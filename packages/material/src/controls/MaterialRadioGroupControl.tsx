@@ -31,80 +31,92 @@ import {
   ControlState,
   isDescriptionHidden,
   isPlainLabel,
-  rankWith,
-  RankedTester,
-  optionIs,
   mapDispatchToControlProps,
-  mapStateToControlProps
+  mapStateToControlProps,
+  optionIs,
+  RankedTester,
+  rankWith
 } from '@jsonforms/core';
 import { Control } from '@jsonforms/react';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
-import { FormControl, FormControlLabel, FormHelperText, FormLabel, Hidden } from '@material-ui/core';
+import {
+  FormControl,
+  FormControlLabel,
+  FormHelperText,
+  FormLabel,
+  Hidden
+} from '@material-ui/core';
 
-export class MaterialRadioGroupControl extends Control<ControlProps, ControlState> {
-    render() {
-        const {
-            config,
-            id,
-            label,
-            required,
-            description,
-            errors,
-            data,
-            schema,
-            visible
-        } = this.props;
-        const isValid = errors.length === 0;
-        const mergedConfig = merge({}, config, this.props.uischema.options);
-        const trim = mergedConfig.trim;
-        const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
+export class MaterialRadioGroupControl extends Control<
+  ControlProps,
+  ControlState
+> {
+  render() {
+    const {
+      config,
+      id,
+      label,
+      required,
+      description,
+      errors,
+      data,
+      schema,
+      visible
+    } = this.props;
+    const isValid = errors.length === 0;
+    const mergedConfig = merge({}, config, this.props.uischema.options);
+    const trim = mergedConfig.trim;
+    const showDescription = !isDescriptionHidden(
+      visible,
+      description,
+      this.state.isFocused
+    );
 
-        const options = schema.enum;
+    const options = schema.enum;
 
-        return (
-          <Hidden xsUp={!visible}>
-            <FormControl
-              component={'fieldset' as 'div'}
-              fullWidth={!trim}
-            >
-              <FormLabel
-                htmlFor={id}
-                error={!isValid}
-                component={'legend' as 'label'}
-              >
-                {computeLabel(
-                  isPlainLabel(label) ? label : label.default,
-                  required
-                )}
-              </FormLabel>
+    return (
+      <Hidden xsUp={!visible}>
+        <FormControl component={'fieldset' as 'div'} fullWidth={!trim}>
+          <FormLabel
+            htmlFor={id}
+            error={!isValid}
+            component={'legend' as 'label'}
+          >
+            {computeLabel(
+              isPlainLabel(label) ? label : label.default,
+              required
+            )}
+          </FormLabel>
 
-              <RadioGroup
-                value={this.state.value}
-                onChange={(_ev, value) => this.handleChange(value)}
-                row={true}
-              >
-                {options.map(optionValue => (
-                  <FormControlLabel
-                    value={optionValue}
-                    key={optionValue}
-                    control={<Radio checked={data === optionValue} />}
-                    label={optionValue}
-                  />
-                ))}
-              </RadioGroup>
-              <FormHelperText error={!isValid}>
-                {!isValid
-                  ? errors
-                  : showDescription
-                  ? description
-                  : null}
-              </FormHelperText>
-            </FormControl>
-          </Hidden>
-        );
-    }
+          <RadioGroup
+            value={this.state.value}
+            onChange={(_ev, value) => this.handleChange(value)}
+            row={true}
+          >
+            {options.map(optionValue => (
+              <FormControlLabel
+                value={optionValue}
+                key={optionValue}
+                control={<Radio checked={data === optionValue} />}
+                label={optionValue}
+              />
+            ))}
+          </RadioGroup>
+          <FormHelperText error={!isValid}>
+            {!isValid ? errors : showDescription ? description : null}
+          </FormHelperText>
+        </FormControl>
+      </Hidden>
+    );
+  }
 }
 
-export const materialRadioGroupControlTester: RankedTester = rankWith(2, optionIs('format', 'radio'));
-export default connect(mapStateToControlProps, mapDispatchToControlProps)(MaterialRadioGroupControl);
+export const materialRadioGroupControlTester: RankedTester = rankWith(
+  2,
+  optionIs('format', 'radio')
+);
+export default connect(
+  mapStateToControlProps,
+  mapDispatchToControlProps
+)(MaterialRadioGroupControl);

@@ -33,9 +33,11 @@ import {
   UISchemaElement
 } from '@jsonforms/core';
 import '../../src/cells';
-import MaterialLabelRenderer, { materialLabelRendererTester } from '../../src/additional/MaterialLabelRenderer';
+import MaterialLabelRenderer, {
+  materialLabelRendererTester
+} from '../../src/additional/MaterialLabelRenderer';
 import { materialRenderers } from '../../src';
-import { combineReducers, createStore, Store, Reducer, AnyAction } from 'redux';
+import { AnyAction, combineReducers, createStore, Reducer, Store } from 'redux';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
@@ -51,13 +53,19 @@ const uischema = {
   text: 'Foo'
 };
 
-const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema: UISchemaElement): Store<JsonFormsState> => {
+const initJsonFormsStore = (
+  testData: any,
+  testSchema: JsonSchema,
+  testUiSchema: UISchemaElement
+): Store<JsonFormsState> => {
   const s: JsonFormsState = {
     jsonforms: {
       renderers: materialRenderers
     }
   };
-  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({ jsonforms: jsonformsReducer() });
+  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({
+    jsonforms: jsonformsReducer()
+  });
   const store: Store<JsonFormsState> = createStore(reducer, s);
   store.dispatch(Actions.init(testData, testSchema, testUiSchema));
   return store;
@@ -65,15 +73,18 @@ const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema:
 
 describe('Material Label Renderer tester', () => {
   it('should fail', () => {
-    expect(materialLabelRendererTester(undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialLabelRendererTester(undefined, undefined)).toBe(
+      NOT_APPLICABLE
+    );
     expect(materialLabelRendererTester(null, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialLabelRendererTester({type: 'Foo'}, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialLabelRendererTester({type: 'Label'}, undefined)).toBe(1);
+    expect(materialLabelRendererTester({ type: 'Foo' }, undefined)).toBe(
+      NOT_APPLICABLE
+    );
+    expect(materialLabelRendererTester({ type: 'Label' }, undefined)).toBe(1);
   });
 });
 
 describe('Material Label Renderer', () => {
-
   let wrapper: ReactWrapper;
 
   afterEach(() => wrapper.unmount());
@@ -82,7 +93,7 @@ describe('Material Label Renderer', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialLabelRenderer schema={schema} uischema={uischema}/>
+        <MaterialLabelRenderer schema={schema} uischema={uischema} />
       </Provider>
     );
 
@@ -109,7 +120,7 @@ describe('Material Label Renderer', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialLabelRenderer schema={schema} uischema={uischema}/>
+        <MaterialLabelRenderer schema={schema} uischema={uischema} />
       </Provider>
     );
     const label = wrapper.find('h6').first();

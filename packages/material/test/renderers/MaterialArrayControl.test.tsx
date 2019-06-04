@@ -33,7 +33,7 @@ import * as React from 'react';
 import { Provider } from 'react-redux';
 
 import MaterialArrayControlRenderer from '../../src/complex/MaterialArrayControlRenderer';
-import { combineReducers, createStore, Store, Reducer, AnyAction } from 'redux';
+import { AnyAction, combineReducers, createStore, Reducer, Store } from 'redux';
 import { materialCells, materialRenderers } from '../../src';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';

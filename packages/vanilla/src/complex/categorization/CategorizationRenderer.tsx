@@ -24,9 +24,10 @@
 */
 import React from 'react';
 import {
-    Categorization,
-    Category,
-    mapStateToLayoutProps, RendererProps
+  Categorization,
+  Category,
+  mapStateToLayoutProps,
+  RendererProps
 } from '@jsonforms/core';
 import { RendererComponent } from '@jsonforms/react';
 import { CategorizationList } from './CategorizationList';
@@ -40,24 +41,27 @@ export interface CategorizationState {
   selectedCategory: Category;
 }
 
-class CategorizationRenderer
-    extends RendererComponent<RendererProps & VanillaRendererProps, CategorizationState> {
-
+class CategorizationRenderer extends RendererComponent<
+  RendererProps & VanillaRendererProps,
+  CategorizationState
+> {
   onCategorySelected = (category: Category) => () => {
-    return this.setState({selectedCategory: category});
-  }
+    return this.setState({ selectedCategory: category });
+  };
 
   /**
    * @inheritDoc
    */
   render() {
-    const { uischema, visible, getStyleAsClassName  } = this.props;
+    const { uischema, visible, getStyleAsClassName } = this.props;
     const categorization = uischema as Categorization;
     const classNames = getStyleAsClassName('categorization');
     const masterClassNames = getStyleAsClassName('categorization.master');
     const detailClassNames = getStyleAsClassName('categorization.detail');
     const selectedCategory = this.findCategory(categorization);
-    const subcategoriesClassName = getStyleAsClassName('category.subcategories');
+    const subcategoriesClassName = getStyleAsClassName(
+      'category.subcategories'
+    );
     const groupClassName = getStyleAsClassName('category.group');
 
     return (
@@ -86,7 +90,7 @@ class CategorizationRenderer
     );
   }
 
-  private findCategory(categorization: Categorization):  Category {
+  private findCategory(categorization: Categorization): Category {
     const category = categorization.elements[0];
 
     if (this.state && this.state.selectedCategory) {
@@ -101,6 +105,6 @@ class CategorizationRenderer
   }
 }
 
-export default connect(
-  addVanillaLayoutProps(mapStateToLayoutProps)
-)(CategorizationRenderer);
+export default connect(addVanillaLayoutProps(mapStateToLayoutProps))(
+  CategorizationRenderer
+);

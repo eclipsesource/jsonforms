@@ -81,25 +81,22 @@ test.failing('autofocus on first element', t => {
   };
   const uischema: HorizontalLayout = {
     type: 'HorizontalLayout',
-    elements: [
-      firstControlElement,
-      secondControlElement
-    ]
+    elements: [firstControlElement, secondControlElement]
   };
   const data = {
-    'firstBooleanCell': true,
-    'secondBooleanCell': false
+    firstBooleanCell: true,
+    secondBooleanCell: false
   };
   const store = initJsonFormsVanillaStore({
     data,
     schema,
     uischema
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <HorizontalLayoutRenderer schema={schema} uischema={uischema}/>
+      <HorizontalLayoutRenderer schema={schema} uischema={uischema} />
     </Provider>
-  ) as unknown as React.Component<any>;
+  ) as unknown) as React.Component<any>;
   const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
   t.not(document.activeElement, inputs[0]);
   t.is(document.activeElement, inputs[1]);
@@ -118,12 +115,15 @@ test('autofocus active', t => {
     schema: t.context.schema,
     uischema
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <BooleanCell schema={t.context.schema} uischema={uischema} path='foo'/>
+      <BooleanCell schema={t.context.schema} uischema={uischema} path='foo' />
     </Provider>
-  ) as unknown as React.Component<any>;;
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+  ) as unknown) as React.Component<any>;
+  const input = TestUtils.findRenderedDOMComponentWithTag(
+    tree,
+    'input'
+  ) as HTMLInputElement;
   t.is(document.activeElement, input);
 });
 
@@ -140,12 +140,15 @@ test('autofocus inactive', t => {
     schema: t.context.schema,
     uischema
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <BooleanCell schema={t.context.schema} uischema={uischema} path='foo'/>
+      <BooleanCell schema={t.context.schema} uischema={uischema} path='foo' />
     </Provider>
-  ) as unknown as React.Component<any>;;
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+  ) as unknown) as React.Component<any>;
+  const input = TestUtils.findRenderedDOMComponentWithTag(
+    tree,
+    'input'
+  ) as HTMLInputElement;
   t.false(input.autofocus);
 });
 
@@ -159,20 +162,23 @@ test('autofocus inactive by default', t => {
     schema: t.context.schema,
     uischema
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <BooleanCell schema={t.context.schema} uischema={uischema} path='foo'/>
+      <BooleanCell schema={t.context.schema} uischema={uischema} path='foo' />
     </Provider>
-  ) as unknown as React.Component<any>;;
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+  ) as unknown) as React.Component<any>;
+  const input = TestUtils.findRenderedDOMComponentWithTag(
+    tree,
+    'input'
+  ) as HTMLInputElement;
   t.not(document.activeElement, input);
 });
 
 test('tester', t => {
   t.is(booleanCellTester(undefined, undefined), -1);
   t.is(booleanCellTester(null, undefined), -1);
-  t.is(booleanCellTester({type: 'Foo'}, undefined), -1);
-  t.is(booleanCellTester({type: 'Control'}, undefined), -1);
+  t.is(booleanCellTester({ type: 'Foo' }, undefined), -1);
+  t.is(booleanCellTester({ type: 'Control' }, undefined), -1);
 });
 
 test('tester with wrong prop type', t => {
@@ -181,10 +187,10 @@ test('tester with wrong prop type', t => {
     scope: '#/properties/foo'
   };
   t.is(
-    booleanCellTester(
-      control,
-      {type: 'object', properties: {foo: {type: 'string'}}}
-    ),
+    booleanCellTester(control, {
+      type: 'object',
+      properties: { foo: { type: 'string' } }
+    }),
     -1
   );
 });
@@ -195,20 +201,17 @@ test('tester with wrong prop type, but sibling has correct one', t => {
     scope: '#/properties/foo'
   };
   t.is(
-    booleanCellTester(
-      control,
-      {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'string'
-          },
-          bar: {
-            type: 'boolean'
-          }
+    booleanCellTester(control, {
+      type: 'object',
+      properties: {
+        foo: {
+          type: 'string'
+        },
+        bar: {
+          type: 'boolean'
         }
       }
-    ),
+    }),
     -1
   );
 });
@@ -219,18 +222,16 @@ test('tester with matching prop type', t => {
     scope: '#/properties/foo'
   };
   t.is(
-    booleanCellTester(
-      control,
-      {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'boolean'
-          }
+    booleanCellTester(control, {
+      type: 'object',
+      properties: {
+        foo: {
+          type: 'boolean'
         }
       }
-    ),
-    2);
+    }),
+    2
+  );
 });
 
 test('render', t => {
@@ -239,13 +240,20 @@ test('render', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <BooleanCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <BooleanCell
+        schema={t.context.schema}
+        uischema={t.context.uischema}
+        path='foo'
+      />
     </Provider>
-  ) as unknown as React.Component<any>;;
+  ) as unknown) as React.Component<any>;
 
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(
+    tree,
+    'input'
+  ) as HTMLInputElement;
   t.is(input.type, 'checkbox');
   t.is(input.checked, true);
 });
@@ -256,31 +264,45 @@ test('update via input event', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <BooleanCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <BooleanCell
+        schema={t.context.schema}
+        uischema={t.context.uischema}
+        path='foo'
+      />
     </Provider>
-  ) as unknown as React.Component<any>;;
+  ) as unknown) as React.Component<any>;
 
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(
+    tree,
+    'input'
+  ) as HTMLInputElement;
   input.checked = false;
   TestUtils.Simulate.change(input);
   t.is(getData(store.getState()).foo, false);
 });
 
 test('update via action', t => {
-  const data = { 'foo': false };
+  const data = { foo: false };
   const store = initJsonFormsVanillaStore({
     data,
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <BooleanCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <BooleanCell
+        schema={t.context.schema}
+        uischema={t.context.uischema}
+        path='foo'
+      />
     </Provider>
-  ) as unknown as React.Component<any>;;
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+  ) as unknown) as React.Component<any>;
+  const input = TestUtils.findRenderedDOMComponentWithTag(
+    tree,
+    'input'
+  ) as HTMLInputElement;
   store.dispatch(update('foo', () => false));
   t.is(input.checked, false);
   t.is(getData(store.getState()).foo, false);
@@ -292,12 +314,19 @@ test.failing('update with undefined value', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <BooleanCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <BooleanCell
+        schema={t.context.schema}
+        uischema={t.context.uischema}
+        path='foo'
+      />
     </Provider>
-  ) as unknown as React.Component<any>;;
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+  ) as unknown) as React.Component<any>;
+  const input = TestUtils.findRenderedDOMComponentWithTag(
+    tree,
+    'input'
+  ) as HTMLInputElement;
   store.dispatch(update('foo', () => undefined));
   t.is(input.value, '');
 });
@@ -308,12 +337,19 @@ test.failing('update with null value', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <BooleanCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <BooleanCell
+        schema={t.context.schema}
+        uischema={t.context.uischema}
+        path='foo'
+      />
     </Provider>
-  ) as unknown as React.Component<any>;;
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+  ) as unknown) as React.Component<any>;
+  const input = TestUtils.findRenderedDOMComponentWithTag(
+    tree,
+    'input'
+  ) as HTMLInputElement;
   store.dispatch(update('foo', () => null));
   t.is(input.value, '');
 });
@@ -324,12 +360,19 @@ test('update with wrong ref', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <BooleanCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <BooleanCell
+        schema={t.context.schema}
+        uischema={t.context.uischema}
+        path='foo'
+      />
     </Provider>
-  ) as unknown as React.Component<any>;;
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+  ) as unknown) as React.Component<any>;
+  const input = TestUtils.findRenderedDOMComponentWithTag(
+    tree,
+    'input'
+  ) as HTMLInputElement;
   store.dispatch(update('bar', () => 11));
   t.is(input.checked, true);
 });
@@ -340,12 +383,19 @@ test('update with null ref', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <BooleanCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <BooleanCell
+        schema={t.context.schema}
+        uischema={t.context.uischema}
+        path='foo'
+      />
     </Provider>
-  ) as unknown as React.Component<any>;;
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+  ) as unknown) as React.Component<any>;
+  const input = TestUtils.findRenderedDOMComponentWithTag(
+    tree,
+    'input'
+  ) as HTMLInputElement;
   store.dispatch(update(null, () => false));
   t.is(input.checked, true);
 });
@@ -356,13 +406,20 @@ test('update with undefined ref', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <BooleanCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <BooleanCell
+        schema={t.context.schema}
+        uischema={t.context.uischema}
+        path='foo'
+      />
     </Provider>
-  ) as unknown as React.Component<any>;;
+  ) as unknown) as React.Component<any>;
   store.dispatch(update(undefined, () => false));
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(
+    tree,
+    'input'
+  ) as HTMLInputElement;
   t.is(input.checked, true);
 });
 
@@ -372,12 +429,19 @@ test('disable', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <BooleanCell schema={t.context.schema} uischema={t.context.uischema} enabled={false}/>
+      <BooleanCell
+        schema={t.context.schema}
+        uischema={t.context.uischema}
+        enabled={false}
+      />
     </Provider>
-  ) as unknown as React.Component<any>;;
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+  ) as unknown) as React.Component<any>;
+  const input = TestUtils.findRenderedDOMComponentWithTag(
+    tree,
+    'input'
+  ) as HTMLInputElement;
   t.true(input.disabled);
 });
 
@@ -387,11 +451,18 @@ test('enabled by default', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <BooleanCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <BooleanCell
+        schema={t.context.schema}
+        uischema={t.context.uischema}
+        path='foo'
+      />
     </Provider>
-  ) as unknown as React.Component<any>;;
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+  ) as unknown) as React.Component<any>;
+  const input = TestUtils.findRenderedDOMComponentWithTag(
+    tree,
+    'input'
+  ) as HTMLInputElement;
   t.false(input.disabled);
 });

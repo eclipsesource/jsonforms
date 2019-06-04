@@ -278,10 +278,10 @@ export class DateControlRenderer extends JsonFormsControl {
     // TODO: DEPS
     this.locale = getLocale(this.ngRedux.getState());
     this.dateFormat = getLocaleDateString(this.locale).toUpperCase();
-    this.datePicker.value = this.data; //.setValue(this.data);
+    this.datePicker.value = this.data; // .setValue(this.data);
     this.datePicker.displayFormat = this.dateFormat;
     this.datePicker.pickerFormat = this.dateFormat;
-    //this.datePicker._inputUpdated();
+    // this.datePicker._inputUpdated();
   }
 }
 

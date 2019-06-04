@@ -30,8 +30,8 @@ import {
   createDefaultValue,
   findUISchema,
   getData,
-  isPlainLabel,
   isObjectArray,
+  isPlainLabel,
   JsonFormsState,
   JsonSchema,
   mapDispatchToArrayControlProps,
@@ -86,11 +86,14 @@ export class MaterialListWithDetailRenderer extends React.Component<
   };
   createDefaultValue = () => createDefaultValue(this.props.schema);
   render() {
-    const {required, visible, errors, path, data, schema, label} = this.props;
+    const { required, visible, errors, path, data, schema, label } = this.props;
     return (
       <Hidden xsUp={!visible}>
         <ArrayLayoutToolbar
-          label={computeLabel(isPlainLabel(label) ? label : label.default, required)}
+          label={computeLabel(
+            isPlainLabel(label) ? label : label.default,
+            required
+          )}
           errors={errors}
           path={path}
           addItem={this.addItem}
@@ -124,7 +127,7 @@ export class MaterialListWithDetailRenderer extends React.Component<
     );
   }
   private renderDetail(): any {
-    const {uischemas, schema, uischema, path} = this.props;
+    const { uischemas, schema, uischema, path } = this.props;
     if (this.state.selectedIndex !== undefined) {
       const foundUISchema = findUISchema(
         uischemas,
@@ -175,22 +178,22 @@ class ListWithDetailMasterItem extends React.Component<
   any
 > {
   render() {
-    const {selected, handleSelect, index, childLabel, removeItem, path} = this.props;
+    const {
+      selected,
+      handleSelect,
+      index,
+      childLabel,
+      removeItem,
+      path
+    } = this.props;
     return (
-      <ListItem
-        button
-        selected={selected}
-        onClick={handleSelect(index)}
-      >
+      <ListItem button selected={selected} onClick={handleSelect(index)}>
         <ListItemAvatar>
           <Avatar aria-label='Index'>{index + 1}</Avatar>
         </ListItemAvatar>
         <ListItemText primary={childLabel} />
         <ListItemSecondaryAction>
-          <IconButton
-            aria-label='Delete'
-            onClick={removeItem(path, index)}
-          >
+          <IconButton aria-label='Delete' onClick={removeItem(path, index)}>
             <DeleteIcon />
           </IconButton>
         </ListItemSecondaryAction>

@@ -37,7 +37,7 @@ import {
 import MaterialRadioGroupControl from '../../src/controls/MaterialRadioGroupControl';
 import { Provider } from 'react-redux';
 import { materialRenderers } from '../../src';
-import { combineReducers, createStore, Store, Reducer, AnyAction } from 'redux';
+import { AnyAction, combineReducers, createStore, Reducer, Store } from 'redux';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 Enzyme.configure({ adapter: new Adapter() });
@@ -57,7 +57,11 @@ const uischema: ControlElement = {
   scope: '#/properties/foo'
 };
 
-const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema: UISchemaElement): Store<JsonFormsState> => {
+const initJsonFormsStore = (
+  testData: any,
+  testSchema: JsonSchema,
+  testUiSchema: UISchemaElement
+): Store<JsonFormsState> => {
   const s: JsonFormsState = {
     jsonforms: {
       renderers: [
@@ -69,14 +73,15 @@ const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema:
       ]
     }
   };
-  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({ jsonforms: jsonformsReducer() });
+  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({
+    jsonforms: jsonformsReducer()
+  });
   const store: Store<JsonFormsState> = createStore(reducer, s);
   store.dispatch(Actions.init(testData, testSchema, testUiSchema));
   return store;
 };
 
 describe('Material radio group control', () => {
-
   let wrapper: ReactWrapper;
 
   afterEach(() => wrapper.unmount());
@@ -115,7 +120,11 @@ describe('Material radio group control', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialRadioGroupControl schema={schema} uischema={uischema} visible={false}/>
+        <MaterialRadioGroupControl
+          schema={schema}
+          uischema={uischema}
+          visible={false}
+        />
       </Provider>
     );
 

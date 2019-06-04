@@ -28,12 +28,12 @@ import {
   convertToValidClassName,
   getConfig,
   JsonFormsState,
-  OwnPropsOfControl,
   OwnPropsOfCell,
+  OwnPropsOfControl,
   OwnPropsOfRenderer,
   RendererProps,
-  StatePropsOfControl,
-  StatePropsOfCell
+  StatePropsOfCell,
+  StatePropsOfControl
 } from '@jsonforms/core';
 import { getStyle, getStyleAsClassName } from '../reducers';
 import { VanillaRendererProps } from '../index';

@@ -31,17 +31,19 @@ import {
   JsonSchema,
   UISchemaElement
 } from '@jsonforms/core';
-import MaterialEnumCell, { materialEnumCellTester } from '../../src/cells/MaterialEnumCell';
+import MaterialEnumCell, {
+  materialEnumCellTester
+} from '../../src/cells/MaterialEnumCell';
 import { Provider } from 'react-redux';
 import { materialRenderers } from '../../src';
-import { combineReducers, createStore, Store, Reducer, AnyAction } from 'redux';
+import { AnyAction, combineReducers, createStore, Reducer, Store } from 'redux';
 
 import Enzyme, { mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-const data =  { nationality: 'JP'};
+const data = { nationality: 'JP' };
 const schema = {
   type: 'string',
   enum: ['DE', 'IT', 'JP', 'US', 'RU', 'Other']
@@ -51,44 +53,46 @@ const uischema = {
   scope: '#/properties/nationality'
 };
 
-const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema: UISchemaElement): Store<JsonFormsState> => {
+const initJsonFormsStore = (
+  testData: any,
+  testSchema: JsonSchema,
+  testUiSchema: UISchemaElement
+): Store<JsonFormsState> => {
   const s: JsonFormsState = {
     jsonforms: {
       renderers: materialRenderers
     }
   };
-  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({ jsonforms: jsonformsReducer() });
+  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({
+    jsonforms: jsonformsReducer()
+  });
   const store: Store<JsonFormsState> = createStore(reducer, s);
   store.dispatch(Actions.init(testData, testSchema, testUiSchema));
   return store;
 };
 
 describe('Material enum cell tester', () => {
-
   it('should succeed with matching prop type', () => {
     const control: ControlElement = {
       type: 'Control',
       scope: '#/properties/nationality'
     };
     expect(
-      materialEnumCellTester(
-        control,
-        {
-          type: 'object',
-          properties: {
-            nationality: {
-              type: 'string',
-              enum: ['DE', 'IT', 'JP', 'US', 'RU', 'Other']
-            }
+      materialEnumCellTester(control, {
+        type: 'object',
+        properties: {
+          nationality: {
+            type: 'string',
+            enum: ['DE', 'IT', 'JP', 'US', 'RU', 'Other']
           }
         }
-      )
+      })
     ).toBe(2);
   });
 });
 
 describe('Material enum cell', () => {
-  it('should select an item from dropdown list', () =>  {
+  it('should select an item from dropdown list', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     const wrapper = mount(
       <Provider store={store}>
