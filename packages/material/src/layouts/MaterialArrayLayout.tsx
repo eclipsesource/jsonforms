@@ -25,7 +25,7 @@
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import find from 'lodash/find';
 import range from 'lodash/range';
-import React from 'react';
+import React, { Fragment } from 'react';
 import {
   ArrayLayoutProps,
   composePaths,
@@ -41,7 +41,9 @@ import {
   Resolve,
   UISchemaElement,
   UISchemaTester,
-  update
+  update,
+  moveUp,
+  moveDown
 } from '@jsonforms/core';
 import { ResolvedJsonForms } from '@jsonforms/react';
 import IconButton from '@material-ui/core/IconButton';
@@ -53,6 +55,8 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Avatar from '@material-ui/core/Avatar';
 import Paper from '@material-ui/core/Paper';
 import DeleteIcon from '@material-ui/icons/Delete';
+import ArrowUpward from '@material-ui/icons/ArrowUpward';
+import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import { connect } from 'react-redux';
 import { AnyAction, Dispatch } from 'redux';
 import { ArrayLayoutToolbar } from './ArrayToolbar';
@@ -62,7 +66,10 @@ const iconStyle: any = { float: 'right' };
 interface MaterialArrayLayoutState {
   expanded: string | boolean;
 }
-export class MaterialArrayLayout extends React.Component<ArrayLayoutProps, MaterialArrayLayoutState> {
+export class MaterialArrayLayout extends React.Component<
+  ArrayLayoutProps,
+  MaterialArrayLayoutState
+> {
   state: MaterialArrayLayoutState = {
     expanded: null
   };
@@ -90,7 +97,10 @@ export class MaterialArrayLayout extends React.Component<ArrayLayoutProps, Mater
     return (
       <Paper style={paperStyle}>
         <ArrayLayoutToolbar
-          label={computeLabel(isPlainLabel(label) ? label : label.default, required)}
+          label={computeLabel(
+            isPlainLabel(label) ? label : label.default,
+            required
+          )}
           errors={errors}
           path={path}
           addItem={addItem}
@@ -109,6 +119,8 @@ export class MaterialArrayLayout extends React.Component<ArrayLayoutProps, Mater
                   uischema={uischema}
                   renderers={renderers}
                   key={index}
+                  enableMoveUp={index != 0}
+                  enableMoveDown={index < data - 1}
                 />
               );
             })
@@ -130,11 +142,15 @@ class ExpandPanelRenderer extends React.Component<ExpandPanelProps, any> {
       schema,
       childPath,
       removeItems,
+      moveDown,
+      moveUp,
       path,
       handleExpansion,
       uischema,
       uischemas,
-      renderers
+      renderers,
+      enableMoveUp,
+      enableMoveDown
     } = this.props;
     const foundUISchema = findUISchema(
       uischemas,
@@ -148,25 +164,61 @@ class ExpandPanelRenderer extends React.Component<ExpandPanelProps, any> {
       <ExpansionPanel expanded={expanded} onChange={handleExpansion(childPath)}>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
           <Grid container alignItems={'center'}>
-            <Grid item xs={11}>
+            <Grid item xs={10}>
               <Grid container alignItems={'center'}>
                 <Grid item xs={1}>
-                  <Avatar aria-label='Index'>{index + 1}</Avatar>
+                  <Avatar aria-label="Index">{index + 1}</Avatar>
                 </Grid>
                 <Grid item xs={2}>
                   {childLabel}
                 </Grid>
               </Grid>
             </Grid>
-            <Grid item xs={1}>
+            <Grid item xs={2}>
               <Grid container justify={'flex-end'}>
                 <Grid item>
-                  <IconButton
-                    onClick={removeItems(path, [index])}
-                    style={iconStyle}
+                  <Grid
+                    container
+                    direction="row"
+                    justify="center"
+                    alignItems="center"
                   >
-                    <DeleteIcon />
-                  </IconButton>
+                    {uischema.options && uischema.options.showSortButtons ? (
+                      <Fragment>
+                        <Grid item>
+                          <IconButton
+                            onClick={moveUp(path, index)}
+                            style={iconStyle}
+                            disabled={!enableMoveUp}
+                            aria-label={`Move up`}
+                          >
+                            <ArrowUpward />
+                          </IconButton>
+                        </Grid>
+                        <Grid item>
+                          <IconButton
+                            onClick={moveDown(path, index)}
+                            style={iconStyle}
+                            disabled={!enableMoveDown}
+                            aria-label={`Move down`}
+                          >
+                            <ArrowDownward />
+                          </IconButton>
+                        </Grid>
+                      </Fragment>
+                    ) : (
+                      ''
+                    )}
+                    <Grid item>
+                      <IconButton
+                        onClick={removeItems(path, [index])}
+                        style={iconStyle}
+                        aria-label={`Delete`}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </Grid>
+                  </Grid>
                 </Grid>
               </Grid>
             </Grid>
@@ -194,6 +246,8 @@ interface OwnPropsOfExpandPanel {
   expanded: boolean;
   renderers?: JsonFormsRendererRegistryEntry[];
   handleExpansion(panel: string): (event: any, expanded: boolean) => void;
+  enableMoveUp: boolean;
+  enableMoveDown: boolean;
 }
 interface StatePropsOfExpandPanel extends OwnPropsOfExpandPanel {
   childLabel: string;
@@ -237,7 +291,9 @@ export const mapStateToExpandPanelProps = (
  * Dispatch props of a table control
  */
 export interface DispatchPropsOfExpandPanel {
-  removeItems(path: string, toDelete: number[]): () => void;
+  removeItems(path: string, toDelete: number[]): (event: any) => void;
+  moveUp(path: string, toMove: number): (event: any) => void;
+  moveDown(path: string, toMove: number): (event: any) => void;
 }
 
 /**
@@ -246,14 +302,35 @@ export interface DispatchPropsOfExpandPanel {
  * @param dispatch the store's dispatch method
  * @returns {DispatchPropsOfArrayControl} dispatch props of an expand panel control
  */
-export const mapDispatchToExpandPanelProps: (dispatch: Dispatch<AnyAction>) => DispatchPropsOfExpandPanel = dispatch => ({
-  removeItems: (path: string, toDelete: number[]) => (): void => {
+export const mapDispatchToExpandPanelProps: (
+  dispatch: Dispatch<AnyAction>
+) => DispatchPropsOfExpandPanel = dispatch => ({
+  removeItems: (path: string, toDelete: number[]) => (event: any): void => {
+    event.stopPropagation();
     dispatch(
       update(path, array => {
         toDelete
           .sort()
           .reverse()
           .forEach(s => array.splice(s, 1));
+        return array;
+      })
+    );
+  },
+  moveUp: (path: string, toMove: number) => (event: any): void => {
+    event.stopPropagation();
+    dispatch(
+      update(path, array => {
+        moveUp(array, toMove);
+        return array;
+      })
+    );
+  },
+  moveDown: (path: string, toMove: number) => (event: any): void => {
+    event.stopPropagation();
+    dispatch(
+      update(path, array => {
+        moveDown(array, toMove);
         return array;
       })
     );

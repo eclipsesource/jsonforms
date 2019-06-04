@@ -27,7 +27,7 @@ import union from 'lodash/union';
 import { DispatchCell } from '@jsonforms/react';
 import startCase from 'lodash/startCase';
 import range from 'lodash/range';
-import React from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import {
   FormHelperText,
@@ -37,7 +37,8 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  Typography
+  Typography,
+  Grid
 } from '@material-ui/core';
 import {
   ArrayLayoutProps,
@@ -51,13 +52,22 @@ import {
 } from '@jsonforms/core';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
+import ArrowDownward from '@material-ui/icons/ArrowDownward';
+import ArrowUpward from '@material-ui/icons/ArrowUpward';
+
 import { WithDeleteDialogSupport } from './DeleteDialog';
 import NoBorderTableCell from './NoBorderTableCell';
 import TableToolbar from './TableToolbar';
-
 // we want a cell that doesn't automatically span
 const styles = {
   fixedCell: {
+    width: '150px',
+    height: '50px',
+    paddingLeft: 0,
+    paddingRight: 0,
+    textAlign: 'center'
+  },
+  fixedCellSmall: {
     width: '50px',
     height: '50px',
     paddingLeft: 0,
@@ -114,7 +124,7 @@ export interface EmptyTableProps {
 const EmptyTable = ({ numColumns }: EmptyTableProps) => (
   <TableRow>
     <NoBorderTableCell colSpan={numColumns}>
-      <Typography align='center'>No data</Typography>
+      <Typography align="center">No data</Typography>
     </NoBorderTableCell>
   </TableRow>
 );
@@ -141,14 +151,11 @@ const mapStateToNonEmptyCellProps = (
   state: JsonFormsState,
   ownProps: OwnPropsOfNonEmptyCell
 ): NonEmptyCellProps => {
-
-  const path = ownProps.rowPath + (ownProps.schema.type === 'object' ? '.' + ownProps.propName : '');
+  const path =
+    ownProps.rowPath +
+    (ownProps.schema.type === 'object' ? '.' + ownProps.propName : '');
   const errors = formatErrorMessage(
-    union(
-      getErrorAt(path, ownProps.schema)(state).map(
-        error => error.message
-      )
-    )
+    union(getErrorAt(path, ownProps.schema)(state).map(error => error.message))
   );
   return {
     rowPath: ownProps.rowPath,
@@ -185,12 +192,12 @@ class NonEmptyCellInner extends React.Component<NonEmptyCellProps, any> {
             path={path}
           />
         ) : (
-            <DispatchCell
-              schema={schema}
-              uischema={controlWithoutLabel('#')}
-              path={path}
-            />
-          )}
+          <DispatchCell
+            schema={schema}
+            uischema={controlWithoutLabel('#')}
+            path={path}
+          />
+        )}
         <FormHelperText error={!isValid}>{!isValid && errors}</FormHelperText>
       </NoBorderTableCell>
     );
@@ -202,45 +209,92 @@ interface NonEmptyRowProps {
   childPath: string;
   schema: JsonSchema;
   rowIndex: number;
+  moveUp: () => void;
+  moveDown: () => void;
+  enableUp: boolean;
+  enableDown: boolean;
+  showSortButtons: boolean;
 }
 
-const NonEmptyRow = React.memo(({
-  childPath,
-  schema,
-  rowIndex,
-  openDeleteDialog
-}: NonEmptyRowProps & WithDeleteDialogSupport) => (
-    <TableRow key={childPath} hover>
-      {generateCells(NonEmptyCell, schema, childPath)}
-      <NoBorderTableCell style={styles.fixedCell}>
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <IconButton
-            aria-label={`Delete`}
-            onClick={() => openDeleteDialog(childPath, rowIndex)}
-          >
-            <DeleteIcon />
-          </IconButton>
-        </div>
-      </NoBorderTableCell>
-    </TableRow>
-  ));
+const NonEmptyRow = React.memo(
+  ({
+    childPath,
+    schema,
+    rowIndex,
+    openDeleteDialog,
+    moveUp,
+    moveDown,
+    enableUp,
+    enableDown,
+    showSortButtons
+  }: NonEmptyRowProps & WithDeleteDialogSupport) => {
+    return (
+      <TableRow key={childPath} hover>
+        {generateCells(NonEmptyCell, schema, childPath)}
+        <NoBorderTableCell
+          style={showSortButtons ? styles.fixedCell : styles.fixedCellSmall}
+        >
+          <Grid container direction="row" justify="center" alignItems="center">
+            {showSortButtons ? (
+              <Fragment>
+                <Grid item>
+                  <IconButton
+                    aria-label={`Move up`}
+                    onClick={moveUp}
+                    disabled={!enableUp}
+                  >
+                    <ArrowUpward />
+                  </IconButton>
+                </Grid>
+                <Grid item>
+                  <IconButton
+                    aria-label={`Move down`}
+                    onClick={moveDown}
+                    disabled={!enableDown}
+                  >
+                    <ArrowDownward />
+                  </IconButton>
+                </Grid>
+              </Fragment>
+            ) : (
+              ''
+            )}
+
+            <Grid item>
+              <IconButton
+                aria-label={`Delete`}
+                onClick={() => openDeleteDialog(childPath, rowIndex)}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Grid>
+          </Grid>
+        </NoBorderTableCell>
+      </TableRow>
+    );
+  }
+);
 interface TableRowsProp {
   data: number;
   path: string;
   schema: JsonSchema;
+  moveUp?(path: string, toMove: number): () => void;
+  moveDown?(path: string, toMove: number): () => void;
+  uischema: ControlElement;
 }
 const TableRows = ({
   data,
   path,
   schema,
-  openDeleteDialog
+  openDeleteDialog,
+  moveUp,
+  moveDown,
+  uischema
 }: TableRowsProp & WithDeleteDialogSupport) => {
   const isEmptyTable = data === 0;
-
   if (isEmptyTable) {
     return <EmptyTable numColumns={getValidColumnProps(schema).length + 1} />;
   }
-
   return (
     <React.Fragment>
       {range(data).map((index: number) => {
@@ -248,7 +302,6 @@ const TableRows = ({
           path,
           `${index}`
         );
-
         return (
           <NonEmptyRow
             key={childPath}
@@ -256,6 +309,13 @@ const TableRows = ({
             rowIndex={index}
             schema={schema}
             openDeleteDialog={openDeleteDialog}
+            moveUp={moveUp(path, index)}
+            moveDown={moveDown(path, index)}
+            enableUp={index !== 0}
+            enableDown={index !== data - 1}
+            showSortButtons={
+              uischema.options && uischema.options.showSortButtons
+            }
           />
         );
       })}
@@ -266,7 +326,7 @@ const TableRows = ({
 export class MaterialTableControl extends React.Component<
   ArrayLayoutProps & WithDeleteDialogSupport,
   any
-  > {
+> {
   addItem = (path: string, value: any) => this.props.addItem(path, value);
   render() {
     const {
