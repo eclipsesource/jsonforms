@@ -415,7 +415,7 @@ export const mapStateToEnumControlProps = (
 ): StatePropsOfControl & OwnPropsOfEnum => {
   const props: StatePropsOfControl = mapStateToControlProps(state, ownProps);
   const options =
-    ownProps.options !== undefined ? ownProps.options : props.schema.enum;
+    ownProps.options !== undefined ? ownProps.options : props.schema.enum || [props.schema.const];
   return {
     ...props,
     options

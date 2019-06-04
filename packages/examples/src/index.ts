@@ -58,6 +58,7 @@ import * as i18n from './i18n';
 import * as issue_1169 from './1169';
 import * as issue_1220 from './1220';
 import * as issue_1253 from './1253';
+import * as issue_1254 from './1254';
 import * as oneOfRecursive from './oneOf-recursive';
 import * as huge from './huge';
 export * from './register';
@@ -100,6 +101,7 @@ export {
   issue_1169,
   issue_1220,
   issue_1253,
+  issue_1254,
   oneOfRecursive,
   huge
 };
