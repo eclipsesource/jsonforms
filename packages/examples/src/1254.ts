@@ -25,33 +25,33 @@
 import { registerExamples } from './register';
 
 export const schema = {
-   type: 'object',
-   properties:{
-     name: {
-       type: 'string',
-       minLength: 1
-     },
-     version: {
-         const: '1.0'
-      }
-   },
-   required: [
-      'version'
-   ]
+  type: 'object',
+  properties: {
+    name: {
+      type: 'string',
+      minLength: 1
+    },
+    version: {
+      const: '1.0'
+    }
+  },
+  required: ['version']
 };
 
 export const uischema = {
-  type: "HorizontalLayout",
-  elements: [{
-    type: 'Control',
-    label: 'Value',
-    scope: '#/properties/name'
-  }, {
-    type: 'Control',
-    label: 'Value',
-    scope: '#/properties/version'
-  }]
-
+  type: 'HorizontalLayout',
+  elements: [
+    {
+      type: 'Control',
+      label: 'Value',
+      scope: '#/properties/name'
+    },
+    {
+      type: 'Control',
+      label: 'Value',
+      scope: '#/properties/version'
+    }
+  ]
 };
 
 const data = {};
