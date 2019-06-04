@@ -10,7 +10,8 @@
 		"bundle": "lerna run bundle",
 		"clean": "lerna run clean",
 		"test": "lerna run test",
-		"test-cov": "lerna run test-cov"
+		"test-cov": "lerna run test-cov",
+		"lint": "tslint 'packages/**/*.{ts,tsx}' -c ./tslint.json"
 	},
 	"devDependencies": {
 		"@types/jest": "^23.0.0",
