@@ -515,6 +515,12 @@ test('test isEnumControl', t => {
       properties: { foo: { type: 'number', enum: [1, 2] } }
     })
   );
+  t.true(
+    isEnumControl(t.context.uischema, {
+      type: 'object',
+      properties: { foo: { const: '1.0' } }
+    })
+  );
 });
 test('test isIntegerControl', t => {
   t.false(isIntegerControl(undefined, undefined));
