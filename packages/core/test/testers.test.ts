@@ -518,8 +518,7 @@ test('test isEnumControl', t => {
   t.true(
     isEnumControl(t.context.uischema, {
       type: 'object',
-      properties: { foo: { const: '1.0' } },
-      required: ['version']
+      properties: { foo: { const: '1.0' } }
     })
   );
 });
