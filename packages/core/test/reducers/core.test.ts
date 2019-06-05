@@ -37,6 +37,20 @@ import {
 
 import { createAjv } from '../../src';
 
+const createRefParserOptions = (
+  encoding = 'testEncoding'
+): RefParser.Options => {
+  const parserOptions: RefParser.ParserOptions & { encoding?: string } = {
+    encoding
+  };
+  const myOptions: RefParser.Options = {
+    parse: {
+      text: parserOptions
+    }
+  };
+  return myOptions;
+};
+
 test('core reducer should support v7', t => {
   const schema: JsonSchema = {
     type: 'object',
@@ -140,13 +154,7 @@ test('core reducer - no previous state - init with options object with ref parse
       }
     }
   };
-  const myOptions = {
-    parse: {
-      text: {
-        encoding: 'testEncoding'
-      }
-    }
-  } as RefParser.Options;
+  const myOptions = createRefParserOptions();
   const after = coreReducer(
     undefined,
     init({}, schema, undefined, {
@@ -170,13 +178,7 @@ test('core reducer - no previous state - init with options object with ajv and r
   const myAjv = new AJV({
     errorDataPath: 'mypath'
   });
-  const myOptions = {
-    parse: {
-      text: {
-        encoding: 'testEncoding'
-      }
-    }
-  } as RefParser.Options;
+  const myOptions = createRefParserOptions();
   const after = coreReducer(
     undefined,
     init({}, schema, undefined, {
@@ -201,13 +203,7 @@ test('core reducer - previous state - init without options should keep previous 
   const myAjv = new AJV({
     errorDataPath: 'mypath'
   });
-  const myOptions = {
-    parse: {
-      text: {
-        encoding: 'testEncoding'
-      }
-    }
-  } as RefParser.Options;
+  const myOptions = createRefParserOptions();
   const after = coreReducer(
     {
       data: {},
@@ -240,13 +236,7 @@ test('core reducer - previous state - init with ajv options object should overwr
   const newAjv = new AJV({
     errorDataPath: 'newajv'
   });
-  const myOptions = {
-    parse: {
-      text: {
-        encoding: 'testEncoding'
-      }
-    }
-  } as RefParser.Options;
+  const myOptions = createRefParserOptions();
   const after = coreReducer(
     {
       data: {},
@@ -279,13 +269,7 @@ test('core reducer - previous state - init with options with ajv should overwrit
   const newAjv = new AJV({
     errorDataPath: 'newajv'
   });
-  const myOptions = {
-    parse: {
-      text: {
-        encoding: 'testEncoding'
-      }
-    }
-  } as RefParser.Options;
+  const myOptions = createRefParserOptions();
   const after = coreReducer(
     {
       data: {},
@@ -317,20 +301,8 @@ test('core reducer - previous state - init with options with ref parser options 
   const myAjv = new AJV({
     errorDataPath: 'mypath'
   });
-  const previousOptions = {
-    parse: {
-      text: {
-        encoding: 'testEncoding'
-      }
-    }
-  } as RefParser.Options;
-  const newOptions = {
-    parse: {
-      text: {
-        encoding: 'newEncoding'
-      }
-    }
-  } as RefParser.Options;
+  const previousOptions = createRefParserOptions();
+  const newOptions = createRefParserOptions('newEncoding');
   const after = coreReducer(
     {
       data: {},
@@ -365,20 +337,8 @@ test('core reducer - previous state - init with both options should overwrite bo
   const newAjv = new AJV({
     errorDataPath: 'newajv'
   });
-  const previousOptions = {
-    parse: {
-      text: {
-        encoding: 'testEncoding'
-      }
-    }
-  } as RefParser.Options;
-  const newOptions = {
-    parse: {
-      text: {
-        encoding: 'newEncoding'
-      }
-    }
-  } as RefParser.Options;
+  const previousOptions = createRefParserOptions();
+  const newOptions = createRefParserOptions('newEncoding');
   const after = coreReducer(
     {
       data: {},
@@ -411,13 +371,7 @@ test('core reducer - previous state - init with empty options should not overwri
   const myAjv = new AJV({
     errorDataPath: 'mypath'
   });
-  const myOptions = {
-    parse: {
-      text: {
-        encoding: 'testEncoding'
-      }
-    }
-  } as RefParser.Options;
+  const myOptions = createRefParserOptions();
   const after = coreReducer(
     {
       data: {},

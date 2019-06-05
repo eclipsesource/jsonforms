@@ -299,7 +299,10 @@ export const isDateControl = and(uiTypeIs('Control'), formatIs('date'));
  */
 export const isEnumControl = and(
   uiTypeIs('Control'),
-  schemaMatches(schema => schema.hasOwnProperty('enum'))
+  or(
+    schemaMatches(schema => schema.hasOwnProperty('enum')),
+    schemaMatches(schema => schema.hasOwnProperty('const'))
+  )
 );
 
 /**

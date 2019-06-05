@@ -23,76 +23,26 @@
   THE SOFTWARE.
 */
 import { registerExamples } from './register';
-import { personCoreSchema } from './person';
+import { UISchemaElement } from '@jsonforms/core';
 
 export const schema = {
   type: 'object',
   properties: {
-    ...personCoreSchema.properties,
-    occupation: { type: 'string' },
-    comments: {
-      type: 'array',
-      items: {
-        type: 'object',
-        properties: {
-          date: {
-            type: 'string',
-            format: 'date'
-          },
-          message: {
-            type: 'string',
-            maxLength: 5
-          }
-        }
-      }
-    }
+    b: { type: 'boolean' },
+    c: { type: 'string', minLength: 1 }
   },
-  required: ['occupation', 'nationality']
+  if: { properties: { b: { enum: [false] } } },
+  then: { required: ['c'] }
 };
 
-export const uischema = {
-  type: 'VerticalLayout',
-  elements: [
-    {
-      type: 'Control',
-      scope: '#/properties/comments',
-      options: {
-        showSortButtons: true,
-        detail: {
-          type: 'VerticalLayout',
-          elements: [
-            {
-              type: 'Control',
-              scope: '#/properties/message'
-            },
-            {
-              type: 'Control',
-              scope: '#/properties/date'
-            }
-          ]
-        }
-      }
-    }
-  ]
-};
+export const uischema: UISchemaElement = undefined;
 
-export const data = {
-  comments: [
-    {
-      date: new Date(2001, 8, 11).toISOString().substr(0, 10),
-      message: 'This is an example message'
-    },
-    {
-      date: new Date().toISOString().substr(0, 10),
-      message: 'Get ready for booohay'
-    }
-  ]
-};
+export const data = {};
 
 registerExamples([
   {
-    name: 'array-with-detail',
-    label: 'Array with detail',
+    name: 'ifthenelse',
+    label: 'If Then Else',
     data,
     schema,
     uischema

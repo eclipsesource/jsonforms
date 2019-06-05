@@ -22,7 +22,12 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import { materialRenderers } from '../../src';
+import Adapter from 'enzyme-adapter-react-16';
+import * as React from 'react';
+import { connect, Provider } from 'react-redux';
+import { AnyAction, combineReducers, createStore, Reducer, Store } from 'redux';
 import {
   Actions,
   ControlElement,
@@ -39,11 +44,6 @@ import {
   rankWith,
   UISchemaElement
 } from '@jsonforms/core';
-import Adapter from 'enzyme-adapter-react-16';
-import * as React from 'react';
-import { connect, Provider } from 'react-redux';
-import { combineReducers, createStore, Store, Reducer, AnyAction } from 'redux';
-import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import '../../src/cells';
 import { MaterialInputControl } from '../../src/controls/MaterialInputControl';
 import MaterialHorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
@@ -67,12 +67,7 @@ const uischema: ControlElement = {
 };
 class TestControlInner extends Control<ControlProps, ControlState> {
   render() {
-    return (
-      <MaterialInputControl
-        {...this.props}
-        input={MuiInputText}
-      />
-    );
+    return <MaterialInputControl {...this.props} input={MuiInputText} />;
   }
 }
 export const testControlTester: RankedTester = rankWith(1, isControl);
@@ -91,7 +86,9 @@ const initJsonFormsStore = (
       renderers: materialRenderers
     }
   };
-  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({ jsonforms: jsonformsReducer() });
+  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({
+    jsonforms: jsonformsReducer()
+  });
   const store: Store<JsonFormsState> = createStore(reducer, s);
   store.dispatch(Actions.init(testData, testSchema, testUiSchema));
   return store;

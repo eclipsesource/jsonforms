@@ -22,8 +22,8 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import * as _ from 'lodash';
 import { init, update, UPDATE_DATA, UpdateAction } from '../../src/actions';
-import test from 'ava';
 import * as Redux from 'redux';
 import {
   clearAllIds,
@@ -36,16 +36,16 @@ import {
   mapStateToLayoutProps
 } from '../../src/util';
 import configureStore from 'redux-mock-store';
-import * as _ from 'lodash';
+import test from 'ava';
 import { generateDefaultUISchema } from '../../src/generators';
 import {
   ControlElement,
   coreReducer,
   JsonFormsState,
   JsonSchema,
+  rankWith,
   RuleEffect,
-  UISchemaElement,
-  rankWith
+  UISchemaElement
 } from '../../src';
 import { jsonformsReducer } from '../../src/reducers';
 import { ErrorObject } from 'ajv';

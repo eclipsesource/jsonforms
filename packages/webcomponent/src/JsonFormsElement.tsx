@@ -27,16 +27,16 @@ import ReactDOM from 'react-dom';
 import RefParser from 'json-schema-ref-parser';
 import { Provider } from 'react-redux';
 import {
-    Actions,
-    Generate,
-    getData,
-    getRefParserOptions,
-    getSchema,
-    getUiSchema,
-    JsonFormsState,
-    JsonFormsStore,
-    JsonSchema,
-    UISchemaElement
+  Actions,
+  Generate,
+  getData,
+  getRefParserOptions,
+  getSchema,
+  getUiSchema,
+  JsonFormsState,
+  JsonFormsStore,
+  JsonSchema,
+  UISchemaElement
 } from '@jsonforms/core';
 import { ResolvedJsonForms } from '@jsonforms/react';
 import { Store } from 'redux';
@@ -56,7 +56,7 @@ interface CustomElementConfig {
 // Usage as decorator
 // tslint:disable:variable-name
 const CustomElement = (config: CustomElementConfig) => (cls: any) => {
-// tslint:enable:variable-name
+  // tslint:enable:variable-name
   if (customElements.get(config.selector)) {
     return;
   }
@@ -72,7 +72,6 @@ const CustomElement = (config: CustomElementConfig) => (cls: any) => {
   selector: 'json-forms'
 })
 export class JsonFormsElement extends HTMLElement {
-
   private InnerComponent: any = ResolvedJsonForms;
   private innerComponentParameters: any = {};
   private allowDynamicUpdate = false;
@@ -100,7 +99,11 @@ export class JsonFormsElement extends HTMLElement {
    * @param {Object} store the store containing the jsonforms state and reducer
    */
   set store(store: Store<JsonFormsState>) {
-    const setupStore = (schema: JsonSchema, uischema: UISchemaElement, d: any) => {
+    const setupStore = (
+      schema: JsonSchema,
+      uischema: UISchemaElement,
+      d: any
+    ) => {
       store.dispatch(Actions.init(d, schema, uischema));
 
       return store;
@@ -108,15 +111,17 @@ export class JsonFormsElement extends HTMLElement {
 
     const data = getData(store.getState()) || {};
 
-    RefParser.dereference(getSchema(store.getState()) || Generate.jsonSchema(data) as any, getRefParserOptions(store.getState()))
-    .then(resolvedSchema => {
+    RefParser.dereference(
+      getSchema(store.getState()) || (Generate.jsonSchema(data) as any),
+      getRefParserOptions(store.getState())
+    ).then(resolvedSchema => {
       this._store = setupStore(
         resolvedSchema as any,
         getUiSchema(store.getState()),
         data
       );
       this.render();
-    })
+    });
   }
 
   get store() {
@@ -152,5 +157,4 @@ export class JsonFormsElement extends HTMLElement {
       this
     );
   }
-
 }

@@ -77,7 +77,7 @@ import { BooleanCheckboxControlRenderer } from '../src';
 // );
 
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { TestBed, async } from '@angular/core/testing';
+import { async, TestBed } from '@angular/core/testing';
 import { ControlElement, JsonSchema } from '@jsonforms/core';
 
 describe('boolean', () => {

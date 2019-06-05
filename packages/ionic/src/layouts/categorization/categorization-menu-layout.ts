@@ -99,17 +99,17 @@ export class CategorizationMenuLayoutRenderer extends JsonFormsIonicLayout {
   selectCategory(category: Category) {
     this.selectedCategory = category;
     // TODO: DEPS
-    //this.nav.navigateRoot.(CategoryRenderer, { category });
+    // this.nav.navigateRoot.(CategoryRenderer, { category });
   }
 
   canGoBack() {
     // TODO: DEPS
     // FIXME: addToStack allows explicit control when to display the 'Go back' button,
     // FIXME: is there a better way to control this?
-    //const count = this.nav.
+    // const count = this.nav.
     //  .getViews()
     //  .reduce((acc, view) => acc + (view.data.addToNavStack ? 1 : 0), 0);
-    //return count > 1;
+    // return count > 1;
     return false;
   }
 

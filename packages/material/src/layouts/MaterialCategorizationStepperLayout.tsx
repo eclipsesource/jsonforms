@@ -35,15 +35,18 @@ import {
   JsonFormsState,
   mapStateToLayoutProps,
   optionIs,
+  OwnPropsOfRenderer,
   RankedTester,
   rankWith,
   RendererProps,
   StatePropsOfLayout,
-  uiTypeIs,
-  OwnPropsOfRenderer
+  uiTypeIs
 } from '@jsonforms/core';
 import { RendererComponent } from '@jsonforms/react';
-import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from '../util/layout';
+import {
+  MaterialLayoutRenderer,
+  MaterialLayoutRendererProps
+} from '../util/layout';
 
 export const materialCategorizationStepperTester: RankedTester = rankWith(
   2,
@@ -58,20 +61,22 @@ export interface CategorizationStepperState {
   activeCategory: number;
 }
 
-export interface MaterialCategorizationStepperLayoutRendererProps extends StatePropsOfLayout {
+export interface MaterialCategorizationStepperLayoutRendererProps
+  extends StatePropsOfLayout {
   data: any;
 }
 
-export class MaterialCategorizationStepperLayoutRenderer
-  extends RendererComponent<MaterialCategorizationStepperLayoutRendererProps & RendererProps, CategorizationStepperState> {
-
+export class MaterialCategorizationStepperLayoutRenderer extends RendererComponent<
+  MaterialCategorizationStepperLayoutRendererProps & RendererProps,
+  CategorizationStepperState
+> {
   state = {
     activeCategory: 0
   };
 
   handleStep = (step: number) => () => {
     this.setState({
-      activeCategory: step,
+      activeCategory: step
     });
   };
 
@@ -89,21 +94,18 @@ export class MaterialCategorizationStepperLayoutRenderer
       renderers
     };
 
-    const categories = categorization.elements
-      .filter((category: Category) => isVisible(category, data));
+    const categories = categorization.elements.filter((category: Category) =>
+      isVisible(category, data)
+    );
 
     return (
       <Hidden xsUp={!visible}>
         <Stepper activeStep={activeCategory} nonLinear>
-          {categories.map((e: Category, idx: number) =>
-            (
-              <Step key={e.label}>
-                <StepButton onClick={this.handleStep(idx)}>
-                  {e.label}
-                </StepButton>
-              </Step>
-            ))
-          }
+          {categories.map((e: Category, idx: number) => (
+            <Step key={e.label}>
+              <StepButton onClick={this.handleStep(idx)}>{e.label}</StepButton>
+            </Step>
+          ))}
         </Stepper>
         <div>
           <MaterialLayoutRenderer {...childProps} />
@@ -124,6 +126,6 @@ const mapStateToCategorizationProps = (
   };
 };
 
-export default connect(
-  mapStateToCategorizationProps,
-)(MaterialCategorizationStepperLayoutRenderer);
+export default connect(mapStateToCategorizationProps)(
+  MaterialCategorizationStepperLayoutRenderer
+);

@@ -26,7 +26,8 @@ import React from 'react';
 import { combineReducers, createStore } from 'redux';
 import { Provider } from 'react-redux';
 import {
-  jsonformsReducer, JsonFormsState,
+  jsonformsReducer,
+  JsonFormsState,
   JsonFormsStore,
   JsonSchema,
   Layout,
@@ -72,31 +73,29 @@ export interface JsonFormsInitialState {
   [x: string]: any;
 }
 
-export const initJsonFormsStore = (
-  {
-    data,
-    schema,
-    uischema,
-    ...props
-  }: JsonFormsInitialState
-): JsonFormsStore => {
+export const initJsonFormsStore = ({
+  data,
+  schema,
+  uischema,
+  ...props
+}: JsonFormsInitialState): JsonFormsStore => {
   const initState: JsonFormsState = {
-      jsonforms: {
-        core: {
-          data,
-          schema,
-          uischema
-        },
-        ...props
-      }
+    jsonforms: {
+      core: {
+        data,
+        schema,
+        uischema
+      },
+      ...props
+    }
   };
   const reducer = combineReducers({ jsonforms: jsonformsReducer() });
   return createStore(reducer, initState);
 };
 
-const CustomRenderer1: StatelessRenderer<RendererProps> = () => (<h1>test</h1>);
-const CustomRenderer2: StatelessRenderer<RendererProps> = () => (<h2>test</h2>);
-const CustomRenderer3: StatelessRenderer<RendererProps> = () => (<h3>test</h3>);
+const CustomRenderer1: StatelessRenderer<RendererProps> = () => <h1>test</h1>;
+const CustomRenderer2: StatelessRenderer<RendererProps> = () => <h2>test</h2>;
+const CustomRenderer3: StatelessRenderer<RendererProps> = () => <h3>test</h3>;
 
 const fixture = {
   data: { foo: 'John Doe' },
@@ -180,7 +179,6 @@ test('deregister an unregistered renderer should be a no-op', () => {
 });
 
 test('ids should be unique within the same form', () => {
-
   const FakeLayout = (props: RendererProps) => {
     const layout = props.uischema as Layout;
     const children = layout.elements.map((e, idx) => (
@@ -189,13 +187,9 @@ test('ids should be unique within the same form', () => {
         schema={fixture.schema}
         path={props.path}
         key={`${props.path}-${idx}`}
-      />)
-    );
-    return (
-      <div className='layout'>
-        {children}
-      </div>
-    );
+      />
+    ));
+    return <div className='layout'>{children}</div>;
   };
 
   const uischema2 = {
@@ -212,29 +206,29 @@ test('ids should be unique within the same form', () => {
     ]
   };
 
-  const store = initJsonFormsStore(
-    {
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: uischema2,
-      renderers: [{
+  const store = initJsonFormsStore({
+    data: fixture.data,
+    schema: fixture.schema,
+    uischema: uischema2,
+    renderers: [
+      {
         tester: rankWith(10, uiTypeIs('HorizontalLayout')),
         renderer: FakeLayout
-      }]
-    }
-  );
+      }
+    ]
+  });
 
   const ids: string[] = [];
   const MyCustomRenderer: StatelessRenderer<any> = props => {
     ids.push(props.id);
-    return (<div>Custom</div>);
+    return <div>Custom</div>;
   };
   store.dispatch(registerRenderer(() => 10, MyCustomRenderer));
 
   const wrapper = mount(
     <Provider store={store}>
       <JsonForms uischema={uischema2} schema={fixture.schema} />
-    </Provider>,
+    </Provider>
   );
 
   expect(ids.indexOf('#/properties/foo') > -1).toBeTruthy();
@@ -243,7 +237,6 @@ test('ids should be unique within the same form', () => {
 });
 
 test('render schema with $ref', () => {
-
   const schemaWithRef = {
     definitions: {
       n: {
@@ -271,12 +264,15 @@ test('render schema with $ref', () => {
     }
   };
 
-  const tester = (_uischema: UISchemaElement, s: JsonSchema) => s.properties.foo.type === 'number' ? 1 : -1;
+  const tester = (_uischema: UISchemaElement, s: JsonSchema) =>
+    s.properties.foo.type === 'number' ? 1 : -1;
 
-  const renderers = [{
-    tester: tester,
-    renderer: CustomRenderer2
-  }];
+  const renderers = [
+    {
+      tester: tester,
+      renderer: CustomRenderer2
+    }
+  ];
 
   const promise = Promise.resolve(resolvedSchema);
   jest.spyOn(RefParser, 'dereference').mockImplementation(() => promise);
@@ -301,7 +297,6 @@ test('render schema with $ref', () => {
 });
 
 test.skip('updates schema with ref', () => {
-
   const schemaWithRef = {
     definitions: {
       n: {
@@ -329,16 +324,21 @@ test.skip('updates schema with ref', () => {
     }
   };
 
-  const tester1 = (_uischema: UISchemaElement, s: JsonSchema) => s.properties.foo.type === 'string' ? 1 : -1;
-  const tester2 = (_uischema: UISchemaElement, s: JsonSchema) => s.properties.foo.type === 'number' ? 1 : -1;
+  const tester1 = (_uischema: UISchemaElement, s: JsonSchema) =>
+    s.properties.foo.type === 'string' ? 1 : -1;
+  const tester2 = (_uischema: UISchemaElement, s: JsonSchema) =>
+    s.properties.foo.type === 'number' ? 1 : -1;
 
-  const renderers = [{
-    tester: tester1,
-    renderer: CustomRenderer1
-  }, {
-    tester: tester2,
-    renderer: CustomRenderer2
-  }];
+  const renderers = [
+    {
+      tester: tester1,
+      renderer: CustomRenderer1
+    },
+    {
+      tester: tester2,
+      renderer: CustomRenderer2
+    }
+  ];
 
   const promise = Promise.resolve(resolvedSchema);
   jest.spyOn(RefParser, 'dereference').mockImplementation(() => promise);
@@ -355,8 +355,7 @@ test.skip('updates schema with ref', () => {
   );
   expect(wrapper.find(CustomRenderer1).length).toBe(1);
 
-  wrapper.setProps({ schema: schemaWithRef }
-  );
+  wrapper.setProps({ schema: schemaWithRef });
 
   return promise.then(() => {
     wrapper.update();

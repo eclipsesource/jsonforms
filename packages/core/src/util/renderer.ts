@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
+
   Copyright (c) 2017-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -47,7 +47,9 @@ import {
   isEnabled,
   isVisible,
   Resolve,
-  resolveSubSchemas
+  resolveSubSchemas,
+  moveUp,
+  moveDown
 } from '../util';
 import has from 'lodash/has';
 import { update } from '../actions';
@@ -415,7 +417,9 @@ export const mapStateToEnumControlProps = (
 ): StatePropsOfControl & OwnPropsOfEnum => {
   const props: StatePropsOfControl = mapStateToControlProps(state, ownProps);
   const options =
-    ownProps.options !== undefined ? ownProps.options : props.schema.enum;
+    ownProps.options !== undefined
+      ? ownProps.options
+      : props.schema.enum || [props.schema.const];
   return {
     ...props,
     options
@@ -496,6 +500,8 @@ export const mapStateToArrayControlProps = (
 export interface DispatchPropsOfArrayControl {
   addItem(path: string, value: any): () => void;
   removeItems?(path: string, toDelete: number[]): () => void;
+  moveUp?(path: string, toMove: number): () => void;
+  moveDown?(path: string, toMove: number): () => void;
 }
 
 /**
@@ -526,6 +532,22 @@ export const mapDispatchToArrayControlProps = (
           .sort()
           .reverse()
           .forEach(s => array.splice(s, 1));
+        return array;
+      })
+    );
+  },
+  moveUp: (path, toMove: number) => () => {
+    dispatch(
+      update(path, array => {
+        moveUp(array, toMove);
+        return array;
+      })
+    );
+  },
+  moveDown: (path, toMove: number) => () => {
+    dispatch(
+      update(path, array => {
+        moveDown(array, toMove);
         return array;
       })
     );
