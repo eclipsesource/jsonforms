@@ -52,7 +52,7 @@ const TableToolbar = React.memo((
                 container
                 justify={'flex-start'}
                 alignItems={'center'}
-                spacing={10}
+                spacing={2}
             >
                 <Grid item>
                   <Typography variant={'h6'}>{label}</Typography>

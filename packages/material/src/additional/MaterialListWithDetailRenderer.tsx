@@ -79,7 +79,7 @@ export const MaterialListWithDetailRenderer =
           addItem={addItem}
           createDefault={handleCreateDefaultValue}
         />
-        <Grid container direction='row' spacing={10}>
+        <Grid container direction='row' spacing={2}>
           <Grid item xs={3}>
             <List>
               {data > 0 ?
