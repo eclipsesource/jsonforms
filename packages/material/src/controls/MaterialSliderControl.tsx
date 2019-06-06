@@ -99,7 +99,7 @@ export class MaterialSliderControl extends Control<ControlProps, ControlState> {
             min={schema.minimum}
             max={schema.maximum}
             value={Number(data || schema.default)}
-            onChange={(_ev, value) => {
+            onChange={(_ev: any, value: any) => {
               handleChange(path, Number(value));
             }
             }

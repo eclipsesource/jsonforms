@@ -72,7 +72,7 @@ export const MaterialLayoutRenderer = ({
         <Grid
           container
           direction={direction}
-          spacing={direction === 'row' ? 16 : 0}
+          spacing={direction === 'row' ? 2 : 0}
         >
           {renderLayoutElements(elements, schema, path, renderers)}
         </Grid>
