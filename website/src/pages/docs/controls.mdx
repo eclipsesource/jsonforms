@@ -5,7 +5,7 @@ parent: UI Schema Elements
 ---
 
 import ApiLink from '../../components/common/ApiLink.js'
-import { Example } from './components/controls'
+import { Example, ExampleWithCustomLabel } from './components/controls'
 
 # Controls
 
@@ -15,7 +15,7 @@ A control is usually displaying the value of one property from the data in an UI
 How a control is rendered depends on the type of the property as defined in the JSON Schema,
 e.g. a property of type `boolean` is rendered as a Checkbox by default.
 
-## `scope` (string)
+## `scope (string)`
 
 The mandatory `scope` property, which expects a [JSON schema reference value](https://spacetelescope.github.io/understanding-json-schema/structuring.html#reuse"),
 defines to which property of the data the control should be bound to.
@@ -49,3 +49,21 @@ JSON Forms ships with a default renderer set which consists of renderers for all
 for arrays. Furthermore JSON Forms allows controls to be replaced or new controls to be added for newly
 invented UI Schema Elements. For documentation on these so called **Custom Renderers** please see the section
 about [Custom renderers](/docs/custom-renderers).
+
+## `label (string | boolean)`
+
+By default, controls use the name of property they point to as a label. You can customize this behaviour by specifying a `label` property:
+
+```json
+{
+  "type": "Control",
+  "scope": "#/properties/name",
+  "label": "First name"
+}
+```
+
+Here's the rendered form:
+
+<ExampleWithCustomLabel />
+
+You can also completly disable the label by setting it to `false`.

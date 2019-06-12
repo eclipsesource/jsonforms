@@ -13,7 +13,7 @@ const DocPage = ({ children, pathname }) => {
   });
   return (
     <Fragment>
-      <SidebarLayout menus={query ? filteredMenus : menus} pathname={pathname} onSearch={setQuery}>
+      <SidebarLayout menus={query ? filteredMenus : menus} pathname={pathname}>
         {children}
         <Button variant="outlined" component={Link} to='/docs' className={styles.toc_button}>
           Back to Overview

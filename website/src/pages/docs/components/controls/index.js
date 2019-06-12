@@ -40,4 +40,43 @@ export const Example = () => (
       uischema={input.uischema}
     />
   </Provider>
-)
+);
+
+export const customLabelInput = {
+  schema: {
+    properties: {
+      name: {  'type': 'string' }
+    }
+  },
+  uischema: {
+    type: 'Control',
+    scope: '#/properties/name',
+    label: "First name"
+  },
+  data: {
+    name: 'Ottgar',
+  }
+};
+
+const storeWithCustomLabel = createJsonFormsStore({
+  data: customLabelInput.data,
+  schema: customLabelInput.schema,
+  uischema: customLabelInput.uischema
+});
+
+export const ExampleWithCustomLabel = () => (
+  <Provider store={storeWithCustomLabel} >
+    <Demo
+      js={() => {
+        return (
+          <JsonForms
+            schema={customLabelInput.schema}
+            uischema={customLabelInput.uischema}
+          />
+        )
+      }}
+      schema={customLabelInput.schema}
+      uischema={customLabelInput.uischema}
+    />
+  </Provider>
+);

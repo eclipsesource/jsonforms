@@ -48,7 +48,7 @@ const Menu = ({ indent, menu, pathname }) => {
 const SidebarLayout = ({ classes, children, menus, pathname, onSearch }) => (
   <div className={classes.container}>
     <div className={styles.sidebar}>
-      {onSearch && <input onChange={ev => onSearch(ev.target.value)} placeholder="Enter search term..." />}
+      {onSearch && <input onChange={ev => onSearch(ev.target.value)} placeholder="Filter sections..." />}
       <ul>
         {menus.map(m => (
           <Menu key={m.route} menu={m} pathname={pathname} indent={0} />
