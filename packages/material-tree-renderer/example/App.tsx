@@ -33,6 +33,7 @@ import {
   getUiSchema,
   JsonFormsStore
 } from '@jsonforms/core';
+import { JsonFormsReduxContext } from '@jsonforms/react';
 
 interface AppParameter {
   store: JsonFormsStore;
@@ -41,21 +42,28 @@ interface AppParameter {
   imageProvider: any;
 }
 
-const App = ({ store, filterPredicate, labelProviders, imageProvider }: AppParameter) => (
+const App = ({
+  store,
+  filterPredicate,
+  labelProviders,
+  imageProvider
+}: AppParameter) => (
   <Provider store={store}>
-    <React.Fragment>
-      <EditorBar
-        schema={getSchema(store.getState())}
-        rootData={getData(store.getState())}
-      />
-      <ThemedTreeWithDetail
-        filterPredicate={filterPredicate}
-        labelProviders={labelProviders}
-        imageProvider={imageProvider}
-        schema={getSchema(store.getState())}
-        uischema={getUiSchema(store.getState())as ControlElement}
-      />
-    </React.Fragment>
+    <JsonFormsReduxContext>
+      <React.Fragment>
+        <EditorBar
+          schema={getSchema(store.getState())}
+          rootData={getData(store.getState())}
+        />
+        <ThemedTreeWithDetail
+          filterPredicate={filterPredicate}
+          labelProviders={labelProviders}
+          imageProvider={imageProvider}
+          schema={getSchema(store.getState())}
+          uischema={getUiSchema(store.getState()) as ControlElement}
+        />
+      </React.Fragment>
+    </JsonFormsReduxContext>
   </Provider>
 );
 
