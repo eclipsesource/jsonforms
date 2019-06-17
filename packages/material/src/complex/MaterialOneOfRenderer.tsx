@@ -25,6 +25,7 @@
 import React, { useCallback, useState } from 'react';
 
 import {
+  CombinatorProps,
   createCombinatorRenderInfos,
   createDefaultValue,
   isOneOfControl,
@@ -32,9 +33,7 @@ import {
   OwnPropsOfControl,
   RankedTester,
   rankWith,
-  resolveSubSchemas,
-  DispatchPropsOfControl,
-  StatePropsOfCombinator
+  resolveSubSchemas
 } from '@jsonforms/core';
 import {
   Button,
@@ -47,112 +46,96 @@ import {
   Tab,
   Tabs
 } from '@material-ui/core';
-import { JsonFormsDispatch, withJsonFormsOneOfProps } from '@jsonforms/react';
+import {
+  JsonFormsDispatch,
+  withJsonFormsOneOfProps
+} from '@jsonforms/react';
 import CombinatorProperties from './CombinatorProperties';
 
 export interface OwnOneOfProps extends OwnPropsOfControl {
   indexOfFittingSchema?: number;
 }
+
 const oneOf = 'oneOf';
-const MaterialOneOfRenderer = ({
-  handleChange,
-  schema,
-  path,
-  renderers,
-  rootSchema,
-  id,
-  visible,
-  indexOfFittingSchema,
-  uischema,
-  uischemas
-}: StatePropsOfCombinator & DispatchPropsOfControl) => {
-  const [open, setOpen] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(indexOfFittingSchema || 0);
-  const [newSelectedIndex, setNewSelectedIndex] = useState(0);
-  const handleClose = useCallback(() => setOpen(false), [setOpen]);
-  const cancel = useCallback(() => {
-    setOpen(false);
-  }, [setOpen]);
-  const handleTabChange = useCallback(
-    (_event: any, newOneOfIndex: number) => {
+const MaterialOneOfRenderer =
+  ({ handleChange, schema, path, renderers, rootSchema, id, visible, indexOfFittingSchema, uischema, uischemas }: CombinatorProps) => {
+    const [open, setOpen] = useState(false);
+    const [selectedIndex, setSelectedIndex] = useState(indexOfFittingSchema || 0);
+    const [newSelectedIndex, setNewSelectedIndex] = useState(0);
+    const handleClose = useCallback(() => setOpen(false), [setOpen]);
+    const cancel = useCallback(() => {
+      setOpen(false);
+    }, [setOpen]);
+    const handleTabChange = useCallback((_event: any, newOneOfIndex: number) => {
       setOpen(true);
       setNewSelectedIndex(newOneOfIndex);
-    },
-    [setOpen, setSelectedIndex]
-  );
-  //const { handleChange } = ctxDispatchToControlProps(dispatch);
-  const _schema = resolveSubSchemas(schema, rootSchema, oneOf);
-  const oneOfRenderInfos = createCombinatorRenderInfos(
-    (_schema as JsonSchema).oneOf,
-    rootSchema,
-    oneOf,
-    uischema,
-    path,
-    uischemas
-  );
-  const confirm = useCallback(() => {
-    handleChange(path, createDefaultValue(schema.oneOf[newSelectedIndex]));
-    setOpen(false);
-    setSelectedIndex(newSelectedIndex);
-  }, [handleChange, createDefaultValue, newSelectedIndex]);
+    }, [setOpen, setSelectedIndex]);
+    const _schema = resolveSubSchemas(schema, rootSchema, oneOf);
+    const oneOfRenderInfos = createCombinatorRenderInfos(
+      (_schema as JsonSchema).oneOf,
+      rootSchema,
+      oneOf,
+      uischema,
+      path,
+      uischemas
+      );
+    const confirm = useCallback(() => {
+      handleChange(
+        path,
+        createDefaultValue(schema.oneOf[newSelectedIndex])
+      );
+      setOpen(false);
+      setSelectedIndex(newSelectedIndex);
+    }, [handleChange, createDefaultValue, newSelectedIndex]);
 
-  return (
-    <Hidden xsUp={!visible}>
-      <CombinatorProperties
-        schema={_schema}
-        combinatorKeyword={'oneOf'}
-        path={path}
-      />
-      <Tabs value={selectedIndex} onChange={handleTabChange}>
-        {oneOfRenderInfos.map(oneOfRenderInfo => (
-          <Tab key={oneOfRenderInfo.label} label={oneOfRenderInfo.label} />
-        ))}
-      </Tabs>
-      {oneOfRenderInfos.map(
-        (oneOfRenderInfo, oneOfIndex) =>
-          selectedIndex === oneOfIndex && (
-            <JsonFormsDispatch
-              key={oneOfIndex}
-              schema={oneOfRenderInfo.schema}
-              uischema={oneOfRenderInfo.uischema}
-              path={path}
-              renderers={renderers}
-            />
-          )
-      )}
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby='alert-dialog-title'
-        aria-describedby='alert-dialog-description'
-      >
-        <DialogTitle id='alert-dialog-title'>{'Clear form?'}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id='alert-dialog-description'>
-            Your data will be cleared if you navigate away from this tab. Do you
-            want to proceed?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={cancel} color='primary'>
-            No
-          </Button>
-          <Button
-            onClick={confirm}
-            color='primary'
-            autoFocus
-            id={`oneOf-${id}-confirm-yes`}
-          >
-            Yes
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Hidden>
-  );
-};
+    return (
+      <Hidden xsUp={!visible}>
+        <CombinatorProperties
+          schema={_schema}
+          combinatorKeyword={'oneOf'}
+          path={path}
+        />
+        <Tabs value={selectedIndex} onChange={handleTabChange}>
+          {oneOfRenderInfos.map(oneOfRenderInfo => <Tab key={oneOfRenderInfo.label} label={oneOfRenderInfo.label} />)}
+        </Tabs>
+        {
+          oneOfRenderInfos.map((oneOfRenderInfo, oneOfIndex) => (
+            selectedIndex === oneOfIndex && (
+              <JsonFormsDispatch
+                key={oneOfIndex}
+                schema={oneOfRenderInfo.schema}
+                uischema={oneOfRenderInfo.uischema}
+                path={path}
+                renderers={renderers}
+              />
+            )
+          ))
+        }
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby='alert-dialog-title'
+          aria-describedby='alert-dialog-description'
+        >
+          <DialogTitle id='alert-dialog-title'>{'Clear form?'}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id='alert-dialog-description'>
+              Your data will be cleared if you navigate away from this tab.
+              Do you want to proceed?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={cancel} color='primary'>
+              No
+            </Button>
+            <Button onClick={confirm} color='primary' autoFocus id={`oneOf-${id}-confirm-yes`}>
+              Yes
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Hidden>
+    );
+  };
 
-export const materialOneOfControlTester: RankedTester = rankWith(
-  3,
-  isOneOfControl
-);
+export const materialOneOfControlTester: RankedTester = rankWith(3, isOneOfControl);
 export default withJsonFormsOneOfProps(MaterialOneOfRenderer);
