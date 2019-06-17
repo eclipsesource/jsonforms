@@ -41,12 +41,12 @@ const uischema = {
 
 describe('Material group layout', () => {
   it('should render a GroupComponent with direction column when given no direction LayoutProp', () => {
-    const wrapper = mount(<MaterialGroupLayout schema={schema} uischema={uischema} />)
-    expect(wrapper.find(MaterialLayoutRenderer).props().direction).toBe('column')
+    const wrapper = mount(<MaterialGroupLayout schema={schema} uischema={uischema} />);
+    expect(wrapper.find(MaterialLayoutRenderer).props().direction).toBe('column');
   })
 
   it('should render a GroupComponent with direction row when this is provided as a direction prop', () => {
-    const wrapper = mount(<MaterialGroupLayout schema={schema} uischema={uischema} direction={'row'} />)
-    expect(wrapper.find(MaterialLayoutRenderer).props().direction).toBe('row')
+    const wrapper = mount(<MaterialGroupLayout schema={schema} uischema={uischema} direction={'row'} />);
+    expect(wrapper.find(MaterialLayoutRenderer).props().direction).toBe('row');
   })
 })

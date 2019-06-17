@@ -61,9 +61,8 @@ export class ResolvedJsonFormsDispatchRenderer
         prevState: JsonFormsRendererState
     ) {
 
-        const schemaHasRefs: boolean = hasRefs(nextProps.schema);
-
         if (!isEqual(prevState.schema, nextProps.schema)) {
+            const schemaHasRefs: boolean = hasRefs(nextProps.schema);
             const newState: JsonFormsRendererState = {
                 id: prevState.id,
                 resolvedSchema: schemaHasRefs ? undefined : nextProps.schema,
@@ -179,6 +178,7 @@ export interface JsonFormsInitStateProps {
 
 export const JsonForms = (props: JsonFormsInitStateProps) => {
     const { data, schema, uischema, renderers } = props;
+
     return (
         <JsonFormsStateProvider
             initState={{

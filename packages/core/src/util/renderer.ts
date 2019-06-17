@@ -49,10 +49,10 @@ import {
   formatErrorMessage,
   isEnabled,
   isVisible,
-  Resolve,
-  resolveSubSchemas,
+  moveDown,
   moveUp,
-  moveDown
+  Resolve,
+  resolveSubSchemas
 } from '../util';
 import has from 'lodash/has';
 import { update } from '../actions';
@@ -293,6 +293,8 @@ export interface StatePropsOfControl extends StatePropsOfScopedRenderer {
    * Whether the rendered data is required.
    */
   required?: boolean;
+
+  // TODO: renderers?
 }
 
 /**
@@ -838,6 +840,8 @@ export const mapStateToArrayLayoutProps = (
     errors: allErrors
   };
 };
+
+export type CombinatorProps = StatePropsOfCombinator & DispatchPropsOfControl;
 
 /**
  * Props of an array control.
