@@ -24,9 +24,9 @@
 */
 
 import { JsonSchema } from '../models/jsonSchema';
-import { UISchemaElement } from '../models/uischema';
+import { ControlElement, UISchemaElement } from '../models/uischema';
 import { resolveSchema } from './resolvers';
-import { generateDefaultUISchema } from '../generators';
+import { findUISchema, UISchemaTester } from '../reducers';
 
 export interface CombinatorSubSchemaRenderInfo {
   schema: JsonSchema;
@@ -69,14 +69,20 @@ export const resolveSubSchemas = (
 export const createCombinatorRenderInfos = (
   combinatorSubSchemas: JsonSchema[],
   rootSchema: JsonSchema,
-  keyword: CombinatorKeyword
+  keyword: CombinatorKeyword,
+  control: ControlElement,
+  path: string,
+  uischemas: { tester: UISchemaTester; uischema: UISchemaElement }[]
 ): CombinatorSubSchemaRenderInfo[] =>
   combinatorSubSchemas.map((subSchema, subSchemaIndex) => ({
     schema: subSchema,
-    uischema: generateDefaultUISchema(
+    uischema: findUISchema(
+      uischemas,
       subSchema,
-      'VerticalLayout',
-      `#`,
+      control.scope,
+      path,
+      undefined,
+      control,
       rootSchema
     ),
     label: createLabel(subSchema, subSchemaIndex, keyword)

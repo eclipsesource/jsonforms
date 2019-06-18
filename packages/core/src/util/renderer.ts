@@ -28,6 +28,7 @@ import union from 'lodash/union';
 import find from 'lodash/find';
 import RefParser from 'json-schema-ref-parser';
 import {
+  findUISchema,
   getConfig,
   getData,
   getErrorAt,
@@ -41,8 +42,8 @@ import {
 import { RankedTester } from '../testers';
 import { JsonSchema } from '../models/jsonSchema';
 import {
-  CombinatorKeyword,
   composePaths,
+  CombinatorKeyword,
   composeWithUi,
   createLabelDescriptionFrom,
   formatErrorMessage,
@@ -56,7 +57,6 @@ import {
 import has from 'lodash/has';
 import { update } from '../actions';
 import { ErrorObject } from 'ajv';
-import { generateDefaultUISchema } from '../generators';
 import { JsonFormsState } from '../store';
 import { AnyAction, Dispatch } from 'redux';
 import { JsonFormsRendererRegistryEntry } from '../reducers/renderers';
@@ -667,7 +667,12 @@ export const mapStateToJsonFormsRendererProps = (
   let uischema = ownProps.uischema;
   if (uischema === undefined) {
     if (ownProps.schema) {
-      uischema = generateDefaultUISchema(ownProps.schema);
+      uischema = findUISchema(
+        state.jsonforms.uischemas,
+        ownProps.schema,
+        undefined,
+        ownProps.path
+      );
     } else {
       uischema = getUiSchema(state);
     }
@@ -693,6 +698,7 @@ export interface StatePropsOfCombinator extends OwnPropsOfControl {
   path: string;
   id: string;
   indexOfFittingSchema: number;
+  uischemas: { tester: UISchemaTester; uischema: UISchemaElement }[];
 }
 
 const mapStateToCombinatorRendererProps = (
@@ -742,7 +748,9 @@ const mapStateToCombinatorRendererProps = (
     rootSchema,
     visible,
     id,
-    indexOfFittingSchema
+    indexOfFittingSchema,
+    uischemas: state.jsonforms.uischemas,
+    uischema
   };
 };
 

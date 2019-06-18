@@ -43,7 +43,11 @@ import {
   moveUp,
   moveDown
 } from '@jsonforms/core';
-import { JsonFormsDispatch, JsonFormsStateContext, useJsonForms } from '@jsonforms/react';
+import {
+  JsonFormsDispatch,
+  JsonFormsStateContext,
+  useJsonForms
+} from '@jsonforms/react';
 import IconButton from '@material-ui/core/IconButton';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import map from 'lodash/map';
@@ -62,7 +66,10 @@ const iconStyle: any = { float: 'right' };
 interface MaterialArrayLayoutState {
   expanded: string | boolean;
 }
-export class MaterialArrayLayout extends React.Component<ArrayLayoutProps, MaterialArrayLayoutState> {
+export class MaterialArrayLayout extends React.Component<
+  ArrayLayoutProps,
+  MaterialArrayLayoutState
+> {
   state: MaterialArrayLayoutState = {
     expanded: null
   };
@@ -84,7 +91,8 @@ export class MaterialArrayLayout extends React.Component<ArrayLayoutProps, Mater
       addItem,
       renderers,
       label,
-      required
+      required,
+      rootSchema
     } = this.props;
 
     return (
@@ -112,6 +120,7 @@ export class MaterialArrayLayout extends React.Component<ArrayLayoutProps, Mater
                   uischema={uischema}
                   renderers={renderers}
                   key={index}
+                  rootSchema={rootSchema}
                   enableMoveUp={index != 0}
                   enableMoveDown={index < data - 1}
                 />
@@ -127,7 +136,6 @@ export class MaterialArrayLayout extends React.Component<ArrayLayoutProps, Mater
 }
 
 const ExpandPanelRenderer = (props: OwnPropsOfExpandPanel) => {
-
   const { renderers, uischemas, dispatch, ...ctx } = useJsonForms();
   const {
     index,
@@ -138,14 +146,13 @@ const ExpandPanelRenderer = (props: OwnPropsOfExpandPanel) => {
     path,
     handleExpansion,
     uischema,
+    rootSchema,
     enableMoveUp,
     enableMoveDown
   } = ctxStateToExpandPanelProps(ctx, props);
-  const { 
-    removeItems,
-    moveDown,
-    moveUp
-  } = ctxDispatchToExpandPanelProps(dispatch);
+  const { removeItems, moveDown, moveUp } = ctxDispatchToExpandPanelProps(
+    dispatch
+  );
 
   const foundUISchema = findUISchema(
     uischemas,
@@ -153,7 +160,8 @@ const ExpandPanelRenderer = (props: OwnPropsOfExpandPanel) => {
     uischema.scope,
     path,
     undefined,
-    uischema
+    uischema,
+    rootSchema
   );
 
   return (
@@ -163,7 +171,7 @@ const ExpandPanelRenderer = (props: OwnPropsOfExpandPanel) => {
           <Grid item xs={10}>
             <Grid container alignItems={'center'}>
               <Grid item xs={1}>
-                <Avatar aria-label="Index">{index + 1}</Avatar>
+                <Avatar aria-label='Index'>{index + 1}</Avatar>
               </Grid>
               <Grid item xs={2}>
                 {childLabel}
@@ -175,9 +183,9 @@ const ExpandPanelRenderer = (props: OwnPropsOfExpandPanel) => {
               <Grid item>
                 <Grid
                   container
-                  direction="row"
-                  justify="center"
-                  alignItems="center"
+                  direction='row'
+                  justify='center'
+                  alignItems='center'
                 >
                   {uischema.options && uischema.options.showSortButtons ? (
                     <Fragment>
@@ -203,8 +211,8 @@ const ExpandPanelRenderer = (props: OwnPropsOfExpandPanel) => {
                       </Grid>
                     </Fragment>
                   ) : (
-                      ''
-                    )}
+                    ''
+                  )}
                   <Grid item>
                     <IconButton
                       onClick={removeItems(path, [index])}
@@ -231,7 +239,7 @@ const ExpandPanelRenderer = (props: OwnPropsOfExpandPanel) => {
       </ExpansionPanelDetails>
     </ExpansionPanel>
   );
-}
+};
 
 interface OwnPropsOfExpandPanel {
   index: number;
@@ -240,6 +248,7 @@ interface OwnPropsOfExpandPanel {
   schema: JsonSchema;
   expanded: boolean;
   renderers?: JsonFormsRendererRegistryEntry[];
+  rootSchema: JsonSchema;
   enableMoveUp: boolean;
   enableMoveDown: boolean;
   handleExpansion(panel: string): (event: any, expanded: boolean) => void;
@@ -262,13 +271,13 @@ export const ctxStateToExpandPanelProps = (
   const { schema, path, index } = ownProps;
   const firstPrimitiveProp = schema.properties
     ? find(Object.keys(schema.properties), propName => {
-      const prop = schema.properties[propName];
-      return (
-        prop.type === 'string' ||
-        prop.type === 'number' ||
-        prop.type === 'integer'
-      );
-    })
+        const prop = schema.properties[propName];
+        return (
+          prop.type === 'string' ||
+          prop.type === 'number' ||
+          prop.type === 'integer'
+        );
+      })
     : undefined;
   const childPath = composePaths(path, `${index}`);
   const childData = Resolve.data(state.core.data, childPath);
@@ -297,7 +306,9 @@ export interface DispatchPropsOfExpandPanel {
  * @param dispatch the store's dispatch method
  * @returns {DispatchPropsOfArrayControl} dispatch props of an expand panel control
  */
-export const ctxDispatchToExpandPanelProps: (dispatch: Dispatch<ReducerAction<any>>) => DispatchPropsOfExpandPanel = dispatch => ({
+export const ctxDispatchToExpandPanelProps: (
+  dispatch: Dispatch<ReducerAction<any>>
+) => DispatchPropsOfExpandPanel = dispatch => ({
   removeItems: (path: string, toDelete: number[]) => (event: any): void => {
     event.stopPropagation();
     dispatch(
@@ -331,4 +342,4 @@ export const ctxDispatchToExpandPanelProps: (dispatch: Dispatch<ReducerAction<an
 });
 export interface ExpandPanelProps
   extends StatePropsOfExpandPanel,
-  DispatchPropsOfExpandPanel { }
+    DispatchPropsOfExpandPanel {}

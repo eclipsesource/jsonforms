@@ -31,33 +31,53 @@ import {
   RankedTester,
   rankWith,
   resolveSubSchemas,
-  StatePropsOfCombinator,
+  StatePropsOfCombinator
 } from '@jsonforms/core';
 import { JsonFormsDispatch, withJsonFormsAnyOfProps } from '@jsonforms/react';
 import { Hidden, Tab, Tabs } from '@material-ui/core';
 import CombinatorProperties from './CombinatorProperties';
 
-const MaterialAnyOfRenderer =
-  ({ schema, rootSchema, indexOfFittingSchema, visible, path, renderers }: StatePropsOfCombinator) => {
-    const [selectedAnyOf, setSelectedAnyOf] = useState(indexOfFittingSchema || 0);
-    const handleChange = useCallback((_ev: any, value: number) => setSelectedAnyOf(value), [setSelectedAnyOf]);
-    const anyOf = 'anyOf';
-    const _schema = resolveSubSchemas(schema, rootSchema, anyOf);
-    const anyOfRenderInfos = createCombinatorRenderInfos((_schema as JsonSchema).anyOf, rootSchema, anyOf);
+const MaterialAnyOfRenderer = ({
+  schema,
+  rootSchema,
+  indexOfFittingSchema,
+  visible,
+  path,
+  renderers,
+  uischema,
+  uischemas
+}: StatePropsOfCombinator) => {
+  const [selectedAnyOf, setSelectedAnyOf] = useState(indexOfFittingSchema || 0);
+  const handleChange = useCallback(
+    (_ev: any, value: number) => setSelectedAnyOf(value),
+    [setSelectedAnyOf]
+  );
+  const anyOf = 'anyOf';
+  const _schema = resolveSubSchemas(schema, rootSchema, anyOf);
+  const anyOfRenderInfos = createCombinatorRenderInfos(
+    (_schema as JsonSchema).anyOf,
+    rootSchema,
+    anyOf,
+    uischema,
+    path,
+    uischemas
+  );
 
-    return (
-      <Hidden xsUp={!visible}>
-        <CombinatorProperties
-          schema={_schema}
-          combinatorKeyword={'anyOf'}
-          path={path}
-        />
-        <Tabs value={selectedAnyOf} onChange={handleChange}>
-          {anyOfRenderInfos.map(anyOfRenderInfo => <Tab key={anyOfRenderInfo.label} label={anyOfRenderInfo.label} />)}
-        </Tabs>
-        {
-          anyOfRenderInfos.map((anyOfRenderInfo, anyOfIndex) => (
-            selectedAnyOf === anyOfIndex &&
+  return (
+    <Hidden xsUp={!visible}>
+      <CombinatorProperties
+        schema={_schema}
+        combinatorKeyword={'anyOf'}
+        path={path}
+      />
+      <Tabs value={selectedAnyOf} onChange={handleChange}>
+        {anyOfRenderInfos.map(anyOfRenderInfo => (
+          <Tab key={anyOfRenderInfo.label} label={anyOfRenderInfo.label} />
+        ))}
+      </Tabs>
+      {anyOfRenderInfos.map(
+        (anyOfRenderInfo, anyOfIndex) =>
+          selectedAnyOf === anyOfIndex && (
             <JsonFormsDispatch
               key={anyOfIndex}
               schema={anyOfRenderInfo.schema}
@@ -65,11 +85,14 @@ const MaterialAnyOfRenderer =
               path={path}
               renderers={renderers}
             />
-          ))
-        }
-      </Hidden>
-    );
-  };
+          )
+      )}
+    </Hidden>
+  );
+};
 
-export const materialAnyOfControlTester: RankedTester = rankWith(3, isAnyOfControl);
+export const materialAnyOfControlTester: RankedTester = rankWith(
+  3,
+  isAnyOfControl
+);
 export default withJsonFormsAnyOfProps(MaterialAnyOfRenderer);
