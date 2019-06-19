@@ -321,7 +321,9 @@ export interface StatePropsOfLayout extends StatePropsOfRenderer {
   renderers?: any[];
 }
 
-export interface LayoutProps extends StatePropsOfLayout {}
+export interface LayoutProps extends StatePropsOfLayout {
+  direction: 'row' | 'column';
+}
 
 /**
  * The state of a control.
