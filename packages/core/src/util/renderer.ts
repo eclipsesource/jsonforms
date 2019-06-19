@@ -202,6 +202,10 @@ export interface OwnPropsOfEnum {
   options?: any[];
 }
 
+export interface OwnPropsOfLayout extends OwnPropsOfRenderer {
+  direction?: 'row' | 'column';
+}
+
 /**
  * State-based props of a {@link Renderer}.
  */
@@ -625,8 +629,8 @@ export const layoutDefaultProps = {
  */
 export const mapStateToLayoutProps = (
   state: JsonFormsState,
-  ownProps: OwnPropsOfJsonFormsRenderer
-): StatePropsOfLayout => {
+  ownProps: OwnPropsOfLayout
+): LayoutProps => {
   const rootData = getData(state);
   const visible: boolean = has(ownProps, 'visible')
     ? ownProps.visible
@@ -642,7 +646,8 @@ export const mapStateToLayoutProps = (
     enabled,
     path: ownProps.path,
     uischema: ownProps.uischema,
-    schema: ownProps.schema
+    schema: ownProps.schema,
+    direction: ownProps.direction || 'column'
   };
 };
 
