@@ -323,11 +323,14 @@ export interface StatePropsOfLayout extends StatePropsOfRenderer {
    * All available renderers.
    */
   renderers?: any[];
-}
 
-export interface LayoutProps extends StatePropsOfLayout {
+  /**
+   * Direction for the layout to flow
+   */
   direction: 'row' | 'column';
 }
+
+export interface LayoutProps extends StatePropsOfLayout {}
 
 /**
  * The state of a control.
@@ -615,10 +618,16 @@ export interface ArrayControlProps
   extends StatePropsOfArrayControl,
     DispatchPropsOfArrayControl {}
 
-export const layoutDefaultProps = {
+export const layoutDefaultProps: {
+  visible: boolean;
+  enabled: boolean;
+  path: string;
+  direction: 'row' | 'column';
+} = {
   visible: true,
   enabled: true,
-  path: ''
+  path: '',
+  direction: 'column'
 };
 
 /**
@@ -647,7 +656,7 @@ export const mapStateToLayoutProps = (
     path: ownProps.path,
     uischema: ownProps.uischema,
     schema: ownProps.schema,
-    direction: ownProps.direction || 'column'
+    direction: ownProps.direction || layoutDefaultProps.direction
   };
 };
 
