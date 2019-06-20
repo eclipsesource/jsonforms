@@ -54,6 +54,7 @@ import {
   OwnPropsOfEnumCell,
   OwnPropsOfJsonFormsRenderer,
   OwnPropsOfMasterListItem,
+  OwnPropsOfLayout,
   rendererReducer,
   StatePropsOfCombinator,
   StatePropsOfControlWithDetail,
@@ -135,7 +136,7 @@ export const ctxToArrayLayoutProps = (ctx: JsonFormsStateContext, props: OwnProp
 export const ctxToArrayControlProps = (ctx: JsonFormsStateContext, props: OwnPropsOfControl) =>
   mapStateToArrayControlProps({ jsonforms: { ...ctx } }, props);
 
-export const ctxToLayoutProps = (ctx: JsonFormsStateContext, props: OwnPropsOfJsonFormsRenderer): LayoutProps =>
+export const ctxToLayoutProps = (ctx: JsonFormsStateContext, props: OwnPropsOfLayout): LayoutProps =>
   mapStateToLayoutProps({ jsonforms: { ...ctx } }, props);
 
 export const ctxToControlProps = (ctx: JsonFormsStateContext, props: OwnPropsOfControl) =>
@@ -207,7 +208,7 @@ export const ctxToCellProps = (
   return mapStateToCellProps({ jsonforms: { ...ctx } }, ownProps);
 }
 
-export const withJsonFormsLayoutProps = (Component: ComponentType<LayoutProps>): ComponentType<OwnPropsOfJsonFormsRenderer> => (props: LayoutProps) => {
+export const withJsonFormsLayoutProps = (Component: ComponentType<LayoutProps>): ComponentType<OwnPropsOfLayout> => (props: LayoutProps) => {
   const ctx = useJsonForms();
   const layoutProps = ctxToLayoutProps(ctx, props);
   return (

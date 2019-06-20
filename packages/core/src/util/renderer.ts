@@ -202,6 +202,10 @@ export interface OwnPropsOfEnum {
   options?: any[];
 }
 
+export interface OwnPropsOfLayout extends OwnPropsOfRenderer {
+  direction?: 'row' | 'column';
+}
+
 /**
  * State-based props of a {@link Renderer}.
  */
@@ -319,6 +323,11 @@ export interface StatePropsOfLayout extends StatePropsOfRenderer {
    * All available renderers.
    */
   renderers?: any[];
+
+  /**
+   * Direction for the layout to flow
+   */
+  direction: 'row' | 'column';
 }
 
 export interface LayoutProps extends StatePropsOfLayout {}
@@ -609,10 +618,16 @@ export interface ArrayControlProps
   extends StatePropsOfArrayControl,
     DispatchPropsOfArrayControl {}
 
-export const layoutDefaultProps = {
+export const layoutDefaultProps: {
+  visible: boolean;
+  enabled: boolean;
+  path: string;
+  direction: 'row' | 'column';
+} = {
   visible: true,
   enabled: true,
-  path: ''
+  path: '',
+  direction: 'column'
 };
 
 /**
@@ -623,8 +638,8 @@ export const layoutDefaultProps = {
  */
 export const mapStateToLayoutProps = (
   state: JsonFormsState,
-  ownProps: OwnPropsOfJsonFormsRenderer
-): StatePropsOfLayout => {
+  ownProps: OwnPropsOfLayout
+): LayoutProps => {
   const rootData = getData(state);
   const visible: boolean = has(ownProps, 'visible')
     ? ownProps.visible
@@ -640,7 +655,8 @@ export const mapStateToLayoutProps = (
     enabled,
     path: ownProps.path,
     uischema: ownProps.uischema,
-    schema: ownProps.schema
+    schema: ownProps.schema,
+    direction: ownProps.direction || layoutDefaultProps.direction
   };
 };
 
