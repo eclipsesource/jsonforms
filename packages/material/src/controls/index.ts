@@ -53,6 +53,8 @@ import MaterialTextControl, {
   materialTextControlTester
 } from './MaterialTextControl';
 
+import { MaterialInputControl } from './MaterialInputControl';
+
 import MaterialAnyOfStringOrEnumControl, {
   materialAnyOfStringOrEnumControlTester
 } from './MaterialAnyOfStringOrEnumControl';
@@ -78,6 +80,7 @@ export {
   materialNumberControlTester,
   MaterialTextControl,
   materialTextControlTester,
+  MaterialInputControl,
   MaterialAnyOfStringOrEnumControl,
   materialAnyOfStringOrEnumControlTester
 };
