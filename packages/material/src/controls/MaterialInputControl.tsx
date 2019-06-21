@@ -67,7 +67,8 @@ export abstract class MaterialInputControl extends Control<ControlProps & WithIn
     const showDescription = !isDescriptionHidden(
       visible,
       description,
-      this.state.isFocused
+      this.state.isFocused,
+      config.showUnfocusedDescription
     );
     const InnerComponent = input;
     return (

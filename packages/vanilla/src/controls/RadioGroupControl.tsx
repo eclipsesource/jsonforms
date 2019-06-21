@@ -47,6 +47,7 @@ export class RadioGroupControl extends Control<ControlProps & VanillaRendererPro
             data,
             schema,
             visible,
+            config
         } = this.props;
         const isValid = errors.length === 0;
         const divClassNames =
@@ -55,7 +56,7 @@ export class RadioGroupControl extends Control<ControlProps & VanillaRendererPro
             display: 'flex',
             flexDirection: 'row'
         };
-        const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
+        const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused, config.showUnfocusedDescription);
 
         const options = schema.enum;
 

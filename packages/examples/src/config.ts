@@ -29,6 +29,7 @@ export const schema = {
   properties: {
     postalCode: {
       type: 'string',
+      description: "A Postal Code",
       maxLength: 5
     }
   }
@@ -56,7 +57,8 @@ export const data = {
 
 const config = {
   restrict: true,
-  trim: true
+  trim: true,
+  showUnfocusedDescription: true
 };
 
 registerExamples([

@@ -74,7 +74,7 @@ export class MaterialSliderControl extends Control<ControlProps, ControlState> {
       marginTop: '7px'
     };
 
-    const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
+    const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused,  config.showUnfocusedDescription);
     return (
       <Hidden xsUp={!visible}>
         <FormControl

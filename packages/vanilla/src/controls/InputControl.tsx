@@ -56,7 +56,8 @@ export class InputControl extends Control<
       visible,
       required,
       path,
-      cells
+      cells,
+      config
     } = this.props;
 
     const isValid = errors.length === 0;
@@ -66,7 +67,8 @@ export class InputControl extends Control<
     const showDescription = !isDescriptionHidden(
       visible,
       description,
-      this.state.isFocused
+      this.state.isFocused,
+      config.showUnfocusedDescription
     );
     const labelText = isPlainLabel(label) ? label : label.default;
     const cell = maxBy(cells, r => r.tester(uischema, schema));

@@ -60,7 +60,7 @@ export class MaterialNativeControl extends Control<ControlProps, ControlState> {
     const trim = mergedConfig.trim;
     const onChange = (ev: any) => handleChange(path, ev.target.value);
     const fieldType = schema.format;
-    const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
+    const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused, config.showUnfocusedDescription);
 
     return (
       <Hidden xsUp={!visible}>
