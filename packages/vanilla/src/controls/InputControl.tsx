@@ -38,6 +38,7 @@ import {
 import { Control, DispatchCell, withJsonFormsControlProps } from '@jsonforms/react';
 import { withVanillaControlProps } from '../util';
 import { VanillaRendererProps } from '../index';
+import merge from 'lodash/merge';
 
 export class InputControl extends Control<
   ControlProps & VanillaRendererProps,
@@ -64,11 +65,13 @@ export class InputControl extends Control<
     const divClassNames = `validation  ${
       isValid ? classNames.description : 'validation_error'
       }`;
+
+    const mergedConfig = merge({}, config, uischema.options);
     const showDescription = !isDescriptionHidden(
       visible,
       description,
       this.state.isFocused,
-      config.showUnfocusedDescription
+      mergedConfig.showUnfocusedDescription
     );
     const labelText = isPlainLabel(label) ? label : label.default;
     const cell = maxBy(cells, r => r.tester(uischema, schema));

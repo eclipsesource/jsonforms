@@ -33,6 +33,7 @@ import {
 import { Control, withJsonFormsControlProps } from '@jsonforms/react';
 import { withVanillaControlProps } from '../util';
 import { VanillaRendererProps } from '../index';
+import merge from 'lodash/merge';
 
 export class RadioGroupControl extends Control<ControlProps & VanillaRendererProps, ControlState> {
 
@@ -56,7 +57,9 @@ export class RadioGroupControl extends Control<ControlProps & VanillaRendererPro
             display: 'flex',
             flexDirection: 'row'
         };
-        const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused, config.showUnfocusedDescription);
+
+        const mergedConfig = merge({}, config, uischema.options);
+        const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused, mergedConfig.showUnfocusedDescription);
 
         const options = schema.enum;
 
