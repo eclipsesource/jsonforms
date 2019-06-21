@@ -91,12 +91,13 @@ export abstract class MaterialInputControl extends Control<ControlProps & WithIn
             isValid={isValid}
             visible={visible}
           />
+          {description !== undefined ? (
+            <FormHelperText>
+              {showDescription || !isValid ? description : null}
+            </FormHelperText>
+          ) : null}
           <FormHelperText error={!isValid}>
-            {!isValid
-              ? errors
-              : showDescription
-              ? description
-              : null}
+            {!isValid ? errors : null}
           </FormHelperText>
         </FormControl>
       </Hidden>
