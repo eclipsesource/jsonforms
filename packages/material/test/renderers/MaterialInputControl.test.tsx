@@ -112,7 +112,7 @@ describe('Material input control', () => {
     );
 
     const control = wrapper.find('div').first();
-    expect(control.children()).toHaveLength(3);
+    expect(control.children()).toHaveLength(4);
 
     const label = wrapper.find('label');
     expect(label.text()).toBe('Foo');
@@ -141,7 +141,7 @@ describe('Material input control', () => {
     );
 
     const div = wrapper.find('div').first();
-    expect(div.children()).toHaveLength(3);
+    expect(div.children()).toHaveLength(4);
 
     const label = wrapper.find('label');
     expect(label.text()).toBe('');
@@ -294,10 +294,10 @@ describe('Material input control', () => {
       </Provider>
     );
     const validation = wrapper.find('p');
-    expect(validation).toHaveLength(3);
+    expect(validation).toHaveLength(6);
     expect(validation.at(0).text()).toBe('');
-    expect(validation.at(1).text()).toBe('is a required property');
     expect(validation.at(2).text()).toBe('is a required property');
+    expect(validation.at(4).text()).toBe('is a required property');
   });
 
   it('should display a marker for a required prop', () => {
