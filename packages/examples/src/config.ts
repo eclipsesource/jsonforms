@@ -29,7 +29,7 @@ export const schema = {
   properties: {
     postalCode: {
       type: 'string',
-      description: "A Postal Code",
+      description: 'A Postal Code',
       maxLength: 5
     }
   }
