@@ -26,6 +26,7 @@ import React from 'react';
 import { combineReducers, createStore } from 'redux';
 import { Provider } from 'react-redux';
 import {
+  createAjv,
   jsonformsReducer,
   JsonFormsState,
   JsonFormsStore,
@@ -45,7 +46,11 @@ import { StatelessRenderer } from '../../src/Renderer';
 
 import Adapter from 'enzyme-adapter-react-16';
 import { JsonFormsDispatchRenderer, JsonFormsDispatch, JsonForms } from '../../src/JsonForms';
-import { JsonFormsReduxContext, useJsonForms } from '../../src/JsonFormsContext';
+import {
+  JsonFormsReduxContext,
+  useJsonForms,
+  JsonFormsStateProvider
+} from '../../src/JsonFormsContext';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -445,4 +450,58 @@ test('JsonForms should support two isolated components', () => {
   expect(wrapper.find('h2').text()).toBe('1');
   expect(wrapper.find('h1').text()).toBe('1');
   wrapper.unmount();
+});
+
+test('JsonForms should create a JsonFormsStateProvider with initState props', () => {
+  const tester = (_uischema: UISchemaElement, s: JsonSchema) =>
+    s.properties.foo.type === 'number' ? 1 : -1;
+
+  const renderers = [
+    {
+      tester: tester,
+      renderer: CustomRenderer2
+    }
+  ];
+
+  const ajv = createAjv();
+
+  const refParserOptions = {
+    resolve: {
+      geo: {
+        order: 1,
+        canRead: (file: any) => {
+          return file.url.indexOf('geographical-location.schema.json') !== -1;
+        },
+        read: () => {
+          return JSON.stringify(fixture.schema);
+        }
+      }
+    } as any
+  };
+
+  const wrapper = mount(
+    <JsonForms
+      data={fixture.data}
+      uischema={fixture.uischema}
+      schema={fixture.schema}
+      ajv={ajv}
+      refParserOptions={refParserOptions}
+      renderers={renderers}
+    />
+  );
+
+  const jsonFormsStateProviderInitStateProp = wrapper
+    .find(JsonFormsStateProvider)
+    .props().initState;
+  expect(jsonFormsStateProviderInitStateProp.core.data).toBe(fixture.data);
+  expect(jsonFormsStateProviderInitStateProp.core.uischema).toBe(
+    fixture.uischema
+  );
+  expect(jsonFormsStateProviderInitStateProp.core.schema).toBe(fixture.schema);
+  expect(jsonFormsStateProviderInitStateProp.core.ajv).toBe(ajv);
+  expect(jsonFormsStateProviderInitStateProp.core.refParserOptions).toBe(
+    refParserOptions
+  );
+
+  expect(jsonFormsStateProviderInitStateProp.renderers).toBe(renderers);
 });
