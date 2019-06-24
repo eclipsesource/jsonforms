@@ -151,12 +151,13 @@ export const createDefaultValue = (schema: JsonSchema) => {
 export const isDescriptionHidden = (
   visible: boolean,
   description: string,
-  isFocused: boolean
+  isFocused: boolean,
+  showUnfocusedDescription: boolean
 ): boolean => {
   return (
     description === undefined ||
     (description !== undefined && !visible) ||
-    !isFocused
+    (!showUnfocusedDescription && !isFocused)
   );
 };
 

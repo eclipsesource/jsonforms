@@ -55,7 +55,7 @@ export class MaterialRadioGroupControl extends Control<ControlProps, ControlStat
     const isValid = errors.length === 0;
     const mergedConfig = merge({}, config, this.props.uischema.options);
     const trim = mergedConfig.trim;
-    const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
+    const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused, mergedConfig.showUnfocusedDescription);
 
     const options = schema.enum;
 

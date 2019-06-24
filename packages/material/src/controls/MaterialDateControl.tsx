@@ -63,14 +63,15 @@ export class MaterialDateControl extends Control<StatePropsOfDateControl & Dispa
             path,
             handleChange,
             data,
-            momentLocale
+            momentLocale,
+            config
         } = this.props;
         const defaultLabel = label as string;
         const cancelLabel = '%cancel';
         const clearLabel = '%clear';
         const isValid = errors.length === 0;
         const trim = uischema.options && uischema.options.trim;
-        const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
+        const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused, config.showUnfocusedDescription);
         const inputProps = {};
         const localeDateTimeFormat =
             momentLocale ? `${momentLocale.localeData().longDateFormat('L')}`

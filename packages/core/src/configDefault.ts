@@ -33,5 +33,10 @@ export const configDefault = {
    * [text] whether to resize the input's width to maxLength,
    * if specified in the JSON schema
    */
-  trim: false
+  trim: false,
+
+  /*
+   * [text] if input descriptions should hide when not focused
+   */
+  showUnfocusedDescription: false
 };
