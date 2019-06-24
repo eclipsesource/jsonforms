@@ -47,6 +47,7 @@ export class RadioGroupControl extends Control<ControlProps & VanillaRendererPro
             errors,
             data,
             schema,
+            uischema,
             visible,
             config
         } = this.props;
