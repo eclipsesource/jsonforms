@@ -1,6 +1,7 @@
 ---
 name: Custom Renderers 
 route: /docs/custom-renderers
+parent: Tutorials
 ---
 
 import { Default, WithCustomRenderer } from './components/custom-renderers'
@@ -16,6 +17,9 @@ In this section you will learn how to create and register a custom renderer for 
 We will replace the default renderer for integer values of a rating property. By default an integer
 property is rendered like this:
 
+**NOTE**: There are fundamental differences between the React-and Angular-based versions of JSON Forms.
+This section describes how to add custom renderers for React-based renderer sets.
+
 <Default />
 
 Our goal is to instead render the UI for rating depicted below:
@@ -25,8 +29,7 @@ Our goal is to instead render the UI for rating depicted below:
 ## Running the seed
 
 If you want to follow along with this tutorial, you may want to [clone the seed repository](https://github.com/eclipsesource/jsonforms-react-seed)
-which basically is just a skeleton application scaffolded by create-react-app with redux
-and JSON Forms dependencies added.
+which basically is just a skeleton application scaffolded by create-react-app and JSON Forms dependencies added.
 
 ```bash
 cd jsonforms-react-seed
@@ -81,7 +84,7 @@ In this case, the props are `data`, which is the actual data bit to be rendered,
 a dot-separated string, which is necessary to propagate an update back to the store.
 
 For the `onClick` prop we pass the `handleChange` handler, which we retrieve
-via another helper function provided by JSON Forms called `mapDispatchToControlProps`.
+via another helper function provided by JSON Forms called `withJsonFormsControlProps`.
 All the handler actually does is to emit a change with the new value.
 
 The complete code of `src/RatingControl.js` looks as follows:
@@ -92,7 +95,7 @@ import {
   mapStateToControlProps, 
   mapDispatchToControlProps 
 } from '@jsonforms/core';
-import { connect } from 'react-redux';
+import { withJsonFormsControlProps } from '@jsonforms/react'
 import { Rating } from './Rating';
 
 const RatingControl = 
@@ -103,10 +106,7 @@ const RatingControl =
   />
 );
 
-export default connect(
-  mapStateToControlProps,
-  mapDispatchToControlProps,
-)(RatingControl);
+export default withJsonFormsControlProps(RatingControl);
 ```
 
 ### 2. Create a tester

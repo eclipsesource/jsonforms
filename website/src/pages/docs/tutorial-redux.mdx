@@ -1,12 +1,12 @@
 ---
-name: Create a JSON Forms app
-route: /docs/tutorial
+name: Create a JSON Forms app (Redux)
+route: /docs/tutorial-redux
 parent: Tutorials
 ---
 
 import { PersonVars } from './components/tutorial/TutorialExample' 
 
-# Tutorial 
+# Tutorial
 
 This section describes you to integrate JSON Forms into a React app from scratch.
 Alternatively you can also clone the [seed app](https://github.com/eclipsesource/jsonforms-react-seed).
@@ -37,11 +37,16 @@ Alternatively you can also clone the [seed app](https://github.com/eclipsesource
    npm install --save @jsonforms/material-renderers
    npm install --save @jsonforms/examples
    
-   npm install --save react 
+   # Since 2.2.x, install react, redux and react-redux are peer dependencies
+   npm install --save react redux react-redux
    ```
+   Since 2.2.x JSON Forms does not include React, redux and react-redux as dependencies, but rather has them
+   configured as peer depenencies.
 3. Switch to the `src` directory and open `index.js` with an editor of your choice.
    Let's add a couple of imports first:
    ```javascript
+   import { combineReducers, createStore } from 'redux';
+   import { Provider } from 'react-redux';
    
    import { Actions, jsonformsReducer } from '@jsonforms/core';
    import { person } from '@jsonforms/examples';
@@ -65,8 +70,39 @@ Alternatively you can also clone the [seed app](https://github.com/eclipsesource
    These variables are defined as follows, in case you are interested:
 
    <PersonVars />
+4. Still in `index.js`, create a new store with the `createStore` function provided by redux.
+   For that purpose JSON Forms exports its reducer via `jsonformsReducer`. For the initial state we supply
+   the renderers we want to use, which we have imported from `@jsonforms/material-renderers`:
 
-4. Open the `App.js` file and import the `JsonForms` component from `@jsonforms/react`.
+   ```javascript
+   const store = createStore(
+     combineReducers(
+        { jsonforms: jsonformsReducer() }),  
+        {
+          jsonforms: {
+            renderers: materialRenderers
+          }
+        }
+   );
+   ```
+
+   In order for JSON Forms to initialize correctly, we also need to dispatch an initialization action that will
+   set-up some internal state that's necessary for JSON Forms:
+
+   ```javascript
+   store.dispatch(Actions.init(data, schema, uischema));
+   ```
+5. Wrap the existing `App` component within a `Provider`
+   
+   ```javascript
+   <Provider store={store}>
+     <App />
+   </Provider>
+   ```
+   
+   You can close the <code>index.js</code> file now.
+
+6. Open the `App.js` file and import the `JsonForms` component from `@jsonforms/react`.
    Delete the `header` element and replace it with the `JsonForms` element
    to get a form rendered:
    ```jsx
@@ -79,11 +115,7 @@ Alternatively you can also clone the [seed app](https://github.com/eclipsesource
        return (
          <div>
             {/* other markup... */}
-            <JsonForms 
-              schema={schema}
-              uischema={uischema}
-              renderers={materialRenderers}
-            />
+            <JsonForms />
          </div>
        )
      }

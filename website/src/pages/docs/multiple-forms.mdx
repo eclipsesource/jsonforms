@@ -37,11 +37,11 @@ The code for the above example looks as follows:
 <div>
   <JsonForms schema={personSchema}
              uischema={personUISchema}
-             path='person'
+             renderers={materialRenderers}
   />
   <JsonForms schema={addressSchema}
              uischema={addressUISchema}
-             path='address'
+             renderers={materialRenderers}
   />
 </div>
 ```

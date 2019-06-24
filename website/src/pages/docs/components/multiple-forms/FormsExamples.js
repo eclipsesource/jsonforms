@@ -5,6 +5,7 @@ import {JsonForms} from '@jsonforms/react';
 import {person} from '@jsonforms/examples';
 import {Demo} from '../../../../components/common';
 import {createJsonFormsStore} from "../../../../common/store";
+import { materialRenderers } from '@jsonforms/material-renderers';
 
 export const schema = {
   type: "object",
@@ -247,12 +248,12 @@ export const MultipleForms = () => (
           <JsonForms
             schema={schemas.person}
             uischema={uischemas.person}
-            path="person"
+            renderers={materialRenderers}
           />
           <JsonForms
             schema={schemas.address}
             uischema={uischemas.address}
-            path="shippingAddress"
+            renderers={materialRenderers}
           />
         </div>
       )}

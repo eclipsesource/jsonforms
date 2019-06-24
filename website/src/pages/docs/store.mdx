@@ -1,11 +1,12 @@
 ---
-name: Redux store shape
+name: Reducers shape
 route: /docs/store
 ---
 
 # Store shape
 
-JSON Forms makes use of redux to maintain its internal state. This section describes the state managed by the JSON Forms reducer.
+JSON Forms makes use the reducer pattern to maintain its internal state. 
+This section describes the sub-state managed by JSON Forms.
 
 JSON Forms exports its reducer via the `jsonformsReducer` function. 
 It's expected that you add this reducer to your application via `combineReducers` under the `jsonforms` key. 
