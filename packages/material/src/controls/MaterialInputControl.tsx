@@ -70,6 +70,14 @@ export abstract class MaterialInputControl extends Control<ControlProps & WithIn
       this.state.isFocused,
       mergedConfig.showUnfocusedDescription
     );
+
+    const firstFormHelperText = showDescription
+      ? description
+      : !isValid
+      ? errors
+      : null;
+    const secondFormHelperText = showDescription && !isValid ? errors : null;
+
     const InnerComponent = input;
     return (
       <Hidden xsUp={!visible}>
@@ -92,12 +100,11 @@ export abstract class MaterialInputControl extends Control<ControlProps & WithIn
             isValid={isValid}
             visible={visible}
           />
+          <FormHelperText error={!isValid && !showDescription}>
+            {firstFormHelperText}
+          </FormHelperText>
           <FormHelperText error={!isValid}>
-            {!isValid
-              ? errors
-              : showDescription
-              ? description
-              : null}
+            {secondFormHelperText}
           </FormHelperText>
         </FormControl>
       </Hidden>
