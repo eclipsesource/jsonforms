@@ -68,38 +68,41 @@ import MaterialAnyOfStringOrEnumControl, {
   MaterialAnyOfStringOrEnumControl as MaterialAnyOfStringOrEnumControlUnwrapped
 } from './MaterialAnyOfStringOrEnumControl';
 
+export const Unwrapped = {
+  MaterialBooleanControl: MaterialBooleanControlUnwrapped,
+  MaterialEnumControl: MaterialEnumControlUnwrapped,
+  MaterialNativeControl: MaterialNativeControlUnwrapped,
+  MaterialDateControl: MaterialDateControlUnwrapped,
+  MaterialDateTimeControl: MaterialDateTimeControlUnwrapped,
+  MaterialSliderControl: MaterialSliderControlUnwrapped,
+  MaterialRadioGroupControl: MaterialRadioGroupControlUnwrapped,
+  MaterialIntegerControl: MaterialIntegerControlUnwrapped,
+  MaterialNumberControl: MaterialNumberControlUnwrapped,
+  MaterialTextControl: MaterialTextControlUnwrapped,
+  MaterialAnyOfStringOrEnumControl: MaterialAnyOfStringOrEnumControlUnwrapped
+}
+
 export {
   MaterialBooleanControl,
-  MaterialBooleanControlUnwrapped,
   materialBooleanControlTester,
   MaterialEnumControl,
-  MaterialEnumControlUnwrapped,
   materialEnumControlTester,
   MaterialNativeControl,
-  MaterialNativeControlUnwrapped,
   materialNativeControlTester,
   MaterialDateControl,
-  MaterialDateControlUnwrapped,
   materialDateControlTester,
   MaterialDateTimeControl,
-  MaterialDateTimeControlUnwrapped,
   materialDateTimeControlTester,
   MaterialSliderControl,
-  MaterialSliderControlUnwrapped,
   materialSliderControlTester,
   MaterialRadioGroupControl,
-  MaterialRadioGroupControlUnwrapped,
   materialRadioGroupControlTester,
   MaterialIntegerControl,
-  MaterialIntegerControlUnwrapped,
   materialIntegerControlTester,
   MaterialNumberControl,
-  MaterialNumberControlUnwrapped,
   materialNumberControlTester,
   MaterialTextControl,
-  MaterialTextControlUnwrapped,
   materialTextControlTester,
   MaterialAnyOfStringOrEnumControl,
-  MaterialAnyOfStringOrEnumControlUnwrapped,
   materialAnyOfStringOrEnumControlTester
 };
