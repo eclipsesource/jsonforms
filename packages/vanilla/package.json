@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/vanilla-renderers",
-  "version": "2.3.0-alpha.0",
+  "version": "2.3.0-alpha.1",
   "description": "Default Renderer Set for JSON Forms",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -20,9 +20,9 @@
     "@jsonforms/react": "^2.2.3"
   },
   "devDependencies": {
-    "@jsonforms/core": "^2.3.0-alpha.0",
-    "@jsonforms/react": "^2.3.0-alpha.0",
-    "@jsonforms/test": "^2.3.0-alpha.0",
+    "@jsonforms/core": "^2.3.0-alpha.1",
+    "@jsonforms/react": "^2.3.0-alpha.1",
+    "@jsonforms/test": "^2.3.0-alpha.1",
     "ava": "^0.25.0",
     "copy-webpack-plugin": "^4.5.1",
     "jsdom": "^11.9.0",

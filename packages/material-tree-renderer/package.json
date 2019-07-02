@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/material-tree-renderer",
-  "version": "2.3.0-alpha.0",
+  "version": "2.3.0-alpha.1",
   "description": "Material-based tree renderer for JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -62,9 +62,9 @@
     "@jsonforms/react": "^2.2.3"
   },
   "devDependencies": {
-    "@jsonforms/core": "^2.3.0-alpha.0",
-    "@jsonforms/material-renderers": "^2.3.0-alpha.0",
-    "@jsonforms/react": "^2.3.0-alpha.0",
+    "@jsonforms/core": "^2.3.0-alpha.1",
+    "@jsonforms/material-renderers": "^2.3.0-alpha.1",
+    "@jsonforms/react": "^2.3.0-alpha.1",
     "@types/lodash": "^4.14.104",
     "@types/recompose": "^0.27.0",
     "awesome-typescript-loader": "^3.1.3",
