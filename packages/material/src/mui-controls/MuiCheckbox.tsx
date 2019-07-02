@@ -24,19 +24,21 @@
 */
 import React from 'react';
 import {
-    CellProps,
-    WithClassname
+  CellProps,
+  WithClassname
 } from '@jsonforms/core';
 import Checkbox from '@material-ui/core/Checkbox';
 
 export const MuiCheckbox = (props: CellProps & WithClassname) => {
   const { data, className, id, enabled, uischema, path, handleChange } = props;
-  const config = {'autoFocus': uischema.options && uischema.options.focus};
+  const config = { 'autoFocus': uischema.options && uischema.options.focus };
+  // !! causes undefined value to be converted to false, otherwise has no effect
+  const checked = !!data;
 
   return (
     <Checkbox
-      checked={data || ''}
-      onChange={(_ev, checked) => handleChange(path, checked)}
+      checked={checked}
+      onChange={(_ev, isChecked) => handleChange(path, isChecked)}
       className={className}
       id={id}
       disabled={!enabled}
