@@ -80,7 +80,7 @@ export const Unwrapped = {
   MaterialNumberControl: MaterialNumberControlUnwrapped,
   MaterialTextControl: MaterialTextControlUnwrapped,
   MaterialAnyOfStringOrEnumControl: MaterialAnyOfStringOrEnumControlUnwrapped
-}
+};
 
 export {
   MaterialBooleanControl,
