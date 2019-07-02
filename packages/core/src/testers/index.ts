@@ -105,7 +105,7 @@ export const schemaSubPathMatches = (
   }
   const schemaPath = uischema.scope;
   let currentDataSchema: JsonSchema = schema;
-  if (schema.type === 'object') {
+  if (hasType(schema, 'object')) {
     currentDataSchema = resolveSchema(schema, schemaPath);
   }
   currentDataSchema = get(currentDataSchema, subPath);
