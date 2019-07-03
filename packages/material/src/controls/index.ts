@@ -23,39 +23,64 @@
   THE SOFTWARE.
 */
 import MaterialBooleanControl, {
-  materialBooleanControlTester
+  materialBooleanControlTester,
+  MaterialBooleanControl as MaterialBooleanControlUnwrapped
 } from './MaterialBooleanControl';
 import MaterialEnumControl, {
-  materialEnumControlTester
+  materialEnumControlTester,
+  MaterialEnumControl as MaterialEnumControlUnwrapped
 } from './MaterialEnumControl';
 import MaterialNativeControl, {
-  materialNativeControlTester
+  materialNativeControlTester,
+  MaterialNativeControl as MaterialNativeControlUnwrapped
 } from './MaterialNativeControl';
 import MaterialDateControl, {
-  materialDateControlTester
+  materialDateControlTester,
+  MaterialDateControl as MaterialDateControlUnwrapped
 } from './MaterialDateControl';
 import MaterialDateTimeControl, {
-  materialDateTimeControlTester
+  materialDateTimeControlTester,
+  MaterialDateTimeControl as MaterialDateTimeControlUnwrapped
 } from './MaterialDateTimeControl';
 import MaterialSliderControl, {
-  materialSliderControlTester
+  materialSliderControlTester,
+  MaterialSliderControl as MaterialSliderControlUnwrapped
 } from './MaterialSliderControl';
 import MaterialRadioGroupControl, {
-  materialRadioGroupControlTester
+  materialRadioGroupControlTester,
+  MaterialRadioGroupControl as MaterialRadioGroupControlUnwrapped
 } from './MaterialRadioGroupControl';
 import MaterialIntegerControl, {
-  materialIntegerControlTester
+  materialIntegerControlTester,
+  MaterialIntegerControl as MaterialIntegerControlUnwrapped
 } from './MaterialIntegerControl';
 import MaterialNumberControl, {
-  materialNumberControlTester
+  materialNumberControlTester,
+  MaterialNumberControl as MaterialNumberControlUnwrapped
 } from './MaterialNumberControl';
 import MaterialTextControl, {
-  materialTextControlTester
+  materialTextControlTester,
+  MaterialTextControl as MaterialTextControlUnwrapped
 } from './MaterialTextControl';
 
 import MaterialAnyOfStringOrEnumControl, {
-  materialAnyOfStringOrEnumControlTester
+  materialAnyOfStringOrEnumControlTester,
+  MaterialAnyOfStringOrEnumControl as MaterialAnyOfStringOrEnumControlUnwrapped
 } from './MaterialAnyOfStringOrEnumControl';
+
+export const Unwrapped = {
+  MaterialBooleanControl: MaterialBooleanControlUnwrapped,
+  MaterialEnumControl: MaterialEnumControlUnwrapped,
+  MaterialNativeControl: MaterialNativeControlUnwrapped,
+  MaterialDateControl: MaterialDateControlUnwrapped,
+  MaterialDateTimeControl: MaterialDateTimeControlUnwrapped,
+  MaterialSliderControl: MaterialSliderControlUnwrapped,
+  MaterialRadioGroupControl: MaterialRadioGroupControlUnwrapped,
+  MaterialIntegerControl: MaterialIntegerControlUnwrapped,
+  MaterialNumberControl: MaterialNumberControlUnwrapped,
+  MaterialTextControl: MaterialTextControlUnwrapped,
+  MaterialAnyOfStringOrEnumControl: MaterialAnyOfStringOrEnumControlUnwrapped
+};
 
 export {
   MaterialBooleanControl,
