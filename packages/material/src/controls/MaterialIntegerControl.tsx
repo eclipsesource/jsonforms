@@ -43,7 +43,7 @@ export class MaterialIntegerControl extends Control<
   render() {
     return (
       <JsonFormsContext.Consumer>
-        {({ core, dispatch }: any) => {
+        {({ core, dispatch, config }: any) => {
           const stateProps = mapStateToControlProps(
             { jsonforms: { core } },
             this.props
@@ -54,6 +54,7 @@ export class MaterialIntegerControl extends Control<
               {...stateProps}
               {...dispatchProps}
               input={MuiInputInteger}
+              config={config}
             />
           );
         }}

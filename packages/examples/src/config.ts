@@ -31,6 +31,10 @@ export const schema = {
       type: 'string',
       description: 'A Postal Code',
       maxLength: 5
+    },
+    recurrenceInterval: {
+      type: 'integer',
+      description: 'A recurrence interval'
     }
   }
 };
@@ -45,6 +49,11 @@ export const uischema = {
           type: 'Control',
           scope: '#/properties/postalCode',
           label: 'Postal Code'
+        },
+        {
+          type: 'Control',
+          scope: '#/properties/recurrenceInterval',
+          label: 'Recurrence Interval'
         }
       ]
     }
