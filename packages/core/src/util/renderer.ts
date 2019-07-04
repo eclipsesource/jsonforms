@@ -740,8 +740,6 @@ const mapStateToCombinatorRendererProps = (
   const id = ownProps.id;
 
   const data = Resolve.data(getData(state), path);
-  console.log("Get CombinatorRendererProps")
-  console.log(data)
 
   const ajv = state.jsonforms.core.ajv;
   const schema = resolvedSchema || rootSchema;
