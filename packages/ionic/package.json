@@ -27,7 +27,9 @@
     "test-cov": "node --max_old_space_size=4096 ../../node_modules/.bin/karma start ./test-config/karma.conf.js --coverage --single-run",
     "e2e": "npm run e2e-update && npm run e2e-test",
     "e2e-test": "protractor ./test-config/protractor.conf.js",
-    "e2e-update": "webdriver-manager update --standalone false --gecko false"
+    "e2e-update": "webdriver-manager update --standalone false --gecko false",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "nyc": {
     "reporter": [
@@ -64,7 +66,8 @@
     "redux": "^4.0.1",
     "rxjs": "^6.4.0",
     "sw-toolbox": "3.6.0",
-    "zone.js": "^0.8.26"
+    "zone.js": "^0.8.26",
+    "snyk": "^1.189.0"
   },
   "devDependencies": {
     "@ionic/app-scripts": "3.1.8",
@@ -89,5 +92,6 @@
     "ts-loader": "^5.3.3",
     "ts-node": "^7.0.1",
     "webpack-dev-server": "^3.2.1"
-  }
+  },
+  "snyk": true
 }
