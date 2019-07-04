@@ -13,7 +13,7 @@
 
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-
+  
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -76,22 +76,23 @@ const MaterialOneOfRenderer =
       path,
       uischemas
       );
-    const confirm = useCallback(() => {
+
+    const openNewTab = (newIndex: number) => {
       handleChange(
         path,
-        createDefaultValue(schema.oneOf[newSelectedIndex])
+        createDefaultValue(schema.oneOf[newIndex])
       );
+      setSelectedIndex(newIndex);
+    }
+
+    const confirm = useCallback(() => {
+      openNewTab(newSelectedIndex)
       setOpen(false);
-      setSelectedIndex(newSelectedIndex);
     }, [handleChange, createDefaultValue, newSelectedIndex]);
     const handleTabChange = useCallback((_event: any, newOneOfIndex: number) => {
       setNewSelectedIndex(newOneOfIndex);
       if(isEmpty(data)) {
-        handleChange(
-          path,
-          createDefaultValue(schema.oneOf[newOneOfIndex])
-        );
-        setSelectedIndex(newOneOfIndex);
+        openNewTab(newOneOfIndex)
       } else {
         setOpen(true);
       }
