@@ -73,7 +73,7 @@
     "@jsonforms/test": "^2.3.0-alpha.1",
     "@types/enzyme": "^3.9.0",
     "@types/enzyme-adapter-react-16": "^1.0.5",
-    "ava": "^0.25.0",
+    "ava": "^2.1.0",
     "copy-webpack-plugin": "^4.5.1",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.11.2",

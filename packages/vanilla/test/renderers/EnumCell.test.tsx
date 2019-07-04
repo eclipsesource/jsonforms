@@ -24,13 +24,24 @@
 */
 import '@jsonforms/test';
 import * as React from 'react';
-import test from 'ava';
-import { getData, update } from '@jsonforms/core';
+import anyTest, { TestInterface } from 'ava';
+import { ControlElement, getData, update } from '@jsonforms/core';
 import { JsonFormsReduxContext } from '@jsonforms/react';
 import EnumCell, { enumCellTester } from '../../src/cells/EnumCell';
 import { Provider } from 'react-redux';
 import * as TestUtils from 'react-dom/test-utils';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
+import { JsonSchema } from '@jsonforms/core/src';
+import { StyleDef } from '../../src';
+
+interface EnumCellTestContext {
+  data: any;
+  schema: JsonSchema;
+  uischema: ControlElement;
+  styles: StyleDef[];
+}
+
+const test = anyTest as TestInterface<EnumCellTestContext>;
 
 test.beforeEach(t => {
   t.context.data = { 'foo': 'a' };

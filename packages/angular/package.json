@@ -32,11 +32,16 @@
     ]
   },
   "ava": {
-    "verbose": true,
-    "require": [
-      "babel-register"
+    "files": [
+      "test/**/*"
     ],
-    "babel": "inherit"
+    "compileEnhancements": false,
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ]
   },
   "peerDependencies": {
     "@angular-redux/store": "^9.0.0",

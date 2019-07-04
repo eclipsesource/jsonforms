@@ -25,7 +25,7 @@
 
 import '@jsonforms/test';
 import * as React from 'react';
-import test from 'ava';
+import anyTest, { TestInterface } from 'ava';
 import {
   ControlElement,
   getData,
@@ -34,11 +34,21 @@ import {
   update
 } from '@jsonforms/core';
 import { JsonFormsReduxContext } from '@jsonforms/react';
-import BooleanCell, { booleanCellTester } from '../../src/cells/BooleanCell';
-import HorizontalLayoutRenderer from '../../src/layouts/HorizontalLayout';
 import { Provider } from 'react-redux';
 import * as TestUtils from 'react-dom/test-utils';
+import BooleanCell, { booleanCellTester } from '../../src/cells/BooleanCell';
+import HorizontalLayoutRenderer from '../../src/layouts/HorizontalLayout';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
+import { StyleDef } from '../../src';
+
+interface BooleanCellTestContext {
+  data: any;
+  schema: JsonSchema;
+  uischema: ControlElement;
+  styles: StyleDef[];
+}
+
+const test = anyTest as TestInterface<BooleanCellTestContext>;
 
 test.beforeEach(t => {
   t.context.data = { foo: true };
@@ -423,7 +433,7 @@ test('disable', t => {
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
       <JsonFormsReduxContext>
-        <BooleanCell schema={t.context.schema} uischema={t.context.uischema} enabled={false}/>
+        <BooleanCell schema={t.context.schema} uischema={t.context.uischema} enabled={false} />
       </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;

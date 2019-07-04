@@ -25,21 +25,32 @@
 import '@jsonforms/test';
 import * as React from 'react';
 import * as _ from 'lodash';
-import test from 'ava';
+import anyTest, { TestInterface } from 'ava';
 import { Provider } from 'react-redux';
 import {
   ControlElement,
   getData,
   HorizontalLayout,
+  JsonSchema,
   update
 } from '@jsonforms/core';
 import { JsonFormsReduxContext } from '@jsonforms/react';
+import * as TestUtils from 'react-dom/test-utils';
 import TableArrayControl, { tableArrayControlTester, } from '../../src/complex/TableArrayControl';
 import HorizontalLayoutRenderer from '../../src/layouts/HorizontalLayout';
 import '../../src';
-import * as TestUtils from 'react-dom/test-utils';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
 import IntegerCell, { integerCellTester } from '../../src/cells/IntegerCell';
+import { StyleDef } from '../../src';
+
+interface TableArrayControlTestContext {
+  schema: JsonSchema;
+  uischema: ControlElement;
+  data: any;
+  styles: StyleDef[];
+}
+
+const test = anyTest as TestInterface<TableArrayControlTestContext>;
 
 test.beforeEach(t => {
 
@@ -365,7 +376,6 @@ test('update via action', t => {
   t.is(children.childNodes.length, 2);
 });
 
-test('tester', t => t.is(tableArrayControlTester({ type: 'Foo' }, null), -1));
 
 test('tester with recursive document ref only', t => {
   const control: ControlElement = {
@@ -468,6 +478,8 @@ test('tester', t => {
 
   t.is(tableArrayControlTester(uischema, t.context.schema), 3);
 });
+
+test('tester - wrong type', t => t.is(tableArrayControlTester({ type: 'Foo' }, null), -1));
 
 test('hide', t => {
   const store = initJsonFormsVanillaStore({

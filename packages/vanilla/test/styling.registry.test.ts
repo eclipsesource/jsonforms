@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { test } from 'ava';
+import test from 'ava';
 import { registerStyle, registerStyles, unregisterStyle } from '../src/actions';
 import { stylingReducer } from '../src/reducers';
 import { findStyle, findStyleAsClassName } from '../src/reducers/styling';

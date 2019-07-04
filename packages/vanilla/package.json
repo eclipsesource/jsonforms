@@ -23,7 +23,7 @@
     "@jsonforms/core": "^2.3.0-alpha.1",
     "@jsonforms/react": "^2.3.0-alpha.1",
     "@jsonforms/test": "^2.3.0-alpha.1",
-    "ava": "^0.25.0",
+    "ava": "^2.1.0",
     "copy-webpack-plugin": "^4.5.1",
     "jsdom": "^11.9.0",
     "jsdom-global": "^3.0.2",
@@ -35,11 +35,18 @@
     "webpack-dev-server": "^3.2.1"
   },
   "ava": {
-    "verbose": true,
-    "require": [
-      "babel-register"
+    "files": [
+      "test/**/*",
+      "!test/vanillaStore.ts"
     ],
-    "babel": "inherit"
+    "compileEnhancements": false,
+    "extensions": [
+      "ts",
+      "tsx"
+    ],
+    "require": [
+      "ts-node/register"
+    ]
   },
   "nyc": {
     "reporter": [

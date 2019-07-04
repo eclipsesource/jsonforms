@@ -24,7 +24,7 @@
 */
 import '@jsonforms/test';
 import * as React from 'react';
-import test from 'ava';
+import anyTest, { TestInterface } from 'ava';
 import { Provider } from 'react-redux';
 import {
   Categorization,
@@ -36,6 +36,16 @@ import { JsonFormsReduxContext } from '@jsonforms/react';
 import * as TestUtils from 'react-dom/test-utils';
 import CategorizationRenderer, { categorizationTester } from '../../src/complex/categorization';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
+import { StyleDef } from '../../src';
+
+interface CategorizationRendererTestContext {
+  data: any;
+  schema: JsonSchema;
+  uischema: Categorization;
+  styles: StyleDef[];
+}
+
+const test = anyTest as TestInterface<CategorizationRendererTestContext>;
 
 test.beforeEach(t => {
   t.context.data = {};
@@ -49,12 +59,12 @@ test.beforeEach(t => {
   };
   t.context.uischema = {
     type: 'Categorization',
-    elements: [
-      {
-        type: 'Category',
-        label: 'B'
-      },
-    ]
+    label: 'A',
+    elements: [{
+      type: 'Category',
+      label: 'B',
+      elements: []
+    }]
   };
   t.context.styles = [
     {

@@ -24,7 +24,7 @@
 */
 import '@jsonforms/test';
 import * as React from 'react';
-import test from 'ava';
+import anyTest, { TestInterface } from 'ava';
 import {
   ControlElement,
   getData,
@@ -38,6 +38,16 @@ import DateCell, { dateCellTester } from '../../src/cells/DateCell';
 import { Provider } from 'react-redux';
 import * as TestUtils from 'react-dom/test-utils';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
+import { StyleDef } from '../../src';
+
+interface DateCellTestContext {
+  data: any;
+  schema: JsonSchema;
+  uischema: ControlElement;
+  styles: StyleDef[];
+}
+
+const test = anyTest as TestInterface<DateCellTestContext>;
 
 test.beforeEach(t => {
   t.context.data = { foo: '1980-04-04' };
@@ -190,7 +200,7 @@ test('tester', t => {
 test('tester with wrong prop type', t => {
   t.is(
     dateCellTester(
-      t.context.uischmea,
+      t.context.uischema,
       {
         type: 'object',
         properties: {

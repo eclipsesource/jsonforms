@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import test from 'ava';
+import anyTest, { TestInterface } from 'ava';
 import {
   and,
   formatIs,
@@ -53,6 +53,8 @@ import {
   LabelElement,
   UISchemaElement
 } from '../src';
+
+const test = anyTest as TestInterface<{ uischema: ControlElement }>;
 
 test.beforeEach(t => {
   t.context.uischema = {
@@ -454,7 +456,7 @@ test('test isDateControl', t => {
   t.false(isDateControl({ type: 'Foo' }, undefined));
   t.false(isDateControl({ type: 'Control' }, undefined));
   t.false(
-    isDateControl(t.context.uischmea, {
+    isDateControl(t.context.uischema, {
       type: 'object',
       properties: { foo: { type: 'string' } }
     })
@@ -600,7 +602,7 @@ test('test isTimeControl', t => {
   t.false(isTimeControl({ type: 'Foo' }, undefined));
   t.false(isTimeControl({ type: 'Control' }, undefined));
   t.false(
-    isTimeControl(t.context.uischmea, {
+    isTimeControl(t.context.uischema, {
       type: 'object',
       properties: { foo: { type: 'string' } }
     })

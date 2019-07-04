@@ -24,7 +24,7 @@
 */
 import '@jsonforms/test';
 import * as React from 'react';
-import test from 'ava';
+import anyTest, { TestInterface } from 'ava';
 import {
   Actions,
   ControlElement,
@@ -45,6 +45,14 @@ import TextCell, { textCellTester } from '../../src/cells/TextCell';
 import DateCell, { dateCellTester } from '../../src/cells/DateCell';
 import * as TestUtils from 'react-dom/test-utils';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
+
+interface InputControlTestContext {
+  data: any;
+  schema: JsonSchema;
+  uischema: ControlElement;
+}
+
+const test = anyTest as TestInterface<InputControlTestContext>;
 
 test.beforeEach(t => {
   t.context.data = { foo: true };
@@ -474,72 +482,6 @@ test('not required', t => {
     type: 'Control',
     scope: '#/properties/dateCell'
   };
-  const store = initJsonFormsVanillaStore({
-    data: {},
-    schema,
-    uischema,
-    renderers: [{ tester: inputControlTester, renderer: InputControl }],
-    cells: [{ tester: dateCellTester, cell: DateCell }]
-  });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <InputControl schema={schema} uischema={uischema} />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label');
-  t.is(label.textContent, 'Date Cell');
-});
-test('required cell is marked', t => {
-  const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-      dateCell: {
-        type: 'string',
-        format: 'date'
-      }
-    },
-    required: ['dateCell']
-  };
-  const uischema: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/dateCell'
-  };
-
-  const store = initJsonFormsVanillaStore({
-    data: {},
-    schema,
-    uischema,
-    renderers: [{ tester: inputControlTester, renderer: InputControl }],
-    cells: [{ tester: dateCellTester, cell: DateCell }]
-  });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <InputControl schema={schema} uischema={uischema} />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label');
-  t.is(label.textContent, 'Date Cell*');
-});
-
-test('not required', t => {
-  const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-      dateCell: {
-        type: 'string',
-        format: 'date'
-      }
-    }
-  };
-  const uischema: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/dateCell'
-  };
-
   const store = initJsonFormsVanillaStore({
     data: {},
     schema,

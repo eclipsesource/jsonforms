@@ -24,7 +24,7 @@
 */
 import '@jsonforms/test';
 import * as React from 'react';
-import test from 'ava';
+import anyTest, { TestInterface } from 'ava';
 import {
   ControlElement,
   getData,
@@ -32,12 +32,22 @@ import {
   JsonSchema,
   update
 } from '@jsonforms/core';
-import HorizontalLayoutRenderer from '../../src/layouts/HorizontalLayout';
-import TimeCell, { timeCellTester } from '../../src/cells/TimeCell';
+import { JsonFormsReduxContext } from '@jsonforms/react';
 import { Provider } from 'react-redux';
 import * as TestUtils from 'react-dom/test-utils';
+import HorizontalLayoutRenderer from '../../src/layouts/HorizontalLayout';
+import TimeCell, { timeCellTester } from '../../src/cells/TimeCell';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
-import { JsonFormsReduxContext } from '@jsonforms/react';
+import { StyleDef } from '../../src';
+
+interface TimeCellTestContext {
+  data: any;
+  schema: JsonSchema;
+  uischema: ControlElement;
+  styles: StyleDef[];
+}
+
+const test = anyTest as TestInterface<TimeCellTestContext>;
 
 test.beforeEach(t => {
   t.context.data = { 'foo': '13:37' };
@@ -182,7 +192,7 @@ test('tester', t => {
 test('tester with wrong prop type', t => {
   t.is(
     timeCellTester(
-      t.context.uischmea,
+      t.context.uischema,
       {
         type: 'object',
         properties: {

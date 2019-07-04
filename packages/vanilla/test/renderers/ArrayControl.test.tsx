@@ -25,13 +25,24 @@
 import '@jsonforms/test';
 import { JsonFormsReduxContext } from '@jsonforms/react';
 import * as React from 'react';
-import test from 'ava';
+import anyTest, { TestInterface } from 'ava';
 import { Provider } from 'react-redux';
 import ArrayControl from '../../src/complex/array/ArrayControlRenderer';
-import { vanillaRenderers } from '../../src/index';
+import { StyleDef, vanillaRenderers } from '../../src/index';
 import * as TestUtils from 'react-dom/test-utils';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
 import IntegerCell, { integerCellTester } from '../../src/cells/IntegerCell';
+import { JsonSchema } from '@jsonforms/core/src';
+import { ControlElement } from '@jsonforms/core';
+
+interface ArrayControlTestContext {
+  schema: JsonSchema;
+  uischema: ControlElement;
+  data: any;
+  styles: StyleDef[];
+}
+
+const test = anyTest as TestInterface<ArrayControlTestContext>;
 
 test.beforeEach(t => {
 

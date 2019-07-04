@@ -24,15 +24,26 @@
 */
 import '@jsonforms/test';
 import * as React from 'react';
-import test from 'ava';
+import anyTest, { TestInterface } from 'ava';
 import { LabelElement, UISchemaElement } from '@jsonforms/core';
 import { JsonFormsReduxContext } from '@jsonforms/react';
+import { JsonSchema } from '@jsonforms/core/src';
 import { Provider } from 'react-redux';
+import * as TestUtils from 'react-dom/test-utils';
 import LabelRenderer, {
   labelRendererTester
 } from '../../src/complex/LabelRenderer';
-import * as TestUtils from 'react-dom/test-utils';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
+import { StyleDef } from '../../src';
+
+interface LabelControlTestContext {
+  data: any;
+  schema: JsonSchema;
+  uischema: LabelElement;
+  styles: StyleDef[];
+}
+
+const test = anyTest as TestInterface<LabelControlTestContext>;
 
 test.beforeEach(t => {
   t.context.data = { name: 'Foo' };

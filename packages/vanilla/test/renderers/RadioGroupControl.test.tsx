@@ -23,9 +23,10 @@
   THE SOFTWARE.
 */
 import '@jsonforms/test';
-import test from 'ava';
+import anyTest, { TestInterface } from 'ava';
 import {
     isEnumControl,
+    JsonSchema,
     rankWith,
     update
 } from '@jsonforms/core';
@@ -37,6 +38,15 @@ import { Provider } from 'react-redux';
 import '../../src';
 import RadioGroupControl from '../../src/controls/RadioGroupControl';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
+import { ControlElement } from '@jsonforms/core/src';
+
+interface RadioGroupControlTestContext {
+    data: any;
+    schema: JsonSchema;
+    uischema: ControlElement;
+}
+
+const test = anyTest as TestInterface<RadioGroupControlTestContext>;
 
 test.beforeEach(t => {
     t.context.data = { foo: 'D' };

@@ -24,7 +24,7 @@
 */
 import '@jsonforms/test';
 import * as React from 'react';
-import test from 'ava';
+import anyTest, { TestInterface } from 'ava';
 import {
   ControlElement,
   getData,
@@ -38,6 +38,16 @@ import { Provider } from 'react-redux';
 import * as TestUtils from 'react-dom/test-utils';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
 import { JsonFormsReduxContext } from '@jsonforms/react';
+import { StyleDef } from '../../src';
+
+interface IntegerCellTestContext {
+  data: any;
+  schema: JsonSchema;
+  uischema: ControlElement;
+  styles: StyleDef[];
+}
+
+const test = anyTest as TestInterface<IntegerCellTestContext>;
 
 test.beforeEach(t => {
   t.context.data = { 'foo': 42 };

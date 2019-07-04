@@ -24,17 +24,25 @@
 */
 import '@jsonforms/test';
 import * as React from 'react';
-import test from 'ava';
+import anyTest, { TestInterface } from 'ava';
 import { GroupLayout } from '@jsonforms/core';
 import { JsonFormsReduxContext } from '@jsonforms/react';
 import { Provider } from 'react-redux';
 import GroupLayoutRenderer, { groupTester } from '../../src/layouts/GroupLayout';
 import * as TestUtils from 'react-dom/test-utils';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
+import { StyleDef } from '../../src';
+
+interface GroupLayoutTestContext {
+  uischema: GroupLayout;
+  styles: StyleDef[];
+}
+
+const test = anyTest as TestInterface<GroupLayoutTestContext>;
 
 test.beforeEach(t => {
   t.context.uischema = {
-    type: 'GroupLayout',
+    type: 'Group',
     elements: [{ type: 'Control' }]
   };
   t.context.styles = [

@@ -24,7 +24,7 @@
 */
 import '@jsonforms/test';
 import * as React from 'react';
-import test from 'ava';
+import anyTest, { TestInterface } from 'ava';
 import {
   ControlElement,
   getData,
@@ -32,15 +32,27 @@ import {
   JsonSchema,
   update
 } from '@jsonforms/core';
-import TextCell, { textCellTester } from '../../src/cells/TextCell';
-import HorizontalLayoutRenderer from '../../src/layouts/HorizontalLayout';
+import { JsonFormsReduxContext } from '@jsonforms/react';
 import { Provider } from 'react-redux';
 import * as TestUtils from 'react-dom/test-utils';
+import TextCell, { textCellTester } from '../../src/cells/TextCell';
+import HorizontalLayoutRenderer from '../../src/layouts/HorizontalLayout';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
-import { JsonFormsReduxContext } from '@jsonforms/react';
+import { StyleDef } from '../../src';
 
 const defaultMaxLength = 524288;
 const defaultSize = 20;
+
+interface TextCellTestContext {
+  data: any;
+  minLengthSchema: JsonSchema;
+  maxLengthSchema: JsonSchema;
+  schema: JsonSchema;
+  uischema: ControlElement;
+  styles: StyleDef[];
+}
+
+const test = anyTest as TestInterface<TextCellTestContext>;
 
 test.beforeEach(t => {
   t.context.data = { name: 'Foo' };
@@ -201,7 +213,7 @@ test('render', t => {
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
       <JsonFormsReduxContext>
-        <TextCell schema={schema} uischema={t.context.uischema} path='name'/>
+        <TextCell schema={schema} uischema={t.context.uischema} path='name' />
       </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
@@ -221,7 +233,7 @@ test('update via input event', t => {
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
       <JsonFormsReduxContext>
-        <TextCell schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name'/>
+        <TextCell schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name' />
       </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
@@ -267,7 +279,7 @@ test('update with undefined value', t => {
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
       <JsonFormsReduxContext>
-        <TextCell schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name'/>
+        <TextCell schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name' />
       </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
@@ -288,7 +300,7 @@ test('update with null value', t => {
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
       <JsonFormsReduxContext>
-        <TextCell schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name'/>
+        <TextCell schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name' />
       </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
@@ -502,7 +514,7 @@ test('do not use maxLength by default', t => {
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
       <JsonFormsReduxContext>
-        <TextCell schema={t.context.maxLengthSchema} uischema={t.context.uischema} path='name'/>
+        <TextCell schema={t.context.maxLengthSchema} uischema={t.context.uischema} path='name' />
       </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
@@ -592,7 +604,7 @@ test('maxLength not specified, attributes should have default values (restrict)'
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
       <JsonFormsReduxContext>
-        <TextCell schema={t.context.schema} uischema={uischema} path='name'/>
+        <TextCell schema={t.context.schema} uischema={uischema} path='name' />
       </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;

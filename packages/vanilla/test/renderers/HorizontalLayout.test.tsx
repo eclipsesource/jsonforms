@@ -25,7 +25,7 @@
 import '@jsonforms/test';
 import * as TestUtils from 'react-dom/test-utils';
 import * as React from 'react';
-import test from 'ava';
+import anyTest, { TestInterface } from 'ava';
 import {
   HorizontalLayout,
   UISchemaElement
@@ -36,6 +36,14 @@ import HorizontalLayoutRenderer, {
 } from '../../src/layouts/HorizontalLayout';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
 import { JsonFormsReduxContext } from '@jsonforms/react';
+import { StyleDef } from '../../src';
+
+interface HorizontalLayoutTestContext {
+  uischema: HorizontalLayout;
+  styles: StyleDef[];
+}
+
+const test = anyTest as TestInterface<HorizontalLayoutTestContext>;
 
 test.beforeEach(t => {
   t.context.uischema = {

@@ -26,11 +26,16 @@
     "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Web Component Wrapper' --mode file --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
   },
   "ava": {
-    "verbose": true,
-    "require": [
-      "babel-register"
+    "files": [
+      "test/**/*"
     ],
-    "babel": "inherit"
+    "compileEnhancements": false,
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ]
   },
   "nyc": {
     "reporter": [
