@@ -58,7 +58,7 @@ export interface OwnOneOfProps extends OwnPropsOfControl {
 
 const oneOf = 'oneOf';
 const MaterialOneOfRenderer =
-  ({ handleChange, schema, path, renderers, rootSchema, id, visible, indexOfFittingSchema, uischema, uischemas }: CombinatorProps) => {
+  ({ handleChange, schema, path, renderers, rootSchema, id, visible, indexOfFittingSchema, uischema, uischemas, data }: CombinatorProps) => {
     const [open, setOpen] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(indexOfFittingSchema || 0);
     const [newSelectedIndex, setNewSelectedIndex] = useState(0);
@@ -67,9 +67,12 @@ const MaterialOneOfRenderer =
       setOpen(false);
     }, [setOpen]);
     const handleTabChange = useCallback((_event: any, newOneOfIndex: number) => {
+      console.log("Handle Tab Change")
+      console.log("Data")
+      console.log(data)
       setOpen(true);
       setNewSelectedIndex(newOneOfIndex);
-    }, [setOpen, setSelectedIndex]);
+    }, [setOpen, setSelectedIndex, data]);
     const _schema = resolveSubSchemas(schema, rootSchema, oneOf);
     const oneOfRenderInfos = createCombinatorRenderInfos(
       (_schema as JsonSchema).oneOf,

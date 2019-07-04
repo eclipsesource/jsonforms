@@ -718,6 +718,7 @@ export interface StatePropsOfCombinator extends OwnPropsOfControl {
   id: string;
   indexOfFittingSchema: number;
   uischemas: { tester: UISchemaTester; uischema: UISchemaElement }[];
+  data: any;
 }
 
 const mapStateToCombinatorRendererProps = (
@@ -739,6 +740,8 @@ const mapStateToCombinatorRendererProps = (
   const id = ownProps.id;
 
   const data = Resolve.data(getData(state), path);
+  console.log("Get CombinatorRendererProps")
+  console.log(data)
 
   const ajv = state.jsonforms.core.ajv;
   const schema = resolvedSchema || rootSchema;
@@ -762,6 +765,7 @@ const mapStateToCombinatorRendererProps = (
   }
 
   return {
+    data,
     path,
     schema,
     rootSchema,
