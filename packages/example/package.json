@@ -10,10 +10,14 @@
     "lodash": "^4.17.4",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
-    "redux": "^4.0.1"
+    "redux": "^4.0.1",
+    "snyk": "^1.189.0"
   },
   "scripts": {
     "build": "echo 'Nothing to do'",
-    "test": "echo 'Nothing to do'"
-  }
+    "test": "echo 'Nothing to do'",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
+  },
+  "snyk": true
 }
