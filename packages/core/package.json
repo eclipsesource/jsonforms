@@ -23,7 +23,9 @@
     "report": "../../node_modules/.bin/nyc report --reporter=html",
     "test": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/ava",
     "test-cov": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/nyc ../../node_modules/.bin/ava",
-    "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Core' --mode file --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
+    "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Core' --mode file --excludeExternals --theme ../../typedoc-jsonforms --out docs src",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "ava": {
     "verbose": true,
@@ -44,7 +46,8 @@
     "json-schema-ref-parser": "^6.1.0",
     "lodash": "^4.17.4",
     "uri-js": "^4.2.2",
-    "uuid": "^3.2.1"
+    "uuid": "^3.2.1",
+    "snyk": "^1.189.0"
   },
   "peerDependencies": {
     "redux": "^4.0.1"
@@ -56,5 +59,6 @@
     "jsdom-global": "^3.0.2",
     "redux": "^4.0.1",
     "redux-mock-store": "1.5.3"
-  }
+  },
+  "snyk": true
 }
