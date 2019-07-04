@@ -29,18 +29,19 @@ import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import Tooltip from '@material-ui/core/Tooltip';
 import {
   StyledComponentProps,
-  StyleRulesCallback,
   withStyles,
-  WithStyles
+  WithStyles,
+  createStyles,
+  Theme
 } from '@material-ui/core/styles';
 import { compose } from 'redux';
 
 export { StyledComponentProps };
-const styles: StyleRulesCallback<'badge'> = ({ palette }) => ({
+const styles = createStyles(({ palette }: Theme) => ({
   badge: {
     color: palette.error.main
   }
-});
+}));
 
 export interface ValidationProps {
   errorMessages: string;
