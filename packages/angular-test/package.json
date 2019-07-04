@@ -6,7 +6,8 @@
   "dependencies": {
     "@jsonforms/angular": "^2.3.0-alpha.1",
     "@jsonforms/core": "^2.3.0-alpha.1",
-    "redux": "^4.0.1"
+    "redux": "^4.0.1",
+    "snyk": "^1.189.0"
   },
   "devDependencies": {
     "jasmine": "^3.2.0",
@@ -20,6 +21,9 @@
   },
   "scripts": {
     "build": "../../node_modules/.bin/tsc",
-    "test": "echo 'Nothing to do'"
-  }
+    "test": "echo 'Nothing to do'",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
+  },
+  "snyk": true
 }
