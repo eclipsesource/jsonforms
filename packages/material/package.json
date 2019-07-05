@@ -24,13 +24,6 @@
     "report": "../../node_modules/.bin/nyc report --reporter=html",
     "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms React Material Renderers' --mode file --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
   },
-  "ava": {
-    "verbose": true,
-    "require": [
-      "babel-register"
-    ],
-    "babel": "inherit"
-  },
   "jest": {
     "moduleFileExtensions": [
       "ts",
@@ -60,11 +53,11 @@
     "@material-ui/icons": "^4.0.1",
     "@material-ui/lab": "^4.0.0-alpha.15",
     "material-ui-pickers": "^2.2.4",
-    "moment": "^2.20.1"
+    "moment": "^2.24.0"
   },
   "peerDependencies": {
-    "@jsonforms/core": "^2.2.3",
-    "@jsonforms/react": "^2.2.3",
+    "@jsonforms/core": "^2.3.0",
+    "@jsonforms/react": "^2.3.0",
     "react-redux": "^6.0.0"
   },
   "devDependencies": {
@@ -73,7 +66,6 @@
     "@jsonforms/test": "^2.3.0-alpha.1",
     "@types/enzyme": "^3.9.0",
     "@types/enzyme-adapter-react-16": "^1.0.5",
-    "ava": "^2.1.0",
     "copy-webpack-plugin": "^4.5.1",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.11.2",
@@ -84,7 +76,7 @@
     "source-map-loader": "^0.2.3",
     "ts-jest": "^23.0.0",
     "ts-loader": "^5.3.3",
-    "tslint-loader": "^3.5.3",
+    "tslint-loader": "^3.5.4",
     "webpack-dev-server": "^3.2.1"
   }
 }

@@ -14,6 +14,7 @@
 		"lint": "tslint 'packages/**/*.{ts,tsx}' -c ./tslint.json"
 	},
 	"devDependencies": {
+		"@istanbuljs/nyc-config-typescript": "0.1.3",
 		"@types/jest": "^23.0.0",
 		"@types/lodash": "^4.14.104",
 		"ajv": "^6.4.0",
@@ -27,10 +28,12 @@
 		"nyc": "^14.1.1",
 		"prettier": "^1.15.3",
 		"source-map-loader": "^0.2.3",
+		"source-map-support": "0.5.12",
 		"style-loader": "^0.21.0",
 		"ts-loader": "^5.3.3",
+		"ts-node": "^8.3.0",
 		"tslint": "^5.8.0",
-		"tslint-loader": "^3.5.3",
+		"tslint-loader": "^3.5.4",
 		"tslint-react": "^3.2.0",
 		"typedoc": "^0.14.2",
 		"typescript": "3.2.4",
