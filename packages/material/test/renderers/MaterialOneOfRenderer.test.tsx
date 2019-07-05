@@ -61,16 +61,20 @@ const clickAddButton = (wrapper: ReactWrapper, times: number) => {
   wrapper.update();
 };
 
-const selectOneOfTab = (wrapper: ReactWrapper, at: number) => {
+const selectOneOfTab = (wrapper: ReactWrapper, at: number, expectConfim: boolean) => {
   // select oneOf
   const buttons = wrapper.find('button');
   buttons.at(at).simulate('click');
   wrapper.update();
 
-  // confirm dialog
-  const confirmButton = wrapper.find(Dialog).last().find('button').at(1);
-  confirmButton.simulate('click');
-  wrapper.update();
+  if (expectConfim) {
+    // confirm dialog
+    const confirmButton = wrapper.find(Dialog).last().find('button').at(1);
+    confirmButton.simulate('click');
+    wrapper.update();
+  } else {
+    expect(wrapper.find(Dialog).last().find('button').at(1).exists()).toBe(false);
+  }
 };
 
 describe('Material oneOf renderer', () => {
@@ -329,7 +333,7 @@ describe('Material oneOf renderer', () => {
 
     wrapper.update();
 
-    selectOneOfTab(wrapper, 1);
+    selectOneOfTab(wrapper, 1, false);
     const nrOfRowsBeforeAdd = wrapper.find('tr');
     clickAddButton(wrapper, 2);
     const nrOfRowsAfterAdd = wrapper.find('tr');
@@ -398,7 +402,7 @@ describe('Material oneOf renderer', () => {
     // expect(wrapper.state())
     wrapper.update();
 
-    selectOneOfTab(wrapper, 1);
+    selectOneOfTab(wrapper, 1, false);
     const nrOfRowsBeforeAdd = wrapper.find('tr');
     clickAddButton(wrapper, 2);
     const nrOfRowsAfterAdd = wrapper.find('tr');
@@ -468,15 +472,56 @@ describe('Material oneOf renderer', () => {
 
     wrapper.update();
 
-    selectOneOfTab(wrapper, 1);
+    selectOneOfTab(wrapper, 1, false);
     clickAddButton(wrapper, 2);
-    selectOneOfTab(wrapper, 0);
+    selectOneOfTab(wrapper, 0, true);
 
     const input = wrapper.find('input').first();
     input.simulate('change', { target: { value: 'test' } });
     wrapper.update();
     expect(getData(store.getState())).toEqual({ thingOrThings: { thing: 'test' } });
   });
+  
+  it('should show confirm dialog when data is not an empty object', async () => {
+    const schema = {
+      type: 'object',
+      properties: {
+        value: {
+          oneOf: [
+            {
+              title: 'String',
+              type: 'string'
+            },
+            {
+              title: 'Number',
+              type: 'number'
+            }
+          ]
+        }
+      }
+    };
+    
+    const uischema: ControlElement = {
+      type: 'Control',
+      label: 'Value',
+      scope: '#/properties/value'
+    };
+
+    const store = initStore();
+    store.dispatch(Actions.init({ value: 'Foo Bar' }, schema, uischema));
+
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <JsonFormsDispatch schema={schema} uischema={uischema}/>
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+
+    await waitForAsync();
+    wrapper.update();
+    selectOneOfTab(wrapper, 1, true);
+  })
 
   it('should be hideable', () => {
     const store = initStore();
