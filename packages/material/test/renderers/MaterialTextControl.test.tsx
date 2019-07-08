@@ -79,5 +79,16 @@ describe('Material text control', () => {
       ...props,
       input: MuiInputText
     });
+    
+    expect(wrapper.find("input").props().id).toEqual(`${props.id}-input`);
+  });
+
+  it('allows adding of mui input props', () => {
+    const props = {
+      ...defaultControlProps(),
+      muiInputProps: { spellCheck: false }
+    };
+    wrapper = mount(createMaterialTextControl(props));
+    expect(wrapper.find('input').props().spellCheck).toEqual(false)
   });
 });
