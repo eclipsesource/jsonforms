@@ -35,8 +35,12 @@ interface MuiInputTextStatus {
   showAdornment: boolean;
 }
 
+interface MuiTextInputProps {
+  muiInputProps? : React.HTMLAttributes<HTMLInputElement>
+}
+
 export class MuiInputText extends React.Component<
-  CellProps & WithClassname,
+  CellProps & WithClassname & MuiTextInputProps,
   MuiInputTextStatus
 > {
   state: MuiInputTextStatus = { showAdornment: false };
@@ -51,7 +55,8 @@ export class MuiInputText extends React.Component<
       isValid,
       path,
       handleChange,
-      schema
+      schema,
+      muiInputProps
     } = this.props;
     const maxLength = schema.maxLength;
     const mergedConfig = merge({}, config, uischema.options);
@@ -61,6 +66,9 @@ export class MuiInputText extends React.Component<
     } else {
       inputProps = {};
     }
+
+    inputProps = merge(inputProps, muiInputProps);
+
     if (mergedConfig.trim && maxLength !== undefined) {
       inputProps.size = maxLength;
     }
