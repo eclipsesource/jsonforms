@@ -36,19 +36,7 @@ interface MuiInputTextStatus {
 }
 
 interface MuiTextInputProps {
-  inputProps?: {
-    autocomplete?: string;
-    maxLength?: number;
-    minLength?: number;
-    pattern?: string | object;
-    placeholder?: string;
-    readonly?: boolean;
-    required?: boolean;
-    size?: number;
-    spellcheck?: boolean;
-    autocorrect?: 'on' | 'off';
-    mozactionhint?: 'go' | 'done' | 'next' | 'search' | 'send';
-  };
+  muiInputProps? : React.HTMLAttributes<HTMLInputElement>
 }
 
 export class MuiInputText extends React.Component<
@@ -68,21 +56,21 @@ export class MuiInputText extends React.Component<
       path,
       handleChange,
       schema,
-      inputProps
+      muiInputProps
     } = this.props;
     const maxLength = schema.maxLength;
     const mergedConfig = merge({}, config, uischema.options);
-    let innerInputProps: any;
+    let inputProps: any;
     if (mergedConfig.restrict) {
-      innerInputProps = { maxLength: maxLength };
+      inputProps = { maxLength: maxLength };
     } else {
-      innerInputProps = {};
+      inputProps = {};
     }
 
-    innerInputProps = merge(innerInputProps, inputProps);
+    inputProps = merge(inputProps, muiInputProps);
 
     if (mergedConfig.trim && maxLength !== undefined) {
-      innerInputProps.size = maxLength;
+      inputProps.size = maxLength;
     }
     const onChange = (ev: any) => handleChange(path, ev.target.value);
 
@@ -101,7 +89,7 @@ export class MuiInputText extends React.Component<
         autoFocus={uischema.options && uischema.options.focus}
         multiline={uischema.options && uischema.options.multi}
         fullWidth={!mergedConfig.trim || maxLength === undefined}
-        inputProps={innerInputProps}
+        inputProps={inputProps}
         error={!isValid}
         onPointerEnter={() => this.setState({ showAdornment: true })}
         onPointerLeave={() => this.setState({ showAdornment: false })}
