@@ -743,7 +743,12 @@ const mapStateToCombinatorRendererProps = (
   const ajv = state.jsonforms.core.ajv;
   const schema = resolvedSchema || rootSchema;
   const _schema = resolveSubSchemas(schema, rootSchema, keyword);
-  const structuralKeywords = ['required', 'additionalProperties', 'type'];
+  const structuralKeywords = [
+    'required',
+    'additionalProperties',
+    'type',
+    'enum'
+  ];
   const dataIsValid = (errors: ErrorObject[]): boolean => {
     return (
       !errors ||
