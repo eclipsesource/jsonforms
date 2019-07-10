@@ -48,6 +48,7 @@ import {
   mapStateToArrayLayoutProps,
   mapStateToCellProps,
   mapStateToControlProps,
+  mapStateToEnumControlProps,
   mapStateToControlWithDetailProps,
   mapStateToJsonFormsRendererProps,
   mapStateToLayoutProps,
@@ -146,6 +147,9 @@ export const ctxToLayoutProps = (ctx: JsonFormsStateContext, props: OwnPropsOfLa
 
 export const ctxToControlProps = (ctx: JsonFormsStateContext, props: OwnPropsOfControl) =>
   mapStateToControlProps({ jsonforms: { ...ctx } }, props);
+
+export const ctxToEnumControlProps = (ctx: JsonFormsStateContext, props: OwnPropsOfControl) =>
+  mapStateToEnumControlProps({ jsonforms: { ...ctx } }, props);
 
 export const ctxToControlWithDetailProps = (
   ctx: JsonFormsStateContext,
@@ -322,12 +326,9 @@ const withContextToEnumCellProps =
 const withContextToEnumProps =
   (Component: ComponentType<ControlProps & OwnPropsOfEnum>): ComponentType<OwnPropsOfControl & OwnPropsOfEnum> =>
     ({ ctx, props }: JsonFormsStateContext & ControlProps & OwnPropsOfEnum) => {
-      const stateProps = ctxToControlProps(ctx, props);
+      const stateProps = ctxToEnumControlProps(ctx, props);
       const dispatchProps = ctxDispatchToControlProps(ctx.dispatch);
-      const options =
-        props.options !== undefined ? props.options : stateProps.schema.enum;
-
-      return (<Component {...props} {...dispatchProps} {...stateProps} options={options} />);
+      return (<Component {...props} {...dispatchProps} {...stateProps} options={stateProps.options} />);
     };
 
 // --
