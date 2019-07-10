@@ -4,35 +4,13 @@ import Adapter from 'enzyme-adapter-react-16';
 import {
   ControlProps,
   OwnPropsOfEnum,
-  Actions,
-  jsonformsReducer,
-  JsonFormsState,
   rankWith
 } from '@jsonforms/core';
 
 import { JsonForms } from '../src/JsonForms';
 import { withJsonFormsEnumProps } from '../src/JsonFormsContext';
-// import {
-//   JsonFormsReduxContext
-// } from '../src/JsonFormsContext';
-// import { Provider } from 'react-redux';
-import { AnyAction, combineReducers, createStore, Reducer, Store } from 'redux';
 
 Enzyme.configure({ adapter: new Adapter() });
-
-export const initJsonFormsStore = (): Store<JsonFormsState> => {
-  const s: JsonFormsState = {
-    jsonforms: {}
-  };
-  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({
-    jsonforms: jsonformsReducer()
-  });
-  const store: Store<JsonFormsState> = createStore(reducer, s);
-  // const { data, schema, uischema } = fixture;
-  store.dispatch(Actions.init({}, {}));
-
-  return store;
-};
 
 test('withJsonFormsEnumProps - constant: should supply control and enum props', () => {
   const MockEnumControlUnwrapped = (_: ControlProps & OwnPropsOfEnum) => {
@@ -41,8 +19,6 @@ test('withJsonFormsEnumProps - constant: should supply control and enum props', 
 
   const MockEnumControl = withJsonFormsEnumProps(MockEnumControlUnwrapped);
 
-  // const store = initJsonFormsStore()
-  //
   const schema = {
     type: 'object',
     properties: {
@@ -91,8 +67,6 @@ test('withJsonFormsEnumProps - enum: should supply control and enum props', () =
 
   const MockEnumControl = withJsonFormsEnumProps(MockEnumControlUnwrapped);
 
-  // const store = initJsonFormsStore()
-  //
   const schema = {
     type: 'object',
     properties: {
