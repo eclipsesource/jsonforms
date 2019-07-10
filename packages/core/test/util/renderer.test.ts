@@ -33,7 +33,8 @@ import {
   mapDispatchToControlProps,
   mapStateToControlProps,
   mapStateToJsonFormsRendererProps,
-  mapStateToLayoutProps
+  mapStateToLayoutProps,
+  mapStateToOneOfProps
 } from '../../src/util';
 import configureStore from 'redux-mock-store';
 import test from 'ava';
@@ -613,6 +614,69 @@ test('mapStateToLayoutProps - hidden via state with path from ownProps ', t => {
   };
   const props = mapStateToLayoutProps(state, ownProps);
   t.false(props.visible);
+});
+
+test("mapStateToOneOfProps - indexOfFittingSchema should not select schema if enum doesn't match", t => {
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/method'
+  };
+
+  const ownProps = {
+    uischema
+  };
+
+  const state = {
+    jsonforms: {
+      core: {
+        ajv: createAjv(),
+        schema: {
+          type: 'object',
+          properties: {
+            method: {
+              oneOf: [
+                {
+                  title: 'Injection',
+                  type: 'object',
+                  properties: {
+                    method: {
+                      title: 'Method',
+                      type: 'string',
+                      enum: ['Injection'],
+                      default: 'Injection'
+                    }
+                  },
+                  required: ['method']
+                },
+                {
+                  title: 'Infusion',
+                  type: 'object',
+                  properties: {
+                    method: {
+                      title: 'Method',
+                      type: 'string',
+                      enum: ['Infusion'],
+                      default: 'Infusion'
+                    }
+                  },
+                  required: ['method']
+                }
+              ]
+            }
+          }
+        },
+        data: {
+          method: {
+            method: 'Infusion'
+          }
+        },
+        uischema
+      }
+    }
+  };
+
+  const oneOfProps = mapStateToOneOfProps(state, ownProps);
+  t.is(oneOfProps.indexOfFittingSchema, 1);
 });
 
 test('should assign defaults to enum', t => {
