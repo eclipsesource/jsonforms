@@ -22,38 +22,28 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import '@jsonforms/test';
 import * as React from 'react';
-import anyTest, { TestInterface } from 'ava';
-import { ControlElement, getData, update } from '@jsonforms/core';
+import { getData, update } from '@jsonforms/core';
 import { JsonFormsReduxContext } from '@jsonforms/react';
+import Adapter from 'enzyme-adapter-react-16';
+import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import EnumCell, { enumCellTester } from '../../src/cells/EnumCell';
 import { Provider } from 'react-redux';
-import * as TestUtils from 'react-dom/test-utils';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
-import { JsonSchema } from '@jsonforms/core/src';
-import { StyleDef } from '../../src';
 
-interface EnumCellTestContext {
-  data: any;
-  schema: JsonSchema;
-  uischema: ControlElement;
-  styles: StyleDef[];
-}
+Enzyme.configure({ adapter: new Adapter() });
 
-const test = anyTest as TestInterface<EnumCellTestContext>;
-
-test.beforeEach(t => {
-  t.context.data = { 'foo': 'a' };
-  t.context.schema = {
+const fixture = {
+  data: { 'foo': 'a' },
+  schema: {
     type: 'string',
     enum: ['a', 'b'],
-  };
-  t.context.uischema = {
+  },
+  uischema: {
     type: 'Control',
     scope: '#/properties/foo',
-  };
-  t.context.styles = [
+  },
+  styles: [
     {
       name: 'control',
       classNames: ['control']
@@ -62,30 +52,29 @@ test.beforeEach(t => {
       name: 'control.validation',
       classNames: ['validation']
     }
-  ];
+  ]
+};
+
+test('tester', () => {
+  expect(enumCellTester(undefined, undefined)).toBe(-1);
+  expect(enumCellTester(null, undefined)).toBe(-1);
+  expect(enumCellTester({ type: 'Foo' }, undefined)).toBe(-1);
+  expect(enumCellTester({ type: 'Control' }, undefined)).toBe(-1);
 });
 
-test('tester', t => {
-  t.is(enumCellTester(undefined, undefined), -1);
-  t.is(enumCellTester(null, undefined), -1);
-  t.is(enumCellTester({ type: 'Foo' }, undefined), -1);
-  t.is(enumCellTester({ type: 'Control' }, undefined), -1);
-});
-
-test('tester with wrong prop type', t => {
-  t.is(
+test('tester with wrong prop type', () => {
+  expect(
     enumCellTester(
-      t.context.uischema,
+      fixture.uischema,
       { type: 'object', properties: { foo: { type: 'string' } } }
-    ),
-    -1
-  );
+    )
+  ).toBe(-1);
 });
 
-test('tester with wrong prop type, but sibling has correct one', t => {
-  t.is(
+test('tester with wrong prop type, but sibling has correct one', () => {
+  expect(
     enumCellTester(
-      t.context.uischema,
+      fixture.uischema,
       {
         'type': 'object',
         'properties': {
@@ -98,15 +87,14 @@ test('tester with wrong prop type, but sibling has correct one', t => {
           }
         }
       }
-    ),
-    -1
-  );
+    )
+  ).toBe(-1);
 });
 
-test('tester with matching string type', t => {
-  t.is(
+test('tester with matching string type', () => {
+  expect(
     enumCellTester(
-      t.context.uischema,
+      fixture.uischema,
       {
         'type': 'object',
         'properties': {
@@ -116,16 +104,15 @@ test('tester with matching string type', t => {
           }
         }
       }
-    ),
-    2
-  );
+    )
+  ).toBe(2);
 });
 
-test('tester with matching numeric type', t => {
-  // TODO should this be true?
-  t.is(
+test('tester with matching numeric type', () => {
+  // TODO should expect be true?
+  expect(
     enumCellTester(
-      t.context.uischema,
+      fixture.uischema,
       {
         'type': 'object',
         'properties': {
@@ -135,199 +122,205 @@ test('tester with matching numeric type', t => {
           }
         }
       }
-    ),
-    2
-  );
+    )
+  ).toBe(2);
 });
 
-test('render', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+describe('Enum cell', () => {
+
+  let wrapper: ReactWrapper;
+
+  afterEach(() => wrapper.unmount());
+
+  test('render', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+
+    const select = wrapper.find('select').getDOMNode() as HTMLSelectElement;
+    expect(select.tagName).toBe('SELECT');
+    expect(select.value).toBe('a');
+    expect(select.options).toHaveLength(3);
+    expect(select.options.item(0).value).toBe('');
+    expect(select.options.item(1).value).toBe('a');
+    expect(select.options.item(2).value).toBe('b');
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
 
-  const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
-  t.is(select.tagName, 'SELECT');
-  t.is(select.value, 'a');
-  t.is(select.options.length, 3);
-  t.is(select.options.item(0).value, '');
-  t.is(select.options.item(1).value, 'a');
-  t.is(select.options.item(2).value, 'b');
-});
-
-test('update via input event', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+  test('update via input event', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const select = wrapper.find('select');
+    select.simulate('change', { target: { value: 'b' } });
+    expect(getData(store.getState()).foo).toBe('b');
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
 
-  const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
-  select.value = 'b';
-  TestUtils.Simulate.change(select);
-  t.is(getData(store.getState()).foo, 'b');
-});
-
-test('update via action', t => {
-  const data = { 'foo': 'b' };
-  const store = initJsonFormsVanillaStore({
-    data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+  test('update via action', () => {
+    const data = { 'foo': 'b' };
+    const store = initJsonFormsVanillaStore({
+      data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const select = wrapper.find('select').getDOMNode() as HTMLSelectElement;
+    store.dispatch(update('foo', () => 'b'));
+    expect(select.value).toBe('b');
+    expect(select.selectedIndex).toBe(2);
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
-  const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
-  store.dispatch(update('foo', () => 'b'));
-  t.is(select.value, 'b');
-  t.is(select.selectedIndex, 2);
-});
 
-test('update with undefined value', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+  test('update with undefined value', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const select = wrapper.find('select').getDOMNode() as HTMLSelectElement;
+    store.dispatch(update('foo', () => undefined));
+    expect(select.selectedIndex).toBe(0);
+    expect(select.value).toBe('');
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
-  const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
-  store.dispatch(update('foo', () => undefined));
-  t.is(select.selectedIndex, 0);
-  t.is(select.value, '');
-});
 
-test('update with null value', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+  test('update with null value', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const select = wrapper.find('select').getDOMNode() as HTMLSelectElement;
+    store.dispatch(update('foo', () => null));
+    expect(select.selectedIndex).toBe(0);
+    expect(select.value).toBe('');
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
-  const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
-  store.dispatch(update('foo', () => null));
-  t.is(select.selectedIndex, 0);
-  t.is(select.value, '');
-});
 
-test('update with wrong ref', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+  test('update with wrong ref', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    store.dispatch(update('bar', () => 'Bar'));
+    wrapper.update();
+    const select = wrapper.find('select').getDOMNode() as HTMLSelectElement;
+    expect(select.selectedIndex).toBe(1);
+    expect(select.value).toBe('a');
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
-  const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
-  store.dispatch(update('bar', () => 'Bar'));
-  t.is(select.selectedIndex, 1);
-  t.is(select.value, 'a');
-});
 
-test('update with null ref', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+  test('update with null ref', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    store.dispatch(update(null, () => false));
+    wrapper.update();
+    const select = wrapper.find('select').getDOMNode() as HTMLSelectElement;
+    expect(select.selectedIndex).toBe(1);
+    expect(select.value).toBe('a');
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
-  const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
-  store.dispatch(update(null, () => false));
-  t.is(select.selectedIndex, 1);
-  t.is(select.value, 'a');
-});
 
-test('update with undefined ref', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+  test('update with undefined ref', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    store.dispatch(update(undefined, () => false));
+    const select = wrapper.find('select').getDOMNode() as HTMLSelectElement;
+    expect(select.selectedIndex).toBe(1);
+    expect(select.value).toBe('a');
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
-  const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
-  store.dispatch(update(undefined, () => false));
-  t.is(select.selectedIndex, 1);
-  t.is(select.value, 'a');
-});
 
-test('disable', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+  test('disable', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <EnumCell schema={fixture.schema} uischema={fixture.uischema} enabled={false} />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const select = wrapper.find('select');
+    expect(select.props().disabled).toBe(true);
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <EnumCell schema={t.context.schema} uischema={t.context.uischema} enabled={false} />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
-  const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
-  t.true(select.disabled);
-});
 
-test('enabled by default', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+  test('enabled by default', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const select = wrapper.find('select');
+    expect(select.props().disabled).toBe(false);
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
-  const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
-  t.false(select.disabled);
-});
+})

@@ -251,7 +251,7 @@ test.cb('Connect JSON Forms element and cause re-init store', t => {
     const verticalLayout1 = jsonForms.children.item(0);
     t.is(verticalLayout1.className, 'layout');
     t.is(verticalLayout1.children.length, 1);
-    const initState: JsonFormsState = {
+    const initState2: JsonFormsState = {
       jsonforms: {
         core: {
           data: {
@@ -266,7 +266,7 @@ test.cb('Connect JSON Forms element and cause re-init store', t => {
     };
     jsonForms.store = createStore(
       combineReducers<JsonFormsState>({ jsonforms: jsonformsReducer() }),
-      initState
+      initState2
     );
     setTimeout(() => {
       t.is(jsonForms.children.length, 1);

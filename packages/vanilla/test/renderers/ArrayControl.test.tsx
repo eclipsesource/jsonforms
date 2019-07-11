@@ -22,31 +22,21 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import '@jsonforms/test';
 import { JsonFormsReduxContext } from '@jsonforms/react';
 import * as React from 'react';
-import anyTest, { TestInterface } from 'ava';
 import { Provider } from 'react-redux';
 import ArrayControl from '../../src/complex/array/ArrayControlRenderer';
-import { StyleDef, vanillaRenderers } from '../../src/index';
-import * as TestUtils from 'react-dom/test-utils';
+import { vanillaRenderers } from '../../src/index';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
 import IntegerCell, { integerCellTester } from '../../src/cells/IntegerCell';
-import { JsonSchema } from '@jsonforms/core/src';
-import { ControlElement } from '@jsonforms/core';
 
-interface ArrayControlTestContext {
-  schema: JsonSchema;
-  uischema: ControlElement;
-  data: any;
-  styles: StyleDef[];
-}
+import Adapter from 'enzyme-adapter-react-16';
+import Enzyme, { mount } from 'enzyme';
 
-const test = anyTest as TestInterface<ArrayControlTestContext>;
+Enzyme.configure({ adapter: new Adapter() });
 
-test.beforeEach(t => {
-
-  t.context.schema = {
+const fixture = {
+  schema: {
     type: 'object',
     properties: {
       test: {
@@ -60,49 +50,48 @@ test.beforeEach(t => {
         }
       }
     }
-  };
-  t.context.uischema = {
+  },
+  uischema: {
     type: 'Control',
     scope: '#/properties/test'
-  };
-  t.context.data = {
+  },
+  data: {
     test: [{ x: 1, y: 3 }]
-  };
-  t.context.styles = [
+  },
+  styles: [
     {
       name: 'array.table',
       classNames: ['array-table-layout', 'control']
     }
-  ];
-});
+  ]
+};
 
-test('render two children', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema,
-    renderers: vanillaRenderers,
-    cells: [
-      {
-        tester: integerCellTester, cell: IntegerCell
-      }
-    ]
+describe('Array control renderer', () => {
+  test('render two children', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema,
+      renderers: vanillaRenderers,
+      cells: [
+        {
+          tester: integerCellTester, cell: IntegerCell
+        }
+      ]
+    });
+    const wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <ArrayControl
+            schema={fixture.schema}
+            uischema={fixture.uischema}
+          />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+
+    const controls = wrapper.find('.control');
+
+    expect(controls).toHaveLength(3);
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <ArrayControl
-          schema={t.context.schema}
-          uischema={t.context.uischema}
-        />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
-
-  const controls = TestUtils.scryRenderedDOMComponentsWithClass(
-    tree,
-    'control'
-  ) as HTMLDivElement[];
-
-  t.is(controls.length, 3);
 });

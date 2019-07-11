@@ -30,7 +30,6 @@ import {
   rankWith,
 } from '@jsonforms/core';
 import { withJsonFormsCellProps } from '@jsonforms/react';
-import { SyntheticEvent } from 'react';
 import { VanillaRendererProps } from '../index';
 
 export const TimeCell = (props: CellProps & VanillaRendererProps) => {
@@ -40,9 +39,7 @@ export const TimeCell = (props: CellProps & VanillaRendererProps) => {
     <input
       type='time'
       value={data || ''}
-      onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
-        handleChange(path, ev.currentTarget.value)
-      }
+      onChange={ev => handleChange(path, ev.target.value)}
       className={className}
       id={id}
       disabled={!enabled}

@@ -23,7 +23,6 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { SyntheticEvent } from 'react';
 import {
   CellProps,
   isNumberControl,
@@ -41,9 +40,7 @@ export const NumberCell = (props: CellProps & VanillaRendererProps) => {
       type='number'
       step='0.1'
       value={data || ''}
-      onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
-        handleChange(path, Number(ev.currentTarget.value))
-      }
+      onChange={ev => handleChange(path, Number(ev.target.value))}
       className={className}
       id={id}
       disabled={!enabled}

@@ -22,9 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import '@jsonforms/test';
 import * as React from 'react';
-import anyTest, { TestInterface } from 'ava';
 import {
   ControlElement,
   getData,
@@ -33,35 +31,30 @@ import {
   update
 } from '@jsonforms/core';
 import { JsonFormsReduxContext } from '@jsonforms/react';
+import { Provider } from 'react-redux';
+import Adapter from 'enzyme-adapter-react-16';
+import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import SliderCell, { sliderCellTester } from '../../src/cells/SliderCell';
 import HorizontalLayoutRenderer from '../../src/layouts/HorizontalLayout';
-import { Provider } from 'react-redux';
-import * as TestUtils from 'react-dom/test-utils';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
-import { StyleDef } from '../../src';
 
-interface SliderCellTestContext {
-  data: any;
-  schema: JsonSchema;
-  uischema: ControlElement;
-  styles: StyleDef[];
-}
+Enzyme.configure({ adapter: new Adapter() });
 
-const test = anyTest as TestInterface<SliderCellTestContext>;
+const controlElement: ControlElement = {
+  type: 'Control',
+  scope: '#/properties/foo'
+};
 
-test.beforeEach(t => {
-  t.context.data = { 'foo': 5 };
-  t.context.schema = {
+const fixture = {
+  data: { 'foo': 5 },
+  schema: {
     type: 'number',
     maximum: 10,
     minimum: 2,
     default: 6
-  };
-  t.context.uischema = {
-    type: 'Control',
-    scope: '#/properties/foo'
-  };
-  t.context.styles = [
+  },
+  uischema: controlElement,
+  styles: [
     {
       name: 'control',
       classNames: ['control']
@@ -70,540 +63,536 @@ test.beforeEach(t => {
       name: 'control.validation',
       classNames: ['validation']
     }
-  ];
-});
+  ]
+};
 
-test.failing('autofocus on first element', t => {
-  const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-      firstSliderCell: { type: 'number', minimum: 5, maximum: 10 },
-      secondSliderCell: { type: 'number', minimum: 5, maximum: 10 }
-    }
-  };
-  const firstControlElement: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/firstSliderCell',
-    options: {
-      focus: true
-    }
-  };
-  const secondControlElement: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/secondSliderCell',
-    options: {
-      focus: true
-    }
-  };
-  const uischema: HorizontalLayout = {
-    type: 'HorizontalLayout',
-    elements: [
-      firstControlElement,
-      secondControlElement
-    ]
-  };
-  const data = {
-    firstSliderCell: 3.14,
-    secondSliderCell: 5.12
-  };
-  const store = initJsonFormsVanillaStore({
-    data,
-    schema,
-    uischema
+describe('Slider cell tester', () => {
+  test('tester', () => {
+    expect(sliderCellTester(undefined, undefined)).toBe(-1);
+    expect(sliderCellTester(null, undefined)).toBe(-1);
+    expect(sliderCellTester({ type: 'Foo' }, undefined)).toBe(-1);
+    expect(sliderCellTester({ type: 'Control' }, undefined)).toBe(-1);
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <HorizontalLayoutRenderer schema={schema} uischema={uischema} />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
 
-  const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
-  t.not(document.activeElement, inputs[0]);
-  t.is(document.activeElement, inputs[1]);
-});
-
-test('autofocus active', t => {
-  const uischema: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/foo',
-    options: { focus: true }
-  };
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema
-  });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <SliderCell
-          schema={t.context.schema}
-          uischema={uischema}
-          path='foo'
-        />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  t.is(document.activeElement, input);
-});
-
-test('autofocus inactive', t => {
-  const uischema: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/foo',
-    options: { focus: false }
-  };
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema
-  });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <SliderCell
-          schema={t.context.schema}
-          uischema={uischema}
-          path='foo'
-        />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  t.false(input.autofocus);
-});
-
-test('autofocus inactive by default', t => {
-  const uischema: ControlElement = t.context.uischema;
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema
-  });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <SliderCell
-          schema={t.context.schema}
-          uischema={uischema}
-          path='foo'
-        />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  t.false(input.autofocus);
-});
-
-test('tester', t => {
-  t.is(sliderCellTester(undefined, undefined), -1);
-  t.is(sliderCellTester(null, undefined), -1);
-  t.is(sliderCellTester({ type: 'Foo' }, undefined), -1);
-  t.is(sliderCellTester({ type: 'Control' }, undefined), -1);
-});
-
-test('tester with wrong schema type', t => {
-  const control: ControlElement = t.context.uischema;
-  t.is(
-    sliderCellTester(
-      control,
-      {
-        type: 'object',
-        properties: {
-          foo: { type: 'string' }
-        }
-      }
-    ),
-    -1
-  );
-});
-
-test('tester with wrong schema type, but sibling has correct one', t => {
-  const control: ControlElement = t.context.uischema;
-  t.is(
-    sliderCellTester(
-      control,
-      {
-        type: 'object',
-        properties: {
-          foo: { type: 'string' },
-          bar: { type: 'number' }
-        }
-      }
-    ),
-    -1
-  );
-});
-
-test('tester with correct schema type, but missing maximum and minimum cells', t => {
-  const control: ControlElement = t.context.uischema;
-  t.is(
-    sliderCellTester(
-      control,
-      {
-        type: 'object',
-        properties: {
-          foo: { type: 'number' }
-        }
-      }
-    ),
-    -1
-  );
-});
-
-test('tester with correct schema type, but missing maximum', t => {
-  const control: ControlElement = t.context.uischema;
-  t.is(
-    sliderCellTester(
-      control,
-      {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'number',
-            minimum: 2
+  test('tester with wrong schema type', () => {
+    const control: ControlElement = fixture.uischema;
+    expect(
+      sliderCellTester(
+        control,
+        {
+          type: 'object',
+          properties: {
+            foo: { type: 'string' }
           }
         }
-      }
-    ),
-    -1
-  );
-});
+      )
+    ).toBe(-1);
+  });
 
-test('tester with correct schema type, but missing minimum', t => {
-  const control: ControlElement = t.context.uischema;
-  t.is(
-    sliderCellTester(
-      control,
-      {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'number',
-            maximum: 10
+  test('tester with wrong schema type, but sibling has correct one', () => {
+    const control: ControlElement = fixture.uischema;
+    expect(
+      sliderCellTester(
+        control,
+        {
+          type: 'object',
+          properties: {
+            foo: { type: 'string' },
+            bar: { type: 'number' }
           }
         }
-      }
-    ),
-    -1
-  );
-});
+      )
+    ).toBe(-1);
+  });
 
-test('tester with matching schema type (number) without default', t => {
-  const control: ControlElement = t.context.uischema;
-  t.is(
-    sliderCellTester(
-      control,
-      {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'number',
-            maximum: 10,
-            minimum: 2
+  test('tester with correct schema type, but missing maximum and minimum cells', () => {
+    const control: ControlElement = fixture.uischema;
+    expect(
+      sliderCellTester(
+        control,
+        {
+          type: 'object',
+          properties: {
+            foo: { type: 'number' }
           }
         }
-      }
-    ),
-    -1
-  );
-});
+      )
+    ).toBe(-1);
+  });
 
-test('tester with matching schema type (integer) without default', t => {
-  const control: ControlElement = t.context.uischema;
-  t.is(
-    sliderCellTester(
-      control,
-      {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'integer',
-            maximum: 10,
-            minimum: 2
+  test('tester with correct schema type, but missing maximum', () => {
+    expect(
+      sliderCellTester(
+        fixture.uischema,
+        {
+          type: 'object',
+          properties: {
+            foo: {
+              type: 'number',
+              minimum: 2
+            }
           }
         }
-      }
-    ),
-    -1
-  );
-});
+      )
+    ).toBe(-1);
+  });
 
-test('tester with matching schema type (number) with default', t => {
-  const control: ControlElement = t.context.uischema;
-  control.options = { slider: true };
-  t.is(
-    sliderCellTester(
-      control,
-      {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'number',
-            maximum: 10,
-            minimum: 2,
-            default: 3
+  test('tester with correct schema type, but missing minimum', () => {
+    expect(
+      sliderCellTester(
+        fixture.uischema,
+        {
+          type: 'object',
+          properties: {
+            foo: {
+              type: 'number',
+              maximum: 10
+            }
           }
         }
-      }
-    ),
-    4
-  );
-});
+      )
+    ).toBe(-1);
+  });
 
-test('tester with matching schema type (integer) with default', t => {
-  const control: ControlElement = t.context.uischema;
-  control.options = { slider: true };
-  t.is(
-    sliderCellTester(
-      control,
-      {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'integer',
-            maximum: 10,
-            minimum: 2,
-            default: 4
+  test('tester with matching schema type (number) without default', () => {
+    expect(
+      sliderCellTester(
+        fixture.uischema,
+        {
+          type: 'object',
+          properties: {
+            foo: {
+              type: 'number',
+              maximum: 10,
+              minimum: 2
+            }
           }
         }
+      )
+    ).toBe(-1);
+  });
+
+  test('tester with matching schema type (integer) without default', () => {
+    expect(
+      sliderCellTester(
+        fixture.uischema,
+        {
+          type: 'object',
+          properties: {
+            foo: {
+              type: 'integer',
+              maximum: 10,
+              minimum: 2
+            }
+          }
+        }
+      )
+    ).toBe(-1);
+  });
+
+  test('tester with matching schema type (number) with default', () => {
+    const control: ControlElement = {
+      ...fixture.uischema,
+      options: { slider: true }
+    };
+    expect(
+      sliderCellTester(
+        control,
+        {
+          type: 'object',
+          properties: {
+            foo: {
+              type: 'number',
+              maximum: 10,
+              minimum: 2,
+              default: 3
+            }
+          }
+        }
+      )
+    ).toBe(4);
+  });
+
+  test('tester with matching schema type (integer) with default', () => {
+    const control: ControlElement = fixture.uischema;
+    control.options = { slider: true };
+    expect(
+      sliderCellTester(
+        control,
+        {
+          type: 'object',
+          properties: {
+            foo: {
+              type: 'integer',
+              maximum: 10,
+              minimum: 2,
+              default: 4
+            }
+          }
+        }
+      )
+    ).toBe(4);
+  });
+});
+
+describe('Slider cell', () => {
+
+  let wrapper: ReactWrapper;
+
+  afterEach(() => wrapper.unmount());
+
+  test.skip('autofocus on first element', () => {
+    const schema: JsonSchema = {
+      type: 'object',
+      properties: {
+        firstSliderCell: { type: 'number', minimum: 5, maximum: 10 },
+        secondSliderCell: { type: 'number', minimum: 5, maximum: 10 }
       }
-    ),
-    4
-  );
-});
-
-test('render', t => {
-  const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-      foo: {
-        type: 'number',
-        maximum: 10,
-        minimum: 2,
-        default: 6
+    };
+    const firstControlElement: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/firstSliderCell',
+      options: {
+        focus: true
       }
-    }
-  };
-  const store = initJsonFormsVanillaStore({
-    data: { 'foo': 5 },
-    schema,
-    uischema: t.context.uischema
-  });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <SliderCell
-          schema={schema}
-          uischema={t.context.uischema}
-          path='foo'
-        />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  t.is(input.type, 'range');
-  t.is(input.value, '5');
-});
+    };
+    const secondControlElement: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/secondSliderCell',
+      options: {
+        focus: true
+      }
+    };
+    const uischema: HorizontalLayout = {
+      type: 'HorizontalLayout',
+      elements: [
+        firstControlElement,
+        secondControlElement
+      ]
+    };
+    const data = {
+      firstSliderCell: 3.14,
+      secondSliderCell: 5.12
+    };
+    const store = initJsonFormsVanillaStore({
+      data,
+      schema,
+      uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <HorizontalLayoutRenderer schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
 
-test('update via input event', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+    const inputs = wrapper.find('input');
+    expect(document.activeElement).toBe(inputs.at(0).getDOMNode());
+    expect(document.activeElement).toBe(inputs.at(1).getDOMNode());
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <SliderCell
-          schema={t.context.schema}
-          uischema={t.context.uischema}
-          path='foo'
-        />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  input.value = '3';
-  TestUtils.Simulate.change(input);
-  t.is(getData(store.getState()).foo, 3);
-});
 
-test('update via action', t => {
-  const store = initJsonFormsVanillaStore({
-    data: { 'foo': 3 },
-    schema: t.context.schema,
-    uischema: t.context.uischema
+  test('autofocus active', () => {
+    const uischema: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/foo',
+      options: { focus: true }
+    };
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <SliderCell
+            schema={fixture.schema}
+            uischema={uischema}
+            path='foo'
+          />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input');
+    expect(document.activeElement).toBe(input.getDOMNode());
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <SliderCell
-          schema={t.context.schema}
-          uischema={t.context.uischema}
-          path='foo'
-        />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  t.is(input.value, '3');
-  store.dispatch(update('foo', () => 4));
-  setTimeout(() => t.is(input.value, 'Bar'), 4);
-});
-// FIXME this moves the slider and changes the value
-test.failing('update with undefined value', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
-  });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <SliderCell
-          schema={t.context.schema}
-          uischema={t.context.uischema}
-          path='foo'
-        />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  store.dispatch(update('foo', () => undefined));
-  t.is(input.value, '');
-});
-// FIXME this moves the slider and changes the value
-test.failing('update with null value', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
-  });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <SliderCell
-          schema={t.context.schema}
-          uischema={t.context.uischema}
-          path='foo'
-        />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  store.dispatch(update('foo', () => null));
-  t.is(input.value, '');
-});
 
-test('update with wrong ref', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+  test('autofocus inactive', () => {
+    const uischema: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/foo',
+      options: { focus: false }
+    };
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <SliderCell
+            schema={fixture.schema}
+            uischema={uischema}
+            path='foo'
+          />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.autofocus).toBe(false);
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <SliderCell
-          schema={t.context.schema}
-          uischema={t.context.uischema}
-          path='foo'
-        />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  store.dispatch(update('bar', () => 11));
-  t.is(input.value, '5');
-});
 
-test('update with null ref', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+  test('autofocus inactive by default', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <SliderCell
+            schema={fixture.schema}
+            uischema={fixture.uischema}
+            path='foo'
+          />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.autofocus).toBe(false);
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <SliderCell
-          schema={t.context.schema}
-          uischema={t.context.uischema}
-          path='foo'
-        />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  store.dispatch(update(null, () => 3));
-  t.is(input.value, '5');
-});
 
-test('update with undefined ref', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+  test('render', () => {
+    const schema: JsonSchema = {
+      type: 'object',
+      properties: {
+        foo: {
+          type: 'number',
+          maximum: 10,
+          minimum: 2,
+          default: 6
+        }
+      }
+    };
+    const store = initJsonFormsVanillaStore({
+      data: { 'foo': 5 },
+      schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <SliderCell
+            schema={schema}
+            uischema={fixture.uischema}
+            path='foo'
+          />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.type).toBe('range');
+    expect(input.value).toBe('5');
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <SliderCell
-          schema={t.context.schema}
-          uischema={t.context.uischema}
-          path='foo'
-        />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
-  store.dispatch(update(undefined, () => 13));
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  t.is(input.value, '5');
-});
 
-test('disable', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+  test('update via input event', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <SliderCell
+            schema={fixture.schema}
+            uischema={fixture.uischema}
+            path='foo'
+          />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input');
+    input.simulate('change', { target: { value: 3 } });
+    wrapper.update();
+    expect(getData(store.getState()).foo).toBe(3);
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <SliderCell
-          schema={t.context.schema}
-          uischema={t.context.uischema}
-          path='foo'
-          enabled={false}
-        />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  t.true(input.disabled);
-});
 
-test('enabled by default', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+  test('update via action', () => {
+    const store = initJsonFormsVanillaStore({
+      data: { 'foo': 3 },
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <SliderCell
+            schema={fixture.schema}
+            uischema={fixture.uischema}
+            path='foo'
+          />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    store.dispatch(update('foo', () => 4));
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.value).toBe('4');
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <SliderCell
-          schema={t.context.schema}
-          uischema={t.context.uischema}
-          path='foo'
-        />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  t.false(input.disabled);
+  // FIXME expect moves the slider and changes the value
+  test.skip('update with undefined value', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <SliderCell
+            schema={fixture.schema}
+            uischema={fixture.uischema}
+            path='foo'
+          />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    store.dispatch(update('foo', () => undefined));
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.value).toBe('');
+  });
+  // FIXME expect moves the slider and changes the value
+  test.skip('update with null value', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <SliderCell
+            schema={fixture.schema}
+            uischema={fixture.uischema}
+            path='foo'
+          />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    store.dispatch(update('foo', () => null));
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.value).toBe('');
+  });
+
+  test('update with wrong ref', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <SliderCell
+            schema={fixture.schema}
+            uischema={fixture.uischema}
+            path='foo'
+          />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    store.dispatch(update('bar', () => 11));
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.value).toBe('5');
+  });
+
+  test('update with null ref', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <SliderCell
+            schema={fixture.schema}
+            uischema={fixture.uischema}
+            path='foo'
+          />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    store.dispatch(update(null, () => 3));
+    expect(input.value).toBe('5');
+  });
+
+  test('update with undefined ref', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <SliderCell
+            schema={fixture.schema}
+            uischema={fixture.uischema}
+            path='foo'
+          />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    store.dispatch(update(undefined, () => 13));
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.value).toBe('5');
+  });
+
+  test('disable', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <SliderCell
+            schema={fixture.schema}
+            uischema={fixture.uischema}
+            path='foo'
+            enabled={false}
+          />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.disabled).toBe(true);
+  });
+
+  test('enabled by default', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <SliderCell
+            schema={fixture.schema}
+            uischema={fixture.uischema}
+            path='foo'
+          />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.disabled).toBe(false);
+  });
 });

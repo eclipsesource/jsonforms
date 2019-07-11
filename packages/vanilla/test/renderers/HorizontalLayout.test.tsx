@@ -22,160 +22,157 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import '@jsonforms/test';
-import * as TestUtils from 'react-dom/test-utils';
 import * as React from 'react';
-import anyTest, { TestInterface } from 'ava';
 import {
   HorizontalLayout,
   UISchemaElement
 } from '@jsonforms/core';
 import { Provider } from 'react-redux';
+import Adapter from 'enzyme-adapter-react-16';
+import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import HorizontalLayoutRenderer, {
   horizontalLayoutTester
 } from '../../src/layouts/HorizontalLayout';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
 import { JsonFormsReduxContext } from '@jsonforms/react';
-import { StyleDef } from '../../src';
 
-interface HorizontalLayoutTestContext {
-  uischema: HorizontalLayout;
-  styles: StyleDef[];
-}
+Enzyme.configure({ adapter: new Adapter() });
 
-const test = anyTest as TestInterface<HorizontalLayoutTestContext>;
-
-test.beforeEach(t => {
-  t.context.uischema = {
+const fixture = {
+  uischema: {
     type: 'HorizontalLayout',
     elements: [{ type: 'Control' }]
-  };
-  t.context.styles = [
+  },
+  styles: [
     {
       name: 'horizontal.layout',
       classNames: ['horizontal-layout']
     }
-  ];
+  ]
+};
+
+test('tester', () => {
+  expect(horizontalLayoutTester(undefined, undefined)).toBe(-1);
+  expect(horizontalLayoutTester(null, undefined)).toBe(-1);
+  expect(horizontalLayoutTester({ type: 'Foo' }, undefined)).toBe(-1);
+  expect(horizontalLayoutTester({ type: 'HorizontalLayout' }, undefined)).toBe(1);
 });
 
-test('tester', t => {
-  t.is(horizontalLayoutTester(undefined, undefined), -1);
-  t.is(horizontalLayoutTester(null, undefined), -1);
-  t.is(horizontalLayoutTester({ type: 'Foo' }, undefined), -1);
-  t.is(horizontalLayoutTester({ type: 'HorizontalLayout' }, undefined), 1);
-});
+describe('Horizontal layout', () => {
 
-test('render with undefined elements', t => {
-  const uischema: UISchemaElement = {
-    type: 'HorizontalLayout'
-  };
-  const store = initJsonFormsVanillaStore({
-    data: {},
-    schema: {},
-    uischema,
-    styles: t.context.styles
+  let wrapper: ReactWrapper;
+
+  afterEach(() => wrapper.unmount());
+
+  test('render with undefined elements', () => {
+    const uischema: UISchemaElement = {
+      type: 'HorizontalLayout'
+    };
+    const store = initJsonFormsVanillaStore({
+      data: {},
+      schema: {},
+      uischema,
+      styles: fixture.styles
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <HorizontalLayoutRenderer uischema={uischema} />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+
+    const horizontalLayout = wrapper.find(HorizontalLayoutRenderer).getDOMNode() as HTMLDivElement;
+
+    expect(horizontalLayout).toBeDefined();
+    expect(horizontalLayout.children).toHaveLength(0);
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <HorizontalLayoutRenderer uischema={uischema} />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
 
-  const horizontalLayout = TestUtils.findRenderedDOMComponentWithClass(tree, 'horizontal-layout');
-  t.not(horizontalLayout, undefined);
-  t.is(horizontalLayout.children.length, 0);
-});
-
-test('render with null elements', t => {
-  const uischema: HorizontalLayout = {
-    type: 'HorizontalLayout',
-    elements: null
-  };
-  const store = initJsonFormsVanillaStore({
-    data: {},
-    schema: {},
-    uischema,
-    styles: t.context.styles
+  test('render with null elements', () => {
+    const uischema: HorizontalLayout = {
+      type: 'HorizontalLayout',
+      elements: null
+    };
+    const store = initJsonFormsVanillaStore({
+      data: {},
+      schema: {},
+      uischema,
+      styles: fixture.styles
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <HorizontalLayoutRenderer uischema={uischema} />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const horizontalLayout = wrapper.find(HorizontalLayoutRenderer).getDOMNode() as HTMLDivElement;
+    expect(horizontalLayout).toBeDefined();
+    expect(horizontalLayout.children).toHaveLength(0);
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <HorizontalLayoutRenderer uischema={uischema} />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
-  const horizontalLayout = TestUtils.findRenderedDOMComponentWithClass(tree, 'horizontal-layout');
-  t.not(horizontalLayout, undefined);
-  t.is(horizontalLayout.children.length, 0);
-});
 
-test('render with children', t => {
-  const uischema: HorizontalLayout = {
-    type: 'HorizontalLayout',
-    elements: [
-      { type: 'Control' },
-      { type: 'Control' }
-    ]
-  };
-  const store = initJsonFormsVanillaStore({
-    data: {},
-    schema: {},
-    uischema,
-    styles: t.context.styles
+  test('render with children', () => {
+    const uischema: HorizontalLayout = {
+      type: 'HorizontalLayout',
+      elements: [
+        { type: 'Control' },
+        { type: 'Control' }
+      ]
+    };
+    const store = initJsonFormsVanillaStore({
+      data: {},
+      schema: {},
+      uischema,
+      styles: fixture.styles
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <HorizontalLayoutRenderer uischema={uischema} />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const horizontalLayout = wrapper.find(HorizontalLayoutRenderer).getDOMNode() as HTMLDivElement;
+    expect(horizontalLayout).toBeDefined();
+    expect(horizontalLayout.children).toHaveLength(2);
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <HorizontalLayoutRenderer uischema={uischema} />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
-  const horizontalLayout = TestUtils.findRenderedDOMComponentWithClass(tree, 'horizontal-layout');
-  t.not(horizontalLayout, undefined);
-  t.is(horizontalLayout.children.length, 2);
-});
 
-test('hide', t => {
-  const store = initJsonFormsVanillaStore({
-    data: {},
-    schema: {},
-    uischema: t.context.uischema,
-    styles: t.context.styles
+  test('hide', () => {
+    const store = initJsonFormsVanillaStore({
+      data: {},
+      schema: {},
+      uischema: fixture.uischema,
+      styles: fixture.styles
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <HorizontalLayoutRenderer
+            uischema={fixture.uischema}
+            visible={false}
+          />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const horizontalLayout = wrapper.find(HorizontalLayoutRenderer).getDOMNode() as HTMLDivElement;
+    expect(horizontalLayout.hidden).toBe(true);
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <HorizontalLayoutRenderer
-          uischema={t.context.uischema}
-          visible={false}
-        />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
-  const horizontalLayout = TestUtils.findRenderedDOMComponentWithClass(
-    tree, 'horizontal-layout'
-  ) as HTMLDivElement;
-  t.true(horizontalLayout.hidden);
-});
 
-test('show by default', t => {
-  const store = initJsonFormsVanillaStore({
-    data: {},
-    schema: {},
-    uischema: t.context.uischema,
-    styles: t.context.styles
+  test('show by default', () => {
+    const store = initJsonFormsVanillaStore({
+      data: {},
+      schema: {},
+      uischema: fixture.uischema,
+      styles: fixture.styles
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <HorizontalLayoutRenderer uischema={fixture.uischema} />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const horizontalLayout = wrapper.find(HorizontalLayoutRenderer).getDOMNode() as HTMLDivElement;
+    expect(horizontalLayout.hidden).toBe(false);
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <HorizontalLayoutRenderer uischema={t.context.uischema} />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
-  const horizontalLayout = TestUtils.findRenderedDOMComponentWithClass(
-    tree, 'horizontal-layout'
-  ) as HTMLDivElement;
-  t.false(horizontalLayout.hidden);
 });
