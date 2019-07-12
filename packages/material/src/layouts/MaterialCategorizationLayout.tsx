@@ -29,7 +29,6 @@ import {
   and,
   Categorization,
   isVisible,
-  JsonFormsSubStates,
   RankedTester,
   rankWith,
   StatePropsOfLayout,
@@ -37,7 +36,7 @@ import {
   UISchemaElement,
   uiTypeIs,
 } from '@jsonforms/core';
-import { ctxToLayoutProps, JsonFormsContext, RendererComponent } from '@jsonforms/react';
+import { RendererComponent, withJsonFormsLayoutProps } from '@jsonforms/react';
 import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from '../util/layout';
 
 export const isSingleLevelCategorization: Tester = and(
@@ -69,45 +68,29 @@ export class MaterialCategorizationLayoutRenderer
   };
 
   render() {
+    const { data, path, renderers, schema, uischema, visible, selected } = this.props;
+    const categorization = uischema as Categorization;
+    const value = this.hasOwnState() ? this.state.activeCategory : selected;
+    const childProps: MaterialLayoutRendererProps = {
+      elements: categorization.elements[value].elements,
+      schema,
+      path,
+      direction: 'column',
+      visible,
+      renderers
+    };
+    const categories = categorization.elements.filter(category => isVisible(category, data));
     return (
-      <JsonFormsContext.Consumer>
-        {
-          (ctx: JsonFormsSubStates) => {
-            const {
-              uischema,
-              schema,
-              path,
-              visible,
-              renderers
-            } = ctxToLayoutProps(ctx, this.props);
-            const data = ctx.core.data;
-            const categorization = uischema as Categorization;
-            const value = this.hasOwnState() ? this.state.activeCategory : this.props.selected;
-            const childProps: MaterialLayoutRendererProps = {
-              elements: categorization.elements[value].elements,
-              schema,
-              path,
-              direction: 'column',
-              visible,
-              renderers
-            };
-            const categories = categorization.elements.filter(category => isVisible(category, data));
-
-            return (
-              <Hidden xsUp={!visible}>
-                <AppBar position='static'>
-                  <Tabs value={value} onChange={this.handleChange} variant='scrollable'>
-                    {categories.map((e, idx) => <Tab key={idx} label={e.label} />)}
-                  </Tabs>
-                </AppBar>
-                <div style={{ marginTop: '0.5em' }}>
-                  <MaterialLayoutRenderer {...childProps} />
-                </div>
-              </Hidden>
-            )
-          }
-        }
-      </JsonFormsContext.Consumer>
+      <Hidden xsUp={!visible}>
+        <AppBar position='static'>
+          <Tabs value={value} onChange={this.handleChange} variant='scrollable'>
+            {categories.map((e, idx) => <Tab key={idx} label={e.label} />)}
+          </Tabs>
+        </AppBar>
+        <div style={{ marginTop: '0.5em' }}>
+          <MaterialLayoutRenderer {...childProps} />
+        </div>
+      </Hidden>
     );
   }
 
@@ -126,4 +109,4 @@ export class MaterialCategorizationLayoutRenderer
   };
 }
 
-export default MaterialCategorizationLayoutRenderer;
+export default withJsonFormsLayoutProps(MaterialCategorizationLayoutRenderer);
