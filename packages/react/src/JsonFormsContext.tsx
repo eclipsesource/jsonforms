@@ -188,7 +188,7 @@ export const ctxToOneOfProps = (
   ownProps: OwnPropsOfControl
 ): CombinatorProps => {
   const props = mapStateToOneOfProps({ jsonforms: { ...ctx } }, ownProps);
-  const { handleChange } = ctxDispatchToControlProps(ctx.dispatch)
+  const { handleChange } = ctxDispatchToControlProps(ctx.dispatch);
   return {
     ...props,
     handleChange
@@ -223,7 +223,7 @@ interface WithContext {
   ctx: JsonFormsStateContext;
 }
 
-const withJsonFormsContext =
+export const withJsonFormsContext =
   (Component: ComponentType<WithContext & any>): ComponentType<any> => (props: any) => {
     const ctx = useJsonForms();
     return <Component ctx={ctx} props={props} />;
@@ -334,7 +334,7 @@ const withContextToEnumProps =
 
 type JsonFormsPropTypes = ControlProps | CombinatorProps | LayoutProps | CellProps | ArrayLayoutProps | StatePropsOfControlWithDetail;
 
-const areEqual = (prevProps: JsonFormsPropTypes, nextProps: JsonFormsPropTypes) => {
+export const areEqual = (prevProps: JsonFormsPropTypes, nextProps: JsonFormsPropTypes) => {
   const prev = omit(prevProps, ['handleChange', 'renderers', 'cells', 'uischemas']);
   const next = omit(nextProps, ['handleChange', 'renderers', 'cells', 'uischemas']);
   return isEqual(prev, next)
