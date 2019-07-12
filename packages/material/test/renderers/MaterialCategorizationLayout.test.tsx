@@ -40,11 +40,10 @@ import Enzyme, { mount } from 'enzyme';
 
 import { AnyAction, combineReducers, createStore, Reducer, Store } from 'redux';
 import MaterialCategorizationLayoutRenderer, {
-  MaterialCategorizationLayoutRenderer as CategorizationLayoutRenderer,
   materialCategorizationTester
 } from '../../src/layouts/MaterialCategorizationLayout';
 import { MaterialLayoutRenderer, materialRenderers } from '../../src';
-import { Tab } from '@material-ui/core';
+import { Tab, Tabs } from '@material-ui/core';
 import Adapter from 'enzyme-adapter-react-16';
 import { Provider } from 'react-redux';
 
@@ -191,7 +190,7 @@ describe('Material categorization layout tester', () => {
   });
 });
 
-describe('Material categorization stepper layout', () => {
+describe('Material categorization layout', () => {
 
   it('should render', () => {
     const nameControl = {
@@ -293,9 +292,10 @@ describe('Material categorization stepper layout', () => {
         </JsonFormsReduxContext>
       </Provider>
     );
-    const beforeClick = wrapper.find(CategorizationLayoutRenderer).state().activeCategory;
+
+    const beforeClick = wrapper.find(Tabs).props().value;
     wrapper.find(Tab).at(1).simulate('click');
-    const afterClick = wrapper.find(CategorizationLayoutRenderer).state().activeCategory;
+    const afterClick = wrapper.find(Tabs).props().value;
 
     expect(beforeClick).toBe(0);
     expect(afterClick).toBe(1);
