@@ -18,7 +18,7 @@ const Menu = ({ indent, menu, pathname }) => {
   const children = useMenus({ filter: m => m.parent === menu.name });
   const style = {
     paddingLeft: indent * baseIndent,
-    fontSize: baseFontSize - indent * 2,
+    fontSize: baseFontSize - indent * 4 - indent,
   };
   if (children) {
     return (
