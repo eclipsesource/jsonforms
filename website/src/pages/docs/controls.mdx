@@ -67,3 +67,48 @@ Here's the rendered form:
 <ExampleWithCustomLabel />
 
 You can also completly disable the label by setting it to `false`.
+
+# Options
+
+## `options` for array controls
+
+Controls referring to arrays can now have an optional `options` 
+attribute specifying how the array shall be rendered. 
+
+### `DEFAULT`
+```
+options: {
+    detail : 'DEFAULT'
+}
+```
+The array will be rendered as before. The string is case insensitive.
+
+### Inline UI schema
+```
+options: {
+    detail : {
+        type: 'HorizontalLayout',
+        ...
+    }
+}
+```
+The array will be rendered using the nested array renderer. 
+The nested renderer will use the specified uischema to render the array elements.
+
+### `GENERATED`
+```
+options: {
+    detail : 'GENERATED'
+}
+```
+The array will be rendered using the nested array renderer. The nested renderer will use a generated uischema to render the array elements. The string is case insensitive.
+
+### `REGISTERED`
+```
+options: {
+    detail : 'REGISTERED'
+}
+```
+The array will be rendered using the nested array renderer. 
+The nested renderer will check if a uischema was registered for the type to be rendered or generate one itself. 
+This case will be triggered if detail is any string besides `GENERATED` (case insensitiv) or `DEFAULT` (case insensitive).
