@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import React, { useCallback, useState } from 'react';
+import isEmpty from 'lodash/isEmpty';
 
 import {
   CombinatorProps,
@@ -58,7 +59,7 @@ export interface OwnOneOfProps extends OwnPropsOfControl {
 
 const oneOf = 'oneOf';
 const MaterialOneOfRenderer =
-  ({ handleChange, schema, path, renderers, rootSchema, id, visible, indexOfFittingSchema, uischema, uischemas }: CombinatorProps) => {
+  ({ handleChange, schema, path, renderers, rootSchema, id, visible, indexOfFittingSchema, uischema, uischemas, data }: CombinatorProps) => {
     const [open, setOpen] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(indexOfFittingSchema || 0);
     const [newSelectedIndex, setNewSelectedIndex] = useState(0);
@@ -66,10 +67,6 @@ const MaterialOneOfRenderer =
     const cancel = useCallback(() => {
       setOpen(false);
     }, [setOpen]);
-    const handleTabChange = useCallback((_event: any, newOneOfIndex: number) => {
-      setOpen(true);
-      setNewSelectedIndex(newOneOfIndex);
-    }, [setOpen, setSelectedIndex]);
     const _schema = resolveSubSchemas(schema, rootSchema, oneOf);
     const oneOfRenderInfos = createCombinatorRenderInfos(
       (_schema as JsonSchema).oneOf,
@@ -79,14 +76,28 @@ const MaterialOneOfRenderer =
       path,
       uischemas
       );
-    const confirm = useCallback(() => {
+
+    const openNewTab = (newIndex: number) => {
       handleChange(
         path,
-        createDefaultValue(schema.oneOf[newSelectedIndex])
+        createDefaultValue(schema.oneOf[newIndex])
       );
+      setSelectedIndex(newIndex);
+    }
+
+    const confirm = useCallback(() => {
+      openNewTab(newSelectedIndex)
       setOpen(false);
-      setSelectedIndex(newSelectedIndex);
     }, [handleChange, createDefaultValue, newSelectedIndex]);
+    const handleTabChange = useCallback((_event: any, newOneOfIndex: number) => {
+      setNewSelectedIndex(newOneOfIndex);
+      if(isEmpty(data)) {
+        openNewTab(newOneOfIndex)
+      } else {
+        setOpen(true);
+      }
+
+    }, [setOpen, setSelectedIndex, data]);
 
     return (
       <Hidden xsUp={!visible}>

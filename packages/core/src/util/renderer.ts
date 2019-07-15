@@ -718,6 +718,7 @@ export interface StatePropsOfCombinator extends OwnPropsOfControl {
   id: string;
   indexOfFittingSchema: number;
   uischemas: { tester: UISchemaTester; uischema: UISchemaElement }[];
+  data: any;
 }
 
 const mapStateToCombinatorRendererProps = (
@@ -767,6 +768,7 @@ const mapStateToCombinatorRendererProps = (
   }
 
   return {
+    data,
     path,
     schema,
     rootSchema,
