@@ -42,9 +42,9 @@ import {
   Paths,
   Resolve,
   Runtime,
+  StatePropsOfControl,
   UISchemaElement,
-  UISchemaTester,
-  StatePropsOfControl
+  UISchemaTester
 } from '@jsonforms/core';
 import { JsonFormsDispatch } from '@jsonforms/react';
 /* tslint:disable:next-line */
@@ -56,9 +56,9 @@ import ObjectListItem from './ObjectListItem';
 import { ExpandRootArray } from './ExpandRootArray';
 import AddItemDialog from './AddItemDialog';
 import {
-  StyleRulesCallback,
+  createStyles,
   withStyles,
-  WithStyles
+  WithStyles,
 } from '@material-ui/core/styles';
 import {
   InstanceLabelProvider,
@@ -135,12 +135,7 @@ const Master = ({
 
 const isNotTuple = (schema: JsonSchema) => !Array.isArray(schema.items);
 
-const styles: StyleRulesCallback<
-  | 'treeMasterDetailContent'
-  | 'treeMasterDetail'
-  | 'treeMasterDetailMaster'
-  | 'treeMasterDetailDetail'
-> = () => ({
+const styles = createStyles({
   treeMasterDetailContent: {
     paddingTop: '1em',
     paddingBottom: '1em'
@@ -225,18 +220,18 @@ export interface DispatchPropsOfTreeWithDetail {
 
 export interface TreeWithDetailProps
   extends StatePropsOfTreeWithDetail,
-    DispatchPropsOfTreeWithDetail {}
+  DispatchPropsOfTreeWithDetail { }
 
 export class TreeWithDetailRenderer extends React.Component<
   TreeWithDetailProps &
-    WithStyles<
-      | 'treeMasterDetailContent'
-      | 'treeMasterDetail'
-      | 'treeMasterDetailMaster'
-      | 'treeMasterDetailDetail'
-    >,
+  WithStyles<
+    | 'treeMasterDetailContent'
+    | 'treeMasterDetail'
+    | 'treeMasterDetailMaster'
+    | 'treeMasterDetailDetail'
+  >,
   TreeWithDetailState
-> {
+  > {
   componentWillMount() {
     const { uischema, data, schema } = this.props;
     const controlElement = uischema;
@@ -381,8 +376,8 @@ export class TreeWithDetailRenderer extends React.Component<
                 uischema={detailUiSchema}
               />
             ) : (
-              'Select an item'
-            )}
+                'Select an item'
+              )}
           </div>
         </div>
         <div>
