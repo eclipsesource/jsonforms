@@ -22,15 +22,16 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import '@jsonforms/test';
 import * as React from 'react';
 import { Provider } from 'react-redux';
-import test from 'ava';
 import { UISchemaElement, VerticalLayout } from '@jsonforms/core';
 import { JsonFormsReduxContext } from '@jsonforms/react';
+import Adapter from 'enzyme-adapter-react-16';
+import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import VerticalLayoutRenderer, { verticalLayoutTester } from '../../src/layouts/VerticalLayout';
-import * as TestUtils from 'react-dom/test-utils';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
+
+Enzyme.configure({ adapter: new Adapter() });
 
 const styles = [
   {
@@ -39,130 +40,131 @@ const styles = [
   }
 ];
 
-test('tester', t => {
-  t.is(verticalLayoutTester(undefined, undefined), -1);
-  t.is(verticalLayoutTester(null, undefined), -1);
-  t.is(verticalLayoutTester({ type: 'Foo' }, undefined), -1);
-  t.is(verticalLayoutTester({ type: 'VerticalLayout' }, undefined), 1);
+test('tester', () => {
+  expect(verticalLayoutTester(undefined, undefined)).toBe(-1);
+  expect(verticalLayoutTester(null, undefined)).toBe(-1);
+  expect(verticalLayoutTester({ type: 'Foo' }, undefined)).toBe(-1);
+  expect(verticalLayoutTester({ type: 'VerticalLayout' }, undefined)).toBe(1);
 });
 
-test('render with undefined elements', t => {
-  const uischema: UISchemaElement = {
-    type: 'VerticalLayout'
-  };
-  const store = initJsonFormsVanillaStore({
-    data: {},
-    schema: {},
-    uischema,
-  });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <VerticalLayoutRenderer uischema={uischema} />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as unknown as React.Component<any>;
+describe('Vertical layout', () => {
 
-  t.not(TestUtils.findRenderedDOMComponentWithClass(tree, 'vertical-layout'), undefined);
-});
+  let wrapper: ReactWrapper;
 
-test('render with null elements', t => {
-  const uischema: VerticalLayout = {
-    type: 'VerticalLayout',
-    elements: null
-  };
-  const store = initJsonFormsVanillaStore({
-    data: {},
-    schema: {},
-    uischema,
-    styles
-  });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <VerticalLayoutRenderer uischema={uischema} />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
+  afterEach(() => wrapper.unmount());
 
-  t.not(TestUtils.findRenderedDOMComponentWithClass(tree, 'vertical-layout'), undefined);
-});
+  test('render with undefined elements', () => {
+    const uischema: UISchemaElement = {
+      type: 'VerticalLayout'
+    };
+    const store = initJsonFormsVanillaStore({
+      data: {},
+      schema: {},
+      uischema,
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <VerticalLayoutRenderer uischema={uischema} />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
 
-test('render with children', t => {
-  const uischema: VerticalLayout = {
-    type: 'VerticalLayout',
-    elements: [{ type: 'Control' }, { type: 'Control' }]
-  };
-  const store = initJsonFormsVanillaStore({
-    data: {},
-    schema: {},
-    uischema,
-    styles
-  });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <VerticalLayoutRenderer uischema={uischema} />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
-  const verticalLayout = TestUtils.findRenderedDOMComponentWithClass(tree, 'vertical-layout');
-
-  t.is(verticalLayout.tagName, 'DIV');
-  t.is(verticalLayout.children.length, 2);
-});
-
-test('hide', t => {
-  const uischema: VerticalLayout = {
-    type: 'VerticalLayout',
-    elements: [{ type: 'Control' }],
-  };
-  const store = initJsonFormsVanillaStore({
-    data: {},
-    schema: {},
-    uischema,
-    styles
+    expect(wrapper.find('.vertical-layout')).toBeDefined();
   });
 
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <VerticalLayoutRenderer
-          uischema={uischema}
-          visible={false}
-        />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
-  const verticalLayout = TestUtils.findRenderedDOMComponentWithClass(
-    tree,
-    'vertical-layout'
-  ) as HTMLDivElement;
-  t.true(verticalLayout.hidden);
-});
+  test('render with null elements', () => {
+    const uischema: VerticalLayout = {
+      type: 'VerticalLayout',
+      elements: null
+    };
+    const store = initJsonFormsVanillaStore({
+      data: {},
+      schema: {},
+      uischema,
+      styles
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <VerticalLayoutRenderer uischema={uischema} />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
 
-test('show by default', t => {
-  const uischema: VerticalLayout = {
-    type: 'VerticalLayout',
-    elements: [{ type: 'Control' }],
-  };
-  const store = initJsonFormsVanillaStore({
-    data: {},
-    schema: {},
-    uischema,
-    styles,
+    expect(wrapper.find('.vertical-layout')).toBeDefined();
   });
 
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <VerticalLayoutRenderer uischema={uischema} />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
-  const verticalLayout = TestUtils.findRenderedDOMComponentWithClass(
-    tree,
-    'vertical-layout'
-  ) as HTMLDivElement;
-  t.false(verticalLayout.hidden);
+  test('render with children', () => {
+    const uischema: VerticalLayout = {
+      type: 'VerticalLayout',
+      elements: [{ type: 'Control' }, { type: 'Control' }]
+    };
+    const store = initJsonFormsVanillaStore({
+      data: {},
+      schema: {},
+      uischema,
+      styles
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <VerticalLayoutRenderer uischema={uischema} />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const verticalLayout = wrapper.find(VerticalLayoutRenderer).getDOMNode();
+
+    expect(verticalLayout.tagName).toBe('DIV');
+    expect(verticalLayout.children).toHaveLength(2);
+  });
+
+  test('hide', () => {
+    const uischema: VerticalLayout = {
+      type: 'VerticalLayout',
+      elements: [{ type: 'Control' }],
+    };
+    const store = initJsonFormsVanillaStore({
+      data: {},
+      schema: {},
+      uischema,
+      styles
+    });
+
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <VerticalLayoutRenderer
+            uischema={uischema}
+            visible={false}
+          />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const verticalLayout = wrapper.find(VerticalLayoutRenderer).getDOMNode() as HTMLDivElement;
+    expect(verticalLayout.hidden).toBe(true);
+  });
+
+  test('show by default', () => {
+    const uischema: VerticalLayout = {
+      type: 'VerticalLayout',
+      elements: [{ type: 'Control' }],
+    };
+    const store = initJsonFormsVanillaStore({
+      data: {},
+      schema: {},
+      uischema,
+      styles,
+    });
+
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <VerticalLayoutRenderer uischema={uischema} />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const verticalLayout = wrapper.find(VerticalLayoutRenderer).getDOMNode() as HTMLDivElement;
+    expect(verticalLayout.hidden).toBe(false);
+  });
 });

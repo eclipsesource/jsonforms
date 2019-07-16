@@ -22,166 +22,161 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import '@jsonforms/test';
 import * as React from 'react';
-import test from 'ava';
 import { LabelElement, UISchemaElement } from '@jsonforms/core';
 import { JsonFormsReduxContext } from '@jsonforms/react';
 import { Provider } from 'react-redux';
+import Adapter from 'enzyme-adapter-react-16';
+import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import LabelRenderer, {
   labelRendererTester
 } from '../../src/complex/LabelRenderer';
-import * as TestUtils from 'react-dom/test-utils';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
 
-test.beforeEach(t => {
-  t.context.data = { name: 'Foo' };
-  t.context.schema = {
+Enzyme.configure({ adapter: new Adapter() });
+
+const fixture = {
+  data: { name: 'Foo' },
+  schema: {
     type: 'object',
     properties: { name: { type: 'string' } }
-  };
-  t.context.uischema = { type: 'Label', text: 'Bar' };
-  t.context.styles = [
+  },
+  uischema: { type: 'Label', text: 'Bar' },
+  styles: [
     {
       name: 'label-control',
       classNames: ['jsf-label']
     }
-  ];
-});
+  ]
+};
 
-test('tester', t => {
-  t.is(labelRendererTester(undefined, undefined), -1);
-  t.is(labelRendererTester(null, undefined), -1);
-  t.is(labelRendererTester({ type: 'Foo' }, undefined), -1);
-  t.is(labelRendererTester({ type: 'Label' }, undefined), 1);
-});
-
-test('render with undefined text', t => {
-  const uischema: UISchemaElement = { type: 'Label' };
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema,
-    styles: t.context.styles
+describe('Label tester', () => {
+  test('tester', () => {
+    expect(labelRendererTester(undefined, undefined)).toBe(-1);
+    expect(labelRendererTester(null, undefined)).toBe(-1);
+    expect(labelRendererTester({ type: 'Foo' }, undefined)).toBe(-1);
+    expect(labelRendererTester({ type: 'Label' }, undefined)).toBe(1);
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <LabelRenderer
-          schema={t.context.schema}
-          uischema={uischema}
-        />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown) as React.Component<any>;
-
-  const label = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'label'
-  ) as HTMLLabelElement;
-  t.is(label.className, 'jsf-label');
-  t.is(label.textContent, '');
 });
 
-test('render with null text', t => {
-  const uischema: LabelElement = {
-    type: 'Label',
-    text: null
-  };
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema,
-    styles: t.context.styles
+describe('Label', () => {
+
+  let wrapper: ReactWrapper;
+
+  afterEach(() => wrapper.unmount());
+
+  test('render with undefined text', () => {
+    const uischema: UISchemaElement = { type: 'Label' };
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema,
+      styles: fixture.styles
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <LabelRenderer
+            schema={fixture.schema}
+            uischema={uischema}
+          />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+
+    const label = wrapper.find('label').getDOMNode();
+    expect(label.className).toBe('jsf-label');
+    expect(label.textContent).toBe('');
   });
 
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <LabelRenderer
-          schema={t.context.schema}
-          uischema={uischema}
-        />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const label = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'label'
-  ) as HTMLLabelElement;
-  t.is(label.className, 'jsf-label');
-  t.is(label.textContent, '');
-});
+  test('render with null text', () => {
+    const uischema: LabelElement = {
+      type: 'Label',
+      text: null
+    };
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema,
+      styles: fixture.styles
+    });
 
-test('render with text', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema,
-    styles: t.context.styles
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <LabelRenderer
+            schema={fixture.schema}
+            uischema={uischema}
+          />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const label = wrapper.find('label').getDOMNode();
+    expect(label.className).toBe('jsf-label');
+    expect(label.textContent).toBe('');
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <LabelRenderer
-          schema={t.context.schema}
-          uischema={t.context.uischema}
-        />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const label = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'label'
-  ) as HTMLLabelElement;
-  t.is(label.className, 'jsf-label');
-  t.is(label.childNodes.length, 1);
-  t.is(label.textContent, 'Bar');
-});
 
-test('hide', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+  test('render with text', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema,
+      styles: fixture.styles
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <LabelRenderer
+            schema={fixture.schema}
+            uischema={fixture.uischema}
+          />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const label = wrapper.find('label').getDOMNode();
+    expect(label.className).toBe('jsf-label');
+    expect(label.childNodes).toHaveLength(1);
+    expect(label.textContent).toBe('Bar');
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <LabelRenderer
-          schema={t.context.schema}
-          uischema={t.context.uischema}
-          visible={false}
-        />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const label = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'label'
-  ) as HTMLLabelElement;
-  t.true(label.hidden);
-});
 
-test('show by default', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+  test('hide', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <LabelRenderer
+            schema={fixture.schema}
+            uischema={fixture.uischema}
+            visible={false}
+          />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const label = wrapper.find('label').getDOMNode() as HTMLLabelElement;
+    expect(label.hidden).toBe(true);
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <LabelRenderer
-          schema={t.context.schema}
-          uischema={t.context.uischema}
-        />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const label = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'label'
-  ) as HTMLLabelElement;
-  t.false(label.hidden);
+
+  test('show by default', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <LabelRenderer
+            schema={fixture.schema}
+            uischema={fixture.uischema}
+          />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const label = wrapper.find('label').getDOMNode() as HTMLLabelElement;
+    expect(label.hidden).toBe(false);
+  });
 });

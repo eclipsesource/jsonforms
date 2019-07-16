@@ -23,7 +23,6 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { SyntheticEvent } from 'react';
 import {
   CellProps,
   isMultiLineControl,
@@ -39,9 +38,7 @@ export const TextAreaCell = (props: CellProps & VanillaRendererProps) => {
   return (
     <textarea
       value={data || ''}
-      onChange={(ev: SyntheticEvent<HTMLTextAreaElement>) =>
-        handleChange(path, ev.currentTarget.value)
-      }
+      onChange={ev => handleChange(path, ev.target.value)}
       className={className}
       id={id}
       disabled={!enabled}

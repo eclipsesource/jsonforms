@@ -22,9 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import '@jsonforms/test';
 import * as React from 'react';
-import test from 'ava';
 import {
   ControlElement,
   getData,
@@ -33,23 +31,28 @@ import {
   update
 } from '@jsonforms/core';
 import { JsonFormsReduxContext } from '@jsonforms/react';
+import { Provider } from 'react-redux';
+import Adapter from 'enzyme-adapter-react-16';
+import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import NumberCell, { numberCellTester } from '../../src/cells/NumberCell';
 import HorizontalLayoutRenderer from '../../src/layouts/HorizontalLayout';
-import { Provider } from 'react-redux';
-import * as TestUtils from 'react-dom/test-utils';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
 
-test.beforeEach(t => {
-  t.context.data = { 'foo': 3.14 };
-  t.context.schema = {
+Enzyme.configure({ adapter: new Adapter() });
+
+const controlElement: ControlElement = {
+  type: 'Control',
+  scope: '#/properties/foo',
+};
+
+const fixture = {
+  data: { 'foo': 3.14 },
+  schema: {
     type: 'number',
     minimum: 5
-  };
-  t.context.uischema = {
-    type: 'Control',
-    scope: '#/properties/foo',
-  };
-  t.context.styles = [
+  },
+  uischema: controlElement,
+  styles: [
     {
       name: 'control',
       classNames: ['control']
@@ -58,381 +61,389 @@ test.beforeEach(t => {
       name: 'control.validation',
       classNames: ['validation']
     }
-  ];
-});
-test.failing('autofocus on first element', t => {
-  const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-      firstNumberCell: { type: 'number', minimum: 5 },
-      secondNumberCell: { type: 'number', minimum: 5 }
-    }
-  };
-  const firstControlElement: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/firstNumberCell',
-    options: {
-      focus: true
-    }
-  };
-  const secondControlElement: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/secondNumberCell',
-    options: {
-      focus: true
-    }
-  };
-  const uischema: HorizontalLayout = {
-    type: 'HorizontalLayout',
-    elements: [
-      firstControlElement,
-      secondControlElement
-    ]
-  };
-  const data = {
-    'firstNumberCell': 3.14,
-    'secondNumberCell': 5.12
-  };
-  const store = initJsonFormsVanillaStore({
-    data,
-    schema,
-    uischema
-  });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <HorizontalLayoutRenderer schema={schema} uischema={uischema} />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
+  ]
+};
 
-  const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
-  t.not(document.activeElement, inputs[0]);
-  t.is(document.activeElement, inputs[1]);
-});
-
-test('autofocus active', t => {
-  const uischema: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/foo',
-    options: {
-      focus: true
-    }
-  };
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema
-  });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <NumberCell schema={t.context.schema} uischema={uischema} path='foo' />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  t.is(document.activeElement, input);
-});
-
-test('autofocus inactive', t => {
-  const uischema: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/foo',
-    options: {
-      focus: false
-    }
-  };
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema
+describe('Number cell tester', () => {
+  test('tester', () => {
+    expect(numberCellTester(undefined, undefined)).toBe(-1);
+    expect(numberCellTester(null, undefined)).toBe(-1);
+    expect(numberCellTester({ type: 'Foo' }, undefined)).toBe(-1);
+    expect(numberCellTester({ type: 'Control' }, undefined)).toBe(-1);
   });
 
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <NumberCell schema={t.context.schema} uischema={uischema} path='foo' />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  t.false(input.autofocus);
-});
-
-test('autofocus inactive by default', t => {
-  const uischema: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/foo'
-  };
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema
-  });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <NumberCell schema={t.context.schema} uischema={uischema} path='foo' />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  t.false(input.autofocus);
-});
-
-test('tester', t => {
-  t.is(numberCellTester(undefined, undefined), -1);
-  t.is(numberCellTester(null, undefined), -1);
-  t.is(numberCellTester({ type: 'Foo' }, undefined), -1);
-  t.is(numberCellTester({ type: 'Control' }, undefined), -1);
-});
-
-test('tester with wrong schema type', t => {
-  const control: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/foo'
-  };
-  t.is(
-    numberCellTester(
-      control,
-      {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'string'
+  test('tester with wrong schema type', () => {
+    const control: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/foo'
+    };
+    expect(
+      numberCellTester(
+        control,
+        {
+          type: 'object',
+          properties: {
+            foo: {
+              type: 'string'
+            }
           }
         }
-      }
-    ),
-    -1
-  );
-});
+      )
+    ).toBe(-1);
+  });
 
-test('tester with wrong schema type, but sibling has correct one', t => {
-  const control: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/foo'
-  };
-  t.is(
-    numberCellTester(
-      control,
-      {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'string'
-          },
-          bar: {
-            type: 'number'
+  test('tester with wrong schema type, but sibling has correct one', () => {
+    const control: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/foo'
+    };
+    expect(
+      numberCellTester(
+        control,
+        {
+          type: 'object',
+          properties: {
+            foo: {
+              type: 'string'
+            },
+            bar: {
+              type: 'number'
+            }
           }
         }
-      }
-    ),
-    -1
-  );
-});
+      )
+    ).toBe(-1);
+  });
 
-test('tester with machting schema type', t => {
-  const control: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/foo'
-  };
-  t.is(
-    numberCellTester(
-      control,
-      {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'number'
+  test('tester with machting schema type', () => {
+    const control: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/foo'
+    };
+    expect(
+      numberCellTester(
+        control,
+        {
+          type: 'object',
+          properties: {
+            foo: {
+              type: 'number'
+            }
           }
         }
+      )
+    ).toBe(2);
+  });
+});
+
+describe('Number cell', () => {
+
+  let wrapper: ReactWrapper;
+
+  afterEach(() => wrapper.unmount());
+
+  test.skip('autofocus on first element', () => {
+    const schema: JsonSchema = {
+      type: 'object',
+      properties: {
+        firstNumberCell: { type: 'number', minimum: 5 },
+        secondNumberCell: { type: 'number', minimum: 5 }
       }
-    ),
-    2
-  );
-});
+    };
+    const firstControlElement: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/firstNumberCell',
+      options: {
+        focus: true
+      }
+    };
+    const secondControlElement: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/secondNumberCell',
+      options: {
+        focus: true
+      }
+    };
+    const uischema: HorizontalLayout = {
+      type: 'HorizontalLayout',
+      elements: [
+        firstControlElement,
+        secondControlElement
+      ]
+    };
+    const data = {
+      'firstNumberCell': 3.14,
+      'secondNumberCell': 5.12
+    };
+    const store = initJsonFormsVanillaStore({
+      data,
+      schema,
+      uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <HorizontalLayoutRenderer schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
 
-test('render', t => {
-  const schema: JsonSchema = { type: 'number' };
-  const store = initJsonFormsVanillaStore({
-    data: { 'foo': 3.14 },
-    schema,
-    uischema: t.context.uischema
+    const inputs = wrapper.find('input');
+    expect(document.activeElement).toBe(inputs.at(0));
+    expect(document.activeElement).toBe(inputs.at(1));
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <NumberCell schema={schema} uischema={t.context.uischema} path='foo' />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
 
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  t.is(input.type, 'number');
-  t.is(input.step, '0.1');
-  t.is(input.value, '3.14');
-});
-
-test('update via input event', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+  test('autofocus active', () => {
+    const uischema: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/foo',
+      options: {
+        focus: true
+      }
+    };
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <NumberCell schema={fixture.schema} uischema={uischema} path='foo' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(document.activeElement).toBe(input);
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <NumberCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  input.value = '2.72';
-  TestUtils.Simulate.change(input);
-  t.is(getData(store.getState()).foo, 2.72);
-});
 
-test('update via action', t => {
-  const store = initJsonFormsVanillaStore({
-    data: { foo: 2.72 },
-    schema: t.context.schema,
-    uischema: t.context.uischema
-  });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <NumberCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  t.is(input.value, '2.72');
-  store.dispatch(update('foo', () => 3.14));
-  setTimeout(() => t.is(input.value, 'Bar'), 3.14);
-});
+  test('autofocus inactive', () => {
+    const uischema: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/foo',
+      options: {
+        focus: false
+      }
+    };
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema
+    });
 
-test('update with undefined value', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <NumberCell schema={fixture.schema} uischema={uischema} path='foo' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.autofocus).toBe(false);
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <NumberCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  store.dispatch(update('foo', () => undefined));
-  t.is(input.value, '');
-});
 
-test('update with null value', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+  test('autofocus inactive by default', () => {
+    const uischema: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/foo'
+    };
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <NumberCell schema={fixture.schema} uischema={uischema} path='foo' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.autofocus).toBe(false);
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <NumberCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  store.dispatch(update('foo', () => null));
-  t.is(input.value, '');
-});
 
-test('update with wrong ref', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
-  });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <NumberCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  store.dispatch(update('bar', () => 11));
-  t.is(input.value, '3.14');
-});
+  test('render', () => {
+    const schema: JsonSchema = { type: 'number' };
+    const store = initJsonFormsVanillaStore({
+      data: { 'foo': 3.14 },
+      schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <NumberCell schema={schema} uischema={fixture.uischema} path='foo' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
 
-test('update with null ref', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.type).toBe('number');
+    expect(input.step).toBe('0.1');
+    expect(input.value).toBe('3.14');
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <NumberCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  store.dispatch(update(null, () => 2.72));
-  t.is(input.value, '3.14');
-});
 
-test('update with undefined ref', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+  test('update via input event', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <NumberCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input');
+    input.simulate('change', { target: { value: '2.72' } });
+    wrapper.update();
+    expect(getData(store.getState()).foo).toBe(2.72);
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <NumberCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
-  store.dispatch(update(undefined, () => 13));
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  t.is(input.value, '3.14');
-});
 
-test('disable', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+  test('update via action', () => {
+    const store = initJsonFormsVanillaStore({
+      data: { foo: 2.72 },
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <NumberCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.value).toBe('2.72');
+    store.dispatch(update('foo', () => 3.14));
+    wrapper.update();
+    expect(input.value).toBe('3.14');
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <NumberCell schema={t.context.schema} uischema={t.context.uischema} enabled={false} />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  t.true(input.disabled);
-});
 
-test('enabled by default', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+  test('update with undefined value', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <NumberCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    store.dispatch(update('foo', () => undefined));
+    expect(input.value).toBe('');
   });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <NumberCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  t.false(input.disabled);
+
+  test('update with null value', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <NumberCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    store.dispatch(update('foo', () => null));
+    expect(input.value).toBe('');
+  });
+
+  test('update with wrong ref', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <NumberCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    store.dispatch(update('bar', () => 11));
+    expect(input.value).toBe('3.14');
+  });
+
+  test('update with null ref', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <NumberCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    store.dispatch(update(null, () => 2.72));
+    expect(input.value).toBe('3.14');
+  });
+
+  test('update with undefined ref', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <NumberCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    store.dispatch(update(undefined, () => 13));
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.value).toBe('3.14');
+  });
+
+  test('disable', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <NumberCell schema={fixture.schema} uischema={fixture.uischema} enabled={false} />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.disabled).toBe(true);
+  });
+
+  test('enabled by default', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <NumberCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.disabled).toBe(false);
+  });
 });

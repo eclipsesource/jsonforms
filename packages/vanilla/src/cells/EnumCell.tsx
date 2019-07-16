@@ -30,7 +30,6 @@ import {
   rankWith,
 } from '@jsonforms/core';
 import { withJsonFormsEnumCellProps } from '@jsonforms/react';
-import { SyntheticEvent } from 'react';
 import { withVanillaControlProps } from '../util';
 import { WithClassname } from '../index';
 
@@ -44,9 +43,7 @@ export const EnumCell = (props: EnumCellProps & WithClassname) => {
       disabled={!enabled}
       autoFocus={uischema.options && uischema.options.focus}
       value={data || ''}
-      onChange={(ev: SyntheticEvent<HTMLSelectElement>) =>
-        handleChange(path, ev.currentTarget.value)
-      }
+      onChange={ev => handleChange(path, ev.target.value)}
     >
       {
         [<option value='' key={'empty'} />]

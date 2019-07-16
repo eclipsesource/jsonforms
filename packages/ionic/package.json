@@ -87,7 +87,7 @@
     "protractor": "^5.4.1",
     "request": "^2.88.0",
     "ts-loader": "^5.3.3",
-    "ts-node": "^7.0.1",
+    "ts-node": "^8.3.0",
     "webpack-dev-server": "^3.2.1"
   }
 }

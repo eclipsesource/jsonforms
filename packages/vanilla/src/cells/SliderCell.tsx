@@ -23,7 +23,6 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { SyntheticEvent } from 'react';
 import {
   CellProps,
   isRangeControl,
@@ -43,9 +42,7 @@ export const SliderCell = (props: CellProps & VanillaRendererProps) => {
         max={schema.maximum}
         min={schema.minimum}
         value={data || schema.default}
-        onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
-          handleChange(path, Number(ev.currentTarget.value))
-        }
+        onChange={ev => handleChange(path, Number(ev.target.value))}
         className={className}
         id={id}
         disabled={!enabled}

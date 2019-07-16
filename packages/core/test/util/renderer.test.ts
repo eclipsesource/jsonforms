@@ -289,7 +289,7 @@ test('mapStateToControlProps - derive label', t => {
   t.is(props.label, 'First Name');
 });
 
-test('mapStateToControlProps - derive label', t => {
+test('mapStateToControlProps - do not show label', t => {
   const ownProps = {
     uischema: {
       ...coreUISchema,

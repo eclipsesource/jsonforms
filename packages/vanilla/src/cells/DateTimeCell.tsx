@@ -23,7 +23,6 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { SyntheticEvent } from 'react';
 import {
   CellProps,
   isDateTimeControl,
@@ -43,9 +42,7 @@ export const DateTimeCell = (props: CellProps & VanillaRendererProps) => {
     <input
       type='datetime-local'
       value={(data || '').substr(0, 16)}
-      onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
-        handleChange(path, toISOString(ev.currentTarget.value))
-      }
+      onChange={ev => handleChange(path, toISOString(ev.target.value))}
       className={className}
       id={id}
       disabled={!enabled}

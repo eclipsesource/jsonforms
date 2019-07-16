@@ -30,7 +30,7 @@ import {
   rankWith,
 } from '@jsonforms/core';
 import { withJsonFormsCellProps } from '@jsonforms/react';
-import { StatelessComponent, SyntheticEvent } from 'react';
+import { StatelessComponent } from 'react';
 import { VanillaRendererProps } from '../index';
 
 export const BooleanCell: StatelessComponent<CellProps> =
@@ -40,9 +40,9 @@ export const BooleanCell: StatelessComponent<CellProps> =
     return (
       <input
         type='checkbox'
-        checked={data || ''}
-        onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
-          handleChange(path, ev.currentTarget.checked)
+        checked={!!data}
+        onChange={ev =>
+          handleChange(path, ev.target.checked)
         }
         className={className}
         id={id}

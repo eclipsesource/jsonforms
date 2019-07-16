@@ -23,7 +23,6 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { SyntheticEvent } from 'react';
 import {
   CellProps,
   isStringControl,
@@ -52,9 +51,7 @@ export const TextCell = (props: CellProps & VanillaRendererProps) => {
     <input
       type='text'
       value={data || ''}
-      onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
-        handleChange(path, ev.currentTarget.value)
-      }
+      onChange={ev => handleChange(path, ev.target.value)}
       className={className}
       id={id}
       disabled={!enabled}

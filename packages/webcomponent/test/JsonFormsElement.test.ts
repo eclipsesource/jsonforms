@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import '@jsonforms/test';
-import test from 'ava';
+import anyTest, { TestInterface } from 'ava';
 import {
   ControlElement,
   generateDefaultUISchema,
@@ -31,7 +31,9 @@ import {
   getSchema,
   getUiSchema,
   jsonformsReducer,
-  JsonFormsState
+  JsonFormsRendererRegistryEntry,
+  JsonFormsState,
+  JsonSchema
 } from '@jsonforms/core';
 import { combineReducers, createStore } from 'redux';
 import {
@@ -41,6 +43,15 @@ import {
   fakeLayoutTester
 } from '@jsonforms/test';
 import { JsonFormsElement } from '../src/JsonFormsElement';
+
+interface JsonFormsElementTestContext {
+  data: any;
+  schema: JsonSchema | undefined;
+  uischema: ControlElement | undefined;
+  renderers: JsonFormsRendererRegistryEntry[];
+}
+
+const test = anyTest as TestInterface<JsonFormsElementTestContext>;
 
 test.beforeEach(t => {
   t.context.data = { name: 'foo' };
@@ -56,27 +67,29 @@ test.beforeEach(t => {
     type: 'Control',
     scope: '#/properties/name'
   };
-  t.context.renderers = [
+  const renderers: JsonFormsRendererRegistryEntry[] = [
     { tester: fakeControlTester, renderer: FakeControl },
     { tester: fakeLayoutTester, renderer: FakeLayout }
   ];
+  t.context.renderers = renderers;
 });
 
 test.cb('render with data set', t => {
   const jsonForms = new JsonFormsElement();
   const jsonSchema = generateJsonSchema(t.context.data);
+  const initState: JsonFormsState = {
+    jsonforms: {
+      core: {
+        data: t.context.data,
+        schema: undefined,
+        uischema: undefined
+      },
+      renderers: t.context.renderers
+    }
+  };
   jsonForms.store = createStore(
     combineReducers<JsonFormsState>({ jsonforms: jsonformsReducer() }),
-    {
-      jsonforms: {
-        core: {
-          data: t.context.data,
-          schema: undefined,
-          uischema: undefined
-        },
-        renderers: t.context.renderers
-      }
-    }
+    initState
   );
   jsonForms.connectedCallback();
 
@@ -95,18 +108,19 @@ test.cb('render with data set', t => {
 test.cb('render with data and data schema set', t => {
   t.plan(4);
   const jsonForms = new JsonFormsElement();
+  const initState: JsonFormsState = {
+    jsonforms: {
+      core: {
+        data: t.context.data,
+        schema: t.context.schema,
+        uischema: undefined
+      },
+      renderers: t.context.renderers
+    }
+  };
   jsonForms.store = createStore(
     combineReducers<JsonFormsState>({ jsonforms: jsonformsReducer() }),
-    {
-      jsonforms: {
-        core: {
-          data: t.context.data,
-          schema: t.context.schema,
-          uischema: undefined
-        },
-        renderers: t.context.renderers
-      }
-    }
+    initState
   );
 
   setTimeout(() => {
@@ -129,18 +143,19 @@ test.cb('render with data and UI schema set', t => {
   t.plan(4);
   const jsonForms = new JsonFormsElement();
   const uischema: ControlElement = t.context.uischema;
+  const initState: JsonFormsState = {
+    jsonforms: {
+      core: {
+        data: t.context.data,
+        schema: undefined,
+        uischema: t.context.uischema
+      },
+      renderers: t.context.renderers
+    }
+  };
   jsonForms.store = createStore(
     combineReducers<JsonFormsState>({ jsonforms: jsonformsReducer() }),
-    {
-      jsonforms: {
-        core: {
-          data: t.context.data,
-          schema: undefined,
-          uischema: t.context.uischema
-        },
-        renderers: t.context.renderers
-      }
-    }
+    initState
   );
   jsonForms.connectedCallback();
   setTimeout(() => {
@@ -158,18 +173,19 @@ test.cb('render with data and UI schema set', t => {
 test.cb('render with data, data schema and UI schema set', t => {
   t.plan(4);
   const jsonForms = new JsonFormsElement();
+  const initState: JsonFormsState = {
+    jsonforms: {
+      core: {
+        data: t.context.data,
+        schema: t.context.schema,
+        uischema: t.context.uischema
+      },
+      renderers: t.context.renderers
+    }
+  };
   jsonForms.store = createStore(
     combineReducers<JsonFormsState>({ jsonforms: jsonformsReducer() }),
-    {
-      jsonforms: {
-        core: {
-          data: t.context.data,
-          schema: t.context.schema,
-          uischema: t.context.uischema
-        },
-        renderers: t.context.renderers
-      }
-    }
+    initState
   );
   setTimeout(() => {
     jsonForms.connectedCallback();
@@ -187,18 +203,19 @@ test.cb('render with data, data schema and UI schema set', t => {
 test.cb('render with data schema and UI schema set', t => {
   t.plan(3);
   const jsonForms = new JsonFormsElement();
+  const initState: JsonFormsState = {
+    jsonforms: {
+      core: {
+        data: undefined,
+        schema: t.context.schema,
+        uischema: t.context.uischema
+      },
+      renderers: t.context.renderers
+    }
+  };
   jsonForms.store = createStore(
     combineReducers<JsonFormsState>({ jsonforms: jsonformsReducer() }),
-    {
-      jsonforms: {
-        core: {
-          data: undefined,
-          schema: t.context.schema,
-          uischema: t.context.uischema
-        },
-        renderers: t.context.renderers
-      }
-    }
+    initState
   );
   setTimeout(() => {
     jsonForms.connectedCallback();
@@ -213,18 +230,19 @@ test.cb('render with data schema and UI schema set', t => {
 test.cb('Connect JSON Forms element and cause re-init store', t => {
   t.plan(6);
   const jsonForms = new JsonFormsElement();
+  const initState: JsonFormsState = {
+    jsonforms: {
+      core: {
+        data: t.context.data,
+        schema: undefined,
+        uischema: undefined
+      },
+      renderers: t.context.renderers
+    }
+  };
   jsonForms.store = createStore(
     combineReducers<JsonFormsState>({ jsonforms: jsonformsReducer() }),
-    {
-      jsonforms: {
-        core: {
-          data: t.context.data,
-          schema: undefined,
-          uischema: undefined
-        },
-        renderers: t.context.renderers
-      }
-    }
+    initState
   );
   jsonForms.connectedCallback();
 
@@ -233,22 +251,22 @@ test.cb('Connect JSON Forms element and cause re-init store', t => {
     const verticalLayout1 = jsonForms.children.item(0);
     t.is(verticalLayout1.className, 'layout');
     t.is(verticalLayout1.children.length, 1);
-
+    const initState2: JsonFormsState = {
+      jsonforms: {
+        core: {
+          data: {
+            firstname: 'bar',
+            lastname: 'foo'
+          } as any,
+          schema: undefined,
+          uischema: undefined
+        },
+        renderers: t.context.renderers
+      }
+    };
     jsonForms.store = createStore(
       combineReducers<JsonFormsState>({ jsonforms: jsonformsReducer() }),
-      {
-        jsonforms: {
-          core: {
-            data: {
-              firstname: 'bar',
-              lastname: 'foo'
-            } as any,
-            schema: undefined,
-            uischema: undefined
-          },
-          renderers: t.context.renderers
-        }
-      }
+      initState2
     );
     setTimeout(() => {
       t.is(jsonForms.children.length, 1);

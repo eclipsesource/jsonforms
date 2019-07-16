@@ -23,9 +23,7 @@
   THE SOFTWARE.
 */
 
-import '@jsonforms/test';
 import * as React from 'react';
-import test from 'ava';
 import {
   ControlElement,
   getData,
@@ -34,20 +32,27 @@ import {
   update
 } from '@jsonforms/core';
 import { JsonFormsReduxContext } from '@jsonforms/react';
+import { Provider } from 'react-redux';
+import Adapter from 'enzyme-adapter-react-16';
+import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import BooleanCell, { booleanCellTester } from '../../src/cells/BooleanCell';
 import HorizontalLayoutRenderer from '../../src/layouts/HorizontalLayout';
-import { Provider } from 'react-redux';
-import * as TestUtils from 'react-dom/test-utils';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
+import { vanillaRenderers } from '../../src';
+import { InputControl } from '../../src/controls/InputControl';
 
-test.beforeEach(t => {
-  t.context.data = { foo: true };
-  t.context.schema = { type: 'boolean' };
-  t.context.uischema = {
-    type: 'Control',
-    scope: '#/properties/foo'
-  };
-  t.context.styles = [
+Enzyme.configure({ adapter: new Adapter() });
+
+const control: ControlElement = {
+  type: 'Control',
+  scope: '#/properties/foo'
+};
+
+const fixture = {
+  data: { foo: true },
+  schema: { type: 'boolean' },
+  uischema: control,
+  styles: [
     {
       name: 'control',
       classNames: ['control']
@@ -56,400 +61,371 @@ test.beforeEach(t => {
       name: 'control.validation',
       classNames: ['validation']
     }
-  ];
-});
-test.failing('autofocus on first element', t => {
-  const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-      firstBooleanCell: { type: 'boolean' },
-      secondBooleanCell: { type: 'boolean' }
-    }
-  };
-  const firstControlElement: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/firstBooleanCell',
-    options: {
-      focus: true
-    }
-  };
-  const secondControlElement: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/secondBooleanCell',
-    options: {
-      focus: true
-    }
-  };
-  const uischema: HorizontalLayout = {
-    type: 'HorizontalLayout',
-    elements: [firstControlElement, secondControlElement]
-  };
-  const data = {
-    firstBooleanCell: true,
-    secondBooleanCell: false
-  };
-  const store = initJsonFormsVanillaStore({
-    data,
-    schema,
-    uischema
+  ]
+};
+
+describe('Boolean cell tester', () => {
+  test('tester', () => {
+    expect(booleanCellTester(undefined, undefined)).toBe(-1);
+    expect(booleanCellTester(null, undefined)).toBe(-1);
+    expect(booleanCellTester({ type: 'Foo' }, undefined)).toBe(-1);
+    expect(booleanCellTester({ type: 'Control' }, undefined)).toBe(-1);
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <HorizontalLayoutRenderer schema={schema} uischema={uischema} />
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
-  t.not(document.activeElement, inputs[0]);
-  t.is(document.activeElement, inputs[1]);
-});
 
-test('autofocus active', t => {
-  const uischema: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/foo',
-    options: {
-      focus: true
-    }
-  };
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema
+  test('tester with wrong prop type', () => {
+    const controlElement: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/foo'
+    };
+    expect(
+      booleanCellTester(controlElement, {
+        type: 'object',
+        properties: { foo: { type: 'string' } }
+      }),
+    ).toBe(-1);
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <BooleanCell schema={t.context.schema} uischema={uischema} path='foo' />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'input'
-  ) as HTMLInputElement;
-  t.is(document.activeElement, input);
-});
 
-test('autofocus inactive', t => {
-  const uischema: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/foo',
-    options: {
-      focus: false
-    }
-  };
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema
+  test('tester with wrong prop type, but sibling has correct one', () => {
+    const controlElement = {
+      type: 'Control',
+      scope: '#/properties/foo'
+    };
+    expect(
+      booleanCellTester(controlElement, {
+        type: 'object',
+        properties: {
+          foo: {
+            type: 'string'
+          },
+          bar: {
+            type: 'boolean'
+          }
+        }
+      })
+    ).toBe(-1);
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <BooleanCell schema={t.context.schema} uischema={uischema} path='foo' />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'input'
-  ) as HTMLInputElement;
-  t.false(input.autofocus);
-});
 
-test('autofocus inactive by default', t => {
-  const uischema: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/foo'
-  };
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema
+  test('tester with matching prop type', () => {
+    const controlElement = {
+      type: 'Control',
+      scope: '#/properties/foo'
+    };
+    expect(
+      booleanCellTester(controlElement, {
+        type: 'object',
+        properties: {
+          foo: {
+            type: 'boolean'
+          }
+        }
+      })
+    ).toBe(2);
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <BooleanCell schema={t.context.schema} uischema={uischema} path='foo' />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'input'
-  ) as HTMLInputElement;
-  t.not(document.activeElement, input);
+
 });
 
-test('tester', t => {
-  t.is(booleanCellTester(undefined, undefined), -1);
-  t.is(booleanCellTester(null, undefined), -1);
-  t.is(booleanCellTester({ type: 'Foo' }, undefined), -1);
-  t.is(booleanCellTester({ type: 'Control' }, undefined), -1);
-});
+describe('Boolean cell', () => {
 
-test('tester with wrong prop type', t => {
-  const control: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/foo'
-  };
-  t.is(
-    booleanCellTester(control, {
-      type: 'object',
-      properties: { foo: { type: 'string' } }
-    }),
-    -1
-  );
-});
+  let wrapper: ReactWrapper;
 
-test('tester with wrong prop type, but sibling has correct one', t => {
-  const control = {
-    type: 'Control',
-    scope: '#/properties/foo'
-  };
-  t.is(
-    booleanCellTester(control, {
+  afterEach(() => wrapper.unmount());
+
+  test.skip('autofocus on first element', () => {
+    const schema: JsonSchema = {
       type: 'object',
       properties: {
-        foo: {
-          type: 'string'
-        },
-        bar: {
-          type: 'boolean'
-        }
+        firstBooleanCell: { type: 'boolean' },
+        secondBooleanCell: { type: 'boolean' }
       }
-    }),
-    -1
-  );
-});
-
-test('tester with matching prop type', t => {
-  const control = {
-    type: 'Control',
-    scope: '#/properties/foo'
-  };
-  t.is(
-    booleanCellTester(control, {
-      type: 'object',
-      properties: {
-        foo: {
-          type: 'boolean'
-        }
+    };
+    const firstControlElement: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/firstBooleanCell',
+      options: {
+        focus: true
       }
-    }),
-    2
-  );
-});
-
-test('render', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+    };
+    const secondControlElement: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/secondBooleanCell',
+      options: {
+        focus: true
+      }
+    };
+    const uischema: HorizontalLayout = {
+      type: 'HorizontalLayout',
+      elements: [firstControlElement, secondControlElement]
+    };
+    const data = {
+      firstBooleanCell: true,
+      secondBooleanCell: false
+    };
+    const store = initJsonFormsVanillaStore({
+      data,
+      schema,
+      uischema,
+      renderers: vanillaRenderers
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <HorizontalLayoutRenderer schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const inputs = wrapper.find(InputControl);
+    expect(inputs.at(0).is(':focus')).toBe(false);
+    expect(inputs.at(1).is(':focus')).toBe(true);
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <BooleanCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown) as React.Component<any>;
 
-  const input = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'input'
-  ) as HTMLInputElement;
-  t.is(input.type, 'checkbox');
-  t.is(input.checked, true);
-});
-
-test('update via input event', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+  test('autofocus active', () => {
+    const uischema: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/foo',
+      options: {
+        focus: true
+      }
+    };
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <BooleanCell schema={fixture.schema} uischema={uischema} path='foo' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input');
+    expect(input.is(':focus')).toBe(true);
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <BooleanCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown) as React.Component<any>;
 
-  const input = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'input'
-  ) as HTMLInputElement;
-  input.checked = false;
-  TestUtils.Simulate.change(input);
-  t.is(getData(store.getState()).foo, false);
-});
-
-test('update via action', t => {
-  const data = { foo: false };
-  const store = initJsonFormsVanillaStore({
-    data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+  test('autofocus inactive', () => {
+    const uischema: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/foo',
+      options: {
+        focus: false
+      }
+    };
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <BooleanCell schema={fixture.schema} uischema={uischema} path='foo' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.autofocus).toBe(false);
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <BooleanCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'input'
-  ) as HTMLInputElement;
-  store.dispatch(update('foo', () => false));
-  t.is(input.checked, false);
-  t.is(getData(store.getState()).foo, false);
-});
 
-test.failing('update with undefined value', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+  test('autofocus inactive by default', () => {
+    const uischema: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/foo'
+    };
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <BooleanCell schema={fixture.schema} uischema={uischema} path='foo' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input').getDOMNode();
+    expect(document.activeElement).not.toBe(input);
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <BooleanCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'input'
-  ) as HTMLInputElement;
-  store.dispatch(update('foo', () => undefined));
-  t.is(input.value, '');
-});
 
-test.failing('update with null value', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
-  });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <BooleanCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'input'
-  ) as HTMLInputElement;
-  store.dispatch(update('foo', () => null));
-  t.is(input.value, '');
-});
+  test('render', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <BooleanCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
 
-test('update with wrong ref', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.type).toBe('checkbox');
+    expect(input.checked).toBe(true);
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <BooleanCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'input'
-  ) as HTMLInputElement;
-  store.dispatch(update('bar', () => 11));
-  t.is(input.checked, true);
-});
 
-test('update with null ref', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
-  });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <BooleanCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'input'
-  ) as HTMLInputElement;
-  store.dispatch(update(null, () => false));
-  t.is(input.checked, true);
-});
+  test('update via input event', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <BooleanCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
 
-test('update with undefined ref', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+    const input = wrapper.find('input');
+    input.simulate('change', { target: { checked: false } });
+    expect(getData(store.getState()).foo).toBe(false);
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <BooleanCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  store.dispatch(update(undefined, () => false));
-  const input = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'input'
-  ) as HTMLInputElement;
-  t.is(input.checked, true);
-});
 
-test('disable', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+  test('update via action', () => {
+    const data = { foo: false };
+    const store = initJsonFormsVanillaStore({
+      data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <BooleanCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    store.dispatch(update('foo', () => false));
+    expect(input.checked).toBe(false);
+    expect(getData(store.getState()).foo).toBe(false);
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <BooleanCell schema={t.context.schema} uischema={t.context.uischema} enabled={false}/>
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'input'
-  ) as HTMLInputElement;
-  t.true(input.disabled);
-});
 
-test('enabled by default', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+  test.skip('update with undefined value', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <BooleanCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    store.dispatch(update('foo', () => undefined));
+    expect(input.value).toEqual('');
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <BooleanCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'input'
-  ) as HTMLInputElement;
-  t.false(input.disabled);
+
+  test.skip('update with null value', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <BooleanCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    store.dispatch(update('foo', () => null));
+    expect(input.value).toEqual('');
+  });
+
+  test('update with wrong ref', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <BooleanCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input');
+    store.dispatch(update('bar', () => 11));
+    expect(input.props().checked).toBe(true);
+  });
+
+  test('update with null ref', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <BooleanCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    store.dispatch(update(null, () => false));
+    expect(input.checked).toBe(true);
+  });
+
+  test('update with undefined ref', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <BooleanCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    store.dispatch(update(undefined, () => false));
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.checked).toBe(true);
+  });
+
+  test('disable', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <BooleanCell schema={fixture.schema} uischema={fixture.uischema} enabled={false} />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.disabled).toBe(true);
+  });
+
+  test('enabled by default', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <BooleanCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.disabled).toBe(false);
+  });
 });

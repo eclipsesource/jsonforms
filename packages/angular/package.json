@@ -21,8 +21,8 @@
     "clean": "rm -rf lib coverage dist .nyc_output 2> /dev/null",
     "lint": "../../node_modules/.bin/tslint --project tsconfig.json --exclude src/models/jsonSchema.ts",
     "report": "../../node_modules/.bin/nyc report --reporter=html",
-    "test": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/ava",
-    "test-cov": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/nyc ../../node_modules/.bin/ava",
+    "test": "../../node_modules/.bin/ava",
+    "test-cov": "../../node_modules/.bin/nyc ../../node_modules/.bin/ava",
     "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Angular Core' --mode file --out docs src"
   },
   "nyc": {
@@ -32,17 +32,23 @@
     ]
   },
   "ava": {
-    "verbose": true,
-    "require": [
-      "babel-register"
+    "files": [
+      "test/**/*"
     ],
-    "babel": "inherit"
+    "compileEnhancements": false,
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register",
+      "source-map-support/register"
+    ]
   },
   "peerDependencies": {
     "@angular-redux/store": "^9.0.0",
     "@angular/core": "^7.2.13",
     "@angular/forms": "^7.2.13",
-    "@jsonforms/core": "^2.2.3",
+    "@jsonforms/core": "^2.3.0",
     "redux": "^4.0.1",
     "rxjs": "^6.4.0"
   },

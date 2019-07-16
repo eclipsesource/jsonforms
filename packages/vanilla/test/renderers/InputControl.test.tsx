@@ -22,9 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import '@jsonforms/test';
 import * as React from 'react';
-import test from 'ava';
 import {
   Actions,
   ControlElement,
@@ -33,6 +31,8 @@ import {
 } from '@jsonforms/core';
 import { JsonFormsDispatch, JsonFormsReduxContext } from '@jsonforms/react';
 import { Provider } from 'react-redux';
+import Adapter from 'enzyme-adapter-react-16';
+import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import '../../src';
 import HorizontalLayoutRenderer, {
   horizontalLayoutTester
@@ -43,707 +43,583 @@ import InputControl, {
 import BooleanCell, { booleanCellTester } from '../../src/cells/BooleanCell';
 import TextCell, { textCellTester } from '../../src/cells/TextCell';
 import DateCell, { dateCellTester } from '../../src/cells/DateCell';
-import * as TestUtils from 'react-dom/test-utils';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
 
-test.beforeEach(t => {
-  t.context.data = { foo: true };
-  t.context.schema = {
+Enzyme.configure({ adapter: new Adapter() });
+
+const fixture = {
+  data: { foo: true },
+  schema: {
     type: 'object',
     properties: {
       foo: {
         type: 'boolean'
       }
     }
-  };
-  t.context.uischema = {
+  },
+  uischema: {
     type: 'Control',
     scope: '#/properties/foo'
-  };
-});
+  }
+};
 
-test('autofocus on first element', t => {
-  const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-      firstBooleanCell: { type: 'boolean' },
-      secondBooleanCell: { type: 'boolean' }
-    }
-  };
-  const firstControlElement: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/firstBooleanCell',
-    options: {
-      focus: true
-    }
-  };
-  const secondControlElement: ControlElement = {
-    type: 'Control',
-    scope: 'properties/secondBooleanCell',
-    options: {
-      focus: true
-    }
-  };
-  const uischema: HorizontalLayout = {
-    type: 'HorizontalLayout',
-    elements: [firstControlElement, secondControlElement]
-  };
-  const data = {
-    firstBooleanCell: true,
-    secondBooleanCell: false
-  };
-  const store = initJsonFormsVanillaStore({
-    data,
-    schema,
-    uischema,
-    renderers: [
-      { tester: inputControlTester, renderer: InputControl },
-      { tester: horizontalLayoutTester, renderer: HorizontalLayoutRenderer }
-    ],
-    cells: [{ tester: booleanCellTester, cell: BooleanCell }]
-  });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <JsonFormsDispatch />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
-  t.not(document.activeElement, inputs[0]);
-  t.is(document.activeElement, inputs[1]);
-});
-
-test('tester', t => {
-  t.is(inputControlTester(undefined, undefined), -1);
-  t.is(inputControlTester(null, undefined), -1);
-  t.is(inputControlTester({ type: 'Foo' }, undefined), -1);
-  t.is(inputControlTester({ type: 'Control' }, undefined), -1);
+test('tester', () => {
+  expect(inputControlTester(undefined, undefined)).toBe(-1);
+  expect(inputControlTester(null, undefined)).toBe(-1);
+  expect(inputControlTester({ type: 'Foo' }, undefined)).toBe(-1);
+  expect(inputControlTester({ type: 'Control' }, undefined)).toBe(-1);
   const control: ControlElement = {
     type: 'Control',
     scope: '#/properties/foo'
   };
-  t.is(inputControlTester(control, undefined), 1);
+  expect(inputControlTester(control, undefined)).toBe(1);
 });
 
-test('render', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema,
-    renderers: [{ tester: inputControlTester, renderer: InputControl }],
-    cells: [{ tester: booleanCellTester, cell: BooleanCell }]
+describe('Input control', () => {
+
+  let wrapper: ReactWrapper;
+
+  afterEach(() => wrapper.unmount());
+
+  test('autofocus on first element', () => {
+    const schema: JsonSchema = {
+      type: 'object',
+      properties: {
+        firstBooleanCell: { type: 'boolean' },
+        secondBooleanCell: { type: 'boolean' }
+      }
+    };
+    const firstControlElement: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/firstBooleanCell',
+      options: {
+        focus: true
+      }
+    };
+    const secondControlElement: ControlElement = {
+      type: 'Control',
+      scope: 'properties/secondBooleanCell',
+      options: {
+        focus: true
+      }
+    };
+    const uischema: HorizontalLayout = {
+      type: 'HorizontalLayout',
+      elements: [firstControlElement, secondControlElement]
+    };
+    const data = {
+      firstBooleanCell: true,
+      secondBooleanCell: false
+    };
+    const store = initJsonFormsVanillaStore({
+      data,
+      schema,
+      uischema,
+      renderers: [
+        { tester: inputControlTester, renderer: InputControl },
+        { tester: horizontalLayoutTester, renderer: HorizontalLayoutRenderer }
+      ],
+      cells: [{ tester: booleanCellTester, cell: BooleanCell }]
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <JsonFormsDispatch />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const inputs = wrapper.find('input');
+    expect(document.activeElement).not.toBe(inputs.at(0).getDOMNode());
+    expect(document.activeElement).toBe(inputs.at(1).getDOMNode());
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <InputControl uischema={t.context.uischema} schema={t.context.schema} />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown) as React.Component<any>;
 
-  const control = TestUtils.findRenderedDOMComponentWithClass(tree, 'control');
-  t.not(control, undefined);
-  t.is(control.childNodes.length, 3);
-  t.not(
-    TestUtils.findRenderedDOMComponentWithClass(tree, 'root_properties_foo'),
-    undefined
-  );
+  test('render', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema,
+      renderers: [{ tester: inputControlTester, renderer: InputControl }],
+      cells: [{ tester: booleanCellTester, cell: BooleanCell }]
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <InputControl uischema={fixture.uischema} schema={fixture.schema} />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
 
-  const label = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'label'
-  ) as HTMLLabelElement;
-  t.is(label.textContent, 'Foo');
+    const control = wrapper.find('.control').getDOMNode();
+    expect(control).toBeDefined();
+    expect(control.childNodes).toHaveLength(3);
+    expect(wrapper.find('.root_properties_foo')).toBeDefined();
 
-  const input = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'input'
-  ) as HTMLInputElement;
-  t.not(input, undefined);
-  t.not(input, null);
+    const label = wrapper.find('label');
+    expect(label.text()).toBe('Foo');
 
-  const validation = TestUtils.findRenderedDOMComponentWithClass(
-    tree,
-    'validation'
-  );
-  t.is(validation.tagName, 'DIV');
-  t.is((validation as HTMLDivElement).children.length, 0);
-});
+    const input = wrapper.find('input');
+    expect(input).toBeDefined();
+    expect(input).not.toBeNull();
 
-test('render without label', t => {
-  const uischema: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/foo',
-    label: false
-  };
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema,
-    renderers: [{ tester: inputControlTester, renderer: InputControl }],
-    cells: [{ tester: booleanCellTester, cell: BooleanCell }]
+    const validation = wrapper.find('.validation').getDOMNode() as HTMLDivElement;
+    expect(validation.tagName).toBe('DIV');
+    expect(validation.children).toHaveLength(0);
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <JsonFormsDispatch />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown) as React.Component<any>;
 
-  const control = TestUtils.findRenderedDOMComponentWithClass(tree, 'control');
-  t.not(control, undefined);
-  t.is(control.childNodes.length, 3);
-  t.not(
-    TestUtils.findRenderedDOMComponentWithClass(tree, 'root_properties_foo'),
-    undefined
-  );
-  /*t.not(TestUtils.findRenderedDOMComponentWithClass(tree, 'valid'), undefined);*/
+  test('render without label', () => {
+    const uischema: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/foo',
+      label: false
+    };
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema,
+      renderers: [{ tester: inputControlTester, renderer: InputControl }],
+      cells: [{ tester: booleanCellTester, cell: BooleanCell }]
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <JsonFormsDispatch />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
 
-  const label = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'label'
-  ) as HTMLLabelElement;
-  t.is(label.textContent, '');
+    const control = wrapper.find('.control');
+    expect(control).toBeDefined();
+    expect(control.getDOMNode().childNodes).toHaveLength(3);
+    expect(wrapper.find('.root_properties_foo')).toBeDefined();
 
-  const input = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'input'
-  ) as HTMLInputElement;
-  t.not(input, undefined);
-  t.not(input, null);
+    const label = wrapper.find('label');
+    expect(label.text()).toBe('');
 
-  const validation = TestUtils.findRenderedDOMComponentWithClass(
-    tree,
-    'validation'
-  );
-  t.is(validation.tagName, 'DIV');
-  t.is((validation as HTMLDivElement).children.length, 0);
-});
+    const input = wrapper.find('input');
+    expect(input).toBeDefined();
+    expect(input).not.toBeNull();
 
-test('hide', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema,
-    renderers: [{ tester: inputControlTester, renderer: InputControl }],
-    cells: [{ tester: booleanCellTester, cell: BooleanCell }]
+    const validation = wrapper.find('.validation').getDOMNode() as HTMLDivElement;
+    expect(validation.tagName).toBe('DIV');
+    expect(validation.children).toHaveLength(0);
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <InputControl
-          schema={t.context.schema}
-          uischema={t.context.uischema}
-          path={''}
-          visible={false}
-        />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const control = TestUtils.findRenderedDOMComponentWithClass(
-    tree,
-    'control'
-  ) as HTMLElement;
-  t.true(control.hidden);
-});
 
-test('show by default', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema,
-    renderers: [{ tester: inputControlTester, renderer: InputControl }],
-    cells: [{ tester: booleanCellTester, cell: BooleanCell }]
+  test('hide', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema,
+      renderers: [{ tester: inputControlTester, renderer: InputControl }],
+      cells: [{ tester: booleanCellTester, cell: BooleanCell }]
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <InputControl
+            schema={fixture.schema}
+            uischema={fixture.uischema}
+            path={''}
+            visible={false}
+          />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const control = wrapper.find('.control').getDOMNode() as HTMLElement;
+    expect(control.hidden).toBe(true);
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <InputControl schema={t.context.schema} uischema={t.context.uischema} />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const control = TestUtils.findRenderedDOMComponentWithClass(
-    tree,
-    'control'
-  ) as HTMLElement;
-  t.false(control.hidden);
-});
 
-test('single error', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema,
-    renderers: [{ tester: inputControlTester, renderer: InputControl }],
-    cells: [{ tester: booleanCellTester, cell: BooleanCell }]
+  test('show by default', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema,
+      renderers: [{ tester: inputControlTester, renderer: InputControl }],
+      cells: [{ tester: booleanCellTester, cell: BooleanCell }]
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <InputControl schema={fixture.schema} uischema={fixture.uischema} />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const control = wrapper.find('.control').getDOMNode() as HTMLElement;
+    expect(control.hidden);
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <InputControl schema={t.context.schema} uischema={t.context.uischema} />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const validation = TestUtils.findRenderedDOMComponentWithClass(
-    tree,
-    'validation'
-  );
-  store.dispatch(Actions.update('foo', () => 2));
-  t.is(validation.textContent, 'should be boolean');
-});
 
-test('multiple errors', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema,
-    renderers: [{ tester: inputControlTester, renderer: InputControl }],
-    cells: [{ tester: booleanCellTester, cell: BooleanCell }]
+  test('single error', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema,
+      renderers: [{ tester: inputControlTester, renderer: InputControl }],
+      cells: [{ tester: booleanCellTester, cell: BooleanCell }]
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <InputControl schema={fixture.schema} uischema={fixture.uischema} />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const validation = wrapper.find('.validation');
+    store.dispatch(Actions.update('foo', () => 2));
+    expect(validation.text()).toBe('should be boolean');
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <InputControl schema={t.context.schema} uischema={t.context.uischema} />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const validation = TestUtils.findRenderedDOMComponentWithClass(
-    tree,
-    'validation'
-  );
-  store.dispatch(Actions.update('foo', () => 3));
-  t.is(validation.textContent, 'should be boolean');
-});
 
-test('empty errors by default', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema,
-    renderers: [{ tester: inputControlTester, renderer: InputControl }],
-    cells: [{ tester: booleanCellTester, cell: BooleanCell }]
+  test('multiple errors', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema,
+      renderers: [{ tester: inputControlTester, renderer: InputControl }],
+      cells: [{ tester: booleanCellTester, cell: BooleanCell }]
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <InputControl schema={fixture.schema} uischema={fixture.uischema} />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    store.dispatch(Actions.update('foo', () => 3));
+    wrapper.update();
+    const validation = wrapper.find('.validation');
+    expect(validation.text()).toBe('should be boolean');
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <JsonFormsDispatch />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const validation = TestUtils.findRenderedDOMComponentWithClass(
-    tree,
-    'validation'
-  );
-  t.is(validation.textContent, '');
-});
 
-test('reset validation message', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema,
-    renderers: [{ tester: inputControlTester, renderer: InputControl }],
-    cells: [{ tester: booleanCellTester, cell: BooleanCell }]
+  test('empty errors by default', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema,
+      renderers: [{ tester: inputControlTester, renderer: InputControl }],
+      cells: [{ tester: booleanCellTester, cell: BooleanCell }]
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <JsonFormsDispatch />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const validation = wrapper.find('.validation');
+    expect(validation.text()).toBe('');
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <JsonFormsDispatch />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const validation = TestUtils.findRenderedDOMComponentWithClass(
-    tree,
-    'validation'
-  );
-  store.dispatch(Actions.update('foo', () => 3));
-  store.dispatch(Actions.update('foo', () => true));
-  t.is(validation.textContent, '');
-});
 
-test('validation of nested schema', t => {
-  const schema = {
-    type: 'object',
-    properties: {
-      name: {
-        type: 'string'
-      },
-      personalData: {
-        type: 'object',
-        properties: {
-          middleName: {
-            type: 'string'
-          },
-          lastName: {
-            type: 'string'
-          }
+  test('reset validation message', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema,
+      renderers: [{ tester: inputControlTester, renderer: InputControl }],
+      cells: [{ tester: booleanCellTester, cell: BooleanCell }]
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <JsonFormsDispatch />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const validation = wrapper.find('.validation');
+    store.dispatch(Actions.update('foo', () => 3));
+    store.dispatch(Actions.update('foo', () => true));
+    expect(validation.text()).toBe('');
+  });
+
+  test('validation of nested schema', () => {
+    const schema = {
+      type: 'object',
+      properties: {
+        name: {
+          type: 'string'
         },
-        required: ['middleName', 'lastName']
-      }
-    },
-    required: ['name']
-  };
-  const firstControlElement: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/name'
-  };
-  const secondControlElement: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/personalData/properties/middleName'
-  };
-  const thirdControlElement: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/personalData/properties/lastName'
-  };
-  const uischema: HorizontalLayout = {
-    type: 'HorizontalLayout',
-    elements: [firstControlElement, secondControlElement, thirdControlElement]
-  };
-  const data = {
-    name: 'John Doe',
-    personalData: {}
-  };
-  const store = initJsonFormsVanillaStore({
-    data,
-    schema,
-    uischema,
-    renderers: [{ tester: inputControlTester, renderer: InputControl }],
-    cells: [{ tester: textCellTester, cell: TextCell }]
+        personalData: {
+          type: 'object',
+          properties: {
+            middleName: {
+              type: 'string'
+            },
+            lastName: {
+              type: 'string'
+            }
+          },
+          required: ['middleName', 'lastName']
+        }
+      },
+      required: ['name']
+    };
+    const firstControlElement: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/name'
+    };
+    const secondControlElement: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/personalData/properties/middleName'
+    };
+    const thirdControlElement: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/personalData/properties/lastName'
+    };
+    const uischema: HorizontalLayout = {
+      type: 'HorizontalLayout',
+      elements: [firstControlElement, secondControlElement, thirdControlElement]
+    };
+    const data = {
+      name: 'John Doe',
+      personalData: {}
+    };
+    const store = initJsonFormsVanillaStore({
+      data,
+      schema,
+      uischema,
+      renderers: [{ tester: inputControlTester, renderer: InputControl }],
+      cells: [{ tester: textCellTester, cell: TextCell }]
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <HorizontalLayoutRenderer schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const validation = wrapper.find('.validation');
+    expect(validation.at(0).text()).toBe('');
+    expect(validation.at(1).text()).toBe('is a required property');
+    expect(validation.at(2).text()).toBe('is a required property');
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <HorizontalLayoutRenderer schema={schema} uischema={uischema} />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const validation = TestUtils.scryRenderedDOMComponentsWithClass(
-    tree,
-    'validation'
-  );
-  t.is(validation[0].textContent, '');
-  t.is(validation[1].textContent, 'is a required property');
-  t.is(validation[2].textContent, 'is a required property');
-});
-test('required cell is marked', t => {
-  const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-      dateCell: {
-        type: 'string',
-        format: 'date'
-      }
-    },
-    required: ['dateCell']
-  };
-  const uischema: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/dateCell'
-  };
-  const store = initJsonFormsVanillaStore({
-    data: {},
-    schema,
-    uischema,
-    renderers: [{ tester: inputControlTester, renderer: InputControl }],
-    cells: [{ tester: dateCellTester, cell: DateCell }]
+  test('required cell is marked', () => {
+    const schema: JsonSchema = {
+      type: 'object',
+      properties: {
+        dateCell: {
+          type: 'string',
+          format: 'date'
+        }
+      },
+      required: ['dateCell']
+    };
+    const uischema: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/dateCell'
+    };
+    const store = initJsonFormsVanillaStore({
+      data: {},
+      schema,
+      uischema,
+      renderers: [{ tester: inputControlTester, renderer: InputControl }],
+      cells: [{ tester: dateCellTester, cell: DateCell }]
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <InputControl schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const label = wrapper.find('label');
+    expect(label.text()).toBe('Date Cell*');
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <InputControl schema={schema} uischema={uischema} />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label');
-  t.is(label.textContent, 'Date Cell*');
-});
 
-test('not required', t => {
-  const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-      dateCell: {
-        type: 'string',
-        format: 'date'
+  test('not required', () => {
+    const schema: JsonSchema = {
+      type: 'object',
+      properties: {
+        dateCell: {
+          type: 'string',
+          format: 'date'
+        }
       }
-    }
-  };
-  const uischema: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/dateCell'
-  };
-  const store = initJsonFormsVanillaStore({
-    data: {},
-    schema,
-    uischema,
-    renderers: [{ tester: inputControlTester, renderer: InputControl }],
-    cells: [{ tester: dateCellTester, cell: DateCell }]
+    };
+    const uischema: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/dateCell'
+    };
+    const store = initJsonFormsVanillaStore({
+      data: {},
+      schema,
+      uischema,
+      renderers: [{ tester: inputControlTester, renderer: InputControl }],
+      cells: [{ tester: dateCellTester, cell: DateCell }]
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <InputControl schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const label = wrapper.find('label');
+    expect(label.text()).toBe('Date Cell');
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <InputControl schema={schema} uischema={uischema} />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label');
-  t.is(label.textContent, 'Date Cell');
-});
-test('required cell is marked', t => {
-  const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-      dateCell: {
-        type: 'string',
-        format: 'date'
+
+  test('show description on focus', () => {
+    const schema: JsonSchema = {
+      type: 'object',
+      properties: {
+        name: {
+          type: 'string',
+          description: 'Enter your first name'
+        }
       }
-    },
-    required: ['dateCell']
-  };
-  const uischema: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/dateCell'
-  };
-
-  const store = initJsonFormsVanillaStore({
-    data: {},
-    schema,
-    uischema,
-    renderers: [{ tester: inputControlTester, renderer: InputControl }],
-    cells: [{ tester: dateCellTester, cell: DateCell }]
+    };
+    const uischema: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/name'
+    };
+    const data = { isFocused: false };
+    const store = initJsonFormsVanillaStore({
+      data,
+      schema,
+      uischema,
+      renderers: [{ tester: inputControlTester, renderer: InputControl }],
+      cells: [{ tester: textCellTester, cell: TextCell }]
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <InputControl schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const control = wrapper.find('.control');
+    control.simulate('focus');
+    const description = wrapper.find('.input-description');
+    expect(description.text()).toBe('Enter your first name');
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <InputControl schema={schema} uischema={uischema} />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label');
-  t.is(label.textContent, 'Date Cell*');
-});
 
-test('not required', t => {
-  const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-      dateCell: {
-        type: 'string',
-        format: 'date'
+  test('hide description when input cell is not focused', () => {
+    const schema: JsonSchema = {
+      type: 'object',
+      properties: {
+        name: {
+          type: 'string',
+          description: 'Enter your first name'
+        }
       }
-    }
-  };
-  const uischema: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/dateCell'
-  };
-
-  const store = initJsonFormsVanillaStore({
-    data: {},
-    schema,
-    uischema,
-    renderers: [{ tester: inputControlTester, renderer: InputControl }],
-    cells: [{ tester: dateCellTester, cell: DateCell }]
+    };
+    const uischema: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/name'
+    };
+    const data = { isFocused: false };
+    const store = initJsonFormsVanillaStore({
+      data,
+      schema,
+      uischema,
+      renderers: [{ tester: inputControlTester, renderer: InputControl }],
+      cells: [{ tester: textCellTester, cell: TextCell }]
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <InputControl schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const description = wrapper.find('.input-description');
+    expect(description.text()).toBe('');
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <InputControl schema={schema} uischema={uischema} />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label');
-  t.is(label.textContent, 'Date Cell');
-});
 
-test('show description on focus', t => {
-  const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-      name: {
-        type: 'string',
-        description: 'Enter your first name'
+  test('hide description on blur', () => {
+    const schema: JsonSchema = {
+      type: 'object',
+      properties: {
+        name: {
+          type: 'string',
+          description: 'Enter your first name'
+        }
       }
-    }
-  };
-  const uischema: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/name'
-  };
-  const data = { isFocused: false };
-  const store = initJsonFormsVanillaStore({
-    data,
-    schema,
-    uischema,
-    renderers: [{ tester: inputControlTester, renderer: InputControl }],
-    cells: [{ tester: textCellTester, cell: TextCell }]
+    };
+    const uischema: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/name'
+    };
+    const data = { isFocused: false };
+    const store = initJsonFormsVanillaStore({
+      data,
+      schema,
+      uischema,
+      renderers: [{ tester: inputControlTester, renderer: InputControl }],
+      cells: [{ tester: textCellTester, cell: TextCell }]
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <JsonFormsDispatch />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const control = wrapper.find('.control');
+    control.simulate('focus');
+    const description = wrapper.find('.input-description');
+    expect(description.text()).toBe('Enter your first name');
+    control.simulate('blur');
+    const hiddenDescription = wrapper.find('.input-description');
+    expect(hiddenDescription.text()).toBe('');
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <InputControl schema={schema} uischema={uischema} />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const control = TestUtils.findRenderedDOMComponentWithClass(
-    tree,
-    'control'
-  ) as HTMLDivElement;
-  TestUtils.Simulate.focus(control);
-  const description = TestUtils.findRenderedDOMComponentWithClass(
-    tree,
-    'input-description'
-  ) as HTMLDivElement;
-  t.is(description.textContent, 'Enter your first name');
-});
 
-test('hide description when input cell is not focused', t => {
-  const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-      name: {
-        type: 'string',
-        description: 'Enter your first name'
+  test('description undefined', () => {
+    const schema: JsonSchema = {
+      type: 'object',
+      properties: {
+        name: {
+          type: 'string'
+        }
       }
-    }
-  };
-  const uischema: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/name'
-  };
-  const data = { isFocused: false };
-  const store = initJsonFormsVanillaStore({
-    data,
-    schema,
-    uischema,
-    renderers: [{ tester: inputControlTester, renderer: InputControl }],
-    cells: [{ tester: textCellTester, cell: TextCell }]
+    };
+    const uischema: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/name'
+    };
+    const data = { isFocused: false };
+    const store = initJsonFormsVanillaStore({
+      data,
+      schema,
+      uischema,
+      renderers: [{ tester: inputControlTester, renderer: InputControl }],
+      cells: [{ tester: textCellTester, cell: TextCell }]
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <JsonFormsDispatch />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const description = wrapper.find('.input-description').getDOMNode();
+    expect(description.textContent).toBe('');
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <InputControl schema={schema} uischema={uischema} />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const description = TestUtils.findRenderedDOMComponentWithClass(
-    tree,
-    'input-description'
-  ) as HTMLDivElement;
-  t.is(description.textContent, '');
-});
 
-test('hide description on blur', t => {
-  const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-      name: {
-        type: 'string',
-        description: 'Enter your first name'
+  test('undefined input control', () => {
+    const schema: JsonSchema = {
+      type: 'object',
+      properties: {
+        expectedValue: {
+          type: ['string', 'integer', 'number', 'boolean']
+        }
       }
-    }
-  };
-  const uischema: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/name'
-  };
-  const data = { isFocused: false };
-  const store = initJsonFormsVanillaStore({
-    data,
-    schema,
-    uischema,
-    renderers: [{ tester: inputControlTester, renderer: InputControl }],
-    cells: [{ tester: textCellTester, cell: TextCell }]
+    };
+    const uischema: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/expectedValue'
+    };
+    const store = initJsonFormsVanillaStore({
+      data: {},
+      schema,
+      uischema,
+      renderers: [{ tester: inputControlTester, renderer: InputControl }],
+      cells: [{ tester: textCellTester, cell: TextCell }]
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <InputControl schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const control = wrapper.find('.control');
+    expect(control).toHaveLength(1);
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <JsonFormsDispatch />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const control = TestUtils.findRenderedDOMComponentWithClass(
-    tree,
-    'control'
-  ) as HTMLDivElement;
-  TestUtils.Simulate.focus(control);
-  const description = TestUtils.findRenderedDOMComponentWithClass(
-    tree,
-    'input-description'
-  ) as HTMLDivElement;
-  t.is(description.textContent, 'Enter your first name');
-  TestUtils.Simulate.blur(control);
-  const hiddenDescription = TestUtils.findRenderedDOMComponentWithClass(
-    tree,
-    'input-description'
-  ) as HTMLDivElement;
-  t.is(hiddenDescription.textContent, '');
-});
-
-test('description undefined', t => {
-  const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-      name: {
-        type: 'string'
-      }
-    }
-  };
-  const uischema: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/name'
-  };
-  const data = { isFocused: false };
-  const store = initJsonFormsVanillaStore({
-    data,
-    schema,
-    uischema,
-    renderers: [{ tester: inputControlTester, renderer: InputControl }],
-    cells: [{ tester: textCellTester, cell: TextCell }]
-  });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <JsonFormsDispatch />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const description = TestUtils.findRenderedDOMComponentWithClass(
-    tree,
-    'input-description'
-  ) as HTMLDivElement;
-  t.is(description.textContent, '');
-});
-
-test('undefined input control', t => {
-  const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-      expectedValue: {
-        type: ['string', 'integer', 'number', 'boolean']
-      }
-    }
-  };
-  const uischema: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/expectedValue'
-  };
-  const store = initJsonFormsVanillaStore({
-    data: {},
-    schema,
-    uischema,
-    renderers: [{ tester: inputControlTester, renderer: InputControl }],
-    cells: [{ tester: textCellTester, cell: TextCell }]
-  });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <InputControl schema={schema} uischema={uischema} />
-      </JsonFormsReduxContext>
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const control = TestUtils.scryRenderedDOMComponentsWithClass(tree, 'control');
-  t.is(control.length, 1);
 });
