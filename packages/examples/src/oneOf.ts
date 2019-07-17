@@ -101,31 +101,31 @@ const schema_1265_array = {
     colours: {
       title: 'Colours',
       type: 'array',
+      minItems: 1,
       items: {
         title: 'Type',
         type: 'string',
-        enum: ['Red', 'Green', 'Blue'],
-        minItems: 1
+        enum: ['Red', 'Green', 'Blue']
       }
     },
     numbers: {
       title: 'Numbers',
       type: 'array',
+      minItems: 1,
       items: {
         title: 'Type',
         type: 'string',
-        enum: ['One', 'Two', 'Three'],
-        minItems: 1
+        enum: ['One', 'Two', 'Three']
       }
     },
     shapes: {
       title: 'Shapes',
       type: 'array',
+      minItems: 1,
       items: {
         title: 'Type',
         type: 'string',
-        enum: ['Circle', 'Triangle', 'Square'],
-        minItems: 1
+        enum: ['Circle', 'Triangle', 'Square']
       }
     }
   }

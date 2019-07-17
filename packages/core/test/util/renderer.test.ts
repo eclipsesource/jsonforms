@@ -34,6 +34,7 @@ import {
   mapStateToControlProps,
   mapStateToJsonFormsRendererProps,
   mapStateToLayoutProps,
+  mapStateToArrayLayoutProps,
   mapStateToOneOfProps
 } from '../../src/util';
 import configureStore from 'redux-mock-store';
@@ -546,6 +547,45 @@ test('mapStateToLayoutProps - visible via state with path from ownProps ', t => 
   };
   const props = mapStateToLayoutProps(state, ownProps);
   t.true(props.visible);
+});
+
+test('mapStateToArrayLayoutProps - should include minItems in array layout props', t => {
+  const schema: JsonSchema = {
+    type: 'array',
+    minItems: 42,
+    items: {
+      type: 'object',
+      properties: {
+        message: {
+          type: 'string',
+          default: 'foo'
+        }
+      }
+    }
+  };
+
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#'
+  };
+
+  const state = {
+    jsonforms: {
+      core: {
+        schema,
+        data: {},
+        uischema,
+        errors: [] as ErrorObject[]
+      }
+    }
+  };
+
+  const ownProps = {
+    uischema
+  };
+
+  const props = mapStateToArrayLayoutProps(state, ownProps);
+  t.is(props.minItems, 42);
 });
 
 test('mapStateToLayoutProps should return renderers prop via ownProps', t => {
