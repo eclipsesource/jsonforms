@@ -811,6 +811,7 @@ export const mapStateToOneOfProps = (
 
 export interface StatePropsOfArrayLayout extends StatePropsOfControlWithDetail {
   data: number;
+  minItems?: number;
 }
 /**
  * Map state to table props
@@ -845,7 +846,8 @@ export const mapStateToArrayLayoutProps = (
     uischema,
     schema: resolvedSchema,
     data: props.data ? props.data.length : 0,
-    errors: allErrors
+    errors: allErrors,
+    minItems: schema.minItems
   };
 };
 
