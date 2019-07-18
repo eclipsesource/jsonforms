@@ -84,7 +84,7 @@ export class MaterialSliderControl extends Control<ControlProps, ControlState> {
           id={id}
         >
           <Typography id={id + '-typo'} style={labelStyle} variant='caption'>
-            {computeLabel(isPlainLabel(label) ? label : label.default, required)}
+            {computeLabel(isPlainLabel(label) ? label : label.default, required, mergedConfig.hideRequiredAsterisk)}
           </Typography>
           <div style={rangeContainerStyle}>
             <Typography style={rangeItemStyle} variant='caption' align='left'>

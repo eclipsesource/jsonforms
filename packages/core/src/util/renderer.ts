@@ -105,8 +105,12 @@ const isRequired = (
  * @param {boolean} required whether the label belongs to a control which is required
  * @returns {string} the label string
  */
-export const computeLabel = (label: string, required: boolean): string => {
-  return required ? label + '*' : label;
+export const computeLabel = (
+  label: string,
+  required: boolean,
+  hideRequiredAsterisk: boolean
+): string => {
+  return required && !hideRequiredAsterisk ? label + '*' : label;
 };
 
 /**

@@ -44,6 +44,7 @@ import moment from 'moment';
 import { Moment } from 'moment';
 import { DatePicker, MuiPickersUtilsProvider } from 'material-ui-pickers';
 import MomentUtils from '@date-io/moment';
+import merge from 'lodash/merge';
 
 export interface DateControl {
     momentLocale?: Moment;
@@ -71,7 +72,8 @@ export class MaterialDateControl extends Control<StatePropsOfDateControl & Dispa
         const clearLabel = '%clear';
         const isValid = errors.length === 0;
         const trim = uischema.options && uischema.options.trim;
-        const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused, config.showUnfocusedDescription);
+        const mergedConfig = merge({}, config, uischema.options);
+        const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused, mergedConfig.showUnfocusedDescription);
         const inputProps = {};
         const localeDateTimeFormat =
             momentLocale ? `${momentLocale.localeData().longDateFormat('L')}`
@@ -100,7 +102,7 @@ export class MaterialDateControl extends Control<StatePropsOfDateControl & Dispa
                     <DatePicker
                         keyboard
                         id={id + '-input'}
-                        label={computeLabel(labelText, required)}
+                        label={computeLabel(labelText, required, mergedConfig.hideRequiredAsterisk)}
                         error={!isValid}
                         fullWidth={!trim}
                         helperText={!isValid ? errors : showDescription ? description : ' '}

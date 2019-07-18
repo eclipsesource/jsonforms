@@ -74,7 +74,7 @@ export class MaterialDateTimeControl extends Control<ControlProps, ControlState>
           <DateTimePicker
             keyboard
             id={id + '-input'}
-            label={computeLabel(isPlainLabel(label) ? label : label.default, required)}
+            label={computeLabel(isPlainLabel(label) ? label : label.default, required, mergedConfig.hideRequiredAsterisk)}
             error={!isValid}
             fullWidth={!trim}
             onFocus={this.onFocus}

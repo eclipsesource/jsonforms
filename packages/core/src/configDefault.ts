@@ -38,5 +38,10 @@ export const configDefault = {
   /*
    * [text] if input descriptions should hide when not focused
    */
-  showUnfocusedDescription: false
+  showUnfocusedDescription: false,
+
+  /*
+   * [text] if asterisks in labels for required fields should be hidden
+   */
+  hideRequiredAsterisk: false
 };

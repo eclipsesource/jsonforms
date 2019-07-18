@@ -92,7 +92,7 @@ export abstract class MaterialInputControl extends Control<ControlProps & WithIn
             error={!isValid}
             style={inputLabelStyle}
           >
-            {computeLabel(isPlainLabel(label) ? label : label.default, required)}
+            {computeLabel(isPlainLabel(label) ? label : label.default, required, mergedConfig.hideRequiredAsterisk)}
           </InputLabel>
           <InnerComponent
             {...this.props}
