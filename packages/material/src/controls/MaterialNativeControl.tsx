@@ -66,7 +66,7 @@ export class MaterialNativeControl extends Control<ControlProps, ControlState> {
       <Hidden xsUp={!visible}>
         <TextField
           id={id + '-input'}
-          label={computeLabel(isPlainLabel(label) ? label : label.default, required)}
+          label={computeLabel(isPlainLabel(label) ? label : label.default, required, mergedConfig.hideRequiredAsterisk)}
           type={fieldType}
           error={!isValid}
           fullWidth={!trim}

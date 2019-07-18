@@ -36,7 +36,8 @@ export const schema = {
       type: 'integer',
       description: 'A recurrence interval'
     }
-  }
+  },
+  required: ['postalCode']
 };
 
 export const uischema = {
@@ -67,7 +68,8 @@ export const data = {
 const config = {
   restrict: true,
   trim: true,
-  showUnfocusedDescription: true
+  showUnfocusedDescription: true,
+  hideRequiredAsterisk: true
 };
 
 registerExamples([

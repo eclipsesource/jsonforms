@@ -91,7 +91,7 @@ export class InputControl extends Control<
           id={id}
         >
           <label htmlFor={id + '-input'} className={classNames.label}>
-            {computeLabel(labelText, required)}
+            {computeLabel(labelText, required, mergedConfig.hideRequiredAsterisk)}
           </label>
           <DispatchCell
             uischema={uischema}

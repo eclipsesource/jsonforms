@@ -72,7 +72,7 @@ export class RadioGroupControl extends Control<ControlProps & VanillaRendererPro
                 onBlur={this.onBlur}
             >
                 <label htmlFor={id} className={classNames.label} >
-                    {computeLabel(isPlainLabel(label) ? label : label.default, required)}
+                    {computeLabel(isPlainLabel(label) ? label : label.default, required, mergedConfig.hideRequiredAsterisk)}
                 </label>
 
                 <div

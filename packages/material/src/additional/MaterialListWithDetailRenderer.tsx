@@ -47,9 +47,10 @@ import range from 'lodash/range';
 import React, { useCallback, useState } from 'react';
 import { ArrayLayoutToolbar } from '../layouts/ArrayToolbar';
 import ListWithDetailMasterItem from './ListWithDetailMasterItem';
+import merge from 'lodash/merge';
 
 export const MaterialListWithDetailRenderer =
-  ({ uischemas, schema, uischema, path, errors, visible, label, required, removeItems, addItem, data, renderers }: ArrayLayoutProps) => {
+  ({ uischemas, schema, uischema, path, errors, visible, label, required, removeItems, addItem, data, renderers, config }: ArrayLayoutProps) => {
     const [selectedIndex, setSelectedIndex] = useState(undefined);
     const handleRemoveItem = useCallback((p: string, value: any) => () => {
       removeItems(p, [value])();
@@ -69,11 +70,12 @@ export const MaterialListWithDetailRenderer =
       undefined,
       uischema
     );
+    const mergedConfig = merge({}, config, uischema.options);
 
     return (
       <Hidden xsUp={!visible}>
         <ArrayLayoutToolbar
-          label={computeLabel(isPlainLabel(label) ? label : label.default, required)}
+          label={computeLabel(isPlainLabel(label) ? label : label.default, required, mergedConfig.hideRequiredAsterisk)}
           errors={errors}
           path={path}
           addItem={addItem}

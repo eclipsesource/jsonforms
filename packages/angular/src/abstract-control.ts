@@ -100,11 +100,13 @@ export abstract class JsonFormsAbstractControl<
           schema,
           rootSchema,
           visible,
-          path
+          path,
+          config
         } = props;
         this.label = computeLabel(
           isPlainLabel(label) ? label : label.default,
-          required
+          required,
+          config ? config.hideRequiredAsterisk : false
         );
         this.data = data;
         this.error = errors;

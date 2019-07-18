@@ -35,6 +35,7 @@ import map from 'lodash/map';
 import Paper from '@material-ui/core/Paper';
 import { ArrayLayoutToolbar } from './ArrayToolbar';
 import ExpandPanelRenderer from './ExpandPanelRenderer';
+import merge from 'lodash/merge';
 
 const paperStyle = { padding: 10 };
 interface MaterialArrayLayoutState {
@@ -66,15 +67,18 @@ export class MaterialArrayLayout extends React.PureComponent<
       renderers,
       label,
       required,
-      rootSchema
+      rootSchema,
+      config
     } = this.props;
+    const mergedConfig = merge({}, config, this.props.uischema.options);
 
     return (
       <Paper style={paperStyle}>
         <ArrayLayoutToolbar
           label={computeLabel(
             isPlainLabel(label) ? label : label.default,
-            required
+            required,
+            mergedConfig.hideRequiredAsterisk
           )}
           errors={errors}
           path={path}

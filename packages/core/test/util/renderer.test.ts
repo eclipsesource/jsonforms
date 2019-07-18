@@ -35,7 +35,8 @@ import {
   mapStateToJsonFormsRendererProps,
   mapStateToLayoutProps,
   mapStateToArrayLayoutProps,
-  mapStateToOneOfProps
+  mapStateToOneOfProps,
+  computeLabel
 } from '../../src/util';
 import configureStore from 'redux-mock-store';
 import test from 'ava';
@@ -843,4 +844,24 @@ test('should assign defaults to newly added item within nested object of an arra
 
   t.is(store.getState().jsonforms.core.data.length, 2);
   t.deepEqual(store.getState().jsonforms.core.data[0], { message: 'foo' });
+});
+
+test('computeLabel - should not edit label if not required and hideRequiredAsterisk is false', t => {
+  const computedLabel = computeLabel('Test Label', false, false);
+  t.is(computedLabel, 'Test Label');
+});
+
+test('computeLabel - should not edit label if not required and hideRequiredAsterisk is true', t => {
+  const computedLabel = computeLabel('Test Label', false, true);
+  t.is(computedLabel, 'Test Label');
+});
+
+test('computeLabel - should not edit label if required but hideRequiredAsterisk is true', t => {
+  const computedLabel = computeLabel('Test Label', true, true);
+  t.is(computedLabel, 'Test Label');
+});
+
+test('computeLabel - should add asterisk if required but hideRequiredAsterisk is false', t => {
+  const computedLabel = computeLabel('Test Label', true, false);
+  t.is(computedLabel, 'Test Label*');
 });

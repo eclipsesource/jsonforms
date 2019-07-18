@@ -72,7 +72,8 @@ export class MaterialRadioGroupControl extends Control<ControlProps, ControlStat
           >
             {computeLabel(
               isPlainLabel(label) ? label : label.default,
-              required
+              required,
+              mergedConfig.hideRequiredAsterisk
             )}
           </FormLabel>
 
