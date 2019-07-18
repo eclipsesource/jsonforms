@@ -46,7 +46,7 @@ import {
 import { Property } from '../services/property.util';
 import { matchContainerProperty } from '../helpers/container.util';
 import {
-  StyleRulesCallback,
+  createStyles,
   withStyles,
   WithStyles
 } from '@material-ui/core/styles';
@@ -139,7 +139,7 @@ export interface ExandArrayContainerState {
   setCss: boolean;
 }
 
-const styles: StyleRulesCallback<'currentTarget' | 'validTarget' | 'invalidTarget'> = () => ({
+const styles = createStyles({
   currentTarget: {
     borderWidth: 'medium'
   },

@@ -31,12 +31,12 @@ import { indexFromPath } from '../helpers/util';
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-    getData,
-    getSchema, JsonFormsState,
-    JsonSchema7,
-    Paths,
-    resolveData,
-    update
+  getData,
+  getSchema, JsonFormsState,
+  JsonSchema7,
+  Paths,
+  resolveData,
+  update
 } from '@jsonforms/core';
 import ExpandArray from './ExpandArray';
 import { findContainerProperties, Property } from '../services/property.util';
@@ -46,13 +46,15 @@ import {
   DragInfo,
   DropResult,
   moveListItem,
-  Types } from './dnd.util';
+  Types
+} from './dnd.util';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
 import Typography from '@material-ui/core/Typography';
 import {
-  StyleRulesCallback,
+  createStyles,
+  Theme,
   withStyles,
   WithStyles
 } from '@material-ui/core/styles';
@@ -69,13 +71,7 @@ import { AnyAction, Dispatch } from 'redux';
  */
 const RESET_SELECTION_DELAY = 40;
 
-const styles:
-  StyleRulesCallback<'listItem' |
-                     'withoutBorders' |
-                     'itemContainer' |
-                     'label' |
-                     'actionButton' |
-                     'selected'> = theme => ({
+const styles = (theme: Theme) => createStyles({
   listItem: {
     minHeight: '1em',
     position: 'relative',
@@ -182,26 +178,26 @@ export interface ObjectListItemProps {
 
 class ObjectListItem extends React.Component
   <ObjectListItemProps &
-    WithStyles<'listItem' |
-               'withoutBorders' |
-               'itemContainer' |
-               'label' |
-               'actionButton' |
-               'selected'>, {}> {
+  WithStyles<'listItem' |
+    'withoutBorders' |
+    'itemContainer' |
+    'label' |
+    'actionButton' |
+    'selected'>, {}> {
 
   render() {
     const {
-        path,
-        schema,
-        rootData,
-        data,
-        handlers,
-        selection,
-        filterPredicate,
-        containerProperties,
-        labelProvider,
-        imageProvider,
-        classes
+      path,
+      schema,
+      rootData,
+      data,
+      handlers,
+      selection,
+      filterPredicate,
+      containerProperties,
+      labelProvider,
+      imageProvider,
+      classes
     } = this.props;
     const pathSegments = path.split('.');
     const parentPath = initial(pathSegments).join('.');
@@ -224,9 +220,9 @@ class ObjectListItem extends React.Component
             className={classes.label}
             onClick={handlers.onSelect(schema, data, path)}
           >
-          <Typography className={labelClass}>
+            <Typography className={labelClass}>
               {labelProvider(schema, data, path)}
-          </Typography>
+            </Typography>
             {
               !isEmpty(containerProperties) ?
                 (
@@ -274,9 +270,9 @@ class ObjectListItem extends React.Component
 const mapStateToProps = (state: JsonFormsState, ownProps: any) => {
   const index = indexFromPath(ownProps.path);
   const containerProperties: Property[] = findContainerProperties(
-      ownProps.schema,
-      getSchema(state) as JsonSchema7,
-      false
+    ownProps.schema,
+    getSchema(state) as JsonSchema7,
+    false
   );
 
   return {
@@ -352,49 +348,49 @@ export interface ObjectListItemDndProps extends ObjectListItemProps {
 }
 
 export class ObjectListItemDnd extends React.Component<ObjectListItemDndProps, any> {
-    render() {
-        const {
-            path,
-            schema,
-            rootData,
-            data,
-            handlers,
-            selection,
-            isRoot,
-            // isDragging,
-            connectDragSource,
-            connectDropTarget,
-            filterPredicate,
-            containerProperties,
-            labelProvider,
-            imageProvider,
-        }: ObjectListItemDndProps = this.props;
+  render() {
+    const {
+      path,
+      schema,
+      rootData,
+      data,
+      handlers,
+      selection,
+      isRoot,
+      // isDragging,
+      connectDragSource,
+      connectDropTarget,
+      filterPredicate,
+      containerProperties,
+      labelProvider,
+      imageProvider,
+    }: ObjectListItemDndProps = this.props;
 
-        const listItem = (
-            <ListItem
-                path={path}
-                schema={schema}
-                rootData={rootData}
-                data={data}
-                handlers={handlers}
-                selection={selection}
-                filterPredicate={filterPredicate}
-                containerProperties={containerProperties}
-                labelProvider={labelProvider}
-                imageProvider={imageProvider}
-            />
-        );
-        if (isRoot === true) {
-            // No Drag and Drop
-            return listItem;
-        }
-
-        // const opacity = isDragging ? 0.2 : 1;
-
-        // wrap in div because react-dnd does not allow directly connecting to components
-        return connectDragSource(
-            connectDropTarget(<div>{listItem}</div>));
+    const listItem = (
+      <ListItem
+        path={path}
+        schema={schema}
+        rootData={rootData}
+        data={data}
+        handlers={handlers}
+        selection={selection}
+        filterPredicate={filterPredicate}
+        containerProperties={containerProperties}
+        labelProvider={labelProvider}
+        imageProvider={imageProvider}
+      />
+    );
+    if (isRoot === true) {
+      // No Drag and Drop
+      return listItem;
     }
+
+    // const opacity = isDragging ? 0.2 : 1;
+
+    // wrap in div because react-dnd does not allow directly connecting to components
+    return connectDragSource(
+      connectDropTarget(<div>{listItem}</div>));
+  }
 }
 
 /**
@@ -423,7 +419,7 @@ const objectDragSource = {
       // List item was not successfully dropped => revert to original position if it was moved
       if (dragInfo.originalPath !== dragInfo.currentPath) {
         console.log(`No valid drop. Revert position. Original: ${dragInfo.originalPath}.` +
-                    `Current: ${dragInfo.currentPath}`);
+          `Current: ${dragInfo.currentPath}`);
         props.moveListItem(dragInfo.data, dragInfo.currentPath, dragInfo.originalPath);
       }
 
@@ -483,7 +479,7 @@ const objectDropTarget = {
    * @param monitor
    */
   hover(props: ObjectListItemDndProps, monitor: any) {
-    if (!monitor.isOver({shallow: true})) {
+    if (!monitor.isOver({ shallow: true })) {
       return;
     }
     if (!monitor.canDrop()) {
