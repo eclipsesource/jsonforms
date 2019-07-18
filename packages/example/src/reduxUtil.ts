@@ -61,7 +61,7 @@ const mapStateToProps = (state: any) => {
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => ({
   changeExampleData: (example: ReactExampleDescription) => {
     dispatch(changeExample(example));
-    dispatch(Actions.init(example.data, example.schema, example.uischema));
+    dispatch(Actions.init(example.data, example.schema, example.uischema, { onChange: example.onChange } ));
     Actions.setConfig(example.config)(dispatch);
   },
   getComponent: (example: ReactExampleDescription) =>

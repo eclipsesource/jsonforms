@@ -64,6 +64,8 @@ export const sanitizeErrors = (validator: ValidateFunction, data: any) =>
 
 const alwaysValid: ValidateFunction = () => true;
 
+type JsonFormsChangeHandler = (state: JsonFormsCore) => void
+
 export interface JsonFormsCore {
   data: any;
   schema: JsonSchema;
@@ -72,6 +74,7 @@ export interface JsonFormsCore {
   validator?: ValidateFunction;
   ajv?: Ajv;
   refParserOptions?: RefParser.Options;
+  onChange?: JsonFormsChangeHandler;
 }
 
 const initState: JsonFormsCore = {
@@ -81,7 +84,8 @@ const initState: JsonFormsCore = {
   errors: [],
   validator: alwaysValid,
   ajv: undefined,
-  refParserOptions: undefined
+  refParserOptions: undefined,
+  onChange: undefined
 };
 
 type ValidCoreActions =
@@ -122,6 +126,14 @@ const getRefParserOptions = (
   return state.refParserOptions;
 };
 
+const getOnChangeOption = (  state: JsonFormsCore,   action?: InitAction
+): JsonFormsChangeHandler => {
+  if(action && hasOnChangeOption(action.options)) {
+    return action.options.onChange;
+  }
+  return state.onChange;
+}
+
 const hasRefParserOption = (option: any): option is InitActionOptions => {
   if (option) {
     return option.refParserOptions !== undefined;
@@ -136,6 +148,13 @@ const hasAjvOption = (option: any): option is InitActionOptions => {
   return false;
 };
 
+const hasOnChangeOption = (option: any): option is InitActionOptions => {
+  if(option) {
+    return option.onChange !== undefined;
+  }
+  return false
+}
+
 export const coreReducer = (
   state: JsonFormsCore = initState,
   action: ValidCoreActions
@@ -146,12 +165,14 @@ export const coreReducer = (
       const v = thisAjv.compile(action.schema);
       const e = sanitizeErrors(v, action.data);
       const o = getRefParserOptions(state, action);
+      const onChange = getOnChangeOption(state, action);
 
       return {
         ...state,
         data: action.data,
         schema: action.schema,
         uischema: action.uischema,
+        onChange: onChange,
         errors: e,
         validator: v,
         ajv: thisAjv,
@@ -193,6 +214,7 @@ export const coreReducer = (
         const result = action.updater(cloneDeep(state.data));
 
         if (result === undefined || result === null) {
+          state.onChange && state.onChange(state)
           return {
             ...state,
             data: state.data,
@@ -202,7 +224,7 @@ export const coreReducer = (
         }
 
         const errors = sanitizeErrors(state.validator, result);
-
+        state.onChange && state.onChange(state)
         return {
           ...state,
           data: result,
@@ -214,7 +236,7 @@ export const coreReducer = (
 
         const newState: any = set(cloneDeep(state.data), action.path, newData);
         const errors = sanitizeErrors(state.validator, newState);
-
+        state.onChange && state.onChange(state)
         return {
           ...state,
           data: newState,

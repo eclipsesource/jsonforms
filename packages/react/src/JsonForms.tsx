@@ -38,6 +38,7 @@ import {
     OwnPropsOfJsonFormsRenderer,
     removeId,
     UISchemaElement,
+    JsonFormsCore
 } from '@jsonforms/core';
 import { ctxToJsonFormsDispatchProps, JsonFormsStateProvider, useJsonForms } from './JsonFormsContext';
 
@@ -178,10 +179,11 @@ export interface JsonFormsInitStateProps {
     renderers: JsonFormsRendererRegistryEntry[];
     ajv?: AJV.Ajv;
     refParserOptions?: RefParser.Options;
+    onChange?(state: JsonFormsCore): void;
 }
 
 export const JsonForms = (props: JsonFormsInitStateProps) => {
-    const { ajv, data, schema, uischema, renderers, refParserOptions } = props;
+    const { ajv, data, schema, uischema, renderers, refParserOptions, onChange } = props;
     return (
         <JsonFormsStateProvider
             initState={{
@@ -191,7 +193,8 @@ export const JsonForms = (props: JsonFormsInitStateProps) => {
                     refParserOptions,
                     schema,
                     uischema,
-                    errors: [] // TODO
+                    errors: [], // TODO
+                    onChange
                 },
                 renderers
             }}

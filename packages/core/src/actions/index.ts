@@ -25,7 +25,7 @@
 import AJV from 'ajv';
 import RefParser from 'json-schema-ref-parser';
 import { RankedTester } from '../testers';
-import { JsonSchema, UISchemaElement } from '../';
+import { JsonSchema, UISchemaElement, JsonFormsCore } from '../';
 import { generateDefaultUISchema, generateJsonSchema } from '../generators';
 import { UISchemaTester } from '../reducers/uischemas';
 import { AnyAction, Dispatch } from 'redux';
@@ -71,6 +71,7 @@ export interface InitAction {
 export interface InitActionOptions {
   ajv?: AJV.Ajv;
   refParserOptions?: RefParser.Options;
+  onChange?(state: JsonFormsCore): void;
 }
 
 export const init = (
