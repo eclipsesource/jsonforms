@@ -40,6 +40,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { DebugElement } from '@angular/core';
 import { MasterListComponent } from '../src/other/master-detail/master';
 import { JsonFormsDetailComponent } from '../src/other/master-detail/detail';
+import { setupMockStore } from '@jsonforms/angular-test';
 
 describe('Master detail', () => {
   let fixture: ComponentFixture<MasterListComponent>;
@@ -130,17 +131,7 @@ describe('Master detail', () => {
   });
 
   it('should render', async(() => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
-    component.uischema = uischema;
-
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data,
-          schema
-        }
-      }
-    });
+    const mockSubStore = setupMockStore(fixture, { uischema, schema, data });
     component.ngOnInit();
     mockSubStore.complete();
 
@@ -157,17 +148,7 @@ describe('Master detail', () => {
   }));
 
   it('add a master item', async(() => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
-    component.uischema = uischema;
-
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data,
-          schema
-        }
-      }
-    });
+    const mockSubStore = setupMockStore(fixture, { uischema, schema, data });
     component.ngOnInit();
     mockSubStore.complete();
     fixture.detectChanges();
@@ -189,17 +170,7 @@ describe('Master detail', () => {
   }));
 
   it('remove an item', async(() => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
-    component.uischema = uischema;
-
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data,
-          schema
-        }
-      }
-    });
+    const mockSubStore = setupMockStore(fixture, { uischema, schema, data });
     component.ngOnInit();
     mockSubStore.complete();
     fixture.detectChanges();
@@ -236,16 +207,11 @@ describe('Master detail', () => {
         }
       ]
     };
-    const mockSubStore = MockNgRedux.getSelectorStub();
-    component.uischema = uischema;
 
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data: moreData,
-          schema
-        }
-      }
+    const mockSubStore = setupMockStore(fixture, {
+      uischema,
+      schema,
+      data: moreData
     });
     component.ngOnInit();
     fixture.detectChanges();
@@ -297,16 +263,10 @@ describe('Master detail', () => {
         }
       ]
     };
-    const mockSubStore = MockNgRedux.getSelectorStub();
-    component.uischema = uischema;
-
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data: moreData,
-          schema
-        }
-      }
+    const mockSubStore = setupMockStore(fixture, {
+      uischema,
+      schema,
+      data: moreData
     });
     component.ngOnInit();
     fixture.detectChanges();
@@ -352,16 +312,10 @@ describe('Master detail', () => {
         }
       ]
     };
-    const mockSubStore = MockNgRedux.getSelectorStub();
-    component.uischema = uischema;
-
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data: moreData,
-          schema
-        }
-      }
+    const mockSubStore = setupMockStore(fixture, {
+      uischema,
+      schema,
+      data: moreData
     });
     component.ngOnInit();
     fixture.detectChanges();
@@ -397,16 +351,10 @@ describe('Master detail', () => {
         }
       ]
     };
-    const mockSubStore = MockNgRedux.getSelectorStub();
-    component.uischema = uischema;
-
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data: moreData,
-          schema
-        }
-      }
+    const mockSubStore = setupMockStore(fixture, {
+      uischema,
+      schema,
+      data: moreData
     });
     component.ngOnInit();
     fixture.detectChanges();
@@ -434,17 +382,7 @@ describe('Master detail', () => {
   });
 
   it('setting detail on click', async(() => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
-    component.uischema = uischema;
-
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data,
-          schema
-        }
-      }
-    });
+    const mockSubStore = setupMockStore(fixture, { uischema, schema, data });
     component.ngOnInit();
     mockSubStore.complete();
 
@@ -487,17 +425,8 @@ describe('Master detail', () => {
   }));
 
   it('can be hidden', async(() => {
-    component.uischema = uischema;
+    const mockSubStore = setupMockStore(fixture, { uischema, schema, data });
     component.visible = false;
-    const mockSubStore = MockNgRedux.getSelectorStub();
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data,
-          schema
-        }
-      }
-    });
     mockSubStore.complete();
     component.ngOnInit();
     fixture.detectChanges();

@@ -43,6 +43,7 @@ import {
   TableRendererTester
 } from '../src/other/table.renderer';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { setupMockStore } from '@jsonforms/angular-test';
 
 const uischema1: ControlElement = { type: 'Control', scope: '#' };
 const uischema2: ControlElement = {
@@ -138,21 +139,11 @@ describe('Table', () => {
   }));
 
   it('renders object array on root', async(() => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
-    component.uischema = uischema1;
-    component.schema = schema_object1;
-
-    mockSubStore.next({
-      jsonforms: {
-        renderers: renderers,
-        core: {
-          data: [
-            { foo: 'foo_1', bar: 'bar_1' },
-            { foo: 'foo_2', bar: 'bar_2' }
-          ],
-          schema: schema_object1
-        }
-      }
+    const mockSubStore = setupMockStore(fixture, {
+      uischema: uischema1,
+      schema: schema_object1,
+      data: [{ foo: 'foo_1', bar: 'bar_1' }, { foo: 'foo_2', bar: 'bar_2' }],
+      renderers
     });
     mockSubStore.complete();
     fixture.detectChanges();
@@ -167,21 +158,15 @@ describe('Table', () => {
     });
   }));
   it('renders object array on path', async(() => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
-    component.uischema = uischema2;
-    component.schema = schema_object2;
-
-    mockSubStore.next({
-      jsonforms: {
-        renderers: renderers,
-        core: {
-          data: {
-            my: [{ foo: 'foo_1', bar: 'bar_1' }, { foo: 'foo_2', bar: 'bar_2' }]
-          },
-          schema: schema_object2
-        }
-      }
+    const mockSubStore = setupMockStore(fixture, {
+      uischema: uischema2,
+      schema: schema_object2,
+      data: {
+        my: [{ foo: 'foo_1', bar: 'bar_1' }, { foo: 'foo_2', bar: 'bar_2' }]
+      },
+      renderers
     });
+
     mockSubStore.complete();
     fixture.detectChanges();
     component.ngOnInit();
@@ -196,18 +181,11 @@ describe('Table', () => {
   }));
 
   it('renders simple array on root', async(() => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
-    component.uischema = uischema1;
-    component.schema = schema_simple1;
-
-    mockSubStore.next({
-      jsonforms: {
-        renderers: renderers,
-        core: {
-          data: ['foo', 'bar'],
-          schema: schema_simple1
-        }
-      }
+    const mockSubStore = setupMockStore(fixture, {
+      uischema: uischema1,
+      schema: schema_simple1,
+      data: ['foo', 'bar'],
+      renderers
     });
     mockSubStore.complete();
     fixture.detectChanges();
@@ -222,18 +200,11 @@ describe('Table', () => {
     });
   }));
   it('renders simple array on path', async(() => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
-    component.uischema = uischema2;
-    component.schema = schema_simple2;
-
-    mockSubStore.next({
-      jsonforms: {
-        renderers: renderers,
-        core: {
-          data: { my: ['foo', 'bar'] },
-          schema: schema_simple2
-        }
-      }
+    const mockSubStore = setupMockStore(fixture, {
+      uischema: uischema2,
+      schema: schema_simple2,
+      data: { my: ['foo', 'bar'] },
+      renderers
     });
     mockSubStore.complete();
     fixture.detectChanges();
@@ -249,20 +220,13 @@ describe('Table', () => {
   }));
 
   it('can be disabled', async(() => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
-    component.uischema = uischema1;
-    component.schema = schema_object1;
-    component.disabled = true;
-
-    mockSubStore.next({
-      jsonforms: {
-        renderers: renderers,
-        core: {
-          data: [{ foo: 'foo_1', bar: 'bar_1' }],
-          schema: schema_object1
-        }
-      }
+    const mockSubStore = setupMockStore(fixture, {
+      uischema: uischema1,
+      schema: schema_object1,
+      data: [{ foo: 'foo_1', bar: 'bar_1' }],
+      renderers
     });
+    component.disabled = true;
     mockSubStore.complete();
     fixture.detectChanges();
     component.ngOnInit();
@@ -277,18 +241,11 @@ describe('Table', () => {
     });
   }));
   it('should be enabled by default', async(() => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
-    component.uischema = uischema1;
-    component.schema = schema_object1;
-
-    mockSubStore.next({
-      jsonforms: {
-        renderers: renderers,
-        core: {
-          data: [{ foo: 'foo_1', bar: 'bar_1' }],
-          schema: schema_object1
-        }
-      }
+    const mockSubStore = setupMockStore(fixture, {
+      uischema: uischema1,
+      schema: schema_object1,
+      data: [{ foo: 'foo_1', bar: 'bar_1' }],
+      renderers
     });
     mockSubStore.complete();
     fixture.detectChanges();

@@ -29,6 +29,7 @@ import { By } from '@angular/platform-browser';
 import { JsonSchema, LabelElement } from '@jsonforms/core';
 
 import { LabelRenderer, LabelRendererTester } from '../src/other';
+import { setupMockStore } from '@jsonforms/angular-test';
 
 const data = {};
 const schema: JsonSchema = {
@@ -72,17 +73,7 @@ describe('Label Renderer Base Tests', () => {
   });
 
   it('should render', () => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
-    component.uischema = uischema;
-
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data: data,
-          schema: schema
-        }
-      }
-    });
+    const mockSubStore = setupMockStore(fixture, { uischema, schema, data });
     mockSubStore.complete();
     fixture.detectChanges();
     component.ngOnInit();
