@@ -24,7 +24,7 @@
 */
 import isEqual from 'lodash/isEqual';
 import maxBy from 'lodash/maxBy';
-import React from 'react';
+import React, { useEffect } from 'react';
 import AJV from 'ajv';
 import RefParser from 'json-schema-ref-parser';
 import { UnknownRenderer } from './UnknownRenderer';
@@ -40,12 +40,17 @@ import {
     UISchemaElement,
 } from '@jsonforms/core';
 import { ctxToJsonFormsDispatchProps, JsonFormsStateProvider, useJsonForms } from './JsonFormsContext';
+import { ErrorObject } from 'ajv';
 
 interface JsonFormsRendererState {
     id: string;
     schema: JsonSchema;
     resolving: boolean;
     resolvedSchema: JsonSchema;
+}
+
+interface JsonFormsReactProps {
+  onChange?(state: {data: any,   errors?: ErrorObject[]}): void;
 }
 
 const hasRefs = (schema: JsonSchema): boolean => {
@@ -156,9 +161,13 @@ export class JsonFormsDispatchRenderer extends ResolvedJsonFormsDispatchRenderer
     }
 }
 
-export const JsonFormsDispatch = (props: OwnPropsOfJsonFormsRenderer) => {
+export const JsonFormsDispatch = (props: OwnPropsOfJsonFormsRenderer & JsonFormsReactProps) => {
     const ctx = useJsonForms();
     const { refResolver } = ctxToJsonFormsDispatchProps(ctx, props);
+    useEffect(() => {
+      props.onChange && props.onChange({data: ctx.core.data, errors: ctx.core.errors})
+    }, [ctx.core.data, ctx.core.errors])
+
     return (
         <JsonFormsDispatchRenderer
             schema={props.schema || ctx.core.schema}
@@ -180,8 +189,8 @@ export interface JsonFormsInitStateProps {
     refParserOptions?: RefParser.Options;
 }
 
-export const JsonForms = (props: JsonFormsInitStateProps) => {
-    const { ajv, data, schema, uischema, renderers, refParserOptions } = props;
+export const JsonForms = (props: JsonFormsInitStateProps & JsonFormsReactProps) => {
+    const { ajv, data, schema, uischema, renderers, refParserOptions, onChange } = props;
     return (
         <JsonFormsStateProvider
             initState={{
@@ -196,7 +205,7 @@ export const JsonForms = (props: JsonFormsInitStateProps) => {
                 renderers
             }}
         >
-            <JsonFormsDispatch />
+            <JsonFormsDispatch onChange={onChange}/>
         </JsonFormsStateProvider>
     );
 };
