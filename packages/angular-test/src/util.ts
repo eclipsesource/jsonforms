@@ -26,7 +26,12 @@ import { Type } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MockNgRedux } from '@angular-redux/store/testing';
 import { JsonFormsControl } from '@jsonforms/angular';
-import { ControlElement, JsonSchema, UISchemaElement } from '@jsonforms/core';
+import {
+  ControlElement,
+  JsonSchema,
+  UISchemaElement,
+  JsonFormsRendererRegistryEntry
+} from '@jsonforms/core';
 import { Subject } from 'rxjs';
 
 export interface ErrorTestExpectation {
@@ -58,6 +63,8 @@ export interface TestData<T extends UISchemaElement> {
   data: any;
   schema: JsonSchema;
   uischema: T;
+  errors?: { dataPath: string; message: string }[];
+  renderers?: JsonFormsRendererRegistryEntry[];
 }
 
 export const setupMockStore = (
@@ -71,9 +78,11 @@ export const setupMockStore = (
 
   mockSubStore.next({
     jsonforms: {
+      renderers: testData.renderers,
       core: {
         data: testData.data,
-        schema: testData.schema
+        schema: testData.schema,
+        errors: testData.errors
       }
     }
   });
