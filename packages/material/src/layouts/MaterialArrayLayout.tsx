@@ -40,10 +40,10 @@ const paperStyle = { padding: 10 };
 interface MaterialArrayLayoutState {
   expanded: string | boolean;
 }
-export class MaterialArrayLayout extends React.Component<
+export class MaterialArrayLayout extends React.PureComponent<
   ArrayLayoutProps,
   MaterialArrayLayoutState
-  > {
+> {
   state: MaterialArrayLayoutState = {
     expanded: null
   };
@@ -101,8 +101,8 @@ export class MaterialArrayLayout extends React.Component<
               );
             })
           ) : (
-              <p>No data</p>
-            )}
+            <p>No data</p>
+          )}
         </div>
       </Paper>
     );

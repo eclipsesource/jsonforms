@@ -25,24 +25,36 @@
 import React from 'react';
 import { CellProps, WithClassname } from '@jsonforms/core';
 import Input from '@material-ui/core/Input';
+import { areEqual } from '@jsonforms/react';
 
-export const MuiInputInteger = (props: CellProps & WithClassname) => {
-  const { data, className, id, enabled, uischema, path, handleChange } = props;
-  const config = { step: '1' };
-  const toNumber = (value: string) =>
-    value === '' ? undefined : parseInt(value, 10);
+export const MuiInputInteger = React.memo(
+  (props: CellProps & WithClassname) => {
+    const {
+      data,
+      className,
+      id,
+      enabled,
+      uischema,
+      path,
+      handleChange
+    } = props;
+    const config = { step: '1' };
+    const toNumber = (value: string) =>
+      value === '' ? undefined : parseInt(value, 10);
 
-  return (
-    <Input
-      type='number'
-      value={data !== undefined && data !== null ? data : ''}
-      onChange={ev => handleChange(path, toNumber(ev.target.value))}
-      className={className}
-      id={id}
-      disabled={!enabled}
-      autoFocus={uischema.options && uischema.options.focus}
-      inputProps={config}
-      fullWidth={true}
-    />
-  );
-};
+    return (
+      <Input
+        type='number'
+        value={data !== undefined && data !== null ? data : ''}
+        onChange={ev => handleChange(path, toNumber(ev.target.value))}
+        className={className}
+        id={id}
+        disabled={!enabled}
+        autoFocus={uischema.options && uischema.options.focus}
+        inputProps={config}
+        fullWidth={true}
+      />
+    );
+  },
+  areEqual
+);

@@ -23,6 +23,9 @@
   THE SOFTWARE.
 */
 import isEmpty from 'lodash/isEmpty';
+import omit from 'lodash/omit';
+import isEqual from 'lodash/isEqual';
+import get from 'lodash/get';
 import React from 'react';
 import {
   JsonFormsRendererRegistryEntry,
@@ -51,32 +54,56 @@ export const renderLayoutElements = (
   ));
 };
 
+const areEqual = (
+  prevProps: MaterialLayoutRendererProps,
+  nextProps: MaterialLayoutRendererProps
+) => {
+  const prev = omit(prevProps, [
+    'handleChange',
+    'renderers',
+    'cells',
+    'uischemas'
+  ]);
+  const next = omit(nextProps, [
+    'handleChange',
+    'renderers',
+    'cells',
+    'uischemas'
+  ]);
+  return (
+    isEqual(prev, next) &&
+    get(prevProps, 'renderers.length') === get(nextProps, 'renderers.length')
+  );
+};
 export interface MaterialLayoutRendererProps extends OwnPropsOfRenderer {
   elements: UISchemaElement[];
   direction: 'row' | 'column';
   renderers?: JsonFormsRendererRegistryEntry[];
 }
-export const MaterialLayoutRenderer = ({
-  visible,
-  elements,
-  schema,
-  path,
-  direction,
-  renderers
-}: MaterialLayoutRendererProps) => {
-  if (isEmpty(elements)) {
-    return null;
-  } else {
-    return (
-      <Hidden xsUp={!visible}>
-        <Grid
-          container
-          direction={direction}
-          spacing={direction === 'row' ? 2 : 0}
-        >
-          {renderLayoutElements(elements, schema, path, renderers)}
-        </Grid>
-      </Hidden>
-    );
-  }
-};
+export const MaterialLayoutRenderer = React.memo(
+  ({
+    visible,
+    elements,
+    schema,
+    path,
+    direction,
+    renderers
+  }: MaterialLayoutRendererProps) => {
+    if (isEmpty(elements)) {
+      return null;
+    } else {
+      return (
+        <Hidden xsUp={!visible}>
+          <Grid
+            container
+            direction={direction}
+            spacing={direction === 'row' ? 2 : 0}
+          >
+            {renderLayoutElements(elements, schema, path, renderers)}
+          </Grid>
+        </Hidden>
+      );
+    }
+  },
+  areEqual
+);

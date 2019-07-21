@@ -23,16 +23,23 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import {
-    EnumCellProps,
-    WithClassname,
-} from '@jsonforms/core';
+import { EnumCellProps, WithClassname } from '@jsonforms/core';
 
 import Select from '@material-ui/core/Select';
 import { MenuItem } from '@material-ui/core';
+import { areEqual } from '@jsonforms/react';
 
-export const MuiSelect = (props: EnumCellProps & WithClassname) => {
-  const { data, className, id, enabled, uischema, path, handleChange, options } = props;
+export const MuiSelect = React.memo((props: EnumCellProps & WithClassname) => {
+  const {
+    data,
+    className,
+    id,
+    enabled,
+    uischema,
+    path,
+    handleChange,
+    options
+  } = props;
 
   return (
     <Select
@@ -44,17 +51,13 @@ export const MuiSelect = (props: EnumCellProps & WithClassname) => {
       onChange={ev => handleChange(path, ev.target.value)}
       fullWidth={true}
     >
-      {
-        [<MenuItem value='' key={'empty'} />]
-          .concat(
-            options.map(optionValue =>
-              (
-                <MenuItem value={optionValue} key={optionValue}>
-                  {optionValue}
-                </MenuItem>
-              )
-            )
-          )}
+      {[<MenuItem value='' key={'empty'} />].concat(
+        options.map(optionValue => (
+          <MenuItem value={optionValue} key={optionValue}>
+            {optionValue}
+          </MenuItem>
+        ))
+      )}
     </Select>
   );
-};
+}, areEqual);
