@@ -23,52 +23,52 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import {
-    CellProps,
-    Formatted,
-    WithClassname,
-} from '@jsonforms/core';
+import { CellProps, Formatted, WithClassname } from '@jsonforms/core';
 import Input from '@material-ui/core/Input';
+import { areEqual } from '@jsonforms/react';
 
-export const MuiInputNumberFormat = (props: CellProps & WithClassname & Formatted<number>) => {
-  const {
-    className,
-    id,
-    enabled,
-    uischema,
-    isValid,
-    path,
-    handleChange,
-    schema
-  } = props;
-  const maxLength = schema.maxLength;
-  let config;
-  if (uischema.options && uischema.options.restrict) {
-    config = {'maxLength': maxLength};
-  } else {
-    config = {};
-  }
-  const trim = uischema.options && uischema.options.trim;
-  const formattedNumber = props.toFormatted(props.data);
+export const MuiInputNumberFormat = React.memo(
+  (props: CellProps & WithClassname & Formatted<number>) => {
+    const {
+      className,
+      id,
+      enabled,
+      uischema,
+      isValid,
+      path,
+      handleChange,
+      schema
+    } = props;
+    const maxLength = schema.maxLength;
+    let config;
+    if (uischema.options && uischema.options.restrict) {
+      config = { maxLength: maxLength };
+    } else {
+      config = {};
+    }
+    const trim = uischema.options && uischema.options.trim;
+    const formattedNumber = props.toFormatted(props.data);
 
-  const onChange = (ev: any) => {
-    const validStringNumber = props.fromFormatted(ev.currentTarget.value);
-    handleChange(path, validStringNumber);
-  };
+    const onChange = (ev: any) => {
+      const validStringNumber = props.fromFormatted(ev.currentTarget.value);
+      handleChange(path, validStringNumber);
+    };
 
-  return (
-    <Input
-      type='text'
-      value={formattedNumber}
-      onChange={onChange}
-      className={className}
-      id={id}
-      disabled={!enabled}
-      autoFocus={uischema.options && uischema.options.focus}
-      multiline={uischema.options && uischema.options.multi}
-      fullWidth={!trim || maxLength === undefined}
-      inputProps={config}
-      error={!isValid}
-    />
-  );
-};
+    return (
+      <Input
+        type='text'
+        value={formattedNumber}
+        onChange={onChange}
+        className={className}
+        id={id}
+        disabled={!enabled}
+        autoFocus={uischema.options && uischema.options.focus}
+        multiline={uischema.options && uischema.options.multi}
+        fullWidth={!trim || maxLength === undefined}
+        inputProps={config}
+        error={!isValid}
+      />
+    );
+  },
+  areEqual
+);

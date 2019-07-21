@@ -36,10 +36,10 @@ interface MuiInputTextStatus {
 }
 
 interface MuiTextInputProps {
-  muiInputProps? : React.HTMLAttributes<HTMLInputElement>
+  muiInputProps?: React.HTMLAttributes<HTMLInputElement>;
 }
 
-export class MuiInputText extends React.Component<
+export class MuiInputText extends React.PureComponent<
   CellProps & WithClassname & MuiTextInputProps,
   MuiInputTextStatus
 > {

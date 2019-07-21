@@ -23,25 +23,23 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import {
-    CellProps,
-    WithClassname
-} from '@jsonforms/core';
+import { CellProps, WithClassname } from '@jsonforms/core';
 import Input from '@material-ui/core/Input';
+import { areEqual } from '@jsonforms/react';
 
-export const MuiInputTime = (props: CellProps & WithClassname) => {
-    const { data, className, id, enabled, uischema, path, handleChange } = props;
+export const MuiInputTime = React.memo((props: CellProps & WithClassname) => {
+  const { data, className, id, enabled, uischema, path, handleChange } = props;
 
-    return (
-        <Input
-            type='time'
-            value={data || ''}
-            onChange={ev => handleChange(path, ev.target.value)}
-            className={className}
-            id={id}
-            disabled={!enabled}
-            autoFocus={uischema.options && uischema.options.focus}
-            fullWidth={true}
-        />
-    );
-};
+  return (
+    <Input
+      type='time'
+      value={data || ''}
+      onChange={ev => handleChange(path, ev.target.value)}
+      className={className}
+      id={id}
+      disabled={!enabled}
+      autoFocus={uischema.options && uischema.options.focus}
+      fullWidth={true}
+    />
+  );
+}, areEqual);
