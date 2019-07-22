@@ -26,7 +26,7 @@ import test from 'ava';
 import AJV from 'ajv';
 import RefParser from 'json-schema-ref-parser';
 import { coreReducer } from '../../src/reducers';
-import { init } from '../../src/actions';
+import { init, updateErrors } from '../../src/actions';
 import { JsonSchema } from '../../src/models/jsonSchema';
 import {
   errorAt,
@@ -386,6 +386,51 @@ test('core reducer - previous state - init with empty options should not overwri
   );
   t.deepEqual(after.ajv, myAjv);
   t.deepEqual(after.refParserOptions, myOptions);
+});
+
+test('core reducer - updateErrors - should update errors with empty list', t => {
+  const before: JsonFormsCore = {
+    data: {},
+    schema: {},
+    uischema: undefined
+  };
+
+  const after = coreReducer(before, updateErrors([]));
+  t.deepEqual(after, { ...before, errors: [] });
+});
+
+test('core reducer - updateErrors - should update errors with error', t => {
+  const before: JsonFormsCore = {
+    data: {},
+    schema: {},
+    uischema: undefined,
+    errors: []
+  };
+
+  const error = {
+    dataPath: 'color',
+    keyword: 'enum',
+    message: 'should be equal to one of the allowed values',
+    params: {
+      allowedValues: ['Blue', 'Green']
+    },
+    schemaPath: '#/properties/color/enum'
+  };
+
+  const after = coreReducer(before, updateErrors([error]));
+  t.deepEqual(after, { ...before, errors: [error] });
+});
+
+test('core reducer - updateErrors - should update errors with undefined', t => {
+  const before: JsonFormsCore = {
+    data: {},
+    schema: {},
+    uischema: undefined,
+    errors: []
+  };
+
+  const after = coreReducer(before, updateErrors(undefined));
+  t.deepEqual(after, { ...before, errors: undefined });
 });
 
 test('errorAt filters enum', t => {

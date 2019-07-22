@@ -41,7 +41,9 @@ import {
   SetSchemaAction,
   SetUISchemaAction,
   UPDATE_DATA,
-  UpdateAction
+  UpdateAction,
+  UPDATE_ERRORS,
+  UpdateErrorsAction
 } from '../actions';
 import { createAjv } from '../util/validator';
 import { JsonSchema, UISchemaElement } from '..';
@@ -87,6 +89,7 @@ const initState: JsonFormsCore = {
 type ValidCoreActions =
   | InitAction
   | UpdateAction
+  | UpdateErrorsAction
   | SetAjvAction
   | SetSchemaAction
   | SetUISchemaAction;
@@ -221,6 +224,12 @@ export const coreReducer = (
           errors
         };
       }
+    }
+    case UPDATE_ERRORS: {
+      return {
+        ...state,
+        errors: action.errors
+      };
     }
     default:
       return state;

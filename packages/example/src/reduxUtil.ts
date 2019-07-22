@@ -32,6 +32,7 @@ import { ReactExampleDescription } from './util';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { AnyAction, Dispatch, Reducer } from 'redux';
+import { ErrorObject } from 'ajv';
 
 export interface ExampleStateProps {
   examples: ReactExampleDescription[];
@@ -42,11 +43,15 @@ export interface ExampleStateProps {
 export interface ExampleDispatchProps {
   changeExampleData(example: ReactExampleDescription): void;
   getComponent(example: ReactExampleDescription): React.Component;
+  onChange?(
+    example: ReactExampleDescription
+  ): (state: { data: any; errors?: ErrorObject[] }) => void;
 }
 
 export interface AppProps extends ExampleStateProps {
   changeExample(exampleName: string): void;
   getExtensionComponent(): React.Component;
+  onChange?(state: { data: any; errors?: ErrorObject[] }): AnyAction;
 }
 
 const mapStateToProps = (state: any) => {
@@ -65,7 +70,11 @@ const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => ({
     Actions.setConfig(example.config)(dispatch);
   },
   getComponent: (example: ReactExampleDescription) =>
-    example.customReactExtension ? example.customReactExtension(dispatch) : null
+    example.customReactExtension
+      ? example.customReactExtension(dispatch)
+      : null,
+  onChange: (example: ReactExampleDescription) =>
+    example.onChange ? example.onChange(dispatch) : undefined
 });
 const mergeProps = (
   stateProps: ExampleStateProps,
@@ -81,7 +90,8 @@ const mergeProps = (
         )
       ),
     getExtensionComponent: () =>
-      dispatchProps.getComponent(stateProps.selectedExample)
+      dispatchProps.getComponent(stateProps.selectedExample),
+    onChange: dispatchProps.onChange(stateProps.selectedExample)
   });
 };
 
