@@ -26,7 +26,7 @@ import test from 'ava';
 import AJV from 'ajv';
 import RefParser from 'json-schema-ref-parser';
 import { coreReducer } from '../../src/reducers';
-import { init } from '../../src/actions';
+import { init, update } from '../../src/actions';
 import { JsonSchema } from '../../src/models/jsonSchema';
 import {
   errorAt,
@@ -387,6 +387,184 @@ test('core reducer - previous state - init with empty options should not overwri
   t.deepEqual(after.ajv, myAjv);
   t.deepEqual(after.refParserOptions, myOptions);
 });
+
+test('core reducer - update - path is undefined state should remain same', t => {
+  const before: JsonFormsCore = {
+    data: {
+      foo: 'bar'
+    },
+    schema: {
+      type: 'object',
+      properties: {
+        foo: {
+          type: 'string',
+          const: 'bar'
+        }
+      }
+    },
+    uischema: {
+      type: 'Label'
+    }
+  };
+
+  const after = coreReducer(
+    before,
+    update(undefined, _ => {
+      return { foo: 'xyz' };
+    })
+  );
+
+  t.deepEqual(before, after);
+});
+
+test('core reducer - update - path is null state should remain same', t => {
+  const before: JsonFormsCore = {
+    data: {
+      foo: 'bar'
+    },
+    schema: {
+      type: 'object',
+      properties: {
+        foo: {
+          type: 'string',
+          const: 'bar'
+        }
+      }
+    },
+    uischema: {
+      type: 'Label'
+    }
+  };
+
+  const after = coreReducer(
+    before,
+    update(null, _ => {
+      return { foo: 'xyz' };
+    })
+  );
+
+  t.deepEqual(before, after);
+});
+
+test('core reducer - update - empty path should update root state', t => {
+  const schema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'string'
+      }
+    }
+  };
+
+  const before: JsonFormsCore = {
+    data: {
+      foo: 'bar'
+    },
+    errors: [],
+    schema,
+    uischema: {
+      type: 'Label'
+    },
+    validator: new AJV().compile(schema)
+  };
+
+  const after = coreReducer(
+    before,
+    update('', _ => {
+      return { foo: 'xyz' };
+    })
+  );
+
+  t.deepEqual(after, { ...before, data: { foo: 'xyz' } });
+});
+
+test('core reducer - update - providing a path should update data only belonging to path', t => {
+  const schema = {
+    type: 'object',
+    properties: {
+      animal: {
+        type: 'string'
+      },
+      color: {
+        type: 'string'
+      }
+    }
+  };
+
+  const before: JsonFormsCore = {
+    data: {
+      animal: 'Sloth',
+      color: 'Blue'
+    },
+    errors: [],
+    schema,
+    uischema: {
+      type: 'Label'
+    },
+    validator: new AJV().compile(schema)
+  };
+
+  const after = coreReducer(
+    before,
+    update('color', _ => {
+      return 'Green';
+    })
+  );
+
+  t.deepEqual(after, { ...before, data: { animal: 'Sloth', color: 'Green' } });
+});
+
+test('core reducer - update - should update errors', t => {
+  const schema = {
+    type: 'object',
+    properties: {
+      animal: {
+        type: 'string'
+      },
+      color: {
+        type: 'string',
+        enum: ['Blue', 'Green']
+      }
+    }
+  };
+
+  const before: JsonFormsCore = {
+    data: {
+      animal: 'Sloth',
+      color: 'Blue'
+    },
+    errors: [],
+    schema,
+    uischema: {
+      type: 'Label'
+    },
+    validator: new AJV().compile(schema)
+  };
+
+  const after = coreReducer(
+    before,
+    update('color', _ => {
+      return 'Yellow';
+    })
+  );
+
+  t.deepEqual(after, {
+    ...before,
+    data: { animal: 'Sloth', color: 'Yellow' },
+    errors: [
+      {
+        dataPath: 'color',
+        keyword: 'enum',
+        message: 'should be equal to one of the allowed values',
+        params: {
+          allowedValues: ['Blue', 'Green']
+        },
+        schemaPath: '#/properties/color/enum'
+      }
+    ]
+  });
+});
+
 
 test('errorAt filters enum', t => {
   const ajv = createAjv();
