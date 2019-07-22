@@ -41,6 +41,7 @@ import {
 } from '@jsonforms/core';
 import Enzyme from 'enzyme';
 import { mount, shallow } from 'enzyme';
+import { act } from 'react-dom/test-utils';
 import RefParser from 'json-schema-ref-parser';
 import { StatelessRenderer } from '../../src/Renderer';
 
@@ -49,6 +50,7 @@ import { JsonFormsDispatchRenderer, JsonFormsDispatch, JsonForms } from '../../s
 import {
   JsonFormsReduxContext,
   useJsonForms,
+  withJsonFormsControlProps,
   JsonFormsStateProvider
 } from '../../src/JsonFormsContext';
 
@@ -505,3 +507,97 @@ test('JsonForms should create a JsonFormsStateProvider with initState props', ()
 
   expect(jsonFormsStateProviderInitStateProp.renderers).toBe(renderers);
 });
+
+test('JsonForms should call onChange handler with new data', () => {
+  const onChangeHandler = jest.fn();
+  const TestInputRenderer = withJsonFormsControlProps(props => (
+    <input onChange={ev => props.handleChange('foo', ev.target.value)} />
+  ));
+
+  const renderers = [
+    {
+      tester: () => 10,
+      renderer: TestInputRenderer
+    }
+  ];
+  const wrapper = mount(
+    <JsonForms
+      data={fixture.data}
+      uischema={fixture.uischema}
+      schema={fixture.schema}
+      onChange={onChangeHandler}
+      renderers={renderers}
+    />
+  );
+
+  const event = {
+    target: {
+      value: 'Test Value'
+    }
+  } as React.ChangeEvent<HTMLInputElement>;
+  act(() => {
+    wrapper
+      .find('input')
+      .props()
+      .onChange(event);
+  })
+
+  const calls = onChangeHandler.mock.calls
+  const lastCallParameter = calls[calls.length - 1][0]
+  expect(lastCallParameter.data).toEqual({foo: 'Test Value'})
+  expect(lastCallParameter.errors).toEqual([])
+});
+
+test('JsonForms should call onChange handler with errors', () => {
+  const onChangeHandler = jest.fn();
+  const TestInputRenderer = withJsonFormsControlProps(props => (
+    <input onChange={ev => props.handleChange('foo', ev.target.value)} />
+  ));
+
+  const schema = {
+      type: 'object',
+      properties: {
+        foo: {
+          type: 'string',
+          minLength: 5
+        }
+      },
+      required: ["foo"],
+    }
+
+  const renderers = [
+    {
+      tester: () => 10,
+      renderer: TestInputRenderer
+    }
+  ];
+  const wrapper = mount(
+    <JsonForms
+      data={fixture.data}
+      uischema={fixture.uischema}
+      schema={schema}
+      onChange={onChangeHandler}
+      renderers={renderers}
+    />
+  );
+
+  const event = {
+    target: {
+      value: "xyz"
+    }
+  } as React.ChangeEvent<HTMLInputElement>;
+
+  act(() => {
+    wrapper
+      .find('input')
+      .props()
+      .onChange(event);
+  })
+
+
+  const calls = onChangeHandler.mock.calls
+  const lastCallParameter = calls[calls.length - 1][0]
+  expect(lastCallParameter.data).toEqual({foo: "xyz"})
+  expect(lastCallParameter.errors.length).toEqual(1)
+  expect(lastCallParameter.errors[0].keyword).toEqual("minLength")
+})
