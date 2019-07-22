@@ -68,7 +68,7 @@ class App extends Component<AppProps> {
           </div>
           <div className='demoform'>
             {this.props.getExtensionComponent()}
-            <JsonFormsDispatch />
+            <JsonFormsDispatch onChange={this.props.onChange} />
           </div>
         </div>
       </JsonFormsReduxContext>
