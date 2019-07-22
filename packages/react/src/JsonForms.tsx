@@ -24,7 +24,7 @@
 */
 import isEqual from 'lodash/isEqual';
 import maxBy from 'lodash/maxBy';
-import React, { useEffect } from 'react';
+import React, { useLayoutEffect } from 'react';
 import AJV from 'ajv';
 import RefParser from 'json-schema-ref-parser';
 import { UnknownRenderer } from './UnknownRenderer';
@@ -165,7 +165,7 @@ export const JsonFormsDispatch = (props: OwnPropsOfJsonFormsRenderer & JsonForms
     const ctx = useJsonForms();
     const { refResolver } = ctxToJsonFormsDispatchProps(ctx, props);
     const {data, errors}  = ctx.core
-    useEffect(() => {
+    useLayoutEffect(() => {
       props.onChange && props.onChange({ data, errors });
     }, [data, errors]);
 

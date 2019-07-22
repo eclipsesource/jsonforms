@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { Actions, getData } from '@jsonforms/core';
+import { Actions, getData, JsonFormsCore } from '@jsonforms/core';
 import {
   CHANGE_EXAMPLE,
   changeExample,
@@ -42,11 +42,15 @@ export interface ExampleStateProps {
 export interface ExampleDispatchProps {
   changeExampleData(example: ReactExampleDescription): void;
   getComponent(example: ReactExampleDescription): React.Component;
+  onChange?(
+    example: ReactExampleDescription
+  ): (state: Pick<JsonFormsCore, 'data' | 'errors'>) => void;
 }
 
 export interface AppProps extends ExampleStateProps {
   changeExample(exampleName: string): void;
   getExtensionComponent(): React.Component;
+  onChange?(state: Pick<JsonFormsCore, 'data' | 'errors'>): AnyAction;
 }
 
 const mapStateToProps = (state: any) => {
@@ -65,7 +69,11 @@ const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => ({
     Actions.setConfig(example.config)(dispatch);
   },
   getComponent: (example: ReactExampleDescription) =>
-    example.customReactExtension ? example.customReactExtension(dispatch) : null
+    example.customReactExtension
+      ? example.customReactExtension(dispatch)
+      : null,
+  onChange: (example: ReactExampleDescription) =>
+    example.onChange ? example.onChange(dispatch) : undefined
 });
 const mergeProps = (
   stateProps: ExampleStateProps,
@@ -81,7 +89,8 @@ const mergeProps = (
         )
       ),
     getExtensionComponent: () =>
-      dispatchProps.getComponent(stateProps.selectedExample)
+      dispatchProps.getComponent(stateProps.selectedExample),
+    onChange: dispatchProps.onChange(stateProps.selectedExample)
   });
 };
 
