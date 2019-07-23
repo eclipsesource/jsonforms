@@ -26,6 +26,7 @@ import get from 'lodash/get';
 import { ControlElement, UISchemaElement } from '../models/uischema';
 import union from 'lodash/union';
 import find from 'lodash/find';
+import cloneDeep from 'lodash/cloneDeep';
 import RefParser from 'json-schema-ref-parser';
 import {
   findUISchema,
@@ -703,7 +704,10 @@ export const mapStateToJsonFormsRendererProps = (
     rootSchema: getSchema(state),
     uischema: uischema,
     refResolver: (schema: any) =>
-      RefParser.dereference(schema, getRefParserOptions(state))
+      RefParser.dereference(cloneDeep(schema), {
+        ...getRefParserOptions(state),
+        dereference: { circular: 'ignore' }
+      })
   };
 };
 
@@ -757,14 +761,18 @@ const mapStateToCombinatorRendererProps = (
       !errors.find(e => structuralKeywords.indexOf(e.keyword) !== -1)
     );
   };
-  let indexOfFittingSchema: number;
-  for (let i = 0; i < _schema[keyword].length; i++) {
-    const valFn = ajv.compile(_schema[keyword][i]);
-    valFn(data);
-    if (dataIsValid(valFn.errors)) {
-      indexOfFittingSchema = i;
-      break;
+  let indexOfFittingSchema: number = 0;
+  try {
+    for (let i = 0; i < _schema[keyword].length; i++) {
+      const valFn = ajv.compile(_schema[keyword][i]);
+      valFn(data);
+      if (dataIsValid(valFn.errors)) {
+        indexOfFittingSchema = i;
+        break;
+      }
     }
+  } catch (error) {
+    console.log(error);
   }
 
   return {
