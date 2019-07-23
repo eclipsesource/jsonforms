@@ -45,10 +45,15 @@ import RefParser from 'json-schema-ref-parser';
 import { StatelessRenderer } from '../../src/Renderer';
 
 import Adapter from 'enzyme-adapter-react-16';
-import { JsonFormsDispatchRenderer, JsonFormsDispatch, JsonForms } from '../../src/JsonForms';
+import {
+  JsonFormsDispatchRenderer,
+  JsonFormsDispatch,
+  JsonForms
+} from '../../src/JsonForms';
 import {
   JsonFormsReduxContext,
   useJsonForms,
+  withJsonFormsControlProps,
   JsonFormsStateProvider
 } from '../../src/JsonFormsContext';
 
@@ -242,7 +247,7 @@ test('ids should be unique within the same form', () => {
       <JsonFormsReduxContext>
         <JsonFormsDispatch uischema={uischema2} schema={fixture.schema} />
       </JsonFormsReduxContext>
-    </Provider>,
+    </Provider>
   );
 
   expect(ids.indexOf('#/properties/foo') > -1).toBeTruthy();
@@ -504,4 +509,84 @@ test('JsonForms should create a JsonFormsStateProvider with initState props', ()
   );
 
   expect(jsonFormsStateProviderInitStateProp.renderers).toBe(renderers);
+});
+
+test('JsonForms should call onChange handler with new data', () => {
+  const onChangeHandler = jest.fn();
+  const TestInputRenderer = withJsonFormsControlProps(props => (
+    <input onChange={ev => props.handleChange('foo', ev.target.value)} />
+  ));
+
+  const renderers = [
+    {
+      tester: () => 10,
+      renderer: TestInputRenderer
+    }
+  ];
+  const wrapper = mount(
+    <JsonForms
+      data={fixture.data}
+      uischema={fixture.uischema}
+      schema={fixture.schema}
+      onChange={onChangeHandler}
+      renderers={renderers}
+    />
+  );
+
+  wrapper.find('input').simulate('change', {
+    target: {
+      value: 'Test Value'
+    }
+  });
+
+  const calls = onChangeHandler.mock.calls;
+  const lastCallParameter = calls[calls.length - 1][0];
+  expect(lastCallParameter.data).toEqual({ foo: 'Test Value' });
+  expect(lastCallParameter.errors).toEqual([]);
+});
+
+test('JsonForms should call onChange handler with errors', () => {
+  const onChangeHandler = jest.fn();
+  const TestInputRenderer = withJsonFormsControlProps(props => (
+    <input onChange={ev => props.handleChange('foo', ev.target.value)} />
+  ));
+
+  const schema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'string',
+        minLength: 5
+      }
+    },
+    required: ['foo']
+  };
+
+  const renderers = [
+    {
+      tester: () => 10,
+      renderer: TestInputRenderer
+    }
+  ];
+  const wrapper = mount(
+    <JsonForms
+      data={fixture.data}
+      uischema={fixture.uischema}
+      schema={schema}
+      onChange={onChangeHandler}
+      renderers={renderers}
+    />
+  );
+
+  wrapper.find('input').simulate('change', {
+    target: {
+      value: 'xyz'
+    }
+  });
+
+  const calls = onChangeHandler.mock.calls;
+  const lastCallParameter = calls[calls.length - 1][0];
+  expect(lastCallParameter.data).toEqual({ foo: 'xyz' });
+  expect(lastCallParameter.errors.length).toEqual(1);
+  expect(lastCallParameter.errors[0].keyword).toEqual('minLength');
 });
