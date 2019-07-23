@@ -565,7 +565,6 @@ test('core reducer - update - should update errors', t => {
   });
 });
 
-
 test('errorAt filters enum', t => {
   const ajv = createAjv();
   const schema: JsonSchema = {
