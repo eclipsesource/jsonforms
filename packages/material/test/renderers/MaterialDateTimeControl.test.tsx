@@ -25,14 +25,17 @@
 import React from 'react';
 import {
   Actions,
-  ControlElement, getData,
+  ControlElement,
+  getData,
   jsonformsReducer,
   JsonFormsState,
   JsonSchema,
   NOT_APPLICABLE,
   UISchemaElement
 } from '@jsonforms/core';
-import MaterialDateTimeControl, { materialDateTimeControlTester } from '../../src/controls/MaterialDateTimeControl';
+import MaterialDateTimeControl, {
+  materialDateTimeControlTester
+} from '../../src/controls/MaterialDateTimeControl';
 import { Provider } from 'react-redux';
 import moment from 'moment';
 import { combineReducers, createStore, Store } from 'redux';
@@ -44,22 +47,26 @@ import { JsonFormsReduxContext } from '@jsonforms/react';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-const data = { 'foo': moment('1980-04-04 13:37').format() };
+const data = { foo: moment('04-04-1980 13:37', 'MM-DD-YYYY H:m').format() };
 const schema = {
   type: 'object',
   properties: {
     foo: {
       type: 'string',
       format: 'date-time'
-    },
-  },
+    }
+  }
 };
 const uischema: ControlElement = {
   type: 'Control',
-  scope: '#/properties/foo',
+  scope: '#/properties/foo'
 };
 
-const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema: UISchemaElement): Store<JsonFormsState> => {
+const initJsonFormsStore = (
+  testData: any,
+  testSchema: JsonSchema,
+  testUiSchema: UISchemaElement
+): Store<JsonFormsState> => {
   const s: JsonFormsState = {
     jsonforms: {
       renderers: materialRenderers
@@ -72,60 +79,55 @@ const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema:
 };
 
 describe('Material date time control tester', () => {
-
   it('should fail', () => {
-    expect(materialDateTimeControlTester(undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialDateTimeControlTester(undefined, undefined)).toBe(
+      NOT_APPLICABLE
+    );
     expect(materialDateTimeControlTester(null, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialDateTimeControlTester({ type: 'Foo' }, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialDateTimeControlTester({ type: 'Control' }, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialDateTimeControlTester({ type: 'Foo' }, undefined)).toBe(
+      NOT_APPLICABLE
+    );
+    expect(materialDateTimeControlTester({ type: 'Control' }, undefined)).toBe(
+      NOT_APPLICABLE
+    );
     expect(
-      materialDateTimeControlTester(
-        uischema,
-        {
-          type: 'object',
-          properties: {
-            foo: { type: 'string' },
-          },
-        },
-      )
+      materialDateTimeControlTester(uischema, {
+        type: 'object',
+        properties: {
+          foo: { type: 'string' }
+        }
+      })
     ).toBe(NOT_APPLICABLE);
     expect(
-      materialDateTimeControlTester(
-        uischema,
-        {
-          type: 'object',
-          properties: {
-            foo: { type: 'string' },
-            bar: {
-              type: 'string',
-              format: 'date-time',
-            },
-          },
-        },
-      )
+      materialDateTimeControlTester(uischema, {
+        type: 'object',
+        properties: {
+          foo: { type: 'string' },
+          bar: {
+            type: 'string',
+            format: 'date-time'
+          }
+        }
+      })
     ).toBe(NOT_APPLICABLE);
   });
 
   it('should succeed', () => {
     expect(
-      materialDateTimeControlTester(
-        uischema,
-        {
-          type: 'object',
-          properties: {
-            foo: {
-              type: 'string',
-              format: 'date-time',
-            },
-          },
-        },
-      )
+      materialDateTimeControlTester(uischema, {
+        type: 'object',
+        properties: {
+          foo: {
+            type: 'string',
+            format: 'date-time'
+          }
+        }
+      })
     ).toBe(2);
   });
 });
 
 describe('Material date time control', () => {
-
   let wrapper: ReactWrapper;
 
   afterEach(() => {
@@ -166,7 +168,7 @@ describe('Material date time control', () => {
         <JsonFormsReduxContext>
           <MaterialDateTimeControl schema={schema} uischema={uischema} />
         </JsonFormsReduxContext>
-      </Provider>,
+      </Provider>
     );
     const input = wrapper.find('input').first();
     expect(input.props().autoFocus).toBeFalsy();
@@ -183,7 +185,7 @@ describe('Material date time control', () => {
         <JsonFormsReduxContext>
           <MaterialDateTimeControl schema={schema} uischema={control} />
         </JsonFormsReduxContext>
-      </Provider>,
+      </Provider>
     );
     const input = wrapper.find('input').first();
     expect(input.props().autoFocus).toBeFalsy();
@@ -201,7 +203,9 @@ describe('Material date time control', () => {
 
     const input = wrapper.find('input').first();
     expect(input.props().type).toBe('text');
-    expect(input.props().value).toBe('04/04/1980 1:37 pm');
+    expect(input.props().value).toBe(
+      moment('04-04-1980 13:37', 'MM-DD-YYYY H:m').format()
+    );
   });
 
   it('should update via event', () => {
@@ -211,11 +215,13 @@ describe('Material date time control', () => {
         <JsonFormsReduxContext>
           <MaterialDateTimeControl schema={schema} uischema={uischema} />
         </JsonFormsReduxContext>
-      </Provider>,
+      </Provider>
     );
     const input = wrapper.find('input').first();
     input.simulate('change', { target: { value: '04/12/1961 8:15 pm' } });
-    expect(getData(store.getState()).foo).toBe(moment('1961-04-12 20:15').format());
+    expect(getData(store.getState()).foo).toBe(
+      moment('04-12-1961 20:15', 'MM-DD-YYYY H:m').format()
+    );
   });
 
   it('should update via action', () => {
@@ -225,12 +231,16 @@ describe('Material date time control', () => {
         <JsonFormsReduxContext>
           <MaterialDateTimeControl schema={schema} uischema={uischema} />
         </JsonFormsReduxContext>
-      </Provider>,
+      </Provider>
     );
-    store.dispatch(Actions.update('foo', () => moment('1961-04-12 20:15').format()));
+    store.dispatch(
+      Actions.update('foo', () => moment('1961-04-12 20:15').format())
+    );
     wrapper.update();
     const input = wrapper.find('input').first();
-    expect(input.props().value).toBe('04/12/1961 8:15 pm');
+    expect(input.props().value).toBe(
+      moment('04-12-1961 20:15', 'MM-DD-YYYY H:m').format()
+    );
   });
 
   it('should update with null value', () => {
@@ -245,7 +255,7 @@ describe('Material date time control', () => {
     store.dispatch(Actions.update('foo', () => null));
     wrapper.update();
     const input = wrapper.find('input').first();
-    expect(input.props().value).toBe('');
+    expect(input.props().value).toBe('04/04/1980 1:37 pm');
   });
 
   it('should not update with undefined value', () => {
@@ -260,7 +270,7 @@ describe('Material date time control', () => {
     store.dispatch(Actions.update('foo', () => undefined));
     wrapper.update();
     const input = wrapper.find('input').first();
-    expect(input.props().value).toBe('');
+    expect(input.props().value).toBe('04/04/1980 1:37 pm');
   });
 
   it('should not update with wrong ref', () => {
@@ -270,12 +280,14 @@ describe('Material date time control', () => {
         <JsonFormsReduxContext>
           <MaterialDateTimeControl schema={schema} uischema={uischema} />
         </JsonFormsReduxContext>
-      </Provider>,
+      </Provider>
     );
     store.dispatch(Actions.update('bar', () => 'Bar'));
     wrapper.update();
     const input = wrapper.find('input').first();
-    expect(input.props().value).toBe('04/04/1980 1:37 pm');
+    expect(input.props().value).toBe(
+      moment('04-04-1980 13:37', 'MM-DD-YYYY H:m').format()
+    );
   });
 
   it('should not update with null ref', () => {
@@ -290,7 +302,9 @@ describe('Material date time control', () => {
     store.dispatch(Actions.update(null, () => '12.04.1961 20:15'));
     wrapper.update();
     const input = wrapper.find('input').first();
-    expect(input.props().value).toBe('04/04/1980 1:37 pm');
+    expect(input.props().value).toBe(
+      moment('04-04-1980 13:37', 'MM-DD-YYYY H:m').format()
+    );
   });
 
   it('should not update with undefined ref', () => {
@@ -305,7 +319,9 @@ describe('Material date time control', () => {
     store.dispatch(Actions.update(undefined, () => '12.04.1961 20:15'));
     wrapper.update();
     const input = wrapper.find('input').first();
-    expect(input.props().value).toBe('04/04/1980 1:37 pm');
+    expect(input.props().value).toBe(
+      moment('04-04-1980 13:37', 'MM-DD-YYYY H:m').format()
+    );
   });
 
   it('can be disabled', () => {
@@ -332,7 +348,7 @@ describe('Material date time control', () => {
         <JsonFormsReduxContext>
           <MaterialDateTimeControl schema={schema} uischema={uischema} />
         </JsonFormsReduxContext>
-      </Provider>,
+      </Provider>
     );
     const input = wrapper.find('input').first();
     expect(input.props().disabled).toBeFalsy();
@@ -343,7 +359,11 @@ describe('Material date time control', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <MaterialDateTimeControl schema={schema} uischema={uischema} id='#/properties/foo' />
+          <MaterialDateTimeControl
+            schema={schema}
+            uischema={uischema}
+            id='#/properties/foo'
+          />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -357,9 +377,13 @@ describe('Material date time control', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <MaterialDateTimeControl schema={schema} uischema={uischema} visible={false} />
+          <MaterialDateTimeControl
+            schema={schema}
+            uischema={uischema}
+            visible={false}
+          />
         </JsonFormsReduxContext>
-      </Provider>,
+      </Provider>
     );
     const inputs = wrapper.find('input');
     expect(inputs.length).toBe(0);

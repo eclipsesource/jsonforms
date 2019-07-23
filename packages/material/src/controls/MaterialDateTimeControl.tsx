@@ -31,20 +31,24 @@ import {
   isDateTimeControl,
   isPlainLabel,
   RankedTester,
-  rankWith,
+  rankWith
 } from '@jsonforms/core';
 import { Control, withJsonFormsControlProps } from '@jsonforms/react';
 import moment from 'moment';
 import { Hidden } from '@material-ui/core';
 import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
-import DateRangeIcon from '@material-ui/icons/DateRange';
 import EventIcon from '@material-ui/icons/Event';
-import AccessTimeIcon from '@material-ui/icons/AccessTime';
-import { DateTimePicker, MuiPickersUtilsProvider } from 'material-ui-pickers';
+import {
+  KeyboardDateTimePicker,
+  MuiPickersUtilsProvider
+} from '@material-ui/pickers';
 import MomentUtils from '@date-io/moment';
 
-export class MaterialDateTimeControl extends Control<ControlProps, ControlState> {
+export class MaterialDateTimeControl extends Control<
+  ControlProps,
+  ControlState
+> {
   render() {
     const {
       id,
@@ -64,37 +68,35 @@ export class MaterialDateTimeControl extends Control<ControlProps, ControlState>
     const isValid = errors.length === 0;
     const trim = mergedConfig.trim;
 
-    const getValue = (event: React.FormEvent<HTMLInputElement>) =>
-      (event.target as HTMLInputElement).value;
     const inputProps = {};
 
     return (
       <Hidden xsUp={!visible}>
         <MuiPickersUtilsProvider utils={MomentUtils}>
-          <DateTimePicker
-            keyboard
+          <KeyboardDateTimePicker
             id={id + '-input'}
-            label={computeLabel(isPlainLabel(label) ? label : label.default, required)}
+            label={computeLabel(
+              isPlainLabel(label) ? label : label.default,
+              required
+            )}
             error={!isValid}
             fullWidth={!trim}
             onFocus={this.onFocus}
             onBlur={this.onBlur}
             helperText={!isValid ? errors : description}
-            InputLabelProps={{ shrink: true, }}
+            InputLabelProps={{ shrink: true }}
+            inputValue={data || null}
             value={data || null}
-            onChange={datetime => handleChange(path, datetime ? moment(datetime).format() : '')}
-            onInputChange={ev =>
-              handleChange(path, getValue(ev) ? moment(getValue(ev)).format() : '')}
+            onChange={datetime =>
+              handleChange(path, datetime ? moment(datetime).format() : '')
+            }
             format='MM/DD/YYYY h:mm a'
             clearable={true}
             disabled={!enabled}
             autoFocus={uischema.options && uischema.options.focus}
             leftArrowIcon={<KeyboardArrowLeftIcon />}
             rightArrowIcon={<KeyboardArrowRightIcon />}
-            dateRangeIcon={<DateRangeIcon />}
             keyboardIcon={<EventIcon />}
-            timeIcon={<AccessTimeIcon />}
-            onClear={() => handleChange(path, '')}
             InputProps={inputProps}
           />
         </MuiPickersUtilsProvider>
@@ -103,6 +105,9 @@ export class MaterialDateTimeControl extends Control<ControlProps, ControlState>
   }
 }
 
-export const materialDateTimeControlTester: RankedTester = rankWith(2, isDateTimeControl);
+export const materialDateTimeControlTester: RankedTester = rankWith(
+  2,
+  isDateTimeControl
+);
 
 export default withJsonFormsControlProps(MaterialDateTimeControl);
