@@ -41,12 +41,15 @@ import {
 } from '@jsonforms/core';
 import Enzyme from 'enzyme';
 import { mount, shallow } from 'enzyme';
-import { act } from 'react-dom/test-utils';
 import RefParser from 'json-schema-ref-parser';
 import { StatelessRenderer } from '../../src/Renderer';
 
 import Adapter from 'enzyme-adapter-react-16';
-import { JsonFormsDispatchRenderer, JsonFormsDispatch, JsonForms } from '../../src/JsonForms';
+import {
+  JsonFormsDispatchRenderer,
+  JsonFormsDispatch,
+  JsonForms
+} from '../../src/JsonForms';
 import {
   JsonFormsReduxContext,
   useJsonForms,
@@ -244,7 +247,7 @@ test('ids should be unique within the same form', () => {
       <JsonFormsReduxContext>
         <JsonFormsDispatch uischema={uischema2} schema={fixture.schema} />
       </JsonFormsReduxContext>
-    </Provider>,
+    </Provider>
   );
 
   expect(ids.indexOf('#/properties/foo') > -1).toBeTruthy();
@@ -530,22 +533,16 @@ test('JsonForms should call onChange handler with new data', () => {
     />
   );
 
-  const event = {
+  wrapper.find('input').simulate('change', {
     target: {
       value: 'Test Value'
     }
-  } as React.ChangeEvent<HTMLInputElement>;
-  act(() => {
-    wrapper
-      .find('input')
-      .props()
-      .onChange(event);
-  })
+  });
 
-  const calls = onChangeHandler.mock.calls
-  const lastCallParameter = calls[calls.length - 1][0]
-  expect(lastCallParameter.data).toEqual({foo: 'Test Value'})
-  expect(lastCallParameter.errors).toEqual([])
+  const calls = onChangeHandler.mock.calls;
+  const lastCallParameter = calls[calls.length - 1][0];
+  expect(lastCallParameter.data).toEqual({ foo: 'Test Value' });
+  expect(lastCallParameter.errors).toEqual([]);
 });
 
 test('JsonForms should call onChange handler with errors', () => {
@@ -555,15 +552,15 @@ test('JsonForms should call onChange handler with errors', () => {
   ));
 
   const schema = {
-      type: 'object',
-      properties: {
-        foo: {
-          type: 'string',
-          minLength: 5
-        }
-      },
-      required: ["foo"],
-    }
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'string',
+        minLength: 5
+      }
+    },
+    required: ['foo']
+  };
 
   const renderers = [
     {
@@ -581,23 +578,15 @@ test('JsonForms should call onChange handler with errors', () => {
     />
   );
 
-  const event = {
+  wrapper.find('input').simulate('change', {
     target: {
-      value: "xyz"
+      value: 'xyz'
     }
-  } as React.ChangeEvent<HTMLInputElement>;
+  });
 
-  act(() => {
-    wrapper
-      .find('input')
-      .props()
-      .onChange(event);
-  })
-
-
-  const calls = onChangeHandler.mock.calls
-  const lastCallParameter = calls[calls.length - 1][0]
-  expect(lastCallParameter.data).toEqual({foo: "xyz"})
-  expect(lastCallParameter.errors.length).toEqual(1)
-  expect(lastCallParameter.errors[0].keyword).toEqual("minLength")
-})
+  const calls = onChangeHandler.mock.calls;
+  const lastCallParameter = calls[calls.length - 1][0];
+  expect(lastCallParameter.data).toEqual({ foo: 'xyz' });
+  expect(lastCallParameter.errors.length).toEqual(1);
+  expect(lastCallParameter.errors[0].keyword).toEqual('minLength');
+});

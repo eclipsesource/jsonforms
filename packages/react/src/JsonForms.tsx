@@ -38,9 +38,9 @@ import {
     OwnPropsOfJsonFormsRenderer,
     removeId,
     UISchemaElement,
+    JsonFormsCore
 } from '@jsonforms/core';
 import { ctxToJsonFormsDispatchProps, JsonFormsStateProvider, useJsonForms } from './JsonFormsContext';
-import { ErrorObject } from 'ajv';
 
 interface JsonFormsRendererState {
     id: string;
@@ -50,7 +50,7 @@ interface JsonFormsRendererState {
 }
 
 interface JsonFormsReactProps {
-  onChange?(state: {data: any,   errors?: ErrorObject[]}): void;
+  onChange?(state: Pick<JsonFormsCore, 'data' | 'errors'>): void;
 }
 
 const hasRefs = (schema: JsonSchema): boolean => {
@@ -164,9 +164,10 @@ export class JsonFormsDispatchRenderer extends ResolvedJsonFormsDispatchRenderer
 export const JsonFormsDispatch = (props: OwnPropsOfJsonFormsRenderer & JsonFormsReactProps) => {
     const ctx = useJsonForms();
     const { refResolver } = ctxToJsonFormsDispatchProps(ctx, props);
+    const {data, errors}  = ctx.core
     useEffect(() => {
-      props.onChange && props.onChange({data: ctx.core.data, errors: ctx.core.errors})
-    }, [ctx.core.data, ctx.core.errors])
+      props.onChange && props.onChange({ data, errors });
+    }, [data, errors]);
 
     return (
         <JsonFormsDispatchRenderer
