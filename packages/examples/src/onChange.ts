@@ -23,8 +23,7 @@
   THE SOFTWARE.
 */
 import { registerExamples } from './register';
-import { UISchemaElement, updateErrors } from '@jsonforms/core';
-import { ErrorObject } from 'ajv';
+import { UISchemaElement, updateErrors, JsonFormsCore } from '@jsonforms/core';
 import { AnyAction, Dispatch } from 'redux';
 
 let touchedProperties: any = {
@@ -35,10 +34,7 @@ let touchedProperties: any = {
 export const onChange = (dispatch: Dispatch<AnyAction>) => ({
   data,
   errors
-}: {
-  data: any;
-  errors: ErrorObject[];
-}) => {
+}: Pick<JsonFormsCore, 'data' | 'errors'>) => {
   Object.keys(data).forEach(key => (touchedProperties[key] = true));
 
   const newErrors = errors.filter(error => {

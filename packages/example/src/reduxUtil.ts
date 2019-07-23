@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { Actions, getData } from '@jsonforms/core';
+import { Actions, getData, JsonFormsCore } from '@jsonforms/core';
 import {
   CHANGE_EXAMPLE,
   changeExample,
@@ -32,7 +32,6 @@ import { ReactExampleDescription } from './util';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { AnyAction, Dispatch, Reducer } from 'redux';
-import { ErrorObject } from 'ajv';
 
 export interface ExampleStateProps {
   examples: ReactExampleDescription[];
@@ -45,13 +44,13 @@ export interface ExampleDispatchProps {
   getComponent(example: ReactExampleDescription): React.Component;
   onChange?(
     example: ReactExampleDescription
-  ): (state: { data: any; errors?: ErrorObject[] }) => void;
+  ): (state: Pick<JsonFormsCore, 'data' | 'errors'>) => void;
 }
 
 export interface AppProps extends ExampleStateProps {
   changeExample(exampleName: string): void;
   getExtensionComponent(): React.Component;
-  onChange?(state: { data: any; errors?: ErrorObject[] }): AnyAction;
+  onChange?(state: Pick<JsonFormsCore, 'data' | 'errors'>): AnyAction;
 }
 
 const mapStateToProps = (state: any) => {

@@ -37,14 +37,14 @@ import {
   setLocale,
   setSchema,
   setUISchema,
-  UISchemaElement
+  UISchemaElement,
+  JsonFormsCore
 } from '@jsonforms/core';
 import { AnyAction, Dispatch } from 'redux';
-import { ErrorObject } from 'ajv';
 
 export interface ReactExampleDescription extends ExampleDescription {
   customReactExtension?(dispatch: Dispatch<AnyAction>): React.Component;
-  onChange?:(dispatch: Dispatch<AnyAction>) => (state: {data: any,   errors?: ErrorObject[]}) => AnyAction;
+  onChange?:(dispatch: Dispatch<AnyAction>) => (state: Pick<JsonFormsCore, 'data' | 'errors'>) => AnyAction;
 }
 const registerRatingControl = (dispatch: Dispatch<AnyAction>) => {
   dispatch(Actions.registerCell(ratingControlTester, ConnectedRatingControl));
