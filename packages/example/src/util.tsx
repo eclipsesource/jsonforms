@@ -28,7 +28,8 @@ import {
   ExampleDescription,
   issue_1220 as Issue1220Example,
   nestedArray as NestedArrayExample,
-  onChange as OnChangeExample
+  onChange as OnChangeExample,
+  i18n
 } from '@jsonforms/examples';
 import ConnectedRatingControl, { ratingControlTester } from './RatingControl';
 import {
@@ -41,10 +42,13 @@ import {
   JsonFormsCore
 } from '@jsonforms/core';
 import { AnyAction, Dispatch } from 'redux';
+import { updateExampleExtensionState } from './reduxUtil';
+import { withJsonFormsContext, JsonFormsStateContext } from '@jsonforms/react';
+import { ErrorObject } from 'ajv'
 
 export interface ReactExampleDescription extends ExampleDescription {
   customReactExtension?(dispatch: Dispatch<AnyAction>): React.Component;
-  onChange?:(dispatch: Dispatch<AnyAction>) => (state: Pick<JsonFormsCore, 'data' | 'errors'>) => AnyAction;
+  onChange?:(dispatch: Dispatch<AnyAction>) => (extensionState: any) => (state: Pick<JsonFormsCore, 'data' | 'errors'>) => AnyAction;
 }
 const registerRatingControl = (dispatch: Dispatch<AnyAction>) => {
   dispatch(Actions.registerCell(ratingControlTester, ConnectedRatingControl));
@@ -55,13 +59,19 @@ const unregisterRatingControl = (dispatch: Dispatch<AnyAction>) => {
   );
 };
 
-export interface I18nExampleProps {
+export interface I18nExampleProps extends OwnPropsOfI18nExample {
+  data: any;
+  errors: ErrorObject[];
+}
+
+export interface OwnPropsOfI18nExample {
   schema: JsonSchema;
   uischema: UISchemaElement;
   dispatch: Dispatch<AnyAction>;
+  onChange: (dispatch: Dispatch<AnyAction>) => (extensionState: any) => (state: Pick<JsonFormsCore, 'data' | 'errors'>) => void;
 }
 
-class I18nExample extends React.Component<
+class I18nExampleRenderer extends React.Component<
   I18nExampleProps,
   {
     localizedSchemas: Map<string, JsonSchema>;
@@ -85,6 +95,8 @@ class I18nExample extends React.Component<
     _.set(deUISchema, 'elements.2.elements.1.label', 'Vegetarier');
     localizedUISchemas.set('de-DE', deUISchema);
     localizedUISchemas.set('en-US', uischema);
+    
+    props.dispatch(updateExampleExtensionState({locale: "en-US"}));
 
     this.state = {
       localizedSchemas,
@@ -93,11 +105,13 @@ class I18nExample extends React.Component<
   }
 
   changeLocale = (locale: string) => {
-    const { dispatch } = this.props;
+    const { dispatch, onChange, data, errors } = this.props;
     const { localizedSchemas, localizedUISchemas } = this.state;
     dispatch(setLocale(locale));
     dispatch(setSchema(localizedSchemas.get(locale)));
     dispatch(setUISchema(localizedUISchemas.get(locale)));
+    dispatch(updateExampleExtensionState({ locale }));
+    onChange(dispatch)({ locale })({data, errors});
   };
 
   render() {
@@ -109,6 +123,18 @@ class I18nExample extends React.Component<
     );
   }
 }
+
+const withContextToI18nProps =
+  (Component: React.ComponentType<I18nExampleProps>): React.ComponentType<OwnPropsOfI18nExample> =>
+    ({ ctx, props }: JsonFormsStateContext & I18nExampleProps) => {
+      const {data, errors} = ctx.core
+      return <Component {...props} data={data} errors={errors}/>
+
+    };
+
+const withI18nProps = (Component: React.ComponentType<I18nExampleProps>): React.ComponentType<OwnPropsOfI18nExample> => withJsonFormsContext(withContextToI18nProps(Component))
+
+const I18nExample = withI18nProps(I18nExampleRenderer)
 
 export const enhanceExample: (
   examples: ExampleDescription[]
@@ -173,8 +199,10 @@ export const enhanceExample: (
               schema={e.schema}
               uischema={e.uischema}
               dispatch={dispatch}
+              onChange={i18n.onChange}
             />
-          )
+          ),
+          onChange: i18n.onChange
         });
       case '1220':
         const issue_1220 = Object.assign({}, e, {

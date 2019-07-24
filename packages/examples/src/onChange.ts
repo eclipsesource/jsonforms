@@ -31,7 +31,7 @@ let touchedProperties: any = {
   description: false
 };
 
-export const onChange = (dispatch: Dispatch<AnyAction>) => ({
+export const onChange = (dispatch: Dispatch<AnyAction>) => (_: any) => ({
   data,
   errors
 }: Pick<JsonFormsCore, 'data' | 'errors'>) => {
