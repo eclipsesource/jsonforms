@@ -32,13 +32,13 @@ import {
   createId,
   findRefs,
   isControl,
+  JsonFormsCore,
   JsonFormsProps,
   JsonFormsRendererRegistryEntry,
   JsonSchema,
   OwnPropsOfJsonFormsRenderer,
   removeId,
   UISchemaElement
-    JsonFormsCore
 } from '@jsonforms/core';
 import {
   ctxToJsonFormsDispatchProps,
@@ -166,10 +166,11 @@ export class JsonFormsDispatchRenderer extends ResolvedJsonFormsDispatchRenderer
   }
 }
 
-export const JsonFormsDispatch = React.memo((props: OwnPropsOfJsonFormsRenderer & JsonFormsReactProps) => {
+export const JsonFormsDispatch = React.memo(
+  (props: OwnPropsOfJsonFormsRenderer & JsonFormsReactProps) => {
     const ctx = useJsonForms();
     const { refResolver } = ctxToJsonFormsDispatchProps(ctx, props);
-    const {data, errors}  = ctx.core
+    const { data, errors } = ctx.core;
     useLayoutEffect(() => {
       props.onChange && props.onChange({ data, errors });
     }, [data, errors]);
@@ -196,23 +197,33 @@ export interface JsonFormsInitStateProps {
   refParserOptions?: RefParser.Options;
 }
 
-export const JsonForms = (props: JsonFormsInitStateProps & JsonFormsReactProps) => {
-    const { ajv, data, schema, uischema, renderers, refParserOptions, onChange } = props;
-    return (
-        <JsonFormsStateProvider
-            initState={{
-                core: {
-                    ajv,
-                    data,
-                    refParserOptions,
-                    schema,
-                    uischema,
-                    errors: [] // TODO
-                },
-                renderers
-            }}
-        >
-            <JsonFormsDispatch onChange={onChange}/>
+export const JsonForms = (
+  props: JsonFormsInitStateProps & JsonFormsReactProps
+) => {
+  const {
+    ajv,
+    data,
+    schema,
+    uischema,
+    renderers,
+    refParserOptions,
+    onChange
+  } = props;
+  return (
+    <JsonFormsStateProvider
+      initState={{
+        core: {
+          ajv,
+          data,
+          refParserOptions,
+          schema,
+          uischema,
+          errors: [] // TODO
+        },
+        renderers
+      }}
+    >
+      <JsonFormsDispatch onChange={onChange} />
     </JsonFormsStateProvider>
   );
 };
