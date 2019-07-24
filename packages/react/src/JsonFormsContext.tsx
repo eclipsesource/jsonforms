@@ -65,7 +65,8 @@ import {
   StatePropsOfControlWithDetail,
   StatePropsOfMasterItem,
   update,
-  OwnPropsOfLayout
+  OwnPropsOfLayout,
+  OwnPropsOfRenderer
 } from '@jsonforms/core';
 import { connect } from 'react-redux';
 
@@ -333,7 +334,7 @@ const withContextToEnumProps =
 
 // --
 
-type JsonFormsPropTypes = ControlProps | CombinatorProps | LayoutProps | CellProps | ArrayLayoutProps | StatePropsOfControlWithDetail;
+type JsonFormsPropTypes = ControlProps | CombinatorProps | LayoutProps | CellProps | ArrayLayoutProps | StatePropsOfControlWithDetail | OwnPropsOfRenderer;
 
 export const areEqual = (prevProps: JsonFormsPropTypes, nextProps: JsonFormsPropTypes) => {
   const prev = omit(prevProps, ['handleChange', 'renderers', 'cells', 'uischemas']);

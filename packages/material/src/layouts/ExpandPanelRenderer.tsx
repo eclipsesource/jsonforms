@@ -1,6 +1,7 @@
 import React, { Fragment, Dispatch, ReducerAction } from 'react';
 import { ComponentType } from 'enzyme';
 import {
+  areEqual,
   JsonFormsDispatch,
   JsonFormsStateContext,
   withJsonFormsContext
@@ -22,9 +23,6 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import IconButton from '@material-ui/core/IconButton';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import find from 'lodash/find';
-import omit from 'lodash/omit';
-import isEqual from 'lodash/isEqual';
-import get from 'lodash/get';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import { Grid } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -67,7 +65,7 @@ export interface DispatchPropsOfExpandPanel {
 
 export interface ExpandPanelProps
   extends StatePropsOfExpandPanel,
-  DispatchPropsOfExpandPanel { }
+    DispatchPropsOfExpandPanel {}
 
 const ExpandPanelRenderer = (props: ExpandPanelProps) => {
   const {
@@ -146,8 +144,8 @@ const ExpandPanelRenderer = (props: ExpandPanelProps) => {
                       </Grid>
                     </Fragment>
                   ) : (
-                      ''
-                    )}
+                    ''
+                  )}
                   <Grid item>
                     <IconButton
                       onClick={removeItems(path, [index])}
@@ -223,50 +221,50 @@ export const ctxDispatchToExpandPanelProps: (
  * @param ownProps any own props
  * @returns {StatePropsOfControl} state props for a control
  */
-export const withContextToExpandPanelProps =
-  (Component: ComponentType<ExpandPanelProps>): ComponentType<OwnPropsOfExpandPanel> =>
-    ({ ctx, props }: JsonFormsStateContext & ExpandPanelProps) => {
-      const dispatchProps = ctxDispatchToExpandPanelProps(ctx.dispatch);
-      const { schema, path, index, uischemas } = props;
-      const firstPrimitiveProp = schema.properties
-        ? find(Object.keys(schema.properties), propName => {
-          const prop = schema.properties[propName];
-          return (
-            prop.type === 'string' ||
-            prop.type === 'number' ||
-            prop.type === 'integer'
-          );
-        })
-        : undefined;
-      const childPath = composePaths(path, `${index}`);
-      const childData = Resolve.data(ctx.core.data, childPath);
-      const childLabel = firstPrimitiveProp ? childData[firstPrimitiveProp] : '';
+export const withContextToExpandPanelProps = (
+  Component: ComponentType<ExpandPanelProps>
+): ComponentType<OwnPropsOfExpandPanel> => ({
+  ctx,
+  props
+}: JsonFormsStateContext & ExpandPanelProps) => {
+  const dispatchProps = ctxDispatchToExpandPanelProps(ctx.dispatch);
+  const { schema, path, index, uischemas } = props;
+  const firstPrimitiveProp = schema.properties
+    ? find(Object.keys(schema.properties), propName => {
+        const prop = schema.properties[propName];
+        return (
+          prop.type === 'string' ||
+          prop.type === 'number' ||
+          prop.type === 'integer'
+        );
+      })
+    : undefined;
+  const childPath = composePaths(path, `${index}`);
+  const childData = Resolve.data(ctx.core.data, childPath);
+  const childLabel = firstPrimitiveProp ? childData[firstPrimitiveProp] : '';
 
-      return (
-        <Component
-          {...props}
-          {...dispatchProps}
-          childLabel={childLabel}
-          childPath={childPath}
-          uischemas={uischemas}
-        />
-      );
-    };
-
-export const areEqual = (prevProps: ExpandPanelProps, nextProps: ExpandPanelProps) => {
-  const prev = omit(prevProps, ['handleChange', 'renderers', 'cells', 'uischemas']);
-  const next = omit(nextProps, ['handleChange', 'renderers', 'cells', 'uischemas']);
-  return isEqual(prev, next)
-    && get(prevProps, 'renderers.length') === get(nextProps, 'renderers.length')
-    && get(prevProps, 'cells.length') === get(nextProps, 'cells.length')
-    && get(prevProps, 'uischemas.length') === get(nextProps, 'uischemas.length');
+  return (
+    <Component
+      {...props}
+      {...dispatchProps}
+      childLabel={childLabel}
+      childPath={childPath}
+      uischemas={uischemas}
+    />
+  );
 };
 
-export const withJsonFormsExpandPanelProps =
-  (Component: ComponentType<ExpandPanelProps>): ComponentType<OwnPropsOfExpandPanel> =>
-    withJsonFormsContext(withContextToExpandPanelProps(React.memo(
-      Component,
-      (prevProps: ExpandPanelProps, nextProps: ExpandPanelProps) => areEqual(prevProps, nextProps)
-    )));
+export const withJsonFormsExpandPanelProps = (
+  Component: ComponentType<ExpandPanelProps>
+): ComponentType<OwnPropsOfExpandPanel> =>
+  withJsonFormsContext(
+    withContextToExpandPanelProps(
+      React.memo(
+        Component,
+        (prevProps: ExpandPanelProps, nextProps: ExpandPanelProps) =>
+          areEqual(prevProps, nextProps)
+      )
+    )
+  );
 
 export default withJsonFormsExpandPanelProps(ExpandPanelRenderer);

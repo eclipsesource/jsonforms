@@ -23,9 +23,6 @@
   THE SOFTWARE.
 */
 import isEmpty from 'lodash/isEmpty';
-import omit from 'lodash/omit';
-import isEqual from 'lodash/isEqual';
-import get from 'lodash/get';
 import React from 'react';
 import {
   JsonFormsRendererRegistryEntry,
@@ -33,7 +30,7 @@ import {
   OwnPropsOfRenderer,
   UISchemaElement
 } from '@jsonforms/core';
-import { JsonFormsDispatch } from '@jsonforms/react';
+import { areEqual, JsonFormsDispatch } from '@jsonforms/react';
 import { Grid, Hidden } from '@material-ui/core';
 
 export const renderLayoutElements = (
@@ -54,27 +51,6 @@ export const renderLayoutElements = (
   ));
 };
 
-const areEqual = (
-  prevProps: MaterialLayoutRendererProps,
-  nextProps: MaterialLayoutRendererProps
-) => {
-  const prev = omit(prevProps, [
-    'handleChange',
-    'renderers',
-    'cells',
-    'uischemas'
-  ]);
-  const next = omit(nextProps, [
-    'handleChange',
-    'renderers',
-    'cells',
-    'uischemas'
-  ]);
-  return (
-    isEqual(prev, next) &&
-    get(prevProps, 'renderers.length') === get(nextProps, 'renderers.length')
-  );
-};
 export interface MaterialLayoutRendererProps extends OwnPropsOfRenderer {
   elements: UISchemaElement[];
   direction: 'row' | 'column';
