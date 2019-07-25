@@ -1,13 +1,17 @@
 ---
-name: Multiple Forms 
+name: Multiple Forms
 route: /docs/multiple-forms
+parent: Tutorials
 ---
 
-import { LinkedForms, MultipleForms } from './components/multiple-forms/FormsExamples'
+import {
+  LinkedForms,
+  MultipleForms
+} from './components/multiple-forms/FormsExamples';
 
 # Multiple Forms
 
-There are use cases where multiple forms should be embedded into a single page. This section 
+There are use cases where multiple forms should be embedded into a single page. This section
 describes some of these in more detail.
 
 ## Linking forms
@@ -19,8 +23,9 @@ the `shippingAddress` property of the person, it is subsequently updated in the 
 <LinkedForms />
 
 ## Independent forms
+
 There might be use cases where you have forms that do not have anything in common, so your forms are independent, although they share the same store. In such cases
-you can explicitly pass  `schema` and `uischema` props to the `JsonFormsDispatch` component
+you can explicitly pass `schema` and `uischema` props to the `JsonFormsDispatch` component
 (if you don't specify these, they will be fetched from the store).
 
 Additionally, the `JsonFormsDispatch` component also takes a `path` prop which specifies
