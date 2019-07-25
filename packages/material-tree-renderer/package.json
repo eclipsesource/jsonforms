@@ -71,7 +71,7 @@
     "copy-webpack-plugin": "^4.5.1",
     "jest": "^23.0.0",
     "ncp": "^2.0.0",
-    "react-dom": "^16.4.0",
+    "react-dom": " ^16.8.0",
     "ts-jest": "^23.0.0",
     "webpack-dev-server": "^3.2.1"
   }
