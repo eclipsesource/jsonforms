@@ -1,96 +1,97 @@
 import React from 'react';
-import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
-import Feedback from '@material-ui/icons/Feedback'
-import Build from '@material-ui/icons/Build'
-import School from '@material-ui/icons/School'
-import Swap from '@material-ui/icons/SwapVerticalCircle'
-import Chat from '@material-ui/icons/Chat'
-import LocalOffer from '@material-ui/icons/LocalOffer'
 import eclipseSourceLogo from './eclipsesource.png';
-import EmailIcon from '@material-ui/icons/Email';
 
 const styles = () => ({
-  grid: {
-    paddingTop: '1em'
+  comparison_container: {
+    margin: '2rem 0 0 0',
+    padding: '2rem 1rem 2rem 1rem'
   },
-  icon: {
-    width: 'auto',
-    height: '6em',
-    display: 'flex',
-    alignItems: 'center',
-    color: '#413f3f'
+  comparison_title: {
+    color: 'white',
+    margin: '1rem 2rem 3rem 4rem'
   },
-  title: {
-    margin: '0.5em',
-
+  community: {
+    backgroundColor: '#1C4587',
+    borderRadius: '0px 60px 0px 60px',
+    color: 'white',
+    padding: '2rem 1rem 2rem 1rem',
+    minWidth: '32rem',
+    maxWidth: '32rem'
+  },
+  professional: {
+    backgroundColor: '#6D9CCD',
+    borderRadius: '60px 0px 60px 0px',
+    color: 'white',
+    padding: '2rem 1rem 2rem 1rem',
+    minWidth: '32rem',
+    maxWidth: '32rem'
+  },
+  list: {
+    margin: '0 2rem 0 2rem'
+  },
+  list_item: {
+    color: 'white',
+    fontSize: '1.4rem'
+  },
+  free_block: {
+    margin: '8.5rem 2rem 0 2rem',
+    textAlign: 'center',
+    fontSize: '1.4rem'
+  },
+  price_block: {
+    margin: '2rem 0 0 2rem',
+    fontSize: '1.4rem'
+  },
+  price_list_item: {
+    color: 'white',
+    fontSize: '1.2rem',
+    '&:before': {
+      content: '"\\2192"',
+      paddingRight: '0.5em'
+    }
+  },
+  link: {
+    color: 'white',
+    textDecoration: 'underline'
   }
 });
 
 const Support = ({ classes }) => (
-  <div className='examples__main'>
-    <div className='examples__main-inner' style={{ alignItems: 'center', display: 'flex', flexDirection: 'column' }}>
-      <Typography variant="h3" style={{ textAlign: 'center', color: '#413f3f' }}>Professional Support is brought to you by</Typography>
-      <img alt="EclipseSource Logo" src={eclipseSourceLogo} className='es-logo'/>
-      <Feedback className={classes.icon}/>
-      <Typography variant='h3' className={classes.title}>
-        Evaluation
-      </Typography>
-      <Typography variant='body1'>
-        Let us help to decide, whether JSON Forms is the right choice for you. We will evaluate your requirements, assess if and how they can be matched with JSON Forms, and help you to estimate the integration effort
-      </Typography>
-
-      <Build className={classes.icon}/>
-      <Typography variant='h3' className={classes.title}>
-        Prototyping
-      </Typography>
-      <Typography variant='body1'>
-        Let us provide you with a prototype demonstrating how JSON Forms will work in your domain
-      </Typography>
-
-      <School className={classes.icon}/>
-      <Typography variant='h3' className={classes.title}>
-        Training
-      </Typography>
-      <Typography variant='body1'>
-        Let us teach you how to apply JSON Forms most efficient in your project, including related technologies such as React or JSON Schema.
-      </Typography>
-
-
-      <Swap className={classes.icon}/>
-      <Typography variant='h3' className={classes.title}>
-        Integration
-      </Typography>
-      <Typography variant='body1'>
-        Let us help you to integrate JSON Forms into your existing application as efficiently as possible
-      </Typography>
-
-      <Chat className={classes.icon}/>
-      <Typography variant='h3' className={classes.title}>
-        Support
-      </Typography>
-      <Typography variant='body1'>
-        Let us assist your team when solving day-to-day issues, such as technical problems or architecture decisions
-      </Typography>
-
-      <LocalOffer className={classes.icon}/>
-      <Typography variant='h3' className={classes.title}>
-        Sponsored Development
-      </Typography>
-
-      <Typography variant='body1'>
-        Let us adapt and enhance the framework based on your specific requirements
-      </Typography>
-
-      <Button style={{ paddingTop: '1em', paddingBottom: '1em' }} color={'primary'} component={props => <a href='mailto:munich@eclipsesource.com' {...props}>Contact us</a>}>
-        <EmailIcon/>
-      </Button>
-
-      <Typography variant='body1'style={{ paddingBottom: '1em' }}>
-        for more details!
-      </Typography>
+  <div className='support__main' style={{ justifyContent: 'center', alignItems: 'center', display: 'flex', flexDirection: 'column' }}>
+    <div className={classes.comparison_container} style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center'}}>
+      <div className={classes.community} style={{flex: '1'}}>
+        <Typography className={classes.comparison_title} variant="h3" style={{ color: 'white' }}>Community support</Typography>
+        <ul className={classes.list} style={{listStylePosition: 'inside'}}>
+          <li className={classes.list_item}><a className={classes.link} href={'https://spectrum.chat/jsonforms/'}>Public channel</a></li>
+          <li className={classes.list_item}>Basic topics only</li>
+          <li className={classes.list_item}>Longer response time</li>
+        </ul>
+        <div className={classes.free_block}>
+          Free
+        </div>
+      </div>
+      <div className={classes.professional} style={{flex: '1'}}>
+        <Typography className={classes.comparison_title} variant="h3" style={{ color: 'white' }}>Professional Support</Typography>
+        <ul className={classes.list} style={{listStylePosition: 'inside'}}>
+          <li className={classes.list_item}>Guaranteed response time</li>
+          <li className={classes.list_item}>In-depth answers</li>
+          <li className={classes.list_item}>Code examples</li>
+          <li className={classes.list_item}>Advanced topics covered</li>
+          <li className={classes.list_item}>Private channel available (NDA)</li>
+          <li className={classes.list_item}>Feature prioritization</li>
+        </ul>
+        <div className={classes.price_block}>
+          Starts from 1.695 €: <a className={classes.link} href={'support@jsonforms.io'}>Contact us</a> for details
+          <ul className={classes.list} style={{listStylePosition: 'inside', listStyle:'none'}}>
+            <li className={classes.price_list_item}>10h professional support</li>
+            <li className={classes.price_list_item}>additionally 5h project sponsorship</li>
+          </ul>
+        </div>
+      </div>
     </div>
+    <img alt="EclipseSource Logo" src={eclipseSourceLogo} className='es-logo' style={{display:'block', marginLeft: 'auto', marginRight: 'auto'}}/>
   </div>
 );
 
