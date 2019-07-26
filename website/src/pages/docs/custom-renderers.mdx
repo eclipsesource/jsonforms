@@ -1,14 +1,14 @@
 ---
-name: Custom Renderers 
+name: Custom Renderers
 route: /docs/custom-renderers
 parent: Tutorials
 ---
 
-import { Default, WithCustomRenderer } from './components/custom-renderers'
+import { Default, WithCustomRenderer } from './components/custom-renderers';
 
 # Custom Renderers
 
- The default renderers of JSON Forms are a good fit for most scenarios,
+The default renderers of JSON Forms are a good fit for most scenarios,
 but there might be certain situations where you'd want to customize the rendered UI Schema elements.
 JSON Forms allows for this by registering a custom renderer that produces a different UI
 for a given UI Schema element.
@@ -44,7 +44,7 @@ The seed is described in more detail within the `README.md` file of
 the [repo](https://github.com/eclipsesource/jsonforms-react-seed), hence we
 only focus on the most crucial parts of the app in the following.
 
-##  Core concepts about rendering
+## Core concepts about rendering
 
 Before explaining how to contribute a component (which will be referred to as "custom control") to JSON Forms,
 we first explain how the basic process of rendering works.
@@ -84,21 +84,20 @@ In this case, the props are `data`, which is the actual data bit to be rendered,
 a dot-separated string, which is necessary to propagate an update back to the store.
 
 For the `onClick` prop we pass the `handleChange` handler, which we retrieve
-via another helper function provided by JSON Forms called `mapDispatchToControlProps`.
+via another helper function provided by JSON Forms called `withJsonFormsControlProps`.
 All the handler actually does is to emit a change with the new value.
 
 The complete code of `src/RatingControl.tsx` looks as follows:
 
 ```jsx
 import * as React from 'react';
-import {mapDispatchToControlProps, mapStateToControlProps} from '@jsonforms/core';
-import {connect} from 'react-redux';
-import {Rating} from './Rating';
+import { withJsonFormsControlProps } from '@jsonforms/react';
+import { Rating } from './Rating';
 
 interface RatingControlProps {
   data: any;
   handleChange(path: string, value: any): void;
-  path: string
+  path: string;
 }
 
 const RatingControl = ({ data, handleChange, path }: RatingControlProps) => (
@@ -108,10 +107,7 @@ const RatingControl = ({ data, handleChange, path }: RatingControlProps) => (
   />
 );
 
-export default connect(
-  mapStateToControlProps,
-  mapDispatchToControlProps,
-)(RatingControl as any);
+export default withJsonFormsControlProps(RatingControl);
 ```
 
 ### 2. Create a tester
@@ -119,15 +115,13 @@ export default connect(
 Now that we have our renderer ready, we need to tell JSON Forms when we want to make use of it.
 For that purpose we create a tester that checks if the corresponding UI schema element is a control
 and whether it is bound to a path that ends with `rating`. If that is the case, we return a rank of
+
 3. That is because the default renderer sets provide a rank with a value of 2, hence our tester will need to
-rank the custom control higher a bit higher, such that it will be picked up for the rating control during rendering.
-The `ratingControlTester.js` file contains the respective code as a default export.
+   rank the custom control higher a bit higher, such that it will be picked up for the rating control during rendering.
+   The `ratingControlTester.js` file contains the respective code as a default export.
 
 ```javascript
-import { 
-  rankWith, 
-  scopeEndsWith 
-} from '@jsonforms/core';
+import { rankWith, scopeEndsWith } from '@jsonforms/core';
 
 export default rankWith(
   3, //increase rank as needed
@@ -140,20 +134,16 @@ for composition (e.g. `and` or `or`) such that it is easy to target specific par
 of the UI schema and/or JSON schema.
 
 ### 3. Register the renderer
- All there is left to do is to register the renderer with its tester. We can do so by calling
+
+All there is left to do is to register the renderer with its tester. We can do so by calling
 the `registerRenderer` action on the store. Within `index.tsx`, the following
 statement registers the renderer.
 
 ```javascript
 import RatingControl from './RatingControl';
-import ratingControlTester from './ratingControlTester'
+import ratingControlTester from './ratingControlTester';
 
-store.dispatch(
-  Actions.registerRenderer(
-    ratingControlTester, 
-    RatingControl
-  )
-);
+store.dispatch(Actions.registerRenderer(ratingControlTester, RatingControl));
 ```
 
 And that's it! The rating control will now be used to render the `rating` property.
