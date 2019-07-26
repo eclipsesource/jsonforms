@@ -90,10 +90,6 @@
 						<section class="tsd-index-section ">
 							<h3>Variables</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-variable"><a href="globals.html#connectedarraycontrolrenderer" class="tsd-kind-icon">Connected<wbr>Array<wbr>Control<wbr>Renderer</a></li>
-								<li class="tsd-kind-variable"><a href="globals.html#connectedgrouplayout" class="tsd-kind-icon">Connected<wbr>Group<wbr>Layout</a></li>
-								<li class="tsd-kind-variable"><a href="globals.html#connectedhorizontallayout" class="tsd-kind-icon">Connected<wbr>Horizontal<wbr>Layout</a></li>
-								<li class="tsd-kind-variable"><a href="globals.html#connectedinputcontrol" class="tsd-kind-icon">Connected<wbr>Input<wbr>Control</a></li>
 								<li class="tsd-kind-variable"><a href="globals.html#register_style" class="tsd-kind-icon">REGISTER_<wbr>STYLE</a></li>
 								<li class="tsd-kind-variable"><a href="globals.html#register_styles" class="tsd-kind-icon">REGISTER_<wbr>STYLES</a></li>
 								<li class="tsd-kind-variable"><a href="globals.html#unregister_style" class="tsd-kind-icon">UNREGISTER_<wbr>STYLE</a></li>
@@ -165,6 +161,8 @@
 								<li class="tsd-kind-function"><a href="globals.html#renderchildren" class="tsd-kind-icon">render<wbr>Children</a></li>
 								<li class="tsd-kind-function"><a href="globals.html#stylingreducer" class="tsd-kind-icon">styling<wbr>Reducer</a></li>
 								<li class="tsd-kind-function"><a href="globals.html#unregisterstyle" class="tsd-kind-icon">unregister<wbr>Style</a></li>
+								<li class="tsd-kind-function"><a href="globals.html#withvanillacellprops" class="tsd-kind-icon">with<wbr>Vanilla<wbr>Cell<wbr>Props</a></li>
+								<li class="tsd-kind-function"><a href="globals.html#withvanillacontrolprops" class="tsd-kind-icon">with<wbr>Vanilla<wbr>Control<wbr>Props</a></li>
 							</ul>
 						</section>
 					</div>
@@ -172,46 +170,6 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Variables</h2>
-				<section class="tsd-panel tsd-member tsd-kind-variable">
-					<a name="connectedarraycontrolrenderer" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> Connected<wbr>Array<wbr>Control<wbr>Renderer</h3>
-					<div class="tsd-signature tsd-kind-icon">Connected<wbr>Array<wbr>Control<wbr>Renderer<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ComponentClass</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">OwnPropsOfControl</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> =&nbsp;connect(addVanillaControlProps(mapStateToArrayControlProps),mapDispatchToArrayControlProps)(ArrayControlRenderer)</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in complex/array/ArrayControlRenderer.tsx:94</li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-variable">
-					<a name="connectedgrouplayout" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> Connected<wbr>Group<wbr>Layout</h3>
-					<div class="tsd-signature tsd-kind-icon">Connected<wbr>Group<wbr>Layout<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ComponentClass</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">OwnPropsOfRenderer</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> =&nbsp;connect(addVanillaLayoutProps(mapStateToLayoutProps))(GroupLayoutRenderer)</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in layouts/GroupLayout.tsx:72</li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-variable">
-					<a name="connectedhorizontallayout" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> Connected<wbr>Horizontal<wbr>Layout</h3>
-					<div class="tsd-signature tsd-kind-icon">Connected<wbr>Horizontal<wbr>Layout<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ComponentClass</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">OwnPropsOfRenderer</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> =&nbsp;connect(addVanillaLayoutProps(mapStateToLayoutProps))(HorizontalLayoutRenderer)</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in layouts/HorizontalLayout.tsx:81</li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-variable">
-					<a name="connectedinputcontrol" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> Connected<wbr>Input<wbr>Control</h3>
-					<div class="tsd-signature tsd-kind-icon">Connected<wbr>Input<wbr>Control<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ComponentClass</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">OwnPropsOfControl</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> =&nbsp;connect(addVanillaControlProps(mapStateToControlProps),mapDispatchToControlProps)(InputControl)</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in controls/InputControl.tsx:114</li>
-						</ul>
-					</aside>
-				</section>
 				<section class="tsd-panel tsd-member tsd-kind-variable">
 					<a name="register_style" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> REGISTER_<wbr>STYLE</h3>
@@ -258,7 +216,7 @@
 					<div class="tsd-signature tsd-kind-icon">boolean<wbr>Cell<wbr>Tester<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> =&nbsp;rankWith(2, isBooleanControl)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in cells/BooleanCell.tsx:62</li>
+							<li>Defined in cells/BooleanCell.tsx:59</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -288,7 +246,7 @@
 					<div class="tsd-signature tsd-kind-icon">convert<wbr>ToValid<wbr>Class<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">convertToValidClassName</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in complex/TableArrayControl.tsx:52</li>
+							<li>Defined in complex/TableArrayControl.tsx:48</li>
 						</ul>
 					</aside>
 				</section>
@@ -298,7 +256,7 @@
 					<div class="tsd-signature tsd-kind-icon">create<wbr>Label<wbr>Description<wbr>From<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">createLabelDescriptionFrom</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in complex/TableArrayControl.tsx:52</li>
+							<li>Defined in complex/TableArrayControl.tsx:48</li>
 						</ul>
 					</aside>
 				</section>
@@ -308,7 +266,7 @@
 					<div class="tsd-signature tsd-kind-icon">date<wbr>Cell<wbr>Tester<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> =&nbsp;rankWith(2, isDateControl)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in cells/DateCell.tsx:60</li>
+							<li>Defined in cells/DateCell.tsx:54</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -328,7 +286,7 @@
 					<div class="tsd-signature tsd-kind-icon">date<wbr>Time<wbr>Cell<wbr>Tester<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> =&nbsp;rankWith(2, isDateTimeControl)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in cells/DateTimeCell.tsx:63</li>
+							<li>Defined in cells/DateTimeCell.tsx:57</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -348,7 +306,7 @@
 					<div class="tsd-signature tsd-kind-icon">enum<wbr>Cell<wbr>Tester<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> =&nbsp;rankWith(2, isEnumControl)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in cells/EnumCell.tsx:71</li>
+							<li>Defined in cells/EnumCell.tsx:66</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -388,7 +346,7 @@
 					<div class="tsd-signature tsd-kind-icon">horizontal<wbr>Layout<wbr>Tester<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> =&nbsp;rankWith(1, uiTypeIs(&#x27;HorizontalLayout&#x27;))</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in layouts/HorizontalLayout.tsx:44</li>
+							<li>Defined in layouts/HorizontalLayout.tsx:43</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -408,7 +366,7 @@
 					<div class="tsd-signature tsd-kind-icon">input<wbr>Control<wbr>Tester<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> =&nbsp;rankWith(1, isControl)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in controls/InputControl.tsx:112</li>
+							<li>Defined in controls/InputControl.tsx:115</li>
 						</ul>
 					</aside>
 				</section>
@@ -418,7 +376,7 @@
 					<div class="tsd-signature tsd-kind-icon">integer<wbr>Cell<wbr>Tester<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> =&nbsp;rankWith(2, isIntegerControl)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in cells/IntegerCell.tsx:60</li>
+							<li>Defined in cells/IntegerCell.tsx:55</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -438,7 +396,7 @@
 					<div class="tsd-signature tsd-kind-icon">is<wbr>Object<wbr>Array<wbr>Control<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in complex/TableArrayControl.tsx:54</li>
+							<li>Defined in complex/TableArrayControl.tsx:50</li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -472,7 +430,7 @@
 					<div class="tsd-signature tsd-kind-icon">is<wbr>Primitive<wbr>Array<wbr>Control<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in complex/TableArrayControl.tsx:54</li>
+							<li>Defined in complex/TableArrayControl.tsx:50</li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -526,7 +484,7 @@
 					<div class="tsd-signature tsd-kind-icon">number<wbr>Cell<wbr>Tester<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> =&nbsp;rankWith(2, isNumberControl)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in cells/NumberCell.tsx:61</li>
+							<li>Defined in cells/NumberCell.tsx:56</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -546,7 +504,7 @@
 					<div class="tsd-signature tsd-kind-icon">number<wbr>Format<wbr>Cell<wbr>Tester<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> =&nbsp;rankWith(4, isNumberFormatControl)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in cells/NumberFormatCell.tsx:75</li>
+							<li>Defined in cells/NumberFormatCell.tsx:73</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -566,7 +524,7 @@
 					<div class="tsd-signature tsd-kind-icon">or<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in complex/TableArrayControl.tsx:54</li>
+							<li>Defined in complex/TableArrayControl.tsx:50</li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -597,7 +555,7 @@
 					<div class="tsd-signature tsd-kind-icon">rank<wbr>With<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in complex/TableArrayControl.tsx:54</li>
+							<li>Defined in complex/TableArrayControl.tsx:50</li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -652,7 +610,7 @@
 					<div class="tsd-signature tsd-kind-icon">slider<wbr>Cell<wbr>Tester<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> =&nbsp;rankWith(4, isRangeControl)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in cells/SliderCell.tsx:62</li>
+							<li>Defined in cells/SliderCell.tsx:57</li>
 						</ul>
 					</aside>
 				</section>
@@ -662,7 +620,7 @@
 					<div class="tsd-signature tsd-kind-icon">table<wbr>Array<wbr>Control<wbr>Tester<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> =&nbsp;rankWith(3,or(isObjectArrayControl, isPrimitiveArrayControl))</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in complex/TableArrayControl.tsx:61</li>
+							<li>Defined in complex/TableArrayControl.tsx:57</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -683,7 +641,7 @@
 					<div class="tsd-signature tsd-kind-icon">text<wbr>Area<wbr>Cell<wbr>Tester<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> =&nbsp;rankWith(2, isMultiLineControl)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in cells/TextAreaCell.tsx:59</li>
+							<li>Defined in cells/TextAreaCell.tsx:54</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -703,7 +661,7 @@
 					<div class="tsd-signature tsd-kind-icon">text<wbr>Cell<wbr>Tester<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> =&nbsp;rankWith(1, isStringControl)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in cells/TextCell.tsx:74</li>
+							<li>Defined in cells/TextCell.tsx:69</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -723,7 +681,7 @@
 					<div class="tsd-signature tsd-kind-icon">time<wbr>Cell<wbr>Tester<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> =&nbsp;rankWith(2, isTimeControl)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in cells/TimeCell.tsx:59</li>
+							<li>Defined in cells/TimeCell.tsx:54</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -763,7 +721,7 @@
 					<div class="tsd-signature tsd-kind-icon">vanilla<wbr>Styles<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[{name: &#x27;control&#x27;,classNames: [&#x27;control&#x27;]},{name: &#x27;control.trim&#x27;,classNames: [&#x27;trim&#x27;]},{name: &#x27;control.input&#x27;,classNames: [&#x27;input&#x27;]},{name: &#x27;control.validation&#x27;,classNames: [&#x27;validation&#x27;]},{name: &#x27;categorization&#x27;,classNames: [&#x27;categorization&#x27;]},{name: &#x27;categorization.master&#x27;,classNames: [&#x27;categorization-master&#x27;]},{name: &#x27;categorization.detail&#x27;,classNames: [&#x27;categorization-detail&#x27;]},{name: &#x27;category.group&#x27;,classNames: [&#x27;category-group&#x27;]},{name: &#x27;array.layout&#x27;,classNames: [&#x27;array-layout&#x27;]},{name: &#x27;array.children&#x27;,classNames: [&#x27;children&#x27;]},{name: &#x27;group.layout&#x27;,classNames: [&#x27;group-layout&#x27;]},{name: &#x27;horizontal.layout&#x27;,classNames: [&#x27;horizontal-layout&#x27;]},{name: &#x27;horizontal.layout.item&#x27;,classNames: ([size]: number[]) &#x3D;&gt; [&#x60;horizontal-layout-${size}&#x60;]},{name: &#x27;vertical.layout&#x27;,classNames: [&#x27;vertical-layout&#x27;]},{name: &#x27;array.table&#x27;,classNames: [&#x27;array-table-layout&#x27;, &#x27;control&#x27;]},{name: &#x27;input.description&#x27;,classNames: [&#x27;input-description&#x27;]}]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in util/index.ts:140</li>
+							<li>Defined in util/index.tsx:192</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -783,7 +741,7 @@
 					<div class="tsd-signature tsd-kind-icon">vertical<wbr>Layout<wbr>Tester<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> =&nbsp;rankWith(1, uiTypeIs(&#x27;VerticalLayout&#x27;))</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in layouts/VerticalLayout.tsx:44</li>
+							<li>Defined in layouts/VerticalLayout.tsx:43</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -839,6 +797,9 @@
 											<h5>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
 										</li>
 										<li class="tsd-parameter">
+											<h5>renderers<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonFormsRendererRegistryEntry</span><span class="tsd-signature-symbol">[]</span></h5>
+										</li>
+										<li class="tsd-parameter">
 											<h5>schema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonSchema4</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">JsonSchema7</span></h5>
 										</li>
 										<li class="tsd-parameter">
@@ -864,7 +825,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in complex/array/ArrayControlRenderer.tsx:39</li>
+									<li>Defined in complex/array/ArrayControlRenderer.tsx:37</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -931,7 +892,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in cells/BooleanCell.tsx:39</li>
+									<li>Defined in cells/BooleanCell.tsx:36</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -997,7 +958,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in cells/DateCell.tsx:39</li>
+									<li>Defined in cells/DateCell.tsx:35</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1020,7 +981,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in cells/DateTimeCell.tsx:39</li>
+									<li>Defined in cells/DateTimeCell.tsx:35</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1043,7 +1004,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in cells/EnumCell.tsx:39</li>
+									<li>Defined in cells/EnumCell.tsx:36</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1109,7 +1070,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in layouts/HorizontalLayout.tsx:46</li>
+									<li>Defined in layouts/HorizontalLayout.tsx:45</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1155,7 +1116,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in cells/IntegerCell.tsx:38</li>
+									<li>Defined in cells/IntegerCell.tsx:35</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1251,7 +1212,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in cells/NumberCell.tsx:38</li>
+									<li>Defined in cells/NumberCell.tsx:35</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1274,7 +1235,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in cells/NumberFormatCell.tsx:38</li>
+									<li>Defined in cells/NumberFormatCell.tsx:36</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1331,7 +1292,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in cells/SliderCell.tsx:38</li>
+									<li>Defined in cells/SliderCell.tsx:35</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1354,7 +1315,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in cells/TextAreaCell.tsx:38</li>
+									<li>Defined in cells/TextAreaCell.tsx:35</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1377,7 +1338,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in cells/TextCell.tsx:39</li>
+									<li>Defined in cells/TextCell.tsx:36</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1400,7 +1361,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in cells/TimeCell.tsx:38</li>
+									<li>Defined in cells/TimeCell.tsx:35</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1423,7 +1384,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in layouts/VerticalLayout.tsx:46</li>
+									<li>Defined in layouts/VerticalLayout.tsx:45</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1469,7 +1430,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in util/index.ts:114</li>
+									<li>Defined in util/index.tsx:150</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1513,7 +1474,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in util/index.ts:56</li>
+									<li>Defined in util/index.tsx:60</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1575,7 +1536,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in util/index.ts:99</li>
+									<li>Defined in util/index.tsx:135</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1654,7 +1615,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in reducers/styling.ts:60</li>
+									<li>Defined in reducers/styling.ts:61</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1924,7 +1885,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in reducers/styling.ts:66</li>
+									<li>Defined in reducers/styling.ts:67</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1968,6 +1929,52 @@
 									<h5>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
 								</li>
 							</ul>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function">
+					<a name="withvanillacellprops" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> with<wbr>Vanilla<wbr>Cell<wbr>Props</h3>
+					<ul class="tsd-signatures tsd-kind-function">
+						<li class="tsd-signature tsd-kind-icon">with<wbr>Vanilla<wbr>Cell<wbr>Props<span class="tsd-signature-symbol">(</span>Component<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ComponentType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">(Anonymous function)</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in util/index.tsx:171</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>Component: <span class="tsd-signature-type">ComponentType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">(Anonymous function)</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function">
+					<a name="withvanillacontrolprops" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> with<wbr>Vanilla<wbr>Control<wbr>Props</h3>
+					<ul class="tsd-signatures tsd-kind-function">
+						<li class="tsd-signature tsd-kind-icon">with<wbr>Vanilla<wbr>Control<wbr>Props<span class="tsd-signature-symbol">(</span>Component<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ComponentType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">(Anonymous function)</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in util/index.tsx:96</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>Component: <span class="tsd-signature-type">ComponentType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">(Anonymous function)</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -2018,18 +2025,6 @@
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/withclassname.html" class="tsd-kind-icon">With<wbr>Classname</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#connectedarraycontrolrenderer" class="tsd-kind-icon">Connected<wbr>Array<wbr>Control<wbr>Renderer</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#connectedgrouplayout" class="tsd-kind-icon">Connected<wbr>Group<wbr>Layout</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#connectedhorizontallayout" class="tsd-kind-icon">Connected<wbr>Horizontal<wbr>Layout</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#connectedinputcontrol" class="tsd-kind-icon">Connected<wbr>Input<wbr>Control</a>
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="globals.html#register_style" class="tsd-kind-icon">REGISTER_<wbr>STYLE</a>
@@ -2228,6 +2223,12 @@
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#unregisterstyle" class="tsd-kind-icon">unregister<wbr>Style</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#withvanillacellprops" class="tsd-kind-icon">with<wbr>Vanilla<wbr>Cell<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#withvanillacontrolprops" class="tsd-kind-icon">with<wbr>Vanilla<wbr>Control<wbr>Props</a>
 					</li>
 				</ul>
 			</nav>

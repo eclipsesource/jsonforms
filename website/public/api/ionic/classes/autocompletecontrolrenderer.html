@@ -114,6 +114,7 @@
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="autocompletecontrolrenderer.html#ngredux" class="tsd-kind-icon">ng<wbr>Redux</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="autocompletecontrolrenderer.html#options" class="tsd-kind-icon">options</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="autocompletecontrolrenderer.html#path" class="tsd-kind-icon">path</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="autocompletecontrolrenderer.html#propspath" class="tsd-kind-icon">props<wbr>Path</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="autocompletecontrolrenderer.html#rootschema" class="tsd-kind-icon">root<wbr>Schema</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="autocompletecontrolrenderer.html#schema" class="tsd-kind-icon">schema</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="autocompletecontrolrenderer.html#scopedschema" class="tsd-kind-icon">scoped<wbr>Schema</a></li>
@@ -127,6 +128,7 @@
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited tsd-is-protected"><a href="autocompletecontrolrenderer.html#getownprops" class="tsd-kind-icon">get<wbr>Own<wbr>Props</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="autocompletecontrolrenderer.html#isenabled" class="tsd-kind-icon">is<wbr>Enabled</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="autocompletecontrolrenderer.html#mapadditionalprops" class="tsd-kind-icon">map<wbr>Additional<wbr>Props</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited tsd-is-protected"><a href="autocompletecontrolrenderer.html#maptoprops" class="tsd-kind-icon">map<wbr>ToProps</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="autocompletecontrolrenderer.html#ngondestroy" class="tsd-kind-icon">ng<wbr>OnDestroy</a></li>
@@ -151,7 +153,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides JsonFormsAbstractControl.__constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/4e3afaa3/packages/ionic/src/controls/enum/autocomplete-control.ts#L52">ionic/src/controls/enum/autocomplete-control.ts:52</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/5245d395/packages/ionic/src/controls/enum/autocomplete-control.ts#L52">ionic/src/controls/enum/autocomplete-control.ts:52</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -240,7 +242,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from JsonFormsAbstractControl.getEventValue</p>
 						<ul>
-							<li>Defined in ionic/node_modules/@jsonforms/angular/lib/abstract-control.d.ts:23</li>
+							<li>Defined in ionic/node_modules/@jsonforms/angular/lib/abstract-control.d.ts:24</li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -315,7 +317,7 @@
 					<div class="tsd-signature tsd-kind-icon">options<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/4e3afaa3/packages/ionic/src/controls/enum/autocomplete-control.ts#L52">ionic/src/controls/enum/autocomplete-control.ts:52</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/5245d395/packages/ionic/src/controls/enum/autocomplete-control.ts#L52">ionic/src/controls/enum/autocomplete-control.ts:52</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -327,6 +329,17 @@
 						<p>Inherited from JsonFormsBaseRenderer.path</p>
 						<ul>
 							<li>Defined in ionic/node_modules/@jsonforms/angular/lib/base.renderer.d.ts:5</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+					<a name="propspath" class="tsd-anchor"></a>
+					<h3>props<wbr>Path</h3>
+					<div class="tsd-signature tsd-kind-icon">props<wbr>Path<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from JsonFormsAbstractControl.propsPath</p>
+						<ul>
+							<li>Defined in ionic/node_modules/@jsonforms/angular/lib/abstract-control.d.ts:22</li>
 						</ul>
 					</aside>
 				</section>
@@ -392,7 +405,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from JsonFormsAbstractControl.validator</p>
 						<ul>
-							<li>Defined in ionic/node_modules/@jsonforms/angular/lib/abstract-control.d.ts:26</li>
+							<li>Defined in ionic/node_modules/@jsonforms/angular/lib/abstract-control.d.ts:27</li>
 						</ul>
 					</aside>
 				</section>
@@ -422,10 +435,28 @@
 								<p>Inherited from JsonFormsAbstractControl.getOwnProps</p>
 								<p>Overrides JsonFormsBaseRenderer.getOwnProps</p>
 								<ul>
-									<li>Defined in ionic/node_modules/@jsonforms/angular/lib/abstract-control.d.ts:29</li>
+									<li>Defined in ionic/node_modules/@jsonforms/angular/lib/abstract-control.d.ts:31</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">OwnPropsOfControl</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+					<a name="isenabled" class="tsd-anchor"></a>
+					<h3>is<wbr>Enabled</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Enabled<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from JsonFormsAbstractControl.isEnabled</p>
+								<ul>
+									<li>Defined in ionic/node_modules/@jsonforms/angular/lib/abstract-control.d.ts:30</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -440,7 +471,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides JsonFormsAbstractControl.mapAdditionalProps</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/4e3afaa3/packages/ionic/src/controls/enum/autocomplete-control.ts#L58">ionic/src/controls/enum/autocomplete-control.ts:58</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/5245d395/packages/ionic/src/controls/enum/autocomplete-control.ts#L58">ionic/src/controls/enum/autocomplete-control.ts:58</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -483,7 +514,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from JsonFormsAbstractControl.ngOnDestroy</p>
 								<ul>
-									<li>Defined in ionic/node_modules/@jsonforms/angular/lib/abstract-control.d.ts:28</li>
+									<li>Defined in ionic/node_modules/@jsonforms/angular/lib/abstract-control.d.ts:29</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -501,7 +532,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from JsonFormsAbstractControl.ngOnInit</p>
 								<ul>
-									<li>Defined in ionic/node_modules/@jsonforms/angular/lib/abstract-control.d.ts:25</li>
+									<li>Defined in ionic/node_modules/@jsonforms/angular/lib/abstract-control.d.ts:26</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -519,7 +550,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from JsonFormsAbstractControl.onChange</p>
 								<ul>
-									<li>Defined in ionic/node_modules/@jsonforms/angular/lib/abstract-control.d.ts:24</li>
+									<li>Defined in ionic/node_modules/@jsonforms/angular/lib/abstract-control.d.ts:25</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -543,7 +574,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from JsonFormsAbstractControl.triggerValidation</p>
 								<ul>
-									<li>Defined in ionic/node_modules/@jsonforms/angular/lib/abstract-control.d.ts:31</li>
+									<li>Defined in ionic/node_modules/@jsonforms/angular/lib/abstract-control.d.ts:33</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -610,6 +641,9 @@
 								<a href="autocompletecontrolrenderer.html#path" class="tsd-kind-icon">path</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="autocompletecontrolrenderer.html#propspath" class="tsd-kind-icon">props<wbr>Path</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 								<a href="autocompletecontrolrenderer.html#rootschema" class="tsd-kind-icon">root<wbr>Schema</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
@@ -632,6 +666,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited tsd-is-protected">
 								<a href="autocompletecontrolrenderer.html#getownprops" class="tsd-kind-icon">get<wbr>Own<wbr>Props</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="autocompletecontrolrenderer.html#isenabled" class="tsd-kind-icon">is<wbr>Enabled</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 								<a href="autocompletecontrolrenderer.html#mapadditionalprops" class="tsd-kind-icon">map<wbr>Additional<wbr>Props</a>

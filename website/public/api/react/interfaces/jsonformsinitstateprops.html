@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>OwnPropsOfMasterListItem | JSON Forms React Material Renderers</title>
+	<title>JsonFormsInitStateProps | JSON Forms React Core</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title">JSON Forms React Material Renderers</a>
+					<a href="../index.html" class="title">JSON Forms React Core</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -38,6 +38,8 @@
 							</div>
 							<input type="checkbox" id="tsd-filter-inherited" checked />
 							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
 							<input type="checkbox" id="tsd-filter-only-exported" />
 							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
 						</div>
@@ -54,10 +56,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="ownpropsofmasterlistitem.html">OwnPropsOfMasterListItem</a>
+					<a href="jsonformsinitstateprops.html">JsonFormsInitStateProps</a>
 				</li>
 			</ul>
-			<h1>Interface OwnPropsOfMasterListItem</h1>
+			<h1>Interface JsonFormsInitStateProps</h1>
 		</div>
 	</div>
 </header>
@@ -68,12 +70,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">OwnPropsOfMasterListItem</span>
-						<ul class="tsd-hierarchy">
-							<li>
-								<a href="statepropsofmasteritem.html" class="tsd-signature-type">StatePropsOfMasterItem</a>
-							</li>
-						</ul>
+						<span class="target">JsonFormsInitStateProps</span>
 					</li>
 				</ul>
 			</section>
@@ -81,142 +78,81 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section tsd-is-not-exported">
+						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="ownpropsofmasterlistitem.html#index" class="tsd-kind-icon">index</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="ownpropsofmasterlistitem.html#path" class="tsd-kind-icon">path</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="ownpropsofmasterlistitem.html#schema" class="tsd-kind-icon">schema</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="ownpropsofmasterlistitem.html#selected" class="tsd-kind-icon">selected</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section tsd-is-not-exported">
-							<h3>Methods</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="ownpropsofmasterlistitem.html#handleselect" class="tsd-kind-icon">handle<wbr>Select</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="ownpropsofmasterlistitem.html#removeitem" class="tsd-kind-icon">remove<wbr>Item</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="jsonformsinitstateprops.html#ajv" class="tsd-kind-icon">ajv</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="jsonformsinitstateprops.html#data" class="tsd-kind-icon">data</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="jsonformsinitstateprops.html#refparseroptions" class="tsd-kind-icon">ref<wbr>Parser<wbr>Options</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="jsonformsinitstateprops.html#renderers" class="tsd-kind-icon">renderers</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="jsonformsinitstateprops.html#schema" class="tsd-kind-icon">schema</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="jsonformsinitstateprops.html#uischema" class="tsd-kind-icon">uischema</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-					<a name="index" class="tsd-anchor"></a>
-					<h3>index</h3>
-					<div class="tsd-signature tsd-kind-icon">index<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="ajv" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> ajv</h3>
+					<div class="tsd-signature tsd-kind-icon">ajv<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">AJV.Ajv</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in additional/MaterialListWithDetailRenderer.tsx:163</li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/5245d395/packages/react/src/JsonForms.tsx#L196">JsonForms.tsx:196</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-					<a name="path" class="tsd-anchor"></a>
-					<h3>path</h3>
-					<div class="tsd-signature tsd-kind-icon">path<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="data" class="tsd-anchor"></a>
+					<h3>data</h3>
+					<div class="tsd-signature tsd-kind-icon">data<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in additional/MaterialListWithDetailRenderer.tsx:165</li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/5245d395/packages/react/src/JsonForms.tsx#L192">JsonForms.tsx:192</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="refparseroptions" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> ref<wbr>Parser<wbr>Options</h3>
+					<div class="tsd-signature tsd-kind-icon">ref<wbr>Parser<wbr>Options<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RefParser.Options</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/5245d395/packages/react/src/JsonForms.tsx#L197">JsonForms.tsx:197</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="renderers" class="tsd-anchor"></a>
+					<h3>renderers</h3>
+					<div class="tsd-signature tsd-kind-icon">renderers<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">JsonFormsRendererRegistryEntry</span><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/5245d395/packages/react/src/JsonForms.tsx#L195">JsonForms.tsx:195</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="schema" class="tsd-anchor"></a>
 					<h3>schema</h3>
 					<div class="tsd-signature tsd-kind-icon">schema<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">JsonSchema</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in additional/MaterialListWithDetailRenderer.tsx:166</li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/5245d395/packages/react/src/JsonForms.tsx#L193">JsonForms.tsx:193</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-					<a name="selected" class="tsd-anchor"></a>
-					<h3>selected</h3>
-					<div class="tsd-signature tsd-kind-icon">selected<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="uischema" class="tsd-anchor"></a>
+					<h3>uischema</h3>
+					<div class="tsd-signature tsd-kind-icon">uischema<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">UISchemaElement</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in additional/MaterialListWithDetailRenderer.tsx:164</li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/5245d395/packages/react/src/JsonForms.tsx#L194">JsonForms.tsx:194</a></li>
 						</ul>
 					</aside>
-				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
-				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
-					<a name="handleselect" class="tsd-anchor"></a>
-					<h3>handle<wbr>Select</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">handle<wbr>Select<span class="tsd-signature-symbol">(</span>index<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in additional/MaterialListWithDetailRenderer.tsx:167</li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>index: <span class="tsd-signature-type">number</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">function</span></h4>
-							<ul class="tsd-parameters">
-								<li class="tsd-parameter-siganture">
-									<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
-										<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-									</ul>
-									<ul class="tsd-descriptions">
-										<li class="tsd-description">
-											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-										</li>
-									</ul>
-								</li>
-							</ul>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
-					<a name="removeitem" class="tsd-anchor"></a>
-					<h3>remove<wbr>Item</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">remove<wbr>Item<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in additional/MaterialListWithDetailRenderer.tsx:168</li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>path: <span class="tsd-signature-type">string</span></h5>
-								</li>
-								<li>
-									<h5>value: <span class="tsd-signature-type">number</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">function</span></h4>
-							<ul class="tsd-parameters">
-								<li class="tsd-parameter-siganture">
-									<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
-										<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-									</ul>
-									<ul class="tsd-descriptions">
-										<li class="tsd-description">
-											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-										</li>
-									</ul>
-								</li>
-							</ul>
-						</li>
-					</ul>
 				</section>
 			</section>
 		</div>
@@ -232,26 +168,26 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface tsd-is-not-exported">
-						<a href="ownpropsofmasterlistitem.html" class="tsd-kind-icon">Own<wbr>Props<wbr>OfMaster<wbr>List<wbr>Item</a>
+					<li class="current tsd-kind-interface">
+						<a href="jsonformsinitstateprops.html" class="tsd-kind-icon">Json<wbr>Forms<wbr>Init<wbr>State<wbr>Props</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-								<a href="ownpropsofmasterlistitem.html#index" class="tsd-kind-icon">index</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="jsonformsinitstateprops.html#ajv" class="tsd-kind-icon">ajv</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-								<a href="ownpropsofmasterlistitem.html#path" class="tsd-kind-icon">path</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="jsonformsinitstateprops.html#data" class="tsd-kind-icon">data</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-								<a href="ownpropsofmasterlistitem.html#schema" class="tsd-kind-icon">schema</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="jsonformsinitstateprops.html#refparseroptions" class="tsd-kind-icon">ref<wbr>Parser<wbr>Options</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-								<a href="ownpropsofmasterlistitem.html#selected" class="tsd-kind-icon">selected</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="jsonformsinitstateprops.html#renderers" class="tsd-kind-icon">renderers</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
-								<a href="ownpropsofmasterlistitem.html#handleselect" class="tsd-kind-icon">handle<wbr>Select</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="jsonformsinitstateprops.html#schema" class="tsd-kind-icon">schema</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
-								<a href="ownpropsofmasterlistitem.html#removeitem" class="tsd-kind-icon">remove<wbr>Item</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="jsonformsinitstateprops.html#uischema" class="tsd-kind-icon">uischema</a>
 							</li>
 						</ul>
 					</li>

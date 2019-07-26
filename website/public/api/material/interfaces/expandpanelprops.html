@@ -89,10 +89,13 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="expandpanelprops.html#childlabel" class="tsd-kind-icon">child<wbr>Label</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="expandpanelprops.html#childpath" class="tsd-kind-icon">child<wbr>Path</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite tsd-is-inherited"><a href="expandpanelprops.html#enablemovedown" class="tsd-kind-icon">enable<wbr>Move<wbr>Down</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite tsd-is-inherited"><a href="expandpanelprops.html#enablemoveup" class="tsd-kind-icon">enable<wbr>Move<wbr>Up</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="expandpanelprops.html#expanded" class="tsd-kind-icon">expanded</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="expandpanelprops.html#index" class="tsd-kind-icon">index</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="expandpanelprops.html#path" class="tsd-kind-icon">path</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="expandpanelprops.html#renderers" class="tsd-kind-icon">renderers</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="expandpanelprops.html#rootschema" class="tsd-kind-icon">root<wbr>Schema</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="expandpanelprops.html#schema" class="tsd-kind-icon">schema</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="expandpanelprops.html#uischema" class="tsd-kind-icon">uischema</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="expandpanelprops.html#uischemas" class="tsd-kind-icon">uischemas</a></li>
@@ -102,6 +105,8 @@
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-inherited"><a href="expandpanelprops.html#handleexpansion" class="tsd-kind-icon">handle<wbr>Expansion</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-inherited"><a href="expandpanelprops.html#movedown" class="tsd-kind-icon">move<wbr>Down</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-inherited"><a href="expandpanelprops.html#moveup" class="tsd-kind-icon">move<wbr>Up</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-inherited"><a href="expandpanelprops.html#removeitems" class="tsd-kind-icon">remove<wbr>Items</a></li>
 							</ul>
 						</section>
@@ -117,7 +122,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="statepropsofexpandpanel.html">StatePropsOfExpandPanel</a>.<a href="statepropsofexpandpanel.html#childlabel">childLabel</a></p>
 						<ul>
-							<li>Defined in layouts/MaterialArrayLayout.tsx:199</li>
+							<li>Defined in layouts/ExpandPanelRenderer.tsx:50</li>
 						</ul>
 					</aside>
 				</section>
@@ -128,7 +133,31 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="statepropsofexpandpanel.html">StatePropsOfExpandPanel</a>.<a href="statepropsofexpandpanel.html#childpath">childPath</a></p>
 						<ul>
-							<li>Defined in layouts/MaterialArrayLayout.tsx:200</li>
+							<li>Defined in layouts/ExpandPanelRenderer.tsx:51</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite tsd-is-inherited">
+					<a name="enablemovedown" class="tsd-anchor"></a>
+					<h3>enable<wbr>Move<wbr>Down</h3>
+					<div class="tsd-signature tsd-kind-icon">enable<wbr>Move<wbr>Down<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="statepropsofexpandpanel.html">StatePropsOfExpandPanel</a>.<a href="statepropsofexpandpanel.html#enablemovedown">enableMoveDown</a></p>
+						<p>Overrides <a href="ownpropsofexpandpanel.html">OwnPropsOfExpandPanel</a>.<a href="ownpropsofexpandpanel.html#enablemovedown">enableMoveDown</a></p>
+						<ul>
+							<li>Defined in layouts/ExpandPanelRenderer.tsx:54</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite tsd-is-inherited">
+					<a name="enablemoveup" class="tsd-anchor"></a>
+					<h3>enable<wbr>Move<wbr>Up</h3>
+					<div class="tsd-signature tsd-kind-icon">enable<wbr>Move<wbr>Up<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="statepropsofexpandpanel.html">StatePropsOfExpandPanel</a>.<a href="statepropsofexpandpanel.html#enablemoveup">enableMoveUp</a></p>
+						<p>Overrides <a href="ownpropsofexpandpanel.html">OwnPropsOfExpandPanel</a>.<a href="ownpropsofexpandpanel.html#enablemoveup">enableMoveUp</a></p>
+						<ul>
+							<li>Defined in layouts/ExpandPanelRenderer.tsx:53</li>
 						</ul>
 					</aside>
 				</section>
@@ -139,7 +168,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="ownpropsofexpandpanel.html">OwnPropsOfExpandPanel</a>.<a href="ownpropsofexpandpanel.html#expanded">expanded</a></p>
 						<ul>
-							<li>Defined in layouts/MaterialArrayLayout.tsx:194</li>
+							<li>Defined in layouts/ExpandPanelRenderer.tsx:41</li>
 						</ul>
 					</aside>
 				</section>
@@ -150,7 +179,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="ownpropsofexpandpanel.html">OwnPropsOfExpandPanel</a>.<a href="ownpropsofexpandpanel.html#index">index</a></p>
 						<ul>
-							<li>Defined in layouts/MaterialArrayLayout.tsx:190</li>
+							<li>Defined in layouts/ExpandPanelRenderer.tsx:37</li>
 						</ul>
 					</aside>
 				</section>
@@ -161,7 +190,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="ownpropsofexpandpanel.html">OwnPropsOfExpandPanel</a>.<a href="ownpropsofexpandpanel.html#path">path</a></p>
 						<ul>
-							<li>Defined in layouts/MaterialArrayLayout.tsx:191</li>
+							<li>Defined in layouts/ExpandPanelRenderer.tsx:38</li>
 						</ul>
 					</aside>
 				</section>
@@ -172,7 +201,18 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="ownpropsofexpandpanel.html">OwnPropsOfExpandPanel</a>.<a href="ownpropsofexpandpanel.html#renderers">renderers</a></p>
 						<ul>
-							<li>Defined in layouts/MaterialArrayLayout.tsx:195</li>
+							<li>Defined in layouts/ExpandPanelRenderer.tsx:42</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="rootschema" class="tsd-anchor"></a>
+					<h3>root<wbr>Schema</h3>
+					<div class="tsd-signature tsd-kind-icon">root<wbr>Schema<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">JsonSchema</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="ownpropsofexpandpanel.html">OwnPropsOfExpandPanel</a>.<a href="ownpropsofexpandpanel.html#rootschema">rootSchema</a></p>
+						<ul>
+							<li>Defined in layouts/ExpandPanelRenderer.tsx:43</li>
 						</ul>
 					</aside>
 				</section>
@@ -183,7 +223,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="ownpropsofexpandpanel.html">OwnPropsOfExpandPanel</a>.<a href="ownpropsofexpandpanel.html#schema">schema</a></p>
 						<ul>
-							<li>Defined in layouts/MaterialArrayLayout.tsx:193</li>
+							<li>Defined in layouts/ExpandPanelRenderer.tsx:40</li>
 						</ul>
 					</aside>
 				</section>
@@ -194,7 +234,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="ownpropsofexpandpanel.html">OwnPropsOfExpandPanel</a>.<a href="ownpropsofexpandpanel.html#uischema">uischema</a></p>
 						<ul>
-							<li>Defined in layouts/MaterialArrayLayout.tsx:192</li>
+							<li>Defined in layouts/ExpandPanelRenderer.tsx:39</li>
 						</ul>
 					</aside>
 				</section>
@@ -205,7 +245,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="statepropsofexpandpanel.html">StatePropsOfExpandPanel</a>.<a href="statepropsofexpandpanel.html#uischemas">uischemas</a></p>
 						<ul>
-							<li>Defined in layouts/MaterialArrayLayout.tsx:201</li>
+							<li>Defined in layouts/ExpandPanelRenderer.tsx:52</li>
 						</ul>
 					</aside>
 				</section>
@@ -223,7 +263,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="ownpropsofexpandpanel.html">OwnPropsOfExpandPanel</a>.<a href="ownpropsofexpandpanel.html#handleexpansion">handleExpansion</a></p>
 								<ul>
-									<li>Defined in layouts/MaterialArrayLayout.tsx:196</li>
+									<li>Defined in layouts/ExpandPanelRenderer.tsx:46</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -258,6 +298,96 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+					<a name="movedown" class="tsd-anchor"></a>
+					<h3>move<wbr>Down</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">move<wbr>Down<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, toMove<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="dispatchpropsofexpandpanel.html">DispatchPropsOfExpandPanel</a>.<a href="dispatchpropsofexpandpanel.html#movedown">moveDown</a></p>
+								<ul>
+									<li>Defined in layouts/ExpandPanelRenderer.tsx:63</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>path: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>toMove: <span class="tsd-signature-type">number</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">function</span></h4>
+							<ul class="tsd-parameters">
+								<li class="tsd-parameter-siganture">
+									<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
+										<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+									</ul>
+									<ul class="tsd-descriptions">
+										<li class="tsd-description">
+											<h4 class="tsd-parameters-title">Parameters</h4>
+											<ul class="tsd-parameters">
+												<li>
+													<h5>event: <span class="tsd-signature-type">any</span></h5>
+												</li>
+											</ul>
+											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+					<a name="moveup" class="tsd-anchor"></a>
+					<h3>move<wbr>Up</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">move<wbr>Up<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, toMove<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="dispatchpropsofexpandpanel.html">DispatchPropsOfExpandPanel</a>.<a href="dispatchpropsofexpandpanel.html#moveup">moveUp</a></p>
+								<ul>
+									<li>Defined in layouts/ExpandPanelRenderer.tsx:62</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>path: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>toMove: <span class="tsd-signature-type">number</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">function</span></h4>
+							<ul class="tsd-parameters">
+								<li class="tsd-parameter-siganture">
+									<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
+										<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+									</ul>
+									<ul class="tsd-descriptions">
+										<li class="tsd-description">
+											<h4 class="tsd-parameters-title">Parameters</h4>
+											<ul class="tsd-parameters">
+												<li>
+													<h5>event: <span class="tsd-signature-type">any</span></h5>
+												</li>
+											</ul>
+											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
 					<a name="removeitems" class="tsd-anchor"></a>
 					<h3>remove<wbr>Items</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
@@ -268,7 +398,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="dispatchpropsofexpandpanel.html">DispatchPropsOfExpandPanel</a>.<a href="dispatchpropsofexpandpanel.html#removeitems">removeItems</a></p>
 								<ul>
-									<li>Defined in layouts/MaterialArrayLayout.tsx:240</li>
+									<li>Defined in layouts/ExpandPanelRenderer.tsx:61</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -284,10 +414,16 @@
 							<ul class="tsd-parameters">
 								<li class="tsd-parameter-siganture">
 									<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
-										<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+										<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 									</ul>
 									<ul class="tsd-descriptions">
 										<li class="tsd-description">
+											<h4 class="tsd-parameters-title">Parameters</h4>
+											<ul class="tsd-parameters">
+												<li>
+													<h5>event: <span class="tsd-signature-type">any</span></h5>
+												</li>
+											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 										</li>
 									</ul>
@@ -319,6 +455,12 @@
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 								<a href="expandpanelprops.html#childpath" class="tsd-kind-icon">child<wbr>Path</a>
 							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite tsd-is-inherited">
+								<a href="expandpanelprops.html#enablemovedown" class="tsd-kind-icon">enable<wbr>Move<wbr>Down</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite tsd-is-inherited">
+								<a href="expandpanelprops.html#enablemoveup" class="tsd-kind-icon">enable<wbr>Move<wbr>Up</a>
+							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 								<a href="expandpanelprops.html#expanded" class="tsd-kind-icon">expanded</a>
 							</li>
@@ -332,6 +474,9 @@
 								<a href="expandpanelprops.html#renderers" class="tsd-kind-icon">renderers</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="expandpanelprops.html#rootschema" class="tsd-kind-icon">root<wbr>Schema</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 								<a href="expandpanelprops.html#schema" class="tsd-kind-icon">schema</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
@@ -342,6 +487,12 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
 								<a href="expandpanelprops.html#handleexpansion" class="tsd-kind-icon">handle<wbr>Expansion</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+								<a href="expandpanelprops.html#movedown" class="tsd-kind-icon">move<wbr>Down</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+								<a href="expandpanelprops.html#moveup" class="tsd-kind-icon">move<wbr>Up</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
 								<a href="expandpanelprops.html#removeitems" class="tsd-kind-icon">remove<wbr>Items</a>

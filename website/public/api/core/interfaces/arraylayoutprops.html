@@ -102,6 +102,7 @@
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="arraylayoutprops.html#errors" class="tsd-kind-icon">errors</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="arraylayoutprops.html#id" class="tsd-kind-icon">id</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="arraylayoutprops.html#label" class="tsd-kind-icon">label</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="arraylayoutprops.html#minitems" class="tsd-kind-icon">min<wbr>Items</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="arraylayoutprops.html#path" class="tsd-kind-icon">path</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="arraylayoutprops.html#renderers" class="tsd-kind-icon">renderers</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="arraylayoutprops.html#required" class="tsd-kind-icon">required</a></li>
@@ -116,6 +117,8 @@
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-inherited"><a href="arraylayoutprops.html#additem" class="tsd-kind-icon">add<wbr>Item</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-inherited"><a href="arraylayoutprops.html#movedown" class="tsd-kind-icon">move<wbr>Down</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-inherited"><a href="arraylayoutprops.html#moveup" class="tsd-kind-icon">move<wbr>Up</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-inherited"><a href="arraylayoutprops.html#removeitems" class="tsd-kind-icon">remove<wbr>Items</a></li>
 							</ul>
 						</section>
@@ -131,7 +134,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="statepropsofcontrol.html">StatePropsOfControl</a>.<a href="statepropsofcontrol.html#cells">cells</a></p>
 						<ul>
-							<li>Defined in util/renderer.ts:272</li>
+							<li>Defined in util/renderer.ts:281</li>
 						</ul>
 					</aside>
 				</section>
@@ -142,7 +145,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="statepropsofrenderer.html">StatePropsOfRenderer</a>.<a href="statepropsofrenderer.html#config">config</a></p>
 						<ul>
-							<li>Defined in util/renderer.ts:208</li>
+							<li>Defined in util/renderer.ts:217</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -159,7 +162,7 @@
 						<p>Inherited from <a href="statepropsofarraylayout.html">StatePropsOfArrayLayout</a>.<a href="statepropsofarraylayout.html#data">data</a></p>
 						<p>Overrides <a href="statepropsofscopedrenderer.html">StatePropsOfScopedRenderer</a>.<a href="statepropsofscopedrenderer.html#data">data</a></p>
 						<ul>
-							<li>Defined in util/renderer.ts:711</li>
+							<li>Defined in util/renderer.ts:813</li>
 						</ul>
 					</aside>
 				</section>
@@ -170,7 +173,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="statepropsofcontrol.html">StatePropsOfControl</a>.<a href="statepropsofcontrol.html#description">description</a></p>
 						<ul>
-							<li>Defined in util/renderer.ts:282</li>
+							<li>Defined in util/renderer.ts:291</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -186,7 +189,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="statepropsofrenderer.html">StatePropsOfRenderer</a>.<a href="statepropsofrenderer.html#enabled">enabled</a></p>
 						<ul>
-							<li>Defined in util/renderer.ts:223</li>
+							<li>Defined in util/renderer.ts:232</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -202,7 +205,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="statepropsofscopedrenderer.html">StatePropsOfScopedRenderer</a>.<a href="statepropsofscopedrenderer.html#errors">errors</a></p>
 						<ul>
-							<li>Defined in util/renderer.ts:245</li>
+							<li>Defined in util/renderer.ts:254</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -218,7 +221,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="statepropsofscopedrenderer.html">StatePropsOfScopedRenderer</a>.<a href="statepropsofscopedrenderer.html#id">id</a></p>
 						<ul>
-							<li>Defined in util/renderer.ts:260</li>
+							<li>Defined in util/renderer.ts:269</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -234,7 +237,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="statepropsofcontrol.html">StatePropsOfControl</a>.<a href="statepropsofcontrol.html#label">label</a></p>
 						<ul>
-							<li>Defined in util/renderer.ts:277</li>
+							<li>Defined in util/renderer.ts:286</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -244,13 +247,24 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="minitems" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> min<wbr>Items</h3>
+					<div class="tsd-signature tsd-kind-icon">min<wbr>Items<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="statepropsofarraylayout.html">StatePropsOfArrayLayout</a>.<a href="statepropsofarraylayout.html#minitems">minItems</a></p>
+						<ul>
+							<li>Defined in util/renderer.ts:814</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 					<a name="path" class="tsd-anchor"></a>
 					<h3>path</h3>
 					<div class="tsd-signature tsd-kind-icon">path<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="statepropsofrenderer.html">StatePropsOfRenderer</a>.<a href="statepropsofrenderer.html#path">path</a></p>
 						<ul>
-							<li>Defined in util/renderer.ts:232</li>
+							<li>Defined in util/renderer.ts:241</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -266,7 +280,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="statepropsofcontrolwithdetail.html">StatePropsOfControlWithDetail</a>.<a href="statepropsofcontrolwithdetail.html#renderers">renderers</a></p>
 						<ul>
-							<li>Defined in util/renderer.ts:430</li>
+							<li>Defined in util/renderer.ts:481</li>
 						</ul>
 					</aside>
 				</section>
@@ -277,7 +291,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="statepropsofcontrol.html">StatePropsOfControl</a>.<a href="statepropsofcontrol.html#required">required</a></p>
 						<ul>
-							<li>Defined in util/renderer.ts:287</li>
+							<li>Defined in util/renderer.ts:296</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -293,7 +307,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="statepropsofscopedrenderer.html">StatePropsOfScopedRenderer</a>.<a href="statepropsofscopedrenderer.html#rootschema">rootSchema</a></p>
 						<ul>
-							<li>Defined in util/renderer.ts:255</li>
+							<li>Defined in util/renderer.ts:264</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -309,7 +323,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="statepropsofrenderer.html">StatePropsOfRenderer</a>.<a href="statepropsofrenderer.html#schema">schema</a></p>
 						<ul>
-							<li>Defined in util/renderer.ts:218</li>
+							<li>Defined in util/renderer.ts:227</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -326,7 +340,7 @@
 						<p>Inherited from <a href="statepropsofscopedrenderer.html">StatePropsOfScopedRenderer</a>.<a href="statepropsofscopedrenderer.html#uischema">uischema</a></p>
 						<p>Overrides <a href="statepropsofrenderer.html">StatePropsOfRenderer</a>.<a href="statepropsofrenderer.html#uischema">uischema</a></p>
 						<ul>
-							<li>Defined in util/renderer.ts:240</li>
+							<li>Defined in util/renderer.ts:249</li>
 						</ul>
 					</aside>
 				</section>
@@ -337,7 +351,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="statepropsofcontrolwithdetail.html">StatePropsOfControlWithDetail</a>.<a href="statepropsofcontrolwithdetail.html#uischemas">uischemas</a></p>
 						<ul>
-							<li>Defined in util/renderer.ts:429</li>
+							<li>Defined in util/renderer.ts:480</li>
 						</ul>
 					</aside>
 				</section>
@@ -348,7 +362,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="statepropsofrenderer.html">StatePropsOfRenderer</a>.<a href="statepropsofrenderer.html#visible">visible</a></p>
 						<ul>
-							<li>Defined in util/renderer.ts:227</li>
+							<li>Defined in util/renderer.ts:236</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -371,7 +385,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="dispatchpropsofarraycontrol.html">DispatchPropsOfArrayControl</a>.<a href="dispatchpropsofarraycontrol.html#additem">addItem</a></p>
 								<ul>
-									<li>Defined in util/renderer.ts:497</li>
+									<li>Defined in util/renderer.ts:561</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -381,6 +395,84 @@
 								</li>
 								<li>
 									<h5>value: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">function</span></h4>
+							<ul class="tsd-parameters">
+								<li class="tsd-parameter-siganture">
+									<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
+										<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+									</ul>
+									<ul class="tsd-descriptions">
+										<li class="tsd-description">
+											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+					<a name="movedown" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> move<wbr>Down</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">move<wbr>Down<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, toMove<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="dispatchpropsofarraycontrol.html">DispatchPropsOfArrayControl</a>.<a href="dispatchpropsofarraycontrol.html#movedown">moveDown</a></p>
+								<ul>
+									<li>Defined in util/renderer.ts:564</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>path: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>toMove: <span class="tsd-signature-type">number</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">function</span></h4>
+							<ul class="tsd-parameters">
+								<li class="tsd-parameter-siganture">
+									<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
+										<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+									</ul>
+									<ul class="tsd-descriptions">
+										<li class="tsd-description">
+											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+					<a name="moveup" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> move<wbr>Up</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">move<wbr>Up<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, toMove<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="dispatchpropsofarraycontrol.html">DispatchPropsOfArrayControl</a>.<a href="dispatchpropsofarraycontrol.html#moveup">moveUp</a></p>
+								<ul>
+									<li>Defined in util/renderer.ts:563</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>path: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>toMove: <span class="tsd-signature-type">number</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">function</span></h4>
@@ -410,7 +502,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="dispatchpropsofarraycontrol.html">DispatchPropsOfArrayControl</a>.<a href="dispatchpropsofarraycontrol.html#removeitems">removeItems</a></p>
 								<ul>
-									<li>Defined in util/renderer.ts:498</li>
+									<li>Defined in util/renderer.ts:562</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -480,6 +572,9 @@
 								<a href="arraylayoutprops.html#label" class="tsd-kind-icon">label</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="arraylayoutprops.html#minitems" class="tsd-kind-icon">min<wbr>Items</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 								<a href="arraylayoutprops.html#path" class="tsd-kind-icon">path</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
@@ -505,6 +600,12 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
 								<a href="arraylayoutprops.html#additem" class="tsd-kind-icon">add<wbr>Item</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+								<a href="arraylayoutprops.html#movedown" class="tsd-kind-icon">move<wbr>Down</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+								<a href="arraylayoutprops.html#moveup" class="tsd-kind-icon">move<wbr>Up</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
 								<a href="arraylayoutprops.html#removeitems" class="tsd-kind-icon">remove<wbr>Items</a>
