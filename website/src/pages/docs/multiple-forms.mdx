@@ -25,11 +25,8 @@ the `shippingAddress` property of the person, it is subsequently updated in the 
 ## Independent forms
 
 There might be use cases where you have forms that do not have anything in common, so your forms are independent, although they share the same store. In such cases
-you can explicitly pass `schema` and `uischema` props to the `JsonFormsDispatch` component
+you can explicitly pass `schema` and `uischema` props to the `JsonForms` component
 (if you don't specify these, they will be fetched from the store).
-
-Additionally, the `JsonFormsDispatch` component also takes a `path` prop which specifies
-the instance path that is used to bind against the data.
 
 To illustrate, let's look again at the example from before, but this time
 the `person` and `address` schemas are not stored in any common parent schema.
