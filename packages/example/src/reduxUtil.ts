@@ -35,7 +35,7 @@ import { AnyAction, Dispatch, Reducer } from 'redux';
 
 export const UPDATE_EXAMPLE_EXTENSION_STATE: 'jsonforms-example/UPDATE_EXAMPLE_EXTENSION_STATE' =
   'jsonforms-example/UPDATE_EXAMPLE_EXTENSION_STATE';
-  
+
 export interface UpdateExampleExtensionStateAction {
   type: 'jsonforms-example/UPDATE_EXAMPLE_EXTENSION_STATE';
   extensionState: any;
@@ -72,7 +72,7 @@ export interface AppProps extends ExampleStateProps {
 const mapStateToProps = (state: any) => {
   const examples = state.examples.data;
   const selectedExample = state.examples.selectedExample || examples[0];
-  const extensionState = state.examples.extensionState
+  const extensionState = state.examples.extensionState;
   return {
     dataAsString: JSON.stringify(getData(state), null, 2),
     examples,
@@ -117,7 +117,6 @@ const mergeProps = (
   });
 };
 
-
 interface ExamplesState {
   data: ReactExampleDescription[];
   selectedExample: ReactExampleDescription;
@@ -140,7 +139,7 @@ export const exampleReducer = (
     case UPDATE_EXAMPLE_EXTENSION_STATE:
       return Object.assign({}, state, {
         extensionState: action.extensionState
-      })
+      });
     default:
       return state;
   }

@@ -28,14 +28,16 @@ import { JsonFormsCore, updateErrors } from '@jsonforms/core';
 import { AnyAction, Dispatch } from 'redux';
 const localize = require('ajv-i18n');
 
-export const onChange = (dispatch: Dispatch<AnyAction>) => (extensionState: any) => ({errors}: Pick<JsonFormsCore, 'data' | 'errors'>) => {
-  if(!extensionState) {
-    return
+export const onChange = (dispatch: Dispatch<AnyAction>) => (
+  extensionState: any
+) => ({ errors }: Pick<JsonFormsCore, 'data' | 'errors'>) => {
+  if (!extensionState) {
+    return;
   }
-  const localiseFunc = localize[extensionState.locale.split("-")[0]]
-  localiseFunc(errors)
-  dispatch(updateErrors(errors))
-}
+  const localiseFunc = localize[extensionState.locale.split('-')[0]];
+  localiseFunc(errors);
+  dispatch(updateErrors(errors));
+};
 
 export const uischema = {
   type: 'VerticalLayout',
