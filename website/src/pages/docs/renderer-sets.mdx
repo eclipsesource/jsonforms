@@ -11,6 +11,8 @@ This is an overview of all available renderer sets and which features they suppo
 
 <RendererSetSchemaFeatureTable />
 
+<br />
+
 <RendererSetUISchemaFeatureTable />
 
 ## Material UI Renderer Set
@@ -44,8 +46,8 @@ const store = createStore(
 );
 ```
 
-The styles are simple objects with a name and an array of classNames to apply. 
-You can also provide a function as classNames which allows you to return dynamic classNames.
+The styles are simple objects with a name and an array of class names to apply. 
+You can also provide a function to the `classNames` parameter, which allows you to return dynamic class names.
 Here is an example:
 
 ```javascript
@@ -60,7 +62,7 @@ export const vanillaStyles = [{
 ```
 
 Inside a renderer you can retrieve the styling using `getStyleAsClassName` and `getStyle`. 
-The difference is that `getStyleAsClassName` returns a string where as `getStyle` returns an array of strings.
+The difference is that `getStyleAsClassName` returns a string whereas `getStyle` returns an array of strings.
 Here is an example:
 
 ```javascript

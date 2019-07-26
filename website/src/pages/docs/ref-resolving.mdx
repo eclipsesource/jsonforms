@@ -1,21 +1,21 @@
 ---
-name: Ref resolving
+name: Ref Resolving
 route: /docs/ref-resolving
 ---
 
-# Ref resolving
+# Ref Resolving
 
 Sometimes it might not be possible to have just a single schema that you can pass to JSONForms 
 or it might make sense to split up a very big schema into multiple smaller ones for maintenance reasons.
 
-If that's the case you can add a custom ref resolver based on [JSON Schema $Ref parser](https://github.com/APIDevTools/json-schema-ref-parser) 
-that determines how `$ref`s will be resolved. You'll also need to adapt the ajv validator in order to enable validation of the referenced schema.
+If that's the case, you can add a custom ref resolver based on [JSON Schema $Ref parser](https://github.com/APIDevTools/json-schema-ref-parser) 
+that determines how `$ref`s will be resolved. You'll also need to adapt the AJV validator in order to enable validation of the referenced schema.
 
 To do, use the [`init` action](/docs/available-actions#initdata-any-schema-jsonschema-uischema-uischemaelement-options-initactionoptions--ajvajv) of JSONForms
 and pass in the ref resolver together with the AJV instance.
 
 Here's an eample of how to accomplish this. We'll first create a customized AJV instance. `yourSchemaObject` is the actual schema to be referenced
-while `yourSchemaIdentifier` is the id that can be used to reference the schema via a $ref.
+while `yourSchemaIdentifier` is the id that can be used to reference the schema via a `$ref`.
 
 ```javascript
 const ajv = createAjv();
@@ -26,9 +26,9 @@ ajv.addSchema(
 ```
 
 Next, we'll set up the ref resolver. The implementation is up to you, but you'll need to implement a `canRead` method that 
-determines whether a current ref needs to be resolved and a `read` method that returns the actual chema. The `order` property
-determines the order in which resolvers are executed until the first one returns true for `canRead`. For more info about ref resolving 
-please see the [JSON Schema $Ref parser documentation](https://apidevtools.org/json-schema-ref-parser/docs/plugins/resolvers.html)
+determines whether a current ref needs to be resolved and a `read` method that returns the actual schema. The `order` property
+determines the order in which resolvers are executed, until the first one returns true for `canRead`. For more info about ref resolving 
+please see the [JSON Schema $Ref parser documentation](https://apidevtools.org/json-schema-ref-parser/docs/plugins/resolvers.html).
 
 ```javascript
 const yourSchemaResolver = {

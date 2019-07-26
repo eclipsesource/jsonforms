@@ -1,10 +1,9 @@
 import React from 'react';
 import { layout } from '@jsonforms/examples';
-import { JsonForms } from '@jsonforms/react';
+import { JsonFormsDispatch, JsonFormsReduxContext } from '@jsonforms/react';
 import { Provider } from 'react-redux';
-import { Demo } from "../common";
-import {createJsonFormsStore} from "../../common/store";
-
+import { Demo } from '../common';
+import { createJsonFormsStore } from '../../common/store';
 
 const verticalLayoutStore = createJsonFormsStore({
   data: layout.data,
@@ -15,57 +14,65 @@ const verticalLayoutStore = createJsonFormsStore({
 const groupStore = createJsonFormsStore({
   data: layout.data,
   schema: layout.schema,
-  uischema: layout.uischemaGroup,
+  uischema: layout.uischemaGroup
 });
 
 const horizontalStore = createJsonFormsStore({
   data: layout.data,
   schema: layout.schema,
-  uischema: layout.uischemaHorizontal,
+  uischema: layout.uischemaHorizontal
 });
 
 const complexStore = createJsonFormsStore({
   data: layout.data,
   schema: layout.schema,
-  uischema: layout.uischemaComplex,
+  uischema: layout.uischemaComplex
 });
 
 export const HorizontalLayout = () => (
   <Provider store={horizontalStore}>
-    <Demo
-      js={() => <JsonForms />}
-      uischema={layout.uischemaHorizontal}
-      schema={layout.schema}
-    />
+    <JsonFormsReduxContext>
+      <Demo
+        js={() => <JsonFormsDispatch />}
+        uischema={layout.uischemaHorizontal}
+        schema={layout.schema}
+      />
+    </JsonFormsReduxContext>
   </Provider>
 );
 
 export const VerticalLayout = () => (
   <Provider store={verticalLayoutStore}>
-    <Demo
-      js={() => <JsonForms/> }
-      uischema={layout.uischemaVertical}
-      schema={layout.schema}
-    />
+    <JsonFormsReduxContext>
+      <Demo
+        js={() => <JsonFormsDispatch />}
+        uischema={layout.uischemaVertical}
+        schema={layout.schema}
+      />
+    </JsonFormsReduxContext>
   </Provider>
-)
+);
 
 export const Group = () => (
-         <Provider store={groupStore}>
-           <Demo
-             js={() => <JsonForms />}
-             uischema={layout.uischemaGroup}
-             schema={layout.schema}
-           />
-         </Provider>
-       );
+  <Provider store={groupStore}>
+    <JsonFormsReduxContext>
+      <Demo
+        js={() => <JsonFormsDispatch />}
+        uischema={layout.uischemaGroup}
+        schema={layout.schema}
+      />
+    </JsonFormsReduxContext>
+  </Provider>
+);
 
 export const NestedLayouts = () => (
-      <Provider store={complexStore}>
-        <Demo
-          js={() => <JsonForms/> }
-          uischema={layout.uischemaComplex}
-          schema={layout.schema}
-        />
-      </Provider>
-)
+  <Provider store={complexStore}>
+    <JsonFormsReduxContext>
+      <Demo
+        js={() => <JsonFormsDispatch />}
+        uischema={layout.uischemaComplex}
+        schema={layout.schema}
+      />
+    </JsonFormsReduxContext>
+  </Provider>
+);

@@ -1,12 +1,16 @@
 import React from 'react';
 import { registerRenderer } from '@jsonforms/core';
-import { JsonForms } from '@jsonforms/react';
-import { createJsonFormsStore } from "../../../../common/store";
-import { Demo, ratingControlTester, RatingControl } from "../../../../components/common";
-import { Provider } from "react-redux";
+import { JsonFormsDispatch, JsonFormsReduxContext } from '@jsonforms/react';
+import { createJsonFormsStore } from '../../../../common/store';
+import {
+  Demo,
+  ratingControlTester,
+  RatingControl
+} from '../../../../components/common';
+import { Provider } from 'react-redux';
 
 const ratingData = {
-  rating: 2,
+  rating: 2
 };
 
 const ratingSchema = {
@@ -15,7 +19,7 @@ const ratingSchema = {
     rating: {
       type: 'integer',
       minimum: 0,
-      maximum: 5,
+      maximum: 5
     }
   }
 };
@@ -38,26 +42,30 @@ const store = createJsonFormsStore({
 });
 
 export const Default = () => (
-         <Provider store={store}>
-           <Demo
-             js={() => <JsonForms />}
-             schema={ratingSchema}
-             uischema={ratingUiSchema}
-           />
-         </Provider>
-       );
+  <Provider store={store}>
+    <JsonFormsReduxContext>
+      <Demo
+        js={() => <JsonFormsDispatch />}
+        schema={ratingSchema}
+        uischema={ratingUiSchema}
+      />
+    </JsonFormsReduxContext>
+  </Provider>
+);
 
 export const WithCustomRenderer = () => (
   <Provider store={storeWithRatingControlExample}>
-    <Demo
-      js={() => {
-        storeWithRatingControlExample.dispatch(
-          registerRenderer(ratingControlTester, RatingControl)
-        );
-        return <JsonForms />;
-      }}
-      schema={ratingSchema}
-      uischema={ratingUiSchema}
-    />
+    <JsonFormsReduxContext>
+      <Demo
+        js={() => {
+          storeWithRatingControlExample.dispatch(
+            registerRenderer(ratingControlTester, RatingControl)
+          );
+          return <JsonFormsDispatch />;
+        }}
+        schema={ratingSchema}
+        uischema={ratingUiSchema}
+      />
+    </JsonFormsReduxContext>
   </Provider>
 );

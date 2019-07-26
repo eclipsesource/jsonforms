@@ -1,11 +1,11 @@
 ---
-name: Reducers shape
+name: Reducers Shape
 route: /docs/store
 ---
 
-# Store shape
+# Store Shape
 
-JSON Forms makes use the reducer pattern to maintain its internal state. 
+JSON Forms makes use of the reducer pattern to maintain its internal state. 
 This section describes the sub-state managed by JSON Forms.
 
 JSON Forms exports its reducer via the `jsonformsReducer` function. 
@@ -33,8 +33,8 @@ export interface JsonFormsState {
 Let's inspect each of these state properties:
 
 ## `core` 
-The core substate stores the data, which represents the data to be rendered, 
-the schema which describes the structure of the `data` and the `uischema`, which describes how to render the `data`.
+The core substate stores the `data`, which represents the data to be rendered, 
+the `schema` which describes the structure of the `data` and the `uischema`, which describes how to render the `data`.
 
 The `validation` substate stores any validation errors the data currently has with respect to the schema. 
 Validation is performed via [ajv](https://github.com/epoberezkin/ajv). The `ValidationState` shape hence looks like this:
@@ -51,13 +51,15 @@ hence the ValidationFunction and ErrorObject types are from ajv.
 ## `renderers`
 
 The renderers property stores all available renderers that are used by JSON Forms when rendering. 
-If you want to know more about renderers, see the section on Custom Renderers.
+If you want to know more about renderers, see the section on [Custom Renderers](/docs/custom-renderers).
 
-## `fields`
+## `cells`
 
-Fields are like renderers but only represent the data to be displayed and nothing else. 
-This is not necessarily the case with Renderers stored within renderers, as such renderers may also display a label or any validation errors. Fields are more universal in that sense that they should not make any assumptions about the environment they are embedded in, e.g. a field may either be used by a regular control or by a table, where it is used within a call. Most controls for primitive datatypes in the default renderer sets of JSON Forms are implemented with fields.
+Cells are like renderers but only represent the data to be displayed and nothing else. 
+This is not necessarily the case with Renderers stored within renderers, as such renderers may also display a label or any validation errors.
+Fields are more universal in the sense that they should not make any assumptions about the environment they are embedded in, e.g. a field may
+either be used by a regular control or by a table, where it is used within a call. Most controls for primitive datatypes in the default renderer sets of JSON Forms are implemented with cells.
 
-If you contribute custom renderers/fields, some of them might need to some additional state not covered by JSON Forms. 
-For that purpose the JsonFormsState allows any additional state to be passed in via an index property.
+If you contribute custom renderers/cells, some of them might need to some additional state not covered by JSON Forms. 
+For that purpose the `additionalState` allows any additional state to be passed in via an index property.
 

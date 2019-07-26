@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import {Provider} from 'react-redux';
-import {JsonForms} from '@jsonforms/react';
+import {JsonFormsDispatch, JsonFormsReduxContext} from '@jsonforms/react';
 import {person} from '@jsonforms/examples';
 import {Demo} from '../../../../components/common';
 import {createJsonFormsStore} from "../../../../common/store";
@@ -228,29 +228,32 @@ const store = createJsonFormsStore({
 
 export const LinkedForms = () => (
   <Provider store={linkedFormsStore}>
+    <JsonFormsReduxContext>
     <Demo
       js={() => (
-        <JsonForms schema={pschema}
+        <JsonFormsDispatch schema={pschema}
                    uischema={puischema}
         />
       )}
       schema={pschema}
       uischema={puischema}
     />
+    </JsonFormsReduxContext>
     </Provider>
 )
 
 export const MultipleForms = () => (
   <Provider store={store}>
+    <JsonFormsReduxContext>
     <Demo
       js={() => (
         <div>
-          <JsonForms
+          <JsonFormsDispatch
             schema={schemas.person}
             uischema={uischemas.person}
             renderers={materialRenderers}
           />
-          <JsonForms
+          <JsonFormsDispatch
             schema={schemas.address}
             uischema={uischemas.address}
             renderers={materialRenderers}
@@ -260,5 +263,6 @@ export const MultipleForms = () => (
       schema={schemas}
       uischema={uischemas}
     />
+    </JsonFormsReduxContext>
   </Provider>
 );

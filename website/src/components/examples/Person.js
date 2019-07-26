@@ -1,12 +1,11 @@
 import React from 'react';
-import {person} from '@jsonforms/examples';
-import {JsonForms} from '@jsonforms/react';
-import {Provider} from 'react-redux';
-import {createJsonFormsStore} from "../../common/store";
-import Demo from "../common/Demo";
+import { person } from '@jsonforms/examples';
+import { JsonFormsDispatch, JsonFormsReduxContext } from '@jsonforms/react';
+import { Provider } from 'react-redux';
+import { createJsonFormsStore } from '../../common/store';
+import Demo from '../common/Demo';
 
 const Person = () => {
-
   const store = createJsonFormsStore({
     data: person.data,
     schema: person.schema,
@@ -16,11 +15,13 @@ const Person = () => {
   return (
     <div className='example'>
       <Provider store={store}>
-        <Demo
-          js={() => <JsonForms/>}
-          schema={person.schema}
-          uischema={person.uischema}
-        />
+        <JsonFormsReduxContext>
+          <Demo
+            js={() => <JsonFormsDispatch />}
+            schema={person.schema}
+            uischema={person.uischema}
+          />
+        </JsonFormsReduxContext>
       </Provider>
     </div>
   );

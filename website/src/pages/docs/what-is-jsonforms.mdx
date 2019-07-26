@@ -3,11 +3,11 @@ name: What is JSONForms?
 route: /docs/what-is-jsonforms
 ---
 
-import { 
-    IntroCode, 
-    GettingStartedExample, 
-    GettingStartedExampleWithRatingControl 
-} from './components//what-is-jsonforms/GettingStartedExample'
+import {
+  IntroCode,
+  GettingStartedExample,
+  GettingStartedExampleWithRatingControl
+} from './components//what-is-jsonforms/GettingStartedExample';
 
 # What is JSONForms?
 
@@ -15,9 +15,10 @@ JSON Forms is a declarative framework for efficiently building form-based web UI
 These UIs are targeted at entering, modifying and viewing data and are usually embedded within an application.
 
 ## Why do we need such a framework?
+
 Writing HTML templates and Javascript for data binding by hand is hard, especially in applications
 of reasonable size.
-Furthermore a form is often more than just a collection of input fields, usually more
+Furthermore, a form is often more than just a collection of input fields, usually more
 advanced functionality is required, e.g. validation or conditional visibility.
 
 JSONForms utilizes the capabilities of JSON and JSON schema and
@@ -25,6 +26,7 @@ provides a simple and declarative way of describing forms.
 Forms are then rendered with a UI library or framework, e.g. React or Angular.
 
 ## How does it work?
+
 Any UI is defined by using two schemata:
 
 - The **data/JSON schema** defines the underlying data to be shown in the UI (objects, properties, and their types)
@@ -61,6 +63,7 @@ Here's the JSON schema, which defines a simple task entity:
 ```
 
 And here's the respective UI schema:
+
 ```
 {
   type: 'VerticalLayout',
@@ -90,15 +93,14 @@ And here's the respective UI schema:
 }
 ```
 
- The form as rendered by JSONForms:
+The form as rendered by JSONForms:
 
 <GettingStartedExample />
 
 JSON Forms provides default renderers for all data types, however, you can change the way things are rendered by
-roviding custom renderers. An example is given below where we replaced the control for the rating property:
+providing custom renderers. An example is given below where we replaced the control for the rating property:
 
 <GettingStartedExampleWithRatingControl />
 
 If you are interested in learning more about JSON Forms, check out
 the [Getting started](/docs/getting-started) section.
-

@@ -14,16 +14,16 @@ describes some of these in more detail.
 
 Forms can interact with each other by using `$ref` and setting the `scope` property within the UI schema
 accordingly. In this example, we have two entities, Person and Address. Whenever we change
-the `shippingAddress` property of the person, it is accordingly updated in the address form and vice versa.
+the `shippingAddress` property of the person, it is subsequently updated in the address form and vice versa.
 
 <LinkedForms />
 
-## Multiple forms within single store
-There might be use cases where you have forms that do not have anything in common. In such cases
-you can explicitly pass  `schema` and `uischema` props to the `JsonForms` component
+## Independent forms
+There might be use cases where you have forms that do not have anything in common, so your forms are independent, although they share the same store. In such cases
+you can explicitly pass  `schema` and `uischema` props to the `JsonFormsDispatch` component
 (if you don't specify these, they will be fetched from the store).
 
-Additionally, the `JsonForms` component also takes a `path` prop which specifies
+Additionally, the `JsonFormsDispatch` component also takes a `path` prop which specifies
 the instance path that is used to bind against the data.
 
 To illustrate, let's look again at the example from before, but this time
@@ -35,11 +35,11 @@ The code for the above example looks as follows:
 
 ```
 <div>
-  <JsonForms schema={personSchema}
+  <JsonFormsDispatch schema={personSchema}
              uischema={personUISchema}
              renderers={materialRenderers}
   />
-  <JsonForms schema={addressSchema}
+  <JsonFormsDispatch schema={addressSchema}
              uischema={addressUISchema}
              renderers={materialRenderers}
   />
@@ -49,3 +49,5 @@ The code for the above example looks as follows:
 As you can see we explicitly pass in the `schema` and `uischema` props.
 We also need to specify which property the data should be written to, in this case we
 use `person` and `shippingAddress`.
+
+If you are interested in using JSON Forms witout Redux, see more details in the [React integration](/docs/react) section.

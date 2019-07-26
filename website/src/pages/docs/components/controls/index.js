@@ -1,13 +1,13 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { JsonForms } from '@jsonforms/react';
-import {createJsonFormsStore} from "../../../../common/store";
-import { Demo } from "../../../../components/common"
+import { JsonFormsDispatch, JsonFormsReduxContext } from '@jsonforms/react';
+import { createJsonFormsStore } from '../../../../common/store';
+import { Demo } from '../../../../components/common';
 
 export const input = {
   schema: {
     properties: {
-      name: {  'type': 'string' }
+      name: { type: 'string' }
     }
   },
   uischema: {
@@ -15,7 +15,7 @@ export const input = {
     scope: '#/properties/name'
   },
   data: {
-    name: 'Ottgar',
+    name: 'Ottgar'
   }
 };
 
@@ -26,35 +26,37 @@ const store = createJsonFormsStore({
 });
 
 export const Example = () => (
-  <Provider store={store} >
-    <Demo
-      js={() => {
-        return (
-          <JsonForms
-            schema={input.schema}
-            uischema={input.uischema}
-          />
-        )
-      }}
-      schema={input.schema}
-      uischema={input.uischema}
-    />
+  <Provider store={store}>
+    <JsonFormsReduxContext>
+      <Demo
+        js={() => {
+          return (
+            <JsonFormsDispatch
+              schema={input.schema}
+              uischema={input.uischema}
+            />
+          );
+        }}
+        schema={input.schema}
+        uischema={input.uischema}
+      />
+    </JsonFormsReduxContext>
   </Provider>
 );
 
 export const customLabelInput = {
   schema: {
     properties: {
-      name: {  'type': 'string' }
+      name: { type: 'string' }
     }
   },
   uischema: {
     type: 'Control',
     scope: '#/properties/name',
-    label: "First name"
+    label: 'First name'
   },
   data: {
-    name: 'Ottgar',
+    name: 'Ottgar'
   }
 };
 
@@ -65,18 +67,20 @@ const storeWithCustomLabel = createJsonFormsStore({
 });
 
 export const ExampleWithCustomLabel = () => (
-  <Provider store={storeWithCustomLabel} >
-    <Demo
-      js={() => {
-        return (
-          <JsonForms
-            schema={customLabelInput.schema}
-            uischema={customLabelInput.uischema}
-          />
-        )
-      }}
-      schema={customLabelInput.schema}
-      uischema={customLabelInput.uischema}
-    />
+  <Provider store={storeWithCustomLabel}>
+    <JsonFormsReduxContext>
+      <Demo
+        js={() => {
+          return (
+            <JsonFormsDispatch
+              schema={customLabelInput.schema}
+              uischema={customLabelInput.uischema}
+            />
+          );
+        }}
+        schema={customLabelInput.schema}
+        uischema={customLabelInput.uischema}
+      />
+    </JsonFormsReduxContext>
   </Provider>
 );

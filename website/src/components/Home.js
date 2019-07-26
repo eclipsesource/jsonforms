@@ -7,7 +7,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import FeaturesIcon from '@material-ui/icons/Report';
 import CustomizeIcon from '@material-ui/icons/Brush';
 import AddIcon from '@material-ui/icons/Add';
-import {JsonForms} from '@jsonforms/react'
+import {JsonFormsDispatch,JsonFormsReduxContext} from '@jsonforms/react'
 import corePackageJson from '@jsonforms/core/package'
 import {Provider} from 'react-redux';
 import angularLogo from "../images/angular.svg"
@@ -127,11 +127,13 @@ const Home = ({ classes }) => {
 
       <div className={styles.landing_page__form}>
         <Provider store={store}>
-          <Demo
-            js={() => <JsonForms />}
-            schema={schema}
-            uischema={uischema}
-          />
+         <JsonFormsReduxContext>
+            <Demo
+              js={() => <JsonFormsDispatch />}
+              schema={schema}
+              uischema={uischema}
+            />
+            </JsonFormsReduxContext>
         </Provider>
       </div>
     </React.Fragment>

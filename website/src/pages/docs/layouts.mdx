@@ -4,29 +4,35 @@ route: /docs/uischema/layouts
 parent: UI Schema Elements
 ---
 
-import ApiLink from "../../components/common/ApiLink"
-import { Layouts } from './components/layouts'
-import DemoButton from './components/DemoButton'
+import ApiLink from '../../components/common/ApiLink';
+import { Layouts } from '../../components/examples/Layouts';
+import DemoButton from './components/DemoButton';
 
 # Layouts
 
 Layout elements in the UI Schema contain other
-UI Schema elements like controls or other layouts and serve the purpose of defining the layout of those, e.g. a layout 
+UI Schema elements like controls or other layouts and serve the purpose of defining the layout of those, e.g. a layout
 could arrange all its contained UI Schema Elements into a horizontal alignment.
 
 ## `elements`
+
 All layouts need to declare an `elements` property which contains the children which are
 to be arranged by the layout. It is expected to be an array of UI Schema elements, e.g. controls
 or other layouts.
 
 ## `type`
+
 By default, JSON Forms supports four different kinds of layouts: `VerticalLayout`
 and `HorizontalLayout`, a slightly modified version of the vertical layout called `Group`
 as well `Categorization`, which is often used to bundle related data, for instance by means of Tabs.
 Those four core layouts are detailed in the following.
 
-## HorizontalLayout 
-<ApiLink link={'/public/api/core/interfaces/horizontallayout.html'} title='API'/> 
+## HorizontalLayout
+
+<ApiLink
+  link={'/public/api/core/interfaces/horizontallayout.html'}
+  title='API'
+/>
 
 Horizontal layouts use the `HorizontalLayout` type and arranges its contained `elements` in a
 horizontal fashion. Each child occupies the same amount of space, i.e. for n children a child occupies 1/n space.
@@ -49,12 +55,13 @@ horizontal fashion. Each child occupies the same amount of space, i.e. for n chi
 }
 ```
 
-<DemoButton to='/examples/layouts#horizontallayout' label="Demo"/>
+<DemoButton to='/examples/layouts#horizontal-layout' label='Demo' />
 
 ## VerticalLayout
-<ApiLink link={'/public/api/core/interfaces/verticallayout.html'} title='API'/> 
 
-Vertical Layouts use the `VerticalLayout` type and arranges its `elements` in a vertical fashion, 
+<ApiLink link={'/public/api/core/interfaces/verticallayout.html'} title='API' />
+
+Vertical Layouts use the `VerticalLayout` type and arranges its `elements` in a vertical fashion,
 i.e. all elements are placed beneath each other.
 
 ```json
@@ -75,16 +82,17 @@ i.e. all elements are placed beneath each other.
 }
 ```
 
-<DemoButton to='/examples/layouts#verticallayout' label="Demo"/>
+<DemoButton to='/examples/layouts#vertical-layout' label='Demo' />
 
 ## Group
 
-<ApiLink link='/public/api/core/interfaces/grouplayout.html'>API</ApiLink> 
+<ApiLink link='/public/api/core/interfaces/grouplayout.html'>API</ApiLink>
 
 Groups are very similar to `VerticalLayout`s but feature an additional mandatory `label` property
 that is used to describe the `elements`.
 
 ### `label`
+
 The label property defines an additional string that is ought to describe the elements of the Group.
 
 ```json
@@ -106,10 +114,11 @@ The label property defines an additional string that is ought to describe the el
 }
 ```
 
+<DemoButton to='/examples/layouts#group' label='Demo' />
 
 ## Categorization
 
-<ApiLink link='/public/api/core/interfaces/categorization.html'>API</ApiLink> 
+<ApiLink link='/public/api/core/interfaces/categorization.html'>API</ApiLink>
 
 Categorization uses the `Categorization` type and can only contain `elements` of
 type `Category`. A `Category` itself acts as a container and has
@@ -167,5 +176,4 @@ and 'Dietary requirements' as demonstrated in example below.
 
 In the example above note how each child within the elements is of type Category.
 
-<DemoButton to='/examples/categorization' label="Demo"/>
-
+<DemoButton to='/examples/categorization' label='Demo' />

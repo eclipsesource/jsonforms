@@ -1,18 +1,18 @@
 ---
-name: Create a JSON Forms app (Redux)
+name: Create a JSON Forms App (Redux)
 route: /docs/tutorial-redux
 parent: Tutorials
 ---
 
 import { PersonVars } from './components/tutorial/TutorialExample' 
 
-# Tutorial
+# Create a JSON Forms App (Redux)
 
-This section describes you to integrate JSON Forms into a React app from scratch.
+This section describes how you can integrate JSON Forms into a React app from scratch.
 Alternatively you can also clone the [seed app](https://github.com/eclipsesource/jsonforms-react-seed).
 
 1. We'll use [create-react-app](https://github.com/facebookincubator/create-react-app) to scaffold a basic React application which we'll use as a starting point.
-   If you didn't install create-react-app yet, please do so now before continuing.
+   If you didn't install `create-react-app` yet, please do so now before continuing.
 
    Let's now create a basic application with:
 
@@ -58,7 +58,7 @@ Alternatively you can also clone the [seed app](https://github.com/eclipsesource
    renderer set. The other ones will be explained in a bit.
 
    Now let's define the variables that are crucial for JSON Forms to work,
-   that is, `data`, `schema` and `uischema`. As previously mention, we are
+   that is, `data`, `schema` and `uischema`. As previously mentioned, we are
    using the person example from JSON Forms here:
 
    ```javascript
@@ -67,10 +67,10 @@ Alternatively you can also clone the [seed app](https://github.com/eclipsesource
    const data = person.data;
    ```
 
-   These variables are defined as follows, in case you are interested:
+   These variables are defined as follows:
 
    <PersonVars />
-4. Still in `index.js`, create a new store with the `createStore` function provided by redux.
+4. Still in `index.js`, create a new store with the `createStore` function provided by Redux.
    For that purpose JSON Forms exports its reducer via `jsonformsReducer`. For the initial state we supply
    the renderers we want to use, which we have imported from `@jsonforms/material-renderers`:
 
