@@ -62,7 +62,7 @@ const Support = ({ classes }) => (
   <div className='support__main' style={{ justifyContent: 'center', alignItems: 'center', display: 'flex', flexDirection: 'column' }}>
     <div className={classes.comparison_container} style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center'}}>
       <div className={classes.community} style={{flex: '1'}}>
-        <Typography className={classes.comparison_title} variant="h3" style={{ color: 'white' }}>Community support</Typography>
+        <Typography className={classes.comparison_title} variant="h3">Community support</Typography>
         <ul className={classes.list} style={{listStylePosition: 'inside'}}>
           <li className={classes.list_item}><a className={classes.link} href={'https://spectrum.chat/jsonforms/'}>Public channel</a></li>
           <li className={classes.list_item}>Basic topics only</li>
@@ -73,7 +73,7 @@ const Support = ({ classes }) => (
         </div>
       </div>
       <div className={classes.professional} style={{flex: '1'}}>
-        <Typography className={classes.comparison_title} variant="h3" style={{ color: 'white' }}>Professional Support</Typography>
+        <Typography className={classes.comparison_title} variant="h3">Professional Support</Typography>
         <ul className={classes.list} style={{listStylePosition: 'inside'}}>
           <li className={classes.list_item}>Guaranteed response time</li>
           <li className={classes.list_item}>In-depth answers</li>
@@ -83,7 +83,7 @@ const Support = ({ classes }) => (
           <li className={classes.list_item}>Feature prioritization</li>
         </ul>
         <div className={classes.price_block}>
-          Starts from 1.695 €: <a className={classes.link} href={'support@jsonforms.io'}>Contact us</a> for details
+          Starts from 1.695 €: <a className={classes.link} href={'mailto:support@jsonforms.io'}>Contact us</a> for details
           <ul className={classes.list} style={{listStylePosition: 'inside', listStyle:'none'}}>
             <li className={classes.price_list_item}>10h professional support</li>
             <li className={classes.price_list_item}>additionally 5h project sponsorship</li>
