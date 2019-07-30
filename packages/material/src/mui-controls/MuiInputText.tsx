@@ -59,9 +59,9 @@ export class MuiInputText extends React.PureComponent<
       muiInputProps
     } = this.props;
     const maxLength = schema.maxLength;
-    const mergedConfig = merge({}, config, uischema.options);
+    const appliedUiSchemaOptions = merge({}, config, uischema.options);
     let inputProps: any;
-    if (mergedConfig.restrict) {
+    if (appliedUiSchemaOptions.restrict) {
       inputProps = { maxLength: maxLength };
     } else {
       inputProps = {};
@@ -69,7 +69,7 @@ export class MuiInputText extends React.PureComponent<
 
     inputProps = merge(inputProps, muiInputProps);
 
-    if (mergedConfig.trim && maxLength !== undefined) {
+    if (appliedUiSchemaOptions.trim && maxLength !== undefined) {
       inputProps.size = maxLength;
     }
     const onChange = (ev: any) => handleChange(path, ev.target.value);
@@ -77,18 +77,16 @@ export class MuiInputText extends React.PureComponent<
     return (
       <Input
         type={
-          uischema.options && uischema.options.format === 'password'
-            ? 'password'
-            : 'text'
+          appliedUiSchemaOptions.format === 'password' ? 'password' : 'text'
         }
         value={data || ''}
         onChange={onChange}
         className={className}
         id={id}
         disabled={!enabled}
-        autoFocus={uischema.options && uischema.options.focus}
-        multiline={uischema.options && uischema.options.multi}
-        fullWidth={!mergedConfig.trim || maxLength === undefined}
+        autoFocus={appliedUiSchemaOptions.focus}
+        multiline={appliedUiSchemaOptions.multi}
+        fullWidth={!appliedUiSchemaOptions.trim || maxLength === undefined}
         inputProps={inputProps}
         error={!isValid}
         onPointerEnter={() => this.setState({ showAdornment: true })}

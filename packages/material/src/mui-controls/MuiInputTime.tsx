@@ -26,10 +26,20 @@ import React from 'react';
 import { CellProps, WithClassname } from '@jsonforms/core';
 import Input from '@material-ui/core/Input';
 import { areEqual } from '@jsonforms/react';
+import merge from 'lodash/merge';
 
 export const MuiInputTime = React.memo((props: CellProps & WithClassname) => {
-  const { data, className, id, enabled, uischema, path, handleChange } = props;
-
+  const {
+    data,
+    className,
+    id,
+    enabled,
+    uischema,
+    path,
+    handleChange,
+    config
+  } = props;
+  const appliedUiSchemaOptions = merge({}, config, uischema.options);
   return (
     <Input
       type='time'
@@ -38,7 +48,7 @@ export const MuiInputTime = React.memo((props: CellProps & WithClassname) => {
       className={className}
       id={id}
       disabled={!enabled}
-      autoFocus={uischema.options && uischema.options.focus}
+      autoFocus={appliedUiSchemaOptions.focus}
       fullWidth={true}
     />
   );

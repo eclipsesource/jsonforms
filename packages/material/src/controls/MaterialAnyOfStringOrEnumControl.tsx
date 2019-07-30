@@ -64,12 +64,12 @@ const MuiAutocompleteInputText = (props: EnumCellProps & WithClassname) => {
   const enumSchema = findEnumSchema(schema.anyOf);
   const stringSchema = findTextSchema(schema.anyOf);
   const maxLength = stringSchema.maxLength;
-  const mergedConfig = merge({}, config, uischema.options);
+  const appliedUiSchemaOptions = merge({}, config, uischema.options);
   let inputProps: InputBaseComponentProps = {};
-  if (mergedConfig.restrict) {
+  if (appliedUiSchemaOptions.restrict) {
     inputProps = { maxLength: maxLength };
   }
-  if (mergedConfig.trim && maxLength !== undefined) {
+  if (appliedUiSchemaOptions.trim && maxLength !== undefined) {
     inputProps.size = maxLength;
   }
   const onChange = (ev: any) => handleChange(path, ev.target.value);
@@ -90,8 +90,8 @@ const MuiAutocompleteInputText = (props: EnumCellProps & WithClassname) => {
       className={className}
       id={id}
       disabled={!enabled}
-      autoFocus={uischema.options && uischema.options.focus}
-      fullWidth={!mergedConfig.trim || maxLength === undefined}
+      autoFocus={appliedUiSchemaOptions.focus}
+      fullWidth={!appliedUiSchemaOptions.trim || maxLength === undefined}
       inputProps={inputProps}
       error={!isValid}
       endAdornment={dataList}
@@ -99,7 +99,10 @@ const MuiAutocompleteInputText = (props: EnumCellProps & WithClassname) => {
   );
 };
 
-export class MaterialAnyOfStringOrEnumControl extends Control<ControlProps, ControlState> {
+export class MaterialAnyOfStringOrEnumControl extends Control<
+  ControlProps,
+  ControlState
+> {
   render() {
     return (
       <MaterialInputControl {...this.props} input={MuiAutocompleteInputText} />

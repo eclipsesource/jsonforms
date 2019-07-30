@@ -24,7 +24,11 @@
 */
 import isEmpty from 'lodash/isEmpty';
 import union from 'lodash/union';
-import { DispatchCell, JsonFormsStateContext, useJsonForms } from '@jsonforms/react';
+import {
+  DispatchCell,
+  JsonFormsStateContext,
+  useJsonForms
+} from '@jsonforms/react';
 import startCase from 'lodash/startCase';
 import range from 'lodash/range';
 import React, { Fragment } from 'react';
@@ -37,7 +41,7 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  Typography,
+  Typography
 } from '@material-ui/core';
 import {
   ArrayLayoutProps,
@@ -57,6 +61,7 @@ import { WithDeleteDialogSupport } from './DeleteDialog';
 import NoBorderTableCell from './NoBorderTableCell';
 import TableToolbar from './TableToolbar';
 import { ErrorObject } from 'ajv';
+import merge from 'lodash/merge';
 
 // we want a cell that doesn't automatically span
 const styles = {
@@ -124,7 +129,7 @@ export interface EmptyTableProps {
 const EmptyTable = ({ numColumns }: EmptyTableProps) => (
   <TableRow>
     <NoBorderTableCell colSpan={numColumns}>
-      <Typography align="center">No data</Typography>
+      <Typography align='center'>No data</Typography>
     </NoBorderTableCell>
   </TableRow>
 );
@@ -151,8 +156,9 @@ const ctxToNonEmptyCellProps = (
   ctx: JsonFormsStateContext,
   ownProps: OwnPropsOfNonEmptyCell
 ): NonEmptyCellProps => {
-
-  const path = ownProps.rowPath + (ownProps.schema.type === 'object' ? '.' + ownProps.propName : '');
+  const path =
+    ownProps.rowPath +
+    (ownProps.schema.type === 'object' ? '.' + ownProps.propName : '');
   const errors = formatErrorMessage(
     union(
       errorsAt(path, ownProps.schema, p => p === path)(ctx.core.errors).map(
@@ -178,7 +184,10 @@ const controlWithoutLabel = (scope: string): ControlElement => ({
 
 const NonEmptyCell = (ownProps: OwnPropsOfNonEmptyCell) => {
   const ctx = useJsonForms();
-  const { path, propName, schema, rootSchema, errors } = ctxToNonEmptyCellProps(ctx, ownProps);
+  const { path, propName, schema, rootSchema, errors } = ctxToNonEmptyCellProps(
+    ctx,
+    ownProps
+  );
 
   const isValid = isEmpty(errors);
 
@@ -195,12 +204,12 @@ const NonEmptyCell = (ownProps: OwnPropsOfNonEmptyCell) => {
           path={path}
         />
       ) : (
-          <DispatchCell
-            schema={schema}
-            uischema={controlWithoutLabel('#')}
-            path={path}
-          />
-        )}
+        <DispatchCell
+          schema={schema}
+          uischema={controlWithoutLabel('#')}
+          path={path}
+        />
+      )}
       <FormHelperText error={!isValid}>{!isValid && errors}</FormHelperText>
     </NoBorderTableCell>
   );
@@ -235,7 +244,7 @@ const NonEmptyRow = React.memo(
         <NoBorderTableCell
           style={showSortButtons ? styles.fixedCell : styles.fixedCellSmall}
         >
-          <Grid container direction="row" justify="center" alignItems="center">
+          <Grid container direction='row' justify='center' alignItems='center'>
             {showSortButtons ? (
               <Fragment>
                 <Grid item>
@@ -258,8 +267,8 @@ const NonEmptyRow = React.memo(
                 </Grid>
               </Fragment>
             ) : (
-                ''
-              )}
+              ''
+            )}
 
             <Grid item>
               <IconButton
@@ -282,6 +291,7 @@ interface TableRowsProp {
   moveUp?(path: string, toMove: number): () => void;
   moveDown?(path: string, toMove: number): () => void;
   uischema: ControlElement;
+  config?: any;
 }
 const TableRows = ({
   data,
@@ -290,13 +300,16 @@ const TableRows = ({
   openDeleteDialog,
   moveUp,
   moveDown,
-  uischema
+  uischema,
+  config
 }: TableRowsProp & WithDeleteDialogSupport) => {
   const isEmptyTable = data === 0;
 
   if (isEmptyTable) {
     return <EmptyTable numColumns={getValidColumnProps(schema).length + 1} />;
   }
+
+  const appliedUiSchemaOptions = merge({}, config, uischema.options);
 
   return (
     <React.Fragment>
@@ -317,9 +330,7 @@ const TableRows = ({
             moveDown={moveDown(path, index)}
             enableUp={index !== 0}
             enableDown={index !== data - 1}
-            showSortButtons={
-              uischema.options && uischema.options.showSortButtons
-            }
+            showSortButtons={appliedUiSchemaOptions.showSortButtons}
           />
         );
       })}
@@ -330,7 +341,7 @@ const TableRows = ({
 export class MaterialTableControl extends React.Component<
   ArrayLayoutProps & WithDeleteDialogSupport,
   any
-  > {
+> {
   addItem = (path: string, value: any) => this.props.addItem(path, value);
   render() {
     const {

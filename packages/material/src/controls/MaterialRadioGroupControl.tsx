@@ -37,9 +37,18 @@ import {
 import { Control, withJsonFormsControlProps } from '@jsonforms/react';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
-import { FormControl, FormControlLabel, FormHelperText, FormLabel, Hidden } from '@material-ui/core';
+import {
+  FormControl,
+  FormControlLabel,
+  FormHelperText,
+  FormLabel,
+  Hidden
+} from '@material-ui/core';
 
-export class MaterialRadioGroupControl extends Control<ControlProps, ControlState> {
+export class MaterialRadioGroupControl extends Control<
+  ControlProps,
+  ControlState
+> {
   render() {
     const {
       config,
@@ -53,9 +62,17 @@ export class MaterialRadioGroupControl extends Control<ControlProps, ControlStat
       visible
     } = this.props;
     const isValid = errors.length === 0;
-    const mergedConfig = merge({}, config, this.props.uischema.options);
-    const trim = mergedConfig.trim;
-    const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused, mergedConfig.showUnfocusedDescription);
+    const appliedUiSchemaOptions = merge(
+      {},
+      config,
+      this.props.uischema.options
+    );
+    const showDescription = !isDescriptionHidden(
+      visible,
+      description,
+      this.state.isFocused,
+      appliedUiSchemaOptions.showUnfocusedDescription
+    );
 
     const options = schema.enum;
 
@@ -63,7 +80,7 @@ export class MaterialRadioGroupControl extends Control<ControlProps, ControlStat
       <Hidden xsUp={!visible}>
         <FormControl
           component={'fieldset' as 'div'}
-          fullWidth={!trim}
+          fullWidth={!appliedUiSchemaOptions.trim}
         >
           <FormLabel
             htmlFor={id}
@@ -73,7 +90,7 @@ export class MaterialRadioGroupControl extends Control<ControlProps, ControlStat
             {computeLabel(
               isPlainLabel(label) ? label : label.default,
               required,
-              mergedConfig.hideRequiredAsterisk
+              appliedUiSchemaOptions.hideRequiredAsterisk
             )}
           </FormLabel>
 
@@ -92,11 +109,7 @@ export class MaterialRadioGroupControl extends Control<ControlProps, ControlStat
             ))}
           </RadioGroup>
           <FormHelperText error={!isValid}>
-            {!isValid
-              ? errors
-              : showDescription
-                ? description
-                : null}
+            {!isValid ? errors : showDescription ? description : null}
           </FormHelperText>
         </FormControl>
       </Hidden>
@@ -104,5 +117,8 @@ export class MaterialRadioGroupControl extends Control<ControlProps, ControlStat
   }
 }
 
-export const materialRadioGroupControlTester: RankedTester = rankWith(2, optionIs('format', 'radio'));
+export const materialRadioGroupControlTester: RankedTester = rankWith(
+  2,
+  optionIs('format', 'radio')
+);
 export default withJsonFormsControlProps(MaterialRadioGroupControl);

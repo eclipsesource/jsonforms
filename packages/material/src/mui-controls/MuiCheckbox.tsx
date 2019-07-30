@@ -26,10 +26,21 @@ import React from 'react';
 import { CellProps, WithClassname } from '@jsonforms/core';
 import Checkbox from '@material-ui/core/Checkbox';
 import { areEqual } from '@jsonforms/react';
+import merge from 'lodash/merge';
 
 export const MuiCheckbox = React.memo((props: CellProps & WithClassname) => {
-  const { data, className, id, enabled, uischema, path, handleChange } = props;
-  const config = { autoFocus: uischema.options && uischema.options.focus };
+  const {
+    data,
+    className,
+    id,
+    enabled,
+    uischema,
+    path,
+    handleChange,
+    config
+  } = props;
+  const appliedUiSchemaOptions = merge({}, config, uischema.options);
+  const inputProps = { autoFocus: !!appliedUiSchemaOptions.focus };
   // !! causes undefined value to be converted to false, otherwise has no effect
   const checked = !!data;
 
@@ -40,7 +51,7 @@ export const MuiCheckbox = React.memo((props: CellProps & WithClassname) => {
       className={className}
       id={id}
       disabled={!enabled}
-      inputProps={config}
+      inputProps={inputProps}
     />
   );
 }, areEqual);

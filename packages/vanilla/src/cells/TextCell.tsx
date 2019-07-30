@@ -46,7 +46,7 @@ export const TextCell = (props: CellProps & VanillaRendererProps) => {
     handleChange
   } = props;
   const maxLength = schema.maxLength;
-  const mergedConfig = merge({}, config, uischema.options);
+  const appliedUiSchemaOptions = merge({}, config, uischema.options);
   return (
     <input
       type='text'
@@ -55,9 +55,9 @@ export const TextCell = (props: CellProps & VanillaRendererProps) => {
       className={className}
       id={id}
       disabled={!enabled}
-      autoFocus={uischema.options && uischema.options.focus}
-      maxLength={mergedConfig.restrict ? maxLength : undefined}
-      size={mergedConfig.trim ? maxLength : undefined}
+      autoFocus={appliedUiSchemaOptions.focus}
+      maxLength={appliedUiSchemaOptions.restrict ? maxLength : undefined}
+      size={appliedUiSchemaOptions.trim ? maxLength : undefined}
     />
   );
 };

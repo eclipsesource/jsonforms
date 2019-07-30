@@ -28,7 +28,7 @@ import {
   ControlProps,
   ControlState,
   isDescriptionHidden,
-  isPlainLabel,
+  isPlainLabel
 } from '@jsonforms/core';
 import { Control } from '@jsonforms/react';
 
@@ -39,8 +39,10 @@ import merge from 'lodash/merge';
 interface WithInput {
   input: any;
 }
-export abstract class MaterialInputControl extends Control<ControlProps & WithInput, ControlState> {
-
+export abstract class MaterialInputControl extends Control<
+  ControlProps & WithInput,
+  ControlState
+> {
   render() {
     const {
       id,
@@ -54,8 +56,7 @@ export abstract class MaterialInputControl extends Control<ControlProps & WithIn
       input
     } = this.props;
     const isValid = errors.length === 0;
-    const mergedConfig = merge({}, config, uischema.options);
-    const trim = mergedConfig.trim;
+    const appliedUiSchemaOptions = merge({}, config, uischema.options);
     const inputLabelStyle: { [x: string]: any } = {
       whiteSpace: 'nowrap',
       overflow: 'hidden',
@@ -68,7 +69,7 @@ export abstract class MaterialInputControl extends Control<ControlProps & WithIn
       visible,
       description,
       this.state.isFocused,
-      mergedConfig.showUnfocusedDescription
+      appliedUiSchemaOptions.showUnfocusedDescription
     );
 
     const firstFormHelperText = showDescription
@@ -82,7 +83,7 @@ export abstract class MaterialInputControl extends Control<ControlProps & WithIn
     return (
       <Hidden xsUp={!visible}>
         <FormControl
-          fullWidth={!trim}
+          fullWidth={!appliedUiSchemaOptions.trim}
           onFocus={this.onFocus}
           onBlur={this.onBlur}
           id={id}
@@ -92,7 +93,11 @@ export abstract class MaterialInputControl extends Control<ControlProps & WithIn
             error={!isValid}
             style={inputLabelStyle}
           >
-            {computeLabel(isPlainLabel(label) ? label : label.default, required, mergedConfig.hideRequiredAsterisk)}
+            {computeLabel(
+              isPlainLabel(label) ? label : label.default,
+              required,
+              appliedUiSchemaOptions.hideRequiredAsterisk
+            )}
           </InputLabel>
           <InnerComponent
             {...this.props}
