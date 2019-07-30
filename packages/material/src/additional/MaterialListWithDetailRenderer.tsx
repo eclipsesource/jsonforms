@@ -35,13 +35,11 @@ import {
   rankWith,
   uiTypeIs
 } from '@jsonforms/core';
-import { JsonFormsDispatch, withJsonFormsArrayLayoutProps } from '@jsonforms/react';
 import {
-  Grid,
-  Hidden,
-  List,
-  Typography
-} from '@material-ui/core';
+  JsonFormsDispatch,
+  withJsonFormsArrayLayoutProps
+} from '@jsonforms/react';
+import { Grid, Hidden, List, Typography } from '@material-ui/core';
 import map from 'lodash/map';
 import range from 'lodash/range';
 import React, { useCallback, useState } from 'react';
@@ -49,74 +47,101 @@ import { ArrayLayoutToolbar } from '../layouts/ArrayToolbar';
 import ListWithDetailMasterItem from './ListWithDetailMasterItem';
 import merge from 'lodash/merge';
 
-export const MaterialListWithDetailRenderer =
-  ({ uischemas, schema, uischema, path, errors, visible, label, required, removeItems, addItem, data, renderers, config }: ArrayLayoutProps) => {
-    const [selectedIndex, setSelectedIndex] = useState(undefined);
-    const handleRemoveItem = useCallback((p: string, value: any) => () => {
+export const MaterialListWithDetailRenderer = ({
+  uischemas,
+  schema,
+  uischema,
+  path,
+  errors,
+  visible,
+  label,
+  required,
+  removeItems,
+  addItem,
+  data,
+  renderers,
+  config
+}: ArrayLayoutProps) => {
+  const [selectedIndex, setSelectedIndex] = useState(undefined);
+  const handleRemoveItem = useCallback(
+    (p: string, value: any) => () => {
       removeItems(p, [value])();
       if (selectedIndex === value) {
         setSelectedIndex(undefined);
       } else if (selectedIndex > value) {
         setSelectedIndex(selectedIndex - 1);
       }
-    }, [removeItems, setSelectedIndex]);
-    const handleListItemClick = useCallback((index: number) => () => setSelectedIndex(index), [setSelectedIndex]);
-    const handleCreateDefaultValue = useCallback(() => createDefaultValue(schema), [createDefaultValue]);
-    const foundUISchema = findUISchema(
-      uischemas,
-      schema,
-      uischema.scope,
-      path,
-      undefined,
-      uischema
-    );
-    const mergedConfig = merge({}, config, uischema.options);
+    },
+    [removeItems, setSelectedIndex]
+  );
+  const handleListItemClick = useCallback(
+    (index: number) => () => setSelectedIndex(index),
+    [setSelectedIndex]
+  );
+  const handleCreateDefaultValue = useCallback(
+    () => createDefaultValue(schema),
+    [createDefaultValue]
+  );
+  const foundUISchema = findUISchema(
+    uischemas,
+    schema,
+    uischema.scope,
+    path,
+    undefined,
+    uischema
+  );
+  const appliedUiSchemaOptions = merge({}, config, uischema.options);
 
-    return (
-      <Hidden xsUp={!visible}>
-        <ArrayLayoutToolbar
-          label={computeLabel(isPlainLabel(label) ? label : label.default, required, mergedConfig.hideRequiredAsterisk)}
-          errors={errors}
-          path={path}
-          addItem={addItem}
-          createDefault={handleCreateDefaultValue}
-        />
-        <Grid container direction='row' spacing={2}>
-          <Grid item xs={3}>
-            <List>
-              {data > 0 ?
-                map(range(data), index => (
-                  <ListWithDetailMasterItem
-                    index={index}
-                    path={path}
-                    schema={schema}
-                    handleSelect={handleListItemClick}
-                    removeItem={handleRemoveItem}
-                    selected={selectedIndex === index}
-                    key={index}
-                  />
-                ))
-                : <p>No data</p>
-              }
-            </List>
-          </Grid>
-          <Grid item xs>
-            {
-              selectedIndex !== undefined ?
-                <JsonFormsDispatch
-                  renderers={renderers}
-                  visible={visible}
+  return (
+    <Hidden xsUp={!visible}>
+      <ArrayLayoutToolbar
+        label={computeLabel(
+          isPlainLabel(label) ? label : label.default,
+          required,
+          appliedUiSchemaOptions.hideRequiredAsterisk
+        )}
+        errors={errors}
+        path={path}
+        addItem={addItem}
+        createDefault={handleCreateDefaultValue}
+      />
+      <Grid container direction='row' spacing={2}>
+        <Grid item xs={3}>
+          <List>
+            {data > 0 ? (
+              map(range(data), index => (
+                <ListWithDetailMasterItem
+                  index={index}
+                  path={path}
                   schema={schema}
-                  uischema={foundUISchema}
-                  path={composePaths(path, `${selectedIndex}`)}
-                /> :
-                <Typography variant='h6'>No Selection</Typography>
-            }
-          </Grid>
+                  handleSelect={handleListItemClick}
+                  removeItem={handleRemoveItem}
+                  selected={selectedIndex === index}
+                  key={index}
+                />
+              ))
+            ) : (
+              <p>No data</p>
+            )}
+          </List>
         </Grid>
-      </Hidden>
-    );
-  };
+        <Grid item xs>
+          {selectedIndex !== undefined ? (
+            <JsonFormsDispatch
+              renderers={renderers}
+              visible={visible}
+              schema={schema}
+              uischema={foundUISchema}
+              path={composePaths(path, `${selectedIndex}`)}
+            />
+          ) : (
+            <Typography variant='h6'>No Selection</Typography>
+          )}
+        </Grid>
+      </Grid>
+    </Hidden>
+  );
+};
 
 export const materialListWithDetailTester: RankedTester = rankWith(
   4,

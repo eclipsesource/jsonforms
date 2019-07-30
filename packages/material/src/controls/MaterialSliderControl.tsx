@@ -35,7 +35,12 @@ import {
 } from '@jsonforms/core';
 import { Control, withJsonFormsControlProps } from '@jsonforms/react';
 
-import { FormControl, FormHelperText, Hidden, Typography } from '@material-ui/core';
+import {
+  FormControl,
+  FormHelperText,
+  Hidden,
+  Typography
+} from '@material-ui/core';
 import Slider from '@material-ui/lab/Slider';
 import merge from 'lodash/merge';
 
@@ -56,8 +61,11 @@ export class MaterialSliderControl extends Control<ControlProps, ControlState> {
       config
     } = this.props;
     const isValid = errors.length === 0;
-    const mergedConfig = merge({}, config, this.props.uischema.options);
-    const trim = mergedConfig.trim;
+    const appliedUiSchemaOptions = merge(
+      {},
+      config,
+      this.props.uischema.options
+    );
     const labelStyle: { [x: string]: any } = {
       whiteSpace: 'nowrap',
       overflow: 'hidden',
@@ -74,17 +82,26 @@ export class MaterialSliderControl extends Control<ControlProps, ControlState> {
       marginTop: '7px'
     };
 
-    const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused, mergedConfig.showUnfocusedDescription);
+    const showDescription = !isDescriptionHidden(
+      visible,
+      description,
+      this.state.isFocused,
+      appliedUiSchemaOptions.showUnfocusedDescription
+    );
     return (
       <Hidden xsUp={!visible}>
         <FormControl
-          fullWidth={!trim}
+          fullWidth={!appliedUiSchemaOptions.trim}
           onFocus={this.onFocus}
           onBlur={this.onBlur}
           id={id}
         >
           <Typography id={id + '-typo'} style={labelStyle} variant='caption'>
-            {computeLabel(isPlainLabel(label) ? label : label.default, required, mergedConfig.hideRequiredAsterisk)}
+            {computeLabel(
+              isPlainLabel(label) ? label : label.default,
+              required,
+              appliedUiSchemaOptions.hideRequiredAsterisk
+            )}
           </Typography>
           <div style={rangeContainerStyle}>
             <Typography style={rangeItemStyle} variant='caption' align='left'>
@@ -101,8 +118,7 @@ export class MaterialSliderControl extends Control<ControlProps, ControlState> {
             value={Number(data || schema.default)}
             onChange={(_ev: any, value: any) => {
               handleChange(path, Number(value));
-            }
-            }
+            }}
             id={id + '-input'}
             disabled={!enabled}
             step={schema.multipleOf || 1}
@@ -115,6 +131,9 @@ export class MaterialSliderControl extends Control<ControlProps, ControlState> {
     );
   }
 }
-export const materialSliderControlTester: RankedTester = rankWith(4, isRangeControl);
+export const materialSliderControlTester: RankedTester = rankWith(
+  4,
+  isRangeControl
+);
 
 export default withJsonFormsControlProps(MaterialSliderControl);

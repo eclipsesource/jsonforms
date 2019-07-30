@@ -56,20 +56,32 @@ export class MaterialNativeControl extends Control<ControlProps, ControlState> {
       config
     } = this.props;
     const isValid = errors.length === 0;
-    const mergedConfig = merge({}, config, this.props.uischema.options);
-    const trim = mergedConfig.trim;
+    const appliedUiSchemaOptions = merge(
+      {},
+      config,
+      this.props.uischema.options
+    );
     const onChange = (ev: any) => handleChange(path, ev.target.value);
     const fieldType = schema.format;
-    const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused, mergedConfig.showUnfocusedDescription);
+    const showDescription = !isDescriptionHidden(
+      visible,
+      description,
+      this.state.isFocused,
+      appliedUiSchemaOptions.showUnfocusedDescription
+    );
 
     return (
       <Hidden xsUp={!visible}>
         <TextField
           id={id + '-input'}
-          label={computeLabel(isPlainLabel(label) ? label : label.default, required, mergedConfig.hideRequiredAsterisk)}
+          label={computeLabel(
+            isPlainLabel(label) ? label : label.default,
+            required,
+            appliedUiSchemaOptions.hideRequiredAsterisk
+          )}
           type={fieldType}
           error={!isValid}
-          fullWidth={!trim}
+          fullWidth={!appliedUiSchemaOptions.trim}
           onFocus={this.onFocus}
           onBlur={this.onBlur}
           helperText={!isValid ? errors : showDescription ? description : null}

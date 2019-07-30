@@ -70,7 +70,11 @@ export class MaterialArrayLayout extends React.PureComponent<
       rootSchema,
       config
     } = this.props;
-    const mergedConfig = merge({}, config, this.props.uischema.options);
+    const appliedUiSchemaOptions = merge(
+      {},
+      config,
+      this.props.uischema.options
+    );
 
     return (
       <Paper style={paperStyle}>
@@ -78,7 +82,7 @@ export class MaterialArrayLayout extends React.PureComponent<
           label={computeLabel(
             isPlainLabel(label) ? label : label.default,
             required,
-            mergedConfig.hideRequiredAsterisk
+            appliedUiSchemaOptions.hideRequiredAsterisk
           )}
           errors={errors}
           path={path}
@@ -101,6 +105,7 @@ export class MaterialArrayLayout extends React.PureComponent<
                   rootSchema={rootSchema}
                   enableMoveUp={index != 0}
                   enableMoveDown={index < data - 1}
+                  config={config}
                 />
               );
             })

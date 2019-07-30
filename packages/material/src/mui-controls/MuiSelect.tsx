@@ -28,6 +28,7 @@ import { EnumCellProps, WithClassname } from '@jsonforms/core';
 import Select from '@material-ui/core/Select';
 import { MenuItem } from '@material-ui/core';
 import { areEqual } from '@jsonforms/react';
+import merge from 'lodash/merge';
 
 export const MuiSelect = React.memo((props: EnumCellProps & WithClassname) => {
   const {
@@ -38,15 +39,17 @@ export const MuiSelect = React.memo((props: EnumCellProps & WithClassname) => {
     uischema,
     path,
     handleChange,
-    options
+    options,
+    config
   } = props;
+  const appliedUiSchemaOptions = merge({}, config, uischema.options);
 
   return (
     <Select
       className={className}
       id={id}
       disabled={!enabled}
-      autoFocus={uischema.options && uischema.options.focus}
+      autoFocus={appliedUiSchemaOptions.focus}
       value={data || ''}
       onChange={ev => handleChange(path, ev.target.value)}
       fullWidth={true}

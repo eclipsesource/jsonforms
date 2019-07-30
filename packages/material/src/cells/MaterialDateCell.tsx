@@ -32,9 +32,21 @@ import {
 } from '@jsonforms/core';
 import { withJsonFormsCellProps } from '@jsonforms/react';
 import Input from '@material-ui/core/Input';
+import merge from 'lodash/merge';
 
 export const MaterialDateCell = (props: CellProps & WithClassname) => {
-  const { data, className, id, enabled, uischema, path, handleChange } = props;
+  const {
+    data,
+    className,
+    id,
+    enabled,
+    uischema,
+    path,
+    handleChange,
+    config
+  } = props;
+
+  const appliedUiSchemaOptions = merge({}, config, uischema.options);
 
   return (
     <Input
@@ -44,7 +56,7 @@ export const MaterialDateCell = (props: CellProps & WithClassname) => {
       className={className}
       id={id}
       disabled={!enabled}
-      autoFocus={uischema.options && uischema.options.focus}
+      autoFocus={appliedUiSchemaOptions.focus}
       fullWidth={true}
     />
   );

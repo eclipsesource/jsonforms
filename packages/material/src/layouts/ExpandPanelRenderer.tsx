@@ -1,3 +1,4 @@
+import merge from 'lodash/merge';
 import React, { Fragment, Dispatch, ReducerAction } from 'react';
 import { ComponentType } from 'enzyme';
 import {
@@ -43,6 +44,7 @@ interface OwnPropsOfExpandPanel {
   rootSchema: JsonSchema;
   enableMoveUp: boolean;
   enableMoveDown: boolean;
+  config: any;
   handleExpansion(panel: string): (event: any, expanded: boolean) => void;
 }
 
@@ -84,7 +86,8 @@ const ExpandPanelRenderer = (props: ExpandPanelProps) => {
     schema,
     uischema,
     uischemas,
-    renderers
+    renderers,
+    config
   } = props;
 
   const foundUISchema = findUISchema(
@@ -96,6 +99,8 @@ const ExpandPanelRenderer = (props: ExpandPanelProps) => {
     uischema,
     rootSchema
   );
+
+  const appliedUiSchemaOptions = merge({}, config, uischema.options);
 
   return (
     <ExpansionPanel expanded={expanded} onChange={handleExpansion(childPath)}>
@@ -120,7 +125,7 @@ const ExpandPanelRenderer = (props: ExpandPanelProps) => {
                   justify='center'
                   alignItems='center'
                 >
-                  {uischema.options && uischema.options.showSortButtons ? (
+                  {appliedUiSchemaOptions.showSortButtons ? (
                     <Fragment>
                       <Grid item>
                         <IconButton

@@ -35,7 +35,11 @@ import {
   RankedTester,
   rankWith
 } from '@jsonforms/core';
-import { Control, DispatchCell, withJsonFormsControlProps } from '@jsonforms/react';
+import {
+  Control,
+  DispatchCell,
+  withJsonFormsControlProps
+} from '@jsonforms/react';
 import { withVanillaControlProps } from '../util';
 import { VanillaRendererProps } from '../index';
 import merge from 'lodash/merge';
@@ -43,9 +47,8 @@ import merge from 'lodash/merge';
 export class InputControl extends Control<
   ControlProps & VanillaRendererProps,
   ControlState
-  > {
+> {
   render() {
-
     const {
       classNames,
       description,
@@ -64,14 +67,14 @@ export class InputControl extends Control<
     const isValid = errors.length === 0;
     const divClassNames = `validation  ${
       isValid ? classNames.description : 'validation_error'
-      }`;
+    }`;
 
-    const mergedConfig = merge({}, config, uischema.options);
+    const appliedUiSchemaOptions = merge({}, config, uischema.options);
     const showDescription = !isDescriptionHidden(
       visible,
       description,
       this.state.isFocused,
-      mergedConfig.showUnfocusedDescription
+      appliedUiSchemaOptions.showUnfocusedDescription
     );
     const labelText = isPlainLabel(label) ? label : label.default;
     const cell = maxBy(cells, r => r.tester(uischema, schema));
@@ -91,7 +94,11 @@ export class InputControl extends Control<
           id={id}
         >
           <label htmlFor={id + '-input'} className={classNames.label}>
-            {computeLabel(labelText, required, mergedConfig.hideRequiredAsterisk)}
+            {computeLabel(
+              labelText,
+              required,
+              appliedUiSchemaOptions.hideRequiredAsterisk
+            )}
           </label>
           <DispatchCell
             uischema={uischema}
@@ -100,11 +107,7 @@ export class InputControl extends Control<
             id={id + '-input'}
           />
           <div className={divClassNames}>
-            {!isValid
-              ? errors
-              : showDescription
-                ? description
-                : null}
+            {!isValid ? errors : showDescription ? description : null}
           </div>
         </div>
       );

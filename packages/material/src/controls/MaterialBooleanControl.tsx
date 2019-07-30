@@ -28,38 +28,51 @@ import {
   isBooleanControl,
   RankedTester,
   rankWith,
-  ControlProps,
+  ControlProps
 } from '@jsonforms/core';
 import { withJsonFormsControlProps } from '@jsonforms/react';
 import { FormControlLabel, Hidden } from '@material-ui/core';
 import { MuiCheckbox } from '../mui-controls/MuiCheckbox';
 
-export const MaterialBooleanControl =
-  ({ data, visible, label, id, enabled, uischema, schema, rootSchema, handleChange, errors, path }: ControlProps) => {
-    return (
-      <Hidden xsUp={!visible}>
-        <FormControlLabel
-          label={label}
-          id={id}
-          control={
-            <MuiCheckbox
-              id={`${id}-input`}
-              isValid={isEmpty(errors)}
-              data={data}
-              enabled={enabled}
-              visible={visible}
-              path={path}
-              uischema={uischema}
-              schema={schema}
-              rootSchema={rootSchema}
-              handleChange={handleChange}
-              errors={errors}
-            />
-          }
-        />
-      </Hidden>
-    );
-  };
+export const MaterialBooleanControl = ({
+  data,
+  visible,
+  label,
+  id,
+  enabled,
+  uischema,
+  schema,
+  rootSchema,
+  handleChange,
+  errors,
+  path,
+  config
+}: ControlProps) => {
+  return (
+    <Hidden xsUp={!visible}>
+      <FormControlLabel
+        label={label}
+        id={id}
+        control={
+          <MuiCheckbox
+            id={`${id}-input`}
+            isValid={isEmpty(errors)}
+            data={data}
+            enabled={enabled}
+            visible={visible}
+            path={path}
+            uischema={uischema}
+            schema={schema}
+            rootSchema={rootSchema}
+            handleChange={handleChange}
+            errors={errors}
+            config={config}
+          />
+        }
+      />
+    </Hidden>
+  );
+};
 
 export const materialBooleanControlTester: RankedTester = rankWith(
   2,
