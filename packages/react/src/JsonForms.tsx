@@ -53,7 +53,7 @@ interface JsonFormsRendererState {
   resolvedSchema: JsonSchema;
 }
 
-interface JsonFormsReactProps {
+export interface JsonFormsReactProps {
   onChange?(state: Pick<JsonFormsCore, 'data' | 'errors'>): void;
 }
 
