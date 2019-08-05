@@ -590,3 +590,41 @@ test('JsonForms should call onChange handler with errors', () => {
   expect(lastCallParameter.errors.length).toEqual(1);
   expect(lastCallParameter.errors[0].keyword).toEqual('minLength');
 });
+
+test('JsonForms should update if data prop is updated', () => {
+  const onChangeHandler = jest.fn();
+  const TestInputRenderer = withJsonFormsControlProps(props => (
+    <input onChange={ev => props.handleChange('foo', ev.target.value)} />
+  ));
+
+  const schema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'string',
+        minLength: 5
+      }
+    },
+    required: ['foo']
+  };
+
+  const renderers = [
+    {
+      tester: () => 10,
+      renderer: TestInputRenderer
+    }
+  ];
+  const wrapper = mount(
+    <JsonForms
+      data={fixture.data}
+      uischema={fixture.uischema}
+      schema={schema}
+      onChange={onChangeHandler}
+      renderers={renderers}
+    />
+  );
+
+  wrapper.setProps({ data: { foo: 'Another name' } });
+  wrapper.update();
+  expect(wrapper.props().data.foo).toBe('Another name');
+});
