@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 
-import React, { ComponentType, Dispatch, ReducerAction, useContext, useEffect, useReducer, useCallback } from 'react';
+import React, { ComponentType, Dispatch, ReducerAction, useCallback, useContext, useEffect, useReducer } from 'react';
 import isEqual from 'lodash/isEqual';
 import omit from 'lodash/omit';
 import get from 'lodash/get';
@@ -95,7 +95,7 @@ export const JsonFormsStateProvider = ({ children, initState }: any) => {
   const { data, schema, uischema, ajv, refParserOptions } = initState.core;
   useEffect(() => {
     dispatch(Actions.init(data, schema, uischema, { ajv, refParserOptions }));
-  }, []);
+  }, [data, schema, uischema, ajv, refParserOptions]);
   return (
     <JsonFormsContext.Provider
       value={{
