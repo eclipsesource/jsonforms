@@ -22,91 +22,77 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React from 'react';
-import { connect } from 'react-redux';
+import React, { useCallback, useState } from 'react';
 
 import {
   createCombinatorRenderInfos,
   isAnyOfControl,
   JsonSchema,
-  mapStateToAnyOfProps,
   RankedTester,
   rankWith,
   resolveSubSchemas,
   StatePropsOfCombinator
 } from '@jsonforms/core';
-import { ResolvedJsonForms } from '@jsonforms/react';
-import CombinatorProperties from './CombinatorProperties';
+import { JsonFormsDispatch, withJsonFormsAnyOfProps } from '@jsonforms/react';
 import { Hidden, Tab, Tabs } from '@material-ui/core';
+import CombinatorProperties from './CombinatorProperties';
 
-interface MaterialAnyOfState {
-  selectedAnyOf: number;
-}
+const MaterialAnyOfRenderer = ({
+  schema,
+  rootSchema,
+  indexOfFittingSchema,
+  visible,
+  path,
+  renderers,
+  uischema,
+  uischemas
+}: StatePropsOfCombinator) => {
+  const [selectedAnyOf, setSelectedAnyOf] = useState(indexOfFittingSchema || 0);
+  const handleChange = useCallback(
+    (_ev: any, value: number) => setSelectedAnyOf(value),
+    [setSelectedAnyOf]
+  );
+  const anyOf = 'anyOf';
+  const _schema = resolveSubSchemas(schema, rootSchema, anyOf);
+  const anyOfRenderInfos = createCombinatorRenderInfos(
+    (_schema as JsonSchema).anyOf,
+    rootSchema,
+    anyOf,
+    uischema,
+    path,
+    uischemas
+  );
 
-class MaterialAnyOfRenderer extends React.Component<
-  StatePropsOfCombinator,
-  MaterialAnyOfState
-> {
-  state: MaterialAnyOfState = {
-    selectedAnyOf: 0
-  };
+  return (
+    <Hidden xsUp={!visible}>
+      <CombinatorProperties
+        schema={_schema}
+        combinatorKeyword={'anyOf'}
+        path={path}
+      />
+      <Tabs value={selectedAnyOf} onChange={handleChange}>
+        {anyOfRenderInfos.map(anyOfRenderInfo => (
+          <Tab key={anyOfRenderInfo.label} label={anyOfRenderInfo.label} />
+        ))}
+      </Tabs>
+      {anyOfRenderInfos.map(
+        (anyOfRenderInfo, anyOfIndex) =>
+          selectedAnyOf === anyOfIndex && (
+            <JsonFormsDispatch
+              key={anyOfIndex}
+              schema={anyOfRenderInfo.schema}
+              uischema={anyOfRenderInfo.uischema}
+              path={path}
+              renderers={renderers}
+            />
+          )
+      )}
+    </Hidden>
+  );
+};
 
-  constructor(props: StatePropsOfCombinator) {
-    super(props);
-    const { indexOfFittingSchema } = this.props;
-    if (indexOfFittingSchema) {
-      this.state.selectedAnyOf = indexOfFittingSchema;
-    }
-  }
-
-  handleChange = (_event: any, value: number) => {
-    this.setState({ selectedAnyOf: value });
-  };
-
-  render() {
-    const anyOf = 'anyOf';
-    const { path, schema, rootSchema, visible } = this.props;
-    const _schema = resolveSubSchemas(schema, rootSchema, anyOf);
-    const anyOfRenderInfos = createCombinatorRenderInfos(
-      (_schema as JsonSchema).anyOf,
-      rootSchema,
-      anyOf
-    );
-
-    return (
-      <Hidden xsUp={!visible}>
-        <CombinatorProperties
-          schema={_schema}
-          combinatorKeyword={'anyOf'}
-          path={path}
-        />
-        <Tabs value={this.state.selectedAnyOf} onChange={this.handleChange}>
-          {anyOfRenderInfos.map(anyOfRenderInfo => (
-            <Tab key={anyOfRenderInfo.label} label={anyOfRenderInfo.label} />
-          ))}
-        </Tabs>
-        {anyOfRenderInfos.map(
-          (anyOfRenderInfo, anyOfIndex) =>
-            this.state.selectedAnyOf === anyOfIndex && (
-              <ResolvedJsonForms
-                key={anyOfIndex}
-                schema={anyOfRenderInfo.schema}
-                uischema={anyOfRenderInfo.uischema}
-                path={path}
-              />
-            )
-        )}
-      </Hidden>
-    );
-  }
-}
-
-const ConnectedMaterialAnyOfRenderer = connect(mapStateToAnyOfProps)(
-  MaterialAnyOfRenderer
-);
-ConnectedMaterialAnyOfRenderer.displayName = 'MaterialAnyOfRenderer';
 export const materialAnyOfControlTester: RankedTester = rankWith(
   3,
   isAnyOfControl
 );
-export default ConnectedMaterialAnyOfRenderer;
+export default withJsonFormsAnyOfProps(MaterialAnyOfRenderer);

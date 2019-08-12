@@ -24,81 +24,53 @@
 */
 import React from 'react';
 import { Hidden, Tab, Tabs } from '@material-ui/core';
-import { connect } from 'react-redux';
 import AppBar from '@material-ui/core/AppBar';
 import {
   and,
   Categorization,
-  getData,
   isVisible,
-  JsonFormsState,
-  mapStateToLayoutProps,
-  OwnPropsOfRenderer,
   RankedTester,
   rankWith,
   StatePropsOfLayout,
   Tester,
   UISchemaElement,
-  uiTypeIs
+  uiTypeIs,
 } from '@jsonforms/core';
-import { RendererComponent } from '@jsonforms/react';
-import {
-  MaterialLayoutRenderer,
-  MaterialLayoutRendererProps
-} from '../util/layout';
+import { RendererComponent, withJsonFormsLayoutProps } from '@jsonforms/react';
+import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from '../util/layout';
 
 export const isSingleLevelCategorization: Tester = and(
   uiTypeIs('Categorization'),
   (uischema: UISchemaElement): boolean => {
     const categorization = uischema as Categorization;
 
-    return (
-      categorization.elements &&
-      categorization.elements.reduce(
-        (acc, e) => acc && e.type === 'Category',
-        true
-      )
-    );
+    return categorization.elements && categorization.elements.reduce((acc, e) => acc && e.type === 'Category', true);
   }
 );
 
-export const materialCategorizationTester: RankedTester = rankWith(
-  1,
-  isSingleLevelCategorization
-);
+export const materialCategorizationTester: RankedTester = rankWith(1, isSingleLevelCategorization);
 export interface CategorizationState {
   activeCategory: number;
 }
 
-export interface MaterialCategorizationLayoutRendererProps
-  extends StatePropsOfLayout {
+export interface MaterialCategorizationLayoutRendererProps extends StatePropsOfLayout {
   selected?: number;
   ownState?: boolean;
-  data: any;
+  data?: any;
   onChange?(selected: number, prevSelected: number): void;
 }
 
-export class MaterialCategorizationLayoutRenderer extends RendererComponent<
-  MaterialCategorizationLayoutRendererProps,
-  CategorizationState
-> {
+export class MaterialCategorizationLayoutRenderer
+  extends RendererComponent<MaterialCategorizationLayoutRendererProps, CategorizationState> {
+
   state = {
     activeCategory: 0
   };
 
   render() {
-    const {
-      data,
-      uischema,
-      schema,
-      path,
-      visible,
-      selected,
-      renderers
-    } = this.props;
-    const value = this.hasOwnState() ? this.state.activeCategory : selected;
+    const { data, path, renderers, schema, uischema, visible, selected } = this.props;
     const categorization = uischema as Categorization;
-
+    const value = this.hasOwnState() ? this.state.activeCategory : selected;
     const childProps: MaterialLayoutRendererProps = {
       elements: categorization.elements[value].elements,
       schema,
@@ -107,18 +79,12 @@ export class MaterialCategorizationLayoutRenderer extends RendererComponent<
       visible,
       renderers
     };
-
-    const categories = categorization.elements.filter(category =>
-      isVisible(category, data)
-    );
-
+    const categories = categorization.elements.filter(category => isVisible(category, data));
     return (
       <Hidden xsUp={!visible}>
         <AppBar position='static'>
           <Tabs value={value} onChange={this.handleChange} variant='scrollable'>
-            {categories.map((e, idx) => (
-              <Tab key={idx} label={e.label} />
-            ))}
+            {categories.map((e, idx) => <Tab key={idx} label={e.label} />)}
           </Tabs>
         </AppBar>
         <div style={{ marginTop: '0.5em' }}>
@@ -143,17 +109,4 @@ export class MaterialCategorizationLayoutRenderer extends RendererComponent<
   };
 }
 
-const mapStateToCategorizationProps = (
-  state: JsonFormsState,
-  ownProps: OwnPropsOfRenderer
-): MaterialCategorizationLayoutRendererProps & StatePropsOfLayout => {
-  const props = mapStateToLayoutProps(state, ownProps);
-  return {
-    ...props,
-    data: getData(state)
-  };
-};
-
-export default connect(mapStateToCategorizationProps)(
-  MaterialCategorizationLayoutRenderer
-);
+export default withJsonFormsLayoutProps(MaterialCategorizationLayoutRenderer);

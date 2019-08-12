@@ -22,24 +22,26 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import '@jsonforms/test';
-import test from 'ava';
 import {
     isEnumControl,
     rankWith,
     update
 } from '@jsonforms/core';
+import { JsonFormsReduxContext } from '@jsonforms/react';
 import * as React from 'react';
 import * as _ from 'lodash';
 import { Provider } from 'react-redux';
+import Adapter from 'enzyme-adapter-react-16';
+import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import '../../src';
 import RadioGroupControl from '../../src/controls/RadioGroupControl';
-import * as TestUtils from 'react-dom/test-utils';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
 
-test.beforeEach(t => {
-    t.context.data = { foo: 'D' };
-    t.context.schema = {
+Enzyme.configure({ adapter: new Adapter() });
+
+const fixture = {
+    data: { foo: 'D' },
+    schema: {
         type: 'object',
         properties: {
             foo: {
@@ -47,57 +49,63 @@ test.beforeEach(t => {
                 enum: ['A', 'B', 'C', 'D']
             }
         }
-    };
-    t.context.uischema = {
+    },
+    uischema: {
         type: 'Control',
         scope: '#/properties/foo'
-    };
-});
+    }
+};
 
-test('render', t => {
-    const store = initJsonFormsVanillaStore({
-        data: t.context.data,
-        schema: t.context.schema,
-        uischema: t.context.uischema,
-        renderers: [{ tester: rankWith(10, isEnumControl), renderer: RadioGroupControl }]
+describe('Radio group control', () => {
+
+    let wrapper: ReactWrapper;
+
+    afterEach(() => wrapper.unmount());
+
+    test('render', () => {
+        const store = initJsonFormsVanillaStore({
+            data: fixture.data,
+            schema: fixture.schema,
+            uischema: fixture.uischema,
+            renderers: [{ tester: rankWith(10, isEnumControl), renderer: RadioGroupControl }]
+        });
+        wrapper = mount(
+            <Provider store={store}>
+                <JsonFormsReduxContext>
+                    <RadioGroupControl schema={fixture.schema} uischema={fixture.uischema} />
+                </JsonFormsReduxContext>
+            </Provider>
+        );
+
+        const radioButtons = wrapper.find('input[type="radio"]');
+        expect(radioButtons).toHaveLength(4);
+        // make sure one option is selected and iexpect "D"
+        const currentlyChecked = radioButtons.filter('input[checked=true]');
+        expect(currentlyChecked).toHaveLength(1);
+        expect((currentlyChecked.getDOMNode() as HTMLInputElement).value).toBe('D');
     });
-    const tree: React.Component<any> = TestUtils.renderIntoDocument(
-        <Provider store={store}>
-            <RadioGroupControl schema={t.context.schema} uischema={t.context.uischema} />
-        </Provider>
-    ) as unknown as React.Component<any>;
 
-    const inputs: HTMLInputElement[] =
-        TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input') as HTMLInputElement[];
-    const radioButtons = _.filter(inputs, i => i.type === 'radio');
-    t.is(radioButtons.length, 4);
-    // make sure one option is selected and it is "D"
-    const currentlyChecked = _.filter(radioButtons, radio => radio.checked);
-    t.is(currentlyChecked.length, 1);
-    t.is(currentlyChecked[0].value, 'D');
-});
+    test('Radio group should have only one selected option', () => {
+        const store = initJsonFormsVanillaStore({
+            data: fixture.data,
+            schema: fixture.schema,
+            uischema: fixture.uischema,
+            renderers: [{ tester: rankWith(10, isEnumControl), renderer: RadioGroupControl }]
+        });
+        wrapper = mount(
+            <Provider store={store}>
+                <JsonFormsReduxContext>
+                    <RadioGroupControl schema={fixture.schema} uischema={fixture.uischema} />
+                </JsonFormsReduxContext>
+            </Provider>
+        );
 
-test('Radio group should have only one selected option', t => {
-    const store = initJsonFormsVanillaStore({
-        data: t.context.data,
-        schema: t.context.schema,
-        uischema: t.context.uischema,
-        renderers: [{ tester: rankWith(10, isEnumControl), renderer: RadioGroupControl }]
+        // change and verify selection
+        store.dispatch(update('foo', () => 'A'));
+        store.dispatch(update('foo', () => 'B'));
+        wrapper.update();
+        const currentlyChecked = wrapper.find('input[checked=true]');
+        expect(currentlyChecked).toHaveLength(1);
+        expect((currentlyChecked.getDOMNode() as HTMLInputElement).value).toBe('B');
     });
-    const tree: React.Component<any> = TestUtils.renderIntoDocument(
-        <Provider store={store}>
-            <RadioGroupControl schema={t.context.schema} uischema={t.context.uischema} />
-        </Provider>
-    ) as unknown as React.Component<any>;
-
-    const inputs: HTMLInputElement[] =
-        TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input') as HTMLInputElement[];
-    const radioButtons = _.filter(inputs, i => i.type === 'radio');
-
-    // change and verify selection
-    store.dispatch(update('foo', () => 'A'));
-    store.dispatch(update('foo', () => 'B'));
-    const currentlyChecked = _.filter(radioButtons, radio => radio.checked);
-    t.is(currentlyChecked.length, 1);
-    t.is(currentlyChecked[0].value, 'B');
 });

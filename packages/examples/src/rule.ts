@@ -62,7 +62,7 @@ export const uischema = {
         condition: {
           scope: '#/properties/alive',
           schema: {
-            const: false
+            const: true
           }
         }
       }

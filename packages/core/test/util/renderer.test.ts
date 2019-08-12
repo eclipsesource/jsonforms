@@ -33,7 +33,10 @@ import {
   mapDispatchToControlProps,
   mapStateToControlProps,
   mapStateToJsonFormsRendererProps,
-  mapStateToLayoutProps
+  mapStateToLayoutProps,
+  mapStateToArrayLayoutProps,
+  mapStateToOneOfProps,
+  computeLabel
 } from '../../src/util';
 import configureStore from 'redux-mock-store';
 import test from 'ava';
@@ -288,7 +291,7 @@ test('mapStateToControlProps - derive label', t => {
   t.is(props.label, 'First Name');
 });
 
-test('mapStateToControlProps - derive label', t => {
+test('mapStateToControlProps - do not show label', t => {
   const ownProps = {
     uischema: {
       ...coreUISchema,
@@ -547,6 +550,45 @@ test('mapStateToLayoutProps - visible via state with path from ownProps ', t => 
   t.true(props.visible);
 });
 
+test('mapStateToArrayLayoutProps - should include minItems in array layout props', t => {
+  const schema: JsonSchema = {
+    type: 'array',
+    minItems: 42,
+    items: {
+      type: 'object',
+      properties: {
+        message: {
+          type: 'string',
+          default: 'foo'
+        }
+      }
+    }
+  };
+
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#'
+  };
+
+  const state = {
+    jsonforms: {
+      core: {
+        schema,
+        data: {},
+        uischema,
+        errors: [] as ErrorObject[]
+      }
+    }
+  };
+
+  const ownProps = {
+    uischema
+  };
+
+  const props = mapStateToArrayLayoutProps(state, ownProps);
+  t.is(props.minItems, 42);
+});
+
 test('mapStateToLayoutProps should return renderers prop via ownProps', t => {
   const uischema = {
     type: 'VerticalLayout',
@@ -613,6 +655,69 @@ test('mapStateToLayoutProps - hidden via state with path from ownProps ', t => {
   };
   const props = mapStateToLayoutProps(state, ownProps);
   t.false(props.visible);
+});
+
+test("mapStateToOneOfProps - indexOfFittingSchema should not select schema if enum doesn't match", t => {
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/method'
+  };
+
+  const ownProps = {
+    uischema
+  };
+
+  const state = {
+    jsonforms: {
+      core: {
+        ajv: createAjv(),
+        schema: {
+          type: 'object',
+          properties: {
+            method: {
+              oneOf: [
+                {
+                  title: 'Injection',
+                  type: 'object',
+                  properties: {
+                    method: {
+                      title: 'Method',
+                      type: 'string',
+                      enum: ['Injection'],
+                      default: 'Injection'
+                    }
+                  },
+                  required: ['method']
+                },
+                {
+                  title: 'Infusion',
+                  type: 'object',
+                  properties: {
+                    method: {
+                      title: 'Method',
+                      type: 'string',
+                      enum: ['Infusion'],
+                      default: 'Infusion'
+                    }
+                  },
+                  required: ['method']
+                }
+              ]
+            }
+          }
+        },
+        data: {
+          method: {
+            method: 'Infusion'
+          }
+        },
+        uischema
+      }
+    }
+  };
+
+  const oneOfProps = mapStateToOneOfProps(state, ownProps);
+  t.is(oneOfProps.indexOfFittingSchema, 1);
 });
 
 test('should assign defaults to enum', t => {
@@ -739,4 +844,24 @@ test('should assign defaults to newly added item within nested object of an arra
 
   t.is(store.getState().jsonforms.core.data.length, 2);
   t.deepEqual(store.getState().jsonforms.core.data[0], { message: 'foo' });
+});
+
+test('computeLabel - should not edit label if not required and hideRequiredAsterisk is false', t => {
+  const computedLabel = computeLabel('Test Label', false, false);
+  t.is(computedLabel, 'Test Label');
+});
+
+test('computeLabel - should not edit label if not required and hideRequiredAsterisk is true', t => {
+  const computedLabel = computeLabel('Test Label', false, true);
+  t.is(computedLabel, 'Test Label');
+});
+
+test('computeLabel - should not edit label if required but hideRequiredAsterisk is true', t => {
+  const computedLabel = computeLabel('Test Label', true, true);
+  t.is(computedLabel, 'Test Label');
+});
+
+test('computeLabel - should add asterisk if required but hideRequiredAsterisk is false', t => {
+  const computedLabel = computeLabel('Test Label', true, false);
+  t.is(computedLabel, 'Test Label*');
 });

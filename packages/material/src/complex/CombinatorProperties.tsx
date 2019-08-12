@@ -25,7 +25,7 @@
 import React from 'react';
 import _ from 'lodash';
 import { Generate, JsonSchema, Layout, UISchemaElement } from '@jsonforms/core';
-import { ResolvedJsonForms } from '@jsonforms/react';
+import { JsonFormsDispatch } from '@jsonforms/react';
 
 interface CombinatorPropertiesProps {
   schema: JsonSchema;
@@ -51,7 +51,7 @@ export class CombinatorProperties extends React.Component<CombinatorPropertiesPr
 
     if (isLayoutWithElements) {
       return (
-        <ResolvedJsonForms
+        <JsonFormsDispatch
           schema={otherProps}
           path={path}
           uischema={foundUISchema}

@@ -29,25 +29,21 @@ import fpflow from 'lodash/fp/flow';
 import filter from 'lodash/filter';
 import join from 'lodash/join';
 import fpkeys from 'lodash/fp/keys';
+import fpstartCase from 'lodash/fp/startCase';
 import {
   ArrayControlProps,
   ControlElement,
   createDefaultValue,
   Helpers,
   isPlainLabel,
-  mapDispatchToArrayControlProps,
-  mapStateToArrayControlProps,
   Paths,
   RankedTester,
   Resolve,
-  StatePropsOfControl,
   Test
 } from '@jsonforms/core';
-import { DispatchCell } from '@jsonforms/react';
-import { addVanillaControlProps } from '../util';
-import { connect } from 'react-redux';
+import { DispatchCell, withJsonFormsArrayControlProps } from '@jsonforms/react';
+import { withVanillaControlProps } from '../util';
 import { VanillaRendererProps } from '../index';
-import { startCase } from 'lodash';
 
 const { createLabelDescriptionFrom, convertToValidClassName } = Helpers;
 
@@ -124,7 +120,7 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
                 fpflow(
                   fpkeys,
                   fpfilter(prop => schema.properties[prop].type !== 'array'),
-                  fpmap(prop => <th key={prop}>{startCase(prop)}</th>)
+                  fpmap(prop => <th key={prop}>{fpstartCase(prop)}</th>)
                 )(schema.properties)
               ) : (
                   <th>Items</th>
@@ -224,7 +220,4 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
   }
 }
 
-export default connect(
-  addVanillaControlProps<StatePropsOfControl>(mapStateToArrayControlProps),
-  mapDispatchToArrayControlProps
-)(TableArrayControl);
+export default withVanillaControlProps(withJsonFormsArrayControlProps(TableArrayControl));

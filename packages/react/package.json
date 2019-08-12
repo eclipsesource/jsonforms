@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/react",
-  "version": "2.2.3",
+  "version": "2.3.0",
   "description": "React module of JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -61,19 +61,19 @@
     "lodash": "^4.17.4"
   },
   "peerDependencies": {
-    "@jsonforms/core": "^2.2.3",
-    "react": "^16.4.0",
+    "@jsonforms/core": "^2.3.0",
+    "react": "^16.8.6",
     "react-redux": "^6.0.0"
   },
   "devDependencies": {
-    "@jsonforms/core": "^2.2.3",
+    "@jsonforms/core": "^2.3.0",
     "@types/enzyme": "^3.9.0",
     "@types/enzyme-adapter-react-16": "^1.0.5",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.11.2",
     "jest": "^23.0.0",
-    "react": "^16.4.0",
-    "react-dom": "^16.4.0",
+    "react": " ^16.8.0",
+    "react-dom": " ^16.8.0",
     "react-redux": "^6.0.0",
     "redux": "^4.0.1",
     "redux-mock-store": "1.5.3",

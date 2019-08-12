@@ -22,16 +22,16 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React from 'react';
+import React, { useCallback, useState } from 'react';
+import isEmpty from 'lodash/isEmpty';
 
 import {
-  CombinatorRendererProps,
+  CombinatorProps,
   createCombinatorRenderInfos,
   createDefaultValue,
   isOneOfControl,
   JsonSchema,
-  mapDispatchToControlProps,
-  mapStateToOneOfProps,
+  OwnPropsOfControl,
   RankedTester,
   rankWith,
   resolveSubSchemas
@@ -47,69 +47,57 @@ import {
   Tab,
   Tabs
 } from '@material-ui/core';
-import { connect } from 'react-redux';
-import { ResolvedJsonForms } from '@jsonforms/react';
+import {
+  JsonFormsDispatch,
+  withJsonFormsOneOfProps
+} from '@jsonforms/react';
 import CombinatorProperties from './CombinatorProperties';
 
-interface MaterialOneOfState {
-  open: boolean;
-  proceed: boolean;
-  selectedOneOf: number;
-  newOneOfIndex?: any;
+export interface OwnOneOfProps extends OwnPropsOfControl {
+  indexOfFittingSchema?: number;
 }
 
-class MaterialOneOfRenderer extends React.Component<CombinatorRendererProps, MaterialOneOfState> {
-
-  state: MaterialOneOfState = {
-    open: false,
-    proceed: false,
-    selectedOneOf: 0,
-    newOneOfIndex: 0
-  };
-  constructor(props: CombinatorRendererProps) {
-    super(props);
-    const {indexOfFittingSchema} = this.props;
-    if (indexOfFittingSchema) {
-      this.state.selectedOneOf = indexOfFittingSchema;
-    }
-  }
-  handleClose = () => {
-    this.setState({ open: false });
-  };
-
-  cancel = () => {
-    this.setState({
-      open: false,
-      proceed: false
-    });
-  };
-
-  confirm = () => {
-    const { path, schema, handleChange } = this.props;
-    handleChange(
-      path,
-      createDefaultValue(schema.oneOf[this.state.newOneOfIndex])
-    );
-    this.setState({
-      open: false,
-      proceed: true,
-      selectedOneOf: this.state.newOneOfIndex
-    });
-  };
-
-  handleTabChange = (_event: any, newOneOfIndex: number) => {
-    this.setState({
-      open: true,
-      newOneOfIndex
-    });
-  };
-
-  render() {
-
-    const oneOf = 'oneOf';
-    const { schema, path, rootSchema, id, visible } = this.props;
+const oneOf = 'oneOf';
+const MaterialOneOfRenderer =
+  ({ handleChange, schema, path, renderers, rootSchema, id, visible, indexOfFittingSchema, uischema, uischemas, data }: CombinatorProps) => {
+    const [open, setOpen] = useState(false);
+    const [selectedIndex, setSelectedIndex] = useState(indexOfFittingSchema || 0);
+    const [newSelectedIndex, setNewSelectedIndex] = useState(0);
+    const handleClose = useCallback(() => setOpen(false), [setOpen]);
+    const cancel = useCallback(() => {
+      setOpen(false);
+    }, [setOpen]);
     const _schema = resolveSubSchemas(schema, rootSchema, oneOf);
-    const oneOfRenderInfos = createCombinatorRenderInfos((_schema as JsonSchema).oneOf, rootSchema, oneOf);
+    const oneOfRenderInfos = createCombinatorRenderInfos(
+      (_schema as JsonSchema).oneOf,
+      rootSchema,
+      oneOf,
+      uischema,
+      path,
+      uischemas
+      );
+
+    const openNewTab = (newIndex: number) => {
+      handleChange(
+        path,
+        createDefaultValue(schema.oneOf[newIndex])
+      );
+      setSelectedIndex(newIndex);
+    }
+
+    const confirm = useCallback(() => {
+      openNewTab(newSelectedIndex)
+      setOpen(false);
+    }, [handleChange, createDefaultValue, newSelectedIndex]);
+    const handleTabChange = useCallback((_event: any, newOneOfIndex: number) => {
+      setNewSelectedIndex(newOneOfIndex);
+      if(isEmpty(data)) {
+        openNewTab(newOneOfIndex)
+      } else {
+        setOpen(true);
+      }
+
+    }, [setOpen, setSelectedIndex, data]);
 
     return (
       <Hidden xsUp={!visible}>
@@ -118,24 +106,25 @@ class MaterialOneOfRenderer extends React.Component<CombinatorRendererProps, Mat
           combinatorKeyword={'oneOf'}
           path={path}
         />
-        <Tabs value={this.state.selectedOneOf} onChange={this.handleTabChange}>
-          {oneOfRenderInfos.map(oneOfRenderInfo => <Tab key={oneOfRenderInfo.label} label={oneOfRenderInfo.label}/>)}
+        <Tabs value={selectedIndex} onChange={handleTabChange}>
+          {oneOfRenderInfos.map(oneOfRenderInfo => <Tab key={oneOfRenderInfo.label} label={oneOfRenderInfo.label} />)}
         </Tabs>
         {
           oneOfRenderInfos.map((oneOfRenderInfo, oneOfIndex) => (
-            this.state.selectedOneOf === oneOfIndex && (
-              <ResolvedJsonForms
+            selectedIndex === oneOfIndex && (
+              <JsonFormsDispatch
                 key={oneOfIndex}
                 schema={oneOfRenderInfo.schema}
                 uischema={oneOfRenderInfo.uischema}
                 path={path}
+                renderers={renderers}
               />
             )
           ))
         }
         <Dialog
-          open={this.state.open}
-          onClose={this.handleClose}
+          open={open}
+          onClose={handleClose}
           aria-labelledby='alert-dialog-title'
           aria-describedby='alert-dialog-description'
         >
@@ -147,24 +136,17 @@ class MaterialOneOfRenderer extends React.Component<CombinatorRendererProps, Mat
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.cancel} color='primary'>
+            <Button onClick={cancel} color='primary'>
               No
             </Button>
-            <Button onClick={this.confirm} color='primary' autoFocus id={`oneOf-${id}-confirm-yes`}>
+            <Button onClick={confirm} color='primary' autoFocus id={`oneOf-${id}-confirm-yes`}>
               Yes
             </Button>
           </DialogActions>
         </Dialog>
       </Hidden>
     );
+  };
 
-  }
-}
-
-const ConnectedMaterialOneOfRenderer = connect(
-  mapStateToOneOfProps,
-  mapDispatchToControlProps
-)(MaterialOneOfRenderer);
-ConnectedMaterialOneOfRenderer.displayName = 'MaterialOneOfRenderer';
 export const materialOneOfControlTester: RankedTester = rankWith(3, isOneOfControl);
-export default ConnectedMaterialOneOfRenderer;
+export default withJsonFormsOneOfProps(MaterialOneOfRenderer);

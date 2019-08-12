@@ -29,9 +29,15 @@ export const schema = {
   properties: {
     postalCode: {
       type: 'string',
+      description: 'A Postal Code',
       maxLength: 5
+    },
+    recurrenceInterval: {
+      type: 'integer',
+      description: 'A recurrence interval'
     }
-  }
+  },
+  required: ['postalCode']
 };
 
 export const uischema = {
@@ -44,6 +50,11 @@ export const uischema = {
           type: 'Control',
           scope: '#/properties/postalCode',
           label: 'Postal Code'
+        },
+        {
+          type: 'Control',
+          scope: '#/properties/recurrenceInterval',
+          label: 'Recurrence Interval'
         }
       ]
     }
@@ -56,7 +67,9 @@ export const data = {
 
 const config = {
   restrict: true,
-  trim: true
+  trim: true,
+  showUnfocusedDescription: true,
+  hideRequiredAsterisk: true
 };
 
 registerExamples([

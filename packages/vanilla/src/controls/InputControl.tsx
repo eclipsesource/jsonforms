@@ -31,22 +31,21 @@ import {
   isControl,
   isDescriptionHidden,
   isPlainLabel,
-  mapDispatchToControlProps,
-  mapStateToControlProps,
   NOT_APPLICABLE,
   RankedTester,
   rankWith
 } from '@jsonforms/core';
-import { Control, DispatchCell } from '@jsonforms/react';
-import { addVanillaControlProps } from '../util';
+import { Control, DispatchCell, withJsonFormsControlProps } from '@jsonforms/react';
+import { withVanillaControlProps } from '../util';
 import { VanillaRendererProps } from '../index';
-import { connect } from 'react-redux';
+import merge from 'lodash/merge';
 
 export class InputControl extends Control<
   ControlProps & VanillaRendererProps,
   ControlState
-> {
+  > {
   render() {
+
     const {
       classNames,
       description,
@@ -58,17 +57,21 @@ export class InputControl extends Control<
       visible,
       required,
       path,
-      cells
+      cells,
+      config
     } = this.props;
 
     const isValid = errors.length === 0;
     const divClassNames = `validation  ${
       isValid ? classNames.description : 'validation_error'
-    }`;
+      }`;
+
+    const mergedConfig = merge({}, config, uischema.options);
     const showDescription = !isDescriptionHidden(
       visible,
       description,
-      this.state.isFocused
+      this.state.isFocused,
+      mergedConfig.showUnfocusedDescription
     );
     const labelText = isPlainLabel(label) ? label : label.default;
     const cell = maxBy(cells, r => r.tester(uischema, schema));
@@ -88,7 +91,7 @@ export class InputControl extends Control<
           id={id}
         >
           <label htmlFor={id + '-input'} className={classNames.label}>
-            {computeLabel(labelText, required)}
+            {computeLabel(labelText, required, mergedConfig.hideRequiredAsterisk)}
           </label>
           <DispatchCell
             uischema={uischema}
@@ -100,8 +103,8 @@ export class InputControl extends Control<
             {!isValid
               ? errors
               : showDescription
-              ? description
-              : null}
+                ? description
+                : null}
           </div>
         </div>
       );
@@ -111,9 +114,4 @@ export class InputControl extends Control<
 
 export const inputControlTester: RankedTester = rankWith(1, isControl);
 
-export const ConnectedInputControl = connect(
-  addVanillaControlProps(mapStateToControlProps),
-  mapDispatchToControlProps
-)(InputControl);
-
-export default ConnectedInputControl;
+export default withVanillaControlProps(withJsonFormsControlProps(InputControl));

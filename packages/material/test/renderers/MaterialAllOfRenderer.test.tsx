@@ -23,13 +23,14 @@
   THE SOFTWARE.
 */
 import React, { Reducer } from 'react';
-import { Provider } from 'react-redux';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { Actions, ControlElement, jsonformsReducer, JsonFormsState } from '@jsonforms/core';
 import { MaterialAllOfRenderer, materialRenderers } from '../../src';
 import { AnyAction, combineReducers, createStore, Store } from 'redux';
+import { JsonFormsReduxContext } from '@jsonforms/react';
+import { Provider } from 'react-redux';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -75,10 +76,15 @@ describe('Material allOf renderer', () => {
       label: 'Value',
       scope: '#/properties/value'
     };
-    store.dispatch(Actions.init({data: undefined}, schema, uischema));
+    store.dispatch(Actions.init({ data: undefined }, schema, uischema));
     wrapper = mount(
       <Provider store={store}>
-        <MaterialAllOfRenderer schema={schema} uischema={uischema}/>
+        <JsonFormsReduxContext>
+          <MaterialAllOfRenderer
+            schema={schema}
+            uischema={uischema}
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const inputs = wrapper.find('input');
@@ -109,10 +115,16 @@ describe('Material allOf renderer', () => {
       label: 'Value',
       scope: '#/properties/value'
     };
-    store.dispatch(Actions.init({data: undefined}, schema, uischema));
+    store.dispatch(Actions.init({ data: undefined }, schema, uischema));
     wrapper = mount(
       <Provider store={store}>
-        <MaterialAllOfRenderer schema={schema} uischema={uischema} visible={false}/>
+        <JsonFormsReduxContext>
+          <MaterialAllOfRenderer
+            schema={schema}
+            uischema={uischema}
+            visible={false}
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const inputs = wrapper.find('input');

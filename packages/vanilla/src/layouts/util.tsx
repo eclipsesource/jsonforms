@@ -25,7 +25,7 @@
 import isEmpty from 'lodash/isEmpty';
 import React from 'react';
 import { JsonSchema, Layout } from '@jsonforms/core';
-import { ResolvedJsonForms } from '@jsonforms/react';
+import { JsonFormsDispatch, useJsonForms } from '@jsonforms/react';
 export interface RenderChildrenProps {
   layout: Layout;
   schema: JsonSchema;
@@ -43,10 +43,13 @@ export const renderChildren = (
     return [];
   }
 
+  const { renderers } = useJsonForms();
+
   return layout.elements.map((child, index) => {
     return (
       <div className={className} key={`${path}-${index}`}>
-        <ResolvedJsonForms
+        <JsonFormsDispatch
+          renderers={renderers}
           uischema={child}
           schema={schema}
           path={path}

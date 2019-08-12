@@ -61,12 +61,15 @@ import * as issue_1253 from './1253';
 import * as issue_1254 from './1254';
 import * as oneOfRecursive from './oneOf-recursive';
 import * as huge from './huge';
+import * as defaultExample from './default';
+import * as onChange from './onChange';
 export * from './register';
 export * from './example';
 
 import * as ifThenElse from './if_then_else';
 
 export {
+  defaultExample,
   allOf,
   anyOf,
   oneOf,
@@ -106,5 +109,6 @@ export {
   issue_1254,
   oneOfRecursive,
   huge,
-  ifThenElse
+  ifThenElse,
+  onChange
 };

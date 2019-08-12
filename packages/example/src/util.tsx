@@ -27,7 +27,8 @@ import * as _ from 'lodash';
 import {
   ExampleDescription,
   issue_1220 as Issue1220Example,
-  nestedArray as NestedArrayExample
+  nestedArray as NestedArrayExample,
+  onChange as OnChangeExample
 } from '@jsonforms/examples';
 import ConnectedRatingControl, { ratingControlTester } from './RatingControl';
 import {
@@ -36,12 +37,14 @@ import {
   setLocale,
   setSchema,
   setUISchema,
-  UISchemaElement
+  UISchemaElement,
+  JsonFormsCore
 } from '@jsonforms/core';
 import { AnyAction, Dispatch } from 'redux';
 
 export interface ReactExampleDescription extends ExampleDescription {
   customReactExtension?(dispatch: Dispatch<AnyAction>): React.Component;
+  onChange?:(dispatch: Dispatch<AnyAction>) => (state: Pick<JsonFormsCore, 'data' | 'errors'>) => AnyAction;
 }
 const registerRatingControl = (dispatch: Dispatch<AnyAction>) => {
   dispatch(Actions.registerCell(ratingControlTester, ConnectedRatingControl));
@@ -195,6 +198,11 @@ export const enhanceExample: (
           )
         });
         return issue_1220;
+        case 'onChange':
+         return {
+           ...e,
+           onChange: OnChangeExample.onChange
+         }
       default:
         return e;
     }

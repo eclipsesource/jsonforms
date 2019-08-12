@@ -26,7 +26,11 @@ import isEmpty from 'lodash/isEmpty';
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import { StyleRulesCallback, withStyles, WithStyles } from '@material-ui/core/styles';
+import {
+  StyleRulesCallback,
+  withStyles,
+  WithStyles
+} from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -40,18 +44,20 @@ import { createAjv } from '@jsonforms/core/lib/util/validator';
 
 const ajv = createAjv();
 
-const styles: StyleRulesCallback<'root' | 'flex' | 'rightIcon' | 'button'> = theme => ({
+const styles: StyleRulesCallback<
+  'root' | 'flex' | 'rightIcon' | 'button'
+> = theme => ({
   root: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   flex: {
-    flex: 1,
+    flex: 1
   },
   rightIcon: {
-    marginLeft: theme.spacing.unit,
+    marginLeft: Number(theme.spacing)
   },
   button: {
-    margin: theme.spacing.unit,
+    margin: Number(theme.spacing)
   }
 });
 
@@ -63,14 +69,17 @@ interface EditorBarProps {
 
 interface EditorBarState {
   exportDialog: {
-    open: boolean
+    open: boolean;
   };
 }
 
-class EditorBar extends
-  React.Component<EditorBarProps & WithStyles<'root' | 'flex' | 'rightIcon' | 'button'>,
-                  EditorBarState> {
-  constructor(props: EditorBarProps & WithStyles<'root' | 'flex' | 'rightIcon' | 'button'>) {
+class EditorBar extends React.Component<
+  EditorBarProps & WithStyles<'root' | 'flex' | 'rightIcon' | 'button'>,
+  EditorBarState
+> {
+  constructor(
+    props: EditorBarProps & WithStyles<'root' | 'flex' | 'rightIcon' | 'button'>
+  ) {
     super(props);
     this.state = {
       exportDialog: {
@@ -97,8 +106,9 @@ class EditorBar extends
 
   handleDownload = () => {
     const a = document.createElement('a');
-    const file = new Blob([JSON.stringify(this.props.rootData, null, 2)],
-                          {type: 'application/json'});
+    const file = new Blob([JSON.stringify(this.props.rootData, null, 2)], {
+      type: 'application/json'
+    });
     a.href = URL.createObjectURL(file);
     a.download = 'download.json';
     a.click();
@@ -132,7 +142,9 @@ class EditorBar extends
           return;
         }
       } else {
-        console.error('Something went wrong! The file is an ArrayBuffer instead of a string.');
+        console.error(
+          'Something went wrong! The file is an ArrayBuffer instead of a string.'
+        );
       }
       if (!isEmpty(readData)) {
         const valid = ajv.validate(schema, readData);
@@ -159,7 +171,11 @@ class EditorBar extends
             <Typography variant='h6' color='inherit' className={classes.flex}>
               User and Task Editor
             </Typography>
-            <Button component='label' className={classes.button} color='inherit'>
+            <Button
+              component='label'
+              className={classes.button}
+              color='inherit'
+            >
               Open Data File
               <FolderOpen className={classes.rightIcon} />
               <input
@@ -180,11 +196,14 @@ class EditorBar extends
               open={this.state.exportDialog.open}
               onClose={this.handleExportDialogClose}
             />
-            <Button className={classes.button} color='inherit' onClick={this.handleDownload}>
+            <Button
+              className={classes.button}
+              color='inherit'
+              onClick={this.handleDownload}
+            >
               Download Model
               <FileDownload className={classes.rightIcon} />
             </Button>
-
           </Toolbar>
         </AppBar>
       </div>
@@ -207,5 +226,8 @@ const mapDispatchToProps = (dispatch: any) => ({
 
 export default compose<any, any>(
   withStyles(styles, { name: 'EditorBar' }),
-  connect(mapStateToProps, mapDispatchToProps)
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )
 )(EditorBar);

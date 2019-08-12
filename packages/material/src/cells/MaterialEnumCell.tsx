@@ -24,16 +24,13 @@
 */
 import React from 'react';
 import {
-  defaultMapDispatchToControlProps,
-  defaultMapStateToEnumCellProps,
   EnumCellProps,
   isEnumControl,
   RankedTester,
   rankWith,
   WithClassname
 } from '@jsonforms/core';
-
-import { connect } from 'react-redux';
+import { withJsonFormsEnumCellProps } from '@jsonforms/react';
 import { MuiSelect } from '../mui-controls/MuiSelect';
 
 export const MaterialEnumCell = (props: EnumCellProps & WithClassname) => (
@@ -45,7 +42,5 @@ export const MaterialEnumCell = (props: EnumCellProps & WithClassname) => (
  * @type {RankedTester}
  */
 export const materialEnumCellTester: RankedTester = rankWith(2, isEnumControl);
-export default connect(
-  defaultMapStateToEnumCellProps,
-  defaultMapDispatchToControlProps
-)(MaterialEnumCell);
+
+export default withJsonFormsEnumCellProps(MaterialEnumCell);

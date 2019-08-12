@@ -23,7 +23,6 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { connect } from 'react-redux';
 import {
   computeLabel,
   ControlProps,
@@ -31,12 +30,10 @@ import {
   isDescriptionHidden,
   isPlainLabel,
   isRangeControl,
-  mapDispatchToControlProps,
-  mapStateToControlProps,
   RankedTester,
   rankWith
 } from '@jsonforms/core';
-import { Control } from '@jsonforms/react';
+import { Control, withJsonFormsControlProps } from '@jsonforms/react';
 
 import { FormControl, FormHelperText, Hidden, Typography } from '@material-ui/core';
 import Slider from '@material-ui/lab/Slider';
@@ -77,7 +74,7 @@ export class MaterialSliderControl extends Control<ControlProps, ControlState> {
       marginTop: '7px'
     };
 
-    const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
+    const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused, mergedConfig.showUnfocusedDescription);
     return (
       <Hidden xsUp={!visible}>
         <FormControl
@@ -87,7 +84,7 @@ export class MaterialSliderControl extends Control<ControlProps, ControlState> {
           id={id}
         >
           <Typography id={id + '-typo'} style={labelStyle} variant='caption'>
-            {computeLabel(isPlainLabel(label) ? label : label.default, required)}
+            {computeLabel(isPlainLabel(label) ? label : label.default, required, mergedConfig.hideRequiredAsterisk)}
           </Typography>
           <div style={rangeContainerStyle}>
             <Typography style={rangeItemStyle} variant='caption' align='left'>
@@ -102,7 +99,7 @@ export class MaterialSliderControl extends Control<ControlProps, ControlState> {
             min={schema.minimum}
             max={schema.maximum}
             value={Number(data || schema.default)}
-            onChange={(_ev, value) => {
+            onChange={(_ev: any, value: any) => {
               handleChange(path, Number(value));
             }
             }
@@ -119,6 +116,5 @@ export class MaterialSliderControl extends Control<ControlProps, ControlState> {
   }
 }
 export const materialSliderControlTester: RankedTester = rankWith(4, isRangeControl);
-export default connect(
-  mapStateToControlProps, mapDispatchToControlProps
-)(MaterialSliderControl);
+
+export default withJsonFormsControlProps(MaterialSliderControl);

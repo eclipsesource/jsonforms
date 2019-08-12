@@ -25,8 +25,10 @@
 import get from 'lodash/get';
 import { ControlElement, UISchemaElement } from '../models/uischema';
 import union from 'lodash/union';
+import find from 'lodash/find';
 import RefParser from 'json-schema-ref-parser';
 import {
+  findUISchema,
   getConfig,
   getData,
   getErrorAt,
@@ -40,21 +42,21 @@ import {
 import { RankedTester } from '../testers';
 import { JsonSchema } from '../models/jsonSchema';
 import {
+  composePaths,
   CombinatorKeyword,
   composeWithUi,
   createLabelDescriptionFrom,
   formatErrorMessage,
   isEnabled,
   isVisible,
-  Resolve,
-  resolveSubSchemas,
+  moveDown,
   moveUp,
-  moveDown
+  Resolve,
+  resolveSubSchemas
 } from '../util';
 import has from 'lodash/has';
 import { update } from '../actions';
 import { ErrorObject } from 'ajv';
-import { generateDefaultUISchema } from '../generators';
 import { JsonFormsState } from '../store';
 import { AnyAction, Dispatch } from 'redux';
 import { JsonFormsRendererRegistryEntry } from '../reducers/renderers';
@@ -103,8 +105,12 @@ const isRequired = (
  * @param {boolean} required whether the label belongs to a control which is required
  * @returns {string} the label string
  */
-export const computeLabel = (label: string, required: boolean): string => {
-  return required ? label + '*' : label;
+export const computeLabel = (
+  label: string,
+  required: boolean,
+  hideRequiredAsterisk: boolean
+): string => {
+  return required && !hideRequiredAsterisk ? label + '*' : label;
 };
 
 /**
@@ -149,12 +155,13 @@ export const createDefaultValue = (schema: JsonSchema) => {
 export const isDescriptionHidden = (
   visible: boolean,
   description: string,
-  isFocused: boolean
+  isFocused: boolean,
+  showUnfocusedDescription: boolean
 ): boolean => {
   return (
     description === undefined ||
     (description !== undefined && !visible) ||
-    !isFocused
+    (!showUnfocusedDescription && !isFocused)
   );
 };
 
@@ -198,6 +205,10 @@ export interface OwnPropsOfControl extends OwnPropsOfRenderer {
 
 export interface OwnPropsOfEnum {
   options?: any[];
+}
+
+export interface OwnPropsOfLayout extends OwnPropsOfRenderer {
+  direction?: 'row' | 'column';
 }
 
 /**
@@ -287,6 +298,8 @@ export interface StatePropsOfControl extends StatePropsOfScopedRenderer {
    * Whether the rendered data is required.
    */
   required?: boolean;
+
+  // TODO: renderers?
 }
 
 /**
@@ -317,7 +330,14 @@ export interface StatePropsOfLayout extends StatePropsOfRenderer {
    * All available renderers.
    */
   renderers?: any[];
+
+  /**
+   * Direction for the layout to flow
+   */
+  direction: 'row' | 'column';
 }
+
+export interface LayoutProps extends StatePropsOfLayout {}
 
 /**
  * The state of a control.
@@ -427,11 +447,55 @@ export const mapStateToEnumControlProps = (
 };
 
 /**
+ * Map state to control props.
+ * @param state the store's state
+ * @param ownProps any own props
+ * @returns {StatePropsOfControl} state props for a control
+ */
+export const mapStateToMasterListItemProps = (
+  state: JsonFormsState,
+  ownProps: OwnPropsOfMasterListItem
+): StatePropsOfMasterItem => {
+  const { schema, path, index } = ownProps;
+  const firstPrimitiveProp = schema.properties
+    ? find(Object.keys(schema.properties), propName => {
+        const prop = schema.properties[propName];
+        return (
+          prop.type === 'string' ||
+          prop.type === 'number' ||
+          prop.type === 'integer'
+        );
+      })
+    : undefined;
+  const childPath = composePaths(path, `${index}`);
+  const childData = Resolve.data(getData(state), childPath);
+  const childLabel = firstPrimitiveProp ? childData[firstPrimitiveProp] : '';
+
+  return {
+    ...ownProps,
+    childLabel
+  };
+};
+
+/**
  * State-based props of a table control.
  */
 export interface StatePropsOfControlWithDetail extends StatePropsOfControl {
   uischemas?: { tester: UISchemaTester; uischema: UISchemaElement }[];
   renderers?: JsonFormsRendererRegistryEntry[];
+}
+
+export interface OwnPropsOfMasterListItem {
+  index: number;
+  selected: boolean;
+  path: string;
+  schema: JsonSchema;
+  handleSelect(index: number): () => void;
+  removeItem(path: string, value: number): () => void;
+}
+
+export interface StatePropsOfMasterItem extends OwnPropsOfMasterListItem {
+  childLabel: string;
 }
 
 /**
@@ -561,6 +625,18 @@ export interface ArrayControlProps
   extends StatePropsOfArrayControl,
     DispatchPropsOfArrayControl {}
 
+export const layoutDefaultProps: {
+  visible: boolean;
+  enabled: boolean;
+  path: string;
+  direction: 'row' | 'column';
+} = {
+  visible: true,
+  enabled: true,
+  path: '',
+  direction: 'column'
+};
+
 /**
  * Map state to layout props.
  * @param state JSONForms state tree
@@ -569,8 +645,8 @@ export interface ArrayControlProps
  */
 export const mapStateToLayoutProps = (
   state: JsonFormsState,
-  ownProps: OwnPropsOfJsonFormsRenderer
-): StatePropsOfLayout => {
+  ownProps: OwnPropsOfLayout
+): LayoutProps => {
   const rootData = getData(state);
   const visible: boolean = has(ownProps, 'visible')
     ? ownProps.visible
@@ -586,7 +662,8 @@ export const mapStateToLayoutProps = (
     enabled,
     path: ownProps.path,
     uischema: ownProps.uischema,
-    schema: ownProps.schema
+    schema: ownProps.schema,
+    direction: ownProps.direction || layoutDefaultProps.direction
   };
 };
 
@@ -596,14 +673,14 @@ export interface OwnPropsOfJsonFormsRenderer extends OwnPropsOfRenderer {
   renderers?: JsonFormsRendererRegistryEntry[];
 }
 
-export interface JsonFormsProps extends StatePropsOfJsonFormsRenderer {
-  renderers?: JsonFormsRendererRegistryEntry[];
-}
-
 export interface StatePropsOfJsonFormsRenderer
   extends OwnPropsOfJsonFormsRenderer {
   rootSchema: JsonSchema;
   refResolver: any;
+}
+
+export interface JsonFormsProps extends StatePropsOfJsonFormsRenderer {
+  renderers?: JsonFormsRendererRegistryEntry[];
 }
 
 export const mapStateToJsonFormsRendererProps = (
@@ -613,7 +690,12 @@ export const mapStateToJsonFormsRendererProps = (
   let uischema = ownProps.uischema;
   if (uischema === undefined) {
     if (ownProps.schema) {
-      uischema = generateDefaultUISchema(ownProps.schema);
+      uischema = findUISchema(
+        state.jsonforms.uischemas,
+        ownProps.schema,
+        undefined,
+        ownProps.path
+      );
     } else {
       uischema = getUiSchema(state);
     }
@@ -629,54 +711,19 @@ export const mapStateToJsonFormsRendererProps = (
   };
 };
 
-export const layoutDefaultProps = {
-  visible: true,
-  enabled: true,
-  path: ''
-};
-
 export const controlDefaultProps = {
   ...layoutDefaultProps,
   errors: [] as string[]
 };
 
-export interface StatePropsOfCombinator {
-  schema: JsonSchema;
+export interface StatePropsOfCombinator extends OwnPropsOfControl {
   rootSchema: JsonSchema;
   path: string;
-  visible: boolean;
   id: string;
   indexOfFittingSchema: number;
+  uischemas: { tester: UISchemaTester; uischema: UISchemaElement }[];
+  data: any;
 }
-export interface CombinatorRendererProps
-  extends StatePropsOfCombinator,
-    DispatchPropsOfControl {}
-/**
- * Map state to all of renderer props.
- * @param state the store's state
- * @param ownProps any own props
- * @returns {StatePropsOfCombinator} state props for a combinator
- */
-export const mapStateToAllOfProps = (
-  state: JsonFormsState,
-  ownProps: OwnPropsOfControl
-): StatePropsOfCombinator => {
-  return mapStateToCombinatorRendererProps(state, ownProps, 'allOf');
-};
-
-export const mapStateToOneOfProps = (
-  state: JsonFormsState,
-  ownProps: OwnPropsOfControl
-): StatePropsOfCombinator => {
-  return mapStateToCombinatorRendererProps(state, ownProps, 'oneOf');
-};
-
-export const mapStateToAnyOfProps = (
-  state: JsonFormsState,
-  ownProps: OwnPropsOfControl
-): StatePropsOfCombinator => {
-  return mapStateToCombinatorRendererProps(state, ownProps, 'anyOf');
-};
 
 const mapStateToCombinatorRendererProps = (
   state: JsonFormsState,
@@ -701,7 +748,12 @@ const mapStateToCombinatorRendererProps = (
   const ajv = state.jsonforms.core.ajv;
   const schema = resolvedSchema || rootSchema;
   const _schema = resolveSubSchemas(schema, rootSchema, keyword);
-  const structuralKeywords = ['required', 'additionalProperties', 'type'];
+  const structuralKeywords = [
+    'required',
+    'additionalProperties',
+    'type',
+    'enum'
+  ];
   const dataIsValid = (errors: ErrorObject[]): boolean => {
     return (
       !errors ||
@@ -720,17 +772,50 @@ const mapStateToCombinatorRendererProps = (
   }
 
   return {
+    data,
     path,
     schema,
     rootSchema,
     visible,
     id,
-    indexOfFittingSchema
+    indexOfFittingSchema,
+    uischemas: state.jsonforms.uischemas,
+    uischema
   };
+};
+
+export interface CombinatorRendererProps
+  extends StatePropsOfCombinator,
+    DispatchPropsOfControl {}
+/**
+ * Map state to all of renderer props.
+ * @param state the store's state
+ * @param ownProps any own props
+ * @returns {StatePropsOfCombinator} state props for a combinator
+ */
+export const mapStateToAllOfProps = (
+  state: JsonFormsState,
+  ownProps: OwnPropsOfControl
+): StatePropsOfCombinator =>
+  mapStateToCombinatorRendererProps(state, ownProps, 'allOf');
+
+export const mapStateToAnyOfProps = (
+  state: JsonFormsState,
+  ownProps: OwnPropsOfControl
+): StatePropsOfCombinator => {
+  return mapStateToCombinatorRendererProps(state, ownProps, 'anyOf');
+};
+
+export const mapStateToOneOfProps = (
+  state: JsonFormsState,
+  ownProps: OwnPropsOfControl
+): StatePropsOfCombinator => {
+  return mapStateToCombinatorRendererProps(state, ownProps, 'oneOf');
 };
 
 export interface StatePropsOfArrayLayout extends StatePropsOfControlWithDetail {
   data: number;
+  minItems?: number;
 }
 /**
  * Map state to table props
@@ -765,9 +850,12 @@ export const mapStateToArrayLayoutProps = (
     uischema,
     schema: resolvedSchema,
     data: props.data ? props.data.length : 0,
-    errors: allErrors
+    errors: allErrors,
+    minItems: schema.minItems
   };
 };
+
+export type CombinatorProps = StatePropsOfCombinator & DispatchPropsOfControl;
 
 /**
  * Props of an array control.

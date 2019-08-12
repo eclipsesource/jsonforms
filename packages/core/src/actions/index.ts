@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import AJV from 'ajv';
+import AJV, { ErrorObject } from 'ajv';
 import RefParser from 'json-schema-ref-parser';
 import { RankedTester } from '../testers';
 import { JsonSchema, UISchemaElement } from '../';
@@ -33,6 +33,8 @@ import { AnyAction, Dispatch } from 'redux';
 export const INIT: 'jsonforms/INIT' = 'jsonforms/INIT';
 export const SET_AJV: 'jsonforms/SET_AJV' = 'jsonforms/SET_AJV';
 export const UPDATE_DATA: 'jsonforms/UPDATE' = 'jsonforms/UPDATE';
+export const UPDATE_ERRORS: 'jsonforms/UPDATE_ERRORS' =
+  'jsonforms/UPDATE_ERRORS';
 export const VALIDATE: 'jsonforms/VALIDATE' = 'jsonforms/VALIDATE';
 export const ADD_RENDERER: 'jsonforms/ADD_RENDERER' = 'jsonforms/ADD_RENDERER';
 export const REMOVE_RENDERER: 'jsonforms/REMOVE_RENDERER' =
@@ -58,6 +60,11 @@ export interface UpdateAction {
   type: 'jsonforms/UPDATE';
   path: string;
   updater(existingData?: any): any;
+}
+
+export interface UpdateErrorsAction {
+  type: 'jsonforms/UPDATE_ERRORS';
+  errors: ErrorObject[];
 }
 
 export interface InitAction {
@@ -125,6 +132,11 @@ export const update = (
   type: UPDATE_DATA,
   path,
   updater
+});
+
+export const updateErrors = (errors: ErrorObject[]): UpdateErrorsAction => ({
+  type: UPDATE_ERRORS,
+  errors
 });
 
 export interface AddRendererAction {

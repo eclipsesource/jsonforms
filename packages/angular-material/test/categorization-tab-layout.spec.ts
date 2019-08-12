@@ -38,6 +38,7 @@ import { JsonFormsOutlet, UnknownRenderer } from '@jsonforms/angular';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { CategorizationTabLayoutRenderer } from '../src';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { setupMockStore } from '@jsonforms/angular-test';
 
 describe('Categorization tab layout', () => {
   let fixture: ComponentFixture<any>;
@@ -79,8 +80,7 @@ describe('Categorization tab layout', () => {
   });
 
   it('render categories initially', async(() => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
-    component.uischema = {
+    const uischema = {
       type: 'Categorization',
       elements: [
         {
@@ -110,14 +110,7 @@ describe('Categorization tab layout', () => {
       ]
     };
 
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data,
-          schema
-        }
-      }
-    });
+    const mockSubStore = setupMockStore(fixture, { uischema, schema, data });
     mockSubStore.complete();
     fixture.detectChanges();
     fixture.whenRenderingDone().then(() => {
@@ -152,8 +145,7 @@ describe('Categorization tab layout', () => {
   }));
 
   it('add category', async(() => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
-    component.uischema = {
+    const uischema = {
       type: 'Categorization',
       elements: [
         {
@@ -182,15 +174,7 @@ describe('Categorization tab layout', () => {
         }
       ]
     };
-
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data,
-          schema
-        }
-      }
-    });
+    const mockSubStore = setupMockStore(fixture, { uischema, schema, data });
     fixture.detectChanges();
     fixture.whenRenderingDone().then(() => {
       fixture.detectChanges();
@@ -291,17 +275,8 @@ describe('Categorization tab layout', () => {
         }
       ]
     };
-    component.uischema = uischema;
+    const mockSubStore = setupMockStore(fixture, { uischema, schema, data });
     component.visible = false;
-    const mockSubStore = MockNgRedux.getSelectorStub();
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data,
-          schema
-        }
-      }
-    });
     mockSubStore.complete();
     fixture.detectChanges();
     fixture.whenRenderingDone().then(() => {

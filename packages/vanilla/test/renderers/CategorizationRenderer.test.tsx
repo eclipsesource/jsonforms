@@ -22,40 +22,45 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import '@jsonforms/test';
 import * as React from 'react';
-import test from 'ava';
 import { Provider } from 'react-redux';
 import {
   Categorization,
+  Category,
   ControlElement,
   JsonSchema,
-  Layout
+  Layout,
 } from '@jsonforms/core';
-import * as TestUtils from 'react-dom/test-utils';
+import { JsonFormsReduxContext } from '@jsonforms/react';
+import Adapter from 'enzyme-adapter-react-16';
+import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import CategorizationRenderer, { categorizationTester } from '../../src/complex/categorization';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
 
-test.beforeEach(t => {
-  t.context.data = { };
-  t.context.schema = {
+Enzyme.configure({ adapter: new Adapter() });
+
+const category: Category = {
+  type: 'Category',
+  label: 'B',
+  elements: []
+};
+
+const fixture = {
+  data: {},
+  schema: {
     type: 'object',
     properties: {
       name: {
         type: 'string'
       }
     }
-  };
-  t.context.uischema = {
+  },
+  uischema: {
     type: 'Categorization',
-    elements: [
-      {
-        type: 'Category',
-        label: 'B'
-      },
-    ]
-  };
-  t.context.styles = [
+    label: 'A',
+    elements: [category]
+  },
+  styles: [
     {
       name: 'categorization',
       classNames: ['categorization']
@@ -76,406 +81,401 @@ test.beforeEach(t => {
       name: 'categorization.detail',
       classNames: ['categorization-detail']
     }
-  ];
-});
+  ]
+};
 
-test('tester', t => {
-  t.is(categorizationTester(undefined, undefined), -1);
-  t.is(categorizationTester(null, undefined), -1);
-  t.is(categorizationTester({type: 'Foo'}, undefined), -1);
-  t.is(categorizationTester({type: 'Categorization'}, undefined), -1);
-});
-
-test('tester with null elements and no schema', t => {
-  const uischema: Layout = {
-    type: 'Categorization',
-    elements: null
-  };
-  t.is(
-      categorizationTester(
-          uischema,
-          undefined
-      ),
-      -1
-  );
-});
-
-test('tester with empty elements and no schema', t => {
-  const uischema: Layout = {
-    type: 'Categorization',
-    elements: []
-  };
-  t.is(
-      categorizationTester(
-          uischema,
-          undefined
-      ),
-      -1
-  );
-});
-
-test('apply tester with single unknown element and no schema', t => {
-  const uischema: Layout = {
-    type: 'Categorization',
-    elements: [
-      {
-        type: 'Foo'
-      },
-    ]
-  };
-  t.is(
-      categorizationTester(
-          uischema,
-          undefined
-      ),
-      -1
-  );
-});
-
-test('tester with single category and no schema', t => {
-  const categorization =  {
-    type: 'Categorization',
-    elements: [
-      {
-        type: 'Category'
-      }
-    ]
-  };
-  t.is(
-      categorizationTester(
-          categorization,
-          undefined
-      ),
-      1
-  );
-});
-
-test('tester with nested categorization and single category and no schema', t => {
-  const nestedCategorization: Layout = {
-    type: 'Categorization',
-    elements: [
-      {
-        type: 'Category'
-      }
-    ]
-  };
-  const categorization: Layout = {
-    type: 'Categorization',
-    elements: [nestedCategorization]
-  };
-  t.is(
-      categorizationTester(
-          categorization,
-          undefined),
-      1
-  );
-});
-
-test('tester with nested categorizations, but no category and no schema', t => {
-  const categorization: any = {
-    type: 'Categorization',
-    elements: [
-      {
-        type: 'Categorization'
-      }
-    ]
-  };
-  t.is(
-      categorizationTester(
-          categorization,
-          undefined
-      ),
-      -1
-  );
-});
-
-test('tester with nested categorizations, null elements and no schema', t => {
-  const categorization: any = {
-    type: 'Categorization',
-    elements: [
-      {
-        type: 'Categorization',
-        label: 'Test',
-        elements: null
-      }
-    ]
-  };
-  t.is(
-      categorizationTester(
-          categorization,
-          undefined
-      ),
-      -1
-  );
-});
-
-test('tester with nested categorizations, empty elements and no schema', t => {
-  const categorization: any = {
-    type: 'Categorization',
-    elements: [
-      {
-        type: 'Categorization',
-        elements: []
-      }
-    ]
-  };
-  t.is(
-      categorizationTester(
-          categorization,
-          undefined
-      ),
-      -1
-  );
-});
-
-test('render', t => {
-  const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-      name: {
-        type: 'string'
-      }
-    }
-  };
-  const nameControl = {
-    type: 'Control',
-    scope: '#/properties/name'
-  };
-  const innerCat: Categorization = {
-    type: 'Categorization',
-    label: 'Bar',
-    elements: [
-      {
-        type: 'Category',
-        label: 'A',
-        elements: [nameControl]
-      }
-    ]
-  };
-  const uischema: Categorization = {
-    type: 'Categorization',
-    label: 'Root',
-    elements: [
-      innerCat,
-      {
-        type: 'Category',
-        label: 'B',
-        elements: [nameControl]
-      }
-    ]
-  };
-
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema,
-    uischema,
-    styles: t.context.styles
-  });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <CategorizationRenderer
-        schema={schema}
-        uischema={uischema}
-      />
-    </Provider>
-  ) as unknown as React.Component<any>;
-
-  // master tree
-  const div = TestUtils.findRenderedDOMComponentWithClass(
-    tree,
-    'categorization'
-  ) as HTMLDivElement;
-  const master = TestUtils.findRenderedDOMComponentWithClass(
-    tree,
-    'categorization-master'
-  );
-  const ul = master.children[0];
-  const liA = ul.children[0];
-  const spanA = liA.children[0];
-  const innerUlA = liA.children[1];
-  const innerLiA = innerUlA.children[0];
-  const innerSpanA = innerLiA.children[0];
-  const liB = ul.children[1];
-  const spanB = liB.children[0];
-  // detail
-  const detail = div.children[1] as HTMLDivElement;
-
-  t.is(div.className, 'categorization');
-  t.is(div.childNodes.length, 2);
-  t.is(master.className, 'categorization-master');
-  t.is(master.children.length, 1);
-  t.is(ul.children.length, 2);
-  t.is(liA.className, 'category-group');
-  t.is(liA.children.length, 2);
-  t.is(spanA.textContent, 'Bar');
-  t.is(innerUlA.className, 'category-subcategories');
-  t.is(innerUlA.children.length, 1);
-  t.is(innerLiA.children.length, 1);
-  t.is(innerSpanA.textContent, 'A');
-  t.not(liB.className, 'category-group');
-  t.is(liB.children.length, 1);
-  t.is(spanB.textContent, 'B');
-  t.is(detail.className, 'categorization-detail');
-  t.is(detail.children.length, 1);
-  t.is(detail.children.item(0).tagName, 'DIV');
-  t.is(detail.children.item(0).children.length, 1);
-});
-
-test('render on click', t => {
-  const data = {'name': 'Foo'};
-  const nameControl: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/name'
-  };
-  const innerCategorization: Categorization = {
-    type: 'Categorization',
-    label: 'Bar',
-    elements: [
-      {
-        type: 'Category',
-        label: 'A',
-        elements: [nameControl]
-      },
-    ]
-  };
-  const uischema: Categorization = {
-    type: 'Categorization',
-    label: 'Root',
-    elements: [
-      innerCategorization,
-      {
-        type: 'Category',
-        label: 'B',
-        elements: [nameControl, nameControl]
-      },
-      {
-        type: 'Category',
-        label: 'C',
-        elements: undefined
-      },
-      {
-        type: 'Category',
-        label: 'D',
-        elements: null
-      },
-    ]
-  };
-  const store = initJsonFormsVanillaStore({
-    data,
-    schema: t.context.schema,
-    uischema,
-    styles: t.context.styles
+describe('Categorization tester', () => {
+  test('tester', () => {
+    expect(categorizationTester(undefined, undefined)).toBe(-1);
+    expect(categorizationTester(null, undefined)).toBe(-1);
+    expect(categorizationTester({ type: 'Foo' }, undefined)).toBe(-1);
+    expect(categorizationTester({ type: 'Categorization' }, undefined)).toBe(-1);
   });
 
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <CategorizationRenderer
-        schema={t.context.schema}
-        uischema={uischema}
-      />
-    </Provider>
-  ) as unknown as React.Component<any>;
-
-  const div: HTMLDivElement = TestUtils.findRenderedDOMComponentWithClass(
-    tree,
-    'categorization'
-  ) as HTMLDivElement;
-  const master = div.children[0] as HTMLDivElement;
-  const ul = master.children[0];
-  const liB = ul.children[1] as HTMLLIElement;
-  const liC = ul.children[2] as HTMLLIElement;
-  const liD = ul.children[3] as HTMLLIElement;
-  const detail = div.children[1] as HTMLDivElement;
-
-  t.is(div.className, 'categorization');
-  t.is(div.childNodes.length, 2);
-  t.is(master.children.length, 1);
-  t.is(ul.children.length, 4);
-  t.is(detail.children.length, 1);
-  t.is(detail.children.item(0).tagName, 'DIV');
-  t.is(detail.children.item(0).children.length, 1);
-  TestUtils.Simulate.click(liB);
-  t.is(detail.children.length, 1);
-  t.is(detail.children.item(0).tagName, 'DIV');
-  t.is(detail.children.item(0).children.length, 2);
-
-  TestUtils.Simulate.click(liC);
-  t.is(detail.children.length, 1);
-  t.is(detail.children.item(0).tagName, 'DIV');
-  t.is(detail.children.item(0).children.length, 0);
-
-  TestUtils.Simulate.click(liD);
-  t.is(detail.children.length, 1);
-  t.is(detail.children.item(0).tagName, 'DIV');
-  t.is(detail.children.item(0).children.length, 0);
-});
-
-test('hide', t => {
-  const uischema: Categorization = {
-    type: 'Categorization',
-    label: '',
-    elements: [
-      {
-        type: 'Category',
-        label: 'B',
-        elements: []
-      }
-    ]
-  };
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema,
-    styles: t.context.styles
+  test('tester with null elements and no schema', () => {
+    const uischema: Layout = {
+      type: 'Categorization',
+      elements: null
+    };
+    expect(
+      categorizationTester(
+        uischema,
+        undefined
+      )
+    ).toBe(-1);
   });
 
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <CategorizationRenderer
-        schema={t.context.schema}
-        uischema={uischema}
-        visible={false}
-      />
-    </Provider>
-  ) as unknown as React.Component<any>;
+  test('tester with empty elements and no schema', () => {
+    const uischema: Layout = {
+      type: 'Categorization',
+      elements: []
+    };
+    expect(
+      categorizationTester(
+        uischema,
+        undefined
+      )
+    ).toBe(-1);
+  });
 
-  const div = TestUtils.findRenderedDOMComponentWithClass(
-    tree,
-    'categorization'
-  ) as HTMLDivElement;
-  t.true(div.hidden);
+  test('apply tester with single unknown element and no schema', () => {
+    const uischema: Layout = {
+      type: 'Categorization',
+      elements: [
+        {
+          type: 'Foo'
+        },
+      ]
+    };
+    expect(
+      categorizationTester(
+        uischema,
+        undefined
+      )
+    ).toBe(-1);
+  });
+
+  test('tester with single category and no schema', () => {
+    const categorization = {
+      type: 'Categorization',
+      elements: [
+        {
+          type: 'Category'
+        }
+      ]
+    };
+    expect(
+      categorizationTester(
+        categorization,
+        undefined
+      )
+    ).toBe(1);
+  });
+
+  test('tester with nested categorization and single category and no schema', () => {
+    const nestedCategorization: Layout = {
+      type: 'Categorization',
+      elements: [
+        {
+          type: 'Category'
+        }
+      ]
+    };
+    const categorization: Layout = {
+      type: 'Categorization',
+      elements: [nestedCategorization]
+    };
+    expect(
+      categorizationTester(
+        categorization,
+        undefined)
+    ).toBe(1);
+  });
+
+  test('tester with nested categorizations, but no category and no schema', () => {
+    const categorization: any = {
+      type: 'Categorization',
+      elements: [
+        {
+          type: 'Categorization'
+        }
+      ]
+    };
+    expect(
+      categorizationTester(
+        categorization,
+        undefined
+      )
+    ).toBe(-1);
+  });
+
+  test('tester with nested categorizations, null elements and no schema', () => {
+    const categorization: any = {
+      type: 'Categorization',
+      elements: [
+        {
+          type: 'Categorization',
+          label: 'Test',
+          elements: null
+        }
+      ]
+    };
+    expect(
+      categorizationTester(
+        categorization,
+        undefined
+      )
+    ).toBe(-1);
+  });
+
+  test('tester with nested categorizations, empty elements and no schema', () => {
+    const categorization: any = {
+      type: 'Categorization',
+      elements: [
+        {
+          type: 'Categorization',
+          elements: []
+        }
+      ]
+    };
+    expect(
+      categorizationTester(
+        categorization,
+        undefined
+      )
+    ).toBe(-1);
+  });
 });
 
-test('showed by default', t => {
-  const uischema: Categorization = {
-    type: 'Categorization',
-    label: '',
-    elements: [
-      {
-        type: 'Category',
-        label: 'B',
-        elements: []
-      }
-    ]
-  };
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema,
-    styles: t.context.styles
-  });
-  const tree: React.Component<any> = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <CategorizationRenderer
-        schema={t.context.schema}
-        uischema={uischema}
-      />
-    </Provider>
-  ) as unknown as React.Component<any>;
+describe('Categorization renderer', () => {
 
-  const div: HTMLDivElement = TestUtils.findRenderedDOMComponentWithClass(
-    tree,
-    'categorization'
-  ) as HTMLDivElement;
-  t.false(div.hidden);
+  let wrapper: ReactWrapper;
+
+  afterEach(() => wrapper.unmount());
+
+  test('render', () => {
+    const schema: JsonSchema = {
+      type: 'object',
+      properties: {
+        name: {
+          type: 'string'
+        }
+      }
+    };
+    const nameControl = {
+      type: 'Control',
+      scope: '#/properties/name'
+    };
+    const innerCat: Categorization = {
+      type: 'Categorization',
+      label: 'Bar',
+      elements: [
+        {
+          type: 'Category',
+          label: 'A',
+          elements: [nameControl]
+        }
+      ]
+    };
+    const uischema: Categorization = {
+      type: 'Categorization',
+      label: 'Root',
+      elements: [
+        innerCat,
+        {
+          type: 'Category',
+          label: 'B',
+          elements: [nameControl]
+        }
+      ]
+    };
+
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema,
+      uischema,
+      styles: fixture.styles
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <CategorizationRenderer
+            schema={schema}
+            uischema={uischema}
+          />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+
+    const div = wrapper.find('.categorization').getDOMNode();
+    const master = wrapper.find('.categorization-master').getDOMNode();
+    const ul = master.children[0];
+    const liA = ul.children[0];
+    const spanA = liA.children[0];
+    const innerUlA = liA.children[1];
+    const innerLiA = innerUlA.children[0];
+    const innerSpanA = innerLiA.children[0];
+    const liB = ul.children[1];
+    const spanB = liB.children[0];
+    // detail
+    const detail = div.children[1] as HTMLDivElement;
+
+    expect(div.className).toBe('categorization');
+    expect(div.childNodes).toHaveLength(2);
+    expect(master.className).toBe('categorization-master');
+    expect(master.children).toHaveLength(1);
+    expect(ul.children).toHaveLength(2);
+    expect(liA.className).toBe('category-group');
+    expect(liA.children).toHaveLength(2);
+    expect(spanA.textContent).toBe('Bar');
+    expect(innerUlA.className).toBe('category-subcategories');
+    expect(innerUlA.children).toHaveLength(1);
+    expect(innerLiA.children).toHaveLength(1);
+    expect(innerSpanA.textContent).toBe('A');
+    expect(liB.className).not.toBe('category-group');
+    expect(liB.children).toHaveLength(1);
+    expect(spanB.textContent).toBe('B');
+    expect(detail.className).toBe('categorization-detail');
+    expect(detail.children).toHaveLength(1);
+    expect(detail.children.item(0).tagName).toBe('DIV');
+    expect(detail.children.item(0).children).toHaveLength(1);
+  });
+
+  test('render on click', () => {
+    const data = { 'name': 'Foo' };
+    const nameControl: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/name'
+    };
+    const innerCategorization: Categorization = {
+      type: 'Categorization',
+      label: 'Bar',
+      elements: [
+        {
+          type: 'Category',
+          label: 'A',
+          elements: [nameControl]
+        },
+      ]
+    };
+    const uischema: Categorization = {
+      type: 'Categorization',
+      label: 'Root',
+      elements: [
+        innerCategorization,
+        {
+          type: 'Category',
+          label: 'B',
+          elements: [nameControl, nameControl]
+        },
+        {
+          type: 'Category',
+          label: 'C',
+          elements: undefined
+        },
+        {
+          type: 'Category',
+          label: 'D',
+          elements: null
+        },
+      ]
+    };
+    const store = initJsonFormsVanillaStore({
+      data,
+      schema: fixture.schema,
+      uischema,
+      styles: fixture.styles
+    });
+
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <CategorizationRenderer
+            schema={fixture.schema}
+            uischema={uischema}
+          />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+
+    const div: HTMLDivElement = wrapper.find('.categorization').getDOMNode();
+    const master = div.children[0] as HTMLDivElement;
+    const ul = master.children[0];
+    const listItems = wrapper.find('li');
+    const liB = listItems.at(2);
+    const liC = listItems.at(3);
+    const liD = listItems.at(4);
+    const detail = div.children[1] as HTMLDivElement;
+
+    expect(div.className).toBe('categorization');
+    expect(div.childNodes).toHaveLength(2);
+    expect(master.children).toHaveLength(1);
+    expect(ul.children).toHaveLength(4);
+    expect(detail.children).toHaveLength(1);
+    expect(detail.children.item(0).tagName).toBe('DIV');
+    expect(detail.children.item(0).children).toHaveLength(1);
+
+    liB.simulate('click');
+    expect(detail.children).toHaveLength(1);
+    expect(detail.children.item(0).tagName).toBe('DIV');
+    expect(detail.children.item(0).children).toHaveLength(2);
+
+    liC.simulate('click');
+    expect(detail.children).toHaveLength(1);
+    expect(detail.children.item(0).tagName).toBe('DIV');
+    expect(detail.children.item(0).children).toHaveLength(0);
+
+    liD.simulate('click');
+    expect(detail.children).toHaveLength(1);
+    expect(detail.children.item(0).tagName).toBe('DIV');
+    expect(detail.children.item(0).children).toHaveLength(0);
+  });
+
+  test('hide', () => {
+    const uischema: Categorization = {
+      type: 'Categorization',
+      label: '',
+      elements: [
+        {
+          type: 'Category',
+          label: 'B',
+          elements: []
+        }
+      ]
+    };
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema,
+      styles: fixture.styles
+    });
+
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <CategorizationRenderer
+            schema={fixture.schema}
+            uischema={uischema}
+            visible={false}
+          />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+
+    const div = wrapper.find('.categorization').getDOMNode() as HTMLDivElement;
+    expect(div.hidden).toBe(true);
+  });
+
+  test('showed by default', () => {
+    const uischema: Categorization = {
+      type: 'Categorization',
+      label: '',
+      elements: [
+        {
+          type: 'Category',
+          label: 'B',
+          elements: []
+        }
+      ]
+    };
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema,
+      styles: fixture.styles
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <CategorizationRenderer
+            schema={fixture.schema}
+            uischema={uischema}
+          />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+
+    const div: HTMLDivElement = wrapper.find('.categorization').getDOMNode();
+    expect(div.hidden).toBe(false);
+  });
 });

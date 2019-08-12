@@ -23,7 +23,6 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { connect } from 'react-redux';
 import merge from 'lodash/merge';
 import {
   computeLabel,
@@ -31,12 +30,10 @@ import {
   ControlState,
   isDateTimeControl,
   isPlainLabel,
-  mapDispatchToControlProps,
-  mapStateToControlProps,
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
-import { Control } from '@jsonforms/react';
+import { Control, withJsonFormsControlProps } from '@jsonforms/react';
 import moment from 'moment';
 import { Hidden } from '@material-ui/core';
 import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
@@ -77,7 +74,7 @@ export class MaterialDateTimeControl extends Control<ControlProps, ControlState>
           <DateTimePicker
             keyboard
             id={id + '-input'}
-            label={computeLabel(isPlainLabel(label) ? label : label.default, required)}
+            label={computeLabel(isPlainLabel(label) ? label : label.default, required, mergedConfig.hideRequiredAsterisk)}
             error={!isValid}
             fullWidth={!trim}
             onFocus={this.onFocus}
@@ -105,7 +102,7 @@ export class MaterialDateTimeControl extends Control<ControlProps, ControlState>
     );
   }
 }
+
 export const materialDateTimeControlTester: RankedTester = rankWith(2, isDateTimeControl);
-export default connect(
-  mapStateToControlProps, mapDispatchToControlProps
-)(MaterialDateTimeControl);
+
+export default withJsonFormsControlProps(MaterialDateTimeControl);

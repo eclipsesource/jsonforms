@@ -23,16 +23,13 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { connect } from 'react-redux';
 import {
   CellProps,
   isTimeControl,
-  mapDispatchToCellProps,
-  mapStateToCellProps,
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
-import { SyntheticEvent } from 'react';
+import { withJsonFormsCellProps } from '@jsonforms/react';
 import { VanillaRendererProps } from '../index';
 
 export const TimeCell = (props: CellProps & VanillaRendererProps) => {
@@ -42,9 +39,7 @@ export const TimeCell = (props: CellProps & VanillaRendererProps) => {
     <input
       type='time'
       value={data || ''}
-      onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
-        handleChange(path, ev.currentTarget.value)
-      }
+      onChange={ev => handleChange(path, ev.target.value)}
       className={className}
       id={id}
       disabled={!enabled}
@@ -58,7 +53,4 @@ export const TimeCell = (props: CellProps & VanillaRendererProps) => {
  */
 export const timeCellTester: RankedTester = rankWith(2, isTimeControl);
 
-export default connect(
-  mapStateToCellProps,
-  mapDispatchToCellProps
-)(TimeCell);
+export default withJsonFormsCellProps(TimeCell);

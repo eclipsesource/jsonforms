@@ -23,23 +23,18 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { connect } from 'react-redux';
 import {
   CellProps,
   isTimeControl,
-  mapDispatchToCellProps,
-  mapStateToCellProps,
   RankedTester,
   rankWith,
   WithClassname
 } from '@jsonforms/core';
+import { withJsonFormsCellProps } from '@jsonforms/react';
 import { MuiInputTime } from '../mui-controls/MuiInputTime';
 
 export const MaterialTimeCell = (props: CellProps & WithClassname) => (
   <MuiInputTime {...props} />
 );
 export const materialTimeCellTester: RankedTester = rankWith(2, isTimeControl);
-export default connect(
-  mapStateToCellProps,
-  mapDispatchToCellProps
-)(MaterialTimeCell);
+export default withJsonFormsCellProps(MaterialTimeCell);

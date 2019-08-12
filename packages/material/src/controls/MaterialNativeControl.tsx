@@ -23,7 +23,6 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { connect } from 'react-redux';
 import {
   computeLabel,
   ControlProps,
@@ -32,14 +31,12 @@ import {
   isDescriptionHidden,
   isPlainLabel,
   isTimeControl,
-  mapDispatchToControlProps,
-  mapStateToControlProps,
   or,
   RankedTester,
   rankWith
 } from '@jsonforms/core';
 import { Hidden } from '@material-ui/core';
-import { Control } from '@jsonforms/react';
+import { Control, withJsonFormsControlProps } from '@jsonforms/react';
 import TextField from '@material-ui/core/TextField';
 import merge from 'lodash/merge';
 
@@ -63,13 +60,13 @@ export class MaterialNativeControl extends Control<ControlProps, ControlState> {
     const trim = mergedConfig.trim;
     const onChange = (ev: any) => handleChange(path, ev.target.value);
     const fieldType = schema.format;
-    const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
+    const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused, mergedConfig.showUnfocusedDescription);
 
     return (
       <Hidden xsUp={!visible}>
         <TextField
           id={id + '-input'}
-          label={computeLabel(isPlainLabel(label) ? label : label.default, required)}
+          label={computeLabel(isPlainLabel(label) ? label : label.default, required, mergedConfig.hideRequiredAsterisk)}
           type={fieldType}
           error={!isValid}
           fullWidth={!trim}
@@ -90,7 +87,4 @@ export const materialNativeControlTester: RankedTester = rankWith(
   or(isDateControl, isTimeControl)
 );
 
-export default connect(
-  mapStateToControlProps,
-  mapDispatchToControlProps
-)(MaterialNativeControl);
+export default withJsonFormsControlProps(MaterialNativeControl);

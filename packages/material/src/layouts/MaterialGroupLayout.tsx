@@ -24,45 +24,25 @@
 */
 import isEmpty from 'lodash/isEmpty';
 import React from 'react';
-import { connect } from 'react-redux';
 import { Card, CardContent, CardHeader, Hidden } from '@material-ui/core';
 import {
   GroupLayout,
-  mapStateToLayoutProps,
+  LayoutProps,
   RankedTester,
   rankWith,
-  StatePropsOfLayout,
   uiTypeIs,
-  withIncreasedRank
+  withIncreasedRank,
 } from '@jsonforms/core';
 import {
   MaterialLayoutRenderer,
   MaterialLayoutRendererProps
 } from '../util/layout';
+import { withJsonFormsLayoutProps } from '@jsonforms/react';
 
 export const groupTester: RankedTester = rankWith(1, uiTypeIs('Group'));
-
 const style: { [x: string]: any } = { marginBottom: '10px' };
-export const MaterializedGroupLayoutRenderer = (props: StatePropsOfLayout) => {
-  const { uischema, schema, path, visible, renderers } = props;
 
-  const groupLayout = uischema as GroupLayout;
-
-  return (
-    <GroupComponent
-      elements={groupLayout.elements}
-      schema={schema}
-      path={path}
-      direction={'column'}
-      visible={visible}
-      uischema={uischema}
-      renderers={renderers}
-    />
-  );
-};
-
-const GroupComponent = React.memo((props: MaterialLayoutRendererProps) => {
-  const { visible, uischema } = props;
+const GroupComponent = React.memo(({ visible, uischema, ...props }: MaterialLayoutRendererProps) => {
   const groupLayout = uischema as GroupLayout;
   return (
     <Hidden xsUp={!visible}>
@@ -71,14 +51,30 @@ const GroupComponent = React.memo((props: MaterialLayoutRendererProps) => {
           <CardHeader title={groupLayout.label} />
         )}
         <CardContent>
-          <MaterialLayoutRenderer {...props} />
+          <MaterialLayoutRenderer {...props} visible={visible} elements={groupLayout.elements} />
         </CardContent>
       </Card>
     </Hidden>
   );
 });
 
-export default connect(mapStateToLayoutProps)(MaterializedGroupLayoutRenderer);
+export const MaterializedGroupLayoutRenderer = ({ uischema, schema, path, visible, renderers, direction }: LayoutProps) => {
+  const groupLayout = uischema as GroupLayout;
+
+  return (
+    <GroupComponent
+      elements={groupLayout.elements}
+      schema={schema}
+      path={path}
+      direction={direction}
+      visible={visible}
+      uischema={uischema}
+      renderers={renderers}
+    />
+  );
+};
+
+export default withJsonFormsLayoutProps(MaterializedGroupLayoutRenderer);
 
 export const materialGroupTester: RankedTester = withIncreasedRank(
   1,

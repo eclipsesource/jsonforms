@@ -38,6 +38,8 @@ import MaterialListWithDetailRenderer, {
 } from '../../src/additional/MaterialListWithDetailRenderer';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
+import { JsonFormsReduxContext } from '@jsonforms/react';
+import { ListItem } from '@material-ui/core';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -148,7 +150,9 @@ describe('Material list with detail renderer', () => {
     const store = initJsonFormsStore();
     wrapper = mount(
       <Provider store={store}>
-        <MaterialListWithDetailRenderer schema={schema} uischema={uischema} />
+        <JsonFormsReduxContext>
+          <MaterialListWithDetailRenderer schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
       </Provider>
     );
 
@@ -159,7 +163,9 @@ describe('Material list with detail renderer', () => {
     const store = initJsonFormsStore([]);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialListWithDetailRenderer schema={schema} uischema={uischema} />
+        <JsonFormsReduxContext>
+          <MaterialListWithDetailRenderer schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
       </Provider>
     );
 
@@ -174,11 +180,13 @@ describe('Material list with detail renderer', () => {
     const store = initJsonFormsStore();
     wrapper = mount(
       <Provider store={store}>
-        <MaterialListWithDetailRenderer
-          schema={schema}
-          uischema={uischema}
-          visible={false}
-        />
+        <JsonFormsReduxContext>
+          <MaterialListWithDetailRenderer
+            schema={schema}
+            uischema={uischema}
+            visible={false}
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
 
@@ -190,7 +198,9 @@ describe('Material list with detail renderer', () => {
     const store = initJsonFormsStore();
     wrapper = mount(
       <Provider store={store}>
-        <MaterialListWithDetailRenderer schema={schema} uischema={uischema} />
+        <JsonFormsReduxContext>
+          <MaterialListWithDetailRenderer schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
       </Provider>
     );
 
@@ -212,10 +222,9 @@ describe('Material list with detail renderer', () => {
     const store = initJsonFormsStore();
     wrapper = mount(
       <Provider store={store}>
-        <MaterialListWithDetailRenderer
-          schema={schema}
-          uischema={uischemaWithLabel}
-        />
+        <JsonFormsReduxContext>
+          <MaterialListWithDetailRenderer schema={schema} uischema={uischemaWithLabel} />
+        </JsonFormsReduxContext>
       </Provider>
     );
 
@@ -226,15 +235,14 @@ describe('Material list with detail renderer', () => {
   it('schema title for list', () => {
     const titleSchema = {
       ...schema,
-      title: 'My awesome title'
+      title: "My awesome title"
     };
     const store = initJsonFormsStore();
     wrapper = mount(
       <Provider store={store}>
-        <MaterialListWithDetailRenderer
-          schema={titleSchema}
-          uischema={uischema}
-        />
+        <JsonFormsReduxContext>
+          <MaterialListWithDetailRenderer schema={titleSchema} uischema={uischema} />
+        </JsonFormsReduxContext>
       </Provider>
     );
 
@@ -246,7 +254,9 @@ describe('Material list with detail renderer', () => {
     const store = initJsonFormsStore();
     wrapper = mount(
       <Provider store={store}>
-        <MaterialListWithDetailRenderer schema={schema} uischema={uischema} />
+        <JsonFormsReduxContext>
+          <MaterialListWithDetailRenderer schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
       </Provider>
     );
 
@@ -264,12 +274,16 @@ describe('Material list with detail renderer', () => {
     const store = initJsonFormsStore();
     wrapper = mount(
       <Provider store={store}>
-        <MaterialListWithDetailRenderer schema={schema} uischema={uischema} />
+        <JsonFormsReduxContext>
+          <MaterialListWithDetailRenderer schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
       </Provider>
     );
 
     const addButton = wrapper.find('button').at(0);
     addButton.simulate('click');
+
+    wrapper.update();
 
     const lis = wrapper.find('li');
     expect(lis).toHaveLength(3);
@@ -279,14 +293,19 @@ describe('Material list with detail renderer', () => {
     const store = initJsonFormsStore();
     wrapper = mount(
       <Provider store={store}>
-        <MaterialListWithDetailRenderer schema={schema} uischema={uischema} />
-      </Provider>
+        <JsonFormsReduxContext>
+          <MaterialListWithDetailRenderer schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
+      </Provider >
     );
 
-    const addButton = wrapper.find('button').at(1);
-    addButton.simulate('click');
+    expect(wrapper.find(ListItem)).toHaveLength(2);
 
-    const lis = wrapper.find('li');
+    const removeButton = wrapper.find('button').at(1);
+    removeButton.simulate('click');
+    wrapper.update();
+
+    const lis = wrapper.find(ListItem);
     expect(lis).toHaveLength(1);
   });
 });

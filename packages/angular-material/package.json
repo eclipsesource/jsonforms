@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/angular-material",
-  "version": "2.2.3",
+  "version": "2.3.0",
   "description": "Material Renderer Set for Angular module of JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -36,13 +36,6 @@
       "text-summary"
     ]
   },
-  "ava": {
-    "verbose": true,
-    "require": [
-      "babel-register"
-    ],
-    "babel": "inherit"
-  },
   "peerDependencies": {
     "@angular-redux/store": "^9.0.0",
     "@angular/animations": "^7.2.13",
@@ -53,8 +46,8 @@
     "@angular/forms": "^7.2.13",
     "@angular/material": "^7.3.7",
     "@angular/platform-browser": "^7.2.13",
-    "@jsonforms/angular": "^2.2.3",
-    "@jsonforms/core": "^2.2.3",
+    "@jsonforms/angular": "^2.3.0",
+    "@jsonforms/core": "^2.3.0",
     "core-js": "^2.5.3",
     "rxjs": "^6.4.0",
     "zone.js": "^0.8.26"
@@ -75,10 +68,10 @@
     "@angular/material": "^7.3.7",
     "@angular/platform-browser": "^7.2.13",
     "@angular/platform-browser-dynamic": "^7.2.13",
-    "@jsonforms/angular": "^2.2.3",
-    "@jsonforms/angular-test": "^2.2.3",
-    "@jsonforms/core": "^2.2.3",
-    "@jsonforms/examples": "^2.2.3",
+    "@jsonforms/angular": "^2.3.0",
+    "@jsonforms/angular-test": "^2.3.0",
+    "@jsonforms/core": "^2.3.0",
+    "@jsonforms/examples": "^2.3.0",
     "@types/node": "^10.10.0",
     "@types/redux-logger": "3.0.6",
     "angular2-template-loader": "^0.6.2",
@@ -102,7 +95,6 @@
     "request": "^2.88.0",
     "rxjs": "^6.4.0",
     "ts-loader": "^5.3.3",
-    "ts-node": "^7.0.1",
     "webpack-cli": "^3.2.1",
     "webpack-dev-server": "^3.2.1",
     "zone.js": "^0.8.26"

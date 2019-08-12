@@ -24,11 +24,11 @@
 */
 import isEmpty from 'lodash/isEmpty';
 import React, { FunctionComponent } from 'react';
-import { connect } from 'react-redux';
-import { GroupLayout, mapStateToLayoutProps, RankedTester, rankWith, RendererProps, uiTypeIs } from '@jsonforms/core';
-import { addVanillaLayoutProps } from '../util';
+import { GroupLayout, RankedTester, rankWith, RendererProps, uiTypeIs } from '@jsonforms/core';
+import { withJsonFormsLayoutProps } from '@jsonforms/react';
 import { renderChildren } from './util';
 import { VanillaRendererProps } from '../index';
+import { withVanillaControlProps } from '../util';
 
 /**
  * Default tester for a group layout.
@@ -69,8 +69,4 @@ export const GroupLayoutRenderer: FunctionComponent<RendererProps & VanillaRende
   );
 };
 
-const ConnectedGroupLayout =  connect(
-  addVanillaLayoutProps(mapStateToLayoutProps)
-)(GroupLayoutRenderer);
-
-export default ConnectedGroupLayout;
+export default withVanillaControlProps(withJsonFormsLayoutProps(GroupLayoutRenderer));

@@ -1,15 +1,15 @@
 {
   "name": "@jsonforms/examples-react",
-  "version": "2.2.3",
+  "version": "2.3.0",
   "private": true,
   "dependencies": {
-    "@jsonforms/core": "^2.2.3",
-    "@jsonforms/examples": "^2.2.3",
-    "@jsonforms/react": "^2.2.3",
-    "@material-ui/core": "^3.3.1",
+    "@jsonforms/core": "^2.3.0",
+    "@jsonforms/examples": "^2.3.0",
+    "@jsonforms/react": "^2.3.0",
+    "@material-ui/core": "~4.0.1",
     "lodash": "^4.17.4",
-    "react": "^16.4.0",
-    "react-dom": "^16.4.0",
+    "react": " ^16.8.0",
+    "react-dom": " ^16.8.0",
     "redux": "^4.0.1"
   },
   "scripts": {

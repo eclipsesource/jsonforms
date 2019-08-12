@@ -23,17 +23,14 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { connect } from 'react-redux';
 import {
-  defaultMapDispatchToControlProps,
-  defaultMapStateToEnumCellProps,
   EnumCellProps,
   isEnumControl,
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
-import { SyntheticEvent } from 'react';
-import { addVanillaCellProps } from '../util';
+import { withJsonFormsEnumCellProps } from '@jsonforms/react';
+import { withVanillaControlProps } from '../util';
 import { WithClassname } from '../index';
 
 export const EnumCell = (props: EnumCellProps & WithClassname) => {
@@ -46,9 +43,7 @@ export const EnumCell = (props: EnumCellProps & WithClassname) => {
       disabled={!enabled}
       autoFocus={uischema.options && uischema.options.focus}
       value={data || ''}
-      onChange={(ev: SyntheticEvent<HTMLSelectElement>) =>
-        handleChange(path, ev.currentTarget.value)
-      }
+      onChange={ev => handleChange(path, ev.target.value)}
     >
       {
         [<option value='' key={'empty'} />]
@@ -70,7 +65,4 @@ export const EnumCell = (props: EnumCellProps & WithClassname) => {
  */
 export const enumCellTester: RankedTester = rankWith(2, isEnumControl);
 
-export default connect(
-  addVanillaCellProps(defaultMapStateToEnumCellProps),
-  defaultMapDispatchToControlProps
-)(EnumCell);
+export default withVanillaControlProps(withJsonFormsEnumCellProps(EnumCell));

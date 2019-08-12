@@ -23,16 +23,13 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { SyntheticEvent } from 'react';
-import { connect } from 'react-redux';
 import {
   CellProps,
   isNumberControl,
-  mapDispatchToCellProps,
-  mapStateToCellProps,
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
+import { withJsonFormsCellProps } from '@jsonforms/react';
 import { VanillaRendererProps } from '../index';
 
 export const NumberCell = (props: CellProps & VanillaRendererProps) => {
@@ -43,9 +40,7 @@ export const NumberCell = (props: CellProps & VanillaRendererProps) => {
       type='number'
       step='0.1'
       value={data || ''}
-      onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
-        handleChange(path, Number(ev.currentTarget.value))
-      }
+      onChange={ev => handleChange(path, Number(ev.target.value))}
       className={className}
       id={id}
       disabled={!enabled}
@@ -60,7 +55,4 @@ export const NumberCell = (props: CellProps & VanillaRendererProps) => {
  */
 export const numberCellTester: RankedTester = rankWith(2, isNumberControl);
 
-export default connect(
-  mapStateToCellProps,
-  mapDispatchToCellProps
-)(NumberCell);
+export default withJsonFormsCellProps(NumberCell);

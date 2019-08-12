@@ -23,16 +23,13 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { SyntheticEvent } from 'react';
-import { connect } from 'react-redux';
 import {
   CellProps,
   isMultiLineControl,
-  mapDispatchToCellProps,
-  mapStateToCellProps,
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
+import { withJsonFormsCellProps } from '@jsonforms/react';
 import { VanillaRendererProps } from '../index';
 
 export const TextAreaCell = (props: CellProps & VanillaRendererProps) => {
@@ -41,9 +38,7 @@ export const TextAreaCell = (props: CellProps & VanillaRendererProps) => {
   return (
     <textarea
       value={data || ''}
-      onChange={(ev: SyntheticEvent<HTMLTextAreaElement>) =>
-        handleChange(path, ev.currentTarget.value)
-      }
+      onChange={ev => handleChange(path, ev.target.value)}
       className={className}
       id={id}
       disabled={!enabled}
@@ -58,7 +53,4 @@ export const TextAreaCell = (props: CellProps & VanillaRendererProps) => {
  */
 export const textAreaCellTester: RankedTester = rankWith(2, isMultiLineControl);
 
-export default connect(
-  mapStateToCellProps,
-  mapDispatchToCellProps
-)(TextAreaCell);
+export default withJsonFormsCellProps(TextAreaCell);

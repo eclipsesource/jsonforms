@@ -36,10 +36,12 @@ import { configReducer } from './config';
 import {
   coreReducer,
   errorAt,
+  errorsAt,
   extractData,
   extractRefParserOptions,
   extractSchema,
   extractUiSchema,
+  JsonFormsCore,
   subErrorsAt
 } from './core';
 import { JsonFormsState, JsonFormsSubStates } from '../store';
@@ -59,7 +61,14 @@ import { JsonSchema } from '../models/jsonSchema';
 import { ControlElement, UISchemaElement } from '../models/uischema';
 import { Generate } from '../generators';
 
-export { rendererReducer, cellReducer, coreReducer, UISchemaTester };
+export {
+  rendererReducer,
+  cellReducer,
+  coreReducer,
+  UISchemaTester,
+  findMatchingUISchema
+};
+export { JsonFormsCore };
 
 export const jsonformsReducer = (
   additionalReducers = {}
@@ -105,7 +114,8 @@ export const findUISchema = (
   schemaPath: string,
   path: string,
   fallbackLayoutType = 'VerticalLayout',
-  control?: ControlElement
+  control?: ControlElement,
+  rootSchema?: JsonSchema
 ): UISchemaElement => {
   // handle options
   if (control && control.options && control.options.detail) {
@@ -127,7 +137,7 @@ export const findUISchema = (
   // default
   const uiSchema = findMatchingUISchema(uischemas)(schema, schemaPath, path);
   if (uiSchema === undefined) {
-    return Generate.uiSchema(schema, fallbackLayoutType);
+    return Generate.uiSchema(schema, fallbackLayoutType, '#', rootSchema);
   }
   return uiSchema;
 };
@@ -137,6 +147,9 @@ export const getErrorAt = (instancePath: string, schema: JsonSchema) => (
 ) => {
   return errorAt(instancePath, schema)(state.jsonforms.core);
 };
+
+export { errorsAt };
+
 export const getSubErrorsAt = (instancePath: string, schema: JsonSchema) => (
   state: JsonFormsState
 ) => subErrorsAt(instancePath, schema)(state.jsonforms.core);

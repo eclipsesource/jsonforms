@@ -43,7 +43,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MockNgRedux } from '@angular-redux/store/testing';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { ErrorTestExpectation } from '@jsonforms/angular-test';
+import { ErrorTestExpectation, setupMockStore } from '@jsonforms/angular-test';
 import { ControlElement, JsonSchema } from '@jsonforms/core';
 import { MockNgZone } from './mock-ng-zone';
 import { AutocompleteControlRenderer } from '../src';
@@ -99,17 +99,7 @@ describe('Autocomplete control Base Tests', () => {
   });
 
   it('should render', fakeAsync(() => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
-    component.uischema = uischema;
-    component.schema = schema;
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data: data,
-          schema: schema
-        }
-      }
-    });
+    const mockSubStore = setupMockStore(fixture, { uischema, schema, data });
     mockSubStore.complete();
     fixture.detectChanges();
     component.ngOnInit();
@@ -120,18 +110,7 @@ describe('Autocomplete control Base Tests', () => {
   }));
 
   it('should support updating the state', fakeAsync(() => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
-    component.uischema = uischema;
-    component.schema = schema;
-
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data: data,
-          schema: schema
-        }
-      }
-    });
+    const mockSubStore = setupMockStore(fixture, { uischema, schema, data });
     fixture.detectChanges();
     component.ngOnInit();
     tick();
@@ -151,18 +130,7 @@ describe('Autocomplete control Base Tests', () => {
   }));
 
   it('should update with undefined value', () => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
-    component.uischema = uischema;
-    component.schema = schema;
-
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data: data,
-          schema: schema
-        }
-      }
-    });
+    const mockSubStore = setupMockStore(fixture, { uischema, schema, data });
     fixture.detectChanges();
     component.ngOnInit();
 
@@ -180,18 +148,7 @@ describe('Autocomplete control Base Tests', () => {
     expect(inputElement.value).toBe('');
   });
   it('should update with null value', () => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
-    component.uischema = uischema;
-    component.schema = schema;
-
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data: data,
-          schema: schema
-        }
-      }
-    });
+    const mockSubStore = setupMockStore(fixture, { uischema, schema, data });
     fixture.detectChanges();
     component.ngOnInit();
 
@@ -209,18 +166,7 @@ describe('Autocomplete control Base Tests', () => {
     expect(inputElement.value).toBe('');
   });
   it('should not update with wrong ref', fakeAsync(() => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
-    component.uischema = uischema;
-    component.schema = schema;
-
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data: data,
-          schema: schema
-        }
-      }
-    });
+    const mockSubStore = setupMockStore(fixture, { uischema, schema, data });
     fixture.detectChanges();
     component.ngOnInit();
     tick();
@@ -240,38 +186,16 @@ describe('Autocomplete control Base Tests', () => {
   }));
   // store needed as we evaluate the calculated enabled value to disable/enable the control
   it('can be disabled', () => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
-    component.uischema = uischema;
-    component.schema = schema;
+    const mockSubStore = setupMockStore(fixture, { uischema, schema, data });
     component.disabled = true;
-
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data: data,
-          schema: schema
-        }
-      }
-    });
     mockSubStore.complete();
     fixture.detectChanges();
     component.ngOnInit();
     expect(inputElement.disabled).toBe(true);
   });
   it('id should be present in output', () => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
-    component.uischema = uischema;
-    component.schema = schema;
+    const mockSubStore = setupMockStore(fixture, { uischema, schema, data });
     component.id = 'myId';
-
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data: data,
-          schema: schema
-        }
-      }
-    });
     mockSubStore.complete();
 
     fixture.detectChanges();
@@ -319,18 +243,7 @@ describe('AutoComplete control Input Event Tests', () => {
     }
   ));
   it('should update via input event', fakeAsync(() => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
-    component.uischema = uischema;
-    component.schema = schema;
-
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data: data,
-          schema: schema
-        }
-      }
-    });
+    const mockSubStore = setupMockStore(fixture, { uischema, schema, data });
     mockSubStore.complete();
     fixture.detectChanges();
     component.ngOnInit();
@@ -355,19 +268,8 @@ describe('AutoComplete control Input Event Tests', () => {
     expect(event.option.value).toBe('B');
   }));
   it('options should prefer own props', fakeAsync(() => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
-    component.uischema = uischema;
-    component.schema = schema;
+    const mockSubStore = setupMockStore(fixture, { uischema, schema, data });
     component.options = ['X', 'Y', 'Z'];
-
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data: data,
-          schema: schema
-        }
-      }
-    });
     mockSubStore.complete();
     fixture.detectChanges();
     component.ngOnInit();
@@ -409,23 +311,17 @@ describe('AutoComplete control Error Tests', () => {
     component = fixture.componentInstance;
   });
   it('should display errors', () => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
-    component.uischema = uischema;
-    component.schema = schema;
-
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data: data,
-          schema: schema,
-          errors: [
-            {
-              dataPath: 'foo',
-              message: 'Hi, this is me, test error!'
-            }
-          ]
-        }
+    const errors = [
+      {
+        dataPath: 'foo',
+        message: 'Hi, this is me, test error!'
       }
+    ];
+    const mockSubStore = setupMockStore(fixture, {
+      uischema,
+      schema,
+      data,
+      errors
     });
     mockSubStore.complete();
     fixture.detectChanges();

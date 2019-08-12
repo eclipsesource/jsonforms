@@ -23,16 +23,15 @@
   THE SOFTWARE.
 */
 import React, { FunctionComponent } from 'react';
-import { connect } from 'react-redux';
 import {
   HorizontalLayout,
-  mapStateToLayoutProps,
   RankedTester,
   rankWith,
   RendererProps,
   uiTypeIs
 } from '@jsonforms/core';
-import { addVanillaLayoutProps } from '../util';
+import { withJsonFormsLayoutProps } from '@jsonforms/react';
+import { withVanillaControlProps } from '../util';
 import { JsonFormsLayout } from './JsonFormsLayout';
 import { renderChildren } from './util';
 import { VanillaRendererProps } from '../index';
@@ -78,8 +77,4 @@ const HorizontalLayoutRenderer: FunctionComponent<RendererProps & VanillaRendere
   );
 };
 
-const ConnectedHorizontalLayout = connect(
-  addVanillaLayoutProps(mapStateToLayoutProps)
-)(HorizontalLayoutRenderer);
-
-export default ConnectedHorizontalLayout;
+export default withVanillaControlProps(withJsonFormsLayoutProps(HorizontalLayoutRenderer));

@@ -43,6 +43,7 @@ import { materialRenderers } from '../../src';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
+import { JsonFormsReduxContext } from '@jsonforms/react';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -145,7 +146,9 @@ describe('Material time cell', () => {
     const store = initJsonFormsStore(data, schema, control);
     wrapper = mount(
       <Provider store={store}>
-        <TimeCell schema={schema} uischema={control} />
+        <JsonFormsReduxContext>
+          <TimeCell schema={schema} uischema={control} />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const input = wrapper.find('input').first();
@@ -163,7 +166,9 @@ describe('Material time cell', () => {
     const store = initJsonFormsStore(data, schema, control);
     wrapper = mount(
       <Provider store={store}>
-        <TimeCell schema={schema} uischema={control} />
+        <JsonFormsReduxContext>
+          <TimeCell schema={schema} uischema={control} />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const input = wrapper.find('input').first();
@@ -178,7 +183,11 @@ describe('Material time cell', () => {
     const store = initJsonFormsStore(data, schema, control);
     wrapper = mount(
       <Provider store={store}>
-        <TimeCell schema={schema} uischema={control} path='foo' />
+        <TimeCell
+          schema={schema}
+          uischema={control}
+          path='foo'
+        />
       </Provider>
     );
     const input = wrapper.find('input').first();
@@ -189,7 +198,13 @@ describe('Material time cell', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TimeCell schema={schema} uischema={uischema} path='foo' />
+        <JsonFormsReduxContext>
+          <TimeCell
+            schema={schema}
+            uischema={uischema}
+            path='foo'
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
 
@@ -202,7 +217,13 @@ describe('Material time cell', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TimeCell schema={schema} uischema={uischema} path='foo' />
+        <JsonFormsReduxContext>
+          <TimeCell
+            schema={schema}
+            uischema={uischema}
+            path='foo'
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const input = wrapper.find('input').first();
@@ -214,7 +235,13 @@ describe('Material time cell', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TimeCell schema={schema} uischema={uischema} path='foo' />
+        <JsonFormsReduxContext>
+          <TimeCell
+            schema={schema}
+            uischema={uischema}
+            path='foo'
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     store.dispatch(update('foo', () => '20:15'));
@@ -227,7 +254,13 @@ describe('Material time cell', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TimeCell schema={schema} uischema={uischema} path='foo' />
+        <JsonFormsReduxContext>
+          <TimeCell
+            schema={schema}
+            uischema={uischema}
+            path='foo'
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     store.dispatch(update('foo', () => null));
@@ -240,7 +273,13 @@ describe('Material time cell', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TimeCell schema={schema} uischema={uischema} path='foo' />
+        <JsonFormsReduxContext>
+          <TimeCell
+            schema={schema}
+            uischema={uischema}
+            path='foo'
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     store.dispatch(update('foo', () => undefined));
@@ -253,7 +292,13 @@ describe('Material time cell', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TimeCell schema={schema} uischema={uischema} path='foo' />
+        <JsonFormsReduxContext>
+          <TimeCell
+            schema={schema}
+            uischema={uischema}
+            path='foo'
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     store.dispatch(update('bar', () => 'Bar'));
@@ -266,7 +311,13 @@ describe('Material time cell', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TimeCell schema={schema} uischema={uischema} path='foo' />
+        <JsonFormsReduxContext>
+          <TimeCell
+            schema={schema}
+            uischema={uischema}
+            path='foo'
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     store.dispatch(update(null, () => '20:15'));
@@ -279,7 +330,13 @@ describe('Material time cell', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TimeCell schema={schema} uischema={uischema} path='foo' />
+        <JsonFormsReduxContext>
+          <TimeCell
+            schema={schema}
+            uischema={uischema}
+            path='foo'
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     store.dispatch(update(undefined, () => '20:15'));
@@ -292,12 +349,14 @@ describe('Material time cell', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TimeCell
-          schema={schema}
-          uischema={uischema}
-          enabled={false}
-          path='foo'
-        />
+        <JsonFormsReduxContext>
+          <TimeCell
+            schema={schema}
+            uischema={uischema}
+            enabled={false}
+            path='foo'
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const input = wrapper.find('input').first();
@@ -308,7 +367,13 @@ describe('Material time cell', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TimeCell schema={schema} uischema={uischema} path='foo' />
+        <JsonFormsReduxContext>
+          <TimeCell
+            schema={schema}
+            uischema={uischema}
+            path='foo'
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const input = wrapper.find('input').first();

@@ -23,56 +23,73 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { connect } from 'react-redux';
 import { Hidden } from '@material-ui/core';
 
 import {
   createCombinatorRenderInfos,
+  findMatchingUISchema,
   isAllOfControl,
   JsonSchema,
-  mapStateToAllOfProps,
   RankedTester,
   rankWith,
   resolveSubSchemas,
   StatePropsOfCombinator
 } from '@jsonforms/core';
-import { ResolvedJsonForms } from '@jsonforms/react';
+import { JsonFormsDispatch, withJsonFormsAllOfProps } from '@jsonforms/react';
 
-class MaterialAllOfRenderer extends React.Component<
-  StatePropsOfCombinator,
-  any
-> {
-  render() {
-    const { schema, rootSchema, path, visible } = this.props;
-
-    const _schema = resolveSubSchemas(schema, rootSchema, 'allOf');
-    const allOfRenderInfos = createCombinatorRenderInfos(
-      (_schema as JsonSchema).allOf,
-      rootSchema,
-      'allOf'
-    );
-
+const MaterialAllOfRenderer = ({
+  schema,
+  rootSchema,
+  visible,
+  renderers,
+  path,
+  uischemas,
+  uischema
+}: StatePropsOfCombinator) => {
+  const _schema = resolveSubSchemas(schema, rootSchema, 'allOf');
+  const delegateUISchema = findMatchingUISchema(uischemas)(
+    _schema,
+    uischema.scope,
+    path
+  );
+  if (delegateUISchema) {
     return (
       <Hidden xsUp={!visible}>
-        {allOfRenderInfos.map((allOfRenderInfo, allOfIndex) => (
-          <ResolvedJsonForms
-            key={allOfIndex}
-            schema={allOfRenderInfo.schema}
-            uischema={allOfRenderInfo.uischema}
-            path={path}
-          />
-        ))}
+        <JsonFormsDispatch
+          schema={_schema}
+          uischema={delegateUISchema}
+          path={path}
+          renderers={renderers}
+        />
       </Hidden>
     );
   }
-}
+  const allOfRenderInfos = createCombinatorRenderInfos(
+    (_schema as JsonSchema).allOf,
+    rootSchema,
+    'allOf',
+    uischema,
+    path,
+    uischemas
+  );
 
-const ConnectedMaterialAllOfRenderer = connect(mapStateToAllOfProps)(
-  MaterialAllOfRenderer
-);
+  return (
+    <Hidden xsUp={!visible}>
+      {allOfRenderInfos.map((allOfRenderInfo, allOfIndex) => (
+        <JsonFormsDispatch
+          key={allOfIndex}
+          schema={allOfRenderInfo.schema}
+          uischema={allOfRenderInfo.uischema}
+          path={path}
+          renderers={renderers}
+        />
+      ))}
+    </Hidden>
+  );
+};
 
 export const materialAllOfControlTester: RankedTester = rankWith(
   3,
   isAllOfControl
 );
-export default ConnectedMaterialAllOfRenderer;
+export default withJsonFormsAllOfProps(MaterialAllOfRenderer);

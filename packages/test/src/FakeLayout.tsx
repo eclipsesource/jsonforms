@@ -31,7 +31,7 @@ import {
   RendererProps,
   Test,
 } from '@jsonforms/core';
-import { JsonForms } from '@jsonforms/react';
+import { JsonFormsDispatch } from '@jsonforms/react';
 import { connect } from 'react-redux';
 
 const {
@@ -53,11 +53,11 @@ export const fakeLayoutTester: RankedTester = rankWith(
 );
 
 const FakeLayout = (props: RendererProps) => {
-  const {uischema, schema, path} = props;
+  const { uischema, schema, path } = props;
   const layout = uischema as Layout;
 
   const children = layout.elements.map((e, idx) => (
-    <JsonForms
+    <JsonFormsDispatch
       uischema={e}
       schema={schema}
       path={path}

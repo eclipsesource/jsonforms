@@ -22,9 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import '@jsonforms/test';
 import * as React from 'react';
-import test from 'ava';
 import {
   ControlElement,
   getData,
@@ -32,31 +30,37 @@ import {
   JsonSchema,
   update
 } from '@jsonforms/core';
+import { JsonFormsReduxContext } from '@jsonforms/react';
+import { Provider } from 'react-redux';
+import Adapter from 'enzyme-adapter-react-16';
+import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import TextCell, { textCellTester } from '../../src/cells/TextCell';
 import HorizontalLayoutRenderer from '../../src/layouts/HorizontalLayout';
-import { Provider } from 'react-redux';
-import * as TestUtils from 'react-dom/test-utils';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
+
+Enzyme.configure({ adapter: new Adapter() });
 
 const defaultMaxLength = 524288;
 const defaultSize = 20;
 
-test.beforeEach(t => {
-  t.context.data = { name: 'Foo' };
-  t.context.minLengthSchema = {
+const controlElement: ControlElement = {
+  type: 'Control',
+  scope: '#/properties/name'
+};
+
+const fixture = {
+  data: { name: 'Foo' },
+  minLengthSchema: {
     type: 'string',
     minLength: 3
-  };
-  t.context.maxLengthSchema = {
+  },
+  maxLengthSchema: {
     type: 'string',
     maxLength: 5
-  };
-  t.context.schema = { type: 'string' };
-  t.context.uischema = {
-    type: 'Control',
-    scope: '#/properties/name'
-  };
-  t.context.styles = [
+  },
+  schema: { type: 'string' },
+  uischema: controlElement,
+  styles: [
     {
       name: 'control',
       classNames: ['control']
@@ -65,584 +69,502 @@ test.beforeEach(t => {
       name: 'control.validation',
       classNames: ['validation']
     }
-  ];
-});
-test.failing('autofocus on first element', t => {
-  const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-      firstName: { type: 'string' },
-      lastName: { type: 'string' }
-    }
-  };
-  const firstControlElement: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/firstName',
-    options: { focus: true }
-  };
-  const secondControlElement: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/lastName',
-    options: { focus: true }
-  };
-  const uischema: HorizontalLayout = {
-    type: 'HorizontalLayout',
-    elements: [firstControlElement, secondControlElement]
-  };
-  const store = initJsonFormsVanillaStore({
-    data: { firstName: 'Foo', lastName: 'Boo' },
-    schema,
-    uischema
-  });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <HorizontalLayoutRenderer schema={schema} uischema={uischema} />
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
-  t.not(document.activeElement, inputs[0]);
-  t.is(document.activeElement, inputs[1]);
+  ]
+};
+
+test('Text cell tester', () => {
+  expect(textCellTester(undefined, undefined)).toBe(-1);
+  expect(textCellTester(null, undefined)).toBe(-1);
+  expect(textCellTester({ type: 'Foo' }, undefined)).toBe(-1);
+  expect(textCellTester({ type: 'Control' }, undefined)).toBe(-1);
 });
 
-test('autofocus active', t => {
-  const uischema: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/name',
-    options: { focus: true }
-  };
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.minLengthSchema,
-    uischema
-  });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextCell
-        schema={t.context.minLengthSchema}
-        uischema={uischema}
-        path='name'
-      />
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'input'
-  ) as HTMLInputElement;
-  t.is(document.activeElement, input);
-});
+describe('Text cell', () => {
 
-test('autofocus inactive', t => {
-  const uischema: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/name',
-    options: { focus: false }
-  };
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.minLengthSchema,
-    uischema
-  });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextCell
-        schema={t.context.minLengthSchema}
-        uischema={uischema}
-        path='name'
-      />
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'input'
-  ) as HTMLInputElement;
-  t.not(document.activeElement, input);
-});
+  let wrapper: ReactWrapper;
 
-test('autofocus inactive by default', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.minLengthSchema,
-    uischema: t.context.uischema
-  });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextCell
-        schema={t.context.minLengthSchema}
-        uischema={t.context.uischema}
-        path='name'
-      />
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'input'
-  ) as HTMLInputElement;
-  t.not(document.activeElement, input);
-});
+  afterEach(() => wrapper.unmount());
 
-test('tester', t => {
-  t.is(textCellTester(undefined, undefined), -1);
-  t.is(textCellTester(null, undefined), -1);
-  t.is(textCellTester({ type: 'Foo' }, undefined), -1);
-  t.is(textCellTester({ type: 'Control' }, undefined), -1);
-});
-
-test('render', t => {
-  const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-      name: { type: 'string' }
-    }
-  };
-  const store = initJsonFormsVanillaStore({
-    data: { name: 'Foo' },
-    schema,
-    uischema: t.context.uischema
+  test.skip('autofocus on first element', () => {
+    const schema: JsonSchema = {
+      type: 'object',
+      properties: {
+        firstName: { type: 'string' },
+        lastName: { type: 'string' }
+      }
+    };
+    const firstControlElement: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/firstName',
+      options: { focus: true }
+    };
+    const secondControlElement: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/lastName',
+      options: { focus: true }
+    };
+    const uischema: HorizontalLayout = {
+      type: 'HorizontalLayout',
+      elements: [firstControlElement, secondControlElement]
+    };
+    const store = initJsonFormsVanillaStore({
+      data: { firstName: 'Foo', lastName: 'Boo' },
+      schema,
+      uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <HorizontalLayoutRenderer schema={schema} uischema={uischema} />
+      </Provider>
+    );
+    const inputs = wrapper.find('input');
+    expect(document.activeElement).not.toBe(inputs.at(0).getDOMNode());
+    expect(document.activeElement).toBe(inputs.at(1).getDOMNode());
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextCell schema={schema} uischema={t.context.uischema} path='name' />
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'input'
-  ) as HTMLInputElement;
-  t.is(input.value, 'Foo');
-});
 
-test('update via input event', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.minLengthSchema,
-    uischema: t.context.uischema
+  test('autofocus active', () => {
+    const uischema: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/name',
+      options: { focus: true }
+    };
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.minLengthSchema,
+      uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <TextCell
+            schema={fixture.minLengthSchema}
+            uischema={uischema}
+            path='name'
+          />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input').getDOMNode();
+    expect(document.activeElement).toBe(input);
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextCell
-        schema={t.context.minLengthSchema}
-        uischema={t.context.uischema}
-        path='name'
-      />
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'input'
-  ) as HTMLInputElement;
-  input.value = 'Bar';
-  TestUtils.Simulate.change(input);
-  t.is(getData(store.getState()).name, 'Bar');
-});
 
-test.cb('update via action', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.minLengthSchema,
-    uischema: t.context.uischema
+  test('autofocus inactive', () => {
+    const uischema: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/name',
+      options: { focus: false }
+    };
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.minLengthSchema,
+      uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <TextCell schema={fixture.minLengthSchema} uischema={uischema} path='name' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input').getDOMNode();
+    expect(document.activeElement).not.toBe(input);
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextCell
-        schema={t.context.minLengthSchema}
-        uischema={t.context.uischema}
-        path='name'
-      />
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'input'
-  ) as HTMLInputElement;
-  store.dispatch(update('name', () => 'Bar'));
-  setTimeout(() => {
-    t.is(input.value, 'Bar');
-    t.end();
-  }, 100);
-});
 
-test('update with undefined value', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.minLengthSchema,
-    uischema: t.context.uischema
+  test('autofocus inactive by default', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.minLengthSchema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <TextCell schema={fixture.minLengthSchema} uischema={fixture.uischema} path='name' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input').getDOMNode();
+    expect(document.activeElement).not.toBe(input);
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextCell
-        schema={t.context.minLengthSchema}
-        uischema={t.context.uischema}
-        path='name'
-      />
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'input'
-  ) as HTMLInputElement;
-  store.dispatch(update('name', () => undefined));
-  t.is(input.value, '');
-});
 
-test('update with null value', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.minLengthSchema,
-    uischema: t.context.uischema
+  test('render', () => {
+    const schema: JsonSchema = {
+      type: 'object',
+      properties: {
+        name: { type: 'string' }
+      }
+    };
+    const store = initJsonFormsVanillaStore({
+      data: { name: 'Foo' },
+      schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <TextCell schema={schema} uischema={fixture.uischema} path='name' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.value).toBe('Foo');
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextCell
-        schema={t.context.minLengthSchema}
-        uischema={t.context.uischema}
-        path='name'
-      />
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'input'
-  ) as HTMLInputElement;
-  store.dispatch(update('name', () => null));
-  t.is(input.value, '');
-});
 
-test('update with wrong ref', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.minLengthSchema,
-    uischema: t.context.uischema
+  test('update via input event', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.minLengthSchema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <TextCell schema={fixture.minLengthSchema} uischema={fixture.uischema} path='name' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input');
+    input.simulate('change', { target: { value: 'Bar' } });
+    expect(getData(store.getState()).name).toBe('Bar');
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextCell
-        schema={t.context.minLengthSchema}
-        uischema={t.context.uischema}
-        path='name'
-      />
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'input'
-  ) as HTMLInputElement;
-  store.dispatch(update('firstname', () => 'Bar'));
-  t.is(input.value, 'Foo');
-});
 
-test('update with null ref', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.minLengthSchema,
-    uischema: t.context.uischema
+  test('update via action', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.minLengthSchema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <TextCell schema={fixture.minLengthSchema} uischema={fixture.uischema} path='name' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    store.dispatch(update('name', () => 'Bar'));
+    expect(input.value).toBe('Bar');
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextCell
-        schema={t.context.minLengthSchema}
-        uischema={t.context.uischema}
-        path='name'
-      />
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'input'
-  ) as HTMLInputElement;
-  store.dispatch(update(null, () => 'Bar'));
-  t.is(input.value, 'Foo');
-});
 
-test('update with undefined ref', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.minLengthSchema,
-    uischema: t.context.uischema
+  test('update with undefined value', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.minLengthSchema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <TextCell schema={fixture.minLengthSchema} uischema={fixture.uischema} path='name' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    store.dispatch(update('name', () => undefined));
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.value).toBe('');
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextCell
-        schema={t.context.minLengthSchema}
-        uischema={t.context.uischema}
-        path='name'
-      />
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'input'
-  ) as HTMLInputElement;
-  store.dispatch(update(undefined, () => 'Bar'));
-  t.is(input.value, 'Foo');
-});
 
-test('disable', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.minLengthSchema,
-    uischema: t.context.uischema
+  test('update with null value', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.minLengthSchema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <TextCell schema={fixture.minLengthSchema} uischema={fixture.uischema} path='name' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    store.dispatch(update('name', () => null));
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.value).toBe('');
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextCell
-        schema={t.context.minLengthSchema}
-        uischema={t.context.uischema}
-        path='name'
-        enabled={false}
-      />
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'input'
-  ) as HTMLInputElement;
-  t.true(input.disabled);
-});
 
-test('enabled by default', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.minLengthSchema,
-    uischema: t.context.uischema
+  test('update with wrong ref', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.minLengthSchema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <TextCell schema={fixture.minLengthSchema} uischema={fixture.uischema} path='name' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    store.dispatch(update('firstname', () => 'Bar'));
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.value).toBe('Foo');
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextCell
-        schema={t.context.minLengthSchema}
-        uischema={t.context.uischema}
-        path='name'
-      />
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'input'
-  ) as HTMLInputElement;
-  t.false(input.disabled);
-});
 
-test('use maxLength for attributes size and maxlength', t => {
-  const uischema: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/name'
-  };
-  const config = {
-    restrict: true,
-    trim: true
-  };
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.maxLengthSchema,
-    uischema,
-    config
+  test('update with null ref', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.minLengthSchema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <TextCell schema={fixture.minLengthSchema} uischema={fixture.uischema} path='name' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    store.dispatch(update(null, () => 'Bar'));
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.value).toBe('Foo');
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextCell
-        schema={t.context.maxLengthSchema}
-        uischema={uischema}
-        path='name'
-      />
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'input'
-  ) as HTMLInputElement;
-  t.is(input.maxLength, 5);
-  t.is(input.size, 5);
-});
 
-test('use maxLength for attribute size only', t => {
-  const uischema: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/name'
-  };
-  const config = {
-    restrict: false,
-    trim: true
-  };
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.maxLengthSchema,
-    uischema,
-    config
+  test('update with undefined ref', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.minLengthSchema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <TextCell schema={fixture.minLengthSchema} uischema={fixture.uischema} path='name' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    store.dispatch(update(undefined, () => 'Bar'));
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.value).toBe('Foo');
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextCell
-        schema={t.context.maxLengthSchema}
-        uischema={uischema}
-        path='name'
-      />
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'input'
-  ) as HTMLInputElement;
-  t.is(input.maxLength, defaultMaxLength);
-  t.is(input.size, 5);
-});
 
-test('use maxLength for attribute max length only', t => {
-  const uischema: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/name'
-  };
-  const config = {
-    restrict: true,
-    trim: false
-  };
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.maxLengthSchema,
-    uischema,
-    config
+  test('disable', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.minLengthSchema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <TextCell schema={fixture.minLengthSchema} uischema={fixture.uischema} path='name' enabled={false} />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.disabled).toBe(true);
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextCell
-        schema={t.context.maxLengthSchema}
-        uischema={uischema}
-        path='name'
-      />
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'input'
-  ) as HTMLInputElement;
-  t.is(input.maxLength, 5);
-  t.is(input.size, defaultSize);
-});
 
-test('do not use maxLength by default', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.maxLengthSchema,
-    uischema: t.context.uischema
+  test('enabled by default', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.minLengthSchema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <TextCell schema={fixture.minLengthSchema} uischema={fixture.uischema} path='name' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.disabled).toBe(false);
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextCell
-        schema={t.context.maxLengthSchema}
-        uischema={t.context.uischema}
-        path='name'
-      />
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'input'
-  ) as HTMLInputElement;
-  t.is(input.maxLength, defaultMaxLength);
-  t.is(input.size, defaultSize);
-});
 
-test('maxLength not specified, attributes should have default values (trim && restrict)', t => {
-  const uischema: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/name'
-  };
-  const config = {
-    restrict: true,
-    trim: true
-  };
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema,
-    config
+  test('use maxLength for attributes size and maxlength', () => {
+    const uischema: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/name'
+    };
+    const config = {
+      restrict: true,
+      trim: true
+    };
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.maxLengthSchema,
+      uischema,
+      config
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <TextCell schema={fixture.maxLengthSchema} uischema={uischema} path='name' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.maxLength).toBe(5);
+    expect(input.size).toBe(5);
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextCell schema={t.context.schema} uischema={uischema} path='name' />
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'input'
-  ) as HTMLInputElement;
-  t.is(input.maxLength, defaultMaxLength);
-  t.is(input.size, defaultSize);
-});
 
-test('maxLength not specified, attributes should have default values (trim)', t => {
-  const uischema: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/name'
-  };
-  const config = {
-    restrict: false,
-    trim: true
-  };
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema,
-    config
+  test('use maxLength for attribute size only', () => {
+    const uischema: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/name'
+    };
+    const config = {
+      restrict: false,
+      trim: true
+    };
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.maxLengthSchema,
+      uischema,
+      config
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <TextCell schema={fixture.maxLengthSchema} uischema={uischema} path='name' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.maxLength).toBe(defaultMaxLength);
+    expect(input.size).toBe(5);
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextCell schema={t.context.schema} uischema={uischema} path='name' />
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'input'
-  ) as HTMLInputElement;
-  t.is(input.maxLength, defaultMaxLength);
-  t.is(input.size, defaultSize);
-});
 
-test('maxLength not specified, attributes should have default values (restrict)', t => {
-  const uischema: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/name'
-  };
-  const config = {
-    restrict: true,
-    trim: false
-  };
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema,
-    config
+  test('use maxLength for attribute max length only', () => {
+    const uischema: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/name'
+    };
+    const config = {
+      restrict: true,
+      trim: false
+    };
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.maxLengthSchema,
+      uischema,
+      config
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <TextCell schema={fixture.maxLengthSchema} uischema={uischema} path='name' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.maxLength).toBe(5);
+    expect(input.size).toBe(defaultSize);
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextCell schema={t.context.schema} uischema={uischema} path='name' />
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'input'
-  ) as HTMLInputElement;
-  t.is(input.maxLength, defaultMaxLength);
-  t.is(input.size, defaultSize);
-});
 
-test('maxLength not specified, attributes should have default values', t => {
-  const store = initJsonFormsVanillaStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+  test('do not use maxLength by default', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.maxLengthSchema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <TextCell schema={fixture.maxLengthSchema} uischema={fixture.uischema} path='name' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.maxLength).toBe(defaultMaxLength);
+    expect(input.size).toBe(defaultSize);
   });
-  const tree: React.Component<any> = (TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextCell
-        schema={t.context.schema}
-        uischema={t.context.uischema}
-        path='name'
-      />
-    </Provider>
-  ) as unknown) as React.Component<any>;
-  const input = TestUtils.findRenderedDOMComponentWithTag(
-    tree,
-    'input'
-  ) as HTMLInputElement;
-  t.is(input.maxLength, defaultMaxLength);
-  t.is(input.size, defaultSize);
+
+  test('maxLength not specified, attributes should have default values (trim && restrict)', () => {
+    const uischema: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/name'
+    };
+    const config = {
+      restrict: true,
+      trim: true
+    };
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema,
+      config
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <TextCell schema={fixture.schema} uischema={uischema} path='name' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.maxLength).toBe(defaultMaxLength);
+    expect(input.size).toBe(defaultSize);
+  });
+
+  test('maxLength not specified, attributes should have default values (trim)', () => {
+    const uischema: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/name'
+    };
+    const config = {
+      restrict: false,
+      trim: true
+    };
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema,
+      config
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <TextCell schema={fixture.schema} uischema={uischema} path='name' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.maxLength).toBe(defaultMaxLength);
+    expect(input.size).toBe(defaultSize);
+  });
+
+  test('maxLength not specified, attributes should have default values (restrict)', () => {
+    const uischema: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/name'
+    };
+    const config = {
+      restrict: true,
+      trim: false
+    };
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema,
+      config
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <TextCell schema={fixture.schema} uischema={uischema} path='name' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.maxLength).toBe(defaultMaxLength);
+    expect(input.size).toBe(defaultSize);
+  });
+
+  test('maxLength not specified, attributes should have default values', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <TextCell schema={fixture.schema} uischema={fixture.uischema} path='name' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.maxLength).toBe(defaultMaxLength);
+    expect(input.size).toBe(defaultSize);
+  });
 });

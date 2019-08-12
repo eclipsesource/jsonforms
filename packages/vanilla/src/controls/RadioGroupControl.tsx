@@ -23,19 +23,17 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { connect } from 'react-redux';
 import {
-  computeLabel,
-  ControlProps,
-  ControlState,
-  isDescriptionHidden,
-  isPlainLabel,
-  mapDispatchToControlProps,
-  mapStateToControlProps
+    computeLabel,
+    ControlProps,
+    ControlState,
+    isDescriptionHidden,
+    isPlainLabel
 } from '@jsonforms/core';
-import { Control } from '@jsonforms/react';
-import { addVanillaControlProps } from '../util';
+import { Control, withJsonFormsControlProps } from '@jsonforms/react';
+import { withVanillaControlProps } from '../util';
 import { VanillaRendererProps } from '../index';
+import merge from 'lodash/merge';
 
 export class RadioGroupControl extends Control<ControlProps & VanillaRendererProps, ControlState> {
 
@@ -49,7 +47,9 @@ export class RadioGroupControl extends Control<ControlProps & VanillaRendererPro
             errors,
             data,
             schema,
+            uischema,
             visible,
+            config
         } = this.props;
         const isValid = errors.length === 0;
         const divClassNames =
@@ -58,7 +58,9 @@ export class RadioGroupControl extends Control<ControlProps & VanillaRendererPro
             display: 'flex',
             flexDirection: 'row'
         };
-        const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
+
+        const mergedConfig = merge({}, config, uischema.options);
+        const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused, mergedConfig.showUnfocusedDescription);
 
         const options = schema.enum;
 
@@ -70,7 +72,7 @@ export class RadioGroupControl extends Control<ControlProps & VanillaRendererPro
                 onBlur={this.onBlur}
             >
                 <label htmlFor={id} className={classNames.label} >
-                    {computeLabel(isPlainLabel(label) ? label : label.default, required)}
+                    {computeLabel(isPlainLabel(label) ? label : label.default, required, mergedConfig.hideRequiredAsterisk)}
                 </label>
 
                 <div
@@ -104,6 +106,4 @@ export class RadioGroupControl extends Control<ControlProps & VanillaRendererPro
     }
 }
 
-export default connect(
-    addVanillaControlProps(mapStateToControlProps), mapDispatchToControlProps
-)(RadioGroupControl);
+export default withVanillaControlProps(withJsonFormsControlProps(RadioGroupControl));
