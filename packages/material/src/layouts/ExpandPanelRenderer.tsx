@@ -65,7 +65,7 @@ export interface DispatchPropsOfExpandPanel {
 
 export interface ExpandPanelProps
   extends StatePropsOfExpandPanel,
-    DispatchPropsOfExpandPanel {}
+  DispatchPropsOfExpandPanel { }
 
 const ExpandPanelRenderer = (props: ExpandPanelProps) => {
   const {
@@ -101,17 +101,17 @@ const ExpandPanelRenderer = (props: ExpandPanelProps) => {
     <ExpansionPanel expanded={expanded} onChange={handleExpansion(childPath)}>
       <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
         <Grid container alignItems={'center'}>
-          <Grid item xs={10}>
+          <Grid item xs={7} md={10}>
             <Grid container alignItems={'center'}>
-              <Grid item xs={1}>
+              <Grid item xs={2} md={1}>
                 <Avatar aria-label='Index'>{index + 1}</Avatar>
               </Grid>
-              <Grid item xs={2}>
+              <Grid item xs={10} md={11}>
                 {childLabel}
               </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={5} md={2}>
             <Grid container justify={'flex-end'}>
               <Grid item>
                 <Grid
@@ -144,8 +144,8 @@ const ExpandPanelRenderer = (props: ExpandPanelProps) => {
                       </Grid>
                     </Fragment>
                   ) : (
-                    ''
-                  )}
+                      ''
+                    )}
                   <Grid item>
                     <IconButton
                       onClick={removeItems(path, [index])}
@@ -227,10 +227,10 @@ export const withContextToExpandPanelProps = (
   ctx,
   props
 }: JsonFormsStateContext & ExpandPanelProps) => {
-  const dispatchProps = ctxDispatchToExpandPanelProps(ctx.dispatch);
-  const { schema, path, index, uischemas } = props;
-  const firstPrimitiveProp = schema.properties
-    ? find(Object.keys(schema.properties), propName => {
+    const dispatchProps = ctxDispatchToExpandPanelProps(ctx.dispatch);
+    const { schema, path, index, uischemas } = props;
+    const firstPrimitiveProp = schema.properties
+      ? find(Object.keys(schema.properties), propName => {
         const prop = schema.properties[propName];
         return (
           prop.type === 'string' ||
@@ -238,21 +238,21 @@ export const withContextToExpandPanelProps = (
           prop.type === 'integer'
         );
       })
-    : undefined;
-  const childPath = composePaths(path, `${index}`);
-  const childData = Resolve.data(ctx.core.data, childPath);
-  const childLabel = firstPrimitiveProp ? childData[firstPrimitiveProp] : '';
+      : undefined;
+    const childPath = composePaths(path, `${index}`);
+    const childData = Resolve.data(ctx.core.data, childPath);
+    const childLabel = firstPrimitiveProp ? childData[firstPrimitiveProp] : '';
 
-  return (
-    <Component
-      {...props}
-      {...dispatchProps}
-      childLabel={childLabel}
-      childPath={childPath}
-      uischemas={uischemas}
-    />
-  );
-};
+    return (
+      <Component
+        {...props}
+        {...dispatchProps}
+        childLabel={childLabel}
+        childPath={childPath}
+        uischemas={uischemas}
+      />
+    );
+  };
 
 export const withJsonFormsExpandPanelProps = (
   Component: ComponentType<ExpandPanelProps>
