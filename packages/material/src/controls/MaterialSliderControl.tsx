@@ -39,9 +39,9 @@ import {
   FormControl,
   FormHelperText,
   Hidden,
+  Slider,
   Typography
 } from '@material-ui/core';
-import Slider from '@material-ui/lab/Slider';
 import merge from 'lodash/merge';
 
 export class MaterialSliderControl extends Control<ControlProps, ControlState> {

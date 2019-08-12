@@ -41,7 +41,10 @@ import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import DateRangeIcon from '@material-ui/icons/DateRange';
 import EventIcon from '@material-ui/icons/Event';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
-import { DateTimePicker, MuiPickersUtilsProvider } from 'material-ui-pickers';
+import {
+  KeyboardDateTimePicker,
+  MuiPickersUtilsProvider
+} from '@material-ui/pickers';
 import MomentUtils from '@date-io/moment';
 
 export class MaterialDateTimeControl extends Control<
@@ -65,16 +68,12 @@ export class MaterialDateTimeControl extends Control<
     } = this.props;
     const appliedUiSchemaOptions = merge({}, config, uischema.options);
     const isValid = errors.length === 0;
-
-    const getValue = (event: React.FormEvent<HTMLInputElement>) =>
-      (event.target as HTMLInputElement).value;
     const inputProps = {};
 
     return (
       <Hidden xsUp={!visible}>
         <MuiPickersUtilsProvider utils={MomentUtils}>
-          <DateTimePicker
-            keyboard
+          <KeyboardDateTimePicker
             id={id + '-input'}
             label={computeLabel(
               isPlainLabel(label) ? label : label.default,
@@ -91,12 +90,6 @@ export class MaterialDateTimeControl extends Control<
             onChange={datetime =>
               handleChange(path, datetime ? moment(datetime).format() : '')
             }
-            onInputChange={ev =>
-              handleChange(
-                path,
-                getValue(ev) ? moment(getValue(ev)).format() : ''
-              )
-            }
             format='MM/DD/YYYY h:mm a'
             clearable={true}
             disabled={!enabled}
@@ -106,7 +99,6 @@ export class MaterialDateTimeControl extends Control<
             dateRangeIcon={<DateRangeIcon />}
             keyboardIcon={<EventIcon />}
             timeIcon={<AccessTimeIcon />}
-            onClear={() => handleChange(path, '')}
             InputProps={inputProps}
           />
         </MuiPickersUtilsProvider>
