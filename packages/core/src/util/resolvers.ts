@@ -187,8 +187,22 @@ function retrieveResolvableSchema(
 
 // copied and adapted from JsonRefs
 
-export const findRefs = (obj: any) => {
-  const refs = {} as any;
+/**
+ * Interface for describing result of an extracted schema ref
+ */
+export interface SchemaRef {
+  uri: string;
+}
+
+/**
+ * Interface wraps SchemaRef
+ */
+export interface SchemaRefs {
+  [id: string]: SchemaRef;
+}
+
+export const findRefs = (obj: JsonSchema): SchemaRefs => {
+  const refs: SchemaRefs = {};
 
   // Validate the provided document
   if (!isArray(obj) && !isObject(obj)) {
