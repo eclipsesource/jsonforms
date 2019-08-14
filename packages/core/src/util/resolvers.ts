@@ -204,11 +204,6 @@ export interface SchemaRefs {
 export const findRefs = (obj: JsonSchema): SchemaRefs => {
   const refs: SchemaRefs = {};
 
-  // Validate the provided document
-  if (!isArray(obj) && !isObject(obj)) {
-    throw new TypeError('obj must be an Array or an Object');
-  }
-
   // Walk the document (or sub document) and find all JSON References
   walk([], obj, [], ({}, node: any, path: any) => {
     let processChildren = true;
