@@ -33,10 +33,26 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { AnyAction, Dispatch, Reducer } from 'redux';
 
+export const UPDATE_EXAMPLE_EXTENSION_STATE: 'jsonforms-example/UPDATE_EXAMPLE_EXTENSION_STATE' =
+  'jsonforms-example/UPDATE_EXAMPLE_EXTENSION_STATE';
+
+export interface UpdateExampleExtensionStateAction {
+  type: 'jsonforms-example/UPDATE_EXAMPLE_EXTENSION_STATE';
+  extensionState: any;
+}
+
+export const updateExampleExtensionState = (
+  extensionState: any
+): UpdateExampleExtensionStateAction => ({
+  type: UPDATE_EXAMPLE_EXTENSION_STATE,
+  extensionState
+});
+
 export interface ExampleStateProps {
   examples: ReactExampleDescription[];
   dataAsString: string;
   selectedExample: ReactExampleDescription;
+  extensionState: any;
 }
 
 export interface ExampleDispatchProps {
@@ -56,10 +72,12 @@ export interface AppProps extends ExampleStateProps {
 const mapStateToProps = (state: any) => {
   const examples = state.examples.data;
   const selectedExample = state.examples.selectedExample || examples[0];
+  const extensionState = state.examples.extensionState;
   return {
     dataAsString: JSON.stringify(getData(state), null, 2),
     examples,
-    selectedExample
+    selectedExample,
+    extensionState
   };
 };
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => ({
@@ -90,7 +108,12 @@ const mergeProps = (
       ),
     getExtensionComponent: () =>
       dispatchProps.getComponent(stateProps.selectedExample),
-    onChange: dispatchProps.onChange(stateProps.selectedExample)
+    onChange:
+      dispatchProps.onChange &&
+      dispatchProps.onChange(stateProps.selectedExample) &&
+      dispatchProps.onChange(stateProps.selectedExample)(
+        stateProps.extensionState
+      )
   });
 };
 
@@ -112,6 +135,10 @@ export const exampleReducer = (
     case CHANGE_EXAMPLE:
       return Object.assign({}, state, {
         selectedExample: action.example
+      });
+    case UPDATE_EXAMPLE_EXTENSION_STATE:
+      return Object.assign({}, state, {
+        extensionState: action.extensionState
       });
     default:
       return state;
