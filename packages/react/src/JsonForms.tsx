@@ -46,6 +46,7 @@ import {
   JsonFormsStateProvider,
   useJsonForms
 } from './JsonFormsContext';
+import hash from 'object-hash';
 
 interface JsonFormsRendererState {
   id: string;
@@ -63,7 +64,7 @@ const hasRefs = memoize((schema: JsonSchema): boolean => {
     return Object.keys(findRefs(schema)).length > 0;
   }
   return false;
-});
+}, hash);
 
 export class ResolvedJsonFormsDispatchRenderer extends React.Component<
   JsonFormsProps,
