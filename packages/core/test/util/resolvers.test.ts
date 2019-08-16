@@ -32,8 +32,11 @@ test('findRef - does not fail on empty input object ', t => {
 
 test('findRef - finds http ref on level 1', t => {
   const refObject = {
-    myitem: {
-      $ref: 'http://myref.com/ref'
+    type: 'object',
+    properties: {
+      myitem: {
+        $ref: 'http://myref.com/ref'
+      }
     }
   };
   t.true(Object.keys(findRefs(refObject)).length > 0);
