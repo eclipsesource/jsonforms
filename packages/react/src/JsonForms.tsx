@@ -59,12 +59,15 @@ export interface JsonFormsReactProps {
   onChange?(state: Pick<JsonFormsCore, 'data' | 'errors'>): void;
 }
 
-const hasRefs = memoize((schema: JsonSchema): boolean => {
-  if (schema !== undefined) {
-    return Object.keys(findRefs(schema)).length > 0;
-  }
-  return false;
-}, hash);
+const hasRefs = memoize(
+  (schema: JsonSchema): boolean => {
+    if (schema !== undefined) {
+      return Object.keys(findRefs(schema)).length > 0;
+    }
+    return false;
+  },
+  (schema: JsonSchema) => (schema ? hash(schema) : false)
+);
 
 export class ResolvedJsonFormsDispatchRenderer extends React.Component<
   JsonFormsProps,
