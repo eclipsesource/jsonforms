@@ -33,8 +33,13 @@ import omitBy from 'lodash/omitBy';
 import startsWith from 'lodash/startsWith';
 import values from 'lodash/values';
 import each from 'lodash/each';
-import { JsonSchema, JsonSchema7 } from '@jsonforms/core';
-import { findRefs, resolveSchema } from '@jsonforms/core';
+import {
+  findRefs,
+  JsonSchema,
+  JsonSchema7,
+  resolveSchema,
+  SchemaRefs
+} from '@jsonforms/core';
 
 const isObject = (schema: JsonSchema): boolean => {
   return schema.properties !== undefined;
@@ -58,20 +63,6 @@ export interface Property {
    * The schema is the JsonSchema this property describes.
    */
   schema: JsonSchema7;
-}
-
-/**
- * Interface for describing result of an extracted schema ref
- */
-interface SchemaRef {
-  uri: string;
-}
-
-/**
- * Interface wraps SchemaRef
- */
-interface SchemaRefs {
-  [id: string]: SchemaRef;
 }
 
 /**
@@ -133,8 +124,8 @@ export const makeSchemaSelfContained = (
   parentSchema: JsonSchema7,
   schema: JsonSchema7
 ): JsonSchema7 => {
-  const schemaRefs = findRefs(schema) as SchemaRefs;
-  const allRefs = findRefs(parentSchema) as SchemaRefs;
+  const schemaRefs = findRefs(schema);
+  const allRefs = findRefs(parentSchema);
   let extractedReferences;
   findReferences(parentSchema, allRefs, schemaRefs, (extractedReferences = {}));
   const refList = values(extractedReferences) as string[];

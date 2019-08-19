@@ -111,7 +111,13 @@ const Resolve: {
   schema: resolveSchema,
   data: resolveData
 };
-export { resolveData, resolveSchema, findRefs } from './resolvers';
+export {
+  resolveData,
+  resolveSchema,
+  findRefs,
+  SchemaRef,
+  SchemaRefs
+} from './resolvers';
 export { Resolve };
 
 // Paths --
