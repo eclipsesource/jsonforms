@@ -43,7 +43,10 @@ import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import EventIcon from '@material-ui/icons/Event';
 import moment from 'moment';
 import { Moment } from 'moment';
-import { DatePicker, MuiPickersUtilsProvider } from 'material-ui-pickers';
+import {
+  KeyboardDatePicker,
+  MuiPickersUtilsProvider
+} from '@material-ui/pickers';
 import MomentUtils from '@date-io/moment';
 
 export interface DateControl {
@@ -100,14 +103,10 @@ export class MaterialDateControl extends Control<
       labelClear = startsWith(clearLabel, '%') ? 'Clear' : clearLabel;
     }
 
-    const getValue = (event: React.FormEvent<HTMLInputElement>) =>
-      (event.target as HTMLInputElement).value;
-
     return (
       <Hidden xsUp={!visible}>
         <MuiPickersUtilsProvider utils={MomentUtils}>
-          <DatePicker
-            keyboard
+          <KeyboardDatePicker
             id={id + '-input'}
             label={computeLabel(
               labelText,
@@ -125,17 +124,10 @@ export class MaterialDateControl extends Control<
                 datetime ? moment(datetime).format('YYYY-MM-DD') : ''
               )
             }
-            onInputChange={ev =>
-              handleChange(
-                path,
-                getValue(ev) ? moment(getValue(ev)).format('YYYY-MM-DD') : ''
-              )
-            }
             format={localeDateTimeFormat}
             clearable={true}
             disabled={!enabled}
             autoFocus={appliedUiSchemaOptions.focus}
-            onClear={() => handleChange(path, '')}
             onFocus={this.onFocus}
             onBlur={this.onBlur}
             cancelLabel={labelCancel}
