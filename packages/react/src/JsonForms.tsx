@@ -24,6 +24,7 @@
 */
 import isEqual from 'lodash/isEqual';
 import maxBy from 'lodash/maxBy';
+import memoize from 'lodash/memoize';
 import React, { useLayoutEffect } from 'react';
 import AJV from 'ajv';
 import RefParser from 'json-schema-ref-parser';
@@ -45,6 +46,7 @@ import {
   JsonFormsStateProvider,
   useJsonForms
 } from './JsonFormsContext';
+import hash from 'object-hash';
 
 interface JsonFormsRendererState {
   id: string;
@@ -57,12 +59,15 @@ export interface JsonFormsReactProps {
   onChange?(state: Pick<JsonFormsCore, 'data' | 'errors'>): void;
 }
 
-const hasRefs = (schema: JsonSchema): boolean => {
-  if (schema !== undefined) {
-    return Object.keys(findRefs(schema)).length > 0;
-  }
-  return false;
-};
+const hasRefs = memoize(
+  (schema: JsonSchema): boolean => {
+    if (schema !== undefined) {
+      return Object.keys(findRefs(schema)).length > 0;
+    }
+    return false;
+  },
+  (schema: JsonSchema) => (schema ? hash(schema) : false)
+);
 
 export class ResolvedJsonFormsDispatchRenderer extends React.Component<
   JsonFormsProps,
