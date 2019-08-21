@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-
+import './MatchMediaMock';
 import React from 'react';
 import { Provider } from 'react-redux';
 import {
@@ -88,8 +88,12 @@ describe('Material categorization stepper layout tester', () => {
   it('should not fail when given undefined data', () => {
     expect(materialCategorizationStepperTester(undefined, undefined)).toBe(-1);
     expect(materialCategorizationStepperTester(null, undefined)).toBe(-1);
-    expect(materialCategorizationStepperTester({ type: 'Foo' }, undefined)).toBe(-1);
-    expect(materialCategorizationStepperTester({ type: 'Categorization' }, undefined)).toBe(-1);
+    expect(
+      materialCategorizationStepperTester({ type: 'Foo' }, undefined)
+    ).toBe(-1);
+    expect(
+      materialCategorizationStepperTester({ type: 'Categorization' }, undefined)
+    ).toBe(-1);
   });
 
   it('should not fail with null elements and no schema', () => {
@@ -129,7 +133,9 @@ describe('Material categorization stepper layout tester', () => {
         }
       ]
     };
-    expect(materialCategorizationStepperTester(categorization, undefined)).toBe(-1);
+    expect(materialCategorizationStepperTester(categorization, undefined)).toBe(
+      -1
+    );
   });
 
   it('should not apply to a nested categorization with single category and no schema', () => {
@@ -145,7 +151,9 @@ describe('Material categorization stepper layout tester', () => {
       type: 'Categorization',
       elements: [nestedCategorization]
     };
-    expect(materialCategorizationStepperTester(categorization, undefined)).toBe(-1);
+    expect(materialCategorizationStepperTester(categorization, undefined)).toBe(
+      -1
+    );
   });
 
   it('should not apply to nested categorizations without categories and no schema', () => {
@@ -157,7 +165,9 @@ describe('Material categorization stepper layout tester', () => {
         }
       ]
     };
-    expect(materialCategorizationStepperTester(categorization, undefined)).toBe(-1);
+    expect(materialCategorizationStepperTester(categorization, undefined)).toBe(
+      -1
+    );
   });
 
   it('should not apply to a nested categorization with null elements and no schema', () => {
@@ -172,7 +182,9 @@ describe('Material categorization stepper layout tester', () => {
       ]
     };
 
-    expect(materialCategorizationStepperTester(categorization, undefined)).toBe(-1);
+    expect(materialCategorizationStepperTester(categorization, undefined)).toBe(
+      -1
+    );
   });
 
   it('should not apply to a nested categorizations with empty elements and no schema', () => {
@@ -185,12 +197,13 @@ describe('Material categorization stepper layout tester', () => {
         }
       ]
     };
-    expect(materialCategorizationStepperTester(categorization, undefined)).toBe(-1);
+    expect(materialCategorizationStepperTester(categorization, undefined)).toBe(
+      -1
+    );
   });
 });
 
 describe('Material categorization stepper layout', () => {
-
   it('should render', () => {
     const nameControl = {
       type: 'Control',
@@ -235,7 +248,7 @@ describe('Material categorization stepper layout', () => {
   });
 
   it('should render on click', () => {
-    const data = { 'name': 'Foo' };
+    const data = { name: 'Foo' };
     const nameControl: ControlElement = {
       type: 'Control',
       scope: '#/properties/name'
@@ -290,7 +303,10 @@ describe('Material categorization stepper layout', () => {
       </Provider>
     );
     const beforeClick = wrapper.find(Stepper).props().activeStep;
-    wrapper.find(StepButton).at(1).simulate('click');
+    wrapper
+      .find(StepButton)
+      .at(1)
+      .simulate('click');
     const afterClick = wrapper.find(Stepper).props().activeStep;
 
     expect(beforeClick).toBe(0);

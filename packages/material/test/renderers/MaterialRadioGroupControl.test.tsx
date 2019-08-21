@@ -22,6 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import './MatchMediaMock';
 import * as React from 'react';
 import {
   Actions,
@@ -126,7 +127,11 @@ describe('Material radio group control', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <MaterialRadioGroupControl schema={schema} uischema={uischema} visible={false} />
+          <MaterialRadioGroupControl
+            schema={schema}
+            uischema={uischema}
+            visible={false}
+          />
         </JsonFormsReduxContext>
       </Provider>
     );

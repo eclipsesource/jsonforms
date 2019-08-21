@@ -22,6 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import './MatchMediaMock';
 import * as React from 'react';
 import {
   Actions,
@@ -34,7 +35,9 @@ import {
   UISchemaElement,
   update
 } from '@jsonforms/core';
-import TextCell, { materialTextCellTester, } from '../../src/cells/MaterialTextCell';
+import TextCell, {
+  materialTextCellTester
+} from '../../src/cells/MaterialTextCell';
 import { Provider } from 'react-redux';
 import { materialRenderers } from '../../src';
 import { combineReducers, createStore, Store } from 'redux';
@@ -48,7 +51,7 @@ Enzyme.configure({ adapter: new Adapter() });
 const DEFAULT_MAX_LENGTH = 524288;
 const DEFAULT_SIZE = 20;
 
-const data = { 'name': 'Foo' };
+const data = { name: 'Foo' };
 const minLengthSchema = {
   type: 'string',
   minLength: 3
@@ -64,7 +67,11 @@ const uischema: ControlElement = {
   scope: '#/properties/name'
 };
 
-const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema: UISchemaElement): Store<JsonFormsState> => {
+const initJsonFormsStore = (
+  testData: any,
+  testSchema: JsonSchema,
+  testUiSchema: UISchemaElement
+): Store<JsonFormsState> => {
   const s: JsonFormsState = {
     jsonforms: {
       renderers: materialRenderers
@@ -80,8 +87,12 @@ describe('Material text cell tester', () => {
   it('should fail', () => {
     expect(materialTextCellTester(undefined, undefined)).toBe(NOT_APPLICABLE);
     expect(materialTextCellTester(null, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialTextCellTester({ type: 'Foo' }, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialTextCellTester({ type: 'Control' }, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialTextCellTester({ type: 'Foo' }, undefined)).toBe(
+      NOT_APPLICABLE
+    );
+    expect(materialTextCellTester({ type: 'Control' }, undefined)).toBe(
+      NOT_APPLICABLE
+    );
   });
   it('should fail with wrong schema type', () => {
     const control: ControlElement = {
@@ -89,17 +100,14 @@ describe('Material text cell tester', () => {
       scope: '#/properties/foo'
     };
     expect(
-      materialTextCellTester(
-        control,
-        {
-          type: 'object',
-          properties: {
-            foo: {
-              type: 'number'
-            }
+      materialTextCellTester(control, {
+        type: 'object',
+        properties: {
+          foo: {
+            type: 'number'
           }
         }
-      )
+      })
     ).toBe(NOT_APPLICABLE);
   });
 
@@ -109,20 +117,17 @@ describe('Material text cell tester', () => {
       scope: '#/properties/foo'
     };
     expect(
-      materialTextCellTester(
-        control,
-        {
-          type: 'object',
-          properties: {
-            foo: {
-              type: 'number'
-            },
-            bar: {
-              type: 'string'
-            }
+      materialTextCellTester(control, {
+        type: 'object',
+        properties: {
+          foo: {
+            type: 'number'
+          },
+          bar: {
+            type: 'string'
           }
         }
-      )
+      })
     ).toBe(NOT_APPLICABLE);
   });
 
@@ -132,23 +137,19 @@ describe('Material text cell tester', () => {
       scope: '#/properties/foo'
     };
     expect(
-      materialTextCellTester(
-        control,
-        {
-          type: 'object',
-          properties: {
-            foo: {
-              type: 'string'
-            }
+      materialTextCellTester(control, {
+        type: 'object',
+        properties: {
+          foo: {
+            type: 'string'
           }
         }
-      )
+      })
     ).toBe(1);
   });
 });
 
 describe('Material text cell', () => {
-
   let wrapper: ReactWrapper;
 
   afterEach(() => wrapper.unmount());
@@ -162,11 +163,7 @@ describe('Material text cell', () => {
     const store = initJsonFormsStore(data, minLengthSchema, control);
     wrapper = mount(
       <Provider store={store}>
-        <TextCell
-          schema={minLengthSchema}
-          uischema={control}
-          path='name'
-        />
+        <TextCell schema={minLengthSchema} uischema={control} path='name' />
       </Provider>
     );
     const input = wrapper.find('input').first();
@@ -182,11 +179,7 @@ describe('Material text cell', () => {
     const store = initJsonFormsStore(data, schema, control);
     wrapper = mount(
       <Provider store={store}>
-        <TextCell
-          schema={minLengthSchema}
-          uischema={control}
-          path={'name'}
-        />
+        <TextCell schema={minLengthSchema} uischema={control} path={'name'} />
       </Provider>
     );
     const input = wrapper.find('input').first();
@@ -201,11 +194,7 @@ describe('Material text cell', () => {
     const store = initJsonFormsStore(data, minLengthSchema, control);
     wrapper = mount(
       <Provider store={store}>
-        <TextCell
-          schema={minLengthSchema}
-          uischema={control}
-          path='name'
-        />
+        <TextCell schema={minLengthSchema} uischema={control} path='name' />
       </Provider>
     );
     const input = wrapper.find('input').first();
@@ -219,15 +208,15 @@ describe('Material text cell', () => {
         name: { type: 'string' }
       }
     };
-    const store = initJsonFormsStore({ 'name': 'Foo' }, minLengthSchema, uischema);
+    const store = initJsonFormsStore(
+      { name: 'Foo' },
+      minLengthSchema,
+      uischema
+    );
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <TextCell
-            schema={jsonSchema}
-            uischema={uischema}
-            path={'name'}
-          />
+          <TextCell schema={jsonSchema} uischema={uischema} path={'name'} />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -241,11 +230,7 @@ describe('Material text cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <TextCell
-            schema={minLengthSchema}
-            uischema={uischema}
-            path='name'
-          />
+          <TextCell schema={minLengthSchema} uischema={uischema} path='name' />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -260,11 +245,7 @@ describe('Material text cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <TextCell
-            schema={minLengthSchema}
-            uischema={uischema}
-            path='name'
-          />
+          <TextCell schema={minLengthSchema} uischema={uischema} path='name' />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -279,11 +260,7 @@ describe('Material text cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <TextCell
-            schema={minLengthSchema}
-            uischema={uischema}
-            path='name'
-          />
+          <TextCell schema={minLengthSchema} uischema={uischema} path='name' />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -298,11 +275,7 @@ describe('Material text cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <TextCell
-            schema={minLengthSchema}
-            uischema={uischema}
-            path='name'
-          />
+          <TextCell schema={minLengthSchema} uischema={uischema} path='name' />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -317,11 +290,7 @@ describe('Material text cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <TextCell
-            schema={minLengthSchema}
-            uischema={uischema}
-            path='name'
-          />
+          <TextCell schema={minLengthSchema} uischema={uischema} path='name' />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -336,11 +305,7 @@ describe('Material text cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <TextCell
-            schema={minLengthSchema}
-            uischema={uischema}
-            path='name'
-          />
+          <TextCell schema={minLengthSchema} uischema={uischema} path='name' />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -355,11 +320,7 @@ describe('Material text cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <TextCell
-            schema={minLengthSchema}
-            uischema={uischema}
-            path='name'
-          />
+          <TextCell schema={minLengthSchema} uischema={uischema} path='name' />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -392,11 +353,7 @@ describe('Material text cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <TextCell
-            schema={minLengthSchema}
-            uischema={uischema}
-            path='name'
-          />
+          <TextCell schema={minLengthSchema} uischema={uischema} path='name' />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -417,11 +374,7 @@ describe('Material text cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <TextCell
-            schema={maxLengthSchema}
-            uischema={control}
-            path='name'
-          />
+          <TextCell schema={maxLengthSchema} uischema={control} path='name' />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -441,15 +394,14 @@ describe('Material text cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <TextCell
-            schema={maxLengthSchema}
-            uischema={control}
-            path='name'
-          />
+          <TextCell schema={maxLengthSchema} uischema={control} path='name' />
         </JsonFormsReduxContext>
       </Provider>
     );
-    const input = wrapper.find('input').first().getDOMNode() as HTMLInputElement;
+    const input = wrapper
+      .find('input')
+      .first()
+      .getDOMNode() as HTMLInputElement;
     expect(input.maxLength).toBe(DEFAULT_MAX_LENGTH);
     expect(
       getComputedStyle(input.parentElement, null).getPropertyValue('width')
@@ -467,15 +419,14 @@ describe('Material text cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <TextCell
-            schema={maxLengthSchema}
-            uischema={control}
-            path='name'
-          />
+          <TextCell schema={maxLengthSchema} uischema={control} path='name' />
         </JsonFormsReduxContext>
       </Provider>
     );
-    const input = wrapper.find('input').first().getDOMNode() as HTMLInputElement;
+    const input = wrapper
+      .find('input')
+      .first()
+      .getDOMNode() as HTMLInputElement;
     expect(input.maxLength).toBe(5);
     expect(
       getComputedStyle(input.parentElement, null).getPropertyValue('width')
@@ -488,15 +439,14 @@ describe('Material text cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <TextCell
-            schema={schema}
-            uischema={uischema}
-            path='name'
-          />
+          <TextCell schema={schema} uischema={uischema} path='name' />
         </JsonFormsReduxContext>
       </Provider>
     );
-    const input = wrapper.find('input').first().getDOMNode() as HTMLInputElement;
+    const input = wrapper
+      .find('input')
+      .first()
+      .getDOMNode() as HTMLInputElement;
     expect(input.maxLength).toBe(DEFAULT_MAX_LENGTH);
     expect(
       getComputedStyle(input.parentElement, null).getPropertyValue('width')
@@ -517,15 +467,14 @@ describe('Material text cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <TextCell
-            schema={schema}
-            uischema={control}
-            path='name'
-          />
+          <TextCell schema={schema} uischema={control} path='name' />
         </JsonFormsReduxContext>
       </Provider>
     );
-    const input = wrapper.find('input').first().getDOMNode() as HTMLInputElement;
+    const input = wrapper
+      .find('input')
+      .first()
+      .getDOMNode() as HTMLInputElement;
     expect(input.maxLength).toBe(DEFAULT_MAX_LENGTH);
     expect(
       getComputedStyle(input.parentElement, null).getPropertyValue('width')
@@ -543,16 +492,15 @@ describe('Material text cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <TextCell
-            schema={schema}
-            uischema={control}
-            path='name'
-          />
+          <TextCell schema={schema} uischema={control} path='name' />
         </JsonFormsReduxContext>
       </Provider>
     );
 
-    const input = wrapper.find('input').first().getDOMNode() as HTMLInputElement;
+    const input = wrapper
+      .find('input')
+      .first()
+      .getDOMNode() as HTMLInputElement;
     expect(input.maxLength).toBe(DEFAULT_MAX_LENGTH);
     expect(
       getComputedStyle(input.parentElement, null).getPropertyValue('width')
@@ -570,16 +518,15 @@ describe('Material text cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <TextCell
-            schema={schema}
-            uischema={control}
-            path='name'
-          />
+          <TextCell schema={schema} uischema={control} path='name' />
         </JsonFormsReduxContext>
       </Provider>
     );
 
-    const input = wrapper.find('input').first().getDOMNode() as HTMLInputElement;
+    const input = wrapper
+      .find('input')
+      .first()
+      .getDOMNode() as HTMLInputElement;
     expect(input.maxLength).toBe(DEFAULT_MAX_LENGTH);
     expect(
       getComputedStyle(input.parentElement, null).getPropertyValue('width')
@@ -591,14 +538,13 @@ describe('Material text cell', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TextCell
-          schema={schema}
-          uischema={uischema}
-          path='name'
-        />
+        <TextCell schema={schema} uischema={uischema} path='name' />
       </Provider>
     );
-    const input = wrapper.find('input').first().getDOMNode() as HTMLInputElement;
+    const input = wrapper
+      .find('input')
+      .first()
+      .getDOMNode() as HTMLInputElement;
     expect(input.maxLength).toBe(DEFAULT_MAX_LENGTH);
     expect(
       getComputedStyle(input.parentElement, null).getPropertyValue('width')

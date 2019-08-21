@@ -22,6 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import './MatchMediaMock';
 import * as React from 'react';
 import {
   Actions,
@@ -140,11 +141,7 @@ describe('Material date cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <MaterialDateCell
-            schema={schema}
-            uischema={control}
-            path='foo'
-          />
+          <MaterialDateCell schema={schema} uischema={control} path='foo' />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -164,11 +161,7 @@ describe('Material date cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <MaterialDateCell
-            schema={schema}
-            uischema={control}
-            path='foo'
-          />
+          <MaterialDateCell schema={schema} uischema={control} path='foo' />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -185,11 +178,7 @@ describe('Material date cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <MaterialDateCell
-            schema={schema}
-            uischema={control}
-            path='foo'
-          />
+          <MaterialDateCell schema={schema} uischema={control} path='foo' />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -202,11 +191,7 @@ describe('Material date cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <MaterialDateCell
-            schema={schema}
-            uischema={uischema}
-            path='foo'
-          />
+          <MaterialDateCell schema={schema} uischema={uischema} path='foo' />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -221,11 +206,7 @@ describe('Material date cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <MaterialDateCell
-            schema={schema}
-            uischema={uischema}
-            path='foo'
-          />
+          <MaterialDateCell schema={schema} uischema={uischema} path='foo' />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -239,11 +220,7 @@ describe('Material date cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <MaterialDateCell
-            schema={schema}
-            uischema={uischema}
-            path='foo'
-          />
+          <MaterialDateCell schema={schema} uischema={uischema} path='foo' />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -258,11 +235,7 @@ describe('Material date cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <MaterialDateCell
-            schema={schema}
-            uischema={uischema}
-            path='foo'
-          />
+          <MaterialDateCell schema={schema} uischema={uischema} path='foo' />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -277,11 +250,7 @@ describe('Material date cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <MaterialDateCell
-            schema={schema}
-            uischema={uischema}
-            path='foo'
-          />
+          <MaterialDateCell schema={schema} uischema={uischema} path='foo' />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -296,11 +265,7 @@ describe('Material date cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <MaterialDateCell
-            schema={schema}
-            uischema={uischema}
-            path='foo'
-          />
+          <MaterialDateCell schema={schema} uischema={uischema} path='foo' />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -314,11 +279,7 @@ describe('Material date cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <MaterialDateCell
-            schema={schema}
-            uischema={uischema}
-            path='foo'
-          />
+          <MaterialDateCell schema={schema} uischema={uischema} path='foo' />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -332,11 +293,7 @@ describe('Material date cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <MaterialDateCell
-            schema={schema}
-            uischema={uischema}
-            path='foo'
-          />
+          <MaterialDateCell schema={schema} uischema={uischema} path='foo' />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -368,11 +325,7 @@ describe('Material date cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <MaterialDateCell
-            schema={schema}
-            uischema={uischema}
-            path='foo'
-          />
+          <MaterialDateCell schema={schema} uischema={uischema} path='foo' />
         </JsonFormsReduxContext>
       </Provider>
     );

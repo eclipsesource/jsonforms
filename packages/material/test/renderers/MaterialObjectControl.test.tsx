@@ -22,6 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import './MatchMediaMock';
 import {
   Actions,
   ControlElement,
@@ -34,7 +35,9 @@ import {
 import * as React from 'react';
 import { AnyAction, combineReducers, createStore, Reducer, Store } from 'redux';
 import { materialRenderers } from '../../src';
-import MaterialObjectRenderer, { materialObjectControlTester } from '../../src/complex/MaterialObjectRenderer';
+import MaterialObjectRenderer, {
+  materialObjectControlTester
+} from '../../src/complex/MaterialObjectRenderer';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { JsonFormsReduxContext } from '@jsonforms/react';
@@ -42,13 +45,19 @@ import { Provider } from 'react-redux';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema: UISchemaElement): Store<JsonFormsState> => {
+const initJsonFormsStore = (
+  testData: any,
+  testSchema: JsonSchema,
+  testUiSchema: UISchemaElement
+): Store<JsonFormsState> => {
   const s: JsonFormsState = {
     jsonforms: {
       renderers: materialRenderers
     }
   };
-  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({ jsonforms: jsonformsReducer() });
+  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({
+    jsonforms: jsonformsReducer()
+  });
   const store: Store<JsonFormsState> = createStore(reducer, s);
   store.dispatch(Actions.init(testData, testSchema, testUiSchema));
   return store;
@@ -69,67 +78,62 @@ const schema = {
       properties: {
         bar_1: { type: 'string' }
       }
-    },
-  },
+    }
+  }
 };
 const uischema1: ControlElement = {
   type: 'Control',
-  scope: '#',
+  scope: '#'
 };
 const uischema2: ControlElement = {
   type: 'Control',
-  scope: '#/properties/foo',
+  scope: '#/properties/foo'
 };
 
 describe('Material object renderer tester', () => {
-
   test('should fail', () => {
-    expect(materialObjectControlTester(undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialObjectControlTester(undefined, undefined)).toBe(
+      NOT_APPLICABLE
+    );
     expect(materialObjectControlTester(null, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialObjectControlTester({ type: 'Foo' }, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialObjectControlTester({ type: 'Control' }, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialObjectControlTester({ type: 'Foo' }, undefined)).toBe(
+      NOT_APPLICABLE
+    );
+    expect(materialObjectControlTester({ type: 'Control' }, undefined)).toBe(
+      NOT_APPLICABLE
+    );
     expect(
-      materialObjectControlTester(
-        uischema2,
-        {
-          type: 'object',
-          properties: {
-            foo: { type: 'string' },
-          },
-        },
-      )
+      materialObjectControlTester(uischema2, {
+        type: 'object',
+        properties: {
+          foo: { type: 'string' }
+        }
+      })
     ).toBe(NOT_APPLICABLE);
     expect(
-      materialObjectControlTester(
-        uischema2,
-        {
-          type: 'object',
-          properties: {
-            foo: { type: 'string' },
-            bar: schema.properties.bar,
-          },
-        },
-      )
+      materialObjectControlTester(uischema2, {
+        type: 'object',
+        properties: {
+          foo: { type: 'string' },
+          bar: schema.properties.bar
+        }
+      })
     ).toBe(NOT_APPLICABLE);
   });
 
   it('should succeed', () => {
     expect(
-      materialObjectControlTester(
-        uischema2,
-        {
-          type: 'object',
-          properties: {
-            foo: schema.properties.foo,
-          },
-        },
-      )
+      materialObjectControlTester(uischema2, {
+        type: 'object',
+        properties: {
+          foo: schema.properties.foo
+        }
+      })
     ).toBe(2);
   });
 });
 
 describe('Material object control', () => {
-
   let wrapper: ReactWrapper;
 
   afterEach(() => wrapper.unmount());
@@ -186,7 +190,11 @@ describe('Material object control', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <MaterialObjectRenderer schema={schema} uischema={uischema2} visible={false} />
+          <MaterialObjectRenderer
+            schema={schema}
+            uischema={uischema2}
+            visible={false}
+          />
         </JsonFormsReduxContext>
       </Provider>
     );

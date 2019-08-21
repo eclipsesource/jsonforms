@@ -22,11 +22,17 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import './MatchMediaMock';
 import React, { Reducer } from 'react';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { Actions, ControlElement, jsonformsReducer, JsonFormsState } from '@jsonforms/core';
+import {
+  Actions,
+  ControlElement,
+  jsonformsReducer,
+  JsonFormsState
+} from '@jsonforms/core';
 import { MaterialAllOfRenderer, materialRenderers } from '../../src';
 import { AnyAction, combineReducers, createStore, Store } from 'redux';
 import { JsonFormsReduxContext } from '@jsonforms/react';
@@ -40,14 +46,15 @@ const initStore = () => {
       renderers: materialRenderers
     }
   };
-  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({ jsonforms: jsonformsReducer() });
+  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({
+    jsonforms: jsonformsReducer()
+  });
   const store: Store<JsonFormsState> = createStore(reducer, s);
 
   return store;
 };
 
 describe('Material allOf renderer', () => {
-
   let wrapper: ReactWrapper;
 
   afterEach(() => wrapper.unmount());
@@ -80,10 +87,7 @@ describe('Material allOf renderer', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <MaterialAllOfRenderer
-            schema={schema}
-            uischema={uischema}
-          />
+          <MaterialAllOfRenderer schema={schema} uischema={uischema} />
         </JsonFormsReduxContext>
       </Provider>
     );

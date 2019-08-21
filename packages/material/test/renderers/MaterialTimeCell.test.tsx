@@ -22,6 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import './MatchMediaMock';
 import * as React from 'react';
 import {
   Actions,
@@ -183,11 +184,7 @@ describe('Material time cell', () => {
     const store = initJsonFormsStore(data, schema, control);
     wrapper = mount(
       <Provider store={store}>
-        <TimeCell
-          schema={schema}
-          uischema={control}
-          path='foo'
-        />
+        <TimeCell schema={schema} uischema={control} path='foo' />
       </Provider>
     );
     const input = wrapper.find('input').first();
@@ -199,11 +196,7 @@ describe('Material time cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <TimeCell
-            schema={schema}
-            uischema={uischema}
-            path='foo'
-          />
+          <TimeCell schema={schema} uischema={uischema} path='foo' />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -218,11 +211,7 @@ describe('Material time cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <TimeCell
-            schema={schema}
-            uischema={uischema}
-            path='foo'
-          />
+          <TimeCell schema={schema} uischema={uischema} path='foo' />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -236,11 +225,7 @@ describe('Material time cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <TimeCell
-            schema={schema}
-            uischema={uischema}
-            path='foo'
-          />
+          <TimeCell schema={schema} uischema={uischema} path='foo' />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -255,11 +240,7 @@ describe('Material time cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <TimeCell
-            schema={schema}
-            uischema={uischema}
-            path='foo'
-          />
+          <TimeCell schema={schema} uischema={uischema} path='foo' />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -274,11 +255,7 @@ describe('Material time cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <TimeCell
-            schema={schema}
-            uischema={uischema}
-            path='foo'
-          />
+          <TimeCell schema={schema} uischema={uischema} path='foo' />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -293,11 +270,7 @@ describe('Material time cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <TimeCell
-            schema={schema}
-            uischema={uischema}
-            path='foo'
-          />
+          <TimeCell schema={schema} uischema={uischema} path='foo' />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -312,11 +285,7 @@ describe('Material time cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <TimeCell
-            schema={schema}
-            uischema={uischema}
-            path='foo'
-          />
+          <TimeCell schema={schema} uischema={uischema} path='foo' />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -331,11 +300,7 @@ describe('Material time cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <TimeCell
-            schema={schema}
-            uischema={uischema}
-            path='foo'
-          />
+          <TimeCell schema={schema} uischema={uischema} path='foo' />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -368,11 +333,7 @@ describe('Material time cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <TimeCell
-            schema={schema}
-            uischema={uischema}
-            path='foo'
-          />
+          <TimeCell schema={schema} uischema={uischema} path='foo' />
         </JsonFormsReduxContext>
       </Provider>
     );

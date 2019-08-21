@@ -22,6 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import './MatchMediaMock';
 import {
   Actions,
   ControlElement,
@@ -223,7 +224,10 @@ describe('Material list with detail renderer', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <MaterialListWithDetailRenderer schema={schema} uischema={uischemaWithLabel} />
+          <MaterialListWithDetailRenderer
+            schema={schema}
+            uischema={uischemaWithLabel}
+          />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -235,13 +239,16 @@ describe('Material list with detail renderer', () => {
   it('schema title for list', () => {
     const titleSchema = {
       ...schema,
-      title: "My awesome title"
+      title: 'My awesome title'
     };
     const store = initJsonFormsStore();
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <MaterialListWithDetailRenderer schema={titleSchema} uischema={uischema} />
+          <MaterialListWithDetailRenderer
+            schema={titleSchema}
+            uischema={uischema}
+          />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -296,7 +303,7 @@ describe('Material list with detail renderer', () => {
         <JsonFormsReduxContext>
           <MaterialListWithDetailRenderer schema={schema} uischema={uischema} />
         </JsonFormsReduxContext>
-      </Provider >
+      </Provider>
     );
 
     expect(wrapper.find(ListItem)).toHaveLength(2);

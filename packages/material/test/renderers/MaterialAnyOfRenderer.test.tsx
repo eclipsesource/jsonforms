@@ -22,13 +22,24 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import './MatchMediaMock';
 import React from 'react';
 import { Provider } from 'react-redux';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { Actions, ControlElement, getData, jsonformsReducer, JsonFormsState } from '@jsonforms/core';
-import { MaterialAnyOfRenderer, materialCells, materialRenderers } from '../../src';
+import {
+  Actions,
+  ControlElement,
+  getData,
+  jsonformsReducer,
+  JsonFormsState
+} from '@jsonforms/core';
+import {
+  MaterialAnyOfRenderer,
+  materialCells,
+  materialRenderers
+} from '../../src';
 import { AnyAction, combineReducers, createStore, Reducer, Store } from 'redux';
 import { JsonFormsReduxContext, JsonFormsDispatch } from '@jsonforms/react';
 
@@ -43,7 +54,9 @@ const initStore = () => {
       cells: materialCells
     }
   };
-  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({ jsonforms: jsonformsReducer() });
+  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({
+    jsonforms: jsonformsReducer()
+  });
   const store: Store<JsonFormsState> = createStore(reducer, s);
   return store;
 };
@@ -64,7 +77,6 @@ const selectanyOfTab = (wrapper: ReactWrapper, at: number) => {
 };
 
 describe('Material anyOf renderer', () => {
-
   let wrapper: ReactWrapper;
 
   afterEach(() => wrapper.unmount());
@@ -180,7 +192,6 @@ describe('Material anyOf renderer', () => {
     expect(nrOfRowsBeforeAdd.length).toBe(3);
     // 2 header row + 2 data rows (one is replacing the 'No data' one)
     expect(nrOfRowsAfterAdd.length).toBe(4);
-
   });
 
   it('should switch to "yourThing" edit, then switch back, then edit', async () => {
@@ -247,7 +258,10 @@ describe('Material anyOf renderer', () => {
 
     selectanyOfTab(wrapper, 1);
     clickAddButton(wrapper, 1);
-    wrapper.find('input').first().simulate('change', { target: { value: 5 } });
+    wrapper
+      .find('input')
+      .first()
+      .simulate('change', { target: { value: 5 } });
     wrapper.update();
     selectanyOfTab(wrapper, 0);
 
@@ -255,8 +269,9 @@ describe('Material anyOf renderer', () => {
     input.simulate('change', { target: { value: 'test' } });
     wrapper.update();
 
-    expect(getData(store.getState())).toEqual({ myThingsAndOrYourThings: [{ age: 5, name: 'test' }] });
-
+    expect(getData(store.getState())).toEqual({
+      myThingsAndOrYourThings: [{ age: 5, name: 'test' }]
+    });
   });
 
   it('should be hideable', () => {
