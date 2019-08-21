@@ -22,6 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import './MatchMediaMock';
 import * as React from 'react';
 import { Provider } from 'react-redux';
 import {
@@ -86,7 +87,6 @@ describe('Material Label Renderer tester', () => {
 });
 
 describe('Material Label Renderer', () => {
-
   let wrapper: ReactWrapper;
 
   afterEach(() => wrapper.unmount());
@@ -127,10 +127,7 @@ describe('Material Label Renderer', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <MaterialLabelRenderer
-            schema={schema}
-            uischema={uischema}
-          />
+          <MaterialLabelRenderer schema={schema} uischema={uischema} />
         </JsonFormsReduxContext>
       </Provider>
     );

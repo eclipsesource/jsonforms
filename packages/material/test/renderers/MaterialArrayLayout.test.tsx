@@ -22,6 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import './MatchMediaMock';
 import {
   Actions,
   ControlElement,
@@ -180,10 +181,7 @@ describe('Material array layout', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <MaterialArrayLayout
-            schema={schema}
-            uischema={uischema}
-          />
+          <MaterialArrayLayout schema={schema} uischema={uischema} />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -275,10 +273,7 @@ describe('Material array layout', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <MaterialArrayLayout
-            schema={schema}
-            uischema={uischemaWithLabel}
-          />
+          <MaterialArrayLayout schema={schema} uischema={uischemaWithLabel} />
         </JsonFormsReduxContext>
       </Provider>
     );

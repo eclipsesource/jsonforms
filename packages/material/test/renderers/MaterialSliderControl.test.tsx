@@ -22,6 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import './MatchMediaMock';
 import * as React from 'react';
 import {
   Actions,
@@ -38,7 +39,7 @@ import SliderControl, {
 import { Provider } from 'react-redux';
 import { materialRenderers } from '../../src';
 import { combineReducers, createStore, Store } from 'redux';
-import Slider from '@material-ui/core';
+import { Slider } from '@material-ui/core';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';

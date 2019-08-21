@@ -22,14 +22,25 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import './MatchMediaMock';
 import React from 'react';
 import { Provider } from 'react-redux';
 import Dialog from '@material-ui/core/Dialog';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { Actions, ControlElement, getData, jsonformsReducer, JsonFormsState } from '@jsonforms/core';
-import { materialCells, MaterialOneOfRenderer, materialRenderers } from '../../src';
+import {
+  Actions,
+  ControlElement,
+  getData,
+  jsonformsReducer,
+  JsonFormsState
+} from '@jsonforms/core';
+import {
+  materialCells,
+  MaterialOneOfRenderer,
+  materialRenderers
+} from '../../src';
 import { combineReducers, createStore, Store } from 'redux';
 import { JsonFormsDispatch, JsonFormsReduxContext } from '@jsonforms/react';
 import { Tab } from '@material-ui/core';
@@ -61,7 +72,11 @@ const clickAddButton = (wrapper: ReactWrapper, times: number) => {
   wrapper.update();
 };
 
-const selectOneOfTab = (wrapper: ReactWrapper, at: number, expectConfim: boolean) => {
+const selectOneOfTab = (
+  wrapper: ReactWrapper,
+  at: number,
+  expectConfim: boolean
+) => {
   // select oneOf
   const buttons = wrapper.find('button');
   buttons.at(at).simulate('click');
@@ -69,16 +84,26 @@ const selectOneOfTab = (wrapper: ReactWrapper, at: number, expectConfim: boolean
 
   if (expectConfim) {
     // confirm dialog
-    const confirmButton = wrapper.find(Dialog).last().find('button').at(1);
+    const confirmButton = wrapper
+      .find(Dialog)
+      .last()
+      .find('button')
+      .at(1);
     confirmButton.simulate('click');
     wrapper.update();
   } else {
-    expect(wrapper.find(Dialog).last().find('button').at(1).exists()).toBe(false);
+    expect(
+      wrapper
+        .find(Dialog)
+        .last()
+        .find('button')
+        .at(1)
+        .exists()
+    ).toBe(false);
   }
 };
 
 describe('Material oneOf renderer', () => {
-
   let wrapper: ReactWrapper;
 
   afterEach(() => wrapper.unmount());
@@ -237,7 +262,7 @@ describe('Material oneOf renderer', () => {
         <JsonFormsReduxContext>
           <MaterialOneOfRenderer schema={schema} uischema={uischema} />
         </JsonFormsReduxContext>
-      </Provider >
+      </Provider>
     );
 
     const secondTab = wrapper.find(Tab).at(1);
@@ -342,11 +367,9 @@ describe('Material oneOf renderer', () => {
     expect(nrOfRowsBeforeAdd.length).toBe(2);
     // 1 header row + 2 data rows (one is replacing the 'No data' one)
     expect(nrOfRowsAfterAdd.length).toBe(3);
-
   });
 
   it('should add an object within an array', async () => {
-
     const schema = {
       type: 'object',
       properties: {
@@ -417,7 +440,6 @@ describe('Material oneOf renderer', () => {
   });
 
   it('should switch to array based oneOf subschema, then switch back, then edit', async () => {
-
     const schema = {
       type: 'object',
       properties: {
@@ -463,7 +485,10 @@ describe('Material oneOf renderer', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <JsonFormsDispatch schema={store.getState().jsonforms.core.schema} uischema={uischema} />
+          <JsonFormsDispatch
+            schema={store.getState().jsonforms.core.schema}
+            uischema={uischema}
+          />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -479,9 +504,11 @@ describe('Material oneOf renderer', () => {
     const input = wrapper.find('input').first();
     input.simulate('change', { target: { value: 'test' } });
     wrapper.update();
-    expect(getData(store.getState())).toEqual({ thingOrThings: { thing: 'test' } });
+    expect(getData(store.getState())).toEqual({
+      thingOrThings: { thing: 'test' }
+    });
   });
-  
+
   it('should show confirm dialog when data is not an empty object', async () => {
     const schema = {
       type: 'object',
@@ -500,7 +527,7 @@ describe('Material oneOf renderer', () => {
         }
       }
     };
-    
+
     const uischema: ControlElement = {
       type: 'Control',
       label: 'Value',
@@ -513,7 +540,7 @@ describe('Material oneOf renderer', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <JsonFormsDispatch schema={schema} uischema={uischema}/>
+          <JsonFormsDispatch schema={schema} uischema={uischema} />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -521,7 +548,7 @@ describe('Material oneOf renderer', () => {
     await waitForAsync();
     wrapper.update();
     selectOneOfTab(wrapper, 1, true);
-  })
+  });
 
   it('should be hideable', () => {
     const store = initStore();
@@ -551,7 +578,11 @@ describe('Material oneOf renderer', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <MaterialOneOfRenderer schema={schema} uischema={uischema} visible={false} />
+          <MaterialOneOfRenderer
+            schema={schema}
+            uischema={uischema}
+            visible={false}
+          />
         </JsonFormsReduxContext>
       </Provider>
     );

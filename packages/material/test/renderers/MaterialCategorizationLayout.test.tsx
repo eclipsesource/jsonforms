@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-
+import './MatchMediaMock';
 import React from 'react';
 import {
   Actions,
@@ -55,7 +55,9 @@ export const initJsonFormsStore = (initState: any): Store<JsonFormsState> => {
       renderers: materialRenderers
     }
   };
-  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({ jsonforms: jsonformsReducer() });
+  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({
+    jsonforms: jsonformsReducer()
+  });
   const store: Store<JsonFormsState> = createStore(reducer, s);
 
   const { data, schema, uischema } = initState;
@@ -90,7 +92,9 @@ describe('Material categorization layout tester', () => {
     expect(materialCategorizationTester(undefined, undefined)).toBe(-1);
     expect(materialCategorizationTester(null, undefined)).toBe(-1);
     expect(materialCategorizationTester({ type: 'Foo' }, undefined)).toBe(-1);
-    expect(materialCategorizationTester({ type: 'Categorization' }, undefined)).toBe(-1);
+    expect(
+      materialCategorizationTester({ type: 'Categorization' }, undefined)
+    ).toBe(-1);
   });
 
   it('should not fail with null elements and no schema', () => {
@@ -191,7 +195,6 @@ describe('Material categorization layout tester', () => {
 });
 
 describe('Material categorization layout', () => {
-
   it('should render', () => {
     const nameControl = {
       type: 'Control',
@@ -230,7 +233,7 @@ describe('Material categorization layout', () => {
             uischema={uischema}
           />
         </JsonFormsReduxContext>
-      </Provider >
+      </Provider>
     );
     const steps = wrapper.find(Tab);
     expect(steps.length).toBe(2);
@@ -238,7 +241,7 @@ describe('Material categorization layout', () => {
   });
 
   it('should render on click', () => {
-    const data = { 'name': 'Foo' };
+    const data = { name: 'Foo' };
     const nameControl: ControlElement = {
       type: 'Control',
       scope: '#/properties/name'
@@ -294,7 +297,10 @@ describe('Material categorization layout', () => {
     );
 
     const beforeClick = wrapper.find(Tabs).props().value;
-    wrapper.find(Tab).at(1).simulate('click');
+    wrapper
+      .find(Tab)
+      .at(1)
+      .simulate('click');
     const afterClick = wrapper.find(Tabs).props().value;
 
     expect(beforeClick).toBe(0);

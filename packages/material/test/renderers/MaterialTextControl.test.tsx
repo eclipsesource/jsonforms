@@ -22,6 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import './MatchMediaMock';
 import React from 'react';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import { MaterialTextControl } from '../../src/controls/MaterialTextControl';
@@ -79,8 +80,8 @@ describe('Material text control', () => {
       ...props,
       input: MuiInputText
     });
-    
-    expect(wrapper.find("input").props().id).toEqual(`${props.id}-input`);
+
+    expect(wrapper.find('input').props().id).toEqual(`${props.id}-input`);
   });
 
   it('allows adding of mui input props', () => {
@@ -89,6 +90,6 @@ describe('Material text control', () => {
       muiInputProps: { spellCheck: false }
     };
     wrapper = mount(createMaterialTextControl(props));
-    expect(wrapper.find('input').props().spellCheck).toEqual(false)
+    expect(wrapper.find('input').props().spellCheck).toEqual(false);
   });
 });

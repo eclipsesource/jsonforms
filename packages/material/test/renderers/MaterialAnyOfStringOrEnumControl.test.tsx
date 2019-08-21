@@ -22,6 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import './MatchMediaMock';
 import React from 'react';
 import { Provider } from 'react-redux';
 
@@ -36,7 +37,9 @@ import {
   UISchemaElement
 } from '@jsonforms/core';
 import {
-  MaterialAnyOfStringOrEnumControl, materialAnyOfStringOrEnumControlTester, materialRenderers
+  MaterialAnyOfStringOrEnumControl,
+  materialAnyOfStringOrEnumControlTester,
+  materialRenderers
 } from '../../src';
 import { combineReducers, createStore, Store } from 'redux';
 
@@ -53,7 +56,9 @@ const uischema: ControlElement = {
 
 describe('Material simple any of control tester', () => {
   it('should only be applicable for simple any of cases', () => {
-    expect(materialAnyOfStringOrEnumControlTester({ type: 'Foo' }, schema)).toBe(-1);
+    expect(
+      materialAnyOfStringOrEnumControlTester({ type: 'Foo' }, schema)
+    ).toBe(-1);
     expect(materialAnyOfStringOrEnumControlTester(uischema, schema)).toBe(5);
 
     const nestedSchema: JsonSchema = {
@@ -65,9 +70,9 @@ describe('Material simple any of control tester', () => {
       type: 'Control',
       scope: '#/properties/foo'
     };
-    expect(materialAnyOfStringOrEnumControlTester(nestedUischema, nestedSchema)).toBe(
-      5
-    );
+    expect(
+      materialAnyOfStringOrEnumControlTester(nestedUischema, nestedSchema)
+    ).toBe(5);
     const schemaNoEnum: JsonSchema = {
       anyOf: [{ type: 'string' }]
     };
@@ -80,58 +85,62 @@ describe('Material simple any of control tester', () => {
     const schemaNoString: JsonSchema = {
       anyOf: [{ type: 'integer' }, { enum: [1, 2] }]
     };
-    expect(materialAnyOfStringOrEnumControlTester(uischema, schemaNoEnum)).toBe(-1);
+    expect(materialAnyOfStringOrEnumControlTester(uischema, schemaNoEnum)).toBe(
+      -1
+    );
     expect(
       materialAnyOfStringOrEnumControlTester(uischema, schemaConflictTypes)
     ).toBe(-1);
     expect(
       materialAnyOfStringOrEnumControlTester(uischema, schemaAdditionalProps)
     ).toBe(5);
-    expect(materialAnyOfStringOrEnumControlTester(uischema, schemaNoString)).toBe(-1);
+    expect(
+      materialAnyOfStringOrEnumControlTester(uischema, schemaNoString)
+    ).toBe(-1);
   });
 });
 
 const initJsonFormsStore = (
-    testData: any,
-    testSchema: JsonSchema,
-    testUiSchema: UISchemaElement
-  ): Store<JsonFormsState> => {
-    const s: JsonFormsState = {
-      jsonforms: {
-        renderers: materialRenderers
-      }
-    };
-    const store: Store<JsonFormsState> = createStore(
-      combineReducers({ jsonforms: jsonformsReducer() }),
-      s
-    );
-    store.dispatch(Actions.init(testData, testSchema, testUiSchema));
-    return store;
+  testData: any,
+  testSchema: JsonSchema,
+  testUiSchema: UISchemaElement
+): Store<JsonFormsState> => {
+  const s: JsonFormsState = {
+    jsonforms: {
+      renderers: materialRenderers
+    }
   };
+  const store: Store<JsonFormsState> = createStore(
+    combineReducers({ jsonforms: jsonformsReducer() }),
+    s
+  );
+  store.dispatch(Actions.init(testData, testSchema, testUiSchema));
+  return store;
+};
 
 describe('Material any of string or enum control', () => {
-    let wrapper: ReactWrapper;
+  let wrapper: ReactWrapper;
 
-    afterEach(() => {
-      wrapper.unmount();
-    });
+  afterEach(() => {
+    wrapper.unmount();
+  });
 
-    it('render', () => {
-      const store = initJsonFormsStore('foo', schema, uischema);
-      wrapper = mount(
-        <Provider store={store}>
-          <MaterialAnyOfStringOrEnumControl schema={schema} uischema={uischema} />
-        </Provider>
-      );
-      const inputs = wrapper.find('input');
-      expect(inputs).toHaveLength(1);
+  it('render', () => {
+    const store = initJsonFormsStore('foo', schema, uischema);
+    wrapper = mount(
+      <Provider store={store}>
+        <MaterialAnyOfStringOrEnumControl schema={schema} uischema={uischema} />
+      </Provider>
+    );
+    const inputs = wrapper.find('input');
+    expect(inputs).toHaveLength(1);
 
-      const datalist = wrapper.find('datalist');
-      expect(datalist).toHaveLength(1);
-      expect(datalist.children()).toHaveLength(2);
+    const datalist = wrapper.find('datalist');
+    expect(datalist).toHaveLength(1);
+    expect(datalist.children()).toHaveLength(2);
 
-      const validation = wrapper.find('p').first();
-      expect(validation.props().className).toContain('MuiFormHelperText-root');
-      expect(validation.children()).toHaveLength(0);
-    });
+    const validation = wrapper.find('p').first();
+    expect(validation.props().className).toContain('MuiFormHelperText-root');
+    expect(validation.children()).toHaveLength(0);
+  });
 });
