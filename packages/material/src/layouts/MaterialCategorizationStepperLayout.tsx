@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import { Hidden, Step, StepButton, Stepper } from '@material-ui/core';
 import {
   and,
@@ -30,14 +30,13 @@ import {
   categorizationHasCategory,
   Category,
   isVisible,
-  LayoutProps,
   optionIs,
   RankedTester,
   rankWith,
   StatePropsOfLayout,
   uiTypeIs
 } from '@jsonforms/core';
-import { useJsonForms, withJsonFormsLayoutProps } from '@jsonforms/react';
+import { RendererComponent, withJsonFormsLayoutProps } from '@jsonforms/react';
 import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from '../util/layout';
 
 export const materialCategorizationStepperTester: RankedTester = rankWith(
@@ -57,47 +56,49 @@ export interface MaterialCategorizationStepperLayoutRendererProps extends StateP
   data: any;
 }
 
-export const MaterialCategorizationStepperLayoutRenderer = ({ uischema, schema, path, visible, renderers }: LayoutProps) => {
+export class MaterialCategorizationStepperLayoutRenderer
+  extends RendererComponent<MaterialCategorizationStepperLayoutRendererProps, CategorizationStepperState> {
 
-  const [activeCategory, setActiveCategory] = useState(0);
-  const ctx = useJsonForms();
-  const data = ctx.core.data;
-  const handleStep = useCallback((step: number) => () => {
-    setActiveCategory(step);
-  }, [setActiveCategory]);
-
-  const categorization = uischema as Categorization;
-
-  const childProps: MaterialLayoutRendererProps = {
-    elements: categorization.elements[activeCategory].elements,
-    schema,
-    path,
-    direction: 'column',
-    visible,
-    renderers
+  state = {
+    activeCategory: 0
   };
 
-  const categories = categorization.elements
-    .filter((category: Category) => isVisible(category, data));
+  handleStep = (step: number) => {
+    this.setState({ activeCategory: step });
+  };
 
-  return (
-    <Hidden xsUp={!visible}>
-      <Stepper activeStep={activeCategory} nonLinear>
-        {categories.map((e: Category, idx: number) =>
-          (
-            <Step key={e.label}>
-              <StepButton onClick={handleStep(idx)}>
-                {e.label}
-              </StepButton>
-            </Step>
-          ))
-        }
-      </Stepper>
-      <div>
-        <MaterialLayoutRenderer {...childProps} />
-      </div>
-    </Hidden>
-  );
-};
+  render() {
+    const { data, path, renderers, schema, uischema, visible } = this.props;
+    const categorization = uischema as Categorization;
+    const activeCategory = this.state.activeCategory;
+    const childProps: MaterialLayoutRendererProps = {
+      elements: categorization.elements[activeCategory].elements,
+      schema,
+      path,
+      direction: 'column',
+      visible,
+      renderers
+    };
+    const categories = categorization.elements.filter((category: Category) => isVisible(category, data));
+    return (
+      <Hidden xsUp={!visible}>
+        <Stepper activeStep={activeCategory} nonLinear>
+          {categories.map((e: Category, idx: number) =>
+            (
+              <Step key={e.label}>
+                <StepButton onClick={() => this.handleStep(idx)}>
+                  {e.label}
+                </StepButton>
+              </Step>
+            ))
+          }
+        </Stepper>
+        <div>
+          <MaterialLayoutRenderer {...childProps} />
+        </div>
+      </Hidden>
+    );
+  }
+}
 
 export default withJsonFormsLayoutProps(MaterialCategorizationStepperLayoutRenderer);
