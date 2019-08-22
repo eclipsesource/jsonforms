@@ -28,6 +28,7 @@ import AppBar from '@material-ui/core/AppBar';
 import {
   and,
   Categorization,
+  Category,
   isVisible,
   RankedTester,
   rankWith,
@@ -79,12 +80,16 @@ export class MaterialCategorizationLayoutRenderer
       visible,
       renderers
     };
-    const categories = categorization.elements.filter(category => isVisible(category, data));
+    const categories = categorization.elements.filter((category: Category) => isVisible(category, data));
     return (
       <Hidden xsUp={!visible}>
         <AppBar position='static'>
           <Tabs value={value} onChange={this.handleChange} variant='scrollable'>
-            {categories.map((e, idx) => <Tab key={idx} label={e.label} />)}
+            {categories.map((e: Category, idx: number) =>
+              (
+                <Tab key={idx} label={e.label} />
+              )
+            )}
           </Tabs>
         </AppBar>
         <div style={{ marginTop: '0.5em' }}>
