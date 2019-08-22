@@ -231,6 +231,11 @@ export interface StatePropsOfRenderer {
   schema: JsonSchema;
 
   /**
+   * The data to be rendered.
+   */
+  data?: any;
+
+  /**
    * Whether the rendered element should be enabled.
    */
   enabled: boolean;
@@ -655,12 +660,15 @@ export const mapStateToLayoutProps = (
     ? ownProps.enabled
     : isEnabled(ownProps.uischema, rootData, ownProps.path);
 
+  const data = Resolve.data(rootData, ownProps.path);
+
   return {
     ...layoutDefaultProps,
     renderers: ownProps.renderers || getRenderers(state),
     visible,
     enabled,
     path: ownProps.path,
+    data,
     uischema: ownProps.uischema,
     schema: ownProps.schema,
     direction: ownProps.direction || layoutDefaultProps.direction
