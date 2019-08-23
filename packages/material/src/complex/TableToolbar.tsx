@@ -40,50 +40,53 @@ export interface MaterialTableToolbarProps {
     uischema: ControlElement;
     schema: JsonSchema;
     rootSchema: JsonSchema;
+    enabled: boolean;
     addItem(path: string, value: any): () => void;
 }
 
 const TableToolbar = React.memo((
-    { numColumns, errors, label, path, addItem, schema }: MaterialTableToolbarProps
+    { numColumns, errors, label, path, addItem, schema, enabled }: MaterialTableToolbarProps
 ) => (
-    <TableRow>
-        <NoBorderTableCell colSpan={numColumns}>
-            <Grid
-                container
-                justify={'flex-start'}
-                alignItems={'center'}
-                spacing={2}
-            >
-                <Grid item>
-                  <Typography variant={'h6'}>{label}</Typography>
-                </Grid>
-                <Grid item>
-                    <Hidden smUp={errors.length === 0}>
-                        <Grid item>
-                            <ValidationIcon
-                                id='tooltip-validation'
-                                errorMessages={errors}
-                            />
-                        </Grid>
-                    </Hidden>
-                </Grid>
-            </Grid>
-        </NoBorderTableCell>
-        <NoBorderTableCell>
-            <Tooltip
-                id='tooltip-add'
-                title={`Add to ${label}`}
-                placement='bottom'
-            >
-                <IconButton
-                    aria-label={`Add to ${label}`}
-                    onClick={addItem(path, createDefaultValue(schema))}
+        <TableRow>
+            <NoBorderTableCell colSpan={numColumns}>
+                <Grid
+                    container
+                    justify={'flex-start'}
+                    alignItems={'center'}
+                    spacing={2}
                 >
-                    <AddIcon/>
-                </IconButton>
-            </Tooltip>
-        </NoBorderTableCell>
-    </TableRow>
-));
+                    <Grid item>
+                        <Typography variant={'h6'}>{label}</Typography>
+                    </Grid>
+                    <Grid item>
+                        <Hidden smUp={errors.length === 0}>
+                            <Grid item>
+                                <ValidationIcon
+                                    id='tooltip-validation'
+                                    errorMessages={errors}
+                                />
+                            </Grid>
+                        </Hidden>
+                    </Grid>
+                </Grid>
+            </NoBorderTableCell>
+            {enabled ?
+                <NoBorderTableCell>
+                    <Tooltip
+                        id='tooltip-add'
+                        title={`Add to ${label}`}
+                        placement='bottom'
+                    >
+                        <IconButton
+                            aria-label={`Add to ${label}`}
+                            onClick={addItem(path, createDefaultValue(schema))}
+                        >
+                            <AddIcon />
+                        </IconButton>
+                    </Tooltip>
+                </NoBorderTableCell>
+                : ''}
+        </TableRow>
+    ));
 
 export default TableToolbar;

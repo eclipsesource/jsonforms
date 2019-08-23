@@ -42,7 +42,7 @@ interface MuiTextInputProps {
 export class MuiInputText extends React.PureComponent<
   CellProps & WithClassname & MuiTextInputProps,
   MuiInputTextStatus
-> {
+  > {
   state: MuiInputTextStatus = { showAdornment: false };
   render() {
     const {
@@ -93,7 +93,7 @@ export class MuiInputText extends React.PureComponent<
         onPointerLeave={() => this.setState({ showAdornment: false })}
         endAdornment={
           <InputAdornment position='end'>
-            <Hidden xsUp={!this.state.showAdornment}>
+            <Hidden xsUp={!this.state.showAdornment || !enabled}>
               <IconButton
                 aria-label='Clear input field'
                 onClick={() => handleChange(path, undefined)}

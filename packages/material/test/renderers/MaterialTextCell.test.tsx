@@ -605,4 +605,23 @@ describe('Material text cell', () => {
     ).toBe('100%');
     expect(input.size).toBe(DEFAULT_SIZE);
   });
+
+  it('should be disabled', () => {
+    const store = initJsonFormsStore(data, minLengthSchema, uischema);
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <TextCell
+            schema={schema}
+            uischema={uischema}
+            path={'name'}
+            enabled={false}
+          />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+
+    const input = wrapper.find('input').first();
+    expect(input.props().disabled).toBe(true);
+  });
 });

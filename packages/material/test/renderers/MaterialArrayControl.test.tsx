@@ -453,6 +453,30 @@ describe('Material array control', () => {
     expect(upButton.is('[disabled]')).toBe(true);
   });
 
+  it('should have fields disabled', () => {
+    const store = initJsonFormsStore();
+    store.dispatch(
+      Actions.init(fixture2.data, fixture2.schema, fixture2.uischema)
+    );
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <MaterialArrayControlRenderer
+            schema={fixture2.schema}
+            uischema={fixture2.uischema}
+            enabled={true}
+          />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    // first row is header in table
+    const input = wrapper
+      .find('tr')
+      .at(1)
+      .find('input');
+    expect(input.is('[disabled]')).toBe(true);
+  });
+
   it('should have down button disabled for last element', () => {
     const store = initJsonFormsStore();
     store.dispatch(
