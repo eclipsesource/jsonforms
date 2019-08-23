@@ -104,19 +104,22 @@ export const initJsonFormsStore = (customData?: any): Store<JsonFormsState> => {
   const s: JsonFormsState = {
     jsonforms: {
       renderers: materialRenderers,
-      cells: materialCells,
+      cells: materialCells
     }
   };
-  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({ jsonforms: jsonformsReducer() });
+  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({
+    jsonforms: jsonformsReducer()
+  });
   const store: Store<JsonFormsState> = createStore(reducer, s);
   const { data, schema, uischema } = fixture;
-  store.dispatch(Actions.init(customData ? customData : data, schema, uischema));
+  store.dispatch(
+    Actions.init(customData ? customData : data, schema, uischema)
+  );
 
   return store;
 };
 
 describe('Material array control', () => {
-
   let wrapper: ReactWrapper;
 
   afterEach(() => wrapper.unmount());
@@ -126,7 +129,10 @@ describe('Material array control', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <MaterialArrayControlRenderer schema={fixture.schema} uischema={fixture.uischema} />
+          <MaterialArrayControlRenderer
+            schema={fixture.schema}
+            uischema={fixture.uischema}
+          />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -142,7 +148,10 @@ describe('Material array control', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <MaterialArrayControlRenderer schema={fixture.schema} uischema={fixture.uischema} />
+          <MaterialArrayControlRenderer
+            schema={fixture.schema}
+            uischema={fixture.uischema}
+          />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -228,7 +237,10 @@ describe('Material array control', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <MaterialArrayControlRenderer schema={fixture.schema} uischema={fixture.uischema} />
+          <MaterialArrayControlRenderer
+            schema={fixture.schema}
+            uischema={fixture.uischema}
+          />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -453,7 +465,7 @@ describe('Material array control', () => {
     expect(upButton.is('[disabled]')).toBe(true);
   });
 
-  it('should have fields disabled', () => {
+  it('should have fields enabled', () => {
     const store = initJsonFormsStore();
     store.dispatch(
       Actions.init(fixture2.data, fixture2.schema, fixture2.uischema)
@@ -473,8 +485,34 @@ describe('Material array control', () => {
     const input = wrapper
       .find('tr')
       .at(1)
-      .find('input');
-    expect(input.is('[disabled]')).toBe(true);
+      .find('input')
+      .first();
+    expect(input.props().disabled).toBe(false);
+  });
+
+  it('should have fields disabled', () => {
+    const store = initJsonFormsStore();
+    store.dispatch(
+      Actions.init(fixture2.data, fixture2.schema, fixture2.uischema)
+    );
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <MaterialArrayControlRenderer
+            schema={fixture2.schema}
+            uischema={fixture2.uischema}
+            enabled={false}
+          />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    // first row is header in table
+    const input = wrapper
+      .find('tr')
+      .at(1)
+      .find('input')
+      .first();
+    expect(input.props().disabled).toBe(true);
   });
 
   it('should have down button disabled for last element', () => {
