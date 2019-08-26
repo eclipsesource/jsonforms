@@ -190,10 +190,14 @@ const controlWithoutLabel = (scope: string): ControlElement => ({
 
 const NonEmptyCell = (ownProps: OwnPropsOfNonEmptyCell) => {
   const ctx = useJsonForms();
-  const { path, propName, schema, rootSchema, errors, enabled } = ctxToNonEmptyCellProps(
-    ctx,
-    ownProps
-  );
+  const {
+    path,
+    propName,
+    schema,
+    rootSchema,
+    errors,
+    enabled
+  } = ctxToNonEmptyCellProps(ctx, ownProps);
 
   const isValid = isEmpty(errors);
 
@@ -211,13 +215,13 @@ const NonEmptyCell = (ownProps: OwnPropsOfNonEmptyCell) => {
           enabled={enabled}
         />
       ) : (
-          <DispatchCell
-            schema={schema}
-            uischema={controlWithoutLabel('#')}
-            path={path}
-            enabled={enabled}
-          />
-        )}
+        <DispatchCell
+          schema={schema}
+          uischema={controlWithoutLabel('#')}
+          path={path}
+          enabled={enabled}
+        />
+      )}
       <FormHelperText error={!isValid}>{!isValid && errors}</FormHelperText>
     </NoBorderTableCell>
   );
@@ -251,11 +255,16 @@ const NonEmptyRow = React.memo(
     return (
       <TableRow key={childPath} hover>
         {generateCells(NonEmptyCell, schema, childPath, enabled)}
-        {enabled ?
+        {enabled ? (
           <NoBorderTableCell
             style={showSortButtons ? styles.fixedCell : styles.fixedCellSmall}
           >
-            <Grid container direction='row' justify='center' alignItems='center'>
+            <Grid
+              container
+              direction='row'
+              justify='center'
+              alignItems='center'
+            >
               {showSortButtons ? (
                 <Fragment>
                   <Grid item>
@@ -277,9 +286,7 @@ const NonEmptyRow = React.memo(
                     </IconButton>
                   </Grid>
                 </Fragment>
-              ) : (
-                  ''
-                )}
+              ) : null}
               <Grid item>
                 <IconButton
                   aria-label={`Delete`}
@@ -290,7 +297,7 @@ const NonEmptyRow = React.memo(
               </Grid>
             </Grid>
           </NoBorderTableCell>
-          : ''}
+        ) : null}
       </TableRow>
     );
   }
@@ -355,7 +362,7 @@ const TableRows = ({
 export class MaterialTableControl extends React.Component<
   ArrayLayoutProps & WithDeleteDialogSupport,
   any
-  > {
+> {
   addItem = (path: string, value: any) => this.props.addItem(path, value);
   render() {
     const {
@@ -394,7 +401,7 @@ export class MaterialTableControl extends React.Component<
             {isObjectSchema && (
               <TableRow>
                 {headerCells}
-                {enabled ? <TableCell /> : ''}
+                {enabled ? <TableCell /> : null}
               </TableRow>
             )}
           </TableHead>
