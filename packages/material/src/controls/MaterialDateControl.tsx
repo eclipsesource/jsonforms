@@ -87,7 +87,7 @@ export class MaterialDateControl extends Control<
       visible,
       description,
       this.state.isFocused,
-      config.showUnfocusedDescription
+      appliedUiSchemaOptions.showUnfocusedDescription
     );
     const inputProps = {};
     const localeDateTimeFormat = momentLocale
