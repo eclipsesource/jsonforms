@@ -38,7 +38,7 @@ import {
  */
 class Dispatch extends React.Component<DispatchCellProps, any> {
   render() {
-    const { uischema, schema, path, cells, id } = this.props;
+    const { uischema, schema, path, cells, id, enabled } = this.props;
     const cell = maxBy(cells, r => r.tester(uischema, schema));
 
     if (cell === undefined || cell.tester(uischema, schema) === -1) {
@@ -48,7 +48,7 @@ class Dispatch extends React.Component<DispatchCellProps, any> {
 
       return (
         <React.Fragment>
-          <Cell uischema={uischema} schema={schema} path={path} id={id} />
+          <Cell uischema={uischema} schema={schema} enabled={enabled} path={path} id={id} />
         </React.Fragment>
       );
     }
