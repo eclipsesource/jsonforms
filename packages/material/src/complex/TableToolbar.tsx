@@ -23,7 +23,12 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { ControlElement, createDefaultValue, JsonSchema, Labels } from '@jsonforms/core';
+import {
+  ControlElement,
+  createDefaultValue,
+  JsonSchema,
+  Labels
+} from '@jsonforms/core';
 import IconButton from '@material-ui/core/IconButton';
 import { Grid, Hidden, Typography } from '@material-ui/core';
 import TableRow from '@material-ui/core/TableRow';
@@ -33,60 +38,68 @@ import ValidationIcon from './ValidationIcon';
 import NoBorderTableCell from './NoBorderTableCell';
 
 export interface MaterialTableToolbarProps {
-    numColumns: number;
-    errors: string;
-    label: string | Labels;
-    path: string;
-    uischema: ControlElement;
-    schema: JsonSchema;
-    rootSchema: JsonSchema;
-    enabled: boolean;
-    addItem(path: string, value: any): () => void;
+  numColumns: number;
+  errors: string;
+  label: string | Labels;
+  path: string;
+  uischema: ControlElement;
+  schema: JsonSchema;
+  rootSchema: JsonSchema;
+  enabled: boolean;
+  addItem(path: string, value: any): () => void;
 }
 
-const TableToolbar = React.memo((
-    { numColumns, errors, label, path, addItem, schema, enabled }: MaterialTableToolbarProps
-) => (
-        <TableRow>
-            <NoBorderTableCell colSpan={numColumns}>
-                <Grid
-                    container
-                    justify={'flex-start'}
-                    alignItems={'center'}
-                    spacing={2}
-                >
-                    <Grid item>
-                        <Typography variant={'h6'}>{label}</Typography>
-                    </Grid>
-                    <Grid item>
-                        <Hidden smUp={errors.length === 0}>
-                            <Grid item>
-                                <ValidationIcon
-                                    id='tooltip-validation'
-                                    errorMessages={errors}
-                                />
-                            </Grid>
-                        </Hidden>
-                    </Grid>
-                </Grid>
-            </NoBorderTableCell>
-            {enabled ?
-                <NoBorderTableCell>
-                    <Tooltip
-                        id='tooltip-add'
-                        title={`Add to ${label}`}
-                        placement='bottom'
-                    >
-                        <IconButton
-                            aria-label={`Add to ${label}`}
-                            onClick={addItem(path, createDefaultValue(schema))}
-                        >
-                            <AddIcon />
-                        </IconButton>
-                    </Tooltip>
-                </NoBorderTableCell>
-                : ''}
-        </TableRow>
-    ));
+const TableToolbar = React.memo(
+  ({
+    numColumns,
+    errors,
+    label,
+    path,
+    addItem,
+    schema,
+    enabled
+  }: MaterialTableToolbarProps) => (
+    <TableRow>
+      <NoBorderTableCell colSpan={numColumns}>
+        <Grid
+          container
+          justify={'flex-start'}
+          alignItems={'center'}
+          spacing={2}
+        >
+          <Grid item>
+            <Typography variant={'h6'}>{label}</Typography>
+          </Grid>
+          <Grid item>
+            <Hidden smUp={errors.length === 0}>
+              <Grid item>
+                <ValidationIcon
+                  id='tooltip-validation'
+                  errorMessages={errors}
+                />
+              </Grid>
+            </Hidden>
+          </Grid>
+        </Grid>
+      </NoBorderTableCell>
+      {enabled ? (
+        <NoBorderTableCell>
+          <Tooltip
+            id='tooltip-add'
+            title={`Add to ${label}`}
+            placement='bottom'
+          >
+            <IconButton
+              aria-label={`Add to ${label}`}
+              onClick={addItem(path, createDefaultValue(schema))}
+            >
+              <AddIcon />
+            </IconButton>
+          </Tooltip>
+        </NoBorderTableCell>
+      ) : null}
+    </TableRow>
+  )
+);
 
 export default TableToolbar;
