@@ -53,6 +53,11 @@ export interface DateControl {
   momentLocale?: Moment;
 }
 
+// Workaround typing problems in @material-ui/pickers@3.2.3
+const AnyPropsKeyboardDatePicker: React.FunctionComponent<
+  any
+> = KeyboardDatePicker;
+
 export class MaterialDateControl extends Control<
   StatePropsOfDateControl & DispatchPropsOfControl & DateControl,
   ControlState
@@ -106,7 +111,7 @@ export class MaterialDateControl extends Control<
     return (
       <Hidden xsUp={!visible}>
         <MuiPickersUtilsProvider utils={MomentUtils}>
-          <KeyboardDatePicker
+          <AnyPropsKeyboardDatePicker
             id={id + '-input'}
             label={computeLabel(
               labelText,
@@ -118,7 +123,7 @@ export class MaterialDateControl extends Control<
             helperText={!isValid ? errors : showDescription ? description : ' '}
             InputLabelProps={{ shrink: true }}
             value={data || null}
-            onChange={datetime =>
+            onChange={(datetime: any) =>
               handleChange(
                 path,
                 datetime ? moment(datetime).format('YYYY-MM-DD') : ''
