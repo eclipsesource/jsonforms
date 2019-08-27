@@ -70,6 +70,52 @@ store.dispatch(Actions.registerUISchema(
 
 You can retrieve a registered UI schema via the `findUISchema` function.
 
+`findUISchema(uischemas: object[], schema: JsonSchema, schemaPath: string, path: string, fallbackLayoutType?: string, control?: ControlElement, rootSchema?: JsonSchema)`
+
+<ApiLink link='/public/api/core/globals.html#finduischema' title='API' /> 
+
+To retrieve the registered UI schema you can call the 'findUISchema' function which is provided through the properties.
+This function needs the uischemas (which consists of a tester and a UI schema), the schema, the schemaPath and a subpath. Optionals parameters are a fallback layout type (`VerticalLayout`by default), a control and the root schema.
+All those parameters are also passed through the properties. The usage is shown using a renderer.
+
+```javascript
+import * as React from 'react';
+import * as _ from 'lodash';
+import { composePaths, ControlElement, Resolve } from '@jsonforms/core';
+import { JsonFormsDispatch } from '@jsonforms/react';
+
+export const MyControl =
+  ({ data, path, uischemas, schema, onAdd, uischema, findUISchema }) => {
+
+    const controlElement = uischema as ControlElement;
+    const resolvedSchema = Resolve.schema(schema, `${controlElement.scope}/items`);
+
+    return (
+        <fieldset>
+            <legend>My Control</legend>
+            <div>
+            {
+                data ? _.range(0, data.length).map(index => {
+
+                    const uischema = findUISchema(uischemas, resolvedSchema, controlElement.scope, path);
+                    const childPath = composePaths(path, `${index}`);
+
+                    return (
+                    <JsonFormsDispatch
+                        schema={resolvedSchema}
+                        uischema={uischema}
+                        path={childPath}
+                        key={childPath}
+                    />
+                    );
+                }) : <p>No data</p>
+            }
+            </div>
+        </fieldset>
+    );
+};
+```
+
 ## `unregisterUISchema(tester: UISchemaTester)`
 
 <ApiLink link='/public/api/core/globals.html#unregisteruischema' title='API' /> 
