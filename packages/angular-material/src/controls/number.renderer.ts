@@ -84,9 +84,10 @@ export class NumberControlRenderer extends JsonFormsControl {
         this.getValue() !== '' &&
         // a 0 in the first place
         ((ev.target.selectionStart === 1 && ev.target.selectionEnd === 1) ||
-          // or in the last place as this doesn't change the value
+          // or in the last place as this doesn't change the value (when there is a separator)
           (ev.target.selectionStart === ev.target.value.length &&
-            ev.target.selectionEnd === ev.target.value.length)))
+            ev.target.selectionEnd === ev.target.value.length &&
+            ev.target.value.indexOf(this.decimalSeparator) !== -1)))
     ) {
       this.oldValue = ev.target.value;
       return;
@@ -94,6 +95,7 @@ export class NumberControlRenderer extends JsonFormsControl {
     super.onChange(ev);
     this.oldValue = this.getValue();
   }
+
   getEventValue = (event: any) => {
     const cleanPattern = new RegExp(`[^-+0-9${this.decimalSeparator}]`, 'g');
     const cleaned = event.target.value.replace(cleanPattern, '');
@@ -137,6 +139,7 @@ export class NumberControlRenderer extends JsonFormsControl {
         this.determineDecimalSeparator();
         this.oldValue = this.getValue();
       }
+      this.form.setValue(this.getValue());
     }
   }
 
