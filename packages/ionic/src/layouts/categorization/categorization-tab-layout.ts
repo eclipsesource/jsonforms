@@ -67,7 +67,7 @@ interface CategoryRenderParams {
   `
 })
 export class CategorizationTabLayoutRenderer extends JsonFormsIonicLayout {
-  @ViewChild('tabs') tabs: IonTabs;
+  @ViewChild('tabs', { static: false }) tabs: IonTabs;
   categoryPages: CategoryRenderParams[];
 
   constructor(

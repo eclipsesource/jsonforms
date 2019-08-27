@@ -78,8 +78,8 @@ const isMasterPage = (page: any) => {
   `
 })
 export class ListWithDetailControl extends JsonFormsArrayControl {
-  @ViewChild('masterNav') masterNav: IonNav;
-  @ViewChild('detailNav') detailNav: IonNav;
+  @ViewChild('masterNav', { static: false }) masterNav: IonNav;
+  @ViewChild('detailNav', { static: false }) detailNav: IonNav;
   masterPage: any;
   detailPage: any;
   masterItems: MasterItem[];

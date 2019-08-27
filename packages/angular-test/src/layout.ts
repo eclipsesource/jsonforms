@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import { JsonFormsOutlet, UnknownRenderer } from '@jsonforms/angular';
-import { MockNgRedux } from '@angular-redux/store/lib/testing';
+import { MockNgRedux } from '@angular-redux/store/testing';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { NgRedux } from '@angular-redux/store';
 import { ComponentFixture, TestBed } from '@angular/core/testing';

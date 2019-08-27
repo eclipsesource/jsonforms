@@ -78,7 +78,7 @@ import { JsonFormsIonicLayout } from '../JsonFormsIonicLayout';
   `
 })
 export class CategorizationMenuLayoutRenderer extends JsonFormsIonicLayout {
-  @ViewChild('categoryContent') nav: NavController;
+  @ViewChild('categoryContent', { static: false }) nav: NavController;
   selectedCategory: Category;
   initialized: boolean;
 

@@ -283,7 +283,8 @@ test('render schema with $ref', () => {
     }
   };
 
-  const tester = (_uischema: UISchemaElement, s: JsonSchema) => s.properties.foo.type === 'number' ? 1 : -1;
+  const tester = (_uischema: UISchemaElement, s: JsonSchema) =>
+    s.properties.foo.type === 'number' ? 1 : -1;
 
   const renderers = [
     {
@@ -428,25 +429,29 @@ test('JsonForms should support two isolated components', () => {
   const customRenderer1 = () => {
     const ctx = useJsonForms();
     const errors = ctx.core.errors;
-    return (<h1>{errors ? errors.length : 0}</h1>);
-  }
+    return <h1>{errors ? errors.length : 0}</h1>;
+  };
   const customRenderer2 = () => {
     const ctx = useJsonForms();
     const errors = ctx.core.errors;
-    return (<h2>{errors ? errors.length : 0}</h2>);
-  }
+    return <h2>{errors ? errors.length : 0}</h2>;
+  };
   const wrapper = mount(
     <div>
       <JsonForms
         data={{ foo: '' }}
-        uischema={{ type: 'Control', scope: '#/properties/foo' }}
+        uischema={
+          { type: 'Control', scope: '#/properties/foo' } as UISchemaElement
+        }
         schema={schema1}
         renderers={[{ tester: () => 3, renderer: customRenderer1 }]}
       />
       <JsonForms
         data={{ bar: 0 }}
         schema={schema2}
-        uischema={{ type: 'Control', scope: '#/properties/bar' }}
+        uischema={
+          { type: 'Control', scope: '#/properties/bar' } as UISchemaElement
+        }
         renderers={[{ tester: () => 3, renderer: customRenderer2 }]}
       />
     </div>
