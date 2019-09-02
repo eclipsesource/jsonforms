@@ -54,7 +54,8 @@ Alternatively you can also clone the [seed app](https://github.com/eclipsesource
 
    import { Actions, jsonformsReducer } from '@jsonforms/core';
    import { person } from '@jsonforms/examples';
-   import { materialRenderers } from '@jsonforms/material-renderers';
+   import { materialRenderers, materialCells } from '@jsonforms/material-renderers';
+   import { JsonFormsReduxContext } from "@jsonforms/react";
    ```
 
    The `person` import is necessary for importing the person example
@@ -85,6 +86,7 @@ Alternatively you can also clone the [seed app](https://github.com/eclipsesource
      combineReducers({ jsonforms: jsonformsReducer() }),
      {
        jsonforms: {
+         cells: materialCells,
          renderers: materialRenderers
        }
      }

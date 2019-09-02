@@ -50,7 +50,8 @@ Alternatively you can also clone the [seed app](https://github.com/eclipsesource
    
    import { Actions, jsonformsReducer } from '@jsonforms/core';
    import { person } from '@jsonforms/examples';
-   import { materialRenderers } from '@jsonforms/material-renderers';
+   import { materialRenderers, materialCells } from '@jsonforms/material-renderers';
+   import { JsonFormsReduxContext } from "@jsonforms/react";
    ```
    The `person` import is necessary for importing the person example
    while `@jsonforms/material-renderers` imports the 
@@ -80,6 +81,7 @@ Alternatively you can also clone the [seed app](https://github.com/eclipsesource
         { jsonforms: jsonformsReducer() }),  
         {
           jsonforms: {
+            cells: materialCells,
             renderers: materialRenderers
           }
         }
@@ -96,7 +98,9 @@ Alternatively you can also clone the [seed app](https://github.com/eclipsesource
    
    ```javascript
    <Provider store={store}>
-     <App />
+     <JsonFormsReduxContext>
+       <App />
+     </JsonFormsReduxContext>
    </Provider>
    ```
    
@@ -107,7 +111,7 @@ Alternatively you can also clone the [seed app](https://github.com/eclipsesource
    to get a form rendered:
    ```jsx
    import React from 'react';
-   import { JsonForms } from '@jsonforms/react';
+   import { JsonFormsDispatch } from '@jsonforms/react';
    // other imports...
    
    class App extends React.Component {
@@ -115,7 +119,7 @@ Alternatively you can also clone the [seed app](https://github.com/eclipsesource
        return (
          <div>
             {/* other markup... */}
-            <JsonForms />
+            <JsonFormsDispatch />
          </div>
        )
      }
