@@ -49,8 +49,8 @@ only focus on the most crucial parts of the app in the following.
 Before explaining how to contribute a component (which will be referred to as "custom control") to JSON Forms,
 we first explain how the basic process of rendering works.
 
-JSON Forms maintains a registry of renderers (which are regular React components). When JSON Forms is instructed to
-render a given UI schema to produce a form, it will start with the root element of the UI Schema and try to
+JSON Forms maintains a registry of renderers (which are regular React components in case of the React/Material renderers we use in this tutorial).
+When JSON Forms is instructed to render a given UI schema to produce a form, it will start with the root element of the UI Schema and try to
 find a renderer for this UI Schema element in its registry of renderers.
 
 To find a matching renderer, JSON Forms relies on so-called testers.
