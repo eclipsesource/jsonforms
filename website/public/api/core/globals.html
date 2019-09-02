@@ -142,6 +142,8 @@
 								<li class="tsd-kind-interface"><a href="interfaces/rendererprops.html" class="tsd-kind-icon">Renderer<wbr>Props</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/rule.html" class="tsd-kind-icon">Rule</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/schemabasedcondition.html" class="tsd-kind-icon">Schema<wbr>Based<wbr>Condition</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/schemaref.html" class="tsd-kind-icon">Schema<wbr>Ref</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/schemarefs.html" class="tsd-kind-icon">Schema<wbr>Refs</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/scopable.html" class="tsd-kind-icon">Scopable</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/setajvaction.html" class="tsd-kind-icon">Set<wbr>Ajv<wbr>Action</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/setconfigaction.html" class="tsd-kind-icon">Set<wbr>Config<wbr>Action</a></li>
@@ -452,7 +454,7 @@
 					<div class="tsd-signature tsd-kind-icon">Combinator<wbr>Props<span class="tsd-signature-symbol">:</span> <a href="interfaces/statepropsofcombinator.html" class="tsd-signature-type">StatePropsOfCombinator</a><span class="tsd-signature-symbol"> &amp; </span><a href="interfaces/dispatchpropsofcontrol.html" class="tsd-signature-type">DispatchPropsOfControl</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in util/renderer.ts:854</li>
+							<li>Defined in util/renderer.ts:866</li>
 						</ul>
 					</aside>
 				</section>
@@ -580,7 +582,7 @@
 					<div class="tsd-signature tsd-kind-icon">Ref<wbr>Resolver<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in util/renderer.ts:666</li>
+							<li>Defined in util/renderer.ts:678</li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -981,7 +983,7 @@
 					<div class="tsd-signature tsd-kind-icon">bad<wbr>Ptr<wbr>Token<wbr>Regex<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol"> =&nbsp;/~(?:[^01]|$)/g</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in util/resolvers.ts:290</li>
+							<li>Defined in util/resolvers.ts:299</li>
 						</ul>
 					</aside>
 				</section>
@@ -1836,7 +1838,7 @@
 					<div class="tsd-signature tsd-kind-icon">uri<wbr>Details<wbr>Cache<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;{} as any</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in util/resolvers.ts:289</li>
+							<li>Defined in util/resolvers.ts:298</li>
 						</ul>
 					</aside>
 				</section>
@@ -2121,7 +2123,7 @@
 					<a name="computelabel" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> compute<wbr>Label</h3>
 					<ul class="tsd-signatures tsd-kind-function">
-						<li class="tsd-signature tsd-kind-icon">compute<wbr>Label<span class="tsd-signature-symbol">(</span>label<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, required<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+						<li class="tsd-signature tsd-kind-icon">compute<wbr>Label<span class="tsd-signature-symbol">(</span>label<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, required<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span>, hideRequiredAsterisk<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -2153,6 +2155,9 @@
 											<p>whether the label belongs to a control which is required</p>
 										</div>
 									</div>
+								</li>
+								<li>
+									<h5>hideRequiredAsterisk: <span class="tsd-signature-type">boolean</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -2369,7 +2374,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in util/renderer.ts:117</li>
+									<li>Defined in util/renderer.ts:121</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2717,7 +2722,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in util/resolvers.ts:275</li>
+									<li>Defined in util/resolvers.ts:284</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3224,22 +3229,22 @@
 					<a name="findrefs" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> find<wbr>Refs</h3>
 					<ul class="tsd-signatures tsd-kind-function">
-						<li class="tsd-signature tsd-kind-icon">find<wbr>Refs<span class="tsd-signature-symbol">(</span>obj<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
+						<li class="tsd-signature tsd-kind-icon">find<wbr>Refs<span class="tsd-signature-symbol">(</span>obj<span class="tsd-signature-symbol">: </span><a href="globals.html#jsonschema" class="tsd-signature-type">JsonSchema</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="interfaces/schemarefs.html" class="tsd-signature-type">SchemaRefs</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in util/resolvers.ts:190</li>
+									<li>Defined in util/resolvers.ts:204</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>obj: <span class="tsd-signature-type">any</span></h5>
+									<h5>obj: <a href="globals.html#jsonschema" class="tsd-signature-type">JsonSchema</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="interfaces/schemarefs.html" class="tsd-signature-type">SchemaRefs</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -3383,7 +3388,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in util/index.ts:118</li>
+									<li>Defined in util/index.ts:124</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3702,7 +3707,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in util/resolvers.ts:369</li>
+									<li>Defined in util/resolvers.ts:378</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3820,7 +3825,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in util/resolvers.ts:292</li>
+									<li>Defined in util/resolvers.ts:301</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3884,7 +3889,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in util/resolvers.ts:350</li>
+									<li>Defined in util/resolvers.ts:359</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -4325,7 +4330,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in util/renderer.ts:151</li>
+									<li>Defined in util/renderer.ts:155</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -4571,7 +4576,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in util/resolvers.ts:380</li>
+									<li>Defined in util/resolvers.ts:389</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -4597,7 +4602,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in util/resolvers.ts:411</li>
+									<li>Defined in util/resolvers.ts:420</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -4862,7 +4867,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in util/renderer.ts:573</li>
+									<li>Defined in util/renderer.ts:582</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -4896,7 +4901,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in util/renderer.ts:416</li>
+									<li>Defined in util/renderer.ts:425</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -4930,7 +4935,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in util/renderer.ts:792</li>
+									<li>Defined in util/renderer.ts:804</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -4972,7 +4977,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in util/renderer.ts:798</li>
+									<li>Defined in util/renderer.ts:810</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -4998,7 +5003,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in util/renderer.ts:535</li>
+									<li>Defined in util/renderer.ts:544</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -5040,7 +5045,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in util/renderer.ts:823</li>
+									<li>Defined in util/renderer.ts:835</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -5124,7 +5129,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in util/renderer.ts:724</li>
+									<li>Defined in util/renderer.ts:736</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -5153,7 +5158,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in util/renderer.ts:359</li>
+									<li>Defined in util/renderer.ts:368</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -5195,7 +5200,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in util/renderer.ts:504</li>
+									<li>Defined in util/renderer.ts:513</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -5263,7 +5268,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in util/renderer.ts:430</li>
+									<li>Defined in util/renderer.ts:439</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -5297,7 +5302,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in util/renderer.ts:682</li>
+									<li>Defined in util/renderer.ts:694</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -5323,7 +5328,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in util/renderer.ts:642</li>
+									<li>Defined in util/renderer.ts:651</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -5364,7 +5369,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in util/renderer.ts:451</li>
+									<li>Defined in util/renderer.ts:460</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -5406,7 +5411,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in util/renderer.ts:805</li>
+									<li>Defined in util/renderer.ts:817</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -5612,7 +5617,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in util/resolvers.ts:375</li>
+									<li>Defined in util/resolvers.ts:384</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -5635,7 +5640,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in util/resolvers.ts:262</li>
+									<li>Defined in util/resolvers.ts:271</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -7007,7 +7012,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in util/resolvers.ts:228</li>
+									<li>Defined in util/resolvers.ts:237</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -8376,7 +8381,7 @@
 					<div class="tsd-signature tsd-kind-icon">Paths<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in util/index.ts:121</li>
+							<li>Defined in util/index.ts:127</li>
 						</ul>
 					</aside>
 					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal tsd-is-not-exported">
@@ -8385,7 +8390,7 @@
 						<div class="tsd-signature tsd-kind-icon">compose<span class="tsd-signature-symbol">:</span> <a href="" class="tsd-signature-type">compose</a><span class="tsd-signature-symbol"> =&nbsp;composePaths</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in util/index.ts:122</li>
+								<li>Defined in util/index.ts:128</li>
 							</ul>
 						</aside>
 					</section>
@@ -8395,7 +8400,7 @@
 						<div class="tsd-signature tsd-kind-icon">from<wbr>Scopable<span class="tsd-signature-symbol">:</span> <a href="" class="tsd-signature-type">fromScopable</a></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in util/index.ts:123</li>
+								<li>Defined in util/index.ts:129</li>
 							</ul>
 						</aside>
 					</section>
@@ -8441,7 +8446,7 @@
 					<div class="tsd-signature tsd-kind-icon">Runtime<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in util/index.ts:128</li>
+							<li>Defined in util/index.ts:134</li>
 						</ul>
 					</aside>
 					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal tsd-is-not-exported">
@@ -8454,7 +8459,7 @@
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in util/index.ts:129</li>
+										<li>Defined in util/index.ts:135</li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -8480,7 +8485,7 @@
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in util/index.ts:132</li>
+										<li>Defined in util/index.ts:138</li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -8506,6 +8511,16 @@
 							<li>Defined in configDefault.ts:25</li>
 						</ul>
 					</aside>
+					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+						<a name="configdefault.hiderequiredasterisk" class="tsd-anchor"></a>
+						<h3>hide<wbr>Required<wbr>Asterisk</h3>
+						<div class="tsd-signature tsd-kind-icon">hide<wbr>Required<wbr>Asterisk<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></div>
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in configDefault.ts:46</li>
+							</ul>
+						</aside>
+					</section>
 					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
 						<a name="configdefault.restrict" class="tsd-anchor"></a>
 						<h3>restrict</h3>
@@ -8543,7 +8558,7 @@
 					<div class="tsd-signature tsd-kind-icon">control<wbr>Default<wbr>Props<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in util/renderer.ts:710</li>
+							<li>Defined in util/renderer.ts:722</li>
 						</ul>
 					</aside>
 					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
@@ -8552,7 +8567,7 @@
 						<div class="tsd-signature tsd-kind-icon">errors<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[] as string[]</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in util/renderer.ts:712</li>
+								<li>Defined in util/renderer.ts:724</li>
 							</ul>
 						</aside>
 					</section>
@@ -8684,7 +8699,7 @@
 					<div class="tsd-signature tsd-kind-icon">layout<wbr>Default<wbr>Props<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in util/renderer.ts:624</li>
+							<li>Defined in util/renderer.ts:633</li>
 						</ul>
 					</aside>
 					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
@@ -8693,7 +8708,7 @@
 						<div class="tsd-signature tsd-kind-icon">direction<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"column"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;column&quot;</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in util/renderer.ts:633</li>
+								<li>Defined in util/renderer.ts:642</li>
 							</ul>
 						</aside>
 					</section>
@@ -8703,7 +8718,7 @@
 						<div class="tsd-signature tsd-kind-icon">enabled<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">true</span><span class="tsd-signature-symbol"> =&nbsp;true</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in util/renderer.ts:631</li>
+								<li>Defined in util/renderer.ts:640</li>
 							</ul>
 						</aside>
 					</section>
@@ -8713,7 +8728,7 @@
 						<div class="tsd-signature tsd-kind-icon">path<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;&quot;</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in util/renderer.ts:632</li>
+								<li>Defined in util/renderer.ts:641</li>
 							</ul>
 						</aside>
 					</section>
@@ -8723,7 +8738,7 @@
 						<div class="tsd-signature tsd-kind-icon">visible<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">true</span><span class="tsd-signature-symbol"> =&nbsp;true</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in util/renderer.ts:630</li>
+								<li>Defined in util/renderer.ts:639</li>
 							</ul>
 						</aside>
 					</section>
@@ -8931,6 +8946,12 @@
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/schemabasedcondition.html" class="tsd-kind-icon">Schema<wbr>Based<wbr>Condition</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/schemaref.html" class="tsd-kind-icon">Schema<wbr>Ref</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/schemarefs.html" class="tsd-kind-icon">Schema<wbr>Refs</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/scopable.html" class="tsd-kind-icon">Scopable</a>
@@ -9750,6 +9771,7 @@
 				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
 				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
 				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
@@ -9798,7 +9820,7 @@
 	</div>
 </footer>
 <div class="container tsd-generator">
-	<p>Generated using <a href="http://typedoc.org/" target="_blank">TypeDoc</a></p>
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
 </div>
 <div class="overlay"></div>
 <script src="assets/js/main.js"></script>
