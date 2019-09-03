@@ -49,6 +49,11 @@ export interface MaterialTableToolbarProps {
   addItem(path: string, value: any): () => void;
 }
 
+const fixedCellSmall = {
+  paddingLeft: 0,
+  paddingRight: 0,
+}
+
 const TableToolbar = React.memo(
   ({
     numColumns,
@@ -83,7 +88,7 @@ const TableToolbar = React.memo(
         </Grid>
       </NoBorderTableCell>
       {enabled ? (
-        <NoBorderTableCell>
+        <NoBorderTableCell align='right' style={ fixedCellSmall }>
           <Tooltip
             id='tooltip-add'
             title={`Add to ${label}`}
