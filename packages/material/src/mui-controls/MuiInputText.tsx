@@ -92,7 +92,7 @@ export class MuiInputText extends React.PureComponent<
         onPointerEnter={() => this.setState({ showAdornment: true })}
         onPointerLeave={() => this.setState({ showAdornment: false })}
         endAdornment={
-          <InputAdornment position='end'>
+          <InputAdornment position='end' style={{ marginLeft: 3 }} >
             <Hidden xsUp={!this.state.showAdornment || !enabled}>
               <IconButton
                 aria-label='Clear input field'
