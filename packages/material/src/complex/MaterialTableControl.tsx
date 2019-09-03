@@ -262,7 +262,7 @@ const NonEmptyRow = React.memo(
             <Grid
               container
               direction='row'
-              justify='center'
+              justify='flex-end'
               alignItems='center'
             >
               {showSortButtons ? (
