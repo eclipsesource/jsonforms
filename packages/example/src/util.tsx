@@ -44,19 +44,21 @@ import {
 import { AnyAction, Dispatch } from 'redux';
 import { updateExampleExtensionState } from './reduxUtil';
 import { withJsonFormsContext, JsonFormsStateContext } from '@jsonforms/react';
-import { ErrorObject } from 'ajv'
+import { ErrorObject } from 'ajv';
 
 export interface ReactExampleDescription extends ExampleDescription {
   customReactExtension?(dispatch: Dispatch<AnyAction>): React.Component;
-  onChange?:(dispatch: Dispatch<AnyAction>) => (extensionState: any) => (state: Pick<JsonFormsCore, 'data' | 'errors'>) => AnyAction;
+  onChange?: (
+    dispatch: Dispatch<AnyAction>
+  ) => (
+    extensionState: any
+  ) => (state: Pick<JsonFormsCore, 'data' | 'errors'>) => AnyAction;
 }
 const registerRatingControl = (dispatch: Dispatch<AnyAction>) => {
   dispatch(Actions.registerCell(ratingControlTester, ConnectedRatingControl));
 };
 const unregisterRatingControl = (dispatch: Dispatch<AnyAction>) => {
-  dispatch(
-    Actions.unregisterCell(ratingControlTester, ConnectedRatingControl)
-  );
+  dispatch(Actions.unregisterCell(ratingControlTester, ConnectedRatingControl));
 };
 
 export interface I18nExampleProps extends OwnPropsOfI18nExample {
@@ -68,7 +70,11 @@ export interface OwnPropsOfI18nExample {
   schema: JsonSchema;
   uischema: UISchemaElement;
   dispatch: Dispatch<AnyAction>;
-  onChange: (dispatch: Dispatch<AnyAction>) => (extensionState: any) => (state: Pick<JsonFormsCore, 'data' | 'errors'>) => void;
+  onChange: (
+    dispatch: Dispatch<AnyAction>
+  ) => (
+    extensionState: any
+  ) => (state: Pick<JsonFormsCore, 'data' | 'errors'>) => void;
 }
 
 class I18nExampleRenderer extends React.Component<
@@ -95,8 +101,8 @@ class I18nExampleRenderer extends React.Component<
     _.set(deUISchema, 'elements.2.elements.1.label', 'Vegetarier');
     localizedUISchemas.set('de-DE', deUISchema);
     localizedUISchemas.set('en-US', uischema);
-    
-    props.dispatch(updateExampleExtensionState({locale: "en-US"}));
+
+    props.dispatch(updateExampleExtensionState({ locale: 'en-US' }));
 
     this.state = {
       localizedSchemas,
@@ -111,7 +117,7 @@ class I18nExampleRenderer extends React.Component<
     dispatch(setSchema(localizedSchemas.get(locale)));
     dispatch(setUISchema(localizedUISchemas.get(locale)));
     dispatch(updateExampleExtensionState({ locale }));
-    onChange(dispatch)({ locale })({data, errors});
+    onChange(dispatch)({ locale })({ data, errors });
   };
 
   render() {
@@ -124,17 +130,22 @@ class I18nExampleRenderer extends React.Component<
   }
 }
 
-const withContextToI18nProps =
-  (Component: React.ComponentType<I18nExampleProps>): React.ComponentType<OwnPropsOfI18nExample> =>
-    ({ ctx, props }: JsonFormsStateContext & I18nExampleProps) => {
-      const {data, errors} = ctx.core
-      return <Component {...props} data={data} errors={errors}/>
+const withContextToI18nProps = (
+  Component: React.ComponentType<I18nExampleProps>
+): React.ComponentType<OwnPropsOfI18nExample> => ({
+  ctx,
+  props
+}: JsonFormsStateContext & I18nExampleProps) => {
+  const { data, errors } = ctx.core;
+  return <Component {...props} data={data} errors={errors} />;
+};
 
-    };
+const withI18nProps = (
+  Component: React.ComponentType<I18nExampleProps>
+): React.ComponentType<OwnPropsOfI18nExample> =>
+  withJsonFormsContext(withContextToI18nProps(Component));
 
-const withI18nProps = (Component: React.ComponentType<I18nExampleProps>): React.ComponentType<OwnPropsOfI18nExample> => withJsonFormsContext(withContextToI18nProps(Component))
-
-const I18nExample = withI18nProps(I18nExampleRenderer)
+const I18nExample = withI18nProps(I18nExampleRenderer);
 
 export const enhanceExample: (
   examples: ExampleDescription[]
@@ -192,6 +203,28 @@ export const enhanceExample: (
           )
         });
         return dynamic;
+      case 'array':
+        const array = Object.assign({}, e, {
+          customReactExtension: (dispatch: Dispatch<AnyAction>) => (
+            <div>
+              <button
+                onClick={() => {
+                  dispatch(Actions.init(e.data, e.schema, e.config.withSort));
+                }}
+              >
+                Reload with sorting
+              </button>
+              <button
+                onClick={() =>
+                  dispatch(Actions.init(e.data, e.schema, e.uischema))
+                }
+              >
+                Reload without sorting
+              </button>
+            </div>
+          )
+        });
+        return array;
       case 'i18n':
         return Object.assign({}, e, {
           customReactExtension: (dispatch: Dispatch<AnyAction>) => (
@@ -226,11 +259,11 @@ export const enhanceExample: (
           )
         });
         return issue_1220;
-        case 'onChange':
-         return {
-           ...e,
-           onChange: OnChangeExample.onChange
-         }
+      case 'onChange':
+        return {
+          ...e,
+          onChange: OnChangeExample.onChange
+        };
       default:
         return e;
     }

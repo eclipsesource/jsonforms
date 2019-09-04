@@ -56,6 +56,19 @@ export const uischema = {
   ]
 };
 
+const uischemaWithSorting = {
+  type: 'VerticalLayout',
+  elements: [
+    {
+      type: 'Control',
+      scope: '#/properties/comments',
+      options: {
+        showSortButtons: true
+      }
+    }
+  ]
+};
+
 export const data = {
   comments: [
     {
@@ -75,6 +88,9 @@ registerExamples([
     label: 'Array',
     data,
     schema,
-    uischema
+    uischema,
+    config: {
+      withSort: uischemaWithSorting
+    }
   }
 ]);
