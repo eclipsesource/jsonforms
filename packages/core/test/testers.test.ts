@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import anyTest, { TestInterface } from 'ava';
+import RefParser from 'json-schema-ref-parser';
 import {
   and,
   formatIs,
@@ -53,8 +54,21 @@ import {
   LabelElement,
   UISchemaElement
 } from '../src';
+import cloneDeep from 'lodash/cloneDeep';
 
 const test = anyTest as TestInterface<{ uischema: ControlElement }>;
+const resolveRef = (jsonSchema: any) => async (pointer: string): Promise<JsonSchema> => {
+  const parser = new RefParser();
+  try {
+    const refs = await parser
+      .resolve(cloneDeep(jsonSchema), {
+        dereference: { circular: 'ignore' }
+      })
+    return refs.get(pointer) as JsonSchema;
+  } catch (error) {
+    return undefined;
+  }
+};
 
 test.beforeEach(t => {
   t.context.uischema = {
@@ -63,7 +77,7 @@ test.beforeEach(t => {
   };
 });
 
-test('schemaTypeIs should check type sub-schema of control', t => {
+test('schemaTypeIs should check type sub-schema of control', async t => {
   const schema: JsonSchema = {
     type: 'object',
     properties: {
@@ -74,11 +88,11 @@ test('schemaTypeIs should check type sub-schema of control', t => {
     type: 'Control',
     scope: '#/properties/foo'
   };
-  t.true(schemaTypeIs('string')(uischema, schema));
-  t.false(schemaTypeIs('integer')(uischema, schema));
+  t.true(await schemaTypeIs('string')(uischema, schema, resolveRef(schema)));
+  t.false(await schemaTypeIs('integer')(uischema, schema, resolveRef(schema)));
 });
 
-test('schemaTypeIs should return false for non-control UI schema elements', t => {
+test('schemaTypeIs should return false for non-control UI schema elements', async t => {
   const schema: JsonSchema = {
     type: 'object',
     properties: {
@@ -89,10 +103,10 @@ test('schemaTypeIs should return false for non-control UI schema elements', t =>
     type: 'Label',
     text: 'some text'
   };
-  t.false(schemaTypeIs('integer')(label, schema));
+  t.false(await schemaTypeIs('integer')(label, schema, resolveRef(schema)));
 });
 
-test('schemaTypeIs should return false for control pointing to invalid sub-schema', t => {
+test('schemaTypeIs should return false for control pointing to invalid sub-schema', async t => {
   const uischema: ControlElement = {
     type: 'Control',
     scope: '#/properties/bar'
@@ -103,10 +117,10 @@ test('schemaTypeIs should return false for control pointing to invalid sub-schem
       foo: { type: 'string' }
     }
   };
-  t.false(schemaTypeIs('string')(uischema, schema));
+  t.false(await schemaTypeIs('string')(uischema, schema, resolveRef(schema)));
 });
 
-test('schemaTypeIs should return true for array type', t => {
+test('schemaTypeIs should return true for array type', async t => {
   const schema: JsonSchema = {
     type: 'object',
     properties: {
@@ -117,11 +131,11 @@ test('schemaTypeIs should return true for array type', t => {
     type: 'Control',
     scope: '#/properties/foo'
   };
-  t.true(schemaTypeIs('string')(uischema, schema));
-  t.true(schemaTypeIs('integer')(uischema, schema));
+  t.true(await schemaTypeIs('string')(uischema, schema, resolveRef(schema)));
+  t.true(await schemaTypeIs('integer')(uischema, schema, resolveRef(schema)));
 });
 
-test('formatIs should check the format of a resolved sub-schema', t => {
+test('formatIs should check the format of a resolved sub-schema', async t => {
   const uischema: ControlElement = {
     type: 'Control',
     scope: '#/properties/foo'
@@ -135,18 +149,18 @@ test('formatIs should check the format of a resolved sub-schema', t => {
       }
     }
   };
-  t.true(formatIs('date-time')(uischema, schema));
+  t.true(await formatIs('date-time')(uischema, schema, resolveRef(schema)));
 });
 
-test('uiTypeIs', t => {
+test('uiTypeIs', async t => {
   const control: ControlElement = {
     type: 'Control',
     scope: '#/properties/bar'
   };
-  t.true(uiTypeIs('Control')(control, undefined));
+  t.true(await uiTypeIs('Control')(control, undefined));
 });
 
-test('optionIs should check for options', t => {
+test('optionIs should check for options', async t => {
   const control: ControlElement = {
     type: 'Control',
     scope: '#/properties/bar',
@@ -154,24 +168,24 @@ test('optionIs should check for options', t => {
       answer: 42
     }
   };
-  t.true(optionIs('answer', 42)(control, undefined));
+  t.true(await optionIs('answer', 42)(control, undefined, resolveRef(control)));
 });
 
-test('optionIs should not fail if uischema is undefined or null', t => {
+test('optionIs should not fail if uischema is undefined or null', async t => {
   const uischema: UISchemaElement = null;
-  t.false(optionIs('answer', 42)(uischema, undefined));
-  t.false(optionIs('answer', 42)(uischema, undefined));
+  t.false(await optionIs('answer', 42)(uischema, undefined));
+  t.false(await optionIs('answer', 42)(uischema, undefined));
 });
 
-test('optionIs should return false for UI schema elements without options cell', t => {
+test('optionIs should return false for UI schema elements without options cell', async t => {
   const control: ControlElement = {
     type: 'Control',
     scope: '#/properties/bar'
   };
-  t.false(optionIs('answer', 42)(control, undefined));
+  t.false(await optionIs('answer', 42)(control, undefined));
 });
 
-test('schemaMatches should check type sub-schema of control via predicate', t => {
+test('schemaMatches should check type sub-schema of control via predicate', async t => {
   const schema: JsonSchema = {
     type: 'object',
     properties: {
@@ -183,11 +197,15 @@ test('schemaMatches should check type sub-schema of control via predicate', t =>
     scope: '#/properties/foo'
   };
   t.true(
-    schemaMatches(subSchema => subSchema.type === 'string')(uischema, schema)
+    await schemaMatches(subSchema => subSchema.type === 'string')(
+      uischema,
+      schema,
+      resolveRef(schema)
+    )
   );
 });
 
-test('schemaMatches should check type sub-schema of control via predicate also without explicit type', t => {
+test('schemaMatches should check type sub-schema of control via predicate also without explicit type', async t => {
   const schema: JsonSchema = {
     properties: {
       foo: { type: 'string' }
@@ -198,11 +216,15 @@ test('schemaMatches should check type sub-schema of control via predicate also w
     scope: '#/properties/foo'
   };
   t.true(
-    schemaMatches(subSchema => subSchema.type === 'string')(uischema, schema)
+    await schemaMatches(subSchema => subSchema.type === 'string')(
+      uischema,
+      schema,
+      resolveRef(schema)
+    )
   );
 });
 
-test('schemaMatches should return false for non-control UI schema elements', t => {
+test('schemaMatches should return false for non-control UI schema elements', async t => {
   const schema: JsonSchema = {
     type: 'object',
     properties: {
@@ -213,10 +235,10 @@ test('schemaMatches should return false for non-control UI schema elements', t =
     type: 'Label',
     text: 'some text'
   };
-  t.false(schemaMatches(() => false)(label, schema));
+  t.false(await schemaMatches(() => false)(label, schema, resolveRef(schema)));
 });
 
-test('schemaMatches should return false for control pointing to invalid subschema', t => {
+test('schemaMatches should return false for control pointing to invalid subschema', async t => {
   const schema: JsonSchema = {
     type: 'object',
     properties: {
@@ -227,42 +249,44 @@ test('schemaMatches should return false for control pointing to invalid subschem
     type: 'Control',
     scope: '#/properties/bar'
   };
-  t.false(schemaMatches(() => false)(uischema, schema));
+  t.false(
+    await schemaMatches(() => false)(uischema, schema, resolveRef(schema))
+  );
 });
 
-test('scopeEndsWith checks whether the ref of a control ends with a certain string', t => {
+test('scopeEndsWith checks whether the ref of a control ends with a certain string', async t => {
   const uischema: ControlElement = {
     type: 'Control',
     scope: '#/properties/bar'
   };
-  t.true(scopeEndsWith('properties/bar')(uischema, undefined));
+  t.true(await scopeEndsWith('properties/bar')(uischema, undefined));
 });
 
-test('scopeEndsWith should return false for non-control UI schema elements', t => {
+test('scopeEndsWith should return false for non-control UI schema elements', async t => {
   const label: LabelElement = {
     type: 'Label',
     text: 'some text'
   };
-  t.false(scopeEndsWith('properties/bar')(label, undefined));
+  t.false(await scopeEndsWith('properties/bar')(label, undefined));
 });
 
-test('refEndIs checks whether the last segment a control ref equals a certain string', t => {
+test('scopeEndsIs checks whether the last segment a control ref equals a certain string', async t => {
   const uischema: ControlElement = {
     type: 'Control',
     scope: '#/properties/bar'
   };
-  t.true(scopeEndIs('bar')(uischema, undefined));
+  t.true(await scopeEndIs('bar')(uischema, undefined));
 });
 
-test('refEndIs should return false for non-control UI schema elements', t => {
+test('scopeEndIs should return false for non-control UI schema elements', async t => {
   const label: LabelElement = {
     type: 'Label',
     text: 'some text'
   };
-  t.false(scopeEndIs('bar')(label, undefined));
+  t.false(await scopeEndIs('bar')(label, undefined));
 });
 
-test('and should allow to compose multiple testers', t => {
+test('and should allow to compose multiple testers', async t => {
   const schema: JsonSchema = {
     type: 'object',
     properties: {
@@ -273,10 +297,16 @@ test('and should allow to compose multiple testers', t => {
     type: 'Control',
     scope: '#/properties/foo'
   };
-  t.true(and(schemaTypeIs('string'), scopeEndIs('foo'))(uischema, schema));
+  t.true(
+    await and(schemaTypeIs('string'), scopeEndIs('foo'))(
+      uischema,
+      schema,
+      resolveRef(schema)
+    )
+  );
 });
 
-test('or should allow to compose multiple testers', t => {
+test('or should allow to compose multiple testers', async t => {
   const schema: JsonSchema = {
     type: 'object',
     properties: {
@@ -288,85 +318,106 @@ test('or should allow to compose multiple testers', t => {
     scope: '#/properties/foo'
   };
   t.true(
-    or(schemaTypeIs('integer'), optionIs('slider', true))(uischema, schema)
+    await or(schemaTypeIs('integer'), optionIs('slider', true))(
+      uischema,
+      schema,
+      resolveRef(schema)
+    )
   );
 });
 
-test('tester isPrimitiveArrayControl', t => {
+test('tester isPrimitiveArrayControl', async t => {
   const control: ControlElement = {
     type: 'Control',
     scope: '#/properties/foo'
   };
-  t.true(
-    isPrimitiveArrayControl(control, {
-      type: 'object',
-      properties: {
-        foo: {
-          type: 'array',
-          items: { type: 'integer' }
-        }
+  const schema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'array',
+        items: { type: 'integer' }
       }
-    }),
+    }
+  };
+  t.true(
+    await isPrimitiveArrayControl(control, schema, resolveRef(schema)),
     `Primitive array tester was not triggered for 'integer' schema type`
   );
-  t.false(
-    isPrimitiveArrayControl(control, {
-      type: 'object',
-      properties: {
-        foo: {
-          type: 'array',
-          items: { type: 'object' }
-        }
+  const jsonSchema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'array',
+        items: { type: 'object' }
       }
-    }),
+    }
+  };
+  t.false(
+    await isPrimitiveArrayControl(control, jsonSchema, resolveRef(jsonSchema)),
     `Primitive array tester was not triggered for 'object' schema type`
   );
 });
 
-test('tester isObjectArrayControl', t => {
-  t.false(isObjectArrayControl({ type: 'Foo' }, null));
+test('tester isObjectArrayControl', async t => {
+  t.false(await isObjectArrayControl({ type: 'Foo' }, null));
   const control: ControlElement = {
     type: 'Control',
     scope: '#/properties/foo'
   };
-  t.false(isObjectArrayControl(control, undefined), 'No Schema not checked!');
+  t.false(
+    await isObjectArrayControl(control, undefined),
+    'No Schema not checked!'
+  );
 
   t.false(
-    isObjectArrayControl(control, {
-      type: 'object',
-      properties: { bar: { type: 'integer' } }
-    }),
+    await isObjectArrayControl(
+      control,
+      {
+        type: 'object',
+        properties: { bar: { type: 'integer' } }
+      }
+    ),
     'Wrong Schema Type not checked!'
   );
   t.false(
-    isObjectArrayControl(control, {
-      type: 'object',
-      properties: { foo: { type: 'array' } }
-    }),
+    await isObjectArrayControl(
+      control,
+      {
+        type: 'object',
+        properties: { foo: { type: 'array' } }
+      }
+    ),
     'Array Schema Type without items not checked!'
   );
   t.false(
-    isObjectArrayControl(control, {
-      type: 'object',
-      properties: {
-        foo: {
-          type: 'array',
-          items: [{ type: 'integer' }, { type: 'string' }]
+    await isObjectArrayControl(
+      control,
+      {
+        type: 'object',
+        properties: {
+          foo: {
+            type: 'array',
+            items: [{ type: 'integer' }, { type: 'string' }]
+          }
         }
       }
-    }),
+    ),
     'Array Schema Type with tuples not checked!'
   );
   t.false(
-    isObjectArrayControl(control, {
-      type: 'object',
-      properties: {
-        foo: {
-          type: 'array',
-          items: { type: 'integer' }
+    await isObjectArrayControl(
+      control,
+      {
+        type: 'object',
+        properties: {
+          foo: {
+            type: 'array',
+            items: { type: 'integer' }
+          }
         }
       }
-    }),
+    ),
     'Array Schema Type with wrong item type not checked!'
   );
   const schema: JsonSchema = {
@@ -384,7 +435,7 @@ test('tester isObjectArrayControl', t => {
       }
     }
   };
-  t.true(isObjectArrayControl(control, schema));
+  t.true(await isObjectArrayControl(control, schema, resolveRef(schema)));
   const schema_noType: JsonSchema = {
     type: 'object',
     properties: {
@@ -399,7 +450,13 @@ test('tester isObjectArrayControl', t => {
       }
     }
   };
-  t.true(isObjectArrayControl(control, schema_noType));
+  t.true(
+    await isObjectArrayControl(
+      control,
+      schema_noType,
+      resolveRef(schema_noType)
+    )
+  );
   const schema_innerAllOf: JsonSchema = {
     type: 'object',
     properties: {
@@ -422,229 +479,299 @@ test('tester isObjectArrayControl', t => {
       }
     }
   };
-  t.true(isObjectArrayControl(control, schema_innerAllOf));
-});
-
-test('isBooleanControl', t => {
-  t.false(isBooleanControl(undefined, undefined));
-  t.false(isBooleanControl(null, undefined));
-  t.false(isBooleanControl({ type: 'Foo' }, undefined));
-  t.false(isBooleanControl({ type: 'Control' }, undefined));
-  t.false(
-    isBooleanControl(t.context.uischema, {
-      type: 'object',
-      properties: { foo: { type: 'string' } }
-    })
-  );
-  t.false(
-    isBooleanControl(t.context.uischema, {
-      type: 'object',
-      properties: { foo: { type: 'string' }, bar: { type: 'boolean' } }
-    })
-  );
   t.true(
-    isBooleanControl(t.context.uischema, {
-      type: 'object',
-      properties: { foo: { type: 'boolean' } }
-    })
+    await isObjectArrayControl(
+      control,
+      schema_innerAllOf,
+      resolveRef(schema_innerAllOf)
+    )
   );
 });
 
-test('test isDateControl', t => {
-  t.false(isDateControl(undefined, undefined));
-  t.false(isDateControl(null, undefined));
-  t.false(isDateControl({ type: 'Foo' }, undefined));
-  t.false(isDateControl({ type: 'Control' }, undefined));
+test('isBooleanControl', async t => {
+  t.false(await isBooleanControl(undefined, undefined));
+  t.false(await isBooleanControl(null, undefined));
+  t.false(await isBooleanControl({ type: 'Foo' }, undefined));
+  t.false(await isBooleanControl({ type: 'Control' }, undefined));
   t.false(
-    isDateControl(t.context.uischema, {
-      type: 'object',
-      properties: { foo: { type: 'string' } }
-    })
+    await isBooleanControl(
+      t.context.uischema,
+      {
+        type: 'object',
+        properties: { foo: { type: 'string' } }
+      }
+    )
   );
   t.false(
-    isDateControl(t.context.uischema, {
-      type: 'object',
-      properties: {
-        foo: { type: 'string' },
-        bar: {
-          type: 'string',
-          format: 'date'
+    await isBooleanControl(
+      t.context.uischema,
+      {
+        type: 'object',
+        properties: { foo: { type: 'string' }, bar: { type: 'boolean' } }
+      }
+    )
+  );
+  const schema = {
+    type: 'object',
+    properties: { foo: { type: 'boolean' } }
+  };
+  t.true(
+    await isBooleanControl(t.context.uischema, schema, resolveRef(schema))
+  );
+});
+
+test('test isDateControl', async t => {
+  t.false(await isDateControl(undefined, undefined));
+  t.false(await isDateControl(null, undefined));
+  t.false(await isDateControl({ type: 'Foo' }, undefined));
+  t.false(await isDateControl({ type: 'Control' }, undefined));
+  t.false(
+    await isDateControl(
+      t.context.uischema,
+      {
+        type: 'object',
+        properties: { foo: { type: 'string' } }
+      }
+    )
+  );
+  t.false(
+    await isDateControl(
+      t.context.uischema,
+      {
+        type: 'object',
+        properties: {
+          foo: { type: 'string' },
+          bar: {
+            type: 'string',
+            format: 'date'
+          }
         }
       }
-    })
+    )
   );
-  t.true(
-    isDateControl(t.context.uischema, {
-      type: 'object',
-      properties: { foo: { type: 'string', format: 'date' } }
-    })
-  );
+  const schema = {
+    type: 'object',
+    properties: { foo: { type: 'string', format: 'date' } }
+  };
+  t.true(await isDateControl(t.context.uischema, schema, resolveRef(schema)));
 });
-test('test isEnumControl', t => {
-  t.false(isEnumControl(undefined, undefined));
-  t.false(isEnumControl(null, undefined));
-  t.false(isEnumControl({ type: 'Foo' }, undefined));
-  t.false(isEnumControl({ type: 'Control' }, undefined));
+test('test isEnumControl', async t => {
+  t.false(await isEnumControl(undefined, undefined));
+  t.false(await isEnumControl(null, undefined));
+  t.false(await isEnumControl({ type: 'Foo' }, undefined));
+  t.false(await isEnumControl({ type: 'Control' }, undefined));
   t.false(
-    isEnumControl(t.context.uischema, {
-      type: 'object',
-      properties: { foo: { type: 'string' } }
-    })
+    await isEnumControl(
+      t.context.uischema,
+      {
+        type: 'object',
+        properties: { foo: { type: 'string' } }
+      }
+    )
   );
   t.false(
-    isEnumControl(t.context.uischema, {
-      type: 'object',
-      properties: {
-        foo: {
-          type: 'string'
-        },
-        bar: {
-          type: 'string',
-          enum: ['a', 'b']
+    await isEnumControl(
+      t.context.uischema,
+      {
+        type: 'object',
+        properties: {
+          foo: {
+            type: 'string'
+          },
+          bar: {
+            type: 'string',
+            enum: ['a', 'b']
+          }
         }
       }
-    })
+    )
   );
+  const schema = {
+    type: 'object',
+    properties: { foo: { type: 'string', enum: ['a', 'b'] } }
+  };
+  t.true(await isEnumControl(t.context.uischema, schema, resolveRef(schema)));
+  const validSchema = {
+    type: 'object',
+    properties: { foo: { type: 'number', enum: [1, 2] } }
+  };
   t.true(
-    isEnumControl(t.context.uischema, {
-      type: 'object',
-      properties: { foo: { type: 'string', enum: ['a', 'b'] } }
-    })
+    await isEnumControl(
+      t.context.uischema,
+      validSchema,
+      resolveRef(validSchema)
+    )
   );
+  const validSchema2 = {
+    type: 'object',
+    properties: { foo: { const: '1.0' } }
+  };
   t.true(
-    isEnumControl(t.context.uischema, {
-      type: 'object',
-      properties: { foo: { type: 'number', enum: [1, 2] } }
-    })
-  );
-  t.true(
-    isEnumControl(t.context.uischema, {
-      type: 'object',
-      properties: { foo: { const: '1.0' } }
-    })
+    await isEnumControl(
+      t.context.uischema,
+      validSchema2,
+      resolveRef(validSchema2)
+    )
   );
 });
-test('test isIntegerControl', t => {
-  t.false(isIntegerControl(undefined, undefined));
-  t.false(isIntegerControl(null, undefined));
-  t.false(isIntegerControl({ type: 'Foo' }, undefined));
-  t.false(isIntegerControl({ type: 'Control' }, undefined));
+test('test isIntegerControl', async t => {
+  t.false(await isIntegerControl(undefined, undefined));
+  t.false(await isIntegerControl(null, undefined));
+  t.false(await isIntegerControl({ type: 'Foo' }, undefined));
+  t.false(await isIntegerControl({ type: 'Control' }, undefined));
   t.false(
-    isIntegerControl(t.context.uischema, {
-      type: 'object',
-      properties: { foo: { type: 'string' } }
-    })
-  );
-  t.false(
-    isIntegerControl(t.context.uischema, {
-      type: 'object',
-      properties: { foo: { type: 'string' }, bar: { type: 'integer' } }
-    })
-  );
-  t.true(
-    isIntegerControl(t.context.uischema, {
-      type: 'object',
-      properties: { foo: { type: 'integer' } }
-    })
-  );
-});
-test('test isNumberControl', t => {
-  t.false(isNumberControl(undefined, undefined));
-  t.false(isNumberControl(null, undefined));
-  t.false(isNumberControl({ type: 'Foo' }, undefined));
-  t.false(isNumberControl({ type: 'Control' }, undefined));
-  t.false(
-    isNumberControl(t.context.uischema, {
-      type: 'object',
-      properties: { foo: { type: 'string' } }
-    })
-  );
-  t.false(
-    isNumberControl(t.context.uischema, {
-      type: 'object',
-      properties: { foo: { type: 'string' }, bar: { type: 'number' } }
-    })
-  );
-  t.true(
-    isNumberControl(t.context.uischema, {
-      type: 'object',
-      properties: { foo: { type: 'number' } }
-    })
-  );
-});
-test('tester isStringControl', t => {
-  t.false(isStringControl(undefined, undefined));
-  t.false(isStringControl(null, undefined));
-  t.false(isStringControl({ type: 'Foo' }, undefined));
-  t.false(isStringControl({ type: 'Control' }, undefined));
-  t.false(
-    isStringControl(t.context.uischema, {
-      type: 'object',
-      properties: { foo: { type: 'number' } }
-    })
-  );
-  t.false(
-    isStringControl(t.context.uischema, {
-      type: 'object',
-      properties: { foo: { type: 'number' }, bar: { type: 'string' } }
-    })
-  );
-  t.true(
-    isStringControl(t.context.uischema, {
-      type: 'object',
-      properties: { foo: { type: 'string' } }
-    })
-  );
-});
-test('test isTimeControl', t => {
-  t.false(isTimeControl(undefined, undefined));
-  t.false(isTimeControl(null, undefined));
-  t.false(isTimeControl({ type: 'Foo' }, undefined));
-  t.false(isTimeControl({ type: 'Control' }, undefined));
-  t.false(
-    isTimeControl(t.context.uischema, {
-      type: 'object',
-      properties: { foo: { type: 'string' } }
-    })
-  );
-  t.false(
-    isTimeControl(t.context.uischema, {
-      type: 'object',
-      properties: {
-        foo: { type: 'string' },
-        bar: { type: 'string', format: 'time' }
+    await isIntegerControl(
+      t.context.uischema,
+      {
+        type: 'object',
+        properties: { foo: { type: 'string' } }
       }
-    })
+    )
   );
+  const incorrectSchema = {
+    type: 'object',
+    properties: { foo: { type: 'string' }, bar: { type: 'integer' } }
+  };
+  t.false(
+    await isIntegerControl(
+      t.context.uischema,
+      incorrectSchema,
+      resolveRef(incorrectSchema)
+    )
+  );
+  const schema = {
+    type: 'object',
+    properties: { foo: { type: 'integer' } }
+  };
   t.true(
-    isTimeControl(t.context.uischema, {
-      type: 'object',
-      properties: { foo: { type: 'string', format: 'time' } }
-    })
+    await isIntegerControl(t.context.uischema, schema, resolveRef(schema))
   );
 });
-test('tester isMultiLineControl', t => {
-  t.false(isMultiLineControl(undefined, undefined));
-  t.false(isMultiLineControl(null, undefined));
-  t.false(isMultiLineControl({ type: 'Foo' }, undefined));
-  t.false(isMultiLineControl({ type: 'Control' }, undefined));
+
+test('test isNumberControl', async t => {
+  t.false(await isNumberControl(undefined, undefined));
+  t.false(await isNumberControl(null, undefined));
+  t.false(await isNumberControl({ type: 'Foo' }, undefined));
+  t.false(await isNumberControl({ type: 'Control' }, undefined));
   t.false(
-    isMultiLineControl(t.context.uischema, {
-      type: 'object',
-      properties: { foo: { type: 'string' } }
-    })
+    await isNumberControl(
+      t.context.uischema,
+      {
+        type: 'object',
+        properties: { foo: { type: 'string' } }
+      }
+    )
+  );
+  const incorrectSchema = {
+    type: 'object',
+    properties: { foo: { type: 'string' }, bar: { type: 'number' } }
+  };
+  t.false(
+    await isNumberControl(
+      t.context.uischema,
+      incorrectSchema,
+      resolveRef(incorrectSchema)
+    )
+  );
+  const schema = {
+    type: 'object',
+    properties: { foo: { type: 'number' } }
+  };
+  t.true(await isNumberControl(t.context.uischema, schema, resolveRef(schema)));
+});
+test('tester isStringControl', async t => {
+  t.false(await isStringControl(undefined, undefined));
+  t.false(await isStringControl(null, undefined));
+  t.false(await isStringControl({ type: 'Foo' }, undefined));
+  t.false(await isStringControl({ type: 'Control' }, undefined));
+  t.false(
+    await isStringControl(
+      t.context.uischema,
+      {
+        type: 'object',
+        properties: { foo: { type: 'number' } }
+      }
+    )
+  );
+  const incorrectSchema = {
+    type: 'object',
+    properties: { foo: { type: 'number' }, bar: { type: 'string' } }
+  };
+  t.false(
+    await isStringControl(
+      t.context.uischema,
+      incorrectSchema,
+      resolveRef(incorrectSchema)
+    )
+  );
+  const schema = {
+    type: 'object',
+    properties: { foo: { type: 'string' } }
+  };
+  t.true(await isStringControl(t.context.uischema, schema, resolveRef(schema)));
+});
+test('test isTimeControl', async t => {
+  t.false(await isTimeControl(undefined, undefined));
+  t.false(await isTimeControl(null, undefined));
+  t.false(await isTimeControl({ type: 'Foo' }, undefined));
+  t.false(await isTimeControl({ type: 'Control' }, undefined));
+  t.false(
+    await isTimeControl(
+      t.context.uischema,
+      {
+        type: 'object',
+        properties: { foo: { type: 'string' } }
+      }
+    )
+  );
+  const incorrectSchema = {
+    type: 'object',
+    properties: {
+      foo: { type: 'string' },
+      bar: { type: 'string', format: 'time' }
+    }
+  };
+  t.false(
+    await isTimeControl(
+      t.context.uischema,
+      incorrectSchema,
+      resolveRef(incorrectSchema)
+    )
+  );
+  const schema = {
+    type: 'object',
+    properties: { foo: { type: 'string', format: 'time' } }
+  };
+  t.true(await isTimeControl(t.context.uischema, schema, resolveRef(schema)));
+});
+test('tester isMultiLineControl', async t => {
+  t.false(await isMultiLineControl(undefined, undefined));
+  t.false(await isMultiLineControl(null, undefined));
+  t.false(await isMultiLineControl({ type: 'Foo' }, undefined));
+  t.false(await isMultiLineControl({ type: 'Control' }, undefined));
+  t.false(
+    await isMultiLineControl(
+      t.context.uischema,
+      {
+        type: 'object',
+        properties: { foo: { type: 'string' } }
+      }
+    )
   );
   const control = t.context.uischema;
   control.options = { multi: true };
   t.true(
-    isMultiLineControl(control, {
-      type: 'object',
-      properties: { foo: { type: 'string' } }
-    })
+    await isMultiLineControl(
+      control,
+      {
+        type: 'object',
+        properties: { foo: { type: 'string' } }
+      }
+    )
   );
 });
 
-test('tester isObjectArrayWithNesting', t => {
+test('tester isObjectArrayWithNesting', async t => {
   const schema = {
     type: 'array',
     items: {
@@ -745,21 +872,61 @@ test('tester isObjectArrayWithNesting', t => {
     }
   };
 
-  t.false(isObjectArrayWithNesting(undefined, undefined));
-  t.false(isObjectArrayWithNesting(null, undefined));
-  t.false(isObjectArrayWithNesting({ type: 'Foo' }, undefined));
-  t.false(isObjectArrayWithNesting({ type: 'Control' }, undefined));
-  t.false(isObjectArrayWithNesting(uischema, schema));
-  t.true(isObjectArrayWithNesting(uischema, nestedSchema));
-  t.true(isObjectArrayWithNesting(uischema, nestedSchema2));
-  t.true(isObjectArrayWithNesting(uischema, nestedSchema3));
+  t.false(await isObjectArrayWithNesting(undefined, undefined));
+  t.false(await isObjectArrayWithNesting(null, undefined));
+  t.false(
+    await isObjectArrayWithNesting({ type: 'Foo' }, undefined)
+  );
+  t.false(
+    await isObjectArrayWithNesting({ type: 'Control' }, undefined)
+  );
+  t.false(await isObjectArrayWithNesting(uischema, schema));
+  t.true(
+    await isObjectArrayWithNesting(
+      uischema,
+      nestedSchema,
+      resolveRef(nestedSchema)
+    )
+  );
+  t.true(
+    await isObjectArrayWithNesting(
+      uischema,
+      nestedSchema2,
+      resolveRef(nestedSchema2)
+    )
+  );
+  t.true(
+    await isObjectArrayWithNesting(
+      uischema,
+      nestedSchema3,
+      resolveRef(nestedSchema3)
+    )
+  );
 
-  t.false(isObjectArrayWithNesting(uischemaOptions.default, schema));
-  t.true(isObjectArrayWithNesting(uischemaOptions.generate, schema));
-  t.true(isObjectArrayWithNesting(uischemaOptions.inline, schema));
+  t.false(
+    await isObjectArrayWithNesting(
+      uischemaOptions.default,
+      schema,
+      resolveRef(schema)
+    )
+  );
+  t.true(
+    await isObjectArrayWithNesting(
+      uischemaOptions.generate,
+      schema,
+      resolveRef(schema)
+    )
+  );
+  t.true(
+    await isObjectArrayWithNesting(
+      uischemaOptions.inline,
+      schema,
+      resolveRef(schema)
+    )
+  );
 });
 
-test('tester schemaSubPathMatches', t => {
+test('tester schemaSubPathMatches', async t => {
   const schema = {
     title: 'Things',
     type: 'array',
@@ -772,17 +939,19 @@ test('tester schemaSubPathMatches', t => {
     scope: '#'
   };
   t.true(
-    schemaSubPathMatches('items', items => items.type === 'number')(
+    await schemaSubPathMatches('items', async items => items.type === 'number')(
       uischema,
-      schema
+      schema,
+      resolveRef(schema)
     )
   );
 });
 
-test('tester not', t => {
+test('tester not', async t => {
+  const schema = {
+    type: 'boolean'
+  };
   t.false(
-    not(isBooleanControl)(t.context.uischema, {
-      type: 'boolean'
-    })
+    await not(isBooleanControl)(t.context.uischema, schema, resolveRef(schema))
   );
 });

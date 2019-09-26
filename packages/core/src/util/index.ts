@@ -27,7 +27,7 @@ import isArray from 'lodash/isArray';
 import includes from 'lodash/includes';
 import find from 'lodash/find';
 import { JsonSchema, Scopable, UISchemaElement } from '../';
-import { resolveData, resolveSchema } from './resolvers';
+import { resolveData, resolveLocalSchema } from './resolvers';
 import {
   compose as composePaths,
   composeWithUi,
@@ -101,23 +101,13 @@ const deriveTypes = (jsonSchema: JsonSchema): string[] => {
  * Convenience wrapper around resolveData and resolveSchema.
  */
 const Resolve: {
-  schema(
-    schema: JsonSchema,
-    schemaPath: string,
-    rootSchema?: JsonSchema
-  ): JsonSchema;
+  localSchema(schema: JsonSchema, schemaPath: string): JsonSchema;
   data(data: any, path: string): any;
 } = {
-  schema: resolveSchema,
+  localSchema: resolveLocalSchema,
   data: resolveData
 };
-export {
-  resolveData,
-  resolveSchema,
-  findRefs,
-  SchemaRef,
-  SchemaRefs
-} from './resolvers';
+export { resolveData, findRefs } from './resolvers';
 export { Resolve };
 
 // Paths --

@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import test from 'ava';
+import test, { skip } from 'ava';
 import { generateDefaultUISchema } from '../../src/generators/uischema';
 import {
   ControlElement,
@@ -31,7 +31,7 @@ import {
 } from '../../src/models/uischema';
 import { JsonSchema } from '../../src';
 
-test('generate ui schema for Control element by resolving refs', t => {
+skip('generate ui schema for Control element by resolving refs', t => {
   const schema: JsonSchema = {
     type: 'object',
     properties: {
@@ -174,7 +174,7 @@ test('generate ui schema for schema with unspecified object root', t => {
   t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
 
-test(`nested object not expanded`, t => {
+skip(`nested object not expanded`, t => {
   const schema = {
     type: 'object',
     properties: {
@@ -523,7 +523,7 @@ test('no separate control for oneOf in array', t => {
   t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
 
-test('generate control for nested oneOf', t => {
+skip('generate control for nested oneOf', t => {
   const schema: JsonSchema = {
     properties: {
       myarray: {

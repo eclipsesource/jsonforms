@@ -34,8 +34,8 @@ import {
   Layout,
   UISchemaElement
 } from '../models/uischema';
-import { resolveSchema } from '../util/resolvers';
 import { deriveTypes } from '../util';
+import { resolveLocalSchema } from '../util/resolvers';
 
 /**
  * Creates a new ILayout.
@@ -122,7 +122,7 @@ const generateUISchema = (
 ): UISchemaElement => {
   if (!isEmpty(jsonSchema) && jsonSchema.$ref !== undefined) {
     return generateUISchema(
-      resolveSchema(rootSchema, jsonSchema.$ref),
+      resolveLocalSchema(rootSchema, jsonSchema.$ref),
       schemaElements,
       currentRef,
       schemaName,
@@ -149,7 +149,7 @@ const generateUISchema = (
     return controlObject;
   }
 
-  if (currentRef === '#' && types[0] === 'object') {
+  if (types[0] === 'object') {
     const layout: Layout = createLayout(layoutType);
     schemaElements.push(layout);
 
@@ -164,7 +164,7 @@ const generateUISchema = (
         let value = jsonSchema.properties[propName];
         const ref = `${nextRef}/${propName}`;
         if (value.$ref !== undefined) {
-          value = resolveSchema(rootSchema, value.$ref);
+          value = resolveLocalSchema(rootSchema, value.$ref);
         }
         generateUISchema(
           value,

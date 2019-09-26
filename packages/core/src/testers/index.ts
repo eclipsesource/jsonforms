@@ -37,7 +37,6 @@ import {
   ControlElement,
   UISchemaElement
 } from '../models/uischema';
-import { resolveSchema } from '../util/resolvers';
 import { deriveTypes, hasType } from '../util';
 
 /**
@@ -46,18 +45,26 @@ import { deriveTypes, hasType } from '../util';
  * @type {number}
  */
 export const NOT_APPLICABLE = -1;
+
+type RefResolver = (ref: string) => Promise<JsonSchema>;
+
 /**
  * A tester is a function that receives an UI schema and a JSON schema and returns a boolean.
  */
-export type Tester = (uischema: UISchemaElement, schema: JsonSchema) => boolean;
+export type Tester = (
+  uischema: UISchemaElement,
+  schema: JsonSchema,
+  refResolver?: RefResolver
+) => Promise<boolean>;
 
 /**
  * A ranked tester associates a tester with a number.
  */
 export type RankedTester = (
   uischema: UISchemaElement,
-  schema: JsonSchema
-) => number;
+  schema: JsonSchema,
+  RefResolver?: RefResolver
+) => Promise<number>;
 
 export const isControl = (uischema: any): uischema is ControlElement =>
   !isEmpty(uischema) && uischema.scope !== undefined;
@@ -74,48 +81,52 @@ export const isControl = (uischema: any): uischema is ControlElement =>
  */
 export const schemaMatches = (
   predicate: (schema: JsonSchema) => boolean
-): Tester => (uischema: UISchemaElement, schema: JsonSchema): boolean => {
-  if (isEmpty(uischema) || !isControl(uischema)) {
-    return false;
-  }
-  if (isEmpty(schema)) {
-    return false;
-  }
-  const schemaPath = uischema.scope;
-  if (isEmpty(schemaPath)) {
-    return false;
-  }
-  let currentDataSchema = schema;
-  if (hasType(schema, 'object')) {
-    currentDataSchema = resolveSchema(schema, schemaPath);
-  }
-  if (currentDataSchema === undefined) {
-    return false;
-  }
+): Tester => async (
+  uischema: UISchemaElement,
+  schema: JsonSchema,
+  refResolver: RefResolver
+): Promise<boolean> => {
+    if (isEmpty(uischema) || !isControl(uischema) || refResolver === undefined) {
+      return false;
+    }
+    if (isEmpty(schema)) {
+      return false;
+    }
+    const schemaPath = uischema.scope;
+    if (isEmpty(schemaPath)) {
+      return false;
+    }
+    let currentDataSchema = schema;
+    currentDataSchema = await refResolver(schemaPath);
+    if (currentDataSchema === undefined) {
+      return false;
+    }
 
-  return predicate(currentDataSchema);
-};
+    return predicate(currentDataSchema);
+  };
 
 export const schemaSubPathMatches = (
   subPath: string,
-  predicate: (schema: JsonSchema) => boolean
-): Tester => (uischema: UISchemaElement, schema: JsonSchema): boolean => {
-  if (isEmpty(uischema) || !isControl(uischema)) {
-    return false;
-  }
-  const schemaPath = uischema.scope;
-  let currentDataSchema: JsonSchema = schema;
-  if (hasType(schema, 'object')) {
-    currentDataSchema = resolveSchema(schema, schemaPath);
-  }
-  currentDataSchema = get(currentDataSchema, subPath);
+  predicate: (schema: JsonSchema) => Promise<boolean>
+): Tester => async (
+  uischema: UISchemaElement,
+  schema: JsonSchema,
+  refResolver: RefResolver
+): Promise<boolean> => {
+    if (isEmpty(uischema) || !isControl(uischema) || refResolver === undefined) {
+      return false;
+    }
+    const schemaPath = uischema.scope;
+    let currentDataSchema: JsonSchema = schema;
+    currentDataSchema = await refResolver(schemaPath);
+    currentDataSchema = get(currentDataSchema, subPath);
 
-  if (currentDataSchema === undefined) {
-    return false;
-  }
+    if (currentDataSchema === undefined) {
+      return false;
+    }
 
-  return predicate(currentDataSchema);
-};
+    return await predicate(currentDataSchema);
+  };
 
 /**
  * Only applicable for Controls.
@@ -153,7 +164,8 @@ export const formatIs = (expectedFormat: string): Tester =>
  */
 export const uiTypeIs = (expected: string): Tester => (
   uischema: UISchemaElement
-): boolean => !isEmpty(uischema) && uischema.type === expected;
+): Promise<boolean> =>
+  Promise.resolve(!isEmpty(uischema) && uischema.type === expected);
 
 /**
  * Checks whether the given UI schema has an option with the given
@@ -163,9 +175,10 @@ export const uiTypeIs = (expected: string): Tester => (
  * @param {string} optionName the name of the option to check
  * @param {any} optionValue the expected value of the option
  */
-export const optionIs = (optionName: string, optionValue: any): Tester => (
-  uischema: UISchemaElement
-): boolean => {
+export const optionIs = (
+  optionName: string,
+  optionValue: any
+): Tester => async (uischema: UISchemaElement): Promise<boolean> => {
   if (isEmpty(uischema)) {
     return false;
   }
@@ -181,9 +194,9 @@ export const optionIs = (optionName: string, optionValue: any): Tester => (
  *
  * @param {string} expected the expected ending of the reference
  */
-export const scopeEndsWith = (expected: string): Tester => (
+export const scopeEndsWith = (expected: string): Tester => async (
   uischema: UISchemaElement
-): boolean => {
+): Promise<boolean> => {
   if (isEmpty(expected) || !isControl(uischema)) {
     return false;
   }
@@ -198,9 +211,9 @@ export const scopeEndsWith = (expected: string): Tester => (
  *
  * @param {string} expected the expected ending of the reference
  */
-export const scopeEndIs = (expected: string): Tester => (
+export const scopeEndIs = (expected: string): Tester => async (
   uischema: UISchemaElement
-): boolean => {
+): Promise<boolean> => {
   if (isEmpty(expected) || !isControl(uischema)) {
     return false;
   }
@@ -214,20 +227,32 @@ export const scopeEndIs = (expected: string): Tester => (
  *
  * @param {Array<Tester>} testers the testers to be composed
  */
-export const and = (...testers: Tester[]): Tester => (
+export const and = (...testers: Tester[]): Tester => async (
   uischema: UISchemaElement,
-  schema: JsonSchema
-) => testers.reduce((acc, tester) => acc && tester(uischema, schema), true);
+  schema: JsonSchema,
+  refResolver: RefResolver
+) => {
+  const results = await Promise.all(
+    testers.map(t => t(uischema, schema, refResolver))
+  );
+  return results.reduce((acc, res) => acc && res, true);
+};
 
 /**
  * A tester that allow composing other testers by || them.
  *
  * @param {Array<Tester>} testers the testers to be composed
  */
-export const or = (...testers: Tester[]): Tester => (
+export const or = (...testers: Tester[]): Tester => async (
   uischema: UISchemaElement,
-  schema: JsonSchema
-) => testers.reduce((acc, tester) => acc || tester(uischema, schema), false);
+  schema: JsonSchema,
+  refResolver: RefResolver
+) => {
+  const results = await Promise.all(
+    testers.map(t => t(uischema, schema, refResolver))
+  );
+  return results.reduce((acc, res) => acc || res, false);
+};
 /**
  * Create a ranked tester that will associate a number with a given tester, if the
  * latter returns true.
@@ -235,22 +260,24 @@ export const or = (...testers: Tester[]): Tester => (
  * @param {number} rank the rank to be returned in case the tester returns true
  * @param {Tester} tester a tester
  */
-export const rankWith = (rank: number, tester: Tester) => (
+export const rankWith = (rank: number, tester: Tester) => async (
   uischema: UISchemaElement,
-  schema: JsonSchema
-): number => {
-  if (tester(uischema, schema)) {
+  schema: JsonSchema,
+  refResolver: RefResolver
+): Promise<number> => {
+  const isApplicable = await tester(uischema, schema, refResolver);
+  if (isApplicable) {
     return rank;
   }
 
   return NOT_APPLICABLE;
 };
 
-export const withIncreasedRank = (by: number, rankedTester: RankedTester) => (
-  uischema: UISchemaElement,
-  schema: JsonSchema
-): number => {
-  const rank = rankedTester(uischema, schema);
+export const withIncreasedRank = (
+  by: number,
+  rankedTester: RankedTester
+) => async (uischema: UISchemaElement, schema: JsonSchema, refResolver: RefResolver): Promise<number> => {
+  const rank = await rankedTester(uischema, schema, refResolver);
   if (rank === NOT_APPLICABLE) {
     return NOT_APPLICABLE;
   }
@@ -360,12 +387,20 @@ export const isDateTimeControl = and(
  * Tests whether the given schema is an array of objects.
  * @type {Tester}
  */
-export const isObjectArray = and(
-  schemaMatches(
-    schema => hasType(schema, 'array') && !Array.isArray(schema.items) // we don't care about tuples
-  ),
-  schemaSubPathMatches('items', schema => hasType(schema, 'object'))
-);
+export const isObjectArray = async (uischema: UISchemaElement, rootSchema: JsonSchema, refResolver: RefResolver) =>
+  and(
+    schemaMatches(
+      // we don't care about tuples
+      schema => hasType(schema, 'array') && !Array.isArray(schema.items)
+    ),
+    schemaSubPathMatches('items', async itemsSchema => {
+      let resolvedSchema = itemsSchema;
+      if (itemsSchema.$ref) {
+        resolvedSchema = await refResolver(itemsSchema.$ref);
+      }
+      return hasType(resolvedSchema, 'object');
+    })
+  )(uischema, rootSchema, refResolver);
 
 /**
  * Tests whether the given UI schema is of type Control and if the schema
@@ -399,23 +434,32 @@ const traverse = (
   return false;
 };
 
-export const isObjectArrayWithNesting = (
+export const isObjectArrayWithNesting: Tester = async (
   uischema: UISchemaElement,
-  schema: JsonSchema
-): boolean => {
-  if (!uiTypeIs('Control')(uischema, schema)) {
+  schema: JsonSchema,
+  refResolver?: RefResolver
+): Promise<boolean> => {
+  const uischemaIsControl = await uiTypeIs('Control')(uischema, schema, refResolver);
+  if (!uischemaIsControl) {
+    return false;
+  }
+  if (schema === undefined || schema.$ref || refResolver === undefined) {
     return false;
   }
   const schemaPath = (uischema as ControlElement).scope;
-  const resolvedSchema = resolveSchema(schema, schemaPath);
+  const resolvedSchema = await refResolver(schemaPath);
   const wantedNestingByType: { [key: string]: number } = {
     object: 2,
     array: 1
   };
   if (has(resolvedSchema, 'items')) {
     // check if nested arrays
+    let itemsSchema: JsonSchema = resolvedSchema.items as JsonSchema;
+    if (itemsSchema.$ref) {
+      itemsSchema = await refResolver(itemsSchema.$ref);
+    }
     if (
-      traverse(resolvedSchema.items, val => {
+      traverse(itemsSchema, val => {
         if (val === schema) {
           return false;
         }
@@ -458,19 +502,27 @@ export const isArrayObjectControl = isObjectArrayControl;
  * is an array of a primitive type.
  * @type {Tester}
  */
-export const isPrimitiveArrayControl = and(
-  uiTypeIs('Control'),
-  schemaMatches(
-    schema => deriveTypes(schema).length !== 0 && !Array.isArray(schema.items) // we don't care about tuples
-  ),
-  schemaSubPathMatches('items', schema => {
-    const types = deriveTypes(schema);
-    return (
-      types.length === 1 &&
-      includes(['integer', 'number', 'boolean', 'string'], types[0])
-    );
-  })
-);
+export const isPrimitiveArrayControl = (
+  uischema: UISchemaElement,
+  rootSchema: JsonSchema,
+  refResolver: RefResolver
+) =>
+  and(
+    uiTypeIs('Control'),
+    schemaMatches(
+      schema => deriveTypes(schema).length !== 0 && !Array.isArray(schema.items) // we don't care about tuples
+    ),
+    schemaSubPathMatches('items', async itemsSchema => {
+      if (itemsSchema.$ref) {
+        itemsSchema = await refResolver(itemsSchema.$ref);
+      }
+      const types = deriveTypes(itemsSchema);
+      const result =
+        types.length === 1 &&
+        includes(['integer', 'number', 'boolean', 'string'], types[0]);
+      return result;
+    })
+  )(uischema, rootSchema, refResolver);
 
 /**
  * Tests whether a given UI schema is of type Control,
@@ -509,7 +561,7 @@ export const isCategory = (uischema: UISchemaElement): boolean =>
   uischema.type === 'Category';
 
 export const hasCategory = (categorization: Categorization): boolean => {
-  if (isEmpty(categorization.elements)) {
+  if (isEmpty(categorization) || isEmpty(categorization.elements)) {
     return false;
   }
   // all children of the categorization have to be categories
@@ -520,10 +572,11 @@ export const hasCategory = (categorization: Categorization): boolean => {
     .reduce((prev, curr) => prev && curr, true);
 };
 
-export const categorizationHasCategory = (uischema: UISchemaElement) =>
+export const categorizationHasCategory = async (uischema: UISchemaElement) =>
   hasCategory(uischema as Categorization);
 
-export const not = (tester: Tester): Tester => (
+export const not = (tester: Tester): Tester => async (
   uischema: UISchemaElement,
-  schema: JsonSchema
-) => !tester(uischema, schema);
+  schema: JsonSchema,
+  refResolver: RefResolver
+) => !tester(uischema, schema, refResolver);

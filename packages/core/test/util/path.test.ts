@@ -23,10 +23,22 @@
   THE SOFTWARE.
 */
 import test from 'ava';
+import RefParser from 'json-schema-ref-parser';
 import { JsonSchema } from '../../src';
 import { Resolve, toDataPath } from '../../src/util';
+import cloneDeep from 'lodash/cloneDeep';
 
-test('resolve ', t => {
+const resolveRef = (jsonSchema: any, pointer: string) => {
+  const parser = new RefParser();
+  return parser
+    .resolve(cloneDeep(jsonSchema), {
+      dereference: { circular: 'ignore' }
+    })
+    .then(refs => refs.get(pointer))
+    .catch(() => false);
+};
+
+test('resolve ', async t => {
   const schema: JsonSchema = {
     type: 'object',
     properties: {
@@ -35,7 +47,7 @@ test('resolve ', t => {
       }
     }
   };
-  t.deepEqual(Resolve.schema(schema, '#/properties/foo'), {
+  t.deepEqual(await resolveRef(schema, '#/properties/foo'), {
     type: 'integer'
   });
 });
@@ -66,26 +78,6 @@ test('toDataPath use of keywords', t => {
 test('toDataPath use of encoded paths', t => {
   const fooBar = encodeURIComponent('foo.bar');
   t.is(toDataPath(`#/properties/${fooBar}`), `${fooBar}`);
-});
-test('toDataPath relative with /', t => {
-  t.is(toDataPath('/properties/foo/properties/bar'), 'foo.bar');
-});
-test('toDataPath use of keywords relative with /', t => {
-  t.is(toDataPath('/properties/properties'), 'properties');
-});
-test('toDataPath use of encoded paths relative with /', t => {
-  const fooBar = encodeURIComponent('foo/bar');
-  t.is(toDataPath(`/properties/${fooBar}`), `${fooBar}`);
-});
-test('toDataPath relative without /', t => {
-  t.is(toDataPath('properties/foo/properties/bar'), 'foo.bar');
-});
-test('toDataPath use of keywords relative without /', t => {
-  t.is(toDataPath('properties/properties'), 'properties');
-});
-test('toDataPath use of encoded paths relative without /', t => {
-  const fooBar = encodeURIComponent('foo/bar');
-  t.is(toDataPath(`properties/${fooBar}`), `${fooBar}`);
 });
 test('resolve instance', t => {
   const instance = { foo: 123 };
@@ -119,7 +111,7 @@ test('resolve uninitiated instance', t => {
   );
   t.is(result, undefined);
 });
-test('resolve $ref', t => {
+test('resolve $ref', async t => {
   const schema: JsonSchema = {
     definitions: {
       foo: {
@@ -136,10 +128,10 @@ test('resolve $ref', t => {
       }
     }
   };
-  const result = Resolve.schema(schema, '#/properties/foos/items');
+  const result = await resolveRef(schema, '#/properties/foos/items');
   t.deepEqual(result, { type: 'string' });
 });
-test.failing('resolve $ref simple', t => {
+test.failing('resolve $ref simple', async t => {
   const schema: JsonSchema = {
     definitions: {
       foo: {
@@ -164,7 +156,7 @@ test.failing('resolve $ref simple', t => {
       }
     }
   };
-  const result = Resolve.schema(schema, '#/properties/foos/items');
+  const result = await resolveRef(schema, '#/properties/foos/items');
   t.deepEqual(result, {
     type: 'object',
     properties: {
@@ -178,7 +170,7 @@ test.failing('resolve $ref simple', t => {
   });
   t.not((schema.definitions.foo.properties.bar.items as JsonSchema).$ref, '#');
 });
-test.failing('resolve $ref complicated', t => {
+test.failing('resolve $ref complicated', async t => {
   const schema: JsonSchema = {
     definitions: {
       foo: {
@@ -214,7 +206,7 @@ test.failing('resolve $ref complicated', t => {
       }
     }
   };
-  const result = Resolve.schema(schema, '#/properties/foos/items');
+  const result = await resolveRef(schema, '#/properties/foos/items');
   t.deepEqual(result, {
     definitions: {
       foo2: {

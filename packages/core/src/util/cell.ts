@@ -25,7 +25,14 @@
 import isEmpty from 'lodash/isEmpty';
 import has from 'lodash/has';
 import union from 'lodash/union';
-import { getConfig, getData, getErrorAt, getSchema } from '../reducers';
+import RefParser from 'json-schema-ref-parser';
+import {
+  getConfig,
+  getData,
+  getErrorAt,
+  getRefParserOptions,
+  getSchema
+} from '../reducers';
 import {
   formatErrorMessage,
   isEnabled,
@@ -56,28 +63,28 @@ export interface StatePropsOfCell extends StatePropsOfScopedRenderer {
   rootSchema: JsonSchema;
 }
 
-export interface OwnPropsOfEnumCell extends OwnPropsOfCell, OwnPropsOfEnum {}
+export interface OwnPropsOfEnumCell extends OwnPropsOfCell, OwnPropsOfEnum { }
 
 /**
  * State props of a cell for enum cell
  */
 export interface StatePropsOfEnumCell
   extends StatePropsOfCell,
-    OwnPropsOfEnum {}
+  OwnPropsOfEnum { }
 
 /**
  * Props of an enum cell.
  */
 export interface EnumCellProps
   extends StatePropsOfEnumCell,
-    DispatchPropsOfControl {}
+  DispatchPropsOfControl { }
 
 export type DispatchPropsOfCell = DispatchPropsOfControl;
 
 /**
  * Props of a cell.
  */
-export interface CellProps extends StatePropsOfCell, DispatchPropsOfCell {}
+export interface CellProps extends StatePropsOfCell, DispatchPropsOfCell { }
 /**
  * Registers the given cell renderer when a JSON Forms store is created.
  * @param {RankedTester} tester
@@ -86,6 +93,7 @@ export interface CellProps extends StatePropsOfCell, DispatchPropsOfCell {}
  */
 export interface DispatchCellStateProps extends StatePropsOfCell {
   cells?: JsonFormsCellRendererRegistryEntry[];
+  refParserOptions: RefParser.Options;
 }
 
 /**
@@ -137,11 +145,12 @@ export const mapStateToDispatchCellProps = (
   return {
     ...props,
     ...otherOwnProps,
-    cells: state.jsonforms.cells || []
+    cells: state.jsonforms.cells || [],
+    refParserOptions: getRefParserOptions(state)
   };
 };
 
-export interface DispatchCellProps extends DispatchCellStateProps {}
+export interface DispatchCellProps extends DispatchCellStateProps { }
 
 /**
  * Default mapStateToCellProps for enum cell. Options is used for populating dropdown list

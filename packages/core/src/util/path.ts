@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import isEmpty from 'lodash/isEmpty';
-import range from 'lodash/range';
+import without from 'lodash/without';
 import { Scopable } from '../';
 
 export const compose = (path1: string, path2: string) => {
@@ -58,10 +58,30 @@ export const toDataPathSegments = (schemaPath: string): string[] => {
     .replace(/allOf\/[\d]\//g, '')
     .replace(/oneOf\/[\d]\//g, '');
   const segments = s.split('/');
+  // TODO: any keywords missing?
+  const keywords = ['properties', 'items', 'definitions', 'anyOf', 'allOf', 'oneOf'];
+  const instancePath: string[] = [];
+  let prevWord;
 
-  const startFromRoot = segments[0] === '#' || segments[0] === '';
-  const startIndex = startFromRoot ? 2 : 1;
-  return range(startIndex, segments.length, 2).map(idx => segments[idx]);
+  for (let i = 0; i < segments.length; i++) {
+    if (keywords.includes(prevWord)) {
+      prevWord = segments[i];
+      instancePath.push(segments[i]);
+      continue;
+    }
+    prevWord = segments[i];
+    if (without(keywords, 'properties').includes(segments[i])) {
+      // ignore next segment
+      i += 1;
+      continue;
+    }
+    if (keywords.includes(segments[i])) {
+      continue;
+    }
+    instancePath.push(segments[i]);
+  }
+
+  return instancePath.slice(1);
 };
 
 /**
@@ -77,16 +97,24 @@ export const toDataPath = (schemaPath: string): string => {
 };
 
 export const composeWithUi = (scopableUi: Scopable, path: string): string => {
-  const segments = toDataPathSegments(scopableUi.scope);
+  let segments = toDataPathSegments(scopableUi.scope);
 
   if (isEmpty(segments) && path === undefined) {
     return '';
   }
 
+  // TODO: this seems rather ugly, but what we're trying to do
+  // here is to join with any path that possibly contains
+  // indices
+  if (path !== undefined && segments[0] === path.split('.')[0]) {
+    segments = segments.slice(1);
+  }
+
   return isEmpty(segments)
     ? path
     : compose(
-        path,
-        segments.join('.')
-      );
+      path,
+      segments.join('.')
+    );
+
 };

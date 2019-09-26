@@ -43,9 +43,15 @@ export interface ReferenceSchemaMap {
 }
 
 const isObjectSchema = (schema: JsonSchema): boolean => {
+  if (schema === undefined) {
+    return false;
+  }
   return schema.properties !== undefined;
 };
 const isArraySchema = (schema: JsonSchema): boolean => {
+  if (schema === undefined) {
+    return false;
+  }
   return schema.type === 'array' && schema.items !== undefined;
 };
 
@@ -82,6 +88,9 @@ export const findAllRefs = (
   result: ReferenceSchemaMap = {},
   resolveTuples = false
 ): ReferenceSchemaMap => {
+  if (schema === undefined) {
+    return {};
+  }
   if (isObjectSchema(schema)) {
     Object.keys(schema.properties).forEach(key =>
       findAllRefs(schema.properties[key], result)
@@ -119,71 +128,20 @@ export const findAllRefs = (
   return result;
 };
 
-/**
- * Resolve the given schema path in order to obtain a subschema.
- * @param {JsonSchema} schema the root schema from which to start
- * @param {string} schemaPath the schema path to be resolved
- * @param {JsonSchema} rootSchema the actual root schema
- * @returns {JsonSchema} the resolved sub-schema
- */
-export const resolveSchema = (
+export const resolveLocalSchema = (
   schema: JsonSchema,
-  schemaPath: string,
-  rootSchema?: JsonSchema
+  schemaPath: string
 ): JsonSchema => {
-  if (isEmpty(schema)) {
-    return undefined;
-  }
   const validPathSegments = schemaPath.split('/');
   const invalidSegment = (pathSegment: string) =>
     pathSegment === '#' || pathSegment === undefined || pathSegment === '';
   const resultSchema = validPathSegments.reduce((curSchema, pathSegment) => {
-    curSchema =
-      curSchema === undefined || curSchema.$ref === undefined
-        ? curSchema
-        : resolveSchema(schema, curSchema.$ref);
     return invalidSegment(pathSegment)
       ? curSchema
       : get(curSchema, pathSegment);
   }, schema);
-  // TODO: because schema is already scoped we might end up with refs pointing
-  // outside of the current schema. It would be better if we'd always could deal
-  // with absolute paths here, so that we don't need to keep two different
-  // schemas around
-  if (resultSchema !== undefined && resultSchema.$ref !== undefined) {
-    try {
-      return retrieveResolvableSchema(schema, resultSchema.$ref);
-    } catch (e) {
-      return retrieveResolvableSchema(rootSchema, resultSchema.$ref);
-    }
-  }
-
   return resultSchema;
 };
-
-/**
- * Normalizes the schema and resolves the given ref.
- *
- * @param {JsonSchema} full the JSON schema to resolved the reference against
- * @param {string} reference the reference to be resolved
- * @returns {JsonSchema} the resolved sub-schema
- */
-// disable rule because resolve is mutually recursive
-// tslint:disable:only-arrow-functions
-function retrieveResolvableSchema(
-  full: JsonSchema,
-  reference: string
-): JsonSchema {
-  // tslint:enable:only-arrow-functions
-  const child = resolveSchema(full, reference);
-  const allRefs = findAllRefs(child);
-  const innerSelfReference = allRefs[reference];
-  if (innerSelfReference !== undefined) {
-    innerSelfReference.$ref = '#';
-  }
-
-  return child;
-}
 
 // copied and adapted from JsonRefs
 
@@ -205,7 +163,7 @@ export const findRefs = (obj: JsonSchema): SchemaRefs => {
   const refs: SchemaRefs = {};
 
   // Walk the document (or sub document) and find all JSON References
-  walk([], obj, [], ({}, node: any, path: any) => {
+  walk([], obj, [], ({ }, node: any, path: any) => {
     let processChildren = true;
     let refDetails;
     let refPtr;

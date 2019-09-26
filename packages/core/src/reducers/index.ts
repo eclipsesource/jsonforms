@@ -122,7 +122,7 @@ export const findUISchema = (
     if (typeof control.options.detail === 'string') {
       if (control.options.detail.toUpperCase() === 'GENERATE') {
         // force generation of uischema
-        return Generate.uiSchema(schema, fallbackLayoutType);
+        return Generate.uiSchema(schema, fallbackLayoutType, schemaPath);
       }
     } else if (typeof control.options.detail === 'object') {
       // check if detail is a valid uischema
@@ -137,7 +137,7 @@ export const findUISchema = (
   // default
   const uiSchema = findMatchingUISchema(uischemas)(schema, schemaPath, path);
   if (uiSchema === undefined) {
-    return Generate.uiSchema(schema, fallbackLayoutType, '#', rootSchema);
+    return Generate.uiSchema(schema, fallbackLayoutType, schemaPath, rootSchema);
   }
   return uiSchema;
 };

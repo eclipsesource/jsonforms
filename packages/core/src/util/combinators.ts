@@ -25,8 +25,8 @@
 
 import { JsonSchema } from '../models/jsonSchema';
 import { ControlElement, UISchemaElement } from '../models/uischema';
-import { resolveSchema } from './resolvers';
 import { findUISchema, UISchemaTester } from '../reducers';
+import { Ajv, ErrorObject } from 'ajv';
 
 export interface CombinatorSubSchemaRenderInfo {
   schema: JsonSchema;
@@ -44,26 +44,8 @@ const createLabel = (
   if (subSchema.title) {
     return subSchema.title;
   } else {
-    return keyword + '-' + subSchemaIndex;
+    return `${keyword}-${subSchemaIndex}`;
   }
-};
-
-export const resolveSubSchemas = (
-  schema: JsonSchema,
-  rootSchema: JsonSchema,
-  keyword: CombinatorKeyword
-) => {
-  // resolve any $refs, otherwise the generated UI schema can't match the schema???
-  const schemas = schema[keyword] as any[];
-  if (schemas.findIndex(e => e.$ref !== undefined) !== -1) {
-    return {
-      ...schema,
-      [keyword]: (schema[keyword] as any[]).map(e =>
-        e.$ref ? resolveSchema(rootSchema, e.$ref) : e
-      )
-    };
-  }
-  return schema;
 };
 
 export const createCombinatorRenderInfos = (
@@ -73,13 +55,13 @@ export const createCombinatorRenderInfos = (
   control: ControlElement,
   path: string,
   uischemas: { tester: UISchemaTester; uischema: UISchemaElement }[]
-): CombinatorSubSchemaRenderInfo[] =>
-  combinatorSubSchemas.map((subSchema, subSchemaIndex) => ({
+): CombinatorSubSchemaRenderInfo[] => {
+  return combinatorSubSchemas.map((subSchema, subSchemaIndex) => ({
     schema: subSchema,
     uischema: findUISchema(
       uischemas,
       subSchema,
-      control.scope,
+      `${control.scope}/${keyword}/${subSchemaIndex}`,
       path,
       undefined,
       control,
@@ -87,3 +69,48 @@ export const createCombinatorRenderInfos = (
     ),
     label: createLabel(subSchema, subSchemaIndex, keyword)
   }));
+};
+
+export const findApplicableSchema = async (
+  ajv: Ajv,
+  data: any,
+  subschemas: JsonSchema[],
+  refResolver: any
+): Promise<number> => {
+  let indexOfFittingSchema = 0;
+  const structuralKeywords = [
+    'required',
+    'additionalProperties',
+    'type',
+    'enum'
+  ];
+  const dataIsValid = (errors: ErrorObject[]): boolean => {
+    return (
+      !errors ||
+      errors.length === 0 ||
+      !errors.find(e => structuralKeywords.indexOf(e.keyword) !== -1)
+    );
+  };
+  try {
+    const resolvedSubSchemas = await Promise.all(
+      subschemas.map(sub => {
+        if (sub.$ref) {
+          return refResolver(sub.$ref);
+        }
+        return sub;
+      })
+    );
+    for (let i = 0; i < resolvedSubSchemas.length; i++) {
+      const valFn = ajv.compile(resolvedSubSchemas[i]);
+      valFn(data);
+      if (dataIsValid(valFn.errors)) {
+        indexOfFittingSchema = i;
+        break;
+      }
+    }
+  } catch (error) {
+    console.log(error);
+  }
+
+  return indexOfFittingSchema;
+};
