@@ -41,6 +41,7 @@ import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { JsonFormsReduxContext } from '@jsonforms/react';
 import { ListItem } from '@material-ui/core';
+import { waitForScopedRenderer, resolveRef } from '../util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -120,7 +121,7 @@ const nestedSchema2 = {
 };
 
 describe('Material list with detail tester', () => {
-  it('should only be applicable for intermediate array or when containing proper options', () => {
+  it('should only be applicable for intermediate array or when containing proper options', async () => {
     const correctUISchema = {
       type: 'ListWithDetail',
       scope: '#'
@@ -131,13 +132,13 @@ describe('Material list with detail tester', () => {
         type: 'string'
       }
     };
-    expect(materialListWithDetailTester(uischema, schema)).toBe(-1);
-    expect(materialListWithDetailTester(correctUISchema, wrongSchema)).toBe(-1);
-    expect(materialListWithDetailTester(correctUISchema, schema)).toBe(4);
-    expect(materialListWithDetailTester(correctUISchema, nestedSchema)).toBe(
+    expect(await materialListWithDetailTester(uischema, schema, resolveRef(schema))).toBe(-1);
+    expect(await materialListWithDetailTester(correctUISchema, wrongSchema, resolveRef(wrongSchema))).toBe(-1);
+    expect(await materialListWithDetailTester(correctUISchema, schema, resolveRef(schema))).toBe(4);
+    expect(await materialListWithDetailTester(correctUISchema, nestedSchema, resolveRef(nestedSchema))).toBe(
       -1
     );
-    expect(materialListWithDetailTester(correctUISchema, nestedSchema2)).toBe(
+    expect(await materialListWithDetailTester(correctUISchema, nestedSchema2, resolveRef(nestedSchema2))).toBe(
       4
     );
   });
@@ -195,7 +196,7 @@ describe('Material list with detail renderer', () => {
     expect(controls).toHaveLength(0);
   });
 
-  it('select renders corresponding data in detail', () => {
+  it('select renders corresponding data in detail', async () => {
     const store = initJsonFormsStore();
     wrapper = mount(
       <Provider store={store}>
@@ -205,8 +206,10 @@ describe('Material list with detail renderer', () => {
       </Provider>
     );
 
+    await waitForScopedRenderer(wrapper);
     const liSecond = wrapper.find('div[role="button"]').at(1);
     liSecond.simulate('click');
+    await waitForScopedRenderer(wrapper);
 
     const controls = wrapper.find('input');
     expect(controls).toHaveLength(2);
@@ -257,7 +260,7 @@ describe('Material list with detail renderer', () => {
     expect(listTitle.text()).toBe('My awesome title');
   });
 
-  it('choose appropriate labels in nested schema', () => {
+  it('choose appropriate labels in nested schema', async () => {
     const store = initJsonFormsStore();
     wrapper = mount(
       <Provider store={store}>
@@ -267,8 +270,10 @@ describe('Material list with detail renderer', () => {
       </Provider>
     );
 
+    await waitForScopedRenderer(wrapper);
     const liSecond = wrapper.find('div[role="button"]').at(1);
     liSecond.simulate('click');
+    await waitForScopedRenderer(wrapper);
 
     const labels = wrapper.find('label');
     expect(labels).toHaveLength(2);

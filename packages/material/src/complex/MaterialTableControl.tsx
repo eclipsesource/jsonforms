@@ -85,6 +85,7 @@ const generateCells = (
   Cell: React.ComponentType<OwnPropsOfNonEmptyCell | TableHeaderCellProps>,
   schema: JsonSchema,
   rowPath: string,
+  schemaPath: string,
   enabled: boolean
 ) => {
   if (schema.type === 'object') {
@@ -98,6 +99,7 @@ const generateCells = (
         schema,
         rowPath,
         cellPath,
+        schemaPath,
         enabled
       };
 
@@ -109,7 +111,8 @@ const generateCells = (
       schema,
       rowPath,
       cellPath: rowPath,
-      enabled
+      enabled,
+      schemaPath
     };
     return <Cell key={rowPath} {...props} />;
   }
@@ -149,13 +152,13 @@ interface NonEmptyCellProps extends OwnPropsOfNonEmptyCell {
   rootSchema: JsonSchema;
   errors: string;
   path: string;
-  enabled: boolean;
 }
 interface OwnPropsOfNonEmptyCell {
   rowPath: string;
   propName?: string;
   schema: JsonSchema;
   enabled: boolean;
+  schemaPath?: string;
 }
 const ctxToNonEmptyCellProps = (
   ctx: JsonFormsStateContext,
@@ -194,7 +197,6 @@ const NonEmptyCell = (ownProps: OwnPropsOfNonEmptyCell) => {
     path,
     propName,
     schema,
-    rootSchema,
     errors,
     enabled
   } = ctxToNonEmptyCellProps(ctx, ownProps);
@@ -205,23 +207,19 @@ const NonEmptyCell = (ownProps: OwnPropsOfNonEmptyCell) => {
     <NoBorderTableCell>
       {schema.properties ? (
         <DispatchCell
-          schema={Resolve.schema(
-            schema,
-            `#/properties/${propName}`,
-            rootSchema
-          )}
-          uischema={controlWithoutLabel(`#/properties/${propName}`)}
+          schema={Resolve.localSchema(schema, `#/properties/${propName}`)}
+          uischema={controlWithoutLabel(`${ownProps.schemaPath}/properties/${propName}`)}
           path={path}
           enabled={enabled}
         />
       ) : (
-        <DispatchCell
-          schema={schema}
-          uischema={controlWithoutLabel('#')}
-          path={path}
-          enabled={enabled}
-        />
-      )}
+          <DispatchCell
+            schema={schema}
+            uischema={controlWithoutLabel(ownProps.schemaPath)}
+            path={path}
+            enabled={enabled}
+          />
+        )}
       <FormHelperText error={!isValid}>{!isValid && errors}</FormHelperText>
     </NoBorderTableCell>
   );
@@ -237,6 +235,7 @@ interface NonEmptyRowProps {
   enableDown: boolean;
   showSortButtons: boolean;
   enabled: boolean;
+  schemaPath: string;
 }
 
 const NonEmptyRow = React.memo(
@@ -250,11 +249,12 @@ const NonEmptyRow = React.memo(
     enableUp,
     enableDown,
     showSortButtons,
+    schemaPath,
     enabled
   }: NonEmptyRowProps & WithDeleteDialogSupport) => {
     return (
       <TableRow key={childPath} hover>
-        {generateCells(NonEmptyCell, schema, childPath, enabled)}
+        {generateCells(NonEmptyCell, schema, childPath, schemaPath, enabled)}
         {enabled ? (
           <NoBorderTableCell
             style={showSortButtons ? styles.fixedCell : styles.fixedCellSmall}
@@ -298,7 +298,7 @@ const NonEmptyRow = React.memo(
             </Grid>
           </NoBorderTableCell>
         ) : null}
-      </TableRow>
+      </TableRow >
     );
   }
 );
@@ -352,6 +352,7 @@ const TableRows = ({
             enableDown={index !== data - 1}
             showSortButtons={appliedUiSchemaOptions.showSortButtons}
             enabled={enabled}
+            schemaPath={uischema.scope + '/items'}
           />
         );
       })}
@@ -362,7 +363,7 @@ const TableRows = ({
 export class MaterialTableControl extends React.Component<
   ArrayLayoutProps & WithDeleteDialogSupport,
   any
-> {
+  > {
   addItem = (path: string, value: any) => this.props.addItem(path, value);
   render() {
     const {
@@ -380,7 +381,7 @@ export class MaterialTableControl extends React.Component<
     const controlElement = uischema as ControlElement;
     const isObjectSchema = schema.type === 'object';
     const headerCells: any = isObjectSchema
-      ? generateCells(TableHeaderCell, schema, path, enabled)
+      ? generateCells(TableHeaderCell, schema, path, '', enabled)
       : undefined;
 
     return (

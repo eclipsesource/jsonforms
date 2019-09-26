@@ -26,7 +26,7 @@ import './MatchMediaMock';
 import * as React from 'react';
 import {
   Actions,
-  ControlElement,
+  ControlElement, 
   getData,
   jsonformsReducer,
   JsonFormsState,
@@ -34,9 +34,7 @@ import {
   NOT_APPLICABLE,
   UISchemaElement
 } from '@jsonforms/core';
-import BooleanCell, {
-  materialBooleanCellTester
-} from '../../src/cells/MaterialBooleanCell';
+import BooleanCell, { materialBooleanCellTester } from '../../src/cells/MaterialBooleanCell';
 import { Provider } from 'react-redux';
 import * as ReactDOM from 'react-dom';
 import { combineReducers, createStore, Store } from 'redux';
@@ -45,14 +43,11 @@ import { materialRenderers } from '../../src';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { JsonFormsReduxContext } from '@jsonforms/react';
+import { resolveRef } from '../util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-export const initJsonFormsStore = (
-  testData: any,
-  testSchema: JsonSchema,
-  testUiSchema: UISchemaElement
-): Store<JsonFormsState> => {
+export const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema: UISchemaElement): Store<JsonFormsState> => {
   const s: JsonFormsState = {
     jsonforms: {
       renderers: materialRenderers
@@ -74,58 +69,56 @@ const uischema: ControlElement = {
 };
 
 describe('Material boolean cell tester', () => {
+
   const control: ControlElement = {
     type: 'Control',
-    scope: '#/properties/foo'
+    scope: '#/properties/foo',
   };
 
-  it('should fail', () => {
-    expect(materialBooleanCellTester(undefined, undefined)).toBe(
-      NOT_APPLICABLE
-    );
-    expect(materialBooleanCellTester(null, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialBooleanCellTester({ type: 'Foo' }, undefined)).toBe(
-      NOT_APPLICABLE
-    );
-    expect(materialBooleanCellTester({ type: 'Control' }, undefined)).toBe(
-      NOT_APPLICABLE
-    );
-    expect(
-      materialBooleanCellTester(control, {
-        type: 'object',
-        properties: { foo: { type: 'string' } }
-      })
-    ).toBe(NOT_APPLICABLE);
-    expect(
-      materialBooleanCellTester(control, {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'string'
-          },
-          bar: {
-            type: 'boolean'
-          }
-        }
-      })
+  it('should fail', async () => {
+    expect(await materialBooleanCellTester(undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(await materialBooleanCellTester(null, undefined)).toBe(NOT_APPLICABLE);
+    expect(await materialBooleanCellTester({ type: 'Foo' }, undefined)).toBe(NOT_APPLICABLE);
+    expect(await materialBooleanCellTester({ type: 'Control' }, undefined)).toBe(NOT_APPLICABLE);
+  });
+
+  it('should fail 2', async () => {
+    const jsonSchema = { type: 'object', properties: { foo: { type: 'string' } } }
+    expect(await
+      materialBooleanCellTester(control, jsonSchema, resolveRef(jsonSchema))
     ).toBe(NOT_APPLICABLE);
   });
 
-  it('should succeed', () => {
-    expect(
-      materialBooleanCellTester(control, {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'boolean'
-          }
+  it('should fail 2', async () => {
+    const jsonSchema = {
+      type: 'object',
+      properties: {
+        foo: {
+          type: 'string'
+        },
+        bar: {
+          type: 'boolean'
         }
-      })
-    ).toBe(2);
+      }
+    };
+    expect(await materialBooleanCellTester(control, jsonSchema, resolveRef(jsonSchema))).toBe(NOT_APPLICABLE);
+  });
+
+  it('should succeed', async () => {
+    const jsonSchema = {
+      type: 'object',
+      properties: {
+        foo: {
+          type: 'boolean'
+        }
+      }
+    };
+    expect(await materialBooleanCellTester(control, jsonSchema, resolveRef(jsonSchema))).toBe(2);
   });
 });
 
 describe('Material boolean cell', () => {
+
   let wrapper: ReactWrapper;
 
   afterEach(() => wrapper.unmount());
@@ -150,7 +143,11 @@ describe('Material boolean cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <BooleanCell schema={schema} uischema={control} path='foo' />
+          <BooleanCell
+            schema={schema}
+            uischema={control}
+            path='foo'
+          />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -170,7 +167,11 @@ describe('Material boolean cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <BooleanCell schema={schema} uischema={control} path='foo' />
+          <BooleanCell
+            schema={schema}
+            uischema={control}
+            path='foo'
+          />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -181,13 +182,17 @@ describe('Material boolean cell', () => {
   it('should not autofocus by default', () => {
     const control: ControlElement = {
       type: 'Control',
-      scope: '#/properties/foo'
+      scope: '#/properties/foo',
     };
     const store = initJsonFormsStore(data, schema, control);
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <BooleanCell schema={schema} uischema={uischema} path='foo' />
+          <BooleanCell
+            schema={schema}
+            uischema={uischema}
+            path='foo'
+          />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -200,7 +205,11 @@ describe('Material boolean cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <BooleanCell schema={schema} uischema={uischema} path='foo' />
+          <BooleanCell
+            schema={schema}
+            uischema={uischema}
+            path='foo'
+          />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -215,7 +224,11 @@ describe('Material boolean cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <BooleanCell schema={schema} uischema={uischema} path='foo' />
+          <BooleanCell
+            schema={schema}
+            uischema={uischema}
+            path='foo'
+          />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -230,7 +243,11 @@ describe('Material boolean cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <BooleanCell schema={schema} uischema={uischema} path='foo' />
+          <BooleanCell
+            schema={schema}
+            uischema={uischema}
+            path='foo'
+          />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -246,7 +263,11 @@ describe('Material boolean cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <BooleanCell schema={schema} uischema={uischema} path='foo' />
+          <BooleanCell
+            schema={schema}
+            uischema={uischema}
+            path='foo'
+          />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -261,7 +282,11 @@ describe('Material boolean cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <BooleanCell schema={schema} uischema={uischema} path='foo' />
+          <BooleanCell
+            schema={schema}
+            uischema={uischema}
+            path='foo'
+          />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -276,7 +301,11 @@ describe('Material boolean cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <BooleanCell schema={schema} uischema={uischema} path='foo' />
+          <BooleanCell
+            schema={schema}
+            uischema={uischema}
+            path='foo'
+          />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -290,9 +319,13 @@ describe('Material boolean cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <BooleanCell schema={schema} uischema={uischema} path='foo' />
+          <BooleanCell
+            schema={schema}
+            uischema={uischema}
+            path='foo'
+          />
         </JsonFormsReduxContext>
-      </Provider>
+      </Provider>,
     );
     const input = wrapper.find('input').first();
     store.dispatch(Actions.update(null, () => false));
@@ -304,7 +337,11 @@ describe('Material boolean cell', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <BooleanCell schema={schema} uischema={uischema} path='foo' />
+          <BooleanCell
+            schema={schema}
+            uischema={uischema}
+            path='foo'
+          />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -334,7 +371,11 @@ describe('Material boolean cell', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <BooleanCell schema={schema} uischema={uischema} path='foo' />
+        <BooleanCell
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+        />
       </Provider>
     );
     const input = wrapper.find('input').first();
@@ -345,7 +386,12 @@ describe('Material boolean cell', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <BooleanCell schema={schema} uischema={uischema} path='foo' id='myid' />
+        <BooleanCell
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+          id='myid'
+        />
       </Provider>
     );
     const input = wrapper.find('input');

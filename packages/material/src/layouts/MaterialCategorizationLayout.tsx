@@ -42,9 +42,12 @@ import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from '../util/lay
 
 export const isSingleLevelCategorization: Tester = and(
   uiTypeIs('Categorization'),
-  (uischema: UISchemaElement): boolean => {
-    const categorization = uischema as Categorization;
+  async (uischema: UISchemaElement): Promise<boolean> => {
+    if (uischema === undefined || uischema === null) {
+      return false;
+    }
 
+    const categorization = uischema as Categorization;
     return categorization.elements && categorization.elements.reduce((acc, e) => acc && e.type === 'Category', true);
   }
 );

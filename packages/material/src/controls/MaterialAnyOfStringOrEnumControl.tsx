@@ -102,13 +102,14 @@ const MuiAutocompleteInputText = (props: EnumCellProps & WithClassname) => {
 export class MaterialAnyOfStringOrEnumControl extends Control<
   ControlProps,
   ControlState
-> {
+  > {
   render() {
     return (
       <MaterialInputControl {...this.props} input={MuiAutocompleteInputText} />
     );
   }
 }
+
 const hasEnumAndText = (schemas: JsonSchema[]) => {
   // idea: map to type,enum and check that all types are string and at least one item is of type enum,
   const enumSchema = findEnumSchema(schemas);

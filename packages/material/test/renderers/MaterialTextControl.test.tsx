@@ -52,7 +52,7 @@ const createMaterialTextControl = (props: ControlProps) => {
 
 const defaultControlProps = (): ControlProps => {
   return {
-    handleChange: () => {},
+    handleChange: () => { },
     enabled: true,
     visible: true,
     path: 'path',
@@ -80,8 +80,7 @@ describe('Material text control', () => {
       ...props,
       input: MuiInputText
     });
-
-    expect(wrapper.find('input').props().id).toEqual(`${props.id}-input`);
+    expect(wrapper.find("input").props().id).toEqual(`${props.id}-input`);
   });
 
   it('allows adding of mui input props', () => {
@@ -90,6 +89,6 @@ describe('Material text control', () => {
       muiInputProps: { spellCheck: false }
     };
     wrapper = mount(createMaterialTextControl(props));
-    expect(wrapper.find('input').props().spellCheck).toEqual(false);
+    expect(wrapper.find('input').props().spellCheck).toEqual(false)
   });
 });

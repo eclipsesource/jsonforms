@@ -26,17 +26,14 @@ import './MatchMediaMock';
 import React from 'react';
 import {
   Actions,
-  ControlElement,
-  getData,
+  ControlElement, getData,
   jsonformsReducer,
   JsonFormsState,
   JsonSchema,
   NOT_APPLICABLE,
   UISchemaElement
 } from '@jsonforms/core';
-import MaterialDateTimeControl, {
-  materialDateTimeControlTester
-} from '../../src/controls/MaterialDateTimeControl';
+import MaterialDateTimeControl, { materialDateTimeControlTester } from '../../src/controls/MaterialDateTimeControl';
 import { Provider } from 'react-redux';
 import moment from 'moment';
 import { combineReducers, createStore, Store } from 'redux';
@@ -45,29 +42,26 @@ import { materialRenderers } from '../../src';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { JsonFormsReduxContext } from '@jsonforms/react';
+import { resolveRef } from '../util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-const data = { foo: moment('1980-04-04 13:37').format() };
+const data = { 'foo': moment('1980-04-04 13:37').format() };
 const schema = {
   type: 'object',
   properties: {
     foo: {
       type: 'string',
       format: 'date-time'
-    }
-  }
+    },
+  },
 };
 const uischema: ControlElement = {
   type: 'Control',
-  scope: '#/properties/foo'
+  scope: '#/properties/foo',
 };
 
-const initJsonFormsStore = (
-  testData: any,
-  testSchema: JsonSchema,
-  testUiSchema: UISchemaElement
-): Store<JsonFormsState> => {
+const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema: UISchemaElement): Store<JsonFormsState> => {
   const s: JsonFormsState = {
     jsonforms: {
       renderers: materialRenderers
@@ -80,55 +74,56 @@ const initJsonFormsStore = (
 };
 
 describe('Material date time control tester', () => {
-  it('should fail', () => {
-    expect(materialDateTimeControlTester(undefined, undefined)).toBe(
-      NOT_APPLICABLE
-    );
-    expect(materialDateTimeControlTester(null, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialDateTimeControlTester({ type: 'Foo' }, undefined)).toBe(
-      NOT_APPLICABLE
-    );
-    expect(materialDateTimeControlTester({ type: 'Control' }, undefined)).toBe(
-      NOT_APPLICABLE
-    );
-    expect(
-      materialDateTimeControlTester(uischema, {
-        type: 'object',
-        properties: {
-          foo: { type: 'string' }
-        }
-      })
-    ).toBe(NOT_APPLICABLE);
-    expect(
-      materialDateTimeControlTester(uischema, {
-        type: 'object',
-        properties: {
-          foo: { type: 'string' },
-          bar: {
-            type: 'string',
-            format: 'date-time'
-          }
-        }
-      })
-    ).toBe(NOT_APPLICABLE);
+
+  it('should fail', async () => {
+    expect(await materialDateTimeControlTester(undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(await materialDateTimeControlTester(null, undefined)).toBe(NOT_APPLICABLE);
+    expect(await materialDateTimeControlTester({ type: 'Foo' }, undefined)).toBe(NOT_APPLICABLE);
+    expect(await materialDateTimeControlTester({ type: 'Control' }, undefined)).toBe(NOT_APPLICABLE);
   });
 
-  it('should succeed', () => {
+  it('should fail 2', async () => {
+    const jsonSchema = {
+      type: 'object',
+      properties: {
+        foo: { type: 'string' },
+      },
+    };
+    expect(await materialDateTimeControlTester(uischema, jsonSchema, resolveRef(jsonSchema))).toBe(NOT_APPLICABLE);
+  });
+
+  it('should fail 3', async () => {
+    const jsonSchema = {
+      type: 'object',
+      properties: {
+        foo: { type: 'string' },
+        bar: {
+          type: 'string',
+          format: 'date-time',
+        },
+      },
+    };
+    expect(await materialDateTimeControlTester(uischema, jsonSchema, resolveRef(jsonSchema))).toBe(NOT_APPLICABLE);
+  });
+
+  it('should succeed', async () => {
+    const jsonSchema = {
+      type: 'object',
+      properties: {
+        foo: {
+          type: 'string',
+          format: 'date-time',
+        },
+      },
+    };
     expect(
-      materialDateTimeControlTester(uischema, {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'string',
-            format: 'date-time'
-          }
-        }
-      })
+      await materialDateTimeControlTester(uischema, jsonSchema, resolveRef(jsonSchema))
     ).toBe(2);
   });
 });
 
 describe('Material date time control', () => {
+
   let wrapper: ReactWrapper;
 
   afterEach(() => {
@@ -169,7 +164,7 @@ describe('Material date time control', () => {
         <JsonFormsReduxContext>
           <MaterialDateTimeControl schema={schema} uischema={uischema} />
         </JsonFormsReduxContext>
-      </Provider>
+      </Provider>,
     );
     const input = wrapper.find('input').first();
     expect(input.props().autoFocus).toBeFalsy();
@@ -186,7 +181,7 @@ describe('Material date time control', () => {
         <JsonFormsReduxContext>
           <MaterialDateTimeControl schema={schema} uischema={control} />
         </JsonFormsReduxContext>
-      </Provider>
+      </Provider>,
     );
     const input = wrapper.find('input').first();
     expect(input.props().autoFocus).toBeFalsy();
@@ -214,13 +209,11 @@ describe('Material date time control', () => {
         <JsonFormsReduxContext>
           <MaterialDateTimeControl schema={schema} uischema={uischema} />
         </JsonFormsReduxContext>
-      </Provider>
+      </Provider>,
     );
     const input = wrapper.find('input').first();
     input.simulate('change', { target: { value: '04/12/1961 8:15 pm' } });
-    expect(getData(store.getState()).foo).toBe(
-      moment('1961-04-12 20:15').format()
-    );
+    expect(getData(store.getState()).foo).toBe(moment('1961-04-12 20:15').format());
   });
 
   it('should update via action', () => {
@@ -230,12 +223,9 @@ describe('Material date time control', () => {
         <JsonFormsReduxContext>
           <MaterialDateTimeControl schema={schema} uischema={uischema} />
         </JsonFormsReduxContext>
-      </Provider>
+      </Provider>,
     );
-    store.dispatch(
-      Actions.update('foo', () => moment('1961-04-12 20:15').format())
-    );
-    // TODO get rid of forceUpdate when possible
+    store.dispatch(Actions.update('foo', () => moment('1961-04-12 20:15').format()));
     wrapper.instance().forceUpdate();
     wrapper.update();
     const input = wrapper.find('input').first();
@@ -252,7 +242,6 @@ describe('Material date time control', () => {
       </Provider>
     );
     store.dispatch(Actions.update('foo', () => null));
-    // TODO get rid of forceUpdate when possible
     wrapper.instance().forceUpdate();
     wrapper.update();
     const input = wrapper.find('input').first();
@@ -269,7 +258,6 @@ describe('Material date time control', () => {
       </Provider>
     );
     store.dispatch(Actions.update('foo', () => undefined));
-    // TODO get rid of forceUpdate when possible
     wrapper.instance().forceUpdate();
     wrapper.update();
     const input = wrapper.find('input').first();
@@ -283,7 +271,7 @@ describe('Material date time control', () => {
         <JsonFormsReduxContext>
           <MaterialDateTimeControl schema={schema} uischema={uischema} />
         </JsonFormsReduxContext>
-      </Provider>
+      </Provider>,
     );
     store.dispatch(Actions.update('bar', () => 'Bar'));
     wrapper.update();
@@ -345,7 +333,7 @@ describe('Material date time control', () => {
         <JsonFormsReduxContext>
           <MaterialDateTimeControl schema={schema} uischema={uischema} />
         </JsonFormsReduxContext>
-      </Provider>
+      </Provider>,
     );
     const input = wrapper.find('input').first();
     expect(input.props().disabled).toBeFalsy();
@@ -356,11 +344,7 @@ describe('Material date time control', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <MaterialDateTimeControl
-            schema={schema}
-            uischema={uischema}
-            id='#/properties/foo'
-          />
+          <MaterialDateTimeControl schema={schema} uischema={uischema} id='#/properties/foo' />
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -374,13 +358,9 @@ describe('Material date time control', () => {
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <MaterialDateTimeControl
-            schema={schema}
-            uischema={uischema}
-            visible={false}
-          />
+          <MaterialDateTimeControl schema={schema} uischema={uischema} visible={false} />
         </JsonFormsReduxContext>
-      </Provider>
+      </Provider>,
     );
     const inputs = wrapper.find('input');
     expect(inputs.length).toBe(0);

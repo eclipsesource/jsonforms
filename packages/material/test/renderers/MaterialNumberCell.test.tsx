@@ -27,40 +27,17 @@ import * as React from 'react';
 import {
   Actions,
   ControlElement,
-  getData,
-  jsonformsReducer,
-  JsonFormsState,
   JsonSchema,
-  NOT_APPLICABLE,
-  UISchemaElement
+  NOT_APPLICABLE
 } from '@jsonforms/core';
-import NumberCell, {
-  materialNumberCellTester
-} from '../../src/cells/MaterialNumberCell';
-import { Provider } from 'react-redux';
-import { materialRenderers } from '../../src';
-import { combineReducers, createStore, Store } from 'redux';
+import NumberCell, { materialNumberCellTester } from '../../src/cells/MaterialNumberCell';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { JsonFormsReduxContext } from '@jsonforms/react';
+import { JsonFormsContext, JsonFormsStateContext, JsonFormsStateProvider } from '@jsonforms/react';
+import { act } from 'react-dom/test-utils';
+import { resolveRef } from '../util';
 
 Enzyme.configure({ adapter: new Adapter() });
-
-const initJsonFormsStore = (
-  testData: any,
-  testSchema: JsonSchema,
-  testUiSchema: UISchemaElement
-): Store<JsonFormsState> => {
-  const s: JsonFormsState = {
-    jsonforms: {
-      renderers: materialRenderers
-    }
-  };
-  const reducer = combineReducers({ jsonforms: jsonformsReducer() });
-  const store: Store<JsonFormsState> = createStore(reducer, s);
-  store.dispatch(Actions.init(testData, testSchema, testUiSchema));
-  return store;
-};
 
 const data = { foo: 3.14 };
 const schema = {
@@ -73,69 +50,70 @@ const uischema: ControlElement = {
 };
 
 describe('Material number cells tester', () => {
-  it('should fail', () => {
-    expect(materialNumberCellTester(undefined, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialNumberCellTester(null, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialNumberCellTester({ type: 'Foo' }, undefined)).toBe(
+  it('should fail', async () => {
+    expect(await materialNumberCellTester(undefined, undefined, resolveRef)).toBe(NOT_APPLICABLE);
+    expect(await materialNumberCellTester(null, undefined, resolveRef)).toBe(NOT_APPLICABLE);
+    expect(await materialNumberCellTester({ type: 'Foo' }, undefined, resolveRef)).toBe(
       NOT_APPLICABLE
     );
-    expect(materialNumberCellTester({ type: 'Control' }, undefined)).toBe(
+    expect(await materialNumberCellTester({ type: 'Control' }, undefined, resolveRef)).toBe(
       NOT_APPLICABLE
     );
   });
 
-  it('should succeed with wrong schema type', () => {
+  it('should succeed with wrong schema type', async () => {
     const control: ControlElement = {
       type: 'Control',
       scope: '#/properties/foo'
     };
     expect(
-      materialNumberCellTester(control, {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'string'
+      await
+        materialNumberCellTester(control, {
+          type: 'object',
+          properties: {
+            foo: {
+              type: 'string'
+            }
           }
-        }
-      })
+        }, resolveRef)
     ).toBe(NOT_APPLICABLE);
   });
 
-  it('should fail if only sibling has correct type', () => {
+  it('should fail if only sibling has correct type', async () => {
     const control: ControlElement = {
       type: 'Control',
       scope: '#/properties/foo'
     };
     expect(
-      materialNumberCellTester(control, {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'string'
-          },
-          bar: {
-            type: 'number'
+      await
+        materialNumberCellTester(control, {
+          type: 'object',
+          properties: {
+            foo: {
+              type: 'string'
+            },
+            bar: {
+              type: 'number'
+            }
           }
-        }
-      })
+        }, resolveRef)
     ).toBe(NOT_APPLICABLE);
   });
 
-  it('should succeed with matching prop type', () => {
+  it('should succeed with matching prop type', async () => {
     const control: ControlElement = {
       type: 'Control',
       scope: '#/properties/foo'
     };
-    expect(
-      materialNumberCellTester(control, {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'number'
-          }
+    const jsonSchema = {
+      type: 'object',
+      properties: {
+        foo: {
+          type: 'number'
         }
-      })
-    ).toBe(2);
+      }
+    };
+    expect(await materialNumberCellTester(control, jsonSchema, resolveRef(jsonSchema))).toBe(2);
   });
 });
 
@@ -152,13 +130,10 @@ describe('Material number cells', () => {
         focus: true
       }
     };
-    const store = initJsonFormsStore(data, schema, control);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <NumberCell schema={schema} uischema={control} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core: { data, schema, control } }}>
+        <NumberCell schema={schema} uischema={control} path='foo' />
+      </JsonFormsStateProvider>
     );
     const inputs = wrapper.find('input');
     expect(inputs.first().props().autoFocus).toBeTruthy();
@@ -172,13 +147,10 @@ describe('Material number cells', () => {
         focus: false
       }
     };
-    const store = initJsonFormsStore(data, schema, control);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <NumberCell schema={schema} uischema={uischema} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core: { data, schema, control } }}>
+        <NumberCell schema={schema} uischema={uischema} path='foo' />
+      </JsonFormsStateProvider>
     );
     const inputs = wrapper.find('input');
     expect(inputs.first().props().autoFocus).toBeFalsy();
@@ -189,13 +161,10 @@ describe('Material number cells', () => {
       type: 'Control',
       scope: '#/properties/foo'
     };
-    const store = initJsonFormsStore(data, schema, control);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <NumberCell schema={schema} uischema={control} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core: { data, schema, control } }}>
+        <NumberCell schema={schema} uischema={control} path='foo' />
+      </JsonFormsStateProvider >
     );
     const inputs = wrapper.find('input');
     expect(inputs.first().props().autoFocus).toBeFalsy();
@@ -210,13 +179,10 @@ describe('Material number cells', () => {
         }
       }
     };
-    const store = initJsonFormsStore({ foo: 3.14 }, schema, uischema);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <NumberCell schema={jsonSchema} uischema={uischema} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core: { data: { foo: 3.14 } }, schema, uischema }}>
+        <NumberCell schema={jsonSchema} uischema={uischema} path='foo' />
+      </JsonFormsStateProvider>
     );
 
     const input = wrapper.find('input').first();
@@ -234,13 +200,10 @@ describe('Material number cells', () => {
         }
       }
     };
-    const store = initJsonFormsStore({ foo: 0 }, schema, uischema);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <NumberCell schema={jsonSchema} uischema={uischema} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core: { data: { foo: 0 } }, schema, uischema }}>
+        <NumberCell schema={jsonSchema} uischema={uischema} path='foo' />
+      </JsonFormsStateProvider>
     );
 
     const input = wrapper.find('input').first();
@@ -250,31 +213,38 @@ describe('Material number cells', () => {
   });
 
   it('should update via input event', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    let ctx: JsonFormsStateContext;
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <NumberCell schema={schema} uischema={uischema} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core: { data, schema, uischema } }}>
+        <JsonFormsContext.Consumer>
+          {context => {
+            ctx = context;
+            return (<NumberCell schema={schema} uischema={uischema} path='foo' />);
+          }}
+        </JsonFormsContext.Consumer>
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input');
     input.simulate('change', { target: { value: 2.72 } });
-    expect(getData(store.getState()).foo).toBe(2.72);
+    expect(ctx.core.data.foo).toBe(2.72);
   });
 
   it('should update via action', () => {
-    const store = initJsonFormsStore({ foo: 2.72 }, schema, uischema);
+    let ctx: JsonFormsStateContext;
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <NumberCell schema={schema} uischema={uischema} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core: { data: { foo: 2.72 } }, schema, uischema }}>
+        <JsonFormsContext.Consumer>
+          {(context: JsonFormsStateContext) => {
+            ctx = context;
+            return (<NumberCell schema={schema} uischema={uischema} path='foo' />);
+          }}
+        </JsonFormsContext.Consumer>
+      </JsonFormsStateProvider >
     );
+
     const input = wrapper.find('input').first();
     expect(input.props().value).toBe(2.72);
-    store.dispatch(Actions.update('foo', () => 3.14));
+    act(() => { ctx.dispatch(Actions.update('foo', () => 3.14)); });
     wrapper.update();
     expect(
       wrapper
@@ -285,101 +255,109 @@ describe('Material number cells', () => {
   });
 
   it('should update with undefined value', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    let ctx: JsonFormsStateContext;
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <NumberCell schema={schema} uischema={uischema} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core: { data: schema, uischema } }}>
+        <JsonFormsContext.Consumer>
+          {(context: JsonFormsStateContext) => {
+            ctx = context;
+            return (<NumberCell schema={schema} uischema={uischema} path='foo' />);
+          }}
+        </JsonFormsContext.Consumer>
+      </JsonFormsStateProvider>
     );
-    store.dispatch(Actions.update('foo', () => undefined));
+    act(() => { ctx.dispatch(Actions.update('foo', () => undefined)); });
     wrapper.update();
     const input = wrapper.find('input').first();
     expect(input.props().value).toBe('');
   });
 
   it('should not update with null value', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    let ctx: JsonFormsStateContext;
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <NumberCell schema={schema} uischema={uischema} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core: { data, schema, uischema } }}>
+        <JsonFormsContext.Consumer>
+          {(context: JsonFormsStateContext) => {
+            ctx = context;
+            return (<NumberCell schema={schema} uischema={uischema} path='foo' />);
+          }}
+        </JsonFormsContext.Consumer>
+      </ JsonFormsStateProvider>
     );
-    store.dispatch(Actions.update('foo', () => null));
+    act(() => { ctx.dispatch(Actions.update('foo', () => null)); });
     wrapper.update();
     const input = wrapper.find('input').first();
     expect(input.props().value).toBe('');
   });
 
   it('should not update with wrong ref', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    let ctx: JsonFormsStateContext;
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <NumberCell schema={schema} uischema={uischema} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core: { data, schema, uischema } }}>
+        <JsonFormsContext.Consumer>
+          {(context: JsonFormsStateContext) => {
+            ctx = context;
+            return (<NumberCell schema={schema} uischema={uischema} path='foo' />);
+          }}
+        </JsonFormsContext.Consumer>
+      </ JsonFormsStateProvider>
     );
-    store.dispatch(Actions.update('bar', () => 11));
+    act(() => { ctx.dispatch(Actions.update('bar', () => 11)); });
     const input = wrapper.find('input').first();
     expect(input.props().value).toBe(3.14);
   });
 
   it('should not update with null ref', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    let ctx: JsonFormsStateContext;
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <NumberCell schema={schema} uischema={uischema} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core: { data, schema, uischema } }}>
+        <JsonFormsContext.Consumer>
+          {(context: JsonFormsStateContext) => {
+            ctx = context;
+            return (<NumberCell schema={schema} uischema={uischema} path='foo' />);
+          }}
+        </JsonFormsContext.Consumer>
+      </JsonFormsStateProvider>
     );
-    store.dispatch(Actions.update(null, () => 2.72));
+    act(() => { ctx.dispatch(Actions.update(null, () => 2.72)); });
     wrapper.update();
     const input = wrapper.find('input').first();
     expect(input.props().value).toBe(3.14);
   });
 
   it('should not update with undefined ref', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    let ctx: JsonFormsStateContext;
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <NumberCell schema={schema} uischema={uischema} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core: { data, schema, uischema } }}>
+        <JsonFormsContext.Consumer>
+          {(context: JsonFormsStateContext) => {
+            ctx = context;
+            return (<NumberCell schema={schema} uischema={uischema} path='foo' />);
+          }}
+        </JsonFormsContext.Consumer>
+      </JsonFormsStateProvider>
     );
-    store.dispatch(Actions.update(undefined, () => 13));
+    act(() => { ctx.dispatch(Actions.update(undefined, () => 13)); });
     wrapper.update();
     const input = wrapper.find('input').first();
     expect(input.props().value).toBe(3.14);
   });
 
   it('can be disabled', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
-      <Provider store={store}>
-        <NumberCell
-          schema={schema}
-          uischema={uischema}
-          path='foo'
-          enabled={false}
-        />
-      </Provider>
+      <JsonFormsStateProvider initState={{ core: { data, schema, uischema } }}>
+        <NumberCell schema={schema} uischema={uischema} path='foo' enabled={false} />
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').first();
     expect(input.props().disabled).toBeTruthy();
   });
 
   it('should be enabled by default', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
-      <Provider store={store}>
+      <JsonFormsStateProvider initState={{ core: { data, schema, uischema } }}>
         <NumberCell schema={schema} uischema={uischema} path='foo' />
-      </Provider>
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').first();
     expect(input.props().disabled).toBeFalsy();

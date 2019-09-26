@@ -24,25 +24,15 @@
 */
 import './MatchMediaMock';
 import * as React from 'react';
-import {
-  Actions,
-  ControlElement,
-  isEnumControl,
-  jsonformsReducer,
-  JsonFormsState,
-  JsonSchema,
-  rankWith,
-  UISchemaElement,
-  update
-} from '@jsonforms/core';
+import { ControlElement, JsonSchema, update } from '@jsonforms/core';
 import MaterialRadioGroupControl from '../../src/controls/MaterialRadioGroupControl';
-import { Provider } from 'react-redux';
-import { materialRenderers } from '../../src';
-import { AnyAction, combineReducers, createStore, Reducer, Store } from 'redux';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { JsonFormsReduxContext } from '@jsonforms/react';
+import { JsonFormsStateProvider, ScopedRenderer, JsonFormsContext, JsonFormsStateContext } from '@jsonforms/react';
+import { resolveRef, waitForScopedRenderer } from '../util';
+
 Enzyme.configure({ adapter: new Adapter() });
+import { act } from 'react-dom/test-utils';
 
 const data = { foo: 'D' };
 const schema = {
@@ -59,83 +49,73 @@ const uischema: ControlElement = {
   scope: '#/properties/foo'
 };
 
-const initJsonFormsStore = (
-  testData: any,
-  testSchema: JsonSchema,
-  testUiSchema: UISchemaElement
-): Store<JsonFormsState> => {
-  const s: JsonFormsState = {
-    jsonforms: {
-      renderers: [
-        ...materialRenderers,
-        {
-          tester: rankWith(10, isEnumControl),
-          renderer: MaterialRadioGroupControl
-        }
-      ]
-    }
-  };
-  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({
-    jsonforms: jsonformsReducer()
-  });
-  const store: Store<JsonFormsState> = createStore(reducer, s);
-  store.dispatch(Actions.init(testData, testSchema, testUiSchema));
-  return store;
-};
-
 describe('Material radio group control', () => {
   let wrapper: ReactWrapper;
 
   afterEach(() => wrapper.unmount());
 
-  it('should have option selected', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+  it('should have option selected', async () => {
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialRadioGroupControl schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core: { data, schema, uischema } }}>
+        <ScopedRenderer schema={schema} uischema={uischema} refResolver={resolveRef(schema)}>
+          {(resolvedSchema: JsonSchema) =>
+            (<MaterialRadioGroupControl schema={resolvedSchema} uischema={uischema} />)
+          }
+        </ScopedRenderer>
+      </JsonFormsStateProvider>
     );
 
+    await waitForScopedRenderer(wrapper);
     const radioButtons = wrapper.find('input[type="radio"]');
     const currentlyChecked = wrapper.find('input[type="radio"][checked=true]');
     expect(radioButtons.length).toBe(4);
     expect(currentlyChecked.first().props().value).toBe('D');
   });
 
-  it('should have only update selected option ', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
-
-    store.dispatch(update('foo', () => 'A'));
-    store.dispatch(update('foo', () => 'B'));
+  it('should have only update selected option ', async () => {
+    let ctx: JsonFormsStateContext;
 
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialRadioGroupControl schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core: { data, schema, uischema } }}>
+        <JsonFormsContext.Consumer>
+          {
+            (context: JsonFormsStateContext) => {
+              ctx = context;
+              return (
+                <ScopedRenderer schema={schema} uischema={uischema} refResolver={resolveRef(schema)}>
+                  {
+                    (resolvedSchema: JsonSchema) =>
+                      <MaterialRadioGroupControl schema={resolvedSchema} uischema={uischema} />
+                  }
+                </ScopedRenderer>
+              );
+            }
+          }
+        </JsonFormsContext.Consumer>
+      </JsonFormsStateProvider>
     );
+
+    await waitForScopedRenderer(wrapper);
+    act(() => { ctx.dispatch(update('foo', () => 'A')); });
+    act(() => { ctx.dispatch(update('foo', () => 'B')); });
+    wrapper.update();
     const currentlyChecked = wrapper.find('input[type="radio"][checked=true]');
     expect(currentlyChecked.length).toBe(1);
     expect(currentlyChecked.first().props().value).toBe('B');
   });
 
-  it('should be hideable ', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+  it('should be hideable ', async () => {
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialRadioGroupControl
-            schema={schema}
-            uischema={uischema}
-            visible={false}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core: { data, schema, uischema } }}>
+        <ScopedRenderer schema={schema} uischema={uischema} refResolver={resolveRef(schema)}>
+          {(resolvedSchema: JsonSchema) =>
+            <MaterialRadioGroupControl schema={resolvedSchema} uischema={uischema} visible={false} />
+          }
+        </ScopedRenderer>
+      </JsonFormsStateProvider>
     );
 
+    await waitForScopedRenderer(wrapper);
     const radioButtons = wrapper.find('input[type="radio"]');
     expect(radioButtons.length).toBe(0);
   });

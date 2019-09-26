@@ -30,64 +30,77 @@ import {
   JsonSchema,
   RankedTester,
   rankWith,
-  resolveSubSchemas,
-  StatePropsOfCombinator
+  StatePropsOfCombinator,
+  refResolver
 } from '@jsonforms/core';
-import { JsonFormsDispatch, withJsonFormsAnyOfProps } from '@jsonforms/react';
+import {
+  JsonFormsDispatch,
+  ScopedRenderer,
+  withJsonFormsCombinatorProps
+} from '@jsonforms/react';
 import { Hidden, Tab, Tabs } from '@material-ui/core';
 import CombinatorProperties from './CombinatorProperties';
 
 const MaterialAnyOfRenderer = ({
   schema,
   rootSchema,
-  indexOfFittingSchema,
+  //  indexOfFittingSchema,
   visible,
   path,
   renderers,
   uischema,
-  uischemas
+  uischemas,
+  refParserOptions
 }: StatePropsOfCombinator) => {
-  const [selectedAnyOf, setSelectedAnyOf] = useState(indexOfFittingSchema || 0);
+  const [selectedAnyOf, setSelectedAnyOf] = useState(0);
   const handleChange = useCallback(
     (_ev: any, value: number) => setSelectedAnyOf(value),
     [setSelectedAnyOf]
   );
-  const anyOf = 'anyOf';
-  const _schema = resolveSubSchemas(schema, rootSchema, anyOf);
-  const anyOfRenderInfos = createCombinatorRenderInfos(
-    (_schema as JsonSchema).anyOf,
-    rootSchema,
-    anyOf,
-    uischema,
-    path,
-    uischemas
+  const resolveRef = useCallback(pointer =>
+    refResolver(rootSchema, refParserOptions)(pointer),
+    [rootSchema, refParserOptions]
   );
 
   return (
-    <Hidden xsUp={!visible}>
-      <CombinatorProperties
-        schema={_schema}
-        combinatorKeyword={'anyOf'}
-        path={path}
-      />
-      <Tabs value={selectedAnyOf} onChange={handleChange}>
-        {anyOfRenderInfos.map(anyOfRenderInfo => (
-          <Tab key={anyOfRenderInfo.label} label={anyOfRenderInfo.label} />
-        ))}
-      </Tabs>
-      {anyOfRenderInfos.map(
-        (anyOfRenderInfo, anyOfIndex) =>
-          selectedAnyOf === anyOfIndex && (
-            <JsonFormsDispatch
-              key={anyOfIndex}
-              schema={anyOfRenderInfo.schema}
-              uischema={anyOfRenderInfo.uischema}
+    <ScopedRenderer schema={schema} uischema={uischema} refResolver={resolveRef}>
+      {(resolvedSchema: JsonSchema) => {
+        const anyOfRenderInfos = createCombinatorRenderInfos(
+          resolvedSchema.anyOf,
+          rootSchema,
+          'anyOf',
+          uischema,
+          path,
+          uischemas
+        );
+
+        return (
+          <Hidden xsUp={!visible}>
+            <CombinatorProperties
+              schema={resolvedSchema}
+              combinatorKeyword={'anyOf'}
               path={path}
-              renderers={renderers}
             />
-          )
-      )}
-    </Hidden>
+            <Tabs value={selectedAnyOf} onChange={handleChange}>
+              {anyOfRenderInfos.map(anyOfRenderInfo => (
+                <Tab key={anyOfRenderInfo.label} label={anyOfRenderInfo.label} />
+              ))}
+            </Tabs>
+            {anyOfRenderInfos.map(
+              (anyOfRenderInfo, anyOfIndex) =>
+                selectedAnyOf === anyOfIndex && (
+                  <JsonFormsDispatch
+                    key={anyOfIndex}
+                    schema={anyOfRenderInfo.schema}
+                    uischema={anyOfRenderInfo.uischema}
+                    path={path}
+                    renderers={renderers}
+                  />)
+            )}
+          </Hidden>
+        );
+      }}
+    </ScopedRenderer>
   );
 };
 
@@ -95,4 +108,6 @@ export const materialAnyOfControlTester: RankedTester = rankWith(
   3,
   isAnyOfControl
 );
-export default withJsonFormsAnyOfProps(MaterialAnyOfRenderer);
+const ConntectedMaterialAnyOfRenderer = withJsonFormsCombinatorProps(MaterialAnyOfRenderer);
+ConntectedMaterialAnyOfRenderer.displayName = 'MaterialAnyOfRenderer';
+export default ConntectedMaterialAnyOfRenderer;

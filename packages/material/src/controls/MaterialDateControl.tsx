@@ -61,7 +61,7 @@ const AnyPropsKeyboardDatePicker: React.FunctionComponent<
 export class MaterialDateControl extends Control<
   StatePropsOfDateControl & DispatchPropsOfControl & DateControl,
   ControlState
-> {
+  > {
   render() {
     const {
       description,

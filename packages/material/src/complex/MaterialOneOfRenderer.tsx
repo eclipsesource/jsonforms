@@ -22,19 +22,20 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import isEmpty from 'lodash/isEmpty';
 
 import {
   CombinatorProps,
   createCombinatorRenderInfos,
   createDefaultValue,
+  findApplicableSchema,
   isOneOfControl,
   JsonSchema,
   OwnPropsOfControl,
   RankedTester,
   rankWith,
-  resolveSubSchemas
+  refResolver
 } from '@jsonforms/core';
 import {
   Button,
@@ -49,7 +50,8 @@ import {
 } from '@material-ui/core';
 import {
   JsonFormsDispatch,
-  withJsonFormsOneOfProps
+  ScopedRenderer,
+  withJsonFormsCombinatorProps
 } from '@jsonforms/react';
 import CombinatorProperties from './CombinatorProperties';
 
@@ -58,95 +60,134 @@ export interface OwnOneOfProps extends OwnPropsOfControl {
 }
 
 const oneOf = 'oneOf';
-const MaterialOneOfRenderer =
-  ({ handleChange, schema, path, renderers, rootSchema, id, visible, indexOfFittingSchema, uischema, uischemas, data }: CombinatorProps) => {
-    const [open, setOpen] = useState(false);
-    const [selectedIndex, setSelectedIndex] = useState(indexOfFittingSchema || 0);
-    const [newSelectedIndex, setNewSelectedIndex] = useState(0);
-    const handleClose = useCallback(() => setOpen(false), [setOpen]);
-    const cancel = useCallback(() => {
-      setOpen(false);
-    }, [setOpen]);
-    const _schema = resolveSubSchemas(schema, rootSchema, oneOf);
-    const oneOfRenderInfos = createCombinatorRenderInfos(
-      (_schema as JsonSchema).oneOf,
-      rootSchema,
-      oneOf,
-      uischema,
-      path,
-      uischemas
+const MaterialOneOfRenderer = ({
+  handleChange,
+  schema,
+  path,
+  renderers,
+  rootSchema,
+  id,
+  visible,
+  uischema,
+  uischemas,
+  data,
+  ajv,
+  refParserOptions
+}: CombinatorProps) => {
+  const [open, setOpen] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [newSelectedIndex, setNewSelectedIndex] = useState(0);
+  const handleClose = useCallback(() => setOpen(false), [setOpen]);
+  const cancel = useCallback(() => {
+    setOpen(false);
+  }, [setOpen]);
+  const openNewTab = (newIndex: number) => {
+    handleChange(path, createDefaultValue(schema.oneOf[newIndex]));
+    setSelectedIndex(newIndex);
+  };
+  const resolveRef = useCallback(pointer => {
+    return refResolver(rootSchema, refParserOptions)(pointer);
+  }, [rootSchema, refParserOptions]);
+  useEffect(() => {
+    const findIndex = async () => {
+      const index = await findApplicableSchema(
+        ajv,
+        data,
+        schema.oneOf,
+        resolveRef
       );
-
-    const openNewTab = (newIndex: number) => {
-      handleChange(
-        path,
-        createDefaultValue(schema.oneOf[newIndex])
-      );
-      setSelectedIndex(newIndex);
-    }
-
-    const confirm = useCallback(() => {
-      openNewTab(newSelectedIndex)
-      setOpen(false);
-    }, [handleChange, createDefaultValue, newSelectedIndex]);
-    const handleTabChange = useCallback((_event: any, newOneOfIndex: number) => {
+      setSelectedIndex(index);
+    };
+    findIndex();
+  }, []);
+  const confirm = useCallback(() => {
+    openNewTab(newSelectedIndex);
+    setOpen(false);
+  }, [handleChange, createDefaultValue, newSelectedIndex]);
+  const handleTabChange = useCallback(
+    (_event: any, newOneOfIndex: number) => {
       setNewSelectedIndex(newOneOfIndex);
-      if(isEmpty(data)) {
-        openNewTab(newOneOfIndex)
+      if (isEmpty(data)) {
+        openNewTab(newOneOfIndex);
       } else {
         setOpen(true);
       }
+    },
+    [setOpen, setSelectedIndex, data]
+  );
 
-    }, [setOpen, setSelectedIndex, data]);
+  return (
+    <ScopedRenderer schema={schema} uischema={uischema} refResolver={resolveRef}>
+      {(resolvedSchema: JsonSchema) => {
+        const oneOfRenderInfos = createCombinatorRenderInfos(
+          resolvedSchema.oneOf,
+          rootSchema,
+          oneOf,
+          uischema,
+          path,
+          uischemas
+        );
 
-    return (
-      <Hidden xsUp={!visible}>
-        <CombinatorProperties
-          schema={_schema}
-          combinatorKeyword={'oneOf'}
-          path={path}
-        />
-        <Tabs value={selectedIndex} onChange={handleTabChange}>
-          {oneOfRenderInfos.map(oneOfRenderInfo => <Tab key={oneOfRenderInfo.label} label={oneOfRenderInfo.label} />)}
-        </Tabs>
-        {
-          oneOfRenderInfos.map((oneOfRenderInfo, oneOfIndex) => (
-            selectedIndex === oneOfIndex && (
-              <JsonFormsDispatch
-                key={oneOfIndex}
-                schema={oneOfRenderInfo.schema}
-                uischema={oneOfRenderInfo.uischema}
-                path={path}
-                renderers={renderers}
-              />
-            )
-          ))
-        }
-        <Dialog
-          open={open}
-          onClose={handleClose}
-          aria-labelledby='alert-dialog-title'
-          aria-describedby='alert-dialog-description'
-        >
-          <DialogTitle id='alert-dialog-title'>{'Clear form?'}</DialogTitle>
-          <DialogContent>
-            <DialogContentText id='alert-dialog-description'>
-              Your data will be cleared if you navigate away from this tab.
-              Do you want to proceed?
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={cancel} color='primary'>
-              No
-            </Button>
-            <Button onClick={confirm} color='primary' autoFocus id={`oneOf-${id}-confirm-yes`}>
-              Yes
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </Hidden>
-    );
-  };
+        return (
+          <Hidden xsUp={!visible}>
+            <CombinatorProperties
+              schema={resolvedSchema}
+              combinatorKeyword={'oneOf'}
+              path={path}
+            />
+            <Tabs value={selectedIndex} onChange={handleTabChange}>
+              {oneOfRenderInfos.map(oneOfRenderInfo => (
+                <Tab key={oneOfRenderInfo.label} label={oneOfRenderInfo.label} />
+              ))}
+            </Tabs>
+            {oneOfRenderInfos.map(
+              (oneOfRenderInfo, oneOfIndex) =>
+                selectedIndex === oneOfIndex && (
+                  <JsonFormsDispatch
+                    key={oneOfIndex}
+                    schema={oneOfRenderInfo.schema}
+                    uischema={oneOfRenderInfo.uischema}
+                    path={path}
+                    renderers={renderers}
+                  />
+                )
+            )}
+            <Dialog
+              open={open}
+              onClose={handleClose}
+              aria-labelledby='alert-dialog-title'
+              aria-describedby='alert-dialog-description'
+            >
+              <DialogTitle id='alert-dialog-title'>{'Clear form?'}</DialogTitle>
+              <DialogContent>
+                <DialogContentText id='alert-dialog-description'>
+                  Your data will be cleared if you navigate away from this tab. Do you
+                  want to proceed?
+          </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={cancel} color='primary'>
+                  No
+                </Button>
+                <Button
+                  onClick={confirm}
+                  color='primary'
+                  autoFocus
+                  id={`oneOf-${id}-confirm-yes`}
+                >
+                  Yes
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </Hidden>
+        )
+      }}
+    </ScopedRenderer>
+  );
+};
 
-export const materialOneOfControlTester: RankedTester = rankWith(3, isOneOfControl);
-export default withJsonFormsOneOfProps(MaterialOneOfRenderer);
+export const materialOneOfControlTester: RankedTester = rankWith(
+  3,
+  isOneOfControl
+);
+export default withJsonFormsCombinatorProps(MaterialOneOfRenderer);

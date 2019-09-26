@@ -24,43 +24,17 @@
 */
 import './MatchMediaMock';
 import React from 'react';
-import { Provider } from 'react-redux';
 import Dialog from '@material-ui/core/Dialog';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import {
-  Actions,
-  ControlElement,
-  getData,
-  jsonformsReducer,
-  JsonFormsState
-} from '@jsonforms/core';
-import {
-  materialCells,
-  MaterialOneOfRenderer,
-  materialRenderers
-} from '../../src';
-import { combineReducers, createStore, Store } from 'redux';
-import { JsonFormsDispatch, JsonFormsReduxContext } from '@jsonforms/react';
+import { ControlElement, JsonSchema } from '@jsonforms/core';
+import { materialRenderers, MaterialOneOfRenderer } from '../../src';
+import { JsonFormsStateProvider, JsonFormsDispatch, ScopedRenderer, JsonFormsStateContext, JsonFormsContext } from '@jsonforms/react';
+import { waitForScopedRenderer, resolveRef } from '../util';
 import { Tab } from '@material-ui/core';
 
 Enzyme.configure({ adapter: new Adapter() });
-
-const waitForAsync = () => new Promise(resolve => setImmediate(resolve));
-
-const initStore = () => {
-  const s: JsonFormsState = {
-    jsonforms: {
-      renderers: materialRenderers,
-      cells: materialCells
-    }
-  };
-
-  const reducer = combineReducers({ jsonforms: jsonformsReducer() });
-  const store: Store<JsonFormsState> = createStore(reducer, s);
-  return store;
-};
 
 const clickAddButton = (wrapper: ReactWrapper, times: number) => {
   // click add button
@@ -72,11 +46,7 @@ const clickAddButton = (wrapper: ReactWrapper, times: number) => {
   wrapper.update();
 };
 
-const selectOneOfTab = (
-  wrapper: ReactWrapper,
-  at: number,
-  expectConfim: boolean
-) => {
+const selectOneOfTab = (wrapper: ReactWrapper, at: number, expectConfim: boolean) => {
   // select oneOf
   const buttons = wrapper.find('button');
   buttons.at(at).simulate('click');
@@ -84,32 +54,21 @@ const selectOneOfTab = (
 
   if (expectConfim) {
     // confirm dialog
-    const confirmButton = wrapper
-      .find(Dialog)
-      .last()
-      .find('button')
-      .at(1);
+    const confirmButton = wrapper.find(Dialog).last().find('button').at(1);
     confirmButton.simulate('click');
     wrapper.update();
   } else {
-    expect(
-      wrapper
-        .find(Dialog)
-        .last()
-        .find('button')
-        .at(1)
-        .exists()
-    ).toBe(false);
+    expect(wrapper.find(Dialog).last().find('button').at(1).exists()).toBe(false);
   }
 };
 
 describe('Material oneOf renderer', () => {
+
   let wrapper: ReactWrapper;
 
   afterEach(() => wrapper.unmount());
 
-  it('should render and select first tab by default', () => {
-    const store = initStore();
+  it('should render and select first tab by default', async () => {
     const schema = {
       type: 'object',
       properties: {
@@ -132,20 +91,27 @@ describe('Material oneOf renderer', () => {
       label: 'Value',
       scope: '#/properties/value'
     };
-    store.dispatch(Actions.init({ data: undefined }, schema, uischema));
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialOneOfRenderer schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider
+        initState={{
+          core: { schema, uischema, data: undefined },
+          renderers: materialRenderers
+        }}
+      >
+        <ScopedRenderer schema={schema} uischema={uischema} refResolver={resolveRef(schema)}>
+          {(resolvedSchema: JsonSchema) => (
+            <MaterialOneOfRenderer schema={resolvedSchema} uischema={uischema} renderers={materialRenderers} visible />
+          )}
+        </ScopedRenderer>
+      </JsonFormsStateProvider>
     );
 
+    await waitForScopedRenderer(wrapper);
     const firstTab = wrapper.find(Tab).first();
     expect(firstTab.props().selected).toBeTruthy();
   });
-  it('should render and select second tab due to datatype', () => {
-    const store = initStore();
+
+  it('should render and select second tab due to datatype', async () => {
     const schema = {
       type: 'object',
       properties: {
@@ -168,20 +134,27 @@ describe('Material oneOf renderer', () => {
       label: 'Value',
       scope: '#/properties/value'
     };
-    store.dispatch(Actions.init({ value: 5 }, schema, uischema));
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialOneOfRenderer schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider
+        initState={{
+          core: { schema, uischema, data: { value: 5 } },
+          renderers: materialRenderers
+        }}
+      >
+        <ScopedRenderer schema={schema} uischema={uischema} refResolver={resolveRef(schema)}>
+          {(resolvedSchema: JsonSchema) => (
+            <MaterialOneOfRenderer schema={resolvedSchema} uischema={uischema} />
+          )}
+        </ScopedRenderer>
+      </JsonFormsStateProvider>
     );
 
+    await waitForScopedRenderer(wrapper);
     const secondTab = wrapper.find(Tab).at(1);
     expect(secondTab.props().selected).toBeTruthy();
   });
-  it('should render and select second tab due to schema with additionalProperties', () => {
-    const store = initStore();
+
+  it('should render and select second tab due to schema with additionalProperties', async () => {
     const schema = {
       type: 'object',
       properties: {
@@ -212,20 +185,27 @@ describe('Material oneOf renderer', () => {
       label: 'Value',
       scope: '#/properties/value'
     };
-    store.dispatch(Actions.init({ value: { bar: 'bar' } }, schema, uischema));
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialOneOfRenderer schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider
+        initState={{
+          core: { schema, uischema, data: { value: { bar: 'bar' } } },
+          renderers: materialRenderers
+        }}
+      >
+        <ScopedRenderer schema={schema} uischema={uischema} refResolver={resolveRef(schema)}>
+          {(resolvedSchema: JsonSchema) => (
+            <MaterialOneOfRenderer schema={resolvedSchema} uischema={uischema} />
+          )}
+        </ScopedRenderer>
+      </JsonFormsStateProvider>
     );
 
+    await waitForScopedRenderer(wrapper);
     const secondTab = wrapper.find(Tab).at(1);
     expect(secondTab.props().selected).toBeTruthy();
   });
-  it('should render and select second tab due to schema with required', () => {
-    const store = initStore();
+
+  it('should render and select second tab due to schema with required', async () => {
     const schema = {
       type: 'object',
       properties: {
@@ -256,21 +236,28 @@ describe('Material oneOf renderer', () => {
       label: 'Value',
       scope: '#/properties/value'
     };
-    store.dispatch(Actions.init({ value: { bar: 'bar' } }, schema, uischema));
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialOneOfRenderer schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider
+        initState={{
+          core: { schema, uischema, data: { value: { bar: 'bar' } } },
+          renderers: materialRenderers
+        }}
+      >
+        <ScopedRenderer schema={schema} uischema={uischema} refResolver={resolveRef(schema)}>
+          {(resolvedSchema: JsonSchema) => (
+            <MaterialOneOfRenderer schema={resolvedSchema} uischema={uischema} />
+          )}
+        </ScopedRenderer>
+      </JsonFormsStateProvider>
     );
 
+    await waitForScopedRenderer(wrapper);
     const secondTab = wrapper.find(Tab).at(1);
     expect(secondTab.props().selected).toBeTruthy();
   });
 
-  it('should add an item at correct path', () => {
-    const store = initStore();
+  it('should add an item at correct path', async () => {
+    let ctx: JsonFormsStateContext;
     const schema = {
       type: 'object',
       properties: {
@@ -293,20 +280,36 @@ describe('Material oneOf renderer', () => {
       label: 'Value',
       scope: '#/properties/value'
     };
-    store.dispatch(Actions.init({ data: undefined }, schema, uischema));
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialOneOfRenderer schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider
+        initState={{
+          core: { schema, uischema, data: undefined },
+          renderers: materialRenderers
+        }}
+      >
+        <JsonFormsContext.Consumer>
+          {
+            (context: JsonFormsStateContext) => {
+              ctx = context;
+              return (
+                <ScopedRenderer schema={schema} uischema={uischema} refResolver={resolveRef(schema)}>
+                  {(resolvedSchema: JsonSchema) => {
+                    return (
+                      <MaterialOneOfRenderer schema={resolvedSchema} uischema={uischema} />
+                    )
+                  }}
+                </ScopedRenderer>
+              );
+            }
+          }
+        </JsonFormsContext.Consumer>
+      </JsonFormsStateProvider >
     );
+    await waitForScopedRenderer(wrapper);
     const input = wrapper.find('input').first();
     input.simulate('change', { target: { value: 'test' } });
     wrapper.update();
-    expect(store.getState().jsonforms.core.data).toEqual({
-      value: 'test'
-    });
+    expect(ctx.core.data).toEqual({ value: 'test' });
   });
 
   it('should add an item within an array', async () => {
@@ -343,33 +346,36 @@ describe('Material oneOf renderer', () => {
       scope: '#/properties/thingOrThings'
     };
 
-    const store = initStore();
-    store.dispatch(Actions.init({ data: {}, schema, uischema }));
+    //store.dispatch(Actions.init({ data: {}, schema, uischema }));
 
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <JsonFormsDispatch schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider
+        initState={{
+          core: { schema, uischema, data: {} },
+          renderers: materialRenderers
+        }}
+      >
+        <JsonFormsDispatch schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
     );
 
-    await waitForAsync();
-
-    wrapper.update();
+    await waitForScopedRenderer(wrapper);
 
     selectOneOfTab(wrapper, 1, false);
+    await waitForScopedRenderer(wrapper);
     const nrOfRowsBeforeAdd = wrapper.find('tr');
     clickAddButton(wrapper, 2);
+    await waitForScopedRenderer(wrapper);
     const nrOfRowsAfterAdd = wrapper.find('tr');
-
     // 1 header row + no data row
     expect(nrOfRowsBeforeAdd.length).toBe(2);
     // 1 header row + 2 data rows (one is replacing the 'No data' one)
     expect(nrOfRowsAfterAdd.length).toBe(3);
+
   });
 
   it('should add an object within an array', async () => {
+
     const schema = {
       type: 'object',
       properties: {
@@ -409,37 +415,41 @@ describe('Material oneOf renderer', () => {
       scope: '#/properties/thingOrThings'
     };
 
-    const store = initStore();
-    store.dispatch(Actions.init({}, schema, uischema));
-
+    let ctx: JsonFormsStateContext;
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <JsonFormsDispatch schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider
+        initState={{
+          core: { schema, uischema, data: {} },
+          renderers: materialRenderers
+        }}
+      >
+        <JsonFormsContext.Consumer>
+          {(context: JsonFormsStateContext) => {
+            ctx = context;
+            return (<JsonFormsDispatch schema={schema} uischema={uischema} />);
+          }}
+        </JsonFormsContext.Consumer>
+      </JsonFormsStateProvider>
     );
 
-    await waitForAsync();
-
-    // expect(wrapper.state())
-    wrapper.update();
+    await waitForScopedRenderer(wrapper);
 
     selectOneOfTab(wrapper, 1, false);
+    await waitForScopedRenderer(wrapper);
     const nrOfRowsBeforeAdd = wrapper.find('tr');
     clickAddButton(wrapper, 2);
+    await waitForScopedRenderer(wrapper);
     const nrOfRowsAfterAdd = wrapper.find('tr');
 
     // 1 header row + no data row
     expect(nrOfRowsBeforeAdd.length).toBe(2);
     // 1 header row + 2 data rows (one is replacing the 'No data' one)
     expect(nrOfRowsAfterAdd.length).toBe(3);
-    expect(getData(store.getState())).toEqual({
-      thingOrThings: ['', '']
-    });
+    expect(ctx.core.data).toEqual({ thingOrThings: ['', ''] });
   });
 
   it('should switch to array based oneOf subschema, then switch back, then edit', async () => {
+
     const schema = {
       type: 'object',
       properties: {
@@ -479,34 +489,36 @@ describe('Material oneOf renderer', () => {
       scope: '#/properties/thingOrThings'
     };
 
-    const store = initStore();
-    store.dispatch(Actions.init({}, schema, uischema));
-
+    let ctx: JsonFormsStateContext;
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <JsonFormsDispatch
-            schema={store.getState().jsonforms.core.schema}
-            uischema={uischema}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider
+        initState={{
+          core: { schema, uischema, data: {} },
+          renderers: materialRenderers
+        }}
+      >
+        <JsonFormsContext.Consumer>
+          {(context: JsonFormsStateContext) => {
+            ctx = context;
+            return (<JsonFormsDispatch schema={schema} uischema={uischema} />);
+          }}
+        </JsonFormsContext.Consumer>
+      </JsonFormsStateProvider>
     );
 
-    await waitForAsync();
-
-    wrapper.update();
+    await waitForScopedRenderer(wrapper);
 
     selectOneOfTab(wrapper, 1, false);
+    await waitForScopedRenderer(wrapper);
     clickAddButton(wrapper, 2);
+    await waitForScopedRenderer(wrapper);
     selectOneOfTab(wrapper, 0, true);
+    await waitForScopedRenderer(wrapper);
 
     const input = wrapper.find('input').first();
     input.simulate('change', { target: { value: 'test' } });
     wrapper.update();
-    expect(getData(store.getState())).toEqual({
-      thingOrThings: { thing: 'test' }
-    });
+    expect(ctx.core.data).toEqual({ thingOrThings: { thing: 'test' } });
   });
 
   it('should show confirm dialog when data is not an empty object', async () => {
@@ -534,24 +546,22 @@ describe('Material oneOf renderer', () => {
       scope: '#/properties/value'
     };
 
-    const store = initStore();
-    store.dispatch(Actions.init({ value: 'Foo Bar' }, schema, uischema));
-
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <JsonFormsDispatch schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider
+        initState={{
+          core: { schema, uischema, data: { value: 'Foo Bar' } },
+          renderers: materialRenderers
+        }}
+      >
+        <JsonFormsDispatch schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
     );
 
-    await waitForAsync();
-    wrapper.update();
+    await waitForScopedRenderer(wrapper);
     selectOneOfTab(wrapper, 1, true);
   });
 
   it('should be hideable', () => {
-    const store = initStore();
     const schema = {
       type: 'object',
       properties: {
@@ -574,17 +584,19 @@ describe('Material oneOf renderer', () => {
       label: 'Value',
       scope: '#/properties/value'
     };
-    store.dispatch(Actions.init({ data: undefined }, schema, uischema));
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialOneOfRenderer
-            schema={schema}
-            uischema={uischema}
-            visible={false}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider
+        initState={{
+          core: { schema, uischema, data: undefined },
+          renderers: materialRenderers
+        }}
+      >
+        <ScopedRenderer schema={schema} uischema={uischema} refResolver={resolveRef(schema)}>
+          {(resolvedSchema: JsonSchema) => (
+            <MaterialOneOfRenderer schema={resolvedSchema} uischema={uischema} visible={false} />
+          )}
+        </ScopedRenderer>
+      </JsonFormsStateProvider>
     );
     const inputs = wrapper.find('input');
     expect(inputs.length).toBe(0);

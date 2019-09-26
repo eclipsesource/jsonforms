@@ -23,8 +23,8 @@
   THE SOFTWARE.
 */
 import React, { useCallback, useState } from 'react';
-import { ArrayLayoutProps } from '@jsonforms/core';
-import { withJsonFormsArrayLayoutProps } from '@jsonforms/react';
+import { ArrayLayoutProps, JsonSchema, refResolver } from '@jsonforms/core';
+import { withJsonFormsArrayLayoutProps, ResolveRef } from '@jsonforms/react';
 import { MaterialTableControl } from './MaterialTableControl';
 import { Hidden } from '@material-ui/core';
 import { DeleteDialog } from './DeleteDialog';
@@ -35,33 +35,48 @@ export const MaterialArrayControlRenderer = (props: ArrayLayoutProps) => {
   const [rowData, setRowData] = useState(undefined);
   const { removeItems, visible } = props;
 
-  const openDeleteDialog = useCallback((p: string, rowIndex: number) => {
-    setOpen(true);
-    setPath(p);
-    setRowData(rowIndex);
-  }, [setOpen, setPath, setRowData]);
+  const openDeleteDialog = useCallback(
+    (p: string, rowIndex: number) => {
+      setOpen(true);
+      setPath(p);
+      setRowData(rowIndex);
+    },
+    [setOpen, setPath, setRowData]
+  );
   const deleteCancel = useCallback(() => setOpen(false), [setOpen]);
   const deleteConfirm = useCallback(() => {
-    const p = path.substring(0, path.lastIndexOf(('.')));
+    const p = path.substring(0, path.lastIndexOf('.'));
     removeItems(p, [rowData])();
     setOpen(false);
   }, [setOpen, path, rowData]);
   const deleteClose = useCallback(() => setOpen(false), [setOpen]);
+  const resolveRef = useCallback(pointer =>
+    refResolver(props.rootSchema, props.refParserOptions)(pointer),
+    [props.rootSchema, props.refParserOptions]
+  );
 
   return (
-    <Hidden xsUp={!visible}>
-      <MaterialTableControl
-        {...props}
-        openDeleteDialog={openDeleteDialog}
-      />
-      <DeleteDialog
-        open={open}
-        onCancel={deleteCancel}
-        onConfirm={deleteConfirm}
-        onClose={deleteClose}
-      />
-    </Hidden>
+    <ResolveRef schema={props.schema} refResolver={resolveRef} pointer={props.schema.$ref}>
+      {(resolvedSchema: JsonSchema) => {
+        return (
+          <Hidden xsUp={!visible}>
+            <MaterialTableControl {...props} schema={resolvedSchema} openDeleteDialog={openDeleteDialog} />
+            <DeleteDialog
+              open={open}
+              onCancel={deleteCancel}
+              onConfirm={deleteConfirm}
+              onClose={deleteClose}
+            />
+          </Hidden>
+        );
+      }}
+    </ResolveRef>
   );
 };
 
-export default withJsonFormsArrayLayoutProps(MaterialArrayControlRenderer);
+export const ConnectedMaterialArrayControlRenderer = withJsonFormsArrayLayoutProps(
+  MaterialArrayControlRenderer
+);
+ConnectedMaterialArrayControlRenderer.displayName =
+  'MaterialArrayControlRenderer';
+export default ConnectedMaterialArrayControlRenderer;

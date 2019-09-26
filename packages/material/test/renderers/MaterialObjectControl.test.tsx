@@ -23,45 +23,16 @@
   THE SOFTWARE.
 */
 import './MatchMediaMock';
-import {
-  Actions,
-  ControlElement,
-  jsonformsReducer,
-  JsonFormsState,
-  JsonSchema,
-  NOT_APPLICABLE,
-  UISchemaElement
-} from '@jsonforms/core';
+import { ControlElement, NOT_APPLICABLE } from '@jsonforms/core';
 import * as React from 'react';
-import { AnyAction, combineReducers, createStore, Reducer, Store } from 'redux';
 import { materialRenderers } from '../../src';
-import MaterialObjectRenderer, {
-  materialObjectControlTester
-} from '../../src/complex/MaterialObjectRenderer';
+import MaterialObjectRenderer, { materialObjectControlTester } from '../../src/complex/MaterialObjectRenderer';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { JsonFormsReduxContext } from '@jsonforms/react';
-import { Provider } from 'react-redux';
+import { JsonFormsStateProvider } from '@jsonforms/react';
+import { resolveRef, waitForScopedRenderer } from '../util';
 
 Enzyme.configure({ adapter: new Adapter() });
-
-const initJsonFormsStore = (
-  testData: any,
-  testSchema: JsonSchema,
-  testUiSchema: UISchemaElement
-): Store<JsonFormsState> => {
-  const s: JsonFormsState = {
-    jsonforms: {
-      renderers: materialRenderers
-    }
-  };
-  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({
-    jsonforms: jsonformsReducer()
-  });
-  const store: Store<JsonFormsState> = createStore(reducer, s);
-  store.dispatch(Actions.init(testData, testSchema, testUiSchema));
-  return store;
-};
 
 const data = { foo: { foo_1: 'foo' }, bar: { bar_1: 'bar' } };
 const schema = {
@@ -78,76 +49,85 @@ const schema = {
       properties: {
         bar_1: { type: 'string' }
       }
-    }
-  }
+    },
+  },
 };
 const uischema1: ControlElement = {
   type: 'Control',
-  scope: '#'
+  scope: '#',
 };
 const uischema2: ControlElement = {
   type: 'Control',
-  scope: '#/properties/foo'
+  scope: '#/properties/foo',
 };
 
 describe('Material object renderer tester', () => {
-  test('should fail', () => {
-    expect(materialObjectControlTester(undefined, undefined)).toBe(
-      NOT_APPLICABLE
-    );
-    expect(materialObjectControlTester(null, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialObjectControlTester({ type: 'Foo' }, undefined)).toBe(
-      NOT_APPLICABLE
-    );
-    expect(materialObjectControlTester({ type: 'Control' }, undefined)).toBe(
-      NOT_APPLICABLE
-    );
-    expect(
-      materialObjectControlTester(uischema2, {
-        type: 'object',
-        properties: {
-          foo: { type: 'string' }
-        }
-      })
-    ).toBe(NOT_APPLICABLE);
-    expect(
-      materialObjectControlTester(uischema2, {
-        type: 'object',
-        properties: {
-          foo: { type: 'string' },
-          bar: schema.properties.bar
-        }
-      })
+
+  test('should fail', async () => {
+    expect(await materialObjectControlTester(undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(await materialObjectControlTester(null, undefined)).toBe(NOT_APPLICABLE);
+    expect(await materialObjectControlTester({ type: 'Foo' }, undefined)).toBe(NOT_APPLICABLE);
+    expect(await materialObjectControlTester({ type: 'Control' }, undefined)).toBe(NOT_APPLICABLE);
+  });
+
+  it('should fail 2', async () => {
+    const jsonSchema = {
+      type: 'object',
+      properties: {
+        foo: { type: 'string' },
+      },
+    };
+    expect(await
+      materialObjectControlTester(
+        uischema2,
+        jsonSchema,
+        resolveRef(jsonSchema)
+      )
     ).toBe(NOT_APPLICABLE);
   });
 
-  it('should succeed', () => {
-    expect(
-      materialObjectControlTester(uischema2, {
-        type: 'object',
-        properties: {
-          foo: schema.properties.foo
-        }
-      })
-    ).toBe(2);
+  it('should fail 3', async () => {
+    const jsonSchema = {
+      type: 'object',
+      properties: {
+        foo: { type: 'string' },
+        bar: schema.properties.bar,
+      },
+    };
+    expect(await materialObjectControlTester(uischema2, jsonSchema, resolveRef(jsonSchema)))
+      .toBe(NOT_APPLICABLE);
+  });
+
+  it('should succeed', async () => {
+    const jsonSchema = {
+      type: 'object',
+      properties: {
+        foo: schema.properties.foo,
+      },
+    };
+    expect(await materialObjectControlTester(uischema2, schema, resolveRef(jsonSchema))).toBe(2);
   });
 });
 
 describe('Material object control', () => {
+
   let wrapper: ReactWrapper;
 
   afterEach(() => wrapper.unmount());
 
-  it('should render all children', () => {
-    const store = initJsonFormsStore(data, schema, uischema1);
+  it('should render all children', async () => {
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialObjectRenderer schema={schema} uischema={uischema1} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider
+        initState={{
+          core: { schema, uischema: uischema1, data },
+          renderers: materialRenderers
+        }}
+      >
+        <MaterialObjectRenderer schema={schema} uischema={uischema1} />
+      </JsonFormsStateProvider>
     );
 
+    await waitForScopedRenderer(wrapper);
     const inputs = wrapper.find('input');
     expect(inputs.length).toBe(2);
     expect(inputs.at(0).props().type).toBe('text');
@@ -156,61 +136,70 @@ describe('Material object control', () => {
     expect(inputs.at(1).props().value).toBe('bar');
   });
 
-  it('should render only itself', () => {
-    const store = initJsonFormsStore(data, schema, uischema1);
+  it('should render only itself', async () => {
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialObjectRenderer schema={schema} uischema={uischema2} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider
+        initState={{
+          core: { schema, uischema: uischema2, data },
+          renderers: materialRenderers
+        }}
+      >
+        <MaterialObjectRenderer schema={schema} uischema={uischema2} />
+      </JsonFormsStateProvider>
     );
 
+    await waitForScopedRenderer(wrapper);
     const inputs = wrapper.find('input');
     expect(inputs.length).toBe(1);
     expect(inputs.at(0).props().type).toBe('text');
     expect(inputs.at(0).props().value).toBe('foo');
   });
 
-  it('should be enabled by default', () => {
-    const store = initJsonFormsStore(data, schema, uischema2);
+  it('should be enabled by default', async () => {
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialObjectRenderer schema={schema} uischema={uischema2} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider
+        initState={{
+          core: { schema, uischema: uischema2, data },
+          renderers: materialRenderers
+        }}
+      >
+        <MaterialObjectRenderer schema={schema} uischema={uischema2} />
+      </JsonFormsStateProvider>
     );
+    await waitForScopedRenderer(wrapper);
     const inputs = wrapper.find('input');
     expect(inputs.first().props().disabled).toBeFalsy();
   });
 
-  it('can be invisible', () => {
-    const store = initJsonFormsStore(data, schema, uischema2);
+  it('can be invisible', async () => {
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialObjectRenderer
-            schema={schema}
-            uischema={uischema2}
-            visible={false}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider
+        initState={{
+          core: { schema, uischema: uischema2, data },
+          renderers: materialRenderers
+        }}
+      >
+        <MaterialObjectRenderer schema={schema} uischema={uischema2} visible={false} />
+      </JsonFormsStateProvider>
     );
+    await waitForScopedRenderer(wrapper);
     const inputs = wrapper.find('input');
     expect(inputs.length).toBe(0);
   });
 
-  it('should be visible by default', () => {
-    const store = initJsonFormsStore(data, schema, uischema2);
+  it('should be visible by default', async () => {
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialObjectRenderer schema={schema} uischema={uischema2} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider
+        initState={{
+          core: { schema, uischema: uischema2, data },
+          renderers: materialRenderers
+        }}
+      >
+        <MaterialObjectRenderer schema={schema} uischema={uischema2} />
+      </JsonFormsStateProvider>
     );
+
+    await waitForScopedRenderer(wrapper);
     const inputs = wrapper.find('input');
     expect(inputs.first().props().hidden).toBeFalsy();
   });

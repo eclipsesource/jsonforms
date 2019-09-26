@@ -101,6 +101,7 @@ import {
 import MaterialCategorizationStepperLayout, {
   materialCategorizationStepperTester
 } from './layouts/MaterialCategorizationStepperLayout';
+import { RefDispatch, refDispatchTester } from '@jsonforms/react';
 
 export * from './complex';
 export * from './controls';
@@ -111,6 +112,10 @@ export * from './util';
 
 export const materialRenderers: JsonFormsRendererRegistryEntry[] = [
   // controls
+  {
+    tester: refDispatchTester,
+    renderer: RefDispatch
+  },
   {
     tester: materialArrayControlTester,
     renderer: MaterialArrayControlRenderer

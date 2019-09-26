@@ -24,7 +24,6 @@
 */
 import './MatchMediaMock';
 import React from 'react';
-import { Provider } from 'react-redux';
 import {
   Actions,
   Categorization,
@@ -36,7 +35,7 @@ import {
   RuleEffect,
   SchemaBasedCondition
 } from '@jsonforms/core';
-import { JsonFormsReduxContext } from '@jsonforms/react';
+import { JsonFormsStateProvider } from '@jsonforms/react';
 import Enzyme, { mount } from 'enzyme';
 
 import { combineReducers, createStore, Store } from 'redux';
@@ -85,34 +84,30 @@ const fixture = {
 };
 
 describe('Material categorization stepper layout tester', () => {
-  it('should not fail when given undefined data', () => {
-    expect(materialCategorizationStepperTester(undefined, undefined)).toBe(-1);
-    expect(materialCategorizationStepperTester(null, undefined)).toBe(-1);
-    expect(
-      materialCategorizationStepperTester({ type: 'Foo' }, undefined)
-    ).toBe(-1);
-    expect(
-      materialCategorizationStepperTester({ type: 'Categorization' }, undefined)
-    ).toBe(-1);
+  it('should not fail when given undefined data', async () => {
+    expect(await materialCategorizationStepperTester(undefined, undefined)).toBe(-1);
+    expect(await materialCategorizationStepperTester(null, undefined)).toBe(-1);
+    expect(await materialCategorizationStepperTester({ type: 'Foo' }, undefined)).toBe(-1);
+    expect(await materialCategorizationStepperTester({ type: 'Categorization' }, undefined)).toBe(-1);
   });
 
-  it('should not fail with null elements and no schema', () => {
+  it('should not fail with null elements and no schema', async () => {
     const uischema: Layout = {
       type: 'Categorization',
       elements: null
     };
-    expect(materialCategorizationStepperTester(uischema, undefined)).toBe(-1);
+    expect(await materialCategorizationStepperTester(uischema, undefined)).toBe(-1);
   });
 
-  it('should not fail with empty elements and no schema', () => {
+  it('should not fail with empty elements and no schema', async () => {
     const uischema: Layout = {
       type: 'Categorization',
       elements: []
     };
-    expect(materialCategorizationStepperTester(uischema, undefined)).toBe(-1);
+    expect(await materialCategorizationStepperTester(uischema, undefined)).toBe(-1);
   });
 
-  it('should not fail tester with single unknown element and no schema', () => {
+  it('should not fail tester with single unknown element and no schema', async () => {
     const uischema: Layout = {
       type: 'Categorization',
       elements: [
@@ -121,10 +116,10 @@ describe('Material categorization stepper layout tester', () => {
         }
       ]
     };
-    expect(materialCategorizationStepperTester(uischema, undefined)).toBe(-1);
+    expect(await materialCategorizationStepperTester(uischema, undefined)).toBe(-1);
   });
 
-  it('should not apply to a single category and no schema', () => {
+  it('should not apply to a single category and no schema', async () => {
     const categorization = {
       type: 'Categorization',
       elements: [
@@ -133,12 +128,10 @@ describe('Material categorization stepper layout tester', () => {
         }
       ]
     };
-    expect(materialCategorizationStepperTester(categorization, undefined)).toBe(
-      -1
-    );
+    expect(await materialCategorizationStepperTester(categorization, undefined)).toBe(-1);
   });
 
-  it('should not apply to a nested categorization with single category and no schema', () => {
+  it('should not apply to a nested categorization with single category and no schema', async () => {
     const nestedCategorization: Layout = {
       type: 'Categorization',
       elements: [
@@ -151,12 +144,10 @@ describe('Material categorization stepper layout tester', () => {
       type: 'Categorization',
       elements: [nestedCategorization]
     };
-    expect(materialCategorizationStepperTester(categorization, undefined)).toBe(
-      -1
-    );
+    expect(await materialCategorizationStepperTester(categorization, undefined)).toBe(-1);
   });
 
-  it('should not apply to nested categorizations without categories and no schema', () => {
+  it('should not apply to nested categorizations without categories and no schema', async () => {
     const categorization: any = {
       type: 'Categorization',
       elements: [
@@ -165,12 +156,10 @@ describe('Material categorization stepper layout tester', () => {
         }
       ]
     };
-    expect(materialCategorizationStepperTester(categorization, undefined)).toBe(
-      -1
-    );
+    expect(await materialCategorizationStepperTester(categorization, undefined)).toBe(-1);
   });
 
-  it('should not apply to a nested categorization with null elements and no schema', () => {
+  it('should not apply to a nested categorization with null elements and no schema', async () => {
     const categorization: any = {
       type: 'Categorization',
       elements: [
@@ -182,12 +171,10 @@ describe('Material categorization stepper layout tester', () => {
       ]
     };
 
-    expect(materialCategorizationStepperTester(categorization, undefined)).toBe(
-      -1
-    );
+    expect(await materialCategorizationStepperTester(categorization, undefined)).toBe(-1);
   });
 
-  it('should not apply to a nested categorizations with empty elements and no schema', () => {
+  it('should not apply to a nested categorizations with empty elements and no schema', async () => {
     const categorization: any = {
       type: 'Categorization',
       elements: [
@@ -197,13 +184,12 @@ describe('Material categorization stepper layout tester', () => {
         }
       ]
     };
-    expect(materialCategorizationStepperTester(categorization, undefined)).toBe(
-      -1
-    );
+    expect(await materialCategorizationStepperTester(categorization, undefined)).toBe(-1);
   });
 });
 
 describe('Material categorization stepper layout', () => {
+
   it('should render', () => {
     const nameControl = {
       type: 'Control',
@@ -232,15 +218,19 @@ describe('Material categorization stepper layout', () => {
       ]
     };
 
-    const store = initJsonFormsStore(fixture);
     const wrapper = mount(
-      <Provider store={store}>
+      <JsonFormsStateProvider
+        initState={{
+          core: { uischema, schema: fixture.schema, data: fixture.data },
+          renderers: materialRenderers
+        }}
+      >
         <MaterialCategorizationStepperLayoutRenderer
           {...layoutDefaultProps}
           schema={fixture.schema}
           uischema={uischema}
         />
-      </Provider>
+      </JsonFormsStateProvider>
     );
     const steps = wrapper.find(Step);
     expect(steps.length).toBe(2);
@@ -248,7 +238,7 @@ describe('Material categorization stepper layout', () => {
   });
 
   it('should render on click', () => {
-    const data = { name: 'Foo' };
+    const data = { 'name': 'Foo' };
     const nameControl: ControlElement = {
       type: 'Control',
       scope: '#/properties/name'
@@ -286,27 +276,23 @@ describe('Material categorization stepper layout', () => {
         }
       ]
     };
-    const store = initJsonFormsStore({
-      ...fixture,
-      data
-    });
 
     const wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialCategorizationStepperLayoutRenderer
-            {...layoutDefaultProps}
-            schema={fixture.schema}
-            uischema={uischema}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider
+        initState={{
+          core: { uischema: fixture.uischema, schema: fixture.schema, data },
+          renderers: materialRenderers
+        }}
+      >
+        <MaterialCategorizationStepperLayoutRenderer
+          {...layoutDefaultProps}
+          schema={fixture.schema}
+          uischema={uischema}
+        />
+      </JsonFormsStateProvider>
     );
     const beforeClick = wrapper.find(Stepper).props().activeStep;
-    wrapper
-      .find(StepButton)
-      .at(1)
-      .simulate('click');
+    wrapper.find(StepButton).at(1).simulate('click');
     const afterClick = wrapper.find(Stepper).props().activeStep;
 
     expect(beforeClick).toBe(0);
@@ -315,17 +301,15 @@ describe('Material categorization stepper layout', () => {
   });
 
   it('can be hidden via ownProp', () => {
-    const store = initJsonFormsStore(fixture);
-
     const wrapper = mount(
-      <Provider store={store}>
+      <JsonFormsStateProvider initState={{ core: { uischema: fixture.uischema, schema: fixture.schema, data: fixture.data } }}>
         <MaterialCategorizationStepperLayoutRenderer
           {...layoutDefaultProps}
           schema={fixture.schema}
           uischema={fixture.uischema}
           visible={false}
         />
-      </Provider>
+      </JsonFormsStateProvider>
     );
 
     expect(wrapper.find(Stepper).exists()).toBeFalsy();
@@ -333,15 +317,14 @@ describe('Material categorization stepper layout', () => {
   });
 
   it('is shown by default', () => {
-    const store = initJsonFormsStore(fixture);
     const wrapper = mount(
-      <Provider store={store}>
+      <JsonFormsStateProvider initState={{ core: { uischema: fixture.uischema, schema: fixture.schema, data: fixture.data } }}>
         <MaterialCategorizationStepperLayoutRenderer
           {...layoutDefaultProps}
           schema={fixture.schema}
           uischema={fixture.uischema}
         />
-      </Provider>
+      </JsonFormsStateProvider>
     );
 
     expect(wrapper.find(Stepper).exists()).toBeTruthy();
@@ -374,15 +357,14 @@ describe('Material categorization stepper layout', () => {
         }
       ]
     };
-    const store = initJsonFormsStore(fixture);
     const wrapper = mount(
-      <Provider store={store}>
+      <JsonFormsStateProvider initState={{ core: { uischema: fixture.uischema, schema: fixture.schema, data: fixture.data } }}>
         <MaterialCategorizationStepperLayoutRenderer
           {...layoutDefaultProps}
           schema={fixture.schema}
           uischema={uischema}
         />
-      </Provider>
+      </JsonFormsStateProvider>
     );
 
     expect(wrapper.find(Step).length).toBe(1);
@@ -390,17 +372,16 @@ describe('Material categorization stepper layout', () => {
   });
 
   it('should have renderers prop via ownProps', () => {
-    const store = initJsonFormsStore(fixture);
     const renderers: any[] = [];
     const wrapper = mount(
-      <Provider store={store}>
+      <JsonFormsStateProvider initState={{ core: { uischema: fixture.uischema, schema: fixture.schema, data: fixture.data } }}>
         <MaterialCategorizationStepperLayoutRenderer
           {...layoutDefaultProps}
           schema={fixture.schema}
           uischema={fixture.uischema}
           renderers={renderers}
         />
-      </Provider>
+      </JsonFormsStateProvider>
     );
 
     const materialArrayLayout = wrapper.find(MaterialLayoutRenderer);

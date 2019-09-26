@@ -31,12 +31,15 @@ import {
   findUISchema,
   isObjectArray,
   isPlainLabel,
+  JsonSchema,
   RankedTester,
   rankWith,
+  refResolver,
   uiTypeIs
 } from '@jsonforms/core';
 import {
   JsonFormsDispatch,
+  ResolveRef,
   withJsonFormsArrayLayoutProps
 } from '@jsonforms/react';
 import { Grid, Hidden, List, Typography } from '@material-ui/core';
@@ -60,8 +63,15 @@ export const MaterialListWithDetailRenderer = ({
   addItem,
   data,
   renderers,
-  config
+  config,
+  refParserOptions,
+  rootSchema
 }: ArrayLayoutProps) => {
+  const resolveRef = useCallback(pointer => {
+    return refResolver(rootSchema, refParserOptions)(pointer)
+  },
+    [rootSchema, refParserOptions]
+  );
   const [selectedIndex, setSelectedIndex] = useState(undefined);
   const handleRemoveItem = useCallback(
     (p: string, value: any) => () => {
@@ -75,71 +85,76 @@ export const MaterialListWithDetailRenderer = ({
     [removeItems, setSelectedIndex]
   );
   const handleListItemClick = useCallback(
-    (index: number) => () => setSelectedIndex(index),
+    (index: number) => () => {
+      setSelectedIndex(index)
+    },
     [setSelectedIndex]
   );
-  const handleCreateDefaultValue = useCallback(
-    () => createDefaultValue(schema),
-    [createDefaultValue]
-  );
-  const foundUISchema = findUISchema(
-    uischemas,
-    schema,
-    uischema.scope,
-    path,
-    undefined,
-    uischema
-  );
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
+  const handleCreateDefaultValue = (s: any) => () => createDefaultValue(s);
 
   return (
-    <Hidden xsUp={!visible}>
-      <ArrayLayoutToolbar
-        label={computeLabel(
-          isPlainLabel(label) ? label : label.default,
-          required,
-          appliedUiSchemaOptions.hideRequiredAsterisk
-        )}
-        errors={errors}
-        path={path}
-        addItem={addItem}
-        createDefault={handleCreateDefaultValue}
-      />
-      <Grid container direction='row' spacing={2}>
-        <Grid item xs={3}>
-          <List>
-            {data > 0 ? (
-              map(range(data), index => (
-                <ListWithDetailMasterItem
-                  index={index}
-                  path={path}
-                  schema={schema}
-                  handleSelect={handleListItemClick}
-                  removeItem={handleRemoveItem}
-                  selected={selectedIndex === index}
-                  key={index}
-                />
-              ))
-            ) : (
-              <p>No data</p>
-            )}
-          </List>
-        </Grid>
-        <Grid item xs>
-          {selectedIndex !== undefined ? (
-            <JsonFormsDispatch
-              renderers={renderers}
-              visible={visible}
-              schema={schema}
-              uischema={foundUISchema}
-              path={composePaths(path, `${selectedIndex}`)}
+    <ResolveRef schema={schema} refResolver={resolveRef} pointer={schema.$ref}>
+      {(resolvedSchema: JsonSchema) => {
+        const foundUISchema = findUISchema(
+          uischemas,
+          resolvedSchema,
+          schema.$ref || `${uischema.scope}/items`,
+          path,
+          undefined,
+          uischema
+        );
+        return (
+          <Hidden xsUp={!visible}>
+            <ArrayLayoutToolbar
+              label={computeLabel(
+                isPlainLabel(label) ? label : label.default,
+                required,
+                appliedUiSchemaOptions.hideRequiredAsterisk
+              )}
+              errors={errors}
+              path={path}
+              addItem={addItem}
+              createDefault={handleCreateDefaultValue(resolvedSchema)}
             />
-          ) : (
-            <Typography variant='h6'>No Selection</Typography>
-          )}
-        </Grid>
-      </Grid>
-    </Hidden>
+            <Grid container direction='row' spacing={2}>
+              <Grid item xs={3}>
+                <List>
+                  {data > 0 ? (
+                    map(range(data), index => (
+                      <ListWithDetailMasterItem
+                        index={index}
+                        path={path}
+                        schema={resolvedSchema}
+                        handleSelect={handleListItemClick}
+                        removeItem={handleRemoveItem}
+                        selected={selectedIndex === index}
+                        key={index}
+                      />
+                    ))
+                  ) : (
+                      <p>No data</p>
+                    )}
+                </List>
+              </Grid>
+              <Grid item xs>
+                {selectedIndex !== undefined ? (
+                  <JsonFormsDispatch
+                    renderers={renderers}
+                    visible={visible}
+                    schema={resolvedSchema}
+                    uischema={foundUISchema}
+                    path={composePaths(path, `${selectedIndex}`)}
+                  />
+                ) : (
+                    <Typography variant='h6'>No Selection</Typography>
+                  )}
+              </Grid>
+            </Grid>
+          </Hidden>
+        );
+      }}
+    </ResolveRef>
   );
 };
 

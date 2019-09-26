@@ -25,23 +25,16 @@
 import './MatchMediaMock';
 import * as React from 'react';
 import {
-  Actions,
   ControlElement,
-  jsonformsReducer,
-  JsonFormsState,
-  JsonSchema,
-  UISchemaElement
 } from '@jsonforms/core';
 import MaterialEnumCell, {
   materialEnumCellTester
 } from '../../src/cells/MaterialEnumCell';
-import { Provider } from 'react-redux';
-import { materialRenderers } from '../../src';
-import { AnyAction, combineReducers, createStore, Reducer, Store } from 'redux';
 
 import Enzyme, { mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { JsonFormsReduxContext } from '@jsonforms/react';
+import { JsonFormsStateProvider } from '@jsonforms/react';
+import { resolveRef } from '../util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -55,57 +48,40 @@ const uischema: ControlElement = {
   scope: '#/properties/nationality'
 };
 
-const initJsonFormsStore = (
-  testData: any,
-  testSchema: JsonSchema,
-  testUiSchema: UISchemaElement
-): Store<JsonFormsState> => {
-  const s: JsonFormsState = {
-    jsonforms: {
-      renderers: materialRenderers
-    }
-  };
-  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({
-    jsonforms: jsonformsReducer()
-  });
-  const store: Store<JsonFormsState> = createStore(reducer, s);
-  store.dispatch(Actions.init(testData, testSchema, testUiSchema));
-  return store;
-};
 
 describe('Material enum cell tester', () => {
-  it('should succeed with matching prop type', () => {
+  it('should succeed with matching prop type', async () => {
     const control: ControlElement = {
       type: 'Control',
       scope: '#/properties/nationality'
     };
-    expect(
-      materialEnumCellTester(control, {
-        type: 'object',
-        properties: {
-          nationality: {
-            type: 'string',
-            enum: ['DE', 'IT', 'JP', 'US', 'RU', 'Other']
-          }
+    const jsonSchema = {
+      type: 'object',
+      properties: {
+        nationality: {
+          type: 'string',
+          enum: ['DE', 'IT', 'JP', 'US', 'RU', 'Other']
         }
-      })
-    ).toBe(2);
+      }
+    };
+    expect(await materialEnumCellTester(control, jsonSchema, resolveRef(jsonSchema))).toBe(2);
   });
 });
 
 describe('Material enum cell', () => {
   it('should select an item from dropdown list', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
     const wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialEnumCell
-            schema={schema}
-            uischema={uischema}
-            path='nationality'
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider
+        initState={{
+          core: { uischema, schema, data }
+        }}
+      >
+        <MaterialEnumCell
+          schema={schema}
+          uischema={uischema}
+          path='nationality'
+        />
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input');
     expect(input.props().value).toBe('JP');

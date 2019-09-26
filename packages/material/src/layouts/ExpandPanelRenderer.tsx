@@ -35,6 +35,7 @@ import ArrowDownward from '@material-ui/icons/ArrowDownward';
 const iconStyle: any = { float: 'right' };
 
 interface OwnPropsOfExpandPanel {
+  schemaPath: string;
   index: number;
   path: string;
   uischema: ControlElement;
@@ -80,6 +81,7 @@ const ExpandPanelRenderer = (props: ExpandPanelProps) => {
     enableMoveDown,
     enableMoveUp,
     handleExpansion,
+    schemaPath,
     removeItems,
     path,
     rootSchema,
@@ -87,13 +89,13 @@ const ExpandPanelRenderer = (props: ExpandPanelProps) => {
     uischema,
     uischemas,
     renderers,
-    config
+    config,
   } = props;
 
   const foundUISchema = findUISchema(
     uischemas,
     schema,
-    uischema.scope,
+    schemaPath,
     path,
     undefined,
     uischema,

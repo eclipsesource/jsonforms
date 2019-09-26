@@ -50,6 +50,7 @@ import '../../src/cells';
 import { MaterialInputControl } from '../../src/controls/MaterialInputControl';
 import MaterialHorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
 import { MuiInputText } from '../../src/mui-controls';
+import { waitForScopedRenderer } from '../util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -71,7 +72,7 @@ class TestControlInner extends Control<ControlProps, ControlState> {
     return <MaterialInputControl {...this.props} input={MuiInputText} />;
   }
 }
-export const testControlTester: RankedTester = rankWith(1, isControl);
+export const testControlTester: RankedTester = rankWith(1, async (uischema: UISchemaElement) => isControl(uischema));
 const TestControl = connect(
   mapStateToControlProps,
   mapDispatchToControlProps
@@ -238,7 +239,7 @@ describe('Material input control', () => {
     expect(validation.text()).toBe('');
   });
 
-  it('should handle validation with nested schemas', () => {
+  it('should handle validation with nested schemas', async () => {
     const jsonSchema = {
       type: 'object',
       properties: {
@@ -294,6 +295,8 @@ describe('Material input control', () => {
         </JsonFormsReduxContext>
       </Provider>
     );
+
+    await waitForScopedRenderer(wrapper);
     const validation = wrapper.find('p');
     expect(validation).toHaveLength(6);
     expect(validation.at(0).text()).toBe('');

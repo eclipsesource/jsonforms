@@ -41,7 +41,7 @@ import { materialRenderers } from '../../src';
 import { AnyAction, combineReducers, createStore, Reducer, Store } from 'redux';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { JsonFormsReduxContext } from '@jsonforms/react';
+import { JsonFormsReduxContext, JsonFormsStateProvider } from '@jsonforms/react';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -74,15 +74,15 @@ const initJsonFormsStore = (
 };
 
 describe('Material Label Renderer tester', () => {
-  it('should fail', () => {
-    expect(materialLabelRendererTester(undefined, undefined)).toBe(
+  it('should fail', async () => {
+    expect(await materialLabelRendererTester(undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
-    expect(materialLabelRendererTester(null, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialLabelRendererTester({ type: 'Foo' }, undefined)).toBe(
+    expect(await materialLabelRendererTester(null, undefined)).toBe(NOT_APPLICABLE);
+    expect(await materialLabelRendererTester({ type: 'Foo' }, undefined)).toBe(
       NOT_APPLICABLE
     );
-    expect(materialLabelRendererTester({ type: 'Label' }, undefined)).toBe(1);
+    expect(await materialLabelRendererTester({ type: 'Label' }, undefined)).toBe(1);
   });
 });
 
@@ -92,13 +92,10 @@ describe('Material Label Renderer', () => {
   afterEach(() => wrapper.unmount());
 
   it('render', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialLabelRenderer schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core: { uischema, schema, data } }}>
+        <MaterialLabelRenderer schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
     );
 
     const label = wrapper.find('h6').first();

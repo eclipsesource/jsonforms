@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Hidden } from '@material-ui/core';
 
 import {
@@ -32,10 +32,14 @@ import {
   JsonSchema,
   RankedTester,
   rankWith,
-  resolveSubSchemas,
+  refResolver,
   StatePropsOfCombinator
 } from '@jsonforms/core';
-import { JsonFormsDispatch, withJsonFormsAllOfProps } from '@jsonforms/react';
+import {
+  JsonFormsDispatch,
+  ScopedRenderer,
+  withJsonFormsCombinatorProps
+} from '@jsonforms/react';
 
 const MaterialAllOfRenderer = ({
   schema,
@@ -44,47 +48,63 @@ const MaterialAllOfRenderer = ({
   renderers,
   path,
   uischemas,
-  uischema
+  uischema,
+  refParserOptions
 }: StatePropsOfCombinator) => {
-  const _schema = resolveSubSchemas(schema, rootSchema, 'allOf');
   const delegateUISchema = findMatchingUISchema(uischemas)(
-    _schema,
+    schema,
     uischema.scope,
     path
   );
-  if (delegateUISchema) {
-    return (
-      <Hidden xsUp={!visible}>
-        <JsonFormsDispatch
-          schema={_schema}
-          uischema={delegateUISchema}
-          path={path}
-          renderers={renderers}
-        />
-      </Hidden>
-    );
-  }
-  const allOfRenderInfos = createCombinatorRenderInfos(
-    (_schema as JsonSchema).allOf,
-    rootSchema,
-    'allOf',
-    uischema,
-    path,
-    uischemas
+  const resolveRef = useCallback(pointer =>
+    refResolver(rootSchema, refParserOptions)(pointer),
+    [rootSchema, refParserOptions]
   );
 
+  if (delegateUISchema) {
+    return (
+      <ScopedRenderer schema={schema} uischema={uischema} refResolver={resolveRef}>
+        {(resolvedSchema: JsonSchema) => (
+          <Hidden xsUp={!visible}>
+            <JsonFormsDispatch
+              schema={resolvedSchema}
+              uischema={delegateUISchema}
+              path={path}
+              renderers={renderers}
+            />
+          </Hidden>
+        )}
+      </ScopedRenderer>
+    );
+  }
+
   return (
-    <Hidden xsUp={!visible}>
-      {allOfRenderInfos.map((allOfRenderInfo, allOfIndex) => (
-        <JsonFormsDispatch
-          key={allOfIndex}
-          schema={allOfRenderInfo.schema}
-          uischema={allOfRenderInfo.uischema}
-          path={path}
-          renderers={renderers}
-        />
-      ))}
-    </Hidden>
+    <ScopedRenderer schema={schema} uischema={uischema} refResolver={resolveRef}>
+      {(resolvedSchema: JsonSchema) => {
+        const allOfRenderInfos = createCombinatorRenderInfos(
+          resolvedSchema.allOf,
+          rootSchema,
+          'allOf',
+          uischema,
+          path,
+          uischemas
+        );
+
+        return (
+          <Hidden xsUp={!visible}>
+            {allOfRenderInfos.map((allOfRenderInfo, allOfIndex) => (
+              <JsonFormsDispatch
+                key={allOfIndex}
+                schema={allOfRenderInfo.schema}
+                uischema={allOfRenderInfo.uischema}
+                path={path}
+                renderers={renderers}
+              />
+            ))}
+          </Hidden>
+        );
+      }}
+    </ScopedRenderer>
   );
 };
 
@@ -92,4 +112,4 @@ export const materialAllOfControlTester: RankedTester = rankWith(
   3,
   isAllOfControl
 );
-export default withJsonFormsAllOfProps(MaterialAllOfRenderer);
+export default withJsonFormsCombinatorProps(MaterialAllOfRenderer);

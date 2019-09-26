@@ -22,26 +22,17 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import './MatchMediaMock';
 import React from 'react';
-import { Provider } from 'react-redux';
+import './MatchMediaMock';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
+import { ControlElement, JsonSchema } from '@jsonforms/core';
 import {
-  Actions,
-  ControlElement,
-  jsonformsReducer,
-  JsonFormsState,
-  JsonSchema,
-  UISchemaElement
-} from '@jsonforms/core';
-import {
-  MaterialAnyOfStringOrEnumControl,
-  materialAnyOfStringOrEnumControlTester,
-  materialRenderers
+  MaterialAnyOfStringOrEnumControl, materialAnyOfStringOrEnumControlTester, materialRenderers
 } from '../../src';
-import { combineReducers, createStore, Store } from 'redux';
+import { resolveRef } from '../util';
+import { JsonFormsStateProvider } from '@jsonforms/react';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -55,11 +46,9 @@ const uischema: ControlElement = {
 };
 
 describe('Material simple any of control tester', () => {
-  it('should only be applicable for simple any of cases', () => {
-    expect(
-      materialAnyOfStringOrEnumControlTester({ type: 'Foo' }, schema)
-    ).toBe(-1);
-    expect(materialAnyOfStringOrEnumControlTester(uischema, schema)).toBe(5);
+  it('should only be applicable for simple any of cases', async () => {
+    expect(await materialAnyOfStringOrEnumControlTester({ type: 'Foo' }, schema, resolveRef(schema))).toBe(-1);
+    expect(await materialAnyOfStringOrEnumControlTester(uischema, schema, resolveRef(schema))).toBe(5);
 
     const nestedSchema: JsonSchema = {
       properties: {
@@ -70,9 +59,9 @@ describe('Material simple any of control tester', () => {
       type: 'Control',
       scope: '#/properties/foo'
     };
-    expect(
-      materialAnyOfStringOrEnumControlTester(nestedUischema, nestedSchema)
-    ).toBe(5);
+    expect(await materialAnyOfStringOrEnumControlTester(nestedUischema, nestedSchema, resolveRef(nestedSchema))).toBe(
+      5
+    );
     const schemaNoEnum: JsonSchema = {
       anyOf: [{ type: 'string' }]
     };
@@ -85,38 +74,12 @@ describe('Material simple any of control tester', () => {
     const schemaNoString: JsonSchema = {
       anyOf: [{ type: 'integer' }, { enum: [1, 2] }]
     };
-    expect(materialAnyOfStringOrEnumControlTester(uischema, schemaNoEnum)).toBe(
-      -1
-    );
-    expect(
-      materialAnyOfStringOrEnumControlTester(uischema, schemaConflictTypes)
-    ).toBe(-1);
-    expect(
-      materialAnyOfStringOrEnumControlTester(uischema, schemaAdditionalProps)
-    ).toBe(5);
-    expect(
-      materialAnyOfStringOrEnumControlTester(uischema, schemaNoString)
-    ).toBe(-1);
+    expect(await materialAnyOfStringOrEnumControlTester(uischema, schemaNoEnum, resolveRef(schemaNoEnum))).toBe(-1);
+    expect(await materialAnyOfStringOrEnumControlTester(uischema, schemaConflictTypes, resolveRef(schemaConflictTypes))).toBe(-1);
+    expect(await materialAnyOfStringOrEnumControlTester(uischema, schemaAdditionalProps, resolveRef(schemaAdditionalProps))).toBe(5);
+    expect(await materialAnyOfStringOrEnumControlTester(uischema, schemaNoString, resolveRef(schemaNoString))).toBe(-1);
   });
 });
-
-const initJsonFormsStore = (
-  testData: any,
-  testSchema: JsonSchema,
-  testUiSchema: UISchemaElement
-): Store<JsonFormsState> => {
-  const s: JsonFormsState = {
-    jsonforms: {
-      renderers: materialRenderers
-    }
-  };
-  const store: Store<JsonFormsState> = createStore(
-    combineReducers({ jsonforms: jsonformsReducer() }),
-    s
-  );
-  store.dispatch(Actions.init(testData, testSchema, testUiSchema));
-  return store;
-};
 
 describe('Material any of string or enum control', () => {
   let wrapper: ReactWrapper;
@@ -126,11 +89,15 @@ describe('Material any of string or enum control', () => {
   });
 
   it('render', () => {
-    const store = initJsonFormsStore('foo', schema, uischema);
     wrapper = mount(
-      <Provider store={store}>
+      <JsonFormsStateProvider
+        initState={{
+          core: { schema, uischema, data: 'foo' },
+          renderers: materialRenderers
+        }}
+      >
         <MaterialAnyOfStringOrEnumControl schema={schema} uischema={uischema} />
-      </Provider>
+      </JsonFormsStateProvider>
     );
     const inputs = wrapper.find('input');
     expect(inputs).toHaveLength(1);

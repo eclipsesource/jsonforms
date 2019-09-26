@@ -22,45 +22,27 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import React from 'react';
 import './MatchMediaMock';
-import React, { Reducer } from 'react';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import {
-  Actions,
-  ControlElement,
-  jsonformsReducer,
-  JsonFormsState
-} from '@jsonforms/core';
+import { ControlElement, JsonSchema } from '@jsonforms/core';
 import { MaterialAllOfRenderer, materialRenderers } from '../../src';
-import { AnyAction, combineReducers, createStore, Store } from 'redux';
-import { JsonFormsReduxContext } from '@jsonforms/react';
-import { Provider } from 'react-redux';
+import { JsonFormsStateProvider, ScopedRenderer } from '@jsonforms/react';
+import { act } from 'react-dom/test-utils';
+import waitUntil from 'async-wait-until';
+import { resolveRef } from '../util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-const initStore = () => {
-  const s: JsonFormsState = {
-    jsonforms: {
-      renderers: materialRenderers
-    }
-  };
-  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({
-    jsonforms: jsonformsReducer()
-  });
-  const store: Store<JsonFormsState> = createStore(reducer, s);
-
-  return store;
-};
-
 describe('Material allOf renderer', () => {
+
   let wrapper: ReactWrapper;
 
   afterEach(() => wrapper.unmount());
 
-  it('should render', () => {
-    const store = initStore();
+  it('should render', async () => {
     const schema = {
       type: 'object',
       properties: {
@@ -83,20 +65,34 @@ describe('Material allOf renderer', () => {
       label: 'Value',
       scope: '#/properties/value'
     };
-    store.dispatch(Actions.init({ data: undefined }, schema, uischema));
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialAllOfRenderer schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider
+        initState={{
+          core: { schema, uischema, data: undefined },
+          renderers: materialRenderers
+        }}
+      >
+        <ScopedRenderer schema={schema} uischema={uischema} refResolver={resolveRef(schema)}>
+          {(resolvedSchema: JsonSchema) => (
+            <MaterialAllOfRenderer
+              schema={resolvedSchema}
+              uischema={uischema}
+              renderers={materialRenderers}
+              visible
+            />
+          )}
+        </ScopedRenderer>
+      </JsonFormsStateProvider>
     );
+    await act(
+      async () => { waitUntil(() => wrapper.find(ScopedRenderer).children !== null); }
+    );
+    wrapper.update();
     const inputs = wrapper.find('input');
     expect(inputs.length).toBe(2);
   });
 
-  it('should be hideable', () => {
-    const store = initStore();
+  it('should be hideable', async () => {
     const schema = {
       type: 'object',
       properties: {
@@ -119,18 +115,29 @@ describe('Material allOf renderer', () => {
       label: 'Value',
       scope: '#/properties/value'
     };
-    store.dispatch(Actions.init({ data: undefined }, schema, uischema));
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialAllOfRenderer
-            schema={schema}
-            uischema={uischema}
-            visible={false}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider
+        initState={{
+          core: { schema, uischema, data: undefined },
+          renderers: materialRenderers
+        }}
+      >
+        <ScopedRenderer schema={schema} uischema={uischema} refResolver={resolveRef(schema)}>
+          {(resolvedSchema: JsonSchema) => (
+            <MaterialAllOfRenderer
+              schema={resolvedSchema}
+              uischema={uischema}
+              renderers={materialRenderers}
+              visible={false}
+            />
+          )}
+        </ScopedRenderer>
+      </JsonFormsStateProvider>
     );
+    await act(
+      async () => { waitUntil(() => wrapper.find(ScopedRenderer).children !== null); }
+    );
+    wrapper.update();
     const inputs = wrapper.find('input');
     expect(inputs.length).toBe(0);
   });

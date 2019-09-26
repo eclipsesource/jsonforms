@@ -25,46 +25,24 @@
 import './MatchMediaMock';
 import React from 'react';
 import {
-  Actions,
   Categorization,
   ControlElement,
-  jsonformsReducer,
-  JsonFormsState,
   Layout,
   layoutDefaultProps,
   RuleEffect,
   SchemaBasedCondition
 } from '@jsonforms/core';
-import { JsonFormsReduxContext } from '@jsonforms/react';
+import { JsonFormsStateProvider } from '@jsonforms/react';
 import Enzyme, { mount } from 'enzyme';
 
-import { AnyAction, combineReducers, createStore, Reducer, Store } from 'redux';
 import MaterialCategorizationLayoutRenderer, {
   materialCategorizationTester
 } from '../../src/layouts/MaterialCategorizationLayout';
 import { MaterialLayoutRenderer, materialRenderers } from '../../src';
 import { Tab, Tabs } from '@material-ui/core';
 import Adapter from 'enzyme-adapter-react-16';
-import { Provider } from 'react-redux';
 
 Enzyme.configure({ adapter: new Adapter() });
-
-export const initJsonFormsStore = (initState: any): Store<JsonFormsState> => {
-  const s: JsonFormsState = {
-    jsonforms: {
-      renderers: materialRenderers
-    }
-  };
-  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({
-    jsonforms: jsonformsReducer()
-  });
-  const store: Store<JsonFormsState> = createStore(reducer, s);
-
-  const { data, schema, uischema } = initState;
-  store.dispatch(Actions.init(data, schema, uischema));
-
-  return store;
-};
 
 const fixture = {
   data: {},
@@ -88,32 +66,30 @@ const fixture = {
 };
 
 describe('Material categorization layout tester', () => {
-  it('should not fail when given undefined data', () => {
-    expect(materialCategorizationTester(undefined, undefined)).toBe(-1);
-    expect(materialCategorizationTester(null, undefined)).toBe(-1);
-    expect(materialCategorizationTester({ type: 'Foo' }, undefined)).toBe(-1);
-    expect(
-      materialCategorizationTester({ type: 'Categorization' }, undefined)
-    ).toBe(-1);
+  it('should not fail when given undefined data', async () => {
+    expect(await materialCategorizationTester(undefined, undefined)).toBe(-1);
+    expect(await materialCategorizationTester(null, undefined)).toBe(-1);
+    expect(await materialCategorizationTester({ type: 'Foo' }, undefined)).toBe(-1);
+    expect(await materialCategorizationTester({ type: 'Categorization' }, undefined)).toBe(-1);
   });
 
-  it('should not fail with null elements and no schema', () => {
+  it('should not fail with null elements and no schema', async () => {
     const uischema: Layout = {
       type: 'Categorization',
       elements: null
     };
-    expect(materialCategorizationTester(uischema, undefined)).toBe(-1);
+    expect(await materialCategorizationTester(uischema, undefined)).toBe(-1);
   });
 
-  it('should succeed with empty elements and no schema', () => {
+  it('should succeed with empty elements and no schema', async () => {
     const uischema: Layout = {
       type: 'Categorization',
       elements: []
     };
-    expect(materialCategorizationTester(uischema, undefined)).toBe(1);
+    expect(await materialCategorizationTester(uischema, undefined)).toBe(1);
   });
 
-  it('should not fail tester with single unknown element and no schema', () => {
+  it('should not fail tester with single unknown element and no schema', async () => {
     const uischema: Layout = {
       type: 'Categorization',
       elements: [
@@ -122,10 +98,10 @@ describe('Material categorization layout tester', () => {
         }
       ]
     };
-    expect(materialCategorizationTester(uischema, undefined)).toBe(-1);
+    expect(await materialCategorizationTester(uischema, undefined)).toBe(-1);
   });
 
-  it('should succeed with a single category and no schema', () => {
+  it('should succeed with a single category and no schema', async () => {
     const categorization = {
       type: 'Categorization',
       elements: [
@@ -134,10 +110,10 @@ describe('Material categorization layout tester', () => {
         }
       ]
     };
-    expect(materialCategorizationTester(categorization, undefined)).toBe(1);
+    expect(await materialCategorizationTester(categorization, undefined)).toBe(1);
   });
 
-  it('should not apply to a nested categorization with single category and no schema', () => {
+  it('should not apply to a nested categorization with single category and no schema', async () => {
     const nestedCategorization: Layout = {
       type: 'Categorization',
       elements: [
@@ -150,10 +126,10 @@ describe('Material categorization layout tester', () => {
       type: 'Categorization',
       elements: [nestedCategorization]
     };
-    expect(materialCategorizationTester(categorization, undefined)).toBe(-1);
+    expect(await materialCategorizationTester(categorization, undefined)).toBe(-1);
   });
 
-  it('should not apply to nested categorizations without categories and no schema', () => {
+  it('should not apply to nested categorizations without categories and no schema', async () => {
     const categorization: any = {
       type: 'Categorization',
       elements: [
@@ -162,10 +138,10 @@ describe('Material categorization layout tester', () => {
         }
       ]
     };
-    expect(materialCategorizationTester(categorization, undefined)).toBe(-1);
+    expect(await materialCategorizationTester(categorization, undefined)).toBe(-1);
   });
 
-  it('should not apply to a nested categorization with null elements and no schema', () => {
+  it('should not apply to a nested categorization with null elements and no schema', async () => {
     const categorization: any = {
       type: 'Categorization',
       elements: [
@@ -177,10 +153,10 @@ describe('Material categorization layout tester', () => {
       ]
     };
 
-    expect(materialCategorizationTester(categorization, undefined)).toBe(-1);
+    expect(await materialCategorizationTester(categorization, undefined)).toBe(-1);
   });
 
-  it('should not apply to a nested categorizations with empty elements and no schema', () => {
+  it('should not apply to a nested categorizations with empty elements and no schema', async () => {
     const categorization: any = {
       type: 'Categorization',
       elements: [
@@ -190,11 +166,12 @@ describe('Material categorization layout tester', () => {
         }
       ]
     };
-    expect(materialCategorizationTester(categorization, undefined)).toBe(-1);
+    expect(await materialCategorizationTester(categorization, undefined)).toBe(-1);
   });
 });
 
 describe('Material categorization layout', () => {
+
   it('should render', () => {
     const nameControl = {
       type: 'Control',
@@ -223,17 +200,19 @@ describe('Material categorization layout', () => {
       ]
     };
 
-    const store = initJsonFormsStore(fixture);
     const wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialCategorizationLayoutRenderer
-            {...layoutDefaultProps}
-            schema={fixture.schema}
-            uischema={uischema}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider
+        initState={{
+          core: { schema: fixture.schema, uischema: fixture.uischema, data: fixture.data },
+          renderers: materialRenderers
+        }}
+      >
+        <MaterialCategorizationLayoutRenderer
+          {...layoutDefaultProps}
+          schema={fixture.schema}
+          uischema={uischema}
+        />
+      </JsonFormsStateProvider>
     );
     const steps = wrapper.find(Tab);
     expect(steps.length).toBe(2);
@@ -241,7 +220,7 @@ describe('Material categorization layout', () => {
   });
 
   it('should render on click', () => {
-    const data = { name: 'Foo' };
+    const data = { 'name': 'Foo' };
     const nameControl: ControlElement = {
       type: 'Control',
       scope: '#/properties/name'
@@ -279,28 +258,23 @@ describe('Material categorization layout', () => {
         }
       ]
     };
-    const store = initJsonFormsStore({
-      ...fixture,
-      data
-    });
-
     const wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialCategorizationLayoutRenderer
-            {...layoutDefaultProps}
-            schema={fixture.schema}
-            uischema={uischema}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider
+        initState={{
+          core: { schema: fixture.schema, uischema: fixture.uischema, data },
+          renderers: materialRenderers
+        }}
+      >
+        <MaterialCategorizationLayoutRenderer
+          {...layoutDefaultProps}
+          schema={fixture.schema}
+          uischema={uischema}
+        />
+      </JsonFormsStateProvider>
     );
 
     const beforeClick = wrapper.find(Tabs).props().value;
-    wrapper
-      .find(Tab)
-      .at(1)
-      .simulate('click');
+    wrapper.find(Tab).at(1).simulate('click');
     const afterClick = wrapper.find(Tabs).props().value;
 
     expect(beforeClick).toBe(0);
@@ -309,19 +283,20 @@ describe('Material categorization layout', () => {
   });
 
   it('can be hidden via ownProp', () => {
-    const store = initJsonFormsStore(fixture);
-
     const wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialCategorizationLayoutRenderer
-            {...layoutDefaultProps}
-            schema={fixture.schema}
-            uischema={fixture.uischema}
-            visible={false}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider
+        initState={{
+          core: { schema: fixture.schema, uischema: fixture.uischema, data: fixture.data },
+          renderers: materialRenderers
+        }}
+      >
+        <MaterialCategorizationLayoutRenderer
+          {...layoutDefaultProps}
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          visible={false}
+        />
+      </JsonFormsStateProvider>
     );
 
     expect(wrapper.find(Tab).exists()).toBeFalsy();
@@ -329,17 +304,19 @@ describe('Material categorization layout', () => {
   });
 
   it('is shown by default', () => {
-    const store = initJsonFormsStore(fixture);
     const wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialCategorizationLayoutRenderer
-            {...layoutDefaultProps}
-            schema={fixture.schema}
-            uischema={fixture.uischema}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider
+        initState={{
+          core: { schema: fixture.schema, uischema: fixture.uischema, data: fixture.data },
+          renderers: materialRenderers
+        }}
+      >
+        <MaterialCategorizationLayoutRenderer
+          {...layoutDefaultProps}
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+        />
+      </JsonFormsStateProvider>
     );
 
     expect(wrapper.find(Tab).exists()).toBeTruthy();
@@ -372,17 +349,19 @@ describe('Material categorization layout', () => {
         }
       ]
     };
-    const store = initJsonFormsStore(fixture);
     const wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialCategorizationLayoutRenderer
-            {...layoutDefaultProps}
-            schema={fixture.schema}
-            uischema={uischema}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider
+        initState={{
+          core: { schema: fixture.schema, uischema: fixture.uischema, data: fixture.data },
+          renderers: materialRenderers
+        }}
+      >
+        <MaterialCategorizationLayoutRenderer
+          {...layoutDefaultProps}
+          schema={fixture.schema}
+          uischema={uischema}
+        />
+      </JsonFormsStateProvider>
     );
 
     expect(wrapper.find(Tab).length).toBe(1);
@@ -390,19 +369,21 @@ describe('Material categorization layout', () => {
   });
 
   it('should have renderers prop via ownProps', () => {
-    const store = initJsonFormsStore(fixture);
     const renderers: any[] = [];
     const wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialCategorizationLayoutRenderer
-            {...layoutDefaultProps}
-            schema={fixture.schema}
-            uischema={fixture.uischema}
-            renderers={renderers}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider
+        initState={{
+          core: { schema: fixture.schema, uischema: fixture.uischema, data: fixture.data },
+          renderers: materialRenderers
+        }}
+      >
+        <MaterialCategorizationLayoutRenderer
+          {...layoutDefaultProps}
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          renderers={renderers}
+        />
+      </JsonFormsStateProvider>
     );
 
     const materialArrayLayout = wrapper.find(MaterialLayoutRenderer);

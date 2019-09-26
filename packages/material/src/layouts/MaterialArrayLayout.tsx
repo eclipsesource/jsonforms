@@ -42,9 +42,9 @@ interface MaterialArrayLayoutState {
   expanded: string | boolean;
 }
 export class MaterialArrayLayout extends React.PureComponent<
-  ArrayLayoutProps,
+  ArrayLayoutProps & { schemaPath: string },
   MaterialArrayLayoutState
-> {
+  > {
   state: MaterialArrayLayoutState = {
     expanded: null
   };
@@ -67,6 +67,7 @@ export class MaterialArrayLayout extends React.PureComponent<
       renderers,
       label,
       required,
+      schemaPath,
       rootSchema,
       config
     } = this.props;
@@ -106,12 +107,13 @@ export class MaterialArrayLayout extends React.PureComponent<
                   enableMoveUp={index != 0}
                   enableMoveDown={index < data - 1}
                   config={config}
+                  schemaPath={schemaPath}
                 />
               );
             })
           ) : (
-            <p>No data</p>
-          )}
+              <p>No data</p>
+            )}
         </div>
       </Paper>
     );

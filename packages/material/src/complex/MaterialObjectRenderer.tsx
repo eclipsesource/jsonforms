@@ -27,15 +27,16 @@ import startCase from 'lodash/startCase';
 import {
   findUISchema,
   GroupLayout,
-  isObjectControl,
   isPlainLabel,
   RankedTester,
   rankWith,
-  StatePropsOfControlWithDetail
+  refResolver,
+  StatePropsOfControlWithDetail,
+  isObjectControl
 } from '@jsonforms/core';
-import { JsonFormsDispatch, withJsonFormsDetailProps } from '@jsonforms/react';
+import { JsonFormsDispatch, ScopedRenderer, withJsonFormsDetailProps } from '@jsonforms/react';
 import { Hidden } from '@material-ui/core';
-import React from 'react';
+import React, { useCallback } from 'react';
 
 const MaterialObjectRenderer = ({
   renderers,
@@ -45,34 +46,49 @@ const MaterialObjectRenderer = ({
   path,
   visible,
   uischema,
-  rootSchema
+  rootSchema,
+  refParserOptions
 }: StatePropsOfControlWithDetail) => {
-  const detailUiSchema = findUISchema(
-    uischemas,
-    schema,
-    uischema.scope,
-    path,
-    'Group',
-    uischema,
-    rootSchema
+
+  const resolveRef = useCallback(pointer =>
+    refResolver(rootSchema, refParserOptions)(pointer),
+    [rootSchema, refParserOptions]
   );
-  if (isEmpty(path)) {
-    detailUiSchema.type = 'VerticalLayout';
-  } else {
-    (detailUiSchema as GroupLayout).label = startCase(
-      isPlainLabel(label) ? label : label.default
-    );
-  }
+
   return (
-    <Hidden xsUp={!visible}>
-      <JsonFormsDispatch
-        visible={visible}
-        schema={schema}
-        uischema={detailUiSchema}
-        path={path}
-        renderers={renderers}
-      />
-    </Hidden>
+    <ScopedRenderer schema={schema} uischema={uischema} refResolver={resolveRef}>
+      {(resolvedSchema: any) => {
+        const detailUiSchema = findUISchema(
+          uischemas,
+          resolvedSchema,
+          uischema.scope,
+          path,
+          'Group',
+          uischema,
+          rootSchema
+        );
+
+        if (isEmpty(path)) {
+          detailUiSchema.type = 'VerticalLayout';
+        } else {
+          detailUiSchema.type = 'Group';
+          (detailUiSchema as GroupLayout).label = startCase(
+            isPlainLabel(label) ? label : label.default
+          );
+        }
+        return (
+          <Hidden xsUp={!visible}>
+            <JsonFormsDispatch
+              visible={visible}
+              schema={resolvedSchema}
+              uischema={detailUiSchema}
+              path={path}
+              renderers={renderers}
+            />
+          </Hidden>
+        );
+      }}
+    </ScopedRenderer>
   );
 };
 

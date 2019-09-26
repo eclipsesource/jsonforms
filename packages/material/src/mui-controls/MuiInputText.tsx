@@ -72,7 +72,9 @@ export class MuiInputText extends React.PureComponent<
     if (appliedUiSchemaOptions.trim && maxLength !== undefined) {
       inputProps.size = maxLength;
     }
-    const onChange = (ev: any) => handleChange(path, ev.target.value);
+    const onChange = (ev: any) => {
+      handleChange(path, ev.target.value);
+    };
 
     return (
       <Input

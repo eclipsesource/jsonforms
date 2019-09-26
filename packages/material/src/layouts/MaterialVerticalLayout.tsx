@@ -58,4 +58,6 @@ export const MaterialVerticalLayoutRenderer = ({ uischema, schema, path, visible
   return <MaterialLayoutRenderer {...childProps} renderers={renderers} />;
 };
 
-export default withJsonFormsLayoutProps(MaterialVerticalLayoutRenderer);
+const ConnectedMaterialVerticalLayoutRenderer = withJsonFormsLayoutProps(MaterialVerticalLayoutRenderer);
+ConnectedMaterialVerticalLayoutRenderer.displayName = 'MaterialVerticalLayoutRenderer';
+export default ConnectedMaterialVerticalLayoutRenderer;

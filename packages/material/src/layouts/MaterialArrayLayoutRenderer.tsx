@@ -27,35 +27,48 @@ import React, { useCallback } from 'react';
 import {
   ArrayLayoutProps,
   isObjectArrayWithNesting,
+  JsonSchema,
   RankedTester,
-  rankWith
+  rankWith,
+  refResolver
 } from '@jsonforms/core';
 import { Hidden } from '@material-ui/core';
 import { MaterialArrayLayout } from './MaterialArrayLayout';
-import { withJsonFormsArrayLayoutProps } from '@jsonforms/react';
+import { ResolveRef, withJsonFormsArrayLayoutProps } from '@jsonforms/react';
 
 export const MaterialArrayLayoutRenderer =
-  ({ visible, enabled, id, uischema, schema, label, rootSchema, renderers, data, path, errors, addItem }: ArrayLayoutProps) => {
+  ({ visible, enabled, id, uischema, schema, label, rootSchema, renderers, data, path, errors, addItem, refParserOptions }: ArrayLayoutProps) => {
     const addItemCb = useCallback((p: string, value: any) => addItem(p, value), [addItem]);
+    const resolveRef = useCallback(pointer => refResolver(rootSchema, refParserOptions)(pointer), [rootSchema, refParserOptions]);
+
     return (
-      <Hidden xsUp={!visible}>
-        <MaterialArrayLayout
-          label={label}
-          uischema={uischema}
-          schema={schema}
-          id={id}
-          rootSchema={rootSchema}
-          errors={errors}
-          enabled={enabled}
-          visible={visible}
-          data={data}
-          path={path}
-          addItem={addItemCb}
-          renderers={renderers}
-        />
-      </Hidden>
+      <ResolveRef schema={schema} refResolver={resolveRef} pointer={schema.$ref}>
+        {(resolvedSchema: JsonSchema) => {
+          return (
+            <Hidden xsUp={!visible}>
+              <MaterialArrayLayout
+                schemaPath={schema.$ref || `${uischema.scope}/items`}
+                label={label}
+                uischema={uischema}
+                schema={resolvedSchema}
+                id={id}
+                rootSchema={rootSchema}
+                errors={errors}
+                enabled={enabled}
+                visible={visible}
+                data={data}
+                path={path}
+                addItem={addItemCb}
+                renderers={renderers}
+                refParserOptions={refParserOptions}
+              />
+            </Hidden>
+          );
+        }}
+      </ResolveRef>
     );
   };
+MaterialArrayLayoutRenderer.displayname = 'MaterialArrayLayoutRenderer';
 
 export const materialArrayLayoutTester: RankedTester = rankWith(4, isObjectArrayWithNesting);
 export default withJsonFormsArrayLayoutProps(MaterialArrayLayoutRenderer);
