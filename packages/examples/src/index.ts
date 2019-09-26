@@ -59,6 +59,7 @@ import * as issue_1169 from './1169';
 import * as issue_1220 from './1220';
 import * as issue_1253 from './1253';
 import * as issue_1254 from './1254';
+import * as issue_1491 from './1491';
 import * as oneOfRecursive from './oneOf-recursive';
 import * as huge from './huge';
 import * as defaultExample from './default';
@@ -107,6 +108,7 @@ export {
   issue_1220,
   issue_1253,
   issue_1254,
+  issue_1491,
   oneOfRecursive,
   huge,
   ifThenElse,
