@@ -1,18 +1,16 @@
 import React from 'react';
-import Enzyme, { mount } from 'enzyme';
+import Enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import {
-  ControlProps,
-  OwnPropsOfEnum,
-  rankWith
-} from '@jsonforms/core';
+import { ControlProps, OwnPropsOfEnum, rankWith } from '@jsonforms/core';
+import { mount } from 'enzyme';
+import { act } from 'react-dom/test-utils';
 
-import { JsonForms } from '../src/JsonForms';
+import { JsonForms, JsonFormsDispatchRenderer } from '../src/JsonForms';
 import { withJsonFormsEnumProps } from '../src/JsonFormsContext';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-test('withJsonFormsEnumProps - constant: should supply control and enum props', () => {
+test('withJsonFormsEnumProps - constant: should supply control and enum props', async () => {
   const MockEnumControlUnwrapped = (_: ControlProps & OwnPropsOfEnum) => {
     return <></>;
   };
@@ -31,7 +29,7 @@ test('withJsonFormsEnumProps - constant: should supply control and enum props', 
 
   const renderers = [
     {
-      tester: rankWith(1, () => true),
+      tester: rankWith(1, async () => true),
       renderer: MockEnumControl
     }
   ];
@@ -47,8 +45,13 @@ test('withJsonFormsEnumProps - constant: should supply control and enum props', 
       schema={schema}
       uischema={uischema}
       renderers={renderers}
+      cells={[]}
     />
   );
+
+  await (act(async () => wrapper.find(JsonFormsDispatchRenderer).state('renderer') !== undefined));
+  wrapper.update();
+
   const mockEnumControlUnwrappedProps = wrapper
     .find(MockEnumControlUnwrapped)
     .props();
@@ -60,7 +63,7 @@ test('withJsonFormsEnumProps - constant: should supply control and enum props', 
   expect(mockEnumControlUnwrappedProps.options).toEqual(['Cambodia']);
 });
 
-test('withJsonFormsEnumProps - enum: should supply control and enum props', () => {
+test('withJsonFormsEnumProps - enum: should supply control and enum props', async () => {
   const MockEnumControlUnwrapped = (_: ControlProps & OwnPropsOfEnum) => {
     return <></>;
   };
@@ -80,7 +83,7 @@ test('withJsonFormsEnumProps - enum: should supply control and enum props', () =
 
   const renderers = [
     {
-      tester: rankWith(1, () => true),
+      tester: rankWith(1, async () => true),
       renderer: MockEnumControl
     }
   ];
@@ -96,9 +99,14 @@ test('withJsonFormsEnumProps - enum: should supply control and enum props', () =
       schema={schema}
       uischema={uischema}
       renderers={renderers}
+      cells={[]}
     />
   );
-  const mockEnumControlUnwrappedProps = wrapper.find(MockEnumControlUnwrapped).props()
+  await (act(async () => wrapper.find(JsonFormsDispatchRenderer).state('renderer') !== undefined));
+  wrapper.update();
+  const mockEnumControlUnwrappedProps = wrapper
+    .find(MockEnumControlUnwrapped)
+    .props();
   expect(mockEnumControlUnwrappedProps.uischema).toEqual(uischema);
   expect(mockEnumControlUnwrappedProps.schema).toEqual(schema.properties.color);
   expect(mockEnumControlUnwrappedProps.path).toEqual('color');

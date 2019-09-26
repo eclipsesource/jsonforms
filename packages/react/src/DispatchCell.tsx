@@ -23,40 +23,57 @@
   THE SOFTWARE.
 */
 import maxBy from 'lodash/maxBy';
-import React from 'react';
-import { connect } from 'react-redux';
+import React, { useEffect, useState, useCallback } from 'react';
 import { UnknownRenderer } from './UnknownRenderer';
-import {
-  DispatchCellProps,
-  DispatchCellStateProps,
-  mapStateToDispatchCellProps,
-  OwnPropsOfCell
-} from '@jsonforms/core';
+import { DispatchCellProps, refResolver } from '@jsonforms/core';
+import { withJsonFormsDispatchCellProps } from './JsonFormsContext';
 
 /**
  * Dispatch renderer component for cells.
  */
-class Dispatch extends React.Component<DispatchCellProps, any> {
-  render() {
-    const { uischema, schema, path, cells, id, enabled } = this.props;
-    const cell = maxBy(cells, r => r.tester(uischema, schema));
-
-    if (cell === undefined || cell.tester(uischema, schema) === -1) {
-      return <UnknownRenderer type={'cell'} />;
-    } else {
-      const Cell = cell.cell;
-
-      return (
-        <React.Fragment>
-          <Cell uischema={uischema} schema={schema} enabled={enabled} path={path} id={id} />
-        </React.Fragment>
+const Dispatch = ({
+  rootSchema,
+  uischema,
+  schema,
+  path,
+  cells,
+  id,
+  refParserOptions
+}: DispatchCellProps) => {
+  const [isTesting, setIsTesting] = useState(false);
+  const [cell, setCell] = useState(undefined);
+  const resolveRef = useCallback((pointer: string) => {
+    return refResolver(rootSchema, refParserOptions)(pointer);
+  }, [rootSchema, refParserOptions]);
+  useEffect(() => {
+    const test = async () => {
+      setIsTesting(true);
+      const prios: any[] = await Promise.all(
+        cells.map(r =>
+          r.tester(uischema, rootSchema, resolveRef).then(result => ({
+            test: result,
+            renderer: r.cell
+          }))
+        )
       );
-    }
-  }
-}
+      const designatedRenderer = maxBy(prios, 'test');
+      setCell(designatedRenderer);
+      setIsTesting(false);
+    };
+    test();
+  }, [cells, uischema, schema, rootSchema]);
 
-export const DispatchCell = connect<
-  DispatchCellStateProps,
-  {},
-  OwnPropsOfCell
->(mapStateToDispatchCellProps)(Dispatch);
+  if (cell === undefined || isTesting || cell.test === -1) {
+    return <UnknownRenderer type={'cell'} />;
+  } else {
+    const Cell = cell.renderer;
+
+    return (
+      <React.Fragment>
+        <Cell uischema={uischema} schema={schema} path={path} id={id} />
+      </React.Fragment>
+    );
+  }
+};
+
+export const DispatchCell = withJsonFormsDispatchCellProps(Dispatch);

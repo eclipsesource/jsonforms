@@ -22,40 +22,27 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React from 'react';
-import { combineReducers, createStore } from 'redux';
-import { Provider } from 'react-redux';
+import React, { useLayoutEffect } from 'react';
+import { act } from 'react-dom/test-utils';
 import {
   createAjv,
-  jsonformsReducer,
-  JsonFormsState,
-  JsonFormsStore,
   JsonSchema,
   Layout,
   rankWith,
-  registerRenderer,
   RendererProps,
+  schemaMatches,
   UISchemaElement,
   uiTypeIs,
-  unregisterRenderer
+  resetRefCache
 } from '@jsonforms/core';
 import Enzyme from 'enzyme';
-import { mount, shallow } from 'enzyme';
-import RefParser from 'json-schema-ref-parser';
+import Adapter from 'enzyme-adapter-react-16';
+import { mount } from 'enzyme';
 import { StatelessRenderer } from '../../src/Renderer';
 
-import Adapter from 'enzyme-adapter-react-16';
-import {
-  JsonFormsDispatchRenderer,
-  JsonFormsDispatch,
-  JsonForms
-} from '../../src/JsonForms';
-import {
-  JsonFormsReduxContext,
-  useJsonForms,
-  withJsonFormsControlProps,
-  JsonFormsStateProvider
-} from '../../src/JsonFormsContext';
+import { JsonForms, JsonFormsDispatchRenderer } from '../../src/JsonForms';
+import waitUntil from 'async-wait-until';
+import { JsonFormsStateProvider, withJsonFormsControlProps } from '../../src/JsonFormsContext';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -84,29 +71,8 @@ export interface JsonFormsInitialState {
   [x: string]: any;
 }
 
-export const initJsonFormsStore = ({
-  data,
-  schema,
-  uischema,
-  ...props
-}: JsonFormsInitialState): JsonFormsStore => {
-  const initState: JsonFormsState = {
-    jsonforms: {
-      core: {
-        data,
-        schema,
-        uischema
-      },
-      ...props
-    }
-  };
-  const reducer = combineReducers({ jsonforms: jsonformsReducer() });
-  return createStore(reducer, initState);
-};
-
 const CustomRenderer1: StatelessRenderer<RendererProps> = () => <h1>test</h1>;
 const CustomRenderer2: StatelessRenderer<RendererProps> = () => <h2>test</h2>;
-const CustomRenderer3: StatelessRenderer<RendererProps> = () => <h3>test</h3>;
 
 const fixture = {
   data: { foo: 'John Doe' },
@@ -124,86 +90,78 @@ const fixture = {
   }
 };
 
-test('JsonForms renderer should report about missing renderer', () => {
-  const store = initJsonFormsStore({
-    data: fixture.data,
-    uischema: fixture.uischema
-  });
+afterEach(() => {
+  resetRefCache();
+});
 
+test('JsonForms renderer should report about missing renderer', async () => {
   const wrapper = mount(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <JsonFormsDispatch />
-      </JsonFormsReduxContext>
-    </Provider>
+    <JsonFormsDispatchRenderer
+      schema={fixture.schema}
+      uischema={fixture.uischema}
+      path={''}
+      rootSchema={fixture.schema}
+      renderers={[]}
+    />
+  );
+
+  await act(
+    async () => await waitUntil(() => wrapper.state('renderer') !== undefined)
   );
 
   expect(wrapper.text()).toContain('No applicable renderer found');
   wrapper.unmount();
 });
 
-test('JsonForms renderer should pick most applicable renderer', () => {
-  const store = initJsonFormsStore({
-    data: fixture.data,
-    uischema: fixture.uischema
-  });
-  store.dispatch(registerRenderer(() => 10, CustomRenderer1));
-  store.dispatch(registerRenderer(() => 5, CustomRenderer2));
+test('JsonForms renderer should pick most applicable renderer', async () => {
+  const renderers = [
+    {
+      tester: async () => 10,
+      renderer: CustomRenderer1
+    },
+    {
+      tester: async () => 5,
+      renderer: CustomRenderer2
+    }
+  ];
   const wrapper = mount(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <JsonFormsDispatch />
-      </JsonFormsReduxContext>
-    </Provider>
+    <JsonFormsDispatchRenderer
+      schema={fixture.schema}
+      uischema={fixture.uischema}
+      path={''}
+      rootSchema={fixture.schema}
+      renderers={renderers}
+    />
   );
-
+  await act(
+    async () => await waitUntil(() => wrapper.state('renderer') !== undefined)
+  );
+  wrapper.update();
   expect(wrapper.find('h1').text()).toBe('test');
   wrapper.unmount();
 });
 
-test('JsonForms renderer should not consider any de-registered renderers', () => {
-  const tester1 = () => 9;
-  const tester2 = () => 8;
-  const tester3 = () => 10;
-  const store = initJsonFormsStore({
-    data: fixture.data,
-    uischema: fixture.uischema
-  });
-  store.dispatch(registerRenderer(tester1, CustomRenderer1));
-  store.dispatch(registerRenderer(tester2, CustomRenderer2));
-  store.dispatch(registerRenderer(tester3, CustomRenderer3));
-  store.dispatch(unregisterRenderer(tester3, CustomRenderer2));
-  const wrapper = mount(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <JsonFormsDispatch />
-      </JsonFormsReduxContext>
-    </Provider>
-  );
-
-  expect(wrapper.find('h1')).toBeDefined();
-  wrapper.unmount();
-});
-
-test('deregister an unregistered renderer should be a no-op', () => {
-  const store = initJsonFormsStore(fixture);
-  store.dispatch(registerRenderer(() => 10, CustomRenderer1));
-  store.dispatch(registerRenderer(() => 5, CustomRenderer2));
-  const tester = () => 10;
-  const nrOfRenderers = store.getState().jsonforms.renderers.length;
-  store.dispatch(unregisterRenderer(tester, CustomRenderer3));
-  expect(store.getState().jsonforms.renderers.length).toBe(nrOfRenderers);
-});
-
-test('ids should be unique within the same form', () => {
+test('ids should be unique within the same form', async () => {
+  const ids: string[] = [];
+  const MyCustomRenderer: StatelessRenderer<any> = props => {
+    useLayoutEffect(() => { ids.push(props.id); }, [props.id]);
+    return <div>Custom</div>;
+  };
   const FakeLayout = (props: RendererProps) => {
     const layout = props.uischema as Layout;
     const children = layout.elements.map((e, idx) => (
-      <JsonFormsDispatch
+      <JsonFormsDispatchRenderer
         uischema={e}
         schema={fixture.schema}
         path={props.path}
         key={`${props.path}-${idx}`}
+        rootSchema={props.schema}
+        renderers={[
+          {
+            tester: rankWith(10, async () => true),
+            renderer: MyCustomRenderer
+          }
+        ]}
       />
     ));
     return <div className='layout'>{children}</div>;
@@ -223,31 +181,27 @@ test('ids should be unique within the same form', () => {
     ]
   };
 
-  const store = initJsonFormsStore({
-    data: fixture.data,
-    schema: fixture.schema,
-    uischema: uischema2,
-    renderers: [
-      {
-        tester: rankWith(10, uiTypeIs('HorizontalLayout')),
-        renderer: FakeLayout
-      }
-    ]
-  });
-
-  const ids: string[] = [];
-  const MyCustomRenderer: StatelessRenderer<any> = props => {
-    ids.push(props.id);
-    return <div>Custom</div>;
-  };
-  store.dispatch(registerRenderer(() => 10, MyCustomRenderer));
-
   const wrapper = mount(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <JsonFormsDispatch uischema={uischema2} schema={fixture.schema} />
-      </JsonFormsReduxContext>
-    </Provider>
+    <JsonFormsDispatchRenderer
+      schema={fixture.schema}
+      rootSchema={fixture.schema}
+      uischema={uischema2}
+      renderers={
+        [
+          {
+            tester: rankWith(10, uiTypeIs('HorizontalLayout')),
+            renderer: FakeLayout
+          },
+          {
+            tester: rankWith(10, async () => true),
+            renderer: MyCustomRenderer
+          }
+        ]}
+    />
+  );
+
+  await act(
+    async () => await waitUntil(() => wrapper.find(JsonFormsDispatchRenderer).first().state('renderer') !== undefined)
   );
 
   expect(ids.indexOf('#/properties/foo') > -1).toBeTruthy();
@@ -255,7 +209,7 @@ test('ids should be unique within the same form', () => {
   wrapper.unmount();
 });
 
-test('render schema with $ref', () => {
+test('render schema with $ref', async () => {
   const schemaWithRef = {
     definitions: {
       n: {
@@ -269,52 +223,38 @@ test('render schema with $ref', () => {
       }
     }
   };
-  const resolvedSchema: any = {
-    definitions: {
-      n: {
-        type: 'number'
-      }
-    },
-    type: 'object',
-    properties: {
-      foo: {
-        type: 'number'
-      }
-    }
-  };
 
-  const tester = (_uischema: UISchemaElement, s: JsonSchema) => s.properties.foo.type === 'number' ? 1 : -1;
+  const tester = rankWith(10, schemaMatches(s => s.type === 'number'));
 
   const renderers = [
     {
-      tester: tester,
+      tester,
       renderer: CustomRenderer2
-    }
+    },
+    //{
+    //  tester: refResolverTester,
+    //  renderer: RefResolver
+    //}
   ];
 
-  const promise = Promise.resolve(resolvedSchema);
-  jest.spyOn(RefParser, 'dereference').mockImplementation(() => promise);
-
-  const wrapper = shallow(
+  const wrapper = mount(
     <JsonFormsDispatchRenderer
       path={''}
       uischema={fixture.uischema}
       schema={schemaWithRef}
       renderers={renderers}
-      rootSchema={resolvedSchema}
-      refResolver={() => promise}
+      rootSchema={schemaWithRef}
     />
   );
+  await act(
+    async () => await waitUntil(() => wrapper.state('renderer') !== undefined)
+  );
 
-  return promise.then(() => {
-    wrapper.update();
-    expect(wrapper.state()).toHaveProperty('resolving', false);
-    expect(wrapper.find(CustomRenderer2).length).toBe(1);
-    wrapper.unmount();
-  });
+  wrapper.update();
+  expect(wrapper.find(CustomRenderer2).length).toBe(1);
 });
 
-test.skip('updates schema with ref', () => {
+test('updates schema with ref', async () => {
   const schemaWithRef = {
     definitions: {
       n: {
@@ -328,24 +268,9 @@ test.skip('updates schema with ref', () => {
       }
     }
   };
-  const resolvedSchema: any = {
-    definitions: {
-      n: {
-        type: 'number'
-      }
-    },
-    type: 'object',
-    properties: {
-      foo: {
-        type: 'number'
-      }
-    }
-  };
 
-  const tester1 = (_uischema: UISchemaElement, s: JsonSchema) =>
-    s.properties.foo.type === 'string' ? 1 : -1;
-  const tester2 = (_uischema: UISchemaElement, s: JsonSchema) =>
-    s.properties.foo.type === 'number' ? 1 : -1;
+  const tester1 = rankWith(10, schemaMatches(s => s.type === 'string'));
+  const tester2 = rankWith(10, schemaMatches(s => s.type === 'number'));
 
   const renderers = [
     {
@@ -358,55 +283,33 @@ test.skip('updates schema with ref', () => {
     }
   ];
 
-  const promise = Promise.resolve(resolvedSchema);
-  jest.spyOn(RefParser, 'dereference').mockImplementation(() => promise);
-
-  const wrapper = shallow(
+  const wrapper = mount(
     <JsonFormsDispatchRenderer
       path={''}
       uischema={fixture.uischema}
       schema={fixture.schema}
       renderers={renderers}
-      rootSchema={resolvedSchema}
-      refResolver={() => promise}
+      rootSchema={fixture.schema}
     />
   );
+
+  await act(
+    async () => await waitUntil(() => wrapper.state('renderer') !== undefined)
+  );
+  wrapper.update();
   expect(wrapper.find(CustomRenderer1).length).toBe(1);
 
-  wrapper.setProps({ schema: schemaWithRef });
-
-  return promise.then(() => {
-    wrapper.update();
-    expect(wrapper.state()).toHaveProperty('resolving', false);
-    expect(wrapper.find(CustomRenderer2).length).toBe(1);
-    wrapper.unmount();
-  });
-});
-
-test('JsonForms renderer should pick most applicable renderer via ownProps', () => {
-  const store = initJsonFormsStore({
-    data: fixture.data,
-    uischema: fixture.uischema
-  });
-  store.dispatch(registerRenderer(() => 10, CustomRenderer1));
-  store.dispatch(registerRenderer(() => 5, CustomRenderer2));
-  const wrapper = mount(
-    <Provider store={store}>
-      <JsonFormsReduxContext>
-        <JsonFormsDispatch
-          uischema={fixture.uischema}
-          schema={fixture.schema}
-          renderers={[{ tester: () => 3, renderer: CustomRenderer3 }]}
-        />
-      </JsonFormsReduxContext>
-    </Provider>
+  resetRefCache();
+  wrapper.setProps({ rootSchema: schemaWithRef });
+  await act(
+    async () => await waitUntil(() => wrapper.state('renderer') !== undefined)
   );
-
-  expect(wrapper.find('h1').text()).toBe('test');
+  wrapper.update();
+  expect(wrapper.find(CustomRenderer2).length).toBe(1);
   wrapper.unmount();
 });
 
-test('JsonForms should support two isolated components', () => {
+test('JsonForms should support two isolated components', async () => {
   const schema1 = {
     type: 'object',
     properties: {
@@ -425,40 +328,50 @@ test('JsonForms should support two isolated components', () => {
       }
     }
   };
-  const customRenderer1 = () => {
-    const ctx = useJsonForms();
-    const errors = ctx.core.errors;
-    return (<h1>{errors ? errors.length : 0}</h1>);
-  }
-  const customRenderer2 = () => {
-    const ctx = useJsonForms();
-    const errors = ctx.core.errors;
-    return (<h2>{errors ? errors.length : 0}</h2>);
-  }
+  const customRenderer1 = withJsonFormsControlProps(({ errors }) => {
+    return <h1>{errors ? errors : 0}</h1>;
+  });
+  const customRenderer2 = withJsonFormsControlProps(({ errors }) => {
+    return <h2>{errors ? errors : 0}</h2>;
+  });
+  const fooControl = { type: 'Control', scope: '#/properties/foo' };
+  const barControl = { type: 'Control', scope: '#/properties/bar' };
   const wrapper = mount(
     <div>
       <JsonForms
         data={{ foo: '' }}
-        uischema={{ type: 'Control', scope: '#/properties/foo' }}
+        uischema={fooControl}
         schema={schema1}
-        renderers={[{ tester: () => 3, renderer: customRenderer1 }]}
+        renderers={[{ tester: async () => 3, renderer: customRenderer1 }]}
       />
       <JsonForms
         data={{ bar: 0 }}
         schema={schema2}
-        uischema={{ type: 'Control', scope: '#/properties/bar' }}
-        renderers={[{ tester: () => 3, renderer: customRenderer2 }]}
+        uischema={barControl}
+        renderers={[{ tester: async () => 3, renderer: customRenderer2 }]}
       />
     </div>
   );
 
-  expect(wrapper.find('h2').text()).toBe('1');
-  expect(wrapper.find('h1').text()).toBe('1');
+  await act(
+    async () => await waitUntil(() =>
+      wrapper.find(JsonFormsDispatchRenderer).first().state('renderer') !== undefined
+    )
+  );
+  await act(
+    async () => await waitUntil(
+      () => wrapper.find(JsonFormsDispatchRenderer).at(1).state('renderer') !== undefined
+    )
+  );
+
+  wrapper.update();
+  expect(wrapper.find('h1').getDOMNode().textContent).toBe('should NOT be shorter than 1 characters');
+  expect(wrapper.find('h2').getDOMNode().textContent).toBe('should be >= 1');
   wrapper.unmount();
 });
 
-test('JsonForms should create a JsonFormsStateProvider with initState props', () => {
-  const tester = (_uischema: UISchemaElement, s: JsonSchema) =>
+test('JsonForms should create a JsonFormsStateProvider with initState props', async () => {
+  const tester = async (_uischema: UISchemaElement, s: JsonSchema) =>
     s.properties.foo.type === 'number' ? 1 : -1;
 
   const renderers = [
@@ -511,7 +424,7 @@ test('JsonForms should create a JsonFormsStateProvider with initState props', ()
   expect(jsonFormsStateProviderInitStateProp.renderers).toBe(renderers);
 });
 
-test('JsonForms should call onChange handler with new data', () => {
+test('JsonForms should call onChange handler with new data', async () => {
   const onChangeHandler = jest.fn();
   const TestInputRenderer = withJsonFormsControlProps(props => (
     <input onChange={ev => props.handleChange('foo', ev.target.value)} />
@@ -519,7 +432,7 @@ test('JsonForms should call onChange handler with new data', () => {
 
   const renderers = [
     {
-      tester: () => 10,
+      tester: async () => 10,
       renderer: TestInputRenderer
     }
   ];
@@ -533,6 +446,10 @@ test('JsonForms should call onChange handler with new data', () => {
     />
   );
 
+  await act(async () => await waitUntil(
+    () => wrapper.find(JsonFormsDispatchRenderer).first().state('renderer') !== undefined
+  ));
+  wrapper.update();
   wrapper.find('input').simulate('change', {
     target: {
       value: 'Test Value'
@@ -545,7 +462,7 @@ test('JsonForms should call onChange handler with new data', () => {
   expect(lastCallParameter.errors).toEqual([]);
 });
 
-test('JsonForms should call onChange handler with errors', () => {
+test('JsonForms should call onChange handler with errors', async () => {
   const onChangeHandler = jest.fn();
   const TestInputRenderer = withJsonFormsControlProps(props => (
     <input onChange={ev => props.handleChange('foo', ev.target.value)} />
@@ -564,7 +481,7 @@ test('JsonForms should call onChange handler with errors', () => {
 
   const renderers = [
     {
-      tester: () => 10,
+      tester: async () => 10,
       renderer: TestInputRenderer
     }
   ];
@@ -577,6 +494,11 @@ test('JsonForms should call onChange handler with errors', () => {
       renderers={renderers}
     />
   );
+
+  await act(async () => await waitUntil(
+    () => wrapper.find(JsonFormsDispatchRenderer).first().state('renderer') !== undefined
+  ));
+  wrapper.update();
 
   wrapper.find('input').simulate('change', {
     target: {
@@ -591,7 +513,7 @@ test('JsonForms should call onChange handler with errors', () => {
   expect(lastCallParameter.errors[0].keyword).toEqual('minLength');
 });
 
-test('JsonForms should update if data prop is updated', () => {
+test('JsonForms should update if data prop is updated', async () => {
   const onChangeHandler = jest.fn();
   const TestInputRenderer = withJsonFormsControlProps(props => (
     <input onChange={ev => props.handleChange('foo', ev.target.value)} />
@@ -610,7 +532,7 @@ test('JsonForms should update if data prop is updated', () => {
 
   const renderers = [
     {
-      tester: () => 10,
+      tester: async () => 10,
       renderer: TestInputRenderer
     }
   ];
@@ -624,7 +546,7 @@ test('JsonForms should update if data prop is updated', () => {
     />
   );
 
-  wrapper.setProps({ data: { foo: 'Another name' } });
+  await (act(async () => wrapper.setProps({ data: { foo: 'Another name' } })));
   wrapper.update();
   expect(wrapper.props().data.foo).toBe('Another name');
 });
