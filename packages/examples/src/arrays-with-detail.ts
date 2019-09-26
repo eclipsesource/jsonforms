@@ -63,11 +63,11 @@ export const uischema = {
           elements: [
             {
               type: 'Control',
-              scope: '#/properties/message'
+              scope: '#/properties/comments/items/properties/message'
             },
             {
               type: 'Control',
-              scope: '#/properties/date'
+              scope: '#/properties/comments/items/properties/date'
             }
           ]
         }
