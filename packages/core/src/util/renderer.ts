@@ -798,23 +798,35 @@ export const mapStateToArrayLayoutProps = (
 
 export type CombinatorProps = StatePropsOfCombinator & DispatchPropsOfControl;
 
-export const refResolver = (rootSchema: JsonSchema, refParserOptions: RefParser.Options, depth = 0): any => async (pointer: string) => {
-  const parser = new RefParser();
-  const clonedRootSchema = cloneDeep(rootSchema as any);
-  const refs = await parser
-    .resolve(clonedRootSchema, {
-      ...refParserOptions,
-      dereference: { circular: 'ignore' }
-    });
-  const resolved: any = refs.get(pointer);
-  if (depth > 20) {
-    return resolved;
-  }
-  if (resolved.$ref) {
-    return refResolver(rootSchema, refParserOptions, depth + 1)(resolved.$ref);
-  }
-  return resolved;
+let mem: any = {};
+
+export const resetRefCache = () => {
+  mem = {}
 };
+
+export const refResolver = (rootSchema: JsonSchema, refParserOptions: RefParser.Options, depth = 0): any =>
+  async (pointer: string) => {
+    if (mem[pointer] === undefined) {
+      const parser = new RefParser();
+      const clonedRootSchema = cloneDeep(rootSchema as any);
+      const refs = await parser
+        .resolve(clonedRootSchema, {
+          ...refParserOptions,
+          dereference: { circular: 'ignore' }
+        });
+      const resolved: any = refs.get(pointer);
+      if (depth > 20) {
+        return resolved;
+      }
+      if (resolved.$ref) {
+        return refResolver(rootSchema, refParserOptions, depth + 1)(resolved.$ref);
+      }
+      mem[pointer] = resolved;
+      return resolved;
+    } else {
+      return mem[pointer];
+    }
+  };
 
 /**
  * Props of an array control.

@@ -28,7 +28,7 @@ import Dialog from '@material-ui/core/Dialog';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { ControlElement, JsonSchema } from '@jsonforms/core';
+import { ControlElement, JsonSchema, resetRefCache } from '@jsonforms/core';
 import { materialRenderers, MaterialOneOfRenderer } from '../../src';
 import { JsonFormsStateProvider, JsonFormsDispatch, ScopedRenderer, JsonFormsStateContext, JsonFormsContext } from '@jsonforms/react';
 import { waitForScopedRenderer, resolveRef } from '../util';
@@ -66,7 +66,10 @@ describe('Material oneOf renderer', () => {
 
   let wrapper: ReactWrapper;
 
-  afterEach(() => wrapper.unmount());
+  afterEach(() => {
+    resetRefCache();
+    wrapper.unmount();
+  });
 
   it('should render and select first tab by default', async () => {
     const schema = {
