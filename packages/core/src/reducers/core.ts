@@ -215,7 +215,7 @@ export const coreReducer = (
         const oldData: any = get(state.data, action.path);
         const newData = action.updater(cloneDeep(oldData));
 
-        const newState: any = set(cloneDeep(state.data), action.path, newData);
+        const newState: any = set(cloneDeep(state.data) || {}, action.path, newData);
         const errors = sanitizeErrors(state.validator, newState);
 
         return {
@@ -264,7 +264,7 @@ const getErrorsAt = (
   schema: JsonSchema,
   matchPath: (path: string) => boolean
 ) => (state: JsonFormsCore): ErrorObject[] =>
-  errorsAt(instancePath, schema, matchPath)(state.errors);
+    errorsAt(instancePath, schema, matchPath)(state.errors);
 
 export const errorAt = (instancePath: string, schema: JsonSchema) =>
   getErrorsAt(instancePath, schema, path => path === instancePath);
