@@ -94,6 +94,30 @@ type ValidCoreActions =
   | SetSchemaAction
   | SetUISchemaAction;
 
+const hasRefParserOption = (option: any): option is InitActionOptions => {
+  if (option) {
+    return option.refParserOptions !== undefined;
+  }
+  return false;
+};
+
+const getRefParserOptions = (
+  state: JsonFormsCore,
+  action?: InitAction
+): RefParser.Options => {
+  if (action && hasRefParserOption(action.options)) {
+    return action.options.refParserOptions;
+  }
+  return state.refParserOptions;
+};
+
+const hasAjvOption = (option: any): option is InitActionOptions => {
+  if (option) {
+    return option.ajv !== undefined;
+  }
+  return false;
+};
+
 const getOrCreateAjv = (state: JsonFormsCore, action?: InitAction): Ajv => {
   if (action) {
     if (hasAjvOption(action.options)) {
@@ -113,30 +137,6 @@ const getOrCreateAjv = (state: JsonFormsCore, action?: InitAction): Ajv => {
     return state.ajv;
   }
   return createAjv();
-};
-
-const getRefParserOptions = (
-  state: JsonFormsCore,
-  action?: InitAction
-): RefParser.Options => {
-  if (action && hasRefParserOption(action.options)) {
-    return action.options.refParserOptions;
-  }
-  return state.refParserOptions;
-};
-
-const hasRefParserOption = (option: any): option is InitActionOptions => {
-  if (option) {
-    return option.refParserOptions !== undefined;
-  }
-  return false;
-};
-
-const hasAjvOption = (option: any): option is InitActionOptions => {
-  if (option) {
-    return option.ajv !== undefined;
-  }
-  return false;
 };
 
 export const coreReducer = (
@@ -215,7 +215,11 @@ export const coreReducer = (
         const oldData: any = get(state.data, action.path);
         const newData = action.updater(cloneDeep(oldData));
 
-        const newState: any = set(cloneDeep(state.data) || {}, action.path, newData);
+        const newState: any = set(
+          cloneDeep(state.data) || {},
+          action.path,
+          newData
+        );
         const errors = sanitizeErrors(state.validator, newState);
 
         return {
@@ -264,7 +268,7 @@ const getErrorsAt = (
   schema: JsonSchema,
   matchPath: (path: string) => boolean
 ) => (state: JsonFormsCore): ErrorObject[] =>
-    errorsAt(instancePath, schema, matchPath)(state.errors);
+  errorsAt(instancePath, schema, matchPath)(state.errors);
 
 export const errorAt = (instancePath: string, schema: JsonSchema) =>
   getErrorsAt(instancePath, schema, path => path === instancePath);

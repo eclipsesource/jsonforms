@@ -71,10 +71,7 @@ export const isPlainLabel = (label: string | Labels): label is string => {
   return typeof label === 'string';
 };
 
-const isRequired = (
-  rootSchema: JsonSchema,
-  schemaPath: string
-): boolean => {
+const isRequired = (rootSchema: JsonSchema, schemaPath: string): boolean => {
   const pathSegments = schemaPath.split('/');
   const prop = pathSegments[pathSegments.length - 1];
   const initSegments = pathSegments.slice(0, pathSegments.length - 2);
@@ -272,7 +269,7 @@ export interface StatePropsOfScopedRenderer extends StatePropsOfRenderer {
 /**
  * Props of a {@link Renderer}.
  */
-export interface RendererProps extends StatePropsOfRenderer { }
+export interface RendererProps extends StatePropsOfRenderer {}
 
 /**
  * State-based props of a Control
@@ -316,7 +313,7 @@ export interface DispatchPropsOfControl {
  */
 export interface ControlProps
   extends StatePropsOfControl,
-  DispatchPropsOfControl { }
+    DispatchPropsOfControl {}
 
 /**
  * State props of a layout;
@@ -333,7 +330,7 @@ export interface StatePropsOfLayout extends StatePropsOfRenderer {
   direction: 'row' | 'column';
 }
 
-export interface LayoutProps extends StatePropsOfLayout { }
+export interface LayoutProps extends StatePropsOfLayout {}
 
 /**
  * The state of a control.
@@ -379,8 +376,7 @@ export const mapStateToControlProps = (
   const errors = formatErrorMessage(
     union(getErrorAt(path, schema)(state).map(error => error.message))
   );
-  const description =
-    schema !== undefined ? schema.description : '';
+  const description = schema !== undefined ? schema.description : '';
   const data = Resolve.data(rootData, path);
   const labelDesc = createLabelDescriptionFrom(uischema, schema);
   const label = labelDesc.show ? labelDesc.text : '';
@@ -451,13 +447,13 @@ export const mapStateToMasterListItemProps = (
   const { schema, path, index } = ownProps;
   const firstPrimitiveProp = schema.properties
     ? find(Object.keys(schema.properties), propName => {
-      const prop = schema.properties[propName];
-      return (
-        prop.type === 'string' ||
-        prop.type === 'number' ||
-        prop.type === 'integer'
-      );
-    })
+        const prop = schema.properties[propName];
+        return (
+          prop.type === 'string' ||
+          prop.type === 'number' ||
+          prop.type === 'integer'
+        );
+      })
     : undefined;
   const childPath = composePaths(path, `${index}`);
   const childData = Resolve.data(getData(state), childPath);
@@ -512,7 +508,7 @@ export const mapStateToControlWithDetailProps = (
 
 export interface ControlWithDetailProps
   extends StatePropsOfControlWithDetail,
-  DispatchPropsOfControl { }
+    DispatchPropsOfControl {}
 
 /**
  * State-based props of a table control.
@@ -617,7 +613,7 @@ export const mapDispatchToArrayControlProps = (
  */
 export interface ArrayControlProps
   extends StatePropsOfArrayControl,
-  DispatchPropsOfArrayControl { }
+    DispatchPropsOfArrayControl {}
 
 export const layoutDefaultProps: {
   visible: boolean;
@@ -752,7 +748,7 @@ export const mapStateToCombinatorRendererProps = (
 
 export interface CombinatorRendererProps
   extends StatePropsOfCombinator,
-  DispatchPropsOfControl { }
+    DispatchPropsOfControl {}
 
 export interface StatePropsOfArrayLayout extends StatePropsOfControlWithDetail {
   data: number;
@@ -792,7 +788,7 @@ export const mapStateToArrayLayoutProps = (
     schema: resolvedSchema,
     data: props.data && Array.isArray(props.data) ? props.data.length : 0,
     errors: allErrors,
-    minItems: schema.minItems,
+    minItems: schema.minItems
   };
 };
 
@@ -801,36 +797,40 @@ export type CombinatorProps = StatePropsOfCombinator & DispatchPropsOfControl;
 let mem: any = {};
 
 export const resetRefCache = () => {
-  mem = {}
+  mem = {};
 };
 
-export const refResolver = (rootSchema: JsonSchema, refParserOptions: RefParser.Options, depth = 0): any =>
-  async (pointer: string) => {
-    if (mem[pointer] === undefined) {
-      const parser = new RefParser();
-      const clonedRootSchema = cloneDeep(rootSchema as any);
-      const refs = await parser
-        .resolve(clonedRootSchema, {
-          ...refParserOptions,
-          dereference: { circular: 'ignore' }
-        });
-      const resolved: any = refs.get(pointer);
-      if (depth > 20) {
-        return resolved;
-      }
-      if (resolved.$ref) {
-        return refResolver(rootSchema, refParserOptions, depth + 1)(resolved.$ref);
-      }
-      mem[pointer] = resolved;
+export const refResolver = (
+  rootSchema: JsonSchema,
+  refParserOptions: RefParser.Options,
+  depth = 0
+): any => async (pointer: string) => {
+  if (mem[pointer] === undefined) {
+    const parser = new RefParser();
+    const clonedRootSchema = cloneDeep(rootSchema as any);
+    const refs = await parser.resolve(clonedRootSchema, {
+      ...refParserOptions,
+      dereference: { circular: 'ignore' }
+    });
+    const resolved: any = refs.get(pointer);
+    if (depth > 20) {
       return resolved;
-    } else {
-      return mem[pointer];
     }
-  };
+    if (resolved.$ref) {
+      return refResolver(rootSchema, refParserOptions, depth + 1)(
+        resolved.$ref
+      );
+    }
+    mem[pointer] = resolved;
+    return resolved;
+  } else {
+    return mem[pointer];
+  }
+};
 
 /**
  * Props of an array control.
  */
 export interface ArrayLayoutProps
   extends StatePropsOfArrayLayout,
-  DispatchPropsOfArrayControl { }
+    DispatchPropsOfArrayControl {}

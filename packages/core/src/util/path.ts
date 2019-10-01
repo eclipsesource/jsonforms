@@ -59,7 +59,14 @@ export const toDataPathSegments = (schemaPath: string): string[] => {
     .replace(/oneOf\/[\d]\//g, '');
   const segments = s.split('/');
   // TODO: any keywords missing?
-  const keywords = ['properties', 'items', 'definitions', 'anyOf', 'allOf', 'oneOf'];
+  const keywords = [
+    'properties',
+    'items',
+    'definitions',
+    'anyOf',
+    'allOf',
+    'oneOf'
+  ];
   const instancePath: string[] = [];
   let prevWord;
 
@@ -113,8 +120,7 @@ export const composeWithUi = (scopableUi: Scopable, path: string): string => {
   return isEmpty(segments)
     ? path
     : compose(
-      path,
-      segments.join('.')
-    );
-
+        path,
+        segments.join('.')
+      );
 };

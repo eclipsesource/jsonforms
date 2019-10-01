@@ -163,7 +163,7 @@ export const findRefs = (obj: JsonSchema): SchemaRefs => {
   const refs: SchemaRefs = {};
 
   // Walk the document (or sub document) and find all JSON References
-  walk([], obj, [], ({ }, node: any, path: any) => {
+  walk([], obj, [], ({}, node: any, path: any) => {
     let processChildren = true;
     let refDetails;
     let refPtr;
