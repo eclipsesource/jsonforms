@@ -23,7 +23,7 @@ const additionalStyles = {
 };
 
 const ExamplesToc = ({ classes }) => {
-  const toc = groupByParent(useMenus({ filter: m => m.route.startsWith('/examples/')}))
+  const toc = groupByParent(useMenus({ filter: m => m.route.startsWith('/examples/') }))
   return (
     <div className={styles.main}>
       <div className={classes.container}>
@@ -34,6 +34,8 @@ const ExamplesToc = ({ classes }) => {
               <Link to={m.route}>{m.name}</Link>
             </li>
           ))}
+          <li><a href={"http://github.eclipsesource.com/make-it-happen-angular/day1"}>Make it happen Angular examples</a></li>
+          <li><a href={"http://github.eclipsesource.com/jsonforms-ionic-playground/"}>Ionic 3 examples</a></li>
         </ul>
       </div>
     </div>
