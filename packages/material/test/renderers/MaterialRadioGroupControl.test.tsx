@@ -28,8 +28,8 @@ import { ControlElement, JsonSchema, update } from '@jsonforms/core';
 import MaterialRadioGroupControl from '../../src/controls/MaterialRadioGroupControl';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { JsonFormsStateProvider, ScopedRenderer, JsonFormsContext, JsonFormsStateContext } from '@jsonforms/react';
-import { resolveRef, waitForScopedRenderer } from '../util';
+import { JsonFormsContext, JsonFormsStateContext, JsonFormsStateProvider, ResolveRef } from '@jsonforms/react';
+import { resolveRef, waitForResolveRef } from '../util';
 
 Enzyme.configure({ adapter: new Adapter() });
 import { act } from 'react-dom/test-utils';
@@ -57,15 +57,15 @@ describe('Material radio group control', () => {
   it('should have option selected', async () => {
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core: { data, schema, uischema } }}>
-        <ScopedRenderer schema={schema} uischema={uischema} refResolver={resolveRef(schema)}>
+        <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef(schema)}>
           {(resolvedSchema: JsonSchema) =>
             (<MaterialRadioGroupControl schema={resolvedSchema} uischema={uischema} />)
           }
-        </ScopedRenderer>
+        </ResolveRef>
       </JsonFormsStateProvider>
     );
 
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     const radioButtons = wrapper.find('input[type="radio"]');
     const currentlyChecked = wrapper.find('input[type="radio"][checked=true]');
     expect(radioButtons.length).toBe(4);
@@ -82,12 +82,12 @@ describe('Material radio group control', () => {
             (context: JsonFormsStateContext) => {
               ctx = context;
               return (
-                <ScopedRenderer schema={schema} uischema={uischema} refResolver={resolveRef(schema)}>
+                <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef(schema)}>
                   {
                     (resolvedSchema: JsonSchema) =>
                       <MaterialRadioGroupControl schema={resolvedSchema} uischema={uischema} />
                   }
-                </ScopedRenderer>
+                </ResolveRef>
               );
             }
           }
@@ -95,7 +95,7 @@ describe('Material radio group control', () => {
       </JsonFormsStateProvider>
     );
 
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     act(() => { ctx.dispatch(update('foo', () => 'A')); });
     act(() => { ctx.dispatch(update('foo', () => 'B')); });
     wrapper.update();
@@ -107,15 +107,15 @@ describe('Material radio group control', () => {
   it('should be hideable ', async () => {
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core: { data, schema, uischema } }}>
-        <ScopedRenderer schema={schema} uischema={uischema} refResolver={resolveRef(schema)}>
+        <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef(schema)}>
           {(resolvedSchema: JsonSchema) =>
             <MaterialRadioGroupControl schema={resolvedSchema} uischema={uischema} visible={false} />
           }
-        </ScopedRenderer>
+        </ResolveRef>
       </JsonFormsStateProvider>
     );
 
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     const radioButtons = wrapper.find('input[type="radio"]');
     expect(radioButtons.length).toBe(0);
   });

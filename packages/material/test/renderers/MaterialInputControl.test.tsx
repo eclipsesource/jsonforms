@@ -50,7 +50,7 @@ import '../../src/cells';
 import { MaterialInputControl } from '../../src/controls/MaterialInputControl';
 import MaterialHorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
 import { MuiInputText } from '../../src/mui-controls';
-import { waitForScopedRenderer } from '../util';
+import { waitForResolveRef } from '../util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -296,7 +296,7 @@ describe('Material input control', () => {
       </Provider>
     );
 
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     const validation = wrapper.find('p');
     expect(validation).toHaveLength(6);
     expect(validation.at(0).text()).toBe('');

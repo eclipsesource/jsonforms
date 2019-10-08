@@ -31,4 +31,3 @@ export * from './JsonFormsContext';
 export * from './UnknownRenderer';
 export * from './ResolveRef';
 export * from './RefDispatch';
-export * from './ScopedRenderer';

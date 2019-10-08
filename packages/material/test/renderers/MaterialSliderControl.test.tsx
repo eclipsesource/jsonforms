@@ -36,8 +36,8 @@ import SliderControl, { materialSliderControlTester } from '../../src/controls/M
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { act } from 'react-dom/test-utils';
-import { JsonFormsContext, JsonFormsStateContext, JsonFormsStateProvider, ScopedRenderer } from '@jsonforms/react';
-import { resolveRef, waitForScopedRenderer } from '../util';
+import { JsonFormsContext, JsonFormsStateContext, JsonFormsStateProvider, ResolveRef } from '@jsonforms/react';
+import { resolveRef, waitForResolveRef } from '../util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -64,117 +64,105 @@ const uischema: ControlElement = {
 describe('Material slider tester', () => {
 
   it('should fail', async () => {
-    expect(await materialSliderControlTester(undefined, undefined)).toBe(NOT_APPLICABLE);
-    expect(await materialSliderControlTester(null, undefined)).toBe(NOT_APPLICABLE);
-    expect(await materialSliderControlTester({ type: 'Foo' }, undefined)).toBe(NOT_APPLICABLE);
-    expect(await materialSliderControlTester({ type: 'Control' }, undefined)).toBe(NOT_APPLICABLE);
+    expect(await materialSliderControlTester(undefined, undefined, resolveRef(undefined))).toBe(NOT_APPLICABLE);
+    expect(await materialSliderControlTester(null, undefined, resolveRef(undefined))).toBe(NOT_APPLICABLE);
+    expect(await materialSliderControlTester({ type: 'Foo' }, undefined, resolveRef(undefined))).toBe(NOT_APPLICABLE);
+    expect(await materialSliderControlTester({ type: 'Control' }, undefined, resolveRef(undefined))).toBe(NOT_APPLICABLE);
   });
 
   it('should fail with wrong schema type', async () => {
+    const wrongType = {
+      type: 'object',
+      properties: {
+        foo: { type: 'string' }
+      }
+    };
     expect(
       await
         materialSliderControlTester(
           uischema,
-          {
-            type: 'object',
-            properties: {
-              foo: { type: 'string' }
-            }
-          },
-          resolveRef
+          wrongType,
+          resolveRef(wrongType)
         )
     ).toBe(NOT_APPLICABLE);
   });
 
   it('should fail if only sibling has correct prop type', async () => {
+    const wrongProp = {
+      type: 'object',
+      properties: {
+        foo: { type: 'string' },
+        bar: { type: 'number' }
+      }
+    };
     expect(
       await
-        materialSliderControlTester(
-          uischema,
-          {
-            type: 'object',
-            properties: {
-              foo: { type: 'string' },
-              bar: { type: 'number' }
-            }
-          },
-          resolveRef
-        )
+        materialSliderControlTester(uischema, wrongProp, resolveRef(wrongProp))
     ).toBe(NOT_APPLICABLE);
   });
 
   it('should fail if maximum and minimum are missing', async () => {
+    const missingMinMax = {
+      type: 'object',
+      properties: {
+        foo: { type: 'number' }
+      }
+    };
     expect(
       await
         materialSliderControlTester(
           uischema,
-          {
-            type: 'object',
-            properties: {
-              foo: { type: 'number' }
-            }
-          },
-          resolveRef
+          missingMinMax,
+          resolveRef(missingMinMax)
         )
     ).toBe(NOT_APPLICABLE);
   });
 
   it('should fail if maximum is missing', async () => {
-    expect(
-      await
-        materialSliderControlTester(
-          uischema,
-          {
-            type: 'object',
-            properties: {
-              foo: {
-                type: 'number',
-                minimum: 2
-              }
-            }
-          },
-          resolveRef
-        )
-    ).toBe(NOT_APPLICABLE);
+    const missingMax = {
+      type: 'object',
+      properties: {
+        foo: {
+          type: 'number',
+          minimum: 2
+        }
+      }
+    };
+    expect(await materialSliderControlTester(uischema, missingMax, resolveRef(missingMax))).toBe(NOT_APPLICABLE);
   });
 
   it('should fail if minimum is missing', async () => {
+    const missingMin = {
+      type: 'object',
+      properties: {
+        foo: {
+          type: 'number',
+          maximum: 10
+        }
+      }
+    };
     expect(
       await
         materialSliderControlTester(
           uischema,
-          {
-            type: 'object',
-            properties: {
-              foo: {
-                type: 'number',
-                maximum: 10
-              }
-            }
-          },
-          resolveRef
+          missingMin,
+          resolveRef(missingMin)
         )
     ).toBe(NOT_APPLICABLE);
   });
 
   it('should fail is default is missing', async () => {
-    expect(
-      await
-        materialSliderControlTester(
-          uischema,
-          {
-            type: 'object',
-            properties: {
-              foo: {
-                type: 'number',
-                maximum: 10,
-                minimum: 2
-              }
-            }
-          },
-          resolveRef
-        )
-    ).toBe(NOT_APPLICABLE);
+    const missingDefault = {
+      type: 'object',
+      properties: {
+        foo: {
+          type: 'number',
+          maximum: 10,
+          minimum: 2
+        }
+      }
+    };
+    expect(await materialSliderControlTester(uischema, missingDefault, resolveRef(missingDefault))).toBe(NOT_APPLICABLE);
   });
 
   it('should succeed with number type', async () => {
@@ -271,15 +259,15 @@ describe('Material slider control', () => {
     };
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core: { data: { foo: 6 }, schema: schemaWithMultipleOf, uischema } }}>
-        <ScopedRenderer schema={schemaWithMultipleOf} uischema={uischema} refResolver={resolveRef(schemaWithMultipleOf)}>
+        <ResolveRef schema={schemaWithMultipleOf} pointer={uischema.scope} refResolver={resolveRef(schemaWithMultipleOf)}>
           {
             (resolvedSchema: JsonSchema) =>
               <SliderControl schema={resolvedSchema} uischema={uischema} />
           }
-        </ScopedRenderer>
+        </ResolveRef>
       </JsonFormsStateProvider>
     );
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     const input = wrapper.find(Slider).first();
     expect(input.props().step).toBe(2);
   });
@@ -292,18 +280,18 @@ describe('Material slider control', () => {
           {context => {
             ctx = context;
             return (
-              <ScopedRenderer schema={schema} uischema={uischema} refResolver={resolveRef(schema)}>
+              <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef(schema)}>
                 {
                   (resolvedSchema: JsonSchema) =>
                     <SliderControl schema={resolvedSchema} uischema={uischema} />
                 }
-              </ScopedRenderer>
+              </ResolveRef>
             );
           }}
         </JsonFormsContext.Consumer>
       </JsonFormsStateProvider>
     );
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     act(() => { ctx.dispatch(Actions.update('foo', () => undefined)); });
     wrapper.update();
     const input = wrapper.find(Slider);
@@ -318,18 +306,18 @@ describe('Material slider control', () => {
           {context => {
             ctx = context;
             return (
-              <ScopedRenderer schema={schema} uischema={uischema} refResolver={resolveRef(schema)}>
+              <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef(schema)}>
                 {
                   (resolvedSchema: JsonSchema) =>
                     <SliderControl schema={resolvedSchema} uischema={uischema} />
                 }
-              </ScopedRenderer>
+              </ResolveRef>
             );
           }}
         </JsonFormsContext.Consumer>
       </JsonFormsStateProvider>
     );
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     act(() => { ctx.dispatch(Actions.update('foo', () => null)); });
     wrapper.update();
     const slider = wrapper.find(Slider).first();
@@ -344,18 +332,18 @@ describe('Material slider control', () => {
           {context => {
             ctx = context;
             return (
-              <ScopedRenderer schema={schema} uischema={uischema} refResolver={resolveRef(schema)}>
+              <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef(schema)}>
                 {
                   (resolvedSchema: JsonSchema) =>
                     <SliderControl schema={resolvedSchema} uischema={uischema} />
                 }
-              </ScopedRenderer>
+              </ResolveRef>
             );
           }}
         </JsonFormsContext.Consumer>
       </JsonFormsStateProvider>
     );
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     act(() => { ctx.dispatch(Actions.update('bar', () => 11)); });
     wrapper.update();
     const input = wrapper.find(Slider).first();
@@ -370,18 +358,18 @@ describe('Material slider control', () => {
           {context => {
             ctx = context;
             return (
-              <ScopedRenderer schema={schema} uischema={uischema} refResolver={resolveRef(schema)}>
+              <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef(schema)}>
                 {
                   (resolvedSchema: JsonSchema) =>
                     <SliderControl schema={resolvedSchema} uischema={uischema} />
                 }
-              </ScopedRenderer>
+              </ResolveRef>
             );
           }}
         </JsonFormsContext.Consumer>
       </JsonFormsStateProvider>
     );
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     act(() => { ctx.dispatch(Actions.update(null, () => 3)); });
     wrapper.update();
     const input = wrapper.find(Slider).first();
@@ -396,18 +384,18 @@ describe('Material slider control', () => {
           {context => {
             ctx = context;
             return (
-              <ScopedRenderer schema={schema} uischema={uischema} refResolver={resolveRef(schema)}>
+              <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef(schema)}>
                 {
                   (resolvedSchema: JsonSchema) =>
                     <SliderControl schema={resolvedSchema} uischema={uischema} />
                 }
-              </ScopedRenderer>
+              </ResolveRef>
             );
           }}
         </JsonFormsContext.Consumer>
       </JsonFormsStateProvider>
     );
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     act(() => { ctx.dispatch(Actions.update(undefined, () => 13)); });
     wrapper.update();
     const input = wrapper.find(Slider).first();
@@ -417,15 +405,15 @@ describe('Material slider control', () => {
   it('can be disabled', async () => {
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core: { data, schema, uischema } }}>
-        <ScopedRenderer schema={schema} uischema={uischema} refResolver={resolveRef(schema)}>
+        <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef(schema)}>
           {
             (resolvedSchema: JsonSchema) =>
               <SliderControl schema={resolvedSchema} uischema={uischema} enabled={false} />
           }
-        </ScopedRenderer>
+        </ResolveRef>
       </JsonFormsStateProvider>
     );
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     const input = wrapper.find(Slider).first();
     expect(input.props().disabled).toBeTruthy();
   });
@@ -433,15 +421,15 @@ describe('Material slider control', () => {
   it('should be enabled by default', async () => {
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core: { data, schema, uischema } }}>
-        <ScopedRenderer schema={schema} uischema={uischema} refResolver={resolveRef(schema)}>
+        <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef(schema)}>
           {
             (resolvedSchema: JsonSchema) =>
               <SliderControl schema={resolvedSchema} uischema={uischema} />
           }
-        </ScopedRenderer>
+        </ResolveRef>
       </JsonFormsStateProvider>
     );
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     const input = wrapper.find(Slider).first();
     expect(input.props().disabled).toBeFalsy();
   });
@@ -449,14 +437,14 @@ describe('Material slider control', () => {
   it('should render id and input id', async () => {
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core: { data, schema, uischema } }}>
-        <ScopedRenderer schema={schema} uischema={uischema} refResolver={resolveRef(schema)}>
+        <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef(schema)}>
           {(resolvedSchema: JsonSchema) =>
             <SliderControl schema={resolvedSchema} uischema={uischema} id='#/properties/foo' />
           }
-        </ScopedRenderer>
+        </ResolveRef>
       </JsonFormsStateProvider>
     );
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     const divs = wrapper.find('div');
     // id
     expect(divs.find((d: any) => d.id === '#/properties/foo')).toBeDefined();
@@ -478,15 +466,15 @@ describe('Material slider control', () => {
     };
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core: { data: { foo: 5 }, schema: jsonSchema, uischema } }}>
-        <ScopedRenderer schema={schema} uischema={uischema} refResolver={resolveRef(jsonSchema)}>
+        <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef(jsonSchema)}>
           {(resolvedSchema: JsonSchema) =>
             <SliderControl schema={resolvedSchema} uischema={uischema} visible={false} />
           }
-        </ScopedRenderer>
+        </ResolveRef>
       </JsonFormsStateProvider >
     );
 
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     const inputs = wrapper.find(Slider);
     expect(inputs.length).toBe(0);
   });

@@ -1,9 +1,10 @@
-import { ScopedRenderer, ResolveRef } from '@jsonforms/react';
+import { ResolveRef } from '@jsonforms/react';
 import waitUntil from 'async-wait-until';
 import { act } from 'react-dom/test-utils';
 import { ReactWrapper } from 'enzyme';
 import cloneDeep from 'lodash/cloneDeep';
 import RefParser from 'json-schema-ref-parser';
+import { JsonSchema, RefResolver } from '@jsonforms/core';
 
 export const waitForRenderer = async (
   wrapper: ReactWrapper,
@@ -16,28 +17,16 @@ export const waitForRenderer = async (
   wrapper.update();
 };
 
-export const waitForScopedRenderer = async (wrapper: ReactWrapper) => {
-  await act(async () => {
-    waitUntil(() => wrapper.find(ScopedRenderer).children() !== null);
-  });
+export const waitForResolveRef = async (wrapper: ReactWrapper) => {
+  await act(async () => waitUntil(() => wrapper.find(ResolveRef).children() != null));
   wrapper.update();
 };
 
-export const waitForRefResolver = async (wrapper: ReactWrapper) => {
-  await act(async () => {
-    waitUntil(() => {
-      const len = wrapper.find(ResolveRef).children().length;
-      return len > 0;
-    });
-  });
-  wrapper.update();
-};
-
-export const resolveRef = (rootSchema: any) => async (pointer: string) => {
+export const resolveRef = (rootSchema: any): RefResolver => (pointer: string) => {
   const parser = new RefParser();
   return parser
     .resolve(cloneDeep(rootSchema), {
       dereference: { circular: 'ignore' }
     })
-    .then(refs => refs.get(pointer));
+    .then(refs => refs.get(pointer) as JsonSchema);
 };

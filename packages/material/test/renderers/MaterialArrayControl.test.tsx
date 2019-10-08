@@ -41,9 +41,9 @@ import {
   JsonFormsContext,
   JsonFormsStateContext,
   JsonFormsStateProvider,
-  ScopedRenderer
+  ResolveRef
 } from '@jsonforms/react';
-import { resolveRef, waitForScopedRenderer } from '../util';
+import { resolveRef, waitForResolveRef } from '../util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -200,9 +200,9 @@ describe('Material array control', () => {
           cells: materialCells
         }}
       >
-        <ScopedRenderer
+        <ResolveRef
           schema={schema}
-          uischema={uischema}
+          pointer={uischema.scope}
           refResolver={resolveRef(schema)}
         >
           {(resolvedSchema: JsonSchema) => {
@@ -213,11 +213,11 @@ describe('Material array control', () => {
               />
             );
           }}
-        </ScopedRenderer>
+        </ResolveRef>
       </JsonFormsStateProvider>
     );
 
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     const rows = wrapper.find('tr');
     // header + no data row
     expect(rows).toHaveLength(2);
@@ -252,9 +252,9 @@ describe('Material array control', () => {
           cells: materialCells
         }}
       >
-        <ScopedRenderer
+        <ResolveRef
           schema={schema}
-          uischema={uischema}
+          pointer={uischema.scope}
           refResolver={resolveRef(schema)}
         >
           {(resolvedSchema: JsonSchema) => {
@@ -265,11 +265,11 @@ describe('Material array control', () => {
               />
             );
           }}
-        </ScopedRenderer>
+        </ResolveRef>
       </JsonFormsStateProvider>
     );
 
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     const rows = wrapper.find('tr');
     // header + 2 data entries
     expect(rows).toHaveLength(3);
@@ -293,9 +293,9 @@ describe('Material array control', () => {
           {(context: JsonFormsStateContext) => {
             ctx = context;
             return (
-              <ScopedRenderer
+              <ResolveRef
                 schema={fixture.schema}
-                uischema={fixture.uischema}
+                pointer={fixture.uischema.scope}
                 refResolver={resolveRef(fixture.schema)}
               >
                 {(resolvedSchema: JsonSchema) => {
@@ -306,14 +306,14 @@ describe('Material array control', () => {
                     />
                   );
                 }}
-              </ScopedRenderer>
+              </ResolveRef>
             );
           }}
         </JsonFormsContext.Consumer>
       </JsonFormsStateProvider>
     );
 
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     const buttons = wrapper.find('button');
     // 5 buttons
     // add row
@@ -374,9 +374,9 @@ describe('Material array control', () => {
           {(context: JsonFormsStateContext) => {
             ctx = context;
             return (
-              <ScopedRenderer
+              <ResolveRef
                 schema={schema}
-                uischema={uischema}
+                pointer={uischema.scope}
                 refResolver={resolveRef(schema)}
               >
                 {(resolvedSchema: JsonSchema) => {
@@ -387,14 +387,14 @@ describe('Material array control', () => {
                     />
                   );
                 }}
-              </ScopedRenderer>
+              </ResolveRef>
             );
           }}
         </JsonFormsContext.Consumer>
       </JsonFormsStateProvider>
     );
 
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     const buttons = wrapper.find('button');
     // 3 buttons
     // add row
@@ -446,9 +446,9 @@ describe('Material array control', () => {
           cells: materialCells
         }}
       >
-        <ScopedRenderer
+        <ResolveRef
           schema={schema}
-          uischema={uischema}
+          pointer={uischema.scope}
           refResolver={resolveRef(schema)}
         >
           {(resolvedSchema: JsonSchema) => {
@@ -460,11 +460,11 @@ describe('Material array control', () => {
               />
             );
           }}
-        </ScopedRenderer>
+        </ResolveRef>
       </JsonFormsStateProvider>
     );
 
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     const nrOfButtons = wrapper.find('button').length;
     expect(nrOfButtons).toBe(0);
 
@@ -486,9 +486,9 @@ describe('Material array control', () => {
           cells: materialCells
         }}
       >
-        <ScopedRenderer
+        <ResolveRef
           schema={fixture2.schema}
-          uischema={fixture2.uischema}
+          pointer={fixture2.uischema.scope}
           refResolver={resolveRef(fixture2.schema)}
         >
           {(resolvedSchema: JsonSchema) => {
@@ -499,11 +499,11 @@ describe('Material array control', () => {
               />
             );
           }}
-        </ScopedRenderer>
+        </ResolveRef>
       </JsonFormsStateProvider>
     );
 
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     // up button
     expect(
       wrapper.find('button').find({ 'aria-label': 'Move up' }).length
@@ -532,9 +532,9 @@ describe('Material array control', () => {
           {(context: JsonFormsStateContext) => {
             ctx = context;
             return (
-              <ScopedRenderer
+              <ResolveRef
                 schema={fixture2.schema}
-                uischema={fixture2.uischema}
+                pointer={fixture2.uischema.scope}
                 refResolver={resolveRef(fixture2.schema)}
               >
                 {(resolvedSchema: JsonSchema) => {
@@ -545,14 +545,14 @@ describe('Material array control', () => {
                     />
                   );
                 }}
-              </ScopedRenderer>
+              </ResolveRef>
             );
           }}
         </JsonFormsContext.Consumer>
       </JsonFormsStateProvider>
     );
 
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     // first row is header in table
     const downButton = wrapper
       .find('tr')
@@ -581,9 +581,9 @@ describe('Material array control', () => {
           {(context: JsonFormsStateContext) => {
             ctx = context;
             return (
-              <ScopedRenderer
+              <ResolveRef
                 schema={fixture2.schema}
-                uischema={fixture2.uischema}
+                pointer={fixture2.uischema.scope}
                 refResolver={resolveRef(fixture2.schema)}
               >
                 {(resolvedSchema: JsonSchema) => {
@@ -594,14 +594,14 @@ describe('Material array control', () => {
                     />
                   );
                 }}
-              </ScopedRenderer>
+              </ResolveRef>
             );
           }}
         </JsonFormsContext.Consumer>
       </JsonFormsStateProvider>
     );
 
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     // first row is header in table
     const upButton = wrapper
       .find('tr')
@@ -625,9 +625,9 @@ describe('Material array control', () => {
           cells: materialCells
         }}
       >
-        <ScopedRenderer
+        <ResolveRef
           schema={fixture2.schema}
-          uischema={fixture2.uischema}
+          pointer={fixture2.uischema.scope}
           refResolver={resolveRef(fixture2.schema)}
         >
           {(resolvedSchema: JsonSchema) => {
@@ -638,11 +638,11 @@ describe('Material array control', () => {
               />
             );
           }}
-        </ScopedRenderer>
+        </ResolveRef>
       </JsonFormsStateProvider>
     );
 
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     // first row is header in table
     const upButton = wrapper
       .find('tr')
@@ -665,9 +665,9 @@ describe('Material array control', () => {
           cells: materialCells
         }}
       >
-        <ScopedRenderer
+        <ResolveRef
           schema={fixture2.schema}
-          uischema={fixture2.uischema}
+          pointer={fixture2.uischema.scope}
           refResolver={resolveRef(fixture2.schema)}
         >
           {(resolvedSchema: JsonSchema) => {
@@ -678,11 +678,11 @@ describe('Material array control', () => {
               />
             );
           }}
-        </ScopedRenderer>
+        </ResolveRef>
       </JsonFormsStateProvider>
     );
 
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     // first row is header in table
     // first buttton is up arrow, second button is down arrow
     const downButton = wrapper

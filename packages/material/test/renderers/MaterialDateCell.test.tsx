@@ -60,33 +60,34 @@ describe('Material date cell', () => {
     expect(await materialDateCellTester({ type: 'Control' }, undefined)).toBe(
       NOT_APPLICABLE
     );
-
+    const wrongType = {
+      type: 'object',
+      properties: {
+        foo: { type: 'string' }
+      }
+    };
     expect(
       await materialDateCellTester(
         uischema,
-        {
-          type: 'object',
-          properties: {
-            foo: { type: 'string' }
-          }
-        },
-        resolveRef
+        wrongType,
+        resolveRef(wrongType)
       )
     ).toBe(NOT_APPLICABLE);
+    const wrongProp = {
+      type: 'object',
+      properties: {
+        foo: { type: 'string' },
+        bar: {
+          type: 'string',
+          format: 'date'
+        }
+      }
+    };
     expect(
       await materialDateCellTester(
         uischema,
-        {
-          type: 'object',
-          properties: {
-            foo: { type: 'string' },
-            bar: {
-              type: 'string',
-              format: 'date'
-            }
-          }
-        },
-        resolveRef
+        schema,
+        resolveRef(wrongProp)
       )
     ).toBe(NOT_APPLICABLE);
   });

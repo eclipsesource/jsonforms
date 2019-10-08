@@ -30,7 +30,7 @@ import MaterialObjectRenderer, { materialObjectControlTester } from '../../src/c
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { JsonFormsStateProvider } from '@jsonforms/react';
-import { resolveRef, waitForScopedRenderer } from '../util';
+import { resolveRef, waitForResolveRef } from '../util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -127,7 +127,7 @@ describe('Material object control', () => {
       </JsonFormsStateProvider>
     );
 
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     const inputs = wrapper.find('input');
     expect(inputs.length).toBe(2);
     expect(inputs.at(0).props().type).toBe('text');
@@ -148,7 +148,7 @@ describe('Material object control', () => {
       </JsonFormsStateProvider>
     );
 
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     const inputs = wrapper.find('input');
     expect(inputs.length).toBe(1);
     expect(inputs.at(0).props().type).toBe('text');
@@ -166,7 +166,7 @@ describe('Material object control', () => {
         <MaterialObjectRenderer schema={schema} uischema={uischema2} />
       </JsonFormsStateProvider>
     );
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     const inputs = wrapper.find('input');
     expect(inputs.first().props().disabled).toBeFalsy();
   });
@@ -182,7 +182,7 @@ describe('Material object control', () => {
         <MaterialObjectRenderer schema={schema} uischema={uischema2} visible={false} />
       </JsonFormsStateProvider>
     );
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     const inputs = wrapper.find('input');
     expect(inputs.length).toBe(0);
   });
@@ -199,7 +199,7 @@ describe('Material object control', () => {
       </JsonFormsStateProvider>
     );
 
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     const inputs = wrapper.find('input');
     expect(inputs.first().props().hidden).toBeFalsy();
   });

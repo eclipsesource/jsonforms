@@ -25,14 +25,13 @@
 import React from 'react';
 import './MatchMediaMock';
 import { act } from 'react-dom/test-utils';
-import waitUntil from 'async-wait-until';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { ControlElement, JsonSchema } from '@jsonforms/core';
-import { MaterialAnyOfRenderer, materialRenderers, materialCells } from '../../src';
-import { JsonFormsStateProvider, ScopedRenderer, JsonFormsContext, JsonFormsStateContext, JsonFormsDispatch } from '@jsonforms/react';
-import { resolveRef, waitForScopedRenderer, waitForRenderer } from '../util';
+import { MaterialAnyOfRenderer, materialCells, materialRenderers, } from '../../src';
+import { JsonFormsContext, JsonFormsDispatch, JsonFormsStateContext, JsonFormsStateProvider, ResolveRef } from '@jsonforms/react';
+import { resolveRef, waitForRenderer, waitForResolveRef } from '../util';
 import { TableRow } from '@material-ui/core';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -93,17 +92,17 @@ describe('Material anyOf renderer', async () => {
           {(context: JsonFormsStateContext) => {
             ctx = context;
             return (
-              <ScopedRenderer schema={schema} uischema={uischema} refResolver={resolveRef(schema)}>
+              <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef(schema)}>
                 {(resolvedSchema: JsonSchema) => {
                   return (<MaterialAnyOfRenderer schema={resolvedSchema} uischema={uischema} />);
                 }}
-              </ScopedRenderer>
+              </ResolveRef>
             );
           }}
         </JsonFormsContext.Consumer>
       </JsonFormsStateProvider>
     );
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     const input = wrapper.find('input').first();
     act(() => input.simulate('change', { target: { value: 'test' } }));
     expect(ctx.core.data.value).toBe('test');
@@ -167,10 +166,10 @@ describe('Material anyOf renderer', async () => {
       </JsonFormsStateProvider>
     );
 
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
 
     selectanyOfTab(wrapper, 1);
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     const nrOfRowsBeforeAdd = wrapper.find('tr');
     clickAddButton(wrapper, 2);
     const nrOfRowsAfterAdd = wrapper.find('tr');
@@ -249,17 +248,17 @@ describe('Material anyOf renderer', async () => {
       </JsonFormsStateProvider>
     );
 
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
 
     selectanyOfTab(wrapper, 1);
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
 
     clickAddButton(wrapper, 1);
     await waitForRenderer(wrapper, TableRow, 1);
     wrapper.find('input').first().simulate('change', { target: { value: 5 } });
     wrapper.update();
     selectanyOfTab(wrapper, 0);
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
 
     const input = wrapper.find('input').first();
     input.simulate('change', { target: { value: 'test' } });
@@ -300,7 +299,7 @@ describe('Material anyOf renderer', async () => {
           cells: materialCells
         }}
       >
-        <ScopedRenderer schema={schema} uischema={uischema} refResolver={resolveRef(schema)}>
+        <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef(schema)}>
           {(resolvedSchema: JsonSchema) => (
             <MaterialAnyOfRenderer
               schema={resolvedSchema}
@@ -308,12 +307,10 @@ describe('Material anyOf renderer', async () => {
               visible={false}
             />
           )}
-        </ScopedRenderer>
+        </ResolveRef>
       </JsonFormsStateProvider>
     );
-    await act(
-      async () => { waitUntil(() => wrapper.find(ScopedRenderer).children !== null); }
-    );
+    await waitForResolveRef(wrapper);
     const inputs = wrapper.find('input');
     expect(inputs.length).toBe(0);
   });

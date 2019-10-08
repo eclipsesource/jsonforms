@@ -42,7 +42,7 @@ import { AnyAction, combineReducers, createStore, Reducer, Store } from 'redux';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { JsonFormsStateProvider, JsonFormsContext, JsonFormsStateContext } from '@jsonforms/react';
-import { waitForScopedRenderer, resolveRef } from '../util';
+import { resolveRef, waitForResolveRef } from '../util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -178,7 +178,7 @@ describe('Material integer cells', () => {
       </JsonFormsStateProvider>
     );
 
-    await waitForScopedRenderer(wrapper)
+    await waitForResolveRef(wrapper)
     const input = wrapper.find('input').first();
     expect(input.props().type).toBe('number');
     expect(input.props().step).toBe('1');
@@ -192,7 +192,7 @@ describe('Material integer cells', () => {
       </JsonFormsStateProvider>
     );
 
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     const input = wrapper.find('input').first();
     expect(input.props().type).toBe('number');
     expect(input.props().step).toBe('1');
@@ -247,7 +247,7 @@ describe('Material integer cells', () => {
       </JsonFormsStateProvider>
     );
     ctx.dispatch(Actions.update('foo', () => undefined));
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     wrapper.update();
     const input = wrapper.find('input');
     expect(input.props().value).toBe('');

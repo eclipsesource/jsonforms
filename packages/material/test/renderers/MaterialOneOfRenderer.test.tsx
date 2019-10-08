@@ -29,9 +29,9 @@ import Dialog from '@material-ui/core/Dialog';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { ControlElement, JsonSchema, resetRefCache } from '@jsonforms/core';
-import { materialRenderers, MaterialOneOfRenderer } from '../../src';
-import { JsonFormsStateProvider, JsonFormsDispatch, ScopedRenderer, JsonFormsStateContext, JsonFormsContext } from '@jsonforms/react';
-import { waitForScopedRenderer, resolveRef } from '../util';
+import { MaterialOneOfRenderer, materialRenderers } from '../../src';
+import { JsonFormsContext, JsonFormsDispatch, JsonFormsStateContext, JsonFormsStateProvider, ResolveRef } from '@jsonforms/react';
+import { resolveRef, waitForResolveRef } from '../util';
 import { Tab } from '@material-ui/core';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -101,15 +101,15 @@ describe('Material oneOf renderer', () => {
           renderers: materialRenderers
         }}
       >
-        <ScopedRenderer schema={schema} uischema={uischema} refResolver={resolveRef(schema)}>
+        <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef(schema)}>
           {(resolvedSchema: JsonSchema) => (
             <MaterialOneOfRenderer schema={resolvedSchema} uischema={uischema} renderers={materialRenderers} visible />
           )}
-        </ScopedRenderer>
+        </ResolveRef>
       </JsonFormsStateProvider>
     );
 
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     const firstTab = wrapper.find(Tab).first();
     expect(firstTab.props().selected).toBeTruthy();
   });
@@ -144,15 +144,15 @@ describe('Material oneOf renderer', () => {
           renderers: materialRenderers
         }}
       >
-        <ScopedRenderer schema={schema} uischema={uischema} refResolver={resolveRef(schema)}>
+        <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef(schema)}>
           {(resolvedSchema: JsonSchema) => (
             <MaterialOneOfRenderer schema={resolvedSchema} uischema={uischema} />
           )}
-        </ScopedRenderer>
+        </ResolveRef>
       </JsonFormsStateProvider>
     );
 
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     const secondTab = wrapper.find(Tab).at(1);
     expect(secondTab.props().selected).toBeTruthy();
   });
@@ -195,15 +195,15 @@ describe('Material oneOf renderer', () => {
           renderers: materialRenderers
         }}
       >
-        <ScopedRenderer schema={schema} uischema={uischema} refResolver={resolveRef(schema)}>
+        <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef(schema)}>
           {(resolvedSchema: JsonSchema) => (
             <MaterialOneOfRenderer schema={resolvedSchema} uischema={uischema} />
           )}
-        </ScopedRenderer>
+        </ResolveRef>
       </JsonFormsStateProvider>
     );
 
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     const secondTab = wrapper.find(Tab).at(1);
     expect(secondTab.props().selected).toBeTruthy();
   });
@@ -246,15 +246,15 @@ describe('Material oneOf renderer', () => {
           renderers: materialRenderers
         }}
       >
-        <ScopedRenderer schema={schema} uischema={uischema} refResolver={resolveRef(schema)}>
+        <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef(schema)}>
           {(resolvedSchema: JsonSchema) => (
             <MaterialOneOfRenderer schema={resolvedSchema} uischema={uischema} />
           )}
-        </ScopedRenderer>
+        </ResolveRef>
       </JsonFormsStateProvider>
     );
 
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     const secondTab = wrapper.find(Tab).at(1);
     expect(secondTab.props().selected).toBeTruthy();
   });
@@ -295,20 +295,16 @@ describe('Material oneOf renderer', () => {
             (context: JsonFormsStateContext) => {
               ctx = context;
               return (
-                <ScopedRenderer schema={schema} uischema={uischema} refResolver={resolveRef(schema)}>
-                  {(resolvedSchema: JsonSchema) => {
-                    return (
-                      <MaterialOneOfRenderer schema={resolvedSchema} uischema={uischema} />
-                    )
-                  }}
-                </ScopedRenderer>
+                <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef(schema)}>
+                  {(resolvedSchema: JsonSchema) => (<MaterialOneOfRenderer schema={resolvedSchema} uischema={uischema} />)}
+                </ResolveRef>
               );
             }
           }
         </JsonFormsContext.Consumer>
       </JsonFormsStateProvider >
     );
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     const input = wrapper.find('input').first();
     input.simulate('change', { target: { value: 'test' } });
     wrapper.update();
@@ -349,8 +345,6 @@ describe('Material oneOf renderer', () => {
       scope: '#/properties/thingOrThings'
     };
 
-    //store.dispatch(Actions.init({ data: {}, schema, uischema }));
-
     wrapper = mount(
       <JsonFormsStateProvider
         initState={{
@@ -362,13 +356,13 @@ describe('Material oneOf renderer', () => {
       </JsonFormsStateProvider>
     );
 
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
 
     selectOneOfTab(wrapper, 1, false);
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     const nrOfRowsBeforeAdd = wrapper.find('tr');
     clickAddButton(wrapper, 2);
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     const nrOfRowsAfterAdd = wrapper.find('tr');
     // 1 header row + no data row
     expect(nrOfRowsBeforeAdd.length).toBe(2);
@@ -435,13 +429,13 @@ describe('Material oneOf renderer', () => {
       </JsonFormsStateProvider>
     );
 
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
 
     selectOneOfTab(wrapper, 1, false);
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     const nrOfRowsBeforeAdd = wrapper.find('tr');
     clickAddButton(wrapper, 2);
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     const nrOfRowsAfterAdd = wrapper.find('tr');
 
     // 1 header row + no data row
@@ -509,14 +503,14 @@ describe('Material oneOf renderer', () => {
       </JsonFormsStateProvider>
     );
 
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
 
     selectOneOfTab(wrapper, 1, false);
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     clickAddButton(wrapper, 2);
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     selectOneOfTab(wrapper, 0, true);
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
 
     const input = wrapper.find('input').first();
     input.simulate('change', { target: { value: 'test' } });
@@ -560,7 +554,7 @@ describe('Material oneOf renderer', () => {
       </JsonFormsStateProvider>
     );
 
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     selectOneOfTab(wrapper, 1, true);
   });
 
@@ -594,11 +588,11 @@ describe('Material oneOf renderer', () => {
           renderers: materialRenderers
         }}
       >
-        <ScopedRenderer schema={schema} uischema={uischema} refResolver={resolveRef(schema)}>
+        <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef(schema)}>
           {(resolvedSchema: JsonSchema) => (
             <MaterialOneOfRenderer schema={resolvedSchema} uischema={uischema} visible={false} />
           )}
-        </ScopedRenderer>
+        </ResolveRef>
       </JsonFormsStateProvider>
     );
     const inputs = wrapper.find('input');

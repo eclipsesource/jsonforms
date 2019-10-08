@@ -50,7 +50,7 @@ import {
 } from '@material-ui/core';
 import {
   JsonFormsDispatch,
-  ScopedRenderer,
+  ResolveRef,
   withJsonFormsCombinatorProps
 } from '@jsonforms/react';
 import CombinatorProperties from './CombinatorProperties';
@@ -117,7 +117,7 @@ const MaterialOneOfRenderer = ({
   );
 
   return (
-    <ScopedRenderer schema={schema} uischema={uischema} refResolver={resolveRef}>
+    <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef}>
       {(resolvedSchema: JsonSchema) => {
         const oneOfRenderInfos = createCombinatorRenderInfos(
           resolvedSchema.oneOf,
@@ -180,9 +180,9 @@ const MaterialOneOfRenderer = ({
               </DialogActions>
             </Dialog>
           </Hidden>
-        )
+        );
       }}
-    </ScopedRenderer>
+    </ResolveRef>
   );
 };
 

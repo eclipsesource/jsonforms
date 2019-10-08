@@ -46,7 +46,7 @@ import { deriveTypes, hasType } from '../util';
  */
 export const NOT_APPLICABLE = -1;
 
-type RefResolver = (ref: string) => Promise<JsonSchema>;
+export type RefResolver = (ref: string) => Promise<JsonSchema>;
 
 /**
  * A tester is a function that receives an UI schema and a JSON schema and returns a boolean.

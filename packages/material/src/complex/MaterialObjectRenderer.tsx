@@ -27,14 +27,14 @@ import startCase from 'lodash/startCase';
 import {
   findUISchema,
   GroupLayout,
+  isObjectControl,
   isPlainLabel,
   RankedTester,
   rankWith,
   refResolver,
   StatePropsOfControlWithDetail,
-  isObjectControl
 } from '@jsonforms/core';
-import { JsonFormsDispatch, ScopedRenderer, withJsonFormsDetailProps } from '@jsonforms/react';
+import { JsonFormsDispatch, ResolveRef, withJsonFormsDetailProps } from '@jsonforms/react';
 import { Hidden } from '@material-ui/core';
 import React, { useCallback } from 'react';
 
@@ -56,7 +56,7 @@ const MaterialObjectRenderer = ({
   );
 
   return (
-    <ScopedRenderer schema={schema} uischema={uischema} refResolver={resolveRef}>
+    <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef}>
       {(resolvedSchema: any) => {
         const detailUiSchema = findUISchema(
           uischemas,
@@ -88,7 +88,7 @@ const MaterialObjectRenderer = ({
           </Hidden>
         );
       }}
-    </ScopedRenderer>
+    </ResolveRef>
   );
 };
 

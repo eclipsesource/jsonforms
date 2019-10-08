@@ -51,12 +51,12 @@ const uischema: ControlElement = {
 
 describe('Material number cells tester', () => {
   it('should fail', async () => {
-    expect(await materialNumberCellTester(undefined, undefined, resolveRef)).toBe(NOT_APPLICABLE);
-    expect(await materialNumberCellTester(null, undefined, resolveRef)).toBe(NOT_APPLICABLE);
-    expect(await materialNumberCellTester({ type: 'Foo' }, undefined, resolveRef)).toBe(
+    expect(await materialNumberCellTester(undefined, undefined, resolveRef(undefined))).toBe(NOT_APPLICABLE);
+    expect(await materialNumberCellTester(null, undefined, resolveRef(undefined))).toBe(NOT_APPLICABLE);
+    expect(await materialNumberCellTester({ type: 'Foo' }, undefined, resolveRef(undefined))).toBe(
       NOT_APPLICABLE
     );
-    expect(await materialNumberCellTester({ type: 'Control' }, undefined, resolveRef)).toBe(
+    expect(await materialNumberCellTester({ type: 'Control' }, undefined, resolveRef(undefined))).toBe(
       NOT_APPLICABLE
     );
   });
@@ -66,17 +66,15 @@ describe('Material number cells tester', () => {
       type: 'Control',
       scope: '#/properties/foo'
     };
-    expect(
-      await
-        materialNumberCellTester(control, {
-          type: 'object',
-          properties: {
-            foo: {
-              type: 'string'
-            }
-          }
-        }, resolveRef)
-    ).toBe(NOT_APPLICABLE);
+    const wrongType = {
+      type: 'object',
+      properties: {
+        foo: {
+          type: 'string'
+        }
+      }
+    };
+    expect(await materialNumberCellTester(control, wrongType, resolveRef(wrongType))).toBe(NOT_APPLICABLE);
   });
 
   it('should fail if only sibling has correct type', async () => {
@@ -84,20 +82,18 @@ describe('Material number cells tester', () => {
       type: 'Control',
       scope: '#/properties/foo'
     };
-    expect(
-      await
-        materialNumberCellTester(control, {
-          type: 'object',
-          properties: {
-            foo: {
-              type: 'string'
-            },
-            bar: {
-              type: 'number'
-            }
-          }
-        }, resolveRef)
-    ).toBe(NOT_APPLICABLE);
+    const wrongProp = {
+      type: 'object',
+      properties: {
+        foo: {
+          type: 'string'
+        },
+        bar: {
+          type: 'number'
+        }
+      }
+    };
+    expect(await materialNumberCellTester(control, wrongProp, resolveRef(wrongProp))).toBe(NOT_APPLICABLE);
   });
 
   it('should succeed with matching prop type', async () => {

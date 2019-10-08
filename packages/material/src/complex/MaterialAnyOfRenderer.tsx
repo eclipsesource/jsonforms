@@ -30,13 +30,13 @@ import {
   JsonSchema,
   RankedTester,
   rankWith,
-  StatePropsOfCombinator,
-  refResolver
+  refResolver,
+  StatePropsOfCombinator
 } from '@jsonforms/core';
 import {
   JsonFormsDispatch,
-  ScopedRenderer,
-  withJsonFormsCombinatorProps
+  ResolveRef,
+  withJsonFormsCombinatorProps,
 } from '@jsonforms/react';
 import { Hidden, Tab, Tabs } from '@material-ui/core';
 import CombinatorProperties from './CombinatorProperties';
@@ -44,7 +44,6 @@ import CombinatorProperties from './CombinatorProperties';
 const MaterialAnyOfRenderer = ({
   schema,
   rootSchema,
-  //  indexOfFittingSchema,
   visible,
   path,
   renderers,
@@ -63,7 +62,7 @@ const MaterialAnyOfRenderer = ({
   );
 
   return (
-    <ScopedRenderer schema={schema} uischema={uischema} refResolver={resolveRef}>
+    <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef}>
       {(resolvedSchema: JsonSchema) => {
         const anyOfRenderInfos = createCombinatorRenderInfos(
           resolvedSchema.anyOf,
@@ -100,7 +99,7 @@ const MaterialAnyOfRenderer = ({
           </Hidden>
         );
       }}
-    </ScopedRenderer>
+    </ResolveRef>
   );
 };
 

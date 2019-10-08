@@ -29,10 +29,8 @@ import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { ControlElement, JsonSchema } from '@jsonforms/core';
 import { MaterialAllOfRenderer, materialRenderers } from '../../src';
-import { JsonFormsStateProvider, ScopedRenderer } from '@jsonforms/react';
-import { act } from 'react-dom/test-utils';
-import waitUntil from 'async-wait-until';
-import { resolveRef } from '../util';
+import { JsonFormsStateProvider, ResolveRef } from '@jsonforms/react';
+import { resolveRef, waitForResolveRef } from '../util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -72,7 +70,7 @@ describe('Material allOf renderer', () => {
           renderers: materialRenderers
         }}
       >
-        <ScopedRenderer schema={schema} uischema={uischema} refResolver={resolveRef(schema)}>
+        <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef(schema)}>
           {(resolvedSchema: JsonSchema) => (
             <MaterialAllOfRenderer
               schema={resolvedSchema}
@@ -81,13 +79,11 @@ describe('Material allOf renderer', () => {
               visible
             />
           )}
-        </ScopedRenderer>
+        </ResolveRef>
       </JsonFormsStateProvider>
     );
-    await act(
-      async () => { waitUntil(() => wrapper.find(ScopedRenderer).children !== null); }
-    );
-    wrapper.update();
+
+    await waitForResolveRef(wrapper);
     const inputs = wrapper.find('input');
     expect(inputs.length).toBe(2);
   });
@@ -122,7 +118,7 @@ describe('Material allOf renderer', () => {
           renderers: materialRenderers
         }}
       >
-        <ScopedRenderer schema={schema} uischema={uischema} refResolver={resolveRef(schema)}>
+        <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef(schema)}>
           {(resolvedSchema: JsonSchema) => (
             <MaterialAllOfRenderer
               schema={resolvedSchema}
@@ -131,13 +127,10 @@ describe('Material allOf renderer', () => {
               visible={false}
             />
           )}
-        </ScopedRenderer>
+        </ResolveRef>
       </JsonFormsStateProvider>
     );
-    await act(
-      async () => { waitUntil(() => wrapper.find(ScopedRenderer).children !== null); }
-    );
-    wrapper.update();
+    await waitForResolveRef(wrapper);
     const inputs = wrapper.find('input');
     expect(inputs.length).toBe(0);
   });

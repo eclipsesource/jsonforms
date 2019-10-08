@@ -56,43 +56,42 @@ const uischema: ControlElement = {
 describe('Material time cell tester', () => {
   it('should fail', async () => {
     expect(
-      await materialTimeCellTester(undefined, undefined, resolveRef)
+      await materialTimeCellTester(undefined, undefined, resolveRef(undefined))
     ).toBe(NOT_APPLICABLE);
     expect(
-      await materialTimeCellTester(null, undefined, resolveRef)
+      await materialTimeCellTester(null, undefined, resolveRef(undefined))
     ).toBe(NOT_APPLICABLE);
     expect(
-      await materialTimeCellTester({ type: 'Foo' }, undefined, resolveRef)
+      await materialTimeCellTester({ type: 'Foo' }, undefined, resolveRef(undefined))
     ).toBe(NOT_APPLICABLE);
     expect(
-      await materialTimeCellTester({ type: 'Control' }, undefined, resolveRef)
+      await materialTimeCellTester({ type: 'Control' }, undefined, resolveRef(undefined))
     ).toBe(NOT_APPLICABLE);
   });
 
   it('should fail with wrong prop type', async () => {
+    const wrongSchema = {
+      type: 'object',
+      properties: {
+        foo: { type: 'string' }
+      }
+    };
     expect(
-      await materialTimeCellTester(uischema, {
-        type: 'object',
-        properties: {
-          foo: { type: 'string' }
-        }
-      }, resolveRef)
-    ).toBe(NOT_APPLICABLE);
+      await materialTimeCellTester(uischema, wrongSchema, resolveRef(wrongSchema))).toBe(NOT_APPLICABLE);
   });
 
   it('should fail if only sibling prop has correct type', async () => {
-    expect(
-      await materialTimeCellTester(uischema, {
-        type: 'object',
-        properties: {
-          foo: { type: 'string' },
-          bar: {
-            type: 'string',
-            format: 'time'
-          }
+    const wrongSchema = {
+      type: 'object',
+      properties: {
+        foo: { type: 'string' },
+        bar: {
+          type: 'string',
+          format: 'time'
         }
-      }, resolveRef)
-    ).toBe(NOT_APPLICABLE);
+      }
+    };
+    expect(await materialTimeCellTester(uischema, wrongSchema, resolveRef(wrongSchema))).toBe(NOT_APPLICABLE);
   });
 
   it('should succeed with correct prop type', async () => {

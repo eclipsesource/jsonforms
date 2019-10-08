@@ -30,7 +30,6 @@ import {
   JsonFormsState
 } from '@jsonforms/core';
 import * as React from 'react';
-//import { Provider } from 'react-redux';
 
 import { combineReducers, createStore, Store } from 'redux';
 import { materialCells, materialRenderers } from '../../src';
@@ -41,7 +40,7 @@ import {
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { JsonFormsStateProvider, JsonFormsContext, JsonFormsStateContext } from '@jsonforms/react';
-import { waitForScopedRenderer, resolveRef } from '../util';
+import { resolveRef, waitForResolveRef } from '../util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -191,7 +190,7 @@ describe('Material array layout', () => {
       </JsonFormsStateProvider>
     );
 
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     const controls = wrapper.find('input');
     // 2 data entries with each having 2 controls
     expect(controls).toHaveLength(4);
@@ -213,7 +212,7 @@ describe('Material array layout', () => {
       </JsonFormsStateProvider>
     );
 
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     const controls = wrapper.find('input');
     // 2 data entries with each having 2 controls
     expect(controls).toHaveLength(4);
@@ -234,7 +233,7 @@ describe('Material array layout', () => {
       </JsonFormsStateProvider>
     );
 
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
 
     const controls = wrapper.find('input');
     // 2 data entries with each having 1 control

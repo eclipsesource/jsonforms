@@ -41,7 +41,7 @@ import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { JsonFormsReduxContext } from '@jsonforms/react';
 import { ListItem } from '@material-ui/core';
-import { waitForScopedRenderer, resolveRef } from '../util';
+import { resolveRef, waitForResolveRef } from '../util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -206,10 +206,10 @@ describe('Material list with detail renderer', () => {
       </Provider>
     );
 
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     const liSecond = wrapper.find('div[role="button"]').at(1);
     liSecond.simulate('click');
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
 
     const controls = wrapper.find('input');
     expect(controls).toHaveLength(2);
@@ -270,10 +270,10 @@ describe('Material list with detail renderer', () => {
       </Provider>
     );
 
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
     const liSecond = wrapper.find('div[role="button"]').at(1);
     liSecond.simulate('click');
-    await waitForScopedRenderer(wrapper);
+    await waitForResolveRef(wrapper);
 
     const labels = wrapper.find('label');
     expect(labels).toHaveLength(2);

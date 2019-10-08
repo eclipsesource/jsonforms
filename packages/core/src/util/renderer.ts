@@ -269,7 +269,7 @@ export interface StatePropsOfScopedRenderer extends StatePropsOfRenderer {
 /**
  * Props of a {@link Renderer}.
  */
-export interface RendererProps extends StatePropsOfRenderer {}
+export interface RendererProps extends StatePropsOfRenderer { }
 
 /**
  * State-based props of a Control
@@ -313,7 +313,7 @@ export interface DispatchPropsOfControl {
  */
 export interface ControlProps
   extends StatePropsOfControl,
-    DispatchPropsOfControl {}
+  DispatchPropsOfControl { }
 
 /**
  * State props of a layout;
@@ -330,7 +330,7 @@ export interface StatePropsOfLayout extends StatePropsOfRenderer {
   direction: 'row' | 'column';
 }
 
-export interface LayoutProps extends StatePropsOfLayout {}
+export interface LayoutProps extends StatePropsOfLayout { }
 
 /**
  * The state of a control.
@@ -447,13 +447,13 @@ export const mapStateToMasterListItemProps = (
   const { schema, path, index } = ownProps;
   const firstPrimitiveProp = schema.properties
     ? find(Object.keys(schema.properties), propName => {
-        const prop = schema.properties[propName];
-        return (
-          prop.type === 'string' ||
-          prop.type === 'number' ||
-          prop.type === 'integer'
-        );
-      })
+      const prop = schema.properties[propName];
+      return (
+        prop.type === 'string' ||
+        prop.type === 'number' ||
+        prop.type === 'integer'
+      );
+    })
     : undefined;
   const childPath = composePaths(path, `${index}`);
   const childData = Resolve.data(getData(state), childPath);
@@ -508,7 +508,7 @@ export const mapStateToControlWithDetailProps = (
 
 export interface ControlWithDetailProps
   extends StatePropsOfControlWithDetail,
-    DispatchPropsOfControl {}
+  DispatchPropsOfControl { }
 
 /**
  * State-based props of a table control.
@@ -613,7 +613,7 @@ export const mapDispatchToArrayControlProps = (
  */
 export interface ArrayControlProps
   extends StatePropsOfArrayControl,
-    DispatchPropsOfArrayControl {}
+  DispatchPropsOfArrayControl { }
 
 export const layoutDefaultProps: {
   visible: boolean;
@@ -659,8 +659,6 @@ export const mapStateToLayoutProps = (
     direction: ownProps.direction || layoutDefaultProps.direction
   };
 };
-
-export type RefResolver = (schema: JsonSchema) => Promise<JsonSchema>;
 
 export interface OwnPropsOfJsonFormsRenderer extends OwnPropsOfRenderer {
   renderers?: JsonFormsRendererRegistryEntry[];
@@ -748,7 +746,7 @@ export const mapStateToCombinatorRendererProps = (
 
 export interface CombinatorRendererProps
   extends StatePropsOfCombinator,
-    DispatchPropsOfControl {}
+  DispatchPropsOfControl { }
 
 export interface StatePropsOfArrayLayout extends StatePropsOfControlWithDetail {
   data: number;
@@ -833,4 +831,4 @@ export const refResolver = (
  */
 export interface ArrayLayoutProps
   extends StatePropsOfArrayLayout,
-    DispatchPropsOfArrayControl {}
+  DispatchPropsOfArrayControl { }
