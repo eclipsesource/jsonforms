@@ -48,6 +48,7 @@ export class MaterialNativeControl extends Control<ControlProps, ControlState> {
       label,
       schema,
       description,
+      enabled,
       visible,
       required,
       path,
@@ -81,6 +82,7 @@ export class MaterialNativeControl extends Control<ControlProps, ControlState> {
           )}
           type={fieldType}
           error={!isValid}
+          disabled={!enabled}
           fullWidth={!appliedUiSchemaOptions.trim}
           onFocus={this.onFocus}
           onBlur={this.onBlur}
