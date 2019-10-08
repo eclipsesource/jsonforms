@@ -157,7 +157,7 @@ test('uiTypeIs', async t => {
     type: 'Control',
     scope: '#/properties/bar'
   };
-  t.true(await uiTypeIs('Control')(control, undefined));
+  t.true(await uiTypeIs('Control')(control, undefined, undefined));
 });
 
 test('optionIs should check for options', async t => {
@@ -173,8 +173,8 @@ test('optionIs should check for options', async t => {
 
 test('optionIs should not fail if uischema is undefined or null', async t => {
   const uischema: UISchemaElement = null;
-  t.false(await optionIs('answer', 42)(uischema, undefined));
-  t.false(await optionIs('answer', 42)(uischema, undefined));
+  t.false(await optionIs('answer', 42)(uischema, undefined, undefined));
+  t.false(await optionIs('answer', 42)(uischema, undefined, undefined));
 });
 
 test('optionIs should return false for UI schema elements without options cell', async t => {
@@ -182,7 +182,7 @@ test('optionIs should return false for UI schema elements without options cell',
     type: 'Control',
     scope: '#/properties/bar'
   };
-  t.false(await optionIs('answer', 42)(control, undefined));
+  t.false(await optionIs('answer', 42)(control, undefined, undefined));
 });
 
 test('schemaMatches should check type sub-schema of control via predicate', async t => {
@@ -259,7 +259,7 @@ test('scopeEndsWith checks whether the ref of a control ends with a certain stri
     type: 'Control',
     scope: '#/properties/bar'
   };
-  t.true(await scopeEndsWith('properties/bar')(uischema, undefined));
+  t.true(await scopeEndsWith('properties/bar')(uischema, undefined, undefined));
 });
 
 test('scopeEndsWith should return false for non-control UI schema elements', async t => {
@@ -267,7 +267,7 @@ test('scopeEndsWith should return false for non-control UI schema elements', asy
     type: 'Label',
     text: 'some text'
   };
-  t.false(await scopeEndsWith('properties/bar')(label, undefined));
+  t.false(await scopeEndsWith('properties/bar')(label, undefined, undefined));
 });
 
 test('scopeEndsIs checks whether the last segment a control ref equals a certain string', async t => {
@@ -275,7 +275,7 @@ test('scopeEndsIs checks whether the last segment a control ref equals a certain
     type: 'Control',
     scope: '#/properties/bar'
   };
-  t.true(await scopeEndIs('bar')(uischema, undefined));
+  t.true(await scopeEndIs('bar')(uischema, undefined, undefined));
 });
 
 test('scopeEndIs should return false for non-control UI schema elements', async t => {
@@ -283,7 +283,7 @@ test('scopeEndIs should return false for non-control UI schema elements', async 
     type: 'Label',
     text: 'some text'
   };
-  t.false(await scopeEndIs('bar')(label, undefined));
+  t.false(await scopeEndIs('bar')(label, undefined, undefined));
 });
 
 test('and should allow to compose multiple testers', async t => {
@@ -360,25 +360,21 @@ test('tester isPrimitiveArrayControl', async t => {
 });
 
 test('tester isObjectArrayControl', async t => {
-  t.false(await isObjectArrayControl({ type: 'Foo' }, null));
+  t.false(await isObjectArrayControl({ type: 'Foo' }, null, undefined));
   const control: ControlElement = {
     type: 'Control',
     scope: '#/properties/foo'
   };
   t.false(
-    await isObjectArrayControl(control, undefined),
+    await isObjectArrayControl(control, undefined, undefined),
     'No Schema not checked!'
   );
-
+  const wrongType = {
+    type: 'object',
+    properties: { bar: { type: 'integer' } }
+  };
   t.false(
-    await isObjectArrayControl(
-      control,
-      {
-        type: 'object',
-        properties: { bar: { type: 'integer' } }
-      }
-    ),
-    'Wrong Schema Type not checked!'
+    await isObjectArrayControl(control, wrongType, undefined), 'Wrong Schema Type not checked!'
   );
   t.false(
     await isObjectArrayControl(
@@ -386,7 +382,8 @@ test('tester isObjectArrayControl', async t => {
       {
         type: 'object',
         properties: { foo: { type: 'array' } }
-      }
+      },
+      undefined
     ),
     'Array Schema Type without items not checked!'
   );
@@ -401,7 +398,8 @@ test('tester isObjectArrayControl', async t => {
             items: [{ type: 'integer' }, { type: 'string' }]
           }
         }
-      }
+      },
+      undefined
     ),
     'Array Schema Type with tuples not checked!'
   );
@@ -416,7 +414,8 @@ test('tester isObjectArrayControl', async t => {
             items: { type: 'integer' }
           }
         }
-      }
+      },
+      undefined
     ),
     'Array Schema Type with wrong item type not checked!'
   );
@@ -489,17 +488,18 @@ test('tester isObjectArrayControl', async t => {
 });
 
 test('isBooleanControl', async t => {
-  t.false(await isBooleanControl(undefined, undefined));
-  t.false(await isBooleanControl(null, undefined));
-  t.false(await isBooleanControl({ type: 'Foo' }, undefined));
-  t.false(await isBooleanControl({ type: 'Control' }, undefined));
+  t.false(await isBooleanControl(undefined, undefined, undefined));
+  t.false(await isBooleanControl(null, undefined, undefined));
+  t.false(await isBooleanControl({ type: 'Foo' }, undefined, undefined));
+  t.false(await isBooleanControl({ type: 'Control' }, undefined, undefined));
   t.false(
     await isBooleanControl(
       t.context.uischema,
       {
         type: 'object',
         properties: { foo: { type: 'string' } }
-      }
+      },
+      undefined
     )
   );
   t.false(
@@ -508,7 +508,8 @@ test('isBooleanControl', async t => {
       {
         type: 'object',
         properties: { foo: { type: 'string' }, bar: { type: 'boolean' } }
-      }
+      },
+      undefined
     )
   );
   const schema = {
@@ -521,17 +522,18 @@ test('isBooleanControl', async t => {
 });
 
 test('test isDateControl', async t => {
-  t.false(await isDateControl(undefined, undefined));
-  t.false(await isDateControl(null, undefined));
-  t.false(await isDateControl({ type: 'Foo' }, undefined));
-  t.false(await isDateControl({ type: 'Control' }, undefined));
+  t.false(await isDateControl(undefined, undefined, undefined));
+  t.false(await isDateControl(null, undefined, undefined));
+  t.false(await isDateControl({ type: 'Foo' }, undefined, undefined));
+  t.false(await isDateControl({ type: 'Control' }, undefined, undefined));
   t.false(
     await isDateControl(
       t.context.uischema,
       {
         type: 'object',
         properties: { foo: { type: 'string' } }
-      }
+      },
+      undefined
     )
   );
   t.false(
@@ -546,7 +548,8 @@ test('test isDateControl', async t => {
             format: 'date'
           }
         }
-      }
+      },
+      undefined
     )
   );
   const schema = {
@@ -556,17 +559,18 @@ test('test isDateControl', async t => {
   t.true(await isDateControl(t.context.uischema, schema, resolveRef(schema)));
 });
 test('test isEnumControl', async t => {
-  t.false(await isEnumControl(undefined, undefined));
-  t.false(await isEnumControl(null, undefined));
-  t.false(await isEnumControl({ type: 'Foo' }, undefined));
-  t.false(await isEnumControl({ type: 'Control' }, undefined));
+  t.false(await isEnumControl(undefined, undefined, undefined));
+  t.false(await isEnumControl(null, undefined, undefined));
+  t.false(await isEnumControl({ type: 'Foo' }, undefined, undefined));
+  t.false(await isEnumControl({ type: 'Control' }, undefined, undefined));
   t.false(
     await isEnumControl(
       t.context.uischema,
       {
         type: 'object',
         properties: { foo: { type: 'string' } }
-      }
+      },
+      undefined
     )
   );
   t.false(
@@ -583,7 +587,8 @@ test('test isEnumControl', async t => {
             enum: ['a', 'b']
           }
         }
-      }
+      },
+      undefined
     )
   );
   const schema = {
@@ -615,17 +620,18 @@ test('test isEnumControl', async t => {
   );
 });
 test('test isIntegerControl', async t => {
-  t.false(await isIntegerControl(undefined, undefined));
-  t.false(await isIntegerControl(null, undefined));
-  t.false(await isIntegerControl({ type: 'Foo' }, undefined));
-  t.false(await isIntegerControl({ type: 'Control' }, undefined));
+  t.false(await isIntegerControl(undefined, undefined, undefined));
+  t.false(await isIntegerControl(null, undefined, undefined));
+  t.false(await isIntegerControl({ type: 'Foo' }, undefined, undefined));
+  t.false(await isIntegerControl({ type: 'Control' }, undefined, undefined));
   t.false(
     await isIntegerControl(
       t.context.uischema,
       {
         type: 'object',
         properties: { foo: { type: 'string' } }
-      }
+      },
+      undefined
     )
   );
   const incorrectSchema = {
@@ -649,17 +655,18 @@ test('test isIntegerControl', async t => {
 });
 
 test('test isNumberControl', async t => {
-  t.false(await isNumberControl(undefined, undefined));
-  t.false(await isNumberControl(null, undefined));
-  t.false(await isNumberControl({ type: 'Foo' }, undefined));
-  t.false(await isNumberControl({ type: 'Control' }, undefined));
+  t.false(await isNumberControl(undefined, undefined, undefined));
+  t.false(await isNumberControl(null, undefined, undefined));
+  t.false(await isNumberControl({ type: 'Foo' }, undefined, undefined));
+  t.false(await isNumberControl({ type: 'Control' }, undefined, undefined));
   t.false(
     await isNumberControl(
       t.context.uischema,
       {
         type: 'object',
         properties: { foo: { type: 'string' } }
-      }
+      },
+      undefined
     )
   );
   const incorrectSchema = {
@@ -680,17 +687,18 @@ test('test isNumberControl', async t => {
   t.true(await isNumberControl(t.context.uischema, schema, resolveRef(schema)));
 });
 test('tester isStringControl', async t => {
-  t.false(await isStringControl(undefined, undefined));
-  t.false(await isStringControl(null, undefined));
-  t.false(await isStringControl({ type: 'Foo' }, undefined));
-  t.false(await isStringControl({ type: 'Control' }, undefined));
+  t.false(await isStringControl(undefined, undefined, undefined));
+  t.false(await isStringControl(null, undefined, undefined));
+  t.false(await isStringControl({ type: 'Foo' }, undefined, undefined));
+  t.false(await isStringControl({ type: 'Control' }, undefined, undefined));
   t.false(
     await isStringControl(
       t.context.uischema,
       {
         type: 'object',
         properties: { foo: { type: 'number' } }
-      }
+      },
+      undefined
     )
   );
   const incorrectSchema = {
@@ -711,17 +719,18 @@ test('tester isStringControl', async t => {
   t.true(await isStringControl(t.context.uischema, schema, resolveRef(schema)));
 });
 test('test isTimeControl', async t => {
-  t.false(await isTimeControl(undefined, undefined));
-  t.false(await isTimeControl(null, undefined));
-  t.false(await isTimeControl({ type: 'Foo' }, undefined));
-  t.false(await isTimeControl({ type: 'Control' }, undefined));
+  t.false(await isTimeControl(undefined, undefined, undefined));
+  t.false(await isTimeControl(null, undefined, undefined));
+  t.false(await isTimeControl({ type: 'Foo' }, undefined, undefined));
+  t.false(await isTimeControl({ type: 'Control' }, undefined, undefined));
   t.false(
     await isTimeControl(
       t.context.uischema,
       {
         type: 'object',
         properties: { foo: { type: 'string' } }
-      }
+      },
+      undefined
     )
   );
   const incorrectSchema = {
@@ -745,17 +754,18 @@ test('test isTimeControl', async t => {
   t.true(await isTimeControl(t.context.uischema, schema, resolveRef(schema)));
 });
 test('tester isMultiLineControl', async t => {
-  t.false(await isMultiLineControl(undefined, undefined));
-  t.false(await isMultiLineControl(null, undefined));
-  t.false(await isMultiLineControl({ type: 'Foo' }, undefined));
-  t.false(await isMultiLineControl({ type: 'Control' }, undefined));
+  t.false(await isMultiLineControl(undefined, undefined, undefined));
+  t.false(await isMultiLineControl(null, undefined, undefined));
+  t.false(await isMultiLineControl({ type: 'Foo' }, undefined, undefined));
+  t.false(await isMultiLineControl({ type: 'Control' }, undefined, undefined));
   t.false(
     await isMultiLineControl(
       t.context.uischema,
       {
         type: 'object',
         properties: { foo: { type: 'string' } }
-      }
+      },
+      undefined
     )
   );
   const control = t.context.uischema;
@@ -766,7 +776,8 @@ test('tester isMultiLineControl', async t => {
       {
         type: 'object',
         properties: { foo: { type: 'string' } }
-      }
+      },
+      undefined
     )
   );
 });
@@ -872,15 +883,15 @@ test('tester isObjectArrayWithNesting', async t => {
     }
   };
 
-  t.false(await isObjectArrayWithNesting(undefined, undefined));
-  t.false(await isObjectArrayWithNesting(null, undefined));
+  t.false(await isObjectArrayWithNesting(undefined, undefined, undefined));
+  t.false(await isObjectArrayWithNesting(null, undefined, undefined));
   t.false(
-    await isObjectArrayWithNesting({ type: 'Foo' }, undefined)
+    await isObjectArrayWithNesting({ type: 'Foo' }, undefined, undefined)
   );
   t.false(
-    await isObjectArrayWithNesting({ type: 'Control' }, undefined)
+    await isObjectArrayWithNesting({ type: 'Control' }, undefined, undefined)
   );
-  t.false(await isObjectArrayWithNesting(uischema, schema));
+  t.false(await isObjectArrayWithNesting(uischema, schema, undefined));
   t.true(
     await isObjectArrayWithNesting(
       uischema,

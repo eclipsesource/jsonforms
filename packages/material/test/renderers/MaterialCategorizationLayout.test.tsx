@@ -67,10 +67,10 @@ const fixture = {
 
 describe('Material categorization layout tester', () => {
   it('should not fail when given undefined data', async () => {
-    expect(await materialCategorizationTester(undefined, undefined)).toBe(-1);
-    expect(await materialCategorizationTester(null, undefined)).toBe(-1);
-    expect(await materialCategorizationTester({ type: 'Foo' }, undefined)).toBe(-1);
-    expect(await materialCategorizationTester({ type: 'Categorization' }, undefined)).toBe(-1);
+    expect(await materialCategorizationTester(undefined, undefined, undefined)).toBe(-1);
+    expect(await materialCategorizationTester(null, undefined, undefined)).toBe(-1);
+    expect(await materialCategorizationTester({ type: 'Foo' }, undefined, undefined)).toBe(-1);
+    expect(await materialCategorizationTester({ type: 'Categorization' }, undefined, undefined)).toBe(-1);
   });
 
   it('should not fail with null elements and no schema', async () => {
@@ -78,7 +78,7 @@ describe('Material categorization layout tester', () => {
       type: 'Categorization',
       elements: null
     };
-    expect(await materialCategorizationTester(uischema, undefined)).toBe(-1);
+    expect(await materialCategorizationTester(uischema, undefined, undefined)).toBe(-1);
   });
 
   it('should succeed with empty elements and no schema', async () => {
@@ -86,7 +86,7 @@ describe('Material categorization layout tester', () => {
       type: 'Categorization',
       elements: []
     };
-    expect(await materialCategorizationTester(uischema, undefined)).toBe(1);
+    expect(await materialCategorizationTester(uischema, undefined, undefined)).toBe(1);
   });
 
   it('should not fail tester with single unknown element and no schema', async () => {
@@ -98,7 +98,7 @@ describe('Material categorization layout tester', () => {
         }
       ]
     };
-    expect(await materialCategorizationTester(uischema, undefined)).toBe(-1);
+    expect(await materialCategorizationTester(uischema, undefined, undefined)).toBe(-1);
   });
 
   it('should succeed with a single category and no schema', async () => {
@@ -110,7 +110,7 @@ describe('Material categorization layout tester', () => {
         }
       ]
     };
-    expect(await materialCategorizationTester(categorization, undefined)).toBe(1);
+    expect(await materialCategorizationTester(categorization, undefined, undefined)).toBe(1);
   });
 
   it('should not apply to a nested categorization with single category and no schema', async () => {
@@ -126,7 +126,7 @@ describe('Material categorization layout tester', () => {
       type: 'Categorization',
       elements: [nestedCategorization]
     };
-    expect(await materialCategorizationTester(categorization, undefined)).toBe(-1);
+    expect(await materialCategorizationTester(categorization, undefined, undefined)).toBe(-1);
   });
 
   it('should not apply to nested categorizations without categories and no schema', async () => {
@@ -138,7 +138,7 @@ describe('Material categorization layout tester', () => {
         }
       ]
     };
-    expect(await materialCategorizationTester(categorization, undefined)).toBe(-1);
+    expect(await materialCategorizationTester(categorization, undefined, undefined)).toBe(-1);
   });
 
   it('should not apply to a nested categorization with null elements and no schema', async () => {
@@ -153,7 +153,7 @@ describe('Material categorization layout tester', () => {
       ]
     };
 
-    expect(await materialCategorizationTester(categorization, undefined)).toBe(-1);
+    expect(await materialCategorizationTester(categorization, undefined, undefined)).toBe(-1);
   });
 
   it('should not apply to a nested categorizations with empty elements and no schema', async () => {
@@ -166,7 +166,7 @@ describe('Material categorization layout tester', () => {
         }
       ]
     };
-    expect(await materialCategorizationTester(categorization, undefined)).toBe(-1);
+    expect(await materialCategorizationTester(categorization, undefined, undefined)).toBe(-1);
   });
 });
 

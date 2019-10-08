@@ -75,14 +75,14 @@ const initJsonFormsStore = (
 
 describe('Material Label Renderer tester', () => {
   it('should fail', async () => {
-    expect(await materialLabelRendererTester(undefined, undefined)).toBe(
+    expect(await materialLabelRendererTester(undefined, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
-    expect(await materialLabelRendererTester(null, undefined)).toBe(NOT_APPLICABLE);
-    expect(await materialLabelRendererTester({ type: 'Foo' }, undefined)).toBe(
+    expect(await materialLabelRendererTester(null, undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(await materialLabelRendererTester({ type: 'Foo' }, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
-    expect(await materialLabelRendererTester({ type: 'Label' }, undefined)).toBe(1);
+    expect(await materialLabelRendererTester({ type: 'Label' }, undefined, undefined)).toBe(1);
   });
 });
 

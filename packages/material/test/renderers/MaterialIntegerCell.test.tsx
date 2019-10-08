@@ -81,14 +81,14 @@ describe('Material integer cells tester', () => {
   };
 
   it('should fail', async () => {
-    expect(await materialIntegerCellTester(undefined, undefined)).toBe(
+    expect(await materialIntegerCellTester(undefined, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
-    expect(await materialIntegerCellTester(null, undefined)).toBe(NOT_APPLICABLE);
-    expect(await materialIntegerCellTester({ type: 'Foo' }, undefined)).toBe(
+    expect(await materialIntegerCellTester(null, undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(await materialIntegerCellTester({ type: 'Foo' }, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
-    expect(await materialIntegerCellTester({ type: 'Control' }, undefined)).toBe(
+    expect(await materialIntegerCellTester({ type: 'Control' }, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
   });

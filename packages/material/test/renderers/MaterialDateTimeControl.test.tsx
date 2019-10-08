@@ -76,10 +76,10 @@ const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema:
 describe('Material date time control tester', () => {
 
   it('should fail', async () => {
-    expect(await materialDateTimeControlTester(undefined, undefined)).toBe(NOT_APPLICABLE);
-    expect(await materialDateTimeControlTester(null, undefined)).toBe(NOT_APPLICABLE);
-    expect(await materialDateTimeControlTester({ type: 'Foo' }, undefined)).toBe(NOT_APPLICABLE);
-    expect(await materialDateTimeControlTester({ type: 'Control' }, undefined)).toBe(NOT_APPLICABLE);
+    expect(await materialDateTimeControlTester(undefined, undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(await materialDateTimeControlTester(null, undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(await materialDateTimeControlTester({ type: 'Foo' }, undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(await materialDateTimeControlTester({ type: 'Control' }, undefined, undefined)).toBe(NOT_APPLICABLE);
   });
 
   it('should fail 2', async () => {

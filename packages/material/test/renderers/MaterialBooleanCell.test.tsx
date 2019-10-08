@@ -76,10 +76,10 @@ describe('Material boolean cell tester', () => {
   };
 
   it('should fail', async () => {
-    expect(await materialBooleanCellTester(undefined, undefined)).toBe(NOT_APPLICABLE);
-    expect(await materialBooleanCellTester(null, undefined)).toBe(NOT_APPLICABLE);
-    expect(await materialBooleanCellTester({ type: 'Foo' }, undefined)).toBe(NOT_APPLICABLE);
-    expect(await materialBooleanCellTester({ type: 'Control' }, undefined)).toBe(NOT_APPLICABLE);
+    expect(await materialBooleanCellTester(undefined, undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(await materialBooleanCellTester(null, undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(await materialBooleanCellTester({ type: 'Foo' }, undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(await materialBooleanCellTester({ type: 'Control' }, undefined, undefined)).toBe(NOT_APPLICABLE);
   });
 
   it('should fail 2', async () => {

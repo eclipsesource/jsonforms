@@ -77,10 +77,10 @@ const uischema: ControlElement = {
 describe('Material date control tester', () => {
 
   test('should fail', async () => {
-    expect(await materialDateControlTester(undefined, undefined)).toBe(NOT_APPLICABLE);
-    expect(await materialDateControlTester(null, undefined)).toBe(NOT_APPLICABLE);
-    expect(await materialDateControlTester({ type: 'Foo' }, undefined)).toBe(NOT_APPLICABLE);
-    expect(await materialDateControlTester({ type: 'Control' }, undefined)).toBe(NOT_APPLICABLE);
+    expect(await materialDateControlTester(undefined, undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(await materialDateControlTester(null, undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(await materialDateControlTester({ type: 'Foo' }, undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(await materialDateControlTester({ type: 'Control' }, undefined, undefined)).toBe(NOT_APPLICABLE);
   });
 
   test('should fail 2', async () => {

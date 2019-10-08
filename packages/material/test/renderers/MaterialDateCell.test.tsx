@@ -52,12 +52,12 @@ const uischema: ControlElement = {
 
 describe('Material date cell', () => {
   it('should fail', async () => {
-    expect(await materialDateCellTester(undefined, undefined)).toBe(NOT_APPLICABLE);
-    expect(await materialDateCellTester(null, undefined)).toBe(NOT_APPLICABLE);
-    expect(await materialDateCellTester({ type: 'Foo' }, undefined)).toBe(
+    expect(await materialDateCellTester(undefined, undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(await materialDateCellTester(null, undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(await materialDateCellTester({ type: 'Foo' }, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
-    expect(await materialDateCellTester({ type: 'Control' }, undefined)).toBe(
+    expect(await materialDateCellTester({ type: 'Control' }, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
     const wrongType = {

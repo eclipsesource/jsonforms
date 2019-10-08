@@ -54,7 +54,7 @@ export type RefResolver = (ref: string) => Promise<JsonSchema>;
 export type Tester = (
   uischema: UISchemaElement,
   schema: JsonSchema,
-  refResolver?: RefResolver
+  refResolver: RefResolver
 ) => Promise<boolean>;
 
 /**
@@ -63,7 +63,7 @@ export type Tester = (
 export type RankedTester = (
   uischema: UISchemaElement,
   schema: JsonSchema,
-  RefResolver?: RefResolver
+  refResolver: RefResolver
 ) => Promise<number>;
 
 export const isControl = (uischema: any): uischema is ControlElement =>
@@ -437,7 +437,7 @@ const traverse = (
 export const isObjectArrayWithNesting: Tester = async (
   uischema: UISchemaElement,
   schema: JsonSchema,
-  refResolver?: RefResolver
+  refResolver: RefResolver
 ): Promise<boolean> => {
   const uischemaIsControl = await uiTypeIs('Control')(uischema, schema, refResolver);
   if (!uischemaIsControl) {

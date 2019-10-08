@@ -85,10 +85,10 @@ const fixture = {
 
 describe('Material categorization stepper layout tester', () => {
   it('should not fail when given undefined data', async () => {
-    expect(await materialCategorizationStepperTester(undefined, undefined)).toBe(-1);
-    expect(await materialCategorizationStepperTester(null, undefined)).toBe(-1);
-    expect(await materialCategorizationStepperTester({ type: 'Foo' }, undefined)).toBe(-1);
-    expect(await materialCategorizationStepperTester({ type: 'Categorization' }, undefined)).toBe(-1);
+    expect(await materialCategorizationStepperTester(undefined, undefined, undefined)).toBe(-1);
+    expect(await materialCategorizationStepperTester(null, undefined, undefined)).toBe(-1);
+    expect(await materialCategorizationStepperTester({ type: 'Foo' }, undefined, undefined)).toBe(-1);
+    expect(await materialCategorizationStepperTester({ type: 'Categorization' }, undefined, undefined)).toBe(-1);
   });
 
   it('should not fail with null elements and no schema', async () => {
@@ -96,7 +96,7 @@ describe('Material categorization stepper layout tester', () => {
       type: 'Categorization',
       elements: null
     };
-    expect(await materialCategorizationStepperTester(uischema, undefined)).toBe(-1);
+    expect(await materialCategorizationStepperTester(uischema, undefined, undefined)).toBe(-1);
   });
 
   it('should not fail with empty elements and no schema', async () => {
@@ -104,7 +104,7 @@ describe('Material categorization stepper layout tester', () => {
       type: 'Categorization',
       elements: []
     };
-    expect(await materialCategorizationStepperTester(uischema, undefined)).toBe(-1);
+    expect(await materialCategorizationStepperTester(uischema, undefined, undefined)).toBe(-1);
   });
 
   it('should not fail tester with single unknown element and no schema', async () => {
@@ -116,7 +116,7 @@ describe('Material categorization stepper layout tester', () => {
         }
       ]
     };
-    expect(await materialCategorizationStepperTester(uischema, undefined)).toBe(-1);
+    expect(await materialCategorizationStepperTester(uischema, undefined, undefined)).toBe(-1);
   });
 
   it('should not apply to a single category and no schema', async () => {
@@ -128,7 +128,7 @@ describe('Material categorization stepper layout tester', () => {
         }
       ]
     };
-    expect(await materialCategorizationStepperTester(categorization, undefined)).toBe(-1);
+    expect(await materialCategorizationStepperTester(categorization, undefined, undefined)).toBe(-1);
   });
 
   it('should not apply to a nested categorization with single category and no schema', async () => {
@@ -144,7 +144,7 @@ describe('Material categorization stepper layout tester', () => {
       type: 'Categorization',
       elements: [nestedCategorization]
     };
-    expect(await materialCategorizationStepperTester(categorization, undefined)).toBe(-1);
+    expect(await materialCategorizationStepperTester(categorization, undefined, undefined)).toBe(-1);
   });
 
   it('should not apply to nested categorizations without categories and no schema', async () => {
@@ -156,7 +156,7 @@ describe('Material categorization stepper layout tester', () => {
         }
       ]
     };
-    expect(await materialCategorizationStepperTester(categorization, undefined)).toBe(-1);
+    expect(await materialCategorizationStepperTester(categorization, undefined, undefined)).toBe(-1);
   });
 
   it('should not apply to a nested categorization with null elements and no schema', async () => {
@@ -171,7 +171,7 @@ describe('Material categorization stepper layout tester', () => {
       ]
     };
 
-    expect(await materialCategorizationStepperTester(categorization, undefined)).toBe(-1);
+    expect(await materialCategorizationStepperTester(categorization, undefined, undefined)).toBe(-1);
   });
 
   it('should not apply to a nested categorizations with empty elements and no schema', async () => {
@@ -184,7 +184,7 @@ describe('Material categorization stepper layout tester', () => {
         }
       ]
     };
-    expect(await materialCategorizationStepperTester(categorization, undefined)).toBe(-1);
+    expect(await materialCategorizationStepperTester(categorization, undefined, undefined)).toBe(-1);
   });
 });
 

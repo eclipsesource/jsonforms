@@ -64,10 +64,10 @@ const uischema2: ControlElement = {
 describe('Material object renderer tester', () => {
 
   test('should fail', async () => {
-    expect(await materialObjectControlTester(undefined, undefined)).toBe(NOT_APPLICABLE);
-    expect(await materialObjectControlTester(null, undefined)).toBe(NOT_APPLICABLE);
-    expect(await materialObjectControlTester({ type: 'Foo' }, undefined)).toBe(NOT_APPLICABLE);
-    expect(await materialObjectControlTester({ type: 'Control' }, undefined)).toBe(NOT_APPLICABLE);
+    expect(await materialObjectControlTester(undefined, undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(await materialObjectControlTester(null, undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(await materialObjectControlTester({ type: 'Foo' }, undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(await materialObjectControlTester({ type: 'Control' }, undefined, undefined)).toBe(NOT_APPLICABLE);
   });
 
   it('should fail 2', async () => {
