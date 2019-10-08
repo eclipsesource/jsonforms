@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { JsonSchema } from '@jsonforms/core';
 
 export interface RefResolverProps {
@@ -30,12 +30,6 @@ export const RefResolver = ({
     return children(schema);
   } if (currentSchema === undefined) {
     return null;
-  } else if (currentSchema.$ref) {
-    return (
-      <RefResolver schema={schema} pointer={pointer} resolveRef={refResolver}>
-        {(resolved: JsonSchema) => children(resolved)}
-      </RefResolver>
-    );
   } else {
     return children(currentSchema);
   }
