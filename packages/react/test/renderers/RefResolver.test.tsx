@@ -5,7 +5,7 @@ import Enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import $RefParser from 'json-schema-ref-parser';
 import waitUntil from 'async-wait-until';
-import { ResolveRef } from '../../src/ResolveRef';
+import { RefResolver } from '../../src/RefResolver';
 import { act } from 'react-dom/test-utils';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -52,7 +52,7 @@ export const resolveRef = (rootSchema: any) => (pointer: string) => {
 };
 
 export const waitForResolveRef = async (wrapper: ReactWrapper) => {
-  await act(async () => waitUntil(() => wrapper.find(ResolveRef).children() != null));
+  await act(async () => waitUntil(() => wrapper.find(RefResolver).children() != null));
   wrapper.update();
 };
 
@@ -62,12 +62,12 @@ test('RefResolver should support resolving a $ref on root', async () => {
   };
   let resolvedSchema: any;
   const wrapper = mount(
-    <ResolveRef schema={schema} refResolver={resolveRef(schema)} pointer='#'>
+    <RefResolver schema={schema} resolveRef={resolveRef(schema)} pointer='#'>
       {(resolved: JsonSchema) => {
         resolvedSchema = resolved;
         return <Fragment />;
       }}
-    </ResolveRef>
+    </RefResolver>
   );
   await waitForResolveRef(wrapper);
   expect(resolvedSchema!.properties.latitude).toBeDefined();

@@ -34,7 +34,7 @@ import {
   refResolver,
   StatePropsOfControlWithDetail,
 } from '@jsonforms/core';
-import { JsonFormsDispatch, ResolveRef, withJsonFormsDetailProps } from '@jsonforms/react';
+import { JsonFormsDispatch, RefResolver, withJsonFormsDetailProps } from '@jsonforms/react';
 import { Hidden } from '@material-ui/core';
 import React, { useCallback } from 'react';
 
@@ -56,7 +56,7 @@ const MaterialObjectRenderer = ({
   );
 
   return (
-    <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef}>
+    <RefResolver schema={schema} pointer={uischema.scope} resolveRef={resolveRef}>
       {(resolvedSchema: any) => {
         const detailUiSchema = findUISchema(
           uischemas,
@@ -88,7 +88,7 @@ const MaterialObjectRenderer = ({
           </Hidden>
         );
       }}
-    </ResolveRef>
+    </RefResolver>
   );
 };
 

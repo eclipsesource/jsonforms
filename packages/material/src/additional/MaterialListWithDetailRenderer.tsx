@@ -39,7 +39,7 @@ import {
 } from '@jsonforms/core';
 import {
   JsonFormsDispatch,
-  ResolveRef,
+  RefResolver,
   withJsonFormsArrayLayoutProps
 } from '@jsonforms/react';
 import { Grid, Hidden, List, Typography } from '@material-ui/core';
@@ -94,7 +94,7 @@ export const MaterialListWithDetailRenderer = ({
   const handleCreateDefaultValue = (s: any) => () => createDefaultValue(s);
 
   return (
-    <ResolveRef schema={schema} refResolver={resolveRef} pointer={schema.$ref}>
+    <RefResolver schema={schema} resolveRef={resolveRef} pointer={schema.$ref}>
       {(resolvedSchema: JsonSchema) => {
         const foundUISchema = findUISchema(
           uischemas,
@@ -154,7 +154,7 @@ export const MaterialListWithDetailRenderer = ({
           </Hidden>
         );
       }}
-    </ResolveRef>
+    </RefResolver>
   );
 };
 

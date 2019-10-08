@@ -36,7 +36,7 @@ import SliderControl, { materialSliderControlTester } from '../../src/controls/M
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { act } from 'react-dom/test-utils';
-import { JsonFormsContext, JsonFormsStateContext, JsonFormsStateProvider, ResolveRef } from '@jsonforms/react';
+import { JsonFormsContext, JsonFormsStateContext, JsonFormsStateProvider, RefResolver } from '@jsonforms/react';
 import { resolveRef, waitForResolveRef } from '../util';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -259,12 +259,12 @@ describe('Material slider control', () => {
     };
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core: { data: { foo: 6 }, schema: schemaWithMultipleOf, uischema } }}>
-        <ResolveRef schema={schemaWithMultipleOf} pointer={uischema.scope} refResolver={resolveRef(schemaWithMultipleOf)}>
+        <RefResolver schema={schemaWithMultipleOf} pointer={uischema.scope} resolveRef={resolveRef(schemaWithMultipleOf)}>
           {
             (resolvedSchema: JsonSchema) =>
               <SliderControl schema={resolvedSchema} uischema={uischema} />
           }
-        </ResolveRef>
+        </RefResolver>
       </JsonFormsStateProvider>
     );
     await waitForResolveRef(wrapper);
@@ -280,12 +280,12 @@ describe('Material slider control', () => {
           {context => {
             ctx = context;
             return (
-              <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef(schema)}>
+              <RefResolver schema={schema} pointer={uischema.scope} resolveRef={resolveRef(schema)}>
                 {
                   (resolvedSchema: JsonSchema) =>
                     <SliderControl schema={resolvedSchema} uischema={uischema} />
                 }
-              </ResolveRef>
+              </RefResolver>
             );
           }}
         </JsonFormsContext.Consumer>
@@ -306,12 +306,12 @@ describe('Material slider control', () => {
           {context => {
             ctx = context;
             return (
-              <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef(schema)}>
+              <RefResolver schema={schema} pointer={uischema.scope} resolveRef={resolveRef(schema)}>
                 {
                   (resolvedSchema: JsonSchema) =>
                     <SliderControl schema={resolvedSchema} uischema={uischema} />
                 }
-              </ResolveRef>
+              </RefResolver>
             );
           }}
         </JsonFormsContext.Consumer>
@@ -332,12 +332,12 @@ describe('Material slider control', () => {
           {context => {
             ctx = context;
             return (
-              <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef(schema)}>
+              <RefResolver schema={schema} pointer={uischema.scope} resolveRef={resolveRef(schema)}>
                 {
                   (resolvedSchema: JsonSchema) =>
                     <SliderControl schema={resolvedSchema} uischema={uischema} />
                 }
-              </ResolveRef>
+              </RefResolver>
             );
           }}
         </JsonFormsContext.Consumer>
@@ -358,12 +358,12 @@ describe('Material slider control', () => {
           {context => {
             ctx = context;
             return (
-              <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef(schema)}>
+              <RefResolver schema={schema} pointer={uischema.scope} resolveRef={resolveRef(schema)}>
                 {
                   (resolvedSchema: JsonSchema) =>
                     <SliderControl schema={resolvedSchema} uischema={uischema} />
                 }
-              </ResolveRef>
+              </RefResolver>
             );
           }}
         </JsonFormsContext.Consumer>
@@ -384,12 +384,12 @@ describe('Material slider control', () => {
           {context => {
             ctx = context;
             return (
-              <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef(schema)}>
+              <RefResolver schema={schema} pointer={uischema.scope} resolveRef={resolveRef(schema)}>
                 {
                   (resolvedSchema: JsonSchema) =>
                     <SliderControl schema={resolvedSchema} uischema={uischema} />
                 }
-              </ResolveRef>
+              </RefResolver>
             );
           }}
         </JsonFormsContext.Consumer>
@@ -405,12 +405,12 @@ describe('Material slider control', () => {
   it('can be disabled', async () => {
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core: { data, schema, uischema } }}>
-        <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef(schema)}>
+        <RefResolver schema={schema} pointer={uischema.scope} resolveRef={resolveRef(schema)}>
           {
             (resolvedSchema: JsonSchema) =>
               <SliderControl schema={resolvedSchema} uischema={uischema} enabled={false} />
           }
-        </ResolveRef>
+        </RefResolver>
       </JsonFormsStateProvider>
     );
     await waitForResolveRef(wrapper);
@@ -421,12 +421,12 @@ describe('Material slider control', () => {
   it('should be enabled by default', async () => {
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core: { data, schema, uischema } }}>
-        <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef(schema)}>
+        <RefResolver schema={schema} pointer={uischema.scope} resolveRef={resolveRef(schema)}>
           {
             (resolvedSchema: JsonSchema) =>
               <SliderControl schema={resolvedSchema} uischema={uischema} />
           }
-        </ResolveRef>
+        </RefResolver>
       </JsonFormsStateProvider>
     );
     await waitForResolveRef(wrapper);
@@ -437,11 +437,11 @@ describe('Material slider control', () => {
   it('should render id and input id', async () => {
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core: { data, schema, uischema } }}>
-        <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef(schema)}>
+        <RefResolver schema={schema} pointer={uischema.scope} resolveRef={resolveRef(schema)}>
           {(resolvedSchema: JsonSchema) =>
             <SliderControl schema={resolvedSchema} uischema={uischema} id='#/properties/foo' />
           }
-        </ResolveRef>
+        </RefResolver>
       </JsonFormsStateProvider>
     );
     await waitForResolveRef(wrapper);
@@ -466,11 +466,11 @@ describe('Material slider control', () => {
     };
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core: { data: { foo: 5 }, schema: jsonSchema, uischema } }}>
-        <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef(jsonSchema)}>
+        <RefResolver schema={schema} pointer={uischema.scope} resolveRef={resolveRef(jsonSchema)}>
           {(resolvedSchema: JsonSchema) =>
             <SliderControl schema={resolvedSchema} uischema={uischema} visible={false} />
           }
-        </ResolveRef>
+        </RefResolver>
       </JsonFormsStateProvider >
     );
 

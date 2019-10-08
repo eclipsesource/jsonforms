@@ -28,7 +28,7 @@ import { ControlElement, JsonSchema, update } from '@jsonforms/core';
 import MaterialRadioGroupControl from '../../src/controls/MaterialRadioGroupControl';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { JsonFormsContext, JsonFormsStateContext, JsonFormsStateProvider, ResolveRef } from '@jsonforms/react';
+import { JsonFormsContext, JsonFormsStateContext, JsonFormsStateProvider, RefResolver } from '@jsonforms/react';
 import { resolveRef, waitForResolveRef } from '../util';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -57,11 +57,11 @@ describe('Material radio group control', () => {
   it('should have option selected', async () => {
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core: { data, schema, uischema } }}>
-        <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef(schema)}>
+        <RefResolver schema={schema} pointer={uischema.scope} resolveRef={resolveRef(schema)}>
           {(resolvedSchema: JsonSchema) =>
             (<MaterialRadioGroupControl schema={resolvedSchema} uischema={uischema} />)
           }
-        </ResolveRef>
+        </RefResolver>
       </JsonFormsStateProvider>
     );
 
@@ -82,12 +82,12 @@ describe('Material radio group control', () => {
             (context: JsonFormsStateContext) => {
               ctx = context;
               return (
-                <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef(schema)}>
+                <RefResolver schema={schema} pointer={uischema.scope} resolveRef={resolveRef(schema)}>
                   {
                     (resolvedSchema: JsonSchema) =>
                       <MaterialRadioGroupControl schema={resolvedSchema} uischema={uischema} />
                   }
-                </ResolveRef>
+                </RefResolver>
               );
             }
           }
@@ -107,11 +107,11 @@ describe('Material radio group control', () => {
   it('should be hideable ', async () => {
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core: { data, schema, uischema } }}>
-        <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef(schema)}>
+        <RefResolver schema={schema} pointer={uischema.scope} resolveRef={resolveRef(schema)}>
           {(resolvedSchema: JsonSchema) =>
             <MaterialRadioGroupControl schema={resolvedSchema} uischema={uischema} visible={false} />
           }
-        </ResolveRef>
+        </RefResolver>
       </JsonFormsStateProvider>
     );
 

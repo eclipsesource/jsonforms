@@ -37,7 +37,7 @@ import {
 } from '@jsonforms/core';
 import {
   JsonFormsDispatch,
-  ResolveRef,
+  RefResolver,
   withJsonFormsCombinatorProps
 } from '@jsonforms/react';
 
@@ -63,7 +63,7 @@ const MaterialAllOfRenderer = ({
 
   if (delegateUISchema) {
     return (
-      <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef}>
+      <RefResolver schema={schema} pointer={uischema.scope} resolveRef={resolveRef}>
         {(resolvedSchema: JsonSchema) => (
           <Hidden xsUp={!visible}>
             <JsonFormsDispatch
@@ -74,12 +74,12 @@ const MaterialAllOfRenderer = ({
             />
           </Hidden>
         )}
-      </ResolveRef>
+      </RefResolver>
     );
   }
 
   return (
-    <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef}>
+    <RefResolver schema={schema} pointer={uischema.scope} resolveRef={resolveRef}>
       {(resolvedSchema: JsonSchema) => {
         const allOfRenderInfos = createCombinatorRenderInfos(
           resolvedSchema.allOf,
@@ -104,7 +104,7 @@ const MaterialAllOfRenderer = ({
           </Hidden>
         );
       }}
-    </ResolveRef>
+    </RefResolver>
   );
 };
 

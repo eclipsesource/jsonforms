@@ -24,7 +24,7 @@
 */
 import React, { useCallback, useState } from 'react';
 import { ArrayLayoutProps, JsonSchema, refResolver } from '@jsonforms/core';
-import { withJsonFormsArrayLayoutProps, ResolveRef } from '@jsonforms/react';
+import { RefResolver, withJsonFormsArrayLayoutProps } from '@jsonforms/react';
 import { MaterialTableControl } from './MaterialTableControl';
 import { Hidden } from '@material-ui/core';
 import { DeleteDialog } from './DeleteDialog';
@@ -56,7 +56,7 @@ export const MaterialArrayControlRenderer = (props: ArrayLayoutProps) => {
   );
 
   return (
-    <ResolveRef schema={props.schema} refResolver={resolveRef} pointer={props.schema.$ref}>
+    <RefResolver schema={props.schema} resolveRef={resolveRef} pointer={props.schema.$ref}>
       {(resolvedSchema: JsonSchema) => {
         return (
           <Hidden xsUp={!visible}>
@@ -70,7 +70,7 @@ export const MaterialArrayControlRenderer = (props: ArrayLayoutProps) => {
           </Hidden>
         );
       }}
-    </ResolveRef>
+    </RefResolver>
   );
 };
 

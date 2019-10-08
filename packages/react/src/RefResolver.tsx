@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { JsonSchema } from '@jsonforms/core';
 
-export const ResolveRef = ({
+export interface RefResolverProps {
+  schema: JsonSchema;
+  pointer: string;
+  children(resolvedSchema: JsonSchema): any;
+  resolveRef(pointer: string): Promise<JsonSchema>;
+}
+
+export const RefResolver = ({
   schema,
   pointer,
   children,
-  refResolver,
-}: any) => {
+  resolveRef: refResolver,
+}: RefResolverProps) => {
   const [currentSchema, setSchema] = useState(undefined);
 
   useEffect(() => {
@@ -25,9 +32,9 @@ export const ResolveRef = ({
     return null;
   } else if (currentSchema.$ref) {
     return (
-      <ResolveRef schema={schema} pointer={pointer} refResolver={refResolver}>
+      <RefResolver schema={schema} pointer={pointer} resolveRef={refResolver}>
         {(resolved: JsonSchema) => children(resolved)}
-      </ResolveRef>
+      </RefResolver>
     );
   } else {
     return children(currentSchema);

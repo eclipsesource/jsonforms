@@ -41,7 +41,7 @@ import {
   JsonFormsContext,
   JsonFormsStateContext,
   JsonFormsStateProvider,
-  ResolveRef
+  RefResolver
 } from '@jsonforms/react';
 import { resolveRef, waitForResolveRef } from '../util';
 
@@ -200,10 +200,10 @@ describe('Material array control', () => {
           cells: materialCells
         }}
       >
-        <ResolveRef
+        <RefResolver
           schema={schema}
           pointer={uischema.scope}
-          refResolver={resolveRef(schema)}
+          resolveRef={resolveRef(schema)}
         >
           {(resolvedSchema: JsonSchema) => {
             return (
@@ -213,7 +213,7 @@ describe('Material array control', () => {
               />
             );
           }}
-        </ResolveRef>
+        </RefResolver>
       </JsonFormsStateProvider>
     );
 
@@ -252,10 +252,10 @@ describe('Material array control', () => {
           cells: materialCells
         }}
       >
-        <ResolveRef
+        <RefResolver
           schema={schema}
           pointer={uischema.scope}
-          refResolver={resolveRef(schema)}
+          resolveRef={resolveRef(schema)}
         >
           {(resolvedSchema: JsonSchema) => {
             return (
@@ -265,7 +265,7 @@ describe('Material array control', () => {
               />
             );
           }}
-        </ResolveRef>
+        </RefResolver>
       </JsonFormsStateProvider>
     );
 
@@ -293,10 +293,10 @@ describe('Material array control', () => {
           {(context: JsonFormsStateContext) => {
             ctx = context;
             return (
-              <ResolveRef
+              <RefResolver
                 schema={fixture.schema}
                 pointer={fixture.uischema.scope}
-                refResolver={resolveRef(fixture.schema)}
+                resolveRef={resolveRef(fixture.schema)}
               >
                 {(resolvedSchema: JsonSchema) => {
                   return (
@@ -306,7 +306,7 @@ describe('Material array control', () => {
                     />
                   );
                 }}
-              </ResolveRef>
+              </RefResolver>
             );
           }}
         </JsonFormsContext.Consumer>
@@ -374,10 +374,10 @@ describe('Material array control', () => {
           {(context: JsonFormsStateContext) => {
             ctx = context;
             return (
-              <ResolveRef
+              <RefResolver
                 schema={schema}
                 pointer={uischema.scope}
-                refResolver={resolveRef(schema)}
+                resolveRef={resolveRef(schema)}
               >
                 {(resolvedSchema: JsonSchema) => {
                   return (
@@ -387,7 +387,7 @@ describe('Material array control', () => {
                     />
                   );
                 }}
-              </ResolveRef>
+              </RefResolver>
             );
           }}
         </JsonFormsContext.Consumer>
@@ -446,10 +446,10 @@ describe('Material array control', () => {
           cells: materialCells
         }}
       >
-        <ResolveRef
+        <RefResolver
           schema={schema}
           pointer={uischema.scope}
-          refResolver={resolveRef(schema)}
+          resolveRef={resolveRef(schema)}
         >
           {(resolvedSchema: JsonSchema) => {
             return (
@@ -460,7 +460,7 @@ describe('Material array control', () => {
               />
             );
           }}
-        </ResolveRef>
+        </RefResolver>
       </JsonFormsStateProvider>
     );
 
@@ -486,10 +486,10 @@ describe('Material array control', () => {
           cells: materialCells
         }}
       >
-        <ResolveRef
+        <RefResolver
           schema={fixture2.schema}
           pointer={fixture2.uischema.scope}
-          refResolver={resolveRef(fixture2.schema)}
+          resolveRef={resolveRef(fixture2.schema)}
         >
           {(resolvedSchema: JsonSchema) => {
             return (
@@ -499,7 +499,7 @@ describe('Material array control', () => {
               />
             );
           }}
-        </ResolveRef>
+        </RefResolver>
       </JsonFormsStateProvider>
     );
 
@@ -532,10 +532,10 @@ describe('Material array control', () => {
           {(context: JsonFormsStateContext) => {
             ctx = context;
             return (
-              <ResolveRef
+              <RefResolver
                 schema={fixture2.schema}
                 pointer={fixture2.uischema.scope}
-                refResolver={resolveRef(fixture2.schema)}
+                resolveRef={resolveRef(fixture2.schema)}
               >
                 {(resolvedSchema: JsonSchema) => {
                   return (
@@ -545,7 +545,7 @@ describe('Material array control', () => {
                     />
                   );
                 }}
-              </ResolveRef>
+              </RefResolver>
             );
           }}
         </JsonFormsContext.Consumer>
@@ -581,10 +581,10 @@ describe('Material array control', () => {
           {(context: JsonFormsStateContext) => {
             ctx = context;
             return (
-              <ResolveRef
+              <RefResolver
                 schema={fixture2.schema}
                 pointer={fixture2.uischema.scope}
-                refResolver={resolveRef(fixture2.schema)}
+                resolveRef={resolveRef(fixture2.schema)}
               >
                 {(resolvedSchema: JsonSchema) => {
                   return (
@@ -594,7 +594,7 @@ describe('Material array control', () => {
                     />
                   );
                 }}
-              </ResolveRef>
+              </RefResolver>
             );
           }}
         </JsonFormsContext.Consumer>
@@ -625,10 +625,10 @@ describe('Material array control', () => {
           cells: materialCells
         }}
       >
-        <ResolveRef
+        <RefResolver
           schema={fixture2.schema}
           pointer={fixture2.uischema.scope}
-          refResolver={resolveRef(fixture2.schema)}
+          resolveRef={resolveRef(fixture2.schema)}
         >
           {(resolvedSchema: JsonSchema) => {
             return (
@@ -638,7 +638,7 @@ describe('Material array control', () => {
               />
             );
           }}
-        </ResolveRef>
+        </RefResolver>
       </JsonFormsStateProvider>
     );
 
@@ -665,10 +665,10 @@ describe('Material array control', () => {
           cells: materialCells
         }}
       >
-        <ResolveRef
+        <RefResolver
           schema={fixture2.schema}
           pointer={fixture2.uischema.scope}
-          refResolver={resolveRef(fixture2.schema)}
+          resolveRef={resolveRef(fixture2.schema)}
         >
           {(resolvedSchema: JsonSchema) => {
             return (
@@ -678,7 +678,7 @@ describe('Material array control', () => {
               />
             );
           }}
-        </ResolveRef>
+        </RefResolver>
       </JsonFormsStateProvider>
     );
 

@@ -35,7 +35,7 @@ import {
 } from '@jsonforms/core';
 import {
   JsonFormsDispatch,
-  ResolveRef,
+  RefResolver,
   withJsonFormsCombinatorProps,
 } from '@jsonforms/react';
 import { Hidden, Tab, Tabs } from '@material-ui/core';
@@ -62,7 +62,7 @@ const MaterialAnyOfRenderer = ({
   );
 
   return (
-    <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef}>
+    <RefResolver schema={schema} pointer={uischema.scope} resolveRef={resolveRef}>
       {(resolvedSchema: JsonSchema) => {
         const anyOfRenderInfos = createCombinatorRenderInfos(
           resolvedSchema.anyOf,
@@ -99,7 +99,7 @@ const MaterialAnyOfRenderer = ({
           </Hidden>
         );
       }}
-    </ResolveRef>
+    </RefResolver>
   );
 };
 

@@ -1,10 +1,10 @@
-import { ResolveRef } from '@jsonforms/react';
+import { RefResolver } from '@jsonforms/react';
 import waitUntil from 'async-wait-until';
 import { act } from 'react-dom/test-utils';
 import { ReactWrapper } from 'enzyme';
 import cloneDeep from 'lodash/cloneDeep';
 import RefParser from 'json-schema-ref-parser';
-import { JsonSchema, RefResolver } from '@jsonforms/core';
+import { JsonSchema, RefResolverFunction } from '@jsonforms/core';
 
 export const waitForRenderer = async (
   wrapper: ReactWrapper,
@@ -18,11 +18,11 @@ export const waitForRenderer = async (
 };
 
 export const waitForResolveRef = async (wrapper: ReactWrapper) => {
-  await act(async () => waitUntil(() => wrapper.find(ResolveRef).children() != null));
+  await act(async () => waitUntil(() => wrapper.find(RefResolver).children() != null));
   wrapper.update();
 };
 
-export const resolveRef = (rootSchema: any): RefResolver => (pointer: string) => {
+export const resolveRef = (rootSchema: any): RefResolverFunction => (pointer: string) => {
   const parser = new RefParser();
   return parser
     .resolve(cloneDeep(rootSchema), {

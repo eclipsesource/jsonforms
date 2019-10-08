@@ -30,7 +30,7 @@ import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { ControlElement, JsonSchema, resetRefCache } from '@jsonforms/core';
 import { MaterialOneOfRenderer, materialRenderers } from '../../src';
-import { JsonFormsContext, JsonFormsDispatch, JsonFormsStateContext, JsonFormsStateProvider, ResolveRef } from '@jsonforms/react';
+import { JsonFormsContext, JsonFormsDispatch, JsonFormsStateContext, JsonFormsStateProvider, RefResolver } from '@jsonforms/react';
 import { resolveRef, waitForResolveRef } from '../util';
 import { Tab } from '@material-ui/core';
 
@@ -101,11 +101,11 @@ describe('Material oneOf renderer', () => {
           renderers: materialRenderers
         }}
       >
-        <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef(schema)}>
+        <RefResolver schema={schema} pointer={uischema.scope} resolveRef={resolveRef(schema)}>
           {(resolvedSchema: JsonSchema) => (
             <MaterialOneOfRenderer schema={resolvedSchema} uischema={uischema} renderers={materialRenderers} visible />
           )}
-        </ResolveRef>
+        </RefResolver>
       </JsonFormsStateProvider>
     );
 
@@ -144,11 +144,11 @@ describe('Material oneOf renderer', () => {
           renderers: materialRenderers
         }}
       >
-        <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef(schema)}>
+        <RefResolver schema={schema} pointer={uischema.scope} resolveRef={resolveRef(schema)}>
           {(resolvedSchema: JsonSchema) => (
             <MaterialOneOfRenderer schema={resolvedSchema} uischema={uischema} />
           )}
-        </ResolveRef>
+        </RefResolver>
       </JsonFormsStateProvider>
     );
 
@@ -195,11 +195,11 @@ describe('Material oneOf renderer', () => {
           renderers: materialRenderers
         }}
       >
-        <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef(schema)}>
+        <RefResolver schema={schema} pointer={uischema.scope} resolveRef={resolveRef(schema)}>
           {(resolvedSchema: JsonSchema) => (
             <MaterialOneOfRenderer schema={resolvedSchema} uischema={uischema} />
           )}
-        </ResolveRef>
+        </RefResolver>
       </JsonFormsStateProvider>
     );
 
@@ -246,11 +246,11 @@ describe('Material oneOf renderer', () => {
           renderers: materialRenderers
         }}
       >
-        <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef(schema)}>
+        <RefResolver schema={schema} pointer={uischema.scope} resolveRef={resolveRef(schema)}>
           {(resolvedSchema: JsonSchema) => (
             <MaterialOneOfRenderer schema={resolvedSchema} uischema={uischema} />
           )}
-        </ResolveRef>
+        </RefResolver>
       </JsonFormsStateProvider>
     );
 
@@ -295,9 +295,9 @@ describe('Material oneOf renderer', () => {
             (context: JsonFormsStateContext) => {
               ctx = context;
               return (
-                <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef(schema)}>
+                <RefResolver schema={schema} pointer={uischema.scope} resolveRef={resolveRef(schema)}>
                   {(resolvedSchema: JsonSchema) => (<MaterialOneOfRenderer schema={resolvedSchema} uischema={uischema} />)}
-                </ResolveRef>
+                </RefResolver>
               );
             }
           }
@@ -588,11 +588,11 @@ describe('Material oneOf renderer', () => {
           renderers: materialRenderers
         }}
       >
-        <ResolveRef schema={schema} pointer={uischema.scope} refResolver={resolveRef(schema)}>
+        <RefResolver schema={schema} pointer={uischema.scope} resolveRef={resolveRef(schema)}>
           {(resolvedSchema: JsonSchema) => (
             <MaterialOneOfRenderer schema={resolvedSchema} uischema={uischema} visible={false} />
           )}
-        </ResolveRef>
+        </RefResolver>
       </JsonFormsStateProvider>
     );
     const inputs = wrapper.find('input');

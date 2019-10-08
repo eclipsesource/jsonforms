@@ -34,7 +34,7 @@ import {
 } from '@jsonforms/core';
 import { Hidden } from '@material-ui/core';
 import { MaterialArrayLayout } from './MaterialArrayLayout';
-import { ResolveRef, withJsonFormsArrayLayoutProps } from '@jsonforms/react';
+import { RefResolver, withJsonFormsArrayLayoutProps } from '@jsonforms/react';
 
 export const MaterialArrayLayoutRenderer =
   ({ visible, enabled, id, uischema, schema, label, rootSchema, renderers, data, path, errors, addItem, refParserOptions }: ArrayLayoutProps) => {
@@ -42,7 +42,7 @@ export const MaterialArrayLayoutRenderer =
     const resolveRef = useCallback(pointer => refResolver(rootSchema, refParserOptions)(pointer), [rootSchema, refParserOptions]);
 
     return (
-      <ResolveRef schema={schema} refResolver={resolveRef} pointer={schema.$ref}>
+      <RefResolver schema={schema} resolveRef={resolveRef} pointer={schema.$ref}>
         {(resolvedSchema: JsonSchema) => {
           return (
             <Hidden xsUp={!visible}>
@@ -65,7 +65,7 @@ export const MaterialArrayLayoutRenderer =
             </Hidden>
           );
         }}
-      </ResolveRef>
+      </RefResolver>
     );
   };
 MaterialArrayLayoutRenderer.displayname = 'MaterialArrayLayoutRenderer';
