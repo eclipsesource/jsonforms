@@ -64,6 +64,7 @@ import * as oneOfRecursive from './oneOf-recursive';
 import * as huge from './huge';
 import * as defaultExample from './default';
 import * as onChange from './onChange';
+import * as rootRef from './root_ref';
 export * from './register';
 export * from './example';
 
@@ -112,5 +113,6 @@ export {
   oneOfRecursive,
   huge,
   ifThenElse,
-  onChange
+  onChange,
+  rootRef
 };
