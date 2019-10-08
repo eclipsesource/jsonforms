@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { Actions, getData, JsonFormsCore } from '@jsonforms/core';
+import { Actions, getData, JsonFormsCore, resetRefCache } from '@jsonforms/core';
 import {
   CHANGE_EXAMPLE,
   changeExample,
@@ -82,6 +82,7 @@ const mapStateToProps = (state: any) => {
 };
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => ({
   changeExampleData: (example: ReactExampleDescription) => {
+    resetRefCache();
     dispatch(changeExample(example));
     dispatch(Actions.init(example.data, example.schema, example.uischema));
     Actions.setConfig(example.config)(dispatch);
