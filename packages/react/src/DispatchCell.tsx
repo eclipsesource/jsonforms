@@ -24,14 +24,11 @@
 */
 import maxBy from 'lodash/maxBy';
 import React from 'react';
-import { connect } from 'react-redux';
 import { UnknownRenderer } from './UnknownRenderer';
 import {
-  DispatchCellProps,
-  DispatchCellStateProps,
-  mapStateToDispatchCellProps,
-  OwnPropsOfCell
+  DispatchCellProps
 } from '@jsonforms/core';
+import { withJsonFormsDispatchCellProps } from './JsonFormsContext';
 
 /**
  * Dispatch renderer component for cells.
@@ -55,8 +52,4 @@ class Dispatch extends React.Component<DispatchCellProps, any> {
   }
 }
 
-export const DispatchCell = connect<
-  DispatchCellStateProps,
-  {},
-  OwnPropsOfCell
->(mapStateToDispatchCellProps)(Dispatch);
+export const DispatchCell = withJsonFormsDispatchCellProps(Dispatch);
