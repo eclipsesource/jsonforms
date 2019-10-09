@@ -39,7 +39,8 @@ import {
   JsonSchema,
   OwnPropsOfJsonFormsRenderer,
   removeId,
-  UISchemaElement
+  UISchemaElement,
+  JsonFormsCellRendererRegistryEntry
 } from '@jsonforms/core';
 import {
   ctxToJsonFormsDispatchProps,
@@ -198,6 +199,7 @@ export interface JsonFormsInitStateProps {
   schema: JsonSchema;
   uischema: UISchemaElement;
   renderers: JsonFormsRendererRegistryEntry[];
+  cells?: JsonFormsCellRendererRegistryEntry[];
   ajv?: AJV.Ajv;
   refParserOptions?: RefParser.Options;
 }
@@ -211,6 +213,7 @@ export const JsonForms = (
     schema,
     uischema,
     renderers,
+    cells,
     refParserOptions,
     onChange
   } = props;
@@ -225,7 +228,8 @@ export const JsonForms = (
           uischema,
           errors: [] // TODO
         },
-        renderers
+        renderers,
+        cells
       }}
     >
       <JsonFormsDispatch onChange={onChange} />

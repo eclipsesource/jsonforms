@@ -66,7 +66,10 @@ import {
   StatePropsOfMasterItem,
   update,
   OwnPropsOfLayout,
-  OwnPropsOfRenderer
+  OwnPropsOfRenderer,
+  DispatchCellProps,
+  mapStateToDispatchCellProps,
+  cellReducer
 } from '@jsonforms/core';
 import { connect } from 'react-redux';
 
@@ -92,6 +95,7 @@ export const JsonFormsContext = React.createContext<JsonFormsStateContext>({
 export const JsonFormsStateProvider = ({ children, initState }: any) => {
   const [core, dispatch] = useReducer(coreReducer, initState.core);
   const [renderers] = useReducer(rendererReducer, initState.renderers);
+  const [cells] = useReducer(cellReducer, initState.cells);
   const { data, schema, uischema, ajv, refParserOptions } = initState.core;
   useEffect(() => {
     dispatch(Actions.init(data, schema, uischema, { ajv, refParserOptions }));
@@ -101,6 +105,7 @@ export const JsonFormsStateProvider = ({ children, initState }: any) => {
       value={{
         core,
         renderers,
+        cells,
         // only core dispatch available
         dispatch
       }}
@@ -220,6 +225,12 @@ export const ctxToCellProps = (
   return mapStateToCellProps({ jsonforms: { ...ctx } }, ownProps);
 };
 
+export const ctxToDispatchCellProps = (
+  ctx: JsonFormsStateContext,
+  ownProps: OwnPropsOfCell
+) => {
+  return mapStateToDispatchCellProps({ jsonforms: { ...ctx } }, ownProps);
+};
 // --
 
 // HOCs utils
@@ -312,6 +323,18 @@ const withContextToCellProps =
 
       return (<Component {...props} {...dispatchProps} {...cellProps} />);
     };
+
+const withContextToDispatchCellProps = (
+  Component: ComponentType<DispatchCellProps>
+): ComponentType<OwnPropsOfCell> => ({
+  ctx,
+  props
+}: JsonFormsStateContext & CellProps) => {
+    const cellProps = ctxToDispatchCellProps(ctx, props);
+    const dispatchProps = ctxDispatchToControlProps(ctx.dispatch);
+
+    return <Component {...props} {...dispatchProps} {...cellProps} />;
+  };
 
 const withContextToEnumCellProps =
   (Component: ComponentType<EnumCellProps>): ComponentType<OwnPropsOfEnumCell> =>
@@ -417,6 +440,17 @@ export const withJsonFormsCellProps =
       Component,
       (prevProps: CellProps, nextProps: CellProps) => isEqual(prevProps, nextProps)
     )));
+
+export const withJsonFormsDispatchCellProps = (
+  Component: ComponentType<DispatchCellProps>
+): ComponentType<OwnPropsOfCell> =>
+  withJsonFormsContext(
+    withContextToDispatchCellProps(
+      React.memo(Component, (prevProps: DispatchCellProps, nextProps: DispatchCellProps) =>
+        isEqual(prevProps, nextProps)
+      )
+    )
+  );
 
 export const withJsonFormsEnumCellProps =
   (Component: ComponentType<EnumCellProps>): ComponentType<OwnPropsOfEnumCell> =>
