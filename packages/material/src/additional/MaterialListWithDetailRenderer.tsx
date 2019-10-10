@@ -34,7 +34,6 @@ import {
   JsonSchema,
   RankedTester,
   rankWith,
-  refResolver,
   uiTypeIs
 } from '@jsonforms/core';
 import {
@@ -63,15 +62,8 @@ export const MaterialListWithDetailRenderer = ({
   addItem,
   data,
   renderers,
-  config,
-  refParserOptions,
-  rootSchema
+  config
 }: ArrayLayoutProps) => {
-  const resolveRef = useCallback(pointer => {
-    return refResolver(rootSchema, refParserOptions)(pointer)
-  },
-    [rootSchema, refParserOptions]
-  );
   const [selectedIndex, setSelectedIndex] = useState(undefined);
   const handleRemoveItem = useCallback(
     (p: string, value: any) => () => {
@@ -94,7 +86,7 @@ export const MaterialListWithDetailRenderer = ({
   const handleCreateDefaultValue = (s: any) => () => createDefaultValue(s);
 
   return (
-    <RefResolver schema={schema} resolveRef={resolveRef} pointer={schema.$ref}>
+    <RefResolver schema={schema} pointer={schema.$ref}>
       {(resolvedSchema: JsonSchema) => {
         const foundUISchema = findUISchema(
           uischemas,

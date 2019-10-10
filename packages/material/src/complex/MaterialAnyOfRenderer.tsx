@@ -30,7 +30,6 @@ import {
   JsonSchema,
   RankedTester,
   rankWith,
-  refResolver,
   StatePropsOfCombinator
 } from '@jsonforms/core';
 import {
@@ -48,21 +47,16 @@ const MaterialAnyOfRenderer = ({
   path,
   renderers,
   uischema,
-  uischemas,
-  refParserOptions
+  uischemas
 }: StatePropsOfCombinator) => {
   const [selectedAnyOf, setSelectedAnyOf] = useState(0);
   const handleChange = useCallback(
     (_ev: any, value: number) => setSelectedAnyOf(value),
     [setSelectedAnyOf]
   );
-  const resolveRef = useCallback(pointer =>
-    refResolver(rootSchema, refParserOptions)(pointer),
-    [rootSchema, refParserOptions]
-  );
 
   return (
-    <RefResolver schema={schema} pointer={uischema.scope} resolveRef={resolveRef}>
+    <RefResolver schema={schema} pointer={uischema.scope}>
       {(resolvedSchema: JsonSchema) => {
         const anyOfRenderInfos = createCombinatorRenderInfos(
           resolvedSchema.anyOf,

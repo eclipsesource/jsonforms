@@ -45,7 +45,7 @@ import {
   useJsonForms
 } from './JsonFormsContext';
 import isEqual from 'lodash/isEqual';
-import { RefResolver } from './RefResolver';
+import RefResolver from './RefResolver';
 
 interface JsonFormsRendererState {
   id: string;
@@ -163,11 +163,7 @@ export class JsonFormsDispatchRenderer extends React.Component<
       return <UnknownRenderer type={'renderer'} />;
     } else if (isControl(this.props.uischema)) {
       return (
-        <RefResolver
-          schema={this.props.schema}
-          pointer={this.props.uischema.scope}
-          resolveRef={this.resolveRef}
-        >
+        <RefResolver pointer={this.props.uischema.scope} schema={this.props.schema}>
           {(resolvedSchema: any) => {
             const Render = this.state.renderer.renderer;
             return (

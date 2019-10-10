@@ -31,7 +31,7 @@ import Adapter from 'enzyme-adapter-react-16';
 import { ControlElement, JsonSchema } from '@jsonforms/core';
 import { MaterialAnyOfRenderer, materialCells, materialRenderers, } from '../../src';
 import { JsonFormsContext, JsonFormsDispatch, JsonFormsStateContext, JsonFormsStateProvider, RefResolver } from '@jsonforms/react';
-import { resolveRef, waitForRenderer, waitForResolveRef } from '../util';
+import { waitForRenderer, waitForResolveRef } from '../util';
 import { TableRow } from '@material-ui/core';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -92,7 +92,7 @@ describe('Material anyOf renderer', async () => {
           {(context: JsonFormsStateContext) => {
             ctx = context;
             return (
-              <RefResolver schema={schema} pointer={uischema.scope} resolveRef={resolveRef(schema)}>
+              <RefResolver schema={schema} pointer={uischema.scope}>
                 {(resolvedSchema: JsonSchema) => {
                   return (<MaterialAnyOfRenderer schema={resolvedSchema} uischema={uischema} />);
                 }}
@@ -299,7 +299,7 @@ describe('Material anyOf renderer', async () => {
           cells: materialCells
         }}
       >
-        <RefResolver schema={schema} pointer={uischema.scope} resolveRef={resolveRef(schema)}>
+        <RefResolver schema={schema} pointer={uischema.scope}>
           {(resolvedSchema: JsonSchema) => (
             <MaterialAnyOfRenderer
               schema={resolvedSchema}

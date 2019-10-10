@@ -43,7 +43,7 @@ import {
   JsonFormsStateProvider,
   RefResolver
 } from '@jsonforms/react';
-import { resolveRef, waitForResolveRef } from '../util';
+import { waitForResolveRef } from '../util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -200,11 +200,7 @@ describe('Material array control', () => {
           cells: materialCells
         }}
       >
-        <RefResolver
-          schema={schema}
-          pointer={uischema.scope}
-          resolveRef={resolveRef(schema)}
-        >
+        <RefResolver schema={schema} pointer={uischema.scope}>
           {(resolvedSchema: JsonSchema) => {
             return (
               <ConnectedMaterialArrayControlRenderer
@@ -252,11 +248,7 @@ describe('Material array control', () => {
           cells: materialCells
         }}
       >
-        <RefResolver
-          schema={schema}
-          pointer={uischema.scope}
-          resolveRef={resolveRef(schema)}
-        >
+        <RefResolver schema={schema} pointer={uischema.scope}>
           {(resolvedSchema: JsonSchema) => {
             return (
               <ConnectedMaterialArrayControlRenderer
@@ -293,11 +285,7 @@ describe('Material array control', () => {
           {(context: JsonFormsStateContext) => {
             ctx = context;
             return (
-              <RefResolver
-                schema={fixture.schema}
-                pointer={fixture.uischema.scope}
-                resolveRef={resolveRef(fixture.schema)}
-              >
+              <RefResolver schema={fixture.schema} pointer={fixture.uischema.scope}>
                 {(resolvedSchema: JsonSchema) => {
                   return (
                     <ConnectedMaterialArrayControlRenderer
@@ -374,11 +362,7 @@ describe('Material array control', () => {
           {(context: JsonFormsStateContext) => {
             ctx = context;
             return (
-              <RefResolver
-                schema={schema}
-                pointer={uischema.scope}
-                resolveRef={resolveRef(schema)}
-              >
+              <RefResolver schema={schema} pointer={uischema.scope}>
                 {(resolvedSchema: JsonSchema) => {
                   return (
                     <ConnectedMaterialArrayControlRenderer
@@ -446,11 +430,7 @@ describe('Material array control', () => {
           cells: materialCells
         }}
       >
-        <RefResolver
-          schema={schema}
-          pointer={uischema.scope}
-          resolveRef={resolveRef(schema)}
-        >
+        <RefResolver schema={schema} pointer={uischema.scope}>
           {(resolvedSchema: JsonSchema) => {
             return (
               <ConnectedMaterialArrayControlRenderer
@@ -486,11 +466,7 @@ describe('Material array control', () => {
           cells: materialCells
         }}
       >
-        <RefResolver
-          schema={fixture2.schema}
-          pointer={fixture2.uischema.scope}
-          resolveRef={resolveRef(fixture2.schema)}
-        >
+        <RefResolver schema={fixture2.schema} pointer={fixture2.uischema.scope}>
           {(resolvedSchema: JsonSchema) => {
             return (
               <ConnectedMaterialArrayControlRenderer
@@ -532,11 +508,7 @@ describe('Material array control', () => {
           {(context: JsonFormsStateContext) => {
             ctx = context;
             return (
-              <RefResolver
-                schema={fixture2.schema}
-                pointer={fixture2.uischema.scope}
-                resolveRef={resolveRef(fixture2.schema)}
-              >
+              <RefResolver schema={fixture2.schema} pointer={fixture2.uischema.scope}>
                 {(resolvedSchema: JsonSchema) => {
                   return (
                     <ConnectedMaterialArrayControlRenderer
@@ -581,11 +553,7 @@ describe('Material array control', () => {
           {(context: JsonFormsStateContext) => {
             ctx = context;
             return (
-              <RefResolver
-                schema={fixture2.schema}
-                pointer={fixture2.uischema.scope}
-                resolveRef={resolveRef(fixture2.schema)}
-              >
+              <RefResolver schema={fixture2.schema} pointer={fixture2.uischema.scope}>
                 {(resolvedSchema: JsonSchema) => {
                   return (
                     <ConnectedMaterialArrayControlRenderer
@@ -625,11 +593,7 @@ describe('Material array control', () => {
           cells: materialCells
         }}
       >
-        <RefResolver
-          schema={fixture2.schema}
-          pointer={fixture2.uischema.scope}
-          resolveRef={resolveRef(fixture2.schema)}
-        >
+        <RefResolver schema={fixture2.schema} pointer={fixture2.uischema.scope}>
           {(resolvedSchema: JsonSchema) => {
             return (
               <ConnectedMaterialArrayControlRenderer
@@ -665,11 +629,7 @@ describe('Material array control', () => {
           cells: materialCells
         }}
       >
-        <RefResolver
-          schema={fixture2.schema}
-          pointer={fixture2.uischema.scope}
-          resolveRef={resolveRef(fixture2.schema)}
-        >
+        <RefResolver schema={fixture2.schema} pointer={fixture2.uischema.scope}>
           {(resolvedSchema: JsonSchema) => {
             return (
               <ConnectedMaterialArrayControlRenderer

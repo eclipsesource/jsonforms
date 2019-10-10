@@ -29,7 +29,7 @@ import MaterialRadioGroupControl from '../../src/controls/MaterialRadioGroupCont
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { JsonFormsContext, JsonFormsStateContext, JsonFormsStateProvider, RefResolver } from '@jsonforms/react';
-import { resolveRef, waitForResolveRef } from '../util';
+import { waitForResolveRef } from '../util';
 
 Enzyme.configure({ adapter: new Adapter() });
 import { act } from 'react-dom/test-utils';
@@ -57,7 +57,7 @@ describe('Material radio group control', () => {
   it('should have option selected', async () => {
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core: { data, schema, uischema } }}>
-        <RefResolver schema={schema} pointer={uischema.scope} resolveRef={resolveRef(schema)}>
+        <RefResolver schema={schema} pointer={uischema.scope}>
           {(resolvedSchema: JsonSchema) =>
             (<MaterialRadioGroupControl schema={resolvedSchema} uischema={uischema} />)
           }
@@ -82,7 +82,7 @@ describe('Material radio group control', () => {
             (context: JsonFormsStateContext) => {
               ctx = context;
               return (
-                <RefResolver schema={schema} pointer={uischema.scope} resolveRef={resolveRef(schema)}>
+                <RefResolver schema={schema} pointer={uischema.scope}>
                   {
                     (resolvedSchema: JsonSchema) =>
                       <MaterialRadioGroupControl schema={resolvedSchema} uischema={uischema} />
@@ -107,7 +107,7 @@ describe('Material radio group control', () => {
   it('should be hideable ', async () => {
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core: { data, schema, uischema } }}>
-        <RefResolver schema={schema} pointer={uischema.scope} resolveRef={resolveRef(schema)}>
+        <RefResolver schema={schema} pointer={uischema.scope}>
           {(resolvedSchema: JsonSchema) =>
             <MaterialRadioGroupControl schema={resolvedSchema} uischema={uischema} visible={false} />
           }

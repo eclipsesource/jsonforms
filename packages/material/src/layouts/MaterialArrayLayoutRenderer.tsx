@@ -29,8 +29,7 @@ import {
   isObjectArrayWithNesting,
   JsonSchema,
   RankedTester,
-  rankWith,
-  refResolver
+  rankWith
 } from '@jsonforms/core';
 import { Hidden } from '@material-ui/core';
 import { MaterialArrayLayout } from './MaterialArrayLayout';
@@ -39,10 +38,9 @@ import { RefResolver, withJsonFormsArrayLayoutProps } from '@jsonforms/react';
 export const MaterialArrayLayoutRenderer =
   ({ visible, enabled, id, uischema, schema, label, rootSchema, renderers, data, path, errors, addItem, refParserOptions }: ArrayLayoutProps) => {
     const addItemCb = useCallback((p: string, value: any) => addItem(p, value), [addItem]);
-    const resolveRef = useCallback(pointer => refResolver(rootSchema, refParserOptions)(pointer), [rootSchema, refParserOptions]);
 
     return (
-      <RefResolver schema={schema} resolveRef={resolveRef} pointer={schema.$ref}>
+      <RefResolver schema={schema} pointer={schema.$ref}>
         {(resolvedSchema: JsonSchema) => {
           return (
             <Hidden xsUp={!visible}>

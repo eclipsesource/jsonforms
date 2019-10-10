@@ -30,7 +30,7 @@ import Adapter from 'enzyme-adapter-react-16';
 import { ControlElement, JsonSchema } from '@jsonforms/core';
 import { MaterialAllOfRenderer, materialRenderers } from '../../src';
 import { JsonFormsStateProvider, RefResolver } from '@jsonforms/react';
-import { resolveRef, waitForResolveRef } from '../util';
+import { waitForResolveRef } from '../util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -70,7 +70,7 @@ describe('Material allOf renderer', () => {
           renderers: materialRenderers
         }}
       >
-        <RefResolver schema={schema} pointer={uischema.scope} resolveRef={resolveRef(schema)}>
+        <RefResolver schema={schema} pointer={uischema.scope}>
           {(resolvedSchema: JsonSchema) => (
             <MaterialAllOfRenderer
               schema={resolvedSchema}
@@ -118,7 +118,7 @@ describe('Material allOf renderer', () => {
           renderers: materialRenderers
         }}
       >
-        <RefResolver schema={schema} pointer={uischema.scope} resolveRef={resolveRef(schema)}>
+        <RefResolver schema={schema} pointer={uischema.scope}>
           {(resolvedSchema: JsonSchema) => (
             <MaterialAllOfRenderer
               schema={resolvedSchema}

@@ -29,4 +29,5 @@ export * from './DispatchCell';
 export * from './Renderer';
 export * from './JsonFormsContext';
 export * from './UnknownRenderer';
-export * from './RefResolver';
+import RefResolver from './RefResolver';
+export { RefResolver };

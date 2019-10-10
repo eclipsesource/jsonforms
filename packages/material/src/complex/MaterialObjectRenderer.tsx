@@ -31,12 +31,11 @@ import {
   isPlainLabel,
   RankedTester,
   rankWith,
-  refResolver,
   StatePropsOfControlWithDetail,
 } from '@jsonforms/core';
 import { JsonFormsDispatch, RefResolver, withJsonFormsDetailProps } from '@jsonforms/react';
 import { Hidden } from '@material-ui/core';
-import React, { useCallback } from 'react';
+import React from 'react';
 
 const MaterialObjectRenderer = ({
   renderers,
@@ -47,16 +46,9 @@ const MaterialObjectRenderer = ({
   visible,
   uischema,
   rootSchema,
-  refParserOptions
 }: StatePropsOfControlWithDetail) => {
-
-  const resolveRef = useCallback(pointer =>
-    refResolver(rootSchema, refParserOptions)(pointer),
-    [rootSchema, refParserOptions]
-  );
-
   return (
-    <RefResolver schema={schema} pointer={uischema.scope} resolveRef={resolveRef}>
+    <RefResolver schema={schema} pointer={uischema.scope}>
       {(resolvedSchema: any) => {
         const detailUiSchema = findUISchema(
           uischemas,

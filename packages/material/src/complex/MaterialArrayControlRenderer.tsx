@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import React, { useCallback, useState } from 'react';
-import { ArrayLayoutProps, JsonSchema, refResolver } from '@jsonforms/core';
+import { ArrayLayoutProps, JsonSchema } from '@jsonforms/core';
 import { RefResolver, withJsonFormsArrayLayoutProps } from '@jsonforms/react';
 import { MaterialTableControl } from './MaterialTableControl';
 import { Hidden } from '@material-ui/core';
@@ -50,13 +50,9 @@ export const MaterialArrayControlRenderer = (props: ArrayLayoutProps) => {
     setOpen(false);
   }, [setOpen, path, rowData]);
   const deleteClose = useCallback(() => setOpen(false), [setOpen]);
-  const resolveRef = useCallback(pointer =>
-    refResolver(props.rootSchema, props.refParserOptions)(pointer),
-    [props.rootSchema, props.refParserOptions]
-  );
 
   return (
-    <RefResolver schema={props.schema} resolveRef={resolveRef} pointer={props.schema.$ref}>
+    <RefResolver schema={props.schema} pointer={props.schema.$ref}>
       {(resolvedSchema: JsonSchema) => {
         return (
           <Hidden xsUp={!visible}>

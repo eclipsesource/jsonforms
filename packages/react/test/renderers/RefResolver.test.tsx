@@ -5,7 +5,7 @@ import Enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import $RefParser from 'json-schema-ref-parser';
 import waitUntil from 'async-wait-until';
-import { RefResolver } from '../../src/RefResolver';
+import RefResolver from '../../src/RefResolver';
 import { act } from 'react-dom/test-utils';
 
 Enzyme.configure({ adapter: new Adapter() });

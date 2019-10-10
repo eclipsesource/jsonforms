@@ -31,7 +31,7 @@ import Adapter from 'enzyme-adapter-react-16';
 import { ControlElement, JsonSchema, resetRefCache } from '@jsonforms/core';
 import { MaterialOneOfRenderer, materialRenderers } from '../../src';
 import { JsonFormsContext, JsonFormsDispatch, JsonFormsStateContext, JsonFormsStateProvider, RefResolver } from '@jsonforms/react';
-import { resolveRef, waitForResolveRef } from '../util';
+import { waitForResolveRef } from '../util';
 import { Tab } from '@material-ui/core';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -101,7 +101,7 @@ describe('Material oneOf renderer', () => {
           renderers: materialRenderers
         }}
       >
-        <RefResolver schema={schema} pointer={uischema.scope} resolveRef={resolveRef(schema)}>
+        <RefResolver schema={schema} pointer={uischema.scope}>
           {(resolvedSchema: JsonSchema) => (
             <MaterialOneOfRenderer schema={resolvedSchema} uischema={uischema} renderers={materialRenderers} visible />
           )}
@@ -144,7 +144,7 @@ describe('Material oneOf renderer', () => {
           renderers: materialRenderers
         }}
       >
-        <RefResolver schema={schema} pointer={uischema.scope} resolveRef={resolveRef(schema)}>
+        <RefResolver schema={schema} pointer={uischema.scope}>
           {(resolvedSchema: JsonSchema) => (
             <MaterialOneOfRenderer schema={resolvedSchema} uischema={uischema} />
           )}
@@ -195,7 +195,7 @@ describe('Material oneOf renderer', () => {
           renderers: materialRenderers
         }}
       >
-        <RefResolver schema={schema} pointer={uischema.scope} resolveRef={resolveRef(schema)}>
+        <RefResolver schema={schema} pointer={uischema.scope}>
           {(resolvedSchema: JsonSchema) => (
             <MaterialOneOfRenderer schema={resolvedSchema} uischema={uischema} />
           )}
@@ -246,7 +246,7 @@ describe('Material oneOf renderer', () => {
           renderers: materialRenderers
         }}
       >
-        <RefResolver schema={schema} pointer={uischema.scope} resolveRef={resolveRef(schema)}>
+        <RefResolver schema={schema} pointer={uischema.scope}>
           {(resolvedSchema: JsonSchema) => (
             <MaterialOneOfRenderer schema={resolvedSchema} uischema={uischema} />
           )}
@@ -295,7 +295,7 @@ describe('Material oneOf renderer', () => {
             (context: JsonFormsStateContext) => {
               ctx = context;
               return (
-                <RefResolver schema={schema} pointer={uischema.scope} resolveRef={resolveRef(schema)}>
+                <RefResolver schema={schema} pointer={uischema.scope}>
                   {(resolvedSchema: JsonSchema) => (<MaterialOneOfRenderer schema={resolvedSchema} uischema={uischema} />)}
                 </RefResolver>
               );
@@ -588,7 +588,7 @@ describe('Material oneOf renderer', () => {
           renderers: materialRenderers
         }}
       >
-        <RefResolver schema={schema} pointer={uischema.scope} resolveRef={resolveRef(schema)}>
+        <RefResolver schema={schema} pointer={uischema.scope}>
           {(resolvedSchema: JsonSchema) => (
             <MaterialOneOfRenderer schema={resolvedSchema} uischema={uischema} visible={false} />
           )}

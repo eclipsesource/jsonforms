@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React, { useCallback } from 'react';
+import React from 'react';
 import { Hidden } from '@material-ui/core';
 
 import {
@@ -32,7 +32,6 @@ import {
   JsonSchema,
   RankedTester,
   rankWith,
-  refResolver,
   StatePropsOfCombinator
 } from '@jsonforms/core';
 import {
@@ -49,21 +48,16 @@ const MaterialAllOfRenderer = ({
   path,
   uischemas,
   uischema,
-  refParserOptions
 }: StatePropsOfCombinator) => {
   const delegateUISchema = findMatchingUISchema(uischemas)(
     schema,
     uischema.scope,
     path
   );
-  const resolveRef = useCallback(pointer =>
-    refResolver(rootSchema, refParserOptions)(pointer),
-    [rootSchema, refParserOptions]
-  );
 
   if (delegateUISchema) {
     return (
-      <RefResolver schema={schema} pointer={uischema.scope} resolveRef={resolveRef}>
+      <RefResolver schema={schema} pointer={uischema.scope}>
         {(resolvedSchema: JsonSchema) => (
           <Hidden xsUp={!visible}>
             <JsonFormsDispatch
@@ -79,7 +73,7 @@ const MaterialAllOfRenderer = ({
   }
 
   return (
-    <RefResolver schema={schema} pointer={uischema.scope} resolveRef={resolveRef}>
+    <RefResolver schema={schema} pointer={uischema.scope}>
       {(resolvedSchema: JsonSchema) => {
         const allOfRenderInfos = createCombinatorRenderInfos(
           resolvedSchema.allOf,

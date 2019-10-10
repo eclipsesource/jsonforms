@@ -1,18 +1,20 @@
-import { useEffect, useState } from 'react';
-import { JsonSchema } from '@jsonforms/core';
+import React, { ComponentType, useCallback, useEffect, useState } from 'react';
+import { JsonSchema, refResolver } from '@jsonforms/core';
+import { JsonFormsStateContext, withJsonFormsContext } from './JsonFormsContext';
+import isEqual from 'lodash/isEqual';
 
 export interface RefResolverProps {
-  schema: JsonSchema;
+  schema?: JsonSchema;
   pointer: string;
   children(resolvedSchema: JsonSchema): any;
-  resolveRef(pointer: string): Promise<JsonSchema>;
+  resolveRef?(pointer: string): Promise<JsonSchema>;
 }
 
-export const RefResolver = ({
+const RefResolver = ({
   schema,
   pointer,
   children,
-  resolveRef: refResolver,
+  resolveRef
 }: RefResolverProps) => {
   const [currentSchema, setSchema] = useState(undefined);
 
@@ -21,7 +23,7 @@ export const RefResolver = ({
       return;
     }
     setSchema(undefined);
-    refResolver(pointer).then((resolved: any) => {
+    resolveRef(pointer).then((resolved: any) => {
       setSchema(resolved);
     });
   }, [schema, pointer]);
@@ -34,3 +36,41 @@ export const RefResolver = ({
     return children(currentSchema);
   }
 };
+
+const withContextToRefResolverProps = (
+  Component: ComponentType<RefResolverProps>
+): ComponentType<RefResolverProps> => ({
+  ctx,
+  props
+}: JsonFormsStateContext & RefResolverProps) => {
+    const { refParserOptions } = ctx.core;
+    //const schema = ctx.core.schema || props.schema;
+    const schema = props.schema;
+    const resolveRef = useCallback(pointer => {
+      return refResolver(schema, refParserOptions)(pointer);
+    }, [schema, refParserOptions]);
+    return (
+      <Component
+        resolveRef={resolveRef}
+        schema={schema}
+        {...props}
+      />
+    );
+  };
+
+export const withJsonFormsRefResolverProps = (
+  Component: ComponentType<RefResolverProps>
+): ComponentType<RefResolverProps> =>
+  withJsonFormsContext(
+    withContextToRefResolverProps(
+      React.memo(
+        Component,
+        (
+          prevProps: RefResolverProps,
+          nextProps: RefResolverProps
+        ) => isEqual(prevProps, nextProps)
+      )
+    )
+  );
+
+export default withJsonFormsRefResolverProps(RefResolver);

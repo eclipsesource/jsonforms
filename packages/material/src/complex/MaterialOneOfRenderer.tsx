@@ -117,7 +117,7 @@ const MaterialOneOfRenderer = ({
   );
 
   return (
-    <RefResolver schema={schema} pointer={uischema.scope} resolveRef={resolveRef}>
+    <RefResolver schema={schema} pointer={uischema.scope}>
       {(resolvedSchema: JsonSchema) => {
         const oneOfRenderInfos = createCombinatorRenderInfos(
           resolvedSchema.oneOf,
