@@ -45,12 +45,13 @@ export const materialHorizontalLayoutTester: RankedTester = rankWith(
   uiTypeIs('HorizontalLayout')
 );
 
-export const MaterialHorizontalLayoutRenderer = ({ uischema, renderers, schema, path, visible }: LayoutProps) => {
+export const MaterialHorizontalLayoutRenderer = ({ uischema, renderers, schema, path, enabled, visible }: LayoutProps) => {
   const layout = uischema as HorizontalLayout;
   const childProps: MaterialLayoutRendererProps = {
     elements: layout.elements,
     schema,
     path,
+    enabled,
     direction: 'row',
     visible
   };

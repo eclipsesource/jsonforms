@@ -37,6 +37,7 @@ export const renderLayoutElements = (
   elements: UISchemaElement[],
   schema: JsonSchema,
   path: string,
+  enabled: boolean,
   renderers?: JsonFormsRendererRegistryEntry[]
 ) => {
   return elements.map((child, index) => (
@@ -45,6 +46,7 @@ export const renderLayoutElements = (
         uischema={child}
         schema={schema}
         path={path}
+        enabled={enabled}
         renderers={renderers}
       />
     </Grid>
@@ -62,6 +64,7 @@ export const MaterialLayoutRenderer = React.memo(
     elements,
     schema,
     path,
+    enabled,
     direction,
     renderers
   }: MaterialLayoutRendererProps) => {
@@ -75,7 +78,7 @@ export const MaterialLayoutRenderer = React.memo(
             direction={direction}
             spacing={direction === 'row' ? 2 : 0}
           >
-            {renderLayoutElements(elements, schema, path, renderers)}
+            {renderLayoutElements(elements, schema, path, enabled, renderers)}
           </Grid>
         </Hidden>
       );

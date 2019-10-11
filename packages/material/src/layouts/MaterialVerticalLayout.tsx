@@ -45,12 +45,13 @@ export const materialVerticalLayoutTester: RankedTester = rankWith(
   uiTypeIs('VerticalLayout')
 );
 
-export const MaterialVerticalLayoutRenderer = ({ uischema, schema, path, visible, renderers }: LayoutProps) => {
+export const MaterialVerticalLayoutRenderer = ({ uischema, schema, path, enabled, visible, renderers }: LayoutProps) => {
   const verticalLayout = uischema as VerticalLayout;
   const childProps: MaterialLayoutRendererProps = {
     elements: verticalLayout.elements,
     schema,
     path,
+    enabled,
     direction: 'column',
     visible
   };

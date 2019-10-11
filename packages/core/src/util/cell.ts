@@ -99,12 +99,14 @@ export const mapStateToCellProps = (
 ): StatePropsOfCell => {
   const { id, schema, path, uischema } = ownProps;
   const rootData = getData(state);
-  const visible = ownProps.visible !== undefined
-    ? ownProps.visible
-    : isVisible(uischema, rootData);
-  const enabled = ownProps.enabled !== undefined
-    ? ownProps.enabled
-    : isEnabled(uischema, rootData);
+  const visible =
+    ownProps.visible !== undefined
+      ? ownProps.visible
+      : isVisible(uischema, rootData);
+  const enabled =
+    ownProps.enabled !== undefined
+      ? ownProps.enabled
+      : isEnabled(uischema, rootData);
   const errors = formatErrorMessage(
     union(getErrorAt(path, schema)(state).map(error => error.message))
   );

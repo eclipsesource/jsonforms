@@ -137,7 +137,8 @@ export const makeSchemaSelfContained = (
       const property = ref.substring(ref.lastIndexOf('/') + 1);
       if (
         (parentSchema as { [key: string]: any })[propertyKey] !== undefined &&
-        (parentSchema as { [key: string]: any })[propertyKey][property] !== undefined
+        (parentSchema as { [key: string]: any })[propertyKey][property] !==
+          undefined
       ) {
         if (get(schema, propertyKey)) {
           set(schema, propertyKey, {
