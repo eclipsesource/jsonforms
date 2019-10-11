@@ -29,7 +29,6 @@ import last from 'lodash/last';
 import isArray from 'lodash/isArray';
 import reduce from 'lodash/reduce';
 import toPairs from 'lodash/toPairs';
-import has from 'lodash/has';
 import includes from 'lodash/includes';
 import { JsonSchema } from '../models/jsonSchema';
 import {
@@ -412,7 +411,7 @@ export const isObjectArrayWithNesting = (
     object: 2,
     array: 1
   };
-  if (has(resolvedSchema, 'items')) {
+  if (resolvedSchema !== undefined && resolvedSchema.items !== undefined) {
     // check if nested arrays
     if (
       traverse(resolvedSchema.items, val => {

@@ -24,7 +24,6 @@
 */
 // tslint:disable:jsx-no-multiline-js
 // tslint:disable:max-line-length
-import has from 'lodash/has';
 import get from 'lodash/get';
 import React from 'react';
 import {
@@ -427,10 +426,10 @@ const mapStateToProps = (
     ownProps.path,
     Paths.fromScopable(ownProps.uischema)
   );
-  const visible = has(ownProps, 'visible')
+  const visible = ownProps.visible !== undefined
     ? ownProps.visible
     : Runtime.isVisible(ownProps.uischema, rootData);
-  const enabled = has(ownProps, 'enabled')
+  const enabled = ownProps.enabled !== undefined
     ? ownProps.enabled
     : Runtime.isEnabled(ownProps.uischema, rootData);
   const rootSchema = getSchema(state);

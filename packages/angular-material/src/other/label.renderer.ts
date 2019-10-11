@@ -22,7 +22,6 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import has from 'lodash/has';
 import { NgRedux } from '@angular-redux/store';
 import { Component } from '@angular/core';
 import { JsonFormsBaseRenderer } from '@jsonforms/angular';
@@ -82,7 +81,7 @@ const mapStateToProps = (
   state: JsonFormsState,
   ownProps: OwnPropsOfRenderer
 ) => {
-  const visible = has(ownProps, 'visible')
+  const visible = ownProps.visible !== undefined
     ? ownProps.visible
     : isVisible(ownProps.uischema, getData(state));
 

@@ -23,7 +23,6 @@
   THE SOFTWARE.
 */
 import keys from 'lodash/keys';
-import has from 'lodash/has';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { combineReducers, createStore, Store } from 'redux';
@@ -79,16 +78,16 @@ const detailSchemata: {
 ];
 
 const filterPredicate = (data: any) => (property: Property): boolean => {
-  if (has(data, '_type') && has(property.schema, 'properties._type.default')) {
+  if ((data._type !== undefined) && (property.schema.properties._type.default !== undefined)) {
     return data._type === property.schema.properties._type.default;
   } else {
     return false;
   }
 };
 
-const isUserGroup = (schema: JsonSchema) => has(schema.properties, 'users');
-const isTask = (schema: JsonSchema) => has(schema.properties, 'done');
-const isUser = (schema: JsonSchema) => has(schema.properties, 'birthday');
+const isUserGroup = (schema: JsonSchema) => schema.properties.users !== undefined;
+const isTask = (schema: JsonSchema) => schema.properties.done !== undefined
+const isUser = (schema: JsonSchema) => schema.properties.birthday !== undefined
 
 const schemaLabelProvider: SchemaLabelProvider = (
   schema: JsonSchema,

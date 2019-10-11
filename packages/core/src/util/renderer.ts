@@ -54,7 +54,6 @@ import {
   Resolve,
   resolveSubSchemas
 } from '../util';
-import has from 'lodash/has';
 import { update } from '../actions';
 import { ErrorObject } from 'ajv';
 import { JsonFormsState } from '../store';
@@ -372,10 +371,10 @@ export const mapStateToControlProps = (
   const { uischema } = ownProps;
   const rootData = getData(state);
   const path = composeWithUi(uischema, ownProps.path);
-  const visible = has(ownProps, 'visible')
+  const visible: boolean = (ownProps.visible !== undefined)
     ? ownProps.visible
     : isVisible(uischema, rootData, ownProps.path);
-  const enabled = has(ownProps, 'enabled')
+  const enabled: boolean = (ownProps.enabled !== undefined)
     ? ownProps.enabled
     : isEnabled(uischema, rootData, ownProps.path);
   const controlElement = uischema as ControlElement;
@@ -653,10 +652,10 @@ export const mapStateToLayoutProps = (
   ownProps: OwnPropsOfLayout
 ): LayoutProps => {
   const rootData = getData(state);
-  const visible: boolean = has(ownProps, 'visible')
+  const visible: boolean = (ownProps.visible !== undefined)
     ? ownProps.visible
     : isVisible(ownProps.uischema, rootData, ownProps.path);
-  const enabled: boolean = has(ownProps, 'enabled')
+  const enabled: boolean = (ownProps.enabled !== undefined)
     ? ownProps.enabled
     : isEnabled(ownProps.uischema, rootData, ownProps.path);
 
@@ -746,7 +745,7 @@ const mapStateToCombinatorRendererProps = (
     uischema.scope,
     rootSchema
   );
-  const visible = has(ownProps, 'visible')
+  const visible: boolean = (ownProps.visible !== undefined)
     ? ownProps.visible
     : isVisible(uischema, getData(state), ownProps.path);
   const id = ownProps.id;

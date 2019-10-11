@@ -22,7 +22,6 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import has from 'lodash/has';
 import set from 'lodash/set';
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
@@ -137,8 +136,8 @@ export const makeSchemaSelfContained = (
       );
       const property = ref.substring(ref.lastIndexOf('/') + 1);
       if (
-        has(parentSchema, propertyKey) &&
-        has(parentSchema, `${propertyKey}.${property}`)
+        (parentSchema as { [key: string]: any })[propertyKey] !== undefined &&
+        (parentSchema as { [key: string]: any })[propertyKey][property] !== undefined
       ) {
         if (get(schema, propertyKey)) {
           set(schema, propertyKey, {
