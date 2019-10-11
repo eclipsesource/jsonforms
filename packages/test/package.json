@@ -18,7 +18,7 @@
     "jsdom-global": "^3.0.2",
     "react": " ^16.8.0",
     "react-dom": " ^16.8.0",
-    "react-redux": "^6.0.0",
+    "react-redux": "^7.0.0",
     "redux": "^4.0.1"
   }
 }

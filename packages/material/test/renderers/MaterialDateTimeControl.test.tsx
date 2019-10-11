@@ -225,13 +225,17 @@ describe('Material date time control', () => {
 
   it('should update via action', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialDateTimeControl schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
-    );
+    // we need a class component as otherwise wrapper.instance() === null
+    class TestComponent extends React.Component {
+      render = () => (
+        <Provider store={store}>
+          <JsonFormsReduxContext>
+            <MaterialDateTimeControl schema={schema} uischema={uischema} />
+          </JsonFormsReduxContext>
+        </Provider>
+      );
+    }
+    wrapper = mount(<TestComponent />);
     store.dispatch(
       Actions.update('foo', () => moment('1961-04-12 20:15').format())
     );
@@ -244,13 +248,17 @@ describe('Material date time control', () => {
 
   it('should update with null value', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialDateTimeControl schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
-    );
+    // we need a class component as otherwise wrapper.instance() === null
+    class TestComponent extends React.Component {
+      render = () => (
+        <Provider store={store}>
+          <JsonFormsReduxContext>
+            <MaterialDateTimeControl schema={schema} uischema={uischema} />
+          </JsonFormsReduxContext>
+        </Provider>
+      );
+    }
+    wrapper = mount(<TestComponent />);
     store.dispatch(Actions.update('foo', () => null));
     // TODO get rid of forceUpdate when possible
     wrapper.instance().forceUpdate();
@@ -261,13 +269,17 @@ describe('Material date time control', () => {
 
   it('should not update with undefined value', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialDateTimeControl schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
-    );
+    // we need a class component as otherwise wrapper.instance() === null
+    class TestComponent extends React.Component {
+      render = () => (
+        <Provider store={store}>
+          <JsonFormsReduxContext>
+            <MaterialDateTimeControl schema={schema} uischema={uischema} />
+          </JsonFormsReduxContext>
+        </Provider>
+      );
+    }
+    wrapper = mount(<TestComponent />);
     store.dispatch(Actions.update('foo', () => undefined));
     // TODO get rid of forceUpdate when possible
     wrapper.instance().forceUpdate();
