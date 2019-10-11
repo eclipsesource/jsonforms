@@ -78,16 +78,20 @@ const detailSchemata: {
 ];
 
 const filterPredicate = (data: any) => (property: Property): boolean => {
-  if ((data._type !== undefined) && (property.schema.properties._type.default !== undefined)) {
+  if (
+    data._type !== undefined &&
+    property.schema.properties._type.default !== undefined
+  ) {
     return data._type === property.schema.properties._type.default;
   } else {
     return false;
   }
 };
 
-const isUserGroup = (schema: JsonSchema) => schema.properties.users !== undefined;
-const isTask = (schema: JsonSchema) => schema.properties.done !== undefined
-const isUser = (schema: JsonSchema) => schema.properties.birthday !== undefined
+const isUserGroup = (schema: JsonSchema) =>
+  schema.properties.users !== undefined;
+const isTask = (schema: JsonSchema) => schema.properties.done !== undefined;
+const isUser = (schema: JsonSchema) => schema.properties.birthday !== undefined;
 
 const schemaLabelProvider: SchemaLabelProvider = (
   schema: JsonSchema,

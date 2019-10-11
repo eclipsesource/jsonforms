@@ -135,7 +135,7 @@ export class ResolvedJsonFormsDispatchRenderer extends React.Component<
     }
   }
   render() {
-    const { uischema, path, renderers } = this.props as JsonFormsProps;
+    const { uischema, path, enabled, renderers } = this.props as JsonFormsProps;
     const { resolving } = this.state;
     const _schema = this.state.resolvedSchema;
 
@@ -153,6 +153,7 @@ export class ResolvedJsonFormsDispatchRenderer extends React.Component<
           uischema={uischema}
           schema={_schema}
           path={path}
+          enabled={enabled}
           renderers={renderers}
           id={this.state.id}
         />
@@ -187,6 +188,7 @@ export const JsonFormsDispatch = React.memo(
         schema={props.schema || ctx.core.schema}
         uischema={props.uischema || ctx.core.uischema}
         path={props.path || ''}
+        enabled={props.enabled}
         rootSchema={ctx.core.schema}
         renderers={ctx.renderers}
         refResolver={refResolver}

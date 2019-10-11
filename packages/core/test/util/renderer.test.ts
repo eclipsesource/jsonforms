@@ -109,7 +109,7 @@ test('mapStateToControlProps - visible via ownProps ', t => {
     uischema
   };
   const props = mapStateToControlProps(createState(uischema), ownProps);
-  t.true(props.visible);
+  t.false(props.visible);
 });
 
 test('mapStateToControlProps - hidden via ownProps ', t => {
@@ -224,7 +224,7 @@ test('mapStateToControlProps - enabled via ownProps ', t => {
     uischema
   };
   const props = mapStateToControlProps(createState(uischema), ownProps);
-  t.true(props.enabled);
+  t.false(props.enabled);
 });
 
 test('mapStateToControlProps - disabled via ownProps ', t => {

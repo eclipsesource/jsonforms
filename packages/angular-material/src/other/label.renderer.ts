@@ -81,9 +81,10 @@ const mapStateToProps = (
   state: JsonFormsState,
   ownProps: OwnPropsOfRenderer
 ) => {
-  const visible = ownProps.visible !== undefined
-    ? ownProps.visible
-    : isVisible(ownProps.uischema, getData(state));
+  const visible =
+    ownProps.visible !== undefined
+      ? ownProps.visible
+      : isVisible(ownProps.uischema, getData(state));
 
   return {
     visible
