@@ -29,7 +29,6 @@ import merge from 'lodash/merge';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Close from '@material-ui/icons/Close';
-import { Hidden } from '@material-ui/core';
 
 interface MuiInputTextStatus {
   showAdornment: boolean;
@@ -42,7 +41,7 @@ interface MuiTextInputProps {
 export class MuiInputText extends React.PureComponent<
   CellProps & WithClassname & MuiTextInputProps,
   MuiInputTextStatus
-  > {
+> {
   state: MuiInputTextStatus = { showAdornment: false };
   render() {
     const {
@@ -92,15 +91,20 @@ export class MuiInputText extends React.PureComponent<
         onPointerEnter={() => this.setState({ showAdornment: true })}
         onPointerLeave={() => this.setState({ showAdornment: false })}
         endAdornment={
-          <InputAdornment position='end'>
-            <Hidden xsUp={!this.state.showAdornment || !enabled}>
-              <IconButton
-                aria-label='Clear input field'
-                onClick={() => handleChange(path, undefined)}
-              >
-                <Close />
-              </IconButton>
-            </Hidden>
+          // Use visibility instead of 'Hidden' so the layout doesn't change when the icon is shown
+          <InputAdornment
+            position='end'
+            style={{
+              visibility:
+                !this.state.showAdornment || !enabled ? 'hidden' : 'visible'
+            }}
+          >
+            <IconButton
+              aria-label='Clear input field'
+              onClick={() => handleChange(path, undefined)}
+            >
+              <Close />
+            </IconButton>
           </InputAdornment>
         }
       />
