@@ -22,15 +22,14 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import has from 'lodash/has';
 import React from 'react';
 import { Icon } from '@material-ui/core';
 import { Work } from '@material-ui/icons';
 import { JsonSchema } from '@jsonforms/core';
 
-const isUserGroup = (schema: JsonSchema) => has(schema.properties, 'users');
-const isTask = (schema: JsonSchema) => has(schema.properties, 'done');
-const isUser = (schema: JsonSchema) => has(schema.properties, 'birthday');
+const isUserGroup = (schema: JsonSchema) => schema.properties.users !== undefined;
+const isTask = (schema: JsonSchema) => schema.properties.done !== undefined;
+const isUser = (schema: JsonSchema) => schema.properties.birthday !== undefined;
 
 export const imageProvider = (schema: JsonSchema): React.ReactElement<any> | string => {
 

@@ -23,7 +23,6 @@
   THE SOFTWARE.
 */
 import isEmpty from 'lodash/isEmpty';
-import has from 'lodash/has';
 import union from 'lodash/union';
 import { getConfig, getData, getErrorAt, getSchema } from '../reducers';
 import {
@@ -101,10 +100,10 @@ export const mapStateToCellProps = (
 ): StatePropsOfCell => {
   const { id, schema, path, uischema } = ownProps;
   const rootData = getData(state);
-  const visible = has(ownProps, 'visible')
+  const visible = ownProps.visible !== undefined
     ? ownProps.visible
     : isVisible(uischema, rootData);
-  const enabled = has(ownProps, 'enabled')
+  const enabled = ownProps.enabled !== undefined
     ? ownProps.enabled
     : isEnabled(uischema, rootData);
   const errors = formatErrorMessage(
