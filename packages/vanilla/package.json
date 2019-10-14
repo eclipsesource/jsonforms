@@ -33,7 +33,7 @@
     "jsdom": "^11.9.0",
     "jsdom-global": "^3.0.2",
     "react-dom": " ^16.8.0",
-    "react-redux": "^6.0.0",
+    "react-redux": "^7.0.0",
     "source-map-loader": "^0.2.3",
     "source-map-support": "0.5.12",
     "ts-loader": "^5.3.3",
