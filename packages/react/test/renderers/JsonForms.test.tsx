@@ -283,7 +283,8 @@ test('render schema with $ref', () => {
     }
   };
 
-  const tester = (_uischema: UISchemaElement, s: JsonSchema) => s.properties.foo.type === 'number' ? 1 : -1;
+  const tester = (_uischema: UISchemaElement, s: JsonSchema) =>
+    s.properties.foo.type === 'number' ? 1 : -1;
 
   const renderers = [
     {
@@ -428,13 +429,13 @@ test('JsonForms should support two isolated components', () => {
   const customRenderer1 = () => {
     const ctx = useJsonForms();
     const errors = ctx.core.errors;
-    return (<h1>{errors ? errors.length : 0}</h1>);
-  }
+    return <h1>{errors ? errors.length : 0}</h1>;
+  };
   const customRenderer2 = () => {
     const ctx = useJsonForms();
     const errors = ctx.core.errors;
-    return (<h2>{errors ? errors.length : 0}</h2>);
-  }
+    return <h2>{errors ? errors.length : 0}</h2>;
+  };
   const wrapper = mount(
     <div>
       <JsonForms
@@ -509,6 +510,107 @@ test('JsonForms should create a JsonFormsStateProvider with initState props', ()
   );
 
   expect(jsonFormsStateProviderInitStateProp.renderers).toBe(renderers);
+});
+
+test('JsonForms should generate an ui schema when uischema is not given', () => {
+  const schema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'string'
+      }
+    }
+  };
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [
+      {
+        type: 'Control',
+        scope: '#/properties/foo'
+      }
+    ]
+  };
+
+  const wrapper = shallow(
+    <JsonForms data={{}} schema={schema} renderers={undefined} />
+  );
+
+  const jsonFormsStateProviderInitStateProp = wrapper
+    .find(JsonFormsStateProvider)
+    .props().initState;
+  expect(jsonFormsStateProviderInitStateProp.core.uischema).toStrictEqual(
+    uischema
+  );
+});
+
+test('JsonForms should generate an ui schema when uischema is not valid', () => {
+  const schema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'string'
+      }
+    }
+  };
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [
+      {
+        type: 'Control',
+        scope: '#/properties/foo'
+      }
+    ]
+  };
+
+  const wrapper = shallow(
+    <JsonForms
+      data={{}}
+      schema={schema}
+      uischema={true as any}
+      renderers={undefined}
+    />
+  );
+
+  const jsonFormsStateProviderInitStateProp = wrapper
+    .find(JsonFormsStateProvider)
+    .props().initState;
+  expect(jsonFormsStateProviderInitStateProp.core.uischema).toStrictEqual(
+    uischema
+  );
+});
+
+test('JsonForms should generate a schema when schema is not given', () => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'string'
+      }
+    },
+    additionalProperties: true,
+    required: ['foo']
+  };
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [
+      {
+        type: 'Control',
+        scope: '#/properties/foo'
+      }
+    ]
+  };
+
+  const wrapper = shallow(
+    <JsonForms data={{ foo: 'bar' }} renderers={undefined} />
+  );
+
+  const jsonFormsStateProviderInitStateProp = wrapper
+    .find(JsonFormsStateProvider)
+    .props().initState;
+  expect(jsonFormsStateProviderInitStateProp.core.schema).toStrictEqual(schema);
+  expect(jsonFormsStateProviderInitStateProp.core.uischema).toStrictEqual(
+    uischema
+  );
 });
 
 test('JsonForms should call onChange handler with new data', () => {
