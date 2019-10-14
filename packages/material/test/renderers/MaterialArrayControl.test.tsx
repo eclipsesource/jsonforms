@@ -247,17 +247,19 @@ describe('Material array control', () => {
     );
 
     const buttons = wrapper.find('button');
-    // 5 buttons
+    // 7 buttons
     // add row
+    // clear string
     // delete row
+    // clear string
     // delete row
     // two dialog buttons (no + yes)
     const nrOfRowsBeforeDelete = wrapper.find('tr').length;
 
-    const deleteButton = buttons.at(1);
+    const deleteButton = buttons.at(2);
     deleteButton.simulate('click');
 
-    const confirmButton = buttons.at(4);
+    const confirmButton = buttons.at(6);
     confirmButton.simulate('click');
 
     const nrOfRowsAfterDelete = wrapper.find('tr').length;
