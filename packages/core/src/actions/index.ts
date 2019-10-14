@@ -83,13 +83,14 @@ export interface InitActionOptions {
 export const init = (
   data: any,
   schema: JsonSchema = generateJsonSchema(data),
-  uischema: UISchemaElement = generateDefaultUISchema(schema),
+  uischema?: UISchemaElement,
   options?: InitActionOptions | AJV.Ajv
 ) => ({
   type: INIT,
   data,
   schema,
-  uischema,
+  uischema:
+    typeof uischema === 'object' ? uischema : generateDefaultUISchema(schema),
   options
 });
 

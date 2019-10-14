@@ -40,7 +40,8 @@ import {
   OwnPropsOfJsonFormsRenderer,
   removeId,
   UISchemaElement,
-  JsonFormsCellRendererRegistryEntry
+  JsonFormsCellRendererRegistryEntry,
+  Generate
 } from '@jsonforms/core';
 import {
   ctxToJsonFormsDispatchProps,
@@ -196,8 +197,8 @@ export const JsonFormsDispatch = React.memo(
 
 export interface JsonFormsInitStateProps {
   data: any;
-  schema: JsonSchema;
-  uischema: UISchemaElement;
+  schema?: JsonSchema;
+  uischema?: UISchemaElement;
   renderers: JsonFormsRendererRegistryEntry[];
   cells?: JsonFormsCellRendererRegistryEntry[];
   ajv?: AJV.Ajv;
@@ -217,6 +218,9 @@ export const JsonForms = (
     refParserOptions,
     onChange
   } = props;
+  const schemaToUse = schema !== undefined ? schema : Generate.jsonSchema(data);
+  const uischemaToUse =
+    typeof uischema === 'object' ? uischema : Generate.uiSchema(schemaToUse);
   return (
     <JsonFormsStateProvider
       initState={{
@@ -224,9 +228,8 @@ export const JsonForms = (
           ajv,
           data,
           refParserOptions,
-          schema,
-          uischema,
-          errors: [] // TODO
+          schema: schemaToUse,
+          uischema: uischemaToUse
         },
         renderers,
         cells
