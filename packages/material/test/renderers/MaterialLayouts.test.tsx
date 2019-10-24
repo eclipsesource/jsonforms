@@ -32,7 +32,8 @@ import {
   JsonFormsState,
   RuleEffect,
   UISchemaElement,
-  Layout
+  Layout,
+  ControlElement
 } from '@jsonforms/core';
 import Adapter from 'enzyme-adapter-react-16';
 import { AnyAction, combineReducers, createStore, Store } from 'redux';
@@ -127,6 +128,14 @@ const bottomShowRule = (uischema: Layout) =>
   bottomRule(rule(RuleEffect.SHOW, 'toggleBottomLayout'), uischema);
 const bottomEnableRule = (uischema: Layout) =>
   bottomRule(rule(RuleEffect.ENABLE, 'toggleBottomLayout'), uischema);
+
+const controlRule = (rule: any, uischema: Layout) => {
+  const group = (uischema.elements[1] as Layout).elements[1];
+  (group as Layout).elements[0].rule = rule;
+  return uischema;
+};
+const controlEnableRule = (uischema: Layout) =>
+  controlRule(rule(RuleEffect.ENABLE, 'toggleControl'), uischema);
 
 const initStore = () => {
   const s: JsonFormsState = {
@@ -320,6 +329,20 @@ describe('Layout Tests', () => {
       expect(controlIsEnabled('middle')).toBe(true);
       expect(controlIsEnabled('bottom')).toBe(false);
     });
+
+    it('disabling control should disable control', () => {
+      const data = {
+        toggleTopLayout: true,
+        toggleMiddleLayout: true,
+        toggleBottomLayout: true,
+        toggleControl: false
+      };
+      const uischema = controlEnableRule(baseUischema());
+      createWrapper(data, uischema);
+      expect(controlIsEnabled('top')).toBe(true);
+      expect(controlIsEnabled('middle')).toBe(true);
+      expect(controlIsEnabled('bottom')).toBe(false);
+    });
   });
 
   describe('Rule Combinations', () => {
@@ -334,6 +357,209 @@ describe('Layout Tests', () => {
       expect(controlIsEnabled('top')).toBe(true);
       expect(controlIsEnabled('middle')).toBe(false);
       expect(controlIsEnabled('bottom')).toBe(false);
+    });
+
+    it('disabling layout and enabling control should enable control', () => {
+      const data = {
+        toggleTopLayout: true,
+        toggleMiddleLayout: true,
+        toggleBottomLayout: false,
+        toggleControl: true
+      };
+      const uischema = bottomEnableRule(controlEnableRule(baseUischema()));
+      createWrapper(data, uischema);
+      expect(controlIsEnabled('top')).toBe(true);
+      expect(controlIsEnabled('middle')).toBe(true);
+      expect(controlIsEnabled('bottom')).toBe(true);
+    });
+  });
+});
+
+describe('Special Layout Tests', () => {
+  describe('Categorization Tests', () => {
+    const schema = {
+      type: 'object',
+      properties: {
+        name: {
+          type: 'string'
+        },
+        age: {
+          type: 'integer'
+        },
+        topCheck: {
+          type: 'boolean'
+        },
+        bottomCheck: {
+          type: 'boolean'
+        }
+      }
+    };
+
+    const uischema = {
+      type: 'Categorization',
+      elements: [
+        {
+          type: 'Category',
+          label: 'Private',
+          elements: [
+            {
+              type: 'Control',
+              scope: '#/properties/name',
+              rule: {
+                effect: RuleEffect.ENABLE,
+                condition: {
+                  scope: '#/properties/bottomCheck',
+                  schema: {
+                    const: true
+                  }
+                }
+              }
+            },
+            {
+              type: 'Control',
+              scope: '#/properties/age'
+            }
+          ],
+          rule: {
+            effect: RuleEffect.ENABLE,
+            condition: {
+              scope: '#/properties/topCheck',
+              schema: {
+                const: true
+              }
+            }
+          }
+        }
+      ]
+    };
+
+    it('enabling top rule and disabling bottom rule should disable control', () => {
+      const data = {
+        topCheck: true,
+        bottomCheck: false
+      };
+      const store = initStore();
+      store.dispatch(Actions.init(data, schema, uischema));
+      const wrapper = mount(
+        <Provider store={store}>
+          <JsonFormsReduxContext>
+            <JsonFormsDispatch />
+          </JsonFormsReduxContext>
+        </Provider>
+      );
+      expect(
+        wrapper
+          .find('input[type="text"]')
+          .first()
+          .props().disabled
+      ).toBe(true);
+    });
+
+    it('disabling top rule and enabling bottom rule should enable control', () => {
+      const data = {
+        topCheck: false,
+        bottomCheck: true
+      };
+      const store = initStore();
+      store.dispatch(Actions.init(data, schema, uischema));
+      const wrapper = mount(
+        <Provider store={store}>
+          <JsonFormsReduxContext>
+            <JsonFormsDispatch />
+          </JsonFormsReduxContext>
+        </Provider>
+      );
+      expect(
+        wrapper
+          .find('input[type="text"]')
+          .first()
+          .props().disabled
+      ).toBe(false);
+    });
+  });
+
+  describe('Object Renderer Tests', () => {
+    const schema = {
+      type: 'object',
+      properties: {
+        name: {
+          type: 'string'
+        },
+        age: {
+          type: 'integer'
+        },
+        check: {
+          type: 'boolean'
+        }
+      }
+    };
+
+    const uischema: ControlElement = {
+      type: 'Control',
+      scope: '#',
+      rule: {
+        effect: RuleEffect.ENABLE,
+        condition: {
+          scope: '#/properties/check',
+          schema: {
+            const: true
+          }
+        } as any
+      }
+    };
+
+    it('enabling object control should enable child controls', () => {
+      const data = {
+        check: true
+      };
+      const store = initStore();
+      store.dispatch(Actions.init(data, schema, uischema));
+      const wrapper = mount(
+        <Provider store={store}>
+          <JsonFormsReduxContext>
+            <JsonFormsDispatch />
+          </JsonFormsReduxContext>
+        </Provider>
+      );
+      expect(
+        wrapper
+          .find('input[type="text"]')
+          .first()
+          .props().disabled
+      ).toBe(false);
+      expect(
+        wrapper
+          .find('input[type="number"]')
+          .first()
+          .props().disabled
+      ).toBe(false);
+    });
+
+    it('disabling object control should disable child controls', () => {
+      const data = {
+        check: false
+      };
+      const store = initStore();
+      store.dispatch(Actions.init(data, schema, uischema));
+      const wrapper = mount(
+        <Provider store={store}>
+          <JsonFormsReduxContext>
+            <JsonFormsDispatch />
+          </JsonFormsReduxContext>
+        </Provider>
+      );
+      expect(
+        wrapper
+          .find('input[type="text"]')
+          .first()
+          .props().disabled
+      ).toBe(true);
+      expect(
+        wrapper
+          .find('input[type="number"]')
+          .first()
+          .props().disabled
+      ).toBe(true);
     });
   });
 });

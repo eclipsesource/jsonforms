@@ -42,7 +42,7 @@ import { withJsonFormsLayoutProps } from '@jsonforms/react';
 export const groupTester: RankedTester = rankWith(1, uiTypeIs('Group'));
 const style: { [x: string]: any } = { marginBottom: '10px' };
 
-const GroupComponent = React.memo(({ visible, uischema, ...props }: MaterialLayoutRendererProps) => {
+const GroupComponent = React.memo(({ visible, enabled, uischema, ...props }: MaterialLayoutRendererProps) => {
   const groupLayout = uischema as GroupLayout;
   return (
     <Hidden xsUp={!visible}>
@@ -51,14 +51,14 @@ const GroupComponent = React.memo(({ visible, uischema, ...props }: MaterialLayo
           <CardHeader title={groupLayout.label} />
         )}
         <CardContent>
-          <MaterialLayoutRenderer {...props} visible={visible} elements={groupLayout.elements} />
+          <MaterialLayoutRenderer {...props} visible={visible} enabled={enabled} elements={groupLayout.elements} />
         </CardContent>
       </Card>
     </Hidden>
   );
 });
 
-export const MaterializedGroupLayoutRenderer = ({ uischema, schema, path, visible, renderers, direction }: LayoutProps) => {
+export const MaterializedGroupLayoutRenderer = ({ uischema, schema, path, visible, enabled, renderers, direction }: LayoutProps) => {
   const groupLayout = uischema as GroupLayout;
 
   return (
@@ -68,6 +68,7 @@ export const MaterializedGroupLayoutRenderer = ({ uischema, schema, path, visibl
       path={path}
       direction={direction}
       visible={visible}
+      enabled={enabled}
       uischema={uischema}
       renderers={renderers}
     />
