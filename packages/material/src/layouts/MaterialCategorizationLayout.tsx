@@ -69,7 +69,7 @@ export class MaterialCategorizationLayoutRenderer
   };
 
   render() {
-    const { data, path, renderers, schema, uischema, visible, selected } = this.props;
+    const { data, path, renderers, schema, uischema, visible, enabled, selected } = this.props;
     const categorization = uischema as Categorization;
     const value = this.hasOwnState() ? this.state.activeCategory : selected;
     const childProps: MaterialLayoutRendererProps = {
@@ -77,6 +77,7 @@ export class MaterialCategorizationLayoutRenderer
       schema,
       path,
       direction: 'column',
+      enabled,
       visible,
       renderers
     };

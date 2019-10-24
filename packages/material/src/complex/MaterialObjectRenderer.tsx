@@ -44,6 +44,7 @@ const MaterialObjectRenderer = ({
   label,
   path,
   visible,
+  enabled,
   uischema,
   rootSchema
 }: StatePropsOfControlWithDetail) => {
@@ -67,6 +68,7 @@ const MaterialObjectRenderer = ({
     <Hidden xsUp={!visible}>
       <JsonFormsDispatch
         visible={visible}
+        enabled={enabled}
         schema={schema}
         uischema={detailUiSchema}
         path={path}

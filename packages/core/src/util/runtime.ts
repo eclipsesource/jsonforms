@@ -128,6 +128,28 @@ export const evalEnablement = (
   }
 };
 
+export const hasShowRule = (uischema: UISchemaElement): boolean => {
+  if (
+    uischema.rule &&
+    (uischema.rule.effect === RuleEffect.SHOW ||
+      uischema.rule.effect === RuleEffect.HIDE)
+  ) {
+    return true;
+  }
+  return false;
+};
+
+export const hasEnableRule = (uischema: UISchemaElement): boolean => {
+  if (
+    uischema.rule &&
+    (uischema.rule.effect === RuleEffect.ENABLE ||
+      uischema.rule.effect === RuleEffect.DISABLE)
+  ) {
+    return true;
+  }
+  return false;
+};
+
 export const isVisible = (
   uischema: UISchemaElement,
   data: any,
