@@ -1,5 +1,6 @@
 import merge from 'lodash/merge';
-import React, { Fragment, Dispatch, ReducerAction } from 'react';
+import get from 'lodash/get';
+import React, { Dispatch, Fragment, ReducerAction } from 'react';
 import { ComponentType } from 'enzyme';
 import {
   areEqual,
@@ -45,6 +46,7 @@ interface OwnPropsOfExpandPanel {
   enableMoveUp: boolean;
   enableMoveDown: boolean;
   config: any;
+  childLabelProp?: string;
   handleExpansion(panel: string): (event: any, expanded: boolean) => void;
 }
 
@@ -234,19 +236,20 @@ export const withContextToExpandPanelProps = (
 }: JsonFormsStateContext & ExpandPanelProps) => {
     const dispatchProps = ctxDispatchToExpandPanelProps(ctx.dispatch);
     const { schema, path, index, uischemas } = props;
-    const firstPrimitiveProp = schema.properties
-      ? find(Object.keys(schema.properties), propName => {
-        const prop = schema.properties[propName];
-        return (
-          prop.type === 'string' ||
-          prop.type === 'number' ||
-          prop.type === 'integer'
-        );
-      })
-      : undefined;
+    let childLabelProp = props.childLabelProp;
+    if (!childLabelProp && schema.properties) {
+        childLabelProp = find(Object.keys(schema.properties), propName => {
+            const prop = schema.properties[propName];
+            return (
+                prop.type === 'string' ||
+                prop.type === 'number' ||
+                prop.type === 'integer'
+            );
+        });
+    }
     const childPath = composePaths(path, `${index}`);
     const childData = Resolve.data(ctx.core.data, childPath);
-    const childLabel = firstPrimitiveProp ? childData[firstPrimitiveProp] : '';
+    const childLabel = get(childData, childLabelProp);
 
     return (
       <Component

@@ -30,6 +30,7 @@ import * as array from './arrays';
 import * as nestedArray from './nestedArrays';
 import * as arrayWithDetail from './arrays-with-detail';
 import * as arrayWithDetailAndRule from './arrays-with-detail-and-rule';
+import * as arrayWithCustomChildLabel from './arrays-with-custom-child-label';
 import * as stringArray from './stringArray';
 import * as categorization from './categorization';
 import * as stepper from './stepper';
@@ -79,6 +80,7 @@ export {
   nestedArray,
   arrayWithDetail,
   arrayWithDetailAndRule,
+  arrayWithCustomChildLabel,
   categorization,
   stepper,
   day1,
