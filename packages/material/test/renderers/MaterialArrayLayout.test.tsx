@@ -47,10 +47,12 @@ Enzyme.configure({ adapter: new Adapter() });
 const data = [
   {
     message: 'El Barto was here',
+    message2: 'El Barto was here 2',
     done: true
   },
   {
-    message: 'Yolo'
+    message: 'Yolo',
+    message2: 'Yolo 2'
   }
 ];
 const schema = {
@@ -106,6 +108,14 @@ const uischemaWithSortOption: ControlElement = {
   scope: '#',
   options: {
     showSortButtons: true
+  }
+};
+
+const uischemaWithChildLabelProp: ControlElement = {
+  type: 'Control',
+  scope: '#',
+  options: {
+    childLabelProp: 'message2'
   }
 };
 
@@ -351,10 +361,12 @@ describe('Material array layout', () => {
     upButton.simulate('click');
     expect(store.getState().jsonforms.core.data).toEqual([
       {
-        message: 'Yolo'
+        message: 'Yolo',
+        message2: 'Yolo 2',
       },
       {
         message: 'El Barto was here',
+        message2: 'El Barto was here 2',
         done: true
       }
     ]);
@@ -381,10 +393,12 @@ describe('Material array layout', () => {
     upButton.simulate('click');
     expect(store.getState().jsonforms.core.data).toEqual([
       {
-        message: 'Yolo'
+        message: 'Yolo',
+        message2: 'Yolo 2'
       },
       {
         message: 'El Barto was here',
+        message2: 'El Barto was here 2',
         done: true
       }
     ]);
@@ -430,5 +444,55 @@ describe('Material array layout', () => {
       .find('button')
       .find({ 'aria-label': 'Move down' });
     expect(downButton.is('[disabled]')).toBe(true);
+  });
+
+  it('should render first simple property as child label', () => {
+    const store = initJsonFormsStore();
+    store.dispatch(Actions.init(data, schema, uischemaWithSortOption));
+    wrapper = mount(
+        <Provider store={store}>
+          <JsonFormsReduxContext>
+            <MaterialArrayLayout
+                schema={schema}
+                uischema={uischemaWithSortOption}
+            />
+          </JsonFormsReduxContext>
+        </Provider>
+    );
+    const childLabel1 = wrapper
+        .find('.MuiGrid-root.MuiGrid-item.MuiGrid-grid-xs-10.MuiGrid-grid-md-11')
+        .at(0)
+        .text();
+    expect(childLabel1).toBe('El Barto was here');
+    const childLabel2 = wrapper
+        .find('.MuiGrid-root.MuiGrid-item.MuiGrid-grid-xs-10.MuiGrid-grid-md-11')
+        .at(1)
+        .text();
+    expect(childLabel2).toBe('Yolo');
+  });
+
+  it('should render configured child label property as child label', () => {
+    const store = initJsonFormsStore();
+    store.dispatch(Actions.init(data, schema, uischemaWithChildLabelProp));
+    wrapper = mount(
+        <Provider store={store}>
+          <JsonFormsReduxContext>
+            <MaterialArrayLayout
+                schema={schema}
+                uischema={uischemaWithChildLabelProp}
+            />
+          </JsonFormsReduxContext>
+        </Provider>
+    );
+    const childLabel = wrapper
+        .find('.MuiGrid-root.MuiGrid-item.MuiGrid-grid-xs-10.MuiGrid-grid-md-11')
+        .at(0)
+        .text();
+    expect(childLabel).toBe('El Barto was here 2');
+    const childLabel2 = wrapper
+        .find('.MuiGrid-root.MuiGrid-item.MuiGrid-grid-xs-10.MuiGrid-grid-md-11')
+        .at(1)
+        .text();
+    expect(childLabel2).toBe('Yolo 2');
   });
 });

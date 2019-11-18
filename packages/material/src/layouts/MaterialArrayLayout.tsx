@@ -106,6 +106,7 @@ export class MaterialArrayLayout extends React.PureComponent<
                   enableMoveUp={index != 0}
                   enableMoveDown={index < data - 1}
                   config={config}
+                  childLabelProp={appliedUiSchemaOptions.childLabelProp}
                 />
               );
             })
