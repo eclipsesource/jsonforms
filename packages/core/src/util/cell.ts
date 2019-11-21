@@ -33,7 +33,6 @@ import {
   OwnPropsOfControl,
   OwnPropsOfEnum,
   Resolve,
-  StatePropsOfCell,
   StatePropsOfScopedRenderer
 } from '.';
 import { DispatchPropsOfControl, mapDispatchToControlProps } from './renderer';
