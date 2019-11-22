@@ -32,12 +32,10 @@ import {
   isPlainLabel
 } from '@jsonforms/core';
 import map from 'lodash/map';
-import Paper from '@material-ui/core/Paper';
 import { ArrayLayoutToolbar } from './ArrayToolbar';
 import ExpandPanelRenderer from './ExpandPanelRenderer';
 import merge from 'lodash/merge';
 
-const paperStyle = { padding: 10 };
 interface MaterialArrayLayoutState {
   expanded: string | boolean;
 }
@@ -77,7 +75,7 @@ export class MaterialArrayLayout extends React.PureComponent<
     );
 
     return (
-      <Paper style={paperStyle}>
+      <div>
         <ArrayLayoutToolbar
           label={computeLabel(
             isPlainLabel(label) ? label : label.default,
@@ -113,7 +111,7 @@ export class MaterialArrayLayout extends React.PureComponent<
             <p>No data</p>
           )}
         </div>
-      </Paper>
+      </div>
     );
   }
 }

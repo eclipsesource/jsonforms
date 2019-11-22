@@ -21,7 +21,7 @@ export const ArrayLayoutToolbar = React.memo(
     createDefault
   }: ArrayLayoutToolbarProps) => {
     return (
-      <Toolbar>
+      <Toolbar disableGutters={true}>
         <Grid container alignItems='center' justify='space-between'>
           <Grid item>
             <Typography variant={'h6'}>{label}</Typography>
