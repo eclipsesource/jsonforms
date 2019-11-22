@@ -52,7 +52,7 @@ export const uischema = {
       type: 'Control',
       scope: '#/properties/comments',
       options: {
-        childLabelProp: 'message2',
+        elementLabelProp: 'message2',
         detail: {
           type: 'VerticalLayout',
           elements: [
@@ -86,8 +86,8 @@ export const data = {
 
 registerExamples([
   {
-    name: 'array-with-custom-child-label',
-    label: 'Array with custom child label',
+    name: 'array-with-custom-element-label',
+    label: 'Array with custom element label',
     data,
     schema,
     uischema
