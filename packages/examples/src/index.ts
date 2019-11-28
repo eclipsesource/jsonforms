@@ -47,6 +47,7 @@ import * as generateUISchema from './generateUI';
 import * as layout from './layout';
 import * as person from './person';
 import * as rule from './rule';
+import * as ruleInheritance from './ruleInheritance';
 import * as resolve from './resolve';
 import * as config from './config';
 import * as text from './text';
@@ -94,6 +95,7 @@ export {
   layout,
   person,
   rule,
+  ruleInheritance,
   dates,
   dyanmic,
   resolve,
