@@ -5,7 +5,7 @@ parent: UI Schema Elements
 ---
 
 import ApiLink from '../../components/common/ApiLink.js'
-import { Example, ExampleWithCustomLabel, ExampleWithArrayLabel } from './components/controls'
+import { Example, ExampleWithCustomLabel, ExampleWithSortButtons, ExampleWithArrayLabel } from './components/controls'
 
 # Controls
 
@@ -117,11 +117,16 @@ This case will be triggered if detail is any string besides `GENERATED` (case in
 
 ### Sorting buttons
 
-**`showSortingButtons`**
+**`showSortButtons`**
+```
+options: {
+  showSortButtons: true
+}
+```
 
 This options is used to toggle additional buttons that allows changing the order of elements within an array.
 
-<img src="/public/images/sortbuttons.png" />
+<ExampleWithSortButtons />
 
 ### Label for array elements
 

@@ -85,6 +85,76 @@ export const ExampleWithCustomLabel = () => (
   </Provider>
 );
 
+export const sortButtons = {
+  schema: {
+    properties: {
+      comments: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            name: {
+              type: 'string',
+            },
+            message: {
+              type: 'string'
+            }
+          }
+        }
+      }
+    }
+  },
+  uischema: {
+    type: 'VerticalLayout',
+    elements: [
+      {
+        type: 'Control',
+        scope: '#/properties/comments',
+        options: {
+          showSortButtons: true
+        }
+      }
+    ]
+  },
+  data: {
+    comments: [
+      {
+        name: 'John Doe',
+        message: 'This is an example message'
+      },
+      {
+        name: 'Max Mustermann',
+        message: 'Get ready for booohay'
+      }
+    ]
+  }
+};
+
+const storeWithSortButtons = createJsonFormsStore({
+  data: sortButtons.data,
+  schema: sortButtons.schema,
+  uischema: sortButtons.uischema
+});
+
+export const ExampleWithSortButtons = () => (
+  <Provider store={storeWithSortButtons}>
+    <JsonFormsReduxContext>
+      <Demo
+        js={() => {
+          return (
+            <JsonFormsDispatch
+              schema={sortButtons.schema}
+              uischema={sortButtons.uischema}
+            />
+          );
+        }}
+        schema={sortButtons.schema}
+        uischema={sortButtons.uischema}
+      />
+    </JsonFormsReduxContext>
+  </Provider>
+);
+
 export const arrayLabel = {
   schema: {
     properties: {
