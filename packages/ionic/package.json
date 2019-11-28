@@ -61,7 +61,7 @@
     "angular-l10n": "^7.1.0",
     "ionic-selectable": "^4.4.0",
     "ionicons": "3.0.0",
-    "redux": "^4.0.1",
+    "redux": "^4.0.4",
     "rxjs": "^6.4.0",
     "sw-toolbox": "3.6.0",
     "zone.js": "^0.8.26"
@@ -70,7 +70,7 @@
     "@ionic/app-scripts": "3.1.8",
     "@jsonforms/angular-test": "^2.3.1",
     "@types/node": "^10.10.0",
-    "copy-webpack-plugin": "^4.5.1",
+    "copy-webpack-plugin": "^5.0.5",
     "html-loader": "^0.5.5",
     "istanbul-instrumenter-loader": "^3.0.1",
     "jasmine": "^3.2.0",
@@ -86,8 +86,8 @@
     "null-loader": "^0.1.1",
     "protractor": "^5.4.1",
     "request": "^2.88.0",
-    "ts-loader": "^5.3.3",
-    "ts-node": "^8.3.0",
-    "webpack-dev-server": "^3.2.1"
+    "ts-loader": "^6.2.1",
+    "ts-node": "^8.5.3",
+    "webpack-dev-server": "^3.9.0"
   }
 }

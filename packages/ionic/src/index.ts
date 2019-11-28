@@ -111,9 +111,7 @@ export {
   rangeControlTester,
   RangeControlRenderer
 } from './controls/range/range-control';
-export {
-  AutoCompleteControlRenderer
-} from './controls/enum/autocomplete-control';
+export { AutoCompleteControlRenderer } from './controls/enum/autocomplete-control';
 
 export {
   horizontalLayoutTester,
@@ -127,9 +125,7 @@ export {
   categorizationTester,
   CategorizationMenuLayoutRenderer
 } from './layouts/categorization/categorization-menu-layout';
-export {
-  CategorizationTabLayoutRenderer
-} from './layouts/categorization/categorization-tab-layout';
+export { CategorizationTabLayoutRenderer } from './layouts/categorization/categorization-tab-layout';
 export { CategoryRenderer } from './layouts/categorization/category/category';
 export { groupTester, GroupLayoutRenderer } from './layouts/group/group-layout';
 
