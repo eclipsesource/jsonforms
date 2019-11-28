@@ -5,7 +5,7 @@ parent: UI Schema Elements
 ---
 
 import ApiLink from '../../components/common/ApiLink.js'
-import { Example, ExampleWithCustomLabel } from './components/controls'
+import { Example, ExampleWithCustomLabel, ExampleWithArrayLabel } from './components/controls'
 
 # Controls
 
@@ -123,3 +123,20 @@ This options is used to toggle additional buttons that allows changing the order
 
 <img src="/public/images/sortbuttons.png" />
 
+### Label for array elements
+
+**`elementLabelProp`**
+```
+options: {
+  elementLabelProp: "propertyName"
+}
+```
+
+This option allows to set a property to serve as a label for each array item. The `elementLabelProp` can be provided as a string or an array. More information can be found here:
+https://lodash.com/docs/4.17.15#get
+
+By default the first primitive (string, number, integer) element will be used.
+
+In the following example each element will be labeled with its name instead of its message because we provide the name prop.
+
+<ExampleWithArrayLabel />

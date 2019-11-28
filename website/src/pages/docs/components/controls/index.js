@@ -84,3 +84,88 @@ export const ExampleWithCustomLabel = () => (
     </JsonFormsReduxContext>
   </Provider>
 );
+
+export const arrayLabel = {
+  schema: {
+    properties: {
+      comments: {
+        type: 'array',
+        title: 'Comments',
+        items: {
+          type: 'object',
+          properties: {
+            message: {
+              type: 'string'
+            },
+            name: {
+              type: 'string'
+            }
+          }
+        }
+      }
+    }
+  },
+  uischema: {
+    type: 'VerticalLayout',
+    elements: [
+      {
+        type: 'Control',
+        scope: '#/properties/comments',
+        options: {
+          elementLabelProp: 'name',
+          detail: {
+            type: 'VerticalLayout',
+            elements: [
+              {
+                type: 'Control',
+                scope: '#/properties/message'
+              },
+              {
+                type: 'Control',
+                scope: '#/properties/name'
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  data: {
+    comments: [
+      {
+        name: 'John Doe',
+        message: 'This is an example message'
+      },
+      {
+        name: 'Max Mustermann',
+        message: 'Another message'
+      }
+    ]
+  }
+};
+
+const storeWithArrayLabel = createJsonFormsStore({
+  data: arrayLabel.data,
+  schema: arrayLabel.schema,
+  uischema: arrayLabel.uischema
+});
+
+export const ExampleWithArrayLabel = () => (
+  <Provider store={storeWithArrayLabel}>
+    <JsonFormsReduxContext>
+      <Demo
+        js={() => {
+          return (
+            <JsonFormsDispatch
+              schema={arrayLabel.schema}
+              uischema={arrayLabel.uischema}
+            />
+          );
+        }}
+        schema={arrayLabel.schema}
+        uischema={arrayLabel.uischema}
+      />
+    </JsonFormsReduxContext>
+  </Provider>
+);
+
