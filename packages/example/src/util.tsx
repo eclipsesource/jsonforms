@@ -203,6 +203,27 @@ export const enhanceExample: (
           )
         });
         return dynamic;
+      case 'rule-enable':
+        return Object.assign({}, e, {
+          customReactExtension: (dispatch: Dispatch<AnyAction>) => (
+            <div>
+              <button
+                onClick={() => {
+                  dispatch(Actions.update('toggleTopLayout', bool => !bool));
+                }}
+              >
+                Enable/Disable top layout
+              </button>
+              <button
+                onClick={() => {
+                  dispatch(Actions.update('toggleBottomLayout', bool => !bool));
+                }}
+              >
+                Show/Hide bottom layout
+              </button>
+            </div>
+          )
+        });
       case 'array':
         const array = Object.assign({}, e, {
           customReactExtension: (dispatch: Dispatch<AnyAction>) => (
