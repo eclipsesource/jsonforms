@@ -87,10 +87,7 @@ export class TableRenderer extends JsonFormsArrayControl {
     this.displayedColumns = this.items.map(item => item.property);
   }
   getProps(index: number, props: OwnPropsOfRenderer): OwnPropsOfRenderer {
-    const rowPath = Paths.compose(
-      props.path,
-      `${index}`
-    );
+    const rowPath = Paths.compose(props.path, `${index}`);
     return {
       schema: props.schema,
       uischema: props.uischema,

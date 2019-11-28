@@ -133,7 +133,8 @@ export class AutocompleteControlRenderer extends JsonFormsControl {
     return (this.options || this.scopedSchema.enum || []).filter(
       option =>
         !this.shouldFilter ||
-        (!val || option.toLowerCase().indexOf(val.toLowerCase()) === 0)
+        !val ||
+        option.toLowerCase().indexOf(val.toLowerCase()) === 0
     );
   }
   protected getOwnProps(): OwnPropsOfAutoComplete {

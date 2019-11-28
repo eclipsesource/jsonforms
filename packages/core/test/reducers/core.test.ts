@@ -1081,8 +1081,10 @@ test('subErrorsAt filters array inner', t => {
     uischema: undefined,
     errors
   };
-  const filtered = subErrorsAt('colours', schema.properties.colours
-    .items as JsonSchema)(state);
+  const filtered = subErrorsAt(
+    'colours',
+    schema.properties.colours.items as JsonSchema
+  )(state);
   t.is(filtered.length, 1);
   t.deepEqual(filtered[0], state.errors[1]);
 });
@@ -1128,8 +1130,10 @@ test('subErrorsAt filters oneOf array inner', t => {
     uischema: undefined,
     errors
   };
-  const filtered = subErrorsAt('coloursOrNumbers', schema.properties
-    .coloursOrNumbers.oneOf[1].items as JsonSchema)(state);
+  const filtered = subErrorsAt(
+    'coloursOrNumbers',
+    schema.properties.coloursOrNumbers.oneOf[1].items as JsonSchema
+  )(state);
   t.is(filtered.length, 1);
   t.deepEqual(filtered[0], state.errors[1]);
 });

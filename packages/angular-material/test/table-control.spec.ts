@@ -142,7 +142,10 @@ describe('Table', () => {
     const mockSubStore = setupMockStore(fixture, {
       uischema: uischema1,
       schema: schema_object1,
-      data: [{ foo: 'foo_1', bar: 'bar_1' }, { foo: 'foo_2', bar: 'bar_2' }],
+      data: [
+        { foo: 'foo_1', bar: 'bar_1' },
+        { foo: 'foo_2', bar: 'bar_2' }
+      ],
       renderers
     });
     mockSubStore.complete();
@@ -162,7 +165,10 @@ describe('Table', () => {
       uischema: uischema2,
       schema: schema_object2,
       data: {
-        my: [{ foo: 'foo_1', bar: 'bar_1' }, { foo: 'foo_2', bar: 'bar_2' }]
+        my: [
+          { foo: 'foo_1', bar: 'bar_1' },
+          { foo: 'foo_2', bar: 'bar_2' }
+        ]
       },
       renderers
     });

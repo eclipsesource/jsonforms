@@ -83,10 +83,5 @@ export const composeWithUi = (scopableUi: Scopable, path: string): string => {
     return '';
   }
 
-  return isEmpty(segments)
-    ? path
-    : compose(
-        path,
-        segments.join('.')
-      );
+  return isEmpty(segments) ? path : compose(path, segments.join('.'));
 };
