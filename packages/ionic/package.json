@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/ionic-renderers",
-  "version": "2.3.2-beta.0",
+  "version": "2.3.2",
   "description": "Ionic renderer set of JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -56,8 +56,8 @@
     "@ionic-native/splash-screen": "4.7.0",
     "@ionic-native/status-bar": "4.7.0",
     "@ionic/angular": "4.2.0",
-    "@jsonforms/angular": "^2.3.2-beta.0",
-    "@jsonforms/core": "^2.3.2-beta.0",
+    "@jsonforms/angular": "^2.3.2",
+    "@jsonforms/core": "^2.3.2",
     "angular-l10n": "^7.1.0",
     "ionic-selectable": "^4.4.0",
     "ionicons": "3.0.0",
@@ -68,7 +68,7 @@
   },
   "devDependencies": {
     "@ionic/app-scripts": "3.1.8",
-    "@jsonforms/angular-test": "^2.3.2-beta.0",
+    "@jsonforms/angular-test": "^2.3.2",
     "@types/node": "^10.10.0",
     "copy-webpack-plugin": "^5.0.5",
     "html-loader": "^0.5.5",
