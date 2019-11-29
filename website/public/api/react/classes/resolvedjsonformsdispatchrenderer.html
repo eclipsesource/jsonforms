@@ -151,7 +151,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides Component.__constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/e41f5131a/packages/react/src/JsonForms.tsx#L94">JsonForms.tsx:94</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/react/src/JsonForms.tsx#L96">packages/react/src/JsonForms.tsx:96</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -174,21 +174,23 @@
 					<aside class="tsd-sources">
 						<p>Inherited from Component.context</p>
 						<ul>
+							<li>Defined in node_modules/@types/react/index.d.ts:445</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>If using the new style context, re-declare this in your class to be the
-							<code>React.ContextType</code> of your <code>static contextType</code>.</p>
+								<code>React.ContextType</code> of your <code>static contextType</code>.
+							Should be used with type annotation or static contextType.</p>
 						</div>
 						<pre><code class="language-ts"><span class="hljs-keyword">static</span> contextType = MyContext
-context!: React.ContextType&lt;<span class="hljs-keyword">typeof</span> MyContext&gt;</code></pre>
+<span class="hljs-comment">// For TS pre-3.7:</span>
+context!: React.ContextType&lt;<span class="hljs-keyword">typeof</span> MyContext&gt;
+<span class="hljs-comment">// For TS 3.7 and above:</span>
+<span class="hljs-keyword">declare</span> context: React.ContextType&lt;<span class="hljs-keyword">typeof</span> MyContext&gt;</code></pre>
 						<dl class="tsd-comment-tags">
-							<dt>deprecated</dt>
-							<dd><p>if used without a type annotation, or without static contextType</p>
-							</dd>
 							<dt>see</dt>
-							<dd><p><a href="https://reactjs.org/docs/legacy-context.html">https://reactjs.org/docs/legacy-context.html</a></p>
+							<dd><p><a href="https://reactjs.org/docs/context.html">https://reactjs.org/docs/context.html</a></p>
 							</dd>
 						</dl>
 					</div>
@@ -199,7 +201,7 @@ context!: React.ContextType&lt;<span class="hljs-keyword">typeof</span> MyContex
 					<div class="tsd-signature tsd-kind-icon">mounted<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/e41f5131a/packages/react/src/JsonForms.tsx#L94">JsonForms.tsx:94</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/react/src/JsonForms.tsx#L96">packages/react/src/JsonForms.tsx:96</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -210,6 +212,7 @@ context!: React.ContextType&lt;<span class="hljs-keyword">typeof</span> MyContex
 					<aside class="tsd-sources">
 						<p>Inherited from Component.props</p>
 						<ul>
+							<li>Defined in node_modules/@types/react/index.d.ts:470</li>
 						</ul>
 					</aside>
 				</section>
@@ -220,6 +223,7 @@ context!: React.ContextType&lt;<span class="hljs-keyword">typeof</span> MyContex
 					<aside class="tsd-sources">
 						<p>Inherited from Component.refs</p>
 						<ul>
+							<li>Defined in node_modules/@types/react/index.d.ts:476</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -245,6 +249,7 @@ context!: React.ContextType&lt;<span class="hljs-keyword">typeof</span> MyContex
 					<aside class="tsd-sources">
 						<p>Inherited from Component.state</p>
 						<ul>
+							<li>Defined in node_modules/@types/react/index.d.ts:471</li>
 						</ul>
 					</aside>
 				</section>
@@ -255,6 +260,7 @@ context!: React.ContextType&lt;<span class="hljs-keyword">typeof</span> MyContex
 					<aside class="tsd-sources">
 						<p>Inherited from Component.contextType</p>
 						<ul>
+							<li>Defined in node_modules/@types/react/index.d.ts:427</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -293,6 +299,7 @@ class Foo extends React.Component {
 							<aside class="tsd-sources">
 								<p>Inherited from DeprecatedLifecycle.UNSAFE_componentWillMount</p>
 								<ul>
+									<li>Defined in node_modules/@types/react/index.d.ts:658</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -330,6 +337,7 @@ class Foo extends React.Component {
 							<aside class="tsd-sources">
 								<p>Inherited from DeprecatedLifecycle.UNSAFE_componentWillReceiveProps</p>
 								<ul>
+									<li>Defined in node_modules/@types/react/index.d.ts:690</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -378,6 +386,7 @@ class Foo extends React.Component {
 							<aside class="tsd-sources">
 								<p>Inherited from DeprecatedLifecycle.UNSAFE_componentWillUpdate</p>
 								<ul>
+									<li>Defined in node_modules/@types/react/index.d.ts:718</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -427,6 +436,7 @@ class Foo extends React.Component {
 							<aside class="tsd-sources">
 								<p>Inherited from ComponentLifecycle.componentDidCatch</p>
 								<ul>
+									<li>Defined in node_modules/@types/react/index.d.ts:587</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -459,7 +469,7 @@ class Foo extends React.Component {
 							<aside class="tsd-sources">
 								<p>Overrides ComponentLifecycle.componentDidMount</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/e41f5131a/packages/react/src/JsonForms.tsx#L108">JsonForms.tsx:108</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/react/src/JsonForms.tsx#L110">packages/react/src/JsonForms.tsx:110</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -477,7 +487,7 @@ class Foo extends React.Component {
 							<aside class="tsd-sources">
 								<p>Overrides NewLifecycle.componentDidUpdate</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/e41f5131a/packages/react/src/JsonForms.tsx#L114">JsonForms.tsx:114</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/react/src/JsonForms.tsx#L116">packages/react/src/JsonForms.tsx:116</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -495,6 +505,7 @@ class Foo extends React.Component {
 							<aside class="tsd-sources">
 								<p>Inherited from DeprecatedLifecycle.componentWillMount</p>
 								<ul>
+									<li>Defined in node_modules/@types/react/index.d.ts:644</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -531,6 +542,7 @@ class Foo extends React.Component {
 							<aside class="tsd-sources">
 								<p>Inherited from DeprecatedLifecycle.componentWillReceiveProps</p>
 								<ul>
+									<li>Defined in node_modules/@types/react/index.d.ts:673</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -578,7 +590,7 @@ class Foo extends React.Component {
 							<aside class="tsd-sources">
 								<p>Overrides ComponentLifecycle.componentWillUnmount</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/e41f5131a/packages/react/src/JsonForms.tsx#L129">JsonForms.tsx:129</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/react/src/JsonForms.tsx#L131">packages/react/src/JsonForms.tsx:131</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -596,6 +608,7 @@ class Foo extends React.Component {
 							<aside class="tsd-sources">
 								<p>Inherited from DeprecatedLifecycle.componentWillUpdate</p>
 								<ul>
+									<li>Defined in node_modules/@types/react/index.d.ts:703</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -644,6 +657,7 @@ class Foo extends React.Component {
 							<aside class="tsd-sources">
 								<p>Inherited from Component.forceUpdate</p>
 								<ul>
+									<li>Defined in node_modules/@types/react/index.d.ts:462</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -679,6 +693,7 @@ class Foo extends React.Component {
 							<aside class="tsd-sources">
 								<p>Inherited from NewLifecycle.getSnapshotBeforeUpdate</p>
 								<ul>
+									<li>Defined in node_modules/@types/react/index.d.ts:623</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -717,7 +732,7 @@ class Foo extends React.Component {
 							<aside class="tsd-sources">
 								<p>Overrides Component.render</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/e41f5131a/packages/react/src/JsonForms.tsx#L135">JsonForms.tsx:135</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/react/src/JsonForms.tsx#L137">packages/react/src/JsonForms.tsx:137</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Element</span></h4>
@@ -734,7 +749,7 @@ class Foo extends React.Component {
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/e41f5131a/packages/react/src/JsonForms.tsx#L120">JsonForms.tsx:120</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/react/src/JsonForms.tsx#L122">packages/react/src/JsonForms.tsx:122</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -758,6 +773,7 @@ class Foo extends React.Component {
 							<aside class="tsd-sources">
 								<p>Inherited from Component.setState</p>
 								<ul>
+									<li>Defined in node_modules/@types/react/index.d.ts:457</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -802,6 +818,7 @@ class Foo extends React.Component {
 							<aside class="tsd-sources">
 								<p>Inherited from ComponentLifecycle.shouldComponentUpdate</p>
 								<ul>
+									<li>Defined in node_modules/@types/react/index.d.ts:577</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -840,7 +857,7 @@ class Foo extends React.Component {
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/e41f5131a/packages/react/src/JsonForms.tsx#L76">JsonForms.tsx:76</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/react/src/JsonForms.tsx#L78">packages/react/src/JsonForms.tsx:78</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
