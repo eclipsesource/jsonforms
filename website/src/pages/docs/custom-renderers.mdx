@@ -14,15 +14,16 @@ JSON Forms allows for this by registering a custom renderer that produces a diff
 for a given UI Schema element.
 
 In this section you will learn how to create and register a custom renderer for a control.
-We will replace the default renderer for integer values of a rating property. By default an integer
-property is rendered like this:
+We will replace the default renderer for integer values of a rating property.
 
 **NOTE**: There are fundamental differences between the React and Angular-based versions of JSON Forms.
 This section describes how to add custom renderers for React-based renderer sets.
 
+By default an integer property is rendered like this:
+
 <Default />
 
-Our goal is to instead render the UI for rating depicted below:
+Our goal is to replace the default renderer with a custom one which will render the UI for rating as depicted below:
 
 <WithCustomRenderer />
 
@@ -30,6 +31,7 @@ Our goal is to instead render the UI for rating depicted below:
 
 If you want to follow along with this tutorial, you may want to [clone the seed repository](https://github.com/eclipsesource/jsonforms-react-seed)
 which basically is just a skeleton application scaffolded by create-react-app and JSON Forms dependencies added.
+It showcases how to use JSON Forms with a Redux store or standalone.
 
 ```bash
 cd jsonforms-react-seed
@@ -46,7 +48,7 @@ only focus on the most crucial parts of the app in the following.
 
 ## Core concepts about rendering
 
-Before explaining how to contribute a component (which will be referred to as "custom control") to JSON Forms,
+Before explaining how to contribute a component (which we will refer to as a "custom control") to JSON Forms,
 we first explain how the basic process of rendering works.
 
 JSON Forms maintains a registry of renderers (which are regular React components in case of the React/Material renderers we use in this tutorial).
@@ -89,7 +91,7 @@ All the handler actually does is to emit a change with the new value.
 
 The complete code of `src/RatingControl.tsx` looks as follows:
 
-```jsx
+```javascript
 import * as React from 'react';
 import { withJsonFormsControlProps } from '@jsonforms/react';
 import { Rating } from './Rating';
@@ -144,6 +146,20 @@ import RatingControl from './RatingControl';
 import ratingControlTester from './ratingControlTester';
 
 store.dispatch(Actions.registerRenderer(ratingControlTester, RatingControl));
+```
+
+To register the custom renderer when using JSON Forms standalone, without a Redux store,
+we simply add it to the list of renderers passed to the `JsonForms` component.
+
+```javascript
+<JsonForms
+  // other necessary declarations go here...
+  renderers={[
+    ...materialRenderers,
+    //register custom renderer
+    { tester: ratingControlTester, renderer: RatingControl }
+  ]}
+/>
 ```
 
 And that's it! The rating control will now be used to render the `rating` property.

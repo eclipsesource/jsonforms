@@ -12,9 +12,13 @@ export const createJsonFormsStore = ({ data, schema, uischema }) => {
     combineReducers({ jsonforms: jsonformsReducer() }),
     {
       jsonforms: {
-        renderers: materialRenderers
-          .concat([{ tester: materialCategorizationTester, renderer: MaterialCategorizationLayout}]),
-        cells: materialCells,
+        renderers: materialRenderers.concat([
+          {
+            tester: materialCategorizationTester,
+            renderer: MaterialCategorizationLayout
+          }
+        ]),
+        cells: materialCells
       }
     }
   );

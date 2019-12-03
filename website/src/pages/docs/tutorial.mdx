@@ -4,7 +4,7 @@ route: /docs/tutorial
 parent: Tutorials
 ---
 
-import { PersonVars } from './components/tutorial/TutorialExample' 
+import { PersonVars } from './components/tutorial/TutorialExample';
 
 # Create a JSON Forms App
 
@@ -17,7 +17,7 @@ Alternatively you can also clone the [seed app](https://github.com/eclipsesource
    Let's now create a basic application with:
 
    ```bash
-   create-react-app my-jsonforms-app
+   npx create-react-app my-jsonforms-app
    ```
 
    Scaffolding may take a couple of moments. Once it's finished, switch to your newly created app and
@@ -27,6 +27,7 @@ Alternatively you can also clone the [seed app](https://github.com/eclipsesource
    cd my-jsonforms-app
    npm install
    ```
+
 2. Install JSON Forms and the material renderer set. We'll use an example from JSON Forms in order to obtain
    a JSON schema, a corresponding UI schema and a data instance to be rendered. You don't need to install
    the `@jsonforms/examples` package if you plan to supply your own schema in the following:
@@ -36,21 +37,30 @@ Alternatively you can also clone the [seed app](https://github.com/eclipsesource
    npm install --save @jsonforms/react
    npm install --save @jsonforms/material-renderers
    npm install --save @jsonforms/examples
-   
+
    npm install --save @material-ui/core
    npm install --save @material-ui/icons
-   npm install --save @material-ui/pickers 
+   npm install --save @material-ui/pickers
+
+   # Since version 2.2.x, react, redux and react-redux are peer dependencies
+   npm install --save react redux react-redux
    ```
+
 3. Switch to the `src` directory and open `App.js` with an editor of your choice.
    Let's add a couple of imports first:
+
    ```javascript
    import { person } from '@jsonforms/examples';
-   import { materialRenderers } from '@jsonforms/material-renderers';
+   import {
+     materialRenderers,
+     materialCells
+   } from '@jsonforms/material-renderers';
    ```
+
    The `person` import is necessary for importing the person example
-   while `@jsonforms/material-renderers` imports the 
+   while `@jsonforms/material-renderers` imports the
    [Material UI](https://material-ui.com) based
-   renderer set.
+   renderer set and respective cells.
 
    Now let's define the variables that are crucial for JSON Forms to work,
    that is, `data`, `schema` and `uischema`. As previously mentioned, we are
@@ -63,24 +73,27 @@ Alternatively you can also clone the [seed app](https://github.com/eclipsesource
    ```
 
    These variables are defined as follows:
+
    <PersonVars />
 
 4. Now import the `JsonForms` component from `@jsonforms/react`.
    Delete the `header` element and replace it with the `JsonForms` element
    to get a form rendered:
+
    ```jsx
    import React from 'react';
    import { JsonForms } from '@jsonforms/react';
    // other imports...
-   
+
    function App() {
      return (
-       <div className="App">
+       <div className='App'>
          <JsonForms
            schema={schema}
            uischema={uischema}
            data={data}
            renderers={materialRenderers}
+           cells={materialCells}
          />
        </div>
      );

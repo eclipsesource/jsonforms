@@ -17,7 +17,7 @@ Alternatively you can also clone the [seed app](https://github.com/eclipsesource
    Let's now create a basic application with:
 
    ```bash
-   create-react-app my-jsonforms-app -- typescript
+   npx create-react-app my-jsonforms-app --typescript
    ```
 
    Scaffolding may take a couple of moments. Once it's finished, switch to your newly created app and
@@ -38,6 +38,10 @@ Alternatively you can also clone the [seed app](https://github.com/eclipsesource
    npm install --save @jsonforms/material-renderers
    npm install --save @jsonforms/examples
 
+   npm install --save @material-ui/core
+   npm install --save @material-ui/icons
+   npm install --save @material-ui/pickers
+
    # Since 2.2.x, install react, redux and react-redux are peer dependencies
    npm install --save react redux react-redux
    ```
@@ -54,8 +58,11 @@ Alternatively you can also clone the [seed app](https://github.com/eclipsesource
 
    import { Actions, jsonformsReducer } from '@jsonforms/core';
    import { person } from '@jsonforms/examples';
-   import { materialRenderers, materialCells } from '@jsonforms/material-renderers';
-   import { JsonFormsReduxContext } from "@jsonforms/react";
+   import {
+     materialRenderers,
+     materialCells
+   } from '@jsonforms/material-renderers';
+   import { JsonFormsReduxContext } from '@jsonforms/react';
    ```
 
    The `person` import is necessary for importing the person example
@@ -110,7 +117,7 @@ Alternatively you can also clone the [seed app](https://github.com/eclipsesource
    </Provider>
    ```
 
-   You can close the <code>index.js</code> file now.
+   You can close the <code>index.tsx</code> file now.
 
 6. Open the `App.tsx` file and import the `JsonForms` component from `@jsonforms/react`.
    Delete the `header` element and replace it with the `JsonForms` element
