@@ -115,7 +115,7 @@ const ExpandPanelRenderer = (props: ExpandPanelProps) => {
     >
       <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
         <Grid container alignItems={'center'}>
-          <Grid item xs={7} md={10}>
+          <Grid item xs={7} md={9}>
             <Grid container alignItems={'center'}>
               <Grid item xs={2} md={1}>
                 <Avatar aria-label='Index'>{index + 1}</Avatar>
@@ -125,7 +125,7 @@ const ExpandPanelRenderer = (props: ExpandPanelProps) => {
               </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={5} md={2}>
+          <Grid item xs={5} md={3}>
             <Grid container justify={'flex-end'}>
               <Grid item>
                 <Grid
