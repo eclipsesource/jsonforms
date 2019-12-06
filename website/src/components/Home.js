@@ -62,7 +62,7 @@ const Home = ({ classes }) => {
         <div style={{ paddingTop: '0.5em' }}>
           <Grid container>
             <Grid item sm={4} md={4}></Grid>
-            <Grid item xs={12} sm={12} md={4} justify='center'>
+            <Grid item xs={12} sm={12} md={4}>
               <Typography variant='h2'>
                 <strong>JSON</strong>Forms
               </Typography>
@@ -91,7 +91,7 @@ const Home = ({ classes }) => {
                 </Link>
               </div>
             </Grid>
-            <Grid item xs={12} sm={12} md={4} justify='flex-start'>
+            <Grid item xs={12} sm={12} md={4}>
               <Twitter id={JSONFORMS_TWITTER_ID} width={400} height={400} />
             </Grid>
           </Grid>

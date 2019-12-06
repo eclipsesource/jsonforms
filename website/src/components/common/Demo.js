@@ -21,7 +21,7 @@ const additionalStyles = theme => ({
   root: {
     position: 'relative',
     [theme.breakpoints.up('sm')]: {
-      padding: `0 ${theme.spacing.unit}px`,
+      padding: `0 ${theme.spacing(1)}px`,
       marginLeft: 0,
       marginRight: 0,
     },
@@ -31,12 +31,12 @@ const additionalStyles = theme => ({
 //    display: 'flex',
 minWidth: '30vw',
     justifyContent: 'center',
-    paddingTop: theme.spacing.unit * 2,
-    paddingBottom: theme.spacing.unit * 2,
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
     [theme.breakpoints.up('sm')]: {
-      paddingLeft: theme.spacing.unit * 3,
-      paddingRight: theme.spacing.unit * 3,
-      paddingTop: theme.spacing.unit * 2,
+      paddingLeft: theme.spacing(3),
+      paddingRight: theme.spacing(3),
+      paddingTop: theme.spacing(2),
     },
   }),
   code: {
@@ -52,17 +52,17 @@ minWidth: '30vw',
     },
   },
   schemaButton: {
-    left: theme.spacing.unit * 2,
-    right: theme.spacing.unit * 2,
+    left: theme.spacing(2),
+    right: theme.spacing(2),
 
   },
   uischemaButton: {
-    left: theme.spacing.unit * 2,
-    right: theme.spacing.unit * 2,
+    left: theme.spacing(2),
+    right: theme.spacing(2),
   },
   data: {
-    left: theme.spacing.unit * 2,
-    right: theme.spacing.unit * 2
+    left: theme.spacing(2),
+    right: theme.spacing(2)
   },
 });
 

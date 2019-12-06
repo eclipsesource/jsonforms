@@ -5,7 +5,7 @@ import Header from './header';
 import Footer from './footer';
 import styles from '../styles/global.module.css';
 
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
 
 import { createMuiTheme } from '@material-ui/core';
 import DocPage from './DocPage';

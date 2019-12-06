@@ -41,7 +41,7 @@ const Header = ({ classes }) => (
       </Link>
       &nbsp;
       <Link to="/" className={styles.logo__title}>
-        <Typography variant="title" color="inherit">
+        <Typography variant="body1" color="inherit">
           JSONForms
         </Typography>
       </Link>
@@ -50,6 +50,9 @@ const Header = ({ classes }) => (
       </Link>
       <Link to="/docs" className={globalStyles.nav__link}>
         Docs
+      </Link>
+      <Link to="/faq" className={globalStyles.nav__link}>
+        FAQ
       </Link>
       <Link
         to="/support"
