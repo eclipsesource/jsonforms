@@ -1,7 +1,7 @@
 import React from 'react';
 import { generateSchema } from '@jsonforms/examples';
 import { JsonFormsDispatch, JsonFormsReduxContext } from '@jsonforms/react';
-import { generateDefaultUISchema, generateJsonSchema } from '@jsonforms/core';
+import { generateJsonSchema } from '@jsonforms/core';
 import { Provider } from 'react-redux';
 
 import { Demo } from '../common';

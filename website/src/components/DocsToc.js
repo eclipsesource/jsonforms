@@ -23,7 +23,7 @@ const additionalStyles = {
 };
 
 const DocsToc = ({ classes }) => {
-  const toc = groupByParent(useMenus({ filter: m => m.route.startsWith('/docs/')}))
+  const toc = groupByParent(useMenus({ filter: m => m.route.startsWith('/docs/') }))
   return (
     <div className={styles.main}>
       <div className={classes.container}>

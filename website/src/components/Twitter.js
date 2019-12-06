@@ -47,7 +47,7 @@ class Twitter extends React.Component {
           this._div.innerHTML = ''
         }
 
-        const { options, onTweetLoadSuccess, onTweetLoadError } = props
+        const { onTweetLoadSuccess, onTweetLoadError } = props
         widgets
           .createTimeline(
             {

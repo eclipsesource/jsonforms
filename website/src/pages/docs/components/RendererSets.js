@@ -1,5 +1,4 @@
-import React, { Fragment } from 'react';
-import Typography from "@material-ui/core/Typography";
+import React from 'react';
 import TableCell from "@material-ui/core/TableCell/TableCell";
 import TableHead from "@material-ui/core/TableHead/TableHead";
 import Table from "@material-ui/core/Table/Table";

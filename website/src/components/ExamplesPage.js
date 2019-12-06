@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useMenus } from "docz";
 import Button from "@material-ui/core/Button";
-import { groupByParent } from "../common/menus";
 import SidebarLayout from "./common/sidebar/SidebarLayout";
 import styles from "../styles/global.module.css";
 
