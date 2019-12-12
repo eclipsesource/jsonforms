@@ -54,6 +54,8 @@
   },
   "devDependencies": {
     "@angular-redux/store": "^9.0.0",
+    "@angular/compiler": "^7.2.13",
+    "@angular/compiler-cli": "7.2.13",
     "@angular/core": "^7.2.13",
     "@angular/forms": "^7.2.13",
     "@jsonforms/core": "^2.3.2",
