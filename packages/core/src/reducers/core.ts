@@ -37,13 +37,9 @@ import {
   SET_AJV,
   SET_SCHEMA,
   SET_UISCHEMA,
-  SetAjvAction,
-  SetSchemaAction,
-  SetUISchemaAction,
   UPDATE_DATA,
-  UpdateAction,
   UPDATE_ERRORS,
-  UpdateErrorsAction
+  ValidCoreActions
 } from '../actions';
 import { createAjv } from '../util/validator';
 import { JsonSchema, UISchemaElement } from '..';
@@ -85,14 +81,6 @@ const initState: JsonFormsCore = {
   ajv: undefined,
   refParserOptions: undefined
 };
-
-type ValidCoreActions =
-  | InitAction
-  | UpdateAction
-  | UpdateErrorsAction
-  | SetAjvAction
-  | SetSchemaAction
-  | SetUISchemaAction;
 
 const getOrCreateAjv = (state: JsonFormsCore, action?: InitAction): Ajv => {
   if (action) {

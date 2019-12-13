@@ -22,17 +22,16 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { NgRedux } from '@angular-redux/store';
 import { Component } from '@angular/core';
 import { JsonFormsControl } from '@jsonforms/angular';
 import {
   and,
   isBooleanControl,
-  JsonFormsState,
   optionIs,
   RankedTester,
   rankWith
 } from '@jsonforms/core';
+import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
 
 @Component({
   selector: 'ToggleControlRenderer',
@@ -51,8 +50,8 @@ import {
   `
 })
 export class ToggleControlRenderer extends JsonFormsControl {
-  constructor(ngRedux: NgRedux<JsonFormsState>) {
-    super(ngRedux);
+  constructor(jsonformsService: JSONFormsAngularService) {
+    super(jsonformsService);
   }
   isChecked = () => this.data || false;
   getEventValue = (event: any) => event.checked;

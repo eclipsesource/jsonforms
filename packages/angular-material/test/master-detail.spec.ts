@@ -32,15 +32,15 @@ import {
   MatListModule,
   MatSidenavModule
 } from '@angular/material';
-import { NgRedux } from '@angular-redux/store';
-import { MockNgRedux } from '@angular-redux/store/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { JsonFormsOutlet, UnknownRenderer } from '@jsonforms/angular';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { DebugElement } from '@angular/core';
 import { MasterListComponent } from '../src/other/master-detail/master';
 import { JsonFormsDetailComponent } from '../src/other/master-detail/detail';
-import { setupMockStore } from '@jsonforms/angular-test';
+import { setupMockStore, getJsonFormsService } from '@jsonforms/angular-test';
+import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
+import { Actions } from '@jsonforms/core';
 
 describe('Master detail', () => {
   let fixture: ComponentFixture<MasterListComponent>;
@@ -116,7 +116,7 @@ describe('Master detail', () => {
         FlexLayoutModule,
         NoopAnimationsModule
       ],
-      providers: [{ provide: NgRedux, useFactory: MockNgRedux.getInstance }]
+      providers: [JSONFormsAngularService]
     })
       .overrideModule(BrowserDynamicTestingModule, {
         set: {
@@ -125,15 +125,14 @@ describe('Master detail', () => {
       })
       .compileComponents();
 
-    MockNgRedux.reset();
     fixture = TestBed.createComponent(MasterListComponent);
     component = fixture.componentInstance;
   });
 
   it('should render', async(() => {
-    const mockSubStore = setupMockStore(fixture, { uischema, schema, data });
+    setupMockStore(fixture, { uischema, schema, data });
+    getJsonFormsService(component).updateCore(Actions.init(data, schema));
     component.ngOnInit();
-    mockSubStore.complete();
 
     fixture.detectChanges();
     fixture.whenStable().then(() => {
@@ -148,9 +147,9 @@ describe('Master detail', () => {
   }));
 
   it('add a master item', async(() => {
-    const mockSubStore = setupMockStore(fixture, { uischema, schema, data });
+    setupMockStore(fixture, { uischema, schema, data });
+    getJsonFormsService(component).updateCore(Actions.init(data, schema));
     component.ngOnInit();
-    mockSubStore.complete();
     fixture.detectChanges();
 
     const spy = spyOn(component, 'addItem').and.returnValue(() => {
@@ -170,9 +169,9 @@ describe('Master detail', () => {
   }));
 
   it('remove an item', async(() => {
-    const mockSubStore = setupMockStore(fixture, { uischema, schema, data });
+    setupMockStore(fixture, { uischema, schema, data });
+    getJsonFormsService(component).updateCore(Actions.init(data, schema));
     component.ngOnInit();
-    mockSubStore.complete();
     fixture.detectChanges();
 
     const spy = spyOn(component, 'removeItems').and.returnValue(() => {
@@ -208,11 +207,12 @@ describe('Master detail', () => {
       ]
     };
 
-    const mockSubStore = setupMockStore(fixture, {
+    setupMockStore(fixture, {
       uischema,
       schema,
       data: moreData
     });
+    getJsonFormsService(component).updateCore(Actions.init(moreData, schema));
     component.ngOnInit();
     fixture.detectChanges();
 
@@ -226,15 +226,9 @@ describe('Master detail', () => {
 
     // delete 1st item
     spyOn(component, 'removeItems').and.callFake(() => () => {
-      mockSubStore.next({
-        jsonforms: {
-          core: {
-            data: { orders: moreData.orders.slice(1) },
-            schema
-          }
-        }
-      });
-      mockSubStore.complete();
+      getJsonFormsService(component).updateCore(
+        Actions.update('orders', () => moreData.orders.slice(1))
+      );
       fixture.detectChanges();
     });
     const buttons: DebugElement[] = fixture.debugElement.queryAll(
@@ -263,11 +257,12 @@ describe('Master detail', () => {
         }
       ]
     };
-    const mockSubStore = setupMockStore(fixture, {
+    setupMockStore(fixture, {
       uischema,
       schema,
       data: moreData
     });
+    getJsonFormsService(component).updateCore(Actions.init(moreData, schema));
     component.ngOnInit();
     fixture.detectChanges();
 
@@ -275,15 +270,9 @@ describe('Master detail', () => {
     spyOn(component, 'removeItems').and.callFake(() => () => {
       const copy = moreData.orders.slice();
       copy.splice(1, 1);
-      mockSubStore.next({
-        jsonforms: {
-          core: {
-            data: { orders: copy },
-            schema
-          }
-        }
-      });
-      mockSubStore.complete();
+      getJsonFormsService(component).updateCore(
+        Actions.update('orders', () => copy)
+      );
       fixture.detectChanges();
     });
     const buttons: DebugElement[] = fixture.debugElement.queryAll(
@@ -312,25 +301,20 @@ describe('Master detail', () => {
         }
       ]
     };
-    const mockSubStore = setupMockStore(fixture, {
+    setupMockStore(fixture, {
       uischema,
       schema,
       data: moreData
     });
+    getJsonFormsService(component).updateCore(Actions.init(moreData, schema));
     component.ngOnInit();
     fixture.detectChanges();
 
     // delete 1st item
     spyOn(component, 'removeItems').and.callFake(() => () => {
-      mockSubStore.next({
-        jsonforms: {
-          core: {
-            data: { orders: moreData.orders.slice(1) },
-            schema
-          }
-        }
-      });
-      mockSubStore.complete();
+      getJsonFormsService(component).updateCore(
+        Actions.update('orders', () => moreData.orders.slice(1))
+      );
       fixture.detectChanges();
     });
     const buttons: DebugElement[] = fixture.debugElement.queryAll(
@@ -351,25 +335,20 @@ describe('Master detail', () => {
         }
       ]
     };
-    const mockSubStore = setupMockStore(fixture, {
+    setupMockStore(fixture, {
       uischema,
       schema,
       data: moreData
     });
+    getJsonFormsService(component).updateCore(Actions.init(moreData, schema));
     component.ngOnInit();
     fixture.detectChanges();
 
     // delete item
     spyOn(component, 'removeItems').and.callFake(() => () => {
-      mockSubStore.next({
-        jsonforms: {
-          core: {
-            data: { orders: [] },
-            schema
-          }
-        }
-      });
-      mockSubStore.complete();
+      getJsonFormsService(component).updateCore(
+        Actions.update('orders', () => [])
+      );
       fixture.detectChanges();
     });
     const buttons: DebugElement[] = fixture.debugElement.queryAll(
@@ -382,9 +361,9 @@ describe('Master detail', () => {
   });
 
   it('setting detail on click', async(() => {
-    const mockSubStore = setupMockStore(fixture, { uischema, schema, data });
+    setupMockStore(fixture, { uischema, schema, data });
+    getJsonFormsService(component).updateCore(Actions.init(data, schema));
     component.ngOnInit();
-    mockSubStore.complete();
 
     fixture.detectChanges();
     fixture.whenStable().then(() => {
@@ -425,9 +404,9 @@ describe('Master detail', () => {
   }));
 
   it('can be hidden', async(() => {
-    const mockSubStore = setupMockStore(fixture, { uischema, schema, data });
+    setupMockStore(fixture, { uischema, schema, data });
+    getJsonFormsService(component).updateCore(Actions.init(data, schema));
     component.visible = false;
-    mockSubStore.complete();
     component.ngOnInit();
     fixture.detectChanges();
     fixture.whenRenderingDone().then(() => {

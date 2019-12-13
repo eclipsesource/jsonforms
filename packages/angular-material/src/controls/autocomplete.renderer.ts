@@ -22,7 +22,6 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { NgRedux } from '@angular-redux/store';
 import { Component, Input } from '@angular/core';
 import { MatAutocompleteSelectedEvent } from '@angular/material';
 import { JsonFormsControl } from '@jsonforms/angular';
@@ -31,7 +30,6 @@ import {
   composeWithUi,
   ControlElement,
   isEnumControl,
-  JsonFormsState,
   OwnPropsOfControl,
   RankedTester,
   rankWith
@@ -39,6 +37,7 @@ import {
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { startWith } from 'rxjs/operators';
+import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
 
 /**
  * To use this component you will need to add your own tester:
@@ -99,8 +98,8 @@ export class AutocompleteControlRenderer extends JsonFormsControl {
   filteredOptions: Observable<string[]>;
   shouldFilter: boolean;
 
-  constructor(ngRedux: NgRedux<JsonFormsState>) {
-    super(ngRedux);
+  constructor(jsonformsService: JSONFormsAngularService) {
+    super(jsonformsService);
   }
   getEventValue = (event: any) => event.target.value;
 
@@ -125,7 +124,9 @@ export class AutocompleteControlRenderer extends JsonFormsControl {
   onSelect(ev: MatAutocompleteSelectedEvent) {
     const path = composeWithUi(this.uischema as ControlElement, this.path);
     this.shouldFilter = false;
-    this.ngRedux.dispatch(Actions.update(path, () => ev.option.value));
+    this.jsonFormsService.updateCore(
+      Actions.update(path, () => ev.option.value)
+    );
     this.triggerValidation();
   }
 

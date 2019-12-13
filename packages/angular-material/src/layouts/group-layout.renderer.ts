@@ -23,15 +23,9 @@
   THE SOFTWARE.
 */
 import { Component } from '@angular/core';
-import {
-  GroupLayout,
-  JsonFormsState,
-  RankedTester,
-  rankWith,
-  uiTypeIs
-} from '@jsonforms/core';
+import { GroupLayout, RankedTester, rankWith, uiTypeIs } from '@jsonforms/core';
 import { LayoutRenderer } from './layout.renderer';
-import { NgRedux } from '@angular-redux/store';
+import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
 
 @Component({
   selector: 'GroupLayoutRenderer',
@@ -45,8 +39,8 @@ import { NgRedux } from '@angular-redux/store';
   `
 })
 export class GroupLayoutRenderer extends LayoutRenderer<GroupLayout> {
-  constructor(ngRedux: NgRedux<JsonFormsState>) {
-    super(ngRedux);
+  constructor(jsonFormsService: JSONFormsAngularService) {
+    super(jsonFormsService);
   }
 }
 export const groupLayoutTester: RankedTester = rankWith(1, uiTypeIs('Group'));

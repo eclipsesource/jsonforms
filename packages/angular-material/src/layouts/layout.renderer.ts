@@ -22,7 +22,6 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { NgRedux } from '@angular-redux/store';
 import { OnDestroy, OnInit } from '@angular/core';
 import { JsonFormsBaseRenderer } from '@jsonforms/angular';
 import {
@@ -33,23 +32,24 @@ import {
   UISchemaElement
 } from '@jsonforms/core';
 import { Subscription } from 'rxjs';
+import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
 
 export class LayoutRenderer<T extends Layout> extends JsonFormsBaseRenderer<T>
   implements OnInit, OnDestroy {
   hidden: boolean;
   private subscription: Subscription;
 
-  constructor(private ngRedux: NgRedux<JsonFormsState>) {
+  constructor(private jsonFormsService: JSONFormsAngularService) {
     super();
   }
 
   ngOnInit() {
-    this.subscription = this.ngRedux
-      .select()
-      .subscribe((state: JsonFormsState) => {
+    this.subscription = this.jsonFormsService.subscribe({
+      next: (state: JsonFormsState) => {
         const props = mapStateToLayoutProps(state, this.getOwnProps());
         this.hidden = !props.visible;
-      });
+      }
+    });
   }
 
   ngOnDestroy() {

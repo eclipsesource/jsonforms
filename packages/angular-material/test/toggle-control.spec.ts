@@ -22,8 +22,6 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { NgRedux } from '@angular-redux/store';
-import { MockNgRedux } from '@angular-redux/store/testing';
 import {
   MatError,
   MatFormFieldModule,
@@ -38,6 +36,7 @@ import {
 } from '@jsonforms/angular-test';
 import { ToggleControlRenderer, ToggleControlRendererTester } from '../src';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
 
 describe('Material boolean field tester', () => {
   const uischema = {
@@ -60,7 +59,7 @@ describe('Material boolean field tester', () => {
   });
 });
 const imports = [MatSlideToggleModule, MatFormFieldModule, FlexLayoutModule];
-const providers = [{ provide: NgRedux, useFactory: MockNgRedux.getInstance }];
+const providers = [JSONFormsAngularService];
 const componentUT: any = ToggleControlRenderer;
 const errorTest: ErrorTestExpectation = {
   errorInstance: MatError,

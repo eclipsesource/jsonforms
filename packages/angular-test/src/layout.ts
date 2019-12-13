@@ -23,10 +23,9 @@
   THE SOFTWARE.
 */
 import { JsonFormsOutlet, UnknownRenderer } from '@jsonforms/angular';
-import { MockNgRedux } from '@angular-redux/store/lib/testing';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
-import { NgRedux } from '@angular-redux/store';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
 
 export const beforeEachLayoutTest = <LAYOUT>(
   Renderer: any,
@@ -35,10 +34,7 @@ export const beforeEachLayoutTest = <LAYOUT>(
   TestBed.configureTestingModule({
     declarations: [Renderer, UnknownRenderer, JsonFormsOutlet, ...declarations],
     imports,
-    providers: [
-      { provide: NgRedux, useFactory: MockNgRedux.getInstance },
-      ...providers
-    ]
+    providers: [JSONFormsAngularService, ...providers]
   })
     .overrideModule(BrowserDynamicTestingModule, {
       set: {
@@ -46,6 +42,5 @@ export const beforeEachLayoutTest = <LAYOUT>(
       }
     })
     .compileComponents();
-  MockNgRedux.reset();
   return TestBed.createComponent(Renderer);
 };

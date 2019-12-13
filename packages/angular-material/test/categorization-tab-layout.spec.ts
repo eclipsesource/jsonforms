@@ -22,8 +22,6 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { NgRedux } from '@angular-redux/store';
-import { MockNgRedux } from '@angular-redux/store/testing';
 import { DebugElement } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import {
@@ -38,7 +36,8 @@ import { JsonFormsOutlet, UnknownRenderer } from '@jsonforms/angular';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { CategorizationTabLayoutRenderer } from '../src';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { setupMockStore } from '@jsonforms/angular-test';
+import { setupMockStore, getJsonFormsService } from '@jsonforms/angular-test';
+import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
 
 describe('Categorization tab layout', () => {
   let fixture: ComponentFixture<any>;
@@ -65,7 +64,7 @@ describe('Categorization tab layout', () => {
         UnknownRenderer
       ],
       imports: [MatTabsModule, FlexLayoutModule, NoopAnimationsModule],
-      providers: [{ provide: NgRedux, useFactory: MockNgRedux.getInstance }]
+      providers: [JSONFormsAngularService]
     })
       .overrideModule(BrowserDynamicTestingModule, {
         set: {
@@ -74,7 +73,6 @@ describe('Categorization tab layout', () => {
       })
       .compileComponents();
 
-    MockNgRedux.reset();
     fixture = TestBed.createComponent(CategorizationTabLayoutRenderer);
     component = fixture.componentInstance;
   });
@@ -110,8 +108,8 @@ describe('Categorization tab layout', () => {
       ]
     };
 
-    const mockSubStore = setupMockStore(fixture, { uischema, schema, data });
-    mockSubStore.complete();
+    setupMockStore(fixture, { uischema, schema, data });
+
     fixture.detectChanges();
     fixture.whenRenderingDone().then(() => {
       fixture.detectChanges();
@@ -174,7 +172,7 @@ describe('Categorization tab layout', () => {
         }
       ]
     };
-    const mockSubStore = setupMockStore(fixture, { uischema, schema, data });
+    setupMockStore(fixture, { uischema, schema, data });
     fixture.detectChanges();
     fixture.whenRenderingDone().then(() => {
       fixture.detectChanges();
@@ -219,15 +217,13 @@ describe('Categorization tab layout', () => {
           }
         ]
       };
-      mockSubStore.next({
-        jsonforms: {
-          core: {
-            data,
-            schema
-          }
+      getJsonFormsService(component).init({
+        core: {
+          data,
+          schema,
+          uischema: undefined
         }
       });
-      mockSubStore.complete();
       fixture.detectChanges();
 
       fixture.whenRenderingDone().then(() => {
@@ -275,9 +271,8 @@ describe('Categorization tab layout', () => {
         }
       ]
     };
-    const mockSubStore = setupMockStore(fixture, { uischema, schema, data });
+    setupMockStore(fixture, { uischema, schema, data });
     component.visible = false;
-    mockSubStore.complete();
     fixture.detectChanges();
     fixture.whenRenderingDone().then(() => {
       expect(fixture.nativeElement.children[0].style.display).toBe('none');

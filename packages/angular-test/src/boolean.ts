@@ -22,13 +22,17 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { MockNgRedux } from '@angular-redux/store/testing';
 import { DebugElement, Type } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { JsonFormsControl } from '@jsonforms/angular';
-import { ControlElement, JsonSchema } from '@jsonforms/core';
-import { baseSetup, ErrorTestExpectation, TestConfig } from './util';
+import { ControlElement, JsonSchema, Actions } from '@jsonforms/core';
+import {
+  baseSetup,
+  ErrorTestExpectation,
+  TestConfig,
+  getJsonFormsService
+} from './util';
 
 const prepareComponent = <C extends JsonFormsControl, I>(
   testConfig: TestConfig<C>,
@@ -84,20 +88,14 @@ export const booleanBaseTest = <C extends JsonFormsControl, I>(
   });
 
   it('should render', () => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
     component.uischema = uischema;
 
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data,
-          schema: defaultBooleanTestSchema
-        }
-      }
-    });
-    mockSubStore.complete();
-    fixture.detectChanges();
+    getJsonFormsService(component).init();
+    getJsonFormsService(component).updateCore(
+      Actions.init(data, defaultBooleanTestSchema)
+    );
     component.ngOnInit();
+    fixture.detectChanges();
     expect(component.data).toBe(true);
     expect(checkboxInstance.checked).toBe(true);
     expect(checkboxInstance.disabled).toBe(false);
@@ -108,153 +106,100 @@ export const booleanBaseTest = <C extends JsonFormsControl, I>(
     expect(hasDisplayNone || hasHidden).toBeFalsy();
   });
   it('should support updating the state', () => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
     component.uischema = uischema;
 
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data,
-          schema: defaultBooleanTestSchema
-        }
-      }
-    });
-    fixture.detectChanges();
+    getJsonFormsService(component).init();
+    getJsonFormsService(component).updateCore(
+      Actions.init(data, defaultBooleanTestSchema)
+    );
     component.ngOnInit();
+    fixture.detectChanges();
 
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data: { foo: false },
-          schema: defaultBooleanTestSchema
-        }
-      }
-    });
-    mockSubStore.complete();
+    getJsonFormsService(component).updateCore(
+      Actions.update('foo', () => false)
+    );
     fixture.detectChanges();
     expect(component.data).toBe(false);
     expect(checkboxInstance.checked).toBe(false);
   });
   it('should update with undefined value', () => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
     component.uischema = uischema;
 
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data,
-          schema: defaultBooleanTestSchema
-        }
-      }
-    });
-    fixture.detectChanges();
+    getJsonFormsService(component).init();
+    getJsonFormsService(component).updateCore(
+      Actions.init(data, defaultBooleanTestSchema)
+    );
     component.ngOnInit();
+    fixture.detectChanges();
 
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data: { foo: undefined },
-          schema: defaultBooleanTestSchema
-        }
-      }
-    });
-    mockSubStore.complete();
+    getJsonFormsService(component).updateCore(
+      Actions.update('foo', () => undefined)
+    );
     fixture.detectChanges();
     expect(component.data).toBe(undefined);
     expect(checkboxInstance.checked).toBe(false);
   });
   it('should update with null value', () => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
     component.uischema = uischema;
 
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data,
-          schema: defaultBooleanTestSchema
-        }
-      }
-    });
-    fixture.detectChanges();
+    getJsonFormsService(component).init();
+    getJsonFormsService(component).updateCore(
+      Actions.init(data, defaultBooleanTestSchema)
+    );
     component.ngOnInit();
+    fixture.detectChanges();
 
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data: { foo: null },
-          schema: defaultBooleanTestSchema
-        }
-      }
-    });
-    mockSubStore.complete();
+    getJsonFormsService(component).updateCore(
+      Actions.update('foo', () => null)
+    );
     fixture.detectChanges();
     expect(component.data).toBe(null);
     expect(checkboxInstance.checked).toBe(false);
   });
   it('should not update with wrong ref', () => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
     component.uischema = uischema;
 
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data,
-          schema: defaultBooleanTestSchema
-        }
-      }
-    });
-    fixture.detectChanges();
+    getJsonFormsService(component).init();
+    getJsonFormsService(component).updateCore(
+      Actions.init(data, defaultBooleanTestSchema)
+    );
     component.ngOnInit();
+    fixture.detectChanges();
 
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data: { foo: true, bar: false },
-          schema: defaultBooleanTestSchema
-        }
-      }
-    });
-    mockSubStore.complete();
+    getJsonFormsService(component).updateCore(
+      Actions.update('foo', () => true)
+    );
+    getJsonFormsService(component).updateCore(
+      Actions.update('bar', () => false)
+    );
     fixture.detectChanges();
     expect(component.data).toBe(true);
     expect(checkboxInstance.checked).toBe(true);
   });
   // store needed as we evaluate the calculated enabled value to disable/enable the control
   it('can be disabled', () => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
     component.uischema = uischema;
     component.disabled = true;
 
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data,
-          schema: defaultBooleanTestSchema
-        }
-      }
-    });
-    mockSubStore.complete();
-    fixture.detectChanges();
+    getJsonFormsService(component).init();
+    getJsonFormsService(component).updateCore(
+      Actions.init(data, defaultBooleanTestSchema)
+    );
     component.ngOnInit();
+    fixture.detectChanges();
     expect(checkboxInstance.disabled).toBe(true);
   });
   // store needed as we evaluate the calculated enabled value to disable/enable the control
   it('can be hidden', () => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
     component.uischema = uischema;
     component.visible = false;
 
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data,
-          schema: defaultBooleanTestSchema
-        }
-      }
-    });
-    mockSubStore.complete();
-    fixture.detectChanges();
+    getJsonFormsService(component).init();
+    getJsonFormsService(component).updateCore(
+      Actions.init(data, defaultBooleanTestSchema)
+    );
     component.ngOnInit();
+    fixture.detectChanges();
     // the component is wrapped in a div
     const hasDisplayNone =
       'none' === fixture.nativeElement.children[0].style.display;
@@ -266,8 +211,12 @@ export const booleanBaseTest = <C extends JsonFormsControl, I>(
     component.uischema = uischema;
     component.id = 'myId';
 
-    fixture.detectChanges();
+    getJsonFormsService(component).init();
+    getJsonFormsService(component).updateCore(
+      Actions.init(data, defaultBooleanTestSchema)
+    );
     component.ngOnInit();
+    fixture.detectChanges();
     expect(checkboxNativeElement.id).toBe('myId');
   });
 };
@@ -295,18 +244,11 @@ export const booleanInputEventTest = <C extends JsonFormsControl, I>(
   });
 
   it('should update via input event', () => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
     component.uischema = uischema;
-
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data,
-          schema: defaultBooleanTestSchema
-        }
-      }
-    });
-    mockSubStore.complete();
+    getJsonFormsService(component).init();
+    getJsonFormsService(component).updateCore(
+      Actions.init(data, defaultBooleanTestSchema)
+    );
     fixture.detectChanges();
     component.ngOnInit();
 
@@ -335,24 +277,25 @@ export const booleanErrorTest = <C extends JsonFormsControl, I>(
     component = preparedComponents.component;
   });
   it('should display errors', () => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
     component.uischema = uischema;
 
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data,
-          schema: defaultBooleanTestSchema,
-          errors: [
-            {
-              dataPath: 'foo',
-              message: 'Hi, this is me, test error!'
-            }
-          ]
-        }
+    getJsonFormsService(component).init({
+      core: {
+        data,
+        schema: defaultBooleanTestSchema,
+        errors: [
+          {
+            dataPath: 'foo',
+            message: 'Hi, this is me, test error!',
+            keyword: '',
+            params: '',
+            schemaPath: ''
+          }
+        ],
+        uischema: undefined
       }
     });
-    mockSubStore.complete();
+
     component.ngOnInit();
     fixture.detectChanges();
     const debugErrors: DebugElement[] = fixture.debugElement.queryAll(

@@ -27,11 +27,7 @@ import { GroupLayout, UISchemaElement } from '@jsonforms/core';
 import { MatCard, MatCardTitle } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
-import {
-  beforeEachLayoutTest,
-  initComponent,
-  setupMockStore
-} from '@jsonforms/angular-test';
+import { beforeEachLayoutTest, setupMockStore } from '@jsonforms/angular-test';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import {
   GroupLayoutRenderer,
@@ -57,10 +53,9 @@ describe('Group layout', () => {
     const uischema: UISchemaElement = {
       type: 'Group'
     };
-    initComponent(
-      fixture,
-      setupMockStore(fixture, { data: {}, schema: {}, uischema })
-    );
+    setupMockStore(fixture, { data: {}, schema: {}, uischema });
+    fixture.componentInstance.ngOnInit();
+    fixture.detectChanges();
     const card: DebugElement[] = fixture.debugElement.queryAll(
       By.directive(MatCard)
     );
@@ -73,10 +68,9 @@ describe('Group layout', () => {
       type: 'Group',
       elements: null
     };
-    initComponent(
-      fixture,
-      setupMockStore(fixture, { data: {}, schema: {}, uischema })
-    );
+    setupMockStore(fixture, { data: {}, schema: {}, uischema });
+    fixture.componentInstance.ngOnInit();
+    fixture.detectChanges();
     const card: DebugElement[] = fixture.debugElement.queryAll(
       By.directive(MatCard)
     );
@@ -90,10 +84,9 @@ describe('Group layout', () => {
       label: 'foo',
       elements: [{ type: 'Control' }, { type: 'Control' }]
     };
-    initComponent(
-      fixture,
-      setupMockStore(fixture, { data: {}, schema: {}, uischema })
-    );
+    setupMockStore(fixture, { data: {}, schema: {}, uischema });
+    fixture.componentInstance.ngOnInit();
+    fixture.detectChanges();
     const card: DebugElement[] = fixture.debugElement.queryAll(
       By.directive(MatCard)
     );

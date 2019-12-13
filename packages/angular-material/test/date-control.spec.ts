@@ -22,8 +22,6 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { NgRedux } from '@angular-redux/store';
-import { MockNgRedux } from '@angular-redux/store/testing';
 import { DebugElement } from '@angular/core';
 import {
   ComponentFixture,
@@ -42,10 +40,15 @@ import {
 } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { ErrorTestExpectation, setupMockStore } from '@jsonforms/angular-test';
-import { ControlElement, JsonSchema } from '@jsonforms/core';
+import {
+  ErrorTestExpectation,
+  setupMockStore,
+  getJsonFormsService
+} from '@jsonforms/angular-test';
+import { ControlElement, JsonSchema, Actions } from '@jsonforms/core';
 import { DateControlRenderer, DateControlRendererTester } from '../src';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
 
 const data = { foo: '2018-01-01' };
 const schema: JsonSchema = {
@@ -76,7 +79,7 @@ const imports = [
   ReactiveFormsModule,
   FlexLayoutModule
 ];
-const providers = [{ provide: NgRedux, useFactory: MockNgRedux.getInstance }];
+const providers = [JSONFormsAngularService];
 const componentUT: any = DateControlRenderer;
 const errorTest: ErrorTestExpectation = {
   errorInstance: MatError,
@@ -94,8 +97,6 @@ describe('Date control Base Tests', () => {
       imports: imports,
       providers: providers
     }).compileComponents();
-
-    MockNgRedux.reset();
   });
   beforeEach(() => {
     fixture = TestBed.createComponent(componentUT);
@@ -105,10 +106,12 @@ describe('Date control Base Tests', () => {
   });
 
   it('should render', () => {
-    const mockSubStore = setupMockStore(fixture, { uischema, schema, data });
-    mockSubStore.complete();
-    fixture.detectChanges();
+    setupMockStore(fixture, { uischema, schema, data });
+    getJsonFormsService(component).updateCore(
+      Actions.init(data, schema, uischema)
+    );
     component.ngOnInit();
+    fixture.detectChanges();
     expect(component.data).toBe('2018-01-01');
     // auto? shown with US layout
     expect(inputElement.value).toBe('1/1/2018');
@@ -118,104 +121,101 @@ describe('Date control Base Tests', () => {
   });
 
   it('should support updating the state', () => {
-    const mockSubStore = setupMockStore(fixture, { uischema, schema, data });
-    fixture.detectChanges();
+    setupMockStore(fixture, { uischema, schema, data });
+    getJsonFormsService(component).updateCore(
+      Actions.init(data, schema, uischema)
+    );
     component.ngOnInit();
+    fixture.detectChanges();
 
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data: { foo: '2018-03-03' },
-          schema: schema
-        }
-      }
-    });
-    mockSubStore.complete();
+    getJsonFormsService(component).updateCore(
+      Actions.update('foo', () => '2018-03-03')
+    );
     fixture.detectChanges();
     expect(component.data).toBe('2018-03-03');
     expect(inputElement.value).toBe('3/3/2018');
   });
   it('should update with undefined value', () => {
-    const mockSubStore = setupMockStore(fixture, { uischema, schema, data });
-    fixture.detectChanges();
+    setupMockStore(fixture, { uischema, schema, data });
+    getJsonFormsService(component).updateCore(
+      Actions.init(data, schema, uischema)
+    );
     component.ngOnInit();
+    fixture.detectChanges();
 
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data: { foo: undefined },
-          schema: schema
-        }
-      }
-    });
-    mockSubStore.complete();
+    getJsonFormsService(component).updateCore(
+      Actions.update('foo', () => undefined)
+    );
     fixture.detectChanges();
     expect(component.data).toBe(undefined);
     expect(inputElement.value).toBe('');
   });
   it('should update with null value', () => {
-    const mockSubStore = setupMockStore(fixture, { uischema, schema, data });
-    fixture.detectChanges();
+    setupMockStore(fixture, { uischema, schema, data });
+    getJsonFormsService(component).updateCore(
+      Actions.init(data, schema, uischema)
+    );
     component.ngOnInit();
+    fixture.detectChanges();
 
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data: { foo: null },
-          schema: schema
-        }
-      }
-    });
-    mockSubStore.complete();
+    getJsonFormsService(component).updateCore(
+      Actions.update('foo', () => null)
+    );
     fixture.detectChanges();
     expect(component.data).toBe(null);
     expect(inputElement.value).toBe('');
   });
   it('should not update with wrong ref', () => {
-    const mockSubStore = setupMockStore(fixture, { uischema, schema, data });
-    fixture.detectChanges();
+    setupMockStore(fixture, { uischema, schema, data });
+    getJsonFormsService(component).updateCore(
+      Actions.init(data, schema, uischema)
+    );
     component.ngOnInit();
+    fixture.detectChanges();
 
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data: { foo: '2018-01-01', bar: '2018-03-03' },
-          schema: schema
-        }
-      }
-    });
-    mockSubStore.complete();
+    getJsonFormsService(component).updateCore(
+      Actions.update('foo', () => '2018-01-01')
+    );
+    getJsonFormsService(component).updateCore(
+      Actions.update('bar', () => '2018-03-03')
+    );
     fixture.detectChanges();
     expect(component.data).toBe('2018-01-01');
     expect(inputElement.value).toBe('1/1/2018');
   });
   // store needed as we evaluate the calculated enabled value to disable/enable the control
   it('can be disabled', () => {
-    const mockSubStore = setupMockStore(fixture, { uischema, schema, data });
+    setupMockStore(fixture, { uischema, schema, data });
     component.disabled = true;
+    getJsonFormsService(component).updateCore(
+      Actions.init(data, schema, uischema)
+    );
 
-    mockSubStore.complete();
-    fixture.detectChanges();
     component.ngOnInit();
+    fixture.detectChanges();
     expect(inputElement.disabled).toBe(true);
   });
   // store needed as we evaluate the calculated enabled value to disable/enable the control
-  it('can be disabled', () => {
-    const mockSubStore = setupMockStore(fixture, { uischema, schema, data });
+  it('can be hidden', () => {
+    setupMockStore(fixture, { uischema, schema, data });
     component.visible = false;
+    getJsonFormsService(component).updateCore(
+      Actions.init(data, schema, uischema)
+    );
 
-    mockSubStore.complete();
-    fixture.detectChanges();
     component.ngOnInit();
+    fixture.detectChanges();
     // the component is wrapped in a div
     expect(fixture.nativeElement.children[0].style.display).toBe('none');
   });
   it('id should be present in output', () => {
     component.uischema = uischema;
     component.id = 'myId';
+    getJsonFormsService(component).init();
+    getJsonFormsService(component).updateCore(Actions.init(data, schema));
 
-    fixture.detectChanges();
     component.ngOnInit();
+    fixture.detectChanges();
     expect(inputElement.id).toBe('myId');
   });
 });
@@ -229,8 +229,6 @@ describe('Date control Input Event Tests', () => {
       imports: imports,
       providers: providers
     }).compileComponents();
-
-    MockNgRedux.reset();
   });
   beforeEach(() => {
     fixture = TestBed.createComponent(componentUT);
@@ -239,10 +237,12 @@ describe('Date control Input Event Tests', () => {
     inputElement = fixture.debugElement.query(By.css('input')).nativeElement;
   });
   it('should update via input event', fakeAsync(() => {
-    const mockSubStore = setupMockStore(fixture, { uischema, schema, data });
-    mockSubStore.complete();
-    fixture.detectChanges();
+    setupMockStore(fixture, { uischema, schema, data });
+    getJsonFormsService(component).updateCore(
+      Actions.init(data, schema, uischema)
+    );
     component.ngOnInit();
+    fixture.detectChanges();
 
     const spy = spyOn(component, 'onChange');
 
@@ -274,29 +274,29 @@ describe('Date control Error Tests', () => {
       imports: imports,
       providers: providers
     }).compileComponents();
-
-    MockNgRedux.reset();
   });
   beforeEach(() => {
     fixture = TestBed.createComponent(componentUT);
     component = fixture.componentInstance;
   });
   it('should display errors', () => {
-    const mockSubStore = setupMockStore(fixture, {
+    setupMockStore(fixture, {
       uischema,
       schema,
       data,
       errors: [
         {
           dataPath: 'foo',
-          message: 'Hi, this is me, test error!'
+          message: 'Hi, this is me, test error!',
+          params: '',
+          keyword: '',
+          schemaPath: ''
         }
       ]
     });
 
-    mockSubStore.complete();
-    fixture.detectChanges();
     component.ngOnInit();
+    fixture.detectChanges();
     const debugErrors: DebugElement[] = fixture.debugElement.queryAll(
       By.directive(errorTest.errorInstance)
     );

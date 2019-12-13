@@ -22,14 +22,13 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { NgRedux } from '@angular-redux/store';
-import { MockNgRedux } from '@angular-redux/store/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { JsonSchema, LabelElement } from '@jsonforms/core';
 
 import { LabelRenderer, LabelRendererTester } from '../src/other';
 import { setupMockStore } from '@jsonforms/angular-test';
+import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
 
 const data = {};
 const schema: JsonSchema = {
@@ -50,7 +49,7 @@ describe('Material label field tester', () => {
     expect(LabelRendererTester(uischema, schema)).toBe(4);
   });
 });
-const providers = [{ provide: NgRedux, useFactory: MockNgRedux.getInstance }];
+const providers = [JSONFormsAngularService];
 const componentUT: any = LabelRenderer;
 
 describe('Label Renderer Base Tests', () => {
@@ -62,8 +61,6 @@ describe('Label Renderer Base Tests', () => {
       declarations: [componentUT],
       providers: providers
     }).compileComponents();
-
-    MockNgRedux.reset();
   });
   beforeEach(() => {
     fixture = TestBed.createComponent(componentUT);
@@ -73,8 +70,7 @@ describe('Label Renderer Base Tests', () => {
   });
 
   it('should render', () => {
-    const mockSubStore = setupMockStore(fixture, { uischema, schema, data });
-    mockSubStore.complete();
+    setupMockStore(fixture, { uischema, schema, data });
     fixture.detectChanges();
     component.ngOnInit();
     expect(labelElement.innerText.trim()).toBe('FooBar');

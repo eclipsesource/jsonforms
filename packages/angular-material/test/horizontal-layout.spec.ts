@@ -25,9 +25,7 @@
 import { ComponentFixture } from '@angular/core/testing';
 import { HorizontalLayout, UISchemaElement } from '@jsonforms/core';
 import { beforeEachLayoutTest, setupMockStore } from '@jsonforms/angular-test';
-import { Subject } from 'rxjs';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { initComponent } from '@jsonforms/angular-test';
 import {
   HorizontalLayoutRenderer,
   horizontalLayoutTester
@@ -53,12 +51,13 @@ describe('Horizontal layout', () => {
     const uischema: UISchemaElement = {
       type: 'HorizontalLayout'
     };
-    const mockSubStore: Subject<any> = setupMockStore(fixture, {
+    setupMockStore(fixture, {
       data: {},
       schema: {},
       uischema
     });
-    initComponent(fixture, mockSubStore);
+    fixture.componentInstance.ngOnInit();
+    fixture.detectChanges();
     expect(fixture.nativeElement.children[0].children.length).toBe(0);
   });
 
@@ -67,12 +66,13 @@ describe('Horizontal layout', () => {
       type: 'HorizontalLayout',
       elements: null
     };
-    const mockSubStore: Subject<any> = setupMockStore(fixture, {
+    setupMockStore(fixture, {
       data: {},
       schema: {},
       uischema
     });
-    initComponent(fixture, mockSubStore);
+    fixture.componentInstance.ngOnInit();
+    fixture.detectChanges();
     expect(fixture.nativeElement.children[0].children.length).toBe(0);
   });
 
@@ -81,12 +81,13 @@ describe('Horizontal layout', () => {
       type: 'HorizontalLayout',
       elements: [{ type: 'Control' }, { type: 'Control' }]
     };
-    const mockSubStore: Subject<any> = setupMockStore(fixture, {
+    setupMockStore(fixture, {
       data: {},
       schema: {},
       uischema
     });
-    initComponent(fixture, mockSubStore);
+    fixture.componentInstance.ngOnInit();
+    fixture.detectChanges();
     expect(fixture.nativeElement.children[0].children.length).toBe(2);
     expect(fixture.nativeElement.children[0].hidden).toBe(false);
   });

@@ -24,14 +24,13 @@
 */
 import { Component } from '@angular/core';
 import {
-  JsonFormsState,
   RankedTester,
   rankWith,
   uiTypeIs,
   VerticalLayout
 } from '@jsonforms/core';
 import { LayoutRenderer } from './layout.renderer';
-import { NgRedux } from '@angular-redux/store';
+import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
 
 @Component({
   selector: 'VerticalLayoutRenderer',
@@ -44,8 +43,8 @@ import { NgRedux } from '@angular-redux/store';
   `
 })
 export class VerticalLayoutRenderer extends LayoutRenderer<VerticalLayout> {
-  constructor(ngRedux: NgRedux<JsonFormsState>) {
-    super(ngRedux);
+  constructor(jsonFormsService: JSONFormsAngularService) {
+    super(jsonFormsService);
   }
 }
 export const verticalLayoutTester: RankedTester = rankWith(

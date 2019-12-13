@@ -22,7 +22,6 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { NgRedux } from '@angular-redux/store';
 import { Component } from '@angular/core';
 import { JsonFormsBaseRenderer } from '@jsonforms/angular';
 import {
@@ -36,46 +35,7 @@ import {
   uiTypeIs
 } from '@jsonforms/core';
 import { Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
-@Component({
-  selector: 'LabelRenderer',
-  template: `
-    <label class="mat-title" fxFlex> {{ label }} </label>
-  `
-})
-export class LabelRenderer extends JsonFormsBaseRenderer<LabelElement> {
-  label: string;
-  visible: boolean;
-
-  private subscription: Subscription;
-
-  constructor(private ngRedux: NgRedux<JsonFormsState>) {
-    super();
-  }
-  ngOnInit() {
-    const labelElement = this.uischema;
-    this.label =
-      labelElement.text !== undefined &&
-      labelElement.text !== null &&
-      labelElement.text;
-    this.subscription = this.ngRedux
-      .select()
-      .pipe(map((s: JsonFormsState) => mapStateToProps(s, this.getOwnProps())))
-      .subscribe(props => {
-        this.visible = props.visible;
-      });
-  }
-
-  ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
-  }
-
-  mapAdditionalProps() {
-    this.label = this.uischema.text;
-  }
-}
+import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
 
 const mapStateToProps = (
   state: JsonFormsState,
@@ -90,5 +50,45 @@ const mapStateToProps = (
     visible
   };
 };
+
+@Component({
+  selector: 'LabelRenderer',
+  template: `
+    <label class="mat-title" fxFlex> {{ label }} </label>
+  `
+})
+export class LabelRenderer extends JsonFormsBaseRenderer<LabelElement> {
+  label: string;
+  visible: boolean;
+
+  private subscription: Subscription;
+
+  constructor(private jsonFormsService: JSONFormsAngularService) {
+    super();
+  }
+  ngOnInit() {
+    const labelElement = this.uischema;
+    this.label =
+      labelElement.text !== undefined &&
+      labelElement.text !== null &&
+      labelElement.text;
+    this.subscription = this.jsonFormsService.subscribe({
+      next: (state: JsonFormsState) => {
+        const props = mapStateToProps(state, this.getOwnProps());
+        this.visible = props.visible;
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
+
+  mapAdditionalProps() {
+    this.label = this.uischema.text;
+  }
+}
 
 export const LabelRendererTester: RankedTester = rankWith(4, uiTypeIs('Label'));

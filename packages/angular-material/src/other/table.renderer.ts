@@ -23,7 +23,6 @@
   THE SOFTWARE.
 */
 import startCase from 'lodash/startCase';
-import { NgRedux } from '@angular-redux/store';
 import { Component } from '@angular/core';
 import { JsonFormsArrayControl } from '@jsonforms/angular';
 import {
@@ -32,7 +31,6 @@ import {
   deriveTypes,
   isObjectArrayControl,
   isPrimitiveArrayControl,
-  JsonFormsState,
   JsonSchema,
   or,
   OwnPropsOfRenderer,
@@ -42,6 +40,7 @@ import {
   setReadonly,
   UISchemaElement
 } from '@jsonforms/core';
+import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
 
 @Component({
   selector: 'TableRenderer',
@@ -76,8 +75,8 @@ export class TableRenderer extends JsonFormsArrayControl {
   items: ColumnDescription[];
   readonly columnsToIgnore = ['array', 'object'];
 
-  constructor(ngRedux: NgRedux<JsonFormsState>) {
-    super(ngRedux);
+  constructor(jsonformsService: JSONFormsAngularService) {
+    super(jsonformsService);
   }
   trackElement(index: number, _element: any) {
     return index ? index : null;

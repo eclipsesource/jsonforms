@@ -23,31 +23,29 @@
   THE SOFTWARE.
 */
 import {
-  ControlProps,
-  ControlWithDetailProps,
   JsonFormsState,
-  mapDispatchToControlProps,
   mapStateToControlProps,
-  mapStateToControlWithDetailProps
+  mapStateToControlWithDetailProps,
+  StatePropsOfControl,
+  StatePropsOfControlWithDetail
 } from '@jsonforms/core';
 import { OnDestroy, OnInit } from '@angular/core';
 import { JsonFormsAbstractControl } from './abstract-control';
 
-export class JsonFormsControl extends JsonFormsAbstractControl<ControlProps>
+export class JsonFormsControl
+  extends JsonFormsAbstractControl<StatePropsOfControl>
   implements OnInit, OnDestroy {
-  protected mapToProps(state: JsonFormsState): ControlProps {
+  protected mapToProps(state: JsonFormsState): StatePropsOfControl {
     const props = mapStateToControlProps(state, this.getOwnProps());
-    const dispatch = mapDispatchToControlProps(this.ngRedux.dispatch);
-    return { ...props, ...dispatch };
+    return { ...props };
   }
 }
 
 export class JsonFormsControlWithDetail
-  extends JsonFormsAbstractControl<ControlWithDetailProps>
+  extends JsonFormsAbstractControl<StatePropsOfControlWithDetail>
   implements OnInit, OnDestroy {
-  protected mapToProps(state: JsonFormsState): ControlWithDetailProps {
+  protected mapToProps(state: JsonFormsState): StatePropsOfControlWithDetail {
     const props = mapStateToControlWithDetailProps(state, this.getOwnProps());
-    const dispatch = mapDispatchToControlProps(this.ngRedux.dispatch);
-    return { ...props, ...dispatch };
+    return { ...props };
   }
 }

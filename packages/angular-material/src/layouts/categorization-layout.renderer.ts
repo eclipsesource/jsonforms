@@ -33,9 +33,9 @@ import {
   uiTypeIs
 } from '@jsonforms/core';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { NgRedux } from '@angular-redux/store';
 import { JsonFormsBaseRenderer } from '@jsonforms/angular';
 import { Subscription } from 'rxjs';
+import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
 
 @Component({
   selector: 'jsonforms-categorization-layout',
@@ -58,17 +58,17 @@ export class CategorizationTabLayoutRenderer
   hidden: boolean;
   private subscription: Subscription;
 
-  constructor(private ngRedux: NgRedux<JsonFormsState>) {
+  constructor(private jsonFormsService: JSONFormsAngularService) {
     super();
   }
 
   ngOnInit() {
-    this.subscription = this.ngRedux
-      .select()
-      .subscribe((state: JsonFormsState) => {
+    this.subscription = this.jsonFormsService.subscribe({
+      next: (state: JsonFormsState) => {
         const props = mapStateToLayoutProps(state, this.getOwnProps());
         this.hidden = !props.visible;
-      });
+      }
+    });
   }
 
   ngOnDestroy() {

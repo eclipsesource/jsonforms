@@ -24,7 +24,6 @@
 */
 import isEmpty from 'lodash/isEmpty';
 import startCase from 'lodash/startCase';
-import { NgRedux } from '@angular-redux/store';
 import { Component } from '@angular/core';
 import { JsonFormsControlWithDetail } from '@jsonforms/angular';
 import {
@@ -32,12 +31,12 @@ import {
   findUISchema,
   GroupLayout,
   isObjectControl,
-  JsonFormsState,
   RankedTester,
   rankWith,
   setReadonly,
   UISchemaElement
 } from '@jsonforms/core';
+import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
 
 @Component({
   selector: 'ObjectRenderer',
@@ -54,8 +53,8 @@ import {
 })
 export class ObjectControlRenderer extends JsonFormsControlWithDetail {
   detailUiSchema: UISchemaElement;
-  constructor(ngRedux: NgRedux<JsonFormsState>) {
-    super(ngRedux);
+  constructor(jsonformsService: JSONFormsAngularService) {
+    super(jsonformsService);
   }
   mapAdditionalProps(props: ControlWithDetailProps) {
     this.detailUiSchema = findUISchema(

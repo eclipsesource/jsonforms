@@ -42,13 +42,13 @@ import {
 import { RankedTester } from '../testers';
 import { JsonSchema } from '../models/jsonSchema';
 import {
-  composePaths,
   CombinatorKeyword,
+  composePaths,
   composeWithUi,
   createLabelDescriptionFrom,
   formatErrorMessage,
-  hasShowRule,
   hasEnableRule,
+  hasShowRule,
   isEnabled,
   isVisible,
   moveDown,
@@ -56,7 +56,7 @@ import {
   Resolve,
   resolveSubSchemas
 } from '../util';
-import { update } from '../actions';
+import { update, ValidCoreActions } from '../actions';
 import { ErrorObject } from 'ajv';
 import { JsonFormsState } from '../store';
 import { AnyAction, Dispatch } from 'redux';
@@ -583,7 +583,7 @@ export interface DispatchPropsOfArrayControl {
  * @returns {DispatchPropsOfArrayControl} dispatch props of an array control
  */
 export const mapDispatchToArrayControlProps = (
-  dispatch: Dispatch<AnyAction>
+  dispatch: Dispatch<ValidCoreActions>
 ): DispatchPropsOfArrayControl => ({
   addItem: (path: string, value: any) => () => {
     dispatch(

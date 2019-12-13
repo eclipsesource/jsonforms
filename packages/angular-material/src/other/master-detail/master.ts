@@ -26,7 +26,6 @@ import some from 'lodash/some';
 import get from 'lodash/get';
 import { Component } from '@angular/core';
 import { JsonFormsArrayControl } from '@jsonforms/angular';
-import { NgRedux } from '@angular-redux/store';
 import {
   ArrayControlProps,
   ControlElement,
@@ -38,8 +37,10 @@ import {
   RankedTester,
   rankWith,
   setReadonly,
+  StatePropsOfArrayControl,
   uiTypeIs
 } from '@jsonforms/core';
+import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
 
 const keywords = ['#', 'properties', 'items'];
 
@@ -142,8 +143,8 @@ export class MasterListComponent extends JsonFormsArrayControl {
   propsPath: string;
   highlightedIdx: number;
 
-  constructor(ngRedux: NgRedux<JsonFormsState>) {
-    super(ngRedux);
+  constructor(jsonformsService: JSONFormsAngularService) {
+    super(jsonformsService);
   }
 
   onListItemHover(idx: number) {
@@ -157,7 +158,7 @@ export class MasterListComponent extends JsonFormsArrayControl {
   ngOnInit() {
     super.ngOnInit();
     const { addItem, removeItems } = mapDispatchToArrayControlProps(
-      this.ngRedux.dispatch
+      this.jsonFormsService.updateCore
     );
     this.addItem = addItem;
     this.removeItems = removeItems;
@@ -241,10 +242,9 @@ export class MasterListComponent extends JsonFormsArrayControl {
     this.removeItems(this.propsPath, [item])();
   }
 
-  protected mapToProps(state: JsonFormsState): ArrayControlProps {
+  protected mapToProps(state: JsonFormsState): StatePropsOfArrayControl {
     const props = mapStateToArrayControlProps(state, this.getOwnProps());
-    const dispatch = mapDispatchToArrayControlProps(this.ngRedux.dispatch);
-    return { ...props, ...dispatch };
+    return { ...props };
   }
 }
 

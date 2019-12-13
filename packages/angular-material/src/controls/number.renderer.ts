@@ -22,18 +22,17 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { NgRedux } from '@angular-redux/store';
 import { Component } from '@angular/core';
 import { JsonFormsControl } from '@jsonforms/angular';
 import {
   getLocale,
   isIntegerControl,
   isNumberControl,
-  JsonFormsState,
   or,
   RankedTester,
   rankWith
 } from '@jsonforms/core';
+import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
 
 @Component({
   selector: 'NumberControlRenderer',
@@ -66,8 +65,8 @@ export class NumberControlRenderer extends JsonFormsControl {
   numberFormat: Intl.NumberFormat;
   decimalSeparator: string;
 
-  constructor(ngRedux: NgRedux<JsonFormsState>) {
-    super(ngRedux);
+  constructor(jsonformsService: JSONFormsAngularService) {
+    super(jsonformsService);
   }
 
   onChange(ev: any) {
@@ -126,11 +125,13 @@ export class NumberControlRenderer extends JsonFormsControl {
 
   mapAdditionalProps() {
     if (this.scopedSchema) {
-      const defaultStep = isNumberControl(this.uischema, this.schema) ? 0.1 : 1;
+      const defaultStep = isNumberControl(this.uischema, this.rootSchema)
+        ? 0.1
+        : 1;
       this.min = this.scopedSchema.minimum;
       this.max = this.scopedSchema.maximum;
       this.multipleOf = this.scopedSchema.multipleOf || defaultStep;
-      const currentLocale = getLocale(this.ngRedux.getState());
+      const currentLocale = getLocale(this.jsonFormsService.getState());
       if (this.locale === undefined || this.locale !== currentLocale) {
         this.locale = currentLocale;
         this.numberFormat = new Intl.NumberFormat(this.locale, {
