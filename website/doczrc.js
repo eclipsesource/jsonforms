@@ -1,7 +1,7 @@
 import { css } from 'docz-plugin-css'
 
 export default {
-  title: "JSONForms",
+  title: "JSON Forms",
   plugins: [
     css({
       preprocessor: "postcss",

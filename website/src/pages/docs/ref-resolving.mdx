@@ -5,13 +5,13 @@ route: /docs/ref-resolving
 
 # Ref Resolving
 
-Sometimes it might not be possible to have just a single schema that you can pass to JSONForms 
+Sometimes it might not be possible to have just a single schema that you can pass to JSON Forms 
 or it might make sense to split up a very big schema into multiple smaller ones for maintenance reasons.
 
 If that's the case, you can add a custom ref resolver based on [JSON Schema $Ref parser](https://github.com/APIDevTools/json-schema-ref-parser) 
 that determines how `$ref`s will be resolved. You'll also need to adapt the AJV validator in order to enable validation of the referenced schema.
 
-To do, use the [`init` action](/docs/available-actions#initdata-any-schema-jsonschema-uischema-uischemaelement-options-initactionoptions--ajvajv) of JSONForms
+To do, use the [`init` action](/docs/available-actions#initdata-any-schema-jsonschema-uischema-uischemaelement-options-initactionoptions--ajvajv) of JSON Forms
 and pass in the ref resolver together with the AJV instance.
 
 Here's an eample of how to accomplish this. We'll first create a customized AJV instance. `yourSchemaObject` is the actual schema to be referenced
@@ -42,7 +42,7 @@ const yourSchemaResolver = {
 }
 ```
 
-Finally, you'll need to initialize JSONForms:
+Finally, you'll need to initialize JSON Forms:
 
 ```javascript
 store.dispatch(
