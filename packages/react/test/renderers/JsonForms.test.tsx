@@ -39,7 +39,8 @@ import {
   RendererProps,
   UISchemaElement,
   uiTypeIs,
-  unregisterRenderer
+  unregisterRenderer,
+  ControlElement
 } from '@jsonforms/core';
 import { isEqual } from 'lodash';
 import Enzyme from 'enzyme';
@@ -619,18 +620,20 @@ test('JsonForms should support two isolated components', () => {
     const errors = ctx.core.errors;
     return <h2>{errors ? errors.length : 0}</h2>;
   };
+  const fooControl: ControlElement = { type: 'Control', scope: '#/properties/foo' };
+  const barControl: ControlElement = { type: 'Control', scope: '#/properties/bar' };
   const wrapper = mount(
     <div>
       <JsonForms
         data={{ foo: '' }}
-        uischema={{ type: 'Control', scope: '#/properties/foo' }}
+        uischema={fooControl}
         schema={schema1}
         renderers={[{ tester: () => 3, renderer: customRenderer1 }]}
       />
       <JsonForms
         data={{ bar: 0 }}
         schema={schema2}
-        uischema={{ type: 'Control', scope: '#/properties/bar' }}
+        uischema={barControl}
         renderers={[{ tester: () => 3, renderer: customRenderer2 }]}
       />
     </div>

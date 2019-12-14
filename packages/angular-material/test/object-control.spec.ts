@@ -27,11 +27,9 @@ import { CommonModule } from '@angular/common';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
-import {
-  MatCardModule,
-  MatFormFieldModule,
-  MatInputModule
-} from '@angular/material';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { JsonFormsAngularService, JsonFormsModule } from '@jsonforms/angular';
 import { ControlElement } from '@jsonforms/core';
@@ -135,12 +133,14 @@ describe('Object Control', () => {
     component.schema = schema2;
 
     getJsonFormsService(component).init({
+
       renderers: renderers,
       core: {
         data: {},
         schema: schema2,
         uischema: undefined
       }
+
     });
     fixture.detectChanges();
     component.ngOnInit();
@@ -154,15 +154,19 @@ describe('Object Control', () => {
   }));
 
   it('render all elements', async(() => {
+
     component.uischema = uischema1;
     component.schema = schema2;
 
     getJsonFormsService(component).init({
+
+
       core: {
         data: {},
         schema: schema2,
         uischema: undefined
       }
+
     });
     getJsonFormsService(component).registerRenderers(renderers);
 
@@ -178,11 +182,14 @@ describe('Object Control', () => {
     component.schema = schema2;
 
     getJsonFormsService(component).init({
+
+
       core: {
         data: {},
         schema: schema2,
         uischema: undefined
       }
+
     });
     getJsonFormsService(component).registerRenderers(renderers);
     fixture.detectChanges();
@@ -193,16 +200,19 @@ describe('Object Control', () => {
   }));
 
   xit('can be disabled', async(() => {
+
     component.uischema = uischema1;
     component.schema = schema1;
     component.disabled = true;
 
     getJsonFormsService(component).init({
+
       core: {
         data: {},
         schema: schema1,
         uischema: undefined
       }
+
     });
     getJsonFormsService(component).registerRenderers(renderers);
     fixture.detectChanges();
@@ -212,6 +222,7 @@ describe('Object Control', () => {
     });
   }));
   xit('should be enabled by default', async(() => {
+
     component.uischema = uischema1;
     component.schema = schema1;
 
@@ -221,6 +232,7 @@ describe('Object Control', () => {
         schema: schema1,
         uischema: undefined
       }
+
     });
     getJsonFormsService(component).registerRenderers(renderers);
     component.ngOnInit();

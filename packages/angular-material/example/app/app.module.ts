@@ -25,7 +25,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { Actions, UISchemaTester } from '@jsonforms/core';
-import { LocaleValidationModule, TranslationModule } from 'angular-l10n';
 import { AppComponent } from './app.component';
 import { JsonFormsAngularMaterialModule } from '../../src/module';
 
@@ -36,17 +35,17 @@ import { JsonFormsAngularService } from '@jsonforms/angular';
   declarations: [AppComponent],
   imports: [
     BrowserModule,
-    JsonFormsAngularMaterialModule,
-    TranslationModule.forRoot({}),
-    LocaleValidationModule.forRoot()
+    JsonFormsAngularMaterialModule
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule {
   constructor(jsonformsService: JsonFormsAngularService) {
+
     jsonformsService.init(initialState.jsonforms);
-    const example = initialState.examples.data[0];
+    const example = initialState.examples.data[19];
+
     jsonformsService.updateCore(
       Actions.init(example.data, example.schema, example.uischema)
     );
@@ -70,9 +69,7 @@ export class AppModule {
       }
       return -1;
     };
-    jsonformsService.updateUiSchema(
-      Actions.registerUISchema(itemTester, uiSchema)
-    );
+    jsonformsService.updateUiSchema(Actions.registerUISchema(itemTester, uiSchema));
   }
 }
 
