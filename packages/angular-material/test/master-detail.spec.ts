@@ -25,13 +25,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
-import {
-  MatButtonModule,
-  MatIconModule,
-  MatListItem,
-  MatListModule,
-  MatSidenavModule
-} from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListItem, MatListModule } from '@angular/material/list';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
   JsonFormsAngularService,
@@ -42,7 +39,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { DebugElement } from '@angular/core';
 import { MasterListComponent } from '../src/other/master-detail/master';
 import { JsonFormsDetailComponent } from '../src/other/master-detail/detail';
-import { setupMockStore, getJsonFormsService } from '@jsonforms/angular-test';
+import { getJsonFormsService, setupMockStore } from '@jsonforms/angular-test';
 import { Actions } from '@jsonforms/core';
 
 describe('Master detail', () => {
@@ -229,9 +226,7 @@ describe('Master detail', () => {
 
     // delete 1st item
     spyOn(component, 'removeItems').and.callFake(() => () => {
-      getJsonFormsService(component).updateCore(
-        Actions.update('orders', () => moreData.orders.slice(1))
-      );
+      getJsonFormsService(component).updateCore(Actions.update('orders', () => moreData.orders.slice(1)));
       fixture.detectChanges();
     });
     const buttons: DebugElement[] = fixture.debugElement.queryAll(
@@ -273,9 +268,7 @@ describe('Master detail', () => {
     spyOn(component, 'removeItems').and.callFake(() => () => {
       const copy = moreData.orders.slice();
       copy.splice(1, 1);
-      getJsonFormsService(component).updateCore(
-        Actions.update('orders', () => copy)
-      );
+      getJsonFormsService(component).updateCore(Actions.update('orders', () => copy));
       fixture.detectChanges();
     });
     const buttons: DebugElement[] = fixture.debugElement.queryAll(
@@ -315,9 +308,7 @@ describe('Master detail', () => {
 
     // delete 1st item
     spyOn(component, 'removeItems').and.callFake(() => () => {
-      getJsonFormsService(component).updateCore(
-        Actions.update('orders', () => moreData.orders.slice(1))
-      );
+      getJsonFormsService(component).updateCore(Actions.update('orders', () => moreData.orders.slice(1)));
       fixture.detectChanges();
     });
     const buttons: DebugElement[] = fixture.debugElement.queryAll(
@@ -349,9 +340,7 @@ describe('Master detail', () => {
 
     // delete item
     spyOn(component, 'removeItems').and.callFake(() => () => {
-      getJsonFormsService(component).updateCore(
-        Actions.update('orders', () => [])
-      );
+      getJsonFormsService(component).updateCore(Actions.update('orders', () => []));
       fixture.detectChanges();
     });
     const buttons: DebugElement[] = fixture.debugElement.queryAll(

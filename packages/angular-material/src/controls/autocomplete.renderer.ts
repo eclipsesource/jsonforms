@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import { Component, Input } from '@angular/core';
-import { MatAutocompleteSelectedEvent } from '@angular/material';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 import {
   Actions,
@@ -123,9 +123,7 @@ export class AutocompleteControlRenderer extends JsonFormsControl {
   onSelect(ev: MatAutocompleteSelectedEvent) {
     const path = composeWithUi(this.uischema as ControlElement, this.path);
     this.shouldFilter = false;
-    this.jsonFormsService.updateCore(
-      Actions.update(path, () => ev.option.value)
-    );
+    this.jsonFormsService.updateCore(Actions.update(path, () => ev.option.value));
     this.triggerValidation();
   }
 

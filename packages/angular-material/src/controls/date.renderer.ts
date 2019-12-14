@@ -30,7 +30,7 @@ import {
   rankWith
 } from '@jsonforms/core';
 import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
-import { DateAdapter, NativeDateAdapter } from '@angular/material';
+import { DateAdapter, NativeDateAdapter } from '@angular/material/core';
 
 @Component({
   selector: 'DateControlRenderer',

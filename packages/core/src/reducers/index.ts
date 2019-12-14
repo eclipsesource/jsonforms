@@ -66,7 +66,9 @@ export {
   rendererReducer,
   cellReducer,
   coreReducer,
+  i18nReducer,
   UISchemaTester,
+  uischemaRegistryReducer,
   findMatchingUISchema
 };
 export { JsonFormsCore };

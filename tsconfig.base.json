@@ -14,7 +14,8 @@
     "noImplicitAny": true,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
-    "esModuleInterop" :true
+    "esModuleInterop": true,
+    "importHelpers": true
   },
   "types": ["jest"]
 }

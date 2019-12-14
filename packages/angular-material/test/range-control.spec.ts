@@ -23,12 +23,8 @@
   THE SOFTWARE.
 */
 import { ReactiveFormsModule } from '@angular/forms';
-import {
-  MatError,
-  MatFormFieldModule,
-  MatSlider,
-  MatSliderModule
-} from '@angular/material';
+import { MatError, MatFormFieldModule } from '@angular/material/form-field';
+import { MatSlider, MatSliderModule } from '@angular/material/slider';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
   ErrorTestExpectation,

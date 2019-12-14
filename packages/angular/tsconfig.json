@@ -4,15 +4,12 @@
     "outDir": "./lib",
     "sourceMap": true
   },
-  "exclude":[
-    "node_modules"
-  ],
-  "files": [
-    "./src/index.ts"
-  ],
+  "exclude": ["node_modules"],
+  "files": ["./src/index.ts"],
   "angularCompilerOptions": {
     "strictMetadataEmit": true,
     "generateCodeForLibraries": false,
-    "skipTemplateCodegen": true
+    "skipTemplateCodegen": true,
+    "enableIvy": false
   }
 }

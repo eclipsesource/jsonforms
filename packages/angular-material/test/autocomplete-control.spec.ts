@@ -22,13 +22,9 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import {
-  MatAutocompleteModule,
-  MatAutocompleteSelectedEvent,
-  MatError,
-  MatFormFieldModule,
-  MatInputModule
-} from '@angular/material';
+import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatError, MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { DebugElement, NgZone } from '@angular/core';
 import {
@@ -41,11 +37,7 @@ import {
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import {
-  ErrorTestExpectation,
-  setupMockStore,
-  getJsonFormsService
-} from '@jsonforms/angular-test';
+import { ErrorTestExpectation, setupMockStore, getJsonFormsService } from '@jsonforms/angular-test';
 import { ControlElement, JsonSchema, Actions } from '@jsonforms/core';
 import { MockNgZone } from './mock-ng-zone';
 import { AutocompleteControlRenderer } from '../src';
@@ -92,6 +84,7 @@ describe('Autocomplete control Base Tests', () => {
       imports: imports,
       providers: providers
     }).compileComponents();
+
   });
   beforeEach(() => {
     fixture = TestBed.createComponent(componentUT);
@@ -102,6 +95,7 @@ describe('Autocomplete control Base Tests', () => {
 
   it('should render', fakeAsync(() => {
     setupMockStore(fixture, { uischema, schema, data });
+    getJsonFormsService(component).updateCore(Actions.init(data, schema, uischema));
     component.ngOnInit();
     fixture.detectChanges();
     tick();
@@ -112,9 +106,7 @@ describe('Autocomplete control Base Tests', () => {
 
   it('should support updating the state', fakeAsync(() => {
     setupMockStore(fixture, { uischema, schema, data });
-    getJsonFormsService(component).updateCore(
-      Actions.init(data, schema, uischema)
-    );
+    getJsonFormsService(component).updateCore(Actions.init(data, schema, uischema));
     component.ngOnInit();
     fixture.detectChanges();
     tick();
@@ -127,39 +119,29 @@ describe('Autocomplete control Base Tests', () => {
 
   it('should update with undefined value', () => {
     setupMockStore(fixture, { uischema, schema, data });
-    getJsonFormsService(component).updateCore(
-      Actions.init(data, schema, uischema)
-    );
+    getJsonFormsService(component).updateCore(Actions.init(data, schema, uischema));
     component.ngOnInit();
     fixture.detectChanges();
 
-    getJsonFormsService(component).updateCore(
-      Actions.update('foo', () => undefined)
-    );
+    getJsonFormsService(component).updateCore(Actions.update('foo', () => undefined));
     fixture.detectChanges();
     expect(component.data).toBe(undefined);
     expect(inputElement.value).toBe('');
   });
   it('should update with null value', () => {
     setupMockStore(fixture, { uischema, schema, data });
-    getJsonFormsService(component).updateCore(
-      Actions.init(data, schema, uischema)
-    );
+    getJsonFormsService(component).updateCore(Actions.init(data, schema, uischema));
     fixture.detectChanges();
     component.ngOnInit();
 
-    getJsonFormsService(component).updateCore(
-      Actions.update('foo', () => null)
-    );
+    getJsonFormsService(component).updateCore(Actions.update('foo', () => null));
     fixture.detectChanges();
     expect(component.data).toBe(null);
     expect(inputElement.value).toBe('');
   });
   it('should not update with wrong ref', fakeAsync(() => {
     setupMockStore(fixture, { uischema, schema, data });
-    getJsonFormsService(component).updateCore(
-      Actions.init(data, schema, uischema)
-    );
+    getJsonFormsService(component).updateCore(Actions.init(data, schema, uischema));
     component.ngOnInit();
     fixture.detectChanges();
     tick();
@@ -173,9 +155,7 @@ describe('Autocomplete control Base Tests', () => {
   // store needed as we evaluate the calculated enabled value to disable/enable the control
   it('can be disabled', () => {
     setupMockStore(fixture, { uischema, schema, data });
-    getJsonFormsService(component).updateCore(
-      Actions.init(data, schema, uischema)
-    );
+    getJsonFormsService(component).updateCore(Actions.init(data, schema, uischema));
     component.disabled = true;
     component.ngOnInit();
     fixture.detectChanges();
@@ -184,9 +164,7 @@ describe('Autocomplete control Base Tests', () => {
   it('id should be present in output', () => {
     setupMockStore(fixture, { uischema, schema, data });
     component.id = 'myId';
-    getJsonFormsService(component).updateCore(
-      Actions.init(data, schema, uischema)
-    );
+    getJsonFormsService(component).updateCore(Actions.init(data, schema, uischema));
 
     fixture.detectChanges();
     component.ngOnInit();
@@ -233,9 +211,7 @@ describe('AutoComplete control Input Event Tests', () => {
   ));
   it('should update via input event', fakeAsync(() => {
     setupMockStore(fixture, { uischema, schema, data });
-    getJsonFormsService(component).updateCore(
-      Actions.init(data, schema, uischema)
-    );
+    getJsonFormsService(component).updateCore(Actions.init(data, schema, uischema));
 
     component.ngOnInit();
     fixture.detectChanges();
@@ -261,9 +237,7 @@ describe('AutoComplete control Input Event Tests', () => {
   }));
   it('options should prefer own props', fakeAsync(() => {
     setupMockStore(fixture, { uischema, schema, data });
-    getJsonFormsService(component).updateCore(
-      Actions.init(data, schema, uischema)
-    );
+    getJsonFormsService(component).updateCore(Actions.init(data, schema, uischema));
     component.options = ['X', 'Y', 'Z'];
 
     component.ngOnInit();
@@ -297,6 +271,7 @@ describe('AutoComplete control Error Tests', () => {
       imports: imports,
       providers: providers
     }).compileComponents();
+
   });
   beforeEach(() => {
     fixture = TestBed.createComponent(componentUT);

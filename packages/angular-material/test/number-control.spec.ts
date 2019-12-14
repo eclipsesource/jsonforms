@@ -24,11 +24,8 @@
 */
 import { DebugElement } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import {
-  MatError,
-  MatFormFieldModule,
-  MatInputModule
-} from '@angular/material';
+import { MatError, MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
   ErrorTestExpectation,
@@ -38,12 +35,6 @@ import {
   numberInputEventTest
 } from '@jsonforms/angular-test';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import {
-  L10nConfig,
-  LocaleValidationModule,
-  LocalizationModule,
-  TranslationModule
-} from 'angular-l10n';
 import { NumberControlRenderer, NumberControlRendererTester } from '../src';
 import { JsonFormsAngularService } from '@jsonforms/angular';
 
@@ -78,17 +69,13 @@ describe('Material number field tester', () => {
     ).toBe(2);
   });
 });
-const emptyL10NConfig: L10nConfig = {};
 
 const imports = [
   MatFormFieldModule,
   MatInputModule,
   NoopAnimationsModule,
   ReactiveFormsModule,
-  FlexLayoutModule,
-  LocalizationModule,
-  LocaleValidationModule.forRoot(),
-  TranslationModule.forRoot(emptyL10NConfig)
+  FlexLayoutModule
 ];
 const providers = [JsonFormsAngularService];
 const componentUT: any = NumberControlRenderer;

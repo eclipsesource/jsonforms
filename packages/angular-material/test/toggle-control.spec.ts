@@ -22,12 +22,8 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import {
-  MatError,
-  MatFormFieldModule,
-  MatSlideToggle,
-  MatSlideToggleModule
-} from '@angular/material';
+import { MatError, MatFormFieldModule } from '@angular/material/form-field';
+import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-toggle';
 import {
   booleanBaseTest,
   booleanErrorTest,
