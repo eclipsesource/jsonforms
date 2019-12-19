@@ -1,8 +1,8 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core';
-import { Link, useMenus } from 'docz';
+import { useMenus } from 'docz';
 import _ from 'lodash';
-import { groupByParent } from '../common/menus';
+import MenuLink from './common/sidebar/MenuLink';
 import styles from "../styles/global.module.css"
 
 const additionalStyles = {
@@ -22,17 +22,49 @@ const additionalStyles = {
   }
 };
 
+const baseIndent = 15;
+const baseFontSize = 22;
+
+const Menu = ({ indent, menu }) => {
+  const children = useMenus({ filter: m => m.parent === menu.name });
+  const style = {
+    paddingLeft: indent * baseIndent,
+    fontSize: baseFontSize - indent * 4 - indent,
+    listStyleType: 'none',
+  };
+  if (children) {
+    return (
+      <li style={style}>
+        <MenuLink to={menu.route} label={menu.name} />
+        <ul style={style}>
+          {children.map(m => (
+            <Menu
+              key={m.id}
+              indent={indent + 1}
+              menu={m}
+            />
+          ))}
+        </ul>
+      </li>
+    );
+  } else {
+    return (
+      <li key={menu.id} style={style}>
+        <MenuLink to={menu.route} label={menu.name} />
+      </li>
+    );
+  }
+}
+
 const DocsToc = ({ classes }) => {
-  const toc = groupByParent(useMenus({ filter: m => m.route.startsWith('/docs/') }))
+  const toc = useMenus({ filter: m => m.route.startsWith('/docs/') && !m.parent })
   return (
     <div className={styles.main}>
       <div className={classes.container}>
         <h1 className={classes.heading}>Documentation</h1>
         <ul className={classes.toc}>
           {toc.map(m => (
-            <li key={m.route}>
-              <Link to={m.route}>{m.name}</Link>
-            </li>
+            <Menu key={m.route} menu={m} indent={0} />
           ))}
         </ul>
       </div>
