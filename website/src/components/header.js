@@ -45,10 +45,10 @@ const Header = ({ classes }) => (
           JSON Forms
         </Typography>
       </Link>
-      <Link to="/examples" className={globalStyles.nav__link}>
+      <Link to="/examples/array" className={globalStyles.nav__link}>
         Examples
       </Link>
-      <Link to="/docs" className={globalStyles.nav__link}>
+      <Link to="/docs/what-is-jsonforms" className={globalStyles.nav__link}>
         Docs
       </Link>
       <Link to="/faq" className={globalStyles.nav__link}>
