@@ -15,6 +15,22 @@
     "test-cov": "jest --no-cache --coverage",
     "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Vanilla Renderers' --mode file --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
   },
+  "keywords": [
+    "vanilla",
+    "form",
+    "forms",
+    "json",
+    "jsonforms",
+    "frontend",
+    "generator",
+    "input",
+    "renderengine",
+    "jsonschema",
+    "schema",
+    "uischema",
+    "layout",
+    "customization"
+  ],
   "peerDependencies": {
     "@jsonforms/core": "^2.3.1",
     "@jsonforms/react": "^2.3.1"
