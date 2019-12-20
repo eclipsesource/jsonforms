@@ -1,3 +1,7 @@
+body {
+  overflow-y: scroll;
+}
+
 .logo__icon {
   align-items: center;
   display: flex
