@@ -34,7 +34,6 @@ import {
   createStyles,
   Theme
 } from '@material-ui/core/styles';
-import { compose } from 'redux';
 
 export { StyledComponentProps };
 const styles = createStyles(({ palette }: Theme) => ({
@@ -48,7 +47,7 @@ export interface ValidationProps {
   id: string;
 }
 
-const ValidationIcon: React.SFC<ValidationProps & WithStyles<'badge'>> =
+const ValidationIcon: React.FC<ValidationProps & WithStyles<'badge'>> =
   ({ classes, errorMessages, id }) => {
     return (
       <Tooltip
@@ -62,6 +61,4 @@ const ValidationIcon: React.SFC<ValidationProps & WithStyles<'badge'>> =
     );
 };
 
-export default compose(
-  withStyles(styles, { name: 'ValidationIcon' })
-)(ValidationIcon);
+export default withStyles(styles, { name: 'ValidationIcon' })(ValidationIcon);
