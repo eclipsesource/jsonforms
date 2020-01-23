@@ -43,7 +43,7 @@ import {
 } from './default-data';
 import { JsonFormsRendererRegistryEntry, rendererReducer } from './renderers';
 import { JsonFormsState, JsonFormsSubStates } from '../store';
-import { Reducer, combineReducers } from 'redux';
+import { combineReducers } from 'redux';
 import {
   UISchemaTester,
   findMatchingUISchema,
@@ -55,6 +55,7 @@ import {
   findLocalizedUISchema,
   i18nReducer
 } from './i18n';
+import { Reducer } from '../util';
 
 import { Generate } from '../generators';
 import { JsonFormsCellRendererRegistryEntry } from './cells';

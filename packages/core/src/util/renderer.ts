@@ -44,10 +44,12 @@ import {
 import { RankedTester } from '../testers';
 import { JsonSchema } from '../models/jsonSchema';
 import {
+  AnyAction,
   CombinatorKeyword,
   composePaths,
   composeWithUi,
   createLabelDescriptionFrom,
+  Dispatch,
   formatErrorMessage,
   hasEnableRule,
   hasShowRule,
@@ -57,11 +59,10 @@ import {
   moveUp,
   Resolve,
   resolveSubSchemas
-} from '../util';
+} from '.';
 import { update, CoreActions } from '../actions';
 import { ErrorObject } from 'ajv';
 import { JsonFormsState } from '../store';
-import { AnyAction, Dispatch } from 'redux';
 import { JsonFormsRendererRegistryEntry } from '../reducers/renderers';
 import { JsonFormsCellRendererRegistryEntry } from '../reducers/cells';
 
