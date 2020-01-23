@@ -38,12 +38,10 @@ import {
 } from './core';
 import {
   JsonFormsDefaultDataRegistryEntry,
-  defaultDataReducer,
   extractDefaultData
 } from './default-data';
 import { JsonFormsRendererRegistryEntry, rendererReducer } from './renderers';
-import { JsonFormsState, JsonFormsSubStates } from '../store';
-import { combineReducers } from 'redux';
+import { JsonFormsState } from '../store';
 import {
   UISchemaTester,
   findMatchingUISchema,
@@ -55,7 +53,6 @@ import {
   findLocalizedUISchema,
   i18nReducer
 } from './i18n';
-import { Reducer } from '../util';
 
 import { Generate } from '../generators';
 import { JsonFormsCellRendererRegistryEntry } from './cells';
@@ -78,20 +75,6 @@ export {
   findMatchingUISchema
 };
 export { JsonFormsCore, ValidationMode };
-
-export const jsonformsReducer = (
-  additionalReducers = {}
-): Reducer<JsonFormsSubStates> =>
-  combineReducers<JsonFormsSubStates>({
-    core: coreReducer,
-    renderers: rendererReducer,
-    cells: cellReducer,
-    config: configReducer,
-    uischemas: uischemaRegistryReducer,
-    defaultData: defaultDataReducer,
-    i18n: i18nReducer,
-    ...additionalReducers
-  });
 
 export const getData = (state: JsonFormsState) =>
   extractData(get(state, 'jsonforms.core'));
