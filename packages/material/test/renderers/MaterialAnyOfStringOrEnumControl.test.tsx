@@ -24,24 +24,20 @@
 */
 import './MatchMediaMock';
 import React from 'react';
-import { Provider } from 'react-redux';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import {
-  Actions,
   ControlElement,
-  jsonformsReducer,
-  JsonFormsState,
-  JsonSchema,
-  UISchemaElement
+  JsonSchema
 } from '@jsonforms/core';
 import {
   MaterialAnyOfStringOrEnumControl,
   materialAnyOfStringOrEnumControlTester,
   materialRenderers
 } from '../../src';
-import { combineReducers, createStore, Store } from 'redux';
+import { JsonForms } from '@jsonforms/react';
+import { onChangeData } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -100,24 +96,6 @@ describe('Material simple any of control tester', () => {
   });
 });
 
-const initJsonFormsStore = (
-  testData: any,
-  testSchema: JsonSchema,
-  testUiSchema: UISchemaElement
-): Store<JsonFormsState> => {
-  const s: JsonFormsState = {
-    jsonforms: {
-      renderers: materialRenderers
-    }
-  };
-  const store: Store<JsonFormsState> = createStore(
-    combineReducers({ jsonforms: jsonformsReducer() }),
-    s
-  );
-  store.dispatch(Actions.init(testData, testSchema, testUiSchema));
-  return store;
-};
-
 describe('Material any of string or enum control', () => {
   let wrapper: ReactWrapper;
 
@@ -126,12 +104,18 @@ describe('Material any of string or enum control', () => {
   });
 
   it('render', () => {
-    const store = initJsonFormsStore('foo', schema, uischema);
     wrapper = mount(
-      <Provider store={store}>
-        <MaterialAnyOfStringOrEnumControl schema={schema} uischema={uischema} />
-      </Provider>
+      <JsonForms
+        data={'foo'}
+        schema={schema}
+        uischema={uischema}
+        renderers={materialRenderers}
+        onChange={({ data }) => {
+          onChangeData.data = data;
+        }}
+      />
     );
+    expect(wrapper.find(MaterialAnyOfStringOrEnumControl).length).toBeTruthy();
     const inputs = wrapper.find('input');
     expect(inputs).toHaveLength(1);
 

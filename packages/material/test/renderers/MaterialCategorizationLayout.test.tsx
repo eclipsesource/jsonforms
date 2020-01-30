@@ -25,46 +25,25 @@
 import './MatchMediaMock';
 import React from 'react';
 import {
-  Actions,
   Categorization,
   ControlElement,
-  jsonformsReducer,
-  JsonFormsState,
   Layout,
   layoutDefaultProps,
   RuleEffect,
   SchemaBasedCondition
 } from '@jsonforms/core';
-import { JsonFormsReduxContext } from '@jsonforms/react';
+import { JsonFormsStateProvider } from '@jsonforms/react';
 import Enzyme, { mount } from 'enzyme';
 
-import { AnyAction, combineReducers, createStore, Reducer, Store } from 'redux';
 import MaterialCategorizationLayoutRenderer, {
   materialCategorizationTester
 } from '../../src/layouts/MaterialCategorizationLayout';
 import { MaterialLayoutRenderer, materialRenderers } from '../../src';
 import { Tab, Tabs } from '@material-ui/core';
 import Adapter from 'enzyme-adapter-react-16';
-import { Provider } from 'react-redux';
+import { initCore } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });
-
-export const initJsonFormsStore = (initState: any): Store<JsonFormsState> => {
-  const s: JsonFormsState = {
-    jsonforms: {
-      renderers: materialRenderers
-    }
-  };
-  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({
-    jsonforms: jsonformsReducer()
-  });
-  const store: Store<JsonFormsState> = createStore(reducer, s);
-
-  const { data, schema, uischema } = initState;
-  store.dispatch(Actions.init(data, schema, uischema));
-
-  return store;
-};
 
 const fixture = {
   data: {},
@@ -223,17 +202,15 @@ describe('Material categorization layout', () => {
       ]
     };
 
-    const store = initJsonFormsStore(fixture);
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     const wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialCategorizationLayoutRenderer
-            {...layoutDefaultProps}
-            schema={fixture.schema}
-            uischema={uischema}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialCategorizationLayoutRenderer
+          {...layoutDefaultProps}
+          schema={fixture.schema}
+          uischema={uischema}
+        />
+      </JsonFormsStateProvider>
     );
     const steps = wrapper.find(Tab);
     expect(steps.length).toBe(2);
@@ -279,21 +256,16 @@ describe('Material categorization layout', () => {
         }
       ]
     };
-    const store = initJsonFormsStore({
-      ...fixture,
-      data
-    });
+    const core = initCore(fixture.schema, fixture.uischema, data);
 
     const wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialCategorizationLayoutRenderer
-            {...layoutDefaultProps}
-            schema={fixture.schema}
-            uischema={uischema}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialCategorizationLayoutRenderer
+          {...layoutDefaultProps}
+          schema={fixture.schema}
+          uischema={uischema}
+        />
+      </JsonFormsStateProvider>
     );
 
     const beforeClick = wrapper.find(Tabs).props().value;
@@ -309,19 +281,17 @@ describe('Material categorization layout', () => {
   });
 
   it('can be hidden via ownProp', () => {
-    const store = initJsonFormsStore(fixture);
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
 
     const wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialCategorizationLayoutRenderer
-            {...layoutDefaultProps}
-            schema={fixture.schema}
-            uischema={fixture.uischema}
-            visible={false}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialCategorizationLayoutRenderer
+          {...layoutDefaultProps}
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          visible={false}
+        />
+      </JsonFormsStateProvider>
     );
 
     expect(wrapper.find(Tab).exists()).toBeFalsy();
@@ -329,17 +299,15 @@ describe('Material categorization layout', () => {
   });
 
   it('is shown by default', () => {
-    const store = initJsonFormsStore(fixture);
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     const wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialCategorizationLayoutRenderer
-            {...layoutDefaultProps}
-            schema={fixture.schema}
-            uischema={fixture.uischema}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialCategorizationLayoutRenderer
+          {...layoutDefaultProps}
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+        />
+      </JsonFormsStateProvider>
     );
 
     expect(wrapper.find(Tab).exists()).toBeTruthy();
@@ -372,17 +340,15 @@ describe('Material categorization layout', () => {
         }
       ]
     };
-    const store = initJsonFormsStore(fixture);
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     const wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialCategorizationLayoutRenderer
-            {...layoutDefaultProps}
-            schema={fixture.schema}
-            uischema={uischema}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialCategorizationLayoutRenderer
+          {...layoutDefaultProps}
+          schema={fixture.schema}
+          uischema={uischema}
+        />
+      </JsonFormsStateProvider>
     );
 
     expect(wrapper.find(Tab).length).toBe(1);
@@ -390,19 +356,17 @@ describe('Material categorization layout', () => {
   });
 
   it('should have renderers prop via ownProps', () => {
-    const store = initJsonFormsStore(fixture);
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     const renderers: any[] = [];
     const wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialCategorizationLayoutRenderer
-            {...layoutDefaultProps}
-            schema={fixture.schema}
-            uischema={fixture.uischema}
-            renderers={renderers}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialCategorizationLayoutRenderer
+          {...layoutDefaultProps}
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          renderers={renderers}
+        />
+      </JsonFormsStateProvider>
     );
 
     const materialArrayLayout = wrapper.find(MaterialLayoutRenderer);

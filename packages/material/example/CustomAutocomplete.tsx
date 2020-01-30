@@ -1,5 +1,7 @@
 import {
+  AnyAction, 
   ControlProps,
+  Dispatch,
   OwnPropsOfEnum,
   RankedTester,
   withIncreasedRank,
@@ -10,7 +12,6 @@ import { materialAutocompleteOneOfEnumControlTester } from '../src/extended/Mate
 import { withJsonFormsOneOfEnumProps } from '@jsonforms/react';
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
-import { AnyAction, Dispatch } from 'redux';
 const MyAutocompleteControl = (props: ControlProps & OwnPropsOfEnum) => {
   return (
     <ExtendedUnwrapped.MaterialAutocompleteOneOfEnumControl

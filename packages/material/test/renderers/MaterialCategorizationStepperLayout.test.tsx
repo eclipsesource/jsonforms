@@ -24,45 +24,26 @@
 */
 import './MatchMediaMock';
 import React from 'react';
-import { Provider } from 'react-redux';
 import {
-  Actions,
   Categorization,
   ControlElement,
-  jsonformsReducer,
-  JsonFormsState,
   Layout,
   layoutDefaultProps,
   RuleEffect,
   SchemaBasedCondition,
-  update
 } from '@jsonforms/core';
-import { JsonFormsReduxContext } from '@jsonforms/react';
+import { JsonFormsStateProvider } from '@jsonforms/react';
 import Enzyme, { mount } from 'enzyme';
 
-import { combineReducers, createStore, Store } from 'redux';
 import MaterialCategorizationStepperLayoutRenderer, {
   materialCategorizationStepperTester
 } from '../../src/layouts/MaterialCategorizationStepperLayout';
 import { MaterialLayoutRenderer, materialRenderers } from '../../src';
-import { Step, StepButton, Stepper, Button } from '@material-ui/core';
+import { Button, Step, StepButton, Stepper } from '@material-ui/core';
 import Adapter from 'enzyme-adapter-react-16';
+import { initCore } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });
-
-export const initJsonFormsStore = (initState: any): Store<JsonFormsState> => {
-  const s: JsonFormsState = {
-    jsonforms: {
-      renderers: materialRenderers
-    }
-  };
-  const reducer = combineReducers({ jsonforms: jsonformsReducer() });
-  const store: Store<JsonFormsState> = createStore(reducer, s);
-  const { data, schema, uischema } = initState;
-  store.dispatch(Actions.init(data, schema, uischema));
-
-  return store;
-};
 
 const fixture = {
   data: {},
@@ -233,15 +214,15 @@ describe('Material categorization stepper layout', () => {
       ]
     };
 
-    const store = initJsonFormsStore(fixture);
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     const wrapper = mount(
-      <Provider store={store}>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
         <MaterialCategorizationStepperLayoutRenderer
           {...layoutDefaultProps}
           schema={fixture.schema}
           uischema={uischema}
         />
-      </Provider>
+      </JsonFormsStateProvider>
     );
     const steps = wrapper.find(Step);
     expect(steps.length).toBe(2);
@@ -287,21 +268,16 @@ describe('Material categorization stepper layout', () => {
         }
       ]
     };
-    const store = initJsonFormsStore({
-      ...fixture,
-      data
-    });
+    const core = initCore(fixture.schema, fixture.uischema, data);
 
     const wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialCategorizationStepperLayoutRenderer
-            {...layoutDefaultProps}
-            schema={fixture.schema}
-            uischema={uischema}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialCategorizationStepperLayoutRenderer
+          {...layoutDefaultProps}
+          schema={fixture.schema}
+          uischema={uischema}
+        />
+      </JsonFormsStateProvider>
     );
     const beforeClick = wrapper.find(Stepper).props().activeStep;
     wrapper
@@ -316,17 +292,17 @@ describe('Material categorization stepper layout', () => {
   });
 
   it('can be hidden via ownProp', () => {
-    const store = initJsonFormsStore(fixture);
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
 
     const wrapper = mount(
-      <Provider store={store}>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
         <MaterialCategorizationStepperLayoutRenderer
           {...layoutDefaultProps}
           schema={fixture.schema}
           uischema={fixture.uischema}
           visible={false}
         />
-      </Provider>
+      </JsonFormsStateProvider>
     );
 
     expect(wrapper.find(Stepper).exists()).toBeFalsy();
@@ -334,15 +310,15 @@ describe('Material categorization stepper layout', () => {
   });
 
   it('is shown by default', () => {
-    const store = initJsonFormsStore(fixture);
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     const wrapper = mount(
-      <Provider store={store}>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
         <MaterialCategorizationStepperLayoutRenderer
           {...layoutDefaultProps}
           schema={fixture.schema}
           uischema={fixture.uischema}
         />
-      </Provider>
+      </JsonFormsStateProvider>
     );
 
     expect(wrapper.find(Stepper).exists()).toBeTruthy();
@@ -375,17 +351,15 @@ describe('Material categorization stepper layout', () => {
         }
       ]
     };
-    const store = initJsonFormsStore(fixture);
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     const wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialCategorizationStepperLayoutRenderer
-            {...layoutDefaultProps}
-            schema={fixture.schema}
-            uischema={uischema}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialCategorizationStepperLayoutRenderer
+          {...layoutDefaultProps}
+          schema={fixture.schema}
+          uischema={uischema}
+        />
+      </JsonFormsStateProvider>
     );
 
     expect(wrapper.find(Step).length).toBe(1);
@@ -393,17 +367,17 @@ describe('Material categorization stepper layout', () => {
   });
 
   it('should have renderers prop via ownProps', () => {
-    const store = initJsonFormsStore(fixture);
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     const renderers: any[] = [];
     const wrapper = mount(
-      <Provider store={store}>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
         <MaterialCategorizationStepperLayoutRenderer
           {...layoutDefaultProps}
           schema={fixture.schema}
           uischema={fixture.uischema}
           renderers={renderers}
         />
-      </Provider>
+      </JsonFormsStateProvider>
     );
 
     const materialArrayLayout = wrapper.find(MaterialLayoutRenderer);
@@ -434,21 +408,16 @@ describe('Material categorization stepper layout', () => {
         }
       ]
     };
-    const store = initJsonFormsStore({
-      ...fixture,
-      uischema
-    });
+    const core = initCore(fixture.schema, uischema, fixture.data);
 
     const wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialCategorizationStepperLayoutRenderer
-            {...layoutDefaultProps}
-            schema={fixture.schema}
-            uischema={uischema}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialCategorizationStepperLayoutRenderer
+          {...layoutDefaultProps}
+          schema={fixture.schema}
+          uischema={uischema}
+        />
+      </JsonFormsStateProvider>
     );
     const isPrevButtonEnabledBeforeClick = !wrapper.find(Button).at(1).props().disabled;
     const isNextButtonEnabledBeforeClick = !wrapper.find(Button).at(0).props().disabled;
@@ -507,21 +476,16 @@ describe('Material categorization stepper layout', () => {
         }
       ]
     };
-    const store = initJsonFormsStore({
-      ...fixture,
-      uischema
-    });
+    const core = initCore(fixture.schema, uischema, fixture.data);
 
     const wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialCategorizationStepperLayoutRenderer
-            {...layoutDefaultProps}
-            schema={fixture.schema}
-            uischema={uischema}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialCategorizationStepperLayoutRenderer
+          {...layoutDefaultProps}
+          schema={fixture.schema}
+          uischema={uischema}
+        />
+      </JsonFormsStateProvider>
     );
     const activeStepBeforeClick = wrapper.find(Stepper).props().activeStep;
     wrapper
@@ -546,7 +510,7 @@ describe('Material categorization stepper layout', () => {
       type: 'Control',
       scope: '#/properties/name'
     };
-      
+
     const uischema: Categorization = {
       type: 'Categorization',
       label: 'Root',
@@ -571,29 +535,24 @@ describe('Material categorization stepper layout', () => {
       ]
     };
 
-    const store = initJsonFormsStore({
-      ...fixture,
-      uischema,
-      data
-    });
-  
+    const core = initCore(fixture.schema, uischema, data);
+
     const wrapper = mount(
-        <Provider store={store}>
-            <JsonFormsReduxContext>
-            <MaterialCategorizationStepperLayoutRenderer
-                {...layoutDefaultProps}
-                schema={fixture.schema}
-                uischema={uischema}
-            />
-            </JsonFormsReduxContext>
-        </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialCategorizationStepperLayoutRenderer
+            {...layoutDefaultProps}
+            schema={fixture.schema}
+            uischema={uischema}
+        />
+      </JsonFormsStateProvider>
     );
 
     const isNextButtonDisabledBeforeTextInput = wrapper.find(Button).at(0).props().disabled;
 
     expect(isNextButtonDisabledBeforeTextInput).toBe(false);
 
-    store.dispatch(update('name', () => 'Barr'));
+    core.data = { ...core.data, name: 'Barr' };
+    wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
     wrapper.update();
 
     const isNextButtonDisabledAfterTextInput = wrapper.find(Button).at(0).props().disabled;

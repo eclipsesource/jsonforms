@@ -27,29 +27,21 @@ import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import { materialRenderers } from '../../src';
 import Adapter from 'enzyme-adapter-react-16';
 import * as React from 'react';
-import { connect, Provider } from 'react-redux';
-import { AnyAction, combineReducers, createStore, Reducer, Store } from 'redux';
 import {
-  Actions,
   ControlElement,
   ControlProps,
   ControlState,
   HorizontalLayout,
   isControl,
-  jsonformsReducer,
-  JsonFormsState,
   JsonSchema,
-  mapDispatchToControlProps,
-  mapStateToControlProps,
   RankedTester,
   rankWith,
-  UISchemaElement
 } from '@jsonforms/core';
-import { Control, JsonFormsReduxContext } from '@jsonforms/react';
-import '../../src/cells';
+import { Control, JsonFormsStateProvider, withJsonFormsControlProps } from '@jsonforms/react';
 import { MaterialInputControl } from '../../src/controls/MaterialInputControl';
 import MaterialHorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
 import { MuiInputText } from '../../src/mui-controls';
+import { initCore } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -72,28 +64,7 @@ class TestControlInner extends Control<ControlProps, ControlState> {
   }
 }
 export const testControlTester: RankedTester = rankWith(1, isControl);
-const TestControl = connect(
-  mapStateToControlProps,
-  mapDispatchToControlProps
-)(TestControlInner);
-
-const initJsonFormsStore = (
-  testData: any,
-  testSchema: JsonSchema,
-  testUiSchema: UISchemaElement
-): Store<JsonFormsState> => {
-  const s: JsonFormsState = {
-    jsonforms: {
-      renderers: materialRenderers
-    }
-  };
-  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({
-    jsonforms: jsonformsReducer()
-  });
-  const store: Store<JsonFormsState> = createStore(reducer, s);
-  store.dispatch(Actions.init(testData, testSchema, testUiSchema));
-  return store;
-};
+const TestControl = withJsonFormsControlProps(TestControlInner);
 
 describe('Material input control', () => {
   let wrapper: ReactWrapper;
@@ -103,13 +74,14 @@ describe('Material input control', () => {
   });
 
   it('render', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TestControl schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <TestControl
+          schema={schema}
+          uischema={uischema}
+        />
+      </JsonFormsStateProvider>
     );
 
     const control = wrapper.find('div').first();
@@ -132,13 +104,11 @@ describe('Material input control', () => {
       scope: '#/properties/foo',
       label: false
     };
-    const store = initJsonFormsStore(data, schema, control);
+    const core = initCore(schema, uischema);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TestControl schema={schema} uischema={control} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <TestControl schema={schema} uischema={control} />
+      </JsonFormsStateProvider>
     );
 
     const div = wrapper.find('div').first();
@@ -156,84 +126,78 @@ describe('Material input control', () => {
   });
 
   it('can be hidden', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TestControl schema={schema} uischema={uischema} visible={false} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <TestControl schema={schema} uischema={uischema} visible={false} />
+      </JsonFormsStateProvider>
     );
     const inputs = wrapper.find('input');
     expect(inputs.length).toBe(0);
   });
 
   it('should be shown by default', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TestControl schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <TestControl schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
     );
     const control = wrapper.find('div').first();
     expect(control.props().hidden).toBeFalsy();
   });
 
   it('should display a single error', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    const core = initCore(schema, uischema, data );
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TestControl schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <TestControl schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
     );
 
-    store.dispatch(Actions.update('foo', () => 2));
+    core.data = { ...core.data, foo: 2 };
+    wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
+    wrapper.update();
     const validation = wrapper.find('p').first();
     expect(validation.text()).toBe('should be string');
   });
 
   it('should display multiple errors', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TestControl schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <TestControl schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
     );
-    store.dispatch(Actions.update('foo', () => 3));
+    core.data = { ...core.data, foo: 3 };
+    wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
+    wrapper.update();
     const validation = wrapper.find('p').first();
     expect(validation.text()).toBe('should be string');
   });
 
   it('should not show any errors', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TestControl schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <TestControl schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
     );
     const validation = wrapper.find('p').first();
     expect(validation.text()).toBe('');
   });
 
   it('should handle validation updates', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TestControl schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <TestControl schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
     );
-    store.dispatch(Actions.update('foo', () => 3));
-    store.dispatch(Actions.update('foo', () => 'bar'));
+    core.data = { ...core.data, foo: 3 };
+    core.data = { ...core.data, foo: 'bar' };
+    wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
+    wrapper.update();
     const validation = wrapper.find('p').first();
     expect(validation.text()).toBe('');
   });
@@ -276,23 +240,18 @@ describe('Material input control', () => {
       type: 'HorizontalLayout',
       elements: [firstControlElement, secondControlElement, thirdControlElement]
     };
-    const store = initJsonFormsStore(
-      {
-        name: 'John Doe',
-        personalData: {}
-      },
-      jsonSchema,
-      layout
-    );
+    const newData = {
+      name: 'John Doe',
+      personalData: {}
+    };
+    const core = initCore(jsonSchema, layout, newData);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialHorizontalLayoutRenderer
-            schema={jsonSchema}
-            uischema={layout}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }} >
+        <MaterialHorizontalLayoutRenderer
+          schema={jsonSchema}
+          uischema={layout}
+        />
+      </ JsonFormsStateProvider>
     );
     const validation = wrapper.find('p');
     expect(validation).toHaveLength(6);
@@ -317,13 +276,11 @@ describe('Material input control', () => {
       scope: '#/properties/dateCell'
     };
 
-    const store = initJsonFormsStore({}, jsonSchema, control);
+    const core = initCore(jsonSchema, control, {});
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TestControl schema={jsonSchema} uischema={control} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <TestControl schema={jsonSchema} uischema={control} />
+      </JsonFormsStateProvider>
     );
     const label = wrapper.find('label').first();
     expect(label.text()).toBe('Date Cell*');
@@ -344,13 +301,11 @@ describe('Material input control', () => {
       scope: '#/properties/dateCell'
     };
 
-    const store = initJsonFormsStore({}, jsonSchema, control);
+    const core = initCore(jsonSchema, control, {});
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TestControl schema={jsonSchema} uischema={control} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <TestControl schema={jsonSchema} uischema={control} />
+      </JsonFormsStateProvider>
     );
     const label = wrapper.find('label').first();
     expect(label.text()).toBe('Date Cell');
@@ -368,11 +323,11 @@ describe('Material input control', () => {
       scope: '#/properties/password',
       options: { format: 'password' }
     };
-    const store = initJsonFormsStore({}, jsonSchema, control);
+    const core = initCore(jsonSchema, control, {});
     wrapper = mount(
-      <Provider store={store}>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
         <TestControl schema={jsonSchema} uischema={control} />
-      </Provider>
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input');
     expect(input.props().type).toBe('password');
@@ -389,15 +344,15 @@ describe('Material input control', () => {
       type: 'Control',
       scope: '#/properties/name'
     };
-    const store = initJsonFormsStore({}, jsonSchema, control);
+    const core = initCore(jsonSchema, control, {});
     wrapper = mount(
-      <Provider store={store}>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
         <TestControl
           schema={jsonSchema}
           uischema={control}
           id={control.scope}
         />
-      </Provider>
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').first();
     expect(input.props().id).toBe('#/properties/name-input');
