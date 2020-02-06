@@ -39,6 +39,7 @@ import React from 'react';
 
 const MaterialObjectRenderer = ({
   renderers,
+  cells,
   uischemas,
   schema,
   label,
@@ -73,6 +74,7 @@ const MaterialObjectRenderer = ({
         uischema={detailUiSchema}
         path={path}
         renderers={renderers}
+        cells={cells}
       />
     </Hidden>
   );

@@ -60,6 +60,7 @@ export const MaterialListWithDetailRenderer = ({
   addItem,
   data,
   renderers,
+  cells,
   config
 }: ArrayLayoutProps) => {
   const [selectedIndex, setSelectedIndex] = useState(undefined);
@@ -129,6 +130,7 @@ export const MaterialListWithDetailRenderer = ({
           {selectedIndex !== undefined ? (
             <JsonFormsDispatch
               renderers={renderers}
+              cells={cells}
               visible={visible}
               schema={schema}
               uischema={foundUISchema}

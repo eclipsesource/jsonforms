@@ -27,18 +27,21 @@ import { combineReducers, createStore } from 'redux';
 import { Provider } from 'react-redux';
 import {
   createAjv,
+  DispatchCellProps,
   jsonformsReducer,
   JsonFormsState,
   JsonFormsStore,
   JsonSchema,
   Layout,
   rankWith,
+  registerCell,
   registerRenderer,
   RendererProps,
   UISchemaElement,
   uiTypeIs,
   unregisterRenderer
 } from '@jsonforms/core';
+import { isEqual } from 'lodash';
 import Enzyme from 'enzyme';
 import { mount, shallow } from 'enzyme';
 import RefParser from 'json-schema-ref-parser';
@@ -46,16 +49,17 @@ import { StatelessRenderer } from '../../src/Renderer';
 
 import Adapter from 'enzyme-adapter-react-16';
 import {
-  JsonFormsDispatchRenderer,
+  JsonForms,
   JsonFormsDispatch,
-  JsonForms
+  JsonFormsDispatchRenderer
 } from '../../src/JsonForms';
 import {
   JsonFormsReduxContext,
+  JsonFormsStateProvider,
   useJsonForms,
-  withJsonFormsControlProps,
-  JsonFormsStateProvider
+  withJsonFormsControlProps
 } from '../../src/JsonFormsContext';
+import { DispatchCell } from '../../../material/node_modules/@jsonforms/react/lib';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -104,9 +108,28 @@ export const initJsonFormsStore = ({
   return createStore(reducer, initState);
 };
 
+window.matchMedia = jest.fn().mockImplementation(query => {
+  return {
+    matches: true,
+    media: query,
+    onchange: null,
+    addListener: jest.fn(),
+    removeListener: jest.fn(),
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+    dispatchEvent: jest.fn()
+  };
+});
+
 const CustomRenderer1: StatelessRenderer<RendererProps> = () => <h1>test</h1>;
 const CustomRenderer2: StatelessRenderer<RendererProps> = () => <h2>test</h2>;
 const CustomRenderer3: StatelessRenderer<RendererProps> = () => <h3>test</h3>;
+const CellRenderer1: StatelessRenderer<DispatchCellProps> = () => (
+  <h1 className='cell test 1'>test</h1>
+);
+const CellRenderer2: StatelessRenderer<DispatchCellProps> = () => (
+  <h2 className='cell test 2'>test</h2>
+);
 
 const fixture = {
   data: { foo: 'John Doe' },
@@ -119,6 +142,10 @@ const fixture = {
     properties: {
       foo: {
         type: 'string'
+      },
+      stringArray: {
+        type: 'array',
+        items: { type: 'number' }
       }
     }
   }
@@ -391,6 +418,84 @@ test('JsonForms renderer should pick most applicable renderer via ownProps', () 
   });
   store.dispatch(registerRenderer(() => 10, CustomRenderer1));
   store.dispatch(registerRenderer(() => 5, CustomRenderer2));
+
+  const wrapper = mount(
+    <Provider store={store}>
+      <JsonFormsReduxContext>
+        <JsonFormsDispatch
+          uischema={fixture.uischema}
+          schema={fixture.schema}
+          renderers={[
+            { tester: () => 3, renderer: CustomRenderer3 },
+            { tester: () => 1, renderer: CustomRenderer2 }
+          ]}
+        />
+      </JsonFormsReduxContext>
+    </Provider>
+  );
+  expect(wrapper.find('h3').text()).toBe('test');
+  wrapper.unmount();
+});
+
+test('JsonForms renderer should pick most applicable cell renderer via ownProps', () => {
+  const uiSchema = {
+    type: 'Control',
+    scope: '#/properties/stringArray'
+  };
+  const data = { stringArray: ['lol', 'pop'] };
+  const schema = {
+    type: 'object',
+    properties: {
+      stringArray: {
+        type: 'array',
+        items: { type: 'string' }
+      }
+    }
+  };
+  const store = initJsonFormsStore({
+    data: data,
+    uischema: uiSchema,
+    schema: schema
+  });
+  store.dispatch(registerCell(() => 50, CellRenderer1));
+
+  const ArrayRenderer: StatelessRenderer<RendererProps> = props => {
+    return (
+      <DispatchCell
+        schema={props.schema}
+        uischema={{
+          type: 'Control',
+          scope: '#/properties/stringArray',
+          label: false
+        }}
+        path={props.path}
+        enabled={true}
+        renderers={props.renderers}
+        cells={props.cells}
+      />
+    );
+  };
+
+  const wrapper = mount(
+    <Provider store={store}>
+      <JsonFormsReduxContext>
+        <JsonFormsDispatch
+          renderers={[{ tester: () => 100, renderer: ArrayRenderer }]}
+          cells={[{ tester: () => 1, cell: CellRenderer2 }]}
+        />
+      </JsonFormsReduxContext>
+    </Provider>
+  );
+  expect(wrapper.find({ className: 'cell test 2' })).toHaveLength(1);
+  wrapper.unmount();
+});
+
+test('JsonForms renderer should not fail when there are no renderers in store, but there are in ownProps', () => {
+  const store = initJsonFormsStore({
+    data: fixture.data,
+    uischema: fixture.uischema
+  });
+
   const wrapper = mount(
     <Provider store={store}>
       <JsonFormsReduxContext>
@@ -402,8 +507,99 @@ test('JsonForms renderer should pick most applicable renderer via ownProps', () 
       </JsonFormsReduxContext>
     </Provider>
   );
+  expect(wrapper.find('h3').text()).toBe('test');
+  wrapper.unmount();
+});
+
+test('JsonForms renderer should pick uiSchema from ownProps', () => {
+  const store = initJsonFormsStore({
+    data: fixture.data,
+    uischema: fixture.uischema
+  });
+  store.dispatch(
+    registerRenderer(
+      rankWith(10, uiTypeIs('HorizontalLayout')),
+      CustomRenderer1
+    )
+  );
+  store.dispatch(registerRenderer(() => 5, CustomRenderer2));
+
+  const myUiSchema = {
+    type: 'HorizontalLayout',
+    elements: [
+      {
+        type: 'Control',
+        scope: '#/properties/foo'
+      }
+    ]
+  };
+  const wrapper = mount(
+    <Provider store={store}>
+      <JsonFormsReduxContext>
+        <JsonFormsDispatch uischema={myUiSchema} />
+      </JsonFormsReduxContext>
+    </Provider>
+  );
 
   expect(wrapper.find('h1').text()).toBe('test');
+  wrapper.unmount();
+});
+
+test('JsonForms renderer should pick schema from ownProps', () => {
+  const mySchema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'boolean'
+      }
+    }
+  };
+  const store = initJsonFormsStore({
+    data: fixture.data,
+    uischema: fixture.uischema,
+    schema: fixture.schema
+  });
+
+  store.dispatch(
+    registerRenderer(
+      rankWith(10, (_, schema) => isEqual(schema, mySchema)),
+      CustomRenderer1
+    )
+  );
+  store.dispatch(registerRenderer(() => 5, CustomRenderer2));
+
+  const wrapper = mount(
+    <Provider store={store}>
+      <JsonFormsReduxContext>
+        <JsonFormsDispatch schema={mySchema} />
+      </JsonFormsReduxContext>
+    </Provider>
+  );
+  expect(wrapper.find('h1').text()).toBe('test');
+  wrapper.unmount();
+});
+
+test('JsonForms renderer should pick enabled prop from ownProps', () => {
+  const CustomRenderer4: StatelessRenderer<RendererProps> = props => {
+    return <h3>{`${props.enabled}`}</h3>;
+  };
+
+  const store = initJsonFormsStore({
+    data: fixture.data,
+    uischema: fixture.uischema,
+    schema: fixture.schema
+  });
+
+  store.dispatch(registerRenderer(() => 5, CustomRenderer4));
+
+  const wrapper = mount(
+    <Provider store={store}>
+      <JsonFormsReduxContext>
+        <JsonFormsDispatch enabled={false} />
+      </JsonFormsReduxContext>
+    </Provider>
+  );
+  expect(wrapper.find('h3').text()).toBe('false');
   wrapper.unmount();
 });
 

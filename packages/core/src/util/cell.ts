@@ -97,7 +97,7 @@ export const mapStateToCellProps = (
   state: JsonFormsState,
   ownProps: OwnPropsOfCell
 ): StatePropsOfCell => {
-  const { id, schema, path, uischema } = ownProps;
+  const { id, schema, path, uischema, renderers, cells } = ownProps;
   const rootData = getData(state);
   const visible =
     ownProps.visible !== undefined
@@ -124,7 +124,9 @@ export const mapStateToCellProps = (
     schema,
     uischema,
     config: getConfig(state),
-    rootSchema
+    rootSchema,
+    renderers,
+    cells
   };
 };
 
@@ -133,11 +135,11 @@ export const mapStateToDispatchCellProps = (
   ownProps: OwnPropsOfCell
 ): DispatchCellStateProps => {
   const props: StatePropsOfCell = mapStateToCellProps(state, ownProps);
-  const { renderers, ...otherOwnProps } = ownProps;
+  const { renderers, cells, ...otherOwnProps } = ownProps;
   return {
     ...props,
     ...otherOwnProps,
-    cells: state.jsonforms.cells || []
+    cells: cells || state.jsonforms.cells || []
   };
 };
 

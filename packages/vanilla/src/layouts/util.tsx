@@ -37,19 +37,20 @@ export const renderChildren = (
   layout: Layout,
   schema: JsonSchema,
   className: string,
-  path: string) => {
-
+  path: string
+) => {
   if (isEmpty(layout.elements)) {
     return [];
   }
 
-  const { renderers } = useJsonForms();
+  const { renderers, cells } = useJsonForms();
 
   return layout.elements.map((child, index) => {
     return (
       <div className={className} key={`${path}-${index}`}>
         <JsonFormsDispatch
           renderers={renderers}
+          cells={cells}
           uischema={child}
           schema={schema}
           path={path}

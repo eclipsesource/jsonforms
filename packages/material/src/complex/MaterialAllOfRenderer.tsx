@@ -42,6 +42,7 @@ const MaterialAllOfRenderer = ({
   rootSchema,
   visible,
   renderers,
+  cells,
   path,
   uischemas,
   uischema
@@ -60,6 +61,7 @@ const MaterialAllOfRenderer = ({
           uischema={delegateUISchema}
           path={path}
           renderers={renderers}
+          cells={cells}
         />
       </Hidden>
     );
@@ -82,6 +84,7 @@ const MaterialAllOfRenderer = ({
           uischema={allOfRenderInfo.uischema}
           path={path}
           renderers={renderers}
+          cells={cells}
         />
       ))}
     </Hidden>

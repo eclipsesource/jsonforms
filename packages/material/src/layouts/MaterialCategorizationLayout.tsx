@@ -35,41 +35,65 @@ import {
   StatePropsOfLayout,
   Tester,
   UISchemaElement,
-  uiTypeIs,
+  uiTypeIs
 } from '@jsonforms/core';
 import { RendererComponent, withJsonFormsLayoutProps } from '@jsonforms/react';
-import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from '../util/layout';
+import {
+  MaterialLayoutRenderer,
+  MaterialLayoutRendererProps
+} from '../util/layout';
 
 export const isSingleLevelCategorization: Tester = and(
   uiTypeIs('Categorization'),
   (uischema: UISchemaElement): boolean => {
     const categorization = uischema as Categorization;
 
-    return categorization.elements && categorization.elements.reduce((acc, e) => acc && e.type === 'Category', true);
+    return (
+      categorization.elements &&
+      categorization.elements.reduce(
+        (acc, e) => acc && e.type === 'Category',
+        true
+      )
+    );
   }
 );
 
-export const materialCategorizationTester: RankedTester = rankWith(1, isSingleLevelCategorization);
+export const materialCategorizationTester: RankedTester = rankWith(
+  1,
+  isSingleLevelCategorization
+);
 export interface CategorizationState {
   activeCategory: number;
 }
 
-export interface MaterialCategorizationLayoutRendererProps extends StatePropsOfLayout {
+export interface MaterialCategorizationLayoutRendererProps
+  extends StatePropsOfLayout {
   selected?: number;
   ownState?: boolean;
   data?: any;
   onChange?(selected: number, prevSelected: number): void;
 }
 
-export class MaterialCategorizationLayoutRenderer
-  extends RendererComponent<MaterialCategorizationLayoutRendererProps, CategorizationState> {
-
+export class MaterialCategorizationLayoutRenderer extends RendererComponent<
+  MaterialCategorizationLayoutRendererProps,
+  CategorizationState
+> {
   state = {
     activeCategory: 0
   };
 
   render() {
-    const { data, path, renderers, schema, uischema, visible, enabled, selected } = this.props;
+    const {
+      data,
+      path,
+      renderers,
+      cells,
+      schema,
+      uischema,
+      visible,
+      enabled,
+      selected
+    } = this.props;
     const categorization = uischema as Categorization;
     const value = this.hasOwnState() ? this.state.activeCategory : selected;
     const childProps: MaterialLayoutRendererProps = {
@@ -79,18 +103,19 @@ export class MaterialCategorizationLayoutRenderer
       direction: 'column',
       enabled,
       visible,
-      renderers
+      renderers,
+      cells
     };
-    const categories = categorization.elements.filter((category: Category) => isVisible(category, data));
+    const categories = categorization.elements.filter((category: Category) =>
+      isVisible(category, data)
+    );
     return (
       <Hidden xsUp={!visible}>
         <AppBar position='static'>
           <Tabs value={value} onChange={this.handleChange} variant='scrollable'>
-            {categories.map((e: Category, idx: number) =>
-              (
-                <Tab key={idx} label={e.label} />
-              )
-            )}
+            {categories.map((e: Category, idx: number) => (
+              <Tab key={idx} label={e.label} />
+            ))}
           </Tabs>
         </AppBar>
         <div style={{ marginTop: '0.5em' }}>

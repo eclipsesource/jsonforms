@@ -28,7 +28,8 @@ import {
   JsonFormsRendererRegistryEntry,
   JsonSchema,
   OwnPropsOfRenderer,
-  UISchemaElement
+  UISchemaElement,
+  JsonFormsCellRendererRegistryEntry
 } from '@jsonforms/core';
 import { areEqual, JsonFormsDispatch } from '@jsonforms/react';
 import { Grid, Hidden } from '@material-ui/core';
@@ -38,7 +39,8 @@ export const renderLayoutElements = (
   schema: JsonSchema,
   path: string,
   enabled: boolean,
-  renderers?: JsonFormsRendererRegistryEntry[]
+  renderers?: JsonFormsRendererRegistryEntry[],
+  cells?: JsonFormsCellRendererRegistryEntry[]
 ) => {
   return elements.map((child, index) => (
     <Grid item key={`${path}-${index}`} xs>
@@ -48,6 +50,7 @@ export const renderLayoutElements = (
         path={path}
         enabled={enabled}
         renderers={renderers}
+        cells={cells}
       />
     </Grid>
   ));
@@ -56,7 +59,6 @@ export const renderLayoutElements = (
 export interface MaterialLayoutRendererProps extends OwnPropsOfRenderer {
   elements: UISchemaElement[];
   direction: 'row' | 'column';
-  renderers?: JsonFormsRendererRegistryEntry[];
 }
 export const MaterialLayoutRenderer = React.memo(
   ({
@@ -66,7 +68,8 @@ export const MaterialLayoutRenderer = React.memo(
     path,
     enabled,
     direction,
-    renderers
+    renderers,
+    cells
   }: MaterialLayoutRendererProps) => {
     if (isEmpty(elements)) {
       return null;
@@ -78,7 +81,14 @@ export const MaterialLayoutRenderer = React.memo(
             direction={direction}
             spacing={direction === 'row' ? 2 : 0}
           >
-            {renderLayoutElements(elements, schema, path, enabled, renderers)}
+            {renderLayoutElements(
+              elements,
+              schema,
+              path,
+              enabled,
+              renderers,
+              cells
+            )}
           </Grid>
         </Hidden>
       );

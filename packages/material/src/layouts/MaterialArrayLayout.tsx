@@ -63,6 +63,7 @@ export class MaterialArrayLayout extends React.PureComponent<
       errors,
       addItem,
       renderers,
+      cells,
       label,
       required,
       rootSchema,
@@ -99,6 +100,7 @@ export class MaterialArrayLayout extends React.PureComponent<
                   handleExpansion={this.handleChange}
                   uischema={uischema}
                   renderers={renderers}
+                  cells={cells}
                   key={index}
                   rootSchema={rootSchema}
                   enableMoveUp={index != 0}

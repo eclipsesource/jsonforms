@@ -32,16 +32,16 @@ import { UnknownRenderer } from './UnknownRenderer';
 import {
   createId,
   findRefs,
+  Generate,
   isControl,
+  JsonFormsCellRendererRegistryEntry,
   JsonFormsCore,
   JsonFormsProps,
   JsonFormsRendererRegistryEntry,
   JsonSchema,
   OwnPropsOfJsonFormsRenderer,
   removeId,
-  UISchemaElement,
-  JsonFormsCellRendererRegistryEntry,
-  Generate
+  UISchemaElement
 } from '@jsonforms/core';
 import {
   ctxToJsonFormsDispatchProps,
@@ -135,7 +135,8 @@ export class ResolvedJsonFormsDispatchRenderer extends React.Component<
     }
   }
   render() {
-    const { uischema, path, enabled, renderers } = this.props as JsonFormsProps;
+    const { uischema, path, enabled, renderers, cells } = this
+      .props as JsonFormsProps;
     const { resolving } = this.state;
     const _schema = this.state.resolvedSchema;
 
@@ -155,6 +156,7 @@ export class ResolvedJsonFormsDispatchRenderer extends React.Component<
           path={path}
           enabled={enabled}
           renderers={renderers}
+          cells={cells}
           id={this.state.id}
         />
       );
@@ -190,8 +192,9 @@ export const JsonFormsDispatch = React.memo(
         path={props.path || ''}
         enabled={props.enabled}
         rootSchema={ctx.core.schema}
-        renderers={ctx.renderers}
+        renderers={props.renderers || ctx.renderers}
         refResolver={refResolver}
+        cells={props.cells || ctx.cells}
       />
     );
   }
