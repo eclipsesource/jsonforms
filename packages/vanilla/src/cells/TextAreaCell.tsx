@@ -31,6 +31,7 @@ import {
 } from '@jsonforms/core';
 import { withJsonFormsCellProps } from '@jsonforms/react';
 import { VanillaRendererProps } from '../index';
+import { withVanillaCellProps } from '../util/index';
 
 export const TextAreaCell = (props: CellProps & VanillaRendererProps) => {
   const { data, className, id, enabled, uischema, path, handleChange } = props;
@@ -53,4 +54,4 @@ export const TextAreaCell = (props: CellProps & VanillaRendererProps) => {
  */
 export const textAreaCellTester: RankedTester = rankWith(2, isMultiLineControl);
 
-export default withJsonFormsCellProps(TextAreaCell);
+export default withJsonFormsCellProps(withVanillaCellProps(TextAreaCell));

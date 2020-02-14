@@ -171,8 +171,11 @@ export const addVanillaCellProps = (
 export const withVanillaCellProps = (Component: ComponentType<any>) => (props: any) => {
   const ctx = useJsonForms();
   const inputClassName = ['validate'].concat(
-    props.isValid ? 'valid' : 'invalid'
-  );
+    props.isValid ? 'valid' : 'invalid');
+  const definedStyle = findStyleAsClassName(ctx.styles)('control.input');
+  if (definedStyle) {
+    inputClassName.push(definedStyle);
+  }
 
   return (
     <Component
@@ -181,7 +184,20 @@ export const withVanillaCellProps = (Component: ComponentType<any>) => (props: a
       getStyle={findStyle(ctx.styles)}
       className={inputClassName.join(' ')}
     />
-  )
+  );
+};
+
+export const withVanillaEnumCellProps = (Component: ComponentType<any>) => (props: any) => {
+  const ctx = useJsonForms();
+
+  return (
+    <Component
+      {...props}
+      getStyleAsClassName={findStyleAsClassName(ctx.styles)}
+      getStyle={findStyle(ctx.styles)}
+      className={findStyleAsClassName(ctx.styles)('control.select')}
+    />
+  );
 };
 
 /**
@@ -201,6 +217,10 @@ export const vanillaStyles = [
   {
     name: 'control.input',
     classNames: ['input']
+  },
+  {
+    name: 'control.select',
+    classNames: ['select']
   },
   {
     name: 'control.validation',

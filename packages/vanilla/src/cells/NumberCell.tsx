@@ -31,6 +31,7 @@ import {
 } from '@jsonforms/core';
 import { withJsonFormsCellProps } from '@jsonforms/react';
 import { VanillaRendererProps } from '../index';
+import { withVanillaCellProps } from '../util/index';
 
 export const NumberCell = (props: CellProps & VanillaRendererProps) => {
   const { data, className, id, enabled, uischema, path, handleChange } = props;
@@ -55,4 +56,4 @@ export const NumberCell = (props: CellProps & VanillaRendererProps) => {
  */
 export const numberCellTester: RankedTester = rankWith(2, isNumberControl);
 
-export default withJsonFormsCellProps(NumberCell);
+export default withJsonFormsCellProps(withVanillaCellProps(NumberCell));
