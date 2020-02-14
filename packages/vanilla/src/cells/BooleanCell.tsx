@@ -32,6 +32,7 @@ import {
 import { withJsonFormsCellProps } from '@jsonforms/react';
 import { StatelessComponent } from 'react';
 import { VanillaRendererProps } from '../index';
+import { withVanillaCellProps } from '../util/index';
 
 export const BooleanCell: StatelessComponent<CellProps> =
   (props: CellProps & VanillaRendererProps) => {
@@ -58,4 +59,4 @@ export const BooleanCell: StatelessComponent<CellProps> =
  */
 export const booleanCellTester: RankedTester = rankWith(2, isBooleanControl);
 
-export default withJsonFormsCellProps(BooleanCell);
+export default withJsonFormsCellProps(withVanillaCellProps(BooleanCell));

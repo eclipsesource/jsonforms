@@ -31,6 +31,7 @@ import {
 } from '@jsonforms/core';
 import { withJsonFormsCellProps } from '@jsonforms/react';
 import { VanillaRendererProps } from '../index';
+import { withVanillaCellProps } from '../util/index';
 
 export const SliderCell = (props: CellProps & VanillaRendererProps) => {
   const { data, className, id, enabled, uischema, schema, path, handleChange } = props;
@@ -56,4 +57,4 @@ export const SliderCell = (props: CellProps & VanillaRendererProps) => {
 
 export const sliderCellTester: RankedTester = rankWith(4, isRangeControl);
 
-export default withJsonFormsCellProps(SliderCell);
+export default withJsonFormsCellProps(withVanillaCellProps(SliderCell));

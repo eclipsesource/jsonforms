@@ -31,6 +31,7 @@ import {
 } from '@jsonforms/core';
 import { withJsonFormsCellProps } from '@jsonforms/react';
 import { VanillaRendererProps } from '../index';
+import { withVanillaCellProps } from '../util/index';
 import merge from 'lodash/merge';
 
 export const TextCell = (props: CellProps & VanillaRendererProps) => {
@@ -68,4 +69,4 @@ export const TextCell = (props: CellProps & VanillaRendererProps) => {
  */
 export const textCellTester: RankedTester = rankWith(1, isStringControl);
 
-export default withJsonFormsCellProps(TextCell);
+export default withJsonFormsCellProps(withVanillaCellProps(TextCell));
