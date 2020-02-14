@@ -99,6 +99,7 @@ export interface WithChildren {
   children: any;
 }
 
+export * from './actions';
 export * from './controls';
 export * from './complex';
 export * from './cells';
