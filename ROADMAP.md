@@ -7,7 +7,7 @@ H1/2020
  * Removal of redux dependency
 
 
-H2/2019
+H2/2020
  * Strict application of semantic versioning
  * Eclipse Theia Integration of a JSONForms-based Editor
  
