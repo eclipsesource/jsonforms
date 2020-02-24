@@ -39,6 +39,10 @@ export const schema = {
           message: {
             type: 'string',
             maxLength: 5
+          },
+          enum: {
+            type: 'string',
+            const: 'foo'
           }
         }
       }
