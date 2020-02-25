@@ -267,6 +267,25 @@ describe('Date cell', () => {
     expect(input.props().value).toBe('1980-04-04');
   });
 
+  test('has classes set', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <DateCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input');
+    expect(input.hasClass('input')).toBe(true);
+    expect(input.hasClass('validate')).toBe(true);
+    expect(input.hasClass('valid')).toBe(true);
+  });
+
   test('update via event', () => {
     const store = initJsonFormsVanillaStore({
       data: fixture.data,

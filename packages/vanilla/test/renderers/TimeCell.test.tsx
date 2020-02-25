@@ -239,6 +239,7 @@ describe('Time cell', () => {
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.autofocus).toBe(false);
   });
+
   test('render', () => {
     const store = initJsonFormsVanillaStore({
       data: fixture.data,
@@ -257,6 +258,26 @@ describe('Time cell', () => {
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.type).toBe('time');
     expect(input.value).toBe('13:37');
+  });
+
+  test('has classes set', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <TimeCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+
+    const input = wrapper.find('input');
+    expect(input.hasClass('input')).toBe(true);
+    expect(input.hasClass('validate')).toBe(true);
+    expect(input.hasClass('valid')).toBe(true);
   });
 
   test('update via event', () => {
