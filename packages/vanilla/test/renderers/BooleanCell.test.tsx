@@ -266,6 +266,25 @@ describe('Boolean cell', () => {
     expect(input.checked).toBe(true);
   });
 
+  test('has classes set', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <BooleanCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input');
+    expect(input.hasClass('input')).toBe(true);
+    expect(input.hasClass('validate')).toBe(true);
+    expect(input.hasClass('valid')).toBe(true);
+  });
+
   test('update via input event', () => {
     const store = initJsonFormsVanillaStore({
       data: fixture.data,

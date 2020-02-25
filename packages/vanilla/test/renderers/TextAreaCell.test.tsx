@@ -198,6 +198,26 @@ describe('Text area cell', () => {
     expect(textarea.value).toBe('Foo');
   });
 
+  test('has classes set', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <TextAreaCell schema={fixture.schema} uischema={fixture.uischema} path='name' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+
+    const input = wrapper.find('textarea');
+    expect(input.hasClass('input')).toBe(true);
+    expect(input.hasClass('validate')).toBe(true);
+    expect(input.hasClass('valid')).toBe(true);
+  });
+
   test('update via input event', () => {
     const store = initJsonFormsVanillaStore({
       data: fixture.data,

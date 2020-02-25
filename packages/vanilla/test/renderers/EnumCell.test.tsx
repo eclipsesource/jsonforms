@@ -157,6 +157,26 @@ describe('Enum cell', () => {
     expect(select.options.item(2).value).toBe('b');
   });
 
+  test('has classes set', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+
+    const input = wrapper.find('select');
+    expect(input.hasClass('select')).toBe(true);
+    expect(input.hasClass('validate')).toBe(true);
+    expect(input.hasClass('valid')).toBe(true);
+  });
+
   test('update via input event', () => {
     const store = initJsonFormsVanillaStore({
       data: fixture.data,
