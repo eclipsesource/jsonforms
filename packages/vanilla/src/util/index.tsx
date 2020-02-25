@@ -168,11 +168,14 @@ export const addVanillaCellProps = (
     };
   };
 
-export const withVanillaCellProps = (Component: ComponentType<any>) => (props: any) => {
+const withVanillaCellPropsForType = (type: string) => (
+  Component: ComponentType<any>
+) => (props: any) => {
   const ctx = useJsonForms();
   const inputClassName = ['validate'].concat(
-    props.isValid ? 'valid' : 'invalid');
-  const definedStyle = findStyleAsClassName(ctx.styles)('control.input');
+    props.isValid ? 'valid' : 'invalid'
+  );
+  const definedStyle = findStyleAsClassName(ctx.styles)(type);
   if (definedStyle) {
     inputClassName.push(definedStyle);
   }
@@ -187,18 +190,13 @@ export const withVanillaCellProps = (Component: ComponentType<any>) => (props: a
   );
 };
 
-export const withVanillaEnumCellProps = (Component: ComponentType<any>) => (props: any) => {
-  const ctx = useJsonForms();
+export const withVanillaCellProps = withVanillaCellPropsForType(
+  'control.input'
+);
 
-  return (
-    <Component
-      {...props}
-      getStyleAsClassName={findStyleAsClassName(ctx.styles)}
-      getStyle={findStyle(ctx.styles)}
-      className={findStyleAsClassName(ctx.styles)('control.select')}
-    />
-  );
-};
+export const withVanillaEnumCellProps = withVanillaCellPropsForType(
+  'control.select'
+);
 
 /**
  * Pre-defined vanilla styles.

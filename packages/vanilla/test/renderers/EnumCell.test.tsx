@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
-import { getData, update } from '@jsonforms/core';
+import { ControlElement, getData, update } from '@jsonforms/core';
 import { JsonFormsReduxContext } from '@jsonforms/react';
 import Adapter from 'enzyme-adapter-react-16';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
@@ -33,16 +33,18 @@ import { initJsonFormsVanillaStore } from '../vanillaStore';
 
 Enzyme.configure({ adapter: new Adapter() });
 
+const control: ControlElement = {
+  type: 'Control',
+  scope: '#/properties/foo',
+};
+
 const fixture = {
   data: { 'foo': 'a' },
   schema: {
     type: 'string',
     enum: ['a', 'b'],
   },
-  uischema: {
-    type: 'Control',
-    scope: '#/properties/foo',
-  },
+  uischema: control,
   styles: [
     {
       name: 'control',
