@@ -30,10 +30,10 @@ import {
   rankWith,
 } from '@jsonforms/core';
 import { withJsonFormsEnumCellProps } from '@jsonforms/react';
-import { withVanillaControlProps, withVanillaEnumCellProps } from '../util';
-import { WithClassname } from '../index';
+import { withVanillaEnumCellProps } from '../util';
+import { VanillaRendererProps } from '../index';
 
-export const EnumCell = (props: EnumCellProps & WithClassname) => {
+export const EnumCell = (props: EnumCellProps & VanillaRendererProps) => {
   const { data, className, id, enabled, uischema, path, handleChange, options } = props;
 
   return (
@@ -65,4 +65,4 @@ export const EnumCell = (props: EnumCellProps & WithClassname) => {
  */
 export const enumCellTester: RankedTester = rankWith(2, isEnumControl);
 
-export default withVanillaControlProps(withJsonFormsEnumCellProps(withVanillaEnumCellProps(EnumCell)));
+export default withJsonFormsEnumCellProps(withVanillaEnumCellProps(EnumCell));
