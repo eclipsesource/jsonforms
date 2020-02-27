@@ -9,7 +9,6 @@ module.exports = merge(baseConfig, {
         'webpack/hot/dev-server',
         './src/index.ts',
         '../examples/src/index.ts',
-        '../webcomponent/src/index.ts',
         './example/index.ts'
     ],
     output: {
