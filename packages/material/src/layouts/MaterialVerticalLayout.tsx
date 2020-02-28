@@ -28,7 +28,7 @@ import {
   RankedTester,
   rankWith,
   uiTypeIs,
-  VerticalLayout
+  VerticalLayout,
 } from '@jsonforms/core';
 import {
   MaterialLayoutRenderer,
@@ -45,15 +45,7 @@ export const materialVerticalLayoutTester: RankedTester = rankWith(
   uiTypeIs('VerticalLayout')
 );
 
-export const MaterialVerticalLayoutRenderer = ({
-  uischema,
-  schema,
-  path,
-  enabled,
-  visible,
-  renderers,
-  cells
-}: LayoutProps) => {
+export const MaterialVerticalLayoutRenderer = ({ uischema, schema, path, enabled, visible, renderers, cells }: LayoutProps) => {
   const verticalLayout = uischema as VerticalLayout;
   const childProps: MaterialLayoutRendererProps = {
     elements: verticalLayout.elements,
@@ -64,13 +56,7 @@ export const MaterialVerticalLayoutRenderer = ({
     visible
   };
 
-  return (
-    <MaterialLayoutRenderer
-      {...childProps}
-      renderers={renderers}
-      cells={cells}
-    />
-  );
+  return <MaterialLayoutRenderer {...childProps} renderers={renderers} cells={cells} />;
 };
 
 export default withJsonFormsLayoutProps(MaterialVerticalLayoutRenderer);

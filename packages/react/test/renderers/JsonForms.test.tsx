@@ -59,7 +59,7 @@ import {
   useJsonForms,
   withJsonFormsControlProps
 } from '../../src/JsonFormsContext';
-import { DispatchCell } from '../../../material/node_modules/@jsonforms/react/lib';
+import { DispatchCell } from '../../src/DispatchCell';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -107,19 +107,6 @@ export const initJsonFormsStore = ({
   const reducer = combineReducers({ jsonforms: jsonformsReducer() });
   return createStore(reducer, initState);
 };
-
-window.matchMedia = jest.fn().mockImplementation(query => {
-  return {
-    matches: true,
-    media: query,
-    onchange: null,
-    addListener: jest.fn(),
-    removeListener: jest.fn(),
-    addEventListener: jest.fn(),
-    removeEventListener: jest.fn(),
-    dispatchEvent: jest.fn()
-  };
-});
 
 const CustomRenderer1: StatelessRenderer<RendererProps> = () => <h1>test</h1>;
 const CustomRenderer2: StatelessRenderer<RendererProps> = () => <h2>test</h2>;

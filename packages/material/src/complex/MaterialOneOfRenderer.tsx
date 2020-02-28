@@ -47,7 +47,10 @@ import {
   Tab,
   Tabs
 } from '@material-ui/core';
-import { JsonFormsDispatch, withJsonFormsOneOfProps } from '@jsonforms/react';
+import {
+  JsonFormsDispatch,
+  withJsonFormsOneOfProps
+} from '@jsonforms/react';
 import CombinatorProperties from './CombinatorProperties';
 
 export interface OwnOneOfProps extends OwnPropsOfControl {
@@ -55,116 +58,96 @@ export interface OwnOneOfProps extends OwnPropsOfControl {
 }
 
 const oneOf = 'oneOf';
-const MaterialOneOfRenderer = ({
-  handleChange,
-  schema,
-  path,
-  renderers,
-  cells,
-  rootSchema,
-  id,
-  visible,
-  indexOfFittingSchema,
-  uischema,
-  uischemas,
-  data
-}: CombinatorProps) => {
-  const [open, setOpen] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(indexOfFittingSchema || 0);
-  const [newSelectedIndex, setNewSelectedIndex] = useState(0);
-  const handleClose = useCallback(() => setOpen(false), [setOpen]);
-  const cancel = useCallback(() => {
-    setOpen(false);
-  }, [setOpen]);
-  const _schema = resolveSubSchemas(schema, rootSchema, oneOf);
-  const oneOfRenderInfos = createCombinatorRenderInfos(
-    (_schema as JsonSchema).oneOf,
-    rootSchema,
-    oneOf,
-    uischema,
-    path,
-    uischemas
-  );
+const MaterialOneOfRenderer =
+  ({ handleChange, schema, path, renderers, cells, rootSchema, id, visible, indexOfFittingSchema, uischema, uischemas, data }: CombinatorProps) => {
+    const [open, setOpen] = useState(false);
+    const [selectedIndex, setSelectedIndex] = useState(indexOfFittingSchema || 0);
+    const [newSelectedIndex, setNewSelectedIndex] = useState(0);
+    const handleClose = useCallback(() => setOpen(false), [setOpen]);
+    const cancel = useCallback(() => {
+      setOpen(false);
+    }, [setOpen]);
+    const _schema = resolveSubSchemas(schema, rootSchema, oneOf);
+    const oneOfRenderInfos = createCombinatorRenderInfos(
+      (_schema as JsonSchema).oneOf,
+      rootSchema,
+      oneOf,
+      uischema,
+      path,
+      uischemas
+      );
 
-  const openNewTab = (newIndex: number) => {
-    handleChange(path, createDefaultValue(schema.oneOf[newIndex]));
-    setSelectedIndex(newIndex);
-  };
+    const openNewTab = (newIndex: number) => {
+      handleChange(
+        path,
+        createDefaultValue(schema.oneOf[newIndex])
+      );
+      setSelectedIndex(newIndex);
+    }
 
-  const confirm = useCallback(() => {
-    openNewTab(newSelectedIndex);
-    setOpen(false);
-  }, [handleChange, createDefaultValue, newSelectedIndex]);
-  const handleTabChange = useCallback(
-    (_event: any, newOneOfIndex: number) => {
+    const confirm = useCallback(() => {
+      openNewTab(newSelectedIndex)
+      setOpen(false);
+    }, [handleChange, createDefaultValue, newSelectedIndex]);
+    const handleTabChange = useCallback((_event: any, newOneOfIndex: number) => {
       setNewSelectedIndex(newOneOfIndex);
-      if (isEmpty(data)) {
-        openNewTab(newOneOfIndex);
+      if(isEmpty(data)) {
+        openNewTab(newOneOfIndex)
       } else {
         setOpen(true);
       }
-    },
-    [setOpen, setSelectedIndex, data]
-  );
 
-  return (
-    <Hidden xsUp={!visible}>
-      <CombinatorProperties
-        schema={_schema}
-        combinatorKeyword={'oneOf'}
-        path={path}
-      />
-      <Tabs value={selectedIndex} onChange={handleTabChange}>
-        {oneOfRenderInfos.map(oneOfRenderInfo => (
-          <Tab key={oneOfRenderInfo.label} label={oneOfRenderInfo.label} />
-        ))}
-      </Tabs>
-      {oneOfRenderInfos.map(
-        (oneOfRenderInfo, oneOfIndex) =>
-          selectedIndex === oneOfIndex && (
-            <JsonFormsDispatch
-              key={oneOfIndex}
-              schema={oneOfRenderInfo.schema}
-              uischema={oneOfRenderInfo.uischema}
-              path={path}
-              renderers={renderers}
-              cells={cells}
-            />
-          )
-      )}
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby='alert-dialog-title'
-        aria-describedby='alert-dialog-description'
-      >
-        <DialogTitle id='alert-dialog-title'>{'Clear form?'}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id='alert-dialog-description'>
-            Your data will be cleared if you navigate away from this tab. Do you
-            want to proceed?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={cancel} color='primary'>
-            No
-          </Button>
-          <Button
-            onClick={confirm}
-            color='primary'
-            autoFocus
-            id={`oneOf-${id}-confirm-yes`}
-          >
-            Yes
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Hidden>
-  );
-};
+    }, [setOpen, setSelectedIndex, data]);
 
-export const materialOneOfControlTester: RankedTester = rankWith(
-  3,
-  isOneOfControl
-);
+    return (
+      <Hidden xsUp={!visible}>
+        <CombinatorProperties
+          schema={_schema}
+          combinatorKeyword={'oneOf'}
+          path={path}
+        />
+        <Tabs value={selectedIndex} onChange={handleTabChange}>
+          {oneOfRenderInfos.map(oneOfRenderInfo => <Tab key={oneOfRenderInfo.label} label={oneOfRenderInfo.label} />)}
+        </Tabs>
+        {
+          oneOfRenderInfos.map((oneOfRenderInfo, oneOfIndex) => (
+            selectedIndex === oneOfIndex && (
+              <JsonFormsDispatch
+                key={oneOfIndex}
+                schema={oneOfRenderInfo.schema}
+                uischema={oneOfRenderInfo.uischema}
+                path={path}
+                renderers={renderers}
+                cells={cells}
+              />
+            )
+          ))
+        }
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby='alert-dialog-title'
+          aria-describedby='alert-dialog-description'
+        >
+          <DialogTitle id='alert-dialog-title'>{'Clear form?'}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id='alert-dialog-description'>
+              Your data will be cleared if you navigate away from this tab.
+              Do you want to proceed?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={cancel} color='primary'>
+              No
+            </Button>
+            <Button onClick={confirm} color='primary' autoFocus id={`oneOf-${id}-confirm-yes`}>
+              Yes
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Hidden>
+    );
+  };
+
+export const materialOneOfControlTester: RankedTester = rankWith(3, isOneOfControl);
 export default withJsonFormsOneOfProps(MaterialOneOfRenderer);
