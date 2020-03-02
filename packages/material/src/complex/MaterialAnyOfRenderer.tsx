@@ -44,6 +44,7 @@ const MaterialAnyOfRenderer = ({
   visible,
   path,
   renderers,
+  cells,
   uischema,
   uischemas
 }: StatePropsOfCombinator) => {
@@ -84,6 +85,7 @@ const MaterialAnyOfRenderer = ({
               uischema={anyOfRenderInfo.uischema}
               path={path}
               renderers={renderers}
+              cells={cells}
             />
           )
       )}

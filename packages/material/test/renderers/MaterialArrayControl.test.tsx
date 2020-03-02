@@ -26,9 +26,11 @@ import './MatchMediaMock';
 import {
   Actions,
   ControlElement,
+  DispatchCellProps,
   jsonformsReducer,
   JsonFormsState,
-  JsonSchema
+  JsonSchema,
+  registerCell
 } from '@jsonforms/core';
 import * as React from 'react';
 import { Provider } from 'react-redux';
@@ -38,7 +40,7 @@ import { AnyAction, combineReducers, createStore, Reducer, Store } from 'redux';
 import { materialCells, materialRenderers } from '../../src';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { JsonFormsReduxContext } from '@jsonforms/react';
+import { JsonFormsReduxContext, StatelessRenderer } from '@jsonforms/react';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -267,6 +269,55 @@ describe('Material array control', () => {
     expect(nrOfRowsBeforeDelete).toBe(4);
     expect(nrOfRowsAfterDelete).toBe(3);
     expect(store.getState().jsonforms.core.data.length).toBe(1);
+  });
+
+  const CellRenderer1: StatelessRenderer<DispatchCellProps> = () => (
+    <div className='cell test 1' />
+  );
+  const CellRenderer2: StatelessRenderer<DispatchCellProps> = () => (
+    <div className='cell test 2' />
+  );
+
+  it('should use cells from store', () => {
+    const store = initJsonFormsStore();
+    store.dispatch(registerCell(() => 50, CellRenderer1));
+    store.dispatch(registerCell(() => 51, CellRenderer2));
+
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <MaterialArrayControlRenderer
+            schema={fixture.schema}
+            uischema={fixture.uischema}
+          />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+
+    const rows = wrapper.find({ className: 'cell test 2' });
+    // 2 header rows + 2 data entries
+    expect(rows.length).toBe(4);
+  });
+
+  it('should use cells from own props', () => {
+    const store = initJsonFormsStore();
+    store.dispatch(registerCell(() => 50, CellRenderer1));
+
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <MaterialArrayControlRenderer
+            schema={fixture.schema}
+            uischema={fixture.uischema}
+            cells={[{ tester: () => 60, cell: CellRenderer2 }]}
+          />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+
+    const rows = wrapper.find({ className: 'cell test 2' });
+    // 2 header rows + 2 data entries
+    expect(rows.length).toBe(4);
   });
 
   it('should support adding rows that contain enums', () => {

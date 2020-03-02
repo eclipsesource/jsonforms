@@ -25,9 +25,7 @@
 import maxBy from 'lodash/maxBy';
 import React from 'react';
 import { UnknownRenderer } from './UnknownRenderer';
-import {
-  DispatchCellProps
-} from '@jsonforms/core';
+import { DispatchCellProps } from '@jsonforms/core';
 import { withJsonFormsDispatchCellProps } from './JsonFormsContext';
 
 /**
@@ -35,17 +33,31 @@ import { withJsonFormsDispatchCellProps } from './JsonFormsContext';
  */
 class Dispatch extends React.Component<DispatchCellProps, any> {
   render() {
-    const { uischema, schema, path, cells, id, enabled } = this.props;
+    const {
+      uischema,
+      schema,
+      path,
+      cells,
+      id,
+      enabled,
+      renderers
+    } = this.props;
     const cell = maxBy(cells, r => r.tester(uischema, schema));
-
     if (cell === undefined || cell.tester(uischema, schema) === -1) {
       return <UnknownRenderer type={'cell'} />;
     } else {
       const Cell = cell.cell;
-
       return (
         <React.Fragment>
-          <Cell uischema={uischema} schema={schema} enabled={enabled} path={path} id={id} />
+          <Cell
+            uischema={uischema}
+            schema={schema}
+            enabled={enabled}
+            path={path}
+            id={id}
+            renderers={renderers}
+            cells={cells}
+          />
         </React.Fragment>
       );
     }

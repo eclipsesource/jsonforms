@@ -59,7 +59,7 @@ export interface OwnOneOfProps extends OwnPropsOfControl {
 
 const oneOf = 'oneOf';
 const MaterialOneOfRenderer =
-  ({ handleChange, schema, path, renderers, rootSchema, id, visible, indexOfFittingSchema, uischema, uischemas, data }: CombinatorProps) => {
+  ({ handleChange, schema, path, renderers, cells, rootSchema, id, visible, indexOfFittingSchema, uischema, uischemas, data }: CombinatorProps) => {
     const [open, setOpen] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(indexOfFittingSchema || 0);
     const [newSelectedIndex, setNewSelectedIndex] = useState(0);
@@ -118,6 +118,7 @@ const MaterialOneOfRenderer =
                 uischema={oneOfRenderInfo.uischema}
                 path={path}
                 renderers={renderers}
+                cells={cells}
               />
             )
           ))

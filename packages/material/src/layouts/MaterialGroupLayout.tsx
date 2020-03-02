@@ -58,7 +58,7 @@ const GroupComponent = React.memo(({ visible, enabled, uischema, ...props }: Mat
   );
 });
 
-export const MaterializedGroupLayoutRenderer = ({ uischema, schema, path, visible, enabled, renderers, direction }: LayoutProps) => {
+export const MaterializedGroupLayoutRenderer = ({ uischema, schema, path, visible, enabled, renderers, cells, direction }: LayoutProps) => {
   const groupLayout = uischema as GroupLayout;
 
   return (
@@ -71,6 +71,7 @@ export const MaterializedGroupLayoutRenderer = ({ uischema, schema, path, visibl
       enabled={enabled}
       uischema={uischema}
       renderers={renderers}
+      cells={cells}
     />
   );
 };

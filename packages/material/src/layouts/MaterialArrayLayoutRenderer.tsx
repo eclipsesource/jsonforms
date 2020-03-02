@@ -34,28 +34,47 @@ import { Hidden } from '@material-ui/core';
 import { MaterialArrayLayout } from './MaterialArrayLayout';
 import { withJsonFormsArrayLayoutProps } from '@jsonforms/react';
 
-export const MaterialArrayLayoutRenderer =
-  ({ visible, enabled, id, uischema, schema, label, rootSchema, renderers, data, path, errors, addItem }: ArrayLayoutProps) => {
-    const addItemCb = useCallback((p: string, value: any) => addItem(p, value), [addItem]);
-    return (
-      <Hidden xsUp={!visible}>
-        <MaterialArrayLayout
-          label={label}
-          uischema={uischema}
-          schema={schema}
-          id={id}
-          rootSchema={rootSchema}
-          errors={errors}
-          enabled={enabled}
-          visible={visible}
-          data={data}
-          path={path}
-          addItem={addItemCb}
-          renderers={renderers}
-        />
-      </Hidden>
-    );
-  };
+export const MaterialArrayLayoutRenderer = ({
+  visible,
+  enabled,
+  id,
+  uischema,
+  schema,
+  label,
+  rootSchema,
+  renderers,
+  cells,
+  data,
+  path,
+  errors,
+  addItem
+}: ArrayLayoutProps) => {
+  const addItemCb = useCallback((p: string, value: any) => addItem(p, value), [
+    addItem
+  ]);
+  return (
+    <Hidden xsUp={!visible}>
+      <MaterialArrayLayout
+        label={label}
+        uischema={uischema}
+        schema={schema}
+        id={id}
+        rootSchema={rootSchema}
+        errors={errors}
+        enabled={enabled}
+        visible={visible}
+        data={data}
+        path={path}
+        addItem={addItemCb}
+        renderers={renderers}
+        cells={cells}
+      />
+    </Hidden>
+  );
+};
 
-export const materialArrayLayoutTester: RankedTester = rankWith(4, isObjectArrayWithNesting);
+export const materialArrayLayoutTester: RankedTester = rankWith(
+  4,
+  isObjectArrayWithNesting
+);
 export default withJsonFormsArrayLayoutProps(MaterialArrayLayoutRenderer);

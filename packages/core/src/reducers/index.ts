@@ -60,6 +60,7 @@ import {
 import { JsonSchema } from '../models/jsonSchema';
 import { ControlElement, UISchemaElement } from '../models/uischema';
 import { Generate } from '../generators';
+import { JsonFormsCellRendererRegistryEntry } from './cells';
 
 export {
   rendererReducer,
@@ -99,6 +100,9 @@ export const getDefaultData = (
 export const getRenderers = (
   state: JsonFormsState
 ): JsonFormsRendererRegistryEntry[] => get(state, 'jsonforms.renderers');
+export const getCells = (
+  state: JsonFormsState
+): JsonFormsCellRendererRegistryEntry[] => get(state, 'jsonforms.cells');
 
 /**
  * Finds a registered UI schema to use, if any.

@@ -45,7 +45,7 @@ export const materialVerticalLayoutTester: RankedTester = rankWith(
   uiTypeIs('VerticalLayout')
 );
 
-export const MaterialVerticalLayoutRenderer = ({ uischema, schema, path, enabled, visible, renderers }: LayoutProps) => {
+export const MaterialVerticalLayoutRenderer = ({ uischema, schema, path, enabled, visible, renderers, cells }: LayoutProps) => {
   const verticalLayout = uischema as VerticalLayout;
   const childProps: MaterialLayoutRendererProps = {
     elements: verticalLayout.elements,
@@ -56,7 +56,7 @@ export const MaterialVerticalLayoutRenderer = ({ uischema, schema, path, enabled
     visible
   };
 
-  return <MaterialLayoutRenderer {...childProps} renderers={renderers} />;
+  return <MaterialLayoutRenderer {...childProps} renderers={renderers} cells={cells} />;
 };
 
 export default withJsonFormsLayoutProps(MaterialVerticalLayoutRenderer);

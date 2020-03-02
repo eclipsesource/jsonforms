@@ -29,6 +29,7 @@ import find from 'lodash/find';
 import RefParser from 'json-schema-ref-parser';
 import {
   findUISchema,
+  getCells,
   getConfig,
   getData,
   getErrorAt,
@@ -42,13 +43,13 @@ import {
 import { RankedTester } from '../testers';
 import { JsonSchema } from '../models/jsonSchema';
 import {
-  composePaths,
   CombinatorKeyword,
+  composePaths,
   composeWithUi,
   createLabelDescriptionFrom,
   formatErrorMessage,
-  hasShowRule,
   hasEnableRule,
+  hasShowRule,
   isEnabled,
   isVisible,
   moveDown,
@@ -61,8 +62,9 @@ import { ErrorObject } from 'ajv';
 import { JsonFormsState } from '../store';
 import { AnyAction, Dispatch } from 'redux';
 import { JsonFormsRendererRegistryEntry } from '../reducers/renderers';
+import { JsonFormsCellRendererRegistryEntry } from '../reducers/cells';
 
-export { JsonFormsRendererRegistryEntry };
+export { JsonFormsRendererRegistryEntry, JsonFormsCellRendererRegistryEntry };
 
 export interface Labels {
   default: string;
@@ -196,6 +198,8 @@ export interface OwnPropsOfRenderer {
   path?: string;
 
   renderers?: JsonFormsRendererRegistryEntry[];
+
+  cells?: JsonFormsCellRendererRegistryEntry[];
 }
 
 export interface OwnPropsOfControl extends OwnPropsOfRenderer {
@@ -249,6 +253,17 @@ export interface StatePropsOfRenderer {
    * Instance path the data is written to, in case of a control.
    */
   path: string;
+
+  /**
+   * All available renderers.
+   */
+  renderers?: JsonFormsRendererRegistryEntry[];
+
+  /**
+   * All available cell renderers.
+   */
+
+  cells?: JsonFormsCellRendererRegistryEntry[];
 }
 
 /**
@@ -333,11 +348,6 @@ export interface ControlProps
  */
 export interface StatePropsOfLayout extends StatePropsOfRenderer {
   /**
-   * All available renderers.
-   */
-  renderers?: any[];
-
-  /**
    * Direction for the layout to flow
    */
   direction: 'row' | 'column';
@@ -413,7 +423,7 @@ export const mapStateToControlProps = (
     uischema: ownProps.uischema,
     schema: resolvedSchema || rootSchema,
     config: getConfig(state),
-    cells: state.jsonforms.cells,
+    cells: ownProps.cells || state.jsonforms.cells,
     rootSchema
   };
 };
@@ -491,6 +501,7 @@ export const mapStateToMasterListItemProps = (
 export interface StatePropsOfControlWithDetail extends StatePropsOfControl {
   uischemas?: { tester: UISchemaTester; uischema: UISchemaElement }[];
   renderers?: JsonFormsRendererRegistryEntry[];
+  cells?: JsonFormsCellRendererRegistryEntry[];
 }
 
 export interface OwnPropsOfMasterListItem {
@@ -562,7 +573,8 @@ export const mapStateToArrayControlProps = (
     uischema,
     schema: resolvedSchema,
     childErrors,
-    renderers: ownProps.renderers || getRenderers(state)
+    renderers: ownProps.renderers || getRenderers(state),
+    cells: ownProps.cells || getCells(state)
   };
 };
 
@@ -671,6 +683,7 @@ export const mapStateToLayoutProps = (
   return {
     ...layoutDefaultProps,
     renderers: ownProps.renderers || getRenderers(state),
+    cells: ownProps.cells || getCells(state),
     visible,
     enabled,
     path: ownProps.path,
@@ -683,9 +696,7 @@ export const mapStateToLayoutProps = (
 
 export type RefResolver = (schema: JsonSchema) => Promise<JsonSchema>;
 
-export interface OwnPropsOfJsonFormsRenderer extends OwnPropsOfRenderer {
-  renderers?: JsonFormsRendererRegistryEntry[];
-}
+export interface OwnPropsOfJsonFormsRenderer extends OwnPropsOfRenderer {}
 
 export interface StatePropsOfJsonFormsRenderer
   extends OwnPropsOfJsonFormsRenderer {
@@ -693,9 +704,7 @@ export interface StatePropsOfJsonFormsRenderer
   refResolver: any;
 }
 
-export interface JsonFormsProps extends StatePropsOfJsonFormsRenderer {
-  renderers?: JsonFormsRendererRegistryEntry[];
-}
+export interface JsonFormsProps extends StatePropsOfJsonFormsRenderer {}
 
 export const mapStateToJsonFormsRendererProps = (
   state: JsonFormsState,
@@ -717,6 +726,7 @@ export const mapStateToJsonFormsRendererProps = (
 
   return {
     renderers: ownProps.renderers || get(state.jsonforms, 'renderers') || [],
+    cells: ownProps.cells || get(state.jsonforms, 'cells') || [],
     schema: ownProps.schema || getSchema(state),
     rootSchema: getSchema(state),
     uischema: uischema,

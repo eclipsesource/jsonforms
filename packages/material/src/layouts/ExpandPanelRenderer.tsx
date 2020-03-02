@@ -19,7 +19,8 @@ import {
   Resolve,
   UISchemaElement,
   UISchemaTester,
-  update
+  update,
+  JsonFormsCellRendererRegistryEntry
 } from '@jsonforms/core';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import IconButton from '@material-ui/core/IconButton';
@@ -43,6 +44,7 @@ interface OwnPropsOfExpandPanel {
   schema: JsonSchema;
   expanded: boolean;
   renderers?: JsonFormsRendererRegistryEntry[];
+  cells?: JsonFormsCellRendererRegistryEntry[];
   rootSchema: JsonSchema;
   enableMoveUp: boolean;
   enableMoveDown: boolean;
@@ -92,6 +94,7 @@ const ExpandPanelRenderer = (props: ExpandPanelProps) => {
     uischema,
     uischemas,
     renderers,
+    cells,
     config
   } = props;
 
@@ -182,6 +185,7 @@ const ExpandPanelRenderer = (props: ExpandPanelProps) => {
           path={childPath}
           key={childPath}
           renderers={renderers}
+          cells={cells}
         />
       </ExpansionPanelDetails>
     </ExpansionPanel>
