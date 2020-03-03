@@ -8,11 +8,7 @@ import {
 } from '@jsonforms/core';
 import { BehaviorSubject, Subscription, PartialObserver } from 'rxjs';
 import { JsonFormsBaseRenderer } from './base.renderer';
-import {
-  ValidCoreActions,
-  ValidLocaleActions,
-  ValidUISchemaReducerActions
-} from '@jsonforms/core';
+import { CoreActions, LocaleActions, UISchemaActions } from '@jsonforms/core';
 import { cloneDeep } from 'lodash';
 import { Injectable } from '@angular/core';
 import { i18nReducer } from '@jsonforms/core/lib/reducers/i18n';
@@ -59,21 +55,21 @@ export class JSONFormsAngularService {
     this.updateSubject();
   }
 
-  updateLocale<T extends ValidLocaleActions>(localeAction: T): T {
+  updateLocale<T extends LocaleActions>(localeAction: T): T {
     const localeState = i18nReducer(this._state.i18n, localeAction);
     this._state.i18n = localeState;
     this.updateSubject();
     return localeAction;
   }
 
-  updateCore<T extends ValidCoreActions>(coreAction: T): T {
+  updateCore<T extends CoreActions>(coreAction: T): T {
     const coreState = coreReducer(this._state.core, coreAction);
     this._state.core = coreState;
     this.updateSubject();
     return coreAction;
   }
 
-  updateUiSchema<T extends ValidUISchemaReducerActions>(uischemaAction: T): T {
+  updateUiSchema<T extends UISchemaActions>(uischemaAction: T): T {
     const uischemaState = uischemaRegistryReducer(
       this._state.uischemas,
       uischemaAction

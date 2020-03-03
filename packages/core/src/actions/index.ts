@@ -56,7 +56,7 @@ export const SET_LOCALIZED_UISCHEMAS: 'jsonforms/SET_LOCALIZED_UISCHEMAS' =
 export const ADD_DEFAULT_DATA: 'jsonforms/ADD_DEFAULT_DATA' = `jsonforms/ADD_DEFAULT_DATA`;
 export const REMOVE_DEFAULT_DATA: 'jsonforms/REMOVE_DEFAULT_DATA' = `jsonforms/REMOVE_DEFAULT_DATA`;
 
-export type ValidCoreActions =
+export type CoreActions =
   | InitAction
   | UpdateAction
   | UpdateErrorsAction
@@ -208,9 +208,7 @@ export const setConfig = (config: any) => (dispatch: Dispatch<AnyAction>) => {
   });
 };
 
-export type ValidUISchemaReducerActions =
-  | AddUISchemaAction
-  | RemoveUISchemaAction;
+export type UISchemaActions = AddUISchemaAction | RemoveUISchemaAction;
 
 export interface AddUISchemaAction {
   type: 'jsonforms/ADD_UI_SCHEMA';
@@ -243,7 +241,7 @@ export const unregisterUISchema = (
   };
 };
 
-export type ValidLocaleActions =
+export type LocaleActions =
   | SetLocaleAction
   | SetLocalizedSchemasAction
   | SetLocalizedUISchemasAction;

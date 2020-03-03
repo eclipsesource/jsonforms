@@ -39,7 +39,7 @@ import {
   SET_UISCHEMA,
   UPDATE_DATA,
   UPDATE_ERRORS,
-  ValidCoreActions
+  CoreActions
 } from '../actions';
 import { createAjv } from '../util/validator';
 import { JsonSchema, UISchemaElement } from '..';
@@ -129,7 +129,7 @@ const hasAjvOption = (option: any): option is InitActionOptions => {
 
 export const coreReducer = (
   state: JsonFormsCore = initState,
-  action: ValidCoreActions
+  action: CoreActions
 ): JsonFormsCore => {
   switch (action.type) {
     case INIT: {

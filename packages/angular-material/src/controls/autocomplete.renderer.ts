@@ -24,7 +24,7 @@
 */
 import { Component, Input } from '@angular/core';
 import { MatAutocompleteSelectedEvent } from '@angular/material';
-import { JsonFormsControl } from '@jsonforms/angular';
+import { JSONFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 import {
   Actions,
   composeWithUi,
@@ -37,7 +37,6 @@ import {
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { startWith } from 'rxjs/operators';
-import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
 
 /**
  * To use this component you will need to add your own tester:

@@ -56,7 +56,7 @@ import {
   Resolve,
   resolveSubSchemas
 } from '../util';
-import { update, ValidCoreActions } from '../actions';
+import { update, CoreActions } from '../actions';
 import { ErrorObject } from 'ajv';
 import { JsonFormsState } from '../store';
 import { AnyAction, Dispatch } from 'redux';
@@ -583,7 +583,7 @@ export interface DispatchPropsOfArrayControl {
  * @returns {DispatchPropsOfArrayControl} dispatch props of an array control
  */
 export const mapDispatchToArrayControlProps = (
-  dispatch: Dispatch<ValidCoreActions>
+  dispatch: Dispatch<CoreActions>
 ): DispatchPropsOfArrayControl => ({
   addItem: (path: string, value: any) => () => {
     dispatch(

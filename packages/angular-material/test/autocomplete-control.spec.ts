@@ -102,9 +102,6 @@ describe('Autocomplete control Base Tests', () => {
 
   it('should render', fakeAsync(() => {
     setupMockStore(fixture, { uischema, schema, data });
-    getJsonFormsService(component).updateCore(
-      Actions.init(data, schema, uischema)
-    );
     component.ngOnInit();
     fixture.detectChanges();
     tick();
