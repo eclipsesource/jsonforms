@@ -39,7 +39,7 @@ import {
 } from '@jsonforms/angular-test';
 import { TextControlRenderer, TextControlRendererTester } from '../src';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
+import { JSONFormsAngularService } from '@jsonforms/angular';
 
 describe('Material text field tester', () => {
   const uischema = {

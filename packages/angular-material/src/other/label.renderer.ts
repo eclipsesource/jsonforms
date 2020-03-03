@@ -23,7 +23,10 @@
   THE SOFTWARE.
 */
 import { Component } from '@angular/core';
-import { JsonFormsBaseRenderer } from '@jsonforms/angular';
+import {
+  JSONFormsAngularService,
+  JsonFormsBaseRenderer
+} from '@jsonforms/angular';
 import {
   getData,
   isVisible,
@@ -35,7 +38,6 @@ import {
   uiTypeIs
 } from '@jsonforms/core';
 import { Subscription } from 'rxjs';
-import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
 
 const mapStateToProps = (
   state: JsonFormsState,

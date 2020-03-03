@@ -45,7 +45,7 @@ import {
   TranslationModule
 } from 'angular-l10n';
 import { NumberControlRenderer, NumberControlRendererTester } from '../src';
-import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
+import { JSONFormsAngularService } from '@jsonforms/angular';
 
 describe('Material number field tester', () => {
   const uischema = {

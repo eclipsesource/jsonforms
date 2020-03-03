@@ -29,9 +29,8 @@ import {
   RankedTester,
   rankWith
 } from '@jsonforms/core';
-import { JsonFormsControl } from '@jsonforms/angular';
+import { JSONFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 import { DateAdapter, NativeDateAdapter } from '@angular/material';
-import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
 
 @Component({
   selector: 'DateControlRenderer',

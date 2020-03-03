@@ -22,10 +22,13 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { JsonFormsOutlet, UnknownRenderer } from '@jsonforms/angular';
+import {
+  JsonFormsOutlet,
+  UnknownRenderer,
+  JSONFormsAngularService
+} from '@jsonforms/angular';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
 
 export const beforeEachLayoutTest = <LAYOUT>(
   Renderer: any,

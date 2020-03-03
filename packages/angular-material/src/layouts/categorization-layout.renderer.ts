@@ -33,9 +33,11 @@ import {
   uiTypeIs
 } from '@jsonforms/core';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { JsonFormsBaseRenderer } from '@jsonforms/angular';
+import {
+  JSONFormsAngularService,
+  JsonFormsBaseRenderer
+} from '@jsonforms/angular';
 import { Subscription } from 'rxjs';
-import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
 
 @Component({
   selector: 'jsonforms-categorization-layout',

@@ -28,7 +28,7 @@ import { JsonSchema, LabelElement } from '@jsonforms/core';
 
 import { LabelRenderer, LabelRendererTester } from '../src/other';
 import { setupMockStore } from '@jsonforms/angular-test';
-import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
+import { JSONFormsAngularService } from '@jsonforms/angular';
 
 const data = {};
 const schema: JsonSchema = {

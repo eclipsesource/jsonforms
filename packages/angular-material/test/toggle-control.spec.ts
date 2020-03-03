@@ -36,7 +36,7 @@ import {
 } from '@jsonforms/angular-test';
 import { ToggleControlRenderer, ToggleControlRendererTester } from '../src';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
+import { JSONFormsAngularService } from '@jsonforms/angular';
 
 describe('Material boolean field tester', () => {
   const uischema = {

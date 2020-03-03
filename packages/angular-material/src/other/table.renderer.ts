@@ -24,7 +24,10 @@
 */
 import startCase from 'lodash/startCase';
 import { Component } from '@angular/core';
-import { JsonFormsArrayControl } from '@jsonforms/angular';
+import {
+  JSONFormsAngularService,
+  JsonFormsArrayControl
+} from '@jsonforms/angular';
 import {
   ArrayControlProps,
   ControlElement,
@@ -40,7 +43,6 @@ import {
   setReadonly,
   UISchemaElement
 } from '@jsonforms/core';
-import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
 
 @Component({
   selector: 'TableRenderer',

@@ -30,7 +30,7 @@ import {
   VerticalLayout
 } from '@jsonforms/core';
 import { LayoutRenderer } from './layout.renderer';
-import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
+import { JSONFormsAngularService } from '@jsonforms/angular';
 
 @Component({
   selector: 'VerticalLayoutRenderer',

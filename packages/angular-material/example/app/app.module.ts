@@ -30,7 +30,7 @@ import { AppComponent } from './app.component';
 import { JsonFormsAngularMaterialModule } from '../../src/module';
 
 import { initialState } from './store';
-import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
+import { JSONFormsAngularService } from '@jsonforms/angular';
 
 @NgModule({
   declarations: [AppComponent],

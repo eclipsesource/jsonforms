@@ -32,12 +32,15 @@ import {
 } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { JsonFormsOutlet, UnknownRenderer } from '@jsonforms/angular';
+import {
+  JSONFormsAngularService,
+  JsonFormsOutlet,
+  UnknownRenderer
+} from '@jsonforms/angular';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { CategorizationTabLayoutRenderer } from '../src';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { setupMockStore, getJsonFormsService } from '@jsonforms/angular-test';
-import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
 
 describe('Categorization tab layout', () => {
   let fixture: ComponentFixture<any>;

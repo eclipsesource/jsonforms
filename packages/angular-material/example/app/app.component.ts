@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import { Component } from '@angular/core';
+import { JSONFormsAngularService } from '@jsonforms/angular';
 import {
   Actions,
   getData,
@@ -31,7 +32,6 @@ import {
   setReadonly,
   unsetReadonly
 } from '@jsonforms/core';
-import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
 import { getExamples } from '@jsonforms/examples';
 import { of } from 'rxjs';
 @Component({

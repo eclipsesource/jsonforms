@@ -25,7 +25,7 @@
 import { Component } from '@angular/core';
 import { GroupLayout, RankedTester, rankWith, uiTypeIs } from '@jsonforms/core';
 import { LayoutRenderer } from './layout.renderer';
-import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
+import { JSONFormsAngularService } from '@jsonforms/angular';
 
 @Component({
   selector: 'GroupLayoutRenderer',

@@ -24,13 +24,12 @@
 */
 import { Type } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { JsonFormsControl } from '@jsonforms/angular';
+import { JSONFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 import {
   JsonFormsRendererRegistryEntry,
   JsonSchema,
   UISchemaElement
 } from '@jsonforms/core';
-import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
 import { ErrorObject } from 'ajv';
 
 export interface ErrorTestExpectation {

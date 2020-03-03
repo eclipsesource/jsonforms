@@ -23,9 +23,8 @@
   THE SOFTWARE.
 */
 import { Component } from '@angular/core';
-import { JsonFormsControl } from '@jsonforms/angular';
+import { JSONFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 import { isMultiLineControl, RankedTester, rankWith } from '@jsonforms/core';
-import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
 
 @Component({
   selector: 'TextAreaRenderer',

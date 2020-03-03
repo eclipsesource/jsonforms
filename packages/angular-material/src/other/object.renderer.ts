@@ -25,7 +25,10 @@
 import isEmpty from 'lodash/isEmpty';
 import startCase from 'lodash/startCase';
 import { Component } from '@angular/core';
-import { JsonFormsControlWithDetail } from '@jsonforms/angular';
+import {
+  JSONFormsAngularService,
+  JsonFormsControlWithDetail
+} from '@jsonforms/angular';
 import {
   ControlWithDetailProps,
   findUISchema,
@@ -36,7 +39,6 @@ import {
   setReadonly,
   UISchemaElement
 } from '@jsonforms/core';
-import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
 
 @Component({
   selector: 'ObjectRenderer',

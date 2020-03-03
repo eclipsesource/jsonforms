@@ -33,13 +33,16 @@ import {
   MatSidenavModule
 } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { JsonFormsOutlet, UnknownRenderer } from '@jsonforms/angular';
+import {
+  JSONFormsAngularService,
+  JsonFormsOutlet,
+  UnknownRenderer
+} from '@jsonforms/angular';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { DebugElement } from '@angular/core';
 import { MasterListComponent } from '../src/other/master-detail/master';
 import { JsonFormsDetailComponent } from '../src/other/master-detail/detail';
 import { setupMockStore, getJsonFormsService } from '@jsonforms/angular-test';
-import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
 import { Actions } from '@jsonforms/core';
 
 describe('Master detail', () => {

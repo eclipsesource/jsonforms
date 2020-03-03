@@ -38,7 +38,7 @@ import {
 } from '@jsonforms/angular-test';
 import { RangeControlRenderer, RangeControlRendererTester } from '../src';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
+import { JSONFormsAngularService } from '@jsonforms/angular';
 
 describe('Material number field tester', () => {
   const uischema = {

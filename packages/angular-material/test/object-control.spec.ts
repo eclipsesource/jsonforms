@@ -33,7 +33,7 @@ import {
   MatInputModule
 } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { JsonFormsModule } from '@jsonforms/angular';
+import { JSONFormsAngularService, JsonFormsModule } from '@jsonforms/angular';
 import { ControlElement } from '@jsonforms/core';
 import {
   GroupLayoutRenderer,
@@ -47,7 +47,6 @@ import {
   ObjectControlRenderer,
   ObjectControlRendererTester
 } from '../src/other/object.renderer';
-import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
 import { getJsonFormsService } from '@jsonforms/angular-test';
 
 const uischema1: ControlElement = { type: 'Control', scope: '#' };

@@ -25,7 +25,10 @@
 import some from 'lodash/some';
 import get from 'lodash/get';
 import { Component } from '@angular/core';
-import { JsonFormsArrayControl } from '@jsonforms/angular';
+import {
+  JSONFormsAngularService,
+  JsonFormsArrayControl
+} from '@jsonforms/angular';
 import {
   ArrayControlProps,
   ControlElement,
@@ -40,7 +43,6 @@ import {
   StatePropsOfArrayControl,
   uiTypeIs
 } from '@jsonforms/core';
-import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
 
 const keywords = ['#', 'properties', 'items'];
 

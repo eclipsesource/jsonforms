@@ -49,7 +49,7 @@ import {
 import { ControlElement, JsonSchema, Actions } from '@jsonforms/core';
 import { MockNgZone } from './mock-ng-zone';
 import { AutocompleteControlRenderer } from '../src';
-import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
+import { JSONFormsAngularService } from '@jsonforms/angular';
 import { ErrorObject } from 'ajv';
 
 const data = { foo: 'A' };

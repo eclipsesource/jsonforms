@@ -33,7 +33,7 @@ import {
 } from '@angular/material';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { JsonFormsModule } from '@jsonforms/angular';
+import { JSONFormsAngularService, JsonFormsModule } from '@jsonforms/angular';
 import { ControlElement } from '@jsonforms/core';
 import { TextControlRenderer, TextControlRendererTester } from '../src';
 import {
@@ -42,7 +42,6 @@ import {
 } from '../src/other/table.renderer';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { setupMockStore } from '@jsonforms/angular-test';
-import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
 
 const uischema1: ControlElement = { type: 'Control', scope: '#' };
 const uischema2: ControlElement = {

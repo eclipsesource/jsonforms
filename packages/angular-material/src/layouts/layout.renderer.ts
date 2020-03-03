@@ -23,7 +23,10 @@
   THE SOFTWARE.
 */
 import { OnDestroy, OnInit } from '@angular/core';
-import { JsonFormsBaseRenderer } from '@jsonforms/angular';
+import {
+  JSONFormsAngularService,
+  JsonFormsBaseRenderer
+} from '@jsonforms/angular';
 import {
   JsonFormsState,
   Layout,
@@ -32,7 +35,6 @@ import {
   UISchemaElement
 } from '@jsonforms/core';
 import { Subscription } from 'rxjs';
-import { JSONFormsAngularService } from '@jsonforms/angular/lib/jsonforms.service';
 
 export class LayoutRenderer<T extends Layout> extends JsonFormsBaseRenderer<T>
   implements OnInit, OnDestroy {
