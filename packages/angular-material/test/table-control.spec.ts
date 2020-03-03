@@ -33,7 +33,7 @@ import {
 } from '@angular/material';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { JSONFormsAngularService, JsonFormsModule } from '@jsonforms/angular';
+import { JsonFormsAngularService, JsonFormsModule } from '@jsonforms/angular';
 import { ControlElement } from '@jsonforms/core';
 import { TextControlRenderer, TextControlRendererTester } from '../src';
 import {
@@ -121,7 +121,7 @@ describe('Table', () => {
         FlexLayoutModule,
         MatTableModule
       ],
-      providers: [JSONFormsAngularService]
+      providers: [JsonFormsAngularService]
     })
       .overrideModule(BrowserDynamicTestingModule, {
         set: {

@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import { Component } from '@angular/core';
-import { JSONFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
+import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 import {
   and,
   isBooleanControl,
@@ -49,7 +49,7 @@ import {
   `
 })
 export class ToggleControlRenderer extends JsonFormsControl {
-  constructor(jsonformsService: JSONFormsAngularService) {
+  constructor(jsonformsService: JsonFormsAngularService) {
     super(jsonformsService);
   }
   isChecked = () => this.data || false;

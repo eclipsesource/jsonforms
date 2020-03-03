@@ -49,7 +49,7 @@ import {
 import { ControlElement, JsonSchema, Actions } from '@jsonforms/core';
 import { MockNgZone } from './mock-ng-zone';
 import { AutocompleteControlRenderer } from '../src';
-import { JSONFormsAngularService } from '@jsonforms/angular';
+import { JsonFormsAngularService } from '@jsonforms/angular';
 import { ErrorObject } from 'ajv';
 
 const data = { foo: 'A' };
@@ -74,7 +74,7 @@ const imports = [
   NoopAnimationsModule,
   ReactiveFormsModule
 ];
-const providers = [JSONFormsAngularService];
+const providers = [JsonFormsAngularService];
 const componentUT: any = AutocompleteControlRenderer;
 const errorTest: ErrorTestExpectation = {
   errorInstance: MatError,

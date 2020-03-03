@@ -45,7 +45,7 @@ import {
   TranslationModule
 } from 'angular-l10n';
 import { NumberControlRenderer, NumberControlRendererTester } from '../src';
-import { JSONFormsAngularService } from '@jsonforms/angular';
+import { JsonFormsAngularService } from '@jsonforms/angular';
 
 describe('Material number field tester', () => {
   const uischema = {
@@ -90,7 +90,7 @@ const imports = [
   LocaleValidationModule.forRoot(),
   TranslationModule.forRoot(emptyL10NConfig)
 ];
-const providers = [JSONFormsAngularService];
+const providers = [JsonFormsAngularService];
 const componentUT: any = NumberControlRenderer;
 const errorTest: ErrorTestExpectation = {
   errorInstance: MatError,

@@ -26,7 +26,7 @@ import isEmpty from 'lodash/isEmpty';
 import startCase from 'lodash/startCase';
 import { Component } from '@angular/core';
 import {
-  JSONFormsAngularService,
+  JsonFormsAngularService,
   JsonFormsControlWithDetail
 } from '@jsonforms/angular';
 import {
@@ -55,7 +55,7 @@ import {
 })
 export class ObjectControlRenderer extends JsonFormsControlWithDetail {
   detailUiSchema: UISchemaElement;
-  constructor(jsonformsService: JSONFormsAngularService) {
+  constructor(jsonformsService: JsonFormsAngularService) {
     super(jsonformsService);
   }
   mapAdditionalProps(props: ControlWithDetailProps) {

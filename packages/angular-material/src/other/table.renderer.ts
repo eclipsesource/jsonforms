@@ -25,7 +25,7 @@
 import startCase from 'lodash/startCase';
 import { Component } from '@angular/core';
 import {
-  JSONFormsAngularService,
+  JsonFormsAngularService,
   JsonFormsArrayControl
 } from '@jsonforms/angular';
 import {
@@ -77,7 +77,7 @@ export class TableRenderer extends JsonFormsArrayControl {
   items: ColumnDescription[];
   readonly columnsToIgnore = ['array', 'object'];
 
-  constructor(jsonformsService: JSONFormsAngularService) {
+  constructor(jsonformsService: JsonFormsAngularService) {
     super(jsonformsService);
   }
   trackElement(index: number, _element: any) {

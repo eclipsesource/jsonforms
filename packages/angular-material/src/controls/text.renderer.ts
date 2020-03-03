@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import { Component } from '@angular/core';
-import { JSONFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
+import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 import { isStringControl, RankedTester, rankWith } from '@jsonforms/core';
 
 @Component({
@@ -44,7 +44,7 @@ import { isStringControl, RankedTester, rankWith } from '@jsonforms/core';
   `
 })
 export class TextControlRenderer extends JsonFormsControl {
-  constructor(jsonformsService: JSONFormsAngularService) {
+  constructor(jsonformsService: JsonFormsAngularService) {
     super(jsonformsService);
   }
   getEventValue = (event: any) => event.target.value;

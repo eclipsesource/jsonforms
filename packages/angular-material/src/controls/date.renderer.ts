@@ -29,7 +29,7 @@ import {
   RankedTester,
   rankWith
 } from '@jsonforms/core';
-import { JSONFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
+import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 import { DateAdapter, NativeDateAdapter } from '@angular/material';
 
 @Component({
@@ -57,7 +57,7 @@ import { DateAdapter, NativeDateAdapter } from '@angular/material';
 })
 export class DateControlRenderer extends JsonFormsControl {
   constructor(
-    jsonformsService: JSONFormsAngularService,
+    jsonformsService: JsonFormsAngularService,
     private dateAdapter: DateAdapter<NativeDateAdapter>
   ) {
     super(jsonformsService);

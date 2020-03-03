@@ -25,7 +25,7 @@
 import { Component } from '@angular/core';
 import { GroupLayout, RankedTester, rankWith, uiTypeIs } from '@jsonforms/core';
 import { LayoutRenderer } from './layout.renderer';
-import { JSONFormsAngularService } from '@jsonforms/angular';
+import { JsonFormsAngularService } from '@jsonforms/angular';
 
 @Component({
   selector: 'GroupLayoutRenderer',
@@ -39,7 +39,7 @@ import { JSONFormsAngularService } from '@jsonforms/angular';
   `
 })
 export class GroupLayoutRenderer extends LayoutRenderer<GroupLayout> {
-  constructor(jsonFormsService: JSONFormsAngularService) {
+  constructor(jsonFormsService: JsonFormsAngularService) {
     super(jsonFormsService);
   }
 }

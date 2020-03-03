@@ -42,7 +42,7 @@ import {
 import { Subscription } from 'rxjs';
 
 import { JsonFormsBaseRenderer } from './base.renderer';
-import { JSONFormsAngularService } from './jsonforms.service';
+import { JsonFormsAngularService } from './jsonforms.service';
 
 export abstract class JsonFormsAbstractControl<
   Props extends StatePropsOfControl
@@ -63,7 +63,7 @@ export abstract class JsonFormsAbstractControl<
   hidden: boolean;
   propsPath: string;
 
-  constructor(protected jsonFormsService: JSONFormsAngularService) {
+  constructor(protected jsonFormsService: JsonFormsAngularService) {
     super();
     this.form = new FormControl(
       {

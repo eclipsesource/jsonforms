@@ -36,7 +36,7 @@ import {
 } from '@jsonforms/angular-test';
 import { ToggleControlRenderer, ToggleControlRendererTester } from '../src';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { JSONFormsAngularService } from '@jsonforms/angular';
+import { JsonFormsAngularService } from '@jsonforms/angular';
 
 describe('Material boolean field tester', () => {
   const uischema = {
@@ -59,7 +59,7 @@ describe('Material boolean field tester', () => {
   });
 });
 const imports = [MatSlideToggleModule, MatFormFieldModule, FlexLayoutModule];
-const providers = [JSONFormsAngularService];
+const providers = [JsonFormsAngularService];
 const componentUT: any = ToggleControlRenderer;
 const errorTest: ErrorTestExpectation = {
   errorInstance: MatError,

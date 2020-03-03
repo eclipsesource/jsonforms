@@ -24,7 +24,7 @@
 */
 import { OnDestroy, OnInit } from '@angular/core';
 import {
-  JSONFormsAngularService,
+  JsonFormsAngularService,
   JsonFormsBaseRenderer
 } from '@jsonforms/angular';
 import {
@@ -41,7 +41,7 @@ export class LayoutRenderer<T extends Layout> extends JsonFormsBaseRenderer<T>
   hidden: boolean;
   private subscription: Subscription;
 
-  constructor(private jsonFormsService: JSONFormsAngularService) {
+  constructor(private jsonFormsService: JsonFormsAngularService) {
     super();
   }
 

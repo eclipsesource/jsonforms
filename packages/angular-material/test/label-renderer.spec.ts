@@ -28,7 +28,7 @@ import { JsonSchema, LabelElement } from '@jsonforms/core';
 
 import { LabelRenderer, LabelRendererTester } from '../src/other';
 import { setupMockStore } from '@jsonforms/angular-test';
-import { JSONFormsAngularService } from '@jsonforms/angular';
+import { JsonFormsAngularService } from '@jsonforms/angular';
 
 const data = {};
 const schema: JsonSchema = {
@@ -49,7 +49,7 @@ describe('Material label field tester', () => {
     expect(LabelRendererTester(uischema, schema)).toBe(4);
   });
 });
-const providers = [JSONFormsAngularService];
+const providers = [JsonFormsAngularService];
 const componentUT: any = LabelRenderer;
 
 describe('Label Renderer Base Tests', () => {

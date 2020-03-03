@@ -47,7 +47,7 @@ import { UnknownRenderer } from './unknown.component';
 import { JsonFormsBaseRenderer } from './base.renderer';
 import { Subscription } from 'rxjs';
 import { JsonFormsControl } from './control';
-import { JSONFormsAngularService } from './jsonforms.service';
+import { JsonFormsAngularService } from './jsonforms.service';
 
 @Directive({
   selector: 'jsonforms-outlet'
@@ -60,7 +60,7 @@ export class JsonFormsOutlet extends JsonFormsBaseRenderer<UISchemaElement>
   constructor(
     private viewContainerRef: ViewContainerRef,
     private componentFactoryResolver: ComponentFactoryResolver,
-    private jsonformsService: JSONFormsAngularService
+    private jsonformsService: JsonFormsAngularService
   ) {
     super();
   }

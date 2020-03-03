@@ -24,7 +24,7 @@
 */
 import { Component, Input } from '@angular/core';
 import { MatAutocompleteSelectedEvent } from '@angular/material';
-import { JSONFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
+import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 import {
   Actions,
   composeWithUi,
@@ -97,7 +97,7 @@ export class AutocompleteControlRenderer extends JsonFormsControl {
   filteredOptions: Observable<string[]>;
   shouldFilter: boolean;
 
-  constructor(jsonformsService: JSONFormsAngularService) {
+  constructor(jsonformsService: JsonFormsAngularService) {
     super(jsonformsService);
   }
   getEventValue = (event: any) => event.target.value;

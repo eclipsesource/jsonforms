@@ -26,7 +26,7 @@ import some from 'lodash/some';
 import get from 'lodash/get';
 import { Component } from '@angular/core';
 import {
-  JSONFormsAngularService,
+  JsonFormsAngularService,
   JsonFormsArrayControl
 } from '@jsonforms/angular';
 import {
@@ -145,7 +145,7 @@ export class MasterListComponent extends JsonFormsArrayControl {
   propsPath: string;
   highlightedIdx: number;
 
-  constructor(jsonformsService: JSONFormsAngularService) {
+  constructor(jsonformsService: JsonFormsAngularService) {
     super(jsonformsService);
   }
 

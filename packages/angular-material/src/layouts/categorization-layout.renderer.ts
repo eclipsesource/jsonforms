@@ -34,7 +34,7 @@ import {
 } from '@jsonforms/core';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
-  JSONFormsAngularService,
+  JsonFormsAngularService,
   JsonFormsBaseRenderer
 } from '@jsonforms/angular';
 import { Subscription } from 'rxjs';
@@ -60,7 +60,7 @@ export class CategorizationTabLayoutRenderer
   hidden: boolean;
   private subscription: Subscription;
 
-  constructor(private jsonFormsService: JSONFormsAngularService) {
+  constructor(private jsonFormsService: JsonFormsAngularService) {
     super();
   }
 

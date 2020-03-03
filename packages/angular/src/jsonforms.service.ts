@@ -17,7 +17,7 @@ import { uischemaRegistryReducer } from '@jsonforms/core/lib/reducers/uischemas'
 @Injectable({
   providedIn: 'root'
 })
-export class JSONFormsAngularService {
+export class JsonFormsAngularService {
   private _state: JsonFormsSubStates;
   private state: BehaviorSubject<JsonFormsState>;
 

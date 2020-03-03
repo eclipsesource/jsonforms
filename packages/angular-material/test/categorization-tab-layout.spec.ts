@@ -33,7 +33,7 @@ import {
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
-  JSONFormsAngularService,
+  JsonFormsAngularService,
   JsonFormsOutlet,
   UnknownRenderer
 } from '@jsonforms/angular';
@@ -67,7 +67,7 @@ describe('Categorization tab layout', () => {
         UnknownRenderer
       ],
       imports: [MatTabsModule, FlexLayoutModule, NoopAnimationsModule],
-      providers: [JSONFormsAngularService]
+      providers: [JsonFormsAngularService]
     })
       .overrideModule(BrowserDynamicTestingModule, {
         set: {

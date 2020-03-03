@@ -48,7 +48,7 @@ import {
 import { ControlElement, JsonSchema, Actions } from '@jsonforms/core';
 import { DateControlRenderer, DateControlRendererTester } from '../src';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { JSONFormsAngularService } from '@jsonforms/angular';
+import { JsonFormsAngularService } from '@jsonforms/angular';
 
 const data = { foo: '2018-01-01' };
 const schema: JsonSchema = {
@@ -79,7 +79,7 @@ const imports = [
   ReactiveFormsModule,
   FlexLayoutModule
 ];
-const providers = [JSONFormsAngularService];
+const providers = [JsonFormsAngularService];
 const componentUT: any = DateControlRenderer;
 const errorTest: ErrorTestExpectation = {
   errorInstance: MatError,

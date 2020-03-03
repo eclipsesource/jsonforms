@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import { Component } from '@angular/core';
-import { JSONFormsAngularService } from '@jsonforms/angular';
+import { JsonFormsAngularService } from '@jsonforms/angular';
 import {
   Actions,
   getData,
@@ -68,7 +68,7 @@ export class AppComponent {
   private readonly = false;
   data: any;
 
-  constructor(private jsonformService: JSONFormsAngularService) {
+  constructor(private jsonformService: JsonFormsAngularService) {
     const examples = getExamples();
     const selectedExample = examples[0];
     this.jsonformService.updateCore(

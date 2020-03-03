@@ -24,7 +24,7 @@
 */
 import { Component } from '@angular/core';
 import {
-  JSONFormsAngularService,
+  JsonFormsAngularService,
   JsonFormsBaseRenderer
 } from '@jsonforms/angular';
 import {
@@ -65,7 +65,7 @@ export class LabelRenderer extends JsonFormsBaseRenderer<LabelElement> {
 
   private subscription: Subscription;
 
-  constructor(private jsonFormsService: JSONFormsAngularService) {
+  constructor(private jsonFormsService: JsonFormsAngularService) {
     super();
   }
   ngOnInit() {

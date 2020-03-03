@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import { Component } from '@angular/core';
-import { JSONFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
+import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 import { isRangeControl, RankedTester, rankWith } from '@jsonforms/core';
 
 @Component({
@@ -53,7 +53,7 @@ export class RangeControlRenderer extends JsonFormsControl {
   max: number;
   multipleOf: number;
 
-  constructor(jsonformsService: JSONFormsAngularService) {
+  constructor(jsonformsService: JsonFormsAngularService) {
     super(jsonformsService);
   }
   getEventValue = (event: any) => Number(event.value);

@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import { Component } from '@angular/core';
-import { JSONFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
+import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 import { isBooleanControl, RankedTester, rankWith } from '@jsonforms/core';
 
 @Component({
@@ -48,7 +48,7 @@ import { isBooleanControl, RankedTester, rankWith } from '@jsonforms/core';
   `
 })
 export class BooleanControlRenderer extends JsonFormsControl {
-  constructor(jsonformsService: JSONFormsAngularService) {
+  constructor(jsonformsService: JsonFormsAngularService) {
     super(jsonformsService);
   }
   isChecked = () => this.data || false;

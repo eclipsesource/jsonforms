@@ -34,7 +34,7 @@ import {
 } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
-  JSONFormsAngularService,
+  JsonFormsAngularService,
   JsonFormsOutlet,
   UnknownRenderer
 } from '@jsonforms/angular';
@@ -119,7 +119,7 @@ describe('Master detail', () => {
         FlexLayoutModule,
         NoopAnimationsModule
       ],
-      providers: [JSONFormsAngularService]
+      providers: [JsonFormsAngularService]
     })
       .overrideModule(BrowserDynamicTestingModule, {
         set: {

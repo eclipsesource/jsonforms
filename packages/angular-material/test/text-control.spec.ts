@@ -39,7 +39,7 @@ import {
 } from '@jsonforms/angular-test';
 import { TextControlRenderer, TextControlRendererTester } from '../src';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { JSONFormsAngularService } from '@jsonforms/angular';
+import { JsonFormsAngularService } from '@jsonforms/angular';
 
 describe('Material text field tester', () => {
   const uischema = {
@@ -67,7 +67,7 @@ const imports = [
   ReactiveFormsModule,
   FlexLayoutModule
 ];
-const providers = [JSONFormsAngularService];
+const providers = [JsonFormsAngularService];
 const componentUT: any = TextControlRenderer;
 const errorTest: ErrorTestExpectation = {
   errorInstance: MatError,

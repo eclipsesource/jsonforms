@@ -30,7 +30,7 @@ import {
   VerticalLayout
 } from '@jsonforms/core';
 import { LayoutRenderer } from './layout.renderer';
-import { JSONFormsAngularService } from '@jsonforms/angular';
+import { JsonFormsAngularService } from '@jsonforms/angular';
 
 @Component({
   selector: 'VerticalLayoutRenderer',
@@ -43,7 +43,7 @@ import { JSONFormsAngularService } from '@jsonforms/angular';
   `
 })
 export class VerticalLayoutRenderer extends LayoutRenderer<VerticalLayout> {
-  constructor(jsonFormsService: JSONFormsAngularService) {
+  constructor(jsonFormsService: JsonFormsAngularService) {
     super(jsonFormsService);
   }
 }

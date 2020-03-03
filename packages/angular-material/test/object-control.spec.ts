@@ -33,7 +33,7 @@ import {
   MatInputModule
 } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { JSONFormsAngularService, JsonFormsModule } from '@jsonforms/angular';
+import { JsonFormsAngularService, JsonFormsModule } from '@jsonforms/angular';
 import { ControlElement } from '@jsonforms/core';
 import {
   GroupLayoutRenderer,
@@ -112,7 +112,7 @@ describe('Object Control', () => {
         ReactiveFormsModule,
         FlexLayoutModule
       ],
-      providers: [JSONFormsAngularService]
+      providers: [JsonFormsAngularService]
     })
       .overrideModule(BrowserDynamicTestingModule, {
         set: {

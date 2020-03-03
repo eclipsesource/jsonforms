@@ -30,7 +30,7 @@ import { AppComponent } from './app.component';
 import { JsonFormsAngularMaterialModule } from '../../src/module';
 
 import { initialState } from './store';
-import { JSONFormsAngularService } from '@jsonforms/angular';
+import { JsonFormsAngularService } from '@jsonforms/angular';
 
 @NgModule({
   declarations: [AppComponent],
@@ -44,7 +44,7 @@ import { JSONFormsAngularService } from '@jsonforms/angular';
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule {
-  constructor(jsonformsService: JSONFormsAngularService) {
+  constructor(jsonformsService: JsonFormsAngularService) {
     jsonformsService.init(initialState.jsonforms);
     const example = initialState.examples.data[0];
     jsonformsService.updateCore(

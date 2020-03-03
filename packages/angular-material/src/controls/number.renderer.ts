@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import { Component } from '@angular/core';
-import { JSONFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
+import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 import {
   getLocale,
   isIntegerControl,
@@ -64,7 +64,7 @@ export class NumberControlRenderer extends JsonFormsControl {
   numberFormat: Intl.NumberFormat;
   decimalSeparator: string;
 
-  constructor(jsonformsService: JSONFormsAngularService) {
+  constructor(jsonformsService: JsonFormsAngularService) {
     super(jsonformsService);
   }
 

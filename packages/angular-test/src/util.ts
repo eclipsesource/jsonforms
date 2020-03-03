@@ -24,7 +24,7 @@
 */
 import { Type } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { JSONFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
+import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 import {
   JsonFormsRendererRegistryEntry,
   JsonSchema,
@@ -65,8 +65,8 @@ export interface TestData<T extends UISchemaElement> {
 
 export const getJsonFormsService = (
   component: JsonFormsControl
-): JSONFormsAngularService => {
-  return (component as any).jsonFormsService as JSONFormsAngularService;
+): JsonFormsAngularService => {
+  return (component as any).jsonFormsService as JsonFormsAngularService;
 };
 
 export const setupMockStore = (
