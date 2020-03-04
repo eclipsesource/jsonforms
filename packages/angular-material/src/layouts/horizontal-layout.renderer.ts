@@ -36,7 +36,7 @@ import { JsonFormsAngularService } from '@jsonforms/angular';
   selector: 'HorizontalLayoutRenderer',
   template: `
     <div
-      fxLayout="row"
+      fxLayout="row wrap"
       fxLayoutGap="16px"
       [fxHide]="hidden"
       fxLayoutAlign="center start"
