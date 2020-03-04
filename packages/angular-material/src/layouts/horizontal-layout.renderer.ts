@@ -25,13 +25,12 @@
 import { Component } from '@angular/core';
 import {
   HorizontalLayout,
-  JsonFormsState,
   RankedTester,
   rankWith,
   uiTypeIs
 } from '@jsonforms/core';
 import { LayoutRenderer } from './layout.renderer';
-import { NgRedux } from '@angular-redux/store';
+import { JsonFormsAngularService } from '@jsonforms/angular';
 
 @Component({
   selector: 'HorizontalLayoutRenderer',
@@ -49,8 +48,8 @@ import { NgRedux } from '@angular-redux/store';
   `
 })
 export class HorizontalLayoutRenderer extends LayoutRenderer<HorizontalLayout> {
-  constructor(ngRedux: NgRedux<JsonFormsState>) {
-    super(ngRedux);
+  constructor(jsonFormsService: JsonFormsAngularService) {
+    super(jsonFormsService);
   }
 }
 export const horizontalLayoutTester: RankedTester = rankWith(

@@ -22,15 +22,9 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { NgRedux } from '@angular-redux/store';
 import { Component } from '@angular/core';
-import { JsonFormsControl } from '@jsonforms/angular';
-import {
-  isRangeControl,
-  JsonFormsState,
-  RankedTester,
-  rankWith
-} from '@jsonforms/core';
+import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
+import { isRangeControl, RankedTester, rankWith } from '@jsonforms/core';
 
 @Component({
   selector: 'RangeControlRenderer',
@@ -59,8 +53,8 @@ export class RangeControlRenderer extends JsonFormsControl {
   max: number;
   multipleOf: number;
 
-  constructor(ngRedux: NgRedux<JsonFormsState>) {
-    super(ngRedux);
+  constructor(jsonformsService: JsonFormsAngularService) {
+    super(jsonformsService);
   }
   getEventValue = (event: any) => Number(event.value);
   mapAdditionalProps() {

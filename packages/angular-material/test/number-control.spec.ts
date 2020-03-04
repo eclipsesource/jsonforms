@@ -22,8 +22,6 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { NgRedux } from '@angular-redux/store';
-import { MockNgRedux } from '@angular-redux/store/testing';
 import { DebugElement } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import {
@@ -47,6 +45,7 @@ import {
   TranslationModule
 } from 'angular-l10n';
 import { NumberControlRenderer, NumberControlRendererTester } from '../src';
+import { JsonFormsAngularService } from '@jsonforms/angular';
 
 describe('Material number field tester', () => {
   const uischema = {
@@ -91,7 +90,7 @@ const imports = [
   LocaleValidationModule.forRoot(),
   TranslationModule.forRoot(emptyL10NConfig)
 ];
-const providers = [{ provide: NgRedux, useFactory: MockNgRedux.getInstance }];
+const providers = [JsonFormsAngularService];
 const componentUT: any = NumberControlRenderer;
 const errorTest: ErrorTestExpectation = {
   errorInstance: MatError,

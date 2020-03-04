@@ -22,23 +22,23 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { NgRedux, select } from '@angular-redux/store';
 import { Component } from '@angular/core';
+import { JsonFormsAngularService } from '@jsonforms/angular';
 import {
   Actions,
+  getData,
   getUiSchema,
-  JsonFormsState,
   setLocale,
   setReadonly,
   unsetReadonly
 } from '@jsonforms/core';
-import { ExampleDescription } from '@jsonforms/examples';
-import { Observable } from 'rxjs';
+import { getExamples } from '@jsonforms/examples';
+import { of } from 'rxjs';
 @Component({
   selector: 'app-root',
   template: `
     <h1>Angular Material Examples</h1>
-    Data: <print-redux></print-redux>
+    Data: {{ data | json }}
     <div>
       Example:
       <select (change)="onChange($event)">
@@ -63,43 +63,55 @@ import { Observable } from 'rxjs';
   `
 })
 export class AppComponent {
-  @select(['examples', 'data']) readonly exampleData$: Observable<any>;
+  readonly exampleData$ = of(getExamples());
   currentLocale = 'en-US';
   private readonly = false;
+  data: any;
 
-  constructor(
-    private ngRedux: NgRedux<
-      JsonFormsState & { examples: { data: ExampleDescription[] } }
-    >
-  ) {}
-
-  onChange = (ev: any) => {
-    const selectedExample = this.ngRedux
-      .getState()
-      .examples.data.find(e => e.name === ev.target.value);
-    this.ngRedux.dispatch(
+  constructor(private jsonformService: JsonFormsAngularService) {
+    const examples = getExamples();
+    const selectedExample = examples[0];
+    this.jsonformService.updateCore(
       Actions.init(
         selectedExample.data,
         selectedExample.schema,
         selectedExample.uischema
       )
     );
-    this.ngRedux.dispatch(setLocale(this.currentLocale));
+    this.jsonformService.subscribe({
+      next: state => (this.data = getData(state))
+    });
+  }
+  examples() {
+    return getExamples();
+  }
+
+  onChange = (ev: any) => {
+    const examples = getExamples();
+    const selectedExample = examples.find(e => e.name === ev.target.value);
+    this.jsonformService.updateCore(
+      Actions.init(
+        selectedExample.data,
+        selectedExample.schema,
+        selectedExample.uischema
+      )
+    );
+    this.jsonformService.updateLocale(setLocale(this.currentLocale));
   };
 
   changeLocale(locale: string) {
     this.currentLocale = locale;
-    this.ngRedux.dispatch(setLocale(locale));
+    this.jsonformService.updateLocale(setLocale(locale));
   }
 
   setReadonly() {
-    const uischema = getUiSchema(this.ngRedux.getState());
+    const uischema = getUiSchema(this.jsonformService.getState());
     if (this.readonly) {
       unsetReadonly(uischema);
     } else {
       setReadonly(uischema);
     }
     this.readonly = !this.readonly;
-    this.ngRedux.dispatch(Actions.setUISchema(uischema));
+    this.jsonformService.updateCore(Actions.setUISchema(uischema));
   }
 }

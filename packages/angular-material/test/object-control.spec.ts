@@ -23,7 +23,6 @@
   THE SOFTWARE.
 */
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
-import { NgRedux, NgReduxModule } from '@angular-redux/store';
 import { CommonModule } from '@angular/common';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -33,9 +32,8 @@ import {
   MatFormFieldModule,
   MatInputModule
 } from '@angular/material';
-import { MockNgRedux } from '@angular-redux/store/lib/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { JsonFormsModule } from '@jsonforms/angular';
+import { JsonFormsAngularService, JsonFormsModule } from '@jsonforms/angular';
 import { ControlElement } from '@jsonforms/core';
 import {
   GroupLayoutRenderer,
@@ -49,6 +47,7 @@ import {
   ObjectControlRenderer,
   ObjectControlRendererTester
 } from '../src/other/object.renderer';
+import { getJsonFormsService } from '@jsonforms/angular-test';
 
 const uischema1: ControlElement = { type: 'Control', scope: '#' };
 const uischema2: ControlElement = {
@@ -106,7 +105,6 @@ describe('Object Control', () => {
       imports: [
         CommonModule,
         JsonFormsModule,
-        NgReduxModule,
         MatCardModule,
         NoopAnimationsModule,
         MatFormFieldModule,
@@ -114,7 +112,7 @@ describe('Object Control', () => {
         ReactiveFormsModule,
         FlexLayoutModule
       ],
-      providers: [{ provide: NgRedux, useFactory: MockNgRedux.getInstance }]
+      providers: [JsonFormsAngularService]
     })
       .overrideModule(BrowserDynamicTestingModule, {
         set: {
@@ -128,26 +126,22 @@ describe('Object Control', () => {
       })
       .compileComponents();
 
-    MockNgRedux.reset();
     fixture = TestBed.createComponent(ObjectControlRenderer);
     component = fixture.componentInstance;
   }));
 
   it('object control creates group', async(() => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
     component.uischema = uischema2;
     component.schema = schema2;
 
-    mockSubStore.next({
-      jsonforms: {
-        renderers: renderers,
-        core: {
-          data: {},
-          schema: schema2
-        }
+    getJsonFormsService(component).init({
+      renderers: renderers,
+      core: {
+        data: {},
+        schema: schema2,
+        uischema: undefined
       }
     });
-    mockSubStore.complete();
     fixture.detectChanges();
     component.ngOnInit();
     fixture.whenStable().then(() => {
@@ -160,20 +154,18 @@ describe('Object Control', () => {
   }));
 
   it('render all elements', async(() => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
     component.uischema = uischema1;
     component.schema = schema2;
 
-    mockSubStore.next({
-      jsonforms: {
-        renderers: renderers,
-        core: {
-          data: {},
-          schema: schema2
-        }
+    getJsonFormsService(component).init({
+      core: {
+        data: {},
+        schema: schema2,
+        uischema: undefined
       }
     });
-    mockSubStore.complete();
+    getJsonFormsService(component).registerRenderers(renderers);
+
     fixture.detectChanges();
     component.ngOnInit();
     fixture.whenStable().then(() => {
@@ -182,20 +174,17 @@ describe('Object Control', () => {
   }));
 
   it('render only own elements', async(() => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
     component.uischema = uischema2;
     component.schema = schema2;
 
-    mockSubStore.next({
-      jsonforms: {
-        renderers: renderers,
-        core: {
-          data: {},
-          schema: schema2
-        }
+    getJsonFormsService(component).init({
+      core: {
+        data: {},
+        schema: schema2,
+        uischema: undefined
       }
     });
-    mockSubStore.complete();
+    getJsonFormsService(component).registerRenderers(renderers);
     fixture.detectChanges();
     component.ngOnInit();
     fixture.whenStable().then(() => {
@@ -204,21 +193,18 @@ describe('Object Control', () => {
   }));
 
   xit('can be disabled', async(() => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
     component.uischema = uischema1;
     component.schema = schema1;
     component.disabled = true;
 
-    mockSubStore.next({
-      jsonforms: {
-        renderers: renderers,
-        core: {
-          data: {},
-          schema: schema1
-        }
+    getJsonFormsService(component).init({
+      core: {
+        data: {},
+        schema: schema1,
+        uischema: undefined
       }
     });
-    mockSubStore.complete();
+    getJsonFormsService(component).registerRenderers(renderers);
     fixture.detectChanges();
     component.ngOnInit();
     fixture.whenStable().then(() => {
@@ -226,21 +212,18 @@ describe('Object Control', () => {
     });
   }));
   xit('should be enabled by default', async(() => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
     component.uischema = uischema1;
     component.schema = schema1;
 
-    mockSubStore.next({
-      jsonforms: {
-        renderers: renderers,
-        core: {
-          data: {},
-          schema: schema1
-        }
+    getJsonFormsService(component).init({
+      core: {
+        data: {},
+        schema: schema1,
+        uischema: undefined
       }
     });
+    getJsonFormsService(component).registerRenderers(renderers);
     component.ngOnInit();
-    mockSubStore.complete();
     fixture.detectChanges();
     fixture.whenRenderingDone().then(() => {
       fixture.detectChanges();

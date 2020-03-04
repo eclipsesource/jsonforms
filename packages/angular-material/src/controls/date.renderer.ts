@@ -23,15 +23,13 @@
   THE SOFTWARE.
 */
 import { Component } from '@angular/core';
-import { NgRedux } from '@angular-redux/store';
 import {
   getLocale,
   isDateControl,
-  JsonFormsState,
   RankedTester,
   rankWith
 } from '@jsonforms/core';
-import { JsonFormsControl } from '@jsonforms/angular';
+import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 import { DateAdapter, NativeDateAdapter } from '@angular/material';
 
 @Component({
@@ -59,14 +57,14 @@ import { DateAdapter, NativeDateAdapter } from '@angular/material';
 })
 export class DateControlRenderer extends JsonFormsControl {
   constructor(
-    ngRedux: NgRedux<JsonFormsState>,
+    jsonformsService: JsonFormsAngularService,
     private dateAdapter: DateAdapter<NativeDateAdapter>
   ) {
-    super(ngRedux);
+    super(jsonformsService);
   }
 
   mapAdditionalProps() {
-    const locale = getLocale(this.ngRedux.getState());
+    const locale = getLocale(this.jsonFormsService.getState());
     this.dateAdapter.setLocale(locale);
   }
 

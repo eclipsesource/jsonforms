@@ -22,15 +22,9 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { NgRedux } from '@angular-redux/store';
 import { Component } from '@angular/core';
-import { JsonFormsControl } from '@jsonforms/angular';
-import {
-  isMultiLineControl,
-  JsonFormsState,
-  RankedTester,
-  rankWith
-} from '@jsonforms/core';
+import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
+import { isMultiLineControl, RankedTester, rankWith } from '@jsonforms/core';
 
 @Component({
   selector: 'TextAreaRenderer',
@@ -49,8 +43,8 @@ import {
   `
 })
 export class TextAreaRenderer extends JsonFormsControl {
-  constructor(ngRedux: NgRedux<JsonFormsState>) {
-    super(ngRedux);
+  constructor(jsonformsService: JsonFormsAngularService) {
+    super(jsonformsService);
   }
   getEventValue = (event: any) => event.target.value;
 }

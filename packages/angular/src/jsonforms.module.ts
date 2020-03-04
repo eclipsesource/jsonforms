@@ -23,15 +23,14 @@
   THE SOFTWARE.
 */
 import { NgModule } from '@angular/core';
-import { NgReduxModule } from '@angular-redux/store';
 
 import { JsonFormsOutlet } from './jsonforms.component';
 import { UnknownRenderer } from './unknown.component';
+import { JsonFormsAngularService } from './jsonforms.service';
 @NgModule({
   declarations: [JsonFormsOutlet, UnknownRenderer],
   entryComponents: [UnknownRenderer],
-  imports: [NgReduxModule],
-  exports: [JsonFormsOutlet, NgReduxModule],
-  providers: []
+  exports: [JsonFormsOutlet],
+  providers: [JsonFormsAngularService]
 })
 export class JsonFormsModule {}

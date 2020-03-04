@@ -23,19 +23,17 @@
   THE SOFTWARE.
 */
 import { BrowserModule } from '@angular/platform-browser';
-import { CUSTOM_ELEMENTS_SCHEMA, isDevMode, NgModule } from '@angular/core';
-import { DevToolsExtension, NgRedux } from '@angular-redux/store';
-import { Actions, JsonFormsState, UISchemaTester } from '@jsonforms/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { Actions, UISchemaTester } from '@jsonforms/core';
 import { LocaleValidationModule, TranslationModule } from 'angular-l10n';
 import { AppComponent } from './app.component';
 import { JsonFormsAngularMaterialModule } from '../../src/module';
 
-import { initialState, rootReducer } from './store';
-import { ReduxComponent } from './redux.component';
-import logger from 'redux-logger';
+import { initialState } from './store';
+import { JsonFormsAngularService } from '@jsonforms/angular';
 
 @NgModule({
-  declarations: [AppComponent, ReduxComponent],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     JsonFormsAngularMaterialModule,
@@ -46,18 +44,10 @@ import logger from 'redux-logger';
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule {
-  constructor(ngRedux: NgRedux<JsonFormsState>, devTools: DevToolsExtension) {
-    let enhancers: any[] = [];
-    // ... add whatever other enhancers you want.
-
-    // You probably only want to expose this tool in devMode.
-    if (isDevMode() && devTools.isEnabled()) {
-      enhancers = [...enhancers, devTools.enhancer()];
-    }
-
-    ngRedux.configureStore(rootReducer, initialState, [logger], enhancers);
+  constructor(jsonformsService: JsonFormsAngularService) {
+    jsonformsService.init(initialState.jsonforms);
     const example = initialState.examples.data[0];
-    ngRedux.dispatch(
+    jsonformsService.updateCore(
       Actions.init(example.data, example.schema, example.uischema)
     );
 
@@ -80,7 +70,9 @@ export class AppModule {
       }
       return -1;
     };
-    ngRedux.dispatch(Actions.registerUISchema(itemTester, uiSchema));
+    jsonformsService.updateUiSchema(
+      Actions.registerUISchema(itemTester, uiSchema)
+    );
   }
 }
 

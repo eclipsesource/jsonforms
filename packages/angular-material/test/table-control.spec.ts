@@ -22,8 +22,6 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { NgRedux, NgReduxModule } from '@angular-redux/store';
-import { MockNgRedux } from '@angular-redux/store/lib/testing';
 import { CommonModule } from '@angular/common';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -35,7 +33,7 @@ import {
 } from '@angular/material';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { JsonFormsModule } from '@jsonforms/angular';
+import { JsonFormsAngularService, JsonFormsModule } from '@jsonforms/angular';
 import { ControlElement } from '@jsonforms/core';
 import { TextControlRenderer, TextControlRendererTester } from '../src';
 import {
@@ -115,7 +113,6 @@ describe('Table', () => {
       imports: [
         CommonModule,
         JsonFormsModule,
-        NgReduxModule,
         MatCardModule,
         NoopAnimationsModule,
         MatFormFieldModule,
@@ -124,7 +121,7 @@ describe('Table', () => {
         FlexLayoutModule,
         MatTableModule
       ],
-      providers: [{ provide: NgRedux, useFactory: MockNgRedux.getInstance }]
+      providers: [JsonFormsAngularService]
     })
       .overrideModule(BrowserDynamicTestingModule, {
         set: {
@@ -133,13 +130,12 @@ describe('Table', () => {
       })
       .compileComponents();
 
-    MockNgRedux.reset();
     fixture = TestBed.createComponent(TableRenderer);
     component = fixture.componentInstance;
   }));
 
   it('renders object array on root', async(() => {
-    const mockSubStore = setupMockStore(fixture, {
+    setupMockStore(fixture, {
       uischema: uischema1,
       schema: schema_object1,
       data: [
@@ -148,7 +144,6 @@ describe('Table', () => {
       ],
       renderers
     });
-    mockSubStore.complete();
     fixture.detectChanges();
     component.ngOnInit();
     fixture.whenStable().then(() => {
@@ -161,7 +156,7 @@ describe('Table', () => {
     });
   }));
   it('renders object array on path', async(() => {
-    const mockSubStore = setupMockStore(fixture, {
+    setupMockStore(fixture, {
       uischema: uischema2,
       schema: schema_object2,
       data: {
@@ -173,7 +168,6 @@ describe('Table', () => {
       renderers
     });
 
-    mockSubStore.complete();
     fixture.detectChanges();
     component.ngOnInit();
     fixture.whenStable().then(() => {
@@ -187,13 +181,12 @@ describe('Table', () => {
   }));
 
   it('renders simple array on root', async(() => {
-    const mockSubStore = setupMockStore(fixture, {
+    setupMockStore(fixture, {
       uischema: uischema1,
       schema: schema_simple1,
       data: ['foo', 'bar'],
       renderers
     });
-    mockSubStore.complete();
     fixture.detectChanges();
     component.ngOnInit();
     fixture.whenStable().then(() => {
@@ -206,13 +199,12 @@ describe('Table', () => {
     });
   }));
   it('renders simple array on path', async(() => {
-    const mockSubStore = setupMockStore(fixture, {
+    setupMockStore(fixture, {
       uischema: uischema2,
       schema: schema_simple2,
       data: { my: ['foo', 'bar'] },
       renderers
     });
-    mockSubStore.complete();
     fixture.detectChanges();
     component.ngOnInit();
     fixture.whenStable().then(() => {
@@ -226,14 +218,13 @@ describe('Table', () => {
   }));
 
   it('can be disabled', async(() => {
-    const mockSubStore = setupMockStore(fixture, {
+    setupMockStore(fixture, {
       uischema: uischema1,
       schema: schema_object1,
       data: [{ foo: 'foo_1', bar: 'bar_1' }],
       renderers
     });
     component.disabled = true;
-    mockSubStore.complete();
     fixture.detectChanges();
     component.ngOnInit();
     fixture.whenStable().then(() => {
@@ -247,13 +238,12 @@ describe('Table', () => {
     });
   }));
   it('should be enabled by default', async(() => {
-    const mockSubStore = setupMockStore(fixture, {
+    setupMockStore(fixture, {
       uischema: uischema1,
       schema: schema_object1,
       data: [{ foo: 'foo_1', bar: 'bar_1' }],
       renderers
     });
-    mockSubStore.complete();
     fixture.detectChanges();
     component.ngOnInit();
     fixture.whenStable().then(() => {

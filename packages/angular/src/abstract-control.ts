@@ -33,7 +33,6 @@ import {
   StatePropsOfControl
 } from '@jsonforms/core';
 import { Input, OnDestroy, OnInit } from '@angular/core';
-import { NgRedux } from '@angular-redux/store';
 import {
   AbstractControl,
   FormControl,
@@ -43,6 +42,7 @@ import {
 import { Subscription } from 'rxjs';
 
 import { JsonFormsBaseRenderer } from './base.renderer';
+import { JsonFormsAngularService } from './jsonforms.service';
 
 export abstract class JsonFormsAbstractControl<
   Props extends StatePropsOfControl
@@ -63,7 +63,7 @@ export abstract class JsonFormsAbstractControl<
   hidden: boolean;
   propsPath: string;
 
-  constructor(protected ngRedux: NgRedux<JsonFormsState>) {
+  constructor(protected jsonFormsService: JsonFormsAngularService) {
     super();
     this.form = new FormControl(
       {
@@ -80,16 +80,15 @@ export abstract class JsonFormsAbstractControl<
   getEventValue = (event: any) => event.value;
 
   onChange(ev: any) {
-    this.ngRedux.dispatch(
+    this.jsonFormsService.updateCore(
       Actions.update(this.propsPath, () => this.getEventValue(ev))
     );
     this.triggerValidation();
   }
 
   ngOnInit() {
-    this.subscription = this.ngRedux
-      .select()
-      .subscribe((state: JsonFormsState) => {
+    this.jsonFormsService.subscribe({
+      next: (state: JsonFormsState) => {
         const props = this.mapToProps(state);
         const {
           data,
@@ -121,7 +120,8 @@ export abstract class JsonFormsAbstractControl<
         this.form.setValue(data);
         this.propsPath = path;
         this.mapAdditionalProps(props);
-      });
+      }
+    });
     this.triggerValidation();
   }
 

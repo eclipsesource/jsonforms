@@ -25,18 +25,17 @@
 import { DebugElement, Type } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { MockNgRedux } from '@angular-redux/store/testing';
 
 import { JsonFormsControl } from '@jsonforms/angular';
 import {
   baseSetup,
   ErrorTestExpectation,
-  initComponent,
   setupMockStore,
   TestConfig,
-  TestData
+  TestData,
+  getJsonFormsService
 } from './util';
-import { ControlElement, JsonSchema } from '@jsonforms/core';
+import { ControlElement, JsonSchema, Actions } from '@jsonforms/core';
 
 interface ComponentResult<C extends JsonFormsControl> {
   fixture: ComponentFixture<any>;
@@ -95,21 +94,15 @@ export const rangeBaseTest = <C extends JsonFormsControl, I>(
   });
 
   it('should render floats', () => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
     component.uischema = rangeDefaultTestData.uischema;
     component.schema = rangeDefaultTestData.schema;
 
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data: rangeDefaultTestData.data,
-          schema: rangeDefaultTestData.schema
-        }
-      }
-    });
-    mockSubStore.complete();
-    fixture.detectChanges();
+    getJsonFormsService(component).init();
+    getJsonFormsService(component).updateCore(
+      Actions.init(rangeDefaultTestData.data, rangeDefaultTestData.schema)
+    );
     component.ngOnInit();
+    fixture.detectChanges();
     expect(component.data).toBe(1.234);
     expect(rangeElement.componentInstance.value).toBe(1.234);
     // step is of type string
@@ -127,14 +120,17 @@ export const rangeBaseTest = <C extends JsonFormsControl, I>(
     schema.properties.foo.minimum = -42;
     schema.properties.foo.maximum = 42;
     schema.properties.foo.default = 1;
-    initComponent(
-      fixture,
-      setupMockStore(fixture, {
-        uischema: rangeDefaultTestData.uischema,
-        schema,
-        data: { foo: 12 }
-      })
+    setupMockStore(fixture, {
+      uischema: rangeDefaultTestData.uischema,
+      schema,
+      data: { foo: 12 }
+    });
+    getJsonFormsService(component).updateCore(
+      Actions.init({ foo: 12 }, schema, rangeDefaultTestData.uischema)
     );
+
+    fixture.componentInstance.ngOnInit();
+    fixture.detectChanges();
     expect(component.data).toBe(12);
     expect(rangeElement.componentInstance.value).toBe(12);
     // step is of type string
@@ -147,176 +143,118 @@ export const rangeBaseTest = <C extends JsonFormsControl, I>(
   });
 
   it('should support updating the state', () => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
     component.uischema = rangeDefaultTestData.uischema;
     component.schema = rangeDefaultTestData.schema;
 
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data: rangeDefaultTestData.data,
-          schema: rangeDefaultTestData.schema
-        }
-      }
-    });
-    fixture.detectChanges();
+    getJsonFormsService(component).init();
+    getJsonFormsService(component).updateCore(
+      Actions.init(rangeDefaultTestData.data, rangeDefaultTestData.schema)
+    );
     component.ngOnInit();
+    fixture.detectChanges();
 
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data: { foo: 4.56 },
-          schema: rangeDefaultTestData.schema
-        }
-      }
-    });
-    mockSubStore.complete();
+    getJsonFormsService(component).updateCore(
+      Actions.update('foo', () => 4.56)
+    );
     fixture.detectChanges();
     expect(component.data).toBe(4.56);
     expect(rangeElement.componentInstance.value).toBe(4.56);
   });
   it('should update with undefined value', () => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
     component.uischema = rangeDefaultTestData.uischema;
     component.schema = rangeDefaultTestData.schema;
 
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data: rangeDefaultTestData.data,
-          schema: rangeDefaultTestData.schema
-        }
-      }
-    });
-    fixture.detectChanges();
+    getJsonFormsService(component).init();
+    getJsonFormsService(component).updateCore(
+      Actions.init(rangeDefaultTestData.data, rangeDefaultTestData.schema)
+    );
     component.ngOnInit();
+    fixture.detectChanges();
 
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data: { foo: undefined },
-          schema: rangeDefaultTestData.schema
-        }
-      }
-    });
-    mockSubStore.complete();
+    getJsonFormsService(component).updateCore(
+      Actions.update('foo', () => undefined)
+    );
     fixture.detectChanges();
     expect(component.data).toBe(undefined);
     expect(rangeElement.componentInstance.value).toBe(0.42);
   });
   it('should update with null value', () => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
     component.uischema = rangeDefaultTestData.uischema;
     component.schema = rangeDefaultTestData.schema;
 
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data: rangeDefaultTestData.data,
-          schema: rangeDefaultTestData.schema
-        }
-      }
-    });
-    fixture.detectChanges();
+    getJsonFormsService(component).init();
+    getJsonFormsService(component).updateCore(
+      Actions.init(rangeDefaultTestData.data, rangeDefaultTestData.schema)
+    );
     component.ngOnInit();
+    fixture.detectChanges();
 
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data: { foo: null },
-          schema: rangeDefaultTestData.schema
-        }
-      }
-    });
-    mockSubStore.complete();
+    getJsonFormsService(component).updateCore(
+      Actions.update('foo', () => null)
+    );
     fixture.detectChanges();
     expect(component.data).toBe(null);
     expect(rangeElement.componentInstance.value).toBe(0.42);
   });
   it('should not update with wrong ref', () => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
     component.uischema = rangeDefaultTestData.uischema;
     component.schema = rangeDefaultTestData.schema;
 
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data: rangeDefaultTestData.data,
-          schema: rangeDefaultTestData.schema
-        }
-      }
-    });
-    fixture.detectChanges();
+    getJsonFormsService(component).init();
+    getJsonFormsService(component).updateCore(
+      Actions.init(rangeDefaultTestData.data, rangeDefaultTestData.schema)
+    );
     component.ngOnInit();
+    fixture.detectChanges();
 
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data: { foo: 1.234, bar: 456.456 },
-          schema: rangeDefaultTestData.schema
-        }
-      }
-    });
-    mockSubStore.complete();
+    getJsonFormsService(component).updateCore(
+      Actions.update('foo', () => 1.234)
+    );
+    getJsonFormsService(component).updateCore(
+      Actions.update('bar', () => 456.456)
+    );
+
     fixture.detectChanges();
     expect(component.data).toBe(1.234);
     expect(rangeElement.componentInstance.value).toBe(1.234);
   });
   // store needed as we evaluate the calculated enabled value to disable/enable the control
   it('can be disabled', () => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
     component.uischema = rangeDefaultTestData.uischema;
     component.schema = rangeDefaultTestData.schema;
     component.disabled = true;
 
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data: rangeDefaultTestData.data,
-          schema: rangeDefaultTestData.schema
-        }
-      }
-    });
-    mockSubStore.complete();
-    fixture.detectChanges();
+    getJsonFormsService(component).init();
+    getJsonFormsService(component).updateCore(
+      Actions.init(rangeDefaultTestData.data, rangeDefaultTestData.schema)
+    );
     component.ngOnInit();
+    fixture.detectChanges();
     expect(rangeElement.componentInstance.disabled).toBe(true);
   });
   it('can be hidden', () => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
     component.uischema = rangeDefaultTestData.uischema;
     component.schema = rangeDefaultTestData.schema;
     component.visible = false;
 
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data: rangeDefaultTestData.data,
-          schema: rangeDefaultTestData.schema
-        }
-      }
-    });
-    mockSubStore.complete();
+    getJsonFormsService(component).init();
+    getJsonFormsService(component).updateCore(
+      Actions.init(rangeDefaultTestData.data, rangeDefaultTestData.schema)
+    );
     fixture.detectChanges();
     component.ngOnInit();
     expect(fixture.nativeElement.children[0].style.display).toBe('none');
   });
   it('id should be present in output', () => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
     component.uischema = rangeDefaultTestData.uischema;
     component.schema = rangeDefaultTestData.schema;
     component.id = 'myId';
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data: rangeDefaultTestData.data,
-          schema: rangeDefaultTestData.schema
-        }
-      }
-    });
-    mockSubStore.complete();
-    fixture.detectChanges();
+    getJsonFormsService(component).init();
+    getJsonFormsService(component).updateCore(
+      Actions.init(rangeDefaultTestData.data)
+    );
     component.ngOnInit();
+    fixture.detectChanges();
     expect(rangeElement.nativeElement.id).toBe('myId');
   });
 };
@@ -335,22 +273,16 @@ export const rangeInputEventTest = <C extends JsonFormsControl, I>(
     component = preparedComponents.component;
   });
 
-  it('should update via input event', () => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
+  it('should update via input event', async () => {
     component.uischema = rangeDefaultTestData.uischema;
     component.schema = rangeDefaultTestData.schema;
 
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data: rangeDefaultTestData.data,
-          schema: rangeDefaultTestData.schema
-        }
-      }
-    });
-    mockSubStore.complete();
-    fixture.detectChanges();
+    getJsonFormsService(component).init();
+    getJsonFormsService(component).updateCore(
+      Actions.init(rangeDefaultTestData.data, rangeDefaultTestData.schema)
+    );
     component.ngOnInit();
+    fixture.detectChanges();
 
     const spy = spyOn(component, 'onChange');
 
@@ -368,6 +300,7 @@ export const rangeInputEventTest = <C extends JsonFormsControl, I>(
 
     // trigger change detection
     fixture.detectChanges();
+    await fixture.isStable();
     expect(spy).toHaveBeenCalled();
   });
 };
@@ -387,27 +320,27 @@ export const rangeErrorTest = <C extends JsonFormsControl, I>(
     component = preparedComponents.component;
   });
   it('should display errors', () => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
     component.uischema = rangeDefaultTestData.uischema;
     component.schema = rangeDefaultTestData.schema;
 
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data: rangeDefaultTestData.data,
-          schema: rangeDefaultTestData.schema,
-          errors: [
-            {
-              dataPath: 'foo',
-              message: 'Hi, this is me, test error!'
-            }
-          ]
-        }
+    getJsonFormsService(component).init({
+      core: {
+        data: rangeDefaultTestData.data,
+        schema: rangeDefaultTestData.schema,
+        errors: [
+          {
+            dataPath: 'foo',
+            message: 'Hi, this is me, test error!',
+            params: '',
+            schemaPath: '',
+            keyword: ''
+          }
+        ],
+        uischema: undefined
       }
     });
-    mockSubStore.complete();
-    fixture.detectChanges();
     component.ngOnInit();
+    fixture.detectChanges();
     const debugErrors: DebugElement[] = fixture.debugElement.queryAll(
       By.directive(errorTestInformation.errorInstance)
     );

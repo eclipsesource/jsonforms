@@ -43,11 +43,11 @@ import {
   OwnPropsOfRenderer,
   UISchemaElement
 } from '@jsonforms/core';
-import { NgRedux } from '@angular-redux/store';
 import { UnknownRenderer } from './unknown.component';
 import { JsonFormsBaseRenderer } from './base.renderer';
 import { Subscription } from 'rxjs';
 import { JsonFormsControl } from './control';
+import { JsonFormsAngularService } from './jsonforms.service';
 
 @Directive({
   selector: 'jsonforms-outlet'
@@ -60,7 +60,7 @@ export class JsonFormsOutlet extends JsonFormsBaseRenderer<UISchemaElement>
   constructor(
     private viewContainerRef: ViewContainerRef,
     private componentFactoryResolver: ComponentFactoryResolver,
-    private ngRedux: NgRedux<any>
+    private jsonformsService: JsonFormsAngularService
   ) {
     super();
   }
@@ -70,13 +70,13 @@ export class JsonFormsOutlet extends JsonFormsBaseRenderer<UISchemaElement>
     this.path = renderProps.path;
     this.schema = renderProps.schema;
     this.uischema = renderProps.uischema;
-    this.update(this.ngRedux.getState());
+    this.update(this.jsonformsService.getState());
   }
 
   ngOnInit(): void {
-    this.subscription = this.ngRedux
-      .select()
-      .subscribe((state: JsonFormsState) => this.update(state));
+    this.subscription = this.jsonformsService.subscribe({
+      next: (state: JsonFormsState) => this.update(state)
+    });
   }
 
   update(state: JsonFormsState) {

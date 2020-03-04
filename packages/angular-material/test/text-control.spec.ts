@@ -22,8 +22,6 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { NgRedux } from '@angular-redux/store';
-import { MockNgRedux } from '@angular-redux/store/testing';
 import { DebugElement } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import {
@@ -41,6 +39,7 @@ import {
 } from '@jsonforms/angular-test';
 import { TextControlRenderer, TextControlRendererTester } from '../src';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { JsonFormsAngularService } from '@jsonforms/angular';
 
 describe('Material text field tester', () => {
   const uischema = {
@@ -68,7 +67,7 @@ const imports = [
   ReactiveFormsModule,
   FlexLayoutModule
 ];
-const providers = [{ provide: NgRedux, useFactory: MockNgRedux.getInstance }];
+const providers = [JsonFormsAngularService];
 const componentUT: any = TextControlRenderer;
 const errorTest: ErrorTestExpectation = {
   errorInstance: MatError,

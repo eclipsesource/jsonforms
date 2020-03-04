@@ -28,3 +28,4 @@ export * from './array-control';
 export * from './jsonforms.component';
 export * from './jsonforms.module';
 export * from './unknown.component';
+export * from './jsonforms.service';

@@ -24,12 +24,7 @@
 */
 import { ComponentFixture } from '@angular/core/testing';
 import { UISchemaElement, VerticalLayout } from '@jsonforms/core';
-import {
-  beforeEachLayoutTest,
-  initComponent,
-  setupMockStore
-} from '@jsonforms/angular-test';
-import { Subject } from 'rxjs';
+import { beforeEachLayoutTest, setupMockStore } from '@jsonforms/angular-test';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import {
   VerticalLayoutRenderer,
@@ -56,12 +51,13 @@ describe('Vertical layout', () => {
     const uischema: UISchemaElement = {
       type: 'VerticalLayout'
     };
-    const mockSubStore: Subject<any> = setupMockStore(fixture, {
+    setupMockStore(fixture, {
       data: {},
       schema: {},
       uischema
     });
-    initComponent(fixture, mockSubStore);
+    fixture.componentInstance.ngOnInit();
+    fixture.detectChanges();
     expect(fixture.nativeElement.children[0].children.length).toBe(0);
     // the component is wrapped in a div
     expect(fixture.nativeElement.children[0].style.display).not.toBe('none');
@@ -73,12 +69,13 @@ describe('Vertical layout', () => {
       elements: null
     };
 
-    const mockSubStore: Subject<any> = setupMockStore(fixture, {
+    setupMockStore(fixture, {
       data: {},
       schema: {},
       uischema
     });
-    initComponent(fixture, mockSubStore);
+    fixture.componentInstance.ngOnInit();
+    fixture.detectChanges();
     expect(fixture.nativeElement.children[0].children.length).toBe(0);
   });
 
@@ -87,12 +84,13 @@ describe('Vertical layout', () => {
       type: 'VerticalLayout',
       elements: [{ type: 'Control' }, { type: 'Control' }]
     };
-    const mockSubStore: Subject<any> = setupMockStore(fixture, {
+    setupMockStore(fixture, {
       data: {},
       schema: {},
       uischema
     });
-    initComponent(fixture, mockSubStore);
+    fixture.componentInstance.ngOnInit();
+    fixture.detectChanges();
     expect(fixture.nativeElement.children[0].children.length).toBe(2);
     expect(fixture.nativeElement.children[0].hidden).toBe(false);
   });
@@ -104,12 +102,11 @@ describe('Vertical layout', () => {
       elements: [{ type: 'Control' }, { type: 'Control' }]
     };
     component.visible = false;
-    const mockSubStore: Subject<any> = setupMockStore(fixture, {
+    setupMockStore(fixture, {
       data: {},
       schema: {},
       uischema
     });
-    mockSubStore.complete();
     component.ngOnInit();
     expect(fixture.nativeElement.children[0].style.display).toBe('none');
   });

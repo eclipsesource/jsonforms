@@ -22,16 +22,14 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { NgRedux } from '@angular-redux/store';
 import { Component, Input } from '@angular/core';
 import { MatAutocompleteSelectedEvent } from '@angular/material';
-import { JsonFormsControl } from '@jsonforms/angular';
+import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 import {
   Actions,
   composeWithUi,
   ControlElement,
   isEnumControl,
-  JsonFormsState,
   OwnPropsOfControl,
   RankedTester,
   rankWith
@@ -99,8 +97,8 @@ export class AutocompleteControlRenderer extends JsonFormsControl {
   filteredOptions: Observable<string[]>;
   shouldFilter: boolean;
 
-  constructor(ngRedux: NgRedux<JsonFormsState>) {
-    super(ngRedux);
+  constructor(jsonformsService: JsonFormsAngularService) {
+    super(jsonformsService);
   }
   getEventValue = (event: any) => event.target.value;
 
@@ -125,7 +123,9 @@ export class AutocompleteControlRenderer extends JsonFormsControl {
   onSelect(ev: MatAutocompleteSelectedEvent) {
     const path = composeWithUi(this.uischema as ControlElement, this.path);
     this.shouldFilter = false;
-    this.ngRedux.dispatch(Actions.update(path, () => ev.option.value));
+    this.jsonFormsService.updateCore(
+      Actions.update(path, () => ev.option.value)
+    );
     this.triggerValidation();
   }
 

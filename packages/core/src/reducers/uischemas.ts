@@ -24,12 +24,7 @@
 */
 import maxBy from 'lodash/maxBy';
 import remove from 'lodash/remove';
-import {
-  ADD_UI_SCHEMA,
-  AddUISchemaAction,
-  REMOVE_UI_SCHEMA,
-  RemoveUISchemaAction
-} from '../actions';
+import { ADD_UI_SCHEMA, REMOVE_UI_SCHEMA, UISchemaActions } from '../actions';
 import { JsonSchema, NOT_APPLICABLE, UISchemaElement } from '..';
 
 export type UISchemaTester = (
@@ -38,11 +33,9 @@ export type UISchemaTester = (
   path: string
 ) => number;
 
-type ValidUISchemaReducerActions = AddUISchemaAction | RemoveUISchemaAction;
-
 export const uischemaRegistryReducer = (
   state: { tester: UISchemaTester; uischema: UISchemaElement }[] = [],
-  action: ValidUISchemaReducerActions
+  action: UISchemaActions
 ) => {
   switch (action.type) {
     case ADD_UI_SCHEMA:

@@ -22,10 +22,12 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { JsonFormsOutlet, UnknownRenderer } from '@jsonforms/angular';
-import { MockNgRedux } from '@angular-redux/store/lib/testing';
+import {
+  JsonFormsAngularService,
+  JsonFormsOutlet,
+  UnknownRenderer
+} from '@jsonforms/angular';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
-import { NgRedux } from '@angular-redux/store';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 export const beforeEachLayoutTest = <LAYOUT>(
@@ -35,10 +37,7 @@ export const beforeEachLayoutTest = <LAYOUT>(
   TestBed.configureTestingModule({
     declarations: [Renderer, UnknownRenderer, JsonFormsOutlet, ...declarations],
     imports,
-    providers: [
-      { provide: NgRedux, useFactory: MockNgRedux.getInstance },
-      ...providers
-    ]
+    providers: [JsonFormsAngularService, ...providers]
   })
     .overrideModule(BrowserDynamicTestingModule, {
       set: {
@@ -46,6 +45,5 @@ export const beforeEachLayoutTest = <LAYOUT>(
       }
     })
     .compileComponents();
-  MockNgRedux.reset();
   return TestBed.createComponent(Renderer);
 };
