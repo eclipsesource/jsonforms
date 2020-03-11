@@ -78,7 +78,7 @@ const setupStore = (
     examples: {
       data: exampleData
     }
-  });
+  } as any);
 
   // Resolve example configuration
   // Add schema to validation
