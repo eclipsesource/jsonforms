@@ -159,9 +159,8 @@ export class MasterListComponent extends JsonFormsArrayControl {
 
   ngOnInit() {
     super.ngOnInit();
-    const { addItem, removeItems } = mapDispatchToArrayControlProps(
-      this.jsonFormsService.updateCore
-    );
+    const dispatch = this.jsonFormsService.updateCore.bind(this.jsonFormsService);
+    const { addItem, removeItems } = mapDispatchToArrayControlProps(dispatch);
     this.addItem = addItem;
     this.removeItems = removeItems;
   }
