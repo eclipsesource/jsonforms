@@ -25,7 +25,7 @@
 import range from 'lodash/range';
 import React from 'react';
 import { ArrayControlProps, composePaths, createDefaultValue, findUISchema } from '@jsonforms/core';
-import { JsonFormsDispatch } from '@jsonforms/react';
+import { ResolvedJsonFormsDispatch } from '@jsonforms/react';
 import { VanillaRendererProps } from '../../index';
 
 export const ArrayControl = ({
@@ -58,7 +58,7 @@ export const ArrayControl = ({
               const childPath = composePaths(path, `${index}`);
 
               return (
-                <JsonFormsDispatch
+                <ResolvedJsonFormsDispatch
                   schema={schema}
                   uischema={foundUISchema || uischema}
                   path={childPath}
