@@ -33,7 +33,7 @@ import {
   resolveSubSchemas,
   StatePropsOfCombinator
 } from '@jsonforms/core';
-import { JsonFormsDispatch, withJsonFormsAnyOfProps } from '@jsonforms/react';
+import { ResolvedJsonFormsDispatch, withJsonFormsAnyOfProps } from '@jsonforms/react';
 import { Hidden, Tab, Tabs } from '@material-ui/core';
 import CombinatorProperties from './CombinatorProperties';
 
@@ -79,7 +79,7 @@ const MaterialAnyOfRenderer = ({
       {anyOfRenderInfos.map(
         (anyOfRenderInfo, anyOfIndex) =>
           selectedAnyOf === anyOfIndex && (
-            <JsonFormsDispatch
+            <ResolvedJsonFormsDispatch
               key={anyOfIndex}
               schema={anyOfRenderInfo.schema}
               uischema={anyOfRenderInfo.uischema}

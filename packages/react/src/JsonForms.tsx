@@ -176,27 +176,37 @@ export class JsonFormsDispatchRenderer extends ResolvedJsonFormsDispatchRenderer
   }
 }
 
+function useJsonFormsDispatchRendererProps(props: OwnPropsOfJsonFormsRenderer & JsonFormsReactProps) {
+  const ctx = useJsonForms();
+  const { refResolver } = ctxToJsonFormsDispatchProps(ctx, props);
+  const { data, errors } = ctx.core;
+  useLayoutEffect(() => {
+    props.onChange && props.onChange({ data, errors });
+  }, [data, errors]);
+
+  return {
+    schema: props.schema || ctx.core.schema,
+    uischema: props.uischema || ctx.core.uischema,
+    path: props.path || '',
+    enabled: props.enabled,
+    rootSchema: ctx.core.schema,
+    renderers: props.renderers || ctx.renderers,
+    refResolver: refResolver,
+    cells: props.cells || ctx.cells,
+  };
+}
+
 export const JsonFormsDispatch = React.memo(
   (props: OwnPropsOfJsonFormsRenderer & JsonFormsReactProps) => {
-    const ctx = useJsonForms();
-    const { refResolver } = ctxToJsonFormsDispatchProps(ctx, props);
-    const { data, errors } = ctx.core;
-    useLayoutEffect(() => {
-      props.onChange && props.onChange({ data, errors });
-    }, [data, errors]);
+    const renderProps = useJsonFormsDispatchRendererProps(props);
+    return <JsonFormsDispatchRenderer {...renderProps} />
+  }
+);
 
-    return (
-      <JsonFormsDispatchRenderer
-        schema={props.schema || ctx.core.schema}
-        uischema={props.uischema || ctx.core.uischema}
-        path={props.path || ''}
-        enabled={props.enabled}
-        rootSchema={ctx.core.schema}
-        renderers={props.renderers || ctx.renderers}
-        refResolver={refResolver}
-        cells={props.cells || ctx.cells}
-      />
-    );
+export const ResolvedJsonFormsDispatch = React.memo(
+  (props: OwnPropsOfJsonFormsRenderer & JsonFormsReactProps) => {
+    const renderProps = useJsonFormsDispatchRendererProps(props);
+    return <ResolvedJsonFormsDispatchRenderer {...renderProps} />
   }
 );
 

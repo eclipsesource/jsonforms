@@ -33,7 +33,7 @@ import {
   rankWith,
   StatePropsOfControlWithDetail
 } from '@jsonforms/core';
-import { JsonFormsDispatch, withJsonFormsDetailProps } from '@jsonforms/react';
+import { ResolvedJsonFormsDispatch, withJsonFormsDetailProps } from '@jsonforms/react';
 import { Hidden } from '@material-ui/core';
 import React from 'react';
 
@@ -67,7 +67,7 @@ const MaterialObjectRenderer = ({
   }
   return (
     <Hidden xsUp={!visible}>
-      <JsonFormsDispatch
+      <ResolvedJsonFormsDispatch
         visible={visible}
         enabled={enabled}
         schema={schema}

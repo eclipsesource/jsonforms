@@ -36,7 +36,7 @@ import {
   uiTypeIs
 } from '@jsonforms/core';
 import {
-  JsonFormsDispatch,
+  ResolvedJsonFormsDispatch,
   withJsonFormsArrayLayoutProps
 } from '@jsonforms/react';
 import { Grid, Hidden, List, Typography } from '@material-ui/core';
@@ -128,7 +128,7 @@ export const MaterialListWithDetailRenderer = ({
         </Grid>
         <Grid item xs>
           {selectedIndex !== undefined ? (
-            <JsonFormsDispatch
+            <ResolvedJsonFormsDispatch
               renderers={renderers}
               cells={cells}
               visible={visible}

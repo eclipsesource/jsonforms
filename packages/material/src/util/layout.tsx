@@ -31,7 +31,7 @@ import {
   UISchemaElement,
   JsonFormsCellRendererRegistryEntry
 } from '@jsonforms/core';
-import { areEqual, JsonFormsDispatch } from '@jsonforms/react';
+import { areEqual, ResolvedJsonFormsDispatch } from '@jsonforms/react';
 import { Grid, Hidden } from '@material-ui/core';
 
 export const renderLayoutElements = (
@@ -44,7 +44,7 @@ export const renderLayoutElements = (
 ) => {
   return elements.map((child, index) => (
     <Grid item key={`${path}-${index}`} xs>
-      <JsonFormsDispatch
+      <ResolvedJsonFormsDispatch
         uischema={child}
         schema={schema}
         path={path}
