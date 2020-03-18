@@ -377,6 +377,10 @@ export class MaterialTableControl extends React.Component<
   any
 > {
   addItem = (path: string, value: any) => this.props.addItem(path, value);
+  confirmDeleteArray = (close: () => void) => {
+    this.props.deleteProperty(this.props.path);
+    close();
+  };
   render() {
     const {
       label,
@@ -411,6 +415,7 @@ export class MaterialTableControl extends React.Component<
               schema={schema}
               rootSchema={rootSchema}
               enabled={enabled}
+              deleteArray={this.confirmDeleteArray}
             />
             {isObjectSchema && (
               <TableRow>

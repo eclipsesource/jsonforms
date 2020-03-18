@@ -50,6 +50,7 @@ import {
   mapStateToControlProps,
   mapStateToEnumControlProps,
   mapStateToControlWithDetailProps,
+  mapDispatchToControlWithDetailProps,
   mapStateToJsonFormsRendererProps,
   mapStateToLayoutProps,
   mapStateToMasterListItemProps,
@@ -162,6 +163,9 @@ export const ctxToControlWithDetailProps = (
   props: OwnPropsOfControl
 ): StatePropsOfControlWithDetail =>
   mapStateToControlWithDetailProps({ jsonforms: { ...ctx } }, props);
+
+export const ctxDispatchToControlWithDetailProps = (dispatch: Dispatch<ReducerAction<any>>) =>
+  mapDispatchToControlWithDetailProps(dispatch as any);
 
 export const ctxToAllOfProps = (
   ctx: JsonFormsStateContext,
@@ -288,7 +292,8 @@ const withContextToDetailProps =
   (Component: ComponentType<StatePropsOfControlWithDetail>): ComponentType<OwnPropsOfControl> =>
     ({ ctx, props }: JsonFormsStateContext & StatePropsOfControlWithDetail) => {
       const detailProps = ctxToControlWithDetailProps(ctx, props);
-      return (<Component {...detailProps} />);
+      const dispatchProps = ctxDispatchToControlWithDetailProps(ctx.dispatch);
+      return (<Component {...detailProps} {...dispatchProps} />);
     };
 
 const withContextToArrayLayoutProps =

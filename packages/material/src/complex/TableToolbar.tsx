@@ -36,6 +36,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import AddIcon from '@material-ui/icons/Add';
 import ValidationIcon from './ValidationIcon';
 import NoBorderTableCell from './NoBorderTableCell';
+import { DeleteProperty } from './DeleteProperty';
 
 export interface MaterialTableToolbarProps {
   numColumns: number;
@@ -47,6 +48,7 @@ export interface MaterialTableToolbarProps {
   rootSchema: JsonSchema;
   enabled: boolean;
   addItem(path: string, value: any): () => void;
+  deleteArray(close: () => void): void;
 }
 
 const fixedCellSmall = {
@@ -62,7 +64,8 @@ const TableToolbar = React.memo(
     path,
     addItem,
     schema,
-    enabled
+    enabled,
+    deleteArray
   }: MaterialTableToolbarProps) => (
     <TableRow>
       <NoBorderTableCell colSpan={numColumns}>
@@ -89,18 +92,29 @@ const TableToolbar = React.memo(
       </NoBorderTableCell>
       {enabled ? (
         <NoBorderTableCell align='right' style={ fixedCellSmall }>
-          <Tooltip
-            id='tooltip-add'
-            title={`Add to ${label}`}
-            placement='bottom'
-          >
-            <IconButton
-              aria-label={`Add to ${label}`}
-              onClick={addItem(path, createDefaultValue(schema))}
+          <Grid container wrap='nowrap'>
+            <Tooltip
+              id='tooltip-add'
+              title={`Add to ${label}`}
+              placement='bottom'
             >
-              <AddIcon />
-            </IconButton>
-          </Tooltip>
+              <IconButton
+                aria-label={`Add to ${label}`}
+                onClick={addItem(path, createDefaultValue(schema))}
+              >
+                <AddIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip
+              id='tooltip-delete-array'
+              title={`Delete ${label}`}
+              placement='bottom'
+            >
+              <DeleteProperty
+                onConfirm={deleteArray}
+              />
+            </Tooltip>
+          </Grid>
         </NoBorderTableCell>
       ) : null}
     </TableRow>

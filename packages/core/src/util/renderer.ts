@@ -536,9 +536,24 @@ export const mapStateToControlWithDetailProps = (
   };
 };
 
+export interface DispatchPropsOfComplex {
+  deleteProperty?(path: string): () => void;
+}
+
+export interface DispatchPropsOfControlWithDetail
+  extends DispatchPropsOfComplex {}
+
+export const mapDispatchToControlWithDetailProps = (
+  dispatch: Dispatch<CoreActions>
+): DispatchPropsOfControlWithDetail => ({
+  deleteProperty: (path: string) => () => {
+    dispatch(update(path, () => undefined));
+  }
+})
+
 export interface ControlWithDetailProps
   extends StatePropsOfControlWithDetail,
-    DispatchPropsOfControl {}
+  DispatchPropsOfControlWithDetail {}
 
 /**
  * State-based props of a table control.
@@ -581,7 +596,7 @@ export const mapStateToArrayControlProps = (
 /**
  * Dispatch props of a table control
  */
-export interface DispatchPropsOfArrayControl {
+export interface DispatchPropsOfArrayControl extends DispatchPropsOfComplex {
   addItem(path: string, value: any): () => void;
   removeItems?(path: string, toDelete: number[]): () => void;
   moveUp?(path: string, toMove: number): () => void;
@@ -635,6 +650,11 @@ export const mapDispatchToArrayControlProps = (
         return array;
       })
     );
+  },
+  deleteProperty: (path: string) => () => {
+    dispatch(
+      update(path, () => undefined)
+    );
   }
 });
 
@@ -642,8 +662,7 @@ export const mapDispatchToArrayControlProps = (
  * Props of an array control.
  */
 export interface ArrayControlProps
-  extends StatePropsOfArrayControl,
-    DispatchPropsOfArrayControl {}
+  extends StatePropsOfArrayControl, DispatchPropsOfArrayControl {}
 
 export const layoutDefaultProps: {
   visible: boolean;

@@ -31,11 +31,12 @@ import {
   isPlainLabel,
   RankedTester,
   rankWith,
-  StatePropsOfControlWithDetail
+  ControlWithDetailProps
 } from '@jsonforms/core';
 import { JsonFormsDispatch, withJsonFormsDetailProps } from '@jsonforms/react';
-import { Hidden } from '@material-ui/core';
+import { Hidden, Grid } from '@material-ui/core';
 import React from 'react';
+import { DeleteProperty } from './DeleteProperty';
 
 const MaterialObjectRenderer = ({
   renderers,
@@ -47,8 +48,9 @@ const MaterialObjectRenderer = ({
   visible,
   enabled,
   uischema,
-  rootSchema
-}: StatePropsOfControlWithDetail) => {
+  rootSchema,
+  deleteProperty
+}: ControlWithDetailProps) => {
   const detailUiSchema = findUISchema(
     uischemas,
     schema,
@@ -65,8 +67,17 @@ const MaterialObjectRenderer = ({
       isPlainLabel(label) ? label : label.default
     );
   }
+  const deleteObject = (close: () => void) => {
+    deleteProperty(path);
+    close();
+  };
   return (
     <Hidden xsUp={!visible}>
+      <Grid container justify='flex-end'>
+        <DeleteProperty
+          onConfirm={deleteObject}
+        />
+      </Grid>
       <JsonFormsDispatch
         visible={visible}
         enabled={enabled}
