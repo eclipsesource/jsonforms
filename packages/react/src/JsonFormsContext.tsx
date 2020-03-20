@@ -359,12 +359,14 @@ const withContextToEnumProps =
 type JsonFormsPropTypes = ControlProps | CombinatorProps | LayoutProps | CellProps | ArrayLayoutProps | StatePropsOfControlWithDetail | OwnPropsOfRenderer;
 
 export const areEqual = (prevProps: JsonFormsPropTypes, nextProps: JsonFormsPropTypes) => {
-  const prev = omit(prevProps, ['handleChange', 'renderers', 'cells', 'uischemas']);
-  const next = omit(nextProps, ['handleChange', 'renderers', 'cells', 'uischemas']);
+  const prev = omit(prevProps, ['schema', 'uischema', 'handleChange', 'renderers', 'cells', 'uischemas']);
+  const next = omit(nextProps, ['schema', 'uischema', 'handleChange', 'renderers', 'cells', 'uischemas']);
   return isEqual(prev, next)
     && get(prevProps, 'renderers.length') === get(nextProps, 'renderers.length')
     && get(prevProps, 'cells.length') === get(nextProps, 'cells.length')
-    && get(prevProps, 'uischemas.length') === get(nextProps, 'uischemas.length');
+    && get(prevProps, 'uischemas.length') === get(nextProps, 'uischemas.length')
+    && get(prevProps, 'schema') === get(nextProps, 'schema')
+    && get(prevProps, 'uischema') === get(nextProps, 'uischema');
 };
 
 // top level HOCs --
