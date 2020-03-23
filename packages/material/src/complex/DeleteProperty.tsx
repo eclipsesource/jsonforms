@@ -24,14 +24,16 @@
 */
 import React, { useState } from 'react';
 import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
+import CloseIcon from '@material-ui/icons/Close';
 import { DeleteDialog } from './DeleteDialog';
+import { Tooltip } from '@material-ui/core';
 
 export interface DeletePropertyProps {
+  title?: String;
   onConfirm(close: () => void): void;
 }
 
-export const DeleteProperty = React.memo(({ onConfirm }: DeletePropertyProps) => {
+export const DeleteProperty = React.memo(({ onConfirm, title }: DeletePropertyProps) => {
   const [modalOpen, setModalOpen] = useState(false);
   const closeModal = () => {
     setModalOpen(false);
@@ -44,9 +46,11 @@ export const DeleteProperty = React.memo(({ onConfirm }: DeletePropertyProps) =>
   };
   return (
     <>
-      <IconButton onClick={openModal} aria-label='delete' title='Delete'>
-        <DeleteIcon />
-      </IconButton>
+      <Tooltip title={title || 'Delete'} id='tooltip-delete-property'>
+        <IconButton onClick={openModal} aria-label='delete' title='Delete'>
+          <CloseIcon />
+        </IconButton>
+      </Tooltip>
       <DeleteDialog
         open={modalOpen}
         onClose={closeModal}

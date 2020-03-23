@@ -34,7 +34,7 @@ import {
   ControlWithDetailProps
 } from '@jsonforms/core';
 import { JsonFormsDispatch, withJsonFormsDetailProps } from '@jsonforms/react';
-import { Hidden, Grid } from '@material-ui/core';
+import { Hidden, Grid, Card, CardHeader, CardContent, Typography } from '@material-ui/core';
 import React from 'react';
 import { DeleteProperty } from './DeleteProperty';
 
@@ -56,7 +56,7 @@ const MaterialObjectRenderer = ({
     schema,
     uischema.scope,
     path,
-    'Group',
+    'VerticalLayout',
     uischema,
     rootSchema
   );
@@ -71,22 +71,36 @@ const MaterialObjectRenderer = ({
     deleteProperty(path);
     close();
   };
+  const mainLabel = (detailUiSchema as GroupLayout).label;
+  const style: { [x: string]: any } = { marginBottom: '10px' };
   return (
     <Hidden xsUp={!visible}>
-      <Grid container justify='flex-end'>
-        <DeleteProperty
-          onConfirm={deleteObject}
+      <Card style={style}>
+        <CardHeader
+          component={
+            () => (
+              <Grid justify='space-between' className='MuiCardHeader-root'>
+                {mainLabel && <Typography variant='h5'>{mainLabel}</Typography>}
+                <DeleteProperty
+                  onConfirm={deleteObject}
+                  title={mainLabel ? `Delete ${mainLabel}` : null}
+                />
+              </Grid>
+            )
+          }
         />
-      </Grid>
-      <JsonFormsDispatch
-        visible={visible}
-        enabled={enabled}
-        schema={schema}
-        uischema={detailUiSchema}
-        path={path}
-        renderers={renderers}
-        cells={cells}
-      />
+        <CardContent>
+          <JsonFormsDispatch
+            visible={visible}
+            enabled={enabled}
+            schema={schema}
+            uischema={detailUiSchema}
+            path={path}
+            renderers={renderers}
+            cells={cells}
+          />
+        </CardContent>
+      </Card>
     </Hidden>
   );
 };

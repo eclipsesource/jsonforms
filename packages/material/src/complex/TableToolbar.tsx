@@ -105,15 +105,10 @@ const TableToolbar = React.memo(
                 <AddIcon />
               </IconButton>
             </Tooltip>
-            <Tooltip
-              id='tooltip-delete-array'
+            <DeleteProperty
+              onConfirm={deleteArray}
               title={`Delete ${label}`}
-              placement='bottom'
-            >
-              <DeleteProperty
-                onConfirm={deleteArray}
-              />
-            </Tooltip>
+            />
           </Grid>
         </NoBorderTableCell>
       ) : null}
