@@ -34,9 +34,13 @@ import {
   ControlWithDetailProps
 } from '@jsonforms/core';
 import { JsonFormsDispatch, withJsonFormsDetailProps } from '@jsonforms/react';
-import { Hidden, Grid, Card, CardHeader, CardContent, Typography } from '@material-ui/core';
+import { Hidden, Grid, Card, CardHeader, CardContent, Typography, Button } from '@material-ui/core';
 import React from 'react';
 import { DeleteProperty } from './DeleteProperty';
+import AddIcon from '@material-ui/icons/Add';
+
+const cardStyle: { [x: string]: any } = { marginBottom: '10px' };
+const headerGridStyle: { [x: string]: any } = { padding: 16 };
 
 const MaterialObjectRenderer = ({
   renderers,
@@ -49,7 +53,9 @@ const MaterialObjectRenderer = ({
   enabled,
   uischema,
   rootSchema,
-  deleteProperty
+  deleteProperty,
+  initializeProperty,
+  data
 }: ControlWithDetailProps) => {
   const detailUiSchema = findUISchema(
     uischemas,
@@ -71,15 +77,17 @@ const MaterialObjectRenderer = ({
     deleteProperty(path);
     close();
   };
+  const initializeObject = () => {
+    initializeProperty(path);
+  }
   const mainLabel = (detailUiSchema as GroupLayout).label;
-  const style: { [x: string]: any } = { marginBottom: '10px' };
   return (
     <Hidden xsUp={!visible}>
-      <Card style={style}>
+      <Card style={cardStyle}>
         <CardHeader
           component={
             () => (
-              <Grid justify='space-between' className='MuiCardHeader-root'>
+              <Grid justify='space-between' container style={headerGridStyle}>
                 {mainLabel && <Typography variant='h5'>{mainLabel}</Typography>}
                 <DeleteProperty
                   onConfirm={deleteObject}
@@ -90,15 +98,23 @@ const MaterialObjectRenderer = ({
           }
         />
         <CardContent>
-          <JsonFormsDispatch
-            visible={visible}
-            enabled={enabled}
-            schema={schema}
-            uischema={detailUiSchema}
-            path={path}
-            renderers={renderers}
-            cells={cells}
-          />
+          {data === undefined ?
+          (
+            <Button startIcon={<AddIcon/>} onClick={initializeObject}>
+              Value is unset, click to add
+            </Button>
+          ) :
+          (
+            <JsonFormsDispatch
+              visible={visible}
+              enabled={enabled}
+              schema={schema}
+              uischema={detailUiSchema}
+              path={path}
+              renderers={renderers}
+              cells={cells}
+            />
+          )}
         </CardContent>
       </Card>
     </Hidden>

@@ -47,7 +47,7 @@ export const DeleteProperty = React.memo(({ onConfirm, title }: DeletePropertyPr
   return (
     <>
       <Tooltip title={title || 'Delete'} id='tooltip-delete-property'>
-        <IconButton onClick={openModal} aria-label='delete' title='Delete'>
+        <IconButton onClick={openModal} aria-label='delete'>
           <CloseIcon />
         </IconButton>
       </Tooltip>

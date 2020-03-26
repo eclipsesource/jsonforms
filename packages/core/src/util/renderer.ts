@@ -538,6 +538,7 @@ export const mapStateToControlWithDetailProps = (
 
 export interface DispatchPropsOfComplex {
   deleteProperty?(path: string): () => void;
+  initializeProperty?(path: string): () => void;
 }
 
 export interface DispatchPropsOfControlWithDetail
@@ -548,6 +549,9 @@ export const mapDispatchToControlWithDetailProps = (
 ): DispatchPropsOfControlWithDetail => ({
   deleteProperty: (path: string) => () => {
     dispatch(update(path, () => undefined));
+  },
+  initializeProperty: (path: string) => () => {
+    dispatch(update(path, () => ({})));
   }
 })
 
