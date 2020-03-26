@@ -33,8 +33,8 @@ import {
   rankWith,
   ControlWithDetailProps
 } from '@jsonforms/core';
-import { JsonFormsDispatch, withJsonFormsDetailProps } from '@jsonforms/react';
 import { Hidden, Grid, Card, CardHeader, CardContent, Typography, Button } from '@material-ui/core';
+import { ResolvedJsonFormsDispatch, withJsonFormsDetailProps } from '@jsonforms/react';
 import React from 'react';
 import { DeleteProperty } from './DeleteProperty';
 import AddIcon from '@material-ui/icons/Add';
@@ -105,7 +105,7 @@ const MaterialObjectRenderer = ({
             </Button>
           ) :
           (
-            <JsonFormsDispatch
+            <ResolvedJsonFormsDispatch
               visible={visible}
               enabled={enabled}
               schema={schema}

@@ -116,7 +116,7 @@ const generateCells = (
 };
 
 const getValidColumnProps = (scopedSchema: JsonSchema) => {
-  if (scopedSchema.type === 'object') {
+  if (scopedSchema.type === 'object' && typeof scopedSchema.properties === 'object') {
     return Object.keys(scopedSchema.properties).filter(
       prop => scopedSchema.properties[prop].type !== 'array'
     );

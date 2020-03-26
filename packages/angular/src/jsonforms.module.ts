@@ -26,11 +26,9 @@ import { NgModule } from '@angular/core';
 
 import { JsonFormsOutlet } from './jsonforms.component';
 import { UnknownRenderer } from './unknown.component';
-import { JsonFormsAngularService } from './jsonforms.service';
 @NgModule({
   declarations: [JsonFormsOutlet, UnknownRenderer],
   entryComponents: [UnknownRenderer],
-  exports: [JsonFormsOutlet],
-  providers: [JsonFormsAngularService]
+  exports: [JsonFormsOutlet]
 })
 export class JsonFormsModule {}

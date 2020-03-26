@@ -4,7 +4,7 @@ import React, { Dispatch, Fragment, ReducerAction, useState } from 'react';
 import { ComponentType } from 'enzyme';
 import {
   areEqual,
-  JsonFormsDispatch,
+  ResolvedJsonFormsDispatch,
   JsonFormsStateContext,
   withJsonFormsContext
 } from '@jsonforms/react';
@@ -179,7 +179,7 @@ const ExpandPanelRenderer = (props: ExpandPanelProps) => {
         </Grid>
       </ExpansionPanelSummary>
       <ExpansionPanelDetails>
-        <JsonFormsDispatch
+        <ResolvedJsonFormsDispatch
           schema={schema}
           uischema={foundUISchema}
           path={childPath}

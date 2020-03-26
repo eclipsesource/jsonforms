@@ -35,7 +35,7 @@ import {
   resolveSubSchemas,
   StatePropsOfCombinator
 } from '@jsonforms/core';
-import { JsonFormsDispatch, withJsonFormsAllOfProps } from '@jsonforms/react';
+import { ResolvedJsonFormsDispatch, withJsonFormsAllOfProps } from '@jsonforms/react';
 
 const MaterialAllOfRenderer = ({
   schema,
@@ -56,7 +56,7 @@ const MaterialAllOfRenderer = ({
   if (delegateUISchema) {
     return (
       <Hidden xsUp={!visible}>
-        <JsonFormsDispatch
+        <ResolvedJsonFormsDispatch
           schema={_schema}
           uischema={delegateUISchema}
           path={path}
@@ -78,7 +78,7 @@ const MaterialAllOfRenderer = ({
   return (
     <Hidden xsUp={!visible}>
       {allOfRenderInfos.map((allOfRenderInfo, allOfIndex) => (
-        <JsonFormsDispatch
+        <ResolvedJsonFormsDispatch
           key={allOfIndex}
           schema={allOfRenderInfo.schema}
           uischema={allOfRenderInfo.uischema}
