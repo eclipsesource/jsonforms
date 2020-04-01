@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { Actions, UISchemaTester } from '@jsonforms/core';
 import { AppComponent } from './app.component';
@@ -35,6 +36,7 @@ import { JsonFormsAngularService } from '@jsonforms/angular';
   declarations: [AppComponent],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     JsonFormsAngularMaterialModule
   ],
   bootstrap: [AppComponent],

@@ -87,7 +87,7 @@ export abstract class JsonFormsAbstractControl<
   }
 
   ngOnInit() {
-    this.jsonFormsService.subscribe({
+    this.jsonFormsService.$state.subscribe({
       next: (state: JsonFormsState) => {
         const props = this.mapToProps(state);
         const {
