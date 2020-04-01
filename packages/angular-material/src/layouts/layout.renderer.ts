@@ -46,7 +46,7 @@ export class LayoutRenderer<T extends Layout> extends JsonFormsBaseRenderer<T>
   }
 
   ngOnInit() {
-    this.subscription = this.jsonFormsService.subscribe({
+    this.subscription = this.jsonFormsService.$state.subscribe({
       next: (state: JsonFormsState) => {
         const props = mapStateToLayoutProps(state, this.getOwnProps());
         this.hidden = !props.visible;

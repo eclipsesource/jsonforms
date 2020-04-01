@@ -1,10 +1,21 @@
-import { JsonFormsState, RankedTester, UISchemaElement, JsonFormsSubStates, coreReducer, JsonFormsRendererRegistryEntry } from "@jsonforms/core";
-import { BehaviorSubject, Subscription, PartialObserver } from "rxjs";
-import { JsonFormsBaseRenderer } from "./base.renderer";
-import { CoreActions, i18nReducer, LocaleActions, UISchemaActions, uischemaRegistryReducer } from "@jsonforms/core";
+import {
+  CoreActions,
+  coreReducer,
+  i18nReducer,
+  JsonFormsRendererRegistryEntry,
+  JsonFormsState,
+  JsonFormsSubStates,
+  LocaleActions,
+  RankedTester,
+  UISchemaActions,
+  UISchemaElement,
+  uischemaRegistryReducer
+} from '@jsonforms/core';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { JsonFormsBaseRenderer } from './base.renderer';
 
 import { cloneDeep } from 'lodash';
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 
 @Injectable({
     providedIn: 'root'
@@ -19,11 +30,11 @@ export class JsonFormsAngularService {
         this.state = new BehaviorSubject({ jsonforms: this._state });
     }
 
-    subscribe(observer: PartialObserver<JsonFormsState>): Subscription {
+    get $state(): Observable<JsonFormsState> {
         if (!this.state) {
             this.init();
         }
-        return this.state.subscribe(observer);
+        return this.state.asObservable();
     }
 
     registerRenderer(renderer: JsonFormsBaseRenderer<UISchemaElement>, tester: RankedTester): void {
