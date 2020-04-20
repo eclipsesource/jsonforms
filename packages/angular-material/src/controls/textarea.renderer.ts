@@ -34,10 +34,10 @@ import { isMultiLineControl, RankedTester, rankWith } from '@jsonforms/core';
       <textarea
         matInput
         (input)="onChange($event)"
-        placeholder="{{ description }}"
         [id]="id"
         [formControl]="form"
       ></textarea>
+      <mat-hint>{{ description }}</mat-hint>
       <mat-error>{{ error }}</mat-error>
     </mat-form-field>
   `

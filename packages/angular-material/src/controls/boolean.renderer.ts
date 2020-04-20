@@ -43,6 +43,7 @@ import { isBooleanControl, RankedTester, rankWith } from '@jsonforms/core';
       >
         {{ label }}
       </mat-checkbox>
+      <mat-hint class="mat-caption">{{ description }}</mat-hint>
       <mat-error class="mat-caption">{{ error }}</mat-error>
     </div>
   `

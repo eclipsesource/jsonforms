@@ -70,7 +70,6 @@ import { startWith } from 'rxjs/operators';
         matInput
         type="text"
         (change)="onChange($event)"
-        placeholder="{{ description }}"
         [id]="id"
         [formControl]="form"
         [matAutocomplete]="auto"
@@ -88,6 +87,7 @@ import { startWith } from 'rxjs/operators';
           {{ option }}
         </mat-option>
       </mat-autocomplete>
+      <mat-hint>{{ description }}</mat-hint>
       <mat-error>{{ error }}</mat-error>
     </mat-form-field>
   `

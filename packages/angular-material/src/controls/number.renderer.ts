@@ -41,7 +41,6 @@ import {
       <input
         matInput
         (input)="onChange($event)"
-        placeholder="{{ description }}"
         [value]="getValue()"
         [id]="id"
         [formControl]="form"
@@ -49,6 +48,7 @@ import {
         [max]="max"
         [step]="multipleOf"
       />
+      <mat-hint>{{ description }}</mat-hint>
       <mat-error>{{ error }}</mat-error>
     </mat-form-field>
   `

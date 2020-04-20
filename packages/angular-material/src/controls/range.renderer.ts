@@ -44,6 +44,7 @@ import { isRangeControl, RankedTester, rankWith } from '@jsonforms/core';
         tickInterval="auto"
         [id]="id"
       ></mat-slider>
+      <mat-hint class="mat-caption">{{ description }}</mat-hint>
       <mat-error class="mat-caption">{{ error }}</mat-error>
     </div>
   `
