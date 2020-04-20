@@ -35,10 +35,10 @@ import { isStringControl, RankedTester, rankWith } from '@jsonforms/core';
         matInput
         [type]="getType()"
         (input)="onChange($event)"
-        placeholder="{{ description }}"
         [id]="id"
         [formControl]="form"
       />
+      <mat-hint>{{ description }}</mat-hint>
       <mat-error>{{ error }}</mat-error>
     </mat-form-field>
   `

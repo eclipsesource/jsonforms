@@ -40,7 +40,6 @@ import { DateAdapter, NativeDateAdapter } from '@angular/material/core';
       <input
         matInput
         (dateChange)="onChange($event)"
-        placeholder="{{ description }}"
         [id]="id"
         [formControl]="form"
         [matDatepicker]="datepicker"
@@ -50,7 +49,7 @@ import { DateAdapter, NativeDateAdapter } from '@angular/material/core';
         [for]="datepicker"
       ></mat-datepicker-toggle>
       <mat-datepicker #datepicker></mat-datepicker>
-
+      <mat-hint>{{ description }}</mat-hint>
       <mat-error>{{ error }}</mat-error>
     </mat-form-field>
   `
