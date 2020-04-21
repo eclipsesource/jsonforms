@@ -43,6 +43,7 @@ import { MockNgZone } from './mock-ng-zone';
 import { AutocompleteControlRenderer } from '../src';
 import { JsonFormsAngularService } from '@jsonforms/angular';
 import { ErrorObject } from 'ajv';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 const data = { foo: 'A' };
 const schema: JsonSchema = {
@@ -64,7 +65,8 @@ const imports = [
   MatInputModule,
   MatFormFieldModule,
   NoopAnimationsModule,
-  ReactiveFormsModule
+  ReactiveFormsModule,
+  FlexLayoutModule
 ];
 const providers = [JsonFormsAngularService];
 const componentUT: any = AutocompleteControlRenderer;
@@ -161,6 +163,18 @@ describe('Autocomplete control Base Tests', () => {
     fixture.detectChanges();
     expect(inputElement.disabled).toBe(true);
   });
+  it('can be hidden', () => {
+    setupMockStore(fixture, { uischema, schema, data });
+    getJsonFormsService(component).updateCore(Actions.init(data, schema, uischema));
+    component.visible = false;
+    component.ngOnInit();
+    fixture.detectChanges();
+    const hasDisplayNone =
+      'none' === fixture.nativeElement.children[0].style.display;
+    const hasHidden = fixture.nativeElement.children[0].hidden;
+    expect(hasDisplayNone || hasHidden).toBeTruthy();
+  });
+
   it('id should be present in output', () => {
     setupMockStore(fixture, { uischema, schema, data });
     component.id = 'myId';
