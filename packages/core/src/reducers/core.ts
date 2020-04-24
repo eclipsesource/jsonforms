@@ -183,15 +183,6 @@ export const coreReducer = (
         // empty path is ok
         const result = action.updater(cloneDeep(state.data));
 
-        if (result === undefined || result === null) {
-          return {
-            ...state,
-            data: state.data,
-            uischema: state.uischema,
-            schema: state.schema
-          };
-        }
-
         const errors = sanitizeErrors(state.validator, result);
 
         return {
@@ -202,8 +193,7 @@ export const coreReducer = (
       } else {
         const oldData: any = get(state.data, action.path);
         const newData = action.updater(cloneDeep(oldData));
-
-        const newState: any = set(cloneDeep(state.data), action.path, newData);
+        const newState: any = set(state.data === undefined ? {} : cloneDeep(state.data), action.path, newData);
         const errors = sanitizeErrors(state.validator, newState);
 
         return {
