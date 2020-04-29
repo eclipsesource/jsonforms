@@ -30,6 +30,7 @@ import isArray from 'lodash/isArray';
 import reduce from 'lodash/reduce';
 import toPairs from 'lodash/toPairs';
 import includes from 'lodash/includes';
+import AJV from 'ajv';
 import { JsonSchema } from '../models/jsonSchema';
 import {
   Categorization,
@@ -48,14 +49,15 @@ export const NOT_APPLICABLE = -1;
 /**
  * A tester is a function that receives an UI schema and a JSON schema and returns a boolean.
  */
-export type Tester = (uischema: UISchemaElement, schema: JsonSchema) => boolean;
+export type Tester = (uischema: UISchemaElement, schema: JsonSchema, ajv?: AJV.Ajv) => boolean;
 
 /**
  * A ranked tester associates a tester with a number.
  */
 export type RankedTester = (
   uischema: UISchemaElement,
-  schema: JsonSchema
+  schema: JsonSchema,
+  ajv?: AJV.Ajv
 ) => number;
 
 export const isControl = (uischema: any): uischema is ControlElement =>
@@ -73,7 +75,7 @@ export const isControl = (uischema: any): uischema is ControlElement =>
  */
 export const schemaMatches = (
   predicate: (schema: JsonSchema) => boolean
-): Tester => (uischema: UISchemaElement, schema: JsonSchema): boolean => {
+): Tester => (uischema: UISchemaElement, schema: JsonSchema, ajv?: AJV.Ajv): boolean => {
   if (isEmpty(uischema) || !isControl(uischema)) {
     return false;
   }
@@ -86,7 +88,7 @@ export const schemaMatches = (
   }
   let currentDataSchema = schema;
   if (hasType(schema, 'object')) {
-    currentDataSchema = resolveSchema(schema, schemaPath);
+    currentDataSchema = resolveSchema(schema, schemaPath, undefined, ajv);
   }
   if (currentDataSchema === undefined) {
     return false;
@@ -215,8 +217,9 @@ export const scopeEndIs = (expected: string): Tester => (
  */
 export const and = (...testers: Tester[]): Tester => (
   uischema: UISchemaElement,
-  schema: JsonSchema
-) => testers.reduce((acc, tester) => acc && tester(uischema, schema), true);
+  schema: JsonSchema,
+  ajv?: AJV.Ajv
+) => testers.reduce((acc, tester) => acc && tester(uischema, schema, ajv), true);
 
 /**
  * A tester that allow composing other testers by || them.
@@ -225,8 +228,9 @@ export const and = (...testers: Tester[]): Tester => (
  */
 export const or = (...testers: Tester[]): Tester => (
   uischema: UISchemaElement,
-  schema: JsonSchema
-) => testers.reduce((acc, tester) => acc || tester(uischema, schema), false);
+  schema: JsonSchema,
+  ajv?: AJV.Ajv
+) => testers.reduce((acc, tester) => acc || tester(uischema, schema, ajv), false);
 /**
  * Create a ranked tester that will associate a number with a given tester, if the
  * latter returns true.
@@ -236,9 +240,10 @@ export const or = (...testers: Tester[]): Tester => (
  */
 export const rankWith = (rank: number, tester: Tester) => (
   uischema: UISchemaElement,
-  schema: JsonSchema
+  schema: JsonSchema,
+  ajv?: AJV.Ajv
 ): number => {
-  if (tester(uischema, schema)) {
+  if (tester(uischema, schema, ajv)) {
     return rank;
   }
 
@@ -247,9 +252,10 @@ export const rankWith = (rank: number, tester: Tester) => (
 
 export const withIncreasedRank = (by: number, rankedTester: RankedTester) => (
   uischema: UISchemaElement,
-  schema: JsonSchema
+  schema: JsonSchema,
+  ajv?: AJV.Ajv
 ): number => {
-  const rank = rankedTester(uischema, schema);
+  const rank = rankedTester(uischema, schema, ajv);
   if (rank === NOT_APPLICABLE) {
     return NOT_APPLICABLE;
   }
