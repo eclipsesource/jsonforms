@@ -34,7 +34,8 @@ export const schema = categorizationSchema;
 export const uischema = {
   ...categorizationUiSchema,
   options: {
-    variant: 'stepper'
+    variant: 'stepper',
+    showNavButtons: true
   }
 };
 
