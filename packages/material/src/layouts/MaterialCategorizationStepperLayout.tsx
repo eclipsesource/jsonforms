@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { Hidden, Step, StepButton, Stepper } from '@material-ui/core';
+import { Button, Hidden, Step, StepButton, Stepper } from '@material-ui/core';
 import {
   and,
   Categorization,
@@ -84,6 +84,18 @@ export class MaterialCategorizationStepperLayoutRenderer extends RendererCompone
     } = this.props;
     const categorization = uischema as Categorization;
     const activeCategory = this.state.activeCategory;
+    const showNavButtons = uischema.options.showNavButtons;
+    const buttonWrapperStyle = {
+      textAlign: 'right' as 'right',
+      width: '100%',
+      margin: '1em auto'
+    };
+    const buttonNextStyle = {
+      float: 'right' as 'right'
+    };
+    const buttonStyle = {
+      marginRight: '1em' 
+    };
     const childProps: MaterialLayoutRendererProps = {
       elements: categorization.elements[activeCategory].elements,
       schema,
@@ -110,6 +122,26 @@ export class MaterialCategorizationStepperLayoutRenderer extends RendererCompone
         <div>
           <MaterialLayoutRenderer {...childProps} />
         </div>
+        {showNavButtons === true ? (<div style={buttonWrapperStyle}>
+          <Button
+            style={buttonNextStyle}
+            variant="contained"
+            color="primary"
+            disabled={activeCategory === categories.length - 1}
+            onClick={() => this.handleStep(activeCategory + 1)}
+          >
+            Next
+          </Button>
+          <Button
+            style={buttonStyle}
+            color="secondary"
+            variant="contained"
+            disabled={activeCategory === 0}
+            onClick={() => this.handleStep(activeCategory - 1)}
+          >
+            Previous
+          </Button>
+        </div>) : (<></>)}
       </Hidden>
     );
   }
