@@ -44,7 +44,7 @@ import MaterialCategorizationStepperLayoutRenderer, {
   materialCategorizationStepperTester
 } from '../../src/layouts/MaterialCategorizationStepperLayout';
 import { MaterialLayoutRenderer, materialRenderers } from '../../src';
-import { Step, StepButton, Stepper } from '@material-ui/core';
+import { Step, StepButton, Stepper, Button } from '@material-ui/core';
 import Adapter from 'enzyme-adapter-react-16';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -405,5 +405,130 @@ describe('Material categorization stepper layout', () => {
 
     const materialArrayLayout = wrapper.find(MaterialLayoutRenderer);
     expect(materialArrayLayout.props().renderers).toHaveLength(0);
+  });
+
+  it('should render nav buttons if showNavButtons is set', () => {
+    const nameControl: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/name'
+    };
+    const uischema: Categorization = {
+      type: 'Categorization',
+      label: 'Root',
+      options: {
+        showNavButtons: true
+      },
+      elements: [
+        {
+          type: 'Category',
+          label: 'B',
+          elements: [nameControl, nameControl]
+        },
+        {
+          type: 'Category',
+          label: 'C',
+          elements: undefined
+        }
+      ]
+    };
+    const store = initJsonFormsStore({
+      ...fixture,
+      uischema
+    });
+
+    const wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <MaterialCategorizationStepperLayoutRenderer
+            {...layoutDefaultProps}
+            schema={fixture.schema}
+            uischema={uischema}
+          />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const prevButtonBeforeClick = wrapper.find(Button).at(0).props().disabled;
+    const nextButtonBeforeClick = wrapper.find(Button).at(1).props().disabled;
+    wrapper
+      .find(StepButton)
+      .at(1)
+      .simulate('click');
+    const prevButtonAfterClick = wrapper.find(Button).at(0).props().disabled;
+    const nextButtonAfterClick = wrapper.find(Button).at(1).props().disabled;
+
+    expect(prevButtonBeforeClick).toBe(true);
+    expect(nextButtonBeforeClick).toBe(false);
+    expect(prevButtonAfterClick).toBe(false);
+    expect(nextButtonAfterClick).toBe(true);
+    wrapper.unmount();
+  });
+
+  it('should render new category on button click', () => {
+    const nameControl: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/name'
+    };
+    const innerCategorization: Categorization = {
+      type: 'Categorization',
+      label: 'Bar',
+      elements: [
+        {
+          type: 'Category',
+          label: 'A',
+          elements: [nameControl]
+        }
+      ]
+    };
+    const uischema: Categorization = {
+      type: 'Categorization',
+      label: 'Root',
+      options: {
+        showNavButtons: true
+      },
+      elements: [
+        innerCategorization,
+        {
+          type: 'Category',
+          label: 'B',
+          elements: [nameControl, nameControl]
+        },
+        {
+          type: 'Category',
+          label: 'C',
+          elements: undefined
+        },
+        {
+          type: 'Category',
+          label: 'D',
+          elements: null
+        }
+      ]
+    };
+    const store = initJsonFormsStore({
+      ...fixture,
+      uischema
+    });
+
+    const wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <MaterialCategorizationStepperLayoutRenderer
+            {...layoutDefaultProps}
+            schema={fixture.schema}
+            uischema={uischema}
+          />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const beforeClick = wrapper.find(Stepper).props().activeStep;
+    wrapper
+      .find(Button)
+      .at(1)
+      .simulate('click');
+    const afterClick = wrapper.find(Stepper).props().activeStep;
+
+    expect(beforeClick).toBe(0);
+    expect(afterClick).toBe(1);
+    wrapper.unmount();
   });
 });
