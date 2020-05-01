@@ -447,14 +447,14 @@ describe('Material categorization stepper layout', () => {
         </JsonFormsReduxContext>
       </Provider>
     );
-    const prevButtonBeforeClick = wrapper.find(Button).at(0).props().disabled;
-    const nextButtonBeforeClick = wrapper.find(Button).at(1).props().disabled;
+    const prevButtonBeforeClick = wrapper.find(Button).at(1).props().disabled;
+    const nextButtonBeforeClick = wrapper.find(Button).at(0).props().disabled;
     wrapper
       .find(StepButton)
       .at(1)
       .simulate('click');
-    const prevButtonAfterClick = wrapper.find(Button).at(0).props().disabled;
-    const nextButtonAfterClick = wrapper.find(Button).at(1).props().disabled;
+    const prevButtonAfterClick = wrapper.find(Button).at(1).props().disabled;
+    const nextButtonAfterClick = wrapper.find(Button).at(0).props().disabled;
 
     expect(prevButtonBeforeClick).toBe(true);
     expect(nextButtonBeforeClick).toBe(false);
@@ -523,7 +523,7 @@ describe('Material categorization stepper layout', () => {
     const beforeClick = wrapper.find(Stepper).props().activeStep;
     wrapper
       .find(Button)
-      .at(1)
+      .at(0)
       .simulate('click');
     const afterClick = wrapper.find(Stepper).props().activeStep;
 
