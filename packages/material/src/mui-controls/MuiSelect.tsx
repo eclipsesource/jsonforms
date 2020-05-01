@@ -30,6 +30,12 @@ import { MenuItem } from '@material-ui/core';
 import { areEqual } from '@jsonforms/react';
 import merge from 'lodash/merge';
 
+interface Option {
+  key: string;
+  value: string;
+  label: string;
+}
+
 export const MuiSelect = React.memo((props: EnumCellProps & WithClassname) => {
   const {
     data,
@@ -43,6 +49,17 @@ export const MuiSelect = React.memo((props: EnumCellProps & WithClassname) => {
     config
   } = props;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
+  const delimiter: string = appliedUiSchemaOptions.keyValueDelimiter;
+  const keyValueLabels: Option[] = (delimiter === undefined) ?
+  options.map(option => {
+    return { key: option, value: option, label: option };
+  }) :
+  options.map(option => {
+    return option.split(delimiter, 2).map((parts: void[]) => {
+      return { key: parts[0], value: option, label: parts[1] };
+    }
+    );
+  });
 
   return (
     <Select
@@ -55,9 +72,9 @@ export const MuiSelect = React.memo((props: EnumCellProps & WithClassname) => {
       fullWidth={true}
     >
       {[<MenuItem value='' key={'empty'} />].concat(
-        options.map(optionValue => (
-          <MenuItem value={optionValue} key={optionValue}>
-            {optionValue}
+        keyValueLabels.map(option => (
+          <MenuItem value={option.value} key={option.key}>
+            {option.label}
           </MenuItem>
         ))
       )}
