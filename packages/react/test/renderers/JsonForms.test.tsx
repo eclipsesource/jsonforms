@@ -698,6 +698,31 @@ test('JsonForms should create a JsonFormsStateProvider with initState props', ()
   expect(jsonFormsStateProviderInitStateProp.renderers).toBe(renderers);
 });
 
+test('JsonForms should honor config passed via initState props', () => {
+
+  const customRenderer = () => {
+    const ctx = useJsonForms();
+    return <h2>{ctx.config.myConfigProperty}</h2>;
+  };
+    const renderers = [
+      { tester: () => 30, renderer: customRenderer }
+  ];
+
+  const wrapper = mount(
+    <JsonForms
+      data={fixture.data}
+      uischema={fixture.uischema}
+      schema={fixture.schema}
+      renderers={renderers}
+      config={{myConfigProperty: 'true'}}
+    />
+  );
+
+    wrapper.update();
+    expect(wrapper.find('h2').text()).toBe('true');
+    wrapper.unmount();
+});
+
 test('JsonForms should generate an ui schema when uischema is not given', () => {
   const schema = {
     type: 'object',

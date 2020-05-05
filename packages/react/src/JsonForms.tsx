@@ -218,6 +218,7 @@ export interface JsonFormsInitStateProps {
   cells?: JsonFormsCellRendererRegistryEntry[];
   ajv?: AJV.Ajv;
   refParserOptions?: RefParser.Options;
+  config?: any;
 }
 
 export const JsonForms = (
@@ -231,7 +232,8 @@ export const JsonForms = (
     renderers,
     cells,
     refParserOptions,
-    onChange
+    onChange,
+    config,
   } = props;
   const schemaToUse = schema !== undefined ? schema : Generate.jsonSchema(data);
   const uischemaToUse =
@@ -246,6 +248,7 @@ export const JsonForms = (
           schema: schemaToUse,
           uischema: uischemaToUse
         },
+        config,
         renderers,
         cells
       }}
