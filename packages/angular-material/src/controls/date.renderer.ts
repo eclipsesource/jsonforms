@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   getLocale,
   isDateControl,
@@ -52,7 +52,8 @@ import { DateAdapter, NativeDateAdapter } from '@angular/material/core';
       <mat-hint>{{ description }}</mat-hint>
       <mat-error>{{ error }}</mat-error>
     </mat-form-field>
-  `
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DateControlRenderer extends JsonFormsControl {
   constructor(

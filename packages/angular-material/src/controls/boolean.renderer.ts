@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef} from '@angular/core';
 import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 import { isBooleanControl, RankedTester, rankWith } from '@jsonforms/core';
 
@@ -46,14 +46,21 @@ import { isBooleanControl, RankedTester, rankWith } from '@jsonforms/core';
       <mat-hint class="mat-caption">{{ description }}</mat-hint>
       <mat-error class="mat-caption">{{ error }}</mat-error>
     </div>
-  `
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BooleanControlRenderer extends JsonFormsControl {
-  constructor(jsonformsService: JsonFormsAngularService) {
+  constructor(jsonformsService: JsonFormsAngularService, private changeDetectionRef: ChangeDetectorRef) {
     super(jsonformsService);
   }
   isChecked = () => this.data || false;
   getEventValue = (event: any) => event.checked;
+
+  mapAdditionalProps() {
+    if (!(this.changeDetectionRef as ViewRef).destroyed) {
+      this.changeDetectionRef.detectChanges();
+    }
+  }
 }
 
 export const booleanControlTester: RankedTester = rankWith(2, isBooleanControl);
