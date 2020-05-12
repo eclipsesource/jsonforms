@@ -86,6 +86,14 @@ export abstract class JsonFormsAbstractControl<
     this.triggerValidation();
   }
 
+  shouldShowUnfocusedDescription(): boolean {
+    const config = this.jsonFormsService.getState().jsonforms.config;
+    if (config) {
+      return config.showUnfocusedDescription;
+    }
+    return false;
+  };
+
   ngOnInit() {
     this.jsonFormsService.$state.subscribe({
       next: (state: JsonFormsState) => {

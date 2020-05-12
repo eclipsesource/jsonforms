@@ -37,7 +37,7 @@ import { isMultiLineControl, RankedTester, rankWith } from '@jsonforms/core';
         [id]="id"
         [formControl]="form"
       ></textarea>
-      <mat-hint>{{ description }}</mat-hint>
+      <mat-hint *ngIf="shouldShowUnfocusedDescription()">{{ description }}</mat-hint>
       <mat-error>{{ error }}</mat-error>
     </mat-form-field>
   `

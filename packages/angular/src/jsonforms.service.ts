@@ -1,4 +1,5 @@
 import {
+  configReducer,
   CoreActions,
   coreReducer,
   i18nReducer,
@@ -7,6 +8,7 @@ import {
   JsonFormsSubStates,
   LocaleActions,
   RankedTester,
+  SetConfigAction,
   UISchemaActions,
   UISchemaElement,
   uischemaRegistryReducer
@@ -75,6 +77,13 @@ export class JsonFormsAngularService {
         this._state.uischemas = uischemaState;
         this.updateSubject();
         return uischemaAction;
+    }
+
+    updateConfig<T extends SetConfigAction>(setConfigAction: T): T {
+        const configState = configReducer(this._state.config, setConfigAction);
+        this._state.config = configState;
+        this.updateSubject();
+        return setConfigAction;
     }
 
     getState(): JsonFormsState {
