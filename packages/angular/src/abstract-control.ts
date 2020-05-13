@@ -43,6 +43,7 @@ import { Subscription } from 'rxjs';
 
 import { JsonFormsBaseRenderer } from './base.renderer';
 import { JsonFormsAngularService } from './jsonforms.service';
+import merge from 'lodash/merge';
 
 export abstract class JsonFormsAbstractControl<
   Props extends StatePropsOfControl
@@ -88,11 +89,12 @@ export abstract class JsonFormsAbstractControl<
 
   shouldShowUnfocusedDescription(): boolean {
     const config = this.jsonFormsService.getState().jsonforms.config;
-    if (config) {
-      return config.showUnfocusedDescription;
+    const appliedUiSchemaOptions = merge({}, config, this.uischema.options);
+    if (appliedUiSchemaOptions) {
+      return !!appliedUiSchemaOptions.showUnfocusedDescription;
     }
     return false;
-  };
+  }
 
   ngOnInit() {
     this.jsonFormsService.$state.subscribe({
