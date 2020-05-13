@@ -23,10 +23,6 @@
   THE SOFTWARE.
 */
 
-import React, { ComponentType, Dispatch, ReducerAction, useCallback, useContext, useEffect, useReducer } from 'react';
-import isEqual from 'lodash/isEqual';
-import omit from 'lodash/omit';
-import get from 'lodash/get';
 import {
   Actions,
   ArrayControlProps,
@@ -34,13 +30,26 @@ import {
   CellProps,
   CombinatorProps,
   ControlProps,
-  coreReducer,
+  DispatchCellProps,
   DispatchPropsOfControl,
   EnumCellProps,
   JsonFormsCore,
   JsonFormsState,
   JsonFormsSubStates,
   LayoutProps,
+  OwnPropsOfCell,
+  OwnPropsOfControl,
+  OwnPropsOfEnum,
+  OwnPropsOfEnumCell,
+  OwnPropsOfJsonFormsRenderer,
+  OwnPropsOfLayout,
+  OwnPropsOfMasterListItem,
+  OwnPropsOfRenderer,
+  StatePropsOfCombinator,
+  StatePropsOfControlWithDetail,
+  StatePropsOfMasterItem,
+  configReducer,
+  coreReducer,
   mapDispatchToArrayControlProps,
   mapStateToAllOfProps,
   mapStateToAnyOfProps,
@@ -48,30 +57,21 @@ import {
   mapStateToArrayLayoutProps,
   mapStateToCellProps,
   mapStateToControlProps,
-  mapStateToEnumControlProps,
   mapStateToControlWithDetailProps,
+  mapStateToDispatchCellProps,
+  mapStateToEnumControlProps,
   mapStateToJsonFormsRendererProps,
   mapStateToLayoutProps,
   mapStateToMasterListItemProps,
   mapStateToOneOfProps,
-  OwnPropsOfCell,
-  OwnPropsOfControl,
-  OwnPropsOfEnum,
-  OwnPropsOfEnumCell,
-  OwnPropsOfJsonFormsRenderer,
-  OwnPropsOfMasterListItem,
-  rendererReducer,
-  StatePropsOfCombinator,
-  StatePropsOfControlWithDetail,
-  StatePropsOfMasterItem,
-  update,
-  OwnPropsOfLayout,
-  OwnPropsOfRenderer,
-  DispatchCellProps,
-  mapStateToDispatchCellProps,
-  cellReducer
+  update
 } from '@jsonforms/core';
+import React, { ComponentType, Dispatch, ReducerAction, useCallback, useContext, useEffect, useReducer, useRef } from 'react';
+
 import { connect } from 'react-redux';
+import get from 'lodash/get';
+import isEqual from 'lodash/isEqual';
+import omit from 'lodash/omit';
 
 const initialCoreState: JsonFormsCore = {
   data: {},
@@ -92,23 +92,57 @@ export const JsonFormsContext = React.createContext<JsonFormsStateContext>({
   renderers: []
 });
 
-export const JsonFormsStateProvider = ({ children, initState }: any) => {
-  const [core, dispatch] = useReducer(coreReducer, initState.core);
-  const [renderers] = useReducer(rendererReducer, initState.renderers);
-  const [cells] = useReducer(cellReducer, initState.cells);
-  const { data, schema, uischema, ajv, refParserOptions } = initState.core;
+/**
+ * Hook similar to `useEffect` with the difference that the effect
+ * is only executed from the second call onwards.
+ */
+const useEffectAfterFirstRender = (
+  effect: () => void,
+  dependencies: Array<any>
+) => {
+  const firstExecution = useRef(true);
   useEffect(() => {
-    dispatch(Actions.init(data, schema, uischema, { ajv, refParserOptions }));
+    if (firstExecution.current) {
+      firstExecution.current = false;
+      return;
+    }
+    effect();
+  }, dependencies);
+};
+
+export const JsonFormsStateProvider = ({ children, initState }: any) => {
+  const { data, schema, uischema, ajv, refParserOptions } = initState.core;
+  // Initialize core immediatly
+  const [core, coreDispatch] = useReducer(
+    coreReducer,
+    coreReducer(
+      initState.core,
+      Actions.init(data, schema, uischema, { ajv, refParserOptions })
+    )
+  );
+  useEffectAfterFirstRender(() => {
+    coreDispatch(
+      Actions.init(data, schema, uischema, { ajv, refParserOptions })
+    );
   }, [data, schema, uischema, ajv, refParserOptions]);
+
+  const [config, configDispatch] = useReducer(
+    configReducer,
+    configReducer(undefined, Actions.setConfig(initState.config))
+  );
+  useEffectAfterFirstRender(() => {
+    configDispatch(Actions.setConfig(initState.config));
+  }, [initState.config]);
+
   return (
     <JsonFormsContext.Provider
       value={{
         core,
-        renderers,
-        cells,
-        config: initState.config,
+        renderers: initState.renderers,
+        cells: initState.cells,
+        config: config,
         // only core dispatch available
-        dispatch,
+        dispatch: coreDispatch,
       }}
     >
       {children}

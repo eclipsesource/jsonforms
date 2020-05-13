@@ -23,12 +23,12 @@
   THE SOFTWARE.
 */
 import AJV, { ErrorObject } from 'ajv';
-import RefParser from 'json-schema-ref-parser';
-import { RankedTester } from '../testers';
 import { JsonSchema, UISchemaElement } from '../';
 import { generateDefaultUISchema, generateJsonSchema } from '../generators';
+
+import { RankedTester } from '../testers';
+import RefParser from 'json-schema-ref-parser';
 import { UISchemaTester } from '../reducers/uischemas';
-import { AnyAction, Dispatch } from 'redux';
 
 export const INIT: 'jsonforms/INIT' = 'jsonforms/INIT';
 export const SET_AJV: 'jsonforms/SET_AJV' = 'jsonforms/SET_AJV';
@@ -201,12 +201,10 @@ export interface SetConfigAction {
   config: any;
 }
 
-export const setConfig = (config: any) => (dispatch: Dispatch<AnyAction>) => {
-  dispatch({
-    type: SET_CONFIG,
-    config
-  });
-};
+export const setConfig = (config: any) => ({
+  type: SET_CONFIG,
+  config,
+});
 
 export type UISchemaActions = AddUISchemaAction | RemoveUISchemaAction;
 

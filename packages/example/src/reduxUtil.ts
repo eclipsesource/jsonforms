@@ -84,7 +84,7 @@ const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => ({
   changeExampleData: (example: ReactExampleDescription) => {
     dispatch(changeExample(example));
     dispatch(Actions.init(example.data, example.schema, example.uischema));
-    Actions.setConfig(example.config)(dispatch);
+    dispatch(Actions.setConfig(example.config));
   },
   getComponent: (example: ReactExampleDescription) =>
     example.customReactExtension
