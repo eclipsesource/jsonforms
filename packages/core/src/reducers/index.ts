@@ -1,3 +1,39 @@
+import { ControlElement, UISchemaElement } from '../models/uischema';
+import {
+  JsonFormsCore,
+  coreReducer,
+  errorAt,
+  errorsAt,
+  extractData,
+  extractRefParserOptions,
+  extractSchema,
+  extractUiSchema,
+  subErrorsAt
+} from './core';
+import {
+  JsonFormsDefaultDataRegistryEntry,
+  defaultDataReducer,
+  extractDefaultData
+} from './default-data';
+import { JsonFormsRendererRegistryEntry, rendererReducer } from './renderers';
+import { JsonFormsState, JsonFormsSubStates } from '../store';
+import { Reducer, combineReducers } from 'redux';
+import {
+  UISchemaTester,
+  findMatchingUISchema,
+  uischemaRegistryReducer
+} from './uischemas';
+import {
+  fetchLocale,
+  findLocalizedSchema,
+  findLocalizedUISchema,
+  i18nReducer
+} from './i18n';
+
+import { Generate } from '../generators';
+import { JsonFormsCellRendererRegistryEntry } from './cells';
+import { JsonSchema } from '../models/jsonSchema';
+import RefParser from 'json-schema-ref-parser';
 /*
   The MIT License
   
@@ -23,50 +59,15 @@
   THE SOFTWARE.
 */
 import { cellReducer } from './cells';
-import get from 'lodash/get';
-import {
-  defaultDataReducer,
-  extractDefaultData,
-  JsonFormsDefaultDataRegistryEntry
-} from './default-data';
-import { combineReducers, Reducer } from 'redux';
-import { JsonFormsRendererRegistryEntry, rendererReducer } from './renderers';
-import RefParser from 'json-schema-ref-parser';
 import { configReducer } from './config';
-import {
-  coreReducer,
-  errorAt,
-  errorsAt,
-  extractData,
-  extractRefParserOptions,
-  extractSchema,
-  extractUiSchema,
-  JsonFormsCore,
-  subErrorsAt
-} from './core';
-import { JsonFormsState, JsonFormsSubStates } from '../store';
-import {
-  findMatchingUISchema,
-  uischemaRegistryReducer,
-  UISchemaTester
-} from './uischemas';
-import {
-  fetchLocale,
-  findLocalizedSchema,
-  findLocalizedUISchema,
-  i18nReducer
-} from './i18n';
-
-import { JsonSchema } from '../models/jsonSchema';
-import { ControlElement, UISchemaElement } from '../models/uischema';
-import { Generate } from '../generators';
-import { JsonFormsCellRendererRegistryEntry } from './cells';
+import get from 'lodash/get';
 
 export {
   rendererReducer,
   cellReducer,
   coreReducer,
   i18nReducer,
+  configReducer,
   UISchemaTester,
   uischemaRegistryReducer,
   findMatchingUISchema
