@@ -388,6 +388,62 @@ test('core reducer - previous state - init with empty options should not overwri
   t.deepEqual(after.refParserOptions, myOptions);
 });
 
+test('core reducer - previous state - init with undefined data should not change data', t => {
+  const schema = {
+    type: 'object',
+    properties: {
+      animal: {
+        type: 'string'
+      },
+      color: {
+        type: 'string'
+      }
+    }
+  };
+
+  const after = coreReducer(
+    {
+      data: undefined,
+      schema: {},
+      uischema: {
+        type: 'Label'
+      }
+    },
+    init(undefined, schema, undefined, {})
+  );
+  t.deepEqual(after.data, undefined);
+});
+
+test('core reducer - update - undefined data should update for given path', t => {
+  const schema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'string'
+      }
+    }
+  };
+
+  const before: JsonFormsCore = {
+    data: undefined,
+    schema: schema,
+    uischema: {
+      type: 'Label'
+    },
+    errors: [],
+    validator: new AJV().compile(schema)
+  };
+
+  const after = coreReducer(
+    before,
+    update('foo', _ => {
+      return 'bar';
+    })
+  );
+
+  t.deepEqual(after, { ...before, data: { foo: 'bar'} });
+});
+
 test('core reducer - update - path is undefined state should remain same', t => {
   const before: JsonFormsCore = {
     data: {
