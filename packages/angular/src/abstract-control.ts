@@ -90,10 +90,7 @@ export abstract class JsonFormsAbstractControl<
   shouldShowUnfocusedDescription(): boolean {
     const config = this.jsonFormsService.getState().jsonforms.config;
     const appliedUiSchemaOptions = merge({}, config, this.uischema.options);
-    if (appliedUiSchemaOptions) {
-      return !!appliedUiSchemaOptions.showUnfocusedDescription;
-    }
-    return false;
+    return appliedUiSchemaOptions.showUnfocusedDescription;
   }
 
   ngOnInit() {

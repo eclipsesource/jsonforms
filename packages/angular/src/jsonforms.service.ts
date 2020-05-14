@@ -8,6 +8,7 @@ import {
   JsonFormsSubStates,
   LocaleActions,
   RankedTester,
+  setConfig,
   SetConfigAction,
   UISchemaActions,
   UISchemaElement,
@@ -29,6 +30,7 @@ export class JsonFormsAngularService {
 
     init(initialState: JsonFormsSubStates = {}) {
         this._state = initialState;
+        this._state.config = configReducer(undefined, setConfig(this._state.config));
         this.state = new BehaviorSubject({ jsonforms: this._state });
     }
 
