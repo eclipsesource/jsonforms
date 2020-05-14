@@ -58,7 +58,7 @@ export class BooleanControlRenderer extends JsonFormsControl {
 
   mapAdditionalProps() {
     if (!(this.changeDetectionRef as ViewRef).destroyed) {
-      this.changeDetectionRef.detectChanges();
+      this.changeDetectionRef.markForCheck();
     }
   }
 }

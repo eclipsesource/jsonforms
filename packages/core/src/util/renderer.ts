@@ -731,7 +731,8 @@ export const mapStateToJsonFormsRendererProps = (
     rootSchema: getSchema(state),
     uischema: uischema,
     refResolver: (schema: any) =>
-      RefParser.dereference(schema, getRefParserOptions(state))
+      RefParser.dereference(schema, getRefParserOptions(state)),
+    path: ownProps.path
   };
 };
 

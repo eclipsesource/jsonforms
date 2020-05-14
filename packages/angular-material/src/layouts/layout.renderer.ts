@@ -50,7 +50,7 @@ export class LayoutRenderer<T extends Layout> extends JsonFormsBaseRenderer<T>
       next: (state: JsonFormsState) => {
         const props = mapStateToLayoutProps(state, this.getOwnProps());
         this.hidden = !props.visible;
-        this.changeDetectionRef.detectChanges();
+        this.changeDetectionRef.markForCheck();
       }
     });
   }
