@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { GroupLayout, RankedTester, rankWith, uiTypeIs } from '@jsonforms/core';
 import { LayoutRenderer } from './layout.renderer';
 import { JsonFormsAngularService } from '@jsonforms/angular';
@@ -36,11 +36,12 @@ import { JsonFormsAngularService } from '@jsonforms/angular';
         <jsonforms-outlet [renderProps]="props"></jsonforms-outlet>
       </div>
     </mat-card>
-  `
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GroupLayoutRenderer extends LayoutRenderer<GroupLayout> {
-  constructor(jsonFormsService: JsonFormsAngularService) {
-    super(jsonFormsService);
+  constructor(jsonFormsService: JsonFormsAngularService, changeDetectionRef: ChangeDetectorRef) {
+    super(jsonFormsService, changeDetectionRef);
   }
 }
 export const groupLayoutTester: RankedTester = rankWith(1, uiTypeIs('Group'));

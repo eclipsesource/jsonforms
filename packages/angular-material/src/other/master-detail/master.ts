@@ -24,7 +24,7 @@
 */
 import some from 'lodash/some';
 import get from 'lodash/get';
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import {
   JsonFormsAngularService,
   JsonFormsArrayControl
@@ -134,7 +134,8 @@ export const removeSchemaKeywords = (path: string) => {
         width: 20%;
       }
     `
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MasterListComponent extends JsonFormsArrayControl {
   masterItems: any[];

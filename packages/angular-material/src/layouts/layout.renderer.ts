@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { OnDestroy, OnInit } from '@angular/core';
+import { OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
 import {
   JsonFormsAngularService,
   JsonFormsBaseRenderer
@@ -41,7 +41,7 @@ export class LayoutRenderer<T extends Layout> extends JsonFormsBaseRenderer<T>
   hidden: boolean;
   private subscription: Subscription;
 
-  constructor(private jsonFormsService: JsonFormsAngularService) {
+  constructor(private jsonFormsService: JsonFormsAngularService, protected changeDetectionRef: ChangeDetectorRef) {
     super();
   }
 
@@ -50,6 +50,7 @@ export class LayoutRenderer<T extends Layout> extends JsonFormsBaseRenderer<T>
       next: (state: JsonFormsState) => {
         const props = mapStateToLayoutProps(state, this.getOwnProps());
         this.hidden = !props.visible;
+        this.changeDetectionRef.markForCheck();
       }
     });
   }

@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import {
   RankedTester,
   rankWith,
@@ -40,11 +40,12 @@ import { JsonFormsAngularService } from '@jsonforms/angular';
         <jsonforms-outlet [renderProps]="props"></jsonforms-outlet>
       </div>
     </div>
-  `
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class VerticalLayoutRenderer extends LayoutRenderer<VerticalLayout> {
-  constructor(jsonFormsService: JsonFormsAngularService) {
-    super(jsonFormsService);
+  constructor(jsonFormsService: JsonFormsAngularService, changeDetectionRef: ChangeDetectorRef) {
+    super(jsonFormsService, changeDetectionRef);
   }
 }
 export const verticalLayoutTester: RankedTester = rankWith(

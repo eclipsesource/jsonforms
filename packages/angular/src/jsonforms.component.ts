@@ -25,7 +25,6 @@
 import maxBy from 'lodash/maxBy';
 import {
   ComponentFactoryResolver,
-  ComponentRef,
   Directive,
   Input,
   OnDestroy,
@@ -41,7 +40,8 @@ import {
   JsonSchema,
   mapStateToJsonFormsRendererProps,
   OwnPropsOfRenderer,
-  UISchemaElement
+  UISchemaElement,
+  StatePropsOfJsonFormsRenderer
 } from '@jsonforms/core';
 import { UnknownRenderer } from './unknown.component';
 import { JsonFormsBaseRenderer } from './base.renderer';
@@ -49,13 +49,24 @@ import { Subscription } from 'rxjs';
 import { JsonFormsControl } from './control';
 import { JsonFormsAngularService } from './jsonforms.service';
 
+import { get} from 'lodash';
+
+const areEqual = (prevProps: StatePropsOfJsonFormsRenderer, nextProps: StatePropsOfJsonFormsRenderer) => {
+  return get(prevProps, 'renderers.length') === get(nextProps, 'renderers.length')
+    && get(prevProps, 'cells.length') === get(nextProps, 'cells.length')
+    && get(prevProps, 'uischemas.length') === get(nextProps, 'uischemas.length')
+    && get(prevProps, 'schema') === get(nextProps, 'schema')
+    && get(prevProps, 'uischema') === get(nextProps, 'uischema')
+    && get(prevProps, 'path') === get(nextProps, 'path');
+};
+
 @Directive({
   selector: 'jsonforms-outlet'
 })
 export class JsonFormsOutlet extends JsonFormsBaseRenderer<UISchemaElement>
   implements OnInit, OnDestroy {
   private subscription: Subscription;
-  private currentComponentRef: ComponentRef<any>;
+  private previousProps: StatePropsOfJsonFormsRenderer;
 
   constructor(
     private viewContainerRef: ViewContainerRef,
@@ -85,6 +96,11 @@ export class JsonFormsOutlet extends JsonFormsBaseRenderer<UISchemaElement>
       uischema: this.uischema,
       path: this.path
     });
+    if (areEqual(this.previousProps, props)) {
+      return;
+    } else {
+      this.previousProps = props;
+    }
     const { renderers } = props as JsonFormsProps;
     const schema: JsonSchema = this.schema || props.schema;
     const uischema = this.uischema || props.uischema;
@@ -95,26 +111,12 @@ export class JsonFormsOutlet extends JsonFormsBaseRenderer<UISchemaElement>
       bestComponent = renderer.renderer;
     }
 
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(
-      bestComponent
-    );
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(bestComponent);
+    this.viewContainerRef.clear();
+    const currentComponentRef = this.viewContainerRef.createComponent(componentFactory);
 
-    if (this.currentComponentRef === undefined) {
-      this.currentComponentRef = this.viewContainerRef.createComponent(
-        componentFactory
-      );
-    } else if (
-      this.currentComponentRef.componentType !== componentFactory.componentType
-    ) {
-      this.viewContainerRef.clear();
-      this.currentComponentRef = this.viewContainerRef.createComponent(
-        componentFactory
-      );
-    }
-
-    if (this.currentComponentRef.instance instanceof JsonFormsBaseRenderer) {
-      const instance = this.currentComponentRef
-        .instance as JsonFormsBaseRenderer<UISchemaElement>;
+    if (currentComponentRef.instance instanceof JsonFormsBaseRenderer) {
+      const instance = currentComponentRef.instance as JsonFormsBaseRenderer<UISchemaElement>;
       instance.uischema = uischema;
       instance.schema = schema;
       instance.path = this.path;

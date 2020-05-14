@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 import { isStringControl, RankedTester, rankWith } from '@jsonforms/core';
 
@@ -41,7 +41,8 @@ import { isStringControl, RankedTester, rankWith } from '@jsonforms/core';
       <mat-hint>{{ description }}</mat-hint>
       <mat-error>{{ error }}</mat-error>
     </mat-form-field>
-  `
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TextControlRenderer extends JsonFormsControl {
   constructor(jsonformsService: JsonFormsAngularService) {
