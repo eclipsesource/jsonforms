@@ -44,7 +44,7 @@ import {
       >
         {{ label }}
       </mat-slide-toggle>
-      <mat-hint class="mat-caption">{{ description }}</mat-hint>
+      <mat-hint class="mat-caption" *ngIf="shouldShowUnfocusedDescription()">{{ description }}</mat-hint>
       <mat-error class="mat-caption">{{ error }}</mat-error>
     </div>
   `

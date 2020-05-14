@@ -30,7 +30,8 @@ import {
   getUiSchema,
   setLocale,
   setReadonly,
-  unsetReadonly
+  unsetReadonly,
+  setConfig
 } from '@jsonforms/core';
 import { getExamples } from '@jsonforms/examples';
 import { of } from 'rxjs';
@@ -97,8 +98,9 @@ export class AppComponent {
         selectedExample.schema,
         selectedExample.uischema
       )
-    );
-    this.jsonformService.updateLocale(setLocale(this.currentLocale));
+      );
+      this.jsonformService.updateConfig(setConfig(selectedExample.config));
+      this.jsonformService.updateLocale(setLocale(this.currentLocale));
   };
 
   changeLocale(locale: string) {

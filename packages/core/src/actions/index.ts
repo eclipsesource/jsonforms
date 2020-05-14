@@ -201,9 +201,9 @@ export interface SetConfigAction {
   config: any;
 }
 
-export const setConfig = (config: any) => ({
+export const setConfig = (config: any): SetConfigAction => ({
   type: SET_CONFIG,
-  config,
+  config
 });
 
 export type UISchemaActions = AddUISchemaAction | RemoveUISchemaAction;

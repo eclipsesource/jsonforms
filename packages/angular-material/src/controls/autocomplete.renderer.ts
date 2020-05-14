@@ -87,7 +87,7 @@ import { startWith } from 'rxjs/operators';
           {{ option }}
         </mat-option>
       </mat-autocomplete>
-      <mat-hint>{{ description }}</mat-hint>
+      <mat-hint *ngIf="shouldShowUnfocusedDescription()">{{ description }}</mat-hint>
       <mat-error>{{ error }}</mat-error>
     </mat-form-field>
   `,
