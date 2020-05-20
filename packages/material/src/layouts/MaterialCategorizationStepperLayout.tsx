@@ -127,7 +127,7 @@ export class MaterialCategorizationStepperLayoutRenderer extends RendererCompone
             style={buttonNextStyle}
             variant="contained"
             color="primary"
-            disabled={activeCategory === categories.length - 1}
+            disabled={activeCategory >= categories.length - 1}
             onClick={() => this.handleStep(activeCategory + 1)}
           >
             Next
