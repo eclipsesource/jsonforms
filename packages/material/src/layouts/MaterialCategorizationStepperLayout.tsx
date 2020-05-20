@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import React from 'react';
+import merge from 'lodash/merge';
 import { Button, Hidden, Step, StepButton, Stepper } from '@material-ui/core';
 import {
   and,
@@ -80,7 +81,8 @@ export class MaterialCategorizationStepperLayoutRenderer extends RendererCompone
       schema,
       uischema,
       visible,
-      cells
+      cells,
+      config
     } = this.props;
     const categorization = uischema as Categorization;
     const activeCategory = this.state.activeCategory;

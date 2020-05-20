@@ -34,7 +34,8 @@ export const schema = categorizationSchema;
 export const uischema = {
   ...categorizationUiSchema,
   options: {
-    variant: 'stepper'
+    variant: 'stepper',
+    showNavButtons: true
   }
 };
 
@@ -42,8 +43,8 @@ export const data = categorizationData;
 
 registerExamples([
   {
-    name: 'categorizationstepper',
-    label: 'Categorization (Stepper)',
+    name: 'categorizationsteppernavbuttons',
+    label: 'Categorization (Stepper - Nav Buttons)',
     data,
     schema,
     uischema
