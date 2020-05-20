@@ -520,7 +520,7 @@ describe('Material categorization stepper layout', () => {
         </JsonFormsReduxContext>
       </Provider>
     );
-    const beforeClick = wrapper.find(Stepper).props().activeStep;
+    const activeStepBeforeClick = wrapper.find(Stepper).props().activeStep;
     wrapper
       .find(Button)
       .at(0)
