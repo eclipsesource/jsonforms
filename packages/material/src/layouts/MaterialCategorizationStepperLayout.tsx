@@ -84,7 +84,7 @@ export class MaterialCategorizationStepperLayoutRenderer extends RendererCompone
     } = this.props;
     const categorization = uischema as Categorization;
     const activeCategory = this.state.activeCategory;
-    const showNavButtons = (uischema.options === undefined) ? false: uischema.options.showNavButtons;
+    const appliedUiSchemaOptions = merge({}, config, uischema.options);
     const buttonWrapperStyle = {
       textAlign: 'right' as 'right',
       width: '100%',
