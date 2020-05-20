@@ -447,7 +447,7 @@ describe('Material categorization stepper layout', () => {
         </JsonFormsReduxContext>
       </Provider>
     );
-    const prevButtonBeforeClick = wrapper.find(Button).at(1).props().disabled;
+    const isPrevButtonEnabledBeforeClick = !wrapper.find(Button).at(1).props().disabled;
     const nextButtonBeforeClick = wrapper.find(Button).at(0).props().disabled;
     wrapper
       .find(StepButton)
