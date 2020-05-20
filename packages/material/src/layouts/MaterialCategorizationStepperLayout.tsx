@@ -122,7 +122,7 @@ export class MaterialCategorizationStepperLayoutRenderer extends RendererCompone
         <div>
           <MaterialLayoutRenderer {...childProps} />
         </div>
-        {showNavButtons === true ? (<div style={buttonWrapperStyle}>
+        { !!appliedUiSchemaOptions.showNavButtons ? (<div style={buttonWrapperStyle}>
           <Button
             style={buttonNextStyle}
             variant="contained"
