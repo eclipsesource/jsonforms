@@ -44,7 +44,7 @@ import MaterialCategorizationStepperLayoutRenderer, {
   materialCategorizationStepperTester
 } from '../../src/layouts/MaterialCategorizationStepperLayout';
 import { MaterialLayoutRenderer, materialRenderers } from '../../src';
-import { Step, StepButton, Stepper, Button } from '@material-ui/core';
+import { Step, StepButton, Stepper, Button, Input } from '@material-ui/core';
 import Adapter from 'enzyme-adapter-react-16';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -448,18 +448,18 @@ describe('Material categorization stepper layout', () => {
       </Provider>
     );
     const isPrevButtonEnabledBeforeClick = !wrapper.find(Button).at(1).props().disabled;
-    const nextButtonBeforeClick = wrapper.find(Button).at(0).props().disabled;
+    const isNextButtonDisabledBeforeClick = wrapper.find(Button).at(0).props().disabled;
     wrapper
       .find(StepButton)
       .at(1)
       .simulate('click');
-    const prevButtonAfterClick = wrapper.find(Button).at(1).props().disabled;
-    const nextButtonAfterClick = wrapper.find(Button).at(0).props().disabled;
+    const isPrevButtonDisabledAfterClick = wrapper.find(Button).at(1).props().disabled;
+    const isNextButtonDisabledAfterClick = wrapper.find(Button).at(0).props().disabled;
 
-    expect(prevButtonBeforeClick).toBe(true);
-    expect(nextButtonBeforeClick).toBe(false);
-    expect(prevButtonAfterClick).toBe(false);
-    expect(nextButtonAfterClick).toBe(true);
+    expect(isPrevButtonEnabledBeforeClick).toBe(false);
+    expect(isNextButtonDisabledBeforeClick).toBe(false);
+    expect(isPrevButtonDisabledAfterClick).toBe(false);
+    expect(isNextButtonDisabledAfterClick).toBe(true);
     wrapper.unmount();
   });
 
@@ -525,10 +525,73 @@ describe('Material categorization stepper layout', () => {
       .find(Button)
       .at(0)
       .simulate('click');
-    const afterClick = wrapper.find(Stepper).props().activeStep;
+    const activeStepAfterClick = wrapper.find(Stepper).props().activeStep;
 
-    expect(beforeClick).toBe(0);
-    expect(afterClick).toBe(1);
+    expect(activeStepBeforeClick).toBe(0);
+    expect(activeStepAfterClick).toBe(1);
+    wrapper.unmount();
+  });
+
+  it('nav button behavior after hiding a step', () => {
+    const condition: SchemaBasedCondition = {
+        scope: '#/properties/name',
+        schema: { minLength: 3 }
+      };
+
+    const nameControl: ControlElement = {
+        type: 'Control',
+        scope: '#/properties/name'
+      };
+      const uischema: Categorization = {
+        type: 'Categorization',
+        label: 'Root',
+        options: {
+          showNavButtons: true
+        },
+        elements: [
+          {
+            type: 'Category',
+            label: 'B',
+            elements: [nameControl]
+          },
+          {
+            type: 'Category',
+            label: 'C',
+            elements: undefined,
+            rule: {
+                effect: RuleEffect.HIDE,
+                condition
+              }
+          }
+        ]
+      };
+      const store = initJsonFormsStore({
+        ...fixture,
+        uischema
+      });
+  
+      const wrapper = mount(
+        <Provider store={store}>
+          <JsonFormsReduxContext>
+            <MaterialCategorizationStepperLayoutRenderer
+              {...layoutDefaultProps}
+              schema={fixture.schema}
+              uischema={uischema}
+            />
+          </JsonFormsReduxContext>
+        </Provider>
+      );
+
+    const isNextButtonDisabledBeforeTextInput = wrapper.find(Button).at(0).props().disabled;
+
+    expect(isNextButtonDisabledBeforeTextInput).toBe(true);
+
+    wrapper.find(Input).at(0).props().value = 'abcd';
+
+    // const isNextButtonDisabledAfterTextInput = wrapper.find(Button).at(0).props().disabled;
+
+    // expect(isNextButtonDisabledAfterTextInput).toBe(false);
+
     wrapper.unmount();
   });
 });
