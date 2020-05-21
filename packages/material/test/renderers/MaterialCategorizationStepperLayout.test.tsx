@@ -34,7 +34,8 @@ import {
   Layout,
   layoutDefaultProps,
   RuleEffect,
-  SchemaBasedCondition
+  SchemaBasedCondition,
+  update
 } from '@jsonforms/core';
 import { JsonFormsReduxContext } from '@jsonforms/react';
 import Enzyme, { mount } from 'enzyme';
@@ -44,7 +45,7 @@ import MaterialCategorizationStepperLayoutRenderer, {
   materialCategorizationStepperTester
 } from '../../src/layouts/MaterialCategorizationStepperLayout';
 import { MaterialLayoutRenderer, materialRenderers } from '../../src';
-import { Step, StepButton, Stepper, Button, Input } from '@material-ui/core';
+import { Step, StepButton, Stepper, Button } from '@material-ui/core';
 import Adapter from 'enzyme-adapter-react-16';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -533,64 +534,69 @@ describe('Material categorization stepper layout', () => {
   });
 
   it('nav button behavior after hiding a step', () => {
+    const data = { name : 'fo' };
     const condition: SchemaBasedCondition = {
-        scope: '#/properties/name',
-        schema: { minLength: 3 }
-      };
+      scope: '#/properties/name',
+      schema: { maxLength: 3 }
+    };
 
     const nameControl: ControlElement = {
-        type: 'Control',
-        scope: '#/properties/name'
-      };
-      const uischema: Categorization = {
-        type: 'Categorization',
-        label: 'Root',
-        options: {
+      type: 'Control',
+      scope: '#/properties/name'
+    };
+      
+    const uischema: Categorization = {
+      type: 'Categorization',
+      label: 'Root',
+      options: {
           showNavButtons: true
+      },
+      elements: [
+        {
+          type: 'Category',
+          label: 'B',
+          elements: [nameControl]
         },
-        elements: [
-          {
-            type: 'Category',
-            label: 'B',
-            elements: [nameControl]
-          },
-          {
-            type: 'Category',
-            label: 'C',
-            elements: undefined,
-            rule: {
-                effect: RuleEffect.HIDE,
-                condition
-              }
+        {
+          type: 'Category',
+          label: 'C',
+          elements: undefined,
+          rule: {
+            effect: RuleEffect.HIDE,
+            condition
           }
-        ]
-      };
-      const store = initJsonFormsStore({
-        ...fixture,
-        uischema
-      });
+        }
+      ]
+    };
+
+    const store = initJsonFormsStore({
+      ...fixture,
+      uischema,
+      data
+    });
   
-      const wrapper = mount(
+    const wrapper = mount(
         <Provider store={store}>
-          <JsonFormsReduxContext>
+            <JsonFormsReduxContext>
             <MaterialCategorizationStepperLayoutRenderer
-              {...layoutDefaultProps}
-              schema={fixture.schema}
-              uischema={uischema}
+                {...layoutDefaultProps}
+                schema={fixture.schema}
+                uischema={uischema}
             />
-          </JsonFormsReduxContext>
+            </JsonFormsReduxContext>
         </Provider>
-      );
+    );
 
     const isNextButtonDisabledBeforeTextInput = wrapper.find(Button).at(0).props().disabled;
 
     expect(isNextButtonDisabledBeforeTextInput).toBe(true);
 
-    wrapper.find(Input).at(0).props().value = 'abcd';
+    store.dispatch(update('name', () => 'Barr'));
+    wrapper.update();
 
-    // const isNextButtonDisabledAfterTextInput = wrapper.find(Button).at(0).props().disabled;
+    const isNextButtonDisabledAfterTextInput = wrapper.find(Button).at(0).props().disabled;
 
-    // expect(isNextButtonDisabledAfterTextInput).toBe(false);
+    expect(isNextButtonDisabledAfterTextInput).toBe(false);
 
     wrapper.unmount();
   });
