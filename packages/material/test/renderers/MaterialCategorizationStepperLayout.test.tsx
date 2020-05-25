@@ -449,18 +449,18 @@ describe('Material categorization stepper layout', () => {
       </Provider>
     );
     const isPrevButtonEnabledBeforeClick = !wrapper.find(Button).at(1).props().disabled;
-    const isNextButtonDisabledBeforeClick = wrapper.find(Button).at(0).props().disabled;
+    const isNextButtonEnabledBeforeClick = !wrapper.find(Button).at(0).props().disabled;
     wrapper
       .find(StepButton)
       .at(1)
       .simulate('click');
-    const isPrevButtonDisabledAfterClick = wrapper.find(Button).at(1).props().disabled;
-    const isNextButtonDisabledAfterClick = wrapper.find(Button).at(0).props().disabled;
+    const isPrevButtonEnabledAfterClick = !wrapper.find(Button).at(1).props().disabled;
+    const isNextButtonEnabledAfterClick = !wrapper.find(Button).at(0).props().disabled;
 
-    expect(isPrevButtonEnabledBeforeClick).toBe(false);
-    expect(isNextButtonDisabledBeforeClick).toBe(false);
-    expect(isPrevButtonDisabledAfterClick).toBe(false);
-    expect(isNextButtonDisabledAfterClick).toBe(true);
+    expect(isPrevButtonEnabledBeforeClick).toBeFalsy();
+    expect(isNextButtonEnabledBeforeClick).toBeTruthy();
+    expect(isPrevButtonEnabledAfterClick).toBeTruthy();
+    expect(isNextButtonEnabledAfterClick).toBeFalsy();
     wrapper.unmount();
   });
 
@@ -562,7 +562,7 @@ describe('Material categorization stepper layout', () => {
           label: 'C',
           elements: undefined,
           rule: {
-            effect: RuleEffect.HIDE,
+            effect: RuleEffect.SHOW,
             condition
           }
         }
@@ -589,14 +589,14 @@ describe('Material categorization stepper layout', () => {
 
     const isNextButtonDisabledBeforeTextInput = wrapper.find(Button).at(0).props().disabled;
 
-    expect(isNextButtonDisabledBeforeTextInput).toBe(true);
+    expect(isNextButtonDisabledBeforeTextInput).toBe(false);
 
     store.dispatch(update('name', () => 'Barr'));
     wrapper.update();
 
     const isNextButtonDisabledAfterTextInput = wrapper.find(Button).at(0).props().disabled;
 
-    expect(isNextButtonDisabledAfterTextInput).toBe(false);
+    expect(isNextButtonDisabledAfterTextInput).toBe(true);
 
     wrapper.unmount();
   });
