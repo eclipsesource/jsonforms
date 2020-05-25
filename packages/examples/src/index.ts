@@ -34,6 +34,7 @@ import * as arrayWithCustomChildLabel from './arrays-with-custom-element-label';
 import * as stringArray from './stringArray';
 import * as categorization from './categorization';
 import * as stepper from './stepper';
+import * as steppershownav from './steppershownav';
 import * as day1 from './day1';
 import * as day2 from './day2';
 import * as day3 from './day3';
@@ -84,6 +85,7 @@ export {
   arrayWithCustomChildLabel,
   categorization,
   stepper,
+  steppershownav,
   day1,
   day2,
   day3,
