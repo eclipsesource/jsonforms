@@ -32,13 +32,27 @@ import {
 } from '@jsonforms/core';
 import { Control } from '@jsonforms/react';
 
-import { Hidden, InputLabel } from '@material-ui/core';
+import { Hidden, InputLabel, withStyles } from '@material-ui/core';
 import { FormControl, FormHelperText } from '@material-ui/core';
 import merge from 'lodash/merge';
 
 interface WithInput {
   input: any;
 }
+
+const TrimmableInputLabel = withStyles({
+  root: {
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    right: '50px', // adjust for remove adornment
+    bottom: '0px' // avoid horizontal cutoff for characters like `qypgj`
+  },
+  shrink: {
+    width: '125%' // shrinked labels are scaled by 75%, therefore set width to 125% to make it the same width as the input
+  }
+})(InputLabel);
+
 export abstract class MaterialInputControl extends Control<
   ControlProps & WithInput,
   ControlState
@@ -57,13 +71,6 @@ export abstract class MaterialInputControl extends Control<
     } = this.props;
     const isValid = errors.length === 0;
     const appliedUiSchemaOptions = merge({}, config, uischema.options);
-    const inputLabelStyle: { [x: string]: any } = {
-      whiteSpace: 'nowrap',
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
-      // magic width as the label is transformed to 75% of its size
-      width: '125%'
-    };
 
     const showDescription = !isDescriptionHidden(
       visible,
@@ -78,8 +85,8 @@ export abstract class MaterialInputControl extends Control<
       ? errors
       : null;
     const secondFormHelperText = showDescription && !isValid ? errors : null;
-
     const InnerComponent = input;
+
     return (
       <Hidden xsUp={!visible}>
         <FormControl
@@ -88,17 +95,16 @@ export abstract class MaterialInputControl extends Control<
           onBlur={this.onBlur}
           id={id}
         >
-          <InputLabel
+          <TrimmableInputLabel
             htmlFor={id + '-input'}
             error={!isValid}
-            style={inputLabelStyle}
           >
             {computeLabel(
               isPlainLabel(label) ? label : label.default,
               required,
               appliedUiSchemaOptions.hideRequiredAsterisk
             )}
-          </InputLabel>
+          </TrimmableInputLabel>
           <InnerComponent
             {...this.props}
             id={id + '-input'}
