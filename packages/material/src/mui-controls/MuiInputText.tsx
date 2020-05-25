@@ -96,7 +96,7 @@ export class MuiInputText extends React.PureComponent<
             position='end'
             style={{
               visibility:
-                !this.state.showAdornment || !enabled ? 'hidden' : 'visible'
+                !this.state.showAdornment || !enabled || data === undefined ? 'hidden' : 'visible'
             }}
           >
             <IconButton
