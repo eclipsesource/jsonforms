@@ -30,6 +30,7 @@ import { MaterialInputControl } from '../../src/controls/MaterialInputControl';
 import { MuiInputText } from '../../src/mui-controls/MuiInputText';
 import Adapter from 'enzyme-adapter-react-16';
 import { ControlElement, ControlProps } from '@jsonforms/core';
+import { Input, InputAdornment } from '@material-ui/core';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -91,5 +92,20 @@ describe('Material text control', () => {
     };
     wrapper = mount(createMaterialTextControl(props));
     expect(wrapper.find('input').props().spellCheck).toEqual(false);
+  });
+
+  it('shows clear button when data exists', () => {
+    const props = defaultControlProps();
+    wrapper = mount(createMaterialTextControl(props));
+    wrapper.find(Input).simulate('pointerenter');
+    expect(wrapper.find(InputAdornment).props().style).toHaveProperty('visibility', 'visible');
+  });
+
+  it('hides clear button when data is undefined', () => {
+    const props = defaultControlProps();
+    delete props.data;
+    wrapper = mount(createMaterialTextControl(props));
+    wrapper.find(Input).simulate('pointerenter');
+    expect(wrapper.find(InputAdornment).props().style).toHaveProperty('visibility', 'hidden');
   });
 });
