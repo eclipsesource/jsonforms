@@ -1,6 +1,7 @@
 {
-  "name": "docz-example-basic",
-  "version": "1.0.0-rc.7",
+  "name": "jsonforms-website",
+  "version": "2.0.0",
+  "description": "Complex forms in the blink of an eye",
   "license": "MIT",
   "scripts": {
     "dev": "docz dev",
