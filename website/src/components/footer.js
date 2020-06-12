@@ -37,17 +37,17 @@ const Footer = ({classes}) => {
           Blog
         </a>
 
-        <Link to="/imprint" className={linkClasses}>
+        <a href="https://eclipsesource.com/imprint/" className={linkClasses}>
           Imprint
-        </Link>
+        </a>
 
-        <Link to="/privacy-policy" className={linkClasses}>
+        <a href="https://www.iubenda.com/privacy-policy/83048734" className={linkClasses}>
           Privacy Policy
-        </Link>
+        </a>
 
-        <Link to="/cookie-policy" className={linkClasses}>
+        <a href="https://www.iubenda.com/privacy-policy/83048734/cookie-policy" className={linkClasses}>
           Cookie Policy
-        </Link>
+        </a>
       </div>
     </footer>
   );
