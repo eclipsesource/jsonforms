@@ -38,8 +38,7 @@ import {
   getRenderers,
   getSchema,
   getSubErrorsAt,
-  getUiSchema,
-  UISchemaTester
+  getUiSchema
 } from '../reducers';
 import { RankedTester } from '../testers';
 import { JsonSchema } from '../models/jsonSchema';
@@ -64,6 +63,7 @@ import { JsonFormsState } from '../store';
 import { AnyAction, Dispatch } from 'redux';
 import { JsonFormsRendererRegistryEntry } from '../reducers/renderers';
 import { JsonFormsCellRendererRegistryEntry } from '../reducers/cells';
+import { JsonFormsUISchemaRegistryEntry } from '../reducers/uischemas';
 
 export { JsonFormsRendererRegistryEntry, JsonFormsCellRendererRegistryEntry };
 
@@ -211,6 +211,8 @@ export interface OwnPropsOfRenderer {
   renderers?: JsonFormsRendererRegistryEntry[];
 
   cells?: JsonFormsCellRendererRegistryEntry[];
+
+  uischemas?: JsonFormsUISchemaRegistryEntry[];
 }
 
 export interface OwnPropsOfControl extends OwnPropsOfRenderer {
@@ -534,7 +536,7 @@ export const mapStateToMasterListItemProps = (
  * State-based props of a table control.
  */
 export interface StatePropsOfControlWithDetail extends StatePropsOfControl {
-  uischemas?: { tester: UISchemaTester; uischema: UISchemaElement }[];
+  uischemas?: JsonFormsUISchemaRegistryEntry[];
   renderers?: JsonFormsRendererRegistryEntry[];
   cells?: JsonFormsCellRendererRegistryEntry[];
 }
@@ -782,7 +784,7 @@ export interface StatePropsOfCombinator extends OwnPropsOfControl {
   path: string;
   id: string;
   indexOfFittingSchema: number;
-  uischemas: { tester: UISchemaTester; uischema: UISchemaElement }[];
+  uischemas: JsonFormsUISchemaRegistryEntry[];
   data: any;
 }
 
