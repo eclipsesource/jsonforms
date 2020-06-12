@@ -40,7 +40,8 @@ import {
   UISchemaElement,
   uiTypeIs,
   unregisterRenderer,
-  ControlElement
+  ControlElement,
+  NOT_APPLICABLE
 } from '@jsonforms/core';
 import { isEqual } from 'lodash';
 import Enzyme from 'enzyme';
@@ -821,6 +822,91 @@ test('JsonForms should generate a schema when schema is not given', () => {
   expect(jsonFormsStateProviderInitStateProp.core.schema).toStrictEqual(schema);
   expect(jsonFormsStateProviderInitStateProp.core.uischema).toStrictEqual(
     uischema
+  );
+});
+
+test('JsonForms should use uischemas', () => {
+  const schema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'object',
+        properties: {
+          bar: {
+            type: 'string',
+          },
+          baz: {
+            type: 'number'
+          }
+        }
+      }
+    }
+  };
+
+  const uischemas = [
+    {
+      tester: (_jsonSchema: JsonSchema, schemaPath: string) => {
+        return schemaPath === '#/properties/foo' ? 2 : NOT_APPLICABLE;
+      },
+      uischema: {
+        type: 'HorizontalLayout',
+        elements: [
+          {
+            type: 'Control',
+            scope: '#/properties/bar'
+          },
+          {
+            type: 'Control',
+            scope: '#/properties/baz'
+          }
+        ]
+      }
+    }
+  ];
+
+  const wrapper = shallow(
+    <JsonForms
+      data={{}}
+      schema={schema}
+      uischema={true as any}
+      renderers={undefined}
+      uischemas={uischemas}
+    />
+  );
+
+  const jsonFormsStateProviderInitStateProp = wrapper
+    .find(JsonFormsStateProvider)
+    .props().initState;
+  expect(jsonFormsStateProviderInitStateProp.uischemas).toStrictEqual(
+    uischemas
+  );
+});
+
+test('JsonForms should not crash with undefined uischemas', () => {
+  const schema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'string'
+      }
+    }
+  };
+
+  const wrapper = shallow(
+    <JsonForms
+      data={{}}
+      schema={schema}
+      uischema={true as any}
+      renderers={undefined}
+      uischemas={undefined}
+    />
+  );
+
+  const jsonFormsStateProviderInitStateProp = wrapper
+    .find(JsonFormsStateProvider)
+    .props().initState;
+  expect(jsonFormsStateProviderInitStateProp.uischemas).toStrictEqual(
+    undefined
   );
 });
 
