@@ -27,7 +27,7 @@ import { JsonSchema } from '../models/jsonSchema';
 import { ControlElement, UISchemaElement } from '../models/uischema';
 import { resolveSchema } from './resolvers';
 import { findUISchema } from '../reducers';
-import { JsonFormsUISchemaRegistryEntry } from '../reducers';
+import { JsonFormsUISchemaRegistryEntry } from '../reducers/uischemas';
 
 export interface CombinatorSubSchemaRenderInfo {
   schema: JsonSchema;
