@@ -62,6 +62,7 @@ export class Rating extends Component {
                   onClick({ value: i + 1});
                 }}
                 key={`${this.props.id}_${i}`}
+                style={{cursor: 'pointer'}}
               >
                 {i < rating ? '\u2605' : '\u2606'}
               </span>
