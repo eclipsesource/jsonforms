@@ -64,6 +64,7 @@ import {
   mapStateToLayoutProps,
   mapStateToMasterListItemProps,
   mapStateToOneOfProps,
+  mapStateToOneOfEnumControlProps,
   update
 } from '@jsonforms/core';
 import React, { ComponentType, Dispatch, ReducerAction, useCallback, useContext, useEffect, useReducer, useRef } from 'react';
@@ -191,6 +192,9 @@ export const ctxToControlProps = (ctx: JsonFormsStateContext, props: OwnPropsOfC
 
 export const ctxToEnumControlProps = (ctx: JsonFormsStateContext, props: OwnPropsOfControl) =>
   mapStateToEnumControlProps({ jsonforms: { ...ctx } }, props);
+
+export const ctxToOneOfEnumControlProps = (ctx: JsonFormsStateContext, props: OwnPropsOfControl) =>
+  mapStateToOneOfEnumControlProps({ jsonforms: { ...ctx } }, props);
 
 export const ctxToControlWithDetailProps = (
   ctx: JsonFormsStateContext,
@@ -388,6 +392,13 @@ const withContextToEnumProps =
       const dispatchProps = ctxDispatchToControlProps(ctx.dispatch);
       return (<Component {...props} {...dispatchProps} {...stateProps} options={stateProps.options} />);
     };
+const withContextToOneOfEnumProps =
+  (Component: ComponentType<ControlProps & OwnPropsOfEnum>): ComponentType<OwnPropsOfControl & OwnPropsOfEnum> =>
+    ({ ctx, props }: JsonFormsStateContext & ControlProps & OwnPropsOfEnum) => {
+      const stateProps = ctxToOneOfEnumControlProps(ctx, props);
+      const dispatchProps = ctxDispatchToControlProps(ctx.dispatch);
+      return (<Component {...props} {...dispatchProps} {...stateProps} options={stateProps.options} />);
+    };
 
 // --
 
@@ -498,6 +509,12 @@ export const withJsonFormsEnumCellProps =
 export const withJsonFormsEnumProps =
   (Component: ComponentType<ControlProps & OwnPropsOfEnum>): ComponentType<OwnPropsOfControl & OwnPropsOfEnum> =>
     withJsonFormsContext(withContextToEnumProps(React.memo(
+      Component,
+      (prevProps: ControlProps & OwnPropsOfEnum, nextProps: ControlProps & OwnPropsOfEnum) => isEqual(prevProps, nextProps)
+    )));
+export const withJsonFormsOneOfEnumProps =
+  (Component: ComponentType<ControlProps & OwnPropsOfEnum>): ComponentType<OwnPropsOfControl & OwnPropsOfEnum> =>
+    withJsonFormsContext(withContextToOneOfEnumProps(React.memo(
       Component,
       (prevProps: ControlProps & OwnPropsOfEnum, nextProps: ControlProps & OwnPropsOfEnum) => isEqual(prevProps, nextProps)
     )));

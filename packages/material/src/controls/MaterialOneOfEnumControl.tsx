@@ -1,7 +1,7 @@
 /*
   The MIT License
 
-  Copyright (c) 2017-2019 EclipseSource Munich
+  Copyright (c) 2018-2020 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,44 +23,27 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { EnumCellProps, WithClassname } from '@jsonforms/core';
+import {
+  ControlProps,
+  isOneOfEnumControl,
+  OwnPropsOfEnum,
+  RankedTester,
+  rankWith,
+} from '@jsonforms/core';
+import { withJsonFormsOneOfEnumProps } from '@jsonforms/react';
+import { MuiSelect } from '../mui-controls/MuiSelect';
+import { MaterialInputControl } from './MaterialInputControl';
 
-import Select from '@material-ui/core/Select';
-import { MenuItem } from '@material-ui/core';
-import { areEqual } from '@jsonforms/react';
-import merge from 'lodash/merge';
+export const MaterialOneOfEnumControl = (props: ControlProps & OwnPropsOfEnum) => (
+  <MaterialInputControl
+    {...props}
+    input={MuiSelect}
+  />
+);
 
-export const MuiSelect = React.memo((props: EnumCellProps & WithClassname) => {
-  const {
-    data,
-    className,
-    id,
-    enabled,
-    uischema,
-    path,
-    handleChange,
-    options,
-    config
-  } = props;
-  const appliedUiSchemaOptions = merge({}, config, uischema.options);
+export const materialOneOfEnumControlTester: RankedTester = rankWith(
+  10,
+  isOneOfEnumControl
+);
 
-  return (
-    <Select
-      className={className}
-      id={id}
-      disabled={!enabled}
-      autoFocus={appliedUiSchemaOptions.focus}
-      value={data || ''}
-      onChange={ev => handleChange(path, ev.target.value)}
-      fullWidth={true}
-    >
-      {[<MenuItem value='' key={'empty'} />].concat(
-        options.map(optionValue => (
-          <MenuItem value={optionValue.value} key={optionValue.value}>
-            {optionValue.label}
-          </MenuItem>
-        ))
-      )}
-    </Select>
-  );
-}, areEqual);
+export default withJsonFormsOneOfEnumProps(MaterialOneOfEnumControl);

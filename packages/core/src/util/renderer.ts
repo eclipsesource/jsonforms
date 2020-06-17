@@ -172,6 +172,14 @@ export interface WithClassname {
   className?: string;
 }
 
+export interface EnumOption {
+  label: string;
+  description: string;
+  value: any;
+}
+
+export const enumToEnumOptionMapper = (e: any): EnumOption => ({ label: e, description: e, value: e });
+
 export interface OwnPropsOfRenderer {
   /**
    * The UI schema to be rendered.
@@ -209,7 +217,7 @@ export interface OwnPropsOfControl extends OwnPropsOfRenderer {
 }
 
 export interface OwnPropsOfEnum {
-  options?: any[];
+  options?: EnumOption[];
 }
 
 export interface OwnPropsOfLayout extends OwnPropsOfRenderer {
@@ -454,10 +462,31 @@ export const mapStateToEnumControlProps = (
   ownProps: OwnPropsOfControl & OwnPropsOfEnum
 ): StatePropsOfControl & OwnPropsOfEnum => {
   const props: StatePropsOfControl = mapStateToControlProps(state, ownProps);
-  const options =
+  const options: EnumOption[] =
     ownProps.options !== undefined
       ? ownProps.options
-      : props.schema.enum || [props.schema.const];
+      : props.schema.enum.map(enumToEnumOptionMapper) || [enumToEnumOptionMapper(props.schema.const)];
+  return {
+    ...props,
+    options
+  };
+};
+
+/**
+ * Default mapStateToCellProps for enum control based on oneOf. Options is used for populating dropdown list
+ * @param state
+ * @param ownProps
+ * @returns {StatePropsOfControl & OwnPropsOfEnum}
+ */
+export const mapStateToOneOfEnumControlProps = (
+  state: JsonFormsState,
+  ownProps: OwnPropsOfControl & OwnPropsOfEnum
+): StatePropsOfControl & OwnPropsOfEnum => {
+  const props: StatePropsOfControl = mapStateToControlProps(state, ownProps);
+  const options: EnumOption[] =
+    ownProps.options !== undefined
+      ? ownProps.options
+      : (props.schema.oneOf as JsonSchema[]).map(e => ({label: e.title, value: e.const, description: e.description}));
   return {
     ...props,
     options
