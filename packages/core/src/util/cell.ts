@@ -162,7 +162,8 @@ export const defaultMapStateToEnumCellProps = (
 ): StatePropsOfEnumCell => {
   const props: StatePropsOfCell = mapStateToCellProps(state, ownProps);
   const options: EnumOption[] =
-    ownProps.options !== undefined ? ownProps.options : props.schema.enum.map(enumToEnumOptionMapper) || [enumToEnumOptionMapper(props.schema.const)];
+    ownProps.options !== undefined ? ownProps.options :
+    props.schema.enum?.map(enumToEnumOptionMapper) || [enumToEnumOptionMapper(props.schema.const)];
   return {
     ...props,
     options

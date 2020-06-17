@@ -36,7 +36,7 @@
     "tslint-loader": "^3.5.4",
     "tslint-react": "^4.1.0",
     "typedoc": "^0.15.3",
-    "typescript": "3.6.4",
+    "typescript": "3.8.3",
     "webpack": "^4.41.2",
     "webpack-merge": "^4.2.2"
   }

@@ -40,6 +40,7 @@ import {
   RuleEffect,
   UISchemaElement
 } from '../../src';
+import { enumToEnumOptionMapper } from '../../src/util/renderer';
 
 const middlewares: Redux.Middleware[] = [];
 const mockStore = configureStore<JsonFormsState>(middlewares);
@@ -236,7 +237,7 @@ test('mapStateToEnumCellProps - set default options for dropdown list', t => {
   };
 
   const props = defaultMapStateToEnumCellProps(createState(uischema), ownProps);
-  t.deepEqual(props.options, ['DE', 'IT', 'JP', 'US', 'RU', 'Other']);
+  t.deepEqual(props.options, ['DE', 'IT', 'JP', 'US', 'RU', 'Other'].map(enumToEnumOptionMapper));
   t.is(props.data, undefined);
 });
 

@@ -174,11 +174,13 @@ export interface WithClassname {
 
 export interface EnumOption {
   label: string;
-  description: string;
   value: any;
 }
 
-export const enumToEnumOptionMapper = (e: any): EnumOption => ({ label: e, description: e, value: e });
+export const enumToEnumOptionMapper = (e: any): EnumOption => {
+  const stringifiedEnum = typeof e === 'string' ? e : JSON.stringify(e);
+  return { label: stringifiedEnum, value: e };
+};
 
 export interface OwnPropsOfRenderer {
   /**
@@ -464,8 +466,8 @@ export const mapStateToEnumControlProps = (
   const props: StatePropsOfControl = mapStateToControlProps(state, ownProps);
   const options: EnumOption[] =
     ownProps.options !== undefined
-      ? ownProps.options
-      : props.schema.enum.map(enumToEnumOptionMapper) || [enumToEnumOptionMapper(props.schema.const)];
+      ? ownProps.options :
+      props.schema.enum?.map(enumToEnumOptionMapper) || [enumToEnumOptionMapper(props.schema.const)];
   return {
     ...props,
     options
@@ -486,7 +488,8 @@ export const mapStateToOneOfEnumControlProps = (
   const options: EnumOption[] =
     ownProps.options !== undefined
       ? ownProps.options
-      : (props.schema.oneOf as JsonSchema[]).map(e => ({label: e.title, value: e.const, description: e.description}));
+      : (props.schema.oneOf as JsonSchema[])?.
+        map(e => ({label: e.title || JSON.stringify(e.const), value: e.const}));
   return {
     ...props,
     options

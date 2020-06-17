@@ -30,6 +30,7 @@ import {
   CellProps,
   CombinatorProps,
   ControlProps,
+  defaultMapStateToEnumCellProps,
   DispatchCellProps,
   DispatchPropsOfControl,
   EnumCellProps,
@@ -264,6 +265,13 @@ export const ctxToCellProps = (
   return mapStateToCellProps({ jsonforms: { ...ctx } }, ownProps);
 };
 
+export const ctxToEnumCellProps = (
+  ctx: JsonFormsStateContext,
+  ownProps: OwnPropsOfCell
+) => {
+  return defaultMapStateToEnumCellProps({ jsonforms: { ...ctx } }, ownProps);
+};
+
 export const ctxToDispatchCellProps = (
   ctx: JsonFormsStateContext,
   ownProps: OwnPropsOfCell
@@ -378,11 +386,10 @@ const withContextToDispatchCellProps = (
 const withContextToEnumCellProps =
   (Component: ComponentType<EnumCellProps>): ComponentType<OwnPropsOfEnumCell> =>
     ({ ctx, props }: JsonFormsStateContext & EnumCellProps) => {
-      const cellProps = ctxToCellProps(ctx, props);
+      const cellProps = ctxToEnumCellProps(ctx, props);
       const dispatchProps = ctxDispatchToControlProps(ctx.dispatch);
-      const options = props.options !== undefined ? props.options : props.schema.enum || [props.schema.const];
 
-      return (<Component {...props} {...dispatchProps} {...cellProps} options={options} />);
+      return (<Component {...props} {...dispatchProps} {...cellProps} />);
     };
 
 const withContextToEnumProps =

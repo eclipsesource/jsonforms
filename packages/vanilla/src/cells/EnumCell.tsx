@@ -50,9 +50,7 @@ export const EnumCell = (props: EnumCellProps & VanillaRendererProps) => {
           .concat(
             options.map(optionValue =>
               (
-                <option value={optionValue.value} label={optionValue.label} key={optionValue.value}>
-                  {optionValue.label}
-                </option>
+                <option value={optionValue.value} label={optionValue.label} key={optionValue.value}/>
               )
             )
           )}
