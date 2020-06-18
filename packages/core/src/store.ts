@@ -70,6 +70,10 @@ export interface JsonFormsSubStates {
    *
    */
   uischemas?: { tester: UISchemaTester; uischema: UISchemaElement }[];
+  /**
+   * If true, sets all controls to read-only.
+   */
+  readOnly?: boolean;
   // allow additional state
   [additionalState: string]: any;
 }
