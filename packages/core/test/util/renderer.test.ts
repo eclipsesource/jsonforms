@@ -27,16 +27,16 @@ import { init, update, UPDATE_DATA, UpdateAction } from '../../src/actions';
 import * as Redux from 'redux';
 import {
   clearAllIds,
+  computeLabel,
   createAjv,
   createDefaultValue,
   mapDispatchToArrayControlProps,
   mapDispatchToControlProps,
+  mapStateToArrayLayoutProps,
   mapStateToControlProps,
   mapStateToJsonFormsRendererProps,
   mapStateToLayoutProps,
-  mapStateToArrayLayoutProps,
   mapStateToOneOfProps,
-  computeLabel
 } from '../../src/util';
 import configureStore from 'redux-mock-store';
 import test from 'ava';
@@ -68,6 +68,15 @@ const hideRule = {
 
 const disableRule = {
   effect: RuleEffect.DISABLE,
+  condition: {
+    type: 'LEAF',
+    scope: '#/properties/firstName',
+    expectedValue: 'Homer'
+  }
+};
+
+const enableRule = {
+  effect: RuleEffect.ENABLE,
   condition: {
     type: 'LEAF',
     scope: '#/properties/firstName',
@@ -180,6 +189,44 @@ test('mapStateToControlProps - visible via state with path from ownProps ', t =>
   };
   const props = mapStateToControlProps(state, ownProps);
   t.true(props.visible);
+});
+
+test('mapStateToControlProps - disabled via global readOnly', t => {
+  const ownProps = {
+    uischema: coreUISchema
+  };
+  const state: JsonFormsState = createState(coreUISchema);
+  state.jsonforms.readOnly = true;
+
+  const props = mapStateToControlProps(state, ownProps);
+  t.false(props.enabled);
+});
+
+test('mapStateToControlProps - disabled via global readOnly beats enabled via ownProps', t => {
+  const ownProps = {
+    uischema: coreUISchema,
+    enabled: true
+  };
+  const state: JsonFormsState = createState(coreUISchema);
+  state.jsonforms.readOnly = true;
+
+  const props = mapStateToControlProps(state, ownProps);
+  t.false(props.enabled);
+});
+
+test('mapStateToControlProps - disabled via global readOnly beats enabled via rule', t => {
+  const uischema = {
+    ...coreUISchema,
+    rule: enableRule
+  };
+  const ownProps = {
+    uischema
+  };
+  const state: JsonFormsState = createState(uischema);
+  state.jsonforms.readOnly = true;
+
+  const props = mapStateToControlProps(state, ownProps);
+  t.false(props.enabled);
 });
 
 test('mapStateToControlProps - enabled via state with path from ownProps ', t => {
@@ -623,6 +670,53 @@ test('mapStateToLayoutProps should return renderers prop via ownProps', t => {
     ]
   });
   t.is(props.renderers.length, 1);
+});
+
+test('mapStateToLayoutProps - disabled via global readOnly', t => {
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [coreUISchema],
+  };
+  const ownProps = {
+    uischema
+  };
+  const state: JsonFormsState = createState(uischema);
+  state.jsonforms.readOnly = true;
+
+  const props = mapStateToLayoutProps(state, ownProps);
+  t.false(props.enabled);
+});
+
+test('mapStateToLayoutProps - disabled via global readOnly beats enabled via ownProps', t => {
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [coreUISchema],
+  };
+  const ownProps = {
+    uischema,
+    enabled: true
+  };
+  const state: JsonFormsState = createState(uischema);
+  state.jsonforms.readOnly = true;
+
+  const props = mapStateToLayoutProps(state, ownProps);
+  t.false(props.enabled);
+});
+
+test('mapStateToLayoutProps - disabled via global readOnly beats enabled via rule', t => {
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [coreUISchema],
+    rule: enableRule
+  };
+  const ownProps = {
+    uischema
+  };
+  const state: JsonFormsState = createState(uischema);
+  state.jsonforms.readOnly = true;
+
+  const props = mapStateToLayoutProps(state, ownProps);
+  t.false(props.enabled);
 });
 
 test('mapStateToLayoutProps - hidden via state with path from ownProps ', t => {

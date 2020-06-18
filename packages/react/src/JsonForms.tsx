@@ -219,6 +219,7 @@ export interface JsonFormsInitStateProps {
   ajv?: AJV.Ajv;
   refParserOptions?: RefParser.Options;
   config?: any;
+  readOnly?: boolean;
 }
 
 export const JsonForms = (
@@ -234,6 +235,7 @@ export const JsonForms = (
     refParserOptions,
     onChange,
     config,
+    readOnly,
   } = props;
   const schemaToUse = schema !== undefined ? schema : Generate.jsonSchema(data);
   const uischemaToUse =
@@ -250,7 +252,8 @@ export const JsonForms = (
         },
         config,
         renderers,
-        cells
+        cells,
+        readOnly,
       }}
     >
       <JsonFormsDispatch onChange={onChange} />
