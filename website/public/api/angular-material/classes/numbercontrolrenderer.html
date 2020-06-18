@@ -111,12 +111,12 @@
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="numbercontrolrenderer.html#form" class="tsd-kind-icon">form</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="numbercontrolrenderer.html#hidden" class="tsd-kind-icon">hidden</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="numbercontrolrenderer.html#id" class="tsd-kind-icon">id</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="numbercontrolrenderer.html#jsonformsservice" class="tsd-kind-icon">json<wbr>Forms<wbr>Service</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="numbercontrolrenderer.html#label" class="tsd-kind-icon">label</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="numbercontrolrenderer.html#locale" class="tsd-kind-icon">locale</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="numbercontrolrenderer.html#max" class="tsd-kind-icon">max</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="numbercontrolrenderer.html#min" class="tsd-kind-icon">min</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="numbercontrolrenderer.html#multipleof" class="tsd-kind-icon">multiple<wbr>Of</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="numbercontrolrenderer.html#ngredux" class="tsd-kind-icon">ng<wbr>Redux</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="numbercontrolrenderer.html#numberformat" class="tsd-kind-icon">number<wbr>Format</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="numbercontrolrenderer.html#oldvalue" class="tsd-kind-icon">old<wbr>Value</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="numbercontrolrenderer.html#path" class="tsd-kind-icon">path</a></li>
@@ -143,6 +143,7 @@
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="numbercontrolrenderer.html#ngondestroy" class="tsd-kind-icon">ng<wbr>OnDestroy</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="numbercontrolrenderer.html#ngoninit" class="tsd-kind-icon">ng<wbr>OnInit</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="numbercontrolrenderer.html#onchange" class="tsd-kind-icon">on<wbr>Change</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="numbercontrolrenderer.html#shouldshowunfocuseddescription" class="tsd-kind-icon">should<wbr>Show<wbr>Unfocused<wbr>Description</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="numbercontrolrenderer.html#triggervalidation" class="tsd-kind-icon">trigger<wbr>Validation</a></li>
 							</ul>
 						</section>
@@ -155,20 +156,20 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Number<wbr>Control<wbr>Renderer<span class="tsd-signature-symbol">(</span>ngRedux<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">NgRedux</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">JsonFormsState</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="numbercontrolrenderer.html" class="tsd-signature-type">NumberControlRenderer</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Number<wbr>Control<wbr>Renderer<span class="tsd-signature-symbol">(</span>jsonformsService<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonFormsAngularService</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="numbercontrolrenderer.html" class="tsd-signature-type">NumberControlRenderer</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Overrides JsonFormsAbstractControl.__constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/angular-material/src/controls/number.renderer.ts#L67">angular-material/src/controls/number.renderer.ts:67</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/485ba1ce/packages/angular-material/src/controls/number.renderer.ts#L66">angular-material/src/controls/number.renderer.ts:66</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>ngRedux: <span class="tsd-signature-type">NgRedux</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">JsonFormsState</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>jsonformsService: <span class="tsd-signature-type">JsonFormsAngularService</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="numbercontrolrenderer.html" class="tsd-signature-type">NumberControlRenderer</a></h4>
@@ -184,7 +185,7 @@
 					<div class="tsd-signature tsd-kind-icon">MAXIMUM_<wbr>FRACTIONAL_<wbr>DIGITS<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">20</span><span class="tsd-signature-symbol"> =&nbsp;20</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/angular-material/src/controls/number.renderer.ts#L59">angular-material/src/controls/number.renderer.ts:59</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/485ba1ce/packages/angular-material/src/controls/number.renderer.ts#L58">angular-material/src/controls/number.renderer.ts:58</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -205,7 +206,7 @@
 					<div class="tsd-signature tsd-kind-icon">decimal<wbr>Separator<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/angular-material/src/controls/number.renderer.ts#L67">angular-material/src/controls/number.renderer.ts:67</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/485ba1ce/packages/angular-material/src/controls/number.renderer.ts#L66">angular-material/src/controls/number.renderer.ts:66</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -286,6 +287,17 @@
 						</ul>
 					</aside>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+					<a name="jsonformsservice" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> json<wbr>Forms<wbr>Service</h3>
+					<div class="tsd-signature tsd-kind-icon">json<wbr>Forms<wbr>Service<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">JsonFormsAngularService</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from JsonFormsAbstractControl.jsonFormsService</p>
+						<ul>
+							<li>Defined in angular/lib/abstract-control.d.ts:8</li>
+						</ul>
+					</aside>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 					<a name="label" class="tsd-anchor"></a>
 					<h3>label</h3>
@@ -303,7 +315,7 @@
 					<div class="tsd-signature tsd-kind-icon">locale<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/angular-material/src/controls/number.renderer.ts#L65">angular-material/src/controls/number.renderer.ts:65</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/485ba1ce/packages/angular-material/src/controls/number.renderer.ts#L64">angular-material/src/controls/number.renderer.ts:64</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -313,7 +325,7 @@
 					<div class="tsd-signature tsd-kind-icon">max<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/angular-material/src/controls/number.renderer.ts#L63">angular-material/src/controls/number.renderer.ts:63</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/485ba1ce/packages/angular-material/src/controls/number.renderer.ts#L62">angular-material/src/controls/number.renderer.ts:62</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -323,7 +335,7 @@
 					<div class="tsd-signature tsd-kind-icon">min<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/angular-material/src/controls/number.renderer.ts#L62">angular-material/src/controls/number.renderer.ts:62</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/485ba1ce/packages/angular-material/src/controls/number.renderer.ts#L61">angular-material/src/controls/number.renderer.ts:61</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -333,18 +345,7 @@
 					<div class="tsd-signature tsd-kind-icon">multiple<wbr>Of<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/angular-material/src/controls/number.renderer.ts#L64">angular-material/src/controls/number.renderer.ts:64</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-					<a name="ngredux" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> ng<wbr>Redux</h3>
-					<div class="tsd-signature tsd-kind-icon">ng<wbr>Redux<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">NgRedux</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">JsonFormsState</span><span class="tsd-signature-symbol">&gt;</span></div>
-					<aside class="tsd-sources">
-						<p>Inherited from JsonFormsAbstractControl.ngRedux</p>
-						<ul>
-							<li>Defined in angular/lib/abstract-control.d.ts:8</li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/485ba1ce/packages/angular-material/src/controls/number.renderer.ts#L63">angular-material/src/controls/number.renderer.ts:63</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -354,7 +355,7 @@
 					<div class="tsd-signature tsd-kind-icon">number<wbr>Format<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">NumberFormat</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/angular-material/src/controls/number.renderer.ts#L66">angular-material/src/controls/number.renderer.ts:66</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/485ba1ce/packages/angular-material/src/controls/number.renderer.ts#L65">angular-material/src/controls/number.renderer.ts:65</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -364,7 +365,7 @@
 					<div class="tsd-signature tsd-kind-icon">old<wbr>Value<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/angular-material/src/controls/number.renderer.ts#L61">angular-material/src/controls/number.renderer.ts:61</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/485ba1ce/packages/angular-material/src/controls/number.renderer.ts#L60">angular-material/src/controls/number.renderer.ts:60</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -452,7 +453,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from JsonFormsAbstractControl.validator</p>
 						<ul>
-							<li>Defined in angular/lib/abstract-control.d.ts:27</li>
+							<li>Defined in angular/lib/abstract-control.d.ts:28</li>
 						</ul>
 					</aside>
 				</section>
@@ -480,7 +481,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/angular-material/src/controls/number.renderer.ts#L146">angular-material/src/controls/number.renderer.ts:146</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/485ba1ce/packages/angular-material/src/controls/number.renderer.ts#L147">angular-material/src/controls/number.renderer.ts:147</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -498,7 +499,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides JsonFormsAbstractControl.getEventValue</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/angular-material/src/controls/number.renderer.ts#L99">angular-material/src/controls/number.renderer.ts:99</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/485ba1ce/packages/angular-material/src/controls/number.renderer.ts#L98">angular-material/src/controls/number.renderer.ts:98</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -523,7 +524,7 @@
 								<p>Inherited from JsonFormsAbstractControl.getOwnProps</p>
 								<p>Overrides JsonFormsBaseRenderer.getOwnProps</p>
 								<ul>
-									<li>Defined in angular/lib/abstract-control.d.ts:31</li>
+									<li>Defined in angular/lib/abstract-control.d.ts:32</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">OwnPropsOfControl</span></h4>
@@ -540,7 +541,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/angular-material/src/controls/number.renderer.ts#L117">angular-material/src/controls/number.renderer.ts:117</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/485ba1ce/packages/angular-material/src/controls/number.renderer.ts#L116">angular-material/src/controls/number.renderer.ts:116</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
@@ -558,7 +559,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from JsonFormsAbstractControl.isEnabled</p>
 								<ul>
-									<li>Defined in angular/lib/abstract-control.d.ts:30</li>
+									<li>Defined in angular/lib/abstract-control.d.ts:31</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -576,7 +577,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides JsonFormsAbstractControl.mapAdditionalProps</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/angular-material/src/controls/number.renderer.ts#L127">angular-material/src/controls/number.renderer.ts:127</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/485ba1ce/packages/angular-material/src/controls/number.renderer.ts#L126">angular-material/src/controls/number.renderer.ts:126</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -587,7 +588,7 @@
 					<a name="maptoprops" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> map<wbr>ToProps</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited tsd-is-protected">
-						<li class="tsd-signature tsd-kind-icon">map<wbr>ToProps<span class="tsd-signature-symbol">(</span>state<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonFormsState</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ControlProps</span></li>
+						<li class="tsd-signature tsd-kind-icon">map<wbr>ToProps<span class="tsd-signature-symbol">(</span>state<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonFormsState</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">StatePropsOfControl</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -604,7 +605,7 @@
 									<h5>state: <span class="tsd-signature-type">JsonFormsState</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ControlProps</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">StatePropsOfControl</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -619,7 +620,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from JsonFormsAbstractControl.ngOnDestroy</p>
 								<ul>
-									<li>Defined in angular/lib/abstract-control.d.ts:29</li>
+									<li>Defined in angular/lib/abstract-control.d.ts:30</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -637,7 +638,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from JsonFormsAbstractControl.ngOnInit</p>
 								<ul>
-									<li>Defined in angular/lib/abstract-control.d.ts:26</li>
+									<li>Defined in angular/lib/abstract-control.d.ts:27</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -655,7 +656,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides JsonFormsAbstractControl.onChange</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/angular-material/src/controls/number.renderer.ts#L73">angular-material/src/controls/number.renderer.ts:73</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/485ba1ce/packages/angular-material/src/controls/number.renderer.ts#L72">angular-material/src/controls/number.renderer.ts:72</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -665,6 +666,24 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+					<a name="shouldshowunfocuseddescription" class="tsd-anchor"></a>
+					<h3>should<wbr>Show<wbr>Unfocused<wbr>Description</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">should<wbr>Show<wbr>Unfocused<wbr>Description<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from JsonFormsAbstractControl.shouldShowUnfocusedDescription</p>
+								<ul>
+									<li>Defined in angular/lib/abstract-control.d.ts:26</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -679,7 +698,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from JsonFormsAbstractControl.triggerValidation</p>
 								<ul>
-									<li>Defined in angular/lib/abstract-control.d.ts:33</li>
+									<li>Defined in angular/lib/abstract-control.d.ts:34</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -736,6 +755,9 @@
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 								<a href="numbercontrolrenderer.html#id" class="tsd-kind-icon">id</a>
 							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+								<a href="numbercontrolrenderer.html#jsonformsservice" class="tsd-kind-icon">json<wbr>Forms<wbr>Service</a>
+							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 								<a href="numbercontrolrenderer.html#label" class="tsd-kind-icon">label</a>
 							</li>
@@ -750,9 +772,6 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="numbercontrolrenderer.html#multipleof" class="tsd-kind-icon">multiple<wbr>Of</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-								<a href="numbercontrolrenderer.html#ngredux" class="tsd-kind-icon">ng<wbr>Redux</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="numbercontrolrenderer.html#numberformat" class="tsd-kind-icon">number<wbr>Format</a>
@@ -816,6 +835,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 								<a href="numbercontrolrenderer.html#onchange" class="tsd-kind-icon">on<wbr>Change</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="numbercontrolrenderer.html#shouldshowunfocuseddescription" class="tsd-kind-icon">should<wbr>Show<wbr>Unfocused<wbr>Description</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
 								<a href="numbercontrolrenderer.html#triggervalidation" class="tsd-kind-icon">trigger<wbr>Validation</a>

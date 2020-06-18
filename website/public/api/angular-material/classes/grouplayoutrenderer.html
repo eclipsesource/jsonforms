@@ -99,6 +99,7 @@
 						<section class="tsd-index-section tsd-is-inherited">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="grouplayoutrenderer.html#changedetectionref" class="tsd-kind-icon">change<wbr>Detection<wbr>Ref</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="grouplayoutrenderer.html#hidden" class="tsd-kind-icon">hidden</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="grouplayoutrenderer.html#path" class="tsd-kind-icon">path</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="grouplayoutrenderer.html#schema" class="tsd-kind-icon">schema</a></li>
@@ -129,20 +130,23 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Group<wbr>Layout<wbr>Renderer<span class="tsd-signature-symbol">(</span>ngRedux<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">NgRedux</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">JsonFormsState</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="grouplayoutrenderer.html" class="tsd-signature-type">GroupLayoutRenderer</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Group<wbr>Layout<wbr>Renderer<span class="tsd-signature-symbol">(</span>jsonFormsService<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonFormsAngularService</span>, changeDetectionRef<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ChangeDetectorRef</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="grouplayoutrenderer.html" class="tsd-signature-type">GroupLayoutRenderer</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Overrides <a href="layoutrenderer.html">LayoutRenderer</a>.<a href="layoutrenderer.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/angular-material/src/layouts/group-layout.renderer.ts#L47">angular-material/src/layouts/group-layout.renderer.ts:47</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/485ba1ce/packages/angular-material/src/layouts/group-layout.renderer.ts#L42">angular-material/src/layouts/group-layout.renderer.ts:42</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>ngRedux: <span class="tsd-signature-type">NgRedux</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">JsonFormsState</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>jsonFormsService: <span class="tsd-signature-type">JsonFormsAngularService</span></h5>
+								</li>
+								<li>
+									<h5>changeDetectionRef: <span class="tsd-signature-type">ChangeDetectorRef</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="grouplayoutrenderer.html" class="tsd-signature-type">GroupLayoutRenderer</a></h4>
@@ -152,6 +156,17 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-inherited">
 				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+					<a name="changedetectionref" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> change<wbr>Detection<wbr>Ref</h3>
+					<div class="tsd-signature tsd-kind-icon">change<wbr>Detection<wbr>Ref<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ChangeDetectorRef</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="layoutrenderer.html">LayoutRenderer</a>.<a href="layoutrenderer.html#changedetectionref">changeDetectionRef</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/485ba1ce/packages/angular-material/src/layouts/layout.renderer.ts#L44">angular-material/src/layouts/layout.renderer.ts:44</a></li>
+						</ul>
+					</aside>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 					<a name="hidden" class="tsd-anchor"></a>
 					<h3>hidden</h3>
@@ -159,7 +174,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="layoutrenderer.html">LayoutRenderer</a>.<a href="layoutrenderer.html#hidden">hidden</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/angular-material/src/layouts/layout.renderer.ts#L39">angular-material/src/layouts/layout.renderer.ts:39</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/485ba1ce/packages/angular-material/src/layouts/layout.renderer.ts#L41">angular-material/src/layouts/layout.renderer.ts:41</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -210,7 +225,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="layoutrenderer.html">LayoutRenderer</a>.<a href="layoutrenderer.html#renderprops">renderProps</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/angular-material/src/layouts/layout.renderer.ts#L61">angular-material/src/layouts/layout.renderer.ts:61</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/485ba1ce/packages/angular-material/src/layouts/layout.renderer.ts#L64">angular-material/src/layouts/layout.renderer.ts:64</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">OwnPropsOfRenderer</span><span class="tsd-signature-symbol">[]</span></h4>
@@ -249,7 +264,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="layoutrenderer.html">LayoutRenderer</a>.<a href="layoutrenderer.html#ngondestroy">ngOnDestroy</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/angular-material/src/layouts/layout.renderer.ts#L55">angular-material/src/layouts/layout.renderer.ts:55</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/485ba1ce/packages/angular-material/src/layouts/layout.renderer.ts#L58">angular-material/src/layouts/layout.renderer.ts:58</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -267,7 +282,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="layoutrenderer.html">LayoutRenderer</a>.<a href="layoutrenderer.html#ngoninit">ngOnInit</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/angular-material/src/layouts/layout.renderer.ts#L46">angular-material/src/layouts/layout.renderer.ts:46</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/485ba1ce/packages/angular-material/src/layouts/layout.renderer.ts#L48">angular-material/src/layouts/layout.renderer.ts:48</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -285,7 +300,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="layoutrenderer.html">LayoutRenderer</a>.<a href="layoutrenderer.html#trackelement">trackElement</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/angular-material/src/layouts/layout.renderer.ts#L72">angular-material/src/layouts/layout.renderer.ts:72</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/485ba1ce/packages/angular-material/src/layouts/layout.renderer.ts#L75">angular-material/src/layouts/layout.renderer.ts:75</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -320,6 +335,9 @@
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
 								<a href="grouplayoutrenderer.html#constructor" class="tsd-kind-icon">constructor</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+								<a href="grouplayoutrenderer.html#changedetectionref" class="tsd-kind-icon">change<wbr>Detection<wbr>Ref</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 								<a href="grouplayoutrenderer.html#hidden" class="tsd-kind-icon">hidden</a>

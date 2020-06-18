@@ -100,9 +100,9 @@
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="jsonformsoutlet.html#componentfactoryresolver" class="tsd-kind-icon">component<wbr>Factory<wbr>Resolver</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="jsonformsoutlet.html#currentcomponentref" class="tsd-kind-icon">current<wbr>Component<wbr>Ref</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="jsonformsoutlet.html#ngredux" class="tsd-kind-icon">ng<wbr>Redux</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="jsonformsoutlet.html#jsonformsservice" class="tsd-kind-icon">jsonforms<wbr>Service</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="jsonformsoutlet.html#path" class="tsd-kind-icon">path</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="jsonformsoutlet.html#previousprops" class="tsd-kind-icon">previous<wbr>Props</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="jsonformsoutlet.html#schema" class="tsd-kind-icon">schema</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="jsonformsoutlet.html#subscription" class="tsd-kind-icon">subscription</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="jsonformsoutlet.html#uischema" class="tsd-kind-icon">uischema</a></li>
@@ -133,13 +133,13 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Json<wbr>Forms<wbr>Outlet<span class="tsd-signature-symbol">(</span>viewContainerRef<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ViewContainerRef</span>, componentFactoryResolver<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ComponentFactoryResolver</span>, ngRedux<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">NgRedux</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="jsonformsoutlet.html" class="tsd-signature-type">JsonFormsOutlet</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Json<wbr>Forms<wbr>Outlet<span class="tsd-signature-symbol">(</span>viewContainerRef<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ViewContainerRef</span>, componentFactoryResolver<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ComponentFactoryResolver</span>, jsonformsService<span class="tsd-signature-symbol">: </span><a href="jsonformsangularservice.html" class="tsd-signature-type">JsonFormsAngularService</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="jsonformsoutlet.html" class="tsd-signature-type">JsonFormsOutlet</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/angular/src/jsonforms.component.ts#L58">jsonforms.component.ts:58</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/485ba1ce/packages/angular/src/jsonforms.component.ts#L69">jsonforms.component.ts:69</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -151,7 +151,7 @@
 									<h5>componentFactoryResolver: <span class="tsd-signature-type">ComponentFactoryResolver</span></h5>
 								</li>
 								<li>
-									<h5>ngRedux: <span class="tsd-signature-type">NgRedux</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>jsonformsService: <a href="jsonformsangularservice.html" class="tsd-signature-type">JsonFormsAngularService</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="jsonformsoutlet.html" class="tsd-signature-type">JsonFormsOutlet</a></h4>
@@ -167,27 +167,17 @@
 					<div class="tsd-signature tsd-kind-icon">component<wbr>Factory<wbr>Resolver<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ComponentFactoryResolver</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/angular/src/jsonforms.component.ts#L62">jsonforms.component.ts:62</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/485ba1ce/packages/angular/src/jsonforms.component.ts#L73">jsonforms.component.ts:73</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="currentcomponentref" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> current<wbr>Component<wbr>Ref</h3>
-					<div class="tsd-signature tsd-kind-icon">current<wbr>Component<wbr>Ref<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ComponentRef</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<a name="jsonformsservice" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> jsonforms<wbr>Service</h3>
+					<div class="tsd-signature tsd-kind-icon">jsonforms<wbr>Service<span class="tsd-signature-symbol">:</span> <a href="jsonformsangularservice.html" class="tsd-signature-type">JsonFormsAngularService</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/angular/src/jsonforms.component.ts#L58">jsonforms.component.ts:58</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="ngredux" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> ng<wbr>Redux</h3>
-					<div class="tsd-signature tsd-kind-icon">ng<wbr>Redux<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">NgRedux</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/angular/src/jsonforms.component.ts#L63">jsonforms.component.ts:63</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/485ba1ce/packages/angular/src/jsonforms.component.ts#L74">jsonforms.component.ts:74</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -198,7 +188,17 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="jsonformsbaserenderer.html">JsonFormsBaseRenderer</a>.<a href="jsonformsbaserenderer.html#path">path</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/angular/src/base.renderer.ts#L35">base.renderer.ts:35</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/485ba1ce/packages/angular/src/base.renderer.ts#L35">base.renderer.ts:35</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="previousprops" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> previous<wbr>Props</h3>
+					<div class="tsd-signature tsd-kind-icon">previous<wbr>Props<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">StatePropsOfJsonFormsRenderer</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/485ba1ce/packages/angular/src/jsonforms.component.ts#L69">jsonforms.component.ts:69</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -209,7 +209,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="jsonformsbaserenderer.html">JsonFormsBaseRenderer</a>.<a href="jsonformsbaserenderer.html#schema">schema</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/angular/src/base.renderer.ts#L34">base.renderer.ts:34</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/485ba1ce/packages/angular/src/base.renderer.ts#L34">base.renderer.ts:34</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -219,7 +219,7 @@
 					<div class="tsd-signature tsd-kind-icon">subscription<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Subscription</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/angular/src/jsonforms.component.ts#L57">jsonforms.component.ts:57</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/485ba1ce/packages/angular/src/jsonforms.component.ts#L68">jsonforms.component.ts:68</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -230,7 +230,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="jsonformsbaserenderer.html">JsonFormsBaseRenderer</a>.<a href="jsonformsbaserenderer.html#uischema">uischema</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/angular/src/base.renderer.ts#L33">base.renderer.ts:33</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/485ba1ce/packages/angular/src/base.renderer.ts#L33">base.renderer.ts:33</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -240,7 +240,7 @@
 					<div class="tsd-signature tsd-kind-icon">view<wbr>Container<wbr>Ref<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ViewContainerRef</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/angular/src/jsonforms.component.ts#L61">jsonforms.component.ts:61</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/485ba1ce/packages/angular/src/jsonforms.component.ts#L72">jsonforms.component.ts:72</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -257,7 +257,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/angular/src/jsonforms.component.ts#L69">jsonforms.component.ts:69</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/485ba1ce/packages/angular/src/jsonforms.component.ts#L80">jsonforms.component.ts:80</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -284,7 +284,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="jsonformsbaserenderer.html">JsonFormsBaseRenderer</a>.<a href="jsonformsbaserenderer.html#getownprops">getOwnProps</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/angular/src/base.renderer.ts#L37">base.renderer.ts:37</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/485ba1ce/packages/angular/src/base.renderer.ts#L37">base.renderer.ts:37</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">OwnPropsOfRenderer</span></h4>
@@ -301,7 +301,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/angular/src/jsonforms.component.ts#L133">jsonforms.component.ts:133</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/485ba1ce/packages/angular/src/jsonforms.component.ts#L135">jsonforms.component.ts:135</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -318,7 +318,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/angular/src/jsonforms.component.ts#L76">jsonforms.component.ts:76</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/485ba1ce/packages/angular/src/jsonforms.component.ts#L87">jsonforms.component.ts:87</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -335,7 +335,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/angular/src/jsonforms.component.ts#L82">jsonforms.component.ts:82</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/485ba1ce/packages/angular/src/jsonforms.component.ts#L93">jsonforms.component.ts:93</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -364,6 +364,9 @@
 						<a href="jsonformsabstractcontrol.html" class="tsd-kind-icon">Json<wbr>Forms<wbr>Abstract<wbr>Control</a>
 					</li>
 					<li class=" tsd-kind-class">
+						<a href="jsonformsangularservice.html" class="tsd-kind-icon">Json<wbr>Forms<wbr>Angular<wbr>Service</a>
+					</li>
+					<li class=" tsd-kind-class">
 						<a href="jsonformsarraycontrol.html" class="tsd-kind-icon">Json<wbr>Forms<wbr>Array<wbr>Control</a>
 					</li>
 					<li class=" tsd-kind-class tsd-has-type-parameter">
@@ -390,13 +393,13 @@
 								<a href="jsonformsoutlet.html#componentfactoryresolver" class="tsd-kind-icon">component<wbr>Factory<wbr>Resolver</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="jsonformsoutlet.html#currentcomponentref" class="tsd-kind-icon">current<wbr>Component<wbr>Ref</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="jsonformsoutlet.html#ngredux" class="tsd-kind-icon">ng<wbr>Redux</a>
+								<a href="jsonformsoutlet.html#jsonformsservice" class="tsd-kind-icon">jsonforms<wbr>Service</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 								<a href="jsonformsoutlet.html#path" class="tsd-kind-icon">path</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="jsonformsoutlet.html#previousprops" class="tsd-kind-icon">previous<wbr>Props</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 								<a href="jsonformsoutlet.html#schema" class="tsd-kind-icon">schema</a>
@@ -431,6 +434,9 @@
 				<ul class="after-current">
 					<li class=" tsd-kind-class">
 						<a href="unknownrenderer.html" class="tsd-kind-icon">Unknown<wbr>Renderer</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-not-exported">
+						<a href="../globals.html#areequal" class="tsd-kind-icon">are<wbr>Equal</a>
 					</li>
 				</ul>
 			</nav>

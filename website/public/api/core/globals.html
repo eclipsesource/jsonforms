@@ -177,20 +177,21 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-type-alias"><a href="globals.html#combinatorkeyword" class="tsd-kind-icon">Combinator<wbr>Keyword</a></li>
 								<li class="tsd-kind-type-alias"><a href="globals.html#combinatorprops" class="tsd-kind-icon">Combinator<wbr>Props</a></li>
+								<li class="tsd-kind-type-alias"><a href="globals.html#coreactions" class="tsd-kind-icon">Core<wbr>Actions</a></li>
 								<li class="tsd-kind-type-alias"><a href="globals.html#dispatchpropsofcell" class="tsd-kind-icon">Dispatch<wbr>Props<wbr>OfCell</a></li>
 								<li class="tsd-kind-type-alias"><a href="globals.html#iteratecallback" class="tsd-kind-icon">Iterate<wbr>Callback</a></li>
 								<li class="tsd-kind-type-alias"><a href="globals.html#jsonformscellrendererregistrystate" class="tsd-kind-icon">Json<wbr>Forms<wbr>Cell<wbr>Renderer<wbr>Registry<wbr>State</a></li>
 								<li class="tsd-kind-type-alias"><a href="globals.html#jsonschema" class="tsd-kind-icon">Json<wbr>Schema</a></li>
+								<li class="tsd-kind-type-alias"><a href="globals.html#localeactions" class="tsd-kind-icon">Locale<wbr>Actions</a></li>
 								<li class="tsd-kind-type-alias tsd-is-not-exported"><a href="globals.html#properties" class="tsd-kind-icon">Properties</a></li>
 								<li class="tsd-kind-type-alias"><a href="globals.html#rankedtester" class="tsd-kind-icon">Ranked<wbr>Tester</a></li>
 								<li class="tsd-kind-type-alias"><a href="globals.html#refresolver" class="tsd-kind-icon">Ref<wbr>Resolver</a></li>
 								<li class="tsd-kind-type-alias"><a href="globals.html#tester" class="tsd-kind-icon">Tester</a></li>
+								<li class="tsd-kind-type-alias"><a href="globals.html#uischemaactions" class="tsd-kind-icon">UISchema<wbr>Actions</a></li>
 								<li class="tsd-kind-type-alias"><a href="globals.html#uischematester" class="tsd-kind-icon">UISchema<wbr>Tester</a></li>
 								<li class="tsd-kind-type-alias tsd-is-not-exported"><a href="globals.html#validcellreduceractions" class="tsd-kind-icon">Valid<wbr>Cell<wbr>Reducer<wbr>Actions</a></li>
-								<li class="tsd-kind-type-alias tsd-is-not-exported"><a href="globals.html#validcoreactions" class="tsd-kind-icon">Valid<wbr>Core<wbr>Actions</a></li>
 								<li class="tsd-kind-type-alias tsd-is-not-exported"><a href="globals.html#validdefaultdataactions" class="tsd-kind-icon">Valid<wbr>Default<wbr>Data<wbr>Actions</a></li>
 								<li class="tsd-kind-type-alias tsd-is-not-exported"><a href="globals.html#validrendererreduceractions" class="tsd-kind-icon">Valid<wbr>Renderer<wbr>Reducer<wbr>Actions</a></li>
-								<li class="tsd-kind-type-alias tsd-is-not-exported"><a href="globals.html#validuischemareduceractions" class="tsd-kind-icon">ValidUISchema<wbr>Reducer<wbr>Actions</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -299,6 +300,7 @@
 								<li class="tsd-kind-function"><a href="globals.html#generatedefaultuischema" class="tsd-kind-icon">generate<wbr>DefaultUISchema</a></li>
 								<li class="tsd-kind-function"><a href="globals.html#generatejsonschema" class="tsd-kind-icon">generate<wbr>Json<wbr>Schema</a></li>
 								<li class="tsd-kind-function tsd-is-not-exported"><a href="globals.html#generateuischema" class="tsd-kind-icon">generateUISchema</a></li>
+								<li class="tsd-kind-function"><a href="globals.html#getcells" class="tsd-kind-icon">get<wbr>Cells</a></li>
 								<li class="tsd-kind-function tsd-is-not-exported"><a href="globals.html#getconditionscope" class="tsd-kind-icon">get<wbr>Condition<wbr>Scope</a></li>
 								<li class="tsd-kind-function"><a href="globals.html#getconfig" class="tsd-kind-icon">get<wbr>Config</a></li>
 								<li class="tsd-kind-function"><a href="globals.html#getdata" class="tsd-kind-icon">get<wbr>Data</a></li>
@@ -456,7 +458,17 @@
 					<div class="tsd-signature tsd-kind-icon">Combinator<wbr>Props<span class="tsd-signature-symbol">:</span> <a href="interfaces/statepropsofcombinator.html" class="tsd-signature-type">StatePropsOfCombinator</a><span class="tsd-signature-symbol"> &amp; </span><a href="interfaces/dispatchpropsofcontrol.html" class="tsd-signature-type">DispatchPropsOfControl</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/core/src/util/renderer.ts:873</li>
+							<li>Defined in packages/core/src/util/renderer.ts:884</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias">
+					<a name="coreactions" class="tsd-anchor"></a>
+					<h3>Core<wbr>Actions</h3>
+					<div class="tsd-signature tsd-kind-icon">Core<wbr>Actions<span class="tsd-signature-symbol">:</span> <a href="interfaces/initaction.html" class="tsd-signature-type">InitAction</a><span class="tsd-signature-symbol"> | </span><a href="interfaces/updateaction.html" class="tsd-signature-type">UpdateAction</a><span class="tsd-signature-symbol"> | </span><a href="interfaces/updateerrorsaction.html" class="tsd-signature-type">UpdateErrorsAction</a><span class="tsd-signature-symbol"> | </span><a href="interfaces/setajvaction.html" class="tsd-signature-type">SetAjvAction</a><span class="tsd-signature-symbol"> | </span><a href="interfaces/setschemaaction.html" class="tsd-signature-type">SetSchemaAction</a><span class="tsd-signature-symbol"> | </span><a href="interfaces/setuischemaaction.html" class="tsd-signature-type">SetUISchemaAction</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in packages/core/src/actions/index.ts:59</li>
 						</ul>
 					</aside>
 				</section>
@@ -518,6 +530,16 @@
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in packages/core/src/models/jsonSchema.ts:28</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias">
+					<a name="localeactions" class="tsd-anchor"></a>
+					<h3>Locale<wbr>Actions</h3>
+					<div class="tsd-signature tsd-kind-icon">Locale<wbr>Actions<span class="tsd-signature-symbol">:</span> <a href="interfaces/setlocaleaction.html" class="tsd-signature-type">SetLocaleAction</a><span class="tsd-signature-symbol"> | </span><a href="interfaces/setlocalizedschemasaction.html" class="tsd-signature-type">SetLocalizedSchemasAction</a><span class="tsd-signature-symbol"> | </span><a href="interfaces/setlocalizeduischemasaction.html" class="tsd-signature-type">SetLocalizedUISchemasAction</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in packages/core/src/actions/index.ts:242</li>
 						</ul>
 					</aside>
 				</section>
@@ -584,7 +606,7 @@
 					<div class="tsd-signature tsd-kind-icon">Ref<wbr>Resolver<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/core/src/util/renderer.ts:684</li>
+							<li>Defined in packages/core/src/util/renderer.ts:697</li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -649,12 +671,22 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias">
+					<a name="uischemaactions" class="tsd-anchor"></a>
+					<h3>UISchema<wbr>Actions</h3>
+					<div class="tsd-signature tsd-kind-icon">UISchema<wbr>Actions<span class="tsd-signature-symbol">:</span> <a href="interfaces/adduischemaaction.html" class="tsd-signature-type">AddUISchemaAction</a><span class="tsd-signature-symbol"> | </span><a href="interfaces/removeuischemaaction.html" class="tsd-signature-type">RemoveUISchemaAction</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in packages/core/src/actions/index.ts:209</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias">
 					<a name="uischematester" class="tsd-anchor"></a>
 					<h3>UISchema<wbr>Tester</h3>
 					<div class="tsd-signature tsd-kind-icon">UISchema<wbr>Tester<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/core/src/reducers/uischemas.ts:35</li>
+							<li>Defined in packages/core/src/reducers/uischemas.ts:30</li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -696,16 +728,6 @@
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-is-not-exported">
-					<a name="validcoreactions" class="tsd-anchor"></a>
-					<h3>Valid<wbr>Core<wbr>Actions</h3>
-					<div class="tsd-signature tsd-kind-icon">Valid<wbr>Core<wbr>Actions<span class="tsd-signature-symbol">:</span> <a href="interfaces/initaction.html" class="tsd-signature-type">InitAction</a><span class="tsd-signature-symbol"> | </span><a href="interfaces/updateaction.html" class="tsd-signature-type">UpdateAction</a><span class="tsd-signature-symbol"> | </span><a href="interfaces/updateerrorsaction.html" class="tsd-signature-type">UpdateErrorsAction</a><span class="tsd-signature-symbol"> | </span><a href="interfaces/setajvaction.html" class="tsd-signature-type">SetAjvAction</a><span class="tsd-signature-symbol"> | </span><a href="interfaces/setschemaaction.html" class="tsd-signature-type">SetSchemaAction</a><span class="tsd-signature-symbol"> | </span><a href="interfaces/setuischemaaction.html" class="tsd-signature-type">SetUISchemaAction</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in packages/core/src/reducers/core.ts:89</li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-is-not-exported">
 					<a name="validdefaultdataactions" class="tsd-anchor"></a>
 					<h3>Valid<wbr>Default<wbr>Data<wbr>Actions</h3>
 					<div class="tsd-signature tsd-kind-icon">Valid<wbr>Default<wbr>Data<wbr>Actions<span class="tsd-signature-symbol">:</span> <a href="interfaces/registerdefaultdataaction.html" class="tsd-signature-type">RegisterDefaultDataAction</a><span class="tsd-signature-symbol"> | </span><a href="interfaces/unregisterdefaultdataaction.html" class="tsd-signature-type">UnregisterDefaultDataAction</a></div>
@@ -722,16 +744,6 @@
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in packages/core/src/reducers/renderers.ts:38</li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-is-not-exported">
-					<a name="validuischemareduceractions" class="tsd-anchor"></a>
-					<h3>ValidUISchema<wbr>Reducer<wbr>Actions</h3>
-					<div class="tsd-signature tsd-kind-icon">ValidUISchema<wbr>Reducer<wbr>Actions<span class="tsd-signature-symbol">:</span> <a href="interfaces/adduischemaaction.html" class="tsd-signature-type">AddUISchemaAction</a><span class="tsd-signature-symbol"> | </span><a href="interfaces/removeuischemaaction.html" class="tsd-signature-type">RemoveUISchemaAction</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in packages/core/src/reducers/uischemas.ts:41</li>
 						</ul>
 					</aside>
 				</section>
@@ -1799,7 +1811,7 @@
 					<div class="tsd-signature tsd-kind-icon">map<wbr>Dispatch<wbr>ToCell<wbr>Props<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> =&nbsp;mapDispatchToControlProps</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/core/src/util/cell.ts:170</li>
+							<li>Defined in packages/core/src/util/cell.ts:172</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -1908,7 +1920,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/reducers/core.ts:67</li>
+									<li>Defined in packages/core/src/reducers/core.ts:63</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">true</span></h4>
@@ -2131,7 +2143,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/util/renderer.ts:109</li>
+									<li>Defined in packages/core/src/util/renderer.ts:111</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2232,13 +2244,13 @@
 					<a name="corereducer" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> core<wbr>Reducer</h3>
 					<ul class="tsd-signatures tsd-kind-function">
-						<li class="tsd-signature tsd-kind-icon">core<wbr>Reducer<span class="tsd-signature-symbol">(</span>state<span class="tsd-signature-symbol">?: </span><a href="interfaces/jsonformscore.html" class="tsd-signature-type">JsonFormsCore</a>, action<span class="tsd-signature-symbol">: </span><a href="globals.html#validcoreactions" class="tsd-signature-type">ValidCoreActions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="interfaces/jsonformscore.html" class="tsd-signature-type">JsonFormsCore</a></li>
+						<li class="tsd-signature tsd-kind-icon">core<wbr>Reducer<span class="tsd-signature-symbol">(</span>state<span class="tsd-signature-symbol">?: </span><a href="interfaces/jsonformscore.html" class="tsd-signature-type">JsonFormsCore</a>, action<span class="tsd-signature-symbol">: </span><a href="globals.html#coreactions" class="tsd-signature-type">CoreActions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="interfaces/jsonformscore.html" class="tsd-signature-type">JsonFormsCore</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/reducers/core.ts:142</li>
+									<li>Defined in packages/core/src/reducers/core.ts:130</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2247,7 +2259,7 @@
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> state: <a href="interfaces/jsonformscore.html" class="tsd-signature-type">JsonFormsCore</a><span class="tsd-signature-symbol"> =&nbsp;initState</span></h5>
 								</li>
 								<li>
-									<h5>action: <a href="globals.html#validcoreactions" class="tsd-signature-type">ValidCoreActions</a></h5>
+									<h5>action: <a href="globals.html#coreactions" class="tsd-signature-type">CoreActions</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="interfaces/jsonformscore.html" class="tsd-signature-type">JsonFormsCore</a></h4>
@@ -2376,7 +2388,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/util/renderer.ts:122</li>
+									<li>Defined in packages/core/src/util/renderer.ts:124</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2564,7 +2576,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/util/cell.ts:178</li>
+									<li>Defined in packages/core/src/util/cell.ts:180</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2595,7 +2607,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/util/cell.ts:152</li>
+									<li>Defined in packages/core/src/util/cell.ts:154</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2747,7 +2759,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/reducers/core.ts:269</li>
+									<li>Defined in packages/core/src/reducers/core.ts:247</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2773,7 +2785,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/reducers/core.ts:243</li>
+									<li>Defined in packages/core/src/reducers/core.ts:221</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2907,7 +2919,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/reducers/core.ts:239</li>
+									<li>Defined in packages/core/src/reducers/core.ts:217</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2953,7 +2965,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/reducers/core.ts:274</li>
+									<li>Defined in packages/core/src/reducers/core.ts:252</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3046,7 +3058,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/reducers/core.ts:240</li>
+									<li>Defined in packages/core/src/reducers/core.ts:218</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3072,7 +3084,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/reducers/core.ts:241</li>
+									<li>Defined in packages/core/src/reducers/core.ts:219</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3214,7 +3226,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/reducers/uischemas.ts:61</li>
+									<li>Defined in packages/core/src/reducers/uischemas.ts:54</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3260,7 +3272,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/reducers/index.ts:111</li>
+									<li>Defined in packages/core/src/reducers/index.ts:118</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3531,6 +3543,29 @@
 						</li>
 					</ul>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function">
+					<a name="getcells" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> get<wbr>Cells</h3>
+					<ul class="tsd-signatures tsd-kind-function">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Cells<span class="tsd-signature-symbol">(</span>state<span class="tsd-signature-symbol">: </span><a href="interfaces/jsonformsstate.html" class="tsd-signature-type">JsonFormsState</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="interfaces/jsonformscellrendererregistryentry.html" class="tsd-signature-type">JsonFormsCellRendererRegistryEntry</a><span class="tsd-signature-symbol">[]</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in packages/core/src/reducers/index.ts:106</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>state: <a href="interfaces/jsonformsstate.html" class="tsd-signature-type">JsonFormsState</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="interfaces/jsonformscellrendererregistryentry.html" class="tsd-signature-type">JsonFormsCellRendererRegistryEntry</a><span class="tsd-signature-symbol">[]</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-is-not-exported">
 					<a name="getconditionscope" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> get<wbr>Condition<wbr>Scope</h3>
@@ -3567,7 +3602,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/reducers/index.ts:157</li>
+									<li>Defined in packages/core/src/reducers/index.ts:164</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3590,7 +3625,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/reducers/index.ts:87</li>
+									<li>Defined in packages/core/src/reducers/index.ts:91</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3613,7 +3648,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/reducers/index.ts:95</li>
+									<li>Defined in packages/core/src/reducers/index.ts:99</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3636,7 +3671,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/reducers/index.ts:145</li>
+									<li>Defined in packages/core/src/reducers/index.ts:152</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3662,7 +3697,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/reducers/core.ts:262</li>
+									<li>Defined in packages/core/src/reducers/core.ts:240</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3732,7 +3767,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/reducers/index.ts:159</li>
+									<li>Defined in packages/core/src/reducers/index.ts:166</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3755,7 +3790,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/reducers/index.ts:162</li>
+									<li>Defined in packages/core/src/reducers/index.ts:169</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3778,7 +3813,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/reducers/index.ts:166</li>
+									<li>Defined in packages/core/src/reducers/index.ts:173</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3801,7 +3836,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/reducers/core.ts:97</li>
+									<li>Defined in packages/core/src/reducers/core.ts:85</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3851,7 +3886,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/reducers/core.ts:118</li>
+									<li>Defined in packages/core/src/reducers/core.ts:106</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3868,7 +3903,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/reducers/index.ts:93</li>
+									<li>Defined in packages/core/src/reducers/index.ts:97</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3914,7 +3949,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/reducers/index.ts:99</li>
+									<li>Defined in packages/core/src/reducers/index.ts:103</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3937,7 +3972,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/reducers/index.ts:89</li>
+									<li>Defined in packages/core/src/reducers/index.ts:93</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3960,7 +3995,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/reducers/index.ts:153</li>
+									<li>Defined in packages/core/src/reducers/index.ts:160</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3986,7 +4021,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/reducers/index.ts:91</li>
+									<li>Defined in packages/core/src/reducers/index.ts:95</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -4009,7 +4044,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/reducers/core.ts:135</li>
+									<li>Defined in packages/core/src/reducers/core.ts:123</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -4078,7 +4113,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/reducers/core.ts:128</li>
+									<li>Defined in packages/core/src/reducers/core.ts:116</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -4181,7 +4216,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/actions/index.ts:83</li>
+									<li>Defined in packages/core/src/actions/index.ts:91</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -4378,7 +4413,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/util/renderer.ts:156</li>
+									<li>Defined in packages/core/src/util/renderer.ts:158</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -4601,7 +4636,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/util/renderer.ts:72</li>
+									<li>Defined in packages/core/src/util/renderer.ts:74</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -4676,7 +4711,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/util/renderer.ts:76</li>
+									<li>Defined in packages/core/src/util/renderer.ts:78</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -4838,7 +4873,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/reducers/index.ts:73</li>
+									<li>Defined in packages/core/src/reducers/index.ts:77</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -4909,13 +4944,13 @@
 					<a name="mapdispatchtoarraycontrolprops" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> map<wbr>Dispatch<wbr>ToArray<wbr>Control<wbr>Props</h3>
 					<ul class="tsd-signatures tsd-kind-function">
-						<li class="tsd-signature tsd-kind-icon">map<wbr>Dispatch<wbr>ToArray<wbr>Control<wbr>Props<span class="tsd-signature-symbol">(</span>dispatch<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Dispatch</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">AnyAction</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="interfaces/dispatchpropsofarraycontrol.html" class="tsd-signature-type">DispatchPropsOfArrayControl</a></li>
+						<li class="tsd-signature tsd-kind-icon">map<wbr>Dispatch<wbr>ToArray<wbr>Control<wbr>Props<span class="tsd-signature-symbol">(</span>dispatch<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Dispatch</span><span class="tsd-signature-symbol">&lt;</span><a href="globals.html#coreactions" class="tsd-signature-type">CoreActions</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="interfaces/dispatchpropsofarraycontrol.html" class="tsd-signature-type">DispatchPropsOfArrayControl</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/util/renderer.ts:585</li>
+									<li>Defined in packages/core/src/util/renderer.ts:597</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -4926,7 +4961,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>dispatch: <span class="tsd-signature-type">Dispatch</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">AnyAction</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>dispatch: <span class="tsd-signature-type">Dispatch</span><span class="tsd-signature-symbol">&lt;</span><a href="globals.html#coreactions" class="tsd-signature-type">CoreActions</a><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
 											<p>the store&#39;s dispatch method</p>
@@ -4949,7 +4984,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/util/renderer.ts:428</li>
+									<li>Defined in packages/core/src/util/renderer.ts:438</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -4983,7 +5018,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/util/renderer.ts:811</li>
+									<li>Defined in packages/core/src/util/renderer.ts:822</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -5025,7 +5060,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/util/renderer.ts:817</li>
+									<li>Defined in packages/core/src/util/renderer.ts:828</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -5051,7 +5086,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/util/renderer.ts:547</li>
+									<li>Defined in packages/core/src/util/renderer.ts:558</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -5093,7 +5128,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/util/renderer.ts:842</li>
+									<li>Defined in packages/core/src/util/renderer.ts:853</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -5177,7 +5212,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/util/renderer.ts:742</li>
+									<li>Defined in packages/core/src/util/renderer.ts:753</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -5206,7 +5241,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/util/renderer.ts:369</li>
+									<li>Defined in packages/core/src/util/renderer.ts:379</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -5248,7 +5283,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/util/renderer.ts:516</li>
+									<li>Defined in packages/core/src/util/renderer.ts:527</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -5290,7 +5325,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/util/cell.ts:131</li>
+									<li>Defined in packages/core/src/util/cell.ts:133</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -5316,7 +5351,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/util/renderer.ts:442</li>
+									<li>Defined in packages/core/src/util/renderer.ts:452</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -5350,7 +5385,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/util/renderer.ts:700</li>
+									<li>Defined in packages/core/src/util/renderer.ts:709</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -5376,7 +5411,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/util/renderer.ts:654</li>
+									<li>Defined in packages/core/src/util/renderer.ts:666</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -5417,7 +5452,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/util/renderer.ts:463</li>
+									<li>Defined in packages/core/src/util/renderer.ts:473</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -5459,7 +5494,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/util/renderer.ts:824</li>
+									<li>Defined in packages/core/src/util/renderer.ts:835</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -5756,7 +5791,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/actions/index.ts:161</li>
+									<li>Defined in packages/core/src/actions/index.ts:169</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -5814,7 +5849,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/actions/index.ts:103</li>
+									<li>Defined in packages/core/src/actions/index.ts:111</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -5851,7 +5886,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/actions/index.ts:149</li>
+									<li>Defined in packages/core/src/actions/index.ts:157</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -5909,7 +5944,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/actions/index.ts:209</li>
+									<li>Defined in packages/core/src/actions/index.ts:217</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -6130,7 +6165,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/reducers/core.ts:60</li>
+									<li>Defined in packages/core/src/reducers/core.ts:56</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -6359,7 +6394,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/actions/index.ts:124</li>
+									<li>Defined in packages/core/src/actions/index.ts:132</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -6384,13 +6419,13 @@
 					<a name="setconfig" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> set<wbr>Config</h3>
 					<ul class="tsd-signatures tsd-kind-function">
-						<li class="tsd-signature tsd-kind-icon">set<wbr>Config<span class="tsd-signature-symbol">(</span>config<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">(Anonymous function)</span></li>
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Config<span class="tsd-signature-symbol">(</span>config<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="interfaces/setconfigaction.html" class="tsd-signature-type">SetConfigAction</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/actions/index.ts:196</li>
+									<li>Defined in packages/core/src/actions/index.ts:204</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -6399,7 +6434,7 @@
 									<h5>config: <span class="tsd-signature-type">any</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">(Anonymous function)</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="interfaces/setconfigaction.html" class="tsd-signature-type">SetConfigAction</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -6413,7 +6448,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/actions/index.ts:239</li>
+									<li>Defined in packages/core/src/actions/index.ts:252</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -6436,7 +6471,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/actions/index.ts:249</li>
+									<li>Defined in packages/core/src/actions/index.ts:262</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -6459,7 +6494,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/actions/index.ts:271</li>
+									<li>Defined in packages/core/src/actions/index.ts:284</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -6528,7 +6563,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/actions/index.ts:261</li>
+									<li>Defined in packages/core/src/actions/index.ts:274</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -6551,7 +6586,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/actions/index.ts:283</li>
+									<li>Defined in packages/core/src/actions/index.ts:296</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -6574,7 +6609,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/reducers/core.ts:271</li>
+									<li>Defined in packages/core/src/reducers/core.ts:249</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -6742,13 +6777,13 @@
 					<a name="uischemaregistryreducer" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> uischema<wbr>Registry<wbr>Reducer</h3>
 					<ul class="tsd-signatures tsd-kind-function">
-						<li class="tsd-signature tsd-kind-icon">uischema<wbr>Registry<wbr>Reducer<span class="tsd-signature-symbol">(</span>state<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">[]</span>, action<span class="tsd-signature-symbol">: </span><a href="globals.html#validuischemareduceractions" class="tsd-signature-type">ValidUISchemaReducerActions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">[]</span></li>
+						<li class="tsd-signature tsd-kind-icon">uischema<wbr>Registry<wbr>Reducer<span class="tsd-signature-symbol">(</span>state<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">[]</span>, action<span class="tsd-signature-symbol">: </span><a href="globals.html#uischemaactions" class="tsd-signature-type">UISchemaActions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">[]</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/reducers/uischemas.ts:43</li>
+									<li>Defined in packages/core/src/reducers/uischemas.ts:36</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -6757,7 +6792,7 @@
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> state: <span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></h5>
 								</li>
 								<li>
-									<h5>action: <a href="globals.html#validuischemareduceractions" class="tsd-signature-type">ValidUISchemaReducerActions</a></h5>
+									<h5>action: <a href="globals.html#uischemaactions" class="tsd-signature-type">UISchemaActions</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">[]</span></h4>
@@ -6774,7 +6809,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/actions/index.ts:173</li>
+									<li>Defined in packages/core/src/actions/index.ts:181</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -6832,7 +6867,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/actions/index.ts:114</li>
+									<li>Defined in packages/core/src/actions/index.ts:122</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -6863,7 +6898,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/actions/index.ts:185</li>
+									<li>Defined in packages/core/src/actions/index.ts:193</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -6921,7 +6956,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/actions/index.ts:225</li>
+									<li>Defined in packages/core/src/actions/index.ts:233</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -6967,7 +7002,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/actions/index.ts:129</li>
+									<li>Defined in packages/core/src/actions/index.ts:137</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -7011,7 +7046,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/actions/index.ts:138</li>
+									<li>Defined in packages/core/src/actions/index.ts:146</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -7034,7 +7069,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/core/src/reducers/core.ts:51</li>
+									<li>Defined in packages/core/src/reducers/core.ts:47</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -8606,7 +8641,7 @@
 					<div class="tsd-signature tsd-kind-icon">control<wbr>Default<wbr>Props<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/core/src/util/renderer.ts:728</li>
+							<li>Defined in packages/core/src/util/renderer.ts:739</li>
 						</ul>
 					</aside>
 					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
@@ -8615,7 +8650,7 @@
 						<div class="tsd-signature tsd-kind-icon">errors<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[] as string[]</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in packages/core/src/util/renderer.ts:730</li>
+								<li>Defined in packages/core/src/util/renderer.ts:741</li>
 							</ul>
 						</aside>
 					</section>
@@ -8626,7 +8661,7 @@
 					<div class="tsd-signature tsd-kind-icon">init<wbr>State<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/core/src/reducers/core.ts:79</li>
+							<li>Defined in packages/core/src/reducers/core.ts:75</li>
 							<li>Defined in packages/core/src/reducers/i18n.ts:34</li>
 						</ul>
 					</aside>
@@ -8636,7 +8671,7 @@
 						<div class="tsd-signature tsd-kind-icon">ajv<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> =&nbsp;undefined</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in packages/core/src/reducers/core.ts:85</li>
+								<li>Defined in packages/core/src/reducers/core.ts:81</li>
 							</ul>
 						</aside>
 					</section>
@@ -8646,7 +8681,7 @@
 						<div class="tsd-signature tsd-kind-icon">data<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in packages/core/src/reducers/core.ts:80</li>
+								<li>Defined in packages/core/src/reducers/core.ts:76</li>
 							</ul>
 						</aside>
 						<div class="tsd-type-declaration">
@@ -8661,7 +8696,7 @@
 						<div class="tsd-signature tsd-kind-icon">errors<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in packages/core/src/reducers/core.ts:83</li>
+								<li>Defined in packages/core/src/reducers/core.ts:79</li>
 							</ul>
 						</aside>
 					</section>
@@ -8701,7 +8736,7 @@
 						<div class="tsd-signature tsd-kind-icon">ref<wbr>Parser<wbr>Options<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> =&nbsp;undefined</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in packages/core/src/reducers/core.ts:86</li>
+								<li>Defined in packages/core/src/reducers/core.ts:82</li>
 							</ul>
 						</aside>
 					</section>
@@ -8711,7 +8746,7 @@
 						<div class="tsd-signature tsd-kind-icon">schema<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in packages/core/src/reducers/core.ts:81</li>
+								<li>Defined in packages/core/src/reducers/core.ts:77</li>
 							</ul>
 						</aside>
 						<div class="tsd-type-declaration">
@@ -8726,7 +8761,7 @@
 						<div class="tsd-signature tsd-kind-icon">uischema<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> =&nbsp;undefined</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in packages/core/src/reducers/core.ts:82</li>
+								<li>Defined in packages/core/src/reducers/core.ts:78</li>
 							</ul>
 						</aside>
 					</section>
@@ -8736,7 +8771,7 @@
 						<div class="tsd-signature tsd-kind-icon">validator<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ValidateFunction</span><span class="tsd-signature-symbol"> =&nbsp;alwaysValid</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in packages/core/src/reducers/core.ts:84</li>
+								<li>Defined in packages/core/src/reducers/core.ts:80</li>
 							</ul>
 						</aside>
 					</section>
@@ -8747,7 +8782,7 @@
 					<div class="tsd-signature tsd-kind-icon">layout<wbr>Default<wbr>Props<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/core/src/util/renderer.ts:636</li>
+							<li>Defined in packages/core/src/util/renderer.ts:648</li>
 						</ul>
 					</aside>
 					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
@@ -8756,7 +8791,7 @@
 						<div class="tsd-signature tsd-kind-icon">direction<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"column"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;column&quot;</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in packages/core/src/util/renderer.ts:645</li>
+								<li>Defined in packages/core/src/util/renderer.ts:657</li>
 							</ul>
 						</aside>
 					</section>
@@ -8766,7 +8801,7 @@
 						<div class="tsd-signature tsd-kind-icon">enabled<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">true</span><span class="tsd-signature-symbol"> =&nbsp;true</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in packages/core/src/util/renderer.ts:643</li>
+								<li>Defined in packages/core/src/util/renderer.ts:655</li>
 							</ul>
 						</aside>
 					</section>
@@ -8776,7 +8811,7 @@
 						<div class="tsd-signature tsd-kind-icon">path<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;&quot;</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in packages/core/src/util/renderer.ts:644</li>
+								<li>Defined in packages/core/src/util/renderer.ts:656</li>
 							</ul>
 						</aside>
 					</section>
@@ -8786,7 +8821,7 @@
 						<div class="tsd-signature tsd-kind-icon">visible<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">true</span><span class="tsd-signature-symbol"> =&nbsp;true</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in packages/core/src/util/renderer.ts:642</li>
+								<li>Defined in packages/core/src/util/renderer.ts:654</li>
 							</ul>
 						</aside>
 					</section>
@@ -9086,6 +9121,9 @@
 						<a href="globals.html#combinatorprops" class="tsd-kind-icon">Combinator<wbr>Props</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#coreactions" class="tsd-kind-icon">Core<wbr>Actions</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
 						<a href="globals.html#dispatchpropsofcell" class="tsd-kind-icon">Dispatch<wbr>Props<wbr>OfCell</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
@@ -9096,6 +9134,9 @@
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="globals.html#jsonschema" class="tsd-kind-icon">Json<wbr>Schema</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#localeactions" class="tsd-kind-icon">Locale<wbr>Actions</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-is-not-exported">
 						<a href="globals.html#properties" class="tsd-kind-icon">Properties</a>
@@ -9110,22 +9151,19 @@
 						<a href="globals.html#tester" class="tsd-kind-icon">Tester</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#uischemaactions" class="tsd-kind-icon">UISchema<wbr>Actions</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
 						<a href="globals.html#uischematester" class="tsd-kind-icon">UISchema<wbr>Tester</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-is-not-exported">
 						<a href="globals.html#validcellreduceractions" class="tsd-kind-icon">Valid<wbr>Cell<wbr>Reducer<wbr>Actions</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-is-not-exported">
-						<a href="globals.html#validcoreactions" class="tsd-kind-icon">Valid<wbr>Core<wbr>Actions</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-not-exported">
 						<a href="globals.html#validdefaultdataactions" class="tsd-kind-icon">Valid<wbr>Default<wbr>Data<wbr>Actions</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-is-not-exported">
 						<a href="globals.html#validrendererreduceractions" class="tsd-kind-icon">Valid<wbr>Renderer<wbr>Reducer<wbr>Actions</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-not-exported">
-						<a href="globals.html#validuischemareduceractions" class="tsd-kind-icon">ValidUISchema<wbr>Reducer<wbr>Actions</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-is-not-exported">
 						<a href="globals.html#additional_properties" class="tsd-kind-icon">ADDITIONAL_<wbr>PROPERTIES</a>
@@ -9420,6 +9458,9 @@
 					</li>
 					<li class=" tsd-kind-function tsd-is-not-exported">
 						<a href="globals.html#generateuischema" class="tsd-kind-icon">generateUISchema</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#getcells" class="tsd-kind-icon">get<wbr>Cells</a>
 					</li>
 					<li class=" tsd-kind-function tsd-is-not-exported">
 						<a href="globals.html#getconditionscope" class="tsd-kind-icon">get<wbr>Condition<wbr>Scope</a>

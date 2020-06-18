@@ -111,8 +111,8 @@
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="objectcontrolrenderer.html#geteventvalue" class="tsd-kind-icon">get<wbr>Event<wbr>Value</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="objectcontrolrenderer.html#hidden" class="tsd-kind-icon">hidden</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="objectcontrolrenderer.html#id" class="tsd-kind-icon">id</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="objectcontrolrenderer.html#jsonformsservice" class="tsd-kind-icon">json<wbr>Forms<wbr>Service</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="objectcontrolrenderer.html#label" class="tsd-kind-icon">label</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="objectcontrolrenderer.html#ngredux" class="tsd-kind-icon">ng<wbr>Redux</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="objectcontrolrenderer.html#path" class="tsd-kind-icon">path</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="objectcontrolrenderer.html#propspath" class="tsd-kind-icon">props<wbr>Path</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="objectcontrolrenderer.html#rootschema" class="tsd-kind-icon">root<wbr>Schema</a></li>
@@ -134,6 +134,7 @@
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="objectcontrolrenderer.html#ngondestroy" class="tsd-kind-icon">ng<wbr>OnDestroy</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="objectcontrolrenderer.html#ngoninit" class="tsd-kind-icon">ng<wbr>OnInit</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="objectcontrolrenderer.html#onchange" class="tsd-kind-icon">on<wbr>Change</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="objectcontrolrenderer.html#shouldshowunfocuseddescription" class="tsd-kind-icon">should<wbr>Show<wbr>Unfocused<wbr>Description</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="objectcontrolrenderer.html#triggervalidation" class="tsd-kind-icon">trigger<wbr>Validation</a></li>
 							</ul>
 						</section>
@@ -146,20 +147,20 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Object<wbr>Control<wbr>Renderer<span class="tsd-signature-symbol">(</span>ngRedux<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">NgRedux</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">JsonFormsState</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="objectcontrolrenderer.html" class="tsd-signature-type">ObjectControlRenderer</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Object<wbr>Control<wbr>Renderer<span class="tsd-signature-symbol">(</span>jsonformsService<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonFormsAngularService</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="objectcontrolrenderer.html" class="tsd-signature-type">ObjectControlRenderer</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Overrides JsonFormsAbstractControl.__constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/angular-material/src/other/object.renderer.ts#L56">angular-material/src/other/object.renderer.ts:56</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/485ba1ce/packages/angular-material/src/other/object.renderer.ts#L57">angular-material/src/other/object.renderer.ts:57</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>ngRedux: <span class="tsd-signature-type">NgRedux</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">JsonFormsState</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>jsonformsService: <span class="tsd-signature-type">JsonFormsAngularService</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="objectcontrolrenderer.html" class="tsd-signature-type">ObjectControlRenderer</a></h4>
@@ -197,7 +198,7 @@
 					<div class="tsd-signature tsd-kind-icon">detail<wbr>UiSchema<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">UISchemaElement</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/angular-material/src/other/object.renderer.ts#L56">angular-material/src/other/object.renderer.ts:56</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/485ba1ce/packages/angular-material/src/other/object.renderer.ts#L57">angular-material/src/other/object.renderer.ts:57</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -299,6 +300,17 @@
 						</ul>
 					</aside>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+					<a name="jsonformsservice" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> json<wbr>Forms<wbr>Service</h3>
+					<div class="tsd-signature tsd-kind-icon">json<wbr>Forms<wbr>Service<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">JsonFormsAngularService</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from JsonFormsAbstractControl.jsonFormsService</p>
+						<ul>
+							<li>Defined in angular/lib/abstract-control.d.ts:8</li>
+						</ul>
+					</aside>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 					<a name="label" class="tsd-anchor"></a>
 					<h3>label</h3>
@@ -307,17 +319,6 @@
 						<p>Inherited from JsonFormsAbstractControl.label</p>
 						<ul>
 							<li>Defined in angular/lib/abstract-control.d.ts:15</li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-					<a name="ngredux" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> ng<wbr>Redux</h3>
-					<div class="tsd-signature tsd-kind-icon">ng<wbr>Redux<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">NgRedux</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">JsonFormsState</span><span class="tsd-signature-symbol">&gt;</span></div>
-					<aside class="tsd-sources">
-						<p>Inherited from JsonFormsAbstractControl.ngRedux</p>
-						<ul>
-							<li>Defined in angular/lib/abstract-control.d.ts:8</li>
 						</ul>
 					</aside>
 				</section>
@@ -405,7 +406,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from JsonFormsAbstractControl.validator</p>
 						<ul>
-							<li>Defined in angular/lib/abstract-control.d.ts:27</li>
+							<li>Defined in angular/lib/abstract-control.d.ts:28</li>
 						</ul>
 					</aside>
 				</section>
@@ -435,7 +436,7 @@
 								<p>Inherited from JsonFormsAbstractControl.getOwnProps</p>
 								<p>Overrides JsonFormsBaseRenderer.getOwnProps</p>
 								<ul>
-									<li>Defined in angular/lib/abstract-control.d.ts:31</li>
+									<li>Defined in angular/lib/abstract-control.d.ts:32</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">OwnPropsOfControl</span></h4>
@@ -453,7 +454,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from JsonFormsAbstractControl.isEnabled</p>
 								<ul>
-									<li>Defined in angular/lib/abstract-control.d.ts:30</li>
+									<li>Defined in angular/lib/abstract-control.d.ts:31</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -471,7 +472,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides JsonFormsAbstractControl.mapAdditionalProps</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/0cf18d3d/packages/angular-material/src/other/object.renderer.ts#L60">angular-material/src/other/object.renderer.ts:60</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/485ba1ce/packages/angular-material/src/other/object.renderer.ts#L61">angular-material/src/other/object.renderer.ts:61</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -488,7 +489,7 @@
 					<a name="maptoprops" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> map<wbr>ToProps</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited tsd-is-protected">
-						<li class="tsd-signature tsd-kind-icon">map<wbr>ToProps<span class="tsd-signature-symbol">(</span>state<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonFormsState</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ControlWithDetailProps</span></li>
+						<li class="tsd-signature tsd-kind-icon">map<wbr>ToProps<span class="tsd-signature-symbol">(</span>state<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonFormsState</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">StatePropsOfControlWithDetail</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -505,7 +506,7 @@
 									<h5>state: <span class="tsd-signature-type">JsonFormsState</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ControlWithDetailProps</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">StatePropsOfControlWithDetail</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -520,7 +521,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from JsonFormsAbstractControl.ngOnDestroy</p>
 								<ul>
-									<li>Defined in angular/lib/abstract-control.d.ts:29</li>
+									<li>Defined in angular/lib/abstract-control.d.ts:30</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -538,7 +539,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from JsonFormsAbstractControl.ngOnInit</p>
 								<ul>
-									<li>Defined in angular/lib/abstract-control.d.ts:26</li>
+									<li>Defined in angular/lib/abstract-control.d.ts:27</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -569,6 +570,24 @@
 						</li>
 					</ul>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+					<a name="shouldshowunfocuseddescription" class="tsd-anchor"></a>
+					<h3>should<wbr>Show<wbr>Unfocused<wbr>Description</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">should<wbr>Show<wbr>Unfocused<wbr>Description<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from JsonFormsAbstractControl.shouldShowUnfocusedDescription</p>
+								<ul>
+									<li>Defined in angular/lib/abstract-control.d.ts:26</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
 					<a name="triggervalidation" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> trigger<wbr>Validation</h3>
@@ -580,7 +599,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from JsonFormsAbstractControl.triggerValidation</p>
 								<ul>
-									<li>Defined in angular/lib/abstract-control.d.ts:33</li>
+									<li>Defined in angular/lib/abstract-control.d.ts:34</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -637,11 +656,11 @@
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 								<a href="objectcontrolrenderer.html#id" class="tsd-kind-icon">id</a>
 							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+								<a href="objectcontrolrenderer.html#jsonformsservice" class="tsd-kind-icon">json<wbr>Forms<wbr>Service</a>
+							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 								<a href="objectcontrolrenderer.html#label" class="tsd-kind-icon">label</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-								<a href="objectcontrolrenderer.html#ngredux" class="tsd-kind-icon">ng<wbr>Redux</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 								<a href="objectcontrolrenderer.html#path" class="tsd-kind-icon">path</a>
@@ -690,6 +709,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 								<a href="objectcontrolrenderer.html#onchange" class="tsd-kind-icon">on<wbr>Change</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="objectcontrolrenderer.html#shouldshowunfocuseddescription" class="tsd-kind-icon">should<wbr>Show<wbr>Unfocused<wbr>Description</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
 								<a href="objectcontrolrenderer.html#triggervalidation" class="tsd-kind-icon">trigger<wbr>Validation</a>
