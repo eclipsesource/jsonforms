@@ -17,13 +17,17 @@ export interface JsonFormsState {
   jsonforms: {
     core: {
       data: any;
-      schema?: JsonSchema;
-      uischema?: UISchemaElement;
-      validation?: ValidationState,
+      schema: JsonSchema;
+      uischema: UISchemaElement;
+      errors?: ErrorObject[];
+      validator?: ValidateFunction;
+      ajv?: Ajv;
+      refParserOptions?: RefParser.Options;
     };
-    // TODO: should we type these?    
+    config?: any;
     renderers?: JsonFormsRendererRegistryEntry[];
     cells?: JsonFormsCellRendererRegistryEntry[];
+    i18n?: JsonFormsLocaleState;
     // allow additional state for JSON Forms
     [additionalState: string]: any;
   };
@@ -48,6 +52,10 @@ The `errors` property stores the current errors.
 Under the hood, JSON Forms uses ajv to validate the data against the schema, 
 hence the ValidationFunction and ErrorObject types are from ajv.
 
+## `config`
+
+Allows to set global configuration options.
+
 ## `renderers`
 
 The renderers property stores all available renderers that are used by JSON Forms when rendering. 
@@ -62,4 +70,8 @@ either be used by a regular control or by a table, where it is used within a cal
 
 If you contribute custom renderers/cells, some of them might need to some additional state not covered by JSON Forms. 
 For that purpose the `additionalState` allows any additional state to be passed in via an index property.
+
+## `i18n`
+
+Allows to define translations for the rendered form. 
 
