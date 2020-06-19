@@ -465,9 +465,8 @@ export const mapStateToEnumControlProps = (
 ): StatePropsOfControl & OwnPropsOfEnum => {
   const props: StatePropsOfControl = mapStateToControlProps(state, ownProps);
   const options: EnumOption[] =
-    ownProps.options !== undefined
-      ? ownProps.options :
-      props.schema.enum?.map(enumToEnumOptionMapper) || 
+      ownProps.options ||
+      props.schema.enum?.map(enumToEnumOptionMapper) ||
       props.schema.const && [enumToEnumOptionMapper(props.schema.const)];
   return {
     ...props,
@@ -487,11 +486,11 @@ export const mapStateToOneOfEnumControlProps = (
 ): StatePropsOfControl & OwnPropsOfEnum => {
   const props: StatePropsOfControl = mapStateToControlProps(state, ownProps);
   const options: EnumOption[] =
-    ownProps.options !== undefined
-      ? ownProps.options
-      : (props.schema.oneOf as JsonSchema[])?.
-        map(e => ({value: e.const,
-          label: e.title || typeof e.const === 'string' ? e.const : JSON.stringify(e.const)}));
+    ownProps.options ||
+    (props.schema.oneOf as JsonSchema[])?.map(e => ({
+      value: e.const,
+      label: e.title || typeof e.const === 'string' ? e.const : JSON.stringify(e.const)
+    }));
   return {
     ...props,
     options
