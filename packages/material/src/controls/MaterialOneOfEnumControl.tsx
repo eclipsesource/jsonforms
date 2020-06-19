@@ -1,7 +1,7 @@
 /*
   The MIT License
 
-  Copyright (c) 2017-2019 EclipseSource Munich
+  Copyright (c) 2018-2020 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,43 +24,26 @@
 */
 import React from 'react';
 import {
-  EnumCellProps,
-  isEnumControl,
+  ControlProps,
+  isOneOfEnumControl,
+  OwnPropsOfEnum,
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
-import { withJsonFormsEnumCellProps } from '@jsonforms/react';
-import { withVanillaEnumCellProps } from '../util';
-import { VanillaRendererProps } from '../index';
+import { withJsonFormsOneOfEnumProps } from '@jsonforms/react';
+import { MuiSelect } from '../mui-controls/MuiSelect';
+import { MaterialInputControl } from './MaterialInputControl';
 
-export const EnumCell = (props: EnumCellProps & VanillaRendererProps) => {
-  const { data, className, id, enabled, uischema, path, handleChange, options } = props;
+export const MaterialOneOfEnumControl = (props: ControlProps & OwnPropsOfEnum) => (
+  <MaterialInputControl
+    {...props}
+    input={MuiSelect}
+  />
+);
 
-  return (
-    <select
-      className={className}
-      id={id}
-      disabled={!enabled}
-      autoFocus={uischema.options && uischema.options.focus}
-      value={data || ''}
-      onChange={ev => handleChange(path, ev.target.value)}
-    >
-      {
-        [<option value='' key={'empty'} />]
-          .concat(
-            options.map(optionValue =>
-              (
-                <option value={optionValue.value} label={optionValue.label} key={optionValue.value}/>
-              )
-            )
-          )}
-    </select>
-  );
-};
-/**
- * Default tester for enum controls.
- * @type {RankedTester}
- */
-export const enumCellTester: RankedTester = rankWith(2, isEnumControl);
+export const materialOneOfEnumControlTester: RankedTester = rankWith(
+  10,
+  isOneOfEnumControl
+);
 
-export default withJsonFormsEnumCellProps(withVanillaEnumCellProps(EnumCell));
+export default withJsonFormsOneOfEnumProps(MaterialOneOfEnumControl);

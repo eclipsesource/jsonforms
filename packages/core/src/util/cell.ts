@@ -34,7 +34,12 @@ import {
   Resolve,
   StatePropsOfScopedRenderer
 } from '.';
-import { DispatchPropsOfControl, mapDispatchToControlProps } from './renderer';
+import {
+  DispatchPropsOfControl,
+  EnumOption,
+  enumToEnumOptionMapper,
+  mapDispatchToControlProps,
+} from './renderer';
 import { JsonFormsState } from '../store';
 import { AnyAction, Dispatch } from 'redux';
 import { JsonFormsCellRendererRegistryEntry } from '../reducers/cells';
@@ -157,8 +162,10 @@ export const defaultMapStateToEnumCellProps = (
   ownProps: OwnPropsOfEnumCell
 ): StatePropsOfEnumCell => {
   const props: StatePropsOfCell = mapStateToCellProps(state, ownProps);
-  const options =
-    ownProps.options !== undefined ? ownProps.options : props.schema.enum;
+  const options: EnumOption[] =
+    ownProps.options ||
+    props.schema.enum?.map(enumToEnumOptionMapper) ||
+    props.schema.const && [enumToEnumOptionMapper(props.schema.const)];
   return {
     ...props,
     options

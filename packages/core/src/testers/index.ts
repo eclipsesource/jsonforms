@@ -306,6 +306,19 @@ export const isEnumControl = and(
 
 /**
  * Tests whether the given UI schema is of type Control and if the schema
+ * has an enum based on oneOf.
+ * @type {Tester}
+ */
+export const isOneOfEnumControl = and(
+  uiTypeIs('Control'),
+  schemaMatches(schema =>
+    schema.hasOwnProperty('oneOf') &&
+    (schema.oneOf as JsonSchema[]).every(s => s.const !== undefined)
+  )
+);
+
+/**
+ * Tests whether the given UI schema is of type Control and if the schema
  * is of type integer
  * @type {Tester}
  */

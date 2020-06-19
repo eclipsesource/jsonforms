@@ -58,7 +58,7 @@ test('withJsonFormsEnumProps - constant: should supply control and enum props', 
   expect(mockEnumControlUnwrappedProps.schema).toEqual(schema.properties.name);
   expect(mockEnumControlUnwrappedProps.path).toEqual('name');
   expect(mockEnumControlUnwrappedProps.id).toEqual('#/properties/name');
-  expect(mockEnumControlUnwrappedProps.options).toEqual(['Cambodia']);
+  expect(mockEnumControlUnwrappedProps.options).toEqual([{value: 'Cambodia', label: 'Cambodia'}]);
 });
 
 test('withJsonFormsEnumProps - enum: should supply control and enum props', () => {
@@ -99,16 +99,16 @@ test('withJsonFormsEnumProps - enum: should supply control and enum props', () =
       renderers={renderers}
     />
   );
-  const mockEnumControlUnwrappedProps = wrapper.find(MockEnumControlUnwrapped).props()
+  const mockEnumControlUnwrappedProps = wrapper.find(MockEnumControlUnwrapped).props();
   expect(mockEnumControlUnwrappedProps.uischema).toEqual(uischema);
   expect(mockEnumControlUnwrappedProps.schema).toEqual(schema.properties.color);
   expect(mockEnumControlUnwrappedProps.path).toEqual('color');
   expect(mockEnumControlUnwrappedProps.id).toEqual('#/properties/color');
   expect(mockEnumControlUnwrappedProps.options).toEqual([
-    'red',
-    'amber',
-    'green',
-    null
+    {value: 'red', label: 'red'},
+    {value: 'amber', label: 'amber'},
+    {value: 'green', label: 'green'},
+    {value: null, label: 'null'}
   ]);
 });
 
@@ -149,7 +149,7 @@ test('withJsonFormsEnumCellProps - constant: should supply control and enum prop
 
   expect(mockEnumControlUnwrappedProps.uischema).toEqual(uischema);
   expect(mockEnumControlUnwrappedProps.schema).toEqual(schema);
-  expect(mockEnumControlUnwrappedProps.options).toEqual(['Cambodia']);
+  expect(mockEnumControlUnwrappedProps.options).toEqual([{label: 'Cambodia', value: 'Cambodia'}]);
 });
 
 test('withJsonFormsEnumCellProps - enum: should supply control and enum props', () => {
@@ -188,9 +188,9 @@ test('withJsonFormsEnumCellProps - enum: should supply control and enum props', 
   expect(mockEnumControlUnwrappedProps.uischema).toEqual(uischema);
   expect(mockEnumControlUnwrappedProps.schema).toEqual(schema);
   expect(mockEnumControlUnwrappedProps.options).toEqual([
-    'red',
-    'amber',
-    'green',
-    null
+    {value: 'red', label: 'red'},
+    {value: 'amber', label: 'amber'},
+    {value: 'green', label: 'green'},
+    {value: null, label: 'null'}
   ]);
 });
