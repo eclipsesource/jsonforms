@@ -489,7 +489,7 @@ export const mapStateToOneOfEnumControlProps = (
     ownProps.options ||
     (props.schema.oneOf as JsonSchema[])?.map(e => ({
       value: e.const,
-      label: e.title || typeof e.const === 'string' ? e.const : JSON.stringify(e.const)
+      label: e.title || (typeof e.const === 'string' ? e.const : JSON.stringify(e.const))
     }));
   return {
     ...props,
