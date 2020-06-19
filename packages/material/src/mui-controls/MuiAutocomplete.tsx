@@ -32,7 +32,7 @@ import merge from 'lodash/merge';
 
 export interface WithOptionLabel {
     getOptionLabel?(option: EnumOption) : string;
-    renderOptionLabel?(option: EnumOption, state: AutocompleteRenderOptionState): ReactNode;
+    renderOption?(option: EnumOption, state: AutocompleteRenderOptionState): ReactNode;
 }
 
 export const MuiAutocomplete = React.memo((props: EnumCellProps & WithClassname & WithOptionLabel) => {
@@ -47,12 +47,12 @@ export const MuiAutocomplete = React.memo((props: EnumCellProps & WithClassname 
     options,
     config,
     getOptionLabel,
-    renderOptionLabel
+    renderOption
   } = props;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
-  const [inputValue, setInputValue] = React.useState('');
+  const [inputValue, setInputValue] = React.useState(data);
 
-  const findOption = data ? options.find(o => o.value === data) : null;
+  const findOption = options.find(o => o.value === data);
   return (
     <Autocomplete
       className={className}
@@ -60,22 +60,23 @@ export const MuiAutocomplete = React.memo((props: EnumCellProps & WithClassname 
       disabled={!enabled}
       value={findOption}
       onChange={(_event: any, newValue: EnumOption | null) => {
-        handleChange(path, newValue ? newValue.value : undefined);
+        handleChange(path, newValue?.value);
       }}
       inputValue={inputValue}
       onInputChange={(_event, newInputValue) => {
         setInputValue(newInputValue);
       }}
-      autoSelect={true}
-      autoComplete={true}
-      fullWidth={true}
+      autoHighlight
+      autoSelect
+      autoComplete
+      fullWidth
       options={options}
-      getOptionLabel={getOptionLabel ? getOptionLabel : option => option?.label}
+      getOptionLabel={getOptionLabel || (option => option?.label)}
       style={{ marginTop: 16 }}
       renderInput={params => (
           <Input style={{ width: '100%' }} type='text' inputProps={params.inputProps} inputRef={params.InputProps.ref} autoFocus={appliedUiSchemaOptions.focus}/>
       )}
-      renderOption={renderOptionLabel || getOptionLabel}
+      renderOption={renderOption}
     />
   );
 }, areEqual);

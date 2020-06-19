@@ -1,7 +1,7 @@
 /*
   The MIT License
 
-  Copyright (c) 2018-2019 EclipseSource Munich
+  Copyright (c) 2018-2020 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -31,15 +31,21 @@ import {
   rankWith,
 } from '@jsonforms/core';
 import { withJsonFormsEnumProps } from '@jsonforms/react';
+import { MuiAutocomplete } from '../mui-controls/MuiAutocomplete';
 import { MuiSelect } from '../mui-controls/MuiSelect';
 import { MaterialInputControl } from './MaterialInputControl';
+import merge from 'lodash/merge';
 
-export const MaterialEnumControl = (props: ControlProps & OwnPropsOfEnum) => (
-  <MaterialInputControl
-    {...props}
-    input={MuiSelect}
-  />
-);
+export const MaterialEnumControl = (props: ControlProps & OwnPropsOfEnum) => {
+  const {config, uischema} = props;
+  const appliedUiSchemaOptions = merge({}, config, uischema.options);
+  return (
+    <MaterialInputControl
+      {...props}
+      input={appliedUiSchemaOptions.autocomplete === false ? MuiSelect : MuiAutocomplete}
+    />
+  );
+};
 
 export const materialEnumControlTester: RankedTester = rankWith(
   2,
