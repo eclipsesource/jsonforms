@@ -3,6 +3,8 @@ name: React Integration
 route: /docs/react
 ---
 
+import Note from './components/Note'
+
 # React Integration
 
 As of version 2.3.0, JSON Forms supports two basic usage patterns: one where the global state is stored within Redux 
@@ -13,25 +15,23 @@ and one without Redux. We'll a have a look at both in this section.
 
 ### Usage
 
-The `JsonForms` component expects four parameters: `schema`, `uischema`, `data` and `renderers`:
+The `JsonForms` component takes the following props:
 
 * `schema`: the JSON schema that describes the underlying data
-* `uischema`: the UI schema that describes how the form should be rendered. You can generate 
-  a UI schema with `Generate.uiSchema` in case you don't have one available
+* `uischema`: the UI schema that describes how the form should be rendered. If none is provided a default layout is used
 * `data`: The data to be rendered
 * `renderers`: The renderers that should be used for rendering the form
 * `cells`: The cells that should be used for rendering the form
+* `onChange`: A callback which is called on each data change, containing the updated data and the validation result.
+    Please make sure to not create a "data cycle", the updated data doesn't need to be provided back to JSON Forms.
+* `config`: The default options element for all ui schema elements
 
 ```
 <JsonForms
   schema={schema}
   uischema={uischema}
   data={data}
-  renderers={[
-    ...materialRenderers,
-    //register custom renderer
-    { tester: yourTester, renderer: yourRenderer }
-  ]}
+  renderers={materialRenderers}
   cells={materialCells}
   onChange={({ errors, data }) => setData(data)}
 />
@@ -41,10 +41,10 @@ The `JsonForms` component expects four parameters: `schema`, `uischema`, `data` 
 
 <Note 
   title="ATTENTION" 
-  body="Deprecated: Please note that future versions, this method will be removed!"
+  body="Deprecated: Please note that we are removing the Redux integration in a future version. To ease migration we recommend using the standalone component."
 />
 
-When using Redux, you need to wrap the entry point with a new component called `JsonFromsReduxContext`. The component used for dispatching is now called `JsonFormsDispatch`.
+When using Redux, you need to wrap the entry point with a new component called `JsonFormsReduxContext`. The component used for dispatching is now called `JsonFormsDispatch`.
 The typical usage in this case is as follows:
 
 ```javascript
