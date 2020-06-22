@@ -23,6 +23,6 @@
   THE SOFTWARE.
 */
 import { renderExample } from '../../example/src/index';
-import { materialCells, materialRenderers } from '../src';
+import { extendedMaterialRenderers, materialCells } from '../src';
 
-renderExample(materialRenderers, materialCells);
+renderExample(extendedMaterialRenderers, materialCells);
