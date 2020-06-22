@@ -17,11 +17,14 @@ export interface JsonFormsState {
   jsonforms: {
     core: {
       data: any;
-      schema?: JsonSchema;
-      uischema?: UISchemaElement;
-      validation?: ValidationState,
+      schema: JsonSchema;
+      uischema: UISchemaElement;
+      errors?: ErrorObject[];
+      validator?: ValidateFunction;
+      ajv?: Ajv;
+      refParserOptions?: RefParser.Options;
     };
-    // TODO: should we type these?    
+    config?: any;
     renderers?: JsonFormsRendererRegistryEntry[];
     cells?: JsonFormsCellRendererRegistryEntry[];
     // allow additional state for JSON Forms
@@ -36,17 +39,15 @@ Let's inspect each of these state properties:
 The core substate stores the `data`, which represents the data to be rendered, 
 the `schema` which describes the structure of the `data` and the `uischema`, which describes how to render the `data`.
 
-The `validation` substate stores any validation errors the data currently has with respect to the schema. 
-Validation is performed via [ajv](https://github.com/epoberezkin/ajv). The `ValidationState` shape hence looks like this:
-
-```javascript
-error: Ajv.ErrorObject[];
-validator: Ajv.ValidateFunction;
-```
-
 The `errors` property stores the current errors. 
 Under the hood, JSON Forms uses ajv to validate the data against the schema, 
-hence the ValidationFunction and ErrorObject types are from ajv.
+hence the `ValidateFunction` and `ErrorObject` types are from ajv.
+
+In `refParserOptions` contains the configuration for the resolver library.
+
+## `config`
+
+The default "options" object for all UI schema elements.
 
 ## `renderers`
 
@@ -58,8 +59,10 @@ If you want to know more about renderers, see the section on [Custom Renderers](
 Cells are like renderers but only represent the data to be displayed and nothing else. 
 This is not necessarily the case with Renderers stored within renderers, as such renderers may also display a label or any validation errors.
 Fields are more universal in the sense that they should not make any assumptions about the environment they are embedded in, e.g. a field may
-either be used by a regular control or by a table, where it is used within a call. Most controls for primitive datatypes in the default renderer sets of JSON Forms are implemented with cells.
+either be used by a regular control or by a table, where it is used within a call.
+
+In React/Material cells are only used for the table control.
+In React/Vanilla cells are used by the table and by the regular renderers.
 
 If you contribute custom renderers/cells, some of them might need to some additional state not covered by JSON Forms. 
 For that purpose the `additionalState` allows any additional state to be passed in via an index property.
-

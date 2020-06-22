@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link} from "docz"
+import { Link } from "docz"
 import withStyles from "@material-ui/core/styles/withStyles";
 import corePackageJson from '@jsonforms/core/package'
 import globalStyles from '../styles/global.module.css';
@@ -11,7 +11,7 @@ const additionalStyles = () => ({
   }
 });
 
-const Footer = ({classes}) => {
+const Footer = ({ classes }) => {
   const linkClasses = [classes.link, globalStyles.link].join(' ');
   return (
     <footer className={styles.footer}>
@@ -20,7 +20,7 @@ const Footer = ({classes}) => {
           Version {corePackageJson.version}
         </span>
         <span className={styles.footer__version_and_copyright_copyright}>
-          © EclipseSource 2019
+          © EclipseSource 2020
         </span>
       </div>
       <div className={styles.footer__links}>
