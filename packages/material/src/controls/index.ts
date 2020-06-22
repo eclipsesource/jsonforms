@@ -73,16 +73,6 @@ import MaterialOneOfEnumControl, {
   MaterialOneOfEnumControl as MaterialOneOfEnumControlUnwrapped
 } from './MaterialOneOfEnumControl';
 
-import MaterialAutocompleteEnumControl, {
-  materialAutocompleteEnumControlTester,
-  MaterialAutocompleteEnumControl as MaterialAutocompleteEnumControlUnwrapped
-} from './MaterialAutocompleteEnumControl';
-
-import MaterialAutocompleteOneOfEnumControl, {
-  materialAutocompleteOneOfEnumControlTester,
-  MaterialAutocompleteOneOfEnumControl as MaterialAutocompleteOneOfEnumControlUnwrapped
-} from './MaterialAutocompleteOneOfEnumControl';
-
 export const Unwrapped = {
   MaterialBooleanControl: MaterialBooleanControlUnwrapped,
   MaterialEnumControl: MaterialEnumControlUnwrapped,
@@ -96,8 +86,6 @@ export const Unwrapped = {
   MaterialTextControl: MaterialTextControlUnwrapped,
   MaterialAnyOfStringOrEnumControl: MaterialAnyOfStringOrEnumControlUnwrapped,
   MaterialOneOfEnumControl: MaterialOneOfEnumControlUnwrapped,
-  MaterialAutocompleteEnumControl: MaterialAutocompleteEnumControlUnwrapped,
-  MaterialAutocompleteOneOfEnumControl: MaterialAutocompleteOneOfEnumControlUnwrapped,
 };
 
 export {
@@ -124,9 +112,5 @@ export {
   MaterialAnyOfStringOrEnumControl,
   materialAnyOfStringOrEnumControlTester,
   MaterialOneOfEnumControl,
-  materialOneOfEnumControlTester,
-  MaterialAutocompleteEnumControl,
-  materialAutocompleteEnumControlTester,
-  MaterialAutocompleteOneOfEnumControl,
-  materialAutocompleteOneOfEnumControlTester,
+  materialOneOfEnumControlTester
 };

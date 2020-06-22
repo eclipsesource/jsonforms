@@ -47,10 +47,6 @@ import {
 import {
   MaterialAnyOfStringOrEnumControl,
   materialAnyOfStringOrEnumControlTester,
-  MaterialAutocompleteEnumControl,
-  materialAutocompleteEnumControlTester,
-  MaterialAutocompleteOneOfEnumControl,
-  materialAutocompleteOneOfEnumControlTester,
   MaterialBooleanControl,
   materialBooleanControlTester,
   MaterialDateControl,
@@ -165,15 +161,6 @@ export const materialRenderers: JsonFormsRendererRegistryEntry[] = [
     tester: materialAnyOfStringOrEnumControlTester,
     renderer: MaterialAnyOfStringOrEnumControl
   }
-];
-
-export const extendedMaterialRenderers: JsonFormsRendererRegistryEntry[] = [
-  {
-    tester: materialAutocompleteOneOfEnumControlTester,
-    renderer: MaterialAutocompleteOneOfEnumControl
-  },
-  { tester: materialAutocompleteEnumControlTester, renderer: MaterialAutocompleteEnumControl },
-  ...materialRenderers
 ];
 
 export const materialCells: JsonFormsCellRendererRegistryEntry[] = [
