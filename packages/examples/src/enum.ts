@@ -1,7 +1,7 @@
 /*
   The MIT License
   
-  Copyright (c) 2017-2019 EclipseSource Munich
+  Copyright (c) 2017-2020 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
   
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,12 +23,15 @@
   THE SOFTWARE.
 */
 import { registerExamples } from './register';
-import { UISchemaElement } from '@jsonforms/core';
 
 export const schema = {
   type: 'object',
   properties: {
     plainEnum: {
+      type: 'string',
+      enum: ['foo', 'bar']
+    },
+    plainEnumSet: {
       type: 'string',
       enum: ['foo', 'bar']
     },
@@ -38,13 +41,80 @@ export const schema = {
             {const: 'foo', title: 'Foo'},
             {const: 'bar', title: 'Bar'}
         ]
-    }
+    },
+    oneOfEnumSet: {
+      type: 'string',
+      oneOf: [
+          {const: 'foo', title: 'Foo'},
+          {const: 'bar', title: 'Bar'}
+      ]
+  }
   }
 };
 
-export const uischema: UISchemaElement = undefined;
+export const uischema = {
+  type: 'VerticalLayout',
+  elements: [
+    {
+      type: 'Group',
+      label: 'Enums',
+      elements: [
+        {
+          type: 'Control',
+          scope: '#/properties/plainEnum'
+        },
+        {
+          type: 'Control',
+          scope: '#/properties/plainEnumSet'
+        },
+        {
+          type: 'Control',
+          scope: '#/properties/plainEnum',
+          options: {
+            autocomplete: false
+          }
+        },
+        {
+          type: 'Control',
+          scope: '#/properties/plainEnumSet',
+          options: {
+            autocomplete: false
+          }
+        },
+      ]
+    },
+    {
+      type: 'Group',
+      label: 'One of Enums',
+      elements: [
+        {
+          type: 'Control',
+          scope: '#/properties/oneOfEnum'
+        },
+        {
+          type: 'Control',
+          scope: '#/properties/oneOfEnumSet'
+        },
+        {
+          type: 'Control',
+          scope: '#/properties/oneOfEnum',
+          options: {
+            autocomplete: false
+          }
+        },
+        {
+          type: 'Control',
+          scope: '#/properties/oneOfEnumSet',
+          options: {
+            autocomplete: false
+          }
+        },
+      ]
+    }
+  ]
+};
 
-export const data = {};
+export const data = {plainEnumSet: 'foo', oneOfEnumSet: 'bar'};
 
 registerExamples([
   {

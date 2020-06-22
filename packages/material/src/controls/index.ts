@@ -112,5 +112,5 @@ export {
   MaterialAnyOfStringOrEnumControl,
   materialAnyOfStringOrEnumControlTester,
   MaterialOneOfEnumControl,
-  materialOneOfEnumControlTester,
+  materialOneOfEnumControlTester
 };

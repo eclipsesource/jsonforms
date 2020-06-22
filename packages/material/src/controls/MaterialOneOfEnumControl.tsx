@@ -35,14 +35,11 @@ import { MuiSelect } from '../mui-controls/MuiSelect';
 import { MaterialInputControl } from './MaterialInputControl';
 
 export const MaterialOneOfEnumControl = (props: ControlProps & OwnPropsOfEnum) => (
-  <MaterialInputControl
-    {...props}
-    input={MuiSelect}
-  />
+    <MaterialInputControl {...props} input={MuiSelect} />
 );
 
 export const materialOneOfEnumControlTester: RankedTester = rankWith(
-  10,
+  5,
   isOneOfEnumControl
 );
 

@@ -68,7 +68,7 @@ import {
   MaterialSliderControl,
   materialSliderControlTester,
   MaterialTextControl,
-  materialTextControlTester
+  materialTextControlTester,
 } from './controls';
 import {
   MaterialArrayLayout,
