@@ -50,9 +50,9 @@ export const MuiAutocomplete = React.memo((props: EnumCellProps & WithClassname 
     renderOption
   } = props;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
-  const [inputValue, setInputValue] = React.useState(data);
+  const [inputValue, setInputValue] = React.useState(data ?? '');
 
-  const findOption = options.find(o => o.value === data);
+  const findOption = options.find(o => o.value === data) ?? null;
   return (
     <Autocomplete
       className={className}
