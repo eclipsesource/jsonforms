@@ -31,12 +31,12 @@ import {
   rankWith,
 } from '@jsonforms/core';
 import { withJsonFormsOneOfEnumProps } from '@jsonforms/react';
-import { MuiAutocomplete } from './MuiAutocomplete';
+import { MuiAutocomplete, WithOptionLabel } from './MuiAutocomplete';
 import { MuiSelect } from '../mui-controls/MuiSelect';
 import { MaterialInputControl } from '../controls/MaterialInputControl';
 import merge from 'lodash/merge';
 
-export const MaterialAutocompleteOneOfEnumControl = (props: ControlProps & OwnPropsOfEnum) => {
+export const MaterialAutocompleteOneOfEnumControl = (props: ControlProps & OwnPropsOfEnum & WithOptionLabel) => {
   const {config, uischema} = props;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
   return (
