@@ -54,12 +54,8 @@ export const uischema = {
       elements: [
         {
           type: 'Control',
-          scope: '#/properties/birthDate'
+          scope: '#/properties/nationality'
         },
-        {
-          type: 'Control',
-          scope: '#/properties/vegetarian'
-        }
       ],
       rule: {
         effect: 'HIDE',
