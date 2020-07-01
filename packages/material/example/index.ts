@@ -25,5 +25,6 @@
 import { renderExample } from '../../example/src/index';
 import { materialCells } from '../src';
 import { extendedMaterialRenderers } from '../src/extended';
+import MyAutocompleteControl, { myAutocompleteTester } from './customAutocomplete';
 
-renderExample(extendedMaterialRenderers, materialCells);
+renderExample([{renderer: MyAutocompleteControl, tester: myAutocompleteTester}, ...extendedMaterialRenderers], materialCells);

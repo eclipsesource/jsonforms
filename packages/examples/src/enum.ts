@@ -39,14 +39,16 @@ export const schema = {
         type: 'string',
         oneOf: [
             {const: 'foo', title: 'Foo'},
-            {const: 'bar', title: 'Bar'}
+            {const: 'bar', title: 'Bar'},
+            {const: 'foobar', title: 'FooBar'}
         ]
     },
     oneOfEnumSet: {
       type: 'string',
       oneOf: [
           {const: 'foo', title: 'Foo'},
-          {const: 'bar', title: 'Bar'}
+          {const: 'bar', title: 'Bar'},
+          {const: 'foobar', title: 'FooBar'}
       ]
   }
   }

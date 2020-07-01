@@ -22,17 +22,19 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React, {ReactNode} from 'react';
+import React, { ReactNode } from 'react';
 import { EnumCellProps, EnumOption, WithClassname } from '@jsonforms/core';
 
 import Input from '@material-ui/core/Input';
 import Autocomplete, { AutocompleteRenderOptionState } from '@material-ui/lab/Autocomplete';
 import { areEqual } from '@jsonforms/react';
 import merge from 'lodash/merge';
+import { FilterOptionsState } from '@material-ui/lab/useAutocomplete';
 
 export interface WithOptionLabel {
     getOptionLabel?(option: EnumOption) : string;
     renderOption?(option: EnumOption, state: AutocompleteRenderOptionState): ReactNode;
+    filterOptions?(options: EnumOption[], state: FilterOptionsState<EnumOption>) : EnumOption[];
 }
 
 export const MuiAutocomplete = React.memo((props: EnumCellProps & WithClassname & WithOptionLabel) => {
@@ -47,7 +49,8 @@ export const MuiAutocomplete = React.memo((props: EnumCellProps & WithClassname 
     options,
     config,
     getOptionLabel,
-    renderOption
+    renderOption,
+    filterOptions
   } = props;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
   const [inputValue, setInputValue] = React.useState(data ?? '');
@@ -77,6 +80,7 @@ export const MuiAutocomplete = React.memo((props: EnumCellProps & WithClassname 
           <Input style={{ width: '100%' }} type='text' inputProps={params.inputProps} inputRef={params.InputProps.ref} autoFocus={appliedUiSchemaOptions.focus}/>
       )}
       renderOption={renderOption}
+      filterOptions={filterOptions}
     />
   );
 }, areEqual);
