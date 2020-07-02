@@ -35,6 +35,7 @@ import * as stringArray from './stringArray';
 import * as categorization from './categorization';
 import * as stepper from './stepper';
 import * as steppershownav from './steppershownav';
+import * as control from './control';
 import * as day1 from './day1';
 import * as day2 from './day2';
 import * as day3 from './day3';
@@ -87,6 +88,7 @@ export {
   categorization,
   stepper,
   steppershownav,
+  control,
   day1,
   day2,
   day3,
