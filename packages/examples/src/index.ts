@@ -35,7 +35,7 @@ import * as stringArray from './stringArray';
 import * as categorization from './categorization';
 import * as stepper from './stepper';
 import * as steppershownav from './steppershownav';
-import * as control from './control';
+import * as controlOptions from './control-options';
 import * as day1 from './day1';
 import * as day2 from './day2';
 import * as day3 from './day3';
@@ -43,7 +43,7 @@ import * as day4 from './day4';
 import * as day5 from './day5';
 import * as day6 from './day6';
 import * as dates from './dates';
-import * as dyanmic from './dynamic';
+import * as dynamic from './dynamic';
 import * as generateSchema from './generate';
 import * as generateUISchema from './generateUI';
 import * as layout from './layout';
@@ -88,7 +88,7 @@ export {
   categorization,
   stepper,
   steppershownav,
-  control,
+  controlOptions,
   day1,
   day2,
   day3,
@@ -102,7 +102,7 @@ export {
   rule,
   ruleInheritance,
   dates,
-  dyanmic,
+  dynamic,
   resolve,
   config,
   text,

@@ -139,7 +139,7 @@ export const extendedSchema = {
       description: 'Hides the "*" symbol, when the field is required',
     }
   },
-  required: ['hideRequiredAsterisk']
+  required: ['hideRequiredAsterisk', 'restrictText']
 };
 
 export const extendedUischema = {
@@ -197,12 +197,45 @@ export const extendedData = {
   restrictText: 'abcde'
 };
 
+const combinedSchema = {
+  ...extendedSchema,
+  properties: {
+    ...schema.properties,
+    ...extendedSchema.properties
+  }
+}
+
+const combinedUiSchema = {
+  type: 'Categorization',
+  elements: [
+    {
+      type: 'Category',
+      label: 'Normal controls',
+      elements: [
+        uischema
+      ]
+    },
+    {
+      type: 'Category',
+      label: 'Configured controls',
+      elements: [
+        extendedUischema
+      ]
+    }
+  ]
+}
+
+const combinedData = {
+  ...data,
+  ...extendedData
+}
+
 registerExamples([
   {
-    name: 'control',
-    label: 'Control',
-    data,
-    schema,
-    uischema
+    name: 'control-options',
+    label: 'Control Options',
+    data: combinedData,
+    schema: combinedSchema,
+    uischema: combinedUiSchema
   }
 ]);
