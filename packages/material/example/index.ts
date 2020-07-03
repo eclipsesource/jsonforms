@@ -25,5 +25,23 @@
 import { renderExample } from '../../example/src/index';
 import { materialCells } from '../src';
 import { extendedMaterialRenderers } from '../src/extended';
+import { ExampleExtension } from './CustomAutocomplete';
+import { ReactExampleDescription } from '../../example/src/util';
 
-renderExample(extendedMaterialRenderers, materialCells);
+const addCustomAutocompleteControl = (examples: ReactExampleDescription[]) => {
+  return examples.map(example => {
+    if(example.name === 'enum'){
+      const adjustedExample = Object.assign({}, example, {
+        customReactExtension: ExampleExtension
+      })
+      return adjustedExample;
+    }
+    return example;
+  });
+};
+
+renderExample(
+  extendedMaterialRenderers,
+  materialCells,
+  addCustomAutocompleteControl
+);

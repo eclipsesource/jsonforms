@@ -115,11 +115,13 @@ const setupStore = (
 export const renderExample = (
   renderers: { tester: RankedTester; renderer: any }[],
   cells: { tester: RankedTester; cell: any }[],
+  enhancer?: (examples: ReactExampleDescription[]) => ReactExampleDescription[],
   ...additionalStoreParams: AdditionalStoreParams[]
 ) => {
   const exampleData = enhanceExample(getExamples());
+  const enhancedExampleData = enhancer ? enhancer(exampleData) : exampleData;
   const store = setupStore(
-    exampleData,
+    enhancedExampleData,
     cells,
     renderers,
     additionalStoreParams
