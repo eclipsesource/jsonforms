@@ -1,15 +1,10 @@
-sudo: required
-
 addons:
   chrome: stable
 
 language: node_js
 
 node_js:
-  - '9'
-
-before_install:
-  - dpkg --compare-versions `npm -v` ge 6.4.1 || npm i -g npm@^6.4.1
+  - '12'
 
 install:
   - npm ci
