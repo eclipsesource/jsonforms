@@ -36,12 +36,19 @@ export const schema = {
     kindOfDead: {
       type: 'string',
       enum: ['Zombie', 'Vampire', 'Ghoul']
+    },
+    vegetables: {
+      type: 'boolean'
+    },
+    kindOfVegetables: {
+      type: 'string',
+      enum: ['All', 'Some', 'Only potato']
     }
   }
 };
 
 export const uischema = {
-  type: 'HorizontalLayout',
+  type: 'VerticalLayout',
   elements: [
     {
       type: 'Control',
@@ -66,6 +73,25 @@ export const uischema = {
           }
         }
       }
+    },
+    {
+      type: 'Control',
+      label: 'Eats vegetables?',
+      scope: '#/properties/vegetables'
+    },
+    {
+      type: 'Control',
+      label: 'Kind of vegetables',
+      scope: '#/properties/kindOfVegetables',
+      rule: {
+        effect: 'HIDE',
+        condition: {
+          scope: '#/properties/vegetables',
+          schema: {
+            const: false
+          }
+        }
+      }
     }
   ]
 };
@@ -73,7 +99,9 @@ export const uischema = {
 export const data = {
   name: 'John Doe',
   alive: true,
-  kindOfDead: 'Zombie'
+  kindOfDead: 'Zombie',
+  vegetables: true,
+  kindOfVegetables: 'Only potatos'
 };
 
 registerExamples([
