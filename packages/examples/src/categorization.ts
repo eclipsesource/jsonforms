@@ -109,8 +109,17 @@ export const uischema = {
           ]
         },
         {
-          type: 'Control',
-          scope: '#/properties/birthDate'
+          type: 'HorizontalLayout',
+          elements: [
+            {
+              type: 'Control',
+              scope: '#/properties/birthDate'
+            },
+            {
+              type: 'Control',
+              scope: '#/properties/nationality'
+            }
+          ]
         },
         {
           type: 'Control',
