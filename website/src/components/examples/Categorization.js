@@ -7,12 +7,7 @@ import { createJsonFormsStore } from '../../common/store';
 
 const CategorizationExample = () => {
   const store = createJsonFormsStore({
-    data: {
-      name: 'Max Power',
-      vegetarian: true,
-      birthDate: '1956-05-12',
-      nationality: 'US'
-    },
+    data: categorization.data,
     schema: categorization.schema,
     uischema: categorization.uischema
   });
