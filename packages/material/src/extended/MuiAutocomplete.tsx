@@ -77,7 +77,14 @@ export const MuiAutocomplete = React.memo((props: EnumCellProps & WithClassname 
       getOptionLabel={getOptionLabel || (option => option?.label)}
       style={{ marginTop: 16 }}
       renderInput={params => (
-          <Input style={{ width: '100%' }} type='text' inputProps={params.inputProps} inputRef={params.InputProps.ref} autoFocus={appliedUiSchemaOptions.focus}/>
+        <Input
+          style={{ width: '100%' }}
+          type='text'
+          inputProps={params.inputProps}
+          inputRef={params.InputProps.ref}
+          autoFocus={appliedUiSchemaOptions.focus}
+          disabled={!enabled}
+        />
       )}
       renderOption={renderOption}
       filterOptions={filterOptions}
