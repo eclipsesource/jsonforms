@@ -30,18 +30,25 @@ export const schema = {
     name: {
       type: 'string'
     },
-    alive: {
+    dead: {
       type: 'boolean'
     },
     kindOfDead: {
       type: 'string',
       enum: ['Zombie', 'Vampire', 'Ghoul']
+    },
+    vegetables: {
+      type: 'boolean'
+    },
+    kindOfVegetables: {
+      type: 'string',
+      enum: ['All', 'Some', 'Only potatoes']
     }
   }
 };
 
 export const uischema = {
-  type: 'HorizontalLayout',
+  type: 'VerticalLayout',
   elements: [
     {
       type: 'Control',
@@ -49,31 +56,60 @@ export const uischema = {
       scope: '#/properties/name'
     },
     {
-      type: 'Control',
-      label: 'Is Alive?',
-      scope: '#/properties/alive'
-    },
-    {
-      type: 'Control',
-      label: 'Kind of dead',
-      scope: '#/properties/kindOfDead',
-      rule: {
-        effect: 'DISABLE',
-        condition: {
-          scope: '#/properties/alive',
-          schema: {
-            const: true
+      type: 'Group',
+      elements: [
+        {
+          type: 'Control',
+          label: 'Is Dead?',
+          scope: '#/properties/dead'
+        },
+        {
+          type: 'Control',
+          label: 'Kind of dead',
+          scope: '#/properties/kindOfDead',
+          rule: {
+            effect: 'ENABLE',
+            condition: {
+              scope: '#/properties/dead',
+              schema: {
+                const: true
+              }
+            }
           }
         }
-      }
+      ]
+    },
+    {
+      type: 'Group',
+      elements: [
+        {
+          type: 'Control',
+          label: 'Eats vegetables?',
+          scope: '#/properties/vegetables'
+        },
+        {
+          type: 'Control',
+          label: 'Kind of vegetables',
+          scope: '#/properties/kindOfVegetables',
+          rule: {
+            effect: 'HIDE',
+            condition: {
+              scope: '#/properties/vegetables',
+              schema: {
+                const: false
+              }
+            }
+          }
+        }
+      ]
     }
   ]
 };
 
 export const data = {
   name: 'John Doe',
-  alive: true,
-  kindOfDead: 'Zombie'
+  dead: false,
+  vegetables: false,
 };
 
 registerExamples([
