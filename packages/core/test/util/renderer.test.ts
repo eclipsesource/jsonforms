@@ -53,6 +53,7 @@ import {
 import { jsonformsReducer } from '../../src/reducers';
 import { ErrorObject } from 'ajv';
 import { combineReducers, createStore, Store } from 'redux';
+import { setValidationMode } from '../../lib';
 
 const middlewares: Redux.Middleware[] = [];
 const mockStore = configureStore<JsonFormsState>(middlewares);
@@ -409,6 +410,44 @@ test('mapStateToControlProps - id', t => {
   };
   const props = mapStateToControlProps(createState(coreUISchema), ownProps);
   t.is(props.id, '#/properties/firstName');
+});
+
+test('mapStateToControlProps - hide errors in hide validation mode', t => {
+  const schema = {
+    type: 'object',
+    properties: {
+      animal: {
+        type: 'string'
+      }
+    }
+  };
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/animal'
+  };
+  const initCoreState = coreReducer(undefined, init({ animal: 100 }, schema, uischema));
+  t.is(initCoreState.errors.length, 1);
+
+  const ownProps = {
+    uischema
+  };
+  const props = mapStateToControlProps(
+    { jsonforms: { core: initCoreState } },
+    ownProps
+  );
+  t.not(props.errors.length, 0);
+
+  const hideErrorsState = coreReducer(
+    initCoreState,
+    setValidationMode('ValidateAndHide')
+  );
+  t.is(hideErrorsState.errors.length, 1);
+
+  const hideErrorsProps = mapStateToControlProps(
+    { jsonforms: { core: hideErrorsState } },
+    ownProps
+  );
+  t.is(hideErrorsProps.errors, '');
 });
 
 test('mapDispatchToControlProps', t => {

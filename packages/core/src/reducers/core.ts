@@ -39,7 +39,8 @@ import {
   SET_UISCHEMA,
   UPDATE_DATA,
   UPDATE_ERRORS,
-  CoreActions
+  CoreActions,
+  SET_VALIDATION_MODE
 } from '../actions';
 import { createAjv } from '../util/validator';
 import { JsonSchema, UISchemaElement } from '..';
@@ -53,14 +54,20 @@ const validate = (validator: ValidateFunction, data: any): ErrorObject[] => {
   return validator.errors;
 };
 
-export const sanitizeErrors = (validator: ValidateFunction, data: any) =>
-  validate(validator, data).map(error => {
+export const sanitizeErrors = (validator: ValidateFunction, data: any) => {
+  if (validator === alwaysValid) {
+    return [];
+  }
+  return validate(validator, data).map(error => {
     error.dataPath = error.dataPath.replace(/\//g, '.').substr(1);
 
     return error;
   });
+};
 
 const alwaysValid: ValidateFunction = () => true;
+
+export type ValidationMode = 'ValidateAndShow' | 'ValidateAndHide' | 'NoValidation';
 
 export interface JsonFormsCore {
   data: any;
@@ -70,6 +77,7 @@ export interface JsonFormsCore {
   validator?: ValidateFunction;
   ajv?: Ajv;
   refParserOptions?: RefParser.Options;
+  validationMode?: ValidationMode;
 }
 
 const initState: JsonFormsCore = {
@@ -79,7 +87,8 @@ const initState: JsonFormsCore = {
   errors: [],
   validator: alwaysValid,
   ajv: undefined,
-  refParserOptions: undefined
+  refParserOptions: undefined,
+  validationMode: 'ValidateAndShow'
 };
 
 const getOrCreateAjv = (state: JsonFormsCore, action?: InitAction): Ajv => {
@@ -127,6 +136,23 @@ const hasAjvOption = (option: any): option is InitActionOptions => {
   return false;
 };
 
+const getValidationMode = (
+  state: JsonFormsCore,
+  action?: InitAction
+): ValidationMode => {
+  if (action && hasValidationModeOption(action.options)) {
+    return action.options.validationMode;
+  }
+  return state.validationMode;
+};
+
+const hasValidationModeOption = (option: any): option is InitActionOptions => {
+  if (option) {
+    return option.validationMode !== undefined;
+  }
+  return false;
+};
+
 export const coreReducer = (
   state: JsonFormsCore = initState,
   action: CoreActions
@@ -134,9 +160,11 @@ export const coreReducer = (
   switch (action.type) {
     case INIT: {
       const thisAjv = getOrCreateAjv(state, action);
-      const v = thisAjv.compile(action.schema);
-      const e = sanitizeErrors(v, action.data);
       const o = getRefParserOptions(state, action);
+
+      const validationMode = getValidationMode(state, action);
+      const v = validationMode === 'NoValidation' ? alwaysValid : thisAjv.compile(action.schema);
+      const e = sanitizeErrors(v, action.data);
 
       return {
         ...state,
@@ -146,12 +174,13 @@ export const coreReducer = (
         errors: e,
         validator: v,
         ajv: thisAjv,
-        refParserOptions: o
+        refParserOptions: o,
+        validationMode
       };
     }
     case SET_AJV: {
       const currentAjv = action.ajv;
-      const validator = currentAjv.compile(state.schema);
+      const validator = state.validationMode === 'NoValidation' ? alwaysValid : currentAjv.compile(state.schema);
       const errors = sanitizeErrors(validator, state.data);
       return {
         ...state,
@@ -160,8 +189,8 @@ export const coreReducer = (
       };
     }
     case SET_SCHEMA: {
-      const v =
-        action.schema && state.ajv
+      const needsNewValidator = action.schema && state.ajv && state.validationMode !== 'NoValidation';
+      const v = needsNewValidator
           ? state.ajv.compile(action.schema)
           : state.validator;
       return {
@@ -209,6 +238,34 @@ export const coreReducer = (
         errors: action.errors
       };
     }
+    case SET_VALIDATION_MODE: {
+      if (state.validationMode === action.validationMode) {
+        return state;
+      }
+      if (action.validationMode === 'NoValidation') {
+        const errors = sanitizeErrors(alwaysValid, state.data);
+        return {
+          ...state,
+          validator: alwaysValid,
+          errors,
+          validationMode: action.validationMode
+        };
+      }
+      if (state.validationMode === 'NoValidation') {
+        const validator = state.ajv.compile(state.schema);
+        const errors = sanitizeErrors(validator, state.data);
+        return {
+          ...state,
+          validator,
+          errors,
+          validationMode: action.validationMode
+        };
+      }
+      return {
+        ...state,
+        validationMode: action.validationMode
+      };
+    }
     default:
       return state;
   }
@@ -242,7 +299,7 @@ const getErrorsAt = (
   schema: JsonSchema,
   matchPath: (path: string) => boolean
 ) => (state: JsonFormsCore): ErrorObject[] =>
-  errorsAt(instancePath, schema, matchPath)(state.errors);
+  errorsAt(instancePath, schema, matchPath)(state.validationMode === 'ValidateAndHide' ? [] : state.errors);
 
 export const errorAt = (instancePath: string, schema: JsonSchema) =>
   getErrorsAt(instancePath, schema, path => path === instancePath);

@@ -12,7 +12,9 @@ import {
   SetConfigAction,
   UISchemaActions,
   UISchemaElement,
-  uischemaRegistryReducer
+  uischemaRegistryReducer,
+  ValidationMode,
+  Actions
 } from '@jsonforms/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { JsonFormsBaseRenderer } from './base.renderer';
@@ -60,21 +62,27 @@ export class JsonFormsAngularService {
         this.updateSubject();
     }
 
-  updateLocale<T extends LocaleActions>(localeAction: T): T {
+    updateValidationMode(validationMode: ValidationMode): void {
+        const coreState = coreReducer(this._state.core, Actions.setValidationMode(validationMode));
+        this._state.core = coreState;
+        this.updateSubject();
+    }
+
+    updateLocale<T extends LocaleActions>(localeAction: T): T {
         const localeState = i18nReducer(this._state.i18n, localeAction);
         this._state.i18n = localeState;
         this.updateSubject();
         return localeAction;
     }
 
-  updateCore<T extends CoreActions>(coreAction: T): T {
+    updateCore<T extends CoreActions>(coreAction: T): T {
         const coreState = coreReducer(this._state.core, coreAction);
         this._state.core = coreState;
         this.updateSubject();
         return coreAction;
     }
 
-  updateUiSchema<T extends UISchemaActions>(uischemaAction: T): T {
+    updateUiSchema<T extends UISchemaActions>(uischemaAction: T): T {
         const uischemaState = uischemaRegistryReducer(this._state.uischemas, uischemaAction);
         this._state.uischemas = uischemaState;
         this.updateSubject();
