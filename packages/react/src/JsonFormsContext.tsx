@@ -113,20 +113,20 @@ const useEffectAfterFirstRender = (
 };
 
 export const JsonFormsStateProvider = ({ children, initState }: any) => {
-  const { data, schema, uischema, ajv, refParserOptions } = initState.core;
+  const { data, schema, uischema, ajv, refParserOptions , validationMode} = initState.core;
   // Initialize core immediatly
   const [core, coreDispatch] = useReducer(
     coreReducer,
     coreReducer(
       initState.core,
-      Actions.init(data, schema, uischema, { ajv, refParserOptions })
+      Actions.init(data, schema, uischema, { ajv, refParserOptions, validationMode })
     )
   );
   useEffectAfterFirstRender(() => {
     coreDispatch(
-      Actions.init(data, schema, uischema, { ajv, refParserOptions })
+      Actions.init(data, schema, uischema, { ajv, refParserOptions, validationMode })
     );
-  }, [data, schema, uischema, ajv, refParserOptions]);
+  }, [data, schema, uischema, ajv, refParserOptions, validationMode]);
 
   const [config, configDispatch] = useReducer(
     configReducer,

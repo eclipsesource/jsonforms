@@ -41,7 +41,8 @@ import {
   JsonSchema,
   OwnPropsOfJsonFormsRenderer,
   removeId,
-  UISchemaElement
+  UISchemaElement,
+  ValidationMode
 } from '@jsonforms/core';
 import {
   ctxToJsonFormsDispatchProps,
@@ -220,6 +221,7 @@ export interface JsonFormsInitStateProps {
   refParserOptions?: RefParser.Options;
   config?: any;
   readOnly?: boolean;
+  validationMode?: ValidationMode;
 }
 
 export const JsonForms = (
@@ -236,6 +238,7 @@ export const JsonForms = (
     onChange,
     config,
     readOnly,
+    validationMode
   } = props;
   const schemaToUse = schema !== undefined ? schema : Generate.jsonSchema(data);
   const uischemaToUse =
@@ -248,7 +251,8 @@ export const JsonForms = (
           data,
           refParserOptions,
           schema: schemaToUse,
-          uischema: uischemaToUse
+          uischema: uischemaToUse,
+          validationMode: validationMode
         },
         config,
         renderers,

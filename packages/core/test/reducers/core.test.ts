@@ -36,6 +36,7 @@ import {
 } from '../../src/reducers/core';
 
 import { createAjv } from '../../src';
+import { setValidationMode } from '../../lib';
 
 const createRefParserOptions = (
   encoding = 'testEncoding'
@@ -1192,4 +1193,222 @@ test('subErrorsAt filters oneOf array inner', t => {
   )(state);
   t.is(filtered.length, 1);
   t.deepEqual(filtered[0], state.errors[1]);
+});
+
+test('errorAt respects hide validation mode', t => {
+  const schema = {
+    type: 'object',
+    properties: {
+      animal: {
+        type: 'string'
+      }
+    }
+  };
+
+  const data = {
+    animal: 100
+  };
+
+  const core: JsonFormsCore = coreReducer(
+    undefined,
+    init(data, schema, undefined, { validationMode: 'ValidateAndHide' })
+  );
+  t.is(core.errors.length, 1);
+  t.is(errorAt('animal', schema)(core).length, 0);
+})
+
+test('core reducer - setValidationMode - No validation should not produce errors', t => {
+  const schema = {
+    type: 'object',
+    properties: {
+      animal: {
+        type: 'string'
+      }
+    }
+  };
+
+  const data = {
+    animal: 100
+  };
+
+  const core: JsonFormsCore = coreReducer(
+    undefined,
+    init(data, schema, undefined, { validationMode: 'NoValidation' })
+  );
+  t.is(core.errors.length, 0);
+  t.is(core.validationMode, 'NoValidation');
+});
+
+test('core reducer - setValidationMode - No validation should remove errors', t => {
+  const schema = {
+    type: 'object',
+    properties: {
+      animal: {
+        type: 'string'
+      }
+    }
+  };
+
+  const data = {
+    animal: 100
+  };
+
+  const before: JsonFormsCore = coreReducer(undefined, init(data, schema));
+  t.is(before.errors.length, 1);
+
+  const after = coreReducer(before, setValidationMode('NoValidation'));
+  t.is(after.errors.length, 0);
+  t.is(after.validationMode, 'NoValidation');
+});
+
+test('core reducer - init - ValidateAndShow should be default validationMode', t => {
+  const data = {
+    animal: 100
+  };
+
+  const core: JsonFormsCore = coreReducer(undefined, init(data));
+  t.is(core.validationMode, 'ValidateAndShow');
+});
+
+test('core reducer - init - Validation should produce errors', t => {
+  const schema = {
+    type: 'object',
+    properties: {
+      animal: {
+        type: 'string'
+      }
+    }
+  };
+
+  const data = {
+    animal: 100
+  };
+
+  const coreShow: JsonFormsCore = coreReducer(
+    undefined,
+    init(data, schema, undefined, { validationMode: 'ValidateAndShow' })
+  );
+  t.is(coreShow.errors.length, 1);
+  t.is(coreShow.validationMode, 'ValidateAndShow');
+
+  const coreHide: JsonFormsCore = coreReducer(
+    undefined,
+    init(data, schema, undefined, { validationMode: 'ValidateAndHide' })
+  );
+  t.is(coreHide.errors.length, 1);
+  t.is(coreHide.validationMode, 'ValidateAndHide');
+});
+
+test('core reducer - setValidationMode - Validation should produce errors', t => {
+  const schema = {
+    type: 'object',
+    properties: {
+      animal: {
+        type: 'string'
+      }
+    }
+  };
+
+  const data = {
+    animal: 100
+  };
+
+  const before: JsonFormsCore = coreReducer(
+    undefined,
+    init(data, schema, undefined, { validationMode: 'NoValidation' })
+  );
+  t.is(before.errors.length, 0);
+
+  const coreShow: JsonFormsCore = coreReducer(
+    before,
+    setValidationMode('ValidateAndShow')
+  );
+  t.is(coreShow.errors.length, 1);
+
+  const coreHide: JsonFormsCore = coreReducer(
+    before,
+    setValidationMode('ValidateAndHide')
+  );
+  t.is(coreHide.errors.length, 1);
+});
+
+test('core reducer - setValidationMode - Hide validation should preserve errors', t => {
+  const schema = {
+    type: 'object',
+    properties: {
+      animal: {
+        type: 'string'
+      }
+    }
+  };
+
+  const data = {
+    animal: 100
+  };
+
+  const before: JsonFormsCore = coreReducer(
+    undefined,
+    init(data, schema)
+  );
+  t.is(before.errors.length, 1);
+
+  const after: JsonFormsCore = coreReducer(
+    before,
+    setValidationMode('ValidateAndHide')
+  );
+  t.is(after.errors.length, 1);
+});
+
+test('core reducer - update - NoValidation should not produce errors', t => {
+  const schema = {
+    type: 'object',
+    properties: {
+      animal: {
+        type: 'string'
+      }
+    }
+  };
+
+  const data = {
+    animal: 'dog'
+  };
+
+  const before: JsonFormsCore = coreReducer(
+    undefined,
+    init(data, schema, undefined, { validationMode: 'NoValidation' })
+  );
+  t.is(before.errors.length, 0);
+
+  const after: JsonFormsCore = coreReducer(
+    before,
+    update('animal', () => 100)
+  );
+  t.is(after.errors.length, 0);
+});
+
+test('core reducer - update - ValidateAndHide should produce errors', t => {
+  const schema = {
+    type: 'object',
+    properties: {
+      animal: {
+        type: 'string'
+      }
+    }
+  };
+
+  const data = {
+    animal: 'dog'
+  };
+
+  const before: JsonFormsCore = coreReducer(
+    undefined,
+    init(data, schema, undefined, { validationMode: 'ValidateAndHide' })
+  );
+  t.is(before.errors.length, 0);
+
+  const after: JsonFormsCore = coreReducer(
+    before,
+    update('animal', () => 100)
+  );
+  t.is(after.errors.length, 1);
 });

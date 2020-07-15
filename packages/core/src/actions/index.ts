@@ -29,6 +29,7 @@ import { generateDefaultUISchema, generateJsonSchema } from '../generators';
 import { RankedTester } from '../testers';
 import RefParser from 'json-schema-ref-parser';
 import { UISchemaTester } from '../reducers/uischemas';
+import { ValidationMode } from '../reducers/core';
 
 export const INIT: 'jsonforms/INIT' = 'jsonforms/INIT';
 export const SET_AJV: 'jsonforms/SET_AJV' = 'jsonforms/SET_AJV';
@@ -46,6 +47,8 @@ export const ADD_UI_SCHEMA: 'jsonforms/ADD_UI_SCHEMA' = `jsonforms/ADD_UI_SCHEMA
 export const REMOVE_UI_SCHEMA: 'jsonforms/REMOVE_UI_SCHEMA' = `jsonforms/REMOVE_UI_SCHEMA`;
 export const SET_SCHEMA: 'jsonforms/SET_SCHEMA' = `jsonforms/SET_SCHEMA`;
 export const SET_UISCHEMA: 'jsonforms/SET_UISCHEMA' = `jsonforms/SET_UISCHEMA`;
+export const SET_VALIDATION_MODE: 'jsonforms/SET_VALIDATION_MODE' =
+  'jsonforms/SET_VALIDATION_MODE';
 
 export const SET_LOCALE: 'jsonforms/SET_LOCALE' = `jsonforms/SET_LOCALE`;
 export const SET_LOCALIZED_SCHEMAS: 'jsonforms/SET_LOCALIZED_SCHEMAS' =
@@ -62,7 +65,8 @@ export type CoreActions =
   | UpdateErrorsAction
   | SetAjvAction
   | SetSchemaAction
-  | SetUISchemaAction;
+  | SetUISchemaAction
+  | SetValidationModeAction;
 
 export interface UpdateAction {
   type: 'jsonforms/UPDATE';
@@ -86,6 +90,12 @@ export interface InitAction {
 export interface InitActionOptions {
   ajv?: AJV.Ajv;
   refParserOptions?: RefParser.Options;
+  validationMode?: ValidationMode;
+}
+
+export interface SetValidationModeAction {
+  type: 'jsonforms/SET_VALIDATION_MODE'
+  validationMode: ValidationMode
 }
 
 export const init = (
@@ -205,6 +215,11 @@ export const setConfig = (config: any): SetConfigAction => ({
   type: SET_CONFIG,
   config
 });
+
+export const setValidationMode = (validationMode: ValidationMode): SetValidationModeAction => ({
+  type: SET_VALIDATION_MODE,
+  validationMode
+})
 
 export type UISchemaActions = AddUISchemaAction | RemoveUISchemaAction;
 
