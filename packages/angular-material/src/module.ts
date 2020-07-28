@@ -43,6 +43,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { JsonFormsModule } from '@jsonforms/angular';
 import { AutocompleteControlRenderer } from './controls/autocomplete.renderer';
@@ -62,6 +63,7 @@ import { CategorizationTabLayoutRenderer } from './layouts/categorization-layout
 import { GroupLayoutRenderer } from './layouts/group-layout.renderer';
 import { HorizontalLayoutRenderer } from './layouts/horizontal-layout.renderer';
 import { VerticalLayoutRenderer } from './layouts/vertical-layout.renderer';
+import { ArrayLayoutRenderer } from './layouts/array-layout.renderer';
 
 @NgModule({
   imports: [
@@ -84,7 +86,8 @@ import { VerticalLayoutRenderer } from './layouts/vertical-layout.renderer';
     MatButtonModule,
     MatIconModule,
     MatAutocompleteModule,
-    MatTableModule
+    MatTableModule,
+    MatToolbarModule
   ],
   declarations: [
     BooleanControlRenderer,
@@ -103,7 +106,8 @@ import { VerticalLayoutRenderer } from './layouts/vertical-layout.renderer';
     JsonFormsDetailComponent,
     ObjectControlRenderer,
     AutocompleteControlRenderer,
-    TableRenderer
+    TableRenderer,
+    ArrayLayoutRenderer
   ],
   entryComponents: [
     BooleanControlRenderer,
@@ -122,7 +126,8 @@ import { VerticalLayoutRenderer } from './layouts/vertical-layout.renderer';
     JsonFormsDetailComponent,
     ObjectControlRenderer,
     AutocompleteControlRenderer,
-    TableRenderer
+    TableRenderer,
+    ArrayLayoutRenderer
   ],
   exports: [
     CommonModule,

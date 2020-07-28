@@ -85,6 +85,10 @@ import {
   groupLayoutTester
 } from './layouts/group-layout.renderer';
 import { TableRenderer, TableRendererTester } from './other/table.renderer';
+import {
+  ArrayLayoutRenderer,
+  ArrayLayoutRendererTester
+} from './layouts/array-layout.renderer';
 
 export * from './controls';
 export * from './layouts';
@@ -110,6 +114,7 @@ export const angularMaterialRenderers: {
   { tester: horizontalLayoutTester, renderer: HorizontalLayoutRenderer },
   { tester: categorizationTester, renderer: CategorizationTabLayoutRenderer },
   { tester: LabelRendererTester, renderer: LabelRenderer },
+  { tester: ArrayLayoutRendererTester, renderer: ArrayLayoutRenderer },
   // other
   { tester: masterDetailTester, renderer: MasterListComponent },
   { tester: TableRendererTester, renderer: TableRenderer }
