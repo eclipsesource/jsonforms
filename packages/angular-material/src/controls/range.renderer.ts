@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ChangeDetectorRef } from '@angular/core';
 import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 import { isRangeControl, RankedTester, rankWith } from '@jsonforms/core';
 
@@ -47,14 +47,15 @@ import { isRangeControl, RankedTester, rankWith } from '@jsonforms/core';
       <mat-hint class="mat-caption" *ngIf="shouldShowUnfocusedDescription()">{{ description }}</mat-hint>
       <mat-error class="mat-caption">{{ error }}</mat-error>
     </div>
-  `
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RangeControlRenderer extends JsonFormsControl {
   min: number;
   max: number;
   multipleOf: number;
 
-  constructor(jsonformsService: JsonFormsAngularService) {
+  constructor(jsonformsService: JsonFormsAngularService, private changeDetectorRef:ChangeDetectorRef) {
     super(jsonformsService);
   }
   getEventValue = (event: any) => Number(event.value);
@@ -64,6 +65,7 @@ export class RangeControlRenderer extends JsonFormsControl {
       this.max = this.scopedSchema.maximum;
       this.multipleOf = this.scopedSchema.multipleOf || 1;
     }
+    this.changeDetectorRef.detectChanges();
   }
 }
 export const RangeControlRendererTester: RankedTester = rankWith(

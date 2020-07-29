@@ -40,8 +40,8 @@ import {
   JsonSchema,
   mapStateToJsonFormsRendererProps,
   OwnPropsOfRenderer,
-  UISchemaElement,
-  StatePropsOfJsonFormsRenderer
+  StatePropsOfJsonFormsRenderer,
+  UISchemaElement
 } from '@jsonforms/core';
 import { UnknownRenderer } from './unknown.component';
 import { JsonFormsBaseRenderer } from './base.renderer';
@@ -49,14 +49,14 @@ import { Subscription } from 'rxjs';
 import { JsonFormsControl } from './control';
 import { JsonFormsAngularService } from './jsonforms.service';
 
-import { get} from 'lodash';
+import { get, isEqual } from 'lodash';
 
 const areEqual = (prevProps: StatePropsOfJsonFormsRenderer, nextProps: StatePropsOfJsonFormsRenderer) => {
   return get(prevProps, 'renderers.length') === get(nextProps, 'renderers.length')
     && get(prevProps, 'cells.length') === get(nextProps, 'cells.length')
     && get(prevProps, 'uischemas.length') === get(nextProps, 'uischemas.length')
     && get(prevProps, 'schema') === get(nextProps, 'schema')
-    && get(prevProps, 'uischema') === get(nextProps, 'uischema')
+    && isEqual(get(prevProps, 'uischema'), get(nextProps, 'uischema'))
     && get(prevProps, 'path') === get(nextProps, 'path');
 };
 
