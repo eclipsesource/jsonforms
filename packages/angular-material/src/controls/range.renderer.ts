@@ -55,7 +55,7 @@ export class RangeControlRenderer extends JsonFormsControl {
   max: number;
   multipleOf: number;
 
-  constructor(jsonformsService: JsonFormsAngularService, private changeDetectorRef:ChangeDetectorRef) {
+  constructor(jsonformsService: JsonFormsAngularService, private changeDetectorRef: ChangeDetectorRef) {
     super(jsonformsService);
   }
   getEventValue = (event: any) => Number(event.value);
@@ -65,7 +65,7 @@ export class RangeControlRenderer extends JsonFormsControl {
       this.max = this.scopedSchema.maximum;
       this.multipleOf = this.scopedSchema.multipleOf || 1;
     }
-    this.changeDetectorRef.detectChanges();
+    this.changeDetectorRef.markForCheck();
   }
 }
 export const RangeControlRendererTester: RankedTester = rankWith(
