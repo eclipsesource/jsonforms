@@ -31,7 +31,7 @@ import {
   ArrayControlProps,
   createDefaultValue,
   findUISchema,
-  isObjectArray,
+  isObjectArrayWithNesting,
   mapDispatchToArrayControlProps,
   OwnPropsOfRenderer,
   Paths,
@@ -144,5 +144,5 @@ export class ArrayLayoutRenderer extends JsonFormsArrayControl {
 
 export const ArrayLayoutRendererTester: RankedTester = rankWith(
   4,
-  isObjectArray
+  isObjectArrayWithNesting
 );
