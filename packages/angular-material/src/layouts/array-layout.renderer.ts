@@ -30,7 +30,7 @@ import {
 import {
   ArrayControlProps,
   createDefaultValue,
-  generateDefaultUISchema,
+  findUISchema,
   isObjectArray,
   mapDispatchToArrayControlProps,
   OwnPropsOfRenderer,
@@ -39,7 +39,8 @@ import {
   rankWith,
   setReadonly,
   UISchemaElement,
-  unsetReadonly
+  UISchemaTester,
+  unsetReadonly,
 } from '@jsonforms/core';
 
 @Component({
@@ -84,10 +85,13 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ArrayLayoutRenderer extends JsonFormsArrayControl {
-  private _uischema: UISchemaElement;
   noData: boolean;
   addItem: (path: string, value: any) => () => void;
   removeItems: (path: string, toDelete: number[]) => () => void;
+  uischemas: {
+    tester: UISchemaTester;
+    uischema: UISchemaElement;
+  }[];
 
   constructor(private jsonFormAngularService: JsonFormsAngularService) {
     super(jsonFormAngularService);
@@ -110,19 +114,18 @@ export class ArrayLayoutRenderer extends JsonFormsArrayControl {
   mapAdditionalProps(props: ArrayControlProps) {
     this.noData =
       !props.data || (Array.isArray(props.data) && !props.data.length);
-  }
-
-  get defaultUISchema() {
-    if (!this._uischema) {
-      this._uischema = generateDefaultUISchema(this.scopedSchema);
-    }
-    return this._uischema;
+    this.uischemas = props.uischemas;
   }
 
   getProps(index: number): OwnPropsOfRenderer {
-    const uischema =
-      (this.uischema.options?.detailUISchema as UISchemaElement) ??
-      this.defaultUISchema;
+    const uischema = findUISchema(
+      this.uischemas,
+      this.scopedSchema,
+      this.uischema.scope,
+      this.propsPath,
+      undefined,
+      this.uischema
+    );
     if (this.isEnabled()) {
       unsetReadonly(uischema);
     } else {
