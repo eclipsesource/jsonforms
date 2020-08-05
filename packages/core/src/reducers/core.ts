@@ -91,6 +91,13 @@ const initState: JsonFormsCore = {
   validationMode: 'ValidateAndShow'
 };
 
+const reuseAjvForSchema = (ajv: Ajv, schema: JsonSchema): Ajv => {
+  if (schema.hasOwnProperty('id') || schema.hasOwnProperty('$id')) {
+    ajv.removeSchema(schema);
+  }
+  return ajv;
+};
+
 const getOrCreateAjv = (state: JsonFormsCore, action?: InitAction): Ajv => {
   if (action) {
     if (hasAjvOption(action.options)) {
@@ -107,7 +114,9 @@ const getOrCreateAjv = (state: JsonFormsCore, action?: InitAction): Ajv => {
     }
   }
   if (state.ajv) {
-    return state.ajv;
+    return action?.schema
+      ? reuseAjvForSchema(state.ajv, action.schema)
+      : state.ajv;
   }
   return createAjv();
 };
@@ -151,13 +160,6 @@ const hasValidationModeOption = (option: any): option is InitActionOptions => {
     return option.validationMode !== undefined;
   }
   return false;
-};
-
-const reuseAjvForSchema = (ajv: Ajv, schema: JsonSchema): Ajv => {
-  if (schema.hasOwnProperty('id') || schema.hasOwnProperty('$id')) {
-    ajv.removeSchema(schema);
-  }
-  return ajv;
 };
 
 export const coreReducer = (
