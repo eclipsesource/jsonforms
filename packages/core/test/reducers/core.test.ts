@@ -36,7 +36,8 @@ import {
 } from '../../src/reducers/core';
 
 import { createAjv } from '../../src';
-import { setValidationMode } from '../../lib';
+import { setSchema, setValidationMode } from '../../lib';
+import { cloneDeep } from 'lodash';
 
 const createRefParserOptions = (
   encoding = 'testEncoding'
@@ -413,6 +414,31 @@ test('core reducer - previous state - init with undefined data should not change
     init(undefined, schema, undefined, {})
   );
   t.deepEqual(after.data, undefined);
+});
+
+test('core reducer - previous state - init schema with id', t => {
+  const schema: JsonSchema = {
+    $id: 'https://www.jsonforms.io/example.json',
+    type: 'object',
+    properties: {
+      animal: {
+        type: 'string'
+      }
+    }
+  };
+  const updatedSchema = cloneDeep(schema);
+  updatedSchema.properties.animal.minLength = 5;
+
+  const before: JsonFormsCore = coreReducer(
+    undefined,
+    init(undefined, schema, undefined, undefined)
+  );
+
+  const after: JsonFormsCore = coreReducer(
+    before,
+    init(undefined, updatedSchema, before.uischema, undefined)
+  );
+  t.is(after.schema.properties.animal.minLength, 5);
 });
 
 test('core reducer - update - undefined data should update for given path', t => {
@@ -1412,3 +1438,30 @@ test('core reducer - update - ValidateAndHide should produce errors', t => {
   );
   t.is(after.errors.length, 1);
 });
+
+test('core reducer - setSchema - schema with id', t => {
+  const schema: JsonSchema = {
+    $id: 'https://www.jsonforms.io/example.json',
+    type: 'object',
+    properties: {
+      animal: {
+        type: 'string'
+      }
+    }
+  };
+  const updatedSchema = cloneDeep(schema);
+  updatedSchema.properties.animal.minLength = 5;
+
+  const before: JsonFormsCore = coreReducer(
+    undefined,
+    init(undefined, schema, undefined, undefined)
+  );
+
+  const after: JsonFormsCore = coreReducer(
+    before,
+    setSchema(updatedSchema)
+  );
+  t.is(after.schema.properties.animal.minLength, 5);
+});
+
+
