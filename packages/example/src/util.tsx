@@ -88,6 +88,7 @@ class I18nExampleRenderer extends React.Component<
     super(props);
     const { schema, uischema } = props;
     const localizedSchemas = new Map<string, JsonSchema>();
+    _.set(schema, '$id', 'http://test.json');
     const deSchema = _.cloneDeep(schema);
     _.set(deSchema, 'properties.name.description', 'Name der Person');
     _.set(deSchema, 'properties.name.birthDate', 'Geburtstag der Person');

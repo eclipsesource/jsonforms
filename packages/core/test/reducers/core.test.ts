@@ -36,7 +36,8 @@ import {
 } from '../../src/reducers/core';
 
 import { createAjv } from '../../src';
-import { setValidationMode } from '../../lib';
+import { setValidationMode, setSchema } from '../../lib';
+import { cloneDeep } from 'lodash';
 
 const createRefParserOptions = (
   encoding = 'testEncoding'
@@ -1411,4 +1412,29 @@ test('core reducer - update - ValidateAndHide should produce errors', t => {
     update('animal', () => 100)
   );
   t.is(after.errors.length, 1);
+});
+
+test('core reducer - setSchema - schema with id', t => {
+  const schema: JsonSchema = {
+    $id: 'https://www.jsonforms.io/example.json',
+    type: 'object',
+    properties: {
+      animal: {
+        type: 'string'
+      }
+    }
+  };
+  const updatedSchema = cloneDeep(schema);
+  updatedSchema.properties.animal.minLength = 5;
+
+  const before: JsonFormsCore = coreReducer(
+    undefined,
+    init(undefined, schema, undefined, undefined)
+  );
+
+  const after: JsonFormsCore = coreReducer(
+    before,
+    setSchema(updatedSchema)
+  );
+  t.is(after.schema.properties.animal.minLength, 5);
 });
