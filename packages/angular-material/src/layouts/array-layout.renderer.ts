@@ -47,7 +47,7 @@ import {
   selector: 'app-array-layout-renderer',
   template: `
     <div fxLayout="column" fxLayoutGap="16px" [fxHide]="hidden">
-      <mat-toolbar>
+      <mat-toolbar color="primary">
         <h2>{{ this.label }}</h2>
         <span fxFlex></span>
         <button
@@ -73,9 +73,8 @@ import {
             <jsonforms-outlet [renderProps]="getProps(idx)"></jsonforms-outlet>
           </mat-card-content>
           <mat-card-actions *ngIf="isEnabled()">
-            <button mat-button (click)="remove(idx)" attr.aria-label="Remove">
-              <mat-icon>remove_circle</mat-icon>
-              Remove
+            <button mat-fab color="primary" (click)="remove(idx)" aria-label="Remove">
+              <mat-icon>delete</mat-icon>
             </button>
           </mat-card-actions>
         </mat-card>
@@ -93,8 +92,8 @@ export class ArrayLayoutRenderer extends JsonFormsArrayControl {
     uischema: UISchemaElement;
   }[];
 
-  constructor(private jsonFormAngularService: JsonFormsAngularService) {
-    super(jsonFormAngularService);
+  constructor(jsonFormsService: JsonFormsAngularService) {
+    super(jsonFormsService);
   }
   remove(index: number): void {
     this.removeItems(this.propsPath, [index])();
@@ -105,7 +104,7 @@ export class ArrayLayoutRenderer extends JsonFormsArrayControl {
   ngOnInit() {
     super.ngOnInit();
     const { addItem, removeItems } = mapDispatchToArrayControlProps(
-      this.jsonFormAngularService.updateCore.bind(this.jsonFormAngularService)
+      this.jsonFormsService.updateCore.bind(this.jsonFormsService)
     );
     this.addItem = addItem;
     this.removeItems = removeItems;
