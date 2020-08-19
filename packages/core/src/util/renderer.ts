@@ -38,7 +38,8 @@ import {
   getSchema,
   getSubErrorsAt,
   getUiSchema,
-  UISchemaTester
+  UISchemaTester,
+  getOrCreateAjv
 } from '../reducers';
 import { RankedTester } from '../testers';
 import { JsonSchema } from '../models/jsonSchema';
@@ -58,7 +59,7 @@ import {
   resolveSubSchemas
 } from '../util';
 import { update, CoreActions } from '../actions';
-import { ErrorObject } from 'ajv';
+import { ErrorObject, Ajv } from 'ajv';
 import { JsonFormsState } from '../store';
 import { AnyAction, Dispatch } from 'redux';
 import { JsonFormsRendererRegistryEntry } from '../reducers/renderers';
@@ -274,6 +275,12 @@ export interface StatePropsOfRenderer {
    */
 
   cells?: JsonFormsCellRendererRegistryEntry[];
+
+  /**
+   * AJV instance from core state.
+   */
+
+   ajv?: Ajv;
 }
 
 /**
@@ -395,12 +402,12 @@ export const mapStateToControlProps = (
   const path = composeWithUi(uischema, ownProps.path);
   const visible: boolean =
     ownProps.visible === undefined || hasShowRule(uischema)
-      ? isVisible(uischema, rootData, ownProps.path)
+      ? isVisible(uischema, rootData, ownProps.path, getOrCreateAjv(state))
       : ownProps.visible;
   const readOnly = state.jsonforms.readOnly;
   const enabled: boolean =
     !readOnly && (ownProps.enabled === undefined || hasEnableRule(uischema)
-      ? isEnabled(uischema, rootData, ownProps.path)
+      ? isEnabled(uischema, rootData, ownProps.path, getOrCreateAjv(state) )
       : ownProps.enabled);
   const controlElement = uischema as ControlElement;
   const id = ownProps.id;
@@ -702,15 +709,16 @@ export const mapStateToLayoutProps = (
   ownProps: OwnPropsOfLayout
 ): LayoutProps => {
   const rootData = getData(state);
+  const ajv = getOrCreateAjv(state);
   const { uischema } = ownProps;
   const visible: boolean =
     ownProps.visible === undefined || hasShowRule(uischema)
-      ? isVisible(ownProps.uischema, rootData, ownProps.path)
+      ? isVisible(ownProps.uischema, rootData, ownProps.path, getOrCreateAjv(state))
       : ownProps.visible;
   const readOnly = state.jsonforms.readOnly;
   const enabled: boolean =
     !readOnly && (ownProps.enabled === undefined || hasEnableRule(uischema)
-      ? isEnabled(ownProps.uischema, rootData, ownProps.path)
+      ? isEnabled(ownProps.uischema, rootData, ownProps.path, getOrCreateAjv(state))
       : ownProps.enabled);
 
   const data = Resolve.data(rootData, ownProps.path);
@@ -725,7 +733,8 @@ export const mapStateToLayoutProps = (
     data,
     uischema: ownProps.uischema,
     schema: ownProps.schema,
-    direction: ownProps.direction || layoutDefaultProps.direction
+    direction: ownProps.direction || layoutDefaultProps.direction,
+    ajv
   };
 };
 
@@ -800,7 +809,7 @@ const mapStateToCombinatorRendererProps = (
   );
   const visible: boolean =
     ownProps.visible === undefined || hasShowRule(uischema)
-      ? isVisible(uischema, getData(state), ownProps.path)
+      ? isVisible(uischema, getData(state), ownProps.path, getOrCreateAjv(state))
       : ownProps.visible;
   const id = ownProps.id;
 

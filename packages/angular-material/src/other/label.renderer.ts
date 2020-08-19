@@ -35,7 +35,8 @@ import {
   OwnPropsOfRenderer,
   RankedTester,
   rankWith,
-  uiTypeIs
+  uiTypeIs,
+  getOrCreateAjv
 } from '@jsonforms/core';
 import { Subscription } from 'rxjs';
 
@@ -46,7 +47,7 @@ const mapStateToProps = (
   const visible =
     ownProps.visible !== undefined
       ? ownProps.visible
-      : isVisible(ownProps.uischema, getData(state));
+      : isVisible(ownProps.uischema, getData(state), undefined, getOrCreateAjv(state));
 
   return {
     visible

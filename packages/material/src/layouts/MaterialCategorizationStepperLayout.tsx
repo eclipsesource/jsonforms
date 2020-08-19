@@ -82,7 +82,8 @@ export class MaterialCategorizationStepperLayoutRenderer extends RendererCompone
       uischema,
       visible,
       cells,
-      config
+      config,
+      ajv
     } = this.props;
     const categorization = uischema as Categorization;
     const activeCategory = this.state.activeCategory;
@@ -108,7 +109,7 @@ export class MaterialCategorizationStepperLayoutRenderer extends RendererCompone
       cells
     };
     const categories = categorization.elements.filter((category: Category) =>
-      isVisible(category, data)
+      isVisible(category, data, undefined, ajv)
     );
     return (
       <Hidden xsUp={!visible}>

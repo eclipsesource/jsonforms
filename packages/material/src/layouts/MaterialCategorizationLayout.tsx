@@ -92,7 +92,8 @@ export class MaterialCategorizationLayoutRenderer extends RendererComponent<
       uischema,
       visible,
       enabled,
-      selected
+      selected,
+      ajv
     } = this.props;
     const categorization = uischema as Categorization;
     const value = this.hasOwnState() ? this.state.activeCategory : selected;
@@ -107,7 +108,7 @@ export class MaterialCategorizationLayoutRenderer extends RendererComponent<
       cells
     };
     const categories = categorization.elements.filter((category: Category) =>
-      isVisible(category, data)
+      isVisible(category, data, undefined, ajv)
     );
     return (
       <Hidden xsUp={!visible}>
