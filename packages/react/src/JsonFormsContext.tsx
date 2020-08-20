@@ -143,7 +143,7 @@ export const JsonFormsStateProvider = ({ children, initState }: any) => {
         renderers: initState.renderers,
         cells: initState.cells,
         config: config,
-        readOnly: initState.readOnly,
+        readonly: initState.readonly,
         // only core dispatch available
         dispatch: coreDispatch,
       }}

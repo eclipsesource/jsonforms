@@ -108,9 +108,9 @@ export const mapStateToCellProps = (
     ownProps.visible !== undefined
       ? ownProps.visible
       : isVisible(uischema, rootData);
-  const readOnly = state.jsonforms.readOnly;
+  const readonly = state.jsonforms.readonly;
   const enabled =
-    !readOnly && (ownProps.enabled !== undefined
+    !readonly && (ownProps.enabled !== undefined
       ? ownProps.enabled
       : isEnabled(uischema, rootData));
   const errors = formatErrorMessage(

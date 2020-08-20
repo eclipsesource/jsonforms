@@ -73,7 +73,7 @@ export interface JsonFormsSubStates {
   /**
    * If true, sets all controls to read-only.
    */
-  readOnly?: boolean;
+  readonly?: boolean;
   // allow additional state
   [additionalState: string]: any;
 }
