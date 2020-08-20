@@ -67,7 +67,8 @@ export class MaterialArrayLayout extends React.PureComponent<
       label,
       required,
       rootSchema,
-      config
+      config,
+      uischemas
     } = this.props;
     const appliedUiSchemaOptions = merge(
       {},
@@ -107,6 +108,7 @@ export class MaterialArrayLayout extends React.PureComponent<
                   enableMoveDown={index < data - 1}
                   config={config}
                   childLabelProp={appliedUiSchemaOptions.elementLabelProp}
+                  uischemas={uischemas}
                 />
               );
             })

@@ -47,6 +47,7 @@ export const MaterialArrayLayoutRenderer = ({
   data,
   path,
   errors,
+  uischemas,
   addItem
 }: ArrayLayoutProps) => {
   const addItemCb = useCallback((p: string, value: any) => addItem(p, value), [
@@ -68,6 +69,7 @@ export const MaterialArrayLayoutRenderer = ({
         addItem={addItemCb}
         renderers={renderers}
         cells={cells}
+        uischemas={uischemas}
       />
     </Hidden>
   );
