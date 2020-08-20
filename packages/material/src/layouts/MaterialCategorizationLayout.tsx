@@ -39,8 +39,10 @@ import {
 } from '@jsonforms/core';
 import { RendererComponent, withJsonFormsLayoutProps } from '@jsonforms/react';
 import {
+  AjvProps,
   MaterialLayoutRenderer,
-  MaterialLayoutRendererProps
+  MaterialLayoutRendererProps,
+  withAjvProps
 } from '../util/layout';
 
 export const isSingleLevelCategorization: Tester = and(
@@ -67,7 +69,7 @@ export interface CategorizationState {
 }
 
 export interface MaterialCategorizationLayoutRendererProps
-  extends StatePropsOfLayout {
+  extends StatePropsOfLayout, AjvProps {
   selected?: number;
   ownState?: boolean;
   data?: any;
@@ -141,4 +143,4 @@ export class MaterialCategorizationLayoutRenderer extends RendererComponent<
   };
 }
 
-export default withJsonFormsLayoutProps(MaterialCategorizationLayoutRenderer);
+export default withJsonFormsLayoutProps(withAjvProps(MaterialCategorizationLayoutRenderer));

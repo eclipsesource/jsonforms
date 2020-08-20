@@ -367,7 +367,7 @@ const withContextToCellProps =
   (Component: ComponentType<CellProps>): ComponentType<OwnPropsOfCell> =>
     ({ ctx, props }: JsonFormsStateContext & CellProps) => {
       const cellProps = ctxToCellProps(ctx, props);
-      const dispatchProps = ctxDispatchToControlProps(ctx.dispatch)
+      const dispatchProps = ctxDispatchToControlProps(ctx.dispatch);
 
       return (<Component {...props} {...dispatchProps} {...cellProps} />);
     };
@@ -400,6 +400,7 @@ const withContextToEnumProps =
       const dispatchProps = ctxDispatchToControlProps(ctx.dispatch);
       return (<Component {...props} {...dispatchProps} {...stateProps} options={stateProps.options} />);
     };
+
 const withContextToOneOfEnumProps =
   (Component: ComponentType<ControlProps & OwnPropsOfEnum>): ComponentType<OwnPropsOfControl & OwnPropsOfEnum> =>
     ({ ctx, props }: JsonFormsStateContext & ControlProps & OwnPropsOfEnum) => {
@@ -520,6 +521,7 @@ export const withJsonFormsEnumProps =
       Component,
       (prevProps: ControlProps & OwnPropsOfEnum, nextProps: ControlProps & OwnPropsOfEnum) => isEqual(prevProps, nextProps)
     )));
+
 export const withJsonFormsOneOfEnumProps =
   (Component: ComponentType<ControlProps & OwnPropsOfEnum>): ComponentType<OwnPropsOfControl & OwnPropsOfEnum> =>
     withJsonFormsContext(withContextToOneOfEnumProps(React.memo(

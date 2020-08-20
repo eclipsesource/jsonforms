@@ -28,11 +28,11 @@ import {
   coreReducer,
   errorAt,
   errorsAt,
+  extractAjv,
   extractData,
   extractRefParserOptions,
   extractSchema,
   extractUiSchema,
-  extractOrCreateAjv, 
   subErrorsAt,
   ValidationMode
 } from './core';
@@ -100,9 +100,9 @@ export const getUiSchema = (state: JsonFormsState): UISchemaElement =>
   extractUiSchema(get(state, 'jsonforms.core'));
 export const getRefParserOptions = (state: JsonFormsState): RefParser.Options =>
   extractRefParserOptions(get(state, 'jsonforms.core'));
-export const getOrCreateAjv = (
+export const getAjv = (
   state: JsonFormsState
-): Ajv => extractOrCreateAjv(get(state, 'jsonforms.core'));
+): Ajv => extractAjv(get(state, 'jsonforms.core'));
 export const getDefaultData = (
   state: JsonFormsState
 ): JsonFormsDefaultDataRegistryEntry[] =>

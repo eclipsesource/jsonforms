@@ -283,7 +283,7 @@ export const coreReducer = (
 export const extractData = (state: JsonFormsCore) => get(state, 'data');
 export const extractSchema = (state: JsonFormsCore) => get(state, 'schema');
 export const extractUiSchema = (state: JsonFormsCore) => get(state, 'uischema');
-export const extractOrCreateAjv = (state: JsonFormsCore) => getOrCreateAjv(state);
+export const extractAjv = (state: JsonFormsCore) => get(state, 'ajv');
 
 export const errorsAt = (
   instancePath: string,

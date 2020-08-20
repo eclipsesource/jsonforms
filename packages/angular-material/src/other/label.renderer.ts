@@ -36,7 +36,7 @@ import {
   RankedTester,
   rankWith,
   uiTypeIs,
-  getOrCreateAjv
+  getAjv
 } from '@jsonforms/core';
 import { Subscription } from 'rxjs';
 
@@ -47,7 +47,7 @@ const mapStateToProps = (
   const visible =
     ownProps.visible !== undefined
       ? ownProps.visible
-      : isVisible(ownProps.uischema, getData(state), undefined, getOrCreateAjv(state));
+      : isVisible(ownProps.uischema, getData(state), undefined, getAjv(state));
 
   return {
     visible

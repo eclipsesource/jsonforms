@@ -36,7 +36,6 @@ import {
 } from './path';
 import { isEnabled, isVisible } from './runtime';
 import { Ajv } from 'ajv';
-import { createAjv } from './validator';
 
 export { createCleanLabel, createLabelDescriptionFrom } from './label';
 
@@ -134,10 +133,10 @@ export { composePaths, composeWithUi, Paths, toDataPath };
 
 // Runtime --
 const Runtime = {
-  isEnabled(uischema: UISchemaElement, data: any, ajv: Ajv = createAjv()): boolean {
+  isEnabled(uischema: UISchemaElement, data: any, ajv: Ajv): boolean {
     return isEnabled(uischema, data,undefined, ajv);
   },
-  isVisible(uischema: UISchemaElement, data: any, ajv: Ajv = createAjv()): boolean {
+  isVisible(uischema: UISchemaElement, data: any, ajv: Ajv): boolean {
     return isVisible(uischema, data, undefined, ajv);
   }
 };
