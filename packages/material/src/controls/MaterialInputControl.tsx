@@ -32,26 +32,13 @@ import {
 } from '@jsonforms/core';
 import { Control } from '@jsonforms/react';
 
-import { Hidden, InputLabel, withStyles } from '@material-ui/core';
+import { Hidden, InputLabel } from '@material-ui/core';
 import { FormControl, FormHelperText } from '@material-ui/core';
 import merge from 'lodash/merge';
 
 interface WithInput {
   input: any;
 }
-
-const TrimmableInputLabel = withStyles({
-  root: {
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    right: '50px', // adjust for remove adornment
-    bottom: '0px' // avoid horizontal cutoff for characters like `qypgj`
-  },
-  shrink: {
-    width: '125%' // shrinked labels are scaled by 75%, therefore set width to 125% to make it the same width as the input
-  }
-})(InputLabel);
 
 export abstract class MaterialInputControl extends Control<
   ControlProps & WithInput,
@@ -95,7 +82,7 @@ export abstract class MaterialInputControl extends Control<
           onBlur={this.onBlur}
           id={id}
         >
-          <TrimmableInputLabel
+          <InputLabel
             htmlFor={id + '-input'}
             error={!isValid}
           >
@@ -104,7 +91,7 @@ export abstract class MaterialInputControl extends Control<
               required,
               appliedUiSchemaOptions.hideRequiredAsterisk
             )}
-          </TrimmableInputLabel>
+          </InputLabel>
           <InnerComponent
             {...this.props}
             id={id + '-input'}
