@@ -35,7 +35,6 @@ import {
 } from '../models/uischema';
 import { resolveData } from './resolvers';
 import { composeWithUi } from './path';
-import { createAjv } from './validator';
 import { Ajv } from 'ajv';
 
 const isOrCondition = (condition: Condition): condition is OrCondition =>
@@ -97,7 +96,7 @@ export const evalVisibility = (
   uischema: UISchemaElement,
   data: any,
   path: string = undefined,
-  ajv: Ajv = createAjv()
+  ajv: Ajv
 ): boolean => {
   const fulfilled = isRuleFulfilled(uischema, data, path, ajv);
 
@@ -116,7 +115,7 @@ export const evalEnablement = (
   uischema: UISchemaElement,
   data: any,
   path: string = undefined,
-  ajv: Ajv = createAjv()
+  ajv: Ajv
 ): boolean => {
   const fulfilled = isRuleFulfilled(uischema, data, path, ajv);
 
@@ -157,7 +156,7 @@ export const isVisible = (
   uischema: UISchemaElement,
   data: any,
   path: string = undefined,
-  ajv: Ajv = createAjv()
+  ajv: Ajv
 ): boolean => {
   if (uischema.rule) {
     return evalVisibility(uischema, data, path, ajv);
@@ -170,7 +169,7 @@ export const isEnabled = (
   uischema: UISchemaElement,
   data: any,
   path: string = undefined,
-  ajv: Ajv = createAjv()
+  ajv: Ajv
 ): boolean => {
   if (uischema.rule) {
     return evalEnablement(uischema, data, path, ajv);
