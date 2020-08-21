@@ -24,14 +24,17 @@
 */
 import isEmpty from 'lodash/isEmpty';
 import React from 'react';
+import { ComponentType } from 'react';
+import { Ajv } from 'ajv';
 import {
+  getAjv,
+  JsonFormsCellRendererRegistryEntry,
   JsonFormsRendererRegistryEntry,
   JsonSchema,
   OwnPropsOfRenderer,
-  UISchemaElement,
-  JsonFormsCellRendererRegistryEntry
+  UISchemaElement
 } from '@jsonforms/core';
-import { areEqual, ResolvedJsonFormsDispatch } from '@jsonforms/react';
+import { areEqual, ResolvedJsonFormsDispatch, useJsonForms } from '@jsonforms/react';
 import { Grid, Hidden } from '@material-ui/core';
 
 export const renderLayoutElements = (
@@ -96,3 +99,15 @@ export const MaterialLayoutRenderer = React.memo(
   },
   areEqual
 );
+
+export interface AjvProps {
+  ajv: Ajv;
+}
+
+export const withAjvProps = <P extends {}>(Component: ComponentType<AjvProps & P>) =>
+  (props: P) => {
+    const ctx = useJsonForms();
+    const ajv = getAjv({jsonforms: {...ctx}});
+
+    return (<Component {...props} ajv={ajv} />);
+  };

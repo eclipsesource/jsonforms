@@ -24,7 +24,7 @@
 */
 import isEmpty from 'lodash/isEmpty';
 import union from 'lodash/union';
-import { getConfig, getData, getErrorAt, getSchema } from '../reducers';
+import { getConfig, getData, getErrorAt, getSchema, getAjv } from '../reducers';
 import {
   formatErrorMessage,
   isEnabled,
@@ -107,12 +107,12 @@ export const mapStateToCellProps = (
   const visible =
     ownProps.visible !== undefined
       ? ownProps.visible
-      : isVisible(uischema, rootData);
+      : isVisible(uischema, rootData, undefined, getAjv(state));
   const readOnly = state.jsonforms.readOnly;
   const enabled =
     !readOnly && (ownProps.enabled !== undefined
       ? ownProps.enabled
-      : isEnabled(uischema, rootData));
+      : isEnabled(uischema, rootData, undefined, getAjv(state)));
   const errors = formatErrorMessage(
     union(getErrorAt(path, schema)(state).map(error => error.message))
   );

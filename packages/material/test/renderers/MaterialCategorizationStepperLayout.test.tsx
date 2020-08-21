@@ -378,11 +378,13 @@ describe('Material categorization stepper layout', () => {
     const store = initJsonFormsStore(fixture);
     const wrapper = mount(
       <Provider store={store}>
-        <MaterialCategorizationStepperLayoutRenderer
-          {...layoutDefaultProps}
-          schema={fixture.schema}
-          uischema={uischema}
-        />
+        <JsonFormsReduxContext>
+          <MaterialCategorizationStepperLayoutRenderer
+            {...layoutDefaultProps}
+            schema={fixture.schema}
+            uischema={uischema}
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
 
