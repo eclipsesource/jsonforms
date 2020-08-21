@@ -28,6 +28,7 @@ import {
   coreReducer,
   errorAt,
   errorsAt,
+  extractAjv,
   extractData,
   extractRefParserOptions,
   extractSchema,
@@ -63,6 +64,7 @@ import RefParser from 'json-schema-ref-parser';
 import { cellReducer } from './cells';
 import { configReducer } from './config';
 import get from 'lodash/get';
+import { Ajv } from 'ajv';
 
 export {
   rendererReducer,
@@ -98,6 +100,9 @@ export const getUiSchema = (state: JsonFormsState): UISchemaElement =>
   extractUiSchema(get(state, 'jsonforms.core'));
 export const getRefParserOptions = (state: JsonFormsState): RefParser.Options =>
   extractRefParserOptions(get(state, 'jsonforms.core'));
+export const getAjv = (
+  state: JsonFormsState
+): Ajv => extractAjv(get(state, 'jsonforms.core'));
 export const getDefaultData = (
   state: JsonFormsState
 ): JsonFormsDefaultDataRegistryEntry[] =>
@@ -108,7 +113,6 @@ export const getRenderers = (
 export const getCells = (
   state: JsonFormsState
 ): JsonFormsCellRendererRegistryEntry[] => get(state, 'jsonforms.cells');
-
 /**
  * Finds a registered UI schema to use, if any.
  * @param schema the JSON schema describing the data to be rendered

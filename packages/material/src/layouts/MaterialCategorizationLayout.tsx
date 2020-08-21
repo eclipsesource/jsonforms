@@ -39,8 +39,10 @@ import {
 } from '@jsonforms/core';
 import { RendererComponent, withJsonFormsLayoutProps } from '@jsonforms/react';
 import {
+  AjvProps,
   MaterialLayoutRenderer,
-  MaterialLayoutRendererProps
+  MaterialLayoutRendererProps,
+  withAjvProps
 } from '../util/layout';
 
 export const isSingleLevelCategorization: Tester = and(
@@ -67,7 +69,7 @@ export interface CategorizationState {
 }
 
 export interface MaterialCategorizationLayoutRendererProps
-  extends StatePropsOfLayout {
+  extends StatePropsOfLayout, AjvProps {
   selected?: number;
   ownState?: boolean;
   data?: any;
@@ -92,7 +94,8 @@ export class MaterialCategorizationLayoutRenderer extends RendererComponent<
       uischema,
       visible,
       enabled,
-      selected
+      selected,
+      ajv
     } = this.props;
     const categorization = uischema as Categorization;
     const value = this.hasOwnState() ? this.state.activeCategory : selected;
@@ -107,7 +110,7 @@ export class MaterialCategorizationLayoutRenderer extends RendererComponent<
       cells
     };
     const categories = categorization.elements.filter((category: Category) =>
-      isVisible(category, data)
+      isVisible(category, data, undefined, ajv)
     );
     return (
       <Hidden xsUp={!visible}>
@@ -140,4 +143,4 @@ export class MaterialCategorizationLayoutRenderer extends RendererComponent<
   };
 }
 
-export default withJsonFormsLayoutProps(MaterialCategorizationLayoutRenderer);
+export default withJsonFormsLayoutProps(withAjvProps(MaterialCategorizationLayoutRenderer));

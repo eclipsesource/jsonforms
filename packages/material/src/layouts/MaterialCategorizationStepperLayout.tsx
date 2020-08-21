@@ -39,8 +39,10 @@ import {
 } from '@jsonforms/core';
 import { RendererComponent, withJsonFormsLayoutProps } from '@jsonforms/react';
 import {
+  AjvProps,
   MaterialLayoutRenderer,
-  MaterialLayoutRendererProps
+  MaterialLayoutRendererProps,
+  withAjvProps
 } from '../util/layout';
 
 export const materialCategorizationStepperTester: RankedTester = rankWith(
@@ -57,8 +59,8 @@ export interface CategorizationStepperState {
 }
 
 export interface MaterialCategorizationStepperLayoutRendererProps
-  extends StatePropsOfLayout {
-  data: any;
+  extends StatePropsOfLayout, AjvProps {
+    data: any;
 }
 
 export class MaterialCategorizationStepperLayoutRenderer extends RendererComponent<
@@ -82,7 +84,8 @@ export class MaterialCategorizationStepperLayoutRenderer extends RendererCompone
       uischema,
       visible,
       cells,
-      config
+      config,
+      ajv
     } = this.props;
     const categorization = uischema as Categorization;
     const activeCategory = this.state.activeCategory;
@@ -96,7 +99,7 @@ export class MaterialCategorizationStepperLayoutRenderer extends RendererCompone
       float: 'right' as 'right'
     };
     const buttonStyle = {
-      marginRight: '1em' 
+      marginRight: '1em'
     };
     const childProps: MaterialLayoutRendererProps = {
       elements: categorization.elements[activeCategory].elements,
@@ -108,7 +111,7 @@ export class MaterialCategorizationStepperLayoutRenderer extends RendererCompone
       cells
     };
     const categories = categorization.elements.filter((category: Category) =>
-      isVisible(category, data)
+      isVisible(category, data, undefined, ajv)
     );
     return (
       <Hidden xsUp={!visible}>
@@ -149,6 +152,6 @@ export class MaterialCategorizationStepperLayoutRenderer extends RendererCompone
   }
 }
 
-export default withJsonFormsLayoutProps(
+export default withJsonFormsLayoutProps(withAjvProps(
   MaterialCategorizationStepperLayoutRenderer
-);
+));

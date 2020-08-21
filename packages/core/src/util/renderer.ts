@@ -29,6 +29,7 @@ import find from 'lodash/find';
 import RefParser from 'json-schema-ref-parser';
 import {
   findUISchema,
+  getAjv,
   getCells,
   getConfig,
   getData,
@@ -395,12 +396,12 @@ export const mapStateToControlProps = (
   const path = composeWithUi(uischema, ownProps.path);
   const visible: boolean =
     ownProps.visible === undefined || hasShowRule(uischema)
-      ? isVisible(uischema, rootData, ownProps.path)
+      ? isVisible(uischema, rootData, ownProps.path, getAjv(state))
       : ownProps.visible;
   const readonly = state.jsonforms.readonly;
   const enabled: boolean =
     !readonly && (ownProps.enabled === undefined || hasEnableRule(uischema)
-      ? isEnabled(uischema, rootData, ownProps.path)
+      ? isEnabled(uischema, rootData, ownProps.path, getAjv(state) )
       : ownProps.enabled);
   const controlElement = uischema as ControlElement;
   const id = ownProps.id;
@@ -705,12 +706,12 @@ export const mapStateToLayoutProps = (
   const { uischema } = ownProps;
   const visible: boolean =
     ownProps.visible === undefined || hasShowRule(uischema)
-      ? isVisible(ownProps.uischema, rootData, ownProps.path)
+      ? isVisible(ownProps.uischema, rootData, ownProps.path, getAjv(state))
       : ownProps.visible;
   const readonly = state.jsonforms.readonly;
   const enabled: boolean =
     !readonly && (ownProps.enabled === undefined || hasEnableRule(uischema)
-      ? isEnabled(ownProps.uischema, rootData, ownProps.path)
+      ? isEnabled(ownProps.uischema, rootData, ownProps.path, getAjv(state))
       : ownProps.enabled);
 
   const data = Resolve.data(rootData, ownProps.path);
@@ -800,7 +801,7 @@ const mapStateToCombinatorRendererProps = (
   );
   const visible: boolean =
     ownProps.visible === undefined || hasShowRule(uischema)
-      ? isVisible(uischema, getData(state), ownProps.path)
+      ? isVisible(uischema, getData(state), ownProps.path, getAjv(state))
       : ownProps.visible;
   const id = ownProps.id;
 
