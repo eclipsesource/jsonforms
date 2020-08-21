@@ -398,9 +398,9 @@ export const mapStateToControlProps = (
     ownProps.visible === undefined || hasShowRule(uischema)
       ? isVisible(uischema, rootData, ownProps.path, getAjv(state))
       : ownProps.visible;
-  const readOnly = state.jsonforms.readOnly;
+  const readonly = state.jsonforms.readonly;
   const enabled: boolean =
-    !readOnly && (ownProps.enabled === undefined || hasEnableRule(uischema)
+    !readonly && (ownProps.enabled === undefined || hasEnableRule(uischema)
       ? isEnabled(uischema, rootData, ownProps.path, getAjv(state) )
       : ownProps.enabled);
   const controlElement = uischema as ControlElement;
@@ -708,9 +708,9 @@ export const mapStateToLayoutProps = (
     ownProps.visible === undefined || hasShowRule(uischema)
       ? isVisible(ownProps.uischema, rootData, ownProps.path, getAjv(state))
       : ownProps.visible;
-  const readOnly = state.jsonforms.readOnly;
+  const readonly = state.jsonforms.readonly;
   const enabled: boolean =
-    !readOnly && (ownProps.enabled === undefined || hasEnableRule(uischema)
+    !readonly && (ownProps.enabled === undefined || hasEnableRule(uischema)
       ? isEnabled(ownProps.uischema, rootData, ownProps.path, getAjv(state))
       : ownProps.enabled);
 

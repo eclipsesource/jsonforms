@@ -192,30 +192,30 @@ test('mapStateToControlProps - visible via state with path from ownProps ', t =>
   t.true(props.visible);
 });
 
-test('mapStateToControlProps - disabled via global readOnly', t => {
+test('mapStateToControlProps - disabled via global readonly', t => {
   const ownProps = {
     uischema: coreUISchema
   };
   const state: JsonFormsState = createState(coreUISchema);
-  state.jsonforms.readOnly = true;
+  state.jsonforms.readonly = true;
 
   const props = mapStateToControlProps(state, ownProps);
   t.false(props.enabled);
 });
 
-test('mapStateToControlProps - disabled via global readOnly beats enabled via ownProps', t => {
+test('mapStateToControlProps - disabled via global readonly beats enabled via ownProps', t => {
   const ownProps = {
     uischema: coreUISchema,
     enabled: true
   };
   const state: JsonFormsState = createState(coreUISchema);
-  state.jsonforms.readOnly = true;
+  state.jsonforms.readonly = true;
 
   const props = mapStateToControlProps(state, ownProps);
   t.false(props.enabled);
 });
 
-test('mapStateToControlProps - disabled via global readOnly beats enabled via rule', t => {
+test('mapStateToControlProps - disabled via global readonly beats enabled via rule', t => {
   const uischema = {
     ...coreUISchema,
     rule: enableRule
@@ -224,7 +224,7 @@ test('mapStateToControlProps - disabled via global readOnly beats enabled via ru
     uischema
   };
   const state: JsonFormsState = createState(uischema);
-  state.jsonforms.readOnly = true;
+  state.jsonforms.readonly = true;
 
   const props = mapStateToControlProps(state, ownProps);
   t.false(props.enabled);
@@ -711,7 +711,7 @@ test('mapStateToLayoutProps should return renderers prop via ownProps', t => {
   t.is(props.renderers.length, 1);
 });
 
-test('mapStateToLayoutProps - disabled via global readOnly', t => {
+test('mapStateToLayoutProps - disabled via global readonly', t => {
   const uischema = {
     type: 'VerticalLayout',
     elements: [coreUISchema],
@@ -720,13 +720,13 @@ test('mapStateToLayoutProps - disabled via global readOnly', t => {
     uischema
   };
   const state: JsonFormsState = createState(uischema);
-  state.jsonforms.readOnly = true;
+  state.jsonforms.readonly = true;
 
   const props = mapStateToLayoutProps(state, ownProps);
   t.false(props.enabled);
 });
 
-test('mapStateToLayoutProps - disabled via global readOnly beats enabled via ownProps', t => {
+test('mapStateToLayoutProps - disabled via global readonly beats enabled via ownProps', t => {
   const uischema = {
     type: 'VerticalLayout',
     elements: [coreUISchema],
@@ -736,13 +736,13 @@ test('mapStateToLayoutProps - disabled via global readOnly beats enabled via own
     enabled: true
   };
   const state: JsonFormsState = createState(uischema);
-  state.jsonforms.readOnly = true;
+  state.jsonforms.readonly = true;
 
   const props = mapStateToLayoutProps(state, ownProps);
   t.false(props.enabled);
 });
 
-test('mapStateToLayoutProps - disabled via global readOnly beats enabled via rule', t => {
+test('mapStateToLayoutProps - disabled via global readonly beats enabled via rule', t => {
   const uischema = {
     type: 'VerticalLayout',
     elements: [coreUISchema],
@@ -752,7 +752,7 @@ test('mapStateToLayoutProps - disabled via global readOnly beats enabled via rul
     uischema
   };
   const state: JsonFormsState = createState(uischema);
-  state.jsonforms.readOnly = true;
+  state.jsonforms.readonly = true;
 
   const props = mapStateToLayoutProps(state, ownProps);
   t.false(props.enabled);

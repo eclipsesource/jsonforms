@@ -204,30 +204,30 @@ test('mapStateToCellProps - enabled via state ', t => {
   t.true(props.enabled);
 });
 
-test('mapStateToCellProps - disabled via global readOnly', t => {
+test('mapStateToCellProps - disabled via global readonly', t => {
   const ownProps = {
     uischema: coreUISchema
   };
   const state: JsonFormsState = createState(coreUISchema);
-  state.jsonforms.readOnly = true;
+  state.jsonforms.readonly = true;
 
   const props = mapStateToCellProps(state, ownProps);
   t.false(props.enabled);
 });
 
-test('mapStateToCellProps - disabled via global readOnly beats enabled via ownProps', t => {
+test('mapStateToCellProps - disabled via global readonly beats enabled via ownProps', t => {
   const ownProps = {
     uischema: coreUISchema,
     enabled: true
   };
   const state: JsonFormsState = createState(coreUISchema);
-  state.jsonforms.readOnly = true;
+  state.jsonforms.readonly = true;
 
   const props = mapStateToCellProps(state, ownProps);
   t.false(props.enabled);
 });
 
-test('mapStateToCellProps - disabled via global readOnly beats enabled via rule', t => {
+test('mapStateToCellProps - disabled via global readonly beats enabled via rule', t => {
   const uischema = {
     ...coreUISchema,
     rule: enableRule
@@ -236,7 +236,7 @@ test('mapStateToCellProps - disabled via global readOnly beats enabled via rule'
     uischema
   };
   const state: JsonFormsState = createState(uischema);
-  state.jsonforms.readOnly = true;
+  state.jsonforms.readonly = true;
 
   const props = mapStateToCellProps(state, ownProps);
   t.false(props.enabled);
