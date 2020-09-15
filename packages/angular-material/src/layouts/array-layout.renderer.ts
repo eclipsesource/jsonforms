@@ -22,47 +22,65 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { ChangeDetectionStrategy, Component } from '@angular/core';
 import {
-  JsonFormsAngularService,
-  JsonFormsArrayControl
-} from '@jsonforms/angular';
+  ChangeDetectionStrategy,
+  Component,
+  OnDestroy,
+  OnInit
+} from '@angular/core';
+import { JsonFormsAngularService } from '@jsonforms/angular';
+import { JsonFormsAbstractControl } from '@jsonforms/angular/lib/abstract-control';
 import {
-  ArrayControlProps,
+  ArrayLayoutProps,
   createDefaultValue,
   findUISchema,
   isObjectArrayWithNesting,
+  JsonFormsState,
   mapDispatchToArrayControlProps,
+  mapStateToArrayLayoutProps,
   OwnPropsOfRenderer,
   Paths,
   RankedTester,
   rankWith,
   setReadonly,
+  StatePropsOfArrayLayout,
   UISchemaElement,
   UISchemaTester,
-  unsetReadonly,
+  unsetReadonly
 } from '@jsonforms/core';
 
-@Component({
+export const ArrayLayoutRendererComponent = {
   selector: 'app-array-layout-renderer',
   template: `
     <div fxLayout="column" fxLayoutGap="16px" [fxHide]="hidden">
-      <mat-toolbar color="primary">
-        <h2>{{ this.label }}</h2>
+      <div [ngClass]="'array-layout-toolbar'">
+        <h2 [ngClass]="['mat-h2', 'array-layout-title']">{{ label }}</h2>
+        <span fxFlex></span>
+        <mat-icon
+          *ngIf="this.error?.length"
+          color="warn"
+          matBadge="{{ this.error.split('\n').length }}"
+          matBadgeColor="warn"
+          matTooltip="{{ this.error }}"
+          matTooltipClass="error-message-tooltip"
+          >
+            error_outline
+        </mat-icon>
         <span fxFlex></span>
         <button
-          mat-icon-button
+          mat-button
+          matTooltip="{{ this.addTooltip }}"
           [disabled]="!isEnabled()"
           (click)="add()"
-          attr.aria-label="{{ 'Add to ' + this.label + 'button' }}"
+          attr.aria-label="{{ this.addAriaLabel }}"
         >
           <mat-icon>add</mat-icon>
         </button>
-      </mat-toolbar>
-      <p *ngIf="noData">No data</p>
+      </div>
+      <p *ngIf="noData">{{ this.noDataMessage }}</p>
       <div
         *ngFor="
-          let item of data;
+          let item of [].constructor(data);
           let idx = index;
           trackBy: trackByFn;
           last as last
@@ -73,7 +91,14 @@ import {
             <jsonforms-outlet [renderProps]="getProps(idx)"></jsonforms-outlet>
           </mat-card-content>
           <mat-card-actions *ngIf="isEnabled()">
-            <button mat-fab color="primary" (click)="remove(idx)" aria-label="Remove">
+            <button
+              mat-button
+              color="warn"
+              (click)="remove(idx)"
+              attr.aria-label="{{ this.removeAriaLabel }}"
+              matTooltip="{{ this.removeTooltip }}"
+              matTooltipPosition="right"
+            >
               <mat-icon>delete</mat-icon>
             </button>
           </mat-card-actions>
@@ -81,9 +106,30 @@ import {
       </div>
     </div>
   `,
+  styles: [
+    `.array-layout-toolbar {
+       display: flex;
+       align-items: center;
+      }
+      .array-layout-title {
+        margin: 0;
+      }
+      ::ng-deep .error-message-tooltip {
+        white-space: pre-line;
+      }
+      `
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush
-})
-export class ArrayLayoutRenderer extends JsonFormsArrayControl {
+};
+@Component(ArrayLayoutRendererComponent)
+export class ArrayLayoutRenderer
+  extends JsonFormsAbstractControl<StatePropsOfArrayLayout>
+  implements OnInit, OnDestroy {
+  addTooltip: string;
+  addAriaLabel: string;
+  noDataMessage: string;
+  removeTooltip: string;
+  removeAriaLabel: string;
   noData: boolean;
   addItem: (path: string, value: any) => () => void;
   removeItems: (path: string, toDelete: number[]) => () => void;
@@ -91,9 +137,12 @@ export class ArrayLayoutRenderer extends JsonFormsArrayControl {
     tester: UISchemaTester;
     uischema: UISchemaElement;
   }[];
-
   constructor(jsonFormsService: JsonFormsAngularService) {
     super(jsonFormsService);
+  }
+  mapToProps(state: JsonFormsState): StatePropsOfArrayLayout {
+    const props = mapStateToArrayLayoutProps(state, this.getOwnProps());
+    return { ...props };
   }
   remove(index: number): void {
     this.removeItems(this.propsPath, [index])();
@@ -109,13 +158,15 @@ export class ArrayLayoutRenderer extends JsonFormsArrayControl {
     this.addItem = addItem;
     this.removeItems = removeItems;
   }
-
-  mapAdditionalProps(props: ArrayControlProps) {
-    this.noData =
-      !props.data || (Array.isArray(props.data) && !props.data.length);
+  mapAdditionalProps(props: ArrayLayoutProps) {
+    this.noData = !props.data || props.data === 0;
     this.uischemas = props.uischemas;
+    this.addTooltip = `Add to ${this.label}`;
+    this.addAriaLabel = `Add to ${this.label} button`;
+    this.removeTooltip = `Delete`;
+    this.removeAriaLabel = `Delete button`;
+    this.noDataMessage = `No data`;
   }
-
   getProps(index: number): OwnPropsOfRenderer {
     const uischema = findUISchema(
       this.uischemas,
