@@ -62,6 +62,7 @@ export const ArrayLayoutRendererComponent = {
           matBadge="{{ this.error.split('\n').length }}"
           matBadgeColor="warn"
           matTooltip="{{ this.error }}"
+          matTooltipClass="error-message-tooltip"
           >
             error_outline
         </mat-icon>
@@ -76,7 +77,7 @@ export const ArrayLayoutRendererComponent = {
           <mat-icon>add</mat-icon>
         </button>
       </div>
-      <p *ngIf="noData">No data</p>
+      <p *ngIf="noData">{{ this.noDataMessage }}</p>
       <div
         *ngFor="
           let item of [].constructor(data);
@@ -95,7 +96,7 @@ export const ArrayLayoutRendererComponent = {
               color="warn"
               (click)="remove(idx)"
               attr.aria-label="{{ this.removeAriaLabel }}"
-              matTooltip="{{this.removeTooltip }}"
+              matTooltip="{{ this.removeTooltip }}"
               matTooltipPosition="right"
             >
               <mat-icon>delete</mat-icon>
@@ -112,7 +113,11 @@ export const ArrayLayoutRendererComponent = {
       }
       .array-layout-title {
         margin: 0;
-      }`
+      }
+      ::ng-deep .error-message-tooltip {
+        white-space: pre-line;
+      }
+      `
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 };
