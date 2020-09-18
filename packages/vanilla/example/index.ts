@@ -31,7 +31,7 @@ import {
 } from '../src';
 import { renderExample } from '../../example/src/index';
 
-renderExample(vanillaRenderers, vanillaCells, {
+renderExample(vanillaRenderers, vanillaCells, undefined, {
   name: 'styles',
   reducer: stylingReducer,
   state: vanillaStyles
