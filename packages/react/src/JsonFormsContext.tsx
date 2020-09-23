@@ -35,7 +35,6 @@ import {
   DispatchPropsOfControl,
   EnumCellProps,
   JsonFormsCore,
-  JsonFormsState,
   JsonFormsSubStates,
   LayoutProps,
   OwnPropsOfCell,
@@ -70,7 +69,6 @@ import {
 } from '@jsonforms/core';
 import React, { ComponentType, Dispatch, ReducerAction, useCallback, useContext, useEffect, useReducer, useRef } from 'react';
 
-import { connect } from 'react-redux';
 import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
 import omit from 'lodash/omit';
@@ -160,25 +158,6 @@ export interface JsonFormsReduxContextProps extends JsonFormsSubStates {
   children: any;
   dispatch: Dispatch<ReducerAction<any>>;
 }
-
-const JsonFormsReduxProvider = ({ children, dispatch, ...other }: JsonFormsReduxContextProps) => {
-  return (
-    <JsonFormsContext.Provider
-      value={{
-        dispatch,
-        ...other
-      }}
-    >
-      {children}
-    </JsonFormsContext.Provider>
-  );
-};
-
-export const JsonFormsReduxContext = connect(
-  (state: JsonFormsState) => ({
-    ...state.jsonforms
-  })
-)(JsonFormsReduxProvider);
 
 export const ctxToArrayLayoutProps = (ctx: JsonFormsStateContext, props: OwnPropsOfControl) =>
   mapStateToArrayLayoutProps({ jsonforms: { ...ctx } }, props);
