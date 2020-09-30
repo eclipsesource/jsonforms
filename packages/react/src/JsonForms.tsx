@@ -25,7 +25,7 @@
 import isEqual from 'lodash/isEqual';
 import maxBy from 'lodash/maxBy';
 import memoize from 'lodash/memoize';
-import React, { useLayoutEffect } from 'react';
+import React, { useLayoutEffect, useMemo } from 'react';
 import AJV from 'ajv';
 import RefParser from 'json-schema-ref-parser';
 import { UnknownRenderer } from './UnknownRenderer';
@@ -240,9 +240,16 @@ export const JsonForms = (
     readonly,
     validationMode
   } = props;
-  const schemaToUse = schema !== undefined ? schema : Generate.jsonSchema(data);
-  const uischemaToUse =
-    typeof uischema === 'object' ? uischema : Generate.uiSchema(schemaToUse);
+  const schemaToUse = useMemo(
+    () => (schema !== undefined ? schema : Generate.jsonSchema(data)),
+    [schema, data]
+  );
+  const uischemaToUse = useMemo(
+    () =>
+      typeof uischema === 'object' ? uischema : Generate.uiSchema(schemaToUse),
+    [uischema, schemaToUse]
+  );
+
   return (
     <JsonFormsStateProvider
       initState={{
