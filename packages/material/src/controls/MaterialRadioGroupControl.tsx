@@ -32,7 +32,7 @@ import {
   isPlainLabel,
   rankWith,
   RankedTester,
-  optionIs
+  optionIs, and, isEnumControl
 } from '@jsonforms/core';
 import { Control, withJsonFormsControlProps } from '@jsonforms/react';
 import Radio from '@material-ui/core/Radio';
@@ -118,7 +118,7 @@ export class MaterialRadioGroupControl extends Control<
 }
 
 export const materialRadioGroupControlTester: RankedTester = rankWith(
-  2,
-  optionIs('format', 'radio')
+  20,
+  and(isEnumControl, optionIs('format', 'radio'))
 );
 export default withJsonFormsControlProps(MaterialRadioGroupControl);
