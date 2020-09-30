@@ -49,7 +49,7 @@ import {
   unsetReadonly
 } from '@jsonforms/core';
 
-export const ArrayLayoutRendererComponent = {
+@Component({
   selector: 'app-array-layout-renderer',
   template: `
     <div fxLayout="column" fxLayoutGap="16px" [fxHide]="hidden">
@@ -120,8 +120,7 @@ export const ArrayLayoutRendererComponent = {
       `
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
-};
-@Component(ArrayLayoutRendererComponent)
+})
 export class ArrayLayoutRenderer
   extends JsonFormsAbstractControl<StatePropsOfArrayLayout>
   implements OnInit, OnDestroy {
