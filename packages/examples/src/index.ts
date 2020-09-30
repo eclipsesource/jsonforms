@@ -68,6 +68,7 @@ import * as huge from './huge';
 import * as defaultExample from './default';
 import * as onChange from './onChange';
 import * as enumExample from './enum';
+import * as radioGroupExample from './radioGroup';
 export * from './register';
 export * from './example';
 
@@ -120,5 +121,6 @@ export {
   huge,
   ifThenElse,
   onChange,
-  enumExample
+  enumExample,
+  radioGroupExample
 };

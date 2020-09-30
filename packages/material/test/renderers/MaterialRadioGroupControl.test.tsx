@@ -27,15 +27,14 @@ import * as React from 'react';
 import {
   Actions,
   ControlElement,
-  isEnumControl,
   jsonformsReducer,
   JsonFormsState,
   JsonSchema,
-  rankWith,
+  NOT_APPLICABLE,
   UISchemaElement,
   update
 } from '@jsonforms/core';
-import MaterialRadioGroupControl from '../../src/controls/MaterialRadioGroupControl';
+import MaterialRadioGroupControl, { materialRadioGroupControlTester } from '../../src/controls/MaterialRadioGroupControl';
 import { Provider } from 'react-redux';
 import { materialRenderers } from '../../src';
 import { AnyAction, combineReducers, createStore, Reducer, Store } from 'redux';
@@ -56,7 +55,10 @@ const schema = {
 };
 const uischema: ControlElement = {
   type: 'Control',
-  scope: '#/properties/foo'
+  scope: '#/properties/foo',
+  options: {
+    format: 'radio'
+  }
 };
 
 const initJsonFormsStore = (
@@ -66,13 +68,7 @@ const initJsonFormsStore = (
 ): Store<JsonFormsState> => {
   const s: JsonFormsState = {
     jsonforms: {
-      renderers: [
-        ...materialRenderers,
-        {
-          tester: rankWith(10, isEnumControl),
-          renderer: MaterialRadioGroupControl
-        }
-      ]
+      renderers: materialRenderers
     }
   };
   const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({
@@ -82,6 +78,22 @@ const initJsonFormsStore = (
   store.dispatch(Actions.init(testData, testSchema, testUiSchema));
   return store;
 };
+
+describe('Material radio group tester', () => {
+  it('should return valid rank for enums with radio format', () => {
+    const rank = materialRadioGroupControlTester(uischema, schema);
+    expect(rank).not.toBe(NOT_APPLICABLE);
+  });
+
+  it('should return NOT_APPLICABLE for enums without radio format', () => {
+    const uiSchemaNoRadio = {
+      type: 'Control',
+      scope: '#/properties/foo'
+    };
+    const rank = materialRadioGroupControlTester(uiSchemaNoRadio, schema);
+    expect(rank).toBe(NOT_APPLICABLE);
+  });
+});
 
 describe('Material radio group control', () => {
   let wrapper: ReactWrapper;
