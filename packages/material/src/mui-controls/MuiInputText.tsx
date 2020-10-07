@@ -67,7 +67,7 @@ export const MuiInputText = React.memo((props: CellProps & WithClassname & MuiTe
   }
   const onChange = (ev: any) => handleChange(path, ev.target.value);
 
-  const hoverColor = useTheme().palette.action.hover;
+  const iconBackgroundColor = useTheme().palette.background.default;
 
   return (
     <Input
@@ -98,10 +98,9 @@ export const MuiInputText = React.memo((props: CellProps & WithClassname & MuiTe
         >
           <IconButton
             aria-label='Clear input field'
-            onClick={() => handleChange(path, undefined)}
-            style={{background: hoverColor}}
+            onClick={() => handleChange(path, undefined)}   
           >
-            <Close />
+            <Close style={{background: iconBackgroundColor, borderRadius: '50%'}}/>
           </IconButton>
         </InputAdornment>
       }
