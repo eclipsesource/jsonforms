@@ -20,7 +20,6 @@ import { Demo, Logo } from '../components/common'
 import { createJsonFormsStore } from "../common/store"
 import globalStyles from '../styles/global.module.css';
 import styles from "./home.module.css"
-import Twitter from "./Twitter";
 import { Grid } from "@material-ui/core";
 //import SEO from "../components/seo"
 
@@ -45,8 +44,6 @@ const additionalStyles = () => ({
     margin: '1em'
   }
 });
-
-const JSONFORMS_TWITTER_ID = '3064900589';
 
 const store = createJsonFormsStore({
   data: { firstName: 'Max Power' },
@@ -90,9 +87,6 @@ const Home = ({ classes }) => {
                   </Button>
                 </Link>
               </div>
-            </Grid>
-            <Grid item xs={12} sm={12} md={4}>
-              <Twitter id={JSONFORMS_TWITTER_ID} width={400} height={400} />
             </Grid>
           </Grid>
         </div>

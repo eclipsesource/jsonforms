@@ -45,9 +45,6 @@ const Footer = ({ classes }) => {
           Privacy Policy
         </a>
 
-        <a href="https://www.iubenda.com/privacy-policy/83048734/cookie-policy" className={linkClasses}>
-          Cookie Policy
-        </a>
       </div>
     </footer>
   );
