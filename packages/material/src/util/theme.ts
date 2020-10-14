@@ -22,5 +22,14 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-export * from './layout';
-export * from './theme';
+import { Theme } from '@material-ui/core/styles';
+
+export interface JsonFormsTheme extends Theme {
+  jsonforms?: {
+    input?: {
+      delete?: {
+        background?: string;
+      }
+    }
+  };
+}

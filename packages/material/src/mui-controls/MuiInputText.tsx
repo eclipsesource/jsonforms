@@ -30,20 +30,11 @@ import merge from 'lodash/merge';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Close from '@material-ui/icons/Close';
-import { Theme, useTheme } from '@material-ui/core/styles';
+import { useTheme } from '@material-ui/core/styles';
+import { JsonFormsTheme } from '../util';
 
 interface MuiTextInputProps {
   muiInputProps?: React.HTMLAttributes<HTMLInputElement>;
-}
-
-interface JsonFormsTheme extends Theme {
-  jsonforms?: {
-    input: {
-      delete: {
-        background: string;
-      }
-    }
-  };
 }
 
 export const MuiInputText = React.memo((props: CellProps & WithClassname & MuiTextInputProps) => {
@@ -78,7 +69,7 @@ export const MuiInputText = React.memo((props: CellProps & WithClassname & MuiTe
   const onChange = (ev: any) => handleChange(path, ev.target.value);
 
   const theme: JsonFormsTheme = useTheme();
-  const iconBackgroundColor = theme.jsonforms?.input?.delete?.background || theme.palette.background.default;
+  const inputDeleteBackgroundColor = theme.jsonforms?.input?.delete?.background || theme.palette.background.default;
 
   return (
     <Input
@@ -111,7 +102,7 @@ export const MuiInputText = React.memo((props: CellProps & WithClassname & MuiTe
             aria-label='Clear input field'
             onClick={() => handleChange(path, undefined)}   
           >
-            <Close style={{background: iconBackgroundColor, borderRadius: '50%'}}/>
+            <Close style={{background: inputDeleteBackgroundColor, borderRadius: '50%'}}/>
           </IconButton>
         </InputAdornment>
       }
