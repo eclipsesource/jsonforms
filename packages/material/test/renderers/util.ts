@@ -35,10 +35,6 @@ export const initCore = (schema: JsonSchema, uischema: UISchemaElement, data?: a
   return { schema, uischema, data, ajv: createAjv() };
 };
 
-export const onChangeData: any = {
-  data: undefined
-};
-
 export const TestEmitter : React.FC<JsonFormsReactProps> = ({onChange}) => {
   const ctx = useJsonForms();
   const { data, errors } = ctx.core;

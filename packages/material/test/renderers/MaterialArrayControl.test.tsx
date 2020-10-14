@@ -35,7 +35,7 @@ import { materialCells, materialRenderers } from '../../src';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { JsonFormsStateProvider, StatelessRenderer } from '@jsonforms/react';
-import { initCore, onChangeData, TestEmitter } from './util';
+import { initCore, TestEmitter } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -232,6 +232,9 @@ describe('Material array control', () => {
 
   it('should delete an item', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
+    const onChangeData: any = {
+      data: undefined
+    };
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: materialRenderers, cells: materialCells, core }}>
         <TestEmitter
@@ -351,6 +354,9 @@ describe('Material array control', () => {
       scope: '#/properties/things'
     };
     const core = initCore(schema, uischema, {});
+    const onChangeData: any = {
+      data: undefined
+    };
 
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
@@ -445,6 +451,9 @@ describe('Material array control', () => {
   });
   it('should be able to move item down if down button is clicked', () => {
     const core = initCore(fixture2.schema, fixture2.uischema, fixture2.data);
+    const onChangeData: any = {
+      data: undefined
+    };
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
         <TestEmitter
@@ -471,6 +480,9 @@ describe('Material array control', () => {
   });
   it('should be able to move item up if up button is clicked', () => {
     const core = initCore(fixture2.schema, fixture2.uischema, fixture2.data);
+    const onChangeData: any = {
+      data: undefined
+    };
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
         <TestEmitter

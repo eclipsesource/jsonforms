@@ -37,7 +37,7 @@ import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { JsonForms, JsonFormsStateProvider } from '@jsonforms/react';
 import { ExpansionPanel } from '@material-ui/core';
-import { initCore, onChangeData } from './util';
+import { initCore } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -307,6 +307,9 @@ describe('Material array layout', () => {
     ).toBe(1);
   });
   it('should move item up if up button is presses', () => {
+    const onChangeData: any = {
+      data: undefined
+    };
     wrapper = mount(
       <JsonForms
         data={data}
@@ -341,6 +344,9 @@ describe('Material array layout', () => {
     ]);
   });
   it('shoud move item down if down button is pressed', () => {
+    const onChangeData: any = {
+      data: undefined
+    };
     wrapper = mount(
       <JsonForms
         data={data}

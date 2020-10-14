@@ -36,7 +36,7 @@ import {
   materialRenderers
 } from '../../src';
 import { JsonForms, JsonFormsStateProvider } from '@jsonforms/react';
-import { initCore, onChangeData, TestEmitter } from './util';
+import { initCore, TestEmitter } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -84,6 +84,9 @@ describe('Material anyOf renderer', () => {
       type: 'Control',
       label: 'Value',
       scope: '#/properties/value'
+    };
+    const onChangeData: any = {
+      data: undefined
     };
     wrapper = mount(
       <JsonForms
@@ -221,6 +224,9 @@ describe('Material anyOf renderer', () => {
     const uischema: ControlElement = {
       type: 'Control',
       scope: '#/properties/myThingsAndOrYourThings'
+    };
+    const onChangeData: any = {
+      data: undefined
     };
     const core = initCore(schema, uischema);
     wrapper = mount(

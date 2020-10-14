@@ -36,7 +36,7 @@ import { materialRenderers } from '../../src';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { JsonFormsStateProvider } from '@jsonforms/react';
-import { initCore, onChangeData, TestEmitter } from './util';
+import { initCore, TestEmitter } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -219,6 +219,9 @@ describe('Material number cells', () => {
 
   it('should update via input event', () => {
     const core = initCore(schema, uischema, data);
+    const onChangeData: any = {
+      data: undefined
+    };
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
         <TestEmitter

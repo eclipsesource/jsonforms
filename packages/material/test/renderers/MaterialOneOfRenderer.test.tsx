@@ -37,7 +37,7 @@ import {
 } from '../../src';
 import { JsonForms, JsonFormsDispatch, JsonFormsStateProvider } from '@jsonforms/react';
 import { Tab } from '@material-ui/core';
-import { initCore, onChangeData, TestEmitter } from './util';
+import { initCore, TestEmitter } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -279,6 +279,9 @@ describe('Material oneOf renderer', () => {
       label: 'Value',
       scope: '#/properties/value'
     };
+    const onChangeData: any = {
+      data: undefined
+    };
     wrapper = mount(
       <JsonForms
         data={undefined}
@@ -398,6 +401,9 @@ describe('Material oneOf renderer', () => {
     };
 
     const core = initCore(schema, uischema, {});
+    const onChangeData: any = {
+      data: undefined
+    };
 
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
@@ -470,6 +476,9 @@ describe('Material oneOf renderer', () => {
     };
 
     const core = initCore(schema, uischema, {});
+    const onChangeData: any = {
+      data: undefined
+    };
 
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
