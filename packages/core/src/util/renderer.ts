@@ -59,8 +59,8 @@ import {
   moveUp,
   Resolve,
   resolveSubSchemas
-} from '.';
-import { update, CoreActions } from '../actions';
+} from '../util';
+import { CoreActions, update } from '../actions';
 import { ErrorObject } from 'ajv';
 import { JsonFormsState } from '../store';
 import { JsonFormsRendererRegistryEntry } from '../reducers/renderers';
