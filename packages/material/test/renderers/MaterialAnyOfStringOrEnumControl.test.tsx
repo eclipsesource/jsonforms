@@ -37,7 +37,6 @@ import {
   materialRenderers
 } from '../../src';
 import { JsonForms } from '@jsonforms/react';
-import { onChangeData } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -110,9 +109,6 @@ describe('Material any of string or enum control', () => {
         schema={schema}
         uischema={uischema}
         renderers={materialRenderers}
-        onChange={({ data }) => {
-          onChangeData.data = data;
-        }}
       />
     );
     expect(wrapper.find(MaterialAnyOfStringOrEnumControl).length).toBeTruthy();

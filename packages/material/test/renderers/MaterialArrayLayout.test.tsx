@@ -252,9 +252,6 @@ describe('Material array layout', () => {
         schema={nestedSchema}
         uischema={uischemaWithLabel}
         renderers={materialRenderers}
-        onChange={({ data }) => {
-          onChangeData.data = data;
-        }}
       />
     );
 
@@ -287,9 +284,6 @@ describe('Material array layout', () => {
         schema={nestedSchema}
         uischema={uischemaWithSortOption}
         renderers={materialRenderers}
-        onChange={({ data }) => {
-          onChangeData.data = data;
-        }}
       />
     );
 
@@ -387,9 +381,6 @@ describe('Material array layout', () => {
         schema={nestedSchema}
         uischema={uischemaWithSortOption}
         renderers={materialRenderers}
-        onChange={({ data }) => {
-          onChangeData.data = data;
-        }}
       />
     );
 
@@ -410,9 +401,6 @@ describe('Material array layout', () => {
         schema={nestedSchema}
         uischema={uischemaWithSortOption}
         renderers={materialRenderers}
-        onChange={({ data }) => {
-          onChangeData.data = data;
-        }}
       />
     );
 
@@ -458,9 +446,6 @@ describe('Material array layout', () => {
         schema={nestedSchema}
         uischema={uischemaWithChildLabelProp}
         renderers={materialRenderers}
-        onChange={({ data }) => {
-          onChangeData.data = data;
-        }}
       />
     );
 

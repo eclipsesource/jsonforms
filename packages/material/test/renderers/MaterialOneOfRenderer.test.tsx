@@ -154,9 +154,6 @@ describe('Material oneOf renderer', () => {
         schema={schema}
         uischema={uischema}
         renderers={materialRenderers}
-        onChange={({ data }) => {
-          onChangeData.data = data;
-        }}
       />
     );
     expect(wrapper.find(MaterialOneOfRenderer).length).toBeTruthy();
@@ -204,9 +201,6 @@ describe('Material oneOf renderer', () => {
         schema={schema}
         uischema={uischema}
         renderers={materialRenderers}
-        onChange={({ data }) => {
-          onChangeData.data = data;
-        }}
       />
     );
     expect(wrapper.find(MaterialOneOfRenderer).length).toBeTruthy();
@@ -254,9 +248,6 @@ describe('Material oneOf renderer', () => {
         schema={schema}
         uischema={uischema}
         renderers={materialRenderers}
-        onChange={({ data }) => {
-          onChangeData.data = data;
-        }}
       />
     );
     expect(wrapper.find(MaterialOneOfRenderer).length).toBeTruthy();
@@ -544,9 +535,6 @@ describe('Material oneOf renderer', () => {
         schema={schema}
         uischema={uischema}
         renderers={materialRenderers}
-        onChange={({ data }) => {
-          onChangeData.data = data;
-        }}
       />
     );
     expect(wrapper.find(MaterialOneOfRenderer).length).toBeTruthy();

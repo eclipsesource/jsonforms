@@ -38,7 +38,7 @@ import { Slider } from '@material-ui/core';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { JsonForms, JsonFormsStateProvider } from '@jsonforms/react';
-import { initCore, onChangeData } from './util';
+import { initCore } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -226,9 +226,6 @@ describe('Material slider control', () => {
         schema={schema}
         uischema={uischema}
         renderers={materialRenderers}
-        onChange={({ data }) => {
-          onChangeData.data = data;
-        }}
       />
     );
     expect(wrapper.find(SliderControl).length).toBeTruthy();
@@ -263,9 +260,6 @@ describe('Material slider control', () => {
         schema={schemaWithMultipleOf}
         uischema={uischema}
         renderers={materialRenderers}
-        onChange={({ data }) => {
-          onChangeData.data = data;
-        }}
       />
     );
     expect(wrapper.find(SliderControl).length).toBeTruthy();
@@ -280,9 +274,6 @@ describe('Material slider control', () => {
         schema={schema}
         uischema={uischema}
         renderers={materialRenderers}
-        onChange={({ data }) => {
-          onChangeData.data = data;
-        }}
       />
     );
     expect(wrapper.find(SliderControl).length).toBeTruthy();
@@ -300,9 +291,6 @@ describe('Material slider control', () => {
         schema={schema}
         uischema={uischema}
         renderers={materialRenderers}
-        onChange={({ data }) => {
-          onChangeData.data = data;
-        }}
       />
     );
     expect(wrapper.find(SliderControl).length).toBeTruthy();
@@ -320,9 +308,6 @@ describe('Material slider control', () => {
         schema={schema}
         uischema={uischema}
         renderers={materialRenderers}
-        onChange={({ data }) => {
-          onChangeData.data = data;
-        }}
       />
     );
     expect(wrapper.find(SliderControl).length).toBeTruthy();
@@ -340,9 +325,6 @@ describe('Material slider control', () => {
         schema={schema}
         uischema={uischema}
         renderers={materialRenderers}
-        onChange={({ data }) => {
-          onChangeData.data = data;
-        }}
       />
     );
     expect(wrapper.find(SliderControl).length).toBeTruthy();
@@ -360,9 +342,6 @@ describe('Material slider control', () => {
         schema={schema}
         uischema={uischema}
         renderers={materialRenderers}
-        onChange={({ data }) => {
-          onChangeData.data = data;
-        }}
       />
     );
     expect(wrapper.find(SliderControl).length).toBeTruthy();
@@ -395,9 +374,6 @@ describe('Material slider control', () => {
         schema={schema}
         uischema={uischema}
         renderers={materialRenderers}
-        onChange={({ data }) => {
-          onChangeData.data = data;
-        }}
       />
     );
     expect(wrapper.find(SliderControl).length).toBeTruthy();

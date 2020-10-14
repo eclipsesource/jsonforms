@@ -30,7 +30,7 @@ import Adapter from 'enzyme-adapter-react-16';
 import { ControlElement } from '@jsonforms/core';
 import { MaterialAllOfRenderer, materialRenderers } from '../../src';
 import { JsonForms, JsonFormsStateProvider } from '@jsonforms/react';
-import { initCore, onChangeData } from './util';
+import { initCore } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -68,9 +68,6 @@ describe('Material allOf renderer', () => {
         schema={schema}
         uischema={uischema}
         renderers={materialRenderers}
-        onChange={({ data }) => {
-          onChangeData.data = data;
-        }}
       />
     );
     expect(wrapper.find(MaterialAllOfRenderer).length).toBeTruthy();

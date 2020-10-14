@@ -34,7 +34,6 @@ import {
 } from '@jsonforms/core';
 import Adapter from 'enzyme-adapter-react-16';
 import { JsonForms } from '@jsonforms/react';
-import { onChangeData } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -143,9 +142,6 @@ describe('Layout Tests', () => {
         schema={schema}
         uischema={uischema}
         renderers={materialRenderers}
-        onChange={({ data }) => {
-          onChangeData.data = data;
-        }}
       />
     );
   };
@@ -429,9 +425,6 @@ describe('Special Layout Tests', () => {
           schema={schema}
           uischema={uischema}
           renderers={materialRenderers}
-          onChange={({ data }) => {
-            onChangeData.data = data;
-          }}
         />
       );
       expect(
@@ -453,9 +446,6 @@ describe('Special Layout Tests', () => {
           schema={schema}
           uischema={uischema}
           renderers={materialRenderers}
-          onChange={({ data }) => {
-            onChangeData.data = data;
-          }}
         />
       );
       expect(
@@ -507,9 +497,6 @@ describe('Special Layout Tests', () => {
           schema={schema}
           uischema={uischema}
           renderers={materialRenderers}
-          onChange={({ data }) => {
-            onChangeData.data = data;
-          }}
         />
       );
       expect(
@@ -536,9 +523,6 @@ describe('Special Layout Tests', () => {
           schema={schema}
           uischema={uischema}
           renderers={materialRenderers}
-          onChange={({ data }) => {
-            onChangeData.data = data;
-          }}
         />
       );
       expect(

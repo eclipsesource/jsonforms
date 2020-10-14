@@ -35,7 +35,7 @@ import { materialRenderers } from '../../src';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { JsonForms, JsonFormsStateProvider } from '@jsonforms/react';
-import { initCore, onChangeData } from './util';
+import { initCore } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -74,9 +74,6 @@ describe('Material Label Renderer', () => {
         schema={schema}
         uischema={uischema}
         renderers={materialRenderers}
-        onChange={({ data }) => {
-          onChangeData.data = data;
-        }}
       />
     );
     expect(wrapper.find(MaterialLabelRenderer).length).toBeTruthy();
@@ -107,9 +104,6 @@ describe('Material Label Renderer', () => {
         schema={schema}
         uischema={uischema}
         renderers={materialRenderers}
-        onChange={({ data }) => {
-          onChangeData.data = data;
-        }}
       />
     );
     expect(wrapper.find(MaterialLabelRenderer).length).toBeTruthy();
