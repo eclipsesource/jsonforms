@@ -195,11 +195,6 @@ describe('Material time cell', () => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
-        <TestEmitter
-          onChange={({ data }) => {
-            onChangeData.data = data;
-          }}
-        />
         <TimeCell schema={schema} uischema={uischema} path='foo' />
       </JsonFormsStateProvider>
     );
@@ -214,11 +209,6 @@ describe('Material time cell', () => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
-        <TestEmitter
-          onChange={({ data }) => {
-            onChangeData.data = data;
-          }}
-        />
         <TimeCell schema={schema} uischema={uischema} path='foo' />
       </JsonFormsStateProvider>
     );
@@ -233,11 +223,6 @@ describe('Material time cell', () => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
-        <TestEmitter
-          onChange={({ data }) => {
-            onChangeData.data = data;
-          }}
-        />
         <TimeCell schema={schema} uischema={uischema} path='foo' />
       </JsonFormsStateProvider>
     );

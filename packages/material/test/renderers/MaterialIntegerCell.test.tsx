@@ -197,11 +197,6 @@ describe('Material integer cells', () => {
     const core = initCore(schema, uischema, { foo: 13 });
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
-        <TestEmitter
-          onChange={({ data }) => {
-            onChangeData.data = data;
-          }}
-        />
         <IntegerCell schema={schema} uischema={uischema} path='foo' />
       </JsonFormsStateProvider>
     );

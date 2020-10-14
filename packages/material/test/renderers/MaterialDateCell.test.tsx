@@ -188,11 +188,6 @@ describe('Material date cell', () => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
-        <TestEmitter
-          onChange={({ data }) => {
-            onChangeData.data = data;
-          }}
-        />
         <MaterialDateCell schema={schema} uischema={uischema} path='foo' />
       </JsonFormsStateProvider>
     );
@@ -207,11 +202,6 @@ describe('Material date cell', () => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
-        <TestEmitter
-          onChange={({ data }) => {
-            onChangeData.data = data;
-          }}
-        />
         <MaterialDateCell schema={schema} uischema={uischema} path='foo' />
       </JsonFormsStateProvider>
     );
@@ -226,11 +216,6 @@ describe('Material date cell', () => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
-        <TestEmitter
-          onChange={({ data }) => {
-            onChangeData.data = data;
-          }}
-        />
         <MaterialDateCell schema={schema} uischema={uischema} path='foo' />
       </JsonFormsStateProvider>
     );
@@ -245,11 +230,6 @@ describe('Material date cell', () => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
-        <TestEmitter
-          onChange={({ data }) => {
-            onChangeData.data = data;
-          }}
-        />
         <MaterialDateCell schema={schema} uischema={uischema} path='foo' />
       </JsonFormsStateProvider>
     );
@@ -264,11 +244,6 @@ describe('Material date cell', () => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
-        <TestEmitter
-          onChange={({ data }) => {
-            onChangeData.data = data;
-          }}
-        />
         <MaterialDateCell schema={schema} uischema={uischema} path='foo' />
       </JsonFormsStateProvider>
     );
@@ -283,11 +258,6 @@ describe('Material date cell', () => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
-        <TestEmitter
-          onChange={({ data }) => {
-            onChangeData.data = data;
-          }}
-        />
         <MaterialDateCell schema={schema} uischema={uischema} path='foo' />
       </JsonFormsStateProvider>
     );

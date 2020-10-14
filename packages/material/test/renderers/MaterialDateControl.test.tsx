@@ -194,11 +194,6 @@ describe('Material date control', () => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
-        <TestEmitter
-          onChange={({ data }) => {
-            onChangeData.data = data;
-          }}
-        />
         <MaterialDateControl schema={schema} uischema={uischema} />
       </JsonFormsStateProvider>
     );
@@ -213,11 +208,6 @@ describe('Material date control', () => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
-        <TestEmitter
-          onChange={({ data }) => {
-            onChangeData.data = data;
-          }}
-        />
         <MaterialDateControl schema={schema} uischema={uischema} />
       </JsonFormsStateProvider>
     );
@@ -232,11 +222,6 @@ describe('Material date control', () => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
-        <TestEmitter
-          onChange={({ data }) => {
-            onChangeData.data = data;
-          }}
-        />
         <MaterialDateControl schema={schema} uischema={uischema} />
       </JsonFormsStateProvider>
     );
@@ -251,11 +236,6 @@ describe('Material date control', () => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
-        <TestEmitter
-          onChange={({ data }) => {
-            onChangeData.data = data;
-          }}
-        />
         <MaterialDateControl schema={schema} uischema={uischema} />
       </JsonFormsStateProvider>
     );
@@ -270,11 +250,6 @@ describe('Material date control', () => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
-        <TestEmitter
-          onChange={({ data }) => {
-            onChangeData.data = data;
-          }}
-        />
         <MaterialDateControl schema={schema} uischema={uischema} />
       </JsonFormsStateProvider>
     );
@@ -289,11 +264,6 @@ describe('Material date control', () => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
-        <TestEmitter
-          onChange={({ data }) => {
-            onChangeData.data = data;
-          }}
-        />
         <MaterialDateControl schema={schema} uischema={uischema} />
       </JsonFormsStateProvider>
     );
