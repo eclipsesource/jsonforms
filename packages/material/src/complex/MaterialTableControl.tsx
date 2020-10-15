@@ -96,6 +96,7 @@ const generateCells = (
       const props = {
         propName: prop,
         schema,
+        title: schema.properties[prop].title ? schema.properties[prop].title : startCase(prop),
         rowPath,
         cellPath,
         enabled,
@@ -109,6 +110,7 @@ const generateCells = (
       schema,
       rowPath,
       cellPath: rowPath,
+      title: schema.title ? schema.title : '',
       enabled
     };
     return <Cell key={rowPath} {...props} />;
@@ -138,11 +140,11 @@ const EmptyTable = ({ numColumns }: EmptyTableProps) => (
 );
 
 interface TableHeaderCellProps {
-  propName: string;
+  title: string;
 }
 
-const TableHeaderCell = React.memo(({ propName }: TableHeaderCellProps) => (
-  <TableCell>{startCase(propName)}</TableCell>
+const TableHeaderCell = React.memo(({ title }: TableHeaderCellProps) => (
+  <TableCell>{title}</TableCell>
 ));
 
 interface NonEmptyCellProps extends OwnPropsOfNonEmptyCell {
@@ -154,6 +156,7 @@ interface NonEmptyCellProps extends OwnPropsOfNonEmptyCell {
 interface OwnPropsOfNonEmptyCell {
   rowPath: string;
   propName?: string;
+  title: string;
   schema: JsonSchema;
   enabled: boolean;
   renderers?: JsonFormsRendererRegistryEntry[];
@@ -178,6 +181,7 @@ const ctxToNonEmptyCellProps = (
   return {
     rowPath: ownProps.rowPath,
     propName: ownProps.propName,
+    title: ownProps.title ? ownProps.title : startCase(ownProps.propName),
     schema: ownProps.schema,
     rootSchema: ctx.core.schema,
     errors,
