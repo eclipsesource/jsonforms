@@ -92,7 +92,7 @@ const generateCells = (
 ) => {
   if (schema.type === 'object') {
     return getValidColumnProps(schema).map(prop => {
-      let title = prop;
+      let title = startCase(prop);
       if (schema.properties && schema.properties[prop].title) {
         title = schema.properties[prop].title;
       }
