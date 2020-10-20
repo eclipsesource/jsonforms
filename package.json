@@ -18,7 +18,7 @@
     "@types/jest": "^24.0.23",
     "@types/lodash": "^4.14.149",
     "ajv": "^6.10.2",
-    "ava": "~2.4.0",
+    "ava": "^3.13.0",
     "babel-loader": "^8.0.6",
     "coveralls": "^3.0.9",
     "cross-env": "^6.0.3",
