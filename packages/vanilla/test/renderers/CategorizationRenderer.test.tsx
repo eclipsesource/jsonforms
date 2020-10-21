@@ -31,7 +31,7 @@ import {
   JsonSchema,
   Layout,
 } from '@jsonforms/core';
-import { JsonFormsReduxContext } from '@jsonforms/react';
+import { JsonFormsReduxContext } from '@jsonforms/react/lib/redux';
 import Adapter from 'enzyme-adapter-react-16';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import CategorizationRenderer, { categorizationTester } from '../../src/complex/categorization';

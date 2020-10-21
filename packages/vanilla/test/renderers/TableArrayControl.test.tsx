@@ -33,7 +33,7 @@ import {
 } from '@jsonforms/core';
 import Adapter from 'enzyme-adapter-react-16';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
-import { JsonFormsReduxContext } from '@jsonforms/react';
+import { JsonFormsReduxContext } from '@jsonforms/react/lib/redux';
 import TableArrayControl, { tableArrayControlTester, } from '../../src/complex/TableArrayControl';
 import HorizontalLayoutRenderer from '../../src/layouts/HorizontalLayout';
 import '../../src';
