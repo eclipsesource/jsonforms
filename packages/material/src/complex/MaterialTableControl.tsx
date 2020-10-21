@@ -90,7 +90,6 @@ const generateCells = (
   enabled: boolean,
   cells?: JsonFormsCellRendererRegistryEntry[]
 ) => {
-  console.log(schema)
   if (schema.type === 'object') {
     return getValidColumnProps(schema).map(prop => {
       const title = schema.properties?.[prop]?.title ?? startCase(prop);
