@@ -23,12 +23,12 @@
   THE SOFTWARE.
 */
 import { combineReducers, Reducer } from 'redux';
-import { jsonformsReducer, JsonFormsState } from '@jsonforms/core';
+import { jsonFormsReducerConfig, JsonFormsState } from '@jsonforms/core';
 import { angularMaterialRenderers } from '../../src/index';
 import { ExampleDescription, getExamples } from '@jsonforms/examples';
 
 export const rootReducer: Reducer<JsonFormsState> = combineReducers({
-  jsonforms: jsonformsReducer(),
+  jsonforms: combineReducers(jsonFormsReducerConfig()),
   examples: (state: ExampleDescription[] = []) => state
 });
 

@@ -77,7 +77,7 @@ export {
 };
 export { JsonFormsCore, ValidationMode };
 
-export const jsonformsReducer = (
+export const jsonFormsReducerConfig = (
   additionalReducers = {}
 ) => ({
     core: coreReducer,

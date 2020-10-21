@@ -33,7 +33,7 @@ import {
   Actions,
   createAjv,
   JsonFormsCellRendererRegistryEntry,
-  jsonformsReducer,
+  jsonFormsReducerConfig,
   JsonFormsRendererRegistryEntry,
   RankedTester
 } from '@jsonforms/core';
@@ -66,7 +66,7 @@ const setupStore = (
     {} as any
   );
   const reducer = combineReducers({
-    jsonforms: jsonformsReducer({ ...additionalReducers }),
+    jsonforms: combineReducers(jsonFormsReducerConfig({ ...additionalReducers })),
     examples: exampleReducer
   });
   const store = createStore(reducer, {

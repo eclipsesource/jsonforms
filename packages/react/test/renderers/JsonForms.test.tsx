@@ -28,7 +28,7 @@ import { Provider } from 'react-redux';
 import {
   createAjv,
   DispatchCellProps,
-  jsonformsReducer,
+  jsonFormsReducerConfig,
   JsonFormsState,
   JsonFormsStore,
   JsonSchema,
@@ -105,7 +105,7 @@ export const initJsonFormsStore = ({
       ...props
     }
   };
-  const reducer = combineReducers({ jsonforms: jsonformsReducer() });
+  const reducer = combineReducers({ jsonforms: combineReducers(jsonFormsReducerConfig()) });
   return createStore(reducer, initState);
 };
 
