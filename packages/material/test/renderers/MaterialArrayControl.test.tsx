@@ -216,7 +216,7 @@ describe('Material array control', () => {
                   properties: {
                       test1: {
                           type: 'string',
-                          title: 'my first test'
+                          title: 'first test'
                       },
                       test_2: {
                           type: 'string',
@@ -244,7 +244,7 @@ describe('Material array control', () => {
     const headers = wrapper.find('tr').at(1).find('th');
 
     // the first property has a title, so we expect it to be rendered as the first column heading
-    expect(headers.at(0).text()).toEqual("my first test");
+    expect(headers.at(0).text()).toEqual("first test");
 
     // the second property has no title, so we expect to see the property name in start case
     expect(headers.at(1).text()).toEqual("Test 2");

@@ -92,12 +92,11 @@ const generateCells = (
 ) => {
   if (schema.type === 'object') {
     return getValidColumnProps(schema).map(prop => {
-      const title = schema.properties?.[prop]?.title ?? startCase(prop);
       const cellPath = Paths.compose(rowPath, prop);
       const props = {
         propName: prop,
         schema,
-        title,
+        title: schema.properties?.[prop]?.title ?? startCase(prop),
         rowPath,
         cellPath,
         enabled,
