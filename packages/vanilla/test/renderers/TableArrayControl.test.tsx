@@ -717,6 +717,4 @@ describe('Tabe array control', () => {
     expect(validation.at(1).getDOMNode().textContent).toBe('is a required property');
     expect(validation.at(2).getDOMNode().textContent).toBe('is a required property');
   });
-
-  
 });
