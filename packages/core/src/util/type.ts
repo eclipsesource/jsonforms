@@ -152,7 +152,7 @@ export interface Store<S = any, A extends Action = AnyAction> {
    * For more information, see the observable proposal:
    * https://github.com/tc39/proposal-observable
    */
-  [Symbol.observable](): Observable<S>
+  [Symbol.observable](): Observable<S>;
 }
 
 // Copied from https://github.com/reduxjs/redux/blob/master/src/types/store.ts
@@ -162,6 +162,24 @@ export interface Store<S = any, A extends Action = AnyAction> {
  * https://github.com/tc39/proposal-observable
  */
 export type Unsubscribe = () => void;
+
+/**
+ * A minimal observable of state changes.
+ * For more information, see the observable proposal:
+ * https://github.com/tc39/proposal-observable
+ */
+export type Observable<T> = {
+  /**
+   * The minimal observable subscription method.
+   * @param {Object} observer Any object that can be used as an observer.
+   * The observer object should have a `next` method.
+   * @returns {subscription} An object with an `unsubscribe` method that can
+   * be used to unsubscribe the observable from the store, and prevent further
+   * emission of values from the observable.
+   */
+  subscribe(observer: Observer<T>): { unsubscribe: Unsubscribe };
+  [Symbol.observable](): Observable<T>
+};
 
 // Copied from https://github.com/reduxjs/redux/blob/master/src/types/store.ts
 /**
