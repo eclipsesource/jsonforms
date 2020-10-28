@@ -145,7 +145,32 @@ export interface Store<S = any, A extends Action = AnyAction> {
    * @param nextReducer The reducer for the store to use instead.
    */
   replaceReducer(nextReducer: Reducer<S, A>): void;
+
+  /**
+   * Interoperability point for observable/reactive libraries.
+   * @returns {observable} A minimal observable of state changes.
+   * For more information, see the observable proposal:
+   * https://github.com/tc39/proposal-observable
+   */
+  [Symbol.observable](): Observable<S>
 }
+
+// Copied from https://github.com/reduxjs/redux/blob/master/src/types/store.ts
+/**
+ * A minimal observable of state changes.
+ * For more information, see the observable proposal:
+ * https://github.com/tc39/proposal-observable
+ */
+export type Unsubscribe = () => void;
+
+// Copied from https://github.com/reduxjs/redux/blob/master/src/types/store.ts
+/**
+ * An Observer is used to receive data from an Observable, and is supplied as
+ * an argument to subscribe.
+ */
+export type Observer<T> = {
+  next?(value: T): void
+};
 
 // Copied from https://github.com/reduxjs/redux/blob/master/src/types/reducers.ts
 /**
