@@ -105,7 +105,7 @@ export const initJsonFormsStore = ({
       ...props
     }
   };
-  const reducer = combineReducers({ jsonforms: combineReducers(jsonFormsReducerConfig()) });
+  const reducer = combineReducers({ jsonforms: combineReducers(jsonFormsReducerConfig) });
   return createStore(reducer, initState);
 };
 

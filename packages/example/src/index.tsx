@@ -66,8 +66,9 @@ const setupStore = (
     {} as any
   );
   const reducer = combineReducers({
-    jsonforms: combineReducers(jsonFormsReducerConfig({ ...additionalReducers })),
-    examples: exampleReducer
+    jsonforms: combineReducers(jsonFormsReducerConfig),
+    examples: exampleReducer,
+    ...additionalReducers
   });
   const store = createStore(reducer, {
     jsonforms: {

@@ -77,18 +77,15 @@ export {
 };
 export { JsonFormsCore, ValidationMode };
 
-export const jsonFormsReducerConfig = (
-  additionalReducers = {}
-) => ({
-    core: coreReducer,
-    renderers: rendererReducer,
-    cells: cellReducer,
-    config: configReducer,
-    uischemas: uischemaRegistryReducer,
-    defaultData: defaultDataReducer,
-    i18n: i18nReducer,
-    ...additionalReducers
-});
+export const jsonFormsReducerConfig = {
+  core: coreReducer,
+  renderers: rendererReducer,
+  cells: cellReducer,
+  config: configReducer,
+  uischemas: uischemaRegistryReducer,
+  defaultData: defaultDataReducer,
+  i18n: i18nReducer
+};
 
 export const getData = (state: JsonFormsState) =>
   extractData(get(state, 'jsonforms.core'));

@@ -46,7 +46,7 @@ export const initJsonFormsVanillaStore = ({
 }): Store<JsonFormsState> => {
   const store: Store<JsonFormsState> = createStore(
     combineReducers({
-      jsonforms: combineReducers( jsonFormsReducerConfig({ styles: stylingReducer }) )
+      jsonforms: combineReducers({...jsonFormsReducerConfig, styles: stylingReducer}),
     }),
     {
       // TODO

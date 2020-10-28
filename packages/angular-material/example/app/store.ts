@@ -28,7 +28,7 @@ import { angularMaterialRenderers } from '../../src/index';
 import { ExampleDescription, getExamples } from '@jsonforms/examples';
 
 export const rootReducer: Reducer<JsonFormsState> = combineReducers({
-  jsonforms: combineReducers(jsonFormsReducerConfig()),
+  jsonforms: combineReducers(jsonFormsReducerConfig),
   examples: (state: ExampleDescription[] = []) => state
 });
 
