@@ -1,7 +1,7 @@
 /*
   The MIT License
 
-  Copyright (c) 2017-2019 EclipseSource Munich
+  Copyright (c) 2018-2020 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,19 +24,24 @@
 */
 import React from 'react';
 import {
-  and,
+    and,
   ControlProps,
-  isEnumControl,
-  optionIs, OwnPropsOfEnum, RankedTester, rankWith
+  isOneOfEnumControl,
+  optionIs,
+  OwnPropsOfEnum,
+  RankedTester,
+  rankWith,
 } from '@jsonforms/core';
-import {  withJsonFormsEnumProps } from '@jsonforms/react';
+import { withJsonFormsOneOfEnumProps } from '@jsonforms/react';
 import { MaterialRadioGroup } from './MaterialRadioGroup';
-export const MaterialRadioGroupControl = (props: ControlProps & OwnPropsOfEnum) => {
-   return <MaterialRadioGroup {...props} />;
+
+export const MaterialOneOfRadioGroupControl = (props: ControlProps & OwnPropsOfEnum) => {
+   return <MaterialRadioGroup {...props}/>;
 };
 
-export const materialRadioGroupControlTester: RankedTester = rankWith(
-  20,
-  and(isEnumControl, optionIs('format', 'radio'))
-);
-export default withJsonFormsEnumProps(MaterialRadioGroupControl);
+export const materialOneOfRadioGroupControlTester: RankedTester = rankWith(
+    20,
+    and(isOneOfEnumControl, optionIs('format', 'radio'))
+  );
+
+export default withJsonFormsOneOfEnumProps(MaterialOneOfRadioGroupControl);
