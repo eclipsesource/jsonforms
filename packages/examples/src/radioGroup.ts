@@ -33,17 +33,49 @@ const schema = {
       exampleRadioEnum: {
         type: 'string',
         enum: ['One', 'Two', 'Three']
-      }
+      },
+      exampleRadioOneOfEnum: {
+        type: 'string',
+        oneOf: [
+            {const: 'foo', title: 'Foo'},
+            {const: 'bar', title: 'Bar'},
+            {const: 'foobar', title: 'FooBar'}
+        ]
+    }
     }
   };
+ const uischema = {
+   type: 'VerticalLayout',
+   elements: [
+     {
+       type: 'Group',
+       label: 'Simple enum',
+       elements: [
+         {
+           type: 'Control',
+           scope: '#/properties/exampleRadioEnum',
+           options: {
+             format: 'radio'
+           }
+         }
+       ]
+     },
+     {
+       type: 'Group',
+       label: 'One of Enum',
+       elements: [
+         {
+           type: 'Control',
+           scope: '#/properties/exampleRadioOneOfEnum',
+           options: {
+             format: 'radio'
+           }
+         }
+       ]
+     }
+   ]
+ };
 
-const uischema = {
-    type: 'Control',
-    scope: '#/properties/exampleRadioEnum',
-    options: {
-      format: 'radio'
-    }
-  };
 
 registerExamples([
   {

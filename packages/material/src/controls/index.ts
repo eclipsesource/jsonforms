@@ -73,6 +73,11 @@ import MaterialOneOfEnumControl, {
   MaterialOneOfEnumControl as MaterialOneOfEnumControlUnwrapped
 } from './MaterialOneOfEnumControl';
 
+import MaterialOneOfRadioGroupControl, {
+  materialOneOfRadioGroupControlTester,
+  MaterialOneOfRadioGroupControl as MaterialOneOfRadioGroupControlUnwrapped
+} from './MaterialOneOfRadioGroupControl';
+
 export const Unwrapped = {
   MaterialBooleanControl: MaterialBooleanControlUnwrapped,
   MaterialEnumControl: MaterialEnumControlUnwrapped,
@@ -86,6 +91,7 @@ export const Unwrapped = {
   MaterialTextControl: MaterialTextControlUnwrapped,
   MaterialAnyOfStringOrEnumControl: MaterialAnyOfStringOrEnumControlUnwrapped,
   MaterialOneOfEnumControl: MaterialOneOfEnumControlUnwrapped,
+  MaterialOneOfRadioGroupControl: MaterialOneOfRadioGroupControlUnwrapped
 };
 
 export {
@@ -112,5 +118,7 @@ export {
   MaterialAnyOfStringOrEnumControl,
   materialAnyOfStringOrEnumControlTester,
   MaterialOneOfEnumControl,
-  materialOneOfEnumControlTester
+  materialOneOfEnumControlTester,
+  MaterialOneOfRadioGroupControl,
+  materialOneOfRadioGroupControlTester
 };
