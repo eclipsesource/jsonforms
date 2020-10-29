@@ -73,6 +73,40 @@ const fixture = {
   ]
 };
 
+const fixture2 = {
+  schema: {
+    type: 'object',
+    properties: {
+      test: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            x: {
+              type: 'integer',
+              title: 'Column X',
+            },
+            y: { type: 'integer' }
+          }
+        }
+      }
+    }
+  },
+  uischema: {
+    type: 'Control',
+    scope: '#/properties/test'
+  },
+  data: {
+    test: [{ x: 1, y: 3 }]
+  },
+  styles: [
+    {
+      name: 'array.table',
+      classNames: ['array-table-layout', 'control']
+    }
+  ]
+};
+
 describe('Tabe array tester', () => {
   test('tester with recursive document ref only', () => {
     const control: ControlElement = {
@@ -309,6 +343,36 @@ describe('Tabe array control', () => {
     const noDataColumn = noDataRow.children[0];
     expect(noDataColumn.tagName).toBe('TD');
     expect(noDataColumn.textContent).toBe('No data');
+  });
+
+  test('use property title as a column header if it exists', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture2.data,
+      schema: fixture2.schema,
+      uischema: fixture2.uischema,
+      cells: [
+        { tester: integerCellTester, cell: IntegerCell }
+      ]
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <TableArrayControl
+            schema={fixture2.schema}
+            uischema={fixture2.uischema}
+          />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+
+    //column headings are wrapped in a <thead> tag
+    const headers = wrapper.find('thead').find('th');
+
+    // the first property has a title, so we expect it to be rendered as the first column heading
+    expect(headers.at(0).text()).toEqual("Column X");
+
+    // the second property has no title, so we expect to see the property name in start case
+    expect(headers.at(1).text()).toEqual("Y");
   });
 
   test('render new child (empty init data)', () => {

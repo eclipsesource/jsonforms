@@ -96,6 +96,7 @@ const generateCells = (
       const props = {
         propName: prop,
         schema,
+        title: schema.properties?.[prop]?.title ?? startCase(prop),
         rowPath,
         cellPath,
         enabled,
@@ -138,11 +139,11 @@ const EmptyTable = ({ numColumns }: EmptyTableProps) => (
 );
 
 interface TableHeaderCellProps {
-  propName: string;
+  title: string;
 }
 
-const TableHeaderCell = React.memo(({ propName }: TableHeaderCellProps) => (
-  <TableCell>{startCase(propName)}</TableCell>
+const TableHeaderCell = React.memo(({ title }: TableHeaderCellProps) => (
+  <TableCell>{title}</TableCell>
 ));
 
 interface NonEmptyCellProps extends OwnPropsOfNonEmptyCell {
