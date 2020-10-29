@@ -98,7 +98,7 @@ describe('Material text control', () => {
     const props = defaultControlProps();
     wrapper = mount(createMaterialTextControl(props));
     wrapper.find(Input).simulate('pointerenter');
-    expect(wrapper.find(InputAdornment).props().style).toHaveProperty('visibility', 'visible');
+    expect(wrapper.find(InputAdornment).props().style).not.toHaveProperty('display', 'none');
   });
 
   it('hides clear button when data is undefined', () => {
@@ -106,6 +106,6 @@ describe('Material text control', () => {
     delete props.data;
     wrapper = mount(createMaterialTextControl(props));
     wrapper.find(Input).simulate('pointerenter');
-    expect(wrapper.find(InputAdornment).props().style).toHaveProperty('visibility', 'hidden');
+    expect(wrapper.find(InputAdornment).props().style).toHaveProperty('display', 'none');
   });
 });
