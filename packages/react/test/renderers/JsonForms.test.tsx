@@ -312,7 +312,7 @@ test('render schema with $ref', () => {
   const promise = Promise.resolve(resolvedSchema);
   jest.spyOn(RefParser, 'dereference').mockImplementation(() => promise);
 
-  const wrapper = shallow(
+  const wrapper = mount(
     <JsonFormsDispatchRenderer
       path={''}
       uischema={fixture.uischema}
