@@ -1,6 +1,6 @@
 import merge from 'lodash/merge';
 import get from 'lodash/get';
-import React, { Dispatch, Fragment, ReducerAction, useState } from 'react';
+import React, { Dispatch, Fragment, ReducerAction, useMemo, useState } from 'react';
 import { ComponentType } from 'enzyme';
 import {
   areEqual,
@@ -97,14 +97,18 @@ const ExpandPanelRenderer = (props: ExpandPanelProps) => {
     config
   } = props;
 
-  const foundUISchema = findUISchema(
-    uischemas,
-    schema,
-    uischema.scope,
-    path,
-    undefined,
-    uischema,
-    rootSchema
+  const foundUISchema = useMemo(
+    () =>
+      findUISchema(
+        uischemas,
+        schema,
+        uischema.scope,
+        path,
+        undefined,
+        uischema,
+        rootSchema
+      ),
+    [uischemas, schema, uischema.scope, path, uischema, rootSchema]
   );
 
   const appliedUiSchemaOptions = merge({}, config, uischema.options);

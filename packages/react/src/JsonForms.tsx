@@ -146,25 +146,56 @@ export class ResolvedJsonFormsDispatchRenderer extends React.Component<
       return <div>Loading...</div>;
     }
 
-    const renderer = maxBy(renderers, r => r.tester(uischema, _schema));
-    if (renderer === undefined || renderer.tester(uischema, _schema) === -1) {
+    return (
+      <TestAndRender
+        uischema={uischema}
+        schema={_schema}
+        path={path}
+        enabled={enabled}
+        renderers={renderers}
+        cells={cells}
+        id={this.state.id}
+      />
+    );
+  }
+}
+
+const TestAndRender = React.memo(
+  (props: {
+    uischema: UISchemaElement;
+    schema: JsonSchema;
+    path: string;
+    enabled: boolean;
+    renderers: JsonFormsRendererRegistryEntry[];
+    cells: JsonFormsCellRendererRegistryEntry[];
+    id: string;
+  }) => {
+    const renderer = useMemo(
+      () => maxBy(props.renderers, r => r.tester(props.uischema, props.schema)),
+      [props.renderers, props.uischema, props.schema]
+    );
+    if (
+      renderer === undefined ||
+      renderer.tester(props.uischema, props.schema) === -1
+    ) {
       return <UnknownRenderer type={'renderer'} />;
     } else {
       const Render = renderer.renderer;
       return (
         <Render
-          uischema={uischema}
-          schema={_schema}
-          path={path}
-          enabled={enabled}
-          renderers={renderers}
-          cells={cells}
-          id={this.state.id}
+          uischema={props.uischema}
+          schema={props.schema}
+          path={props.path}
+          enabled={props.enabled}
+          renderers={props.renderers}
+          cells={props.cells}
+          id={props.id}
         />
       );
     }
   }
-}
+);
+
 
 export class JsonFormsDispatchRenderer extends ResolvedJsonFormsDispatchRenderer {
   constructor(props: JsonFormsProps) {
@@ -271,7 +302,7 @@ export const JsonForms = (
         readonly,
       }}
     >
-      <JsonFormsDispatch onChange={onChange} />
+      <JsonFormsDispatch onChange={onChange}/>
     </JsonFormsStateProvider>
   );
 };

@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import range from 'lodash/range';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { ArrayControlProps, composePaths, createDefaultValue, findUISchema } from '@jsonforms/core';
 import { ResolvedJsonFormsDispatch } from '@jsonforms/react';
 import { VanillaRendererProps } from '../../index';
@@ -39,6 +39,10 @@ export const ArrayControl = ({
   uischemas,
   renderers
 }: ArrayControlProps & VanillaRendererProps) => {
+  const childUiSchema = useMemo(
+    () => findUISchema(uischemas, schema, uischema.scope, path),
+    [uischemas, schema, uischema.scope, path]
+  );
   return (
     <div className={classNames.wrapper}>
       <fieldset className={classNames.fieldSet}>
@@ -54,13 +58,12 @@ export const ArrayControl = ({
         <div className={classNames.children}>
           {data ? (
             range(0, data.length).map(index => {
-              const foundUISchema = findUISchema(uischemas, schema, uischema.scope, path);
               const childPath = composePaths(path, `${index}`);
 
               return (
                 <ResolvedJsonFormsDispatch
                   schema={schema}
-                  uischema={foundUISchema || uischema}
+                  uischema={childUiSchema || uischema}
                   path={childPath}
                   key={childPath}
                   renderers={renderers}

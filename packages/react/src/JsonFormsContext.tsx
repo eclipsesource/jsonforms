@@ -67,7 +67,7 @@ import {
   mapStateToOneOfEnumControlProps,
   update
 } from '@jsonforms/core';
-import React, { ComponentType, Dispatch, ReducerAction, useCallback, useContext, useEffect, useReducer, useRef } from 'react';
+import React, { ComponentType, Dispatch, ReducerAction, useCallback, useContext, useEffect, useMemo, useReducer, useRef } from 'react';
 
 import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
@@ -112,10 +112,11 @@ const useEffectAfterFirstRender = (
 
 export const JsonFormsStateProvider = ({ children, initState }: any) => {
   const { data, schema, uischema, ajv, refParserOptions , validationMode} = initState.core;
-  // Initialize core immediatly
+  // Initialize core immediately
   const [core, coreDispatch] = useReducer(
     coreReducer,
-    coreReducer(
+    undefined,
+    () => coreReducer(
       initState.core,
       Actions.init(data, schema, uischema, { ajv, refParserOptions, validationMode })
     )
@@ -128,24 +129,27 @@ export const JsonFormsStateProvider = ({ children, initState }: any) => {
 
   const [config, configDispatch] = useReducer(
     configReducer,
-    configReducer(undefined, Actions.setConfig(initState.config))
+    undefined,
+    () => configReducer(undefined, Actions.setConfig(initState.config))
   );
   useEffectAfterFirstRender(() => {
     configDispatch(Actions.setConfig(initState.config));
   }, [initState.config]);
 
+  const contextValue = useMemo(() => ({
+    core,
+    renderers: initState.renderers,
+    cells: initState.cells,
+    config: config,
+        uischemas: initState.uischemas,
+    readonly: initState.readonly,
+    // only core dispatch available
+    dispatch: coreDispatch,
+  }), [core, initState.renderers, initState.cells, config, initState.readonly]);
+
   return (
     <JsonFormsContext.Provider
-      value={{
-        core,
-        renderers: initState.renderers,
-        cells: initState.cells,
-        config: config,
-        uischemas: initState.uischemas,
-        readonly: initState.readonly,
-        // only core dispatch available
-        dispatch: coreDispatch,
-      }}
+      value={contextValue}
     >
       {children}
     </JsonFormsContext.Provider>
@@ -397,9 +401,9 @@ export const areEqual = (prevProps: JsonFormsPropTypes, nextProps: JsonFormsProp
   const prev = omit(prevProps, ['schema', 'uischema', 'handleChange', 'renderers', 'cells', 'uischemas']);
   const next = omit(nextProps, ['schema', 'uischema', 'handleChange', 'renderers', 'cells', 'uischemas']);
   return isEqual(prev, next)
-    && get(prevProps, 'renderers.length') === get(nextProps, 'renderers.length')
-    && get(prevProps, 'cells.length') === get(nextProps, 'cells.length')
-    && get(prevProps, 'uischemas.length') === get(nextProps, 'uischemas.length')
+    && get(prevProps, 'renderers') === get(nextProps, 'renderers')
+    && get(prevProps, 'cells') === get(nextProps, 'cells')
+    && get(prevProps, 'uischemas') === get(nextProps, 'uischemas')
     && get(prevProps, 'schema') === get(nextProps, 'schema')
     && get(prevProps, 'uischema') === get(nextProps, 'uischema');
 };
@@ -467,14 +471,14 @@ export const withJsonFormsMasterListItemProps =
     withJsonFormsContext(withContextToMasterListItemProps(React.memo(
       Component,
       (prevProps: StatePropsOfMasterItem, nextProps: StatePropsOfMasterItem) =>
-        isEqual(omit(prevProps, ['handleSelect', 'removeItem']), omit(nextProps, ['handleSelect', 'removeItem']))
+        areEqual(omit(prevProps, ['handleSelect', 'removeItem']), omit(nextProps, ['handleSelect', 'removeItem']))
     )));
 
 export const withJsonFormsCellProps =
   (Component: ComponentType<CellProps>): ComponentType<OwnPropsOfCell> =>
     withJsonFormsContext(withContextToCellProps(React.memo(
       Component,
-      (prevProps: CellProps, nextProps: CellProps) => isEqual(prevProps, nextProps)
+      (prevProps: CellProps, nextProps: CellProps) => areEqual(prevProps, nextProps)
     )));
 
 export const withJsonFormsDispatchCellProps = (
@@ -483,7 +487,7 @@ export const withJsonFormsDispatchCellProps = (
   withJsonFormsContext(
     withContextToDispatchCellProps(
       React.memo(Component, (prevProps: DispatchCellProps, nextProps: DispatchCellProps) =>
-        isEqual(prevProps, nextProps)
+        areEqual(prevProps, nextProps)
       )
     )
   );
@@ -492,20 +496,20 @@ export const withJsonFormsEnumCellProps =
   (Component: ComponentType<EnumCellProps>): ComponentType<OwnPropsOfEnumCell> =>
     withJsonFormsContext(withContextToEnumCellProps(React.memo(
       Component,
-      (prevProps: EnumCellProps, nextProps: EnumCellProps) => isEqual(prevProps, nextProps)
+      (prevProps: EnumCellProps, nextProps: EnumCellProps) => areEqual(prevProps, nextProps)
     )));
 
 export const withJsonFormsEnumProps =
   (Component: ComponentType<ControlProps & OwnPropsOfEnum>): ComponentType<OwnPropsOfControl & OwnPropsOfEnum> =>
     withJsonFormsContext(withContextToEnumProps(React.memo(
       Component,
-      (prevProps: ControlProps & OwnPropsOfEnum, nextProps: ControlProps & OwnPropsOfEnum) => isEqual(prevProps, nextProps)
+      (prevProps: ControlProps & OwnPropsOfEnum, nextProps: ControlProps & OwnPropsOfEnum) => areEqual(prevProps, nextProps)
     )));
 
 export const withJsonFormsOneOfEnumProps =
   (Component: ComponentType<ControlProps & OwnPropsOfEnum>): ComponentType<OwnPropsOfControl & OwnPropsOfEnum> =>
     withJsonFormsContext(withContextToOneOfEnumProps(React.memo(
       Component,
-      (prevProps: ControlProps & OwnPropsOfEnum, nextProps: ControlProps & OwnPropsOfEnum) => isEqual(prevProps, nextProps)
+      (prevProps: ControlProps & OwnPropsOfEnum, nextProps: ControlProps & OwnPropsOfEnum) => areEqual(prevProps, nextProps)
     )));
 // --

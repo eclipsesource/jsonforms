@@ -35,7 +35,7 @@ import {
 } from '@jsonforms/core';
 import { ResolvedJsonFormsDispatch, withJsonFormsDetailProps } from '@jsonforms/react';
 import { Hidden } from '@material-ui/core';
-import React from 'react';
+import React, { useMemo } from 'react';
 
 const MaterialObjectRenderer = ({
   renderers,
@@ -49,14 +49,18 @@ const MaterialObjectRenderer = ({
   uischema,
   rootSchema
 }: StatePropsOfControlWithDetail) => {
-  const detailUiSchema = findUISchema(
-    uischemas,
-    schema,
-    uischema.scope,
-    path,
-    'Group',
-    uischema,
-    rootSchema
+  const detailUiSchema = useMemo(
+    () =>
+      findUISchema(
+        uischemas,
+        schema,
+        uischema.scope,
+        path,
+        'Group',
+        uischema,
+        rootSchema
+      ),
+    [uischemas, schema, uischema.scope, path, uischema, rootSchema]
   );
   if (isEmpty(path)) {
     detailUiSchema.type = 'VerticalLayout';

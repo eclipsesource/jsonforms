@@ -42,7 +42,7 @@ import {
 import { Grid, Hidden, List, Typography } from '@material-ui/core';
 import map from 'lodash/map';
 import range from 'lodash/range';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { ArrayLayoutToolbar } from '../layouts/ArrayToolbar';
 import ListWithDetailMasterItem from './ListWithDetailMasterItem';
 import merge from 'lodash/merge';
@@ -83,13 +83,17 @@ export const MaterialListWithDetailRenderer = ({
     () => createDefaultValue(schema),
     [createDefaultValue]
   );
-  const foundUISchema = findUISchema(
-    uischemas,
-    schema,
-    uischema.scope,
-    path,
-    undefined,
-    uischema
+  const foundUISchema = useMemo(
+    () =>
+      findUISchema(
+        uischemas,
+        schema,
+        uischema.scope,
+        path,
+        undefined,
+        uischema
+      ),
+    [uischemas, schema, uischema.scope, path, uischema]
   );
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
 
