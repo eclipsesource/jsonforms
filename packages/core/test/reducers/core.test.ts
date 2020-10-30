@@ -35,7 +35,7 @@ import {
   subErrorsAt
 } from '../../src/reducers/core';
 
-import { createAjv } from '../../src';
+import { createAjv, updateCore } from '../../src';
 import { setSchema, setValidationMode } from '../../lib';
 import { cloneDeep } from 'lodash';
 
@@ -1437,6 +1437,82 @@ test('core reducer - update - ValidateAndHide should produce errors', t => {
     update('animal', () => 100)
   );
   t.is(after.errors.length, 1);
+});
+
+test('core reducer - update core - state should be unchanged when nothing changes', t => {
+  const schema = {
+    type: 'object',
+    properties: {
+      animal: {
+        type: 'string'
+      }
+    }
+  };
+
+  const data = {
+    animal: 'dog'
+  };
+  const before: JsonFormsCore = coreReducer(
+    undefined,
+    init(data, schema)
+    );
+
+  const after: JsonFormsCore = coreReducer(
+    before,
+    updateCore(before.data, before.schema, before.uischema, before.ajv)
+  );
+  t.true(before === after);
+});
+
+test('core reducer - update core - unchanged state properties should be unchanged when state changes', t => {
+  const schema = {
+    type: 'object',
+    properties: {
+      animal: {
+        type: 'string'
+      }
+    }
+  };
+
+  const data = {
+    animal: 'dog'
+  };
+  const before: JsonFormsCore = coreReducer(
+    undefined,
+    init(data, schema)
+    );
+
+  const afterDataUpdate: JsonFormsCore = coreReducer(
+    before,
+    updateCore({
+      animal: 'cat'
+    }, before.schema, before.uischema, before.ajv)
+  );
+  t.true(before.schema === afterDataUpdate.schema);
+  t.true(before.ajv === afterDataUpdate.ajv);
+  t.true(before.errors === afterDataUpdate.errors);
+  t.true(before.refParserOptions === afterDataUpdate.refParserOptions);
+  t.true(before.uischema === afterDataUpdate.uischema);
+  t.true(before.validationMode === afterDataUpdate.validationMode);
+  t.true(before.validator === afterDataUpdate.validator);
+
+  const updatedSchema = {
+    type: 'object',
+    properties: {
+      animal: {
+        type: 'string'
+      },
+      id: {
+        type: 'number'
+      }
+    }
+  };
+  // check that data stays unchanged as well
+  const afterSchemaUpdate : JsonFormsCore = coreReducer(
+    before,
+    updateCore(before.data, updatedSchema, before.uischema, before.ajv)
+  );
+  t.true(before.data === afterSchemaUpdate.data);
 });
 
 test('core reducer - setSchema - schema with id', t => {
