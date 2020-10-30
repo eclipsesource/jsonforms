@@ -161,13 +161,6 @@ export interface Store<S = any, A extends Action = AnyAction> {
  * For more information, see the observable proposal:
  * https://github.com/tc39/proposal-observable
  */
-export type Unsubscribe = () => void;
-
-/**
- * A minimal observable of state changes.
- * For more information, see the observable proposal:
- * https://github.com/tc39/proposal-observable
- */
 export type Observable<T> = {
   /**
    * The minimal observable subscription method.
