@@ -32,6 +32,7 @@ import { UISchemaTester } from '../reducers/uischemas';
 import { ValidationMode } from '../reducers/core';
 
 export const INIT: 'jsonforms/INIT' = 'jsonforms/INIT';
+export const UPDATE_CORE: 'jsonforms/UPDATE_CORE' = `jsonforms/UPDATE_CORE`;
 export const SET_AJV: 'jsonforms/SET_AJV' = 'jsonforms/SET_AJV';
 export const UPDATE_DATA: 'jsonforms/UPDATE' = 'jsonforms/UPDATE';
 export const UPDATE_ERRORS: 'jsonforms/UPDATE_ERRORS' =
@@ -61,6 +62,7 @@ export const REMOVE_DEFAULT_DATA: 'jsonforms/REMOVE_DEFAULT_DATA' = `jsonforms/R
 
 export type CoreActions =
   | InitAction
+  | UpdateCoreAction
   | UpdateAction
   | UpdateErrorsAction
   | SetAjvAction
@@ -87,6 +89,14 @@ export interface InitAction {
   options?: InitActionOptions | AJV.Ajv;
 }
 
+export interface UpdateCoreAction {
+  type: 'jsonforms/UPDATE_CORE';
+  data?: any;
+  schema?: JsonSchema;
+  uischema?: UISchemaElement;
+  options?: InitActionOptions | AJV.Ajv;
+}
+
 export interface InitActionOptions {
   ajv?: AJV.Ajv;
   refParserOptions?: RefParser.Options;
@@ -109,6 +119,19 @@ export const init = (
   schema,
   uischema:
     typeof uischema === 'object' ? uischema : generateDefaultUISchema(schema),
+  options
+});
+
+export const updateCore = (
+  data: any,
+  schema: JsonSchema,
+  uischema?: UISchemaElement,
+  options?: AJV.Ajv | InitActionOptions
+): UpdateCoreAction => ({
+  type: UPDATE_CORE,
+  data,
+  schema,
+  uischema,
   options
 });
 

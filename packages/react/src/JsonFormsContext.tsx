@@ -120,9 +120,9 @@ export const JsonFormsStateProvider = ({ children, initState }: any) => {
       Actions.init(data, schema, uischema, { ajv, refParserOptions, validationMode })
     )
   );
-  useEffectAfterFirstRender(() => {
+  useEffect(() => {
     coreDispatch(
-      Actions.init(data, schema, uischema, { ajv, refParserOptions, validationMode })
+      Actions.updateCore(data, schema, uischema, { ajv, refParserOptions, validationMode })
     );
   }, [data, schema, uischema, ajv, refParserOptions, validationMode]);
 
