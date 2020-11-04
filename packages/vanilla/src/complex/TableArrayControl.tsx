@@ -120,7 +120,7 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
                 fpflow(
                   fpkeys,
                   fpfilter(prop => schema.properties[prop].type !== 'array'),
-                  fpmap(prop => <th key={prop}>{fpstartCase(prop)}</th>)
+                  fpmap(prop => <th key={prop}>{schema.properties[prop].title ?? fpstartCase(prop)}</th>)
                 )(schema.properties)
               ) : (
                   <th>Items</th>

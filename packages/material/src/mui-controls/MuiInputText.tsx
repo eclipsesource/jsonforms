@@ -22,92 +22,90 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React from 'react';
+import React, { useState } from 'react';
 import { CellProps, WithClassname } from '@jsonforms/core';
+import { areEqual } from '@jsonforms/react';
 import Input from '@material-ui/core/Input';
 import merge from 'lodash/merge';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Close from '@material-ui/icons/Close';
-
-interface MuiInputTextStatus {
-  showAdornment: boolean;
-}
+import { useTheme } from '@material-ui/core/styles';
+import { JsonFormsTheme } from '../util';
 
 interface MuiTextInputProps {
   muiInputProps?: React.HTMLAttributes<HTMLInputElement>;
 }
 
-export class MuiInputText extends React.PureComponent<
-  CellProps & WithClassname & MuiTextInputProps,
-  MuiInputTextStatus
-> {
-  state: MuiInputTextStatus = { showAdornment: false };
-  render() {
-    const {
-      data,
-      config,
-      className,
-      id,
-      enabled,
-      uischema,
-      isValid,
-      path,
-      handleChange,
-      schema,
-      muiInputProps
-    } = this.props;
-    const maxLength = schema.maxLength;
-    const appliedUiSchemaOptions = merge({}, config, uischema.options);
-    let inputProps: any;
-    if (appliedUiSchemaOptions.restrict) {
-      inputProps = { maxLength: maxLength };
-    } else {
-      inputProps = {};
-    }
-
-    inputProps = merge(inputProps, muiInputProps);
-
-    if (appliedUiSchemaOptions.trim && maxLength !== undefined) {
-      inputProps.size = maxLength;
-    }
-    const onChange = (ev: any) => handleChange(path, ev.target.value);
-
-    return (
-      <Input
-        type={
-          appliedUiSchemaOptions.format === 'password' ? 'password' : 'text'
-        }
-        value={data || ''}
-        onChange={onChange}
-        className={className}
-        id={id}
-        disabled={!enabled}
-        autoFocus={appliedUiSchemaOptions.focus}
-        multiline={appliedUiSchemaOptions.multi}
-        fullWidth={!appliedUiSchemaOptions.trim || maxLength === undefined}
-        inputProps={inputProps}
-        error={!isValid}
-        onPointerEnter={() => this.setState({ showAdornment: true })}
-        onPointerLeave={() => this.setState({ showAdornment: false })}
-        endAdornment={
-          // Use visibility instead of 'Hidden' so the layout doesn't change when the icon is shown
-          <InputAdornment
-            position='end'
-            style={{
-              visibility:
-                !this.state.showAdornment || !enabled || data === undefined ? 'hidden' : 'visible'
-            }}
-          >
-            <IconButton
-              aria-label='Clear input field'
-              onClick={() => handleChange(path, undefined)}
-            >
-              <Close />
-            </IconButton>
-          </InputAdornment>
-        }
-      />
-    );
+export const MuiInputText = React.memo((props: CellProps & WithClassname & MuiTextInputProps) => {
+  const [showAdornment, setShowAdornment] = useState(false);
+  const {
+    data,
+    config,
+    className,
+    id,
+    enabled,
+    uischema,
+    isValid,
+    path,
+    handleChange,
+    schema,
+    muiInputProps
+  } = props;
+  const maxLength = schema.maxLength;
+  const appliedUiSchemaOptions = merge({}, config, uischema.options);
+  let inputProps: any;
+  if (appliedUiSchemaOptions.restrict) {
+    inputProps = { maxLength: maxLength };
+  } else {
+    inputProps = {};
   }
-}
+
+  inputProps = merge(inputProps, muiInputProps);
+
+  if (appliedUiSchemaOptions.trim && maxLength !== undefined) {
+    inputProps.size = maxLength;
+  }
+  const onChange = (ev: any) => handleChange(path, ev.target.value);
+
+  const theme: JsonFormsTheme = useTheme();
+  const inputDeleteBackgroundColor = theme.jsonforms?.input?.delete?.background || theme.palette.background.default;
+
+  return (
+    <Input
+      type={
+        appliedUiSchemaOptions.format === 'password' ? 'password' : 'text'
+      }
+      value={data || ''}
+      onChange={onChange}
+      className={className}
+      id={id}
+      disabled={!enabled}
+      autoFocus={appliedUiSchemaOptions.focus}
+      multiline={appliedUiSchemaOptions.multi}
+      fullWidth={!appliedUiSchemaOptions.trim || maxLength === undefined}
+      inputProps={inputProps}
+      error={!isValid}
+      onPointerEnter={() => setShowAdornment(true) }
+      onPointerLeave={() => setShowAdornment(false) }
+      endAdornment={
+        <InputAdornment
+          position='end'
+          style={{
+            display:
+              !showAdornment || !enabled || data === undefined ? 'none' : 'flex',
+            position: 'absolute',
+            right: 0
+          }}
+        >
+          <IconButton
+            aria-label='Clear input field'
+            onClick={() => handleChange(path, undefined)}   
+          >
+            <Close style={{background: inputDeleteBackgroundColor, borderRadius: '50%'}}/>
+          </IconButton>
+        </InputAdornment>
+      }
+    />
+  );
+}, areEqual);
