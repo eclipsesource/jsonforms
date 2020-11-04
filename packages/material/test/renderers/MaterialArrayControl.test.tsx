@@ -171,7 +171,6 @@ describe('Material array control', () => {
   });
 
   it('should use title as a header if it exists', () => {
-    const store = initJsonFormsStore();
     // re-init
     const data: any = { test: [] };
     const schema: JsonSchema = {
@@ -198,25 +197,22 @@ describe('Material array control', () => {
       type: 'Control',
       scope: '#/properties/test'
     };
-    store.dispatch(Actions.init(data, schema, uischema));
+    const core = initCore(schema, uischema, data);
 
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
           <MaterialArrayControlRenderer schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      </JsonFormsStateProvider>
     );
 
-    //column headings are in the second row of the table, wrapped in <th>
+    // column headings are in the second row of the table, wrapped in <th>
     const headers = wrapper.find('tr').at(1).find('th');
 
     // the first property has a title, so we expect it to be rendered as the first column heading
-    expect(headers.at(0).text()).toEqual("first test");
+    expect(headers.at(0).text()).toEqual('first test');
 
     // the second property has no title, so we expect to see the property name in start case
-    expect(headers.at(1).text()).toEqual("Test 2");
- 
+    expect(headers.at(1).text()).toEqual('Test 2');
   });
 
   it('should render empty primitives', () => {
