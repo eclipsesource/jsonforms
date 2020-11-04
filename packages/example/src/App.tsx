@@ -24,7 +24,8 @@
 */
 
 import React, { Component, CSSProperties } from 'react';
-import { JsonFormsDispatch, JsonFormsReduxContext } from '@jsonforms/react';
+import { JsonFormsDispatch } from '@jsonforms/react';
+import { JsonFormsReduxContext } from '@jsonforms/react/lib/redux';
 import './App.css';
 import { AppProps, initializedConnect } from './reduxUtil';
 
