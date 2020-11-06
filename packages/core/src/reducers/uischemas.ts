@@ -33,8 +33,13 @@ export type UISchemaTester = (
   path: string
 ) => number;
 
+export interface JsonFormsUISchemaRegistryEntry {
+  tester: UISchemaTester;
+  uischema: UISchemaElement;
+}
+
 export const uischemaRegistryReducer = (
-  state: { tester: UISchemaTester; uischema: UISchemaElement }[] = [],
+  state: JsonFormsUISchemaRegistryEntry[] = [],
   action: UISchemaActions
 ) => {
   switch (action.type) {
@@ -52,7 +57,7 @@ export const uischemaRegistryReducer = (
 };
 
 export const findMatchingUISchema = (
-  state: { tester: UISchemaTester; uischema: UISchemaElement }[]
+  state: JsonFormsUISchemaRegistryEntry[]
 ) => (
   jsonSchema: JsonSchema,
   schemaPath: string,

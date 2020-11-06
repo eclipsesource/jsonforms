@@ -4,12 +4,15 @@ import Adapter from 'enzyme-adapter-react-16';
 import {
   CellProps,
   ControlProps,
+  JsonSchema,
+  NOT_APPLICABLE,
   OwnPropsOfEnum,
-  rankWith
+  rankWith,
+  StatePropsOfControlWithDetail
 } from '@jsonforms/core';
 
 import { JsonForms } from '../src/JsonForms';
-import { withJsonFormsEnumCellProps, withJsonFormsEnumProps } from '../src/JsonFormsContext';
+import { withJsonFormsDetailProps, withJsonFormsEnumCellProps, withJsonFormsEnumProps } from '../src/JsonFormsContext';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -193,4 +196,71 @@ test('withJsonFormsEnumCellProps - enum: should supply control and enum props', 
     {value: 'green', label: 'green'},
     {value: null, label: 'null'}
   ]);
+});
+
+test('withJsonFormsDetailProps - should use uischemas props', () => {
+  const MockUISchemas = (_: StatePropsOfControlWithDetail) => {
+    return <></>;
+  };
+
+  const MockBasicRenderer = withJsonFormsDetailProps(MockUISchemas);
+
+  const schema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'string',
+      },
+      bar: {
+        type: 'number'
+      }
+    }
+  };
+
+  const renderers = [
+    {
+      tester: rankWith(1, () => true),
+      renderer: MockBasicRenderer
+    }
+  ];
+
+  const uischemas = [
+    {
+      tester: (_jsonSchema: JsonSchema, schemaPath: string) => {
+        return schemaPath === '#/properties/color' ? 2 : NOT_APPLICABLE;
+      },
+      uischema: {
+        type: 'HorizontalLayout',
+        elements: [
+          {
+            type: 'Control',
+            scope: '#/properties/foo'
+          },
+          {
+            type: 'Control',
+            scope: '#/properties/bar'
+          }
+        ]
+      }
+    }
+  ];
+
+  const uischema = {
+    type: 'Control',
+    scope: '#'
+  };
+
+  const wrapper = mount(
+    <JsonForms
+      data={{}}
+      schema={schema}
+      uischema={uischema}
+      renderers={renderers}
+      uischemas={uischemas}
+    />
+  );
+  const mockUISchemasProps = wrapper.find(MockUISchemas).props();
+  expect(mockUISchemasProps.uischema).toEqual(uischema);
+  expect(mockUISchemasProps.schema).toEqual(schema);
+  expect(mockUISchemasProps.uischemas).toEqual(uischemas);
 });
