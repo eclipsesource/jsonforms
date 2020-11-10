@@ -17,10 +17,9 @@ import {
   moveDown,
   moveUp,
   Resolve,
-  UISchemaElement,
-  UISchemaTester,
   update,
-  JsonFormsCellRendererRegistryEntry
+  JsonFormsCellRendererRegistryEntry,
+  JsonFormsUISchemaRegistryEntry
 } from '@jsonforms/core';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import IconButton from '@material-ui/core/IconButton';
@@ -45,6 +44,7 @@ interface OwnPropsOfExpandPanel {
   expanded: boolean;
   renderers?: JsonFormsRendererRegistryEntry[];
   cells?: JsonFormsCellRendererRegistryEntry[];
+  uischemas?: JsonFormsUISchemaRegistryEntry[];
   rootSchema: JsonSchema;
   enableMoveUp: boolean;
   enableMoveDown: boolean;
@@ -56,7 +56,6 @@ interface OwnPropsOfExpandPanel {
 interface StatePropsOfExpandPanel extends OwnPropsOfExpandPanel {
   childLabel: string;
   childPath: string;
-  uischemas: { tester: UISchemaTester; uischema: UISchemaElement }[];
   enableMoveUp: boolean;
   enableMoveDown: boolean;
 }

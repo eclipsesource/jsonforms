@@ -45,6 +45,7 @@ import { JsonFormsRendererRegistryEntry, rendererReducer } from './renderers';
 import { JsonFormsState } from '../store';
 import {
   findMatchingUISchema,
+  JsonFormsUISchemaRegistryEntry,
   uischemaRegistryReducer,
   UISchemaTester
 } from './uischemas';
@@ -73,7 +74,8 @@ export {
   configReducer,
   UISchemaTester,
   uischemaRegistryReducer,
-  findMatchingUISchema
+  findMatchingUISchema,
+  JsonFormsUISchemaRegistryEntry
 };
 export { JsonFormsCore, ValidationMode };
 
@@ -108,6 +110,10 @@ export const getRenderers = (
 export const getCells = (
   state: JsonFormsState
 ): JsonFormsCellRendererRegistryEntry[] => get(state, 'jsonforms.cells');
+export const getUISchemas = (
+  state: JsonFormsState
+): JsonFormsUISchemaRegistryEntry[] => get(state, 'jsonforms.uischemas');
+
 /**
  * Finds a registered UI schema to use, if any.
  * @param schema the JSON schema describing the data to be rendered
@@ -117,7 +123,7 @@ export const getCells = (
  * @param control may be checked for embedded inline uischema options
  */
 export const findUISchema = (
-  uischemas: { tester: UISchemaTester; uischema: UISchemaElement }[],
+  uischemas: JsonFormsUISchemaRegistryEntry[],
   schema: JsonSchema,
   schemaPath: string,
   path: string,

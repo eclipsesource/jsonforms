@@ -38,6 +38,7 @@ import {
   JsonFormsCore,
   JsonFormsProps,
   JsonFormsRendererRegistryEntry,
+  JsonFormsUISchemaRegistryEntry,
   JsonSchema,
   OwnPropsOfJsonFormsRenderer,
   removeId,
@@ -220,6 +221,7 @@ export interface JsonFormsInitStateProps {
   ajv?: AJV.Ajv;
   refParserOptions?: RefParser.Options;
   config?: any;
+  uischemas?: JsonFormsUISchemaRegistryEntry[];
   readonly?: boolean;
   validationMode?: ValidationMode;
 }
@@ -237,6 +239,7 @@ export const JsonForms = (
     refParserOptions,
     onChange,
     config,
+    uischemas,
     readonly,
     validationMode
   } = props;
@@ -262,6 +265,7 @@ export const JsonForms = (
           validationMode: validationMode
         },
         config,
+        uischemas,
         renderers,
         cells,
         readonly,

@@ -27,8 +27,7 @@ import { JsonFormsCore } from './reducers/core';
 import { JsonFormsCellRendererRegistryEntry } from './reducers/cells';
 import { JsonFormsRendererRegistryEntry } from './reducers/renderers';
 import { JsonFormsLocaleState } from './reducers/i18n';
-import { UISchemaTester } from './reducers/uischemas';
-import { UISchemaElement } from './models/uischema';
+import { JsonFormsUISchemaRegistryEntry } from './reducers/uischemas';
 
 /**
  * JSONForms store.
@@ -69,7 +68,7 @@ export interface JsonFormsSubStates {
   /**
    *
    */
-  uischemas?: { tester: UISchemaTester; uischema: UISchemaElement }[];
+  uischemas?: JsonFormsUISchemaRegistryEntry[];
   /**
    * If true, sets all controls to read-only.
    */

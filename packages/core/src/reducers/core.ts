@@ -31,16 +31,16 @@ import isFunction from 'lodash/isFunction';
 import { Ajv, ErrorObject, ValidateFunction } from 'ajv';
 import RefParser from 'json-schema-ref-parser';
 import {
+  CoreActions,
   INIT,
   InitAction,
   InitActionOptions,
   SET_AJV,
   SET_SCHEMA,
   SET_UISCHEMA,
+  SET_VALIDATION_MODE,
   UPDATE_DATA,
-  UPDATE_ERRORS,
-  CoreActions,
-  SET_VALIDATION_MODE
+  UPDATE_ERRORS
 } from '../actions';
 import { createAjv } from '../util/validator';
 import { JsonSchema, UISchemaElement } from '..';
