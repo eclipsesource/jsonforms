@@ -34,7 +34,7 @@ import {
   JsonFormsStore,
   JsonSchema,
   Layout,
-  NOT_APPLICABLE
+  NOT_APPLICABLE,
   rankWith,
   registerCell,
   registerRenderer,
