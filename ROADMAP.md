@@ -5,3 +5,6 @@ This roadmap defines our current view on how we will continue with the developme
 H1/2021
  * Vue.js Renderer Set
  * Eclipse Theia Integration of a JSONForms-based Editor
+
+H2/2021
+ * Improve Documentation
