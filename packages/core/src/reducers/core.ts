@@ -43,6 +43,7 @@ import {
   UPDATE_ERRORS
 } from '../actions';
 import { createAjv } from '../util/validator';
+import { Reducer } from '../util/type';
 import { JsonSchema, UISchemaElement } from '..';
 
 const validate = (validator: ValidateFunction, data: any): ErrorObject[] => {
@@ -162,10 +163,10 @@ const hasValidationModeOption = (option: any): option is InitActionOptions => {
   return false;
 };
 
-export const coreReducer = (
-  state: JsonFormsCore = initState,
-  action: CoreActions
-): JsonFormsCore => {
+export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
+  state = initState,
+  action
+) => {
   switch (action.type) {
     case INIT: {
       const thisAjv = getOrCreateAjv(state, action);

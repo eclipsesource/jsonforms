@@ -29,6 +29,7 @@ import {
   REMOVE_CELL,
   RemoveCellRendererAction
 } from '../actions';
+import { Reducer } from '../util/type';
 
 type ValidCellReducerActions = AddCellRendererAction | RemoveCellRendererAction;
 
@@ -39,9 +40,9 @@ export interface JsonFormsCellRendererRegistryEntry {
   cell: any;
 }
 
-export const cellReducer = (
-  state: JsonFormsCellRendererRegistryState = [],
-  { type, tester, cell }: ValidCellReducerActions
+export const cellReducer: Reducer<JsonFormsCellRendererRegistryState, ValidCellReducerActions> = (
+  state = [],
+  { type, tester, cell }
 ) => {
   switch (type) {
     case ADD_CELL:

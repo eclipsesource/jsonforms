@@ -26,6 +26,7 @@ import maxBy from 'lodash/maxBy';
 import remove from 'lodash/remove';
 import { ADD_UI_SCHEMA, REMOVE_UI_SCHEMA, UISchemaActions } from '../actions';
 import { JsonSchema, NOT_APPLICABLE, UISchemaElement } from '..';
+import { Reducer } from '../util/type';
 
 export type UISchemaTester = (
   schema: JsonSchema,
@@ -38,9 +39,9 @@ export interface JsonFormsUISchemaRegistryEntry {
   uischema: UISchemaElement;
 }
 
-export const uischemaRegistryReducer = (
-  state: JsonFormsUISchemaRegistryEntry[] = [],
-  action: UISchemaActions
+export const uischemaRegistryReducer: Reducer<JsonFormsUISchemaRegistryEntry[], UISchemaActions> = (
+  state = [],
+  action
 ) => {
   switch (action.type) {
     case ADD_UI_SCHEMA:

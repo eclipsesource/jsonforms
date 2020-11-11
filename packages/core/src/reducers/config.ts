@@ -25,13 +25,14 @@
 import merge from 'lodash/merge';
 import { SET_CONFIG, SetConfigAction } from '../actions';
 import { configDefault } from '../configDefault';
+import { Reducer } from '../util/type';
 
 const applyDefaultConfiguration = (config: any = {}) =>
   merge({}, configDefault, config);
 
-export const configReducer = (
+export const configReducer: Reducer<any, SetConfigAction> = (
   state = applyDefaultConfiguration(),
-  action: SetConfigAction
+  action
 ) => {
   switch (action.type) {
     case SET_CONFIG:

@@ -28,6 +28,7 @@ import {
   REMOVE_DEFAULT_DATA,
   UnregisterDefaultDataAction
 } from '../actions';
+import { Reducer } from '../util/type';
 
 export interface JsonFormsDefaultDataRegistryEntry {
   schemaPath: string;
@@ -38,9 +39,9 @@ type ValidDefaultDataActions =
   | RegisterDefaultDataAction
   | UnregisterDefaultDataAction;
 
-export const defaultDataReducer = (
-  state: JsonFormsDefaultDataRegistryEntry[] = [],
-  action: ValidDefaultDataActions
+export const defaultDataReducer: Reducer<JsonFormsDefaultDataRegistryEntry[], ValidDefaultDataActions> = (
+  state = [],
+  action
 ) => {
   switch (action.type) {
     case ADD_DEFAULT_DATA:
