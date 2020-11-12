@@ -23,22 +23,17 @@
   THE SOFTWARE.
 */
 import './MatchMediaMock';
-import React, { Reducer } from 'react';
+import React from 'react';
 import Enzyme, { mount } from 'enzyme';
 import { materialRenderers } from '../../src';
 import {
-  Actions,
-  jsonformsReducer,
-  JsonFormsState,
-  RuleEffect,
-  UISchemaElement,
+  ControlElement,
   Layout,
-  ControlElement
+  RuleEffect,
+  UISchemaElement
 } from '@jsonforms/core';
 import Adapter from 'enzyme-adapter-react-16';
-import { AnyAction, combineReducers, createStore, Store } from 'redux';
-import { JsonFormsReduxContext, JsonFormsDispatch } from '@jsonforms/react';
-import { Provider } from 'react-redux';
+import { JsonForms } from '@jsonforms/react';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -137,32 +132,17 @@ const controlRule = (rule: any, uischema: Layout) => {
 const controlEnableRule = (uischema: Layout) =>
   controlRule(rule(RuleEffect.ENABLE, 'toggleControl'), uischema);
 
-const initStore = () => {
-  const s: JsonFormsState = {
-    jsonforms: {
-      renderers: materialRenderers
-    }
-  };
-  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({
-    jsonforms: jsonformsReducer()
-  });
-  const store: Store<JsonFormsState> = createStore(reducer, s);
-
-  return store;
-};
-
 describe('Layout Tests', () => {
   let wrapper: Enzyme.ReactWrapper;
 
   const createWrapper = (data: any, uischema: UISchemaElement) => {
-    const store = initStore();
-    store.dispatch(Actions.init(data, schema, uischema));
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <JsonFormsDispatch />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonForms
+        data={data}
+        schema={schema}
+        uischema={uischema}
+        renderers={materialRenderers}
+      />
     );
   };
 
@@ -178,12 +158,13 @@ describe('Layout Tests', () => {
         return wrapper.find('input[type="number"]').length > 0;
       case 'bottom':
         return wrapper.find('input[type="checkbox"]').length > 0;
+      default:
+        fail('Should not happen, something is massively broken');
     }
-    fail('Should not happen, something is massively broken');
   };
 
   const controlIsEnabled = (control: string) => {
-    var foundControl;
+    let foundControl;
     switch (control) {
       case 'top':
         foundControl = wrapper.find('input[type="text"]');
@@ -438,14 +419,13 @@ describe('Special Layout Tests', () => {
         topCheck: true,
         bottomCheck: false
       };
-      const store = initStore();
-      store.dispatch(Actions.init(data, schema, uischema));
       const wrapper = mount(
-        <Provider store={store}>
-          <JsonFormsReduxContext>
-            <JsonFormsDispatch />
-          </JsonFormsReduxContext>
-        </Provider>
+        <JsonForms
+          data={data}
+          schema={schema}
+          uischema={uischema}
+          renderers={materialRenderers}
+        />
       );
       expect(
         wrapper
@@ -460,14 +440,13 @@ describe('Special Layout Tests', () => {
         topCheck: false,
         bottomCheck: true
       };
-      const store = initStore();
-      store.dispatch(Actions.init(data, schema, uischema));
       const wrapper = mount(
-        <Provider store={store}>
-          <JsonFormsReduxContext>
-            <JsonFormsDispatch />
-          </JsonFormsReduxContext>
-        </Provider>
+        <JsonForms
+          data={data}
+          schema={schema}
+          uischema={uischema}
+          renderers={materialRenderers}
+        />
       );
       expect(
         wrapper
@@ -512,14 +491,13 @@ describe('Special Layout Tests', () => {
       const data = {
         check: true
       };
-      const store = initStore();
-      store.dispatch(Actions.init(data, schema, uischema));
       const wrapper = mount(
-        <Provider store={store}>
-          <JsonFormsReduxContext>
-            <JsonFormsDispatch />
-          </JsonFormsReduxContext>
-        </Provider>
+        <JsonForms
+          data={data}
+          schema={schema}
+          uischema={uischema}
+          renderers={materialRenderers}
+        />
       );
       expect(
         wrapper
@@ -539,14 +517,13 @@ describe('Special Layout Tests', () => {
       const data = {
         check: false
       };
-      const store = initStore();
-      store.dispatch(Actions.init(data, schema, uischema));
       const wrapper = mount(
-        <Provider store={store}>
-          <JsonFormsReduxContext>
-            <JsonFormsDispatch />
-          </JsonFormsReduxContext>
-        </Provider>
+        <JsonForms
+          data={data}
+          schema={schema}
+          uischema={uischema}
+          renderers={materialRenderers}
+        />
       );
       expect(
         wrapper

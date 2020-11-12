@@ -24,7 +24,7 @@
 */
 import * as React from 'react';
 import { LabelElement, UISchemaElement } from '@jsonforms/core';
-import { JsonFormsReduxContext } from '@jsonforms/react';
+import { JsonFormsReduxContext } from '@jsonforms/react/lib/redux';
 import { Provider } from 'react-redux';
 import Adapter from 'enzyme-adapter-react-16';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';

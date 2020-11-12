@@ -22,34 +22,5 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { RankedTester } from '../testers';
-import {
-  ADD_CELL,
-  AddCellRendererAction,
-  REMOVE_CELL,
-  RemoveCellRendererAction
-} from '../actions';
-import { Reducer } from '../util/type';
 
-type ValidCellReducerActions = AddCellRendererAction | RemoveCellRendererAction;
-
-export type JsonFormsCellRendererRegistryState = JsonFormsCellRendererRegistryEntry[];
-
-export interface JsonFormsCellRendererRegistryEntry {
-  tester: RankedTester;
-  cell: any;
-}
-
-export const cellReducer: Reducer<JsonFormsCellRendererRegistryState, ValidCellReducerActions> = (
-  state = [],
-  { type, tester, cell }
-) => {
-  switch (type) {
-    case ADD_CELL:
-      return state.concat([{ tester, cell }]);
-    case REMOVE_CELL:
-      return state.filter(t => t.tester !== tester);
-    default:
-      return state;
-  }
-};
+export * from './JsonFormsReduxContext';

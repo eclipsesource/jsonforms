@@ -24,23 +24,18 @@
 */
 import './MatchMediaMock';
 import {
-  Actions,
   ControlElement,
   DispatchCellProps,
-  jsonformsReducer,
-  JsonFormsState,
-  JsonSchema,
-  registerCell
+  JsonSchema
 } from '@jsonforms/core';
 import * as React from 'react';
-import { Provider } from 'react-redux';
 
 import MaterialArrayControlRenderer from '../../src/complex/MaterialArrayControlRenderer';
-import { AnyAction, combineReducers, createStore, Reducer, Store } from 'redux';
 import { materialCells, materialRenderers } from '../../src';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { JsonFormsReduxContext, StatelessRenderer } from '@jsonforms/react';
+import { JsonFormsStateProvider, StatelessRenderer } from '@jsonforms/react';
+import { initCore, TestEmitter } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -103,41 +98,20 @@ const fixture2: {
   }
 };
 
-export const initJsonFormsStore = (customData?: any): Store<JsonFormsState> => {
-  const s: JsonFormsState = {
-    jsonforms: {
-      renderers: materialRenderers,
-      cells: materialCells
-    }
-  };
-  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({
-    jsonforms: jsonformsReducer()
-  });
-  const store: Store<JsonFormsState> = createStore(reducer, s);
-  const { data, schema, uischema } = fixture;
-  store.dispatch(
-    Actions.init(customData ? customData : data, schema, uischema)
-  );
-
-  return store;
-};
-
 describe('Material array control', () => {
   let wrapper: ReactWrapper;
 
   afterEach(() => wrapper.unmount());
 
   it('should render', () => {
-    const store = initJsonFormsStore();
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialArrayControlRenderer
-            schema={fixture.schema}
-            uischema={fixture.uischema}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialArrayControlRenderer
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+        />
+      </JsonFormsStateProvider>
     );
 
     const rows = wrapper.find('tr');
@@ -146,17 +120,14 @@ describe('Material array control', () => {
   });
 
   it('should render empty', () => {
-    const store = initJsonFormsStore([]);
-
+    const core = initCore(fixture.schema, fixture.uischema);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialArrayControlRenderer
-            schema={fixture.schema}
-            uischema={fixture.uischema}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialArrayControlRenderer
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+        />
+      </JsonFormsStateProvider>
     );
 
     const rows = wrapper.find('tr');
@@ -168,7 +139,6 @@ describe('Material array control', () => {
   });
 
   it('should render even without properties', () => {
-    const store = initJsonFormsStore();
     // re-init
     const data: any = { test: [] };
     const schema: JsonSchema = {
@@ -184,14 +154,12 @@ describe('Material array control', () => {
       type: 'Control',
       scope: '#/properties/test'
     };
-    store.dispatch(Actions.init(data, schema, uischema));
+    const core = initCore(schema, uischema, data);
 
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialArrayControlRenderer schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialArrayControlRenderer schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
     );
 
     const rows = wrapper.find('tr');
@@ -203,7 +171,6 @@ describe('Material array control', () => {
   });
 
   it('should use title as a header if it exists', () => {
-    const store = initJsonFormsStore();
     // re-init
     const data: any = { test: [] };
     const schema: JsonSchema = {
@@ -230,29 +197,25 @@ describe('Material array control', () => {
       type: 'Control',
       scope: '#/properties/test'
     };
-    store.dispatch(Actions.init(data, schema, uischema));
+    const core = initCore(schema, uischema, data);
 
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
           <MaterialArrayControlRenderer schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      </JsonFormsStateProvider>
     );
 
-    //column headings are in the second row of the table, wrapped in <th>
+    // column headings are in the second row of the table, wrapped in <th>
     const headers = wrapper.find('tr').at(1).find('th');
 
     // the first property has a title, so we expect it to be rendered as the first column heading
-    expect(headers.at(0).text()).toEqual("first test");
+    expect(headers.at(0).text()).toEqual('first test');
 
     // the second property has no title, so we expect to see the property name in start case
-    expect(headers.at(1).text()).toEqual("Test 2");
- 
+    expect(headers.at(1).text()).toEqual('Test 2');
   });
 
   it('should render empty primitives', () => {
-    const store = initJsonFormsStore();
     // re-init
     const data: any = { test: [] };
     const schema: JsonSchema = {
@@ -268,14 +231,11 @@ describe('Material array control', () => {
       type: 'Control',
       scope: '#/properties/test'
     };
-    store.dispatch(Actions.init(data, schema, uischema));
-
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialArrayControlRenderer schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialArrayControlRenderer schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
     );
 
     const rows = wrapper.find('tr');
@@ -288,7 +248,6 @@ describe('Material array control', () => {
   });
 
   it('should render primitives', () => {
-    const store = initJsonFormsStore();
     // re-init
     const data = { test: ['foo', 'bar'] };
     const schema = {
@@ -304,14 +263,11 @@ describe('Material array control', () => {
       type: 'Control',
       scope: '#/properties/test'
     };
-    store.dispatch(Actions.init(data, schema, uischema));
-
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialArrayControlRenderer schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialArrayControlRenderer schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
     );
 
     const rows = wrapper.find('tr');
@@ -320,16 +276,22 @@ describe('Material array control', () => {
   });
 
   it('should delete an item', () => {
-    const store = initJsonFormsStore();
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
+    const onChangeData: any = {
+      data: undefined
+    };
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialArrayControlRenderer
-            schema={fixture.schema}
-            uischema={fixture.uischema}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, cells: materialCells, core }}>
+        <TestEmitter
+          onChange={({ data }) => {
+            onChangeData.data = data;
+          }}
+        />
+        <MaterialArrayControlRenderer
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+        />
+      </JsonFormsStateProvider>
     );
 
     const buttons = wrapper.find('button');
@@ -352,7 +314,7 @@ describe('Material array control', () => {
 
     expect(nrOfRowsBeforeDelete).toBe(4);
     expect(nrOfRowsAfterDelete).toBe(3);
-    expect(store.getState().jsonforms.core.data.length).toBe(1);
+    expect(onChangeData.data.length).toBe(1);
   });
 
   const CellRenderer1: StatelessRenderer<DispatchCellProps> = () => (
@@ -363,19 +325,25 @@ describe('Material array control', () => {
   );
 
   it('should use cells from store', () => {
-    const store = initJsonFormsStore();
-    store.dispatch(registerCell(() => 50, CellRenderer1));
-    store.dispatch(registerCell(() => 51, CellRenderer2));
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
+    const cells = [
+      {
+        tester: () => 50,
+        cell: CellRenderer1
+      }, {
+        tester: () => 51,
+        cell: CellRenderer2
+      }
+    ];
 
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialArrayControlRenderer
-            schema={fixture.schema}
-            uischema={fixture.uischema}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialArrayControlRenderer
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          cells={cells}
+        />
+      </JsonFormsStateProvider>
     );
 
     const rows = wrapper.find({ className: 'cell test 2' });
@@ -384,19 +352,20 @@ describe('Material array control', () => {
   });
 
   it('should use cells from own props', () => {
-    const store = initJsonFormsStore();
-    store.dispatch(registerCell(() => 50, CellRenderer1));
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
+    const cell = {
+      tester: () => 50,
+      cell: CellRenderer1
+    };
 
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialArrayControlRenderer
-            schema={fixture.schema}
-            uischema={fixture.uischema}
-            cells={[{ tester: () => 60, cell: CellRenderer2 }]}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialArrayControlRenderer
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          cells={[ cell, { tester: () => 60, cell: CellRenderer2 }]}
+        />
+      </JsonFormsStateProvider>
     );
 
     const rows = wrapper.find({ className: 'cell test 2' });
@@ -429,15 +398,20 @@ describe('Material array control', () => {
       type: 'Control',
       scope: '#/properties/things'
     };
-    const store = initJsonFormsStore();
-    store.dispatch(Actions.init({}, schema, uischema));
+    const core = initCore(schema, uischema, {});
+    const onChangeData: any = {
+      data: undefined
+    };
 
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialArrayControlRenderer schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <TestEmitter
+          onChange={({ data }) => {
+            onChangeData.data = data;
+          }}
+        />
+        <MaterialArrayControlRenderer schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
     );
 
     const buttons = wrapper.find('button');
@@ -455,7 +429,7 @@ describe('Material array control', () => {
     // 2 header rows + 'no data' row
     expect(nrOfRowsBeforeAdd).toBe(3);
     expect(nrOfRowsAfterAdd).toBe(4);
-    expect(store.getState().jsonforms.core.data).toEqual({ things: [{}, {}] });
+    expect(onChangeData.data).toEqual({ things: [{}, {}] });
   });
 
   it('should be hideable', () => {
@@ -483,19 +457,15 @@ describe('Material array control', () => {
       type: 'Control',
       scope: '#/properties/things'
     };
-    const store = initJsonFormsStore();
-    store.dispatch(Actions.init({}, schema, uischema));
-
+    const core = initCore(schema, uischema, {});
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialArrayControlRenderer
-            schema={schema}
-            uischema={uischema}
-            visible={false}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialArrayControlRenderer
+          schema={schema}
+          uischema={uischema}
+          visible={false}
+        />
+      </JsonFormsStateProvider>
     );
 
     const nrOfButtons = wrapper.find('button').length;
@@ -506,17 +476,14 @@ describe('Material array control', () => {
   });
   it('should render sort buttons if showSortButtons is true', () => {
     const data = { test: ['foo'] };
-    const store = initJsonFormsStore();
-    store.dispatch(Actions.init(data, fixture2.schema, fixture2.uischema));
+    const core = initCore(fixture2.schema, fixture2.uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialArrayControlRenderer
-            schema={fixture2.schema}
-            uischema={fixture2.uischema}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialArrayControlRenderer
+          schema={fixture2.schema}
+          uischema={fixture2.uischema}
+        />
+      </JsonFormsStateProvider>
     );
     // up button
     expect(
@@ -528,19 +495,22 @@ describe('Material array control', () => {
     ).toBe(1);
   });
   it('should be able to move item down if down button is clicked', () => {
-    const store = initJsonFormsStore();
-    store.dispatch(
-      Actions.init(fixture2.data, fixture2.schema, fixture2.uischema)
-    );
+    const core = initCore(fixture2.schema, fixture2.uischema, fixture2.data);
+    const onChangeData: any = {
+      data: undefined
+    };
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialArrayControlRenderer
-            schema={fixture2.schema}
-            uischema={fixture2.uischema}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <TestEmitter
+          onChange={({ data }) => {
+            onChangeData.data = data;
+          }}
+        />
+        <MaterialArrayControlRenderer
+          schema={fixture2.schema}
+          uischema={fixture2.uischema}
+        />
+      </JsonFormsStateProvider>
     );
     // first row is header in table
     const downButton = wrapper
@@ -549,24 +519,27 @@ describe('Material array control', () => {
       .find('button')
       .find({ 'aria-label': 'Move down' });
     downButton.simulate('click');
-    expect(store.getState().jsonforms.core.data).toEqual({
+    expect(onChangeData.data).toEqual({
       test: ['baz', 'foo', 'bar']
     });
   });
   it('should be able to move item up if up button is clicked', () => {
-    const store = initJsonFormsStore();
-    store.dispatch(
-      Actions.init(fixture2.data, fixture2.schema, fixture2.uischema)
-    );
+    const core = initCore(fixture2.schema, fixture2.uischema, fixture2.data);
+    const onChangeData: any = {
+      data: undefined
+    };
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialArrayControlRenderer
-            schema={fixture2.schema}
-            uischema={fixture2.uischema}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <TestEmitter
+          onChange={({ data }) => {
+            onChangeData.data = data;
+          }}
+        />
+        <MaterialArrayControlRenderer
+          schema={fixture2.schema}
+          uischema={fixture2.uischema}
+        />
+      </JsonFormsStateProvider>
     );
     // first row is header in table
     const upButton = wrapper
@@ -575,24 +548,19 @@ describe('Material array control', () => {
       .find('button')
       .find({ 'aria-label': 'Move up' });
     upButton.simulate('click');
-    expect(store.getState().jsonforms.core.data).toEqual({
+    expect(onChangeData.data).toEqual({
       test: ['foo', 'bar', 'baz']
     });
   });
   it('should have up button disabled for first element', () => {
-    const store = initJsonFormsStore();
-    store.dispatch(
-      Actions.init(fixture2.data, fixture2.schema, fixture2.uischema)
-    );
+    const core = initCore(fixture2.schema, fixture2.uischema, fixture2.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialArrayControlRenderer
-            schema={fixture2.schema}
-            uischema={fixture2.uischema}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialArrayControlRenderer
+          schema={fixture2.schema}
+          uischema={fixture2.uischema}
+        />
+      </JsonFormsStateProvider>
     );
     // first row is header in table
     const upButton = wrapper
@@ -604,20 +572,15 @@ describe('Material array control', () => {
   });
 
   it('should have fields enabled', () => {
-    const store = initJsonFormsStore();
-    store.dispatch(
-      Actions.init(fixture2.data, fixture2.schema, fixture2.uischema)
-    );
+    const core = initCore(fixture2.schema, fixture2.uischema, fixture2.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialArrayControlRenderer
-            schema={fixture2.schema}
-            uischema={fixture2.uischema}
-            enabled={true}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, cells: materialCells, core }}>
+        <MaterialArrayControlRenderer
+          schema={fixture2.schema}
+          uischema={fixture2.uischema}
+          enabled={true}
+        />
+      </JsonFormsStateProvider>
     );
     // first row is header in table
     const input = wrapper
@@ -629,20 +592,15 @@ describe('Material array control', () => {
   });
 
   it('should have fields disabled', () => {
-    const store = initJsonFormsStore();
-    store.dispatch(
-      Actions.init(fixture2.data, fixture2.schema, fixture2.uischema)
-    );
+    const core = initCore(fixture2.schema, fixture2.uischema, fixture2.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialArrayControlRenderer
-            schema={fixture2.schema}
-            uischema={fixture2.uischema}
-            enabled={false}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, cells: materialCells, core }}>
+        <MaterialArrayControlRenderer
+          schema={fixture2.schema}
+          uischema={fixture2.uischema}
+          enabled={false}
+        />
+      </JsonFormsStateProvider>
     );
     // first row is header in table
     const input = wrapper
@@ -654,19 +612,14 @@ describe('Material array control', () => {
   });
 
   it('should have down button disabled for last element', () => {
-    const store = initJsonFormsStore();
-    store.dispatch(
-      Actions.init(fixture2.data, fixture2.schema, fixture2.uischema)
-    );
+    const core = initCore(fixture2.schema, fixture2.uischema, fixture2.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialArrayControlRenderer
-            schema={fixture2.schema}
-            uischema={fixture2.uischema}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialArrayControlRenderer
+          schema={fixture2.schema}
+          uischema={fixture2.uischema}
+        />
+      </JsonFormsStateProvider>
     );
     // first row is header in table
     // first buttton is up arrow, second button is down arrow

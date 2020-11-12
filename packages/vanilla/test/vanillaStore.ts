@@ -25,7 +25,7 @@
 import { combineReducers, createStore, Store } from 'redux';
 import {
   Actions,
-  jsonformsReducer,
+  jsonFormsReducerConfig,
   JsonFormsState,
   JsonSchema,
   UISchemaElement
@@ -46,7 +46,7 @@ export const initJsonFormsVanillaStore = ({
 }): Store<JsonFormsState> => {
   const store: Store<JsonFormsState> = createStore(
     combineReducers({
-      jsonforms: jsonformsReducer({ styles: stylingReducer })
+      jsonforms: combineReducers({...jsonFormsReducerConfig, styles: stylingReducer}),
     }),
     {
       // TODO

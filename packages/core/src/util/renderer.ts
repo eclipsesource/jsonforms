@@ -43,10 +43,12 @@ import {
 import { RankedTester } from '../testers';
 import { JsonSchema } from '../models/jsonSchema';
 import {
+  AnyAction,
   CombinatorKeyword,
   composePaths,
   composeWithUi,
   createLabelDescriptionFrom,
+  Dispatch,
   formatErrorMessage,
   hasEnableRule,
   hasShowRule,
@@ -57,10 +59,9 @@ import {
   Resolve,
   resolveSubSchemas
 } from '../util';
-import { update, CoreActions } from '../actions';
+import { CoreActions, update } from '../actions';
 import { ErrorObject } from 'ajv';
 import { JsonFormsState } from '../store';
-import { AnyAction, Dispatch } from 'redux';
 import { JsonFormsRendererRegistryEntry } from '../reducers/renderers';
 import { JsonFormsCellRendererRegistryEntry } from '../reducers/cells';
 import { JsonFormsUISchemaRegistryEntry } from '../reducers/uischemas';

@@ -25,42 +25,20 @@
 import './MatchMediaMock';
 import * as React from 'react';
 import {
-  Actions,
   ControlElement,
-  getData,
-  jsonformsReducer,
-  JsonFormsState,
   JsonSchema,
-  NOT_APPLICABLE,
-  UISchemaElement
+  NOT_APPLICABLE
 } from '@jsonforms/core';
 import NumberCell, {
   materialNumberCellTester
 } from '../../src/cells/MaterialNumberCell';
-import { Provider } from 'react-redux';
 import { materialRenderers } from '../../src';
-import { combineReducers, createStore, Store } from 'redux';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { JsonFormsReduxContext } from '@jsonforms/react';
+import { JsonFormsStateProvider } from '@jsonforms/react';
+import { initCore, TestEmitter } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });
-
-const initJsonFormsStore = (
-  testData: any,
-  testSchema: JsonSchema,
-  testUiSchema: UISchemaElement
-): Store<JsonFormsState> => {
-  const s: JsonFormsState = {
-    jsonforms: {
-      renderers: materialRenderers
-    }
-  };
-  const reducer = combineReducers({ jsonforms: jsonformsReducer() });
-  const store: Store<JsonFormsState> = createStore(reducer, s);
-  store.dispatch(Actions.init(testData, testSchema, testUiSchema));
-  return store;
-};
 
 const data = { foo: 3.14 };
 const schema = {
@@ -152,13 +130,11 @@ describe('Material number cells', () => {
         focus: true
       }
     };
-    const store = initJsonFormsStore(data, schema, control);
+    const core = initCore(schema, control, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <NumberCell schema={schema} uischema={control} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <NumberCell schema={schema} uischema={control} path='foo' />
+      </JsonFormsStateProvider>
     );
     const inputs = wrapper.find('input');
     expect(inputs.first().props().autoFocus).toBeTruthy();
@@ -172,13 +148,11 @@ describe('Material number cells', () => {
         focus: false
       }
     };
-    const store = initJsonFormsStore(data, schema, control);
+    const core = initCore(schema, control, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <NumberCell schema={schema} uischema={uischema} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <NumberCell schema={schema} uischema={uischema} path='foo' />
+      </JsonFormsStateProvider>
     );
     const inputs = wrapper.find('input');
     expect(inputs.first().props().autoFocus).toBeFalsy();
@@ -189,13 +163,11 @@ describe('Material number cells', () => {
       type: 'Control',
       scope: '#/properties/foo'
     };
-    const store = initJsonFormsStore(data, schema, control);
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <NumberCell schema={schema} uischema={control} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <NumberCell schema={schema} uischema={control} path='foo' />
+      </JsonFormsStateProvider>
     );
     const inputs = wrapper.find('input');
     expect(inputs.first().props().autoFocus).toBeFalsy();
@@ -210,13 +182,11 @@ describe('Material number cells', () => {
         }
       }
     };
-    const store = initJsonFormsStore({ foo: 3.14 }, schema, uischema);
+    const core = initCore(schema, uischema, { foo: 3.14 });
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <NumberCell schema={jsonSchema} uischema={uischema} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <NumberCell schema={jsonSchema} uischema={uischema} path='foo' />
+      </JsonFormsStateProvider>
     );
 
     const input = wrapper.find('input').first();
@@ -234,13 +204,11 @@ describe('Material number cells', () => {
         }
       }
     };
-    const store = initJsonFormsStore({ foo: 0 }, schema, uischema);
+    const core = initCore(schema, uischema, { foo: 0 });
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <NumberCell schema={jsonSchema} uischema={uischema} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <NumberCell schema={jsonSchema} uischema={uischema} path='foo' />
+      </JsonFormsStateProvider>
     );
 
     const input = wrapper.find('input').first();
@@ -250,32 +218,39 @@ describe('Material number cells', () => {
   });
 
   it('should update via input event', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    const core = initCore(schema, uischema, data);
+    const onChangeData: any = {
+      data: undefined
+    };
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <NumberCell schema={schema} uischema={uischema} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <TestEmitter
+          onChange={({ data }) => {
+            onChangeData.data = data;
+          }}
+        />
+        <NumberCell schema={schema} uischema={uischema} path='foo' />
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input');
     input.simulate('change', { target: { value: 2.72 } });
-    expect(getData(store.getState()).foo).toBe(2.72);
+    expect(onChangeData.data.foo).toBe(2.72);
   });
 
   it('should update via action', () => {
-    const store = initJsonFormsStore({ foo: 2.72 }, schema, uischema);
+    const core = initCore(schema, uischema, { foo: 2.72 });
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <NumberCell schema={schema} uischema={uischema} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <NumberCell schema={schema} uischema={uischema} path='foo' />
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').first();
     expect(input.props().value).toBe(2.72);
-    store.dispatch(Actions.update('foo', () => 3.14));
+
+    core.data = { ...core.data, foo: 3.14 };
+    wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
     wrapper.update();
+
     expect(
       wrapper
         .find('input')
@@ -285,101 +260,97 @@ describe('Material number cells', () => {
   });
 
   it('should update with undefined value', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <NumberCell schema={schema} uischema={uischema} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <NumberCell schema={schema} uischema={uischema} path='foo' />
+      </JsonFormsStateProvider>
     );
-    store.dispatch(Actions.update('foo', () => undefined));
+    core.data = { ...core.data, foo: undefined };
+    wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
     wrapper.update();
     const input = wrapper.find('input').first();
     expect(input.props().value).toBe('');
   });
 
   it('should not update with null value', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <NumberCell schema={schema} uischema={uischema} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <NumberCell schema={schema} uischema={uischema} path='foo' />
+      </JsonFormsStateProvider>
     );
-    store.dispatch(Actions.update('foo', () => null));
+    core.data = { ...core.data, foo: null };
+    wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
     wrapper.update();
     const input = wrapper.find('input').first();
     expect(input.props().value).toBe('');
   });
 
   it('should not update with wrong ref', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <NumberCell schema={schema} uischema={uischema} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <NumberCell schema={schema} uischema={uischema} path='foo' />
+      </JsonFormsStateProvider>
     );
-    store.dispatch(Actions.update('bar', () => 11));
+    core.data = { ...core.data, bar: 11 };
+    wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
+    wrapper.update();
     const input = wrapper.find('input').first();
     expect(input.props().value).toBe(3.14);
   });
 
   it('should not update with null ref', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <NumberCell schema={schema} uischema={uischema} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <NumberCell schema={schema} uischema={uischema} path='foo' />
+      </JsonFormsStateProvider>
     );
-    store.dispatch(Actions.update(null, () => 2.72));
+    core.data = { ...core.data, null: 2.72 };
+    wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
     wrapper.update();
     const input = wrapper.find('input').first();
     expect(input.props().value).toBe(3.14);
   });
 
   it('should not update with undefined ref', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <NumberCell schema={schema} uischema={uischema} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <NumberCell schema={schema} uischema={uischema} path='foo' />
+      </JsonFormsStateProvider>
     );
-    store.dispatch(Actions.update(undefined, () => 13));
+    core.data = { ...core.data, undefined: 13 };
+    wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
     wrapper.update();
     const input = wrapper.find('input').first();
     expect(input.props().value).toBe(3.14);
   });
 
   it('can be disabled', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
         <NumberCell
           schema={schema}
           uischema={uischema}
           path='foo'
           enabled={false}
         />
-      </Provider>
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').first();
     expect(input.props().disabled).toBeTruthy();
   });
 
   it('should be enabled by default', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
         <NumberCell schema={schema} uischema={uischema} path='foo' />
-      </Provider>
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').first();
     expect(input.props().disabled).toBeFalsy();

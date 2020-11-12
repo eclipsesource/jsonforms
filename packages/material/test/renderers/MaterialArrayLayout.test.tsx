@@ -24,24 +24,20 @@
 */
 import './MatchMediaMock';
 import {
-  Actions,
-  ControlElement,
-  jsonformsReducer,
-  JsonFormsState
+  ControlElement
 } from '@jsonforms/core';
 import * as React from 'react';
-import { Provider } from 'react-redux';
 
-import { combineReducers, createStore, Store } from 'redux';
-import { materialCells, materialRenderers } from '../../src';
+import { materialRenderers } from '../../src';
 import {
   MaterialArrayLayout,
   materialArrayLayoutTester
 } from '../../src/layouts';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { JsonFormsReduxContext } from '@jsonforms/react';
+import { JsonForms, JsonFormsStateProvider } from '@jsonforms/react';
 import { ExpansionPanel } from '@material-ui/core';
+import { initCore } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -120,20 +116,6 @@ const uischemaWithChildLabelProp: ControlElement = {
   }
 };
 
-export const initJsonFormsStore = (): Store<JsonFormsState> => {
-  const s: JsonFormsState = {
-    jsonforms: {
-      renderers: materialRenderers,
-      cells: materialCells
-    }
-  };
-  const reducer = combineReducers({ jsonforms: jsonformsReducer() });
-  const store: Store<JsonFormsState> = createStore(reducer, s);
-  store.dispatch(Actions.init(data, schema, uischema));
-
-  return store;
-};
-
 const uischemaOptions: {
   generate: ControlElement;
   default: ControlElement;
@@ -188,13 +170,11 @@ describe('Material array layout', () => {
   afterEach(() => wrapper.unmount());
 
   it('should render two by two children', () => {
-    const store = initJsonFormsStore();
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialArrayLayout schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialArrayLayout schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
     );
 
     const controls = wrapper.find('input');
@@ -203,16 +183,11 @@ describe('Material array layout', () => {
   });
 
   it('should generate uischema when options.detail=GENERATE', () => {
-    const store = initJsonFormsStore();
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialArrayLayout
-            schema={schema}
-            uischema={uischemaOptions.generate}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialArrayLayout schema={schema} uischema={uischemaOptions.generate} />
+      </JsonFormsStateProvider>
     );
 
     const controls = wrapper.find('input');
@@ -221,16 +196,11 @@ describe('Material array layout', () => {
   });
 
   it('should use inline options.detail uischema', () => {
-    const store = initJsonFormsStore();
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialArrayLayout
-            schema={schema}
-            uischema={uischemaOptions.inline}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialArrayLayout schema={schema} uischema={uischemaOptions.inline} />
+      </JsonFormsStateProvider>
     );
 
     const controls = wrapper.find('input');
@@ -239,17 +209,15 @@ describe('Material array layout', () => {
   });
 
   it('should be hideable', () => {
-    const store = initJsonFormsStore();
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialArrayLayout
-            schema={schema}
-            uischema={uischema}
-            visible={false}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialArrayLayout
+          schema={schema}
+          uischema={uischema}
+          visible={false}
+        />
+      </JsonFormsStateProvider>
     );
 
     const controls = wrapper.find('input');
@@ -258,17 +226,15 @@ describe('Material array layout', () => {
   });
 
   it('should have renderers prop via ownProps', () => {
-    const store = initJsonFormsStore();
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialArrayLayout
-            schema={schema}
-            uischema={uischema}
-            renderers={[]}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialArrayLayout
+          schema={schema}
+          uischema={uischema}
+          renderers={[]}
+        />
+      </JsonFormsStateProvider>
     );
 
     const materialArrayLayout = wrapper.find(MaterialArrayLayout);
@@ -280,14 +246,16 @@ describe('Material array layout', () => {
       ...uischema,
       label: 'My awesome label'
     };
-    const store = initJsonFormsStore();
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialArrayLayout schema={schema} uischema={uischemaWithLabel} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonForms
+        data={data}
+        schema={nestedSchema}
+        uischema={uischemaWithLabel}
+        renderers={materialRenderers}
+      />
     );
+
+    expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
 
     const listLabel = wrapper.find('h6').at(0);
     expect(listLabel.text()).toBe('My awesome label');
@@ -298,11 +266,11 @@ describe('Material array layout', () => {
       ...schema,
       title: 'My awesome title'
     };
-    const store = initJsonFormsStore();
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
         <MaterialArrayLayout schema={titleSchema} uischema={uischema} />
-      </Provider>
+      </JsonFormsStateProvider>
     );
 
     const listTitle = wrapper.find('h6').at(0);
@@ -310,18 +278,16 @@ describe('Material array layout', () => {
   });
 
   it('should render sort buttons if showSortButtons is true', () => {
-    const store = initJsonFormsStore();
-    store.dispatch(Actions.init(data, schema, uischemaWithSortOption));
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialArrayLayout
-            schema={schema}
-            uischema={uischemaWithSortOption}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonForms
+        data={data}
+        schema={nestedSchema}
+        uischema={uischemaWithSortOption}
+        renderers={materialRenderers}
+      />
     );
+
+    expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
 
     // up button
     expect(
@@ -341,18 +307,23 @@ describe('Material array layout', () => {
     ).toBe(1);
   });
   it('should move item up if up button is presses', () => {
-    const store = initJsonFormsStore();
-    store.dispatch(Actions.init(data, schema, uischemaWithSortOption));
+    const onChangeData: any = {
+      data: undefined
+    };
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialArrayLayout
-            schema={schema}
-            uischema={uischemaWithSortOption}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonForms
+        data={data}
+        schema={nestedSchema}
+        uischema={uischemaWithSortOption}
+        renderers={materialRenderers}
+        onChange={({ data }) => {
+          onChangeData.data = data;
+        }}
+      />
     );
+
+    expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
+
     // getting up button of second item in expension panel;
     const upButton = wrapper
       .find('ExpandPanelRenderer')
@@ -360,7 +331,7 @@ describe('Material array layout', () => {
       .find('button')
       .find({ 'aria-label': 'Move up' });
     upButton.simulate('click');
-    expect(store.getState().jsonforms.core.data).toEqual([
+    expect(onChangeData.data).toEqual([
       {
         message: 'Yolo',
         message2: 'Yolo 2'
@@ -373,18 +344,23 @@ describe('Material array layout', () => {
     ]);
   });
   it('shoud move item down if down button is pressed', () => {
-    const store = initJsonFormsStore();
-    store.dispatch(Actions.init(data, schema, uischemaWithSortOption));
+    const onChangeData: any = {
+      data: undefined
+    };
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialArrayLayout
-            schema={schema}
-            uischema={uischemaWithSortOption}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonForms
+        data={data}
+        schema={nestedSchema}
+        uischema={uischemaWithSortOption}
+        renderers={materialRenderers}
+        onChange={({ data }) => {
+          onChangeData.data = data;
+        }}
+      />
     );
+
+    expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
+
     // getting up button of second item in expension panel;
     const upButton = wrapper
       .find('ExpandPanelRenderer')
@@ -392,7 +368,7 @@ describe('Material array layout', () => {
       .find('button')
       .find({ 'aria-label': 'Move down' });
     upButton.simulate('click');
-    expect(store.getState().jsonforms.core.data).toEqual([
+    expect(onChangeData.data).toEqual([
       {
         message: 'Yolo',
         message2: 'Yolo 2'
@@ -405,18 +381,17 @@ describe('Material array layout', () => {
     ]);
   });
   it('should have up button disabled for first element', () => {
-    const store = initJsonFormsStore();
-    store.dispatch(Actions.init(data, schema, uischemaWithSortOption));
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialArrayLayout
-            schema={schema}
-            uischema={uischemaWithSortOption}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonForms
+        data={data}
+        schema={nestedSchema}
+        uischema={uischemaWithSortOption}
+        renderers={materialRenderers}
+      />
     );
+
+    expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
+
     // getting up button of second item in expension panel;
     const upButton = wrapper
       .find('ExpandPanelRenderer')
@@ -426,18 +401,17 @@ describe('Material array layout', () => {
     expect(upButton.is('[disabled]')).toBe(true);
   });
   it('should have down button disabled for last element', () => {
-    const store = initJsonFormsStore();
-    store.dispatch(Actions.init(data, schema, uischemaWithSortOption));
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialArrayLayout
-            schema={schema}
-            uischema={uischemaWithSortOption}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonForms
+        data={data}
+        schema={nestedSchema}
+        uischema={uischemaWithSortOption}
+        renderers={materialRenderers}
+      />
     );
+
+    expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
+
     // getting up button of second item in expension panel;
     const downButton = wrapper
       .find('ExpandPanelRenderer')
@@ -451,44 +425,38 @@ describe('Material array layout', () => {
     wrapper
       .find(
         `#${
-          wrapper
-            .find(ExpansionPanel)
-            .at(index)
-            .props()['aria-labelledby']
+        wrapper
+          .find(ExpansionPanel)
+          .at(index)
+          .props()['aria-labelledby']
         }`
       )
       .text();
 
   it('should render first simple property as child label', () => {
-    const store = initJsonFormsStore();
-    store.dispatch(Actions.init(data, schema, uischemaWithSortOption));
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialArrayLayout
-            schema={schema}
-            uischema={uischemaWithSortOption}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialArrayLayout schema={schema} uischema={uischemaWithSortOption} />
+      </JsonFormsStateProvider>
     );
+
     expect(getChildLabel(wrapper, 0)).toBe('El Barto was here');
     expect(getChildLabel(wrapper, 1)).toBe('Yolo');
   });
 
   it('should render configured child label property as child label', () => {
-    const store = initJsonFormsStore();
-    store.dispatch(Actions.init(data, schema, uischemaWithChildLabelProp));
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialArrayLayout
-            schema={schema}
-            uischema={uischemaWithChildLabelProp}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonForms
+        data={data}
+        schema={nestedSchema}
+        uischema={uischemaWithChildLabelProp}
+        renderers={materialRenderers}
+      />
     );
+
+    expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
+
     expect(getChildLabel(wrapper, 0)).toBe('El Barto was here 2');
     expect(getChildLabel(wrapper, 1)).toBe('Yolo 2');
   });

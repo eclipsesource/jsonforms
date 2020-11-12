@@ -26,33 +26,31 @@ import * as React from 'react';
 import * as _ from 'lodash';
 import {
   ExampleDescription,
+  i18n,
   issue_1220 as Issue1220Example,
   nestedArray as NestedArrayExample,
   onChange as OnChangeExample,
-  i18n
 } from '@jsonforms/examples';
 import ConnectedRatingControl, { ratingControlTester } from './RatingControl';
 import {
   Actions,
+  JsonFormsCore,
   JsonSchema,
   setLocale,
   setSchema,
   setUISchema,
   UISchemaElement,
-  JsonFormsCore
 } from '@jsonforms/core';
 import { AnyAction, Dispatch } from 'redux';
 import { updateExampleExtensionState } from './reduxUtil';
-import { withJsonFormsContext, JsonFormsStateContext } from '@jsonforms/react';
+import { JsonFormsStateContext, withJsonFormsContext } from '@jsonforms/react';
 import { ErrorObject } from 'ajv';
 
 export interface ReactExampleDescription extends ExampleDescription {
-  customReactExtension?(dispatch: Dispatch<AnyAction>): React.Component;
-  onChange?: (
-    dispatch: Dispatch<AnyAction>
-  ) => (
+  onChange?(dispatch: Dispatch<AnyAction>): (
     extensionState: any
   ) => (state: Pick<JsonFormsCore, 'data' | 'errors'>) => AnyAction;
+  customReactExtension?(dispatch: Dispatch<AnyAction>): React.Component;
 }
 const registerRatingControl = (dispatch: Dispatch<AnyAction>) => {
   dispatch(Actions.registerCell(ratingControlTester, ConnectedRatingControl));
@@ -61,20 +59,18 @@ const unregisterRatingControl = (dispatch: Dispatch<AnyAction>) => {
   dispatch(Actions.unregisterCell(ratingControlTester, ConnectedRatingControl));
 };
 
-export interface I18nExampleProps extends OwnPropsOfI18nExample {
-  data: any;
-  errors: ErrorObject[];
-}
-
 export interface OwnPropsOfI18nExample {
   schema: JsonSchema;
   uischema: UISchemaElement;
   dispatch: Dispatch<AnyAction>;
-  onChange: (
-    dispatch: Dispatch<AnyAction>
-  ) => (
+  onChange(dispatch: Dispatch<AnyAction>): (
     extensionState: any
   ) => (state: Pick<JsonFormsCore, 'data' | 'errors'>) => void;
+}
+
+export interface I18nExampleProps extends OwnPropsOfI18nExample {
+  data: any;
+  errors: ErrorObject[];
 }
 
 class I18nExampleRenderer extends React.Component<

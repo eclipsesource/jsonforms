@@ -34,7 +34,7 @@ import HorizontalLayoutRenderer, {
   horizontalLayoutTester
 } from '../../src/layouts/HorizontalLayout';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
-import { JsonFormsReduxContext } from '@jsonforms/react';
+import { JsonFormsReduxContext } from '@jsonforms/react/lib/redux';
 
 Enzyme.configure({ adapter: new Adapter() });
 

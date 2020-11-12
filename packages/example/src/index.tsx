@@ -33,9 +33,11 @@ import {
   Actions,
   createAjv,
   JsonFormsCellRendererRegistryEntry,
-  jsonformsReducer,
+  jsonFormsReducerConfig,
   JsonFormsRendererRegistryEntry,
-  RankedTester
+  JsonFormsState,
+  RankedTester,
+  Store
 } from '@jsonforms/core';
 import { getExamples } from '@jsonforms/examples';
 import { AdditionalStoreParams, exampleReducer } from './reduxUtil';
@@ -66,10 +68,11 @@ const setupStore = (
     {} as any
   );
   const reducer = combineReducers({
-    jsonforms: jsonformsReducer({ ...additionalReducers }),
-    examples: exampleReducer
+    jsonforms: combineReducers(jsonFormsReducerConfig),
+    examples: exampleReducer,
+    ...additionalReducers
   });
-  const store = createStore(reducer, {
+  const store: Store<JsonFormsState> = createStore(reducer, {
     jsonforms: {
       cells: cells,
       renderers: renderers,

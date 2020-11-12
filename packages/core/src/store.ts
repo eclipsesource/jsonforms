@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { Store } from 'redux';
+import { Store } from './util';
 import { JsonFormsCore } from './reducers/core';
 import { JsonFormsCellRendererRegistryEntry } from './reducers/cells';
 import { JsonFormsRendererRegistryEntry } from './reducers/renderers';

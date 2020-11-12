@@ -24,24 +24,18 @@
 */
 import './MatchMediaMock';
 import * as React from 'react';
-import { Provider } from 'react-redux';
 import {
-  Actions,
-  jsonformsReducer,
-  JsonFormsState,
-  JsonSchema,
-  NOT_APPLICABLE,
-  UISchemaElement
+  NOT_APPLICABLE
 } from '@jsonforms/core';
 import '../../src/cells';
 import MaterialLabelRenderer, {
   materialLabelRendererTester
 } from '../../src/additional/MaterialLabelRenderer';
 import { materialRenderers } from '../../src';
-import { AnyAction, combineReducers, createStore, Reducer, Store } from 'redux';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { JsonFormsReduxContext } from '@jsonforms/react';
+import { JsonForms, JsonFormsStateProvider } from '@jsonforms/react';
+import { initCore } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -53,24 +47,6 @@ const schema = {
 const uischema = {
   type: 'Label',
   text: 'Foo'
-};
-
-const initJsonFormsStore = (
-  testData: any,
-  testSchema: JsonSchema,
-  testUiSchema: UISchemaElement
-): Store<JsonFormsState> => {
-  const s: JsonFormsState = {
-    jsonforms: {
-      renderers: materialRenderers
-    }
-  };
-  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({
-    jsonforms: jsonformsReducer()
-  });
-  const store: Store<JsonFormsState> = createStore(reducer, s);
-  store.dispatch(Actions.init(testData, testSchema, testUiSchema));
-  return store;
 };
 
 describe('Material Label Renderer tester', () => {
@@ -92,45 +68,45 @@ describe('Material Label Renderer', () => {
   afterEach(() => wrapper.unmount());
 
   it('render', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialLabelRenderer schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonForms
+        data={undefined}
+        schema={schema}
+        uischema={uischema}
+        renderers={materialRenderers}
+      />
     );
+    expect(wrapper.find(MaterialLabelRenderer).length).toBeTruthy();
 
     const label = wrapper.find('h6').first();
     expect(label.text()).toBe('Foo');
   });
 
   it('can be hidden', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialLabelRenderer
-            schema={schema}
-            uischema={uischema}
-            visible={false}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialLabelRenderer
+          schema={schema}
+          uischema={uischema}
+          visible={false}
+        />
+      </JsonFormsStateProvider>
     );
     const labels = wrapper.find('h6');
     expect(labels.length).toBe(0);
   });
 
   it('should be shown by default', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialLabelRenderer schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonForms
+        data={undefined}
+        schema={schema}
+        uischema={uischema}
+        renderers={materialRenderers}
+      />
     );
+    expect(wrapper.find(MaterialLabelRenderer).length).toBeTruthy();
     const label = wrapper.find('h6').first();
     expect(label.props().hidden).toBeFalsy();
   });

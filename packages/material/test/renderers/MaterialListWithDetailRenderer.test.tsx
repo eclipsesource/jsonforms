@@ -24,23 +24,19 @@
 */
 import './MatchMediaMock';
 import {
-  Actions,
-  ControlElement,
-  jsonformsReducer,
-  JsonFormsState
+  ControlElement
 } from '@jsonforms/core';
 import * as React from 'react';
-import { Provider } from 'react-redux';
 
-import { combineReducers, createStore, Store } from 'redux';
 import { materialRenderers } from '../../src';
 import MaterialListWithDetailRenderer, {
   materialListWithDetailTester
 } from '../../src/additional/MaterialListWithDetailRenderer';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { JsonFormsReduxContext } from '@jsonforms/react';
-import { ListItem } from '@material-ui/core';
+import { JsonFormsStateProvider } from '@jsonforms/react';
+import { ListItem } from '@material-ui/core'
+import { initCore } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -73,23 +69,6 @@ const schema = {
 const uischema: ControlElement = {
   type: 'Control',
   scope: '#'
-};
-
-export const initJsonFormsStore = (
-  overrideData?: any
-): Store<JsonFormsState> => {
-  const s: JsonFormsState = {
-    jsonforms: {
-      renderers: materialRenderers
-    }
-  };
-  const reducer = combineReducers({ jsonforms: jsonformsReducer() });
-  const store: Store<JsonFormsState> = createStore(reducer, s);
-  store.dispatch(
-    Actions.init(overrideData ? overrideData : data, schema, uischema)
-  );
-
-  return store;
 };
 
 const nestedSchema = {
@@ -148,26 +127,22 @@ describe('Material list with detail renderer', () => {
   afterEach(() => wrapper.unmount());
 
   it('should render two list entries', () => {
-    const store = initJsonFormsStore();
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialListWithDetailRenderer schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialListWithDetailRenderer schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
     );
 
     const lis = wrapper.find('li');
     expect(lis).toHaveLength(2);
   });
   it('should render empty entries', () => {
-    const store = initJsonFormsStore([]);
+    const core = initCore(schema, uischema, []);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialListWithDetailRenderer schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialListWithDetailRenderer schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
     );
 
     const lis = wrapper.find('li');
@@ -178,17 +153,15 @@ describe('Material list with detail renderer', () => {
   });
 
   it('should be hideable', () => {
-    const store = initJsonFormsStore();
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialListWithDetailRenderer
-            schema={schema}
-            uischema={uischema}
-            visible={false}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialListWithDetailRenderer
+          schema={schema}
+          uischema={uischema}
+          visible={false}
+        />
+      </JsonFormsStateProvider>
     );
 
     const controls = wrapper.find('ul');
@@ -196,13 +169,11 @@ describe('Material list with detail renderer', () => {
   });
 
   it('select renders corresponding data in detail', () => {
-    const store = initJsonFormsStore();
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialListWithDetailRenderer schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialListWithDetailRenderer schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
     );
 
     const liSecond = wrapper.find('div[role="button"]').at(1);
@@ -220,16 +191,14 @@ describe('Material list with detail renderer', () => {
       ...uischema,
       label: 'My awesome label'
     };
-    const store = initJsonFormsStore();
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialListWithDetailRenderer
-            schema={schema}
-            uischema={uischemaWithLabel}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialListWithDetailRenderer
+          schema={schema}
+          uischema={uischemaWithLabel}
+        />
+      </JsonFormsStateProvider>
     );
 
     const listLabel = wrapper.find('h6').at(0);
@@ -241,16 +210,14 @@ describe('Material list with detail renderer', () => {
       ...schema,
       title: 'My awesome title'
     };
-    const store = initJsonFormsStore();
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialListWithDetailRenderer
-            schema={titleSchema}
-            uischema={uischema}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialListWithDetailRenderer
+          schema={titleSchema}
+          uischema={uischema}
+        />
+      </JsonFormsStateProvider>
     );
 
     const listTitle = wrapper.find('h6').at(0);
@@ -258,13 +225,11 @@ describe('Material list with detail renderer', () => {
   });
 
   it('choose appropriate labels in nested schema', () => {
-    const store = initJsonFormsStore();
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialListWithDetailRenderer schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialListWithDetailRenderer schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
     );
 
     const liSecond = wrapper.find('div[role="button"]').at(1);
@@ -278,13 +243,11 @@ describe('Material list with detail renderer', () => {
   });
 
   it('add data to the array', () => {
-    const store = initJsonFormsStore();
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialListWithDetailRenderer schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialListWithDetailRenderer schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
     );
 
     const addButton = wrapper.find('button').at(0);
@@ -297,13 +260,11 @@ describe('Material list with detail renderer', () => {
   });
 
   it('remove data from the array', () => {
-    const store = initJsonFormsStore();
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialListWithDetailRenderer schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialListWithDetailRenderer schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
     );
 
     expect(wrapper.find(ListItem)).toHaveLength(2);

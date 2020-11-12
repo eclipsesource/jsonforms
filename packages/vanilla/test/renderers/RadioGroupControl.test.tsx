@@ -27,7 +27,7 @@ import {
     rankWith,
     update
 } from '@jsonforms/core';
-import { JsonFormsReduxContext } from '@jsonforms/react';
+import { JsonFormsReduxContext } from '@jsonforms/react/lib/redux';
 import * as React from 'react';
 import * as _ from 'lodash';
 import { Provider } from 'react-redux';

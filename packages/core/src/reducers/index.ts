@@ -24,7 +24,6 @@
 */
 import { ControlElement, UISchemaElement } from '../models/uischema';
 import {
-  JsonFormsCore,
   coreReducer,
   errorAt,
   errorsAt,
@@ -33,22 +32,22 @@ import {
   extractRefParserOptions,
   extractSchema,
   extractUiSchema,
+  JsonFormsCore,
   subErrorsAt,
   ValidationMode
 } from './core';
 import {
-  JsonFormsDefaultDataRegistryEntry,
-  defaultDataReducer,
-  extractDefaultData
+  extractDefaultData,
+  JsonFormsDefaultDataRegistryEntry
 } from './default-data';
+import { defaultDataReducer } from '../reducers/default-data';
 import { JsonFormsRendererRegistryEntry, rendererReducer } from './renderers';
-import { JsonFormsState, JsonFormsSubStates } from '../store';
-import { Reducer, combineReducers } from 'redux';
+import { JsonFormsState } from '../store';
 import {
-  JsonFormsUISchemaRegistryEntry,
-  UISchemaTester,
   findMatchingUISchema,
-  uischemaRegistryReducer
+  JsonFormsUISchemaRegistryEntry,
+  uischemaRegistryReducer,
+  UISchemaTester
 } from './uischemas';
 import {
   fetchLocale,
@@ -80,19 +79,15 @@ export {
 };
 export { JsonFormsCore, ValidationMode };
 
-export const jsonformsReducer = (
-  additionalReducers = {}
-): Reducer<JsonFormsSubStates> =>
-  combineReducers<JsonFormsSubStates>({
-    core: coreReducer,
-    renderers: rendererReducer,
-    cells: cellReducer,
-    config: configReducer,
-    uischemas: uischemaRegistryReducer,
-    defaultData: defaultDataReducer,
-    i18n: i18nReducer,
-    ...additionalReducers
-  });
+export const jsonFormsReducerConfig = {
+  core: coreReducer,
+  renderers: rendererReducer,
+  cells: cellReducer,
+  config: configReducer,
+  uischemas: uischemaRegistryReducer,
+  defaultData: defaultDataReducer,
+  i18n: i18nReducer
+};
 
 export const getData = (state: JsonFormsState) =>
   extractData(get(state, 'jsonforms.core'));

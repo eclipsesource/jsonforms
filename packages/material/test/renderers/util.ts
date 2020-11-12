@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
+
   Copyright (c) 2017-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,34 +22,24 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { RankedTester } from '../testers';
+
 import {
-  ADD_CELL,
-  AddCellRendererAction,
-  REMOVE_CELL,
-  RemoveCellRendererAction
-} from '../actions';
-import { Reducer } from '../util/type';
+  createAjv,
+  JsonSchema,
+  UISchemaElement
+} from '@jsonforms/core';
+import { JsonFormsReactProps, useJsonForms } from '@jsonforms/react';
+import React from 'react';
 
-type ValidCellReducerActions = AddCellRendererAction | RemoveCellRendererAction;
+export const initCore = (schema: JsonSchema, uischema: UISchemaElement, data?: any) => {
+  return { schema, uischema, data, ajv: createAjv() };
+};
 
-export type JsonFormsCellRendererRegistryState = JsonFormsCellRendererRegistryEntry[];
-
-export interface JsonFormsCellRendererRegistryEntry {
-  tester: RankedTester;
-  cell: any;
-}
-
-export const cellReducer: Reducer<JsonFormsCellRendererRegistryState, ValidCellReducerActions> = (
-  state = [],
-  { type, tester, cell }
-) => {
-  switch (type) {
-    case ADD_CELL:
-      return state.concat([{ tester, cell }]);
-    case REMOVE_CELL:
-      return state.filter(t => t.tester !== tester);
-    default:
-      return state;
-  }
+export const TestEmitter : React.FC<JsonFormsReactProps> = ({onChange}) => {
+  const ctx = useJsonForms();
+  const { data, errors } = ctx.core;
+  React.useEffect(() => {
+    onChange({ data, errors });
+  }, [data, errors]);
+  return null;
 };

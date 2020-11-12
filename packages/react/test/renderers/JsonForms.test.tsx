@@ -26,13 +26,15 @@ import React from 'react';
 import { combineReducers, createStore } from 'redux';
 import { Provider } from 'react-redux';
 import {
+  ControlElement,
   createAjv,
   DispatchCellProps,
-  jsonformsReducer,
+  jsonFormsReducerConfig,
   JsonFormsState,
   JsonFormsStore,
   JsonSchema,
   Layout,
+  NOT_APPLICABLE,
   rankWith,
   registerCell,
   registerRenderer,
@@ -40,8 +42,6 @@ import {
   UISchemaElement,
   uiTypeIs,
   unregisterRenderer,
-  ControlElement,
-  NOT_APPLICABLE
 } from '@jsonforms/core';
 import { isEqual } from 'lodash';
 import Enzyme from 'enzyme';
@@ -56,11 +56,11 @@ import {
   JsonFormsDispatchRenderer
 } from '../../src/JsonForms';
 import {
-  JsonFormsReduxContext,
   JsonFormsStateProvider,
   useJsonForms,
   withJsonFormsControlProps
 } from '../../src/JsonFormsContext';
+import { JsonFormsReduxContext } from '../../src/redux';
 import { DispatchCell } from '../../src/DispatchCell';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -106,7 +106,7 @@ export const initJsonFormsStore = ({
       ...props
     }
   };
-  const reducer = combineReducers({ jsonforms: jsonformsReducer() });
+  const reducer = combineReducers({ jsonforms: combineReducers(jsonFormsReducerConfig) });
   return createStore(reducer, initState);
 };
 

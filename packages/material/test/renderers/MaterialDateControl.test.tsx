@@ -23,48 +23,22 @@
   THE SOFTWARE.
 */
 import './MatchMediaMock';
-import { Provider } from 'react-redux';
 import {
-  Actions,
   ControlElement,
-  getData,
-  jsonformsReducer,
-  JsonFormsState,
-  JsonSchema,
   NOT_APPLICABLE,
-  UISchemaElement
 } from '@jsonforms/core';
 import MaterialDateControl, {
   materialDateControlTester
 } from '../../src/controls/MaterialDateControl';
 import * as React from 'react';
-import { AnyAction, combineReducers, createStore, Reducer, Store } from 'redux';
 import { materialRenderers } from '../../src';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { JsonFormsReduxContext } from '@jsonforms/react';
+import { JsonFormsStateProvider } from '@jsonforms/react';
+import { initCore, TestEmitter } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });
-
-const initJsonFormsStore = (
-  testData: any,
-  testSchema: JsonSchema,
-  testUiSchema: UISchemaElement
-): Store<JsonFormsState> => {
-  const s: JsonFormsState = {
-    jsonforms: {
-      renderers: materialRenderers
-    }
-  };
-  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({
-    jsonforms: jsonformsReducer()
-  });
-  const store: Store<JsonFormsState> = createStore(reducer, s);
-
-  store.dispatch(Actions.init(testData, testSchema, testUiSchema));
-  return store;
-};
 
 const data = { foo: '1980-06-04' };
 const schema = {
@@ -143,13 +117,11 @@ describe('Material date control', () => {
         focus: true
       }
     };
-    const store = initJsonFormsStore(data, schema, control);
+    const core = initCore(schema, control, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialDateControl schema={schema} uischema={control} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialDateControl schema={schema} uischema={control} />
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').first();
     expect(input.props().autoFocus).toBe(true);
@@ -163,13 +135,11 @@ describe('Material date control', () => {
         focus: false
       }
     };
-    const store = initJsonFormsStore(data, schema, control);
+    const core = initCore(schema, control, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialDateControl schema={schema} uischema={control} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialDateControl schema={schema} uischema={control} />
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').first();
     expect(input.props().autoFocus).toBeFalsy();
@@ -180,26 +150,22 @@ describe('Material date control', () => {
       type: 'Control',
       scope: '#/properties/foo'
     };
-    const store = initJsonFormsStore(data, schema, uischema);
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialDateControl schema={schema} uischema={control} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialDateControl schema={schema} uischema={control} />
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').first();
     expect(input.props().autoFocus).toBeFalsy();
   });
 
   it('should render', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialDateControl schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialDateControl schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
     );
 
     const input = wrapper.find('input').first();
@@ -208,169 +174,145 @@ describe('Material date control', () => {
   });
 
   it('should update via event', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    const core = initCore(schema, uischema, data);
+    const onChangeData: any = {
+      data: undefined
+    };
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialDateControl schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <TestEmitter
+          onChange={({ data }) => {
+            onChangeData.data = data;
+          }}
+        />
+        <MaterialDateControl schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').first();
     input.simulate('change', { target: { value: '1961-04-12' } });
-    expect(getData(store.getState()).foo).toBe('1961-04-12');
+    expect(onChangeData.data.foo).toBe('1961-04-12');
   });
 
   it('should update via action', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
-    // we need a class component as otherwise wrapper.instance() === null
-    class TestComponent extends React.Component {
-      render = () => (
-        <Provider store={store}>
-          <JsonFormsReduxContext>
-            <MaterialDateControl schema={schema} uischema={uischema} />
-          </JsonFormsReduxContext>
-        </Provider>
-      );
-    }
-    wrapper = mount(<TestComponent />);
-    store.dispatch(Actions.update('foo', () => '1961-04-12'));
-    // TODO get rid of forceUpdate when possible
-    wrapper.instance().forceUpdate();
+    const core = initCore(schema, uischema, data);
+    wrapper = mount(
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialDateControl schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
+    );
+    core.data = { ...core.data, foo: '1961-04-12' };
+    wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
     wrapper.update();
     const input = wrapper.find('input').first();
     expect(input.props().value).toBe('1961-04-12');
   });
 
   it('should update with null value', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
-    // we need a class component as otherwise wrapper.instance() === null
-    class TestComponent extends React.Component {
-      render = () => (
-        <Provider store={store}>
-          <JsonFormsReduxContext>
-            <MaterialDateControl schema={schema} uischema={uischema} />
-          </JsonFormsReduxContext>
-        </Provider>
-      );
-    }
-    wrapper = mount(<TestComponent />);
-    store.dispatch(Actions.update('foo', () => null));
-    // TODO get rid of forceUpdate when possible
-    wrapper.instance().forceUpdate();
+    const core = initCore(schema, uischema, data);
+    wrapper = mount(
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialDateControl schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
+    );
+    core.data = { ...core.data, foo: null };
+    wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
     wrapper.update();
     const input = wrapper.find('input').first();
     expect(input.props().value).toBe('');
   });
 
   it('should update with undefined value', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
-    // we need a class component as otherwise wrapper.instance() === null
-    class TestComponent extends React.Component {
-      render = () => (
-        <Provider store={store}>
-          <JsonFormsReduxContext>
-            <MaterialDateControl schema={schema} uischema={uischema} />
-          </JsonFormsReduxContext>
-        </Provider>
-      );
-    }
-    wrapper = mount(<TestComponent />);
-    store.dispatch(Actions.update('foo', () => undefined));
-    // TODO get rid of forceUpdate when possible
-    wrapper.instance().forceUpdate();
+    const core = initCore(schema, uischema, data);
+    wrapper = mount(
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialDateControl schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
+    );
+    core.data = { ...core.data, foo: undefined };
+    wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
     wrapper.update();
     const input = wrapper.find('input').first();
     expect(input.props().value).toBe('');
   });
 
   it('should not update with wrong ref', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialDateControl schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialDateControl schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
     );
-    store.dispatch(Actions.update('bar', () => 'Bar'));
+    core.data = { ...core.data, bar: 'Bar' };
+    wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
     wrapper.update();
     const input = wrapper.find('input');
     expect(input.props().value).toBe('1980-06-04');
   });
 
   it('should not update with null ref', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialDateControl schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialDateControl schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
     );
-    store.dispatch(Actions.update(null, () => '1961-04-12'));
+    core.data = { ...core.data, null: '1961-04-12' };
+    wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
     wrapper.update();
     const input = wrapper.find('input').first();
     expect(input.props().value).toBe('1980-06-04');
   });
 
   it('should not update with undefined ref', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialDateControl schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialDateControl schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
     );
-    store.dispatch(Actions.update(undefined, () => '1961-04-12'));
+    core.data = { ...core.data, undefined: '1961-04-12' };
+    wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
     wrapper.update();
     const input = wrapper.find('input').first();
     expect(input.props().value).toBe('1980-06-04');
   });
 
   it('can be disabled', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialDateControl
-            schema={schema}
-            uischema={uischema}
-            enabled={false}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialDateControl
+          schema={schema}
+          uischema={uischema}
+          enabled={false}
+        />
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').first();
     expect(input.props().disabled).toBeTruthy();
   });
 
   it('should be enabled by default', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialDateControl schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialDateControl schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').first();
     expect(input.props().disabled).toBeFalsy();
   });
 
   it('should render input id', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialDateControl
-            schema={schema}
-            uischema={uischema}
-            id='#/properties/foo'
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialDateControl
+          schema={schema}
+          uischema={uischema}
+          id='#/properties/foo'
+        />
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').first();
     // there is only input id at the moment
@@ -378,17 +320,15 @@ describe('Material date control', () => {
   });
 
   it('should be hideable', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialDateControl
-            schema={schema}
-            uischema={uischema}
-            visible={false}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialDateControl
+          schema={schema}
+          uischema={uischema}
+          visible={false}
+        />
+      </JsonFormsStateProvider>
     );
     const inputs = wrapper.find('input');
     expect(inputs.length).toBe(0);

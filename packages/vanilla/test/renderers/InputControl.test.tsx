@@ -29,7 +29,8 @@ import {
   HorizontalLayout,
   JsonSchema
 } from '@jsonforms/core';
-import { JsonFormsDispatch, JsonFormsReduxContext } from '@jsonforms/react';
+import { JsonFormsDispatch } from '@jsonforms/react';
+import { JsonFormsReduxContext } from '@jsonforms/react/lib/redux';
 import { Provider } from 'react-redux';
 import Adapter from 'enzyme-adapter-react-16';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';

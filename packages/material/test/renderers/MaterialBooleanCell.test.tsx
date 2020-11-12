@@ -25,44 +25,21 @@
 import './MatchMediaMock';
 import * as React from 'react';
 import {
-  Actions,
   ControlElement,
-  getData,
-  jsonformsReducer,
-  JsonFormsState,
-  JsonSchema,
   NOT_APPLICABLE,
-  UISchemaElement
 } from '@jsonforms/core';
 import BooleanCell, {
   materialBooleanCellTester
 } from '../../src/cells/MaterialBooleanCell';
-import { Provider } from 'react-redux';
 import * as ReactDOM from 'react-dom';
-import { combineReducers, createStore, Store } from 'redux';
 import { materialRenderers } from '../../src';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { JsonFormsReduxContext } from '@jsonforms/react';
+import { JsonFormsStateProvider } from '@jsonforms/react';
+import { initCore, TestEmitter } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });
-
-export const initJsonFormsStore = (
-  testData: any,
-  testSchema: JsonSchema,
-  testUiSchema: UISchemaElement
-): Store<JsonFormsState> => {
-  const s: JsonFormsState = {
-    jsonforms: {
-      renderers: materialRenderers
-    }
-  };
-  const reducer = combineReducers({ jsonforms: jsonformsReducer() });
-  const store: Store<JsonFormsState> = createStore(reducer, s);
-  store.dispatch(Actions.init(testData, testSchema, testUiSchema));
-  return store;
-};
 
 const data = { foo: true };
 const schema = {
@@ -146,13 +123,11 @@ describe('Material boolean cell', () => {
         focus: true
       }
     };
-    const store = initJsonFormsStore(data, schema, control);
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <BooleanCell schema={schema} uischema={control} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <BooleanCell schema={schema} uischema={control} path='foo' />
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').first();
     expect(input.props().autoFocus).toBeTruthy();
@@ -166,13 +141,11 @@ describe('Material boolean cell', () => {
         focus: false
       }
     };
-    const store = initJsonFormsStore(data, schema, control);
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <BooleanCell schema={schema} uischema={control} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <BooleanCell schema={schema} uischema={control} path='foo' />
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').first();
     expect(input.props().autoFocus).toBe(false);
@@ -183,26 +156,22 @@ describe('Material boolean cell', () => {
       type: 'Control',
       scope: '#/properties/foo'
     };
-    const store = initJsonFormsStore(data, schema, control);
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <BooleanCell schema={schema} uischema={uischema} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <BooleanCell schema={schema} uischema={control} path='foo' />
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').first();
     expect(input.props().autoFocus).toBeFalsy();
   });
 
   it('should render', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <BooleanCell schema={schema} uischema={uischema} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <BooleanCell schema={schema} uischema={uischema} path='foo' />
+      </JsonFormsStateProvider>
     );
 
     const input = wrapper.find('input').first();
@@ -211,142 +180,190 @@ describe('Material boolean cell', () => {
   });
 
   it('should update via input event', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    const core = initCore(schema, uischema, data);
+    const onChangeData: any = {
+      data: undefined
+    };
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <BooleanCell schema={schema} uischema={uischema} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <TestEmitter
+          onChange={({ data }) => {
+            onChangeData.data = data;
+          }}
+        />
+        <BooleanCell schema={schema} uischema={uischema} path='foo' />
+      </JsonFormsStateProvider>
     );
 
     const input = wrapper.find('input');
     input.simulate('change', { target: { value: false } });
-    expect(getData(store.getState()).foo).toBeFalsy();
+    expect(onChangeData.data.foo).toBeFalsy();
   });
 
   it('should update via action', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    const core = initCore(schema, uischema, data);
+    const onChangeData: any = {
+      data: undefined
+    };
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <BooleanCell schema={schema} uischema={uischema} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <TestEmitter
+          onChange={({ data }) => {
+            onChangeData.data = data;
+          }}
+        />
+        <BooleanCell schema={schema} uischema={uischema} path='foo' />
+      </JsonFormsStateProvider>
     );
-    store.dispatch(Actions.update('foo', () => false));
+    core.data = { ...core.data, foo: false };
+    wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
     wrapper.update();
     const input = wrapper.find('input').first();
     expect(input.props().checked).toBeFalsy();
-    expect(getData(store.getState()).foo).toBeFalsy();
+    expect(onChangeData.data.foo).toBeFalsy();
   });
 
   it('should update with undefined value', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    const core = initCore(schema, uischema, data);
+    const onChangeData: any = {
+      data: undefined
+    };
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <BooleanCell schema={schema} uischema={uischema} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <TestEmitter
+          onChange={({ data }) => {
+            onChangeData.data = data;
+          }}
+        />
+        <BooleanCell schema={schema} uischema={uischema} path='foo' />
+      </JsonFormsStateProvider>
     );
-    store.dispatch(Actions.update('foo', () => undefined));
+    core.data = { ...core.data, foo: undefined };
+    wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
     wrapper.update();
     const input = wrapper.find('input').first();
     expect(input.props().checked).toBeFalsy();
   });
 
   it('should update with null value', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    const core = initCore(schema, uischema, data);
+    const onChangeData: any = {
+      data: undefined
+    };
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <BooleanCell schema={schema} uischema={uischema} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <TestEmitter
+          onChange={({ data }) => {
+            onChangeData.data = data;
+          }}
+        />
+        <BooleanCell schema={schema} uischema={uischema} path='foo' />
+      </JsonFormsStateProvider>
     );
-    store.dispatch(Actions.update('foo', () => null));
+    core.data = { ...core.data, foo: null };
+    wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
     wrapper.update();
     const input = wrapper.find('input').first();
     expect(input.props().checked).toBeFalsy();
   });
 
   it('should not update with wrong ref', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    const core = initCore(schema, uischema, data);
+    const onChangeData: any = {
+      data: undefined
+    };
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <BooleanCell schema={schema} uischema={uischema} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <TestEmitter
+          onChange={({ data }) => {
+            onChangeData.data = data;
+          }}
+        />
+        <BooleanCell schema={schema} uischema={uischema} path='foo' />
+      </JsonFormsStateProvider>
     );
+    core.data = { ...core.data, bar: 11 };
+    wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
     const input = wrapper.find('input').first();
-    store.dispatch(Actions.update('bar', () => 11));
     expect(input.props().checked).toBeTruthy();
   });
 
   it('should not update with null ref', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    const core = initCore(schema, uischema, data);
+    const onChangeData: any = {
+      data: undefined
+    };
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <BooleanCell schema={schema} uischema={uischema} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <TestEmitter
+          onChange={({ data }) => {
+            onChangeData.data = data;
+          }}
+        />
+        <BooleanCell schema={schema} uischema={uischema} path='foo' />
+      </JsonFormsStateProvider>
     );
+    core.data = { ...core.data, null: false };
+    wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
     const input = wrapper.find('input').first();
-    store.dispatch(Actions.update(null, () => false));
     expect(input.props().checked).toBeTruthy();
   });
 
   it('should not update with an undefined ref', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    const core = initCore(schema, uischema, data);
+    const onChangeData: any = {
+      data: undefined
+    };
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <BooleanCell schema={schema} uischema={uischema} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <TestEmitter
+          onChange={({ data }) => {
+            onChangeData.data = data;
+          }}
+        />
+        <BooleanCell schema={schema} uischema={uischema} path='foo' />
+      </JsonFormsStateProvider>
     );
-    store.dispatch(Actions.update(undefined, () => false));
+    core.data = { ...core.data, undefined: false};
+    wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
     wrapper.update();
     const input = wrapper.find('input').first();
     expect(input.props().checked).toBeTruthy();
   });
 
   it('can be disabled', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
         <BooleanCell
           schema={schema}
           uischema={uischema}
           enabled={false}
           path='foo'
         />
-      </Provider>
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').first();
     expect(input.props().disabled).toBeTruthy();
   });
 
   it('should be enabled by default', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
         <BooleanCell schema={schema} uischema={uischema} path='foo' />
-      </Provider>
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').first();
     expect(input.props().disabled).toBeFalsy();
   });
 
   it('id should be present in output', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
         <BooleanCell schema={schema} uischema={uischema} path='foo' id='myid' />
-      </Provider>
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input');
     expect(input.props().id).toBe('myid');

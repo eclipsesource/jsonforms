@@ -24,6 +24,7 @@
 */
 import { SET_LOCALE, SET_LOCALIZED_SCHEMAS } from '../actions';
 import { JsonSchema, SET_LOCALIZED_UISCHEMAS, UISchemaElement } from '..';
+import { Reducer } from '../util/type';
 
 export interface JsonFormsLocaleState {
   locale?: string;
@@ -37,7 +38,7 @@ const initState: JsonFormsLocaleState = {
   localizedUISchemas: new Map()
 };
 
-export const i18nReducer = (state = initState, action: any) => {
+export const i18nReducer: Reducer<any, any> = (state = initState, action) => {
   switch (action.type) {
     case SET_LOCALIZED_SCHEMAS:
       return {

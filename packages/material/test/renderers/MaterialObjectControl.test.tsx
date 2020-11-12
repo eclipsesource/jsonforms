@@ -24,44 +24,20 @@
 */
 import './MatchMediaMock';
 import {
-  Actions,
   ControlElement,
-  jsonformsReducer,
-  JsonFormsState,
-  JsonSchema,
-  NOT_APPLICABLE,
-  UISchemaElement
+  NOT_APPLICABLE
 } from '@jsonforms/core';
 import * as React from 'react';
-import { AnyAction, combineReducers, createStore, Reducer, Store } from 'redux';
 import { materialRenderers } from '../../src';
 import MaterialObjectRenderer, {
   materialObjectControlTester
 } from '../../src/complex/MaterialObjectRenderer';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { JsonFormsReduxContext } from '@jsonforms/react';
-import { Provider } from 'react-redux';
+import { JsonFormsStateProvider } from '@jsonforms/react';
+import { initCore } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });
-
-const initJsonFormsStore = (
-  testData: any,
-  testSchema: JsonSchema,
-  testUiSchema: UISchemaElement
-): Store<JsonFormsState> => {
-  const s: JsonFormsState = {
-    jsonforms: {
-      renderers: materialRenderers
-    }
-  };
-  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({
-    jsonforms: jsonformsReducer()
-  });
-  const store: Store<JsonFormsState> = createStore(reducer, s);
-  store.dispatch(Actions.init(testData, testSchema, testUiSchema));
-  return store;
-};
 
 const data = { foo: { foo_1: 'foo' }, bar: { bar_1: 'bar' } };
 const schema = {
@@ -139,13 +115,11 @@ describe('Material object control', () => {
   afterEach(() => wrapper.unmount());
 
   it('should render all children', () => {
-    const store = initJsonFormsStore(data, schema, uischema1);
+    const core = initCore(schema, uischema1, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialObjectRenderer schema={schema} uischema={uischema1} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialObjectRenderer schema={schema} uischema={uischema1} />
+      </JsonFormsStateProvider>
     );
 
     const inputs = wrapper.find('input');
@@ -157,13 +131,11 @@ describe('Material object control', () => {
   });
 
   it('should render only itself', () => {
-    const store = initJsonFormsStore(data, schema, uischema1);
+    const core = initCore(schema, uischema1, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialObjectRenderer schema={schema} uischema={uischema2} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialObjectRenderer schema={schema} uischema={uischema2} />
+      </JsonFormsStateProvider>
     );
 
     const inputs = wrapper.find('input');
@@ -173,43 +145,37 @@ describe('Material object control', () => {
   });
 
   it('should be enabled by default', () => {
-    const store = initJsonFormsStore(data, schema, uischema2);
+    const core = initCore(schema, uischema2, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialObjectRenderer schema={schema} uischema={uischema2} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialObjectRenderer schema={schema} uischema={uischema2} />
+      </JsonFormsStateProvider>
     );
     const inputs = wrapper.find('input');
     expect(inputs.first().props().disabled).toBeFalsy();
   });
 
   it('can be invisible', () => {
-    const store = initJsonFormsStore(data, schema, uischema2);
+    const core = initCore(schema, uischema2, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialObjectRenderer
-            schema={schema}
-            uischema={uischema2}
-            visible={false}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialObjectRenderer
+          schema={schema}
+          uischema={uischema2}
+          visible={false}
+        />
+      </JsonFormsStateProvider>
     );
     const inputs = wrapper.find('input');
     expect(inputs.length).toBe(0);
   });
 
   it('should be visible by default', () => {
-    const store = initJsonFormsStore(data, schema, uischema2);
+    const core = initCore(schema, uischema2, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialObjectRenderer schema={schema} uischema={uischema2} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialObjectRenderer schema={schema} uischema={uischema2} />
+      </JsonFormsStateProvider>
     );
     const inputs = wrapper.find('input');
     expect(inputs.first().props().hidden).toBeFalsy();

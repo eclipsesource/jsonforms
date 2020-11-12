@@ -23,36 +23,16 @@
   THE SOFTWARE.
 */
 import './MatchMediaMock';
-import React, { Reducer } from 'react';
+import React from 'react';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import {
-  Actions,
-  ControlElement,
-  jsonformsReducer,
-  JsonFormsState
-} from '@jsonforms/core';
+import { ControlElement } from '@jsonforms/core';
 import { MaterialAllOfRenderer, materialRenderers } from '../../src';
-import { AnyAction, combineReducers, createStore, Store } from 'redux';
-import { JsonFormsReduxContext } from '@jsonforms/react';
-import { Provider } from 'react-redux';
+import { JsonForms, JsonFormsStateProvider } from '@jsonforms/react';
+import { initCore } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });
-
-const initStore = () => {
-  const s: JsonFormsState = {
-    jsonforms: {
-      renderers: materialRenderers
-    }
-  };
-  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({
-    jsonforms: jsonformsReducer()
-  });
-  const store: Store<JsonFormsState> = createStore(reducer, s);
-
-  return store;
-};
 
 describe('Material allOf renderer', () => {
   let wrapper: ReactWrapper;
@@ -60,7 +40,6 @@ describe('Material allOf renderer', () => {
   afterEach(() => wrapper.unmount());
 
   it('should render', () => {
-    const store = initStore();
     const schema = {
       type: 'object',
       properties: {
@@ -83,20 +62,20 @@ describe('Material allOf renderer', () => {
       label: 'Value',
       scope: '#/properties/value'
     };
-    store.dispatch(Actions.init({ data: undefined }, schema, uischema));
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialAllOfRenderer schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonForms
+        data={undefined}
+        schema={schema}
+        uischema={uischema}
+        renderers={materialRenderers}
+      />
     );
+    expect(wrapper.find(MaterialAllOfRenderer).length).toBeTruthy();
     const inputs = wrapper.find('input');
     expect(inputs.length).toBe(2);
   });
 
   it('should be hideable', () => {
-    const store = initStore();
     const schema = {
       type: 'object',
       properties: {
@@ -119,17 +98,15 @@ describe('Material allOf renderer', () => {
       label: 'Value',
       scope: '#/properties/value'
     };
-    store.dispatch(Actions.init({ data: undefined }, schema, uischema));
+    const core = initCore(schema, uischema);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialAllOfRenderer
-            schema={schema}
-            uischema={uischema}
-            visible={false}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialAllOfRenderer
+          schema={schema}
+          uischema={uischema}
+          visible={false}
+        />
+      </JsonFormsStateProvider>
     );
     const inputs = wrapper.find('input');
     expect(inputs.length).toBe(0);

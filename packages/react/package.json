@@ -77,7 +77,9 @@
   },
   "peerDependencies": {
     "@jsonforms/core": "^2.4.1",
-    "react": "^16.12.0",
+    "react": "^16.12.0"
+  },
+  "optionalPeerDependencies": {
     "react-redux": "^7.1.3"
   },
   "devDependencies": {

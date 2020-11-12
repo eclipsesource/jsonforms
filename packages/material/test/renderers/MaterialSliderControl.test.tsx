@@ -25,29 +25,24 @@
 import './MatchMediaMock';
 import * as React from 'react';
 import {
-  Actions,
   ControlElement,
-  jsonformsReducer,
-  JsonFormsState,
   JsonSchema,
-  NOT_APPLICABLE,
-  UISchemaElement
+  NOT_APPLICABLE
 } from '@jsonforms/core';
 import SliderControl, {
   materialSliderControlTester
 } from '../../src/controls/MaterialSliderControl';
-import { Provider } from 'react-redux';
 import { materialRenderers } from '../../src';
-import { combineReducers, createStore, Store } from 'redux';
 import { Slider } from '@material-ui/core';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { JsonFormsReduxContext } from '@jsonforms/react';
+import { JsonForms, JsonFormsStateProvider } from '@jsonforms/react';
+import { initCore } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-const data = { foo: 5 };
+const data: any = { foo: 5 };
 const schema = {
   type: 'object',
   properties: {
@@ -65,22 +60,6 @@ const uischema: ControlElement = {
   options: {
     slider: true
   }
-};
-
-const initJsonFormsStore = (
-  testData: any,
-  testSchema: JsonSchema,
-  testUiSchema: UISchemaElement
-): Store<JsonFormsState> => {
-  const s: JsonFormsState = {
-    jsonforms: {
-      renderers: materialRenderers
-    }
-  };
-  const reducer = combineReducers({ jsonforms: jsonformsReducer() });
-  const store: Store<JsonFormsState> = createStore(reducer, s);
-  store.dispatch(Actions.init(testData, testSchema, testUiSchema));
-  return store;
 };
 
 describe('Material slider tester', () => {
@@ -224,31 +203,36 @@ describe('Material slider control', () => {
         }
       }
     };
-    const store = initJsonFormsStore({ foo: 5 }, jsonSchema, uischema);
+    const core = initCore(jsonSchema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <SliderControl schema={jsonSchema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <SliderControl
+          schema={jsonSchema}
+          uischema={uischema}
+        />
+      </JsonFormsStateProvider>
     );
-
     const input = wrapper.find(Slider).first();
     expect(input.props().value).toBe(5);
   });
 
   it('should update via action', () => {
-    const store = initJsonFormsStore({ foo: 3 }, schema, uischema);
+    let data = {
+      foo: 3
+    };
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <SliderControl schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonForms
+        data={data}
+        schema={schema}
+        uischema={uischema}
+        renderers={materialRenderers}
+      />
     );
+    expect(wrapper.find(SliderControl).length).toBeTruthy();
     let slider = wrapper.find(Slider).first();
     expect(slider.props().value).toBe(3);
-    store.dispatch(Actions.update('foo', () => 4));
+    data = { ...data, foo: 4 };
+    wrapper.setProps({ data: data });
     wrapper.update();
     slider = wrapper.find(Slider).first();
     expect(slider.props().value).toBe(4);
@@ -267,135 +251,146 @@ describe('Material slider control', () => {
         }
       }
     };
-    const store = initJsonFormsStore(
-      { foo: 6 },
-      schemaWithMultipleOf,
-      uischema
-    );
+    const data = {
+      foo: 6
+    };
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <SliderControl schema={schemaWithMultipleOf} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonForms
+        data={data}
+        schema={schemaWithMultipleOf}
+        uischema={uischema}
+        renderers={materialRenderers}
+      />
     );
+    expect(wrapper.find(SliderControl).length).toBeTruthy();
     const input = wrapper.find(Slider).first();
     expect(input.props().step).toBe(2);
   });
 
   it('should not update with undefined value', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <SliderControl schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonForms
+        data={data}
+        schema={schema}
+        uischema={uischema}
+        renderers={materialRenderers}
+      />
     );
-    store.dispatch(Actions.update('foo', () => undefined));
+    expect(wrapper.find(SliderControl).length).toBeTruthy();
+    const newData = { ...data, foo: undefined };
+    wrapper.setProps({ data: newData });
     wrapper.update();
     const input = wrapper.find(Slider);
     expect(input.props().value).toBe(schema.properties.foo.default);
   });
 
   it('should not update with null value', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <SliderControl schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonForms
+        data={data}
+        schema={schema}
+        uischema={uischema}
+        renderers={materialRenderers}
+      />
     );
-    store.dispatch(Actions.update('foo', () => null));
+    expect(wrapper.find(SliderControl).length).toBeTruthy();
+    const newData = { ...data, foo: null };
+    wrapper.setProps({ data: newData });
     wrapper.update();
     const slider = wrapper.find(Slider).first();
     expect(slider.props().value).toBe(schema.properties.foo.default);
   });
 
   it('should not update with wrong ref', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <SliderControl schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonForms
+        data={data}
+        schema={schema}
+        uischema={uischema}
+        renderers={materialRenderers}
+      />
     );
-    store.dispatch(Actions.update('bar', () => 11));
+    expect(wrapper.find(SliderControl).length).toBeTruthy();
+    const newData = { ...data, bar: 11 };
+    wrapper.setProps({ data: newData });
     wrapper.update();
     const input = wrapper.find(Slider).first();
     expect(input.props().value).toBe(5);
   });
 
   it('should not update with null ref', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <SliderControl schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonForms
+        data={data}
+        schema={schema}
+        uischema={uischema}
+        renderers={materialRenderers}
+      />
     );
-    store.dispatch(Actions.update(null, () => 3));
+    expect(wrapper.find(SliderControl).length).toBeTruthy();
+    const newData = { ...data, null: 3 };
+    wrapper.setProps({ data: newData });
     wrapper.update();
     const input = wrapper.find(Slider).first();
     expect(input.props().value).toBe(5);
   });
 
   it('should not update with undefined ref', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <SliderControl schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonForms
+        data={data}
+        schema={schema}
+        uischema={uischema}
+        renderers={materialRenderers}
+      />
     );
-    store.dispatch(Actions.update(undefined, () => 13));
+    expect(wrapper.find(SliderControl).length).toBeTruthy();
+    const newData = { ...data, undefined: 13 };
+    wrapper.setProps({ data: newData });
     wrapper.update();
     const input = wrapper.find(Slider).first();
     expect(input.props().value).toBe(5);
   });
 
   it('can be disabled', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <SliderControl schema={schema} uischema={uischema} enabled={false} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <SliderControl
+          schema={schema}
+          uischema={uischema}
+          enabled={false}
+        />
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find(Slider).first();
     expect(input.props().disabled).toBeTruthy();
   });
 
   it('should be enabled by default', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <SliderControl schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonForms
+        data={data}
+        schema={schema}
+        uischema={uischema}
+        renderers={materialRenderers}
+      />
     );
+    expect(wrapper.find(SliderControl).length).toBeTruthy();
     const input = wrapper.find(Slider).first();
     expect(input.props().disabled).toBeFalsy();
   });
 
   it('should render id and input id', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <SliderControl
-            schema={schema}
-            uischema={uischema}
-            id='#/properties/foo'
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <SliderControl
+          schema={schema}
+          uischema={uischema}
+          id='#/properties/foo'
+        />
+      </JsonFormsStateProvider>
     );
     const divs = wrapper.find('div');
     // id
@@ -418,17 +413,15 @@ describe('Material slider control', () => {
         }
       }
     };
-    const store = initJsonFormsStore({ foo: 5 }, jsonSchema, uischema);
+    const core = initCore(schema, uischema, { foo: 5 });
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <SliderControl
-            schema={jsonSchema}
-            uischema={uischema}
-            visible={false}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <SliderControl
+          schema={jsonSchema}
+          uischema={uischema}
+          visible={false}
+        />
+      </JsonFormsStateProvider>
     );
 
     const inputs = wrapper.find(Slider);

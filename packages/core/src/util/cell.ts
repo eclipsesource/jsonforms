@@ -26,6 +26,8 @@ import isEmpty from 'lodash/isEmpty';
 import union from 'lodash/union';
 import { getConfig, getData, getErrorAt, getSchema, getAjv } from '../reducers';
 import {
+  AnyAction,
+  Dispatch,
   formatErrorMessage,
   isEnabled,
   isVisible,
@@ -41,7 +43,6 @@ import {
   mapDispatchToControlProps,
 } from './renderer';
 import { JsonFormsState } from '../store';
-import { AnyAction, Dispatch } from 'redux';
 import { JsonFormsCellRendererRegistryEntry } from '../reducers/cells';
 import { JsonSchema } from '..';
 

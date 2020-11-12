@@ -25,23 +25,17 @@
 import './MatchMediaMock';
 import * as React from 'react';
 import {
-  Actions,
-  ControlElement,
-  jsonformsReducer,
-  JsonFormsState,
-  JsonSchema,
-  UISchemaElement
+  ControlElement
 } from '@jsonforms/core';
 import MaterialEnumCell, {
   materialEnumCellTester
 } from '../../src/cells/MaterialEnumCell';
-import { Provider } from 'react-redux';
 import { materialRenderers } from '../../src';
-import { AnyAction, combineReducers, createStore, Reducer, Store } from 'redux';
 
 import Enzyme, { mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { JsonFormsReduxContext } from '@jsonforms/react';
+import { JsonFormsStateProvider } from '@jsonforms/react';
+import { initCore } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -53,24 +47,6 @@ const schema = {
 const uischema: ControlElement = {
   type: 'Control',
   scope: '#/properties/nationality'
-};
-
-const initJsonFormsStore = (
-  testData: any,
-  testSchema: JsonSchema,
-  testUiSchema: UISchemaElement
-): Store<JsonFormsState> => {
-  const s: JsonFormsState = {
-    jsonforms: {
-      renderers: materialRenderers
-    }
-  };
-  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({
-    jsonforms: jsonformsReducer()
-  });
-  const store: Store<JsonFormsState> = createStore(reducer, s);
-  store.dispatch(Actions.init(testData, testSchema, testUiSchema));
-  return store;
 };
 
 describe('Material enum cell tester', () => {
@@ -95,17 +71,15 @@ describe('Material enum cell tester', () => {
 
 describe('Material enum cell', () => {
   it('should select an item from dropdown list', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    const core = initCore(schema, uischema, data);
     const wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <MaterialEnumCell
-            schema={schema}
-            uischema={uischema}
-            path='nationality'
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialEnumCell
+          schema={schema}
+          uischema={uischema}
+          path='nationality'
+        />
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input');
     expect(input.props().value).toBe('JP');
