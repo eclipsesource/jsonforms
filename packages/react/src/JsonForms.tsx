@@ -25,7 +25,8 @@
 import isEqual from 'lodash/isEqual';
 import maxBy from 'lodash/maxBy';
 import memoize from 'lodash/memoize';
-import React, { useLayoutEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
+import { useIsomorphicLayoutEffect } from './hooks/useIsomorphicLayoutEffect';
 import AJV from 'ajv';
 import RefParser from 'json-schema-ref-parser';
 import { UnknownRenderer } from './UnknownRenderer';
