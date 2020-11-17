@@ -23,8 +23,18 @@
   THE SOFTWARE.
 */
 
-import { JsonFormsState } from '@jsonforms/core';
+import {
+  cellReducer,
+  configReducer,
+  coreReducer,
+  i18nReducer,
+  JsonFormsState,
+  JsonFormsSubStates,
+  rendererReducer,
+  uischemaRegistryReducer,
+} from '@jsonforms/core';
 import { connect } from 'react-redux';
+import { combineReducers, Reducer } from 'redux';
 import React from 'react';
 import { JsonFormsContext, JsonFormsReduxContextProps } from '../JsonFormsContext';
 
@@ -46,3 +56,16 @@ export const JsonFormsReduxContext = connect(
     ...state.jsonforms
   })
 )(JsonFormsReduxProvider);
+
+export const jsonformsReducer = (
+  additionalReducers = {}
+): Reducer<JsonFormsSubStates> =>
+  combineReducers<JsonFormsSubStates>({
+    core: coreReducer,
+    renderers: rendererReducer,
+    cells: cellReducer,
+    config: configReducer,
+    uischemas: uischemaRegistryReducer,
+    i18n: i18nReducer,
+    ...additionalReducers
+});
