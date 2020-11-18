@@ -25,7 +25,7 @@
 import isEqual from 'lodash/isEqual';
 import maxBy from 'lodash/maxBy';
 import memoize from 'lodash/memoize';
-import React, { useLayoutEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import AJV from 'ajv';
 import RefParser from 'json-schema-ref-parser';
 import { UnknownRenderer } from './UnknownRenderer';
@@ -212,10 +212,6 @@ export class JsonFormsDispatchRenderer extends ResolvedJsonFormsDispatchRenderer
 function useJsonFormsDispatchRendererProps(props: OwnPropsOfJsonFormsRenderer & JsonFormsReactProps) {
   const ctx = useJsonForms();
   const { refResolver } = ctxToJsonFormsDispatchProps(ctx, props);
-  const { data, errors } = ctx.core;
-  useLayoutEffect(() => {
-    props.onChange && props.onChange({ data, errors });
-  }, [data, errors]);
 
   return {
     schema: props.schema || ctx.core.schema,
@@ -301,8 +297,9 @@ export const JsonForms = (
         cells,
         readonly,
       }}
+      onChange={onChange}
     >
-      <JsonFormsDispatch onChange={onChange}/>
+      <JsonFormsDispatch />
     </JsonFormsStateProvider>
   );
 };
