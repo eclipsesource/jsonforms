@@ -110,7 +110,7 @@ const useEffectAfterFirstRender = (
   }, dependencies);
 };
 
-export const JsonFormsStateProvider = ({ children, initState }: any) => {
+export const JsonFormsStateProvider = ({ children, initState, onChange }: any) => {
   const { data, schema, uischema, ajv, refParserOptions , validationMode} = initState.core;
   // Initialize core immediately
   const [core, coreDispatch] = useReducer(
@@ -146,6 +146,15 @@ export const JsonFormsStateProvider = ({ children, initState }: any) => {
     // only core dispatch available
     dispatch: coreDispatch,
   }), [core, initState.renderers, initState.cells, config, initState.readonly]);
+
+  const onChangeRef = useRef(onChange);
+  useEffect(() => {
+    onChangeRef.current = onChange;
+  }, [onChange]);
+
+  useEffect(() => {
+    onChangeRef.current?.({ data: core.data, errors: core.errors });
+  }, [core.data, core.errors]);
 
   return (
     <JsonFormsContext.Provider
