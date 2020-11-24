@@ -180,8 +180,9 @@ describe('Date control Base Tests', () => {
   it('id should be present in output', () => {
     component.uischema = uischema;
     component.id = 'myId';
-    getJsonFormsService(component).init();
-    getJsonFormsService(component).updateCore(Actions.init(data, schema));
+    getJsonFormsService(component).init(
+      {core: {data: data, schema: schema, uischema: uischema}}
+    );
 
     component.ngOnInit();
     fixture.detectChanges();
@@ -251,17 +252,19 @@ describe('Date control Error Tests', () => {
     setupMockStore(fixture, {
       uischema,
       schema,
-      data,
-      errors: [
-        {
-          dataPath: 'foo',
-          message: 'Hi, this is me, test error!',
-          params: '',
-          keyword: '',
-          schemaPath: ''
-        }
-      ]
+      data
     });
+    const formsService = getJsonFormsService(component);
+    formsService.updateCore(Actions.updateErrors([
+      {
+        dataPath: 'foo',
+        message: 'Hi, this is me, test error!',
+        params: '',
+        keyword: '',
+        schemaPath: ''
+      }
+    ]));
+    formsService.refresh();
 
     component.ngOnInit();
     fixture.detectChanges();

@@ -1,7 +1,7 @@
 /*
   The MIT License
   
-  Copyright (c) 2017-2019 EclipseSource Munich
+  Copyright (c) 2017-2020 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
   
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,11 +24,12 @@
 */
 import { NgModule } from '@angular/core';
 
+import { JsonForms } from './jsonforms-root.component';
 import { JsonFormsOutlet } from './jsonforms.component';
 import { UnknownRenderer } from './unknown.component';
 @NgModule({
-  declarations: [JsonFormsOutlet, UnknownRenderer],
+  declarations: [JsonFormsOutlet, UnknownRenderer, JsonForms],
   entryComponents: [UnknownRenderer],
-  exports: [JsonFormsOutlet]
+  exports: [JsonFormsOutlet, JsonForms]
 })
 export class JsonFormsModule {}

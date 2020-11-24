@@ -50,7 +50,7 @@ export const baseSetup = <C extends JsonFormsControl>(
     TestBed.configureTestingModule({
       declarations: [testConfig.componentUT],
       imports: testConfig.imports,
-      providers: testConfig.providers
+      providers: [JsonFormsAngularService].concat(testConfig.providers)
     }).compileComponents();
   });
 };

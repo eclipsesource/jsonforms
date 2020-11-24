@@ -90,9 +90,8 @@ export const booleanBaseTest = <C extends JsonFormsControl, I>(
   it('should render', () => {
     component.uischema = uischema;
 
-    getJsonFormsService(component).init();
-    getJsonFormsService(component).updateCore(
-      Actions.init(data, defaultBooleanTestSchema)
+    getJsonFormsService(component).init(
+      {core: {data: data, schema: defaultBooleanTestSchema, uischema: uischema}}
     );
     component.ngOnInit();
     fixture.detectChanges();
@@ -108,9 +107,8 @@ export const booleanBaseTest = <C extends JsonFormsControl, I>(
   it('should support updating the state', () => {
     component.uischema = uischema;
 
-    getJsonFormsService(component).init();
-    getJsonFormsService(component).updateCore(
-      Actions.init(data, defaultBooleanTestSchema)
+    getJsonFormsService(component).init(
+      {core: {data: data, schema: defaultBooleanTestSchema, uischema: uischema}}
     );
     component.ngOnInit();
     fixture.detectChanges();
@@ -125,9 +123,8 @@ export const booleanBaseTest = <C extends JsonFormsControl, I>(
   it('should update with undefined value', () => {
     component.uischema = uischema;
 
-    getJsonFormsService(component).init();
-    getJsonFormsService(component).updateCore(
-      Actions.init(data, defaultBooleanTestSchema)
+    getJsonFormsService(component).init(
+      {core: {data: data, schema: defaultBooleanTestSchema, uischema: uischema}}
     );
     component.ngOnInit();
     fixture.detectChanges();
@@ -142,9 +139,8 @@ export const booleanBaseTest = <C extends JsonFormsControl, I>(
   it('should update with null value', () => {
     component.uischema = uischema;
 
-    getJsonFormsService(component).init();
-    getJsonFormsService(component).updateCore(
-      Actions.init(data, defaultBooleanTestSchema)
+    getJsonFormsService(component).init(
+      {core: {data: data, schema: defaultBooleanTestSchema, uischema: uischema}}
     );
     component.ngOnInit();
     fixture.detectChanges();
@@ -159,9 +155,8 @@ export const booleanBaseTest = <C extends JsonFormsControl, I>(
   it('should not update with wrong ref', () => {
     component.uischema = uischema;
 
-    getJsonFormsService(component).init();
-    getJsonFormsService(component).updateCore(
-      Actions.init(data, defaultBooleanTestSchema)
+    getJsonFormsService(component).init(
+      {core: {data: data, schema: defaultBooleanTestSchema, uischema: uischema}}
     );
     component.ngOnInit();
     fixture.detectChanges();
@@ -181,9 +176,8 @@ export const booleanBaseTest = <C extends JsonFormsControl, I>(
     component.uischema = uischema;
     component.disabled = true;
 
-    getJsonFormsService(component).init();
-    getJsonFormsService(component).updateCore(
-      Actions.init(data, defaultBooleanTestSchema)
+    getJsonFormsService(component).init(
+      {core: {data: data, schema: defaultBooleanTestSchema, uischema: uischema}}
     );
     component.ngOnInit();
     fixture.detectChanges();
@@ -194,9 +188,8 @@ export const booleanBaseTest = <C extends JsonFormsControl, I>(
     component.uischema = uischema;
     component.visible = false;
 
-    getJsonFormsService(component).init();
-    getJsonFormsService(component).updateCore(
-      Actions.init(data, defaultBooleanTestSchema)
+    getJsonFormsService(component).init(
+      {core: {data: data, schema: defaultBooleanTestSchema, uischema: uischema}}
     );
     component.ngOnInit();
     fixture.detectChanges();
@@ -211,9 +204,8 @@ export const booleanBaseTest = <C extends JsonFormsControl, I>(
     component.uischema = uischema;
     component.id = 'myId';
 
-    getJsonFormsService(component).init();
-    getJsonFormsService(component).updateCore(
-      Actions.init(data, defaultBooleanTestSchema)
+    getJsonFormsService(component).init(
+      {core: {data: data, schema: defaultBooleanTestSchema, uischema: uischema}}
     );
     component.ngOnInit();
     fixture.detectChanges();
@@ -245,9 +237,8 @@ export const booleanInputEventTest = <C extends JsonFormsControl, I>(
 
   it('should update via input event', () => {
     component.uischema = uischema;
-    getJsonFormsService(component).init();
-    getJsonFormsService(component).updateCore(
-      Actions.init(data, defaultBooleanTestSchema)
+    getJsonFormsService(component).init(
+      {core: {data: data, schema: defaultBooleanTestSchema, uischema: uischema}}
     );
     fixture.detectChanges();
     component.ngOnInit();
@@ -279,22 +270,24 @@ export const booleanErrorTest = <C extends JsonFormsControl, I>(
   it('should display errors', () => {
     component.uischema = uischema;
 
-    getJsonFormsService(component).init({
+    const formsService = getJsonFormsService(component);
+    formsService.init({
       core: {
         data,
         schema: defaultBooleanTestSchema,
-        errors: [
-          {
-            dataPath: 'foo',
-            message: 'Hi, this is me, test error!',
-            keyword: '',
-            params: '',
-            schemaPath: ''
-          }
-        ],
         uischema: undefined
       }
     });
+    formsService.updateCore(Actions.updateErrors([
+      {
+        dataPath: 'foo',
+        message: 'Hi, this is me, test error!',
+        keyword: '',
+        schemaPath: '',
+        params: ''
+      }
+    ]));
+    formsService.refresh();
 
     component.ngOnInit();
     fixture.detectChanges();
