@@ -97,9 +97,8 @@ export const rangeBaseTest = <C extends JsonFormsControl, I>(
     component.uischema = rangeDefaultTestData.uischema;
     component.schema = rangeDefaultTestData.schema;
 
-    getJsonFormsService(component).init();
-    getJsonFormsService(component).updateCore(
-      Actions.init(rangeDefaultTestData.data, rangeDefaultTestData.schema)
+    getJsonFormsService(component).init(
+      {core: {data: rangeDefaultTestData.data, schema: rangeDefaultTestData.schema, uischema: rangeDefaultTestData.uischema}}
     );
     component.ngOnInit();
     fixture.detectChanges();
@@ -146,9 +145,8 @@ export const rangeBaseTest = <C extends JsonFormsControl, I>(
     component.uischema = rangeDefaultTestData.uischema;
     component.schema = rangeDefaultTestData.schema;
 
-    getJsonFormsService(component).init();
-    getJsonFormsService(component).updateCore(
-      Actions.init(rangeDefaultTestData.data, rangeDefaultTestData.schema)
+    getJsonFormsService(component).init(
+      {core: {data: rangeDefaultTestData.data, schema: rangeDefaultTestData.schema, uischema: rangeDefaultTestData.uischema}}
     );
     component.ngOnInit();
     fixture.detectChanges();
@@ -164,9 +162,8 @@ export const rangeBaseTest = <C extends JsonFormsControl, I>(
     component.uischema = rangeDefaultTestData.uischema;
     component.schema = rangeDefaultTestData.schema;
 
-    getJsonFormsService(component).init();
-    getJsonFormsService(component).updateCore(
-      Actions.init(rangeDefaultTestData.data, rangeDefaultTestData.schema)
+    getJsonFormsService(component).init(
+      {core: {data: rangeDefaultTestData.data, schema: rangeDefaultTestData.schema, uischema: rangeDefaultTestData.uischema}}
     );
     component.ngOnInit();
     fixture.detectChanges();
@@ -182,9 +179,8 @@ export const rangeBaseTest = <C extends JsonFormsControl, I>(
     component.uischema = rangeDefaultTestData.uischema;
     component.schema = rangeDefaultTestData.schema;
 
-    getJsonFormsService(component).init();
-    getJsonFormsService(component).updateCore(
-      Actions.init(rangeDefaultTestData.data, rangeDefaultTestData.schema)
+    getJsonFormsService(component).init(
+      {core: {data: rangeDefaultTestData.data, schema: rangeDefaultTestData.schema, uischema: rangeDefaultTestData.uischema}}
     );
     component.ngOnInit();
     fixture.detectChanges();
@@ -200,9 +196,8 @@ export const rangeBaseTest = <C extends JsonFormsControl, I>(
     component.uischema = rangeDefaultTestData.uischema;
     component.schema = rangeDefaultTestData.schema;
 
-    getJsonFormsService(component).init();
-    getJsonFormsService(component).updateCore(
-      Actions.init(rangeDefaultTestData.data, rangeDefaultTestData.schema)
+    getJsonFormsService(component).init(
+      {core: {data: rangeDefaultTestData.data, schema: rangeDefaultTestData.schema, uischema: rangeDefaultTestData.uischema}}
     );
     component.ngOnInit();
     fixture.detectChanges();
@@ -224,9 +219,8 @@ export const rangeBaseTest = <C extends JsonFormsControl, I>(
     component.schema = rangeDefaultTestData.schema;
     component.disabled = true;
 
-    getJsonFormsService(component).init();
-    getJsonFormsService(component).updateCore(
-      Actions.init(rangeDefaultTestData.data, rangeDefaultTestData.schema)
+    getJsonFormsService(component).init(
+      {core: {data: rangeDefaultTestData.data, schema: rangeDefaultTestData.schema, uischema: rangeDefaultTestData.uischema}}
     );
     component.ngOnInit();
     fixture.detectChanges();
@@ -237,9 +231,8 @@ export const rangeBaseTest = <C extends JsonFormsControl, I>(
     component.schema = rangeDefaultTestData.schema;
     component.visible = false;
 
-    getJsonFormsService(component).init();
-    getJsonFormsService(component).updateCore(
-      Actions.init(rangeDefaultTestData.data, rangeDefaultTestData.schema)
+    getJsonFormsService(component).init(
+      {core: {data: rangeDefaultTestData.data, schema: rangeDefaultTestData.schema, uischema: rangeDefaultTestData.uischema}}
     );
     fixture.detectChanges();
     component.ngOnInit();
@@ -249,9 +242,8 @@ export const rangeBaseTest = <C extends JsonFormsControl, I>(
     component.uischema = rangeDefaultTestData.uischema;
     component.schema = rangeDefaultTestData.schema;
     component.id = 'myId';
-    getJsonFormsService(component).init();
-    getJsonFormsService(component).updateCore(
-      Actions.init(rangeDefaultTestData.data)
+    getJsonFormsService(component).init(
+      {core: {data: rangeDefaultTestData.data, schema: rangeDefaultTestData.schema, uischema: rangeDefaultTestData.uischema}}
     );
     component.ngOnInit();
     fixture.detectChanges();
@@ -277,9 +269,8 @@ export const rangeInputEventTest = <C extends JsonFormsControl, I>(
     component.uischema = rangeDefaultTestData.uischema;
     component.schema = rangeDefaultTestData.schema;
 
-    getJsonFormsService(component).init();
-    getJsonFormsService(component).updateCore(
-      Actions.init(rangeDefaultTestData.data, rangeDefaultTestData.schema)
+    getJsonFormsService(component).init(
+      {core: {data: rangeDefaultTestData.data, schema: rangeDefaultTestData.schema, uischema: rangeDefaultTestData.uischema}}
     );
     component.ngOnInit();
     fixture.detectChanges();
@@ -323,22 +314,25 @@ export const rangeErrorTest = <C extends JsonFormsControl, I>(
     component.uischema = rangeDefaultTestData.uischema;
     component.schema = rangeDefaultTestData.schema;
 
-    getJsonFormsService(component).init({
+    const formsService = getJsonFormsService(component);
+    formsService.init({
       core: {
         data: rangeDefaultTestData.data,
         schema: rangeDefaultTestData.schema,
-        errors: [
-          {
-            dataPath: 'foo',
-            message: 'Hi, this is me, test error!',
-            params: '',
-            schemaPath: '',
-            keyword: ''
-          }
-        ],
         uischema: undefined
       }
     });
+    formsService.updateCore(Actions.updateErrors([
+      {
+        dataPath: 'foo',
+        message: 'Hi, this is me, test error!',
+        keyword: '',
+        schemaPath: '',
+        params: ''
+      }
+    ]));
+    formsService.refresh();
+
     component.ngOnInit();
     fixture.detectChanges();
     const debugErrors: DebugElement[] = fixture.debugElement.queryAll(

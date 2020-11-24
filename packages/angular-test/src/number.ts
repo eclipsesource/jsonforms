@@ -236,9 +236,8 @@ export const numberBaseTest = <C extends JsonFormsControl>(
     component.uischema = testData.uischema;
     component.disabled = true;
 
-    getJsonFormsService(component).init();
-    getJsonFormsService(component).updateCore(
-      Actions.init(testData.data, testData.schema)
+    getJsonFormsService(component).init(
+      {core: {data: testData.data, schema: testData.schema, uischema: testData.uischema}}
     );
     component.ngOnInit();
     fixture.detectChanges();
@@ -249,9 +248,8 @@ export const numberBaseTest = <C extends JsonFormsControl>(
     component.uischema = testData.uischema;
     component.visible = false;
 
-    getJsonFormsService(component).init();
-    getJsonFormsService(component).updateCore(
-      Actions.init(testData.data, testData.schema)
+    getJsonFormsService(component).init(
+      {core: {data: testData.data, schema: testData.schema, uischema: testData.uischema}}
     );
     component.ngOnInit();
     fixture.detectChanges();
@@ -264,9 +262,8 @@ export const numberBaseTest = <C extends JsonFormsControl>(
   it('id should be present in output', () => {
     component.uischema = testData.uischema;
     component.id = 'myId';
-    getJsonFormsService(component).init();
-    getJsonFormsService(component).updateCore(
-      Actions.init(testData.data, testData.schema)
+    getJsonFormsService(component).init(
+      {core: {data: testData.data, schema: testData.schema, uischema: testData.uischema}}
     );
     component.ngOnInit();
     fixture.detectChanges();
@@ -339,22 +336,24 @@ export const numberErrorTest = <C extends JsonFormsControl>(
   it('should display errors', () => {
     component.uischema = testData.uischema;
 
-    getJsonFormsService(component).init({
+    const formsService = getJsonFormsService(component);
+    formsService.init({
       core: {
         data: testData.data,
         schema: testData.schema,
-        errors: [
-          {
-            dataPath: 'foo',
-            message: 'Hi, this is me, test error!',
-            keyword: '',
-            schemaPath: '',
-            params: ''
-          }
-        ],
         uischema: undefined
       }
     });
+    formsService.updateCore(Actions.updateErrors([
+      {
+        dataPath: 'foo',
+        message: 'Hi, this is me, test error!',
+        keyword: '',
+        schemaPath: '',
+        params: ''
+      }
+    ]));
+    formsService.refresh();
     component.ngOnInit();
     fixture.detectChanges();
     const debugErrors: DebugElement[] = fixture.debugElement.queryAll(

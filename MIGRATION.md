@@ -1,3 +1,47 @@
+# Migrating to JSON Forms 2.5 for Angular users
+The JsonFormsAngularService is not provided in the root anymore. 
+To keep the old behavior, you need to provide it manually in the module.
+
+The preferred way is using the new JsonForms Component though.
+This component wraps the service and allows the user to interact with it using databinding.
+
+Example:
+
+```ts
+import { Component } from '@angular/core';
+import { angularMaterialRenderers } from '../../src/index';
+export const schema = {
+  type: 'object',
+  properties: {
+    name: {
+      type: 'string'
+    }
+  },
+  required: ['name']
+};
+export const data = {name: 'Send email to Adrian'};
+
+@Component({
+  selector: 'app-root',
+  template: `
+    <div>Data: {{ data | json }}</div>
+    <jsonforms
+      [data]="data"
+      [schema]="schema"
+      [renderers]="renderers"
+      (dataChange)="onDataChange($event)"
+    ></jsonforms>
+  `
+})
+export class AppComponent {
+  readonly renderers = angularMaterialRenderers;
+  data: any;
+  onDataChange(data: any) {
+    this.data = data;
+  }
+}
+```
+
 # Migrating to JSON Forms 2.5 for React users
 
 In version 2.5 we made the `redux` dependency within the `react` package optional.

@@ -1,7 +1,7 @@
 /*
   The MIT License
 
-  Copyright (c) 2017-2019 EclipseSource Munich
+  Copyright (c) 2017-2020 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,19 +23,28 @@
   THE SOFTWARE.
 */
 import { Component } from '@angular/core';
-import { JsonFormsAngularService } from '@jsonforms/angular';
-import {
-  Actions,
-  getData,
-  getUiSchema,
-  setLocale,
-  setReadonly,
-  unsetReadonly,
-  setConfig
-} from '@jsonforms/core';
-import { getExamples } from '@jsonforms/examples';
-import { of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { ExampleDescription, getExamples } from '@jsonforms/examples';
+import { UISchemaElement, UISchemaTester } from '@jsonforms/core';
+import { angularMaterialRenderers } from '../../src/index';
+const uiSchema = {
+  type: 'HorizontalLayout',
+  elements: [
+    {
+      type: 'Control',
+      scope: '#/properties/buyer/properties/email'
+    },
+    {
+      type: 'Control',
+      scope: '#/properties/status'
+    }
+  ]
+};
+const itemTester: UISchemaTester = (_schema, schemaPath, _path) => {
+  if (schemaPath === '#/properties/warehouseitems/items') {
+    return 10;
+  }
+  return -1;
+};
 @Component({
   selector: 'app-root',
   template: `
@@ -45,7 +54,7 @@ import { map } from 'rxjs/operators';
       Example:
       <select (change)="onChange($event)">
         <option
-          *ngFor="let example of exampleData$ | async"
+          *ngFor="let example of examples"
           value="{{ example.name }}"
           label="{{ example.label }}"
         >
@@ -57,65 +66,50 @@ import { map } from 'rxjs/operators';
       <button (click)="changeLocale('de-DE')">Change locale to de-DE</button>
       <button (click)="changeLocale('en-US')">Change locale to en-US</button>
       Current locale: {{ currentLocale }}
-      <button (click)="setReadonly()">
+      <button (click)="toggleReadonly()">
         {{ readonly ? 'Unset' : 'Set' }} Readonly
       </button>
     </div>
-    <jsonforms-outlet></jsonforms-outlet>
+    <jsonforms
+      [data]="selectedExample.data"
+      [schema]="selectedExample.schema"
+      [uischema]="selectedExample.uischema"
+      [renderers]="renderers"
+      (dataChange)="onDataChange($event)"
+      [locale]="currentLocale"
+      [uischemas]="uischemas"
+      [readonly]="readonly"
+    ></jsonforms>
   `
 })
 export class AppComponent {
-  readonly exampleData$ = of(getExamples());
+  readonly renderers = angularMaterialRenderers;
+  readonly examples = getExamples();
+  selectedExample: ExampleDescription;
   currentLocale = 'en-US';
   private readonly = false;
   data: any;
+  uischemas: { tester: UISchemaTester; uischema: UISchemaElement; }[] = [
+    { tester: itemTester, uischema: uiSchema }
+  ];
 
-  constructor(private jsonformService: JsonFormsAngularService) {
-    const examples = getExamples();
-    const selectedExample = examples[0];
-    this.jsonformService.updateCore(
-      Actions.init(
-        selectedExample.data,
-        selectedExample.schema,
-        selectedExample.uischema
-      )
-    );
-
-    this.jsonformService.$state.pipe(
-      map(state => getData(state))
-    ).subscribe(data => this.data = data);
-  }
-  examples() {
-    return getExamples();
+  constructor() {
+    this.selectedExample = this.examples[19];
   }
 
-  onChange = (ev: any) => {
-    const examples = getExamples();
-    const selectedExample = examples.find(e => e.name === ev.target.value);
-    this.jsonformService.updateCore(
-      Actions.init(
-        selectedExample.data,
-        selectedExample.schema,
-        selectedExample.uischema
-      )
-      );
-      this.jsonformService.updateConfig(setConfig(selectedExample.config));
-      this.jsonformService.updateLocale(setLocale(this.currentLocale));
-  };
+  onDataChange(data: any) {
+    this.data = data;
+  }
+
+  onChange(ev: any) {
+    this.selectedExample = this.examples.find(e => e.name === ev.target.value);
+  }
 
   changeLocale(locale: string) {
     this.currentLocale = locale;
-    this.jsonformService.updateLocale(setLocale(locale));
   }
 
-  setReadonly() {
-    const uischema = getUiSchema(this.jsonformService.getState());
-    if (this.readonly) {
-      unsetReadonly(uischema);
-    } else {
-      setReadonly(uischema);
-    }
+  toggleReadonly() {
     this.readonly = !this.readonly;
-    this.jsonformService.updateCore(Actions.setUISchema(uischema));
   }
 }

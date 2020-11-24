@@ -26,13 +26,13 @@ import { DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { JsonFormsControl } from '@jsonforms/angular';
-import { ControlElement, JsonSchema, Actions } from '@jsonforms/core';
+import { Actions, ControlElement, JsonSchema } from '@jsonforms/core';
 import {
   baseSetup,
   ErrorTestExpectation,
+  getJsonFormsService,
   TestConfig,
-  TestData,
-  getJsonFormsService
+  TestData
 } from './util';
 
 interface ComponentResult<C extends JsonFormsControl> {
@@ -103,9 +103,8 @@ export const textBaseTest = <C extends JsonFormsControl>(
 
   it('should render', () => {
     component.uischema = testData.uischema;
-    getJsonFormsService(component).init();
-    getJsonFormsService(component).updateCore(
-      Actions.init(testData.data, testData.schema)
+    getJsonFormsService(component).init(
+      {core: {data: testData.data, schema: testData.schema, uischema: testData.uischema}}
     );
     component.ngOnInit();
     fixture.detectChanges();
@@ -122,9 +121,8 @@ export const textBaseTest = <C extends JsonFormsControl>(
   it('should support updating the state', () => {
     component.uischema = testData.uischema;
 
-    getJsonFormsService(component).init();
-    getJsonFormsService(component).updateCore(
-      Actions.init(testData.data, testData.schema)
+    getJsonFormsService(component).init(
+      {core: {data: testData.data, schema: testData.schema, uischema: testData.uischema}}
     );
     component.ngOnInit();
     fixture.detectChanges();
@@ -139,9 +137,8 @@ export const textBaseTest = <C extends JsonFormsControl>(
   it('should update with undefined value', () => {
     component.uischema = testData.uischema;
 
-    getJsonFormsService(component).init();
-    getJsonFormsService(component).updateCore(
-      Actions.init(testData.data, testData.schema)
+    getJsonFormsService(component).init(
+      {core: {data: testData.data, schema: testData.schema, uischema: testData.uischema}}
     );
     component.ngOnInit();
     fixture.detectChanges();
@@ -156,9 +153,8 @@ export const textBaseTest = <C extends JsonFormsControl>(
   it('should update with null value', () => {
     component.uischema = testData.uischema;
 
-    getJsonFormsService(component).init();
-    getJsonFormsService(component).updateCore(
-      Actions.init(testData.data, testData.schema)
+    getJsonFormsService(component).init(
+      {core: {data: testData.data, schema: testData.schema, uischema: testData.uischema}}
     );
     component.ngOnInit();
     fixture.detectChanges();
@@ -173,9 +169,8 @@ export const textBaseTest = <C extends JsonFormsControl>(
   it('should not update with wrong ref', () => {
     component.uischema = testData.uischema;
 
-    getJsonFormsService(component).init();
-    getJsonFormsService(component).updateCore(
-      Actions.init(testData.data, testData.schema)
+    getJsonFormsService(component).init(
+      {core: {data: testData.data, schema: testData.schema, uischema: testData.uischema}}
     );
     component.ngOnInit();
     fixture.detectChanges();
@@ -195,9 +190,8 @@ export const textBaseTest = <C extends JsonFormsControl>(
     component.uischema = testData.uischema;
     component.disabled = true;
 
-    getJsonFormsService(component).init();
-    getJsonFormsService(component).updateCore(
-      Actions.init(testData.data, testData.schema)
+    getJsonFormsService(component).init(
+      {core: {data: testData.data, schema: testData.schema, uischema: testData.uischema}}
     );
     component.ngOnInit();
     fixture.detectChanges();
@@ -207,9 +201,8 @@ export const textBaseTest = <C extends JsonFormsControl>(
     component.uischema = testData.uischema;
     component.visible = false;
 
-    getJsonFormsService(component).init();
-    getJsonFormsService(component).updateCore(
-      Actions.init(testData.data, testData.schema)
+    getJsonFormsService(component).init(
+      {core: {data: testData.data, schema: testData.schema, uischema: testData.uischema}}
     );
     component.ngOnInit();
     fixture.detectChanges();
@@ -221,9 +214,8 @@ export const textBaseTest = <C extends JsonFormsControl>(
   it('id should be present in output', () => {
     component.uischema = testData.uischema;
     component.id = 'myId';
-    getJsonFormsService(component).init();
-    getJsonFormsService(component).updateCore(
-      Actions.init(testData.data, testData.schema)
+    getJsonFormsService(component).init(
+      {core: {data: testData.data, schema: testData.schema, uischema: testData.uischema}}
     );
     component.ngOnInit();
     fixture.detectChanges();
@@ -256,9 +248,8 @@ export const textInputEventTest = <C extends JsonFormsControl>(
   it('should update via input event', () => {
     component.uischema = testData.uischema;
 
-    getJsonFormsService(component).init();
-    getJsonFormsService(component).updateCore(
-      Actions.init(testData.data, testData.schema)
+    getJsonFormsService(component).init(
+      {core: {data: testData.data, schema: testData.schema, uischema: testData.uischema}}
     );
     component.ngOnInit();
     fixture.detectChanges();
@@ -292,22 +283,24 @@ export const textErrorTest = <C extends JsonFormsControl>(
   it('should display errors', () => {
     component.uischema = testData.uischema;
 
-    getJsonFormsService(component).init({
+    const formsService = getJsonFormsService(component);
+    formsService.init({
       core: {
         data: testData.data,
         schema: testData.schema,
-        errors: [
-          {
-            dataPath: 'foo',
-            message: 'Hi, this is me, test error!',
-            keyword: '',
-            schemaPath: '',
-            params: ''
-          }
-        ],
         uischema: undefined
       }
     });
+    formsService.updateCore(Actions.updateErrors([
+      {
+        dataPath: 'foo',
+        message: 'Hi, this is me, test error!',
+        keyword: '',
+        schemaPath: '',
+        params: ''
+      }
+    ]));
+    formsService.refresh();
     component.ngOnInit();
     fixture.detectChanges();
     const debugErrors: DebugElement[] = fixture.debugElement.queryAll(
@@ -350,11 +343,9 @@ export const textTypeTest = <C extends JsonFormsControl>(
     component.uischema = uischema;
     component.schema = schema;
 
-    getJsonFormsService(component).init();
-    getJsonFormsService(component).updateCore(
-      Actions.init(testData.data, schema)
+    getJsonFormsService(component).init(
+      {core: {data: testData.data, schema: schema, uischema: uischema}}
     );
-
     component.ngOnInit();
     fixture.detectChanges();
     expect(textNativeElement.type).toBe('password');
@@ -366,9 +357,8 @@ export const textTypeTest = <C extends JsonFormsControl>(
     component.uischema = testData.uischema;
     component.schema = schema;
 
-    getJsonFormsService(component).init();
-    getJsonFormsService(component).updateCore(
-      Actions.init(testData.data, schema)
+    getJsonFormsService(component).init(
+      {core: {data: testData.data, schema: schema, uischema: testData.uischema}}
     );
     component.ngOnInit();
     fixture.detectChanges();
@@ -381,11 +371,9 @@ export const textTypeTest = <C extends JsonFormsControl>(
     component.uischema = testData.uischema;
     component.schema = schema;
 
-    getJsonFormsService(component).init();
-    getJsonFormsService(component).updateCore(
-      Actions.init(testData.data, schema)
+    getJsonFormsService(component).init(
+      {core: {data: testData.data, schema: schema, uischema: testData.uischema}}
     );
-
     component.ngOnInit();
     fixture.detectChanges();
     expect(textNativeElement.type).toBe('tel');
@@ -397,9 +385,8 @@ export const textTypeTest = <C extends JsonFormsControl>(
     component.uischema = testData.uischema;
     component.schema = schema;
 
-    getJsonFormsService(component).init();
-    getJsonFormsService(component).updateCore(
-      Actions.init(testData.data, schema)
+    getJsonFormsService(component).init(
+      {core: {data: testData.data, schema: schema, uischema: testData.uischema}}
     );
     component.ngOnInit();
     fixture.detectChanges();

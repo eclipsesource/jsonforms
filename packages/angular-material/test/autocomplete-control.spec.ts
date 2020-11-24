@@ -304,9 +304,12 @@ describe('AutoComplete control Error Tests', () => {
     setupMockStore(fixture, {
       uischema,
       schema,
-      data,
-      errors
+      data
     });
+    const formsService = getJsonFormsService(component);
+    formsService.updateCore(Actions.updateErrors(errors));
+    formsService.refresh();
+
     component.ngOnInit();
     fixture.detectChanges();
     const debugErrors: DebugElement[] = fixture.debugElement.queryAll(
