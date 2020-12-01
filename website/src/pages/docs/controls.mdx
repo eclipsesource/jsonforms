@@ -5,7 +5,7 @@ parent: UI Schema Elements
 ---
 
 import ApiLink from '../../components/common/ApiLink.js'
-import { Example, ExampleWithCustomLabel, ExampleWithSortButtons, ExampleWithArrayLabel } from './components/controls'
+import { Example, ExampleWithCustomLabel, ExampleWithSortButtons, ExampleWithArrayLabel, ExampleWithRadioGroup } from './components/controls'
 
 # Controls
 
@@ -80,7 +80,7 @@ attribute specifying how the array shall be rendered.
 **`DEFAULT`**
 ```
 options: {
-    detail : 'DEFAULT'
+  detail : 'DEFAULT'
 }
 ```
 The array will be rendered as before. The string is case insensitive.
@@ -88,10 +88,10 @@ The array will be rendered as before. The string is case insensitive.
 **Inline UI schema**
 ```
 options: {
-    detail : {
-        type: 'HorizontalLayout',
-        ...
-    }
+  detail : {
+    type: 'HorizontalLayout',
+    ...
+  }
 }
 ```
 The array will be rendered using the nested array renderer. 
@@ -100,7 +100,7 @@ The nested renderer will use the specified uischema to render the array elements
 **`GENERATED`**
 ```
 options: {
-    detail : 'GENERATED'
+  detail : 'GENERATED'
 }
 ```
 The array will be rendered using the nested array renderer. The nested renderer will use a generated uischema to render the array elements. The string is case insensitive.
@@ -108,7 +108,7 @@ The array will be rendered using the nested array renderer. The nested renderer 
 **`REGISTERED`**
 ```
 options: {
-    detail : 'REGISTERED'
+  detail : 'REGISTERED'
 }
 ```
 The array will be rendered using the nested array renderer. 
@@ -145,3 +145,16 @@ By default the first primitive (string, number, integer) element will be used.
 In the following example each element will be labeled with its name instead of its message because we provide the name prop.
 
 <ExampleWithArrayLabel />
+
+### Radio groups
+
+**`format: 'radio'`**
+```
+options: {
+  format: 'radio'
+}
+```
+
+Use the `format: 'radio'` option to display an enum as a radio group.
+
+<ExampleWithRadioGroup />

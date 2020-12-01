@@ -239,3 +239,47 @@ export const ExampleWithArrayLabel = () => (
   </Provider>
 );
 
+export const radioGroup = {
+  schema: {
+    type: 'object',
+    properties: {
+      exampleRadioEnum: {
+        type: 'string',
+        enum: ['One', 'Two', 'Three']
+      }
+    }
+  },
+  uischema: {
+    type: 'Control',
+    scope: '#/properties/exampleRadioEnum',
+    options: {
+      format: 'radio'
+    }
+  },
+  data: {}
+};
+
+const storeWithRadioGroup = createJsonFormsStore({
+  data: radioGroup.data,
+  schema: radioGroup.schema,
+  uischema: radioGroup.uischema
+});
+
+export const ExampleWithRadioGroup = () => (
+  <Provider store={storeWithRadioGroup}>
+    <JsonFormsReduxContext>
+      <Demo
+        js={() => {
+          return (
+            <JsonFormsDispatch
+              schema={radioGroup.schema}
+              uischema={radioGroup.uischema}
+            />
+          );
+        }}
+        schema={radioGroup.schema}
+        uischema={radioGroup.uischema}
+      />
+    </JsonFormsReduxContext>
+  </Provider>
+);
