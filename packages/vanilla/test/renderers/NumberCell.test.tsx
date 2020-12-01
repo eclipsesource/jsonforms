@@ -466,4 +466,21 @@ describe('Number cell', () => {
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.disabled).toBe(false);
   });
+
+  test('shows 0 instead of empty string', () => {
+    const store = initJsonFormsVanillaStore({
+      data: { foo: 0 },
+      schema: fixture.schema,
+      uischema: fixture.uischema
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <NumberCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.value).toBe('0');
+  });
 });
