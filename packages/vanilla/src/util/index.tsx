@@ -41,6 +41,7 @@ import { getStyle, getStyleAsClassName } from '../reducers';
 import { VanillaRendererProps } from '../index';
 import { ComponentType } from 'react';
 import { findStyle, findStyleAsClassName } from '../reducers/styling';
+import { useStyles } from '../styleContext';
 
 /**
  * A style associates a name with a list of CSS class names.
@@ -95,26 +96,27 @@ export const addVanillaControlProps = <P extends StatePropsOfControl>(
 
 export const withVanillaControlProps = (Component: ComponentType<any>) => (props: any) => {
   const ctx = useJsonForms();
+  const contextStyles = useStyles();
   const controlElement = props.uischema as ControlElement;
   const config = ctx.config;
   const trim = config && config.trim;
-  const styles = findStyle(ctx.styles)('control');
+  const styles = findStyle(contextStyles)('control');
   let classNames: string[] = !isEmpty(controlElement.scope)
     ? styles.concat([`${convertToValidClassName(controlElement.scope)}`])
     : [''];
 
   if (trim) {
-    classNames = classNames.concat(findStyle(ctx.styles)('control.trim'));
+    classNames = classNames.concat(findStyle(contextStyles)('control.trim'));
   }
   const isValid = isEmpty(props.errors);
-  const labelClass = findStyleAsClassName(ctx.styles)('control.label');
-  const descriptionClassName = findStyleAsClassName(ctx.styles)('input.description');
+  const labelClass = findStyleAsClassName(contextStyles)('control.label');
+  const descriptionClassName = findStyleAsClassName(contextStyles)('input.description');
   const inputClassName = ['validate'].concat(isValid ? 'valid' : 'invalid');
   return (
     <Component
       {...props}
-      getStyleAsClassName={findStyleAsClassName(ctx.styles)}
-      getStyle={findStyle(ctx.styles)}
+      getStyleAsClassName={findStyleAsClassName(contextStyles)}
+      getStyle={findStyle(contextStyles)}
       classNames={{
         wrapper: classNames.join(' '),
         input: inputClassName.join(' '),
@@ -171,11 +173,11 @@ export const addVanillaCellProps = (
 const withVanillaCellPropsForType = (type: string) => (
   Component: ComponentType<any>
 ) => (props: any) => {
-  const ctx = useJsonForms();
   const inputClassName = ['validate'].concat(
     props.isValid ? 'valid' : 'invalid'
   );
-  const definedStyle = findStyleAsClassName(ctx.styles)(type);
+  const styles = useStyles();
+  const definedStyle = findStyleAsClassName(styles)(type);
   if (definedStyle) {
     inputClassName.push(definedStyle);
   }
@@ -183,8 +185,8 @@ const withVanillaCellPropsForType = (type: string) => (
   return (
     <Component
       {...props}
-      getStyleAsClassName={findStyleAsClassName(ctx.styles)}
-      getStyle={findStyle(ctx.styles)}
+      getStyleAsClassName={findStyleAsClassName(styles)}
+      getStyle={findStyle(styles)}
       className={inputClassName.join(' ')}
     />
   );
