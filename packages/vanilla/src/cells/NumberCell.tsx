@@ -40,7 +40,7 @@ export const NumberCell = (props: CellProps & VanillaRendererProps) => {
     <input
       type='number'
       step='0.1'
-      value={data || ''}
+      value={data ?? ''}
       onChange={ev => handleChange(path, Number(ev.target.value))}
       className={className}
       id={id}
