@@ -51,6 +51,9 @@ const store = createJsonFormsStore({
   uischema
 });
 
+const nextVersion = process.env.DOCZ_NEXTVERSION;
+const nextVersionText = nextVersion && nextVersion !== corePackageJson.version ? `@next: ${nextVersion}` : '';
+
 const Home = ({ classes }) => {
   return (
     <React.Fragment>
@@ -74,7 +77,8 @@ const Home = ({ classes }) => {
               </div>
               <div className={styles.feature}>
                 <Typography>
-                  Version {corePackageJson.version}
+                  Version: {corePackageJson.version}
+                  {nextVersionText && <><br/>{nextVersionText}</>}
                 </Typography>
               </div>
               <div className={styles.feature}>
