@@ -106,6 +106,7 @@ export * from './cells';
 export * from './layouts';
 export * from './reducers';
 export * from './util';
+export * from './styleContext';
 
 export const vanillaRenderers: { tester: RankedTester; renderer: any }[] = [
   { tester: inputControlTester, renderer: InputControl },
