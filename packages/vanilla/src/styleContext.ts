@@ -35,12 +35,12 @@ const defaultContext: any = {
   styles: []
 };
 
-export const StyleContextInstance = React.createContext<StyleContext>(
+export const JsonFormsStyleContext = React.createContext<StyleContext>(
   defaultContext
 );
 
 export const useStyleContext = (): StyleContext =>
-  useContext(StyleContextInstance);
+  useContext(JsonFormsStyleContext);
 
 export const useStyles = (): StyleDef[] | undefined => {
   const { styles } = useStyleContext();
