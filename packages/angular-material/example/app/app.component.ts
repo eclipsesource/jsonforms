@@ -49,7 +49,7 @@ const itemTester: UISchemaTester = (_schema, schemaPath, _path) => {
   selector: 'app-root',
   template: `
     <h1>Angular Material Examples</h1>
-    Data: {{ data | json }}
+    Data: {{ selectedExample.data | json }}
     <div>
       Example:
       <select (change)="onChange($event)">
@@ -71,14 +71,14 @@ const itemTester: UISchemaTester = (_schema, schemaPath, _path) => {
       </button>
     </div>
     <jsonforms
-      [data]="selectedExample.data"
+      [(data)]="selectedExample.data"
       [schema]="selectedExample.schema"
       [uischema]="selectedExample.uischema"
       [renderers]="renderers"
-      (dataChange)="onDataChange($event)"
       [locale]="currentLocale"
       [uischemas]="uischemas"
       [readonly]="readonly"
+      [config]="config"
     ></jsonforms>
   `
 })
@@ -95,10 +95,6 @@ export class AppComponent {
 
   constructor() {
     this.selectedExample = this.examples[19];
-  }
-
-  onDataChange(data: any) {
-    this.data = data;
   }
 
   onChange(ev: any) {
