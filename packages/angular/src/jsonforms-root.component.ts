@@ -26,7 +26,7 @@ import {
     Component,
     EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges
 } from '@angular/core';
-import { JsonFormsRendererRegistryEntry, JsonSchema, UISchemaElement, UISchemaTester, ValidationMode } from '@jsonforms/core';
+import { Actions, JsonFormsRendererRegistryEntry, JsonSchema, UISchemaElement, UISchemaTester, ValidationMode } from '@jsonforms/core';
 import { Ajv } from 'ajv';
 import { JsonFormsAngularService, USE_STATE_VALUE } from './jsonforms.service';
 @Component({
@@ -46,6 +46,7 @@ export class JsonForms implements OnChanges, OnInit {
     @Input() readonly: boolean;
     @Input() validationMode: ValidationMode;
     @Input() ajv: Ajv;
+    @Input() config: any;
 
     private initialized = false;
 
@@ -63,7 +64,9 @@ export class JsonForms implements OnChanges, OnInit {
             },
             uischemas: this.uischemas,
             i18n: { locale: this.locale, localizedSchemas: undefined, localizedUISchemas: undefined },
-            renderers: this.renderers
+            renderers: this.renderers,
+            config: this.config,
+            readonly: this.readonly
         });
         this.jsonformsService.$state.subscribe(state => {
             const data = state?.jsonforms?.core?.data;
@@ -88,6 +91,7 @@ export class JsonForms implements OnChanges, OnInit {
         const newReadonly = changes.readonly;
         const newValidationMode = changes.validationMode;
         const newAjv = changes.ajv;
+        const newConfig = changes.config;
 
         if (newData || newSchema || newUiSchema || newValidationMode || newAjv) {
             this.jsonformsService.updateCoreState(
@@ -113,6 +117,10 @@ export class JsonForms implements OnChanges, OnInit {
 
         if (newReadonly && !newReadonly.isFirstChange()) {
             this.jsonformsService.setReadonly(newReadonly.currentValue);
+        }
+
+        if (newConfig && !newConfig.isFirstChange()) {
+            this.jsonformsService.updateConfig(Actions.setConfig(newConfig.currentValue));
         }
     }
 }
