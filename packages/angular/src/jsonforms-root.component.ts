@@ -70,7 +70,7 @@ export class JsonForms implements OnChanges, OnInit {
         });
         this.jsonformsService.$state.subscribe(state => {
             const data = state?.jsonforms?.core?.data;
-            if (data) {
+            if (data !== this.data) {
                 this.dataChange.emit(data);
             }
         });
