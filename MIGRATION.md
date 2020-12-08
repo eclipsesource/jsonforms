@@ -144,7 +144,7 @@ If you want to keep using the Redux variant of JSON Forms for now (which is not 
 The new imports are available at `@jsonforms/react/lib/redux`, i.e.
 
 ```ts
-import { jsonformsReducers, JsonFormsReduxProvider } from '@jsonforms/react/lib/redux';
+import { jsonformsReducer, JsonFormsReduxProvider } from '@jsonforms/react/lib/redux';
 ```
 
 # Migrating from JSON Forms 1.x (AngularJS 1.x)
