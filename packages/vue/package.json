@@ -1,0 +1,68 @@
+{
+  "name": "@jsonforms/vue",
+  "version": "2.5.0-alpha.1",
+  "description": "Vue 3 module of JSON Forms",
+  "repository": "https://github.com/eclipsesource/jsonforms",
+  "bugs": "https://github.com/eclipsesource/jsonforms/issues",
+  "homepage": "http://jsonforms.io/",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "vue",
+    "vue3",
+    "vue 3",
+    "form",
+    "forms",
+    "json",
+    "jsonforms",
+    "frontend",
+    "generator",
+    "input",
+    "renderengine",
+    "jsonschema",
+    "schema",
+    "uischema",
+    "layout",
+    "customization"
+  ],
+  "main": "lib/jsonforms-vue.js",
+  "types": "lib/src/index.d.ts",
+  "files": [
+    "lib/*",
+    "src/*"
+  ],
+  "scripts": {
+    "serve": "vue-cli-service serve dev/serve.ts",
+    "build": "cross-env NODE_ENV=production rollup --config rollup.config.js",
+    "clean": "rm -rf lib",
+    "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Vue' --mode file --out docs src/jsonFormsCompositions.ts"
+  },
+  "dependencies": {
+    "lodash": "^4.17.15"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.5",
+    "@babel/preset-typescript": "^7.9.0",
+    "@jsonforms/core": "^2.5.0-alpha.1",
+    "@rollup/plugin-alias": "^2.2.0",
+    "@vue/cli-plugin-babel": "^4.3.1",
+    "@vue/cli-plugin-typescript": "^4.3.1",
+    "@vue/cli-service": "^4.3.1",
+    "@vue/compiler-sfc": "^3.0.3",
+    "cross-env": "^7.0.2",
+    "rollup": "^2.7.3",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-typescript2": "^0.29.0",
+    "rollup-plugin-vue": "^6.0.0",
+    "typescript": "3.8.3",
+    "vue": "^3.0.3",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "peerDependencies": {
+    "@jsonforms/core": "^2.5.0-alpha.0",
+    "vue": "^3.0.3"
+  }
+}
