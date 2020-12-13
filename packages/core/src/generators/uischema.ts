@@ -26,6 +26,7 @@ import isEmpty from 'lodash/isEmpty';
 import startCase from 'lodash/startCase';
 import keys from 'lodash/keys';
 import { JsonSchema } from '../models/jsonSchema';
+
 import {
   ControlElement,
   isGroup,
@@ -201,6 +202,124 @@ const generateUISchema = (
   }
 };
 
+const generateDeepUISchema = (
+  jsonSchema: JsonSchema,
+  schemaElements: UISchemaElement[],
+  currentRef: string,
+  schemaName: string,
+  layoutType: string,
+  rootSchema?: JsonSchema
+): UISchemaElement => {
+  if (!isEmpty(jsonSchema) && jsonSchema.$ref !== undefined) {
+    return generateDeepUISchema(
+      resolveSchema(rootSchema, jsonSchema.$ref),
+      schemaElements,
+      currentRef,
+      schemaName,
+      layoutType,
+      rootSchema
+    );
+  }
+
+  if (isCombinator(jsonSchema)) {
+    const controlObject: ControlElement = createControlElement(currentRef);
+    schemaElements.push(controlObject);
+    return controlObject;
+  }
+
+  const types = deriveTypes(jsonSchema);
+  if (types.length === 0) {
+    return null;
+  }
+
+  if (types.length > 1) {
+    const controlObject: ControlElement = createControlElement(currentRef);
+    schemaElements.push(controlObject);
+    return controlObject;
+  }
+
+  if (types[0] === 'object') {
+
+    const layout: Layout = createLayout(layoutType);
+    schemaElements.push(layout);
+
+    if (jsonSchema.properties && keys(jsonSchema.properties).length > 1) {
+      addLabel(layout, schemaName);
+    }
+
+    if (!isEmpty(jsonSchema.properties)) {
+      // traverse properties
+      const nextRef: string = currentRef + '/properties';
+      Object.keys(jsonSchema.properties).map(propName => {
+        let value = jsonSchema.properties[propName];
+        const ref = `${nextRef}/${propName}`;
+        if (value.$ref !== undefined) {
+          value = resolveSchema(rootSchema, value.$ref);
+        }
+        generateDeepUISchema(
+          value,
+          layout.elements,
+          ref,
+          propName,
+          layoutType,
+          rootSchema
+        );
+      });
+    }
+
+    return layout;
+  }
+  if (types[0] === 'array') {
+    const layout: Layout = createLayout('Control');
+    delete layout.elements;
+    // @ts-ignore
+    layout.scope = currentRef;
+
+    schemaElements.push(layout);
+
+    const ref = '#';
+    const propName = '';
+
+    if (!Array.isArray(jsonSchema.items)) {
+      const value = jsonSchema.items;
+      const inArrayUiSchema =  generateDeepUISchema(
+        value,
+        [],
+        ref,
+        propName,
+        layoutType,
+        rootSchema
+      );
+      if (inArrayUiSchema) {
+        layout.options = {
+          detail: inArrayUiSchema
+        };
+      }
+    }
+    return layout;
+  }
+
+  switch (types[0]) {
+    case 'object': // object items will be handled by the object control itself
+    /* falls through */
+    case 'array': // array items will be handled by the array control itself
+    /* falls through */
+    case 'string':
+    /* falls through */
+    case 'number':
+    /* falls through */
+    case 'integer':
+    /* falls through */
+    case 'boolean':
+      const controlObject: ControlElement = createControlElement(currentRef);
+      schemaElements.push(controlObject);
+
+      return controlObject;
+    default:
+      throw new Error('Unknown type: ' + JSON.stringify(jsonSchema));
+  }
+};
+
 /**
  * Generate a default UI schema.
  * @param {JsonSchema} jsonSchema the JSON schema to generated a UI schema for
@@ -215,5 +334,22 @@ export const generateDefaultUISchema = (
 ): UISchemaElement =>
   wrapInLayoutIfNecessary(
     generateUISchema(jsonSchema, [], prefix, '', layoutType, rootSchema),
+    layoutType
+  );
+
+/**
+ * Generate a deep nested default UI schema.
+ * @param {JsonSchema} jsonSchema the JSON schema to generated a UI schema for
+ * @param {string} layoutType the desired layout type for the root layout
+ *        of the generated UI schema
+ */
+export const generateDeepDefaultUISchema = (
+  jsonSchema: JsonSchema,
+  layoutType = 'VerticalLayout',
+  prefix = '#',
+  rootSchema = jsonSchema
+): UISchemaElement =>
+  wrapInLayoutIfNecessary(
+    generateDeepUISchema(jsonSchema, [], prefix, '', layoutType, rootSchema),
     layoutType
   );
