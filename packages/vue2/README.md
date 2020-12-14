@@ -74,9 +74,6 @@ import VueCompositionAPI from '@vue/composition-api'
 Vue.use(VueCompositionAPI)
 ```
 
-Note that `@jsonforms/vue2` is distributed without type information.
-Please use `@jsonforms/vue` which is based on Vue 3+ for Typescript support.
-
 ## Renderer Set
 
 The `@jsonforms/vue` package offers JSON Forms Core bindings based on the composition API.
@@ -94,7 +91,7 @@ const controlRenderer = defineComponent({
   props: {
     ...rendererProps()
   },
-  setup(props) {
+  setup(props:any) {
     return useJsonFormsControl(props);
   },
   methods: {
@@ -169,7 +166,7 @@ const layoutRenderer = defineComponent({
   props: {
     ...rendererProps()
   },
-  setup(props) {
+  setup(props:any) {
     return useJsonFormsLayout(props);
   }
 });

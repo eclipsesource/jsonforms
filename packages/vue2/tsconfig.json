@@ -4,7 +4,7 @@
     "module": "esnext",
     "skipLibCheck": true,
     "strict": true,
-    "declaration": false,
+    "declaration": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "importHelpers": true,
@@ -13,7 +13,7 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "outDir": "./lib",
-    "types": ["node", "vue"],
+    "types": ["node", "vue", "jest"],
     "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
   },
   "exclude": ["node_modules", "lib"]

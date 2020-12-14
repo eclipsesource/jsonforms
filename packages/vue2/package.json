@@ -28,14 +28,18 @@
     "customization"
   ],
   "main": "lib/jsonforms-vue.js",
-  "types": "lib/index.d.ts",
+  "types": "lib/src/index.d.ts",
   "files": [
     "lib/*",
     "src/*"
   ],
   "scripts": {
-    "serve": "rm -rf src dev/renderers dev/components && cp -r ../vue/src src && cp -r ../vue/dev/renderers dev/renderers && cp -r ../vue/dev/components dev/components && vue-cli-service serve dev/serve.ts",
-    "build": "rm -rf src && cp -r ../vue/src src && cross-env NODE_ENV=production rollup --config rollup.config.js && cp index.d.ts lib",
+    "serve:pre": "rm -rf src dev/renderers dev/components && cp -r ../vue/src src && cp -r ../vue/dev/renderers dev/renderers && cp -r ../vue/dev/components dev/components",
+    "serve:do": "vue-cli-service serve dev/serve.ts",
+    "serve": "npm run serve:pre && npm run serve:do",
+    "build:pre": "rm -rf src && cp -r ../vue/src src",
+    "build:do": "cross-env NODE_ENV=production rollup --config rollup.config.js",
+    "build": "npm run build:pre && npm run build:do",
     "clean": "rm -rf lib",
     "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Vue' --mode file --out docs src/jsonFormsCompositions.ts"
   },
@@ -47,11 +51,14 @@
     "@babel/preset-env": "^7.9.5",
     "@babel/preset-typescript": "^7.9.0",
     "@jsonforms/core": "^2.5.0-alpha.1",
+    "@types/jest": "^24.0.23",
     "@rollup/plugin-alias": "^2.2.0",
     "@vue/cli-plugin-babel": "^4.3.1",
     "@vue/cli-plugin-typescript": "^4.3.1",
+    "@vue/cli-plugin-unit-jest": "~4.5.0",
     "@vue/cli-service": "^4.3.1",
     "@vue/composition-api": "^1.0.0-beta.21",
+    "@vue/test-utils": "^1.0.3",
     "cross-env": "^7.0.2",
     "rollup": "^2.7.3",
     "rollup-plugin-babel": "^4.4.0",

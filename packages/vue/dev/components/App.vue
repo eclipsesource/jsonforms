@@ -46,7 +46,6 @@ export default defineComponent({
     <json-forms
       v-bind:data="data"
       v-bind:renderers="renderers"
-      v-bind:schema="schema"
       @change="onChange"
     />
     <button @click="setSchema">Set Schema</button>

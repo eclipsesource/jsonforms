@@ -46,11 +46,13 @@ export default defineComponent({
     },
     schema: {
       required: false,
-      type: [Object, Boolean] as PropType<JsonSchema>
+      type: [Object, Boolean] as PropType<JsonSchema>,
+      default: undefined
     },
     uischema: {
       required: false,
-      type: Object as PropType<UISchemaElement>
+      type: Object as PropType<UISchemaElement>,
+      default: undefined
     },
     renderers: {
       required: true,
@@ -58,35 +60,38 @@ export default defineComponent({
     },
     cells: {
       required: false,
-      default: () => [],
-      type: Array as PropType<JsonFormsCellRendererRegistryEntry[]>
+      type: Array as PropType<JsonFormsCellRendererRegistryEntry[]>,
+      default: () =>[]
     },
     config: {
       required: false,
-      type: Object as PropType<any>
+      type: Object as PropType<any>,
+      default: undefined
     },
     readonly: {
       required: false,
-      default: false,
-      type: Boolean
+      type: Boolean,
+      default: false
     },
     uischemas: {
       required: false,
-      default: () => [],
-      type: Array as PropType<JsonFormsUISchemaRegistryEntry[]>
+      type: Array as PropType<JsonFormsUISchemaRegistryEntry[]>,
+      default: () => []
     },
     validationMode: {
       required: false,
-      default: 'ValidateAndShow',
-      type: String as PropType<ValidationMode>
+      type: String as PropType<ValidationMode>,
+      default: 'ValidateAndShow'
     },
     ajv: {
       required: false,
-      type: Object as PropType<Ajv>
+      type: Object as PropType<Ajv>,
+      default: undefined
     },
     refParserOptions: {
       required: false,
-      type: Object as PropType<RefParser.Options>
+      type: Object as PropType<RefParser.Options>,
+      default: undefined
     }
   },
   data() {
@@ -124,6 +129,7 @@ export default defineComponent({
   },
   watch: {
     schema(newSchema) {
+      console.log("schema updated");
       const generatorData = isObject(this.data) ? this.data : {};
       this.schemaToUse = newSchema ?? Generate.jsonSchema(generatorData);
       if (!this.uischema) {
@@ -131,6 +137,7 @@ export default defineComponent({
       }
     },
     uischema(newUischema) {
+      console.log("uischema updated");
       this.uischemaToUse = newUischema ?? Generate.uiSchema(this.schemaToUse);
     },
     renderers(newRenderers) {

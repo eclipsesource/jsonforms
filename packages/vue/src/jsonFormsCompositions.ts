@@ -29,8 +29,7 @@ import {
   defaultMapStateToEnumCellProps,
   mapStateToDispatchCellProps
 } from '@jsonforms/core';
-import { PropType } from 'vue';
-import { inject, ref, watchEffect } from '../config';
+import { CompType, inject, ref, watchEffect } from '../config';
 
 /**
  * Constructs a props declaration for Vue components which can be used
@@ -44,11 +43,11 @@ import { inject, ref, watchEffect } from '../config';
 export const rendererProps = <U = UISchemaElement>() => ({
   schema: {
     required: true as true,
-    type: [Object, Boolean] as PropType<JsonSchema>
+    type: [Object, Boolean] as CompType<JsonSchema, [ObjectConstructor, BooleanConstructor]>
   },
   uischema: {
     required: true as true,
-    type: Object as PropType<U>
+    type: Object as CompType<U, ObjectConstructor>
   },
   path: {
     required: true as true,
@@ -56,15 +55,18 @@ export const rendererProps = <U = UISchemaElement>() => ({
   },
   enabled: {
     required: false as false,
-    type: Boolean
+    type: Boolean,
+    default: undefined
   },
   renderers: {
     required: false,
-    type: Array as PropType<JsonFormsRendererRegistryEntry[]>
+    type: Array as CompType<JsonFormsRendererRegistryEntry[], ArrayConstructor>,
+    default: undefined
   },
   cells: {
     required: false,
-    type: Array as PropType<JsonFormsCellRendererRegistryEntry[]>
+    type: Array as CompType<JsonFormsCellRendererRegistryEntry[], ArrayConstructor>,
+    default: undefined
   }
 });
 
@@ -87,22 +89,27 @@ export const masterListItemProps = () => ({
   },
   schema: {
     required: true as true,
-    type: [Object, Boolean] as PropType<JsonSchema>
+    type: [Object, Boolean] as CompType<JsonSchema, [ObjectConstructor, BooleanConstructor]>
   },
   handleSelect: {
     required: false as false,
-    type: Function as PropType<(index: number) => void>
+    type: Function as CompType<(index: number) => void, FunctionConstructor>,
+    default: undefined
   },
   removeItem: {
     required: false as false,
-    type: Function as PropType<(path: string, value: number) => void>
+    type: Function as CompType<(path: string, value: number) => void, FunctionConstructor>,
+    default: undefined
   }
 });
 
-interface RendererProps {
+export interface RendererProps<U = UISchemaElement> {
   schema: JsonSchema;
-  uischema: UISchemaElement;
+  uischema: U;
   path: string;
+  enabled?: boolean;
+  renderers?: JsonFormsRendererRegistryEntry[];
+  cells?: JsonFormsCellRendererRegistryEntry[];
 }
 
 export interface ControlProps extends RendererProps {
