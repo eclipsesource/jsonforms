@@ -135,6 +135,7 @@ export class NumberControlRenderer extends JsonFormsControl {
       if (this.locale === undefined || this.locale !== currentLocale) {
         this.locale = currentLocale;
         this.numberFormat = new Intl.NumberFormat(this.locale, {
+          useGrouping: this.uischema.options ? this.uischema.options.useGrouping : undefined,
           maximumFractionDigits: this.MAXIMUM_FRACTIONAL_DIGITS
         });
         this.determineDecimalSeparator();
