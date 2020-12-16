@@ -57,7 +57,7 @@ Overwrite the default styles via the `JsonFormsStyleContext`.
 ```typescript
 import { JsonFormsStyleContext } from '@jsonforms/vanilla-renderers';
 
-const styleContextValue = { styles :[
+const styleContextValue = { styles: [
   {
     name: 'control.input',
     classNames: ['custom-input']
