@@ -1,6 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { JsonFormsDispatch, JsonFormsReduxContext } from '@jsonforms/react';
+import { ThemeProvider } from '@material-ui/core/styles';
 import { createJsonFormsStore } from '../../../../common/store';
 import { Demo } from '../../../../components/common';
 
@@ -279,6 +280,37 @@ export const ExampleWithRadioGroup = () => (
         }}
         schema={radioGroup.schema}
         uischema={radioGroup.uischema}
+      />
+    </JsonFormsReduxContext>
+  </Provider>
+);
+
+const storeWithCustomClearBackground = createJsonFormsStore({
+  data: input.data,
+  schema: input.schema,
+  uischema: input.uischema
+});
+
+export const ExampleWithCustomClearBackground = () => (
+  <Provider store={storeWithCustomClearBackground}>
+    <JsonFormsReduxContext>
+      <Demo
+        js={() => {
+          return (
+            <ThemeProvider
+              theme={{
+                jsonforms: { input: { delete: { background: '#f44336' }}}
+              }}
+            >
+              <JsonFormsDispatch
+                schema={input.schema}
+                uischema={input.uischema}
+              />
+            </ThemeProvider>
+          );
+        }}
+        schema={input.schema}
+        uischema={input.uischema}
       />
     </JsonFormsReduxContext>
   </Provider>

@@ -5,7 +5,7 @@ parent: UI Schema Elements
 ---
 
 import ApiLink from '../../components/common/ApiLink.js'
-import { Example, ExampleWithCustomLabel, ExampleWithSortButtons, ExampleWithArrayLabel, ExampleWithRadioGroup } from './components/controls'
+import { Example, ExampleWithCustomLabel, ExampleWithSortButtons, ExampleWithArrayLabel, ExampleWithRadioGroup, ExampleWithCustomClearBackground } from './components/controls'
 
 # Controls
 
@@ -158,3 +158,23 @@ options: {
 Use the `format: 'radio'` option to display an enum as a radio group.
 
 <ExampleWithRadioGroup />
+
+
+## Theming
+### Customize 'clear input button' background
+
+```
+<ThemeProvider
+  theme={{
+    jsonforms: { input: { delete: { background: '#f44336' }}}
+  }}
+>
+  <JsonForms
+    ...
+  />
+</ThemeProvider>
+```
+
+The background of the the 'clear input button' (the one you can see when you hover of the input field) is by default your theme's `palette.background.default` color. If you want to customize the background of this button you can use the custom theme variable `jsonforms.input.delete.background`.
+
+<ExampleWithCustomClearBackground />
