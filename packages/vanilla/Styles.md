@@ -52,16 +52,11 @@
 - input.description &rightarrow; id for the description of control
 
 ## Example of styling id contributions
-You can either contribute all styles yourself or adapt an existing style definition.
-
-### Provide custom styles
-If you want to customize the default styles, you can provide them directly via the `JsonFormsStyleContext`.
+Overwrite the default styles via the `JsonFormsStyleContext`.
 
 ```typescript
 import { JsonFormsStyleContext } from '@jsonforms/vanilla-renderers';
 
-// Setup adapted styles by creating a register styles action and applying it
-// to the vanilla styles by invoking the stylingReducer with the action.
 const styleContextValue = { styles :[
   {
     name: 'control.input',
