@@ -3,7 +3,6 @@ import PropTypes from "prop-types"
 import React from "react"
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Logo from './Logo';
@@ -53,6 +52,9 @@ const Header = ({ classes }) => (
       </Link>
       <Link to="/faq" className={globalStyles.nav__link}>
         FAQ
+      </Link>
+      <Link to="/news" className={globalStyles.nav__link}>
+        News
       </Link>
       <Link
         to="/support"

@@ -11,6 +11,7 @@ import { createMuiTheme } from '@material-ui/core';
 import DocPage from './DocPage';
 import ExamplesPage from './ExamplesPage';
 import FAQPage from './FAQPage';
+import NewsPage from './NewsPage';
 import { Location } from '@reach/router';
 
 const defaultTheme = createMuiTheme();
@@ -111,6 +112,14 @@ const LocationAwareLayout = ({ children }) => {
               <FAQPage pathname={location.pathname}>
                 {children}
               </FAQPage>
+            </Layout>
+          );
+        } else if (location.pathname.startsWith('/news')) {
+          return (
+            <Layout>
+              <NewsPage pathname={location.pathname}>
+                {children}
+              </NewsPage>
             </Layout>
           );
         } else {

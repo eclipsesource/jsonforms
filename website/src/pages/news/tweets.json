@@ -1,0 +1,28 @@
+{
+  "1334472645946077186": {
+    "text": "We released the first alpha version of JSON Forms 2.5.0 Bottle with popping cork. It not only includes various performance improvements for React but is also the first version completely free of Redux.<br/>We also enhanced our Angular bindings with the ability to render multiple forms at the same time as well as adding explicit 'readonly' and 'validationMode' support which already existed in the React renderers.<br/>Check our migration guide if you still use the Redux variant of JSON Forms. We also included a convenient fallback if you're not ready for the full migration yet. Angular users should also take a look Right-pointing magnifying glass.",
+    "date": "1607001600"
+  },
+  "1311386748635709441": {
+    "text": "JSON Forms \"2.4.1\" is out nowParty popper! Among others the release includes autocomplete renderers and improved validation control. Check out the changelog here:",
+    "link": "https://github.com/eclipsesource/jsonforms/releases/tag/v2.4.1",
+    "date": "1601501100"
+  },
+  "1296896997736275968": {
+    "text": "Today we shipped the first beta of our next release: JSON Forms \"2.4.1-beta.0\" including a new renderer for oneOf consts (i.e. titled enums) and a form-wide \"readonly\" flag Articulated lorryParty popper. We plan the stable release for end of September. See you then!",
+    "date": "1598046480"
+  },
+  "1275342208070189056": {
+    "text": "Last week we released JSON Forms v2.4.0 Partying faceMost importantly: The Angular renderers are now Redux free while the React standalone component supports most features of the Redux variant. See the change log for more information including many other changes:",
+    "link": "https://github.com/eclipsesource/jsonforms/releases/tag/v2.4.0",
+    "date": "1592907420"
+  },
+  "1264956645400031234": {
+    "text": "Another prerelease, another community contribution. Today we released JSON Forms v2.4.0-beta.0 supporting navigation buttons in the stepper variant of the categorization renderer. We also included Angular performance improvements among other changes. Release coming soon Grinning face",
+    "date": "1590431340"
+  },
+  "1253678375715168259": {
+    "text": "We received a community contribution to improve the new Redux-less Angular renderers. Thanks a lot! It and other changes are included in the newly released JSON Forms v2.4.0-alpha.3. We plan to ship a regular release in the upcoming weeks Delivery truckWrapped present.",
+    "date": "1587742380"
+  }
+}
