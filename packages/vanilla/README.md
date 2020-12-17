@@ -10,6 +10,8 @@ You can combine [JSONForms React](https://www.npmjs.com/package/@jsonforms/react
 
 Check https://www.npmjs.com/search?q=%40jsonforms for all published JSONForms packages.
 
+If you want to customize styling, have a look at our [styles guide](Styles.md).
+
 # License
 The JSONForms project is licensed under the MIT License. See the [LICENSE file](https://github.com/eclipsesource/jsonforms/blob/master/LICENSE) for more information.
 

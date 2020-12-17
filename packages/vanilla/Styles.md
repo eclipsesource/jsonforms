@@ -52,50 +52,12 @@
 - input.description &rightarrow; id for the description of control
 
 ## Example of styling id contributions
-You can either contribute all styles yourself or adapt an existing style definition.
-
-### Define all styles from scratch
-If you want to define all styles yourself, you can hand them into JsonForms's store.
+Overwrite the default styles via the `JsonFormsStyleContext`.
 
 ```typescript
-import { vanillaStyles } from '../src/util';
-import { stylingReducer } from '../src/reducers';
-const store: Store<JsonFormsState> = createStore(
-    combineReducers({ jsonforms: jsonformsReducer({ styles: stylingReducer }) }),
-    {
-      jsonforms: {
-        styles: vanillaStyles,
-        ...other
-      }
-    }
-  );
-```
-The styles themselves look like this:
-```typescript
-export const vanillaStyles = [
-  {
-    name: 'horizontal.layout',
-    classNames: ['horizontal-layout']
-  },
-  {
-    name: 'horizontal.layout.item',
-    classNames: numberOfChildren => ['horizontal-layout' + numberOfChildren[0]]
-  }
-];
-```
-So you can either provide a simple `name` to `classNames` mapping using strings where `classNames` must be an array of strings.
-Or you can provide a function for `classNames` which returns an array of strings. The second method allows you to provide classes as needed for some layouts like bootstrap.
+import { JsonFormsStyleContext } from '@jsonforms/vanilla-renderers';
 
-### Adapt an existing style definition
-You can also adapt an existing style definition by adding new styles or removing existing ones.
-For this, you can use the JsonForms _styling reducer_ and its corresponding actions.
-
-```typescript
-import { registerStyles, stylingReducer, vanillaStyles } from '@jsonforms/vanilla-renderers';
-
-// Setup adapted styles by creating a register styles action and applying it
-// to the vanilla styles by invoking the stylingReducer with the action.
-const registerStylesAction = registerStyles([
+const styleContextValue = { styles: [
   {
     name: 'control.input',
     classNames: ['custom-input']
@@ -104,16 +66,14 @@ const registerStylesAction = registerStyles([
     name: 'array.button',
     classNames: ['custom-array-button']
   }
-]);
-const adaptedStyles = stylingReducer(vanillaStyles, registerStylesAction);
+]};
 
-const store: Store<JsonFormsState> = createStore(
-    combineReducers({ jsonforms: jsonformsReducer({ styles: stylingReducer }) }),
-    {
-      jsonforms: {
-        styles: adaptedStyles,
-        ...other
-      }
-    }
-  );
+<JsonFormsStyleContext.Provider value={styleContextValue}>
+  <JsonForms
+    data={data}
+    schema={schema}
+    uischema={uischema}
+    ...
+  />
+</JsonFormsStyleContext.Provider>
 ```
