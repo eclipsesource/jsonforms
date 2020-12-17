@@ -15,6 +15,9 @@ import reactLogo from '../images/react-logo.svg';
 import reduxLogo from '../images/reduxLogo.svg';
 import schema from './schema.json';
 import uischema from './uischema.json';
+import tweets from '../pages/news/tweets.json';
+import schemaLogo from './schemalogo.svg';
+import { NewsSection } from './NewsSection';
 
 import { Demo, Logo } from '../components/common'
 import { createJsonFormsStore } from "../common/store"
@@ -30,23 +33,13 @@ const additionalStyles = () => ({
     paddingBottom: '0.5em',
     fontSize: '2em',
   },
-  icon: {
-    width: 'auto',
-    height: '6em',
-    padding: 9,
-  },
-  schemaLogo: {
-    padding: '18px',
-    height: '108px',
-    width: '108px',
-  },
   gettingStartedButton: {
     margin: '1em'
   }
 });
 
 const store = createJsonFormsStore({
-  data: { firstName: 'Max Power' },
+  data: { firstName: 'Max', lastName: 'Power' },
   schema,
   uischema
 });
@@ -98,14 +91,14 @@ const Home = ({ classes }) => {
 
       <div className={styles.landing_page__features}>
         <div className={styles.feature}>
-          <div alt='JSON Schema Logo' className={[classes.schemaLogo, styles.schema_logo_black, styles.schema_logo_white].join(' ')} />
+          <img src={schemaLogo} className={styles.schemaLogo} />
           <p className={styles.landing_page__detail}>
             Declare your forms as JSON based on a JSON Schema
           </p>
         </div>
 
         <div className={styles.feature}>
-          <FeaturesIcon className={[classes.icon, styles.icon].join(' ')} />
+          <FeaturesIcon className={styles.icon} />
           <p className={styles.landing_page__detail}>
             Fully-featured forms including data-binding, input validation, and rule-based visibility
             out-of-the-box
@@ -113,7 +106,7 @@ const Home = ({ classes }) => {
         </div>
 
         <div className={styles.feature}>
-          <CustomizeIcon className={[classes.icon, styles.icon].join(' ')} />
+          <CustomizeIcon className={styles.icon} />
           <p className={styles.landing_page__detail}>
             Designed for customizability from custom styling to custom widgets
           </p>
@@ -143,6 +136,22 @@ const Home = ({ classes }) => {
             />
           </JsonFormsReduxContext>
         </Provider>
+      </div>
+
+      <hr/>
+
+      <div className={styles.landing_page__news}>
+        <div class={styles.news_section}>
+          <NewsSection tweets={tweets} amount="1" />
+        </div>
+        <Link
+          to='/news'
+          className={globalStyles.link}
+        >
+          <Button variant="contained">
+            more news
+          </Button>
+        </Link>
       </div>
     </React.Fragment >
   );
