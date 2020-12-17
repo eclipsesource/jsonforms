@@ -40,17 +40,10 @@ const styles = () => ({
     textAlign: 'center',
     fontSize: '1.4rem'
   },
-  price_block: {
-    margin: '2rem 0 0 2rem',
+  details_block: {
+    margin: '2rem 2rem 0 0',
+    textAlign: 'center',
     fontSize: '1.4rem'
-  },
-  price_list_item: {
-    color: 'white',
-    fontSize: '1.2rem',
-    '&:before': {
-      content: '"\\2192"',
-      paddingRight: '0.5em'
-    }
   },
   link: {
     color: 'white',
@@ -82,12 +75,8 @@ const Support = ({ classes }) => (
           <li className={classes.list_item}>Private channel available (NDA)</li>
           <li className={classes.list_item}>Feature prioritization</li>
         </ul>
-        <div className={classes.price_block}>
-          Starts from 1.695 €: <a className={classes.link} href={'mailto:support@jsonforms.io'}>Contact us</a> for details
-          <ul className={classes.list} style={{listStylePosition: 'inside', listStyle:'none'}}>
-            <li className={classes.price_list_item}>10h professional support</li>
-            <li className={classes.price_list_item}>additionally 5h project sponsorship</li>
-          </ul>
+        <div className={classes.details_block}>
+          For details please see <a className={classes.link} href={'https://eclipsesource.com/services/developer-support/'}>here</a>.
         </div>
       </div>
     </div>
