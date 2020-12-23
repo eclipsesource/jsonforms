@@ -24,7 +24,7 @@
 */
 import some from 'lodash/some';
 import get from 'lodash/get';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import {
   JsonFormsAngularService,
   JsonFormsArrayControl
@@ -39,7 +39,6 @@ import {
   mapStateToArrayControlProps,
   RankedTester,
   rankWith,
-  setReadonly,
   StatePropsOfArrayControl,
   uiTypeIs
 } from '@jsonforms/core';
@@ -146,7 +145,7 @@ export class MasterListComponent extends JsonFormsArrayControl {
   propsPath: string;
   highlightedIdx: number;
 
-  constructor(jsonformsService: JsonFormsAngularService) {
+  constructor(jsonformsService: JsonFormsAngularService, private changeDetectorRef: ChangeDetectorRef) {
     super(jsonformsService);
   }
 
@@ -179,9 +178,6 @@ export class MasterListComponent extends JsonFormsArrayControl {
         props.path,
         'VerticalLayout'
       );
-    if (!this.isEnabled()) {
-      setReadonly(detailUISchema);
-    }
 
     const masterItems = (data || []).map((d: any, index: number) => {
       const labelRefInstancePath = removeSchemaKeywords(
@@ -229,6 +225,7 @@ export class MasterListComponent extends JsonFormsArrayControl {
       this.selectedItem = this.masterItems[0];
       this.selectedItemIdx = 0;
     }
+    this.changeDetectorRef.markForCheck();
   }
 
   onSelect(item: any, idx: number): void {
