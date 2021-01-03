@@ -1,6 +1,8 @@
 import * as React from "react";
 import { Link } from 'docz';
 import Button from "@material-ui/core/Button";
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
 import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
 
@@ -13,6 +15,7 @@ import { Provider } from 'react-redux';
 import angularLogo from "../images/angular.svg"
 import reactLogo from '../images/react-logo.svg';
 import reduxLogo from '../images/reduxLogo.svg';
+import architectureSmall from '../images/architecture_small.svg';
 import schema from './schema.json';
 import uischema from './uischema.json';
 import tweets from '../pages/news/tweets.json';
@@ -122,7 +125,7 @@ const Home = ({ classes }) => {
           <img src={angularLogo} alt="Angular logo" style={{ height: '80px' }} />
         </div>
         <Typography variant='h4' style={{ color: '#212121', textAlign: 'center' }}>
-          JSON Forms is a JSON Schema based approach for creating forms based on Redux and comes with support for React and Angular.
+          JSON Forms is a JSON Schema based approach for creating forms based on Redux and comes with support for React, Angular and Vue.
         </Typography>
       </div>
 
@@ -152,6 +155,28 @@ const Home = ({ classes }) => {
             more news
           </Button>
         </Link>
+      </div>
+
+      <div className={styles.landing_page__architecture}>
+        <Grid container spacing={3} alignItems="center">
+          <Grid item xs={12}>
+            <Typography variant='h3' align='center' className={styles.shift_left}>JSON Forms Architecture</Typography>
+          </Grid>
+        </Grid>
+        <Grid container spacing={5} alignItems="center" justify="center" mt={4} className={styles.landing_page__architecture_inner}>
+          <Grid item xs={12} lg={6}>
+          <Link to='/docs/architecture'>
+            <img src={architectureSmall} alt="JSON Forms Architecture" className={styles.architecture_small} />
+          </Link>
+          </Grid>
+          <Grid item xs={12} lg={6}>
+            <Card>
+              <CardContent>
+                JSON Forms has a modular architecture and can be customized on every level. The core functionality is pure Javascript and therefore independent from any UI framework. We offer bindings for  React, Angular and Vue. For more information see <Link to='/docs/architecture'>here</Link>.
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
       </div>
     </React.Fragment >
   );
