@@ -33,7 +33,7 @@ import {
   rankWith,
   StatePropsOfControl
 } from '@jsonforms/core';
-import { merge } from 'lodash';
+import merge from 'lodash/merge';
 
 @Component({
   selector: 'NumberControlRenderer',
