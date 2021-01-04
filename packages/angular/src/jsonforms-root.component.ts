@@ -27,7 +27,7 @@ import {
     EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges
 } from '@angular/core';
 import { Actions, JsonFormsRendererRegistryEntry, JsonSchema, UISchemaElement, UISchemaTester, ValidationMode } from '@jsonforms/core';
-import { Ajv } from 'ajv';
+import { Ajv, ErrorObject } from 'ajv';
 import { JsonFormsAngularService, USE_STATE_VALUE } from './jsonforms.service';
 @Component({
     selector: 'jsonforms',
@@ -47,6 +47,10 @@ export class JsonForms implements OnChanges, OnInit {
     @Input() validationMode: ValidationMode;
     @Input() ajv: Ajv;
     @Input() config: any;
+    @Output() errors = new EventEmitter<ErrorObject[]>();
+
+    private previousData:any;
+    private previousErrors:ErrorObject[];
 
     private initialized = false;
 
@@ -70,8 +74,14 @@ export class JsonForms implements OnChanges, OnInit {
         });
         this.jsonformsService.$state.subscribe(state => {
             const data = state?.jsonforms?.core?.data;
-            if (data !== this.data) {
+            const errors = state?.jsonforms?.core?.errors;
+            if(this.previousData !== data) {
+                this.previousData = data;
                 this.dataChange.emit(data);
+            }
+            if(this.previousErrors !== errors) {
+                this.previousErrors = errors;
+                this.errors.emit(errors);
             }
         });
         this.initialized = true;

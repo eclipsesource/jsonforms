@@ -126,8 +126,10 @@ export class JsonFormsAngularService {
 
     updateCore<T extends CoreActions>(coreAction: T): T {
         const coreState = coreReducer(this._state.core, coreAction);
-        this._state.core = coreState;
-        this.updateSubject();
+        if(coreState !== this._state.core) {
+            this._state.core = coreState;
+            this.updateSubject();
+        }
         return coreAction;
     }
 
@@ -156,22 +158,28 @@ export class JsonFormsAngularService {
     setUiSchema(uischema: UISchemaElement | undefined): void {
         const newUiSchema = uischema ?? generateDefaultUISchema(this._state.core.schema);
         const coreState = coreReducer(this._state.core, Actions.updateCore(this._state.core.data, this._state.core.schema, newUiSchema));
-        this._state.core = coreState;
-        this.updateSubject();
+        if(coreState !== this._state.core) {
+            this._state.core = coreState;
+            this.updateSubject();
+        }
     }
 
     setSchema(schema: JsonSchema | undefined): void {
         const coreState = coreReducer(this._state.core,
             Actions.updateCore(this._state.core.data, schema ?? generateJsonSchema(this._state.core.data), this._state.core.uischema)
         );
-        this._state.core = coreState;
-        this.updateSubject();
+        if(coreState !== this._state.core) {
+            this._state.core = coreState;
+            this.updateSubject();
+        }
     }
 
     setData(data: any): void {
         const coreState = coreReducer(this._state.core, Actions.updateCore(data, this._state.core.schema, this._state.core.uischema));
-        this._state.core = coreState;
-        this.updateSubject();
+        if(coreState !== this._state.core) {
+            this._state.core = coreState;
+            this.updateSubject();
+        }
     }
 
     setLocale(locale: string): void {
