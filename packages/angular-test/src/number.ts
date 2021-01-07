@@ -43,7 +43,7 @@ interface ComponentResult<C extends JsonFormsControl> {
   numberNativeElement?: any;
 }
 
-const prepareComponent = <C extends JsonFormsControl>(
+export const prepareComponent = <C extends JsonFormsControl>(
   testConfig: TestConfig<C>,
   instance?: string,
   elementToUse?: (element: DebugElement) => any

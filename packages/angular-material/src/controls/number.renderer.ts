@@ -30,8 +30,10 @@ import {
   isNumberControl,
   or,
   RankedTester,
-  rankWith
+  rankWith,
+  StatePropsOfControl
 } from '@jsonforms/core';
+import merge from 'lodash/merge';
 
 @Component({
   selector: 'NumberControlRenderer',
@@ -123,7 +125,7 @@ export class NumberControlRenderer extends JsonFormsControl {
     return '';
   };
 
-  mapAdditionalProps() {
+  mapAdditionalProps(props:StatePropsOfControl) {
     if (this.scopedSchema) {
       const defaultStep = isNumberControl(this.uischema, this.rootSchema)
         ? 0.1
@@ -131,10 +133,12 @@ export class NumberControlRenderer extends JsonFormsControl {
       this.min = this.scopedSchema.minimum;
       this.max = this.scopedSchema.maximum;
       this.multipleOf = this.scopedSchema.multipleOf || defaultStep;
+      const appliedUiSchemaOptions = merge({}, props.config, this.uischema.options);
       const currentLocale = getLocale(this.jsonFormsService.getState());
       if (this.locale === undefined || this.locale !== currentLocale) {
         this.locale = currentLocale;
         this.numberFormat = new Intl.NumberFormat(this.locale, {
+          useGrouping: appliedUiSchemaOptions.useGrouping,
           maximumFractionDigits: this.MAXIMUM_FRACTIONAL_DIGITS
         });
         this.determineDecimalSeparator();

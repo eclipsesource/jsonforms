@@ -23,20 +23,25 @@
   THE SOFTWARE.
 */
 import { DebugElement } from '@angular/core';
+import { ComponentFixture } from '@angular/core/testing';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatError, MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 import {
+  baseSetup,
   ErrorTestExpectation,
+  getJsonFormsService,
   numberAdditionalPropsTest,
   numberBaseTest,
   numberErrorTest,
-  numberInputEventTest
+  numberInputEventTest,
+  prepareComponent
 } from '@jsonforms/angular-test';
-import { FlexLayoutModule } from '@angular/flex-layout';
+import { Actions, ControlElement, JsonFormsCore } from '@jsonforms/core';
 import { NumberControlRenderer, NumberControlRendererTester } from '../src';
-import { JsonFormsAngularService } from '@jsonforms/angular';
 
 describe('Material number field tester', () => {
   const uischema = {
@@ -99,4 +104,111 @@ describe('Number control Error Tests', numberErrorTest(testConfig, errorTest));
 describe(
   'Number control Additional Props Tests',
   numberAdditionalPropsTest(testConfig, 'input', toSelect)
+);
+
+describe(
+  'Number control custom', () => {
+    let fixture: ComponentFixture<any>;
+    let numberNativeElement: any;
+    let component: JsonFormsControl;
+    baseSetup(testConfig);
+
+    const defaultSchema =  {
+      type: 'object',
+      properties: {
+        foo: { type: 'number' }
+      }
+    };
+    const defaultData = {foo:1000000};
+    const defaultUischema: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/foo'
+    };
+
+    beforeEach(() => {
+      const preparedComponents = prepareComponent(
+        testConfig, 'input', toSelect);
+      fixture = preparedComponents.fixture;
+      numberNativeElement = preparedComponents.numberNativeElement;
+      component = preparedComponents.component;
+    });
+
+    it('default grouping behavior', () => {
+      const uischema = Object.assign({},defaultUischema);
+      component.uischema = uischema;
+      const state:JsonFormsCore = {
+        data: defaultData,
+        schema: defaultSchema,
+        uischema: uischema
+      };
+      getJsonFormsService(component).init({
+        core: state, i18n: {
+          locale: 'en',
+          localizedSchemas: undefined,
+          localizedUISchemas: undefined
+        }
+      });
+      getJsonFormsService(component).updateCore(
+        Actions.init(state.data, state.schema)
+      );
+      component.ngOnInit();
+      fixture.detectChanges();
+
+      expect(numberNativeElement.value).toBe('1,000,000');
+    });
+
+    it('should use config for grouping', () => {
+      const uischema = Object.assign({},defaultUischema);
+      component.uischema = uischema;
+      const state:JsonFormsCore = {
+        data: defaultData,
+        schema: defaultSchema,
+        uischema: uischema
+      };
+      getJsonFormsService(component).init({
+        core: state, i18n: {
+          locale: 'en',
+          localizedSchemas: undefined,
+          localizedUISchemas: undefined
+        },config: {
+          useGrouping: false
+        },
+      });
+      getJsonFormsService(component).updateCore(
+        Actions.init(state.data, state.schema)
+      );
+      component.ngOnInit();
+      fixture.detectChanges();
+
+      expect(numberNativeElement.value).toBe('1000000');
+    });
+    it('should use uischema for grouping', () => {
+      const uischema = Object.assign({},defaultUischema);
+      uischema.options = {
+        useGrouping: false
+      }
+      component.uischema = uischema;
+      const state:JsonFormsCore = {
+        data: defaultData,
+        schema: defaultSchema,
+        uischema: uischema
+      };
+      getJsonFormsService(component).init({
+        core: state, i18n: {
+          locale: 'en',
+          localizedSchemas: undefined,
+          localizedUISchemas: undefined
+        },config: {
+          useGrouping: true
+        },
+      });
+      getJsonFormsService(component).updateCore(
+        Actions.init(state.data, state.schema)
+      );
+      component.ngOnInit();
+      fixture.detectChanges();
+
+      expect(numberNativeElement.value).toBe('1000000');
+    });
+  }
 );
