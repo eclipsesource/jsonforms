@@ -79,3 +79,32 @@ const styleContextValue = { styles: [
   />
 </JsonFormsStyleContext.Provider>
 ```
+
+You can also extend the existing default styles.
+Thereby, the existing style classes as well as your custom ones will be applied.
+This is the case because all style definitions for an ID are merged.
+
+```typescript
+import { JsonFormsStyleContext, vanillaStyles } from '@jsonforms/vanilla-renderers';
+
+const styleContextValue = { styles: [
+  ...vanillaStyles,
+  {
+    name: 'control.input',
+    classNames: ['custom-input']
+  },
+  {
+    name: 'array.button',
+    classNames: ['custom-array-button']
+  }
+]};
+
+<JsonFormsStyleContext.Provider value={styleContextValue}>
+  <JsonForms
+    data={data}
+    schema={schema}
+    uischema={uischema}
+    ...
+  />
+</JsonFormsStyleContext.Provider>
+```

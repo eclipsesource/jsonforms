@@ -22,10 +22,10 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import isEmpty from 'lodash/isEmpty';
 import remove from 'lodash/remove';
-import find from 'lodash/find';
 import join from 'lodash/join';
+import filter from 'lodash/filter';
+import reduce from 'lodash/reduce';
 import { REGISTER_STYLE, REGISTER_STYLES, UNREGISTER_STYLE } from '../actions';
 import { StyleDef } from '../styles';
 
@@ -47,15 +47,13 @@ export const findStyle = (styles: StyleDef[]) => (
   style: string,
   ...args: any[]
 ): string[] => {
-  const foundStyle = find(styles, s => s.name === style);
-  if (!isEmpty(foundStyle) && typeof foundStyle.classNames === 'function') {
-    const res = foundStyle.classNames(args);
-    return res;
-  } else if (!isEmpty(foundStyle)) {
-    return foundStyle.classNames as string[];
-  }
-
-  return [];
+  const foundStyles = filter(styles, s => s.name === style);
+  return reduce(foundStyles, (res: string[], style: StyleDef) => {
+    if (typeof style.classNames === 'function') {
+      return res.concat(style.classNames(args));
+    }
+    return res.concat(style.classNames);
+  }, []);
 };
 
 export const findStyleAsClassName = (styles: StyleDef[]) => (
