@@ -33,13 +33,6 @@ import { initJsonFormsVanillaStore } from '../vanillaStore';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-const styles = [
-  {
-    name: 'vertical.layout',
-    classNames: ['vertical-layout']
-  }
-];
-
 test('tester', () => {
   expect(verticalLayoutTester(undefined, undefined)).toBe(-1);
   expect(verticalLayoutTester(null, undefined)).toBe(-1);
@@ -81,8 +74,7 @@ describe('Vertical layout', () => {
     const store = initJsonFormsVanillaStore({
       data: {},
       schema: {},
-      uischema,
-      styles
+      uischema
     });
     wrapper = mount(
       <Provider store={store}>
@@ -103,8 +95,7 @@ describe('Vertical layout', () => {
     const store = initJsonFormsVanillaStore({
       data: {},
       schema: {},
-      uischema,
-      styles
+      uischema
     });
     wrapper = mount(
       <Provider store={store}>
@@ -127,8 +118,7 @@ describe('Vertical layout', () => {
     const store = initJsonFormsVanillaStore({
       data: {},
       schema: {},
-      uischema,
-      styles
+      uischema
     });
 
     wrapper = mount(
@@ -153,8 +143,7 @@ describe('Vertical layout', () => {
     const store = initJsonFormsVanillaStore({
       data: {},
       schema: {},
-      uischema,
-      styles,
+      uischema
     });
 
     wrapper = mount(

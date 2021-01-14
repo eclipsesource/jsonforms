@@ -54,6 +54,7 @@
 ## Example of styling id contributions
 By default, the `vanillaStyles` defined in [src/styles/styles.ts](./src/styles/styles.ts) are applied.
 These can be overwritten via the `JsonFormsStyleContext`.
+The following example will completely replace the default styles.
 
 ```typescript
 import { JsonFormsStyleContext } from '@jsonforms/vanilla-renderers';

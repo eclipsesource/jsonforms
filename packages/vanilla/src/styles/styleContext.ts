@@ -24,7 +24,6 @@
 */
 
 import React, { useContext } from 'react';
-import { useJsonForms } from '@jsonforms/react';
 import { StyleDef, vanillaStyles } from './styles';
 
 export interface StyleContext {
@@ -42,11 +41,7 @@ export const JsonFormsStyleContext = React.createContext(
 export const useStyleContext = (): StyleContext =>
   useContext(JsonFormsStyleContext);
 
-export const useStyles = (): StyleDef[] | undefined => {
+export const useStyles = (): StyleDef[] => {
   const { styles } = useStyleContext();
-  const ctx = useJsonForms();
-  if (styles.length === 0 && ctx.styles) {
-    return ctx.styles;
-  }
   return styles;
 };

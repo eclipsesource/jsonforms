@@ -51,17 +51,7 @@ const fixture = {
     type: 'string',
     format: 'time'
   },
-  uischema: controlElement,
-  styles: [
-    {
-      name: 'control',
-      classNames: ['control']
-    },
-    {
-      name: 'control.validation',
-      classNames: ['validation']
-    }
-  ]
+  uischema: controlElement
 };
 
 describe('Time cell tester', () => {
@@ -244,8 +234,7 @@ describe('Time cell', () => {
     const store = initJsonFormsVanillaStore({
       data: fixture.data,
       schema: fixture.schema,
-      uischema: fixture.uischema,
-      styles: fixture.styles
+      uischema: fixture.uischema
     });
     wrapper = mount(
       <Provider store={store}>
@@ -284,8 +273,7 @@ describe('Time cell', () => {
     const store = initJsonFormsVanillaStore({
       data: fixture.data,
       schema: fixture.schema,
-      uischema: fixture.uischema,
-      styles: fixture.styles
+      uischema: fixture.uischema
     });
     wrapper = mount(
       <Provider store={store}>
@@ -304,8 +292,7 @@ describe('Time cell', () => {
     const store = initJsonFormsVanillaStore({
       data: fixture.data,
       schema: fixture.schema,
-      uischema: fixture.uischema,
-      styles: fixture.styles
+      uischema: fixture.uischema
     });
     wrapper = mount(
       <Provider store={store}>
@@ -323,8 +310,7 @@ describe('Time cell', () => {
     const store = initJsonFormsVanillaStore({
       data: fixture.data,
       schema: fixture.schema,
-      uischema: fixture.uischema,
-      styles: fixture.styles
+      uischema: fixture.uischema
     });
     wrapper = mount(
       <Provider store={store}>
@@ -340,8 +326,7 @@ describe('Time cell', () => {
     const store = initJsonFormsVanillaStore({
       data: fixture.data,
       schema: fixture.schema,
-      uischema: fixture.uischema,
-      styles: fixture.styles
+      uischema: fixture.uischema
     });
     wrapper = mount(
       <Provider store={store}>
@@ -359,8 +344,7 @@ describe('Time cell', () => {
     const store = initJsonFormsVanillaStore({
       data: fixture.data,
       schema: fixture.schema,
-      uischema: fixture.uischema,
-      styles: fixture.styles
+      uischema: fixture.uischema
     });
     wrapper = mount(
       <Provider store={store}>
@@ -378,8 +362,7 @@ describe('Time cell', () => {
     const store = initJsonFormsVanillaStore({
       data: fixture.data,
       schema: fixture.schema,
-      uischema: fixture.uischema,
-      styles: fixture.styles
+      uischema: fixture.uischema
     });
     wrapper = mount(
       <Provider store={store}>
@@ -397,8 +380,7 @@ describe('Time cell', () => {
     const store = initJsonFormsVanillaStore({
       data: fixture.data,
       schema: fixture.schema,
-      uischema: fixture.uischema,
-      styles: fixture.styles
+      uischema: fixture.uischema
     });
     wrapper = mount(
       <Provider store={store}>
@@ -416,8 +398,7 @@ describe('Time cell', () => {
     const store = initJsonFormsVanillaStore({
       data: fixture.data,
       schema: fixture.schema,
-      uischema: fixture.uischema,
-      styles: fixture.styles
+      uischema: fixture.uischema
     });
     wrapper = mount(
       <Provider store={store}>
@@ -434,8 +415,7 @@ describe('Time cell', () => {
     const store = initJsonFormsVanillaStore({
       data: fixture.data,
       schema: fixture.schema,
-      uischema: fixture.uischema,
-      styles: fixture.styles
+      uischema: fixture.uischema
     });
     wrapper = mount(
       <Provider store={store}>
