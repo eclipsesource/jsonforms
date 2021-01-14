@@ -1,7 +1,7 @@
 /*
   The MIT License
   
-  Copyright (c) 2017-2019 EclipseSource Munich
+  Copyright (c) 2017-2021 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
   
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,30 +23,5 @@
   THE SOFTWARE.
 */
 
-import React, { useContext } from 'react';
-import { useJsonForms } from '@jsonforms/react';
-import { StyleDef } from './util';
-
-export interface StyleContext {
-  styles: StyleDef[];
-}
-
-const defaultContext: any = {
-  styles: []
-};
-
-export const JsonFormsStyleContext = React.createContext<StyleContext>(
-  defaultContext
-);
-
-export const useStyleContext = (): StyleContext =>
-  useContext(JsonFormsStyleContext);
-
-export const useStyles = (): StyleDef[] | undefined => {
-  const { styles } = useStyleContext();
-  const ctx = useJsonForms();
-  if (styles.length === 0 && ctx.styles) {
-    return ctx.styles;
-  }
-  return styles;
-};
+export * from './styleContext';
+export * from './styles';

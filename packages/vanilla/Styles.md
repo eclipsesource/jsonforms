@@ -52,7 +52,8 @@
 - input.description &rightarrow; id for the description of control
 
 ## Example of styling id contributions
-Overwrite the default styles via the `JsonFormsStyleContext`.
+By default, the `vanillaStyles` defined in [src/styles/styles.ts](./src/styles/styles.ts) are applied.
+These can be overwritten via the `JsonFormsStyleContext`.
 
 ```typescript
 import { JsonFormsStyleContext } from '@jsonforms/vanilla-renderers';

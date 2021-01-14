@@ -22,42 +22,31 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { combineReducers, createStore, Store } from 'redux';
-import {
-  Actions,
-  jsonFormsReducerConfig,
-  JsonFormsState,
-  JsonSchema,
-  UISchemaElement
-} from '@jsonforms/core';
-import { vanillaStyles } from '../src/styles';
-import { stylingReducer } from '../src/reducers';
 
-export const initJsonFormsVanillaStore = ({
-  data,
-  schema,
-  uischema,
-  ...other
-}: {
-  data: any;
-  uischema: UISchemaElement;
-  schema: JsonSchema;
-  [other: string]: any;
-}): Store<JsonFormsState> => {
-  const store: Store<JsonFormsState> = createStore(
-    combineReducers({
-      jsonforms: combineReducers({...jsonFormsReducerConfig, styles: stylingReducer}),
-    }),
-    {
-      // TODO
-      jsonforms: {
-        styles: vanillaStyles,
-        ...other
-      } as any
-    }
-  );
+import React, { useContext } from 'react';
+import { useJsonForms } from '@jsonforms/react';
+import { StyleDef, vanillaStyles } from './styles';
 
-  store.dispatch(Actions.init(data, schema, uischema));
+export interface StyleContext {
+  styles: StyleDef[];
+}
 
-  return store;
+const defaultContext: StyleContext = {
+  styles: vanillaStyles
+};
+
+export const JsonFormsStyleContext = React.createContext(
+  defaultContext
+);
+
+export const useStyleContext = (): StyleContext =>
+  useContext(JsonFormsStyleContext);
+
+export const useStyles = (): StyleDef[] | undefined => {
+  const { styles } = useStyleContext();
+  const ctx = useJsonForms();
+  if (styles.length === 0 && ctx.styles) {
+    return ctx.styles;
+  }
+  return styles;
 };

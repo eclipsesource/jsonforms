@@ -24,16 +24,10 @@
 */
 import { createThemeSelection } from './theme.switcher';
 import {
-  stylingReducer,
   vanillaCells,
   vanillaRenderers,
-  vanillaStyles
 } from '../src';
 import { renderExample } from '../../example/src/index';
 
-renderExample(vanillaRenderers, vanillaCells, undefined, {
-  name: 'styles',
-  reducer: stylingReducer,
-  state: vanillaStyles
-});
+renderExample(vanillaRenderers, vanillaCells, undefined);
 createThemeSelection();

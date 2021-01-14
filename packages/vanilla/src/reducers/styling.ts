@@ -27,7 +27,7 @@ import remove from 'lodash/remove';
 import find from 'lodash/find';
 import join from 'lodash/join';
 import { REGISTER_STYLE, REGISTER_STYLES, UNREGISTER_STYLE } from '../actions';
-import { StyleDef } from '../util';
+import { StyleDef } from '../styles';
 
 const removeStyle = (styles: StyleDef[], name: string) => {
   const copy = styles.slice();
