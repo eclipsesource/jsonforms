@@ -57,13 +57,7 @@ const fixture = {
   },
   data: {
     test: [{ x: 1, y: 3 }]
-  },
-  styles: [
-    {
-      name: 'array.table',
-      classNames: ['array-table-layout', 'control']
-    }
-  ]
+  }
 };
 
 describe('Array control renderer', () => {

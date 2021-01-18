@@ -56,6 +56,10 @@ Basically there are two different approaches:
 
 Below you can find some guidance about each approach.
 
+In any case, users of the vanilla renderers need to migrate style definitions.
+Providing style classes via the redux context is no longer supported even when using the redux fallback.
+For more information see the [vanilla renderer style guide](./packages/vanilla/Styles.md).
+
 ## Case 1: Migrate to the standalone variant (recommended)
 
 The standalone JSON Forms variant is the new default and the main focus for new features and bug fixes.

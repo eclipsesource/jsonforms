@@ -41,15 +41,7 @@ import { getStyle, getStyleAsClassName } from '../reducers';
 import { VanillaRendererProps } from '../index';
 import { ComponentType } from 'react';
 import { findStyle, findStyleAsClassName } from '../reducers/styling';
-import { useStyles } from '../styleContext';
-
-/**
- * A style associates a name with a list of CSS class names.
- */
-export interface StyleDef {
-  name: string;
-  classNames: string[] | ((...args: any[]) => string[]);
-}
+import { useStyles } from '../styles';
 
 /**
  * Add vanilla props to the return value of calling the given
@@ -200,78 +192,3 @@ export const withVanillaEnumCellProps = withVanillaCellPropsForType(
   'control.select'
 );
 
-/**
- * Pre-defined vanilla styles.
- *
- * @type {{name: string; classNames: string[]}[]}
- */
-export const vanillaStyles = [
-  {
-    name: 'control',
-    classNames: ['control']
-  },
-  {
-    name: 'control.trim',
-    classNames: ['trim']
-  },
-  {
-    name: 'control.input',
-    classNames: ['input']
-  },
-  {
-    name: 'control.select',
-    classNames: ['select']
-  },
-  {
-    name: 'control.validation',
-    classNames: ['validation']
-  },
-  {
-    name: 'categorization',
-    classNames: ['categorization']
-  },
-  {
-    name: 'categorization.master',
-    classNames: ['categorization-master']
-  },
-  {
-    name: 'categorization.detail',
-    classNames: ['categorization-detail']
-  },
-  {
-    name: 'category.group',
-    classNames: ['category-group']
-  },
-  {
-    name: 'array.layout',
-    classNames: ['array-layout']
-  },
-  {
-    name: 'array.children',
-    classNames: ['children']
-  },
-  {
-    name: 'group.layout',
-    classNames: ['group-layout']
-  },
-  {
-    name: 'horizontal.layout',
-    classNames: ['horizontal-layout']
-  },
-  {
-    name: 'horizontal.layout.item',
-    classNames: ([size]: number[]) => [`horizontal-layout-${size}`]
-  },
-  {
-    name: 'vertical.layout',
-    classNames: ['vertical-layout']
-  },
-  {
-    name: 'array.table',
-    classNames: ['array-table-layout', 'control']
-  },
-  {
-    name: 'input.description',
-    classNames: ['input-description']
-  }
-];

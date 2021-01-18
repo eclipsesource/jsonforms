@@ -64,13 +64,7 @@ const fixture = {
   },
   data: {
     test: [{ x: 1, y: 3 }]
-  },
-  styles: [
-    {
-      name: 'array.table',
-      classNames: ['array-table-layout', 'control']
-    }
-  ]
+  }
 };
 
 const fixture2 = {
@@ -98,13 +92,7 @@ const fixture2 = {
   },
   data: {
     test: [{ x: 1, y: 3 }]
-  },
-  styles: [
-    {
-      name: 'array.table',
-      classNames: ['array-table-layout', 'control']
-    }
-  ]
+  }
 };
 
 describe('Tabe array tester', () => {
@@ -541,8 +529,7 @@ describe('Tabe array control', () => {
     const store = initJsonFormsVanillaStore({
       data: fixture.data,
       schema: fixture.schema,
-      uischema: fixture.uischema,
-      styles: fixture.styles
+      uischema: fixture.uischema
     });
     wrapper = mount(
       <Provider store={store}>
@@ -563,8 +550,7 @@ describe('Tabe array control', () => {
     const store = initJsonFormsVanillaStore({
       data: fixture.data,
       schema: fixture.schema,
-      uischema: fixture.uischema,
-      styles: fixture.styles
+      uischema: fixture.uischema
     });
     wrapper = mount(
       <Provider store={store}>

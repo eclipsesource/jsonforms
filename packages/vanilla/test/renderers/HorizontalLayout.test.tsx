@@ -42,13 +42,7 @@ const fixture = {
   uischema: {
     type: 'HorizontalLayout',
     elements: [{ type: 'Control' }]
-  },
-  styles: [
-    {
-      name: 'horizontal.layout',
-      classNames: ['horizontal-layout']
-    }
-  ]
+  }
 };
 
 test('tester', () => {
@@ -71,8 +65,7 @@ describe('Horizontal layout', () => {
     const store = initJsonFormsVanillaStore({
       data: {},
       schema: {},
-      uischema,
-      styles: fixture.styles
+      uischema
     });
     wrapper = mount(
       <Provider store={store}>
@@ -96,8 +89,7 @@ describe('Horizontal layout', () => {
     const store = initJsonFormsVanillaStore({
       data: {},
       schema: {},
-      uischema,
-      styles: fixture.styles
+      uischema
     });
     wrapper = mount(
       <Provider store={store}>
@@ -122,8 +114,7 @@ describe('Horizontal layout', () => {
     const store = initJsonFormsVanillaStore({
       data: {},
       schema: {},
-      uischema,
-      styles: fixture.styles
+      uischema
     });
     wrapper = mount(
       <Provider store={store}>
@@ -141,8 +132,7 @@ describe('Horizontal layout', () => {
     const store = initJsonFormsVanillaStore({
       data: {},
       schema: {},
-      uischema: fixture.uischema,
-      styles: fixture.styles
+      uischema: fixture.uischema
     });
     wrapper = mount(
       <Provider store={store}>
@@ -162,8 +152,7 @@ describe('Horizontal layout', () => {
     const store = initJsonFormsVanillaStore({
       data: {},
       schema: {},
-      uischema: fixture.uischema,
-      styles: fixture.styles
+      uischema: fixture.uischema
     });
     wrapper = mount(
       <Provider store={store}>

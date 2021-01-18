@@ -52,12 +52,43 @@
 - input.description &rightarrow; id for the description of control
 
 ## Example of styling id contributions
-Overwrite the default styles via the `JsonFormsStyleContext`.
+By default, the `vanillaStyles` defined in [src/styles/styles.ts](./src/styles/styles.ts) are applied.
+These can be overwritten via the `JsonFormsStyleContext`.
+The following example will completely replace the default styles.
 
 ```typescript
 import { JsonFormsStyleContext } from '@jsonforms/vanilla-renderers';
 
 const styleContextValue = { styles: [
+  {
+    name: 'control.input',
+    classNames: ['custom-input']
+  },
+  {
+    name: 'array.button',
+    classNames: ['custom-array-button']
+  }
+]};
+
+<JsonFormsStyleContext.Provider value={styleContextValue}>
+  <JsonForms
+    data={data}
+    schema={schema}
+    uischema={uischema}
+    ...
+  />
+</JsonFormsStyleContext.Provider>
+```
+
+You can also extend the existing default styles.
+Thereby, the existing style classes as well as your custom ones will be applied.
+This is the case because all style definitions for an ID are merged.
+
+```typescript
+import { JsonFormsStyleContext, vanillaStyles } from '@jsonforms/vanilla-renderers';
+
+const styleContextValue = { styles: [
+  ...vanillaStyles,
   {
     name: 'control.input',
     classNames: ['custom-input']

@@ -36,6 +36,7 @@ import Adapter from 'enzyme-adapter-react-16';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import CategorizationRenderer, { categorizationTester } from '../../src/complex/categorization';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
+import { JsonFormsStyleContext } from '../../src/styles';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -273,16 +274,17 @@ describe('Categorization renderer', () => {
     const store = initJsonFormsVanillaStore({
       data: fixture.data,
       schema,
-      uischema,
-      styles: fixture.styles
+      uischema
     });
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <CategorizationRenderer
-            schema={schema}
-            uischema={uischema}
-          />
+          <JsonFormsStyleContext.Provider value={{ styles: fixture.styles }}>
+            <CategorizationRenderer
+              schema={schema}
+              uischema={uischema}
+              />
+          </JsonFormsStyleContext.Provider>
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -363,17 +365,18 @@ describe('Categorization renderer', () => {
     const store = initJsonFormsVanillaStore({
       data,
       schema: fixture.schema,
-      uischema,
-      styles: fixture.styles
+      uischema
     });
 
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <CategorizationRenderer
-            schema={fixture.schema}
-            uischema={uischema}
-          />
+          <JsonFormsStyleContext.Provider value={{ styles: fixture.styles }}>
+            <CategorizationRenderer
+              schema={fixture.schema}
+              uischema={uischema}
+              />
+          </JsonFormsStyleContext.Provider>
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -426,18 +429,19 @@ describe('Categorization renderer', () => {
     const store = initJsonFormsVanillaStore({
       data: fixture.data,
       schema: fixture.schema,
-      uischema,
-      styles: fixture.styles
+      uischema
     });
 
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <CategorizationRenderer
-            schema={fixture.schema}
-            uischema={uischema}
-            visible={false}
-          />
+          <JsonFormsStyleContext.Provider value={{ styles: fixture.styles }}>
+            <CategorizationRenderer
+              schema={fixture.schema}
+              uischema={uischema}
+              visible={false}
+              />
+          </JsonFormsStyleContext.Provider>
         </JsonFormsReduxContext>
       </Provider>
     );
@@ -461,16 +465,17 @@ describe('Categorization renderer', () => {
     const store = initJsonFormsVanillaStore({
       data: fixture.data,
       schema: fixture.schema,
-      uischema,
-      styles: fixture.styles
+      uischema
     });
     wrapper = mount(
       <Provider store={store}>
         <JsonFormsReduxContext>
-          <CategorizationRenderer
-            schema={fixture.schema}
-            uischema={uischema}
-          />
+          <JsonFormsStyleContext.Provider value={{ styles: fixture.styles }}>
+            <CategorizationRenderer
+              schema={fixture.schema}
+              uischema={uischema}
+              />
+          </JsonFormsStyleContext.Provider>
         </JsonFormsReduxContext>
       </Provider>
     );

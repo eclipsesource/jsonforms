@@ -22,12 +22,26 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { createThemeSelection } from './theme.switcher';
-import {
-  vanillaCells,
-  vanillaRenderers,
-} from '../src';
-import { renderExample } from '../../example/src/index';
 
-renderExample(vanillaRenderers, vanillaCells, undefined);
-createThemeSelection();
+import React, { useContext } from 'react';
+import { StyleDef, vanillaStyles } from './styles';
+
+export interface StyleContext {
+  styles: StyleDef[];
+}
+
+const defaultContext: StyleContext = {
+  styles: vanillaStyles
+};
+
+export const JsonFormsStyleContext = React.createContext(
+  defaultContext
+);
+
+export const useStyleContext = (): StyleContext =>
+  useContext(JsonFormsStyleContext);
+
+export const useStyles = (): StyleDef[] => {
+  const { styles } = useStyleContext();
+  return styles;
+};
