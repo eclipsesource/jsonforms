@@ -148,6 +148,12 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
                     error.dataPath.startsWith(childPath)
                   );
 
+                  const validationClassName = getStyleAsClassName('array.validation');
+                  const errorValidationClassName = getStyleAsClassName('array.validation.error');
+                  const errorClassNames = errorsPerEntry ? 
+                    [validationClassName].concat(errorValidationClassName).join(' ') : 
+                    validationClassName;
+
                   return (
                     <tr key={childPath}>
                       {schema.properties ? (
@@ -189,15 +195,12 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
                         )}
                       <td>
                         {errorsPerEntry ? (
-                          <span
-                            className={getStyleAsClassName(
-                              'array.validation.error'
-                            )}
+                          <span className={errorClassNames}
                           >
                             {join(errorsPerEntry.map(e => e.message), ' and ')}
                           </span>
                         ) : (
-                            <span>OK</span>
+                            <span className={errorClassNames}>OK</span>
                           )}
                       </td>
                       <td>
