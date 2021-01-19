@@ -98,6 +98,10 @@ export const vanillaStyles: StyleDef[] = [
     classNames: ['vertical-layout']
   },
   {
+    name: 'array.table.validation',
+    classNames: ['validation']
+  },
+  {
     name: 'array.table',
     classNames: ['array-table-layout', 'control']
   },

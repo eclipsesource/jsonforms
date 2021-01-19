@@ -23,6 +23,7 @@
 - array.table.table &rightarrow; id for the table
 - array.table.label &rightarrow; id for the label in the header
 - array.table.button &rightarrow; id for the add button
+- array.table.validation &rightarrow; id for the validation field
 - array.validation.error &rightarrow; id for the validation column if activated
 ### GroupRenderer
 #### Hardcoded ClassNames

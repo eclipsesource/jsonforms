@@ -85,6 +85,7 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
     const tableClass = getStyleAsClassName('array.table.table');
     const labelClass = getStyleAsClassName('array.table.label');
     const buttonClass = getStyleAsClassName('array.table.button');
+    const validationClass = getStyleAsClassName('array.table.validation');
     const controlClass = [
       getStyleAsClassName('array.table'),
       convertToValidClassName(controlElement.scope)
@@ -96,7 +97,9 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
     });
     const labelObject = createLabelDescriptionFrom(controlElement, schema);
     const isValid = errors.length === 0;
-    const divClassNames = 'validation' + (isValid ? '' : ' validation_error');
+    const divClassNames = [validationClass]
+      .concat(isValid ? '' : ' validation_error')
+      .join(' ');
     const labelText = isPlainLabel(label) ? label : label.default;
 
     return (
