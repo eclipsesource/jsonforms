@@ -8,10 +8,7 @@ import withStyles from '@material-ui/core/styles/withStyles';
 
 import FeaturesIcon from '@material-ui/icons/Report';
 import CustomizeIcon from '@material-ui/icons/Brush';
-import { JsonFormsDispatch } from '@jsonforms/react';
-import { JsonFormsReduxContext } from '@jsonforms/react/lib/redux';
 import corePackageJson from '@jsonforms/core/package';
-import { Provider } from 'react-redux';
 import angularLogo from '../images/angular.svg';
 import reactLogo from '../images/react-logo.svg';
 import vueLogo from '../images/vue-logo.svg';
@@ -23,7 +20,6 @@ import schemaLogo from './schemalogo.svg';
 import { NewsSection } from './NewsSection';
 
 import { Demo, Logo } from '../components/common';
-import { createJsonFormsStore } from '../common/store';
 import globalStyles from '../styles/global.module.css';
 import styles from './home.module.css';
 import { Grid } from '@material-ui/core';
@@ -40,11 +36,7 @@ const additionalStyles = () => ({
   },
 });
 
-const store = createJsonFormsStore({
-  data: { firstName: 'Max', lastName: 'Power' },
-  schema,
-  uischema,
-});
+const data = { firstName: 'Max', lastName: 'Power' };
 
 const nextVersion = process.env.DOCZ_NEXTVERSION;
 const nextVersionText =
@@ -151,15 +143,7 @@ const Home = ({ classes }) => {
       </div>
 
       <div className={styles.landing_page__form}>
-        <Provider store={store}>
-          <JsonFormsReduxContext>
-            <Demo
-              js={() => <JsonFormsDispatch />}
-              schema={schema}
-              uischema={uischema}
-            />
-          </JsonFormsReduxContext>
-        </Provider>
+        <Demo schema={schema} uischema={uischema} data={data} />
       </div>
 
       <hr />

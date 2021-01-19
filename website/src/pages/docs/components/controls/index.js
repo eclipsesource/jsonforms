@@ -1,9 +1,5 @@
 import React from 'react';
-import { Provider } from 'react-redux';
-import { JsonFormsDispatch } from '@jsonforms/react';
-import { JsonFormsReduxContext } from '@jsonforms/react/lib/redux';
 import { ThemeProvider } from '@material-ui/core/styles';
-import { createJsonFormsStore } from '../../../../common/store';
 import { Demo } from '../../../../components/common';
 
 export const input = {
@@ -21,29 +17,8 @@ export const input = {
   },
 };
 
-const store = createJsonFormsStore({
-  data: input.data,
-  schema: input.schema,
-  uischema: input.uischema,
-});
-
 export const Example = () => (
-  <Provider store={store}>
-    <JsonFormsReduxContext>
-      <Demo
-        js={() => {
-          return (
-            <JsonFormsDispatch
-              schema={input.schema}
-              uischema={input.uischema}
-            />
-          );
-        }}
-        schema={input.schema}
-        uischema={input.uischema}
-      />
-    </JsonFormsReduxContext>
-  </Provider>
+  <Demo data={input.data} schema={input.schema} uischema={input.uischema} />
 );
 
 export const customLabelInput = {
@@ -62,29 +37,12 @@ export const customLabelInput = {
   },
 };
 
-const storeWithCustomLabel = createJsonFormsStore({
-  data: customLabelInput.data,
-  schema: customLabelInput.schema,
-  uischema: customLabelInput.uischema,
-});
-
 export const ExampleWithCustomLabel = () => (
-  <Provider store={storeWithCustomLabel}>
-    <JsonFormsReduxContext>
-      <Demo
-        js={() => {
-          return (
-            <JsonFormsDispatch
-              schema={customLabelInput.schema}
-              uischema={customLabelInput.uischema}
-            />
-          );
-        }}
-        schema={customLabelInput.schema}
-        uischema={customLabelInput.uischema}
-      />
-    </JsonFormsReduxContext>
-  </Provider>
+  <Demo
+    data={customLabelInput.data}
+    schema={customLabelInput.schema}
+    uischema={customLabelInput.uischema}
+  />
 );
 
 export const sortButtons = {
@@ -132,29 +90,12 @@ export const sortButtons = {
   },
 };
 
-const storeWithSortButtons = createJsonFormsStore({
-  data: sortButtons.data,
-  schema: sortButtons.schema,
-  uischema: sortButtons.uischema,
-});
-
 export const ExampleWithSortButtons = () => (
-  <Provider store={storeWithSortButtons}>
-    <JsonFormsReduxContext>
-      <Demo
-        js={() => {
-          return (
-            <JsonFormsDispatch
-              schema={sortButtons.schema}
-              uischema={sortButtons.uischema}
-            />
-          );
-        }}
-        schema={sortButtons.schema}
-        uischema={sortButtons.uischema}
-      />
-    </JsonFormsReduxContext>
-  </Provider>
+  <Demo
+    data={sortButtons.data}
+    schema={sortButtons.schema}
+    uischema={sortButtons.uischema}
+  />
 );
 
 export const arrayLabel = {
@@ -216,29 +157,12 @@ export const arrayLabel = {
   },
 };
 
-const storeWithArrayLabel = createJsonFormsStore({
-  data: arrayLabel.data,
-  schema: arrayLabel.schema,
-  uischema: arrayLabel.uischema,
-});
-
 export const ExampleWithArrayLabel = () => (
-  <Provider store={storeWithArrayLabel}>
-    <JsonFormsReduxContext>
-      <Demo
-        js={() => {
-          return (
-            <JsonFormsDispatch
-              schema={arrayLabel.schema}
-              uischema={arrayLabel.uischema}
-            />
-          );
-        }}
-        schema={arrayLabel.schema}
-        uischema={arrayLabel.uischema}
-      />
-    </JsonFormsReduxContext>
-  </Provider>
+  <Demo
+    data={arrayLabel.data}
+    schema={arrayLabel.schema}
+    uischema={arrayLabel.uischema}
+  />
 );
 
 export const radioGroup = {
@@ -261,58 +185,20 @@ export const radioGroup = {
   data: {},
 };
 
-const storeWithRadioGroup = createJsonFormsStore({
-  data: radioGroup.data,
-  schema: radioGroup.schema,
-  uischema: radioGroup.uischema,
-});
-
 export const ExampleWithRadioGroup = () => (
-  <Provider store={storeWithRadioGroup}>
-    <JsonFormsReduxContext>
-      <Demo
-        js={() => {
-          return (
-            <JsonFormsDispatch
-              schema={radioGroup.schema}
-              uischema={radioGroup.uischema}
-            />
-          );
-        }}
-        schema={radioGroup.schema}
-        uischema={radioGroup.uischema}
-      />
-    </JsonFormsReduxContext>
-  </Provider>
+  <Demo
+    data={radioGroup.data}
+    schema={radioGroup.schema}
+    uischema={radioGroup.uischema}
+  />
 );
 
-const storeWithCustomClearBackground = createJsonFormsStore({
-  data: input.data,
-  schema: input.schema,
-  uischema: input.uischema,
-});
-
 export const ExampleWithCustomClearBackground = () => (
-  <Provider store={storeWithCustomClearBackground}>
-    <JsonFormsReduxContext>
-      <Demo
-        js={() => {
-          return (
-            <ThemeProvider
-              theme={{
-                jsonforms: { input: { delete: { background: '#f44336' } } },
-              }}
-            >
-              <JsonFormsDispatch
-                schema={input.schema}
-                uischema={input.uischema}
-              />
-            </ThemeProvider>
-          );
-        }}
-        schema={input.schema}
-        uischema={input.uischema}
-      />
-    </JsonFormsReduxContext>
-  </Provider>
+  <ThemeProvider
+    theme={{
+      jsonforms: { input: { delete: { background: '#f44336' } } },
+    }}
+  >
+    <Demo data={input.data} schema={input.schema} uischema={input.uischema} />
+  </ThemeProvider>
 );

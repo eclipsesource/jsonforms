@@ -1,12 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
-import { Provider } from 'react-redux';
-import { JsonFormsDispatch } from '@jsonforms/react';
-import { JsonFormsReduxContext } from '@jsonforms/react/lib/redux';
-import { person } from '@jsonforms/examples';
 import { Demo } from '../../../../components/common';
-import { createJsonFormsStore } from '../../../../common/store';
-import { materialRenderers } from '@jsonforms/material-renderers';
 
 export const schema = {
   type: 'object',
@@ -205,51 +199,13 @@ const pdata = {};
 const pschema = _.cloneDeep(schema);
 const puischema = _.cloneDeep(uischema);
 
-const linkedFormsStore = createJsonFormsStore({
-  data: pdata,
-  schema: pschema,
-  uischema: puischema,
-});
-
-const store = createJsonFormsStore({
-  data: person.data,
-  schema: person.personCoreSchema,
-  uischema: person.uischema,
-});
-
 export const LinkedForms = () => (
-  <Provider store={linkedFormsStore}>
-    <JsonFormsReduxContext>
-      <Demo
-        js={() => <JsonFormsDispatch schema={pschema} uischema={puischema} />}
-        schema={pschema}
-        uischema={puischema}
-      />
-    </JsonFormsReduxContext>
-  </Provider>
+  <Demo data={pdata} schema={pschema} uischema={puischema} />
 );
 
 export const MultipleForms = () => (
-  <Provider store={store}>
-    <JsonFormsReduxContext>
-      <Demo
-        js={() => (
-          <div>
-            <JsonFormsDispatch
-              schema={schemas.person}
-              uischema={uischemas.person}
-              renderers={materialRenderers}
-            />
-            <JsonFormsDispatch
-              schema={schemas.address}
-              uischema={uischemas.address}
-              renderers={materialRenderers}
-            />
-          </div>
-        )}
-        schema={schemas}
-        uischema={uischemas}
-      />
-    </JsonFormsReduxContext>
-  </Provider>
+  <>
+    <Demo schema={schemas.person} uischema={uischemas.person} data={{}} />
+    <Demo schema={schemas.address} uischema={uischemas.address} data={{}} />
+  </>
 );

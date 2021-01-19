@@ -1,14 +1,10 @@
 import React from 'react';
-import { registerRenderer } from '@jsonforms/core';
-import { JsonFormsDispatch } from '@jsonforms/react';
-import { JsonFormsReduxContext } from '@jsonforms/react/lib/redux';
-import { createJsonFormsStore } from '../../../../common/store';
 import {
   Demo,
   ratingControlTester,
   RatingControl,
 } from '../../../../components/common';
-import { Provider } from 'react-redux';
+import { materialRenderers } from '@jsonforms/material-renderers';
 
 const ratingData = {
   rating: 2,
@@ -30,43 +26,18 @@ const ratingUiSchema = {
   scope: '#/properties/rating',
 };
 
-const storeWithRatingControlExample = createJsonFormsStore({
-  data: ratingData,
-  schema: ratingSchema,
-  uischema: ratingUiSchema,
-});
-
-const store = createJsonFormsStore({
-  data: ratingData,
-  schema: ratingSchema,
-  uischema: ratingUiSchema,
-});
-
 export const Default = () => (
-  <Provider store={store}>
-    <JsonFormsReduxContext>
-      <Demo
-        js={() => <JsonFormsDispatch />}
-        schema={ratingSchema}
-        uischema={ratingUiSchema}
-      />
-    </JsonFormsReduxContext>
-  </Provider>
+  <Demo data={ratingData} schema={ratingSchema} uischema={ratingUiSchema} />
 );
 
 export const WithCustomRenderer = () => (
-  <Provider store={storeWithRatingControlExample}>
-    <JsonFormsReduxContext>
-      <Demo
-        js={() => {
-          storeWithRatingControlExample.dispatch(
-            registerRenderer(ratingControlTester, RatingControl)
-          );
-          return <JsonFormsDispatch />;
-        }}
-        schema={ratingSchema}
-        uischema={ratingUiSchema}
-      />
-    </JsonFormsReduxContext>
-  </Provider>
+  <Demo
+    data={ratingData}
+    schema={ratingSchema}
+    uischema={ratingUiSchema}
+    renderers={[
+      ...materialRenderers,
+      { tester: ratingControlTester, renderer: RatingControl },
+    ]}
+  />
 );

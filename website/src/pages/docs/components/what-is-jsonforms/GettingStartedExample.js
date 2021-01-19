@@ -1,14 +1,10 @@
 import React from 'react';
-import { Provider } from 'react-redux';
-import { registerRenderer } from '@jsonforms/core';
-import { JsonFormsDispatch } from '@jsonforms/react';
-import { JsonFormsReduxContext } from '@jsonforms/react/lib/redux';
 import {
   Demo,
   RatingControl,
   ratingControlTester,
 } from '../../../../components/common';
-import { createJsonFormsStore } from '../../../../common/store';
+import { materialRenderers } from '@jsonforms/material-renderers';
 
 export const IntroCode = {
   schema: {
@@ -57,48 +53,18 @@ export const IntroCode = {
   },
 };
 
-const storeWithoutCustomControl = createJsonFormsStore({
-  data: {},
-  schema: IntroCode.schema,
-  uischema: IntroCode.uischema,
-});
-
-const storeWithRatingControlExample = createJsonFormsStore({
-  data: {},
-  schema: IntroCode.schema,
-  uischema: IntroCode.uischema,
-});
-
 export const GettingStartedExample = () => (
-  <Provider store={storeWithoutCustomControl}>
-    <JsonFormsReduxContext>
-      <Demo
-        js={() => <JsonFormsDispatch />}
-        schema={IntroCode.schema}
-        uischema={IntroCode.uischema}
-      />
-    </JsonFormsReduxContext>
-  </Provider>
+  <Demo data={{}} schema={IntroCode.schema} uischema={IntroCode.uischema} />
 );
 
 export const GettingStartedExampleWithRatingControl = () => (
-  <Provider store={storeWithRatingControlExample}>
-    <JsonFormsReduxContext>
-      <Demo
-        js={() => {
-          storeWithRatingControlExample.dispatch(
-            registerRenderer(ratingControlTester, RatingControl)
-          );
-          return (
-            <JsonFormsDispatch
-              schema={IntroCode.schema}
-              uischema={IntroCode.uischema}
-            />
-          );
-        }}
-        schema={IntroCode.schema}
-        uischema={IntroCode.uischema}
-      />
-    </JsonFormsReduxContext>
-  </Provider>
+  <Demo
+    data={{}}
+    schema={IntroCode.schema}
+    uischema={IntroCode.uischema}
+    renderers={[
+      ...materialRenderers,
+      { tester: ratingControlTester, renderer: RatingControl },
+    ]}
+  />
 );

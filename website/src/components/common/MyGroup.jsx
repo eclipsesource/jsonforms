@@ -22,20 +22,20 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { mapStateToLayoutProps, rankWith, uiTypeIs } from '@jsonforms/core';
+import { rankWith, uiTypeIs } from '@jsonforms/core';
 import { MaterialLayoutRenderer } from '@jsonforms/material-renderers';
+import { withJsonFormsLayoutProps } from '@jsonforms/react';
 import {
   ExpansionPanel,
   ExpansionPanelDetails,
   ExpansionPanelSummary,
   Hidden,
-  Typography
+  Typography,
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import React from 'react';
-import { connect } from 'react-redux';
 
-const MyGroupRenderer = props => {
+const MyGroupRenderer = (props) => {
   const { uischema, schema, path, visible, renderers } = props;
 
   const layoutProps = {
@@ -45,7 +45,7 @@ const MyGroupRenderer = props => {
     direction: 'column',
     visible: visible,
     uischema: uischema,
-    renderers: renderers
+    renderers: renderers,
   };
   return (
     <Hidden xsUp={!visible}>
@@ -61,6 +61,6 @@ const MyGroupRenderer = props => {
   );
 };
 
-export default connect(mapStateToLayoutProps)(MyGroupRenderer);
+export default withJsonFormsLayoutProps(MyGroupRenderer);
 
 export const myGroupTester = rankWith(1000, uiTypeIs('Group'));

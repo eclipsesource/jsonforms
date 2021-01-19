@@ -1,14 +1,10 @@
 import React from 'react';
-import { registerRenderer } from '@jsonforms/core';
-import { JsonFormsDispatch } from '@jsonforms/react';
-import { JsonFormsReduxContext } from '@jsonforms/react/lib/redux';
-import { createJsonFormsStore } from '../../../../common/store';
 import {
   Demo,
   myGroupTester,
   MyGroupRenderer,
 } from '../../../../components/common';
-import { Provider } from 'react-redux';
+import { materialRenderers } from '@jsonforms/material-renderers';
 
 const groupData = {
   name: 'John Doe',
@@ -34,43 +30,18 @@ const groupUiSchema = {
   ],
 };
 
-const storeWithRatingControlExample = createJsonFormsStore({
-  data: groupData,
-  schema: groupSchema,
-  uischema: groupUiSchema,
-});
-
-const store = createJsonFormsStore({
-  data: groupData,
-  schema: groupSchema,
-  uischema: groupUiSchema,
-});
-
 export const Default = () => (
-  <Provider store={store}>
-    <JsonFormsReduxContext>
-      <Demo
-        js={() => <JsonFormsDispatch />}
-        schema={groupSchema}
-        uischema={groupUiSchema}
-      />
-    </JsonFormsReduxContext>
-  </Provider>
+  <Demo data={groupData} schema={groupSchema} uischema={groupUiSchema} />
 );
 
 export const WithCustomRenderer = () => (
-  <Provider store={storeWithRatingControlExample}>
-    <JsonFormsReduxContext>
-      <Demo
-        js={() => {
-          storeWithRatingControlExample.dispatch(
-            registerRenderer(myGroupTester, MyGroupRenderer)
-          );
-          return <JsonFormsDispatch />;
-        }}
-        schema={groupSchema}
-        uischema={groupUiSchema}
-      />
-    </JsonFormsReduxContext>
-  </Provider>
+  <Demo
+    data={groupData}
+    schema={groupSchema}
+    uischema={groupUiSchema}
+    renderers={[
+      ...materialRenderers,
+      { tester: myGroupTester, renderer: MyGroupRenderer },
+    ]}
+  />
 );
