@@ -24,6 +24,7 @@
 - array.table.label &rightarrow; id for the label in the header
 - array.table.button &rightarrow; id for the add button
 - array.table.validation &rightarrow; id for the validation field
+- array.table.validation.error &rightarrow; id for the validation error field
 - array.validation.error &rightarrow; id for the validation column if activated
 ### GroupRenderer
 #### Hardcoded ClassNames
@@ -50,6 +51,8 @@
 #### Ids
 - control &rightarrow; id for the whole control
 - control.label &rightarrow; id for the label of control
+- control.validation &rightarrow; id for the validation of control
+- control.validation.error &rightarrow; id for the validation error of control
 - input.description &rightarrow; id for the description of control
 
 ## Example of styling id contributions

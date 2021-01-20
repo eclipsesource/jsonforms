@@ -67,7 +67,7 @@ export class InputControl extends Control<
     const isValid = errors.length === 0;
 
     const divClassNames = [classNames.validation]
-      .concat(isValid ? classNames.description : 'validation_error')
+      .concat(isValid ? classNames.description : classNames.validationError)
       .join(' ');
 
     const appliedUiSchemaOptions = merge({}, config, uischema.options);

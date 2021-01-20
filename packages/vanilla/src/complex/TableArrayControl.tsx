@@ -98,7 +98,7 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
     const labelObject = createLabelDescriptionFrom(controlElement, schema);
     const isValid = errors.length === 0;
     const divClassNames = [validationClass]
-      .concat(isValid ? '' : ' validation_error')
+      .concat(isValid ? '' : getStyleAsClassName('array.table.validation.error'))
       .join(' ');
     const labelText = isPlainLabel(label) ? label : label.default;
 

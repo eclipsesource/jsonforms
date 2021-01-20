@@ -72,6 +72,7 @@ export const addVanillaControlProps = <P extends StatePropsOfControl>(
     const labelClass = getStyleAsClassName(state)('control.label');
     const descriptionClassName = getStyleAsClassName(state)('input.description');
     const validationClassName = getStyleAsClassName(state)('control.validation');
+    const validationErrorClassName = getStyleAsClassName(state)('control.validation.error');
     const inputClassName = ['validate'].concat(isValid ? 'valid' : 'invalid');
 
     return {
@@ -83,7 +84,8 @@ export const addVanillaControlProps = <P extends StatePropsOfControl>(
         input: inputClassName.join(' '),
         label: labelClass,
         description: descriptionClassName,
-        validation: validationClassName
+        validation: validationClassName,
+        validationError: validationErrorClassName
       }
     };
   };
@@ -106,6 +108,7 @@ export const withVanillaControlProps = (Component: ComponentType<any>) => (props
   const labelClass = findStyleAsClassName(contextStyles)('control.label');
   const descriptionClassName = findStyleAsClassName(contextStyles)('input.description');
   const validationClassName = findStyleAsClassName(contextStyles)('control.validation');
+  const validationErrorClassName = findStyleAsClassName(contextStyles)('control.validation.error');
   const inputClassName = ['validate'].concat(isValid ? 'valid' : 'invalid');
   return (
     <Component
@@ -117,7 +120,8 @@ export const withVanillaControlProps = (Component: ComponentType<any>) => (props
         input: inputClassName.join(' '),
         label: labelClass,
         description: descriptionClassName,
-        validation: validationClassName
+        validation: validationClassName,
+        validationError: validationErrorClassName
       }}
     />
   );
