@@ -45,6 +45,7 @@ import BooleanCell, { booleanCellTester } from '../../src/cells/BooleanCell';
 import TextCell, { textCellTester } from '../../src/cells/TextCell';
 import DateCell, { dateCellTester } from '../../src/cells/DateCell';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
+import { JsonFormsStyleContext } from '../../src/styles';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -306,6 +307,33 @@ describe('Input control', () => {
     );
     const validation = wrapper.find('.validation');
     expect(validation.text()).toBe('');
+  });
+
+  test('custom validation class', () => {
+    const store = initJsonFormsVanillaStore({
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: fixture.uischema,
+      renderers: [{ tester: inputControlTester, renderer: InputControl }],
+      cells: [{ tester: booleanCellTester, cell: BooleanCell }]
+    });
+    const styleContextValue = { styles: [
+      {
+        name: 'control.validation',
+        classNames: ['custom-validation']
+      },
+    ]};
+    wrapper = mount(
+      <Provider store={store}>
+        <JsonFormsReduxContext>
+          <JsonFormsStyleContext.Provider value={styleContextValue}>
+            <JsonFormsDispatch />
+          </JsonFormsStyleContext.Provider>
+        </JsonFormsReduxContext>
+      </Provider>
+    );
+    const validation = wrapper.find('.custom-validation');
+    expect(validation.exists()).toBeTruthy();
   });
 
   test('reset validation message', () => {

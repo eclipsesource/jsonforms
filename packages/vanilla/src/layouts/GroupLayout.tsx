@@ -49,8 +49,8 @@ export const GroupLayoutRenderer: FunctionComponent<RendererProps & VanillaRende
   const group = uischema as GroupLayout;
   const elementsSize = group.elements ? group.elements.length : 0;
   const classNames = getStyleAsClassName('group.layout');
-  const childClassNames = getStyle('group.layout.item', elementsSize)
-    .concat(['group-layout-item'])
+  const childClassNames = ['group-layout-item']
+    .concat(getStyle('group.layout.item', elementsSize))
     .join(' ');
 
   return (

@@ -54,6 +54,10 @@ export const vanillaStyles: StyleDef[] = [
     classNames: ['select']
   },
   {
+    name: 'control.validation.error',
+    classNames: ['validation_error']
+  },
+  {
     name: 'control.validation',
     classNames: ['validation']
   },
@@ -96,6 +100,14 @@ export const vanillaStyles: StyleDef[] = [
   {
     name: 'vertical.layout',
     classNames: ['vertical-layout']
+  },
+  {
+    name: 'array.table.validation.error',
+    classNames: ['validation_error']
+  },
+  {
+    name: 'array.table.validation',
+    classNames: ['validation']
   },
   {
     name: 'array.table',

@@ -56,8 +56,8 @@ export const VerticalLayoutRenderer: FunctionComponent<RendererProps & VanillaRe
   const verticalLayout = uischema as VerticalLayout;
   const elementsSize = verticalLayout.elements ? verticalLayout.elements.length : 0;
   const layoutClassName = getStyleAsClassName('vertical.layout');
-  const childClassNames = getStyle('vertical.layout.item', elementsSize)
-    .concat(['vertical-layout-item'])
+  const childClassNames = ['vertical-layout-item']
+    .concat(getStyle('vertical.layout.item', elementsSize))
     .join(' ');
 
   return (

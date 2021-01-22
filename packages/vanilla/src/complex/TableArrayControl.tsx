@@ -85,6 +85,7 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
     const tableClass = getStyleAsClassName('array.table.table');
     const labelClass = getStyleAsClassName('array.table.label');
     const buttonClass = getStyleAsClassName('array.table.button');
+    const validationClass = getStyleAsClassName('array.table.validation');
     const controlClass = [
       getStyleAsClassName('array.table'),
       convertToValidClassName(controlElement.scope)
@@ -96,7 +97,9 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
     });
     const labelObject = createLabelDescriptionFrom(controlElement, schema);
     const isValid = errors.length === 0;
-    const divClassNames = 'validation' + (isValid ? '' : ' validation_error');
+    const divClassNames = [validationClass]
+      .concat(isValid ? '' : getStyleAsClassName('array.table.validation.error'))
+      .join(' ');
     const labelText = isPlainLabel(label) ? label : label.default;
 
     return (
@@ -145,6 +148,12 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
                     error.dataPath.startsWith(childPath)
                   );
 
+                  const validationClassName = getStyleAsClassName('array.validation');
+                  const errorValidationClassName = getStyleAsClassName('array.validation.error');
+                  const errorClassNames = errorsPerEntry ? 
+                    [validationClassName].concat(errorValidationClassName).join(' ') : 
+                    validationClassName;
+
                   return (
                     <tr key={childPath}>
                       {schema.properties ? (
@@ -186,15 +195,12 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
                         )}
                       <td>
                         {errorsPerEntry ? (
-                          <span
-                            className={getStyleAsClassName(
-                              'array.validation.error'
-                            )}
+                          <span className={errorClassNames}
                           >
                             {join(errorsPerEntry.map(e => e.message), ' and ')}
                           </span>
                         ) : (
-                            <span>OK</span>
+                            <span className={errorClassNames}>OK</span>
                           )}
                       </td>
                       <td>

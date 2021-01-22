@@ -57,8 +57,8 @@ const HorizontalLayoutRenderer: FunctionComponent<RendererProps & VanillaRendere
   const horizontalLayout = uischema as HorizontalLayout;
   const elementsSize = horizontalLayout.elements ? horizontalLayout.elements.length : 0;
   const layoutClassName = getStyleAsClassName('horizontal.layout');
-  const childClassNames = getStyle('horizontal.layout.item', elementsSize)
-    .concat(['horizontal-layout-item'])
+  const childClassNames = ['horizontal-layout-item']
+    .concat(getStyle('horizontal.layout.item', elementsSize))
     .join(' ');
 
   return (

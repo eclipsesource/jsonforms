@@ -65,9 +65,10 @@ export class InputControl extends Control<
     } = this.props;
 
     const isValid = errors.length === 0;
-    const divClassNames = `validation  ${
-      isValid ? classNames.description : 'validation_error'
-    }`;
+
+    const divClassNames = [classNames.validation]
+      .concat(isValid ? classNames.description : classNames.validationError)
+      .join(' ');
 
     const appliedUiSchemaOptions = merge({}, config, uischema.options);
     const showDescription = !isDescriptionHidden(
