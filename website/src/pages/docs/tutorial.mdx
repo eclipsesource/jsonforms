@@ -20,18 +20,17 @@ Alternatively you can also clone the [seed app](https://github.com/eclipsesource
    npx create-react-app my-jsonforms-app
    ```
 
-  If you want to use typescript within your project, use the following command instead:
-  ```bash
-  npx create-react-app my-jsonforms-app --typescript
-  ```
+If you want to use typescript within your project, use the following command instead:
 
-   Scaffolding may take a couple of moments. Once it's finished, switch to your newly created app and
-   install all dependencies:
+```bash
+npx create-react-app my-jsonforms-app --template typescript
+```
 
-   ```bash
-   cd my-jsonforms-app
-   npm install
-   ```
+Scaffolding may take a couple of moments. Once it's finished, switch to your newly created app.
+
+```bash
+cd my-jsonforms-app
+```
 
 2. Install JSON Forms and the material renderer set. We'll use an example from JSON Forms in order to obtain
    a JSON schema, a corresponding UI schema and a data instance to be rendered. You don't need to install
@@ -45,10 +44,6 @@ Alternatively you can also clone the [seed app](https://github.com/eclipsesource
 
    npm install --save @material-ui/core
    npm install --save @material-ui/icons
-   npm install --save @material-ui/pickers
-
-   # Since version 2.2.x, react, redux and react-redux are peer dependencies
-   npm install --save react redux react-redux
    ```
 
 3. Switch to the `src` directory and open `App.js` (`App.tsx` when using typescript) with an editor of your choice.
@@ -58,23 +53,19 @@ Alternatively you can also clone the [seed app](https://github.com/eclipsesource
    import { person } from '@jsonforms/examples';
    import {
      materialRenderers,
-     materialCells
+     materialCells,
    } from '@jsonforms/material-renderers';
    ```
 
-   The `person` import is necessary for importing the person example
-   while `@jsonforms/material-renderers` imports the
-   [Material UI](https://material-ui.com) based
-   renderer set and respective cells.
+   The `person` import is necessary for importing the person example while `@jsonforms/material-renderers` imports the [Material UI](https://material-ui.com) based renderer set and respective cells.
 
-   Now let's define the variables that are crucial for JSON Forms to work,
-   that is, `data`, `schema` and `uischema`. As previously mentioned, we are
-   using the person example from JSON Forms here:
+   Now let's define the variables that are crucial for JSON Forms to work, that is, `data`, `schema` and `uischema`.
+   As previously mentioned, we are using the person example from JSON Forms here:
 
    ```javascript
    const schema = person.schema;
    const uischema = person.uischema;
-   const data = person.data;
+   const initialData = person.data;
    ```
 
    These variables are defined as follows:
@@ -82,15 +73,14 @@ Alternatively you can also clone the [seed app](https://github.com/eclipsesource
    <PersonVars />
 
 4. Now import the `JsonForms` component from `@jsonforms/react`.
-   Delete the `header` element and replace it with the `JsonForms` element
-   to get a form rendered:
+   Delete the `header` element and replace it with the `JsonForms` element to get a form rendered:
 
    ```jsx
-   import React from 'react';
+   import React, { useState } from 'react';
    import { JsonForms } from '@jsonforms/react';
-   // other imports...
 
    function App() {
+     const [data, setData] = useState(initialData);
      return (
        <div className='App'>
          <JsonForms
@@ -99,8 +89,14 @@ Alternatively you can also clone the [seed app](https://github.com/eclipsesource
            data={data}
            renderers={materialRenderers}
            cells={materialCells}
+           onChange={({ data, _errors }) => setData(data)}
          />
        </div>
      );
    }
    ```
+
+   The optional `onChange` handler demonstrates how you can listen to data and validation changes in JSON Forms.
+
+5. Now you have a basic form up and running!
+   Take a look at our [seed app](https://github.com/eclipsesource/jsonforms-react-seed) for more examples.

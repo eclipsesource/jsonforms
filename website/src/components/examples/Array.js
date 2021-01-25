@@ -1,6 +1,7 @@
 import React from 'react';
 import { array } from '@jsonforms/examples';
-import { JsonFormsDispatch, JsonFormsReduxContext } from '@jsonforms/react';
+import { JsonFormsDispatch } from '@jsonforms/react';
+import { JsonFormsReduxContext } from '@jsonforms/react/lib/redux';
 import { Provider } from 'react-redux';
 import Demo from '../common/Demo';
 import { createJsonFormsStore } from '../../common/store';
@@ -12,14 +13,14 @@ const Array = () => {
     elements: [
       {
         type: 'Control',
-        scope: '#/properties/comments'
-      }
-    ]
+        scope: '#/properties/comments',
+      },
+    ],
   };
   const store = createJsonFormsStore({
     data: array.data,
     schema: array.schema,
-    uischema
+    uischema,
   });
 
   return (
@@ -30,7 +31,7 @@ const Array = () => {
             schema={array.schema}
             uischema={uischema}
             style={{
-              padding: 0
+              padding: 0,
             }}
             js={() => (
               <React.Fragment>

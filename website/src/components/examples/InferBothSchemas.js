@@ -1,6 +1,7 @@
 import React from 'react';
 import { generateSchema } from '@jsonforms/examples';
-import { JsonFormsDispatch, JsonFormsReduxContext } from '@jsonforms/react';
+import { JsonFormsDispatch } from '@jsonforms/react';
+import { JsonFormsReduxContext } from '@jsonforms/react/lib/redux';
 import { generateJsonSchema } from '@jsonforms/core';
 import { Provider } from 'react-redux';
 
@@ -12,7 +13,7 @@ const InferBothSchemas = () => {
 
   const store = createJsonFormsStore({
     data: generateSchema.data,
-    schema
+    schema,
   });
 
   return (

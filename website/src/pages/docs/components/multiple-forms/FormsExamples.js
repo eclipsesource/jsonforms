@@ -1,214 +1,205 @@
 import React from 'react';
 import _ from 'lodash';
-import {Provider} from 'react-redux';
-import {JsonFormsDispatch, JsonFormsReduxContext} from '@jsonforms/react';
-import {person} from '@jsonforms/examples';
-import {Demo} from '../../../../components/common';
-import {createJsonFormsStore} from "../../../../common/store";
+import { Provider } from 'react-redux';
+import { JsonFormsDispatch } from '@jsonforms/react';
+import { JsonFormsReduxContext } from '@jsonforms/react/lib/redux';
+import { person } from '@jsonforms/examples';
+import { Demo } from '../../../../components/common';
+import { createJsonFormsStore } from '../../../../common/store';
 import { materialRenderers } from '@jsonforms/material-renderers';
 
 export const schema = {
-  type: "object",
+  type: 'object',
   properties: {
     person: {
-      title: "Person",
-      type: "object",
+      title: 'Person',
+      type: 'object',
       properties: {
         firstName: {
-          type: "string"
+          type: 'string',
         },
         lastName: {
-          type: "string"
+          type: 'string',
         },
         age: {
-          description: "Age in years",
-          type: "integer",
-          minimum: 0
+          description: 'Age in years',
+          type: 'integer',
+          minimum: 0,
         },
         shippingAddress: {
-          $ref: "#/properties/address/properties/addressId"
-        }
+          $ref: '#/properties/address/properties/addressId',
+        },
       },
-      required: ["firstName", "lastName"]
+      required: ['firstName', 'lastName'],
     },
     address: {
-      title: "Order",
-      type: "object",
+      title: 'Order',
+      type: 'object',
       properties: {
         addressId: {
-          type: "string",
-          label: "Address Type",
-          enum: [
-            "Home Address 1",
-            "Home Address 2",
-            "Workplace",
-          ]
+          type: 'string',
+          label: 'Address Type',
+          enum: ['Home Address 1', 'Home Address 2', 'Workplace'],
         },
         street: {
-          type: "string",
+          type: 'string',
         },
         city: {
-          type: "string"
+          type: 'string',
         },
         zipCode: {
-          type: "string"
-        }
-      }
-    }
-  }
+          type: 'string',
+        },
+      },
+    },
+  },
 };
 
 export const uischema = {
-  type: "VerticalLayout",
+  type: 'VerticalLayout',
   elements: [
     {
-      type: "Group",
-      label: "Person",
+      type: 'Group',
+      label: 'Person',
       elements: [
         {
-          type: "HorizontalLayout",
+          type: 'HorizontalLayout',
           elements: [
             {
-              type: "Control",
-              scope: "#/properties/person/properties/firstName"
+              type: 'Control',
+              scope: '#/properties/person/properties/firstName',
             },
             {
-              type: "Control",
-              scope: "#/properties/person/properties/lastName"
-            }
-          ]
+              type: 'Control',
+              scope: '#/properties/person/properties/lastName',
+            },
+          ],
         },
         {
-          type: "HorizontalLayout",
-          elements: [{
-            type: "Control",
-            scope: "#/properties/person/properties/age"
-          },
+          type: 'HorizontalLayout',
+          elements: [
             {
-              type: "Control",
-              label: "Address",
-              scope: "#/properties/person/properties/shippingAddress"
-            }
-          ]
-        }
-      ]
+              type: 'Control',
+              scope: '#/properties/person/properties/age',
+            },
+            {
+              type: 'Control',
+              label: 'Address',
+              scope: '#/properties/person/properties/shippingAddress',
+            },
+          ],
+        },
+      ],
     },
     {
-      type: "Group",
-      label: "Address",
+      type: 'Group',
+      label: 'Address',
       elements: [
         {
-          type: "HorizontalLayout",
+          type: 'HorizontalLayout',
           elements: [
             {
-              type: "Control",
-              scope: "#/properties/person/properties/shippingAddress"
+              type: 'Control',
+              scope: '#/properties/person/properties/shippingAddress',
             },
             {
-              type: "Control",
-              scope: "#/properties/address/properties/street"
-            }
-          ]
+              type: 'Control',
+              scope: '#/properties/address/properties/street',
+            },
+          ],
         },
         {
-          type: "HorizontalLayout",
+          type: 'HorizontalLayout',
           elements: [
             {
-              type: "Control",
-              scope: "#/properties/address/properties/city"
+              type: 'Control',
+              scope: '#/properties/address/properties/city',
             },
             {
-              type: "Control",
-              scope: "#/properties/address/properties/zipCode"
-            }
-          ]
-        }
-      ]
-    }
-  ]
+              type: 'Control',
+              scope: '#/properties/address/properties/zipCode',
+            },
+          ],
+        },
+      ],
+    },
+  ],
 };
 
 const clonedPersonSchema = _.cloneDeep(schema.properties.person);
-clonedPersonSchema.properties.shippingAddress = { type: "string" };
+clonedPersonSchema.properties.shippingAddress = { type: 'string' };
 
 export const schemas = {
   person: clonedPersonSchema,
-  address: schema.properties.address
+  address: schema.properties.address,
 };
 
 export const uischemas = {
   person: {
-    type: "Group",
-    label: "Person",
+    type: 'Group',
+    label: 'Person',
     elements: [
       {
-        type: "HorizontalLayout",
+        type: 'HorizontalLayout',
         elements: [
           {
-            type: "Control",
-            scope: "#/properties/firstName"
+            type: 'Control',
+            scope: '#/properties/firstName',
           },
           {
-            type: "Control",
-            scope: "#/properties/lastName"
-          }
-        ]
+            type: 'Control',
+            scope: '#/properties/lastName',
+          },
+        ],
       },
       {
-        type: "HorizontalLayout",
+        type: 'HorizontalLayout',
         elements: [
           {
-            type: "Control",
-            scope: "#/properties/age"
+            type: 'Control',
+            scope: '#/properties/age',
           },
           {
-            type: "Control",
-            scope: "#/properties/shippingAddress"
-          }
-        ]
-      }
-    ]
+            type: 'Control',
+            scope: '#/properties/shippingAddress',
+          },
+        ],
+      },
+    ],
   },
   address: {
-    type: "Group",
-    label: "Address",
+    type: 'Group',
+    label: 'Address',
     elements: [
       {
-        type: "HorizontalLayout",
+        type: 'HorizontalLayout',
         elements: [
           {
-            type: "Control",
-            scope: "#/properties/addressId"
+            type: 'Control',
+            scope: '#/properties/addressId',
           },
           {
-            type: "Control",
-            scope: "#/properties/street"
+            type: 'Control',
+            scope: '#/properties/street',
           },
-        ]
+        ],
       },
       {
-        type: "HorizontalLayout",
+        type: 'HorizontalLayout',
         elements: [
           {
-            type: "Control",
-            scope: "#/properties/city"
+            type: 'Control',
+            scope: '#/properties/city',
           },
           {
-            type: "Control",
-            scope: "#/properties/zipCode"
-          }
-        ]
-      }
-    ]
-  }
+            type: 'Control',
+            scope: '#/properties/zipCode',
+          },
+        ],
+      },
+    ],
+  },
 };
-
-
-//const store = createJsonFormsStore({
-//  data: person.data,
-//  schema: person.personCoreSchema,
-//  uischema: person.uischema
-//});
 
 const pdata = {};
 const pschema = _.cloneDeep(schema);
@@ -217,52 +208,48 @@ const puischema = _.cloneDeep(uischema);
 const linkedFormsStore = createJsonFormsStore({
   data: pdata,
   schema: pschema,
-  uischema: puischema
+  uischema: puischema,
 });
 
 const store = createJsonFormsStore({
   data: person.data,
   schema: person.personCoreSchema,
-  uischema: person.uischema
+  uischema: person.uischema,
 });
 
 export const LinkedForms = () => (
   <Provider store={linkedFormsStore}>
     <JsonFormsReduxContext>
-    <Demo
-      js={() => (
-        <JsonFormsDispatch schema={pschema}
-                   uischema={puischema}
-        />
-      )}
-      schema={pschema}
-      uischema={puischema}
-    />
+      <Demo
+        js={() => <JsonFormsDispatch schema={pschema} uischema={puischema} />}
+        schema={pschema}
+        uischema={puischema}
+      />
     </JsonFormsReduxContext>
-    </Provider>
-)
+  </Provider>
+);
 
 export const MultipleForms = () => (
   <Provider store={store}>
     <JsonFormsReduxContext>
-    <Demo
-      js={() => (
-        <div>
-          <JsonFormsDispatch
-            schema={schemas.person}
-            uischema={uischemas.person}
-            renderers={materialRenderers}
-          />
-          <JsonFormsDispatch
-            schema={schemas.address}
-            uischema={uischemas.address}
-            renderers={materialRenderers}
-          />
-        </div>
-      )}
-      schema={schemas}
-      uischema={uischemas}
-    />
+      <Demo
+        js={() => (
+          <div>
+            <JsonFormsDispatch
+              schema={schemas.person}
+              uischema={uischemas.person}
+              renderers={materialRenderers}
+            />
+            <JsonFormsDispatch
+              schema={schemas.address}
+              uischema={uischemas.address}
+              renderers={materialRenderers}
+            />
+          </div>
+        )}
+        schema={schemas}
+        uischema={uischemas}
+      />
     </JsonFormsReduxContext>
   </Provider>
 );

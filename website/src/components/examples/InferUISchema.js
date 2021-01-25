@@ -1,6 +1,7 @@
 import React from 'react';
 import { generateUISchema } from '@jsonforms/examples';
-import { JsonFormsDispatch, JsonFormsReduxContext } from '@jsonforms/react';
+import { JsonFormsDispatch } from '@jsonforms/react';
+import { JsonFormsReduxContext } from '@jsonforms/react/lib/redux';
 import { generateDefaultUISchema, generateJsonSchema } from '@jsonforms/core';
 import { Provider } from 'react-redux';
 import { Demo } from '../common';
@@ -13,7 +14,7 @@ const InferUISchema = () => {
   const store = createJsonFormsStore({
     data: generateUISchema.data,
     schema,
-    uischema
+    uischema,
   });
 
   return (

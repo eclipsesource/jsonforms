@@ -1,25 +1,26 @@
 import React from 'react';
 import { registerRenderer } from '@jsonforms/core';
-import { JsonFormsDispatch, JsonFormsReduxContext } from '@jsonforms/react';
+import { JsonFormsDispatch } from '@jsonforms/react';
+import { JsonFormsReduxContext } from '@jsonforms/react/lib/redux';
 import { createJsonFormsStore } from '../../../../common/store';
 import {
   Demo,
   myGroupTester,
-  MyGroupRenderer
+  MyGroupRenderer,
 } from '../../../../components/common';
 import { Provider } from 'react-redux';
 
 const groupData = {
-  name: 'John Doe'
+  name: 'John Doe',
 };
 
 const groupSchema = {
   type: 'object',
   properties: {
     name: {
-      type: 'string'
-    }
-  }
+      type: 'string',
+    },
+  },
 };
 
 const groupUiSchema = {
@@ -28,21 +29,21 @@ const groupUiSchema = {
   elements: [
     {
       type: 'Control',
-      scope: '#/properties/name'
-    }
-  ]
+      scope: '#/properties/name',
+    },
+  ],
 };
 
 const storeWithRatingControlExample = createJsonFormsStore({
   data: groupData,
   schema: groupSchema,
-  uischema: groupUiSchema
+  uischema: groupUiSchema,
 });
 
 const store = createJsonFormsStore({
   data: groupData,
   schema: groupSchema,
-  uischema: groupUiSchema
+  uischema: groupUiSchema,
 });
 
 export const Default = () => (
