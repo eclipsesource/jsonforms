@@ -1,6 +1,7 @@
 import React from 'react';
 import { person } from '@jsonforms/examples';
-import { JsonFormsDispatch, JsonFormsReduxContext } from '@jsonforms/react';
+import { JsonFormsDispatch } from '@jsonforms/react';
+import { JsonFormsReduxContext } from '@jsonforms/react/lib/redux';
 import { Provider } from 'react-redux';
 import { createJsonFormsStore } from '../../common/store';
 import Demo from '../common/Demo';
@@ -9,7 +10,7 @@ const Person = () => {
   const store = createJsonFormsStore({
     data: person.data,
     schema: person.schema,
-    uischema: person.uischema
+    uischema: person.uischema,
   });
 
   return (

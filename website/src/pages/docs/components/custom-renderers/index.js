@@ -1,16 +1,17 @@
 import React from 'react';
 import { registerRenderer } from '@jsonforms/core';
-import { JsonFormsDispatch, JsonFormsReduxContext } from '@jsonforms/react';
+import { JsonFormsDispatch } from '@jsonforms/react';
+import { JsonFormsReduxContext } from '@jsonforms/react/lib/redux';
 import { createJsonFormsStore } from '../../../../common/store';
 import {
   Demo,
   ratingControlTester,
-  RatingControl
+  RatingControl,
 } from '../../../../components/common';
 import { Provider } from 'react-redux';
 
 const ratingData = {
-  rating: 2
+  rating: 2,
 };
 
 const ratingSchema = {
@@ -19,26 +20,26 @@ const ratingSchema = {
     rating: {
       type: 'integer',
       minimum: 0,
-      maximum: 5
-    }
-  }
+      maximum: 5,
+    },
+  },
 };
 
 const ratingUiSchema = {
   type: 'Control',
-  scope: '#/properties/rating'
+  scope: '#/properties/rating',
 };
 
 const storeWithRatingControlExample = createJsonFormsStore({
   data: ratingData,
   schema: ratingSchema,
-  uischema: ratingUiSchema
+  uischema: ratingUiSchema,
 });
 
 const store = createJsonFormsStore({
   data: ratingData,
   schema: ratingSchema,
-  uischema: ratingUiSchema
+  uischema: ratingUiSchema,
 });
 
 export const Default = () => (

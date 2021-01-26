@@ -46,6 +46,7 @@ const emojiReplace = (text) => {
   text = text.replace('Grinning face', '😀');
   text = text.replace('Right-pointing magnifying glass', '🔎');
   text = text.replace('Bottle with popping cork', '🍾');
+  text = text.replace('Heart', '❤️')
   return text;
 }
 

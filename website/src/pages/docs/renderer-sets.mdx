@@ -3,84 +3,28 @@ name: Renderer sets
 route: /docs/renderer-sets
 ---
 
-import { RendererSetSchemaFeatureTable, RendererSetUISchemaFeatureTable } from './components/RendererSets'
+import {
+  RendererSetSchemaFeatureTable,
+  RendererSetUISchemaFeatureTable,
+} from './components/RendererSets';
 
 # Renderer sets
 
 This is an overview of all available renderer sets and which features they support.
 
 <RendererSetSchemaFeatureTable />
-
 <br />
-
 <RendererSetUISchemaFeatureTable />
 
-## Material UI Renderer Set
+## React Material UI Renderer Set
 
-The Material Renderer Set is based on [Material UI](https://material-ui.com). 
-If you want to implement your own renderers and use them with the Material Renderer Set we recommend to also use Material UI.
+The React Material UI Renderer Set is based on [Material UI](https://material-ui.com).
 
-## Vanilla Renderer Set
-The Vanilla Renderer Set is based on plain HTML with a set of custom styles.
+## React Vanilla Renderer Set
 
-### Styling/Customization
+The React Vanilla Renderer Set is based on plain HTML with a set of custom styles.
+For more information and a customization guide, see the [Vanilla Readme](https://github.com/eclipsesource/jsonforms/blob/master/packages/vanilla/README.md) and [Styles](https://github.com/eclipsesource/jsonforms/blob/master/packages/vanilla/Styles.md) manual.
 
-You can define the classes to be set by providing styles to the store:
+## Angular Material UI Renderer Set
 
-```javascript
-import { combineReducers, createStore } from 'redux';
-import { jsonformsReducer } from '@jsonforms/core';
-import { stylingReducer, vanillaFields, vanillaRenderers, vanillaStyles } from '@jsonforms/vanilla-renderers';
-
-const store = createStore(
-  combineReducers({ 
-    jsonforms: jsonformsReducer({ styles: stylingReducer }) 
-  }),
-  {
-    jsonforms: {
-      cells: vanillaCells,
-      renderers: vanillaRenderers,
-      styles: vanillaStyles,
-    },
-  }
-);
-```
-
-The styles are simple objects with a name and an array of class names to apply. 
-You can also provide a function to the `classNames` parameter, which allows you to return dynamic class names.
-Here is an example:
-
-```javascript
-export const vanillaStyles = [{
-  name: 'horizontal.layout',
-  classNames: ['horizontal-layout']
-}, {
-  name: 'horizontal.layout.item',
-  classNames: numberOfChildren => 
-    ['horizontal-layout' + numberOfChildren[0]]
-}];
-```
-
-Inside a renderer you can retrieve the styling using `getStyleAsClassName` and `getStyle`. 
-The difference is that `getStyleAsClassName` returns a string whereas `getStyle` returns an array of strings.
-Here is an example:
-
-```javascript
-const HorizontalLayoutRenderer = (props: VanillaLayoutProps) => {
-  const { 
-    uischema, 
-    getStyle, 
-    getStyleAsClassName 
-  } = props
-  const horizontalLayout = uischema as HorizontalLayout
-  const elements = horizontalLayout.elements
-  const size = elements ? elements.length : 0
-  const cls = getStyleAsClassName('horizontal.layout')
-  const childClsNames = getStyle('horizontal.layout.item', size)
-    .join(' ')
-  // ...
-}
-```
-
-You can find all predefined style constants in [this list](https://github.com/eclipsesource/jsonforms/blob/master/packages/vanilla/Styles.md).
-
+The Angular Material UI Renderer Set is based on [Angular Material](https://material.angular.io/).

@@ -1,45 +1,58 @@
 ---
 name: Available Actions
 route: /docs/available-actions
+parent: Redux Integration
 ---
 
-import ApiLink from "../../components/common/ApiLink";
+import ApiLink from '../../components/common/ApiLink';
+import Note from './components/Note';
 
 # Available Actions
 
+<Note
+  title='ATTENTION'
+  body={<span>As of JSON Forms 2.5 the React-Redux variant is deprecated in favor of the <a href="/docs/react">JSON Forms "standalone" component</a>.
+        See our <a href="https://github.com/eclipsesource/jsonforms/blob/master/MIGRATION.md">migration guide</a> for more information.</span>}
+/>
+
 JSON Forms provides a couple of actions to interact with the store, which we describe here. All actions might either be imported directly or via the Actions utility.
 
-## `init(data: any, schema: JsonSchema, uischema: UISchemaElement, options: InitActionOptions | AJV.Ajv)` 
+## `init(data: any, schema: JsonSchema, uischema: UISchemaElement, options: InitActionOptions | AJV.Ajv)`
 
-<ApiLink link='/public/api/core/interfaces/initaction.html' title='API' /> 
+<ApiLink link='/public/api/core/interfaces/initaction.html' title='API' />
 
 The INIT action expects the data, schema and uischema and initializes the store accordingly. Currently, this action must be called in order for JSON Forms to work properly.
 
 The `options` parameter allows customization of the validator and the ref resolver that are both used by JSON Forms.
-Please see the respective section on [Validation](/docs/validation) and [ref resolving](/docs/ref-resolving) for more details.
 
-## `update(path: string, updater: (existingData: any) => any` 
+## `update(path: string, updater: (existingData: any) => any`
 
-<ApiLink link='/public/api/core/interfaces/updateaction.html' title='API' /> 
+<ApiLink link='/public/api/core/interfaces/updateaction.html' title='API' />
 
-The update action is used to update the data substate within the store. 
-It expects two arguments: a dot-separated path describing which part of the data should be updated as well as a function that returns the value that should be used. 
+The update action is used to update the data substate within the store.
+It expects two arguments: a dot-separated path describing which part of the data should be updated as well as a function that returns the value that should be used.
 The function gets passed the current value that might be used to calculate the updated value.  
-`mapDispatchToControlProps` and  `mapDispatchToFieldProps`  provide a helper function called `handleChange` which already dispatches the update action,
- so that you rarely need to interact with update itself, if at all.
+`mapDispatchToControlProps` and `mapDispatchToFieldProps` provide a helper function called `handleChange` which already dispatches the update action,
+so that you rarely need to interact with update itself, if at all.
 
-## `registerRenderer(tester: RankedTester, renderer: any)` 
+## `registerRenderer(tester: RankedTester, renderer: any)`
 
-<ApiLink link='/public/api/core/interfaces/addrendereraction.html' title='API' /> 
+<ApiLink
+  link='/public/api/core/interfaces/addrendereraction.html'
+  title='API'
+/>
 
-This action allows you to register a renderer. It expects two arguments, the 1st being a tester and the 2nd the actual renderer. 
+This action allows you to register a renderer. It expects two arguments, the 1st being a tester and the 2nd the actual renderer.
 Please see the section about [Custom Renderers](/docs/custom-renderers) for an example how to use these.
 
 ## `registerUISchema(tester: UISchemaTester, uischema: UISchemaElement)`
 
-<ApiLink link='/public/api/core/interfaces/adduischemaaction.html' title='API' /> 
+<ApiLink
+  link='/public/api/core/interfaces/adduischemaaction.html'
+  title='API'
+/>
 
-When initializing JSON Forms you have to provide a UISchema. Generally this is already enough as it covers most use cases. 
+When initializing JSON Forms you have to provide a UISchema. Generally this is already enough as it covers most use cases.
 But in some cases, especially when rendering (nested) arrays, you have to provide an UISchema which can be retrieved.
 This allows you, for example, to customize the layouts for the elements of the array.
 
@@ -48,31 +61,33 @@ The registration of an UISchema looks as follows:
 ```javascript
 import { Actions, NOT_APPLICABLE } from '@jsonforms/core';
 
-store.dispatch(Actions.registerUISchema(
-  (jsonSchema, schemaPath) => {
-    return schemaPath === '#/properties/firstarray' ? 2 : NOT_APPLICABLE;
-  },
-  {
-    type: 'VerticalLayout',
-    elements: [
-      {
-        type: 'Control',
-        scope: '#/properties/firstName'
-      },
-      {
-        type: 'Control',
-        scope: '#/properties/lastName'
-      }
-    ]
-  }
-));
+store.dispatch(
+  Actions.registerUISchema(
+    (jsonSchema, schemaPath) => {
+      return schemaPath === '#/properties/firstarray' ? 2 : NOT_APPLICABLE;
+    },
+    {
+      type: 'VerticalLayout',
+      elements: [
+        {
+          type: 'Control',
+          scope: '#/properties/firstName',
+        },
+        {
+          type: 'Control',
+          scope: '#/properties/lastName',
+        },
+      ],
+    }
+  )
+);
 ```
 
 You can retrieve a registered UI schema via the `findUISchema` function.
 
 `findUISchema(uischemas: object[], schema: JsonSchema, schemaPath: string, path: string, fallbackLayoutType?: string, control?: ControlElement, rootSchema?: JsonSchema)`
 
-<ApiLink link='/public/api/core/globals.html#finduischema' title='API' /> 
+<ApiLink link='/public/api/core/globals.html#finduischema' title='API' />
 
 To retrieve the registered UI schema you can call the 'findUISchema' function which is provided through the properties.
 This function needs the uischemas (which consists of a tester and a UI schema), the schema, the schemaPath and a subpath. Optionals parameters are a fallback layout type (`VerticalLayout`by default), a control and the root schema.
@@ -118,7 +133,6 @@ export const MyControl =
 
 ## `unregisterUISchema(tester: UISchemaTester)`
 
-<ApiLink link='/public/api/core/globals.html#unregisteruischema' title='API' /> 
+<ApiLink link='/public/api/core/globals.html#unregisteruischema' title='API' />
 
 This action allows to unregister a previously registered UI schema
-

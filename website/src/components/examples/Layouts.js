@@ -1,6 +1,7 @@
 import React from 'react';
 import { layout } from '@jsonforms/examples';
-import { JsonFormsDispatch, JsonFormsReduxContext } from '@jsonforms/react';
+import { JsonFormsDispatch } from '@jsonforms/react';
+import { JsonFormsReduxContext } from '@jsonforms/react/lib/redux';
 import { Provider } from 'react-redux';
 import { Demo } from '../common';
 import { createJsonFormsStore } from '../../common/store';
@@ -8,25 +9,25 @@ import { createJsonFormsStore } from '../../common/store';
 const verticalLayoutStore = createJsonFormsStore({
   data: layout.data,
   schema: layout.schema,
-  uischema: layout.uischemaVertical
+  uischema: layout.uischemaVertical,
 });
 
 const groupStore = createJsonFormsStore({
   data: layout.data,
   schema: layout.schema,
-  uischema: layout.uischemaGroup
+  uischema: layout.uischemaGroup,
 });
 
 const horizontalStore = createJsonFormsStore({
   data: layout.data,
   schema: layout.schema,
-  uischema: layout.uischemaHorizontal
+  uischema: layout.uischemaHorizontal,
 });
 
 const complexStore = createJsonFormsStore({
   data: layout.data,
   schema: layout.schema,
-  uischema: layout.uischemaComplex
+  uischema: layout.uischemaComplex,
 });
 
 export const HorizontalLayout = () => (

@@ -102,6 +102,7 @@
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="masterlistcomponent.html#additem" class="tsd-kind-icon">add<wbr>Item</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="masterlistcomponent.html#changedetectorref" class="tsd-kind-icon">change<wbr>Detector<wbr>Ref</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="masterlistcomponent.html#data" class="tsd-kind-icon">data</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="masterlistcomponent.html#description" class="tsd-kind-icon">description</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="masterlistcomponent.html#disabled" class="tsd-kind-icon">disabled</a></li>
@@ -157,20 +158,23 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Master<wbr>List<wbr>Component<span class="tsd-signature-symbol">(</span>jsonformsService<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonFormsAngularService</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="masterlistcomponent.html" class="tsd-signature-type">MasterListComponent</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Master<wbr>List<wbr>Component<span class="tsd-signature-symbol">(</span>jsonformsService<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonFormsAngularService</span>, changeDetectorRef<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ChangeDetectorRef</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="masterlistcomponent.html" class="tsd-signature-type">MasterListComponent</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Overrides JsonFormsAbstractControl.__constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/bdd934f4/packages/angular-material/src/other/master-detail/master.ts#L147">angular-material/src/other/master-detail/master.ts:147</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/bc8197849/packages/angular-material/src/other/master-detail/master.ts#L146">angular-material/src/other/master-detail/master.ts:146</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>jsonformsService: <span class="tsd-signature-type">JsonFormsAngularService</span></h5>
+								</li>
+								<li>
+									<h5>changeDetectorRef: <span class="tsd-signature-type">ChangeDetectorRef</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="masterlistcomponent.html" class="tsd-signature-type">MasterListComponent</a></h4>
@@ -186,7 +190,7 @@
 					<div class="tsd-signature tsd-kind-icon">add<wbr>Item<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/bdd934f4/packages/angular-material/src/other/master-detail/master.ts#L144">angular-material/src/other/master-detail/master.ts:144</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/bc8197849/packages/angular-material/src/other/master-detail/master.ts#L143">angular-material/src/other/master-detail/master.ts:143</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -225,6 +229,16 @@
 							</li>
 						</ul>
 					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="changedetectorref" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> change<wbr>Detector<wbr>Ref</h3>
+					<div class="tsd-signature tsd-kind-icon">change<wbr>Detector<wbr>Ref<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ChangeDetectorRef</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/bc8197849/packages/angular-material/src/other/master-detail/master.ts#L148">angular-material/src/other/master-detail/master.ts:148</a></li>
+						</ul>
+					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 					<a name="data" class="tsd-anchor"></a>
@@ -341,7 +355,7 @@
 					<div class="tsd-signature tsd-kind-icon">highlighted<wbr>Idx<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/bdd934f4/packages/angular-material/src/other/master-detail/master.ts#L147">angular-material/src/other/master-detail/master.ts:147</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/bc8197849/packages/angular-material/src/other/master-detail/master.ts#L146">angular-material/src/other/master-detail/master.ts:146</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -384,7 +398,7 @@
 					<div class="tsd-signature tsd-kind-icon">master<wbr>Items<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/bdd934f4/packages/angular-material/src/other/master-detail/master.ts#L141">angular-material/src/other/master-detail/master.ts:141</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/bc8197849/packages/angular-material/src/other/master-detail/master.ts#L140">angular-material/src/other/master-detail/master.ts:140</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -406,7 +420,7 @@
 					<aside class="tsd-sources">
 						<p>Overrides JsonFormsAbstractControl.propsPath</p>
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/bdd934f4/packages/angular-material/src/other/master-detail/master.ts#L146">angular-material/src/other/master-detail/master.ts:146</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/bc8197849/packages/angular-material/src/other/master-detail/master.ts#L145">angular-material/src/other/master-detail/master.ts:145</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -416,7 +430,7 @@
 					<div class="tsd-signature tsd-kind-icon">remove<wbr>Items<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/bdd934f4/packages/angular-material/src/other/master-detail/master.ts#L145">angular-material/src/other/master-detail/master.ts:145</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/bc8197849/packages/angular-material/src/other/master-detail/master.ts#L144">angular-material/src/other/master-detail/master.ts:144</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -495,7 +509,7 @@
 					<div class="tsd-signature tsd-kind-icon">selected<wbr>Item<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/bdd934f4/packages/angular-material/src/other/master-detail/master.ts#L142">angular-material/src/other/master-detail/master.ts:142</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/bc8197849/packages/angular-material/src/other/master-detail/master.ts#L141">angular-material/src/other/master-detail/master.ts:141</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -505,7 +519,7 @@
 					<div class="tsd-signature tsd-kind-icon">selected<wbr>Item<wbr>Idx<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/bdd934f4/packages/angular-material/src/other/master-detail/master.ts#L143">angular-material/src/other/master-detail/master.ts:143</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/bc8197849/packages/angular-material/src/other/master-detail/master.ts#L142">angular-material/src/other/master-detail/master.ts:142</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -604,7 +618,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides JsonFormsAbstractControl.mapAdditionalProps</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/bdd934f4/packages/angular-material/src/other/master-detail/master.ts#L169">angular-material/src/other/master-detail/master.ts:169</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/bc8197849/packages/angular-material/src/other/master-detail/master.ts#L168">angular-material/src/other/master-detail/master.ts:168</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -628,7 +642,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides JsonFormsArrayControl.mapToProps</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/bdd934f4/packages/angular-material/src/other/master-detail/master.ts#L247">angular-material/src/other/master-detail/master.ts:247</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/bc8197849/packages/angular-material/src/other/master-detail/master.ts#L244">angular-material/src/other/master-detail/master.ts:244</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -670,7 +684,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides JsonFormsAbstractControl.ngOnInit</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/bdd934f4/packages/angular-material/src/other/master-detail/master.ts#L161">angular-material/src/other/master-detail/master.ts:161</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/bc8197849/packages/angular-material/src/other/master-detail/master.ts#L160">angular-material/src/other/master-detail/master.ts:160</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -687,7 +701,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/bdd934f4/packages/angular-material/src/other/master-detail/master.ts#L239">angular-material/src/other/master-detail/master.ts:239</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/bc8197849/packages/angular-material/src/other/master-detail/master.ts#L236">angular-material/src/other/master-detail/master.ts:236</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -728,7 +742,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/bdd934f4/packages/angular-material/src/other/master-detail/master.ts#L243">angular-material/src/other/master-detail/master.ts:243</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/bc8197849/packages/angular-material/src/other/master-detail/master.ts#L240">angular-material/src/other/master-detail/master.ts:240</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -751,7 +765,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/bdd934f4/packages/angular-material/src/other/master-detail/master.ts#L153">angular-material/src/other/master-detail/master.ts:153</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/bc8197849/packages/angular-material/src/other/master-detail/master.ts#L152">angular-material/src/other/master-detail/master.ts:152</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -774,7 +788,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/bdd934f4/packages/angular-material/src/other/master-detail/master.ts#L234">angular-material/src/other/master-detail/master.ts:234</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/bc8197849/packages/angular-material/src/other/master-detail/master.ts#L231">angular-material/src/other/master-detail/master.ts:231</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -818,7 +832,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/bdd934f4/packages/angular-material/src/other/master-detail/master.ts#L157">angular-material/src/other/master-detail/master.ts:157</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/bc8197849/packages/angular-material/src/other/master-detail/master.ts#L156">angular-material/src/other/master-detail/master.ts:156</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -874,6 +888,9 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="masterlistcomponent.html#additem" class="tsd-kind-icon">add<wbr>Item</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="masterlistcomponent.html#changedetectorref" class="tsd-kind-icon">change<wbr>Detector<wbr>Ref</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 								<a href="masterlistcomponent.html#data" class="tsd-kind-icon">data</a>

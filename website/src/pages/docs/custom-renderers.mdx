@@ -5,6 +5,7 @@ parent: Tutorials
 ---
 
 import { Default, WithCustomRenderer } from './components/custom-renderers';
+import Note from './components/Note';
 
 # Custom Renderers
 
@@ -16,8 +17,11 @@ for a given UI Schema element.
 In this section you will learn how to create and register a custom renderer for a control.
 We will replace the default renderer for integer values of a rating property.
 
-**NOTE**: There are fundamental differences between the React and Angular-based versions of JSON Forms.
-This section describes how to add custom renderers for React-based renderer sets.
+<Note
+  title='NOTE'
+  body='While the high level concepts are the same, there are large implementation differences between the offered React, Angular and Vue renderer sets.
+This tutorial describes how to add custom renderers for React-based renderer sets.'
+/>
 
 By default an integer property is rendered like this:
 
@@ -31,7 +35,7 @@ Our goal is to replace the default renderer with a custom one which will render 
 
 If you want to follow along with this tutorial, you may want to [clone the seed repository](https://github.com/eclipsesource/jsonforms-react-seed)
 which basically is just a skeleton application scaffolded by create-react-app and JSON Forms dependencies added.
-It showcases how to use JSON Forms with a Redux store or standalone.
+It showcases how to use the standalone JSON Forms component and the legacy version with a Redux store (deprecated).
 
 ```bash
 cd jsonforms-react-seed
@@ -78,15 +82,11 @@ by selecting the appropriate number of stars. We won't go into detail about the 
 that we need to provide an `onClick` property in order to allow specifying a callback which gets called
 every time the user clicks on a star. We also need to suppy an initial `value`.
 
-In order to leverage the React component to a JSON Forms compatible renderer, we need to connect it to the store.
-This will allow us to retrieve the initial value and to emit events updating the respective value in the
-store when the users clicks on a star. JSON Forms provides a
-helper function `mapStateToControlProps` which already provides most of the necessary props for us.
-In this case, the props are `data`, which is the actual data bit to be rendered, and `path`,
-a dot-separated string, which is necessary to propagate an update back to the store.
-
-For the `onClick` prop we pass the `handleChange` handler, which we retrieve
-via another helper function provided by JSON Forms called `withJsonFormsControlProps`.
+In order to use our React component as a JSON Forms compatible renderer, we can use the `withJsonFormsControlProps` utility function
+from JSON Forms that will give us all necessary props to render the control.
+This will allow us to retrieve the initial value and to emit events updating the respective value when the users clicks on a star.
+In this case, the props are `data`, which is the actual data bit to be rendered, `path`,
+a dot-separated string, which represents the path the data is written to and the `handleChange` handler function which we can use for the `onClick` prop of our `Rating` control.
 All the handler actually does is to emit a change with the new value.
 
 The complete code of `src/RatingControl.tsx` looks as follows:
@@ -116,11 +116,10 @@ export default withJsonFormsControlProps(RatingControl);
 
 Now that we have our renderer ready, we need to tell JSON Forms when we want to make use of it.
 For that purpose we create a tester that checks if the corresponding UI schema element is a control
-and whether it is bound to a path that ends with `rating`. If that is the case, we return a rank of
-
-3. That is because the default renderer sets provide a rank with a value of 2, hence our tester will need to
-   rank the custom control higher a bit higher, such that it will be picked up for the rating control during rendering.
-   The `ratingControlTester.js` file contains the respective code as a default export.
+and whether it is bound to a path that ends with `rating`. If that is the case, we return a rank of `3`.
+That is because the default renderer sets provide a rank with a value of `2`, hence our tester will need to
+rank the custom control higher, such that it will be picked up for the rating control during rendering.
+The `ratingControlTester.js` file contains the respective code as a default export.
 
 ```javascript
 import { rankWith, scopeEndsWith } from '@jsonforms/core';
@@ -137,31 +136,37 @@ of the UI schema and/or JSON schema.
 
 ### 3. Register the renderer
 
-All there is left to do is to register the renderer with its tester. We can do so by calling
-the `registerRenderer` action on the store. Within `index.tsx`, the following
-statement registers the renderer.
+All that's left to do is to use the renderer with its tester. We can do so by appending
+the renderer/tester pair to the array of renderer registrations used by the `JsonForms` component.
+Within `App.tsx`, find the list of renderers used by the standalone `JsonForms` component and add the renderer and its tester like so:
 
 ```javascript
 import RatingControl from './RatingControl';
 import ratingControlTester from './ratingControlTester';
 
-store.dispatch(Actions.registerRenderer(ratingControlTester, RatingControl));
+// list of renderers declared outside the App component
+const renderers = [
+  ...materialRenderers,
+  //register custom renderers
+  { tester: ratingControlTester, renderer: RatingControl },
+];
 ```
 
-To register the custom renderer when using JSON Forms standalone, without a Redux store,
-we simply add it to the list of renderers passed to the `JsonForms` component.
+Then, by simply passing the list of renderers to JSON Forms, our custom rating renderer will now be used to render the `rating` property.
 
 ```javascript
 <JsonForms
   // other necessary declarations go here...
-  renderers={[
-    ...materialRenderers,
-    //register custom renderer
-    { tester: ratingControlTester, renderer: RatingControl }
-  ]}
+  renderers={renderers}
 />
 ```
 
-And that's it! The rating control will now be used to render the `rating` property.
-It should be noted that in order to create a full-fledged control there's more work left,
+And that's it!
+It should be noted that in order to create a full-fledged control there's more work left to do,
 since we did not cover concepts like validation or visibility.
+
+## Dispatching
+
+When writing custom renderers that themselves dispatch to JSON Forms, there are two components that can be used: `ResolvedJsonFormsDispatch` and `JsonFormsDispatch`.
+For performance reasons, it is almost always preferable to use the `ResolvedJsonFormsDispatch` component.
+In contrast to `ResolvedJsonFormsDispatch`, the `JsonFormsDispatch` component will additionally check and resolve external schema refs, which is almost never needed in a nested component such as a renderer.

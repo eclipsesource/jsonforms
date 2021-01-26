@@ -1,10 +1,11 @@
 import { combineReducers, createStore } from 'redux';
-import { Actions, jsonformsReducer } from '@jsonforms/core';
+import { jsonformsReducer } from '@jsonforms/react/lib/redux';
+import { Actions } from '@jsonforms/core';
 import {
   materialCells,
   materialRenderers,
   materialCategorizationTester,
-  MaterialCategorizationLayout
+  MaterialCategorizationLayout,
 } from '@jsonforms/material-renderers';
 
 export const createJsonFormsStore = ({ data, schema, uischema }) => {
@@ -15,11 +16,11 @@ export const createJsonFormsStore = ({ data, schema, uischema }) => {
         renderers: materialRenderers.concat([
           {
             tester: materialCategorizationTester,
-            renderer: MaterialCategorizationLayout
-          }
+            renderer: MaterialCategorizationLayout,
+          },
         ]),
-        cells: materialCells
-      }
+        cells: materialCells,
+      },
     }
   );
 

@@ -1,2 +1,4 @@
-/docs/tutorial-typescript    /docs/tutorial-redux   301
-/*    /index.html   200
+/docs/tutorial-typescript    /docs/tutorial                   301
+/docs/angular                /docs/integrations/angular       301
+/docs/react                  /docs/integrations/react         301
+/*                           /index.html                      200

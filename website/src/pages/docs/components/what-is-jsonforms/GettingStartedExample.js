@@ -1,11 +1,12 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { registerRenderer } from '@jsonforms/core';
-import { JsonFormsDispatch, JsonFormsReduxContext } from '@jsonforms/react';
+import { JsonFormsDispatch } from '@jsonforms/react';
+import { JsonFormsReduxContext } from '@jsonforms/react/lib/redux';
 import {
   Demo,
   RatingControl,
-  ratingControlTester
+  ratingControlTester,
 } from '../../../../components/common';
 import { createJsonFormsStore } from '../../../../common/store';
 
@@ -14,58 +15,58 @@ export const IntroCode = {
     type: 'object',
     properties: {
       name: {
-        type: 'string'
+        type: 'string',
       },
       description: {
-        type: 'string'
+        type: 'string',
       },
       done: {
-        type: 'boolean'
+        type: 'boolean',
       },
       rating: {
-        type: 'integer'
-      }
+        type: 'integer',
+      },
     },
-    required: ['name']
+    required: ['name'],
   },
   uischema: {
     type: 'VerticalLayout',
     elements: [
       {
         type: 'Control',
-        scope: '#/properties/name'
+        scope: '#/properties/name',
       },
       {
         type: 'Control',
         scope: '#/properties/description',
         options: {
-          multi: true
-        }
+          multi: true,
+        },
       },
       {
         type: 'Control',
         label: 'Rating',
-        scope: '#/properties/rating'
+        scope: '#/properties/rating',
       },
       {
         type: 'Control',
         label: 'Done?',
-        scope: '#/properties/done'
-      }
-    ]
-  }
+        scope: '#/properties/done',
+      },
+    ],
+  },
 };
 
 const storeWithoutCustomControl = createJsonFormsStore({
   data: {},
   schema: IntroCode.schema,
-  uischema: IntroCode.uischema
+  uischema: IntroCode.uischema,
 });
 
 const storeWithRatingControlExample = createJsonFormsStore({
   data: {},
   schema: IntroCode.schema,
-  uischema: IntroCode.uischema
+  uischema: IntroCode.uischema,
 });
 
 export const GettingStartedExample = () => (

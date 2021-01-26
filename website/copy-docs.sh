@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 WEBSITE_REPO=$( dirname "${BASH_SOURCE[0]}" )
 JSONFORMS_REPO=$1
-declare -a PACKAGES=(core react material vanilla angular angular-material material-tree-renderer ionic)
+declare -a PACKAGES=(core react material vanilla angular angular-material vue vue2)
 
 if [[ -z $JSONFORMS_REPO || ! -d $JSONFORMS_REPO ]]; then
   echo "Error: please specify JSONForms source repo location."

@@ -1,7 +1,8 @@
 import React from 'react';
 import { day3 } from '@jsonforms/examples';
 import { registerRenderer } from '@jsonforms/core';
-import { JsonFormsDispatch, JsonFormsReduxContext } from '@jsonforms/react';
+import { JsonFormsDispatch } from '@jsonforms/react';
+import { JsonFormsReduxContext } from '@jsonforms/react/lib/redux';
 import { Provider } from 'react-redux';
 
 import { Demo } from '../common';
@@ -13,7 +14,7 @@ const CustomControlsExample = () => {
   const store = createJsonFormsStore({
     data: day3.data,
     schema: day3.schema,
-    uischema: day3.uischema
+    uischema: day3.uischema,
   });
 
   store.dispatch(registerRenderer(ratingControlTester, RatingControl));

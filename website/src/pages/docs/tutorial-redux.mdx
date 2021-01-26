@@ -5,8 +5,16 @@ parent: Tutorials
 ---
 
 import { PersonVars } from './components/tutorial/TutorialExample';
+import Note from './components/Note';
 
-# Create a JSON Forms App (Redux)
+# Create a JSON Forms App
+
+<Note
+  title='ATTENTION'
+  body={<span>As of JSON Forms 2.5 the React-Redux variant is deprecated in favor of the <a href="/docs/react">JSON Forms "standalone" component</a>.
+        See our <a href="https://github.com/eclipsesource/jsonforms/blob/master/MIGRATION.md">migration guide</a> for more information.
+        For the React standalone tutorial, see <a href="/docs/tutorial">here</a></span>}
+/>
 
 This section describes how you can integrate JSON Forms into a React app from scratch.
 Alternatively you can also clone the [seed app](https://github.com/eclipsesource/jsonforms-react-seed).
@@ -21,16 +29,15 @@ Alternatively you can also clone the [seed app](https://github.com/eclipsesource
    ```
 
    If you want to use typescript within your project, use the following command instead:
-    ```bash
-   npx create-react-app my-jsonforms-app --typescript
+
+   ```bash
+   npx create-react-app my-jsonforms-app --template typescript
    ```
 
-   Scaffolding may take a couple of moments. Once it's finished, switch to your newly created app and
-   install all dependencies:
+   Scaffolding may take a couple of moments. Once it's finished, switch to your newly created app.
 
    ```bash
    cd my-jsonforms-app
-   npm install
    ```
 
 2. Install JSON Forms and the material renderer set. We'll use an example from JSON Forms in order to obtain
@@ -45,14 +52,12 @@ Alternatively you can also clone the [seed app](https://github.com/eclipsesource
 
    npm install --save @material-ui/core
    npm install --save @material-ui/icons
-   npm install --save @material-ui/pickers
 
-   # Since 2.2.x, install react, redux and react-redux are peer dependencies
-   npm install --save react redux react-redux
+   npm install --save redux react-redux
    ```
 
    Since 2.2.x JSON Forms does not include React, redux and react-redux as dependencies, but rather has them
-   configured as peer depenencies.
+   configured as peer dependencies.
 
 3. Switch to the `src` directory and open `index.js` (`index.tsx` when using typescript) with an editor of your choice.
    Let's add a couple of imports first:
@@ -61,13 +66,13 @@ Alternatively you can also clone the [seed app](https://github.com/eclipsesource
    import { combineReducers, createStore } from 'redux';
    import { Provider } from 'react-redux';
 
-   import { Actions, jsonformsReducer } from '@jsonforms/core';
+   import { Actions } from '@jsonforms/core';
    import { person } from '@jsonforms/examples';
    import {
      materialRenderers,
-     materialCells
+     materialCells,
    } from '@jsonforms/material-renderers';
-   import { JsonFormsReduxContext } from '@jsonforms/react';
+   import { jsonformsReducer, JsonFormsReduxProvider } from '@jsonforms/react/lib/redux';
    ```
 
    The `person` import is necessary for importing the person example
@@ -99,8 +104,8 @@ Alternatively you can also clone the [seed app](https://github.com/eclipsesource
      {
        jsonforms: {
          cells: materialCells,
-         renderers: materialRenderers
-       }
+         renderers: materialRenderers,
+       },
      }
    );
    ```
@@ -124,8 +129,8 @@ Alternatively you can also clone the [seed app](https://github.com/eclipsesource
 
    You can close the <code>index.js</code> file now.
 
-6. Open the `App.js` (`App.tsx` when using typescript) file and import the `JsonForms` component from `@jsonforms/react`.
-   Delete the `header` element and replace it with the `JsonForms` element
+6. Open the `App.js` (`App.tsx` when using typescript) file and import the `JsonFormsDispatch` component from `@jsonforms/react`.
+   Delete the `header` element and replace it with the `JsonFormsDispatch` element
    to get a form rendered:
 
    ```jsx

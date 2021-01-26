@@ -1,30 +1,31 @@
-import * as React from "react";
+import * as React from 'react';
 import { Link } from 'docz';
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import withStyles from "@material-ui/core/styles/withStyles";
+import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
+import withStyles from '@material-ui/core/styles/withStyles';
 
 import FeaturesIcon from '@material-ui/icons/Report';
 import CustomizeIcon from '@material-ui/icons/Brush';
-import AddIcon from '@material-ui/icons/Add';
-import { JsonFormsDispatch, JsonFormsReduxContext } from '@jsonforms/react'
-import corePackageJson from '@jsonforms/core/package'
+import { JsonFormsDispatch } from '@jsonforms/react';
+import { JsonFormsReduxContext } from '@jsonforms/react/lib/redux';
+import corePackageJson from '@jsonforms/core/package';
 import { Provider } from 'react-redux';
-import angularLogo from "../images/angular.svg"
+import angularLogo from '../images/angular.svg';
 import reactLogo from '../images/react-logo.svg';
-import reduxLogo from '../images/reduxLogo.svg';
+import architectureSmall from '../images/architecture_small.svg';
 import schema from './schema.json';
 import uischema from './uischema.json';
 import tweets from '../pages/news/tweets.json';
 import schemaLogo from './schemalogo.svg';
 import { NewsSection } from './NewsSection';
 
-import { Demo, Logo } from '../components/common'
-import { createJsonFormsStore } from "../common/store"
+import { Demo, Logo } from '../components/common';
+import { createJsonFormsStore } from '../common/store';
 import globalStyles from '../styles/global.module.css';
-import styles from "./home.module.css"
-import { Grid } from "@material-ui/core";
-//import SEO from "../components/seo"
+import styles from './home.module.css';
+import { Grid } from '@material-ui/core';
 
 const additionalStyles = () => ({
   logo: {
@@ -34,23 +35,25 @@ const additionalStyles = () => ({
     fontSize: '2em',
   },
   gettingStartedButton: {
-    margin: '1em'
-  }
+    margin: '1em',
+  },
 });
 
 const store = createJsonFormsStore({
   data: { firstName: 'Max', lastName: 'Power' },
   schema,
-  uischema
+  uischema,
 });
 
 const nextVersion = process.env.DOCZ_NEXTVERSION;
-const nextVersionText = nextVersion && nextVersion !== corePackageJson.version ? `@next: ${nextVersion}` : '';
+const nextVersionText =
+  nextVersion && nextVersion !== corePackageJson.version
+    ? `@next: ${nextVersion}`
+    : '';
 
 const Home = ({ classes }) => {
   return (
     <React.Fragment>
-      {/*<SEO title="Home" keywords={[`jsonschema`, `json`, `react`, `forms`]} />*/}
       <div className={classes.logo}>
         <div style={{ paddingTop: '0.5em' }}>
           <Grid container>
@@ -60,9 +63,7 @@ const Home = ({ classes }) => {
                 <strong>JSON</strong>Forms
               </Typography>
               <Logo />
-              <Typography variant='h5'>
-                More forms. Less code.
-              </Typography>
+              <Typography variant='h5'>More forms. Less code.</Typography>
               <div className={styles.feature}>
                 <Typography variant='h6' style={{ color: '#747474' }}>
                   Complex forms in the blink of an eye
@@ -71,15 +72,20 @@ const Home = ({ classes }) => {
               <div className={styles.feature}>
                 <Typography>
                   Version: {corePackageJson.version}
-                  {nextVersionText && <><br/>{nextVersionText}</>}
+                  {nextVersionText && (
+                    <>
+                      <br />
+                      {nextVersionText}
+                    </>
+                  )}
                 </Typography>
               </div>
               <div className={styles.feature}>
-                <Link
-                  to='/docs/getting-started'
-                  className={globalStyles.link}
-                >
-                  <Button variant='outlined' className={classes.gettingStartedButton}>
+                <Link to='/docs/getting-started' className={globalStyles.link}>
+                  <Button
+                    variant='outlined'
+                    className={classes.gettingStartedButton}
+                  >
                     Get started
                   </Button>
                 </Link>
@@ -100,29 +106,40 @@ const Home = ({ classes }) => {
         <div className={styles.feature}>
           <FeaturesIcon className={styles.icon} />
           <p className={styles.landing_page__detail}>
-            Fully-featured forms including data-binding, input validation, and rule-based visibility
-            out-of-the-box
+            Fully-featured forms including data-binding, input validation, and
+            rule-based visibility out-of-the-box
           </p>
         </div>
 
         <div className={styles.feature}>
           <CustomizeIcon className={styles.icon} />
           <p className={styles.landing_page__detail}>
-            Designed for customizability from custom styling to custom widgets
+            Designed for customizability - from custom styling to custom widgets
           </p>
         </div>
       </div>
 
       <div className={styles.landing_page__description}>
         <div className={styles.landing_page__logos}>
-          <img src={reduxLogo} alt="Redux logo" style={{ height: '80px' }} />
-          <AddIcon />
-          <img src={reactLogo} alt="React logo" style={{ height: '80px', width: '80px' }} />
+          <img
+            src={reactLogo}
+            alt='React logo'
+            style={{ height: '80px', width: '80px' }}
+          />
 
-          <img src={angularLogo} alt="Angular logo" style={{ height: '80px' }} />
+          <img
+            src={angularLogo}
+            alt='Angular logo'
+            style={{ height: '80px' }}
+          />
         </div>
-        <Typography variant='h4' style={{ color: '#212121', textAlign: 'center' }}>
-          JSON Forms is a JSON Schema based approach for creating forms based on Redux and comes with support for React and Angular.
+        <Typography
+          variant='h4'
+          style={{ color: '#212121', textAlign: 'center' }}
+        >
+          JSON Forms is a JSON Schema based approach for creating forms.
+          <br />
+          It comes with off the shelf support for React and Angular.
         </Typography>
       </div>
 
@@ -138,22 +155,60 @@ const Home = ({ classes }) => {
         </Provider>
       </div>
 
-      <hr/>
+      <hr />
 
       <div className={styles.landing_page__news}>
-        <div class={styles.news_section}>
-          <NewsSection tweets={tweets} amount="1" />
+        <div className={styles.news_section}>
+          <NewsSection tweets={tweets} amount='1' />
         </div>
-        <Link
-          to='/news'
-          className={globalStyles.link}
-        >
-          <Button variant="contained">
-            more news
-          </Button>
+        <Link to='/news' className={globalStyles.link}>
+          <Button variant='contained'>more news</Button>
         </Link>
       </div>
-    </React.Fragment >
+
+      <div className={styles.landing_page__architecture}>
+        <Grid container spacing={3} alignItems='center'>
+          <Grid item xs={12}>
+            <Typography
+              variant='h3'
+              align='center'
+              className={styles.shift_left}
+            >
+              JSON Forms Architecture
+            </Typography>
+          </Grid>
+        </Grid>
+        <Grid
+          container
+          spacing={5}
+          alignItems='center'
+          justify='center'
+          mt={4}
+          className={styles.landing_page__architecture_inner}
+        >
+          <Grid item xs={12} lg={6}>
+            <Link to='/docs/architecture'>
+              <img
+                src={architectureSmall}
+                alt='JSON Forms Architecture'
+                className={styles.architecture_small}
+              />
+            </Link>
+          </Grid>
+          <Grid item xs={12} lg={6}>
+            <Card>
+              <CardContent>
+                JSON Forms has a modular architecture and can be customized on
+                every level. The core functionality is pure Javascript and
+                therefore independent from any UI framework. We offer bindings
+                for React, Angular and Vue. For more information see{' '}
+                <Link to='/docs/architecture'>here</Link>.
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
+      </div>
+    </React.Fragment>
   );
 };
 

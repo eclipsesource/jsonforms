@@ -6,7 +6,7 @@ route: /docs/what-is-jsonforms
 import {
   IntroCode,
   GettingStartedExample,
-  GettingStartedExampleWithRatingControl
+  GettingStartedExampleWithRatingControl,
 } from './components//what-is-jsonforms/GettingStartedExample';
 
 # What is JSON Forms?
@@ -18,7 +18,7 @@ These UIs are targeted at entering, modifying and viewing data and are usually e
 
 Writing HTML templates and Javascript for data binding by hand is hard, especially in applications
 of reasonable size.
-Furthermore, a form is often more than just a collection of input fields, usually more
+Furthermore, a form is often more than just a collection of input fields and more
 advanced functionality is required, e.g. validation or conditional visibility.
 
 JSON Forms utilizes the capabilities of JSON and JSON schema and
@@ -29,14 +29,17 @@ Forms are then rendered with a UI library or framework, e.g. React or Angular.
 
 Any UI is defined by using two schemata:
 
-- The **data/JSON schema** defines the underlying data to be shown in the UI (objects, properties, and their types)
-- The **UI schema** defines how this data is rendered as a form, e.g. the order of controls, their visibility, and the layout
+\- the **data/JSON schema** defines the underlying data to be shown in the UI
+(objects, properties, and their types);
+
+\- the **UI schema** defines how this data is rendered as a form, e.g. the
+order of controls, their visibility, and the layout.
 
 Both artifacts are interpreted during runtime by the framework and mapped to respective UI components,
-which already feature data binding, validation, etc.
+which already feature data binding, validation etc.
 
-Let's look at an example: Below is given a JSON schema describing a task and an
-UI schema which defines four controls which are to be arranged in a vertical fashion.
+Let's look at an example: below is given a JSON schema describing a task and an
+UI schema which defines four controls that are to be arranged in a vertical fashion.
 The result of rendering the form with JSON Forms can be seen at the bottom.
 
 Here's the JSON schema, which defines a simple task entity:

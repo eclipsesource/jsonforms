@@ -1,21 +1,24 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core';
-import styles from '../../../styles/global.module.css'
+import styles from '../../../styles/global.module.css';
 import MenuLink from './MenuLink';
 import { useMenus } from 'docz';
-
+import hiddenPageRoutes from '../../../pages/hiddenPageRoutes';
 const additionalStyles = {
-    container: {
-        display: 'flex',
-        paddingBottom: 10
-    }
-}
+  container: {
+    display: 'flex',
+    paddingBottom: 10,
+  },
+};
 
 const baseIndent = 5;
 const baseFontSize = 22;
 
 const Menu = ({ indent, menu, pathname }) => {
-  const children = useMenus({ filter: m => m.parent === menu.name });
+  const children = useMenus({
+    filter: (m) =>
+      !hiddenPageRoutes.includes(m.route) && m.parent === menu.name,
+  });
   const style = {
     paddingLeft: indent * baseIndent,
     fontSize: baseFontSize - indent * 4 - indent,
@@ -25,13 +28,8 @@ const Menu = ({ indent, menu, pathname }) => {
       <li style={style}>
         <MenuLink to={menu.route} label={menu.name} pathname={pathname} />
         <ul style={style}>
-          {children.map(m => (
-            <Menu
-              key={m.id}
-              indent={indent + 1}
-              menu={m}
-              pathname={pathname}
-            />
+          {children.map((m) => (
+            <Menu key={m.id} indent={indent + 1} menu={m} pathname={pathname} />
           ))}
         </ul>
       </li>
@@ -43,14 +41,19 @@ const Menu = ({ indent, menu, pathname }) => {
       </li>
     );
   }
-}
+};
 
 const SidebarLayout = ({ classes, children, menus, pathname, onSearch }) => (
   <div className={classes.container}>
     <div className={styles.sidebar}>
-      {onSearch && <input onChange={ev => onSearch(ev.target.value)} placeholder="Filter sections..." />}
+      {onSearch && (
+        <input
+          onChange={(ev) => onSearch(ev.target.value)}
+          placeholder='Filter sections...'
+        />
+      )}
       <ul>
-        {menus.map(m => (
+        {menus.map((m) => (
           <Menu key={m.route} menu={m} pathname={pathname} indent={0} />
         ))}
       </ul>
