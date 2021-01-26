@@ -1,11 +1,11 @@
 {
   "name": "@jsonforms/angular-test",
-  "version": "2.5.0-beta.0",
+  "version": "2.5.0-beta.1",
   "private": true,
   "main": "./lib/index.js",
   "dependencies": {
-    "@jsonforms/angular": "^2.5.0-beta.0",
-    "@jsonforms/core": "^2.5.0-beta.0",
+    "@jsonforms/angular": "^2.5.0-beta.1",
+    "@jsonforms/core": "^2.5.0-beta.1",
     "redux": "^4.0.4"
   },
   "devDependencies": {
