@@ -20,8 +20,6 @@ describe('JsonForms.vue', () => {
     const wrapper = shallowMount(JsonForms, bindings({
       props: { data, renderers }
     }));
-    console.log(Generate.jsonSchema(data));
-    console.log((wrapper.vm as any).jsonforms.core.schema);
     expect((wrapper.vm as any).jsonforms.core.schema).toEqual(Generate.jsonSchema(data));
   });
 
