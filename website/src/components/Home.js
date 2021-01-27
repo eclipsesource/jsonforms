@@ -14,6 +14,7 @@ import corePackageJson from '@jsonforms/core/package';
 import { Provider } from 'react-redux';
 import angularLogo from '../images/angular.svg';
 import reactLogo from '../images/react-logo.svg';
+import vueLogo from '../images/vue-logo.svg';
 import architectureSmall from '../images/architecture_small.svg';
 import schema from './schema.json';
 import uischema from './uischema.json';
@@ -130,7 +131,13 @@ const Home = ({ classes }) => {
           <img
             src={angularLogo}
             alt='Angular logo'
-            style={{ height: '80px' }}
+            style={{ height: '80px', paddingLeft: '5px' }}
+          />
+
+          <img
+            src={vueLogo}
+            alt='Vue logo'
+            style={{ height: '70px', paddingLeft: '5px' }}
           />
         </div>
         <Typography
@@ -139,7 +146,7 @@ const Home = ({ classes }) => {
         >
           JSON Forms is a JSON Schema based approach for creating forms.
           <br />
-          It comes with off the shelf support for React and Angular.
+          It comes with off the shelf support for React, Angular and Vue.
         </Typography>
       </div>
 
