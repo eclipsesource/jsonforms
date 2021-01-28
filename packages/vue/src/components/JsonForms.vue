@@ -61,7 +61,7 @@ export default defineComponent({
     cells: {
       required: false,
       type: Array as PropType<JsonFormsCellRendererRegistryEntry[]>,
-      default: () =>[]
+      default: () => []
     },
     config: {
       required: false,
@@ -129,7 +129,6 @@ export default defineComponent({
   },
   watch: {
     schema(newSchema) {
-      console.log("schema updated");
       const generatorData = isObject(this.data) ? this.data : {};
       this.schemaToUse = newSchema ?? Generate.jsonSchema(generatorData);
       if (!this.uischema) {
@@ -137,7 +136,6 @@ export default defineComponent({
       }
     },
     uischema(newUischema) {
-      console.log("uischema updated");
       this.uischemaToUse = newUischema ?? Generate.uiSchema(this.schemaToUse);
     },
     renderers(newRenderers) {
@@ -149,11 +147,14 @@ export default defineComponent({
     uischemas(newUischemas) {
       this.jsonforms.uischemas = newUischemas;
     },
-    config(newConfig) {
-      this.jsonforms.config = configReducer(
-        undefined,
-        Actions.setConfig(newConfig)
-      );
+    config: {
+      handler(newConfig) {
+        this.jsonforms.config = configReducer(
+          undefined,
+          Actions.setConfig(newConfig)
+        );
+      },
+      deep: true
     },
     readonly(newReadonly) {
       this.jsonforms.readonly = newReadonly;

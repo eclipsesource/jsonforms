@@ -32,6 +32,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Close from '@material-ui/icons/Close';
 import { useTheme } from '@material-ui/core/styles';
 import { JsonFormsTheme } from '../util';
+import { InputBaseComponentProps } from '@material-ui/core';
 
 interface MuiTextInputProps {
   muiInputProps?: React.HTMLAttributes<HTMLInputElement>;
@@ -54,7 +55,7 @@ export const MuiInputText = React.memo((props: CellProps & WithClassname & MuiTe
   } = props;
   const maxLength = schema.maxLength;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
-  let inputProps: any;
+  let inputProps: InputBaseComponentProps;
   if (appliedUiSchemaOptions.restrict) {
     inputProps = { maxLength: maxLength };
   } else {

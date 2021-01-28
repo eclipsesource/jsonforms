@@ -27,9 +27,12 @@ import {
   JsonFormsRendererRegistryEntry,
   JsonFormsCellRendererRegistryEntry,
   defaultMapStateToEnumCellProps,
-  mapStateToDispatchCellProps
+  mapStateToDispatchCellProps,
+  createId,
+  removeId
 } from '@jsonforms/core';
-import { CompType, inject, ref, watchEffect } from '../config';
+import { onBeforeMount } from 'vue';
+import { CompType, inject, onUnmounted, ref, watchEffect } from '../config';
 
 /**
  * Constructs a props declaration for Vue components which can be used
@@ -43,7 +46,10 @@ import { CompType, inject, ref, watchEffect } from '../config';
 export const rendererProps = <U = UISchemaElement>() => ({
   schema: {
     required: true as true,
-    type: [Object, Boolean] as CompType<JsonSchema, [ObjectConstructor, BooleanConstructor]>
+    type: [Object, Boolean] as CompType<
+      JsonSchema,
+      [ObjectConstructor, BooleanConstructor]
+    >
   },
   uischema: {
     required: true as true,
@@ -65,7 +71,10 @@ export const rendererProps = <U = UISchemaElement>() => ({
   },
   cells: {
     required: false,
-    type: Array as CompType<JsonFormsCellRendererRegistryEntry[], ArrayConstructor>,
+    type: Array as CompType<
+      JsonFormsCellRendererRegistryEntry[],
+      ArrayConstructor
+    >,
     default: undefined
   }
 });
@@ -89,7 +98,10 @@ export const masterListItemProps = () => ({
   },
   schema: {
     required: true as true,
-    type: [Object, Boolean] as CompType<JsonSchema, [ObjectConstructor, BooleanConstructor]>
+    type: [Object, Boolean] as CompType<
+      JsonSchema,
+      [ObjectConstructor, BooleanConstructor]
+    >
   },
   handleSelect: {
     required: false as false,
@@ -98,7 +110,10 @@ export const masterListItemProps = () => ({
   },
   removeItem: {
     required: false as false,
-    type: Function as CompType<(path: string, value: number) => void, FunctionConstructor>,
+    type: Function as CompType<
+      (path: string, value: number) => void,
+      FunctionConstructor
+    >,
     default: undefined
   }
 });
@@ -116,11 +131,11 @@ export interface ControlProps extends RendererProps {
   uischema: ControlElement;
 }
 
-type Nullable<T> = {
+export type Nullable<T> = {
   [P in keyof T]: P | null;
 };
 
-const controlInit = () => ({
+export const controlInit = () => ({
   data: null,
   description: null,
   errors: null,
@@ -137,36 +152,36 @@ const controlInit = () => ({
   rootSchema: null
 });
 
-const controlWithDetailInit = () => ({
+export const controlWithDetailInit = () => ({
   ...controlInit(),
   uischemas: null
 });
 
-const arrayControlInit = () => ({
+export const arrayControlInit = () => ({
   ...controlWithDetailInit(),
   childErrors: null,
   renderers: null,
   cells: null
 });
 
-const arrayLayoutInit = () => ({
+export const arrayLayoutInit = () => ({
   ...controlWithDetailInit(),
   minItems: null,
   renderers: null,
   cells: null
 });
 
-const enumControlInit = () => ({
+export const enumControlInit = () => ({
   ...controlInit(),
   options: null
 });
 
-const combinatorControlInit = () => ({
+export const combinatorControlInit = () => ({
   ...controlWithDetailInit(),
   indexOfFittingSchema: null
 });
 
-const layoutInit = () => ({
+export const layoutInit = () => ({
   renderers: null,
   cells: null,
   visible: null,
@@ -178,7 +193,7 @@ const layoutInit = () => ({
   direction: null
 });
 
-const rendererInit = () => ({
+export const rendererInit = () => ({
   renderers: null,
   cells: null,
   schema: null,
@@ -187,7 +202,7 @@ const rendererInit = () => ({
   path: null
 });
 
-const masterListItemInit = () => ({
+export const masterListItemInit = () => ({
   index: null,
   selected: null,
   path: null,
@@ -195,7 +210,7 @@ const masterListItemInit = () => ({
   childLabel: null
 });
 
-const cellInit = () => ({
+export const cellInit = () => ({
   data: null,
   visible: null,
   enabled: null,
@@ -211,27 +226,27 @@ const cellInit = () => ({
   cells: null
 });
 
-const enumCellInit = () => ({
+export const enumCellInit = () => ({
   ...cellInit(),
   options: null
 });
 
-type Required<T> = T extends object
+export type Required<T> = T extends object
   ? { [P in keyof T]-?: NonNullable<T[P]> }
   : T;
 
-function useControl<R, D, P>(
+export function useControl<R, D, P>(
   props: P,
   stateInit: () => Nullable<R>,
   stateMap: (state: JsonFormsState, props: P) => R
 ): { control: Required<R> };
-function useControl<R, D, P>(
+export function useControl<R, D, P>(
   props: P,
   stateInit: () => Nullable<R>,
   stateMap: (state: JsonFormsState, props: P) => R,
   dispatchMap: (dispatch: Dispatch<CoreActions>) => D
 ): { control: Required<R> } & D;
-function useControl<R, D, P>(
+export function useControl<R, D, P>(
   props: P,
   stateInit: () => Nullable<R>,
   stateMap: (state: JsonFormsState, props: P) => R,
@@ -246,10 +261,25 @@ function useControl<R, D, P>(
 
   const control = ref<Nullable<R>>(stateInit());
   watchEffect(() => {
-    Object.assign(control.value, stateMap({ jsonforms }, props));
+    Object.assign(
+      control.value,
+      stateMap({ jsonforms }, { ...props, id: control.value.id ?? undefined})
+    );
   });
 
   const dispatchMethods = dispatchMap?.(dispatch);
+
+  onBeforeMount(() => {
+    if (control.value.uischema.scope) {
+      control.value.id = createId(control.value.uischema.scope);
+    }
+  });
+
+  onUnmounted(() => {
+    if (control.value.id) {
+      removeId(control.value.id);
+    }
+  });
 
   return {
     control: (control as unknown) as R,
@@ -448,7 +478,7 @@ export const useJsonFormsRenderer = (props: RendererProps) => {
     Nullable<Omit<StatePropsOfJsonFormsRenderer, 'refResolver'>>
   >(rendererInit());
   const resolver = { refResolver: null };
-  
+
   watchEffect(() => {
     const { refResolver, ...other } = mapStateToJsonFormsRendererProps(
       { jsonforms },
