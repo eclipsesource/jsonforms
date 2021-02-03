@@ -11,6 +11,8 @@ const additionalStyles = () => ({
   }
 });
 
+const currentYear = new Date().getFullYear();
+
 const Footer = ({ classes }) => {
   const linkClasses = [classes.link, globalStyles.link].join(' ');
   return (
@@ -20,7 +22,7 @@ const Footer = ({ classes }) => {
           Version {corePackageJson.version}
         </span>
         <span className={styles.footer__version_and_copyright_copyright}>
-          © EclipseSource 2020
+          © EclipseSource {currentYear}
         </span>
       </div>
       <div className={styles.footer__links}>
