@@ -112,22 +112,37 @@ const RatingControl = ({ data, handleChange, path }) => (
 />
 ```
 
-When using the redux integration you'll need to use the [registerRenderer](/docs/available-actions#registerrenderertester-rankedtester-renderer-any) action:
-```
-import { rankWith, scopeEndsWith } from '@jsonforms/core';
-import { Rating } from './Rating';
-
-const RatingControl = ({ data, handleChange, path }) => (
-  <Rating
-    value={data}
-    onClick={ev => handleChange(path, Number(ev.value))}
-  />
-);
-
-export withJsonFormsControlProps(RatingControl);
-
-// Register the renderer in your store
-store.dispatch(Actions.registerRenderer(rankWith(3,scopeEndsWith('rating')), RatingControl));
-```
-
 For more information about custom renderers, have a look [here](/docs/custom-renderers).
+
+
+## How can I use default values within JSON Forms
+
+We use Ajv for handling JSON Schema's default values.
+To enable the creation of default values, you need to create a custom Ajv instance and hand it over to JSON Forms.
+
+The following example shows the code for React, however the process is the same for Angular and Vue.
+
+```
+import { createAjv } from '@jsonforms/core';
+
+const handleDefaultsAjv = createAjv({useDefaults: true});
+
+<JsonForms
+    data={data}
+    schema={schema}
+    uischema={uischema}
+    renderers={renderers}
+    cells={cells}
+    onChange={({ errors, data }) => setData(data)}
+    ajv={handleDefaultsAjv}
+/>
+```
+
+Now default values within the schema file can be used:
+```
+{
+  type: "string",
+  title: "Name",
+  default: "Max"
+}
+```
