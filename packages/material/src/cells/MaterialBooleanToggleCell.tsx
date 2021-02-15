@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
-  Copyright (c) 2017-2019 EclipseSource Munich
+
+  Copyright (c) 2017-2021 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,29 +22,26 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { renderExample } from '../../example/src/index';
-import { materialCells } from '../src';
-import { extendedMaterialRenderers } from '../src/extended';
-import { ExampleExtension } from './CustomAutocomplete';
-import { ReactExampleDescription } from '../../example/src/util';
-import { booleanToggleExample } from './booleanToggle';
+import React from 'react';
+import {
+  and,
+  CellProps,
+  isBooleanControl,
+  optionIs,
+  RankedTester,
+  rankWith,
+  WithClassname
+} from '@jsonforms/core';
+import { withJsonFormsCellProps } from '@jsonforms/react';
+import { MuiToggle } from '../mui-controls/MuiToggle';
 
-const addCustomAutocompleteControl = (examples: ReactExampleDescription[]) => {
-  const enhancedExamples = examples.map(example => {
-    if(example.name === 'enum'){
-      const adjustedExample = Object.assign({}, example, {
-        customReactExtension: ExampleExtension
-      })
-      return adjustedExample;
-    }
-    return example;
-  });
-  enhancedExamples.push(booleanToggleExample);
-  return enhancedExamples;
+export const MaterialBooleanToggleCell = (props: CellProps & WithClassname) => {
+  return <MuiToggle {...props} />;
 };
 
-renderExample(
-  extendedMaterialRenderers,
-  materialCells,
-  addCustomAutocompleteControl
-);
+export const materialBooleanToggleCellTester: RankedTester = rankWith(
+  3,
+  and(isBooleanControl, optionIs('toggle', true))
+);;
+
+export default withJsonFormsCellProps(MaterialBooleanToggleCell);

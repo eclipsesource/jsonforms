@@ -1,7 +1,7 @@
 /*
   The MIT License
   
-  Copyright (c) 2017-2019 EclipseSource Munich
+  Copyright (c) 2017-2021 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
   
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,29 +22,45 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { renderExample } from '../../example/src/index';
-import { materialCells } from '../src';
-import { extendedMaterialRenderers } from '../src/extended';
-import { ExampleExtension } from './CustomAutocomplete';
-import { ReactExampleDescription } from '../../example/src/util';
-import { booleanToggleExample } from './booleanToggle';
 
-const addCustomAutocompleteControl = (examples: ReactExampleDescription[]) => {
-  const enhancedExamples = examples.map(example => {
-    if(example.name === 'enum'){
-      const adjustedExample = Object.assign({}, example, {
-        customReactExtension: ExampleExtension
-      })
-      return adjustedExample;
+export const schema = {
+  type: 'object',
+  properties: {
+    checkbox: {
+      type: 'boolean'
+    },
+    toggle: {
+      type: 'boolean'
     }
-    return example;
-  });
-  enhancedExamples.push(booleanToggleExample);
-  return enhancedExamples;
+  }
 };
 
-renderExample(
-  extendedMaterialRenderers,
-  materialCells,
-  addCustomAutocompleteControl
-);
+export const uischema = {
+  type: 'VerticalLayout',
+  elements: [
+    {
+      type: 'Control',
+      scope: '#/properties/checkbox'
+    },
+    {
+      type: 'Control',
+      scope: '#/properties/toggle',
+      options: {
+        toggle: true
+      }
+    }
+  ]
+};
+
+export const data = {
+  checkbox: false,
+  toggle: false
+};
+
+export const booleanToggleExample = {
+  name: 'booleanToggle',
+  label: 'Boolean Toggle',
+  data,
+  schema,
+  uischema
+};
