@@ -23,6 +23,8 @@
   THE SOFTWARE.
 */
 
+import { registerExamples } from "./register";
+
 export const schema = {
   type: 'object',
   properties: {
@@ -64,3 +66,5 @@ export const booleanToggleExample = {
   schema,
   uischema
 };
+
+registerExamples([booleanToggleExample]);

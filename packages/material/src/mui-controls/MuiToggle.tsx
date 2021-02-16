@@ -41,7 +41,6 @@ export const MuiToggle = React.memo((props: CellProps & WithClassname) => {
   } = props;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
   const inputProps = { autoFocus: !!appliedUiSchemaOptions.focus };
-  // !! causes undefined value to be converted to false, otherwise has no effect
   const checked = !!data;
 
   return (

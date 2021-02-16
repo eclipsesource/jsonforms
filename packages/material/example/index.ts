@@ -27,10 +27,9 @@ import { materialCells } from '../src';
 import { extendedMaterialRenderers } from '../src/extended';
 import { ExampleExtension } from './CustomAutocomplete';
 import { ReactExampleDescription } from '../../example/src/util';
-import { booleanToggleExample } from './booleanToggle';
 
 const addCustomAutocompleteControl = (examples: ReactExampleDescription[]) => {
-  const enhancedExamples = examples.map(example => {
+  return examples.map(example => {
     if(example.name === 'enum'){
       const adjustedExample = Object.assign({}, example, {
         customReactExtension: ExampleExtension
@@ -39,8 +38,6 @@ const addCustomAutocompleteControl = (examples: ReactExampleDescription[]) => {
     }
     return example;
   });
-  enhancedExamples.push(booleanToggleExample);
-  return enhancedExamples;
 };
 
 renderExample(
