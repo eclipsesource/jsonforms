@@ -25,6 +25,9 @@
 import MaterialBooleanCell, {
   materialBooleanCellTester
 } from './MaterialBooleanCell';
+import MaterialBooleanToggleCell, {
+  materialBooleanToggleCellTester
+} from './MaterialBooleanToggleCell';
 import MaterialDateCell, { materialDateCellTester } from './MaterialDateCell';
 import MaterialEnumCell, { materialEnumCellTester } from './MaterialEnumCell';
 import MaterialIntegerCell, {
@@ -42,6 +45,8 @@ import MaterialTimeCell, { materialTimeCellTester } from './MaterialTimeCell';
 export {
   MaterialBooleanCell,
   materialBooleanCellTester,
+  MaterialBooleanToggleCell,
+  materialBooleanToggleCellTester,
   MaterialDateCell,
   materialDateCellTester,
   MaterialEnumCell,

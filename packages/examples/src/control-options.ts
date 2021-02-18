@@ -1,7 +1,7 @@
 /*
   The MIT License
   
-  Copyright (c) 2017-2019 EclipseSource Munich
+  Copyright (c) 2017-2021 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
   
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -137,6 +137,10 @@ export const extendedSchema = {
     hideRequiredAsterisk: {
       type: 'string',
       description: 'Hides the "*" symbol, when the field is required',
+    },
+    toggle: {
+      type: 'boolean',
+      description: 'The "toggle" option renders boolean values as a toggle.'
     }
   },
   required: ['hideRequiredAsterisk', 'restrictText']
@@ -186,6 +190,14 @@ export const extendedUischema = {
       options: {
         hideRequiredAsterisk: true
       }
+    },
+    {
+      type: 'Control',
+      scope: '#/properties/toggle',
+      label: 'Boolean as Toggle',
+      options: {
+        toggle: true
+      }
     }
   ]
 };
@@ -194,7 +206,8 @@ export const extendedData = {
   multilineString: 'Multi-\nline\nexample',
   slider: 4,
   trimText: 'abcdefg',
-  restrictText: 'abcde'
+  restrictText: 'abcde',
+  toggle: false
 };
 
 const combinedSchema = {

@@ -26,6 +26,10 @@ import MaterialBooleanControl, {
   materialBooleanControlTester,
   MaterialBooleanControl as MaterialBooleanControlUnwrapped
 } from './MaterialBooleanControl';
+import MaterialBooleanToggleControl, {
+  materialBooleanToggleControlTester,
+  MaterialBooleanToggleControl as MaterialBooleanToggleControlUnwrapped
+} from './MaterialBooleanToggleControl';
 import MaterialEnumControl, {
   materialEnumControlTester,
   MaterialEnumControl as MaterialEnumControlUnwrapped
@@ -80,6 +84,7 @@ import MaterialOneOfRadioGroupControl, {
 
 export const Unwrapped = {
   MaterialBooleanControl: MaterialBooleanControlUnwrapped,
+  MaterialBooleanToggleControl: MaterialBooleanToggleControlUnwrapped,
   MaterialEnumControl: MaterialEnumControlUnwrapped,
   MaterialNativeControl: MaterialNativeControlUnwrapped,
   MaterialDateControl: MaterialDateControlUnwrapped,
@@ -97,6 +102,8 @@ export const Unwrapped = {
 export {
   MaterialBooleanControl,
   materialBooleanControlTester,
+  MaterialBooleanToggleControl,
+  materialBooleanToggleControlTester,
   MaterialEnumControl,
   materialEnumControlTester,
   MaterialNativeControl,

@@ -1,7 +1,7 @@
 /*
   The MIT License
 
-  Copyright (c) 2017-2019 EclipseSource Munich
+  Copyright (c) 2017-2021 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -69,6 +69,7 @@ import * as defaultExample from './default';
 import * as onChange from './onChange';
 import * as enumExample from './enum';
 import * as radioGroupExample from './radioGroup';
+import * as booleanToggle from './booleanToggle';
 export * from './register';
 export * from './example';
 
@@ -122,5 +123,6 @@ export {
   ifThenElse,
   onChange,
   enumExample,
-  radioGroupExample
+  radioGroupExample,
+  booleanToggle
 };
