@@ -129,3 +129,5 @@ export {
   MaterialOneOfRadioGroupControl,
   materialOneOfRadioGroupControlTester
 };
+
+export * from './MaterialInputControl';
