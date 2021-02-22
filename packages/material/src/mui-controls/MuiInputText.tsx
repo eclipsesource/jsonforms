@@ -25,7 +25,7 @@
 import React, { useState } from 'react';
 import { CellProps, WithClassname } from '@jsonforms/core';
 import { areEqual } from '@jsonforms/react';
-import Input from '@material-ui/core/Input';
+import Input, { InputProps } from '@material-ui/core/Input';
 import merge from 'lodash/merge';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -34,7 +34,8 @@ import { useTheme } from '@material-ui/core/styles';
 import { JsonFormsTheme } from '../util';
 
 interface MuiTextInputProps {
-  muiInputProps?: React.HTMLAttributes<HTMLInputElement>;
+  muiInputProps?: InputProps['inputProps'];
+  inputComponent?: InputProps['inputComponent'];
 }
 
 export const MuiInputText = React.memo((props: CellProps & WithClassname & MuiTextInputProps) => {
@@ -50,7 +51,8 @@ export const MuiInputText = React.memo((props: CellProps & WithClassname & MuiTe
     path,
     handleChange,
     schema,
-    muiInputProps
+    muiInputProps,
+    inputComponent
   } = props;
   const maxLength = schema.maxLength;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
@@ -106,6 +108,7 @@ export const MuiInputText = React.memo((props: CellProps & WithClassname & MuiTe
           </IconButton>
         </InputAdornment>
       }
+      inputComponent={inputComponent}
     />
   );
 }, areEqual);
