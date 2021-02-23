@@ -23,7 +23,6 @@
   THE SOFTWARE.
 */
 import isEmpty from 'lodash/isEmpty';
-import startCase from 'lodash/startCase';
 import {
   findUISchema,
   GroupLayout,
@@ -65,9 +64,7 @@ const MaterialObjectRenderer = ({
   if (isEmpty(path)) {
     detailUiSchema.type = 'VerticalLayout';
   } else {
-    (detailUiSchema as GroupLayout).label = startCase(
-      isPlainLabel(label) ? label : label.default
-    );
+    (detailUiSchema as GroupLayout).label = isPlainLabel(label) ? label : label.default;
   }
   return (
     <Hidden xsUp={!visible}>
