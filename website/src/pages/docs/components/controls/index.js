@@ -1,5 +1,5 @@
 import React from 'react';
-import { ThemeProvider } from '@material-ui/core/styles';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { Demo } from '../../../../components/common';
 
 export const input = {
@@ -195,9 +195,9 @@ export const ExampleWithRadioGroup = () => (
 
 export const ExampleWithCustomClearBackground = () => (
   <ThemeProvider
-    theme={{
+    theme={createMuiTheme({
       jsonforms: { input: { delete: { background: '#f44336' } } },
-    }}
+    })}
   >
     <Demo data={input.data} schema={input.schema} uischema={input.uischema} />
   </ThemeProvider>

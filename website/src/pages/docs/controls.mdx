@@ -179,10 +179,12 @@ Use the `format: 'radio'` option to display an enum as a radio group.
 ## Customize 'clear input button' background
 
 ```
-<ThemeProvider
-  theme={{
+const customizedTheme = createMuiTheme({
     jsonforms: { input: { delete: { background: '#f44336' }}}
-  }}
+  });
+
+<ThemeProvider
+  theme={customizedTheme}
 >
   <JsonForms
     ...
