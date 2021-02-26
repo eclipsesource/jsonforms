@@ -1,34 +1,40 @@
-# JSONForms - More Forms. Less Code
+# JSON Forms - More Forms. Less Code
+
 ### Complex Forms in the blink of an eye
 
-JSONForms eliminates the tedious task of writing fully-featured forms by hand by leveraging the capabilities of JSON, JSON Schema and Javascript.
+JSON Forms eliminates the tedious task of writing fully-featured forms by hand by leveraging the capabilities of JSON, JSON Schema and Javascript.
 
-# Vue Package
-This is the JSONForms Vue package which provides the necessary bindings for Vue. It uses [JSONForms Core](https://www.npmjs.com/package/@jsonforms/core).
+## Vue Package
 
-## Usage
+This is the JSON Forms Vue package which provides the necessary bindings for Vue. It uses [JSON Forms Core](https://www.npmjs.com/package/@jsonforms/core).
+
+### Usage
 
 Use the `json-forms` component for each form you want to render.
 
 Mandatory props:
- * `data: any` - the data to show
- * `renderers: JsonFormsRendererRegistryEntry[]` - the Vue renderer set to use
+
+* `data: any` - the data to show
+* `renderers: JsonFormsRendererRegistryEntry[]` - the Vue renderer set to use
 
 Optional props:
- * `schema: JsonSchema` - the data schema for the given data. Will be generated when not given.
- * `uischema: UISchemaElement` - the ui schema for the given data schema. Will be generated when not given.
- * `cells: JsonFormsCellRendererRegistryEntry[]` - the Vue cell renderer set to use
- * `config: any` - form-wide options. May contain default ui schema options.
- * `readonly: boolean` - whether all controls shall be readonly.
- * `uischemas: JsonFormsUiSchemaEntry[]` - registry for dynamic ui schema dispatching
- * `validationMode: 'ValidateAndShow' | 'ValidateAndHide' | 'NoValidation'` - the validation mode for the form
- * `ajv: AJV` - custom Ajv instance for the form
- * `refParserOptions: RefParserOptions` - configuration for ref resolving
+
+* `schema: JsonSchema` - the data schema for the given data. Will be generated when not given.
+* `uischema: UISchemaElement` - the ui schema for the given data schema. Will be generated when not given.
+* `cells: JsonFormsCellRendererRegistryEntry[]` - the Vue cell renderer set to use
+* `config: any` - form-wide options. May contain default ui schema options.
+* `readonly: boolean` - whether all controls shall be readonly.
+* `uischemas: JsonFormsUiSchemaEntry[]` - registry for dynamic ui schema dispatching
+* `validationMode: 'ValidateAndShow' | 'ValidateAndHide' | 'NoValidation'` - the validation mode for the form
+* `ajv: AJV` - custom Ajv instance for the form
+* `refParserOptions: RefParserOptions` - configuration for ref resolving
 
 Events:
- * `change: {data: any; errors: AJVError[]}` - Whenever data and/or errors change this event is emitted.
+
+* `change: {data: any; errors: AJVError[]}` - Whenever data and/or errors change this event is emitted.
 
 Example:
+
 ```html
 <json-forms
   v-bind:data="data"
@@ -37,6 +43,7 @@ Example:
   @change="onChange"
 />
 ```
+
 ```ts
 export default defineComponent({
   components: {
@@ -66,12 +73,12 @@ export default defineComponent({
 });
 ```
 
-## Renderer Set
+### Renderer Set
 
 The `@jsonforms/vue` package offers JSON Forms Core bindings based on the composition API.
 These bindings handle the props given to the `dispatch-renderer` and use the JSON Forms Core to determine specialized inputs for many use cases like validation and rule-based visibility.
 
-### Basic control renderer example
+#### Basic control renderer example
 
 ```ts
 import { ControlElement } from '@jsonforms/core';
@@ -131,7 +138,7 @@ Here it's ranked with priority `1` (higher is better) for any UI schema element 
 
 These entries can then be collected and form the Vue renderer set handed over to the `json-forms` component.
 
-### Basic layout renderer example
+#### Basic layout renderer example
 
 The principle is the same as with the control example.
 The only difference here is the use of the provided `dispatch-renderer` which will determine the next renderer to use, based on its inputs.
@@ -170,6 +177,7 @@ export const entry: JsonFormsRendererRegistryEntry = {
   tester: rankWith(1, isLayout)
 };
 ```
+
 ```html
 <div>
   <div
@@ -188,7 +196,7 @@ export const entry: JsonFormsRendererRegistryEntry = {
 </div>
 ```
 
-### dispatch renderer
+#### dispatch renderer
 
 The dispatch renderer is used to dispatch to the highest ranked registered renderer.
 
@@ -196,7 +204,7 @@ Required props are `schema`, `uischema` and `path`.
 Optional props are `enabled`, `renderers` and `cells`.
 These can be used to implement more advanced use cases like hierarchical enablement and dynamically adapted renderer / cell sets.
 
-### Available bindings
+#### Available bindings
 
 The following bindings can be used for `Control` elements and provide a `control` property and `handleChange` method.
 The `useJsonFormsArrayControl` additionally provides `addItem`, `removeItems`, `moveUp` and `moveDown` methods.
@@ -236,10 +244,11 @@ The binding provides an `item` propery.
 
 * `useJsonFormsMasterListItem`
 
-### Custom binding
+#### Custom binding
 
 Should any of the provided bindings not completely match an intended use case, then you can create your own.
 When constructing a new binding you might want to access the injected raw `jsonforms` object and `dispatch` method, e.g.
+
 ```ts
 import { inject } from 'vue';
 
@@ -264,8 +273,22 @@ const myComponent = defineComponent({
 The injected `jsonforms` object is not meant to be modified directly.
 Instead it should be modified via the provided `dispatch` and by changing the props of the `json-forms` component.
 
-# License
-The JSONForms project is licensed under the MIT License. See the [LICENSE file](https://github.com/eclipsesource/jsonforms/blob/master/LICENSE) for more information.
+## License
 
-# Roadmap
+The JSON Forms project is licensed under the MIT License. See the [LICENSE file](https://github.com/eclipsesource/jsonforms/blob/master/LICENSE) for more information.
+
+## Roadmap
+
 Our current roadmap is available [here](https://github.com/eclipsesource/jsonforms/blob/master/ROADMAP.md).
+
+## Development
+
+JSON Forms is developed by [EclipseSource](https://eclipsesource.com).
+We are always very happy to have contributions, whether for trivial cleanups or big new features.
+
+## Feedback, Help and Support
+
+Feel free to start a discussion by [opening an issue](https://github.com/eclipsesource/jsonforms/issues/new/choose) on the repo
+or by contacting us [directly via email](mailto:jsonforms@eclipsesource.com?subject=JSON%20Forms).
+You can also use the [public chat](https://spectrum.chat/jsonforms) to get help from the community.
+In addition, EclipseSource also offers [professional support](https://jsonforms.io/support) for JSON Forms.
