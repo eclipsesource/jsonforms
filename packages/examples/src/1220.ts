@@ -23,9 +23,7 @@
   THE SOFTWARE.
 */
 import { registerExamples } from './register';
-import { Actions, JsonSchema, NOT_APPLICABLE } from '@jsonforms/core';
-import { Dispatch } from 'react';
-import { AnyAction } from 'redux';
+import { Actions, JsonSchema, NOT_APPLICABLE, AnyAction, Dispatch } from '@jsonforms/core';
 
 const data = {
   orders: [
