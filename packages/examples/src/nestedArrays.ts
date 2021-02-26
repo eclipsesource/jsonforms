@@ -28,9 +28,10 @@ import {
   ControlElement,
   JsonSchema,
   NOT_APPLICABLE,
-  VerticalLayout
+  VerticalLayout,
+  AnyAction,
+  Dispatch
 } from '@jsonforms/core';
-import { AnyAction, Dispatch } from 'redux';
 
 const schema = {
   type: 'object',

@@ -24,8 +24,7 @@
 */
 import { registerExamples } from './register';
 import { personCoreSchema } from './person';
-import { JsonFormsCore, updateErrors } from '@jsonforms/core';
-import { AnyAction, Dispatch } from 'redux';
+import { JsonFormsCore, updateErrors, AnyAction, Dispatch } from '@jsonforms/core';
 const localize = require('ajv-i18n');
 
 export const onChange = (dispatch: Dispatch<AnyAction>) => (

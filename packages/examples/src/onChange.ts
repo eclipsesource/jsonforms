@@ -23,8 +23,7 @@
   THE SOFTWARE.
 */
 import { registerExamples } from './register';
-import { UISchemaElement, updateErrors, JsonFormsCore } from '@jsonforms/core';
-import { AnyAction, Dispatch } from 'redux';
+import { UISchemaElement, updateErrors, JsonFormsCore, AnyAction, Dispatch } from '@jsonforms/core';
 
 let touchedProperties: any = {
   name: false,
