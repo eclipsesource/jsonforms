@@ -42,6 +42,9 @@ import MaterialAnyOfRenderer, {
 import MaterialOneOfRenderer, {
   materialOneOfControlTester
 } from './MaterialOneOfRenderer';
+import MaterialEnumArrayRenderer, {
+  materialEnumArrayRendererTester
+} from './MaterialEnumArrayRenderer';
 
 export const materialArrayControlTester: RankedTester = rankWith(
   3,
@@ -52,7 +55,9 @@ export { MaterialObjectRenderer };
 export { MaterialAllOfRenderer };
 export { MaterialAnyOfRenderer };
 export { MaterialOneOfRenderer };
+export { MaterialEnumArrayRenderer };
 export { materialObjectControlTester };
 export { materialAllOfControlTester };
 export { materialAnyOfControlTester };
 export { materialOneOfControlTester };
+export { materialEnumArrayRendererTester };

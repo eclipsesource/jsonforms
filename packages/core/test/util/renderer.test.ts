@@ -37,6 +37,8 @@ import {
   mapStateToJsonFormsRendererProps,
   mapStateToLayoutProps,
   mapStateToOneOfProps,
+  mapStateToMultiEnumControlProps,
+  mapDispatchToMultiEnumProps
 } from '../../src/util';
 import configureStore from 'redux-mock-store';
 import test from 'ava';
@@ -852,6 +854,240 @@ test("mapStateToOneOfProps - indexOfFittingSchema should not select schema if en
 
   const oneOfProps = mapStateToOneOfProps(state, ownProps);
   t.is(oneOfProps.indexOfFittingSchema, 1);
+});
+
+test('mapStateToMultiEnumControlProps - oneOf items', t => {
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/colors'
+  };
+  const state = {
+    jsonforms: {
+      core: {
+        schema: {
+          type: 'object',
+          properties: {
+            colors: {
+              type: 'array',
+              items: {
+                oneOf: [
+                  {
+                    const: 'red'
+                  },
+                  {
+                    const: 'pink',
+                    title: 'almost red'
+                  }
+                ]
+              },
+              uniqueItems: true
+            }
+          }
+        },
+        data: {},
+        uischema,
+        errors: [] as ErrorObject[]
+      }
+    }
+  };
+  const ownProps = {
+    uischema,
+    path: 'colors'
+  };
+  const props = mapStateToMultiEnumControlProps(state, ownProps);
+  t.deepEqual(props.options, [
+    { label: 'red', value: 'red' },
+    { label: 'almost red', value: 'pink' }
+  ]);
+});
+
+test('mapStateToMultiEnumControlProps - enum items', t => {
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/colors'
+  };
+  const state = {
+    jsonforms: {
+      core: {
+        schema: {
+          type: 'object',
+          properties: {
+            colors: {
+              type: 'array',
+              items: {
+                type: 'string',
+                enum: ['red', 'green', 'pink']
+              },
+              uniqueItems: true
+            }
+          }
+        },
+        data: {},
+        uischema,
+        errors: [] as ErrorObject[]
+      }
+    }
+  };
+  const ownProps = {
+    uischema,
+    path: 'colors'
+  };
+  const props = mapStateToMultiEnumControlProps(state, ownProps);
+  t.deepEqual(props.options, [
+    { label: 'red', value: 'red' },
+    { label: 'green', value: 'green' },
+    { label: 'pink', value: 'pink' }
+  ]);
+});
+
+test('mapDispatchToMultiEnumProps - enum schema - addItem', t => {
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/colors'
+  };
+  const schema = {
+    type: 'object',
+    properties: {
+      colors: {
+        type: 'array',
+        items: {
+          type: 'string',
+          enum: ['red', 'green', 'pink']
+        },
+        uniqueItems: true
+      }
+    }
+  };
+  const data = {colors:['green']};
+  const initCore : JsonFormsCore = {
+    uischema,
+    schema,
+    data,
+    errors: [] as ErrorObject[]
+  };
+  const [getCore, dispatch] = mockDispatch(initCore);
+  dispatch(init(data, schema, uischema, createAjv({ useDefaults: true })));
+  const props = mapDispatchToMultiEnumProps(dispatch);
+  props.addItem('colors', 'pink');
+
+  t.is(getCore().data.colors.length, 2);
+  t.deepEqual(getCore().data.colors[0], 'green');
+  t.deepEqual(getCore().data.colors[1], 'pink');
+});
+
+test('mapDispatchToMultiEnumProps - enum schema - removeItem', t => {
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/colors'
+  };
+  const schema = {
+    type: 'object',
+    properties: {
+      colors: {
+        type: 'array',
+        items: {
+          type: 'string',
+          enum: ['red', 'green', 'pink']
+        },
+        uniqueItems: true
+      }
+    }
+  };
+  const data = {colors:['green', 'red']};
+  const initCore : JsonFormsCore = {
+    uischema,
+    schema,
+    data,
+    errors: [] as ErrorObject[]
+  };
+  const [getCore, dispatch] = mockDispatch(initCore);
+  dispatch(init(data, schema, uischema, createAjv({ useDefaults: true })));
+  const props = mapDispatchToMultiEnumProps(dispatch);
+  props.removeItem('colors', 'red');
+
+  t.is(getCore().data.colors.length, 1);
+  t.deepEqual(getCore().data.colors[0], 'green');
+});
+
+test('mapDispatchToMultiEnumProps - oneOf schema - addItem', t => {
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/colors'
+  };
+  const schema = {
+    type: 'object',
+    properties: {
+      colors: {
+        type: 'array',
+        items: {
+          oneOf: [
+            {
+              const: 'red'
+            },
+            {
+              const: 'pink',
+              title: 'almost red'
+            }
+          ]
+        },
+        uniqueItems: true
+      }
+    }
+  };
+  const data = {};
+  const initCore : JsonFormsCore = {
+    uischema,
+    schema,
+    data,
+    errors: [] as ErrorObject[]
+  };
+  const [getCore, dispatch] = mockDispatch(initCore);
+  dispatch(init(data, schema, uischema, createAjv({ useDefaults: true })));
+  const props = mapDispatchToMultiEnumProps(dispatch);
+  props.addItem('colors', 'pink');
+
+  t.is(getCore().data.colors.length, 1);
+  t.deepEqual(getCore().data.colors[0], 'pink');
+});
+
+test('mapDispatchToMultiEnumProps - oneOf schema - removeItem', t => {
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/colors'
+  };
+  const schema = {
+    type: 'object',
+    properties: {
+      colors: {
+        type: 'array',
+        items: {
+          oneOf: [
+            {
+              const: 'red'
+            },
+            {
+              const: 'pink',
+              title: 'almost red'
+            }
+          ]
+        },
+        uniqueItems: true
+      }
+    }
+  };
+  const data = {colors:['pink']};
+  const initCore : JsonFormsCore = {
+    uischema,
+    schema,
+    data,
+    errors: [] as ErrorObject[]
+  };
+  const [getCore, dispatch] = mockDispatch(initCore);
+  dispatch(init(data, schema, uischema, createAjv({ useDefaults: true })));
+  const props = mapDispatchToMultiEnumProps(dispatch);
+  props.removeItem('colors', 'pink');
+
+  t.is(getCore().data.colors.length, 0);
 });
 
 test('should assign defaults to enum', t => {

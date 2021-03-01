@@ -36,7 +36,9 @@ import {
   materialObjectControlTester,
   MaterialObjectRenderer,
   materialOneOfControlTester,
-  MaterialOneOfRenderer
+  MaterialOneOfRenderer,
+  MaterialEnumArrayRenderer,
+  materialEnumArrayRendererTester
 } from './complex';
 import {
   MaterialLabelRenderer,
@@ -171,6 +173,10 @@ export const materialRenderers: JsonFormsRendererRegistryEntry[] = [
   {
     tester: materialAnyOfStringOrEnumControlTester,
     renderer: MaterialAnyOfStringOrEnumControl
+  },
+  {
+    tester: materialEnumArrayRendererTester,
+    renderer: MaterialEnumArrayRenderer
   }
 ];
 

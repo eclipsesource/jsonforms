@@ -184,6 +184,12 @@ export const enumToEnumOptionMapper = (e: any): EnumOption => {
   return { label: stringifiedEnum, value: e };
 };
 
+export const oneOfToEnumOptionMapper = (e: any): EnumOption => ({
+  value: e.const,
+  label:
+    e.title || (typeof e.const === 'string' ? e.const : JSON.stringify(e.const))
+});
+
 export interface OwnPropsOfRenderer {
   /**
    * The UI schema to be rendered.
@@ -492,10 +498,29 @@ export const mapStateToOneOfEnumControlProps = (
   const props: StatePropsOfControl = mapStateToControlProps(state, ownProps);
   const options: EnumOption[] =
     ownProps.options ||
-    (props.schema.oneOf as JsonSchema[])?.map(e => ({
-      value: e.const,
-      label: e.title || (typeof e.const === 'string' ? e.const : JSON.stringify(e.const))
-    }));
+    (props.schema.oneOf as JsonSchema[])?.map(oneOfToEnumOptionMapper);
+  return {
+    ...props,
+    options
+  };
+};
+
+/**
+ * Default mapStateToCellProps for multi enum control. Options is used for populating dropdown list
+ * @param state
+ * @param ownProps
+ * @returns {StatePropsOfControl & OwnPropsOfEnum}
+ */
+export const mapStateToMultiEnumControlProps = (
+  state: JsonFormsState,
+  ownProps: OwnPropsOfControl & OwnPropsOfEnum
+): StatePropsOfControl & OwnPropsOfEnum => {
+  const props: StatePropsOfControl = mapStateToControlProps(state, ownProps);
+  const items = props.schema.items as JsonSchema;
+  const options: EnumOption[] =
+    ownProps.options ||
+    (items?.oneOf && (items.oneOf as JsonSchema[]).map(oneOfToEnumOptionMapper)) ||
+    items?.enum?.map(enumToEnumOptionMapper);
   return {
     ...props,
     options
@@ -671,6 +696,36 @@ export const mapDispatchToArrayControlProps = (
       update(path, array => {
         moveDown(array, toMove);
         return array;
+      })
+    );
+  }
+});
+
+export interface DispatchPropsOfMultiEnumControl {
+  addItem: (path:string, value: any) => void;
+  removeItem? :(path:string, toDelete: any) => void;
+}
+
+export const mapDispatchToMultiEnumProps = (
+  dispatch: Dispatch<CoreActions>
+): DispatchPropsOfMultiEnumControl => ({
+  addItem: (path:string, value: any) => {
+    dispatch(
+      update(path, data => {
+        if (data === undefined || data === null) {
+          return [value];
+        }
+        data.push(value);
+        return data;
+      })
+    );
+  },
+  removeItem: (path:string, toDelete: any) => {
+    dispatch(
+      update(path, data => {
+        const indexInData = data.indexOf(toDelete);
+        data.splice(indexInData, 1);
+        return data;
       })
     );
   }
