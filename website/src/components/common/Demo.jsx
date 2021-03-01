@@ -22,7 +22,8 @@ const useStyles = makeStyles((theme) =>
     },
     root: {
       position: 'relative',
-      width: '40vw',
+      minWidth: '700px',
+      maxWidth: '992px',
       [theme.breakpoints.up('sm')]: {
         padding: `0 ${theme.spacing(1)}px`,
         marginLeft: 0,
