@@ -1,0 +1,77 @@
+{
+  "name": "@jsonforms/vue2-vanilla",
+  "version": "2.5.0",
+  "description": "Vue 2 Vanilla renderers for JSON Forms",
+  "repository": "https://github.com/eclipsesource/jsonforms",
+  "bugs": "https://github.com/eclipsesource/jsonforms/issues",
+  "homepage": "http://jsonforms.io/",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "vue",
+    "vue2",
+    "vue 2",
+    "form",
+    "forms",
+    "json",
+    "jsonforms",
+    "frontend",
+    "generator",
+    "input",
+    "renderengine",
+    "jsonschema",
+    "schema",
+    "uischema",
+    "layout",
+    "customization"
+  ],
+  "main": "lib/jsonforms-vue2-vanilla.js",
+  "types": "lib/src/index.d.ts",
+  "files": [
+    "lib/*",
+    "src/*",
+    "vanilla.css"
+  ],
+  "scripts": {
+    "serve:pre": "rm -rf src dev/components && cp -r ../../vue/vue-vanilla/src src && cp -r ../../vue/vue-vanilla/dev/components dev/components",
+    "serve:do": "vue-cli-service serve dev/serve.ts",
+    "serve": "npm run serve:pre && npm run serve:do",
+    "build:pre": "rm -rf src && cp -r ../../vue/vue-vanilla/src src",
+    "build:do": "cross-env NODE_ENV=production rollup --config rollup.config.js",
+    "build": "npm run build:pre && npm run build:do",
+    "clean": "rm -rf lib",
+    "doc": "../../../node_modules/.bin/typedoc --name 'JSON Forms Vue 2 Vanilla Renderers' --mode file --out docs src --ignoreCompilerErrors"
+  },
+  "dependencies": {
+    "lodash": "^4.17.15"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.5",
+    "@babel/preset-typescript": "^7.9.0",
+    "@jsonforms/core": "^2.5.0",
+    "@jsonforms/vue2": "^2.5.0",
+    "@rollup/plugin-alias": "^2.2.0",
+    "@types/jest": "^24.0.23",
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-typescript": "~4.5.0",
+    "@vue/cli-plugin-unit-jest": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "@vue/composition-api": "^1.0.0-rc.3",
+    "@vue/test-utils": "^1.0.3",
+    "cross-env": "^7.0.2",
+    "rollup": "^2.7.3",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-typescript2": "^0.29.0",
+    "rollup-plugin-vue": "^5.1.9",
+    "typescript": "3.8.3",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "peerDependencies": {
+    "@jsonforms/core": "^2.5.0",
+    "@jsonforms/vue2": "^2.5.0",
+    "vue": "^2.6.12"
+  }
+}

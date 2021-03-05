@@ -1,5 +1,4 @@
 {
-  "lerna": "2.5.1",
   "packages": [
     "packages/angular",
     "packages/angular-material",
@@ -10,10 +9,18 @@
     "packages/material",
     "packages/react",
     "packages/vue",
-    "packages/vue-vanilla"
+    "packages/vue/vue",
+    "packages/vue/vue-vanilla",
+    "packages/vue2",
+    "packages/vue2/vue2",
+    "packages/vue2/vue2-vanilla"
   ],
   "version": "2.5.0",
   "nohoist": [
-    "core-js"
+    "core-js",
+    "vue",
+    "rollup-plugin-vue",
+    "@vue/test-utils",
+    "@vue/composition-api"
   ]
 }
