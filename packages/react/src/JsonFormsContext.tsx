@@ -65,7 +65,10 @@ import {
   mapStateToMasterListItemProps,
   mapStateToOneOfProps,
   mapStateToOneOfEnumControlProps,
-  update
+  mapDispatchToMultiEnumProps,
+  update,
+  mapStateToMultiEnumControlProps,
+  DispatchPropsOfMultiEnumControl
 } from '@jsonforms/core';
 import React, { ComponentType, Dispatch, ReducerAction, useCallback, useContext, useEffect, useMemo, useReducer, useRef } from 'react';
 
@@ -191,6 +194,9 @@ export const ctxToEnumControlProps = (ctx: JsonFormsStateContext, props: OwnProp
 export const ctxToOneOfEnumControlProps = (ctx: JsonFormsStateContext, props: OwnPropsOfControl) =>
   mapStateToOneOfEnumControlProps({ jsonforms: { ...ctx } }, props);
 
+export const ctxToMultiEnumControlProps = (ctx: JsonFormsStateContext, props: OwnPropsOfControl) =>
+mapStateToMultiEnumControlProps({ jsonforms: { ...ctx } }, props);
+
 export const ctxToControlWithDetailProps = (
   ctx: JsonFormsStateContext,
   props: OwnPropsOfControl
@@ -272,6 +278,9 @@ export const ctxToDispatchCellProps = (
 ) => {
   return mapStateToDispatchCellProps({ jsonforms: { ...ctx } }, ownProps);
 };
+
+export const ctxDispatchToMultiEnumProps = (dispatch: Dispatch<ReducerAction<any>>) =>
+  mapDispatchToMultiEnumProps(dispatch as any);
 // --
 
 // HOCs utils
@@ -402,6 +411,15 @@ const withContextToOneOfEnumProps =
       return (<Component {...props} {...dispatchProps} {...stateProps} options={stateProps.options} />);
     };
 
+const withContextToMultiEnumProps =
+(Component: ComponentType<ControlProps & OwnPropsOfEnum>): ComponentType<OwnPropsOfControl & OwnPropsOfEnum & DispatchPropsOfMultiEnumControl> =>
+  ({ ctx, props }: JsonFormsStateContext & ControlProps & OwnPropsOfEnum & DispatchPropsOfMultiEnumControl) => {
+    const stateProps = ctxToMultiEnumControlProps(ctx, props);
+    const dispatchProps = ctxDispatchToMultiEnumProps(ctx.dispatch);
+    return (<Component {...props} {...dispatchProps} {...stateProps} options={stateProps.options} />);
+  };
+
+
 // --
 
 type JsonFormsPropTypes = ControlProps | CombinatorProps | LayoutProps | CellProps | ArrayLayoutProps | StatePropsOfControlWithDetail | OwnPropsOfRenderer;
@@ -521,4 +539,20 @@ export const withJsonFormsOneOfEnumProps =
       Component,
       (prevProps: ControlProps & OwnPropsOfEnum, nextProps: ControlProps & OwnPropsOfEnum) => areEqual(prevProps, nextProps)
     )));
+
+export const withJsonFormsMultiEnumProps = (
+  Component: ComponentType<ControlProps & OwnPropsOfEnum & DispatchPropsOfMultiEnumControl>
+): ComponentType<OwnPropsOfControl & OwnPropsOfEnum & DispatchPropsOfMultiEnumControl> =>
+  withJsonFormsContext(
+    withContextToMultiEnumProps(
+      React.memo(
+        Component,
+        (
+          prevProps: ControlProps & OwnPropsOfEnum & DispatchPropsOfMultiEnumControl,
+          nextProps: ControlProps & OwnPropsOfEnum & DispatchPropsOfMultiEnumControl
+        ) => areEqual(prevProps, nextProps)
+      )
+    )
+  );
+
 // --
