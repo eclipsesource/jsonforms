@@ -1,19 +1,8 @@
 {
   "packages": [
-    "packages/angular",
-    "packages/angular-material",
-    "packages/angular-test",
-    "packages/core",
-    "packages/example",
-    "packages/examples",
-    "packages/material",
-    "packages/react",
-    "packages/vue",
-    "packages/vue/vue",
-    "packages/vue/vue-vanilla",
-    "packages/vue2",
-    "packages/vue2/vue2",
-    "packages/vue2/vue2-vanilla"
+    "packages/*",
+    "packages/vue/*",
+    "packages/vue2/*"
   ],
   "version": "2.5.0",
   "nohoist": [
