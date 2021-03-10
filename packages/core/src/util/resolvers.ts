@@ -33,7 +33,6 @@ import isString from 'lodash/isString';
 import isPlainObject from 'lodash/isPlainObject';
 import { parse } from 'uri-js';
 import { JsonSchema } from '..';
-import { result } from 'lodash';
 
 /**
  * Map for storing refs and the respective schemas they are pointing to.
