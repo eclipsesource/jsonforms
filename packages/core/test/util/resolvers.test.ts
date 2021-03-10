@@ -113,7 +113,6 @@ test('resolveSchema - resolves schema with any ', t => {
       }
     }
   };
-  debugger;
   // test backward compatibility
   t.deepEqual(resolveSchema(schema, '#/properties/description/oneOf/0/properties/name'), {type: 'string'});
   t.deepEqual(resolveSchema(schema, '#/properties/description/oneOf/1/properties/index'), {type: 'number'});

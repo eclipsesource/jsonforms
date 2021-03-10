@@ -33,6 +33,7 @@ import isString from 'lodash/isString';
 import isPlainObject from 'lodash/isPlainObject';
 import { parse } from 'uri-js';
 import { JsonSchema } from '..';
+import { result } from 'lodash';
 
 /**
  * Map for storing refs and the respective schemas they are pointing to.
@@ -107,6 +108,9 @@ export const findAllRefs = (
   return result;
 };
 
+const invalidSegment = (pathSegment: string) =>
+  pathSegment === '#' || pathSegment === undefined || pathSegment === '';
+
 /**
  * Resolve the given schema path in order to obtain a subschema.
  * @param {JsonSchema} schema the root schema from which to start
@@ -123,8 +127,6 @@ export const resolveSchema = (
     return undefined;
   }
   const validPathSegments = schemaPath.split('/');
-  const invalidSegment = (pathSegment: string) =>
-    pathSegment === '#' || pathSegment === undefined || pathSegment === '';
   let resultSchema = schema;
   for (let i = 0; i < validPathSegments.length; i++) {
     let pathSegment = validPathSegments[i];
@@ -133,6 +135,7 @@ export const resolveSchema = (
         ? resultSchema
         : resolveSchema(schema, resultSchema.$ref);
     if (invalidSegment(pathSegment)) {
+      // skip invalid segments
       continue;
     }
     let curSchema = get(resultSchema, pathSegment);
@@ -140,13 +143,18 @@ export const resolveSchema = (
       resultSchema = curSchema;
       continue;
     }
-    let schemas = resultSchema.oneOf || resultSchema.allOf || resultSchema.anyOf || [];
+    // resolving was not successful, check whether the scope omitted an oneOf, allOf or anyOf and resolve anyway
+    const schemas = [].concat(resultSchema.oneOf ?? [], resultSchema.allOf ?? [], resultSchema.anyOf ?? []);
     for (let item of schemas) {
       curSchema = resolveSchema(item, validPathSegments.slice(i).join('/'));
-      if (curSchema) break;
+      if (curSchema) {
+        break;
+      }
     }
-    resultSchema = curSchema;
-    break;
+    if (curSchema) {
+      resultSchema = curSchema;
+      break;
+    }
   }
   // TODO: because schema is already scoped we might end up with refs pointing
   // outside of the current schema. It would be better if we'd always could deal
