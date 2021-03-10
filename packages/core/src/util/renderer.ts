@@ -750,6 +750,16 @@ export const layoutDefaultProps: {
   direction: 'column'
 };
 
+const getDirection = (uischema: UISchemaElement) => {
+  if (uischema.type === 'HorizontalLayout') {
+    return 'row';
+  }
+  if (uischema.type === 'VerticalLayout') {
+    return 'column';
+  }
+  return layoutDefaultProps.direction;
+};
+
 /**
  * Map state to layout props.
  * @param state JSONForms state tree
@@ -784,7 +794,7 @@ export const mapStateToLayoutProps = (
     data,
     uischema: ownProps.uischema,
     schema: ownProps.schema,
-    direction: ownProps.direction || layoutDefaultProps.direction
+    direction: ownProps.direction ?? getDirection(uischema)
   };
 };
 

@@ -152,3 +152,4 @@ export * from './combinators';
 export * from './uischema';
 export * from './array';
 export * from './type';
+export * from './schema';
