@@ -57,10 +57,7 @@ export const resolveData = (instance: any, dataPath: string): any => {
   return dataPathSegments
     .map(segment => decodeURIComponent(segment))
     .reduce((curInstance, decodedSegment) => {
-      if (
-        !curInstance ||
-        !curInstance.hasOwnProperty(decodedSegment)
-      ) {
+      if (!curInstance || !curInstance.hasOwnProperty(decodedSegment)) {
         return undefined;
       }
 
@@ -138,22 +135,26 @@ export const resolveSchema = (
       continue;
     }
     let curSchema = get(resultSchema, pathSegment);
-    if (curSchema) {
-      resultSchema = curSchema;
-      continue;
-    }
-    // resolving was not successful, check whether the scope omitted an oneOf, allOf or anyOf and resolve anyway
-    const schemas = [].concat(resultSchema.oneOf ?? [], resultSchema.allOf ?? [], resultSchema.anyOf ?? []);
-    for (let item of schemas) {
-      curSchema = resolveSchema(item, validPathSegments.slice(i).join('/'));
+    if (!curSchema) {
+      // resolving was not successful, check whether the scope omitted an oneOf, allOf or anyOf and resolve anyway
+      const schemas = [].concat(
+        resultSchema?.oneOf ?? [],
+        resultSchema?.allOf ?? [],
+        resultSchema?.anyOf ?? []
+      );
+      for (let item of schemas) {
+        curSchema = resolveSchema(item, validPathSegments.slice(i).join('/'));
+        if (curSchema) {
+          break;
+        }
+      }
       if (curSchema) {
+        // already resolved rest of the path
+        resultSchema = curSchema;
         break;
       }
     }
-    if (curSchema) {
-      resultSchema = curSchema;
-      break;
-    }
+    resultSchema = curSchema;
   }
   // TODO: because schema is already scoped we might end up with refs pointing
   // outside of the current schema. It would be better if we'd always could deal
