@@ -70,6 +70,7 @@ import * as onChange from './onChange';
 import * as enumExample from './enum';
 import * as radioGroupExample from './radioGroup';
 import * as booleanToggle from './booleanToggle';
+import * as multiEnum from './multi-enum';
 export * from './register';
 export * from './example';
 
@@ -124,5 +125,6 @@ export {
   onChange,
   enumExample,
   radioGroupExample,
-  booleanToggle
+  booleanToggle,
+  multiEnum
 };

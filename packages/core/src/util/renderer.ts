@@ -187,7 +187,7 @@ export const enumToEnumOptionMapper = (e: any): EnumOption => {
 export const oneOfToEnumOptionMapper = (e: any): EnumOption => ({
   value: e.const,
   label:
-    e.title || (typeof e.const === 'string' ? e.const : JSON.stringify(e.const))
+    e.title ?? (typeof e.const === 'string' ? e.const : JSON.stringify(e.const))
 });
 
 export interface OwnPropsOfRenderer {
