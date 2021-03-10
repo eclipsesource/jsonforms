@@ -26,6 +26,7 @@ import * as allOf from './allOf';
 import * as anyOf from './anyOf';
 import * as oneOf from './oneOf';
 import * as oneOfArray from './oneOfArray';
+import * as anyOfOneOfAllOfResolve from './anyOf-oneOf-allOf-resolve';
 import * as array from './arrays';
 import * as nestedArray from './nestedArrays';
 import * as arrayWithDetail from './arrays-with-detail';
@@ -82,6 +83,7 @@ export {
   anyOf,
   oneOf,
   oneOfArray,
+  anyOfOneOfAllOfResolve,
   stringArray,
   array,
   nestedArray,
