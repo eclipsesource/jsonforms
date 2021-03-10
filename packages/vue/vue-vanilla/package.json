@@ -34,7 +34,8 @@
   "types": "lib/src/index.d.ts",
   "files": [
     "lib/*",
-    "src/*"
+    "src/*",
+    "vanilla.css"
   ],
   "scripts": {
     "serve": "vue-cli-service serve dev/serve.ts",
