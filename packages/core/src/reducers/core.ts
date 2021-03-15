@@ -353,15 +353,16 @@ export const errorsAt = (
     }
 
     let result = matchPath(error.dataPath);
-    // In anyOf and oneOf blocks with "primitive subschemas" (not defining an object),
+    // In anyOf and oneOf blocks with "primitive" (i.e. string, number etc.) or array subschemas,
     // we want to make sure that errors are only shown for the correct subschema.
     // Therefore, we compare the error's parent schema with the property's schema.
-    // This is necessary because in the primitive case the error's data path is the same for all subschemas:
+    // In the primitive case the error's data path is the same for all subschemas:
     // It directly points to the property defining the anyOf/oneOf.
+    // The same holds true for errors on the array level (e.g. min item amount).
     // In contrast, this comparison must not be done for errors whose parent schema defines an object
     // because the parent schema can never match the property schema (e.g. for 'required' checks).
     const parentSchema: JsonSchema | undefined = error.parentSchema;
-    if (result && parentSchema?.type !== 'object'
+    if (result && !isObjectSchema(parentSchema)
       && combinatorPaths.findIndex(p => instancePath.startsWith(p)) !== -1) {
       result = result && isEqual(parentSchema, schema);
     }
@@ -370,16 +371,24 @@ export const errorsAt = (
 };
 
 /**
+ * @returns true if the schema describes an object.
+ */
+const isObjectSchema = (schema?: JsonSchema): boolean => {
+  return schema?.type === 'object' || !!schema?.properties;
+}
+
+/**
  * The error-type of an AJV error is defined by its `keyword` property.
  * Certain errors are filtered because they don't fit to any rendered control.
  * All of them have in common that we don't want to show them in the UI
  * because controls will show the actual reason why they don't match their correponding sub schema.
  * - additionalProperties: Indicates that a property is present that is not defined in the schema.
  *      Jsonforms only allows to edit defined properties. These errors occur if an oneOf doesn't match.
+ * - allOf: Indicates that not all of the allOf definitions match as a whole.
  * - anyOf: Indicates that an anyOf definition itself is not valid because none of its subschemas matches.
  * - oneOf: Indicates that an oneOf definition itself is not valid because not exactly one of its subschemas matches.
  */
-const filteredErrorKeywords = ['additionalProperties', 'anyOf', 'oneOf'];
+const filteredErrorKeywords = ['additionalProperties', 'allOf', 'anyOf', 'oneOf'];
 
 const getErrorsAt = (
   instancePath: string,
