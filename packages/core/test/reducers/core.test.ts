@@ -468,13 +468,18 @@ test('core reducer - update - undefined data should update for given path', t =>
     })
   );
 
+  t.not(before, after);
+  t.not(before.data, after.data);
   t.deepEqual(after, { ...before, data: { foo: 'bar'} });
 });
 
 test('core reducer - update - path is undefined state should remain same', t => {
   const before: JsonFormsCore = {
     data: {
-      foo: 'bar'
+      foo: 'bar',
+      baz: {
+        bar: 'bar'
+      }
     },
     schema: {
       type: 'object',
@@ -493,17 +498,23 @@ test('core reducer - update - path is undefined state should remain same', t => 
   const after = coreReducer(
     before,
     update(undefined, _ => {
-      return { foo: 'xyz' };
+      return { foo: 'anything' };
     })
   );
 
+  t.is(before, after);
+  t.is(before.data, after.data);
+  t.is(before.data.baz, after.data.baz);
   t.deepEqual(before, after);
 });
 
 test('core reducer - update - path is null state should remain same', t => {
   const before: JsonFormsCore = {
     data: {
-      foo: 'bar'
+      foo: 'bar',
+      baz: {
+        bar:'bar'
+      }
     },
     schema: {
       type: 'object',
@@ -522,10 +533,13 @@ test('core reducer - update - path is null state should remain same', t => {
   const after = coreReducer(
     before,
     update(null, _ => {
-      return { foo: 'xyz' };
+      return { foo: 'anything' };
     })
   );
 
+  t.is(before, after);
+  t.is(before.data, after.data);
+  t.is(before.data.baz, after.data.baz);
   t.deepEqual(before, after);
 });
 
@@ -541,7 +555,10 @@ test('core reducer - update - empty path should update root state', t => {
 
   const before: JsonFormsCore = {
     data: {
-      foo: 'bar'
+      foo: 'bar',
+      baz: {
+        bar:'bar'
+      }
     },
     errors: [],
     schema,
@@ -558,6 +575,8 @@ test('core reducer - update - empty path should update root state', t => {
     })
   );
 
+  t.not(before, after);
+  t.not(before.data, after.data);
   t.deepEqual(after, { ...before, data: { foo: 'xyz' } });
 });
 
@@ -577,7 +596,10 @@ test('core reducer - update - providing a path should update data only belonging
   const before: JsonFormsCore = {
     data: {
       animal: 'Sloth',
-      color: 'Blue'
+      color: 'Blue',
+      baz: {
+        bar: 'bar'
+      }
     },
     errors: [],
     schema,
@@ -594,7 +616,10 @@ test('core reducer - update - providing a path should update data only belonging
     })
   );
 
-  t.deepEqual(after, { ...before, data: { animal: 'Sloth', color: 'Green' } });
+  t.not(before, after);
+  t.not(before.data, after.data);
+  t.is(before.data.baz, after.data.baz);
+  t.deepEqual(after, { ...before, data: { ...before.data, color: 'Green' } });
 });
 
 test('core reducer - update - should update errors', t => {
@@ -614,7 +639,7 @@ test('core reducer - update - should update errors', t => {
   const before: JsonFormsCore = {
     data: {
       animal: 'Sloth',
-      color: 'Blue'
+      color: 'Blue',
     },
     errors: [],
     schema,
@@ -633,7 +658,7 @@ test('core reducer - update - should update errors', t => {
 
   t.deepEqual(after, {
     ...before,
-    data: { animal: 'Sloth', color: 'Yellow' },
+    data: { ...before.data, color: 'Yellow' },
     errors: [
       {
         dataPath: 'color',
