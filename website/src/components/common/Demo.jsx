@@ -80,7 +80,9 @@ const Demo = (props) => {
   const uiSchemaAsString = JSON.stringify(uischema, null, 2);
 
   useEffect(() => {
-    global.Prism.highlightAll();
+    if (global.Prism !== undefined) {
+      global.Prism.highlightAll();
+    }
   }, [dataOpen, schemaOpen, uischemaOpen]);
 
   const handleClickOpenSchema = () => {
