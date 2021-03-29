@@ -130,12 +130,12 @@ Attributes not specified here fall back to either the `defaultStyles` or provide
 
 ```js
 {
-  type: 'Control',
-  scope: '#/properties/name',
-  options: {
-    styles: {
-      control: {
-        root: 'my-control-root'
+  "type": "Control",
+  "scope": "#/properties/name",
+  "options": {
+    "styles": {
+      "control": {
+        "root": "my-control-root"
       }
     }
   }
