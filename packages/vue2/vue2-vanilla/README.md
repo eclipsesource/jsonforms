@@ -138,14 +138,14 @@ You can also use specify styles in the ui schema via the `options.styles` proper
 Attributes specified here override the respective `defaultStyles` or provided `styles`.
 Attributes not specified here fall back to either the `defaultStyles` or provided `styles`.
 
-```js
+```json
 {
-  type: 'Control',
-  scope: '#/properties/name',
-  options: {
-    styles: {
-      control: {
-        root: 'my-control-root'
+  "type": "Control",
+  "scope": "#/properties/name",
+  "options": {
+    "styles": {
+      "control": {
+        "root": "my-control-root"
       }
     }
   }
