@@ -754,6 +754,110 @@ test('errorAt filters required', t => {
   t.deepEqual(filtered[0], state.errors[1]);
 });
 
+test('errorAt filters required in oneOf object', t => {
+  const ajv = createAjv();
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      fooOrBar: {
+        oneOf: [
+          {
+            title: 'Foo',
+            type: 'object',
+            properties: {
+              foo: {
+                type: 'string'
+              }
+            },
+            required: ['foo'],
+            additionalProperties: false
+          },
+          {
+            title: 'Bar',
+            type: 'object',
+            properties: {
+              bar: {
+                type: 'number'
+              }
+            },
+            required: ['bar'],
+            additionalProperties: false
+          }
+        ]
+      }
+    },
+    additionalProperties: false
+  };
+  const data = { fooOrBar: { } };
+  const v = ajv.compile(schema);
+  const errors = sanitizeErrors(v, data);
+
+  const state: JsonFormsCore = {
+    data,
+    schema,
+    uischema: undefined,
+    errors
+  };
+  const filtered = errorAt(
+    'fooOrBar.foo',
+    schema.properties.fooOrBar.oneOf[0].properties.foo
+  )(state);
+  t.is(filtered.length, 1);
+  t.deepEqual(filtered[0].keyword, 'required');
+});
+
+test('errorAt filters required in anyOf object', t => {
+  const ajv = createAjv();
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      fooOrBar: {
+        anyOf: [
+          {
+            title: 'Foo',
+            type: 'object',
+            properties: {
+              foo: {
+                type: 'string'
+              }
+            },
+            required: ['foo'],
+            additionalProperties: false
+          },
+          {
+            title: 'Bar',
+            type: 'object',
+            properties: {
+              bar: {
+                type: 'number'
+              }
+            },
+            required: ['bar'],
+            additionalProperties: false
+          }
+        ]
+      }
+    },
+    additionalProperties: false
+  };
+  const data = { fooOrBar: { } };
+  const v = ajv.compile(schema);
+  const errors = sanitizeErrors(v, data);
+
+  const state: JsonFormsCore = {
+    data,
+    schema,
+    uischema: undefined,
+    errors
+  };
+  const filtered = errorAt(
+    'fooOrBar.foo',
+    schema.properties.fooOrBar.anyOf[0].properties.foo
+  )(state);
+  t.is(filtered.length, 1);
+  t.deepEqual(filtered[0].keyword, 'required');
+});
+
 test('errorAt filters array minItems', t => {
   const ajv = createAjv();
   const schema: JsonSchema = {
@@ -973,6 +1077,7 @@ test('errorAt filters oneOf objects', t => {
     schema.properties.coloursOrNumbers.oneOf[1].properties.colour
   )(state);
   t.is(filtered.length, 1);
+  t.is(filtered[0].keyword, 'enum');
   t.deepEqual(filtered[0], state.errors[1]);
 });
 
