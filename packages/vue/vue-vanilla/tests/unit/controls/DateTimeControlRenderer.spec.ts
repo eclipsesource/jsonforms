@@ -8,7 +8,10 @@ const schema = {
 };
 const uischema = {
   type: 'Control',
-  scope: '#'
+  scope: '#',
+  options: {
+    placeholder: 'date-time placeholder'
+  }
 };
 
 describe('DateTimeControlRenderer.vue', () => {
@@ -28,5 +31,12 @@ describe('DateTimeControlRenderer.vue', () => {
     await input.setValue('2021-03-10T21:10');
     await input.trigger('blur');
     expect(wrapper.vm.data).to.equal('2021-03-10T21:10:00.000Z');
+  });
+
+  it('should have a placeholder', async () => {
+    const wrapper = mountJsonForms('2021-03-09T21:54:00.000Z', schema, uischema);
+    const select = wrapper.find('input');
+    const placeholder = select.attributes('placeholder');
+    expect(placeholder).to.equal('date-time placeholder');
   });
 });

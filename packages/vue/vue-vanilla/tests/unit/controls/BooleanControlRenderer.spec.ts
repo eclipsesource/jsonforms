@@ -7,7 +7,10 @@ const schema = {
 };
 const uischema = {
   type: 'Control',
-  scope: '#'
+  scope: '#',
+  options: {
+    placeholder: 'boolean placeholder'
+  }
 };
 
 describe('BooleanControlRenderer.vue', () => {
@@ -26,5 +29,12 @@ describe('BooleanControlRenderer.vue', () => {
     const input = wrapper.find('input');
     await input.trigger('click');
     expect(wrapper.vm.data).to.equal(false);
+  });
+
+  it('should have a placeholder', async () => {
+    const wrapper = mountJsonForms(true, schema, uischema);
+    const select = wrapper.find('input');
+    const placeholder = select.attributes('placeholder');
+    expect(placeholder).to.equal('boolean placeholder');
   });
 });

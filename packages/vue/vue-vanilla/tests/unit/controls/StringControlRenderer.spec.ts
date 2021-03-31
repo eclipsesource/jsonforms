@@ -7,7 +7,10 @@ const schema = {
 };
 const uischema = {
   type: 'Control',
-  scope: '#'
+  scope: '#',
+  options: {
+    placeholder: 'string placeholder'
+  }
 };
 
 describe('StringControlRenderer.vue', () => {
@@ -26,5 +29,12 @@ describe('StringControlRenderer.vue', () => {
     const select = wrapper.find('input');
     await select.setValue('b');
     expect(wrapper.vm.data).to.equal('b');
+  });
+
+  it('should have a placeholder', async () => {
+    const wrapper = mountJsonForms('a', schema, uischema);
+    const select = wrapper.find('input');
+    const placeholder = select.attributes('placeholder');
+    expect(placeholder).to.equal('string placeholder');
   });
 });
