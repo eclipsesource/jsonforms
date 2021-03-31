@@ -6,6 +6,7 @@ export const defaultStyles: Styles = {
     wrapper: 'wrapper',
     label: 'label',
     description: 'description',
+    input: 'input',
     error: 'error',
     textarea: 'text-area',
     select: 'select',
