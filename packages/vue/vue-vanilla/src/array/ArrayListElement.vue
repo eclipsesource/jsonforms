@@ -6,6 +6,7 @@
         @click="moveUpClicked"
         :disabled="!moveUpEnabled"
         :class="styles.arrayList.itemMoveUp"
+        type="button"
       >
         ↑
       </button>
@@ -13,10 +14,15 @@
         @click="moveDownClicked"
         :disabled="!moveDownEnabled"
         :class="styles.arrayList.itemMoveDown"
+        type="button"
       >
         ↓
       </button>
-      <button @click="deleteClicked" :class="styles.arrayList.itemDelete">
+      <button
+        @click="deleteClicked"
+        :class="styles.arrayList.itemDelete"
+        type="button"
+      >
         🗙
       </button>
     </div>
