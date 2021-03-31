@@ -21,23 +21,23 @@ import {
   mapStateToAnyOfProps,
   mapStateToOneOfProps,
   mapStateToJsonFormsRendererProps,
-  StatePropsOfJsonFormsRenderer,
   mapStateToArrayLayoutProps,
   mapStateToCellProps,
   JsonFormsRendererRegistryEntry,
   JsonFormsCellRendererRegistryEntry,
   defaultMapStateToEnumCellProps,
   mapStateToDispatchCellProps,
+  StatePropsOfJsonFormsRenderer,
   createId,
   removeId
 } from '@jsonforms/core';
 import {
   CompType,
+  computed,
   inject,
   onBeforeMount,
   onUnmounted,
-  ref,
-  watch,
+  ref
 } from '../config';
 
 /**
@@ -137,124 +137,21 @@ export interface ControlProps extends RendererProps {
   uischema: ControlElement;
 }
 
-export type Nullable<T> = {
-  [P in keyof T]: P | null;
-};
-
-export const controlInit = () => ({
-  data: null,
-  description: null,
-  errors: null,
-  label: null,
-  visible: null,
-  enabled: null,
-  id: null,
-  path: null,
-  required: null,
-  uischema: null,
-  schema: null,
-  config: null,
-  cells: null,
-  rootSchema: null
-});
-
-export const controlWithDetailInit = () => ({
-  ...controlInit(),
-  uischemas: null
-});
-
-export const arrayControlInit = () => ({
-  ...controlWithDetailInit(),
-  childErrors: null,
-  renderers: null,
-  cells: null
-});
-
-export const arrayLayoutInit = () => ({
-  ...controlWithDetailInit(),
-  minItems: null,
-  renderers: null,
-  cells: null
-});
-
-export const enumControlInit = () => ({
-  ...controlInit(),
-  options: null
-});
-
-export const combinatorControlInit = () => ({
-  ...controlWithDetailInit(),
-  indexOfFittingSchema: null
-});
-
-export const layoutInit = () => ({
-  renderers: null,
-  cells: null,
-  visible: null,
-  enabled: null,
-  path: null,
-  data: null,
-  uischema: null,
-  schema: null,
-  direction: null
-});
-
-export const rendererInit = () => ({
-  renderers: null,
-  cells: null,
-  schema: null,
-  rootSchema: null,
-  uischema: null,
-  path: null
-});
-
-export const masterListItemInit = () => ({
-  index: null,
-  selected: null,
-  path: null,
-  schema: null,
-  childLabel: null
-});
-
-export const cellInit = () => ({
-  data: null,
-  visible: null,
-  enabled: null,
-  id: null,
-  path: null,
-  errors: null,
-  isValid: null,
-  schema: null,
-  uischema: null,
-  config: null,
-  rootSchema: null,
-  renderers: null,
-  cells: null
-});
-
-export const enumCellInit = () => ({
-  ...cellInit(),
-  options: null
-});
-
 export type Required<T> = T extends object
   ? { [P in keyof T]-?: NonNullable<T[P]> }
   : T;
 
-export function useControl<R, D, P>(
+export function useControl<R, D, P extends {}>(
   props: P,
-  stateInit: () => Nullable<R>,
   stateMap: (state: JsonFormsState, props: P) => R
 ): { control: Required<R> };
-export function useControl<R, D, P>(
+export function useControl<R, D, P extends {}>(
   props: P,
-  stateInit: () => Nullable<R>,
   stateMap: (state: JsonFormsState, props: P) => R,
   dispatchMap: (dispatch: Dispatch<CoreActions>) => D
 ): { control: Required<R> } & D;
-export function useControl<R, D, P>(
+export function useControl<R, D, P extends {}>(
   props: P,
-  stateInit: () => Nullable<R>,
   stateMap: (state: JsonFormsState, props: P) => R,
   dispatchMap?: (dispatch: Dispatch<CoreActions>) => D
 ) {
@@ -265,32 +162,24 @@ export function useControl<R, D, P>(
     throw "'jsonforms' or 'dispatch' couldn't be injected. Are you within JSON Forms?";
   }
 
-  const control = ref<Nullable<R>>(stateInit());
-  const updateControl = (jsonforms: JsonFormsSubStates, props: P) => {
-    Object.assign(
-      control.value,
-      stateMap({ jsonforms }, { ...props, id: control.value.id ?? undefined })
-    );
-  };
-  updateControl(jsonforms, props);
-  watch(
-    () => [...Object.values(jsonforms), props],
-    () => {
-      updateControl(jsonforms, props);
-    }
-  );
+  const id = ref<string | undefined>(undefined);
+  const control = computed(() => ({
+    ...stateMap({ jsonforms }, props),
+    id: id.value
+  }));
 
   const dispatchMethods = dispatchMap?.(dispatch);
 
   onBeforeMount(() => {
-    if (control.value.uischema.scope) {
-      control.value.id = createId(control.value.uischema.scope);
+    if ((control.value as any).uischema.scope) {
+      id.value = createId((control.value as any).uischema.scope);
     }
   });
 
   onUnmounted(() => {
-    if (control.value.id) {
-      removeId(control.value.id);
+    if (id.value) {
+      removeId(id.value);
+      id.value = undefined;
     }
   });
 
@@ -308,12 +197,7 @@ export function useControl<R, D, P>(
  * Dispatch changes via the provided `handleChange` method.
  */
 export const useJsonFormsControl = (props: ControlProps) => {
-  return useControl(
-    props,
-    controlInit,
-    mapStateToControlProps,
-    mapDispatchToControlProps
-  );
+  return useControl(props, mapStateToControlProps, mapDispatchToControlProps);
 };
 
 /**
@@ -326,7 +210,6 @@ export const useJsonFormsControl = (props: ControlProps) => {
 export const useJsonFormsControlWithDetail = (props: ControlProps) => {
   return useControl(
     props,
-    controlWithDetailInit,
     mapStateToControlWithDetailProps,
     mapDispatchToControlProps
   );
@@ -341,7 +224,6 @@ export const useJsonFormsControlWithDetail = (props: ControlProps) => {
 export const useJsonFormsEnumControl = (props: ControlProps) => {
   return useControl(
     props,
-    enumControlInit,
     mapStateToEnumControlProps,
     mapDispatchToControlProps
   );
@@ -357,7 +239,6 @@ export const useJsonFormsEnumControl = (props: ControlProps) => {
 export const useJsonFormsOneOfEnumControl = (props: ControlProps) => {
   return useControl(
     props,
-    enumControlInit,
     mapStateToOneOfEnumControlProps,
     mapDispatchToControlProps
   );
@@ -372,7 +253,6 @@ export const useJsonFormsOneOfEnumControl = (props: ControlProps) => {
 export const useJsonFormsArrayControl = (props: ControlProps) => {
   return useControl(
     props,
-    arrayControlInit,
     mapStateToArrayControlProps,
     mapDispatchToArrayControlProps
   );
@@ -385,12 +265,7 @@ export const useJsonFormsArrayControl = (props: ControlProps) => {
  * Dispatch changes via the provided `handleChange` method.
  */
 export const useJsonFormsAllOfControl = (props: ControlProps) => {
-  return useControl(
-    props,
-    combinatorControlInit,
-    mapStateToAllOfProps,
-    mapDispatchToControlProps
-  );
+  return useControl(props, mapStateToAllOfProps, mapDispatchToControlProps);
 };
 
 /**
@@ -400,12 +275,7 @@ export const useJsonFormsAllOfControl = (props: ControlProps) => {
  * Dispatch changes via the provided `handleChange` method.
  */
 export const useJsonFormsAnyOfControl = (props: ControlProps) => {
-  return useControl(
-    props,
-    combinatorControlInit,
-    mapStateToAnyOfProps,
-    mapDispatchToControlProps
-  );
+  return useControl(props, mapStateToAnyOfProps, mapDispatchToControlProps);
 };
 
 /**
@@ -415,12 +285,7 @@ export const useJsonFormsAnyOfControl = (props: ControlProps) => {
  * Dispatch changes via the provided `handleChange` method.
  */
 export const useJsonFormsOneOfControl = (props: ControlProps) => {
-  return useControl(
-    props,
-    combinatorControlInit,
-    mapStateToOneOfProps,
-    mapDispatchToControlProps
-  );
+  return useControl(props, mapStateToOneOfProps, mapDispatchToControlProps);
 };
 
 export interface LayoutProps extends RendererProps {
@@ -433,11 +298,7 @@ export interface LayoutProps extends RendererProps {
  * Access bindings via the provided reactive 'layout' object.
  */
 export const useJsonFormsLayout = (props: LayoutProps) => {
-  const { control, ...other } = useControl(
-    props,
-    layoutInit,
-    mapStateToLayoutProps
-  );
+  const { control, ...other } = useControl(props, mapStateToLayoutProps);
   return { layout: control, ...other };
 };
 
@@ -448,11 +309,7 @@ export const useJsonFormsLayout = (props: LayoutProps) => {
  * Access bindings via the provided reactive 'layout' object.
  */
 export const useJsonFormsArrayLayout = (props: ControlProps) => {
-  const { control, ...other } = useControl(
-    props,
-    arrayLayoutInit,
-    mapStateToArrayLayoutProps
-  );
+  const { control, ...other } = useControl(props, mapStateToArrayLayoutProps);
   return { layout: control, ...other };
 };
 
@@ -468,7 +325,7 @@ export const useJsonFormsMasterListItem = (props: OwnPropsOfMasterListItem) => {
     Omit<OwnPropsOfMasterListItem, 'handleSelect' | 'removeItem'>,
     unknown,
     OwnPropsOfMasterListItem
-  >(props, masterListItemInit, mapStateToMasterListItemProps);
+  >(props, mapStateToMasterListItemProps);
   return { item: control, ...other };
 };
 
@@ -487,41 +344,18 @@ export const useJsonFormsRenderer = (props: RendererProps) => {
     throw "'jsonforms' or 'dispatch' couldn't be injected. Are you within JSON Forms?";
   }
 
-  const renderer = ref<
-    Nullable<Omit<StatePropsOfJsonFormsRenderer, 'refResolver'>>
-  >(rendererInit());
-  const resolver = { refResolver: null };
+  const reactiveProps: any = reactive(props);
 
-  const updateRenderer = (
-    jsonforms: JsonFormsSubStates,
-    props: RendererProps
-  ) => {
-    const { refResolver, ...other } = mapStateToJsonFormsRendererProps(
-      { jsonforms },
-      props
-    );
-    Object.assign(renderer.value, other);
-    resolver.refResolver = refResolver;
-  };
-  updateRenderer(jsonforms, props);
-  watch(
-    () => [...Object.values(jsonforms), props],
-    () => {
-      updateRenderer(jsonforms, props);
-    }
+  const renderer = computed(
+    () =>
+      mapStateToJsonFormsRendererProps(
+        { jsonforms },
+        reactiveProps
+      ) as Required<StatePropsOfJsonFormsRenderer>
   );
 
-  const refResolver = (schema: any) =>
-    (resolver as Pick<
-      StatePropsOfJsonFormsRenderer,
-      'refResolver'
-    >).refResolver(schema);
-
   return {
-    renderer: (renderer as unknown) as Required<
-      Omit<StatePropsOfJsonFormsRenderer, 'refResolver'>
-    >,
-    refResolver
+    renderer
   };
 };
 
@@ -535,7 +369,6 @@ export const useJsonFormsRenderer = (props: RendererProps) => {
 export const useJsonFormsCell = (props: ControlProps) => {
   const { control, ...other } = useControl(
     props,
-    cellInit,
     mapStateToCellProps,
     mapDispatchToControlProps
   );
@@ -552,7 +385,6 @@ export const useJsonFormsCell = (props: ControlProps) => {
 export const useJsonFormsEnumCell = (props: ControlProps) => {
   const { control, ...other } = useControl(
     props,
-    enumCellInit,
     defaultMapStateToEnumCellProps,
     mapDispatchToControlProps
   );
@@ -569,7 +401,6 @@ export const useJsonFormsEnumCell = (props: ControlProps) => {
 export const useJsonFormsDispatchCell = (props: ControlProps) => {
   const { control, ...other } = useControl(
     props,
-    cellInit,
     mapStateToDispatchCellProps,
     mapDispatchToControlProps
   );

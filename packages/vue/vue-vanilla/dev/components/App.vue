@@ -237,8 +237,124 @@ export default defineComponent({
       this.data.number = 10;
     },
     adaptUiSchema() {
-      this.uischema.elements[0].elements[0].elements[1].options = {
-        multi: true
+      this.uischema = {
+        type: 'VerticalLayout',
+        elements: [
+          {
+            type: 'HorizontalLayout',
+            elements: [
+              {
+                type: 'VerticalLayout',
+                elements: [
+                  {
+                    type: 'Control',
+                    scope: '#/properties/string',
+                    options: {
+                      placeholder: 'this is a placeholder'
+                    }
+                  },
+                  {
+                    type: 'Control',
+                    scope: '#/properties/multiString'
+                  },
+                  {
+                    type: 'Control',
+                    scope: '#/properties/boolean',
+                    options: {
+                      placeholder: 'boolean placeholder'
+                    }
+                  },
+                  {
+                    type: 'Control',
+                    scope: '#/properties/boolean2'
+                  },
+                  {
+                    type: 'Control',
+                    scope: '#/properties/number',
+                    rule: {
+                      effect: 'DISABLE',
+                      condition: {
+                        scope: '#/properties/boolean',
+                        schema: {
+                          const: true
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                type: 'Group',
+                label: 'My group',
+                elements: [
+                  {
+                    type: 'Control',
+                    scope: '#/properties/integer',
+                    rule: {
+                      effect: 'HIDE',
+                      condition: {
+                        scope: '#/properties/boolean2',
+                        schema: {
+                          const: true
+                        }
+                      }
+                    }
+                  },
+                  {
+                    type: 'HorizontalLayout',
+                    elements: [
+                      {
+                        type: 'Control',
+                        scope: '#/properties/enum'
+                      },
+                      {
+                        type: 'Control',
+                        scope: '#/properties/oneOfEnum'
+                      },
+                      {
+                        type: 'Control',
+                        scope: '#/properties/date',
+                        options: {
+                          placeholder: 'date placeholder'
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    type: 'Control',
+                    scope: '#/properties/dateTime',
+                    options: {
+                      placeholder: 'date-time placeholder'
+                    }
+                  },
+                  {
+                    type: 'Control',
+                    scope: '#/properties/time',
+                    options: {
+                      placeholder: 'time placeholder',
+                      styles: {
+                        control: {
+                          root: 'control my-time'
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            type: 'Label',
+            text: 'This is my label'
+          },
+          {
+            type: 'Control',
+            scope: '#/properties/array',
+            options: {
+              childLabelProp: 'age'
+            }
+          }
+        ]
       };
     }
   },

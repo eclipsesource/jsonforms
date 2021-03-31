@@ -35,10 +35,12 @@
     "vanilla.css"
   ],
   "scripts": {
-    "serve:pre": "rm -rf src dev/components && cp -r ../../vue/vue-vanilla/src src && cp -r ../../vue/vue-vanilla/dev/components dev/components",
+    "copy:source": "rm -rf src && cp -r ../../vue/vue-vanilla/src src && cp ../../vue/vue-vanilla/vanilla.css vanilla.css",
+    "copy:dev": "rm -rf src dev/components && cp -r ../../vue/vue-vanilla/dev/components dev/components",
+    "serve:pre": "npm run copy:source && npm run copy:dev",
     "serve:do": "vue-cli-service serve dev/serve.ts",
     "serve": "npm run serve:pre && npm run serve:do",
-    "build:pre": "rm -rf src && cp -r ../../vue/vue-vanilla/src src",
+    "build:pre": "npm run copy:source",
     "build:do": "cross-env NODE_ENV=production rollup --config rollup.config.js",
     "build": "npm run build:pre && npm run build:do",
     "clean": "rm -rf lib",
