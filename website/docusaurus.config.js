@@ -8,6 +8,14 @@ module.exports = {
   favicon: 'img/favicon.ico',
   organizationName: 'eclipsesource',
   projectName: 'jsonforms',
+  scripts: [
+    {
+      src: 'https://static.cloudflareinsights.com/beacon.min.js',
+      defer: true,
+      'data-cf-beacon':
+        '{&quot;token&quot;: &quot;b2ec7b485fc04039bf1a9fbd51005477&quot;}',
+    },
+  ],
   themeConfig: {
     colorMode: {
       defaultMode: 'light',
@@ -65,9 +73,9 @@ module.exports = {
               href: 'https://github.com/eclipsesource/jsonforms',
             },
             {
-              label: 'Spetrum',
+              label: 'Spectrum',
               href: 'https://spectrum.chat/jsonforms',
-            }
+            },
           ],
         },
         {
