@@ -1,0 +1,303 @@
+---
+id: custom-renderers
+title: Custom Renderers
+---
+
+import { Default, WithCustomRenderer } from '../../../src/components/docs/tutorials/custom-renderers';
+
+The default renderers of JSON Forms are a good fit for most scenarios, but there might be certain situations where you'd want to customize the rendered UI Schema elements.
+JSON Forms allows for this by registering a custom renderer that produces a different UI for a given UI Schema element.
+
+In this section you will learn how to create and register a custom renderer for a control.
+We will replace the default renderer for integer values of a rating property.
+
+:::info Note
+
+While the high level concepts are the same, there are large implementation differences between the offered React, Angular and Vue renderer sets.
+This tutorial describes how to add custom renderers for React-based renderer sets.
+
+:::
+
+By default an integer property is rendered like this:
+
+<Default />
+
+Our goal is to replace the default renderer with a custom one which will render the UI for rating as depicted below:
+
+<WithCustomRenderer />
+
+## Running the seed
+
+If you want to follow along with this tutorial, you may want to [clone the seed repository](https://github.com/eclipsesource/jsonforms-react-seed) which basically is just a skeleton application scaffolded by create-react-app and JSON Forms dependencies added.
+It showcases how to use the standalone JSON Forms component and the legacy version with a Redux store (deprecated).
+
+```bash
+cd jsonforms-react-seed
+npm install
+npm start
+```
+
+Once the dependencies are installed and the local server has been started, navigate to http://localhost:3000 in order to see the application running.
+
+The seed is described in more detail within the `README.md` file of the [repo](https://github.com/eclipsesource/jsonforms-react-seed), hence we only focus on the most crucial parts of the app in the following.
+
+## Core concepts about rendering
+
+Before explaining how to contribute a component (which we will refer to as a "custom control") to JSON Forms,
+we first explain how the basic process of rendering works.
+
+JSON Forms maintains a registry of renderers (which are regular React components in case of the React/Material renderers we use in this tutorial).
+When JSON Forms is instructed to render a given UI schema to produce a form, it will start with the root element of the UI Schema and try to find a renderer for this UI Schema element in its registry of renderers.
+
+To find a matching renderer, JSON Forms relies on so-called testers.
+Every renderer has a tester associated with its registration, which is a function of a UI schema and a JSON schema returning a number.
+The returned number is the priority which expresses if and how well a renderer can actually render the given UI Schema Element (where `NOT_APPLICABLE` aka. `-1` means "not at all").
+
+In order to create and register a renderer, we need to perform the following steps:
+
+1. Create a renderer (a React component)
+2. Create a corresponding tester for the renderer
+3. Register both the renderer and the tester with the framework
+
+The seed app already contains all of the ingredients necessary to create a custom renderer,
+which we'll use in the following.
+
+### 1. Create a renderer
+
+As mentioned previously, the seed app already features a component which we want to use as a renderer.
+It's contained in `src/Rating.tsx` and is a rating control, i.e. it allows to set a value between 0 and 5 by selecting the appropriate number of stars.
+We won't go into detail about the control itself, but we should mention that we need to provide an `onClick` property in order to allow specifying a callback which gets called every time the user clicks on a star.
+We also need to suppy an initial `value`.
+
+In order to use our React component as a JSON Forms compatible renderer, we can use the `withJsonFormsControlProps` utility function
+from JSON Forms that will give us all necessary props to render the control.
+This will allow us to retrieve the initial value and to emit events updating the respective value when the users clicks on a star.
+In this case, the props are `data`, which is the actual data bit to be rendered, `path`,
+a dot-separated string, which represents the path the data is written to and the `handleChange` handler function which we can use for the `onClick` prop of our `Rating` control.
+For the `onClick` prop we pass the `handleChange` handler, which we retrieve via another helper function (HOC) provided by JSON Forms called `withJsonFormsControlProps`.
+All the handler actually does is to emit a change with the new value.
+
+The complete code of `src/RatingControl.tsx` looks as follows:
+
+```javascript
+import * as React from 'react';
+import { withJsonFormsControlProps } from '@jsonforms/react';
+import { Rating } from './Rating';
+
+interface RatingControlProps {
+  data: any;
+  handleChange(path: string, value: any): void;
+  path: string;
+}
+
+const RatingControl = ({ data, handleChange, path }: RatingControlProps) => (
+  <Rating
+    value={data}
+    onClick={(ev: any) => handleChange(path, Number(ev.value))}
+  />
+);
+
+export default withJsonFormsControlProps(RatingControl);
+```
+
+### 2. Create a tester
+
+Now that we have our renderer ready, we need to tell JSON Forms when we want to make use of it.
+For that purpose we create a tester that checks if the corresponding UI schema element is a control and whether it is bound to a path that ends with `rating`.
+If that is the case, we return a rank of 3.
+That is because the default renderer sets provide a rank with a value of 2, hence our tester will need to rank the custom control higher a bit higher, such that it will be picked up for the rating control during rendering.
+The `ratingControlTester.js` file contains the respective code as a default export.
+
+```javascript
+import { rankWith, scopeEndsWith } from '@jsonforms/core';
+
+export default rankWith(
+  3, //increase rank as needed
+  scopeEndsWith('rating')
+);
+```
+
+Generally speaking, the testers API is made out of different predicates and functions that allow for composition (e.g. `and` or `or`) such that it is easy to target specific parts of the UI schema and/or JSON schema.
+
+### 3. Register the renderer
+
+To register the custom renderer we simply add it to the list of renderers passed to the `JsonForms` component.
+
+```javascript
+// list of renderers declared outside the App component
+const renderers = [
+  ...materialRenderers,
+  //register custom renderers
+  { tester: ratingControlTester, renderer: RatingControl },
+];
+
+<JsonForms
+  // other necessary declarations go here...
+  renderers={renderers}
+/>;
+```
+
+And that's it!
+It should be noted that in order to create a full-fledged control there's more work left, since we did not cover concepts like validation or visibility.
+
+## Dispatching
+
+When writing custom renderers that themselves dispatch to JSON Forms, there are two components that can be used: `ResolvedJsonFormsDispatch` and `JsonFormsDispatch`.
+For performance reasons, it is almost always preferable to use the `ResolvedJsonFormsDispatch` component.
+In contrast to `ResolvedJsonFormsDispatch`, the `JsonFormsDispatch` component will additionally check and resolve external schema refs, which is almost never needed in a nested component such as a renderer.
+
+## Reusing existing controls
+
+There are also scenarios where you don't need a full custom renderer but just want to wrap an existing control or slighly modify its props.
+
+Let's say you have a customized JSON Schema in which some `boolean` properties are associated with a `price`.
+The price shall be shown in the label of the control.
+Also when the price is over a certain amount an additional text shall be shown indicating that shipping is free.
+For this we would like to reuse the existing JSON Forms `MaterialBooleanControl`.
+
+The JSON Forms React Material renderer set exposes its renderers in two ways, a "connected" variant which is used during dispatching and the pure "unwrapped" version.
+When you simply want to wrap an existing renderer you can use the default exported "connected" variant.
+When you want to access the same props as the "unwrapped" version you'll need to use that variant and then connect it yourself.
+
+The following steps are also based on the [seed repository](https://github.com/eclipsesource/jsonforms-react-seed).
+
+### 1. Add the Control to uischema.json
+
+```json
+{
+  "type": "Control",
+  "scope": "#/properties/include_gift"
+}
+```
+
+### 2. Add the field to schema.json
+
+```JSON
+  "include_gift": {
+    "type": "boolean",
+    "price": 20
+  }
+```
+
+### 3. Create a renderer and tester
+
+The exported controls from `@jsonforms/material-renderers` are wrapped in [Higher-Order Components (HOC)](https://reactjs.org/docs/higher-order-components.html) to connect them with JSON Forms' internally managed state.
+If we were to use those wrapped controls, we would only have the basic props available which are used for dispatching.
+This is useful when you don't really care about the renderer's props but would like to wrap it in additional components.
+
+The unwrapped variants are the ones you want to use when you would like to access the same detailed props as the pure renderer.
+As we want to access the schema's price attribute as well as modify the calculated label, we'll use the unwrapped renderer.
+The unwrapped controls are all exported in an object called Unwrapped in ['@jsonforms/material-renderers'](https://github.com/eclipsesource/jsonforms/blob/master/packages/material/src/controls/index.ts).
+We can import that object, and then use destructuring to access a specific Control.
+
+```ts
+import { Unwrapped } from '@jsonforms/material-renderers';
+const { MaterialBooleanControl } = Unwrapped;
+```
+
+To determine which HOC to use, we can look at the [source](https://github.com/eclipsesource/jsonforms/tree/master/packages/material/src/controls) for the respective control.
+Most controls use `withJsonFormsControlProps`, with some exceptions for more specialized controls.
+Having determined that, we can export our extended control using the same HOC, so that it maintains compatibility.
+
+```ts
+export default withJsonFormsControlProps(checkBoxWithPriceControl);
+```
+
+Since our example also uses an attribute that is not defined in the `JsonSchema` type, TypeScript will complain that Property 'price' does not exist on type 'JsonSchema'.
+This can be solved by extending the type with an additional attribute, and then casting the schema that was passed into the control into that extended type.
+This is a safe operation as we'll make sure that the renderer is only invoked for schemas which have the `price` attribute.
+
+```ts
+type JsonSchemaWithPrice = JsonSchema & { price: string };
+const schema = props.schema as JsonSchemaWithPrice;
+```
+
+Finally, we can return the original control, with added components around it.
+We use the `ControlProps` interface, imported from core, to make sure our props have the correct types.
+
+```tsx
+import { ControlProps } from '@jsonforms/core';
+
+export const checkBoxWithPriceControl = (props: ControlProps) => {
+  const schema = props.schema as JsonSchemaWithPrice;
+  const label = `${props.label} (${schema.price})`;
+  return (
+    <Grid container>
+      <Grid item xs={12}>
+        <MaterialBooleanControl {...props} label={label} />
+      </Grid>
+      {schema.price > 50 && (
+        <Grid item xs={12}>
+          <Typography>Shipping is free!</Typography>
+        </Grid>
+      )}
+    </Grid>
+  );
+};
+```
+
+The complete code of `src/CheckBoxWithPriceControl.tsx`:
+
+```tsx
+import {
+  JsonSchema,
+  ControlProps,
+  isBooleanControl,
+  RankedTester,
+  rankWith,
+  schemaMatches,
+  and,
+} from '@jsonforms/core';
+import { withJsonFormsControlProps } from '@jsonforms/react';
+import { Unwrapped } from '@jsonforms/material-renderers';
+import { Grid, Typography } from '@material-ui/core';
+const { MaterialBooleanControl } = Unwrapped;
+
+type JsonSchemaWithPrice = JsonSchema & { price: number };
+
+export const checkBoxWithPriceControl = (props: ControlProps) => {
+  const schema = props.schema as JsonSchemaWithPrice;
+  const label = `${props.label} (${schema.price})`;
+  return (
+    <Grid container>
+      <Grid item xs={12}>
+        <MaterialBooleanControl {...props} label={label} />
+      </Grid>
+      {schema.price > 50 && (
+        <Grid item xs={12}>
+          <Typography>Shipping is free!</Typography>
+        </Grid>
+      )}
+    </Grid>
+  );
+};
+
+export const checkBoxWithPriceControlTester: RankedTester = rankWith(
+  3,
+  and(
+    isBooleanControl,
+    schemaMatches((schema) => schema.hasOwnProperty('price'))
+  )
+);
+export default withJsonFormsControlProps(checkBoxWithPriceControl);
+```
+
+### 4. Register the renderer and tester in App.tsx
+
+Finally, as in the examples above, we need to register our renderers and testers:
+
+```ts
+import CheckBoxWithPriceControl, {
+  checkBoxWithPriceControlTester,
+} from './CheckBoxWithPriceControl';
+
+const renderers = [
+  ...materialRenderers,
+  // register custom renderers
+  { tester: ratingControlTester, renderer: RatingControl },
+  {
+    tester: checkBoxWithPriceControlTester,
+    renderer: CheckBoxWithPriceControl,
+  },
+];
+```

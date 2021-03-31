@@ -10,12 +10,12 @@ if [[ -z $JSONFORMS_REPO || ! -d $JSONFORMS_REPO ]]; then
 fi
 
 for package in "${PACKAGES[@]}"; do
-  rm -rf $WEBSITE_REPO/public/api/$package
-  cp -r $JSONFORMS_REPO/packages/$package/docs $WEBSITE_REPO/public/api/$package
+  rm -rf $WEBSITE_REPO/static/api/$package
+  cp -r $JSONFORMS_REPO/packages/$package/docs $WEBSITE_REPO/static/api/$package
   echo "Package $package copied."
 done
 
 # Remove absolute paths (https://github.com/TypeStrong/typedoc/issues/642)
-find $WEBSITE_REPO/public/api -type f -name "*.html" -print0 | xargs -0 sed '/Defined in \/home\//d' -i
+find $WEBSITE_REPO/static/api -type f -name "*.html" -print0 | xargs -0 sed '/Defined in \/home\//d' -i
 
 exit 0

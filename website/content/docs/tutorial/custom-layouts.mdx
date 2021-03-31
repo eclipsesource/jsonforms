@@ -1,0 +1,223 @@
+---
+id: custom-layouts
+title: Custom Layouts
+---
+
+import { Default, WithCustomRenderer } from '../../../src/components/docs/tutorials/custom-layouts';
+
+The default layouts of JSON Forms are a good fit for most scenarios,
+but there might be certain situations where you'd want to customize the rendered layouts.
+JSON Forms allows for this by registering a custom renderer that produces a different UI
+for a given layout.
+
+In this section you will learn how to create and register a custom renderer for a layout.
+
+:::info Note
+
+While the high level concepts are the same, there are large implementation differences between the offered React, Angular and Vue renderer sets.
+This tutorial describes how to add custom renderers for React-based renderer sets.
+
+:::
+
+We will replace the default renderer for groups. By default a group is rendered like this:
+
+<Default />
+
+Our goal is to instead render the UI for groups as depicted below:
+
+<WithCustomRenderer />
+
+## Running the seed
+
+If you want to follow along with this tutorial, you may want to [clone the seed repository](https://github.com/eclipsesource/jsonforms-react-seed)
+which basically is just a skeleton application scaffolded by create-react-app with the JSON Forms dependencies added.
+
+```bash
+cd jsonforms-react-seed
+npm install
+npm start
+```
+
+Once the dependencies are installed and the local server has been started,
+navigate to http://localhost:3000 in order to see the application running.
+
+The seed is described in more detail within the `README.md` file of
+the [repo](https://github.com/eclipsesource/jsonforms-react-seed), hence we
+only focus on the most crucial parts of the app in the following.
+
+## Core concepts about rendering
+
+Before explaining how to contribute a component (which will be referred to as "custom layout") to JSON Forms,
+we first explain how the basic process of rendering works.
+
+JSON Forms maintains a registry of renderers (which are regular React components in case of the React/Material renderers we use in this tutorial).
+When JSON Forms is instructed to render a given UI schema to produce a form, it will start with the root element of the UI Schema and try to
+find a renderer for this UI Schema element in its registry of renderers.
+
+To find a matching renderer, JSON Forms relies on so-called testers.
+Every renderer has a tester associated with its registration, which is a function of a UI schema and a
+JSON schema returning a number.
+The returned number is the priority which expresses if and how well a renderer can actually render the
+given UI Schema Element (where `NOT_APPLICABLE` aka. `-1` means "not at all").
+
+In order to create and register a renderer, we need to perform the following steps:
+
+1. Change UI Schema to contain a group
+2. Create a renderer (a React component)
+3. Create a corresponding tester for the renderer
+4. Register both the renderer and the tester with the framework
+
+The seed app already contains all of the ingredients necessary to create a custom layout,
+which we'll use in the following.
+
+### 1. Add Group to UI Schema
+
+The first step is to extend our UI Schema and add a Group to it.
+You can find the UISchema in `src\uischema.json`.
+We can change the type of the root from `"type": "VerticalLayout",` to `"type": "Group",`.
+As a group can have a label we should add it, too: `"label": "My Group!",` .
+We can keep everything else unchanged.
+
+### 2. Create a renderer
+
+We first need to create a new `src\MyGroup.jsx` file.
+
+Here we can code our component. For our example we create a single Accordion.
+In order to render the child elements we reuse the `MaterialLayoutRenderer` which we can import from `@jsonforms/material-renderers`.
+
+In order to use our React component as a JSON Forms compatible renderer, we can make use of the `withJsonFormsLayoutProps` utility function
+from JSON Forms that will give us all relevant props to render the group and delegate to the layout renderer.
+In this case, the props are:
+`uischema`, which is the actual uischema element to be rendered
+`path`, which is necessary to scope the element
+`schema`, which is the JSON Schema
+`visible`, which tells us whether the renderer is visible based on rule evaluation
+`renderers`, which is the list of all known renderers and will be needed for further rendering
+
+The complete code of `src/MyGroup.jsx` looks as follows:
+
+```jsx
+import { MaterialLayoutRenderer } from '@jsonforms/material-renderers';
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Hidden,
+  Typography,
+} from '@material-ui/core';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import React from 'react';
+import { withJsonFormsLayoutProps } from '@jsonforms/react';
+
+const MyGroupRenderer = (props) => {
+  const { uischema, schema, path, visible, renderers } = props;
+
+  const layoutProps = {
+    elements: uischema.elements,
+    schema: schema,
+    path: path,
+    direction: 'column',
+    visible: visible,
+    uischema: uischema,
+    renderers: renderers,
+  };
+  return (
+    <Hidden xsUp={!visible}>
+      <Accordion>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography>{uischema.label}</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <MaterialLayoutRenderer {...layoutProps} />
+        </AccordionDetails>
+      </Accordion>
+    </Hidden>
+  );
+};
+
+export default withJsonFormsLayoutProps(MyGroupRenderer);
+```
+
+### 3. Create a tester
+
+Now that we have our renderer ready, we need to tell JSON Forms when we want to make use of it.
+For that purpose we create a tester that checks if the corresponding UI schema element is a group.
+If that is the case, we return a rank of `1000`.
+
+Add the following code to `src/MyGroup.jsx`:
+
+```javascript
+import { rankWith, uiTypeIs } from '@jsonforms/core';
+
+export const myGroupTester = rankWith(1000, uiTypeIs('Group'));
+```
+
+Generally speaking, the testers API is made out of different predicates and functions that allow
+for composition (e.g. `and` or `or`) such that it is easy to target specific parts
+of the UI schema and/or JSON schema.
+
+### 4. Register the renderer
+
+All that's left to do is to use the renderer with its tester. We can do so by appending
+the renderer/tester pair to the array of renderer registrations used by the `JsonForms` component.
+Within `App.tsx`, find the list of renderers used by the standalone `JsonForms` component and add the renderer and its tester like so:
+
+```javascript
+import MyGroupRenderer, { myGroupTester } from './MyGroup';
+
+// list of renderers declared outside the App component
+const renderers = [
+  ...materialRenderers,
+  //register custom renderers
+  { tester: myGroupTester, renderer: MyGroupRenderer },
+];
+```
+
+Then, by simply passing the list of renderers to JSON Forms, our custom layout renderer will be picked up for the Group ui element.
+
+```javascript
+<JsonForms
+  // other necessary declarations go here...
+  renderers={renderers}
+/>
+```
+
+And that's it! The MyGroup renderer will now be used to render the `Group` element.
+
+## Dispatching
+
+When writing custom renderers that themselves dispatch to JSON Forms, there are two components that can be used: `ResolvedJsonFormsDispatch` and `JsonFormsDispatch`.
+For performance reasons, it is almost always preferable to use the `ResolvedJsonFormsDispatch` component.
+In contrast to `ResolvedJsonFormsDispatch`, the `JsonFormsDispatch` component will additionally check and resolve external schema refs, which is almost never needed in a nested component such as a renderer.
+
+Simple example renderer using dispatching:
+
+```javascript
+const MyLayoutRenderer = ({
+  schema,
+  uischema,
+  path,
+  renderers,
+  cells,
+  enabled,
+  visible,
+}) => {
+  return (
+    <div>
+      {visible &&
+        uischema.elements.map((child, index) => (
+          <ResolvedJsonFormsDispatch
+            schema={schema}
+            uischema={child}
+            path={path}
+            enabled={enabled}
+            renderers={renderers}
+            cells={cells}
+            key={index}
+          />
+        ))}
+    </div>
+  );
+};
+export default withJsonFormsLayoutProps(MyLayoutRenderer);
+```

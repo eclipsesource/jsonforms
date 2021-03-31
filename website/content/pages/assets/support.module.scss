@@ -1,0 +1,49 @@
+h3 {
+  font-size: 2rem;
+  padding: 0;
+}
+.comparison_container {
+  margin: 2rem 0 0 0;
+  padding: 2rem 1rem 2rem 1rem;
+}
+.comparison_title {
+  color: white;
+  margin: 1rem 2rem 3rem 4rem;
+}
+.community {
+  background-color: #1C4587;
+  border-radius: 0px 60px 0px 60px;
+  color: white;
+  padding: 2rem 1rem 2rem 1rem;
+  min-width: 32rem;
+  max-width: 32rem;
+}
+.professional {
+  background-color: #6D9CCD;
+  border-radius: 60px 0px 60px 0px;
+  color: white;
+  padding: 2rem 1rem 2rem 1rem;
+  min-width: 32rem;
+  max-width: 32rem;
+}
+.list {
+  margin: 0 2rem 0 2rem
+}
+.list_item {
+  color: white;
+  font-size: 1.4rem;
+}
+.free_block, .details_block {
+  text-align: center;
+  font-size: 1.4rem
+}
+.free_block {
+  margin: 8.5rem 2rem 0 2rem;
+}
+.details_block {
+  margin: 2rem 0 0 2rem;
+}
+.link {
+  color: white;
+  text-decoration: underline
+}

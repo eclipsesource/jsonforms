@@ -1,0 +1,142 @@
+/* stylelint-disable docusaurus/copyright-header */
+
+/**
+ * CSS files with the .module.css suffix will be treated as CSS modules
+ * and scoped locally.
+ */
+
+.heroBanner {
+  padding: 4rem 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  color: #000;
+  h1 {
+    font-weight: normal;
+  }
+  .subtitle {
+    font-size: 1.5rem;
+    line-height: 1.5;
+    margin-bottom: 0;
+  }
+  .subsubtitle {
+    font-size: 1.3rem;
+    line-height: 1.5;
+    color: #747474;
+    margin-bottom: 10px;
+  }
+}
+
+@media screen and (max-width: 966px) {
+  .heroBanner {
+    padding: 2rem;
+  }
+}
+
+.logo {
+  max-width: 200px;
+  filter: invert(1);
+}
+
+
+
+.home {
+  h2 {
+    text-align: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    font-size: 2rem;
+  }
+  h3 {
+    text-align: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    font-size: 1.25rem;
+  }
+  section {
+    padding: 2rem;
+  }
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  --ifm-color-secondary: #ababab;
+}
+
+.sectionFeatures {
+  display: flex;
+  align-items: center;
+  padding: 2rem 0;
+  width: 100%;
+  background: var(--background-inverted);
+  color: var(--background);
+  .customFeatureIcon {
+    height: 3em !important;
+    width: auto !important;
+    font-size: 1.5rem;
+  }
+  .featureIcon {
+    height: 4em !important;
+    width: auto !important;
+    font-size: 1.5rem;
+    fill: var(--background);
+  }
+  p {
+    text-align: center;
+  }
+}
+
+.sectionDemo {
+  border-top: 1px solid #000;
+  //background: #212121;
+  .frameworkLogos {
+    text-align: center;
+    svg {
+      height: 80px;
+      width: 80px;
+    }
+  }
+  .demoContent {
+    margin: auto;
+    max-width: 900px;
+  }
+}
+
+.sectionNews {
+  max-width: 700px;
+  margin: auto;
+  .newsCard {
+    background: #f5f5f5;
+  }
+  .newsButton {
+    margin: 20px auto;
+    text-align: center;
+    display: block;
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+
+.sectionArchitecture {
+  background: #f5f5f5;
+  h2 {
+    color: #000;
+  }
+}
+
+.sectionArchitectureContent {
+  max-width: 1000px;
+  margin: auto;
+  padding: 2em;
+  align-items: center;
+}
+
+.architectureDiagram {
+  max-width: 900px;
+  width: 100%;
+  margin: auto;
+  display: block;
+}

@@ -1,0 +1,25 @@
+---
+id: redux
+title: Redux Integration
+---
+
+:::info ATTENTION
+
+As of JSON Forms 2.5 the React-Redux variant is deprecated in favor of the <a href="/docs/integrations/react">JSON Forms "standalone" component</a>. 
+See our <a href="https://github.com/eclipsesource/jsonforms/blob/master/MIGRATION.md">migration guide</a> for more information.
+
+:::
+
+When using Redux, you need to wrap the entry point with a new component called `JsonFormsReduxContext`. The component used for dispatching is now called `JsonFormsDispatch`.
+The typical usage in this case is as follows:
+
+```javascript
+<Provider store={store}>
+  <JsonFormsReduxContext>
+    <JsonFormsDispatch />
+  </JsonFormsReduxContext>
+</Provider>
+```
+
+- [Available actions](/docs/deprecated/available-actions)
+- [Store shape](/docs/deprecated/store)

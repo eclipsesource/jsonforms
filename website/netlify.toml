@@ -1,0 +1,30 @@
+[build]
+  publish = "build"
+
+[[redirects]]
+ from = "/public/api/core/*"
+ to = "/api/core/"
+
+[[redirects]]
+ from = "/public/api/react/*"
+ to = "/api/react/"
+
+[[redirects]]
+ from = "/public/api/material/*"
+ to = "/api/material/"
+
+[[redirects]]
+ from = "/public/api/vanilla/*"
+ to = "/api/vanilla/"
+
+[[redirects]]
+ from = "/public/api/angular/*"
+ to = "/api/angular/"
+
+[[redirects]]
+ from = "/public/api/vue/*"
+ to = "/api/vue/"
+
+[[redirects]]
+ from = "/public/api/vue2/*"
+ to = "/api/vue2/"

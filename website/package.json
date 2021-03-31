@@ -4,29 +4,47 @@
   "description": "Complex forms in the blink of an eye",
   "license": "MIT",
   "scripts": {
-    "dev": "docz dev",
-    "build:docz": "docz build && cpx _redirects .docz/dist",
-    "build": "./build_with_next.sh"
+    "docusaurus": "docusaurus",
+    "start": "docusaurus start",
+    "build:docusaurus": "docusaurus build",
+    "build:env": "./build_with_next.sh",
+    "build": "npm run build:env && npm run build:docusaurus",
+    "swizzle": "docusaurus swizzle",
+    "deploy": "docusaurus deploy",
+    "serve": "docusaurus serve",
+    "clear": "docusaurus clear"
   },
   "dependencies": {
-    "@emotion/core": "^10.0.10",
+    "@docusaurus/core": "^2.0.0-alpha.72",
+    "@docusaurus/plugin-client-redirects": "^2.0.0-alpha.72",
+    "@docusaurus/preset-classic": "^2.0.0-alpha.72",
     "@jsonforms/core": "^2.5.0",
     "@jsonforms/examples": "^2.5.0",
     "@jsonforms/material-renderers": "^2.5.0",
     "@jsonforms/react": "^2.5.0",
     "@material-ui/core": "^4.3.3",
     "@material-ui/icons": "^4.2.1",
-    "prop-types": "^15.7.2",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-helmet": "^5.2.0",
-    "styled-components": "^4.2.0"
+    "@mdx-js/react": "^1.6.21",
+    "clsx": "^1.1.1",
+    "docusaurus-plugin-sass": "^0.1.12",
+    "docusaurus2-dotenv": "^1.4.0",
+    "prism-react-renderer": "^1.2.0",
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4"
+  },
+  "browserslist": {
+    "production": [
+      ">0.5%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   },
   "devDependencies": {
-    "cpx": "^1.5.0",
-    "docz": "1.2.0",
-    "docz-plugin-css": "^0.11.0",
-    "docz-theme-default": "1.2.0",
-    "webpack": "^4.28.4"
+    "@babel/plugin-proposal-class-properties": "^7.13.0"
   }
 }

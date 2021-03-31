@@ -1,0 +1,15 @@
+---
+id: gen-both-schemas
+title: Generate both schemata
+---
+
+import InferBothSchemas from '../../src/components/examples/InferBothSchemas'
+
+This example demonstrates that JSON Forms is already able to render a form just by specifying
+the data to be rendered. Both, the JSON schema as well as the UI schema have been omitted in this example
+as you can see yourself if you check the provided schema and UI schema.
+
+If no JSON schema is provided to JSON Forms it will generate one. In most uses cases this might not be the
+thing you want, but it's a useful feature nevertheless, e.g. for rapid prototyping.
+
+<InferBothSchemas />

@@ -1,0 +1,74 @@
+---
+id: store
+title: Store Shape
+---
+
+:::info ATTENTION
+
+As of JSON Forms 2.5 the React-Redux variant is deprecated in favor of the <a href="/docs/integrations/react">JSON Forms "standalone" component</a>. 
+See our <a href="https://github.com/eclipsesource/jsonforms/blob/master/MIGRATION.md">migration guide</a> for more information.
+
+:::
+
+JSON Forms makes use of the reducer pattern to maintain its internal state.
+This section describes the sub-state managed by JSON Forms.
+
+JSON Forms exports its reducer via the `jsonformsReducer` function.
+It's expected that you add this reducer to your application via `combineReducers` under the `jsonforms` key.
+The basic structure of the JSON Forms state looks like this:
+
+```javascript
+export interface JsonFormsState {
+  jsonforms: {
+    core: {
+      data: any,
+      schema: JsonSchema,
+      uischema: UISchemaElement,
+      errors?: ErrorObject[],
+      validator?: ValidateFunction,
+      ajv?: Ajv,
+      refParserOptions?: RefParser.Options,
+    },
+    config?: any,
+    renderers?: JsonFormsRendererRegistryEntry[],
+    cells?: JsonFormsCellRendererRegistryEntry[],
+    // allow additional state for JSON Forms
+    [additionalState: string]: any,
+  };
+}
+```
+
+Let's inspect each of these state properties:
+
+## `core`
+
+The core substate stores the `data`, which represents the data to be rendered,
+the `schema` which describes the structure of the `data` and the `uischema`, which describes how to render the `data`.
+
+The `errors` property stores the current errors.
+Under the hood, JSON Forms uses ajv to validate the data against the schema,
+hence the `ValidateFunction` and `ErrorObject` types are from ajv.
+
+In `refParserOptions` contains the configuration for the resolver library.
+
+## `config`
+
+The default "options" object for all UI schema elements.
+
+## `renderers`
+
+The renderers property stores all available renderers that are used by JSON Forms when rendering.
+If you want to know more about renderers, see the section on [Custom Renderers](/docs/tutorial/custom-renderers).
+
+## `cells`
+
+Cells are like renderers but only represent the data to be displayed and nothing else.
+This is not necessarily the case with Renderers stored within renderers, as such renderers may also display a label or any validation errors.
+Fields are more universal in the sense that they should not make any assumptions about the environment they are embedded in, e.g. a field may
+either be used by a regular control or by a table, where it is used within a call.
+
+In React/Material cells are only used for the table control.
+In React/Vanilla cells are used by the table and by the regular renderers.
+
+If you contribute custom renderers/cells, some of them might need to some additional state not covered by JSON Forms.
+For that purpose the `additionalState` allows any additional state to be passed in via an index property.

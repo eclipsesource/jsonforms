@@ -1,0 +1,29 @@
+---
+id: architecture
+title: Architecture
+---
+
+<img
+  src='/img/architecture.svg'
+  style={{background: '#fff', padding: '10px', marginBottom: '10px'}}
+  alt="Example banner"
+/>
+
+The basis of JSON Forms is the core module (`@jsonforms/core`) which provides utilities for managing and rendering JSON Schema based forms.
+The core package is independent of any UI technology.
+
+We also provide the JSON Forms React (`@jsonforms/react`), JSON Forms Angular (`@jsonforms/angular`) and JSON Forms Vue (`@jsonforms/vue`, `@jsonforms/vue2`) modules.
+These use the core package to provide specialized bindings for React, Angular and Vue.
+This approach is especially useful when developing multiple renderer sets against the same technology (i.e. React) as the core bindings don't need to be reimplemented with each set.
+
+For React we maintain two renderer sets:
+The `@jsonforms/material-renderers`, which are based on the popular [Material-UI](https://material-ui.com/) framework and `@jsonforms/vanilla-renderers` which provides pure HTML5 renderers.
+For Angular we provide a [Angular Material](https://material.angular.io/) based renderer set (`@jsonforms/angular-material`). 
+For Vue we provide a HTML5 based renderer set, `@jsonforms/vue-vanilla` for Vue 3 and `@jsonforms/vue2-vanilla` for Vue 2.
+
+We put great emphasis on the customizability and extensibility of JSON Forms.
+Not only are the existing renderers declaratively configurable, you can also add your own custom renderers or replace existing ones.
+Even when you would like to use a different UI framework (e.g. Bootstrap) you can still reuse the JSON Forms core and React, Angular or Vue packages to help you on the way.
+
+In case you would like to use different application framework you can even create the bindings yourself.
+In this case you still get use out of JSON Forms via the core package.

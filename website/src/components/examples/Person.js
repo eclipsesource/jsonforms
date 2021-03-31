@@ -1,6 +1,6 @@
 import React from 'react';
 import { person } from '@jsonforms/examples';
-import Demo from '../common/Demo';
+import { Demo } from '../common';
 
 const Person = () => {
   return (

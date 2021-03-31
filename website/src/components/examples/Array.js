@@ -1,9 +1,25 @@
 import React from 'react';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import Demo from '../common/Demo';
-import styles from '../../styles/global.module.css';
+import { createStyles, makeStyles } from '@material-ui/core';
+import { Demo } from '../common';
 
-const Array = () => {
+const useStyles = makeStyles((theme) =>
+  createStyles({
+    example_array_note: {
+      display: 'none',
+      "@media only screen and (max-width: 850px)": {
+        display: 'block'
+      }
+    },
+    example_array: {
+      "@media only screen and (max-width: 850px)": {
+        display: 'none'
+      }
+    }
+  })
+);
+
+export const Array = () => {
   const theme = createMuiTheme({
     overrides: {
       MuiSelect: {
@@ -63,21 +79,24 @@ const Array = () => {
     ],
   };
 
+  const classes = useStyles();
+
   return (
-    <div className={styles.example}>
+    <div>
       <ThemeProvider theme={theme}>
-        <Demo
-          id='array-demo'
-          className={styles.examples__array}
-          schema={schema}
-          uischema={uischema}
-          data={data}
-          style={{
-            padding: 0,
-          }}
-        />
+        <div className={classes.example_array}>
+          <Demo
+            id='array-demo'
+            schema={schema}
+            uischema={uischema}
+            data={data}
+            style={{
+              padding: 0,
+            }}
+          />
+        </div>
       </ThemeProvider>
-      <div className={styles.examples__array_note}>
+      <div className={classes.example_array_note}>
         Our current array renderer is not supported on mobile, sorry.
       </div>
     </div>
