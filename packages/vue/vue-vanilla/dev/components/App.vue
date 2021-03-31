@@ -82,7 +82,10 @@ const uischema = {
           elements: [
             {
               type: 'Control',
-              scope: '#/properties/string'
+              scope: '#/properties/string',
+              options: {
+                placeholder: 'this is a placeholder'
+              }
             },
             {
               type: 'Control',
@@ -90,7 +93,10 @@ const uischema = {
             },
             {
               type: 'Control',
-              scope: '#/properties/boolean'
+              scope: '#/properties/boolean',
+              options: {
+                placeholder: 'boolean placeholder'
+              }
             },
             {
               type: 'Control',
@@ -141,18 +147,25 @@ const uischema = {
                 },
                 {
                   type: 'Control',
-                  scope: '#/properties/date'
+                  scope: '#/properties/date',
+                  options: {
+                    placeholder: 'date placeholder'
+                  }
                 }
               ]
             },
             {
               type: 'Control',
-              scope: '#/properties/dateTime'
+              scope: '#/properties/dateTime',
+              options: {
+                placeholder: 'date-time placeholder'
+              }
             },
             {
               type: 'Control',
               scope: '#/properties/time',
               options: {
+                placeholder: 'time placeholder',
                 styles: {
                   control: {
                     root: 'control my-time'
@@ -179,7 +192,9 @@ const uischema = {
 } as any;
 
 // mergeStyles combines all classes from both styles definitions into one
-const myStyles = mergeStyles(defaultStyles, { control: { root: 'my-control' } });
+const myStyles = mergeStyles(defaultStyles, {
+  control: { root: 'my-control' }
+});
 
 export default defineComponent({
   name: 'app',
@@ -230,7 +245,7 @@ export default defineComponent({
   provide() {
     return {
       styles: myStyles
-    }
+    };
   }
 });
 </script>
