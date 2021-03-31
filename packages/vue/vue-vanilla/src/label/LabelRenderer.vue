@@ -1,5 +1,5 @@
 <template>
-  <label v-if="layout.visible" :class="styles.label">
+  <label v-if="layout.visible" :class="styles.label.root">
     {{ this.layout.uischema.text }}
   </label>
 </template>

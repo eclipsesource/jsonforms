@@ -14,46 +14,47 @@ const createEmptyStyles = (): Styles => ({
 
 export interface Styles {
   control: {
-    root?: String;
-    wrapper?: String;
-    label?: String;
-    description?: String;
-    error?: String;
-    textarea?: String;
-    select?: String;
-    option?: String;
+    root?: string;
+    wrapper?: string;
+    label?: string;
+    description?: string;
+    error?: string;
+    input?: string;
+    textarea?: string;
+    select?: string;
+    option?: string;
   };
   verticalLayout: {
-    root?: String;
-    item?: String;
+    root?: string;
+    item?: string;
   };
   horizontalLayout: {
-    root?: String;
-    item?: String;
+    root?: string;
+    item?: string;
   };
   group: {
-    root?: String;
-    label?: String;
-    item?: String;
+    root?: string;
+    label?: string;
+    item?: string;
   };
   arrayList: {
-    root?: String;
-    legend?: String;
-    addButton?: String;
-    label?: String;
-    itemWrapper?: String;
-    noData?: String;
-    item?: String;
-    itemToolbar?: String;
-    itemLabel?: String;
-    itemContent?: String;
-    itemExpanded?: String;
-    itemMoveUp?: String;
-    itemMoveDown?: String;
-    itemDelete?: String;
+    root?: string;
+    legend?: string;
+    addButton?: string;
+    label?: string;
+    itemWrapper?: string;
+    noData?: string;
+    item?: string;
+    itemToolbar?: string;
+    itemLabel?: string;
+    itemContent?: string;
+    itemExpanded?: string;
+    itemMoveUp?: string;
+    itemMoveDown?: string;
+    itemDelete?: string;
   };
   label: {
-    root?: String;
+    root?: string;
   };
 }
 
