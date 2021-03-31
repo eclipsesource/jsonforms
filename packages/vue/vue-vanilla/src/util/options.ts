@@ -4,10 +4,3 @@ export interface Options {
   focus?: boolean;
   step?: number;
 }
-
-export const optionsInit = () => ({
-  showUnfocusedDescription: null,
-  hideRequiredAsterisk:null,
-  focus: null,
-  step: null
-})

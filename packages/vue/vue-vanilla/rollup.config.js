@@ -12,7 +12,7 @@ const buildFormats = [
       exports: 'named',
       sourcemap: true
     },
-    external: ['vue', '@jsonforms/core', '@jsonforms/vue', 'lodash/maxBy', 'lodash/merge', 'lodash/cloneDeep'],
+    external: ['vue', '@jsonforms/core', '@jsonforms/vue', 'lodash/maxBy', 'lodash/merge', 'lodash/cloneDeep', 'lodash/mergeWith'],
     plugins: [
       typescript({
         module: 'esnext',

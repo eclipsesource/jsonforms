@@ -8,6 +8,10 @@
   flex-direction: column;
 }
 
+.horizontal-layout-item, .vertical-layout-item {
+  flex: 1;
+}
+
 .error {
   color: red;
 }
