@@ -57,4 +57,13 @@ describe('ArrayListRenderer.vue', () => {
     await moveDownButtons[1].trigger('click');
     expect(wrapper.vm.data).to.deep.equal(['a', 'c', 'b']);
   });
+
+  it('all buttons have type button', async () => {
+    const wrapper = mountJsonForms(['a'], schema, uischema);
+    const buttons = wrapper.findAll('button');
+    for (let button of buttons) {
+      let type = button.attributes('type');
+      expect(type).to.equal('button');
+    }
+  });
 });
