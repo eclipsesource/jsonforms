@@ -72,7 +72,7 @@ export const MaterialEnumArrayRenderer = ({
             );
           })}
         </FormGroup>
-        <FormHelperText error hidden={isEmpty(errors)}>
+        <FormHelperText error>
           {errors}
         </FormHelperText>
       </FormControl>
