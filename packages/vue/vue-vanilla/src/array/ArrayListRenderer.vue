@@ -1,7 +1,11 @@
 <template>
   <fieldset v-if="control.visible" :class="styles.arrayList.root">
     <legend :class="styles.arrayList.legend">
-      <button :class="styles.arrayList.addButton" @click="addButtonClick">
+      <button
+        :class="styles.arrayList.addButton"
+        @click="addButtonClick"
+        type="button"
+      >
         +
       </button>
       <label :class="styles.arrayList.label">
