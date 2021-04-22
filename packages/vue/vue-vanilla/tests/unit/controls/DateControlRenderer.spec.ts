@@ -8,7 +8,10 @@ const schema = {
 };
 const uischema = {
   type: 'Control',
-  scope: '#'
+  scope: '#',
+  options: {
+    placeholder: 'date placeholder'
+  }
 };
 
 describe('DateControlRenderer.vue', () => {
@@ -28,5 +31,12 @@ describe('DateControlRenderer.vue', () => {
     await input.setValue('2021-03-10');
     await input.trigger('blur');
     expect(wrapper.vm.data).to.equal('2021-03-10');
+  });
+
+  it('should have a placeholder', async () => {
+    const wrapper = mountJsonForms('2021-03-09', schema, uischema);
+    const input = wrapper.find('input');
+    const placeholder = input.attributes('placeholder');
+    expect(placeholder).to.equal('date placeholder');
   });
 });

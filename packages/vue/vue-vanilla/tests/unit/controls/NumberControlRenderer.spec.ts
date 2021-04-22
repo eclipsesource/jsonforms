@@ -7,7 +7,10 @@ const schema = {
 };
 const uischema = {
   type: 'Control',
-  scope: '#'
+  scope: '#',
+  options: {
+    placeholder: 'number placeholder'
+  }
 };
 
 describe('NumberControlRenderer.vue', () => {
@@ -23,8 +26,15 @@ describe('NumberControlRenderer.vue', () => {
 
   it('emits a data change', async () => {
     const wrapper = mountJsonForms(1, schema, uischema);
-    const select = wrapper.find('input');
-    await select.setValue(2);
+    const input = wrapper.find('input');
+    await input.setValue(2);
     expect(wrapper.vm.data).to.equal(2);
+  });
+  
+  it('should have a placeholder', async () => {
+    const wrapper = mountJsonForms(1, schema, uischema);
+    const input = wrapper.find('input');
+    const placeholder = input.attributes('placeholder');
+    expect(placeholder).to.equal('number placeholder');
   });
 });

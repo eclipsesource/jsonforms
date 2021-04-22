@@ -23,8 +23,8 @@ describe('IntegerControlRenderer.vue', () => {
 
   it('emits a data change', async () => {
     const wrapper = mountJsonForms(1, schema, uischema);
-    const select = wrapper.find('input');
-    await select.setValue(2);
+    const input = wrapper.find('input');
+    await input.setValue(2);
     expect(wrapper.vm.data).to.equal(2);
   });
 });

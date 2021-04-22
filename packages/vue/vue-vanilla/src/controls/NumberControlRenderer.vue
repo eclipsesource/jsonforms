@@ -13,6 +13,7 @@
       :value="control.data"
       :disabled="!control.enabled"
       :autofocus="appliedOptions.focus"
+      :placeholder="appliedOptions.placeholder"
       @change="onChange"
       @focus="isFocused = true"
       @blur="isFocused = false"
