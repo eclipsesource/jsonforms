@@ -27,15 +27,15 @@ describe('TimeControlRenderer.vue', () => {
 
   it('emits a data change', async () => {
     const wrapper = mountJsonForms('00:20', schema, uischema);
-    const select = wrapper.find('input');
-    await select.setValue('01:51');
+    const input = wrapper.find('input');
+    await input.setValue('01:51');
     expect(wrapper.vm.data).to.equal('01:51');
   });
 
   it('should have a placeholder', async () => {
     const wrapper = mountJsonForms('00:20', schema, uischema);
-    const select = wrapper.find('input');
-    const placeholder = select.attributes('placeholder');
+    const input = wrapper.find('input');
+    const placeholder = input.attributes('placeholder');
     expect(placeholder).to.equal('time placeholder');
   });
 });

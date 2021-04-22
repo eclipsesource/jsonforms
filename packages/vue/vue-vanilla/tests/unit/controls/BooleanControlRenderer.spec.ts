@@ -33,8 +33,8 @@ describe('BooleanControlRenderer.vue', () => {
 
   it('should have a placeholder', async () => {
     const wrapper = mountJsonForms(true, schema, uischema);
-    const select = wrapper.find('input');
-    const placeholder = select.attributes('placeholder');
+    const input = wrapper.find('input');
+    const placeholder = input.attributes('placeholder');
     expect(placeholder).to.equal('boolean placeholder');
   });
 });

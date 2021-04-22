@@ -35,8 +35,8 @@ describe('DateTimeControlRenderer.vue', () => {
 
   it('should have a placeholder', async () => {
     const wrapper = mountJsonForms('2021-03-09T21:54:00.000Z', schema, uischema);
-    const select = wrapper.find('input');
-    const placeholder = select.attributes('placeholder');
+    const input = wrapper.find('input');
+    const placeholder = input.attributes('placeholder');
     expect(placeholder).to.equal('date-time placeholder');
   });
 });

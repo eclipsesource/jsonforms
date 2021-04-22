@@ -26,15 +26,15 @@ describe('StringControlRenderer.vue', () => {
 
   it('emits a data change', async () => {
     const wrapper = mountJsonForms('a', schema, uischema);
-    const select = wrapper.find('input');
-    await select.setValue('b');
+    const input = wrapper.find('input');
+    await input.setValue('b');
     expect(wrapper.vm.data).to.equal('b');
   });
 
   it('should have a placeholder', async () => {
     const wrapper = mountJsonForms('a', schema, uischema);
-    const select = wrapper.find('input');
-    const placeholder = select.attributes('placeholder');
+    const input = wrapper.find('input');
+    const placeholder = input.attributes('placeholder');
     expect(placeholder).to.equal('string placeholder');
   });
 });
