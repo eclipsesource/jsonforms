@@ -31,11 +31,24 @@ export const useVanillaControl = <
     input.handleChange(input.control.value.path, adaptTarget(event.target));
   };
 
+  const controlWrapper = computed(() => {
+    const {
+      id,
+      description,
+      errors,
+      label,
+      visible,
+      required
+    } = input.control.value;
+    return { id, description, errors, label, visible, required };
+  });
+
   return {
     ...input,
     styles: useStyles(input.control.value.uischema),
     isFocused,
     appliedOptions,
+    controlWrapper,
     onChange
   };
 };
