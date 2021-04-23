@@ -344,18 +344,25 @@ export const useJsonFormsRenderer = (props: RendererProps) => {
     throw "'jsonforms' or 'dispatch' couldn't be injected. Are you within JSON Forms?";
   }
 
-  const reactiveProps: any = reactive(props);
-
-  const renderer = computed(
+  const rawProps = computed(
     () =>
       mapStateToJsonFormsRendererProps(
         { jsonforms },
-        reactiveProps
+        props
       ) as Required<StatePropsOfJsonFormsRenderer>
   );
 
+  const refResolver = computed(() => rawProps.value.refResolver);
+  const rootSchema = computed(() => rawProps.value.rootSchema);
+  const renderer = computed(() => {
+    const { refResolver, rootSchema, ...rest} = rawProps.value;
+    return rest;
+  });
+
   return {
-    renderer
+    renderer,
+    refResolver,
+    rootSchema
   };
 };
 

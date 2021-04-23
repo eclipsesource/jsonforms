@@ -1,6 +1,6 @@
 <template>
   <control-wrapper
-    v-bind="control"
+    v-bind="controlWrapper"
     :styles="styles"
     :isFocused="isFocused"
     :appliedOptions="appliedOptions"
