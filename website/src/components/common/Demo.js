@@ -36,11 +36,11 @@ const demoStyles = makeStyles((theme) =>
 
 const theme = createMuiTheme({
   overrides: {
-    MuiFormControl: {
+    MuiFormHelperText: {
       root: {
-        margin: '0.8em 0',
-      },
-    },
+        minHeight: '1.6em',
+      }
+    }
   },
 });
 
