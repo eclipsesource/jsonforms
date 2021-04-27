@@ -8,6 +8,7 @@ module.exports = {
     'rule',
     'custom-controls',
     'gen-uischema',
-    'gen-both-schemas'
+    'gen-both-schemas',
+    'combinators'
   ]
 };
