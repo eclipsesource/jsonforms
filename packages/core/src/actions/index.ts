@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import AJV, { ErrorObject } from 'ajv';
+import  Ajv, { ErrorObject } from 'ajv';
 import { JsonSchema, UISchemaElement } from '../';
 import { generateDefaultUISchema, generateJsonSchema } from '../generators';
 
@@ -86,7 +86,7 @@ export interface InitAction {
   data: any;
   schema: JsonSchema;
   uischema: UISchemaElement;
-  options?: InitActionOptions | AJV.Ajv;
+  options?: InitActionOptions | Ajv;
 }
 
 export interface UpdateCoreAction {
@@ -94,11 +94,11 @@ export interface UpdateCoreAction {
   data?: any;
   schema?: JsonSchema;
   uischema?: UISchemaElement;
-  options?: InitActionOptions | AJV.Ajv;
+  options?: InitActionOptions | Ajv;
 }
 
 export interface InitActionOptions {
-  ajv?: AJV.Ajv;
+  ajv?: Ajv;
   refParserOptions?: RefParser.Options;
   validationMode?: ValidationMode;
 }
@@ -112,7 +112,7 @@ export const init = (
   data: any,
   schema: JsonSchema = generateJsonSchema(data),
   uischema?: UISchemaElement,
-  options?: InitActionOptions | AJV.Ajv
+  options?: InitActionOptions | Ajv
 ) => ({
   type: INIT,
   data,
@@ -126,7 +126,7 @@ export const updateCore = (
   data: any,
   schema: JsonSchema,
   uischema?: UISchemaElement,
-  options?: AJV.Ajv | InitActionOptions
+  options?: Ajv | InitActionOptions
 ): UpdateCoreAction => ({
   type: UPDATE_CORE,
   data,
@@ -159,10 +159,10 @@ export const unregisterDefaultData = (schemaPath: string) => ({
 
 export interface SetAjvAction {
   type: 'jsonforms/SET_AJV';
-  ajv: AJV.Ajv;
+  ajv: Ajv;
 }
 
-export const setAjv = (ajv: AJV.Ajv) => ({
+export const setAjv = (ajv: Ajv) => ({
   type: SET_AJV,
   ajv
 });

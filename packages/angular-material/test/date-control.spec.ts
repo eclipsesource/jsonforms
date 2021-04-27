@@ -259,7 +259,7 @@ describe('Date control Error Tests', () => {
       {
         dataPath: 'foo',
         message: 'Hi, this is me, test error!',
-        params: '',
+        params: {},
         keyword: '',
         schemaPath: ''
       }

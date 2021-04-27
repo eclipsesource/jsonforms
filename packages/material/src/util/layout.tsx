@@ -25,7 +25,7 @@
 import isEmpty from 'lodash/isEmpty';
 import React from 'react';
 import { ComponentType } from 'react';
-import { Ajv } from 'ajv';
+import Ajv from 'ajv';
 import {
   getAjv,
   JsonFormsCellRendererRegistryEntry,

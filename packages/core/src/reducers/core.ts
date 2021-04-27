@@ -28,7 +28,7 @@ import get from 'lodash/get';
 import filter from 'lodash/filter';
 import isEqual from 'lodash/isEqual';
 import isFunction from 'lodash/isFunction';
-import { Ajv, ErrorObject, ValidateFunction } from 'ajv';
+import Ajv, { ErrorObject, ValidateFunction } from 'ajv';
 import RefParser from 'json-schema-ref-parser';
 import {
   CoreActions,
@@ -57,9 +57,46 @@ const validate = (validator: ValidateFunction, data: any): ErrorObject[] => {
   return validator.errors;
 };
 
-export const sanitizeErrors = (validator: ValidateFunction, data: any) => {
-  if (validator === alwaysValid) {
+const getInvalidProperty = (error: ErrorObject): string | undefined => {
+  switch (error.keyword) {
+    case 'required':
+    case 'dependencies':
+      return error.params.missingProperty;
+    case 'additionalProperties':
+      return error.params.additionalProperty;
+    default:
+      return undefined;
+  }
+};
+
+export const sanitizeErrors = (
+  validator: ValidateFunction | undefined,
+  data: any
+) => {
+  if (!validator) {
     return [];
+  }
+  // check if we have an ajv v7 validator (schemaEnv was introduced in v7)
+  // FIXME is there a better way?
+  if (validator.schemaEnv) {
+    return validate(validator, data).map(error => {
+      const invalidProperty = getInvalidProperty(error);
+      if (invalidProperty) {
+        error.dataPath = `${error.dataPath}.${invalidProperty}`;
+        if (error.keyword === 'required') {
+          // change validation message to refer to the property
+          error.message = 'is a required property';
+        }
+      }
+      // remove '.' chars at the beginning of paths
+      error.dataPath = error.dataPath.replace(/^./, '');
+      // change array paths to dot notation (e.g. 'segment[0]' becomes 'segment.0')
+      error.dataPath = error.dataPath.replace(
+        /\[\d+\]/g,
+        m => '.' + m.match(/\d+/g)[0]
+      );
+      return error;
+    });
   }
   return validate(validator, data).map(error => {
     error.dataPath = error.dataPath.replace(/\//g, '.').substr(1);
@@ -67,8 +104,6 @@ export const sanitizeErrors = (validator: ValidateFunction, data: any) => {
     return error;
   });
 };
-
-const alwaysValid: ValidateFunction = () => true;
 
 export type ValidationMode = 'ValidateAndShow' | 'ValidateAndHide' | 'NoValidation';
 
@@ -88,7 +123,7 @@ const initState: JsonFormsCore = {
   schema: {},
   uischema: undefined,
   errors: [],
-  validator: alwaysValid,
+  validator: undefined,
   ajv: undefined,
   refParserOptions: undefined,
   validationMode: 'ValidateAndShow'
@@ -176,7 +211,7 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
       const o = getRefParserOptions(state, action);
 
       const validationMode = getValidationMode(state, action);
-      const v = validationMode === 'NoValidation' ? alwaysValid : thisAjv.compile(action.schema);
+      const v = validationMode === 'NoValidation' ? undefined : thisAjv.compile(action.schema);
       const e = sanitizeErrors(v, action.data);
 
       return {
@@ -205,7 +240,7 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
         // revalidate only if necessary
         validator =
           validationMode === 'NoValidation'
-            ? alwaysValid
+            ? undefined
             : thisAjv.compile(action.schema);
         errors = sanitizeErrors(validator, action.data);
       } else if (state.data !== action.data) {
@@ -237,7 +272,7 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
     }
     case SET_AJV: {
       const currentAjv = action.ajv;
-      const validator = state.validationMode === 'NoValidation' ? alwaysValid : currentAjv.compile(state.schema);
+      const validator = state.validationMode === 'NoValidation' ? undefined : currentAjv.compile(state.schema);
       const errors = sanitizeErrors(validator, state.data);
       return {
         ...state,
@@ -303,10 +338,10 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
         return state;
       }
       if (action.validationMode === 'NoValidation') {
-        const errors = sanitizeErrors(alwaysValid, state.data);
+        const errors = sanitizeErrors(undefined, state.data);
         return {
           ...state,
-          validator: alwaysValid,
+          validator: undefined,
           errors,
           validationMode: action.validationMode
         };

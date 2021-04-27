@@ -26,7 +26,7 @@ import {
 import { JsonFormsChangeEvent } from '../types';
 import DispatchRenderer from './DispatchRenderer.vue';
 
-import { Ajv } from 'ajv';
+import Ajv from 'ajv';
 import RefParser from 'json-schema-ref-parser';
 
 const isObject = (elem: any): elem is Object => {

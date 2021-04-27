@@ -35,7 +35,7 @@ import {
   toDataPathSegments
 } from './path';
 import { isEnabled, isVisible } from './runtime';
-import { Ajv } from 'ajv';
+import Ajv from 'ajv';
 
 export { createCleanLabel, createLabelDescriptionFrom } from './label';
 

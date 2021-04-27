@@ -350,7 +350,7 @@ export const numberErrorTest = <C extends JsonFormsControl>(
         message: 'Hi, this is me, test error!',
         keyword: '',
         schemaPath: '',
-        params: ''
+        params: {}
       }
     ]));
     formsService.refresh();

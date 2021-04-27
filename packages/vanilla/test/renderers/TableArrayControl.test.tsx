@@ -494,7 +494,7 @@ describe('Tabe array control', () => {
     );
     const rows = wrapper.find('tr');
     const lastRow = rows.last().getDOMNode() as HTMLTableRowElement;
-    expect(lastRow.children.item(1).textContent).toBe('should NOT be longer than 3 characters');
+    expect(lastRow.children.item(1).textContent).toBe('should NOT have more than 3 characters');
     expect(rows).toHaveLength(3);
   });
 

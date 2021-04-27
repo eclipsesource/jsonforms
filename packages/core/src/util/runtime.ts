@@ -35,7 +35,7 @@ import {
 } from '../models/uischema';
 import { resolveData } from './resolvers';
 import { composeWithUi } from './path';
-import { Ajv } from 'ajv';
+import Ajv from 'ajv';
 
 const isOrCondition = (condition: Condition): condition is OrCondition =>
   condition.type === 'OR';

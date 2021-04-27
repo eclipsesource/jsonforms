@@ -64,7 +64,7 @@ import RefParser from 'json-schema-ref-parser';
 import { cellReducer } from './cells';
 import { configReducer } from './config';
 import get from 'lodash/get';
-import { Ajv } from 'ajv';
+import Ajv from 'ajv';
 
 export {
   rendererReducer,

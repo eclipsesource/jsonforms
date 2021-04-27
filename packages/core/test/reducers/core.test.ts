@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import test from 'ava';
-import AJV from 'ajv';
+import Ajv from 'ajv';
 import RefParser from 'json-schema-ref-parser';
 import { coreReducer } from '../../src/reducers';
 import { init, update, updateErrors } from '../../src/actions';
@@ -100,9 +100,7 @@ test('core reducer - no previous state - init with ajv as options object should 
       }
     }
   };
-  const myAjv = new AJV({
-    errorDataPath: 'mypath'
-  });
+  const myAjv = new Ajv();
   const after = coreReducer(undefined, init({}, schema, undefined, myAjv));
   t.deepEqual(after.ajv, myAjv);
   t.true(after.refParserOptions === undefined);
@@ -133,9 +131,7 @@ test('core reducer - no previous state - init with options object with ajv', t =
       }
     }
   };
-  const myAjv = new AJV({
-    errorDataPath: 'mypath'
-  });
+  const myAjv = new Ajv();
   const after = coreReducer(
     undefined,
     init({}, schema, undefined, {
@@ -177,9 +173,7 @@ test('core reducer - no previous state - init with options object with ajv and r
       }
     }
   };
-  const myAjv = new AJV({
-    errorDataPath: 'mypath'
-  });
+  const myAjv = new Ajv();
   const myOptions = createRefParserOptions();
   const after = coreReducer(
     undefined,
@@ -202,9 +196,7 @@ test('core reducer - previous state - init without options should keep previous 
       }
     }
   };
-  const myAjv = new AJV({
-    errorDataPath: 'mypath'
-  });
+  const myAjv = new Ajv();
   const myOptions = createRefParserOptions();
   const after = coreReducer(
     {
@@ -232,12 +224,8 @@ test('core reducer - previous state - init with ajv options object should overwr
       }
     }
   };
-  const previousAjv = new AJV({
-    errorDataPath: 'mypath'
-  });
-  const newAjv = new AJV({
-    errorDataPath: 'newajv'
-  });
+  const previousAjv = new Ajv();
+  const newAjv = new Ajv();
   const myOptions = createRefParserOptions();
   const after = coreReducer(
     {
@@ -265,12 +253,8 @@ test('core reducer - previous state - init with options with ajv should overwrit
       }
     }
   };
-  const previousAjv = new AJV({
-    errorDataPath: 'mypath'
-  });
-  const newAjv = new AJV({
-    errorDataPath: 'newajv'
-  });
+  const previousAjv = new Ajv();
+  const newAjv = new Ajv();
   const myOptions = createRefParserOptions();
   const after = coreReducer(
     {
@@ -300,9 +284,7 @@ test('core reducer - previous state - init with options with ref parser options 
       }
     }
   };
-  const myAjv = new AJV({
-    errorDataPath: 'mypath'
-  });
+  const myAjv = new Ajv();
   const previousOptions = createRefParserOptions();
   const newOptions = createRefParserOptions('newEncoding');
   const after = coreReducer(
@@ -333,12 +315,8 @@ test('core reducer - previous state - init with both options should overwrite bo
       }
     }
   };
-  const previousAjv = new AJV({
-    errorDataPath: 'mypath'
-  });
-  const newAjv = new AJV({
-    errorDataPath: 'newajv'
-  });
+  const previousAjv = new Ajv();
+  const newAjv = new Ajv();
   const previousOptions = createRefParserOptions();
   const newOptions = createRefParserOptions('newEncoding');
   const after = coreReducer(
@@ -370,9 +348,7 @@ test('core reducer - previous state - init with empty options should not overwri
       }
     }
   };
-  const myAjv = new AJV({
-    errorDataPath: 'mypath'
-  });
+  const myAjv = new Ajv();
   const myOptions = createRefParserOptions();
   const after = coreReducer(
     {
@@ -458,7 +434,7 @@ test('core reducer - update - undefined data should update for given path', t =>
       type: 'Label'
     },
     errors: [],
-    validator: new AJV().compile(schema)
+    validator: new Ajv().compile(schema)
   };
 
   const after = coreReducer(
@@ -565,7 +541,7 @@ test('core reducer - update - empty path should update root state', t => {
     uischema: {
       type: 'Label'
     },
-    validator: new AJV().compile(schema)
+    validator: new Ajv().compile(schema)
   };
 
   const after = coreReducer(
@@ -606,7 +582,7 @@ test('core reducer - update - providing a path should update data only belonging
     uischema: {
       type: 'Label'
     },
-    validator: new AJV().compile(schema)
+    validator: new Ajv().compile(schema)
   };
 
   const after = coreReducer(
@@ -646,7 +622,7 @@ test('core reducer - update - should update errors', t => {
     uischema: {
       type: 'Label'
     },
-    validator: new AJV().compile(schema)
+    validator: new Ajv().compile(schema)
   };
 
   const after = coreReducer(

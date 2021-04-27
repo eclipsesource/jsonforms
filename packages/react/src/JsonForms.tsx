@@ -26,7 +26,7 @@ import isEqual from 'lodash/isEqual';
 import maxBy from 'lodash/maxBy';
 import memoize from 'lodash/memoize';
 import React, { useMemo } from 'react';
-import AJV from 'ajv';
+import Ajv from 'ajv';
 import RefParser from 'json-schema-ref-parser';
 import { UnknownRenderer } from './UnknownRenderer';
 import {
@@ -245,7 +245,7 @@ export interface JsonFormsInitStateProps {
   uischema?: UISchemaElement;
   renderers: JsonFormsRendererRegistryEntry[];
   cells?: JsonFormsCellRendererRegistryEntry[];
-  ajv?: AJV.Ajv;
+  ajv?: Ajv;
   refParserOptions?: RefParser.Options;
   config?: any;
   uischemas?: JsonFormsUISchemaRegistryEntry[];

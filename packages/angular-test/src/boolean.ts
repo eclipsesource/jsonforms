@@ -284,7 +284,7 @@ export const booleanErrorTest = <C extends JsonFormsControl, I>(
         message: 'Hi, this is me, test error!',
         keyword: '',
         schemaPath: '',
-        params: ''
+        params: {}
       }
     ]));
     formsService.refresh();
