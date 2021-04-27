@@ -32,7 +32,7 @@ import {
 } from '../../config/jsonforms';
 import { useVanillaLayout } from '../util';
 
-const layoutRenderer = defineComponent({
+const layoutRenderer: any = defineComponent({
   name: 'layout-renderer',
   components: {
     DispatchRenderer

@@ -33,7 +33,7 @@ import { rendererProps, useJsonFormsControl } from '../../config/jsonforms';
 import { default as ControlWrapper } from './ControlWrapper.vue';
 import { useVanillaControl } from '../util';
 
-const controlRenderer = defineComponent({
+const controlRenderer: any = defineComponent({
   name: 'multi-string-control-renderer',
   components: {
     ControlWrapper

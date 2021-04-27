@@ -12,7 +12,7 @@ import {
 /**
  * Adds styles, isFocused, appliedOptions and onChange
  */
-export const useVanillaControl = <
+export const useVanillaControl: any = <
   I extends { control: any; handleChange: any }
 >(
   input: I,
@@ -56,7 +56,7 @@ export const useVanillaControl = <
 /**
  * Adds styles and appliedOptions
  */
-export const useVanillaLayout = <I extends { layout: any }>(input: I) => {
+export const useVanillaLayout: any = <I extends { layout: any }>(input: I) => {
   const appliedOptions = computed(() =>
     merge(
       {},
@@ -74,7 +74,7 @@ export const useVanillaLayout = <I extends { layout: any }>(input: I) => {
 /**
  * Adds styles, appliedOptions and childUiSchema
  */
-export const useVanillaArrayControl = <I extends { control: any }>(
+export const useVanillaArrayControl: any = <I extends { control: any }>(
   input: I
 ) => {
   const appliedOptions = computed(() =>

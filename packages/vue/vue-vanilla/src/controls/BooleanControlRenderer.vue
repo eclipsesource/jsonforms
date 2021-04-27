@@ -32,7 +32,7 @@ import { rendererProps, useJsonFormsControl } from '../../config/jsonforms';
 import { default as ControlWrapper } from './ControlWrapper.vue';
 import { useVanillaControl } from '../util';
 
-const controlRenderer = defineComponent({
+const controlRenderer: any = defineComponent({
   name: 'boolean-control-renderer',
   components: {
     ControlWrapper
@@ -41,7 +41,7 @@ const controlRenderer = defineComponent({
     ...rendererProps<ControlElement>()
   },
   setup(props) {
-    return useVanillaControl(useJsonFormsControl(props), target => target.checked);
+    return useVanillaControl(useJsonFormsControl(props), (target: { checked: any; }) => target.checked);
   }
 });
 

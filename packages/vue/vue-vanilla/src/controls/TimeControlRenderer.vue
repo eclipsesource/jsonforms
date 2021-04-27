@@ -32,7 +32,7 @@ import { rendererProps, useJsonFormsControl } from '../../config/jsonforms';
 import { default as ControlWrapper } from './ControlWrapper.vue';
 import { useVanillaControl } from '../util';
 
-const controlRenderer = defineComponent({
+const controlRenderer: any = defineComponent({
   name: 'time-control-renderer',
   components: {
     ControlWrapper
