@@ -35,16 +35,16 @@
     "vanilla.css"
   ],
   "scripts": {
-    "copy:source": "rm -rf src && cp -r ../../vue/vue-vanilla/src src && cp ../../vue/vue-vanilla/vanilla.css vanilla.css",
-    "copy:dev": "rm -rf src dev/components && cp -r ../../vue/vue-vanilla/dev/components dev/components",
+    "copy:source": "rimraf src && cp-cli ../../vue/vue-vanilla/src src && cp-cli ../../vue/vue-vanilla/vanilla.css vanilla.css",
+    "copy:dev": "rimraf src dev/components && cp-cli ../../vue/vue-vanilla/dev/components dev/components",
     "serve:pre": "npm run copy:source && npm run copy:dev",
     "serve:do": "vue-cli-service serve dev/serve.ts",
     "serve": "npm run serve:pre && npm run serve:do",
     "build:pre": "npm run copy:source",
     "build:do": "cross-env NODE_ENV=production rollup --config rollup.config.js",
     "build": "npm run build:pre && npm run build:do",
-    "clean": "rm -rf lib",
-    "doc": "../../../node_modules/.bin/typedoc --name 'JSON Forms Vue 2 Vanilla Renderers' --mode file --out docs src --ignoreCompilerErrors"
+    "clean": "rimraf lib",
+    "doc": "typedoc --name 'JSON Forms Vue 2 Vanilla Renderers' --mode file --out docs src --ignoreCompilerErrors"
   },
   "dependencies": {
     "lodash": "^4.17.15"
@@ -63,11 +63,14 @@
     "@vue/cli-service": "~4.5.0",
     "@vue/composition-api": "^1.0.0-rc.3",
     "@vue/test-utils": "^1.0.3",
+    "cp-cli": "^2.0.0",
     "cross-env": "^7.0.2",
+    "rimraf": "^3.0.2",
     "rollup": "^2.7.3",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-typescript2": "^0.29.0",
     "rollup-plugin-vue": "^5.1.9",
+    "typedoc": "^0.19.2",
     "typescript": "3.8.3",
     "vue-template-compiler": "^2.6.11"
   },

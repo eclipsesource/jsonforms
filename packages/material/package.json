@@ -31,15 +31,15 @@
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
-    "bundle": "../../node_modules/.bin/webpack --config ./webpack/webpack.build.js --env=production --display-error-details",
-    "build": "../../node_modules/.bin/tsc",
-    "dev": "../../node_modules/.bin/webpack --config webpack/webpack.dev.js && webpack-dev-server --config webpack/webpack.dev.js --env=dev --inline",
-    "clean": "rm -rf lib coverage dist .nyc_output 2> /dev/null",
-    "lint": "../../node_modules/.bin/tslint --project tsconfig.json --exclude src/models/jsonSchema.ts",
+    "bundle": "webpack --config ./webpack/webpack.build.js --env=production --display-error-details",
+    "build": "tsc",
+    "dev": "webpack --config webpack/webpack.dev.js && webpack-dev-server --config webpack/webpack.dev.js --env=dev --inline",
+    "clean": "rimraf lib coverage dist .nyc_output 2> /dev/null",
+    "lint": "tslint --project tsconfig.json --exclude src/models/jsonSchema.ts",
     "test": "jest --no-cache",
     "test-cov": "jest --no-cache --coverage",
-    "report": "../../node_modules/.bin/nyc report --reporter=html",
-    "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms React Material Renderers' --mode file --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
+    "report": "nyc report --reporter=html",
+    "doc": "typedoc --name 'JSON Forms React Material Renderers' --mode file --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
   },
   "jest": {
     "moduleFileExtensions": [
@@ -93,11 +93,18 @@
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.15.1",
     "jest": "^24.9.0",
+    "nyc": "^14.1.1",
     "react-dom": "^16.12.0",
+    "rimraf": "^3.0.2",
     "source-map-loader": "^0.2.4",
     "ts-jest": "^24.2.0",
     "ts-loader": "^6.2.1",
+    "tslint": "^5.20.1",
     "tslint-loader": "^3.5.4",
+    "typedoc": "^0.19.2",
+    "typescript": "3.8.3",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.2.1",
     "webpack-dev-server": "^3.9.0"
   }
 }
