@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/angular",
-  "version": "2.5.1-alpha.1",
+  "version": "2.5.1-beta.0",
   "description": "Angular module of JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -71,7 +71,7 @@
     "@angular/compiler-cli": "^9.0.0",
     "@angular/core": "^9.0.0",
     "@angular/forms": "^9.0.0",
-    "@jsonforms/core": "^2.5.1-alpha.1",
+    "@jsonforms/core": "^2.5.1-beta.0",
     "copy-webpack-plugin": "^5.0.5",
     "rxjs": "^6.4.0",
     "webpack-dev-server": "^3.9.0"
