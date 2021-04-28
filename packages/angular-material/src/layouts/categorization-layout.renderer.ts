@@ -48,7 +48,7 @@ import { Subscription } from 'rxjs';
         [label]="category.label"
       >
         <div *ngFor="let element of category.elements">
-          <jsonforms-outlet [uischema]="element"></jsonforms-outlet>
+          <jsonforms-outlet [uischema]="element" [path]="path" [schema]="schema"></jsonforms-outlet>
         </div>
       </mat-tab>
     </mat-tab-group>

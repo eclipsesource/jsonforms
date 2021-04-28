@@ -34,19 +34,27 @@ import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
   JsonFormsAngularService,
-  JsonFormsOutlet,
-  UnknownRenderer
+  JsonFormsModule,
+  JsonFormsOutlet
 } from '@jsonforms/angular';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
-import { CategorizationTabLayoutRenderer } from '../src';
+import { CategorizationTabLayoutRenderer, TextControlRenderer, TextControlRendererTester } from '../src';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { setupMockStore, getJsonFormsService } from '@jsonforms/angular-test';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+
+const renderers = [
+  { tester: TextControlRendererTester, renderer: TextControlRenderer },
+];
 
 describe('Categorization tab layout', () => {
   let fixture: ComponentFixture<any>;
   let component: any;
 
-  const data = { foo: true };
+  const data = { foo: 'true' };
   const schema = {
     type: 'object',
     properties: {
@@ -62,16 +70,15 @@ describe('Categorization tab layout', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
-        JsonFormsOutlet,
         CategorizationTabLayoutRenderer,
-        UnknownRenderer
+        TextControlRenderer
       ],
-      imports: [MatTabsModule, FlexLayoutModule, NoopAnimationsModule],
+      imports: [CommonModule, MatTabsModule, FlexLayoutModule, NoopAnimationsModule, JsonFormsModule,MatFormFieldModule,MatInputModule,ReactiveFormsModule,],
       providers: [JsonFormsAngularService]
     })
       .overrideModule(BrowserDynamicTestingModule, {
         set: {
-          entryComponents: [UnknownRenderer]
+          entryComponents: [TextControlRenderer]
         }
       })
       .compileComponents();
@@ -142,6 +149,50 @@ describe('Categorization tab layout', () => {
       expect(activeTabOutlets.length).toBe(2);
 
       expect(fixture.nativeElement.children[0].style.display).not.toBe('none');
+    });
+  }));
+
+  it('pass path and schema to children', async(() => {
+    const uischema = {
+      type: 'Categorization',
+      elements: [
+        {
+          type: 'Category',
+          label: 'foo',
+          elements: [
+            {
+              type: 'Control',
+              scope: '#/properties/foo'
+            },
+          ]
+        }
+      ]
+    };
+    setupMockStore(fixture, { uischema, schema, data });
+    component.path = 'aa';
+    const subSchema = {type: 'string'};
+    component.schema = subSchema;
+    getJsonFormsService(component).init({
+
+      renderers: renderers,
+      core: {
+        data: {},
+        schema: schema,
+        uischema: undefined
+      }
+
+    });
+
+    fixture.detectChanges();
+    fixture.whenRenderingDone().then(() => {
+      const contents: DebugElement[] = fixture.debugElement.queryAll(
+        By.directive(MatTabBody)
+      );
+      const activeTabOutlets = contents[0].queryAll(
+        By.directive(TextControlRenderer)
+      );
+      expect(activeTabOutlets[0].componentInstance.path).toBe('aa');
+      expect(activeTabOutlets[0].componentInstance.schema).toBe(subSchema);
     });
   }));
 
