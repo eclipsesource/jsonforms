@@ -13,9 +13,8 @@ For a more detailed tutorial about the usage of JSON Forms, please see [this tut
 
 ## Feedback, Help and Support
 
-Feel free to start a discussion by [opening an issue](https://github.com/eclipsesource/jsonforms/issues/new/choose) on the repo
-or by contacting us [directly via email](mailto:jsonforms@eclipsesource.com?subject=JSON%20Forms).
-You can also use the [public chat](https://spectrum.chat/jsonforms) to get help from the community.
+Feel free to start a discussion by [opening an issue](https://github.com/eclipsesource/jsonforms/issues/new/choose) on the repo or by contacting us [directly via email](mailto:jsonforms@eclipsesource.com?subject=JSON%20Forms).
+You can also use the [discussion board](https://spectrum.chat/jsonforms) to get help from the community.
 In addition, EclipseSource also offers [professional support](https://jsonforms.io/support) for JSON Forms.
 
 ## Developers Documentation
@@ -56,4 +55,4 @@ If you are still using JSON Forms 1, check our [migration guide](https://github.
 
 ## Community
 
-We have a [public chat](https://spectrum.chat/jsonforms) where you can reach out to the community if you have questions.
+We have a [discussion board](https://spectrum.chat/jsonforms) where you can reach out to the community if you have questions.

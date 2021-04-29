@@ -18,19 +18,10 @@ The JSON Forms project is licensed under the MIT License. See the [LICENSE file]
 
 Our current roadmap is available [here](https://github.com/eclipsesource/jsonforms/blob/master/ROADMAP.md).
 
-## Development
-
-JSON Forms is developed by [EclipseSource](https://eclipsesource.com).
-We are always very happy to have contributions, whether for trivial cleanups or big new features.
-
-## Migration
-
-If you are still using JSON Forms 1, check our [migration guide](https://github.com/eclipsesource/jsonforms/blob/master/MIGRATION.md).
-
 ## Feedback, Help and Support
 
+JSON Forms is developed by [EclipseSource](https://eclipsesource.com).
 Feel free to start a discussion by [opening an issue](https://github.com/eclipsesource/jsonforms/issues/new/choose) on the repo
 or by contacting us [directly via email](mailto:jsonforms@eclipsesource.com?subject=JSON%20Forms).
-You can also use the [public chat](https://spectrum.chat/jsonforms) to get help from the community.
+You can also use the [discussion board](https://spectrum.chat/jsonforms) to get help from the community.
 In addition, EclipseSource also offers [professional support](https://jsonforms.io/support) for JSON Forms.
-
