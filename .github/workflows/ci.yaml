@@ -19,13 +19,29 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: 12
-    - name: Build
-      run: | 
+    - name: Install nan
+      if: runner.os == 'macOS'
+      run: npm install nan --save-dev
+    - name: Build and Test (Windows and Mac)
+      if: runner.os != 'Linux'
+      run: |
+        npm ci
+        npm run init
+        npx lerna run build --ignore @jsonforms/vue-vanilla --ignore @jsonforms/vue2-vanilla
+        npx lerna run doc --ignore @jsonforms/vue-vanilla --ignore @jsonforms/vue2-vanilla
+        npm run test-cov
+        npm run check-format
+        npm run bundle
+        npx rimraf packages/vue/vue/node_modules/@jsonforms
+        npx rimraf packages/vue2/vue2/node_modules/@jsonforms
+        npx lerna run build --scope @jsonforms/vue-vanilla --scope @jsonforms/vue2-vanilla
+        npx lerna run doc --scope @jsonforms/vue-vanilla --scope @jsonforms/vue2-vanilla
+    - name: Build and Test (Linux)
+      if: runner.os == 'Linux'
+      run: |
         npm ci
         npm run init
         npm run build
         npm run bundle
-    - name: Test
-      run: |
         npm run test-cov
         npm run check-format
