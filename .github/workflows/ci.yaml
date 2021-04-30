@@ -24,7 +24,8 @@ jobs:
         npm ci
         npm run init
         npm run build
+        npm run bundle
     - name: Test
       run: |
-        npm test
+        npm run test-cov
         npm run check-format
