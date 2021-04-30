@@ -55,7 +55,8 @@ import { defineComponent } from '../../config/vue';
 import {
   DispatchRenderer,
   rendererProps,
-  useJsonFormsArrayControl
+  useJsonFormsArrayControl,
+  RendererProps
 } from '../../config/jsonforms';
 import { useVanillaArrayControl } from '../util';
 import ArrayListElement from './ArrayListElement.vue';
@@ -69,7 +70,7 @@ const controlRenderer = defineComponent({
   props: {
     ...rendererProps<ControlElement>()
   },
-  setup(props) {
+  setup(props: RendererProps<ControlElement>) {
     return useVanillaArrayControl(useJsonFormsArrayControl(props));
   },
   computed: {
