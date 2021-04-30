@@ -24,17 +24,7 @@ jobs:
         npm ci
         npm run init
         npm run build
-        npm run bundle
     - name: Test
       run: |
         npm test
-        npm run test-cov
         npm run check-format
-    #- name: Merge Reports
-    #  if: success()
-    #  run: 'npm run merge-report && cat coverage/lcov.info'
-    #- name: Upload Report
-    #  if: success()
-    #  uses: coverallsapp/github-action@master
-    #  with:
-    #    github-token: ${{ secrets.coverall_token }}
