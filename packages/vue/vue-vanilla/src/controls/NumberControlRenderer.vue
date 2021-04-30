@@ -29,7 +29,7 @@ import {
   isNumberControl
 } from '@jsonforms/core';
 import { defineComponent } from '../../config/vue';
-import { rendererProps, useJsonFormsControl } from '../../config/jsonforms';
+import { rendererProps, useJsonFormsControl, RendererProps } from '../../config/jsonforms';
 import { default as ControlWrapper } from './ControlWrapper.vue';
 import { useVanillaControl } from '../util';
 
@@ -41,7 +41,7 @@ const controlRenderer = defineComponent({
   props: {
     ...rendererProps<ControlElement>()
   },
-  setup(props) {
+  setup(props: RendererProps<ControlElement>) {
     return useVanillaControl(useJsonFormsControl(props), target =>
       Number(target.value)
     );

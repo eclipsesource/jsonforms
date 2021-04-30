@@ -28,7 +28,8 @@ import { defineComponent } from '../../config/vue';
 import {
   DispatchRenderer,
   rendererProps,
-  useJsonFormsLayout
+  useJsonFormsLayout,
+  RendererProps
 } from '../../config/jsonforms';
 import { useVanillaLayout } from '../util';
 
@@ -40,7 +41,7 @@ const layoutRenderer = defineComponent({
   props: {
     ...rendererProps<Layout>()
   },
-  setup(props) {
+  setup(props: RendererProps<Layout>) {
     return useVanillaLayout(useJsonFormsLayout(props));
   },
   computed: {

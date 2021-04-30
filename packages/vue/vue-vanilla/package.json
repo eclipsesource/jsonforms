@@ -39,9 +39,12 @@
   ],
   "scripts": {
     "serve": "vue-cli-service serve dev/serve.ts",
-    "build": "cross-env NODE_ENV=production rollup --config rollup.config.js",
-    "clean": "rm -rf lib",
-    "doc": "../../../node_modules/.bin/typedoc --name 'JSON Forms Vue Vanilla Renderers' --mode file --out docs src --ignoreCompilerErrors",
+    "build:pre": "rimraf ../vue/node_modules/@jsonforms/core",
+    "build:do": "cross-env NODE_ENV=production rollup --config rollup.config.js",
+    "build": "run-s --continue-on-error build:pre build:do build:after",
+    "build:after": "symlink-dir ../../core ../vue/node_modules/@jsonforms/core",
+    "clean": "rimraf lib",
+    "doc": "typedoc --name 'JSON Forms Vue Vanilla Renderers' --mode file --out docs src --ignoreCompilerErrors",
     "test": "vue-cli-service test:unit"
   },
   "dependencies": {
@@ -65,10 +68,14 @@
     "@vue/test-utils": "^2.0.0-0",
     "chai": "^4.1.2",
     "cross-env": "^7.0.2",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^3.0.2",
     "rollup": "^2.7.3",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-typescript2": "^0.29.0",
     "rollup-plugin-vue": "^6.0.0",
+    "symlink-dir": "^5.0.0",
+    "typedoc": "^0.19.2",
     "typescript": "3.8.3",
     "vue-jest": "^5.0.0-0"
   },
