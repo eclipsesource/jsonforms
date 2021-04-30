@@ -1,0 +1,5 @@
+src/
+dev/*
+!dev/serve.ts
+tests/unit/
+vanilla.css

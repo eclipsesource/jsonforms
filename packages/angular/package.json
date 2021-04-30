@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/angular",
-  "version": "2.5.0",
+  "version": "2.5.1-beta.0",
   "description": "Angular module of JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -32,14 +32,14 @@
   "main": "./lib/index.js",
   "typings": "./lib/index.d.ts",
   "scripts": {
-    "bundle": "../../node_modules/.bin/webpack --config ./webpack.build.js --env=production --display-error-details",
-    "build": "../../node_modules/.bin/ngc",
-    "clean": "rm -rf lib coverage dist .nyc_output 2> /dev/null",
-    "lint": "../../node_modules/.bin/tslint --project tsconfig.json --exclude src/models/jsonSchema.ts",
-    "report": "../../node_modules/.bin/nyc report --reporter=html",
-    "test": "../../node_modules/.bin/ava",
-    "test-cov": "../../node_modules/.bin/nyc ../../node_modules/.bin/ava",
-    "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Angular Core' --mode file --out docs src"
+    "bundle": "webpack --config ./webpack.build.js --env=production --display-error-details",
+    "build": "ngc",
+    "clean": "rimraf lib coverage dist .nyc_output 2> /dev/null",
+    "lint": "tslint --project tsconfig.json --exclude src/models/jsonSchema.ts",
+    "report": "nyc report --reporter=html",
+    "test": "ava",
+    "test-cov": "nyc ava",
+    "doc": "typedoc --name 'JSON Forms Angular Core' --mode file --out docs src"
   },
   "nyc": {
     "reporter": [
@@ -63,7 +63,7 @@
   "peerDependencies": {
     "@angular/core": "^9.0.0",
     "@angular/forms": "^9.0.0",
-    "@jsonforms/core": "^2.5.0",
+    "@jsonforms/core": "^2.5.1-alpha.0",
     "rxjs": "^6.4.0"
   },
   "devDependencies": {
@@ -71,9 +71,16 @@
     "@angular/compiler-cli": "^9.0.0",
     "@angular/core": "^9.0.0",
     "@angular/forms": "^9.0.0",
-    "@jsonforms/core": "^2.5.0",
+    "@jsonforms/core": "^2.5.1-beta.0",
+    "ava": "~2.4.0",
     "copy-webpack-plugin": "^5.0.5",
+    "nyc": "^14.1.1",
+    "rimraf": "^3.0.2",
     "rxjs": "^6.4.0",
+    "tslint": "^5.20.1",
+    "typedoc": "^0.19.2",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.2.1",
     "webpack-dev-server": "^3.9.0"
   }
 }

@@ -1,9 +1,10 @@
 {
-  "lerna": "2.5.1",
   "packages": [
-    "packages/*"
+    "packages/*",
+    "packages/vue/*",
+    "packages/vue2/*"
   ],
-  "version": "2.5.0",
+  "version": "2.5.1-beta.0",
   "nohoist": [
     "core-js",
     "vue",

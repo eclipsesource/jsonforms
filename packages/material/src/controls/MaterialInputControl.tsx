@@ -36,7 +36,7 @@ import { Hidden, InputLabel } from '@material-ui/core';
 import { FormControl, FormHelperText } from '@material-ui/core';
 import merge from 'lodash/merge';
 
-interface WithInput {
+export interface WithInput {
   input: any;
 }
 

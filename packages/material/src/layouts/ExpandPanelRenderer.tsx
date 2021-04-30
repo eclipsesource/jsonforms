@@ -19,12 +19,12 @@ import {
   Resolve,
   update,
   JsonFormsCellRendererRegistryEntry,
-  JsonFormsUISchemaRegistryEntry
+  JsonFormsUISchemaRegistryEntry,
+  getFirstPrimitiveProp
 } from '@jsonforms/core';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import IconButton from '@material-ui/core/IconButton';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import find from 'lodash/find';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import { Grid } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -235,20 +235,6 @@ export const ctxDispatchToExpandPanelProps: (
     );
   }
 });
-
-const getFirstPrimitiveProp = (schema: any) => {
-  if (schema.properties) {
-    return find(Object.keys(schema.properties), propName => {
-      const prop = schema.properties[propName];
-      return (
-        prop.type === 'string' ||
-        prop.type === 'number' ||
-        prop.type === 'integer'
-      );
-    });
-  }
-  return undefined;
-};
 
 /**
  * Map state to control props.

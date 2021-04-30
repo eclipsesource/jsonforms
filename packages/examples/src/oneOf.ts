@@ -35,7 +35,8 @@ export const schema = {
         city: { type: 'string' },
         state: { type: 'string' }
       },
-      required: ['street_address', 'city', 'state']
+      required: ['street_address', 'city', 'state'],
+      additionalProperties: false
     },
     user: {
       type: 'object',
@@ -43,7 +44,8 @@ export const schema = {
         name: { type: 'string' },
         mail: { type: 'string' }
       },
-      required: ['name', 'mail']
+      required: ['name', 'mail'],
+      additionalProperties: false
     }
   },
 
@@ -54,7 +56,8 @@ export const schema = {
     addressOrUser: {
       oneOf: [{ $ref: '#/definitions/address' }, { $ref: '#/definitions/user' }]
     }
-  }
+  },
+  required: ['name']
 };
 
 export const uischema = {

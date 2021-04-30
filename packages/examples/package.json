@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/examples",
-  "version": "2.5.0",
+  "version": "2.5.1-beta.0",
   "description": "JSON Forms Example Data",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -34,15 +34,21 @@
   "main": "./lib/index.js",
   "typings": "./lib/index.d.ts",
   "scripts": {
-    "build": "../../node_modules/.bin/tsc",
-    "clean": "rm -rf lib coverage dist .nyc_output 2> /dev/null",
-    "lint": "../../node_modules/.bin/tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
+    "build": "tsc",
+    "clean": "rimraf lib coverage dist .nyc_output 2> /dev/null",
+    "lint": "tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
     "test": "echo 'Nothing to do for `examples` package'",
-    "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Examples' --mode file --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
+    "doc": "typedoc --name 'JSON Forms Examples' --mode file --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
   },
   "dependencies": {
-    "@jsonforms/core": "^2.5.0",
+    "@jsonforms/core": "^2.5.1-beta.0",
     "ajv-i18n": "^3.5.0",
     "redux": "^4.0.4"
+  },
+  "devDependencies": {
+    "rimraf": "^3.0.2",
+    "tslint": "^5.20.1",
+    "typedoc": "^0.19.2",
+    "typescript": "3.8.3"
   }
 }

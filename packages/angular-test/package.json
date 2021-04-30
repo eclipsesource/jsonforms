@@ -1,11 +1,11 @@
 {
   "name": "@jsonforms/angular-test",
-  "version": "2.5.0",
+  "version": "2.5.1-beta.0",
   "private": true,
   "main": "./lib/index.js",
   "dependencies": {
-    "@jsonforms/angular": "^2.5.0",
-    "@jsonforms/core": "^2.5.0",
+    "@jsonforms/angular": "^2.5.1-beta.0",
+    "@jsonforms/core": "^2.5.1-beta.0",
     "redux": "^4.0.4"
   },
   "devDependencies": {
@@ -16,10 +16,11 @@
     "karma-coverage-istanbul-reporter": "^2.0.4",
     "karma-jasmine": "^2.0.1",
     "karma-sourcemap-loader": "^0.3.7",
-    "karma-webpack": "^3.0.5"
+    "karma-webpack": "^3.0.5",
+    "typescript": "3.8.3"
   },
   "scripts": {
-    "build": "../../node_modules/.bin/tsc",
+    "build": "tsc",
     "test": "echo 'Nothing to do'"
   }
 }

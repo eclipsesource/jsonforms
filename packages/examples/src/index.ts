@@ -26,6 +26,7 @@ import * as allOf from './allOf';
 import * as anyOf from './anyOf';
 import * as oneOf from './oneOf';
 import * as oneOfArray from './oneOfArray';
+import * as anyOfOneOfAllOfResolve from './anyOf-oneOf-allOf-resolve';
 import * as array from './arrays';
 import * as nestedArray from './nestedArrays';
 import * as arrayWithDetail from './arrays-with-detail';
@@ -70,6 +71,7 @@ import * as onChange from './onChange';
 import * as enumExample from './enum';
 import * as radioGroupExample from './radioGroup';
 import * as booleanToggle from './booleanToggle';
+import * as multiEnum from './multi-enum';
 export * from './register';
 export * from './example';
 
@@ -81,6 +83,7 @@ export {
   anyOf,
   oneOf,
   oneOfArray,
+  anyOfOneOfAllOfResolve,
   stringArray,
   array,
   nestedArray,
@@ -124,5 +127,6 @@ export {
   onChange,
   enumExample,
   radioGroupExample,
-  booleanToggle
+  booleanToggle,
+  multiEnum
 };
