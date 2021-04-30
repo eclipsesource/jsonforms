@@ -36,7 +36,7 @@ const toISOString = (inputDateTime: string) => {
   return inputDateTime === '' ? '' : inputDateTime + ':00.000Z';
 };
 
-const controlRenderer: any = defineComponent({
+const controlRenderer = defineComponent({
   name: 'datetime-control-renderer',
   components: {
     ControlWrapper
@@ -45,7 +45,7 @@ const controlRenderer: any = defineComponent({
     ...rendererProps<ControlElement>()
   },
   setup(props) {
-    return useVanillaControl(useJsonFormsControl(props), (target: { value: string; }) => toISOString(target.value));
+    return useVanillaControl(useJsonFormsControl(props), target => toISOString(target.value));
   },
   computed: {
     dataTime(): string {

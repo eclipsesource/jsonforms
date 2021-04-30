@@ -60,7 +60,7 @@ import {
 import { useVanillaArrayControl } from '../util';
 import ArrayListElement from './ArrayListElement.vue';
 
-const controlRenderer: any = defineComponent({
+const controlRenderer = defineComponent({
   name: 'array-list-renderer',
   components: {
     ArrayListElement,

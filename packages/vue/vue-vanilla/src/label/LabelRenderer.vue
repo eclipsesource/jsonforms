@@ -19,7 +19,7 @@ import {
 } from '../../config/jsonforms';
 import { useVanillaLayout } from '../util';
 
-const labelRenderer: any = defineComponent({
+const labelRenderer = defineComponent({
   name: 'label-renderer',
   components: {
     DispatchRenderer

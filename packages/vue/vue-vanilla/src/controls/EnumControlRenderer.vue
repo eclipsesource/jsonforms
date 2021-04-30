@@ -40,7 +40,7 @@ import { rendererProps, useJsonFormsEnumControl } from '../../config/jsonforms';
 import { default as ControlWrapper } from './ControlWrapper.vue';
 import { useVanillaControl } from '../util';
 
-const controlRenderer: any = defineComponent({
+const controlRenderer = defineComponent({
   name: 'enum-control-renderer',
   components: {
     ControlWrapper
