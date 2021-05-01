@@ -210,6 +210,81 @@ export const data = {
   vegetarian: false
 };
 
+const schema_1713 = {
+  "type": "object",
+  "properties": {
+    "experiments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "additionalItems": false
+      }
+    }
+  },
+  "required": [
+    "experiments"
+  ]
+};
+const uischema_1713 = {
+  "type": "Categorization",
+  "elements": [
+    {
+      "type": "Category",
+      "label": "Experiments",
+      "elements": [
+        {
+          "type": "ListWithDetail",
+          "scope": "#/properties/experiments",
+          "options": {
+            "labelRef": "#/items/properties/ID",
+            "detail": {
+              "type": "VerticalLayout",
+              "elements": [
+                {
+                  "type": "HorizontalLayout",
+                  "elements": [
+                    {
+                      "type": "Control",
+                      "scope": "#/properties/ID"
+                    }
+                  ]
+                },
+                {
+                  "type": "Categorization",
+                  "elements": [
+                    {
+                      "type": "Category",
+                      "label": "Sequential",
+                      "elements": [
+                        {
+                          "type": "VerticalLayout",
+                          "elements": [
+                            {
+                              "type": "Control",
+                              "scope": "#/properties/ID"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+  };
+
+
 registerExamples([
   {
     name: 'categorization',
@@ -217,5 +292,12 @@ registerExamples([
     data,
     schema,
     uischema
+  },
+  {
+    name: '1713',
+    label: 'Bug 1713',
+    data,
+    schema:schema_1713,
+    uischema:uischema_1713
   }
 ]);
