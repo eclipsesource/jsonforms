@@ -96,6 +96,7 @@ const uischema = {
 };
 const data = {};
 function App() {
+  const [data, setData] = useState(initialData);
   return (
     <JsonForms
       schema={schema}
@@ -103,6 +104,7 @@ function App() {
       data={data}
       renderers={materialRenderers}
       cells={materialCells}
+      onChange={({ data, _errors }) => setData(data)}
     />
   );
 }

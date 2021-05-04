@@ -13,6 +13,10 @@ In order to use JSON Forms Core you need to decide which UI framework you would 
 JSON Forms currently supports [React](https://github.com/eclipsesource/jsonforms/blob/master/packages/react), [Angular](https://github.com/eclipsesource/jsonforms/blob/master/packages/angular) and [Vue](https://github.com/eclipsesource/jsonforms/blob/master/packages/vue).
 
 The following seeds are available:
+- [React Seed](https://github.com/eclipsesource/jsonforms-react-seed)
+- [Angular Seed](https://github.com/eclipsesource/jsonforms-angular-seed)
+- [Vue Seed](https://github.com/eclipsesource/jsonforms-vue-seed)
+
 See the official [documentation](https://jsonforms.io/) and the [Example Package](https://github.com/eclipsesource/jsonforms/blob/master/packages/examples) on how to integrate JSON Forms with your application.
 
 Check <https://www.npmjs.com/search?q=%40jsonforms> for all published JSON Forms packages.

@@ -21,8 +21,7 @@ In addition, EclipseSource also offers [professional support](https://jsonforms.
 
 ### First time setup
 
-* Install [node.js](https://nodejs.org/) (version >= 6.x.x)
-* Update npm (version >= 5.8.0)
+* Install [node.js](https://nodejs.org/) (only Node 12 is currently supported)
 * Clone this repository
 * Install dependencies: `npm ci`
 * Hook up dependencies between packages: `npm run init`
@@ -32,8 +31,10 @@ In addition, EclipseSource also offers [professional support](https://jsonforms.
 * Build (all packages): `npm run build`
 * Test (all packages): `npm run test`
 * Clean (delete `dist` folder of all packages): `npm run clean`
-* Run vanilla examples: `cd packages/vanilla && npm run dev`
-* Run material examples: `cd packages/material && npm run dev`
+* Run React Vanilla examples: `cd packages/vanilla && npm run dev`
+* Run React Material examples: `cd packages/material && npm run dev`
+* Run Angular Material examples: `cd packages/angular-material && npm run dev`
+* Run Vue Vanilla examples: `cd packages/vue/vue-vanilla && npm run serve`
 
 ### Dependency & Release management
 
@@ -51,7 +52,7 @@ The JSON Forms project is licensed under the MIT License. See the [LICENSE file]
 
 ## Migration
 
-If you are still using JSON Forms 1, check our [migration guide](https://github.com/eclipsesource/jsonforms/blob/master/MIGRATION.md).
+See our [migration guide](https://github.com/eclipsesource/jsonforms/blob/master/MIGRATION.md) when updating JSON Forms.
 
 ## Community
 

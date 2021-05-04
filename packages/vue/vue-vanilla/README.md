@@ -25,7 +25,7 @@ Use the `json-forms` component for each form you want to render and hand over th
 ```vue
 <script>
 import { JsonForms } from '@jsonforms/vue';
-import { vanillaRenderers } from '@jsonforms/vue-vanilla'
+import { vanillaRenderers } from '@jsonforms/vue-vanilla';
 
 const renderers = [
   ...vanillaRenderers,
