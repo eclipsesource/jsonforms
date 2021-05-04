@@ -12,6 +12,61 @@ See the official [documentation](https://jsonforms.io/docs/integrations/angular)
 
 Check <https://www.npmjs.com/search?q=%40jsonforms> for all published JSON Forms packages.
 
+### Quick start
+
+Install JSON Forms Core, Angular and Angular Material Renderers
+
+```bash
+npm i --save @jsonforms/core @jsonforms/angular @jsonforms/angular-material
+```
+
+Use the `json-forms` component for each form you want to render and hand over the renderer set.
+
+Example component file `app.component.ts`:
+
+```ts
+import { Component } from "@angular/core";
+import { angularMaterialRenderers } from "@jsonforms/angular-material";
+
+@Component({
+  selector: "app-root",
+  template: `<jsonforms
+    [data]="data"
+    [schema]="schema"
+    [uischema]="uischema"
+    [renderers]="renderers"
+  ></jsonforms>`,
+})
+export class AppComponent {
+  renderers = angularMaterialRenderers;
+  data = {};
+}
+```
+
+Example module file:
+
+```ts
+import { NgModule } from "@angular/core";
+import { BrowserModule } from "@angular/platform-browser";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { JsonFormsModule } from "@jsonforms/angular";
+import { JsonFormsAngularMaterialModule } from "@jsonforms/angular-material";
+import { AppComponent } from "./app.component";
+
+@NgModule({
+  declarations: [AppComponent],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    JsonFormsModule,
+    JsonFormsAngularMaterialModule,
+  ],
+  schemas: [],
+  bootstrap: [AppComponent],
+})
+
+```
+
 ## License
 
 The JSON Forms project is licensed under the MIT License. See the [LICENSE file](https://github.com/eclipsesource/jsonforms/blob/master/LICENSE) for more information.

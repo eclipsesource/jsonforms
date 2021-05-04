@@ -16,6 +16,38 @@ Check <https://www.npmjs.com/search?q=%40jsonforms> for all published JSONForms 
 
 If you want to customize styling, have a look at our [styles guide](https://github.com/eclipsesource/jsonforms/blob/master/packages/vanilla/Styles.md).
 
+### Quick start
+
+Install JSON Forms Core, React and React Vanilla Renderers
+
+```bash
+npm i --save @jsonforms/core @jsonforms/react @jsonforms/vanilla-renderers
+```
+
+Use the `JsonForms` component for each form you want to render and hand over the renderer set.
+
+```js
+import React, { useState } from 'react';
+import { JsonForms } from '@jsonforms/react';
+import { vanillaCells, vanillaRenderers } from '@jsonforms/vanilla-renderers';
+
+function App() {
+  const [data, setData] = useState(initialData);
+  return (
+    <div className='App'>
+      <JsonForms
+        schema={schema}
+        uischema={uischema}
+        data={data}
+        renderers={vanillaRenderers}
+        cells={vanillaCells}
+        onChange={({ data, _errors }) => setData(data)}
+      />
+    </div>
+  );
+}
+```
+
 ## License
 
 The JSON Forms project is licensed under the MIT License. See the [LICENSE file](https://github.com/eclipsesource/jsonforms/blob/master/LICENSE) for more information.
