@@ -10,7 +10,7 @@ This is the JSON Forms Angular package which provides the necessary bindings for
 
 You can combine the Angular package with any Angular-based renderer set you want, for example the [Material Renderers](https://github.com/eclipsesource/jsonforms/blob/master/packages/angular-material).
 
-See the official [documentation](https://jsonforms.io/) and the JSON Forms Angular [seed repository](https://github.com/eclipsesource/jsonforms-angular-seed) for examples on how to integrate JSON Forms with your application.
+See the official [documentation](https://jsonforms.io/docs/integrations/angular) and the JSON Forms Angular [seed repository](https://github.com/eclipsesource/jsonforms-angular-seed) for examples on how to integrate JSON Forms with your application.
 
 Check <https://www.npmjs.com/search?q=%40jsonforms> for all published JSON Forms packages.
 

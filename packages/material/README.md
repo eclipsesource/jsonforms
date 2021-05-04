@@ -10,6 +10,8 @@ This is the JSON Forms Material Renderers Package. This package only contains re
 
 See the official [documentation](https://jsonforms.io/docs/integrations/react/) and the JSON Forms React [seed repository](https://github.com/eclipsesource/jsonforms-react-seed) for examples on how to integrate JSON Forms with your application.
 
+You can combine [JSON Forms React](https://github.com/eclipsesource/jsonforms/blob/master/packages/react) with other renderers too, for example with the [Vanilla Renderers](https://github.com/eclipsesource/jsonforms/blob/master/packages/vanilla-renderers).
+
 Check <https://www.npmjs.com/search?q=%40jsonforms> for all published JSONForms packages.
 
 ## License

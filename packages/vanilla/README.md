@@ -10,6 +10,8 @@ This is the JSONForms Vanilla Renderers Package. This package only contains rend
 
 You can combine [JSON Forms React](https://github.com/eclipsesource/jsonforms/blob/master/packages/react) with other renderers too, for example with the [Material Renderers](https://github.com/eclipsesource/jsonforms/blob/master/packages/material-renderers).
 
+See the official [documentation](https://jsonforms.io/docs/integrations/react/) and the JSON Forms React [seed repository](https://github.com/eclipsesource/jsonforms-react-seed) for examples on how to integrate JSON Forms with your application.
+
 Check <https://www.npmjs.com/search?q=%40jsonforms> for all published JSONForms packages.
 
 If you want to customize styling, have a look at our [styles guide](https://github.com/eclipsesource/jsonforms/blob/master/packages/vanilla/Styles.md).

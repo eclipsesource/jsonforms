@@ -8,6 +8,8 @@ JSON Forms eliminates the tedious task of writing fully-featured forms by hand b
 
 This is the JSONForms Angular Material renderers package. This package only contains renderers and must be combined with [JSON Forms Angular](https://github.com/eclipsesource/jsonforms/blob/master/packages/angular).
 
+See the official [documentation](https://jsonforms.io/docs/integrations/angular) and the JSON Forms Angular [seed repository](https://github.com/eclipsesource/jsonforms-angular-seed) for examples on how to integrate JSON Forms with your application.
+
 Check <https://www.npmjs.com/search?q=%40jsonforms> for all published JSON Forms packages.
 
 ## License
