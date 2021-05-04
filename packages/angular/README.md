@@ -27,14 +27,14 @@ Optional props:
 
 * `schema: JsonSchema` - the data schema for the given data. Will be generated when not given.
 * `uischema: UISchemaElement` - the UI schema for the given data schema. Will be generated when not given.
-* `cells: JsonFormsCellRendererRegistryEntry[]` - the Angular cell renderer set to use
 * `config: any` - form-wide options. May contain default ui schema options.
 * `readonly: boolean` - whether all controls shall be readonly.
 * `uischemas: JsonFormsUiSchemaEntry[]` - registry for dynamic ui schema dispatching
 * `validationMode: 'ValidateAndShow' | 'ValidateAndHide' | 'NoValidation'` - the validation mode for the form
 * `ajv: AJV` - custom Ajv instance for the form
-* `refParserOptions: RefParserOptions` - configuration for ref resolving
-* `onChange` - callback which is called on each data change, containing the updated data and the validation result.
+* `locale` - string, for example for formatting numbers 
+* `dataChange` - event emitter which is called on each data change, containing the updated data and the validation result.
+* `errors` - event emitter which is called with all validations errors.
 
 Example component file `app.component.ts`:
 
