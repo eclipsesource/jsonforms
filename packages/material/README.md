@@ -6,9 +6,9 @@ JSON Forms eliminates the tedious task of writing fully-featured forms by hand b
 
 ## Material Renderers Package
 
-This is the JSON Forms Material Renderers Package. This package only contains renderers and must be combined with [JSON Forms React](https://www.npmjs.com/package/@jsonforms/react).
+This is the JSON Forms Material Renderers Package. This package only contains renderers and must be combined with [JSON Forms React](https://github.com/eclipsesource/jsonforms/blob/master/packages/react).
 
-You can combine [JSON Forms React](https://www.npmjs.com/package/@jsonforms/react) with other renderers too, for example with the [Vanilla Renderers](https://www.npmjs.com/package/@jsonforms/vanilla-renderers).
+See the official [documentation](https://jsonforms.io/docs/integrations/react/) and the JSON Forms React [seed repository](https://github.com/eclipsesource/jsonforms-react-seed) for examples on how to integrate JSON Forms with your application.
 
 Check <https://www.npmjs.com/search?q=%40jsonforms> for all published JSONForms packages.
 

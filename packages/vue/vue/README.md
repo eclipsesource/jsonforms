@@ -6,7 +6,7 @@ JSON Forms eliminates the tedious task of writing fully-featured forms by hand b
 
 ## Vue Package
 
-This is the JSON Forms Vue package which provides the necessary bindings for Vue. It uses [JSON Forms Core](https://www.npmjs.com/package/@jsonforms/core).
+This is the JSON Forms Vue package which provides the necessary bindings for Vue. It uses [JSON Forms Core](https://github.com/eclipsesource/jsonforms/blob/master/packages/core).
 
 ## JSON Forms Vue seed app
 

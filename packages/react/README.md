@@ -6,9 +6,9 @@ JSON Forms eliminates the tedious task of writing fully-featured forms by hand b
 
 ## React Package
 
-This is the JSON Forms React package which provides the necessary bindings for React. It uses [JSON Forms Core](https://www.npmjs.com/package/@jsonforms/core).
+This is the JSON Forms React package which provides the necessary bindings for React. It uses [JSON Forms Core](https://github.com/eclipsesource/jsonforms/blob/master/packages/core).
 
-You can combine the react package with any react-based renderer set you want, for example the [Material Renderers](https://www.npmjs.com/package/@jsonforms/material-renderers) or the [Vanilla Renderers](https://www.npmjs.com/package/@jsonforms/vanilla-renderers).
+You can combine the react package with any react-based renderer set you want, for example the [Material Renderers](https://github.com/eclipsesource/jsonforms/blob/master/packages/material-renderers) or the [Vanilla Renderers](https://github.com/eclipsesource/jsonforms/blob/master/packages/vanilla-renderers).
 
 See the official [documentation](https://jsonforms.io/) and the JSON Forms React [seed repository](https://github.com/eclipsesource/jsonforms-react-seed) for examples on how to integrate JSON Forms with your application.
 
