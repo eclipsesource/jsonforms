@@ -1,6 +1,6 @@
 # JSON Forms - More Forms. Less Code
 
-### Complex Forms in the blink of an eye
+*Complex forms in the blink of an eye*
 
 JSON Forms eliminates the tedious task of writing fully-featured forms by hand by leveraging the capabilities of JSON, JSON Schema and Javascript.
 

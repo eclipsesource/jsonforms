@@ -1,6 +1,6 @@
 # JSON Forms - More Forms. Less Code
 
-### Complex Forms in the blink of an eye
+*Complex forms in the blink of an eye*
 
 ## Getting started
 
