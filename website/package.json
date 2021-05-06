@@ -15,9 +15,9 @@
     "clear": "docusaurus clear"
   },
   "dependencies": {
-    "@docusaurus/core": "^2.0.0-alpha.73",
-    "@docusaurus/plugin-client-redirects": "^2.0.0-alpha.73",
-    "@docusaurus/preset-classic": "^2.0.0-alpha.73",
+    "@docusaurus/core": "2.0.0-alpha.73",
+    "@docusaurus/plugin-client-redirects": "2.0.0-alpha.73",
+    "@docusaurus/preset-classic": "2.0.0-alpha.73",
     "@easyops-cn/docusaurus-search-local": "^0.16.1",
     "@jsonforms/core": "^2.5.0",
     "@jsonforms/examples": "^2.5.0",

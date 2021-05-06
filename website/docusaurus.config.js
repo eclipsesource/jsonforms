@@ -1,3 +1,5 @@
+const path = require('path');
+
 module.exports = {
   title: 'JSON Forms',
   tagline: 'More forms. Less code.',
@@ -122,6 +124,7 @@ module.exports = {
     ],
   ],
   plugins: [
+    path.resolve(__dirname, './src/custom-webpack'),
     'docusaurus-plugin-sass',
     'docusaurus2-dotenv',
     [
