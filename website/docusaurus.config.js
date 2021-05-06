@@ -157,6 +157,7 @@ module.exports = {
         id: 'faq',
         path: 'content/faq',
         routeBasePath: 'faq',
+        sidebarPath: require.resolve('./src/sidebars/faq.js'),
       },
     ],
     [
@@ -228,7 +229,9 @@ module.exports = {
     [
       '@easyops-cn/docusaurus-search-local',
       {
-        hashed: true
+        hashed: true,
+        docsDir: "./content/docs",
+        blogDir: "./content/news"
       },
     ]
   ],
