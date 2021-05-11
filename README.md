@@ -2,6 +2,10 @@
 
 *Complex forms in the blink of an eye*
 
+## Documentation
+
+Please see the official JSON Forms website, [jsonforms.io](https://jsonforms.io), for documentation, examples and API references.
+
 ## Getting started
 
 1. Clone the seed app with `git clone https://github.com/eclipsesource/jsonforms-react-seed.git`
@@ -13,8 +17,9 @@ For a more detailed tutorial about the usage of JSON Forms, please see [this tut
 
 ## Feedback, Help and Support
 
-Feel free to start a discussion by [opening an issue](https://github.com/eclipsesource/jsonforms/issues/new/choose) on the repo or by contacting us [directly via email](mailto:jsonforms@eclipsesource.com?subject=JSON%20Forms).
-You can also use the [discussion board](https://spectrum.chat/jsonforms) to get help from the community.
+If you encounter any problems feel free to [open an issue](https://github.com/eclipsesource/jsonforms/issues/new/choose) on the repo.
+For questions and discussions please use the [JSON Forms board](https://spectrum.chat/jsonforms).
+You can also reach us via [email](mailto:jsonforms@eclipsesource.com?subject=JSON%20Forms).
 In addition, EclipseSource also offers [professional support](https://jsonforms.io/support) for JSON Forms.
 
 ## Developers Documentation
@@ -42,7 +47,7 @@ For more info about how we handle dependencies and releases in the JSON Forms pr
 
 ### Continuous Integration
 
-The JSON Forms project is build and tested via [Travis](https://travis-ci.org/). Coverage is documented by [Coveralls](https://coveralls.io).
+The JSON Forms project is built and tested via [Travis](https://travis-ci.org/). Coverage is documented by [Coveralls](https://coveralls.io).
 
 Current status: [![Build Status](https://travis-ci.org/eclipsesource/jsonforms.svg?branch=master)](https://travis-ci.org/eclipsesource/jsonforms) [![Coverage Status](https://coveralls.io/repos/eclipsesource/jsonforms/badge.svg?branch=master&service=github)](https://coveralls.io/github/eclipsesource/jsonforms?branch=master)
 
@@ -56,4 +61,4 @@ See our [migration guide](https://github.com/eclipsesource/jsonforms/blob/master
 
 ## Community
 
-We have a [discussion board](https://spectrum.chat/jsonforms) where you can reach out to the community if you have questions.
+We have a [discussion board](https://spectrum.chat/jsonforms) where you can reach out to the developers and the community if you have questions.
