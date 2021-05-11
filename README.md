@@ -34,7 +34,7 @@ In addition, EclipseSource also offers [professional support](https://jsonforms.
 * Run React Vanilla examples: `cd packages/vanilla && npm run dev`
 * Run React Material examples: `cd packages/material && npm run dev`
 * Run Angular Material examples: `cd packages/angular-material && npm run dev`
-* Run Vue Vanilla examples: `cd packages/vue/vue-vanilla && npm run serve`
+* Run Vue Vanilla dev setup: `cd packages/vue/vue-vanilla && npm run serve`
 
 ### Dependency & Release management
 
