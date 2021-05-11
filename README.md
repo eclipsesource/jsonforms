@@ -1,7 +1,9 @@
-# JSONForms - More Forms. Less Code
-### Complex Forms in the blink of an eye
+# JSON Forms - More Forms. Less Code
 
-# Getting started
+*Complex forms in the blink of an eye*
+
+## Getting started
+
 1. Clone the seed app with `git clone https://github.com/eclipsesource/jsonforms-react-seed.git`
 2. Install dependencies with `npm ci` (or `npm install` when using an older version)
 3. Run the app with `npm run start`
@@ -9,40 +11,49 @@
 For more info about the seed app, please see the corresponding README file of the [seed repo](https://github.com/eclipsesource/jsonforms-react-seed).
 For a more detailed tutorial about the usage of JSON Forms, please see [this tutorial](http://jsonforms.io/docs/tutorial).
 
-# Feedback, Help and Support
-Feel free to start a discussion by opening an issue on this repo or by contacting us [directly via email](mailto:jsonforms@eclipsesource.com?subject=JSON%20Forms).
-In addition EclipseSource also offers [professional support](https://jsonforms.io/support) for JSON Forms.
+## Feedback, Help and Support
 
-# Developers Documentation
+Feel free to start a discussion by [opening an issue](https://github.com/eclipsesource/jsonforms/issues/new/choose) on the repo or by contacting us [directly via email](mailto:jsonforms@eclipsesource.com?subject=JSON%20Forms).
+You can also use the [discussion board](https://spectrum.chat/jsonforms) to get help from the community.
+In addition, EclipseSource also offers [professional support](https://jsonforms.io/support) for JSON Forms.
 
-## First time setup
-* Install [node.js](https://nodejs.org/) (version >= 6.x.x)
-* Update npm (version >= 5.8.0)
+## Developers Documentation
+
+### First time setup
+
+* Install [node.js](https://nodejs.org/) (only Node 12 is currently supported)
 * Clone this repository
 * Install dependencies: `npm ci`
 * Hook up dependencies between packages: `npm run init`
 
-## Build & Testing
+### Build & Testing
+
 * Build (all packages): `npm run build`
 * Test (all packages): `npm run test`
 * Clean (delete `dist` folder of all packages): `npm run clean`
-* Run vanilla examples: `cd packages/vanilla && npm run dev`
-* Run material examples: `cd packages/material && npm run dev`
-* Check Formatting: `npm run check-format`
+* Run React Vanilla examples: `cd packages/vanilla && npm run dev`
+* Run React Material examples: `cd packages/material && npm run dev`
+* Run Angular Material examples: `cd packages/angular-material && npm run dev`
+* Run Vue Vanilla dev setup: `cd packages/vue/vue-vanilla && npm run serve`
 
-## Dependency & Release management
-For more info about how we handle dependencies and releases in the JSON Forms project, please see our [Developer Documentation wiki page](https://github.com/eclipsesource/jsonforms/wiki/Developer-documentation). 
+### Dependency & Release management
 
-## Continuous Integration
-The JSONForms project is build and tested via [Travis](https://travis-ci.org/). Coverage is documented by [Coveralls](https://coveralls.io).
+For more info about how we handle dependencies and releases in the JSON Forms project, please see our [Developer Documentation wiki page](https://github.com/eclipsesource/jsonforms/wiki/Developer-documentation).
+
+### Continuous Integration
+
+The JSON Forms project is build and tested via [Travis](https://travis-ci.org/). Coverage is documented by [Coveralls](https://coveralls.io).
 
 Current status: [![Build Status](https://travis-ci.org/eclipsesource/jsonforms.svg?branch=master)](https://travis-ci.org/eclipsesource/jsonforms) [![Coverage Status](https://coveralls.io/repos/eclipsesource/jsonforms/badge.svg?branch=master&service=github)](https://coveralls.io/github/eclipsesource/jsonforms?branch=master)
 
-# License
-The JSONForms project is licensed under the MIT License. See the [LICENSE file](https://github.com/eclipsesource/jsonforms/blob/master/LICENSE) for more information.
+## License
 
-# Migration
-If you are already using JSONForms 1, check our [migration guide](https://github.com/eclipsesource/jsonforms/blob/master/MIGRATION.md).
+The JSON Forms project is licensed under the MIT License. See the [LICENSE file](https://github.com/eclipsesource/jsonforms/blob/master/LICENSE) for more information.
 
-# Community
-We have a [Spectrum Chat](https://spectrum.chat/jsonforms) where you can reach out to the community if you have questions.
+## Migration
+
+See our [migration guide](https://github.com/eclipsesource/jsonforms/blob/master/MIGRATION.md) when updating JSON Forms.
+
+## Community
+
+We have a [discussion board](https://spectrum.chat/jsonforms) where you can reach out to the community if you have questions.

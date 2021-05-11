@@ -7,7 +7,7 @@ JSON Forms eliminates the tedious task of writing fully-featured forms by hand b
 
 ## Vue 2 Vanilla Renderers
 
-This is the JSON Forms Vue 2 Vanilla renderers package which provides a HTML5-based renderer set for [JSON Forms Vue 2](https://www.npmjs.com/package/@jsonforms/vue2).
+This is the JSON Forms Vue 2 Vanilla renderers package which provides a HTML5-based renderer set for [JSON Forms Vue 2](https://github.com/eclipsesource/jsonforms/blob/master/packages/vue2).
 
 ### JSON Forms Vue 2 seed app
 
