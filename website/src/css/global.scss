@@ -45,6 +45,9 @@ html[data-theme='light'] {
   .navbar__brand:hover {
     color: var(--background);
   }
+  .navbar__toggle {
+    color: var(--background);
+  }
   .footer--dark {
     --ifm-footer-background-color: #242526;
   }
