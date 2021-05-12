@@ -210,7 +210,8 @@ export default defineComponent({
       schema,
       uischema,
       config: {
-        hideRequiredAsterisk: true
+        hideRequiredAsterisk: true,
+        removeWhenEmpty: false
       }
     };
   },
@@ -232,6 +233,9 @@ export default defineComponent({
     },
     switchAsterisk() {
       this.config.hideRequiredAsterisk = !this.config.hideRequiredAsterisk;
+    },
+    switchRemoveWhenEmpty() {
+      this.config.removeWhenEmpty = !this.config.removeWhenEmpty;
     },
     adaptData() {
       this.data.number = 10;
@@ -392,6 +396,7 @@ export default defineComponent({
       />
       <button @click="setSchema">Set Schema</button>
       <button @click="switchAsterisk">Switch Asterisk</button>
+      <button @click="switchRemoveWhenEmpty">Switch removeWhenEmpty</button>
       <button @click="adaptData">Adapt data</button>
       <button @click="adaptUiSchema">Adapt uischema</button>
     </div>
