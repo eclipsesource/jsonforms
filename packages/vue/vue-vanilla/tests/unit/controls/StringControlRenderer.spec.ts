@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { mountJsonForms } from '../util';
+import { addRemoveWhenEmptyOption, mountJsonForms } from '../util';
 
 const schema = {
   type: 'string',
@@ -36,5 +36,17 @@ describe('StringControlRenderer.vue', () => {
     const input = wrapper.find('input');
     const placeholder = input.attributes('placeholder');
     expect(placeholder).to.equal('string placeholder');
+  });
+
+  describe('removeWhenEmpty: true', () => {
+    const rweUischema = addRemoveWhenEmptyOption(uischema);
+
+    it('data should be undefined', async () => {
+      const wrapper = mountJsonForms('a', schema, rweUischema);
+      const input = wrapper.find('input');
+      await input.setValue('b');
+      await input.setValue('');
+      expect(wrapper.vm.data).to.equal(undefined);
+    });
   });
 });

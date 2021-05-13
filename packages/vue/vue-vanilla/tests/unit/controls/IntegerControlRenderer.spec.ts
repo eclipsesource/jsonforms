@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { mountJsonForms } from '../util';
+import { addRemoveWhenEmptyOption, mountJsonForms } from '../util';
 
 const schema = {
   type: 'integer',
@@ -26,5 +26,17 @@ describe('IntegerControlRenderer.vue', () => {
     const input = wrapper.find('input');
     await input.setValue(2);
     expect(wrapper.vm.data).to.equal(2);
+  });
+
+  describe('removeWhenEmpty: true', () => {
+    const rweUischema = addRemoveWhenEmptyOption(uischema);
+
+    it('data should be undefined', async () => {
+      const wrapper = mountJsonForms(1, schema, rweUischema);
+      const input = wrapper.find('input');
+      await input.setValue(2);
+      await input.setValue('');
+      expect(wrapper.vm.data).to.equal(undefined);
+    });
   });
 });

@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { mountJsonForms } from '../util';
+import { addRemoveWhenEmptyOption, mountJsonForms } from '../util';
 
 const schema = {
   type: 'boolean',
@@ -36,5 +36,16 @@ describe('BooleanControlRenderer.vue', () => {
     const input = wrapper.find('input');
     const placeholder = input.attributes('placeholder');
     expect(placeholder).to.equal('boolean placeholder');
+  });
+
+  describe('removeWhenEmpty: true', () => {
+    const rweUischema = addRemoveWhenEmptyOption(uischema);
+
+    it('data should be false', async () => {
+      const wrapper = mountJsonForms(true, schema, rweUischema);
+      const input = wrapper.find('input');
+      await input.trigger('click');
+      expect(wrapper.vm.data).to.equal(false);
+    });
   });
 });

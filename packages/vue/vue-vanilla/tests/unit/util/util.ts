@@ -11,3 +11,13 @@ export const mountJsonForms = (
     props: { initialData: data, schema, uischema, config }
   });
 };
+
+export const addRemoveWhenEmptyOption = (uischema: any) => {
+  return {
+    ...uischema,
+    options: {
+      ...uischema.options,
+      removeWhenEmpty: true
+    }
+  };
+};

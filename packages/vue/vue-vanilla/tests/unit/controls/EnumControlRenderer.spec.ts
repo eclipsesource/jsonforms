@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { mountJsonForms } from '../util';
+import { addRemoveWhenEmptyOption, mountJsonForms } from '../util';
 
 const schema = {
   type: 'string',
@@ -27,5 +27,17 @@ describe('EnumControlRenderer.vue', () => {
     const select = wrapper.find('select');
     await select.setValue('b');
     expect(wrapper.vm.data).to.equal('b');
+  });
+
+  describe('removeWhenEmpty: true', () => {
+    const rweUischema = addRemoveWhenEmptyOption(uischema);
+
+    it('data should be undefined', async () => {
+      const wrapper = mountJsonForms('a', schema, rweUischema);
+      const select = wrapper.find('select');
+      await select.setValue('b');
+      await select.setValue('');
+      expect(wrapper.vm.data).to.equal(undefined);
+    });
   });
 });

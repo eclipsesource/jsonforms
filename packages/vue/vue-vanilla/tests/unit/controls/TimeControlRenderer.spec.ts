@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { mountJsonForms } from '../util';
+import { addRemoveWhenEmptyOption, mountJsonForms } from '../util';
 
 const schema = {
   type: 'string',
@@ -37,5 +37,17 @@ describe('TimeControlRenderer.vue', () => {
     const input = wrapper.find('input');
     const placeholder = input.attributes('placeholder');
     expect(placeholder).to.equal('time placeholder');
+  });
+
+  describe('removeWhenEmpty: true', () => {
+    const rweUischema = addRemoveWhenEmptyOption(uischema);
+
+    it('data should be undefined', async () => {
+      const wrapper = mountJsonForms('00:20', schema, rweUischema);
+      const input = wrapper.find('input');
+      await input.setValue('01:51');
+      await input.setValue('');
+      expect(wrapper.vm.data).to.equal(undefined);
+    });
   });
 });
