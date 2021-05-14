@@ -1,5 +1,6 @@
 import { expect } from 'chai';
-import { addRemoveWhenEmptyOption, mountJsonForms } from '../util';
+import { merge } from 'lodash';
+import { mountJsonForms } from '../util';
 
 const schema = {
   type: 'string',
@@ -41,7 +42,7 @@ describe('DateControlRenderer.vue', () => {
   });
 
   describe('removeWhenEmpty: true', () => {
-    const rweUischema = addRemoveWhenEmptyOption(uischema);
+    const rweUischema = merge(uischema, { options: { removeWhenEmpty: true } });
 
     it('data should be undefined', async () => {
       const wrapper = mountJsonForms('2021-03-09', schema, rweUischema);

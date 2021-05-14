@@ -1,11 +1,13 @@
 import { expect } from 'chai';
-import { addRemoveWhenEmptyOption, mountJsonForms } from '../util';
+import { merge } from 'lodash';
+import { mountJsonForms } from '../util';
 
 const schema = {
   type: 'string',
   title: 'My OneOf Enum',
   oneOf: [
-    { const: 'a', title: 'Foo'}, { const: 'b', title: 'Bar'}
+    { const: 'a', title: 'Foo' },
+    { const: 'b', title: 'Bar' }
   ]
 };
 const uischema = {
@@ -32,7 +34,7 @@ describe('EnumOneOfControlRenderer.vue', () => {
   });
 
   describe('removeWhenEmpty: true', () => {
-    const rweUischema = addRemoveWhenEmptyOption(uischema);
+    const rweUischema = merge(uischema, { options: { removeWhenEmpty: true } });
 
     it('data should be undefined', async () => {
       const wrapper = mountJsonForms('a', schema, rweUischema);

@@ -1,5 +1,6 @@
 import { expect } from 'chai';
-import { addRemoveWhenEmptyOption, mountJsonForms } from '../util';
+import { merge } from 'lodash';
+import { mountJsonForms } from '../util';
 
 const schema = {
   type: 'boolean',
@@ -39,7 +40,7 @@ describe('BooleanControlRenderer.vue', () => {
   });
 
   describe('removeWhenEmpty: true', () => {
-    const rweUischema = addRemoveWhenEmptyOption(uischema);
+    const rweUischema = merge(uischema, { options: { removeWhenEmpty: true } });
 
     it('data should be false', async () => {
       const wrapper = mountJsonForms(true, schema, rweUischema);
