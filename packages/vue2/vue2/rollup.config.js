@@ -8,7 +8,7 @@ const buildFormats = [
     input: 'src/index.ts',
     output: {
       file: 'lib/jsonforms-vue2.js',
-      format: 'esm',
+      format: 'commonjs',
       exports: 'named',
       sourcemap: true
     },
@@ -16,7 +16,7 @@ const buildFormats = [
     plugins: [
       typescript({
         check: false, // types are incompatible with Vue3
-        module: 'esnext',
+        module: 'commonjs',
         tsconfig: 'tsconfig.json',
         tsconfigOverride: {
           include: null,
