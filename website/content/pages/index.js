@@ -106,9 +106,12 @@ function Home() {
           <section className={styles.sectionNews}>
             <Card className={styles.newsCard}>
               <CardContent>
-                Today we released JSON Forms v2.5 🎉 This release marks the final step in our quest to remove Redux as a hard dependency of JSON Forms. Check our updated migration guide if you'd like to migrate to the Redux-less variants.
-                We also like to announce the new JSON Forms Vue 2 & Vue 3 support. Many thanks to headwire.com whose sponsoring made the JSON Forms Vue bindings possible. Among others they plan to power peregrine-cms.com with JSON Forms Vue and decided to contribute back ❤️.
-                We now also work on a basic JSON Forms Vue renderer set which we plan to release with one of the next versions of JSON Forms! See you soon!
+                It's a new renderer set! Last week we published JSON Forms v2.5.1 containing our new Vue 3 and Vue 2 vanilla renderer sets. Big thanks to <a href='http://headwire.com'>headwire.com</a> who partly sponsored the new renderers!
+                <br/>
+                We also have two new renderers for React Material: boolean toggles and multiple choice (array of enum values).
+                Other changes include fixes for the Angular renderers as well as improvements to the core framework. Check out the <a href="https://github.com/eclipsesource/jsonforms/releases/tag/v2.5.1">detailed change list</a>.
+                <br/>
+                <span style={{ display: 'block', textAlign: 'right', width: '100%'}}>20th May 2021</span>
               </CardContent>
             </Card>
             <Link to='/news' className={styles.newsButton}>
