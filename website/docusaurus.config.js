@@ -88,7 +88,7 @@ module.exports = {
               href: 'https://twitter.com/JSONForms',
             },
             {
-              label: 'EcpliseSource Blog',
+              label: 'EclipseSource Blog',
               href: 'https://eclipsesource.com/blogs/tag/jsonforms/',
             },
           ],
