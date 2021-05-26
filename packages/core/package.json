@@ -38,7 +38,7 @@
     "lint": "tslint --project tsconfig.json --exclude src/models/jsonSchema.ts",
     "report": "nyc report --reporter=html",
     "test": "ava",
-    "test-cov": "nyc ava",
+    "test-cov": "rimraf -rf .nyc_output && nyc ava",
     "doc": "typedoc --name 'JSON Forms Core' --mode file --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
   },
   "ava": {

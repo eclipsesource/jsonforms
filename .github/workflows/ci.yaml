@@ -26,6 +26,17 @@ jobs:
         npm run build
         npm run bundle
     - name: Test
+      if: matrix.os != 'ubuntu-latest'
+      run: |
+        npm run test
+    - name: Test & Coverage
+      if: matrix.os == 'ubuntu-latest'
       run: |
         npm run test-cov
         npm run check-format
+        npm run merge-report && cat coverage/lcov.info
+    - name: Upload Coveralls Report
+      if: success() && matrix.os == 'ubuntu-latest'
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
