@@ -39,6 +39,9 @@ import MaterialNumberCell, {
 import MaterialNumberFormatCell, {
   materialNumberFormatCellTester
 } from './MaterialNumberFormatCell';
+import MaterialOneOfEnumCell, {
+  materialOneOfEnumCellTester
+} from './MaterialOneOfEnumCell';
 import MaterialTextCell, { materialTextCellTester } from './MaterialTextCell';
 import MaterialTimeCell, { materialTimeCellTester } from './MaterialTimeCell';
 
@@ -57,6 +60,8 @@ export {
   materialNumberCellTester,
   MaterialNumberFormatCell,
   materialNumberFormatCellTester,
+  MaterialOneOfEnumCell,
+  materialOneOfEnumCellTester,
   MaterialTextCell,
   materialTextCellTester,
   MaterialTimeCell,

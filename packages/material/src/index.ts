@@ -103,6 +103,8 @@ import {
   materialNumberCellTester,
   MaterialNumberFormatCell,
   materialNumberFormatCellTester,
+  MaterialOneOfEnumCell,
+  materialOneOfEnumCellTester,
   MaterialTextCell,
   materialTextCellTester,
   MaterialTimeCell,
@@ -188,6 +190,7 @@ export const materialCells: JsonFormsCellRendererRegistryEntry[] = [
   { tester: materialIntegerCellTester, cell: MaterialIntegerCell },
   { tester: materialNumberCellTester, cell: MaterialNumberCell },
   { tester: materialNumberFormatCellTester, cell: MaterialNumberFormatCell },
+  { tester: materialOneOfEnumCellTester, cell: MaterialOneOfEnumCell },
   { tester: materialTextCellTester, cell: MaterialTextCell },
   { tester: materialTimeCellTester, cell: MaterialTimeCell }
 ];
