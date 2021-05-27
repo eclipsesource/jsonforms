@@ -55,10 +55,10 @@ export const RendererSetSchemaFeatureTable = () => (
         <TableRow>
           <TableCell />
           <TableCell>Toggle</TableCell>
-          <NotSupported />
+          <Supported />
           <Supported />
           <NotSupported />
-          <Supported />
+          <NotSupported />
         </TableRow>
         <TableRow>
           <TableCell>integer</TableCell>
@@ -74,7 +74,7 @@ export const RendererSetSchemaFeatureTable = () => (
           <NotSupported />
           <Supported />
           <NotSupported />
-          <Supported />
+          <NotSupported />
         </TableRow>
         <TableRow>
           <TableCell>String</TableCell>
@@ -103,10 +103,26 @@ export const RendererSetSchemaFeatureTable = () => (
         <TableRow>
           <TableCell />
           <TableCell>Autocomplete</TableCell>
+          <Supported />
+          <Supported />
+          <NotSupported />
+          <NotSupported />
+        </TableRow>
+        <TableRow>
+          <TableCell>oneOf (const / title)</TableCell>
+          <TableCell>Combo</TableCell>
+          <Supported />
+          <NotSupported />
           <NotSupported />
           <Supported />
+        </TableRow>
+        <TableRow>
+          <TableCell />
+          <TableCell>Autocomplete</TableCell>
           <Supported />
-          <Supported />
+          <NotSupported />
+          <NotSupported />
+          <NotSupported />
         </TableRow>
         <TableRow>
           <TableCell>Date format</TableCell>
@@ -138,7 +154,7 @@ export const RendererSetSchemaFeatureTable = () => (
           <Supported />
           <Supported />
           <NotSupported />
-          <Supported />
+          <NotSupported />
         </TableRow>
         <TableRow>
           <TableCell>Array of primitives</TableCell>
@@ -154,15 +170,31 @@ export const RendererSetSchemaFeatureTable = () => (
           <Supported />
           <NotSupported />
           <Supported />
-          <Supported />
+          <NotSupported />
         </TableRow>
         <TableRow>
           <TableCell />
-          <TableCell>List with Detail</TableCell>
+          <TableCell>List</TableCell>
           <Supported />
           <Supported />
           <NotSupported />
           <Supported />
+        </TableRow>
+        <TableRow>
+          <TableCell />
+          <TableCell>Master Detail</TableCell>
+          <Supported />
+          <Supported />
+          <NotSupported />
+          <NotSupported />
+        </TableRow>
+        <TableRow>
+          <TableCell>Array of enums</TableCell>
+          <TableCell>Multiple Choice</TableCell>
+          <Supported />
+          <NotSupported />
+          <NotSupported />
+          <NotSupported />
         </TableRow>
         <TableRow>
           <TableCell>oneOf</TableCell>
@@ -170,7 +202,7 @@ export const RendererSetSchemaFeatureTable = () => (
           <Supported />
           <NotSupported />
           <NotSupported />
-          <Supported />
+          <NotSupported />
         </TableRow>
         <TableRow>
           <TableCell>allOf</TableCell>
@@ -178,7 +210,7 @@ export const RendererSetSchemaFeatureTable = () => (
           <Supported />
           <NotSupported />
           <NotSupported />
-          <Supported />
+          <NotSupported />
         </TableRow>
         <TableRow>
           <TableCell>anyOf</TableCell>
@@ -186,7 +218,7 @@ export const RendererSetSchemaFeatureTable = () => (
           <Supported />
           <NotSupported />
           <NotSupported />
-          <Supported />
+          <NotSupported />
         </TableRow>
       </TableBody>
     </Table>
@@ -230,7 +262,7 @@ export const RendererSetUISchemaFeatureTable = () => (
           <Supported />
           <Supported />
           <Supported />
-          <Supported />
+          <NotSupported />
         </TableRow>
         <TableRow>
           <TableCell>Group</TableCell>
