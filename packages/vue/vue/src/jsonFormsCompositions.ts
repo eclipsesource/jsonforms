@@ -334,7 +334,6 @@ export const useJsonFormsMasterListItem = (props: OwnPropsOfMasterListItem) => {
  * Useful for meta elements like dispatchers.
  *
  * Access bindings via the provided reactive 'renderer' object.
- * Offers a 'refResolver' method to trigger json-schema-ref-resolver.
  */
 export const useJsonFormsRenderer = (props: RendererProps) => {
   const jsonforms = inject<JsonFormsSubStates>('jsonforms');
@@ -352,16 +351,14 @@ export const useJsonFormsRenderer = (props: RendererProps) => {
       ) as Required<StatePropsOfJsonFormsRenderer>
   );
 
-  const refResolver = computed(() => rawProps.value.refResolver);
   const rootSchema = computed(() => rawProps.value.rootSchema);
   const renderer = computed(() => {
-    const { refResolver, rootSchema, ...rest} = rawProps.value;
+    const { rootSchema, ...rest} = rawProps.value;
     return rest;
   });
 
   return {
     renderer,
-    refResolver,
     rootSchema
   };
 };

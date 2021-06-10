@@ -26,7 +26,6 @@ import get from 'lodash/get';
 import { ControlElement, UISchemaElement } from '../models/uischema';
 import union from 'lodash/union';
 import find from 'lodash/find';
-import RefParser from 'json-schema-ref-parser';
 import {
   findUISchema,
   getAjv,
@@ -34,7 +33,6 @@ import {
   getConfig,
   getData,
   getErrorAt,
-  getRefParserOptions,
   getRenderers,
   getSchema,
   getSubErrorsAt,
@@ -805,7 +803,6 @@ export interface OwnPropsOfJsonFormsRenderer extends OwnPropsOfRenderer {}
 export interface StatePropsOfJsonFormsRenderer
   extends OwnPropsOfJsonFormsRenderer {
   rootSchema: JsonSchema;
-  refResolver: any;
 }
 
 export interface JsonFormsProps extends StatePropsOfJsonFormsRenderer {}
@@ -834,8 +831,6 @@ export const mapStateToJsonFormsRendererProps = (
     schema: ownProps.schema || getSchema(state),
     rootSchema: getSchema(state),
     uischema: uischema,
-    refResolver: (schema: any) =>
-      RefParser.dereference(schema, getRefParserOptions(state)),
     path: ownProps.path
   };
 };
@@ -892,12 +887,19 @@ const mapStateToCombinatorRendererProps = (
     );
   };
   let indexOfFittingSchema: number;
+  // TODO instead of compiling the combinator subschemas we can compile the original schema
+  // without the combinator alternatives and then revalidate and check the errors for the
+  // element
   for (let i = 0; i < _schema[keyword].length; i++) {
-    const valFn = ajv.compile(_schema[keyword][i]);
-    valFn(data);
-    if (dataIsValid(valFn.errors)) {
-      indexOfFittingSchema = i;
-      break;
+    try {
+      const valFn = ajv.compile(_schema[keyword][i]);
+      valFn(data);
+      if (dataIsValid(valFn.errors)) {
+        indexOfFittingSchema = i;
+        break;
+      }
+    } catch (error) {
+      console.debug("Combinator subschema is not self contained, can't hand it over to AJV");
     }
   }
 

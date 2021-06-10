@@ -72,8 +72,7 @@
     ]
   },
   "dependencies": {
-    "lodash": "^4.17.15",
-    "object-hash": "^2.0.0"
+    "lodash": "^4.17.15"
   },
   "peerDependencies": {
     "@jsonforms/core": "^2.5.2",

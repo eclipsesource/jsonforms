@@ -33,7 +33,6 @@ Optional props:
 * `uischemas: JsonFormsUiSchemaEntry[]` - registry for dynamic ui schema dispatching
 * `validationMode: 'ValidateAndShow' | 'ValidateAndHide' | 'NoValidation'` - the validation mode for the form
 * `ajv: AJV` - custom Ajv instance for the form
-* `refParserOptions: RefParserOptions` - configuration for ref resolving
 * `onChange` - callback which is called on each data change, containing the updated data and the validation result.
 
 Example:

@@ -32,7 +32,6 @@ Optional props:
 * `uischemas: JsonFormsUiSchemaEntry[]` - registry for dynamic ui schema dispatching
 * `validationMode: 'ValidateAndShow' | 'ValidateAndHide' | 'NoValidation'` - the validation mode for the form
 * `ajv: AJV` - custom Ajv instance for the form
-* `refParserOptions: RefParserOptions` - configuration for ref resolving
 
 Events:
 

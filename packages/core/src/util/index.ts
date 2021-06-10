@@ -115,9 +115,6 @@ const Resolve: {
 export {
   resolveData,
   resolveSchema,
-  findRefs,
-  SchemaRef,
-  SchemaRefs
 } from './resolvers';
 export { Resolve };
 

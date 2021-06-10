@@ -27,7 +27,6 @@ import { JsonSchema, UISchemaElement } from '../';
 import { generateDefaultUISchema, generateJsonSchema } from '../generators';
 
 import { RankedTester } from '../testers';
-import RefParser from 'json-schema-ref-parser';
 import { UISchemaTester } from '../reducers/uischemas';
 import { ValidationMode } from '../reducers/core';
 
@@ -99,7 +98,6 @@ export interface UpdateCoreAction {
 
 export interface InitActionOptions {
   ajv?: AJV.Ajv;
-  refParserOptions?: RefParser.Options;
   validationMode?: ValidationMode;
 }
 

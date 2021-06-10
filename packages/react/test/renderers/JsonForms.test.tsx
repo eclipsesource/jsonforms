@@ -39,6 +39,7 @@ import {
   registerCell,
   registerRenderer,
   RendererProps,
+  schemaMatches,
   UISchemaElement,
   uiTypeIs,
   unregisterRenderer,
@@ -46,7 +47,6 @@ import {
 import { isEqual } from 'lodash';
 import Enzyme from 'enzyme';
 import { mount, shallow } from 'enzyme';
-import RefParser from 'json-schema-ref-parser';
 import { StatelessRenderer } from '../../src/Renderer';
 
 import Adapter from 'enzyme-adapter-react-16';
@@ -285,22 +285,8 @@ test('render schema with $ref', () => {
       }
     }
   };
-  const resolvedSchema: any = {
-    definitions: {
-      n: {
-        type: 'number'
-      }
-    },
-    type: 'object',
-    properties: {
-      foo: {
-        type: 'number'
-      }
-    }
-  };
 
-  const tester = (_uischema: UISchemaElement, s: JsonSchema) =>
-    s.properties.foo.type === 'number' ? 1 : -1;
+  const tester = rankWith(1, schemaMatches(schema => schema.type === 'number'));
 
   const renderers = [
     {
@@ -309,26 +295,18 @@ test('render schema with $ref', () => {
     }
   ];
 
-  const promise = Promise.resolve(resolvedSchema);
-  jest.spyOn(RefParser, 'dereference').mockImplementation(() => promise);
-
   const wrapper = mount(
     <JsonFormsDispatchRenderer
       path={''}
       uischema={fixture.uischema}
       schema={schemaWithRef}
       renderers={renderers}
-      rootSchema={resolvedSchema}
-      refResolver={() => promise}
+      rootSchema={schemaWithRef}
     />
   );
 
-  return promise.then(() => {
-    wrapper.update();
-    expect(wrapper.state()).toHaveProperty('resolving', false);
-    expect(wrapper.find(CustomRenderer2).length).toBe(1);
-    wrapper.unmount();
-  });
+  expect(wrapper.find(CustomRenderer2).length).toBe(1);
+  wrapper.unmount();
 });
 
 test.skip('updates schema with ref', () => {
@@ -375,9 +353,6 @@ test.skip('updates schema with ref', () => {
     }
   ];
 
-  const promise = Promise.resolve(resolvedSchema);
-  jest.spyOn(RefParser, 'dereference').mockImplementation(() => promise);
-
   const wrapper = shallow(
     <JsonFormsDispatchRenderer
       path={''}
@@ -385,19 +360,16 @@ test.skip('updates schema with ref', () => {
       schema={fixture.schema}
       renderers={renderers}
       rootSchema={resolvedSchema}
-      refResolver={() => promise}
     />
   );
   expect(wrapper.find(CustomRenderer1).length).toBe(1);
 
   wrapper.setProps({ schema: schemaWithRef });
 
-  return promise.then(() => {
-    wrapper.update();
-    expect(wrapper.state()).toHaveProperty('resolving', false);
-    expect(wrapper.find(CustomRenderer2).length).toBe(1);
-    wrapper.unmount();
-  });
+  wrapper.update();
+  expect(wrapper.state()).toHaveProperty('resolving', false);
+  expect(wrapper.find(CustomRenderer2).length).toBe(1);
+  wrapper.unmount();
 });
 
 test('JsonForms renderer should pick most applicable renderer via ownProps', () => {
@@ -658,27 +630,12 @@ test('JsonForms should create a JsonFormsStateProvider with initState props', ()
 
   const ajv = createAjv();
 
-  const refParserOptions = {
-    resolve: {
-      geo: {
-        order: 1,
-        canRead: (file: any) => {
-          return file.url.indexOf('geographical-location.schema.json') !== -1;
-        },
-        read: () => {
-          return JSON.stringify(fixture.schema);
-        }
-      }
-    } as any
-  };
-
   const wrapper = mount(
     <JsonForms
       data={fixture.data}
       uischema={fixture.uischema}
       schema={fixture.schema}
       ajv={ajv}
-      refParserOptions={refParserOptions}
       renderers={renderers}
     />
   );
@@ -692,9 +649,6 @@ test('JsonForms should create a JsonFormsStateProvider with initState props', ()
   );
   expect(jsonFormsStateProviderInitStateProp.core.schema).toBe(fixture.schema);
   expect(jsonFormsStateProviderInitStateProp.core.ajv).toBe(ajv);
-  expect(jsonFormsStateProviderInitStateProp.core.refParserOptions).toBe(
-    refParserOptions
-  );
 
   expect(jsonFormsStateProviderInitStateProp.renderers).toBe(renderers);
 });

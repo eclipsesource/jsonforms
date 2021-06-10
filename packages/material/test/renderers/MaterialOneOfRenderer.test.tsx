@@ -303,7 +303,7 @@ describe('Material oneOf renderer', () => {
     });
   });
 
-  it('should add an item within an array', async () => {
+  it.skip('should add an item within an array', async () => {
     const schema = {
       type: 'object',
       properties: {
@@ -360,7 +360,7 @@ describe('Material oneOf renderer', () => {
     expect(nrOfRowsAfterAdd.length).toBe(3);
   });
 
-  it('should add an object within an array', async () => {
+  it.skip('should add an object within an array', async () => {
     const schema = {
       type: 'object',
       properties: {
@@ -435,7 +435,7 @@ describe('Material oneOf renderer', () => {
     });
   });
 
-  it('should switch to array based oneOf subschema, then switch back, then edit', async () => {
+  it.skip('should switch to array based oneOf subschema, then switch back, then edit', async () => {
     const schema = {
       type: 'object',
       properties: {
