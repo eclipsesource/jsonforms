@@ -27,7 +27,6 @@ import { JsonFormsChangeEvent } from '../types';
 import DispatchRenderer from './DispatchRenderer.vue';
 
 import { Ajv } from 'ajv';
-import RefParser from 'json-schema-ref-parser';
 
 const isObject = (elem: any): elem is Object => {
   return elem && typeof elem === 'object';
@@ -88,11 +87,6 @@ export default defineComponent({
       type: Object as PropType<Ajv>,
       default: undefined
     },
-    refParserOptions: {
-      required: false,
-      type: Object as PropType<RefParser.Options>,
-      default: undefined
-    }
   },
   data() {
     const generatorData = isObject(this.data) ? this.data : {};
@@ -109,7 +103,6 @@ export default defineComponent({
         Actions.init(this.data, schemaToUse, uischemaToUse, {
           validationMode: this.validationMode,
           ajv: this.ajv,
-          refParserOptions: this.refParserOptions
         })
       );
       return core;
@@ -165,7 +158,6 @@ export default defineComponent({
         Actions.updateCore(this.data, this.schemaToUse, this.uischemaToUse, {
           validationMode: this.validationMode,
           ajv: this.ajv,
-          refParserOptions: this.refParserOptions
         })
       );
     },
@@ -181,7 +173,6 @@ export default defineComponent({
         this.uischemaToUse,
         this.validationMode,
         this.ajv,
-        this.refParserOptions
       ];
     },
     eventToEmit(): JsonFormsChangeEvent {

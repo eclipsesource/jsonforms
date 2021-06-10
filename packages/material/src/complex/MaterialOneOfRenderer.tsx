@@ -48,7 +48,7 @@ import {
   Tabs
 } from '@material-ui/core';
 import {
-  ResolvedJsonFormsDispatch,
+  JsonFormsDispatch,
   withJsonFormsOneOfProps
 } from '@jsonforms/react';
 import CombinatorProperties from './CombinatorProperties';
@@ -112,7 +112,7 @@ const MaterialOneOfRenderer =
         {
           oneOfRenderInfos.map((oneOfRenderInfo, oneOfIndex) => (
             selectedIndex === oneOfIndex && (
-              <ResolvedJsonFormsDispatch
+              <JsonFormsDispatch
                 key={oneOfIndex}
                 schema={oneOfRenderInfo.schema}
                 uischema={oneOfRenderInfo.uischema}

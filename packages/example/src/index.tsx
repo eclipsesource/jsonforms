@@ -28,10 +28,8 @@ import './index.css';
 import App from './App';
 import { combineReducers, createStore } from 'redux';
 import { Provider } from 'react-redux';
-import geoschema from './geographical-location.schema';
 import {
   Actions,
-  createAjv,
   JsonFormsCellRendererRegistryEntry,
   jsonFormsReducerConfig,
   JsonFormsRendererRegistryEntry,
@@ -83,38 +81,17 @@ const setupStore = (
     }
   } as any);
 
-  // Resolve example configuration
-  // Add schema to validation
-  const ajv = createAjv();
-  ajv.addSchema(geoschema, 'geographical-location.schema.json');
-  // Allow json-schema-ref-resolver to resolve same schema
-  const geoResolver = {
-    order: 1,
-    canRead: (file: any) => {
-      return file.url.indexOf('geographical-location.schema.json') !== -1;
-    },
-    read: () => {
-      return JSON.stringify(geoschema);
-    }
-  };
   // Add configuration to JSONForms
   store.dispatch(
     Actions.init(
       exampleData[0].data,
       exampleData[0].schema,
       exampleData[0].uischema,
-      {
-        ajv: ajv,
-        refParserOptions: {
-          resolve: {
-            geo: geoResolver
-          } as any
-        }
-      }
     )
   );
   return store;
 };
+
 export const renderExample = (
   renderers: { tester: RankedTester; renderer: any }[],
   cells: { tester: RankedTester; cell: any }[],

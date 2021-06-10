@@ -24,7 +24,6 @@
 */
 import test from 'ava';
 import AJV from 'ajv';
-import RefParser from 'json-schema-ref-parser';
 import { coreReducer } from '../../src/reducers';
 import { init, update, updateErrors } from '../../src/actions';
 import { JsonSchema } from '../../src/models/jsonSchema';
@@ -38,20 +37,6 @@ import {
 import { createAjv, updateCore } from '../../src';
 import { setSchema, setValidationMode } from '../../lib';
 import { cloneDeep } from 'lodash';
-
-const createRefParserOptions = (
-  encoding = 'testEncoding'
-): RefParser.Options => {
-  const parserOptions: RefParser.ParserOptions & { encoding?: string } = {
-    encoding
-  };
-  const myOptions: RefParser.Options = {
-    parse: {
-      text: parserOptions
-    }
-  };
-  return myOptions;
-};
 
 test('core reducer should support v7', t => {
   const schema: JsonSchema = {
@@ -75,7 +60,7 @@ test('core reducer should support v7', t => {
   t.is(after.errors.length, 1);
 });
 
-test('core reducer - no previous state - init without options should create new ajv and no ref parser options object', t => {
+test('core reducer - no previous state - init without options should create new ajv', t => {
   const schema: JsonSchema = {
     type: 'object',
     properties: {
@@ -87,7 +72,6 @@ test('core reducer - no previous state - init without options should create new 
   };
   const after = coreReducer(undefined, init({}, schema, undefined, undefined));
   t.true(after.ajv !== undefined);
-  t.true(after.refParserOptions === undefined);
 });
 
 test('core reducer - no previous state - init with ajv as options object should use it', t => {
@@ -105,7 +89,6 @@ test('core reducer - no previous state - init with ajv as options object should 
   });
   const after = coreReducer(undefined, init({}, schema, undefined, myAjv));
   t.deepEqual(after.ajv, myAjv);
-  t.true(after.refParserOptions === undefined);
 });
 
 test('core reducer - no previous state - init with empty options object', t => {
@@ -120,7 +103,6 @@ test('core reducer - no previous state - init with empty options object', t => {
   };
   const after = coreReducer(undefined, init({}, schema, undefined, {}));
   t.true(after.ajv !== undefined);
-  t.true(after.refParserOptions === undefined);
 });
 
 test('core reducer - no previous state - init with options object with ajv', t => {
@@ -143,53 +125,6 @@ test('core reducer - no previous state - init with options object with ajv', t =
     })
   );
   t.deepEqual(after.ajv, myAjv);
-  t.true(after.refParserOptions === undefined);
-});
-
-test('core reducer - no previous state - init with options object with ref parser options', t => {
-  const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-      foo: {
-        type: 'string',
-        const: 'bar'
-      }
-    }
-  };
-  const myOptions = createRefParserOptions();
-  const after = coreReducer(
-    undefined,
-    init({}, schema, undefined, {
-      refParserOptions: myOptions
-    })
-  );
-  t.true(after.ajv !== undefined);
-  t.deepEqual(after.refParserOptions, myOptions);
-});
-
-test('core reducer - no previous state - init with options object with ajv and ref parser options', t => {
-  const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-      foo: {
-        type: 'string',
-        const: 'bar'
-      }
-    }
-  };
-  const myAjv = new AJV({
-    errorDataPath: 'mypath'
-  });
-  const myOptions = createRefParserOptions();
-  const after = coreReducer(
-    undefined,
-    init({}, schema, undefined, {
-      ajv: myAjv,
-      refParserOptions: myOptions
-    })
-  );
-  t.deepEqual(after.ajv, myAjv);
-  t.deepEqual(after.refParserOptions, myOptions);
 });
 
 test('core reducer - previous state - init without options should keep previous objects', t => {
@@ -205,7 +140,6 @@ test('core reducer - previous state - init without options should keep previous 
   const myAjv = new AJV({
     errorDataPath: 'mypath'
   });
-  const myOptions = createRefParserOptions();
   const after = coreReducer(
     {
       data: {},
@@ -214,15 +148,13 @@ test('core reducer - previous state - init without options should keep previous 
         type: 'Label'
       },
       ajv: myAjv,
-      refParserOptions: myOptions
     },
     init({}, schema)
   );
   t.deepEqual(after.ajv, myAjv);
-  t.deepEqual(after.refParserOptions, myOptions);
 });
 
-test('core reducer - previous state - init with ajv options object should overwrite ajv and keep ref parser options', t => {
+test('core reducer - previous state - init with ajv options object should overwrite ajv', t => {
   const schema: JsonSchema = {
     type: 'object',
     properties: {
@@ -238,7 +170,6 @@ test('core reducer - previous state - init with ajv options object should overwr
   const newAjv = new AJV({
     errorDataPath: 'newajv'
   });
-  const myOptions = createRefParserOptions();
   const after = coreReducer(
     {
       data: {},
@@ -247,117 +178,10 @@ test('core reducer - previous state - init with ajv options object should overwr
         type: 'Label'
       },
       ajv: previousAjv,
-      refParserOptions: myOptions
     },
     init({}, schema, undefined, newAjv)
   );
   t.deepEqual(after.ajv, newAjv);
-  t.deepEqual(after.refParserOptions, myOptions);
-});
-
-test('core reducer - previous state - init with options with ajv should overwrite ajv and keep ref parser options', t => {
-  const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-      foo: {
-        type: 'string',
-        const: 'bar'
-      }
-    }
-  };
-  const previousAjv = new AJV({
-    errorDataPath: 'mypath'
-  });
-  const newAjv = new AJV({
-    errorDataPath: 'newajv'
-  });
-  const myOptions = createRefParserOptions();
-  const after = coreReducer(
-    {
-      data: {},
-      schema: {},
-      uischema: {
-        type: 'Label'
-      },
-      ajv: previousAjv,
-      refParserOptions: myOptions
-    },
-    init({}, schema, undefined, {
-      ajv: newAjv
-    })
-  );
-  t.deepEqual(after.ajv, newAjv);
-  t.deepEqual(after.refParserOptions, myOptions);
-});
-
-test('core reducer - previous state - init with options with ref parser options should overwrite ref parser options and keep ajv', t => {
-  const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-      foo: {
-        type: 'string',
-        const: 'bar'
-      }
-    }
-  };
-  const myAjv = new AJV({
-    errorDataPath: 'mypath'
-  });
-  const previousOptions = createRefParserOptions();
-  const newOptions = createRefParserOptions('newEncoding');
-  const after = coreReducer(
-    {
-      data: {},
-      schema: {},
-      uischema: {
-        type: 'Label'
-      },
-      ajv: myAjv,
-      refParserOptions: previousOptions
-    },
-    init({}, schema, undefined, {
-      refParserOptions: newOptions
-    })
-  );
-  t.deepEqual(after.ajv, myAjv);
-  t.deepEqual(after.refParserOptions, newOptions);
-});
-
-test('core reducer - previous state - init with both options should overwrite both', t => {
-  const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-      foo: {
-        type: 'string',
-        const: 'bar'
-      }
-    }
-  };
-  const previousAjv = new AJV({
-    errorDataPath: 'mypath'
-  });
-  const newAjv = new AJV({
-    errorDataPath: 'newajv'
-  });
-  const previousOptions = createRefParserOptions();
-  const newOptions = createRefParserOptions('newEncoding');
-  const after = coreReducer(
-    {
-      data: {},
-      schema: {},
-      uischema: {
-        type: 'Label'
-      },
-      ajv: previousAjv,
-      refParserOptions: previousOptions
-    },
-    init({}, schema, undefined, {
-      ajv: newAjv,
-      refParserOptions: newOptions
-    })
-  );
-  t.deepEqual(after.ajv, newAjv);
-  t.deepEqual(after.refParserOptions, newOptions);
 });
 
 test('core reducer - previous state - init with empty options should not overwrite', t => {
@@ -373,7 +197,6 @@ test('core reducer - previous state - init with empty options should not overwri
   const myAjv = new AJV({
     errorDataPath: 'mypath'
   });
-  const myOptions = createRefParserOptions();
   const after = coreReducer(
     {
       data: {},
@@ -382,12 +205,10 @@ test('core reducer - previous state - init with empty options should not overwri
         type: 'Label'
       },
       ajv: myAjv,
-      refParserOptions: myOptions
     },
     init({}, schema, undefined, {})
   );
   t.deepEqual(after.ajv, myAjv);
-  t.deepEqual(after.refParserOptions, myOptions);
 });
 
 test('core reducer - previous state - init with undefined data should not change data', t => {
@@ -1621,7 +1442,6 @@ test('core reducer - update core - unchanged state properties should be unchange
   t.true(before.schema === afterDataUpdate.schema);
   t.true(before.ajv === afterDataUpdate.ajv);
   t.true(before.errors === afterDataUpdate.errors);
-  t.true(before.refParserOptions === afterDataUpdate.refParserOptions);
   t.true(before.uischema === afterDataUpdate.uischema);
   t.true(before.validationMode === afterDataUpdate.validationMode);
   t.true(before.validator === afterDataUpdate.validator);

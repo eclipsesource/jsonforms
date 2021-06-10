@@ -244,7 +244,6 @@ describe('Material boolean toggle control', () => {
     expect(wrapper.find('.MuiSwitch-thumb')).toHaveLength(1);
 
     const input = wrapper.find('input').first();    
-    console.log('should render props', input.props());
     expect(input.props().type).toBe('checkbox');
     expect(input.props().checked).toBeTruthy();
   });

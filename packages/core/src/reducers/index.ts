@@ -29,7 +29,6 @@ import {
   errorsAt,
   extractAjv,
   extractData,
-  extractRefParserOptions,
   extractSchema,
   extractUiSchema,
   JsonFormsCore,
@@ -59,7 +58,6 @@ import {
 import { Generate } from '../generators';
 import { JsonFormsCellRendererRegistryEntry } from './cells';
 import { JsonSchema } from '../models/jsonSchema';
-import RefParser from 'json-schema-ref-parser';
 
 import { cellReducer } from './cells';
 import { configReducer } from './config';
@@ -95,8 +93,6 @@ export const getSchema = (state: JsonFormsState): JsonSchema =>
   extractSchema(get(state, 'jsonforms.core'));
 export const getUiSchema = (state: JsonFormsState): UISchemaElement =>
   extractUiSchema(get(state, 'jsonforms.core'));
-export const getRefParserOptions = (state: JsonFormsState): RefParser.Options =>
-  extractRefParserOptions(get(state, 'jsonforms.core'));
 export const getAjv = (
   state: JsonFormsState
 ): Ajv => extractAjv(get(state, 'jsonforms.core'));

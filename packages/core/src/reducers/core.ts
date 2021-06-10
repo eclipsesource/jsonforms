@@ -29,7 +29,6 @@ import filter from 'lodash/filter';
 import isEqual from 'lodash/isEqual';
 import isFunction from 'lodash/isFunction';
 import { Ajv, ErrorObject, ValidateFunction } from 'ajv';
-import RefParser from 'json-schema-ref-parser';
 import {
   CoreActions,
   INIT,
@@ -79,7 +78,6 @@ export interface JsonFormsCore {
   errors?: ErrorObject[];
   validator?: ValidateFunction;
   ajv?: Ajv;
-  refParserOptions?: RefParser.Options;
   validationMode?: ValidationMode;
 }
 
@@ -90,7 +88,6 @@ const initState: JsonFormsCore = {
   errors: [],
   validator: alwaysValid,
   ajv: undefined,
-  refParserOptions: undefined,
   validationMode: 'ValidateAndShow'
 };
 
@@ -107,8 +104,7 @@ const getOrCreateAjv = (state: JsonFormsCore, action?: InitAction | UpdateCoreAc
       // options object with ajv
       return action.options.ajv;
     } else if (
-      action.options !== undefined &&
-      !hasRefParserOption(action.options)
+      action.options !== undefined 
     ) {
       // it is not an option object => should be ajv itself => check for compile function
       if (isFunction(action.options.compile)) {
@@ -122,23 +118,6 @@ const getOrCreateAjv = (state: JsonFormsCore, action?: InitAction | UpdateCoreAc
       : state.ajv;
   }
   return createAjv();
-};
-
-const getRefParserOptions = (
-  state: JsonFormsCore,
-  action?: InitAction | UpdateCoreAction
-): RefParser.Options => {
-  if (action && hasRefParserOption(action.options)) {
-    return action.options.refParserOptions;
-  }
-  return state.refParserOptions;
-};
-
-const hasRefParserOption = (option: any): option is InitActionOptions => {
-  if (option) {
-    return option.refParserOptions !== undefined;
-  }
-  return false;
 };
 
 const hasAjvOption = (option: any): option is InitActionOptions => {
@@ -173,7 +152,6 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
   switch (action.type) {
     case INIT: {
       const thisAjv = getOrCreateAjv(state, action);
-      const o = getRefParserOptions(state, action);
 
       const validationMode = getValidationMode(state, action);
       const v = validationMode === 'NoValidation' ? alwaysValid : thisAjv.compile(action.schema);
@@ -187,13 +165,11 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
         errors: e,
         validator: v,
         ajv: thisAjv,
-        refParserOptions: o,
         validationMode
       };
     }
     case UPDATE_CORE: {
       const thisAjv = getOrCreateAjv(state, action);
-      const refParserOptions = getRefParserOptions(state, action);
       const validationMode = getValidationMode(state, action);
       let validator = state.validator;
       let errors = state.errors;
@@ -219,7 +195,6 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
         state.ajv !== thisAjv ||
         state.errors !== errors ||
         state.validator !== validator ||
-        state.refParserOptions !== refParserOptions ||
         state.validationMode !== validationMode;
       return stateChanged
         ? {
@@ -230,7 +205,6 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
             ajv: thisAjv === state.ajv ? state.ajv : thisAjv,
             errors: isEqual(errors, state.errors) ? state.errors : errors,
             validator: validator === state.validator ? state.validator : validator,
-            refParserOptions: refParserOptions === state.refParserOptions ? state.refParserOptions : refParserOptions,
             validationMode: validationMode === state.validationMode ? state.validationMode : validationMode
           }
         : state;
@@ -402,6 +376,3 @@ export const errorAt = (instancePath: string, schema: JsonSchema) =>
   getErrorsAt(instancePath, schema, path => path === instancePath);
 export const subErrorsAt = (instancePath: string, schema: JsonSchema) =>
   getErrorsAt(instancePath, schema, path => path.startsWith(instancePath));
-
-export const extractRefParserOptions = (state: JsonFormsCore) =>
-  get(state, 'refParserOptions');
