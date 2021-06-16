@@ -1,3 +1,72 @@
+# Migrating to JSON Forms 3.0 for React users
+
+With version 3.0 of JSON Forms, we removed the `json-schema-ref-parser` dependency within the core package. 
+This change only affects users of the React variant (Vue and Angular are not affected) and even for React only a few users will need to adjust their code.
+Problematic cases are mostly complex `$ref` setups, often in combination with `anyOf`, `allOf` or `oneOf`.
+To restore the previous behavior, you can use `json-schema-ref-parser` or `json-refs` to resolve references on your own before passing the schema to JSON Forms. 
+Here is an example, how to use these libraries to resolve your refs before handing the schema to JSON Forms:
+
+```ts
+import React, { useState } from 'react';
+import { JsonForms } from '@jsonforms/react';
+import { materialCells, materialRenderers } from '@jsonforms/material-renderers';
+import $RefParser from '@apidevtools/json-schema-ref-parser';
+import JsonRefs from 'JsonRefs';
+
+const schema = {
+  $defs: {
+    Base: {
+      type: 'object',
+      properties: {
+        width: {
+          type: 'integer'
+        }
+      }
+    },
+    Child: {
+      type: 'object',
+      allOf: [
+        { $ref: '#/$defs/Base' },
+        {
+          properties: {
+            geometry: {
+              type: 'string'
+            }
+          }
+        }
+      ]
+    }
+  },
+  type: 'object',
+  properties: {
+    element: {
+      $ref: '#/$defs/Child'
+    }
+  }
+};
+
+const resolvedSchema = $RefParser.dereference(schema)
+// or
+const resolvedSchema = JsonRefs.resolveRefs(schema)
+
+function App() {
+  const [data, setData] = useState(initialData);
+
+  return (
+    <JsonForms
+      schema={resolvedSchema}
+      uischema={uischema}
+      data={data}
+      renderers={materialRenderers}
+      cells={materialCells}
+      onChange={({ data, _errors }) => setData(data)}
+    />
+  );
+}
+```
+
+For more information have a look at our [ref-resolving](https://jsonforms.io/docs/ref-resolving) docs page.
+
 # Migrating to JSON Forms 2.5 for Angular users
 The JsonFormsAngularService is not provided in the root anymore. 
 To keep the old behavior, you need to provide it manually in the module.
