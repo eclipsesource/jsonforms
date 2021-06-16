@@ -36,6 +36,9 @@ import {
 import { resolveData } from './resolvers';
 import { composeWithUi } from './path';
 import { Ajv } from 'ajv';
+import { getAjv } from '../reducers';
+import { JsonFormsState } from '../store';
+import { JsonSchema } from '../models/jsonSchema';
 
 const isOrCondition = (condition: Condition): condition is OrCondition =>
   condition.type === 'OR';
@@ -175,5 +178,40 @@ export const isEnabled = (
     return evalEnablement(uischema, data, path, ajv);
   }
 
+  return true;
+};
+
+export const isInherentlyEnabled = (
+  state: JsonFormsState,
+  ownProps: any,
+  uischema: UISchemaElement,
+  schema: JsonSchema & { readOnly?: boolean },
+  rootData: any,
+  config: any
+) => {
+  if (state?.jsonforms?.readonly) {
+    return false;
+  }
+  if (uischema && hasEnableRule(uischema)) {
+    return isEnabled(uischema, rootData, ownProps?.path, getAjv(state));
+  }
+  if (typeof uischema?.options?.readonly === 'boolean') {
+    return !uischema.options.readonly;
+  }
+  if (typeof uischema?.options?.readOnly === 'boolean') {
+    return !uischema.options.readOnly;
+  }
+  if (typeof config?.readonly === 'boolean') {
+    return !config.readonly;
+  }
+  if (typeof config?.readOnly === 'boolean') {
+    return !config.readOnly;
+  }
+  if (typeof schema?.readOnly === 'boolean') {
+    return !schema.readOnly;
+  }
+  if (typeof ownProps?.enabled === 'boolean') {
+    return ownProps.enabled;
+  }
   return true;
 };
