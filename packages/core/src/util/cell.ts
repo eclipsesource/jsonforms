@@ -40,7 +40,7 @@ import {
   DispatchPropsOfControl,
   EnumOption,
   enumToEnumOptionMapper,
-  mapDispatchToControlProps,
+  mapDispatchToControlProps
 } from './renderer';
 import { JsonFormsState } from '../store';
 import { JsonFormsCellRendererRegistryEntry } from '../reducers/cells';
@@ -111,7 +111,8 @@ export const mapStateToCellProps = (
       : isVisible(uischema, rootData, undefined, getAjv(state));
   const readonly = state.jsonforms.readonly;
   const enabled =
-    !readonly && (ownProps.enabled !== undefined
+    !readonly &&
+    (ownProps.enabled !== undefined
       ? ownProps.enabled
       : isEnabled(uischema, rootData, undefined, getAjv(state)));
   const errors = formatErrorMessage(
@@ -166,7 +167,7 @@ export const defaultMapStateToEnumCellProps = (
   const options: EnumOption[] =
     ownProps.options ||
     props.schema.enum?.map(enumToEnumOptionMapper) ||
-    props.schema.const && [enumToEnumOptionMapper(props.schema.const)];
+    (props.schema.const && [enumToEnumOptionMapper(props.schema.const)]);
   return {
     ...props,
     options

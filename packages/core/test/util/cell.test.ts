@@ -284,7 +284,10 @@ test('mapStateToEnumCellProps - set default options for dropdown list', t => {
   };
 
   const props = defaultMapStateToEnumCellProps(createState(uischema), ownProps);
-  t.deepEqual(props.options, ['DE', 'IT', 'JP', 'US', 'RU', 'Other'].map(enumToEnumOptionMapper));
+  t.deepEqual(
+    props.options,
+    ['DE', 'IT', 'JP', 'US', 'RU', 'Other'].map(enumToEnumOptionMapper)
+  );
   t.is(props.data, undefined);
 });
 
