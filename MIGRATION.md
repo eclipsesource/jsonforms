@@ -25,12 +25,25 @@ import JsonRefs from 'json-refs';
 
 import mySchemaWithReferences from 'myschema.json';
 
-const schema = $RefParser.dereference(mySchemaWithReferences);
-// or
-const schema = JsonRefs.resolveRefs(schemaWithReferences)
+const refParserOptions = {
+  dereference: {
+    circular: false
+  }
+}
 
 function App() {
   const [data, setData] = useState(initialData);
+  const [resolvedSchema, setSchema] = useState();
+
+  useEffect(() => {
+    $RefParser.dereference(mySchemaWithReferences).then(res => setSchema(res.$schema));
+    // or
+    JsonRefs.resolveRefs(mySchemaWithReferences).then(res => setSchema(res.resolved));
+  },[]);
+
+  if(resolvedSchema === undefined) {
+    return <div> Loading... </div>
+  }
 
   return (
     <JsonForms
