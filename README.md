@@ -15,14 +15,11 @@ Please see the official JSON Forms website, [jsonforms.io](https://jsonforms.io)
 For more info about the seed app, please see the corresponding README file of the [seed repo](https://github.com/eclipsesource/jsonforms-react-seed).
 For a more detailed tutorial about the usage of JSON Forms, please see [this tutorial](http://jsonforms.io/docs/tutorial).
 
-## Upgrading to 3.0
+## Upgrading to JSON Forms 3.0
 
-Within version 3.0 of JSON Forms we removed the `json-schema-ref-parser` dependency from the core package. 
+With version 3.0 of JSON Forms we removed the `json-schema-ref-parser` from the core package.
 This change only affects users of the React variant (Vue and Angular are not affected) and even for React only a few users will need to adjust their code.
-If you use ref resolving in combination with `anyOf`, `allOf` or `oneOf`, there could be problems. 
-To avoid issues and for more information, please have a look at our [migration guide](https://github.com/eclipsesource/jsonforms/blob/master/MIGRATION.md). 
-
-As long as version 3.0 is in alpha stage, we will work on smoothing things out and try to avoid as many issues as possible.
+To avoid issues and for more information, please have a look at our [migration guide](https://github.com/eclipsesource/jsonforms/blob/master/MIGRATION.md).
 
 ## Feedback, Help and Support
 

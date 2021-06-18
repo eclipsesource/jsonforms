@@ -13,8 +13,11 @@ Also all users of JSON Forms React had to pay the resolving effort, whether they
 Most React users should be unaffected by this change and don't need to spend any migration efforts.
 However when you relied on the resolving of external JSON Schema references via the `refParserOptions` or use complicated references setups which can't yet be handled by JSON Forms' internal processing, you can resolve the JSON Schema before handing it over to JSON Forms.
 
-To restore the old behavior, you can use `json-schema-ref-parser` or other libraries like `json-refs` to resolve references on your own before passing the schema to JSON Forms.
+Note that we're aware of some regressions caused by removing `json-schema-ref-parser` which occur when not handing over a resolved JSON Schema to JSON Forms.
+We're working on removing these edge cases during the JSON Forms 3.0 alpha period.
+You can always restore the old behavior when following the approach described below.
 
+To restore the old behavior, you can use `json-schema-ref-parser` or other libraries like `json-refs` to resolve references on your own before passing the schema to JSON Forms.
 
 ```ts
 import React, { useState } from 'react';
