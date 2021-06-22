@@ -22,8 +22,9 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+
 import get from 'lodash/get';
-import { ControlElement, UISchemaElement } from '../models/uischema';
+import { ControlElement, JsonSchema, UISchemaElement } from '../models';
 import union from 'lodash/union';
 import find from 'lodash/find';
 import {
@@ -36,32 +37,23 @@ import {
   getRenderers,
   getSchema,
   getSubErrorsAt,
-  getUiSchema
+  getUiSchema,
+  JsonFormsCellRendererRegistryEntry,
+  JsonFormsRendererRegistryEntry,
+  JsonFormsUISchemaRegistryEntry,
 } from '../reducers';
 import { RankedTester } from '../testers';
-import { JsonSchema } from '../models/jsonSchema';
-import {
-  AnyAction,
-  CombinatorKeyword,
-  composePaths,
-  composeWithUi,
-  createLabelDescriptionFrom,
-  Dispatch,
-  formatErrorMessage,
-  hasShowRule,
-  isInherentlyEnabled,
-  isVisible,
-  moveDown,
-  moveUp,
-  Resolve,
-  resolveSubSchemas
-} from '../util';
+import { isInherentlyEnabled, hasShowRule } from './runtime';
+import { createLabelDescriptionFrom } from './label';
+import { CombinatorKeyword, resolveSubSchemas } from './combinators';
+import { moveDown, moveUp } from './array';
+import { AnyAction, Dispatch } from './type';
+import { formatErrorMessage, Resolve } from './util';
+import { composePaths, composeWithUi } from './path';
+import { isVisible } from './runtime';
 import { CoreActions, update } from '../actions';
 import { ErrorObject } from 'ajv';
 import { JsonFormsState } from '../store';
-import { JsonFormsRendererRegistryEntry } from '../reducers/renderers';
-import { JsonFormsCellRendererRegistryEntry } from '../reducers/cells';
-import { JsonFormsUISchemaRegistryEntry } from '../reducers/uischemas';
 
 export { JsonFormsRendererRegistryEntry, JsonFormsCellRendererRegistryEntry };
 

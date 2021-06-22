@@ -22,6 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+
 import { RankedTester } from '../testers';
 import {
   ADD_CELL,
@@ -29,7 +30,7 @@ import {
   REMOVE_CELL,
   RemoveCellRendererAction
 } from '../actions';
-import { Reducer } from '../util/type';
+import { Reducer } from '../util';
 
 type ValidCellReducerActions = AddCellRendererAction | RemoveCellRendererAction;
 

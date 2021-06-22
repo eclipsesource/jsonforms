@@ -22,9 +22,10 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+
 import isEmpty from 'lodash/isEmpty';
 import get from 'lodash/get';
-import { JsonSchema } from '../models/jsonSchema';
+import { JsonSchema } from '../models';
 
 /**
  * Map for storing refs and the respective schemas they are pointing to.

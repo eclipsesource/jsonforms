@@ -22,20 +22,20 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+
 import isEmpty from 'lodash/isEmpty';
 import startCase from 'lodash/startCase';
 import keys from 'lodash/keys';
-import { JsonSchema } from '../models/jsonSchema';
 import {
   ControlElement,
   isGroup,
   isLayout,
+  JsonSchema,
   LabelElement,
   Layout,
   UISchemaElement
-} from '../models/uischema';
-import { resolveSchema } from '../util/resolvers';
-import { deriveTypes } from '../util';
+} from '../models';
+import { deriveTypes, resolveSchema } from '../util';
 
 /**
  * Creates a new ILayout.

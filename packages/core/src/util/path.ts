@@ -22,9 +22,10 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+
 import isEmpty from 'lodash/isEmpty';
 import range from 'lodash/range';
-import { Scopable } from '../';
+import { Scopable } from '../models';
 
 export const compose = (path1: string, path2: string) => {
   let p1 = path1;
@@ -40,6 +41,8 @@ export const compose = (path1: string, path2: string) => {
     return `${p1}${path2}`;
   }
 };
+
+export { compose as composePaths };
 
 /**
  * Convert a schema path (i.e. JSON pointer) to an array by splitting

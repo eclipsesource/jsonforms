@@ -23,4 +23,21 @@
   THE SOFTWARE.
 */
 
-export * from './actions';
+import { generateJsonSchema } from './schema';
+import { createControlElement, generateDefaultUISchema } from './uischema';
+import { ControlElement, JsonSchema, UISchemaElement } from '../';
+
+export const Generate: {
+  jsonSchema(instance: Object, options?: any): JsonSchema;
+  uiSchema(
+    jsonSchema: JsonSchema,
+    layoutType?: string,
+    prefix?: string,
+    rootSchema?: JsonSchema
+  ): UISchemaElement;
+  controlElement(ref: string): ControlElement;
+} = {
+  jsonSchema: generateJsonSchema,
+  uiSchema: generateDefaultUISchema,
+  controlElement: createControlElement
+};

@@ -23,11 +23,9 @@
   THE SOFTWARE.
 */
 
-import { JsonSchema } from '../models/jsonSchema';
-import { ControlElement, UISchemaElement } from '../models/uischema';
+import { ControlElement, JsonSchema, UISchemaElement } from '../models';
 import { resolveSchema } from './resolvers';
-import { findUISchema } from '../reducers';
-import { JsonFormsUISchemaRegistryEntry } from '../reducers/uischemas';
+import { findUISchema, JsonFormsUISchemaRegistryEntry } from '../reducers';
 
 export interface CombinatorSubSchemaRenderInfo {
   schema: JsonSchema;
