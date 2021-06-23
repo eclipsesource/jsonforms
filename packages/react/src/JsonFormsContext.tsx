@@ -413,7 +413,7 @@ const withContextToEnumProps =
 
 const withContextToOneOfEnumCellProps =
   (Component: ComponentType<EnumCellProps>): ComponentType<OwnPropsOfEnumCell> =>
-    ({ctx, props}: JsonFormsStateContext & EnumCellProps) => {
+    ({ ctx, props }: JsonFormsStateContext & EnumCellProps) => {
       const cellProps = ctxToOneOfEnumCellProps(ctx, props);
       const dispatchProps = ctxDispatchToControlProps(ctx.dispatch);
       return (<Component {...props} {...dispatchProps} {...cellProps} />);
