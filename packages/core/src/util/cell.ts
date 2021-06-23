@@ -26,25 +26,19 @@ import isEmpty from 'lodash/isEmpty';
 import union from 'lodash/union';
 import { getConfig, getData, getErrorAt, getSchema, getAjv } from '../reducers';
 import {
-  AnyAction,
-  Dispatch,
-  formatErrorMessage,
-  isEnabled,
-  isVisible,
-  OwnPropsOfControl,
-  OwnPropsOfEnum,
-  Resolve,
-  StatePropsOfScopedRenderer
-} from '.';
-import {
   DispatchPropsOfControl,
   EnumOption,
   enumToEnumOptionMapper,
-  mapDispatchToControlProps
+  mapDispatchToControlProps,
+  OwnPropsOfControl,
+  OwnPropsOfEnum,
+  StatePropsOfScopedRenderer
 } from './renderer';
 import { JsonFormsState } from '../store';
 import { JsonFormsCellRendererRegistryEntry } from '../reducers/cells';
-import { JsonSchema } from '..';
+import { JsonSchema } from '../models/jsonSchema';
+import { isInherentlyEnabled, isVisible } from './runtime';
+import { AnyAction, Dispatch, formatErrorMessage, Resolve } from '.';
 
 export { JsonFormsCellRendererRegistryEntry };
 
@@ -109,17 +103,38 @@ export const mapStateToCellProps = (
     ownProps.visible !== undefined
       ? ownProps.visible
       : isVisible(uischema, rootData, undefined, getAjv(state));
-  const readonly = state.jsonforms.readonly;
-  const enabled =
-    !readonly &&
-    (ownProps.enabled !== undefined
-      ? ownProps.enabled
-      : isEnabled(uischema, rootData, undefined, getAjv(state)));
+
+  const rootSchema = getSchema(state);
+  const config = getConfig(state);
+
+  /* When determining the enabled state of cells we take a shortcut: At the
+   * moment it's only possible to configure enablement and disablement at the
+   * control level. Therefore the renderer using the cell, for example a 
+   * table renderer, determines whether a cell is enabled and should hand
+   * over the prop themselves. If that prop was given, we prefer it over
+   * anything else to save evaluation effort (except for the global readonly
+   * flag). For example it would be quite expensive to evaluate the same ui schema
+   * rule again and again for each cell of a table. */
+  let enabled;
+  if (state.jsonforms.readonly === true) {
+    enabled = false;
+  } else if (typeof ownProps.enabled === 'boolean') {
+    enabled = ownProps.enabled;
+  } else {
+    enabled = isInherentlyEnabled(
+      state,
+      ownProps,
+      uischema,
+      schema || rootSchema,
+      rootData,
+      config
+    );
+  }
+
   const errors = formatErrorMessage(
     union(getErrorAt(path, schema)(state).map(error => error.message))
   );
   const isValid = isEmpty(errors);
-  const rootSchema = getSchema(state);
 
   return {
     data: Resolve.data(rootData, path),

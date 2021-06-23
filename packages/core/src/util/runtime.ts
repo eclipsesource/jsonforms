@@ -181,11 +181,16 @@ export const isEnabled = (
   return true;
 };
 
+/**
+ * Indicates whether the given `uischema` element shall be enabled or disabled.
+ * Checks the global readonly flag, uischema rule, uischema options (including the config),
+ * the schema and the enablement indicator of the parent.
+ */
 export const isInherentlyEnabled = (
   state: JsonFormsState,
   ownProps: any,
   uischema: UISchemaElement,
-  schema: JsonSchema & { readOnly?: boolean },
+  schema: JsonSchema & { readOnly?: boolean } | undefined,
   rootData: any,
   config: any
 ) => {
@@ -207,8 +212,8 @@ export const isInherentlyEnabled = (
   if (typeof config?.readOnly === 'boolean') {
     return !config.readOnly;
   }
-  if (typeof schema?.readOnly === 'boolean') {
-    return !schema.readOnly;
+  if (schema?.readOnly === true) {
+    return false;
   }
   if (typeof ownProps?.enabled === 'boolean') {
     return ownProps.enabled;
