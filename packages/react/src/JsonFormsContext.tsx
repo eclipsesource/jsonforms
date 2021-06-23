@@ -413,7 +413,6 @@ const withContextToEnumProps =
 
 const withContextToOneOfEnumCellProps =
   (Component: ComponentType<EnumCellProps>): ComponentType<OwnPropsOfEnumCell> =>
-    // @ts-ignore
     ({ctx, props}: JsonFormsStateContext & EnumCellProps) => {
       const cellProps = ctxToOneOfEnumCellProps(ctx, props);
       const dispatchProps = ctxDispatchToControlProps(ctx.dispatch);
