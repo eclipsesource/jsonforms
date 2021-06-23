@@ -592,9 +592,35 @@ test('isInherentlyEnabled disabled by uischema over ownProps', t => {
   t.false(
     isInherentlyEnabled(
       null,
-      { enabled: false },
+      { enabled: true },
       ({ options: { readonly: true } } as unknown) as ControlElement,
       null,
+      null,
+      null
+    )
+  );
+});
+
+test('isInherentlyEnabled enabled by uischema over schema', t => {
+  t.true(
+    isInherentlyEnabled(
+      null,
+      null,
+      ({ options: { readonly: false } } as unknown) as ControlElement,
+      { readOnly: true },
+      null,
+      null
+    )
+  );
+});
+
+test('isInherentlyEnabled disabled by ownProps over schema enablement', t => {
+  t.false(
+    isInherentlyEnabled(
+      null,
+      { enabled: false},
+      null,
+      { readOnly: false },
       null,
       null
     )
@@ -709,6 +735,42 @@ test('isInherentlyEnabled enabled by config over ownProps', t => {
     isInherentlyEnabled(null, { enabled: false }, null, null, null, {
       readonly: false
     })
+  );
+});
+
+test('isInherentlyEnabled enabled by uischema over config', t => {
+  t.true(
+    isInherentlyEnabled(
+      null,
+      null,
+      ({ options: { readonly: false } } as unknown) as ControlElement,
+      null,
+      null,
+      { readonly: true }
+    )
+  );
+});
+
+test('isInherentlyEnabled prefer readonly over readOnly', t => {
+  t.true(
+    isInherentlyEnabled(
+      null,
+      null,
+      ({ options: { readonly: false, readOnly: true } } as unknown) as ControlElement,
+      null,
+      null,
+      null
+    )
+  );
+  t.false(
+    isInherentlyEnabled(
+      null,
+      null,
+      ({ options: { readonly: true, readOnly: false } } as unknown) as ControlElement,
+      null,
+      null,
+      null
+    )
   );
 });
 

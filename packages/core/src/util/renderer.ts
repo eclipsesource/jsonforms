@@ -785,7 +785,7 @@ export const mapStateToLayoutProps = (
     state,
     ownProps,
     uischema,
-    ownProps.schema,
+    undefined, // layouts have no associated schema
     rootData,
     config
   );
