@@ -68,19 +68,7 @@ describe('Material one of enum cell tester', () => {
       materialOneOfEnumCellTester(control, {
         type: 'object',
         properties: {
-          country: {
-            type: 'string',
-            oneOf: [
-              {
-                const: 'AU',
-                title: 'Australia'
-              },
-              {
-                const: 'NZ',
-                title: 'New Zealand'
-              }
-            ]
-          }
+          country: schema
         }
       })
     ).toBe(2);
