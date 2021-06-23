@@ -1,0 +1,54 @@
+name: Feature request
+description: Suggest an idea for this project
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This issue form is for requesting features only!
+
+        If you want to report a bug, please use the [bug report][br] form.
+
+        [br]: https://github.com/eclipsesource/jsonforms/issues/new?assignees=&labels=&template=bug_report.yml
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: Is your feature request related to a problem? Please describe.
+      description: A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: Describe the solution you'd like
+      description: A clear and concise description of what you want to happen.
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: Describe alternatives you've considered
+      description: A clear and concise description of any alternative solutions or features you've considered.
+  - type: markdown
+    attributes:
+      value: |
+        ## Describe for which setup you like to have the improvement
+  - type: checkboxes
+    attributes:
+      label: Framework
+      options:
+        - label: Core
+        - label: React
+        - label: Angular
+        - label: Vue 3
+        - label: Vue 2
+        - label: Other (please specify in the Additional context field)
+  - type: checkboxes
+    attributes:
+      label: RendererSet
+      options:
+        - label: Material
+        - label: Vanilla
+        - label: Other (please specify in the Additional context field)
+  - type: textarea
+    attributes:
+      label: Additional context
+      description: Add any other context or screenshots about the feature request here.

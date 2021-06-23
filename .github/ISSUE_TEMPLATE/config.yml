@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: JSON Forms board
+    url: https://spectrum.chat/jsonforms
+    about: For questions and discussions
+  - name: Professional support
+    url: https://jsonforms.io/support
+    about: Professional support by EclipseSource

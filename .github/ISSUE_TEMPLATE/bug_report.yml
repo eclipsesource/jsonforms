@@ -1,0 +1,66 @@
+name: Bug report
+description: Create a report to help us improve
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This issue form is for reporting bugs only!
+
+        If you have a feature or enhancement request, please use the [feature request][fr] form.
+
+        [fr]: https://github.com/eclipsesource/jsonforms/issues/new?assignees=&labels=&template=feature_request.yml
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: Describe the bug
+      description: A clear and concise description of what the bug is.
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: Expected behavior
+      description: A clear and concise description of what you expected to happen.
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: Steps to reproduce the issue
+      description: Steps to reproduce the behavior
+      value: |
+        1. Go to '...'
+        2. Click on '....'
+        3. Scroll down to '....'
+        4. See error
+  - type: textarea
+    attributes:
+      label: Screenshots
+      description: If applicable, add screenshots to help explain your problem.
+  - type: input
+    validations:
+      required: true
+    attributes:
+      label: In which browser are you experiencing the issue?
+      placeholder: Google Chrome 91.0.4472.114
+      description: Provide the full name and don't forget to add the version!
+  - type: checkboxes
+    attributes:
+      label: Framework
+      options:
+        - label: Core
+        - label: React
+        - label: Angular
+        - label: Vue 3
+        - label: Vue 2
+        - label: Other (please specify in the Additional context field)
+  - type: checkboxes
+    attributes:
+      label: RendererSet
+      options:
+        - label: Material
+        - label: Vanilla
+        - label: Other (please specify in the Additional context field)
+  - type: textarea
+    attributes:
+      label: Additional context
+      description: Add any other context about the problem here.
