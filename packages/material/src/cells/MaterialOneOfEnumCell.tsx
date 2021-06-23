@@ -38,7 +38,7 @@ export const MaterialOneOfEnumCell = (props: EnumCellProps & WithClassname) => (
 );
 
 /**
- * Default tester for enum controls.
+ * Default tester for oneOf enum controls.
  * @type {RankedTester}
  */
 export const materialOneOfEnumCellTester: RankedTester = rankWith(2, isOneOfEnumControl);
