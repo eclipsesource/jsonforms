@@ -72,6 +72,7 @@ import * as enumExample from './enum';
 import * as radioGroupExample from './radioGroup';
 import * as booleanToggle from './booleanToggle';
 import * as multiEnum from './multi-enum';
+import * as enumInArray from './enumInArray';
 import * as readonly from './readonly';
 export * from './register';
 export * from './example';
@@ -130,5 +131,6 @@ export {
   radioGroupExample,
   booleanToggle,
   multiEnum,
+  enumInArray,
   readonly
 };

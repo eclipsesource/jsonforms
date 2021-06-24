@@ -30,7 +30,7 @@ import {
   defaultMapDispatchToControlProps,
   defaultMapStateToEnumCellProps,
   DispatchPropsOfCell,
-  mapStateToCellProps
+  mapStateToCellProps, mapStateToOneOfEnumCellProps, oneOfToEnumOptionMapper
 } from '../../src/util';
 import { UPDATE_DATA, UpdateAction } from '../../src/actions';
 import configureStore from 'redux-mock-store';
@@ -288,6 +288,34 @@ test('mapStateToEnumCellProps - set default options for dropdown list', t => {
     props.options,
     ['DE', 'IT', 'JP', 'US', 'RU', 'Other'].map(enumToEnumOptionMapper)
   );
+  t.is(props.data, undefined);
+});
+
+
+test('mapStateToOneOfEnumCellProps - set one of options for dropdown list', t => {
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/country'
+  };
+  const ownProps = {
+    schema: {
+      oneOf: [
+        {
+          const: 'AU',
+          title: 'Australia'
+        },
+        {
+          const: 'NZ',
+          title: 'New Zealand'
+        }
+      ]
+    },
+    uischema,
+    path: 'country'
+  };
+
+  const props = mapStateToOneOfEnumCellProps(createState(uischema), ownProps);
+  t.deepEqual(props.options, [{title: 'Australia' , const: 'AU', }, { title: 'New Zealand', const: 'NZ' }].map(oneOfToEnumOptionMapper));
   t.is(props.data, undefined);
 });
 

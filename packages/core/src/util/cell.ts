@@ -38,7 +38,7 @@ import { JsonFormsState } from '../store';
 import { JsonFormsCellRendererRegistryEntry } from '../reducers/cells';
 import { JsonSchema } from '../models/jsonSchema';
 import { isInherentlyEnabled, isVisible } from './runtime';
-import { AnyAction, Dispatch, formatErrorMessage, Resolve } from '.';
+import { AnyAction, Dispatch, formatErrorMessage, oneOfToEnumOptionMapper, Resolve } from '.';
 
 export { JsonFormsCellRendererRegistryEntry };
 
@@ -188,6 +188,27 @@ export const defaultMapStateToEnumCellProps = (
     options
   };
 };
+
+/**
+ * mapStateToOneOfEnumCellProps for one of enum cell. Options is used for populating dropdown list from oneOf
+ * @param state
+ * @param ownProps
+ * @returns {StatePropsOfEnumCell}
+ */
+export const mapStateToOneOfEnumCellProps = (
+  state: JsonFormsState,
+  ownProps: OwnPropsOfEnumCell
+): StatePropsOfEnumCell => {
+  const props: StatePropsOfCell = mapStateToCellProps(state, ownProps);
+  const options: EnumOption[] =
+    ownProps.options ||
+    (props.schema.oneOf as JsonSchema[])?.map(oneOfToEnumOptionMapper);
+  return {
+    ...props,
+    options
+  };
+};
+
 
 /**
  * Synonym for mapDispatchToControlProps.

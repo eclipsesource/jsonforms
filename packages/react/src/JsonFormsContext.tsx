@@ -65,6 +65,7 @@ import {
   mapStateToMasterListItemProps,
   mapStateToOneOfProps,
   mapStateToOneOfEnumControlProps,
+  mapStateToOneOfEnumCellProps,
   mapDispatchToMultiEnumProps,
   update,
   mapStateToMultiEnumControlProps,
@@ -271,6 +272,13 @@ export const ctxToEnumCellProps = (
   return defaultMapStateToEnumCellProps({ jsonforms: { ...ctx } }, ownProps);
 };
 
+export const ctxToOneOfEnumCellProps = (
+  ctx: JsonFormsStateContext,
+  props: OwnPropsOfControl
+) => {
+  return mapStateToOneOfEnumCellProps({jsonforms: {...ctx}}, props);
+};
+
 export const ctxToDispatchCellProps = (
   ctx: JsonFormsStateContext,
   ownProps: OwnPropsOfCell
@@ -402,6 +410,14 @@ const withContextToEnumProps =
       return (<Component {...props} {...dispatchProps} {...stateProps} options={stateProps.options} />);
     };
 
+const withContextToOneOfEnumCellProps =
+  (Component: ComponentType<EnumCellProps>): ComponentType<OwnPropsOfEnumCell> =>
+    ({ ctx, props }: JsonFormsStateContext & EnumCellProps) => {
+      const cellProps = ctxToOneOfEnumCellProps(ctx, props);
+      const dispatchProps = ctxDispatchToControlProps(ctx.dispatch);
+      return (<Component {...props} {...dispatchProps} {...cellProps} />);
+    };
+
 const withContextToOneOfEnumProps =
   (Component: ComponentType<ControlProps & OwnPropsOfEnum>): ComponentType<OwnPropsOfControl & OwnPropsOfEnum> =>
     ({ ctx, props }: JsonFormsStateContext & ControlProps & OwnPropsOfEnum) => {
@@ -530,6 +546,13 @@ export const withJsonFormsEnumProps =
     withJsonFormsContext(withContextToEnumProps(React.memo(
       Component,
       (prevProps: ControlProps & OwnPropsOfEnum, nextProps: ControlProps & OwnPropsOfEnum) => areEqual(prevProps, nextProps)
+    )));
+
+export const withJsonFormsOneOfEnumCellProps =
+  (Component: ComponentType<EnumCellProps>): ComponentType<OwnPropsOfEnumCell> =>
+    withJsonFormsContext(withContextToOneOfEnumCellProps(React.memo(
+      Component,
+      (prevProps: EnumCellProps, nextProps: EnumCellProps) => areEqual(prevProps, nextProps)
     )));
 
 export const withJsonFormsOneOfEnumProps =
