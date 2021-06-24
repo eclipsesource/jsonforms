@@ -27,6 +27,8 @@ import {
   AndCondition,
   ControlElement,
   createAjv,
+  isInherentlyEnabled,
+  JsonFormsCore,
   LeafCondition,
   OrCondition,
   RuleEffect,
@@ -221,8 +223,24 @@ test('evalVisibility show valid case based on schema condition and enum', t => {
     ruleValue: 'bar'
   };
   t.is(evalVisibility(uischema, data, undefined, createAjv()), true);
-  t.is(evalVisibility(uischema, { ...data, ruleValue: 'baz' }, undefined, createAjv()), true);
-  t.is(evalVisibility(uischema, { ...data, ruleValue: 'foo' }, undefined, createAjv()), false);
+  t.is(
+    evalVisibility(
+      uischema,
+      { ...data, ruleValue: 'baz' },
+      undefined,
+      createAjv()
+    ),
+    true
+  );
+  t.is(
+    evalVisibility(
+      uischema,
+      { ...data, ruleValue: 'foo' },
+      undefined,
+      createAjv()
+    ),
+    false
+  );
 });
 
 test('evalVisibility show invalid case', t => {
@@ -514,6 +532,248 @@ test('evalEnablement disable invalid case based on schema condition', t => {
     ruleValue: 'bar'
   };
   t.is(evalEnablement(uischema, data, undefined, createAjv()), false);
-  t.is(evalEnablement(uischema, { ...data, ruleValue: 'baz' }, undefined, createAjv()), false);
-  t.is(evalEnablement(uischema, { ...data, ruleValue: 'foo' }, undefined, createAjv()), true);
+  t.is(
+    evalEnablement(
+      uischema,
+      { ...data, ruleValue: 'baz' },
+      undefined,
+      createAjv()
+    ),
+    false
+  );
+  t.is(
+    evalEnablement(
+      uischema,
+      { ...data, ruleValue: 'foo' },
+      undefined,
+      createAjv()
+    ),
+    true
+  );
+});
+
+test('isInherentlyEnabled disabled globally', t => {
+  t.false(
+    isInherentlyEnabled(
+      { jsonforms: { readonly: true } },
+      null,
+      null,
+      null,
+      null,
+      null
+    )
+  );
+});
+
+test('isInherentlyEnabled disabled by ownProps', t => {
+  t.false(
+    isInherentlyEnabled(null, { enabled: false }, null, null, null, null)
+  );
+});
+
+test('isInherentlyEnabled enabled by ownProps', t => {
+  t.true(isInherentlyEnabled(null, { enabled: true }, null, null, null, null));
+});
+
+test('isInherentlyEnabled disabled by uischema', t => {
+  t.false(
+    isInherentlyEnabled(
+      null,
+      null,
+      ({ options: { readonly: true } } as unknown) as ControlElement,
+      null,
+      null,
+      null
+    )
+  );
+});
+
+test('isInherentlyEnabled disabled by uischema over ownProps', t => {
+  t.false(
+    isInherentlyEnabled(
+      null,
+      { enabled: true },
+      ({ options: { readonly: true } } as unknown) as ControlElement,
+      null,
+      null,
+      null
+    )
+  );
+});
+
+test('isInherentlyEnabled enabled by uischema over schema', t => {
+  t.true(
+    isInherentlyEnabled(
+      null,
+      null,
+      ({ options: { readonly: false } } as unknown) as ControlElement,
+      { readOnly: true },
+      null,
+      null
+    )
+  );
+});
+
+test('isInherentlyEnabled disabled by ownProps over schema enablement', t => {
+  t.false(
+    isInherentlyEnabled(
+      null,
+      { enabled: false},
+      null,
+      { readOnly: false },
+      null,
+      null
+    )
+  );
+});
+
+test('isInherentlyEnabled disabled by uischema over schema', t => {
+  t.false(
+    isInherentlyEnabled(
+      null,
+      null,
+      ({ options: { readonly: true } } as unknown) as ControlElement,
+      { readOnly: false },
+      null,
+      null
+    )
+  );
+});
+
+test('isInherentlyEnabled disabled by schema', t => {
+  t.false(
+    isInherentlyEnabled(null, null, null, { readOnly: true }, null, null)
+  );
+});
+
+test('isInherentlyEnabled disabled by schema over ownProps', t => {
+  t.false(
+    isInherentlyEnabled(
+      null,
+      { enabled: true },
+      null,
+      { readOnly: true },
+      null,
+      null
+    )
+  );
+});
+
+test('isInherentlyEnabled disabled by rule', t => {
+  const leafCondition: SchemaBasedCondition = {
+    scope: '#/properties/ruleValue',
+    schema: { type: 'string', pattern: 'bar' }
+  };
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/value',
+    rule: {
+      effect: RuleEffect.DISABLE,
+      condition: leafCondition
+    }
+  };
+  const data = {
+    value: 'foo',
+    ruleValue: 'bar'
+  };
+
+  t.false(
+    isInherentlyEnabled(
+      { jsonforms: { core: { ajv: createAjv() } as JsonFormsCore } },
+      null,
+      uischema,
+      null,
+      data,
+      null
+    )
+  );
+});
+
+test('isInherentlyEnabled disabled by global over rule ', t => {
+  const leafCondition: SchemaBasedCondition = {
+    scope: '#/properties/ruleValue',
+    schema: { type: 'string', pattern: 'bar' }
+  };
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/value',
+    rule: {
+      effect: RuleEffect.ENABLE,
+      condition: leafCondition
+    }
+  };
+  const data = {
+    value: 'foo',
+    ruleValue: 'bar'
+  };
+
+  t.false(
+    isInherentlyEnabled(
+      {
+        jsonforms: {
+          readonly: true,
+          core: { ajv: createAjv() } as JsonFormsCore
+        }
+      },
+      null,
+      uischema,
+      null,
+      data,
+      null
+    )
+  );
+});
+
+test('isInherentlyEnabled disabled by config', t => {
+  t.false(
+    isInherentlyEnabled(null, null, null, null, null, { readonly: true })
+  );
+});
+
+test('isInherentlyEnabled enabled by config over ownProps', t => {
+  t.true(
+    isInherentlyEnabled(null, { enabled: false }, null, null, null, {
+      readonly: false
+    })
+  );
+});
+
+test('isInherentlyEnabled enabled by uischema over config', t => {
+  t.true(
+    isInherentlyEnabled(
+      null,
+      null,
+      ({ options: { readonly: false } } as unknown) as ControlElement,
+      null,
+      null,
+      { readonly: true }
+    )
+  );
+});
+
+test('isInherentlyEnabled prefer readonly over readOnly', t => {
+  t.true(
+    isInherentlyEnabled(
+      null,
+      null,
+      ({ options: { readonly: false, readOnly: true } } as unknown) as ControlElement,
+      null,
+      null,
+      null
+    )
+  );
+  t.false(
+    isInherentlyEnabled(
+      null,
+      null,
+      ({ options: { readonly: true, readOnly: false } } as unknown) as ControlElement,
+      null,
+      null,
+      null
+    )
+  );
+});
+
+test('isInherentlyEnabled enabled', t => {
+  t.true(isInherentlyEnabled(null, null, null, null, null, null));
 });

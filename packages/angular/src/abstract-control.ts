@@ -148,10 +148,7 @@ export abstract class JsonFormsAbstractControl<
   }
 
   isEnabled(): boolean {
-    return (
-      this.enabled &&
-      (this.uischema.options ? !this.uischema.options.readonly : true)
-    );
+    return this.enabled;
   }
 
   protected getOwnProps(): OwnPropsOfControl {

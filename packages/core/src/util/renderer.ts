@@ -48,9 +48,8 @@ import {
   createLabelDescriptionFrom,
   Dispatch,
   formatErrorMessage,
-  hasEnableRule,
   hasShowRule,
-  isEnabled,
+  isInherentlyEnabled,
   isVisible,
   moveDown,
   moveUp,
@@ -405,11 +404,6 @@ export const mapStateToControlProps = (
     ownProps.visible === undefined || hasShowRule(uischema)
       ? isVisible(uischema, rootData, ownProps.path, getAjv(state))
       : ownProps.visible;
-  const readonly = state.jsonforms.readonly;
-  const enabled: boolean =
-    !readonly && (ownProps.enabled === undefined || hasEnableRule(uischema)
-      ? isEnabled(uischema, rootData, ownProps.path, getAjv(state) )
-      : ownProps.enabled);
   const controlElement = uischema as ControlElement;
   const id = ownProps.id;
   const rootSchema = getSchema(state);
@@ -429,6 +423,15 @@ export const mapStateToControlProps = (
   const data = Resolve.data(rootData, path);
   const labelDesc = createLabelDescriptionFrom(uischema, resolvedSchema);
   const label = labelDesc.show ? labelDesc.text : '';
+  const config = getConfig(state);
+  const enabled: boolean = isInherentlyEnabled(
+    state,
+    ownProps,
+    uischema,
+    resolvedSchema || rootSchema,
+    rootData,
+    config
+  );
   return {
     data,
     description,
@@ -474,9 +477,9 @@ export const mapStateToEnumControlProps = (
 ): StatePropsOfControl & OwnPropsOfEnum => {
   const props: StatePropsOfControl = mapStateToControlProps(state, ownProps);
   const options: EnumOption[] =
-      ownProps.options ||
-      props.schema.enum?.map(enumToEnumOptionMapper) ||
-      props.schema.const && [enumToEnumOptionMapper(props.schema.const)];
+    ownProps.options ||
+    props.schema.enum?.map(enumToEnumOptionMapper) ||
+    (props.schema.const && [enumToEnumOptionMapper(props.schema.const)]);
   return {
     ...props,
     options
@@ -517,7 +520,8 @@ export const mapStateToMultiEnumControlProps = (
   const items = props.schema.items as JsonSchema;
   const options: EnumOption[] =
     ownProps.options ||
-    (items?.oneOf && (items.oneOf as JsonSchema[]).map(oneOfToEnumOptionMapper)) ||
+    (items?.oneOf &&
+      (items.oneOf as JsonSchema[]).map(oneOfToEnumOptionMapper)) ||
     items?.enum?.map(enumToEnumOptionMapper);
   return {
     ...props,
@@ -700,14 +704,14 @@ export const mapDispatchToArrayControlProps = (
 });
 
 export interface DispatchPropsOfMultiEnumControl {
-  addItem: (path:string, value: any) => void;
-  removeItem? :(path:string, toDelete: any) => void;
+  addItem: (path: string, value: any) => void;
+  removeItem?: (path: string, toDelete: any) => void;
 }
 
 export const mapDispatchToMultiEnumProps = (
   dispatch: Dispatch<CoreActions>
 ): DispatchPropsOfMultiEnumControl => ({
-  addItem: (path:string, value: any) => {
+  addItem: (path: string, value: any) => {
     dispatch(
       update(path, data => {
         if (data === undefined || data === null) {
@@ -718,7 +722,7 @@ export const mapDispatchToMultiEnumProps = (
       })
     );
   },
-  removeItem: (path:string, toDelete: any) => {
+  removeItem: (path: string, toDelete: any) => {
     dispatch(
       update(path, data => {
         const indexInData = data.indexOf(toDelete);
@@ -774,13 +778,17 @@ export const mapStateToLayoutProps = (
     ownProps.visible === undefined || hasShowRule(uischema)
       ? isVisible(ownProps.uischema, rootData, ownProps.path, getAjv(state))
       : ownProps.visible;
-  const readonly = state.jsonforms.readonly;
-  const enabled: boolean =
-    !readonly && (ownProps.enabled === undefined || hasEnableRule(uischema)
-      ? isEnabled(ownProps.uischema, rootData, ownProps.path, getAjv(state))
-      : ownProps.enabled);
 
   const data = Resolve.data(rootData, ownProps.path);
+  const config = getConfig(state);
+  const enabled: boolean = isInherentlyEnabled(
+    state,
+    ownProps,
+    uischema,
+    undefined, // layouts have no associated schema
+    rootData,
+    config
+  );
 
   return {
     ...layoutDefaultProps,
