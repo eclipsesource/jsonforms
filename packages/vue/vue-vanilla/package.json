@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/vue-vanilla",
-  "version": "2.5.2",
+  "version": "3.0.0-alpha.0",
   "description": "Vue 3 Vanilla renderers for JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -54,8 +54,8 @@
     "@babel/core": "^7.9.0",
     "@babel/preset-env": "^7.9.5",
     "@babel/preset-typescript": "^7.9.0",
-    "@jsonforms/core": "^2.5.2",
-    "@jsonforms/vue": "^2.5.2",
+    "@jsonforms/core": "^3.0.0-alpha.0",
+    "@jsonforms/vue": "^3.0.0-alpha.0",
     "@rollup/plugin-alias": "^2.2.0",
     "@types/chai": "^4.2.11",
     "@types/jest": "^24.0.23",
@@ -80,8 +80,8 @@
     "vue-jest": "^5.0.0-0"
   },
   "peerDependencies": {
-    "@jsonforms/core": "^2.5.2",
-    "@jsonforms/vue": "^2.5.2",
+    "@jsonforms/core": "^3.0.0-alpha.0",
+    "@jsonforms/vue": "^3.0.0-alpha.0",
     "vue": "^3.0.3"
   }
 }
