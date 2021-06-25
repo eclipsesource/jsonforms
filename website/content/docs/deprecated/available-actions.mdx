@@ -7,7 +7,7 @@ import ApiLink from '../../../src/components/common/ApiLink';
 
 :::info ATTENTION
 
-As of JSON Forms 2.5 the React-Redux variant is deprecated in favor of the <a href="/docs/integrations/react">JSON Forms "standalone" component</a>. 
+As of JSON Forms 2.5 the React-Redux variant is deprecated in favor of the <a href="/docs/integrations/react">JSON Forms "standalone" component</a>.
 See our <a href="https://github.com/eclipsesource/jsonforms/blob/master/MIGRATION.md">migration guide</a> for more information.
 
 :::
@@ -28,7 +28,7 @@ The `options` parameter allows customization of the validator and the ref resolv
 
 The update action is used to update the data substate within the store.
 It expects two arguments: a dot-separated path describing which part of the data should be updated as well as a function that returns the value that should be used.
-The function gets passed the current value that might be used to calculate the updated value.  
+The function gets passed the current value that might be used to calculate the updated value.
 `mapDispatchToControlProps` and `mapDispatchToFieldProps` provide a helper function called `handleChange` which already dispatches the update action,
 so that you rarely need to interact with update itself, if at all.
 

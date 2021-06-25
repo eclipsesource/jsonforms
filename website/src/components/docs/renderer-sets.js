@@ -182,7 +182,7 @@ export const RendererSetSchemaFeatureTable = () => (
         </TableRow>
         <TableRow>
           <TableCell />
-          <TableCell>Master Detail</TableCell>
+          <TableCell>List with Detail</TableCell>
           <Supported />
           <Supported />
           <NotSupported />

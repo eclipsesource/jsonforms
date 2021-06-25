@@ -4,13 +4,11 @@ import { Demo } from '../common';
 
 const Person = () => {
   return (
-    <div className='example'>
-      <Demo
-        data={person.data}
-        schema={person.schema}
-        uischema={person.uischema}
-      />
-    </div>
+    <Demo
+      data={person.data}
+      schema={person.schema}
+      uischema={person.uischema}
+    />
   );
 };
 

@@ -9,6 +9,7 @@ module.exports = {
     'custom-controls',
     'gen-uischema',
     'gen-both-schemas',
-    'combinators'
+    'combinators',
+    'list-with-detail'
   ]
 };
