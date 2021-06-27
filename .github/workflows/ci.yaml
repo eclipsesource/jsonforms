@@ -5,6 +5,7 @@ on: [push, pull_request]
 jobs:
   ci:
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
@@ -20,7 +21,7 @@ jobs:
       with:
         node-version: 12
     - name: Build
-      run: | 
+      run: |
         npm ci
         npm run init
         npm run build
