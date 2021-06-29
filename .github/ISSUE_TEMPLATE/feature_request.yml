@@ -31,23 +31,25 @@ body:
     attributes:
       value: |
         ## Describe for which setup you like to have the improvement
-  - type: checkboxes
+  - type: dropdown
     attributes:
       label: Framework
+      multiple: true
       options:
-        - label: Core
-        - label: React
-        - label: Angular
-        - label: Vue 3
-        - label: Vue 2
-        - label: Other (please specify in the Additional context field)
-  - type: checkboxes
+        - Core
+        - React
+        - Angular
+        - Vue 3
+        - Vue 2
+        - Other (please specify in the Additional context field)
+  - type: dropdown
     attributes:
       label: RendererSet
+      multiple: true
       options:
-        - label: Material
-        - label: Vanilla
-        - label: Other (please specify in the Additional context field)
+        - Material
+        - Vanilla
+        - Other (please specify in the Additional context field)
   - type: textarea
     attributes:
       label: Additional context
