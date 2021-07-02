@@ -38,7 +38,8 @@ import {
   Paths,
   RankedTester,
   Resolve,
-  Test
+  Test,
+  getControlPath
 } from '@jsonforms/core';
 import { DispatchCell, withJsonFormsArrayControlProps } from '@jsonforms/react';
 import { withVanillaControlProps } from '../util';
@@ -142,9 +143,10 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
                     `${index}`
                   );
                   // TODO
-                  const errorsPerEntry: any[] = filter(childErrors, error =>
-                    error.dataPath.startsWith(childPath)
-                  );
+                  const errorsPerEntry: any[] = filter(childErrors, error => {
+                    const errorPath = getControlPath(error);
+                    return errorPath.startsWith(childPath);
+                  });
 
                   const validationClassName = getStyleAsClassName('array.validation');
                   const errorValidationClassName = getStyleAsClassName('array.validation.error');

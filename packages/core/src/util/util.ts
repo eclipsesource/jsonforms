@@ -31,7 +31,7 @@ import { JsonSchema, Scopable, UISchemaElement } from '..';
 import { resolveData, resolveSchema } from './resolvers';
 import { composePaths, toDataPathSegments } from './path';
 import { isEnabled, isVisible } from './runtime';
-import { Ajv } from 'ajv';
+import Ajv from 'ajv';
 
 /**
  * Escape the given string such that it can be used as a class name,

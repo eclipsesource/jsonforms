@@ -37,7 +37,7 @@ export const onChange = (dispatch: Dispatch<AnyAction>) => (_: any) => ({
   Object.keys(data).forEach(key => (touchedProperties[key] = true));
 
   const newErrors = errors.filter(error => {
-    return touchedProperties[error.dataPath];
+    return touchedProperties[(error as any).dataPath ?? error.instancePath];
   });
 
   if (newErrors.length < errors.length) {

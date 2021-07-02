@@ -40,7 +40,7 @@ import { initCore, TestEmitter } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-const data = { foo: '13:37' };
+const data = { foo: '13:37:05' };
 const schema = {
   type: 'object',
   properties: {
@@ -203,7 +203,7 @@ describe('Material time control', () => {
     );
     const input = wrapper.find('input').first();
     input.simulate('change', { target: { value: '08:40' } });
-    expect(onChangeData.data.foo).toBe('08:40');
+    expect(onChangeData.data.foo).toBe('08:40:00');
   });
 
   it('should update via action', () => {
@@ -213,7 +213,7 @@ describe('Material time control', () => {
         <MaterialTimeControl schema={schema} uischema={uischema} />
       </JsonFormsStateProvider>
     );
-    core.data = { ...core.data, foo: '08:40' };
+    core.data = { ...core.data, foo: '08:40:00' };
     wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
     wrapper.update();
     const input = wrapper.find('input').first();

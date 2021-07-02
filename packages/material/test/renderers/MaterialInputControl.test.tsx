@@ -159,7 +159,7 @@ describe('Material input control', () => {
     wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
     wrapper.update();
     const validation = wrapper.find('p').first();
-    expect(validation.text()).toBe('should be string');
+    expect(validation.text()).toBe('must be string');
   });
 
   it('should display multiple errors', () => {
@@ -173,7 +173,7 @@ describe('Material input control', () => {
     wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
     wrapper.update();
     const validation = wrapper.find('p').first();
-    expect(validation.text()).toBe('should be string');
+    expect(validation.text()).toBe('must be string');
   });
 
   it('should not show any errors', () => {

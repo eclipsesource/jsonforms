@@ -384,7 +384,7 @@ test('mapStateToControlProps - errors', t => {
   };
   const clonedState = _.cloneDeep(createState(coreUISchema));
   const error: ErrorObject = {
-    dataPath: 'firstName',
+    instancePath: '/firstName',
     message: 'Duff beer',
     keyword: 'whatever',
     schemaPath: '',

@@ -29,7 +29,7 @@ import get from 'lodash/get';
 import filter from 'lodash/filter';
 import isEqual from 'lodash/isEqual';
 import isFunction from 'lodash/isFunction';
-import { Ajv, ErrorObject, ValidateFunction } from 'ajv';
+import Ajv, { ErrorObject, ValidateFunction } from 'ajv';
 import {
   CoreActions,
   INIT,
@@ -47,27 +47,16 @@ import {
 import { createAjv, Reducer } from '../util';
 import { JsonSchema, UISchemaElement } from '../models';
 
-const validate = (validator: ValidateFunction, data: any): ErrorObject[] => {
+export const validate = (validator: ValidateFunction | undefined, data: any): ErrorObject[] => {
+  if (validator === undefined) {
+    return [];
+  }
   const valid = validator(data);
   if (valid) {
     return [];
   }
-
   return validator.errors;
 };
-
-export const sanitizeErrors = (validator: ValidateFunction, data: any) => {
-  if (validator === alwaysValid) {
-    return [];
-  }
-  return validate(validator, data).map(error => {
-    error.dataPath = error.dataPath.replace(/\//g, '.').substr(1);
-
-    return error;
-  });
-};
-
-const alwaysValid: ValidateFunction = () => true;
 
 export type ValidationMode = 'ValidateAndShow' | 'ValidateAndHide' | 'NoValidation';
 
@@ -86,7 +75,7 @@ const initState: JsonFormsCore = {
   schema: {},
   uischema: undefined,
   errors: [],
-  validator: alwaysValid,
+  validator: undefined,
   ajv: undefined,
   validationMode: 'ValidateAndShow'
 };
@@ -154,8 +143,8 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
       const thisAjv = getOrCreateAjv(state, action);
 
       const validationMode = getValidationMode(state, action);
-      const v = validationMode === 'NoValidation' ? alwaysValid : thisAjv.compile(action.schema);
-      const e = sanitizeErrors(v, action.data);
+      const v = validationMode === 'NoValidation' ? undefined : thisAjv.compile(action.schema);
+      const e = validate(v, action.data);
 
       return {
         ...state,
@@ -181,11 +170,11 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
         // revalidate only if necessary
         validator =
           validationMode === 'NoValidation'
-            ? alwaysValid
+            ? undefined
             : thisAjv.compile(action.schema);
-        errors = sanitizeErrors(validator, action.data);
+        errors = validate(validator, action.data);
       } else if (state.data !== action.data) {
-        errors = sanitizeErrors(validator, action.data);
+        errors = validate(validator, action.data);
       }
 
       const stateChanged =
@@ -211,8 +200,8 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
     }
     case SET_AJV: {
       const currentAjv = action.ajv;
-      const validator = state.validationMode === 'NoValidation' ? alwaysValid : currentAjv.compile(state.schema);
-      const errors = sanitizeErrors(validator, state.data);
+      const validator = state.validationMode === 'NoValidation' ? undefined : currentAjv.compile(state.schema);
+      const errors = validate(validator, state.data);
       return {
         ...state,
         validator,
@@ -224,7 +213,7 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
       const v = needsNewValidator
         ? reuseAjvForSchema(state.ajv, action.schema).compile(action.schema)
         : state.validator;
-      const errors = sanitizeErrors(v, state.data);
+      const errors = validate(v, state.data);
       return {
         ...state,
         validator: v,
@@ -244,7 +233,7 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
       } else if (action.path === '') {
         // empty path is ok
         const result = action.updater(cloneDeep(state.data));
-        const errors = sanitizeErrors(state.validator, result);
+        const errors = validate(state.validator, result);
         return {
           ...state,
           data: result,
@@ -258,7 +247,7 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
           newData,
           state.data === undefined ? {} : state.data
         );
-        const errors = sanitizeErrors(state.validator, newState);
+        const errors = validate(state.validator, newState);
         return {
           ...state,
           data: newState,
@@ -277,17 +266,16 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
         return state;
       }
       if (action.validationMode === 'NoValidation') {
-        const errors = sanitizeErrors(alwaysValid, state.data);
+        const errors = validate(undefined, state.data);
         return {
           ...state,
-          validator: alwaysValid,
           errors,
           validationMode: action.validationMode
         };
       }
       if (state.validationMode === 'NoValidation') {
         const validator = reuseAjvForSchema(state.ajv, state.schema).compile(state.schema);
-        const errors = sanitizeErrors(validator, state.data);
+        const errors = validate(validator, state.data);
         return {
           ...state,
           validator,
@@ -310,6 +298,40 @@ export const extractSchema = (state: JsonFormsCore) => get(state, 'schema');
 export const extractUiSchema = (state: JsonFormsCore) => get(state, 'uischema');
 export const extractAjv = (state: JsonFormsCore) => get(state, 'ajv');
 
+const getInvalidProperty = (error: ErrorObject): string | undefined => {
+  switch (error.keyword) {
+    case 'required':
+    case 'dependencies':
+      return error.params.missingProperty;
+    case 'additionalProperties':
+      return error.params.additionalProperty;
+    default:
+      return undefined;
+  }
+};
+
+export const getControlPath = (error: ErrorObject) => {
+  const dataPath = (error as any).dataPath;
+  // older AJV version
+  if (dataPath) {
+    return dataPath.replace(/\//g, '.').substr(1);
+  }
+  // dataPath was renamed to instancePath in AJV v8
+  var controlPath: string = error.instancePath;
+
+  // change '/' chars to '.'
+  controlPath = controlPath.replace(/\//g, '.');
+  
+  const invalidProperty = getInvalidProperty(error);
+  if (invalidProperty !== undefined && !controlPath.endsWith(invalidProperty)) {
+    controlPath = `${controlPath}.${invalidProperty}`;
+  }
+  
+  // remove '.' chars at the beginning of paths
+  controlPath = controlPath.replace(/^./, '');
+  return controlPath;
+}
+
 export const errorsAt = (
   instancePath: string,
   schema: JsonSchema,
@@ -319,15 +341,15 @@ export const errorsAt = (
   const combinatorPaths = filter(
     errors,
     error => error.keyword === 'oneOf' || error.keyword === 'anyOf'
-  ).map(error => error.dataPath);
-
-  return filter(errors, error => {
-    // Filter errors that match any keyword that we don't want to show in the UI
-    if (filteredErrorKeywords.indexOf(error.keyword) !== -1) {
-      return false;
-    }
-
-    let result = matchPath(error.dataPath);
+    ).map(error => getControlPath(error));
+    
+    return filter(errors, error => {
+      // Filter errors that match any keyword that we don't want to show in the UI
+      if (filteredErrorKeywords.indexOf(error.keyword) !== -1) {
+        return false;
+      }
+    const controlPath = getControlPath(error);
+    let result = matchPath(controlPath);
     // In anyOf and oneOf blocks with "primitive" (i.e. string, number etc.) or array subschemas,
     // we want to make sure that errors are only shown for the correct subschema.
     // Therefore, we compare the error's parent schema with the property's schema.

@@ -22,21 +22,16 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-
-import AJV from 'ajv';
+import Ajv from 'ajv';
+import addFormats from 'ajv-formats';
 import { Options } from 'ajv';
-import { Draft4 } from '../models';
 
 export const createAjv = (options?: Options) => {
-  const ajv = new AJV({
-    schemaId: 'auto',
+  const ajv = new Ajv({
     allErrors: true,
-    jsonPointers: true,
-    errorDataPath: 'property',
     verbose: true,
     ...options
   });
-  ajv.addFormat('time', '^([0-1][0-9]|2[0-3]):[0-5][0-9]$');
-  ajv.addMetaSchema(Draft4);
+  addFormats(ajv);
   return ajv;
 };

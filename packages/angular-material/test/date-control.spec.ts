@@ -257,9 +257,9 @@ describe('Date control Error Tests', () => {
     const formsService = getJsonFormsService(component);
     formsService.updateCore(Actions.updateErrors([
       {
-        dataPath: 'foo',
+        instancePath: '/foo',
         message: 'Hi, this is me, test error!',
-        params: '',
+        params: {},
         keyword: '',
         schemaPath: ''
       }

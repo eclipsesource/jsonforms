@@ -92,7 +92,7 @@ const fixture2 = {
   }
 };
 
-describe('Tabe array tester', () => {
+describe('Table array tester', () => {
   test('tester with recursive document ref only', () => {
     const control: ControlElement = {
       type: 'Control',
@@ -194,7 +194,7 @@ describe('Tabe array tester', () => {
   test('tester - wrong type', () => expect(tableArrayControlTester({ type: 'Foo' }, null)).toBe(-1));
 });
 
-describe('Tabe array control', () => {
+describe('Table array control', () => {
 
   let wrapper: ReactWrapper;
 
@@ -471,7 +471,7 @@ describe('Tabe array control', () => {
     );
     const rows = wrapper.find('tr');
     const lastRow = rows.last().getDOMNode() as HTMLTableRowElement;
-    expect(lastRow.children.item(1).textContent).toBe('should NOT be longer than 3 characters');
+    expect(lastRow.children.item(1).textContent).toBe('must NOT have more than 3 characters');
     expect(rows).toHaveLength(3);
   });
 
@@ -543,7 +543,7 @@ describe('Tabe array control', () => {
     wrapper.setProps({ initState: { core }} );
     wrapper.update();
     const validation = wrapper.find('.validation').getDOMNode();
-    expect(validation.textContent).toBe('should be array');
+    expect(validation.textContent).toBe('must be array');
   });
 
   test('multiple errors', () => {
@@ -560,7 +560,7 @@ describe('Tabe array control', () => {
     wrapper.setProps({ initState: { core }} );
     wrapper.update();
     const validation = wrapper.find('.validation').getDOMNode();
-    expect(validation.textContent).toBe('should be array');
+    expect(validation.textContent).toBe('must be array');
   });
 
   test('empty errors by default', () => {
@@ -591,7 +591,7 @@ describe('Tabe array control', () => {
     core.data = { ...core.data, test: 3 };
     wrapper.setProps({ initState: { core }} );
     wrapper.update();
-    expect(validation.textContent).toBe('should be array');
+    expect(validation.textContent).toBe('must be array');
     core.data = { ...core.data, test: [] };
     wrapper.setProps({ initState: { core }} );
     wrapper.update();

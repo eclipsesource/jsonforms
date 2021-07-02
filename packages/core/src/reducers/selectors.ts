@@ -24,7 +24,7 @@
 */
 
 import get from 'lodash/get';
-import { Ajv} from 'ajv';
+import Ajv from 'ajv';
 import { JsonFormsState } from '../store';
 import { JsonSchema, UISchemaElement } from '../models';
 import {

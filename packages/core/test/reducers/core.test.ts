@@ -23,14 +23,14 @@
   THE SOFTWARE.
 */
 import test from 'ava';
-import AJV from 'ajv';
+import Ajv from 'ajv';
 import { coreReducer } from '../../src/reducers';
 import { init, update, updateErrors } from '../../src/actions';
 import { JsonSchema } from '../../src/models/jsonSchema';
 import {
   errorAt,
   JsonFormsCore,
-  sanitizeErrors,
+  validate,
   subErrorsAt
 } from '../../src/reducers/core';
 
@@ -84,9 +84,7 @@ test('core reducer - no previous state - init with ajv as options object should 
       }
     }
   };
-  const myAjv = new AJV({
-    errorDataPath: 'mypath'
-  });
+  const myAjv = new Ajv();
   const after = coreReducer(undefined, init({}, schema, undefined, myAjv));
   t.deepEqual(after.ajv, myAjv);
 });
@@ -115,9 +113,7 @@ test('core reducer - no previous state - init with options object with ajv', t =
       }
     }
   };
-  const myAjv = new AJV({
-    errorDataPath: 'mypath'
-  });
+  const myAjv = new Ajv();
   const after = coreReducer(
     undefined,
     init({}, schema, undefined, {
@@ -137,9 +133,7 @@ test('core reducer - previous state - init without options should keep previous 
       }
     }
   };
-  const myAjv = new AJV({
-    errorDataPath: 'mypath'
-  });
+  const myAjv = new Ajv();
   const after = coreReducer(
     {
       data: {},
@@ -164,12 +158,8 @@ test('core reducer - previous state - init with ajv options object should overwr
       }
     }
   };
-  const previousAjv = new AJV({
-    errorDataPath: 'mypath'
-  });
-  const newAjv = new AJV({
-    errorDataPath: 'newajv'
-  });
+  const previousAjv = new Ajv();
+  const newAjv = new Ajv();
   const after = coreReducer(
     {
       data: {},
@@ -194,9 +184,7 @@ test('core reducer - previous state - init with empty options should not overwri
       }
     }
   };
-  const myAjv = new AJV({
-    errorDataPath: 'mypath'
-  });
+  const myAjv = new Ajv();
   const after = coreReducer(
     {
       data: {},
@@ -279,7 +267,7 @@ test('core reducer - update - undefined data should update for given path', t =>
       type: 'Label'
     },
     errors: [],
-    validator: new AJV().compile(schema)
+    validator: new Ajv().compile(schema)
   };
 
   const after = coreReducer(
@@ -386,7 +374,7 @@ test('core reducer - update - empty path should update root state', t => {
     uischema: {
       type: 'Label'
     },
-    validator: new AJV().compile(schema)
+    validator: new Ajv().compile(schema)
   };
 
   const after = coreReducer(
@@ -427,7 +415,7 @@ test('core reducer - update - providing a path should update data only belonging
     uischema: {
       type: 'Label'
     },
-    validator: new AJV().compile(schema)
+    validator: new Ajv().compile(schema)
   };
 
   const after = coreReducer(
@@ -467,7 +455,7 @@ test('core reducer - update - should update errors', t => {
     uischema: {
       type: 'Label'
     },
-    validator: new AJV().compile(schema)
+    validator: new Ajv().compile(schema)
   };
 
   const after = coreReducer(
@@ -482,9 +470,9 @@ test('core reducer - update - should update errors', t => {
     data: { ...before.data, color: 'Yellow' },
     errors: [
       {
-        dataPath: 'color',
+        instancePath: '/color',
         keyword: 'enum',
-        message: 'should be equal to one of the allowed values',
+        message: 'must be equal to one of the allowed values',
         params: {
           allowedValues: ['Blue', 'Green']
         },
@@ -514,7 +502,7 @@ test('core reducer - updateErrors - should update errors with error', t => {
   };
 
   const error = {
-    dataPath: 'color',
+    instancePath: '/color',
     keyword: 'enum',
     message: 'should be equal to one of the allowed values',
     params: {
@@ -556,7 +544,7 @@ test('errorAt filters enum', t => {
   };
   const data = { foo: '', bar: '' };
   const v = ajv.compile(schema);
-  const errors = sanitizeErrors(v, data);
+  const errors = validate(v, data);
 
   const state: JsonFormsCore = {
     data,
@@ -587,7 +575,7 @@ test('errorAt filters required', t => {
   };
   const data = {};
   const v = ajv.compile(schema);
-  const errors = sanitizeErrors(v, data);
+  const errors = validate(v, data);
 
   const state: JsonFormsCore = {
     data,
@@ -636,7 +624,7 @@ test('errorAt filters required in oneOf object', t => {
   };
   const data = { fooOrBar: { } };
   const v = ajv.compile(schema);
-  const errors = sanitizeErrors(v, data);
+  const errors = validate(v, data);
 
   const state: JsonFormsCore = {
     data,
@@ -688,7 +676,7 @@ test('errorAt filters required in anyOf object', t => {
   };
   const data = { fooOrBar: { } };
   const v = ajv.compile(schema);
-  const errors = sanitizeErrors(v, data);
+  const errors = validate(v, data);
 
   const state: JsonFormsCore = {
     data,
@@ -736,7 +724,7 @@ test('errorAt filters array minItems', t => {
     numbers: []
   };
   const v = ajv.compile(schema);
-  const errors = sanitizeErrors(v, data);
+  const errors = validate(v, data);
 
   const state: JsonFormsCore = {
     data,
@@ -781,7 +769,7 @@ test('errorAt filters array inner value', t => {
     numbers: ['Bar']
   };
   const v = ajv.compile(schema);
-  const errors = sanitizeErrors(v, data);
+  const errors = validate(v, data);
 
   const state: JsonFormsCore = {
     data,
@@ -817,7 +805,7 @@ test('errorAt filters oneOf simple', t => {
   };
   const data: { coloursOrNumbers: string } = { coloursOrNumbers: 'Foo' };
   const v = ajv.compile(schema);
-  const errors = sanitizeErrors(v, data);
+  const errors = validate(v, data);
 
   const state: JsonFormsCore = {
     data,
@@ -856,7 +844,7 @@ test('errorAt filters anyOf simple', t => {
   };
   const data: { coloursOrNumbers: string } = { coloursOrNumbers: 'Foo' };
   const v = ajv.compile(schema);
-  const errors = sanitizeErrors(v, data);
+  const errors = validate(v, data);
 
   const state: JsonFormsCore = {
     data,
@@ -910,7 +898,7 @@ test('errorAt filters oneOf objects', t => {
   };
   const data = { coloursOrNumbers: { colour: 'Foo' } };
   const v = ajv.compile(schema);
-  const errors = sanitizeErrors(v, data);
+  const errors = validate(v, data);
 
   const state: JsonFormsCore = {
     data,
@@ -962,7 +950,7 @@ test('errorAt filters oneOf objects same properties', t => {
   };
   const data = { coloursOrNumbers: { colourOrNumber: 'Foo' } };
   const v = ajv.compile(schema);
-  const errors = sanitizeErrors(v, data);
+  const errors = validate(v, data);
 
   const state: JsonFormsCore = {
     data,
@@ -1011,7 +999,7 @@ test('errorAt filters oneOf array', t => {
   };
   const data: { coloursOrNumbers: string[] } = { coloursOrNumbers: [] };
   const v = ajv.compile(schema);
-  const errors = sanitizeErrors(v, data);
+  const errors = validate(v, data);
 
   const state: JsonFormsCore = {
     data,
@@ -1060,7 +1048,7 @@ test('errorAt filters oneOf array inner', t => {
   };
   const data: { coloursOrNumbers: string[] } = { coloursOrNumbers: ['Foo'] };
   const v = ajv.compile(schema);
-  const errors = sanitizeErrors(v, data);
+  const errors = validate(v, data);
 
   const state: JsonFormsCore = {
     data,
@@ -1107,7 +1095,7 @@ test('subErrorsAt filters array inner', t => {
     numbers: ['Bar']
   };
   const v = ajv.compile(schema);
-  const errors = sanitizeErrors(v, data);
+  const errors = validate(v, data);
 
   const state: JsonFormsCore = {
     data,
@@ -1156,7 +1144,7 @@ test('subErrorsAt filters oneOf array inner', t => {
   };
   const data: { coloursOrNumbers: string[] } = { coloursOrNumbers: ['Foo'] };
   const v = ajv.compile(schema);
-  const errors = sanitizeErrors(v, data);
+  const errors = validate(v, data);
 
   const state: JsonFormsCore = {
     data,
