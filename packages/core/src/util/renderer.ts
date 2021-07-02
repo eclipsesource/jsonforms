@@ -385,6 +385,14 @@ export interface ControlState {
   isFocused: boolean;
 }
 
+const getControlErrorMessage = (error: ErrorObject) => {
+  if (error.keyword === 'required') {
+    // change validation message to refer to the property (and not its parent)
+   return 'is a required property';
+  }
+  return error.message;
+}
+
 /**
  * Map state to control props.
  * @param state the store's state
@@ -414,7 +422,7 @@ export const mapStateToControlProps = (
     rootSchema
   );
   const errors = formatErrorMessage(
-    union(getErrorAt(path, resolvedSchema)(state).map(error => error.message))
+    union(getErrorAt(path, resolvedSchema)(state).map(error => getControlErrorMessage(error)))
   );
   const description =
     resolvedSchema !== undefined ? resolvedSchema.description : '';

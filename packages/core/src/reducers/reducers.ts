@@ -28,6 +28,7 @@ import {
   coreReducer,
   errorAt,
   errorsAt,
+  getControlPath,
   JsonFormsCore,
   subErrorsAt,
   ValidationMode
@@ -126,7 +127,7 @@ export const getErrorAt = (instancePath: string, schema: JsonSchema) => (
   return errorAt(instancePath, schema)(state.jsonforms.core);
 };
 
-export { errorsAt };
+export { errorsAt, getControlPath };
 
 export const getSubErrorsAt = (instancePath: string, schema: JsonSchema) => (
   state: JsonFormsState

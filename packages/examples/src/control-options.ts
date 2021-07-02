@@ -102,7 +102,7 @@ export const data = {
   number: 50.5,
   integer: 50,
   date: '2020-06-25',
-  time: '23:08',
+  time: '23:08:00',
   dateTime: '2020-06-25T23:08:42+02:00',
   enum: 'Two'
 };

@@ -227,11 +227,10 @@ describe('Input control', () => {
         <InputControl schema={fixture.schema} uischema={fixture.uischema} />
       </JsonFormsStateProvider>
     );
+    const newCore = {...core, data: {...core.data, foo: 2}};
+    wrapper.setProps({ initState: { renderers: vanillaRenderers, core: newCore, cells, renderes }} );
     const validation = wrapper.find('.validation');
-    core.data = { ...core.data, foo: 2 };
-    wrapper.setProps({ initState: { renderers: vanillaRenderers, core, cells, renderes }} );
-    wrapper.update();
-    expect(validation.text()).toBe('should be boolean');
+    expect(validation.text()).toBe('must be boolean');
   });
 
   test('multiple errors', () => {
@@ -243,11 +242,10 @@ describe('Input control', () => {
         <InputControl schema={fixture.schema} uischema={fixture.uischema} />
       </JsonFormsStateProvider>
     );
-    core.data = { ...core.data, foo: 3 };
-    wrapper.setProps({ initState: { renderers: vanillaRenderers, core, cells, renderes }} );
-    wrapper.update();
+    const newCore = {...core, data: {...core.data, foo: 3}};
+    wrapper.setProps({ initState: { renderers: vanillaRenderers, core: newCore, cells, renderes }} );
     const validation = wrapper.find('.validation');
-    expect(validation.text()).toBe('should be boolean');
+    expect(validation.text()).toBe('must be boolean');
   });
 
   test('empty errors by default', () => {

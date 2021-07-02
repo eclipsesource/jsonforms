@@ -26,7 +26,7 @@ import {
 import { JsonFormsChangeEvent } from '../types';
 import DispatchRenderer from './DispatchRenderer.vue';
 
-import { Ajv } from 'ajv';
+import Ajv from 'ajv';
 
 const isObject = (elem: any): elem is Object => {
   return elem && typeof elem === 'object';

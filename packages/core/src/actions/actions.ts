@@ -85,7 +85,7 @@ export interface InitAction {
   data: any;
   schema: JsonSchema;
   uischema: UISchemaElement;
-  options?: InitActionOptions | AJV.Ajv;
+  options?: InitActionOptions | AJV;
 }
 
 export interface UpdateCoreAction {
@@ -93,11 +93,11 @@ export interface UpdateCoreAction {
   data?: any;
   schema?: JsonSchema;
   uischema?: UISchemaElement;
-  options?: InitActionOptions | AJV.Ajv;
+  options?: InitActionOptions | AJV;
 }
 
 export interface InitActionOptions {
-  ajv?: AJV.Ajv;
+  ajv?: AJV;
   validationMode?: ValidationMode;
 }
 
@@ -110,7 +110,7 @@ export const init = (
   data: any,
   schema: JsonSchema = generateJsonSchema(data),
   uischema?: UISchemaElement,
-  options?: InitActionOptions | AJV.Ajv
+  options?: InitActionOptions | AJV
 ) => ({
   type: INIT,
   data,
@@ -124,7 +124,7 @@ export const updateCore = (
   data: any,
   schema: JsonSchema,
   uischema?: UISchemaElement,
-  options?: AJV.Ajv | InitActionOptions
+  options?: AJV | InitActionOptions
 ): UpdateCoreAction => ({
   type: UPDATE_CORE,
   data,
@@ -157,10 +157,10 @@ export const unregisterDefaultData = (schemaPath: string) => ({
 
 export interface SetAjvAction {
   type: 'jsonforms/SET_AJV';
-  ajv: AJV.Ajv;
+  ajv: AJV;
 }
 
-export const setAjv = (ajv: AJV.Ajv) => ({
+export const setAjv = (ajv: AJV) => ({
   type: SET_AJV,
   ajv
 });

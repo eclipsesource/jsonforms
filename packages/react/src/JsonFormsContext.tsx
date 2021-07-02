@@ -82,7 +82,7 @@ const initialCoreState: JsonFormsCore = {
   schema: {},
   uischema: undefined,
   errors: [],
-  validator: () => true,
+  validator: undefined,
   ajv: undefined,
 };
 

@@ -252,6 +252,7 @@ export const booleanInputEventTest = <C extends JsonFormsControl, I>(
     expect(checkboxInstance.checked).toBe(false);
   });
 };
+
 export const booleanErrorTest = <C extends JsonFormsControl, I>(
   testConfig: TestConfig<C>,
   instance: Type<I>,
@@ -275,16 +276,16 @@ export const booleanErrorTest = <C extends JsonFormsControl, I>(
       core: {
         data,
         schema: defaultBooleanTestSchema,
-        uischema: undefined
+        uischema: uischema
       }
     });
     formsService.updateCore(Actions.updateErrors([
       {
-        dataPath: 'foo',
+        instancePath: '/foo',
         message: 'Hi, this is me, test error!',
         keyword: '',
         schemaPath: '',
-        params: ''
+        params: {}
       }
     ]));
     formsService.refresh();

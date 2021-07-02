@@ -27,7 +27,7 @@ import {
     EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges
 } from '@angular/core';
 import { Actions, JsonFormsRendererRegistryEntry, JsonSchema, UISchemaElement, UISchemaTester, ValidationMode } from '@jsonforms/core';
-import { Ajv, ErrorObject } from 'ajv';
+import Ajv, { ErrorObject } from 'ajv';
 import { JsonFormsAngularService, USE_STATE_VALUE } from './jsonforms.service';
 @Component({
     selector: 'jsonforms',

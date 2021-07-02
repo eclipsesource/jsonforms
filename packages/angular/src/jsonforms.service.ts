@@ -48,7 +48,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { JsonFormsBaseRenderer } from './base.renderer';
 
 import { cloneDeep } from 'lodash';
-import { Ajv } from 'ajv';
+import Ajv from 'ajv';
 
 export const USE_STATE_VALUE = Symbol('Marker to use state value');
 export class JsonFormsAngularService {

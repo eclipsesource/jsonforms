@@ -346,11 +346,11 @@ export const numberErrorTest = <C extends JsonFormsControl>(
     });
     formsService.updateCore(Actions.updateErrors([
       {
-        dataPath: 'foo',
+        instancePath: '/foo',
         message: 'Hi, this is me, test error!',
         keyword: '',
         schemaPath: '',
-        params: ''
+        params: {}
       }
     ]));
     formsService.refresh();

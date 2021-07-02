@@ -24,7 +24,7 @@
 */
 import maxBy from 'lodash/maxBy';
 import React, { useMemo } from 'react';
-import AJV from 'ajv';
+import Ajv from 'ajv';
 import { UnknownRenderer } from './UnknownRenderer';
 import {
   createId,
@@ -176,7 +176,7 @@ export interface JsonFormsInitStateProps {
   uischema?: UISchemaElement;
   renderers: JsonFormsRendererRegistryEntry[];
   cells?: JsonFormsCellRendererRegistryEntry[];
-  ajv?: AJV.Ajv;
+  ajv?: Ajv;
   config?: any;
   uischemas?: JsonFormsUISchemaRegistryEntry[];
   readonly?: boolean;

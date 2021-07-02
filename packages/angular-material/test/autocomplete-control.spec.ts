@@ -39,7 +39,6 @@ import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ErrorTestExpectation, setupMockStore, getJsonFormsService } from '@jsonforms/angular-test';
 import { ControlElement, JsonSchema, Actions } from '@jsonforms/core';
-import { MockNgZone } from './mock-ng-zone';
 import { AutocompleteControlRenderer } from '../src';
 import { JsonFormsAngularService } from '@jsonforms/angular';
 import { ErrorObject } from 'ajv';
@@ -191,14 +190,13 @@ describe('AutoComplete control Input Event Tests', () => {
   let inputElement: HTMLInputElement;
   let overlayContainer: OverlayContainer;
   let overlayContainerElement: HTMLElement;
-  let zone: MockNgZone;
+  let zone: NgZone;
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [componentUT],
       imports: imports,
       providers: [
         ...providers,
-        { provide: NgZone, useFactory: () => (zone = new MockNgZone()) }
       ]
     }).compileComponents();
 
@@ -210,7 +208,8 @@ describe('AutoComplete control Input Event Tests', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(componentUT);
     component = fixture.componentInstance;
-
+    zone =  TestBed.inject(NgZone);
+    spyOn(zone, 'runOutsideAngular').and.callFake((fn: Function) => fn());
     inputElement = fixture.debugElement.query(By.css('input')).nativeElement;
   });
 
@@ -233,7 +232,7 @@ describe('AutoComplete control Input Event Tests', () => {
     const spy = spyOn(component, 'onSelect');
 
     inputElement.focus();
-    zone.simulateZoneExit();
+    zone.runOutsideAngular(() => zone.onStable.emit(null));
     fixture.detectChanges();
 
     const options = overlayContainerElement.querySelectorAll(
@@ -259,7 +258,7 @@ describe('AutoComplete control Input Event Tests', () => {
     const spy = spyOn(component, 'onSelect');
 
     inputElement.focus();
-    zone.simulateZoneExit();
+    zone.runOutsideAngular(() => zone.onStable.emit(null));
     fixture.detectChanges();
 
     const options = overlayContainerElement.querySelectorAll(
@@ -294,9 +293,9 @@ describe('AutoComplete control Error Tests', () => {
   it('should display errors', () => {
     const errors: ErrorObject[] = [
       {
-        dataPath: 'foo',
+        instancePath: '/foo',
         message: 'Hi, this is me, test error!',
-        params: '',
+        params: {},
         keyword: '',
         schemaPath: ''
       }
