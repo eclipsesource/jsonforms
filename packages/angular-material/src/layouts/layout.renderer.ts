@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
+import { OnDestroy, OnInit, ChangeDetectorRef, Component } from '@angular/core';
 import {
   JsonFormsAngularService,
   JsonFormsBaseRenderer
@@ -36,6 +36,9 @@ import {
 } from '@jsonforms/core';
 import { Subscription } from 'rxjs';
 
+@Component({
+  template: ''
+})
 export class LayoutRenderer<T extends Layout> extends JsonFormsBaseRenderer<T>
   implements OnInit, OnDestroy {
   hidden: boolean;
