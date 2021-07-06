@@ -22,10 +22,10 @@ import {
   JsonFormsUISchemaRegistryEntry,
   getFirstPrimitiveProp
 } from '@jsonforms/core';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import IconButton from '@material-ui/core/IconButton';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
 import { Grid } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Avatar from '@material-ui/core/Avatar';
@@ -114,12 +114,12 @@ const ExpandPanelRenderer = (props: ExpandPanelProps) => {
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
 
   return (
-    <ExpansionPanel
+    <Accordion
       aria-labelledby={labelHtmlId}
       expanded={expanded}
       onChange={handleExpansion(childPath)}
     >
-      <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Grid container alignItems={'center'}>
           <Grid item xs={7} md={9}>
             <Grid container alignItems={'center'}>
@@ -180,8 +180,8 @@ const ExpandPanelRenderer = (props: ExpandPanelProps) => {
             </Grid>
           </Grid>
         </Grid>
-      </ExpansionPanelSummary>
-      <ExpansionPanelDetails>
+      </AccordionSummary>
+      <AccordionDetails>
         <JsonFormsDispatch
           schema={schema}
           uischema={foundUISchema}
@@ -190,8 +190,8 @@ const ExpandPanelRenderer = (props: ExpandPanelProps) => {
           renderers={renderers}
           cells={cells}
         />
-      </ExpansionPanelDetails>
-    </ExpansionPanel>
+      </AccordionDetails>
+    </Accordion>
   );
 };
 
