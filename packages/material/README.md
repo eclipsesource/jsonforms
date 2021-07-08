@@ -59,6 +59,6 @@ Our current roadmap is available [here](https://github.com/eclipsesource/jsonfor
 JSON Forms is developed by [EclipseSource](https://eclipsesource.com).
 
 If you encounter any problems feel free to [open an issue](https://github.com/eclipsesource/jsonforms/issues/new/choose) on the repo.
-For questions and discussions please use the [JSON Forms board](https://spectrum.chat/jsonforms).
+For questions and discussions please use the [JSON Forms board](https://jsonforms.discourse.group).
 You can also reach us via [email](mailto:jsonforms@eclipsesource.com?subject=JSON%20Forms).
 In addition, EclipseSource also offers [professional support](https://jsonforms.io/support) for JSON Forms.
