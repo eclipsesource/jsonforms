@@ -16,7 +16,7 @@ function Support() {
           <div className={styles.community} style={{flex: '1'}}>
             <h3 className={styles.comparison_title}>Community support</h3>
             <ul className={styles.list} style={{listStylePosition: 'inside'}}>
-              <li className={styles.list_item}><a className={styles.link} href={'https://spectrum.chat/jsonforms/'}>Public channel</a></li>
+              <li className={styles.list_item}><a className={styles.link} href={'https://jsonforms.discourse.group'}>Public channel</a></li>
               <li className={styles.list_item}>Basic topics only</li>
               <li className={styles.list_item}>Longer response time</li>
             </ul>

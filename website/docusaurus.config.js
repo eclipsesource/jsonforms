@@ -75,8 +75,8 @@ module.exports = {
               href: 'https://github.com/eclipsesource/jsonforms',
             },
             {
-              label: 'Spectrum',
-              href: 'https://spectrum.chat/jsonforms',
+              label: 'Discourse',
+              href: 'https://jsonforms.discourse.group',
             },
           ],
         },
@@ -89,7 +89,7 @@ module.exports = {
             },
             {
               label: 'EclipseSource Blog',
-              href: 'https://eclipsesource.com/blogs/tag/jsonforms/',
+              href: 'https://eclipsesource.com/blogs/tag/jsonforms',
             },
           ],
         },
@@ -98,7 +98,7 @@ module.exports = {
           items: [
             {
               label: 'Imprint',
-              href: 'https://eclipsesource.com/imprint/',
+              href: 'https://eclipsesource.com/imprint',
             },
             {
               label: 'Privacy Policy',
