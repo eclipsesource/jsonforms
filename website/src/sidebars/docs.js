@@ -9,6 +9,7 @@ module.exports = {
       collapsed: false,
       items: ['uischema/uischema', 'uischema/controls', 'uischema/layouts', 'uischema/rules'],
     },
+    'labels',
     'renderer-sets',
     'ref-resolving',
     'validation',
