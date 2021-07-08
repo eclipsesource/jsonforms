@@ -12,6 +12,7 @@ module.exports = {
     'labels',
     'renderer-sets',
     'ref-resolving',
+    'readonly',
     'validation',
     {
       type: 'category',

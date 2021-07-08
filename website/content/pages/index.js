@@ -23,9 +23,10 @@ import { Demo } from '../../src/components/common/Demo';
 import schema from './assets/schema.json';
 import uischema from './assets/uischema.json';
 
+const currentVersion = process.env.CURRENTVERSION ?? corePackageJson.version;;
 const nextVersion = process.env.NEXTVERSION;
 const nextVersionText =
-  nextVersion && nextVersion !== corePackageJson.version
+  nextVersion && nextVersion !== currentVersion
     ? `@next: ${nextVersion}`
     : '';
 
@@ -46,7 +47,7 @@ function Home() {
             <p className={styles.subtitle}>{siteConfig.tagline}</p>
             <p className={styles.subsubtitle}>Complex forms in the blink of an eye</p>
             <p className={styles.version}>
-            Version: {corePackageJson.version}
+            Version: {currentVersion}
               {nextVersionText && (
                 <>
                   <br />

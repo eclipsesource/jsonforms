@@ -1,4 +1,5 @@
 node_modules
 .docusaurus
 build
+.env
 google7cffb0370fcac18c.html

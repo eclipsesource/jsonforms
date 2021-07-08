@@ -11,5 +11,5 @@ module.exports = {
     'gen-both-schemas',
     'combinators',
     'list-with-detail'
-  ]
+]
 };
