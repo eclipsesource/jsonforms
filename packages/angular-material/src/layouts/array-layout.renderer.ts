@@ -28,8 +28,7 @@ import {
   OnDestroy,
   OnInit
 } from '@angular/core';
-import { JsonFormsAngularService } from '@jsonforms/angular';
-import { JsonFormsAbstractControl } from '@jsonforms/angular/lib/abstract-control';
+import { JsonFormsAngularService, JsonFormsAbstractControl } from '@jsonforms/angular';
 import {
   ArrayLayoutProps,
   createDefaultValue,
