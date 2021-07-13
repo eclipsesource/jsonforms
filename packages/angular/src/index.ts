@@ -30,3 +30,4 @@ export * from './jsonforms.module';
 export * from './unknown.component';
 export * from './jsonforms.service';
 export * from './jsonforms-root.component';
+export * from './abstract-control';
