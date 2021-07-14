@@ -25,7 +25,7 @@
 import { ControlElement, JsonSchema, UISchemaElement } from '../';
 
 import { generateJsonSchema } from './schema';
-import { createControlElement, generateDefaultUISchema } from './uischema';
+import { createControlElement, generateDefaultUISchema, generateDeepDefaultUISchema } from './uischema';
 
 export const Generate: {
   jsonSchema(instance: Object, options?: any): JsonSchema;
@@ -44,3 +44,4 @@ export const Generate: {
 
 export { generateJsonSchema };
 export { generateDefaultUISchema };
+export { generateDeepDefaultUISchema };
