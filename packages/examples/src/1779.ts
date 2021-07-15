@@ -45,7 +45,7 @@ const uischema = {
 
 registerExamples([
     {
-        name: '1779',
+        name: '1779-string',
         label: 'List With Detail primitive (string)',
         data,
         schema,
@@ -74,8 +74,8 @@ const uischema_number = {
 
 registerExamples([
     {
-        name: '1779',
-        label: 'List With Detail primitive (string)',
+        name: '1779-number',
+        label: 'List With Detail primitive (number)',
         data: data_number,
         schema: schema_number,
         uischema: uischema_number

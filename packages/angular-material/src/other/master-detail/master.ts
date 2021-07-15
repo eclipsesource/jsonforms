@@ -183,7 +183,7 @@ export class MasterListComponent extends JsonFormsArrayControl {
       const labelRefInstancePath = controlElement.options?.labelRef && removeSchemaKeywords(
         controlElement.options.labelRef
       );
-      const isPrimitive = d && typeof d !== 'object';
+      const isPrimitive = d !== undefined && typeof d !== 'object';
       const masterItem = {
         label: isPrimitive ? d.toString() : get(d, labelRefInstancePath ?? getFirstPrimitiveProp(schema)),
         data: d,
