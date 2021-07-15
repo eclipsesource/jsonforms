@@ -22,6 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+
 export const configDefault = {
   /*
    * [text] whether to restrict the number of characters to maxLength,

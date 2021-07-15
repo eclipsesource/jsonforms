@@ -22,23 +22,38 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+
 import isEmpty from 'lodash/isEmpty';
 import union from 'lodash/union';
-import { getConfig, getData, getErrorAt, getSchema, getAjv } from '../reducers';
+import {
+  getConfig,
+  getData,
+  getErrorAt,
+  getSchema,
+  getAjv,
+  JsonFormsCellRendererRegistryEntry
+} from '../reducers';
+import { AnyAction, Dispatch } from './type';
+import {
+  formatErrorMessage,
+  Resolve,
+} from './util';
+import {
+  isInherentlyEnabled,
+  isVisible,
+} from './runtime';
 import {
   DispatchPropsOfControl,
   EnumOption,
   enumToEnumOptionMapper,
   mapDispatchToControlProps,
+  oneOfToEnumOptionMapper,
   OwnPropsOfControl,
   OwnPropsOfEnum,
-  StatePropsOfScopedRenderer
+  StatePropsOfScopedRenderer,
 } from './renderer';
 import { JsonFormsState } from '../store';
-import { JsonFormsCellRendererRegistryEntry } from '../reducers/cells';
-import { JsonSchema } from '../models/jsonSchema';
-import { isInherentlyEnabled, isVisible } from './runtime';
-import { AnyAction, Dispatch, formatErrorMessage, oneOfToEnumOptionMapper, Resolve } from '.';
+import { JsonSchema } from '../models';
 
 export { JsonFormsCellRendererRegistryEntry };
 

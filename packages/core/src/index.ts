@@ -22,40 +22,15 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-export * from './util';
 
-export { JsonSchema } from './models/jsonSchema';
-export { JsonSchema4 } from './models/jsonSchema4';
-export { JsonSchema7 } from './models/jsonSchema7';
-export * from './store';
 export * from './actions';
-import * as Actions from './actions';
-export { Actions };
-export * from './reducers';
+export * as Actions from './actions';
 export * from './generators';
-
-export * from './models/uischema';
-
-import * as Test from './testers';
+export * from './models';
+export * from './reducers';
 export * from './testers';
-export { Test };
-
-import { convertToValidClassName, createLabelDescriptionFrom } from './util';
-import { ControlElement, LabelDescription } from './models/uischema';
-import { JsonSchema } from './models/jsonSchema';
-
-const Helpers: {
-  createLabelDescriptionFrom(
-    withLabel: ControlElement,
-    schema: JsonSchema
-  ): LabelDescription;
-  convertToValidClassName(s: string): string;
-} = {
-  createLabelDescriptionFrom,
-  convertToValidClassName
-};
-
-export { Helpers };
-
+export * as Test from './testers';
 export * from './util';
+
+export * from './Helpers';
 export * from './store';

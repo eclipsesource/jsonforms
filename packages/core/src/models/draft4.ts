@@ -22,6 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+
 export const Draft4 = {
   id: 'http://json-schema.org/draft-04/schema#',
   $schema: 'http://json-schema.org/draft-04/schema#',

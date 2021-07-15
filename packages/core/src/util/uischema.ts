@@ -22,8 +22,9 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+
 import isEmpty from 'lodash/isEmpty';
-import { isLayout, UISchemaElement } from '../models/uischema';
+import { isLayout, UISchemaElement } from '../models';
 
 export type IterateCallback = (uischema: UISchemaElement) => void;
 

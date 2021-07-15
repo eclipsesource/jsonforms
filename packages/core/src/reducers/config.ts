@@ -22,10 +22,11 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+
 import merge from 'lodash/merge';
 import { SET_CONFIG, SetConfigAction } from '../actions';
 import { configDefault } from '../configDefault';
-import { Reducer } from '../util/type';
+import { Reducer } from '../util';
 
 const applyDefaultConfiguration = (config: any = {}) =>
   merge({}, configDefault, config);

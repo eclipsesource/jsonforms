@@ -23,4 +23,16 @@
   THE SOFTWARE.
 */
 
-export * from './actions';
+import { convertToValidClassName, createLabelDescriptionFrom } from './util';
+import { ControlElement, JsonSchema, LabelDescription } from './models';
+
+export const Helpers: {
+  createLabelDescriptionFrom(
+    withLabel: ControlElement,
+    schema: JsonSchema
+  ): LabelDescription;
+  convertToValidClassName(s: string): string;
+} = {
+  createLabelDescriptionFrom,
+  convertToValidClassName
+};

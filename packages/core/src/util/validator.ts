@@ -22,9 +22,10 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+
 import AJV from 'ajv';
 import { Options } from 'ajv';
-import { Draft4 } from '../models/draft4';
+import { Draft4 } from '../models';
 
 export const createAjv = (options?: Options) => {
   const ajv = new AJV({

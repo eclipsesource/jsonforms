@@ -22,6 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+
 import cloneDeep from 'lodash/cloneDeep';
 import setFp from 'lodash/fp/set';
 import get from 'lodash/get';
@@ -43,9 +44,8 @@ import {
   UPDATE_CORE,
   UpdateCoreAction
 } from '../actions';
-import { createAjv } from '../util/validator';
-import { Reducer } from '../util/type';
-import { JsonSchema, UISchemaElement } from '..';
+import { createAjv, Reducer } from '../util';
+import { JsonSchema, UISchemaElement } from '../models';
 
 const validate = (validator: ValidateFunction, data: any): ErrorObject[] => {
   const valid = validator(data);
@@ -104,7 +104,7 @@ const getOrCreateAjv = (state: JsonFormsCore, action?: InitAction | UpdateCoreAc
       // options object with ajv
       return action.options.ajv;
     } else if (
-      action.options !== undefined 
+      action.options !== undefined
     ) {
       // it is not an option object => should be ajv itself => check for compile function
       if (isFunction(action.options.compile)) {

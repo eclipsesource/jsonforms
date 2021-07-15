@@ -22,9 +22,10 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { SET_LOCALE, SET_LOCALIZED_SCHEMAS } from '../actions';
-import { JsonSchema, SET_LOCALIZED_UISCHEMAS, UISchemaElement } from '..';
-import { Reducer } from '../util/type';
+
+import { SET_LOCALE, SET_LOCALIZED_SCHEMAS, SET_LOCALIZED_UISCHEMAS } from '../actions';
+import { JsonSchema, UISchemaElement } from '../models';
+import { Reducer } from '../util';
 
 export interface JsonFormsLocaleState {
   locale?: string;

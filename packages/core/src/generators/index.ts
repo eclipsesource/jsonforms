@@ -22,25 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { ControlElement, JsonSchema, UISchemaElement } from '../';
 
-import { generateJsonSchema } from './schema';
-import { createControlElement, generateDefaultUISchema } from './uischema';
-
-export const Generate: {
-  jsonSchema(instance: Object, options?: any): JsonSchema;
-  uiSchema(
-    jsonSchema: JsonSchema,
-    layoutType?: string,
-    prefix?: string,
-    rootSchema?: JsonSchema
-  ): UISchemaElement;
-  controlElement(ref: string): ControlElement;
-} = {
-  jsonSchema: generateJsonSchema,
-  uiSchema: generateDefaultUISchema,
-  controlElement: createControlElement
-};
-
-export { generateJsonSchema };
-export { generateDefaultUISchema };
+export * from './Generate';
+export * from './schema';
+export * from './uischema';

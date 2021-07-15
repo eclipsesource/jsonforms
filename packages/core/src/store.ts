@@ -22,12 +22,15 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+
 import { Store } from './util';
-import { JsonFormsCore } from './reducers/core';
-import { JsonFormsCellRendererRegistryEntry } from './reducers/cells';
-import { JsonFormsRendererRegistryEntry } from './reducers/renderers';
-import { JsonFormsLocaleState } from './reducers/i18n';
-import { JsonFormsUISchemaRegistryEntry } from './reducers/uischemas';
+import {
+  JsonFormsCore,
+  JsonFormsCellRendererRegistryEntry,
+  JsonFormsRendererRegistryEntry,
+  JsonFormsLocaleState,
+  JsonFormsUISchemaRegistryEntry
+} from './reducers';
 
 /**
  * JSONForms store.

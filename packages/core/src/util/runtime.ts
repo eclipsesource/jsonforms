@@ -22,6 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+
 import has from 'lodash/has';
 import {
   AndCondition,
@@ -32,7 +33,7 @@ import {
   SchemaBasedCondition,
   Scopable,
   UISchemaElement
-} from '../models/uischema';
+} from '../models';
 import { resolveData } from './resolvers';
 import { composeWithUi } from './path';
 import { Ajv } from 'ajv';

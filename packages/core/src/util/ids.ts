@@ -22,6 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+
 const usedIds: Set<string> = new Set<string>();
 
 const makeId = (idBase: string, iteration: number) =>

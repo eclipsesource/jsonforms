@@ -22,13 +22,14 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+
 import {
   ADD_DEFAULT_DATA,
   RegisterDefaultDataAction,
   REMOVE_DEFAULT_DATA,
   UnregisterDefaultDataAction
 } from '../actions';
-import { Reducer } from '../util/type';
+import { Reducer } from '../util';
 
 export interface JsonFormsDefaultDataRegistryEntry {
   schemaPath: string;

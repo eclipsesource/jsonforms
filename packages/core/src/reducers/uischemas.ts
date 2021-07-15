@@ -22,11 +22,13 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+
 import maxBy from 'lodash/maxBy';
 import remove from 'lodash/remove';
 import { ADD_UI_SCHEMA, REMOVE_UI_SCHEMA, UISchemaActions } from '../actions';
-import { JsonSchema, NOT_APPLICABLE, UISchemaElement } from '..';
-import { Reducer } from '../util/type';
+import { NOT_APPLICABLE } from '../testers';
+import { JsonSchema, UISchemaElement } from '../models';
+import { Reducer } from '../util';
 
 export type UISchemaTester = (
   schema: JsonSchema,

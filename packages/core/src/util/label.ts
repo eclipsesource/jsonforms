@@ -22,10 +22,10 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+
 import startCase from 'lodash/startCase';
 
-import { ControlElement, LabelDescription } from '../models/uischema';
-import { JsonSchema } from '../models/jsonSchema';
+import { ControlElement, JsonSchema, LabelDescription } from '../models';
 
 const deriveLabel = (
   controlElement: ControlElement,
