@@ -34,6 +34,7 @@ import {
   ControlElement,
   createDefaultValue,
   findUISchema,
+  getFirstPrimitiveProp,
   JsonFormsState,
   mapDispatchToArrayControlProps,
   mapStateToArrayControlProps,
@@ -169,22 +170,22 @@ export class MasterListComponent extends JsonFormsArrayControl {
     const { data, path, schema, uischema } = props;
     const controlElement = uischema as ControlElement;
     this.propsPath = props.path;
-    const detailUISchema =
-      controlElement.options.detail ||
-      findUISchema(
+    const detailUISchema = findUISchema(
         props.uischemas,
         schema,
         `${controlElement.scope}/items`,
         props.path,
-        'VerticalLayout'
+        'VerticalLayout',
+        controlElement
       );
 
     const masterItems = (data || []).map((d: any, index: number) => {
-      const labelRefInstancePath = removeSchemaKeywords(
+      const labelRefInstancePath = controlElement.options?.labelRef && removeSchemaKeywords(
         controlElement.options.labelRef
       );
+      const isPrimitive = d !== undefined && typeof d !== 'object';
       const masterItem = {
-        label: get(d, labelRefInstancePath),
+        label: isPrimitive ? d.toString() : get(d, labelRefInstancePath ?? getFirstPrimitiveProp(schema)),
         data: d,
         path: `${path}.${index}`,
         schema,

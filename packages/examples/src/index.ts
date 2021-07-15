@@ -74,6 +74,7 @@ import * as booleanToggle from './booleanToggle';
 import * as multiEnum from './multi-enum';
 import * as enumInArray from './enumInArray';
 import * as readonly from './readonly';
+import * as bug_1779 from './1779';
 export * from './register';
 export * from './example';
 
@@ -132,5 +133,6 @@ export {
   booleanToggle,
   multiEnum,
   enumInArray,
-  readonly
+  readonly,
+  bug_1779
 };
