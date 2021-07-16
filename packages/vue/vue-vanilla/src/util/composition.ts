@@ -28,7 +28,15 @@ export const useVanillaControl = <
 
   const isFocused = ref(false);
   const onChange = (event: Event) => {
-    input.handleChange(input.control.value.path, adaptTarget(event.target));
+    let data = adaptTarget(event.target);
+
+    if (appliedOptions.value.removeWhenEmpty) {
+      if (isEmpty(data, input.control.value.schema.type)) {
+        data = undefined;
+      }
+    }
+
+    input.handleChange(input.control.value.path, data);
   };
 
   const controlWrapper = computed(() => {
@@ -77,44 +85,65 @@ export const useVanillaLayout = <I extends { layout: any }>(input: I) => {
 export const useVanillaArrayControl = <I extends { control: any }>(
   input: I
 ) => {
-  const appliedOptions = computed(() =>
-    merge(
-      {},
-      cloneDeep(input.control.value.config),
-      cloneDeep(input.control.value.uischema.options)
-    )
-  );
+       const appliedOptions = computed(() =>
+         merge(
+           {},
+           cloneDeep(input.control.value.config),
+           cloneDeep(input.control.value.uischema.options)
+         )
+       );
 
-  const childUiSchema = computed(() =>
-    findUISchema(
-      input.control.value.uischemas,
-      input.control.value.schema,
-      input.control.value.uischema.scope,
-      input.control.value.path
-    )
-  );
+       const childUiSchema = computed(() =>
+         findUISchema(
+           input.control.value.uischemas,
+           input.control.value.schema,
+           input.control.value.uischema.scope,
+           input.control.value.path
+         )
+       );
 
-  const childLabelForIndex = (index: number) => {
-    const childLabelProp =
-      input.control.value.uischema.options?.childLabelProp ??
-      getFirstPrimitiveProp(input.control.value.schema);
-    if (!childLabelProp) {
-      return `${index}`;
+       const childLabelForIndex = (index: number) => {
+         const childLabelProp =
+           input.control.value.uischema.options?.childLabelProp ??
+           getFirstPrimitiveProp(input.control.value.schema);
+         if (!childLabelProp) {
+           return `${index}`;
+         }
+         const labelValue = Resolve.data(
+           input.control.value.data,
+           composePaths(`${index}`, childLabelProp)
+         );
+         if (
+           labelValue === undefined ||
+           labelValue === null ||
+           labelValue === NaN
+         ) {
+           return '';
+         }
+         return `${labelValue}`;
+       };
+
+       return {
+         ...input,
+         styles: useStyles(input.control.value.uischema),
+         appliedOptions,
+         childUiSchema,
+         childLabelForIndex
+       };
+     };
+
+function isEmpty(data: any, type: string): boolean {
+  if (type) {
+    type = type.toLowerCase();
+
+    if (type === 'number') {
+      return !data && data !== 0;
+    } else if (type === 'boolean') {
+      return data;
     }
-    const labelValue = Resolve.data(
-      input.control.value.data,
-      composePaths(`${index}`, childLabelProp)
-    );
-    if (labelValue === undefined || labelValue === null || labelValue === NaN) {
-      return '';
-    }
-    return `${labelValue}`;
-  };
-  return {
-    ...input,
-    styles: useStyles(input.control.value.uischema),
-    appliedOptions,
-    childUiSchema,
-    childLabelForIndex
-  };
-};
+  }
+
+  console.log(data);
+
+  return !data || data.length <= 0;
+}

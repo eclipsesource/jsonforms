@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import { merge } from 'lodash';
 import { mountJsonForms } from '../util';
 
 const schema = {
@@ -36,5 +37,17 @@ describe('StringControlRenderer.vue', () => {
     const input = wrapper.find('input');
     const placeholder = input.attributes('placeholder');
     expect(placeholder).to.equal('string placeholder');
+  });
+
+  describe('removeWhenEmpty: true', () => {
+    const rweUischema = merge(uischema, { options: { removeWhenEmpty: true } });
+
+    it('data should be undefined', async () => {
+      const wrapper = mountJsonForms('a', schema, rweUischema);
+      const input = wrapper.find('input');
+      await input.setValue('b');
+      await input.setValue('');
+      expect(wrapper.vm.data).to.equal(undefined);
+    });
   });
 });
