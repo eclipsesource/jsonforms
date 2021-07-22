@@ -877,7 +877,8 @@ const mapStateToCombinatorRendererProps = (
     'required',
     'additionalProperties',
     'type',
-    'enum'
+    'enum',
+    'const'
   ];
   const dataIsValid = (errors: ErrorObject[]): boolean => {
     return (

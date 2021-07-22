@@ -51,6 +51,9 @@ import {
   JsonFormsCore,
   JsonFormsState,
   JsonSchema,
+  JsonSchema7,
+  mapStateToAnyOfProps,
+  OwnPropsOfControl,
   rankWith,
   RuleEffect,
   UISchemaElement
@@ -1217,4 +1220,60 @@ test('computeLabel - should not edit label if required but hideRequiredAsterisk 
 test('computeLabel - should add asterisk if required but hideRequiredAsterisk is false', t => {
   const computedLabel = computeLabel('Test Label', true, false);
   t.is(computedLabel, 'Test Label*');
+});
+
+test('mapStateToAnyOfProps - const constraint in anyOf schema should return correct indexOfFittingSchema', t => {
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#'
+  };
+  const schema: JsonSchema7 = {
+    anyOf: [
+      {
+        type: "object",
+        properties: {
+          type: {
+            const: "type1"
+          }
+        }
+      },
+      {
+        type: "object",
+        properties: {
+          type: {
+            const: "type2"
+          }
+        }
+      },
+      {
+        type: "object",
+        properties: {
+          type: {
+            const: "type3"
+          }
+        }
+      }
+    ]
+  };
+  const ownProps: OwnPropsOfControl = {
+    visible: true,
+    uischema,
+    path: 'foo'
+  };
+  const state = {
+    jsonforms: {
+      core: {
+        ajv: createAjv(),
+        schema,
+        data: {
+          foo: { type: "type3"}
+        },
+        uischema,
+        errors: [] as ErrorObject[]
+      }
+    }
+  };
+  const props = mapStateToAnyOfProps(state, ownProps);
+  console.log(JSON.stringify(props, null, 2));
+  t.is(props.indexOfFittingSchema, 2);
 });
