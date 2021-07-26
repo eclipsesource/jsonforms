@@ -92,8 +92,11 @@ export const MaterialCategorizationLayoutRenderer = (props: MaterialCategorizati
   } = props;
   const categorization = uischema as Categorization;
   const [activeCategory, setActiveCategory]= useState<number|undefined>(selected??0);
+  const categories = categorization.elements.filter((category: Category) =>
+    isVisible(category, data, undefined, ajv)
+  );
   const childProps: MaterialLayoutRendererProps = {
-    elements: categorization.elements[activeCategory].elements,
+    elements: categories[activeCategory].elements,
     schema,
     path,
     direction: 'column',
@@ -102,9 +105,6 @@ export const MaterialCategorizationLayoutRenderer = (props: MaterialCategorizati
     renderers,
     cells
   };
-  const categories = categorization.elements.filter((category: Category) =>
-    isVisible(category, data, undefined, ajv)
-  );
   const onTabChange = (_event: any, value: any) => {
     if (onChange) {
       onChange(value, activeCategory);

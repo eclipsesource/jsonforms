@@ -372,4 +372,77 @@ describe('Material categorization layout', () => {
     const materialArrayLayout = wrapper.find(MaterialLayoutRenderer);
     expect(materialArrayLayout.props().renderers).toHaveLength(0);
   });
+
+  it('display correct content when hiding a tab', () => {
+    const data = { name : 'fo' };
+    const condition: SchemaBasedCondition = {
+      scope: '#/properties/name',
+      schema: { maxLength: 3 }
+    };
+    const nameControl: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/name'
+    };
+    const uischema: Categorization = {
+      type: 'Categorization',
+      label: '',
+      options: {
+          showNavButtons: true
+      },
+      elements: [
+        {
+          type: 'Category',
+          label: 'A',
+          elements: undefined
+        },
+        {
+          type: 'Category',
+          label: 'B',
+          elements: undefined,
+          rule: {
+            effect: RuleEffect.SHOW,
+            condition: condition
+          }
+        },
+        {
+          type: 'Category',
+          label: 'C',
+          elements: [nameControl],
+          rule: {
+            effect: RuleEffect.HIDE,
+            condition: condition
+          }
+        }
+      ]
+    };
+
+    const core = initCore(fixture.schema, uischema, data);
+
+    const wrapper = mount(
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <MaterialCategorizationLayoutRenderer
+            {...layoutDefaultProps}
+            schema={fixture.schema}
+            uischema={uischema}
+        />
+      </JsonFormsStateProvider>
+    );
+    
+    wrapper
+      .find(Tab)
+      .at(1)
+      .simulate('click');
+
+    let isCategoryCshown = wrapper.find('input[type="text"]').length > 0;
+    expect(isCategoryCshown).toBe(false);
+
+    core.data = { ...core.data, name: 'Barr' };
+    wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
+    wrapper.update();
+
+    isCategoryCshown = wrapper.find('input[type="text"]').length > 0;
+    expect(isCategoryCshown).toBe(true);
+    
+    wrapper.unmount();
+  });
 });
