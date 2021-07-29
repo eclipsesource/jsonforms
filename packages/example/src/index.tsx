@@ -41,6 +41,11 @@ import { getExamples } from '@jsonforms/examples';
 import { AdditionalStoreParams, exampleReducer } from './reduxUtil';
 import { enhanceExample, ReactExampleDescription } from './util';
 
+import dayjs from 'dayjs';
+import 'dayjs/locale/de';
+import 'dayjs/locale/en';
+dayjs.locale('de');
+
 const setupStore = (
   exampleData: ReactExampleDescription[],
   cells: JsonFormsCellRendererRegistryEntry[],

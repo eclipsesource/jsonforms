@@ -35,7 +35,6 @@ import {
   ControlElement,
   createDefaultValue,
   Helpers,
-  isPlainLabel,
   Paths,
   RankedTester,
   Resolve,
@@ -100,12 +99,11 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
     const divClassNames = [validationClass]
       .concat(isValid ? '' : getStyleAsClassName('array.table.validation.error'))
       .join(' ');
-    const labelText = isPlainLabel(label) ? label : label.default;
 
     return (
       <div className={controlClass} hidden={!visible}>
         <header>
-          <label className={labelClass}>{labelText}</label>
+          <label className={labelClass}>{label}</label>
           <button
             className={buttonClass}
             onClick={addItem(path, createDefaultValue(schema))}

@@ -57,15 +57,6 @@ import { JsonFormsState } from '../store';
 
 export { JsonFormsRendererRegistryEntry, JsonFormsCellRendererRegistryEntry };
 
-export interface Labels {
-  default: string;
-  [additionalLabels: string]: string;
-}
-
-export const isPlainLabel = (label: string | Labels): label is string => {
-  return typeof label === 'string';
-};
-
 const isRequired = (
   schema: JsonSchema,
   schemaPath: string,
@@ -317,7 +308,7 @@ export interface StatePropsOfControl extends StatePropsOfScopedRenderer {
   /**
    * The label for the rendered element.
    */
-  label: string | Labels;
+  label: string;
 
   /**
    * Description of input cell

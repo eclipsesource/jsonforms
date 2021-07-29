@@ -29,7 +29,6 @@ import {
   composePaths,
   computeLabel,
   createDefaultValue,
-  isPlainLabel
 } from '@jsonforms/core';
 import map from 'lodash/map';
 import { ArrayLayoutToolbar } from './ArrayToolbar';
@@ -80,7 +79,7 @@ export class MaterialArrayLayout extends React.PureComponent<
       <div>
         <ArrayLayoutToolbar
           label={computeLabel(
-            isPlainLabel(label) ? label : label.default,
+            label,
             required,
             appliedUiSchemaOptions.hideRequiredAsterisk
           )}

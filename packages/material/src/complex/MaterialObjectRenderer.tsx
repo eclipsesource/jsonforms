@@ -27,7 +27,6 @@ import {
   findUISchema,
   GroupLayout,
   isObjectControl,
-  isPlainLabel,
   RankedTester,
   rankWith,
   StatePropsOfControlWithDetail
@@ -64,7 +63,7 @@ const MaterialObjectRenderer = ({
   if (isEmpty(path)) {
     detailUiSchema.type = 'VerticalLayout';
   } else {
-    (detailUiSchema as GroupLayout).label = isPlainLabel(label) ? label : label.default;
+    (detailUiSchema as GroupLayout).label = label;
   }
   return (
     <Hidden xsUp={!visible}>

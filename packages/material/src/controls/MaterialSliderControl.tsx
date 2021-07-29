@@ -28,7 +28,6 @@ import {
   ControlProps,
   ControlState,
   isDescriptionHidden,
-  isPlainLabel,
   isRangeControl,
   RankedTester,
   rankWith
@@ -98,7 +97,7 @@ export class MaterialSliderControl extends Control<ControlProps, ControlState> {
         >
           <Typography id={id + '-typo'} style={labelStyle} variant='caption'>
             {computeLabel(
-              isPlainLabel(label) ? label : label.default,
+              label,
               required,
               appliedUiSchemaOptions.hideRequiredAsterisk
             )}

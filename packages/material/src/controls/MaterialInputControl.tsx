@@ -28,7 +28,6 @@ import {
   ControlProps,
   ControlState,
   isDescriptionHidden,
-  isPlainLabel
 } from '@jsonforms/core';
 import { Control } from '@jsonforms/react';
 
@@ -87,7 +86,7 @@ export abstract class MaterialInputControl extends Control<
             error={!isValid}
           >
             {computeLabel(
-              isPlainLabel(label) ? label : label.default,
+              label,
               required,
               appliedUiSchemaOptions.hideRequiredAsterisk
             )}

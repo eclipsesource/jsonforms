@@ -26,7 +26,6 @@ import {
   Actions,
   computeLabel,
   ControlElement,
-  isPlainLabel,
   JsonFormsState,
   JsonSchema,
   OwnPropsOfControl,
@@ -110,7 +109,7 @@ export abstract class JsonFormsAbstractControl<
           config
         } = props;
         this.label = computeLabel(
-          isPlainLabel(label) ? label : label.default,
+          label,
           required,
           config ? config.hideRequiredAsterisk : false
         );

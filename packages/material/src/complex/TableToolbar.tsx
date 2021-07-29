@@ -27,7 +27,6 @@ import {
   ControlElement,
   createDefaultValue,
   JsonSchema,
-  Labels
 } from '@jsonforms/core';
 import IconButton from '@material-ui/core/IconButton';
 import { Grid, Hidden, Typography } from '@material-ui/core';
@@ -40,7 +39,7 @@ import NoBorderTableCell from './NoBorderTableCell';
 export interface MaterialTableToolbarProps {
   numColumns: number;
   errors: string;
-  label: string | Labels;
+  label: string;
   path: string;
   uischema: ControlElement;
   schema: JsonSchema;

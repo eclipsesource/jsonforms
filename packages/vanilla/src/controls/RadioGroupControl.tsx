@@ -28,7 +28,6 @@ import {
   ControlProps,
   ControlState,
   isDescriptionHidden,
-  isPlainLabel
 } from '@jsonforms/core';
 import { Control, withJsonFormsControlProps } from '@jsonforms/react';
 import { withVanillaControlProps } from '../util';
@@ -81,7 +80,7 @@ export class RadioGroupControl extends Control<
       >
         <label htmlFor={id} className={classNames.label}>
           {computeLabel(
-            isPlainLabel(label) ? label : label.default,
+            label,
             required,
             appliedUiSchemaOptions.hideRequiredAsterisk
           )}

@@ -29,7 +29,6 @@ import {
   ControlProps,
   ControlState,
   isDescriptionHidden,
-  isPlainLabel,
   OwnPropsOfEnum
 } from '@jsonforms/core';
 import { Control } from '@jsonforms/react';
@@ -84,7 +83,7 @@ export class MaterialRadioGroup extends Control<
             component={'legend' as 'label'}
           >
             {computeLabel(
-              isPlainLabel(label) ? label : label.default,
+              label,
               required,
               appliedUiSchemaOptions.hideRequiredAsterisk
             )}

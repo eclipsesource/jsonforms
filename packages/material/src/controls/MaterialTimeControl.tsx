@@ -27,26 +27,21 @@ import merge from 'lodash/merge';
 import {
   ControlProps,
   ControlState,
-  isDateTimeControl,
+  isTimeControl,
   isDescriptionHidden,
   RankedTester,
   rankWith
 } from '@jsonforms/core';
 import { Control, withJsonFormsControlProps } from '@jsonforms/react';
 import { FormHelperText, Hidden } from '@material-ui/core';
-import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
-import DateRangeIcon from '@material-ui/icons/DateRange';
-import EventIcon from '@material-ui/icons/Event';
-import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import {
-  KeyboardDateTimePicker,
+  KeyboardTimePicker,
   MuiPickersUtilsProvider
 } from '@material-ui/pickers';
 import DayjsUtils from '@date-io/dayjs';
 import { createOnChangeHandler, getData } from '../util';
 
-export class MaterialDateTimeControl extends Control<
+export class MaterialTimeControl extends Control<
   ControlProps,
   ControlState
 > {
@@ -75,8 +70,8 @@ export class MaterialDateTimeControl extends Control<
       appliedUiSchemaOptions.showUnfocusedDescription
     );
 
-    const format = appliedUiSchemaOptions.dateTimeFormat ?? 'YYYY-MM-DD HH:mm';
-    const saveFormat = appliedUiSchemaOptions.dateTimeSaveFormat ?? undefined;
+    const format = appliedUiSchemaOptions.timeFormat ?? 'HH:mm';
+    const saveFormat = appliedUiSchemaOptions.timeSaveFormat ?? 'HH:mm';
 
     const firstFormHelperText = showDescription
       ? description
@@ -88,7 +83,7 @@ export class MaterialDateTimeControl extends Control<
     return (
       <Hidden xsUp={!visible}>
         <MuiPickersUtilsProvider utils={DayjsUtils}>
-          <KeyboardDateTimePicker
+          <KeyboardTimePicker
             id={id + '-input'}
             required={required && !appliedUiSchemaOptions.hideRequiredAsterisk}
             label={label}
@@ -112,11 +107,6 @@ export class MaterialDateTimeControl extends Control<
             cancelLabel={appliedUiSchemaOptions.cancelLabel}
             clearLabel={appliedUiSchemaOptions.clearLabel}
             okLabel={appliedUiSchemaOptions.okLabel}
-            leftArrowIcon={<KeyboardArrowLeftIcon />}
-            rightArrowIcon={<KeyboardArrowRightIcon />}
-            dateRangeIcon={<DateRangeIcon />}
-            keyboardIcon={<EventIcon />}
-            timeIcon={<AccessTimeIcon />}
             invalidDateMessage={null}
             maxDateMessage={null}
             minDateMessage={null}
@@ -133,9 +123,9 @@ export class MaterialDateTimeControl extends Control<
   }
 }
 
-export const materialDateTimeControlTester: RankedTester = rankWith(
-  2,
-  isDateTimeControl
+export const materialTimeControlTester: RankedTester = rankWith(
+  4,
+  isTimeControl
 );
 
-export default withJsonFormsControlProps(MaterialDateTimeControl);
+export default withJsonFormsControlProps(MaterialTimeControl);

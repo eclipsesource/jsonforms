@@ -29,7 +29,6 @@ import {
   ControlState,
   isDateControl,
   isDescriptionHidden,
-  isPlainLabel,
   isTimeControl,
   or,
   RankedTester,
@@ -63,7 +62,7 @@ export class MaterialNativeControl extends Control<ControlProps, ControlState> {
       this.props.uischema.options
     );
     const onChange = (ev: any) => handleChange(path, ev.target.value);
-    const fieldType = schema.format;
+    const fieldType = appliedUiSchemaOptions.format ?? schema.format;
     const showDescription = !isDescriptionHidden(
       visible,
       description,
@@ -76,7 +75,7 @@ export class MaterialNativeControl extends Control<ControlProps, ControlState> {
         <TextField
           id={id + '-input'}
           label={computeLabel(
-            isPlainLabel(label) ? label : label.default,
+            label,
             required,
             appliedUiSchemaOptions.hideRequiredAsterisk
           )}

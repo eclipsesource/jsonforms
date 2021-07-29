@@ -1,7 +1,6 @@
 import merge from 'lodash/merge';
 import get from 'lodash/get';
-import React, { Dispatch, Fragment, ReducerAction, useMemo, useState } from 'react';
-import { ComponentType } from 'enzyme';
+import React, { ComponentType, Dispatch, Fragment, ReducerAction, useMemo, useState, useEffect } from 'react';
 import {
   areEqual,
   JsonFormsDispatch,
@@ -20,7 +19,9 @@ import {
   update,
   JsonFormsCellRendererRegistryEntry,
   JsonFormsUISchemaRegistryEntry,
-  getFirstPrimitiveProp
+  getFirstPrimitiveProp,
+  createId,
+  removeId
 } from '@jsonforms/core';
 import IconButton from '@material-ui/core/IconButton';
 import Accordion from '@material-ui/core/Accordion';
@@ -32,7 +33,6 @@ import Avatar from '@material-ui/core/Avatar';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ArrowUpward from '@material-ui/icons/ArrowUpward';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
-import uuid from 'uuid/v1';
 
 const iconStyle: any = { float: 'right' };
 
@@ -74,7 +74,13 @@ export interface ExpandPanelProps
     DispatchPropsOfExpandPanel {}
 
 const ExpandPanelRenderer = (props: ExpandPanelProps) => {
-  const [labelHtmlId] = useState(`id${uuid()}`);
+  const [labelHtmlId] = useState<string>(createId('expand-panel'));
+
+  useEffect(() => {
+    return () => {
+      removeId(labelHtmlId);
+    };
+  }, [labelHtmlId]);
 
   const {
     childLabel,

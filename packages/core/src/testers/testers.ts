@@ -286,13 +286,6 @@ export const isOneOfControl = and(
 
 /**
  * Tests whether the given UI schema is of type Control and if the schema
- * has a 'date' format.
- * @type {Tester}
- */
-export const isDateControl = and(uiTypeIs('Control'), formatIs('date'));
-
-/**
- * Tests whether the given UI schema is of type Control and if the schema
  * has an enum.
  * @type {Tester}
  */
@@ -352,20 +345,33 @@ export const isMultiLineControl = and(
 );
 
 /**
- * Tests whether the given UI schema is of type Control and if the schema
- * has a 'time' format.
+ * Tests whether the given UI schema is of type Control and whether the schema
+ * or uischema options has a 'date' format.
  * @type {Tester}
  */
-export const isTimeControl = and(uiTypeIs('Control'), formatIs('time'));
+export const isDateControl = and(
+  uiTypeIs('Control'),
+  or(formatIs('date'), optionIs('format', 'date'))
+);
 
 /**
- * Tests whether the given UI schema is of type Control and if the schema
- * has a 'date-time' format.
+ * Tests whether the given UI schema is of type Control and whether the schema
+ * or the uischema options has a 'time' format.
+ * @type {Tester}
+ */
+export const isTimeControl = and(
+  uiTypeIs('Control'),
+  or(formatIs('time'), optionIs('format', 'time'))
+);
+
+/**
+ * Tests whether the given UI schema is of type Control and whether the schema
+ * or the uischema options has a 'date-time' format.
  * @type {Tester}
  */
 export const isDateTimeControl = and(
   uiTypeIs('Control'),
-  formatIs('date-time')
+  or(formatIs('date-time'), optionIs('format', 'date-time'))
 );
 
 /**
