@@ -1,5 +1,5 @@
 import React from 'react';
-import { Demo } from '../common';
+import { Demo } from '../common/Demo';
 
 const data = {
   addressOrUser: {
@@ -18,7 +18,7 @@ const uischema = {
       scope: '#/properties/addressOrUser'
     }
   ]
-} 
+}
 
 const schema = {
   definitions: {

@@ -1,6 +1,7 @@
 ---
 id: controls
 title: Controls
+description: Controls generally represent properties declared in JSON Schema and serve to manipulate data.
 ---
 
 import ApiLink from '../../../src/components/common/ApiLink';
@@ -18,13 +19,11 @@ import {
 Controls represent the basic building blocks for creating forms.
 
 A control is usually displaying the value of one property from the data in an UI element such as an input field.
-How a control is rendered depends on the type of the property as defined in the JSON Schema,
-e.g. a property of type `boolean` is rendered as a Checkbox by default.
+How a control is rendered depends on the type of the property as defined in the JSON Schema, e.g. a property of type `boolean` is rendered as a Checkbox by default.
 
 ## `scope (string)`
 
-The mandatory `scope` property, which expects a [JSON schema reference value](https://spacetelescope.github.io/understanding-json-schema/structuring.html#reuse"),
-defines to which property of the data the control should be bound to.
+The mandatory `scope` property, which expects a [JSON schema reference value](https://spacetelescope.github.io/understanding-json-schema/structuring.html#reuse"), defines to which property of the data the control should be bound to.
 
 For instance, let's suppose we want to create a control for the `name` property in this schema:
 
@@ -51,14 +50,14 @@ JSON Forms will render the following form from this UI Schema:
 
 <Example />
 
-JSON Forms ships with a default renderer set which consists of renderers for all primitive types as well as
-for arrays. Furthermore JSON Forms allows controls to be replaced or new controls to be added for newly
-invented UI Schema Elements. For documentation on these so called **Custom Renderers** please see the section
-about [Custom Renderers](/docs/tutorial/custom-renderers).
+JSON Forms ships with a default renderer set which consists of renderers for all primitive types as well as for arrays.
+Furthermore JSON Forms allows controls to be replaced or new controls to be added for newly invented UI Schema Elements.
+For documentation on these so called **Custom Renderers** please see the section about [Custom Renderers](/docs/tutorial/custom-renderers).
 
 ## `label (string | boolean)`
 
-By default, controls use the name of property they point to as a label. You can customize this behaviour by specifying a `label` property:
+By default, controls use the name of property they point to as a label.
+You can customize this behaviour by specifying a `label` property:
 
 ```json
 {
@@ -72,7 +71,7 @@ Here's the rendered form:
 
 <ExampleWithCustomLabel />
 
-You can also completly disable the label by setting it to `false`.
+You can also completely disable the label by setting it to `false`.
 
 ## Options
 
@@ -102,7 +101,9 @@ options: {
 }
 ```
 
-The array will be rendered using the nested array renderer. The nested renderer will use a generated uischema to render the array elements. The string is case insensitive.
+The array will be rendered using the nested array renderer.
+The nested renderer will use a generated UI Schema to render the array elements.
+The string is case insensitive.
 
 **`REGISTERED`**
 
@@ -113,7 +114,7 @@ options: {
 ```
 
 The array will be rendered using the nested array renderer.
-The nested renderer will check if a uischema was registered for the type to be rendered or generate one itself.
+The nested renderer will check if a UI Schema was registered for the type to be rendered or generate one itself.
 This case will be triggered if `detail` is any string besides `GENERATED` (case insensitive) or `DEFAULT` (case insensitive).
 
 **`Inlined UI schema`**
@@ -128,7 +129,7 @@ options: {
 ```
 
 The array will be rendered using the nested array renderer.
-The nested renderer will use the specified uischema to render the array elements.
+The nested renderer will use the specified UI Schema to render the array elements.
 
 ### Sorting buttons (`showSortButtons`)
 
@@ -138,8 +139,7 @@ options: {
 }
 ```
 
-The `showSortButtons` option is used to toggle additional buttons that allow changing the
-order of elements within an array.
+The `showSortButtons` option is used to toggle additional buttons that allow changing the order of elements within an array.
 
 <ExampleWithSortButtons />
 
@@ -199,6 +199,7 @@ const customizedTheme = createMuiTheme({
 </ThemeProvider>
 ```
 
-The background of the the 'clear input button' (the one you can see when you hover of the input field) is by default your theme's `palette.background.default` color. If you want to customize the background of this button you can use the custom theme variable `jsonforms.input.delete.background`.
+The background of the the 'clear input button' (the one you can see when you hover of the input field) is by default your theme's `palette.background.default` color.
+If you want to customize the background of this button you can use the custom theme variable `jsonforms.input.delete.background`.
 
 <ExampleWithCustomClearBackground />

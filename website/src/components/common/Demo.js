@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
 import { JsonForms } from '@jsonforms/react';
-import { createStyles, createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core';
+import { createStyles, createTheme, makeStyles, ThemeProvider } from '@material-ui/core';
 import {
   materialCells,
   materialRenderers,
@@ -34,7 +34,7 @@ const demoStyles = makeStyles((theme) =>
   })
 );
 
-const theme = createMuiTheme({
+const theme = createTheme({
   overrides: {
     MuiFormHelperText: {
       root: {

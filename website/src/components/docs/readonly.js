@@ -1,5 +1,5 @@
 import React from 'react';
-import { Demo } from '../common';
+import { Demo } from '../common/Demo';
 
 const data = {
   firstName: "Max",

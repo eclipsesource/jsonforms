@@ -10,6 +10,7 @@ module.exports = {
   favicon: 'img/favicon.ico',
   organizationName: 'eclipsesource',
   projectName: 'jsonforms',
+  titleDelimiter: '-',
   scripts: [
     {
       src: 'https://static.cloudflareinsights.com/beacon.min.js',
@@ -166,6 +167,7 @@ module.exports = {
         id: 'news',
         path: 'content/news',
         routeBasePath: 'news',
+        blogTitle: 'News',
         blogSidebarTitle: 'Latest News',
         showReadingTime: false,
         blogSidebarCount: 'ALL',

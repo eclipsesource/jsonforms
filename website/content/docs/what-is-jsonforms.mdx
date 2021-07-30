@@ -1,6 +1,7 @@
 ---
 id: what-is-jsonforms
 title: What is JSON Forms?
+description: JSON Forms is a declarative framework for efficiently building form-based web UIs.
 slug: /
 ---
 
@@ -14,52 +15,46 @@ These UIs are targeted at entering, modifying and viewing data and are usually e
 
 ## Why do we need such a framework?
 
-Writing HTML templates and Javascript for data binding by hand is hard, especially in applications
-of reasonable size.
-Furthermore, a form is often more than just a collection of input fields and more
-advanced functionality is required, e.g. validation or conditional visibility.
+Writing HTML templates and Javascript for data binding by hand is hard, especially in applications of reasonable size.
+Furthermore, a form is often more than just a collection of input fields and more advanced functionality is required, e.g. validation or conditional visibility.
 
-JSON Forms utilizes the capabilities of JSON and JSON schema and
-provides a simple and declarative way of describing forms.
-Forms are then rendered with a UI library or framework, e.g. React or Angular.
+JSON Forms utilizes the capabilities of JSON and JSON schema and provides a simple and declarative way of describing forms.
+Forms are then rendered with a UI library or framework, e.g. [React](integrations/react) or [Angular](integrations/angular).
 
 ## How does it work?
 
 Any UI is defined by using two schemata:
 
-\- the **data/JSON schema** defines the underlying data to be shown in the UI
-(objects, properties, and their types);
+- the **data/JSON schema** defines the underlying data to be shown in the UI (objects, properties, and their types);
+- the **UI schema** defines how this data is rendered as a form, e.g. the order of controls, their visibility, and the layout.
 
-\- the **UI schema** defines how this data is rendered as a form, e.g. the
-order of controls, their visibility, and the layout.
+Both artifacts are interpreted during runtime by the framework and mapped to respective UI components, which already feature data binding, validation etc.
 
-Both artifacts are interpreted during runtime by the framework and mapped to respective UI components,
-which already feature data binding, validation etc.
-
-Let's look at an example: below is given a JSON schema describing a task and an
-UI schema which defines four controls that are to be arranged in a vertical fashion.
+Let's look at an example: below is given a JSON schema describing a task and an UI schema which defines four controls that are to be arranged in a vertical fashion.
 The result of rendering the form with JSON Forms can be seen at the bottom.
 
 Here's the JSON schema, which defines a simple task entity:
 
 ```json
 {
-  type: 'object',
-  properties: {
-    name: {
-      type: 'string'
+  "type":"object",
+  "properties":{
+    "name":{
+      "type":"string"
     },
-    description: {
-      type: 'string'
+    "description":{
+      "type":"string"
     },
-    done: {
-      type: 'boolean'
+    "done":{
+      "type":"boolean"
     },
-    rating: {
-      type: 'integer'
+    "rating":{
+      "type":"integer"
     }
   },
-  required: ['name']
+  "required":[
+    "name"
+  ]
 }
 ```
 
@@ -67,28 +62,28 @@ And here's the respective UI schema:
 
 ```json
 {
-  type: 'VerticalLayout',
-  elements: [
+  "type":"VerticalLayout",
+  "elements":[
     {
-      type: 'Control',
-      scope: '#/properties/name'
+      "type":"Control",
+      "scope":"#/properties/name"
     },
     {
-      type: 'Control',
-      scope: '#/properties/description',
-      options: {
-        multi: true
+      "type":"Control",
+      "scope":"#/properties/description",
+      "options":{
+        "multi":true
       }
     },
     {
-      type: 'Control',
-      label: 'Rating',
-      scope: '#/properties/rating'
+      "type":"Control",
+      "label":"Rating",
+      "scope":"#/properties/rating"
     },
     {
-      type: 'Control',
-      label: 'Done?',
-      scope: '#/properties/done'
+      "type":"Control",
+      "label":"Done?",
+      "scope":"#/properties/done"
     }
   ]
 }
@@ -98,10 +93,8 @@ The form as rendered by JSON Forms:
 
 <GettingStartedExample />
 
-JSON Forms provides default renderers for all data types, however, you can change the way things are rendered by
-providing custom renderers. An example is given below where we replaced the control for the rating property:
+JSON Forms provides default renderers for all data types, however, you can change the way things are rendered by providing custom renderers. An example is given below where we replaced the control for the rating property:
 
 <GettingStartedExampleWithRatingControl />
 
-If you are interested in learning more about JSON Forms, check out
-the [Getting started](/docs/getting-started) section.
+If you are interested in learning more about JSON Forms, check out the [Getting started](getting-started) section.

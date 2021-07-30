@@ -1,14 +1,13 @@
 ---
 id: custom-layouts
 title: Custom Layouts
+description: This tutorial describes how to create and register a custom layout
 ---
 
 import { Default, WithCustomRenderer } from '../../../src/components/docs/tutorials/custom-layouts';
 
-The default layouts of JSON Forms are a good fit for most scenarios,
-but there might be certain situations where you'd want to customize the rendered layouts.
-JSON Forms allows for this by registering a custom renderer that produces a different UI
-for a given layout.
+The default layouts of JSON Forms are a good fit for most scenarios, but there might be certain situations where you'd want to customize the rendered layouts.
+JSON Forms allows for this by registering a custom renderer that produces a different UI for a given layout.
 
 In this section you will learn how to create and register a custom renderer for a layout.
 
@@ -29,8 +28,7 @@ Our goal is to instead render the UI for groups as depicted below:
 
 ## Running the seed
 
-If you want to follow along with this tutorial, you may want to [clone the seed repository](https://github.com/eclipsesource/jsonforms-react-seed)
-which basically is just a skeleton application scaffolded by create-react-app with the JSON Forms dependencies added.
+If you want to follow along with this tutorial, you may want to [clone the seed repository](https://github.com/eclipsesource/jsonforms-react-seed) which basically is just a skeleton application scaffolded by create-react-app with the JSON Forms dependencies added.
 
 ```bash
 cd jsonforms-react-seed
@@ -38,27 +36,20 @@ npm install
 npm start
 ```
 
-Once the dependencies are installed and the local server has been started,
-navigate to http://localhost:3000 in order to see the application running.
+Once the dependencies are installed and the local server has been started, navigate to http://localhost:3000 in order to see the application running.
 
-The seed is described in more detail within the `README.md` file of
-the [repo](https://github.com/eclipsesource/jsonforms-react-seed), hence we
-only focus on the most crucial parts of the app in the following.
+The seed is described in more detail within the `README.md` file of the [repo](https://github.com/eclipsesource/jsonforms-react-seed), hence we only focus on the most crucial parts of the app in the following.
 
 ## Core concepts about rendering
 
-Before explaining how to contribute a component (which will be referred to as "custom layout") to JSON Forms,
-we first explain how the basic process of rendering works.
+Before explaining how to contribute a component (which will be referred to as "custom layout") to JSON Forms, we first explain how the basic process of rendering works.
 
 JSON Forms maintains a registry of renderers (which are regular React components in case of the React/Material renderers we use in this tutorial).
-When JSON Forms is instructed to render a given UI schema to produce a form, it will start with the root element of the UI Schema and try to
-find a renderer for this UI Schema element in its registry of renderers.
+When JSON Forms is instructed to render a given UI schema to produce a form, it will start with the root element of the UI Schema and try to find a renderer for this UI Schema element in its registry of renderers.
 
 To find a matching renderer, JSON Forms relies on so-called testers.
-Every renderer has a tester associated with its registration, which is a function of a UI schema and a
-JSON schema returning a number.
-The returned number is the priority which expresses if and how well a renderer can actually render the
-given UI Schema Element (where `NOT_APPLICABLE` aka. `-1` means "not at all").
+Every renderer has a tester associated with its registration, which is a function of a UI schema and a JSON schema returning a number.
+The returned number is the priority which expresses if and how well a renderer can actually render the given UI Schema Element (where `NOT_APPLICABLE` aka. `-1` means "not at all").
 
 In order to create and register a renderer, we need to perform the following steps:
 
@@ -67,8 +58,7 @@ In order to create and register a renderer, we need to perform the following ste
 3. Create a corresponding tester for the renderer
 4. Register both the renderer and the tester with the framework
 
-The seed app already contains all of the ingredients necessary to create a custom layout,
-which we'll use in the following.
+The seed app already contains all of the ingredients necessary to create a custom layout, which we'll use in the following.
 
 ### 1. Add Group to UI Schema
 
@@ -85,8 +75,7 @@ We first need to create a new `src\MyGroup.jsx` file.
 Here we can code our component. For our example we create a single Accordion.
 In order to render the child elements we reuse the `MaterialLayoutRenderer` which we can import from `@jsonforms/material-renderers`.
 
-In order to use our React component as a JSON Forms compatible renderer, we can make use of the `withJsonFormsLayoutProps` utility function
-from JSON Forms that will give us all relevant props to render the group and delegate to the layout renderer.
+In order to use our React component as a JSON Forms compatible renderer, we can make use of the `withJsonFormsLayoutProps` utility function from JSON Forms that will give us all relevant props to render the group and delegate to the layout renderer.
 In this case, the props are:
 `uischema`, which is the actual uischema element to be rendered
 `path`, which is necessary to scope the element
@@ -146,23 +135,20 @@ If that is the case, we return a rank of `1000`.
 
 Add the following code to `src/MyGroup.jsx`:
 
-```javascript
+```js
 import { rankWith, uiTypeIs } from '@jsonforms/core';
 
 export const myGroupTester = rankWith(1000, uiTypeIs('Group'));
 ```
 
-Generally speaking, the testers API is made out of different predicates and functions that allow
-for composition (e.g. `and` or `or`) such that it is easy to target specific parts
-of the UI schema and/or JSON schema.
+Generally speaking, the testers API is made out of different predicates and functions that allow for composition (e.g. `and` or `or`) such that it is easy to target specific parts of the UI schema and/or JSON schema.
 
 ### 4. Register the renderer
 
-All that's left to do is to use the renderer with its tester. We can do so by appending
-the renderer/tester pair to the array of renderer registrations used by the `JsonForms` component.
+All that's left to do is to use the renderer with its tester. We can do so by appending the renderer/tester pair to the array of renderer registrations used by the `JsonForms` component.
 Within `App.tsx`, find the list of renderers used by the standalone `JsonForms` component and add the renderer and its tester like so:
 
-```javascript
+```js
 import MyGroupRenderer, { myGroupTester } from './MyGroup';
 
 // list of renderers declared outside the App component
@@ -175,7 +161,7 @@ const renderers = [
 
 Then, by simply passing the list of renderers to JSON Forms, our custom layout renderer will be picked up for the Group ui element.
 
-```javascript
+```js
 <JsonForms
   // other necessary declarations go here...
   renderers={renderers}
@@ -192,7 +178,7 @@ In contrast to `ResolvedJsonFormsDispatch`, the `JsonFormsDispatch` component wi
 
 Simple example renderer using dispatching:
 
-```javascript
+```js
 const MyLayoutRenderer = ({
   schema,
   uischema,

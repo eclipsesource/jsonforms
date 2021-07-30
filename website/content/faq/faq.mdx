@@ -1,6 +1,7 @@
 ---
 id: faq
 title: FAQ
+description: Frequently Asked Questions
 slug: /
 ---
 
@@ -47,7 +48,8 @@ class App extends React.Component {
 export default App;
 ```
 
-The second example uses the functional component approach. Therefore we use the `useState` hook, which provides the data (first parameter) and a function to update the data (second parameter).
+The second example uses the functional component approach.
+Therefore we use the `useState` hook, which provides the data (first parameter) and a function to update the data (second parameter).
 ```js
 import React, { useState } from 'react';
 import { JsonForms } from '@jsonforms/react';
@@ -76,7 +78,6 @@ function App() {
 
 export default App;
 ```
-
 
 ## How can I integrate a custom renderer?
 
@@ -113,7 +114,6 @@ const RatingControl = ({ data, handleChange, path }) => (
 
 For more information about custom renderers, have a look [here](/docs/tutorial/custom-renderers).
 
-
 ## How can I use default values within JSON Forms
 
 We use Ajv for handling JSON Schema's default values.
@@ -127,21 +127,21 @@ import { createAjv } from '@jsonforms/core';
 const handleDefaultsAjv = createAjv({useDefaults: true});
 
 <JsonForms
-    data={data}
-    schema={schema}
-    uischema={uischema}
-    renderers={renderers}
-    cells={cells}
-    onChange={({ errors, data }) => setData(data)}
-    ajv={handleDefaultsAjv}
+  data={data}
+  schema={schema}
+  uischema={uischema}
+  renderers={renderers}
+  cells={cells}
+  onChange={({ errors, data }) => setData(data)}
+  ajv={handleDefaultsAjv}
 />
 ```
 
 Now default values within the schema file can be used:
 ```json
 {
-  type: "string",
-  title: "Name",
-  default: "Max"
+  "type": "string",
+  "title": "Name",
+  "default": "Max"
 }
 ```

@@ -1,6 +1,6 @@
 import React from 'react';
 import { categorization, stepper, steppershownav } from '@jsonforms/examples';
-import { Demo } from '../common';
+import { Demo } from '../common/Demo';
 
 export const Categorization = () => (
   <Demo

@@ -1,7 +1,7 @@
 import React from 'react';
 import { generateSchema } from '@jsonforms/examples';
 import { generateJsonSchema } from '@jsonforms/core';
-import { Demo } from '../common';
+import { Demo } from '../common/Demo';
 
 const InferBothSchemas = () => {
   const schema = generateJsonSchema(generateSchema.data);

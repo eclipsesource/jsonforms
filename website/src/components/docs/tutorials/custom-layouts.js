@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { Demo } from '../../common';
+import { Demo } from '../../common/Demo';
 
 const GroupRenderer = (props) => {
   const { uischema, schema, path, visible, renderers } = props;

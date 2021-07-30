@@ -1,6 +1,6 @@
 import React from 'react';
 import { rule } from '@jsonforms/examples';
-import { Demo } from '../common';
+import { Demo } from '../common/Demo';
 
 const RuleExample = () => {
   return (

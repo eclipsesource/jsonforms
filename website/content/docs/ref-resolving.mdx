@@ -1,12 +1,13 @@
 ---
 id: ref-resolving
 title: Ref Resolving
+description: Resolve JSON Schema $refs
 ---
 
 :::caution ATTENTION
 
 With version 3.0 of JSON Forms, we no longer include `json-schema-ref-parser` within the core package.
-The old documentation for JSON Forms < 3.0 can be found <a href="/docs/deprecated/ref-resolving-legacy">here</a>.
+The old documentation for JSON Forms < 3.0 can be found [here](deprecated/ref-resolving-legacy).
 For a migration guide, have a look [here](https://github.com/eclipsesource/jsonforms/blob/master/MIGRATION.md).
 
 :::
@@ -17,7 +18,7 @@ We recommend using a library like [`json-refs`](https://github.com/whitlockjc/js
 
 Below you can find an example on how to use `json-refs` and `json-schema-ref-parser`:
 
-```ts
+```js
 import React, { useState } from 'react';
 import { JsonForms } from '@jsonforms/react';
 import { materialCells, materialRenderers } from '@jsonforms/material-renderers';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Demo } from '../../common';
+import { Demo } from '../../common/Demo';
 import RatingControl from '../../common/rating/RatingControl';
 import ratingControlTester from '../../common/rating/ratingControlTester';
 import { materialRenderers } from '@jsonforms/material-renderers';

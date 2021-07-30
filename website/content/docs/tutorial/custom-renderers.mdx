@@ -1,6 +1,7 @@
 ---
 id: custom-renderers
 title: Custom Renderers
+description: This tutorial describes how to create and register a custom renderer
 ---
 
 import { Default, WithCustomRenderer } from '../../../src/components/docs/tutorials/custom-renderers';
@@ -43,8 +44,7 @@ The seed is described in more detail within the `README.md` file of the [repo](h
 
 ## Core concepts about rendering
 
-Before explaining how to contribute a component (which we will refer to as a "custom control") to JSON Forms,
-we first explain how the basic process of rendering works.
+Before explaining how to contribute a component (which we will refer to as a "custom control") to JSON Forms, we first explain how the basic process of rendering works.
 
 JSON Forms maintains a registry of renderers (which are regular React components in case of the React/Material renderers we use in this tutorial).
 When JSON Forms is instructed to render a given UI schema to produce a form, it will start with the root element of the UI Schema and try to find a renderer for this UI Schema element in its registry of renderers.
@@ -59,8 +59,7 @@ In order to create and register a renderer, we need to perform the following ste
 2. Create a corresponding tester for the renderer
 3. Register both the renderer and the tester with the framework
 
-The seed app already contains all of the ingredients necessary to create a custom renderer,
-which we'll use in the following.
+The seed app already contains all of the ingredients necessary to create a custom renderer, which we'll use in the following.
 
 ### 1. Create a renderer
 
@@ -69,17 +68,15 @@ It's contained in `src/Rating.tsx` and is a rating control, i.e. it allows to se
 We won't go into detail about the control itself, but we should mention that we need to provide an `onClick` property in order to allow specifying a callback which gets called every time the user clicks on a star.
 We also need to suppy an initial `value`.
 
-In order to use our React component as a JSON Forms compatible renderer, we can use the `withJsonFormsControlProps` utility function
-from JSON Forms that will give us all necessary props to render the control.
+In order to use our React component as a JSON Forms compatible renderer, we can use the `withJsonFormsControlProps` utility function from JSON Forms that will give us all necessary props to render the control.
 This will allow us to retrieve the initial value and to emit events updating the respective value when the users clicks on a star.
-In this case, the props are `data`, which is the actual data bit to be rendered, `path`,
-a dot-separated string, which represents the path the data is written to and the `handleChange` handler function which we can use for the `onClick` prop of our `Rating` control.
+In this case, the props are `data`, which is the actual data bit to be rendered, `path`, a dot-separated string, which represents the path the data is written to and the `handleChange` handler function which we can use for the `onClick` prop of our `Rating` control.
 For the `onClick` prop we pass the `handleChange` handler, which we retrieve via another helper function (HOC) provided by JSON Forms called `withJsonFormsControlProps`.
 All the handler actually does is to emit a change with the new value.
 
 The complete code of `src/RatingControl.tsx` looks as follows:
 
-```javascript
+```js
 import * as React from 'react';
 import { withJsonFormsControlProps } from '@jsonforms/react';
 import { Rating } from './Rating';
@@ -108,7 +105,7 @@ If that is the case, we return a rank of 3.
 That is because the default renderer sets provide a rank with a value of 2, hence our tester will need to rank the custom control higher a bit higher, such that it will be picked up for the rating control during rendering.
 The `ratingControlTester.js` file contains the respective code as a default export.
 
-```javascript
+```js
 import { rankWith, scopeEndsWith } from '@jsonforms/core';
 
 export default rankWith(
@@ -123,7 +120,7 @@ Generally speaking, the testers API is made out of different predicates and func
 
 To register the custom renderer we simply add it to the list of renderers passed to the `JsonForms` component.
 
-```javascript
+```js
 // list of renderers declared outside the App component
 const renderers = [
   ...materialRenderers,
@@ -148,7 +145,7 @@ In contrast to `ResolvedJsonFormsDispatch`, the `JsonFormsDispatch` component wi
 
 ## Reusing existing controls
 
-There are also scenarios where you don't need a full custom renderer but just want to wrap an existing control or slighly modify its props.
+There are also scenarios where you don't need a full custom renderer but just want to wrap an existing control or slightly modify its props.
 
 Let's say you have a customized JSON Schema in which some `boolean` properties are associated with a `price`.
 The price shall be shown in the label of the control.
@@ -172,11 +169,11 @@ The following steps are also based on the [seed repository](https://github.com/e
 
 ### 2. Add the field to schema.json
 
-```JSON
-  "include_gift": {
-    "type": "boolean",
-    "price": 20
-  }
+```json
+"include_gift": {
+  "type": "boolean",
+  "price": 20
+}
 ```
 
 ### 3. Create a renderer and tester
@@ -190,7 +187,7 @@ As we want to access the schema's price attribute as well as modify the calculat
 The unwrapped controls are all exported in an object called Unwrapped in ['@jsonforms/material-renderers'](https://github.com/eclipsesource/jsonforms/blob/master/packages/material/src/controls/index.ts).
 We can import that object, and then use destructuring to access a specific Control.
 
-```ts
+```js
 import { Unwrapped } from '@jsonforms/material-renderers';
 const { MaterialBooleanControl } = Unwrapped;
 ```
@@ -199,7 +196,7 @@ To determine which HOC to use, we can look at the [source](https://github.com/ec
 Most controls use `withJsonFormsControlProps`, with some exceptions for more specialized controls.
 Having determined that, we can export our extended control using the same HOC, so that it maintains compatibility.
 
-```ts
+```js
 export default withJsonFormsControlProps(checkBoxWithPriceControl);
 ```
 

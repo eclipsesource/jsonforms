@@ -1,14 +1,15 @@
 ---
 id: react
 title: React Integration
+description: React Integration
 ---
 
 :::info ATTENTION
 
 As of JSON Forms 2.5 the React-Redux variant is deprecated in favor of the JSON Forms "standalone" component.
 The standalone component can still be used in combination with Redux like any other React component.
-See our <a href="https://github.com/eclipsesource/jsonforms/blob/master/MIGRATION.md">migration guide</a> for more information.
-For the legacy Redux integration, see <a href="/docs/deprecated/redux">here</a>.
+See our [migration guide](https://github.com/eclipsesource/jsonforms/blob/master/MIGRATION.md) for more information.
+For the legacy Redux integration, see [here](../deprecated/redux).
 
 :::
 
@@ -24,7 +25,7 @@ The `JsonForms` component takes the following props:
 - [`uischemas`](#uischemas): A list of UI schemas to be used for specific schema elements
 - [`readonly`](#readonly): If set to _true_, the component will be rendered in its disabled state.
 
-```jsx
+```js
 <JsonForms
   schema={schema}
   uischema={uischema}
@@ -44,7 +45,7 @@ The generated schema is useful for rapid prototyping, but generally it is prefer
 
 An example schema could look like this:
 
-```json
+```js
 const schema = {
   type: 'object',
   properties: {
@@ -82,7 +83,7 @@ const schema = {
 
 The `uischema` prop is a JSON describing the layout of the form.
 It can contain different UI schema elements, such as layouts and controls as well as rules for dynamically controlling different features of the UI elements based on data.
-You can find more information on the different UI elements and rules [here](/docs/uischema).
+You can find more information on the different UI elements and rules [here](../uischema/uischema).
 
 If no UI schema is provided, JSON Forms will generate one for you.
 You can find an example of a generated UI schema in [our Examples section](/examples/gen-uischema).
@@ -183,7 +184,7 @@ const ClearFormExample = () => {
 ## `renderers`
 
 With the `renderers` prop you can supply the renderers that should be used for rendering the form.
-You can choose one of the [renderer sets](/docs/renderer-sets) already provided by JSON Forms or supply [your own renderers](/docs/tutorial/custom-renderers).
+You can choose one of the [renderer sets](../renderer-sets) already provided by JSON Forms or supply [your own renderers](../tutorial/custom-renderers).
 
 ## `cells`
 
@@ -191,7 +192,7 @@ Cells are a second renderer set, intended to be used for simpler use cases than 
 In the `@jsonforms/material-renderers` they are used for rendering table cells.
 In the `@jsonforms/vanilla-renderers` they are used both for rendering table cells as well as the inner content of the regular renderers, i.e. the integer renderer will use an integer cell.
 
-You can use the cell renderers provided by one of the available [renderer sets](/docs/renderer-sets) or supply [your own custom ones](/docs/tutorial/custom-renderers).
+You can use the cell renderers provided by one of the available [renderer sets](../renderer-sets) or supply [your own custom ones](../tutorial/custom-renderers).
 
 ## `onChange`
 
@@ -209,7 +210,7 @@ You can configure some options available for all UI schema elements via the `con
 
 The default config used by JSON Forms looks like this:
 
-```json
+```js
 defaultConfigOptions = {
  restrict: false,
  trim: false,

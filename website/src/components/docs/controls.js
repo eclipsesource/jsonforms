@@ -1,7 +1,7 @@
 import React from 'react';
 import { JsonFormsDispatch } from '@jsonforms/react';
 import { ThemeProvider } from '@material-ui/core/styles';
-import { Demo } from '../common';
+import { Demo } from '../common/Demo';
 
 export const input = {
   schema: {

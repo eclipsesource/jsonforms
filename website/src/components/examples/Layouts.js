@@ -1,6 +1,6 @@
 import React from 'react';
 import { layout } from '@jsonforms/examples';
-import { Demo } from '../common';
+import { Demo } from '../common/Demo';
 
 export const HorizontalLayout = () => (
   <Demo

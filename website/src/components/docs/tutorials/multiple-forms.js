@@ -1,6 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
-import { Demo } from '../../common';
+import { Demo } from '../../common/Demo';
 
 export const schema = {
   type: 'object',
