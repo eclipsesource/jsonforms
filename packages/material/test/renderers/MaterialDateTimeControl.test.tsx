@@ -31,7 +31,7 @@ import {
 import MaterialDateTimeControl, {
   materialDateTimeControlTester
 } from '../../src/controls/MaterialDateTimeControl';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { materialRenderers } from '../../src';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
@@ -41,7 +41,7 @@ import { initCore, TestEmitter } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-const data = { foo: moment('1980-04-04 13:37').format() };
+const data = { foo: dayjs('1980-04-04 13:37').format() };
 const schema = {
   type: 'object',
   properties: {
@@ -101,6 +101,19 @@ describe('Material date time control tester', () => {
           }
         }
       })
+    ).toBe(2);
+    expect(
+      materialDateTimeControlTester(
+        { ...uischema, options: { format: 'date-time' } },
+        {
+          type: 'object',
+          properties: {
+            foo: {
+              type: 'string'
+            }
+          }
+        }
+      )
     ).toBe(2);
   });
 });
@@ -173,7 +186,7 @@ describe('Material date time control', () => {
 
     const input = wrapper.find('input').first();
     expect(input.props().type).toBe('text');
-    expect(input.props().value).toBe('04/04/1980 1:37 pm');
+    expect(input.props().value).toBe('1980-04-04 13:37');
   });
 
   it('should update via event', () => {
@@ -192,9 +205,9 @@ describe('Material date time control', () => {
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').first();
-    input.simulate('change', { target: { value: '04/12/1961 8:15 pm' } });
+    input.simulate('change', { target: { value: '1961-12-94 20:15' } });
     expect(onChangeData.data.foo).toBe(
-      moment('1961-04-12 20:15').format()
+      dayjs('1961-12-94 20:15').format()
     );
   });
 
@@ -205,11 +218,11 @@ describe('Material date time control', () => {
         <MaterialDateTimeControl schema={schema} uischema={uischema} />
       </JsonFormsStateProvider>
     );
-    core.data = { ...core.data, foo: moment('1961-04-12 20:15').format() };
+    core.data = { ...core.data, foo: dayjs('1961-12-04 20:15').format() };
     wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
     wrapper.update();
     const input = wrapper.find('input').first();
-    expect(input.props().value).toBe('04/12/1961 8:15 pm');
+    expect(input.props().value).toBe('1961-12-04 20:15');
   });
 
   it('should update with null value', () => {
@@ -251,7 +264,7 @@ describe('Material date time control', () => {
     wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
     wrapper.update();
     const input = wrapper.find('input').first();
-    expect(input.props().value).toBe('04/04/1980 1:37 pm');
+    expect(input.props().value).toBe('1980-04-04 13:37');
   });
 
   it('should not update with null ref', () => {
@@ -265,7 +278,7 @@ describe('Material date time control', () => {
     wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
     wrapper.update();
     const input = wrapper.find('input').first();
-    expect(input.props().value).toBe('04/04/1980 1:37 pm');
+    expect(input.props().value).toBe('1980-04-04 13:37');
   });
 
   it('should not update with undefined ref', () => {
@@ -279,7 +292,7 @@ describe('Material date time control', () => {
     wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
     wrapper.update();
     const input = wrapper.find('input').first();
-    expect(input.props().value).toBe('04/04/1980 1:37 pm');
+    expect(input.props().value).toBe('1980-04-04 13:37');
   });
 
   it('can be disabled', () => {
@@ -320,7 +333,7 @@ describe('Material date time control', () => {
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').first();
-    // there is only input id at the moment
+    // there is only input id at the dayjs
     expect(input.props().id).toBe('#/properties/foo-input');
   });
 
@@ -337,5 +350,35 @@ describe('Material date time control', () => {
     );
     const inputs = wrapper.find('input');
     expect(inputs.length).toBe(0);
+  });
+
+  it('should support format customizations', () => {
+    const core = initCore(schema, uischema, {foo: dayjs('1980-04-23 13:37').format('YYYY/MM/DD h:mm a')});
+    const onChangeData: any = {
+      data: undefined
+    };
+    wrapper = mount(
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <TestEmitter
+          onChange={({ data }) => {
+            onChangeData.data = data;
+          }}
+        />
+        <MaterialDateTimeControl
+          schema={schema}
+          uischema={{...uischema, options: {
+            dateTimeFormat: 'DD-MM-YY hh:mm:a',
+            dateTimeSaveFormat: 'YYYY/MM/DD h:mm a',
+            ampm: true
+          }}}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    const input = wrapper.find('input').first();
+    expect(input.props().value).toBe('23-04-80 01:37:pm');
+
+    input.simulate('change', { target: { value: '10-12-05 11:22:am' } });
+    expect(onChangeData.data.foo).toBe('2005/12/10 11:22 am');
   });
 });

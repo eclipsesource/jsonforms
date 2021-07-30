@@ -30,7 +30,6 @@ import {
   createDefaultValue,
   findUISchema,
   isObjectArray,
-  isPlainLabel,
   RankedTester,
   rankWith,
   uiTypeIs
@@ -101,7 +100,7 @@ export const MaterialListWithDetailRenderer = ({
     <Hidden xsUp={!visible}>
       <ArrayLayoutToolbar
         label={computeLabel(
-          isPlainLabel(label) ? label : label.default,
+          label,
           required,
           appliedUiSchemaOptions.hideRequiredAsterisk
         )}

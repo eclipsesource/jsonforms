@@ -46,6 +46,10 @@ import MaterialDateTimeControl, {
   materialDateTimeControlTester,
   MaterialDateTimeControl as MaterialDateTimeControlUnwrapped
 } from './MaterialDateTimeControl';
+import MaterialTimeControl, {
+  materialTimeControlTester,
+  MaterialTimeControl as MaterialTimeControlUnwrapped
+} from './MaterialTimeControl';
 import MaterialSliderControl, {
   materialSliderControlTester,
   MaterialSliderControl as MaterialSliderControlUnwrapped
@@ -89,6 +93,7 @@ export const Unwrapped = {
   MaterialNativeControl: MaterialNativeControlUnwrapped,
   MaterialDateControl: MaterialDateControlUnwrapped,
   MaterialDateTimeControl: MaterialDateTimeControlUnwrapped,
+  MaterialTimeControl: MaterialTimeControlUnwrapped,
   MaterialSliderControl: MaterialSliderControlUnwrapped,
   MaterialRadioGroupControl: MaterialRadioGroupControlUnwrapped,
   MaterialIntegerControl: MaterialIntegerControlUnwrapped,
@@ -112,6 +117,8 @@ export {
   materialDateControlTester,
   MaterialDateTimeControl,
   materialDateTimeControlTester,
+  MaterialTimeControl,
+  materialTimeControlTester,
   MaterialSliderControl,
   materialSliderControlTester,
   MaterialRadioGroupControl,

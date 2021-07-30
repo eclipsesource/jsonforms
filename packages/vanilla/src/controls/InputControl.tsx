@@ -30,7 +30,6 @@ import {
   ControlState,
   isControl,
   isDescriptionHidden,
-  isPlainLabel,
   NOT_APPLICABLE,
   RankedTester,
   rankWith
@@ -77,7 +76,6 @@ export class InputControl extends Control<
       this.state.isFocused,
       appliedUiSchemaOptions.showUnfocusedDescription
     );
-    const labelText = isPlainLabel(label) ? label : label.default;
     const cell = maxBy(cells, r => r.tester(uischema, schema));
     if (
       cell === undefined ||
@@ -96,7 +94,7 @@ export class InputControl extends Control<
         >
           <label htmlFor={id + '-input'} className={classNames.label}>
             {computeLabel(
-              labelText,
+              label,
               required,
               appliedUiSchemaOptions.hideRequiredAsterisk
             )}

@@ -23,22 +23,46 @@
   THE SOFTWARE.
 */
 import { registerExamples } from './register';
-import moment from 'moment';
 
 const schema = {
   type: 'object',
   properties: {
-    date: {
-      type: 'string',
-      format: 'date'
+    schemaBased: {
+      type: 'object',
+      properties: {
+        date: {
+          type: 'string',
+          format: 'date',
+          description: 'schema-based date picker'
+        },
+        time: {
+          type: 'string',
+          format: 'time',
+          description: 'schema-based time picker'
+        },
+        datetime: {
+          type: 'string',
+          format: 'date-time',
+          description: 'schema-based datetime picker'
+        }
+      }
     },
-    time: {
-      type: 'string',
-      format: 'time'
-    },
-    datetime: {
-      type: 'string',
-      format: 'date-time'
+    uiSchemaBased: {
+      type: 'object',
+      properties: {
+        date: {
+          type: 'string',
+          description: 'does not allow to select days'
+        },
+        time: {
+          type: 'string',
+          description: '24 hour format'
+        },
+        datetime: {
+          type: 'string',
+          description: 'uischema-based datetime picker'
+        }
+      }
     }
   }
 };
@@ -50,11 +74,15 @@ const uischema = {
       elements: [
         {
           type: 'Control',
-          scope: '#/properties/date'
+          scope: '#/properties/schemaBased/properties/date'
         },
         {
           type: 'Control',
-          scope: '#/properties/time'
+          scope: '#/properties/schemaBased/properties/time'
+        },
+        {
+          type: 'Control',
+          scope: '#/properties/schemaBased/properties/datetime'
         }
       ]
     },
@@ -63,16 +91,52 @@ const uischema = {
       elements: [
         {
           type: 'Control',
-          scope: '#/properties/datetime'
+          scope: '#/properties/uiSchemaBased/properties/date',
+          label: 'Year Month Picker',
+          options: {
+            format: 'date',
+            clearLabel: 'Clear it!',
+            cancelLabel: 'Abort',
+            okLabel: 'Do it',
+            views: ['year', 'month'],
+            dateFormat: 'YYYY.MM',
+            dateSaveFormat: 'YYYY-MM'
+          },
+        },
+        {
+          type: 'Control',
+          scope: '#/properties/uiSchemaBased/properties/time',
+          options: {
+            format: 'time',
+            ampm: true
+          }
+        },
+        {
+          type: 'Control',
+          scope: '#/properties/uiSchemaBased/properties/datetime',
+          options: {
+            format: 'date-time',
+            dateTimeFormat: 'DD-MM-YY hh:mm:a',
+            dateTimeSaveFormat: 'YYYY/MM/DD h:mm a',
+            ampm: true
+          }
         }
       ]
     }
   ]
 };
+
 const data = {
-  date: new Date().toISOString().substr(0, 10),
-  time: '13:37',
-  datetime: moment().format()
+  schemaBased: {
+    date: new Date().toISOString().substr(0, 10),
+    time: '13:37',
+    datetime: new Date().toISOString()
+  },
+  uiSchemaBased: {
+    date: new Date().toISOString().substr(0, 10),
+    time: '13:37',
+    datetime: '1999/12/11 10:05 am'
+  }
 };
 registerExamples([
   {
