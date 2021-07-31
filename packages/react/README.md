@@ -93,7 +93,7 @@ const uischema = {
     }
   ]
 };
-const data = {};
+const initialData = {};
 function App() {
   const [data, setData] = useState(initialData);
   return (
