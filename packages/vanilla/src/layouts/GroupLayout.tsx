@@ -48,6 +48,7 @@ const GroupLayoutRendererComponent: FunctionComponent<RendererProps & VanillaRen
     schema,
     uischema,
     path,
+    enabled,
     visible,
     getStyle,
     getStyleAsClassName
@@ -70,7 +71,7 @@ const GroupLayoutRendererComponent: FunctionComponent<RendererProps & VanillaRen
             {group.label}
           </legend> : ''
       }
-      {renderChildren(group, schema, childClassNames, path)}
+      {renderChildren(group, schema, childClassNames, path, enabled)}
     </fieldset>
   );
 });

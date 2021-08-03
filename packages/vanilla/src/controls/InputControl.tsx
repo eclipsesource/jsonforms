@@ -57,6 +57,7 @@ export class InputControl extends Control<
       uischema,
       schema,
       visible,
+      enabled,
       required,
       path,
       cells,
@@ -104,6 +105,7 @@ export class InputControl extends Control<
             schema={schema}
             path={path}
             id={id + '-input'}
+            enabled={enabled}
           />
           <div className={divClassNames}>
             {!isValid ? errors : showDescription ? description : null}

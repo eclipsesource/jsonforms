@@ -77,7 +77,7 @@ const VerticalLayoutRendererComponent: FunctionComponent<RendererProps & Vanilla
       getStyle={getStyle}
       getStyleAsClassName={getStyleAsClassName}
     >
-      {renderChildren(verticalLayout, schema, childClassNames, path)}
+      {renderChildren(verticalLayout, schema, childClassNames, path, enabled)}
     </JsonFormsLayout>
   );
 });

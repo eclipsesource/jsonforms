@@ -37,7 +37,8 @@ export const renderChildren = (
   layout: Layout,
   schema: JsonSchema,
   className: string,
-  path: string
+  path: string,
+  enabled: boolean
 ) => {
   if (isEmpty(layout.elements)) {
     return [];
@@ -54,6 +55,7 @@ export const renderChildren = (
           uischema={child}
           schema={schema}
           path={path}
+          enabled={enabled}
         />
       </div>
     );
