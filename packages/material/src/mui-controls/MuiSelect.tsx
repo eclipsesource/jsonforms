@@ -50,7 +50,7 @@ export const MuiSelect = React.memo((props: EnumCellProps & WithClassname) => {
       id={id}
       disabled={!enabled}
       autoFocus={appliedUiSchemaOptions.focus}
-      value={data || ''}
+      value={data !== undefined && data !== null ? data : ''}
       onChange={ev => handleChange(path, ev.target.value)}
       fullWidth={true}
     >
