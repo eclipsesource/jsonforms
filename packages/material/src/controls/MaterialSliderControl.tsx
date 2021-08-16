@@ -24,9 +24,9 @@
 */
 import React from 'react';
 import {
-  computeLabel,
   ControlProps,
   ControlState,
+  showAsRequired,
   isDescriptionHidden,
   isRangeControl,
   RankedTester,
@@ -37,6 +37,7 @@ import { Control, withJsonFormsControlProps } from '@jsonforms/react';
 import {
   FormControl,
   FormHelperText,
+  FormLabel,
   Hidden,
   Slider,
   Typography
@@ -95,13 +96,17 @@ export class MaterialSliderControl extends Control<ControlProps, ControlState> {
           onBlur={this.onBlur}
           id={id}
         >
-          <Typography id={id + '-typo'} style={labelStyle} variant='caption'>
-            {computeLabel(
-              label,
-              required,
-              appliedUiSchemaOptions.hideRequiredAsterisk
-            )}
-          </Typography>
+          <FormLabel
+            htmlFor={id}
+            error={!isValid}
+            component={'legend' as 'label'}
+            required={showAsRequired(required,
+              appliedUiSchemaOptions.hideRequiredAsterisk)}
+          >
+            <Typography id={id + '-typo'} style={labelStyle} variant='caption'>
+              {label}
+            </Typography>
+          </FormLabel>
           <div style={rangeContainerStyle}>
             <Typography style={rangeItemStyle} variant='caption' align='left'>
               {schema.minimum}

@@ -88,6 +88,7 @@ const isRequired = (
  *
  * @param {string} label the label string
  * @param {boolean} required whether the label belongs to a control which is required
+ * @param {boolean} hideRequiredAsterisk applied UI Schema option
  * @returns {string} the label string
  */
 export const computeLabel = (
@@ -96,6 +97,20 @@ export const computeLabel = (
   hideRequiredAsterisk: boolean
 ): string => {
   return required && !hideRequiredAsterisk ? label + '*' : label;
+};
+
+/**
+ * Indicates whether to mark a field as required.
+ *
+ * @param {boolean} required whether the label belongs to a control which is required
+ * @param {boolean} hideRequiredAsterisk applied UI Schema option
+ * @returns {boolean} should the field be marked as required
+ */
+ export const showAsRequired = (
+  required: boolean,
+  hideRequiredAsterisk: boolean
+): boolean => {
+  return required && !hideRequiredAsterisk;
 };
 
 /**
