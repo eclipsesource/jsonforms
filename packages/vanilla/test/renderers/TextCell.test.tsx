@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
+
   Copyright (c) 2017-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,18 +25,15 @@
 import * as React from 'react';
 import {
   ControlElement,
-  getData,
   HorizontalLayout,
   JsonSchema,
-  update
 } from '@jsonforms/core';
-import { JsonFormsReduxContext } from '@jsonforms/react/lib/redux';
-import { Provider } from 'react-redux';
+import { JsonFormsStateProvider } from '@jsonforms/react';
 import Adapter from 'enzyme-adapter-react-16';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import TextCell, { textCellTester } from '../../src/cells/TextCell';
 import HorizontalLayoutRenderer from '../../src/layouts/HorizontalLayout';
-import { initJsonFormsVanillaStore } from '../vanillaStore';
+import { initCore, TestEmitter } from '../util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -107,15 +104,11 @@ describe('Text cell', () => {
       type: 'HorizontalLayout',
       elements: [firstControlElement, secondControlElement]
     };
-    const store = initJsonFormsVanillaStore({
-      data: { firstName: 'Foo', lastName: 'Boo' },
-      schema,
-      uischema
-    });
+    const core = initCore(schema, uischema, { firstName: 'Foo', lastName: 'Boo' });
     wrapper = mount(
-      <Provider store={store}>
+      <JsonFormsStateProvider initState={{ core }}>
         <HorizontalLayoutRenderer schema={schema} uischema={uischema} />
-      </Provider>
+      </JsonFormsStateProvider>
     );
     const inputs = wrapper.find('input');
     expect(document.activeElement).not.toBe(inputs.at(0).getDOMNode());
@@ -128,21 +121,15 @@ describe('Text cell', () => {
       scope: '#/properties/name',
       options: { focus: true }
     };
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.minLengthSchema,
-      uischema
-    });
+    const core = initCore(fixture.minLengthSchema, uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TextCell
-            schema={fixture.minLengthSchema}
-            uischema={uischema}
-            path='name'
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TextCell
+          schema={fixture.minLengthSchema}
+          uischema={uischema}
+          path='name'
+        />
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode();
     expect(document.activeElement).toBe(input);
@@ -154,34 +141,22 @@ describe('Text cell', () => {
       scope: '#/properties/name',
       options: { focus: false }
     };
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.minLengthSchema,
-      uischema
-    });
+    const core = initCore(fixture.minLengthSchema, uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TextCell schema={fixture.minLengthSchema} uischema={uischema} path='name' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TextCell schema={fixture.minLengthSchema} uischema={uischema} path='name' />
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode();
     expect(document.activeElement).not.toBe(input);
   });
 
   test('autofocus inactive by default', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.minLengthSchema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.minLengthSchema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TextCell schema={fixture.minLengthSchema} uischema={fixture.uischema} path='name' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TextCell schema={fixture.minLengthSchema} uischema={fixture.uischema} path='name' />
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode();
     expect(document.activeElement).not.toBe(input);
@@ -194,34 +169,22 @@ describe('Text cell', () => {
         name: { type: 'string' }
       }
     };
-    const store = initJsonFormsVanillaStore({
-      data: { name: 'Foo' },
-      schema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(schema, fixture.uischema, { name: 'Foo' });
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TextCell schema={schema} uischema={fixture.uischema} path='name' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TextCell schema={schema} uischema={fixture.uischema} path='name' />
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.value).toBe('Foo');
   });
 
   test('has classes set', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TextCell schema={fixture.schema} uischema={fixture.uischema} path='name' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TextCell schema={fixture.schema} uischema={fixture.uischema} path='name' />
+      </JsonFormsStateProvider>
     );
 
     const input = wrapper.find('input');
@@ -231,160 +194,126 @@ describe('Text cell', () => {
   });
 
   test('update via input event', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.minLengthSchema,
-      uischema: fixture.uischema
-    });
+    const onChangeData: any = {
+      data: undefined
+    };
+    const core = initCore(fixture.minLengthSchema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TextCell schema={fixture.minLengthSchema} uischema={fixture.uischema} path='name' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TestEmitter
+          onChange={({ data }) => {
+            onChangeData.data = data;
+          }}
+        />
+        <TextCell schema={fixture.minLengthSchema} uischema={fixture.uischema} path='name' />
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input');
     input.simulate('change', { target: { value: 'Bar' } });
-    expect(getData(store.getState()).name).toBe('Bar');
+    expect(onChangeData.data.name).toBe('Bar');
   });
 
   test('update via action', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.minLengthSchema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.minLengthSchema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TextCell schema={fixture.minLengthSchema} uischema={fixture.uischema} path='name' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TextCell schema={fixture.minLengthSchema} uischema={fixture.uischema} path='name' />
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
-    store.dispatch(update('name', () => 'Bar'));
+    core.data = { ...core.data, name: 'Bar' };
+    wrapper.setProps({ initState: { core }} );
+    wrapper.update();
     expect(input.value).toBe('Bar');
   });
 
   test('update with undefined value', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.minLengthSchema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.minLengthSchema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TextCell schema={fixture.minLengthSchema} uischema={fixture.uischema} path='name' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TextCell schema={fixture.minLengthSchema} uischema={fixture.uischema} path='name' />
+      </JsonFormsStateProvider>
     );
-    store.dispatch(update('name', () => undefined));
+    core.data = { ...core.data, name: undefined };
+    wrapper.setProps({ initState: { core }} );
+    wrapper.update();
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.value).toBe('');
   });
 
   test('update with null value', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.minLengthSchema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.minLengthSchema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TextCell schema={fixture.minLengthSchema} uischema={fixture.uischema} path='name' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TextCell schema={fixture.minLengthSchema} uischema={fixture.uischema} path='name' />
+      </JsonFormsStateProvider>
     );
-    store.dispatch(update('name', () => null));
+    core.data = { ...core.data, name: null };
+    wrapper.setProps({ initState: { core }} );
+    wrapper.update();
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.value).toBe('');
   });
 
   test('update with wrong ref', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.minLengthSchema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.minLengthSchema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TextCell schema={fixture.minLengthSchema} uischema={fixture.uischema} path='name' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TextCell schema={fixture.minLengthSchema} uischema={fixture.uischema} path='name' />
+      </JsonFormsStateProvider>
     );
-    store.dispatch(update('firstname', () => 'Bar'));
+    core.data = { ...core.data, firstname: 'Bar' };
+    wrapper.setProps({ initState: { core }} );
+    wrapper.update();
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.value).toBe('Foo');
   });
 
   test('update with null ref', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.minLengthSchema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.minLengthSchema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TextCell schema={fixture.minLengthSchema} uischema={fixture.uischema} path='name' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TextCell schema={fixture.minLengthSchema} uischema={fixture.uischema} path='name' />
+      </JsonFormsStateProvider>
     );
-    store.dispatch(update(null, () => 'Bar'));
+    core.data = { ...core.data, null: 'Bar' };
+    wrapper.setProps({ initState: { core }} );
+    wrapper.update();
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.value).toBe('Foo');
   });
 
   test('update with undefined ref', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.minLengthSchema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.minLengthSchema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TextCell schema={fixture.minLengthSchema} uischema={fixture.uischema} path='name' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TextCell schema={fixture.minLengthSchema} uischema={fixture.uischema} path='name' />
+      </JsonFormsStateProvider>
     );
-    store.dispatch(update(undefined, () => 'Bar'));
+    core.data = { ...core.data, undefined: 'Bar' };
+    wrapper.setProps({ initState: { core }} );
+    wrapper.update();
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.value).toBe('Foo');
   });
 
   test('disable', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.minLengthSchema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.minLengthSchema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TextCell schema={fixture.minLengthSchema} uischema={fixture.uischema} path='name' enabled={false} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TextCell schema={fixture.minLengthSchema} uischema={fixture.uischema} path='name' enabled={false} />
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.disabled).toBe(true);
   });
 
   test('enabled by default', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.minLengthSchema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.minLengthSchema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TextCell schema={fixture.minLengthSchema} uischema={fixture.uischema} path='name' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TextCell schema={fixture.minLengthSchema} uischema={fixture.uischema} path='name' />
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.disabled).toBe(false);
@@ -393,24 +322,17 @@ describe('Text cell', () => {
   test('use maxLength for attributes size and maxlength', () => {
     const uischema: ControlElement = {
       type: 'Control',
-      scope: '#/properties/name'
+      scope: '#/properties/name',
+      options: {
+        trim: true,
+        restrict: true
+      }
     };
-    const config = {
-      restrict: true,
-      trim: true
-    };
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.maxLengthSchema,
-      uischema,
-      config
-    });
+    const core = initCore(fixture.maxLengthSchema, uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TextCell schema={fixture.maxLengthSchema} uischema={uischema} path='name' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TextCell schema={fixture.maxLengthSchema} uischema={uischema} path='name' />
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.maxLength).toBe(5);
@@ -420,24 +342,17 @@ describe('Text cell', () => {
   test('use maxLength for attribute size only', () => {
     const uischema: ControlElement = {
       type: 'Control',
-      scope: '#/properties/name'
+      scope: '#/properties/name',
+      options: {
+        trim: true,
+        restrict: false
+      }
     };
-    const config = {
-      restrict: false,
-      trim: true
-    };
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.maxLengthSchema,
-      uischema,
-      config
-    });
+    const core = initCore(fixture.maxLengthSchema, uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TextCell schema={fixture.maxLengthSchema} uischema={uischema} path='name' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TextCell schema={fixture.maxLengthSchema} uischema={uischema} path='name' />
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.maxLength).toBe(defaultMaxLength);
@@ -447,24 +362,17 @@ describe('Text cell', () => {
   test('use maxLength for attribute max length only', () => {
     const uischema: ControlElement = {
       type: 'Control',
-      scope: '#/properties/name'
+      scope: '#/properties/name',
+      options: {
+        trim: false,
+        restrict: true
+      }
     };
-    const config = {
-      restrict: true,
-      trim: false
-    };
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.maxLengthSchema,
-      uischema,
-      config
-    });
+    const core = initCore(fixture.maxLengthSchema, uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TextCell schema={fixture.maxLengthSchema} uischema={uischema} path='name' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TextCell schema={fixture.maxLengthSchema} uischema={uischema} path='name' />
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.maxLength).toBe(5);
@@ -472,17 +380,11 @@ describe('Text cell', () => {
   });
 
   test('do not use maxLength by default', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.maxLengthSchema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.maxLengthSchema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TextCell schema={fixture.maxLengthSchema} uischema={fixture.uischema} path='name' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TextCell schema={fixture.maxLengthSchema} uischema={fixture.uischema} path='name' />
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.maxLength).toBe(defaultMaxLength);
@@ -492,24 +394,17 @@ describe('Text cell', () => {
   test('maxLength not specified, attributes should have default values (trim && restrict)', () => {
     const uischema: ControlElement = {
       type: 'Control',
-      scope: '#/properties/name'
+      scope: '#/properties/name',
+      options: {
+        trim: true,
+        restrict: true
+      }
     };
-    const config = {
-      restrict: true,
-      trim: true
-    };
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema,
-      config
-    });
+    const core = initCore(fixture.schema, uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TextCell schema={fixture.schema} uischema={uischema} path='name' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TextCell schema={fixture.schema} uischema={uischema} path='name' />
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.maxLength).toBe(defaultMaxLength);
@@ -519,24 +414,17 @@ describe('Text cell', () => {
   test('maxLength not specified, attributes should have default values (trim)', () => {
     const uischema: ControlElement = {
       type: 'Control',
-      scope: '#/properties/name'
+      scope: '#/properties/name',
+      options: {
+        trim: true,
+        restrict: false
+      }
     };
-    const config = {
-      restrict: false,
-      trim: true
-    };
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema,
-      config
-    });
+    const core = initCore(fixture.schema, uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TextCell schema={fixture.schema} uischema={uischema} path='name' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TextCell schema={fixture.schema} uischema={uischema} path='name' />
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.maxLength).toBe(defaultMaxLength);
@@ -546,24 +434,17 @@ describe('Text cell', () => {
   test('maxLength not specified, attributes should have default values (restrict)', () => {
     const uischema: ControlElement = {
       type: 'Control',
-      scope: '#/properties/name'
+      scope: '#/properties/name',
+      options: {
+        trim: false,
+        restrict: true
+      }
     };
-    const config = {
-      restrict: true,
-      trim: false
-    };
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema,
-      config
-    });
+    const core = initCore(fixture.schema, uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TextCell schema={fixture.schema} uischema={uischema} path='name' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TextCell schema={fixture.schema} uischema={uischema} path='name' />
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.maxLength).toBe(defaultMaxLength);
@@ -571,17 +452,11 @@ describe('Text cell', () => {
   });
 
   test('maxLength not specified, attributes should have default values', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TextCell schema={fixture.schema} uischema={fixture.uischema} path='name' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TextCell schema={fixture.schema} uischema={fixture.uischema} path='name' />
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.maxLength).toBe(defaultMaxLength);

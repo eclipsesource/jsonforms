@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
+
   Copyright (c) 2017-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,18 +25,15 @@
 import * as React from 'react';
 import {
   ControlElement,
-  getData,
   HorizontalLayout,
   JsonSchema,
-  update
 } from '@jsonforms/core';
-import { JsonFormsReduxContext } from '@jsonforms/react/lib/redux';
-import { Provider } from 'react-redux';
+import { JsonFormsStateProvider } from '@jsonforms/react';
 import Adapter from 'enzyme-adapter-react-16';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import TextAreaCell, { textAreaCellTester, } from '../../src/cells/TextAreaCell';
 import HorizontalLayoutRenderer from '../../src/layouts/HorizontalLayout';
-import { initJsonFormsVanillaStore } from '../vanillaStore';
+import { initCore, TestEmitter } from '../util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -103,15 +100,11 @@ describe('Text area cell', () => {
       'firstName': 'Foo',
       'lastName': 'Boo'
     };
-    const store = initJsonFormsVanillaStore({
-      data,
-      schema,
-      uischema
-    });
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
+      <JsonFormsStateProvider initState={{ core }}>
         <HorizontalLayoutRenderer schema={schema} uischema={uischema} />
-      </Provider>
+      </JsonFormsStateProvider>
     );
     const inputs = wrapper.find('input');
     expect(document.activeElement).not.toBe(inputs.at(0).getDOMNode());
@@ -126,15 +119,11 @@ describe('Text area cell', () => {
         focus: true
       }
     };
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema
-    });
+    const core = initCore(fixture.schema, uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
+      <JsonFormsStateProvider initState={{ core }}>
         <TextAreaCell schema={fixture.schema} uischema={uischema} path='name' />
-      </Provider>
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('textarea').getDOMNode();
     expect(document.activeElement).toBe(input);
@@ -148,15 +137,11 @@ describe('Text area cell', () => {
         focus: false
       }
     };
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema
-    });
+    const core = initCore(fixture.schema, uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
+      <JsonFormsStateProvider initState={{ core }}>
         <TextAreaCell schema={fixture.schema} uischema={uischema} path='name' />
-      </Provider>
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('textarea').getDOMNode() as HTMLInputElement;
     expect(input.autofocus).toBe(false);
@@ -167,49 +152,33 @@ describe('Text area cell', () => {
       type: 'Control',
       scope: '#/properties/name'
     };
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema
-    });
+    const core = initCore(fixture.schema, uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
+      <JsonFormsStateProvider initState={{ core }}>
         <TextAreaCell schema={fixture.schema} uischema={uischema} path='name' />
-      </Provider>
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('textarea').getDOMNode() as HTMLInputElement;
     expect(input.autofocus).toBe(false);
   });
 
   test('render', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TextAreaCell schema={fixture.schema} uischema={fixture.uischema} path='name' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TextAreaCell schema={fixture.schema} uischema={fixture.uischema} path='name' />
+      </JsonFormsStateProvider>
     );
     const textarea = wrapper.find('textarea').getDOMNode() as HTMLTextAreaElement;
     expect(textarea.value).toBe('Foo');
   });
 
   test('has classes set', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TextAreaCell schema={fixture.schema} uischema={fixture.uischema} path='name' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TextAreaCell schema={fixture.schema} uischema={fixture.uischema} path='name' />
+      </JsonFormsStateProvider>
     );
 
     const input = wrapper.find('textarea');
@@ -219,161 +188,127 @@ describe('Text area cell', () => {
   });
 
   test('update via input event', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const onChangeData: any = {
+      data: undefined
+    };
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TextAreaCell schema={fixture.schema} uischema={fixture.uischema} path='name' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TestEmitter
+          onChange={({ data }) => {
+            onChangeData.data = data;
+          }}
+        />
+        <TextAreaCell schema={fixture.schema} uischema={fixture.uischema} path='name' />
+      </JsonFormsStateProvider>
     );
 
     const textarea = wrapper.find('textarea');
     textarea.simulate('change', { target: { value: 'Bar' } });
-    expect(getData(store.getState()).name).toBe('Bar');
+    expect(onChangeData.data.name).toBe('Bar');
   });
 
   test('update via action', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TextAreaCell schema={fixture.schema} uischema={fixture.uischema} path='name' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TextAreaCell schema={fixture.schema} uischema={fixture.uischema} path='name' />
+      </JsonFormsStateProvider>
     );
-    store.dispatch(update('name', () => 'Bar'));
+    core.data = { ...core.data, name: 'Bar' };
+    wrapper.setProps({ initState: { core }} );
+    wrapper.update();
     const textarea = wrapper.find('textarea').getDOMNode() as HTMLTextAreaElement;
     expect(textarea.value).toBe('Bar');
   });
 
   test('update with undefined value', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TextAreaCell schema={fixture.schema} uischema={fixture.uischema} path='name' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TextAreaCell schema={fixture.schema} uischema={fixture.uischema} path='name' />
+      </JsonFormsStateProvider>
     );
     const textArea = wrapper.find('textarea').getDOMNode() as HTMLTextAreaElement;
-    store.dispatch(update('name', () => undefined));
+    core.data = { ...core.data, name: undefined };
+    wrapper.setProps({ initState: { core }} );
+    wrapper.update();
     expect(textArea.value).toBe('');
   });
 
   test('update with null value', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TextAreaCell schema={fixture.schema} uischema={fixture.uischema} path='name' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TextAreaCell schema={fixture.schema} uischema={fixture.uischema} path='name' />
+      </JsonFormsStateProvider>
     );
-    store.dispatch(update('name', () => null));
+    core.data = { ...core.data, name: null };
+    wrapper.setProps({ initState: { core }} );
+    wrapper.update();
     const textArea = wrapper.find('textarea').getDOMNode() as HTMLTextAreaElement;
     expect(textArea.value).toBe('');
   });
 
   test('update with wrong ref', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TextAreaCell schema={fixture.schema} uischema={fixture.uischema} path='name' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TextAreaCell schema={fixture.schema} uischema={fixture.uischema} path='name' />
+      </JsonFormsStateProvider>
     );
-    store.dispatch(update('firstname', () => 'Bar'));
+    core.data = { ...core.data, firstname: 'Bar' };
+    wrapper.setProps({ initState: { core }} );
+    wrapper.update();
     const textArea = wrapper.find('textarea').getDOMNode() as HTMLTextAreaElement;
     expect(textArea.value).toBe('Foo');
   });
 
   test('update with null ref', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TextAreaCell schema={fixture.schema} uischema={fixture.uischema} path='name' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TextAreaCell schema={fixture.schema} uischema={fixture.uischema} path='name' />
+      </JsonFormsStateProvider>
     );
-    store.dispatch(update(null, () => 'Bar'));
+    core.data = { ...core.data, null: 'Bar' };
+    wrapper.setProps({ initState: { core }} );
+    wrapper.update();
     const textArea = wrapper.find('textarea').getDOMNode() as HTMLTextAreaElement;
     expect(textArea.value).toBe('Foo');
   });
 
   test('update with undefined ref', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TextAreaCell schema={fixture.schema} uischema={fixture.uischema} path='name' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TextAreaCell schema={fixture.schema} uischema={fixture.uischema} path='name' />
+      </JsonFormsStateProvider>
     );
     const textArea = wrapper.find('textarea').getDOMNode() as HTMLTextAreaElement;
-    store.dispatch(update(undefined, () => 'Bar'));
+    core.data = { ...core.data, undefined: 'Bar' };
+    wrapper.setProps({ initState: { core }} );
+    wrapper.update();
     expect(textArea.value).toBe('Foo');
   });
 
   test('disable', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TextAreaCell schema={fixture.schema} uischema={fixture.uischema} enabled={false} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TextAreaCell schema={fixture.schema} uischema={fixture.uischema} enabled={false} />
+      </JsonFormsStateProvider>
     );
     const textArea = wrapper.find('textarea').getDOMNode() as HTMLTextAreaElement;
     expect(textArea.disabled).toBe(true);
   });
 
   test('enabled by default', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TextAreaCell schema={fixture.schema} uischema={fixture.uischema} path='name' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TextAreaCell schema={fixture.schema} uischema={fixture.uischema} path='name' />
+      </JsonFormsStateProvider>
     );
     const textArea = wrapper.find('textarea').getDOMNode() as HTMLTextAreaElement;
     expect(textArea.disabled).toBe(false);

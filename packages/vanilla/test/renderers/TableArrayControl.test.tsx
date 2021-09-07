@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
+
   Copyright (c) 2017-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,20 +24,17 @@
 */
 import * as React from 'react';
 import * as _ from 'lodash';
-import { Provider } from 'react-redux';
 import {
   ControlElement,
-  getData,
   HorizontalLayout,
-  update
 } from '@jsonforms/core';
 import Adapter from 'enzyme-adapter-react-16';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
-import { JsonFormsReduxContext } from '@jsonforms/react/lib/redux';
+import { JsonFormsStateProvider } from '@jsonforms/react';
 import TableArrayControl, { tableArrayControlTester, } from '../../src/complex/TableArrayControl';
 import HorizontalLayoutRenderer from '../../src/layouts/HorizontalLayout';
 import '../../src';
-import { initJsonFormsVanillaStore } from '../vanillaStore';
+import { initCore, TestEmitter } from '../util';
 import IntegerCell, { integerCellTester } from '../../src/cells/IntegerCell';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -204,23 +201,15 @@ describe('Tabe array control', () => {
   afterEach(() => wrapper.unmount());
 
   test('render two children', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema,
-      cells: [
-        { tester: integerCellTester, cell: IntegerCell }
-      ]
-    });
+    const cells = [{ tester: integerCellTester, cell: IntegerCell }];
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TableArrayControl
-            schema={fixture.schema}
-            uischema={fixture.uischema}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core, cells }}>
+        <TableArrayControl
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+        />
+      </JsonFormsStateProvider>
     );
 
     const header = wrapper.find('header').getDOMNode();
@@ -275,20 +264,14 @@ describe('Tabe array control', () => {
       type: 'Control',
       scope: '#/properties/test'
     };
-    const store = initJsonFormsVanillaStore({
-      data: {},
-      schema: fixture.schema,
-      uischema: control
-    });
+    const core = initCore(fixture.schema, control, {});
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TableArrayControl
-            schema={fixture.schema}
-            uischema={control}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TableArrayControl
+          schema={fixture.schema}
+          uischema={control}
+        />
+      </JsonFormsStateProvider>
     );
 
     const header = wrapper.find('header').getDOMNode();
@@ -334,23 +317,15 @@ describe('Tabe array control', () => {
   });
 
   test('use property title as a column header if it exists', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture2.data,
-      schema: fixture2.schema,
-      uischema: fixture2.uischema,
-      cells: [
-        { tester: integerCellTester, cell: IntegerCell }
-      ]
-    });
+    const cells = [{ tester: integerCellTester, cell: IntegerCell }];
+    const core = initCore(fixture2.schema, fixture2.uischema, fixture2.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TableArrayControl
-            schema={fixture2.schema}
-            uischema={fixture2.uischema}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core, cells }}>
+        <TableArrayControl
+          schema={fixture2.schema}
+          uischema={fixture2.uischema}
+        />
+      </JsonFormsStateProvider>
     );
 
     //column headings are wrapped in a <thead> tag
@@ -364,20 +339,22 @@ describe('Tabe array control', () => {
   });
 
   test('render new child (empty init data)', () => {
-    const store = initJsonFormsVanillaStore({
-      data: { test: [] },
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const onChangeData: any = {
+      data: undefined
+    };
+    const core = initCore(fixture.schema, fixture.uischema, { test: [] });
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TableArrayControl
-            schema={fixture.schema}
-            uischema={fixture.uischema}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TestEmitter
+          onChange={({ data }) => {
+            onChangeData.data = data;
+          }}
+        />
+        <TableArrayControl
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+        />
+      </JsonFormsStateProvider>
     );
 
     const control = wrapper.find('.root_properties_test');
@@ -385,24 +362,26 @@ describe('Tabe array control', () => {
 
     const button = wrapper.find('button');
     button.simulate('click');
-    expect(getData(store.getState()).test).toHaveLength(1);
+    expect(onChangeData.data.test).toHaveLength(1);
   });
 
   test('render new child (undefined data)', () => {
-    const store = initJsonFormsVanillaStore({
-      data: { test: undefined },
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const onChangeData: any = {
+      data: undefined
+    };
+    const core = initCore(fixture.schema, fixture.uischema, { test: undefined });
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TableArrayControl
-            schema={fixture.schema}
-            uischema={fixture.uischema}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TestEmitter
+          onChange={({ data }) => {
+            onChangeData.data = data;
+          }}
+        />
+        <TableArrayControl
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+        />
+      </JsonFormsStateProvider>
     );
 
     const control = wrapper.find('.root_properties_test');
@@ -410,24 +389,26 @@ describe('Tabe array control', () => {
 
     const button = wrapper.find('button');
     button.simulate('click');
-    expect(getData(store.getState()).test).toHaveLength(1);
+    expect(onChangeData.data.test).toHaveLength(1);
   });
 
   test('render new child (null data)', () => {
-    const store = initJsonFormsVanillaStore({
-      data: { test: null },
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const onChangeData: any = {
+      data: undefined
+    };
+    const core = initCore(fixture.schema, fixture.uischema, { test: null });
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TableArrayControl
-            schema={fixture.schema}
-            uischema={fixture.uischema}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TestEmitter
+          onChange={({ data }) => {
+            onChangeData.data = data;
+          }}
+        />
+        <TableArrayControl
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+        />
+      </JsonFormsStateProvider>
     );
 
     const control = wrapper.find('.root_properties_test');
@@ -435,29 +416,31 @@ describe('Tabe array control', () => {
 
     const button = wrapper.find('button');
     button.simulate('click');
-    expect(getData(store.getState()).test).toHaveLength(1);
+    expect(onChangeData.data.test).toHaveLength(1);
   });
 
   test('render new child', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const onChangeData: any = {
+      data: undefined
+    };
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TableArrayControl
-            schema={fixture.schema}
-            uischema={fixture.uischema}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TestEmitter
+          onChange={({ data }) => {
+            onChangeData.data = data;
+          }}
+        />
+        <TableArrayControl
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+        />
+      </JsonFormsStateProvider>
     );
 
     const addButton = wrapper.find('button').first();
     addButton.simulate('click');
-    expect(getData(store.getState()).test).toHaveLength(2);
+    expect(onChangeData.data.test).toHaveLength(2);
   });
 
   test('render primitives ', () => {
@@ -477,20 +460,14 @@ describe('Tabe array control', () => {
       type: 'Control',
       scope: '#/properties/test'
     };
-    const store = initJsonFormsVanillaStore({
-      data: { test: ['foo', 'bars'] },
-      schema,
-      uischema
-    });
+    const core = initCore(schema, uischema, { test: ['foo', 'bars'] });
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TableArrayControl
-            schema={schema}
-            uischema={uischema}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TableArrayControl
+          schema={schema}
+          uischema={uischema}
+        />
+      </JsonFormsStateProvider>
     );
     const rows = wrapper.find('tr');
     const lastRow = rows.last().getDOMNode() as HTMLTableRowElement;
@@ -499,156 +476,124 @@ describe('Tabe array control', () => {
   });
 
   test('update via action', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TableArrayControl
-            schema={fixture.schema}
-            uischema={fixture.uischema}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TableArrayControl
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+        />
+      </JsonFormsStateProvider>
     );
 
     const children = wrapper.find('tbody').getDOMNode();
     expect(children.childNodes).toHaveLength(1);
 
-    store.dispatch(update('test', () => [{ x: 1, y: 3 }, { x: 2, y: 3 }]));
+    core.data = { ...core.data, test: [{ x: 1, y: 3 }, { x: 2, y: 3 }] };
+    wrapper.setProps({ initState: { core }} );
+    wrapper.update();
     expect(children.childNodes).toHaveLength(2);
 
-    store.dispatch(update(undefined, () => [{ x: 1, y: 3 }, { x: 2, y: 3 }, { x: 3, y: 3 }]));
+    core.data = { ...core.data, undefined: [{ x: 1, y: 3 }, { x: 2, y: 3 }, { x: 3, y: 3 }] };
+    wrapper.setProps({ initState: { core }} );
+    wrapper.update();
     expect(children.childNodes).toHaveLength(2);
   });
 
   test('hide', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TableArrayControl
-            schema={fixture.schema}
-            uischema={fixture.uischema}
-            visible={false}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TableArrayControl
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          visible={false}
+        />
+      </JsonFormsStateProvider>
     );
     const control = wrapper.find('.control').getDOMNode() as HTMLElement;
     expect(control.hidden).toBe(true);
   });
 
   test('show by default', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TableArrayControl
-            schema={fixture.schema}
-            uischema={fixture.uischema}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TableArrayControl
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+        />
+      </JsonFormsStateProvider>
     );
     const control = wrapper.find('.control').getDOMNode() as HTMLElement;
     expect(control.hidden).toBe(false);
   });
 
   test('single error', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TableArrayControl
-            schema={fixture.schema}
-            uischema={fixture.uischema}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TableArrayControl
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+        />
+      </JsonFormsStateProvider>
     );
-    store.dispatch(update('test', () => 2));
+    core.data = { ...core.data, test: 2 };
+    wrapper.setProps({ initState: { core }} );
+    wrapper.update();
     const validation = wrapper.find('.validation').getDOMNode();
     expect(validation.textContent).toBe('should be array');
   });
 
   test('multiple errors', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TableArrayControl
-            schema={fixture.schema}
-            uischema={fixture.uischema}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TableArrayControl
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+        />
+      </JsonFormsStateProvider>
     );
-    store.dispatch(update('test', () => 3));
+    core.data = { ...core.data, test: 3 };
+    wrapper.setProps({ initState: { core }} );
+    wrapper.update();
     const validation = wrapper.find('.validation').getDOMNode();
     expect(validation.textContent).toBe('should be array');
   });
 
   test('empty errors by default', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TableArrayControl
-            schema={fixture.schema}
-            uischema={fixture.uischema}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TableArrayControl
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+        />
+      </JsonFormsStateProvider>
     );
     const validation = wrapper.find('.validation').getDOMNode();
     expect(validation.textContent).toBe('');
   });
 
   test('reset validation message', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <TableArrayControl
-            schema={fixture.schema}
-            uischema={fixture.uischema}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TableArrayControl
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+        />
+      </JsonFormsStateProvider>
     );
     const validation = wrapper.find('.validation').getDOMNode();
-    store.dispatch(update('test', () => 3));
+    core.data = { ...core.data, test: 3 };
+    wrapper.setProps({ initState: { core }} );
     wrapper.update();
     expect(validation.textContent).toBe('should be array');
-    store.dispatch(update('test', () => []));
+    core.data = { ...core.data, test: [] };
+    wrapper.setProps({ initState: { core }} );
     wrapper.update();
     expect(validation.textContent).toBe('');
   });
@@ -685,18 +630,11 @@ describe('Tabe array control', () => {
       type: 'HorizontalLayout',
       elements: [firstControl, secondControl, thirdControl]
     };
-    const store = initJsonFormsVanillaStore({
-      data: {
-        name: 'John Doe',
-        personalData: {}
-      },
-      schema,
-      uischema
-    });
+    const core = initCore(fixture.schema, fixture.uischema, {name: 'John Doe', personalData: {} });
     wrapper = mount(
-      <Provider store={store}>
+      <JsonFormsStateProvider initState={{ core }}>
         <HorizontalLayoutRenderer schema={schema} uischema={uischema} />
-      </Provider>
+      </JsonFormsStateProvider>
     );
     const validation = wrapper.find('.valdiation');
     expect(validation.at(0).getDOMNode().textContent).toBe('');

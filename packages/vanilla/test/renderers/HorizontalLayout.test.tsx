@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
+
   Copyright (c) 2017-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -27,14 +27,13 @@ import {
   HorizontalLayout,
   UISchemaElement
 } from '@jsonforms/core';
-import { Provider } from 'react-redux';
 import Adapter from 'enzyme-adapter-react-16';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import HorizontalLayoutRenderer, {
   horizontalLayoutTester
 } from '../../src/layouts/HorizontalLayout';
-import { initJsonFormsVanillaStore } from '../vanillaStore';
-import { JsonFormsReduxContext } from '@jsonforms/react/lib/redux';
+import { initCore } from '../util';
+import { JsonFormsStateProvider } from '@jsonforms/react';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -62,17 +61,11 @@ describe('Horizontal layout', () => {
     const uischema: UISchemaElement = {
       type: 'HorizontalLayout'
     };
-    const store = initJsonFormsVanillaStore({
-      data: {},
-      schema: {},
-      uischema
-    });
+    const core = initCore({}, uischema, {});
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <HorizontalLayoutRenderer uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <HorizontalLayoutRenderer uischema={uischema} />
+      </JsonFormsStateProvider>
     );
 
     const horizontalLayout = wrapper.find(HorizontalLayoutRenderer).getDOMNode() as HTMLDivElement;
@@ -86,17 +79,11 @@ describe('Horizontal layout', () => {
       type: 'HorizontalLayout',
       elements: null
     };
-    const store = initJsonFormsVanillaStore({
-      data: {},
-      schema: {},
-      uischema
-    });
+    const core = initCore({}, uischema, {});
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <HorizontalLayoutRenderer uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <HorizontalLayoutRenderer uischema={uischema} />
+      </JsonFormsStateProvider>
     );
     const horizontalLayout = wrapper.find(HorizontalLayoutRenderer).getDOMNode() as HTMLDivElement;
     expect(horizontalLayout).toBeDefined();
@@ -111,17 +98,11 @@ describe('Horizontal layout', () => {
         { type: 'Control' }
       ]
     };
-    const store = initJsonFormsVanillaStore({
-      data: {},
-      schema: {},
-      uischema
-    });
+    const core = initCore({}, uischema, {});
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <HorizontalLayoutRenderer uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <HorizontalLayoutRenderer uischema={uischema} />
+      </JsonFormsStateProvider>
     );
     const horizontalLayout = wrapper.find(HorizontalLayoutRenderer).getDOMNode() as HTMLDivElement;
     expect(horizontalLayout).toBeDefined();
@@ -129,37 +110,25 @@ describe('Horizontal layout', () => {
   });
 
   test('hide', () => {
-    const store = initJsonFormsVanillaStore({
-      data: {},
-      schema: {},
-      uischema: fixture.uischema
-    });
+    const core = initCore({}, fixture.uischema, {});
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <HorizontalLayoutRenderer
-            uischema={fixture.uischema}
-            visible={false}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <HorizontalLayoutRenderer
+          uischema={fixture.uischema}
+          visible={false}
+        />
+      </JsonFormsStateProvider>
     );
     const horizontalLayout = wrapper.find(HorizontalLayoutRenderer).getDOMNode() as HTMLDivElement;
     expect(horizontalLayout.hidden).toBe(true);
   });
 
   test('show by default', () => {
-    const store = initJsonFormsVanillaStore({
-      data: {},
-      schema: {},
-      uischema: fixture.uischema
-    });
+    const core = initCore({}, fixture.uischema, {});
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <HorizontalLayoutRenderer uischema={fixture.uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <HorizontalLayoutRenderer uischema={fixture.uischema} />
+      </JsonFormsStateProvider>
     );
     const horizontalLayout = wrapper.find(HorizontalLayoutRenderer).getDOMNode() as HTMLDivElement;
     expect(horizontalLayout.hidden).toBe(false);

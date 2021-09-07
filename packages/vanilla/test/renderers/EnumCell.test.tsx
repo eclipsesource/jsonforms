@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
+
   Copyright (c) 2017-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,13 +23,12 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
-import { ControlElement, getData, update } from '@jsonforms/core';
-import { JsonFormsReduxContext } from '@jsonforms/react/lib/redux';
+import { ControlElement } from '@jsonforms/core';
+import { JsonFormsStateProvider } from '@jsonforms/react';
 import Adapter from 'enzyme-adapter-react-16';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import EnumCell, { enumCellTester } from '../../src/cells/EnumCell';
-import { Provider } from 'react-redux';
-import { initJsonFormsVanillaStore } from '../vanillaStore';
+import { initCore, TestEmitter } from '../util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -135,17 +134,11 @@ describe('Enum cell', () => {
   afterEach(() => wrapper.unmount());
 
   test('render', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+      </JsonFormsStateProvider>
     );
 
     const select = wrapper.find('select').getDOMNode() as HTMLSelectElement;
@@ -158,17 +151,11 @@ describe('Enum cell', () => {
   });
 
   test('has classes set', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+      </JsonFormsStateProvider>
     );
 
     const input = wrapper.find('select');
@@ -178,95 +165,80 @@ describe('Enum cell', () => {
   });
 
   test('update via input event', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const onChangeData: any = {
+      data: undefined
+    };
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TestEmitter
+          onChange={({ data }) => {
+            onChangeData.data = data;
+          }}
+        />
+        <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+      </JsonFormsStateProvider>
     );
     const select = wrapper.find('select');
     select.simulate('change', { target: { value: 'b' } });
-    expect(getData(store.getState()).foo).toBe('b');
+    expect(onChangeData.data.foo).toBe('b');
   });
 
   test('update via action', () => {
     const data = { 'foo': 'b' };
-    const store = initJsonFormsVanillaStore({
-      data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.schema, fixture.uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+      </JsonFormsStateProvider>
     );
     const select = wrapper.find('select').getDOMNode() as HTMLSelectElement;
-    store.dispatch(update('foo', () => 'b'));
+    core.data = { ...core.data, foo: 'b' };
+    wrapper.setProps({ initState: { core }} );
+    wrapper.update();
     expect(select.value).toBe('b');
     expect(select.selectedIndex).toBe(2);
   });
 
   test('update with undefined value', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+      </JsonFormsStateProvider>
     );
     const select = wrapper.find('select').getDOMNode() as HTMLSelectElement;
-    store.dispatch(update('foo', () => undefined));
+    core.data = { ...core.data, foo: undefined };
+    wrapper.setProps({ initState: { core }} );
+    wrapper.update();
     expect(select.selectedIndex).toBe(0);
     expect(select.value).toBe('');
   });
 
   test('update with null value', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+      </JsonFormsStateProvider>
     );
     const select = wrapper.find('select').getDOMNode() as HTMLSelectElement;
-    store.dispatch(update('foo', () => null));
+    core.data = { ...core.data, foo: null };
+    wrapper.setProps({ initState: { core }} );
+    wrapper.update();
     expect(select.selectedIndex).toBe(0);
     expect(select.value).toBe('');
   });
 
   test('update with wrong ref', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+      </JsonFormsStateProvider>
     );
-    store.dispatch(update('bar', () => 'Bar'));
+    core.data = { ...core.data, bar: 'Bar' };
+    wrapper.setProps({ initState: { core }} );
     wrapper.update();
     const select = wrapper.find('select').getDOMNode() as HTMLSelectElement;
     expect(select.selectedIndex).toBe(1);
@@ -274,19 +246,14 @@ describe('Enum cell', () => {
   });
 
   test('update with null ref', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+      </JsonFormsStateProvider>
     );
-    store.dispatch(update(null, () => false));
+    core.data = { ...core.data, null: false };
+    wrapper.setProps({ initState: { core }} );
     wrapper.update();
     const select = wrapper.find('select').getDOMNode() as HTMLSelectElement;
     expect(select.selectedIndex).toBe(1);
@@ -294,53 +261,37 @@ describe('Enum cell', () => {
   });
 
   test('update with undefined ref', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+      </JsonFormsStateProvider>
     );
-    store.dispatch(update(undefined, () => false));
+    core.data = { ...core.data, undefined: false };
+    wrapper.setProps({ initState: { core }} );
+    wrapper.update();
     const select = wrapper.find('select').getDOMNode() as HTMLSelectElement;
     expect(select.selectedIndex).toBe(1);
     expect(select.value).toBe('a');
   });
 
   test('disable', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <EnumCell schema={fixture.schema} uischema={fixture.uischema} enabled={false} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <EnumCell schema={fixture.schema} uischema={fixture.uischema} enabled={false} />
+      </JsonFormsStateProvider>
     );
     const select = wrapper.find('select');
     expect(select.props().disabled).toBe(true);
   });
 
   test('enabled by default', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+      </JsonFormsStateProvider>
     );
     const select = wrapper.find('select');
     expect(select.props().disabled).toBe(false);
