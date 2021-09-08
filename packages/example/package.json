@@ -8,12 +8,13 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
-    "core-js": "^3.6.5",
-    "vue": "^2.6.14",
-    "@vue/composition-api": "^1.0.0-rc.3",
     "@jsonforms/core": "3.0.0-alpha.1",
     "@jsonforms/vue2": "3.0.0-alpha.1",
-    "@jsonforms/vue2-vuetify": "3.0.0-alpha.1"
+    "@jsonforms/vue2-vuetify": "3.0.0-alpha.1",
+    "@vue/composition-api": "^1.0.0-rc.3",
+    "core-js": "^3.6.5",
+    "vue": "^2.6.14",
+    "vuetify": "^2.4.0"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.18.0",
@@ -29,7 +30,11 @@
     "eslint-plugin-vue": "^6.2.2",
     "prettier": "^2.2.1",
     "rimraf": "^3.0.2",
+    "sass": "~1.32.0",
+    "sass-loader": "^10.0.0",
     "typescript": "~4.1.5",
-    "vue-template-compiler": "^2.6.14"
+    "vue-cli-plugin-vuetify": "~2.4.2",
+    "vue-template-compiler": "^2.6.14",
+    "vuetify-loader": "^1.7.0"
   }
 }

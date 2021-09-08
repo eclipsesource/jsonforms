@@ -67,6 +67,8 @@ import VueCompositionAPI from '@vue/composition-api';
 Vue.use(VueCompositionAPI);
 ```
 
+If note done yet, please [install Vuetify for Vue 2](https://vuetifyjs.com/en/getting-started/installation/).
+
 For more information on how JSON Forms can be configured, please see the [README of `@jsonforms/vue2`](https://github.com/eclipsesource/jsonforms/blob/master/packages/vue2/vue2/README.md).
 
 ## License

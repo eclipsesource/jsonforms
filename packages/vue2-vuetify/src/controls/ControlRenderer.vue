@@ -1,8 +1,11 @@
 <template>
-  <div>
-    <label>{{ control.label }}</label>
-    <input :value="control.data" @change="onChange" />
-  </div>
+  <v-text-field
+    :value="control.data ? control.data : null"
+    :label="control.label"
+    clearable
+    @input="onChange"
+  >
+  </v-text-field>
 </template>
 
 <script lang="ts">
@@ -18,9 +21,13 @@ import {
   useJsonFormsControl,
 } from '@jsonforms/vue2';
 import { defineComponent } from '@vue/composition-api';
+import { VTextField } from 'vuetify/lib';
 
 const controlRenderer = defineComponent({
   name: 'control-renderer',
+  components: {
+    VTextField,
+  },
   props: {
     ...rendererProps(),
   },
@@ -28,8 +35,8 @@ const controlRenderer = defineComponent({
     return useJsonFormsControl(props);
   },
   methods: {
-    onChange(event: Event) {
-      this.handleChange(this.control.path, (event.target as any).value);
+    onChange(newValue: string) {
+      this.handleChange(this.control.path, newValue ?? undefined);
     },
   },
 });

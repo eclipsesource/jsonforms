@@ -1,17 +1,17 @@
 <template>
-  <div class="layout">
-    <div
+  <v-row>
+    <v-col
       v-for="(element, index) in layout.uischema.elements"
       :key="`${path}-${index}`"
-      class="layout-item"
+      cols="12"
     >
       <dispatch-renderer
         :schema="layout.schema"
         :uischema="element"
         :path="layout.path"
       />
-    </div>
-  </div>
+    </v-col>
+  </v-row>
 </template>
 
 <script lang="ts">
@@ -28,11 +28,14 @@ import {
   useJsonFormsLayout,
   RendererProps,
 } from '@jsonforms/vue2';
+import { VCol, VRow } from 'vuetify/lib';
 
 const layoutRenderer = defineComponent({
   name: 'layout-renderer',
   components: {
     DispatchRenderer,
+    VCol,
+    VRow,
   },
   props: {
     ...rendererProps<Layout>(),

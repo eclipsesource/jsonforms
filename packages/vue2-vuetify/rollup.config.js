@@ -20,6 +20,7 @@ const buildFormats = [
       '@jsonforms/core',
       '@jsonforms/vue2',
       'lodash/*',
+      'vuetify/lib',
     ],
     plugins: [
       resolve({

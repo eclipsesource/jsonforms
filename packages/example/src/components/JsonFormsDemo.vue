@@ -1,13 +1,17 @@
 <template>
-  <div id="demo">
-    <json-forms
-      v-bind:data="data"
-      v-bind:schema="schema"
-      v-bind:renderers="renderers"
-      @change="onChange"
-    />
-    <pre>{{ JSON.stringify(data, null, 2) }}</pre>
-  </div>
+  <v-row>
+    <v-col cols="6">
+      <json-forms
+        v-bind:data="data"
+        v-bind:schema="schema"
+        v-bind:renderers="renderers"
+        @change="onChange"
+      />
+    </v-col>
+    <v-col cols="6">
+      <pre>{{ JSON.stringify(data, null, 2) }}</pre>
+    </v-col>
+  </v-row>
 </template>
 
 <script lang="ts">
@@ -121,15 +125,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-.layout {
-  display: flex;
-  flex-direction: column;
-}
-
-.layout-item {
-  flex: 1;
-}
-</style>

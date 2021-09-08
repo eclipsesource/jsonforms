@@ -35,6 +35,7 @@
   "peerDependencies": {
     "vue": "^2.6.11",
     "@vue/composition-api": "^1.0.0-rc.3",
+    "vuetify": "^2.4.0",
     "@jsonforms/core": "^3.0.0-alpha.1",
     "@jsonforms/vue2": "^3.0.0-alpha.1"
   },
@@ -62,6 +63,7 @@
     "prettier": "^2.2.1",
     "typescript": "~4.1.5",
     "vue": "^2.6.14",
-    "vue-template-compiler": "^2.6.14"
+    "vue-template-compiler": "^2.6.14",
+    "vuetify": "^2.4.0"
   }
 }
