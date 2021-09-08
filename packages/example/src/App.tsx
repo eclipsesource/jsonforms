@@ -23,39 +23,58 @@
   THE SOFTWARE.
 */
 
-import React, { Component, CSSProperties } from 'react';
-import { JsonFormsDispatch } from '@jsonforms/react';
-import { JsonFormsReduxContext } from '@jsonforms/react/lib/redux';
+import React, { useEffect, useState } from 'react';
+import { JsonForms } from '@jsonforms/react';
+import { ExampleDescription } from '@jsonforms/examples';
+import {
+  JsonFormsCellRendererRegistryEntry,
+  JsonFormsRendererRegistryEntry
+} from '@jsonforms/core';
 import './App.css';
-import { AppProps, initializedConnect } from './reduxUtil';
 
-const preStyle: CSSProperties = {
-  overflowX: 'auto'
-};
-class App extends Component<AppProps> {
-  render() {
-    return (
-      <JsonFormsReduxContext>
-        <div>
-          <div className='App'>
-            <header className='App-header'>
-              <img src='assets/logo.svg' className='App-logo' alt='logo' />
-              <h1 className='App-title'>Welcome to JSON Forms with React</h1>
-              <p className='App-intro'>More Forms. Less Code.</p>
-            </header>
-          </div>
+type AppProps = {
+  examples: ExampleDescription[],
+  cells: JsonFormsCellRendererRegistryEntry[],
+  renderers: JsonFormsRendererRegistryEntry[],
+}
 
+const App = ({ examples, cells, renderers}: AppProps) => {
+  const [currentExample, setExample] = useState<ExampleDescription>(examples[0]);
+  const [currentIndex, setIndex] = useState<number>(0);
+  const [dataAsString, setDataAsString] = useState<any>('');
+
+  useEffect(() => {
+    setExample(examples[currentIndex]);
+  }, [currentIndex]);
+
+  const changeData = (data: any) => {
+    setDataAsString(JSON.stringify(data, null, 2));
+  };
+
+  const uischema = currentExample.uischema;
+  const schema = currentExample.schema;
+  const data = currentExample.data;
+  const config = currentExample.config;
+  return (
+    <div>
+      <div className='App'>
+        <header className='App-header'>
+          <img src='assets/logo.svg' className='App-logo' alt='logo' />
+          <h1 className='App-title'>Welcome to JSON Forms with React</h1>
+          <p className='App-intro'>More Forms. Less Code.</p>
+        </header>
+        <div className='content'>
           <h4 className='data-title'>Examples</h4>
           <div className='data-content'>
             <select
-              value={this.props.selectedExample.name || ''}
-              onChange={ev => this.props.changeExample(ev.currentTarget.value)}
+              value={currentIndex}
+              onChange={ev => setIndex(Number(ev.currentTarget.value))}
             >
-              {this.props.examples.map(optionValue => (
+              {examples.map((optionValue: ExampleDescription, index: number) => (
                 <option
-                  value={optionValue.name}
+                  value={index}
                   label={optionValue.label}
-                  key={optionValue.name}
+                  key={index}
                 >
                   {optionValue.label}
                 </option>
@@ -65,16 +84,23 @@ class App extends Component<AppProps> {
 
           <h4 className='data-title'>Bound data</h4>
           <div className='data-content'>
-            <pre style={preStyle}>{this.props.dataAsString}</pre>
+            <pre>{dataAsString}</pre>
           </div>
           <div className='demoform'>
-            {this.props.getExtensionComponent()}
-            <JsonFormsDispatch onChange={this.props.onChange} />
+            <JsonForms
+              schema={schema}
+              uischema={uischema}
+              data={data}
+              cells={cells}
+              renderers={renderers}
+              config={config}
+              onChange={({ data }) => changeData(data)}
+            />
           </div>
         </div>
-      </JsonFormsReduxContext>
-    );
-  }
+      </div>
+    </div>
+  );
 }
 
-export default initializedConnect(App);
+export default App;

@@ -24,97 +24,17 @@
 */
 import ReactDOM from 'react-dom';
 import React from 'react';
-import './index.css';
 import App from './App';
-import { combineReducers, createStore } from 'redux';
-import { Provider } from 'react-redux';
-import {
-  Actions,
-  JsonFormsCellRendererRegistryEntry,
-  jsonFormsReducerConfig,
-  JsonFormsRendererRegistryEntry,
-  JsonFormsState,
-  RankedTester,
-  Store
-} from '@jsonforms/core';
+import { RankedTester } from '@jsonforms/core';
 import { getExamples } from '@jsonforms/examples';
-import { AdditionalStoreParams, exampleReducer } from './reduxUtil';
-import { enhanceExample, ReactExampleDescription } from './util';
-
-import dayjs from 'dayjs';
-import 'dayjs/locale/de';
-import 'dayjs/locale/en';
-dayjs.locale('de');
-
-const setupStore = (
-  exampleData: ReactExampleDescription[],
-  cells: JsonFormsCellRendererRegistryEntry[],
-  renderers: JsonFormsRendererRegistryEntry[],
-  additionalStoreParams: any
-) => {
-  const additionalReducers = additionalStoreParams.reduce(
-    (acc: any, x: any) => {
-      if (x.reducer) {
-        acc[x.name] = x.reducer;
-      }
-
-      return acc;
-    },
-    {} as any
-  );
-  const additionalInitState = additionalStoreParams.reduce(
-    (acc: any, x: any) => {
-      acc[x.name] = x.state;
-
-      return acc;
-    },
-    {} as any
-  );
-  const reducer = combineReducers({
-    jsonforms: combineReducers(jsonFormsReducerConfig),
-    examples: exampleReducer,
-    ...additionalReducers
-  });
-  const store: Store<JsonFormsState> = createStore(reducer, {
-    jsonforms: {
-      cells: cells,
-      renderers: renderers,
-      ...additionalInitState
-    },
-    examples: {
-      data: exampleData
-    }
-  } as any);
-
-  // Add configuration to JSONForms
-  store.dispatch(
-    Actions.init(
-      exampleData[0].data,
-      exampleData[0].schema,
-      exampleData[0].uischema,
-    )
-  );
-  return store;
-};
 
 export const renderExample = (
   renderers: { tester: RankedTester; renderer: any }[],
-  cells: { tester: RankedTester; cell: any }[],
-  enhancer?: (examples: ReactExampleDescription[]) => ReactExampleDescription[],
-  ...additionalStoreParams: AdditionalStoreParams[]
+  cells: { tester: RankedTester; cell: any }[]
 ) => {
-  const exampleData = enhanceExample(getExamples());
-  const enhancedExampleData = enhancer ? enhancer(exampleData) : exampleData;
-  const store = setupStore(
-    enhancedExampleData,
-    cells,
-    renderers,
-    additionalStoreParams
-  );
+  const examples = getExamples();
   ReactDOM.render(
-    <Provider store={store}>
-      <App />
-    </Provider>,
+    <App examples={examples} renderers={renderers} cells={cells} />,
     document.getElementById('root')
   );
 };
