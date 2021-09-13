@@ -283,7 +283,7 @@ describe('Material input control', () => {
       </JsonFormsStateProvider>
     );
     const label = wrapper.find('label').first();
-    expect(label.text()).toBe('Date Cell*');
+    expect(label.text()).toBe('Date Cell *');
   });
 
   it('should not display a marker for a non-required prop', () => {

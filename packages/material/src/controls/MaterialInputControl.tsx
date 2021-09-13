@@ -24,7 +24,7 @@
 */
 import React from 'react';
 import {
-  computeLabel,
+  showAsRequired,
   ControlProps,
   ControlState,
   isDescriptionHidden,
@@ -84,12 +84,10 @@ export abstract class MaterialInputControl extends Control<
           <InputLabel
             htmlFor={id + '-input'}
             error={!isValid}
+            required={showAsRequired(required,
+              appliedUiSchemaOptions.hideRequiredAsterisk)}
           >
-            {computeLabel(
-              label,
-              required,
-              appliedUiSchemaOptions.hideRequiredAsterisk
-            )}
+            {label}
           </InputLabel>
           <InnerComponent
             {...this.props}

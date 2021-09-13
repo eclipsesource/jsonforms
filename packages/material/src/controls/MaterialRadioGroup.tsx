@@ -25,9 +25,9 @@
 import merge from 'lodash/merge';
 import React from 'react';
 import {
-  computeLabel,
   ControlProps,
   ControlState,
+  showAsRequired,
   isDescriptionHidden,
   OwnPropsOfEnum
 } from '@jsonforms/core';
@@ -81,12 +81,10 @@ export class MaterialRadioGroup extends Control<
             htmlFor={id}
             error={!isValid}
             component={'legend' as 'label'}
+            required={showAsRequired(required,
+              appliedUiSchemaOptions.hideRequiredAsterisk)}
           >
-            {computeLabel(
-              label,
-              required,
-              appliedUiSchemaOptions.hideRequiredAsterisk
-            )}
+            {label}
           </FormLabel>
 
           <RadioGroup

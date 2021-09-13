@@ -24,9 +24,9 @@
 */
 import React from 'react';
 import {
-  computeLabel,
   ControlProps,
   ControlState,
+  showAsRequired,
   isDateControl,
   isDescriptionHidden,
   isTimeControl,
@@ -73,12 +73,10 @@ export class MaterialNativeControl extends Control<ControlProps, ControlState> {
     return (
       <Hidden xsUp={!visible}>
         <TextField
+          required={showAsRequired(required,
+            appliedUiSchemaOptions.hideRequiredAsterisk)}
           id={id + '-input'}
-          label={computeLabel(
-            label,
-            required,
-            appliedUiSchemaOptions.hideRequiredAsterisk
-          )}
+          label={label}
           type={fieldType}
           error={!isValid}
           disabled={!enabled}
