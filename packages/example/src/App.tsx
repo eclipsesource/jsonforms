@@ -24,12 +24,14 @@
 */
 
 import React, { useEffect, useState } from 'react';
-import { JsonForms } from '@jsonforms/react';
+import { JsonForms, JsonFormsInitStateProps, JsonFormsReactProps } from '@jsonforms/react';
 import { ExampleDescription } from '@jsonforms/examples';
 import {
   JsonFormsCellRendererRegistryEntry,
-  JsonFormsRendererRegistryEntry
+  JsonFormsRendererRegistryEntry,
+  JsonSchema
 } from '@jsonforms/core';
+import { resolveRefs } from 'json-refs';
 import './App.css';
 
 type AppProps = {
@@ -37,6 +39,28 @@ type AppProps = {
   cells: JsonFormsCellRendererRegistryEntry[],
   renderers: JsonFormsRendererRegistryEntry[],
 }
+
+const ResolvedJsonForms = (
+  props: JsonFormsInitStateProps & JsonFormsReactProps
+) => {
+  const [init, setInit] = useState(false);
+  const [schema, setSchema] = useState<JsonSchema>();
+  useEffect(() => {
+    if (!props.schema) {
+      setInit(true);
+      setSchema(props.schema);
+    } else {
+      resolveRefs(props.schema).then((result) => {
+        setInit(true);
+        setSchema(result.resolved);
+      });
+    }
+  }, [props.schema]);
+  if (!init) {
+    return null;
+  }
+  return <JsonForms {...props} schema={schema} />;
+};
 
 const App = ({ examples, cells, renderers}: AppProps) => {
   const [currentExample, setExample] = useState<ExampleDescription>(examples[0]);
@@ -87,7 +111,8 @@ const App = ({ examples, cells, renderers}: AppProps) => {
             <pre>{dataAsString}</pre>
           </div>
           <div className='demoform'>
-            <JsonForms
+            <ResolvedJsonForms
+              key={currentIndex}
               schema={schema}
               uischema={uischema}
               data={data}

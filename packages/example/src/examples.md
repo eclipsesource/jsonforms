@@ -8,12 +8,12 @@
 | anyOf | ✅ |  |  |
 | anyOf_simple | ✅ |  |  |
 | oneOf | ✅ |  |  |
-| 1265_array | ❌ | ✅ | array.push is not a function |
+| 1265_array | ✅ | ✅ |  |
 | 1265_object | ✅ |  |  |
 | 1265_simple | ✅ |  |  |
 | 1273_simple | ✅ |  |  |
 | oneOfArray | ✅ |  |  |
-| anyOf-oneOf-allOf-resolve | ❌ | ✅ | Maximum call stack size exceeded |
+| anyOf-oneOf-allOf-resolve | ✅ | ✅ |  |
 | array | ❌ |  | No action buttons (and logic) |
 | nestedArray | ❌ |  | No action buttons (and logic) |
 | person | ✅ |  |  |
@@ -47,23 +47,23 @@
 | text | ✅ |  |  |
 | numbers | ✅ |  |  |
 | scope | ✅ |  |  |
-| list-with-detail | ❌ | ✅ | No applicable renderer found |
-| list-with-detail-no-labelref | ❌ | ✅ | No applicable renderer found |
-| list-with-detail-registered | ❌ | ✅ | No applicable renderer found |
+| list-with-detail | ✅ | ✅ |  |
+| list-with-detail-no-labelref | ✅ | ✅ |  |
+| list-with-detail-registered | ✅ | ✅ |  |
 | rootObject | ✅ |  |  |
 | object | ✅ |  |  |
 | i18n | ❌ |  | No action buttons (and logic) |
 | issue-1253 | ✅ |  |  |
 | issue-1253-wrong-path-binding | ✅ |  |  |
-| issue-1253-cell-missing-cell | ❌ | ✅ | array.push is not a function |
-| issue-1253-add-button-empty-row | ❌ | ✅ | Cannot read properties of undefined |
-| issue-1253-enum-error | ❌ | ✅ | Cannot read properties of undefined |
+| issue-1253-cell-missing-cell | ✅ | ✅ | |
+| issue-1253-add-button-empty-row | ✅ | ✅ | |
+| issue-1253-enum-error | ✅ | ✅ |  |
 | issue-1254 | ✅ |  |  |
 | oneOf-recursive | ✅ |  |  |
-| huge | ❌ | ✅ | No applicable renderer found |
+| huge | ✅ | ✅ |  |
 | default | ✅ |  |  |
 | onChange | ✅ |  |  |
-| enum | ❌ |  | No action buttons (and logic) |
+| enum | ✅ |  | No action buttons (and logic) |
 | radio-group | ✅ |  |  |
 | booleanToggle | ✅ |  |  |
 | multi-enum | ✅ |  |  |
