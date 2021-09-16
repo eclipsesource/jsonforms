@@ -21,6 +21,22 @@ import { vuetifyRenderers } from '@jsonforms/vue2-vuetify';
 
 const schema = {
   properties: {
+    gender: {
+      oneOf: [
+        {
+          const: 'male',
+          title: 'Male',
+        },
+        {
+          const: 'female',
+          title: 'Female',
+        },
+        {
+          const: 'other',
+          title: 'Diverse',
+        },
+      ],
+    },
     name: {
       type: 'string',
       minLength: 1,
