@@ -1,0 +1,7 @@
+{
+  "multilineString": "Multi-\nline\nexample",
+  "slider": 4,
+  "trimText": "abcdefg",
+  "restrictText": "abcde",
+  "toggle": false
+}

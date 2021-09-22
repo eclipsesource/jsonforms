@@ -1,0 +1,58 @@
+{
+  "type": "Categorization",
+  "elements": [
+    {
+      "type": "Category",
+      "label": "Persons",
+      "elements": [
+        { "type": "ListWithDetail", "scope": "#/properties/persons" }
+      ]
+    },
+    {
+      "type": "Category",
+      "label": "Relationships",
+      "elements": [
+        { "type": "ListWithDetail", "scope": "#/properties/relationships" }
+      ]
+    },
+    {
+      "type": "Category",
+      "label": "SourceDescriptions",
+      "elements": [
+        { "type": "ListWithDetail", "scope": "#/properties/sourceDescriptions" }
+      ]
+    },
+    {
+      "type": "Category",
+      "label": "Agents",
+      "elements": [{ "type": "ListWithDetail", "scope": "#/properties/agents" }]
+    },
+    {
+      "type": "Category",
+      "label": "Events",
+      "elements": [{ "type": "ListWithDetail", "scope": "#/properties/events" }]
+    },
+    {
+      "type": "Category",
+      "label": "Documents",
+      "elements": [
+        { "type": "ListWithDetail", "scope": "#/properties/documents" }
+      ]
+    },
+    {
+      "type": "Category",
+      "label": "Places",
+      "elements": [{ "type": "ListWithDetail", "scope": "#/properties/places" }]
+    },
+    {
+      "type": "Category",
+      "label": "Generic",
+      "elements": [
+        { "type": "Control", "scope": "#/properties/description" },
+        { "type": "Control", "scope": "#/properties/lang" },
+        { "type": "Control", "scope": "#/properties/attribution" },
+        { "type": "Control", "scope": "#/properties/id" }
+      ]
+    }
+  ]
+}

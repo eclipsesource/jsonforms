@@ -1,0 +1,37 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "Control",
+      "scope": "#/properties/string"
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/boolean"
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/number"
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/integer"
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/date"
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/time"
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/dateTime"
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/enum"
+    }
+  ]
+}

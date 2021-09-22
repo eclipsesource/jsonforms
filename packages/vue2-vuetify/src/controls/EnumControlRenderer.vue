@@ -1,49 +1,72 @@
 <template>
-  <div>
-    <v-select
-      :value="control.data ? control.data : null"
-      :label="control.label"
-      :error-messages="control.errors"
-      clearable
-      :items="control.options"
-      item-text="label"
-      item-value="value"
-      @input="onChange"
-    >
-    </v-select>
-  </div>
+  <control-wrapper
+    v-bind="controlWrapper"
+    :styles="styles"
+    :isFocused="isFocused"
+    :appliedOptions="appliedOptions"
+  >
+    <v-hover v-slot="{ hover }">
+      <v-select
+        v-disabled-icon-focus
+        :id="control.id + '-input'"
+        :class="styles.control.input"
+        :disabled="!control.enabled"
+        :autofocus="appliedOptions.focus"
+        :placeholder="appliedOptions.placeholder"
+        :label="computedLabel"
+        :hint="control.description"
+        :persistent-hint="persistentHint()"
+        :required="control.required"
+        :error-messages="control.errors"
+        :clearable="hover"
+        v-model="control.data"
+        :items="control.options"
+        item-text="label"
+        item-value="value"
+        @change="onChange"
+        @focus="isFocused = true"
+        @blur="isFocused = false"
+      />
+    </v-hover>
+  </control-wrapper>
 </template>
 
 <script lang="ts">
 import {
+  ControlElement,
   JsonFormsRendererRegistryEntry,
   rankWith,
   isEnumControl,
-  ControlElement,
 } from '@jsonforms/core';
+import { defineComponent } from '../vue';
 import {
-  RendererProps,
   rendererProps,
   useJsonFormsEnumControl,
+  RendererProps,
 } from '@jsonforms/vue2';
-import { defineComponent } from '@vue/composition-api';
-import { VSelect } from 'vuetify/lib';
+import { default as ControlWrapper } from './ControlWrapper.vue';
+import { useVuetifyControl } from '../util';
+import { VSelect, VHover } from 'vuetify/lib';
+import { DisabledIconFocus } from './directives';
 
 const controlRenderer = defineComponent({
   name: 'enum-control-renderer',
   components: {
+    ControlWrapper,
     VSelect,
+    VHover,
+  },
+  directives: {
+    DisabledIconFocus,
   },
   props: {
-    ...rendererProps(),
+    ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    return useJsonFormsEnumControl(props);
-  },
-  methods: {
-    onChange(newValue: string) {
-      this.handleChange(this.control.path, newValue ?? undefined);
-    },
+    return useVuetifyControl(
+      useJsonFormsEnumControl(props),
+      (value) => value || undefined
+    );
   },
 });
 

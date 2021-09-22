@@ -1,0 +1,13 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "Control",
+      "scope": "#/properties/oneOfMultiEnum"
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/multiEnum"
+    }
+  ]
+}

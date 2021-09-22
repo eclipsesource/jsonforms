@@ -1,0 +1,8 @@
+{
+  "oneOfMultiEnum": [
+    "foo"
+  ],
+  "multiEnum": [
+    "bar"
+  ]
+}

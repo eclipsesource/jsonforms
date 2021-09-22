@@ -1,0 +1,15 @@
+{
+  "type": "HorizontalLayout",
+  "elements": [
+    {
+      "type": "Control",
+      "label": "Name",
+      "scope": "#/properties/name"
+    },
+    {
+      "type": "Control",
+      "label": "Birth Date",
+      "scope": "#/properties/birthDate"
+    }
+  ]
+}
