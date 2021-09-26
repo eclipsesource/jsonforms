@@ -1,5 +1,5 @@
 <template>
-  <div v-if="layout.visible" :class="styles.group.root">
+  <div v-if="layout.visible" :class="styles.categorization.root">
     <v-stepper
       non-linear
       v-model="activeCategory"
@@ -80,17 +80,16 @@ import {
   optionIs,
   Tester,
   isVisible,
-  JsonFormsSubStates,
   categorizationHasCategory,
 } from '@jsonforms/core';
-import { defineComponent, inject, ref } from '../vue';
+import { defineComponent, ref } from '../vue';
 import {
   DispatchRenderer,
   rendererProps,
   useJsonFormsLayout,
   RendererProps,
 } from '@jsonforms/vue2';
-import { useVuetifyLayout } from '../util';
+import { useAjv, useVuetifyLayout } from '../util';
 import {
   VStepper,
   VStepperHeader,
@@ -98,6 +97,7 @@ import {
   VDivider,
   VStepperItems,
   VStepperContent,
+  VSpacer,
   VCard,
   VCardActions,
   VBtn,
@@ -111,6 +111,7 @@ const layoutRenderer = defineComponent({
     VStepperHeader,
     VStepperStep,
     VDivider,
+    VSpacer,
     VStepperItems,
     VStepperContent,
     VCard,
@@ -122,27 +123,19 @@ const layoutRenderer = defineComponent({
   },
   setup(props: RendererProps<Layout>) {
     const activeCategory = ref(1);
+    const ajv = useAjv();
 
-    return { ...useVuetifyLayout(useJsonFormsLayout(props)), activeCategory };
+    return {
+      ...useVuetifyLayout(useJsonFormsLayout(props)),
+      activeCategory,
+      ajv,
+    };
   },
   computed: {
     visibleCategories(): (Category | Categorization)[] {
-      const jsonforms = inject<JsonFormsSubStates>('jsonforms');
-
-      if (!jsonforms) {
-        throw new Error(
-          "'jsonforms' couldn't be injected. Are you within JSON Forms?"
-        );
-      }
-
       return (this.layout.uischema as Categorization).elements.filter(
         (category: Category | Categorization) =>
-          isVisible(
-            category,
-            this.layout.data,
-            this.layout.path,
-            jsonforms?.core?.ajv!
-          )
+          isVisible(category, this.layout.data, this.layout.path, this.ajv)
       );
     },
   },

@@ -18,7 +18,7 @@
         :persistent-hint="persistentHint()"
         :required="control.required"
         :error-messages="control.errors"
-        v-model="control.data"
+        :value="control.data"
         :maxlength="
           appliedOptions.restrict ? control.schema.maxLength : undefined
         "
@@ -79,8 +79,9 @@ const controlRenderer = defineComponent({
   },
   computed: {
     items(): string[] {
-      const enumSchema = findEnumSchema(this.control.schema.anyOf!)!;
-      return enumSchema.enum!;
+      // made sure via the testers
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      return findEnumSchema(this.control.schema.anyOf!)!.enum!;
     },
   },
 });
@@ -94,20 +95,20 @@ const findEnumSchema = (schemas: JsonSchema[]) =>
 const findTextSchema = (schemas: JsonSchema[]) =>
   schemas.find((s) => s.type === 'string' && s.enum === undefined);
 
-const hasEnumAndText = (schemas: JsonSchema[]) => {
+const hasEnumAndText = (schemas: JsonSchema[]): boolean => {
   // idea: map to type,enum and check that all types are string and at least one item is of type enum,
-  const enumSchema = findEnumSchema(schemas)!;
-  const stringSchema = findTextSchema(schemas)!;
+  const enumSchema = findEnumSchema(schemas);
+  const stringSchema = findTextSchema(schemas);
   const remainingSchemas = schemas.filter(
     (s) => s !== enumSchema || s !== stringSchema
   );
   const wrongType = remainingSchemas.find((s) => s.type && s.type !== 'string');
-  return enumSchema && stringSchema && !wrongType;
+  return !!enumSchema && !!stringSchema && !wrongType;
 };
 const simpleAnyOf = and(
   uiTypeIs('Control'),
   schemaMatches(
-    (schema) => schema.hasOwnProperty('anyOf') && hasEnumAndText(schema.anyOf!)
+    (schema) => Array.isArray(schema.anyOf) && hasEnumAndText(schema.anyOf)
   )
 );
 
@@ -116,4 +117,3 @@ export const entry: JsonFormsRendererRegistryEntry = {
   tester: rankWith(5, simpleAnyOf),
 };
 </script>
-

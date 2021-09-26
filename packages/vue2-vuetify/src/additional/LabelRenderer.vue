@@ -1,6 +1,6 @@
 <template>
   <v-label v-if="layout.visible" :class="styles.label.root">
-    {{ this.layoutUiSchema.text }}
+    {{ layout.uischema.text }}
   </v-label>
 </template>
 
@@ -10,7 +10,6 @@ import {
   Layout,
   rankWith,
   uiTypeIs,
-  LabelElement,
 } from '@jsonforms/core';
 import { defineComponent } from '../vue';
 import {
@@ -34,11 +33,6 @@ const labelRenderer = defineComponent({
   setup(props: RendererProps<Layout>) {
     // reuse layout bindings for label
     return useVuetifyLayout(useJsonFormsLayout(props));
-  },
-  computed: {
-    layoutUiSchema(): LabelElement {
-      return this.layout.uischema as LabelElement;
-    },
   },
 });
 

@@ -9,7 +9,9 @@ const createEmptyStyles = (): Styles => ({
   horizontalLayout: {},
   group: {},
   arrayList: {},
+  listWithDetail: {},
   label: {},
+  categorization: {},
 });
 
 export interface Styles {
@@ -44,7 +46,23 @@ export interface Styles {
     itemMoveDown?: string;
     itemDelete?: string;
   };
+  listWithDetail: {
+    root?: string;
+    toolbar?: string;
+    addButton?: string;
+    label?: string;
+    noData?: string;
+    item?: string;
+    itemLabel?: string;
+    itemContent?: string;
+    itemMoveUp?: string;
+    itemMoveDown?: string;
+    itemDelete?: string;
+  };
   label: {
+    root?: string;
+  };
+  categorization: {
     root?: string;
   };
 }

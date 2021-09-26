@@ -28,7 +28,7 @@
             : undefined
         "
         :clearable="hover"
-        v-model="control.data"
+        :value="control.data"
         :items="suggestions"
         hide-no-data
         @change="onChange"
@@ -48,7 +48,7 @@
         :persistent-hint="persistentHint()"
         :required="control.required"
         :error-messages="control.errors"
-        v-model="control.data"
+        :value="control.data"
         :maxlength="
           appliedOptions.restrict ? control.schema.maxLength : undefined
         "

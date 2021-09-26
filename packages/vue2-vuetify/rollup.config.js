@@ -3,6 +3,7 @@ import babel from '@rollup/plugin-babel';
 import typescript from 'rollup-plugin-typescript2';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
+import visualizer from 'rollup-plugin-visualizer';
 
 import packageJson from './package.json';
 
@@ -20,6 +21,7 @@ const buildFormats = [
       '@vue/composition-api',
       '@jsonforms/core',
       '@jsonforms/vue2',
+      'lodash',
       'lodash/startCase',
       'lodash/isEmpty',
       'lodash/findIndex',
@@ -29,21 +31,19 @@ const buildFormats = [
       'lodash/isArray',
       'lodash/every',
       'lodash/isString',
+      'lodash/omit',
       'vuetify/lib',
       '@mdi/font',
+      'dayjs',
+      'dayjs/plugin/customParseFormat',
+      'dayjs/plugin/utc',
+      'dayjs/plugin/timezone',
     ],
     plugins: [
       resolve({
         extensions: ['.js', '.jsx', '.ts', '.tsx', '.vue'],
       }),
-      commonjs({
-        namedExports: {
-          dayjs: ['dayjs'],
-          'dayjs/plugin/customParseFormat': ['customParsing'],
-          'dayjs/plugin/utc': ['utc'],
-          'dayjs/plugin/timezone': ['timezone'],
-        },
-      }),
+      commonjs(),
       vue({
         css: true,
         template: {
@@ -61,6 +61,7 @@ const buildFormats = [
         extensions: ['.js', '.jsx', '.ts', '.tsx', '.vue'],
         babelHelpers: 'bundled',
       }),
+      visualizer(),
     ],
   },
 ];

@@ -240,16 +240,15 @@ const controlRenderer = defineComponent({
     return useVuetifyArrayControl(useJsonFormsArrayControl(props));
   },
   computed: {
-    noData(): boolean {
-      return !this.control.data || this.control.data.length === 0;
-    },
-    //TODO: check is that is the appropate way to get the array schema, possibly it would be better for the core to have a property that exports that schema
     arraySchema(): JsonSchema | undefined {
       return Resolve.schema(
         this.control.rootSchema,
         this.control.uischema.scope,
         this.control.rootSchema
       );
+    },
+    noData(): boolean {
+      return !this.control.data || this.control.data.length === 0;
     },
   },
   methods: {

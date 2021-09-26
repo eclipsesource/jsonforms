@@ -184,10 +184,10 @@ import {
   isObjectArrayWithNesting,
   composePaths,
   createDefaultValue,
-  Resolve,
-  JsonSchema,
   UISchemaElement,
   findUISchema,
+  Resolve,
+  JsonSchema,
 } from '@jsonforms/core';
 import { defineComponent } from '../vue';
 import {
@@ -264,7 +264,6 @@ const controlRenderer = defineComponent({
         this.control.rootSchema
       );
     },
-    //TODO: check is that is the appropate way to get the array schema, possibly it would be better for the core to have a property that exports that schema
     arraySchema(): JsonSchema | undefined {
       return Resolve.schema(
         this.control.rootSchema,

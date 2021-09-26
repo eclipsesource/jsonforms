@@ -4,15 +4,13 @@
       <v-col v-for="(o, index) in control.options" :key="o.value">
         <v-checkbox
           :label="o.label"
-          :value="o.value"
+          :input-value="dataHasEnum(o.value)"
           :id="control.id + `-input-${index}`"
           :path="composePaths(control.path, `${index}`)"
           :error-messages="control.errors"
           :disabled="!control.enabled"
-          multiple
           :indeterminate="control.data === undefined"
-          v-model="control.data"
-          @change="onChange"
+          @change="(value) => toggle(o.value, value)"
         ></v-checkbox>
       </v-col>
     </v-row>
@@ -33,9 +31,6 @@ import {
   schemaSubPathMatches,
   uiTypeIs,
   composePaths,
-  update,
-  Dispatch,
-  CoreActions,
 } from '@jsonforms/core';
 import { VCheckbox, VContainer, VRow, VCol } from 'vuetify/lib';
 import {
@@ -45,8 +40,8 @@ import {
   useControl,
   ControlProps,
 } from '@jsonforms/vue2';
-import { defineComponent, inject } from '../vue';
-import { useVuetifyMultiEnumControl } from '../util';
+import { defineComponent } from '../vue';
+import { useVuetifyBasicControl } from '../util';
 
 //TODO: move into JsonForm Vue project under src/components/jsonFormsCompositions.ts
 const useJsonFormsMultiEnumControl = (props: ControlProps) => {
@@ -70,23 +65,20 @@ const controlRenderer = defineComponent({
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    const dispatch = inject<Dispatch<CoreActions>>('dispatch');
-
-    if (!dispatch) {
-      throw new Error(
-        "'jsonforms' or 'dispatch' couldn't be injected. Are you within JSON Forms?"
-      );
-    }
-
-    return {
-      ...useVuetifyMultiEnumControl(useJsonFormsMultiEnumControl(props)),
-      dispatch,
-    };
+    return useVuetifyBasicControl(useJsonFormsMultiEnumControl(props));
   },
   methods: {
+    dataHasEnum(value: any) {
+      return !!this.control.data?.includes(value);
+    },
     composePaths,
-    onChange() {
-      this.dispatch(update(this.control.path, () => this.control.data));
+    toggle(value: any, add: boolean) {
+      if (add) {
+        this.addItem(this.control.path, value);
+      } else {
+        // mistyped in core
+        this.removeItem?.(this.control.path, value);
+      }
     },
   },
 });

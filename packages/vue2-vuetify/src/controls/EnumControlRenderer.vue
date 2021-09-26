@@ -19,7 +19,7 @@
         :required="control.required"
         :error-messages="control.errors"
         :clearable="hover"
-        v-model="control.data"
+        :value="control.data"
         :items="control.options"
         item-text="label"
         item-value="value"

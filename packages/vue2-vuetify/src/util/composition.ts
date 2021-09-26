@@ -3,12 +3,14 @@ import {
   computeLabel,
   getFirstPrimitiveProp,
   isDescriptionHidden,
+  JsonFormsSubStates,
   Resolve,
 } from '@jsonforms/core';
 import cloneDeep from 'lodash/cloneDeep';
 import merge from 'lodash/merge';
 import { useStyles } from '../styles';
-import { computed, ComputedRef, ref } from '../vue';
+import { computed, ComputedRef, inject, ref } from '../vue';
+import { Ajv } from 'ajv';
 
 const useControlAppliedOptions = <I extends { control: any }>(input: I) => {
   return computed(() =>
@@ -119,7 +121,11 @@ export const useVuetifyArrayControl = <I extends { control: any }>(
       input.control.value.data,
       composePaths(`${index}`, childLabelProp)
     );
-    if (labelValue === undefined || labelValue === null || isNaN(labelValue)) {
+    if (
+      labelValue === undefined ||
+      labelValue === null ||
+      Number.isNaN(labelValue)
+    ) {
       return '';
     }
     return `${labelValue}`;
@@ -134,9 +140,9 @@ export const useVuetifyArrayControl = <I extends { control: any }>(
 };
 
 /**
- * Adds styles, appliedOptions and childUiSchema
+ * Adds styles and appliedOptions
  */
-export const useVuetifyMultiEnumControl = <I extends { control: any }>(
+export const useVuetifyBasicControl = <I extends { control: any }>(
   input: I
 ) => {
   const appliedOptions = useControlAppliedOptions(input);
@@ -146,4 +152,20 @@ export const useVuetifyMultiEnumControl = <I extends { control: any }>(
     styles: useStyles(input.control.value.uischema),
     appliedOptions,
   };
+};
+
+/**
+ * Extracts Ajv from JSON Forms
+ */
+export const useAjv = () => {
+  const jsonforms = inject<JsonFormsSubStates>('jsonforms');
+
+  if (!jsonforms) {
+    throw new Error(
+      "'jsonforms' couldn't be injected. Are you within JSON Forms?"
+    );
+  }
+
+  // should always exist
+  return jsonforms.core?.ajv as Ajv;
 };

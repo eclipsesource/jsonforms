@@ -32,7 +32,23 @@ export const defaultStyles: Styles = {
     itemMoveDown: 'array-list-item-move-down',
     itemDelete: 'array-list-item-delete',
   },
+  listWithDetail: {
+    root: 'list-with-detail',
+    toolbar: 'list-with-detail-toolbar',
+    addButton: 'list-with-detail-add',
+    label: 'list-with-detail-label',
+    noData: 'list-with-detail-no-data',
+    item: 'list-with-detail-item',
+    itemLabel: 'list-with-detail-item-label',
+    itemContent: 'list-with-detail-item-content',
+    itemMoveUp: 'list-with-detail-item-move-up',
+    itemMoveDown: 'list-with-detail-item-move-down',
+    itemDelete: 'list-with-detail-item-delete',
+  },
   label: {
     root: 'label-element',
+  },
+  categorization: {
+    root: 'categorization',
   },
 };

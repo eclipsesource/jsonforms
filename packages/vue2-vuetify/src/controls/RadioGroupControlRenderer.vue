@@ -17,7 +17,7 @@
       :required="control.required"
       :error-messages="control.errors"
       row
-      v-model="control.data"
+      :value="control.data"
       @change="onChange"
       @focus="isFocused = true"
       @blur="isFocused = false"

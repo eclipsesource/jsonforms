@@ -33,11 +33,12 @@
     "watch": "rollup --watch --config rollup.config.js"
   },
   "dependencies": {
-    "dayjs": "1.10.6"
+    "dayjs": "^1.10.6",
+    "lodash": "^4.17.15"
   },
   "peerDependencies": {
     "vue": "^2.6.11",
-    "@vue/composition-api": "^1.0.0-rc.3",
+    "@vue/composition-api": "1.0.0-rc.3",
     "vuetify": "^2.4.0",
     "@mdi/font": "^5.9.55",
     "@jsonforms/core": "^3.0.0-alpha.1",
@@ -53,7 +54,7 @@
     "@typescript-eslint/parser": "^4.18.0",
     "@vue/eslint-config-prettier": "^6.0.0",
     "@vue/eslint-config-typescript": "^7.0.0",
-    "@vue/composition-api": "^1.0.0-rc.3",
+    "@vue/composition-api": "1.0.0-rc.3",
     "rimraf": "^3.0.2",
     "rollup": "^2.52.8",
     "@rollup/plugin-commonjs": "^14.0.0",
@@ -61,6 +62,7 @@
     "rollup-plugin-typescript2": "^0.30.0",
     "rollup-plugin-vue": "^5.1.9",
     "@rollup/plugin-node-resolve": "^9.0.0",
+    "rollup-plugin-visualizer": "^5.5.2",
     "eslint": "^6.7.2",
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-vue": "^6.2.2",

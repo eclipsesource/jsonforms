@@ -5,7 +5,7 @@
   >
     <v-row>
       <v-col
-        v-for="(element, index) in layoutUiSchema.elements"
+        v-for="(element, index) in layout.uischema.elements"
         :key="`${layout.path}-${index}`"
         :class="styles.horizontalLayout.item"
       >
@@ -27,7 +27,6 @@ import {
   uiTypeIs,
   JsonFormsRendererRegistryEntry,
   Layout,
-  HorizontalLayout,
   rankWith,
 } from '@jsonforms/core';
 import { defineComponent } from '../vue';
@@ -53,11 +52,6 @@ const layoutRenderer = defineComponent({
   },
   setup(props: RendererProps<Layout>) {
     return useVuetifyLayout(useJsonFormsLayout(props));
-  },
-  computed: {
-    layoutUiSchema(): HorizontalLayout {
-      return this.layout.uischema as HorizontalLayout;
-    },
   },
 });
 

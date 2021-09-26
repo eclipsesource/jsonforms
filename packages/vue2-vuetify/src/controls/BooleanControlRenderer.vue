@@ -17,7 +17,7 @@
       :required="control.required"
       :error-messages="control.errors"
       :indeterminate="control.data === undefined"
-      v-model="control.data"
+      :value="control.data"
       @change="onChange"
       @focus="isFocused = true"
       @blur="isFocused = false"
@@ -52,7 +52,10 @@ const controlRenderer = defineComponent({
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    return useVuetifyControl(useJsonFormsControl(props));
+    return useVuetifyControl(
+      useJsonFormsControl(props),
+      (newValue) => newValue || false
+    );
   },
 });
 

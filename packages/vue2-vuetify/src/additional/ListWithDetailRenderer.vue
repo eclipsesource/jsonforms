@@ -2,12 +2,12 @@
   <v-container
     v-if="control.visible"
     fill-height
-    :class="styles.arrayList.root"
+    :class="styles.listWithDetail.root"
   >
     <v-row>
       <v-col class="pa-0">
-        <v-toolbar flat :class="styles.arrayList.toolbar">
-          <v-toolbar-title :class="styles.arrayList.label">{{
+        <v-toolbar flat :class="styles.listWithDetail.toolbar">
+          <v-toolbar-title :class="styles.listWithDetail.label">{{
             computedLabel
           }}</v-toolbar-title>
           <validation-icon
@@ -25,7 +25,7 @@
                 small
                 :aria-label="`Add to ${control.label}`"
                 v-on="onTooltip"
-                :class="styles.arrayList.addButton"
+                :class="styles.listWithDetail.addButton"
                 @click="addButtonClick"
                 :disabled="
                   !control.enabled ||
@@ -43,7 +43,7 @@
         </v-toolbar>
       </v-col>
     </v-row>
-    <v-row v-if="noData" :class="styles.arrayList.noData">
+    <v-row v-if="noData" :class="styles.listWithDetail.noData">
       <v-col>No data</v-col>
     </v-row>
     <v-row v-else>
@@ -59,7 +59,11 @@
             max-width="350"
           >
             <template v-slot="{ index }">
-              <v-list-item dense :value="index" :class="styles.arrayList.item">
+              <v-list-item
+                dense
+                :value="index"
+                :class="styles.listWithDetail.item"
+              >
                 <v-list-item-avatar
                   aria-label="Index"
                   size="64"
@@ -85,7 +89,7 @@
                       <template v-slot:activator="{ on: onTooltip }">
                         <span
                           v-on="onTooltip"
-                          :class="styles.arrayList.itemLabel"
+                          :class="styles.listWithDetail.itemLabel"
                         >
                           {{ childLabelForIndex(index) }}</span
                         >
@@ -106,7 +110,7 @@
                         class="ma-0"
                         aria-label="Move up"
                         :disabled="index <= 0 || !control.enabled"
-                        :class="styles.arrayList.itemMoveUp"
+                        :class="styles.listWithDetail.itemMoveUp"
                         @click.native="moveUpClick($event, index)"
                       >
                         <v-icon class="notranslate">mdi-arrow-up</v-icon>
@@ -129,7 +133,7 @@
                         :disabled="
                           index >= control.data.length - 1 || !control.enabled
                         "
-                        :class="styles.arrayList.itemMoveDown"
+                        :class="styles.listWithDetail.itemMoveDown"
                         @click.native="moveDownClick($event, index)"
                       >
                         <v-icon class="notranslate">mdi-arrow-down</v-icon>
@@ -149,7 +153,7 @@
                         small
                         class="ma-0"
                         aria-label="Delete"
-                        :class="styles.arrayList.itemDelete"
+                        :class="styles.listWithDetail.itemDelete"
                         @click.native="removeItemsClick($event, [index])"
                         :disabled="
                           !control.enabled ||
@@ -173,7 +177,7 @@
       <v-col v-if="selectedIndex === undefined" class="grow">
         <span class="text-h6">No Selection</span>
       </v-col>
-      <v-col v-else :class="`grow ${styles.arrayList.itemContent}`">
+      <v-col v-else :class="`grow ${styles.listWithDetail.itemContent}`">
         <dispatch-renderer
           :schema="control.schema"
           :uischema="foundUISchema"
@@ -291,7 +295,6 @@ const controlRenderer = defineComponent({
         this.control.uischema
       );
     },
-    //TODO: check is that is the appropate way to get the array schema, possibly it would be better for the core to have a property that exports that schema
     arraySchema(): JsonSchema | undefined {
       return Resolve.schema(
         this.control.rootSchema,
@@ -342,4 +345,3 @@ export const entry: JsonFormsRendererRegistryEntry = {
   transform: none !important;
 }
 </style>
-

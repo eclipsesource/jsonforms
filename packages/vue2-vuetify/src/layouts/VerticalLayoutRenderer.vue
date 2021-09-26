@@ -5,7 +5,7 @@
     :class="`pa-0 ${styles.verticalLayout.root}`"
   >
     <v-row
-      v-for="(element, index) in layoutUiSchema.elements"
+      v-for="(element, index) in layout.uischema.elements"
       :key="`${layout.path}-${index}`"
       no-gutters
     >
@@ -28,7 +28,6 @@ import {
   uiTypeIs,
   JsonFormsRendererRegistryEntry,
   Layout,
-  VerticalLayout,
   rankWith,
 } from '@jsonforms/core';
 import { defineComponent } from '../vue';
@@ -54,11 +53,6 @@ const layoutRenderer = defineComponent({
   },
   setup(props: RendererProps<Layout>) {
     return useVuetifyLayout(useJsonFormsLayout(props));
-  },
-  computed: {
-    layoutUiSchema(): VerticalLayout {
-      return this.layout.uischema as VerticalLayout;
-    },
   },
 });
 

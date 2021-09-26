@@ -4,14 +4,12 @@
     :class="`pa-0 ${styles.group.root}`"
     elevation="2"
   >
-    <v-card-title
-      v-if="groupLayoutUiSchema.label"
-      :class="styles.group.label"
-      >{{ groupLayoutUiSchema.label }}</v-card-title
-    >
+    <v-card-title v-if="layout.uischema.label" :class="styles.group.label">{{
+      layout.uischema.label
+    }}</v-card-title>
 
     <v-card-text
-      v-for="(element, index) in groupLayoutUiSchema.elements"
+      v-for="(element, index) in layout.uischema.elements"
       :key="`${layout.path}-${index}`"
       :class="styles.group.item"
     >
@@ -31,7 +29,6 @@
 import {
   JsonFormsRendererRegistryEntry,
   Layout,
-  GroupLayout,
   rankWith,
   and,
   isLayout,
@@ -60,11 +57,6 @@ const layoutRenderer = defineComponent({
   },
   setup(props: RendererProps<Layout>) {
     return useVuetifyLayout(useJsonFormsLayout(props));
-  },
-  computed: {
-    groupLayoutUiSchema(): GroupLayout {
-      return this.layout.uischema as GroupLayout;
-    },
   },
 });
 

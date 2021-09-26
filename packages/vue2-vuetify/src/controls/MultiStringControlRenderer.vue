@@ -18,7 +18,7 @@
         :persistent-hint="persistentHint()"
         :required="control.required"
         :error-messages="control.errors"
-        v-model="control.data"
+        :value="control.data"
         :maxlength="
           appliedOptions.restrict ? control.schema.maxLength : undefined
         "

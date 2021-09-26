@@ -17,7 +17,7 @@
       :persistent-hint="persistentHint()"
       :required="control.required"
       :error-messages="control.errors"
-      v-model="dataTime"
+      :value="dataTime"
       @focus="isFocused = true"
       @blur="isFocused = false"
     />

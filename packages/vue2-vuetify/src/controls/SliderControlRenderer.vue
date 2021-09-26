@@ -20,7 +20,7 @@
       :persistent-hint="persistentHint()"
       :required="control.required"
       :error-messages="control.errors"
-      v-model="control.data"
+      :value="control.data"
       @change="onChange"
       @focus="isFocused = true"
       @blur="isFocused = false"
