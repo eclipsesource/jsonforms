@@ -32,6 +32,7 @@ import {
   JsonSchema
 } from '@jsonforms/core';
 import { resolveRefs } from 'json-refs';
+import { enhancements } from './enhancements';
 import './App.css';
 
 type AppProps = {
@@ -62,23 +63,40 @@ const ResolvedJsonForms = (
   return <JsonForms {...props} schema={schema} />;
 };
 
+const getProps = (example: ExampleDescription, cells?: any, renderers?: any) => {
+  const schema = example.schema;
+  const uischema = example.uischema;
+  const data = example.data;
+  const config = example.config;
+  return {
+    schema,
+    uischema,
+    data,
+    config,
+    cells,
+    renderers
+  }
+}
+
 const App = ({ examples, cells, renderers}: AppProps) => {
   const [currentExample, setExample] = useState<ExampleDescription>(examples[0]);
   const [currentIndex, setIndex] = useState<number>(0);
   const [dataAsString, setDataAsString] = useState<any>('');
+  const [props, setProps] = useState<any>(getProps(currentExample, cells, renderers)); // helper function
+
+  const enhancement: any = enhancements();
+  const currentEnhancements: any = enhancement[currentExample?.name];
 
   useEffect(() => {
-    setExample(examples[currentIndex]);
+    let example = examples[currentIndex];
+    setExample(example);
+    setProps(getProps(example, cells, renderers));
   }, [currentIndex]);
 
   const changeData = (data: any) => {
     setDataAsString(JSON.stringify(data, null, 2));
   };
 
-  const uischema = currentExample.uischema;
-  const schema = currentExample.schema;
-  const data = currentExample.data;
-  const config = currentExample.config;
   return (
     <div>
       <div className='App'>
@@ -111,14 +129,14 @@ const App = ({ examples, cells, renderers}: AppProps) => {
             <pre>{dataAsString}</pre>
           </div>
           <div className='demoform'>
+            <div className="buttons">
+              {currentEnhancements?.map((buttons: any, index: number) => (
+                <button onClick = { () => setProps((oldProps: JsonFormsInitStateProps) => buttons.apply(oldProps)) } key={index}>{buttons.label}</button>
+              ))}
+            </div>
             <ResolvedJsonForms
               key={currentIndex}
-              schema={schema}
-              uischema={uischema}
-              data={data}
-              cells={cells}
-              renderers={renderers}
-              config={config}
+              {...props}
               onChange={({ data }) => changeData(data)}
             />
           </div>

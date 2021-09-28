@@ -20,6 +20,28 @@ body {
   font-size: 1.5em;
 }
 
+.buttons {
+  margin-bottom: 20px;
+}
+
+button {
+  margin-right: 10px;
+  background-color: #0069ed;
+  color: #ffffff;
+  border: 1px solid;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 1rem 2rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #0053ba;
+}
+button:active {
+  transform: scale(0.99);
+}
+
 .App-intro {
   font-size: large;
 }
