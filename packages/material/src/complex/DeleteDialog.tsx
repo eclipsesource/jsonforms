@@ -23,14 +23,14 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import Button from '@material-ui/core/Button';
 import {
+    Button,
     Dialog,
     DialogActions,
     DialogContent,
     DialogContentText,
     DialogTitle,
-} from '@material-ui/core';
+} from '@mui/material';
 
 export interface DeleteDialogProps {
     open: boolean;

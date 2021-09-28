@@ -30,7 +30,7 @@ import {
   RankedTester,
   rankWith
 } from '@jsonforms/core';
-import { Hidden } from '@material-ui/core';
+import { Hidden } from '@mui/material';
 import { MaterialArrayLayout } from './MaterialArrayLayout';
 import { withJsonFormsArrayLayoutProps } from '@jsonforms/react';
 

@@ -26,7 +26,7 @@ import './MatchMediaMock';
 import React from 'react';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import { MaterialNativeControl } from '../../src/controls/MaterialNativeControl';
-import TextField from '@material-ui/core/TextField';
+import TextField from '@mui/material/TextField';
 import Adapter from 'enzyme-adapter-react-16';
 import { ControlElement, ControlProps } from '@jsonforms/core';
 

@@ -35,7 +35,7 @@ import MaterialListWithDetailRenderer, {
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { JsonFormsStateProvider } from '@jsonforms/react';
-import { ListItem } from '@material-ui/core'
+import { ListItem } from '@mui/material'
 import { initCore } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });

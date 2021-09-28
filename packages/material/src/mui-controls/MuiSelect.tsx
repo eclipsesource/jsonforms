@@ -25,8 +25,7 @@
 import React from 'react';
 import { EnumCellProps, WithClassname } from '@jsonforms/core';
 
-import Select from '@material-ui/core/Select';
-import { MenuItem } from '@material-ui/core';
+import { MenuItem, Select } from '@mui/material';
 import merge from 'lodash/merge';
 
 export const MuiSelect = React.memo((props: EnumCellProps & WithClassname) => {

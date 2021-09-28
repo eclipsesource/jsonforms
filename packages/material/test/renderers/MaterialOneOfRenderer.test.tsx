@@ -24,7 +24,7 @@
 */
 import './MatchMediaMock';
 import React from 'react';
-import Dialog from '@material-ui/core/Dialog';
+import Dialog from '@mui/material/Dialog';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
@@ -36,7 +36,7 @@ import {
   materialRenderers
 } from '../../src';
 import { JsonForms, JsonFormsDispatch, JsonFormsStateProvider } from '@jsonforms/react';
-import { Tab } from '@material-ui/core';
+import { Tab } from '@mui/material';
 import { initCore, TestEmitter } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });

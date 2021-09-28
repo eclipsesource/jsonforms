@@ -26,7 +26,7 @@ import React, { useCallback, useState } from 'react';
 import { ArrayLayoutProps } from '@jsonforms/core';
 import { withJsonFormsArrayLayoutProps } from '@jsonforms/react';
 import { MaterialTableControl } from './MaterialTableControl';
-import { Hidden } from '@material-ui/core';
+import { Hidden } from '@mui/material';
 import { DeleteDialog } from './DeleteDialog';
 
 export const MaterialArrayControlRenderer = (props: ArrayLayoutProps) => {

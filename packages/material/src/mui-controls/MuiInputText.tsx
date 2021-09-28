@@ -24,14 +24,17 @@
 */
 import React, { useState } from 'react';
 import { CellProps, WithClassname } from '@jsonforms/core';
-import Input, { InputProps } from '@material-ui/core/Input';
+import {
+  IconButton,
+  Input,
+  InputAdornment,
+  InputBaseComponentProps,
+  InputProps,
+  useTheme
+} from '@mui/material';
 import merge from 'lodash/merge';
-import IconButton from '@material-ui/core/IconButton';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import Close from '@material-ui/icons/Close';
-import { useTheme } from '@material-ui/core/styles';
+import Close from '@mui/icons-material/Close';
 import { JsonFormsTheme, useDebouncedChange } from '../util';
-import { InputBaseComponentProps } from '@material-ui/core';
 
 interface MuiTextInputProps {
   muiInputProps?: InputProps['inputProps'];

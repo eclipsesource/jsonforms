@@ -31,8 +31,8 @@ import {
     ListItemAvatar,
     ListItemSecondaryAction,
     ListItemText,
-} from '@material-ui/core';
-import DeleteIcon from '@material-ui/icons/Delete';
+} from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 import React from 'react';
 
 const ListWithDetailMasterItem = ({ index, childLabel, selected, handleSelect, removeItem, path }: StatePropsOfMasterItem) => {

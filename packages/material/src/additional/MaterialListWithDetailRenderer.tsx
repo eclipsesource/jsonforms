@@ -38,7 +38,7 @@ import {
   JsonFormsDispatch,
   withJsonFormsArrayLayoutProps
 } from '@jsonforms/react';
-import { Grid, Hidden, List, Typography } from '@material-ui/core';
+import { Grid, Hidden, List, Typography } from '@mui/material';
 import map from 'lodash/map';
 import range from 'lodash/range';
 import React, { useCallback, useMemo, useState } from 'react';

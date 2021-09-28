@@ -24,7 +24,7 @@
 */
 import React from 'react';
 import { CellProps, WithClassname } from '@jsonforms/core';
-import Checkbox from '@material-ui/core/Checkbox';
+import { Checkbox } from '@mui/material';
 import merge from 'lodash/merge';
 
 export const MuiCheckbox = React.memo((props: CellProps & WithClassname) => {

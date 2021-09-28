@@ -22,16 +22,18 @@ import {
   createId,
   removeId
 } from '@jsonforms/core';
-import IconButton from '@material-ui/core/IconButton';
-import Accordion from '@material-ui/core/Accordion';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
-import { Grid } from '@material-ui/core';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import Avatar from '@material-ui/core/Avatar';
-import DeleteIcon from '@material-ui/icons/Delete';
-import ArrowUpward from '@material-ui/icons/ArrowUpward';
-import ArrowDownward from '@material-ui/icons/ArrowDownward';
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Avatar,
+  Grid,
+  IconButton
+} from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ArrowUpward from '@mui/icons-material/ArrowUpward';
+import ArrowDownward from '@mui/icons-material/ArrowDownward';
 
 const iconStyle: any = { float: 'right' };
 
@@ -137,12 +139,12 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
             </Grid>
           </Grid>
           <Grid item xs={5} md={3}>
-            <Grid container justify={'flex-end'}>
+            <Grid container justifyContent='flex-end'>
               <Grid item>
                 <Grid
                   container
                   direction='row'
-                  justify='center'
+                  justifyContent='center'
                   alignItems='center'
                 >
                   {appliedUiSchemaOptions.showSortButtons ? (

@@ -25,15 +25,18 @@
 import React, { ReactNode } from 'react';
 import { EnumCellProps, EnumOption, WithClassname } from '@jsonforms/core';
 
-import Input from '@material-ui/core/Input';
-import Autocomplete, { AutocompleteRenderOptionState } from '@material-ui/lab/Autocomplete';
+import {
+  Autocomplete,
+  AutocompleteRenderOptionState,
+  Input,
+  FilterOptionsState
+} from '@mui/material';
 import merge from 'lodash/merge';
-import { FilterOptionsState } from '@material-ui/lab/useAutocomplete';
 
 export interface WithOptionLabel {
-    getOptionLabel?(option: EnumOption) : string;
-    renderOption?(option: EnumOption, state: AutocompleteRenderOptionState): ReactNode;
-    filterOptions?(options: EnumOption[], state: FilterOptionsState<EnumOption>) : EnumOption[];
+  getOptionLabel?(option: EnumOption) : string;
+  renderOption?(option: EnumOption, state: AutocompleteRenderOptionState): ReactNode;
+  filterOptions?(options: EnumOption[], state: FilterOptionsState<EnumOption>) : EnumOption[];
 }
 
 export const MuiAutocomplete = (props: EnumCellProps & WithClassname & WithOptionLabel) => {

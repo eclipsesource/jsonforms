@@ -24,7 +24,7 @@
 */
 import isEmpty from 'lodash/isEmpty';
 import React from 'react';
-import { Card, CardContent, CardHeader, Hidden } from '@material-ui/core';
+import { Card, CardContent, CardHeader, Hidden } from '@mui/material';
 import {
   GroupLayout,
   LayoutProps,

@@ -40,7 +40,7 @@ import {
   Hidden,
   Slider,
   Typography
-} from '@material-ui/core';
+} from '@mui/material';
 import merge from 'lodash/merge';
 import { useFocus } from '../util';
 

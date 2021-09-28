@@ -31,7 +31,7 @@ import {
   ControlProps
 } from '@jsonforms/core';
 import { withJsonFormsControlProps } from '@jsonforms/react';
-import { FormControlLabel, Hidden } from '@material-ui/core';
+import { FormControlLabel, Hidden } from '@mui/material';
 import { MuiCheckbox } from '../mui-controls/MuiCheckbox';
 
 export const MaterialBooleanControl = ({

@@ -33,7 +33,7 @@ import SliderControl, {
   materialSliderControlTester
 } from '../../src/controls/MaterialSliderControl';
 import { materialRenderers } from '../../src';
-import { Slider } from '@material-ui/core';
+import { Slider } from '@mui/material';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';

@@ -24,7 +24,7 @@
 */
 import React, {useCallback} from 'react';
 import { CellProps, Formatted, WithClassname } from '@jsonforms/core';
-import Input from '@material-ui/core/Input';
+import { Input } from '@mui/material';
 import merge from 'lodash/merge';
 import { useDebouncedChange } from '../util';
 

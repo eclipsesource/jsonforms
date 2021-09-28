@@ -14,8 +14,8 @@ module.exports = merge(baseConfig, {
       "redux": "Redux",
       "react-redux": "ReactRedux"
     },
-    /@material-ui\/core\/.*/,
-    /@material-ui\/icons\/.*/,
-    /@material-ui\/lab\/.*/,
+    /@mui\/material\/.*/,
+    /@mui\/icons-material\/.*/,
+    /@mui\/lab\/.*/,
   ],
 });

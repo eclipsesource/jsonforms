@@ -30,7 +30,7 @@ import { MaterialInputControl } from '../../src/controls/MaterialInputControl';
 import { MuiInputText } from '../../src/mui-controls/MuiInputText';
 import Adapter from 'enzyme-adapter-react-16';
 import { ControlElement, ControlProps } from '@jsonforms/core';
-import { Input, InputAdornment } from '@material-ui/core';
+import { Input, InputAdornment } from '@mui/material';
 
 Enzyme.configure({ adapter: new Adapter() });
 

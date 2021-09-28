@@ -32,15 +32,12 @@ import {
   rankWith,
 } from '@jsonforms/core';
 import { withJsonFormsControlProps } from '@jsonforms/react';
-import { FormHelperText, Hidden } from '@material-ui/core';
-import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
-import EventIcon from '@material-ui/icons/Event';
+import { FormHelperText, Hidden, TextField } from '@mui/material';
 import {
-  KeyboardDatePicker,
-  MuiPickersUtilsProvider
-} from '@material-ui/pickers';
-import DayJsUtils from '@date-io/dayjs';
+  DatePicker,
+  LocalizationProvider 
+} from '@mui/lab';
+import AdapterDayjs from '@mui/lab/AdapterDayjs';
 import { createOnChangeHandler, getData, useFocus } from '../util';
 
 export const MaterialDateControl = (props: ControlProps)=> {
@@ -85,32 +82,32 @@ export const MaterialDateControl = (props: ControlProps)=> {
 
   return (
     <Hidden xsUp={!visible}>
-      <MuiPickersUtilsProvider utils={DayJsUtils}>
-        <KeyboardDatePicker
-          id={id + '-input'}
-          required={required && !appliedUiSchemaOptions.hideRequiredAsterisk}
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DatePicker
           label={label}
-          error={!isValid}
-          fullWidth={!appliedUiSchemaOptions.trim}
-          InputLabelProps={data ? { shrink: true } : undefined}
           value={getData(data, saveFormat)}
           clearable
           onChange={onChange}
-          format={format}
+          inputFormat={format}
           views={appliedUiSchemaOptions.views}
           disabled={!enabled}
           autoFocus={appliedUiSchemaOptions.focus}
-          onFocus={onFocus}
-          onBlur={onBlur}
-          cancelLabel={appliedUiSchemaOptions.cancelLabel}
-          clearLabel={appliedUiSchemaOptions.clearLabel}
-          okLabel={appliedUiSchemaOptions.okLabel}
-          leftArrowIcon={<KeyboardArrowLeftIcon />}
-          rightArrowIcon={<KeyboardArrowRightIcon />}
-          keyboardIcon={<EventIcon />}
-          invalidDateMessage={null}
-          maxDateMessage={null}
-          minDateMessage={null}
+          cancelText={appliedUiSchemaOptions.cancelLabel}
+          clearText={appliedUiSchemaOptions.clearLabel}
+          okText={appliedUiSchemaOptions.okLabel}
+          renderInput={params => (
+            <TextField 
+              {...params}
+              id={id + '-input'}
+              required={required && !appliedUiSchemaOptions.hideRequiredAsterisk}
+              error={!isValid}
+              fullWidth={!appliedUiSchemaOptions.trim}
+              InputLabelProps={data ? { shrink: true } : undefined}
+              onFocus={onFocus}
+              onBlur={onBlur}
+              variant={'standard'}
+            />
+          )}
         />
         <FormHelperText error={!isValid && !showDescription}>
           {firstFormHelperText}
@@ -118,7 +115,7 @@ export const MaterialDateControl = (props: ControlProps)=> {
         <FormHelperText error={!isValid}>
           {secondFormHelperText}
         </FormHelperText>
-      </MuiPickersUtilsProvider>
+      </LocalizationProvider>
     </Hidden>
   );
 };

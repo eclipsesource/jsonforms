@@ -24,16 +24,18 @@
 */
 import React from 'react';
 
-import Badge from '@material-ui/core/Badge';
-import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
-import Tooltip from '@material-ui/core/Tooltip';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import {
+  Badge,
+  Tooltip,
+  Theme
+} from '@mui/material';
 import {
   StyledComponentProps,
   withStyles,
   WithStyles,
-  createStyles,
-  Theme
-} from '@material-ui/core/styles';
+  createStyles
+} from '@mui/styles';
 
 export { StyledComponentProps };
 const styles = createStyles(({ palette }: Theme) => ({

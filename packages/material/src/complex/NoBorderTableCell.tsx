@@ -22,8 +22,8 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { withStyles } from '@material-ui/core/styles';
-import { TableCell } from '@material-ui/core';
+import { withStyles } from '@mui/styles';
+import { TableCell } from '@mui/material';
 import React from 'react';
 
 const styles = {

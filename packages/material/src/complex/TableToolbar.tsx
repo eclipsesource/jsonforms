@@ -28,11 +28,13 @@ import {
   createDefaultValue,
   JsonSchema,
 } from '@jsonforms/core';
-import IconButton from '@material-ui/core/IconButton';
-import { Grid, Hidden, Typography } from '@material-ui/core';
-import TableRow from '@material-ui/core/TableRow';
-import Tooltip from '@material-ui/core/Tooltip';
-import AddIcon from '@material-ui/icons/Add';
+import {
+  IconButton,
+  TableRow,
+  Tooltip
+} from '@mui/material';
+import { Grid, Hidden, Typography } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 import ValidationIcon from './ValidationIcon';
 import NoBorderTableCell from './NoBorderTableCell';
 
@@ -67,7 +69,7 @@ const TableToolbar = React.memo(
       <NoBorderTableCell colSpan={numColumns}>
         <Grid
           container
-          justify={'flex-start'}
+          justifyContent={'flex-start'}
           alignItems={'center'}
           spacing={2}
         >

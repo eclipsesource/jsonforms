@@ -23,8 +23,7 @@
   THE SOFTWARE.
 */
 import React, {useState} from 'react';
-import { Hidden, Tab, Tabs } from '@material-ui/core';
-import AppBar from '@material-ui/core/AppBar';
+import { AppBar, Hidden, Tab, Tabs } from '@mui/material';
 import {
   and,
   Categorization,

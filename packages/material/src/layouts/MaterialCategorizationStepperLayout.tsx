@@ -24,7 +24,7 @@
 */
 import React, {useState} from 'react';
 import merge from 'lodash/merge';
-import { Button, Hidden, Step, StepButton, Stepper } from '@material-ui/core';
+import { Button, Hidden, Step, StepButton, Stepper } from '@mui/material';
 import {
   and,
   Categorization,
