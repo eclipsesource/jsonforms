@@ -30,9 +30,6 @@ import {
   isDescriptionHidden,
   OwnPropsOfEnum
 } from '@jsonforms/core';
-import { Control } from '@jsonforms/react';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
 import {
   FormControl,
   FormControlLabel,

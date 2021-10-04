@@ -35,7 +35,7 @@ import merge from 'lodash/merge';
 
 export interface WithOptionLabel {
   getOptionLabel?(option: EnumOption) : string;
-  renderOption?(option: EnumOption, state: AutocompleteRenderOptionState): ReactNode;
+  renderOption?(props: React.HTMLAttributes<HTMLLIElement>, option: EnumOption, state: AutocompleteRenderOptionState): ReactNode;
   filterOptions?(options: EnumOption[], state: FilterOptionsState<EnumOption>) : EnumOption[];
 }
 
