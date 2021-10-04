@@ -24,6 +24,7 @@
 */
 import {
   isEnumControl,
+    isOneOfEnumControl,
   rankWith,
 } from '@jsonforms/core';
 import { JsonFormsStateProvider } from '@jsonforms/react';
@@ -32,7 +33,7 @@ import * as _ from 'lodash';
 import Adapter from 'enzyme-adapter-react-16';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import '../../src';
-import RadioGroupControl from '../../src/controls/RadioGroupControl';
+import { RadioGroupControl, OneOfRadioGroupControl } from '../../src';
 import { initCore } from '../util';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -54,45 +55,82 @@ const fixture = {
   }
 };
 
+const oneOfFixture = {
+    data: { foo: 'b' },
+    schema: {
+        type: 'object',
+        properties: {
+            foo: {
+                oneOf: [
+                    { const: 'a', title: 'A' },
+                    { const: 'b', title: 'B' },
+                    { const: 'c', title: 'C' }
+                ]
+            }
+        }
+    },
+    uischema: {
+        type: 'Control',
+        scope: '#/properties/foo'
+    }
+};
+
 describe('Radio group control', () => {
 
-  let wrapper: ReactWrapper;
+    let wrapper: ReactWrapper;
 
-  afterEach(() => wrapper.unmount());
+    afterEach(() => wrapper.unmount());
 
-  test('render', () => {
-    const renderers = [{ tester: rankWith(10, isEnumControl), renderer: RadioGroupControl }];
-    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
-    wrapper = mount(
-      <JsonFormsStateProvider initState={{ core, renderers }}>
-        <RadioGroupControl schema={fixture.schema} uischema={fixture.uischema} />
-      </JsonFormsStateProvider>
-    );
+    test('render enum', () => {
+        const renderers = [{ tester: rankWith(10, isEnumControl), renderer: RadioGroupControl }];
+        const core = initCore(fixture.schema, fixture.uischema, fixture.data);
+        wrapper = mount(
+            <JsonFormsStateProvider initState={{ core, renderers }}>
+                <RadioGroupControl schema={fixture.schema} uischema={fixture.uischema} />
+            </JsonFormsStateProvider>
+        );
 
-    const radioButtons = wrapper.find('input[type="radio"]');
-    expect(radioButtons).toHaveLength(4);
-    // make sure one option is selected and iexpect "D"
-    const currentlyChecked = radioButtons.filter('input[checked=true]');
-    expect(currentlyChecked).toHaveLength(1);
-    expect((currentlyChecked.getDOMNode() as HTMLInputElement).value).toBe('D');
-  });
+        const radioButtons = wrapper.find('input[type="radio"]');
+        expect(radioButtons).toHaveLength(4);
 
-  test('Radio group should have only one selected option', () => {
-    const renderers = [{ tester: rankWith(10, isEnumControl), renderer: RadioGroupControl }];
-    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
-    wrapper = mount(
-      <JsonFormsStateProvider initState={{ core, renderers }}>
-        <RadioGroupControl schema={fixture.schema} uischema={fixture.uischema} />
-      </JsonFormsStateProvider>
-    );
+        // make sure one option is selected and expect "D"
+        const currentlyChecked = radioButtons.filter('input[checked=true]');
+        expect(currentlyChecked).toHaveLength(1);
+        expect((currentlyChecked.getDOMNode() as HTMLInputElement).value).toBe('D');
+    });
 
-    // change and verify selection
-    core.data = { ...core.data, foo: 'A' };
-    core.data = { ...core.data, foo: 'B' };
-    wrapper.setProps({ initState: { core }} );
-    wrapper.update();
-    const currentlyChecked = wrapper.find('input[checked=true]');
-    expect(currentlyChecked).toHaveLength(1);
-    expect((currentlyChecked.getDOMNode() as HTMLInputElement).value).toBe('B');
-  });
+    test('render oneOf', () => {
+        const renderers = [{ tester: rankWith(10, isOneOfEnumControl), renderer: OneOfRadioGroupControl }];
+        const core = initCore(oneOfFixture.schema, oneOfFixture.uischema, oneOfFixture.data);
+        wrapper = mount(
+            <JsonFormsStateProvider initState={{ core, renderers }}>
+                <OneOfRadioGroupControl schema={oneOfFixture.schema} uischema={oneOfFixture.uischema} />
+            </JsonFormsStateProvider>
+        );
+
+        const radioButtons = wrapper.find('input[type="radio"]');
+        expect(radioButtons).toHaveLength(3);
+        const currentlyChecked = radioButtons.filter('input[checked=true]');
+        expect(currentlyChecked).toHaveLength(1);
+        expect((currentlyChecked.getDOMNode() as HTMLInputElement).value).toBe('b');
+    });
+
+    test('Radio group should have only one selected option', () => {
+        const renderers = [{ tester: rankWith(10, isEnumControl), renderer: RadioGroupControl }];
+        const core = initCore(fixture.schema, fixture.uischema, fixture.data);
+        wrapper = mount(
+            <JsonFormsStateProvider initState={{ core, renderers }}>
+                <RadioGroupControl schema={fixture.schema} uischema={fixture.uischema} />
+            </JsonFormsStateProvider>
+        );
+
+        // change and verify selection
+        core.data = { ...core.data, foo: 'A' };
+        core.data = { ...core.data, foo: 'B' };
+        wrapper.setProps({ initState: { core } });
+        wrapper.update();
+        const currentlyChecked = wrapper.find('input[checked=true]');
+        expect(currentlyChecked).toHaveLength(1);
+        expect((currentlyChecked.getDOMNode() as HTMLInputElement).value).toBe('B');
+    });
 });

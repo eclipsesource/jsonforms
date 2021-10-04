@@ -1,7 +1,7 @@
 /*
   The MIT License
 
-  Copyright (c) 2017-2021 EclipseSource Munich
+  Copyright (c) 2018-2021 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -26,19 +26,23 @@ import React from 'react';
 import {
   and,
   ControlProps,
-  isEnumControl,
-  optionIs, RankedTester, rankWith
+  isOneOfEnumControl,
+  optionIs,
+  RankedTester,
+  rankWith,
 } from '@jsonforms/core';
-import { withJsonFormsEnumProps } from '@jsonforms/react';
-import { RadioGroup } from './RadioGroup';
 import { withVanillaControlProps } from '../util';
 import { VanillaRendererProps } from '../index';
-export const RadioGroupControl = (props: ControlProps & VanillaRendererProps) => {
+import { withJsonFormsOneOfEnumProps } from '@jsonforms/react';
+import { RadioGroup } from './RadioGroup';
+
+export const OneOfRadioGroupControl = (props: ControlProps & VanillaRendererProps) => {
   return <RadioGroup {...props} />;
 };
 
-export const radioGroupControlTester: RankedTester = rankWith(
+export const oneOfRadioGroupControlTester: RankedTester = rankWith(
   3,
-  and(isEnumControl, optionIs('format', 'radio'))
+  and(isOneOfEnumControl, optionIs('format', 'radio'))
 );
-export default withVanillaControlProps(withJsonFormsEnumProps(RadioGroupControl));
+
+export default withVanillaControlProps(withJsonFormsOneOfEnumProps(OneOfRadioGroupControl));

@@ -46,7 +46,7 @@ import {
   timeCellTester
 } from './cells';
 
-import { InputControl, inputControlTester } from './controls';
+import { InputControl, inputControlTester, RadioGroupControl, radioGroupControlTester, OneOfRadioGroupControl, oneOfRadioGroupControlTester,  } from './controls';
 
 import {
   ArrayControl,
@@ -110,6 +110,8 @@ export * from './styles';
 
 export const vanillaRenderers: { tester: RankedTester; renderer: any }[] = [
   { tester: inputControlTester, renderer: InputControl },
+  { tester: radioGroupControlTester, renderer: RadioGroupControl },
+  { tester: oneOfRadioGroupControlTester, renderer: OneOfRadioGroupControl },
   { tester: arrayControlTester, renderer: ArrayControl },
   { tester: labelRendererTester, renderer: LabelRenderer },
   { tester: categorizationTester, renderer: Categorization },
