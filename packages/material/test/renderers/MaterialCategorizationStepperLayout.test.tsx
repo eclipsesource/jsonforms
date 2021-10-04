@@ -40,7 +40,7 @@ import MaterialCategorizationStepperLayoutRenderer, {
 } from '../../src/layouts/MaterialCategorizationStepperLayout';
 import { MaterialLayoutRenderer, materialRenderers } from '../../src';
 import { Button, Step, StepButton, Stepper } from '@mui/material';
-import Adapter from 'enzyme-adapter-react-16';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { initCore } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });

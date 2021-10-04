@@ -28,7 +28,7 @@ import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import { MaterialTextControl } from '../../src/controls/MaterialTextControl';
 import { MaterialInputControl } from '../../src/controls/MaterialInputControl';
 import { MuiInputText } from '../../src/mui-controls/MuiInputText';
-import Adapter from 'enzyme-adapter-react-16';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { ControlElement, ControlProps } from '@jsonforms/core';
 import { Input, InputAdornment } from '@mui/material';
 

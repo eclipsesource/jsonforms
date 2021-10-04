@@ -25,7 +25,7 @@
 import './MatchMediaMock';
 import * as React from 'react';
 import Enzyme, { mount } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import MaterialGroupLayout from '../../src/layouts/MaterialGroupLayout';
 import { MaterialLayoutRenderer } from '../../src/util/layout';
 
