@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
+
   Copyright (c) 2017-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,18 +25,15 @@
 import * as React from 'react';
 import {
   ControlElement,
-  getData,
   HorizontalLayout,
   JsonSchema,
-  update
 } from '@jsonforms/core';
-import { JsonFormsReduxContext } from '@jsonforms/react/lib/redux';
-import { Provider } from 'react-redux';
+import { JsonFormsStateProvider } from '@jsonforms/react';
 import Adapter from 'enzyme-adapter-react-16';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import HorizontalLayoutRenderer from '../../src/layouts/HorizontalLayout';
 import DateTimeCell, { dateTimeCellTester } from '../../src/cells/DateTimeCell';
-import { initJsonFormsVanillaStore } from '../vanillaStore';
+import { initCore, TestEmitter } from '../util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -161,17 +158,11 @@ describe('date time cell', () => {
       'firstDate': '1980-04-04T13:37:00.000Z',
       'secondDate': '1980-04-04T13:37:00.000Z'
     };
-    const store = initJsonFormsVanillaStore({
-      data,
-      schema,
-      uischema
-    });
+    const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <HorizontalLayoutRenderer schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <HorizontalLayoutRenderer schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
     );
     const inputs = wrapper.find('input');
     expect(document.activeElement).not.toBe(inputs.at(0));
@@ -186,22 +177,16 @@ describe('date time cell', () => {
         focus: true
       }
     };
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema
-    });
+    const core = initCore(fixture.schema, uischema, fixture.data);
 
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <DateTimeCell
-            schema={fixture.schema}
-            uischema={uischema}
-            path='foo'
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <DateTimeCell
+          schema={fixture.schema}
+          uischema={uischema}
+          path='foo'
+        />
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode();
     expect(document.activeElement).toBe(input);
@@ -215,21 +200,16 @@ describe('date time cell', () => {
         focus: false
       }
     };
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema
-    });
+    const core = initCore(fixture.schema, uischema, fixture.data);
+
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <DateTimeCell
-            schema={fixture.schema}
-            uischema={uischema}
-            path='foo'
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <DateTimeCell
+          schema={fixture.schema}
+          uischema={uischema}
+          path='foo'
+        />
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.autofocus).toBe(false);
@@ -240,42 +220,31 @@ describe('date time cell', () => {
       type: 'Control',
       scope: '#/properties/foo'
     };
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema
-    });
+    const core = initCore(fixture.schema, uischema, fixture.data);
+
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <DateTimeCell
-            schema={fixture.schema}
-            uischema={uischema}
-            path='foo'
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <DateTimeCell
+          schema={fixture.schema}
+          uischema={uischema}
+          path='foo'
+        />
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.autofocus).toBe(false);
   });
 
   test('render', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <DateTimeCell
-            schema={fixture.schema}
-            uischema={fixture.uischema}
-            path='foo'
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <DateTimeCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
+      </JsonFormsStateProvider>
     );
 
     const input = wrapper.find('input');
@@ -284,21 +253,15 @@ describe('date time cell', () => {
   });
 
   test('has classes set', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <DateTimeCell
-            schema={fixture.schema}
-            uischema={fixture.uischema}
-            path='foo'
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <DateTimeCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
+      </JsonFormsStateProvider>
     );
 
     const input = wrapper.find('input');
@@ -308,201 +271,163 @@ describe('date time cell', () => {
   });
 
   test('update via event', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const onChangeData: any = {
+      data: undefined
+    };
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <DateTimeCell
-            schema={fixture.schema}
-            uischema={fixture.uischema}
-            path='foo'
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <TestEmitter
+          onChange={({ data }) => {
+            onChangeData.data = data;
+          }}
+        />
+        <DateTimeCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input');
     input.simulate('change', { target: { value: '1961-04-12T20:15' } });
-    expect(getData(store.getState()).foo).toBe('1961-04-12T20:15:00.000Z');
+    expect(onChangeData.data.foo).toBe('1961-04-12T20:15:00.000Z');
   });
 
   test('update via action', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <DateTimeCell
-            schema={fixture.schema}
-            uischema={fixture.uischema}
-            path='foo'
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <DateTimeCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
+      </JsonFormsStateProvider>
     );
-    store.dispatch(update('foo', () => '1961-04-12T20:15:00.000Z'));
+    core.data = { ...core.data, foo: '1961-04-12T20:15:00.000Z' };
+    wrapper.setProps({ initState: { core }} );
     wrapper.update();
     const input = wrapper.find('input');
     expect(input.props().value).toBe('1961-04-12T20:15');
   });
 
   test('update with null value', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <DateTimeCell
-            schema={fixture.schema}
-            uischema={fixture.uischema}
-            path='foo'
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <DateTimeCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
+      </JsonFormsStateProvider>
     );
-    store.dispatch(update('foo', () => null));
+    core.data = { ...core.data, foo: null };
+    wrapper.setProps({ initState: { core }} );
     wrapper.update();
     const input = wrapper.find('input');
     expect(input.props().value).toBe('');
   });
 
   test('update with undefined value', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <DateTimeCell
-            schema={fixture.schema}
-            uischema={fixture.uischema}
-            path='foo'
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <DateTimeCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
+      </JsonFormsStateProvider>
     );
-    store.dispatch(update('foo', () => undefined));
+    core.data = { ...core.data, foo: undefined };
+    wrapper.setProps({ initState: { core }} );
     wrapper.update();
     const input = wrapper.find('input');
     expect(input.props().value).toBe('');
   });
 
   test('update with wrong ref', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <DateTimeCell
-            schema={fixture.schema}
-            uischema={fixture.uischema}
-            path='foo'
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <DateTimeCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
+      </JsonFormsStateProvider>
     );
-    store.dispatch(update('bar', () => 'Bar'));
+    core.data = { ...core.data, bar: 'Bar' };
+    wrapper.setProps({ initState: { core }} );
     wrapper.update();
     const input = wrapper.find('input');
     expect(input.props().value).toBe('1980-04-04T13:37');
   });
 
   test('update with null ref', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <DateTimeCell
-            schema={fixture.schema}
-            uischema={fixture.uischema}
-            path='foo'
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <DateTimeCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input');
-    store.dispatch(update(null, () => '1961-04-12T20:15:00.000Z'));
+    core.data = { ...core.data, null: '1961-04-12T20:15:00.000Z' };
+    wrapper.setProps({ initState: { core }} );
+    wrapper.update();
     expect(input.props().value).toBe('1980-04-04T13:37');
   });
 
   test('update with undefined ref', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <DateTimeCell
-            schema={fixture.schema}
-            uischema={fixture.uischema}
-            path='foo'
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <DateTimeCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input');
-    store.dispatch(update(undefined, () => '1961-04-12T20:15:00.000Z'));
+    core.data = { ...core.data, undefined: '1961-04-12T20:15:00.000Z' };
+    wrapper.setProps({ initState: { core }} );
+    wrapper.update();
     expect(input.props().value).toBe('1980-04-04T13:37');
   });
 
   test('disable', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <DateTimeCell
-            schema={fixture.schema}
-            uischema={fixture.uischema}
-            path='foo'
-            enabled={false}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <DateTimeCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+          enabled={false}
+        />
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input');
     expect(input.props().disabled).toBe(true);
   });
 
   test('enabled by default', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <DateTimeCell
-            schema={fixture.schema}
-            uischema={fixture.uischema}
-            path='foo'
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <DateTimeCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
+      </JsonFormsStateProvider>
     );
     const input = wrapper.find('input');
     expect(input.props().disabled).toBe(false);

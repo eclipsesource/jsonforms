@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
+
   Copyright (c) 2017-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,7 +23,6 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
-import { Provider } from 'react-redux';
 import {
   Categorization,
   Category,
@@ -31,12 +30,12 @@ import {
   JsonSchema,
   Layout,
 } from '@jsonforms/core';
-import { JsonFormsReduxContext } from '@jsonforms/react/lib/redux';
+import { JsonFormsStateProvider } from '@jsonforms/react';
 import Adapter from 'enzyme-adapter-react-16';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import CategorizationRenderer, { categorizationTester } from '../../src/complex/categorization';
-import { initJsonFormsVanillaStore } from '../vanillaStore';
-import { JsonFormsStyleContext } from '../../src/styles';
+import { initCore } from '../util';
+import { vanillaRenderers } from '../../src';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -60,29 +59,7 @@ const fixture = {
     type: 'Categorization',
     label: 'A',
     elements: [category]
-  },
-  styles: [
-    {
-      name: 'categorization',
-      classNames: ['categorization']
-    },
-    {
-      name: 'categorization.master',
-      classNames: ['categorization-master']
-    },
-    {
-      name: 'category.group',
-      classNames: ['category-group']
-    },
-    {
-      name: 'category.subcategories',
-      classNames: ['category-subcategories']
-    },
-    {
-      name: 'categorization.detail',
-      classNames: ['categorization-detail']
-    }
-  ]
+  }
 };
 
 describe('Categorization tester', () => {
@@ -270,23 +247,15 @@ describe('Categorization renderer', () => {
         }
       ]
     };
+    const core = initCore(schema, uischema, fixture.data);
 
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema,
-      uischema
-    });
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <JsonFormsStyleContext.Provider value={{ styles: fixture.styles }}>
-            <CategorizationRenderer
-              schema={schema}
-              uischema={uischema}
-              />
-          </JsonFormsStyleContext.Provider>
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <CategorizationRenderer
+          schema={schema}
+          uischema={uischema}
+          />
+      </JsonFormsStateProvider>
     );
 
     const div = wrapper.find('.categorization').getDOMNode();
@@ -362,23 +331,15 @@ describe('Categorization renderer', () => {
         },
       ]
     };
-    const store = initJsonFormsVanillaStore({
-      data,
-      schema: fixture.schema,
-      uischema
-    });
+    const core = initCore(fixture.schema, uischema, data);
 
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <JsonFormsStyleContext.Provider value={{ styles: fixture.styles }}>
-            <CategorizationRenderer
-              schema={fixture.schema}
-              uischema={uischema}
-              />
-          </JsonFormsStyleContext.Provider>
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <CategorizationRenderer
+          schema={fixture.schema}
+          uischema={uischema}
+          />
+      </JsonFormsStateProvider>
     );
 
     const div: HTMLDivElement = wrapper.find('.categorization').getDOMNode();
@@ -426,24 +387,16 @@ describe('Categorization renderer', () => {
         }
       ]
     };
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema
-    });
+    const core = initCore(fixture.schema, uischema, fixture.data);
 
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <JsonFormsStyleContext.Provider value={{ styles: fixture.styles }}>
-            <CategorizationRenderer
-              schema={fixture.schema}
-              uischema={uischema}
-              visible={false}
-              />
-          </JsonFormsStyleContext.Provider>
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core }}>
+        <CategorizationRenderer
+          schema={fixture.schema}
+          uischema={uischema}
+          visible={false}
+          />
+      </JsonFormsStateProvider>
     );
 
     const div = wrapper.find('.categorization').getDOMNode() as HTMLDivElement;
@@ -462,22 +415,15 @@ describe('Categorization renderer', () => {
         }
       ]
     };
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema
-    });
+    const core = initCore(fixture.schema, uischema, fixture.data);
+
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <JsonFormsStyleContext.Provider value={{ styles: fixture.styles }}>
-            <CategorizationRenderer
-              schema={fixture.schema}
-              uischema={uischema}
-              />
-          </JsonFormsStyleContext.Provider>
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core }}>
+        <CategorizationRenderer
+          schema={fixture.schema}
+          uischema={uischema}
+          />
+      </JsonFormsStateProvider>
     );
 
     const div: HTMLDivElement = wrapper.find('.categorization').getDOMNode();

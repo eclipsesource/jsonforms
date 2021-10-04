@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
+
   Copyright (c) 2017-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,13 +23,12 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
-import { Provider } from 'react-redux';
 import { UISchemaElement, VerticalLayout } from '@jsonforms/core';
-import { JsonFormsReduxContext } from '@jsonforms/react/lib/redux';
+import { JsonFormsStateProvider } from '@jsonforms/react';
 import Adapter from 'enzyme-adapter-react-16';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import VerticalLayoutRenderer, { verticalLayoutTester } from '../../src/layouts/VerticalLayout';
-import { initJsonFormsVanillaStore } from '../vanillaStore';
+import { initCore } from '../util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -50,17 +49,11 @@ describe('Vertical layout', () => {
     const uischema: UISchemaElement = {
       type: 'VerticalLayout'
     };
-    const store = initJsonFormsVanillaStore({
-      data: {},
-      schema: {},
-      uischema,
-    });
+    const core = initCore({}, uischema, {});
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <VerticalLayoutRenderer uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <VerticalLayoutRenderer uischema={uischema} />
+      </JsonFormsStateProvider>
     );
 
     expect(wrapper.find('.vertical-layout')).toBeDefined();
@@ -71,17 +64,11 @@ describe('Vertical layout', () => {
       type: 'VerticalLayout',
       elements: null
     };
-    const store = initJsonFormsVanillaStore({
-      data: {},
-      schema: {},
-      uischema
-    });
+    const core = initCore({}, uischema, {});
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <VerticalLayoutRenderer uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <VerticalLayoutRenderer uischema={uischema} />
+      </JsonFormsStateProvider>
     );
 
     expect(wrapper.find('.vertical-layout')).toBeDefined();
@@ -92,17 +79,11 @@ describe('Vertical layout', () => {
       type: 'VerticalLayout',
       elements: [{ type: 'Control' }, { type: 'Control' }]
     };
-    const store = initJsonFormsVanillaStore({
-      data: {},
-      schema: {},
-      uischema
-    });
+    const core = initCore({}, uischema, {});
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <VerticalLayoutRenderer uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <VerticalLayoutRenderer uischema={uischema} />
+      </JsonFormsStateProvider>
     );
     const verticalLayout = wrapper.find(VerticalLayoutRenderer).getDOMNode();
 
@@ -115,21 +96,15 @@ describe('Vertical layout', () => {
       type: 'VerticalLayout',
       elements: [{ type: 'Control' }],
     };
-    const store = initJsonFormsVanillaStore({
-      data: {},
-      schema: {},
-      uischema
-    });
+    const core = initCore({}, uischema, {});
 
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <VerticalLayoutRenderer
-            uischema={uischema}
-            visible={false}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <VerticalLayoutRenderer
+          uischema={uischema}
+          visible={false}
+        />
+      </JsonFormsStateProvider>
     );
     const verticalLayout = wrapper.find(VerticalLayoutRenderer).getDOMNode() as HTMLDivElement;
     expect(verticalLayout.hidden).toBe(true);
@@ -140,18 +115,12 @@ describe('Vertical layout', () => {
       type: 'VerticalLayout',
       elements: [{ type: 'Control' }],
     };
-    const store = initJsonFormsVanillaStore({
-      data: {},
-      schema: {},
-      uischema
-    });
+    const core = initCore({}, uischema, {});
 
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <VerticalLayoutRenderer uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core }}>
+        <VerticalLayoutRenderer uischema={uischema} />
+      </JsonFormsStateProvider>
     );
     const verticalLayout = wrapper.find(VerticalLayoutRenderer).getDOMNode() as HTMLDivElement;
     expect(verticalLayout.hidden).toBe(false);

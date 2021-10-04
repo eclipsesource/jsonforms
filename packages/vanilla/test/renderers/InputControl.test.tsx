@@ -24,14 +24,13 @@
 */
 import * as React from 'react';
 import {
-  Actions,
   ControlElement,
   HorizontalLayout,
   JsonSchema
 } from '@jsonforms/core';
 import { JsonFormsDispatch } from '@jsonforms/react';
-import { JsonFormsReduxContext } from '@jsonforms/react/lib/redux';
-import { Provider } from 'react-redux';
+import { JsonFormsStateProvider } from '@jsonforms/react';
+import { vanillaRenderers } from '../../src';
 import Adapter from 'enzyme-adapter-react-16';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import '../../src';
@@ -44,7 +43,7 @@ import InputControl, {
 import BooleanCell, { booleanCellTester } from '../../src/cells/BooleanCell';
 import TextCell, { textCellTester } from '../../src/cells/TextCell';
 import DateCell, { dateCellTester } from '../../src/cells/DateCell';
-import { initJsonFormsVanillaStore } from '../vanillaStore';
+import { initCore } from '../util';
 import { JsonFormsStyleContext } from '../../src/styles';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -113,22 +112,16 @@ describe('Input control', () => {
       firstBooleanCell: true,
       secondBooleanCell: false
     };
-    const store = initJsonFormsVanillaStore({
-      data,
-      schema,
-      uischema,
-      renderers: [
-        { tester: inputControlTester, renderer: InputControl },
-        { tester: horizontalLayoutTester, renderer: HorizontalLayoutRenderer }
-      ],
-      cells: [{ tester: booleanCellTester, cell: BooleanCell }]
-    });
+    const core = initCore(schema, uischema, data);
+    const renderes = [
+      { tester: inputControlTester, renderer: InputControl },
+      { tester: horizontalLayoutTester, renderer: HorizontalLayoutRenderer }
+    ];
+    const cells = [{ tester: booleanCellTester, cell: BooleanCell }];
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <JsonFormsDispatch />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core, cells, renderes }}>
+        <JsonFormsDispatch />
+      </JsonFormsStateProvider>
     );
     const inputs = wrapper.find('input');
     expect(document.activeElement).not.toBe(inputs.at(0).getDOMNode());
@@ -136,19 +129,13 @@ describe('Input control', () => {
   });
 
   test('render', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema,
-      renderers: [{ tester: inputControlTester, renderer: InputControl }],
-      cells: [{ tester: booleanCellTester, cell: BooleanCell }]
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
+    const renderes = [{ tester: inputControlTester, renderer: InputControl }];
+    const cells = [{ tester: booleanCellTester, cell: BooleanCell }];
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <InputControl uischema={fixture.uischema} schema={fixture.schema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core, cells, renderes }}>
+        <InputControl uischema={fixture.uischema} schema={fixture.schema} />
+      </JsonFormsStateProvider>
     );
 
     const control = wrapper.find('.control').getDOMNode();
@@ -174,19 +161,13 @@ describe('Input control', () => {
       scope: '#/properties/foo',
       label: false
     };
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema,
-      renderers: [{ tester: inputControlTester, renderer: InputControl }],
-      cells: [{ tester: booleanCellTester, cell: BooleanCell }]
-    });
+    const core = initCore(fixture.schema, uischema, fixture.data);
+    const renderes = [{ tester: inputControlTester, renderer: InputControl }];
+    const cells = [{ tester: booleanCellTester, cell: BooleanCell }];
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <JsonFormsDispatch />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core, cells, renderes }}>
+        <JsonFormsDispatch />
+      </JsonFormsStateProvider>
     );
 
     const control = wrapper.find('.control');
@@ -207,116 +188,85 @@ describe('Input control', () => {
   });
 
   test('hide', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema,
-      renderers: [{ tester: inputControlTester, renderer: InputControl }],
-      cells: [{ tester: booleanCellTester, cell: BooleanCell }]
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
+    const renderes = [{ tester: inputControlTester, renderer: InputControl }];
+    const cells = [{ tester: booleanCellTester, cell: BooleanCell }];
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <InputControl
-            schema={fixture.schema}
-            uischema={fixture.uischema}
-            path={''}
-            visible={false}
-          />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core, cells, renderes }}>
+        <InputControl
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path={''}
+          visible={false}
+        />
+      </JsonFormsStateProvider>
     );
     const control = wrapper.find('.control').getDOMNode() as HTMLElement;
     expect(control.hidden).toBe(true);
   });
 
   test('show by default', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema,
-      renderers: [{ tester: inputControlTester, renderer: InputControl }],
-      cells: [{ tester: booleanCellTester, cell: BooleanCell }]
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
+    const renderes = [{ tester: inputControlTester, renderer: InputControl }];
+    const cells = [{ tester: booleanCellTester, cell: BooleanCell }];
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <InputControl schema={fixture.schema} uischema={fixture.uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core, cells, renderes }}>
+        <InputControl schema={fixture.schema} uischema={fixture.uischema} />
+      </JsonFormsStateProvider>
     );
     const control = wrapper.find('.control').getDOMNode() as HTMLElement;
     expect(control.hidden);
   });
 
   test('single error', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema,
-      renderers: [{ tester: inputControlTester, renderer: InputControl }],
-      cells: [{ tester: booleanCellTester, cell: BooleanCell }]
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
+    const renderes = [{ tester: inputControlTester, renderer: InputControl }];
+    const cells = [{ tester: booleanCellTester, cell: BooleanCell }];
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <InputControl schema={fixture.schema} uischema={fixture.uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core, cells, renderes }}>
+        <InputControl schema={fixture.schema} uischema={fixture.uischema} />
+      </JsonFormsStateProvider>
     );
     const validation = wrapper.find('.validation');
-    store.dispatch(Actions.update('foo', () => 2));
+    core.data = { ...core.data, foo: 2 };
+    wrapper.setProps({ initState: { renderers: vanillaRenderers, core, cells, renderes }} );
+    wrapper.update();
     expect(validation.text()).toBe('should be boolean');
   });
 
   test('multiple errors', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema,
-      renderers: [{ tester: inputControlTester, renderer: InputControl }],
-      cells: [{ tester: booleanCellTester, cell: BooleanCell }]
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
+    const renderes = [{ tester: inputControlTester, renderer: InputControl }];
+    const cells = [{ tester: booleanCellTester, cell: BooleanCell }];
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <InputControl schema={fixture.schema} uischema={fixture.uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core, cells, renderes }}>
+        <InputControl schema={fixture.schema} uischema={fixture.uischema} />
+      </JsonFormsStateProvider>
     );
-    store.dispatch(Actions.update('foo', () => 3));
+    core.data = { ...core.data, foo: 3 };
+    wrapper.setProps({ initState: { renderers: vanillaRenderers, core, cells, renderes }} );
     wrapper.update();
     const validation = wrapper.find('.validation');
     expect(validation.text()).toBe('should be boolean');
   });
 
   test('empty errors by default', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema,
-      renderers: [{ tester: inputControlTester, renderer: InputControl }],
-      cells: [{ tester: booleanCellTester, cell: BooleanCell }]
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
+    const renderes = [{ tester: inputControlTester, renderer: InputControl }];
+    const cells = [{ tester: booleanCellTester, cell: BooleanCell }];
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <JsonFormsDispatch />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core, cells, renderes }}>
+        <JsonFormsDispatch />
+      </JsonFormsStateProvider>
     );
     const validation = wrapper.find('.validation');
     expect(validation.text()).toBe('');
   });
 
   test('custom validation class', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema,
-      renderers: [{ tester: inputControlTester, renderer: InputControl }],
-      cells: [{ tester: booleanCellTester, cell: BooleanCell }]
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
+    const renderes = [{ tester: inputControlTester, renderer: InputControl }];
+    const cells = [{ tester: booleanCellTester, cell: BooleanCell }];
     const styleContextValue = { styles: [
       {
         name: 'control.validation',
@@ -324,36 +274,30 @@ describe('Input control', () => {
       },
     ]};
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <JsonFormsStyleContext.Provider value={styleContextValue}>
-            <JsonFormsDispatch />
-          </JsonFormsStyleContext.Provider>
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core, cells, renderes }}>
+        <JsonFormsStyleContext.Provider value={styleContextValue}>
+          <JsonFormsDispatch />
+        </JsonFormsStyleContext.Provider>
+      </JsonFormsStateProvider>
     );
     const validation = wrapper.find('.custom-validation');
     expect(validation.exists()).toBeTruthy();
   });
 
   test('reset validation message', () => {
-    const store = initJsonFormsVanillaStore({
-      data: fixture.data,
-      schema: fixture.schema,
-      uischema: fixture.uischema,
-      renderers: [{ tester: inputControlTester, renderer: InputControl }],
-      cells: [{ tester: booleanCellTester, cell: BooleanCell }]
-    });
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
+    const renderes = [{ tester: inputControlTester, renderer: InputControl }];
+    const cells = [{ tester: booleanCellTester, cell: BooleanCell }];
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <JsonFormsDispatch />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core, cells, renderes }}>
+        <JsonFormsDispatch />
+      </JsonFormsStateProvider>
     );
     const validation = wrapper.find('.validation');
-    store.dispatch(Actions.update('foo', () => 3));
-    store.dispatch(Actions.update('foo', () => true));
+    core.data = { ...core.data, foo: 3 };
+    core.data = { ...core.data, foo: true };
+    wrapper.setProps({ initState: { core }} );
+    wrapper.update();
     expect(validation.text()).toBe('');
   });
 
@@ -399,19 +343,13 @@ describe('Input control', () => {
       name: 'John Doe',
       personalData: {}
     };
-    const store = initJsonFormsVanillaStore({
-      data,
-      schema,
-      uischema,
-      renderers: [{ tester: inputControlTester, renderer: InputControl }],
-      cells: [{ tester: textCellTester, cell: TextCell }]
-    });
+    const core = initCore(schema, uischema, data);
+    const renderes = [{ tester: inputControlTester, renderer: InputControl }];
+    const cells = [{ tester: textCellTester, cell: TextCell }];
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <HorizontalLayoutRenderer schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core, cells, renderes }}>
+        <HorizontalLayoutRenderer schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
     );
     const validation = wrapper.find('.validation');
     expect(validation.at(0).text()).toBe('');
@@ -433,19 +371,13 @@ describe('Input control', () => {
       type: 'Control',
       scope: '#/properties/dateCell'
     };
-    const store = initJsonFormsVanillaStore({
-      data: {},
-      schema,
-      uischema,
-      renderers: [{ tester: inputControlTester, renderer: InputControl }],
-      cells: [{ tester: dateCellTester, cell: DateCell }]
-    });
+    const core = initCore(schema, uischema, {});
+    const renderes = [{ tester: inputControlTester, renderer: InputControl }];
+    const cells = [{ tester: dateCellTester, cell: DateCell }];
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <InputControl schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core, cells, renderes }}>
+        <InputControl schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
     );
     const label = wrapper.find('label');
     expect(label.text()).toBe('Date Cell*');
@@ -465,19 +397,13 @@ describe('Input control', () => {
       type: 'Control',
       scope: '#/properties/dateCell'
     };
-    const store = initJsonFormsVanillaStore({
-      data: {},
-      schema,
-      uischema,
-      renderers: [{ tester: inputControlTester, renderer: InputControl }],
-      cells: [{ tester: dateCellTester, cell: DateCell }]
-    });
+    const core = initCore(schema, uischema, {});
+    const renderes = [{ tester: inputControlTester, renderer: InputControl }];
+    const cells = [{ tester: dateCellTester, cell: DateCell }];
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <InputControl schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core, cells, renderes }}>
+        <InputControl schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
     );
     const label = wrapper.find('label');
     expect(label.text()).toBe('Date Cell');
@@ -498,19 +424,13 @@ describe('Input control', () => {
       scope: '#/properties/name'
     };
     const data = { isFocused: false };
-    const store = initJsonFormsVanillaStore({
-      data,
-      schema,
-      uischema,
-      renderers: [{ tester: inputControlTester, renderer: InputControl }],
-      cells: [{ tester: textCellTester, cell: TextCell }]
-    });
+    const core = initCore(schema, uischema, data);
+    const renderes = [{ tester: inputControlTester, renderer: InputControl }];
+    const cells = [{ tester: textCellTester, cell: DateCell }];
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <InputControl schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core, cells, renderes }}>
+        <InputControl schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
     );
     const control = wrapper.find('.control');
     control.simulate('focus');
@@ -533,19 +453,13 @@ describe('Input control', () => {
       scope: '#/properties/name'
     };
     const data = { isFocused: false };
-    const store = initJsonFormsVanillaStore({
-      data,
-      schema,
-      uischema,
-      renderers: [{ tester: inputControlTester, renderer: InputControl }],
-      cells: [{ tester: textCellTester, cell: TextCell }]
-    });
+    const core = initCore(schema, uischema, data);
+    const renderes = [{ tester: inputControlTester, renderer: InputControl }];
+    const cells = [{ tester: textCellTester, cell: DateCell }];
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <InputControl schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core, cells, renderes }}>
+        <InputControl schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
     );
     const description = wrapper.find('.input-description');
     expect(description.text()).toBe('');
@@ -566,19 +480,13 @@ describe('Input control', () => {
       scope: '#/properties/name'
     };
     const data = { isFocused: false };
-    const store = initJsonFormsVanillaStore({
-      data,
-      schema,
-      uischema,
-      renderers: [{ tester: inputControlTester, renderer: InputControl }],
-      cells: [{ tester: textCellTester, cell: TextCell }]
-    });
+    const core = initCore(schema, uischema, data);
+    const renderes = [{ tester: inputControlTester, renderer: InputControl }];
+    const cells = [{ tester: textCellTester, cell: DateCell }];
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <JsonFormsDispatch />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core, cells, renderes }}>
+        <JsonFormsDispatch />
+      </JsonFormsStateProvider>
     );
     const control = wrapper.find('.control');
     control.simulate('focus');
@@ -603,19 +511,13 @@ describe('Input control', () => {
       scope: '#/properties/name'
     };
     const data = { isFocused: false };
-    const store = initJsonFormsVanillaStore({
-      data,
-      schema,
-      uischema,
-      renderers: [{ tester: inputControlTester, renderer: InputControl }],
-      cells: [{ tester: textCellTester, cell: TextCell }]
-    });
+    const core = initCore(schema, uischema, data);
+    const renderes = [{ tester: inputControlTester, renderer: InputControl }];
+    const cells = [{ tester: textCellTester, cell: DateCell }];
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <JsonFormsDispatch />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core, cells, renderes }}>
+        <JsonFormsDispatch />
+      </JsonFormsStateProvider>
     );
     const description = wrapper.find('.input-description').getDOMNode();
     expect(description.textContent).toBe('');
@@ -634,19 +536,13 @@ describe('Input control', () => {
       type: 'Control',
       scope: '#/properties/expectedValue'
     };
-    const store = initJsonFormsVanillaStore({
-      data: {},
-      schema,
-      uischema,
-      renderers: [{ tester: inputControlTester, renderer: InputControl }],
-      cells: [{ tester: textCellTester, cell: TextCell }]
-    });
+    const core = initCore(schema, uischema, {});
+    const renderes = [{ tester: inputControlTester, renderer: InputControl }];
+    const cells = [{ tester: textCellTester, cell: DateCell }];
     wrapper = mount(
-      <Provider store={store}>
-        <JsonFormsReduxContext>
-          <InputControl schema={schema} uischema={uischema} />
-        </JsonFormsReduxContext>
-      </Provider>
+      <JsonFormsStateProvider initState={{ core, cells, renderes }}>
+        <InputControl schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
     );
     const control = wrapper.find('.control');
     expect(control).toHaveLength(1);
