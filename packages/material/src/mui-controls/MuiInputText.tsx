@@ -77,7 +77,10 @@ export const MuiInputText = React.memo((props: CellProps & WithClassname & MuiTe
 
   const theme: JsonFormsTheme = useTheme();
   
-  const closeStyle = {background: theme.jsonforms?.input?.delete?.background || theme.palette.background.default, borderRadius: '50%'};
+  const closeStyle = {
+    background: theme.jsonforms?.input?.delete?.background || theme.palette.background.default,
+    borderRadius: '50%'
+  };
 
   return (
     <Input
@@ -109,6 +112,7 @@ export const MuiInputText = React.memo((props: CellProps & WithClassname & MuiTe
           <IconButton
             aria-label='Clear input field'
             onClick={onClear}   
+            size='large'
           >
             <Close style={closeStyle}/>
           </IconButton>

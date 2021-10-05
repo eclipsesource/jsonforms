@@ -91,7 +91,6 @@ export const MaterialDateControl = (props: ControlProps)=> {
           inputFormat={format}
           views={appliedUiSchemaOptions.views}
           disabled={!enabled}
-          autoFocus={appliedUiSchemaOptions.focus}
           cancelText={appliedUiSchemaOptions.cancelLabel}
           clearText={appliedUiSchemaOptions.clearLabel}
           okText={appliedUiSchemaOptions.okLabel}
@@ -100,11 +99,13 @@ export const MaterialDateControl = (props: ControlProps)=> {
               {...params}
               id={id + '-input'}
               required={required && !appliedUiSchemaOptions.hideRequiredAsterisk}
+              autoFocus={appliedUiSchemaOptions.focus}
               error={!isValid}
               fullWidth={!appliedUiSchemaOptions.trim}
               InputLabelProps={data ? { shrink: true } : undefined}
               onFocus={onFocus}
               onBlur={onBlur}
+              variant={'standard'}
             />
           )}
         />

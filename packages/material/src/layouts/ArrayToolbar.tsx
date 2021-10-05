@@ -46,7 +46,7 @@ export const ArrayLayoutToolbar = React.memo(
                   <IconButton
                     aria-label={`Add to ${label}`}
                     onClick={addItem(path, createDefault())}
-                  >
+                    size='large'>
                     <AddIcon />
                   </IconButton>
                 </Tooltip>

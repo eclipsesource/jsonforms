@@ -22,20 +22,18 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { withStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import { TableCell } from '@mui/material';
 import React from 'react';
 
-const styles = {
-    noBottomBorder: {
-        borderBottom: 'none'
-    }
-};
+const StyledTableCell = styled(TableCell)({
+  borderBottom: 'none'
+});
 
-const NoBorderTableCell = ({ classes, children, ...otherProps }: any) => (
-    <TableCell className={classes.noBottomBorder} {...otherProps}>
-        {children}
-    </TableCell>
+const NoBorderTableCell = ({ children, ...otherProps }: any) => (
+  <StyledTableCell {...otherProps}>
+    {children}
+  </StyledTableCell>
 );
 
-export default withStyles(styles)(NoBorderTableCell);
+export default (NoBorderTableCell);

@@ -98,7 +98,7 @@ const TableToolbar = React.memo(
             <IconButton
               aria-label={`Add to ${label}`}
               onClick={addItem(path, createDefaultValue(schema))}
-            >
+              size='large'>
               <AddIcon />
             </IconButton>
           </Tooltip>

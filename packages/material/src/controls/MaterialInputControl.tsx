@@ -76,6 +76,7 @@ export const MaterialInputControl = (props: ControlProps & WithInput) => {
         onFocus={onFocus}
         onBlur={onBlur}
         id={id}
+        variant={'standard'}
       >
         <InputLabel
           htmlFor={id + '-input'}

@@ -28,20 +28,11 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import {
   Badge,
   Tooltip,
-  Theme
+  styled
 } from '@mui/material';
-import {
-  StyledComponentProps,
-  withStyles,
-  WithStyles,
-  createStyles
-} from '@mui/styles';
 
-export { StyledComponentProps };
-const styles = createStyles(({ palette }: Theme) => ({
-  badge: {
-    color: palette.error.main
-  }
+const StyledBadge = styled(Badge)(({ theme }) => ({
+  color: theme.palette.error.main
 }));
 
 export interface ValidationProps {
@@ -49,18 +40,18 @@ export interface ValidationProps {
   id: string;
 }
 
-const ValidationIcon: React.FC<ValidationProps & WithStyles<'badge'>> =
-  ({ classes, errorMessages, id }) => {
+const ValidationIcon: React.FC<ValidationProps> =
+  ({ errorMessages, id }) => {
     return (
       <Tooltip
         id={id}
         title={errorMessages}
       >
-        <Badge className={classes.badge} badgeContent={errorMessages.split('\n').length}>
+        <StyledBadge badgeContent={errorMessages.split('\n').length}>
           <ErrorOutlineIcon color='inherit'/>
-        </Badge>
+        </StyledBadge>
       </Tooltip>
     );
 };
 
-export default withStyles(styles, { name: 'ValidationIcon' })(ValidationIcon);
+export default ValidationIcon;

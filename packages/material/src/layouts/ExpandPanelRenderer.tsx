@@ -155,7 +155,7 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
                           style={iconStyle}
                           disabled={!enableMoveUp}
                           aria-label={`Move up`}
-                        >
+                          size='large'>
                           <ArrowUpward />
                         </IconButton>
                       </Grid>
@@ -165,7 +165,7 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
                           style={iconStyle}
                           disabled={!enableMoveDown}
                           aria-label={`Move down`}
-                        >
+                          size='large'>
                           <ArrowDownward />
                         </IconButton>
                       </Grid>
@@ -178,7 +178,7 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
                       onClick={removeItems(path, [index])}
                       style={iconStyle}
                       aria-label={`Delete`}
-                    >
+                      size='large'>
                       <DeleteIcon />
                     </IconButton>
                   </Grid>

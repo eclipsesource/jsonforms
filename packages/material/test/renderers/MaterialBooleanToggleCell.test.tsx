@@ -236,7 +236,7 @@ describe('Material boolean toggle cell', () => {
     );
 
     // Make sure a toggle is rendered by checking for the thumb element
-    expect(wrapper.find('.MuiSwitch-thumb')).toHaveLength(1);
+    expect(wrapper.find('.MuiSwitch-thumb')).toHaveLength(2);
 
     const input = wrapper.find('input').first();
     expect(input.props().type).toBe('checkbox');

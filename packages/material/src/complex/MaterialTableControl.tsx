@@ -293,11 +293,7 @@ const NonEmptyRowComponent =
               {showSortButtons ? (
                 <Fragment>
                   <Grid item>
-                    <IconButton
-                      aria-label={`Move up`}
-                      onClick={moveUp}
-                      disabled={!enableUp}
-                    >
+                    <IconButton aria-label={`Move up`} onClick={moveUp} disabled={!enableUp} size='large'>
                       <ArrowUpward />
                     </IconButton>
                   </Grid>
@@ -306,7 +302,7 @@ const NonEmptyRowComponent =
                       aria-label={`Move down`}
                       onClick={moveDown}
                       disabled={!enableDown}
-                    >
+                      size='large'>
                       <ArrowDownward />
                     </IconButton>
                   </Grid>
@@ -316,7 +312,7 @@ const NonEmptyRowComponent =
                 <IconButton
                   aria-label={`Delete`}
                   onClick={() => openDeleteDialog(childPath, rowIndex)}
-                >
+                  size='large'>
                   <DeleteIcon />
                 </IconButton>
               </Grid>

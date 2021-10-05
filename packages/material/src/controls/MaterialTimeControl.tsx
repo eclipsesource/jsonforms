@@ -102,11 +102,13 @@ export const MaterialTimeControl = (props: ControlProps) => {
               {...params}
               id={id + '-input'}
               required={required && !appliedUiSchemaOptions.hideRequiredAsterisk}
+              autoFocus={appliedUiSchemaOptions.focus}
               error={!isValid}
               fullWidth={!appliedUiSchemaOptions.trim}
               InputLabelProps={data ? { shrink: true } : undefined}
               onFocus={onFocus}
               onBlur={onBlur}
+              variant={'standard'}
             />
           )}
         />

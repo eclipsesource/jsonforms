@@ -51,6 +51,7 @@ export const MuiSelect = React.memo((props: EnumCellProps & WithClassname) => {
       value={data !== undefined ? data : ''}
       onChange={ev => handleChange(path, ev.target.value)}
       fullWidth={true}
+      variant={'standard'}
     >
       {[<MenuItem value='' key={'empty'} />].concat(
         options.map(optionValue => (
