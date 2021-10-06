@@ -175,7 +175,7 @@ describe('Material integer cells', () => {
     expect(input.props().value).toBe(0);
   });
 
-  it('should update via input event', () => {
+  it('should update via input event', (done) => {
     const core = initCore(schema, uischema, data);
     const onChangeData: any = {
       data: undefined
@@ -193,10 +193,13 @@ describe('Material integer cells', () => {
 
     const input = wrapper.find('input');
     input.simulate('change', { target: { value: 13 } });
-    expect(onChangeData.data.foo).toBe(13);
+    setTimeout(() => {
+      expect(onChangeData.data.foo).toBe(13);
+      done();
+    }, 1000)
   });
 
-  it('should update via action', () => {
+  it('should update via action', (done) => {
     const core = initCore(schema, uischema, { foo: 13 });
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
@@ -206,11 +209,14 @@ describe('Material integer cells', () => {
     core.data = { ...core.data, foo: 42 };
     wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
     wrapper.update();
-    const input = wrapper.find('input').first();
-    expect(input.props().value).toBe(42);
+    setTimeout(() => {
+      const input = wrapper.find('input').first();
+      expect(input.props().value).toBe(42);
+      done();
+    }, 1000);
   });
 
-  it('should not update with undefined value', () => {
+  it('should not update with undefined value', (done) => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
@@ -220,11 +226,14 @@ describe('Material integer cells', () => {
     core.data = { ...core.data, foo: undefined };
     wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
     wrapper.update();
-    const input = wrapper.find('input');
-    expect(input.props().value).toBe('');
+    setTimeout(() => {
+      const input = wrapper.find('input');
+      expect(input.props().value).toBe('');
+      done();
+    }, 1000);
   });
 
-  it('should not update with null value', () => {
+  it('should not update with null value', (done) => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
@@ -234,11 +243,14 @@ describe('Material integer cells', () => {
     core.data = { ...core.data, foo: null };
     wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
     wrapper.update();
-    const input = wrapper.find('input').first();
-    expect(input.props().value).toBe('');
+    setTimeout(() => {
+      const input = wrapper.find('input').first();
+      expect(input.props().value).toBe('');
+      done();
+    }, 1000);
   });
 
-  it('should not update with wrong ref', () => {
+  it('should not update with wrong ref', (done) => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
@@ -248,11 +260,14 @@ describe('Material integer cells', () => {
     core.data = { ...core.data, bar: 11 };
     wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
     wrapper.update();
-    const input = wrapper.find('input');
-    expect(input.props().value).toBe(42);
+    setTimeout(() => {
+      const input = wrapper.find('input');
+      expect(input.props().value).toBe(42);
+      done();
+    }, 1000);
   });
 
-  it('should not update with null ref', () => {
+  it('should not update with null ref', (done) => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
@@ -262,11 +277,14 @@ describe('Material integer cells', () => {
     core.data = { ...core.data, null: 13 };
     wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
     wrapper.update();
-    const input = wrapper.find('input').first();
-    expect(input.props().value).toBe(42);
+    setTimeout(() => {
+      const input = wrapper.find('input');
+      expect(input.props().value).toBe(42);
+      done();
+    }, 1000);
   });
 
-  it('should not update with undefined ref', () => {
+  it('should not update with undefined ref', (done) => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
@@ -276,8 +294,11 @@ describe('Material integer cells', () => {
     core.data = { ...core.data, undefined: 13 };
     wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
     wrapper.update();
-    const input = wrapper.find('input').first();
-    expect(input.props().value).toBe(42);
+    setTimeout(() => {
+      const input = wrapper.find('input');
+      expect(input.props().value).toBe(42);
+      done();
+    }, 1000);
   });
 
   it('can be disabled', () => {

@@ -1,7 +1,7 @@
 /*
   The MIT License
   
-  Copyright (c) 2017-2019 EclipseSource Munich
+  Copyright (c) 2021 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
   
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,7 +22,45 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-export * from './datejs';
-export * from './layout';
-export * from './theme';
-export * from './debounce';
+import { registerExamples } from './register';
+import { UISchemaElement } from '@jsonforms/core';
+
+export const schema = {
+  type: 'object',
+  properties: {
+    propText0: {type: 'string'},
+    propText1: {type: 'string'},
+    propText2: {type: 'string'},
+    propText3: {type: 'string'},
+    propText4: {type: 'string'},
+    propText5: {type: 'string'},
+    propText6: {type: 'string'},
+    propText7: {type: 'string'},
+    propText8: {type: 'string'},
+    propText9: {type: 'string'},
+    propNumber0: {type: 'number'},
+    propNumber1: {type: 'number'},
+    propNumber2: {type: 'number'},
+    propNumber3: {type: 'number'},
+    propNumber4: {type: 'number'},
+    propNumber5: {type: 'number'},
+    propNumber6: {type: 'number'},
+    propNumber7: {type: 'number'},
+    propNumber8: {type: 'number'},
+    propNumber9: {type: 'number'},
+  }
+};
+
+export const uischema: UISchemaElement = undefined;
+
+export const data = {};
+
+registerExamples([
+  {
+    name: '1645',
+    label: 'Issue 1645',
+    data,
+    schema,
+    uischema
+  }
+]);

@@ -62,7 +62,7 @@ describe('Material anyOf renderer', () => {
 
   afterEach(() => wrapper.unmount());
 
-  it('should add an item at correct path', () => {
+  it('should add an item at correct path', (done) => {
     const schema = {
       type: 'object',
       properties: {
@@ -103,9 +103,12 @@ describe('Material anyOf renderer', () => {
     const input = wrapper.find('input').first();
     input.simulate('change', { target: { value: 'test' } });
     wrapper.update();
-    expect(onChangeData.data).toEqual({
-      value: 'test'
-    });
+    setTimeout(() => {
+      expect(onChangeData.data).toEqual({
+        value: 'test'
+      });
+      done();
+    }, 1000);
   });
 
   it('should add a "mything"', async () => {
@@ -179,7 +182,7 @@ describe('Material anyOf renderer', () => {
     expect(nrOfRowsAfterAdd.length).toBe(4);
   });
 
-  it('should switch to "yourThing" edit, then switch back, then edit', async () => {
+  it('should switch to "yourThing" edit, then switch back, then edit', async (done) => {
     const schema = {
       type: 'object',
       properties: {
@@ -260,9 +263,12 @@ describe('Material anyOf renderer', () => {
     input.simulate('change', { target: { value: 'test' } });
     wrapper.update();
 
-    expect(onChangeData.data).toEqual({
-      myThingsAndOrYourThings: [{ age: 5, name: 'test' }]
-    });
+    setTimeout(() => {
+      expect(onChangeData.data).toEqual({
+        myThingsAndOrYourThings: [{ age: 5, name: 'test' }]
+      });
+      done();
+    }, 1000);
   });
 
   it('should be hideable', () => {

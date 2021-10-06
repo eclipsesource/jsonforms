@@ -75,6 +75,7 @@ import * as multiEnum from './multi-enum';
 import * as enumInArray from './enumInArray';
 import * as readonly from './readonly';
 import * as bug_1779 from './1779';
+import * as bug_1645 from './1645';
 export * from './register';
 export * from './example';
 
@@ -134,5 +135,6 @@ export {
   multiEnum,
   enumInArray,
   readonly,
-  bug_1779
+  bug_1779,
+  bug_1645
 };

@@ -256,7 +256,7 @@ describe('Material oneOf renderer', () => {
     expect(secondTab.props().selected).toBeTruthy();
   });
 
-  it('should add an item at correct path', () => {
+  it('should add an item at correct path', (done) => {
     const schema = {
       type: 'object',
       properties: {
@@ -298,9 +298,12 @@ describe('Material oneOf renderer', () => {
     const input = wrapper.find('input').first();
     input.simulate('change', { target: { value: 'test' } });
     wrapper.update();
-    expect(onChangeData.data).toEqual({
-      value: 'test'
-    });
+    setTimeout(() => {
+      expect(onChangeData.data).toEqual({
+        value: 'test'
+      });
+      done();
+    }, 1000);
   });
 
   it.skip('should add an item within an array', async () => {
