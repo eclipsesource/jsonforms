@@ -37,7 +37,7 @@ import {
 } from '@jsonforms/core';
 import { JsonFormsDispatch, withJsonFormsAllOfProps } from '@jsonforms/react';
 
-const MaterialAllOfRenderer = ({
+export const MaterialAllOfRenderer = ({
   schema,
   rootSchema,
   visible,
@@ -95,4 +95,5 @@ export const materialAllOfControlTester: RankedTester = rankWith(
   3,
   isAllOfControl
 );
+
 export default withJsonFormsAllOfProps(MaterialAllOfRenderer);

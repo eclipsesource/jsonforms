@@ -25,7 +25,6 @@
 import React from 'react';
 import { CellProps, WithClassname } from '@jsonforms/core';
 import Switch from '@material-ui/core/Switch';
-import { areEqual } from '@jsonforms/react';
 import merge from 'lodash/merge';
 
 export const MuiToggle = React.memo((props: CellProps & WithClassname) => {
@@ -53,4 +52,4 @@ export const MuiToggle = React.memo((props: CellProps & WithClassname) => {
       inputProps={inputProps}
     />
   );
-}, areEqual);
+});

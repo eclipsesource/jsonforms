@@ -1,7 +1,7 @@
 /*
   The MIT License
   
-  Copyright (c) 2017-2019 EclipseSource Munich
+  Copyright (c) 2021 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
   
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,8 +22,11 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-export * from './datejs';
-export * from './layout';
-export * from './theme';
-export * from './debounce';
-export * from './focus';
+import {useState, useCallback} from 'react';
+
+export const useFocus = ():[boolean, () => void, () => void] => {
+    const [focused, setFocused] = useState(false);
+    const onFocus = useCallback(() => setFocused(true), []);
+    const onBlur = useCallback(() => setFocused(false), []);
+    return [focused, onFocus, onBlur];
+};

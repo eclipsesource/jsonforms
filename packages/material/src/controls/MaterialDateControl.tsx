@@ -23,17 +23,15 @@
   THE SOFTWARE.
 */
 import merge from 'lodash/merge';
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
-  ControlState,
-  DispatchPropsOfControl,
+  ControlProps,
   isDateControl,
   isDescriptionHidden,
   RankedTester,
   rankWith,
-  StatePropsOfControl
 } from '@jsonforms/core';
-import { Control, withJsonFormsControlProps } from '@jsonforms/react';
+import { withJsonFormsControlProps } from '@jsonforms/react';
 import { FormHelperText, Hidden } from '@material-ui/core';
 import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
@@ -43,90 +41,87 @@ import {
   MuiPickersUtilsProvider
 } from '@material-ui/pickers';
 import DayJsUtils from '@date-io/dayjs';
-import { createOnChangeHandler, getData } from '../util';
+import { createOnChangeHandler, getData, useFocus } from '../util';
 
-export class MaterialDateControl extends Control<
-  StatePropsOfControl & DispatchPropsOfControl,
-  ControlState
-> {
-  render() {
-    const {
-      description,
-      id,
-      errors,
-      label,
-      uischema,
-      visible,
-      enabled,
-      required,
-      path,
-      handleChange,
-      data,
-      config
-    } = this.props;
-    const isValid = errors.length === 0;
-    const appliedUiSchemaOptions = merge({}, config, uischema.options);
-    const showDescription = !isDescriptionHidden(
-      visible,
-      description,
-      this.state.isFocused,
-      appliedUiSchemaOptions.showUnfocusedDescription
-    );
+export const MaterialDateControl = (props: ControlProps)=> {
+  const [focused, onFocus, onBlur] = useFocus();
+  const {
+    description,
+    id,
+    errors,
+    label,
+    uischema,
+    visible,
+    enabled,
+    required,
+    path,
+    handleChange,
+    data,
+    config
+  } = props;
+  const isValid = errors.length === 0;
+  const appliedUiSchemaOptions = merge({}, config, uischema.options);
+  const showDescription = !isDescriptionHidden(
+    visible,
+    description,
+    focused,
+    appliedUiSchemaOptions.showUnfocusedDescription
+  );
 
-    const format = appliedUiSchemaOptions.dateFormat ?? 'YYYY-MM-DD';
-    const saveFormat = appliedUiSchemaOptions.dateSaveFormat ?? 'YYYY-MM-DD';
+  const format = appliedUiSchemaOptions.dateFormat ?? 'YYYY-MM-DD';
+  const saveFormat = appliedUiSchemaOptions.dateSaveFormat ?? 'YYYY-MM-DD';
 
-    const firstFormHelperText = showDescription
-      ? description
-      : !isValid
-      ? errors
-      : null;
-    const secondFormHelperText = showDescription && !isValid ? errors : null;
+  const firstFormHelperText = showDescription
+    ? description
+    : !isValid
+    ? errors
+    : null;
+  const secondFormHelperText = showDescription && !isValid ? errors : null;
+  const onChange = useMemo(() => createOnChangeHandler(
+    path,
+    handleChange,
+    saveFormat
+  ),[path, handleChange, saveFormat]);
 
-    return (
-      <Hidden xsUp={!visible}>
-        <MuiPickersUtilsProvider utils={DayJsUtils}>
-          <KeyboardDatePicker
-            id={id + '-input'}
-            required={required && !appliedUiSchemaOptions.hideRequiredAsterisk}
-            label={label}
-            error={!isValid}
-            fullWidth={!appliedUiSchemaOptions.trim}
-            InputLabelProps={data ? { shrink: true } : undefined}
-            value={getData(data, saveFormat)}
-            clearable
-            onChange={createOnChangeHandler(
-              path,
-              handleChange,
-              saveFormat
-            )}
-            format={format}
-            views={appliedUiSchemaOptions.views}
-            disabled={!enabled}
-            autoFocus={appliedUiSchemaOptions.focus}
-            onFocus={this.onFocus}
-            onBlur={this.onBlur}
-            cancelLabel={appliedUiSchemaOptions.cancelLabel}
-            clearLabel={appliedUiSchemaOptions.clearLabel}
-            okLabel={appliedUiSchemaOptions.okLabel}
-            leftArrowIcon={<KeyboardArrowLeftIcon />}
-            rightArrowIcon={<KeyboardArrowRightIcon />}
-            keyboardIcon={<EventIcon />}
-            invalidDateMessage={null}
-            maxDateMessage={null}
-            minDateMessage={null}
-          />
-          <FormHelperText error={!isValid && !showDescription}>
-            {firstFormHelperText}
-          </FormHelperText>
-          <FormHelperText error={!isValid}>
-            {secondFormHelperText}
-          </FormHelperText>
-        </MuiPickersUtilsProvider>
-      </Hidden>
-    );
-  }
-}
+  return (
+    <Hidden xsUp={!visible}>
+      <MuiPickersUtilsProvider utils={DayJsUtils}>
+        <KeyboardDatePicker
+          id={id + '-input'}
+          required={required && !appliedUiSchemaOptions.hideRequiredAsterisk}
+          label={label}
+          error={!isValid}
+          fullWidth={!appliedUiSchemaOptions.trim}
+          InputLabelProps={data ? { shrink: true } : undefined}
+          value={getData(data, saveFormat)}
+          clearable
+          onChange={onChange}
+          format={format}
+          views={appliedUiSchemaOptions.views}
+          disabled={!enabled}
+          autoFocus={appliedUiSchemaOptions.focus}
+          onFocus={onFocus}
+          onBlur={onBlur}
+          cancelLabel={appliedUiSchemaOptions.cancelLabel}
+          clearLabel={appliedUiSchemaOptions.clearLabel}
+          okLabel={appliedUiSchemaOptions.okLabel}
+          leftArrowIcon={<KeyboardArrowLeftIcon />}
+          rightArrowIcon={<KeyboardArrowRightIcon />}
+          keyboardIcon={<EventIcon />}
+          invalidDateMessage={null}
+          maxDateMessage={null}
+          minDateMessage={null}
+        />
+        <FormHelperText error={!isValid && !showDescription}>
+          {firstFormHelperText}
+        </FormHelperText>
+        <FormHelperText error={!isValid}>
+          {secondFormHelperText}
+        </FormHelperText>
+      </MuiPickersUtilsProvider>
+    </Hidden>
+  );
+};
 
 export const materialDateControlTester: RankedTester = rankWith(
   4,

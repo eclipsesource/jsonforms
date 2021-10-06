@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import range from 'lodash/range';
-import React from 'react';
+import React, {useState, useCallback} from 'react';
 import {
   ArrayLayoutProps,
   composePaths,
@@ -35,87 +35,78 @@ import { ArrayLayoutToolbar } from './ArrayToolbar';
 import ExpandPanelRenderer from './ExpandPanelRenderer';
 import merge from 'lodash/merge';
 
-interface MaterialArrayLayoutState {
-  expanded: string | boolean;
-}
-export class MaterialArrayLayout extends React.PureComponent<
-  ArrayLayoutProps,
-  MaterialArrayLayoutState
-> {
-  state: MaterialArrayLayoutState = {
-    expanded: null
-  };
-  innerCreateDefaultValue = () => createDefaultValue(this.props.schema);
-  handleChange = (panel: string) => (_event: any, expanded: boolean) => {
-    this.setState({
-      expanded: expanded ? panel : false
-    });
-  };
-  isExpanded = (index: number) =>
-    this.state.expanded === composePaths(this.props.path, `${index}`);
-  render() {
-    const {
-      data,
-      path,
-      schema,
-      uischema,
-      errors,
-      addItem,
-      renderers,
-      cells,
-      label,
-      required,
-      rootSchema,
-      config,
-      uischemas
-    } = this.props;
-    const appliedUiSchemaOptions = merge(
-      {},
-      config,
-      this.props.uischema.options
-    );
+const MaterialArrayLayoutComponent = (props: ArrayLayoutProps)=> {
+  const [expanded, setExpanded] = useState<string|boolean>(false);
+  const innerCreateDefaultValue = useCallback(() => createDefaultValue(props.schema), [props.schema]);
+  const handleChange = useCallback((panel: string) => (_event: any, expandedPanel: boolean) => {
+    setExpanded(expandedPanel ? panel : false)
+  }, []);
+  const isExpanded = (index: number) => 
+    expanded === composePaths(props.path, `${index}`);
+  
+  const {
+    data,
+    path,
+    schema,
+    uischema,
+    errors,
+    addItem,
+    renderers,
+    cells,
+    label,
+    required,
+    rootSchema,
+    config,
+    uischemas
+  } = props;
+  const appliedUiSchemaOptions = merge(
+    {},
+    config,
+    props.uischema.options
+  );
 
-    return (
+  return (
+    <div>
+      <ArrayLayoutToolbar
+        label={computeLabel(
+          label,
+          required,
+          appliedUiSchemaOptions.hideRequiredAsterisk
+        )}
+        errors={errors}
+        path={path}
+        addItem={addItem}
+        createDefault={innerCreateDefaultValue}
+      />
       <div>
-        <ArrayLayoutToolbar
-          label={computeLabel(
-            label,
-            required,
-            appliedUiSchemaOptions.hideRequiredAsterisk
-          )}
-          errors={errors}
-          path={path}
-          addItem={addItem}
-          createDefault={this.innerCreateDefaultValue}
-        />
-        <div>
-          {data > 0 ? (
-            map(range(data), index => {
-              return (
-                <ExpandPanelRenderer
-                  index={index}
-                  expanded={this.isExpanded(index)}
-                  schema={schema}
-                  path={path}
-                  handleExpansion={this.handleChange}
-                  uischema={uischema}
-                  renderers={renderers}
-                  cells={cells}
-                  key={index}
-                  rootSchema={rootSchema}
-                  enableMoveUp={index != 0}
-                  enableMoveDown={index < data - 1}
-                  config={config}
-                  childLabelProp={appliedUiSchemaOptions.elementLabelProp}
-                  uischemas={uischemas}
-                />
-              );
-            })
-          ) : (
-            <p>No data</p>
-          )}
-        </div>
+        {data > 0 ? (
+          map(range(data), index => {
+            return (
+              <ExpandPanelRenderer
+                index={index}
+                expanded={isExpanded(index)}
+                schema={schema}
+                path={path}
+                handleExpansion={handleChange}
+                uischema={uischema}
+                renderers={renderers}
+                cells={cells}
+                key={index}
+                rootSchema={rootSchema}
+                enableMoveUp={index != 0}
+                enableMoveDown={index < data - 1}
+                config={config}
+                childLabelProp={appliedUiSchemaOptions.elementLabelProp}
+                uischemas={uischemas}
+              />
+            );
+          })
+        ) : (
+          <p>No data</p>
+        )}
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
+
+export const MaterialArrayLayout = React.memo(MaterialArrayLayoutComponent);

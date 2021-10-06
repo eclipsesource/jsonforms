@@ -31,7 +31,7 @@ import {
 } from '@jsonforms/react';
 import startCase from 'lodash/startCase';
 import range from 'lodash/range';
-import React, { Fragment } from 'react';
+import React, { Fragment, useMemo } from 'react';
 import {
   FormHelperText,
   Grid,
@@ -195,20 +195,19 @@ const controlWithoutLabel = (scope: string): ControlElement => ({
   label: false
 });
 
-const NonEmptyCell = (ownProps: OwnPropsOfNonEmptyCell) => {
-  const ctx = useJsonForms();
-  const {
-    path,
-    propName,
-    schema,
-    rootSchema,
-    errors,
-    enabled,
-    renderers,
-    cells
-  } = ctxToNonEmptyCellProps(ctx, ownProps);
+interface NonEmptyCellComponentProps {
+  path: string,
+  propName?: string,
+  schema: JsonSchema,
+  rootSchema: JsonSchema,
+  errors: string,
+  enabled: boolean,
+  renderers?: JsonFormsRendererRegistryEntry[],
+  cells?: JsonFormsCellRendererRegistryEntry[],
+  isValid: boolean
+}
+const NonEmptyCellComponent = React.memo(({path, propName, schema,rootSchema, errors, enabled, renderers, cells, isValid}:NonEmptyCellComponentProps) => {
 
-  const isValid = isEmpty(errors);
   return (
     <NoBorderTableCell>
       {schema.properties ? (
@@ -237,35 +236,47 @@ const NonEmptyCell = (ownProps: OwnPropsOfNonEmptyCell) => {
       <FormHelperText error={!isValid}>{!isValid && errors}</FormHelperText>
     </NoBorderTableCell>
   );
+});
+
+const NonEmptyCell = (ownProps: OwnPropsOfNonEmptyCell) => {
+  const ctx = useJsonForms();
+  const emptyCellProps = ctxToNonEmptyCellProps(ctx, ownProps);
+
+  const isValid = isEmpty(emptyCellProps.errors);
+  return <NonEmptyCellComponent {...emptyCellProps} isValid={isValid}/>
 };
 
 interface NonEmptyRowProps {
   childPath: string;
   schema: JsonSchema;
   rowIndex: number;
-  moveUp: () => void;
-  moveDown: () => void;
+  moveUpCreator: (path:string, position: number)=> ()=> void;
+  moveDownCreator: (path:string, position: number)=> ()=> void;
   enableUp: boolean;
   enableDown: boolean;
   showSortButtons: boolean;
   enabled: boolean;
   cells?: JsonFormsCellRendererRegistryEntry[];
+  path: string;
 }
 
-const NonEmptyRow = React.memo(
+const NonEmptyRowComponent = 
   ({
     childPath,
     schema,
     rowIndex,
     openDeleteDialog,
-    moveUp,
-    moveDown,
+    moveUpCreator,
+    moveDownCreator,
     enableUp,
     enableDown,
     showSortButtons,
     enabled,
-    cells
+    cells,
+    path
   }: NonEmptyRowProps & WithDeleteDialogSupport) => {
+    const moveUp = useMemo(() => moveUpCreator(path, rowIndex),[moveUpCreator, path, rowIndex]);
+    const moveDown = useMemo(() => moveDownCreator(path, rowIndex),[moveDownCreator, path, rowIndex]);
     return (
       <TableRow key={childPath} hover>
         {generateCells(NonEmptyCell, schema, childPath, enabled, cells)}
@@ -314,8 +325,8 @@ const NonEmptyRow = React.memo(
         ) : null}
       </TableRow>
     );
-  }
-);
+  };
+export const NonEmptyRow = React.memo(NonEmptyRowComponent);
 interface TableRowsProp {
   data: number;
   path: string;
@@ -359,13 +370,14 @@ const TableRows = ({
             rowIndex={index}
             schema={schema}
             openDeleteDialog={openDeleteDialog}
-            moveUp={moveUp(path, index)}
-            moveDown={moveDown(path, index)}
+            moveUpCreator={moveUp}
+            moveDownCreator={moveDown}
             enableUp={index !== 0}
             enableDown={index !== data - 1}
             showSortButtons={appliedUiSchemaOptions.showSortButtons}
             enabled={enabled}
             cells={cells}
+            path={path}
           />
         );
       })}

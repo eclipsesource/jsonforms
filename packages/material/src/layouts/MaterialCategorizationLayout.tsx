@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React from 'react';
+import React, {useState} from 'react';
 import { Hidden, Tab, Tabs } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import {
@@ -37,7 +37,7 @@ import {
   UISchemaElement,
   uiTypeIs
 } from '@jsonforms/core';
-import { RendererComponent, withJsonFormsLayoutProps } from '@jsonforms/react';
+import { withJsonFormsLayoutProps } from '@jsonforms/react';
 import {
   AjvProps,
   MaterialLayoutRenderer,
@@ -76,71 +76,55 @@ export interface MaterialCategorizationLayoutRendererProps
   onChange?(selected: number, prevSelected: number): void;
 }
 
-export class MaterialCategorizationLayoutRenderer extends RendererComponent<
-  MaterialCategorizationLayoutRendererProps,
-  CategorizationState
-> {
-  state = {
-    activeCategory: 0
+export const MaterialCategorizationLayoutRenderer = (props: MaterialCategorizationLayoutRendererProps) => {
+  const {
+    data,
+    path,
+    renderers,
+    cells,
+    schema,
+    uischema,
+    visible,
+    enabled,
+    selected,
+    onChange,
+    ajv
+  } = props;
+  const categorization = uischema as Categorization;
+  const [activeCategory, setActiveCategory]= useState<number|undefined>(selected??0);
+  const childProps: MaterialLayoutRendererProps = {
+    elements: categorization.elements[activeCategory].elements,
+    schema,
+    path,
+    direction: 'column',
+    enabled,
+    visible,
+    renderers,
+    cells
   };
-
-  render() {
-    const {
-      data,
-      path,
-      renderers,
-      cells,
-      schema,
-      uischema,
-      visible,
-      enabled,
-      selected,
-      ajv
-    } = this.props;
-    const categorization = uischema as Categorization;
-    const value = this.hasOwnState() ? this.state.activeCategory : selected;
-    const childProps: MaterialLayoutRendererProps = {
-      elements: categorization.elements[value].elements,
-      schema,
-      path,
-      direction: 'column',
-      enabled,
-      visible,
-      renderers,
-      cells
-    };
-    const categories = categorization.elements.filter((category: Category) =>
-      isVisible(category, data, undefined, ajv)
-    );
-    return (
-      <Hidden xsUp={!visible}>
-        <AppBar position='static'>
-          <Tabs value={value} onChange={this.handleChange} variant='scrollable'>
-            {categories.map((e: Category, idx: number) => (
-              <Tab key={idx} label={e.label} />
-            ))}
-          </Tabs>
-        </AppBar>
-        <div style={{ marginTop: '0.5em' }}>
-          <MaterialLayoutRenderer {...childProps} />
-        </div>
-      </Hidden>
-    );
-  }
-
-  hasOwnState = () => {
-    return this.props.ownState !== undefined ? this.props.ownState : true;
-  };
-
-  private handleChange = (_event: any, value: any) => {
-    if (this.props.onChange) {
-      this.props.onChange(value, this.state.activeCategory);
+  const categories = categorization.elements.filter((category: Category) =>
+    isVisible(category, data, undefined, ajv)
+  );
+  const onTabChange = (_event: any, value: any) => {
+    if (onChange) {
+      onChange(value, activeCategory);
     }
-    const hasOwnState = this.hasOwnState();
-    if (hasOwnState) {
-      this.setState({ activeCategory: value });
-    }
+    setActiveCategory(value);
   };
-}
+  return (
+    <Hidden xsUp={!visible}>
+      <AppBar position='static'>
+        <Tabs value={activeCategory} onChange={onTabChange} variant='scrollable'>
+          {categories.map((e: Category, idx: number) => (
+            <Tab key={idx} label={e.label} />
+          ))}
+        </Tabs>
+      </AppBar>
+      <div style={{ marginTop: '0.5em' }}>
+        <MaterialLayoutRenderer {...childProps} />
+      </div>
+    </Hidden>
+  );
+};
 
 export default withJsonFormsLayoutProps(withAjvProps(MaterialCategorizationLayoutRenderer));

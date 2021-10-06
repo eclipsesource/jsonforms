@@ -2,6 +2,13 @@
 
 ## Migrating to JSON Forms 3.0 for React users
 
+### Removal of Class Components in React Material
+
+With Version 3.0 of JSON Forms we removed all React Material class components.
+Please check whether you extended any of our base renderers in your adaptation.
+
+### Removal of JSON Schema $Ref Parser
+
 With version 3.0 of JSON Forms, we removed the `json-schema-ref-parser` dependency within the core package.
 This change only affects users of the React variant, Vue and Angular users are not affected.
 

@@ -37,7 +37,7 @@ import { JsonFormsDispatch, withJsonFormsAnyOfProps } from '@jsonforms/react';
 import { Hidden, Tab, Tabs } from '@material-ui/core';
 import CombinatorProperties from './CombinatorProperties';
 
-const MaterialAnyOfRenderer = ({
+export const MaterialAnyOfRenderer = ({
   schema,
   rootSchema,
   indexOfFittingSchema,
@@ -97,4 +97,5 @@ export const materialAnyOfControlTester: RankedTester = rankWith(
   3,
   isAnyOfControl
 );
+
 export default withJsonFormsAnyOfProps(MaterialAnyOfRenderer);

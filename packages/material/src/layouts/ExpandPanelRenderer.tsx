@@ -1,8 +1,7 @@
 import merge from 'lodash/merge';
 import get from 'lodash/get';
-import React, { ComponentType, Dispatch, Fragment, ReducerAction, useMemo, useState, useEffect } from 'react';
+import React, { ComponentType, Dispatch, Fragment, ReducerAction, useMemo, useState, useEffect, useCallback } from 'react';
 import {
-  areEqual,
   JsonFormsDispatch,
   JsonFormsStateContext,
   withJsonFormsContext
@@ -73,7 +72,7 @@ export interface ExpandPanelProps
   extends StatePropsOfExpandPanel,
     DispatchPropsOfExpandPanel {}
 
-const ExpandPanelRenderer = (props: ExpandPanelProps) => {
+const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
   const [labelHtmlId] = useState<string>(createId('expand-panel'));
 
   useEffect(() => {
@@ -201,6 +200,8 @@ const ExpandPanelRenderer = (props: ExpandPanelProps) => {
   );
 };
 
+const ExpandPanelRenderer = React.memo(ExpandPanelRendererComponent);
+
 /**
  * Maps state to dispatch properties of an expand pandel control.
  *
@@ -210,7 +211,7 @@ const ExpandPanelRenderer = (props: ExpandPanelProps) => {
 export const ctxDispatchToExpandPanelProps: (
   dispatch: Dispatch<ReducerAction<any>>
 ) => DispatchPropsOfExpandPanel = dispatch => ({
-  removeItems: (path: string, toDelete: number[]) => (event: any): void => {
+  removeItems: useCallback((path: string, toDelete: number[]) => (event: any): void => {
     event.stopPropagation();
     dispatch(
       update(path, array => {
@@ -221,8 +222,8 @@ export const ctxDispatchToExpandPanelProps: (
         return array;
       })
     );
-  },
-  moveUp: (path: string, toMove: number) => (event: any): void => {
+  }, [dispatch]),
+  moveUp: useCallback((path: string, toMove: number) => (event: any): void => {
     event.stopPropagation();
     dispatch(
       update(path, array => {
@@ -230,8 +231,8 @@ export const ctxDispatchToExpandPanelProps: (
         return array;
       })
     );
-  },
-  moveDown: (path: string, toMove: number) => (event: any): void => {
+  }, [dispatch]),
+  moveDown: useCallback((path: string, toMove: number) => (event: any): void => {
     event.stopPropagation();
     dispatch(
       update(path, array => {
@@ -239,7 +240,7 @@ export const ctxDispatchToExpandPanelProps: (
         return array;
       })
     );
-  }
+  }, [dispatch])
 });
 
 /**
@@ -277,13 +278,6 @@ export const withJsonFormsExpandPanelProps = (
   Component: ComponentType<ExpandPanelProps>
 ): ComponentType<OwnPropsOfExpandPanel> =>
   withJsonFormsContext(
-    withContextToExpandPanelProps(
-      React.memo(
-        Component,
-        (prevProps: ExpandPanelProps, nextProps: ExpandPanelProps) =>
-          areEqual(prevProps, nextProps)
-      )
-    )
-  );
+    withContextToExpandPanelProps(Component));
 
 export default withJsonFormsExpandPanelProps(ExpandPanelRenderer);
