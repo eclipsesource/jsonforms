@@ -25,7 +25,6 @@
 import React from 'react';
 import { CellProps, WithClassname } from '@jsonforms/core';
 import Checkbox from '@material-ui/core/Checkbox';
-import { areEqual } from '@jsonforms/react';
 import merge from 'lodash/merge';
 
 export const MuiCheckbox = React.memo((props: CellProps & WithClassname) => {
@@ -54,4 +53,4 @@ export const MuiCheckbox = React.memo((props: CellProps & WithClassname) => {
       inputProps={inputProps}
     />
   );
-}, areEqual);
+});

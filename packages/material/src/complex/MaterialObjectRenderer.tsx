@@ -35,7 +35,7 @@ import { JsonFormsDispatch, withJsonFormsDetailProps } from '@jsonforms/react';
 import { Hidden } from '@material-ui/core';
 import React, { useMemo } from 'react';
 
-const MaterialObjectRenderer = ({
+export const MaterialObjectRenderer = ({
   renderers,
   cells,
   uischemas,
@@ -84,4 +84,5 @@ export const materialObjectControlTester: RankedTester = rankWith(
   2,
   isObjectControl
 );
+
 export default withJsonFormsDetailProps(MaterialObjectRenderer);

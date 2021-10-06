@@ -35,6 +35,7 @@ export const MaterialEnumArrayRenderer = ({
   data,
   addItem,
   removeItem,
+  handleChange,
   ...otherProps
 }: ControlProps & OwnPropsOfEnum & DispatchPropsOfMultiEnumControl) => {
   return (

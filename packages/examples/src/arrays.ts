@@ -46,13 +46,18 @@ export const schema = {
           }
         }
       }
-    }
+    },
+    foo:{type:'string'}
   }
 };
 
 export const uischema = {
   type: 'VerticalLayout',
   elements: [
+    {
+      type: 'Control',
+      scope: '#/properties/foo'
+    },
     {
       type: 'Control',
       scope: '#/properties/comments'

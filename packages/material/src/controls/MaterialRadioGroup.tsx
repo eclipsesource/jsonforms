@@ -26,12 +26,10 @@ import merge from 'lodash/merge';
 import React from 'react';
 import {
   ControlProps,
-  ControlState,
   showAsRequired,
   isDescriptionHidden,
   OwnPropsOfEnum
 } from '@jsonforms/core';
-import { Control } from '@jsonforms/react';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import {
@@ -41,71 +39,73 @@ import {
   FormLabel,
   Hidden
 } from '@material-ui/core';
+import { useFocus } from '../util';
 
-export class MaterialRadioGroup extends Control<
-  ControlProps & OwnPropsOfEnum,
-  ControlState
-> {
-  render() {
-    const {
-      config,
-      id,
-      label,
-      required,
-      description,
-      errors,
-      data,
-      visible,
-      options
-    } = this.props;
-    const isValid = errors.length === 0;
-    const appliedUiSchemaOptions = merge(
-      {},
-      config,
-      this.props.uischema.options
-    );
-    const showDescription = !isDescriptionHidden(
-      visible,
-      description,
-      this.state.isFocused,
-      appliedUiSchemaOptions.showUnfocusedDescription
-    );
+export const MaterialRadioGroup = (props: ControlProps & OwnPropsOfEnum) => {
+  const [focused, onFocus, onBlur] = useFocus();
+  const {
+    config,
+    id,
+    label,
+    required,
+    description,
+    errors,
+    data,
+    visible,
+    options,
+    handleChange,
+    path
+  } = props;
+  const isValid = errors.length === 0;
+  const appliedUiSchemaOptions = merge(
+    {},
+    config,
+    props.uischema.options
+  );
+  const showDescription = !isDescriptionHidden(
+    visible,
+    description,
+    focused,
+    appliedUiSchemaOptions.showUnfocusedDescription
+  );
+  const onChange = (_ev:any, value:any) => handleChange(path, value);
 
-    return (
-      <Hidden xsUp={!visible}>
-        <FormControl
-          component={'fieldset' as 'div'}
-          fullWidth={!appliedUiSchemaOptions.trim}
+  return (
+    <Hidden xsUp={!visible}>
+      <FormControl
+        component={'fieldset' as 'div'}
+        fullWidth={!appliedUiSchemaOptions.trim}
+        onFocus={onFocus}
+        onBlur={onBlur}
+      >
+        <FormLabel
+          htmlFor={id}
+          error={!isValid}
+          component={'legend' as 'label'}
+          required={showAsRequired(required,
+            appliedUiSchemaOptions.hideRequiredAsterisk)}
         >
-          <FormLabel
-            htmlFor={id}
-            error={!isValid}
-            component={'legend' as 'label'}
-            required={showAsRequired(required,
-              appliedUiSchemaOptions.hideRequiredAsterisk)}
-          >
-            {label}
-          </FormLabel>
+          {label}
+        </FormLabel>
 
-          <RadioGroup
-            value={this.state.value}
-            onChange={(_ev, value) => this.handleChange(value)}
-            row={true}
-          >
-            {options.map(option => (
-              <FormControlLabel
-                value={option.value}
-                key={option.label}
-                control={<Radio checked={data === option.value} />}
-                label={option.label}
-              />
-            ))}
-          </RadioGroup>
-          <FormHelperText error={!isValid}>
-            {!isValid ? errors : showDescription ? description : null}
-          </FormHelperText>
-        </FormControl>
-      </Hidden>
-    );
-  }
-}
+        <RadioGroup
+          value={props.data}
+          onChange={onChange}
+          row={true}
+        >
+          {options.map(option => (
+            <FormControlLabel
+              value={option.value}
+              key={option.label}
+              control={<Radio checked={data === option.value} />}
+              label={option.label}
+            />
+          ))}
+        </RadioGroup>
+        <FormHelperText error={!isValid}>
+          {!isValid ? errors : showDescription ? description : null}
+        </FormHelperText>
+      </FormControl>
+    </Hidden>
+  );
+};

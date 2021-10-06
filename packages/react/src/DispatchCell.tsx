@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import maxBy from 'lodash/maxBy';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { UnknownRenderer } from './UnknownRenderer';
 import { DispatchCellProps } from '@jsonforms/core';
 import { withJsonFormsDispatchCellProps } from './JsonFormsContext';
@@ -31,37 +31,24 @@ import { withJsonFormsDispatchCellProps } from './JsonFormsContext';
 /**
  * Dispatch renderer component for cells.
  */
-class Dispatch extends React.Component<DispatchCellProps, any> {
-  render() {
-    const {
-      uischema,
-      schema,
-      path,
-      cells,
-      id,
-      enabled,
-      renderers
-    } = this.props;
-    const cell = maxBy(cells, r => r.tester(uischema, schema));
-    if (cell === undefined || cell.tester(uischema, schema) === -1) {
-      return <UnknownRenderer type={'cell'} />;
-    } else {
-      const Cell = cell.cell;
-      return (
-        <React.Fragment>
-          <Cell
-            uischema={uischema}
-            schema={schema}
-            enabled={enabled}
-            path={path}
-            id={id}
-            renderers={renderers}
-            cells={cells}
-          />
-        </React.Fragment>
-      );
-    }
+export const Dispatch = ({uischema, schema, path, cells, id, enabled, renderers}:DispatchCellProps) => {
+  const cell = useMemo(() => maxBy(cells, r => r.tester(uischema, schema)), [cells, uischema, schema]);
+  if (cell === undefined || cell.tester(uischema, schema) === -1) {
+    return <UnknownRenderer type={'cell'} />;
+  } else {
+    const Cell = cell.cell;
+    return (
+        <Cell
+          uischema={uischema}
+          schema={schema}
+          enabled={enabled}
+          path={path}
+          id={id}
+          renderers={renderers}
+          cells={cells}
+        />
+    );
   }
-}
+};
 
 export const DispatchCell = withJsonFormsDispatchCellProps(Dispatch);

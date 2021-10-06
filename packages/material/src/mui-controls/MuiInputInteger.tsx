@@ -25,7 +25,6 @@
 import React from 'react';
 import { CellProps, WithClassname } from '@jsonforms/core';
 import Input from '@material-ui/core/Input';
-import { areEqual } from '@jsonforms/react';
 import merge from 'lodash/merge';
 import { useDebouncedChange } from '../util';
 
@@ -33,7 +32,7 @@ const toNumber = (value: string) =>
       value === '' ? undefined : parseInt(value, 10);
 const eventToValue = (ev:any) => toNumber(ev.target.value);
 
-export const MuiInputInteger = React.memo(
+export const MuiInputInteger = React.memo( 
   (props: CellProps & WithClassname) => {
     const {
       data,
@@ -64,6 +63,4 @@ export const MuiInputInteger = React.memo(
         fullWidth={true}
       />
     );
-  },
-  areEqual
-);
+  });

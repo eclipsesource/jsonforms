@@ -25,7 +25,6 @@
 import React from 'react';
 import {
   ControlProps,
-  ControlState,
   showAsRequired,
   isDateControl,
   isDescriptionHidden,
@@ -35,63 +34,63 @@ import {
   rankWith
 } from '@jsonforms/core';
 import { Hidden } from '@material-ui/core';
-import { Control, withJsonFormsControlProps } from '@jsonforms/react';
+import { withJsonFormsControlProps } from '@jsonforms/react';
 import TextField from '@material-ui/core/TextField';
 import merge from 'lodash/merge';
+import { useDebouncedChange, useFocus } from '../util';
 
-export class MaterialNativeControl extends Control<ControlProps, ControlState> {
-  render() {
-    const {
-      id,
-      errors,
-      label,
-      schema,
-      description,
-      enabled,
-      visible,
-      required,
-      path,
-      handleChange,
-      data,
-      config
-    } = this.props;
-    const isValid = errors.length === 0;
-    const appliedUiSchemaOptions = merge(
-      {},
-      config,
-      this.props.uischema.options
-    );
-    const onChange = (ev: any) => handleChange(path, ev.target.value);
-    const fieldType = appliedUiSchemaOptions.format ?? schema.format;
-    const showDescription = !isDescriptionHidden(
-      visible,
-      description,
-      this.state.isFocused,
-      appliedUiSchemaOptions.showUnfocusedDescription
-    );
+export const MaterialNativeControl = (props: ControlProps) => {
+  const [focused, onFocus, onBlur] = useFocus();
+  const {
+    id,
+    errors,
+    label,
+    schema,
+    description,
+    enabled,
+    visible,
+    required,
+    path,
+    handleChange,
+    data,
+    config
+  } = props;
+  const isValid = errors.length === 0;
+  const appliedUiSchemaOptions = merge(
+    {},
+    config,
+    props.uischema.options
+  );
+  const [inputValue, onChange] = useDebouncedChange(handleChange, '', data, path);
+  const fieldType = appliedUiSchemaOptions.format ?? schema.format;
+  const showDescription = !isDescriptionHidden(
+    visible,
+    description,
+    focused,
+    appliedUiSchemaOptions.showUnfocusedDescription
+  );
 
-    return (
-      <Hidden xsUp={!visible}>
-        <TextField
-          required={showAsRequired(required,
-            appliedUiSchemaOptions.hideRequiredAsterisk)}
-          id={id + '-input'}
-          label={label}
-          type={fieldType}
-          error={!isValid}
-          disabled={!enabled}
-          fullWidth={!appliedUiSchemaOptions.trim}
-          onFocus={this.onFocus}
-          onBlur={this.onBlur}
-          helperText={!isValid ? errors : showDescription ? description : null}
-          InputLabelProps={{ shrink: true }}
-          value={data}
-          onChange={onChange}
-        />
-      </Hidden>
-    );
-  }
-}
+  return (
+    <Hidden xsUp={!visible}>
+      <TextField
+        required={showAsRequired(required,
+          appliedUiSchemaOptions.hideRequiredAsterisk)}
+        id={id + '-input'}
+        label={label}
+        type={fieldType}
+        error={!isValid}
+        disabled={!enabled}
+        fullWidth={!appliedUiSchemaOptions.trim}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        helperText={!isValid ? errors : showDescription ? description : null}
+        InputLabelProps={{ shrink: true }}
+        value={inputValue}
+        onChange={onChange}
+      />
+    </Hidden>
+  );
+};
 
 export const materialNativeControlTester: RankedTester = rankWith(
   2,

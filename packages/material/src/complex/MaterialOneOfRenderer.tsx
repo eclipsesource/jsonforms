@@ -26,7 +26,7 @@ import React, { useCallback, useState } from 'react';
 import isEmpty from 'lodash/isEmpty';
 
 import {
-  CombinatorProps,
+  CombinatorRendererProps,
   createCombinatorRenderInfos,
   createDefaultValue,
   isOneOfControl,
@@ -57,9 +57,8 @@ export interface OwnOneOfProps extends OwnPropsOfControl {
   indexOfFittingSchema?: number;
 }
 
-const oneOf = 'oneOf';
-const MaterialOneOfRenderer =
-  ({ handleChange, schema, path, renderers, cells, rootSchema, id, visible, indexOfFittingSchema, uischema, uischemas, data }: CombinatorProps) => {
+export const MaterialOneOfRenderer =
+  ({ handleChange, schema, path, renderers, cells, rootSchema, id, visible, indexOfFittingSchema, uischema, uischemas, data }: CombinatorRendererProps) => {
     const [open, setOpen] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(indexOfFittingSchema || 0);
     const [newSelectedIndex, setNewSelectedIndex] = useState(0);
@@ -67,11 +66,11 @@ const MaterialOneOfRenderer =
     const cancel = useCallback(() => {
       setOpen(false);
     }, [setOpen]);
-    const _schema = resolveSubSchemas(schema, rootSchema, oneOf);
+    const _schema = resolveSubSchemas(schema, rootSchema, 'oneOf');
     const oneOfRenderInfos = createCombinatorRenderInfos(
       (_schema as JsonSchema).oneOf,
       rootSchema,
-      oneOf,
+      'oneOf',
       uischema,
       path,
       uischemas
@@ -150,4 +149,5 @@ const MaterialOneOfRenderer =
   };
 
 export const materialOneOfControlTester: RankedTester = rankWith(3, isOneOfControl);
+
 export default withJsonFormsOneOfProps(MaterialOneOfRenderer);

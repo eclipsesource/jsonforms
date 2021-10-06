@@ -1002,8 +1002,6 @@ export const mapStateToArrayLayoutProps = (
   };
 };
 
-export type CombinatorProps = StatePropsOfCombinator & DispatchPropsOfControl;
-
 /**
  * Props of an array control.
  */

@@ -22,106 +22,103 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React from 'react';
+import React, { useMemo } from 'react';
 import merge from 'lodash/merge';
 import {
   ControlProps,
-  ControlState,
   isTimeControl,
   isDescriptionHidden,
   RankedTester,
   rankWith
 } from '@jsonforms/core';
-import { Control, withJsonFormsControlProps } from '@jsonforms/react';
+import { withJsonFormsControlProps } from '@jsonforms/react';
 import { FormHelperText, Hidden } from '@material-ui/core';
 import {
   KeyboardTimePicker,
   MuiPickersUtilsProvider
 } from '@material-ui/pickers';
 import DayjsUtils from '@date-io/dayjs';
-import { createOnChangeHandler, getData } from '../util';
+import { createOnChangeHandler, getData, useFocus } from '../util';
 
-export class MaterialTimeControl extends Control<
-  ControlProps,
-  ControlState
-> {
-  render() {
+export const MaterialTimeControl = (props: ControlProps) => {
+  const [focused, onFocus, onBlur] = useFocus();
     const {
-      id,
-      description,
-      errors,
-      label,
-      uischema,
-      visible,
-      enabled,
-      required,
-      path,
-      handleChange,
-      data,
-      config
-    } = this.props;
-    const appliedUiSchemaOptions = merge({}, config, uischema.options);
-    const isValid = errors.length === 0;
+    id,
+    description,
+    errors,
+    label,
+    uischema,
+    visible,
+    enabled,
+    required,
+    path,
+    handleChange,
+    data,
+    config
+  } = props;
+  const appliedUiSchemaOptions = merge({}, config, uischema.options);
+  const isValid = errors.length === 0;
 
-    const showDescription = !isDescriptionHidden(
-      visible,
-      description,
-      this.state.isFocused,
-      appliedUiSchemaOptions.showUnfocusedDescription
-    );
+  const showDescription = !isDescriptionHidden(
+    visible,
+    description,
+    focused,
+    appliedUiSchemaOptions.showUnfocusedDescription
+  );
 
-    const format = appliedUiSchemaOptions.timeFormat ?? 'HH:mm';
+  const format = appliedUiSchemaOptions.timeFormat ?? 'HH:mm';
     const saveFormat = appliedUiSchemaOptions.timeSaveFormat ?? 'HH:mm:ss';
 
-    const firstFormHelperText = showDescription
-      ? description
-      : !isValid
-      ? errors
-      : null;
-    const secondFormHelperText = showDescription && !isValid ? errors : null;
+  const firstFormHelperText = showDescription
+    ? description
+    : !isValid
+    ? errors
+    : null;
+  const secondFormHelperText = showDescription && !isValid ? errors : null;
 
-    return (
-      <Hidden xsUp={!visible}>
-        <MuiPickersUtilsProvider utils={DayjsUtils}>
-          <KeyboardTimePicker
-            id={id + '-input'}
-            required={required && !appliedUiSchemaOptions.hideRequiredAsterisk}
-            label={label}
-            error={!isValid}
-            fullWidth={!appliedUiSchemaOptions.trim}
-            onFocus={this.onFocus}
-            onBlur={this.onBlur}
-            InputLabelProps={data ? { shrink: true } : undefined}
-            value={getData(data, saveFormat)}
-            clearable
-            onChange={createOnChangeHandler(
-              path,
-              handleChange,
-              saveFormat
-            )}
-            format={format}
-            ampm={!!appliedUiSchemaOptions.ampm}
-            views={appliedUiSchemaOptions.views}
-            disabled={!enabled}
-            autoFocus={appliedUiSchemaOptions.focus}
-            cancelLabel={appliedUiSchemaOptions.cancelLabel}
-            clearLabel={appliedUiSchemaOptions.clearLabel}
-            okLabel={appliedUiSchemaOptions.okLabel}
-            invalidDateMessage={null}
-            maxDateMessage={null}
-            minDateMessage={null}
-          />
-          <FormHelperText error={!isValid && !showDescription}>
-            {firstFormHelperText}
-          </FormHelperText>
-          <FormHelperText error={!isValid}>
-            {secondFormHelperText}
-          </FormHelperText>
-        </MuiPickersUtilsProvider>
-      </Hidden>
-    );
-  }
-}
+  const onChange = useMemo(() => createOnChangeHandler(
+    path,
+    handleChange,
+    saveFormat
+  ),[path, handleChange, saveFormat]);
+
+  return (
+    <Hidden xsUp={!visible}>
+      <MuiPickersUtilsProvider utils={DayjsUtils}>
+        <KeyboardTimePicker
+          id={id + '-input'}
+          required={required && !appliedUiSchemaOptions.hideRequiredAsterisk}
+          label={label}
+          error={!isValid}
+          fullWidth={!appliedUiSchemaOptions.trim}
+          onFocus={onFocus}
+          onBlur={onBlur}
+          InputLabelProps={data ? { shrink: true } : undefined}
+          value={getData(data, saveFormat)}
+          clearable
+          onChange={onChange}
+          format={format}
+          ampm={!!appliedUiSchemaOptions.ampm}
+          views={appliedUiSchemaOptions.views}
+          disabled={!enabled}
+          autoFocus={appliedUiSchemaOptions.focus}
+          cancelLabel={appliedUiSchemaOptions.cancelLabel}
+          clearLabel={appliedUiSchemaOptions.clearLabel}
+          okLabel={appliedUiSchemaOptions.okLabel}
+          invalidDateMessage={null}
+          maxDateMessage={null}
+          minDateMessage={null}
+        />
+        <FormHelperText error={!isValid && !showDescription}>
+          {firstFormHelperText}
+        </FormHelperText>
+        <FormHelperText error={!isValid}>
+          {secondFormHelperText}
+        </FormHelperText>
+      </MuiPickersUtilsProvider>
+    </Hidden>
+  );
+};
 
 export const materialTimeControlTester: RankedTester = rankWith(
   4,
