@@ -38,7 +38,8 @@ import { Control, withJsonFormsControlProps } from '@jsonforms/react';
 import { Input } from '@material-ui/core';
 import { InputBaseComponentProps } from '@material-ui/core/InputBase';
 import merge from 'lodash/merge';
-import React from 'react';
+import React, { useMemo } from 'react';
+import { useDebouncedChange } from '../util';
 import { MaterialInputControl } from './MaterialInputControl';
 
 const findEnumSchema = (schemas: JsonSchema[]) =>
@@ -64,17 +65,20 @@ const MuiAutocompleteInputText = (props: EnumCellProps & WithClassname) => {
   const enumSchema = findEnumSchema(schema.anyOf);
   const stringSchema = findTextSchema(schema.anyOf);
   const maxLength = stringSchema.maxLength;
-  const appliedUiSchemaOptions = merge({}, config, uischema.options);
-  let inputProps: InputBaseComponentProps = {};
-  if (appliedUiSchemaOptions.restrict) {
-    inputProps = { maxLength: maxLength };
-  }
-  if (appliedUiSchemaOptions.trim && maxLength !== undefined) {
-    inputProps.size = maxLength;
-  }
-  const onChange = (ev: any) => handleChange(path, ev.target.value);
+  const appliedUiSchemaOptions = useMemo(() => merge({}, config, uischema.options),[config, uischema.options]);
+  const inputProps: InputBaseComponentProps = useMemo(() => {
+    let propMemo: InputBaseComponentProps = {};
+    if (appliedUiSchemaOptions.restrict) {
+      propMemo = { maxLength: maxLength };
+    }
+    if (appliedUiSchemaOptions.trim && maxLength !== undefined) {
+      propMemo.size = maxLength;
+    }
+    propMemo.list = props.id + 'datalist';
+    return propMemo;
+  },[appliedUiSchemaOptions,props.id]);
+  const [inputText, onChange] = useDebouncedChange(handleChange, '', data, path);
 
-  inputProps.list = props.id + 'datalist';
   const dataList = (
     <datalist id={props.id + 'datalist'}>
       {enumSchema.enum.map(optionValue => (
@@ -85,7 +89,7 @@ const MuiAutocompleteInputText = (props: EnumCellProps & WithClassname) => {
   return (
     <Input
       type='text'
-      value={data || ''}
+      value={inputText}
       onChange={onChange}
       className={className}
       id={id}

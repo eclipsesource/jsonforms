@@ -27,6 +27,7 @@ import { CellProps, WithClassname } from '@jsonforms/core';
 import Input from '@material-ui/core/Input';
 import { areEqual } from '@jsonforms/react';
 import merge from 'lodash/merge';
+import { useDebouncedChange } from '../util';
 
 export const MuiInputTime = React.memo((props: CellProps & WithClassname) => {
   const {
@@ -40,11 +41,13 @@ export const MuiInputTime = React.memo((props: CellProps & WithClassname) => {
     config
   } = props;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
+  const [inputValue, onChange] = useDebouncedChange(handleChange, '', data, path);
+
   return (
     <Input
       type='time'
-      value={data || ''}
-      onChange={ev => handleChange(path, ev.target.value)}
+      value={inputValue}
+      onChange={onChange}
       className={className}
       id={id}
       disabled={!enabled}
