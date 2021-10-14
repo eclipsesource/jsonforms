@@ -37,7 +37,13 @@ import { withVanillaControlProps } from '../util';
  */
 export const groupTester: RankedTester = rankWith(1, uiTypeIs('Group'));
 
-export const GroupLayoutRenderer: FunctionComponent<RendererProps & VanillaRendererProps> = (
+export const GroupLayoutRenderer = (props: RendererProps & VanillaRendererProps) => {
+  const {data, ...otherProps} = props;
+  // We don't hand over data to the layout renderer to avoid rerendering it with every data change
+  return <GroupLayoutRendererComponent {...otherProps}/>;
+}
+
+const GroupLayoutRendererComponent: FunctionComponent<RendererProps & VanillaRendererProps> = React.memo((
   {
     schema,
     uischema,
@@ -67,6 +73,6 @@ export const GroupLayoutRenderer: FunctionComponent<RendererProps & VanillaRende
       {renderChildren(group, schema, childClassNames, path)}
     </fieldset>
   );
-};
+});
 
 export default withVanillaControlProps(withJsonFormsLayoutProps(GroupLayoutRenderer));

@@ -85,7 +85,7 @@ describe('Vertical layout', () => {
         <VerticalLayoutRenderer uischema={uischema} />
       </JsonFormsStateProvider>
     );
-    const verticalLayout = wrapper.find(VerticalLayoutRenderer).getDOMNode();
+    const verticalLayout = wrapper.find('JsonFormsLayout').getDOMNode();
 
     expect(verticalLayout.tagName).toBe('DIV');
     expect(verticalLayout.children).toHaveLength(2);
@@ -106,7 +106,7 @@ describe('Vertical layout', () => {
         />
       </JsonFormsStateProvider>
     );
-    const verticalLayout = wrapper.find(VerticalLayoutRenderer).getDOMNode() as HTMLDivElement;
+    const verticalLayout = wrapper.find('JsonFormsLayout').getDOMNode() as HTMLDivElement;
     expect(verticalLayout.hidden).toBe(true);
   });
 
@@ -122,7 +122,7 @@ describe('Vertical layout', () => {
         <VerticalLayoutRenderer uischema={uischema} />
       </JsonFormsStateProvider>
     );
-    const verticalLayout = wrapper.find(VerticalLayoutRenderer).getDOMNode() as HTMLDivElement;
+    const verticalLayout = wrapper.find('JsonFormsLayout').getDOMNode() as HTMLDivElement;
     expect(verticalLayout.hidden).toBe(false);
   });
 });

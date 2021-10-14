@@ -42,7 +42,13 @@ import { VanillaRendererProps } from '../index';
  */
 export const verticalLayoutTester: RankedTester = rankWith(1, uiTypeIs('VerticalLayout'));
 
-export const VerticalLayoutRenderer: FunctionComponent<RendererProps & VanillaRendererProps> = (
+export const VerticalLayoutRenderer = (props: RendererProps & VanillaRendererProps) => {
+  const {data, ...otherProps} = props;
+  // We don't hand over data to the layout renderer to avoid rerendering it with every data change
+  return <VerticalLayoutRendererComponent {...otherProps}/>;
+}
+
+const VerticalLayoutRendererComponent: FunctionComponent<RendererProps & VanillaRendererProps> = React.memo((
   {
     schema,
     uischema,
@@ -74,6 +80,6 @@ export const VerticalLayoutRenderer: FunctionComponent<RendererProps & VanillaRe
       {renderChildren(verticalLayout, schema, childClassNames, path)}
     </JsonFormsLayout>
   );
-};
+});
 
-export default withVanillaControlProps(withJsonFormsLayoutProps(VerticalLayoutRenderer));
+export default withVanillaControlProps(withJsonFormsLayoutProps(VerticalLayoutRenderer, false));
