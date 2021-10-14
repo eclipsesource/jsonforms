@@ -39,7 +39,7 @@ import {
 import { useJsonForms } from '@jsonforms/react';
 import { getStyle, getStyleAsClassName } from '../reducers';
 import { VanillaRendererProps } from '../index';
-import { ComponentType } from 'react';
+import { ComponentType, useMemo } from 'react';
 import { findStyle, findStyleAsClassName } from '../reducers/styling';
 import { useStyles } from '../styles';
 
@@ -96,7 +96,7 @@ export const withVanillaControlProps = (Component: ComponentType<any>) => (props
   const controlElement = props.uischema as ControlElement;
   const config = ctx.config;
   const trim = config && config.trim;
-  const styles = findStyle(contextStyles)('control');
+  const styles = useMemo(() => findStyle(contextStyles)('control'), [contextStyles]);
   let classNames: string[] = !isEmpty(controlElement.scope)
     ? styles.concat([`${convertToValidClassName(controlElement.scope)}`])
     : [''];
@@ -105,24 +105,33 @@ export const withVanillaControlProps = (Component: ComponentType<any>) => (props
     classNames = classNames.concat(findStyle(contextStyles)('control.trim'));
   }
   const isValid = isEmpty(props.errors);
-  const labelClass = findStyleAsClassName(contextStyles)('control.label');
-  const descriptionClassName = findStyleAsClassName(contextStyles)('input.description');
-  const validationClassName = findStyleAsClassName(contextStyles)('control.validation');
-  const validationErrorClassName = findStyleAsClassName(contextStyles)('control.validation.error');
+  const labelClass = useMemo(() => findStyleAsClassName(contextStyles)('control.label'), [contextStyles]);
+  const descriptionClassName = useMemo(() => findStyleAsClassName(contextStyles)('input.description'), [contextStyles]);
+  const validationClassName = useMemo(() => findStyleAsClassName(contextStyles)('control.validation'), [contextStyles]);
+  const validationErrorClassName = useMemo(() => findStyleAsClassName(contextStyles)('control.validation.error'), [contextStyles]);
   const inputClassName = ['validate'].concat(isValid ? 'valid' : 'invalid');
+
+  const getStyleAsClassName = useMemo(() => findStyleAsClassName(contextStyles), [contextStyles]);
+  const getStyle = useMemo(() => findStyle(contextStyles), [contextStyles]);
+
+  const wrapper = classNames.join(' ');
+  const input = inputClassName.join(' ');
+
+  const classNamesProp = useMemo(() => ({
+    wrapper,
+    input,
+    label: labelClass,
+    description: descriptionClassName,
+    validation: validationClassName,
+    validationError: validationErrorClassName
+  }), [wrapper, input, labelClass, descriptionClassName, validationClassName, validationErrorClassName]);
+
   return (
     <Component
       {...props}
-      getStyleAsClassName={findStyleAsClassName(contextStyles)}
-      getStyle={findStyle(contextStyles)}
-      classNames={{
-        wrapper: classNames.join(' '),
-        input: inputClassName.join(' '),
-        label: labelClass,
-        description: descriptionClassName,
-        validation: validationClassName,
-        validationError: validationErrorClassName
-      }}
+      getStyleAsClassName={getStyleAsClassName}
+      getStyle={getStyle}
+      classNames={classNamesProp}
     />
   );
 }

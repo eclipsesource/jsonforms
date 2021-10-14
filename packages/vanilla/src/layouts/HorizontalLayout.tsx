@@ -42,7 +42,13 @@ import { VanillaRendererProps } from '../index';
  */
 export const horizontalLayoutTester: RankedTester = rankWith(1, uiTypeIs('HorizontalLayout'));
 
-const HorizontalLayoutRenderer: FunctionComponent<RendererProps & VanillaRendererProps> = (
+export const HorizontalLayoutRenderer = (props: RendererProps & VanillaRendererProps) => {
+  const {data, ...otherProps} = props;
+  // We don't hand over data to the layout renderer to avoid rerendering it with every data change
+  return <HorizontalLayoutRendererComponent {...otherProps}/>;
+}
+
+const HorizontalLayoutRendererComponent: FunctionComponent<RendererProps & VanillaRendererProps> = React.memo((
   {
     schema,
     uischema,
@@ -75,6 +81,6 @@ const HorizontalLayoutRenderer: FunctionComponent<RendererProps & VanillaRendere
       {renderChildren(horizontalLayout, schema, childClassNames, path)}
     </JsonFormsLayout>
   );
-};
+});
 
-export default withVanillaControlProps(withJsonFormsLayoutProps(HorizontalLayoutRenderer));
+export default withVanillaControlProps(withJsonFormsLayoutProps(HorizontalLayoutRenderer, false));

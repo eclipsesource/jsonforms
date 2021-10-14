@@ -68,7 +68,7 @@ describe('Horizontal layout', () => {
       </JsonFormsStateProvider>
     );
 
-    const horizontalLayout = wrapper.find(HorizontalLayoutRenderer).getDOMNode() as HTMLDivElement;
+    const horizontalLayout = wrapper.find('JsonFormsLayout').getDOMNode() as HTMLDivElement;
 
     expect(horizontalLayout).toBeDefined();
     expect(horizontalLayout.children).toHaveLength(0);
@@ -85,7 +85,7 @@ describe('Horizontal layout', () => {
         <HorizontalLayoutRenderer uischema={uischema} />
       </JsonFormsStateProvider>
     );
-    const horizontalLayout = wrapper.find(HorizontalLayoutRenderer).getDOMNode() as HTMLDivElement;
+    const horizontalLayout = wrapper.find('JsonFormsLayout').getDOMNode();
     expect(horizontalLayout).toBeDefined();
     expect(horizontalLayout.children).toHaveLength(0);
   });
@@ -104,7 +104,7 @@ describe('Horizontal layout', () => {
         <HorizontalLayoutRenderer uischema={uischema} />
       </JsonFormsStateProvider>
     );
-    const horizontalLayout = wrapper.find(HorizontalLayoutRenderer).getDOMNode() as HTMLDivElement;
+    const horizontalLayout = wrapper.find('JsonFormsLayout').getDOMNode() as HTMLDivElement;
     expect(horizontalLayout).toBeDefined();
     expect(horizontalLayout.children).toHaveLength(2);
   });
@@ -119,7 +119,7 @@ describe('Horizontal layout', () => {
         />
       </JsonFormsStateProvider>
     );
-    const horizontalLayout = wrapper.find(HorizontalLayoutRenderer).getDOMNode() as HTMLDivElement;
+    const horizontalLayout = wrapper.find('JsonFormsLayout').getDOMNode() as HTMLDivElement;
     expect(horizontalLayout.hidden).toBe(true);
   });
 
@@ -130,7 +130,7 @@ describe('Horizontal layout', () => {
         <HorizontalLayoutRenderer uischema={fixture.uischema} />
       </JsonFormsStateProvider>
     );
-    const horizontalLayout = wrapper.find(HorizontalLayoutRenderer).getDOMNode() as HTMLDivElement;
+    const horizontalLayout = wrapper.find('JsonFormsLayout').getDOMNode() as HTMLDivElement;
     expect(horizontalLayout.hidden).toBe(false);
   });
 });

@@ -26,10 +26,8 @@ import React from 'react';
 import { RendererProps } from '@jsonforms/core';
 import { VanillaRendererProps, WithChildren } from '../index';
 
-// tslint:disable:variable-name
 export const JsonFormsLayout =
     ({ className, children, visible }: RendererProps & VanillaRendererProps & WithChildren) => {
-// tslint:enable:variable-name
 
   return (
     <div
