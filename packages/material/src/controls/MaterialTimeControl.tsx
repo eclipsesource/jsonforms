@@ -105,6 +105,7 @@ export const MaterialTimeControl = (props: ControlProps) => {
               autoFocus={appliedUiSchemaOptions.focus}
               error={!isValid}
               fullWidth={!appliedUiSchemaOptions.trim}
+              inputProps={{ ...params.inputProps, type: 'text' }}
               InputLabelProps={data ? { shrink: true } : undefined}
               onFocus={onFocus}
               onBlur={onBlur}
