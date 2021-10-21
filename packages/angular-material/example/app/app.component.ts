@@ -75,7 +75,7 @@ const itemTester: UISchemaTester = (_schema, schemaPath, _path) => {
       [schema]="selectedExample.schema"
       [uischema]="selectedExample.uischema"
       [renderers]="renderers"
-      [locale]="currentLocale"
+      [i18n]="i18n"
       [uischemas]="uischemas"
       [readonly]="readonly"
       [config]="config"
@@ -86,7 +86,9 @@ export class AppComponent {
   readonly renderers = angularMaterialRenderers;
   readonly examples = getExamples();
   selectedExample: ExampleDescription;
-  currentLocale = 'en-US';
+  i18n = {
+    locale: 'en-US'
+  }
   private readonly = false;
   data: any;
   uischemas: { tester: UISchemaTester; uischema: UISchemaElement; }[] = [
@@ -102,7 +104,7 @@ export class AppComponent {
   }
 
   changeLocale(locale: string) {
-    this.currentLocale = locale;
+    this.i18n.locale = locale;
   }
 
   toggleReadonly() {

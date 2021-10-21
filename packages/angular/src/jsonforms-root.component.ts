@@ -23,10 +23,9 @@
   THE SOFTWARE.
 */
 import {
-    Component,
-    EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges
+    Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges
 } from '@angular/core';
-import { Actions, JsonFormsRendererRegistryEntry, JsonSchema, UISchemaElement, UISchemaTester, ValidationMode } from '@jsonforms/core';
+import { Actions, JsonFormsI18nState, JsonFormsRendererRegistryEntry, JsonSchema, UISchemaElement, UISchemaTester, ValidationMode } from '@jsonforms/core';
 import Ajv, { ErrorObject } from 'ajv';
 import { JsonFormsAngularService, USE_STATE_VALUE } from './jsonforms.service';
 @Component({
@@ -42,11 +41,11 @@ export class JsonForms implements OnChanges, OnInit {
     @Input() renderers: JsonFormsRendererRegistryEntry[];
     @Input() uischemas: { tester: UISchemaTester; uischema: UISchemaElement; }[];
     @Output() dataChange = new EventEmitter<any>();
-    @Input() locale: string;
     @Input() readonly: boolean;
     @Input() validationMode: ValidationMode;
     @Input() ajv: Ajv;
     @Input() config: any;
+    @Input() i18n: JsonFormsI18nState;
     @Output() errors = new EventEmitter<ErrorObject[]>();
 
     private previousData:any;
@@ -67,7 +66,7 @@ export class JsonForms implements OnChanges, OnInit {
                 validationMode: this.validationMode
             },
             uischemas: this.uischemas,
-            i18n: { locale: this.locale, localizedSchemas: undefined, localizedUISchemas: undefined },
+            i18n: this.i18n,
             renderers: this.renderers,
             config: this.config,
             readonly: this.readonly
@@ -87,6 +86,14 @@ export class JsonForms implements OnChanges, OnInit {
         this.initialized = true;
     }
 
+    ngDoCheck(): void {
+        // we can't use ngOnChanges as then nested i18n changes will not be detected
+        // the update will result in a no-op when the parameters did not change
+        this.jsonformsService.updateI18n(
+            Actions.updateI18n(this.i18n?.locale, this.i18n?.translate, this.i18n?.translateError)
+        );
+    }
+
     // tslint:disable-next-line: cyclomatic-complexity
     ngOnChanges(changes: SimpleChanges): void {
         if (!this.initialized) {
@@ -97,7 +104,7 @@ export class JsonForms implements OnChanges, OnInit {
         const newUiSchema = changes.uischema;
         const newRenderers = changes.renderers;
         const newUischemas = changes.uischemas;
-        const newLocale = changes.locale;
+        const newI18n = changes.i18n;
         const newReadonly = changes.readonly;
         const newValidationMode = changes.validationMode;
         const newAjv = changes.ajv;
@@ -121,8 +128,10 @@ export class JsonForms implements OnChanges, OnInit {
             this.jsonformsService.setUiSchemas(newUischemas.currentValue);
         }
 
-        if (newLocale && !newLocale.isFirstChange()) {
-            this.jsonformsService.setLocale(newLocale.currentValue);
+        if (newI18n && !newI18n.isFirstChange()) {
+            this.jsonformsService.updateI18n(
+                Actions.updateI18n(newI18n.currentValue?.locale, newI18n.currentValue?.translate, newI18n.currentValue?.translateError)
+            );
         }
 
         if (newReadonly && !newReadonly.isFirstChange()) {

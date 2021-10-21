@@ -28,9 +28,9 @@ import {
   JsonFormsCore,
   JsonFormsCellRendererRegistryEntry,
   JsonFormsRendererRegistryEntry,
-  JsonFormsLocaleState,
   JsonFormsUISchemaRegistryEntry
 } from './reducers';
+import { JsonFormsI18nState } from './i18n';
 
 /**
  * JSONForms store.
@@ -65,11 +65,11 @@ export interface JsonFormsSubStates {
    */
   cells?: JsonFormsCellRendererRegistryEntry[];
   /**
-   *
+   * I18n settings.
    */
-  i18n?: JsonFormsLocaleState;
+  i18n?: JsonFormsI18nState;
   /**
-   *
+   * The UI schema registry used in detail renderers.
    */
   uischemas?: JsonFormsUISchemaRegistryEntry[];
   /**

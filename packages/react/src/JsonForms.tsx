@@ -32,6 +32,7 @@ import {
   isControl,
   JsonFormsCellRendererRegistryEntry,
   JsonFormsCore,
+  JsonFormsI18nState,
   JsonFormsProps,
   JsonFormsRendererRegistryEntry,
   JsonFormsUISchemaRegistryEntry,
@@ -181,6 +182,7 @@ export interface JsonFormsInitStateProps {
   uischemas?: JsonFormsUISchemaRegistryEntry[];
   readonly?: boolean;
   validationMode?: ValidationMode;
+  i18n?: JsonFormsI18nState;
 }
 
 export const JsonForms = (
@@ -197,7 +199,8 @@ export const JsonForms = (
     config,
     uischemas,
     readonly,
-    validationMode
+    validationMode,
+    i18n
   } = props;
   const schemaToUse = useMemo(
     () => (schema !== undefined ? schema : Generate.jsonSchema(data)),
@@ -224,6 +227,7 @@ export const JsonForms = (
         renderers,
         cells,
         readonly,
+        i18n
       }}
       onChange={onChange}
     >

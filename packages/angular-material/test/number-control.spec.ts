@@ -144,8 +144,6 @@ describe(
       getJsonFormsService(component).init({
         core: state, i18n: {
           locale: 'en',
-          localizedSchemas: undefined,
-          localizedUISchemas: undefined
         }
       });
       getJsonFormsService(component).updateCore(
@@ -168,8 +166,6 @@ describe(
       getJsonFormsService(component).init({
         core: state, i18n: {
           locale: 'en',
-          localizedSchemas: undefined,
-          localizedUISchemas: undefined
         },config: {
           useGrouping: false
         },
@@ -196,8 +192,6 @@ describe(
       getJsonFormsService(component).init({
         core: state, i18n: {
           locale: 'en',
-          localizedSchemas: undefined,
-          localizedUISchemas: undefined
         },config: {
           useGrouping: true
         },
