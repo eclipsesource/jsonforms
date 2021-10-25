@@ -175,7 +175,7 @@ export const numberBaseTest = <C extends JsonFormsControl>(
     component.ngOnInit();
     fixture.detectChanges();
     getJsonFormsService(fixture.componentInstance).updateCore(
-      Actions.update('foo', () => 456.456)
+      Actions.update(['foo'], () => 456.456)
     );
     fixture.detectChanges();
     expect(component.data).toBe(456.456);
@@ -191,7 +191,7 @@ export const numberBaseTest = <C extends JsonFormsControl>(
     component.ngOnInit();
     fixture.detectChanges();
     getJsonFormsService(fixture.componentInstance).updateCore(
-      Actions.update('foo', () => undefined)
+      Actions.update(['foo'], () => undefined)
     );
     fixture.detectChanges();
 
@@ -208,7 +208,7 @@ export const numberBaseTest = <C extends JsonFormsControl>(
     component.ngOnInit();
     fixture.detectChanges();
     getJsonFormsService(fixture.componentInstance).updateCore(
-      Actions.update('foo', () => null)
+      Actions.update(['foo'], () => null)
     );
     fixture.detectChanges();
     expect(component.data).toBe(null);
@@ -224,7 +224,7 @@ export const numberBaseTest = <C extends JsonFormsControl>(
     component.ngOnInit();
     fixture.detectChanges();
     getJsonFormsService(fixture.componentInstance).updateCore(
-      Actions.update('bar', () => 456.456)
+      Actions.update(['bar'], () => 456.456)
     );
     fixture.detectChanges();
     expect(component.data).toBe(123.123);

@@ -152,7 +152,7 @@ export const rangeBaseTest = <C extends JsonFormsControl, I>(
     fixture.detectChanges();
 
     getJsonFormsService(component).updateCore(
-      Actions.update('foo', () => 4.56)
+      Actions.update(['foo'], () => 4.56)
     );
     fixture.detectChanges();
     expect(component.data).toBe(4.56);
@@ -169,7 +169,7 @@ export const rangeBaseTest = <C extends JsonFormsControl, I>(
     fixture.detectChanges();
 
     getJsonFormsService(component).updateCore(
-      Actions.update('foo', () => undefined)
+      Actions.update(['foo'], () => undefined)
     );
     fixture.detectChanges();
     expect(component.data).toBe(undefined);
@@ -186,7 +186,7 @@ export const rangeBaseTest = <C extends JsonFormsControl, I>(
     fixture.detectChanges();
 
     getJsonFormsService(component).updateCore(
-      Actions.update('foo', () => null)
+      Actions.update(['foo'], () => null)
     );
     fixture.detectChanges();
     expect(component.data).toBe(null);
@@ -203,10 +203,10 @@ export const rangeBaseTest = <C extends JsonFormsControl, I>(
     fixture.detectChanges();
 
     getJsonFormsService(component).updateCore(
-      Actions.update('foo', () => 1.234)
+      Actions.update(['foo'], () => 1.234)
     );
     getJsonFormsService(component).updateCore(
-      Actions.update('bar', () => 456.456)
+      Actions.update(['bar'], () => 456.456)
     );
 
     fixture.detectChanges();

@@ -103,7 +103,7 @@ export const useVanillaArrayControl = <I extends { control: any }>(
     }
     const labelValue = Resolve.data(
       input.control.value.data,
-      composePaths(`${index}`, childLabelProp)
+      composePaths([`${index}`], childLabelProp)
     );
     if (labelValue === undefined || labelValue === null || labelValue === NaN) {
       return '';

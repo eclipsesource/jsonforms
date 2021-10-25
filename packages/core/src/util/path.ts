@@ -28,15 +28,7 @@ import range from 'lodash/range';
 import { Scopable } from '../models';
 
 export const compose = (path1: string[], path2: string[]) => {
-  let p1 = path1;
-
-  if (isEmpty(p1)) {
-    return path2;
-  } else if (isEmpty(path2)) {
-    return p1;
-  } else {
-    return p1.concat(path2);
-  }
+    return path1.concat(path2);
 };
 
 export { compose as composePaths };

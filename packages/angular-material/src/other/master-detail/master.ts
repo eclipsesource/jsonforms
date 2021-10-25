@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import some from 'lodash/some';
+//import some from 'lodash/some';
 import get from 'lodash/get';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import {
@@ -31,6 +31,7 @@ import {
 } from '@jsonforms/angular';
 import {
   ArrayControlProps,
+  composePaths,
   ControlElement,
   createDefaultValue,
   findUISchema,
@@ -44,15 +45,15 @@ import {
   uiTypeIs
 } from '@jsonforms/core';
 
-const keywords = ['#', 'properties', 'items'];
+//const keywords = ['#', 'properties', 'items'];
 
-export const removeSchemaKeywords = (path: string[]) => {
+/*export const removeSchemaKeywords = (path: string[]) => {
   return path
     .split('/')
     .filter(s => !some(keywords, key => key === s))
     .join('.');
 };
-
+*/
 @Component({
   selector: 'jsonforms-list-with-detail-master',
   template: `
@@ -180,14 +181,13 @@ export class MasterListComponent extends JsonFormsArrayControl {
       );
 
     const masterItems = (data || []).map((d: any, index: number) => {
-      const labelRefInstancePath = controlElement.options?.labelRef && removeSchemaKeywords(
-        controlElement.options.labelRef
-      );
+      const labelRefInstancePath = controlElement.options?.labelRef &&
+        controlElement.options.labelRef;
       const isPrimitive = d !== undefined && typeof d !== 'object';
       const masterItem = {
         label: isPrimitive ? d.toString() : get(d, labelRefInstancePath ?? getFirstPrimitiveProp(schema)),
         data: d,
-        path: `${path}.${index}`,
+        path: composePaths(path, [`${index}`]),
         schema,
         uischema: detailUISchema
       };

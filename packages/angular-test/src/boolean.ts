@@ -114,7 +114,7 @@ export const booleanBaseTest = <C extends JsonFormsControl, I>(
     fixture.detectChanges();
 
     getJsonFormsService(component).updateCore(
-      Actions.update('foo', () => false)
+      Actions.update(['foo'], () => false)
     );
     fixture.detectChanges();
     expect(component.data).toBe(false);
@@ -130,7 +130,7 @@ export const booleanBaseTest = <C extends JsonFormsControl, I>(
     fixture.detectChanges();
 
     getJsonFormsService(component).updateCore(
-      Actions.update('foo', () => undefined)
+      Actions.update(['foo'], () => undefined)
     );
     fixture.detectChanges();
     expect(component.data).toBe(undefined);
@@ -146,7 +146,7 @@ export const booleanBaseTest = <C extends JsonFormsControl, I>(
     fixture.detectChanges();
 
     getJsonFormsService(component).updateCore(
-      Actions.update('foo', () => null)
+      Actions.update(['foo'], () => null)
     );
     fixture.detectChanges();
     expect(component.data).toBe(null);
@@ -162,10 +162,10 @@ export const booleanBaseTest = <C extends JsonFormsControl, I>(
     fixture.detectChanges();
 
     getJsonFormsService(component).updateCore(
-      Actions.update('foo', () => true)
+      Actions.update(['foo'], () => true)
     );
     getJsonFormsService(component).updateCore(
-      Actions.update('bar', () => false)
+      Actions.update(['bar'], () => false)
     );
     fixture.detectChanges();
     expect(component.data).toBe(true);

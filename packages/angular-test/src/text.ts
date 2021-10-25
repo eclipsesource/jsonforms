@@ -128,7 +128,7 @@ export const textBaseTest = <C extends JsonFormsControl>(
     fixture.detectChanges();
 
     getJsonFormsService(component).updateCore(
-      Actions.update('foo', () => 'bar')
+      Actions.update(['foo'], () => 'bar')
     );
     fixture.detectChanges();
     expect(component.data).toBe('bar');
@@ -144,7 +144,7 @@ export const textBaseTest = <C extends JsonFormsControl>(
     fixture.detectChanges();
 
     getJsonFormsService(component).updateCore(
-      Actions.update('foo', () => undefined)
+      Actions.update(['foo'], () => undefined)
     );
     fixture.detectChanges();
     expect(component.data).toBe(undefined);
@@ -160,7 +160,7 @@ export const textBaseTest = <C extends JsonFormsControl>(
     fixture.detectChanges();
 
     getJsonFormsService(component).updateCore(
-      Actions.update('foo', () => null)
+      Actions.update(['foo'], () => null)
     );
     fixture.detectChanges();
     expect(component.data).toBe(null);
@@ -176,10 +176,10 @@ export const textBaseTest = <C extends JsonFormsControl>(
     fixture.detectChanges();
 
     getJsonFormsService(component).updateCore(
-      Actions.update('foo', () => 'foo')
+      Actions.update(['foo'], () => 'foo')
     );
     getJsonFormsService(component).updateCore(
-      Actions.update('bar', () => 'bar')
+      Actions.update(['bar'], () => 'bar')
     );
     fixture.detectChanges();
     expect(component.data).toBe('foo');
