@@ -3,7 +3,7 @@ import { useState, useCallback, useEffect } from 'react'
 
 
 const eventToValue = (ev: any) => ev.target.value;
-export const useDebouncedChange = (handleChange: (path: string, value: any) => void, defaultValue: any, data: any, path: string, eventToValueFunction: (ev: any) => any = eventToValue, timeout = 300): [any, React.ChangeEventHandler, () => void] => {
+export const useDebouncedChange = (handleChange: (path: string[], value: any) => void, defaultValue: any, data: any, path: string[], eventToValueFunction: (ev: any) => any = eventToValue, timeout = 300): [any, React.ChangeEventHandler, () => void] => {
   const [input, setInput] = useState(data ?? defaultValue);
   useEffect(() => {
     setInput(data ?? defaultValue);

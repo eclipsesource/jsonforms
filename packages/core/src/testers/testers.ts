@@ -96,7 +96,7 @@ export const schemaMatches = (
 };
 
 export const schemaSubPathMatches = (
-  subPath: string,
+  subPath: string[],
   predicate: (schema: JsonSchema) => boolean
 ): Tester => (uischema: UISchemaElement, schema: JsonSchema): boolean => {
   if (isEmpty(uischema) || !isControl(uischema)) {
@@ -382,7 +382,7 @@ export const isObjectArray = and(
   schemaMatches(
     schema => hasType(schema, 'array') && !Array.isArray(schema.items) // we don't care about tuples
   ),
-  schemaSubPathMatches('items', schema => hasType(schema, 'object'))
+  schemaSubPathMatches(['items'], schema => hasType(schema, 'object'))
 );
 
 /**
@@ -481,7 +481,7 @@ export const isPrimitiveArrayControl = and(
   schemaMatches(
     schema => deriveTypes(schema).length !== 0 && !Array.isArray(schema.items) // we don't care about tuples
   ),
-  schemaSubPathMatches('items', schema => {
+  schemaSubPathMatches(['items'], schema => {
     const types = deriveTypes(schema);
     return (
       types.length === 1 &&

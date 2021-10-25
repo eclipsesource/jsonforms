@@ -46,7 +46,7 @@ import {
 
 const keywords = ['#', 'properties', 'items'];
 
-export const removeSchemaKeywords = (path: string) => {
+export const removeSchemaKeywords = (path: string[]) => {
   return path
     .split('/')
     .filter(s => !some(keywords, key => key === s))
@@ -141,9 +141,9 @@ export class MasterListComponent extends JsonFormsArrayControl {
   masterItems: any[];
   selectedItem: any;
   selectedItemIdx: number;
-  addItem: (path: string, value: any) => () => void;
-  removeItems: (path: string, toDelete: number[]) => () => void;
-  propsPath: string;
+  addItem: (path: string[], value: any) => () => void;
+  removeItems: (path: string[], toDelete: number[]) => () => void;
+  propsPath: string[];
   highlightedIdx: number;
 
   constructor(jsonformsService: JsonFormsAngularService, private changeDetectorRef: ChangeDetectorRef) {

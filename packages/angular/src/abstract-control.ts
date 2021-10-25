@@ -63,7 +63,7 @@ export abstract class JsonFormsAbstractControl<
   rootSchema: JsonSchema;
   enabled: boolean;
   hidden: boolean;
-  propsPath: string;
+  propsPath: string[];
 
   constructor(protected jsonFormsService: JsonFormsAngularService) {
     super();

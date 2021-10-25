@@ -117,7 +117,7 @@ export const masterListItemProps = () => ({
   removeItem: {
     required: false as false,
     type: Function as CompType<
-      (path: string, value: number) => void,
+      (path: string[], value: number) => void,
       FunctionConstructor
     >,
     default: undefined
@@ -127,7 +127,7 @@ export const masterListItemProps = () => ({
 export interface RendererProps<U = UISchemaElement> {
   schema: JsonSchema;
   uischema: U;
-  path: string;
+  path: string[];
   enabled?: boolean;
   renderers?: JsonFormsRendererRegistryEntry[];
   cells?: JsonFormsCellRendererRegistryEntry[];

@@ -41,11 +41,11 @@ const isArraySchema = (schema: JsonSchema): boolean => {
   return schema.type === 'array' && schema.items !== undefined;
 };
 
-export const resolveData = (instance: any, dataPath: string): any => {
+export const resolveData = (instance: any, dataPath: string[]): any => {
   if (isEmpty(dataPath)) {
     return instance;
   }
-  const dataPathSegments = dataPath.split('.');
+  const dataPathSegments = dataPath;
 
   return dataPathSegments
     .map(segment => decodeURIComponent(segment))

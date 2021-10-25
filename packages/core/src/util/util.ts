@@ -101,7 +101,7 @@ export const Resolve: {
    schemaPath: string,
    rootSchema?: JsonSchema
  ): JsonSchema;
- data(data: any, path: string): any;
+ data(data: any, path: string[]): any;
 } = {
  schema: resolveSchema,
  data: resolveData

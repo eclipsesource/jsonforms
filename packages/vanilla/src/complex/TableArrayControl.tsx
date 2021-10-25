@@ -39,7 +39,8 @@ import {
   RankedTester,
   Resolve,
   Test,
-  getControlPath
+  getControlPath,
+  toId
 } from '@jsonforms/core';
 import { DispatchCell, withJsonFormsArrayControlProps } from '@jsonforms/react';
 import { withVanillaControlProps } from '../util';
@@ -61,9 +62,9 @@ export const tableArrayControlTester: RankedTester = rankWith(
 
 class TableArrayControl extends React.Component<ArrayControlProps & VanillaRendererProps, any> {
 
-  confirmDelete = (path: string, index: number) => {
-    const p = path.substring(0, path.lastIndexOf(('.')));
-    this.props.removeItems(p, [index])();
+  confirmDelete = (path: string[], index: number) => {
+    path.pop();
+    this.props.removeItems(path, [index])();
   };
 
   render() {
@@ -140,7 +141,7 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
                 data.map((_child, index) => {
                   const childPath = Paths.compose(
                     path,
-                    `${index}`
+                    [`${index}`]
                   );
                   // TODO
                   const errorsPerEntry: any[] = filter(childErrors, error => {
@@ -155,7 +156,7 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
                     validationClassName;
 
                   return (
-                    <tr key={childPath}>
+                    <tr key={toId(childPath)}>
                       {schema.properties ? (
                         fpflow(
                           fpkeys,
@@ -165,15 +166,15 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
                           fpmap(prop => {
                             const childPropPath = Paths.compose(
                               childPath,
-                              prop.toString()
+                              [prop.toString()]
                             );
 
                             return (
-                              <td key={childPropPath}>
+                              <td key={toId(childPropPath)}>
                                 <DispatchCell
                                   schema={Resolve.schema(schema, `#/properties/${prop}`, rootSchema)}
                                   uischema={createControlElement(prop)}
-                                  path={childPath + '.' + prop}
+                                  path={Paths.compose(childPath,[prop])}
                                 />
                               </td>
                             );
@@ -181,10 +182,10 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
                         )(schema.properties)
                       ) : (
                           <td
-                            key={Paths.compose(
+                            key={toId(Paths.compose(
                               childPath,
-                              index.toString()
-                            )}
+                              [index.toString()]
+                            ))}
                           >
                             <DispatchCell
                               schema={schema}

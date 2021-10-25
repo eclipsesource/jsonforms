@@ -30,14 +30,14 @@ export interface RenderChildrenProps {
   layout: Layout;
   schema: JsonSchema;
   className: string;
-  path: string;
+  path: string[];
 }
 
 export const renderChildren = (
   layout: Layout,
   schema: JsonSchema,
   className: string,
-  path: string
+  path: string[]
 ) => {
   if (isEmpty(layout.elements)) {
     return [];

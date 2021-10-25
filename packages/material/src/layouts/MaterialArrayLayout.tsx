@@ -26,7 +26,6 @@ import range from 'lodash/range';
 import React from 'react';
 import {
   ArrayLayoutProps,
-  composePaths,
   computeLabel,
   createDefaultValue,
 } from '@jsonforms/core';
@@ -36,7 +35,7 @@ import ExpandPanelRenderer from './ExpandPanelRenderer';
 import merge from 'lodash/merge';
 
 interface MaterialArrayLayoutState {
-  expanded: string | boolean;
+  expanded: number | boolean;
 }
 export class MaterialArrayLayout extends React.PureComponent<
   ArrayLayoutProps,
@@ -46,13 +45,13 @@ export class MaterialArrayLayout extends React.PureComponent<
     expanded: null
   };
   innerCreateDefaultValue = () => createDefaultValue(this.props.schema);
-  handleChange = (panel: string) => (_event: any, expanded: boolean) => {
+  handleChange = (index: number) => (_event: any, expanded: boolean) => {
     this.setState({
-      expanded: expanded ? panel : false
+      expanded: expanded ? index : false
     });
   };
   isExpanded = (index: number) =>
-    this.state.expanded === composePaths(this.props.path, `${index}`);
+    this.state.expanded === index;
   render() {
     const {
       data,
@@ -74,6 +73,7 @@ export class MaterialArrayLayout extends React.PureComponent<
       config,
       this.props.uischema.options
     );
+    console.log("here");
 
     return (
       <div>

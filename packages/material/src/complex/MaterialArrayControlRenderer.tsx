@@ -31,22 +31,23 @@ import { DeleteDialog } from './DeleteDialog';
 
 export const MaterialArrayControlRenderer = (props: ArrayLayoutProps) => {
   const [open, setOpen] = useState(false);
-  const [path, setPath] = useState(undefined);
+  const [path, setPath] = useState<string[]>(undefined);
   const [rowData, setRowData] = useState(undefined);
   const { removeItems, visible } = props;
 
-  const openDeleteDialog = useCallback((p: string, rowIndex: number) => {
+  const openDeleteDialog = useCallback((p: string[], rowIndex: number) => {
     setOpen(true);
     setPath(p);
     setRowData(rowIndex);
   }, [setOpen, setPath, setRowData]);
   const deleteCancel = useCallback(() => setOpen(false), [setOpen]);
   const deleteConfirm = useCallback(() => {
-    const p = path.substring(0, path.lastIndexOf(('.')));
-    removeItems(p, [rowData])();
+    path.pop();
+    removeItems(path, [rowData])();
     setOpen(false);
   }, [setOpen, path, rowData]);
   const deleteClose = useCallback(() => setOpen(false), [setOpen]);
+  console.log("here");
 
   return (
     <Hidden xsUp={!visible}>

@@ -97,7 +97,7 @@ export class TableRenderer extends JsonFormsArrayControl {
   }
   generateCells = (
     schema: JsonSchema,
-    rowPath: string
+    rowPath: string[]
   ): ColumnDescription[] => {
     if (schema.type === 'object') {
       return this.getValidColumnProps(schema).map(prop => {

@@ -40,7 +40,7 @@ import { Grid, Hidden } from '@material-ui/core';
 export const renderLayoutElements = (
   elements: UISchemaElement[],
   schema: JsonSchema,
-  path: string,
+  path: string[],
   enabled: boolean,
   renderers?: JsonFormsRendererRegistryEntry[],
   cells?: JsonFormsCellRendererRegistryEntry[]

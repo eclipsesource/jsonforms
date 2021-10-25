@@ -94,7 +94,7 @@ const TestAndRender = React.memo(
   (props: {
     uischema: UISchemaElement;
     schema: JsonSchema;
-    path: string;
+    path: string[];
     enabled: boolean;
     renderers: JsonFormsRendererRegistryEntry[];
     cells: JsonFormsCellRendererRegistryEntry[];
@@ -143,7 +143,7 @@ const useJsonFormsDispatchRendererProps = (props: OwnPropsOfJsonFormsRenderer & 
   return {
     schema: props.schema || ctx.core.schema,
     uischema: props.uischema || ctx.core.uischema,
-    path: props.path || '',
+    path: props.path || [],
     enabled: props.enabled,
     rootSchema: ctx.core.schema,
     renderers: props.renderers || ctx.renderers,

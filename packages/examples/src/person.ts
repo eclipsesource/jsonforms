@@ -54,7 +54,7 @@ export const schema = {
     personalData: {
       type: 'object',
       properties: {
-        age: {
+        'ag.e': {
           type: 'integer',
           description: 'Please enter your age.'
         },
@@ -100,7 +100,7 @@ export const uischema = {
         },
         {
           type: 'Control',
-          scope: '#/properties/personalData/properties/age'
+          scope: '#/properties/personalData/properties/ag.e'
         },
         {
           type: 'Control',

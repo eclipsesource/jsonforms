@@ -64,7 +64,7 @@ export const MaterialListWithDetailRenderer = ({
 }: ArrayLayoutProps) => {
   const [selectedIndex, setSelectedIndex] = useState(undefined);
   const handleRemoveItem = useCallback(
-    (p: string, value: any) => () => {
+    (p: string[], value: any) => () => {
       removeItems(p, [value])();
       if (selectedIndex === value) {
         setSelectedIndex(undefined);
@@ -95,6 +95,7 @@ export const MaterialListWithDetailRenderer = ({
     [uischemas, schema, uischema.scope, path, uischema]
   );
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
+  console.log("here");
 
   return (
     <Hidden xsUp={!visible}>
@@ -137,7 +138,7 @@ export const MaterialListWithDetailRenderer = ({
               visible={visible}
               schema={schema}
               uischema={foundUISchema}
-              path={composePaths(path, `${selectedIndex}`)}
+              path={composePaths(path, [`${selectedIndex}`])}
             />
           ) : (
             <Typography variant='h6'>No Selection</Typography>

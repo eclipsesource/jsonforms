@@ -129,8 +129,8 @@ export class ArrayLayoutRenderer
   removeTooltip: string;
   removeAriaLabel: string;
   noData: boolean;
-  addItem: (path: string, value: any) => () => void;
-  removeItems: (path: string, toDelete: number[]) => () => void;
+  addItem: (path: string[], value: any) => () => void;
+  removeItems: (path: string[], toDelete: number[]) => () => void;
   uischemas: {
     tester: UISchemaTester;
     uischema: UISchemaElement;

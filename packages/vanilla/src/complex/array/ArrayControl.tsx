@@ -24,7 +24,7 @@
 */
 import range from 'lodash/range';
 import React, { useMemo } from 'react';
-import { ArrayControlProps, composePaths, createDefaultValue, findUISchema } from '@jsonforms/core';
+import { ArrayControlProps, composePaths, createDefaultValue, findUISchema, toId } from '@jsonforms/core';
 import { JsonFormsDispatch } from '@jsonforms/react';
 import { VanillaRendererProps } from '../../index';
 
@@ -58,14 +58,14 @@ export const ArrayControl = ({
         <div className={classNames.children}>
           {data ? (
             range(0, data.length).map(index => {
-              const childPath = composePaths(path, `${index}`);
+              const childPath = composePaths(path, [`${index}`]);
 
               return (
                 <JsonFormsDispatch
                   schema={schema}
                   uischema={childUiSchema || uischema}
                   path={childPath}
-                  key={childPath}
+                  key={toId(childPath)}
                   renderers={renderers}
                 />
               );

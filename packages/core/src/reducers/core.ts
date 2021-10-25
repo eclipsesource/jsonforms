@@ -44,7 +44,7 @@ import {
   UPDATE_CORE,
   UpdateCoreAction
 } from '../actions';
-import { createAjv, Reducer } from '../util';
+import { contains, createAjv, Reducer } from '../util';
 import { JsonSchema, UISchemaElement } from '../models';
 
 export const validate = (validator: ValidateFunction | undefined, data: any): ErrorObject[] => {
@@ -230,7 +230,7 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
     case UPDATE_DATA: {
       if (action.path === undefined || action.path === null) {
         return state;
-      } else if (action.path === '') {
+      } else if (action.path === []) {
         // empty path is ok
         const result = action.updater(cloneDeep(state.data));
         const errors = validate(state.validator, result);
@@ -333,9 +333,9 @@ export const getControlPath = (error: ErrorObject) => {
 }
 
 export const errorsAt = (
-  instancePath: string,
+  instancePath: string[],
   schema: JsonSchema,
-  matchPath: (path: string) => boolean
+  matchPath: (path: string[]) => boolean
 ) => (errors: ErrorObject[]): ErrorObject[] => {
   // Get data paths of oneOf and anyOf errors to later determine whether an error occurred inside a subschema of oneOf or anyOf.
   const combinatorPaths = filter(
@@ -360,7 +360,7 @@ export const errorsAt = (
     // because the parent schema can never match the property schema (e.g. for 'required' checks).
     const parentSchema: JsonSchema | undefined = error.parentSchema;
     if (result && !isObjectSchema(parentSchema)
-      && combinatorPaths.findIndex(p => instancePath.startsWith(p)) !== -1) {
+      && combinatorPaths.findIndex(p => contains(instancePath,p)) !== -1) {
       result = result && isEqual(parentSchema, schema);
     }
     return result;
@@ -388,13 +388,13 @@ const isObjectSchema = (schema?: JsonSchema): boolean => {
 const filteredErrorKeywords = ['additionalProperties', 'allOf', 'anyOf', 'oneOf'];
 
 const getErrorsAt = (
-  instancePath: string,
+  instancePath: string[],
   schema: JsonSchema,
-  matchPath: (path: string) => boolean
+  matchPath: (path: string[]) => boolean
 ) => (state: JsonFormsCore): ErrorObject[] =>
   errorsAt(instancePath, schema, matchPath)(state.validationMode === 'ValidateAndHide' ? [] : state.errors);
 
-export const errorAt = (instancePath: string, schema: JsonSchema) =>
+export const errorAt = (instancePath: string[], schema: JsonSchema) =>
   getErrorsAt(instancePath, schema, path => path === instancePath);
-export const subErrorsAt = (instancePath: string, schema: JsonSchema) =>
-  getErrorsAt(instancePath, schema, path => path.startsWith(instancePath));
+export const subErrorsAt = (instancePath: string[], schema: JsonSchema) =>
+  getErrorsAt(instancePath, schema, path => contains(path,instancePath));

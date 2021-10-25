@@ -30,7 +30,7 @@ import { JsonFormsDispatch } from '@jsonforms/react';
 interface CombinatorPropertiesProps {
   schema: JsonSchema;
   combinatorKeyword: 'oneOf' | 'anyOf';
-  path: string;
+  path: string[];
 }
 
 export const isLayout = (uischema: UISchemaElement): uischema is Layout =>

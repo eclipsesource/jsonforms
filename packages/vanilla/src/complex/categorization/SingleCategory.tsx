@@ -29,7 +29,7 @@ import { JsonFormsDispatch } from '@jsonforms/react';
 export interface CategoryProps {
   category: Category;
   schema: JsonSchema;
-  path: string;
+  path: string[];
 }
 
 export const SingleCategory = ({ category, schema, path }: CategoryProps) => (

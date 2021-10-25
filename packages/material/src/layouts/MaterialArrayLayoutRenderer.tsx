@@ -50,9 +50,11 @@ export const MaterialArrayLayoutRenderer = ({
   uischemas,
   addItem
 }: ArrayLayoutProps) => {
-  const addItemCb = useCallback((p: string, value: any) => addItem(p, value), [
+  const addItemCb = useCallback((p: string[], value: any) => addItem(p, value), [
     addItem
   ]);
+  console.log("here");
+
   return (
     <Hidden xsUp={!visible}>
       <MaterialArrayLayout

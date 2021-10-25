@@ -206,14 +206,14 @@ export const enhanceExample: (
             <div>
               <button
                 onClick={() => {
-                  dispatch(Actions.update('toggleTopLayout', bool => !bool));
+                  dispatch(Actions.update(['toggleTopLayout'], bool => !bool));
                 }}
               >
                 Enable/Disable top layout
               </button>
               <button
                 onClick={() => {
-                  dispatch(Actions.update('toggleBottomLayout', bool => !bool));
+                  dispatch(Actions.update(['toggleBottomLayout'], bool => !bool));
                 }}
               >
                 Show/Hide bottom layout

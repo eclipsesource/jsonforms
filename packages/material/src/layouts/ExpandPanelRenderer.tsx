@@ -21,7 +21,8 @@ import {
   JsonFormsUISchemaRegistryEntry,
   getFirstPrimitiveProp,
   createId,
-  removeId
+  removeId,
+  toId
 } from '@jsonforms/core';
 import IconButton from '@material-ui/core/IconButton';
 import Accordion from '@material-ui/core/Accordion';
@@ -38,7 +39,7 @@ const iconStyle: any = { float: 'right' };
 
 interface OwnPropsOfExpandPanel {
   index: number;
-  path: string;
+  path: string[];
   uischema: ControlElement;
   schema: JsonSchema;
   expanded: boolean;
@@ -50,12 +51,12 @@ interface OwnPropsOfExpandPanel {
   enableMoveDown: boolean;
   config: any;
   childLabelProp?: string;
-  handleExpansion(panel: string): (event: any, expanded: boolean) => void;
+  handleExpansion(index: number): (event: any, expanded: boolean) => void;
 }
 
 interface StatePropsOfExpandPanel extends OwnPropsOfExpandPanel {
   childLabel: string;
-  childPath: string;
+  childPath: string[];
   enableMoveUp: boolean;
   enableMoveDown: boolean;
 }
@@ -64,9 +65,9 @@ interface StatePropsOfExpandPanel extends OwnPropsOfExpandPanel {
  * Dispatch props of a table control
  */
 export interface DispatchPropsOfExpandPanel {
-  removeItems(path: string, toDelete: number[]): (event: any) => void;
-  moveUp(path: string, toMove: number): (event: any) => void;
-  moveDown(path: string, toMove: number): (event: any) => void;
+  removeItems(path: string[], toDelete: number[]): (event: any) => void;
+  moveUp(path: string[], toMove: number): (event: any) => void;
+  moveDown(path: string[], toMove: number): (event: any) => void;
 }
 
 export interface ExpandPanelProps
@@ -123,7 +124,7 @@ const ExpandPanelRenderer = (props: ExpandPanelProps) => {
     <Accordion
       aria-labelledby={labelHtmlId}
       expanded={expanded}
-      onChange={handleExpansion(childPath)}
+      onChange={handleExpansion(index)}
     >
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Grid container alignItems={'center'}>
@@ -192,7 +193,7 @@ const ExpandPanelRenderer = (props: ExpandPanelProps) => {
           schema={schema}
           uischema={foundUISchema}
           path={childPath}
-          key={childPath}
+          key={toId(childPath)}
           renderers={renderers}
           cells={cells}
         />
@@ -210,7 +211,7 @@ const ExpandPanelRenderer = (props: ExpandPanelProps) => {
 export const ctxDispatchToExpandPanelProps: (
   dispatch: Dispatch<ReducerAction<any>>
 ) => DispatchPropsOfExpandPanel = dispatch => ({
-  removeItems: (path: string, toDelete: number[]) => (event: any): void => {
+  removeItems: (path: string[], toDelete: number[]) => (event: any): void => {
     event.stopPropagation();
     dispatch(
       update(path, array => {
@@ -222,7 +223,7 @@ export const ctxDispatchToExpandPanelProps: (
       })
     );
   },
-  moveUp: (path: string, toMove: number) => (event: any): void => {
+  moveUp: (path: string[], toMove: number) => (event: any): void => {
     event.stopPropagation();
     dispatch(
       update(path, array => {
@@ -231,7 +232,7 @@ export const ctxDispatchToExpandPanelProps: (
       })
     );
   },
-  moveDown: (path: string, toMove: number) => (event: any): void => {
+  moveDown: (path: string[], toMove: number) => (event: any): void => {
     event.stopPropagation();
     dispatch(
       update(path, array => {
@@ -256,12 +257,12 @@ export const withContextToExpandPanelProps = (
 }: JsonFormsStateContext & ExpandPanelProps) => {
   const dispatchProps = ctxDispatchToExpandPanelProps(ctx.dispatch);
   const { childLabelProp, schema, path, index, uischemas } = props;
-  const childPath = composePaths(path, `${index}`);
+  const childPath = composePaths(path, [`${index}`]);
   const childData = Resolve.data(ctx.core.data, childPath);
   const childLabel = childLabelProp
     ? get(childData, childLabelProp, '')
     : get(childData, getFirstPrimitiveProp(schema), '');
-
+    console.log("here");
   return (
     <Component
       {...props}

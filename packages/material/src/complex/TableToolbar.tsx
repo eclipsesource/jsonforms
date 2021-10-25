@@ -40,12 +40,12 @@ export interface MaterialTableToolbarProps {
   numColumns: number;
   errors: string;
   label: string;
-  path: string;
+  path: string[];
   uischema: ControlElement;
   schema: JsonSchema;
   rootSchema: JsonSchema;
   enabled: boolean;
-  addItem(path: string, value: any): () => void;
+  addItem(path: string[], value: any): () => void;
 }
 
 const fixedCellSmall = {

@@ -91,7 +91,7 @@ export const findUISchema = (
   uischemas: JsonFormsUISchemaRegistryEntry[],
   schema: JsonSchema,
   schemaPath: string,
-  path: string,
+  path: string[],
   fallbackLayoutType = 'VerticalLayout',
   control?: ControlElement,
   rootSchema?: JsonSchema
@@ -121,7 +121,7 @@ export const findUISchema = (
   return uiSchema;
 };
 
-export const getErrorAt = (instancePath: string, schema: JsonSchema) => (
+export const getErrorAt = (instancePath: string[], schema: JsonSchema) => (
   state: JsonFormsState
 ) => {
   return errorAt(instancePath, schema)(state.jsonforms.core);
@@ -129,7 +129,7 @@ export const getErrorAt = (instancePath: string, schema: JsonSchema) => (
 
 export { errorsAt, getControlPath };
 
-export const getSubErrorsAt = (instancePath: string, schema: JsonSchema) => (
+export const getSubErrorsAt = (instancePath: string[], schema: JsonSchema) => (
   state: JsonFormsState
 ) => subErrorsAt(instancePath, schema)(state.jsonforms.core);
 

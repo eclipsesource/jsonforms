@@ -33,7 +33,7 @@ import {
 export class JsonFormsBaseRenderer<T extends UISchemaElement> {
   @Input() uischema: T;
   @Input() schema: JsonSchema;
-  @Input() path: string;
+  @Input() path: string[];
 
   protected getOwnProps(): OwnPropsOfRenderer {
     return {

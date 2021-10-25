@@ -33,7 +33,7 @@ import { Reducer } from '../util';
 export type UISchemaTester = (
   schema: JsonSchema,
   schemaPath: string,
-  path: string
+  path: string[]
 ) => number;
 
 export interface JsonFormsUISchemaRegistryEntry {
@@ -64,7 +64,7 @@ export const findMatchingUISchema = (
 ) => (
   jsonSchema: JsonSchema,
   schemaPath: string,
-  path: string
+  path: string[]
 ): UISchemaElement => {
   const match = maxBy(state, entry =>
     entry.tester(jsonSchema, schemaPath, path)

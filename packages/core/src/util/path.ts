@@ -27,18 +27,15 @@ import isEmpty from 'lodash/isEmpty';
 import range from 'lodash/range';
 import { Scopable } from '../models';
 
-export const compose = (path1: string, path2: string) => {
+export const compose = (path1: string[], path2: string[]) => {
   let p1 = path1;
-  if (!isEmpty(path1) && !isEmpty(path2) && !path2.startsWith('[')) {
-    p1 = path1 + '.';
-  }
 
   if (isEmpty(p1)) {
     return path2;
   } else if (isEmpty(path2)) {
     return p1;
   } else {
-    return `${p1}${path2}`;
+    return p1.concat(path2);
   }
 };
 
@@ -75,16 +72,32 @@ export const toDataPathSegments = (schemaPath: string): string[] => {
  * @param {string} schemaPath the schema path to be converted
  * @returns {string} the path without schema-specific keywords
  */
-export const toDataPath = (schemaPath: string): string => {
-  return toDataPathSegments(schemaPath).join('.');
+export const toDataPath = (schemaPath: string): string[] => {
+  return toDataPathSegments(schemaPath);
 };
 
-export const composeWithUi = (scopableUi: Scopable, path: string): string => {
+export const composeWithUi = (scopableUi: Scopable, path: string[]): string[] => {
   const segments = toDataPathSegments(scopableUi.scope);
 
   if (isEmpty(segments) && path === undefined) {
-    return '';
+    return [];
   }
 
-  return isEmpty(segments) ? path : compose(path, segments.join('.'));
+  return isEmpty(segments) ? path : compose(path, segments);
 };
+
+export const toId = (path: string[]): string=>{
+  return path.join('');
+}
+
+export const contains = (path1: string[], path2: string[]):boolean =>{
+  if(path1.length<path2.length){
+    return false;
+  }
+  path2.forEach((value,i)=>{
+    if (path1[i]!==value){
+      return false;
+    }
+  })
+  return true;
+}

@@ -52,7 +52,8 @@ import {
   Paths,
   Resolve,
   JsonFormsRendererRegistryEntry,
-  JsonFormsCellRendererRegistryEntry
+  JsonFormsCellRendererRegistryEntry,
+  toId
 } from '@jsonforms/core';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -64,6 +65,7 @@ import NoBorderTableCell from './NoBorderTableCell';
 import TableToolbar from './TableToolbar';
 import { ErrorObject } from 'ajv';
 import merge from 'lodash/merge';
+import * as _ from 'lodash';
 
 // we want a cell that doesn't automatically span
 const styles = {
@@ -86,13 +88,13 @@ const styles = {
 const generateCells = (
   Cell: React.ComponentType<OwnPropsOfNonEmptyCell | TableHeaderCellProps>,
   schema: JsonSchema,
-  rowPath: string,
+  rowPath: string[],
   enabled: boolean,
   cells?: JsonFormsCellRendererRegistryEntry[]
 ) => {
   if (schema.type === 'object') {
     return getValidColumnProps(schema).map(prop => {
-      const cellPath = Paths.compose(rowPath, prop);
+      const cellPath = Paths.compose(rowPath, [prop]);
       const props = {
         propName: prop,
         schema,
@@ -102,7 +104,7 @@ const generateCells = (
         enabled,
         cells
       };
-      return <Cell key={cellPath} {...props} />;
+      return <Cell key={toId(cellPath)} {...props} />;
     });
   } else {
     // primitives
@@ -112,7 +114,7 @@ const generateCells = (
       cellPath: rowPath,
       enabled
     };
-    return <Cell key={rowPath} {...props} />;
+    return <Cell key={toId(rowPath)} {...props} />;
   }
 };
 
@@ -149,11 +151,11 @@ const TableHeaderCell = React.memo(({ title }: TableHeaderCellProps) => (
 interface NonEmptyCellProps extends OwnPropsOfNonEmptyCell {
   rootSchema: JsonSchema;
   errors: string;
-  path: string;
+  path: string[];
   enabled: boolean;
 }
 interface OwnPropsOfNonEmptyCell {
-  rowPath: string;
+  rowPath: string[];
   propName?: string;
   schema: JsonSchema;
   enabled: boolean;
@@ -164,9 +166,11 @@ const ctxToNonEmptyCellProps = (
   ctx: JsonFormsStateContext,
   ownProps: OwnPropsOfNonEmptyCell
 ): NonEmptyCellProps => {
-  const path =
-    ownProps.rowPath +
-    (ownProps.schema.type === 'object' ? '.' + ownProps.propName : '');
+  const path: string[] = _.cloneDeep(ownProps.rowPath);
+  if(ownProps.schema.type === 'object'){ 
+    path.push(ownProps.propName);
+  }
+
   const errors = formatErrorMessage(
     union(
       errorsAt(
@@ -240,7 +244,7 @@ const NonEmptyCell = (ownProps: OwnPropsOfNonEmptyCell) => {
 };
 
 interface NonEmptyRowProps {
-  childPath: string;
+  childPath: string[];
   schema: JsonSchema;
   rowIndex: number;
   moveUp: () => void;
@@ -266,8 +270,10 @@ const NonEmptyRow = React.memo(
     enabled,
     cells
   }: NonEmptyRowProps & WithDeleteDialogSupport) => {
+    console.log("here");
+
     return (
-      <TableRow key={childPath} hover>
+      <TableRow key={toId(childPath)} hover>
         {generateCells(NonEmptyCell, schema, childPath, enabled, cells)}
         {enabled ? (
           <NoBorderTableCell
@@ -318,14 +324,14 @@ const NonEmptyRow = React.memo(
 );
 interface TableRowsProp {
   data: number;
-  path: string;
+  path: string[];
   schema: JsonSchema;
   uischema: ControlElement;
   config?: any;
   enabled: boolean;
   cells?: JsonFormsCellRendererRegistryEntry[];
-  moveUp?(path: string, toMove: number): () => void;
-  moveDown?(path: string, toMove: number): () => void;
+  moveUp?(path: string[], toMove: number): () => void;
+  moveDown?(path: string[], toMove: number): () => void;
 }
 const TableRows = ({
   data,
@@ -346,15 +352,16 @@ const TableRows = ({
   }
 
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
+  console.log("here");
 
   return (
     <React.Fragment>
       {range(data).map((index: number) => {
-        const childPath = Paths.compose(path, `${index}`);
+        const childPath = Paths.compose(path, [`${index}`]);
 
         return (
           <NonEmptyRow
-            key={childPath}
+            key={toId(childPath)}
             childPath={childPath}
             rowIndex={index}
             schema={schema}
@@ -377,7 +384,7 @@ export class MaterialTableControl extends React.Component<
   ArrayLayoutProps & WithDeleteDialogSupport,
   any
 > {
-  addItem = (path: string, value: any) => this.props.addItem(path, value);
+  addItem = (path: string[], value: any) => this.props.addItem(path, value);
   render() {
     const {
       label,
@@ -397,6 +404,7 @@ export class MaterialTableControl extends React.Component<
     const headerCells: any = isObjectSchema
       ? generateCells(TableHeaderCell, schema, path, enabled, cells)
       : undefined;
+      console.log("here");
 
     return (
       <Hidden xsUp={!visible}>

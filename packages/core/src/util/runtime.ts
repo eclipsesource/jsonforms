@@ -54,14 +54,14 @@ const isSchemaCondition = (
   condition: Condition
 ): condition is SchemaBasedCondition => has(condition, 'schema');
 
-const getConditionScope = (condition: Scopable, path: string): string => {
+const getConditionScope = (condition: Scopable, path: string[]): string[] => {
   return composeWithUi(condition, path);
 };
 
 const evaluateCondition = (
   data: any,
   condition: Condition,
-  path: string,
+  path: string[],
   ajv: Ajv
 ): boolean => {
   if (isAndCondition(condition)) {
@@ -89,7 +89,7 @@ const evaluateCondition = (
 const isRuleFulfilled = (
   uischema: UISchemaElement,
   data: any,
-  path: string,
+  path: string[],
   ajv: Ajv
 ): boolean => {
   const condition = uischema.rule.condition;
@@ -99,7 +99,7 @@ const isRuleFulfilled = (
 export const evalVisibility = (
   uischema: UISchemaElement,
   data: any,
-  path: string = undefined,
+  path: string[] = undefined,
   ajv: Ajv
 ): boolean => {
   const fulfilled = isRuleFulfilled(uischema, data, path, ajv);
@@ -118,7 +118,7 @@ export const evalVisibility = (
 export const evalEnablement = (
   uischema: UISchemaElement,
   data: any,
-  path: string = undefined,
+  path: string[] = undefined,
   ajv: Ajv
 ): boolean => {
   const fulfilled = isRuleFulfilled(uischema, data, path, ajv);
@@ -159,7 +159,7 @@ export const hasEnableRule = (uischema: UISchemaElement): boolean => {
 export const isVisible = (
   uischema: UISchemaElement,
   data: any,
-  path: string = undefined,
+  path: string[] = undefined,
   ajv: Ajv
 ): boolean => {
   if (uischema.rule) {
@@ -172,7 +172,7 @@ export const isVisible = (
 export const isEnabled = (
   uischema: UISchemaElement,
   data: any,
-  path: string = undefined,
+  path: string[] = undefined,
   ajv: Ajv
 ): boolean => {
   if (uischema.rule) {
