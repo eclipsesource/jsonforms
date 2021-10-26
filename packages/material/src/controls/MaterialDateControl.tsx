@@ -89,6 +89,7 @@ export const MaterialDateControl = (props: ControlProps)=> {
           clearable
           onChange={onChange}
           inputFormat={format}
+          disableMaskedInput
           views={appliedUiSchemaOptions.views}
           disabled={!enabled}
           cancelText={appliedUiSchemaOptions.cancelLabel}

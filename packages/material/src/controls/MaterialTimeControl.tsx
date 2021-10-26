@@ -91,6 +91,7 @@ export const MaterialTimeControl = (props: ControlProps) => {
           clearable
           onChange={onChange}
           inputFormat={format}
+          disableMaskedInput
           ampm={!!appliedUiSchemaOptions.ampm}
           views={appliedUiSchemaOptions.views}
           disabled={!enabled}
