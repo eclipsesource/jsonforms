@@ -31,7 +31,7 @@ import {
   styled
 } from '@mui/material';
 
-const StyledBadge = styled(Badge)(({ theme }) => ({
+const StyledBadge = styled(Badge)(({ theme }: any) => ({
   color: theme.palette.error.main
 }));
 
