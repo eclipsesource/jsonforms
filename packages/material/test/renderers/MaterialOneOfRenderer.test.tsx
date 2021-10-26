@@ -119,8 +119,8 @@ describe('Material oneOf renderer', () => {
       </JsonFormsStateProvider>
     );
 
-    const firstTab = wrapper.find(Tab).first().html();
-    expect(firstTab).toContain('Mui-selected');
+    const firstTab = wrapper.find(Tab).first();
+    expect(firstTab.html()).toContain('Mui-selected');
   });
 
   it('should render and select second tab due to datatype', () => {
@@ -159,8 +159,8 @@ describe('Material oneOf renderer', () => {
     );
     expect(wrapper.find(MaterialOneOfRenderer).length).toBeTruthy();
 
-    const secondTab = wrapper.find(Tab).at(1).html();
-    expect(secondTab).toContain('Mui-selected');
+    const secondTab = wrapper.find(Tab).at(1);
+    expect(secondTab.html()).toContain('Mui-selected');
   });
 
   it('should render and select second tab due to schema with additionalProperties', () => {
@@ -207,8 +207,8 @@ describe('Material oneOf renderer', () => {
     );
     expect(wrapper.find(MaterialOneOfRenderer).length).toBeTruthy();
 
-    const secondTab = wrapper.find(Tab).at(1).html();
-    expect(secondTab).toContain('Mui-selected');
+    const secondTab = wrapper.find(Tab).at(1);
+    expect(secondTab.html()).toContain('Mui-selected');
   });
 
   it('should render and select second tab due to schema with required', () => {
@@ -255,8 +255,8 @@ describe('Material oneOf renderer', () => {
     );
     expect(wrapper.find(MaterialOneOfRenderer).length).toBeTruthy();
 
-    const secondTab = wrapper.find(Tab).at(1).html();
-    expect(secondTab).toContain('Mui-selected');
+    const secondTab = wrapper.find(Tab).at(1);
+    expect(secondTab.html()).toContain('Mui-selected');
   });
 
   it('should add an item at correct path', (done) => {
