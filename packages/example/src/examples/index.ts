@@ -39,158 +39,193 @@ import { input as ifThenElse } from './if-then-else';
 
 export const examples = [
   {
+    id: 'main',
     title: 'Main',
     input: main,
   },
   {
+    id: 'basic',
     title: 'Basic',
     input: basic,
   },
   {
+    id: 'control',
     title: 'Control',
     input: control,
   },
   {
+    id: 'control-options',
     title: 'Control Options',
     input: controlOptions,
   },
   {
+    id: 'enum',
     title: 'Enum',
     input: enumExample,
   },
   {
+    id: 'enum-in-array',
     title: 'Enum In Array',
     input: enumInArray,
   },
   {
+    id: 'multi-array',
     title: 'Multi Enum',
     input: multiEnum,
   },
   {
+    id: 'categorization',
     title: 'Categorization',
     input: categorization,
   },
   {
+    id: 'categorization-stepper',
     title: 'Categorization Stepper',
     input: categorizationStepper,
   },
   {
+    id: 'categorization-stepper-nav',
     title: 'Categorization Stepper With Navigation',
     input: categorizationStepperNav,
   },
   {
+    id: 'horizontal-layout',
     title: 'Horizontal Layout',
     input: horizontalLayout,
   },
   {
+    id: 'vertical-layout',
     title: 'Vertical Layout',
     input: verticalLayout,
   },
   {
+    id: 'group-layout',
     title: 'Group Layout',
     input: groupLayout,
   },
   {
+    id: 'nested-layout',
     title: 'Nested Layout',
     input: nestedLayout,
   },
   {
+    id: 'array',
     title: 'Array',
     input: array,
   },
   {
+    id: 'array-restrict',
     title: 'Array Min/Max Items',
     input: arrayRestrict,
   },
   {
+    id: 'array-with-reorder',
     title: 'Array With Reorder',
     input: arrayWithReorder,
   },
   {
+    id: 'nested-array',
     title: 'Nested Array',
     input: nestedArray,
   },
   {
+    id: 'nested-array-restrict',
     title: 'Nested Array Min/Max Items',
     input: nestedArrayRestrict,
   },
   {
+    id: 'nested-array-with-reorder',
     title: 'Nested Array With Reorder',
     input: nestedArrayWithReorder,
   },
   {
+    id: 'rule',
     title: 'Rule',
     input: rule,
   },
   {
+    id: 'login',
     title: 'Login',
     input: login,
   },
   {
+    id: 'radio',
     title: 'Radio',
     input: radio,
   },
   {
+    id: 'radio-group',
     title: 'Radio Group',
     input: radioGroup,
   },
   {
+    id: 'object',
     title: 'Object',
     input: object,
   },
   {
+    id: 'root-object',
     title: 'Root Object',
     input: rootObject,
   },
   {
+    id: 'no-ui-schema',
     title: 'Generate UI Schema',
     input: noUISchema,
   },
   {
+    id: 'no-schemas',
     title: 'Generate Both Schemas',
     input: noSchemas,
   },
   {
+    id: 'one-of',
     title: 'Combinators oneOf',
     input: oneOf,
   },
   {
+    id: 'one-of-recursive',
     title: 'Combinators oneOf recursive',
     input: oneOfRecursive,
   },
   {
+    id: 'any-of',
     title: 'Combinators anyOf',
     input: anyOf,
   },
   {
+    id: 'any-of-simple',
     title: 'Combinators anyOf simple',
     input: anyOfSimple,
   },
   {
+    id: 'all-of',
     title: 'Combinators allOf',
     input: allOf,
   },
   {
+    id: 'list-with-details',
     title: 'List With Details',
     input: listWithDetails,
   },
   {
+    id: 'list-with-details-restrict',
     title: 'List With Details Min/Max Items',
     input: listWithDetailsRestrict,
   },
   {
+    id: 'list-with-details-reorder',
     title: 'List With Details And Reorder',
     input: listWithDetailsAndReorder,
   },
   {
+    id: 'if-then-else',
     title: 'If Then Else',
     input: ifThenElse,
   },
-  //TODO: Temporary disable the Huge example since it does generate errors and the browser hangs
-  /*
   {
+    id: 'huge',
     title: 'Huge',
     input: huge,
   },
-  */
 ];

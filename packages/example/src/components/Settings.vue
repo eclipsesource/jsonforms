@@ -102,9 +102,8 @@
               outlined
               persistent-hint
               dense
-              v-model="validationModeData"
+              v-model="validationMode"
               :items="validationModes"
-              @change="$emit('validation-changed', validationModeData)"
             ></v-select>
           </v-col>
         </v-row>
@@ -119,15 +118,9 @@
             <v-tooltip bottom>
               <template v-slot:activator="{ on: onTooltip }">
                 <v-switch
-                  v-model="hideRequiredAsteriskData"
+                  v-model="hideRequiredAsterisk"
                   label="Hide Required Asterisk"
                   v-on="onTooltip"
-                  @change="
-                    $emit(
-                      'hide-required-asterisk-changed',
-                      hideRequiredAsteriskData
-                    )
-                  "
                 ></v-switch>
               </template>
               If asterisks in labels for required fields should be hidden
@@ -139,15 +132,9 @@
             <v-tooltip bottom>
               <template v-slot:activator="{ on: onTooltip }">
                 <v-switch
-                  v-model="showUnfocusedDescriptionData"
+                  v-model="showUnfocusedDescription"
                   label="Show Unfocused Description"
                   v-on="onTooltip"
-                  @change="
-                    $emit(
-                      'show-unfocused-description-changed',
-                      showUnfocusedDescriptionData
-                    )
-                  "
                 ></v-switch>
               </template>
               If input descriptions should hide when not focused
@@ -159,10 +146,9 @@
             <v-tooltip bottom>
               <template v-slot:activator="{ on: onTooltip }">
                 <v-switch
-                  v-model="restrictData"
+                  v-model="restrict"
                   label="Restrict"
                   v-on="onTooltip"
-                  @change="$emit('restrict-changed', restrictData)"
                 ></v-switch>
               </template>
               Whether to restrict the number of characters to maxLength, if
@@ -175,10 +161,9 @@
             <v-tooltip bottom>
               <template v-slot:activator="{ on: onTooltip }">
                 <v-switch
-                  v-model="readonlyData"
+                  v-model="readonly"
                   label="Read-Only"
                   v-on="onTooltip"
-                  @change="$emit('readonly-changed', readonlyData)"
                 ></v-switch>
               </template>
               If true, sets all controls to read-only
@@ -193,30 +178,28 @@
 </template>
 
 <script lang="ts">
+import { sync } from 'vuex-pathify';
+
 export default {
   name: 'Settings',
-  props: {
-    validationMode: { type: String, required: true },
-    showUnfocusedDescription: { type: Boolean, required: true },
-    hideRequiredAsterisk: { type: Boolean, required: true },
-    readonly: { type: Boolean, required: true },
-    restrict: { type: Boolean, required: true },
+  computed: {
+    validationMode: sync('app/jsonforms@validationMode'),
+    hideRequiredAsterisk: sync('app/jsonforms@config.hideRequiredAsterisk'),
+    showUnfocusedDescription: sync(
+      'app/jsonforms@config.showUnfocusedDescription'
+    ),
+    restrict: sync('app/jsonforms@config.restrict'),
+    readonly: sync('app/jsonforms@readonly'),
   },
   data: function () {
     return {
       settings: false,
-      validationModeData: this.validationMode,
       validationModes: [
         { text: 'Validate And Show', value: 'ValidateAndShow' },
         { text: 'Validate And Hide', value: 'ValidateAndHide' },
         { text: 'No Validation', value: 'NoValidation' },
       ],
-      hideRequiredAsteriskData: this.hideRequiredAsterisk,
-      showUnfocusedDescriptionData: this.showUnfocusedDescription,
-      readonlyData: this.readonly,
-      restrictData: this.restrict,
     };
   },
 };
 </script>
-<style scoped></style>
