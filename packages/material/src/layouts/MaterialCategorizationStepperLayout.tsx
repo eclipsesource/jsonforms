@@ -94,8 +94,11 @@ export const MaterialCategorizationStepperLayoutRenderer = (props: MaterialCateg
   const buttonStyle = {
     marginRight: '1em'
   };
+  const categories = categorization.elements.filter((category: Category) =>
+    isVisible(category, data, undefined, ajv)
+  );
   const childProps: MaterialLayoutRendererProps = {
-    elements: categorization.elements[activeCategory].elements,
+    elements: categories[activeCategory].elements,
     schema,
     path,
     direction: 'column',
@@ -103,9 +106,6 @@ export const MaterialCategorizationStepperLayoutRenderer = (props: MaterialCateg
     renderers,
     cells
   };
-  const categories = categorization.elements.filter((category: Category) =>
-    isVisible(category, data, undefined, ajv)
-  );
   return (
     <Hidden xsUp={!visible}>
       <Stepper activeStep={activeCategory} nonLinear>
