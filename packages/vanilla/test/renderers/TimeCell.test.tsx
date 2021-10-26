@@ -29,7 +29,7 @@ import {
   JsonSchema,
 } from '@jsonforms/core';
 import { JsonFormsStateProvider } from '@jsonforms/react';
-import Adapter from 'enzyme-adapter-react-16';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import HorizontalLayoutRenderer from '../../src/layouts/HorizontalLayout';
 import TimeCell, { timeCellTester } from '../../src/cells/TimeCell';

@@ -25,7 +25,7 @@
 import * as React from 'react';
 import { GroupLayout } from '@jsonforms/core';
 import { JsonFormsStateProvider } from '@jsonforms/react';
-import Adapter from 'enzyme-adapter-react-16';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import GroupLayoutRenderer, { groupTester } from '../../src/layouts/GroupLayout';
 import { initCore } from '../util';
