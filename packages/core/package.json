@@ -63,6 +63,7 @@
   "dependencies": {
     "@types/json-schema": "^7.0.3",
     "ajv": "^8.6.1",
+    "ajv-formats": "^2.1.0",
     "lodash": "^4.17.15"
   },
   "devDependencies": {
