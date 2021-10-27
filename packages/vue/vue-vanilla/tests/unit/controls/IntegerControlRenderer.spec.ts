@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import { merge } from 'lodash';
 import { mountJsonForms } from '../util';
 
 const schema = {
@@ -26,5 +27,17 @@ describe('IntegerControlRenderer.vue', () => {
     const input = wrapper.find('input');
     await input.setValue(2);
     expect(wrapper.vm.data).to.equal(2);
+  });
+
+  describe('removeWhenEmpty: true', () => {
+    const rweUischema = merge(uischema, { options: { removeWhenEmpty: true } });
+
+    it('data should be undefined', async () => {
+      const wrapper = mountJsonForms(1, schema, rweUischema);
+      const input = wrapper.find('input');
+      await input.setValue(2);
+      await input.setValue('');
+      expect(wrapper.vm.data).to.equal(undefined);
+    });
   });
 });

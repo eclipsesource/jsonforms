@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import { merge } from 'lodash';
 import { mountJsonForms } from '../util';
 
 const schema = {
@@ -26,8 +27,20 @@ describe('MultiStringControlRenderer.vue', () => {
 
   it('emits a data change', async () => {
     const wrapper = mountJsonForms('a', schema, uischema);
-    const select = wrapper.find('textarea');
-    await select.setValue('b');
+    const textarea = wrapper.find('textarea');
+    await textarea.setValue('b');
     expect(wrapper.vm.data).to.equal('b');
+  });
+
+  describe('removeWhenEmpty: true', () => {
+    const rweUischema = merge(uischema, { options: { removeWhenEmpty: true } });
+
+    it('data should be undefined', async () => {
+      const wrapper = mountJsonForms('a', schema, rweUischema);
+      const textarea = wrapper.find('textarea');
+      await textarea.setValue('b');
+      await textarea.setValue('');
+      expect(wrapper.vm.data).to.equal(undefined);
+    });
   });
 });

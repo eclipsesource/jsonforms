@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import { merge } from 'lodash';
 import { mountJsonForms } from '../util';
 
 const schema = {
@@ -27,5 +28,17 @@ describe('EnumControlRenderer.vue', () => {
     const select = wrapper.find('select');
     await select.setValue('b');
     expect(wrapper.vm.data).to.equal('b');
+  });
+
+  describe('removeWhenEmpty: true', () => {
+    const rweUischema = merge(uischema, { options: { removeWhenEmpty: true } });
+
+    it('data should be undefined', async () => {
+      const wrapper = mountJsonForms('a', schema, rweUischema);
+      const select = wrapper.find('select');
+      await select.setValue('b');
+      await select.setValue('');
+      expect(wrapper.vm.data).to.equal(undefined);
+    });
   });
 });
