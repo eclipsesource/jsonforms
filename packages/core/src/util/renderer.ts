@@ -25,7 +25,6 @@
 
 import get from 'lodash/get';
 import { ControlElement, JsonSchema, UISchemaElement } from '../models';
-import union from 'lodash/union';
 import find from 'lodash/find';
 import {
   findUISchema,
@@ -34,9 +33,11 @@ import {
   getConfig,
   getData,
   getErrorAt,
+  getErrorTranslator,
   getRenderers,
   getSchema,
   getSubErrorsAt,
+  getTranslator,
   getUiSchema,
   JsonFormsCellRendererRegistryEntry,
   JsonFormsRendererRegistryEntry,
@@ -48,12 +49,13 @@ import { createLabelDescriptionFrom } from './label';
 import { CombinatorKeyword, resolveSubSchemas } from './combinators';
 import { moveDown, moveUp } from './array';
 import { AnyAction, Dispatch } from './type';
-import { formatErrorMessage, Resolve } from './util';
+import { Resolve } from './util';
 import { composePaths, composeWithUi } from './path';
 import { isVisible } from './runtime';
 import { CoreActions, update } from '../actions';
 import { ErrorObject } from 'ajv';
 import { JsonFormsState } from '../store';
+import { getCombinedErrorMessage, getI18nKey, i18nJsonSchema, Translator } from '../i18n';
 
 export { JsonFormsRendererRegistryEntry, JsonFormsCellRendererRegistryEntry };
 
@@ -174,16 +176,45 @@ export interface EnumOption {
   value: any;
 }
 
-export const enumToEnumOptionMapper = (e: any): EnumOption => {
-  const stringifiedEnum = typeof e === 'string' ? e : JSON.stringify(e);
-  return { label: stringifiedEnum, value: e };
+export const enumToEnumOptionMapper = (
+  e: any,
+  t?: Translator,
+  i18nKey?: string
+): EnumOption => {
+  let label = typeof e === 'string' ? e : JSON.stringify(e);
+  if (t) {
+    if (i18nKey) {
+      label = t(`${i18nKey}.${label}`, label);
+    } else {
+      label = t(label, label);
+    }
+  }
+  return { label, value: e };
 };
 
-export const oneOfToEnumOptionMapper = (e: any): EnumOption => ({
-  value: e.const,
-  label:
-    e.title ?? (typeof e.const === 'string' ? e.const : JSON.stringify(e.const))
-});
+export const oneOfToEnumOptionMapper = (
+  e: any,
+  t?: Translator,
+  uiSchemaI18nKey?: string
+): EnumOption => {
+  let label =
+    e.title ??
+    (typeof e.const === 'string' ? e.const : JSON.stringify(e.const));
+  if (t) {
+    // prefer schema keys as they can be more specialized
+    if (e.i18n) {
+      label = t(e.i18n, label);
+    } else if (uiSchemaI18nKey) {
+      label = t(`${uiSchemaI18nKey}.${label}`, label);
+    } else {
+      label = t(label, label);
+    }
+  }
+  return {
+    label,
+    value: e.const,
+  };
+};
 
 export interface OwnPropsOfRenderer {
   /**
@@ -385,14 +416,6 @@ export interface ControlState {
   isFocused: boolean;
 }
 
-const getControlErrorMessage = (error: ErrorObject) => {
-  if (error.keyword === 'required') {
-    // change validation message to refer to the property (and not its parent)
-   return 'is a required property';
-  }
-  return error.message;
-}
-
 /**
  * Map state to control props.
  * @param state the store's state
@@ -421,9 +444,8 @@ export const mapStateToControlProps = (
     controlElement.scope,
     rootSchema
   );
-  const errors = formatErrorMessage(
-    union(getErrorAt(path, resolvedSchema)(state).map(error => getControlErrorMessage(error)))
-  );
+  const errors = getErrorAt(path, resolvedSchema)(state);
+  
   const description =
     resolvedSchema !== undefined ? resolvedSchema.description : '';
   const data = Resolve.data(rootData, path);
@@ -438,18 +460,26 @@ export const mapStateToControlProps = (
     rootData,
     config
   );
+
+  const schema = resolvedSchema ?? rootSchema;
+  const t = getTranslator()(state);
+  const te = getErrorTranslator()(state);
+  const i18nLabel = t(getI18nKey(schema, uischema, 'label') ?? label, label);
+  const i18nDescription = t(getI18nKey(schema, uischema, 'description') ?? description, description);
+  const i18nErrorMessage = getCombinedErrorMessage(errors, te, t, schema, uischema);
+
   return {
     data,
-    description,
-    errors,
-    label,
+    description: i18nDescription,
+    errors: i18nErrorMessage,
+    label: i18nLabel,
     visible,
     enabled,
     id,
     path,
     required,
-    uischema: ownProps.uischema,
-    schema: resolvedSchema || rootSchema,
+    uischema,
+    schema,
     config: getConfig(state),
     cells: ownProps.cells || state.jsonforms.cells,
     rootSchema
@@ -484,8 +514,20 @@ export const mapStateToEnumControlProps = (
   const props: StatePropsOfControl = mapStateToControlProps(state, ownProps);
   const options: EnumOption[] =
     ownProps.options ||
-    props.schema.enum?.map(enumToEnumOptionMapper) ||
-    (props.schema.const && [enumToEnumOptionMapper(props.schema.const)]);
+    props.schema.enum?.map(e =>
+      enumToEnumOptionMapper(
+        e,
+        getTranslator()(state),
+        props.uischema?.options?.i18n ?? (props.schema as i18nJsonSchema).i18n
+      )
+    ) ||
+    (props.schema.const && [
+      enumToEnumOptionMapper(
+        props.schema.const,
+        getTranslator()(state),
+        props.uischema?.options?.i18n ?? (props.schema as i18nJsonSchema).i18n
+      )
+    ]);
   return {
     ...props,
     options
@@ -505,7 +547,13 @@ export const mapStateToOneOfEnumControlProps = (
   const props: StatePropsOfControl = mapStateToControlProps(state, ownProps);
   const options: EnumOption[] =
     ownProps.options ||
-    (props.schema.oneOf as JsonSchema[])?.map(oneOfToEnumOptionMapper);
+    (props.schema.oneOf as JsonSchema[])?.map(oneOfSubSchema =>
+      oneOfToEnumOptionMapper(
+        oneOfSubSchema,
+        getTranslator()(state),
+        props.uischema?.options?.i18n
+      )
+    );
   return {
     ...props,
     options
@@ -527,8 +575,20 @@ export const mapStateToMultiEnumControlProps = (
   const options: EnumOption[] =
     ownProps.options ||
     (items?.oneOf &&
-      (items.oneOf as JsonSchema[]).map(oneOfToEnumOptionMapper)) ||
-    items?.enum?.map(enumToEnumOptionMapper);
+      (items.oneOf as JsonSchema[]).map(oneOfSubSchema =>
+        oneOfToEnumOptionMapper(
+          oneOfSubSchema,
+          state.jsonforms.i18n?.translate,
+          props.uischema?.options?.i18n
+        )
+      )) ||
+    items?.enum?.map(e =>
+      enumToEnumOptionMapper(
+        e,
+        state.jsonforms.i18n?.translate,
+        props.uischema?.options?.i18n ?? (props.schema as i18nJsonSchema).i18n
+      )
+    );
   return {
     ...props,
     options
@@ -984,9 +1044,17 @@ export const mapStateToArrayLayoutProps = (
   } = mapStateToControlWithDetailProps(state, ownProps);
 
   const resolvedSchema = Resolve.schema(schema, 'items', props.rootSchema);
-  const childErrors = formatErrorMessage(
-    getSubErrorsAt(path, resolvedSchema)(state).map(error => error.message)
+
+  // TODO Does not consider a specialized '.custom' error message overriding all other error messages
+  // TODO Does not consider 'i18n' keys which are specified in the ui schemas of the sub errors
+  const childErrors = getCombinedErrorMessage(
+    getSubErrorsAt(path, resolvedSchema)(state),
+    getErrorTranslator()(state),
+    getTranslator()(state),
+    undefined,
+    undefined
   );
+
   const allErrors =
     errors +
     (errors.length > 0 && childErrors.length > 0 ? '\n' : '') +

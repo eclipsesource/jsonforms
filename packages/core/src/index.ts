@@ -34,3 +34,4 @@ export * from './util';
 
 export * from './Helpers';
 export * from './store';
+export * from './i18n';

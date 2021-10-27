@@ -21,7 +21,9 @@ import {
   JsonFormsUISchemaRegistryEntry,
   JsonFormsRendererRegistryEntry,
   JsonFormsCellRendererRegistryEntry,
-  CoreActions
+  CoreActions,
+  i18nReducer,
+  JsonFormsI18nState
 } from '@jsonforms/core';
 import { JsonFormsChangeEvent } from '../types';
 import DispatchRenderer from './DispatchRenderer.vue';
@@ -87,6 +89,11 @@ export default defineComponent({
       type: Object as PropType<Ajv>,
       default: undefined
     },
+    i18n: {
+      required: false,
+      type: Object as PropType<JsonFormsI18nState>,
+      default: undefined
+    }
   },
   data() {
     const generatorData = isObject(this.data) ? this.data : {};
@@ -113,6 +120,7 @@ export default defineComponent({
       jsonforms: {
         core: initCore(),
         config: configReducer(undefined, Actions.setConfig(this.config)),
+        i18n: i18nReducer(this.i18n, Actions.updateI18n(this.i18n?.locale, this.i18n?.translate, this.i18n?.translateError)),
         renderers: this.renderers,
         cells: this.cells,
         uischemas: this.uischemas,
@@ -163,6 +171,15 @@ export default defineComponent({
     },
     eventToEmit(newEvent) {
       this.$emit('change', newEvent);
+    },
+    i18n: {
+      handler(newI18n) {
+        this.jsonforms.i18n = i18nReducer(
+          this.jsonforms.i18n,
+          Actions.updateI18n(newI18n?.locale, newI18n?.translate, newI18n?.translateError)
+        );
+      },
+      deep: true
     }
   },
   computed: {

@@ -31,7 +31,8 @@ import {
   getErrorAt,
   getSchema,
   getAjv,
-  JsonFormsCellRendererRegistryEntry
+  JsonFormsCellRendererRegistryEntry,
+  getTranslator
 } from '../reducers';
 import { AnyAction, Dispatch } from './type';
 import {
@@ -54,6 +55,7 @@ import {
 } from './renderer';
 import { JsonFormsState } from '../store';
 import { JsonSchema } from '../models';
+import { i18nJsonSchema } from '..';
 
 export { JsonFormsCellRendererRegistryEntry };
 
@@ -196,8 +198,20 @@ export const defaultMapStateToEnumCellProps = (
   const props: StatePropsOfCell = mapStateToCellProps(state, ownProps);
   const options: EnumOption[] =
     ownProps.options ||
-    props.schema.enum?.map(enumToEnumOptionMapper) ||
-    (props.schema.const && [enumToEnumOptionMapper(props.schema.const)]);
+    props.schema.enum?.map(e =>
+      enumToEnumOptionMapper(
+        e,
+        getTranslator()(state),
+        props.uischema?.options?.i18n ?? (props.schema as i18nJsonSchema).i18n
+      )
+    ) ||
+    (props.schema.const && [
+      enumToEnumOptionMapper(
+        props.schema.const,
+        getTranslator()(state),
+        props.uischema?.options?.i18n ?? (props.schema as i18nJsonSchema).i18n
+      )
+    ]);
   return {
     ...props,
     options
@@ -217,7 +231,13 @@ export const mapStateToOneOfEnumCellProps = (
   const props: StatePropsOfCell = mapStateToCellProps(state, ownProps);
   const options: EnumOption[] =
     ownProps.options ||
-    (props.schema.oneOf as JsonSchema[])?.map(oneOfToEnumOptionMapper);
+    (props.schema.oneOf as JsonSchema[])?.map(oneOfSubSchema =>
+      oneOfToEnumOptionMapper(
+        oneOfSubSchema,
+        getTranslator()(state),
+        props.uischema?.options?.i18n
+      )
+    );
   return {
     ...props,
     options

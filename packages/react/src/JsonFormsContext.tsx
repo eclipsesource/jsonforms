@@ -67,7 +67,8 @@ import {
   mapStateToMultiEnumControlProps,
   DispatchPropsOfMultiEnumControl,
   mapDispatchToControlProps,
-  mapDispatchToArrayControlProps
+  mapDispatchToArrayControlProps,
+  i18nReducer
 } from '@jsonforms/core';
 import React, { ComponentType, Dispatch, ReducerAction, useContext, useEffect, useMemo, useReducer, useRef } from 'react';
 
@@ -108,7 +109,7 @@ const useEffectAfterFirstRender = (
 };
 
 export const JsonFormsStateProvider = ({ children, initState, onChange }: any) => {
-  const { data, schema, uischema, ajv, validationMode} = initState.core;
+  const { data, schema, uischema, ajv, validationMode } = initState.core;
   // Initialize core immediately
   const [core, coreDispatch] = useReducer(
     coreReducer,
@@ -133,6 +134,20 @@ export const JsonFormsStateProvider = ({ children, initState, onChange }: any) =
     configDispatch(Actions.setConfig(initState.config));
   }, [initState.config]);
 
+  const [i18n, i18nDispatch] = useReducer(
+    i18nReducer,
+    undefined,
+    () => i18nReducer(
+      initState.i18n,
+      Actions.updateI18n(initState.i18n?.locale, initState.i18n?.translate, initState.i18n?.translateError)
+    )
+  );
+  useEffect(() => {
+    i18nDispatch(
+      Actions.updateI18n(initState.i18n?.locale, initState.i18n?.translate, initState.i18n?.translateError)
+    );
+  }, [initState.i18n?.locale, initState.i18n?.translate, initState.i18n?.translateError]);
+
   const contextValue = useMemo(() => ({
     core,
     renderers: initState.renderers,
@@ -140,9 +155,10 @@ export const JsonFormsStateProvider = ({ children, initState, onChange }: any) =
     config: config,
     uischemas: initState.uischemas,
     readonly: initState.readonly,
+    i18n: i18n,
     // only core dispatch available
     dispatch: coreDispatch,
-  }), [core, initState.renderers, initState.cells, config, initState.readonly]);
+  }), [core, initState.renderers, initState.cells, config, initState.readonly, i18n]);
 
   const onChangeRef = useRef(onChange);
   useEffect(() => {

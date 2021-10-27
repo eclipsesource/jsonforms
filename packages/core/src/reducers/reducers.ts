@@ -43,10 +43,9 @@ import {
   UISchemaTester
 } from './uischemas';
 import {
+  fetchErrorTranslator,
   fetchLocale,
-  findLocalizedSchema,
-  findLocalizedUISchema,
-  i18nReducer
+  i18nReducer,
 } from './i18n';
 
 import { Generate } from '../generators';
@@ -55,6 +54,8 @@ import { JsonSchema } from '../models/jsonSchema';
 import { cellReducer } from './cells';
 import { configReducer } from './config';
 import get from 'lodash/get';
+import { fetchTranslator } from '.';
+import { ErrorTranslator, Translator } from '../i18n';
 
 export {
   rendererReducer,
@@ -138,11 +139,10 @@ export const getConfig = (state: JsonFormsState) => state.jsonforms.config;
 export const getLocale = (state: JsonFormsState) =>
   fetchLocale(get(state, 'jsonforms.i18n'));
 
-export const getLocalizedSchema = (locale: string) => (
+export const getTranslator = () => (
   state: JsonFormsState
-): JsonSchema => findLocalizedSchema(locale)(get(state, 'jsonforms.i18n'));
+): Translator => fetchTranslator(get(state, 'jsonforms.i18n'));
 
-export const getLocalizedUISchema = (locale: string) => (
+export const getErrorTranslator = () => (
   state: JsonFormsState
-): UISchemaElement =>
-  findLocalizedUISchema(locale)(get(state, 'jsonforms.i18n'));
+): ErrorTranslator => fetchErrorTranslator(get(state, 'jsonforms.i18n'));

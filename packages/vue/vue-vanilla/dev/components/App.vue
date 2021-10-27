@@ -3,59 +3,62 @@ import { defineComponent } from '../../config/vue';
 import { JsonForms, JsonFormsChangeEvent } from '../../config/jsonforms';
 import { vanillaRenderers, mergeStyles, defaultStyles } from '../../src';
 import '../../vanilla.css';
+import { get } from 'lodash';
+import { JsonFormsI18nState } from '@jsonforms/core';
 
 const schema = {
   properties: {
     string: {
       type: 'string',
-      description: 'a string'
+      description: 'a string',
+      pattern: '[a-z]+'
     },
     multiString: {
       type: 'string',
-      description: 'a string'
+      description: 'a string',
     },
     boolean: {
       type: 'boolean',
-      description: 'enable / disable number'
+      description: 'enable / disable number',
     },
     boolean2: {
       type: 'boolean',
-      description: 'show / hide integer'
+      description: 'show / hide integer',
     },
     number: {
       type: 'number',
-      description: 'a number'
+      description: 'a number',
     },
     integer: {
       type: 'integer',
-      description: 'an integer'
+      description: 'an integer',
     },
     enum: {
       type: 'string',
       enum: ['a', 'b', 'c'],
-      description: 'an enum'
+      description: 'an enum',
     },
     oneOfEnum: {
       oneOf: [
         { const: '1', title: 'Number 1' },
-        { const: 'B', title: 'Foo' }
+        { const: 'B', title: 'Foo' },
       ],
-      description: 'one of enum'
+      description: 'one of enum',
     },
     date: {
       type: 'string',
       format: 'date',
-      description: 'a date'
+      description: 'a date',
     },
     dateTime: {
       type: 'string',
       format: 'date-time',
-      description: 'a date time'
+      description: 'a date time',
     },
     time: {
       type: 'string',
       format: 'time',
-      description: 'a time'
+      description: 'a time',
     },
     array: {
       type: 'array',
@@ -63,12 +66,12 @@ const schema = {
         type: 'object',
         properties: {
           name: { type: 'string' },
-          age: { type: 'integer' }
-        }
-      }
-    }
+          age: { type: 'integer' },
+        },
+      },
+    },
   },
-  required: ['string', 'number']
+  required: ['string', 'number'],
 } as any;
 
 const uischema = {
@@ -84,23 +87,23 @@ const uischema = {
               type: 'Control',
               scope: '#/properties/string',
               options: {
-                placeholder: 'this is a placeholder'
-              }
+                placeholder: 'this is a placeholder',
+              },
             },
             {
               type: 'Control',
-              scope: '#/properties/multiString'
+              scope: '#/properties/multiString',
             },
             {
               type: 'Control',
               scope: '#/properties/boolean',
               options: {
-                placeholder: 'boolean placeholder'
-              }
+                placeholder: 'boolean placeholder',
+              },
             },
             {
               type: 'Control',
-              scope: '#/properties/boolean2'
+              scope: '#/properties/boolean2',
             },
             {
               type: 'Control',
@@ -110,12 +113,12 @@ const uischema = {
                 condition: {
                   scope: '#/properties/boolean',
                   schema: {
-                    const: true
-                  }
-                }
-              }
-            }
-          ]
+                    const: true,
+                  },
+                },
+              },
+            },
+          ],
         },
         {
           type: 'Group',
@@ -129,37 +132,37 @@ const uischema = {
                 condition: {
                   scope: '#/properties/boolean2',
                   schema: {
-                    const: true
-                  }
-                }
-              }
+                    const: true,
+                  },
+                },
+              },
             },
             {
               type: 'HorizontalLayout',
               elements: [
                 {
                   type: 'Control',
-                  scope: '#/properties/enum'
+                  scope: '#/properties/enum',
                 },
                 {
                   type: 'Control',
-                  scope: '#/properties/oneOfEnum'
+                  scope: '#/properties/oneOfEnum',
                 },
                 {
                   type: 'Control',
                   scope: '#/properties/date',
                   options: {
-                    placeholder: 'date placeholder'
-                  }
-                }
-              ]
+                    placeholder: 'date placeholder',
+                  },
+                },
+              ],
             },
             {
               type: 'Control',
               scope: '#/properties/dateTime',
               options: {
-                placeholder: 'date-time placeholder'
-              }
+                placeholder: 'date-time placeholder',
+              },
             },
             {
               type: 'Control',
@@ -168,50 +171,52 @@ const uischema = {
                 placeholder: 'time placeholder',
                 styles: {
                   control: {
-                    root: 'control my-time'
-                  }
-                }
-              }
-            }
-          ]
-        }
-      ]
+                    root: 'control my-time',
+                  },
+                },
+              },
+            },
+          ],
+        },
+      ],
     },
     {
       type: 'Label',
-      text: 'This is my label'
+      text: 'This is my label',
     },
     {
       type: 'Control',
       scope: '#/properties/array',
       options: {
-        childLabelProp: 'age'
-      }
-    }
-  ]
+        childLabelProp: 'age',
+      },
+    },
+  ],
 } as any;
 
 // mergeStyles combines all classes from both styles definitions into one
 const myStyles = mergeStyles(defaultStyles, {
-  control: { root: 'my-control' }
+  control: { root: 'my-control' },
 });
 
 export default defineComponent({
   name: 'app',
   components: {
-    JsonForms
+    JsonForms,
   },
-  data: function() {
+  data: function () {
+    const i18n: Partial<JsonFormsI18nState> = { locale: 'en' };
     return {
       renderers: Object.freeze(vanillaRenderers),
       data: {
-        number: 5
+        number: 5,
       },
       schema,
       uischema,
       config: {
-        hideRequiredAsterisk: true
-      }
+        hideRequiredAsterisk: true,
+      },
+      i18n
     };
   },
   methods: {
@@ -221,14 +226,25 @@ export default defineComponent({
           name: {
             type: 'string',
             title: 'NAME',
-            description: 'The name'
-          }
-        }
+            description: 'The name',
+          },
+        },
       };
     },
     onChange(event: JsonFormsChangeEvent) {
       console.log(event);
       this.data = event.data;
+    },
+    translationChange(event: any) {
+      try {
+        const input = JSON.parse(event.target.value);
+        (this as any).i18n.translate = (key: string, defaultMessage: string | undefined) => {
+          const translated = get(input, key) as string;
+          return translated ?? defaultMessage;
+        };
+      } catch (error) {
+        console.log('invalid translation input');
+      }
     },
     switchAsterisk() {
       this.config.hideRequiredAsterisk = !this.config.hideRequiredAsterisk;
@@ -250,23 +266,23 @@ export default defineComponent({
                     type: 'Control',
                     scope: '#/properties/string',
                     options: {
-                      placeholder: 'this is a placeholder'
-                    }
+                      placeholder: 'this is a placeholder',
+                    },
                   },
                   {
                     type: 'Control',
-                    scope: '#/properties/multiString'
+                    scope: '#/properties/multiString',
                   },
                   {
                     type: 'Control',
                     scope: '#/properties/boolean',
                     options: {
-                      placeholder: 'boolean placeholder'
-                    }
+                      placeholder: 'boolean placeholder',
+                    },
                   },
                   {
                     type: 'Control',
-                    scope: '#/properties/boolean2'
+                    scope: '#/properties/boolean2',
                   },
                   {
                     type: 'Control',
@@ -276,12 +292,12 @@ export default defineComponent({
                       condition: {
                         scope: '#/properties/boolean',
                         schema: {
-                          const: true
-                        }
-                      }
-                    }
-                  }
-                ]
+                          const: true,
+                        },
+                      },
+                    },
+                  },
+                ],
               },
               {
                 type: 'Group',
@@ -295,37 +311,37 @@ export default defineComponent({
                       condition: {
                         scope: '#/properties/boolean2',
                         schema: {
-                          const: true
-                        }
-                      }
-                    }
+                          const: true,
+                        },
+                      },
+                    },
                   },
                   {
                     type: 'HorizontalLayout',
                     elements: [
                       {
                         type: 'Control',
-                        scope: '#/properties/enum'
+                        scope: '#/properties/enum',
                       },
                       {
                         type: 'Control',
-                        scope: '#/properties/oneOfEnum'
+                        scope: '#/properties/oneOfEnum',
                       },
                       {
                         type: 'Control',
                         scope: '#/properties/date',
                         options: {
-                          placeholder: 'date placeholder'
-                        }
-                      }
-                    ]
+                          placeholder: 'date placeholder',
+                        },
+                      },
+                    ],
                   },
                   {
                     type: 'Control',
                     scope: '#/properties/dateTime',
                     options: {
-                      placeholder: 'date-time placeholder'
-                    }
+                      placeholder: 'date-time placeholder',
+                    },
                   },
                   {
                     type: 'Control',
@@ -334,35 +350,35 @@ export default defineComponent({
                       placeholder: 'time placeholder',
                       styles: {
                         control: {
-                          root: 'control my-time'
-                        }
-                      }
-                    }
-                  }
-                ]
-              }
-            ]
+                          root: 'control my-time',
+                        },
+                      },
+                    },
+                  },
+                ],
+              },
+            ],
           },
           {
             type: 'Label',
-            text: 'This is my label'
+            text: 'This is my label',
           },
           {
             type: 'Control',
             scope: '#/properties/array',
             options: {
-              childLabelProp: 'age'
-            }
-          }
-        ]
+              childLabelProp: 'age',
+            },
+          },
+        ],
       };
-    }
+    },
   },
   provide() {
     return {
-      styles: myStyles
+      styles: myStyles,
     };
-  }
+  },
 });
 </script>
 
@@ -388,6 +404,7 @@ export default defineComponent({
         :uischema="uischema"
         :renderers="renderers"
         :config="config"
+        :i18n="i18n"
         @change="onChange"
       />
       <button @click="setSchema">Set Schema</button>
@@ -404,6 +421,7 @@ export default defineComponent({
         >{{ JSON.stringify(config, null, 2) }}
     </pre
       >
+      <textarea @change="translationChange" />
     </div>
   </div>
 </template>

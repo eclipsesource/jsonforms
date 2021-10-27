@@ -29,6 +29,7 @@ import { generateDefaultUISchema, generateJsonSchema } from '../generators';
 
 import { RankedTester } from '../testers';
 import { UISchemaTester, ValidationMode } from '../reducers';
+import { ErrorTranslator, Translator } from '../i18n';
 
 export const INIT: 'jsonforms/INIT' = 'jsonforms/INIT';
 export const UPDATE_CORE: 'jsonforms/UPDATE_CORE' = `jsonforms/UPDATE_CORE`;
@@ -51,10 +52,10 @@ export const SET_VALIDATION_MODE: 'jsonforms/SET_VALIDATION_MODE' =
   'jsonforms/SET_VALIDATION_MODE';
 
 export const SET_LOCALE: 'jsonforms/SET_LOCALE' = `jsonforms/SET_LOCALE`;
-export const SET_LOCALIZED_SCHEMAS: 'jsonforms/SET_LOCALIZED_SCHEMAS' =
-  'jsonforms/SET_LOCALIZED_SCHEMAS';
-export const SET_LOCALIZED_UISCHEMAS: 'jsonforms/SET_LOCALIZED_UISCHEMAS' =
-  'jsonforms/SET_LOCALIZED_UISCHEMAS';
+export const SET_TRANSLATOR: 'jsonforms/SET_TRANSLATOR' =
+  'jsonforms/SET_TRANSLATOR';
+export const UPDATE_I18N: 'jsonforms/UPDATE_I18N' =
+  'jsonforms/UPDATE_I18N';
 
 export const ADD_DEFAULT_DATA: 'jsonforms/ADD_DEFAULT_DATA' = `jsonforms/ADD_DEFAULT_DATA`;
 export const REMOVE_DEFAULT_DATA: 'jsonforms/REMOVE_DEFAULT_DATA' = `jsonforms/REMOVE_DEFAULT_DATA`;
@@ -275,31 +276,19 @@ export const unregisterUISchema = (
   };
 };
 
-export type LocaleActions =
+export type I18nActions =
   | SetLocaleAction
-  | SetLocalizedSchemasAction
-  | SetLocalizedUISchemasAction;
+  | SetTranslatorAction
+  | UpdateI18nAction
 
 export interface SetLocaleAction {
   type: 'jsonforms/SET_LOCALE';
-  locale: string;
+  locale: string | undefined;
 }
 
-export const setLocale = (locale: string): SetLocaleAction => ({
+export const setLocale = (locale: string | undefined): SetLocaleAction => ({
   type: SET_LOCALE,
   locale
-});
-
-export interface SetLocalizedSchemasAction {
-  type: 'jsonforms/SET_LOCALIZED_SCHEMAS';
-  localizedSchemas: Map<string, JsonSchema>;
-}
-
-export const setLocalizedSchemas = (
-  localizedSchemas: Map<string, JsonSchema>
-): SetLocalizedSchemasAction => ({
-  type: SET_LOCALIZED_SCHEMAS,
-  localizedSchemas
 });
 
 export interface SetSchemaAction {
@@ -312,16 +301,37 @@ export const setSchema = (schema: JsonSchema): SetSchemaAction => ({
   schema
 });
 
-export interface SetLocalizedUISchemasAction {
-  type: 'jsonforms/SET_LOCALIZED_UISCHEMAS';
-  localizedUISchemas: Map<string, UISchemaElement>;
+export interface SetTranslatorAction {
+  type: 'jsonforms/SET_TRANSLATOR';
+  translator?: Translator;
+  errorTranslator?: ErrorTranslator; 
 }
 
-export const setLocalizedUISchemas = (
-  localizedUISchemas: Map<string, UISchemaElement>
-): SetLocalizedUISchemasAction => ({
-  type: SET_LOCALIZED_UISCHEMAS,
-  localizedUISchemas
+export const setTranslator = (
+  translator?: Translator,
+  errorTranslator?: ErrorTranslator
+): SetTranslatorAction => ({
+  type: SET_TRANSLATOR,
+  translator,
+  errorTranslator
+});
+
+export interface UpdateI18nAction {
+  type: 'jsonforms/UPDATE_I18N';
+  locale: string | undefined;
+  translator: Translator | undefined;
+  errorTranslator: ErrorTranslator | undefined; 
+}
+
+export const updateI18n = (
+  locale: string | undefined,
+  translator: Translator | undefined,
+  errorTranslator: ErrorTranslator | undefined
+): UpdateI18nAction => ({
+  type: UPDATE_I18N,
+  locale,
+  translator,
+  errorTranslator
 });
 
 export interface SetUISchemaAction {

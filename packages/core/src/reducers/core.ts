@@ -77,7 +77,7 @@ const initState: JsonFormsCore = {
   errors: [],
   validator: undefined,
   ajv: undefined,
-  validationMode: 'ValidateAndShow'
+  validationMode: 'ValidateAndShow',
 };
 
 const reuseAjvForSchema = (ajv: Ajv, schema: JsonSchema): Ajv => {
@@ -154,7 +154,7 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
         errors: e,
         validator: v,
         ajv: thisAjv,
-        validationMode
+        validationMode,
       };
     }
     case UPDATE_CORE: {
@@ -184,17 +184,17 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
         state.ajv !== thisAjv ||
         state.errors !== errors ||
         state.validator !== validator ||
-        state.validationMode !== validationMode;
+        state.validationMode !== validationMode
       return stateChanged
         ? {
             ...state,
-            data: state.data === action.data ? state.data : action.data,
-            schema: state.schema === action.schema ? state.schema : action.schema,
-            uischema: state.uischema === action.uischema ? state.uischema : action.uischema,
-            ajv: thisAjv === state.ajv ? state.ajv : thisAjv,
+            data: action.data,
+            schema: action.schema,
+            uischema: action.uischema,
+            ajv: thisAjv,
             errors: isEqual(errors, state.errors) ? state.errors : errors,
-            validator: validator === state.validator ? state.validator : validator,
-            validationMode: validationMode === state.validationMode ? state.validationMode : validationMode
+            validator: validator,
+            validationMode: validationMode,
           }
         : state;
     }

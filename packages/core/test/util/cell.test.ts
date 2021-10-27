@@ -286,7 +286,7 @@ test('mapStateToEnumCellProps - set default options for dropdown list', t => {
   const props = defaultMapStateToEnumCellProps(createState(uischema), ownProps);
   t.deepEqual(
     props.options,
-    ['DE', 'IT', 'JP', 'US', 'RU', 'Other'].map(enumToEnumOptionMapper)
+    ['DE', 'IT', 'JP', 'US', 'RU', 'Other'].map(e => enumToEnumOptionMapper(e))
   );
   t.is(props.data, undefined);
 });
@@ -315,7 +315,7 @@ test('mapStateToOneOfEnumCellProps - set one of options for dropdown list', t =>
   };
 
   const props = mapStateToOneOfEnumCellProps(createState(uischema), ownProps);
-  t.deepEqual(props.options, [{title: 'Australia' , const: 'AU', }, { title: 'New Zealand', const: 'NZ' }].map(oneOfToEnumOptionMapper));
+  t.deepEqual(props.options, [{title: 'Australia' , const: 'AU', }, { title: 'New Zealand', const: 'NZ' }].map(schema => oneOfToEnumOptionMapper(schema)));
   t.is(props.data, undefined);
 });
 

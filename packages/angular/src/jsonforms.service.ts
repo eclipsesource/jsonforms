@@ -34,7 +34,7 @@ import {
     JsonFormsState,
     JsonFormsSubStates,
     JsonSchema,
-    LocaleActions,
+    I18nActions,
     RankedTester,
     setConfig,
     SetConfigAction,
@@ -42,7 +42,8 @@ import {
     UISchemaElement,
     uischemaRegistryReducer,
     UISchemaTester,
-    ValidationMode
+    ValidationMode,
+    updateI18n
 } from '@jsonforms/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { JsonFormsBaseRenderer } from './base.renderer';
@@ -56,9 +57,10 @@ export class JsonFormsAngularService {
     private _state: JsonFormsSubStates;
     private state: BehaviorSubject<JsonFormsState>;
 
-    init(initialState: JsonFormsSubStates = { core: { data: undefined, schema: undefined, uischema: undefined } }) {
+    init(initialState: JsonFormsSubStates = { core: { data: undefined, schema: undefined, uischema: undefined, validationMode: 'ValidateAndShow' } }) {
         this._state = initialState;
         this._state.config = configReducer(undefined, setConfig(this._state.config));
+        this._state.i18n = i18nReducer(this._state.i18n, updateI18n(this._state.i18n?.locale, this._state.i18n?.translate, this._state.i18n?.translateError));
         this.state = new BehaviorSubject({ jsonforms: this._state });
         const data = initialState.core.data;
         const schema = initialState.core.schema ?? generateJsonSchema(data);
@@ -117,16 +119,18 @@ export class JsonFormsAngularService {
         this.updateSubject();
     }
 
-    updateLocale<T extends LocaleActions>(localeAction: T): T {
-        const localeState = i18nReducer(this._state.i18n, localeAction);
-        this._state.i18n = localeState;
-        this.updateSubject();
-        return localeAction;
+    updateI18n<T extends I18nActions>(i18nAction: T): T {
+        const i18nState = i18nReducer(this._state.i18n, i18nAction);
+        if (i18nState !== this._state.i18n) {
+            this._state.i18n = i18nState;
+            this.updateSubject();
+        }
+        return i18nAction;
     }
 
     updateCore<T extends CoreActions>(coreAction: T): T {
         const coreState = coreReducer(this._state.core, coreAction);
-        if(coreState !== this._state.core) {
+        if (coreState !== this._state.core) {
             this._state.core = coreState;
             this.updateSubject();
         }
