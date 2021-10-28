@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/vue2-vuetify",
-  "version": "3.0.0-alpha.1",
+  "version": "3.0.0-alpha.2",
   "description": "Vue 2 Vuetify renderers for JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms-vuetify-renderers",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -33,6 +33,7 @@
     "watch": "rollup --watch --config rollup.config.js"
   },
   "dependencies": {
+    "ajv": "^8.6.1",
     "dayjs": "^1.10.6",
     "lodash": "^4.17.15"
   },
@@ -41,15 +42,16 @@
     "@vue/composition-api": "1.0.0-rc.3",
     "vuetify": "^2.4.0",
     "@mdi/font": "^5.9.55",
-    "@jsonforms/core": "^3.0.0-alpha.1",
-    "@jsonforms/vue2": "^3.0.0-alpha.1"
+    "@jsonforms/core": "^3.0.0-alpha.2",
+    "@jsonforms/vue2": "^3.0.0-alpha.2"
   },
   "devDependencies": {
+    "ajv": "^8.6.1",
     "@babel/core": "^7.14.6",
     "@babel/preset-env": "^7.14.7",
     "@babel/preset-typescript": "^7.14.5",
-    "@jsonforms/core": "3.0.0-alpha.1",
-    "@jsonforms/vue2": "3.0.0-alpha.1",
+    "@jsonforms/core": "3.0.0-alpha.2",
+    "@jsonforms/vue2": "3.0.0-alpha.2",
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",
     "@vue/eslint-config-prettier": "^6.0.0",

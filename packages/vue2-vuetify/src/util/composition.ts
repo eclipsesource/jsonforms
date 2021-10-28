@@ -10,7 +10,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import merge from 'lodash/merge';
 import { useStyles } from '../styles';
 import { computed, ComputedRef, inject, ref } from '../vue';
-import { Ajv } from 'ajv';
+import Ajv from 'ajv';
 
 const useControlAppliedOptions = <I extends { control: any }>(input: I) => {
   return computed(() =>
@@ -80,6 +80,29 @@ export const useVuetifyControl = <
     persistentHint,
     computedLabel,
   };
+};
+
+export const useTranslator = () => {
+  const jsonforms = inject<JsonFormsSubStates>('jsonforms');
+
+  if (!jsonforms) {
+    throw new Error(
+      "'jsonforms couldn't be injected. Are you within JSON Forms?"
+    );
+  }
+
+  if (!jsonforms.i18n || !jsonforms.i18n.translate) {
+    throw new Error(
+      "'jsonforms i18n couldn't be injected. Are you within JSON Forms?"
+    );
+  }
+
+  const translate = computed(() => {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return jsonforms.i18n!.translate!;
+  });
+
+  return translate;
 };
 
 /**

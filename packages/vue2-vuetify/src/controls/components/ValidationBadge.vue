@@ -38,6 +38,7 @@ import findIndex from 'lodash/findIndex';
 import {
   createControlElement,
   createLabelDescriptionFrom,
+  JsonSchema,
 } from '@jsonforms/core';
 
 export default defineComponent({
@@ -79,7 +80,7 @@ export default defineComponent({
   computed: {
     tooltipMessages(): string[] {
       const error: {
-        dataPath: string;
+        instancePath: string;
         schemaPath: string;
         labels: (string | undefined)[];
         message: string;
@@ -92,11 +93,11 @@ export default defineComponent({
           if (index == -1) {
             error.push({
               schemaPath: errorObject.schemaPath,
-              dataPath: errorObject.dataPath,
+              instancePath: errorObject.instancePath,
               labels: [
                 createLabelDescriptionFrom(
-                  createControlElement(errorObject.dataPath),
-                  errorObject.schema
+                  createControlElement(errorObject.instancePath),
+                  errorObject.schema as JsonSchema
                 ).text,
               ],
               message: errorObject.message,
@@ -104,8 +105,8 @@ export default defineComponent({
           } else {
             error[index].labels.push(
               createLabelDescriptionFrom(
-                createControlElement(errorObject.dataPath),
-                errorObject.schema
+                createControlElement(errorObject.instancePath),
+                errorObject.schema as JsonSchema
               ).text
             );
           }

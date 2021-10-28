@@ -112,6 +112,23 @@
       <v-divider />
 
       <v-container>
+        <v-row><v-col>Locale (Mostly in basic example)</v-col></v-row>
+        <v-row>
+          <v-col>
+            <v-select
+              outlined
+              persistent-hint
+              dense
+              v-model="locale"
+              :items="locales"
+            ></v-select>
+          </v-col>
+        </v-row>
+      </v-container>
+
+      <v-divider />
+
+      <v-container>
         <v-row><v-col>Options</v-col></v-row>
         <v-row>
           <v-col>
@@ -170,6 +187,20 @@
             </v-tooltip>
           </v-col>
         </v-row>
+        <v-row>
+          <v-col>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on: onTooltip }">
+                <v-switch
+                  v-model="locale"
+                  label="Switch beetwen english and german locale"
+                  v-on="onTooltip"
+                ></v-switch>
+              </template>
+              Only applies to basic example
+            </v-tooltip>
+          </v-col>
+        </v-row>
       </v-container>
 
       <v-divider />
@@ -190,6 +221,7 @@ export default {
     ),
     restrict: sync('app/jsonforms@config.restrict'),
     readonly: sync('app/jsonforms@readonly'),
+    locale: sync('app/jsonforms@locale'),
   },
   data: function () {
     return {
@@ -198,6 +230,10 @@ export default {
         { text: 'Validate And Show', value: 'ValidateAndShow' },
         { text: 'Validate And Hide', value: 'ValidateAndHide' },
         { text: 'No Validation', value: 'NoValidation' },
+      ],
+      locales: [
+        { text: 'English (en)', value: 'en' },
+        { text: 'German (de)', value: 'de' },
       ],
     };
   },

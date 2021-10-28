@@ -1,6 +1,6 @@
 <template>
   <v-label v-if="layout.visible" :class="styles.label.root">
-    {{ layout.uischema.text }}
+    {{ translatedLabel }}
   </v-label>
 </template>
 
@@ -10,6 +10,7 @@ import {
   Layout,
   rankWith,
   uiTypeIs,
+  LabelElement,
 } from '@jsonforms/core';
 import { defineComponent } from '../vue';
 import {
@@ -18,7 +19,7 @@ import {
   useJsonFormsLayout,
   RendererProps,
 } from '@jsonforms/vue2';
-import { useVuetifyLayout } from '../util';
+import { useVuetifyLayout, useTranslator } from '../util';
 import { VLabel } from 'vuetify/lib';
 
 const labelRenderer = defineComponent({
@@ -31,8 +32,23 @@ const labelRenderer = defineComponent({
     ...rendererProps<Layout>(),
   },
   setup(props: RendererProps<Layout>) {
-    // reuse layout bindings for label
-    return useVuetifyLayout(useJsonFormsLayout(props));
+    const t = useTranslator();
+    const layout = useVuetifyLayout(useJsonFormsLayout(props));
+    return { ...layout, t };
+  },
+  computed: {
+    translatedLabel(): string | undefined {
+      if (this.layout.uischema.options?.i18n) {
+        return this.t(
+          this.layout.uischema.options.i18n,
+          (this.layout.uischema as LabelElement).text
+        );
+      }
+      return this.t(
+        (this.layout.uischema as LabelElement).text,
+        (this.layout.uischema as LabelElement).text
+      );
+    },
   },
 });
 

@@ -12,6 +12,7 @@
       :validationMode="validationMode"
       :ajv="ajv"
       :readonly="readonly"
+      :i18n="i18n"
       @change="onChange"
     />
     <v-container v-else>
@@ -58,9 +59,11 @@ import {
   JsonFormsRendererRegistryEntry,
   JsonFormsCellRendererRegistryEntry,
   JsonSchema,
+  JsonFormsI18nState,
 } from '@jsonforms/core';
 import { JsonForms, JsonFormsChangeEvent } from '@jsonforms/vue2';
 import JsonRefs from 'json-refs';
+import { createTranslator } from '../i18n';
 
 export default {
   name: 'demo-form',
@@ -103,6 +106,11 @@ export default {
       type: Object as PropType<Ajv>,
       default: undefined,
     },
+    locale: {
+      required: false,
+      type: String,
+      default: 'en',
+    },
   },
   data() {
     return {
@@ -111,14 +119,23 @@ export default {
         resolved: false,
         error: undefined,
       } as ResolvedSchema,
+      i18n: {
+        locale: this.locale,
+        translate: createTranslator(this.locale),
+      } as JsonFormsI18nState,
     };
   },
   watch: {
     example: {
       deep: true,
-      handler(newExample: Example, oldExample: Example) {
+      handler(newExample: Example, oldExample: Example): void {
         this.resolveSchema(newExample.input.schema);
       },
+    },
+    locale(newLocale: string): void {
+      console.log('LOCALE SWITCH', newLocale);
+      this.i18n.locale = newLocale;
+      this.i18n.translate = createTranslator(newLocale);
     },
   },
   mounted() {

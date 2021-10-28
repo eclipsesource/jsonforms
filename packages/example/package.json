@@ -8,9 +8,9 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
-    "@jsonforms/core": "3.0.0-alpha.1",
-    "@jsonforms/vue2": "3.0.0-alpha.1",
-    "@jsonforms/vue2-vuetify": "3.0.0-alpha.1",
+    "@jsonforms/core": "3.0.0-alpha.2",
+    "@jsonforms/vue2": "3.0.0-alpha.2",
+    "@jsonforms/vue2-vuetify": "3.0.0-alpha.2",
     "@vue/composition-api": "1.0.0-rc.3",
     "core-js": "^3.6.5",
     "vue": "^2.6.14",

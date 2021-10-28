@@ -22,6 +22,7 @@ const state: AppState = {
     renderers: extendedVuetifyRenderers,
     cells: extendedVuetifyRenderers,
     ajv,
+    locale: 'en',
   },
   monaco: {
     schemaModel: undefined,

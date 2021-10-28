@@ -295,7 +295,9 @@ const controlRenderer = defineComponent({
     },
     childErrors(index: number): ErrorObject[] {
       return this.control.childErrors.filter((e) =>
-        e.dataPath.startsWith(this.composePaths(this.control.path, `${index}`))
+        e.instancePath.startsWith(
+          this.composePaths(this.control.path, `${index}`)
+        )
       );
     },
   },

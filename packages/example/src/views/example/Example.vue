@@ -20,6 +20,7 @@
                 :validationMode="validationMode"
                 :ajv="ajv"
                 :readonly="readonly"
+                :locale="locale"
                 @change="onChange"
               />
             </v-tab-item>
@@ -200,6 +201,7 @@ export default {
     monacoSchemaModel: sync('app/monaco@schemaModel'),
     monacoUiSchemaModel: sync('app/monaco@uischemaModel'),
     monacoDataModel: sync('app/monaco@dataModel'),
+    locale: sync('app/jsonforms@locale'),
   },
   mounted() {
     this.setExample(

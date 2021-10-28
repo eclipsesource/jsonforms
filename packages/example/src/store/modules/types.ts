@@ -3,7 +3,7 @@ import {
   JsonFormsCellRendererRegistryEntry,
 } from '@jsonforms/core';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
-import AJV from 'ajv';
+import Ajv from 'ajv';
 
 // declare your own store states
 export interface AppState {
@@ -19,7 +19,8 @@ export interface AppState {
     };
     renderers: JsonFormsRendererRegistryEntry[];
     cells: JsonFormsCellRendererRegistryEntry[];
-    ajv: AJV.Ajv;
+    ajv: Ajv;
+    locale: string;
   };
   monaco: {
     schemaModel: monaco.editor.ITextModel | undefined;
