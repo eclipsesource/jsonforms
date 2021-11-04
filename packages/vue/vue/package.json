@@ -27,7 +27,8 @@
     "layout",
     "customization"
   ],
-  "main": "lib/jsonforms-vue.js",
+  "main": "lib/jsonforms-vue.cjs.js",
+  "module": "lib/jsonforms-vue.esm.js",
   "types": "lib/src/index.d.ts",
   "files": [
     "lib/*",
@@ -41,34 +42,37 @@
     "test": "vue-cli-service test:unit"
   },
   "dependencies": {
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.15",
+    "ajv": "^8.6.1"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
     "@babel/preset-env": "^7.9.5",
     "@babel/preset-typescript": "^7.9.0",
+    "@rollup/plugin-alias": "^3.1.8",
     "@jsonforms/core": "^3.0.0-alpha.3",
-    "@rollup/plugin-alias": "^2.2.0",
     "@types/jest": "^24.0.23",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-typescript": "~4.5.0",
     "@vue/cli-plugin-unit-jest": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
-    "@vue/compiler-sfc": "^3.0.7",
+    "@vue/compiler-sfc": "^3.2.26",
     "@vue/test-utils": "^2.0.0-0",
+    "core-js": "^3.9.1",
     "cross-env": "^7.0.2",
     "rimraf": "^3.0.2",
     "rollup": "^2.7.3",
     "rollup-plugin-babel": "^4.4.0",
-    "rollup-plugin-typescript2": "^0.29.0",
+    "rollup-plugin-typescript2": "^0.31.1",
     "rollup-plugin-vue": "^6.0.0",
+    "rollup-plugin-visualizer": "^5.4.1",
+    "rollup-plugin-cleanup": "^3.2.1",
     "typedoc": "^0.19.2",
     "typescript": "4.2.3",
-    "vue-jest": "^5.0.0-0",
-    "vue-template-compiler": "^2.6.11"
+    "vue-jest": "^5.0.0-0"
   },
   "peerDependencies": {
-    "@jsonforms/core": "^3.0.0-alpha.0",
-    "vue": "^3.0.3"
+    "@jsonforms/core": "^3.0.0-alpha.2",
+    "vue": "^3.2.26"
   }
 }

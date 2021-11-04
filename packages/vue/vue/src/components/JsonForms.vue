@@ -162,7 +162,7 @@ export default defineComponent({
     },
     coreDataToUpdate() {
       this.jsonforms.core = coreReducer(
-        this.jsonforms.core,
+        this.jsonforms.core as JsonFormsCore,
         Actions.updateCore(this.data, this.schemaToUse, this.uischemaToUse, {
           validationMode: this.validationMode,
           ajv: this.ajv,
@@ -208,7 +208,7 @@ export default defineComponent({
   },
   methods: {
     dispatch(action: CoreActions) {
-      this.jsonforms.core = coreReducer(this.jsonforms.core, action);
+      this.jsonforms.core = coreReducer(this.jsonforms.core as JsonFormsCore, action);
     }
   },
   provide() {

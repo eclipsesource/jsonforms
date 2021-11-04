@@ -31,22 +31,29 @@
     "layout",
     "customization"
   ],
-  "main": "./lib/index.js",
+  "main": "lib/jsonforms-examples.cjs.js",
+  "module": "lib/jsonforms-examples.esm.js",
   "typings": "./lib/index.d.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "rollup -c rollup.config.js",
     "clean": "rimraf lib coverage dist .nyc_output 2> /dev/null",
     "lint": "tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
     "test": "echo 'Nothing to do for `examples` package'",
     "doc": "typedoc --name 'JSON Forms Examples' --mode file --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
   },
   "dependencies": {
-    "@jsonforms/core": "^3.0.0-alpha.3",
-    "ajv-i18n": "^3.5.0",
-    "redux": "^4.0.4"
+    "ajv-i18n": "^3.5.0"
+  },
+  "peerDependencies": {
+    "@jsonforms/core": "^3.0.0-alpha.3"
   },
   "devDependencies": {
+    "@jsonforms/core": "^3.0.0-alpha.3",
     "rimraf": "^3.0.2",
+    "rollup": "^2.7.3",
+    "rollup-plugin-typescript2": "^0.31.1",
+    "rollup-plugin-visualizer": "^5.4.1",
+    "rollup-plugin-cleanup": "^3.2.1",
     "tslib": "^2.2.0",
     "tslint": "^5.20.1",
     "typedoc": "^0.19.2",

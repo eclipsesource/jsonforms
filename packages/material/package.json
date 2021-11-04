@@ -28,11 +28,11 @@
     "layout",
     "customization"
   ],
-  "main": "lib/index.js",
+  "main": "lib/jsonforms-react-material.cjs.js",
+  "module": "lib/jsonforms-react-material.esm.js",
   "typings": "lib/index.d.ts",
   "scripts": {
-    "bundle": "webpack --config ./webpack/webpack.build.js --env=production --display-error-details",
-    "build": "tsc",
+    "build": "rollup -c rollup.config.js",
     "dev": "webpack --config webpack/webpack.dev.js && webpack-dev-server --config webpack/webpack.dev.js --env=dev --inline",
     "clean": "rimraf lib coverage dist .nyc_output 2> /dev/null",
     "lint": "tslint --project tsconfig.json --exclude src/models/jsonSchema.ts",
@@ -56,7 +56,12 @@
     "testPathIgnorePatterns": [
       "/node_modules/",
       "/dist/"
-    ]
+    ],
+    "globals": {
+      "ts-jest": {
+        "tsconfig": "tsconfig.test.json"
+      }
+    }
   },
   "nyc": {
     "reporter": [
@@ -69,8 +74,8 @@
     "dayjs": "1.10.6"
   },
   "peerDependencies": {
-    "@jsonforms/core": "^3.0.0-alpha.0",
-    "@jsonforms/react": "^3.0.0-alpha.0",
+    "@jsonforms/core": "^3.0.0-alpha.3",
+    "@jsonforms/react": "^3.0.0-alpha.3",
     "@mui/icons-material": "^5.0.0",
     "@mui/lab": "^5.0.0-alpha.54",
     "@mui/material": "^5.0.0"
@@ -92,6 +97,10 @@
     "nyc": "^14.1.1",
     "react-dom": "^17.0.2",
     "rimraf": "^3.0.2",
+    "rollup": "^2.7.3",
+    "rollup-plugin-typescript2": "^0.31.1",
+    "rollup-plugin-visualizer": "^5.4.1",
+    "rollup-plugin-cleanup": "^3.2.1",
     "source-map-loader": "^0.2.4",
     "ts-jest": "^26.4.4",
     "ts-loader": "^6.2.1",

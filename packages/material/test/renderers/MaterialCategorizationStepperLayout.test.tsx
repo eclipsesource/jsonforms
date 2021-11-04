@@ -39,7 +39,7 @@ import MaterialCategorizationStepperLayoutRenderer, {
   materialCategorizationStepperTester
 } from '../../src/layouts/MaterialCategorizationStepperLayout';
 import { MaterialLayoutRenderer, materialRenderers } from '../../src';
-import { Button, Step, StepButton, Stepper } from '@mui/material';
+import { Button, Step, Stepper } from '@mui/material';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { initCore } from './util';
 
@@ -281,7 +281,7 @@ describe('Material categorization stepper layout', () => {
     );
     const beforeClick = wrapper.find(Stepper).props().activeStep;
     wrapper
-      .find(StepButton)
+      .find('button')
       .at(1)
       .simulate('click');
     const afterClick = wrapper.find(Stepper).props().activeStep;
@@ -422,7 +422,7 @@ describe('Material categorization stepper layout', () => {
     const isPrevButtonEnabledBeforeClick = !wrapper.find(Button).at(1).props().disabled;
     const isNextButtonEnabledBeforeClick = !wrapper.find(Button).at(0).props().disabled;
     wrapper
-      .find(StepButton)
+      .find('button')
       .at(1)
       .simulate('click');
     const isPrevButtonEnabledAfterClick = !wrapper.find(Button).at(1).props().disabled;
@@ -489,8 +489,8 @@ describe('Material categorization stepper layout', () => {
     );
     const activeStepBeforeClick = wrapper.find(Stepper).props().activeStep;
     wrapper
-      .find(Button)
-      .at(0)
+      .find('button')
+      .at(4)
       .simulate('click');
     const activeStepAfterClick = wrapper.find(Stepper).props().activeStep;
 
@@ -618,7 +618,7 @@ describe('Material categorization stepper layout', () => {
     );
     
     wrapper
-      .find(StepButton)
+      .find('button')
       .at(1)
       .simulate('click');
 

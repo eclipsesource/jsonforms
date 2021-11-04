@@ -3,6 +3,6 @@
   "private": true,
   "description": "Meta package for JSON Forms Vue 3 development",
   "devDependencies": {
-    "vue": "3.0.7"
+    "vue": "^3.2.26"
   }
 }

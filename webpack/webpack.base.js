@@ -16,18 +16,31 @@ module.exports = {
         rules: [
           { enforce: 'pre', test: /\.js$/, exclude: /node_modules/, loader: 'source-map-loader' },
           {
-            test: /\.ts$/, 						  // All ts and tsx files will be process by
-            loaders: ['ts-loader' ], // first ts-loader, then babel-loader
-            exclude: /node_modules/                   // ignore node_modules
-          },
-          {
-            test: /\.tsx$/, 						  // All ts and tsx files will be process by
-            loaders: [ 'babel-loader', 'ts-loader' ], // first ts-loader, then babel-loader
-            exclude: /node_modules/                   // ignore node_modules
+            test: /\.tsx?$/, 						  // All ts and tsx files will be process by
+            use: [
+              // first ts-loader, then babel-loader
+              {
+                loader: 'babel-loader',
+                options: {
+                  plugins: [
+                    '@babel/plugin-proposal-optional-chaining',
+                    '@babel/plugin-proposal-nullish-coalescing-operator'
+                  ]
+                }
+              },
+              { loader: 'ts-loader'}
+            ], 
+            exclude: /node_modules/,                   // ignore node_modules
           },
           {
             test: /\.jsx?$/,                          // all js and jsx files will be processed by
             loader: 'babel-loader',                   // babel-loader
+            options: {
+              plugins: [
+                '@babel/plugin-proposal-optional-chaining',
+                '@babel/plugin-proposal-nullish-coalescing-operator'
+              ]
+            },
             exclude: /node_modules/                  // ignore node_modules
           },
         ]

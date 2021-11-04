@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig",
+  "compilerOptions": {
+    "outDir": "./lib/cjs",
+    "sourceMap": true,
+    "target": "es5",
+    "module": "commonjs"
+  },
+}
