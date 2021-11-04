@@ -5,6 +5,7 @@ dist
 lib
 docs
 *.log
+stats.html
 
 .idea/
 .vscode/*

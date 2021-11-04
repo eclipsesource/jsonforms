@@ -30,11 +30,11 @@
     "layout",
     "customization"
   ],
-  "main": "./lib/index.js",
-  "typings": "./lib/index.d.ts",
+  "main": "./lib/cjs/index.js",
+  "module": "./lib/esm/index.js",
+  "typings": "./lib/esm/index.d.ts",
   "scripts": {
-    "bundle": "webpack --config webpack/webpack.build.js --env=production --display-error-details",
-    "build": "ngc",
+    "build": "ngc && ngc -p tsconfig.cjs.json",
     "dev": "webpack --config webpack/webpack.dev.js && webpack-dev-server --config webpack/webpack.dev.js --env=dev --inline",
     "clean": "rimraf lib coverage dist .nyc_output 2> /dev/null",
     "lint": "tslint --project tsconfig.json --exclude src/models/jsonSchema.ts",

@@ -9,7 +9,6 @@
     "core-js",
     "vue",
     "rollup-plugin-vue",
-    "@vue/test-utils",
-    "@vue/composition-api"
+    "@vue/test-utils"
   ]
 }

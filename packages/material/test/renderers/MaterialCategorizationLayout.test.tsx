@@ -270,7 +270,7 @@ describe('Material categorization layout', () => {
 
     const beforeClick = wrapper.find(Tabs).props().value;
     wrapper
-      .find(Tab)
+      .find('button[role="tab"]')
       .at(1)
       .simulate('click');
     const afterClick = wrapper.find(Tabs).props().value;
@@ -429,7 +429,7 @@ describe('Material categorization layout', () => {
     );
     
     wrapper
-      .find(Tab)
+      .find('button[role="tab"]')
       .at(1)
       .simulate('click');
 

@@ -20,7 +20,7 @@ module.exports = merge(baseConfig, {
         contentBase: './example'
     },
     plugins: [
-        new webpack.HotModuleReplacementPlugin()
+        new webpack.HotModuleReplacementPlugin(),
     ],
     module: {
         rules: [

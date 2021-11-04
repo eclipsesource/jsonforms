@@ -2,21 +2,30 @@ import vue from 'rollup-plugin-vue';
 import alias from '@rollup/plugin-alias';
 import babel from 'rollup-plugin-babel';
 import typescript from 'rollup-plugin-typescript2';
+import cleanup from 'rollup-plugin-cleanup';
+import { visualizer } from 'rollup-plugin-visualizer';
+
+const packageJson = require('./package.json');
+
+const baseConfig = {
+  input: 'src/index.ts',
+  external: [
+    ...Object.keys(packageJson.dependencies),
+    ...Object.keys(packageJson.peerDependencies),
+    /^lodash\/.*/
+  ]
+};
 
 const buildFormats = [
   {
-    input: 'src/index.ts',
+    ...baseConfig,
     output: {
-      file: 'lib/jsonforms-vue.js',
+      file: packageJson.module,
       format: 'esm',
-      exports: 'named',
       sourcemap: true
     },
-    external: ['vue', '@jsonforms/core', 'lodash/maxBy', 'lodash/cloneDeep'],
     plugins: [
       typescript({
-        module: 'esnext',
-        tsconfig: 'tsconfig.json',
         tsconfigOverride: {
           include: null,
           exclude: ['node_modules', 'tests', 'dev']
@@ -34,7 +43,40 @@ const buildFormats = [
       babel({
         exclude: 'node_modules/**',
         extensions: ['.js', '.jsx', '.ts', '.tsx', '.vue']
-      })
+      }),
+      cleanup({ extensions: ['js', 'ts', 'jsx', 'tsx', 'vue'] }),
+      visualizer({ open: false })
+    ]
+  },
+  {
+    ...baseConfig,
+    output: {
+      file: packageJson.main,
+      format: 'cjs',
+      sourcemap: true
+    },
+    plugins: [
+      typescript({
+        tsconfigOverride: {
+          include: null,
+          exclude: ['node_modules', 'tests', 'dev'],
+          target: "ES5"
+        }
+      }),
+      alias({
+        resolve: ['.js', '.jsx', '.ts', '.tsx', '.vue']
+      }),
+      vue({
+        css: false,
+        template: {
+          isProduction: true
+        }
+      }),
+      babel({
+        exclude: 'node_modules/**',
+        extensions: ['.js', '.jsx', '.ts', '.tsx', '.vue']
+      }),
+      cleanup({ extensions: ['js', 'ts', 'jsx', 'tsx', 'vue'] }),
     ]
   }
 ];

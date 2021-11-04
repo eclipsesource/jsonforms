@@ -2,13 +2,12 @@
   "extends": "../../tsconfig.base",
   "compilerOptions": {
     "outDir": "./lib",
-    "sourceMap": true
+    "sourceMap": true,
   },
   "exclude":[
     "node_modules"
   ],
   "files": [
-    "./src/index.ts",
-    "./src/redux/index.ts"
+    "./src/index.ts"
   ]
 }

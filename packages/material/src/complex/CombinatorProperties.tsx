@@ -23,9 +23,9 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import _ from 'lodash';
 import { Generate, JsonSchema, Layout, UISchemaElement } from '@jsonforms/core';
 import { JsonFormsDispatch } from '@jsonforms/react';
+import omit from 'lodash/omit';
 
 interface CombinatorPropertiesProps {
   schema: JsonSchema;
@@ -42,7 +42,7 @@ export class CombinatorProperties extends React.Component<CombinatorPropertiesPr
 
     const { schema, combinatorKeyword, path } = this.props;
 
-    const otherProps: JsonSchema = _.omit(schema, combinatorKeyword) as JsonSchema;
+    const otherProps: JsonSchema = omit(schema, combinatorKeyword) as JsonSchema;
     const foundUISchema: UISchemaElement = Generate.uiSchema(otherProps, 'VerticalLayout');
     let isLayoutWithElements = false;
     if (foundUISchema !== null && isLayout(foundUISchema)) {

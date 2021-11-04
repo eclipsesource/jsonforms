@@ -29,16 +29,16 @@
     "layout",
     "customization"
   ],
-  "main": "./lib/index.js",
-  "typings": "./lib/index.d.ts",
+  "main": "./lib/cjs/index.js",
+  "esm": "./lib/esm/index.js",
+  "typings": "./lib/esm/index.d.ts",
   "scripts": {
-    "bundle": "webpack --config ./webpack.build.js --env=production --display-error-details",
-    "build": "ngc",
+    "build": "ngc && ngc -p tsconfig.cjs.json",
     "clean": "rimraf lib coverage dist .nyc_output 2> /dev/null",
     "lint": "tslint --project tsconfig.json --exclude src/models/jsonSchema.ts",
     "report": "nyc report --reporter=html",
-    "test": "ava",
-    "test-cov": "nyc ava",
+    "test": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} ava",
+    "test-cov": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} nyc ava",
     "doc": "typedoc --name 'JSON Forms Angular Core' --mode file --out docs src"
   },
   "nyc": {
@@ -74,13 +74,11 @@
     "@jsonforms/core": "^3.0.0-alpha.3",
     "ava": "~2.4.0",
     "copy-webpack-plugin": "^5.0.5",
+    "cross-env": "^7.0.2",
     "nyc": "^14.1.1",
     "rimraf": "^3.0.2",
     "rxjs": "^6.4.0",
     "tslint": "^5.20.1",
-    "typedoc": "^0.19.2",
-    "webpack": "^4.41.2",
-    "webpack-cli": "^3.2.1",
-    "webpack-dev-server": "^3.9.0"
+    "typedoc": "^0.19.2"
   }
 }

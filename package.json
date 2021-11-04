@@ -2,7 +2,7 @@
   "name": "jsonforms-monorepo",
   "scripts": {
     "lerna": "lerna",
-    "preparePublish": "git clean -dfx && npm ci && npm run init && npm run clean && npm run build && npm run bundle && npm run test",
+    "preparePublish": "git clean -dfx && npm ci && npm run init && npm run clean && npm run build && npm run test",
     "merge-report": "mkdir -p coverage && lcov-result-merger 'packages/**/coverage/lcov.info' 'coverage/lcov.info'",
     "check-format": "echo 'temporarily disabled'",
     "init": "lerna bootstrap --hoist",
@@ -14,6 +14,8 @@
     "lint": "tslint 'packages/**/*.{ts,tsx}' -c ./tslint.json"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.16.5",
+    "@babel/plugin-proposal-optional-chaining": "^7.16.5",
     "@istanbuljs/nyc-config-typescript": "0.1.3",
     "@types/jest": "^24.0.23",
     "@types/lodash": "^4.14.149",
@@ -34,7 +36,7 @@
     "source-map-support": "0.5.16",
     "style-loader": "^1.0.1",
     "ts-loader": "^6.2.1",
-    "ts-node": "^8.5.3",
+    "ts-node": "^10.4.0",
     "tslint": "^5.20.1",
     "tslint-loader": "^3.5.4",
     "tslint-react": "^4.1.0",

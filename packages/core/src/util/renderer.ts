@@ -86,17 +86,17 @@ const isRequired = (
  * Adds an asterisk to the given label string based
  * on the required parameter.
  *
- * @param {string} label the label string
+ * @param {string | undefined} label the label string
  * @param {boolean} required whether the label belongs to a control which is required
  * @param {boolean} hideRequiredAsterisk applied UI Schema option
  * @returns {string} the label string
  */
 export const computeLabel = (
-  label: string,
+  label: string | undefined,
   required: boolean,
   hideRequiredAsterisk: boolean
 ): string => {
-  return required && !hideRequiredAsterisk ? label + '*' : label;
+  return `${label ?? ''}${ required && !hideRequiredAsterisk ? '*' : ''}`;
 };
 
 /**
@@ -154,7 +154,7 @@ export const createDefaultValue = (schema: JsonSchema) => {
  */
 export const isDescriptionHidden = (
   visible: boolean,
-  description: string,
+  description: string | undefined,
   isFocused: boolean,
   showUnfocusedDescription: boolean
 ): boolean => {

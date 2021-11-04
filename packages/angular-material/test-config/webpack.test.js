@@ -9,7 +9,19 @@ module.exports = {
   },
 
   module: {
-    rules: [{
+    rules: [
+      {
+        test: /\.jsx?$/,
+        loader: 'babel-loader',
+        options: {
+          plugins: [
+            '@babel/plugin-proposal-optional-chaining',
+            '@babel/plugin-proposal-nullish-coalescing-operator'
+          ]
+        },
+        exclude: /node_modules/
+      },
+      {
         test: /\.ts$/,
         loaders: [
           {

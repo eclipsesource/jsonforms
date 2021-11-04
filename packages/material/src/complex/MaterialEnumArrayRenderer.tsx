@@ -22,8 +22,8 @@ import {
   FormHelperText,
   Hidden
 } from '@mui/material';
-import { startCase } from 'lodash';
-import { isEmpty } from 'lodash';
+import startCase from 'lodash/startCase';
+import isEmpty from 'lodash/isEmpty';
 import React from 'react';
 
 export const MaterialEnumArrayRenderer = ({
