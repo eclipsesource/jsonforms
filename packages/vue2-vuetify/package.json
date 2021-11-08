@@ -6,6 +6,9 @@
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
   "homepage": "http://jsonforms.io/",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "keywords": [
     "vue",
     "vue2",
@@ -27,6 +30,10 @@
   ],
   "main": "lib/jsonforms-vue2-vuetify.cjs.js",
   "typings": "lib/index.d.ts",
+  "files": [
+    "lib",
+    "src"
+  ],
   "scripts": {
     "prebuild": "rimraf lib",
     "build": "rollup --config rollup.config.js",
