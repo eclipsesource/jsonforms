@@ -31,7 +31,7 @@ button {
   border: 1px solid;
   font-size: 1rem;
   line-height: 1;
-  padding: 1rem 2rem;
+  padding: 0.5rem 1rem;
   border-radius: 5px;
   cursor: pointer;
 }

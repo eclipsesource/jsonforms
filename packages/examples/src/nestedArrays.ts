@@ -23,15 +23,7 @@
   THE SOFTWARE.
 */
 import { registerExamples } from './register';
-import {
-  Actions,
-  ControlElement,
-  JsonSchema,
-  NOT_APPLICABLE,
-  VerticalLayout,
-  AnyAction,
-  Dispatch
-} from '@jsonforms/core';
+import { ControlElement, JsonSchema, NOT_APPLICABLE, VerticalLayout } from '@jsonforms/core';
 
 const schema = {
   type: 'object',
@@ -54,7 +46,7 @@ const schema = {
   }
 };
 
-const uischema = {
+export const uischema = {
   type: 'HorizontalLayout',
   elements: [
     {
@@ -87,9 +79,6 @@ registerExamples([
   }
 ]);
 
-const nestedArrayTester = (_jsonSchema: JsonSchema, schemaPath: string) => {
-  return schemaPath === '#/properties/exampleArray' ? 2 : NOT_APPLICABLE;
-};
 const control1: ControlElement = {
   type: 'Control',
   scope: '#/properties/name'
@@ -103,11 +92,7 @@ export const nestedArrayLayout: VerticalLayout = {
   type: 'VerticalLayout',
   elements: [control1, control2]
 };
-export const registerNestedArrayUISchema = (dispatch: Dispatch<AnyAction>) => {
-  dispatch(Actions.registerUISchema(nestedArrayTester, nestedArrayLayout));
-};
-export const unregisterNestedArrayUISchema = (
-  dispatch: Dispatch<AnyAction>
-) => {
-  dispatch(Actions.unregisterUISchema(nestedArrayTester));
+
+export const nestedArrayTester = (_jsonSchema: JsonSchema, schemaPath: string) => {
+  return schemaPath === '#/properties/exampleArray' ? 2 : NOT_APPLICABLE;
 };

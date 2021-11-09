@@ -24,7 +24,10 @@
 */
 
 import { JsonFormsInitStateProps } from '@jsonforms/react';
+import { JsonFormsUISchemaRegistryEntry } from '@jsonforms/core';
 import { array as ArrayExample } from '@jsonforms/examples';
+import { nestedArray } from '@jsonforms/examples';
+import { issue_1220 } from '@jsonforms/examples';
 
 export const enhancements = () => {
   return {
@@ -44,6 +47,54 @@ export const enhancements = () => {
           return {
             ...props,
             uischema: ArrayExample.uischema
+          }
+        }
+      },
+    ],
+    'nestedArray': [
+      {
+        'label': 'Register NestedArray UISchema',
+        'apply': (props: JsonFormsInitStateProps) => {
+          return {
+            ...props,
+            uischemas: [ 
+              ...props.uischemas,
+              { tester: nestedArray.nestedArrayTester, uischema: nestedArray.nestedArrayLayout }
+            ]
+          }
+        }
+      },
+      {
+        'label': 'Unregister NestedArray UISchema',
+        'apply': (props: JsonFormsInitStateProps) => {
+          const uischemas: JsonFormsUISchemaRegistryEntry[] = [];
+          return {
+            ...props,
+            uischemas: uischemas
+          }
+        }
+      },
+    ],
+    '1220': [
+      {
+        'label': 'Register Issue 1220 UISchema',
+        'apply': (props: JsonFormsInitStateProps) => {
+          return {
+            ...props,
+            uischemas: [
+              ...props.uischemas,
+              { tester: issue_1220.nestedArrayTester, schema: issue_1220.detail_uischema }
+            ]
+          }
+        }
+      },
+      {
+        'label': 'Unregister Issue 1220 UISchema',
+        'apply': (props: JsonFormsInitStateProps) => {
+          const uischemas: JsonFormsUISchemaRegistryEntry[] = [];
+          return {
+            ...props,
+            uischemas: uischemas
           }
         }
       },
