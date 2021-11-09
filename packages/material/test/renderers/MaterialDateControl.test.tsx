@@ -202,7 +202,8 @@ describe('Material date control', () => {
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').first();
-    input.simulate('change', { target: { value: '1961-04-12' } });
+    (input.getDOMNode() as HTMLInputElement).value = '1961-04-12';
+    input.simulate('change', input);
     expect(onChangeData.data.foo).toBe('1961-04-12');
   });
 
@@ -372,7 +373,8 @@ describe('Material date control', () => {
     const input = wrapper.find('input').first();
     expect(input.props().value).toBe('1980/06');
 
-    input.simulate('change', { target: { value: '1961/04' } });
+    (input.getDOMNode() as HTMLInputElement).value = '1961/04';
+    input.simulate('change', input);
     expect(onChangeData.data.foo).toBe('04---1961');
   });
 });
