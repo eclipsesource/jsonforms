@@ -63,7 +63,7 @@ export const rendererProps = <U = UISchemaElement>() => ({
   },
   path: {
     required: true as true,
-    type: String
+    type: Array as CompType<string[], ArrayConstructor>,
   },
   enabled: {
     required: false as false,
