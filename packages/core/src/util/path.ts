@@ -62,9 +62,13 @@ export const toDataPathSegments = (schemaPath: string): string[] => {
     .replace(/oneOf\/[\d]\//g, '');
   const segments = s.split('/');
 
-  const startFromRoot = segments[0] === '#' || segments[0] === '';
+  const decodedSegments = segments.map(segment => {
+    return segment.split('~1').join('/').split('~0').join('~');
+  });
+
+  const startFromRoot = decodedSegments[0] === '#' || decodedSegments[0] === '';
   const startIndex = startFromRoot ? 2 : 1;
-  return range(startIndex, segments.length, 2).map(idx => segments[idx]);
+  return range(startIndex, decodedSegments.length, 2).map(idx => decodedSegments[idx]);
 };
 
 /**

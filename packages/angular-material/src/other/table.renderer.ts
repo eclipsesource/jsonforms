@@ -101,7 +101,8 @@ export class TableRenderer extends JsonFormsArrayControl {
   ): ColumnDescription[] => {
     if (schema.type === 'object') {
       return this.getValidColumnProps(schema).map(prop => {
-        const uischema = controlWithoutLabel(`#/properties/${prop}`);
+        const encProp = prop.split('/').join('~1');
+        const uischema = controlWithoutLabel(`#/properties/${encProp}`);
         if (!this.isEnabled()) {
           setReadonly(uischema);
         }

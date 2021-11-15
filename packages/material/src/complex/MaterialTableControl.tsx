@@ -207,7 +207,7 @@ interface NonEmptyCellComponentProps {
   isValid: boolean
 }
 const NonEmptyCellComponent = React.memo(({path, propName, schema,rootSchema, errors, enabled, renderers, cells, isValid}:NonEmptyCellComponentProps) => {
-
+  propName = propName?.split('/').join('~1');
   return (
     <NoBorderTableCell>
       {schema.properties ? (

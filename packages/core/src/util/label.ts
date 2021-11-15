@@ -36,7 +36,8 @@ const deriveLabel = (
   }
   if (typeof controlElement.scope === 'string') {
     const ref = controlElement.scope;
-    const label = ref.substr(ref.lastIndexOf('/') + 1);
+    let label = ref.substr(ref.lastIndexOf('/') + 1);
+    label = label.split('~1').join('/').split('~0').join('~');
 
     return startCase(label);
   }

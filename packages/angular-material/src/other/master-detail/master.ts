@@ -50,7 +50,9 @@ export const removeSchemaKeywords = (path: string) => {
   return path
     .split('/')
     .filter(s => !some(keywords, key => key === s))
-    .join('.');
+    .join('.')
+    .split('~1')
+    .join('/')
 };
 
 @Component({

@@ -162,6 +162,7 @@ const generateUISchema = (
       const nextRef: string = currentRef + '/properties';
       Object.keys(jsonSchema.properties).map(propName => {
         let value = jsonSchema.properties[propName];
+        propName = propName.split('/').join('~1');
         const ref = `${nextRef}/${propName}`;
         if (value.$ref !== undefined) {
           value = resolveSchema(rootSchema, value.$ref);

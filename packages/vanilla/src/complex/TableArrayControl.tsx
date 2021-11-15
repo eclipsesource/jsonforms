@@ -167,12 +167,13 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
                               childPath,
                               prop.toString()
                             );
-
+                            let encProp = prop;
+                            encProp = prop.split('/').join('~1');
                             return (
                               <td key={childPropPath}>
                                 <DispatchCell
-                                  schema={Resolve.schema(schema, `#/properties/${prop}`, rootSchema)}
-                                  uischema={createControlElement(prop)}
+                                  schema={Resolve.schema(schema, `#/properties/${encProp}`, rootSchema)}
+                                  uischema={createControlElement(encProp)}
                                   path={childPath + '.' + prop}
                                 />
                               </td>

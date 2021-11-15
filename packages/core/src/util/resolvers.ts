@@ -115,7 +115,9 @@ export const resolveSchema = (
   if (isEmpty(schema)) {
     return undefined;
   }
-  const validPathSegments = schemaPath.split('/');
+  const validPathSegments = schemaPath.split('/').map(segment => {
+    return segment.split('~1').join('/').split('~0').join('~');
+  });
   let resultSchema = schema;
   for (let i = 0; i < validPathSegments.length; i++) {
     let pathSegment = validPathSegments[i];
@@ -136,7 +138,7 @@ export const resolveSchema = (
         resultSchema?.anyOf ?? []
       );
       for (let item of schemas) {
-        curSchema = resolveSchema(item, validPathSegments.slice(i).join('/'));
+        curSchema = resolveSchema(item, validPathSegments.slice(i).map(s => s.split('/').join('~1')).join('/'));
         if (curSchema) {
           break;
         }
