@@ -264,3 +264,70 @@ test('withJsonFormsDetailProps - should use uischemas props', () => {
   expect(mockUISchemasProps.schema).toEqual(schema);
   expect(mockUISchemasProps.uischemas).toEqual(uischemas);
 });
+
+test('withJsonFormsDetailProps - should update uischemas after change', () => {
+  const MockUISchemas = (_: StatePropsOfControlWithDetail) => {
+    return <></>;
+  };
+
+  const MockBasicRenderer = withJsonFormsDetailProps(MockUISchemas);
+
+  const schema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'string',
+      },
+      bar: {
+        type: 'number'
+      }
+    }
+  };
+
+  const renderers = [
+    {
+      tester: rankWith(1, () => true),
+      renderer: MockBasicRenderer
+    }
+  ];
+
+  const newUischemas = [
+    {
+      tester: (_jsonSchema: JsonSchema, schemaPath: string) => {
+        return schemaPath === '#/properties/color' ? 2 : NOT_APPLICABLE;
+      },
+      uischema: {
+        type: 'HorizontalLayout',
+        elements: [
+          {
+            type: 'Control',
+            scope: '#/properties/foo'
+          },
+          {
+            type: 'Control',
+            scope: '#/properties/bar'
+          }
+        ]
+      }
+    }
+  ];
+
+  const uischema = {
+    type: 'Control',
+    scope: '#'
+  };
+
+  const wrapper = mount(
+    <JsonForms
+      data={{}}
+      schema={schema}
+      uischema={uischema}
+      renderers={renderers}
+    />
+  );
+
+  wrapper.setProps({ uischemas: newUischemas });
+  wrapper.update();
+  const mockUISchemasProps = wrapper.find(MockUISchemas).props();
+  expect(mockUISchemasProps.uischemas).toEqual(newUischemas);
+});

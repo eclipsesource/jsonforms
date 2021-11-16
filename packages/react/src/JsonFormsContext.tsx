@@ -158,7 +158,7 @@ export const JsonFormsStateProvider = ({ children, initState, onChange }: any) =
     i18n: i18n,
     // only core dispatch available
     dispatch: coreDispatch,
-  }), [core, initState.renderers, initState.cells, config, initState.readonly, i18n]);
+  }), [core, initState.renderers, initState.cells, config, initState.uischemas, initState.readonly, i18n]);
 
   const onChangeRef = useRef(onChange);
   useEffect(() => {
