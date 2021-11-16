@@ -22,13 +22,28 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import { StateProps } from '../example';
 import { registerExamples } from '../register';
+
+const actions = [
+  {
+    'label': 'Change data',
+    'apply': (props: StateProps) => {
+      return {
+        ...props,
+        data: { id: 'aaa' }
+      }
+    }
+  },
+]
+
 registerExamples([
   {
     name: 'dynamic',
     label: 'Dynamic Change',
     schema: undefined,
     uischema: undefined,
-    data: { name: 'bla' }
+    data: { name: 'bla' },
+    actions
   }
 ]);

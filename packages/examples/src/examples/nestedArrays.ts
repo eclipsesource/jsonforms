@@ -23,7 +23,8 @@
   THE SOFTWARE.
 */
 import { registerExamples } from '../register';
-import { ControlElement, JsonSchema, NOT_APPLICABLE } from '@jsonforms/core';
+import { ControlElement, JsonFormsUISchemaRegistryEntry, JsonSchema, NOT_APPLICABLE } from '@jsonforms/core';
+import { StateProps } from '..';
 
 const schema = {
   type: 'object',
@@ -79,7 +80,7 @@ const control2: ControlElement = {
   scope: '#/properties/choices'
 };
 
-export const uischemas = [
+const uischemas = [
   {
     tester: (_jsonSchema: JsonSchema, schemaPath: string) => {
       return schemaPath === '#/properties/exampleArray' ? 2 : NOT_APPLICABLE;
@@ -89,6 +90,28 @@ export const uischemas = [
       elements: [control1, control2]
     }
   }
+];
+
+const actions = [
+  {
+    'label': 'Register NestedArray UISchema',
+    'apply': (props: StateProps) => {
+      return {
+        ...props,
+        uischemas: uischemas
+      }
+    }
+  },
+  {
+    'label': 'Unregister NestedArray UISchema',
+    'apply': (props: StateProps) => {
+      const uischemas: JsonFormsUISchemaRegistryEntry[] = undefined;
+      return {
+        ...props,
+        uischemas: uischemas
+      }
+    }
+  },
 ]
 
 registerExamples([
@@ -97,6 +120,7 @@ registerExamples([
     label: 'Nested Array',
     data,
     schema,
-    uischema
+    uischema,
+    actions
   }
 ]);

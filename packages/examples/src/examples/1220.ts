@@ -23,7 +23,8 @@
   THE SOFTWARE.
 */
 import { registerExamples } from '../register';
-import { JsonSchema, NOT_APPLICABLE } from '@jsonforms/core';
+import { JsonFormsUISchemaRegistryEntry, JsonSchema, NOT_APPLICABLE } from '@jsonforms/core';
+import { StateProps } from '../example';
 
 const data = {
   orders: [
@@ -73,7 +74,7 @@ export const uischema = {
   scope: '#/properties/orders'
 };
 
-export const uischemas = [
+const uischemas = [
   {
     tester: (_jsonSchema: JsonSchema, schemaPath: string) => {
       return schemaPath === '#/properties/orders' ? 2 : NOT_APPLICABLE;
@@ -111,12 +112,35 @@ export const uischemas = [
   },
 ];
 
+const actions = [
+  {
+    'label': 'Register Issue 1220 UISchema',
+    'apply': (props: StateProps) => {
+      return {
+        ...props,
+        uischemas: uischemas
+      }
+    }
+  },
+  {
+    'label': 'Unregister Issue 1220 UISchema',
+    'apply': (props: StateProps) => {
+      const uischemas: JsonFormsUISchemaRegistryEntry[] = undefined;
+      return {
+        ...props,
+        uischemas: uischemas
+      }
+    }
+  },
+];
+
 registerExamples([
   {
     name: '1220',
     label: 'Issue 1220',
     data,
     schema,
-    uischema
+    uischema,
+    actions
   }
 ]);

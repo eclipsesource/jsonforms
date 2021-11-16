@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import { registerExamples } from '../register';
+import { StateProps } from '../example';
 
 export const schema = {
   type: 'object',
@@ -91,6 +92,27 @@ export const data = {
   ]
 };
 
+const actions = [
+  {
+    'label': 'Enable Sorting',
+    'apply': (props: StateProps) => {
+      return {
+        ...props,
+        uischema: uischemaWithSorting
+      }
+    }
+  },
+  {
+    'label': 'Disable Sorting',
+    'apply': (props: StateProps) => {
+      return {
+        ...props,
+        uischema: uischema
+      }
+    }
+  },
+];
+
 registerExamples([
   {
     name: 'array',
@@ -100,6 +122,7 @@ registerExamples([
     uischema,
     config: {
       withSort: uischemaWithSorting
-    }
+    },
+    actions
   }
 ]);

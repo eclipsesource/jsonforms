@@ -22,6 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import { StateProps } from '../example';
 import { registerExamples } from '../register';
 
 export const schema = {
@@ -93,12 +94,36 @@ export const data = {
   toggleControl: true
 };
 
+const actions = [
+  [
+    {
+      'label': 'Enable/Disable top layout',
+      'apply': (props: StateProps) => {
+        return {
+          ...props,
+          data: { ...props.data, toggleTopLayout: !props.data.toggleTopLayout }
+        }
+      }
+    },
+    {
+      'label': 'Show/Hide bottom layout',
+      'apply': (props: StateProps) => {
+        return {
+          ...props,
+          data: { ...props.data, toggleBottomLayout: !props.data.toggleBottomLayout }
+        }
+      }
+    },
+  ]
+]
+
 registerExamples([
   {
     name: 'rule-enable',
     label: 'Rule Inheritance',
     data,
     schema,
-    uischema
+    uischema,
+    actions
   }
 ]);

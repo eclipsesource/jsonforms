@@ -32,7 +32,6 @@ import {
   JsonSchema
 } from '@jsonforms/core';
 import { resolveRefs } from 'json-refs';
-import { enhancements } from './enhancements';
 import './App.css';
 
 type AppProps = {
@@ -86,8 +85,7 @@ const App = ({ examples, cells, renderers}: AppProps) => {
   const [dataAsString, setDataAsString] = useState<any>('');
   const [props, setProps] = useState<any>(getProps(currentExample, cells, renderers)); // helper function
 
-  const enhancement: any = enhancements();
-  const currentEnhancements: any = enhancement[currentExample?.name];
+  const actions: any = currentExample.actions;
 
   useEffect(() => {
     let example = examples[currentIndex];
@@ -132,7 +130,7 @@ const App = ({ examples, cells, renderers}: AppProps) => {
           </div>
           <div className='demoform'>
             <div className="buttons">
-              {currentEnhancements?.map((buttons: any, index: number) => (
+              {actions?.map((buttons: any, index: number) => (
                 <button onClick = { () => setProps((oldProps: JsonFormsInitStateProps) => buttons.apply(oldProps)) } key={index}>{buttons.label}</button>
               ))}
             </div>
