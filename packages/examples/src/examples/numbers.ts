@@ -22,14 +22,68 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { JsonSchema, UISchemaElement } from '@jsonforms/core';
+import { registerExamples } from '../register';
 
-export interface ExampleDescription {
-  name: string;
-  label: string;
-  data: any;
-  schema: JsonSchema;
-  uischema: UISchemaElement;
-  uischemas?: any;
-  config?: any;
-}
+export const schema = {
+  type: 'object',
+  properties: {
+    price: {
+      type: 'number',
+      maximum: 100,
+      minimum: 1,
+      default: 50
+    },
+    age: {
+      type: 'integer'
+    },
+    height: {
+      type: 'number'
+    }
+  }
+};
+
+export const uischema = {
+  type: 'VerticalLayout',
+  elements: [
+    {
+      type: 'HorizontalLayout',
+      elements: [
+        {
+          type: 'Control',
+          scope: '#/properties/price',
+          label: {
+            text: 'Price'
+          }
+        },
+        {
+          type: 'Control',
+          scope: '#/properties/age'
+        },
+        {
+          type: 'Control',
+          scope: '#/properties/height'
+        },
+        {
+          type: 'Control',
+          scope: '#/properties/price',
+          label: {
+            text: 'Price with Slider'
+          },
+          options: { slider: true }
+        }
+      ]
+    }
+  ]
+};
+
+export const data = {};
+
+registerExamples([
+  {
+    name: 'numbers',
+    label: 'Numbers',
+    data,
+    schema,
+    uischema
+  }
+]);

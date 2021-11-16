@@ -1,7 +1,7 @@
 /*
   The MIT License
   
-  Copyright (c) 2017-2019 EclipseSource Munich
+  Copyright (c) 2017-2021 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
   
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,14 +22,49 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { JsonSchema, UISchemaElement } from '@jsonforms/core';
 
-export interface ExampleDescription {
-  name: string;
-  label: string;
-  data: any;
-  schema: JsonSchema;
-  uischema: UISchemaElement;
-  uischemas?: any;
-  config?: any;
-}
+import { registerExamples } from '../register';
+
+export const schema = {
+  type: 'object',
+  properties: {
+    checkbox: {
+      type: 'boolean'
+    },
+    toggle: {
+      type: 'boolean'
+    }
+  }
+};
+
+export const uischema = {
+  type: 'VerticalLayout',
+  elements: [
+    {
+      type: 'Control',
+      scope: '#/properties/checkbox'
+    },
+    {
+      type: 'Control',
+      scope: '#/properties/toggle',
+      options: {
+        toggle: true
+      }
+    }
+  ]
+};
+
+export const data = {
+  checkbox: false,
+  toggle: false
+};
+
+export const booleanToggleExample = {
+  name: 'booleanToggle',
+  label: 'Boolean Toggle',
+  data,
+  schema,
+  uischema
+};
+
+registerExamples([booleanToggleExample]);

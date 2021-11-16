@@ -57,8 +57,7 @@ export const enhancements = () => {
         'apply': (props: JsonFormsInitStateProps) => {
           return {
             ...props,
-            uischemas: [ 
-              ...props.uischemas,
+            uischemas: [
               { tester: nestedArray.nestedArrayTester, uischema: nestedArray.nestedArrayLayout }
             ]
           }
@@ -82,7 +81,6 @@ export const enhancements = () => {
           return {
             ...props,
             uischemas: [
-              ...props.uischemas,
               { tester: issue_1220.nestedArrayTester, schema: issue_1220.detail_uischema }
             ]
           }

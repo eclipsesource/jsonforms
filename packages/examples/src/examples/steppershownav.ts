@@ -22,14 +22,31 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { JsonSchema, UISchemaElement } from '@jsonforms/core';
+import { registerExamples } from '../register';
+import {
+  data as categorizationData,
+  schema as categorizationSchema,
+  uischema as categorizationUiSchema
+} from './categorization';
 
-export interface ExampleDescription {
-  name: string;
-  label: string;
-  data: any;
-  schema: JsonSchema;
-  uischema: UISchemaElement;
-  uischemas?: any;
-  config?: any;
-}
+export const schema = categorizationSchema;
+
+export const uischema = {
+  ...categorizationUiSchema,
+  options: {
+    variant: 'stepper',
+    showNavButtons: true
+  }
+};
+
+export const data = categorizationData;
+
+registerExamples([
+  {
+    name: 'categorizationsteppernavbuttons',
+    label: 'Categorization (Stepper - Nav Buttons)',
+    data,
+    schema,
+    uischema
+  }
+]);

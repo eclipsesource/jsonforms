@@ -22,14 +22,67 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { JsonSchema, UISchemaElement } from '@jsonforms/core';
+import { registerExamples } from '../register';
 
-export interface ExampleDescription {
-  name: string;
-  label: string;
-  data: any;
-  schema: JsonSchema;
-  uischema: UISchemaElement;
-  uischemas?: any;
-  config?: any;
-}
+const data = {
+};
+
+const schema = {
+    type: 'object',
+    properties: {
+      exampleRadioEnum: {
+        type: 'string',
+        enum: ['One', 'Two', 'Three']
+      },
+      exampleRadioOneOfEnum: {
+        type: 'string',
+        oneOf: [
+            {const: 'foo', title: 'Foo'},
+            {const: 'bar', title: 'Bar'},
+            {const: 'foobar', title: 'FooBar'}
+        ]
+    }
+    }
+  };
+ const uischema = {
+   type: 'VerticalLayout',
+   elements: [
+     {
+       type: 'Group',
+       label: 'Simple enum',
+       elements: [
+         {
+           type: 'Control',
+           scope: '#/properties/exampleRadioEnum',
+           options: {
+             format: 'radio'
+           }
+         }
+       ]
+     },
+     {
+       type: 'Group',
+       label: 'One of Enum',
+       elements: [
+         {
+           type: 'Control',
+           scope: '#/properties/exampleRadioOneOfEnum',
+           options: {
+             format: 'radio'
+           }
+         }
+       ]
+     }
+   ]
+ };
+
+
+registerExamples([
+  {
+    name: 'radio-group',
+    label: 'Radio Group',
+    data,
+    schema,
+    uischema
+  }
+]);

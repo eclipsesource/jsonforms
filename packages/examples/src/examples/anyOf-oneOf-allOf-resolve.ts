@@ -22,14 +22,74 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { JsonSchema, UISchemaElement } from '@jsonforms/core';
+import { registerExamples } from '../register';
 
-export interface ExampleDescription {
-  name: string;
-  label: string;
-  data: any;
-  schema: JsonSchema;
-  uischema: UISchemaElement;
-  uischemas?: any;
-  config?: any;
-}
+export const schema = {
+  $defs: {
+    Base: {
+      type: 'object',
+      properties: {
+        width: {
+          type: 'integer'
+        }
+      }
+    },
+    Child: {
+      type: 'object',
+      allOf: [
+        { $ref: '#/$defs/Base' },
+        {
+          properties: {
+            geometry: {
+              type: 'string'
+            }
+          }
+        }
+      ]
+    }
+  },
+  type: 'object',
+  properties: {
+    element: {
+      $ref: '#/$defs/Child'
+    }
+  }
+};
+
+export const uischema = {
+  type: 'VerticalLayout',
+  elements: [
+    {
+      type: 'Label',
+      text: 'AllOfRenderer'
+    },
+    {
+      type: 'Control',
+      scope: '#/properties/element'
+    },
+    {
+      type: 'Label',
+      text: 'Manual controls'
+    },
+    {
+      type: 'Control',
+      scope: '#/properties/element/properties/width'
+    },
+    {
+      type: 'Control',
+      scope: '#/properties/element/properties/geometry'
+    }
+  ]
+};
+
+const data = {};
+
+registerExamples([
+  {
+    name: 'anyOf-oneOf-allOf-resolve',
+    label: 'AnyOf OneOf AllOf Resolve',
+    data,
+    schema,
+    uischema
+  }
+]);

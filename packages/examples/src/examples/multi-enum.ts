@@ -1,7 +1,7 @@
 /*
   The MIT License
   
-  Copyright (c) 2017-2019 EclipseSource Munich
+  Copyright (c) 2017-2020 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
   
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,14 +22,55 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { JsonSchema, UISchemaElement } from '@jsonforms/core';
+import { registerExamples } from '../register';
 
-export interface ExampleDescription {
-  name: string;
-  label: string;
-  data: any;
-  schema: JsonSchema;
-  uischema: UISchemaElement;
-  uischemas?: any;
-  config?: any;
-}
+export const schema = {
+  type: 'object',
+  properties: {
+    oneOfMultiEnum: {
+      type: 'array',
+      uniqueItems: true,
+      items: {
+        oneOf: [
+          { const: 'foo', title: 'My Foo' },
+          { const: 'bar', title: 'My Bar' },
+          { const: 'foobar', title: 'My FooBar' }
+        ]
+      }
+    },
+    multiEnum: {
+      type: 'array',
+      uniqueItems: true,
+      items: {
+        type: 'string',
+        enum: ['foo', 'bar', 'foobar']
+      }
+    }
+  }
+};
+
+export const uischema = {
+  type: 'VerticalLayout',
+  elements: [
+    {
+      type: 'Control',
+      scope: '#/properties/oneOfMultiEnum'
+    },
+    {
+      type: 'Control',
+      scope: '#/properties/multiEnum'
+    }
+  ]
+};
+
+export const data = { oneOfMultiEnum: ['foo'], multiEnum: ['bar'] };
+
+registerExamples([
+  {
+    name: 'multi-enum',
+    label: 'Multi Enum',
+    data,
+    schema,
+    uischema
+  }
+]);

@@ -22,14 +22,23 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { JsonSchema, UISchemaElement } from '@jsonforms/core';
+import { registerExamples } from '../register';
+import {
+  data as day5Data,
+  schema as day5Schema,
+  uischema as day5UiSchema
+} from './day5';
 
-export interface ExampleDescription {
-  name: string;
-  label: string;
-  data: any;
-  schema: JsonSchema;
-  uischema: UISchemaElement;
-  uischemas?: any;
-  config?: any;
-}
+export const schema = day5Schema;
+export const uischema = day5UiSchema;
+export const data = day5Data;
+
+registerExamples([
+  {
+    name: 'day6',
+    label: 'Day 6',
+    data,
+    schema,
+    uischema
+  }
+]);
