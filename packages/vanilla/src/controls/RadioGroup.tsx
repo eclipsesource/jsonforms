@@ -50,7 +50,8 @@ export class RadioGroup extends Control<
       data,
       uischema,
       visible,
-      config
+      config,
+      enabled
     } = this.props;
     const isValid = errors.length === 0;
     const divClassNames = `validation  ${isValid ? classNames.description : 'validation_error'
@@ -93,6 +94,7 @@ export class RadioGroup extends Control<
                 name={id}
                 checked={data === option.value}
                 onChange={ev => this.handleChange(ev.currentTarget.value)}
+                disabled={!enabled}
               />
               <label htmlFor={option.value}>{option.label}</label>
             </div>
