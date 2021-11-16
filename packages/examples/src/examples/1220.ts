@@ -72,36 +72,44 @@ export const uischema = {
   type: 'Control',
   scope: '#/properties/orders'
 };
-export const detail_uischema = {
-  type: 'VerticalLayout',
-  elements: [
-    {
-      type: 'Control',
-      scope: '#/properties/title'
+
+export const uischemas = [
+  {
+    tester: (_jsonSchema: JsonSchema, schemaPath: string) => {
+      return schemaPath === '#/properties/orders' ? 2 : NOT_APPLICABLE;
     },
-    {
-      type: 'Control',
-      scope: '#/properties/ordered'
-    },
-    {
+    uischema: {
       type: 'VerticalLayout',
       elements: [
         {
           type: 'Control',
-          scope: '#/properties/assignee'
+          scope: '#/properties/title'
+        },
+        {
+          type: 'Control',
+          scope: '#/properties/ordered'
+        },
+        {
+          type: 'VerticalLayout',
+          elements: [
+            {
+              type: 'Control',
+              scope: '#/properties/assignee'
+            }
+          ],
+          rule: {
+            effect: 'SHOW',
+            condition: {
+              type: 'LEAF',
+              scope: '#/properties/ordered',
+              expectedValue: true
+            }
+          }
         }
-      ],
-      rule: {
-        effect: 'SHOW',
-        condition: {
-          type: 'LEAF',
-          scope: '#/properties/ordered',
-          expectedValue: true
-        }
-      }
-    }
-  ]
-};
+      ]
+    },
+  },
+];
 
 registerExamples([
   {
@@ -112,7 +120,3 @@ registerExamples([
     uischema
   }
 ]);
-
-export const nestedArrayTester = (_jsonSchema: JsonSchema, schemaPath: string) => {
-  return schemaPath === '#/properties/orders' ? 2 : NOT_APPLICABLE;
-};

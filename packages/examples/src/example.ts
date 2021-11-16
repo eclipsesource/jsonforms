@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { JsonSchema, UISchemaElement } from '@jsonforms/core';
+import { JsonFormsUISchemaRegistryEntry, JsonSchema, UISchemaElement } from '@jsonforms/core';
 
 export interface ExampleDescription {
   name: string;
@@ -30,6 +30,6 @@ export interface ExampleDescription {
   data: any;
   schema: JsonSchema;
   uischema: UISchemaElement;
-  uischemas?: any;
+  uischemas?: JsonFormsUISchemaRegistryEntry[];
   config?: any;
 }

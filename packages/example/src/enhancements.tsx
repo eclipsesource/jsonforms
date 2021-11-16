@@ -57,16 +57,14 @@ export const enhancements = () => {
         'apply': (props: JsonFormsInitStateProps) => {
           return {
             ...props,
-            uischemas: [
-              { tester: nestedArray.nestedArrayTester, uischema: nestedArray.nestedArrayLayout }
-            ]
+            uischemas: nestedArray.uischemas
           }
         }
       },
       {
         'label': 'Unregister NestedArray UISchema',
         'apply': (props: JsonFormsInitStateProps) => {
-          const uischemas: JsonFormsUISchemaRegistryEntry[] = [];
+          const uischemas: JsonFormsUISchemaRegistryEntry[] = undefined;
           return {
             ...props,
             uischemas: uischemas
@@ -80,16 +78,14 @@ export const enhancements = () => {
         'apply': (props: JsonFormsInitStateProps) => {
           return {
             ...props,
-            uischemas: [
-              { tester: issue_1220.nestedArrayTester, schema: issue_1220.detail_uischema }
-            ]
+            uischemas: issue_1220.uischemas
           }
         }
       },
       {
         'label': 'Unregister Issue 1220 UISchema',
         'apply': (props: JsonFormsInitStateProps) => {
-          const uischemas: JsonFormsUISchemaRegistryEntry[] = [];
+          const uischemas: JsonFormsUISchemaRegistryEntry[] = undefined;
           return {
             ...props,
             uischemas: uischemas
