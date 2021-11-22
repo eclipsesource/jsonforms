@@ -123,6 +123,20 @@ describe('Group layout', () => {
     expect(groupLayout.props().hidden).toBe(true);
   });
 
+  test('pass enabled prop to children', () => {
+    const core = initCore({}, fixture.uischema, {});
+    wrapper = mount(
+      <JsonFormsStateProvider initState={{ core }}>
+        <GroupLayoutRenderer
+          uischema={fixture.uischema}
+          enabled={false}
+        />
+      </JsonFormsStateProvider>
+    );
+    const child = wrapper.find('JsonFormsDispatchRenderer');
+    expect(child.prop('enabled')).toBe(false);
+  });
+
   test('show by default', () => {
     const core = initCore({}, fixture.uischema, {});
     wrapper = mount(

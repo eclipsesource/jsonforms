@@ -78,7 +78,7 @@ const HorizontalLayoutRendererComponent: FunctionComponent<RendererProps & Vanil
       getStyle={getStyle}
       getStyleAsClassName={getStyleAsClassName}
     >
-      {renderChildren(horizontalLayout, schema, childClassNames, path)}
+      {renderChildren(horizontalLayout, schema, childClassNames, path, enabled)}
     </JsonFormsLayout>
   );
 });

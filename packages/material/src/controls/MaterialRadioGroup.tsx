@@ -54,7 +54,8 @@ export const MaterialRadioGroup = (props: ControlProps & OwnPropsOfEnum) => {
     visible,
     options,
     handleChange,
-    path
+    path,
+    enabled
   } = props;
   const isValid = errors.length === 0;
   const appliedUiSchemaOptions = merge(
@@ -99,6 +100,7 @@ export const MaterialRadioGroup = (props: ControlProps & OwnPropsOfEnum) => {
               key={option.label}
               control={<Radio checked={data === option.value} />}
               label={option.label}
+              disabled={!enabled}
             />
           ))}
         </RadioGroup>
