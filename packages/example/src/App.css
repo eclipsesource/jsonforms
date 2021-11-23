@@ -22,9 +22,10 @@ body {
 
 .buttons {
   margin-bottom: 20px;
+  text-align: center;
 }
 
-button {
+.action-button {
   margin-right: 10px;
   background-color: #0069ed;
   color: #ffffff;
@@ -35,10 +36,10 @@ button {
   border-radius: 5px;
   cursor: pointer;
 }
-button:hover {
+.action-button:hover {
   background-color: #0053ba;
 }
-button:active {
+.action-button:active {
   transform: scale(0.99);
 }
 
@@ -51,10 +52,69 @@ button:active {
   to { transform: rotate(360deg); }
 }
 
+.demo {
+  border: 1px solid #ccc;
+  padding: 20px;
+  margin-top: 40px;
+}
+.demo h4 {
+  text-align: center;
+  margin-top: -30px;
+  
+}
+.demo h4 span {
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 5px;
+}
+
 pre {
   overflow-x: auto;
-  background: #ccc;
   padding: 15px;
+  margin: 0;
+}
+
+.react-tabs {
+  max-width: 600px;
+  margin: 40px auto 20px auto;
+  border: 1px solid #ccc;
+  padding: 0 0 20px 0;
+  background: #eee;
+}
+.react-tabs__tab-list {
+  list-style: none;
+  display: flex;
+  margin-top: -18px;
+  margin-bottom: 0;
+  justify-content: center;
+}
+.react-tabs__tab {
+  display: inline;
+  background-color: #0069ed;
+  color: #ffffff;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0.5rem 3rem;
+  cursor: pointer;
+}
+.react-tabs__tab:first-child {
+  border-radius: 5px 0 0 5px;
+}
+.react-tabs__tab:last-child {
+  border-radius: 0 5px 5px 0;
+}
+.react-tabs__tab.react-tabs__tab--selected {
+  background-color: #0047a1;
+}
+.react-tabs__tab-panel {
+  display: none;
+}
+.react-tabs__tab-panel.react-tabs__tab-panel--selected {
+  display: block;
+}
+.react-tabs > .react-tabs__tab-panel {
+  height: 150px;
+  overflow: scroll;
 }
 
 .content {

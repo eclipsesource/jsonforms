@@ -32,6 +32,7 @@ import {
   JsonSchema
 } from '@jsonforms/core';
 import { resolveRefs } from 'json-refs';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import './App.css';
 
 type AppProps = {
@@ -83,9 +84,22 @@ const App = ({ examples, cells, renderers}: AppProps) => {
   const [currentExample, setExample] = useState<ExampleDescription>(examples[0]);
   const [currentIndex, setIndex] = useState<number>(0);
   const [dataAsString, setDataAsString] = useState<any>('');
+  const [schemaAsString, setSchemaAsString] = useState<any>('');
+  const [uiSchemaAsString, setUiSchemaAsString] = useState<any>('');
   const [props, setProps] = useState<any>(getProps(currentExample, cells, renderers)); // helper function
 
   const actions: any = currentExample.actions;
+
+  useEffect(() => {
+    const hash = window.location.hash.replace('#', '');
+    const exampleIndex = examples.findIndex(example => {
+      return example.name === hash
+    });
+    console.log(exampleIndex);
+    if(exampleIndex !== -1) {
+      setIndex(exampleIndex);
+    }
+  }, []);
 
   const changeExample = (exampleID: number) => {
     let example = examples[exampleID];
@@ -93,6 +107,11 @@ const App = ({ examples, cells, renderers}: AppProps) => {
     setExample(example);
     setProps(getProps(example, cells, renderers));
   };
+
+  useEffect(() => {
+    setSchemaAsString(JSON.stringify(props.schema, null, 2));
+    setUiSchemaAsString(JSON.stringify(props.uischema, null, 2));
+  }, [props]);
 
   const changeData = (data: any) => {
     setDataAsString(JSON.stringify(data, null, 2));
@@ -107,7 +126,7 @@ const App = ({ examples, cells, renderers}: AppProps) => {
           <p className='App-intro'>More Forms. Less Code.</p>
         </header>
         <div className='content'>
-          <h4 className='data-title'>Examples</h4>
+          <h4 className='data-title'>Select Example:</h4>
           <div className='data-content'>
             <select
               value={currentIndex}
@@ -125,21 +144,38 @@ const App = ({ examples, cells, renderers}: AppProps) => {
             </select>
           </div>
 
-          <h4 className='data-title'>Bound data</h4>
-          <div className='data-content'>
-            <pre>{dataAsString}</pre>
+          <div className='current'>
+            <Tabs>
+              <TabList>
+                <Tab>Data</Tab>
+                <Tab>Schema</Tab>
+                <Tab>UISchema</Tab>
+              </TabList>
+              <TabPanel>
+                <pre>{dataAsString}</pre>
+              </TabPanel>
+              <TabPanel>
+                <pre>{schemaAsString}</pre>
+              </TabPanel>
+              <TabPanel>
+                <pre>{uiSchemaAsString}</pre>
+              </TabPanel>
+            </Tabs>
           </div>
           <div className='demoform'>
             <div className="buttons">
               {actions?.map((action: any, index: number) => (
-                <button onClick = { () => setProps((oldProps: JsonFormsInitStateProps) => action.apply(oldProps)) } key={index}>{action.label}</button>
+                <button className='action-button' onClick = { () => setProps((oldProps: JsonFormsInitStateProps) => action.apply(oldProps)) } key={index}>{action.label}</button>
               ))}
             </div>
-            <ResolvedJsonForms
-              key={currentIndex}
-              {...props}
-              onChange={({ data }) => changeData(data)}
-            />
+            <div className='demo'>
+              <h4><span>Example</span></h4>
+              <ResolvedJsonForms
+                key={currentIndex}
+                {...props}
+                onChange={({ data }) => changeData(data)}
+              />
+            </div>
           </div>
         </div>
       </div>
