@@ -35,6 +35,7 @@ body {
   padding: 0.5rem 1rem;
   border-radius: 5px;
   cursor: pointer;
+  text-align: center;
 }
 .action-button:hover {
   background-color: #0053ba;
@@ -68,9 +69,37 @@ body {
   border-radius: 5px;
 }
 
+.demo-wrapper {
+  display: flex;
+}
+
+.current {
+  margin-right: 30px;
+}
+.current.hide {
+  display: none;
+}
+
+.content {
+  padding: 0 20px 20px 20px;
+}
+
+.select-example {
+  text-align: center;
+}
+
+.example-selector {
+  display: flex;
+  justify-content: center;
+}
+
+.demoform {
+  width: 100%;
+  margin-top: 20px;
+}
+
 pre {
   overflow-x: auto;
-  padding: 15px;
   margin: 0;
 }
 
@@ -78,7 +107,7 @@ pre {
   max-width: 600px;
   margin: 40px auto 20px auto;
   border: 1px solid #ccc;
-  padding: 0 0 20px 0;
+  padding: 0;
   background: #eee;
 }
 .react-tabs__tab-list {
@@ -87,6 +116,17 @@ pre {
   margin-top: -18px;
   margin-bottom: 0;
   justify-content: center;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.panel-wrapper {
+  height: 150px;
+  overflow: scroll;
+  margin: 20px 0;
+  padding: 0 15px;
+}
+.panel-wrapper.full-height {
+  height: auto !important;
 }
 .react-tabs__tab {
   display: inline;
@@ -109,28 +149,9 @@ pre {
 .react-tabs__tab-panel {
   display: none;
 }
+.react-tabs__tab-panel:hover {
+  cursor: pointer;
+}
 .react-tabs__tab-panel.react-tabs__tab-panel--selected {
   display: block;
-}
-.react-tabs > .react-tabs__tab-panel {
-  height: 150px;
-  overflow: scroll;
-}
-
-.content {
-  padding: 20px;
-}
-
-.data-title {
-  text-align: center;
-}
-
-.data-content {
-  display: flex;
-  justify-content: center;
-}
-
-.demoform {
-  width: 80%;
-  margin: auto;
 }

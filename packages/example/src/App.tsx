@@ -117,6 +117,16 @@ const App = ({ examples, cells, renderers}: AppProps) => {
     setDataAsString(JSON.stringify(data, null, 2));
   };
 
+  const togglePanelHeight = () => {
+    var panel = document.getElementsByClassName("panel-wrapper")[0];
+    panel.classList.toggle('full-height');
+  }
+
+  const hidePanel = () => {
+    var panel = document.getElementsByClassName("current")[0];
+    panel.classList.toggle('hide');
+  }
+
   return (
     <div>
       <div className='App'>
@@ -126,8 +136,8 @@ const App = ({ examples, cells, renderers}: AppProps) => {
           <p className='App-intro'>More Forms. Less Code.</p>
         </header>
         <div className='content'>
-          <h4 className='data-title'>Select Example:</h4>
-          <div className='data-content'>
+          <h4 className='select-example'>Select Example:</h4>
+          <div className='example-selector'>
             <select
               value={currentIndex}
               onChange={ev => changeExample(Number(ev.currentTarget.value))}
@@ -144,37 +154,42 @@ const App = ({ examples, cells, renderers}: AppProps) => {
             </select>
           </div>
 
-          <div className='current'>
-            <Tabs>
-              <TabList>
-                <Tab>Data</Tab>
-                <Tab>Schema</Tab>
-                <Tab>UISchema</Tab>
-              </TabList>
-              <TabPanel>
-                <pre>{dataAsString}</pre>
-              </TabPanel>
-              <TabPanel>
-                <pre>{schemaAsString}</pre>
-              </TabPanel>
-              <TabPanel>
-                <pre>{uiSchemaAsString}</pre>
-              </TabPanel>
-            </Tabs>
-          </div>
-          <div className='demoform'>
-            <div className="buttons">
-              {actions?.map((action: any, index: number) => (
-                <button className='action-button' onClick = { () => setProps((oldProps: JsonFormsInitStateProps) => action.apply(oldProps)) } key={index}>{action.label}</button>
-              ))}
+          <div className="demo-wrapper">
+            <div className='current'>
+              <Tabs>
+                <TabList>
+                  <Tab>Data</Tab>
+                  <Tab>Schema</Tab>
+                  <Tab>UISchema</Tab>
+                </TabList>
+                <div className="panel-wrapper" onClick={() => togglePanelHeight()}>
+                  <TabPanel>
+                    <pre>{dataAsString}</pre>
+                  </TabPanel>
+                  <TabPanel>
+                    <pre>{schemaAsString}</pre>
+                  </TabPanel>
+                  <TabPanel>
+                    <pre>{uiSchemaAsString}</pre>
+                  </TabPanel>
+                </div>
+              </Tabs>
+              <div className='action-button' onClick={() => hidePanel()}>Hide Panel (Reload page to show again)</div>
             </div>
-            <div className='demo'>
-              <h4><span>Example</span></h4>
-              <ResolvedJsonForms
-                key={currentIndex}
-                {...props}
-                onChange={({ data }) => changeData(data)}
-              />
+            <div className='demoform'>
+              <div className="buttons">
+                {actions?.map((buttons: any, index: number) => (
+                  <button className="action-button" onClick = { () => setProps((oldProps: JsonFormsInitStateProps) => buttons.apply(oldProps)) } key={index}>{buttons.label}</button>
+                ))}
+              </div>
+              <div className='demo'>
+                <h4><span>Example</span></h4>
+                <ResolvedJsonForms
+                  key={currentIndex}
+                  {...props}
+                  onChange={({ data }) => changeData(data)}
+                />
+              </div>
             </div>
           </div>
         </div>
