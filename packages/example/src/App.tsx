@@ -33,13 +33,20 @@ import {
 } from '@jsonforms/core';
 import { resolveRefs } from 'json-refs';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import Highlight from 'react-highlight';
+import 'highlight.js/styles/default.css';
 import './App.css';
 
 type AppProps = {
   examples: ExampleDescription[],
   cells: JsonFormsCellRendererRegistryEntry[],
   renderers: JsonFormsRendererRegistryEntry[],
-}
+};
+
+type Action = {
+  label: string,
+  apply: any
+};
 
 const ResolvedJsonForms = (
   props: JsonFormsInitStateProps & JsonFormsReactProps
@@ -87,15 +94,15 @@ const App = ({ examples, cells, renderers}: AppProps) => {
   const [schemaAsString, setSchemaAsString] = useState<any>('');
   const [uiSchemaAsString, setUiSchemaAsString] = useState<any>('');
   const [props, setProps] = useState<any>(getProps(currentExample, cells, renderers)); // helper function
+  const [showPanel, setShowPanel] = useState<boolean>(true);
 
-  const actions: any = currentExample.actions;
+  const actions: Action[] = currentExample.actions;
 
   useEffect(() => {
     const hash = window.location.hash.replace('#', '');
     const exampleIndex = examples.findIndex(example => {
       return example.name === hash
     });
-    console.log(exampleIndex);
     if(exampleIndex !== -1) {
       setIndex(exampleIndex);
     }
@@ -106,12 +113,33 @@ const App = ({ examples, cells, renderers}: AppProps) => {
     setIndex(exampleID);
     setExample(example);
     setProps(getProps(example, cells, renderers));
+    window.location.hash = example.name;
+    if(example.name == 'huge') {
+      setShowPanel(false);
+    }
   };
 
   useEffect(() => {
-    setSchemaAsString(JSON.stringify(props.schema, null, 2));
-    setUiSchemaAsString(JSON.stringify(props.uischema, null, 2));
+    if(props.schema != undefined) {
+      setSchemaAsString(JSON.stringify(props.schema, null, 2));
+    } else {
+      setSchemaAsString('No schema set');
+    }
+    if(props.uischema != undefined) {
+      setUiSchemaAsString(JSON.stringify(props.uischema, null, 2));
+    } else {
+      setUiSchemaAsString('No ui schema set');
+    }
   }, [props]);
+
+  useEffect(() => {
+    var panel = document.getElementsByClassName("current")[0];
+    if(showPanel) {
+      panel.classList.remove('hide');
+    } else {
+      panel.classList.add('hide');
+    }
+  }, [showPanel]);
 
   const changeData = (data: any) => {
     setDataAsString(JSON.stringify(data, null, 2));
@@ -122,9 +150,8 @@ const App = ({ examples, cells, renderers}: AppProps) => {
     panel.classList.toggle('full-height');
   }
 
-  const hidePanel = () => {
-    var panel = document.getElementsByClassName("current")[0];
-    panel.classList.toggle('hide');
+  const togglePanel = (checked: boolean) => {
+    setShowPanel(checked);
   }
 
   return (
@@ -136,8 +163,8 @@ const App = ({ examples, cells, renderers}: AppProps) => {
           <p className='App-intro'>More Forms. Less Code.</p>
         </header>
         <div className='content'>
-          <h4 className='select-example'>Select Example:</h4>
           <div className='example-selector'>
+            <h4>Select Example:</h4>
             <select
               value={currentIndex}
               onChange={ev => changeExample(Number(ev.currentTarget.value))}
@@ -153,8 +180,12 @@ const App = ({ examples, cells, renderers}: AppProps) => {
               ))}
             </select>
           </div>
+          <div className='toggle-panel'>
+            <input type="checkbox" id="panel" name="panel" checked={showPanel} onChange={e => togglePanel(e.target.checked)} />
+            <label htmlFor="panel">Show sidepanel</label>
+          </div>
 
-          <div className="demo-wrapper">
+          <div className='demo-wrapper'>
             <div className='current'>
               <Tabs>
                 <TabList>
@@ -162,24 +193,30 @@ const App = ({ examples, cells, renderers}: AppProps) => {
                   <Tab>Schema</Tab>
                   <Tab>UISchema</Tab>
                 </TabList>
-                <div className="panel-wrapper" onClick={() => togglePanelHeight()}>
+                <p className='expand-hint' onClick={() => togglePanelHeight()}>Click here to expand</p>
+                <div className="panel-wrapper">
                   <TabPanel>
-                    <pre>{dataAsString}</pre>
+                    <Highlight className='json'>
+                      {dataAsString}
+                    </Highlight>
                   </TabPanel>
                   <TabPanel>
-                    <pre>{schemaAsString}</pre>
+                    <Highlight className='json'>
+                      {schemaAsString}
+                    </Highlight>
                   </TabPanel>
                   <TabPanel>
-                    <pre>{uiSchemaAsString}</pre>
+                    <Highlight className='json'>
+                      {uiSchemaAsString}
+                    </Highlight>
                   </TabPanel>
                 </div>
               </Tabs>
-              <div className='action-button' onClick={() => hidePanel()}>Hide Panel (Reload page to show again)</div>
             </div>
             <div className='demoform'>
               <div className="buttons">
-                {actions?.map((buttons: any, index: number) => (
-                  <button className="action-button" onClick = { () => setProps((oldProps: JsonFormsInitStateProps) => buttons.apply(oldProps)) } key={index}>{buttons.label}</button>
+                {actions?.map((action: Action, index: number) => (
+                  <button className="action-button" onClick={ () => setProps((oldProps: JsonFormsInitStateProps) => action.apply(oldProps))} key={index}>{action.label}</button>
                 ))}
               </div>
               <div className='demo'>

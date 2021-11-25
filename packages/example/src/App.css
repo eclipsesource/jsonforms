@@ -10,7 +10,7 @@ body {
 }
 
 .App-header {
-  background-color: #222;
+  background-color: #00021e;
   padding: 20px;
   color: white;
   text-align: center;
@@ -54,9 +54,10 @@ body {
 }
 
 .demo {
-  border: 1px solid #ccc;
+  background: #f3f4fa;
+  border-radius: 9px;
   padding: 20px;
-  margin-top: 40px;
+  margin-top: 20px;
 }
 .demo h4 {
   text-align: center;
@@ -80,22 +81,56 @@ body {
   display: none;
 }
 
-.content {
-  padding: 0 20px 20px 20px;
+.hljs {
+  background: none;
+  padding: 0 !important;
 }
 
-.select-example {
-  text-align: center;
+.content {
+  padding: 0 20px 20px 20px;
 }
 
 .example-selector {
   display: flex;
   justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.example-selector h4 {
+  margin: 0 10px 0 0;
+}
+
+.example-selector select {
+  background: #f3f4fa;
+  border-radius: 9px;
+  height: 30px;
+  border: 0;
+  padding: 0 10px;
+  outline: none;
+}
+
+.toggle-panel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
 }
 
 .demoform {
   width: 100%;
   margin-top: 20px;
+}
+
+.expand-hint {
+  font-family: monospace;
+  font-style: italic;
+  text-align: right;
+  padding: 10px;
+  margin: 0;
+}
+.expand-hint:hover {
+  cursor: pointer;
 }
 
 pre {
@@ -104,11 +139,12 @@ pre {
 }
 
 .react-tabs {
-  max-width: 600px;
+  max-width: 400px;
   margin: 40px auto 20px auto;
-  border: 1px solid #ccc;
   padding: 0;
-  background: #eee;
+  background: #f3f4fa;
+  border-radius: 9px;
+  display: inline-block;
 }
 .react-tabs__tab-list {
   list-style: none;
@@ -120,13 +156,13 @@ pre {
   padding-right: 10px;
 }
 .panel-wrapper {
-  height: 150px;
+  max-height: 150px;
   overflow: scroll;
-  margin: 20px 0;
+  margin: 0 0 20px 0;
   padding: 0 15px;
 }
 .panel-wrapper.full-height {
-  height: auto !important;
+  max-height: none !important;
 }
 .react-tabs__tab {
   display: inline;
@@ -134,7 +170,7 @@ pre {
   color: #ffffff;
   font-size: 1rem;
   line-height: 1;
-  padding: 0.5rem 3rem;
+  padding: 0.5rem 2rem;
   cursor: pointer;
 }
 .react-tabs__tab:first-child {
@@ -148,9 +184,6 @@ pre {
 }
 .react-tabs__tab-panel {
   display: none;
-}
-.react-tabs__tab-panel:hover {
-  cursor: pointer;
 }
 .react-tabs__tab-panel.react-tabs__tab-panel--selected {
   display: block;
