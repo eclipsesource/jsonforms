@@ -90,6 +90,7 @@ export const toId = (path: string[]): string=>{
 }
 
 export const contains = (path1: string[], path2: string[]):boolean =>{
+  console.log("contains");
   if(path1.length<path2.length){
     return false;
   }
@@ -98,5 +99,6 @@ export const contains = (path1: string[], path2: string[]):boolean =>{
       return false;
     }
   })
+  console.log("true");
   return true;
 }
