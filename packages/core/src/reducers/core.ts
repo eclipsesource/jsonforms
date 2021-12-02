@@ -312,23 +312,22 @@ const getInvalidProperty = (error: ErrorObject): string | undefined => {
 
 export const getControlPath = (error: ErrorObject) => {
   const dataPath = (error as any).dataPath;
+  console.log("datapath: ",dataPath);
   // older AJV version
   if (dataPath) {
-    return dataPath.replace(/\//g, '.').substr(1);
+    return dataPath.split("/\//g").filter((e: string) =>e!=="");
   }
   // dataPath was renamed to instancePath in AJV v8
-  var controlPath: string = error.instancePath;
-
   // change '/' chars to '.'
-  controlPath = controlPath.replace(/\//g, '.');
+  console.log("instancePath: ",error.instancePath);
+  var controlPath: string[] = error.instancePath.split("/").filter(e=> e!=="");
   
   const invalidProperty = getInvalidProperty(error);
-  if (invalidProperty !== undefined && !controlPath.endsWith(invalidProperty)) {
-    controlPath = `${controlPath}.${invalidProperty}`;
+  if (invalidProperty !== undefined && controlPath && controlPath[controlPath.length]!==invalidProperty) {
+    controlPath.push(invalidProperty);
   }
   
-  // remove '.' chars at the beginning of paths
-  controlPath = controlPath.replace(/^./, '');
+  console.log("returnedPath: ",controlPath);
   return controlPath;
 }
 
@@ -400,6 +399,7 @@ const getErrorsAt = (
   errorsAt(instancePath, schema, matchPath)(state.validationMode === 'ValidateAndHide' ? [] : state.errors);
 
 export const errorAt = (instancePath: string[], schema: JsonSchema) =>
-  getErrorsAt(instancePath, schema, path => path === instancePath);
+  getErrorsAt(instancePath, schema, p => {
+    return p.length === instancePath.length && p.every((element,i) => element === instancePath[i])});
 export const subErrorsAt = (instancePath: string[], schema: JsonSchema) =>
   getErrorsAt(instancePath, schema, path => contains(path,instancePath));

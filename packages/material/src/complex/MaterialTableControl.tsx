@@ -125,7 +125,7 @@ const getValidColumnProps = (scopedSchema: JsonSchema) => {
     );
   }
   // primitives
-  return [''];
+  return [];
 };
 
 export interface EmptyTableProps {
@@ -176,7 +176,8 @@ const ctxToNonEmptyCellProps = (
       errorsAt(
         path,
         ownProps.schema,
-        p => p === path
+        p => {
+          return p.length === path.length && p.every((element,i) => element === path[i])}
       )(ctx.core.errors).map((error: ErrorObject) => error.message)
     )
   );
