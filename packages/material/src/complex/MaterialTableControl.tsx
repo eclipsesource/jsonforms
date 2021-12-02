@@ -170,7 +170,7 @@ const ctxToNonEmptyCellProps = (
   if(ownProps.schema.type === 'object'){ 
     path.push(ownProps.propName);
   }
-  console.log(ctx.core.errors);
+
   const errors = formatErrorMessage(
     union(
       errorsAt(
@@ -181,7 +181,6 @@ const ctxToNonEmptyCellProps = (
       )(ctx.core.errors).map((error: ErrorObject) => error.message)
     )
   );
-  console.log("errores: ",errors);
   return {
     rowPath: ownProps.rowPath,
     propName: ownProps.propName,
@@ -214,7 +213,6 @@ const NonEmptyCell = (ownProps: OwnPropsOfNonEmptyCell) => {
     cells
   } = ctxToNonEmptyCellProps(ctx, ownProps);
 
-  console.log("errors: ",errors);
   const isValid = isEmpty(errors);
   return (
     <NoBorderTableCell>
@@ -408,7 +406,6 @@ export class MaterialTableControl extends React.Component<
       ? generateCells(TableHeaderCell, schema, path, enabled, cells)
       : undefined;
       console.log("here");
-      console.log("errors: ",errors);
 
     return (
       <Hidden xsUp={!visible}>

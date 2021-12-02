@@ -336,7 +336,6 @@ export const errorsAt = (
   schema: JsonSchema,
   matchPath: (path: string[]) => boolean
 ) => (errors: ErrorObject[]): ErrorObject[] => {
-  console.log("errors: ",errors);
   // Get data paths of oneOf and anyOf errors to later determine whether an error occurred inside a subschema of oneOf or anyOf.
   const combinatorPaths = filter(
     errors,
@@ -344,15 +343,12 @@ export const errorsAt = (
     ).map(error => getControlPath(error));
     
     return filter(errors, error => {
-
       // Filter errors that match any keyword that we don't want to show in the UI
       if (filteredErrorKeywords.indexOf(error.keyword) !== -1) {
         return false;
       }
     const controlPath = getControlPath(error);
-    console.log("controllpath: ", controlPath);
     let result = matchPath(controlPath);
-    console.log("result: ",result);
     // In anyOf and oneOf blocks with "primitive" (i.e. string, number etc.) or array subschemas,
     // we want to make sure that errors are only shown for the correct subschema.
     // Therefore, we compare the error's parent schema with the property's schema.
@@ -366,7 +362,6 @@ export const errorsAt = (
       && combinatorPaths.findIndex(p => contains(instancePath,p)) !== -1) {
       result = result && isEqual(parentSchema, schema);
     }
-    console.log(result);
     return result;
   });
 };
