@@ -57,7 +57,7 @@ const areEqual = (prevProps: StatePropsOfJsonFormsRenderer, nextProps: StateProp
     && get(prevProps, 'uischemas.length') === get(nextProps, 'uischemas.length')
     && get(prevProps, 'schema') === get(nextProps, 'schema')
     && isEqual(get(prevProps, 'uischema'), get(nextProps, 'uischema'))
-    && get(prevProps, 'path') === get(nextProps, 'path');
+    && isEqual(get(prevProps, 'path'), get(nextProps, 'path'));
 };
 
 @Directive({
@@ -78,7 +78,9 @@ export class JsonFormsOutlet extends JsonFormsBaseRenderer<UISchemaElement>
 
   @Input()
   set renderProps(renderProps: OwnPropsOfRenderer) {
-    this.path = renderProps.path;
+    if (!isEqual(this.path, renderProps.path)) {
+      this.path = renderProps.path;
+    }
     this.schema = renderProps.schema;
     this.uischema = renderProps.uischema;
     this.update(this.jsonformsService.getState());

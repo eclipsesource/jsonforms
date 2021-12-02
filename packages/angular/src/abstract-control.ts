@@ -43,6 +43,7 @@ import { Subscription } from 'rxjs';
 import { JsonFormsBaseRenderer } from './base.renderer';
 import { JsonFormsAngularService } from './jsonforms.service';
 import merge from 'lodash/merge';
+import { isEqual } from 'lodash';
 @Component({
   template: ''
 })
@@ -126,7 +127,9 @@ export abstract class JsonFormsAbstractControl<
           this.scopedSchema !== undefined ? this.scopedSchema.description : '';
         this.id = props.id;
         this.form.setValue(data);
-        this.propsPath = path;
+        if (!isEqual(this.propsPath, path)) {
+          this.propsPath = path;
+        }
         this.mapAdditionalProps(props);
       }
     });
