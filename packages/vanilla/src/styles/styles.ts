@@ -54,6 +54,22 @@ export const vanillaStyles: StyleDef[] = [
     classNames: ['select']
   },
   {
+    name: 'control.radio',
+    classNames: ['radio']
+  },
+  {
+    name: 'control.radio.option',
+    classNames: ['radio-option']
+  },
+  {
+    name: 'control.radio.input',
+    classNames: ['radio-input']
+  },
+  {
+    name: 'control.radio.label',
+    classNames: ['radio-label']
+  },
+  {
     name: 'control.validation.error',
     classNames: ['validation_error']
   },

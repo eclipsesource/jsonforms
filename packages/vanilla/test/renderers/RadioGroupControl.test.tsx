@@ -33,7 +33,7 @@ import * as _ from 'lodash';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import '../../src';
-import { RadioGroupControl, OneOfRadioGroupControl } from '../../src';
+import { vanillaStyles, RadioGroupControl, OneOfRadioGroupControl, JsonFormsStyleContext } from '../../src';
 import { initCore } from '../util';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -97,6 +97,54 @@ describe('Radio group control', () => {
         const currentlyChecked = radioButtons.filter('input[checked=true]');
         expect(currentlyChecked).toHaveLength(1);
         expect((currentlyChecked.getDOMNode() as HTMLInputElement).value).toBe('D');
+    });
+
+    test('render enum with CSS classes', () => {
+        const renderers = [{ tester: rankWith(10, isEnumControl), renderer: RadioGroupControl }];
+        const core = initCore(fixture.schema, fixture.uischema, fixture.data);
+        wrapper = mount(
+            <JsonFormsStateProvider initState={{ core, renderers }}>
+                <RadioGroupControl schema={fixture.schema} uischema={fixture.uischema} />
+            </JsonFormsStateProvider>
+        );
+
+        const radioControl = wrapper.find('.radio');
+        expect(radioControl).toHaveLength(1);
+        expect(radioControl.prop('style')).toEqual({
+          display: 'flex', flexDirection: 'row'
+        });
+
+        const radioOptions = wrapper.find('.radio-option');
+        expect(radioOptions).toHaveLength(4);
+
+        const radioInput = wrapper.find('.radio-input');
+        expect(radioInput).toHaveLength(4);
+
+        const radioLabel = wrapper.find('.radio-label');
+        expect(radioLabel).toHaveLength(4);
+    });
+
+    test('do not render inline styles in radio if radio class is overwritten', () => {
+        const renderers = [{ tester: rankWith(10, isEnumControl), renderer: RadioGroupControl }];
+        const core = initCore(fixture.schema, fixture.uischema, fixture.data);
+        const customStyles = vanillaStyles.map(style => {
+          if (style.name !== 'control.radio') { return style; }
+
+          return {
+            name: style.name,
+            classNames: ['radio-custom-class']
+          };
+        });
+        wrapper = mount(
+            <JsonFormsStyleContext.Provider value={{ styles: customStyles }}>
+              <JsonFormsStateProvider initState={{ core, renderers }}>
+                <RadioGroupControl schema={fixture.schema} uischema={fixture.uischema} />
+              </JsonFormsStateProvider>
+            </JsonFormsStyleContext.Provider>
+        );
+
+        const radioControl = wrapper.find('.radio-custom-class');
+        expect(radioControl.prop('style')).toEqual({});
     });
 
     test('render oneOf', () => {
