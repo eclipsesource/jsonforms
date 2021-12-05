@@ -313,6 +313,24 @@ describe('Text area cell', () => {
     const textArea = wrapper.find('textarea').getDOMNode() as HTMLTextAreaElement;
     expect(textArea.disabled).toBe(false);
   });
+
+  test('accept placeholder attribute', () => {
+    const uischema: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/name',
+      options: {
+        placeholder: 'Placeholder for name field'
+      }
+    };
+    const core = initCore(fixture.schema, uischema, fixture.data);
+    wrapper = mount(
+      <JsonFormsStateProvider initState={{ core }}>
+        <TextAreaCell schema={fixture.schema} uischema={uischema} path='name' />
+      </JsonFormsStateProvider>
+    );
+    const textArea = wrapper.find('textarea').getDOMNode() as HTMLTextAreaElement;
+    expect(textArea.placeholder).toBe('Placeholder for name field');
+  });
 });
 
 describe('Text area cell tester', () => {

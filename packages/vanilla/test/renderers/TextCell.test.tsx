@@ -319,6 +319,24 @@ describe('Text cell', () => {
     expect(input.disabled).toBe(false);
   });
 
+  test('accept placeholder attribute', () => {
+    const uischema: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/name',
+      options: {
+        placeholder: 'Placeholder for name field'
+      }
+    };
+    const core = initCore(fixture.schema, uischema, fixture.data);
+    wrapper = mount(
+      <JsonFormsStateProvider initState={{ core }}>
+        <TextCell schema={fixture.schema} uischema={uischema} path='name' />
+      </JsonFormsStateProvider>
+    );
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.placeholder).toBe('Placeholder for name field');
+  });
+
   test('use maxLength for attributes size and maxlength', () => {
     const uischema: ControlElement = {
       type: 'Control',
