@@ -53,7 +53,7 @@ import {
   Resolve,
   JsonFormsRendererRegistryEntry,
   JsonFormsCellRendererRegistryEntry,
-  toId
+  toKey
 } from '@jsonforms/core';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -104,7 +104,7 @@ const generateCells = (
         enabled,
         cells
       };
-      return <Cell key={toId(cellPath)} {...props} />;
+      return <Cell key={toKey(cellPath)} {...props} />;
     });
   } else {
     // primitives
@@ -114,7 +114,7 @@ const generateCells = (
       cellPath: rowPath,
       enabled
     };
-    return <Cell key={toId(rowPath)} {...props} />;
+    return <Cell key={toKey(rowPath)} {...props} />;
   }
 };
 
@@ -271,10 +271,9 @@ const NonEmptyRow = React.memo(
     enabled,
     cells
   }: NonEmptyRowProps & WithDeleteDialogSupport) => {
-    console.log("here");
 
     return (
-      <TableRow key={toId(childPath)} hover>
+      <TableRow key={toKey(childPath)} hover>
         {generateCells(NonEmptyCell, schema, childPath, enabled, cells)}
         {enabled ? (
           <NoBorderTableCell
@@ -353,7 +352,6 @@ const TableRows = ({
   }
 
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
-  console.log("here");
 
   return (
     <React.Fragment>
@@ -362,7 +360,7 @@ const TableRows = ({
 
         return (
           <NonEmptyRow
-            key={toId(childPath)}
+            key={toKey(childPath)}
             childPath={childPath}
             rowIndex={index}
             schema={schema}
@@ -405,7 +403,6 @@ export class MaterialTableControl extends React.Component<
     const headerCells: any = isObjectSchema
       ? generateCells(TableHeaderCell, schema, path, enabled, cells)
       : undefined;
-      console.log("here");
 
     return (
       <Hidden xsUp={!visible}>

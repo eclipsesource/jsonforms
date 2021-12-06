@@ -40,7 +40,7 @@ import {
   Resolve,
   Test,
   getControlPath,
-  toId
+  toKey
 } from '@jsonforms/core';
 import { DispatchCell, withJsonFormsArrayControlProps } from '@jsonforms/react';
 import { withVanillaControlProps } from '../util';
@@ -146,7 +146,7 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
                   // TODO
                   const errorsPerEntry: any[] = filter(childErrors, error => {
                     const errorPath = getControlPath(error);
-                    return errorPath.startsWith(childPath);
+                    return errorPath.length >= childPath.length && childPath.every((element,i) => element === errorPath[i])
                   });
 
                   const validationClassName = getStyleAsClassName('array.validation');
@@ -156,7 +156,7 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
                     validationClassName;
 
                   return (
-                    <tr key={toId(childPath)}>
+                    <tr key={toKey(childPath)}>
                       {schema.properties ? (
                         fpflow(
                           fpkeys,
@@ -170,7 +170,7 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
                             );
 
                             return (
-                              <td key={toId(childPropPath)}>
+                              <td key={toKey(childPropPath)}>
                                 <DispatchCell
                                   schema={Resolve.schema(schema, `#/properties/${prop}`, rootSchema)}
                                   uischema={createControlElement(prop)}
@@ -182,7 +182,7 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
                         )(schema.properties)
                       ) : (
                           <td
-                            key={toId(Paths.compose(
+                            key={toKey(Paths.compose(
                               childPath,
                               [index.toString()]
                             ))}

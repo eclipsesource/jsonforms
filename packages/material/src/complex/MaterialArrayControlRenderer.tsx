@@ -47,7 +47,6 @@ export const MaterialArrayControlRenderer = (props: ArrayLayoutProps) => {
     setOpen(false);
   }, [setOpen, path, rowData]);
   const deleteClose = useCallback(() => setOpen(false), [setOpen]);
-  console.log("here");
 
   return (
     <Hidden xsUp={!visible}>

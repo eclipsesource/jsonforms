@@ -2,7 +2,7 @@
   <dispatch-renderer
     v-bind:schema="jsonforms.core.schema"
     v-bind:uischema="jsonforms.core.uischema"
-    v-bind:path="''"
+    v-bind:path="[]"
   />
 </template>
 

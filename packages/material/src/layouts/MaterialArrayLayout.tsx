@@ -73,7 +73,6 @@ export class MaterialArrayLayout extends React.PureComponent<
       config,
       this.props.uischema.options
     );
-    console.log("here");
 
     return (
       <div>

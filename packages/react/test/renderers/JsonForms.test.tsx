@@ -297,7 +297,7 @@ test('render schema with $ref', () => {
 
   const wrapper = mount(
     <JsonFormsDispatchRenderer
-      path={''}
+      path={[]}
       uischema={fixture.uischema}
       schema={schemaWithRef}
       renderers={renderers}
@@ -355,7 +355,7 @@ test.skip('updates schema with ref', () => {
 
   const wrapper = shallow(
     <JsonFormsDispatchRenderer
-      path={''}
+      path={[]}
       uischema={fixture.uischema}
       schema={fixture.schema}
       renderers={renderers}

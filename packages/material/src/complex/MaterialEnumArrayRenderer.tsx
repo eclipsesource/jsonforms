@@ -37,7 +37,6 @@ export const MaterialEnumArrayRenderer = ({
   removeItem,
   ...otherProps
 }: ControlProps & OwnPropsOfEnum & DispatchPropsOfMultiEnumControl) => {
-  console.log("here");
 
   return (
     <Hidden xlUp={!visible}>

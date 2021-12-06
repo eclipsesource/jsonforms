@@ -24,7 +24,7 @@
 */
 import range from 'lodash/range';
 import React, { useMemo } from 'react';
-import { ArrayControlProps, composePaths, createDefaultValue, findUISchema, toId } from '@jsonforms/core';
+import { ArrayControlProps, composePaths, createDefaultValue, findUISchema, toKey } from '@jsonforms/core';
 import { JsonFormsDispatch } from '@jsonforms/react';
 import { VanillaRendererProps } from '../../index';
 
@@ -65,7 +65,7 @@ export const ArrayControl = ({
                   schema={schema}
                   uischema={childUiSchema || uischema}
                   path={childPath}
-                  key={toId(childPath)}
+                  key={toKey(childPath)}
                   renderers={renderers}
                 />
               );

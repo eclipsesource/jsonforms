@@ -85,7 +85,7 @@ export const composeWithUi = (scopableUi: Scopable, path: string[]): string[] =>
   return isEmpty(segments) ? path : compose(path, segments);
 };
 
-export const toId = (path: string[]): string=>{
+export const toKey = (path: string[]): string=>{
   return path.join('');
 }
 

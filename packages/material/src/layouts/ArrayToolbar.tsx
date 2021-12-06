@@ -20,7 +20,6 @@ export const ArrayLayoutToolbar = React.memo(
     path,
     createDefault
   }: ArrayLayoutToolbarProps) => {
-    console.log("here");
     return (
       <Toolbar disableGutters={true}>
         <Grid container alignItems='center' justify='space-between'>

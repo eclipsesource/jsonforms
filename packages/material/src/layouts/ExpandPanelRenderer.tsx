@@ -22,7 +22,7 @@ import {
   getFirstPrimitiveProp,
   createId,
   removeId,
-  toId
+  toKey
 } from '@jsonforms/core';
 import IconButton from '@material-ui/core/IconButton';
 import Accordion from '@material-ui/core/Accordion';
@@ -193,7 +193,7 @@ const ExpandPanelRenderer = (props: ExpandPanelProps) => {
           schema={schema}
           uischema={foundUISchema}
           path={childPath}
-          key={toId(childPath)}
+          key={toKey(childPath)}
           renderers={renderers}
           cells={cells}
         />
@@ -262,7 +262,6 @@ export const withContextToExpandPanelProps = (
   const childLabel = childLabelProp
     ? get(childData, childLabelProp, '')
     : get(childData, getFirstPrimitiveProp(schema), '');
-    console.log("here");
   return (
     <Component
       {...props}

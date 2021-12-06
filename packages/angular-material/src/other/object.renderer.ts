@@ -70,7 +70,6 @@ export class ObjectControlRenderer extends JsonFormsControlWithDetail {
     if (isEmpty(props.path)) {
       this.detailUiSchema.type = 'VerticalLayout';
     } else {
-      console.log(props.path);
       (this.detailUiSchema as GroupLayout).label = props.path.map(element=>startCase(element)).toString();
     }
     if (!this.isEnabled()) {

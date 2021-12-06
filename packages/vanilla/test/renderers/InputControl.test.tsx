@@ -196,7 +196,7 @@ describe('Input control', () => {
         <InputControl
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path={''}
+          path={[]}
           visible={false}
         />
       </JsonFormsStateProvider>

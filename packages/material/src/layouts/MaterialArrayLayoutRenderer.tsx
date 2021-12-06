@@ -53,7 +53,6 @@ export const MaterialArrayLayoutRenderer = ({
   const addItemCb = useCallback((p: string[], value: any) => addItem(p, value), [
     addItem
   ]);
-  console.log("here");
 
   return (
     <Hidden xsUp={!visible}>

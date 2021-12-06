@@ -95,7 +95,6 @@ export const MaterialListWithDetailRenderer = ({
     [uischemas, schema, uischema.scope, path, uischema]
   );
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
-  console.log("here");
 
   return (
     <Hidden xsUp={!visible}>

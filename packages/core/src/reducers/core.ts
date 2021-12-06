@@ -312,14 +312,12 @@ const getInvalidProperty = (error: ErrorObject): string | undefined => {
 
 export const getControlPath = (error: ErrorObject) => {
   const dataPath = (error as any).dataPath;
-  console.log("datapath: ",dataPath);
   // older AJV version
   if (dataPath) {
     return dataPath.split("/\//g").filter((e: string) =>e!=="");
   }
   // dataPath was renamed to instancePath in AJV v8
   // change '/' chars to '.'
-  console.log("instancePath: ",error.instancePath);
   var controlPath: string[] = error.instancePath.split("/").filter(e=> e!=="");
   
   const invalidProperty = getInvalidProperty(error);
@@ -327,7 +325,6 @@ export const getControlPath = (error: ErrorObject) => {
     controlPath.push(invalidProperty);
   }
   
-  console.log("returnedPath: ",controlPath);
   return controlPath;
 }
 
