@@ -71,9 +71,9 @@
   "peerDependencies": {
     "@jsonforms/core": "^3.0.0-alpha.0",
     "@jsonforms/react": "^3.0.0-alpha.0",
-    "@mui/icons-material": "^5.2.0",
-    "@mui/lab": "^5.0.0-alpha.58",
-    "@mui/material": "^5.2.2"
+    "@mui/icons-material": "^5.0.0",
+    "@mui/lab": "^5.0.0-alpha.54",
+    "@mui/material": "^5.0.0"
   },
   "devDependencies": {
     "@emotion/react": "^11.5.0",
