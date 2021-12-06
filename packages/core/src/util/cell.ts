@@ -25,14 +25,14 @@
 
 import isEmpty from 'lodash/isEmpty';
 import union from 'lodash/union';
+import type { JsonFormsCellRendererRegistryEntry } from '../reducers';
 import {
+  getAjv,
   getConfig,
   getData,
   getErrorAt,
   getSchema,
-  getAjv,
-  JsonFormsCellRendererRegistryEntry,
-  getTranslator
+  getTranslator,
 } from '../reducers';
 import { AnyAction, Dispatch } from './type';
 import {
@@ -57,7 +57,7 @@ import { JsonFormsState } from '../store';
 import { JsonSchema } from '../models';
 import { getI18nKeyPrefix } from '../i18n';
 
-export { JsonFormsCellRendererRegistryEntry };
+export type { JsonFormsCellRendererRegistryEntry };
 
 export interface OwnPropsOfCell extends OwnPropsOfControl {
   data?: any;

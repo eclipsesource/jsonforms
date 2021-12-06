@@ -25,30 +25,31 @@
 import React from 'react';
 import { combineReducers, createStore } from 'redux';
 import { Provider } from 'react-redux';
-import {
+import type {
   ControlElement,
-  createAjv,
   DispatchCellProps,
-  jsonFormsReducerConfig,
   JsonFormsState,
   JsonFormsStore,
   JsonSchema,
   Layout,
+  RendererProps,
+  UISchemaElement,
+} from '@jsonforms/core';
+import {
+  createAjv,
+  jsonFormsReducerConfig,
   NOT_APPLICABLE,
   rankWith,
   registerCell,
   registerRenderer,
-  RendererProps,
   schemaMatches,
-  UISchemaElement,
   uiTypeIs,
   unregisterRenderer,
 } from '@jsonforms/core';
 import { isEqual } from 'lodash';
 import Enzyme from 'enzyme';
 import { mount, shallow } from 'enzyme';
-import { StatelessRenderer } from '../../src/Renderer';
-
+import type { StatelessRenderer } from '../../src/Renderer';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import {
   JsonForms,

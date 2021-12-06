@@ -26,13 +26,13 @@ import isEmpty from 'lodash/isEmpty';
 import React from 'react';
 import { ComponentType } from 'react';
 import Ajv from 'ajv';
+import type { UISchemaElement } from '@jsonforms/core';
 import {
   getAjv,
   JsonFormsCellRendererRegistryEntry,
   JsonFormsRendererRegistryEntry,
   JsonSchema,
   OwnPropsOfRenderer,
-  UISchemaElement
 } from '@jsonforms/core';
 import { JsonFormsDispatch, useJsonForms } from '@jsonforms/react';
 import { Grid, Hidden } from '@mui/material';
