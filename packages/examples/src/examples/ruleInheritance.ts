@@ -95,26 +95,24 @@ export const data = {
 };
 
 const actions = [
-  [
-    {
-      'label': 'Enable/Disable top layout',
-      'apply': (props: StateProps) => {
-        return {
-          ...props,
-          data: { ...props.data, toggleTopLayout: !props.data.toggleTopLayout }
-        }
+  {
+    'label': 'Enable/Disable top layout',
+    'apply': (props: StateProps) => {
+      return {
+        ...props,
+        data: { ...props.data, toggleTopLayout: !props.data.toggleTopLayout }
       }
-    },
-    {
-      'label': 'Show/Hide bottom layout',
-      'apply': (props: StateProps) => {
-        return {
-          ...props,
-          data: { ...props.data, toggleBottomLayout: !props.data.toggleBottomLayout }
-        }
+    }
+  },
+  {
+    'label': 'Show/Hide bottom layout',
+    'apply': (props: StateProps) => {
+      return {
+        ...props,
+        data: { ...props.data, toggleBottomLayout: !props.data.toggleBottomLayout }
       }
-    },
-  ]
+    }
+  },
 ]
 
 registerExamples([

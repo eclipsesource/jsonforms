@@ -130,8 +130,8 @@ const App = ({ examples, cells, renderers}: AppProps) => {
           </div>
           <div className='demoform'>
             <div className="buttons">
-              {actions?.map((buttons: any, index: number) => (
-                <button onClick = { () => setProps((oldProps: JsonFormsInitStateProps) => buttons.apply(oldProps)) } key={index}>{buttons.label}</button>
+              {actions?.map((action: any, index: number) => (
+                <button onClick = { () => setProps((oldProps: JsonFormsInitStateProps) => action.apply(oldProps)) } key={index}>{action.label}</button>
               ))}
             </div>
             <ResolvedJsonForms

@@ -38,7 +38,7 @@ export interface ExampleDescription {
   uischema: UISchemaElement;
   uischemas?: JsonFormsUISchemaRegistryEntry[];
   config?: any;
-  actions?: any;
+  actions?: {label: string, apply: (props: StateProps) => any}[];
 }
 
 export interface StateProps {
