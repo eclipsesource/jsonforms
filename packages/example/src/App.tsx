@@ -93,7 +93,7 @@ const App = ({ examples, cells, renderers}: AppProps) => {
   const [dataAsString, setDataAsString] = useState<any>('');
   const [schemaAsString, setSchemaAsString] = useState<any>('');
   const [uiSchemaAsString, setUiSchemaAsString] = useState<any>('');
-  const [props, setProps] = useState<any>(getProps(currentExample, cells, renderers)); // helper function
+  const [props, setProps] = useState<any>(getProps(currentExample, cells, renderers));
   const [showPanel, setShowPanel] = useState<boolean>(true);
 
   const actions: Action[] = currentExample.actions;
@@ -133,7 +133,7 @@ const App = ({ examples, cells, renderers}: AppProps) => {
   }, [props]);
 
   useEffect(() => {
-    var panel = document.getElementsByClassName("current")[0];
+    var panel = document.getElementsByClassName('props-panel')[0];
     if(showPanel) {
       panel.classList.remove('hide');
     } else {
@@ -146,7 +146,7 @@ const App = ({ examples, cells, renderers}: AppProps) => {
   };
 
   const togglePanelHeight = () => {
-    var panel = document.getElementsByClassName("panel-wrapper")[0];
+    var panel = document.getElementsByClassName('panel-wrapper')[0];
     panel.classList.toggle('full-height');
   }
 
@@ -157,36 +157,38 @@ const App = ({ examples, cells, renderers}: AppProps) => {
   return (
     <div>
       <div className='App'>
-        <header className='App-header'>
-          <img src='assets/logo.svg' className='App-logo' alt='logo' />
-          <h1 className='App-title'>Welcome to JSON Forms with React</h1>
-          <p className='App-intro'>More Forms. Less Code.</p>
+        <header>
+          <img src='assets/logo.svg' className='logo' alt='logo' />
+          <h1 className='title'>Welcome to JSON Forms with React</h1>
+          <p className='intro'>More Forms. Less Code.</p>
         </header>
         <div className='content'>
-          <div className='example-selector'>
-            <h4>Select Example:</h4>
-            <select
-              value={currentIndex}
-              onChange={ev => changeExample(Number(ev.currentTarget.value))}
-            >
-              {examples.map((optionValue: ExampleDescription, index: number) => (
-                <option
-                  value={index}
-                  label={optionValue.label}
-                  key={index}
-                >
-                  {optionValue.label}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className='toggle-panel'>
-            <input type="checkbox" id="panel" name="panel" checked={showPanel} onChange={e => togglePanel(e.target.checked)} />
-            <label htmlFor="panel">Show sidepanel</label>
+          <div className='tools'>
+            <div className='example-selector'>
+              <h4>Select Example:</h4>
+              <select
+                value={currentIndex}
+                onChange={ev => changeExample(Number(ev.currentTarget.value))}
+              >
+                {examples.map((optionValue: ExampleDescription, index: number) => (
+                  <option
+                    value={index}
+                    label={optionValue.label}
+                    key={index}
+                  >
+                    {optionValue.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className='toggle-panel'>
+              <input type='checkbox' id='panel' name='panel' checked={showPanel} onChange={e => togglePanel(e.target.checked)} />
+              <label htmlFor='panel'>Show sidepanel</label>
+            </div>
           </div>
 
           <div className='demo-wrapper'>
-            <div className='current'>
+            <div className='props-panel'>
               <Tabs>
                 <TabList>
                   <Tab>Data</Tab>
@@ -194,7 +196,7 @@ const App = ({ examples, cells, renderers}: AppProps) => {
                   <Tab>UISchema</Tab>
                 </TabList>
                 <p className='expand-hint' onClick={() => togglePanelHeight()}>Click here to expand</p>
-                <div className="panel-wrapper">
+                <div className='panel-wrapper'>
                   <TabPanel>
                     <Highlight className='json'>
                       {dataAsString}
@@ -214,9 +216,9 @@ const App = ({ examples, cells, renderers}: AppProps) => {
               </Tabs>
             </div>
             <div className='demoform'>
-              <div className="buttons">
+              <div className='buttons'>
                 {actions?.map((action: Action, index: number) => (
-                  <button className="action-button" onClick={ () => setProps((oldProps: JsonFormsInitStateProps) => action.apply(oldProps))} key={index}>{action.label}</button>
+                  <button className='action-button' onClick={ () => setProps((oldProps: JsonFormsInitStateProps) => action.apply(oldProps))} key={index}>{action.label}</button>
                 ))}
               </div>
               <div className='demo'>

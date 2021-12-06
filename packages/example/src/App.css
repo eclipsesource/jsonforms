@@ -4,25 +4,95 @@ body {
   font-family: sans-serif;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
-}
-
-.App-header {
+header {
   background-color: #00021e;
   padding: 20px;
   color: white;
   text-align: center;
 }
-
-.App-title {
+header .logo {
+  animation: spin infinite 20s linear;
+  height: 80px;
+}
+header .title {
   font-size: 1.5em;
 }
+header .intro {
+  font-size: large;
+}
 
-.buttons {
+.content {
+  padding: 0 20px 20px 20px;
+}
+
+.tools .example-selector {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+.tools .example-selector h4 {
+  margin: 0 10px 0 0;
+}
+.tools .example-selector select {
+  background: #f3f4fa;
+  border-radius: 9px;
+  height: 30px;
+  border: 0;
+  padding: 0 10px;
+  outline: none;
+}
+.tools .toggle-panel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+.tools .toggle-panel:hover {
+  cursor: pointer;
+}
+
+.demo-wrapper {
+  display: flex;
+}
+.demo-wrapper .props-panel {
+  margin-right: 30px;
+}
+.demo-wrapper .props-panel.hide {
+  display: none;
+}
+.demo-wrapper .props-panel .expand-hint {
+  font-family: monospace;
+  font-style: italic;
+  text-align: right;
+  padding: 10px;
+  margin: 0;
+}
+.demo-wrapper .props-panel .expand-hint:hover {
+  cursor: pointer;
+}
+.demo-wrapper .demoform {
+  width: 100%;
+  margin-top: 20px;
+}
+.demo-wrapper .demoform .buttons {
   margin-bottom: 20px;
   text-align: center;
+}
+.demo-wrapper .demoform .demo {
+  background: #f3f4fa;
+  border-radius: 9px;
+  padding: 20px;
+  margin-top: 20px;
+}
+.demo-wrapper .demoform .demo h4 {
+  text-align: center;
+  margin-top: -30px;
+}
+.demo-wrapper .demoform .demo h4 span {
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 5px;
 }
 
 .action-button {
@@ -44,96 +114,19 @@ body {
   transform: scale(0.99);
 }
 
-.App-intro {
-  font-size: large;
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
-
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-.demo {
-  background: #f3f4fa;
-  border-radius: 9px;
-  padding: 20px;
-  margin-top: 20px;
-}
-.demo h4 {
-  text-align: center;
-  margin-top: -30px;
-  
-}
-.demo h4 span {
-  padding: 10px;
-  background-color: #fff;
-  border-radius: 5px;
-}
-
-.demo-wrapper {
-  display: flex;
-}
-
-.current {
-  margin-right: 30px;
-}
-.current.hide {
-  display: none;
-}
-
 .hljs {
   background: none;
   padding: 0 !important;
 }
-
-.content {
-  padding: 0 20px 20px 20px;
-}
-
-.example-selector {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-}
-
-.example-selector h4 {
-  margin: 0 10px 0 0;
-}
-
-.example-selector select {
-  background: #f3f4fa;
-  border-radius: 9px;
-  height: 30px;
-  border: 0;
-  padding: 0 10px;
-  outline: none;
-}
-
-.toggle-panel {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 10px;
-}
-
-.demoform {
-  width: 100%;
-  margin-top: 20px;
-}
-
-.expand-hint {
-  font-family: monospace;
-  font-style: italic;
-  text-align: right;
-  padding: 10px;
-  margin: 0;
-}
-.expand-hint:hover {
-  cursor: pointer;
-}
-
-pre {
+.hljs pre {
   overflow-x: auto;
   margin: 0;
 }
@@ -146,7 +139,7 @@ pre {
   border-radius: 9px;
   display: inline-block;
 }
-.react-tabs__tab-list {
+.react-tabs .react-tabs__tab-list {
   list-style: none;
   display: flex;
   margin-top: -18px;
@@ -155,16 +148,7 @@ pre {
   padding-left: 10px;
   padding-right: 10px;
 }
-.panel-wrapper {
-  max-height: 150px;
-  overflow: scroll;
-  margin: 0 0 20px 0;
-  padding: 0 15px;
-}
-.panel-wrapper.full-height {
-  max-height: none !important;
-}
-.react-tabs__tab {
+.react-tabs .react-tabs__tab-list .react-tabs__tab {
   display: inline;
   background-color: #0069ed;
   color: #ffffff;
@@ -173,18 +157,27 @@ pre {
   padding: 0.5rem 2rem;
   cursor: pointer;
 }
-.react-tabs__tab:first-child {
+.react-tabs .react-tabs__tab-list .react-tabs__tab:first-child {
   border-radius: 5px 0 0 5px;
 }
-.react-tabs__tab:last-child {
+.react-tabs .react-tabs__tab-list .react-tabs__tab:last-child {
   border-radius: 0 5px 5px 0;
 }
-.react-tabs__tab.react-tabs__tab--selected {
+.react-tabs .react-tabs__tab-list .react-tabs__tab.react-tabs__tab--selected {
   background-color: #0047a1;
 }
-.react-tabs__tab-panel {
+.react-tabs .panel-wrapper {
+  max-height: 150px;
+  overflow: scroll;
+  margin: 0 0 20px 0;
+  padding: 0 15px;
+}
+.react-tabs .panel-wrapper.full-height {
+  max-height: none !important;
+}
+.react-tabs .panel-wrapper .react-tabs__tab-panel {
   display: none;
 }
-.react-tabs__tab-panel.react-tabs__tab-panel--selected {
+.react-tabs .panel-wrapper .react-tabs__tab-panel.react-tabs__tab-panel--selected {
   display: block;
 }
