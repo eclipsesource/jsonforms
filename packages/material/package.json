@@ -69,22 +69,20 @@
     "dayjs": "1.10.6"
   },
   "peerDependencies": {
-    "@emotion/react": "^11.5.0",
-    "@emotion/styled": "^11.3.0",
     "@jsonforms/core": "^3.0.0-alpha.0",
     "@jsonforms/react": "^3.0.0-alpha.0",
-    "@mui/icons-material": "^5.1.0",
-    "@mui/lab": "^5.0.0-alpha.54",
-    "@mui/material": "^5.1.0"
+    "@mui/icons-material": "^5.2.0",
+    "@mui/lab": "^5.0.0-alpha.58",
+    "@mui/material": "^5.2.2"
   },
   "devDependencies": {
     "@emotion/react": "^11.5.0",
     "@emotion/styled": "^11.3.0",
     "@jsonforms/core": "^3.0.0-alpha.2",
     "@jsonforms/react": "^3.0.0-alpha.2",
-    "@mui/icons-material": "^5.1.0",
-    "@mui/lab": "^5.0.0-alpha.54",
-    "@mui/material": "^5.1.0",
+    "@mui/icons-material": "^5.2.0",
+    "@mui/lab": "^5.0.0-alpha.58",
+    "@mui/material": "^5.2.2",
     "@types/enzyme": "^3.10.3",
     "@types/react-dom": "^17.0.9",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.3",

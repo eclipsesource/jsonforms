@@ -113,7 +113,7 @@ export const MaterialCategorizationLayoutRenderer = (props: MaterialCategorizati
   return (
     <Hidden xsUp={!visible}>
       <AppBar position='static'>
-        <Tabs value={activeCategory} onChange={onTabChange} textColor='inherit' indicatorColor='secondary'>
+        <Tabs value={activeCategory} onChange={onTabChange} textColor='inherit' indicatorColor='secondary' variant='scrollable'>
           {categories.map((e: Category, idx: number) => (
             <Tab key={idx} label={e.label} />
           ))}

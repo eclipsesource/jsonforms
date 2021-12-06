@@ -6,7 +6,7 @@
     "@jsonforms/core": "^3.0.0-alpha.2",
     "@jsonforms/examples": "^3.0.0-alpha.2",
     "@jsonforms/react": "^3.0.0-alpha.2",
-    "@mui/material": "^5.1.0",
+    "@mui/material": "^5.2.2",
     "lodash": "^4.17.15",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
