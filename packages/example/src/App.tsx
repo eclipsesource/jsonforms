@@ -87,11 +87,12 @@ const App = ({ examples, cells, renderers}: AppProps) => {
 
   const actions: any = currentExample.actions;
 
-  useEffect(() => {
-    let example = examples[currentIndex];
+  const changeExample = (exampleID: number) => {
+    let example = examples[exampleID];
+    setIndex(exampleID);
     setExample(example);
     setProps(getProps(example, cells, renderers));
-  }, [currentIndex]);
+  };
 
   const changeData = (data: any) => {
     setDataAsString(JSON.stringify(data, null, 2));
@@ -110,7 +111,7 @@ const App = ({ examples, cells, renderers}: AppProps) => {
           <div className='data-content'>
             <select
               value={currentIndex}
-              onChange={ev => setIndex(Number(ev.currentTarget.value))}
+              onChange={ev => changeExample(Number(ev.currentTarget.value))}
             >
               {examples.map((optionValue: ExampleDescription, index: number) => (
                 <option
