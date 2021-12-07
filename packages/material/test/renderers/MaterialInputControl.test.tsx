@@ -25,7 +25,7 @@
 import './MatchMediaMock';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import { materialRenderers } from '../../src';
-import Adapter from 'enzyme-adapter-react-16';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import * as React from 'react';
 import {
   ControlElement,

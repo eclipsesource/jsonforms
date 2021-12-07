@@ -24,10 +24,10 @@
 */
 import './MatchMediaMock';
 import React from 'react';
-import Dialog from '@material-ui/core/Dialog';
+import Dialog from '@mui/material/Dialog';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import {
   ControlElement
 } from '@jsonforms/core';
@@ -36,7 +36,7 @@ import {
   materialRenderers
 } from '../../src';
 import { JsonForms, JsonFormsDispatch, JsonFormsStateProvider } from '@jsonforms/react';
-import { Tab } from '@material-ui/core';
+import { Tab } from '@mui/material';
 import { initCore, TestEmitter } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -120,8 +120,9 @@ describe('Material oneOf renderer', () => {
     );
 
     const firstTab = wrapper.find(Tab).first();
-    expect(firstTab.props().selected).toBeTruthy();
+    expect(firstTab.html()).toContain('Mui-selected');
   });
+
   it('should render and select second tab due to datatype', () => {
     const schema = {
       type: 'object',
@@ -159,8 +160,9 @@ describe('Material oneOf renderer', () => {
     expect(wrapper.find(MaterialOneOfRenderer).length).toBeTruthy();
 
     const secondTab = wrapper.find(Tab).at(1);
-    expect(secondTab.props().selected).toBeTruthy();
+    expect(secondTab.html()).toContain('Mui-selected');
   });
+
   it('should render and select second tab due to schema with additionalProperties', () => {
     const schema = {
       type: 'object',
@@ -206,8 +208,9 @@ describe('Material oneOf renderer', () => {
     expect(wrapper.find(MaterialOneOfRenderer).length).toBeTruthy();
 
     const secondTab = wrapper.find(Tab).at(1);
-    expect(secondTab.props().selected).toBeTruthy();
+    expect(secondTab.html()).toContain('Mui-selected');
   });
+
   it('should render and select second tab due to schema with required', () => {
     const schema = {
       type: 'object',
@@ -253,7 +256,7 @@ describe('Material oneOf renderer', () => {
     expect(wrapper.find(MaterialOneOfRenderer).length).toBeTruthy();
 
     const secondTab = wrapper.find(Tab).at(1);
-    expect(secondTab.props().selected).toBeTruthy();
+    expect(secondTab.html()).toContain('Mui-selected');
   });
 
   it('should add an item at correct path', (done) => {

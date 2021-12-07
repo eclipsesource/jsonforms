@@ -34,7 +34,7 @@ import { withJsonFormsLayoutProps } from '@jsonforms/react';
 import {
   Hidden,
   Typography
-} from '@material-ui/core';
+} from '@mui/material';
 
 /**
  * Default tester for a label.

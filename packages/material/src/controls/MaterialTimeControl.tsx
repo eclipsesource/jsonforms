@@ -32,12 +32,12 @@ import {
   rankWith
 } from '@jsonforms/core';
 import { withJsonFormsControlProps } from '@jsonforms/react';
-import { FormHelperText, Hidden } from '@material-ui/core';
+import { FormHelperText, Hidden, TextField } from '@mui/material';
 import {
-  KeyboardTimePicker,
-  MuiPickersUtilsProvider
-} from '@material-ui/pickers';
-import DayjsUtils from '@date-io/dayjs';
+  TimePicker,
+  LocalizationProvider 
+} from '@mui/lab';
+import AdapterDayjs from '@mui/lab/AdapterDayjs';
 import { createOnChangeHandler, getData, useFocus } from '../util';
 
 export const MaterialTimeControl = (props: ControlProps) => {
@@ -84,30 +84,35 @@ export const MaterialTimeControl = (props: ControlProps) => {
 
   return (
     <Hidden xsUp={!visible}>
-      <MuiPickersUtilsProvider utils={DayjsUtils}>
-        <KeyboardTimePicker
-          id={id + '-input'}
-          required={required && !appliedUiSchemaOptions.hideRequiredAsterisk}
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <TimePicker
           label={label}
-          error={!isValid}
-          fullWidth={!appliedUiSchemaOptions.trim}
-          onFocus={onFocus}
-          onBlur={onBlur}
-          InputLabelProps={data ? { shrink: true } : undefined}
           value={getData(data, saveFormat)}
           clearable
           onChange={onChange}
-          format={format}
+          inputFormat={format}
+          disableMaskedInput
           ampm={!!appliedUiSchemaOptions.ampm}
           views={appliedUiSchemaOptions.views}
           disabled={!enabled}
-          autoFocus={appliedUiSchemaOptions.focus}
-          cancelLabel={appliedUiSchemaOptions.cancelLabel}
-          clearLabel={appliedUiSchemaOptions.clearLabel}
-          okLabel={appliedUiSchemaOptions.okLabel}
-          invalidDateMessage={null}
-          maxDateMessage={null}
-          minDateMessage={null}
+          cancelText={appliedUiSchemaOptions.cancelLabel}
+          clearText={appliedUiSchemaOptions.clearLabel}
+          okText={appliedUiSchemaOptions.okLabel}
+          renderInput={params => (
+            <TextField 
+              {...params}
+              id={id + '-input'}
+              required={required && !appliedUiSchemaOptions.hideRequiredAsterisk}
+              autoFocus={appliedUiSchemaOptions.focus}
+              error={!isValid}
+              fullWidth={!appliedUiSchemaOptions.trim}
+              inputProps={{ ...params.inputProps, type: 'text' }}
+              InputLabelProps={data ? { shrink: true } : undefined}
+              onFocus={onFocus}
+              onBlur={onBlur}
+              variant={'standard'}
+            />
+          )}
         />
         <FormHelperText error={!isValid && !showDescription}>
           {firstFormHelperText}
@@ -115,7 +120,7 @@ export const MaterialTimeControl = (props: ControlProps) => {
         <FormHelperText error={!isValid}>
           {secondFormHelperText}
         </FormHelperText>
-      </MuiPickersUtilsProvider>
+      </LocalizationProvider>
     </Hidden>
   );
 };

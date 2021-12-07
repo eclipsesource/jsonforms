@@ -46,7 +46,7 @@ import {
   Hidden,
   Tab,
   Tabs
-} from '@material-ui/core';
+} from '@mui/material';
 import {
   JsonFormsDispatch,
   withJsonFormsOneOfProps

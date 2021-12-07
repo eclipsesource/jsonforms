@@ -33,7 +33,7 @@ import {
   and
 } from '@jsonforms/core';
 import { withJsonFormsControlProps } from '@jsonforms/react';
-import { FormControlLabel, Hidden } from '@material-ui/core';
+import { FormControlLabel, Hidden } from '@mui/material';
 import { MuiToggle } from '../mui-controls/MuiToggle';
 
 export const MaterialBooleanToggleControl = ({

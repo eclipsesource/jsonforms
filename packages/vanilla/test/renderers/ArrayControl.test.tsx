@@ -29,7 +29,7 @@ import { vanillaRenderers } from '../../src/index';
 import { initCore } from '../util';
 import IntegerCell, { integerCellTester } from '../../src/cells/IntegerCell';
 
-import Adapter from 'enzyme-adapter-react-16';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import Enzyme, { mount } from 'enzyme';
 
 Enzyme.configure({ adapter: new Adapter() });

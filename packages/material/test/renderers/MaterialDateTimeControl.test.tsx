@@ -35,7 +35,7 @@ import dayjs from 'dayjs';
 import { materialRenderers } from '../../src';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { JsonFormsStateProvider } from '@jsonforms/react';
 import { initCore, TestEmitter } from './util';
 
@@ -205,7 +205,8 @@ describe('Material date time control', () => {
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').first();
-    input.simulate('change', { target: { value: '1961-12-94 20:15' } });
+    (input.getDOMNode() as HTMLInputElement).value ='1961-12-94 20:15'; 
+    input.simulate('change', input);
     expect(onChangeData.data.foo).toBe(
       dayjs('1961-12-94 20:15').format()
     );
@@ -378,7 +379,8 @@ describe('Material date time control', () => {
     const input = wrapper.find('input').first();
     expect(input.props().value).toBe('23-04-80 01:37:pm');
 
-    input.simulate('change', { target: { value: '10-12-05 11:22:am' } });
+    (input.getDOMNode() as HTMLInputElement).value = '10-12-05 11:22:am'; 
+    input.simulate('change', input);
     expect(onChangeData.data.foo).toBe('2005/12/10 11:22 am');
   });
 });

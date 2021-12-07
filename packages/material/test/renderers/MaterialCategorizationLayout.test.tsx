@@ -39,8 +39,8 @@ import MaterialCategorizationLayoutRenderer, {
   materialCategorizationTester
 } from '../../src/layouts/MaterialCategorizationLayout';
 import { MaterialLayoutRenderer, materialRenderers } from '../../src';
-import { Tab, Tabs } from '@material-ui/core';
-import Adapter from 'enzyme-adapter-react-16';
+import { Tab, Tabs } from '@mui/material';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { initCore } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });

@@ -34,7 +34,7 @@ import {
   StatePropsOfCombinator
 } from '@jsonforms/core';
 import { JsonFormsDispatch, withJsonFormsAnyOfProps } from '@jsonforms/react';
-import { Hidden, Tab, Tabs } from '@material-ui/core';
+import { Hidden, Tab, Tabs } from '@mui/material';
 import CombinatorProperties from './CombinatorProperties';
 
 export const MaterialAnyOfRenderer = ({

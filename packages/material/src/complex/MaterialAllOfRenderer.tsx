@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { Hidden } from '@material-ui/core';
+import { Hidden } from '@mui/material';
 
 import {
   createCombinatorRenderInfos,

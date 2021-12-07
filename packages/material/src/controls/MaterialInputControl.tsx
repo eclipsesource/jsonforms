@@ -29,8 +29,8 @@ import {
   isDescriptionHidden,
 } from '@jsonforms/core';
 
-import { Hidden, InputLabel } from '@material-ui/core';
-import { FormControl, FormHelperText } from '@material-ui/core';
+import { Hidden, InputLabel } from '@mui/material';
+import { FormControl, FormHelperText } from '@mui/material';
 import merge from 'lodash/merge';
 import { useFocus } from '../util';
 
@@ -76,6 +76,7 @@ export const MaterialInputControl = (props: ControlProps & WithInput) => {
         onFocus={onFocus}
         onBlur={onBlur}
         id={id}
+        variant={'standard'}
       >
         <InputLabel
           htmlFor={id + '-input'}

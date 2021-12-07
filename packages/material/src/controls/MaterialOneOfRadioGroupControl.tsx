@@ -36,12 +36,12 @@ import { withJsonFormsOneOfEnumProps } from '@jsonforms/react';
 import { MaterialRadioGroup } from './MaterialRadioGroup';
 
 export const MaterialOneOfRadioGroupControl = (props: ControlProps & OwnPropsOfEnum) => {
-   return <MaterialRadioGroup {...props}/>;
+  return <MaterialRadioGroup {...props}/>;
 };
 
 export const materialOneOfRadioGroupControlTester: RankedTester = rankWith(
-    20,
-    and(isOneOfEnumControl, optionIs('format', 'radio'))
-  );
+  20,
+  and(isOneOfEnumControl, optionIs('format', 'radio'))
+);
 
 export default withJsonFormsOneOfEnumProps(MaterialOneOfRadioGroupControl);

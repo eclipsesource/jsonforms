@@ -21,7 +21,7 @@ import {
   FormGroup,
   FormHelperText,
   Hidden
-} from '@material-ui/core';
+} from '@mui/material';
 import { startCase } from 'lodash';
 import { isEmpty } from 'lodash';
 import React from 'react';

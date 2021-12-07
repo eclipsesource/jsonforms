@@ -1,8 +1,12 @@
-import { Grid, Hidden, Tooltip } from '@material-ui/core';
-import IconButton from '@material-ui/core/IconButton';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import AddIcon from '@material-ui/icons/Add';
+import { 
+  Grid,
+  IconButton,
+  Hidden,
+  Toolbar,
+  Tooltip,
+  Typography
+} from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 import React from 'react';
 import ValidationIcon from '../complex/ValidationIcon';
 export interface ArrayLayoutToolbarProps {
@@ -22,7 +26,7 @@ export const ArrayLayoutToolbar = React.memo(
   }: ArrayLayoutToolbarProps) => {
     return (
       <Toolbar disableGutters={true}>
-        <Grid container alignItems='center' justify='space-between'>
+        <Grid container alignItems='center' justifyContent='space-between'>
           <Grid item>
             <Typography variant={'h6'}>{label}</Typography>
           </Grid>
@@ -42,7 +46,7 @@ export const ArrayLayoutToolbar = React.memo(
                   <IconButton
                     aria-label={`Add to ${label}`}
                     onClick={addItem(path, createDefault())}
-                  >
+                    size='large'>
                     <AddIcon />
                   </IconButton>
                 </Tooltip>

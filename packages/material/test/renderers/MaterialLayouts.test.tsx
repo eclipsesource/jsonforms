@@ -32,7 +32,7 @@ import {
   RuleEffect,
   UISchemaElement
 } from '@jsonforms/core';
-import Adapter from 'enzyme-adapter-react-16';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { JsonForms } from '@jsonforms/react';
 
 Enzyme.configure({ adapter: new Adapter() });

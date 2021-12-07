@@ -32,7 +32,7 @@ import {
   StatePropsOfControlWithDetail
 } from '@jsonforms/core';
 import { JsonFormsDispatch, withJsonFormsDetailProps } from '@jsonforms/react';
-import { Hidden } from '@material-ui/core';
+import { Hidden } from '@mui/material';
 import React, { useMemo } from 'react';
 
 export const MaterialObjectRenderer = ({

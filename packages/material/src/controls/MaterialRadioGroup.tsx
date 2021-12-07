@@ -30,15 +30,15 @@ import {
   isDescriptionHidden,
   OwnPropsOfEnum
 } from '@jsonforms/core';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
 import {
   FormControl,
   FormControlLabel,
   FormHelperText,
   FormLabel,
-  Hidden
-} from '@material-ui/core';
+  Hidden,
+  Radio,
+  RadioGroup
+} from '@mui/material';
 import { useFocus } from '../util';
 
 export const MaterialRadioGroup = (props: ControlProps & OwnPropsOfEnum) => {

@@ -31,7 +31,7 @@ import {
   WithClassname
 } from '@jsonforms/core';
 import { withJsonFormsCellProps } from '@jsonforms/react';
-import Input from '@material-ui/core/Input';
+import Input from '@mui/material/Input';
 import merge from 'lodash/merge';
 
 export const MaterialDateCell = (props: CellProps & WithClassname) => {

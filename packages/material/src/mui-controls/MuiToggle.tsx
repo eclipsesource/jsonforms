@@ -24,7 +24,7 @@
 */
 import React from 'react';
 import { CellProps, WithClassname } from '@jsonforms/core';
-import Switch from '@material-ui/core/Switch';
+import { Switch } from '@mui/material';
 import merge from 'lodash/merge';
 
 export const MuiToggle = React.memo((props: CellProps & WithClassname) => {

@@ -34,9 +34,9 @@ import {
   materialArrayLayoutTester
 } from '../../src/layouts';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { JsonForms, JsonFormsStateProvider } from '@jsonforms/react';
-import { Accordion } from '@material-ui/core';
+import { Accordion } from '@mui/material';
 import { initCore } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });

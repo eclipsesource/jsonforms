@@ -36,13 +36,14 @@ import {
   FormHelperText,
   Grid,
   Hidden,
+  IconButton,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
   Typography
-} from '@material-ui/core';
+} from '@mui/material';
 import {
   ArrayLayoutProps,
   ControlElement,
@@ -54,10 +55,9 @@ import {
   JsonFormsRendererRegistryEntry,
   JsonFormsCellRendererRegistryEntry
 } from '@jsonforms/core';
-import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
-import ArrowDownward from '@material-ui/icons/ArrowDownward';
-import ArrowUpward from '@material-ui/icons/ArrowUpward';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ArrowDownward from '@mui/icons-material/ArrowDownward';
+import ArrowUpward from '@mui/icons-material/ArrowUpward';
 
 import { WithDeleteDialogSupport } from './DeleteDialog';
 import NoBorderTableCell from './NoBorderTableCell';
@@ -287,17 +287,13 @@ const NonEmptyRowComponent =
             <Grid
               container
               direction='row'
-              justify='flex-end'
+              justifyContent='flex-end'
               alignItems='center'
             >
               {showSortButtons ? (
                 <Fragment>
                   <Grid item>
-                    <IconButton
-                      aria-label={`Move up`}
-                      onClick={moveUp}
-                      disabled={!enableUp}
-                    >
+                    <IconButton aria-label={`Move up`} onClick={moveUp} disabled={!enableUp} size='large'>
                       <ArrowUpward />
                     </IconButton>
                   </Grid>
@@ -306,7 +302,7 @@ const NonEmptyRowComponent =
                       aria-label={`Move down`}
                       onClick={moveDown}
                       disabled={!enableDown}
-                    >
+                      size='large'>
                       <ArrowDownward />
                     </IconButton>
                   </Grid>
@@ -316,7 +312,7 @@ const NonEmptyRowComponent =
                 <IconButton
                   aria-label={`Delete`}
                   onClick={() => openDeleteDialog(childPath, rowIndex)}
-                >
+                  size='large'>
                   <DeleteIcon />
                 </IconButton>
               </Grid>

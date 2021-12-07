@@ -28,7 +28,7 @@ import {
   ControlElement,
   HorizontalLayout,
 } from '@jsonforms/core';
-import Adapter from 'enzyme-adapter-react-16';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import { JsonFormsStateProvider } from '@jsonforms/react';
 import TableArrayControl, { tableArrayControlTester, } from '../../src/complex/TableArrayControl';

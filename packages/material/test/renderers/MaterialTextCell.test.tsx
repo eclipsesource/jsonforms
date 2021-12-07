@@ -35,7 +35,7 @@ import TextCell, {
 import { materialRenderers } from '../../src';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { JsonFormsStateProvider } from '@jsonforms/react';
 import { initCore, TestEmitter } from './util';
 
@@ -454,9 +454,8 @@ describe('Material text cell', () => {
       .first()
       .getDOMNode() as HTMLInputElement;
     expect(input.maxLength).toBe(DEFAULT_MAX_LENGTH);
-    expect(
-      getComputedStyle(input.parentElement, null).getPropertyValue('width')
-    ).toBe('100%');
+
+    expect(input.parentElement.classList.contains('MuiInputBase-fullWidth')).toBeTruthy;
     expect(input.size).toBe(DEFAULT_SIZE);
   });
 
@@ -478,9 +477,7 @@ describe('Material text cell', () => {
       .first()
       .getDOMNode() as HTMLInputElement;
     expect(input.maxLength).toBe(DEFAULT_MAX_LENGTH);
-    expect(
-      getComputedStyle(input.parentElement, null).getPropertyValue('width')
-    ).toBe('100%');
+    expect(input.parentElement.classList.contains('MuiInputBase-fullWidth')).toBeTruthy;
     expect(input.size).toBe(DEFAULT_SIZE);
   });
 
@@ -502,9 +499,7 @@ describe('Material text cell', () => {
       .first()
       .getDOMNode() as HTMLInputElement;
     expect(input.maxLength).toBe(DEFAULT_MAX_LENGTH);
-    expect(
-      getComputedStyle(input.parentElement, null).getPropertyValue('width')
-    ).toBe('100%');
+    expect(input.parentElement.classList.contains('MuiInputBase-fullWidth')).toBeTruthy;
     expect(input.size).toBe(DEFAULT_SIZE);
   });
 
@@ -520,9 +515,7 @@ describe('Material text cell', () => {
       .first()
       .getDOMNode() as HTMLInputElement;
     expect(input.maxLength).toBe(DEFAULT_MAX_LENGTH);
-    expect(
-      getComputedStyle(input.parentElement, null).getPropertyValue('width')
-    ).toBe('100%');
+    expect(input.parentElement.classList.contains('MuiInputBase-fullWidth')).toBeTruthy;
     expect(input.size).toBe(DEFAULT_SIZE);
   });
 

@@ -34,7 +34,7 @@ import * as React from 'react';
 import { materialRenderers } from '../../src';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { JsonFormsStateProvider } from '@jsonforms/react';
 import { initCore, TestEmitter } from './util';
 
@@ -202,7 +202,8 @@ describe('Material time control', () => {
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').first();
-    input.simulate('change', { target: { value: '08:40' } });
+    (input.getDOMNode() as HTMLInputElement).value = '08:40';
+    input.simulate('change', input);
     expect(onChangeData.data.foo).toBe('08:40:00');
   });
 
@@ -372,7 +373,8 @@ describe('Material time control', () => {
     const input = wrapper.find('input').first();
     expect(input.props().value).toBe('02-13');
 
-    input.simulate('change', { target: { value: '12-01' } });
+    (input.getDOMNode() as HTMLInputElement).value = '12:01';
+    input.simulate('change', input);
     expect(onChangeData.data.foo).toBe('1//12 am');
   });
 });

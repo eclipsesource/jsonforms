@@ -23,8 +23,7 @@
   THE SOFTWARE.
 */
 import React, {useState} from 'react';
-import { Hidden, Tab, Tabs } from '@material-ui/core';
-import AppBar from '@material-ui/core/AppBar';
+import { AppBar, Hidden, Tab, Tabs } from '@mui/material';
 import {
   and,
   Categorization,
@@ -114,7 +113,7 @@ export const MaterialCategorizationLayoutRenderer = (props: MaterialCategorizati
   return (
     <Hidden xsUp={!visible}>
       <AppBar position='static'>
-        <Tabs value={activeCategory} onChange={onTabChange} variant='scrollable'>
+        <Tabs value={activeCategory} onChange={onTabChange} textColor='inherit' indicatorColor='secondary' variant='scrollable'>
           {categories.map((e: Category, idx: number) => (
             <Tab key={idx} label={e.label} />
           ))}
