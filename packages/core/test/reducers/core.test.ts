@@ -272,7 +272,7 @@ test('core reducer - update - undefined data should update for given path', t =>
 
   const after = coreReducer(
     before,
-    update('foo', _ => {
+    update(['foo'], _ => {
       return 'bar';
     })
   );
@@ -379,7 +379,7 @@ test('core reducer - update - empty path should update root state', t => {
 
   const after = coreReducer(
     before,
-    update('', _ => {
+    update([], _ => {
       return { foo: 'xyz' };
     })
   );
@@ -420,7 +420,7 @@ test('core reducer - update - providing a path should update data only belonging
 
   const after = coreReducer(
     before,
-    update('color', _ => {
+    update(['color'], _ => {
       return 'Green';
     })
   );
@@ -460,7 +460,7 @@ test('core reducer - update - should update errors', t => {
 
   const after = coreReducer(
     before,
-    update('color', _ => {
+    update(['color'], _ => {
       return 'Yellow';
     })
   );
@@ -552,7 +552,7 @@ test('errorAt filters enum', t => {
     uischema: undefined,
     errors
   };
-  const filtered = errorAt('foo', schema.properties.foo)(state);
+  const filtered = errorAt(['foo'], schema.properties.foo)(state);
   t.is(filtered.length, 1);
   t.deepEqual(filtered[0], state.errors[1]);
 });
@@ -583,7 +583,7 @@ test('errorAt filters required', t => {
     uischema: undefined,
     errors
   };
-  const filtered = errorAt('foo', schema.properties.foo)(state);
+  const filtered = errorAt(['foo'], schema.properties.foo)(state);
   t.is(filtered.length, 1);
   t.deepEqual(filtered[0], state.errors[1]);
 });
@@ -633,7 +633,7 @@ test('errorAt filters required in oneOf object', t => {
     errors
   };
   const filtered = errorAt(
-    'fooOrBar.foo',
+    ['fooOrBar','foo'],
     schema.properties.fooOrBar.oneOf[0].properties.foo
   )(state);
   t.is(filtered.length, 1);
@@ -685,7 +685,7 @@ test('errorAt filters required in anyOf object', t => {
     errors
   };
   const filtered = errorAt(
-    'fooOrBar.foo',
+    ['fooOrBar','foo'],
     schema.properties.fooOrBar.anyOf[0].properties.foo
   )(state);
   t.is(filtered.length, 1);
@@ -732,7 +732,7 @@ test('errorAt filters array minItems', t => {
     uischema: undefined,
     errors
   };
-  const filtered = errorAt('colours', schema.properties.colours)(state);
+  const filtered = errorAt(['colours'], schema.properties.colours)(state);
   t.is(filtered.length, 1);
   t.deepEqual(filtered[0], state.errors[1]);
 });
@@ -777,7 +777,7 @@ test('errorAt filters array inner value', t => {
     uischema: undefined,
     errors
   };
-  const filtered = errorAt('colours.0', schema.properties.colours)(state);
+  const filtered = errorAt(['colours','0'], schema.properties.colours)(state);
   t.is(filtered.length, 1);
   t.deepEqual(filtered[0], state.errors[1]);
 });
@@ -814,7 +814,7 @@ test('errorAt filters oneOf simple', t => {
     errors
   };
   const filtered = errorAt(
-    'coloursOrNumbers',
+    ['coloursOrNumbers'],
     schema.properties.coloursOrNumbers.oneOf[1]
   )(state);
   t.is(filtered.length, 1);
@@ -853,7 +853,7 @@ test('errorAt filters anyOf simple', t => {
     errors
   };
   const filtered = errorAt(
-    'coloursOrNumbers',
+    ['coloursOrNumbers'],
     schema.properties.coloursOrNumbers.anyOf[1]
   )(state);
   t.is(filtered.length, 1);
@@ -907,7 +907,7 @@ test('errorAt filters oneOf objects', t => {
     errors
   };
   const filtered = errorAt(
-    'coloursOrNumbers.colour',
+    ['coloursOrNumbers','colour'],
     schema.properties.coloursOrNumbers.oneOf[1].properties.colour
   )(state);
   t.is(filtered.length, 1);
@@ -959,7 +959,7 @@ test('errorAt filters oneOf objects same properties', t => {
     errors
   };
   const filtered = errorAt(
-    'coloursOrNumbers.colourOrNumber',
+    ['coloursOrNumbers','colourOrNumber'],
     schema.properties.coloursOrNumbers.oneOf[1].properties.colourOrNumber
   )(state);
   t.is(filtered.length, 1);
@@ -1008,7 +1008,7 @@ test('errorAt filters oneOf array', t => {
     errors
   };
   const filtered = errorAt(
-    'coloursOrNumbers',
+    ['coloursOrNumbers'],
     schema.properties.coloursOrNumbers.oneOf[1]
   )(state);
   t.is(filtered.length, 1);
@@ -1057,7 +1057,7 @@ test('errorAt filters oneOf array inner', t => {
     errors
   };
   const filtered = errorAt(
-    'coloursOrNumbers',
+    ['coloursOrNumbers'],
     schema.properties.coloursOrNumbers.oneOf[1]
   )(state);
   t.is(filtered.length, 0);
@@ -1104,9 +1104,10 @@ test('subErrorsAt filters array inner', t => {
     errors
   };
   const filtered = subErrorsAt(
-    'colours',
+    ['colours'],
     schema.properties.colours.items as JsonSchema
   )(state);
+  console.log("fillterreeed: ",filtered);
   t.is(filtered.length, 1);
   t.deepEqual(filtered[0], state.errors[1]);
 });
@@ -1153,7 +1154,7 @@ test('subErrorsAt filters oneOf array inner', t => {
     errors
   };
   const filtered = subErrorsAt(
-    'coloursOrNumbers',
+    ['coloursOrNumbers'],
     schema.properties.coloursOrNumbers.oneOf[1].items as JsonSchema
   )(state);
   t.is(filtered.length, 1);
@@ -1179,7 +1180,7 @@ test('errorAt respects hide validation mode', t => {
     init(data, schema, undefined, { validationMode: 'ValidateAndHide' })
   );
   t.is(core.errors.length, 1);
-  t.is(errorAt('animal', schema)(core).length, 0);
+  t.is(errorAt(['animal'], schema)(core).length, 0);
 })
 
 test('core reducer - setValidationMode - No validation should not produce errors', t => {
@@ -1346,7 +1347,7 @@ test('core reducer - update - NoValidation should not produce errors', t => {
 
   const after: JsonFormsCore = coreReducer(
     before,
-    update('animal', () => 100)
+    update(['animal'], () => 100)
   );
   t.is(after.errors.length, 0);
 });
@@ -1373,7 +1374,7 @@ test('core reducer - update - ValidateAndHide should produce errors', t => {
 
   const after: JsonFormsCore = coreReducer(
     before,
-    update('animal', () => 100)
+    update(['animal'], () => 100)
   );
   t.is(after.errors.length, 1);
 });
