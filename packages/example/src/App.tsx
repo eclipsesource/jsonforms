@@ -104,7 +104,7 @@ const App = ({ examples, cells, renderers}: AppProps) => {
       return example.name === hash
     });
     if(exampleIndex !== -1) {
-      setIndex(exampleIndex);
+      changeExample(exampleIndex);
     }
   }, []);
 
@@ -130,7 +130,7 @@ const App = ({ examples, cells, renderers}: AppProps) => {
     } else {
       setUiSchemaAsString('No ui schema set');
     }
-  }, [props]);
+  }, [props.schema, props.uischema]);
 
   useEffect(() => {
     var panel = document.getElementsByClassName('props-panel')[0];
@@ -157,7 +157,7 @@ const App = ({ examples, cells, renderers}: AppProps) => {
   return (
     <div>
       <div className='App'>
-        <header>
+        <header className='header'>
           <img src='assets/logo.svg' className='logo' alt='logo' />
           <h1 className='title'>Welcome to JSON Forms with React</h1>
           <p className='intro'>More Forms. Less Code.</p>

@@ -4,20 +4,20 @@ body {
   font-family: sans-serif;
 }
 
-header {
+.header {
   background-color: #00021e;
   padding: 20px;
   color: white;
   text-align: center;
 }
-header .logo {
+.header .logo {
   animation: spin infinite 20s linear;
   height: 80px;
 }
-header .title {
+.header .title {
   font-size: 1.5em;
 }
-header .intro {
+.header .intro {
   font-size: large;
 }
 
@@ -169,7 +169,6 @@ header .intro {
 .react-tabs .panel-wrapper {
   max-height: 150px;
   overflow: scroll;
-  margin: 0 0 20px 0;
   padding: 0 15px;
 }
 .react-tabs .panel-wrapper.full-height {

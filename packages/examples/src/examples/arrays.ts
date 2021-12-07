@@ -71,6 +71,10 @@ export const uischemaWithSorting = {
   elements: [
     {
       type: 'Control',
+      scope: '#/properties/foo'
+    },
+    {
+      type: 'Control',
       scope: '#/properties/comments',
       options: {
         showSortButtons: true
