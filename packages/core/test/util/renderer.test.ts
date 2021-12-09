@@ -23,47 +23,25 @@
   THE SOFTWARE.
 */
 import * as _ from 'lodash';
-import { init, update, UPDATE_DATA, UpdateAction } from '../../src/actions';
 import * as Redux from 'redux';
-import {
-  clearAllIds,
-  computeLabel,
-  createAjv,
-  createDefaultValue,
-  mapDispatchToArrayControlProps,
-  mapDispatchToControlProps,
-  mapStateToArrayLayoutProps,
-  mapStateToControlProps,
-  mapStateToJsonFormsRendererProps,
-  mapStateToLayoutProps,
-  mapStateToOneOfProps,
-  mapStateToMultiEnumControlProps,
-  mapDispatchToMultiEnumProps
-} from '../../src/util';
 import configureStore from 'redux-mock-store';
 import test from 'ava';
-import { generateDefaultUISchema } from '../../src/generators';
-import {
-  ControlElement,
-  CoreActions,
-  coreReducer,
-  Dispatch,
-  JsonFormsCore,
-  JsonFormsState,
-  JsonSchema,
-  JsonSchema7,
-  mapStateToAnyOfProps,
-  OwnPropsOfControl,
-  rankWith,
-  RuleEffect,
-  UISchemaElement,
-  setValidationMode,
-  defaultJsonFormsI18nState,
-  i18nJsonSchema,
-  mapStateToEnumControlProps,
-  mapStateToOneOfEnumControlProps
-} from '../../src';
+
 import { ErrorObject } from 'ajv';
+import { JsonFormsState } from '../../src/store';
+import { coreReducer, JsonFormsCore } from '../../src/reducers/core';
+import { Dispatch } from '../../src/util/type';
+import { CoreActions, init, setValidationMode, update, UpdateAction, UPDATE_DATA } from '../../src/actions/actions';
+import { ControlElement, RuleEffect, UISchemaElement } from '../../src/models/uischema';
+import { computeLabel, createDefaultValue, mapDispatchToArrayControlProps, mapDispatchToControlProps, mapDispatchToMultiEnumProps, mapStateToAnyOfProps, mapStateToArrayLayoutProps, mapStateToControlProps, mapStateToEnumControlProps, mapStateToJsonFormsRendererProps, mapStateToLayoutProps, mapStateToMultiEnumControlProps, mapStateToOneOfEnumControlProps, mapStateToOneOfProps, OwnPropsOfControl } from '../../src/util/renderer';
+import { clearAllIds } from '../../src/util/ids';
+import { generateDefaultUISchema } from '../../src/generators/uischema';
+import { JsonSchema } from '../../src/models/jsonSchema';
+import { rankWith } from '../../src/testers/testers';
+import { createAjv } from '../../src/util/validator';
+import { JsonSchema7 } from '../../src/models/jsonSchema7';
+import { defaultJsonFormsI18nState } from '../../src/reducers/i18n';
+import { i18nJsonSchema } from '../../src/i18n/i18nTypes';
 
 const middlewares: Redux.Middleware[] = [];
 const mockStore = configureStore<JsonFormsState>(middlewares);
@@ -1304,7 +1282,7 @@ test('mapStateToControlProps - i18n - default translation has no effect', t => {
   t.is(props.description, undefined);
 });
 
-test('mapStateToControlProps - i18n - translation via label key', t => {
+test('mapStateToControlProps - i18n - translation via path key', t => {
   const ownProps = {
     uischema: coreUISchema
   };
@@ -1312,6 +1290,24 @@ test('mapStateToControlProps - i18n - translation via label key', t => {
   state.jsonforms.i18n = defaultJsonFormsI18nState;
   state.jsonforms.i18n.translate = (key: string, defaultMessage: string | undefined) => {
     switch(key){
+      case 'firstName.label': return 'my translation';
+      default: return defaultMessage;
+    }
+  }
+
+  const props = mapStateToControlProps(state, ownProps);
+  t.is(props.label, 'my translation');
+  t.is(props.description, undefined);
+});
+
+test('mapStateToControlProps - i18n - translation via default message', t => {
+  const ownProps = {
+    uischema: coreUISchema
+  };
+  const state: JsonFormsState = createState(coreUISchema);
+  state.jsonforms.i18n = defaultJsonFormsI18nState;
+  state.jsonforms.i18n.translate = (_key: string, defaultMessage: string | undefined) => {
+    switch(defaultMessage){
       case 'First Name': return 'my translation';
       default: return defaultMessage;
     }
@@ -1601,7 +1597,7 @@ test('mapStateToEnumControlProps - i18n - default translation has no effect', t 
   t.is(props.options[0].label, 'a');
 });
 
-test('mapStateToEnumControlProps - i18n - label translation', t => {
+test('mapStateToEnumControlProps - i18n - path label translation', t => {
   const ownProps = {
     uischema: coreUISchema
   };
@@ -1610,6 +1606,24 @@ test('mapStateToEnumControlProps - i18n - label translation', t => {
   state.jsonforms.i18n = defaultJsonFormsI18nState;
   state.jsonforms.i18n.translate = (key: string, defaultMessage: string | undefined) => {
     switch(key){
+      case 'firstName.a': return 'my message';
+      default: return defaultMessage;
+    }
+  }
+
+  const props = mapStateToEnumControlProps(state, ownProps);
+  t.is(props.options[0].label, 'my message');
+});
+
+test('mapStateToEnumControlProps - i18n - defaultMessage translation', t => {
+  const ownProps = {
+    uischema: coreUISchema
+  };
+  const state: JsonFormsState = createState(coreUISchema);
+  state.jsonforms.core.schema.properties.firstName.enum = ['a', 'b'];
+  state.jsonforms.i18n = defaultJsonFormsI18nState;
+  state.jsonforms.i18n.translate = (_key: string, defaultMessage: string | undefined) => {
+    switch(defaultMessage){
       case 'a': return 'my message';
       default: return defaultMessage;
     }
@@ -1662,7 +1676,7 @@ test('mapStateToOneOfEnumControlProps- i18n - default translation has no effect'
   t.is(props.options[0].label, 'foo');
 });
 
-test('mapStateToOneOfEnumControlProps - i18n - label translation', t => {
+test('mapStateToOneOfEnumControlProps - i18n - path label translation', t => {
   const ownProps = {
     uischema: coreUISchema
   };
@@ -1671,6 +1685,24 @@ test('mapStateToOneOfEnumControlProps - i18n - label translation', t => {
   state.jsonforms.i18n = defaultJsonFormsI18nState;
   state.jsonforms.i18n.translate = (key: string, defaultMessage: string | undefined) => {
     switch(key){
+      case 'firstName.foo': return 'my message';
+      default: return defaultMessage;
+    }
+  }
+
+  const props = mapStateToOneOfEnumControlProps(state, ownProps);
+  t.is(props.options[0].label, 'my message');
+});
+
+test('mapStateToOneOfEnumControlProps - i18n - default message translation', t => {
+  const ownProps = {
+    uischema: coreUISchema
+  };
+  const state: JsonFormsState = createState(coreUISchema);
+  state.jsonforms.core.schema.properties.firstName.oneOf = [{const: 'a', title: 'foo'}, {const: 'b', title: 'bar'}]
+  state.jsonforms.i18n = defaultJsonFormsI18nState;
+  state.jsonforms.i18n.translate = (_key: string, defaultMessage: string | undefined) => {
+    switch(defaultMessage){
       case 'foo': return 'my message';
       default: return defaultMessage;
     }

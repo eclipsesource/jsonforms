@@ -27,11 +27,7 @@ import { ControlElement, UISchemaElement } from '../models';
 import {
   coreReducer,
   errorAt,
-  errorsAt,
-  getControlPath,
-  JsonFormsCore,
   subErrorsAt,
-  ValidationMode
 } from './core';
 import { defaultDataReducer } from './default-data';
 import { rendererReducer } from './renderers';
@@ -40,7 +36,6 @@ import {
   findMatchingUISchema,
   JsonFormsUISchemaRegistryEntry,
   uischemaRegistryReducer,
-  UISchemaTester
 } from './uischemas';
 import {
   fetchErrorTranslator,
@@ -56,19 +51,6 @@ import { configReducer } from './config';
 import get from 'lodash/get';
 import { fetchTranslator } from '.';
 import { ErrorTranslator, Translator } from '../i18n';
-
-export {
-  rendererReducer,
-  cellReducer,
-  coreReducer,
-  i18nReducer,
-  configReducer,
-  UISchemaTester,
-  uischemaRegistryReducer,
-  findMatchingUISchema,
-  JsonFormsUISchemaRegistryEntry
-};
-export { JsonFormsCore, ValidationMode };
 
 export const jsonFormsReducerConfig = {
   core: coreReducer,
@@ -127,8 +109,6 @@ export const getErrorAt = (instancePath: string, schema: JsonSchema) => (
 ) => {
   return errorAt(instancePath, schema)(state.jsonforms.core);
 };
-
-export { errorsAt, getControlPath };
 
 export const getSubErrorsAt = (instancePath: string, schema: JsonSchema) => (
   state: JsonFormsState
