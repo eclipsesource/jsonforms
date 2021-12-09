@@ -26,84 +26,95 @@ import React from 'react';
 import {
   computeLabel,
   ControlProps,
-  ControlState,
   isDescriptionHidden,
   OwnPropsOfEnum
 } from '@jsonforms/core';
-import { Control } from '@jsonforms/react';
 import { VanillaRendererProps } from '../index';
+import { findStyleAsClassName } from '../reducers/styling';
+import { useStyles } from '../styles';
 import merge from 'lodash/merge';
+import { useMemo, useState } from 'react';
 
-export class RadioGroup extends Control<
-  ControlProps & VanillaRendererProps & OwnPropsOfEnum,
-  ControlState
-> {
-  render() {
-    const {
-      classNames,
-      id,
-      label,
-      options,
-      required,
-      description,
-      errors,
-      data,
-      uischema,
-      visible,
-      config,
-      enabled
-    } = this.props;
-    const isValid = errors.length === 0;
-    const divClassNames = `validation  ${isValid ? classNames.description : 'validation_error'
-      }`;
-    const groupStyle: { [x: string]: any } = {
+export const RadioGroup = ({
+  classNames,
+  id,
+  label,
+  options,
+  required,
+  description,
+  errors,
+  data,
+  uischema,
+  visible,
+  config,
+  enabled,
+  path,
+  handleChange
+}: ControlProps & VanillaRendererProps & OwnPropsOfEnum) => {
+  const contextStyles = useStyles();
+  const [isFocused, setFocus] = useState(false);
+  const radioControl = useMemo(() => findStyleAsClassName(contextStyles)('control.radio'), [contextStyles]);
+  const radioOption = useMemo(() => findStyleAsClassName(contextStyles)('control.radio.option'), [contextStyles]);
+  const radioInput = useMemo(() => findStyleAsClassName(contextStyles)('control.radio.input'), [contextStyles]);
+  const radioLabel = useMemo(() => findStyleAsClassName(contextStyles)('control.radio.label'), [contextStyles]);
+  const isValid = errors.length === 0;
+  const divClassNames = `validation  ${isValid ? classNames.description : 'validation_error' }`;
+  const appliedUiSchemaOptions = merge({}, config, uischema.options);
+  const showDescription = !isDescriptionHidden(
+    visible,
+    description,
+    isFocused,
+    appliedUiSchemaOptions.showUnfocusedDescription
+  );
+  const hasRadioClass = !radioControl || radioControl === 'radio';
+  let groupStyle: { [x: string]: any } = {};
+  if (hasRadioClass) {
+    groupStyle = {
       display: 'flex',
       flexDirection: 'row'
     };
-
-    const appliedUiSchemaOptions = merge({}, config, uischema.options);
-    const showDescription = !isDescriptionHidden(
-      visible,
-      description,
-      this.state.isFocused,
-      appliedUiSchemaOptions.showUnfocusedDescription
-    );
-
-    return (
-      <div
-        className={classNames.wrapper}
-        hidden={!visible}
-        onFocus={this.onFocus}
-        onBlur={this.onBlur}
-      >
-        <label htmlFor={id} className={classNames.label}>
-          {computeLabel(
-            label,
-            required,
-            appliedUiSchemaOptions.hideRequiredAsterisk
-          )}
-        </label>
-
-        <div style={groupStyle}>
-          {options.map(option => (
-            <div key={option.label}>
-              <input
-                type='radio'
-                value={option.value}
-                id={option.value}
-                name={id}
-                checked={data === option.value}
-                onChange={ev => this.handleChange(ev.currentTarget.value)}
-                disabled={!enabled}
-              />
-              <label htmlFor={option.value}>{option.label}</label>
-            </div>
-          ))}
-        </div>
-        <div className={divClassNames}>
-          {!isValid ? errors : showDescription ? description : null}
-        </div>
-      </div>
-    );
   }
-}
+  return (
+    <div
+      className={classNames.wrapper}
+      hidden={!visible}
+      onFocus={() => setFocus(true)}
+      onBlur={() => setFocus(false)}
+    >
+      <label htmlFor={id} className={classNames.label}>
+        {computeLabel(
+          label,
+          required,
+          appliedUiSchemaOptions.hideRequiredAsterisk
+        )}
+      </label>
+
+      <div className={radioControl} style={groupStyle}>
+        {options.map(option => (
+          <div key={option.label} className={radioOption}>
+            <input
+              type='radio'
+              value={option.value}
+              id={option.value}
+              name={id}
+              checked={data === option.value}
+              onChange={ev => handleChange(path, ev.currentTarget.value)}
+              disabled={!enabled}
+              className={radioInput}
+            />
+            <label
+              htmlFor={option.value}
+              className={radioLabel}
+            >
+              {option.label}
+            </label>
+          </div>
+        ))}
+      </div>
+      <div className={divClassNames}>
+        {!isValid ? errors : showDescription ? description : null}
+      </div>
+    </div>
+  );
+};
+
