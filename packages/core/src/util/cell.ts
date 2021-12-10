@@ -55,7 +55,7 @@ import {
 } from './renderer';
 import { JsonFormsState } from '../store';
 import { JsonSchema } from '../models';
-import { getI18nKeyPrefix } from '..';
+import { getI18nKeyPrefix } from '../i18n';
 
 export { JsonFormsCellRendererRegistryEntry };
 
