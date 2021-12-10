@@ -23,39 +23,101 @@
   THE SOFTWARE.
 */
 
-import React, { Component, CSSProperties } from 'react';
-import { JsonFormsDispatch } from '@jsonforms/react';
-import { JsonFormsReduxContext } from '@jsonforms/react/lib/redux';
+import React, { useEffect, useState } from 'react';
+import { JsonForms, JsonFormsInitStateProps, JsonFormsReactProps } from '@jsonforms/react';
+import { ExampleDescription } from '@jsonforms/examples';
+import {
+  JsonFormsCellRendererRegistryEntry,
+  JsonFormsRendererRegistryEntry,
+  JsonSchema
+} from '@jsonforms/core';
+import { resolveRefs } from 'json-refs';
 import './App.css';
-import { AppProps, initializedConnect } from './reduxUtil';
 
-const preStyle: CSSProperties = {
-  overflowX: 'auto'
+type AppProps = {
+  examples: ExampleDescription[],
+  cells: JsonFormsCellRendererRegistryEntry[],
+  renderers: JsonFormsRendererRegistryEntry[],
+}
+
+const ResolvedJsonForms = (
+  props: JsonFormsInitStateProps & JsonFormsReactProps
+) => {
+  const [init, setInit] = useState(false);
+  const [schema, setSchema] = useState<JsonSchema>();
+  useEffect(() => {
+    if (!props.schema) {
+      setInit(true);
+      setSchema(props.schema);
+    } else {
+      resolveRefs(props.schema).then((result) => {
+        setInit(true);
+        setSchema(result.resolved);
+      });
+    }
+  }, [props.schema]);
+  if (!init) {
+    return null;
+  }
+  return <JsonForms {...props} schema={schema} />;
 };
-class App extends Component<AppProps> {
-  render() {
-    return (
-      <JsonFormsReduxContext>
-        <div>
-          <div className='App'>
-            <header className='App-header'>
-              <img src='assets/logo.svg' className='App-logo' alt='logo' />
-              <h1 className='App-title'>Welcome to JSON Forms with React</h1>
-              <p className='App-intro'>More Forms. Less Code.</p>
-            </header>
-          </div>
 
+const getProps = (example: ExampleDescription, cells?: any, renderers?: any) => {
+  const schema = example.schema;
+  const uischema = example.uischema;
+  const data = example.data;
+  const uischemas = example.uischemas;
+  const config = example.config;
+  return {
+    schema,
+    uischema,
+    data,
+    config,
+    uischemas,
+    cells,
+    renderers
+  }
+}
+
+const App = ({ examples, cells, renderers}: AppProps) => {
+  const [currentExample, setExample] = useState<ExampleDescription>(examples[0]);
+  const [currentIndex, setIndex] = useState<number>(0);
+  const [dataAsString, setDataAsString] = useState<any>('');
+  const [props, setProps] = useState<any>(getProps(currentExample, cells, renderers)); // helper function
+
+  const actions: any = currentExample.actions;
+
+  const changeExample = (exampleID: number) => {
+    let example = examples[exampleID];
+    setIndex(exampleID);
+    setExample(example);
+    setProps(getProps(example, cells, renderers));
+  };
+
+  const changeData = (data: any) => {
+    setDataAsString(JSON.stringify(data, null, 2));
+  };
+
+  return (
+    <div>
+      <div className='App'>
+        <header className='App-header'>
+          <img src='assets/logo.svg' className='App-logo' alt='logo' />
+          <h1 className='App-title'>Welcome to JSON Forms with React</h1>
+          <p className='App-intro'>More Forms. Less Code.</p>
+        </header>
+        <div className='content'>
           <h4 className='data-title'>Examples</h4>
           <div className='data-content'>
             <select
-              value={this.props.selectedExample.name || ''}
-              onChange={ev => this.props.changeExample(ev.currentTarget.value)}
+              value={currentIndex}
+              onChange={ev => changeExample(Number(ev.currentTarget.value))}
             >
-              {this.props.examples.map(optionValue => (
+              {examples.map((optionValue: ExampleDescription, index: number) => (
                 <option
-                  value={optionValue.name}
+                  value={index}
                   label={optionValue.label}
-                  key={optionValue.name}
+                  key={index}
                 >
                   {optionValue.label}
                 </option>
@@ -65,16 +127,24 @@ class App extends Component<AppProps> {
 
           <h4 className='data-title'>Bound data</h4>
           <div className='data-content'>
-            <pre style={preStyle}>{this.props.dataAsString}</pre>
+            <pre>{dataAsString}</pre>
           </div>
           <div className='demoform'>
-            {this.props.getExtensionComponent()}
-            <JsonFormsDispatch onChange={this.props.onChange} />
+            <div className="buttons">
+              {actions?.map((action: any, index: number) => (
+                <button onClick = { () => setProps((oldProps: JsonFormsInitStateProps) => action.apply(oldProps)) } key={index}>{action.label}</button>
+              ))}
+            </div>
+            <ResolvedJsonForms
+              key={currentIndex}
+              {...props}
+              onChange={({ data }) => changeData(data)}
+            />
           </div>
         </div>
-      </JsonFormsReduxContext>
-    );
-  }
+      </div>
+    </div>
+  );
 }
 
-export default initializedConnect(App);
+export default App;

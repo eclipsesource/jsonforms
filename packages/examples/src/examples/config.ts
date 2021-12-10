@@ -22,31 +22,70 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { 
-  JsonFormsCellRendererRegistryEntry,
-  JsonFormsUISchemaRegistryEntry,
-  JsonFormsRendererRegistryEntry,
-  JsonSchema,
-  UISchemaElement
-} from '@jsonforms/core';
+import { registerExamples } from '../register';
 
-export interface ExampleDescription {
-  name: string;
-  label: string;
-  data: any;
-  schema: JsonSchema;
-  uischema: UISchemaElement;
-  uischemas?: JsonFormsUISchemaRegistryEntry[];
-  config?: any;
-  actions?: {label: string, apply: (props: StateProps) => any}[];
-}
+export const schema = {
+  type: 'object',
+  properties: {
+    postalCode: {
+      type: 'string',
+      description: 'A Postal Code',
+      maxLength: 5
+    },
+    recurrenceInterval: {
+      type: 'integer',
+      description: 'A recurrence interval'
+    }
+  },
+  required: ['postalCode']
+};
 
-export interface StateProps {
-  data: any;
-  schema?: JsonSchema;
-  uischema?: UISchemaElement;
-  renderers: JsonFormsRendererRegistryEntry[];
-  cells?: JsonFormsCellRendererRegistryEntry[];
-  config?: any;
-  uischemas?: JsonFormsUISchemaRegistryEntry[];
-}
+export const uischema = {
+  type: 'VerticalLayout',
+  elements: [
+    {
+      type: 'HorizontalLayout',
+      elements: [
+        {
+          type: 'Control',
+          scope: '#/properties/postalCode',
+          label: 'Postal Code'
+        },
+        {
+          type: 'Control',
+          scope: '#/properties/recurrenceInterval',
+          label: 'Recurrence Interval'
+        }
+      ]
+    }
+  ]
+};
+
+export const data = {
+  postalCode: '12345'
+};
+
+const config = {
+  restrict: true,
+  trim: true,
+  showUnfocusedDescription: true,
+  hideRequiredAsterisk: true
+};
+
+registerExamples([
+  {
+    name: 'configDefault',
+    label: 'Configuration (Default)',
+    data,
+    schema,
+    uischema: uischema
+  },
+  {
+    name: 'configCustom',
+    label: 'Configuration (Custom)',
+    data,
+    schema,
+    uischema,
+    config
+  }
+]);

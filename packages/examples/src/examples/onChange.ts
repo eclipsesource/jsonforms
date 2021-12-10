@@ -22,12 +22,54 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { createThemeSelection } from './theme.switcher';
-import {
-  vanillaCells,
-  vanillaRenderers,
-} from '../src';
-import { renderExample } from '../../example/src/index';
+import { registerExamples } from '../register';
+import { UISchemaElement, updateErrors, JsonFormsCore, AnyAction, Dispatch } from '@jsonforms/core';
 
-renderExample(vanillaRenderers, vanillaCells);
-createThemeSelection();
+let touchedProperties: any = {
+  name: false,
+  description: false
+};
+
+export const onChange = (dispatch: Dispatch<AnyAction>) => (_: any) => ({
+  data,
+  errors
+}: Pick<JsonFormsCore, 'data' | 'errors'>) => {
+  Object.keys(data).forEach(key => (touchedProperties[key] = true));
+
+  const newErrors = errors.filter(error => {
+    return touchedProperties[(error as any).dataPath ?? error.instancePath];
+  });
+
+  if (newErrors.length < errors.length) {
+    return dispatch(updateErrors(newErrors));
+  }
+};
+
+export const schema = {
+  type: 'object',
+  properties: {
+    name: {
+      type: 'string',
+      minLength: 1
+    },
+    description: {
+      type: 'string',
+      minLength: 1
+    }
+  },
+  required: ['name', 'description']
+};
+
+export const uischema: UISchemaElement = undefined;
+
+export const data = {};
+
+registerExamples([
+  {
+    name: 'onChange',
+    label: 'On Change',
+    data,
+    schema,
+    uischema
+  }
+]);

@@ -22,12 +22,46 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { createThemeSelection } from './theme.switcher';
-import {
-  vanillaCells,
-  vanillaRenderers,
-} from '../src';
-import { renderExample } from '../../example/src/index';
+import { registerExamples } from '../register';
 
-renderExample(vanillaRenderers, vanillaCells);
-createThemeSelection();
+export const schema = {
+  type: 'object',
+  properties: {
+    name: {
+      type: 'string',
+      minLength: 1
+    },
+    version: {
+      const: '1.0'
+    }
+  },
+  required: ['version']
+};
+
+export const uischema = {
+  type: 'HorizontalLayout',
+  elements: [
+    {
+      type: 'Control',
+      label: 'Name',
+      scope: '#/properties/name'
+    },
+    {
+      type: 'Control',
+      label: 'Version',
+      scope: '#/properties/version'
+    }
+  ]
+};
+
+const data = {};
+
+registerExamples([
+  {
+    name: 'issue-1254',
+    label: 'issue 1254 (JSONSchema constants)',
+    data,
+    schema,
+    uischema
+  }
+]);
