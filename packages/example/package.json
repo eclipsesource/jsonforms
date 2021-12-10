@@ -1,16 +1,16 @@
 {
   "name": "@jsonforms/examples-react",
-  "version": "3.0.0-alpha.2",
+  "version": "3.0.0-alpha.3",
   "private": true,
   "dependencies": {
-    "@jsonforms/core": "^3.0.0-alpha.2",
-    "@jsonforms/examples": "^3.0.0-alpha.2",
-    "@jsonforms/react": "^3.0.0-alpha.2",
+    "@jsonforms/core": "^3.0.0-alpha.3",
+    "@jsonforms/examples": "^3.0.0-alpha.3",
+    "@jsonforms/react": "^3.0.0-alpha.3",
     "@mui/material": "^5.2.2",
     "json-refs": "3.0.15",
     "lodash": "^4.17.15",
-    "react-dom": "^17.0.2",
-    "react": "^17.0.2"
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   },
   "scripts": {
     "build": "echo 'Nothing to do'",
