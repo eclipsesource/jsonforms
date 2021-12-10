@@ -55,7 +55,7 @@ import {
 } from './renderer';
 import { JsonFormsState } from '../store';
 import { JsonSchema } from '../models';
-import { i18nJsonSchema } from '..';
+import { getI18nKeyPrefix } from '../i18n';
 
 export { JsonFormsCellRendererRegistryEntry };
 
@@ -202,14 +202,14 @@ export const defaultMapStateToEnumCellProps = (
       enumToEnumOptionMapper(
         e,
         getTranslator()(state),
-        props.uischema?.options?.i18n ?? (props.schema as i18nJsonSchema).i18n
+        getI18nKeyPrefix(props.schema, props.uischema, props.path)
       )
     ) ||
     (props.schema.const && [
       enumToEnumOptionMapper(
         props.schema.const,
         getTranslator()(state),
-        props.uischema?.options?.i18n ?? (props.schema as i18nJsonSchema).i18n
+        getI18nKeyPrefix(props.schema, props.uischema, props.path)
       )
     ]);
   return {
@@ -235,7 +235,7 @@ export const mapStateToOneOfEnumCellProps = (
       oneOfToEnumOptionMapper(
         oneOfSubSchema,
         getTranslator()(state),
-        props.uischema?.options?.i18n
+        getI18nKeyPrefix(props.schema, props.uischema, props.path)
       )
     );
   return {

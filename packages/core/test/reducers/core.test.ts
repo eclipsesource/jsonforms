@@ -25,7 +25,7 @@
 import test from 'ava';
 import Ajv from 'ajv';
 import { coreReducer } from '../../src/reducers';
-import { init, update, updateErrors } from '../../src/actions';
+import { init, setSchema, setValidationMode, update, updateCore, updateErrors } from '../../src/actions';
 import { JsonSchema } from '../../src/models/jsonSchema';
 import {
   errorAt,
@@ -34,9 +34,8 @@ import {
   subErrorsAt
 } from '../../src/reducers/core';
 
-import { createAjv, updateCore } from '../../src';
-import { setSchema, setValidationMode } from '../../lib';
 import { cloneDeep } from 'lodash';
+import { createAjv } from '../../src/util/validator';
 
 test('core reducer should support v7', t => {
   const schema: JsonSchema = {
