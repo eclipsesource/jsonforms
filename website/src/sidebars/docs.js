@@ -14,6 +14,7 @@ module.exports = {
     'ref-resolving',
     'readonly',
     'validation',
+    'date-time-picker',
     {
       type: 'category',
       label: 'Tutorials',
