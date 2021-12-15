@@ -29,7 +29,7 @@
         "
         :clearable="hover"
         multi-line
-        @change="onChange"
+        @input="onChange"
         @focus="isFocused = true"
         @blur="isFocused = false"
       />

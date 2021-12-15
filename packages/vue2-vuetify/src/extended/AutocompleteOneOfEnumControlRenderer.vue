@@ -46,7 +46,7 @@
         :items="control.options"
         item-text="label"
         item-value="value"
-        @change="onChange"
+        @input="onChange"
         @focus="isFocused = true"
         @blur="isFocused = false"
       />

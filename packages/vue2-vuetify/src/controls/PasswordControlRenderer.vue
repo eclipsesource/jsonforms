@@ -28,7 +28,7 @@
           ? control.schema.maxLength
           : undefined
       "
-      @change="onChange"
+      @input="onChange"
       @focus="isFocused = true"
       @blur="isFocused = false"
     />

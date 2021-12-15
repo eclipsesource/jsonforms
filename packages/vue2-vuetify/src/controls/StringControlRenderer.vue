@@ -31,7 +31,7 @@
         :value="control.data"
         :items="suggestions"
         hide-no-data
-        @change="onChange"
+        @input="onChange"
         @focus="isFocused = true"
         @blur="isFocused = false"
       />
@@ -58,7 +58,7 @@
             : undefined
         "
         :clearable="hover"
-        @change="onChange"
+        @input="onChange"
         @focus="isFocused = true"
         @blur="isFocused = false"
       />

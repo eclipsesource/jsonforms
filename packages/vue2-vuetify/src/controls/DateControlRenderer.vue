@@ -18,7 +18,7 @@
       :required="control.required"
       :error-messages="control.errors"
       :value="control.data"
-      @change="onChange"
+      @input="onChange"
       @focus="isFocused = true"
       @blur="isFocused = false"
     />
