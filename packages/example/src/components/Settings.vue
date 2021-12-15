@@ -192,8 +192,22 @@
             <v-tooltip bottom>
               <template v-slot:activator="{ on: onTooltip }">
                 <v-switch
+                  v-model="collapseNewItems"
+                  label="Collapse new items"
+                  v-on="onTooltip"
+                ></v-switch>
+              </template>
+              If true, new array items are not expanded by default
+            </v-tooltip>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on: onTooltip }">
+                <v-switch
                   v-model="locale"
-                  label="Switch beetwen english and german locale"
+                  label="Switch between english and german locale"
                   v-on="onTooltip"
                 ></v-switch>
               </template>
@@ -220,6 +234,7 @@ export default {
       'app/jsonforms@config.showUnfocusedDescription'
     ),
     restrict: sync('app/jsonforms@config.restrict'),
+    collapseNewItems: sync('app/jsonforms@config.collapseNewItems'),
     readonly: sync('app/jsonforms@readonly'),
     locale: sync('app/jsonforms@locale'),
   },

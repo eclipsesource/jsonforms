@@ -40,7 +40,7 @@
     <v-card-text>
       <v-container justify-space-around align-content-center>
         <v-row justify="center">
-          <v-expansion-panels accordion focusable>
+          <v-expansion-panels accordion focusable v-model="currentlyExpanded">
             <v-expansion-panel
               v-for="(element, index) in control.data"
               :key="`${control.path}-${index}`"
@@ -218,6 +218,7 @@ import {
 } from 'vuetify/lib';
 import { ValidationIcon, ValidationBadge } from '../controls/components/index';
 import { ErrorObject } from 'ajv';
+import { ref } from '@vue/composition-api';
 
 const controlRenderer = defineComponent({
   name: 'array-layout-renderer',
@@ -247,7 +248,9 @@ const controlRenderer = defineComponent({
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    return useVuetifyArrayControl(useJsonFormsArrayControl(props));
+    const control = useVuetifyArrayControl(useJsonFormsArrayControl(props));
+    const currentlyExpanded = ref<null | number>(null);
+    return { ...control, currentlyExpanded };
   },
   computed: {
     noData(): boolean {
@@ -280,6 +283,9 @@ const controlRenderer = defineComponent({
         this.control.path,
         createDefaultValue(this.control.schema)
       )();
+      if (!this.appliedOptions.collapseNewItems && this.control.data?.length) {
+        this.currentlyExpanded = this.control.data.length - 1;
+      }
     },
     moveUpClick(event: Event, toMove: number): void {
       event.stopPropagation();

@@ -16,6 +16,7 @@ export interface AppState {
       trim: boolean;
       showUnfocusedDescription: boolean;
       hideRequiredAsterisk: boolean;
+      collapseNewItems: boolean;
     };
     renderers: JsonFormsRendererRegistryEntry[];
     cells: JsonFormsCellRendererRegistryEntry[];
