@@ -67,7 +67,7 @@ export const MaterialTimeControl = (props: ControlProps) => {
   );
 
   const format = appliedUiSchemaOptions.timeFormat ?? 'HH:mm';
-    const saveFormat = appliedUiSchemaOptions.timeSaveFormat ?? 'HH:mm:ss';
+  const saveFormat = appliedUiSchemaOptions.timeSaveFormat ?? 'HH:mm';
 
   const firstFormHelperText = showDescription
     ? description
