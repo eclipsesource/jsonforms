@@ -2,6 +2,15 @@
 
 ## Migrating to JSON Forms 3.0 for React users
 
+### Removal of React Material extended renderer set
+
+Previously we maintained a separate 'extended' renderer set to not force all consumers of JSON Forms to consume the Material UI lab dependency.
+With the update to Material UI v5 the lab dependency became more important as it also contains all date and time pickers.
+Therefore we now require the lab dependency and removed the no longer needed extended renderer set.
+
+If you consumed the extended renderer set then just revert to the normal renderer set.
+There should not be any behavior changes.
+
 ### Removal of Class Components in React Material
 
 With Version 3.0 of JSON Forms we removed all React Material class components.
