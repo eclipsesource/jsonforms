@@ -8,16 +8,16 @@ import styles from './assets/index.module.scss';
 import corePackageJson from '@jsonforms/core/package';
 
 import SchemaIcon from '../../static/img/schemaIcon.svg';
-import FeaturesIcon from '@material-ui/icons/Report';
-import CustomizeIcon from '@material-ui/icons/Brush';
+import FeaturesIcon from '@mui/icons-material/Report';
+import CustomizeIcon from '@mui/icons-material/Brush';
 import ArchitectureSmall from '../../static/img/architecture_small.svg';
 import AngularLogo from '../../static/img/angular-logo.svg';
 import ReactLogo from '../../static/img/react-logo.svg';
 import VueLogo from '../../static/img/vue-logo.svg';
 
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
 
 import { Demo } from '../../src/components/common/Demo';
 import schema from './assets/schema.json';

@@ -1,10 +1,10 @@
 import React from 'react';
-import TableCell from '@material-ui/core/TableCell/TableCell';
-import TableHead from '@material-ui/core/TableHead/TableHead';
-import Table from '@material-ui/core/Table/Table';
-import TableBody from '@material-ui/core/TableBody/TableBody';
-import TableRow from '@material-ui/core/TableRow/TableRow';
-import { makeStyles } from '@material-ui/core';
+import TableCell from '@mui/material/TableCell/TableCell';
+import TableHead from '@mui/material/TableHead/TableHead';
+import Table from '@mui/material/Table/Table';
+import TableBody from '@mui/material/TableBody/TableBody';
+import TableRow from '@mui/material/TableRow/TableRow';
+import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles({
   tableSupported: {

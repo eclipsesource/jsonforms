@@ -1,6 +1,6 @@
 import React from 'react';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import { createStyles, makeStyles } from '@material-ui/core';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { createStyles, makeStyles } from '@mui/styles';
 import { Demo } from '../common/Demo';
 
 const useStyles = makeStyles((theme) =>
@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) =>
 );
 
 export const Array = () => {
-  const theme = createMuiTheme({
+  const theme = createTheme({
     overrides: {
       MuiSelect: {
         select: {

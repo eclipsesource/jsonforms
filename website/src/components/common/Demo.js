@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
 import { JsonForms } from '@jsonforms/react';
-import { createStyles, createTheme, makeStyles, ThemeProvider } from '@material-ui/core';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { createStyles, makeStyles } from '@mui/styles';
 import {
   materialCells,
   materialRenderers,
@@ -17,9 +18,6 @@ const demoStyles = makeStyles((theme) =>
       color: '#000',
       marginBottom: 20,
       margin: 'auto',
-      [theme.breakpoints.up('sm')]: {
-        padding: `0 ${theme.spacing(1)}px`
-      },
     },
     tabs: {
       '& li:first-child': {
@@ -35,14 +33,18 @@ const demoStyles = makeStyles((theme) =>
 );
 
 const theme = createTheme({
-  overrides: {
-    MuiFormHelperText: {
-      root: {
-        minHeight: '1.6em',
+  components: {
+    MuiFormControl: {
+      styleOverrides: {
+        root: {
+          margin: '0.8em 0',
+        },
       }
-    }
+    },
   },
 });
+
+const defaultTheme = createTheme();
 
 const codeStyle = makeStyles((theme) =>
   createStyles({
@@ -103,37 +105,39 @@ export const Demo = (props) => {
 
   const classes = demoStyles();
   return (
-    <div className={classes.root} id={id}>
-      <Tabs
-        defaultValue="demo"
-        values={[
-          {label: 'Demo', value: 'demo'},
-          {label: 'Schema', value: 'schema'},
-          {label: 'UI Schema', value: 'uischema'},
-          {label: 'Data', value: 'data'},
-        ]}
-        className={classes.tabs}>
-        <TabItem value="demo" className={clsx('demoTab', classes.demoTab)}>
-          <ThemeProvider theme={theme}>
-            <JsonForms
-              renderers={materialRenderers}
-              cells={materialCells}
-              onChange={({ data }) => setData(data)}
-              {...props}
-            />
-          </ThemeProvider>
-        </TabItem>
-        <TabItem value="schema">
-          <Code name="schema.json">{schema}</Code>
-        </TabItem>
-        <TabItem value="uischema">
-          <Code name="uischema.json">{uischema}</Code>
-        </TabItem>
-        <TabItem value="data">
-          <Code>{data}</Code>
-        </TabItem>
-      </Tabs>
-    </div>
+    <ThemeProvider theme={defaultTheme}>
+      <div className={classes.root} id={id}>
+        <Tabs
+          defaultValue="demo"
+          values={[
+            {label: 'Demo', value: 'demo'},
+            {label: 'Schema', value: 'schema'},
+            {label: 'UI Schema', value: 'uischema'},
+            {label: 'Data', value: 'data'},
+          ]}
+          className={classes.tabs}>
+          <TabItem value="demo" className={clsx('demoTab', classes.demoTab)}>
+            <ThemeProvider theme={theme}>
+              <JsonForms
+                renderers={materialRenderers}
+                cells={materialCells}
+                onChange={({ data }) => setData(data)}
+                {...props}
+              />
+            </ThemeProvider>
+          </TabItem>
+          <TabItem value="schema">
+            <Code name="schema.json">{schema}</Code>
+          </TabItem>
+          <TabItem value="uischema">
+            <Code name="uischema.json">{uischema}</Code>
+          </TabItem>
+          <TabItem value="data">
+            <Code>{data}</Code>
+          </TabItem>
+        </Tabs>
+      </div>
+    </ThemeProvider>
   );
 };
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { JsonFormsDispatch } from '@jsonforms/react';
-import { ThemeProvider } from '@material-ui/core/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import { Demo } from '../common/Demo';
 
 export const input = {

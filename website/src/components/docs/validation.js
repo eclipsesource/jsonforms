@@ -3,7 +3,7 @@ import {
   materialCells,
   materialRenderers,
 } from '@jsonforms/material-renderers';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 import { JsonForms } from '@jsonforms/react';
 
 const schema = {

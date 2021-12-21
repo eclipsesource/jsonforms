@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Demo } from '../common/Demo';
 
-import TableCell from '@material-ui/core/TableCell/TableCell';
-import TableHead from '@material-ui/core/TableHead/TableHead';
-import Table from '@material-ui/core/Table/Table';
-import TableBody from '@material-ui/core/TableBody/TableBody';
-import TableRow from '@material-ui/core/TableRow/TableRow';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import Grid from '@material-ui/core/Grid';
+import TableCell from '@mui/material/TableCell/TableCell';
+import TableHead from '@mui/material/TableHead/TableHead';
+import Table from '@mui/material/Table/Table';
+import TableBody from '@mui/material/TableBody/TableBody';
+import TableRow from '@mui/material/TableRow/TableRow';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import Grid from '@mui/material/Grid';
 
 import { JsonForms } from '@jsonforms/react';
 import {
@@ -35,7 +35,7 @@ export const TimeSchemaInput = {
     scope: '#/properties/time',
   },
   data: {
-    time: '13:37',
+    time: '13:37:00',
   },
 };
 
@@ -63,7 +63,7 @@ export const TimeUiSchemaInput = {
     }
   },
   data: {
-    time: '13:37'
+    time: '13:37:00'
   },
 };
 
@@ -98,7 +98,7 @@ export const TimeUiSchemaOptionsInput = {
     }
   },
   data: {
-    time: '13:00'
+    time: '13:00:00'
   },
 };
 
