@@ -32,11 +32,20 @@ import {
 } from '@jsonforms/core';
 import { withJsonFormsEnumProps } from '@jsonforms/react';
 import { MuiSelect } from '../mui-controls/MuiSelect';
+import merge from 'lodash/merge';
 import { MaterialInputControl } from './MaterialInputControl';
+import { MuiAutocomplete, WithOptionLabel } from '../mui-controls/MuiAutocomplete';
 
-export const MaterialEnumControl = (props: ControlProps & OwnPropsOfEnum) => (
-  <MaterialInputControl {...props} input={MuiSelect} />
-);
+export const MaterialEnumControl = (props: ControlProps & OwnPropsOfEnum & WithOptionLabel) => {
+  const {config, uischema} = props;
+  const appliedUiSchemaOptions = merge({}, config, uischema.options);
+  return (
+    <MaterialInputControl
+      {...props}
+      input={appliedUiSchemaOptions.autocomplete === false ? MuiSelect : MuiAutocomplete}
+    />
+  );
+};
 
 export const materialEnumControlTester: RankedTester = rankWith(
   2,
