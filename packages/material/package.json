@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/material-renderers",
-  "version": "3.0.0-alpha.3",
+  "version": "3.0.0-beta.0",
   "description": "Material Renderer Set for JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -74,8 +74,8 @@
     "dayjs": "1.10.6"
   },
   "peerDependencies": {
-    "@jsonforms/core": "^3.0.0-alpha.3",
-    "@jsonforms/react": "^3.0.0-alpha.3",
+    "@jsonforms/core": "^3.0.0-beta.0",
+    "@jsonforms/react": "^3.0.0-beta.0",
     "@mui/icons-material": "^5.0.0",
     "@mui/lab": "^5.0.0-alpha.54",
     "@mui/material": "^5.0.0"
@@ -83,8 +83,8 @@
   "devDependencies": {
     "@emotion/react": "^11.5.0",
     "@emotion/styled": "^11.3.0",
-    "@jsonforms/core": "^3.0.0-alpha.3",
-    "@jsonforms/react": "^3.0.0-alpha.3",
+    "@jsonforms/core": "^3.0.0-beta.0",
+    "@jsonforms/react": "^3.0.0-beta.0",
     "@mui/icons-material": "^5.2.0",
     "@mui/lab": "^5.0.0-alpha.58",
     "@mui/material": "^5.2.2",
@@ -98,9 +98,9 @@
     "react-dom": "^17.0.2",
     "rimraf": "^3.0.2",
     "rollup": "^2.7.3",
+    "rollup-plugin-cleanup": "^3.2.1",
     "rollup-plugin-typescript2": "^0.31.1",
     "rollup-plugin-visualizer": "^5.4.1",
-    "rollup-plugin-cleanup": "^3.2.1",
     "source-map-loader": "^0.2.4",
     "ts-jest": "^26.4.4",
     "ts-loader": "^6.2.1",

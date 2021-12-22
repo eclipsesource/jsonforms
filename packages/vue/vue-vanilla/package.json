@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/vue-vanilla",
-  "version": "3.0.0-alpha.3",
+  "version": "3.0.0-beta.0",
   "description": "Vue 3 Vanilla renderers for JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -55,8 +55,8 @@
     "@babel/core": "^7.9.0",
     "@babel/preset-env": "^7.9.5",
     "@babel/preset-typescript": "^7.9.0",
-    "@jsonforms/core": "^3.0.0-alpha.3",
-    "@jsonforms/vue": "^3.0.0-alpha.3",
+    "@jsonforms/core": "^3.0.0-beta.0",
+    "@jsonforms/vue": "^3.0.0-beta.0",
     "@types/chai": "^4.2.11",
     "@types/jest": "^24.0.23",
     "@types/mocha": "^5.2.4",
@@ -72,18 +72,18 @@
     "rimraf": "^3.0.2",
     "rollup": "^2.7.3",
     "rollup-plugin-babel": "^4.4.0",
-    "rollup-plugin-typescript2": "^0.31.1",
-    "rollup-plugin-vue": "^6.0.0",
-    "rollup-plugin-visualizer": "^5.4.1",
     "rollup-plugin-cleanup": "^3.2.1",
+    "rollup-plugin-typescript2": "^0.31.1",
+    "rollup-plugin-visualizer": "^5.4.1",
+    "rollup-plugin-vue": "^6.0.0",
     "symlink-dir": "^5.0.0",
     "typedoc": "^0.19.2",
     "typescript": "4.2.3",
     "vue-jest": "^5.0.0-0"
   },
   "peerDependencies": {
-    "@jsonforms/core": "^3.0.0-alpha.2",
-    "@jsonforms/vue": "^3.0.0-alpha.2",
+    "@jsonforms/core": "^3.0.0-beta.0",
+    "@jsonforms/vue": "^3.0.0-beta.0",
     "vue": "^3.2.26"
   }
 }

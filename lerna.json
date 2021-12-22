@@ -4,7 +4,7 @@
     "packages/vue/*",
     "packages/vue2/*"
   ],
-  "version": "3.0.0-alpha.3",
+  "version": "3.0.0-beta.0",
   "nohoist": [
     "core-js",
     "vue",
