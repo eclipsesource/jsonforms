@@ -32,7 +32,7 @@ In addition, EclipseSource also offers [professional support](https://jsonforms.
 
 ### First time setup
 
-* Install [node.js](https://nodejs.org/) (only Node 12 is currently supported)
+* Install [node.js](https://nodejs.org/) (only Node 14 and npm 6 is currently supported)
 * Clone this repository
 * Install dependencies: `npm ci`
 * Hook up dependencies between packages: `npm run init`
