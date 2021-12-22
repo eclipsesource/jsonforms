@@ -32,9 +32,9 @@ import {
 import { defaultDataReducer } from './default-data';
 import { rendererReducer } from './renderers';
 import { JsonFormsState } from '../store';
+import type { JsonFormsUISchemaRegistryEntry } from './uischemas';
 import {
   findMatchingUISchema,
-  JsonFormsUISchemaRegistryEntry,
   uischemaRegistryReducer,
 } from './uischemas';
 import {
@@ -59,7 +59,7 @@ export const jsonFormsReducerConfig = {
   config: configReducer,
   uischemas: uischemaRegistryReducer,
   defaultData: defaultDataReducer,
-  i18n: i18nReducer
+  i18n: i18nReducer,
 };
 
 /**
