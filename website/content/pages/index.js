@@ -107,12 +107,11 @@ function Home() {
           <section className={styles.sectionNews}>
             <Card className={styles.newsCard}>
               <CardContent>
-                We're working on our next major release. Our main focus is on improving the core module and overhauling our build including our published bundles.
-                In the end we'll have a smaller and faster JSON Forms for all bindings and renderer sets.
-                The refactoring of JSON Forms' core dependencies is already available on the npm <code>next</code> stream via our latest prerelease <code>3.0.0-alpha.0</code>.
-                Additionally JSON Forms is now also compatible with Angular 12 by default. Interested? Try it today, we're always looking for feedback 😀
+                We've got an early present for you 🎁! Today we merged the last feature for JSON Forms 3.0 and released the first beta version <code>v3.0.0-beta.0</code> 🎉 Try our new ESM module builds today!
+
+                Stable release coming in the new year 🥳
                 <br/>
-                <span style={{ display: 'block', textAlign: 'right', width: '100%'}}>29th June 2021</span>
+                <span style={{ display: 'block', textAlign: 'right', width: '100%'}}>22th December 2021</span>
               </CardContent>
             </Card>
             <Link to='/news' className={styles.newsButton}>
