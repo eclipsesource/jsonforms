@@ -64,7 +64,7 @@ test('toDataPath use of keywords', t => {
   t.is(toDataPath('#/properties/properties'), 'properties');
 });
 test('toDataPath use of encoded paths', t => {
-  const fooBar = encodeURIComponent('foo.bar');
+  const fooBar = 'foo.bar';
   t.is(toDataPath(`#/properties/${fooBar}`), `${fooBar}`);
 });
 test('toDataPath relative with /', t => {

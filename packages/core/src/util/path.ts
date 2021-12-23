@@ -27,19 +27,8 @@ import isEmpty from 'lodash/isEmpty';
 import range from 'lodash/range';
 import { Scopable } from '../models';
 
-export const compose = (path1: string, path2: string) => {
-  let p1 = path1;
-  if (!isEmpty(path1) && !isEmpty(path2) && !path2.startsWith('[')) {
-    p1 = path1 + '.';
-  }
-
-  if (isEmpty(p1)) {
-    return path2;
-  } else if (isEmpty(path2)) {
-    return p1;
-  } else {
-    return `${p1}${path2}`;
-  }
+export const compose = (path1: string[], path2: string[] | string) => {
+  return path1?.concat(path2 ?? []);
 };
 
 export { compose as composePaths };
@@ -66,25 +55,47 @@ export const toDataPathSegments = (schemaPath: string): string[] => {
   const startIndex = startFromRoot ? 2 : 1;
   return range(startIndex, segments.length, 2).map(idx => segments[idx]);
 };
-
+// TODO: `toDataPathSegments` and `toDataPath` are the same!
 /**
  * Remove all schema-specific keywords (e.g. 'properties') from a given path.
  * @example
- * toDataPath('#/properties/foo/properties/bar') === '#/foo/bar')
+ * toDataPath('#/properties/foo/properties/bar') === ['foo', 'bar'])
  *
  * @param {string} schemaPath the schema path to be converted
- * @returns {string} the path without schema-specific keywords
+ * @returns {string[]} the path without schema-specific keywords
  */
-export const toDataPath = (schemaPath: string): string => {
-  return toDataPathSegments(schemaPath).join('.');
-};
+export const toDataPath = (schemaPath: string): string[] => toDataPathSegments(schemaPath);
 
-export const composeWithUi = (scopableUi: Scopable, path: string): string => {
+export const composeWithUi = (scopableUi: Scopable, path: string[]): string[] => {
   const segments = toDataPathSegments(scopableUi.scope);
 
   if (isEmpty(segments) && path === undefined) {
-    return '';
+    return [];
   }
 
-  return isEmpty(segments) ? path : compose(path, segments.join('.'));
+  return isEmpty(segments) ? path : compose(path, segments);
 };
+
+/**
+ * Check if two paths are equal (section by section)
+ */
+export const pathsAreEqual = (path1: string[], path2: string[]) =>
+  path2.length === path1.length && path2.every((section, i) => section === path1[i]);
+
+/**
+ * Check if a path starts with another path (`subPath`)
+ */
+export const pathStartsWith = (path: string[], subPath: string[]) =>
+  subPath.length <= path.length && subPath.every((section, i) => section === path[i]);
+
+/**
+ * Convert path `array` to a `string`, injectively (in a reversible way)
+ */
+export const stringifyPath = (path: string[]) =>
+  path.map(segment => ajvInstancePathEncoder(segment)).join('/');
+
+export const ajvInstancePathEncoder = (pathSegment: string) =>
+  pathSegment.replace(/[~\/]/g, match => match === '~' ? '~0' : '~1');
+
+export const ajvInstancePathDecoder = (pathSegment: string) =>
+  pathSegment.replace(/~0|~1/g, match => match === '~0' ? '~' : '/');

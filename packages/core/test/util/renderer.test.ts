@@ -168,7 +168,7 @@ test('mapStateToControlProps - visible via state with path from ownProps ', t =>
   };
   const ownProps = {
     uischema,
-    path: 'foo'
+    path: ['foo']
   };
   const state = {
     jsonforms: {
@@ -238,7 +238,7 @@ test('mapStateToControlProps - enabled via state with path from ownProps ', t =>
   const ownProps = {
     visible: true,
     uischema,
-    path: 'foo'
+    path: ['foo']
   };
   const state = {
     jsonforms: {

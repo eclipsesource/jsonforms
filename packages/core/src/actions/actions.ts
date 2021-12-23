@@ -72,7 +72,7 @@ export type CoreActions =
 
 export interface UpdateAction {
   type: 'jsonforms/UPDATE';
-  path: string;
+  path: string[];
   updater(existingData?: any): any;
 }
 
@@ -167,7 +167,7 @@ export const setAjv = (ajv: AJV) => ({
 });
 
 export const update = (
-  path: string,
+  path: string[],
   updater: (existingData: any) => any
 ): UpdateAction => ({
   type: UPDATE_DATA,

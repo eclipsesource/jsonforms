@@ -50,7 +50,7 @@ export const MaterialArrayLayoutRenderer = ({
   uischemas,
   addItem
 }: ArrayLayoutProps) => {
-  const addItemCb = useCallback((p: string, value: any) => addItem(p, value), [
+  const addItemCb = useCallback((thePath: string[], value: any) => addItem(thePath, value), [
     addItem
   ]);
   return (

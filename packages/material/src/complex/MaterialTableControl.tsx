@@ -49,11 +49,13 @@ import {
   ControlElement,
   errorsAt,
   formatErrorMessage,
+  JsonFormsCellRendererRegistryEntry,
+  JsonFormsRendererRegistryEntry,
   JsonSchema,
   Paths,
+  pathsAreEqual,
   Resolve,
-  JsonFormsRendererRegistryEntry,
-  JsonFormsCellRendererRegistryEntry
+  stringifyPath,
 } from '@jsonforms/core';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowDownward from '@mui/icons-material/ArrowDownward';
@@ -86,7 +88,7 @@ const styles = {
 const generateCells = (
   Cell: React.ComponentType<OwnPropsOfNonEmptyCell | TableHeaderCellProps>,
   schema: JsonSchema,
-  rowPath: string,
+  rowPath: string[],
   enabled: boolean,
   cells?: JsonFormsCellRendererRegistryEntry[]
 ) => {
@@ -102,7 +104,7 @@ const generateCells = (
         enabled,
         cells
       };
-      return <Cell key={cellPath} {...props} />;
+      return <Cell key={stringifyPath(cellPath)} {...props} />;
     });
   } else {
     // primitives
@@ -112,7 +114,7 @@ const generateCells = (
       cellPath: rowPath,
       enabled
     };
-    return <Cell key={rowPath} {...props} />;
+    return <Cell key={stringifyPath(rowPath)} {...props} />;
   }
 };
 
@@ -149,11 +151,11 @@ const TableHeaderCell = React.memo(({ title }: TableHeaderCellProps) => (
 interface NonEmptyCellProps extends OwnPropsOfNonEmptyCell {
   rootSchema: JsonSchema;
   errors: string;
-  path: string;
+  path: string[];
   enabled: boolean;
 }
 interface OwnPropsOfNonEmptyCell {
-  rowPath: string;
+  rowPath: string[];
   propName?: string;
   schema: JsonSchema;
   enabled: boolean;
@@ -164,15 +166,16 @@ const ctxToNonEmptyCellProps = (
   ctx: JsonFormsStateContext,
   ownProps: OwnPropsOfNonEmptyCell
 ): NonEmptyCellProps => {
-  const path =
-    ownProps.rowPath +
-    (ownProps.schema.type === 'object' ? '.' + ownProps.propName : '');
+  const path = Paths.compose(
+    ownProps.rowPath,
+    ownProps.schema.type === 'object' ? ownProps.propName : undefined
+  );
   const errors = formatErrorMessage(
     union(
       errorsAt(
         path,
         ownProps.schema,
-        p => p === path
+        thePath => pathsAreEqual(thePath, path)
       )(ctx.core.errors).map((error: ErrorObject) => error.message)
     )
   );
@@ -196,17 +199,17 @@ const controlWithoutLabel = (scope: string): ControlElement => ({
 });
 
 interface NonEmptyCellComponentProps {
-  path: string,
-  propName?: string,
-  schema: JsonSchema,
-  rootSchema: JsonSchema,
-  errors: string,
-  enabled: boolean,
-  renderers?: JsonFormsRendererRegistryEntry[],
-  cells?: JsonFormsCellRendererRegistryEntry[],
-  isValid: boolean
+  path: string[];
+  propName?: string;
+  schema: JsonSchema;
+  rootSchema: JsonSchema;
+  errors: string;
+  enabled: boolean;
+  renderers?: JsonFormsRendererRegistryEntry[];
+  cells?: JsonFormsCellRendererRegistryEntry[];
+  isValid: boolean;
 }
-const NonEmptyCellComponent = React.memo(({path, propName, schema,rootSchema, errors, enabled, renderers, cells, isValid}:NonEmptyCellComponentProps) => {
+const NonEmptyCellComponent = React.memo(({path, propName, schema, rootSchema, errors, enabled, renderers, cells, isValid}: NonEmptyCellComponentProps) => {
 
   return (
     <NoBorderTableCell>
@@ -243,24 +246,24 @@ const NonEmptyCell = (ownProps: OwnPropsOfNonEmptyCell) => {
   const emptyCellProps = ctxToNonEmptyCellProps(ctx, ownProps);
 
   const isValid = isEmpty(emptyCellProps.errors);
-  return <NonEmptyCellComponent {...emptyCellProps} isValid={isValid}/>
+  return <NonEmptyCellComponent {...emptyCellProps} isValid={isValid}/>;
 };
 
 interface NonEmptyRowProps {
-  childPath: string;
+  childPath: string[];
   schema: JsonSchema;
   rowIndex: number;
-  moveUpCreator: (path:string, position: number)=> ()=> void;
-  moveDownCreator: (path:string, position: number)=> ()=> void;
+  moveUpCreator(path: string[], position: number): () => void;
+  moveDownCreator(path: string[], position: number): () => void;
   enableUp: boolean;
   enableDown: boolean;
   showSortButtons: boolean;
   enabled: boolean;
   cells?: JsonFormsCellRendererRegistryEntry[];
-  path: string;
+  path: string[];
 }
 
-const NonEmptyRowComponent = 
+const NonEmptyRowComponent =
   ({
     childPath,
     schema,
@@ -275,10 +278,10 @@ const NonEmptyRowComponent =
     cells,
     path
   }: NonEmptyRowProps & WithDeleteDialogSupport) => {
-    const moveUp = useMemo(() => moveUpCreator(path, rowIndex),[moveUpCreator, path, rowIndex]);
-    const moveDown = useMemo(() => moveDownCreator(path, rowIndex),[moveDownCreator, path, rowIndex]);
+    const moveUp = useMemo(() => moveUpCreator(path, rowIndex), [moveUpCreator, path, rowIndex]);
+    const moveDown = useMemo(() => moveDownCreator(path, rowIndex), [moveDownCreator, path, rowIndex]);
     return (
-      <TableRow key={childPath} hover>
+      <TableRow key={stringifyPath(childPath)} hover>
         {generateCells(NonEmptyCell, schema, childPath, enabled, cells)}
         {enabled ? (
           <NoBorderTableCell
@@ -302,7 +305,8 @@ const NonEmptyRowComponent =
                       aria-label={`Move down`}
                       onClick={moveDown}
                       disabled={!enableDown}
-                      size='large'>
+                      size='large'
+                    >
                       <ArrowDownward />
                     </IconButton>
                   </Grid>
@@ -312,7 +316,8 @@ const NonEmptyRowComponent =
                 <IconButton
                   aria-label={`Delete`}
                   onClick={() => openDeleteDialog(childPath, rowIndex)}
-                  size='large'>
+                  size='large'
+                >
                   <DeleteIcon />
                 </IconButton>
               </Grid>
@@ -325,14 +330,14 @@ const NonEmptyRowComponent =
 export const NonEmptyRow = React.memo(NonEmptyRowComponent);
 interface TableRowsProp {
   data: number;
-  path: string;
+  path: string[];
   schema: JsonSchema;
   uischema: ControlElement;
   config?: any;
   enabled: boolean;
   cells?: JsonFormsCellRendererRegistryEntry[];
-  moveUp?(path: string, toMove: number): () => void;
-  moveDown?(path: string, toMove: number): () => void;
+  moveUp?(path: string[], toMove: number): () => void;
+  moveDown?(path: string[], toMove: number): () => void;
 }
 const TableRows = ({
   data,
@@ -361,7 +366,7 @@ const TableRows = ({
 
         return (
           <NonEmptyRow
-            key={childPath}
+            key={stringifyPath(childPath)}
             childPath={childPath}
             rowIndex={index}
             schema={schema}
@@ -385,7 +390,7 @@ export class MaterialTableControl extends React.Component<
   ArrayLayoutProps & WithDeleteDialogSupport,
   any
 > {
-  addItem = (path: string, value: any) => this.props.addItem(path, value);
+  addItem = (path: string[], value: any) => this.props.addItem(path, value);
   render() {
     const {
       label,

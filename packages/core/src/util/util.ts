@@ -93,27 +93,27 @@ export const deriveTypes = (jsonSchema: JsonSchema): string[] => {
 };
 
 /**
-* Convenience wrapper around resolveData and resolveSchema.
-*/
+ * Convenience wrapper around resolveData and resolveSchema.
+ */
 export const Resolve: {
  schema(
    schema: JsonSchema,
    schemaPath: string,
    rootSchema?: JsonSchema
  ): JsonSchema;
- data(data: any, path: string): any;
+ data(data: any, path: string[]): any;
 } = {
  schema: resolveSchema,
  data: resolveData
 };
 
 // Paths --
-const fromScopable = (scopable: Scopable) =>
+const fromScopable = (scopable: Scopable) => // TODO: Where this is used?
  toDataPathSegments(scopable.scope).join('.');
 
 export const Paths = {
  compose: composePaths,
- fromScopable
+ fromScopable,
 };
 
 // Runtime --

@@ -5,8 +5,8 @@ import customParsing from 'dayjs/plugin/customParseFormat';
 dayjs.extend(customParsing);
 
 export const createOnChangeHandler = (
-  path: string,
-  handleChange: (path: string, value: any) => void,
+  path: string[],
+  handleChange: (path: string[], value: any) => void,
   saveFormat: string | undefined
 ) => (time: dayjs.Dayjs) => {
   if (!time) {

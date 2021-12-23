@@ -12,8 +12,8 @@ import ValidationIcon from '../complex/ValidationIcon';
 export interface ArrayLayoutToolbarProps {
   label: string;
   errors: string;
-  path: string;
-  addItem(path: string, data: any): () => void;
+  path: string[];
+  addItem(path: string[], data: any): () => void;
   createDefault(): any;
 }
 export const ArrayLayoutToolbar = React.memo(

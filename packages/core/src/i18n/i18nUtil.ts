@@ -15,11 +15,10 @@ export const getI18nKeyPrefixBySchema = (
  * Transforms a given path to a prefix which can be used for i18n keys.
  * Returns 'root' for empty paths and removes array indices
  */
-export const transformPathToI18nPrefix = (path: string) => {
+export const transformPathToI18nPrefix = (path: string[]) => {
   return (
     path
-      ?.split('.')
-      .filter(segment => !/^\d+$/.test(segment))
+      ?.filter(segment => !/^\d+$/.test(segment))
       .join('.') || 'root'
   );
 };
@@ -27,7 +26,7 @@ export const transformPathToI18nPrefix = (path: string) => {
 export const getI18nKeyPrefix = (
   schema: i18nJsonSchema | undefined,
   uischema: UISchemaElement | undefined,
-  path: string | undefined
+  path: string[] | undefined
 ): string | undefined => {
   return (
     getI18nKeyPrefixBySchema(schema, uischema) ??
@@ -38,7 +37,7 @@ export const getI18nKeyPrefix = (
 export const getI18nKey = (
   schema: i18nJsonSchema | undefined,
   uischema: UISchemaElement | undefined,
-  path: string | undefined,
+  path: string[] | undefined,
   key: string
 ): string | undefined => {
   return `${getI18nKeyPrefix(schema, uischema, path)}.${key}`;
@@ -89,7 +88,7 @@ export const getCombinedErrorMessage = (
   t: Translator,
   schema?: i18nJsonSchema,
   uischema?: UISchemaElement,
-  path?: string
+  path?: string[],
 ) => {
   if (errors.length > 0 && t) {
     // check whether there is a special message which overwrites all others

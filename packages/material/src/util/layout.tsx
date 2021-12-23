@@ -40,7 +40,7 @@ import { Grid, Hidden } from '@mui/material';
 export const renderLayoutElements = (
   elements: UISchemaElement[],
   schema: JsonSchema,
-  path: string,
+  path: string[],
   enabled: boolean,
   renderers?: JsonFormsRendererRegistryEntry[],
   cells?: JsonFormsCellRendererRegistryEntry[]

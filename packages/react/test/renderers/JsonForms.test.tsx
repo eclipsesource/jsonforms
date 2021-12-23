@@ -43,6 +43,7 @@ import {
   registerCell,
   registerRenderer,
   schemaMatches,
+  stringifyPath,
   uiTypeIs,
   unregisterRenderer,
 } from '@jsonforms/core';
@@ -220,7 +221,7 @@ test('ids should be unique within the same form', () => {
         uischema={e}
         schema={fixture.schema}
         path={props.path}
-        key={`${props.path}-${idx}`}
+        key={`${stringifyPath(props.path)}-${idx}`}
       />
     ));
     return <div className='layout'>{children}</div>;
@@ -298,7 +299,7 @@ test('render schema with $ref', () => {
 
   const wrapper = mount(
     <JsonFormsDispatchRenderer
-      path={''}
+      path={[]}
       uischema={fixture.uischema}
       schema={schemaWithRef}
       renderers={renderers}
@@ -356,7 +357,7 @@ test.skip('updates schema with ref', () => {
 
   const wrapper = shallow(
     <JsonFormsDispatchRenderer
-      path={''}
+      path={[]}
       uischema={fixture.uischema}
       schema={fixture.schema}
       renderers={renderers}

@@ -40,7 +40,7 @@ export interface DeleteDialogProps {
 }
 
 export interface WithDeleteDialogSupport {
-  openDeleteDialog(path: string, data: number): void;
+  openDeleteDialog(path: string[], data: number): void;
 }
 
 export const DeleteDialog = React.memo(({ open, onClose, onConfirm, onCancel }: DeleteDialogProps) => {

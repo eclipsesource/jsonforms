@@ -41,21 +41,19 @@ const isArraySchema = (schema: JsonSchema): boolean => {
   return schema.type === 'array' && schema.items !== undefined;
 };
 
-export const resolveData = (instance: any, dataPath: string): any => {
+export const resolveData = (instance: any, dataPath: string[]): any => {
   if (isEmpty(dataPath)) {
     return instance;
   }
-  const dataPathSegments = dataPath.split('.');
 
-  return dataPathSegments
-    .map(segment => decodeURIComponent(segment))
-    .reduce((curInstance, decodedSegment) => {
-      if (!curInstance || !curInstance.hasOwnProperty(decodedSegment)) {
-        return undefined;
-      }
+  // TODO: Replace with a `for` loop to improve performance (by breaking the loop on `undefined`)
+  return dataPath.reduce((curInstance, segment) => {
+    if (!curInstance?.hasOwnProperty(segment)) {
+      return undefined;
+    }
 
-      return curInstance[decodedSegment];
-    }, instance);
+    return curInstance[segment];
+  }, instance);
 };
 
 /**

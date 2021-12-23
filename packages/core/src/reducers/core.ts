@@ -39,12 +39,12 @@ import {
   SET_SCHEMA,
   SET_UISCHEMA,
   SET_VALIDATION_MODE,
+  UPDATE_CORE,
   UPDATE_DATA,
   UPDATE_ERRORS,
-  UPDATE_CORE,
   UpdateCoreAction
 } from '../actions';
-import { createAjv, Reducer } from '../util';
+import { pathsAreEqual, createAjv, pathStartsWith, Reducer } from '../util';
 import { JsonSchema, UISchemaElement } from '../models';
 
 export const validate = (validator: ValidateFunction | undefined, data: any): ErrorObject[] => {
@@ -184,7 +184,7 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
         state.ajv !== thisAjv ||
         state.errors !== errors ||
         state.validator !== validator ||
-        state.validationMode !== validationMode
+        state.validationMode !== validationMode;
       return stateChanged
         ? {
             ...state,
@@ -230,7 +230,8 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
     case UPDATE_DATA: {
       if (action.path === undefined || action.path === null) {
         return state;
-      } else if (action.path === '') {
+      }
+      if (action.path.length === 0) {
         // empty path is ok
         const result = action.updater(cloneDeep(state.data));
         const errors = validate(state.validator, result);
@@ -317,32 +318,29 @@ export const getControlPath = (error: ErrorObject) => {
     return dataPath.replace(/\//g, '.').substr(1);
   }
   // dataPath was renamed to instancePath in AJV v8
-  var controlPath: string = error.instancePath;
+  const controlPath = error.instancePath
+    .replace(/^\//, '') // remove leading slash
+    .split('/'); // convert to string[]
 
-  // change '/' chars to '.'
-  controlPath = controlPath.replace(/\//g, '.');
-  
   const invalidProperty = getInvalidProperty(error);
-  if (invalidProperty !== undefined && !controlPath.endsWith(invalidProperty)) {
-    controlPath = `${controlPath}.${invalidProperty}`;
+  if (invalidProperty !== undefined && controlPath.at(-1) !== invalidProperty) {
+    controlPath.push(invalidProperty);
   }
-  
-  // remove '.' chars at the beginning of paths
-  controlPath = controlPath.replace(/^./, '');
+
   return controlPath;
-}
+};
 
 export const errorsAt = (
-  instancePath: string,
+  instancePath: string[],
   schema: JsonSchema,
-  matchPath: (path: string) => boolean
+  matchPath: (path: string[]) => boolean
 ) => (errors: ErrorObject[]): ErrorObject[] => {
   // Get data paths of oneOf and anyOf errors to later determine whether an error occurred inside a subschema of oneOf or anyOf.
   const combinatorPaths = filter(
     errors,
     error => error.keyword === 'oneOf' || error.keyword === 'anyOf'
     ).map(error => getControlPath(error));
-    
+
     return filter(errors, error => {
       // Filter errors that match any keyword that we don't want to show in the UI
       if (filteredErrorKeywords.indexOf(error.keyword) !== -1) {
@@ -360,8 +358,8 @@ export const errorsAt = (
     // because the parent schema can never match the property schema (e.g. for 'required' checks).
     const parentSchema: JsonSchema | undefined = error.parentSchema;
     if (result && !isObjectSchema(parentSchema)
-      && combinatorPaths.findIndex(p => instancePath.startsWith(p)) !== -1) {
-      result = result && isEqual(parentSchema, schema);
+      && combinatorPaths.some(combinatorPath => pathStartsWith(instancePath, combinatorPath))) {
+      result = isEqual(parentSchema, schema);
     }
     return result;
   });
@@ -372,7 +370,7 @@ export const errorsAt = (
  */
 const isObjectSchema = (schema?: JsonSchema): boolean => {
   return schema?.type === 'object' || !!schema?.properties;
-}
+};
 
 /**
  * The error-type of an AJV error is defined by its `keyword` property.
@@ -388,13 +386,16 @@ const isObjectSchema = (schema?: JsonSchema): boolean => {
 const filteredErrorKeywords = ['additionalProperties', 'allOf', 'anyOf', 'oneOf'];
 
 const getErrorsAt = (
-  instancePath: string,
+  instancePath: string[],
   schema: JsonSchema,
-  matchPath: (path: string) => boolean
+  matchPath: (path: string[]) => boolean
 ) => (state: JsonFormsCore): ErrorObject[] =>
-  errorsAt(instancePath, schema, matchPath)(state.validationMode === 'ValidateAndHide' ? [] : state.errors);
+  errorsAt(instancePath, schema, matchPath)(
+    state.validationMode === 'ValidateAndHide' ? [] : state.errors
+  );
 
-export const errorAt = (instancePath: string, schema: JsonSchema) =>
-  getErrorsAt(instancePath, schema, path => path === instancePath);
-export const subErrorsAt = (instancePath: string, schema: JsonSchema) =>
-  getErrorsAt(instancePath, schema, path => path.startsWith(instancePath));
+export const errorAt = (instancePath: string[], schema: JsonSchema) =>
+  getErrorsAt(instancePath, schema, path => pathsAreEqual(path, instancePath));
+
+export const subErrorsAt = (instancePath: string[], schema: JsonSchema) =>
+  getErrorsAt(instancePath, schema, path => pathStartsWith(path, instancePath));

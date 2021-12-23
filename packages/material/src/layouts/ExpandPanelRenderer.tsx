@@ -20,7 +20,8 @@ import {
   JsonFormsUISchemaRegistryEntry,
   getFirstPrimitiveProp,
   createId,
-  removeId
+  removeId,
+  stringifyPath,
 } from '@jsonforms/core';
 import {
   Accordion,
@@ -39,7 +40,7 @@ const iconStyle: any = { float: 'right' };
 
 interface OwnPropsOfExpandPanel {
   index: number;
-  path: string;
+  path: string[];
   uischema: ControlElement;
   schema: JsonSchema;
   expanded: boolean;
@@ -51,12 +52,12 @@ interface OwnPropsOfExpandPanel {
   enableMoveDown: boolean;
   config: any;
   childLabelProp?: string;
-  handleExpansion(panel: string): (event: any, expanded: boolean) => void;
+  handleExpansion(panel: string[]): (event: any, expanded: boolean) => void;
 }
 
 interface StatePropsOfExpandPanel extends OwnPropsOfExpandPanel {
   childLabel: string;
-  childPath: string;
+  childPath: string[];
   enableMoveUp: boolean;
   enableMoveDown: boolean;
 }
@@ -65,9 +66,9 @@ interface StatePropsOfExpandPanel extends OwnPropsOfExpandPanel {
  * Dispatch props of a table control
  */
 export interface DispatchPropsOfExpandPanel {
-  removeItems(path: string, toDelete: number[]): (event: any) => void;
-  moveUp(path: string, toMove: number): (event: any) => void;
-  moveDown(path: string, toMove: number): (event: any) => void;
+  removeItems(path: string[], toDelete: number[]): (event: any) => void;
+  moveUp(path: string[], toMove: number): (event: any) => void;
+  moveDown(path: string[], toMove: number): (event: any) => void;
 }
 
 export interface ExpandPanelProps
@@ -155,7 +156,8 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
                           style={iconStyle}
                           disabled={!enableMoveUp}
                           aria-label={`Move up`}
-                          size='large'>
+                          size='large'
+                        >
                           <ArrowUpward />
                         </IconButton>
                       </Grid>
@@ -165,7 +167,8 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
                           style={iconStyle}
                           disabled={!enableMoveDown}
                           aria-label={`Move down`}
-                          size='large'>
+                          size='large'
+                        >
                           <ArrowDownward />
                         </IconButton>
                       </Grid>
@@ -178,7 +181,8 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
                       onClick={removeItems(path, [index])}
                       style={iconStyle}
                       aria-label={`Delete`}
-                      size='large'>
+                      size='large'
+                    >
                       <DeleteIcon />
                     </IconButton>
                   </Grid>
@@ -193,7 +197,7 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
           schema={schema}
           uischema={foundUISchema}
           path={childPath}
-          key={childPath}
+          key={stringifyPath(childPath)}
           renderers={renderers}
           cells={cells}
         />
@@ -213,7 +217,7 @@ const ExpandPanelRenderer = React.memo(ExpandPanelRendererComponent);
 export const ctxDispatchToExpandPanelProps: (
   dispatch: Dispatch<ReducerAction<any>>
 ) => DispatchPropsOfExpandPanel = dispatch => ({
-  removeItems: useCallback((path: string, toDelete: number[]) => (event: any): void => {
+  removeItems: useCallback((path: string[], toDelete: number[]) => (event: any): void => {
     event.stopPropagation();
     dispatch(
       update(path, array => {
@@ -225,7 +229,7 @@ export const ctxDispatchToExpandPanelProps: (
       })
     );
   }, [dispatch]),
-  moveUp: useCallback((path: string, toMove: number) => (event: any): void => {
+  moveUp: useCallback((path: string[], toMove: number) => (event: any): void => {
     event.stopPropagation();
     dispatch(
       update(path, array => {
@@ -234,7 +238,7 @@ export const ctxDispatchToExpandPanelProps: (
       })
     );
   }, [dispatch]),
-  moveDown: useCallback((path: string, toMove: number) => (event: any): void => {
+  moveDown: useCallback((path: string[], toMove: number) => (event: any): void => {
     event.stopPropagation();
     dispatch(
       update(path, array => {

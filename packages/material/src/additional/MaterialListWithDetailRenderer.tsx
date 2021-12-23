@@ -64,8 +64,8 @@ export const MaterialListWithDetailRenderer = ({
 }: ArrayLayoutProps) => {
   const [selectedIndex, setSelectedIndex] = useState(undefined);
   const handleRemoveItem = useCallback(
-    (p: string, value: any) => () => {
-      removeItems(p, [value])();
+    (thePath: string[], value: any) => () => {
+      removeItems(thePath, [value])();
       if (selectedIndex === value) {
         setSelectedIndex(undefined);
       } else if (selectedIndex > value) {

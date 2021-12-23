@@ -70,7 +70,7 @@ export const createCombinatorRenderInfos = (
   rootSchema: JsonSchema,
   keyword: CombinatorKeyword,
   control: ControlElement,
-  path: string,
+  path: string[],
   uischemas: JsonFormsUISchemaRegistryEntry[]
 ): CombinatorSubSchemaRenderInfo[] =>
   combinatorSubSchemas.map((subSchema, subSchemaIndex) => ({

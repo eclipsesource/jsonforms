@@ -238,7 +238,7 @@ export interface OwnPropsOfRenderer {
    * path can not be inferred via the UI schema element as
    * it is the case with nested controls.
    */
-  path?: string;
+  path?: string[];
 
   renderers?: JsonFormsRendererRegistryEntry[];
 
@@ -297,7 +297,7 @@ export interface StatePropsOfRenderer {
   /**
    * Instance path the data is written to, in case of a control.
    */
-  path: string;
+  path: string[];
 
   /**
    * All available renderers.
@@ -378,7 +378,7 @@ export interface DispatchPropsOfControl {
    * @param {string} path the path to the data to be updated
    * @param {any} value the new value that should be written to the given path
    */
-  handleChange(path: string, value: any): void;
+  handleChange(path: string[], value: any): void;
 }
 
 /**
@@ -637,10 +637,10 @@ export interface StatePropsOfControlWithDetail extends StatePropsOfControl {
 export interface OwnPropsOfMasterListItem {
   index: number;
   selected: boolean;
-  path: string;
+  path: string[];
   schema: JsonSchema;
   handleSelect(index: number): () => void;
-  removeItem(path: string, value: number): () => void;
+  removeItem(path: string[], value: number): () => void;
 }
 
 export interface StatePropsOfMasterItem extends OwnPropsOfMasterListItem {
@@ -712,10 +712,10 @@ export const mapStateToArrayControlProps = (
  * Dispatch props of a table control
  */
 export interface DispatchPropsOfArrayControl {
-  addItem(path: string, value: any): () => void;
-  removeItems?(path: string, toDelete: number[]): () => void;
-  moveUp?(path: string, toMove: number): () => void;
-  moveDown?(path: string, toMove: number): () => void;
+  addItem(path: string[], value: any): () => void;
+  removeItems?(path: string[], toDelete: number[]): () => void;
+  moveUp?(path: string[], toMove: number): () => void;
+  moveDown?(path: string[], toMove: number): () => void;
 }
 
 /**
@@ -727,7 +727,7 @@ export interface DispatchPropsOfArrayControl {
 export const mapDispatchToArrayControlProps = (
   dispatch: Dispatch<CoreActions>
 ): DispatchPropsOfArrayControl => ({
-  addItem: (path: string, value: any) => () => {
+  addItem: (path: string[], value: any) => () => {
     dispatch(
       update(path, array => {
         if (array === undefined || array === null) {
@@ -739,7 +739,7 @@ export const mapDispatchToArrayControlProps = (
       })
     );
   },
-  removeItems: (path: string, toDelete: number[]) => () => {
+  removeItems: (path: string[], toDelete: number[]) => () => {
     dispatch(
       update(path, array => {
         toDelete
@@ -769,14 +769,14 @@ export const mapDispatchToArrayControlProps = (
 });
 
 export interface DispatchPropsOfMultiEnumControl {
-  addItem: (path: string, value: any) => void;
-  removeItem?: (path: string, toDelete: any) => void;
+  addItem: (path: string[], value: any) => void;
+  removeItem?: (path: string[], toDelete: any) => void;
 }
 
 export const mapDispatchToMultiEnumProps = (
   dispatch: Dispatch<CoreActions>
 ): DispatchPropsOfMultiEnumControl => ({
-  addItem: (path: string, value: any) => {
+  addItem: (path: string[], value: any) => {
     dispatch(
       update(path, data => {
         if (data === undefined || data === null) {
@@ -787,7 +787,7 @@ export const mapDispatchToMultiEnumProps = (
       })
     );
   },
-  removeItem: (path: string, toDelete: any) => {
+  removeItem: (path: string[], toDelete: any) => {
     dispatch(
       update(path, data => {
         const indexInData = data.indexOf(toDelete);
@@ -808,12 +808,12 @@ export interface ArrayControlProps
 export const layoutDefaultProps: {
   visible: boolean;
   enabled: boolean;
-  path: string;
+  path: string[];
   direction: 'row' | 'column';
 } = {
   visible: true,
   enabled: true,
-  path: '',
+  path: [],
   direction: 'column'
 };
 
@@ -915,7 +915,7 @@ export const controlDefaultProps = {
 
 export interface StatePropsOfCombinator extends OwnPropsOfControl {
   rootSchema: JsonSchema;
-  path: string;
+  path: string[];
   id: string;
   indexOfFittingSchema: number;
   uischemas: JsonFormsUISchemaRegistryEntry[];

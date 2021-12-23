@@ -23,27 +23,28 @@
   THE SOFTWARE.
 */
 import range from 'lodash/range';
-import React, {useState, useCallback} from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   ArrayLayoutProps,
   composePaths,
   computeLabel,
   createDefaultValue,
+  pathsAreEqual,
 } from '@jsonforms/core';
 import map from 'lodash/map';
 import { ArrayLayoutToolbar } from './ArrayToolbar';
 import ExpandPanelRenderer from './ExpandPanelRenderer';
 import merge from 'lodash/merge';
 
-const MaterialArrayLayoutComponent = (props: ArrayLayoutProps)=> {
-  const [expanded, setExpanded] = useState<string|boolean>(false);
+const MaterialArrayLayoutComponent = (props: ArrayLayoutProps) => {
+  const [expanded, setExpanded] = useState<string[]>(null);
   const innerCreateDefaultValue = useCallback(() => createDefaultValue(props.schema), [props.schema]);
-  const handleChange = useCallback((panel: string) => (_event: any, expandedPanel: boolean) => {
-    setExpanded(expandedPanel ? panel : false)
+  const handleChange = useCallback((panel: string[]) => (_event: any, expandedPanel: boolean) => {
+    setExpanded(expandedPanel ? panel : null);
   }, []);
-  const isExpanded = (index: number) => 
-    expanded === composePaths(props.path, `${index}`);
-  
+  const isExpanded = (index: number) =>
+    expanded ? pathsAreEqual(expanded, composePaths(props.path, `${index}`)) : false;
+
   const {
     data,
     path,
