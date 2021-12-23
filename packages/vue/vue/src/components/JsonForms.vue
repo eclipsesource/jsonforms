@@ -57,7 +57,7 @@ export default defineComponent({
     },
     renderers: {
       required: true,
-      type: Array as PropType<JsonFormsRendererRegistryEntry[]>
+      type: Array as PropType<JsonFormsRendererRegistryEntry[] | Readonly<JsonFormsRendererRegistryEntry[]>>
     },
     cells: {
       required: false,
