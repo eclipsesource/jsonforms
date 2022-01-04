@@ -90,6 +90,8 @@ export const JsonFormsContext = React.createContext<JsonFormsStateContext>({
   renderers: []
 });
 
+type EmittedEventsCache = { timestamp: number; event: any }[];
+
 /**
  * Hook similar to `useEffect` with the difference that the effect
  * is only executed from the second call onwards.
@@ -165,8 +167,36 @@ export const JsonFormsStateProvider = ({ children, initState, onChange }: any) =
     onChangeRef.current = onChange;
   }, [onChange]);
 
+  /**
+   * We keep recently emitted events in a cache to not emit them again in case they were already sent very
+   * recently. This is used to prevent endless rerendering loops in cases where the user triggers changes
+   * very very quickly, for example via Chrome form autofill. As the incoming data is only checked against
+   * the current data in the state, these events might loop A -> B -> A -> B ... when the user
+   * feeds the updated data back to JSON Forms in between the updates. Not emitting them again
+   * prevents the loop.
+   */
+  const emittedEventsCache = useRef<EmittedEventsCache>([]);
   useEffect(() => {
-    onChangeRef.current?.({ data: core.data, errors: core.errors });
+    if (!onChangeRef.current) {
+      return;
+    }
+    if (emittedEventsCache.current.length > 0) {
+      // clear cache in case it's outdated
+      if (Date.now() - emittedEventsCache.current[emittedEventsCache.current.length - 1].timestamp > 300) {
+        emittedEventsCache.current.length = 0;
+      }
+      // Don't emit again when data was recently emitted
+      if (emittedEventsCache.current.find(previouslyEmitted => previouslyEmitted.event.data === core.data) !== undefined) {
+        return;
+      }
+    }
+    const newEvent = { data: core.data, errors: core.errors };
+    // Maximum size of the cache
+    if (emittedEventsCache.current.length > 100) {
+      emittedEventsCache.current.shift();
+    }
+    emittedEventsCache.current.push({ timestamp: Date.now(), event: newEvent });
+    onChangeRef.current(newEvent);
   }, [core.data, core.errors]);
 
   return (
