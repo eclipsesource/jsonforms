@@ -20,5 +20,5 @@ module.exports = {
       poll: true,
     },
   },
-  transpileDependencies: ['vuetify'],
+  transpileDependencies: ['vuetify', '@jsonforms/core', '@jsonforms/vue2'],
 };

@@ -8,19 +8,21 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
-    "@jsonforms/core": "3.0.0-alpha.3",
-    "@jsonforms/vue2": "3.0.0-alpha.3",
+    "@jsonforms/core": "^3.0.0-beta.0",
+    "@jsonforms/vue2": "^3.0.0-beta.0",
     "@jsonforms/vue2-vuetify": "3.0.0-alpha.3",
-    "@vue/composition-api": "1.0.0-rc.3",
+    "@vue/composition-api": "^1.4.3",
     "core-js": "^3.6.5",
-    "vue": "^2.6.14",
-    "vuetify": "^2.4.0",
-    "vue-router": "^3.2.0",
-    "vuex": "^3.4.0",
+    "json-refs": "^3.0.15",
     "monaco-editor": "^0.26.0",
-    "json-refs": "^3.0.15"
+    "vue": "^2.6.14",
+    "vue-router": "^3.2.0",
+    "vuetify": "^2.4.0",
+    "vuex": "^3.4.0"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-optional-chaining": "^7.16.7",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.16.7",
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",
     "@vue/cli-plugin-babel": "~4.5.0",
@@ -32,6 +34,7 @@
     "eslint": "^6.7.2",
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-vue": "^6.2.2",
+    "monaco-editor-webpack-plugin": "^4.1.1",
     "prettier": "^2.2.1",
     "rimraf": "^3.0.2",
     "sass": "~1.32.0",
@@ -40,7 +43,6 @@
     "vue-cli-plugin-vuetify": "~2.4.2",
     "vue-template-compiler": "^2.6.14",
     "vuetify-loader": "^1.7.0",
-    "monaco-editor-webpack-plugin": "^4.1.1",
     "vuex-pathify": "^1.4.5"
   }
 }
