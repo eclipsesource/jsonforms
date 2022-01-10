@@ -29,6 +29,7 @@
     "customization"
   ],
   "main": "lib/jsonforms-vue2-vuetify.cjs.js",
+  "module": "lib/jsonforms-vue2-vuetify.esm.js",
   "typings": "lib/index.d.ts",
   "files": [
     "lib",
@@ -60,7 +61,6 @@
     "@jsonforms/vue2": "^3.0.0-beta.0",
     "@mdi/font": "^5.9.55",
     "@rollup/plugin-babel": "^5.3.0",
-    "@rollup/plugin-commonjs": "^14.0.0",
     "@rollup/plugin-node-resolve": "^9.0.0",
     "@types/jest": "^24.0.23",
     "@types/lodash": "^4.14.172",
@@ -79,6 +79,7 @@
     "rollup-plugin-typescript2": "^0.30.0",
     "rollup-plugin-visualizer": "^5.5.2",
     "rollup-plugin-vue": "^5.1.9",
+    "rollup-plugin-cleanup": "^3.2.1",
     "typescript": "~4.1.5",
     "vue": "^2.6.14",
     "vue-template-compiler": "^2.6.14",
