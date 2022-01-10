@@ -7,6 +7,7 @@ import {
   Resolve,
 } from '@jsonforms/core';
 import cloneDeep from 'lodash/cloneDeep';
+import debounce from 'lodash/debounce';
 import merge from 'lodash/merge';
 import { useStyles } from '../styles';
 import { computed, ComputedRef, inject, ref } from '../vue';
@@ -42,14 +43,20 @@ export const useVuetifyControl = <
   I extends { control: any; handleChange: any }
 >(
   input: I,
-  adaptValue: (target: any) => any = (v) => v
+  adaptValue: (target: any) => any = (v) => v,
+  debounceWait?: number
 ) => {
-  const appliedOptions = useControlAppliedOptions(input);
+  const changeEmitter =
+    typeof debounceWait === 'number'
+      ? debounce(input.handleChange, debounceWait)
+      : input.handleChange;
 
-  const isFocused = ref(false);
   const onChange = (value: any) => {
-    input.handleChange(input.control.value.path, adaptValue(value));
+    changeEmitter(input.control.value.path, adaptValue(value));
   };
+
+  const appliedOptions = useControlAppliedOptions(input);
+  const isFocused = ref(false);
 
   const persistentHint = (): boolean => {
     return !isDescriptionHidden(

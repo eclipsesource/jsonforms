@@ -69,7 +69,8 @@ const controlRenderer = defineComponent({
     return {
       ...useVuetifyControl(
         useJsonFormsControl(props),
-        (value) => value || undefined
+        (value) => value || undefined,
+        300
       ),
       passwordVisible,
     };
