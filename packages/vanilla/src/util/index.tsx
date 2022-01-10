@@ -209,3 +209,7 @@ export const withVanillaEnumCellProps = withVanillaCellPropsForType(
   'control.select'
 );
 
+export const withVanillaBooleanCellProps = withVanillaCellPropsForType(
+  'control.checkbox'
+);
+

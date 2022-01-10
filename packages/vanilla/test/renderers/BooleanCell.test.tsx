@@ -55,6 +55,10 @@ const fixture = {
       classNames: ['control']
     },
     {
+      name: 'control.checkbox',
+      classNames: ['checkbox']
+    },
+    {
       name: 'control.validation',
       classNames: ['validation']
     }
@@ -240,7 +244,7 @@ describe('Boolean cell', () => {
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input');
-    expect(input.hasClass('input')).toBe(true);
+    expect(input.hasClass('checkbox')).toBe(true);
     expect(input.hasClass('validate')).toBe(true);
     expect(input.hasClass('valid')).toBe(true);
   });
@@ -380,5 +384,16 @@ describe('Boolean cell', () => {
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.disabled).toBe(false);
+  });
+
+  test('with checkbox className', () => {
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
+    wrapper = mount(
+      <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core }}>
+        <BooleanCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+      </JsonFormsStateProvider>
+    );
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.classList.contains('checkbox')).toBe(true);
   });
 });
