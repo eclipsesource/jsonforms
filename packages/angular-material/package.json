@@ -54,20 +54,19 @@
     ]
   },
   "peerDependencies": {
-    "@angular/animations": "^12.0.0",
-    "@angular/cdk": "^12.0.0",
-    "@angular/common": "^12.0.0",
-    "@angular/core": "^12.0.0",
-    "@angular/flex-layout": "^12.0.0-beta",
-    "@angular/forms": "^12.0.0",
-    "@angular/material": "^12.0.0",
-    "@angular/platform-browser": "^12.0.0",
-    "@angular/router": "^12.0.0",
+    "@angular/animations": "^12.0.0 || ^13.0.0",
+    "@angular/cdk": "^12.0.0 || ^13.0.0",
+    "@angular/common": "^12.0.0 || ^13.0.0",
+    "@angular/core": "^12.0.0 || ^13.0.0",
+    "@angular/flex-layout": "^12.0.0-beta || ^13.0.0-beta",
+    "@angular/forms": "^12.0.0 || ^13.0.0",
+    "@angular/material": "^12.0.0 || ^13.0.0",
+    "@angular/platform-browser": "^12.0.0 || ^13.0.0",
+    "@angular/router": "^12.0.0 || ^13.0.0",
     "@jsonforms/angular": "^3.0.0-beta.0",
     "@jsonforms/core": "^3.0.0-beta.0",
     "core-js": "^2.5.3",
-    "rxjs": "^6.4.0",
-    "zone.js": "^0.10.2"
+    "rxjs": "^6.4.0"
   },
   "dependencies": {
     "hammerjs": "2.0.8"
@@ -116,6 +115,6 @@
     "webpack": "^4.41.2",
     "webpack-cli": "^3.2.1",
     "webpack-dev-server": "^3.9.0",
-    "zone.js": "^0.10.2"
+    "zone.js": "^0.11.4"
   }
 }

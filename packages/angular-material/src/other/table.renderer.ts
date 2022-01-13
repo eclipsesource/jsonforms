@@ -155,7 +155,7 @@ interface ColumnDescription {
   props: OwnPropsOfRenderer;
 }
 
-const controlWithoutLabel = (scope: string): ControlElement => ({
+export const controlWithoutLabel = (scope: string): ControlElement => ({
   type: 'Control',
   scope: scope,
   label: false
