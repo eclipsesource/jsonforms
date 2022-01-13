@@ -40,7 +40,7 @@ import {
 } from '@jsonforms/core';
 import { Subscription } from 'rxjs';
 
-const mapStateToProps = (
+export const mapStateToLabelProps = (
   state: JsonFormsState,
   ownProps: OwnPropsOfRenderer
 ) => {
@@ -77,7 +77,7 @@ export class LabelRenderer extends JsonFormsBaseRenderer<LabelElement> {
       labelElement.text;
     this.subscription = this.jsonFormsService.$state.subscribe({
       next: (state: JsonFormsState) => {
-        const props = mapStateToProps(state, this.getOwnProps());
+        const props = mapStateToLabelProps(state, this.getOwnProps());
         this.visible = props.visible;
       }
     });
