@@ -70,7 +70,8 @@ import {
   mapDispatchToArrayControlProps,
   i18nReducer
 } from '@jsonforms/core';
-import React, { ComponentType, Dispatch, ReducerAction, useContext, useEffect, useMemo, useReducer, useRef } from 'react';
+import debounce from 'lodash/debounce';
+import React, { ComponentType, Dispatch, ReducerAction, useCallback, useContext, useEffect, useMemo, useReducer, useRef } from 'react';
 
 const initialCoreState: JsonFormsCore = {
   data: {},
@@ -110,7 +111,7 @@ const useEffectAfterFirstRender = (
 
 export const JsonFormsStateProvider = ({ children, initState, onChange }: any) => {
   const { data, schema, uischema, ajv, validationMode } = initState.core;
-  // Initialize core immediately
+  
   const [core, coreDispatch] = useReducer(
     coreReducer,
     undefined,
@@ -165,8 +166,28 @@ export const JsonFormsStateProvider = ({ children, initState, onChange }: any) =
     onChangeRef.current = onChange;
   }, [onChange]);
 
+  /**
+   * A common pattern for users of JSON Forms is to feed back the data which is emitted by
+   * JSON Forms to JSON Forms ('controlled style').
+   * 
+   * Every time this happens, we dispatch the 'updateCore' action which will be a no-op when
+   * the data handed over is the one which was just recently emitted. This allows us to skip
+   * rerendering for all normal cases of use.
+   * 
+   * However there can be extreme use cases, for example when using Chrome Auto-fill for forms,
+   * which can cause JSON Forms to emit multiple change events before the parent component is
+   * rerendered. Therefore not the very recent data, but the previous data is fed back to
+   * JSON Forms first. JSON Forms recognizes that this is not the very recent data and will
+   * validate, rerender and emit a change event again. This can then lead to data loss or even
+   * an endless rerender loop, depending on the emitted events chain.
+   * 
+   * To handle these edge cases in which many change events are sent in an extremely short amount
+   * of time we debounce them over a short amount of time. 10ms was chosen as this worked well
+   * even on low-end mobile device settings in the Chrome simulator.
+   */
+  const debouncedEmit = useCallback(debounce((...args) => onChangeRef.current?.(...args), 10), []);
   useEffect(() => {
-    onChangeRef.current?.({ data: core.data, errors: core.errors });
+    debouncedEmit({ data: core.data, errors: core.errors });
   }, [core.data, core.errors]);
 
   return (
@@ -216,7 +237,6 @@ export const ctxToOneOfEnumControlProps = (ctx: JsonFormsStateContext, props: Ow
    */
   const options = useMemo(() => enumProps.options, [props.options, enumProps.schema]);
   return {...enumProps, options}
-  
 }
 
 export const ctxToMultiEnumControlProps = (ctx: JsonFormsStateContext, props: OwnPropsOfControl) =>
