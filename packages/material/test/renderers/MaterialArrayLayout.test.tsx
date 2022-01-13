@@ -306,7 +306,7 @@ describe('Material array layout', () => {
         .find({ 'aria-label': 'Move down' }).length
     ).toBe(1);
   });
-  it('should move item up if up button is presses', () => {
+  it('should move item up if up button is presses', (done) => {
     const onChangeData: any = {
       data: undefined
     };
@@ -331,19 +331,23 @@ describe('Material array layout', () => {
       .find('button')
       .find({ 'aria-label': 'Move up' });
     upButton.simulate('click');
-    expect(onChangeData.data).toEqual([
-      {
-        message: 'Yolo',
-        message2: 'Yolo 2'
-      },
-      {
-        message: 'El Barto was here',
-        message2: 'El Barto was here 2',
-        done: true
-      }
-    ]);
+    // events are debounced for some time, so let's wait
+    setTimeout(() => {
+      expect(onChangeData.data).toEqual([
+        {
+          message: 'Yolo',
+          message2: 'Yolo 2'
+        },
+        {
+          message: 'El Barto was here',
+          message2: 'El Barto was here 2',
+          done: true
+        }
+      ]);
+      done();
+    }, 50);
   });
-  it('shoud move item down if down button is pressed', () => {
+  it('should move item down if down button is pressed', (done) => {
     const onChangeData: any = {
       data: undefined
     };
@@ -368,17 +372,20 @@ describe('Material array layout', () => {
       .find('button')
       .find({ 'aria-label': 'Move down' });
     upButton.simulate('click');
-    expect(onChangeData.data).toEqual([
-      {
-        message: 'Yolo',
-        message2: 'Yolo 2'
-      },
-      {
-        message: 'El Barto was here',
-        message2: 'El Barto was here 2',
-        done: true
-      }
-    ]);
+    // events are debounced for some time, so let's wait
+    setTimeout(() => {
+      expect(onChangeData.data).toEqual([
+        {
+          message: 'Yolo',
+          message2: 'Yolo 2'
+        },
+        {
+          message: 'El Barto was here',
+          message2: 'El Barto was here 2',
+          done: true
+        }
+      ]); done();
+    }, 50);
   });
   it('should have up button disabled for first element', () => {
     wrapper = mount(

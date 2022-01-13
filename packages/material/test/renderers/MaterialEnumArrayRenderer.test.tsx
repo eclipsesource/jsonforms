@@ -116,8 +116,8 @@ describe('EnumArrayControl', () => {
     expect(labels.last().text()).toBe('Bar');
   });
 
-  test('oneOf items - updates data', () => {
-    let myData = undefined;
+  test('oneOf items - updates data', (done) => {
+    let myData: any = undefined;
     wrapper = mount(
       <JsonForms
         schema={oneOfSchema}
@@ -131,7 +131,11 @@ describe('EnumArrayControl', () => {
     );
     const input = wrapper.find('input').first();
     input.simulate('change', { target: { checked: true } });
-    expect(myData).toStrictEqual(['foo']);
+    // events are debounced for some time, so let's wait
+    setTimeout(() => {
+      expect(myData).toStrictEqual(['foo']);
+      done();
+    }, 50);
   });
 
   test('enum items - renders', () => {
@@ -177,8 +181,8 @@ describe('EnumArrayControl', () => {
     expect(labels.at(2).text()).toBe('C');
   });
 
-  test('enum items - updates data', () => {
-    let myData = undefined;
+  test('enum items - updates data', (done) => {
+    let myData: any = undefined;
     wrapper = mount(
       <JsonForms
         schema={enumSchema}
@@ -192,6 +196,10 @@ describe('EnumArrayControl', () => {
     );
     const input = wrapper.find('input').first();
     input.simulate('change', { target: { checked: true } });
-    expect(myData).toStrictEqual(['a']);
+    // events are debounced for some time, so let's wait
+    setTimeout(() => {
+      expect(myData).toStrictEqual(['a']);
+      done();
+    }, 50);
   });
 });

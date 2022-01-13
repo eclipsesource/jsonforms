@@ -865,7 +865,7 @@ test('JsonForms should not crash with undefined uischemas', () => {
   );
 });
 
-test('JsonForms should call onChange handler with new data', () => {
+test('JsonForms should call onChange handler with new data', (done) => {
   const onChangeHandler = jest.fn();
   const TestInputRenderer = withJsonFormsControlProps(props => (
     <input onChange={ev => props.handleChange('foo', ev.target.value)} />
@@ -893,13 +893,18 @@ test('JsonForms should call onChange handler with new data', () => {
     }
   });
 
-  const calls = onChangeHandler.mock.calls;
-  const lastCallParameter = calls[calls.length - 1][0];
-  expect(lastCallParameter.data).toEqual({ foo: 'Test Value' });
-  expect(lastCallParameter.errors).toEqual([]);
+  // events are debounced for some time, so let's wait
+  setTimeout(() => {
+    const calls = onChangeHandler.mock.calls;
+    const lastCallParameter = calls[calls.length - 1][0];
+    expect(lastCallParameter.data).toEqual({ foo: 'Test Value' });
+    expect(lastCallParameter.errors).toEqual([]);
+    done();
+  }, 50);
+  
 });
 
-test('JsonForms should call onChange handler with errors', () => {
+test('JsonForms should call onChange handler with errors', (done) => {
   const onChangeHandler = jest.fn();
   const TestInputRenderer = withJsonFormsControlProps(props => (
     <input onChange={ev => props.handleChange('foo', ev.target.value)} />
@@ -938,11 +943,16 @@ test('JsonForms should call onChange handler with errors', () => {
     }
   });
 
-  const calls = onChangeHandler.mock.calls;
-  const lastCallParameter = calls[calls.length - 1][0];
-  expect(lastCallParameter.data).toEqual({ foo: 'xyz' });
-  expect(lastCallParameter.errors.length).toEqual(1);
-  expect(lastCallParameter.errors[0].keyword).toEqual('minLength');
+  // events are debounced for some time, so let's wait
+  setTimeout(() => {
+    const calls = onChangeHandler.mock.calls;
+    const lastCallParameter = calls[calls.length - 1][0];
+    expect(lastCallParameter.data).toEqual({ foo: 'xyz' });
+    expect(lastCallParameter.errors.length).toEqual(1);
+    expect(lastCallParameter.errors[0].keyword).toEqual('minLength');
+    done();
+  }, 50);
+
 });
 
 test('JsonForms should update if data prop is updated', () => {
