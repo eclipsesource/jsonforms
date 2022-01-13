@@ -54,6 +54,10 @@ export const vanillaStyles: StyleDef[] = [
     classNames: ['select']
   },
   {
+    name: 'control.checkbox',
+    classNames: ['checkbox']
+  },
+  {
     name: 'control.radio',
     classNames: ['radio']
   },
