@@ -67,7 +67,7 @@ export const jsonFormsReducerConfig = {
  * @param schema the JSON schema describing the data to be rendered
  * @param schemaPath the according schema path
  * @param path the instance path
- * @param fallbackLayoutType the type of the layout to use
+ * @param fallback the type of the layout to use or a UI-schema-generator function
  * @param control may be checked for embedded inline uischema options
  */
 export const findUISchema = (
@@ -75,7 +75,7 @@ export const findUISchema = (
   schema: JsonSchema,
   schemaPath: string,
   path: string,
-  fallbackLayoutType = 'VerticalLayout',
+  fallback: string | (() => UISchemaElement) = 'VerticalLayout',
   control?: ControlElement,
   rootSchema?: JsonSchema
 ): UISchemaElement => {
@@ -83,8 +83,12 @@ export const findUISchema = (
   if (control && control.options && control.options.detail) {
     if (typeof control.options.detail === 'string') {
       if (control.options.detail.toUpperCase() === 'GENERATE') {
+        //use fallback generation function
+        if(typeof fallback === "function"){
+          return fallback();
+        }
         // force generation of uischema
-        return Generate.uiSchema(schema, fallbackLayoutType);
+        return Generate.uiSchema(schema, fallback);
       }
     } else if (typeof control.options.detail === 'object') {
       // check if detail is a valid uischema
@@ -99,7 +103,11 @@ export const findUISchema = (
   // default
   const uiSchema = findMatchingUISchema(uischemas)(schema, schemaPath, path);
   if (uiSchema === undefined) {
-    return Generate.uiSchema(schema, fallbackLayoutType, '#', rootSchema);
+    //use fallback generation function
+    if(typeof fallback === 'function'){
+      return fallback();
+    }
+    return Generate.uiSchema(schema, fallback, '#', rootSchema);
   }
   return uiSchema;
 };
