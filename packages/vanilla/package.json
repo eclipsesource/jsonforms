@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/vanilla-renderers",
-  "version": "3.0.0-beta.0",
+  "version": "3.0.0-beta.1",
   "description": "Default Renderer Set for JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -42,8 +42,8 @@
   },
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
-    "@jsonforms/core": "^3.0.0-beta.0",
-    "@jsonforms/react": "^3.0.0-beta.0",
+    "@jsonforms/core": "^3.0.0-beta.1",
+    "@jsonforms/react": "^3.0.0-beta.1",
     "@types/enzyme": "^3.10.3",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.3",
     "copy-webpack-plugin": "^5.0.5",
