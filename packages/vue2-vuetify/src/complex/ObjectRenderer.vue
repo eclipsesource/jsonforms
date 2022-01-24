@@ -30,7 +30,7 @@ import {
   useJsonFormsControlWithDetail,
 } from '@jsonforms/vue2';
 import { defineComponent } from '../vue';
-import { useVuetifyControl } from '../util';
+import { useNested, useVuetifyControl } from '../util';
 
 const controlRenderer = defineComponent({
   name: 'object-renderer',
@@ -41,7 +41,12 @@ const controlRenderer = defineComponent({
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    return useVuetifyControl(useJsonFormsControlWithDetail(props));
+    const control = useVuetifyControl(useJsonFormsControlWithDetail(props));
+    const nested = useNested('object');
+    return {
+      ...control,
+      nested,
+    };
   },
   computed: {
     detailUiSchema(): UISchemaElement {
@@ -55,12 +60,21 @@ const controlRenderer = defineComponent({
         this.control.rootSchema
       );
 
+      // TODO: The following code can be streamlined once we have generator support
+      // for 'findUISchema' in JSON Forms Core (https://github.com/eclipsesource/jsonforms/pull/1871)
       if (isEmpty(this.control.path)) {
         result.type = 'VerticalLayout';
       } else {
         (result as GroupLayout).label = this.control.label;
+        if (this.nested.level > 0) {
+          result.options = {
+            ...result.options,
+            bare: true,
+            alignLeft:
+              this.nested.level >= 4 || this.nested.parentElement === 'array',
+          };
+        }
       }
-
       return result;
     },
   },

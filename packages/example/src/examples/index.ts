@@ -27,6 +27,7 @@ import { input as nestedLayout } from './nested-layout';
 import { input as noSchemas } from './no-schemas';
 import { input as noUISchema } from './no-ui-schema';
 import { input as object } from './object';
+import { input as objectNested } from './object-nested';
 import { input as oneOf } from './oneOf';
 import { input as oneOfRecursive } from './oneOf-recursive';
 import { input as radio } from './radio';
@@ -162,6 +163,11 @@ export const examples = [
     id: 'object',
     title: 'Object',
     input: object,
+  },
+  {
+    id: 'object-nested',
+    title: 'Object (Nested)',
+    input: objectNested,
   },
   {
     id: 'root-object',

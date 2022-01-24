@@ -196,7 +196,7 @@ import {
   useJsonFormsArrayControl,
   RendererProps,
 } from '@jsonforms/vue2';
-import { useVuetifyArrayControl } from '../util';
+import { useNested, useVuetifyArrayControl } from '../util';
 import {
   VCard,
   VCardTitle,
@@ -250,6 +250,8 @@ const controlRenderer = defineComponent({
   setup(props: RendererProps<ControlElement>) {
     const control = useVuetifyArrayControl(useJsonFormsArrayControl(props));
     const currentlyExpanded = ref<null | number>(null);
+    // indicate to our child renderers that we are increasing the "nested" level
+    useNested('array');
     return { ...control, currentlyExpanded };
   },
   computed: {

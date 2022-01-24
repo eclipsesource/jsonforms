@@ -17,6 +17,8 @@ export const defaultStyles: Styles = {
     root: 'group',
     label: 'group-label',
     item: 'group-item',
+    bare: 'group-bare',
+    alignLeft: 'group-align-left',
   },
   arrayList: {
     root: 'array-list',

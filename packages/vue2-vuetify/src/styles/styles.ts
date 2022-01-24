@@ -31,6 +31,8 @@ export interface Styles {
     root?: string;
     label?: string;
     item?: string;
+    bare?: string;
+    alignLeft?: string;
   };
   arrayList: {
     root?: string;

@@ -1,8 +1,9 @@
 <template>
   <v-card
     v-if="layout.visible"
-    :class="`pa-0 ${styles.group.root}`"
-    elevation="2"
+    :class="classes"
+    :elevation="!bare ? 2 : undefined"
+    :outlined="bare"
   >
     <v-card-title v-if="layout.uischema.label" :class="styles.group.label">{{
       layout.uischema.label
@@ -58,6 +59,24 @@ const layoutRenderer = defineComponent({
   setup(props: RendererProps<Layout>) {
     return useVuetifyLayout(useJsonFormsLayout(props));
   },
+  computed: {
+    bare(): boolean {
+      return !!this.appliedOptions.bare;
+    },
+    alignLeft(): boolean {
+      return !!this.appliedOptions.alignLeft;
+    },
+    classes(): string {
+      const classes = ['my-1', 'pa-0', `${this.styles.group.root}`];
+      if (this.bare) {
+        classes.push(`${this.styles.group.bare}`);
+      }
+      if (this.alignLeft) {
+        classes.push(`${this.styles.group.alignLeft}`);
+      }
+      return classes.join(' ');
+    },
+  },
 });
 
 export default layoutRenderer;
@@ -67,3 +86,18 @@ export const entry: JsonFormsRendererRegistryEntry = {
   tester: rankWith(2, and(isLayout, uiTypeIs('Group'))),
 };
 </script>
+
+<!-- Default styles for the 'nested' feature -->
+<style>
+.group.group-bare {
+  border: 0;
+}
+.group-bare > .group-label,
+.group-bare > .group-item {
+  padding-right: 0;
+}
+.group-align-left > .group-label,
+.group-align-left > .group-item {
+  padding-left: 0;
+}
+</style>
