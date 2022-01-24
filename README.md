@@ -15,7 +15,7 @@ Please see the official JSON Forms website, [jsonforms.io](https://jsonforms.io)
 For more info about the seed app, please see the corresponding README file of the [seed repo](https://github.com/eclipsesource/jsonforms-react-seed).
 For a more detailed tutorial about the usage of JSON Forms, please see [this tutorial](http://jsonforms.io/docs/tutorial).
 
-## Upgrading to JSON Forms 3.0 Alpha
+## Upgrading to JSON Forms 3.0
 
 With version 3.0 of JSON Forms we removed `json-schema-ref-parser` from the core package.
 This change only affects users of the React variant (Vue and Angular are not affected) and even for React only a few users will need to adjust their code.

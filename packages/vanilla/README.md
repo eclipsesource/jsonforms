@@ -8,7 +8,7 @@ JSON Forms eliminates the tedious task of writing fully-featured forms by hand b
 
 This is the JSONForms Vanilla Renderers Package. This package only contains renderers and must be combined with [JSON Forms React](https://github.com/eclipsesource/jsonforms/blob/master/packages/react).
 
-You can combine [JSON Forms React](https://github.com/eclipsesource/jsonforms/blob/master/packages/react) with other renderers too, for example with the [Material Renderers](https://github.com/eclipsesource/jsonforms/blob/master/packages/material-renderers).
+You can combine [JSON Forms React](https://github.com/eclipsesource/jsonforms/blob/master/packages/react) with other renderers too, for example with the [Material Renderers](https://github.com/eclipsesource/jsonforms/tree/master/packages/material).
 
 See the official [documentation](https://jsonforms.io/docs/integrations/react/) and the JSON Forms React [seed repository](https://github.com/eclipsesource/jsonforms-react-seed) for examples on how to integrate JSON Forms with your application.
 
@@ -31,19 +31,66 @@ import React, { useState } from 'react';
 import { JsonForms } from '@jsonforms/react';
 import { vanillaCells, vanillaRenderers } from '@jsonforms/vanilla-renderers';
 
+const schema = {
+  type: 'object',
+  properties: {
+    name: {
+      type: 'string',
+      minLength: 1
+    },
+    done: {
+      type: 'boolean'
+    },
+    due_date: {
+      type: 'string',
+      format: 'date'
+    },
+    recurrence: {
+      type: 'string',
+      enum: ['Never', 'Daily', 'Weekly', 'Monthly']
+    }
+  },
+  required: ['name', 'due_date']
+};
+const uischema = {
+  type: 'VerticalLayout',
+  elements: [
+    {
+      type: 'Control',
+      label: false,
+      scope: '#/properties/done'
+    },
+    {
+      type: 'Control',
+      scope: '#/properties/name'
+    },
+    {
+      type: 'HorizontalLayout',
+      elements: [
+        {
+          type: 'Control',
+          scope: '#/properties/due_date'
+        },
+        {
+          type: 'Control',
+          scope: '#/properties/recurrence'
+        }
+      ]
+    }
+  ]
+};
+const initialData = {};
 function App() {
   const [data, setData] = useState(initialData);
   return (
-    <div className='App'>
-      <JsonForms
-        schema={schema}
-        uischema={uischema}
-        data={data}
-        renderers={vanillaRenderers}
-        cells={vanillaCells}
-        onChange={({ data, _errors }) => setData(data)}
-      />
-    </div>
+    <JsonForms
+      schema={schema}
+      uischema={uischema}
+      data={data}
+      renderers={vanillaRenderers}
+      cells={vanillaCells}
+      onChange={({ data, _errors }) => setData(data)}
+    />
   );
 }
 ```
@@ -64,3 +111,7 @@ If you encounter any problems feel free to [open an issue](https://github.com/ec
 For questions and discussions please use the [JSON Forms board](https://jsonforms.discourse.group).
 You can also reach us via [email](mailto:jsonforms@eclipsesource.com?subject=JSON%20Forms).
 In addition, EclipseSource also offers [professional support](https://jsonforms.io/support) for JSON Forms.
+
+## Migration
+
+See our [migration guide](https://github.com/eclipsesource/jsonforms/blob/master/MIGRATION.md) when updating JSON Forms.

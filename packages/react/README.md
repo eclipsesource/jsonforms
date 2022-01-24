@@ -8,7 +8,7 @@ JSON Forms eliminates the tedious task of writing fully-featured forms by hand b
 
 This is the JSON Forms React package which provides the necessary bindings for React. It uses [JSON Forms Core](https://github.com/eclipsesource/jsonforms/blob/master/packages/core).
 
-You can combine the react package with any react-based renderer set you want, for example the [Material Renderers](https://github.com/eclipsesource/jsonforms/blob/master/packages/material-renderers) or the [Vanilla Renderers](https://github.com/eclipsesource/jsonforms/blob/master/packages/vanilla-renderers).
+You can combine the react package with any react-based renderer set you want, for example the [Material Renderers](https://github.com/eclipsesource/jsonforms/tree/master/packages/material) or the [Vanilla Renderers](https://github.com/eclipsesource/jsonforms/tree/master/packages/vanilla).
 
 See the official [documentation](https://jsonforms.io/) and the JSON Forms React [seed repository](https://github.com/eclipsesource/jsonforms-react-seed) for examples on how to integrate JSON Forms with your application.
 
@@ -107,6 +107,7 @@ function App() {
     />
   );
 }
+export default App;
 ```
 
 ## License
@@ -125,3 +126,7 @@ If you encounter any problems feel free to [open an issue](https://github.com/ec
 For questions and discussions please use the [JSON Forms board](https://jsonforms.discourse.group).
 You can also reach us via [email](mailto:jsonforms@eclipsesource.com?subject=JSON%20Forms).
 In addition, EclipseSource also offers [professional support](https://jsonforms.io/support) for JSON Forms.
+
+## Migration
+
+See our [migration guide](https://github.com/eclipsesource/jsonforms/blob/master/MIGRATION.md) when updating JSON Forms.

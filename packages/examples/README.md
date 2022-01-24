@@ -8,7 +8,7 @@ JSON Forms eliminates the tedious task of writing fully-featured forms by hand b
 
 This is the examples package which demonstrates how to integrate JSON Forms with your application.
 
-You can use the examples with any renderer set you want, for example the [Material Renderers](https://github.com/eclipsesource/jsonforms/blob/master/packages/material-renderers) or the [Angular Renderers](https://github.com/eclipsesource/jsonforms/blob/master/packages/vanilla-renderers).
+You can use the examples with any renderer set you want, for example the [Material Renderers](https://github.com/eclipsesource/jsonforms/tree/master/packages/material) or the [Angular Renderers](https://github.com/eclipsesource/jsonforms/tree/master/packages/angular-material).
 
 Check <https://www.npmjs.com/search?q=%40jsonforms> for all published JSON Forms packages.
 
@@ -28,3 +28,7 @@ If you encounter any problems feel free to [open an issue](https://github.com/ec
 For questions and discussions please use the [JSON Forms board](https://jsonforms.discourse.group).
 You can also reach us via [email](mailto:jsonforms@eclipsesource.com?subject=JSON%20Forms).
 In addition, EclipseSource also offers [professional support](https://jsonforms.io/support) for JSON Forms.
+
+## Migration
+
+See our [migration guide](https://github.com/eclipsesource/jsonforms/blob/master/MIGRATION.md) when updating JSON Forms.
