@@ -225,7 +225,7 @@ export const ctxToEnumControlProps = (ctx: JsonFormsStateContext, props: OwnProp
    * Make sure, that options are memoized as otherwise the component will rerender for every change, 
    * as the options array is recreated every time.
    */
-  const options = useMemo(() => enumProps.options, [props.options, enumProps.schema]);
+  const options = useMemo(() => enumProps.options, [props.options, enumProps.schema, ctx.i18n?.translate]);
   return {...enumProps, options}
 }
 
@@ -235,12 +235,19 @@ export const ctxToOneOfEnumControlProps = (ctx: JsonFormsStateContext, props: Ow
    * Make sure, that options are memoized as otherwise the component will rerender for every change, 
    * as the options array is recreated every time.
    */
-  const options = useMemo(() => enumProps.options, [props.options, enumProps.schema]);
+  const options = useMemo(() => enumProps.options, [props.options, enumProps.schema, ctx.i18n?.translate]);
   return {...enumProps, options}
 }
 
-export const ctxToMultiEnumControlProps = (ctx: JsonFormsStateContext, props: OwnPropsOfControl) =>
-  mapStateToMultiEnumControlProps({ jsonforms: { ...ctx } }, props);
+export const ctxToMultiEnumControlProps = (ctx: JsonFormsStateContext, props: OwnPropsOfControl) => {
+  const enumProps = mapStateToMultiEnumControlProps({ jsonforms: { ...ctx } }, props);
+  /**
+   * Make sure, that options are memoized as otherwise the component will rerender for every change, 
+   * as the options array is recreated every time.
+   */
+  const options = useMemo(() => enumProps.options, [enumProps.schema, ctx.i18n?.translate]);
+  return {...enumProps, options}
+}
 
 export const ctxToControlWithDetailProps = (
   ctx: JsonFormsStateContext,
@@ -318,7 +325,7 @@ export const ctxToEnumCellProps = (
    * Make sure, that options are memoized as otherwise the cell will rerender for every change, 
    * as the options array is recreated every time.
    */
-  const options = useMemo(() => cellProps.options, [ownProps.options, cellProps.schema]);
+  const options = useMemo(() => cellProps.options, [ownProps.options, cellProps.schema, ctx.i18n?.translate]);
   return {...cellProps, options}
 };
 
@@ -331,7 +338,7 @@ export const ctxToOneOfEnumCellProps = (
    * Make sure, that options are memoized as otherwise the cell will rerender for every change, 
    * as the options array is recreated every time.
    */
-  const options = useMemo(() => enumCellProps.options, [props.options, enumCellProps.schema])
+  const options = useMemo(() => enumCellProps.options, [props.options, enumCellProps.schema, ctx.i18n?.translate])
   return {...enumCellProps, options};
 };
 
