@@ -10,7 +10,7 @@
   "dependencies": {
     "@jsonforms/core": "^3.0.0-beta.0",
     "@jsonforms/vue2": "^3.0.0-beta.0",
-    "@jsonforms/vue2-vuetify": "3.0.0-alpha.3",
+    "@jsonforms/vue2-vuetify": "3.0.0-beta.0",
     "@vue/composition-api": "^1.4.3",
     "core-js": "^3.6.5",
     "json-refs": "^3.0.15",
