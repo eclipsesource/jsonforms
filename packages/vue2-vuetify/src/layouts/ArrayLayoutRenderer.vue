@@ -190,6 +190,7 @@ import {
   findUISchema,
   Resolve,
   JsonSchema,
+  getControlPath,
 } from '@jsonforms/core';
 import { defineComponent } from '../vue';
 import {
@@ -307,11 +308,12 @@ const controlRenderer = defineComponent({
       this.removeItems?.(this.control.path, toDelete)();
     },
     childErrors(index: number): ErrorObject[] {
-      return this.control.childErrors.filter((e) =>
-        e.instancePath.startsWith(
+      return this.control.childErrors.filter((e) => {
+        const errorDataPath = getControlPath(e);
+        return errorDataPath.startsWith(
           this.composePaths(this.control.path, `${index}`)
-        )
-      );
+        );
+      });
     },
   },
 });
