@@ -49,20 +49,22 @@
               <v-expansion-panel-header :class="styles.arrayList.itemHeader">
                 <v-container py-0>
                   <v-row
-                    :style="`display: grid; grid-template-columns: min-content auto min-content ${
+                    :style="`display: grid; grid-template-columns: ${
+                      !hideAvatar ? 'min-content' : ''
+                    } auto min-content ${
                       appliedOptions.showSortButtons
                         ? 'min-content min-content'
                         : ''
                     }`"
                   >
-                    <v-col align-self="center" px-0>
+                    <v-col v-if="!hideAvatar" align-self="center" px-0>
                       <validation-badge
                         overlap
                         bordered
                         :errors="childErrors(index)"
                       >
-                        <v-avatar size="40" aria-label="Index" color="info"
-                          ><span class="info--text text--lighten-5">{{
+                        <v-avatar size="40" aria-label="Index" color="primary"
+                          ><span class="primary--text text--lighten-5">{{
                             index + 1
                           }}</span></v-avatar
                         >
@@ -275,6 +277,9 @@ const controlRenderer = defineComponent({
         this.control.uischema.scope,
         this.control.rootSchema
       );
+    },
+    hideAvatar(): boolean {
+      return !!this.appliedOptions.hideAvatar;
     },
   },
   methods: {
