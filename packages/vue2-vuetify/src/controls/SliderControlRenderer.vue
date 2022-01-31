@@ -21,6 +21,7 @@
       :required="control.required"
       :error-messages="control.errors"
       :value="control.data"
+      v-bind="vuetifyProps('v-slider')"
       @change="onChange"
       @focus="isFocused = true"
       @blur="isFocused = false"

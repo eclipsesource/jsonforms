@@ -2,12 +2,14 @@
   <v-container
     v-if="layout.visible"
     :class="`pa-0 ${styles.horizontalLayout.root}`"
+    v-bind="vuetifyProps('v-container')"
   >
-    <v-row>
+    <v-row v-bind="vuetifyProps('v-row')">
       <v-col
         v-for="(element, index) in layout.uischema.elements"
         :key="`${layout.path}-${index}`"
         :class="styles.horizontalLayout.item"
+        v-bind="vuetifyProps(`v-col[${index}]`)"
       >
         <dispatch-renderer
           :schema="layout.schema"

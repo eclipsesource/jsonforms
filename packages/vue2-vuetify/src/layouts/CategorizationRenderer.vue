@@ -1,30 +1,75 @@
 <template>
-  <v-card v-if="layout.visible" :class="styles.categorization.root">
-    <v-tabs v-model="activeCategory" :vertical="layout.direction == 'row'">
-      <v-tab
-        v-for="(element, index) in visibleCategories"
-        :key="`${layout.path}-${index}`"
-      >
-        {{ element.label }}
-      </v-tab>
-    </v-tabs>
+  <v-container v-if="layout.visible" :class="styles.categorization.root">
+    <v-row
+      v-if="appliedOptions.vertical == true"
+      v-bind="vuetifyProps('v-row')"
+    >
+      <v-col v-bind="vuetifyProps('v-col.v-tabs')">
+        <v-tabs
+          v-model="activeCategory"
+          v-bind="vuetifyProps('v-tabs')"
+          vertical
+        >
+          <v-tab
+            v-for="(element, index) in visibleCategories"
+            :key="`${layout.path}-${index}`"
+          >
+            {{ element.label }}
+          </v-tab>
+        </v-tabs>
+      </v-col>
+      <v-col v-bind="vuetifyProps('v-col.v-tabs-items')">
+        <v-tabs-items
+          v-model="activeCategory"
+          vertical
+          v-bind="vuetifyProps('v-tabs-items')"
+        >
+          <v-tab-item
+            v-for="(element, index) in visibleCategories"
+            :key="`${layout.path}-${index}`"
+          >
+            <dispatch-renderer
+              :schema="layout.schema"
+              :uischema="element"
+              :path="layout.path"
+              :enabled="layout.enabled"
+              :renderers="layout.renderers"
+              :cells="layout.cells"
+            />
+          </v-tab-item>
+        </v-tabs-items>
+      </v-col>
+    </v-row>
+    <v-row v-else v-bind="vuetifyProps('v-row')">
+      <v-tabs v-model="activeCategory" v-bind="vuetifyProps('v-tabs')">
+        <v-tab
+          v-for="(element, index) in visibleCategories"
+          :key="`${layout.path}-${index}`"
+        >
+          {{ element.label }}
+        </v-tab>
+      </v-tabs>
 
-    <v-tabs-items v-model="activeCategory">
-      <v-tab-item
-        v-for="(element, index) in visibleCategories"
-        :key="`${layout.path}-${index}`"
+      <v-tabs-items
+        v-model="activeCategory"
+        v-bind="vuetifyProps('v-tabs-items')"
       >
-        <dispatch-renderer
-          :schema="layout.schema"
-          :uischema="element"
-          :path="layout.path"
-          :enabled="layout.enabled"
-          :renderers="layout.renderers"
-          :cells="layout.cells"
-        />
-      </v-tab-item>
-    </v-tabs-items>
-  </v-card>
+        <v-tab-item
+          v-for="(element, index) in visibleCategories"
+          :key="`${layout.path}-${index}`"
+        >
+          <dispatch-renderer
+            :schema="layout.schema"
+            :uischema="element"
+            :path="layout.path"
+            :enabled="layout.enabled"
+            :renderers="layout.renderers"
+            :cells="layout.cells"
+          />
+        </v-tab-item>
+      </v-tabs-items>
+    </v-row>
+  </v-container>
 </template>
 
 <script lang="ts">
@@ -48,17 +93,27 @@ import {
   RendererProps,
 } from '@jsonforms/vue2';
 import { useAjv, useVuetifyLayout } from '../util';
-import { VCard, VTabs, VTab, VTabsItems, VTabItem } from 'vuetify/lib';
+import {
+  VContainer,
+  VTabs,
+  VTab,
+  VTabsItems,
+  VTabItem,
+  VRow,
+  VCol,
+} from 'vuetify/lib';
 
 const layoutRenderer = defineComponent({
   name: 'categorization-renderer',
   components: {
     DispatchRenderer,
-    VCard,
+    VContainer,
     VTabs,
     VTab,
     VTabsItems,
     VTabItem,
+    VRow,
+    VCol,
   },
   props: {
     ...rendererProps<Layout>(),

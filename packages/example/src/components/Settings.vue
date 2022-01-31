@@ -99,6 +99,7 @@
         <v-row>
           <v-col>
             <v-select
+              attach
               outlined
               persistent-hint
               dense

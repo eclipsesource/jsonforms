@@ -29,6 +29,7 @@
         "
         :clearable="hover"
         multi-line
+        v-bind="vuetifyProps('v-textarea')"
         @input="onChange"
         @focus="isFocused = true"
         @blur="isFocused = false"

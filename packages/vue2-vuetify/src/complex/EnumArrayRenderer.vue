@@ -10,6 +10,7 @@
           :error-messages="control.errors"
           :disabled="!control.enabled"
           :indeterminate="control.data === undefined"
+          v-bind="vuetifyProps(`v-checkbox[${o.value}]`)"
           @change="(value) => toggle(o.value, value)"
         ></v-checkbox>
       </v-col>

@@ -1,5 +1,9 @@
 <template>
-  <v-label v-if="layout.visible" :class="styles.label.root">
+  <v-label
+    v-if="layout.visible"
+    :class="styles.label.root"
+    v-bind="vuetifyProps('v-label')"
+  >
     {{ translatedLabel }}
   </v-label>
 </template>

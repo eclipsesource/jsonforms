@@ -3,11 +3,7 @@
   "properties": {
     "exampleRadioEnum": {
       "type": "string",
-      "enum": [
-        "One",
-        "Two",
-        "Three"
-      ]
+      "enum": ["Red", "Green", "Blue"]
     }
   }
 }

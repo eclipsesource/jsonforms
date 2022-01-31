@@ -9,6 +9,8 @@ import {
 import cloneDeep from 'lodash/cloneDeep';
 import debounce from 'lodash/debounce';
 import merge from 'lodash/merge';
+import get from 'lodash/get';
+import isPlainObject from 'lodash/isPlainObject';
 import { useStyles } from '../styles';
 import { computed, ComputedRef, inject, ref } from '../vue';
 import Ajv from 'ajv';
@@ -78,6 +80,12 @@ export const useVuetifyControl = <
 
   const styles = useStyles(input.control.value.uischema);
 
+  const vuetifyProps = (path: string) => {
+    const props = get(appliedOptions.value?.vuetify, path);
+
+    return props && isPlainObject(props) ? props : {};
+  };
+
   return {
     ...input,
     styles,
@@ -85,6 +93,7 @@ export const useVuetifyControl = <
     appliedOptions,
     controlWrapper,
     onChange,
+    vuetifyProps,
     persistentHint,
     computedLabel,
   };
@@ -124,10 +133,18 @@ export const useVuetifyLayout = <I extends { layout: any }>(input: I) => {
       cloneDeep(input.layout.value.uischema.options)
     )
   );
+
+  const vuetifyProps = (path: string) => {
+    const props = get(appliedOptions.value?.vuetify, path);
+
+    return props && isPlainObject(props) ? props : {};
+  };
+
   return {
     ...input,
     styles: useStyles(input.layout.value.uischema),
     appliedOptions,
+    vuetifyProps,
   };
 };
 
@@ -178,10 +195,17 @@ export const useVuetifyBasicControl = <I extends { control: any }>(
 ) => {
   const appliedOptions = useControlAppliedOptions(input);
 
+  const vuetifyProps = (path: string) => {
+    const props = get(appliedOptions.value?.vuetify, path);
+
+    return props && isPlainObject(props) ? props : {};
+  };
+
   return {
     ...input,
     styles: useStyles(input.control.value.uischema),
     appliedOptions,
+    vuetifyProps,
   };
 };
 

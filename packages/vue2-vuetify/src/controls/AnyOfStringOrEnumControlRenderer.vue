@@ -29,6 +29,7 @@
         "
         :items="items"
         :clearable="hover"
+        v-bind="vuetifyProps('v-combobox')"
         @change="onChange"
         @focus="isFocused = true"
         @blur="isFocused = false"

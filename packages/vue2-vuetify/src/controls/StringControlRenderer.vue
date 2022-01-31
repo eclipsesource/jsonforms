@@ -31,6 +31,7 @@
         :value="control.data"
         :items="suggestions"
         hide-no-data
+        v-bind="vuetifyProps('v-combobox')"
         @input="onChange"
         @focus="isFocused = true"
         @blur="isFocused = false"
@@ -58,6 +59,7 @@
             : undefined
         "
         :clearable="hover"
+        v-bind="vuetifyProps('v-text-field')"
         @input="onChange"
         @focus="isFocused = true"
         @blur="isFocused = false"

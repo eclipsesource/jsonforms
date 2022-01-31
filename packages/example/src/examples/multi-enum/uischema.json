@@ -3,11 +3,29 @@
   "elements": [
     {
       "type": "Control",
-      "scope": "#/properties/oneOfMultiEnum"
+      "scope": "#/properties/oneOfMultiEnum",
+      "options": {
+        "vuetify": {
+          "v-checkbox": {
+            "foo": {
+              "color": "green"
+            }
+          }
+        }
+      }
     },
     {
       "type": "Control",
-      "scope": "#/properties/multiEnum"
+      "scope": "#/properties/multiEnum",
+      "options": {
+        "vuetify": {
+          "v-checkbox": {
+            "foobar": {
+              "color": "yellow"
+            }
+          }
+        }
+      }
     }
   ]
 }

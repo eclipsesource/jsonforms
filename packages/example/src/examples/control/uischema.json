@@ -3,7 +3,14 @@
   "elements": [
     {
       "type": "Control",
-      "scope": "#/properties/string"
+      "scope": "#/properties/string",
+      "options": {
+        "vuetify": {
+          "v-text-field": {
+            "prepend-icon": "mdi-format-text"
+          }
+        }
+      }
     },
     {
       "type": "Control",

@@ -28,6 +28,7 @@
           ? control.schema.maxLength
           : undefined
       "
+      v-bind="vuetifyProps('v-text-field')"
       @input="onChange"
       @focus="isFocused = true"
       @blur="isFocused = false"

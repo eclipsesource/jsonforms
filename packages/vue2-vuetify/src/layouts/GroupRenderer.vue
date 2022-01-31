@@ -4,12 +4,17 @@
     :class="classes"
     :elevation="!bare ? 2 : undefined"
     :outlined="bare"
+    v-bind="vuetifyProps('v-card')"
   >
-    <v-card-title v-if="layout.uischema.label" :class="styles.group.label">{{
-      layout.uischema.label
-    }}</v-card-title>
+    <v-card-title
+      v-if="layout.uischema.label"
+      :class="styles.group.label"
+      v-bind="vuetifyProps('v-card-title')"
+      >{{ layout.uischema.label }}</v-card-title
+    >
 
     <v-card-text
+      v-bind="vuetifyProps(`v-card-text[${index}]`)"
       v-for="(element, index) in layout.uischema.elements"
       :key="`${layout.path}-${index}`"
       :class="styles.group.item"

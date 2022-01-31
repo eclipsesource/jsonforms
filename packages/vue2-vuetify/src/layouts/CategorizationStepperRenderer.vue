@@ -1,9 +1,64 @@
 <template>
   <div v-if="layout.visible" :class="styles.categorization.root">
     <v-stepper
+      v-if="appliedOptions.vertical == true"
       non-linear
       v-model="activeCategory"
-      :vertical="layout.direction == 'row'"
+      v-bind="vuetifyProps('v-stepper')"
+    >
+      <template v-for="(element, index) in visibleCategories">
+        <v-stepper-step
+          :key="`${layout.path}-${index}`"
+          :step="index + 1"
+          editable
+        >
+          {{ element.label }}
+        </v-stepper-step>
+
+        <v-stepper-content :key="`${layout.path}-${index}`" :step="index + 1">
+          <v-card elevation="0">
+            <dispatch-renderer
+              :schema="layout.schema"
+              :uischema="element"
+              :path="layout.path"
+              :enabled="layout.enabled"
+              :renderers="layout.renderers"
+              :cells="layout.cells"
+            />
+
+            <div v-if="!!appliedOptions.showNavButtons">
+              <v-divider></v-divider>
+
+              <v-card-actions>
+                <v-btn
+                  text
+                  left
+                  :disabled="activeCategory - 1 <= 0"
+                  @click="activeCategory--"
+                >
+                  Back
+                </v-btn>
+                <v-spacer></v-spacer>
+                <v-btn
+                  text
+                  right
+                  color="primary"
+                  :disabled="activeCategory - 1 >= visibleCategories.length - 1"
+                  @click="activeCategory++"
+                >
+                  Next
+                </v-btn>
+              </v-card-actions>
+            </div>
+          </v-card>
+        </v-stepper-content>
+      </template>
+    </v-stepper>
+    <v-stepper
+      v-else
+      non-linear
+      v-model="activeCategory"
+      v-bind="vuetifyProps('v-stepper')"
     >
       <v-stepper-header>
         <template v-for="(element, index) in visibleCategories">

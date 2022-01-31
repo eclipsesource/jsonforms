@@ -9,6 +9,7 @@ export {
   onUnmounted,
   reactive,
   ref,
+  unref,
   watch,
   watchEffect,
 } from '@vue/composition-api';

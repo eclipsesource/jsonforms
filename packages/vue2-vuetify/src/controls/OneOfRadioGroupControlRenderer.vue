@@ -5,7 +5,9 @@
     :isFocused="isFocused"
     :appliedOptions="appliedOptions"
   >
-    <v-label :for="control.id + '-input'">{{ computedLabel }}</v-label>
+    <v-label :for="control.id + '-input'" v-bind="vuetifyProps('v-label')">{{
+      computedLabel
+    }}</v-label>
     <v-radio-group
       :id="control.id + '-input'"
       :class="styles.control.input"
@@ -16,7 +18,7 @@
       :persistent-hint="persistentHint()"
       :required="control.required"
       :error-messages="control.errors"
-      row
+      v-bind="vuetifyProps('v-radio-group')"
       :value="control.data"
       @change="onChange"
       @focus="isFocused = true"
@@ -24,6 +26,7 @@
     >
       <v-radio
         v-for="o in control.options"
+        v-bind="vuetifyProps(`v-radio[${o.value}]`)"
         :key="o.value"
         :label="o.label"
         :value="o.value"

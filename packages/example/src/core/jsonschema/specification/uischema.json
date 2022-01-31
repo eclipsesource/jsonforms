@@ -3,21 +3,26 @@
   "$id": "http://jsonforms.io/uischema",
   "title": "UI schema meta-schema",
   "type": "object",
-  "properties": {
-    "type": {
-      "type": "string",
-      "enum": ["HorizontalLayout", "VerticalLayout", "Group", "Categorization"]
+  "anyOf": [
+    {
+      "$ref": "#/definitions/control"
     },
-    "label": {
-      "type": "string"
+    {
+      "$ref": "#/definitions/label"
     },
-    "elements": {
-      "$ref": "#/definitions/elements"
+    {
+      "$ref": "#/definitions/horizontallayout"
     },
-    "rule": {
-      "$ref": "http://jsonforms.io/uischema/rule"
+    {
+      "$ref": "#/definitions/verticallayout"
+    },
+    {
+      "$ref": "#/definitions/categorization"
+    },
+    {
+      "$ref": "#/definitions/group"
     }
-  },
+  ],
   "definitions": {
     "elements": {
       "type": "array",
@@ -26,6 +31,9 @@
         "anyOf": [
           {
             "$ref": "#/definitions/control"
+          },
+          {
+            "$ref": "#/definitions/label"
           },
           {
             "$ref": "#/definitions/horizontallayout"
@@ -84,6 +92,38 @@
         "additionalProperties": "Control should not have properties other than type, label, scope, options, suggestion and rule"
       }
     },
+    "label": {
+      "type": "object",
+      "$id": "#label",
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "Label",
+          "default": "Label"
+        },
+        "text": {
+          "type": "string"
+        },
+        "options": {
+          "$ref": "#/definitions/options"
+        },
+        "rule": {
+          "$ref": "#/definitions/rule"
+        }
+      },
+      "additionalProperties": false,
+      "errorMessage": {
+        "properties": {
+          "type": "type should be equal to one of the allowed values",
+          "options": "Control options should be object",
+          "text": "Label text should be string"
+        },
+        "required": {
+          "type": "Label should have a string property \"type\""
+        },
+        "additionalProperties": "Label should not have properties other than type, text, options, and rule"
+      }
+    },
     "horizontallayout": {
       "type": "object",
       "$id": "#horizontallayout",
@@ -95,6 +135,9 @@
         },
         "elements": {
           "$ref": "#/definitions/elements"
+        },
+        "options": {
+          "$ref": "#/definitions/options"
         },
         "rule": {
           "$ref": "#/definitions/rule"
@@ -110,7 +153,7 @@
           "elements": "Layout should have an array property \"elements\"",
           "type": "Layout should have a string property \"type\""
         },
-        "additionalProperties": "Layout should not have properties other than type, elements and rule"
+        "additionalProperties": "Layout should not have properties other than type, elements, options and rule"
       }
     },
     "verticallayout": {
@@ -125,6 +168,9 @@
         "elements": {
           "$ref": "#/definitions/elements"
         },
+        "options": {
+          "$ref": "#/definitions/options"
+        },
         "rule": {
           "$ref": "#/definitions/rule"
         }
@@ -139,7 +185,7 @@
           "elements": "Layout should have an array property \"elements\"",
           "type": "Layout should have a string property \"type\""
         },
-        "additionalProperties": "Layout should not have properties other than type, elements and rule"
+        "additionalProperties": "Layout should not have properties other than type, elements, options and rule"
       }
     },
     "categorization": {
@@ -150,6 +196,9 @@
           "type": "string",
           "const": "Categorization",
           "default": "Categorization"
+        },
+        "options": {
+          "$ref": "#/definitions/options"
         },
         "elements": {
           "type": "array",
@@ -168,7 +217,7 @@
           "elements": "Categorization should have an array property \"elements\"",
           "type": "Categorization should have a string property \"type\""
         },
-        "additionalProperties": "Categorization should not have properties other than type and elements"
+        "additionalProperties": "Categorization should not have properties other than type. elements, and options"
       }
     },
     "category": {
@@ -186,6 +235,9 @@
           "const": "Category",
           "default": "Category"
         },
+        "options": {
+          "$ref": "#/definitions/options"
+        },
         "rule": {
           "$ref": "#/definitions/rule"
         }
@@ -200,7 +252,7 @@
           "type": "Category layout should have a string property \"type\"",
           "elements": "Category layout should have an array property \"elements\""
         },
-        "additionalProperties": "Category layout should not have properties other than type, elements, label and rule"
+        "additionalProperties": "Category layout should not have properties other than type, elements, label, options and rule"
       }
     },
     "group": {
@@ -218,6 +270,9 @@
         "label": {
           "type": "string"
         },
+        "options": {
+          "$ref": "#/definitions/options"
+        },
         "rule": {
           "$ref": "#/definitions/rule"
         }
@@ -234,7 +289,7 @@
           "elements": "Group layout should have an array property \"elements\"",
           "label": "Group layout should have a string property \"label\""
         },
-        "additionalProperties": "Group layout should not have properties other than type, elements, label and rule"
+        "additionalProperties": "Group layout should not have properties other than type, elements, label, options and rule"
       }
     },
     "rule": {
@@ -251,8 +306,6 @@
       "additionalProperties": true
     }
   },
-  "required": ["elements", "type"],
-  "additionalProperties": false,
   "errorMessage": {
     "properties": {
       "type": "Root type should be equal to one of the allowed values",
@@ -262,6 +315,6 @@
       "elements": "Root should have an array property \"elements\"",
       "type": "Root should have a string property \"type\""
     },
-    "additionalProperties": "Root should not have properties other than type, elements, label and rule"
+    "additionalProperties": "Root should not have properties other than type, elements, label, options and rule"
   }
 }

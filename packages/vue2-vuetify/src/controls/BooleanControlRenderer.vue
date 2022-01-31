@@ -18,6 +18,7 @@
       :error-messages="control.errors"
       :indeterminate="control.data === undefined"
       :value="control.data"
+      v-bind="vuetifyProps('v-checkbox')"
       @change="onChange"
       @focus="isFocused = true"
       @blur="isFocused = false"

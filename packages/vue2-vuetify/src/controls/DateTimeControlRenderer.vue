@@ -18,6 +18,7 @@
       :required="control.required"
       :error-messages="control.errors"
       :value="dataTime"
+      v-bind="vuetifyProps('v-text-field')"
       @focus="isFocused = true"
       @blur="isFocused = false"
     />
