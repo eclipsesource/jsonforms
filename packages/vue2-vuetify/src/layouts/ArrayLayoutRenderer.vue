@@ -146,7 +146,7 @@
                                 arraySchema.minItems !== undefined &&
                                 control.data.length <= arraySchema.minItems)
                             "
-                            @click.native="removeItemsClick($event, [index])"
+                            @click.stop.native="suggestToDelete = index"
                           >
                             <v-icon class="notranslate">mdi-delete</v-icon>
                           </v-btn>
@@ -175,6 +175,36 @@
         No data
       </v-container></v-card-text
     >
+    <v-dialog
+      :value="suggestToDelete !== null"
+      max-width="600"
+      @keydown.esc="suggestToDelete = null"
+      @click:outside="suggestToDelete = null"
+    >
+      <v-card>
+        <v-card-title class="text-h5">
+          Delete {{ childLabelForIndex(suggestToDelete) || 'element' }}?
+        </v-card-title>
+
+        <v-card-text> The element will be deleted. </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn text @click="suggestToDelete = null"> Cancel </v-btn>
+          <v-btn
+            text
+            ref="confirm"
+            @click="
+              removeItemsClick([suggestToDelete]);
+              suggestToDelete = null;
+            "
+          >
+            Delete
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
@@ -202,8 +232,10 @@ import {
 import { useNested, useVuetifyArrayControl } from '../util';
 import {
   VCard,
+  VCardActions,
   VCardTitle,
   VCardText,
+  VDialog,
   VRow,
   VCol,
   VContainer,
@@ -228,9 +260,11 @@ const controlRenderer = defineComponent({
   components: {
     DispatchRenderer,
     VCard,
+    VCardActions,
     VCardTitle,
     VCardText,
     VAvatar,
+    VDialog,
     VRow,
     VCol,
     VToolbar,
@@ -253,9 +287,10 @@ const controlRenderer = defineComponent({
   setup(props: RendererProps<ControlElement>) {
     const control = useVuetifyArrayControl(useJsonFormsArrayControl(props));
     const currentlyExpanded = ref<null | number>(null);
+    const suggestToDelete = ref<null | number>(null);
     // indicate to our child renderers that we are increasing the "nested" level
     useNested('array');
-    return { ...control, currentlyExpanded };
+    return { ...control, currentlyExpanded, suggestToDelete };
   },
   computed: {
     noData(): boolean {
@@ -303,8 +338,7 @@ const controlRenderer = defineComponent({
       event.stopPropagation();
       this.moveDown?.(this.control.path, toMove)();
     },
-    removeItemsClick(event: Event, toDelete: number[]): void {
-      event.stopPropagation();
+    removeItemsClick(toDelete: number[]): void {
       this.removeItems?.(this.control.path, toDelete)();
     },
     childErrors(index: number): ErrorObject[] {
