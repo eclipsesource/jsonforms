@@ -26,6 +26,7 @@
 import isEmpty from 'lodash/isEmpty';
 import get from 'lodash/get';
 import { JsonSchema } from '../models';
+import { decode, encode } from './path';
 
 /**
  * Map for storing refs and the respective schemas they are pointing to.
@@ -115,9 +116,7 @@ export const resolveSchema = (
   if (isEmpty(schema)) {
     return undefined;
   }
-  const validPathSegments = schemaPath.split('/').map(segment => {
-    return segment.split('~1').join('/').split('~0').join('~');
-  });
+  const validPathSegments = schemaPath.split('/').map(decode);
   let resultSchema = schema;
   for (let i = 0; i < validPathSegments.length; i++) {
     let pathSegment = validPathSegments[i];
@@ -138,7 +137,7 @@ export const resolveSchema = (
         resultSchema?.anyOf ?? []
       );
       for (let item of schemas) {
-        curSchema = resolveSchema(item, validPathSegments.slice(i).map(s => s.split('/').join('~1')).join('/'));
+        curSchema = resolveSchema(item, validPathSegments.slice(i).map(encode).join('/'));
         if (curSchema) {
           break;
         }

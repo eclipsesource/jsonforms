@@ -26,6 +26,7 @@
 import startCase from 'lodash/startCase';
 
 import { ControlElement, JsonSchema, LabelDescription } from '../models';
+import { decode } from './path';
 
 const deriveLabel = (
   controlElement: ControlElement,
@@ -36,9 +37,7 @@ const deriveLabel = (
   }
   if (typeof controlElement.scope === 'string') {
     const ref = controlElement.scope;
-    let label = ref.substr(ref.lastIndexOf('/') + 1);
-    label = label.split('~1').join('/').split('~0').join('~');
-
+    const label = decode(ref.substr(ref.lastIndexOf('/') + 1));
     return startCase(label);
   }
 

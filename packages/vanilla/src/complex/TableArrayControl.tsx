@@ -39,7 +39,8 @@ import {
   RankedTester,
   Resolve,
   Test,
-  getControlPath
+  getControlPath,
+  encode
 } from '@jsonforms/core';
 import { DispatchCell, withJsonFormsArrayControlProps } from '@jsonforms/react';
 import { withVanillaControlProps } from '../util';
@@ -167,13 +168,11 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
                               childPath,
                               prop.toString()
                             );
-                            let encProp = prop;
-                            encProp = prop.split('/').join('~1');
                             return (
                               <td key={childPropPath}>
                                 <DispatchCell
-                                  schema={Resolve.schema(schema, `#/properties/${encProp}`, rootSchema)}
-                                  uischema={createControlElement(encProp)}
+                                  schema={Resolve.schema(schema, `#/properties/${encode(prop)}`, rootSchema)}
+                                  uischema={createControlElement(encode(prop))}
                                   path={childPath + '.' + prop}
                                 />
                               </td>
