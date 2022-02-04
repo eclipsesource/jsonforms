@@ -556,3 +556,21 @@ test('generate control for nested oneOf', t => {
   };
   t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
+
+test('encode "/" in generated ui schema', t => {
+  const schema: JsonSchema = {
+    properties: {
+      'some / initial / value': {
+        type : 'integer'
+      }
+    }
+  };
+  const uischema: Layout = {
+    type: 'VerticalLayout',
+    elements: [{
+      type: 'Control',
+      scope: '#/properties/some ~1 initial ~1 value'
+    }] as ControlElement[]
+  };
+  t.deepEqual(generateDefaultUISchema(schema), uischema);
+});

@@ -33,6 +33,7 @@ import {
   ArrayControlProps,
   ControlElement,
   createDefaultValue,
+  decode,
   findUISchema,
   getFirstPrimitiveProp,
   JsonFormsState,
@@ -47,10 +48,12 @@ import {
 const keywords = ['#', 'properties', 'items'];
 
 export const removeSchemaKeywords = (path: string) => {
-  return path
-    .split('/')
-    .filter(s => !some(keywords, key => key === s))
-    .join('.');
+  return decode(
+    path
+      .split('/')
+      .filter(s => !some(keywords, key => key === s))
+      .join('.')
+  );
 };
 
 @Component({

@@ -87,6 +87,9 @@ test('toDataPath use of encoded paths relative without /', t => {
   const fooBar = encodeURIComponent('foo/bar');
   t.is(toDataPath(`properties/${fooBar}`), `${fooBar}`);
 });
+test('toDataPath use of encoded special character in pathname', t => {
+  t.is(toDataPath('properties/foo~0bar~1baz'), 'foo~bar/baz');
+});
 test('resolve instance', t => {
   const instance = { foo: 123 };
   const result = Resolve.data(instance, toDataPath('#/properties/foo'));

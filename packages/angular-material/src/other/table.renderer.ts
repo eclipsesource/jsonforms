@@ -32,6 +32,7 @@ import {
   ArrayControlProps,
   ControlElement,
   deriveTypes,
+  encode,
   isObjectArrayControl,
   isPrimitiveArrayControl,
   JsonSchema,
@@ -101,7 +102,8 @@ export class TableRenderer extends JsonFormsArrayControl {
   ): ColumnDescription[] => {
     if (schema.type === 'object') {
       return this.getValidColumnProps(schema).map(prop => {
-        const uischema = controlWithoutLabel(`#/properties/${prop}`);
+        const encProp = encode(prop);
+        const uischema = controlWithoutLabel(`#/properties/${encProp}`);
         if (!this.isEnabled()) {
           setReadonly(uischema);
         }

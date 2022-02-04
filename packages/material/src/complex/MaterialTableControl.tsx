@@ -53,7 +53,8 @@ import {
   Paths,
   Resolve,
   JsonFormsRendererRegistryEntry,
-  JsonFormsCellRendererRegistryEntry
+  JsonFormsCellRendererRegistryEntry,
+  encode
 } from '@jsonforms/core';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowDownward from '@mui/icons-material/ArrowDownward';
@@ -206,18 +207,17 @@ interface NonEmptyCellComponentProps {
   cells?: JsonFormsCellRendererRegistryEntry[],
   isValid: boolean
 }
-const NonEmptyCellComponent = React.memo(({path, propName, schema,rootSchema, errors, enabled, renderers, cells, isValid}:NonEmptyCellComponentProps) => {
-
+const NonEmptyCellComponent = React.memo(({path, propName, schema, rootSchema, errors, enabled, renderers, cells, isValid}:NonEmptyCellComponentProps) => {
   return (
     <NoBorderTableCell>
       {schema.properties ? (
         <DispatchCell
           schema={Resolve.schema(
             schema,
-            `#/properties/${propName}`,
+            `#/properties/${encode(propName)}`,
             rootSchema
           )}
-          uischema={controlWithoutLabel(`#/properties/${propName}`)}
+          uischema={controlWithoutLabel(`#/properties/${encode(propName)}`)}
           path={path}
           enabled={enabled}
           renderers={renderers}

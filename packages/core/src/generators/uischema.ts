@@ -35,7 +35,7 @@ import {
   Layout,
   UISchemaElement
 } from '../models';
-import { deriveTypes, resolveSchema } from '../util';
+import { deriveTypes, encode, resolveSchema } from '../util';
 
 /**
  * Creates a new ILayout.
@@ -162,7 +162,7 @@ const generateUISchema = (
       const nextRef: string = currentRef + '/properties';
       Object.keys(jsonSchema.properties).map(propName => {
         let value = jsonSchema.properties[propName];
-        const ref = `${nextRef}/${propName}`;
+        const ref = `${nextRef}/${encode(propName)}`;
         if (value.$ref !== undefined) {
           value = resolveSchema(rootSchema, value.$ref);
         }

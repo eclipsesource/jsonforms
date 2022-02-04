@@ -64,3 +64,16 @@ test('resolveSchema - resolves schema with any ', t => {
   t.deepEqual(resolveSchema(schema, '#/properties/description/properties/exist'), {type: 'boolean'});
   t.is(resolveSchema(schema, '#/properties/description/properties/notfound'), undefined);
 });
+
+test('resolveSchema - resolves schema with encoded characters', t => {
+  const schema = {
+    type: 'object',
+    properties: {
+      'foo / ~ bar': {
+        type: 'integer'
+      }
+    }
+  };
+  t.deepEqual(resolveSchema(schema, '#/properties/foo ~1 ~0 bar'), {type: 'integer'});
+  t.is(resolveSchema(schema, '#/properties/foo / bar'), undefined);
+});
