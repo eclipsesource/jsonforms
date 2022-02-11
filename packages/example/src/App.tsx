@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { JsonForms, JsonFormsInitStateProps, JsonFormsReactProps } from '@jsonforms/react';
 import { ExampleDescription } from '@jsonforms/examples';
 import {
@@ -91,10 +91,10 @@ const App = ({ examples, cells, renderers}: AppProps) => {
   const [currentExample, setExample] = useState<ExampleDescription>(examples[0]);
   const [currentIndex, setIndex] = useState<number>(0);
   const [dataAsString, setDataAsString] = useState<any>('');
-  const [schemaAsString, setSchemaAsString] = useState<any>('');
-  const [uiSchemaAsString, setUiSchemaAsString] = useState<any>('');
   const [props, setProps] = useState<any>(getProps(currentExample, cells, renderers));
   const [showPanel, setShowPanel] = useState<boolean>(true);
+  const schemaAsString = useMemo(() => JSON.stringify(props.schema, null, 2), [props.schema]);
+  const uiSchemaAsString = useMemo(() => JSON.stringify(props.uischema, null, 2), [props.uischema]);
 
   const actions: Action[] = currentExample.actions;
 
@@ -119,40 +119,9 @@ const App = ({ examples, cells, renderers}: AppProps) => {
     }
   };
 
-  useEffect(() => {
-    if(props.schema != undefined) {
-      setSchemaAsString(JSON.stringify(props.schema, null, 2));
-    } else {
-      setSchemaAsString('No schema set');
-    }
-    if(props.uischema != undefined) {
-      setUiSchemaAsString(JSON.stringify(props.uischema, null, 2));
-    } else {
-      setUiSchemaAsString('No ui schema set');
-    }
-  }, [props.schema, props.uischema]);
-
-  useEffect(() => {
-    var panel = document.getElementsByClassName('props-panel')[0];
-    if(showPanel) {
-      panel.classList.remove('hide');
-    } else {
-      panel.classList.add('hide');
-    }
-  }, [showPanel]);
-
   const changeData = (data: any) => {
     setDataAsString(JSON.stringify(data, null, 2));
   };
-
-  const togglePanelHeight = () => {
-    var panel = document.getElementsByClassName('panel-wrapper')[0];
-    panel.classList.toggle('full-height');
-  }
-
-  const togglePanel = (checked: boolean) => {
-    setShowPanel(checked);
-  }
 
   return (
     <div>
@@ -182,39 +151,40 @@ const App = ({ examples, cells, renderers}: AppProps) => {
               </select>
             </div>
             <div className='toggle-panel'>
-              <input type='checkbox' id='panel' name='panel' checked={showPanel} onChange={e => togglePanel(e.target.checked)} />
+              <input type='checkbox' id='panel' name='panel' checked={showPanel} onChange={() => setShowPanel(!showPanel)} />
               <label htmlFor='panel'>Show sidepanel</label>
             </div>
           </div>
 
           <div className='demo-wrapper'>
-            <div className='props-panel'>
-              <Tabs>
-                <TabList>
-                  <Tab>Data</Tab>
-                  <Tab>Schema</Tab>
-                  <Tab>UISchema</Tab>
-                </TabList>
-                <p className='expand-hint' onClick={() => togglePanelHeight()}>Click here to expand</p>
-                <div className='panel-wrapper'>
-                  <TabPanel>
-                    <Highlight className='json'>
-                      {dataAsString}
-                    </Highlight>
-                  </TabPanel>
-                  <TabPanel>
-                    <Highlight className='json'>
-                      {schemaAsString}
-                    </Highlight>
-                  </TabPanel>
-                  <TabPanel>
-                    <Highlight className='json'>
-                      {uiSchemaAsString}
-                    </Highlight>
-                  </TabPanel>
-                </div>
-              </Tabs>
-            </div>
+            { showPanel && 
+              <div className='props-panel'>
+                <Tabs>
+                  <TabList>
+                    <Tab>Data</Tab>
+                    <Tab>Schema</Tab>
+                    <Tab>UISchema</Tab>
+                  </TabList>
+                  <div className="panel-wrapper">
+                    <TabPanel>
+                      <Highlight className='json'>
+                        {dataAsString}
+                      </Highlight>
+                    </TabPanel>
+                    <TabPanel>
+                      <Highlight className='json'>
+                        {schemaAsString}
+                      </Highlight>
+                    </TabPanel>
+                    <TabPanel>
+                      <Highlight className='json'>
+                        {uiSchemaAsString}
+                      </Highlight>
+                    </TabPanel>
+                  </div>
+                </Tabs>
+              </div>
+            }
             <div className='demoform'>
               <div className='buttons'>
                 {actions?.map((action: Action, index: number) => (
@@ -222,7 +192,6 @@ const App = ({ examples, cells, renderers}: AppProps) => {
                 ))}
               </div>
               <div className='demo'>
-                <h4><span>Example</span></h4>
                 <ResolvedJsonForms
                   key={currentIndex}
                   {...props}

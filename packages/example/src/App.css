@@ -2,6 +2,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+  background: #f3f4fa;
 }
 
 .header {
@@ -35,7 +36,7 @@ body {
   margin: 0 10px 0 0;
 }
 .tools .example-selector select {
-  background: #f3f4fa;
+  background: #fff;
   border-radius: 9px;
   height: 30px;
   border: 0;
@@ -80,19 +81,10 @@ body {
   text-align: center;
 }
 .demo-wrapper .demoform .demo {
-  background: #f3f4fa;
+  background: #fff;
   border-radius: 9px;
   padding: 20px;
   margin-top: 20px;
-}
-.demo-wrapper .demoform .demo h4 {
-  text-align: center;
-  margin-top: -30px;
-}
-.demo-wrapper .demoform .demo h4 span {
-  padding: 10px;
-  background-color: #fff;
-  border-radius: 5px;
 }
 
 .action-button {
@@ -135,7 +127,7 @@ body {
   max-width: 400px;
   margin: 40px auto 20px auto;
   padding: 0;
-  background: #f3f4fa;
+  background: #fff;
   border-radius: 9px;
   display: inline-block;
 }
@@ -167,12 +159,8 @@ body {
   background-color: #0047a1;
 }
 .react-tabs .panel-wrapper {
-  max-height: 150px;
   overflow: scroll;
   padding: 0 15px;
-}
-.react-tabs .panel-wrapper.full-height {
-  max-height: none !important;
 }
 .react-tabs .panel-wrapper .react-tabs__tab-panel {
   display: none;
