@@ -24,7 +24,6 @@
         :items="control.options"
         item-text="label"
         item-value="value"
-        attach
         v-bind="vuetifyProps('v-select')"
         @change="onChange"
         @focus="isFocused = true"
@@ -48,7 +47,6 @@
         :items="control.options"
         item-text="label"
         item-value="value"
-        attach
         v-bind="vuetifyProps('v-autocomplete')"
         @input="onChange"
         @focus="isFocused = true"
