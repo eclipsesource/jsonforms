@@ -151,7 +151,7 @@ const App = ({ examples, cells, renderers}: AppProps) => {
               </select>
             </div>
             <div className='toggle-panel'>
-              <input type='checkbox' id='panel' name='panel' checked={showPanel} onChange={() => setShowPanel(!showPanel)} />
+              <input type='checkbox' id='panel' name='panel' checked={showPanel} onChange={() => setShowPanel(prevShow => !prevShow)} />
               <label htmlFor='panel'>Show sidepanel</label>
             </div>
           </div>
