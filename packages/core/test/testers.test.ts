@@ -45,7 +45,8 @@ import {
   schemaTypeIs,
   scopeEndIs,
   scopeEndsWith,
-  uiTypeIs
+  uiTypeIs, 
+  isOneOfEnumControl
 } from '../src/testers';
 import {
   ControlElement,
@@ -309,6 +310,20 @@ test('tester isPrimitiveArrayControl', t => {
     }),
     `Primitive array tester was not triggered for 'integer' schema type`
   );
+  const schemaWithRefs = {
+    definitions: { int: { type: 'integer' } },
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'array',
+        items: { $ref: '#/definitions/int' }
+      }
+    }
+  };
+  t.true(
+    isPrimitiveArrayControl(control, schemaWithRefs, schemaWithRefs),
+    `Primitive array tester was not triggered for 'integer' schema type with refs`
+  );
   t.false(
     isPrimitiveArrayControl(control, {
       type: 'object',
@@ -423,6 +438,28 @@ test('tester isObjectArrayControl', t => {
     }
   };
   t.true(isObjectArrayControl(control, schema_innerAllOf));
+
+  const schemaWithRefs = {
+    definitions: {
+      order: {
+        type: 'object',
+        properties: {
+          x: { type: 'integer' },
+          y: { type: 'integer' }
+        }
+      }
+    },
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'array',
+        items: {
+          $ref: '#/definitions/order'
+        }
+      }
+    }
+  }
+  t.true(isObjectArrayControl(control, schemaWithRefs, schemaWithRefs));
 });
 
 test('isBooleanControl', t => {
@@ -709,6 +746,15 @@ test('tester isObjectArrayWithNesting', t => {
     }
   };
 
+  const nestedSchemaWithRef =
+  {
+    definitions: { itemsType: { ...schema } },
+    type: 'array',
+    items: {
+      $ref: '#/definitions/itemsType'
+    }
+  };
+
   const uischemaOptions: {
     generate: ControlElement;
     default: ControlElement;
@@ -753,6 +799,7 @@ test('tester isObjectArrayWithNesting', t => {
   t.true(isObjectArrayWithNesting(uischema, nestedSchema));
   t.true(isObjectArrayWithNesting(uischema, nestedSchema2));
   t.true(isObjectArrayWithNesting(uischema, nestedSchema3));
+  t.true(isObjectArrayWithNesting(uischema, nestedSchemaWithRef));
 
   t.false(isObjectArrayWithNesting(uischemaOptions.default, schema));
   t.true(isObjectArrayWithNesting(uischemaOptions.generate, schema));
@@ -771,6 +818,7 @@ test('tester schemaSubPathMatches', t => {
     type: 'Control',
     scope: '#'
   };
+
   t.true(
     schemaSubPathMatches('items', items => items.type === 'number')(
       uischema,
@@ -785,4 +833,41 @@ test('tester not', t => {
       type: 'boolean'
     })
   );
+});
+
+test('tester isOneOfEnumControl', t => {
+  const control: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/country'
+  };
+  const oneOfSchema = {
+    type: 'string',
+    oneOf: [
+      {
+        const: 'AU',
+        title: 'Australia'
+      },
+      {
+        const: 'NZ',
+        title: 'New Zealand'
+      }
+    ]
+  };
+
+  t.true(isOneOfEnumControl(control, {
+    type: 'object',
+    properties: {
+      country: oneOfSchema
+    }
+  }));
+  const schemaWithRefs = {
+    definitions: { country: oneOfSchema },
+    type: 'object',
+    properties: {
+      country: {
+        $ref: '#/definitions/country'
+      }
+    }
+  }
+  t.true(isOneOfEnumControl(control, schemaWithRefs, schemaWithRefs));
 });

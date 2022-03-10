@@ -27,21 +27,26 @@ import { ControlElement, JsonFormsUISchemaRegistryEntry, JsonSchema, NOT_APPLICA
 import { StateProps } from '..';
 
 const schema = {
+  definitions: {
+    choicesContainer: {
+      type: 'object',
+      properties: {
+        name: { type: 'string' },
+        choices: {
+          type: 'array',
+          items: {
+            type: 'string'
+          }
+        }
+      }
+    }
+  },
   type: 'object',
   properties: {
     exampleArray: {
       type: 'array',
       items: {
-        type: 'object',
-        properties: {
-          name: { type: 'string' },
-          choices: {
-            type: 'array',
-            items: {
-              type: 'string'
-            }
-          }
-        }
+        $ref: '#/definitions/choicesContainer'
       }
     }
   }

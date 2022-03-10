@@ -111,7 +111,7 @@ const invalidSegment = (pathSegment: string) =>
 export const resolveSchema = (
   schema: JsonSchema,
   schemaPath: string,
-  rootSchema?: JsonSchema
+  rootSchema: JsonSchema
 ): JsonSchema => {
   if (isEmpty(schema)) {
     return undefined;
@@ -123,7 +123,8 @@ export const resolveSchema = (
     resultSchema =
       resultSchema === undefined || resultSchema.$ref === undefined
         ? resultSchema
-        : resolveSchema(schema, resultSchema.$ref);
+        // use rootSchema as value for schema, since schema is undefined or a ref
+        : resolveSchema(rootSchema, resultSchema.$ref, rootSchema);
     if (invalidSegment(pathSegment)) {
       // skip invalid segments
       continue;
@@ -137,7 +138,7 @@ export const resolveSchema = (
         resultSchema?.anyOf ?? []
       );
       for (let item of schemas) {
-        curSchema = resolveSchema(item, validPathSegments.slice(i).map(encode).join('/'));
+        curSchema = resolveSchema(item, validPathSegments.slice(i).map(encode).join('/'), rootSchema);
         if (curSchema) {
           break;
         }
@@ -155,36 +156,10 @@ export const resolveSchema = (
   // with absolute paths here, so that we don't need to keep two different
   // schemas around
   if (resultSchema !== undefined && resultSchema.$ref !== undefined) {
-    try {
-      return retrieveResolvableSchema(schema, resultSchema.$ref);
-    } catch (e) {
-      return retrieveResolvableSchema(rootSchema, resultSchema.$ref);
-    }
+    return resolveSchema(schema, resultSchema.$ref, rootSchema)
+      ?? resolveSchema(rootSchema, resultSchema.$ref, rootSchema)
+      ?? schema;
   }
 
   return resultSchema;
 };
-
-/**
- * Normalizes the schema and resolves the given ref.
- *
- * @param {JsonSchema} full the JSON schema to resolved the reference against
- * @param {string} reference the reference to be resolved
- * @returns {JsonSchema} the resolved sub-schema
- */
-// disable rule because resolve is mutually recursive
-// tslint:disable:only-arrow-functions
-function retrieveResolvableSchema(
-  full: JsonSchema,
-  reference: string
-): JsonSchema {
-  // tslint:enable:only-arrow-functions
-  const child = resolveSchema(full, reference);
-  const allRefs = findAllRefs(child);
-  const innerSelfReference = allRefs[reference];
-  if (innerSelfReference !== undefined) {
-    innerSelfReference.$ref = '#';
-  }
-
-  return child;
-}

@@ -23,11 +23,11 @@ export default defineComponent({
   computed: {
     determinedCell(): any {
       const cell = maxBy(this.cell.cells, r =>
-        r.tester(this.cell.uischema, this.cell.schema)
+        r.tester(this.cell.uischema, this.cell.schema, this.cell.rootSchema)
       );
       if (
         cell === undefined ||
-        cell.tester(this.cell.uischema, this.cell.schema) === -1
+        cell.tester(this.cell.uischema, this.cell.schema, this.cell.rootSchema) === -1
       ) {
         return UnknownRenderer;
       } else {

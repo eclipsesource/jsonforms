@@ -75,6 +75,18 @@ const nestedSchema = {
   }
 };
 
+const nestedSchemaWithRef = {
+  definitions: {
+    arrayItems: {
+      ...schema
+    }
+  },
+  type: 'array',
+  items: {
+    $ref: '#/definitions/arrayItems'
+  }
+}
+
 const uischema: ControlElement = {
   type: 'Control',
   scope: '#'
@@ -99,6 +111,18 @@ const nestedSchema2 = {
     }
   }
 };
+
+const nestedSchema2WithRef = {
+  definitions: {
+    arrayItems: {
+      ...nestedSchema2
+    }
+  },
+  type: 'array',
+  items: {
+    $ref: '#/definitions/arrayItems'
+  }
+}
 
 const uischemaWithSortOption: ControlElement = {
   type: 'Control',
@@ -157,6 +181,9 @@ describe('Material array layout tester', () => {
     expect(materialArrayLayoutTester(uischema, schema)).toBe(-1);
     expect(materialArrayLayoutTester(uischema, nestedSchema)).toBe(4);
     expect(materialArrayLayoutTester(uischema, nestedSchema2)).toBe(4);
+    expect(materialArrayLayoutTester(uischema, nestedSchemaWithRef)).toBe(4);
+    expect(materialArrayLayoutTester(uischema, nestedSchemaWithRef, nestedSchemaWithRef)).toBe(4);
+    expect(materialArrayLayoutTester(uischema, nestedSchema2WithRef)).toBe(4);
 
     expect(materialArrayLayoutTester(uischemaOptions.default, schema)).toBe(-1);
     expect(materialArrayLayoutTester(uischemaOptions.generate, schema)).toBe(4);

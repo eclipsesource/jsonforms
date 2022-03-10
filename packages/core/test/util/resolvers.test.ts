@@ -27,6 +27,29 @@ import test from 'ava';
 
 test('resolveSchema - resolves schema with any ', t => {
   const schema = {
+    $defs: {
+      Base: {
+        type: 'object',
+        properties: {
+          width: {
+            type: 'integer'
+          }
+        }
+      },
+      Child: {
+        type: 'object',
+        allOf: [
+          { $ref: '#/$defs/Base' },
+          {
+            properties: {
+              geometry: {
+                type: 'string'
+              }
+            }
+          }
+        ]
+      }
+    },
     type: 'object',
     properties: {
       description: {
@@ -51,18 +74,30 @@ test('resolveSchema - resolves schema with any ', t => {
               type: 'boolean'
             }
           }
+        },
+        {
+          type: 'object',
+          properties: {
+            element: {
+              $ref: '#/$defs/Child'
+            }
+          }
         }]
       }
     }
   };
   // test backward compatibility
-  t.deepEqual(resolveSchema(schema, '#/properties/description/oneOf/0/properties/name'), {type: 'string'});
-  t.deepEqual(resolveSchema(schema, '#/properties/description/oneOf/1/properties/index'), {type: 'number'});
+  t.deepEqual(resolveSchema(schema, '#/properties/description/oneOf/0/properties/name', schema), {type: 'string'});
+  t.deepEqual(resolveSchema(schema, '#/properties/description/oneOf/1/properties/index', schema), {type: 'number'});
   // new simple approach
-  t.deepEqual(resolveSchema(schema, '#/properties/description/properties/name'), {type: 'string'});
-  t.deepEqual(resolveSchema(schema, '#/properties/description/properties/index'), {type: 'number'});
-  t.deepEqual(resolveSchema(schema, '#/properties/description/properties/exist'), {type: 'boolean'});
-  t.is(resolveSchema(schema, '#/properties/description/properties/notfound'), undefined);
+  t.deepEqual(resolveSchema(schema, '#/properties/description/properties/name', schema), {type: 'string'});
+  t.deepEqual(resolveSchema(schema, '#/properties/description/properties/index', schema), {type: 'number'});
+  t.deepEqual(resolveSchema(schema, '#/properties/description/properties/exist', schema), {type: 'boolean'});
+  t.is(resolveSchema(schema, '#/properties/description/properties/notfound', schema), undefined);
+  // refs
+  t.deepEqual(resolveSchema(schema, '#/properties/description/properties/element/properties/geometry', schema), {type: 'string'});
+  t.deepEqual(resolveSchema(schema, '#/properties/description/properties/element/properties/width', schema), {type: 'integer'});
+
 });
 
 test('resolveSchema - resolves schema with encoded characters', t => {
@@ -74,6 +109,6 @@ test('resolveSchema - resolves schema with encoded characters', t => {
       }
     }
   };
-  t.deepEqual(resolveSchema(schema, '#/properties/foo ~1 ~0 bar'), {type: 'integer'});
-  t.is(resolveSchema(schema, '#/properties/foo / bar'), undefined);
+  t.deepEqual(resolveSchema(schema, '#/properties/foo ~1 ~0 bar', schema), {type: 'integer'});
+  t.is(resolveSchema(schema, '#/properties/foo / bar', schema), undefined);
 });
