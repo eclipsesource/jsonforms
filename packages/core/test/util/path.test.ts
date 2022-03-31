@@ -46,11 +46,38 @@ test('toDataPath ', t => {
 test('toDataPath replace anyOf', t => {
   t.is(toDataPath('/anyOf/1/properties/foo/anyOf/1/properties/bar'), 'foo.bar');
 });
+test('toDataPath replace anyOf in combination with conditional schema compositions', t => {
+  t.is(toDataPath('/anyOf/1/then/properties/foo'), 'foo');
+});
+test('toDataPath replace multiple directly nested anyOf in combination with conditional schema compositions', t => {
+  t.is(toDataPath('/anyOf/1/then/anyOf/0/then/properties/foo'), 'foo');
+});
+test('toDataPath replace multiple nested properties with anyOf in combination with conditional schema compositions', t => {
+  t.is(toDataPath('/anyOf/1/properties/foo/anyOf/0/then/properties/bar'), 'foo.bar');
+});
 test('toDataPath replace allOf', t => {
   t.is(toDataPath('/allOf/1/properties/foo/allOf/1/properties/bar'), 'foo.bar');
 });
+test('toDataPath replace allOf in combination with conditional schema compositions', t => {
+  t.is(toDataPath('/allOf/1/then/properties/foo'), 'foo');
+});
+test('toDataPath replace multiple directly nested allOf in combination with conditional schema compositions', t => {
+  t.is(toDataPath('/allOf/1/then/allOf/0/then/properties/foo'), 'foo');
+});
+test('toDataPath replace multiple nested properties with allOf in combination with conditional schema compositions', t => {
+  t.is(toDataPath('/allOf/1/properties/foo/allOf/0/then/properties/bar'), 'foo.bar');
+});
 test('toDataPath replace oneOf', t => {
   t.is(toDataPath('/oneOf/1/properties/foo/oneOf/1/properties/bar'), 'foo.bar');
+});
+test('toDataPath replace oneOf in combination with conditional schema compositions', t => {
+  t.is(toDataPath('/oneOf/1/then/properties/foo'), 'foo');
+});
+test('toDataPath replace multiple directly nested oneOf in combination with conditional schema compositions', t => {
+  t.is(toDataPath('/oneOf/1/then/oneOf/0/then/properties/foo'), 'foo');
+});
+test('toDataPath replace multiple nested properties with oneOf in combination with conditional schema compositions', t => {
+  t.is(toDataPath('/oneOf/1/properties/foo/oneOf/0/then/properties/bar'), 'foo.bar');
 });
 test('toDataPath replace all combinators', t => {
   t.is(
