@@ -11,6 +11,10 @@ Therefore we now require the lab dependency and removed the no longer needed ext
 If you consumed the extended renderer set then just revert to the normal renderer set.
 There should not be any behavior changes.
 
+### Update to Material-UI v5 in React Material
+
+In Version 3.0 of JSON Forms we updated Material-UI from version 4 to version 5. To update your application see the official Material-UI [migration guide](https://mui.com/guides/migration-v4/).
+
 ### Removal of Class Components in React Material
 
 With Version 3.0 of JSON Forms we removed all React Material class components.
