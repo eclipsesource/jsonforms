@@ -2,24 +2,6 @@
 
 ## Migrating to JSON Forms 3.0 for React users
 
-### Removal of React Material extended renderer set
-
-Previously we maintained a separate 'extended' renderer set to not force all consumers of JSON Forms to consume the Material UI lab dependency.
-With the update to Material UI v5 the lab dependency became more important as it also contains all date and time pickers.
-Therefore we now require the lab dependency and removed the no longer needed extended renderer set.
-
-If you consumed the extended renderer set then just revert to the normal renderer set.
-There should not be any behavior changes.
-
-### Update to Material-UI v5 in React Material
-
-In Version 3.0 of JSON Forms we updated Material-UI from version 4 to version 5. To update your application see the official Material-UI [migration guide](https://mui.com/guides/migration-v4/).
-
-### Removal of Class Components in React Material
-
-With Version 3.0 of JSON Forms we removed all React Material class components.
-Please check whether you extended any of our base renderers in your adaptation.
-
 ### Removal of JSON Schema $Ref Parser
 
 With version 3.0 of JSON Forms, we removed the `json-schema-ref-parser` dependency within the core package.
@@ -82,6 +64,25 @@ function App() {
 ```
 
 For more information have a look at our [ref-resolving](https://jsonforms.io/docs/ref-resolving) docs page.
+
+### Update to Material UI v5 in React Material
+
+Material UI was updated from version 4 to version 5 which introduced a lot of breaking changes.
+To update your application see the official Material UI [migration guide](https://mui.com/guides/migration-v4/).
+
+### Removal of React Material extended renderer set
+
+Previously we maintained a separate 'extended' renderer set to not force all consumers of JSON Forms to consume the Material UI lab dependency.
+With the update to Material UI v5 the lab dependency became more important as it also contains all date and time pickers.
+Therefore we now require the lab dependency and removed the no longer needed extended renderer set.
+
+If you consumed the extended renderer set then just revert to the normal renderer set.
+There should not be any behavior changes.
+
+### Removal of Class Components in React Material
+
+All React Material class components were refactored to functonal components.
+Please check whether you extended any of our base renderers in your adaptation.
 
 ## Migrating to JSON Forms 2.5 for Angular users
 
