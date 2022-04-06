@@ -81,7 +81,7 @@ There should not be any behavior changes.
 
 ### Removal of Class Components in React Material
 
-All React Material class components were refactored to functonal components.
+All React Material class components were refactored to functional components.
 Please check whether you extended any of our base renderers in your adaptation.
 
 ## Migrating to JSON Forms 2.5 for Angular users
