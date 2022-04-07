@@ -13,3 +13,5 @@ export interface InjectJsonFormsDispatch {
 }
 
 export type JsonFormsChangeEvent = Pick<JsonFormsCore, 'data' | 'errors'>
+
+export type MaybeReadonly<T> = T | Readonly<T>
