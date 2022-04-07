@@ -9,7 +9,8 @@ jobs:
     if: | 
       startsWith(github.ref, 'refs/tags/v') &&
       !contains(github.ref, 'alpha') &&
-      !contains(github.ref, 'beta')
+      !contains(github.ref, 'beta') &&
+      !contains(github.ref, 'rc')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
