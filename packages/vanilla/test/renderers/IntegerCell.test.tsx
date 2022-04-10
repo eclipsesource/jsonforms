@@ -351,4 +351,15 @@ describe('Integer cell', () => {
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.disabled).toBe(false);
   });
+
+  test('shows 0 instead of empty string', () => {
+    const core = initCore(fixture.schema, fixture.uischema, { foo: 0 });
+    wrapper = mount(
+      <JsonFormsStateProvider initState={{ core }}>
+        <IntegerCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+      </JsonFormsStateProvider>
+    );
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.value).toBe('0');
+  });
 });
