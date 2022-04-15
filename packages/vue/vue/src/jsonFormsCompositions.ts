@@ -396,6 +396,22 @@ export const useJsonFormsEnumCell = (props: ControlProps) => {
 };
 
 /**
+ * Provides bindings for 'oneOf' enum cell elements. Cells are meant to show simple inputs,
+ * for example without error validation, within a larger structure like tables.
+ *
+ * Access bindings via the provided reactive 'cell' object.
+ * Dispatch changes via the provided `handleChange` method.
+ */
+export const useJsonFormsOneOfEnumCell = (props: ControlProps) => {
+  const { control, ...other } = useControl(
+      props,
+      mapStateToOneOfEnumControlProps,
+      mapDispatchToControlProps
+  );
+  return { cell: control, ...other };
+};
+
+/**
  * Provides bindings for a cell dispatcher. Cells are meant to show simple inputs,
  * for example without error validation, within a larger structure like tables.
  *
