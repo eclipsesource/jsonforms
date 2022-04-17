@@ -134,12 +134,28 @@ export const resolveSchema = (
       const schemas = [].concat(
         resultSchema?.oneOf ?? [],
         resultSchema?.allOf ?? [],
-        resultSchema?.anyOf ?? []
+        resultSchema?.anyOf ?? [],
+        // also add root level schema composition entries
+        schema?.oneOf ?? [],
+        schema?.allOf ?? [],
+        schema?.anyOf ?? []
       );
-      for (let item of schemas) {
+      for (const item of schemas) {
         curSchema = resolveSchema(item, validPathSegments.slice(i).map(encode).join('/'));
         if (curSchema) {
           break;
+        }
+        if (!curSchema) {
+          const conditionalSchemas = [].concat(
+              item.then ?? [],
+              item.else ?? [],
+          );
+          for (const condiItem of conditionalSchemas) {
+            curSchema = resolveSchema(condiItem, schemaPath);
+            if (curSchema) {
+              break;
+            }
+          }
         }
       }
       if (curSchema) {

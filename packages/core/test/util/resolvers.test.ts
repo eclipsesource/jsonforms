@@ -53,15 +53,65 @@ test('resolveSchema - resolves schema with any ', t => {
           }
         }]
       }
-    }
+    },
+    anyOf: [{
+        type: 'object',
+        properties: {
+          test: {
+            type: 'boolean'
+          }
+        }
+      },
+      {
+        if: {
+          properties: {
+            exist: {
+              const: true
+            }
+          }
+        },
+        then: {
+          properties: {
+            lastname: {
+              type: 'string'
+            }
+          }
+        },
+        else: {
+          properties: {
+            firstname: {
+              type: 'string'
+            },
+            address: {
+              type: 'object',
+              anyOf: [
+                {
+                  properties: {
+                    street: {
+                      type: 'string'
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    ]
   };
   // test backward compatibility
   t.deepEqual(resolveSchema(schema, '#/properties/description/oneOf/0/properties/name'), {type: 'string'});
   t.deepEqual(resolveSchema(schema, '#/properties/description/oneOf/1/properties/index'), {type: 'number'});
+  t.deepEqual(resolveSchema(schema, '#/anyOf/0/then/properties/lastname'), {type: 'string'});
+  t.deepEqual(resolveSchema(schema, '#/anyOf/0/else/properties/firstname'), {type: 'string'});
+  t.deepEqual(resolveSchema(schema, '#/anyOf/0/else/properties/address/anyOf/0/properties/street'), {type: 'string'});
   // new simple approach
   t.deepEqual(resolveSchema(schema, '#/properties/description/properties/name'), {type: 'string'});
   t.deepEqual(resolveSchema(schema, '#/properties/description/properties/index'), {type: 'number'});
   t.deepEqual(resolveSchema(schema, '#/properties/description/properties/exist'), {type: 'boolean'});
+  t.deepEqual(resolveSchema(schema, '#/properties/lastname'), {type: 'string'});
+  t.deepEqual(resolveSchema(schema, '#/properties/firstname'), {type: 'string'});
+  t.deepEqual(resolveSchema(schema, '#/properties/address/properties/street'), {type: 'string'});
   t.is(resolveSchema(schema, '#/properties/description/properties/notfound'), undefined);
 });
 
