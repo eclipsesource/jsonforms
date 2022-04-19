@@ -54,14 +54,7 @@ test('resolveSchema - resolves schema with any ', t => {
         }]
       }
     },
-    anyOf: [{
-        type: 'object',
-        properties: {
-          test: {
-            type: 'boolean'
-          }
-        }
-      },
+    anyOf: [
       {
         if: {
           properties: {
