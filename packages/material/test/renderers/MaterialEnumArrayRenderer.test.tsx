@@ -51,7 +51,8 @@ describe('EnumArrayControl tester', () => {
       materialEnumArrayRendererTester(uischema, {
         type: 'array',
         items: {}
-      })
+      },
+      undefined)
     ).toBe(NOT_APPLICABLE);
     expect(
       materialEnumArrayRendererTester(uischema, {
@@ -59,12 +60,13 @@ describe('EnumArrayControl tester', () => {
         items: {
           anyOf: []
         }
-      })
+      },
+      undefined)
     ).toBe(NOT_APPLICABLE);
   });
 
   it('should succeed for schema with enum items', () => {
-    expect(materialEnumArrayRendererTester(uischema, enumSchema)).toBe(5);
+    expect(materialEnumArrayRendererTester(uischema, enumSchema, undefined)).toBe(5);
   });
 });
 

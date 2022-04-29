@@ -151,13 +151,9 @@ export const resolveSchema = (
     }
     resultSchema = curSchema;
   }
-  // TODO: because schema is already scoped we might end up with refs pointing
-  // outside of the current schema. It would be better if we'd always could deal
-  // with absolute paths here, so that we don't need to keep two different
-  // schemas around
+
   if (resultSchema !== undefined && resultSchema.$ref !== undefined) {
-    return resolveSchema(schema, resultSchema.$ref, rootSchema)
-      ?? resolveSchema(rootSchema, resultSchema.$ref, rootSchema)
+    return resolveSchema(rootSchema, resultSchema.$ref, rootSchema)
       ?? schema;
   }
 

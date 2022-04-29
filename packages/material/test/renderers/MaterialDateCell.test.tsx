@@ -52,12 +52,12 @@ const uischema: ControlElement = {
 
 describe('Material date cell', () => {
   it('should fail', () => {
-    expect(materialDateCellTester(undefined, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialDateCellTester(null, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialDateCellTester({ type: 'Foo' }, undefined)).toBe(
+    expect(materialDateCellTester(undefined, undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialDateCellTester(null, undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialDateCellTester({ type: 'Foo' }, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
-    expect(materialDateCellTester({ type: 'Control' }, undefined)).toBe(
+    expect(materialDateCellTester({ type: 'Control' }, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
 
@@ -67,7 +67,8 @@ describe('Material date cell', () => {
         properties: {
           foo: { type: 'string' }
         }
-      })
+      },
+      undefined)
     ).toBe(NOT_APPLICABLE);
     expect(
       materialDateCellTester(uischema, {
@@ -79,7 +80,8 @@ describe('Material date cell', () => {
             format: 'date'
           }
         }
-      })
+      },
+      undefined)
     ).toBe(NOT_APPLICABLE);
   });
 
@@ -93,7 +95,8 @@ describe('Material date cell', () => {
             format: 'date'
           }
         }
-      })
+      },
+      undefined)
     ).toBe(2);
   });
 });

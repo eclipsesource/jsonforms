@@ -931,7 +931,7 @@ export const mapStateToCombinatorRendererProps = (
   const { uischema } = ownProps;
   const path = composeWithUi(uischema, ownProps.path);
   const rootSchema = getSchema(state);
-  let resolvedSchema = Resolve.schema(
+  const resolvedSchema = Resolve.schema(
     ownProps.schema || rootSchema,
     uischema.scope,
     rootSchema

@@ -335,10 +335,10 @@ describe('Text area cell', () => {
 
 describe('Text area cell tester', () => {
   test('tester', () => {
-    expect(textAreaCellTester(undefined, undefined)).toBe(-1);
-    expect(textAreaCellTester(null, undefined)).toBe(-1);
-    expect(textAreaCellTester({ type: 'Foo' }, undefined)).toBe(-1);
-    expect(textAreaCellTester({ type: 'Control' }, undefined)).toBe(-1);
-    expect(textAreaCellTester({ type: 'Control', options: { multi: true } }, undefined)).toBe(2);
+    expect(textAreaCellTester(undefined, undefined, undefined)).toBe(-1);
+    expect(textAreaCellTester(null, undefined, undefined)).toBe(-1);
+    expect(textAreaCellTester({ type: 'Foo' }, undefined, undefined)).toBe(-1);
+    expect(textAreaCellTester({ type: 'Control' }, undefined, undefined)).toBe(-1);
+    expect(textAreaCellTester({ type: 'Control', options: { multi: true } }, undefined, undefined)).toBe(2);
   });
 });

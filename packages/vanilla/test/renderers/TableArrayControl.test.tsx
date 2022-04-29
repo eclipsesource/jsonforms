@@ -98,7 +98,7 @@ describe('Table array tester', () => {
       type: 'Control',
       scope: '#'
     };
-    expect(tableArrayControlTester(control, undefined)).toBe(-1);
+    expect(tableArrayControlTester(control, undefined, undefined)).toBe(-1);
   });
 
   test(' tester with prop of wrong type', () => {
@@ -114,7 +114,8 @@ describe('Table array tester', () => {
           properties: {
             x: { type: 'integer' }
           }
-        }
+        },
+        undefined
       )
     ).toBe(-1);
   });
@@ -132,7 +133,8 @@ describe('Table array tester', () => {
           properties: {
             foo: { type: 'array' }
           }
-        }
+        },
+        undefined
       )
     ).toBe(-1);
   });
@@ -156,7 +158,8 @@ describe('Table array tester', () => {
               ]
             }
           }
-        }
+        },
+        undefined
       )
     ).toBe(-1);
   });
@@ -177,7 +180,8 @@ describe('Table array tester', () => {
               items: { type: 'integer' }
             }
           }
-        }
+        },
+        undefined
       )
     ).toBe(3);
   });
@@ -188,10 +192,10 @@ describe('Table array tester', () => {
       scope: '#/properties/test'
     };
 
-    expect(tableArrayControlTester(uischema, fixture.schema)).toBe(3);
+    expect(tableArrayControlTester(uischema, fixture.schema, undefined)).toBe(3);
   });
 
-  test('tester - wrong type', () => expect(tableArrayControlTester({ type: 'Foo' }, null)).toBe(-1));
+  test('tester - wrong type', () => expect(tableArrayControlTester({ type: 'Foo' }, null, undefined)).toBe(-1));
 });
 
 describe('Table array control', () => {

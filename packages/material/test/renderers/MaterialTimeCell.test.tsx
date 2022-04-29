@@ -54,12 +54,12 @@ const uischema: ControlElement = {
 
 describe('Material time cell tester', () => {
   it('should fail', () => {
-    expect(materialTimeCellTester(undefined, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialTimeCellTester(null, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialTimeCellTester({ type: 'Foo' }, undefined)).toBe(
+    expect(materialTimeCellTester(undefined, undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialTimeCellTester(null, undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialTimeCellTester({ type: 'Foo' }, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
-    expect(materialTimeCellTester({ type: 'Control' }, undefined)).toBe(
+    expect(materialTimeCellTester({ type: 'Control' }, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
   });
@@ -71,7 +71,8 @@ describe('Material time cell tester', () => {
         properties: {
           foo: { type: 'string' }
         }
-      })
+      },
+      undefined)
     ).toBe(NOT_APPLICABLE);
   });
 
@@ -86,7 +87,8 @@ describe('Material time cell tester', () => {
             format: 'time'
           }
         }
-      })
+      },
+      undefined)
     ).toBe(NOT_APPLICABLE);
   });
 
@@ -100,7 +102,8 @@ describe('Material time cell tester', () => {
             format: 'time'
           }
         }
-      })
+      },
+      undefined)
     ).toBe(2);
   });
 });

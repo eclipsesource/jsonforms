@@ -57,27 +57,29 @@ describe('Material integer cells tester', () => {
   };
 
   it('should fail', () => {
-    expect(materialIntegerCellTester(undefined, undefined)).toBe(
+    expect(materialIntegerCellTester(undefined, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
-    expect(materialIntegerCellTester(null, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialIntegerCellTester({ type: 'Foo' }, undefined)).toBe(
+    expect(materialIntegerCellTester(null, undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialIntegerCellTester({ type: 'Foo' }, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
-    expect(materialIntegerCellTester({ type: 'Control' }, undefined)).toBe(
+    expect(materialIntegerCellTester({ type: 'Control' }, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
     expect(
       materialIntegerCellTester(controlElement, {
         type: 'object',
         properties: { foo: { type: 'string' } }
-      })
+      },
+      undefined)
     ).toBe(NOT_APPLICABLE);
     expect(
       materialIntegerCellTester(controlElement, {
         type: 'object',
         properties: { foo: { type: 'string' }, bar: { type: 'integer' } }
-      })
+      },
+      undefined)
     ).toBe(NOT_APPLICABLE);
   });
 
@@ -86,7 +88,8 @@ describe('Material integer cells tester', () => {
       materialIntegerCellTester(controlElement, {
         type: 'object',
         properties: { foo: { type: 'integer' } }
-      })
+      },
+      undefined)
     ).toBe(2);
   });
 });

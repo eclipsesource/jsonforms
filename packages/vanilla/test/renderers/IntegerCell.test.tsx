@@ -63,10 +63,10 @@ const fixture = {
 
 describe('Integer cell tester', () => {
   test('tester', () => {
-    expect(integerCellTester(undefined, undefined)).toBe(-1);
-    expect(integerCellTester(null, undefined)).toBe(-1);
-    expect(integerCellTester({ type: 'Foo' }, undefined)).toBe(-1);
-    expect(integerCellTester({ type: 'Control' }, undefined)).toBe(-1);
+    expect(integerCellTester(undefined, undefined, undefined)).toBe(-1);
+    expect(integerCellTester(null, undefined, undefined)).toBe(-1);
+    expect(integerCellTester({ type: 'Foo' }, undefined, undefined)).toBe(-1);
+    expect(integerCellTester({ type: 'Control' }, undefined, undefined)).toBe(-1);
 
     const controlElement: ControlElement = {
       type: 'Control',
@@ -75,19 +75,22 @@ describe('Integer cell tester', () => {
     expect(
       integerCellTester(
         controlElement,
-        { type: 'object', properties: { foo: { type: 'string' } } }
+        { type: 'object', properties: { foo: { type: 'string' } } },
+        undefined
       )
     ).toBe(-1);
     expect(
       integerCellTester(
         controlElement,
-        { type: 'object', properties: { foo: { type: 'string' }, bar: { type: 'integer' } } }
+        { type: 'object', properties: { foo: { type: 'string' }, bar: { type: 'integer' } } },
+        undefined
       )
     ).toBe(-1);
     expect(
       integerCellTester(
         controlElement,
-        { type: 'object', properties: { foo: { type: 'integer' } } })
+        { type: 'object', properties: { foo: { type: 'integer' } } },
+        undefined)
     ).toBe(2);
   });
 

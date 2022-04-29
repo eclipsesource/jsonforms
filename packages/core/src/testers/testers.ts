@@ -47,9 +47,9 @@ import { deriveTypes, hasType, resolveSchema } from '../util';
 export const NOT_APPLICABLE = -1;
 /**
  * A tester is a function that receives an UI schema and a JSON schema and returns a boolean.
- * Optionally, a root JSON schema can be provided, which will be used for resolving refs in the schema.
+ * Optionally, a root JSON schema can be provided, which can be used for resolving refs in the schema.
  */
-export type Tester = (uischema: UISchemaElement, schema: JsonSchema, rootSchema?: JsonSchema) => boolean;
+export type Tester = (uischema: UISchemaElement, schema: JsonSchema, rootSchema: JsonSchema) => boolean;
 
 /**
  * A ranked tester associates a tester with a number.
@@ -57,7 +57,7 @@ export type Tester = (uischema: UISchemaElement, schema: JsonSchema, rootSchema?
 export type RankedTester = (
   uischema: UISchemaElement,
   schema: JsonSchema,
-  rootSchema?: JsonSchema
+  rootSchema: JsonSchema
 ) => number;
 
 export const isControl = (uischema: any): uischema is ControlElement =>
@@ -74,8 +74,8 @@ export const isControl = (uischema: any): uischema is ControlElement =>
  *        applied to the resolved sub-schema
  */
 export const schemaMatches = (
-  predicate: (schema: JsonSchema, rootSchema?: JsonSchema) => boolean
-): Tester => (uischema: UISchemaElement, schema: JsonSchema, rootSchema?: JsonSchema): boolean => {
+  predicate: (schema: JsonSchema, rootSchema: JsonSchema) => boolean
+): Tester => (uischema: UISchemaElement, schema: JsonSchema, rootSchema: JsonSchema): boolean => {
   if (isEmpty(uischema) || !isControl(uischema)) {
     return false;
   }
@@ -88,7 +88,7 @@ export const schemaMatches = (
   }
   let currentDataSchema = schema;
   if (hasType(schema, 'object')) {
-    currentDataSchema = resolveSchema(schema, schemaPath, schema);
+    currentDataSchema = resolveSchema(schema, schemaPath, rootSchema);
   }
   if (currentDataSchema === undefined) {
     return false;
@@ -99,15 +99,15 @@ export const schemaMatches = (
 
 export const schemaSubPathMatches = (
   subPath: string,
-  predicate: (schema: JsonSchema, rootSchema?: JsonSchema) => boolean
-): Tester => (uischema: UISchemaElement, schema: JsonSchema, rootSchema?: JsonSchema): boolean => {
+  predicate: (schema: JsonSchema, rootSchema: JsonSchema) => boolean
+): Tester => (uischema: UISchemaElement, schema: JsonSchema, rootSchema: JsonSchema): boolean => {
   if (isEmpty(uischema) || !isControl(uischema)) {
     return false;
   }
   const schemaPath = uischema.scope;
   let currentDataSchema: JsonSchema = schema;
   if (hasType(schema, 'object')) {
-    currentDataSchema = resolveSchema(schema, schemaPath, schema);
+    currentDataSchema = resolveSchema(schema, schemaPath, rootSchema);
   }
   currentDataSchema = get(currentDataSchema, subPath);
 
@@ -229,7 +229,7 @@ export const and = (...testers: Tester[]): Tester => (
 export const or = (...testers: Tester[]): Tester => (
   uischema: UISchemaElement,
   schema: JsonSchema,
-  rootSchema?: JsonSchema
+  rootSchema: JsonSchema
 ) => testers.reduce((acc, tester) => acc || tester(uischema, schema, rootSchema), false);
 /**
  * Create a ranked tester that will associate a number with a given tester, if the
@@ -241,7 +241,7 @@ export const or = (...testers: Tester[]): Tester => (
 export const rankWith = (rank: number, tester: Tester) => (
   uischema: UISchemaElement,
   schema: JsonSchema,
-  rootSchema?: JsonSchema
+  rootSchema: JsonSchema
 ): number => {
   if (tester(uischema, schema, rootSchema)) {
     return rank;
@@ -253,7 +253,7 @@ export const rankWith = (rank: number, tester: Tester) => (
 export const withIncreasedRank = (by: number, rankedTester: RankedTester) => (
   uischema: UISchemaElement,
   schema: JsonSchema,
-  rootSchema?: JsonSchema
+  rootSchema: JsonSchema
 ): number => {
   const rank = rankedTester(uischema, schema, rootSchema);
   if (rank === NOT_APPLICABLE) {
@@ -429,7 +429,7 @@ const traverse = (
 export const isObjectArrayWithNesting = (
   uischema: UISchemaElement,
   schema: JsonSchema,
-  rootSchema?: JsonSchema
+  rootSchema: JsonSchema
 ): boolean => {
   if (!uiTypeIs('Control')(uischema, schema, rootSchema)) {
     return false;

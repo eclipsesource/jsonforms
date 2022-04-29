@@ -68,13 +68,13 @@ const fixture = {
 
 describe('Material categorization stepper layout tester', () => {
   it('should not fail when given undefined data', () => {
-    expect(materialCategorizationStepperTester(undefined, undefined)).toBe(-1);
-    expect(materialCategorizationStepperTester(null, undefined)).toBe(-1);
+    expect(materialCategorizationStepperTester(undefined, undefined, undefined)).toBe(-1);
+    expect(materialCategorizationStepperTester(null, undefined, undefined)).toBe(-1);
     expect(
-      materialCategorizationStepperTester({ type: 'Foo' }, undefined)
+      materialCategorizationStepperTester({ type: 'Foo' }, undefined, undefined)
     ).toBe(-1);
     expect(
-      materialCategorizationStepperTester({ type: 'Categorization' }, undefined)
+      materialCategorizationStepperTester({ type: 'Categorization' }, undefined, undefined)
     ).toBe(-1);
   });
 
@@ -83,7 +83,7 @@ describe('Material categorization stepper layout tester', () => {
       type: 'Categorization',
       elements: null
     };
-    expect(materialCategorizationStepperTester(uischema, undefined)).toBe(-1);
+    expect(materialCategorizationStepperTester(uischema, undefined, undefined)).toBe(-1);
   });
 
   it('should not fail with empty elements and no schema', () => {
@@ -91,7 +91,7 @@ describe('Material categorization stepper layout tester', () => {
       type: 'Categorization',
       elements: []
     };
-    expect(materialCategorizationStepperTester(uischema, undefined)).toBe(-1);
+    expect(materialCategorizationStepperTester(uischema, undefined, undefined)).toBe(-1);
   });
 
   it('should not fail tester with single unknown element and no schema', () => {
@@ -103,7 +103,7 @@ describe('Material categorization stepper layout tester', () => {
         }
       ]
     };
-    expect(materialCategorizationStepperTester(uischema, undefined)).toBe(-1);
+    expect(materialCategorizationStepperTester(uischema, undefined, undefined)).toBe(-1);
   });
 
   it('should not apply to a single category and no schema', () => {
@@ -115,7 +115,7 @@ describe('Material categorization stepper layout tester', () => {
         }
       ]
     };
-    expect(materialCategorizationStepperTester(categorization, undefined)).toBe(
+    expect(materialCategorizationStepperTester(categorization, undefined, undefined)).toBe(
       -1
     );
   });
@@ -133,7 +133,7 @@ describe('Material categorization stepper layout tester', () => {
       type: 'Categorization',
       elements: [nestedCategorization]
     };
-    expect(materialCategorizationStepperTester(categorization, undefined)).toBe(
+    expect(materialCategorizationStepperTester(categorization, undefined, undefined)).toBe(
       -1
     );
   });
@@ -147,7 +147,7 @@ describe('Material categorization stepper layout tester', () => {
         }
       ]
     };
-    expect(materialCategorizationStepperTester(categorization, undefined)).toBe(
+    expect(materialCategorizationStepperTester(categorization, undefined, undefined)).toBe(
       -1
     );
   });
@@ -164,7 +164,7 @@ describe('Material categorization stepper layout tester', () => {
       ]
     };
 
-    expect(materialCategorizationStepperTester(categorization, undefined)).toBe(
+    expect(materialCategorizationStepperTester(categorization, undefined, undefined)).toBe(
       -1
     );
   });
@@ -179,7 +179,7 @@ describe('Material categorization stepper layout tester', () => {
         }
       ]
     };
-    expect(materialCategorizationStepperTester(categorization, undefined)).toBe(
+    expect(materialCategorizationStepperTester(categorization, undefined, undefined)).toBe(
       -1
     );
   });

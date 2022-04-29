@@ -64,14 +64,14 @@ const uischema: ControlElement = {
 
 describe('Material slider tester', () => {
   it('should fail', () => {
-    expect(materialSliderControlTester(undefined, undefined)).toBe(
+    expect(materialSliderControlTester(undefined, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
-    expect(materialSliderControlTester(null, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialSliderControlTester({ type: 'Foo' }, undefined)).toBe(
+    expect(materialSliderControlTester(null, undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialSliderControlTester({ type: 'Foo' }, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
-    expect(materialSliderControlTester({ type: 'Control' }, undefined)).toBe(
+    expect(materialSliderControlTester({ type: 'Control' }, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
   });
@@ -83,7 +83,8 @@ describe('Material slider tester', () => {
         properties: {
           foo: { type: 'string' }
         }
-      })
+      },
+      undefined)
     ).toBe(NOT_APPLICABLE);
   });
 
@@ -95,7 +96,8 @@ describe('Material slider tester', () => {
           foo: { type: 'string' },
           bar: { type: 'number' }
         }
-      })
+      },
+      undefined)
     ).toBe(NOT_APPLICABLE);
   });
 
@@ -106,7 +108,8 @@ describe('Material slider tester', () => {
         properties: {
           foo: { type: 'number' }
         }
-      })
+      },
+      undefined)
     ).toBe(NOT_APPLICABLE);
   });
 
@@ -120,7 +123,8 @@ describe('Material slider tester', () => {
             minimum: 2
           }
         }
-      })
+      },
+      undefined)
     ).toBe(NOT_APPLICABLE);
   });
 
@@ -134,7 +138,8 @@ describe('Material slider tester', () => {
             maximum: 10
           }
         }
-      })
+      },
+      undefined)
     ).toBe(NOT_APPLICABLE);
   });
 
@@ -149,7 +154,8 @@ describe('Material slider tester', () => {
             minimum: 2
           }
         }
-      })
+      },
+      undefined)
     ).toBe(NOT_APPLICABLE);
   });
 
@@ -165,7 +171,8 @@ describe('Material slider tester', () => {
             default: 6
           }
         }
-      })
+      },
+      undefined)
     ).toBe(4);
   });
 
@@ -181,7 +188,8 @@ describe('Material slider tester', () => {
             default: 6
           }
         }
-      })
+      },
+      undefined)
     ).toBe(4);
   });
 });

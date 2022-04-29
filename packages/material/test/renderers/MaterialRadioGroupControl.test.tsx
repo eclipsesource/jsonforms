@@ -56,7 +56,7 @@ const uischema: ControlElement = {
 
 describe('Material radio group tester', () => {
   it('should return valid rank for enums with radio format', () => {
-    const rank = materialRadioGroupControlTester(uischema, schema);
+    const rank = materialRadioGroupControlTester(uischema, schema, undefined);
     expect(rank).not.toBe(NOT_APPLICABLE);
   });
 
@@ -65,7 +65,7 @@ describe('Material radio group tester', () => {
       type: 'Control',
       scope: '#/properties/foo'
     };
-    const rank = materialRadioGroupControlTester(uiSchemaNoRadio, schema);
+    const rank = materialRadioGroupControlTester(uiSchemaNoRadio, schema, undefined);
     expect(rank).toBe(NOT_APPLICABLE);
   });
 });
