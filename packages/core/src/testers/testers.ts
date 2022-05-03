@@ -142,7 +142,7 @@ export const formatIs = (expectedFormat: string): Tester =>
     schema =>
       !isEmpty(schema) &&
       schema.format === expectedFormat &&
-      schema.type === 'string'
+      hasType(schema, 'string')
   );
 
 /**
