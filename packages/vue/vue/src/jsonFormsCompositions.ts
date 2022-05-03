@@ -27,6 +27,7 @@ import {
   JsonFormsCellRendererRegistryEntry,
   defaultMapStateToEnumCellProps,
   mapStateToDispatchCellProps,
+  mapStateToOneOfEnumCellProps,
   StatePropsOfJsonFormsRenderer,
   createId,
   removeId
@@ -405,7 +406,7 @@ export const useJsonFormsEnumCell = (props: ControlProps) => {
 export const useJsonFormsOneOfEnumCell = (props: ControlProps) => {
   const { control, ...other } = useControl(
       props,
-      mapStateToOneOfEnumControlProps,
+      mapStateToOneOfEnumCellProps,
       mapDispatchToControlProps
   );
   return { cell: control, ...other };
