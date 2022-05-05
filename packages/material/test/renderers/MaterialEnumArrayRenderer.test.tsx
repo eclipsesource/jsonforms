@@ -113,7 +113,7 @@ describe('EnumArrayControl', () => {
     );
     const labels = wrapper.find('label');
     expect(labels.first().text()).toBe('My Title');
-    expect(labels.last().text()).toBe('Bar');
+    expect(labels.last().text()).toBe('bar');
   });
 
   test('oneOf items - updates data', (done) => {
@@ -176,9 +176,9 @@ describe('EnumArrayControl', () => {
       />
     );
     const labels = wrapper.find('label');
-    expect(labels.at(0).text()).toBe('A');
-    expect(labels.at(1).text()).toBe('B');
-    expect(labels.at(2).text()).toBe('C');
+    expect(labels.at(0).text()).toBe('a');
+    expect(labels.at(1).text()).toBe('b');
+    expect(labels.at(2).text()).toBe('c');
   });
 
   test('enum items - updates data', (done) => {
