@@ -53,7 +53,11 @@ const controlRenderer = defineComponent({
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    return useVuetifyControl(useJsonFormsControl(props), undefined, 300);
+    return useVuetifyControl(
+      useJsonFormsControl(props),
+      (value) => value || undefined,
+      300
+    );
   },
 });
 
