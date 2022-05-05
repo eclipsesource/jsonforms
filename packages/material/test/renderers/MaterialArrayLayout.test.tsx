@@ -181,9 +181,9 @@ describe('Material array layout tester', () => {
     expect(materialArrayLayoutTester(uischema, schema, undefined)).toBe(-1);
     expect(materialArrayLayoutTester(uischema, nestedSchema, undefined)).toBe(4);
     expect(materialArrayLayoutTester(uischema, nestedSchema2, undefined)).toBe(4);
-    expect(materialArrayLayoutTester(uischema, nestedSchemaWithRef, undefined)).toBe(4);
     expect(materialArrayLayoutTester(uischema, nestedSchemaWithRef, nestedSchemaWithRef)).toBe(4);
-    expect(materialArrayLayoutTester(uischema, nestedSchema2WithRef, undefined)).toBe(4);
+    expect(materialArrayLayoutTester(uischema, nestedSchemaWithRef, nestedSchemaWithRef)).toBe(4);
+    expect(materialArrayLayoutTester(uischema, nestedSchema2WithRef, nestedSchema2WithRef)).toBe(4);
 
     expect(materialArrayLayoutTester(uischemaOptions.default, schema, undefined)).toBe(-1);
     expect(materialArrayLayoutTester(uischemaOptions.generate, schema, undefined)).toBe(4);

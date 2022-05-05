@@ -47,7 +47,7 @@ import { deriveTypes, hasType, resolveSchema } from '../util';
 export const NOT_APPLICABLE = -1;
 /**
  * A tester is a function that receives an UI schema and a JSON schema and returns a boolean.
- * Optionally, a root JSON schema can be provided, which can be used for resolving refs in the schema.
+ * The rootSchema is handed over as context. Can be used to resolve references.
  */
 export type Tester = (uischema: UISchemaElement, schema: JsonSchema, rootSchema: JsonSchema) => boolean;
 
@@ -403,22 +403,31 @@ export const isObjectArrayControl = and(uiTypeIs('Control'), isObjectArray);
 
 const traverse = (
   any: JsonSchema | JsonSchema[],
-  pred: (obj: JsonSchema) => boolean
+  pred: (obj: JsonSchema) => boolean,
+  rootSchema: JsonSchema
 ): boolean => {
   if (isArray(any)) {
-    return reduce(any, (acc, el) => acc || traverse(el, pred), false);
+    return reduce(any, (acc, el) => acc || traverse(el, pred, rootSchema), false);
   }
 
   if (pred(any)) {
     return true;
   }
+
+  if (any.$ref) {
+    const toTraverse = resolveSchema(rootSchema, any.$ref, rootSchema);
+    if (toTraverse && !toTraverse.$ref) {
+      return traverse(toTraverse, pred, rootSchema);
+    }
+  }
+
   if (any.items) {
-    return traverse(any.items, pred);
+    return traverse(any.items, pred, rootSchema);
   }
   if (any.properties) {
     return reduce(
       toPairs(any.properties),
-      (acc, [_key, val]) => acc || traverse(val, pred),
+      (acc, [_key, val]) => acc || traverse(val, pred, rootSchema),
       false
     );
   }
@@ -436,9 +445,6 @@ export const isObjectArrayWithNesting = (
   }
   const schemaPath = (uischema as ControlElement).scope;
   const resolvedSchema = resolveSchema(schema, schemaPath, rootSchema ?? schema);
-  if (resolvedSchema?.items && (resolvedSchema.items as any).$ref){
-    resolvedSchema.items = resolveSchema(resolvedSchema, 'items', rootSchema ?? schema);
-  }
   const wantedNestingByType: { [key: string]: number } = {
     object: 2,
     array: 1
@@ -463,7 +469,7 @@ export const isObjectArrayWithNesting = (
         }
         wantedNestingByType[val.type] = typeCount - 1;
         return wantedNestingByType[val.type] === 0;
-      })
+      }, rootSchema)
     ) {
       return true;
     }

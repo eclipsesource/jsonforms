@@ -801,7 +801,7 @@ test('tester isObjectArrayWithNesting', t => {
   t.true(isObjectArrayWithNesting(uischema, nestedSchema, undefined));
   t.true(isObjectArrayWithNesting(uischema, nestedSchema2, undefined));
   t.true(isObjectArrayWithNesting(uischema, nestedSchema3, undefined));
-  t.true(isObjectArrayWithNesting(uischema, nestedSchemaWithRef, undefined));
+  t.true(isObjectArrayWithNesting(uischema, nestedSchemaWithRef, nestedSchemaWithRef));
 
   t.false(isObjectArrayWithNesting(uischemaOptions.default, schema, undefined));
   t.true(isObjectArrayWithNesting(uischemaOptions.generate, schema, undefined));
