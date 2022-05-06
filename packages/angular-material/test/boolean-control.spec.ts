@@ -49,7 +49,7 @@ describe('Material boolean field tester', () => {
             type: 'boolean'
           }
         }
-      })
+      }, undefined)
     ).toBe(2);
   });
 });

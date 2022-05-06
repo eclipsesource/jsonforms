@@ -58,7 +58,7 @@ describe('Material number field tester', () => {
             type: 'number'
           }
         }
-      })
+      }, undefined)
     ).toBe(2);
   });
   it('should succeed with integers', () => {
@@ -70,7 +70,7 @@ describe('Material number field tester', () => {
             type: 'integer'
           }
         }
-      })
+      }, undefined)
     ).toBe(2);
   });
 });

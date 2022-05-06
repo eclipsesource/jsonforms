@@ -46,7 +46,7 @@ const uischema: LabelElement = {
 
 describe('Material label field tester', () => {
   it('should succeed', () => {
-    expect(LabelRendererTester(uischema, schema)).toBe(4);
+    expect(LabelRendererTester(uischema, schema, undefined)).toBe(4);
   });
 });
 const providers = [JsonFormsAngularService];

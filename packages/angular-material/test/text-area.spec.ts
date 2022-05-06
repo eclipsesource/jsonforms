@@ -55,7 +55,7 @@ describe('Material text field tester', () => {
             type: 'string'
           }
         }
-      })
+      }, undefined)
     ).toBe(2);
   });
 });
