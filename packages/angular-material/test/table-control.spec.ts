@@ -95,10 +95,10 @@ const renderers = [
 
 describe('Table tester', () => {
   it('should succeed', () => {
-    expect(TableRendererTester(uischema1, schema_object1)).toBe(3);
-    expect(TableRendererTester(uischema1, schema_simple1)).toBe(3);
-    expect(TableRendererTester(uischema2, schema_object2)).toBe(3);
-    expect(TableRendererTester(uischema2, schema_simple2)).toBe(3);
+    expect(TableRendererTester(uischema1, schema_object1, schema_object1)).toBe(3);
+    expect(TableRendererTester(uischema1, schema_simple1, schema_simple1)).toBe(3);
+    expect(TableRendererTester(uischema2, schema_object2, schema_object2)).toBe(3);
+    expect(TableRendererTester(uischema2, schema_simple2, schema_simple2)).toBe(3);
   });
 });
 describe('Table', () => {

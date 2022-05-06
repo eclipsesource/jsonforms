@@ -70,10 +70,10 @@ const fixture = {
 };
 
 test('Text cell tester', () => {
-  expect(textCellTester(undefined, undefined)).toBe(-1);
-  expect(textCellTester(null, undefined)).toBe(-1);
-  expect(textCellTester({ type: 'Foo' }, undefined)).toBe(-1);
-  expect(textCellTester({ type: 'Control' }, undefined)).toBe(-1);
+  expect(textCellTester(undefined, undefined, undefined)).toBe(-1);
+  expect(textCellTester(null, undefined, undefined)).toBe(-1);
+  expect(textCellTester({ type: 'Foo' }, undefined, undefined)).toBe(-1);
+  expect(textCellTester({ type: 'Control' }, undefined, undefined)).toBe(-1);
 });
 
 describe('Text cell', () => {

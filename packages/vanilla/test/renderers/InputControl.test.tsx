@@ -65,15 +65,15 @@ const fixture = {
 };
 
 test('tester', () => {
-  expect(inputControlTester(undefined, undefined)).toBe(-1);
-  expect(inputControlTester(null, undefined)).toBe(-1);
-  expect(inputControlTester({ type: 'Foo' }, undefined)).toBe(-1);
-  expect(inputControlTester({ type: 'Control' }, undefined)).toBe(-1);
+  expect(inputControlTester(undefined, undefined, undefined)).toBe(-1);
+  expect(inputControlTester(null, undefined, undefined)).toBe(-1);
+  expect(inputControlTester({ type: 'Foo' }, undefined, undefined)).toBe(-1);
+  expect(inputControlTester({ type: 'Control' }, undefined, undefined)).toBe(-1);
   const control: ControlElement = {
     type: 'Control',
     scope: '#/properties/foo'
   };
-  expect(inputControlTester(control, undefined)).toBe(1);
+  expect(inputControlTester(control, undefined, undefined)).toBe(1);
 });
 
 describe('Input control', () => {

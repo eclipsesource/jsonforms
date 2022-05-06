@@ -58,14 +58,14 @@ const uischema: ControlElement = {
 
 describe('Material date time control tester', () => {
   it('should fail', () => {
-    expect(materialDateTimeControlTester(undefined, undefined)).toBe(
+    expect(materialDateTimeControlTester(undefined, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
-    expect(materialDateTimeControlTester(null, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialDateTimeControlTester({ type: 'Foo' }, undefined)).toBe(
+    expect(materialDateTimeControlTester(null, undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialDateTimeControlTester({ type: 'Foo' }, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
-    expect(materialDateTimeControlTester({ type: 'Control' }, undefined)).toBe(
+    expect(materialDateTimeControlTester({ type: 'Control' }, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
     expect(
@@ -74,7 +74,8 @@ describe('Material date time control tester', () => {
         properties: {
           foo: { type: 'string' }
         }
-      })
+      },
+      undefined)
     ).toBe(NOT_APPLICABLE);
     expect(
       materialDateTimeControlTester(uischema, {
@@ -86,7 +87,8 @@ describe('Material date time control tester', () => {
             format: 'date-time'
           }
         }
-      })
+      },
+      undefined)
     ).toBe(NOT_APPLICABLE);
   });
 
@@ -100,7 +102,8 @@ describe('Material date time control tester', () => {
             format: 'date-time'
           }
         }
-      })
+      },
+      undefined)
     ).toBe(2);
     expect(
       materialDateTimeControlTester(
@@ -112,7 +115,8 @@ describe('Material date time control tester', () => {
               type: 'string'
             }
           }
-        }
+        },
+        undefined
       )
     ).toBe(2);
   });

@@ -24,8 +24,8 @@
 */
 
 import { ControlElement, JsonSchema, UISchemaElement } from '../models';
-import { resolveSchema } from './resolvers';
 import { findUISchema, JsonFormsUISchemaRegistryEntry } from '../reducers';
+import { Resolve } from './util';
 
 export interface CombinatorSubSchemaRenderInfo {
   schema: JsonSchema;
@@ -47,24 +47,6 @@ const createLabel = (
   }
 };
 
-export const resolveSubSchemas = (
-  schema: JsonSchema,
-  rootSchema: JsonSchema,
-  keyword: CombinatorKeyword
-) => {
-  // resolve any $refs, otherwise the generated UI schema can't match the schema???
-  const schemas = schema[keyword] as any[];
-  if (schemas.findIndex(e => e.$ref !== undefined) !== -1) {
-    return {
-      ...schema,
-      [keyword]: (schema[keyword] as any[]).map(e =>
-        e.$ref ? resolveSchema(rootSchema, e.$ref) : e
-      )
-    };
-  }
-  return schema;
-};
-
 export const createCombinatorRenderInfos = (
   combinatorSubSchemas: JsonSchema[],
   rootSchema: JsonSchema,
@@ -73,16 +55,19 @@ export const createCombinatorRenderInfos = (
   path: string,
   uischemas: JsonFormsUISchemaRegistryEntry[]
 ): CombinatorSubSchemaRenderInfo[] =>
-  combinatorSubSchemas.map((subSchema, subSchemaIndex) => ({
-    schema: subSchema,
-    uischema: findUISchema(
-      uischemas,
-      subSchema,
-      control.scope,
-      path,
-      undefined,
-      control,
-      rootSchema
-    ),
-    label: createLabel(subSchema, subSchemaIndex, keyword)
-  }));
+  combinatorSubSchemas.map((subSchema, subSchemaIndex) => {
+    const schema = subSchema.$ref ? Resolve.schema(rootSchema, subSchema.$ref, rootSchema) : subSchema;
+    return {
+      schema,
+      uischema: findUISchema(
+        uischemas,
+        schema,
+        control.scope,
+        path,
+        undefined,
+        control,
+        rootSchema
+      ),
+      label: createLabel(subSchema, subSchemaIndex, keyword)
+    }
+  });

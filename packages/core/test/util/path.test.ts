@@ -35,7 +35,7 @@ test('resolve ', t => {
       }
     }
   };
-  t.deepEqual(Resolve.schema(schema, '#/properties/foo'), {
+  t.deepEqual(Resolve.schema(schema, '#/properties/foo', schema), {
     type: 'integer'
   });
 });
@@ -139,10 +139,10 @@ test('resolve $ref', t => {
       }
     }
   };
-  const result = Resolve.schema(schema, '#/properties/foos/items');
+  const result = Resolve.schema(schema, '#/properties/foos/items', schema);
   t.deepEqual(result, { type: 'string' });
 });
-test.failing('resolve $ref simple', t => {
+test('resolve $ref simple', t => {
   const schema: JsonSchema = {
     definitions: {
       foo: {
@@ -167,21 +167,21 @@ test.failing('resolve $ref simple', t => {
       }
     }
   };
-  const result = Resolve.schema(schema, '#/properties/foos/items');
+  const result = Resolve.schema(schema, '#/properties/foos/items', schema);
   t.deepEqual(result, {
     type: 'object',
     properties: {
       bar: {
         type: 'array',
         items: {
-          $ref: '#'
+          $ref: '#/definitions/foo'
         }
       }
     }
   });
   t.not((schema.definitions.foo.properties.bar.items as JsonSchema).$ref, '#');
 });
-test.failing('resolve $ref complicated', t => {
+test('resolve $ref complicated', t => {
   const schema: JsonSchema = {
     definitions: {
       foo: {
@@ -217,21 +217,8 @@ test.failing('resolve $ref complicated', t => {
       }
     }
   };
-  const result = Resolve.schema(schema, '#/properties/foos/items');
+  const result = Resolve.schema(schema, '#/properties/foos/items', schema);
   t.deepEqual(result, {
-    definitions: {
-      foo2: {
-        type: 'object',
-        properties: {
-          bar: {
-            type: 'array',
-            items: {
-              $ref: '#'
-            }
-          }
-        }
-      }
-    },
     type: 'object',
     properties: {
       bar: {

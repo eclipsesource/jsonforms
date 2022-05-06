@@ -122,7 +122,7 @@ const generateUISchema = (
 ): UISchemaElement => {
   if (!isEmpty(jsonSchema) && jsonSchema.$ref !== undefined) {
     return generateUISchema(
-      resolveSchema(rootSchema, jsonSchema.$ref),
+      resolveSchema(rootSchema, jsonSchema.$ref, rootSchema),
       schemaElements,
       currentRef,
       schemaName,
@@ -164,7 +164,7 @@ const generateUISchema = (
         let value = jsonSchema.properties[propName];
         const ref = `${nextRef}/${encode(propName)}`;
         if (value.$ref !== undefined) {
-          value = resolveSchema(rootSchema, value.$ref);
+          value = resolveSchema(rootSchema, value.$ref, rootSchema);
         }
         generateUISchema(
           value,

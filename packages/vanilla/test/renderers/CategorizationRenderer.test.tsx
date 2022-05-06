@@ -64,10 +64,10 @@ const fixture = {
 
 describe('Categorization tester', () => {
   test('tester', () => {
-    expect(categorizationTester(undefined, undefined)).toBe(-1);
-    expect(categorizationTester(null, undefined)).toBe(-1);
-    expect(categorizationTester({ type: 'Foo' }, undefined)).toBe(-1);
-    expect(categorizationTester({ type: 'Categorization' }, undefined)).toBe(-1);
+    expect(categorizationTester(undefined, undefined, undefined)).toBe(-1);
+    expect(categorizationTester(null, undefined, undefined)).toBe(-1);
+    expect(categorizationTester({ type: 'Foo' }, undefined, undefined)).toBe(-1);
+    expect(categorizationTester({ type: 'Categorization' }, undefined, undefined)).toBe(-1);
   });
 
   test('tester with null elements and no schema', () => {
@@ -78,6 +78,7 @@ describe('Categorization tester', () => {
     expect(
       categorizationTester(
         uischema,
+        undefined,
         undefined
       )
     ).toBe(-1);
@@ -91,6 +92,7 @@ describe('Categorization tester', () => {
     expect(
       categorizationTester(
         uischema,
+        undefined,
         undefined
       )
     ).toBe(-1);
@@ -108,6 +110,7 @@ describe('Categorization tester', () => {
     expect(
       categorizationTester(
         uischema,
+        undefined,
         undefined
       )
     ).toBe(-1);
@@ -125,6 +128,7 @@ describe('Categorization tester', () => {
     expect(
       categorizationTester(
         categorization,
+        undefined,
         undefined
       )
     ).toBe(1);
@@ -146,6 +150,7 @@ describe('Categorization tester', () => {
     expect(
       categorizationTester(
         categorization,
+        undefined,
         undefined)
     ).toBe(1);
   });
@@ -162,6 +167,7 @@ describe('Categorization tester', () => {
     expect(
       categorizationTester(
         categorization,
+        undefined,
         undefined
       )
     ).toBe(-1);
@@ -181,6 +187,7 @@ describe('Categorization tester', () => {
     expect(
       categorizationTester(
         categorization,
+        undefined,
         undefined
       )
     ).toBe(-1);
@@ -199,6 +206,7 @@ describe('Categorization tester', () => {
     expect(
       categorizationTester(
         categorization,
+        undefined,
         undefined
       )
     ).toBe(-1);

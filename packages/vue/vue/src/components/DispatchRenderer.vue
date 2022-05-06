@@ -19,11 +19,11 @@ export default defineComponent({
   computed: {
     determinedRenderer(): any {
       const renderer = maxBy(this.renderer.renderers, r =>
-        r.tester(this.renderer.uischema, this.renderer.schema)
+        r.tester(this.renderer.uischema, this.renderer.schema, this.rootSchema)
       );
       if (
         renderer === undefined ||
-        renderer.tester(this.renderer.uischema, this.renderer.schema) === -1
+        renderer.tester(this.renderer.uischema, this.renderer.schema, this.rootSchema) === -1
       ) {
         return UnknownRenderer;
       } else {

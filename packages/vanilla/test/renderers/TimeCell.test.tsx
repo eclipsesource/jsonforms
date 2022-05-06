@@ -54,10 +54,10 @@ const fixture = {
 describe('Time cell tester', () => {
 
   test('tester', () => {
-    expect(timeCellTester(undefined, undefined)).toBe(-1);
-    expect(timeCellTester(null, undefined)).toBe(-1);
-    expect(timeCellTester({ type: 'Foo' }, undefined)).toBe(-1);
-    expect(timeCellTester({ type: 'Control' }, undefined)).toBe(-1);
+    expect(timeCellTester(undefined, undefined, undefined)).toBe(-1);
+    expect(timeCellTester(null, undefined, undefined)).toBe(-1);
+    expect(timeCellTester({ type: 'Foo' }, undefined, undefined)).toBe(-1);
+    expect(timeCellTester({ type: 'Control' }, undefined, undefined)).toBe(-1);
   });
 
   test('tester with wrong prop type', () => {
@@ -70,6 +70,7 @@ describe('Time cell tester', () => {
             foo: { type: 'string' },
           },
         },
+        undefined
       )
     ).toBe(-1);
   });
@@ -88,6 +89,7 @@ describe('Time cell tester', () => {
             },
           },
         },
+        undefined
       )
     ).toBe(-1);
   });
@@ -105,6 +107,7 @@ describe('Time cell tester', () => {
             },
           },
         },
+        undefined
       )
     ).toBe(2);
   });

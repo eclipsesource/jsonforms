@@ -68,14 +68,14 @@ const uischema2: ControlElement = {
 
 describe('Material object renderer tester', () => {
   test('should fail', () => {
-    expect(materialObjectControlTester(undefined, undefined)).toBe(
+    expect(materialObjectControlTester(undefined, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
-    expect(materialObjectControlTester(null, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialObjectControlTester({ type: 'Foo' }, undefined)).toBe(
+    expect(materialObjectControlTester(null, undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialObjectControlTester({ type: 'Foo' }, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
-    expect(materialObjectControlTester({ type: 'Control' }, undefined)).toBe(
+    expect(materialObjectControlTester({ type: 'Control' }, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
     expect(
@@ -84,7 +84,8 @@ describe('Material object renderer tester', () => {
         properties: {
           foo: { type: 'string' }
         }
-      })
+      },
+      undefined)
     ).toBe(NOT_APPLICABLE);
     expect(
       materialObjectControlTester(uischema2, {
@@ -93,7 +94,8 @@ describe('Material object renderer tester', () => {
           foo: { type: 'string' },
           bar: schema.properties.bar
         }
-      })
+      },
+      undefined)
     ).toBe(NOT_APPLICABLE);
   });
 
@@ -104,7 +106,8 @@ describe('Material object renderer tester', () => {
         properties: {
           foo: schema.properties.foo
         }
-      })
+      },
+      undefined)
     ).toBe(2);
   });
 });

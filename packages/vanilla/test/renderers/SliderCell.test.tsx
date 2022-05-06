@@ -65,10 +65,10 @@ const fixture = {
 
 describe('Slider cell tester', () => {
   test('tester', () => {
-    expect(sliderCellTester(undefined, undefined)).toBe(-1);
-    expect(sliderCellTester(null, undefined)).toBe(-1);
-    expect(sliderCellTester({ type: 'Foo' }, undefined)).toBe(-1);
-    expect(sliderCellTester({ type: 'Control' }, undefined)).toBe(-1);
+    expect(sliderCellTester(undefined, undefined, undefined)).toBe(-1);
+    expect(sliderCellTester(null, undefined, undefined)).toBe(-1);
+    expect(sliderCellTester({ type: 'Foo' }, undefined, undefined)).toBe(-1);
+    expect(sliderCellTester({ type: 'Control' }, undefined, undefined)).toBe(-1);
   });
 
   test('tester with wrong schema type', () => {
@@ -81,7 +81,8 @@ describe('Slider cell tester', () => {
           properties: {
             foo: { type: 'string' }
           }
-        }
+        },
+        undefined
       )
     ).toBe(-1);
   });
@@ -97,7 +98,8 @@ describe('Slider cell tester', () => {
             foo: { type: 'string' },
             bar: { type: 'number' }
           }
-        }
+        },
+        undefined
       )
     ).toBe(-1);
   });
@@ -112,7 +114,8 @@ describe('Slider cell tester', () => {
           properties: {
             foo: { type: 'number' }
           }
-        }
+        },
+        undefined
       )
     ).toBe(-1);
   });
@@ -129,7 +132,8 @@ describe('Slider cell tester', () => {
               minimum: 2
             }
           }
-        }
+        },
+        undefined
       )
     ).toBe(-1);
   });
@@ -146,7 +150,8 @@ describe('Slider cell tester', () => {
               maximum: 10
             }
           }
-        }
+        },
+        undefined
       )
     ).toBe(-1);
   });
@@ -164,7 +169,8 @@ describe('Slider cell tester', () => {
               minimum: 2
             }
           }
-        }
+        },
+        undefined
       )
     ).toBe(-1);
   });
@@ -182,7 +188,8 @@ describe('Slider cell tester', () => {
               minimum: 2
             }
           }
-        }
+        },
+        undefined
       )
     ).toBe(-1);
   });
@@ -205,7 +212,8 @@ describe('Slider cell tester', () => {
               default: 3
             }
           }
-        }
+        },
+        undefined
       )
     ).toBe(4);
   });
@@ -226,7 +234,8 @@ describe('Slider cell tester', () => {
               default: 4
             }
           }
-        }
+        },
+        undefined
       )
     ).toBe(4);
   });
@@ -420,7 +429,7 @@ describe('Slider cell', () => {
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, foo: 4 };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.value).toBe('4');
@@ -438,7 +447,7 @@ describe('Slider cell', () => {
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, foo: undefined };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.value).toBe('');
@@ -456,7 +465,7 @@ describe('Slider cell', () => {
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, foo: null };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.value).toBe('');
@@ -474,7 +483,7 @@ describe('Slider cell', () => {
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, bar: 11 };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.value).toBe('5');
@@ -493,7 +502,7 @@ describe('Slider cell', () => {
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     core.data = { ...core.data, null: 3 };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     expect(input.value).toBe('5');
   });
@@ -510,7 +519,7 @@ describe('Slider cell', () => {
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, undefined: 13 };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.value).toBe('5');

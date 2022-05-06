@@ -99,7 +99,7 @@ export const Resolve: {
  schema(
    schema: JsonSchema,
    schemaPath: string,
-   rootSchema?: JsonSchema
+   rootSchema: JsonSchema
  ): JsonSchema;
  data(data: any, path: string): any;
 } = {

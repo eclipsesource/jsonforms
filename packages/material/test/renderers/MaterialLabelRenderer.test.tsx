@@ -51,14 +51,14 @@ const uischema = {
 
 describe('Material Label Renderer tester', () => {
   it('should fail', () => {
-    expect(materialLabelRendererTester(undefined, undefined)).toBe(
+    expect(materialLabelRendererTester(undefined, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
-    expect(materialLabelRendererTester(null, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialLabelRendererTester({ type: 'Foo' }, undefined)).toBe(
+    expect(materialLabelRendererTester(null, undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialLabelRendererTester({ type: 'Foo' }, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
-    expect(materialLabelRendererTester({ type: 'Label' }, undefined)).toBe(1);
+    expect(materialLabelRendererTester({ type: 'Label' }, undefined, undefined)).toBe(1);
   });
 });
 

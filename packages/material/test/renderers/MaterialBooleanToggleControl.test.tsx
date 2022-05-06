@@ -70,23 +70,24 @@ describe('Material boolean toggle control tester', () => {
   };
 
   it('should fail', () => {
-    expect(materialBooleanToggleControlTester(undefined, undefined)).toBe(
+    expect(materialBooleanToggleControlTester(undefined, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
-    expect(materialBooleanToggleControlTester(null, undefined)).toBe(
+    expect(materialBooleanToggleControlTester(null, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
-    expect(materialBooleanToggleControlTester({ type: 'Foo' }, undefined)).toBe(
+    expect(materialBooleanToggleControlTester({ type: 'Foo' }, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
     expect(
-      materialBooleanToggleControlTester({ type: 'Control' }, undefined)
+      materialBooleanToggleControlTester({ type: 'Control' }, undefined, undefined)
     ).toBe(NOT_APPLICABLE);
     expect(
       materialBooleanToggleControlTester(control, {
         type: 'object',
         properties: { foo: { type: 'string' } }
-      })
+      },
+      undefined)
     ).toBe(NOT_APPLICABLE);
     expect(
       materialBooleanToggleControlTester(control, {
@@ -99,7 +100,8 @@ describe('Material boolean toggle control tester', () => {
             type: 'boolean'
           }
         }
-      })
+      },
+      undefined)
     ).toBe(NOT_APPLICABLE);
 
     // Not applicable for boolean control if toggle option is false
@@ -119,7 +121,8 @@ describe('Material boolean toggle control tester', () => {
               type: 'boolean'
             }
           }
-        }
+        },
+        undefined
       )
     ).toBe(NOT_APPLICABLE);
 
@@ -137,7 +140,8 @@ describe('Material boolean toggle control tester', () => {
               type: 'boolean'
             }
           }
-        }
+        },
+        undefined
       )
     ).toBe(NOT_APPLICABLE);
   });
@@ -151,7 +155,8 @@ describe('Material boolean toggle control tester', () => {
             type: 'boolean'
           }
         }
-      })
+      },
+      undefined)
     ).toBe(3);
   });
 });

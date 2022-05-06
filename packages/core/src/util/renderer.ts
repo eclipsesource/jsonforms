@@ -48,7 +48,7 @@ import {
 import { RankedTester } from '../testers';
 import { hasShowRule, isInherentlyEnabled, isVisible } from './runtime';
 import { createLabelDescriptionFrom } from './label';
-import { CombinatorKeyword, resolveSubSchemas } from './combinators';
+import { CombinatorKeyword } from './combinators';
 import { moveDown, moveUp } from './array';
 import { AnyAction, Dispatch } from './type';
 import { Resolve } from './util';
@@ -936,6 +936,7 @@ export const mapStateToCombinatorRendererProps = (
     uischema.scope,
     rootSchema
   );
+
   const visible: boolean =
     ownProps.visible === undefined || hasShowRule(uischema)
       ? isVisible(uischema, getData(state), ownProps.path, getAjv(state))
@@ -946,7 +947,6 @@ export const mapStateToCombinatorRendererProps = (
 
   const ajv = state.jsonforms.core.ajv;
   const schema = resolvedSchema || rootSchema;
-  const _schema = resolveSubSchemas(schema, rootSchema, keyword);
   const structuralKeywords = [
     'required',
     'additionalProperties',
@@ -965,9 +965,9 @@ export const mapStateToCombinatorRendererProps = (
   // TODO instead of compiling the combinator subschemas we can compile the original schema
   // without the combinator alternatives and then revalidate and check the errors for the
   // element
-  for (let i = 0; i < _schema[keyword].length; i++) {
+  for (let i = 0; i < resolvedSchema[keyword]?.length; i++) {
     try {
-      const valFn = ajv.compile(_schema[keyword][i]);
+      const valFn = ajv.compile(resolvedSchema[keyword][i]);
       valFn(data);
       if (dataIsValid(valFn.errors)) {
         indexOfFittingSchema = i;

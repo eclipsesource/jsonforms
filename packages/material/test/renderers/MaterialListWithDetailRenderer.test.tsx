@@ -110,13 +110,13 @@ describe('Material list with detail tester', () => {
         type: 'string'
       }
     };
-    expect(materialListWithDetailTester(uischema, schema)).toBe(-1);
-    expect(materialListWithDetailTester(correctUISchema, wrongSchema)).toBe(-1);
-    expect(materialListWithDetailTester(correctUISchema, schema)).toBe(4);
-    expect(materialListWithDetailTester(correctUISchema, nestedSchema)).toBe(
+    expect(materialListWithDetailTester(uischema, schema, undefined)).toBe(-1);
+    expect(materialListWithDetailTester(correctUISchema, wrongSchema, undefined)).toBe(-1);
+    expect(materialListWithDetailTester(correctUISchema, schema, undefined)).toBe(4);
+    expect(materialListWithDetailTester(correctUISchema, nestedSchema, undefined)).toBe(
       -1
     );
-    expect(materialListWithDetailTester(correctUISchema, nestedSchema2)).toBe(
+    expect(materialListWithDetailTester(correctUISchema, nestedSchema2, undefined)).toBe(
       4
     );
   });

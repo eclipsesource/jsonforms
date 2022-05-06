@@ -59,7 +59,7 @@ const uischema: ControlElement = {
 
 describe('Material boolean field tester', () => {
   it('should succeed', () => {
-    expect(DateControlRendererTester(uischema, schema)).toBe(2);
+    expect(DateControlRendererTester(uischema, schema, schema)).toBe(2);
   });
 });
 const imports = [

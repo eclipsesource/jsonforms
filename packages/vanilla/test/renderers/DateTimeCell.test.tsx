@@ -63,10 +63,10 @@ const fixture = {
 
 describe('Date time cell tester', () => {
   test('tester', () => {
-    expect(dateTimeCellTester(undefined, undefined)).toBe(-1);
-    expect(dateTimeCellTester(null, undefined)).toBe(-1);
-    expect(dateTimeCellTester({ type: 'Foo' }, undefined)).toBe(-1);
-    expect(dateTimeCellTester({ type: 'Control' }, undefined)).toBe(-1);
+    expect(dateTimeCellTester(undefined, undefined, undefined)).toBe(-1);
+    expect(dateTimeCellTester(null, undefined, undefined)).toBe(-1);
+    expect(dateTimeCellTester({ type: 'Foo' }, undefined, undefined)).toBe(-1);
+    expect(dateTimeCellTester({ type: 'Control' }, undefined, undefined)).toBe(-1);
   });
 
   test('tester with wrong prop type', () => {
@@ -79,6 +79,7 @@ describe('Date time cell tester', () => {
             foo: { type: 'string' },
           },
         },
+        undefined
       )
     ).toBe(-1);
   });
@@ -97,6 +98,7 @@ describe('Date time cell tester', () => {
             },
           },
         },
+        undefined
       )
     ).toBe(-1);
   });
@@ -114,6 +116,7 @@ describe('Date time cell tester', () => {
             },
           },
         },
+        undefined
       )
     ).toBe(2);
   });

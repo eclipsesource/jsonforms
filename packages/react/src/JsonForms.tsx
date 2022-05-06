@@ -75,12 +75,13 @@ export class JsonFormsDispatchRenderer extends React.Component<
   }
   
   render() {
-    const { schema, uischema, path, enabled, renderers, cells } = this.props as JsonFormsProps;
+    const { schema, rootSchema, uischema, path, enabled, renderers, cells } = this.props as JsonFormsProps;
 
     return (
       <TestAndRender
         uischema={uischema}
         schema={schema}
+        rootSchema={rootSchema}
         path={path}
         enabled={enabled}
         renderers={renderers}
@@ -95,6 +96,7 @@ const TestAndRender = React.memo(
   (props: {
     uischema: UISchemaElement;
     schema: JsonSchema;
+    rootSchema: JsonSchema;
     path: string;
     enabled: boolean;
     renderers: JsonFormsRendererRegistryEntry[];
@@ -102,12 +104,12 @@ const TestAndRender = React.memo(
     id: string;
   }) => {
     const renderer = useMemo(
-      () => maxBy(props.renderers, r => r.tester(props.uischema, props.schema)),
+      () => maxBy(props.renderers, r => r.tester(props.uischema, props.schema, props.rootSchema)),
       [props.renderers, props.uischema, props.schema]
     );
     if (
       renderer === undefined ||
-      renderer.tester(props.uischema, props.schema) === -1
+      renderer.tester(props.uischema, props.schema, props.rootSchema) === -1
     ) {
       return <UnknownRenderer type={'renderer'} />;
     } else {

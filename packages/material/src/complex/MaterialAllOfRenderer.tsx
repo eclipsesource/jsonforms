@@ -32,7 +32,6 @@ import {
   JsonSchema,
   RankedTester,
   rankWith,
-  resolveSubSchemas,
   StatePropsOfCombinator
 } from '@jsonforms/core';
 import { JsonFormsDispatch, withJsonFormsAllOfProps } from '@jsonforms/react';
@@ -47,9 +46,8 @@ export const MaterialAllOfRenderer = ({
   uischemas,
   uischema
 }: StatePropsOfCombinator) => {
-  const _schema = resolveSubSchemas(schema, rootSchema, 'allOf');
   const delegateUISchema = findMatchingUISchema(uischemas)(
-    _schema,
+    schema,
     uischema.scope,
     path
   );
@@ -57,7 +55,7 @@ export const MaterialAllOfRenderer = ({
     return (
       <Hidden xsUp={!visible}>
         <JsonFormsDispatch
-          schema={_schema}
+          schema={schema}
           uischema={delegateUISchema}
           path={path}
           renderers={renderers}
@@ -67,7 +65,7 @@ export const MaterialAllOfRenderer = ({
     );
   }
   const allOfRenderInfos = createCombinatorRenderInfos(
-    (_schema as JsonSchema).allOf,
+    (schema as JsonSchema).allOf,
     rootSchema,
     'allOf',
     uischema,

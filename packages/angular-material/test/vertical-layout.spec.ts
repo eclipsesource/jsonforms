@@ -33,7 +33,7 @@ import {
 
 describe('Vertical layout tester', () => {
   it('should succeed', () => {
-    expect(verticalLayoutTester({ type: 'VerticalLayout' }, undefined)).toBe(1);
+    expect(verticalLayoutTester({ type: 'VerticalLayout' }, undefined, undefined)).toBe(1);
   });
 });
 describe('Vertical layout', () => {

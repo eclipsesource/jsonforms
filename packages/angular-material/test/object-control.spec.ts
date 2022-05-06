@@ -84,8 +84,8 @@ const renderers = [
 
 describe('Object Control tester', () => {
   it('should succeed', () => {
-    expect(ObjectControlRendererTester(uischema1, schema1)).toBe(2);
-    expect(ObjectControlRendererTester(uischema2, schema2)).toBe(2);
+    expect(ObjectControlRendererTester(uischema1, schema1, undefined)).toBe(2);
+    expect(ObjectControlRendererTester(uischema2, schema2, undefined)).toBe(2);
   });
 });
 describe('Object Control', () => {

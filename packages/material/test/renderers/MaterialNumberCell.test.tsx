@@ -52,12 +52,12 @@ const uischema: ControlElement = {
 
 describe('Material number cells tester', () => {
   it('should fail', () => {
-    expect(materialNumberCellTester(undefined, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialNumberCellTester(null, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialNumberCellTester({ type: 'Foo' }, undefined)).toBe(
+    expect(materialNumberCellTester(undefined, undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialNumberCellTester(null, undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialNumberCellTester({ type: 'Foo' }, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
-    expect(materialNumberCellTester({ type: 'Control' }, undefined)).toBe(
+    expect(materialNumberCellTester({ type: 'Control' }, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
   });
@@ -75,7 +75,8 @@ describe('Material number cells tester', () => {
             type: 'string'
           }
         }
-      })
+      },
+      undefined)
     ).toBe(NOT_APPLICABLE);
   });
 
@@ -95,7 +96,8 @@ describe('Material number cells tester', () => {
             type: 'number'
           }
         }
-      })
+      },
+      undefined)
     ).toBe(NOT_APPLICABLE);
   });
 
@@ -112,7 +114,8 @@ describe('Material number cells tester', () => {
             type: 'number'
           }
         }
-      })
+      },
+      undefined)
     ).toBe(2);
   });
 });

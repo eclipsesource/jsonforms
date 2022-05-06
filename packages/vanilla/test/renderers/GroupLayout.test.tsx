@@ -40,10 +40,10 @@ const fixture = {
 };
 
 test('tester', () => {
-  expect(groupTester(undefined, undefined)).toBe(-1);
-  expect(groupTester(null, undefined)).toBe(-1);
-  expect(groupTester({ type: 'Foo' }, undefined)).toBe(-1);
-  expect(groupTester({ type: 'Group' }, undefined)).toBe(1);
+  expect(groupTester(undefined, undefined, undefined)).toBe(-1);
+  expect(groupTester(null, undefined, undefined)).toBe(-1);
+  expect(groupTester({ type: 'Foo' }, undefined, undefined)).toBe(-1);
+  expect(groupTester({ type: 'Group' }, undefined, undefined)).toBe(1);
 });
 
 describe('Group layout', () => {

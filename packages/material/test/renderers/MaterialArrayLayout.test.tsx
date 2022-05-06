@@ -75,6 +75,18 @@ const nestedSchema = {
   }
 };
 
+const nestedSchemaWithRef = {
+  definitions: {
+    arrayItems: {
+      ...schema
+    }
+  },
+  type: 'array',
+  items: {
+    $ref: '#/definitions/arrayItems'
+  }
+}
+
 const uischema: ControlElement = {
   type: 'Control',
   scope: '#'
@@ -99,6 +111,18 @@ const nestedSchema2 = {
     }
   }
 };
+
+const nestedSchema2WithRef = {
+  definitions: {
+    arrayItems: {
+      ...nestedSchema2
+    }
+  },
+  type: 'array',
+  items: {
+    $ref: '#/definitions/arrayItems'
+  }
+}
 
 const uischemaWithSortOption: ControlElement = {
   type: 'Control',
@@ -154,13 +178,16 @@ const uischemaOptions: {
 
 describe('Material array layout tester', () => {
   it('should only be applicable for intermediate array or when containing proper options', () => {
-    expect(materialArrayLayoutTester(uischema, schema)).toBe(-1);
-    expect(materialArrayLayoutTester(uischema, nestedSchema)).toBe(4);
-    expect(materialArrayLayoutTester(uischema, nestedSchema2)).toBe(4);
+    expect(materialArrayLayoutTester(uischema, schema, undefined)).toBe(-1);
+    expect(materialArrayLayoutTester(uischema, nestedSchema, undefined)).toBe(4);
+    expect(materialArrayLayoutTester(uischema, nestedSchema2, undefined)).toBe(4);
+    expect(materialArrayLayoutTester(uischema, nestedSchemaWithRef, nestedSchemaWithRef)).toBe(4);
+    expect(materialArrayLayoutTester(uischema, nestedSchemaWithRef, nestedSchemaWithRef)).toBe(4);
+    expect(materialArrayLayoutTester(uischema, nestedSchema2WithRef, nestedSchema2WithRef)).toBe(4);
 
-    expect(materialArrayLayoutTester(uischemaOptions.default, schema)).toBe(-1);
-    expect(materialArrayLayoutTester(uischemaOptions.generate, schema)).toBe(4);
-    expect(materialArrayLayoutTester(uischemaOptions.inline, schema)).toBe(4);
+    expect(materialArrayLayoutTester(uischemaOptions.default, schema, undefined)).toBe(-1);
+    expect(materialArrayLayoutTester(uischemaOptions.generate, schema, undefined)).toBe(4);
+    expect(materialArrayLayoutTester(uischemaOptions.inline, schema, undefined)).toBe(4);
   });
 });
 

@@ -52,10 +52,10 @@ const fixture = {
 
 describe('Label tester', () => {
   test('tester', () => {
-    expect(labelRendererTester(undefined, undefined)).toBe(-1);
-    expect(labelRendererTester(null, undefined)).toBe(-1);
-    expect(labelRendererTester({ type: 'Foo' }, undefined)).toBe(-1);
-    expect(labelRendererTester({ type: 'Label' }, undefined)).toBe(1);
+    expect(labelRendererTester(undefined, undefined, undefined)).toBe(-1);
+    expect(labelRendererTester(null, undefined, undefined)).toBe(-1);
+    expect(labelRendererTester({ type: 'Foo' }, undefined, undefined)).toBe(-1);
+    expect(labelRendererTester({ type: 'Label' }, undefined, undefined)).toBe(1);
   });
 });
 

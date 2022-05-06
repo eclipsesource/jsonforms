@@ -56,6 +56,7 @@ export class InputControl extends Control<
       label,
       uischema,
       schema,
+      rootSchema,
       visible,
       enabled,
       required,
@@ -77,10 +78,10 @@ export class InputControl extends Control<
       this.state.isFocused,
       appliedUiSchemaOptions.showUnfocusedDescription
     );
-    const cell = maxBy(cells, r => r.tester(uischema, schema));
+    const cell = maxBy(cells, r => r.tester(uischema, schema, rootSchema));
     if (
       cell === undefined ||
-      cell.tester(uischema, schema) === NOT_APPLICABLE
+      cell.tester(uischema, schema, rootSchema) === NOT_APPLICABLE
     ) {
       console.warn('No applicable cell found.', uischema, schema);
       return null;

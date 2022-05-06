@@ -34,7 +34,7 @@ import {
 describe('Horizontal layout tester', () => {
   it('should succeed', () => {
     expect(
-      horizontalLayoutTester({ type: 'HorizontalLayout' }, undefined)
+      horizontalLayoutTester({ type: 'HorizontalLayout' }, undefined, undefined)
     ).toBe(1);
   });
 });
