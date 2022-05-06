@@ -1,5 +1,31 @@
 # Migration guide
 
+## JSON Forms 3.0
+
+## Additional parameter for testers
+
+Previously the testers had the following interfaces.
+
+```ts
+type Tester = (uischema: UISchemaElement, schema: JsonSchema) => boolean;
+type RankedTester = (uischema: UISchemaElement, schema: JsonSchema) => number;
+```
+
+Testers may be invoked on arbitrary subschemas of the form-wide schema, for example on nested objects or arrays.
+Therefore JSON Forms was not able to properly run the testers on schemas containing `$ref`s pointing to a parent element.
+The workaround for this was to resolve the JSON Schema by hand before handing it over to JSON Forms.
+Only the React renderers did this automatically but we removed this functionality, see the next section for more information.
+
+We now added an additional parameter to the testers, the `rootSchema`.
+
+```ts
+type Tester = (uischema: UISchemaElement, schema: JsonSchema, rootSchema: JsonSchema) => boolean;
+type RankedTester = (uischema: UISchemaElement, schema: JsonSchema, rootSchema: JsonSchema) => number;
+```
+
+This allows the testers to resolve any `$ref` they might encounter in their handed over `schema`.
+Therefore the manual resolving of JSON Schemas before handing them over to JSON Forms does not need to performed in those cases.
+
 ## Migrating to JSON Forms 3.0 for React users
 
 ### Removal of JSON Schema $Ref Parser
