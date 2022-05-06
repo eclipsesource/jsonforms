@@ -1,8 +1,10 @@
 # Migration guide
 
-## JSON Forms 3.0
+## Migrating to JSON Forms 3.0
 
-## Additional parameter for testers
+### Core
+
+#### Additional parameter for testers
 
 Previously the testers had the following interfaces.
 
@@ -11,7 +13,7 @@ type Tester = (uischema: UISchemaElement, schema: JsonSchema) => boolean;
 type RankedTester = (uischema: UISchemaElement, schema: JsonSchema) => number;
 ```
 
-Testers may be invoked on arbitrary subschemas of the form-wide schema, for example on nested objects or arrays.
+Testers may be invoked on arbitrary subschemas of the form-wide schema, for example on nested objects or array items.
 Therefore JSON Forms was not able to properly run the testers on schemas containing `$ref`s pointing to a parent element.
 The workaround for this was to resolve the JSON Schema by hand before handing it over to JSON Forms.
 Only the React renderers did this automatically but we removed this functionality, see the next section for more information.
@@ -24,11 +26,11 @@ type RankedTester = (uischema: UISchemaElement, schema: JsonSchema, rootSchema: 
 ```
 
 This allows the testers to resolve any `$ref` they might encounter in their handed over `schema`.
-Therefore the manual resolving of JSON Schemas before handing them over to JSON Forms does not need to performed in those cases.
+Therefore the manual resolving of JSON Schemas before handing them over to JSON Forms does not need to be performed in those cases.
 
-## Migrating to JSON Forms 3.0 for React users
+### React
 
-### Removal of JSON Schema $Ref Parser
+#### Removal of JSON Schema $Ref Parser
 
 With version 3.0 of JSON Forms, we removed the `json-schema-ref-parser` dependency within the core package.
 This change only affects users of the React variant, Vue and Angular users are not affected.
@@ -40,10 +42,6 @@ Also all users of JSON Forms React had to pay the resolving effort, whether they
 
 Most React users should be unaffected by this change and don't need to spend any migration efforts.
 However when you relied on the resolving of external JSON Schema references via the `refParserOptions` or use complicated references setups which can't yet be handled by JSON Forms' internal processing, you can resolve the JSON Schema before handing it over to JSON Forms.
-
-Note that we're aware of some regressions caused by removing `json-schema-ref-parser` which occur when not handing over a resolved JSON Schema to JSON Forms.
-We're working on removing these edge cases during the JSON Forms 3.0 alpha period.
-You can always restore the old behavior when following the approach described below.
 
 To restore the old behavior, you can use `json-schema-ref-parser` or other libraries like `json-refs` to resolve references on your own before passing the schema to JSON Forms.
 
@@ -91,12 +89,12 @@ function App() {
 
 For more information have a look at our [ref-resolving](https://jsonforms.io/docs/ref-resolving) docs page.
 
-### Update to Material UI v5 in React Material
+#### Update to Material UI v5 in React Material
 
 Material UI was updated from version 4 to version 5 which introduced a lot of breaking changes.
 To update your application see the official Material UI [migration guide](https://mui.com/guides/migration-v4/).
 
-### Removal of React Material extended renderer set
+#### Removal of React Material extended renderer set
 
 Previously we maintained a separate 'extended' renderer set to not force all consumers of JSON Forms to consume the Material UI lab dependency.
 With the update to Material UI v5 the lab dependency became more important as it also contains all date and time pickers.
@@ -105,12 +103,14 @@ Therefore we now require the lab dependency and removed the no longer needed ext
 If you consumed the extended renderer set then just revert to the normal renderer set.
 There should not be any behavior changes.
 
-### Removal of Class Components in React Material
+#### Removal of Class Components in React Material
 
 All React Material class components were refactored to functional components.
 Please check whether you extended any of our base renderers in your adaptation.
 
-## Migrating to JSON Forms 2.5 for Angular users
+## Migrating to JSON Forms 2.5
+
+### JsonForms Component for Angular
 
 The JsonFormsAngularService is not provided in the root anymore.
 To keep the old behavior, you need to provide it manually in the module.
@@ -155,7 +155,7 @@ export class AppComponent {
 }
 ```
 
-## Migrating to JSON Forms 2.5 for React users
+### Removal of React Redux integration
 
 In version 2.5 we made the `redux` dependency within the `react` package optional.
 Users of the JSON Forms React standalone version (i.e. without Redux) don't need to change anything.
@@ -174,13 +174,13 @@ In any case, users of the vanilla renderers need to migrate style definitions.
 Providing style classes via the redux context is no longer supported even when using the redux fallback.
 For more information see the [vanilla renderer style guide](./packages/vanilla/Styles.md).
 
-### Case 1: Migrate to the standalone variant (recommended)
+#### Case 1: Migrate to the standalone variant (recommended)
 
 The standalone JSON Forms variant is the new default and the main focus for new features and bug fixes.
 We definitely recommend migrating to this version as soon as possible.
 All current Redux functionally can also be achieved with the standalone version.
 
-#### Example 1: Init action
+##### Example 1: Init action
 
 Previously the store was initialized like this:
 
@@ -218,7 +218,7 @@ return (
 );
 ```
 
-#### Example 2: Register a custom renderer
+##### Example 2: Register a custom renderer
 
 Another commonly used action is the 'register renderer' action.
 
@@ -246,7 +246,7 @@ const MyApp = () => (
 
 ```
 
-#### Example 3: Listen to data and validation changes
+##### Example 3: Listen to data and validation changes
 
 The `JsonForms` component offers to register a listener which is notified whenever `data` and `errors` changes:
 
@@ -263,7 +263,7 @@ const MyApp = () => {
 };
 ```
 
-### Case 2: Use the Redux fallback
+#### Case 2: Use the Redux fallback
 
 If you want to keep using the Redux variant of JSON Forms for now (which is not recommended), you have to change a few import paths.
 
@@ -281,7 +281,9 @@ The complexity of the migration of an existing JSON Forms 1.x application, which
 
 There are two big changes between JSON Forms 1 and JSON Forms 2 you need to understand when migrating your existing application.
 
-1. JSON Forms 2.x does not rely on any specific UI framework [or library]. The `2.0.0` initial release featured renderers based on [React](https://reactjs.org). An [Angular](https://angular.io) based renderer set was released with `2.1.0`.
+1. JSON Forms 2.x does not rely on any specific UI framework [or library].
+  The `2.0.0` initial release featured renderers based on [React](https://reactjs.org).
+  An [Angular](https://angular.io) based renderer set was released with `2.1.0`.
 
 2. Since JSON Forms 2.x maintains its internal state via [redux](https://redux.js.org/), you will need to add it as a dependency to your application.
 
@@ -289,7 +291,8 @@ There are two big changes between JSON Forms 1 and JSON Forms 2 you need to unde
 
 #### Step 1: Update your UI schemata
 
-There is only one minor change in the UI schemata. The UI Schema for controls was simplified and the bulky `ref` object inside `scope` was removed.
+There is only one minor change in the UI schemata.
+The UI Schema for controls was simplified and the bulky `ref` object inside `scope` was removed.
 
 Instead of:
 
@@ -315,7 +318,8 @@ Otherwise the UI schema remains unchanged and works like in JSON Forms 1.x.
 
 #### Step 2: Use JSON Forms 2.x in your application
 
-As JSON Forms 2 does not rely on any specific UI framework or library you can choose which renderer set you want to use. The React Material renderer set is the most polished one at the moment, followed by Angular Material and the Vanilla renderer sets.
+As JSON Forms 2 does not rely on any specific UI framework or library you can choose which renderer set you want to use.
+The React Material renderer set is the most polished one at the moment, followed by Angular Material and the Vanilla renderer sets.
 
 ##### Use with React
 
@@ -323,4 +327,7 @@ Please refer to the React [tutorial](http://jsonforms.io/docs/tutorial).
 
 #### Step 3: Migrate Custom Renderers
 
-Any custom renderer needs to be re-factored to conform to the new custom renderer style in JSON Forms 2.x. You can find instructions how to implement Custom controls based on React [here](http://jsonforms.io/docs/custom-renderers). While you need to change a lot except for the template, the good news it that writing custom renderers became much simpler in JSON Forms 2 since the framework will trigger rendering and re-rendering in case of changes to the data or other state. In many cases this means you will be able to streamline your code for custom renderers significantly.
+Any custom renderer needs to be refactored to conform to the new custom renderer style in JSON Forms 2.x.
+You can find instructions how to implement Custom controls based on React [here](http://jsonforms.io/docs/custom-renderers).
+While you need to change a lot except for the template, the good news it that writing custom renderers became much simpler in JSON Forms 2 since the framework will trigger rendering and re-rendering in case of changes to the data or other state.
+In many cases this means you will be able to streamline your code for custom renderers significantly.
