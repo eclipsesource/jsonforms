@@ -2,9 +2,7 @@
 
 ## Migrating to JSON Forms 3.0
 
-### Core
-
-#### Additional parameter for testers
+### Additional parameter for testers
 
 Previously the testers had the following interfaces.
 
@@ -28,11 +26,9 @@ type RankedTester = (uischema: UISchemaElement, schema: JsonSchema, rootSchema: 
 This allows the testers to resolve any `$ref` they might encounter in their handed over `schema`.
 Therefore the manual resolving of JSON Schemas before handing them over to JSON Forms does not need to be performed in those cases.
 
-### React
+### Removal of JSON Schema $Ref Parser
 
-#### Removal of JSON Schema $Ref Parser
-
-With version 3.0 of JSON Forms, we removed the `json-schema-ref-parser` dependency within the core package.
+We removed the `json-schema-ref-parser` dependency within the core package.
 This change only affects users of the React variant, Vue and Angular users are not affected.
 
 `json-schema-ref-parser` was used to resolve external JSON Schema references.
@@ -89,12 +85,12 @@ function App() {
 
 For more information have a look at our [ref-resolving](https://jsonforms.io/docs/ref-resolving) docs page.
 
-#### Update to Material UI v5 in React Material
+### Update to Material UI v5 in React Material
 
 Material UI was updated from version 4 to version 5 which introduced a lot of breaking changes.
 To update your application see the official Material UI [migration guide](https://mui.com/guides/migration-v4/).
 
-#### Removal of React Material extended renderer set
+### Removal of React Material extended renderer set
 
 Previously we maintained a separate 'extended' renderer set to not force all consumers of JSON Forms to consume the Material UI lab dependency.
 With the update to Material UI v5 the lab dependency became more important as it also contains all date and time pickers.
@@ -103,7 +99,7 @@ Therefore we now require the lab dependency and removed the no longer needed ext
 If you consumed the extended renderer set then just revert to the normal renderer set.
 There should not be any behavior changes.
 
-#### Removal of Class Components in React Material
+### Removal of Class Components in React Material
 
 All React Material class components were refactored to functional components.
 Please check whether you extended any of our base renderers in your adaptation.
