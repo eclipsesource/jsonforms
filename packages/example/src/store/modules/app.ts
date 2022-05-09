@@ -19,6 +19,7 @@ const state: AppState = {
       showUnfocusedDescription: false,
       hideRequiredAsterisk: true,
       collapseNewItems: false,
+      initCollapsed: false,
       hideAvatar: false,
     },
     renderers: extendedVuetifyRenderers,

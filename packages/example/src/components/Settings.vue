@@ -194,11 +194,25 @@
               <template v-slot:activator="{ on: onTooltip }">
                 <v-switch
                   v-model="collapseNewItems"
-                  label="Collapse new items"
+                  label="Collapse new array items"
                   v-on="onTooltip"
                 ></v-switch>
               </template>
               If true, new array items are not expanded by default
+            </v-tooltip>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on: onTooltip }">
+                <v-switch
+                  v-model="initCollapsed"
+                  label="Collapse arrays initially"
+                  v-on="onTooltip"
+                ></v-switch>
+              </template>
+              If true, arrays are not expanded initially
             </v-tooltip>
           </v-col>
         </v-row>
@@ -236,6 +250,7 @@ export default {
     ),
     restrict: sync('app/jsonforms@config.restrict'),
     collapseNewItems: sync('app/jsonforms@config.collapseNewItems'),
+    initCollapsed: sync('app/jsonforms@config.initCollapsed'),
     readonly: sync('app/jsonforms@readonly'),
     locale: sync('app/jsonforms@locale'),
     hideAvatar: sync('app/jsonforms@config.hideAvatar'),

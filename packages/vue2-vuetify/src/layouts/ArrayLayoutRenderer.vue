@@ -286,7 +286,9 @@ const controlRenderer = defineComponent({
   },
   setup(props: RendererProps<ControlElement>) {
     const control = useVuetifyArrayControl(useJsonFormsArrayControl(props));
-    const currentlyExpanded = ref<null | number>(null);
+    const currentlyExpanded = ref<null | number>(
+      control.appliedOptions.value.initCollapsed ? null : 0
+    );
     const suggestToDelete = ref<null | number>(null);
     // indicate to our child renderers that we are increasing the "nested" level
     useNested('array');
