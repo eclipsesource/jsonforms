@@ -126,13 +126,23 @@ export const useTranslator = () => {
  * Adds styles and appliedOptions
  */
 export const useVuetifyLayout = <I extends { layout: any }>(input: I) => {
-  const appliedOptions = computed(() =>
-    merge(
+  // TODO: We consume 'config' here manually as it's not provided by the input.layout.
+  // Once it's provided there, we don't need to inject jsonforms again
+  const jsonforms = inject<JsonFormsSubStates>('jsonforms');
+
+  if (!jsonforms) {
+    throw new Error(
+      "'jsonforms couldn't be injected. Are you within JSON Forms?"
+    );
+  }
+
+  const appliedOptions = computed(() => {
+    return merge(
       {},
-      cloneDeep(input.layout.value.config),
+      cloneDeep(jsonforms.config),
       cloneDeep(input.layout.value.uischema.options)
-    )
-  );
+    );
+  });
 
   const vuetifyProps = (path: string) => {
     const props = get(appliedOptions.value?.vuetify, path);

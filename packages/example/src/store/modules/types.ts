@@ -18,6 +18,7 @@ export interface AppState {
       hideRequiredAsterisk: boolean;
       collapseNewItems: boolean;
       initCollapsed: boolean;
+      breakHorizontal: false | string;
       hideAvatar: boolean;
     };
     renderers: JsonFormsRendererRegistryEntry[];
