@@ -57,17 +57,18 @@ const fixture = {
 };
 
 test('tester', () => {
-  expect(enumCellTester(undefined, undefined)).toBe(-1);
-  expect(enumCellTester(null, undefined)).toBe(-1);
-  expect(enumCellTester({ type: 'Foo' }, undefined)).toBe(-1);
-  expect(enumCellTester({ type: 'Control' }, undefined)).toBe(-1);
+  expect(enumCellTester(undefined, undefined, undefined)).toBe(-1);
+  expect(enumCellTester(null, undefined, undefined)).toBe(-1);
+  expect(enumCellTester({ type: 'Foo' }, undefined, undefined)).toBe(-1);
+  expect(enumCellTester({ type: 'Control' }, undefined, undefined)).toBe(-1);
 });
 
 test('tester with wrong prop type', () => {
   expect(
     enumCellTester(
       fixture.uischema,
-      { type: 'object', properties: { foo: { type: 'string' } } }
+      { type: 'object', properties: { foo: { type: 'string' } } },
+      undefined
     )
   ).toBe(-1);
 });
@@ -87,7 +88,8 @@ test('tester with wrong prop type, but sibling has correct one', () => {
             'enum': ['a', 'b']
           }
         }
-      }
+      },
+      undefined
     )
   ).toBe(-1);
 });
@@ -104,7 +106,8 @@ test('tester with matching string type', () => {
             'enum': ['a', 'b']
           }
         }
-      }
+      },
+      undefined
     )
   ).toBe(2);
 });
@@ -122,7 +125,8 @@ test('tester with matching numeric type', () => {
             'enum': [1, 2]
           }
         }
-      }
+      },
+      undefined
     )
   ).toBe(2);
 });

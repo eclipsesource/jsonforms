@@ -51,7 +51,6 @@ import * as layout from './examples/layout';
 import * as person from './examples/person';
 import * as rule from './examples/rule';
 import * as ruleInheritance from './examples/ruleInheritance';
-import * as resolve from './examples/resolve';
 import * as config from './examples/config';
 import * as text from './examples/text';
 import * as numbers from './examples/numbers';
@@ -113,7 +112,6 @@ export {
   ruleInheritance,
   dates,
   dynamic,
-  resolve,
   config,
   text,
   numbers,

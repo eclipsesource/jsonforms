@@ -34,7 +34,6 @@ import {
   OwnPropsOfControl,
   RankedTester,
   rankWith,
-  resolveSubSchemas
 } from '@jsonforms/core';
 import {
   Button,
@@ -66,9 +65,8 @@ export const MaterialOneOfRenderer =
     const cancel = useCallback(() => {
       setOpen(false);
     }, [setOpen]);
-    const _schema = resolveSubSchemas(schema, rootSchema, 'oneOf');
     const oneOfRenderInfos = createCombinatorRenderInfos(
-      (_schema as JsonSchema).oneOf,
+      (schema as JsonSchema).oneOf,
       rootSchema,
       'oneOf',
       uischema,
@@ -79,7 +77,7 @@ export const MaterialOneOfRenderer =
     const openNewTab = (newIndex: number) => {
       handleChange(
         path,
-        createDefaultValue(schema.oneOf[newIndex])
+        createDefaultValue(oneOfRenderInfos[newIndex].schema)
       );
       setSelectedIndex(newIndex);
     }
@@ -101,7 +99,7 @@ export const MaterialOneOfRenderer =
     return (
       <Hidden xsUp={!visible}>
         <CombinatorProperties
-          schema={_schema}
+          schema={schema}
           combinatorKeyword={'oneOf'}
           path={path}
         />

@@ -72,6 +72,19 @@ export const uischemaNonRoot = {
           scope: '#/properties/address/properties/state',
           expectedValue: 'DC'
         }
+      },
+      options: {
+        detail: {
+          type: 'Group',
+          label: 'User Data',
+          elements: [
+            { type: 'Control', scope: '#/properties/name'},
+            {
+              type: 'Control',
+              scope: '#/properties/mail'
+            }
+          ]
+        }
       }
     }
   ]

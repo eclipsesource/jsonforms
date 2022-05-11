@@ -70,7 +70,8 @@ describe('Material one of enum cell tester', () => {
         properties: {
           country: schema
         }
-      })
+      },
+      undefined)
     ).toBe(2);
   });
 });

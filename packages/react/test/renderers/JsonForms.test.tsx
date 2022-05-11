@@ -310,7 +310,7 @@ test('render schema with $ref', () => {
   wrapper.unmount();
 });
 
-test.skip('updates schema with ref', () => {
+test('updates schema with ref', () => {
   const schemaWithRef = {
     definitions: {
       n: {
@@ -338,10 +338,8 @@ test.skip('updates schema with ref', () => {
     }
   };
 
-  const tester1 = (_uischema: UISchemaElement, s: JsonSchema) =>
-    s.properties.foo.type === 'string' ? 1 : -1;
-  const tester2 = (_uischema: UISchemaElement, s: JsonSchema) =>
-    s.properties.foo.type === 'number' ? 1 : -1;
+  const tester1 = rankWith(1, schemaMatches(schema => schema.type === 'string'))
+  const tester2 = rankWith(1, schemaMatches(schema => schema.type === 'number'))
 
   const renderers = [
     {
@@ -354,7 +352,7 @@ test.skip('updates schema with ref', () => {
     }
   ];
 
-  const wrapper = shallow(
+  const wrapper = mount(
     <JsonFormsDispatchRenderer
       path={''}
       uischema={fixture.uischema}
@@ -368,7 +366,6 @@ test.skip('updates schema with ref', () => {
   wrapper.setProps({ schema: schemaWithRef });
 
   wrapper.update();
-  expect(wrapper.state()).toHaveProperty('resolving', false);
   expect(wrapper.find(CustomRenderer2).length).toBe(1);
   wrapper.unmount();
 });

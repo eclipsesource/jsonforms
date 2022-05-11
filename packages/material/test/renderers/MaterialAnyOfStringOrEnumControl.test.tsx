@@ -52,9 +52,9 @@ const uischema: ControlElement = {
 describe('Material simple any of control tester', () => {
   it('should only be applicable for simple any of cases', () => {
     expect(
-      materialAnyOfStringOrEnumControlTester({ type: 'Foo' }, schema)
+      materialAnyOfStringOrEnumControlTester({ type: 'Foo' }, schema, undefined)
     ).toBe(-1);
-    expect(materialAnyOfStringOrEnumControlTester(uischema, schema)).toBe(5);
+    expect(materialAnyOfStringOrEnumControlTester(uischema, schema, undefined)).toBe(5);
 
     const nestedSchema: JsonSchema = {
       properties: {
@@ -66,7 +66,7 @@ describe('Material simple any of control tester', () => {
       scope: '#/properties/foo'
     };
     expect(
-      materialAnyOfStringOrEnumControlTester(nestedUischema, nestedSchema)
+      materialAnyOfStringOrEnumControlTester(nestedUischema, nestedSchema, undefined)
     ).toBe(5);
     const schemaNoEnum: JsonSchema = {
       anyOf: [{ type: 'string' }]
@@ -80,17 +80,17 @@ describe('Material simple any of control tester', () => {
     const schemaNoString: JsonSchema = {
       anyOf: [{ type: 'integer' }, { enum: [1, 2] }]
     };
-    expect(materialAnyOfStringOrEnumControlTester(uischema, schemaNoEnum)).toBe(
+    expect(materialAnyOfStringOrEnumControlTester(uischema, schemaNoEnum, undefined)).toBe(
       -1
     );
     expect(
-      materialAnyOfStringOrEnumControlTester(uischema, schemaConflictTypes)
+      materialAnyOfStringOrEnumControlTester(uischema, schemaConflictTypes, undefined)
     ).toBe(-1);
     expect(
-      materialAnyOfStringOrEnumControlTester(uischema, schemaAdditionalProps)
+      materialAnyOfStringOrEnumControlTester(uischema, schemaAdditionalProps, undefined)
     ).toBe(5);
     expect(
-      materialAnyOfStringOrEnumControlTester(uischema, schemaNoString)
+      materialAnyOfStringOrEnumControlTester(uischema, schemaNoString, undefined)
     ).toBe(-1);
   });
 });

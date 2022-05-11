@@ -127,7 +127,7 @@ export class NumberControlRenderer extends JsonFormsControl {
 
   mapAdditionalProps(props:StatePropsOfControl) {
     if (this.scopedSchema) {
-      const defaultStep = isNumberControl(this.uischema, this.rootSchema)
+      const defaultStep = isNumberControl(this.uischema, this.rootSchema, this.rootSchema)
         ? 0.1
         : 1;
       this.min = this.scopedSchema.minimum;

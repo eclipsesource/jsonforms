@@ -25,7 +25,7 @@ import {
   i18nReducer,
   JsonFormsI18nState
 } from '@jsonforms/core';
-import { JsonFormsChangeEvent } from '../types';
+import { JsonFormsChangeEvent, MaybeReadonly } from '../types';
 import DispatchRenderer from './DispatchRenderer.vue';
 
 import Ajv from 'ajv';
@@ -57,11 +57,11 @@ export default defineComponent({
     },
     renderers: {
       required: true,
-      type: Array as PropType<JsonFormsRendererRegistryEntry[]>
+      type: Array as PropType<MaybeReadonly<JsonFormsRendererRegistryEntry[]>>
     },
     cells: {
       required: false,
-      type: Array as PropType<JsonFormsCellRendererRegistryEntry[]>,
+      type: Array as PropType<MaybeReadonly<JsonFormsCellRendererRegistryEntry[]>>,
       default: () => []
     },
     config: {
@@ -76,7 +76,7 @@ export default defineComponent({
     },
     uischemas: {
       required: false,
-      type: Array as PropType<JsonFormsUISchemaRegistryEntry[]>,
+      type: Array as PropType<MaybeReadonly<JsonFormsUISchemaRegistryEntry[]>>,
       default: () => []
     },
     validationMode: {

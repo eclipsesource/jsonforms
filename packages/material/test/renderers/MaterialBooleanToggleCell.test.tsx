@@ -65,23 +65,24 @@ describe('Material boolean toggle cell tester', () => {
   };
 
   it('should fail', () => {
-    expect(materialBooleanToggleCellTester(undefined, undefined)).toBe(
+    expect(materialBooleanToggleCellTester(undefined, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
-    expect(materialBooleanToggleCellTester(null, undefined)).toBe(
+    expect(materialBooleanToggleCellTester(null, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
-    expect(materialBooleanToggleCellTester({ type: 'Foo' }, undefined)).toBe(
+    expect(materialBooleanToggleCellTester({ type: 'Foo' }, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
     expect(
-      materialBooleanToggleCellTester({ type: 'Control' }, undefined)
+      materialBooleanToggleCellTester({ type: 'Control' }, undefined, undefined)
     ).toBe(NOT_APPLICABLE);
     expect(
       materialBooleanToggleCellTester(control, {
         type: 'object',
         properties: { foo: { type: 'string' } }
-      })
+      },
+      undefined)
     ).toBe(NOT_APPLICABLE);
     expect(
       materialBooleanToggleCellTester(control, {
@@ -94,7 +95,8 @@ describe('Material boolean toggle cell tester', () => {
             type: 'boolean'
           }
         }
-      })
+      },
+      undefined)
     ).toBe(NOT_APPLICABLE);
 
     // Not applicable for boolean cell if toggle option is false
@@ -114,7 +116,8 @@ describe('Material boolean toggle cell tester', () => {
               type: 'boolean'
             }
           }
-        }
+        },
+        undefined
       )
     ).toBe(NOT_APPLICABLE);
 
@@ -132,7 +135,8 @@ describe('Material boolean toggle cell tester', () => {
               type: 'boolean'
             }
           }
-        }
+        },
+        undefined
       )
     ).toBe(NOT_APPLICABLE);
   });
@@ -146,7 +150,8 @@ describe('Material boolean toggle cell tester', () => {
             type: 'boolean'
           }
         }
-      })
+      },
+      undefined)
     ).toBe(3);
   });
 });

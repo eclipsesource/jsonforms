@@ -33,10 +33,10 @@ import { initCore } from '../util';
 Enzyme.configure({ adapter: new Adapter() });
 
 test('tester', () => {
-  expect(verticalLayoutTester(undefined, undefined)).toBe(-1);
-  expect(verticalLayoutTester(null, undefined)).toBe(-1);
-  expect(verticalLayoutTester({ type: 'Foo' }, undefined)).toBe(-1);
-  expect(verticalLayoutTester({ type: 'VerticalLayout' }, undefined)).toBe(1);
+  expect(verticalLayoutTester(undefined, undefined, undefined)).toBe(-1);
+  expect(verticalLayoutTester(null, undefined, undefined)).toBe(-1);
+  expect(verticalLayoutTester({ type: 'Foo' }, undefined, undefined)).toBe(-1);
+  expect(verticalLayoutTester({ type: 'VerticalLayout' }, undefined, undefined)).toBe(1);
 });
 
 describe('Vertical layout', () => {

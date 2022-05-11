@@ -25,7 +25,7 @@
 import isEmpty from 'lodash/isEmpty';
 import {
   findUISchema,
-  GroupLayout,
+  Generate,
   isObjectControl,
   RankedTester,
   rankWith,
@@ -54,17 +54,12 @@ export const MaterialObjectRenderer = ({
         schema,
         uischema.scope,
         path,
-        'Group',
+        () => isEmpty(path) ? Generate.uiSchema(schema, 'VerticalLayout') : {...Generate.uiSchema(schema, 'Group'), label},
         uischema,
         rootSchema
       ),
-    [uischemas, schema, uischema.scope, path, uischema, rootSchema]
+    [uischemas, schema, uischema.scope, path, label, uischema, rootSchema]
   );
-  if (isEmpty(path)) {
-    detailUiSchema.type = 'VerticalLayout';
-  } else {
-    (detailUiSchema as GroupLayout).label = label;
-  }
   return (
     <Hidden xsUp={!visible}>
       <JsonFormsDispatch

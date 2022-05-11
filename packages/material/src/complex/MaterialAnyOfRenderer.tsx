@@ -30,7 +30,6 @@ import {
   JsonSchema,
   RankedTester,
   rankWith,
-  resolveSubSchemas,
   StatePropsOfCombinator
 } from '@jsonforms/core';
 import { JsonFormsDispatch, withJsonFormsAnyOfProps } from '@jsonforms/react';
@@ -54,9 +53,8 @@ export const MaterialAnyOfRenderer = ({
     [setSelectedAnyOf]
   );
   const anyOf = 'anyOf';
-  const _schema = resolveSubSchemas(schema, rootSchema, anyOf);
   const anyOfRenderInfos = createCombinatorRenderInfos(
-    (_schema as JsonSchema).anyOf,
+    (schema as JsonSchema).anyOf,
     rootSchema,
     anyOf,
     uischema,
@@ -67,8 +65,8 @@ export const MaterialAnyOfRenderer = ({
   return (
     <Hidden xsUp={!visible}>
       <CombinatorProperties
-        schema={_schema}
-        combinatorKeyword={'anyOf'}
+        schema={schema}
+        combinatorKeyword={anyOf}
         path={path}
       />
       <Tabs value={selectedAnyOf} onChange={handleChange}>

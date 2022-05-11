@@ -45,10 +45,10 @@ const fixture = {
 };
 
 test('tester', () => {
-  expect(horizontalLayoutTester(undefined, undefined)).toBe(-1);
-  expect(horizontalLayoutTester(null, undefined)).toBe(-1);
-  expect(horizontalLayoutTester({ type: 'Foo' }, undefined)).toBe(-1);
-  expect(horizontalLayoutTester({ type: 'HorizontalLayout' }, undefined)).toBe(1);
+  expect(horizontalLayoutTester(undefined, undefined, undefined)).toBe(-1);
+  expect(horizontalLayoutTester(null, undefined, undefined)).toBe(-1);
+  expect(horizontalLayoutTester({ type: 'Foo' }, undefined, undefined)).toBe(-1);
+  expect(horizontalLayoutTester({ type: 'HorizontalLayout' }, undefined, undefined)).toBe(1);
 });
 
 describe('Horizontal layout', () => {

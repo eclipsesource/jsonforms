@@ -104,10 +104,11 @@ export class JsonFormsOutlet extends JsonFormsBaseRenderer<UISchemaElement>
     const { renderers } = props as JsonFormsProps;
     const schema: JsonSchema = this.schema || props.schema;
     const uischema = this.uischema || props.uischema;
+    const rootSchema = props.rootSchema;
 
-    const renderer = maxBy(renderers, r => r.tester(uischema, schema));
+    const renderer = maxBy(renderers, r => r.tester(uischema, schema, rootSchema));
     let bestComponent: Type<any> = UnknownRenderer;
-    if (renderer !== undefined && renderer.tester(uischema, schema) !== -1) {
+    if (renderer !== undefined && renderer.tester(uischema, schema, rootSchema) !== -1) {
       bestComponent = renderer.renderer;
     }
 

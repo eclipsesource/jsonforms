@@ -57,14 +57,14 @@ const uischema: ControlElement = {
 
 describe('Material date control tester', () => {
   test('should fail', () => {
-    expect(materialDateControlTester(undefined, undefined)).toBe(
+    expect(materialDateControlTester(undefined, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
-    expect(materialDateControlTester(null, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialDateControlTester({ type: 'Foo' }, undefined)).toBe(
+    expect(materialDateControlTester(null, undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialDateControlTester({ type: 'Foo' }, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
-    expect(materialDateControlTester({ type: 'Control' }, undefined)).toBe(
+    expect(materialDateControlTester({ type: 'Control' }, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
     expect(
@@ -73,7 +73,8 @@ describe('Material date control tester', () => {
         properties: {
           foo: { type: 'string' }
         }
-      })
+      },
+      undefined)
     ).toBe(NOT_APPLICABLE);
     expect(
       materialDateControlTester(uischema, {
@@ -85,7 +86,8 @@ describe('Material date control tester', () => {
             format: 'date'
           }
         }
-      })
+      },
+      undefined)
     ).toBe(NOT_APPLICABLE);
   });
 
@@ -99,7 +101,8 @@ describe('Material date control tester', () => {
             format: 'date'
           }
         }
-      })
+      },
+      undefined)
     ).toBe(4);
     expect(
       materialDateControlTester(
@@ -111,7 +114,8 @@ describe('Material date control tester', () => {
               type: 'string'
             }
           }
-        }
+        },
+        undefined
       )
     ).toBe(4);
   });

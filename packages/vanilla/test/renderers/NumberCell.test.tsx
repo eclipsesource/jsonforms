@@ -63,10 +63,10 @@ const fixture = {
 
 describe('Number cell tester', () => {
   test('tester', () => {
-    expect(numberCellTester(undefined, undefined)).toBe(-1);
-    expect(numberCellTester(null, undefined)).toBe(-1);
-    expect(numberCellTester({ type: 'Foo' }, undefined)).toBe(-1);
-    expect(numberCellTester({ type: 'Control' }, undefined)).toBe(-1);
+    expect(numberCellTester(undefined, undefined, undefined)).toBe(-1);
+    expect(numberCellTester(null, undefined, undefined)).toBe(-1);
+    expect(numberCellTester({ type: 'Foo' }, undefined, undefined)).toBe(-1);
+    expect(numberCellTester({ type: 'Control' }, undefined, undefined)).toBe(-1);
   });
 
   test('tester with wrong schema type', () => {
@@ -84,7 +84,8 @@ describe('Number cell tester', () => {
               type: 'string'
             }
           }
-        }
+        },
+        undefined
       )
     ).toBe(-1);
   });
@@ -107,7 +108,8 @@ describe('Number cell tester', () => {
               type: 'number'
             }
           }
-        }
+        },
+        undefined
       )
     ).toBe(-1);
   });
@@ -127,7 +129,8 @@ describe('Number cell tester', () => {
               type: 'number'
             }
           }
-        }
+        },
+        undefined
       )
     ).toBe(2);
   });
@@ -296,7 +299,7 @@ describe('Number cell', () => {
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.value).toBe('2.72');
     core.data = { ...core.data, foo: 3.14 };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     expect(input.value).toBe('3.14');
   });
@@ -310,7 +313,7 @@ describe('Number cell', () => {
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     core.data = { ...core.data, foo: undefined };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     expect(input.value).toBe('');
   });
@@ -324,7 +327,7 @@ describe('Number cell', () => {
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     core.data = { ...core.data, foo: null };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     expect(input.value).toBe('');
   });
@@ -338,7 +341,7 @@ describe('Number cell', () => {
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     core.data = { ...core.data, bar: 11 };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     expect(input.value).toBe('3.14');
   });
@@ -352,7 +355,7 @@ describe('Number cell', () => {
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     core.data = { ...core.data, null: 2.72 };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     expect(input.value).toBe('3.14');
   });
@@ -365,7 +368,7 @@ describe('Number cell', () => {
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, undefined: 13 };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.value).toBe('3.14');

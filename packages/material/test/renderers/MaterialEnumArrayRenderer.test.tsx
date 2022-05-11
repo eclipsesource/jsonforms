@@ -51,7 +51,8 @@ describe('EnumArrayControl tester', () => {
       materialEnumArrayRendererTester(uischema, {
         type: 'array',
         items: {}
-      })
+      },
+      undefined)
     ).toBe(NOT_APPLICABLE);
     expect(
       materialEnumArrayRendererTester(uischema, {
@@ -59,12 +60,13 @@ describe('EnumArrayControl tester', () => {
         items: {
           anyOf: []
         }
-      })
+      },
+      undefined)
     ).toBe(NOT_APPLICABLE);
   });
 
   it('should succeed for schema with enum items', () => {
-    expect(materialEnumArrayRendererTester(uischema, enumSchema)).toBe(5);
+    expect(materialEnumArrayRendererTester(uischema, enumSchema, undefined)).toBe(5);
   });
 });
 
@@ -113,7 +115,7 @@ describe('EnumArrayControl', () => {
     );
     const labels = wrapper.find('label');
     expect(labels.first().text()).toBe('My Title');
-    expect(labels.last().text()).toBe('Bar');
+    expect(labels.last().text()).toBe('bar');
   });
 
   test('oneOf items - updates data', (done) => {
@@ -176,9 +178,9 @@ describe('EnumArrayControl', () => {
       />
     );
     const labels = wrapper.find('label');
-    expect(labels.at(0).text()).toBe('A');
-    expect(labels.at(1).text()).toBe('B');
-    expect(labels.at(2).text()).toBe('C');
+    expect(labels.at(0).text()).toBe('a');
+    expect(labels.at(1).text()).toBe('b');
+    expect(labels.at(2).text()).toBe('c');
   });
 
   test('enum items - updates data', (done) => {

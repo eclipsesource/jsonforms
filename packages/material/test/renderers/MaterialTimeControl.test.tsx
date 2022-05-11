@@ -57,14 +57,14 @@ const uischema: ControlElement = {
 
 describe('Material time control tester', () => {
   test('should fail', () => {
-    expect(materialTimeControlTester(undefined, undefined)).toBe(
+    expect(materialTimeControlTester(undefined, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
-    expect(materialTimeControlTester(null, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialTimeControlTester({ type: 'Foo' }, undefined)).toBe(
+    expect(materialTimeControlTester(null, undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialTimeControlTester({ type: 'Foo' }, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
-    expect(materialTimeControlTester({ type: 'Control' }, undefined)).toBe(
+    expect(materialTimeControlTester({ type: 'Control' }, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
     expect(
@@ -73,7 +73,8 @@ describe('Material time control tester', () => {
         properties: {
           foo: { type: 'string' }
         }
-      })
+      },
+      undefined)
     ).toBe(NOT_APPLICABLE);
     expect(
       materialTimeControlTester(uischema, {
@@ -85,7 +86,8 @@ describe('Material time control tester', () => {
             format: 'time'
           }
         }
-      })
+      },
+      undefined)
     ).toBe(NOT_APPLICABLE);
   });
 
@@ -99,7 +101,8 @@ describe('Material time control tester', () => {
             format: 'time'
           }
         }
-      })
+      },
+      undefined)
     ).toBe(4);
     expect(
       materialTimeControlTester(
@@ -111,7 +114,8 @@ describe('Material time control tester', () => {
               type: 'string'
             }
           }
-        }
+        },
+        undefined
       )
     ).toBe(4);
   });

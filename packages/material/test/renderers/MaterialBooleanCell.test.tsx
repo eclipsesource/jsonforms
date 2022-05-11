@@ -57,21 +57,22 @@ describe('Material boolean cell tester', () => {
   };
 
   it('should fail', () => {
-    expect(materialBooleanCellTester(undefined, undefined)).toBe(
+    expect(materialBooleanCellTester(undefined, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
-    expect(materialBooleanCellTester(null, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialBooleanCellTester({ type: 'Foo' }, undefined)).toBe(
+    expect(materialBooleanCellTester(null, undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialBooleanCellTester({ type: 'Foo' }, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
-    expect(materialBooleanCellTester({ type: 'Control' }, undefined)).toBe(
+    expect(materialBooleanCellTester({ type: 'Control' }, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
     expect(
       materialBooleanCellTester(control, {
         type: 'object',
         properties: { foo: { type: 'string' } }
-      })
+      },
+      undefined)
     ).toBe(NOT_APPLICABLE);
     expect(
       materialBooleanCellTester(control, {
@@ -84,7 +85,8 @@ describe('Material boolean cell tester', () => {
             type: 'boolean'
           }
         }
-      })
+      },
+      undefined)
     ).toBe(NOT_APPLICABLE);
   });
 
@@ -97,7 +99,8 @@ describe('Material boolean cell tester', () => {
             type: 'boolean'
           }
         }
-      })
+      },
+      undefined)
     ).toBe(2);
   });
 });

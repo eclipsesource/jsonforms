@@ -64,10 +64,10 @@ const fixture = {
 
 describe('Date cell tester', () => {
   test('tester', () => {
-    expect(dateCellTester(undefined, undefined)).toBe(-1);
-    expect(dateCellTester(null, undefined)).toBe(-1);
-    expect(dateCellTester({ type: 'Foo' }, undefined)).toBe(-1);
-    expect(dateCellTester({ type: 'Control' }, undefined)).toBe(-1);
+    expect(dateCellTester(undefined, undefined, undefined)).toBe(-1);
+    expect(dateCellTester(null, undefined, undefined)).toBe(-1);
+    expect(dateCellTester({ type: 'Foo' }, undefined, undefined)).toBe(-1);
+    expect(dateCellTester({ type: 'Control' }, undefined, undefined)).toBe(-1);
   });
 
   test('tester with wrong prop type', () => {
@@ -80,6 +80,7 @@ describe('Date cell tester', () => {
             foo: { type: 'string' },
           },
         },
+        undefined
       )
     ).toBe(-1);
   });
@@ -98,6 +99,7 @@ describe('Date cell tester', () => {
             },
           },
         },
+        undefined
       )
     ).toBe(-1);
   });
@@ -115,6 +117,7 @@ describe('Date cell tester', () => {
             },
           },
         },
+        undefined
       )
     ).toBe(2);
   });

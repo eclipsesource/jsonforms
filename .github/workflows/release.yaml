@@ -1,0 +1,32 @@
+name: 'Release'
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  release:
+    if: | 
+      startsWith(github.ref, 'refs/tags/v') &&
+      !contains(github.ref, 'alpha') &&
+      !contains(github.ref, 'beta') &&
+      !contains(github.ref, 'rc')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Create Changelog
+        id: create_changelog
+        uses: mikepenz/release-changelog-builder-action@v2
+        with:
+          configuration: ./.github/config/changelog.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          body: ${{ steps.create_changelog.outputs.changelog }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

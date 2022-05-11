@@ -39,7 +39,7 @@ import {
 
 describe('Group layout tester', () => {
   it('should succeed', () => {
-    expect(groupLayoutTester({ type: 'Group' }, undefined)).toBe(1);
+    expect(groupLayoutTester({ type: 'Group' }, undefined, undefined)).toBe(1);
   });
 });
 describe('Group layout', () => {

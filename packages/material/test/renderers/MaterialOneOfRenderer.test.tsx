@@ -309,7 +309,7 @@ describe('Material oneOf renderer', () => {
     }, 1000);
   });
 
-  it.skip('should add an item within an array', async () => {
+  it('should add an item within an array', async () => {
     const schema = {
       type: 'object',
       properties: {
@@ -366,7 +366,7 @@ describe('Material oneOf renderer', () => {
     expect(nrOfRowsAfterAdd.length).toBe(3);
   });
 
-  it.skip('should add an object within an array', async () => {
+  it('should add an object within an array', async () => {
     const schema = {
       type: 'object',
       properties: {
@@ -424,7 +424,6 @@ describe('Material oneOf renderer', () => {
 
     await waitForAsync();
 
-    // expect(wrapper.state())
     wrapper.update();
 
     selectOneOfTab(wrapper, 1, false);
@@ -441,7 +440,7 @@ describe('Material oneOf renderer', () => {
     });
   });
 
-  it.skip('should switch to array based oneOf subschema, then switch back, then edit', async () => {
+  it('should switch to array based oneOf subschema, then switch back, then edit', async (done) => {
     const schema = {
       type: 'object',
       properties: {
@@ -511,9 +510,15 @@ describe('Material oneOf renderer', () => {
     const input = wrapper.find('input').first();
     input.simulate('change', { target: { value: 'test' } });
     wrapper.update();
-    expect(onChangeData.data).toEqual({
-      thingOrThings: { thing: 'test' }
-    });
+
+    setTimeout(() => {
+      expect(onChangeData.data).toEqual({
+        thingOrThings: { thing: 'test' }
+      });
+      done();
+    }, 1000);
+
+    
   });
 
   it('should show confirm dialog when data is not an empty object', async () => {

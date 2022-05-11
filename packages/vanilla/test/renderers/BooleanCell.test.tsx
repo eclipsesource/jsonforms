@@ -67,10 +67,10 @@ const fixture = {
 
 describe('Boolean cell tester', () => {
   test('tester', () => {
-    expect(booleanCellTester(undefined, undefined)).toBe(-1);
-    expect(booleanCellTester(null, undefined)).toBe(-1);
-    expect(booleanCellTester({ type: 'Foo' }, undefined)).toBe(-1);
-    expect(booleanCellTester({ type: 'Control' }, undefined)).toBe(-1);
+    expect(booleanCellTester(undefined, undefined, undefined)).toBe(-1);
+    expect(booleanCellTester(null, undefined, undefined)).toBe(-1);
+    expect(booleanCellTester({ type: 'Foo' }, undefined, undefined)).toBe(-1);
+    expect(booleanCellTester({ type: 'Control' }, undefined, undefined)).toBe(-1);
   });
 
   test('tester with wrong prop type', () => {
@@ -82,7 +82,8 @@ describe('Boolean cell tester', () => {
       booleanCellTester(controlElement, {
         type: 'object',
         properties: { foo: { type: 'string' } }
-      }),
+      },
+      undefined),
     ).toBe(-1);
   });
 
@@ -102,7 +103,8 @@ describe('Boolean cell tester', () => {
             type: 'boolean'
           }
         }
-      })
+      },
+      undefined)
     ).toBe(-1);
   });
 
@@ -119,7 +121,8 @@ describe('Boolean cell tester', () => {
             type: 'boolean'
           }
         }
-      })
+      },
+      undefined)
     ).toBe(2);
   });
 

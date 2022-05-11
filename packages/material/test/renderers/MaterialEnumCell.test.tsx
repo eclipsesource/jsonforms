@@ -64,7 +64,8 @@ describe('Material enum cell tester', () => {
             enum: ['DE', 'IT', 'JP', 'US', 'RU', 'Other']
           }
         }
-      })
+      },
+      undefined)
     ).toBe(2);
   });
 });
