@@ -25,8 +25,8 @@
 
 import isEmpty from 'lodash/isEmpty';
 import get from 'lodash/get';
-import { JsonSchema } from '../models';
-import { decode, encode } from './path';
+import { JsonSchema, JsonSchema7 } from '../models';
+import { decode } from './path';
 
 /**
  * Map for storing refs and the respective schemas they are pointing to.
@@ -113,65 +113,66 @@ export const resolveSchema = (
   schemaPath: string,
   rootSchema: JsonSchema
 ): JsonSchema => {
+  const segments = schemaPath.split('/').map(decode);
+  return resolveSchemaWithSegments(schema, segments, rootSchema);
+};
+
+const resolveSchemaWithSegments = (
+  schema: JsonSchema,
+  pathSegments: string[],
+  rootSchema: JsonSchema
+): JsonSchema => {
   if (isEmpty(schema)) {
     return undefined;
   }
-  const validPathSegments = schemaPath.split('/').map(decode);
-  let resultSchema = schema;
-  for (let i = 0; i < validPathSegments.length; i++) {
-    let pathSegment = validPathSegments[i];
-    resultSchema =
-      resultSchema === undefined || resultSchema.$ref === undefined
-        ? resultSchema
-        // use rootSchema as value for schema, since schema is undefined or a ref
-        : resolveSchema(rootSchema, resultSchema.$ref, rootSchema);
-    if (invalidSegment(pathSegment)) {
-      // skip invalid segments
-      continue;
-    }
-    let curSchema = get(resultSchema, pathSegment);
-    if (!curSchema) {
-      // resolving was not successful, check whether the scope omitted an oneOf, allOf or anyOf and resolve anyway
-      const schemas = [].concat(
-        resultSchema?.oneOf ?? [],
-        resultSchema?.allOf ?? [],
-        resultSchema?.anyOf ?? [],
-        // also add root level schema composition entries
-        schema?.oneOf ?? [],
-        schema?.allOf ?? [],
-        schema?.anyOf ?? []
+
+  if (schema.$ref) {
+    schema = resolveSchema(rootSchema, schema.$ref, rootSchema);
+  }
+
+  if (pathSegments.length === 0) {
+    return schema;
+  }
+
+  const [segment, ...remainingSegments] = pathSegments;
+
+  if (invalidSegment(segment)) {
+    return resolveSchemaWithSegments(schema, remainingSegments, rootSchema);
+  }
+
+  const singleSegmentResolveSchema = get(schema, segment);
+
+  const resolvedSchema = resolveSchemaWithSegments(singleSegmentResolveSchema, remainingSegments, rootSchema);
+  if (resolvedSchema) {
+    return resolvedSchema;
+  }
+
+  if (segment === 'properties' || segment === 'items') {
+    // Let's try to resolve the path, assuming oneOf/allOf/anyOf/then/else was omitted.
+    // We only do this when traversing an object or array as we want to avoid
+    // following a property which is named oneOf, allOf, anyOf, then or else.
+    let alternativeResolveResult = undefined;
+
+    const subSchemas = [].concat(
+      schema.oneOf ?? [],
+      schema.allOf ?? [],
+      schema.anyOf ?? [],
+      (schema as JsonSchema7).then ?? [],
+      (schema as JsonSchema7).else ?? []
+    );
+
+    for (const subSchema of subSchemas) {
+      alternativeResolveResult = resolveSchemaWithSegments(
+        subSchema,
+        [segment, ...remainingSegments],
+        rootSchema
       );
-      for (const item of schemas) {
-        curSchema = resolveSchema(item, validPathSegments.slice(i).map(encode).join('/'), rootSchema);
-        if (curSchema) {
-          break;
-        }
-        if (!curSchema) {
-          const conditionalSchemas = [].concat(
-              item.then ?? [],
-              item.else ?? [],
-          );
-          for (const condiItem of conditionalSchemas) {
-            curSchema = resolveSchema(condiItem, schemaPath);
-            if (curSchema) {
-              break;
-            }
-          }
-        }
-      }
-      if (curSchema) {
-        // already resolved rest of the path
-        resultSchema = curSchema;
+      if (alternativeResolveResult) {
         break;
       }
     }
-    resultSchema = curSchema;
+    return alternativeResolveResult;
   }
 
-  if (resultSchema !== undefined && resultSchema.$ref !== undefined) {
-    return resolveSchema(rootSchema, resultSchema.$ref, rootSchema)
-      ?? schema;
-  }
-
-  return resultSchema;
-};
+  return undefined;
+}
