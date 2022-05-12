@@ -42,7 +42,6 @@
     "test": "vue-cli-service test:unit"
   },
   "dependencies": {
-    "ajv": "^8.6.1",
     "lodash": "^4.17.15"
   },
   "devDependencies": {
