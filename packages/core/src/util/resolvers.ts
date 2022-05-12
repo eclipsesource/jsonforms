@@ -113,7 +113,7 @@ export const resolveSchema = (
   schemaPath: string,
   rootSchema: JsonSchema
 ): JsonSchema => {
-  const segments = schemaPath.split('/').map(decode);
+  const segments = schemaPath?.split('/').map(decode);
   return resolveSchemaWithSegments(schema, segments, rootSchema);
 };
 
@@ -130,7 +130,7 @@ const resolveSchemaWithSegments = (
     schema = resolveSchema(rootSchema, schema.$ref, rootSchema);
   }
 
-  if (pathSegments.length === 0) {
+  if (!pathSegments || pathSegments.length === 0) {
     return schema;
   }
 
