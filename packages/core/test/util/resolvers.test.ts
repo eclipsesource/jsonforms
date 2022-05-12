@@ -25,7 +25,7 @@
 import { resolveSchema } from '../../src/util/resolvers';
 import test from 'ava';
 
-test.only('resolveSchema - resolves schema with any ', t => {
+test('resolveSchema - resolves schema with any ', t => {
   const schema = {
     $defs: {
       Base: {
