@@ -57,9 +57,8 @@ export { compose as composePaths };
  */
 export const toDataPathSegments = (schemaPath: string): string[] => {
   const s = schemaPath
-    .replace(/anyOf\/[\d]\//g, '')
-    .replace(/allOf\/[\d]\//g, '')
-    .replace(/oneOf\/[\d]\//g, '');
+    .replace(/(anyOf|allOf|oneOf)\/[\d]\//g, '')
+    .replace(/(then|else)\//g, '');
   const segments = s.split('/');
 
   const decodedSegments = segments.map(decode);
@@ -79,7 +78,7 @@ export const toDataPathSegments = (schemaPath: string): string[] => {
  */
 export const toDataPath = (schemaPath: string): string => {
   return toDataPathSegments(schemaPath).join('.');
-};
+    };
 
 export const composeWithUi = (scopableUi: Scopable, path: string): string => {
   const segments = toDataPathSegments(scopableUi.scope);
