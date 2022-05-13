@@ -1,7 +1,7 @@
 <template>
   <div v-if="control.visible">
     <combinator-properties
-      :schema="subSchema"
+      :schema="control.schema"
       combinatorKeyword="anyOf"
       :path="path"
     />
@@ -27,6 +27,7 @@
           :path="control.path"
           :renderers="control.renderers"
           :cells="control.cells"
+          :enabled="control.enabled"
         />
       </v-tab-item>
     </v-tabs-items>
@@ -40,9 +41,7 @@ import {
   createCombinatorRenderInfos,
   isAnyOfControl,
   JsonFormsRendererRegistryEntry,
-  JsonSchema,
   rankWith,
-  resolveSubSchemas,
 } from '@jsonforms/core';
 import {
   DispatchRenderer,
@@ -79,16 +78,10 @@ const controlRenderer = defineComponent({
     };
   },
   computed: {
-    subSchema(): JsonSchema {
-      return resolveSubSchemas(
-        this.control.schema,
-        this.control.rootSchema,
-        'anyOf'
-      );
-    },
     anyOfRenderInfos(): CombinatorSubSchemaRenderInfo[] {
       return createCombinatorRenderInfos(
-        this.subSchema.anyOf!,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        this.control.schema.anyOf!,
         this.control.rootSchema,
         'anyOf',
         this.control.uischema,

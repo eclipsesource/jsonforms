@@ -16,6 +16,7 @@
 import {
   ControlElement,
   findUISchema,
+  Generate,
   GroupLayout,
   isObjectControl,
   JsonFormsRendererRegistryEntry,
@@ -23,6 +24,7 @@ import {
   UISchemaElement,
 } from '@jsonforms/core';
 import isEmpty from 'lodash/isEmpty';
+import cloneDeep from 'lodash/cloneDeep';
 import {
   DispatchRenderer,
   rendererProps,
@@ -50,31 +52,36 @@ const controlRenderer = defineComponent({
   },
   computed: {
     detailUiSchema(): UISchemaElement {
-      const result = findUISchema(
+      const uiSchemaGenerator = () => {
+        const uiSchema = Generate.uiSchema(this.control.schema, 'Group');
+        if (isEmpty(this.control.path)) {
+          uiSchema.type = 'VerticalLayout';
+        } else {
+          (uiSchema as GroupLayout).label = this.control.label;
+        }
+        return uiSchema;
+      };
+
+      let result = findUISchema(
         this.control.uischemas,
         this.control.schema,
         this.control.uischema.scope,
         this.control.path,
-        'Group',
+        uiSchemaGenerator,
         this.control.uischema,
         this.control.rootSchema
       );
 
-      // TODO: The following code can be streamlined once we have generator support
-      // for 'findUISchema' in JSON Forms Core (https://github.com/eclipsesource/jsonforms/pull/1871)
-      if (isEmpty(this.control.path)) {
-        result.type = 'VerticalLayout';
-      } else {
-        (result as GroupLayout).label = this.control.label;
-        if (this.nested.level > 0) {
-          result.options = {
-            ...result.options,
-            bare: true,
-            alignLeft:
-              this.nested.level >= 4 || this.nested.parentElement === 'array',
-          };
-        }
+      if (this.nested.level > 0) {
+        result = cloneDeep(result);
+        result.options = {
+          ...result.options,
+          bare: true,
+          alignLeft:
+            this.nested.level >= 4 || this.nested.parentElement === 'array',
+        };
       }
+
       return result;
     },
   },
