@@ -52,10 +52,14 @@ export { compose as composePaths };
  * and de-referencing the single segments to obtain a new object.
  *
  *
- * @param {string} schemaPath the schema path to be converted
+ * @param {string?} schemaPath the schema path to be converted
  * @returns {string[]} an array containing only non-schema-specific segments
  */
-export const toDataPathSegments = (schemaPath: string): string[] => {
+export const toDataPathSegments = (schemaPath?: string): string[] => {
+  if (schemaPath === null) {
+    return [];
+  }
+
   const s = schemaPath
     .replace(/(anyOf|allOf|oneOf)\/[\d]\//g, '')
     .replace(/(then|else)\//g, '');
