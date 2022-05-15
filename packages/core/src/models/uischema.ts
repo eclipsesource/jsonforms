@@ -26,14 +26,39 @@
 import { JsonSchema } from './jsonSchema';
 
 /**
+ * Interface for describing an UI schema element that may reference
+ * a subschema. The value of the scope may be a JSON Pointer or null.
+ */
+export interface Scopable {
+  /**
+   * The scope that determines to which part this element may be bound to.
+   */
+  scope?: string;
+}
+
+/**
  * Interface for describing an UI schema element that is referencing
  * a subschema. The value of the scope must be a JSON Pointer.
  */
-export interface Scopable {
+export interface Scoped extends Scopable {
   /**
    * The scope that determines to which part this element should be bound to.
    */
   scope: string;
+}
+
+/**
+ * Interface for describing an UI schema element that may be labeled.
+ */
+export interface Lableable<T = string> {
+  label?: string|T;
+}
+
+/**
+ * Interface for describing an UI schema element that is labeled.
+ */
+export interface Labeled<T = string> extends Lableable<T> {
+  label: string|T;
 }
 
 /**
@@ -87,7 +112,7 @@ export interface Condition {
 /**
  * A leaf condition.
  */
-export interface LeafCondition extends Condition, Scopable {
+export interface LeafCondition extends Condition, Scoped {
   type: 'LEAF';
 
   /**
@@ -96,7 +121,7 @@ export interface LeafCondition extends Condition, Scopable {
   expectedValue: any;
 }
 
-export interface SchemaBasedCondition extends Condition, Scopable {
+export interface SchemaBasedCondition extends Condition, Scoped {
   schema: JsonSchema;
 }
 
@@ -170,12 +195,8 @@ export interface HorizontalLayout extends Layout {
  * A group resembles a vertical layout, but additionally might have a label.
  * This layout is useful when grouping different elements by a certain criteria.
  */
-export interface GroupLayout extends Layout {
+export interface GroupLayout extends Layout, Lableable {
   type: 'Group';
-  /**
-   * The label of this group layout.
-   */
-  label?: string;
 }
 
 /**
@@ -207,23 +228,15 @@ export interface LabelElement extends UISchemaElement {
  * A control element. The scope property of the control determines
  * to which part of the schema the control should be bound.
  */
-export interface ControlElement extends UISchemaElement, Scopable {
+export interface ControlElement extends UISchemaElement, Scopable, Lableable<string | boolean | LabelDescription> {
   type: 'Control';
-  /**
-   * An optional label that will be associated with the control
-   */
-  label?: string | boolean | LabelDescription;
 }
 
 /**
  * The category layout.
  */
-export interface Category extends Layout {
+export interface Category extends Layout, Labeled {
   type: 'Category';
-  /**
-   * The label associated with this category layout.
-   */
-  label: string;
 }
 
 /**
@@ -231,12 +244,8 @@ export interface Category extends Layout {
  * A child element may either be itself a Categorization or a Category, hence
  * the categorization element can be used to represent recursive structures like trees.
  */
-export interface Categorization extends UISchemaElement {
+export interface Categorization extends UISchemaElement, Labeled {
   type: 'Categorization';
-  /**
-   * The label of this categorization.
-   */
-  label: string;
   /**
    * The child elements of this categorization which are either of type
    * {@link Category} or {@link Categorization}.
@@ -249,3 +258,15 @@ export const isGroup = (layout: Layout): layout is GroupLayout =>
 
 export const isLayout = (uischema: UISchemaElement): uischema is Layout =>
   (uischema as Layout).elements !== undefined;
+
+export const isScopeable = (obj: object): obj is Scopable =>
+  obj !== undefined && obj.hasOwnProperty('scope');
+
+export const isScoped = (obj: object): obj is Scoped =>
+  isScopeable(obj) && obj.scope !== null;
+
+export const isLabelable = (obj: object): obj is Lableable =>
+  obj !== undefined && obj.hasOwnProperty('label');
+
+export const isLabeled = (obj: object): obj is Labeled =>
+  isLabelable(obj) && obj.label !== null;
