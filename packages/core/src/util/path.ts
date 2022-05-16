@@ -56,7 +56,8 @@ export { compose as composePaths };
  * @returns {string[]} an array containing only non-schema-specific segments
  */
 export const toDataPathSegments = (schemaPath?: string): string[] => {
-  if (schemaPath === null) {
+  if (!schemaPath) {
+    // handle undefined, null and ''
     return [];
   }
 

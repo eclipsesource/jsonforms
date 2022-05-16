@@ -26,21 +26,10 @@
 import { JsonSchema } from './jsonSchema';
 
 /**
- * Interface for describing an UI schema element that may reference
- * a subschema. The value of the scope may be a JSON Pointer or null.
- */
-export interface Scopable {
-  /**
-   * The scope that determines to which part this element may be bound to.
-   */
-  scope?: string;
-}
-
-/**
  * Interface for describing an UI schema element that is referencing
  * a subschema. The value of the scope must be a JSON Pointer.
  */
-export interface Scoped extends Scopable {
+export interface Scopable {
   /**
    * The scope that determines to which part this element should be bound to.
    */
@@ -112,7 +101,7 @@ export interface Condition {
 /**
  * A leaf condition.
  */
-export interface LeafCondition extends Condition, Scoped {
+export interface LeafCondition extends Condition, Scopable {
   type: 'LEAF';
 
   /**
@@ -121,7 +110,7 @@ export interface LeafCondition extends Condition, Scoped {
   expectedValue: any;
 }
 
-export interface SchemaBasedCondition extends Condition, Scoped {
+export interface SchemaBasedCondition extends Condition, Scopable {
   schema: JsonSchema;
 }
 
@@ -260,13 +249,7 @@ export const isLayout = (uischema: UISchemaElement): uischema is Layout =>
   (uischema as Layout).elements !== undefined;
 
 export const isScopeable = (obj: object): obj is Scopable =>
-  obj !== undefined && obj.hasOwnProperty('scope');
-
-export const isScoped = (obj: object): obj is Scoped =>
-  isScopeable(obj) && obj.scope !== null;
-
-export const isLabelable = (obj: object): obj is Lableable =>
-  obj !== undefined && obj.hasOwnProperty('label');
+  obj !== undefined && obj.hasOwnProperty('scope') && (obj as Scopable).scope !== undefined;
 
 export const isLabeled = (obj: object): obj is Labeled =>
-  isLabelable(obj) && obj.label !== null;
+  obj !== undefined && obj.hasOwnProperty('label') && (obj as Lableable).label !== undefined;
