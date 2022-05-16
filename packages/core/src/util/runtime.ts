@@ -32,7 +32,7 @@ import {
   OrCondition,
   RuleEffect,
   SchemaBasedCondition,
-  Scoped,
+  Scopable,
   UISchemaElement
 } from '../models';
 import { resolveData } from './resolvers';
@@ -54,7 +54,7 @@ const isSchemaCondition = (
   condition: Condition
 ): condition is SchemaBasedCondition => has(condition, 'schema');
 
-const getConditionScope = (condition: Scoped, path: string): string => {
+const getConditionScope = (condition: Scopable, path: string): string => {
   return composeWithUi(condition, path);
 };
 
