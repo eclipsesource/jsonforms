@@ -26,7 +26,8 @@
 import get from 'lodash/get';
 import { ControlElement, JsonSchema, UISchemaElement } from '../models';
 import find from 'lodash/find';
-import type {
+import {
+  getUISchemas,
   JsonFormsCellRendererRegistryEntry,
   JsonFormsRendererRegistryEntry,
 } from '../reducers';
@@ -866,7 +867,8 @@ export const mapStateToLayoutProps = (
     data,
     uischema: ownProps.uischema,
     schema: ownProps.schema,
-    direction: ownProps.direction ?? getDirection(uischema)
+    direction: ownProps.direction ?? getDirection(uischema),
+    config
   };
 };
 
@@ -914,7 +916,7 @@ export const controlDefaultProps = {
   errors: [] as string[]
 };
 
-export interface StatePropsOfCombinator extends OwnPropsOfControl {
+export interface StatePropsOfCombinator extends StatePropsOfControl {
   rootSchema: JsonSchema;
   path: string;
   id: string;
@@ -928,25 +930,12 @@ export const mapStateToCombinatorRendererProps = (
   ownProps: OwnPropsOfControl,
   keyword: CombinatorKeyword
 ): StatePropsOfCombinator => {
-  const { uischema } = ownProps;
-  const path = composeWithUi(uischema, ownProps.path);
-  const rootSchema = getSchema(state);
-  const resolvedSchema = Resolve.schema(
-    ownProps.schema || rootSchema,
-    uischema.scope,
-    rootSchema
+  const { data, schema, ...props } = mapStateToControlProps(
+    state,
+    ownProps
   );
 
-  const visible: boolean =
-    ownProps.visible === undefined || hasShowRule(uischema)
-      ? isVisible(uischema, getData(state), ownProps.path, getAjv(state))
-      : ownProps.visible;
-  const id = ownProps.id;
-
-  const data = Resolve.data(getData(state), path);
-
   const ajv = state.jsonforms.core.ajv;
-  const schema = resolvedSchema || rootSchema;
   const structuralKeywords = [
     'required',
     'additionalProperties',
@@ -965,9 +954,9 @@ export const mapStateToCombinatorRendererProps = (
   // TODO instead of compiling the combinator subschemas we can compile the original schema
   // without the combinator alternatives and then revalidate and check the errors for the
   // element
-  for (let i = 0; i < resolvedSchema[keyword]?.length; i++) {
+  for (let i = 0; i < schema[keyword]?.length; i++) {
     try {
-      const valFn = ajv.compile(resolvedSchema[keyword][i]);
+      const valFn = ajv.compile(schema[keyword][i]);
       valFn(data);
       if (dataIsValid(valFn.errors)) {
         indexOfFittingSchema = i;
@@ -980,14 +969,10 @@ export const mapStateToCombinatorRendererProps = (
 
   return {
     data,
-    path,
     schema,
-    rootSchema,
-    visible,
-    id,
+    ...props,
     indexOfFittingSchema,
-    uischemas: state.jsonforms.uischemas,
-    uischema
+    uischemas: getUISchemas(state)
   };
 };
 
@@ -1045,7 +1030,6 @@ export const mapStateToArrayLayoutProps = (
 
   const resolvedSchema = Resolve.schema(schema, 'items', props.rootSchema);
 
-  // TODO Does not consider a specialized '.custom' error message overriding all other error messages
   // TODO Does not consider 'i18n' keys which are specified in the ui schemas of the sub errors
   const childErrors = getCombinedErrorMessage(
     getSubErrorsAt(path, resolvedSchema)(state),

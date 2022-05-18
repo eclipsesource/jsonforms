@@ -75,6 +75,7 @@ import * as enumInArray from './examples/enumInArray';
 import * as readonly from './examples/readonly';
 import * as bug_1779 from './examples/1779';
 import * as bug_1645 from './examples/1645';
+import * as conditionalSchemaComposition from './examples/conditional-schema-compositions';
 export * from './register';
 export * from './example';
 
@@ -134,5 +135,6 @@ export {
   enumInArray,
   readonly,
   bug_1779,
-  bug_1645
+  bug_1645,
+  conditionalSchemaComposition
 };
