@@ -49,7 +49,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { JsonFormsBaseRenderer } from './base.renderer';
 
 import { cloneDeep } from 'lodash';
-import Ajv from 'ajv';
+import Ajv, { ErrorObject } from 'ajv';
 
 export const USE_STATE_VALUE = Symbol('Marker to use state value');
 export class JsonFormsAngularService {
@@ -57,7 +57,7 @@ export class JsonFormsAngularService {
     private _state: JsonFormsSubStates;
     private state: BehaviorSubject<JsonFormsState>;
 
-    init(initialState: JsonFormsSubStates = { core: { data: undefined, schema: undefined, uischema: undefined, validationMode: 'ValidateAndShow' } }) {
+    init(initialState: JsonFormsSubStates = { core: { data: undefined, schema: undefined, uischema: undefined, validationMode: 'ValidateAndShow', additionalErrors: undefined } }) {
         this._state = initialState;
         this._state.config = configReducer(undefined, setConfig(this._state.config));
         this._state.i18n = i18nReducer(this._state.i18n, updateI18n(this._state.i18n?.locale, this._state.i18n?.translate, this._state.i18n?.translateError));
@@ -209,15 +209,17 @@ export class JsonFormsAngularService {
         schema: JsonSchema | typeof USE_STATE_VALUE,
         uischema: UISchemaElement | typeof USE_STATE_VALUE,
         ajv: Ajv | typeof USE_STATE_VALUE,
-        validationMode: ValidationMode | typeof USE_STATE_VALUE
+        validationMode: ValidationMode | typeof USE_STATE_VALUE,
+        additionalErrors: ErrorObject[] | typeof USE_STATE_VALUE,
     ): void {
         const newData = data === USE_STATE_VALUE ? this._state.core.data : data;
         const newSchema = schema === USE_STATE_VALUE ? this._state.core.schema : schema ?? generateJsonSchema(newData);
         const newUischema = uischema === USE_STATE_VALUE ? this._state.core.uischema : uischema ?? generateDefaultUISchema(newSchema);
         const newAjv = ajv === USE_STATE_VALUE ? this._state.core.ajv : ajv;
         const newValidationMode = validationMode === USE_STATE_VALUE ? this._state.core.validationMode : validationMode;
+        const newAdditionalErrors = additionalErrors === USE_STATE_VALUE ? this._state.core.additionalErrors : additionalErrors;
         this.updateCore(
-            Actions.updateCore(newData, newSchema, newUischema, {ajv: newAjv, validationMode: newValidationMode})
+            Actions.updateCore(newData, newSchema, newUischema, {ajv: newAjv, validationMode: newValidationMode, additionalErrors: newAdditionalErrors})
         );
     }
 

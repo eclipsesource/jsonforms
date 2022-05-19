@@ -65,6 +65,7 @@ export interface JsonFormsCore {
   schema: JsonSchema;
   uischema: UISchemaElement;
   errors?: ErrorObject[];
+  additionalErrors?: ErrorObject[];
   validator?: ValidateFunction;
   ajv?: Ajv;
   validationMode?: ValidationMode;
@@ -78,6 +79,7 @@ const initState: JsonFormsCore = {
   validator: undefined,
   ajv: undefined,
   validationMode: 'ValidateAndShow',
+  additionalErrors: []
 };
 
 const reuseAjvForSchema = (ajv: Ajv, schema: JsonSchema): Ajv => {
@@ -133,6 +135,23 @@ const hasValidationModeOption = (option: any): option is InitActionOptions => {
   return false;
 };
 
+const hasAdditionalErrorsOption = (option: any): option is InitActionOptions => {
+  if (option) {
+    return option.additionalErrors !== undefined;
+  }
+  return false;
+};
+
+const getAdditionalErrors = (
+  state: JsonFormsCore,
+  action?: InitAction | UpdateCoreAction
+): ErrorObject[] => {
+  if (action && hasAdditionalErrorsOption(action.options)) {
+    return action.options.additionalErrors;
+  }
+  return state.additionalErrors;
+};
+
 // tslint:disable-next-line: cyclomatic-complexity
 export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
   state = initState,
@@ -145,12 +164,14 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
       const validationMode = getValidationMode(state, action);
       const v = validationMode === 'NoValidation' ? undefined : thisAjv.compile(action.schema);
       const e = validate(v, action.data);
+      const additionalErrors = getAdditionalErrors(state, action);
 
       return {
         ...state,
         data: action.data,
         schema: action.schema,
         uischema: action.uischema,
+        additionalErrors,
         errors: e,
         validator: v,
         ajv: thisAjv,
@@ -176,6 +197,7 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
       } else if (state.data !== action.data) {
         errors = validate(validator, action.data);
       }
+      const additionalErrors = getAdditionalErrors(state, action);
 
       const stateChanged =
         state.data !== action.data ||
@@ -184,7 +206,8 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
         state.ajv !== thisAjv ||
         state.errors !== errors ||
         state.validator !== validator ||
-        state.validationMode !== validationMode
+        state.validationMode !== validationMode ||
+        state.additionalErrors !== additionalErrors
       return stateChanged
         ? {
             ...state,
@@ -195,6 +218,7 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
             errors: isEqual(errors, state.errors) ? state.errors : errors,
             validator: validator,
             validationMode: validationMode,
+            additionalErrors
           }
         : state;
     }
@@ -391,8 +415,11 @@ const getErrorsAt = (
   instancePath: string,
   schema: JsonSchema,
   matchPath: (path: string) => boolean
-) => (state: JsonFormsCore): ErrorObject[] =>
-  errorsAt(instancePath, schema, matchPath)(state.validationMode === 'ValidateAndHide' ? [] : state.errors);
+) => (state: JsonFormsCore): ErrorObject[] => {
+  const errors = state.errors ?? [];
+  const additionalErrors = state.additionalErrors ?? [];
+  return errorsAt(instancePath, schema, matchPath)(state.validationMode === 'ValidateAndHide' ? additionalErrors : [...errors, ...additionalErrors]);
+}
 
 export const errorAt = (instancePath: string, schema: JsonSchema) =>
   getErrorsAt(instancePath, schema, path => path === instancePath);

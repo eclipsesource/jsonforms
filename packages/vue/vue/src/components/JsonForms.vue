@@ -28,7 +28,7 @@ import {
 import { JsonFormsChangeEvent, MaybeReadonly } from '../types';
 import DispatchRenderer from './DispatchRenderer.vue';
 
-import Ajv from 'ajv';
+import Ajv, { ErrorObject } from 'ajv';
 
 const isObject = (elem: any): elem is Object => {
   return elem && typeof elem === 'object';
@@ -93,7 +93,12 @@ export default defineComponent({
       required: false,
       type: Object as PropType<JsonFormsI18nState>,
       default: undefined
-    }
+    },
+    additionalErrors: {
+      required: false,
+      type: Array as PropType<ErrorObject[]>,
+      default: () => []
+    },
   },
   data() {
     const generatorData = isObject(this.data) ? this.data : {};
@@ -110,6 +115,7 @@ export default defineComponent({
         Actions.init(this.data, schemaToUse, uischemaToUse, {
           validationMode: this.validationMode,
           ajv: this.ajv,
+          additionalErrors: this.additionalErrors
         })
       );
       return core;
@@ -166,6 +172,7 @@ export default defineComponent({
         Actions.updateCore(this.data, this.schemaToUse, this.uischemaToUse, {
           validationMode: this.validationMode,
           ajv: this.ajv,
+          additionalErrors: this.additionalErrors
         })
       );
     },
@@ -190,6 +197,7 @@ export default defineComponent({
         this.uischemaToUse,
         this.validationMode,
         this.ajv,
+        this.additionalErrors
       ];
     },
     eventToEmit(): JsonFormsChangeEvent {
