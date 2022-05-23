@@ -5,6 +5,7 @@ import { vanillaRenderers, mergeStyles, defaultStyles } from '../../src';
 import '../../vanilla.css';
 import { get } from 'lodash';
 import { JsonFormsI18nState } from '@jsonforms/core';
+import { ErrorObject } from 'ajv';
 
 const schema = {
   properties: {
@@ -206,6 +207,7 @@ export default defineComponent({
   },
   data: function () {
     const i18n: Partial<JsonFormsI18nState> = { locale: 'en' };
+    const additionalErrors: ErrorObject[] = [];
     return {
       renderers: Object.freeze(vanillaRenderers),
       data: {
@@ -216,7 +218,8 @@ export default defineComponent({
       config: {
         hideRequiredAsterisk: true,
       },
-      i18n
+      i18n,
+      additionalErrors,
     };
   },
   methods: {
@@ -248,6 +251,18 @@ export default defineComponent({
     },
     switchAsterisk() {
       this.config.hideRequiredAsterisk = !this.config.hideRequiredAsterisk;
+    },
+    addAdditionalError() {
+      this.additionalErrors = [
+        ...this.additionalErrors,
+        {
+          instancePath: '/dateTime',
+          message: `New error #${this.additionalErrors.length + 1}`,
+          schemaPath: '',
+          keyword: '',
+          params: {},
+        },
+      ];
     },
     adaptData() {
       this.data.number = 10;
@@ -405,12 +420,14 @@ export default defineComponent({
         :renderers="renderers"
         :config="config"
         :i18n="i18n"
+        :additional-errors="additionalErrors"
         @change="onChange"
       />
       <button @click="setSchema">Set Schema</button>
       <button @click="switchAsterisk">Switch Asterisk</button>
       <button @click="adaptData">Adapt data</button>
       <button @click="adaptUiSchema">Adapt uischema</button>
+      <button @click="addAdditionalError">Add additional error</button>
     </div>
     <div class="data">
       <pre

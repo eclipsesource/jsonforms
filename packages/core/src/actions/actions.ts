@@ -100,6 +100,7 @@ export interface UpdateCoreAction {
 export interface InitActionOptions {
   ajv?: AJV;
   validationMode?: ValidationMode;
+  additionalErrors?: ErrorObject[];
 }
 
 export interface SetValidationModeAction {

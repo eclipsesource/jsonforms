@@ -133,6 +133,15 @@ test('core reducer - previous state - init without options should keep previous 
     }
   };
   const myAjv = new Ajv();
+  const additionalErrors = [{
+    instancePath: '',
+    dataPath: '',
+    schemaPath: '#/required',
+    keyword: 'required',
+    params: {
+      missingProperty: 'foo'
+    },
+  }];
   const after = coreReducer(
     {
       data: {},
@@ -141,10 +150,12 @@ test('core reducer - previous state - init without options should keep previous 
         type: 'Label'
       },
       ajv: myAjv,
+      additionalErrors
     },
     init({}, schema)
   );
   t.deepEqual(after.ajv, myAjv);
+  t.deepEqual(after.additionalErrors, additionalErrors);
 });
 
 test('core reducer - previous state - init with ajv options object should overwrite ajv', t => {
@@ -173,6 +184,49 @@ test('core reducer - previous state - init with ajv options object should overwr
   t.deepEqual(after.ajv, newAjv);
 });
 
+test('core reducer - previous state - init with additionalErrors option object should overwrite additionalErrors', t => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'string',
+        const: 'bar'
+      }
+    }
+  };
+
+  const prevAdditionalErrors = [{
+    instancePath: '',
+    dataPath: '',
+    schemaPath: '#/required',
+    keyword: 'required',
+    params: {
+      missingProperty: 'foo'
+    },
+  }];
+  const currentAdditionalErrors = [{
+    instancePath: '',
+    dataPath: '',
+    schemaPath: '#/required',
+    keyword: 'required',
+    params: {
+      missingProperty: 'bar'
+    },
+  }];
+  const after = coreReducer(
+    {
+      data: {},
+      schema: {},
+      uischema: {
+        type: 'Label'
+      },
+      additionalErrors: prevAdditionalErrors
+    },
+    init({}, schema, undefined, { additionalErrors: currentAdditionalErrors })
+  );
+  t.deepEqual(after.additionalErrors, currentAdditionalErrors);
+});
+
 test('core reducer - previous state - init with empty options should not overwrite', t => {
   const schema: JsonSchema = {
     type: 'object',
@@ -184,6 +238,15 @@ test('core reducer - previous state - init with empty options should not overwri
     }
   };
   const myAjv = new Ajv();
+  const additionalErrors = [{
+    instancePath: '',
+    dataPath: '',
+    schemaPath: '#/required',
+    keyword: 'required',
+    params: {
+      missingProperty: 'foo'
+    },
+  }];
   const after = coreReducer(
     {
       data: {},
@@ -192,10 +255,12 @@ test('core reducer - previous state - init with empty options should not overwri
         type: 'Label'
       },
       ajv: myAjv,
+      additionalErrors
     },
     init({}, schema, undefined, {})
   );
   t.deepEqual(after.ajv, myAjv);
+  t.deepEqual(after.additionalErrors, additionalErrors);
 });
 
 test('core reducer - previous state - init with undefined data should not change data', t => {
@@ -1181,6 +1246,108 @@ test('errorAt respects hide validation mode', t => {
   t.is(errorAt('animal', schema)(core).length, 0);
 })
 
+test('errorAt contains additionalErrors', t => {
+  const schema = {
+    type: 'object',
+    properties: {
+      animal: {
+        type: 'string'
+      }
+    }
+  };
+
+  const data = {
+    animal: 100
+  };
+
+  const additionalErrors = [{
+    instancePath: '',
+    dataPath: '',
+    schemaPath: '#/required',
+    keyword: 'required',
+    params: {
+      missingProperty: 'animal'
+    },
+  }];
+  const core: JsonFormsCore = coreReducer(
+    undefined,
+    init(data, schema, undefined, { additionalErrors })
+  );
+  t.is(core.errors.length, 1);
+  t.is(core.additionalErrors.length, 1);
+  const errorsAt = errorAt('animal', schema)(core);
+  t.is(errorsAt.length, 2);
+  t.true(errorsAt.indexOf(additionalErrors[0]) > -1);
+});
+
+test('errorAt contains additionalErrors for validation mode NoValidation ', t => {
+  const schema = {
+    type: 'object',
+    properties: {
+      animal: {
+        type: 'string'
+      }
+    }
+  };
+
+  const data = {
+    animal: 100
+  };
+
+  const additionalErrors = [{
+    instancePath: '',
+    dataPath: '',
+    schemaPath: '#/required',
+    keyword: 'required',
+    params: {
+      missingProperty: 'animal'
+    },
+  }];
+  const core: JsonFormsCore = coreReducer(
+    undefined,
+    init(data, schema, undefined, { additionalErrors, validationMode: 'NoValidation' })
+  );
+  t.is(core.errors.length, 0);
+  t.is(core.additionalErrors.length, 1);
+  const errorsAt = errorAt('animal', schema)(core);
+  t.is(errorsAt.length, 1);
+  t.is(errorsAt.indexOf(additionalErrors[0]), 0);
+});
+
+test('errorAt contains additionalErrors for validation mode ValidateAndHide ', t => {
+  const schema = {
+    type: 'object',
+    properties: {
+      animal: {
+        type: 'string'
+      }
+    }
+  };
+
+  const data = {
+    animal: 100
+  };
+
+  const additionalErrors = [{
+    instancePath: '',
+    dataPath: '',
+    schemaPath: '#/required',
+    keyword: 'required',
+    params: {
+      missingProperty: 'animal'
+    },
+  }];
+  const core: JsonFormsCore = coreReducer(
+    undefined,
+    init(data, schema, undefined, { additionalErrors, validationMode: 'ValidateAndHide' })
+  );
+  t.is(core.errors.length, 1);
+  t.is(core.additionalErrors.length, 1);
+  const errorsAt = errorAt('animal', schema)(core);
+  t.is(errorsAt.length, 1);
+  t.is(errorsAt.indexOf(additionalErrors[0]), 0);
+});
+
 test('core reducer - setValidationMode - No validation should not produce errors', t => {
   const schema = {
     type: 'object',
@@ -1424,7 +1591,7 @@ test('core reducer - update core - unchanged state properties should be unchange
     before,
     updateCore({
       animal: 'cat'
-    }, before.schema, before.uischema, before.ajv)
+    }, before.schema, before.uischema, { ajv: before.ajv, additionalErrors: before.additionalErrors })
   );
   t.true(before.schema === afterDataUpdate.schema);
   t.true(before.ajv === afterDataUpdate.ajv);
@@ -1432,6 +1599,7 @@ test('core reducer - update core - unchanged state properties should be unchange
   t.true(before.uischema === afterDataUpdate.uischema);
   t.true(before.validationMode === afterDataUpdate.validationMode);
   t.true(before.validator === afterDataUpdate.validator);
+  t.true(before.additionalErrors === afterDataUpdate.additionalErrors);
 
   const updatedSchema = {
     type: 'object',
@@ -1450,6 +1618,40 @@ test('core reducer - update core - unchanged state properties should be unchange
     updateCore(before.data, updatedSchema, before.uischema, before.ajv)
   );
   t.true(before.data === afterSchemaUpdate.data);
+});
+
+test('core reducer - update core - additionalErrors should update', t => {
+  const schema = {
+    type: 'object',
+    properties: {
+      animal: {
+        type: 'string'
+      }
+    }
+  };
+
+  const data = {
+    animal: 'dog'
+  };
+  const before: JsonFormsCore = coreReducer(
+    undefined,
+    init(data, schema, undefined, { additionalErrors: [] })
+  );
+
+  const additionalErrors = [{
+    instancePath: '',
+    dataPath: '',
+    schemaPath: '#/required',
+    keyword: 'required',
+    params: {
+      missingProperty: 'animal'
+    },
+  }];
+  const after: JsonFormsCore = coreReducer(
+    before,
+    updateCore(before.data, before.schema, before.uischema, { additionalErrors })
+  );
+  t.true(after.additionalErrors === additionalErrors);
 });
 
 test('core reducer - setSchema - schema with id', t => {

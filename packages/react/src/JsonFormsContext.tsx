@@ -78,6 +78,7 @@ const initialCoreState: JsonFormsCore = {
   schema: {},
   uischema: undefined,
   errors: [],
+  additionalErrors: [],
   validator: undefined,
   ajv: undefined,
 };
@@ -110,21 +111,21 @@ const useEffectAfterFirstRender = (
 };
 
 export const JsonFormsStateProvider = ({ children, initState, onChange }: any) => {
-  const { data, schema, uischema, ajv, validationMode } = initState.core;
+  const { data, schema, uischema, ajv, validationMode, additionalErrors } = initState.core;
   
   const [core, coreDispatch] = useReducer(
     coreReducer,
     undefined,
     () => coreReducer(
       initState.core,
-      Actions.init(data, schema, uischema, { ajv, validationMode })
+      Actions.init(data, schema, uischema, { ajv, validationMode, additionalErrors })
     )
   );
   useEffect(() => {
     coreDispatch(
-      Actions.updateCore(data, schema, uischema, { ajv, validationMode })
+      Actions.updateCore(data, schema, uischema, { ajv, validationMode, additionalErrors })
     );
-  }, [data, schema, uischema, ajv, validationMode]);
+  }, [data, schema, uischema, ajv, validationMode, additionalErrors]);
 
   const [config, configDispatch] = useReducer(
     configReducer,

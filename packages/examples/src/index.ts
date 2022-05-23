@@ -76,6 +76,7 @@ import * as readonly from './examples/readonly';
 import * as bug_1779 from './examples/1779';
 import * as bug_1645 from './examples/1645';
 import * as conditionalSchemaComposition from './examples/conditional-schema-compositions';
+import * as additionalErrors from './examples/additional-errors';
 export * from './register';
 export * from './example';
 
@@ -136,5 +137,6 @@ export {
   readonly,
   bug_1779,
   bug_1645,
-  conditionalSchemaComposition
+  conditionalSchemaComposition,
+  additionalErrors
 };

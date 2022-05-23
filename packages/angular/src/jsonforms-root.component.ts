@@ -46,6 +46,7 @@ export class JsonForms implements OnChanges, OnInit {
     @Input() ajv: Ajv;
     @Input() config: any;
     @Input() i18n: JsonFormsI18nState;
+    @Input() additionalErrors: ErrorObject[];
     @Output() errors = new EventEmitter<ErrorObject[]>();
 
     private previousData:any;
@@ -64,7 +65,8 @@ export class JsonForms implements OnChanges, OnInit {
                 uischema: this.uischema,
                 schema: this.schema,
                 ajv: this.ajv,
-                validationMode: this.validationMode
+                validationMode: this.validationMode,
+                additionalErrors: this.additionalErrors
             },
             uischemas: this.uischemas,
             i18n: this.i18n,
@@ -128,14 +130,16 @@ export class JsonForms implements OnChanges, OnInit {
         const newValidationMode = changes.validationMode;
         const newAjv = changes.ajv;
         const newConfig = changes.config;
+        const newAdditionalErrors = changes.additionalErrors;
 
-        if (newData || newSchema || newUiSchema || newValidationMode || newAjv) {
+        if (newData || newSchema || newUiSchema || newValidationMode || newAjv || newAdditionalErrors) {
             this.jsonformsService.updateCoreState(
                 newData ? newData.currentValue : USE_STATE_VALUE,
                 newSchema ? newSchema.currentValue : USE_STATE_VALUE,
                 newUiSchema ? newUiSchema.currentValue : USE_STATE_VALUE,
                 newAjv ? newAjv.currentValue : USE_STATE_VALUE,
-                newValidationMode ? newValidationMode.currentValue : USE_STATE_VALUE
+                newValidationMode ? newValidationMode.currentValue : USE_STATE_VALUE,
+                newAdditionalErrors ? newAdditionalErrors.currentValue : USE_STATE_VALUE
             );
         }
 
