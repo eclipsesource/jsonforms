@@ -179,7 +179,8 @@ export class MasterListComponent extends JsonFormsArrayControl {
         `${controlElement.scope}/items`,
         props.path,
         'VerticalLayout',
-        controlElement
+        controlElement,
+        props.rootSchema
       );
 
     const masterItems = (data || []).map((d: any, index: number) => {

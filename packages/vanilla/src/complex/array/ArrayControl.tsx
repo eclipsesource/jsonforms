@@ -37,11 +37,12 @@ export const ArrayControl = ({
   addItem,
   uischema,
   uischemas,
-  renderers
+  renderers,
+  rootSchema
 }: ArrayControlProps & VanillaRendererProps) => {
   const childUiSchema = useMemo(
-    () => findUISchema(uischemas, schema, uischema.scope, path),
-    [uischemas, schema, uischema.scope, path]
+    () => findUISchema(uischemas, schema, uischema.scope, path, undefined, uischema, rootSchema),
+    [uischemas, schema, uischema.scope, path, uischema, rootSchema]
   );
   return (
     <div className={classNames.wrapper}>

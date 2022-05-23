@@ -172,7 +172,8 @@ export class ArrayLayoutRenderer
       this.uischema.scope,
       this.propsPath,
       undefined,
-      this.uischema
+      this.uischema,
+      this.rootSchema
     );
     if (this.isEnabled()) {
       unsetReadonly(uischema);

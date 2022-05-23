@@ -60,7 +60,8 @@ export const MaterialListWithDetailRenderer = ({
   data,
   renderers,
   cells,
-  config
+  config,
+  rootSchema
 }: ArrayLayoutProps) => {
   const [selectedIndex, setSelectedIndex] = useState(undefined);
   const handleRemoveItem = useCallback(
@@ -90,9 +91,10 @@ export const MaterialListWithDetailRenderer = ({
         uischema.scope,
         path,
         undefined,
-        uischema
+        uischema,
+        rootSchema
       ),
-    [uischemas, schema, uischema.scope, path, uischema]
+    [uischemas, schema, uischema.scope, path, uischema, rootSchema]
   );
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
 
