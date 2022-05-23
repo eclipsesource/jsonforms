@@ -465,8 +465,8 @@ export const mapStateToControlProps = (
   const schema = resolvedSchema ?? rootSchema;
   const t = getTranslator()(state);
   const te = getErrorTranslator()(state);
-  const i18nLabel = t(getI18nKey(schema, uischema, path, 'label'), label);
-  const i18nDescription = t(getI18nKey(schema, uischema, path, 'description'), description);
+  const i18nLabel = t(getI18nKey(schema, uischema, path, 'label'), label, {schema, uischema, path, errors} );
+  const i18nDescription = t(getI18nKey(schema, uischema, path, 'description'), description, {schema, uischema, path, errors});
   const i18nErrorMessage = getCombinedErrorMessage(errors, te, t, schema, uischema, path);
 
   return {

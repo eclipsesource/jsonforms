@@ -54,26 +54,26 @@ export const defaultErrorTranslator: ErrorTranslator = (error, t, uischema) => {
     getControlPath(error),
     `error.${error.keyword}`
   );
-  const specializedKeywordMessage = t(i18nKey, undefined);
+  const specializedKeywordMessage = t(i18nKey, undefined, { error } );
   if (specializedKeywordMessage !== undefined) {
     return specializedKeywordMessage;
   }
 
   // check whether there is a generic keyword message
-  const genericKeywordMessage = t(`error.${error.keyword}`, undefined);
+  const genericKeywordMessage = t(`error.${error.keyword}`, undefined, { error });
   if (genericKeywordMessage !== undefined) {
     return genericKeywordMessage;
   }
 
   // check whether there is a customization for the default message
-  const messageCustomization = t(error.message, undefined);
+  const messageCustomization = t(error.message, undefined, { error });
   if (messageCustomization !== undefined) {
     return messageCustomization;
   }
 
   // rewrite required property messages (if they were not customized) as we place them next to the respective input
   if (error.keyword === 'required' && error.message?.startsWith('must have required property')) {
-    return t('is a required property', 'is a required property');
+    return t('is a required property', 'is a required property', { error });
   }
 
   return error.message;
@@ -94,7 +94,7 @@ export const getCombinedErrorMessage = (
   if (errors.length > 0 && t) {
     // check whether there is a special message which overwrites all others
     const customErrorKey = getI18nKey(schema, uischema, path, 'error.custom');
-    const specializedErrorMessage = t(customErrorKey, undefined);
+    const specializedErrorMessage = t(customErrorKey, undefined, {schema, uischema, path, errors});
     if (specializedErrorMessage !== undefined) {
       return specializedErrorMessage;
     }
