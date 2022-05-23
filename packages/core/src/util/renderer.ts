@@ -894,7 +894,10 @@ export const mapStateToJsonFormsRendererProps = (
         state.jsonforms.uischemas,
         ownProps.schema,
         undefined,
-        ownProps.path
+        ownProps.path,
+        undefined,
+        undefined,
+        state.jsonforms.core.schema
       );
     } else {
       uischema = getUiSchema(state);

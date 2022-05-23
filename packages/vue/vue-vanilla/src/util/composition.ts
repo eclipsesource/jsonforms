@@ -90,7 +90,10 @@ export const useVanillaArrayControl = <I extends { control: any }>(
       input.control.value.uischemas,
       input.control.value.schema,
       input.control.value.uischema.scope,
-      input.control.value.path
+      input.control.value.path,
+      undefined,
+      input.control.value.uischema,
+      input.control.value.rootSchema
     )
   );
 
