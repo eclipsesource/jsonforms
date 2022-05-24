@@ -213,6 +213,11 @@ export interface ControlElement extends UISchemaElement, Scopable {
    * An optional label that will be associated with the control
    */
   label?: string | boolean | LabelDescription;
+  /**
+   * The i18n key for the control. It is used to identify the string that needs to be translated.
+   * It is suffixed with `.label`, `.description` and `.error.<keyword>` to derive the corresponding message keys for the control.
+   */
+  i18n?: string;
 }
 
 /**
@@ -243,6 +248,9 @@ export interface Categorization extends UISchemaElement {
    */
   elements: (Category | Categorization)[];
 }
+
+export const isControlElement = (element: UISchemaElement): element is ControlElement =>
+  element.type === 'Control';
 
 export const isGroup = (layout: Layout): layout is GroupLayout =>
   layout.type === 'Group';

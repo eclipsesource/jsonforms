@@ -1,5 +1,5 @@
 import { ErrorObject } from 'ajv';
-import { UISchemaElement } from '../models';
+import { isControlElement, UISchemaElement } from '../models';
 import { getControlPath } from '../reducers';
 import { formatErrorMessage } from '../util';
 import { i18nJsonSchema, ErrorTranslator, Translator } from './i18nTypes';
@@ -8,7 +8,10 @@ export const getI18nKeyPrefixBySchema = (
   schema: i18nJsonSchema | undefined,
   uischema: UISchemaElement | undefined
 ): string | undefined => {
-  return uischema?.options?.i18n ?? schema?.i18n ?? undefined;
+  if (uischema && isControlElement(uischema) && uischema.i18n) {
+    return uischema.i18n;
+  }
+  return schema?.i18n ?? undefined;
 };
 
 /**
