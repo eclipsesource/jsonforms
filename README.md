@@ -37,6 +37,14 @@ In addition, EclipseSource also offers [professional support](https://jsonforms.
 * Install dependencies: `npm ci`
 * Hook up dependencies between packages: `npm run init`
 
+### VS Code dev container
+
+As an alternative to the first time setup, you can use the provided [VS Code dev container](https://code.visualstudio.com/docs/remote/containers) configured in [devcontainer.json](.devcontainer/devcontainer.json).
+
+* Execute command: `Remote Containers: Reopen in container`
+* Wait until the container is built and loaded
+* First time setup and an initial build of all packages has been executed in the container
+
 ### Build & Testing
 
 * Build (all packages): `npm run build`
