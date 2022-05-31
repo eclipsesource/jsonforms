@@ -25,7 +25,7 @@
 
 import isEmpty from 'lodash/isEmpty';
 import range from 'lodash/range';
-import { Scopable } from '../models';
+import { isScoped, Scopable } from '../models';
 
 export const compose = (path1: string, path2: string) => {
   let p1 = path1;
@@ -52,15 +52,10 @@ export { compose as composePaths };
  * and de-referencing the single segments to obtain a new object.
  *
  *
- * @param {string?} schemaPath the schema path to be converted
+ * @param {string} schemaPath the schema path to be converted
  * @returns {string[]} an array containing only non-schema-specific segments
  */
-export const toDataPathSegments = (schemaPath?: string): string[] => {
-  if (!schemaPath) {
-    // handle undefined, null and ''
-    return [];
-  }
-
+export const toDataPathSegments = (schemaPath: string): string[] => {
   const s = schemaPath
     .replace(/anyOf\/[\d]\//g, '')
     .replace(/allOf\/[\d]\//g, '')
@@ -87,6 +82,10 @@ export const toDataPath = (schemaPath: string): string => {
 };
 
 export const composeWithUi = (scopableUi: Scopable, path: string): string => {
+  if (!isScoped(scopableUi)) {
+    return '';
+  }
+
   const segments = toDataPathSegments(scopableUi.scope);
 
   if (isEmpty(segments) && path === undefined) {

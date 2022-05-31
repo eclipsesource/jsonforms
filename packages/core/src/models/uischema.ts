@@ -27,9 +27,20 @@ import { JsonSchema } from './jsonSchema';
 
 /**
  * Interface for describing an UI schema element that is referencing
- * a subschema. The value of the scope must be a JSON Pointer.
+ * a subschema. The value of the scope may be a JSON Pointer.
  */
 export interface Scopable {
+  /**
+   * The scope that determines to which part this element should be bound to.
+   */
+  scope?: string;
+}
+
+/**
+ * Interface for describing an UI schema element that is referencing
+ * a subschema. The value of the scope must be a JSON Pointer.
+ */
+export interface Scoped extends Scopable {
   /**
    * The scope that determines to which part this element should be bound to.
    */
@@ -101,7 +112,7 @@ export interface Condition {
 /**
  * A leaf condition.
  */
-export interface LeafCondition extends Condition, Scopable {
+export interface LeafCondition extends Condition, Scoped {
   type: 'LEAF';
 
   /**
@@ -110,7 +121,7 @@ export interface LeafCondition extends Condition, Scopable {
   expectedValue: any;
 }
 
-export interface SchemaBasedCondition extends Condition, Scopable {
+export interface SchemaBasedCondition extends Condition, Scoped {
   schema: JsonSchema;
 }
 
@@ -217,7 +228,7 @@ export interface LabelElement extends UISchemaElement {
  * A control element. The scope property of the control determines
  * to which part of the schema the control should be bound.
  */
-export interface ControlElement extends UISchemaElement, Scopable, Lableable<string | boolean | LabelDescription> {
+export interface ControlElement extends UISchemaElement, Scoped, Lableable<string | boolean | LabelDescription> {
   type: 'Control';
 }
 
@@ -249,7 +260,13 @@ export const isLayout = (uischema: UISchemaElement): uischema is Layout =>
   (uischema as Layout).elements !== undefined;
 
 export const isScopeable = (obj: object): obj is Scopable =>
-  obj !== undefined && obj.hasOwnProperty('scope') && (obj as Scopable).scope !== undefined;
+  obj !== undefined && obj.hasOwnProperty('scope');
+
+export const isScoped = (obj: object): obj is Scoped =>
+  isScopeable(obj) && obj.scope !== undefined;
+
+export const isLabelable = (obj: object): obj is Lableable =>
+  obj !== undefined && obj.hasOwnProperty('label');
 
 export const isLabeled = (obj: object): obj is Labeled =>
-  obj !== undefined && obj.hasOwnProperty('label') && (obj as Lableable).label !== undefined;
+  isLabelable(obj) && obj.label !== undefined;
