@@ -1,0 +1,119 @@
+---
+id: multiple-choice
+title: Multiple Choice
+description: Configure Multiple Choice
+---
+
+import { OneOfLabel, PropertyLabel, SchemaLabel, UiSchemaLabel } from '../../src/components/docs/labels'
+
+import {
+  MultiEnum,
+  OneOfMultiEnum,
+  PlainEnum,
+  OneOfEnum,
+  RadioGroup
+} from '../../src/components/docs/multiple-choice';
+
+JSON Forms supports different multiple-choice options. It is possible to configure a single select, where only one option can be selected, or a multi select, where several options can be selected.
+
+## Single Select
+
+A single select can be achieved by using an `enum` or a `oneOf` in the JSON schema.
+
+### Enum
+You can define an enum in your schema like this:
+```js
+plainEnum: {
+  type: 'string',
+  enum: ['foo', 'bar', 'foobar']
+}
+```
+
+<PlainEnum />
+
+### One Of
+
+With the use of `oneOf`, you can also add the `title` option. You can define an enum in your schema like this:
+
+```js
+oneOfEnum: {
+  type: 'string',
+  oneOf: [
+    {
+      const: 'foo',
+      title: 'Foo'
+    },
+    {
+      const: 'bar',
+      title: 'Bar'
+    },
+    {
+      const: 'foobar',
+      title: 'FooBar'
+    }
+  ]
+}
+```
+<OneOfEnum />
+
+### Radio Button
+
+Both `enum` and `oneOf` support the option to use radio buttons instead of a dropdown. You can use them by using the `format` option in the UI Schema:
+
+```js
+{
+  type: "Control",
+  scope: "#/properties/radioGroup",
+  options: {
+    format: "radio"
+  }
+}
+```
+
+<RadioGroup />
+
+## Multi Select
+
+There are again two different ways to define the enum.
+
+### Enum
+JSON forms will render a multi select if you define an Array of `enums` with the `uniqueItems` option set to true in your JSON schema like in the example below.
+
+```js
+multiEnum: {
+  type: "array",
+  uniqueItems: true,
+  items: {
+    type: "string",
+    enum: [
+      "foo",
+      "bar",
+      "foobar"
+    ]
+  }
+}
+```
+<MultiEnum />
+
+### One Of
+
+JSON forms will render a multi select if you define an Array of `oneOfs` with the `uniqueItems` option set to true in your JSON schema like in the example below.
+
+```js
+oneOfMultiEnum: {
+  type: 'array',
+  uniqueItems: true,
+  items: {
+    oneOf: [
+      { const: 'foo', title: 'My Foo' },
+      { const: 'bar', title: 'My Bar' },
+      { const: 'foobar', title: 'My FooBar' }
+    ]
+  }
+}
+```
+
+<OneOfMultiEnum />
+
+## Localization
+For how to localize the enum, have a look at our localization guide.

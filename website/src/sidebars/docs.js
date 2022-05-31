@@ -15,6 +15,7 @@ module.exports = {
     'readonly',
     'validation',
     'date-time-picker',
+    'multiple-choice',
     {
       type: 'category',
       label: 'Tutorials',
