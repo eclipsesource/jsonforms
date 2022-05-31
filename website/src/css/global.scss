@@ -17,6 +17,9 @@
   --ifm-color-primary-lightest: rgb(146, 224, 208);
   --ifm-table-stripe-background: #fff;
   --ifm-table-background: #fff;
+  --ifm-code-background: #ebedf0;
+  --ifm-code-padding-horizontal: 0.4rem;
+  --ifm-code-padding-vertical: 0.2rem;
   --ifm-code-font-size: 95%;
   --ifm-table-border-width: 0;
   // Copied and adjusted from https://github.com/facebookincubator/infima/blob/c02b401/packages/core/styles/components/navbar.pcss#L22
@@ -63,9 +66,14 @@ html[data-theme='light'] {
   padding: 0 var(--ifm-pre-padding);
 }
 
+code {
+  border: 0;
+}
+
 .blog-wrapper {
   .avatar__photo {
     display: flex;
+    filter: invert(1);
   }
 }
 

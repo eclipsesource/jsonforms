@@ -138,6 +138,7 @@ module.exports = {
       '@docusaurus/plugin-content-docs',
       {
         id: 'docs',
+        breadcrumbs: false,
         path: 'content/docs',
         routeBasePath: 'docs',
         sidebarPath: require.resolve('./src/sidebars/docs.js'),
@@ -147,6 +148,7 @@ module.exports = {
       '@docusaurus/plugin-content-docs',
       {
         id: 'examples',
+        breadcrumbs: false,
         path: 'content/examples',
         routeBasePath: 'examples',
         sidebarPath: require.resolve('./src/sidebars/examples.js'),

@@ -10,7 +10,7 @@ import {
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Highlight, { defaultProps } from "prism-react-renderer";
-import usePrismTheme from '@theme/hooks/usePrismTheme';
+import { usePrismTheme } from '@docusaurus/theme-common';
 
 const demoStyles = makeStyles((theme) =>
   createStyles({
