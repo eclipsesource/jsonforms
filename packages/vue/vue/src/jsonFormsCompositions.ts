@@ -30,7 +30,9 @@ import {
   mapStateToOneOfEnumCellProps,
   StatePropsOfJsonFormsRenderer,
   createId,
-  removeId
+  removeId,
+  mapStateToMultiEnumControlProps,
+  mapDispatchToMultiEnumProps
 } from '@jsonforms/core';
 import {
   CompType,
@@ -287,6 +289,16 @@ export const useJsonFormsAnyOfControl = (props: ControlProps) => {
  */
 export const useJsonFormsOneOfControl = (props: ControlProps) => {
   return useControl(props, mapStateToOneOfProps, mapDispatchToControlProps);
+};
+
+/**
+ * Provides bindings for 'Control' elements which resolve to multiple choice enums.
+ *
+ * Access bindings via the provided reactive `control` object.
+ * Dispatch changes via the provided `handleChange` method.
+ */
+export const useJsonFormsMultiEnumControl = (props: ControlProps) => {
+  return useControl(props, mapStateToMultiEnumControlProps, mapDispatchToMultiEnumProps);
 };
 
 export interface LayoutProps extends RendererProps {
