@@ -80,11 +80,13 @@ const ValidationExample = () => {
       <Button onClick={toggleValidation} color='primary' variant='contained'>
         Switch Validation Mode
       </Button>
-      <br />
-      <br />
-      Current mode: {currentValidationMode}
-      <br />
-      Emitted errors: {errors.map((error) => error.message).join(', ')}
+      <p />
+      <p>
+        <b>Current validation mode:</b> {currentValidationMode}
+      </p>
+      <p>
+        <b>Emitted errors:</b> {errors.map((error) => error.message).join(', ')}
+      </p>
     </div>
   );
 };

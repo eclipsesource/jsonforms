@@ -3,3 +3,5 @@ node_modules
 build
 .env
 google7cffb0370fcac18c.html
+.yalc
+yalc.lock
