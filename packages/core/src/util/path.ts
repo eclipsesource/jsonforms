@@ -82,16 +82,16 @@ export const toDataPath = (schemaPath: string): string => {
 
 export const composeWithUi = (scopableUi: Scopable, path: string): string => {
   if (!isScoped(scopableUi)) {
-    return '';
+    return path ?? '';
   }
 
   const segments = toDataPathSegments(scopableUi.scope);
 
-  if (isEmpty(segments) && path === undefined) {
-    return '';
+  if (isEmpty(segments)) {
+    return path ?? '';
   }
 
-  return isEmpty(segments) ? path : compose(path, segments.join('.'));
+  return compose(path, segments.join('.'));
 };
 
 /**
