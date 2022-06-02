@@ -48,6 +48,7 @@ export interface Scoped extends Scopable {
 }
 
 /**
+
  * Interface for describing an UI schema element that may be labeled.
  */
 export interface Lableable<T = string> {
@@ -59,6 +60,14 @@ export interface Lableable<T = string> {
  */
 export interface Labeled<T = string> extends Lableable<T> {
   label: string|T;
+
+/*
+ * Interface for describing an UI schema element that can provide an internationalization base key.
+ * If defined, this key is suffixed to derive applicable message keys for the UI schema element.
+ * For example, such suffixes are `.label` or `.description` to derive the corresponding message keys for a control element.
+ */
+export interface Internationalizable {
+  i18n?: string;
 }
 
 /**
@@ -228,7 +237,7 @@ export interface LabelElement extends UISchemaElement {
  * A control element. The scope property of the control determines
  * to which part of the schema the control should be bound.
  */
-export interface ControlElement extends UISchemaElement, Scoped, Lableable<string | boolean | LabelDescription> {
+export interface ControlElement extends UISchemaElement, Scoped, Lableable<string | boolean | LabelDescription> | Internationalizable {
   type: 'Control';
 }
 
@@ -251,6 +260,10 @@ export interface Categorization extends UISchemaElement, Labeled {
    * {@link Category} or {@link Categorization}.
    */
   elements: (Category | Categorization)[];
+}
+
+export const isInternationalized = (element: unknown): element is Required<Internationalizable> => {
+  return typeof element === 'object' && element !== null && typeof (element as Internationalizable).i18n === 'string';
 }
 
 export const isGroup = (layout: Layout): layout is GroupLayout =>
