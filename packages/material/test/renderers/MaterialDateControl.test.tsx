@@ -381,4 +381,31 @@ describe('Material date control', () => {
     input.simulate('change', input);
     expect(onChangeData.data.foo).toBe('04---1961');
   });
+
+  it('should call onChange with original input value for invalid date strings', () => {
+    const core = initCore(schema, uischema);
+    const onChangeData: any = {
+      data: undefined
+    };
+    wrapper = mount(
+      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+        <TestEmitter
+          onChange={({ data }) => {
+            onChangeData.data = data;
+          }}
+        />
+        <MaterialDateControl
+          schema={schema}
+          uischema={{...uischema}}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    const input = wrapper.find('input').first();
+    expect(input.props().value).toBe('');
+
+    (input.getDOMNode() as HTMLInputElement).value = 'invalid date string'; 
+    input.simulate('change', input);
+    expect(onChangeData.data.foo).toBe('invalid date string');
+  });
 });
