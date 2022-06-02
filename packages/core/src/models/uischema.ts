@@ -259,14 +259,14 @@ export const isGroup = (layout: Layout): layout is GroupLayout =>
 export const isLayout = (uischema: UISchemaElement): uischema is Layout =>
   (uischema as Layout).elements !== undefined;
 
-export const isScopeable = (obj: object): obj is Scopable =>
-  obj !== undefined && obj.hasOwnProperty('scope');
+export const isScopable = (obj: unknown): obj is Scopable =>
+  obj && typeof obj === 'object';
 
 export const isScoped = (obj: unknown): obj is Scoped =>
-  isScopeable(obj) && typeof obj.scope === 'string';
+  isScopable(obj) && typeof obj.scope === 'string';
 
-export const isLabelable = (obj: object): obj is Lableable =>
-  obj !== undefined && obj.hasOwnProperty('label');
+export const isLabelable = (obj: unknown): obj is Lableable =>
+  obj && typeof obj === 'object';
 
-export const isLabeled = (obj: object): obj is Labeled =>
-  isLabelable(obj) && obj.label !== undefined;
+export const isLabeled = (obj: unknown): obj is Labeled =>
+  isLabelable(obj) && ['string', 'object'].includes(typeof obj.label);
