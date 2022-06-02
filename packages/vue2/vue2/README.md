@@ -99,7 +99,7 @@ Vue.use(VueCompositionAPI)
 
 The `@jsonforms/vue` package offers JSON Forms Core bindings based on the composition API.
 These bindings handle the props given to the `dispatch-renderer` and use the JSON Forms Core to determine specialized inputs for many use cases like validation and rule-based visibility.
-Using these bindings as a basis it's straightforward to create renderer sets for Vue 2.
+Using these bindings as a basis, it's straightforward to create renderer sets for Vue 2.
 
 #### Basic control renderer example
 
