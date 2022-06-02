@@ -262,8 +262,8 @@ export const isLayout = (uischema: UISchemaElement): uischema is Layout =>
 export const isScopeable = (obj: object): obj is Scopable =>
   obj !== undefined && obj.hasOwnProperty('scope');
 
-export const isScoped = (obj: object): obj is Scoped =>
-  isScopeable(obj) && obj.scope !== undefined;
+export const isScoped = (obj: unknown): obj is Scoped =>
+  isScopeable(obj) && typeof obj.scope === 'string';
 
 export const isLabelable = (obj: object): obj is Lableable =>
   obj !== undefined && obj.hasOwnProperty('label');
