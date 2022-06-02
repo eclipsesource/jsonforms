@@ -1344,7 +1344,7 @@ test('mapStateToControlProps - i18n - translation via UI Schema i18n key', t => 
   };
   const state: JsonFormsState = createState(coreUISchema);
   state.jsonforms.i18n = defaultJsonFormsI18nState;
-  ownProps.uischema = {...ownProps.uischema, options: {i18n: 'my-key'}};
+  ownProps.uischema = {...ownProps.uischema, i18n: 'my-key'};
   state.jsonforms.i18n.translate = (key: string, defaultMessage: string | undefined) => {
     switch(key){
       case 'my-key.label': return 'my label';
