@@ -28,8 +28,8 @@ import { EnumCellProps, EnumOption, WithClassname } from '@jsonforms/core';
 import {
   Autocomplete,
   AutocompleteRenderOptionState,
-  Input,
-  FilterOptionsState
+  FilterOptionsState,
+  Input
 } from '@mui/material';
 import merge from 'lodash/merge';
 
@@ -76,7 +76,7 @@ export const MuiAutocomplete = (props: EnumCellProps & WithClassname & WithOptio
       autoComplete
       fullWidth
       options={options}
-      getOptionLabel={getOptionLabel || (option => option?.label)}
+      getOptionLabel={getOptionLabel || (option => typeof option === 'string' ? option : option?.label)}
       style={{ marginTop: 16 }}
       renderInput={params => (
         <Input
