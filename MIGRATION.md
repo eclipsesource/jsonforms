@@ -104,6 +104,10 @@ There should not be any behavior changes.
 All React Material class components were refactored to functional components.
 Please check whether you extended any of our base renderers in your adaptation.
 
+### Localization of Date Picker in Angular Material
+
+Date Picker in Angular Material will use the global configuration of your Angular Material application.
+
 ## Migrating to JSON Forms 2.5
 
 ### JsonForms Component for Angular
