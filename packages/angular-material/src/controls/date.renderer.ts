@@ -24,13 +24,11 @@
 */
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
-  getLocale,
   isDateControl,
   RankedTester,
   rankWith
 } from '@jsonforms/core';
 import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
-import { DateAdapter, NativeDateAdapter } from '@angular/material/core';
 
 @Component({
   selector: 'DateControlRenderer',
@@ -58,14 +56,8 @@ import { DateAdapter, NativeDateAdapter } from '@angular/material/core';
 export class DateControlRenderer extends JsonFormsControl {
   constructor(
     jsonformsService: JsonFormsAngularService,
-    private dateAdapter: DateAdapter<NativeDateAdapter>
   ) {
     super(jsonformsService);
-  }
-
-  mapAdditionalProps() {
-    const locale = getLocale(this.jsonFormsService.getState());
-    this.dateAdapter.setLocale(locale);
   }
 
   getEventValue = (event: any) => event.value.toISOString().substr(0, 10);
