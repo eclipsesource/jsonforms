@@ -119,6 +119,7 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
   );
 
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
+  const showSortButtons = appliedUiSchemaOptions.showSortButtons || appliedUiSchemaOptions.showArrayLayoutSortButtons;
 
   return (
     <Accordion
@@ -147,7 +148,7 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
                   justifyContent='center'
                   alignItems='center'
                 >
-                  {appliedUiSchemaOptions.showSortButtons ? (
+                  {showSortButtons ? (
                     <Fragment>
                       <Grid item>
                         <IconButton

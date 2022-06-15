@@ -370,7 +370,7 @@ const TableRows = ({
             moveDownCreator={moveDown}
             enableUp={index !== 0}
             enableDown={index !== data - 1}
-            showSortButtons={appliedUiSchemaOptions.showSortButtons}
+            showSortButtons={appliedUiSchemaOptions.showSortButtons || appliedUiSchemaOptions.showArrayTableSortButtons}
             enabled={enabled}
             cells={cells}
             path={path}
