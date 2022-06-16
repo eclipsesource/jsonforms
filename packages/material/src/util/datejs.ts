@@ -8,13 +8,13 @@ export const createOnChangeHandler = (
   path: string,
   handleChange: (path: string, value: any) => void,
   saveFormat: string | undefined
-) => (time: dayjs.Dayjs, keyboardInputValue: string) => {
+) => (time: dayjs.Dayjs, textInputValue: string) => {
   if (!time) {
     handleChange(path, undefined);
     return;
   }
   const result = dayjs(time).format(saveFormat);
-  handleChange(path, result === 'Invalid Date' ? keyboardInputValue : result);
+  handleChange(path, result === 'Invalid Date' ? textInputValue : result);
 };
 
 export const getData = (
