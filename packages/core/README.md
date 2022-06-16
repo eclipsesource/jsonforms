@@ -21,6 +21,12 @@ See the official [documentation](https://jsonforms.io/) and the [Example Package
 
 Check <https://www.npmjs.com/search?q=%40jsonforms> for all published JSON Forms packages.
 
+## Upgrading to JSON Forms 3.0
+
+With version 3.0 of JSON Forms we removed `json-schema-ref-parser` from the core package.
+This change only affects users of the React variant (Vue and Angular are not affected) and even for React only a few users will need to adjust their code.
+To avoid issues and for more information, please have a look at our [migration guide](https://github.com/eclipsesource/jsonforms/blob/master/MIGRATION.md).
+
 ## License
 
 The JSON Forms project is licensed under the MIT License. See the [LICENSE file](https://github.com/eclipsesource/jsonforms/blob/master/LICENSE) for more information.
@@ -37,3 +43,8 @@ If you encounter any problems feel free to [open an issue](https://github.com/ec
 For questions and discussions please use the [JSON Forms board](https://jsonforms.discourse.group).
 You can also reach us via [email](mailto:jsonforms@eclipsesource.com?subject=JSON%20Forms).
 In addition, EclipseSource also offers [professional support](https://jsonforms.io/support) for JSON Forms.
+
+
+## Migration
+
+See our [migration guide](https://github.com/eclipsesource/jsonforms/blob/master/MIGRATION.md) when updating JSON Forms.
