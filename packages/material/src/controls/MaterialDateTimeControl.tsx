@@ -38,7 +38,12 @@ import {
   LocalizationProvider 
 } from '@mui/lab';
 import AdapterDayjs from '@mui/lab/AdapterDayjs';
-import { createOnChangeHandler, getData, useFocus } from '../util';
+import {
+  createOnChangeHandler,
+  getData,
+  useFocus,
+  useParsedDateSynchronizer,
+} from '../util';
 
 export const MaterialDateTimeControl = (props: ControlProps) => {
   const [focused, onFocus, onBlur] = useFocus();
@@ -82,6 +87,8 @@ export const MaterialDateTimeControl = (props: ControlProps) => {
     saveFormat
   ),[path, handleChange, saveFormat]);
 
+  const parsedDateSynchronizer = useParsedDateSynchronizer({ data, onBlur });
+
   return (
     <Hidden xsUp={!visible}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -106,10 +113,15 @@ export const MaterialDateTimeControl = (props: ControlProps) => {
               autoFocus={appliedUiSchemaOptions.focus}
               error={!isValid}
               fullWidth={!appliedUiSchemaOptions.trim}
-              inputProps={{ ...params.inputProps, type: 'text' }}
+              inputProps={{
+                ...params.inputProps,
+                type: 'text',
+                value: parsedDateSynchronizer.value,
+                onChange: parsedDateSynchronizer.createOnChangeHandler(params.inputProps.onChange),
+              }}
               InputLabelProps={data ? { shrink: true } : undefined}
               onFocus={onFocus}
-              onBlur={onBlur}
+              onBlur={parsedDateSynchronizer.onBlur}
               variant={'standard'}
             />
           )}
