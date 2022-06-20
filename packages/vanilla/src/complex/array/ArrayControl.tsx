@@ -50,7 +50,7 @@ export const ArrayControl = ({
         <legend>
           <button
             className={classNames.button}
-            onClick={() => addItem(path, createDefaultValue(schema))}
+            onClick={addItem(path, createDefaultValue(schema))}
           >
             +
           </button>
