@@ -33,7 +33,7 @@ import { ArrayControl } from './ArrayControl';
 export { ArrayControl, ArrayControlRenderer };
 
 export const arrayControlTester: RankedTester = rankWith(
-  2,
+  4,
   isObjectArrayWithNesting
 );
 
