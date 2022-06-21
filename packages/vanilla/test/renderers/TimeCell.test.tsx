@@ -259,7 +259,7 @@ describe('Time cell', () => {
     const input = wrapper.find('input');
     input.simulate('change', { target: { value: '20:15' } });
     wrapper.update();
-    expect(onChangeData.data.foo).toBe('20:15');
+    expect(onChangeData.data.foo).toBe('20:15:00');
   });
 
   test('update via action', () => {
