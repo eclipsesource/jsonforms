@@ -67,7 +67,9 @@ export const MaterialTimeControl = (props: ControlProps) => {
   );
 
   const format = appliedUiSchemaOptions.timeFormat ?? 'HH:mm';
-    const saveFormat = appliedUiSchemaOptions.timeSaveFormat ?? 'HH:mm:ss';
+  const saveFormat = appliedUiSchemaOptions.timeSaveFormat ?? 'HH:mm:ss';
+
+  const views = appliedUiSchemaOptions.views ?? ['hours', 'minutes'];
 
   const firstFormHelperText = showDescription
     ? description
@@ -93,7 +95,7 @@ export const MaterialTimeControl = (props: ControlProps) => {
           inputFormat={format}
           disableMaskedInput
           ampm={!!appliedUiSchemaOptions.ampm}
-          views={appliedUiSchemaOptions.views}
+          views={views}
           disabled={!enabled}
           cancelText={appliedUiSchemaOptions.cancelLabel}
           clearText={appliedUiSchemaOptions.clearLabel}
