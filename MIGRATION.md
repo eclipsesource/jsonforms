@@ -108,7 +108,7 @@ Please check whether you extended any of our base renderers in your adaptation.
 
 The `scope` attribute in `Scopable` is now optional.
 Use `Scoped` instead for non optional scopes.
-
+The utility function `fromScopable` was renamed to `fromScoped` accordingly.
 ## Migrating to JSON Forms 2.5
 
 ### JsonForms Component for Angular
