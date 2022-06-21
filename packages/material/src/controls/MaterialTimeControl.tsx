@@ -32,7 +32,7 @@ import {
   rankWith
 } from '@jsonforms/core';
 import { withJsonFormsControlProps } from '@jsonforms/react';
-import { FormHelperText, Hidden, TextField } from '@mui/material';
+import { FormHelperText, Hidden } from '@mui/material';
 import {
   TimePicker,
   LocalizationProvider 
@@ -41,8 +41,8 @@ import AdapterDayjs from '@mui/lab/AdapterDayjs';
 import {
   createOnChangeHandler,
   getData,
-  useFocus,
-  useParsedDateSynchronizer,
+  ResettableTextField,
+  useFocus
 } from '../util';
 
 export const MaterialTimeControl = (props: ControlProps) => {
@@ -87,14 +87,15 @@ export const MaterialTimeControl = (props: ControlProps) => {
     saveFormat
   ),[path, handleChange, saveFormat]);
 
-  const parsedDateSynchronizer = useParsedDateSynchronizer({ data, onBlur });
+  const value = getData(data, saveFormat);
+  const valueInInputFormat = value ? value.format(format) : '';
 
   return (
     <Hidden xsUp={!visible}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <TimePicker
           label={label}
-          value={getData(data, saveFormat)}
+          value={value}
           clearable
           onChange={onChange}
           inputFormat={format}
@@ -106,8 +107,12 @@ export const MaterialTimeControl = (props: ControlProps) => {
           clearText={appliedUiSchemaOptions.clearLabel}
           okText={appliedUiSchemaOptions.okLabel}
           renderInput={params => (
-            <TextField 
+            <ResettableTextField 
               {...params}
+              rawValue={data}
+              dayjsValueIsValid={value !== null}
+              valueInInputFormat={valueInInputFormat}
+              focused={focused}
               id={id + '-input'}
               required={required && !appliedUiSchemaOptions.hideRequiredAsterisk}
               autoFocus={appliedUiSchemaOptions.focus}
@@ -115,13 +120,11 @@ export const MaterialTimeControl = (props: ControlProps) => {
               fullWidth={!appliedUiSchemaOptions.trim}
               inputProps={{
                 ...params.inputProps,
-                type: 'text',
-                value: parsedDateSynchronizer.value,
-                onChange: parsedDateSynchronizer.createOnChangeHandler(params.inputProps.onChange),
+                type: 'text'
               }}
               InputLabelProps={data ? { shrink: true } : undefined}
               onFocus={onFocus}
-              onBlur={parsedDateSynchronizer.onBlur}
+              onBlur={onBlur}
               variant={'standard'}
             />
           )}
