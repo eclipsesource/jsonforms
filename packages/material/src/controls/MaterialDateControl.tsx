@@ -68,6 +68,8 @@ export const MaterialDateControl = (props: ControlProps)=> {
   const format = appliedUiSchemaOptions.dateFormat ?? 'YYYY-MM-DD';
   const saveFormat = appliedUiSchemaOptions.dateSaveFormat ?? 'YYYY-MM-DD';
 
+  const views = appliedUiSchemaOptions.views ?? ['year', 'day'];
+
   const firstFormHelperText = showDescription
     ? description
     : !isValid
@@ -90,7 +92,7 @@ export const MaterialDateControl = (props: ControlProps)=> {
           onChange={onChange}
           inputFormat={format}
           disableMaskedInput
-          views={appliedUiSchemaOptions.views}
+          views={views}
           disabled={!enabled}
           cancelText={appliedUiSchemaOptions.cancelLabel}
           clearText={appliedUiSchemaOptions.clearLabel}
