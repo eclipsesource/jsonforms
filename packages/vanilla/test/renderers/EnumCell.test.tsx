@@ -188,6 +188,27 @@ describe('Enum cell', () => {
     expect(onChangeData.data.foo).toBe('b');
   });
 
+  test('empty selection should lead to data deletion', () => {
+    const onChangeData: any = {
+      data: undefined
+    };
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
+    wrapper = mount(
+      <JsonFormsStateProvider initState={{ core }}>
+        <TestEmitter
+          onChange={({ data }) => {
+            onChangeData.data = data;
+          }}
+        />
+        <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+      </JsonFormsStateProvider>
+    );
+    expect(onChangeData.data.foo).toBe('a');
+    const select = wrapper.find('select');
+    select.simulate('change', { target: { selectedIndex: 0 } });
+    expect(onChangeData.data.foo).toBe(undefined);
+  });
+
   test('update via action', () => {
     const data = { 'foo': 'b' };
     const core = initCore(fixture.schema, fixture.uischema, data);

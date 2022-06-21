@@ -43,7 +43,7 @@ export const EnumCell = (props: EnumCellProps & VanillaRendererProps) => {
       disabled={!enabled}
       autoFocus={uischema.options && uischema.options.focus}
       value={data || ''}
-      onChange={ev => handleChange(path, ev.target.value)}
+      onChange={ev => handleChange(path, ev.target.selectedIndex === 0 ? undefined : ev.target.value)}
     >
       {
         [<option value='' key={'empty'} />]
