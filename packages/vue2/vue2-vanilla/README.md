@@ -22,17 +22,85 @@ Install JSON Forms Core, Vue 2 and Vue 2 Vanilla Renderers.
 npm i --save @jsonforms/core @jsonforms/vue2 @jsonforms/vue2-vanilla
 ```
 
+Also add the packages to the transpile dependencies in the `vue.config.js` file:
+
+```js
+module.exports = {
+    transpileDependencies: ['@jsonforms/core', '@jsonforms/vue2', '@jsonforms/vue2-vanilla']
+}
+```
+
+As JSON Forms uses the Vue 3 composition API you need to add the `@vue/composition-api` plugin to your Vue 2 app.
+
+```ts
+import VueCompositionAPI from '@vue/composition-api'
+
+Vue.use(VueCompositionAPI)
+```
+
 Use the `json-forms` component for each form you want to render and hand over the renderer set.
 
 ```vue
 <script>
 import { JsonForms } from '@jsonforms/vue2';
 import { vanillaRenderers } from '@jsonforms/vue2-vanilla'
+import { defineComponent } from "@vue/composition-api";
 
 const renderers = [
   ...vanillaRenderers,
   // here you can add custom renderers
 ]
+
+const schema = {
+  type: 'object',
+  properties: {
+    name: {
+      type: 'string',
+      minLength: 1
+    },
+    done: {
+      type: 'boolean'
+    },
+    due_date: {
+      type: 'string',
+      format: 'date'
+    },
+    recurrence: {
+      type: 'string',
+      enum: ['Never', 'Daily', 'Weekly', 'Monthly']
+    }
+  },
+  required: ['name', 'due_date']
+};
+
+const uischema = {
+  type: 'VerticalLayout',
+  elements: [
+    {
+      type: 'Control',
+      label: false,
+      scope: '#/properties/done'
+    },
+    {
+      type: 'Control',
+      scope: '#/properties/name'
+    },
+    {
+      type: 'HorizontalLayout',
+      elements: [
+        {
+          type: 'Control',
+          scope: '#/properties/due_date'
+        },
+        {
+          type: 'Control',
+          scope: '#/properties/recurrence'
+        }
+      ]
+    }
+  ]
+};
+const data = {};
 
 export default defineComponent({
   name: 'app',
@@ -68,14 +136,6 @@ export default defineComponent({
 By default the Vanilla Renderers don't apply any CSS at all.
 For a quick start you can use `@jsonforms/vue-vanilla/vanilla.css`.
 
-As JSON Forms uses the Vue 3 composition API you need to add the `@vue/composition-api` plugin to your Vue 2 app.
-
-```ts
-import VueCompositionAPI from '@vue/composition-api'
-
-Vue.use(VueCompositionAPI)
-```
-
 For more information on how JSON Forms can be configured, please see the [README of `@jsonforms/vue2`](../vue2/README.md).
 
 ### Styling
@@ -92,8 +152,14 @@ If you want to fall back to `defaultStyles` or combine them with your own classe
 
 ```vue
 <script>
-import { JsonForms } from '@jsonforms/vue';
-import { defaultStyles, mergeStyles, vanillaRenderers } from '@jsonforms/vue-vanilla'
+import { JsonForms } from '@jsonforms/vue2';
+import { defaultStyles, mergeStyles, vanillaRenderers } from '@jsonforms/vue2-vanilla'
+import { defineComponent } from "@vue/composition-api";
+
+const renderers = [
+  ...vanillaRenderers,
+  // here you can add custom renderers
+]
 
 // mergeStyles combines all classes from both styles definitions
 const myStyles = mergeStyles(defaultStyles, { control: { root: 'my-control' } });
@@ -105,7 +171,7 @@ export default defineComponent({
   },
   data() {
     return {
-      renderers: Object.freeze(vanillaRenderers),
+      renderers: Object.freeze(renderers),
       data,
       schema,
       uischema,
@@ -118,7 +184,7 @@ export default defineComponent({
   },
   provide() {
     return {
-      styles: myStyles;
+      styles: myStyles
     }
   }
 });
@@ -159,3 +225,7 @@ The JSONForms project is licensed under the MIT License. See the [LICENSE file](
 ## Roadmap
 
 Our current roadmap is available [here](https://github.com/eclipsesource/jsonforms/blob/master/ROADMAP.md).
+
+## Migration
+
+See our [migration guide](https://github.com/eclipsesource/jsonforms/blob/master/MIGRATION.md) when updating JSON Forms.

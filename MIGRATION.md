@@ -110,6 +110,10 @@ The `scope` attribute in `Scopable` is now optional.
 Use `Scoped` instead for non optional scopes.
 The utility function `fromScopable` was renamed to `fromScoped` accordingly.
 
+### Localization of Date Picker in Angular Material
+
+Date Picker in Angular Material will use the global configuration of your Angular Material application.
+
 ## Migrating to JSON Forms 2.5
 
 ### JsonForms Component for Angular

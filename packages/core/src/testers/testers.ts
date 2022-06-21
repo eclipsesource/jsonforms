@@ -144,7 +144,7 @@ export const formatIs = (expectedFormat: string): Tester =>
     schema =>
       !isEmpty(schema) &&
       schema.format === expectedFormat &&
-      schema.type === 'string'
+      hasType(schema, 'string')
   );
 
 /**
@@ -445,10 +445,7 @@ export const isObjectArrayWithNesting = (
   }
   const schemaPath = (uischema as ControlElement).scope;
   const resolvedSchema = resolveSchema(schema, schemaPath, rootSchema ?? schema);
-  const wantedNestingByType: { [key: string]: number } = {
-    object: 2,
-    array: 1
-  };
+  let objectDepth = 0;
   if (resolvedSchema !== undefined && resolvedSchema.items !== undefined) {
     // check if nested arrays
     if (
@@ -459,16 +456,16 @@ export const isObjectArrayWithNesting = (
         if (val.$ref !== undefined) {
           return false;
         }
-        // we don't support multiple types
-        if (typeof val.type !== 'string') {
+        if (hasType(val, 'object')) {
+          objectDepth++;
+          if (objectDepth === 2) {
+            return true;
+          }
+        }
+        if (hasType(val, 'array')) {
           return true;
         }
-        const typeCount = wantedNestingByType[val.type];
-        if (typeCount === undefined) {
-          return false;
-        }
-        wantedNestingByType[val.type] = typeCount - 1;
-        return wantedNestingByType[val.type] === 0;
+        return false;
       }, rootSchema)
     ) {
       return true;

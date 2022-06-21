@@ -333,6 +333,36 @@ describe('Material array layout', () => {
         .find({ 'aria-label': 'Move down' }).length
     ).toBe(1);
   });
+  it('should render sort buttons if showSortButtons is true in config', () => {
+    wrapper = mount(
+      <JsonForms
+        data={data}
+        schema={nestedSchema}
+        uischema={uischema}
+        renderers={materialRenderers}
+        config={{showSortButtons: true}}
+      />
+    );
+
+    expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
+
+    // up button
+    expect(
+      wrapper
+        .find('Memo(ExpandPanelRendererComponent)')
+        .at(0)
+        .find('button')
+        .find({ 'aria-label': 'Move up' }).length
+    ).toBe(1);
+    // down button
+    expect(
+      wrapper
+        .find('Memo(ExpandPanelRendererComponent)')
+        .at(0)
+        .find('button')
+        .find({ 'aria-label': 'Move down' }).length
+    ).toBe(1);
+  });
   it('should move item up if up button is presses', (done) => {
     const onChangeData: any = {
       data: undefined
@@ -341,7 +371,8 @@ describe('Material array layout', () => {
       <JsonForms
         data={data}
         schema={nestedSchema}
-        uischema={uischemaWithSortOption}
+        uischema={uischema}
+        config={{showSortButtons: true}}
         renderers={materialRenderers}
         onChange={({ data }) => {
           onChangeData.data = data;

@@ -56,7 +56,7 @@ export default defineComponent({
   data() {
     return {
       // freeze renderers for performance gains
-      renderers: Object.freeze(vueRenderers),
+      renderers: Object.freeze(renderers),
       data: {
         number: 5
       },
@@ -90,6 +90,7 @@ export default defineComponent({
 
 The `@jsonforms/vue` package offers JSON Forms Core bindings based on the composition API.
 These bindings handle the props given to the `dispatch-renderer` and use the JSON Forms Core to determine specialized inputs for many use cases like validation and rule-based visibility.
+Using these bindings as a basis, it's straightforward to create renderer sets for Vue 3.
 
 #### Basic control renderer example
 
@@ -302,3 +303,7 @@ If you encounter any problems feel free to [open an issue](https://github.com/ec
 For questions and discussions please use the [JSON Forms board](https://jsonforms.discourse.group).
 You can also reach us via [email](mailto:jsonforms@eclipsesource.com?subject=JSON%20Forms).
 In addition, EclipseSource also offers [professional support](https://jsonforms.io/support) for JSON Forms.
+
+## Migration
+
+See our [migration guide](https://github.com/eclipsesource/jsonforms/blob/master/MIGRATION.md) when updating JSON Forms.

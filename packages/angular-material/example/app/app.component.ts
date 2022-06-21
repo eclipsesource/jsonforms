@@ -26,6 +26,8 @@ import { Component } from '@angular/core';
 import { ExampleDescription, getExamples } from '@jsonforms/examples';
 import { UISchemaElement, UISchemaTester } from '@jsonforms/core';
 import { angularMaterialRenderers } from '../../src/index';
+import { DateAdapter } from '@angular/material/core';
+
 const uiSchema = {
   type: 'HorizontalLayout',
   elements: [
@@ -89,14 +91,17 @@ export class AppComponent {
   i18n = {
     locale: 'en-US'
   }
+  private dateAdapter;
   private readonly = false;
   data: any;
   uischemas: { tester: UISchemaTester; uischema: UISchemaElement; }[] = [
     { tester: itemTester, uischema: uiSchema }
   ];
 
-  constructor() {
+  constructor(dateAdapter: DateAdapter<Date>) {
     this.selectedExample = this.examples[19];
+    this.dateAdapter = dateAdapter;
+    dateAdapter.setLocale(this.i18n.locale);
   }
 
   onChange(ev: any) {
@@ -105,6 +110,7 @@ export class AppComponent {
 
   changeLocale(locale: string) {
     this.i18n.locale = locale;
+    this.dateAdapter.setLocale(locale);
   }
 
   toggleReadonly() {
