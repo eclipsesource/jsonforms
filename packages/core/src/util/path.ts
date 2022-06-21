@@ -25,7 +25,7 @@
 
 import isEmpty from 'lodash/isEmpty';
 import range from 'lodash/range';
-import { Scopable } from '../models';
+import { isScoped, Scopable } from '../models';
 
 export const compose = (path1: string, path2: string) => {
   let p1 = path1;
@@ -81,13 +81,17 @@ export const toDataPath = (schemaPath: string): string => {
     };
 
 export const composeWithUi = (scopableUi: Scopable, path: string): string => {
-  const segments = toDataPathSegments(scopableUi.scope);
-
-  if (isEmpty(segments) && path === undefined) {
-    return '';
+  if (!isScoped(scopableUi)) {
+    return path ?? '';
   }
 
-  return isEmpty(segments) ? path : compose(path, segments.join('.'));
+  const segments = toDataPathSegments(scopableUi.scope);
+
+  if (isEmpty(segments)) {
+    return path ?? '';
+  }
+
+  return compose(path, segments.join('.'));
 };
 
 /**

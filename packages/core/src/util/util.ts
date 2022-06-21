@@ -27,7 +27,7 @@ import isEmpty from 'lodash/isEmpty';
 import isArray from 'lodash/isArray';
 import includes from 'lodash/includes';
 import find from 'lodash/find';
-import { JsonSchema, Scopable, UISchemaElement } from '..';
+import { JsonSchema, Scoped, UISchemaElement } from '..';
 import { resolveData, resolveSchema } from './resolvers';
 import { composePaths, toDataPathSegments } from './path';
 import { isEnabled, isVisible } from './runtime';
@@ -56,8 +56,8 @@ export const hasType = (jsonSchema: JsonSchema, expected: string): boolean => {
 };
 
 /**
-* Derives the type of the jsonSchema element
-*/
+ * Derives the type of the jsonSchema element
+ */
 export const deriveTypes = (jsonSchema: JsonSchema): string[] => {
  if (isEmpty(jsonSchema)) {
    return [];
@@ -93,8 +93,8 @@ export const deriveTypes = (jsonSchema: JsonSchema): string[] => {
 };
 
 /**
-* Convenience wrapper around resolveData and resolveSchema.
-*/
+ * Convenience wrapper around resolveData and resolveSchema.
+ */
 export const Resolve: {
  schema(
    schema: JsonSchema,
@@ -108,18 +108,18 @@ export const Resolve: {
 };
 
 // Paths --
-const fromScopable = (scopable: Scopable) =>
+const fromScoped = (scopable: Scoped): string =>
  toDataPathSegments(scopable.scope).join('.');
 
 export const Paths = {
  compose: composePaths,
- fromScopable
+ fromScoped
 };
 
 // Runtime --
 export const Runtime = {
  isEnabled(uischema: UISchemaElement, data: any, ajv: Ajv): boolean {
-   return isEnabled(uischema, data,undefined, ajv);
+   return isEnabled(uischema, data, undefined, ajv);
  },
  isVisible(uischema: UISchemaElement, data: any, ajv: Ajv): boolean {
    return isVisible(uischema, data, undefined, ajv);

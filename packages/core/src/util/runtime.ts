@@ -27,6 +27,7 @@ import has from 'lodash/has';
 import {
   AndCondition,
   Condition,
+  JsonSchema,
   LeafCondition,
   OrCondition,
   RuleEffect,
@@ -39,7 +40,6 @@ import { composeWithUi } from './path';
 import Ajv from 'ajv';
 import { getAjv } from '../reducers';
 import { JsonFormsState } from '../store';
-import { JsonSchema } from '../models/jsonSchema';
 
 const isOrCondition = (condition: Condition): condition is OrCondition =>
   condition.type === 'OR';

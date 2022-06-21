@@ -27,9 +27,20 @@ import { JsonSchema } from './jsonSchema';
 
 /**
  * Interface for describing an UI schema element that is referencing
- * a subschema. The value of the scope must be a JSON Pointer.
+ * a subschema. The value of the scope may be a JSON Pointer.
  */
 export interface Scopable {
+  /**
+   * The scope that determines to which part this element should be bound to.
+   */
+  scope?: string;
+}
+
+/**
+ * Interface for describing an UI schema element that is referencing
+ * a subschema. The value of the scope must be a JSON Pointer.
+ */
+export interface Scoped extends Scopable {
   /**
    * The scope that determines to which part this element should be bound to.
    */
@@ -37,6 +48,23 @@ export interface Scopable {
 }
 
 /**
+ * Interface for describing an UI schema element that may be labeled.
+ */
+export interface Lableable<T = string> {
+  /**
+   * Label for UI schema element.
+   */
+  label?: string|T;
+}
+
+/**
+ * Interface for describing an UI schema element that is labeled.
+ */
+export interface Labeled<T = string> extends Lableable<T> {
+  label: string | T;
+}
+
+/*
  * Interface for describing an UI schema element that can provide an internationalization base key.
  * If defined, this key is suffixed to derive applicable message keys for the UI schema element.
  * For example, such suffixes are `.label` or `.description` to derive the corresponding message keys for a control element.
@@ -96,7 +124,7 @@ export interface Condition {
 /**
  * A leaf condition.
  */
-export interface LeafCondition extends Condition, Scopable {
+export interface LeafCondition extends Condition, Scoped {
   type: 'LEAF';
 
   /**
@@ -105,7 +133,7 @@ export interface LeafCondition extends Condition, Scopable {
   expectedValue: any;
 }
 
-export interface SchemaBasedCondition extends Condition, Scopable {
+export interface SchemaBasedCondition extends Condition, Scoped {
   schema: JsonSchema;
 }
 
@@ -179,12 +207,8 @@ export interface HorizontalLayout extends Layout {
  * A group resembles a vertical layout, but additionally might have a label.
  * This layout is useful when grouping different elements by a certain criteria.
  */
-export interface GroupLayout extends Layout {
+export interface GroupLayout extends Layout, Lableable {
   type: 'Group';
-  /**
-   * The label of this group layout.
-   */
-  label?: string;
 }
 
 /**
@@ -216,23 +240,15 @@ export interface LabelElement extends UISchemaElement {
  * A control element. The scope property of the control determines
  * to which part of the schema the control should be bound.
  */
-export interface ControlElement extends UISchemaElement, Scopable, Internationalizable {
+export interface ControlElement extends UISchemaElement, Scoped, Lableable<string | boolean | LabelDescription>, Internationalizable {
   type: 'Control';
-  /**
-   * An optional label that will be associated with the control
-   */
-  label?: string | boolean | LabelDescription;
 }
 
 /**
  * The category layout.
  */
-export interface Category extends Layout {
+export interface Category extends Layout, Labeled {
   type: 'Category';
-  /**
-   * The label associated with this category layout.
-   */
-  label: string;
 }
 
 /**
@@ -240,12 +256,8 @@ export interface Category extends Layout {
  * A child element may either be itself a Categorization or a Category, hence
  * the categorization element can be used to represent recursive structures like trees.
  */
-export interface Categorization extends UISchemaElement {
+export interface Categorization extends UISchemaElement, Labeled {
   type: 'Categorization';
-  /**
-   * The label of this categorization.
-   */
-  label: string;
   /**
    * The child elements of this categorization which are either of type
    * {@link Category} or {@link Categorization}.
@@ -253,12 +265,23 @@ export interface Categorization extends UISchemaElement {
   elements: (Category | Categorization)[];
 }
 
-export const isInternationalized = (element: unknown): element is Required<Internationalizable> => {
-  return typeof element === 'object' && element !== null && typeof (element as Internationalizable).i18n === 'string';
-}
+export const isInternationalized = (element: unknown): element is Required<Internationalizable> =>
+  typeof element === 'object' && element !== null && typeof (element as Internationalizable).i18n === 'string';
 
 export const isGroup = (layout: Layout): layout is GroupLayout =>
   layout.type === 'Group';
 
 export const isLayout = (uischema: UISchemaElement): uischema is Layout =>
   (uischema as Layout).elements !== undefined;
+
+export const isScopable = (obj: unknown): obj is Scopable =>
+  obj && typeof obj === 'object';
+
+export const isScoped = (obj: unknown): obj is Scoped =>
+  isScopable(obj) && typeof obj.scope === 'string';
+
+export const isLabelable = (obj: unknown): obj is Lableable =>
+  obj && typeof obj === 'object';
+
+export const isLabeled = (obj: unknown): obj is Labeled =>
+  isLabelable(obj) && ['string', 'object'].includes(typeof obj.label);
