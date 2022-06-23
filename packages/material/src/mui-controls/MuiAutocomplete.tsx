@@ -77,6 +77,7 @@ export const MuiAutocomplete = (props: EnumCellProps & WithClassname & WithOptio
       fullWidth
       options={options}
       getOptionLabel={getOptionLabel || (option => option?.label)}
+      freeSolo={false}
       style={{ marginTop: 16 }}
       renderInput={params => (
         <Input
