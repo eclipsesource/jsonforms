@@ -28,8 +28,8 @@ import { EnumCellProps, EnumOption, WithClassname } from '@jsonforms/core';
 import {
   Autocomplete,
   AutocompleteRenderOptionState,
-  FilterOptionsState,
-  Input
+  Input,
+  FilterOptionsState
 } from '@mui/material';
 import merge from 'lodash/merge';
 
