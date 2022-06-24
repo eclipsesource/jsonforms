@@ -40,7 +40,11 @@
     <v-card-text>
       <v-container justify-space-around align-content-center>
         <v-row justify="center">
-          <v-expansion-panels accordion focusable v-model="currentlyExpanded">
+          <v-expansion-panels
+            accordion
+            v-bind="expansionPanelsProps"
+            v-model="currentlyExpanded"
+          >
             <v-expansion-panel
               v-for="(element, index) in control.data"
               :key="`${control.path}-${index}`"
@@ -253,7 +257,8 @@ import {
 } from 'vuetify/lib';
 import { ValidationIcon, ValidationBadge } from '../controls/components/index';
 import { ErrorObject } from 'ajv';
-import { ref } from '@vue/composition-api';
+import { computed, ref } from '@vue/composition-api';
+import merge from 'lodash/merge';
 
 const controlRenderer = defineComponent({
   name: 'array-layout-renderer',
@@ -289,10 +294,21 @@ const controlRenderer = defineComponent({
     const currentlyExpanded = ref<null | number>(
       control.appliedOptions.value.initCollapsed ? null : 0
     );
+    const expansionPanelsProps = computed(() =>
+      merge(
+        { flat: false, focusable: true },
+        control.vuetifyProps('v-expansion-panels')
+      )
+    );
     const suggestToDelete = ref<null | number>(null);
     // indicate to our child renderers that we are increasing the "nested" level
     useNested('array');
-    return { ...control, currentlyExpanded, suggestToDelete };
+    return {
+      ...control,
+      currentlyExpanded,
+      expansionPanelsProps,
+      suggestToDelete,
+    };
   },
   computed: {
     noData(): boolean {
