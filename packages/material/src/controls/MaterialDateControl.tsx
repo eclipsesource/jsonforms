@@ -32,13 +32,18 @@ import {
   rankWith,
 } from '@jsonforms/core';
 import { withJsonFormsControlProps } from '@jsonforms/react';
-import { FormHelperText, Hidden, TextField } from '@mui/material';
+import { FormHelperText, Hidden } from '@mui/material';
 import {
   DatePicker,
   LocalizationProvider 
 } from '@mui/lab';
 import AdapterDayjs from '@mui/lab/AdapterDayjs';
-import { createOnChangeHandler, getData, useFocus } from '../util';
+import {
+  createOnChangeHandler,
+  getData,
+  ResettableTextField,
+  useFocus,
+} from '../util';
 
 export const MaterialDateControl = (props: ControlProps)=> {
   const [focused, onFocus, onBlur] = useFocus();
@@ -82,12 +87,15 @@ export const MaterialDateControl = (props: ControlProps)=> {
     saveFormat
   ),[path, handleChange, saveFormat]);
 
+  const value = getData(data, saveFormat);
+  const valueInInputFormat = value ? value.format(format) : '';
+
   return (
     <Hidden xsUp={!visible}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DatePicker
           label={label}
-          value={getData(data, saveFormat)}
+          value={value}
           clearable
           onChange={onChange}
           inputFormat={format}
@@ -98,14 +106,21 @@ export const MaterialDateControl = (props: ControlProps)=> {
           clearText={appliedUiSchemaOptions.clearLabel}
           okText={appliedUiSchemaOptions.okLabel}
           renderInput={params => (
-            <TextField 
+            <ResettableTextField 
               {...params}
+              rawValue={data}
+              dayjsValueIsValid={value !== null}
+              valueInInputFormat={valueInInputFormat}
+              focused={focused}
               id={id + '-input'}
               required={required && !appliedUiSchemaOptions.hideRequiredAsterisk}
               autoFocus={appliedUiSchemaOptions.focus}
               error={!isValid}
               fullWidth={!appliedUiSchemaOptions.trim}
-              inputProps={{ ...params.inputProps, type: 'text' }}
+              inputProps={{
+                ...params.inputProps,
+                type: 'text',
+              }}
               InputLabelProps={data ? { shrink: true } : undefined}
               onFocus={onFocus}
               onBlur={onBlur}
