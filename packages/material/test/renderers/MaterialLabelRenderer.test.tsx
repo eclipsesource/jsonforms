@@ -25,6 +25,7 @@
 import './MatchMediaMock';
 import * as React from 'react';
 import {
+  LabelElement,
   NOT_APPLICABLE
 } from '@jsonforms/core';
 import '../../src/cells';
@@ -44,7 +45,7 @@ const schema = {
   type: 'object',
   properties: {}
 };
-const uischema = {
+const uischema: LabelElement = {
   type: 'Label',
   text: 'Foo'
 };

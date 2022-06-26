@@ -22,8 +22,8 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React from 'react';
-import { Categorization, Category } from '@jsonforms/core';
+import React, { useMemo } from 'react';
+import { Categorization, Category, deriveLabelForUISchemaElement, Translator } from '@jsonforms/core';
 import { isCategorization } from './tester';
 
 const getCategoryClassName = (category: Category, selectedCategory: Category): string =>
@@ -36,6 +36,7 @@ export interface CategorizationProps {
   onSelect: any;
   subcategoriesClassName: string;
   groupClassName: string;
+  t: Translator;
 }
 
 export const CategorizationList  = (
@@ -45,19 +46,25 @@ export const CategorizationList  = (
     depth,
     onSelect,
     subcategoriesClassName,
-    groupClassName
-  }: CategorizationProps) =>
-  (
+    groupClassName,
+    t
+  }: CategorizationProps) => {
+
+  const categoryLabels = useMemo(() =>
+     categorization.elements.map(cat => deriveLabelForUISchemaElement(cat, t)),
+  [categorization, t])
+
+  return (
     <ul className={subcategoriesClassName}>
       {
-        categorization.elements.map(category => {
+        categorization.elements.map((category, idx) => {
           if (isCategorization(category)) {
             return (
               <li
-                key={category.label}
+                key={categoryLabels[idx]}
                 className={groupClassName}
               >
-                <span>{category.label}</span>
+                <span>{categoryLabels[idx]}</span>
                 <CategorizationList
                   categorization={category}
                   selectedCategory={selectedCategory}
@@ -65,17 +72,18 @@ export const CategorizationList  = (
                   onSelect={onSelect}
                   subcategoriesClassName={subcategoriesClassName}
                   groupClassName={groupClassName}
+                  t={t}
                 />
               </li>
             );
           } else {
             return (
               <li
-                key={category.label}
+                key={categoryLabels[idx]}
                 onClick={onSelect(category)}
                 className={getCategoryClassName(category, selectedCategory)}
               >
-                <span>{category.label}</span>
+                <span>{categoryLabels[idx]}</span>
               </li>
             );
           }
@@ -83,3 +91,4 @@ export const CategorizationList  = (
       }
     </ul>
   );
+}

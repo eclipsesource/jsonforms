@@ -1,12 +1,12 @@
 import { ErrorObject } from 'ajv';
-import { isInternationalized, UISchemaElement } from '../models';
+import { isInternationalized, Labelable, UISchemaElement } from '../models';
 import { getControlPath } from '../reducers';
 import { formatErrorMessage } from '../util';
 import { i18nJsonSchema, ErrorTranslator, Translator } from './i18nTypes';
 
 export const getI18nKeyPrefixBySchema = (
   schema: i18nJsonSchema | undefined,
-  uischema: UISchemaElement | undefined
+  uischema: unknown | undefined
 ): string | undefined => {
   if (isInternationalized(uischema)) {
     return uischema.i18n;
@@ -18,7 +18,7 @@ export const getI18nKeyPrefixBySchema = (
  * Transforms a given path to a prefix which can be used for i18n keys.
  * Returns 'root' for empty paths and removes array indices
  */
-export const transformPathToI18nPrefix = (path: string) => {
+export const transformPathToI18nPrefix = (path: string): string => {
   return (
     path
       ?.split('.')
@@ -29,9 +29,9 @@ export const transformPathToI18nPrefix = (path: string) => {
 
 export const getI18nKeyPrefix = (
   schema: i18nJsonSchema | undefined,
-  uischema: UISchemaElement | undefined,
+  uischema: unknown | undefined,
   path: string | undefined
-): string | undefined => {
+): string => {
   return (
     getI18nKeyPrefixBySchema(schema, uischema) ??
     transformPathToI18nPrefix(path)
@@ -40,10 +40,10 @@ export const getI18nKeyPrefix = (
 
 export const getI18nKey = (
   schema: i18nJsonSchema | undefined,
-  uischema: UISchemaElement | undefined,
+  uischema: unknown | undefined,
   path: string | undefined,
   key: string
-): string | undefined => {
+): string => {
   return `${getI18nKeyPrefix(schema, uischema, path)}.${key}`;
 };
 
@@ -106,3 +106,20 @@ export const getCombinedErrorMessage = (
     errors.map(error => et(error, t, uischema))
   );
 };
+
+/**
+ * This can be used to internationalize the label of the given Labelable (e.g. UI Schema elements).
+ * This should not be used for controls as there we have additional context in the form of the JSON Schema available.
+ */
+export const deriveLabelForUISchemaElement = (uischema: Labelable<boolean>, t: Translator): string | undefined => {
+  if (uischema.label === false) {
+    return undefined;
+  }
+  if ((uischema.label === undefined || uischema.label === null || uischema.label === true) && !isInternationalized(uischema)) {
+    return undefined;
+  }
+  const stringifiedLabel = typeof uischema.label === 'string' ? uischema.label : JSON.stringify(uischema.label);
+  const i18nKeyPrefix = getI18nKeyPrefixBySchema(undefined, uischema);
+  const i18nKey = typeof i18nKeyPrefix === 'string' ? `${i18nKeyPrefix}.label` : stringifiedLabel;
+  return t(i18nKey, stringifiedLabel, { uischema: uischema });
+}

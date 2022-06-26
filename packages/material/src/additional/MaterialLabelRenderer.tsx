@@ -24,13 +24,12 @@
 */
 import React from 'react';
 import {
-  LabelElement,
-  OwnPropsOfRenderer,
+  LabelProps,
   RankedTester,
   rankWith,
   uiTypeIs,
 } from '@jsonforms/core';
-import { withJsonFormsLayoutProps } from '@jsonforms/react';
+import { withJsonFormsLabelProps } from '@jsonforms/react';
 import {
   Hidden,
   Typography
@@ -45,15 +44,14 @@ export const materialLabelRendererTester: RankedTester = rankWith(1, uiTypeIs('L
 /**
  * Default renderer for a label.
  */
-export const MaterialLabelRenderer = ({ uischema, visible }: OwnPropsOfRenderer) => {
-  const labelElement: LabelElement = uischema as LabelElement;
+export const MaterialLabelRenderer = ({ text, visible }: LabelProps ) => {
   return (
     <Hidden xsUp={!visible}>
       <Typography variant='h6'>
-        {labelElement.text !== undefined && labelElement.text !== null && labelElement.text}
+        {text}
       </Typography>
     </Hidden>
   );
 };
 
-export default withJsonFormsLayoutProps(MaterialLabelRenderer);
+export default withJsonFormsLabelProps(MaterialLabelRenderer);

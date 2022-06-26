@@ -23,8 +23,8 @@
   THE SOFTWARE.
 */
 import React, { FunctionComponent } from 'react';
-import { LabelElement, RankedTester, rankWith, RendererProps, uiTypeIs } from '@jsonforms/core';
-import { withJsonFormsLayoutProps } from '@jsonforms/react';
+import { LabelProps, RankedTester, rankWith, uiTypeIs } from '@jsonforms/core';
+import { withJsonFormsLabelProps } from '@jsonforms/react';
 import { VanillaRendererProps } from '../index';
 import { withVanillaControlProps } from '../util';
 
@@ -37,9 +37,8 @@ export const labelRendererTester: RankedTester = rankWith(1, uiTypeIs('Label'));
 /**
  * Default renderer for a label.
  */
-export const LabelRenderer: FunctionComponent<RendererProps & VanillaRendererProps> =
-  ({ uischema, visible, getStyleAsClassName }) => {
-    const labelElement: LabelElement = uischema as LabelElement;
+export const LabelRenderer: FunctionComponent<LabelProps & VanillaRendererProps> =
+  ({ text, visible, getStyleAsClassName }) => {
     const classNames = getStyleAsClassName('label-control');
     const isHidden = !visible;
 
@@ -48,9 +47,9 @@ export const LabelRenderer: FunctionComponent<RendererProps & VanillaRendererPro
         hidden={isHidden}
         className={classNames}
       >
-        {labelElement.text !== undefined && labelElement.text !== null && labelElement.text}
+        {text}
       </label>
     );
   };
 
-export default withVanillaControlProps(withJsonFormsLayoutProps(LabelRenderer));
+export default withVanillaControlProps(withJsonFormsLabelProps(LabelRenderer));

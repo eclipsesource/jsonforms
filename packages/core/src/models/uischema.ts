@@ -50,7 +50,7 @@ export interface Scoped extends Scopable {
 /**
  * Interface for describing an UI schema element that may be labeled.
  */
-export interface Lableable<T = string> {
+export interface Labelable<T = string> {
   /**
    * Label for UI schema element.
    */
@@ -60,7 +60,7 @@ export interface Lableable<T = string> {
 /**
  * Interface for describing an UI schema element that is labeled.
  */
-export interface Labeled<T = string> extends Lableable<T> {
+export interface Labeled<T = string> extends Labelable<T> {
   label: string | T;
 }
 
@@ -207,7 +207,7 @@ export interface HorizontalLayout extends Layout {
  * A group resembles a vertical layout, but additionally might have a label.
  * This layout is useful when grouping different elements by a certain criteria.
  */
-export interface GroupLayout extends Layout, Lableable {
+export interface GroupLayout extends Layout, Labelable {
   type: 'Group';
 }
 
@@ -228,7 +228,7 @@ export interface LabelDescription {
 /**
  * A label element.
  */
-export interface LabelElement extends UISchemaElement {
+export interface LabelElement extends UISchemaElement, Internationalizable {
   type: 'Label';
   /**
    * The text of label.
@@ -240,7 +240,7 @@ export interface LabelElement extends UISchemaElement {
  * A control element. The scope property of the control determines
  * to which part of the schema the control should be bound.
  */
-export interface ControlElement extends UISchemaElement, Scoped, Lableable<string | boolean | LabelDescription>, Internationalizable {
+export interface ControlElement extends UISchemaElement, Scoped, Labelable<string | boolean | LabelDescription>, Internationalizable {
   type: 'Control';
 }
 
@@ -280,8 +280,8 @@ export const isScopable = (obj: unknown): obj is Scopable =>
 export const isScoped = (obj: unknown): obj is Scoped =>
   isScopable(obj) && typeof obj.scope === 'string';
 
-export const isLabelable = (obj: unknown): obj is Lableable =>
+export const isLabelable = (obj: unknown): obj is Labelable =>
   obj && typeof obj === 'object';
 
-export const isLabeled = (obj: unknown): obj is Labeled =>
-  isLabelable(obj) && ['string', 'object'].includes(typeof obj.label);
+export const isLabeled = <T = never>(obj: unknown): obj is Labeled<T> =>
+  isLabelable(obj) && ['string', 'boolean'].includes(typeof obj.label);
