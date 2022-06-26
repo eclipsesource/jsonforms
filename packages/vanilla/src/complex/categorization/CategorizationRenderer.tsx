@@ -28,7 +28,7 @@ import {
   Category,
   LayoutProps
 } from '@jsonforms/core';
-import { RendererComponent, withJsonFormsLayoutProps } from '@jsonforms/react';
+import { RendererComponent, TranslateProps, withJsonFormsLayoutProps, withTranslateProps } from '@jsonforms/react';
 import { CategorizationList } from './CategorizationList';
 import { SingleCategory } from './SingleCategory';
 import { isCategorization } from './tester';
@@ -40,7 +40,7 @@ export interface CategorizationState {
 }
 
 class CategorizationRenderer extends RendererComponent<
-  LayoutProps & VanillaRendererProps,
+  LayoutProps & VanillaRendererProps & TranslateProps,
   CategorizationState
 > {
   onCategorySelected = (category: Category) => () => {
@@ -51,7 +51,7 @@ class CategorizationRenderer extends RendererComponent<
    * @inheritDoc
    */
   render() {
-    const { uischema, visible, getStyleAsClassName } = this.props;
+    const { uischema, visible, getStyleAsClassName, t } = this.props;
     const categorization = uischema as Categorization;
     const classNames = getStyleAsClassName('categorization');
     const masterClassNames = getStyleAsClassName('categorization.master');
@@ -75,6 +75,7 @@ class CategorizationRenderer extends RendererComponent<
             onSelect={this.onCategorySelected}
             subcategoriesClassName={subcategoriesClassName}
             groupClassName={groupClassName}
+            t={t}
           />
         </div>
         <div className={detailClassNames}>
@@ -103,4 +104,4 @@ class CategorizationRenderer extends RendererComponent<
   }
 }
 
-export default withVanillaControlProps(withJsonFormsLayoutProps(CategorizationRenderer));
+export default withVanillaControlProps(withTranslateProps(withJsonFormsLayoutProps(CategorizationRenderer)));

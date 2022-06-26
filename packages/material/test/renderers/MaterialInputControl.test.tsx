@@ -250,6 +250,10 @@ describe('Material input control', () => {
         <MaterialHorizontalLayoutRenderer
           schema={jsonSchema}
           uischema={layout}
+          direction="row"
+          enabled
+          visible
+          path=""
         />
       </ JsonFormsStateProvider>
     );

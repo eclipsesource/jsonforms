@@ -24,7 +24,7 @@
 */
 import isEmpty from 'lodash/isEmpty';
 import React, { FunctionComponent } from 'react';
-import { GroupLayout, RankedTester, rankWith, RendererProps, uiTypeIs } from '@jsonforms/core';
+import { GroupLayout, LayoutProps, RankedTester, rankWith, uiTypeIs } from '@jsonforms/core';
 import { withJsonFormsLayoutProps } from '@jsonforms/react';
 import { renderChildren } from './util';
 import { VanillaRendererProps } from '../index';
@@ -37,22 +37,23 @@ import { withVanillaControlProps } from '../util';
  */
 export const groupTester: RankedTester = rankWith(1, uiTypeIs('Group'));
 
-export const GroupLayoutRenderer = (props: RendererProps & VanillaRendererProps) => {
+export const GroupLayoutRenderer = (props: LayoutProps & VanillaRendererProps) => {
   const {data, ...otherProps} = props;
   // We don't hand over data to the layout renderer to avoid rerendering it with every data change
   return <GroupLayoutRendererComponent {...otherProps}/>;
 }
 
-const GroupLayoutRendererComponent: FunctionComponent<RendererProps & VanillaRendererProps> = React.memo((
+const GroupLayoutRendererComponent: FunctionComponent<LayoutProps & VanillaRendererProps> = React.memo((
   {
     schema,
     uischema,
     path,
     enabled,
     visible,
+    label,
     getStyle,
     getStyleAsClassName
-  }: RendererProps & VanillaRendererProps) => {
+  }: LayoutProps & VanillaRendererProps) => {
   const group = uischema as GroupLayout;
   const elementsSize = group.elements ? group.elements.length : 0;
   const classNames = getStyleAsClassName('group.layout');
@@ -66,9 +67,9 @@ const GroupLayoutRendererComponent: FunctionComponent<RendererProps & VanillaRen
       hidden={visible === undefined || visible === null ? false : !visible}
     >
       {
-        !isEmpty(group.label) ?
+        !isEmpty(label) ?
           <legend className={getStyleAsClassName('group.label')}>
-            {group.label}
+            {label}
           </legend> : ''
       }
       {renderChildren(group, schema, childClassNames, path, enabled)}

@@ -28,31 +28,15 @@ import {
   JsonFormsBaseRenderer
 } from '@jsonforms/angular';
 import {
-  getData,
-  isVisible,
   JsonFormsState,
   LabelElement,
-  OwnPropsOfRenderer,
+  mapStateToLabelProps,
+  OwnPropsOfLabel,
   RankedTester,
   rankWith,
   uiTypeIs,
-  getAjv
 } from '@jsonforms/core';
 import { Subscription } from 'rxjs';
-
-export const mapStateToLabelProps = (
-  state: JsonFormsState,
-  ownProps: OwnPropsOfRenderer
-) => {
-  const visible =
-    ownProps.visible !== undefined
-      ? ownProps.visible
-      : isVisible(ownProps.uischema, getData(state), undefined, getAjv(state));
-
-  return {
-    visible
-  };
-};
 
 @Component({
   selector: 'LabelRenderer',
@@ -70,15 +54,11 @@ export class LabelRenderer extends JsonFormsBaseRenderer<LabelElement> {
     super();
   }
   ngOnInit() {
-    const labelElement = this.uischema;
-    this.label =
-      labelElement.text !== undefined &&
-      labelElement.text !== null &&
-      labelElement.text;
     this.subscription = this.jsonFormsService.$state.subscribe({
       next: (state: JsonFormsState) => {
-        const props = mapStateToLabelProps(state, this.getOwnProps());
+        const props = mapStateToLabelProps(state, this.getOwnProps() as OwnPropsOfLabel);
         this.visible = props.visible;
+        this.label = props.text
       }
     });
   }
@@ -87,10 +67,6 @@ export class LabelRenderer extends JsonFormsBaseRenderer<LabelElement> {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
-  }
-
-  mapAdditionalProps() {
-    this.label = this.uischema.text;
   }
 }
 

@@ -32,7 +32,9 @@ import {
   createId,
   removeId,
   mapStateToMultiEnumControlProps,
-  mapDispatchToMultiEnumProps
+  mapDispatchToMultiEnumProps,
+  mapStateToLabelProps,
+  LabelElement
 } from '@jsonforms/core';
 import {
   CompType,
@@ -167,6 +169,7 @@ export function useControl<R, D, P extends {}>(
 
   const id = ref<string | undefined>(undefined);
   const control = computed(() => ({
+    ...props,
     ...stateMap({ jsonforms }, props),
     id: id.value
   }));
@@ -374,6 +377,16 @@ export const useJsonFormsRenderer = (props: RendererProps) => {
     renderer,
     rootSchema
   };
+};
+
+/**
+ * Provides bindings for 'Label' elements.
+ *
+ * Access bindings via the provided reactive `label` object.
+ */
+export const useJsonFormsLabel = (props: RendererProps<LabelElement>) => {
+  const { control, ...other } = useControl(props, mapStateToLabelProps);
+  return { label: control, ...other };
 };
 
 /**
