@@ -8,8 +8,8 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
-    "@jsonforms/core": "3.0.0-beta.2",
-    "@jsonforms/vue2": "3.0.0-beta.2",
+    "@jsonforms/core": "3.0.0-beta.4",
+    "@jsonforms/vue2": "3.0.0-beta.4",
     "@jsonforms/vue2-vuetify": "3.0.0-beta.2",
     "@vue/composition-api": "^1.4.3",
     "core-js": "^3.9.1",
