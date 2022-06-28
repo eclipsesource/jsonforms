@@ -45,6 +45,7 @@ const buildFormats = [
         tsconfigOverride: {
           target: 'ES5',
         },
+        tsconfig: 'tsconfig.compile.json',
       }),
       babel({
         exclude: 'node_modules/**',
@@ -80,6 +81,7 @@ const buildFormats = [
         tsconfigOverride: {
           target: 'ES5',
         },
+        tsconfig: 'tsconfig.compile.json',
       }),
       babel({
         exclude: 'node_modules/**',
