@@ -16,6 +16,14 @@ Install JSON Forms Core, Vue 2 and Vue 2 Vuetify Renderers.
 npm i --save @jsonforms/core @jsonforms/vue2 @jsonforms/vue2-vuetify
 ```
 
+Also add the packages to the transpile dependencies in the `vue.config.js` file:
+
+```js
+module.exports = {
+    transpileDependencies: ['@jsonforms/core', '@jsonforms/vue2', '@jsonforms/vue2-vuetify']
+}
+```
+
 Use the `json-forms` component for each form you want to render and hand over the renderer set.
 
 ```vue

@@ -42,9 +42,6 @@ const buildFormats = [
       }),
       typescript({
         emitDeclarationOnly: true,
-        tsconfigOverride: {
-          target: 'ES5',
-        },
         tsconfig: 'tsconfig.compile.json',
       }),
       babel({
