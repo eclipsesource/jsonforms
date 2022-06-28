@@ -17,9 +17,9 @@
       :persistent-hint="persistentHint()"
       :required="control.required"
       :error-messages="control.errors"
-      :value="control.data"
+      :value="inputValue"
       v-bind="vuetifyProps('v-text-field')"
-      @input="onChange"
+      @input="onInputChange"
       @focus="isFocused = true"
       @blur="isFocused = false"
     />
@@ -40,8 +40,10 @@ import {
   RendererProps,
 } from '@jsonforms/vue2';
 import { default as ControlWrapper } from './ControlWrapper.vue';
-import { useVuetifyControl } from '../util';
+import { parseDateTime, useVuetifyControl } from '../util';
 import { VTextField } from 'vuetify/lib';
+
+const JSON_SCHEMA_DATE_FORMATS = ['YYYY-MM-DD'];
 
 const controlRenderer = defineComponent({
   name: 'date-control-renderer',
@@ -58,6 +60,36 @@ const controlRenderer = defineComponent({
       (value) => value || undefined,
       300
     );
+  },
+  computed: {
+    dateFormat(): string {
+      return typeof this.appliedOptions.dateFormat == 'string'
+        ? this.appliedOptions.dateFormat
+        : 'YYYY-MM-DD';
+    },
+    dateSaveFormat(): string {
+      return typeof this.appliedOptions.dateSaveFormat == 'string'
+        ? this.appliedOptions.dateSaveFormat
+        : 'YYYY-MM-DD';
+    },
+    formats(): string[] {
+      return [
+        this.dateSaveFormat,
+        this.dateFormat,
+        ...JSON_SCHEMA_DATE_FORMATS,
+      ];
+    },
+    inputValue(): string | undefined {
+      const value = this.control.data;
+      const date = parseDateTime(value, this.formats);
+      return date ? date.format(this.dateFormat) : value;
+    },
+  },
+  methods: {
+    onInputChange(value: string): void {
+      const date = parseDateTime(value, this.dateFormat);
+      this.onChange(date ? date.format(this.dateSaveFormat) : value);
+    },
   },
 });
 

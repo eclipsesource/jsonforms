@@ -1,0 +1,176 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EnumControlRenderer.vue should render component and match snapshot 1`] = `
+<div data-app="true"
+     class="v-application v-application--is-ltr theme--light"
+     id="app"
+>
+  <div class="v-application--wrap">
+    <div id="#"
+         class="control"
+         appliedoptions="[object Object]"
+         errors
+         label="My Enum"
+    >
+      <div class="v-input v-input--is-label-active v-input--is-dirty theme--light v-text-field v-select input">
+        <div class="v-input__control">
+          <div role="button"
+               aria-haspopup="listbox"
+               aria-expanded="false"
+               aria-owns="list-67"
+               class="v-input__slot"
+          >
+            <div class="v-select__slot">
+              <label for="#-input"
+                     class="v-label v-label--active theme--light"
+                     style="left: 0px; position: absolute;"
+              >
+                My Enum
+              </label>
+              <div class="v-select__selections">
+                <div class="v-select__selection v-select__selection--comma">
+                  a
+                </div>
+                <input id="#-input"
+                       readonly="readonly"
+                       type="text"
+                       aria-readonly="false"
+                       autocomplete="off"
+                >
+              </div>
+              <div class="v-input__append-inner">
+                <div class="v-input__icon v-input__icon--append">
+                  <i aria-hidden="true"
+                     class="v-icon notranslate mdi mdi-menu-down theme--light"
+                  >
+                  </i>
+                </div>
+              </div>
+              <input type="hidden"
+                     value="a"
+              >
+            </div>
+            <div class="v-menu">
+            </div>
+          </div>
+          <div class="v-text-field__details">
+            <div class="v-messages theme--light">
+              <transition-group-stub tag="div"
+                                     name="message-transition"
+                                     class="v-messages__wrapper"
+              >
+              </transition-group-stub>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`EnumControlRenderer.vue should render component and match snapshot when clicked 1`] = `
+<div data-app="true"
+     class="v-application v-application--is-ltr theme--light"
+     id="app"
+>
+  <div class="v-application--wrap">
+    <div id="#"
+         class="control"
+         appliedoptions="[object Object]"
+         errors
+         label="My Enum"
+         isfocused="true"
+    >
+      <div class="v-input v-input--is-label-active v-input--is-dirty v-input--is-focused theme--light v-text-field v-select v-select--is-menu-active primary--text input">
+        <div class="v-input__control">
+          <div role="button"
+               aria-haspopup="listbox"
+               aria-expanded="true"
+               aria-owns="list-80"
+               class="v-input__slot"
+          >
+            <div class="v-select__slot">
+              <label for="#-input"
+                     class="v-label v-label--active theme--light primary--text"
+                     style="left: 0px; position: absolute;"
+              >
+                My Enum
+              </label>
+              <div class="v-select__selections">
+                <div class="v-select__selection v-select__selection--comma">
+                  a
+                </div>
+                <input id="#-input"
+                       readonly="readonly"
+                       type="text"
+                       aria-readonly="false"
+                       autocomplete="off"
+                >
+              </div>
+              <div class="v-input__append-inner">
+                <div class="v-input__icon v-input__icon--append">
+                  <i aria-hidden="true"
+                     class="v-icon notranslate mdi mdi-menu-down theme--light primary--text"
+                  >
+                  </i>
+                </div>
+              </div>
+              <input type="hidden"
+                     value="a"
+              >
+            </div>
+            <div class="v-menu">
+              <transition-stub name="v-menu-transition">
+              </transition-stub>
+            </div>
+          </div>
+          <div class="v-text-field__details">
+            <div class="v-messages theme--light primary--text">
+              <transition-group-stub tag="div"
+                                     name="message-transition"
+                                     class="v-messages__wrapper"
+              >
+              </transition-group-stub>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="v-menu__content theme--light menuable__content__active "
+       style="max-height: 304px; min-width: 0px; max-width: auto; top: 12px; left: 0px; transform-origin: top left; z-index: 8; display: none;"
+  >
+    <div role="listbox"
+         tabindex="-1"
+         class="v-list v-select-list v-sheet theme--light theme--light"
+         id="list-80"
+    >
+      <div tabindex="0"
+           aria-selected="true"
+           id="list-item-87-0"
+           role="option"
+           class="v-list-item primary--text v-list-item--active v-list-item--link theme--light"
+      >
+        <div class="v-list-item__content">
+          <div class="v-list-item__title">
+            a
+          </div>
+        </div>
+      </div>
+      <div tabindex="0"
+           aria-selected="false"
+           id="list-item-87-1"
+           role="option"
+           class="v-list-item v-list-item--link theme--light"
+      >
+        <div class="v-list-item__content">
+          <div class="v-list-item__title">
+            b
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

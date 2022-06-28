@@ -17,9 +17,9 @@
       :persistent-hint="persistentHint()"
       :required="control.required"
       :error-messages="control.errors"
-      :value="control.data"
+      :value="inputValue"
       v-bind="vuetifyProps('v-text-field')"
-      @input="onChange"
+      @input="onInputChange"
       @focus="isFocused = true"
       @blur="isFocused = false"
     />
@@ -40,8 +40,15 @@ import {
   RendererProps,
 } from '@jsonforms/vue2';
 import { default as ControlWrapper } from './ControlWrapper.vue';
-import { useVuetifyControl } from '../util';
+import { parseDateTime, useVuetifyControl } from '../util';
 import { VTextField } from 'vuetify/lib';
+
+const JSON_SCHEMA_TIME_FORMATS = [
+  'HH:mm:ss.SSSZ',
+  'HH:mm:ss.SSS',
+  'HH:mm:ssZ',
+  'HH:mm:ss',
+];
 
 const controlRenderer = defineComponent({
   name: 'time-control-renderer',
@@ -58,6 +65,36 @@ const controlRenderer = defineComponent({
       (value) => value || undefined,
       300
     );
+  },
+  computed: {
+    timeFormat(): string {
+      return typeof this.appliedOptions.timeFormat == 'string'
+        ? this.appliedOptions.timeFormat
+        : 'HH:mm';
+    },
+    timeSaveFormat(): string {
+      return typeof this.appliedOptions.timeSaveFormat == 'string'
+        ? this.appliedOptions.timeSaveFormat
+        : 'HH:mm:ss';
+    },
+    formats(): string[] {
+      return [
+        this.timeSaveFormat,
+        this.timeFormat,
+        ...JSON_SCHEMA_TIME_FORMATS,
+      ];
+    },
+    inputValue(): string | undefined {
+      const value = this.control.data;
+      const time = parseDateTime(value, this.formats);
+      return time ? time.format(this.timeFormat) : value;
+    },
+  },
+  methods: {
+    onInputChange(value: string): void {
+      const time = parseDateTime(value, this.timeFormat);
+      this.onChange(time ? time.format(this.timeSaveFormat) : value);
+    },
   },
 });
 
