@@ -49,6 +49,7 @@ import * as generateSchema from './examples/generate';
 import * as generateUISchema from './examples/generateUI';
 import * as layout from './examples/layout';
 import * as person from './examples/person';
+import * as issue_1884 from './examples/1884';
 import * as rule from './examples/rule';
 import * as ruleInheritance from './examples/ruleInheritance';
 import * as config from './examples/config';
@@ -140,5 +141,6 @@ export {
   bug_1779,
   bug_1645,
   conditionalSchemaComposition,
-  additionalErrors
+  additionalErrors,
+  issue_1884,
 };
