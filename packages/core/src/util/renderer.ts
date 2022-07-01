@@ -910,7 +910,8 @@ export const mapStateToJsonFormsRendererProps = (
     schema: ownProps.schema || getSchema(state),
     rootSchema: getSchema(state),
     uischema: uischema,
-    path: ownProps.path
+    path: ownProps.path,
+    enabled: ownProps.enabled
   };
 };
 
