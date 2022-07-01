@@ -1,4 +1,11 @@
-const devPresets = ['@vue/cli-plugin-babel/preset'];
+const devPresets = [
+  [
+    '@vue/cli-plugin-babel/preset',
+    {
+      useBuiltIns: false,
+    },
+  ],
+];
 const buildPresets = ['@babel/preset-env', '@babel/preset-typescript'];
 module.exports = {
   presets: process.env.NODE_ENV === 'production' ? buildPresets : devPresets,
