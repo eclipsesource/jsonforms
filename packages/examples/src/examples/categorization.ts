@@ -22,6 +22,8 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import { Translator } from '@jsonforms/core';
+import get from 'lodash/get';
 import { registerExamples } from '../register';
 
 export const schema = {
@@ -93,7 +95,7 @@ export const uischema = {
   elements: [
     {
       type: 'Category',
-      label: 'Basic Information',
+      label: 'categoryLabelKey',
       elements: [
         {
           type: 'HorizontalLayout',
@@ -133,7 +135,7 @@ export const uischema = {
     },
     {
       type: 'Category',
-      label: 'Address',
+      i18n: 'address',
       elements: [
         {
           type: 'HorizontalLayout',
@@ -284,6 +286,15 @@ const uischema_1713 = {
   ]
   };
 
+export const translations = {
+  categoryLabelKey: 'Basic',
+  address: {
+    label: "Address",
+  },
+};
+export const translate: Translator = (key: string, defaultMessage: string) => {
+  return get(translations, key) ?? defaultMessage
+};
 
 registerExamples([
   {
@@ -291,7 +302,8 @@ registerExamples([
     label: 'Categorization',
     data,
     schema,
-    uischema
+    uischema,
+    i18n: { locale: 'en', translate: translate }
   },
   {
     name: '1713',
