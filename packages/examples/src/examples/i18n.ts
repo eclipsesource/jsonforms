@@ -24,7 +24,8 @@
 */
 import { registerExamples } from '../register';
 import { personCoreSchema } from './person';
-import { JsonFormsCore, updateErrors, AnyAction, Dispatch } from '@jsonforms/core';
+import { JsonFormsCore, updateErrors, AnyAction, Dispatch, Translator } from '@jsonforms/core';
+import get from 'lodash/get';
 const localize = require('ajv-i18n');
 
 export const onChange = (dispatch: Dispatch<AnyAction>) => (
@@ -42,7 +43,8 @@ export const uischema = {
   type: 'VerticalLayout',
   elements: [
     {
-      type: 'HorizontalLayout',
+      type: 'Group',
+      i18n: 'basicInfoGroup',
       elements: [
         {
           type: 'Control',
@@ -56,7 +58,7 @@ export const uischema = {
     },
     {
       type: 'Label',
-      text: 'Additional Information'
+      text: 'additionalInformationLabel',
     },
     {
       type: 'HorizontalLayout',
@@ -83,12 +85,26 @@ export const data = {
   postalCode: '12345'
 };
 
+export const translations = {
+  basicInfoGroup: {
+    label: 'Basic Information'
+  },
+  additionalInformationLabel: 'Additional Information'
+};
+export const translate: Translator = (key: string, defaultMessage: string) => {
+  return get(translations, key) ?? defaultMessage;
+};
+
 registerExamples([
   {
     name: 'i18n',
     label: 'Person (i18n)',
     data,
     schema: personCoreSchema,
-    uischema
+    uischema,
+    i18n: {
+      translate: translate,
+      locale: 'en'
+    }
   }
 ]);
