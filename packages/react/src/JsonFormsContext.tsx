@@ -35,6 +35,7 @@ import {
   DispatchPropsOfControl,
   EnumCellProps,
   JsonFormsCore,
+  JsonFormsProps,
   JsonFormsSubStates,
   LayoutProps,
   OwnPropsOfCell,
@@ -300,7 +301,7 @@ export const ctxToOneOfProps = (
   };
 };
 
-export const ctxToJsonFormsDispatchProps = (
+export const ctxToJsonFormsRendererProps = (
   ctx: JsonFormsStateContext,
   ownProps: OwnPropsOfJsonFormsRenderer
 ) => mapStateToJsonFormsRendererProps({ jsonforms: { ...ctx } }, ownProps);
@@ -380,6 +381,13 @@ export const withJsonFormsContext =
     const ctx = useJsonForms();
     return <Component ctx={ctx} props={props} />;
   };
+
+export const withContextToJsonFormsRendererProps =
+  (Component: ComponentType<JsonFormsProps>): ComponentType<OwnPropsOfJsonFormsRenderer> =>
+    ({ ctx, props }: JsonFormsStateContext & JsonFormsProps) => {
+      const contextProps = ctxToJsonFormsRendererProps(ctx, props)
+      return (<Component {...props} {...contextProps} />)
+    };
 
 const withContextToControlProps =
   (Component: ComponentType<ControlProps>): ComponentType<OwnPropsOfControl> =>
@@ -523,6 +531,10 @@ const withContextToLabelProps =
 // --
 
 // top level HOCs --
+
+export const withJsonFormsRendererProps =
+  (Component: ComponentType<JsonFormsProps>, memoize = true): ComponentType<OwnPropsOfJsonFormsRenderer> =>
+  withJsonFormsContext(withContextToJsonFormsRendererProps(memoize ? React.memo(Component): Component));
 
 export const withJsonFormsControlProps =
   (Component: ComponentType<ControlProps>, memoize = true): ComponentType<OwnPropsOfControl> =>

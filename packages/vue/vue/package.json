@@ -56,7 +56,7 @@
     "@vue/cli-plugin-unit-jest": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "^3.2.26",
-    "@vue/test-utils": "^2.0.0-0",
+    "@vue/test-utils": "^2.0.2",
     "core-js": "^3.9.1",
     "cross-env": "^7.0.2",
     "rimraf": "^3.0.2",

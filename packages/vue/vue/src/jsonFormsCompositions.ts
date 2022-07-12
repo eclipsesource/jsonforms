@@ -87,6 +87,11 @@ export const rendererProps = <U = UISchemaElement>() => ({
       ArrayConstructor
     >,
     default: undefined
+  },
+  config: {
+    required: false,
+    type: Object,
+    default: undefined
   }
 });
 
@@ -136,6 +141,7 @@ export interface RendererProps<U = UISchemaElement> {
   enabled?: boolean;
   renderers?: JsonFormsRendererRegistryEntry[];
   cells?: JsonFormsCellRendererRegistryEntry[];
+  config?: any;
 }
 
 export interface ControlProps extends RendererProps {

@@ -41,6 +41,7 @@ import { Actions, ControlElement, JsonSchema } from '@jsonforms/core';
 import { DateControlRenderer, DateControlRendererTester } from '../src';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { JsonFormsAngularService } from '@jsonforms/angular';
+import { createTesterContext } from './util';
 
 const data = { foo: '2018-01-01' };
 const schema: JsonSchema = {
@@ -59,7 +60,7 @@ const uischema: ControlElement = {
 
 describe('Material boolean field tester', () => {
   it('should succeed', () => {
-    expect(DateControlRendererTester(uischema, schema, schema)).toBe(2);
+    expect(DateControlRendererTester(uischema, schema, createTesterContext(schema))).toBe(2);
   });
 });
 const imports = [

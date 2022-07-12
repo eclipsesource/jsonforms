@@ -304,6 +304,7 @@ test('render schema with $ref', () => {
       schema={schemaWithRef}
       renderers={renderers}
       rootSchema={schemaWithRef}
+      config={undefined}
     />
   );
 
@@ -360,6 +361,7 @@ test('updates schema with ref', () => {
       schema={fixture.schema}
       renderers={renderers}
       rootSchema={resolvedSchema}
+      config={undefined}
     />
   );
   expect(wrapper.find(CustomRenderer1).length).toBe(1);

@@ -18,12 +18,13 @@ export default defineComponent({
   },
   computed: {
     determinedRenderer(): any {
+      const testerContext = { rootSchema: this.rootSchema, config: this.config };
       const renderer = maxBy(this.renderer.renderers, r =>
-        r.tester(this.renderer.uischema, this.renderer.schema, this.rootSchema)
+        r.tester(this.renderer.uischema, this.renderer.schema, testerContext)
       );
       if (
         renderer === undefined ||
-        renderer.tester(this.renderer.uischema, this.renderer.schema, this.rootSchema) === -1
+        renderer.tester(this.renderer.uischema, this.renderer.schema, testerContext) === -1
       ) {
         return UnknownRenderer;
       } else {
