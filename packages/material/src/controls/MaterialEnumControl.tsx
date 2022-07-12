@@ -37,12 +37,18 @@ import { MaterialInputControl } from './MaterialInputControl';
 import { MuiAutocomplete, WithOptionLabel } from '../mui-controls/MuiAutocomplete';
 
 export const MaterialEnumControl = (props: ControlProps & OwnPropsOfEnum & WithOptionLabel) => {
-  const {config, uischema} = props;
+  const {config, uischema, errors} = props;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
+  const isValid = errors.length === 0;
   return (
+    appliedUiSchemaOptions.autocomplete === false ?
     <MaterialInputControl
       {...props}
-      input={appliedUiSchemaOptions.autocomplete === false ? MuiSelect : MuiAutocomplete}
+      input={MuiSelect}
+    />:
+    <MuiAutocomplete
+      {...props}
+      isValid={isValid}
     />
   );
 };
