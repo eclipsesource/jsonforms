@@ -76,6 +76,7 @@ const getProps = (example: ExampleDescription, cells?: any, renderers?: any) => 
   const data = example.data;
   const uischemas = example.uischemas;
   const config = example.config;
+  const i18n = example.i18n;
   return {
     schema,
     uischema,
@@ -83,7 +84,8 @@ const getProps = (example: ExampleDescription, cells?: any, renderers?: any) => 
     config,
     uischemas,
     cells,
-    renderers
+    renderers,
+    i18n
   }
 }
 

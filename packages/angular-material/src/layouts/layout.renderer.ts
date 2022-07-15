@@ -42,6 +42,7 @@ import { Subscription } from 'rxjs';
 export class LayoutRenderer<T extends Layout> extends JsonFormsBaseRenderer<T>
   implements OnInit, OnDestroy {
   hidden: boolean;
+  label: string | undefined;
   private subscription: Subscription;
 
   constructor(private jsonFormsService: JsonFormsAngularService, protected changeDetectionRef: ChangeDetectorRef) {
@@ -52,6 +53,7 @@ export class LayoutRenderer<T extends Layout> extends JsonFormsBaseRenderer<T>
     this.subscription = this.jsonFormsService.$state.subscribe({
       next: (state: JsonFormsState) => {
         const props = mapStateToLayoutProps(state, this.getOwnProps());
+        this.label = props.label;
         this.hidden = !props.visible;
         this.changeDetectionRef.markForCheck();
       }

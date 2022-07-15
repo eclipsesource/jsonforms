@@ -110,3 +110,7 @@ export const withAjvProps = <P extends {}>(Component: ComponentType<AjvProps & P
 
     return (<Component {...props} ajv={ajv} />);
   };
+
+export interface MaterialLabelableLayoutRendererProps extends MaterialLayoutRendererProps {
+  label?: string;
+}

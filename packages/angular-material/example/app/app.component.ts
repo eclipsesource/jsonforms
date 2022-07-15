@@ -24,7 +24,7 @@
 */
 import { Component } from '@angular/core';
 import { ExampleDescription, getExamples } from '@jsonforms/examples';
-import { UISchemaElement, UISchemaTester } from '@jsonforms/core';
+import { JsonFormsI18nState, UISchemaElement, UISchemaTester } from '@jsonforms/core';
 import { angularMaterialRenderers } from '../../src/index';
 import { DateAdapter } from '@angular/material/core';
 
@@ -40,6 +40,9 @@ const uiSchema = {
       scope: '#/properties/status'
     }
   ]
+};
+const defaultI18n: JsonFormsI18nState = {
+  locale: 'en-US'
 };
 const itemTester: UISchemaTester = (_schema, schemaPath, _path) => {
   if (schemaPath === '#/properties/warehouseitems/items') {
@@ -88,9 +91,7 @@ export class AppComponent {
   readonly renderers = angularMaterialRenderers;
   readonly examples = getExamples();
   selectedExample: ExampleDescription;
-  i18n = {
-    locale: 'en-US'
-  }
+  i18n: JsonFormsI18nState;
   private dateAdapter;
   private readonly = false;
   data: any;
@@ -101,11 +102,13 @@ export class AppComponent {
   constructor(dateAdapter: DateAdapter<Date>) {
     this.selectedExample = this.examples[19];
     this.dateAdapter = dateAdapter;
+    this.i18n = this.selectedExample.i18n ?? defaultI18n;
     dateAdapter.setLocale(this.i18n.locale);
   }
 
   onChange(ev: any) {
     this.selectedExample = this.examples.find(e => e.name === ev.target.value);
+    this.i18n = this.selectedExample.i18n ?? defaultI18n;
   }
 
   changeLocale(locale: string) {

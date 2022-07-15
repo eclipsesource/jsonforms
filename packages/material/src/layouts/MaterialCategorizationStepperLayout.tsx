@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React, {useState} from 'react';
+import React, {useState, useMemo} from 'react';
 import merge from 'lodash/merge';
 import { Button, Hidden, Step, StepButton, Stepper } from '@mui/material';
 import {
@@ -30,6 +30,7 @@ import {
   Categorization,
   categorizationHasCategory,
   Category,
+  deriveLabelForUISchemaElement,
   isVisible,
   optionIs,
   RankedTester,
@@ -37,7 +38,7 @@ import {
   StatePropsOfLayout,
   uiTypeIs
 } from '@jsonforms/core';
-import { withJsonFormsLayoutProps } from '@jsonforms/react';
+import { TranslateProps, withJsonFormsLayoutProps, withTranslateProps } from '@jsonforms/react';
 import {
   AjvProps,
   MaterialLayoutRenderer,
@@ -59,7 +60,7 @@ export interface CategorizationStepperState {
 }
 
 export interface MaterialCategorizationStepperLayoutRendererProps
-  extends StatePropsOfLayout, AjvProps {
+  extends StatePropsOfLayout, AjvProps, TranslateProps {
     data: any;
 }
 
@@ -79,7 +80,8 @@ export const MaterialCategorizationStepperLayoutRenderer = (props: MaterialCateg
     visible,
     cells,
     config,
-    ajv
+    ajv,
+    t
   } = props;
   const categorization = uischema as Categorization;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
@@ -94,9 +96,9 @@ export const MaterialCategorizationStepperLayoutRenderer = (props: MaterialCateg
   const buttonStyle = {
     marginRight: '1em'
   };
-  const categories = categorization.elements.filter((category: Category) =>
+  const categories = useMemo(() => categorization.elements.filter((category: Category) =>
     isVisible(category, data, undefined, ajv)
-  );
+  ),[categorization, data, ajv]);
   const childProps: MaterialLayoutRendererProps = {
     elements: categories[activeCategory].elements,
     schema,
@@ -106,13 +108,18 @@ export const MaterialCategorizationStepperLayoutRenderer = (props: MaterialCateg
     renderers,
     cells
   };
+  const tabLabels = useMemo(() => {
+    return categories.map((e: Category) => 
+      deriveLabelForUISchemaElement(e, t)
+    )
+  }, [categories, t])
   return (
     <Hidden xsUp={!visible}>
       <Stepper activeStep={activeCategory} nonLinear>
-        {categories.map((e: Category, idx: number) => (
-          <Step key={e.label}>
+        {categories.map((_: Category, idx: number) => (
+          <Step key={tabLabels[idx]}>
             <StepButton onClick={() => handleStep(idx)}>
-              {e.label}
+              {tabLabels[idx]}
             </StepButton>
           </Step>
         ))}
@@ -144,6 +151,6 @@ export const MaterialCategorizationStepperLayoutRenderer = (props: MaterialCateg
   );
 };
 
-export default withJsonFormsLayoutProps(withAjvProps(
-  MaterialCategorizationStepperLayoutRenderer
-));
+export default withAjvProps(withTranslateProps(
+  withJsonFormsLayoutProps(MaterialCategorizationStepperLayoutRenderer
+)));

@@ -37,7 +37,7 @@ import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { JsonForms, JsonFormsStateProvider } from '@jsonforms/react';
 import { Accordion } from '@mui/material';
-import { initCore } from './util';
+import { createTesterContext, initCore } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -181,9 +181,9 @@ describe('Material array layout tester', () => {
     expect(materialArrayLayoutTester(uischema, schema, undefined)).toBe(-1);
     expect(materialArrayLayoutTester(uischema, nestedSchema, undefined)).toBe(4);
     expect(materialArrayLayoutTester(uischema, nestedSchema2, undefined)).toBe(4);
-    expect(materialArrayLayoutTester(uischema, nestedSchemaWithRef, nestedSchemaWithRef)).toBe(4);
-    expect(materialArrayLayoutTester(uischema, nestedSchemaWithRef, nestedSchemaWithRef)).toBe(4);
-    expect(materialArrayLayoutTester(uischema, nestedSchema2WithRef, nestedSchema2WithRef)).toBe(4);
+    expect(materialArrayLayoutTester(uischema, nestedSchemaWithRef, createTesterContext(nestedSchemaWithRef))).toBe(4);
+    expect(materialArrayLayoutTester(uischema, nestedSchemaWithRef, createTesterContext(nestedSchemaWithRef))).toBe(4);
+    expect(materialArrayLayoutTester(uischema, nestedSchema2WithRef, createTesterContext(nestedSchema2WithRef))).toBe(4);
 
     expect(materialArrayLayoutTester(uischemaOptions.default, schema, undefined)).toBe(-1);
     expect(materialArrayLayoutTester(uischemaOptions.generate, schema, undefined)).toBe(4);

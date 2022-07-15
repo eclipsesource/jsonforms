@@ -22,12 +22,13 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React, {useState} from 'react';
+import React, {useState, useMemo} from 'react';
 import { AppBar, Hidden, Tab, Tabs } from '@mui/material';
 import {
   and,
   Categorization,
   Category,
+  deriveLabelForUISchemaElement,
   isVisible,
   RankedTester,
   rankWith,
@@ -36,7 +37,7 @@ import {
   UISchemaElement,
   uiTypeIs
 } from '@jsonforms/core';
-import { withJsonFormsLayoutProps } from '@jsonforms/react';
+import { TranslateProps, withJsonFormsLayoutProps, withTranslateProps } from '@jsonforms/react';
 import {
   AjvProps,
   MaterialLayoutRenderer,
@@ -68,7 +69,7 @@ export interface CategorizationState {
 }
 
 export interface MaterialCategorizationLayoutRendererProps
-  extends StatePropsOfLayout, AjvProps {
+  extends StatePropsOfLayout, AjvProps, TranslateProps {
   selected?: number;
   ownState?: boolean;
   data?: any;
@@ -87,13 +88,14 @@ export const MaterialCategorizationLayoutRenderer = (props: MaterialCategorizati
     enabled,
     selected,
     onChange,
-    ajv
+    ajv,
+    t
   } = props;
   const categorization = uischema as Categorization;
   const [activeCategory, setActiveCategory]= useState<number|undefined>(selected??0);
-  const categories = categorization.elements.filter((category: Category) =>
+  const categories = useMemo(() => categorization.elements.filter((category: Category) =>
     isVisible(category, data, undefined, ajv)
-  );
+  ),[categorization, data, ajv]);
   const childProps: MaterialLayoutRendererProps = {
     elements: categories[activeCategory].elements,
     schema,
@@ -110,12 +112,19 @@ export const MaterialCategorizationLayoutRenderer = (props: MaterialCategorizati
     }
     setActiveCategory(value);
   };
+
+  const tabLabels = useMemo(() => {
+    return categories.map((e: Category) => 
+      deriveLabelForUISchemaElement(e, t)
+    )
+  }, [categories, t])
+
   return (
     <Hidden xsUp={!visible}>
       <AppBar position='static'>
         <Tabs value={activeCategory} onChange={onTabChange} textColor='inherit' indicatorColor='secondary' variant='scrollable'>
-          {categories.map((e: Category, idx: number) => (
-            <Tab key={idx} label={e.label} />
+          {categories.map((_, idx: number) => (
+            <Tab key={idx} label={tabLabels[idx]} />
           ))}
         </Tabs>
       </AppBar>
@@ -126,4 +135,4 @@ export const MaterialCategorizationLayoutRenderer = (props: MaterialCategorizati
   );
 };
 
-export default withJsonFormsLayoutProps(withAjvProps(MaterialCategorizationLayoutRenderer));
+export default withAjvProps(withTranslateProps(withJsonFormsLayoutProps(MaterialCategorizationLayoutRenderer)));

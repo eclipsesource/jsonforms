@@ -32,10 +32,9 @@ import { JsonFormsState } from '../../src/store';
 import { coreReducer, JsonFormsCore } from '../../src/reducers/core';
 import { Dispatch } from '../../src/util/type';
 import { CoreActions, init, setValidationMode, update, UpdateAction, UPDATE_DATA } from '../../src/actions/actions';
-import { ControlElement, RuleEffect, UISchemaElement } from '../../src/models/uischema';
-import { computeLabel, createDefaultValue, mapDispatchToArrayControlProps, mapDispatchToControlProps, mapDispatchToMultiEnumProps, mapStateToAnyOfProps, mapStateToArrayLayoutProps, mapStateToControlProps, mapStateToEnumControlProps, mapStateToJsonFormsRendererProps, mapStateToLayoutProps, mapStateToMultiEnumControlProps, mapStateToOneOfEnumControlProps, mapStateToOneOfProps, OwnPropsOfControl } from '../../src/util/renderer';
+import { ControlElement, LabelElement, RuleEffect, UISchemaElement } from '../../src/models/uischema';
+import { computeLabel, createDefaultValue, mapDispatchToArrayControlProps, mapDispatchToControlProps, mapDispatchToMultiEnumProps, mapStateToAnyOfProps, mapStateToArrayLayoutProps, mapStateToControlProps, mapStateToEnumControlProps, mapStateToJsonFormsRendererProps, mapStateToLabelProps, mapStateToLayoutProps, mapStateToMultiEnumControlProps, mapStateToOneOfEnumControlProps, mapStateToOneOfProps, OwnPropsOfControl } from '../../src/util/renderer';
 import { clearAllIds } from '../../src/util/ids';
-import { generateDefaultUISchema } from '../../src/generators/uischema';
 import { JsonSchema } from '../../src/models/jsonSchema';
 import { rankWith } from '../../src/testers/testers';
 import { createAjv } from '../../src/util/validator';
@@ -495,7 +494,7 @@ test('createDefaultValue', t => {
   t.deepEqual(createDefaultValue({ type: 'something' }), {});
 });
 
-test(`mapStateToDispatchRendererProps should generate UI schema given ownProps schema`, t => {
+test(`mapStateToJsonFormsRendererProps should use registered UI schema given ownProps schema`, t => {
   const store = mockStore(createState(coreUISchema));
   const schema = {
     type: 'object',
@@ -507,16 +506,16 @@ test(`mapStateToDispatchRendererProps should generate UI schema given ownProps s
   };
 
   const props = mapStateToJsonFormsRendererProps(store.getState(), { schema });
-  t.deepEqual(props.uischema, generateDefaultUISchema(schema));
+  t.deepEqual(props.uischema, coreUISchema);
 });
 
-test(`mapStateToDispatchRendererProps should use registered UI schema given no ownProps`, t => {
+test(`mapStateToJsonFormsRendererProps should use registered UI schema given no ownProps`, t => {
   const store = mockStore(createState(coreUISchema));
   const props = mapStateToJsonFormsRendererProps(store.getState(), {});
   t.deepEqual(props.uischema, coreUISchema);
 });
 
-test(`mapStateToDispatchRendererProps should use UI schema if given via ownProps`, t => {
+test(`mapStateToJsonFormsRendererProps should use UI schema if given via ownProps`, t => {
   const store = mockStore(createState(coreUISchema));
   const schema = {
     type: 'object',
@@ -1729,4 +1728,103 @@ test('mapStateToOneOfEnumControlProps - i18n - i18n key translation', t => {
 
   const props = mapStateToOneOfEnumControlProps(state, ownProps);
   t.is(props.options[0].label, 'my message');
+});
+
+
+test('mapStateToLabelProps - i18n - should not crash without i18n', t => {
+  const labelUISchema : LabelElement = {
+    type: 'Label',
+    text: 'foo',
+    i18n: 'bar'
+  }
+  const ownProps = {
+    uischema: labelUISchema
+  };
+  const state: JsonFormsState = createState(labelUISchema);
+  state.jsonforms.i18n = undefined;
+
+  const props = mapStateToLabelProps(state, ownProps);
+  t.is(props.text, 'foo');
+});
+
+test('mapStateToLabelProps - i18n - default translation has no effect', t => {
+  const labelUISchema : LabelElement = {
+    type: 'Label',
+    text: 'foo',
+    i18n: 'bar'
+  }
+  const ownProps = {
+    uischema: labelUISchema
+  };
+  const state: JsonFormsState = createState(labelUISchema);
+  state.jsonforms.i18n = defaultJsonFormsI18nState;
+
+  const props = mapStateToLabelProps(state, ownProps);
+  t.is(props.text, 'foo');
+});
+
+test('mapStateToLabelProps - i18n - default key translation', t => {
+  const labelUISchema : LabelElement = {
+    type: 'Label',
+    text: 'foo'
+  }
+  const ownProps = {
+    uischema: labelUISchema
+  };
+  const state: JsonFormsState = createState(labelUISchema);
+  state.jsonforms.i18n = defaultJsonFormsI18nState;
+  state.jsonforms.i18n.translate = (key: string, defaultMessage: string | undefined) => {
+    switch(key){
+      case 'foo': return 'my message';
+      default: return defaultMessage;
+    }
+  }
+
+  const props = mapStateToLabelProps(state, ownProps);
+  t.is(props.text, 'my message');
+});
+
+
+test('mapStateToLabelProps - i18n - default message translation', t => {
+  const labelUISchema : LabelElement = {
+    type: 'Label',
+    text: 'foo',
+    i18n: 'bar'
+  }
+  const ownProps = {
+    uischema: labelUISchema
+  };
+  const state: JsonFormsState = createState(labelUISchema);
+  state.jsonforms.i18n = defaultJsonFormsI18nState;
+  state.jsonforms.i18n.translate = (_key: string, defaultMessage: string | undefined) => {
+    switch(defaultMessage){
+      case 'foo': return 'my message';
+      default: return defaultMessage;
+    }
+  }
+
+  const props = mapStateToLabelProps(state, ownProps);
+  t.is(props.text, 'my message');
+});
+
+test('mapStateToLabelProps - i18n - i18n key translation', t => {
+  const labelUISchema : LabelElement = {
+    type: 'Label',
+    text: 'foo',
+    i18n: 'bar'
+  }
+  const ownProps = {
+    uischema: labelUISchema
+  };
+  const state: JsonFormsState = createState(labelUISchema);
+  state.jsonforms.i18n = defaultJsonFormsI18nState;
+  state.jsonforms.i18n.translate = (key: string, defaultMessage: string | undefined): string | undefined => {
+    switch(key){
+      case 'bar.text': return 'my message';
+      default: return defaultMessage;
+    }
+  }
+
+  const props = mapStateToLabelProps(state, ownProps);
+  t.is(props.text, 'my message');
 });

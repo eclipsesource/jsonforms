@@ -26,6 +26,7 @@
 import {
   createAjv,
   JsonSchema,
+  TesterContext,
   UISchemaElement
 } from '@jsonforms/core';
 import { JsonFormsReactProps, useJsonForms } from '@jsonforms/react';
@@ -42,4 +43,8 @@ export const TestEmitter : React.FC<JsonFormsReactProps> = ({onChange}) => {
     onChange({ data, errors });
   }, [data, errors]);
   return null;
+};
+
+export const createTesterContext = (rootSchema: JsonSchema, config?: any): TesterContext => {
+  return { rootSchema, config };
 };

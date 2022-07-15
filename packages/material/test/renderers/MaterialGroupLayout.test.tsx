@@ -67,7 +67,7 @@ const uischema = {
 describe('Material group layout', () => {
   it('should render a GroupComponent with direction column when given no direction LayoutProp', () => {
     const wrapper = mount(
-      <MaterialGroupLayout schema={schema} uischema={uischema} />
+      <MaterialGroupLayout schema={schema} uischema={uischema} direction="column" enabled visible path=""/>
     );
     expect(wrapper.find(MaterialLayoutRenderer).props().direction).toBe(
       'column'
@@ -80,6 +80,9 @@ describe('Material group layout', () => {
         schema={schema}
         uischema={uischema}
         direction={'row'}
+        enabled
+        visible
+        path=""
       />
     );
     expect(wrapper.find(MaterialLayoutRenderer).props().direction).toBe('row');

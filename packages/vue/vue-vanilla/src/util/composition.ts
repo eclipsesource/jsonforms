@@ -72,6 +72,24 @@ export const useVanillaLayout = <I extends { layout: any }>(input: I) => {
 };
 
 /**
+ * Adds styles and appliedOptions
+ */
+export const useVanillaLabel = <I extends { label: any }>(input: I) => {
+  const appliedOptions = computed(() =>
+    merge(
+      {},
+      cloneDeep(input.label.value.config),
+      cloneDeep(input.label.value.uischema.options)
+    )
+  );
+  return {
+    ...input,
+    styles: useStyles(input.label.value.uischema),
+    appliedOptions
+  };
+};
+
+/**
  * Adds styles, appliedOptions and childUiSchema
  */
 export const useVanillaArrayControl = <I extends { control: any }>(

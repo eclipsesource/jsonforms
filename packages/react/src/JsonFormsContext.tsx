@@ -35,6 +35,7 @@ import {
   DispatchPropsOfControl,
   EnumCellProps,
   JsonFormsCore,
+  JsonFormsProps,
   JsonFormsSubStates,
   LayoutProps,
   OwnPropsOfCell,
@@ -68,7 +69,12 @@ import {
   DispatchPropsOfMultiEnumControl,
   mapDispatchToControlProps,
   mapDispatchToArrayControlProps,
-  i18nReducer
+  i18nReducer,
+  Translator,
+  defaultJsonFormsI18nState,
+  OwnPropsOfLabel,
+  LabelProps,
+  mapStateToLabelProps
 } from '@jsonforms/core';
 import debounce from 'lodash/debounce';
 import React, { ComponentType, Dispatch, ReducerAction, useCallback, useContext, useEffect, useMemo, useReducer, useRef } from 'react';
@@ -295,7 +301,7 @@ export const ctxToOneOfProps = (
   };
 };
 
-export const ctxToJsonFormsDispatchProps = (
+export const ctxToJsonFormsRendererProps = (
   ctx: JsonFormsStateContext,
   ownProps: OwnPropsOfJsonFormsRenderer
 ) => mapStateToJsonFormsRendererProps({ jsonforms: { ...ctx } }, ownProps);
@@ -355,6 +361,13 @@ export const ctxDispatchToMultiEnumProps = (dispatch: Dispatch<ReducerAction<any
     ...useMemo(() => mapDispatchToMultiEnumProps(dispatch as any), [dispatch])
 });
 
+export const ctxToLabelProps = (
+  ctx: JsonFormsStateContext,
+  ownProps: OwnPropsOfLabel
+) => {
+  return mapStateToLabelProps({ jsonforms: { ...ctx } }, ownProps);
+}
+
 // --
 
 // HOCs utils
@@ -368,6 +381,13 @@ export const withJsonFormsContext =
     const ctx = useJsonForms();
     return <Component ctx={ctx} props={props} />;
   };
+
+export const withContextToJsonFormsRendererProps =
+  (Component: ComponentType<JsonFormsProps>): ComponentType<OwnPropsOfJsonFormsRenderer> =>
+    ({ ctx, props }: JsonFormsStateContext & JsonFormsProps) => {
+      const contextProps = ctxToJsonFormsRendererProps(ctx, props)
+      return (<Component {...props} {...contextProps} />)
+    };
 
 const withContextToControlProps =
   (Component: ComponentType<ControlProps>): ComponentType<OwnPropsOfControl> =>
@@ -412,7 +432,7 @@ const withContextToDetailProps =
   (Component: ComponentType<StatePropsOfControlWithDetail>): ComponentType<OwnPropsOfControl> =>
     ({ ctx, props }: JsonFormsStateContext & StatePropsOfControlWithDetail) => {
       const detailProps = ctxToControlWithDetailProps(ctx, props);
-      return (<Component {...detailProps} />);
+      return (<Component {...props} {...detailProps} />);
     };
 
 const withContextToArrayLayoutProps =
@@ -420,7 +440,7 @@ const withContextToArrayLayoutProps =
     ({ ctx, props }: JsonFormsStateContext & ArrayLayoutProps) => {
       const arrayLayoutProps = ctxToArrayLayoutProps(ctx, props);
       const dispatchProps = ctxDispatchToArrayControlProps(ctx.dispatch);
-      return (<Component {...arrayLayoutProps} {...dispatchProps} />);
+      return (<Component {...props} {...arrayLayoutProps} {...dispatchProps} />);
     };
 
 const withContextToArrayControlProps =
@@ -436,7 +456,7 @@ const withContextToMasterListItemProps =
   (Component: ComponentType<StatePropsOfMasterItem>): ComponentType<OwnPropsOfMasterListItem> =>
     ({ ctx, props }: JsonFormsStateContext & StatePropsOfMasterItem) => {
       const stateProps = ctxToMasterListItemProps(ctx, props);
-      return (<Component {...stateProps} />);
+      return (<Component {...props} {...stateProps} />);
     };
 
 const withContextToCellProps =
@@ -501,17 +521,27 @@ const withContextToMultiEnumProps =
     return (<Component {...props} {...dispatchProps} {...stateProps} />);
   };
 
+const withContextToLabelProps =
+(Component: ComponentType<LabelProps>): ComponentType<OwnPropsOfLabel> =>
+  ({ ctx, props }: JsonFormsStateContext & LabelProps & OwnPropsOfLabel) => {
+    const stateProps = ctxToLabelProps(ctx, props);
+    return (<Component {...props} {...stateProps} />);
+  };
 
 // --
 
 // top level HOCs --
 
+export const withJsonFormsRendererProps =
+  (Component: ComponentType<JsonFormsProps>, memoize = true): ComponentType<OwnPropsOfJsonFormsRenderer> =>
+  withJsonFormsContext(withContextToJsonFormsRendererProps(memoize ? React.memo(Component): Component));
+
 export const withJsonFormsControlProps =
   (Component: ComponentType<ControlProps>, memoize = true): ComponentType<OwnPropsOfControl> =>
   withJsonFormsContext(withContextToControlProps(memoize ? React.memo(Component) : Component));
 
-export const withJsonFormsLayoutProps =
-  (Component: ComponentType<LayoutProps>, memoize = true): ComponentType<OwnPropsOfLayout> =>
+export const withJsonFormsLayoutProps = <T extends LayoutProps>
+  (Component: ComponentType<T>, memoize = true): ComponentType<T & OwnPropsOfLayout> =>
     withJsonFormsContext(withContextToLayoutProps(memoize ? React.memo(Component) : Component));
 
 export const withJsonFormsOneOfProps =
@@ -572,4 +602,22 @@ export const withJsonFormsMultiEnumProps = (
 ): ComponentType<OwnPropsOfControl & OwnPropsOfEnum & DispatchPropsOfMultiEnumControl> =>
   withJsonFormsContext(withContextToMultiEnumProps(memoize ? React.memo(Component) : Component));
 
-// --
+export const withJsonFormsLabelProps =
+  (Component: ComponentType<LabelProps & OwnPropsOfEnum>, memoize = true): ComponentType<OwnPropsOfLabel> =>
+    withJsonFormsContext(withContextToLabelProps(memoize ? React.memo(Component) : Component));
+
+// Util HOCs
+
+export interface TranslateProps {
+  t: Translator;
+  locale: string;
+}
+
+export const withTranslateProps = <P extends {}>(Component: ComponentType<TranslateProps & P>) =>
+  (props: P) => {
+    const ctx = useJsonForms();
+    const locale = ctx.i18n?.locale ?? defaultJsonFormsI18nState.locale;
+    const t = ctx.i18n?.translate ?? defaultJsonFormsI18nState.translate;
+
+    return (<Component {...props} locale={locale} t={t} />);
+  };

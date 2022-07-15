@@ -16,15 +16,21 @@ Therefore JSON Forms was not able to properly run the testers on schemas contain
 The workaround for this was to resolve the JSON Schema by hand before handing it over to JSON Forms.
 Only the React renderers did this automatically but we removed this functionality, see the next section for more information.
 
-We now added an additional parameter to the testers, the `rootSchema`.
+We now added an additional parameter to the testers, the new `TesterContext`.
 
 ```ts
-type Tester = (uischema: UISchemaElement, schema: JsonSchema, rootSchema: JsonSchema) => boolean;
-type RankedTester = (uischema: UISchemaElement, schema: JsonSchema, rootSchema: JsonSchema) => number;
+interface TesterContext {
+  rootSchema: JsonSchema;
+  config: any;
+}
+
+type Tester = (uischema: UISchemaElement, schema: JsonSchema, context: TesterContext) => boolean;
+type RankedTester = (uischema: UISchemaElement, schema: JsonSchema, context: TesterContext) => number;
 ```
 
-This allows the testers to resolve any `$ref` they might encounter in their handed over `schema`.
+This allows the testers to resolve any `$ref` they might encounter in their handed over `schema` by using the context's `rootSchema`.
 Therefore the manual resolving of JSON Schemas before handing them over to JSON Forms does not need to be performed in those cases.
+In addition, testers can now access the form wide `config`.
 
 ### Removal of JSON Schema $Ref Parser
 
@@ -113,6 +119,10 @@ The utility function `fromScopable` was renamed to `fromScoped` accordingly.
 ### Localization of Date Picker in Angular Material
 
 Date Picker in Angular Material will use the global configuration of your Angular Material application.
+
+### React prop mapping functions
+
+Renamed `ctxToJsonFormsDispatchProps` to `ctxToJsonFormsRendererProps` in order to better reflect the function's purpose.
 
 ## Migrating to JSON Forms 2.5
 

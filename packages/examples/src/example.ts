@@ -27,7 +27,8 @@ import {
   JsonFormsUISchemaRegistryEntry,
   JsonFormsRendererRegistryEntry,
   JsonSchema,
-  UISchemaElement
+  UISchemaElement,
+  JsonFormsI18nState
 } from '@jsonforms/core';
 
 export interface ExampleDescription {
@@ -38,7 +39,8 @@ export interface ExampleDescription {
   uischema: UISchemaElement;
   uischemas?: JsonFormsUISchemaRegistryEntry[];
   config?: any;
-  actions?: {label: string, apply: (props: StateProps) => any}[];
+  actions?: { label: string, apply: (props: StateProps) => any }[];
+  i18n?: JsonFormsI18nState;
 }
 
 export interface StateProps {

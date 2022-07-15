@@ -27,6 +27,8 @@ import React from 'react';
 import {
   Categorization,
   ControlElement,
+  createAjv,
+  defaultJsonFormsI18nState,
   Layout,
   layoutDefaultProps,
   RuleEffect,
@@ -63,8 +65,16 @@ const fixture = {
         label: 'B'
       }
     ]
-  }
+  },
 };
+
+const testDefaultProps = {
+  ...layoutDefaultProps,
+  data: fixture.data,
+  ajv: createAjv(),
+  t: defaultJsonFormsI18nState.translate,
+  locale: defaultJsonFormsI18nState.locale
+}
 
 describe('Material categorization stepper layout tester', () => {
   it('should not fail when given undefined data', () => {
@@ -218,7 +228,7 @@ describe('Material categorization stepper layout', () => {
     const wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
         <MaterialCategorizationStepperLayoutRenderer
-          {...layoutDefaultProps}
+          {...testDefaultProps}
           schema={fixture.schema}
           uischema={uischema}
         />
@@ -273,7 +283,7 @@ describe('Material categorization stepper layout', () => {
     const wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
         <MaterialCategorizationStepperLayoutRenderer
-          {...layoutDefaultProps}
+          {...testDefaultProps}
           schema={fixture.schema}
           uischema={uischema}
         />
@@ -297,7 +307,7 @@ describe('Material categorization stepper layout', () => {
     const wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
         <MaterialCategorizationStepperLayoutRenderer
-          {...layoutDefaultProps}
+          {...testDefaultProps}
           schema={fixture.schema}
           uischema={fixture.uischema}
           visible={false}
@@ -314,7 +324,7 @@ describe('Material categorization stepper layout', () => {
     const wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
         <MaterialCategorizationStepperLayoutRenderer
-          {...layoutDefaultProps}
+          {...testDefaultProps}
           schema={fixture.schema}
           uischema={fixture.uischema}
         />
@@ -355,7 +365,7 @@ describe('Material categorization stepper layout', () => {
     const wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
         <MaterialCategorizationStepperLayoutRenderer
-          {...layoutDefaultProps}
+          {...testDefaultProps}
           schema={fixture.schema}
           uischema={uischema}
         />
@@ -372,7 +382,7 @@ describe('Material categorization stepper layout', () => {
     const wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
         <MaterialCategorizationStepperLayoutRenderer
-          {...layoutDefaultProps}
+          {...testDefaultProps}
           schema={fixture.schema}
           uischema={fixture.uischema}
           renderers={renderers}
@@ -413,7 +423,7 @@ describe('Material categorization stepper layout', () => {
     const wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
         <MaterialCategorizationStepperLayoutRenderer
-          {...layoutDefaultProps}
+          {...testDefaultProps}
           schema={fixture.schema}
           uischema={uischema}
         />
@@ -481,7 +491,7 @@ describe('Material categorization stepper layout', () => {
     const wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
         <MaterialCategorizationStepperLayoutRenderer
-          {...layoutDefaultProps}
+          {...testDefaultProps}
           schema={fixture.schema}
           uischema={uischema}
         />
@@ -540,7 +550,7 @@ describe('Material categorization stepper layout', () => {
     const wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
         <MaterialCategorizationStepperLayoutRenderer
-            {...layoutDefaultProps}
+            {...testDefaultProps}
             schema={fixture.schema}
             uischema={uischema}
         />
@@ -610,7 +620,7 @@ describe('Material categorization stepper layout', () => {
     const wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
         <MaterialCategorizationStepperLayoutRenderer
-            {...layoutDefaultProps}
+            {...testDefaultProps}
             schema={fixture.schema}
             uischema={uischema}
         />
