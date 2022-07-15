@@ -35,6 +35,7 @@ import {
 import {
   createId,
   isControl,
+  getConfig,
   JsonFormsProps,
   JsonFormsState,
   JsonSchema,
@@ -104,11 +105,14 @@ export class JsonFormsOutlet extends JsonFormsBaseRenderer<UISchemaElement>
     const { renderers } = props as JsonFormsProps;
     const schema: JsonSchema = this.schema || props.schema;
     const uischema = this.uischema || props.uischema;
-    const rootSchema = props.rootSchema;
+    const testerContext = {
+      rootSchema: props.rootSchema,
+      config: getConfig(state)
+    };
 
-    const renderer = maxBy(renderers, r => r.tester(uischema, schema, rootSchema));
+    const renderer = maxBy(renderers, r => r.tester(uischema, schema, testerContext));
     let bestComponent: Type<any> = UnknownRenderer;
-    if (renderer !== undefined && renderer.tester(uischema, schema, rootSchema) !== -1) {
+    if (renderer !== undefined && renderer.tester(uischema, schema, testerContext) !== -1) {
       bestComponent = renderer.renderer;
     }
 

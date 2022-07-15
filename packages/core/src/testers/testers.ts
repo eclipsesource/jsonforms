@@ -49,7 +49,7 @@ export const NOT_APPLICABLE = -1;
  * A tester is a function that receives an UI schema and a JSON schema and returns a boolean.
  * The rootSchema is handed over as context. Can be used to resolve references.
  */
-export type Tester = (uischema: UISchemaElement, schema: JsonSchema, rootSchema: JsonSchema) => boolean;
+export type Tester = (uischema: UISchemaElement, schema: JsonSchema, context: TesterContext) => boolean;
 
 /**
  * A ranked tester associates a tester with a number.
@@ -57,8 +57,18 @@ export type Tester = (uischema: UISchemaElement, schema: JsonSchema, rootSchema:
 export type RankedTester = (
   uischema: UISchemaElement,
   schema: JsonSchema,
-  rootSchema: JsonSchema
+  context: TesterContext
 ) => number;
+
+/**
+ * Additional context given to a tester in addition to UISchema and JsonSchema.
+ */
+export interface TesterContext {
+  /** The root JsonSchema of the form. Can be used to resolve references. */
+  rootSchema: JsonSchema;
+  /** The form wide configuration object given to JsonForms. */
+  config: any;
+}
 
 export const isControl = (uischema: any): uischema is ControlElement =>
   !isEmpty(uischema) && uischema.scope !== undefined;
@@ -75,7 +85,7 @@ export const isControl = (uischema: any): uischema is ControlElement =>
  */
 export const schemaMatches = (
   predicate: (schema: JsonSchema, rootSchema: JsonSchema) => boolean
-): Tester => (uischema: UISchemaElement, schema: JsonSchema, rootSchema: JsonSchema): boolean => {
+): Tester => (uischema: UISchemaElement, schema: JsonSchema, context: TesterContext): boolean => {
   if (isEmpty(uischema) || !isControl(uischema)) {
     return false;
   }
@@ -88,26 +98,26 @@ export const schemaMatches = (
   }
   let currentDataSchema = schema;
   if (hasType(schema, 'object')) {
-    currentDataSchema = resolveSchema(schema, schemaPath, rootSchema);
+    currentDataSchema = resolveSchema(schema, schemaPath, context?.rootSchema);
   }
   if (currentDataSchema === undefined) {
     return false;
   }
 
-  return predicate(currentDataSchema, rootSchema);
+  return predicate(currentDataSchema, context?.rootSchema);
 };
 
 export const schemaSubPathMatches = (
   subPath: string,
   predicate: (schema: JsonSchema, rootSchema: JsonSchema) => boolean
-): Tester => (uischema: UISchemaElement, schema: JsonSchema, rootSchema: JsonSchema): boolean => {
+): Tester => (uischema: UISchemaElement, schema: JsonSchema, context: TesterContext): boolean => {
   if (isEmpty(uischema) || !isControl(uischema)) {
     return false;
   }
   const schemaPath = uischema.scope;
   let currentDataSchema: JsonSchema = schema;
   if (hasType(schema, 'object')) {
-    currentDataSchema = resolveSchema(schema, schemaPath, rootSchema);
+    currentDataSchema = resolveSchema(schema, schemaPath, context?.rootSchema);
   }
   currentDataSchema = get(currentDataSchema, subPath);
 
@@ -115,7 +125,7 @@ export const schemaSubPathMatches = (
     return false;
   }
 
-  return predicate(currentDataSchema, rootSchema);
+  return predicate(currentDataSchema, context?.rootSchema);
 };
 
 /**
@@ -218,8 +228,8 @@ export const scopeEndIs = (expected: string): Tester => (
 export const and = (...testers: Tester[]): Tester => (
   uischema: UISchemaElement,
   schema: JsonSchema,
-  rootSchema: JsonSchema
-) => testers.reduce((acc, tester) => acc && tester(uischema, schema, rootSchema), true);
+  context: TesterContext
+) => testers.reduce((acc, tester) => acc && tester(uischema, schema, context), true);
 
 /**
  * A tester that allow composing other testers by || them.
@@ -229,8 +239,8 @@ export const and = (...testers: Tester[]): Tester => (
 export const or = (...testers: Tester[]): Tester => (
   uischema: UISchemaElement,
   schema: JsonSchema,
-  rootSchema: JsonSchema
-) => testers.reduce((acc, tester) => acc || tester(uischema, schema, rootSchema), false);
+  context: TesterContext
+) => testers.reduce((acc, tester) => acc || tester(uischema, schema, context), false);
 /**
  * Create a ranked tester that will associate a number with a given tester, if the
  * latter returns true.
@@ -241,9 +251,9 @@ export const or = (...testers: Tester[]): Tester => (
 export const rankWith = (rank: number, tester: Tester) => (
   uischema: UISchemaElement,
   schema: JsonSchema,
-  rootSchema: JsonSchema
+  context: TesterContext
 ): number => {
-  if (tester(uischema, schema, rootSchema)) {
+  if (tester(uischema, schema, context)) {
     return rank;
   }
 
@@ -253,9 +263,9 @@ export const rankWith = (rank: number, tester: Tester) => (
 export const withIncreasedRank = (by: number, rankedTester: RankedTester) => (
   uischema: UISchemaElement,
   schema: JsonSchema,
-  rootSchema: JsonSchema
+  context: TesterContext
 ): number => {
-  const rank = rankedTester(uischema, schema, rootSchema);
+  const rank = rankedTester(uischema, schema, context);
   if (rank === NOT_APPLICABLE) {
     return NOT_APPLICABLE;
   }
@@ -438,13 +448,13 @@ const traverse = (
 export const isObjectArrayWithNesting = (
   uischema: UISchemaElement,
   schema: JsonSchema,
-  rootSchema: JsonSchema
+  context: TesterContext
 ): boolean => {
-  if (!uiTypeIs('Control')(uischema, schema, rootSchema)) {
+  if (!uiTypeIs('Control')(uischema, schema, context)) {
     return false;
   }
   const schemaPath = (uischema as ControlElement).scope;
-  const resolvedSchema = resolveSchema(schema, schemaPath, rootSchema ?? schema);
+  const resolvedSchema = resolveSchema(schema, schemaPath, context?.rootSchema ?? schema);
   let objectDepth = 0;
   if (resolvedSchema !== undefined && resolvedSchema.items !== undefined) {
     // check if nested arrays
@@ -466,7 +476,7 @@ export const isObjectArrayWithNesting = (
           return true;
         }
         return false;
-      }, rootSchema)
+      }, context?.rootSchema)
     ) {
       return true;
     }
@@ -532,7 +542,7 @@ export const isRangeControl = and(
 
 /**
  * Tests whether the given UI schema is of type Control, if the schema
- * is of type string and has option format
+ * is of type integer and has option format
  * @type {Tester}
  */
 export const isNumberFormatControl = and(
@@ -566,6 +576,6 @@ export const categorizationHasCategory = (uischema: UISchemaElement) =>
 export const not = (tester: Tester): Tester => (
   uischema: UISchemaElement,
   schema: JsonSchema,
-  rootSchema: JsonSchema
+  context: TesterContext
 
-) => !tester(uischema, schema, rootSchema);
+) => !tester(uischema, schema, context);

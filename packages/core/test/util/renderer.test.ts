@@ -35,7 +35,6 @@ import { CoreActions, init, setValidationMode, update, UpdateAction, UPDATE_DATA
 import { ControlElement, LabelElement, RuleEffect, UISchemaElement } from '../../src/models/uischema';
 import { computeLabel, createDefaultValue, mapDispatchToArrayControlProps, mapDispatchToControlProps, mapDispatchToMultiEnumProps, mapStateToAnyOfProps, mapStateToArrayLayoutProps, mapStateToControlProps, mapStateToEnumControlProps, mapStateToJsonFormsRendererProps, mapStateToLabelProps, mapStateToLayoutProps, mapStateToMultiEnumControlProps, mapStateToOneOfEnumControlProps, mapStateToOneOfProps, OwnPropsOfControl } from '../../src/util/renderer';
 import { clearAllIds } from '../../src/util/ids';
-import { generateDefaultUISchema } from '../../src/generators/uischema';
 import { JsonSchema } from '../../src/models/jsonSchema';
 import { rankWith } from '../../src/testers/testers';
 import { createAjv } from '../../src/util/validator';
@@ -495,7 +494,7 @@ test('createDefaultValue', t => {
   t.deepEqual(createDefaultValue({ type: 'something' }), {});
 });
 
-test(`mapStateToDispatchRendererProps should generate UI schema given ownProps schema`, t => {
+test(`mapStateToJsonFormsRendererProps should use registered UI schema given ownProps schema`, t => {
   const store = mockStore(createState(coreUISchema));
   const schema = {
     type: 'object',
@@ -507,16 +506,16 @@ test(`mapStateToDispatchRendererProps should generate UI schema given ownProps s
   };
 
   const props = mapStateToJsonFormsRendererProps(store.getState(), { schema });
-  t.deepEqual(props.uischema, generateDefaultUISchema(schema));
+  t.deepEqual(props.uischema, coreUISchema);
 });
 
-test(`mapStateToDispatchRendererProps should use registered UI schema given no ownProps`, t => {
+test(`mapStateToJsonFormsRendererProps should use registered UI schema given no ownProps`, t => {
   const store = mockStore(createState(coreUISchema));
   const props = mapStateToJsonFormsRendererProps(store.getState(), {});
   t.deepEqual(props.uischema, coreUISchema);
 });
 
-test(`mapStateToDispatchRendererProps should use UI schema if given via ownProps`, t => {
+test(`mapStateToJsonFormsRendererProps should use UI schema if given via ownProps`, t => {
   const store = mockStore(createState(coreUISchema));
   const schema = {
     type: 'object',

@@ -32,7 +32,6 @@ import {
   JsonFormsRendererRegistryEntry,
 } from '../reducers';
 import {
-  findUISchema,
   getAjv,
   getCells,
   getConfig,
@@ -889,6 +888,7 @@ export interface OwnPropsOfJsonFormsRenderer extends OwnPropsOfRenderer {}
 export interface StatePropsOfJsonFormsRenderer
   extends OwnPropsOfJsonFormsRenderer {
   rootSchema: JsonSchema;
+  config: any;
 }
 
 export interface JsonFormsProps extends StatePropsOfJsonFormsRenderer {}
@@ -897,30 +897,15 @@ export const mapStateToJsonFormsRendererProps = (
   state: JsonFormsState,
   ownProps: OwnPropsOfJsonFormsRenderer
 ): StatePropsOfJsonFormsRenderer => {
-  let uischema = ownProps.uischema;
-  if (uischema === undefined) {
-    if (ownProps.schema) {
-      uischema = findUISchema(
-        state.jsonforms.uischemas,
-        ownProps.schema,
-        undefined,
-        ownProps.path,
-        undefined,
-        undefined,
-        state.jsonforms.core.schema
-      );
-    } else {
-      uischema = getUiSchema(state);
-    }
-  }
-
   return {
-    renderers: ownProps.renderers || get(state.jsonforms, 'renderers') || [],
-    cells: ownProps.cells || get(state.jsonforms, 'cells') || [],
+    renderers: ownProps.renderers || get(state.jsonforms, 'renderers'),
+    cells: ownProps.cells || get(state.jsonforms, 'cells'),
     schema: ownProps.schema || getSchema(state),
     rootSchema: getSchema(state),
-    uischema: uischema,
-    path: ownProps.path
+    uischema: ownProps.uischema || getUiSchema(state),
+    path: ownProps.path,
+    enabled: ownProps.enabled,
+    config: getConfig(state)
   };
 };
 

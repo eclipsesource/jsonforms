@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import maxBy from 'lodash/maxBy';
-import React, { useMemo } from 'react';
+import React, { ComponentType, useMemo } from 'react';
 import Ajv, { ErrorObject } from 'ajv';
 import { UnknownRenderer } from './UnknownRenderer';
 import {
@@ -44,7 +44,7 @@ import {
 } from '@jsonforms/core';
 import {
   JsonFormsStateProvider,
-  useJsonForms
+  withJsonFormsRendererProps
 } from './JsonFormsContext';
 
 interface JsonFormsRendererState {
@@ -75,7 +75,7 @@ export class JsonFormsDispatchRenderer extends React.Component<
   }
   
   render() {
-    const { schema, rootSchema, uischema, path, enabled, renderers, cells } = this.props as JsonFormsProps;
+    const { schema, rootSchema, uischema, path, enabled, renderers, cells, config } = this.props as JsonFormsProps;
 
     return (
       <TestAndRender
@@ -87,6 +87,7 @@ export class JsonFormsDispatchRenderer extends React.Component<
         renderers={renderers}
         cells={cells}
         id={this.state.id}
+        config={config}
       />
     );
   }
@@ -102,14 +103,22 @@ const TestAndRender = React.memo(
     renderers: JsonFormsRendererRegistryEntry[];
     cells: JsonFormsCellRendererRegistryEntry[];
     id: string;
+    config: any;
   }) => {
+    const testerContext = useMemo(
+      () => ({
+        rootSchema: props.rootSchema,
+        config: props.config
+      }),
+      [props.rootSchema, props.config]
+    );
     const renderer = useMemo(
-      () => maxBy(props.renderers, r => r.tester(props.uischema, props.schema, props.rootSchema)),
-      [props.renderers, props.uischema, props.schema]
+      () => maxBy(props.renderers, r => r.tester(props.uischema, props.schema, testerContext)),
+      [props.renderers, props.uischema, props.schema, testerContext]
     );
     if (
       renderer === undefined ||
-      renderer.tester(props.uischema, props.schema, props.rootSchema) === -1
+      renderer.tester(props.uischema, props.schema, testerContext) === -1
     ) {
       return <UnknownRenderer type={'renderer'} />;
     } else {
@@ -140,38 +149,16 @@ export class ResolvedJsonFormsDispatchRenderer extends JsonFormsDispatchRenderer
   }
 }
 
-const useJsonFormsDispatchRendererProps = (props: OwnPropsOfJsonFormsRenderer & JsonFormsReactProps) => {
-  const ctx = useJsonForms();
-
-  return {
-    schema: props.schema || ctx.core.schema,
-    uischema: props.uischema || ctx.core.uischema,
-    path: props.path || '',
-    enabled: props.enabled,
-    rootSchema: ctx.core.schema,
-    renderers: props.renderers || ctx.renderers,
-    cells: props.cells || ctx.cells,
-  };
-}
-
-export const JsonFormsDispatch = React.memo(
-  (props: OwnPropsOfJsonFormsRenderer & JsonFormsReactProps) => {
-    const renderProps = useJsonFormsDispatchRendererProps(props);
-    return <JsonFormsDispatchRenderer {...renderProps} />
-  }
-);
+export const JsonFormsDispatch: ComponentType<OwnPropsOfJsonFormsRenderer> =
+  withJsonFormsRendererProps(JsonFormsDispatchRenderer);
 
 /**
  * @deprecated Since Version 3.0 this optimization component is no longer necessary.
  * Use `JsonFormsDispatch` instead.
  * We still export it for backward compatibility 
  */
-export const ResolvedJsonFormsDispatch = React.memo(
-  (props: OwnPropsOfJsonFormsRenderer & JsonFormsReactProps) => {
-    const renderProps = useJsonFormsDispatchRendererProps(props);
-    return <ResolvedJsonFormsDispatchRenderer {...renderProps} />
-  }
-);
+export const ResolvedJsonFormsDispatch: ComponentType<OwnPropsOfJsonFormsRenderer> =
+  withJsonFormsRendererProps(ResolvedJsonFormsDispatchRenderer);
 
 export interface JsonFormsInitStateProps {
   data: any;

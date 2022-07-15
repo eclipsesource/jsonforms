@@ -46,7 +46,8 @@ import {
   scopeEndIs,
   scopeEndsWith,
   uiTypeIs,
-  isOneOfEnumControl
+  isOneOfEnumControl,
+  TesterContext
 } from '../src/testers';
 import {
   ControlElement,
@@ -56,6 +57,9 @@ import {
 } from '../src';
 
 const test = anyTest as TestInterface<{ uischema: ControlElement }>;
+
+const createTesterContext =
+  (rootSchema: JsonSchema, config?: any): TesterContext => ({ rootSchema, config });
 
 test.beforeEach(t => {
   t.context.uischema = {
@@ -75,8 +79,9 @@ test('schemaTypeIs should check type sub-schema of control', t => {
     type: 'Control',
     scope: '#/properties/foo'
   };
-  t.true(schemaTypeIs('string')(uischema, schema, schema));
-  t.false(schemaTypeIs('integer')(uischema, schema, schema));
+  const testerContext = createTesterContext(schema);
+  t.true(schemaTypeIs('string')(uischema, schema, testerContext));
+  t.false(schemaTypeIs('integer')(uischema, schema, testerContext));
 });
 
 test('schemaTypeIs should return false for non-control UI schema elements', t => {
@@ -90,7 +95,8 @@ test('schemaTypeIs should return false for non-control UI schema elements', t =>
     type: 'Label',
     text: 'some text'
   };
-  t.false(schemaTypeIs('integer')(label, schema, schema));
+  const testerContext = createTesterContext(schema);
+  t.false(schemaTypeIs('integer')(label, schema, testerContext));
 });
 
 test('schemaTypeIs should return false for control pointing to invalid sub-schema', t => {
@@ -104,7 +110,8 @@ test('schemaTypeIs should return false for control pointing to invalid sub-schem
       foo: { type: 'string' }
     }
   };
-  t.false(schemaTypeIs('string')(uischema, schema, schema));
+  const testerContext = createTesterContext(schema);
+  t.false(schemaTypeIs('string')(uischema, schema, testerContext));
 });
 
 test('schemaTypeIs should return true for array type', t => {
@@ -118,8 +125,9 @@ test('schemaTypeIs should return true for array type', t => {
     type: 'Control',
     scope: '#/properties/foo'
   };
-  t.true(schemaTypeIs('string')(uischema, schema, schema));
-  t.true(schemaTypeIs('integer')(uischema, schema, schema));
+  const testerContext = createTesterContext(schema);
+  t.true(schemaTypeIs('string')(uischema, schema, testerContext));
+  t.true(schemaTypeIs('integer')(uischema, schema, testerContext));
 });
 
 test('formatIs should check the format of a resolved sub-schema', t => {
@@ -136,7 +144,8 @@ test('formatIs should check the format of a resolved sub-schema', t => {
       }
     }
   };
-  t.true(formatIs('date-time')(uischema, schema, schema));
+  const testerContext = createTesterContext(schema);
+  t.true(formatIs('date-time')(uischema, schema, testerContext));
 });
 
 test('uiTypeIs', t => {
@@ -183,8 +192,9 @@ test('schemaMatches should check type sub-schema of control via predicate', t =>
     type: 'Control',
     scope: '#/properties/foo'
   };
+  const testerContext = createTesterContext(schema);
   t.true(
-    schemaMatches(subSchema => subSchema.type === 'string')(uischema, schema, schema)
+    schemaMatches(subSchema => subSchema.type === 'string')(uischema, schema, testerContext)
   );
 });
 
@@ -198,8 +208,9 @@ test('schemaMatches should check type sub-schema of control via predicate also w
     type: 'Control',
     scope: '#/properties/foo'
   };
+  const testerContext = createTesterContext(schema);
   t.true(
-    schemaMatches(subSchema => subSchema.type === 'string')(uischema, schema, schema)
+    schemaMatches(subSchema => subSchema.type === 'string')(uischema, schema, testerContext)
   );
 });
 
@@ -214,7 +225,8 @@ test('schemaMatches should return false for non-control UI schema elements', t =
     type: 'Label',
     text: 'some text'
   };
-  t.false(schemaMatches(() => false)(label, schema, schema));
+  const testerContext = createTesterContext(schema);
+  t.false(schemaMatches(() => false)(label, schema, testerContext));
 });
 
 test('schemaMatches should return false for control pointing to invalid subschema', t => {
@@ -228,7 +240,8 @@ test('schemaMatches should return false for control pointing to invalid subschem
     type: 'Control',
     scope: '#/properties/bar'
   };
-  t.false(schemaMatches(() => false)(uischema, schema, schema));
+  const testerContext = createTesterContext(schema);
+  t.false(schemaMatches(() => false)(uischema, schema, testerContext));
 });
 
 test('scopeEndsWith checks whether the ref of a control ends with a certain string', t => {
@@ -274,7 +287,8 @@ test('and should allow to compose multiple testers', t => {
     type: 'Control',
     scope: '#/properties/foo'
   };
-  t.true(and(schemaTypeIs('string'), scopeEndIs('foo'))(uischema, schema, schema));
+  const testerContext = createTesterContext(schema);
+  t.true(and(schemaTypeIs('string'), scopeEndIs('foo'))(uischema, schema, testerContext));
 });
 
 test('or should allow to compose multiple testers', t => {
@@ -288,8 +302,9 @@ test('or should allow to compose multiple testers', t => {
     type: 'Control',
     scope: '#/properties/foo'
   };
+  const testerContext = createTesterContext(schema);
   t.true(
-    or(schemaTypeIs('integer'), optionIs('slider', true))(uischema, schema, schema)
+    or(schemaTypeIs('integer'), optionIs('slider', true))(uischema, schema, testerContext)
   );
 });
 
@@ -308,7 +323,7 @@ test('tester isPrimitiveArrayControl', t => {
     }
   };
   t.true(
-    isPrimitiveArrayControl(control, schema, schema),
+    isPrimitiveArrayControl(control, schema, createTesterContext(schema)),
     `Primitive array tester was not triggered for 'integer' schema type`
   );
   const schemaWithRefs = {
@@ -322,7 +337,7 @@ test('tester isPrimitiveArrayControl', t => {
     }
   };
   t.true(
-    isPrimitiveArrayControl(control, schemaWithRefs, schemaWithRefs),
+    isPrimitiveArrayControl(control, schemaWithRefs, createTesterContext(schemaWithRefs)),
     `Primitive array tester was not triggered for 'integer' schema type with refs`
   );
   const objectSchema = {
@@ -335,7 +350,7 @@ test('tester isPrimitiveArrayControl', t => {
     }
   };
   t.false(
-    isPrimitiveArrayControl(control, objectSchema, objectSchema),
+    isPrimitiveArrayControl(control, objectSchema, createTesterContext(objectSchema)),
     `Primitive array tester was not triggered for 'object' schema type`
   );
 });
@@ -401,7 +416,7 @@ test('tester isObjectArrayControl', t => {
       }
     }
   };
-  t.true(isObjectArrayControl(control, schema, schema));
+  t.true(isObjectArrayControl(control, schema, createTesterContext(schema)));
   const schema_noType: JsonSchema = {
     type: 'object',
     properties: {
@@ -416,7 +431,7 @@ test('tester isObjectArrayControl', t => {
       }
     }
   };
-  t.true(isObjectArrayControl(control, schema_noType, schema_noType));
+  t.true(isObjectArrayControl(control, schema_noType, createTesterContext(schema_noType)));
   const schema_innerAllOf: JsonSchema = {
     type: 'object',
     properties: {
@@ -439,7 +454,7 @@ test('tester isObjectArrayControl', t => {
       }
     }
   };
-  t.true(isObjectArrayControl(control, schema_innerAllOf, schema_innerAllOf));
+  t.true(isObjectArrayControl(control, schema_innerAllOf, createTesterContext(schema_innerAllOf)));
 
   const schemaWithRefs = {
     definitions: {
@@ -461,7 +476,8 @@ test('tester isObjectArrayControl', t => {
       }
     }
   }
-  t.true(isObjectArrayControl(control, schemaWithRefs, schemaWithRefs));
+  const testerContext = createTesterContext(schemaWithRefs);
+  t.true(isObjectArrayControl(control, schemaWithRefs, testerContext));
 });
 
 test('isBooleanControl', t => {
@@ -801,7 +817,7 @@ test('tester isObjectArrayWithNesting', t => {
   t.true(isObjectArrayWithNesting(uischema, nestedSchema, undefined));
   t.true(isObjectArrayWithNesting(uischema, nestedSchema2, undefined));
   t.true(isObjectArrayWithNesting(uischema, nestedSchema3, undefined));
-  t.true(isObjectArrayWithNesting(uischema, nestedSchemaWithRef, nestedSchemaWithRef));
+  t.true(isObjectArrayWithNesting(uischema, nestedSchemaWithRef, createTesterContext(nestedSchemaWithRef)));
 
   t.false(isObjectArrayWithNesting(uischemaOptions.default, schema, undefined));
   t.true(isObjectArrayWithNesting(uischemaOptions.generate, schema, undefined));
@@ -872,5 +888,6 @@ test('tester isOneOfEnumControl', t => {
       }
     }
   }
-  t.true(isOneOfEnumControl(control, schemaWithRefs, schemaWithRefs));
+  const testerContext = createTesterContext(schemaWithRefs);
+  t.true(isOneOfEnumControl(control, schemaWithRefs, testerContext));
 });
