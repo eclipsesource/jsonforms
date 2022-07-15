@@ -66,7 +66,7 @@ export type RankedTester = (
 export interface TesterContext {
   /** The root JsonSchema of the form. Can be used to resolve references. */
   rootSchema: JsonSchema;
-  /** The global configuration object given to JsonForms. Can be used to derive default UISchema options. */
+  /** The form wide configuration object given to JsonForms. */
   config: any;
 }
 

@@ -30,7 +30,7 @@ type RankedTester = (uischema: UISchemaElement, schema: JsonSchema, context: Tes
 
 This allows the testers to resolve any `$ref` they might encounter in their handed over `schema` by using the context's `rootSchema`.
 Therefore the manual resolving of JSON Schemas before handing them over to JSON Forms does not need to be performed in those cases.
-In addition, testers can now access the global `config` to consider default UI Schema options.
+In addition, testers can now access the form wide `config`.
 
 ### Removal of JSON Schema $Ref Parser
 
