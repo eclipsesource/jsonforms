@@ -7,6 +7,7 @@ import { JsonFormsI18nState } from '@jsonforms/core';
 import { ErrorObject } from 'ajv';
 
 import { getExamples } from '../../../../examples';
+import get from 'lodash/get';
 
 // mergeStyles combines all classes from both styles definitions into one
 const myStyles = mergeStyles(defaultStyles, {
@@ -24,6 +25,7 @@ export default defineComponent({
     const i18n: Partial<JsonFormsI18nState> = { locale: 'en' };
     const additionalErrors: ErrorObject[] = [];
     return {
+      data: {},
       renderers: Object.freeze(vanillaRenderers),
       currentExampleName: examples[0].name,
       examples,
@@ -43,10 +45,22 @@ export default defineComponent({
   methods: {
     onChange(event: JsonFormsChangeEvent) {
       console.log(event);
+      this.data = event.data;
     },
     onExampleChange(event: any) {
       this.currentExampleName = event.target.value;
-    }
+    },
+    translationChange(event: any) {
+      try {
+        const input = JSON.parse(event.target.value);
+        (this as any).i18n.translate = (key: string, defaultMessage: string | undefined) => {
+          const translated = get(input, key) as string;
+          return translated ?? defaultMessage;
+        };
+      } catch (error) {
+        console.log('invalid translation input');
+      }
+    },
   },
   provide() {
     return {
@@ -82,6 +96,13 @@ export default defineComponent({
           >{{ option.label }}</option
         >
       </select>
+      <div class="data">
+        <h5>data</h5>
+        <pre>{{ JSON.stringify(data, null, 2) }}
+        </pre>
+        <h5>i18n translator</h5>
+        <textarea @change="translationChange"></textarea>
+      </div>
     </div>
 
     <div class="form">
@@ -93,8 +114,8 @@ export default defineComponent({
         :config="config"
         :i18n="i18n"
         :additional-errors="additionalErrors"
-        @change="onChange"
-      />
+        @change="onChange">
+      </json-forms>
     </div>
   </div>
 </template>
