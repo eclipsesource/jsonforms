@@ -38,7 +38,8 @@ export const MuiSelect = React.memo((props: EnumCellProps & WithClassname) => {
     path,
     handleChange,
     options,
-    config
+    config,
+    emptyLabel
   } = props;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
 
@@ -49,11 +50,11 @@ export const MuiSelect = React.memo((props: EnumCellProps & WithClassname) => {
       disabled={!enabled}
       autoFocus={appliedUiSchemaOptions.focus}
       value={data !== undefined ? data : ''}
-      onChange={ev => handleChange(path, ev.target.value)}
+      onChange={ev =>handleChange(path, ev.target.value === '' ? undefined : ev.target.value)}
       fullWidth={true}
       variant={'standard'}
     >
-      {[<MenuItem value='' key={'empty'} />].concat(
+      {[<MenuItem value={''} key={''}><em>{emptyLabel ? emptyLabel : ''}</em></MenuItem>].concat(
         options.map(optionValue => (
           <MenuItem value={optionValue.value} key={optionValue.value}>
             {optionValue.label}

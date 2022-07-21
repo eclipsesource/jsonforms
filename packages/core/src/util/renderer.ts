@@ -260,6 +260,7 @@ export interface OwnPropsOfLabel extends OwnPropsOfRenderer {
 
 export interface OwnPropsOfEnum {
   options?: EnumOption[];
+  emptyLabel?: string;
 }
 
 export interface OwnPropsOfLayout extends OwnPropsOfRenderer {
@@ -533,9 +534,11 @@ export const mapStateToEnumControlProps = (
         getI18nKeyPrefix(props.schema, props.uischema, props.path)
       )
     ]);
+    const emptyLabel = getEmptyLabel(props,state);
   return {
     ...props,
-    options
+    options,
+    emptyLabel
   };
 };
 
@@ -559,9 +562,11 @@ export const mapStateToOneOfEnumControlProps = (
         getI18nKeyPrefix(props.schema, props.uischema, props.path)
       )
     );
+    const emptyLabel = getEmptyLabel(props,state);
   return {
     ...props,
-    options
+    options,
+    emptyLabel
   };
 };
 
@@ -1091,3 +1096,9 @@ export const mapStateToLabelProps = (
     cells: props.cells || getCells(state),
   }
 }
+
+function getEmptyLabel(props: StatePropsOfControl, state: JsonFormsState) {
+  const t = getTranslator()(state);
+  return t(getI18nKey(props.schema, props.uischema, props.path, 'empty'), 'empty');
+}
+

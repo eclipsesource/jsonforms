@@ -34,7 +34,7 @@ import { withVanillaEnumCellProps } from '../util';
 import { VanillaRendererProps } from '../index';
 
 export const EnumCell = (props: EnumCellProps & VanillaRendererProps) => {
-  const { data, className, id, enabled, uischema, path, handleChange, options } = props;
+  const { emptyLabel, data, className, id, enabled, uischema, path, handleChange, options } = props;
 
   return (
     <select
@@ -46,7 +46,7 @@ export const EnumCell = (props: EnumCellProps & VanillaRendererProps) => {
       onChange={ev => handleChange(path, ev.target.selectedIndex === 0 ? undefined : ev.target.value)}
     >
       {
-        [<option value='' key={'empty'} />]
+        [<option value={''} key={''}>{emptyLabel ? emptyLabel : ''}</option>]
           .concat(
             options.map(optionValue =>
               (

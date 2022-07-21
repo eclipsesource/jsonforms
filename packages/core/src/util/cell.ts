@@ -55,7 +55,7 @@ import {
 } from './renderer';
 import { JsonFormsState } from '../store';
 import { JsonSchema } from '../models';
-import { getI18nKeyPrefix } from '../i18n';
+import { getI18nKey, getI18nKeyPrefix } from '../i18n';
 
 export type { JsonFormsCellRendererRegistryEntry };
 
@@ -212,9 +212,11 @@ export const defaultMapStateToEnumCellProps = (
         getI18nKeyPrefix(props.schema, props.uischema, props.path)
       )
     ]);
+  const emptyLabel = getEmptyLabel(props,state);
   return {
     ...props,
-    options
+    options,
+    emptyLabel
   };
 };
 
@@ -238,9 +240,11 @@ export const mapStateToOneOfEnumCellProps = (
         getI18nKeyPrefix(props.schema, props.uischema, props.path)
       )
     );
+  const emptyLabel = getEmptyLabel(props,state);
   return {
     ...props,
-    options
+    options,
+    emptyLabel
   };
 };
 
@@ -267,3 +271,8 @@ export const defaultMapDispatchToControlProps =
       handleChange: ownProps.handleChange || handleChange
     };
   };
+
+function getEmptyLabel(props: OwnPropsOfEnumCell, state: JsonFormsState) {
+  const t = getTranslator()(state);
+  return t(getI18nKey(props.schema, props.uischema, props.path, 'empty'), 'empty');
+}
