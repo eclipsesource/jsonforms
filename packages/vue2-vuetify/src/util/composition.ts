@@ -12,9 +12,9 @@ import merge from 'lodash/merge';
 import get from 'lodash/get';
 import isPlainObject from 'lodash/isPlainObject';
 import { useStyles } from '../styles';
-import { computed, ComputedRef, inject, ref } from '../vue';
+import { computed, ComputedRef, inject, ref } from 'vue';
 import Ajv from 'ajv';
-import { provide } from '@vue/composition-api';
+import { provide } from 'vue';
 
 const useControlAppliedOptions = <I extends { control: any }>(input: I) => {
   return computed(() =>

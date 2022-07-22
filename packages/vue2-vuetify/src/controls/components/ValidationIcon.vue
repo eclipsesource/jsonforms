@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, CompType } from '../../vue';
+import { defineComponent, PropType } from 'vue';
 import { ErrorObject } from 'ajv';
 import { default as ValidationBadge } from './ValidationBadge.vue';
 import { VIcon } from 'vuetify/lib';
@@ -19,7 +19,7 @@ export default defineComponent({
   props: {
     errors: {
       required: true,
-      type: Array as CompType<ErrorObject, ArrayConstructor>,
+      type: Array as PropType<ErrorObject[]>,
     },
   },
 });

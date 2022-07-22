@@ -47,7 +47,7 @@ import {
   isMultiLineControl,
   and,
 } from '@jsonforms/core';
-import { defineComponent } from '../vue';
+import { defineComponent } from 'vue';
 import {
   rendererProps,
   useJsonFormsControl,

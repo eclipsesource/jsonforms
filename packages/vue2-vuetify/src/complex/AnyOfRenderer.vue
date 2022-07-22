@@ -50,7 +50,7 @@ import {
   useJsonFormsAnyOfControl,
 } from '@jsonforms/vue2';
 import { VTabs, VTab, VTabsItems, VTabItem } from 'vuetify/lib';
-import { defineComponent, ref } from '../vue';
+import { defineComponent, ref } from 'vue';
 import { useVuetifyControl } from '../util';
 import { CombinatorProperties } from './components';
 

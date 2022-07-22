@@ -8,14 +8,13 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
-    "@jsonforms/core": "3.0.0-beta.4",
-    "@jsonforms/vue2": "3.0.0-beta.4",
+    "@jsonforms/core": "3.0.0-rc.0",
+    "@jsonforms/vue2": "3.0.0-rc.0",
     "@jsonforms/vue2-vuetify": "3.0.0-beta.4.1",
-    "@vue/composition-api": "^1.4.3",
     "core-js": "^3.9.1",
     "json-refs": "^3.0.15",
     "monaco-editor": "^0.26.0",
-    "vue": "^2.6.14",
+    "vue": "^2.7.0",
     "vue-router": "^3.2.0",
     "vuetify": "^2.4.0",
     "vuex": "^3.4.0"
@@ -25,10 +24,10 @@
     "@babel/plugin-proposal-optional-chaining": "^7.16.7",
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",
-    "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-eslint": "~4.5.0",
-    "@vue/cli-plugin-typescript": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
+    "@vue/cli-plugin-babel": "~4.5.18",
+    "@vue/cli-plugin-eslint": "~4.5.18",
+    "@vue/cli-plugin-typescript": "~4.5.18",
+    "@vue/cli-service": "~4.5.18",
     "@vue/eslint-config-prettier": "^6.0.0",
     "@vue/eslint-config-typescript": "^7.0.0",
     "eslint": "^6.7.2",
@@ -41,7 +40,7 @@
     "sass-loader": "^10.0.0",
     "typescript": "~4.1.5",
     "vue-cli-plugin-vuetify": "~2.4.2",
-    "vue-template-compiler": "^2.6.14",
+    "vue-template-compiler": "^2.7.0",
     "vuetify-loader": "^1.7.0",
     "vuex-pathify": "^1.4.5"
   }

@@ -17,7 +17,7 @@ exports[`OneOfEnumControlRenderer.vue should render component and match snapshot
           <div role="button"
                aria-haspopup="listbox"
                aria-expanded="false"
-               aria-owns="list-67"
+               aria-owns="list-66"
                class="v-input__slot"
           >
             <div class="v-select__slot">
@@ -87,7 +87,7 @@ exports[`OneOfEnumControlRenderer.vue should render component and match snapshot
           <div role="button"
                aria-haspopup="listbox"
                aria-expanded="true"
-               aria-owns="list-80"
+               aria-owns="list-79"
                class="v-input__slot"
           >
             <div class="v-select__slot">
@@ -144,11 +144,11 @@ exports[`OneOfEnumControlRenderer.vue should render component and match snapshot
     <div role="listbox"
          tabindex="-1"
          class="v-list v-select-list v-sheet theme--light theme--light"
-         id="list-80"
+         id="list-79"
     >
       <div tabindex="0"
            aria-selected="true"
-           id="list-item-87-0"
+           id="list-item-86-0"
            role="option"
            class="v-list-item primary--text v-list-item--active v-list-item--link theme--light"
       >
@@ -160,7 +160,7 @@ exports[`OneOfEnumControlRenderer.vue should render component and match snapshot
       </div>
       <div tabindex="0"
            aria-selected="false"
-           id="list-item-87-1"
+           id="list-item-86-1"
            role="option"
            class="v-list-item v-list-item--link theme--light"
       >

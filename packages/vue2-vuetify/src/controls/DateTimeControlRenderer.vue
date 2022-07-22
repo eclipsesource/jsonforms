@@ -104,19 +104,7 @@
                 <v-btn text @click="showMenu = false">
                   {{ cancelLabel }}
                 </v-btn>
-                <v-btn
-                  text
-                  color="primary"
-                  @click="
-                    () => {
-                      onPickerChange(
-                        $refs.datePicker.inputDate,
-                        $refs.timePicker.genValue()
-                      );
-                      showMenu = false;
-                    }
-                  "
-                >
+                <v-btn text color="primary" @click="okHandler">
                   {{ okLabel }}
                 </v-btn>
               </v-card-actions>
@@ -136,6 +124,7 @@ import {
   JsonSchema,
   rankWith,
 } from '@jsonforms/core';
+import { defineComponent, ref } from 'vue';
 import {
   rendererProps,
   RendererProps,
@@ -160,11 +149,9 @@ import {
   VTabItem,
 } from 'vuetify/lib';
 import { parseDateTime, useTranslator, useVuetifyControl } from '../util';
-import { defineComponent } from '../vue';
 import { default as ControlWrapper } from './ControlWrapper.vue';
 import { DisabledIconFocus } from './directives';
 import { VueMaskDirective as Mask } from 'v-mask';
-import { ref } from '@vue/composition-api';
 import dayjs from 'dayjs';
 
 const JSON_SCHEMA_DATE_TIME_FORMATS = [
@@ -479,6 +466,14 @@ const controlRenderer = defineComponent({
         );
         this.onChange(dateTime!.format(this.dateTimeSaveFormat));
       }
+    },
+    okHandler(): void {
+      this.onPickerChange(
+        // cast to 'any' because of Typescript problems (excessive stack depth when comparing types)
+        (this.$refs.datePicker as any).inputDate,
+        (this.$refs.timePicker as any).genValue()
+      );
+      this.showMenu = false;
     },
     clear(): void {
       this.mask = undefined;

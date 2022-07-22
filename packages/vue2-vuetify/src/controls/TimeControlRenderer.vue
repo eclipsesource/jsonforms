@@ -56,16 +56,7 @@
               <v-btn text @click="showMenu = false">
                 {{ cancelLabel }}
               </v-btn>
-              <v-btn
-                text
-                color="primary"
-                @click="
-                  () => {
-                    onPickerChange($refs.picker.genValue());
-                    showMenu = false;
-                  }
-                "
-              >
+              <v-btn text color="primary" @click="okHandler">
                 {{ okLabel }}
               </v-btn></v-time-picker
             >
@@ -84,12 +75,12 @@ import {
   JsonSchema,
   rankWith,
 } from '@jsonforms/core';
+import { defineComponent, ref } from 'vue';
 import {
   rendererProps,
   RendererProps,
   useJsonFormsControl,
 } from '@jsonforms/vue2';
-import { ref } from '@vue/composition-api';
 import { VueMaskDirective as Mask } from 'v-mask';
 import {
   VBtn,
@@ -101,7 +92,6 @@ import {
   VTimePicker,
 } from 'vuetify/lib';
 import { parseDateTime, useTranslator, useVuetifyControl } from '../util';
-import { defineComponent } from '../vue';
 import { default as ControlWrapper } from './ControlWrapper.vue';
 import { DisabledIconFocus } from './directives';
 
@@ -311,6 +301,11 @@ const controlRenderer = defineComponent({
     onPickerChange(value: string): void {
       const time = parseDateTime(value, this.useSeconds ? 'HH:mm:ss' : 'HH:mm');
       this.onChange(time ? time.format(this.timeSaveFormat) : value);
+    },
+    okHandler(): void {
+      // cast to 'any' because of Typescript problems (excessive stack depth when comparing types)
+      this.onPickerChange((this.$refs.picker as any).genValue());
+      this.showMenu = false;
     },
     clear(): void {
       this.mask = undefined;

@@ -206,7 +206,7 @@ import {
   Resolve,
   JsonSchema,
 } from '@jsonforms/core';
-import { defineComponent, ref } from '../vue';
+import { defineComponent, ref } from 'vue';
 import {
   DispatchRenderer,
   rendererProps,

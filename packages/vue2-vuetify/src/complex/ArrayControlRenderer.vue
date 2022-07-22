@@ -184,7 +184,7 @@ import {
   Resolve,
 } from '@jsonforms/core';
 import startCase from 'lodash/startCase';
-import { defineComponent } from '../vue';
+import { defineComponent } from 'vue';
 import {
   DispatchCell,
   DispatchRenderer,

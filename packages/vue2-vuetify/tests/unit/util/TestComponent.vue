@@ -13,7 +13,7 @@
 
 <script lang="ts">
 import { JsonForms, JsonFormsChangeEvent } from '@jsonforms/vue2';
-import { defineComponent } from '../../../src/vue';
+import { defineComponent } from 'vue';
 import { VApp } from 'vuetify/lib';
 
 export default defineComponent({

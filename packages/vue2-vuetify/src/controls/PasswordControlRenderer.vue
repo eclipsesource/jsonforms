@@ -45,7 +45,7 @@ import {
   and,
   formatIs,
 } from '@jsonforms/core';
-import { defineComponent, ref } from '../vue';
+import { defineComponent, ref } from 'vue';
 import {
   rendererProps,
   useJsonFormsControl,

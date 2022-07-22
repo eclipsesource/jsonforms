@@ -31,7 +31,7 @@ import {
   RendererProps,
   useJsonFormsControlWithDetail,
 } from '@jsonforms/vue2';
-import { defineComponent } from '../vue';
+import { defineComponent } from 'vue';
 import { useNested, useVuetifyControl } from '../util';
 
 const controlRenderer = defineComponent({

@@ -38,7 +38,7 @@ import {
   RendererProps,
   useJsonFormsMultiEnumControl,
 } from '@jsonforms/vue2';
-import { defineComponent } from '../vue';
+import { defineComponent } from 'vue';
 import { useVuetifyBasicControl } from '../util';
 
 const controlRenderer = defineComponent({

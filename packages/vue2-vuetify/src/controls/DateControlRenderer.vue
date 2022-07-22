@@ -53,16 +53,7 @@
               <v-btn text @click="showMenu = false">
                 {{ cancelLabel }}
               </v-btn>
-              <v-btn
-                text
-                color="primary"
-                @click="
-                  () => {
-                    onPickerChange($refs.picker.inputDate);
-                    showMenu = false;
-                  }
-                "
-              >
+              <v-btn text color="primary" @click="okHandler">
                 {{ okLabel }}
               </v-btn>
             </v-date-picker>
@@ -82,14 +73,13 @@ import {
   rankWith,
 } from '@jsonforms/core';
 import { VueMaskDirective as Mask } from 'v-mask';
-import { defineComponent } from '../vue';
+import { defineComponent, ref } from 'vue';
 
 import {
   rendererProps,
   RendererProps,
   useJsonFormsControl,
 } from '@jsonforms/vue2';
-import { ref } from '@vue/composition-api';
 import dayjs from 'dayjs';
 import {
   VBtn,
@@ -277,6 +267,11 @@ const controlRenderer = defineComponent({
     clear(): void {
       this.mask = undefined;
       this.onChange(null);
+    },
+    okHandler(): void {
+      // cast to 'any' because of Typescript problems (excessive stack depth when comparing types)
+      this.onPickerChange((this.$refs.picker as any).inputDate);
+      this.showMenu = false;
     },
     maskFunction(value: string): (string | RegExp)[] {
       const format = this.dateFormat;

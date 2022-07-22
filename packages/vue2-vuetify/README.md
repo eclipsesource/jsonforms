@@ -67,13 +67,7 @@ export default defineComponent({
 </template>
 ```
 
-As JSON Forms uses the Vue 3 composition API you need to add the `@vue/composition-api` plugin to your Vue 2 app.
-
-```ts
-import VueCompositionAPI from '@vue/composition-api';
-
-Vue.use(VueCompositionAPI);
-```
+As JSON Forms uses the Composition API you need to use at least Vue 2.7.
 
 If note done yet, please [install Vuetify for Vue 2](https://vuetifyjs.com/en/getting-started/installation/).
 

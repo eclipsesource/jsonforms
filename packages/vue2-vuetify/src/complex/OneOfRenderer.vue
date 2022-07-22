@@ -82,11 +82,10 @@ import {
   VTabsItems,
   VTabItem,
 } from 'vuetify/lib';
-import { defineComponent, ref } from '../vue';
+import { defineComponent, ref } from 'vue';
 import { useVuetifyControl } from '../util';
 import { CombinatorProperties } from './components';
 import isEmpty from 'lodash/isEmpty';
-import Vue from 'vue';
 
 const controlRenderer = defineComponent({
   name: 'one-of-renderer',
@@ -149,7 +148,8 @@ const controlRenderer = defineComponent({
         });
         // this.$nextTick does not work so use setTimeout
         setTimeout(() =>
-          ((this.$refs.confirm as Vue).$el as HTMLElement).focus()
+          // cast to 'any' instead of 'Vue' because of Typescript problems (excessive stack depth when comparing types) during rollup build
+          ((this.$refs.confirm as any).$el as HTMLElement).focus()
         );
       } else {
         this.$nextTick(() => {

@@ -44,7 +44,7 @@ import {
   optionIs,
   and,
 } from '@jsonforms/core';
-import { defineComponent } from '../vue';
+import { defineComponent } from 'vue';
 import {
   rendererProps,
   useJsonFormsOneOfEnumControl,
