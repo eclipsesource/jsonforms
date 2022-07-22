@@ -14,7 +14,7 @@
 
 <script lang="ts">
 import { isDescriptionHidden, computeLabel } from '@jsonforms/core';
-import { defineComponent, CompType } from '../../config/vue';
+import { defineComponent, PropType } from 'vue';
 import { Styles } from '../styles';
 import { Options } from '../util';
 
@@ -42,7 +42,7 @@ export default defineComponent({
     },
     appliedOptions: {
       required: false as false,
-      type: Object as CompType<Options, ObjectConstructor>,
+      type: Object as PropType<Options>,
       default: undefined
     },
     visible: {
@@ -62,7 +62,7 @@ export default defineComponent({
     },
     styles: {
       required: true,
-      type: Object as CompType<Styles, ObjectConstructor>
+      type: Object as PropType<Styles>
     }
   },
   computed: {

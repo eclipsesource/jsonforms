@@ -29,7 +29,7 @@
   ],
   "main": "lib/jsonforms-vue.cjs.js",
   "module": "lib/jsonforms-vue.esm.js",
-  "types": "lib/src/index.d.ts",
+  "types": "lib/index.d.ts",
   "files": [
     "lib/*",
     "src/*"

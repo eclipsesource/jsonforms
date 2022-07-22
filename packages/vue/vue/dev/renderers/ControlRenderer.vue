@@ -38,7 +38,7 @@ import {
   JsonFormsRendererRegistryEntry,
   rankWith
 } from '@jsonforms/core';
-import { defineComponent } from '../../config';
+import { defineComponent } from 'vue';
 import { rendererProps, useJsonFormsControl } from '../../src/';
 
 const controlRenderer = defineComponent({

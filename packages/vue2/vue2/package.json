@@ -29,7 +29,7 @@
   ],
   "main": "lib/jsonforms-vue2.cjs.js",
   "module": "lib/jsonforms-vue2.esm.js",
-  "types": "lib/src/index.d.ts",
+  "types": "lib/index.d.ts",
   "files": [
     "lib/*",
     "src/*"
@@ -70,7 +70,7 @@
     "rollup-plugin-vue": "^5.1.9",
     "typedoc": "^0.19.2",
     "typescript": "4.2.3",
-    "vue-template-compiler": "^2.6.14"
+    "vue-template-compiler": "^2.7.0"
   },
   "peerDependencies": {
     "@jsonforms/core": "3.0.0-beta.5",
