@@ -87,14 +87,6 @@ export default defineComponent({
 });
 ```
 
-As JSON Forms uses the Vue 3 composition API you need to add the `@vue/composition-api` plugin to your Vue 2 app.
-
-```ts
-import VueCompositionAPI from '@vue/composition-api'
-
-Vue.use(VueCompositionAPI)
-```
-
 ### Renderer Set
 
 The `@jsonforms/vue` package offers JSON Forms Core bindings based on the composition API.
@@ -105,7 +97,7 @@ Using these bindings as a basis, it's straightforward to create renderer sets fo
 
 ```ts
 import { ControlElement } from '@jsonforms/core';
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent } from 'vue';
 import { rendererProps, useJsonFormsControl } from '@jsonforms/vue';
 
 const controlRenderer = defineComponent({
@@ -173,7 +165,7 @@ import {
   Layout,
   rankWith
 } from '@jsonforms/core';
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent } from 'vue';
 import {
   DispatchRenderer,
   rendererProps,
@@ -273,7 +265,7 @@ Should any of the provided bindings not completely match an intended use case, t
 When constructing a new binding you might want to access the injected raw `jsonforms` object and `dispatch` method, e.g.
 
 ```ts
-import { inject } from '@vue/composition-api';
+import { inject } from 'vue';
 
 const useCustomBinding = (props) => {
   const jsonforms = inject<JsonFormsSubStates>('jsonforms');

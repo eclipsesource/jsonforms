@@ -30,21 +30,13 @@ module.exports = {
 }
 ```
 
-As JSON Forms uses the Vue 3 composition API you need to add the `@vue/composition-api` plugin to your Vue 2 app.
-
-```ts
-import VueCompositionAPI from '@vue/composition-api'
-
-Vue.use(VueCompositionAPI)
-```
-
 Use the `json-forms` component for each form you want to render and hand over the renderer set.
 
 ```vue
 <script>
 import { JsonForms } from '@jsonforms/vue2';
 import { vanillaRenderers } from '@jsonforms/vue2-vanilla'
-import { defineComponent } from "@vue/composition-api";
+import { defineComponent } from "vue";
 
 const renderers = [
   ...vanillaRenderers,
@@ -154,7 +146,7 @@ If you want to fall back to `defaultStyles` or combine them with your own classe
 <script>
 import { JsonForms } from '@jsonforms/vue2';
 import { defaultStyles, mergeStyles, vanillaRenderers } from '@jsonforms/vue2-vanilla'
-import { defineComponent } from "@vue/composition-api";
+import { defineComponent } from "vue";
 
 const renderers = [
   ...vanillaRenderers,
