@@ -23,15 +23,18 @@
   THE SOFTWARE.
 */
 import React, { ReactNode } from 'react';
-import { EnumCellProps, EnumOption, WithClassname } from '@jsonforms/core';
+import { ControlProps, EnumCellProps, EnumOption, isDescriptionHidden, WithClassname } from '@jsonforms/core';
 
 import {
   Autocomplete,
   AutocompleteRenderOptionState,
-  Input,
-  FilterOptionsState
+  FilterOptionsState,
+  FormHelperText,
+  Hidden,
+  TextField
 } from '@mui/material';
 import merge from 'lodash/merge';
+import { useFocus } from '../util/focus';
 
 export interface WithOptionLabel {
   getOptionLabel?(option: EnumOption) : string;
@@ -39,8 +42,13 @@ export interface WithOptionLabel {
   filterOptions?(options: EnumOption[], state: FilterOptionsState<EnumOption>) : EnumOption[];
 }
 
-export const MuiAutocomplete = (props: EnumCellProps & WithClassname & WithOptionLabel) => {
+export const MuiAutocomplete = (props: ControlProps & EnumCellProps & WithClassname & WithOptionLabel) => {
   const {
+    description,
+    errors,
+    visible,
+    required,
+    label,
     data,
     className,
     id,
@@ -52,45 +60,80 @@ export const MuiAutocomplete = (props: EnumCellProps & WithClassname & WithOptio
     config,
     getOptionLabel,
     renderOption,
-    filterOptions
+    filterOptions,
+    isValid
   } = props;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
   const [inputValue, setInputValue] = React.useState(data ?? '');
+  const [focused, onFocus, onBlur] = useFocus();
 
   const findOption = options.find(o => o.value === data) ?? null;
+  
+  const showDescription = !isDescriptionHidden(
+    visible,
+    description,
+    focused,
+    appliedUiSchemaOptions.showUnfocusedDescription
+  );
+  
+  const firstFormHelperText = showDescription
+    ? description
+    : !isValid
+    ? errors
+    : null;
+  const secondFormHelperText = showDescription && !isValid ? errors : null;
+
   return (
-    <Autocomplete
-      className={className}
-      id={id}
-      disabled={!enabled}
-      value={findOption}
-      onChange={(_event: any, newValue: EnumOption | null) => {
-        handleChange(path, newValue?.value);
-      }}
-      inputValue={inputValue}
-      onInputChange={(_event, newInputValue) => {
-        setInputValue(newInputValue);
-      }}
-      autoHighlight
-      autoSelect
-      autoComplete
-      fullWidth
-      options={options}
-      getOptionLabel={getOptionLabel || (option => option?.label)}
-      freeSolo={false}
-      style={{ marginTop: 16 }}
-      renderInput={params => (
-        <Input
-          style={{ width: '100%' }}
-          type='text'
-          inputProps={params.inputProps}
-          inputRef={params.InputProps.ref}
-          autoFocus={appliedUiSchemaOptions.focus}
-          disabled={!enabled}
-        />
-      )}
-      renderOption={renderOption}
-      filterOptions={filterOptions}
-    />
+    <Hidden xsUp={!visible}>
+      <Autocomplete
+        className={className}
+        id={id}
+        disabled={!enabled}
+        value={findOption}
+        onChange={(_event: any, newValue: EnumOption | null) => {
+          handleChange(path, newValue?.value);
+        }}
+        inputValue={inputValue}
+        onInputChange={(_event, newInputValue) => {
+          setInputValue(newInputValue);
+        }}
+        autoHighlight
+        autoSelect
+        autoComplete
+        fullWidth
+        options={options}
+        getOptionLabel={getOptionLabel || (option => option?.label)}
+        freeSolo={false}
+        renderInput={params => { 
+          return(
+          <TextField
+            label={label} 
+            variant={'standard'}
+            type='text'
+            inputProps={params.inputProps}
+            inputRef={params.InputProps.ref}
+            autoFocus={appliedUiSchemaOptions.focus}
+            disabled={!enabled}
+            {...params}
+            id={id + '-input'}
+            required={required && !appliedUiSchemaOptions.hideRequiredAsterisk}
+            error={!isValid}
+            fullWidth={!appliedUiSchemaOptions.trim}
+            InputLabelProps={data ? { shrink: true } : undefined}
+            onFocus={onFocus}
+            onBlur={onBlur}
+            focused={focused}
+          />
+        )}}
+        renderOption={renderOption}
+        filterOptions={filterOptions}
+      />
+      <FormHelperText error={!isValid && !showDescription}>
+        {firstFormHelperText}
+      </FormHelperText>
+      <FormHelperText error={!isValid}>
+        {secondFormHelperText}
+      </FormHelperText>
+    </Hidden>
   );
 };
