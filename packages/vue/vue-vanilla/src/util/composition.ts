@@ -1,5 +1,5 @@
 import { useStyles } from '../styles';
-import { computed, ref } from '../../config/vue';
+import { computed, ref } from 'vue';
 import merge from 'lodash/merge';
 import cloneDeep from 'lodash/cloneDeep';
 import {

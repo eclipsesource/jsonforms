@@ -37,13 +37,13 @@ import {
   LabelElement
 } from '@jsonforms/core';
 import {
-  CompType,
+  PropType,
   computed,
   inject,
   onBeforeMount,
   onUnmounted,
   ref
-} from '../config';
+} from 'vue';
 
 /**
  * Constructs a props declaration for Vue components which can be used
@@ -57,14 +57,13 @@ import {
 export const rendererProps = <U = UISchemaElement>() => ({
   schema: {
     required: true as true,
-    type: [Object, Boolean] as CompType<
-      JsonSchema,
-      [ObjectConstructor, BooleanConstructor]
+    type: [Object, Boolean] as PropType<
+      JsonSchema
     >
   },
   uischema: {
     required: true as true,
-    type: Object as CompType<U, ObjectConstructor>
+    type: Object as PropType<U>
   },
   path: {
     required: true as true,
@@ -77,14 +76,13 @@ export const rendererProps = <U = UISchemaElement>() => ({
   },
   renderers: {
     required: false,
-    type: Array as CompType<JsonFormsRendererRegistryEntry[], ArrayConstructor>,
+    type: Array as PropType<JsonFormsRendererRegistryEntry[]>,
     default: undefined
   },
   cells: {
     required: false,
-    type: Array as CompType<
-      JsonFormsCellRendererRegistryEntry[],
-      ArrayConstructor
+    type: Array as PropType<
+      JsonFormsCellRendererRegistryEntry[]
     >,
     default: undefined
   },
@@ -114,21 +112,19 @@ export const masterListItemProps = () => ({
   },
   schema: {
     required: true as true,
-    type: [Object, Boolean] as CompType<
-      JsonSchema,
-      [ObjectConstructor, BooleanConstructor]
+    type: [Object, Boolean] as PropType<
+      JsonSchema
     >
   },
   handleSelect: {
     required: false as false,
-    type: Function as CompType<(index: number) => void, FunctionConstructor>,
+    type: Function as PropType<(index: number) => void>,
     default: undefined
   },
   removeItem: {
     required: false as false,
-    type: Function as CompType<
-      (path: string, value: number) => void,
-      FunctionConstructor
+    type: Function as PropType<
+      (path: string, value: number) => void
     >,
     default: undefined
   }

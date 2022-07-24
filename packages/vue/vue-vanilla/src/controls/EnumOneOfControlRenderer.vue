@@ -35,7 +35,7 @@ import {
   rankWith,
   isOneOfEnumControl
 } from '@jsonforms/core';
-import { defineComponent } from '../../config/vue';
+import { defineComponent } from 'vue';
 import { rendererProps, useJsonFormsOneOfEnumControl, RendererProps } from '../../config/jsonforms';
 import { default as ControlWrapper } from './ControlWrapper.vue';
 import { useVanillaControl } from '../util';

@@ -59,11 +59,10 @@
     "@jsonforms/vue2": "^3.0.0-beta.5",
     "@rollup/plugin-alias": "^3.1.8",
     "@types/jest": "^24.0.23",
-    "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-typescript": "~4.5.0",
-    "@vue/cli-plugin-unit-jest": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
-    "@vue/composition-api": "^1.4.2",
+    "@vue/cli-plugin-babel": "~4.5.18",
+    "@vue/cli-plugin-typescript": "~4.5.18",
+    "@vue/cli-plugin-unit-jest": "~4.5.18",
+    "@vue/cli-service": "~4.5.18",
     "@vue/test-utils": "^1.0.3",
     "cp-cli": "^2.0.0",
     "cross-env": "^7.0.2",
@@ -78,11 +77,11 @@
     "symlink-dir": "^5.0.0",
     "typedoc": "^0.19.2",
     "typescript": "4.2.3",
-    "vue-template-compiler": "^2.6.14"
+    "vue-template-compiler": "^2.7.0"
   },
   "peerDependencies": {
     "@jsonforms/core": "3.0.0-beta.5",
     "@jsonforms/vue2": "3.0.0-beta.5",
-    "vue": "^2.6.14"
+    "vue": "^2.7.0"
   }
 }

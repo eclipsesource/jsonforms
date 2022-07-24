@@ -8,7 +8,7 @@
 
 <script lang="ts">
 import { PropType } from 'vue';
-import { defineComponent } from '../../config';
+import { defineComponent } from 'vue';
 import {
   coreReducer,
   Actions,

@@ -1,5 +1,5 @@
 import { UISchemaElement } from '@jsonforms/core';
-import { inject } from '../../config/vue';
+import { inject } from 'vue';
 import merge from 'lodash/merge';
 import { defaultStyles } from './defaultStyles';
 
