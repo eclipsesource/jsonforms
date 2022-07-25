@@ -3,7 +3,6 @@ import { Wrapper } from '@vue/test-utils';
 import TimeControlRenderer, {
   entry as timeControlRendererEntry,
 } from '../../../src/controls/TimeControlRenderer.vue';
-import { wait } from '../../../tests';
 import { mountJsonForms } from '../util';
 
 describe('TimeControlRenderer.vue', () => {
@@ -39,8 +38,8 @@ describe('TimeControlRenderer.vue', () => {
     expect(wrapper.getComponent(TimeControlRenderer));
   });
 
-  it('renders a time input', () => {
-    expect(wrapper.find('input[type="time"]').exists()).toBe(true);
+  it('renders a text input', () => {
+    expect(wrapper.find('input[type="text"]').exists()).toBe(true);
   });
 
   it('renders title as label', () => {
@@ -48,20 +47,25 @@ describe('TimeControlRenderer.vue', () => {
   });
 
   it('emits a data change', async () => {
-    const input = wrapper.find('input');
+    const input = wrapper.find('input[type="text"]');
     await input.setValue('01:51:10');
-    // 300 ms debounceWait
-    await wait(300);
     expect(wrapper.vm.$data.data).toEqual('01:51:10');
   });
 
   it('should have a placeholder', async () => {
-    const input = wrapper.find('input');
+    const input = wrapper.find('input[type="text"]');
     await input.trigger('focus');
     const placeholder = input.attributes('placeholder');
     expect(placeholder).toEqual('time placeholder');
   });
+
   it('should render component and match snapshot', () => {
+    expect(wrapper.html()).toMatchSnapshot();
+  });
+
+  it('should render component and match snapshot when clicked', async () => {
+    const input = wrapper.find('input[type="text"]');
+    await input.trigger('click');
     expect(wrapper.html()).toMatchSnapshot();
   });
 });

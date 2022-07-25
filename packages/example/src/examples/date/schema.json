@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "properties": {
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "stringDate": {
+      "type": "string"
+    },
+    "stringDateFull": {
+      "type": "string"
+    }
+  }
+}

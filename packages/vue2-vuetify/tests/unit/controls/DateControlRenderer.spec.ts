@@ -3,7 +3,6 @@ import { Wrapper } from '@vue/test-utils';
 import DateControlRenderer, {
   entry as dateControlRendererEntry,
 } from '../../../src/controls/DateControlRenderer.vue';
-import { wait } from '../../../tests';
 import { mountJsonForms } from '../util';
 
 describe('DateControlRenderer.vue', () => {
@@ -20,6 +19,8 @@ describe('DateControlRenderer.vue', () => {
     scope: '#',
     options: {
       placeholder: 'date placeholder',
+      dateFormat: 'MM/DD/YYYY',
+      dateSaveFormat: 'YYYY-MM-DD',
     },
   };
 
@@ -40,7 +41,7 @@ describe('DateControlRenderer.vue', () => {
   });
 
   it('renders a date input', () => {
-    expect(wrapper.find('input[type="date"]').exists()).toBe(true);
+    expect(wrapper.find('input[type="text"]').exists()).toBe(true);
   });
 
   it('renders title as label', () => {
@@ -48,22 +49,25 @@ describe('DateControlRenderer.vue', () => {
   });
 
   it('emits a data change', async () => {
-    const input = wrapper.find('input[type="date"]');
-    await input.setValue('2021-03-10');
-    await input.trigger('blur');
-    // 300 ms debounceWait
-    await wait(300);
+    const input = wrapper.find('input[type="text"]');
+    await input.setValue('03/10/2021');
     expect(wrapper.vm.$data.data).toEqual('2021-03-10');
   });
 
   it('should have a placeholder', async () => {
-    const input = wrapper.find('input[type="date"]');
+    const input = wrapper.find('input[type="text"]');
     await input.trigger('focus');
     const placeholder = input.attributes('placeholder');
     expect(placeholder).toEqual('date placeholder');
   });
 
   it('should render component and match snapshot', () => {
+    expect(wrapper.html()).toMatchSnapshot();
+  });
+
+  it('should render component and match snapshot when clicked', async () => {
+    const input = wrapper.find('input[type="text"]');
+    await input.trigger('click');
     expect(wrapper.html()).toMatchSnapshot();
   });
 });

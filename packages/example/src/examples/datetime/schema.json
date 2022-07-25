@@ -1,0 +1,33 @@
+{
+  "type": "object",
+  "properties": {
+    "dateTime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "dateTimeFull": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "dateTimeWithZone": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "dateTimeFullWithZone": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "stringDateTime": {
+      "type": "string"
+    },
+    "stringDateTimeFull": {
+      "type": "string"
+    },
+    "stringDateTimeWithZone": {
+      "type": "string"
+    },
+    "stringDateTimeFullWithZone": {
+      "type": "string"
+    }
+  }
+}

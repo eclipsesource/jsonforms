@@ -1,0 +1,56 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "Group",
+      "label": "Schema Based",
+      "elements": [
+        {
+          "type": "HorizontalLayout",
+          "elements": [
+            {
+              "type": "Control",
+              "scope": "#/properties/date",
+              "label": "Date",
+              "options": {
+                "dateFormat": "MM/DD/YYYY",
+                "dateSaveFormat": "YYYY-MM-DD"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Group",
+      "label": "UI Schema Based",
+      "elements": [
+        {
+          "type": "HorizontalLayout",
+          "elements": [
+            {
+              "type": "Control",
+              "scope": "#/properties/stringDateFull",
+              "label": "Full Date",
+              "options": {
+                "format": "date",
+                "dateFormat": "MM/DD/YYYY",
+                "dateSaveFormat": "MM/DD/YYYY"
+              }
+            },
+            {
+              "type": "Control",
+              "scope": "#/properties/stringDate",
+              "label": "Year and Month only",
+              "options": {
+                "format": "date",
+                "dateFormat": "YYYY-MM",
+                "dateSaveFormat": "YYYY-MM"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

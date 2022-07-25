@@ -11,6 +11,9 @@ import { input as categorizationStepperNav } from './categorization-stepper-nav'
 import { input as control } from './control';
 import { input as controlOptions } from './control-options';
 import { input as enumExample } from './enum';
+import { input as dateExample } from './date';
+import { input as timeExample } from './time';
+import { input as dateTimeExample } from './datetime';
 import { input as enumInArray } from './enum-in-array';
 import { input as groupLayout } from './group-layout';
 import { input as horizontalLayout } from './horizontal-layout';
@@ -58,6 +61,21 @@ export const examples = [
     id: 'control-options',
     title: 'Control Options',
     input: controlOptions,
+  },
+  {
+    id: 'datetime',
+    title: 'Datetime',
+    input: dateTimeExample,
+  },
+  {
+    id: 'date',
+    title: 'Date',
+    input: dateExample,
+  },
+  {
+    id: 'time',
+    title: 'Time',
+    input: timeExample,
   },
   {
     id: 'enum',

@@ -3,7 +3,6 @@ import { Wrapper } from '@vue/test-utils';
 import DateTimeControlRenderer, {
   entry as dateTimeControlRendererEntry,
 } from '../../../src/controls/DateTimeControlRenderer.vue';
-import { wait } from '../../../tests';
 import { mountJsonForms } from '../util';
 
 describe('DateTimeControlRenderer.vue', () => {
@@ -40,7 +39,7 @@ describe('DateTimeControlRenderer.vue', () => {
   });
 
   it('renders a date time input', () => {
-    expect(wrapper.find('input[type="datetime-local"]').exists()).toBe(true);
+    expect(wrapper.find('input[type="text"]').exists()).toBe(true);
   });
 
   it('renders title as label', () => {
@@ -48,22 +47,25 @@ describe('DateTimeControlRenderer.vue', () => {
   });
 
   it('emits a data change', async () => {
-    const input = wrapper.find('input[type="datetime-local"]');
+    const input = wrapper.find('input[type="text"]');
     await input.setValue('2021-03-10T21:10');
-    await input.trigger('blur');
-    // 300 ms debounceWait
-    await wait(300);
     expect(wrapper.vm.$data.data).toEqual('2021-03-10T21:10:00');
   });
 
   it('should have a placeholder', async () => {
-    const input = wrapper.find('input[type="datetime-local"]');
+    const input = wrapper.find('input[type="text"]');
     await input.trigger('focus');
     const placeholder = input.attributes('placeholder');
     expect(placeholder).toEqual('date-time placeholder');
   });
 
   it('should render component and match snapshot', () => {
+    expect(wrapper.html()).toMatchSnapshot();
+  });
+
+  it('should render component and match snapshot when clicked', async () => {
+    const input = wrapper.find('input[type="text"]');
+    await input.trigger('click');
     expect(wrapper.html()).toMatchSnapshot();
   });
 });
