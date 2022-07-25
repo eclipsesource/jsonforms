@@ -47,7 +47,7 @@ export class TextAreaRenderer extends JsonFormsControl {
   constructor(jsonformsService: JsonFormsAngularService) {
     super(jsonformsService);
   }
-  getEventValue = (event: any) => event.target.value;
+  getEventValue = (event: any) => event.target.value || undefined;
 }
 export const TextAreaRendererTester: RankedTester = rankWith(
   2,

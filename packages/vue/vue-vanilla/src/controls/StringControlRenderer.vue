@@ -40,7 +40,7 @@ const controlRenderer = defineComponent({
     ...rendererProps<ControlElement>()
   },
   setup(props: RendererProps<ControlElement>) {
-    return useVanillaControl(useJsonFormsControl(props));
+    return useVanillaControl(useJsonFormsControl(props), target => target.value || undefined);
   }
 });
 

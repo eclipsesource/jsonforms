@@ -30,10 +30,10 @@ import {
   rankWith,
   WithClassname
 } from '@jsonforms/core';
-import { withJsonFormsOneOfEnumCellProps } from '@jsonforms/react';
+import { TranslateProps, withJsonFormsOneOfEnumCellProps, withTranslateProps } from '@jsonforms/react';
 import { MuiSelect } from '../mui-controls/MuiSelect';
 
-export const MaterialOneOfEnumCell = (props: EnumCellProps & WithClassname) => (
+export const MaterialOneOfEnumCell = (props: EnumCellProps & WithClassname & TranslateProps) => (
   <MuiSelect {...props} />
 );
 
@@ -43,4 +43,4 @@ export const MaterialOneOfEnumCell = (props: EnumCellProps & WithClassname) => (
  */
 export const materialOneOfEnumCellTester: RankedTester = rankWith(2, isOneOfEnumControl);
 
-export default withJsonFormsOneOfEnumCellProps(MaterialOneOfEnumCell);
+export default withJsonFormsOneOfEnumCellProps(withTranslateProps(React.memo(MaterialOneOfEnumCell)), false);
