@@ -1,155 +1,200 @@
 <template>
-  <v-container fluid class="demo" v-if="example != null">
-    <v-flex>
-      <v-card>
-        <v-card-title>{{ example.title }}</v-card-title>
-        <v-card-text>
-          <v-tabs v-model="activeTab">
-            <v-tab :key="0">Demo</v-tab>
-            <v-spacer expand />
-            <v-tab :key="1">Schema</v-tab>
-            <v-tab :key="2">UI Schema</v-tab>
-            <v-tab :key="3">Data</v-tab>
-
-            <v-tab-item :key="0">
-              <demo-form
-                :example="example"
-                :renderers="renderers"
-                :cells="cells"
-                :config="config"
-                :validationMode="validationMode"
-                :ajv="ajv"
-                :readonly="readonly"
-                :locale="locale"
-                @change="onChange"
-              />
-            </v-tab-item>
-            <v-tab-item :key="1">
-              <v-card>
-                <v-card-title>
-                  <v-toolbar flat>
-                    <v-toolbar-title>Schema</v-toolbar-title>
-                    <v-spacer></v-spacer>
-                    <v-tooltip bottom>
-                      <template v-slot:activator="{ on: onTooltip }">
-                        <v-btn
-                          icon
-                          @click="reloadMonacoSchema"
-                          v-on="onTooltip"
-                        >
-                          <v-icon>mdi-reload</v-icon>
-                        </v-btn>
-                      </template>
-                      {{ `Reload Example Schema` }}
-                    </v-tooltip>
-                    <v-tooltip bottom>
-                      <template v-slot:activator="{ on: onTooltip }">
-                        <v-btn icon @click="saveMonacoSchema" v-on="onTooltip">
-                          <v-icon>mdi-content-save</v-icon>
-                        </v-btn>
-                      </template>
-                      {{ `Apply Change To Example Schema` }}
-                    </v-tooltip>
-                  </v-toolbar>
-                </v-card-title>
-                <v-divider class="mx-4"></v-divider>
-                <monaco-editor
-                  :theme="$vuetify.theme.dark ? 'vs-dark' : 'vs'"
-                  height="500"
-                  :language="`json`"
-                  v-model="monacoSchemaModel"
-                  :editorBeforeMount="registerValidations"
-                ></monaco-editor>
-              </v-card>
-            </v-tab-item>
-            <v-tab-item :key="2">
-              <v-card>
-                <v-card-title>
-                  <v-toolbar flat>
-                    <v-toolbar-title>UI Schema</v-toolbar-title>
-                    <v-spacer></v-spacer>
-                    <v-tooltip bottom>
-                      <template v-slot:activator="{ on: onTooltip }">
-                        <v-btn
-                          icon
-                          @click="reloadMonacoUiSchema"
-                          v-on="onTooltip"
-                        >
-                          <v-icon>mdi-reload</v-icon>
-                        </v-btn>
-                      </template>
-                      {{ `Reload Example UI Schema` }}
-                    </v-tooltip>
-                    <v-tooltip bottom>
-                      <template v-slot:activator="{ on: onTooltip }">
-                        <v-btn
-                          icon
-                          @click="saveMonacoUiSchema"
-                          v-on="onTooltip"
-                        >
-                          <v-icon>mdi-content-save</v-icon>
-                        </v-btn>
-                      </template>
-                      {{ `Apply Change To Example UI Schema` }}
-                    </v-tooltip>
-                  </v-toolbar>
-                </v-card-title>
-                <v-divider class="mx-4"></v-divider>
-                <monaco-editor
-                  :theme="$vuetify.theme.dark ? 'vs-dark' : 'vs'"
-                  height="500"
-                  language="json"
-                  v-model="monacoUiSchemaModel"
-                  :editorBeforeMount="registerValidations"
-                ></monaco-editor>
-              </v-card>
-            </v-tab-item>
-            <v-tab-item :key="3">
-              <v-card>
-                <v-card-title>
-                  <v-toolbar flat>
-                    <v-toolbar-title>Data</v-toolbar-title>
-                    <v-spacer></v-spacer>
-                    <v-tooltip bottom>
-                      <template v-slot:activator="{ on: onTooltip }">
-                        <v-btn icon @click="reloadMonacoData" v-on="onTooltip">
-                          <v-icon>mdi-reload</v-icon>
-                        </v-btn>
-                      </template>
-                      {{ `Reload Example Data` }}
-                    </v-tooltip>
-                    <v-tooltip bottom>
-                      <template v-slot:activator="{ on: onTooltip }">
-                        <v-btn icon @click="saveMonacoData" v-on="onTooltip">
-                          <v-icon>mdi-content-save</v-icon>
-                        </v-btn>
-                      </template>
-                      {{ `Apply Change To Example Data` }}
-                    </v-tooltip>
-                  </v-toolbar>
-                </v-card-title>
-                <v-divider class="mx-4"></v-divider>
-                <monaco-editor
-                  :theme="$vuetify.theme.dark ? 'vs-dark' : 'vs'"
-                  height="500"
-                  language="json"
-                  v-model="monacoDataModel"
-                  :editorBeforeMount="registerValidations"
-                ></monaco-editor>
-              </v-card>
-            </v-tab-item>
-          </v-tabs>
-        </v-card-text>
-      </v-card>
-      <v-snackbar v-model="snackbar" :timeout="snackbarTimeout">
-        {{ snackbarText }}
-
-        <template v-slot:action="{ attrs }">
-          <v-btn text v-bind="attrs" @click="snackbar = false"> Close </v-btn>
-        </template>
-      </v-snackbar>
-    </v-flex>
-  </v-container>
+  <div>
+    <v-container fluid class="demo" v-if="example != null && !formonly">
+      <v-flex>
+        <v-card>
+          <v-card-title>{{ example.title }}</v-card-title>
+          <v-card-text>
+            <v-tabs v-model="activeTab">
+              <v-tab :key="0">Demo</v-tab>
+              <v-spacer expand />
+              <v-tab :key="1">Schema</v-tab>
+              <v-tab :key="2">UI Schema</v-tab>
+              <v-tab :key="3">Data</v-tab>
+              <v-tab-item :key="0">
+                <v-card>
+                  <v-card-title>
+                    <v-toolbar flat>
+                      <v-toolbar-title>JSONForm</v-toolbar-title>
+                      <v-spacer></v-spacer>
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on: onTooltip }">
+                          <v-btn
+                            icon
+                            v-on="onTooltip"
+                            :to="{
+                              name: 'example',
+                              params: { id: $route.params.id },
+                              query: { view: 'form-only' },
+                            }"
+                          >
+                            <v-icon>mdi-dock-window</v-icon>
+                          </v-btn>
+                        </template>
+                        {{ `Show JsonForm Only` }}
+                      </v-tooltip>
+                    </v-toolbar>
+                  </v-card-title>
+                  <v-divider class="mx-4"></v-divider>
+                  <demo-form
+                    :example="example"
+                    :renderers="renderers"
+                    :cells="cells"
+                    :config="config"
+                    :validationMode="validationMode"
+                    :ajv="ajv"
+                    :readonly="readonly"
+                    :locale="locale"
+                    @change="onChange"
+                  />
+                </v-card>
+              </v-tab-item>
+              <v-tab-item :key="1">
+                <v-card>
+                  <v-card-title>
+                    <v-toolbar flat>
+                      <v-toolbar-title>Schema</v-toolbar-title>
+                      <v-spacer></v-spacer>
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on: onTooltip }">
+                          <v-btn
+                            icon
+                            @click="reloadMonacoSchema"
+                            v-on="onTooltip"
+                          >
+                            <v-icon>mdi-reload</v-icon>
+                          </v-btn>
+                        </template>
+                        {{ `Reload Example Schema` }}
+                      </v-tooltip>
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on: onTooltip }">
+                          <v-btn
+                            icon
+                            @click="saveMonacoSchema"
+                            v-on="onTooltip"
+                          >
+                            <v-icon>mdi-content-save</v-icon>
+                          </v-btn>
+                        </template>
+                        {{ `Apply Change To Example Schema` }}
+                      </v-tooltip>
+                    </v-toolbar>
+                  </v-card-title>
+                  <v-divider class="mx-4"></v-divider>
+                  <monaco-editor
+                    :theme="$vuetify.theme.dark ? 'vs-dark' : 'vs'"
+                    height="500"
+                    :language="`json`"
+                    v-model="monacoSchemaModel"
+                    :editorBeforeMount="registerValidations"
+                  ></monaco-editor>
+                </v-card>
+              </v-tab-item>
+              <v-tab-item :key="2">
+                <v-card>
+                  <v-card-title>
+                    <v-toolbar flat>
+                      <v-toolbar-title>UI Schema</v-toolbar-title>
+                      <v-spacer></v-spacer>
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on: onTooltip }">
+                          <v-btn
+                            icon
+                            @click="reloadMonacoUiSchema"
+                            v-on="onTooltip"
+                          >
+                            <v-icon>mdi-reload</v-icon>
+                          </v-btn>
+                        </template>
+                        {{ `Reload Example UI Schema` }}
+                      </v-tooltip>
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on: onTooltip }">
+                          <v-btn
+                            icon
+                            @click="saveMonacoUiSchema"
+                            v-on="onTooltip"
+                          >
+                            <v-icon>mdi-content-save</v-icon>
+                          </v-btn>
+                        </template>
+                        {{ `Apply Change To Example UI Schema` }}
+                      </v-tooltip>
+                    </v-toolbar>
+                  </v-card-title>
+                  <v-divider class="mx-4"></v-divider>
+                  <monaco-editor
+                    :theme="$vuetify.theme.dark ? 'vs-dark' : 'vs'"
+                    height="500"
+                    language="json"
+                    v-model="monacoUiSchemaModel"
+                    :editorBeforeMount="registerValidations"
+                  ></monaco-editor>
+                </v-card>
+              </v-tab-item>
+              <v-tab-item :key="3">
+                <v-card>
+                  <v-card-title>
+                    <v-toolbar flat>
+                      <v-toolbar-title>Data</v-toolbar-title>
+                      <v-spacer></v-spacer>
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on: onTooltip }">
+                          <v-btn
+                            icon
+                            @click="reloadMonacoData"
+                            v-on="onTooltip"
+                          >
+                            <v-icon>mdi-reload</v-icon>
+                          </v-btn>
+                        </template>
+                        {{ `Reload Example Data` }}
+                      </v-tooltip>
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on: onTooltip }">
+                          <v-btn icon @click="saveMonacoData" v-on="onTooltip">
+                            <v-icon>mdi-content-save</v-icon>
+                          </v-btn>
+                        </template>
+                        {{ `Apply Change To Example Data` }}
+                      </v-tooltip>
+                    </v-toolbar>
+                  </v-card-title>
+                  <v-divider class="mx-4"></v-divider>
+                  <monaco-editor
+                    :theme="$vuetify.theme.dark ? 'vs-dark' : 'vs'"
+                    height="500"
+                    language="json"
+                    v-model="monacoDataModel"
+                    :editorBeforeMount="registerValidations"
+                  ></monaco-editor>
+                </v-card>
+              </v-tab-item>
+            </v-tabs>
+          </v-card-text>
+        </v-card>
+        <v-snackbar v-model="snackbar" :timeout="snackbarTimeout">
+          {{ snackbarText }}
+          <template v-slot:action="{ attrs }">
+            <v-btn text v-bind="attrs" @click="snackbar = false"> Close </v-btn>
+          </template>
+        </v-snackbar>
+      </v-flex>
+    </v-container>
+    <demo-form
+      v-if="example != null && formonly"
+      :example="example"
+      :renderers="renderers"
+      :cells="cells"
+      :config="config"
+      :validationMode="validationMode"
+      :ajv="ajv"
+      :readonly="readonly"
+      :locale="locale"
+      @change="onChange"
+    />
+  </div>
 </template>
 
 <script lang="ts">
@@ -202,6 +247,9 @@ export default {
     monacoUiSchemaModel: sync('app/monaco@uischemaModel'),
     monacoDataModel: sync('app/monaco@dataModel'),
     locale: sync('app/jsonforms@locale'),
+    formonly(): boolean {
+      return this.$route.query?.view === 'form-only';
+    },
   },
   mounted() {
     this.setExample(

@@ -1,8 +1,8 @@
 <template>
   <v-app>
-    <default-app-bar />
+    <default-app-bar v-if="!formonly" />
 
-    <default-drawer />
+    <default-drawer v-if="!formonly" />
 
     <default-view />
   </v-app>
@@ -16,6 +16,11 @@ export default {
     DefaultAppBar: () => import('./AppBar'),
     DefaultDrawer: () => import('./Drawer'),
     DefaultView: () => import('./View'),
+  },
+  computed: {
+    formonly(): boolean {
+      return this.$route.query?.view === 'form-only';
+    },
   },
 };
 </script>
