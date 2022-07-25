@@ -7,10 +7,10 @@
     v-bind="vuetifyProps('v-card')"
   >
     <v-card-title
-      v-if="layout.uischema.label"
+      v-if="layout.label"
       :class="styles.group.label"
       v-bind="vuetifyProps('v-card-title')"
-      >{{ layout.uischema.label }}</v-card-title
+      >{{ layout.label }}</v-card-title
     >
 
     <v-card-text

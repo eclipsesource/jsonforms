@@ -11,10 +11,10 @@
           vertical
         >
           <v-tab
-            v-for="(element, index) in visibleCategories"
+            v-for="(_, index) in visibleCategories"
             :key="`${layout.path}-${index}`"
           >
-            {{ element.label }}
+            {{ visibleCategoryLabels[index] }}
           </v-tab>
         </v-tabs>
       </v-col>
@@ -43,10 +43,10 @@
     <v-row v-else v-bind="vuetifyProps('v-row')">
       <v-tabs v-model="activeCategory" v-bind="vuetifyProps('v-tabs')">
         <v-tab
-          v-for="(element, index) in visibleCategories"
+          v-for="(_, index) in visibleCategories"
           :key="`${layout.path}-${index}`"
         >
-          {{ element.label }}
+          {{ visibleCategoryLabels[index] }}
         </v-tab>
       </v-tabs>
 
@@ -84,6 +84,7 @@ import {
   Tester,
   isVisible,
   categorizationHasCategory,
+  deriveLabelForUISchemaElement,
 } from '@jsonforms/core';
 import { defineComponent, ref } from 'vue';
 import {
@@ -92,7 +93,7 @@ import {
   useJsonFormsLayout,
   RendererProps,
 } from '@jsonforms/vue2';
-import { useAjv, useVuetifyLayout } from '../util';
+import { useAjv, useTranslator, useVuetifyLayout } from '../util';
 import {
   VContainer,
   VTabs,
@@ -121,11 +122,12 @@ const layoutRenderer = defineComponent({
   setup(props: RendererProps<Layout>) {
     const activeCategory = ref(0);
     const ajv = useAjv();
-
+    const t = useTranslator();
     return {
       ...useVuetifyLayout(useJsonFormsLayout(props)),
       activeCategory,
       ajv,
+      t,
     };
   },
   computed: {
@@ -134,6 +136,11 @@ const layoutRenderer = defineComponent({
         (category: Category | Categorization) =>
           isVisible(category, this.layout.data, this.layout.path, this.ajv)
       );
+    },
+    visibleCategoryLabels(): string[] {
+      return this.visibleCategories.map((element) => {
+        return deriveLabelForUISchemaElement(element, this.t) ?? '';
+      });
     },
   },
 });

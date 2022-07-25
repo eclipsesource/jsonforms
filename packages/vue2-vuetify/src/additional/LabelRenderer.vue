@@ -1,17 +1,16 @@
 <template>
   <v-label
-    v-if="layout.visible"
+    v-if="label.visible"
     :class="styles.label.root"
     v-bind="vuetifyProps('v-label')"
   >
-    {{ translatedLabel }}
+    {{ label.text }}
   </v-label>
 </template>
 
 <script lang="ts">
 import {
   JsonFormsRendererRegistryEntry,
-  Layout,
   rankWith,
   uiTypeIs,
   LabelElement,
@@ -20,11 +19,11 @@ import { defineComponent } from 'vue';
 import {
   DispatchRenderer,
   rendererProps,
-  useJsonFormsLayout,
   RendererProps,
+  useJsonFormsLabel,
 } from '@jsonforms/vue2';
-import { useVuetifyLayout, useTranslator } from '../util';
 import { VLabel } from 'vuetify/lib';
+import { useVuetifyLabel } from '../util';
 
 const labelRenderer = defineComponent({
   name: 'label-renderer',
@@ -33,26 +32,10 @@ const labelRenderer = defineComponent({
     VLabel,
   },
   props: {
-    ...rendererProps<Layout>(),
+    ...rendererProps<LabelElement>(),
   },
-  setup(props: RendererProps<Layout>) {
-    const t = useTranslator();
-    const layout = useVuetifyLayout(useJsonFormsLayout(props));
-    return { ...layout, t };
-  },
-  computed: {
-    translatedLabel(): string | undefined {
-      if (this.layout.uischema.options?.i18n) {
-        return this.t(
-          this.layout.uischema.options.i18n,
-          (this.layout.uischema as LabelElement).text
-        );
-      }
-      return this.t(
-        (this.layout.uischema as LabelElement).text,
-        (this.layout.uischema as LabelElement).text
-      );
-    },
+  setup(props: RendererProps<LabelElement>) {
+    return useVuetifyLabel(useJsonFormsLabel(props));
   },
 });
 

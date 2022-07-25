@@ -40,6 +40,31 @@ const useComputedLabel = <I extends { control: any }>(
 };
 
 /**
+ * Adds styles, appliedOptions and vuetifyProps
+ */
+export const useVuetifyLabel = <I extends { label: any }>(input: I) => {
+  const styles = useStyles(input.label.value.uischema);
+  const appliedOptions = computed(() =>
+    merge(
+      {},
+      cloneDeep(input.label.value.config),
+      cloneDeep(input.label.value.uischema.options)
+    )
+  );
+  const vuetifyProps = (path: string) => {
+    const props = get(appliedOptions.value?.vuetify, path);
+
+    return props && isPlainObject(props) ? props : {};
+  };
+  return {
+    ...input,
+    appliedOptions,
+    vuetifyProps,
+    styles,
+  };
+};
+
+/**
  * Adds styles, isFocused, appliedOptions and onChange
  */
 export const useVuetifyControl = <
