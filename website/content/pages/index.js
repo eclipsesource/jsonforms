@@ -107,11 +107,11 @@ function Home() {
           <section className={styles.sectionNews}>
             <Card className={styles.newsCard}>
               <CardContent>
-                We've got an early present for you 🎁! Today we merged the last feature for JSON Forms 3.0 and released the first beta version <code>v3.0.0-beta.0</code> 🎉 Try our new ESM module builds today!
-
-                Stable release coming in the new year 🥳
+                Great news! We are in the final stretches of the long awaited JSON Forms 3.0 release. Today we published the release candidate "3.0.0-rc.0" 🎉
                 <br/>
-                <span style={{ display: 'block', textAlign: 'right', width: '100%'}}>22th December 2021</span>
+                We welcome any feedback of curious users. Any questions? Check out our community forum <a href="https://jsonforms.discourse.group">jsonforms.discourse.group</a>.
+                <br/>
+                <span style={{ display: 'block', textAlign: 'right', width: '100%'}}>25th July 2022</span>
               </CardContent>
             </Card>
             <Link to='/news' className={styles.newsButton}>
