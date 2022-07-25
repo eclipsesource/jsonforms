@@ -22,25 +22,30 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React from 'react';
+import React, { useMemo } from 'react';
 import { EnumCellProps, WithClassname } from '@jsonforms/core';
 
 import { MenuItem, Select } from '@mui/material';
 import merge from 'lodash/merge';
+import { TranslateProps } from '@jsonforms/react';
+import { i18nDefaults } from '../util';
 
-export const MuiSelect = React.memo((props: EnumCellProps & WithClassname) => {
+export const MuiSelect = React.memo((props: EnumCellProps & WithClassname & TranslateProps) => {
   const {
     data,
     className,
     id,
     enabled,
+    schema,
     uischema,
     path,
     handleChange,
     options,
-    config
+    config,
+    t
   } = props;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
+  const noneOptionLabel = useMemo(() => t('enum.none', i18nDefaults['enum.none'], { schema, uischema, path}), [t, schema, uischema, path]);
 
   return (
     <Select
@@ -49,11 +54,11 @@ export const MuiSelect = React.memo((props: EnumCellProps & WithClassname) => {
       disabled={!enabled}
       autoFocus={appliedUiSchemaOptions.focus}
       value={data !== undefined ? data : ''}
-      onChange={ev => handleChange(path, ev.target.value)}
+      onChange={ev =>handleChange(path, ev.target.value || undefined)}
       fullWidth={true}
       variant={'standard'}
     >
-      {[<MenuItem value='' key={'empty'} />].concat(
+      {[<MenuItem value={''} key='jsonforms.enum.none'><em>{noneOptionLabel}</em></MenuItem>].concat(
         options.map(optionValue => (
           <MenuItem value={optionValue.value} key={optionValue.value}>
             {optionValue.label}

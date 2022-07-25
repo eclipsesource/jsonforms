@@ -22,6 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+export * from './i18nDefaults';
 import React from 'react';
 import isEmpty from 'lodash/isEmpty';
 import {

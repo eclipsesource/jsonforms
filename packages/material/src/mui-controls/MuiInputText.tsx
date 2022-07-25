@@ -40,6 +40,9 @@ interface MuiTextInputProps {
   muiInputProps?: InputProps['inputProps'];
   inputComponent?: InputProps['inputComponent'];
 }
+
+const eventToValue = (ev:any) => ev.target.value === '' ? undefined : ev.target.value;
+
 export const MuiInputText = React.memo((props: CellProps & WithClassname & MuiTextInputProps) => { 
   const [showAdornment, setShowAdornment] = useState(false);
   const {
@@ -71,7 +74,7 @@ export const MuiInputText = React.memo((props: CellProps & WithClassname & MuiTe
     inputProps.size = maxLength;
   };
   
-  const [inputText, onChange, onClear] = useDebouncedChange(handleChange, '', data, path);
+  const [inputText, onChange, onClear] = useDebouncedChange(handleChange, '', data, path, eventToValue);
   const onPointerEnter = () => setShowAdornment(true);
   const onPointerLeave = () => setShowAdornment(false);
 

@@ -22,20 +22,20 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   EnumCellProps,
   isEnumControl,
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
-import { withJsonFormsEnumCellProps } from '@jsonforms/react';
-import { withVanillaEnumCellProps } from '../util';
+import { TranslateProps, withJsonFormsEnumCellProps, withTranslateProps } from '@jsonforms/react';
+import { i18nDefaults, withVanillaEnumCellProps } from '../util';
 import { VanillaRendererProps } from '../index';
 
-export const EnumCell = (props: EnumCellProps & VanillaRendererProps) => {
-  const { data, className, id, enabled, uischema, path, handleChange, options } = props;
-
+export const EnumCell = (props: EnumCellProps & VanillaRendererProps & TranslateProps) => {
+  const { data, className, id, enabled, schema, uischema, path, handleChange, options, t } = props;
+  const noneOptionLabel = useMemo(() => t('enum.none', i18nDefaults['enum.none'], { schema, uischema, path}), [t, schema, uischema, path]);
   return (
     <select
       className={className}
@@ -46,7 +46,7 @@ export const EnumCell = (props: EnumCellProps & VanillaRendererProps) => {
       onChange={ev => handleChange(path, ev.target.selectedIndex === 0 ? undefined : ev.target.value)}
     >
       {
-        [<option value='' key={'empty'} />]
+        [<option value={''} key={'jsonforms.enum.none'}>{noneOptionLabel}</option>]
           .concat(
             options.map(optionValue =>
               (
@@ -63,4 +63,4 @@ export const EnumCell = (props: EnumCellProps & VanillaRendererProps) => {
  */
 export const enumCellTester: RankedTester = rankWith(2, isEnumControl);
 
-export default withJsonFormsEnumCellProps(withVanillaEnumCellProps(EnumCell));
+export default withJsonFormsEnumCellProps(withTranslateProps(withVanillaEnumCellProps(EnumCell)));

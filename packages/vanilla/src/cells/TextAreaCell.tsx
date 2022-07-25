@@ -40,7 +40,7 @@ export const TextAreaCell = (props: CellProps & VanillaRendererProps) => {
   return (
     <textarea
       value={data || ''}
-      onChange={ev => handleChange(path, ev.target.value)}
+      onChange={ev => handleChange(path, ev.target.value === '' ? undefined : ev.target.value)}
       className={className}
       id={id}
       disabled={!enabled}

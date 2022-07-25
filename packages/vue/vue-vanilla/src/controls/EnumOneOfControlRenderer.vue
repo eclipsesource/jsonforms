@@ -49,7 +49,7 @@ const controlRenderer = defineComponent({
     ...rendererProps<ControlElement>()
   },
   setup(props: RendererProps<ControlElement>) {
-    return useVanillaControl(useJsonFormsOneOfEnumControl(props));
+    return useVanillaControl(useJsonFormsOneOfEnumControl(props), target => target.selectedIndex === 0 ? undefined : target.value );
   }
 });
 

@@ -30,10 +30,10 @@ import {
   rankWith,
   WithClassname
 } from '@jsonforms/core';
-import { withJsonFormsEnumCellProps } from '@jsonforms/react';
+import { TranslateProps, withJsonFormsEnumCellProps, withTranslateProps } from '@jsonforms/react';
 import { MuiSelect } from '../mui-controls/MuiSelect';
 
-export const MaterialEnumCell = (props: EnumCellProps & WithClassname) => (
+export const MaterialEnumCell = (props: EnumCellProps & WithClassname & TranslateProps) => (
   <MuiSelect {...props} />
 );
 
@@ -43,4 +43,5 @@ export const MaterialEnumCell = (props: EnumCellProps & WithClassname) => (
  */
 export const materialEnumCellTester: RankedTester = rankWith(2, isEnumControl);
 
-export default withJsonFormsEnumCellProps(MaterialEnumCell);
+// HOC order can be reversed with https://github.com/eclipsesource/jsonforms/issues/1987
+export default withJsonFormsEnumCellProps(withTranslateProps(React.memo(MaterialEnumCell)), false);

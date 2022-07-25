@@ -52,7 +52,7 @@ export const TextCell = (props: CellProps & VanillaRendererProps) => {
     <input
       type='text'
       value={data || ''}
-      onChange={ev => handleChange(path, ev.target.value)}
+      onChange={ev => handleChange(path, ev.target.value === '' ? undefined : ev.target.value)}
       className={className}
       id={id}
       disabled={!enabled}

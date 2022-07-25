@@ -43,7 +43,7 @@ const controlRenderer = defineComponent({
   },
   setup(props: RendererProps<ControlElement>) {
     return useVanillaControl(useJsonFormsControl(props), target =>
-      Number(target.value)
+      target.value === '' ? undefined : Number(target.value)
     );
   },
   computed: {

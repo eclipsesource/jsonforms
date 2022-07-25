@@ -34,7 +34,7 @@ import { withJsonFormsCellProps } from '@jsonforms/react';
 import { VanillaRendererProps } from '../index';
 import { withVanillaCellProps } from '../util/index';
 
-export const NumberFormatCell = (props: CellProps & VanillaRendererProps & Formatted<number>) => {
+export const NumberFormatCell = (props: CellProps & VanillaRendererProps & Formatted<number|undefined>) => {
   const {
     className,
     id,
