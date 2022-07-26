@@ -44,38 +44,41 @@ export const ArrayControl = ({
     () => findUISchema(uischemas, schema, uischema.scope, path, undefined, uischema, rootSchema),
     [uischemas, schema, uischema.scope, path, uischema, rootSchema]
   );
+  const isValid = errors.length === 0;
+  const divClassNames = [validationClass]
+    .concat(isValid ? '' : getStyleAsClassName('array.table.validation.error'))
+    .join(' ');  
   return (
     <div className={classNames.wrapper}>
-      <fieldset className={classNames.fieldSet}>
-        <legend>
-          <button
+      <header>
+        <label className={'array.label'}>{label}</label>
+        <button
             className={classNames.button}
             onClick={addItem(path, createDefaultValue(schema))}
-          >
-            +
-          </button>
-          <label className={'array.label'}>{label}</label>
-        </legend>
-        <div className={classNames.children}>
-          {data ? (
-            range(0, data.length).map(index => {
-              const childPath = composePaths(path, `${index}`);
-
-              return (
-                <JsonFormsDispatch
-                  schema={schema}
-                  uischema={childUiSchema || uischema}
-                  path={childPath}
-                  key={childPath}
-                  renderers={renderers}
-                />
-              );
-            })
-          ) : (
-              <p>No data</p>
-            )}
-        </div>
-      </fieldset>
+        >Add to {labelObject.text}
+	    </button>
+      </header>
+      <div className={divClassNames}>
+        {!isValid ? errors : ''}
+      </div>      
+      <div className={classNames.children}>
+        {data ? (
+          range(0, data.length).map(index => {
+            const childPath = composePaths(path, `${index}`);
+            return (
+              <JsonFormsDispatch
+                schema={schema}
+                uischema={childUiSchema || uischema}
+                path={childPath}
+                key={childPath}
+                renderers={renderers}
+              />
+            );
+          })
+        ) : (
+            <p>No data</p>
+        )}
+      </div>
     </div>
   );
 };
