@@ -34,6 +34,7 @@
             ref="menu"
             v-model="showMenu"
             :close-on-content-click="false"
+            :return-value.sync="pickerValue"
             transition="scale-transition"
             offset-y
             min-width="290px"
@@ -43,7 +44,7 @@
             </template>
             <v-time-picker
               v-if="showMenu"
-              :value="pickerValue"
+              v-model="pickerValue"
               ref="picker"
               v-bind="vuetifyProps('v-time-picker')"
               :min="minTime"
@@ -254,16 +255,21 @@ const controlRenderer = defineComponent({
       const time = parseDateTime(value, this.formats);
       return time ? time.format(this.timeFormat) : value;
     },
-    pickerValue(): string | undefined {
-      const value = this.control.data;
+    pickerValue: {
+      get(): string | undefined {
+        const value = this.control.data;
 
-      const time = parseDateTime(value, this.formats);
-      // show only valid values
-      return time
-        ? this.useSeconds
-          ? time.format('HH:mm:ss')
-          : time.format('HH:mm')
-        : undefined;
+        const time = parseDateTime(value, this.formats);
+        // show only valid values
+        return time
+          ? this.useSeconds
+            ? time.format('HH:mm:ss')
+            : time.format('HH:mm')
+          : undefined;
+      },
+      set(val: string) {
+        this.onPickerChange(val);
+      },
     },
     clearLabel(): string {
       const label =
@@ -303,8 +309,7 @@ const controlRenderer = defineComponent({
       this.onChange(time ? time.format(this.timeSaveFormat) : value);
     },
     okHandler(): void {
-      // cast to 'any' because of Typescript problems (excessive stack depth when comparing types)
-      this.onPickerChange((this.$refs.picker as any).genValue());
+      (this.$refs.menu as any).save(this.pickerValue);
       this.showMenu = false;
     },
     clear(): void {

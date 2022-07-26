@@ -30,8 +30,10 @@
         </template>
         <template slot="prepend-inner">
           <v-menu
+            ref="menu"
             v-model="showMenu"
             :close-on-content-click="false"
+            :return-value.sync="pickerValue"
             transition="scale-transition"
             offset-y
             min-width="290px"
@@ -41,7 +43,7 @@
             </template>
             <v-date-picker
               v-if="showMenu"
-              :value="pickerValue"
+              v-model="pickerValue"
               ref="picker"
               v-bind="vuetifyProps('v-date-picker')"
               :min="minDate"
@@ -220,12 +222,17 @@ const controlRenderer = defineComponent({
       const date = parseDateTime(value, this.formats);
       return date ? date.format(this.dateFormat) : value;
     },
-    pickerValue(): string | undefined {
-      const value = this.control.data;
+    pickerValue: {
+      get(): string | undefined {
+        const value = this.control.data;
 
-      const date = parseDateTime(value, this.formats);
-      // show only valid values
-      return date ? date.format('YYYY-MM-DD') : undefined;
+        const date = parseDateTime(value, this.formats);
+        // show only valid values
+        return date ? date.format('YYYY-MM-DD') : undefined;
+      },
+      set(val: string): void {
+        this.onPickerChange(val);
+      },
     },
     clearLabel(): string {
       const label =
@@ -269,8 +276,7 @@ const controlRenderer = defineComponent({
       this.onChange(null);
     },
     okHandler(): void {
-      // cast to 'any' because of Typescript problems (excessive stack depth when comparing types)
-      this.onPickerChange((this.$refs.picker as any).inputDate);
+      (this.$refs.menu as any).save(this.pickerValue);
       this.showMenu = false;
     },
     maskFunction(value: string): (string | RegExp)[] {

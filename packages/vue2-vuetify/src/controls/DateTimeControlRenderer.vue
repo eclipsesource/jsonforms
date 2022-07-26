@@ -33,6 +33,7 @@
             ref="menu"
             v-model="showMenu"
             :close-on-content-click="false"
+            :return-value.sync="pickerValue"
             transition="scale-transition"
             offset-y
             :min-width="useTabLayout ? '290px' : '580px'"
@@ -53,7 +54,7 @@
                 <v-tab-item value="date"
                   ><v-date-picker
                     v-if="showMenu"
-                    :value="datePickerValue"
+                    v-model="datePickerValue"
                     ref="datePicker"
                     v-bind="vuetifyProps('v-date-picker')"
                     :min="minDate"
@@ -64,7 +65,7 @@
                 </v-tab-item>
                 <v-tab-item value="time"
                   ><v-time-picker
-                    :value="timePickerValue"
+                    v-model="timePickerValue"
                     ref="timePicker"
                     v-bind="vuetifyProps('v-time-picker')"
                     :min="minTime"
@@ -78,7 +79,7 @@
                 <v-col min-width="290px" cols="auto">
                   <v-date-picker
                     v-if="showMenu"
-                    :value="datePickerValue"
+                    v-model="datePickerValue"
                     ref="datePicker"
                     v-bind="vuetifyProps('v-date-picker')"
                     :min="minDate"
@@ -88,7 +89,7 @@
                 </v-col>
                 <v-col min-width="290px" cols="auto">
                   <v-time-picker
-                    :value="timePickerValue"
+                    v-model="timePickerValue"
                     ref="timePicker"
                     v-bind="vuetifyProps('v-time-picker')"
                     :min="minTime"
@@ -399,23 +400,48 @@ const controlRenderer = defineComponent({
       const date = parseDateTime(value, this.formats);
       return date ? date.format(this.dateTimeFormat) : value;
     },
-    datePickerValue(): string | undefined {
-      const value = this.control.data;
+    datePickerValue: {
+      get(): string | undefined {
+        const value = this.control.data;
 
-      const date = parseDateTime(value, this.formats);
-      // show only valid values
-      return date ? date.format('YYYY-MM-DD') : undefined;
+        const date = parseDateTime(value, this.formats);
+        // show only valid values
+        return date ? date.format('YYYY-MM-DD') : undefined;
+      },
+      set(val: string) {
+        this.onPickerChange(val, (this.$refs.timePicker as any).genValue());
+      },
     },
-    timePickerValue(): string | undefined {
-      const value = this.control.data;
+    timePickerValue: {
+      get(): string | undefined {
+        const value = this.control.data;
 
-      const time = parseDateTime(value, this.formats);
-      // show only valid values
-      return time
-        ? this.useSeconds
-          ? time.format('HH:mm:ss')
-          : time.format('HH:mm')
-        : undefined;
+        const time = parseDateTime(value, this.formats);
+        // show only valid values
+        return time
+          ? this.useSeconds
+            ? time.format('HH:mm:ss')
+            : time.format('HH:mm')
+          : undefined;
+      },
+      set(val: string) {
+        this.onPickerChange((this.$refs.datePicker as any).inputDate, val);
+      },
+    },
+    pickerValue: {
+      get(): string | undefined {
+        const value = this.control.data;
+
+        const dateTime = parseDateTime(value, this.formats);
+        // show only valid values
+        return dateTime
+          ? dateTime.format('YYYY-MM-DDTHH:mm:ss.SSSZ')
+          : undefined;
+      },
+      set(val: string) {
+        const dateTime = parseDateTime(val, 'YYYY-MM-DDTHH:mm:ss.SSSZ');
+        this.onChange(dateTime!.format(this.dateTimeSaveFormat));
+      },
     },
     clearLabel(): string {
       const label =
@@ -453,7 +479,7 @@ const controlRenderer = defineComponent({
     onPickerChange(dateValue: string, timeValue: string): void {
       const date = parseDateTime(dateValue, 'YYYY-MM-DD');
       const time = parseDateTime(
-        timeValue,
+        timeValue ?? (this.useSeconds ? '00:00:00' : '00:00'),
         this.useSeconds ? 'HH:mm:ss' : 'HH:mm'
       );
       if (date && time) {
@@ -468,11 +494,7 @@ const controlRenderer = defineComponent({
       }
     },
     okHandler(): void {
-      this.onPickerChange(
-        // cast to 'any' because of Typescript problems (excessive stack depth when comparing types)
-        (this.$refs.datePicker as any).inputDate,
-        (this.$refs.timePicker as any).genValue()
-      );
+      (this.$refs.menu as any).save(this.pickerValue);
       this.showMenu = false;
     },
     clear(): void {
