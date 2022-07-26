@@ -1,3 +1,6 @@
+export * from './components';
+export * from './directives';
+
 export { default as AnyOfStringOrEnumControlRenderer } from './AnyOfStringOrEnumControlRenderer.vue';
 export { default as BooleanControlRenderer } from './BooleanControlRenderer.vue';
 export { default as BooleanToggleControlRenderer } from './BooleanToggleControlRenderer.vue';
