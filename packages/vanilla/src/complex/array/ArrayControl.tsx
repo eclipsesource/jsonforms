@@ -34,9 +34,11 @@ export const ArrayControl = ({
   label,
   path,
   schema,
+  errors,
   addItem,
   uischema,
   uischemas,
+  getStyleAsClassName,
   renderers,
   rootSchema
 }: ArrayControlProps & VanillaRendererProps) => {
@@ -45,21 +47,22 @@ export const ArrayControl = ({
     [uischemas, schema, uischema.scope, path, uischema, rootSchema]
   );
   const isValid = errors.length === 0;
+  const validationClass = getStyleAsClassName('array.control.validation');
   const divClassNames = [validationClass]
-    .concat(isValid ? '' : getStyleAsClassName('array.table.validation.error'))
+    .concat(isValid ? '' : getStyleAsClassName('array.control.validation.error'))
     .join(' ');  
   return (
     <div className={classNames.wrapper}>
       <header>
-        <label className={'array.label'}>{label}</label>
+        <label className={'array.control.label'}>{label}</label>
         <button
             className={classNames.button}
             onClick={addItem(path, createDefaultValue(schema))}
-        >Add to {labelObject.text}
+        >Add to {label}
 	    </button>
       </header>
       <div className={divClassNames}>
-        {!isValid ? errors : ''}
+        {errors}
       </div>      
       <div className={classNames.children}>
         {data ? (
