@@ -11,6 +11,6 @@
     "strictMetadataEmit": true,
     "generateCodeForLibraries": false,
     "skipTemplateCodegen": true,
-    "enableIvy": false
+    "compilationMode": "partial"
   }
 }

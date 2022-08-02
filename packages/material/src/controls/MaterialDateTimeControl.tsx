@@ -108,7 +108,7 @@ export const MaterialDateTimeControl = (props: ControlProps) => {
           cancelText={appliedUiSchemaOptions.cancelLabel}
           clearText={appliedUiSchemaOptions.clearLabel}
           okText={appliedUiSchemaOptions.okLabel}
-          renderInput={params => (
+          renderInput={(params: any) => (
             <ResettableTextField 
               {...params}
               rawValue={data}

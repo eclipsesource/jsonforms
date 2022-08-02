@@ -109,7 +109,7 @@
     "tslint": "^5.20.1",
     "tslint-loader": "^3.5.4",
     "typedoc": "^0.19.2",
-    "typescript": "4.2.3",
+    "typescript": "^4.6.4",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.2.1",
     "webpack-dev-server": "^3.9.0"
