@@ -30,6 +30,7 @@ import {
   HorizontalLayoutRenderer,
   horizontalLayoutTester
 } from '../src/layouts/horizontal-layout.renderer';
+import { LayoutChildrenRenderPropsPipe } from '../src/layouts/layout.renderer';
 
 describe('Horizontal layout tester', () => {
   it('should succeed', () => {
@@ -43,6 +44,7 @@ describe('Horizontal layout', () => {
 
   beforeEach(() => {
     fixture = beforeEachLayoutTest(HorizontalLayoutRenderer, {
+      declarations: [LayoutChildrenRenderPropsPipe],
       imports: [FlexLayoutModule]
     });
   });

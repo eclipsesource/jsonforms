@@ -46,6 +46,7 @@ import {
   ObjectControlRendererTester
 } from '../src/other/object.renderer';
 import { getJsonFormsService } from '@jsonforms/angular-test';
+import { LayoutChildrenRenderPropsPipe } from '../src/layouts/layout.renderer';
 
 const uischema1: ControlElement = { type: 'Control', scope: '#' };
 const uischema2: ControlElement = {
@@ -98,7 +99,8 @@ describe('Object Control', () => {
         ObjectControlRenderer,
         TextControlRenderer,
         VerticalLayoutRenderer,
-        GroupLayoutRenderer
+        GroupLayoutRenderer,
+        LayoutChildrenRenderPropsPipe
       ],
       imports: [
         CommonModule,

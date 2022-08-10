@@ -41,7 +41,7 @@ import { JsonFormsAngularService } from '@jsonforms/angular';
       [fxHide]="hidden"
       fxLayoutAlign="center start"
     >
-      <div *ngFor="let props of renderProps; trackBy: trackElement" fxFlex>
+      <div *ngFor="let props of uischema | layoutChildrenRenderProps: schema: path; trackBy: trackElement" fxFlex>
         <jsonforms-outlet [renderProps]="props"></jsonforms-outlet>
       </div>
     </div>
