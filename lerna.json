@@ -6,7 +6,6 @@
   ],
   "version": "3.0.0-rc.0",
   "nohoist": [
-    "core-js",
     "vue",
     "rollup-plugin-vue",
     "@vue/test-utils"

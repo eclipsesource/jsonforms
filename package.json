@@ -23,7 +23,6 @@
     "ajv-formats": "^2.1.0",
     "ava": "~2.4.0",
     "babel-loader": "^8.0.6",
-    "core-js": "^3.9.1",
     "coveralls": "^3.0.9",
     "cross-env": "^7.0.2",
     "css-loader": "^3.2.0",
@@ -42,7 +41,7 @@
     "tslint-loader": "^3.5.4",
     "tslint-react": "^4.1.0",
     "typedoc": "^0.19.2",
-    "typescript": "^4.6.4",
+    "typescript": "4.6.4",
     "webpack": "^4.41.2",
     "webpack-merge": "^4.2.2"
   }
