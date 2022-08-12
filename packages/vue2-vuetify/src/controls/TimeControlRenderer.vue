@@ -38,6 +38,7 @@
             transition="scale-transition"
             offset-y
             min-width="290px"
+            v-bind="vuetifyProps('v-menu')"
           >
             <template v-slot:activator="{ on: onMenu }">
               <v-icon v-on="onMenu" tabindex="-1">{{ pickerIcon }}</v-icon>
