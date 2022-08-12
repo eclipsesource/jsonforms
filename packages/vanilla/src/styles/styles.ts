@@ -138,6 +138,18 @@ export const vanillaStyles: StyleDef[] = [
     classNames: ['array-table-layout', 'control']
   },
   {
+    name: 'array.control.validation.error',
+    classNames: ['validation_error']
+  },
+  {
+    name: 'array.control.validation',
+    classNames: ['validation']
+  },
+  {
+    name: 'array.control',
+    classNames: ['array-control-layout', 'control']
+  },  
+  {
     name: 'input.description',
     classNames: ['input-description']
   }

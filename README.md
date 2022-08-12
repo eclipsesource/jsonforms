@@ -32,34 +32,10 @@ In addition, EclipseSource also offers [professional support](https://jsonforms.
 
 ### First time setup
 
-If you want to contribute to the project or implement a new renderer components it is recommended to first create a fork of this project so you can later start pull a request to contribute your code.
-
-For a first time setup:
-
 * Install [node.js](https://nodejs.org/) (only Node 14 and npm 6 is currently supported)
-* Fork this repository on Github 
 * Clone this repository
-
-Now you can build the project and run the examples. First of all you need to install the base dependencies, then run lerna and then build all packages. After that you can execute the example application.
-
-So starting from the root directory:
-
-	# reset and clean everything
-	git reset --hard
-	git clean -dfx
-	
-	# build JSON Forms
-	npm ci
-	npm run init
-	npm run build
-	
-	# e.g. Start React Vanilla example application
-	cd packages/vanilla && npm run dev
-
-Run the example from your web browser: localhost:3000#person
-
-<img src="example-01.png" />
-
+* Install dependencies: `npm ci`
+* Hook up dependencies between packages: `npm run init`
 
 ### VS Code dev container
 

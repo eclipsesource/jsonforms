@@ -24,9 +24,11 @@
 */
 import range from 'lodash/range';
 import React, { useMemo } from 'react';
-import { ArrayControlProps, composePaths, createDefaultValue, findUISchema } from '@jsonforms/core';
+import { ArrayControlProps, composePaths, createDefaultValue, findUISchema, Helpers, ControlElement } from '@jsonforms/core';
 import { JsonFormsDispatch } from '@jsonforms/react';
 import { VanillaRendererProps } from '../../index';
+
+const { convertToValidClassName } = Helpers;
 
 export const ArrayControl = ({
   classNames,
@@ -42,6 +44,8 @@ export const ArrayControl = ({
   renderers,
   rootSchema
 }: ArrayControlProps & VanillaRendererProps) => {
+	
+  const controlElement = uischema as ControlElement;
   const childUiSchema = useMemo(
     () => findUISchema(uischemas, schema, uischema.scope, path, undefined, uischema, rootSchema),
     [uischemas, schema, uischema.scope, path, uischema, rootSchema]
@@ -51,12 +55,19 @@ export const ArrayControl = ({
   const divClassNames = [validationClass]
     .concat(isValid ? '' : getStyleAsClassName('array.control.validation.error'))
     .join(' ');  
+  const buttonClass = getStyleAsClassName('array.control.button');
+  const labelClass = getStyleAsClassName('array.control.label');
+  const controlClass = [
+      getStyleAsClassName('array.control'),
+      convertToValidClassName(controlElement.scope)
+    ].join(' ');
+  
   return (
-    <div className={classNames.wrapper}>
+    <div className={controlClass}>
       <header>
-        <label className={'array.control.label'}>{label}</label>
+        <label className={labelClass}>{label}</label>
         <button
-            className={classNames.button}
+            className={buttonClass}
             onClick={addItem(path, createDefaultValue(schema))}
         >Add to {label}
 	    </button>

@@ -406,12 +406,12 @@ jsonforms-tree>dialog>.content {
   border-bottom: none;
 }
 
-.array-table-layout.control>header {
+.array-table-layout.control>header, .array-control-layout.control>header {
   display: flex;
   margin: 0.25em;
 }
 
-.array-table-layout header label {
+.array-table-layout header label, .array-control-layout header label {
   flex: 1;
   font-weight: bold;
 }
@@ -448,3 +448,10 @@ jsonforms-tree>dialog>.content {
 .array-table-layout td>* {
   flex: 1;
 }
+.array-control-layout .children>div {
+	border-top: 1px solid var(--jsf-border-color);
+	padding-top: 10px;
+} 
+
+
+
