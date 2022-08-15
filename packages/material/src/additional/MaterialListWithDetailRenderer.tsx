@@ -98,6 +98,10 @@ export const MaterialListWithDetailRenderer = ({
   );
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
 
+  React.useEffect(() => {
+    setSelectedIndex(undefined);
+  }, [schema]);
+
   return (
     <Hidden xsUp={!visible}>
       <ArrayLayoutToolbar
