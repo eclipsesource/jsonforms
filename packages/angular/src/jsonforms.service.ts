@@ -200,6 +200,10 @@ export class JsonFormsAngularService {
         return cloneDeep({ jsonforms: this._state });
     }
 
+    getConfig(): any {
+        return cloneDeep(this._state.config)
+    }
+
     refresh(): void {
         this.updateSubject();
     }
