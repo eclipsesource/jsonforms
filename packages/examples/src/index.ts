@@ -61,6 +61,7 @@ import * as listWithDetailRegistered from './examples/list-with-detail-registere
 import * as object from './examples/object';
 import * as i18n from './examples/i18n';
 import * as issue_1948 from './examples/1948';
+import * as issue_1996 from './examples/1996';
 import * as issue_1169 from './examples/1169';
 import * as issue_1220 from './examples/1220';
 import * as issue_1253 from './examples/1253';
@@ -86,6 +87,7 @@ import * as ifThenElse from './examples/if_then_else';
 
 export {
   issue_1948,
+  issue_1996,
   defaultExample,
   allOf,
   anyOf,

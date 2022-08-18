@@ -773,6 +773,58 @@ test('tester isObjectArrayWithNesting', t => {
     }
   };
 
+  const nestedSchemaWithAnyOf = {
+    type: "array",
+    items: {
+      anyOf: [
+        {
+          type: "object",
+          properties: {
+            value: {
+              type: "string"
+            }
+          },
+          required: ["value"]
+        },
+        {
+          type: "object",
+          properties: {
+            value: {
+              type: "number"
+            }
+          },
+          required: ["value"]
+        }
+      ]
+    }
+  };
+
+  const nestedSchemaWithOneOf = {
+    type: "array",
+    items: {
+      oneOf: [
+        {
+          type: "object",
+          properties: {
+            value: {
+              type: "string"
+            }
+          },
+          required: ["value"]
+        },
+        {
+          type: "object",
+          properties: {
+            value: {
+              type: "number"
+            }
+          },
+          required: ["value"]
+        }
+      ]
+    }
+  };
+
   const uischemaOptions: {
     generate: ControlElement;
     default: ControlElement;
@@ -822,6 +874,9 @@ test('tester isObjectArrayWithNesting', t => {
   t.false(isObjectArrayWithNesting(uischemaOptions.default, schema, undefined));
   t.true(isObjectArrayWithNesting(uischemaOptions.generate, schema, undefined));
   t.true(isObjectArrayWithNesting(uischemaOptions.inline, schema, undefined));
+
+  t.true(isObjectArrayWithNesting(uischema, nestedSchemaWithAnyOf, undefined));
+  t.true(isObjectArrayWithNesting(uischema, nestedSchemaWithOneOf, undefined));
 });
 
 test('tester schemaSubPathMatches', t => {
