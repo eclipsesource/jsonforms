@@ -24,9 +24,11 @@
 */
 import range from 'lodash/range';
 import React, { useMemo } from 'react';
-import { ArrayControlProps, composePaths, createDefaultValue, findUISchema } from '@jsonforms/core';
+import { ArrayControlProps, composePaths, createDefaultValue, findUISchema, Helpers, ControlElement } from '@jsonforms/core';
 import { JsonFormsDispatch } from '@jsonforms/react';
 import { VanillaRendererProps } from '../../index';
+
+const { convertToValidClassName } = Helpers;
 
 export const ArrayControl = ({
   classNames,
@@ -34,48 +36,63 @@ export const ArrayControl = ({
   label,
   path,
   schema,
+  errors,
   addItem,
   uischema,
   uischemas,
+  getStyleAsClassName,
   renderers,
   rootSchema
 }: ArrayControlProps & VanillaRendererProps) => {
+	
+  const controlElement = uischema as ControlElement;
   const childUiSchema = useMemo(
     () => findUISchema(uischemas, schema, uischema.scope, path, undefined, uischema, rootSchema),
     [uischemas, schema, uischema.scope, path, uischema, rootSchema]
   );
+  const isValid = errors.length === 0;
+  const validationClass = getStyleAsClassName('array.control.validation');
+  const divClassNames = [validationClass]
+    .concat(isValid ? '' : getStyleAsClassName('array.control.validation.error'))
+    .join(' ');  
+  const buttonClass = getStyleAsClassName('array.control.button');
+  const labelClass = getStyleAsClassName('array.control.label');
+  const controlClass = [
+      getStyleAsClassName('array.control'),
+      convertToValidClassName(controlElement.scope)
+    ].join(' ');
+  
   return (
-    <div className={classNames.wrapper}>
-      <fieldset className={classNames.fieldSet}>
-        <legend>
-          <button
-            className={classNames.button}
+    <div className={controlClass}>
+      <header>
+        <label className={labelClass}>{label}</label>
+        <button
+            className={buttonClass}
             onClick={addItem(path, createDefaultValue(schema))}
-          >
-            +
-          </button>
-          <label className={'array.label'}>{label}</label>
-        </legend>
-        <div className={classNames.children}>
-          {data ? (
-            range(0, data.length).map(index => {
-              const childPath = composePaths(path, `${index}`);
-
-              return (
-                <JsonFormsDispatch
-                  schema={schema}
-                  uischema={childUiSchema || uischema}
-                  path={childPath}
-                  key={childPath}
-                  renderers={renderers}
-                />
-              );
-            })
-          ) : (
-              <p>No data</p>
-            )}
-        </div>
-      </fieldset>
+        >Add to {label}
+	    </button>
+      </header>
+      <div className={divClassNames}>
+        {errors}
+      </div>      
+      <div className={classNames.children}>
+        {data ? (
+          range(0, data.length).map(index => {
+            const childPath = composePaths(path, `${index}`);
+            return (
+              <JsonFormsDispatch
+                schema={schema}
+                uischema={childUiSchema || uischema}
+                path={childPath}
+                key={childPath}
+                renderers={renderers}
+              />
+            );
+          })
+        ) : (
+            <p>No data</p>
+        )}
+      </div>
     </div>
   );
 };
