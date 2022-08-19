@@ -466,6 +466,9 @@ export const isObjectArrayWithNesting = (
         if (val.$ref !== undefined) {
           return false;
         }
+        if (val.anyOf || val.oneOf) {
+          return true;
+        }
         if (hasType(val, 'object')) {
           objectDepth++;
           if (objectDepth === 2) {
