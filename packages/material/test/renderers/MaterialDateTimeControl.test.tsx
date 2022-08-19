@@ -209,10 +209,10 @@ describe('Material date time control', () => {
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').first();
-    (input.getDOMNode() as HTMLInputElement).value ='1961-12-94 20:15'; 
+    (input.getDOMNode() as HTMLInputElement).value ='1961-12-12 20:15'; 
     input.simulate('change', input);
     expect(onChangeData.data.foo).toBe(
-      dayjs('1961-12-94 20:15').format()
+      dayjs('1961-12-12 20:15').format()
     );
   });
 

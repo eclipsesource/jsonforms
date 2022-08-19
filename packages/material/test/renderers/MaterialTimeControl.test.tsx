@@ -377,7 +377,7 @@ describe('Material time control', () => {
     const input = wrapper.find('input').first();
     expect(input.props().value).toBe('02-13');
 
-    (input.getDOMNode() as HTMLInputElement).value = '12:01';
+    (input.getDOMNode() as HTMLInputElement).value = '12-01';
     input.simulate('change', input);
     expect(onChangeData.data.foo).toBe('1//12 am');
   });

@@ -36,8 +36,8 @@ import { FormHelperText, Hidden } from '@mui/material';
 import {
   DatePicker,
   LocalizationProvider 
-} from '@mui/lab';
-import AdapterDayjs from '@mui/lab/AdapterDayjs';
+} from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import {
   createOnChangeHandler,
   getData,
@@ -96,15 +96,16 @@ export const MaterialDateControl = (props: ControlProps)=> {
         <DatePicker
           label={label}
           value={value}
-          clearable
           onChange={onChange}
           inputFormat={format}
           disableMaskedInput
           views={views}
           disabled={!enabled}
-          cancelText={appliedUiSchemaOptions.cancelLabel}
-          clearText={appliedUiSchemaOptions.clearLabel}
-          okText={appliedUiSchemaOptions.okLabel}
+          componentsProps={{
+            actionBar: {
+              actions: (variant) => (variant === 'desktop' ? [] : ['clear', 'cancel', 'accept'])
+            }
+          }}
           renderInput={params => (
             <ResettableTextField 
               {...params}
