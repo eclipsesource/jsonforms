@@ -77,9 +77,8 @@ export const uischema = {
 const data = {
   name: 'test',
   addressOrUser: {
-    street_address: '1600 Pennsylvania Avenue NW',
-    city: 'Washington',
-    state: 'DC'
+    name: 'User',
+    mail: 'mail@example.com',
   }
 };
 

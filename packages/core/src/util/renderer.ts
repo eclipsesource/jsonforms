@@ -928,9 +928,9 @@ export const mapStateToCombinatorRendererProps = (
   ownProps: OwnPropsOfControl,
   keyword: CombinatorKeyword
 ): StatePropsOfCombinator => {
-  const { data, schema, ...props } = mapStateToControlProps(
+  const { data, schema, rootSchema, ...props } = mapStateToControlProps(
     state,
-    ownProps
+    ownProps,
   );
 
   const ajv = state.jsonforms.core.ajv;
@@ -954,7 +954,12 @@ export const mapStateToCombinatorRendererProps = (
   // element
   for (let i = 0; i < schema[keyword]?.length; i++) {
     try {
-      const valFn = ajv.compile(schema[keyword][i]);
+      let _schema = schema[keyword][i];
+      if(_schema.$ref){
+        _schema = Resolve.schema( rootSchema, _schema.$ref, rootSchema
+        );
+      }
+      const valFn = ajv.compile(_schema);
       valFn(data);
       if (dataIsValid(valFn.errors)) {
         indexOfFittingSchema = i;
@@ -968,6 +973,7 @@ export const mapStateToCombinatorRendererProps = (
   return {
     data,
     schema,
+    rootSchema,
     ...props,
     indexOfFittingSchema,
     uischemas: getUISchemas(state)
