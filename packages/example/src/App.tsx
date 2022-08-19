@@ -24,14 +24,12 @@
 */
 
 import React, { useEffect, useMemo, useState } from 'react';
-import { JsonForms, JsonFormsInitStateProps, JsonFormsReactProps } from '@jsonforms/react';
+import { JsonForms, JsonFormsInitStateProps } from '@jsonforms/react';
 import { ExampleDescription } from '@jsonforms/examples';
 import {
   JsonFormsCellRendererRegistryEntry,
   JsonFormsRendererRegistryEntry,
-  JsonSchema
 } from '@jsonforms/core';
-import { resolveRefs } from 'json-refs';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import Highlight from 'react-highlight';
 import 'highlight.js/styles/default.css';
@@ -46,28 +44,6 @@ type AppProps = {
 type Action = {
   label: string,
   apply: any
-};
-
-const ResolvedJsonForms = (
-  props: JsonFormsInitStateProps & JsonFormsReactProps
-) => {
-  const [init, setInit] = useState(false);
-  const [schema, setSchema] = useState<JsonSchema>();
-  useEffect(() => {
-    if (!props.schema) {
-      setInit(true);
-      setSchema(props.schema);
-    } else {
-      resolveRefs(props.schema).then((result) => {
-        setInit(true);
-        setSchema(result.resolved);
-      });
-    }
-  }, [props.schema]);
-  if (!init) {
-    return null;
-  }
-  return <JsonForms {...props} schema={schema} />;
 };
 
 const getProps = (example: ExampleDescription, cells?: any, renderers?: any) => {
@@ -194,7 +170,7 @@ const App = ({ examples, cells, renderers}: AppProps) => {
                 ))}
               </div>
               <div className='demo'>
-                <ResolvedJsonForms
+                <JsonForms
                   key={currentIndex}
                   {...props}
                   onChange={({ data }) => changeData(data)}
