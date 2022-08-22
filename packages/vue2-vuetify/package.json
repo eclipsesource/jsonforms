@@ -48,8 +48,8 @@
     "v-mask": "^2.3.0"
   },
   "peerDependencies": {
-    "@jsonforms/core": "3.0.0-rc.0",
-    "@jsonforms/vue2": "3.0.0-rc.0",
+    "@jsonforms/core": "3.0.0-rc.1",
+    "@jsonforms/vue2": "3.0.0-rc.1",
     "@mdi/font": "^5.9.55",
     "vue": "^2.7.0",
     "vuetify": "^2.4.0"
@@ -58,8 +58,8 @@
     "@babel/core": "^7.14.6",
     "@babel/preset-env": "^7.14.7",
     "@babel/preset-typescript": "^7.14.5",
-    "@jsonforms/core": "3.0.0-rc.0",
-    "@jsonforms/vue2": "3.0.0-rc.0",
+    "@jsonforms/core": "3.0.0-rc.1",
+    "@jsonforms/vue2": "3.0.0-rc.1",
     "@mdi/font": "^5.9.55",
     "@rollup/plugin-babel": "^5.3.0",
     "@rollup/plugin-node-resolve": "^9.0.0",
