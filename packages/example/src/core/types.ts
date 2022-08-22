@@ -1,4 +1,8 @@
-import { UISchemaElement, JsonSchema } from '@jsonforms/core';
+import {
+  UISchemaElement,
+  JsonSchema,
+  JsonFormsRendererRegistryEntry,
+} from '@jsonforms/core';
 
 export type Example = {
   id: string;
@@ -7,6 +11,7 @@ export type Example = {
     schema?: JsonSchema;
     uischema?: UISchemaElement;
     data: Record<string, any>;
+    renderers?: JsonFormsRendererRegistryEntry[];
   };
 };
 

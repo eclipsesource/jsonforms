@@ -36,17 +36,19 @@
                     </v-toolbar>
                   </v-card-title>
                   <v-divider class="mx-4"></v-divider>
-                  <demo-form
-                    :example="example"
-                    :renderers="renderers"
-                    :cells="cells"
-                    :config="config"
-                    :validationMode="validationMode"
-                    :ajv="ajv"
-                    :readonly="readonly"
-                    :locale="locale"
-                    @change="onChange"
-                  />
+                  <div class="json-forms">
+                    <demo-form
+                      :example="example"
+                      :renderers="allRenderers"
+                      :cells="cells"
+                      :config="config"
+                      :validationMode="validationMode"
+                      :ajv="ajv"
+                      :readonly="readonly"
+                      :locale="locale"
+                      @change="onChange"
+                    />
+                  </div>
                 </v-card>
               </v-tab-item>
               <v-tab-item :key="1">
@@ -182,18 +184,20 @@
         </v-snackbar>
       </v-flex>
     </v-container>
-    <demo-form
-      v-if="example != null && formonly"
-      :example="example"
-      :renderers="renderers"
-      :cells="cells"
-      :config="config"
-      :validationMode="validationMode"
-      :ajv="ajv"
-      :readonly="readonly"
-      :locale="locale"
-      @change="onChange"
-    />
+    <div class="json-forms">
+      <demo-form
+        v-if="example != null && formonly"
+        :example="example"
+        :renderers="allRenderers"
+        :cells="cells"
+        :config="config"
+        :validationMode="validationMode"
+        :ajv="ajv"
+        :readonly="readonly"
+        :locale="locale"
+        @change="onChange"
+      />
+    </div>
   </div>
 </template>
 
@@ -215,6 +219,7 @@ import {
   getMonacoModelForUri,
 } from '@/core/jsonSchemaValidation';
 import { Example } from '@/core/types';
+import type { JsonFormsRendererRegistryEntry } from '@jsonforms/core';
 
 const myStyles = mergeStyles(defaultStyles, {
   control: { root: 'my-control' },
@@ -238,6 +243,9 @@ export default {
   },
   computed: {
     renderers: sync('app/jsonforms@renderers'),
+    allRenderers(): JsonFormsRendererRegistryEntry[] {
+      return (this.example?.input.renderers ?? []).concat(this.renderers);
+    },
     cells: sync('app/jsonforms@cells'),
     config: sync('app/jsonforms@config'),
     validationMode: sync('app/jsonforms@validationMode'),
@@ -280,6 +288,7 @@ export default {
             schema: example.input.schema,
             uischema: example.input.uischema,
             data: example.input.data,
+            renderers: example.input.renderers,
           },
         };
         this.updateMonacoModels(this.example);

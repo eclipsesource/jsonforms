@@ -189,7 +189,10 @@ export const useVuetifyArrayControl = <I extends { control: any }>(
     return props && isPlainObject(props) ? props : {};
   };
 
-  const childLabelForIndex = (index: number) => {
+  const childLabelForIndex = (index: number | null) => {
+    if (index === null) {
+      return '';
+    }
     const childLabelProp =
       input.control.value.uischema.options?.childLabelProp ??
       getFirstPrimitiveProp(input.control.value.schema);

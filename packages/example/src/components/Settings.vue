@@ -207,12 +207,40 @@
             <v-tooltip bottom>
               <template v-slot:activator="{ on: onTooltip }">
                 <v-switch
+                  v-model="hideArraySummaryValidation"
+                  label="Hide array summary validation"
+                  v-on="onTooltip"
+                ></v-switch>
+              </template>
+              If true, the summary of validation errors in arrays is hidden
+            </v-tooltip>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on: onTooltip }">
+                <v-switch
                   v-model="initCollapsed"
                   label="Collapse arrays initially"
                   v-on="onTooltip"
                 ></v-switch>
               </template>
               If true, arrays are not expanded initially
+            </v-tooltip>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on: onTooltip }">
+                <v-switch
+                  v-model="hideAvatar"
+                  label="Hide Array Item Avatar"
+                  v-on="onTooltip"
+                ></v-switch>
+              </template>
+              Whether the array index avatars shall be shown
             </v-tooltip>
           </v-col>
         </v-row>
@@ -230,20 +258,6 @@
             </v-col>
           </v-row>
         </v-container>
-        <v-row>
-          <v-col>
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on: onTooltip }">
-                <v-switch
-                  v-model="hideAvatar"
-                  label="Hide Array Item Avatar"
-                  v-on="onTooltip"
-                ></v-switch>
-              </template>
-              Whether the array index avatars shall be shown
-            </v-tooltip>
-          </v-col>
-        </v-row>
       </v-container>
 
       <v-divider />
@@ -269,6 +283,9 @@ export default {
     readonly: sync('app/jsonforms@readonly'),
     locale: sync('app/jsonforms@locale'),
     hideAvatar: sync('app/jsonforms@config.hideAvatar'),
+    hideArraySummaryValidation: sync(
+      'app/jsonforms@config.hideArraySummaryValidation'
+    ),
   },
   data: function () {
     return {

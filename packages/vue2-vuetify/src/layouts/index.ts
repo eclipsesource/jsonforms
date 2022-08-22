@@ -10,8 +10,17 @@ import { entry as categorizationStepperRendererEntry } from './CategorizationSte
 import { entry as groupRendererEntry } from './GroupRenderer.vue';
 import { entry as horizontalLayoutRendererEntry } from './HorizontalLayoutRenderer.vue';
 import { entry as verticalLayoutRendererEntry } from './VerticalLayoutRenderer.vue';
-import { default as VerticalLayoutRenderer } from './VerticalLayoutRenderer.vue';
 
+export {
+  arrayLayoutRendererEntry,
+  categorizationRendererEntry,
+  categorizationStepperRendererEntry,
+  groupRendererEntry,
+  horizontalLayoutRendererEntry,
+  verticalLayoutRendererEntry,
+};
+
+import { default as VerticalLayoutRenderer } from './VerticalLayoutRenderer.vue';
 export { default as ArrayLayoutRenderer } from './ArrayLayoutRenderer.vue';
 export { default as CategorizationRenderer } from './CategorizationRenderer.vue';
 export { default as CategorizationStepperRenderer } from './CategorizationStepperRenderer.vue';

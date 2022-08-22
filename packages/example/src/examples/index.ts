@@ -10,6 +10,7 @@ import { input as categorizationStepper } from './categorization-stepper';
 import { input as categorizationStepperNav } from './categorization-stepper-nav';
 import { input as control } from './control';
 import { input as controlOptions } from './control-options';
+import { input as customRenderer } from './custom-renderer';
 import { input as enumExample } from './enum';
 import { input as dateExample } from './date';
 import { input as timeExample } from './time';
@@ -106,6 +107,11 @@ export const examples = [
     id: 'categorization-stepper-nav',
     title: 'Categorization Stepper With Navigation',
     input: categorizationStepperNav,
+  },
+  {
+    id: 'custom-renderer',
+    title: 'Custom Renderer',
+    input: customRenderer,
   },
   {
     id: 'horizontal-layout',
