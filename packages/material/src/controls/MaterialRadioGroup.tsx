@@ -90,7 +90,7 @@ export const MaterialRadioGroup = (props: ControlProps & OwnPropsOfEnum) => {
         </FormLabel>
 
         <RadioGroup
-          value={props.data}
+          value={props.data ?? ''}
           onChange={onChange}
           row={true}
         >
