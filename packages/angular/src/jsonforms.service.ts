@@ -186,6 +186,10 @@ export class JsonFormsAngularService {
         }
     }
 
+    getLocale(): string | undefined {
+        return this._state.i18n?.locale;
+    }
+
     setLocale(locale: string): void {
         this._state.i18n.locale = locale;
         this.updateSubject();

@@ -25,7 +25,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 import {
-  getLocale,
   isIntegerControl,
   isNumberControl,
   or,
@@ -138,7 +137,7 @@ export class NumberControlRenderer extends JsonFormsControl {
       this.max = this.scopedSchema.maximum;
       this.multipleOf = this.scopedSchema.multipleOf || defaultStep;
       const appliedUiSchemaOptions = merge({}, props.config, this.uischema.options);
-      const currentLocale = getLocale(this.jsonFormsService.getState());
+      const currentLocale = this.jsonFormsService.getLocale();
       if (this.locale === undefined || this.locale !== currentLocale) {
         this.locale = currentLocale;
         this.numberFormat = new Intl.NumberFormat(this.locale, {
