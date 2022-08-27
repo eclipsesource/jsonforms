@@ -265,7 +265,7 @@ export interface Categorization extends UISchemaElement, Labeled {
   elements: (Category | Categorization)[];
 }
 
-export const isInternationalized = (element: unknown): element is Required<Internationalizable> =>
+export const isInternationalized = (element: any): element is Required<Internationalizable> =>
   typeof element === 'object' && element !== null && typeof (element as Internationalizable).i18n === 'string';
 
 export const isGroup = (layout: Layout): layout is GroupLayout =>
@@ -274,14 +274,14 @@ export const isGroup = (layout: Layout): layout is GroupLayout =>
 export const isLayout = (uischema: UISchemaElement): uischema is Layout =>
   (uischema as Layout).elements !== undefined;
 
-export const isScopable = (obj: unknown): obj is Scopable =>
+export const isScopable = (obj: any): obj is Scopable =>
   obj && typeof obj === 'object';
 
-export const isScoped = (obj: unknown): obj is Scoped =>
+export const isScoped = (obj: any): obj is Scoped =>
   isScopable(obj) && typeof obj.scope === 'string';
 
-export const isLabelable = (obj: unknown): obj is Labelable =>
+export const isLabelable = (obj: any): obj is Labelable =>
   obj && typeof obj === 'object';
 
-export const isLabeled = <T = never>(obj: unknown): obj is Labeled<T> =>
+export const isLabeled = <T = never>(obj: any): obj is Labeled<T> =>
   isLabelable(obj) && ['string', 'boolean'].includes(typeof obj.label);
