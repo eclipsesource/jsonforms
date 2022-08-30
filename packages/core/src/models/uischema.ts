@@ -256,7 +256,7 @@ export interface Category extends Layout, Labeled {
  * A child element may either be itself a Categorization or a Category, hence
  * the categorization element can be used to represent recursive structures like trees.
  */
-export interface Categorization extends UISchemaElement, Labeled {
+export interface Categorization extends UISchemaElement {
   type: 'Categorization';
   /**
    * The child elements of this categorization which are either of type
