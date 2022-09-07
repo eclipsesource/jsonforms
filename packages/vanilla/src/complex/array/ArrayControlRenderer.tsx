@@ -31,7 +31,7 @@ import { withVanillaControlProps } from '../../util';
 
 const { convertToValidClassName } = Helpers;
 
-const ArrayControl = ({
+export const ArrayControl = ({
   classNames,
   data,
   label,
@@ -88,33 +88,34 @@ const ArrayControl = ({
           range(0, data.length).map(index => {
             const childPath = composePaths(path, `${index}`);
             return (
-              <div key={index}><JsonFormsDispatch
-                schema={schema}
-                uischema={childUiSchema || uischema}
-                path={childPath}
-                key={childPath}
-                renderers={renderers}
-              />                
-              <div className={childControlsClass}>
-                <button
-                  className={buttonClassUp}
-              	  aria-label={`Up`}
-                  onClick={() => {
-                    moveUp(path,index)();
+              <div key={index}>
+                <JsonFormsDispatch
+                  schema={schema}
+                  uischema={childUiSchema || uischema}
+                  path={childPath}
+                  key={childPath}
+                  renderers={renderers}
+                />                
+                <div className={childControlsClass}>
+                  <button
+                    className={buttonClassUp}
+              	    aria-label={`Up`}
+                    onClick={() => {
+                      moveUp(path,index)();
                   }}>Up</button>
-                 <button
+                  <button
                     className={buttonClassDown}
-                	aria-label={`Down`}
+                    aria-label={`Down`}
                     onClick={() => {
                       moveDown(path,index)();
                   }}>Down</button>
-                 <button
-                  className={buttonClassDelete}
-              	  aria-label={`Delete`}
-                  onClick={() => {
-                	if (window.confirm('Are you sure you wish to delete this item?')) {
-                       removeItems(path,[index])();
-                    }
+                  <button
+                    className={buttonClassDelete}
+                    aria-label={`Delete`}
+                    onClick={() => {
+                      if (window.confirm('Are you sure you wish to delete this item?')) {
+                        removeItems(path,[index])();
+                      }
                   }}>Delete</button>
                 </div>
               </div>
@@ -148,7 +149,6 @@ export const ArrayControlRenderer =
         enabled,
         errors
     }: ArrayControlProps & VanillaRendererProps) => {
-
         const controlElement = uischema as ControlElement;
         const labelDescription = Helpers.createLabelDescriptionFrom(controlElement, schema);
         const label = labelDescription.show ? labelDescription.text : '';

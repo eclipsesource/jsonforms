@@ -27,9 +27,8 @@ import {
   RankedTester,
   rankWith
 } from '@jsonforms/core';
-import ArrayControlRenderer from './ArrayControlRenderer';
-
-export {  ArrayControlRenderer };
+import ArrayControlRenderer, { ArrayControl } from './ArrayControlRenderer';
+export { ArrayControlRenderer, ArrayControl };
 
 export const arrayControlTester: RankedTester = rankWith(
   4,
