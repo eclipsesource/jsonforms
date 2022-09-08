@@ -22,19 +22,115 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React from 'react';
-
-import {
-    ArrayControlProps,
-    ControlElement,
-    Helpers
-} from '@jsonforms/core';
-import { withJsonFormsArrayControlProps } from '@jsonforms/react';
-import { ArrayControl } from './ArrayControl';
-import { withVanillaControlProps } from '../../util';
+import range from 'lodash/range';
+import React, { useMemo } from 'react';
+import { ArrayControlProps, composePaths, createDefaultValue, findUISchema, Helpers, ControlElement } from '@jsonforms/core';
+import { JsonFormsDispatch,withJsonFormsArrayControlProps } from '@jsonforms/react';
 import { VanillaRendererProps } from '../../index';
+import { withVanillaControlProps } from '../../util';
 
-const ArrayControlRenderer =
+const { convertToValidClassName } = Helpers;
+
+export const ArrayControl = ({
+  classNames,
+  data,
+  label,
+  path,
+  schema,
+  errors,
+  addItem,
+  removeItems,
+  moveUp,
+  moveDown,
+  uischema,
+  uischemas,
+  getStyleAsClassName,
+  renderers,
+  rootSchema
+}: ArrayControlProps & VanillaRendererProps) => {
+	
+  const controlElement = uischema as ControlElement;
+  const childUiSchema = useMemo(
+    () => findUISchema(uischemas, schema, uischema.scope, path, undefined, uischema, rootSchema),
+    [uischemas, schema, uischema.scope, path, uischema, rootSchema]
+  );
+  const isValid = errors.length === 0;
+  const validationClass = getStyleAsClassName('array.control.validation');
+  const divClassNames = [validationClass]
+    .concat(isValid ? '' : getStyleAsClassName('array.control.validation.error'))
+    .join(' ');  
+  const buttonClassAdd = getStyleAsClassName('array.control.add');
+  const labelClass = getStyleAsClassName('array.control.label');
+  const childControlsClass = getStyleAsClassName('array.child.controls');
+  const buttonClassUp = getStyleAsClassName('array.child.controls.up');
+  const buttonClassDown = getStyleAsClassName('array.child.controls.down');
+  const buttonClassDelete = getStyleAsClassName('array.child.controls.delete');
+  const controlClass = [
+      getStyleAsClassName('array.control'),
+      convertToValidClassName(controlElement.scope)
+    ].join(' ');
+  
+  return (
+    <div className={controlClass}>
+      <header>
+        <label className={labelClass}>{label}</label>
+        <button
+            className={buttonClassAdd}
+            onClick={addItem(path, createDefaultValue(schema))}
+        >Add to {label}
+	    </button>
+      </header>
+      <div className={divClassNames}>
+        {errors}
+      </div>      
+      <div className={classNames.children}>
+        {data ? (
+          range(0, data.length).map(index => {
+            const childPath = composePaths(path, `${index}`);
+            return (
+              <div key={index}>
+                <JsonFormsDispatch
+                  schema={schema}
+                  uischema={childUiSchema || uischema}
+                  path={childPath}
+                  key={childPath}
+                  renderers={renderers}
+                />                
+                <div className={childControlsClass}>
+                  <button
+                    className={buttonClassUp}
+              	    aria-label={`Up`}
+                    onClick={() => {
+                      moveUp(path,index)();
+                  }}>Up</button>
+                  <button
+                    className={buttonClassDown}
+                    aria-label={`Down`}
+                    onClick={() => {
+                      moveDown(path,index)();
+                  }}>Down</button>
+                  <button
+                    className={buttonClassDelete}
+                    aria-label={`Delete`}
+                    onClick={() => {
+                      if (window.confirm('Are you sure you wish to delete this item?')) {
+                        removeItems(path,[index])();
+                      }
+                  }}>Delete</button>
+                </div>
+              </div>
+            );
+          })
+        ) : (
+            <p>No data</p>
+        )}
+      </div>
+    </div>
+  );
+};
+
+
+export const ArrayControlRenderer =
     ({
         schema,
         uischema,
@@ -46,12 +142,13 @@ const ArrayControlRenderer =
         getStyle,
         getStyleAsClassName,
         removeItems,
+        moveUp,
+        moveDown,        
         id,
         visible,
         enabled,
         errors
     }: ArrayControlProps & VanillaRendererProps) => {
-
         const controlElement = uischema as ControlElement;
         const labelDescription = Helpers.createLabelDescriptionFrom(controlElement, schema);
         const label = labelDescription.show ? labelDescription.text : '';
@@ -69,24 +166,26 @@ const ArrayControlRenderer =
 
         return (
             <ArrayControl
-                errors={errors}
-                getStyle={getStyle}
-                getStyleAsClassName={getStyleAsClassName}
-                removeItems={removeItems}
                 classNames={classNames}
                 data={data}
                 label={label}
                 path={path}
-                addItem={addItem}
-                uischemas={uischemas}
-                uischema={uischema}
                 schema={schema}
+                errors={errors}
+                addItem={addItem}
+                removeItems={removeItems}
+                moveUp={moveUp}
+                moveDown={moveDown}
+                uischema={uischema}
+                uischemas={uischemas}
+                getStyleAsClassName={getStyleAsClassName}
                 rootSchema={rootSchema}
                 id={id}
                 visible={visible}
                 enabled={enabled}
+                getStyle={getStyle}
             />
         );
     };
-
+    
 export default withVanillaControlProps(withJsonFormsArrayControlProps(ArrayControlRenderer));

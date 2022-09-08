@@ -416,6 +416,12 @@ jsonforms-tree>dialog>.content {
   font-weight: bold;
 }
 
+.array-control-layout.control>.children .child-controls {
+  display: flex;
+  justify-content: flex-end;
+  margin: 0 1em 0.75em 0;
+}
+
 .array-table-layout table {
   flex: 1;
   display: flex;

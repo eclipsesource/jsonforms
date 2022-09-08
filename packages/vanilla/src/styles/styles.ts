@@ -146,9 +146,29 @@ export const vanillaStyles: StyleDef[] = [
     classNames: ['validation']
   },
   {
+    name: 'array.control.add',
+    classNames: ['button-add']
+  },  
+  {
+    name: 'array.child.controls',
+    classNames: ['child-controls']
+  },
+  {
+    name: 'array.child.controls.up',
+    classNames: ['button-up']
+  },  
+  {
+    name: 'array.child.controls.down',
+    classNames: ['button-down']
+  },  
+  {
+    name: 'array.child.controls.delete',
+    classNames: ['button-delete']
+  },  
+  {
     name: 'array.control',
     classNames: ['array-control-layout', 'control']
-  },  
+  },    
   {
     name: 'input.description',
     classNames: ['input-description']
