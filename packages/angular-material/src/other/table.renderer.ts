@@ -139,10 +139,6 @@ export class TableRenderer extends JsonFormsArrayControl {
     this.removeItems = removeItems;
   }
 
-  isEnabled() {
-    return false;
-  }
-
   generateCells = (
     schema: JsonSchema,
     rowPath: string
