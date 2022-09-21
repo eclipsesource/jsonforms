@@ -28,6 +28,7 @@ import {
 import { Actions, JsonFormsI18nState, JsonFormsRendererRegistryEntry, JsonSchema, UISchemaElement, UISchemaTester, ValidationMode } from '@jsonforms/core';
 import Ajv, { ErrorObject } from 'ajv';
 import { JsonFormsAngularService, USE_STATE_VALUE } from './jsonforms.service';
+import { Config } from './config';
 @Component({
     selector: 'jsonforms',
     template: '<jsonforms-outlet></jsonforms-outlet>',
@@ -44,7 +45,7 @@ export class JsonForms implements OnChanges, OnInit {
     @Input() readonly: boolean;
     @Input() validationMode: ValidationMode;
     @Input() ajv: Ajv;
-    @Input() config: any;
+    @Input() config: Config;
     @Input() i18n: JsonFormsI18nState;
     @Input() additionalErrors: ErrorObject[];
     @Output() errors = new EventEmitter<ErrorObject[]>();
