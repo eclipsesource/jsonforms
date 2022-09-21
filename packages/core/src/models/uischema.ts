@@ -207,7 +207,7 @@ export interface HorizontalLayout extends Layout {
  * A group resembles a vertical layout, but additionally might have a label.
  * This layout is useful when grouping different elements by a certain criteria.
  */
-export interface GroupLayout extends Layout, Labelable {
+export interface GroupLayout extends Layout, Labelable, Internationalizable {
   type: 'Group';
 }
 
@@ -247,7 +247,7 @@ export interface ControlElement extends UISchemaElement, Scoped, Labelable<strin
 /**
  * The category layout.
  */
-export interface Category extends Layout, Labeled {
+export interface Category extends Layout, Labeled, Internationalizable {
   type: 'Category';
 }
 
@@ -256,7 +256,7 @@ export interface Category extends Layout, Labeled {
  * A child element may either be itself a Categorization or a Category, hence
  * the categorization element can be used to represent recursive structures like trees.
  */
-export interface Categorization extends UISchemaElement, Labeled {
+export interface Categorization extends UISchemaElement, Labeled, Internationalizable {
   type: 'Categorization';
   /**
    * The child elements of this categorization which are either of type
