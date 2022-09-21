@@ -45,6 +45,7 @@ const MaterialArrayLayoutComponent = (props: ArrayLayoutProps)=> {
     expanded === composePaths(props.path, `${index}`);
   
   const {
+    enabled,
     data,
     path,
     schema,
@@ -83,6 +84,7 @@ const MaterialArrayLayoutComponent = (props: ArrayLayoutProps)=> {
           map(range(data), index => {
             return (
               <ExpandPanelRenderer
+                enabled={enabled}
                 index={index}
                 expanded={isExpanded(index)}
                 schema={schema}

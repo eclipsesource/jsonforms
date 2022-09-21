@@ -38,6 +38,7 @@ import ArrowDownward from '@mui/icons-material/ArrowDownward';
 const iconStyle: any = { float: 'right' };
 
 interface OwnPropsOfExpandPanel {
+  enabled: boolean;
   index: number;
   path: string;
   uischema: ControlElement;
@@ -84,6 +85,7 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
   }, [labelHtmlId]);
 
   const {
+    enabled,
     childLabel,
     childPath,
     index,
@@ -191,6 +193,7 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
       </AccordionSummary>
       <AccordionDetails>
         <JsonFormsDispatch
+          enabled={enabled}
           schema={schema}
           uischema={foundUISchema}
           path={childPath}
