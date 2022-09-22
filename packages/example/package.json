@@ -1,11 +1,11 @@
 {
   "name": "@jsonforms/examples-react",
-  "version": "3.0.0-rc.1",
+  "version": "3.0.0",
   "private": true,
   "dependencies": {
-    "@jsonforms/core": "^3.0.0-rc.1",
-    "@jsonforms/examples": "^3.0.0-rc.1",
-    "@jsonforms/react": "^3.0.0-rc.1",
+    "@jsonforms/core": "^3.0.0",
+    "@jsonforms/examples": "^3.0.0",
+    "@jsonforms/react": "^3.0.0",
     "@mui/material": "^5.2.2",
     "@types/react-highlight": "^0.12.5",
     "@types/react-tabs": "^2.3.3",

@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/material-renderers",
-  "version": "3.0.0-rc.1",
+  "version": "3.0.0",
   "description": "Material Renderer Set for JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -76,8 +76,8 @@
   "peerDependencies": {
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
-    "@jsonforms/core": "3.0.0-rc.1",
-    "@jsonforms/react": "3.0.0-rc.1",
+    "@jsonforms/core": "3.0.0",
+    "@jsonforms/react": "3.0.0",
     "@mui/icons-material": "^5.0.0",
     "@mui/material": "^5.0.0",
     "@mui/x-date-pickers": "^5.0.0-beta.5"
@@ -85,8 +85,8 @@
   "devDependencies": {
     "@emotion/react": "^11.5.0",
     "@emotion/styled": "^11.3.0",
-    "@jsonforms/core": "^3.0.0-rc.1",
-    "@jsonforms/react": "^3.0.0-rc.1",
+    "@jsonforms/core": "^3.0.0",
+    "@jsonforms/react": "^3.0.0",
     "@mui/icons-material": "^5.2.0",
     "@mui/material": "^5.2.2",
     "@mui/x-date-pickers": "^5.0.0-beta.5",
