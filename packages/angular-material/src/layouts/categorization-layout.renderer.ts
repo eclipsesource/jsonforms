@@ -26,8 +26,11 @@ import {
   and,
   Categorization,
   categorizationHasCategory,
+  Category,
   defaultJsonFormsI18nState,
   deriveLabelForUISchemaElement,
+  getAjv,
+  isVisible,
   JsonFormsState,
   Labelable,
   mapStateToLayoutProps,
@@ -47,7 +50,7 @@ import { Subscription } from 'rxjs';
   template: `
     <mat-tab-group dynamicHeight="true" [fxHide]="hidden">
       <mat-tab
-        *ngFor="let category of uischema.elements; let i = index"
+        *ngFor="let category of visibleCategories; let i = index"
         [label]="categoryLabels[i]"
       >
         <div *ngFor="let element of category.elements">
@@ -61,6 +64,7 @@ export class CategorizationTabLayoutRenderer
   extends JsonFormsBaseRenderer<Categorization>
   implements OnInit, OnDestroy {
   hidden: boolean;
+  visibleCategories: (Category | Categorization)[];
   private subscription: Subscription;
   categoryLabels: string[];
 
@@ -73,7 +77,9 @@ export class CategorizationTabLayoutRenderer
       next: (state: JsonFormsState) => {
         const props = mapStateToLayoutProps(state, this.getOwnProps());
         this.hidden = !props.visible;
-        this.categoryLabels = this.uischema.elements.map(
+        this.visibleCategories =  this.uischema.elements.filter((category: Category | Categorization) =>
+          isVisible(category, props.data, undefined, getAjv(state)));
+        this.categoryLabels = this.visibleCategories.map(
           element => deriveLabelForUISchemaElement(element as Labelable<boolean>,
             state.jsonforms.i18n?.translate ?? defaultJsonFormsI18nState.translate));
       }

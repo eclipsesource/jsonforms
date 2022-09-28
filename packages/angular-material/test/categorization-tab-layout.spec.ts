@@ -271,9 +271,9 @@ describe('Categorization tab layout', () => {
           }
         ]
       };
-      getJsonFormsService(component).setUiSchema(newUischema);
       component.uischema = newUischema;
       fixture.detectChanges();
+      getJsonFormsService(component).setUiSchema(newUischema);
 
       fixture.whenRenderingDone().then(() => {
         fixture.detectChanges();
@@ -284,8 +284,7 @@ describe('Categorization tab layout', () => {
         expect(tabGroup2._tabs.length).toBe(3);
         const lastTab: MatTab = tabGroup2._tabs.last;
         expect(lastTab.isActive).toBeFalsy();
-        // there are update issues within the tests so that the new ui schema is not assigned to `this.uischema` within the renderer
-        // expect(lastTab.textLabel).toBe('quux');
+        expect(lastTab.textLabel).toBe('quux');
       });
     });
   }));
