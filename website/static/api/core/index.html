@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>JSON Forms Core</title>
-	<meta name="description" content="">
+	<title>&#x27;JSON</title>
+	<meta name="description" content="Documentation for &#x27;JSON">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/main.css">
 </head>
@@ -13,7 +13,7 @@
 	<div class="tsd-page-toolbar">
 		<div class="container">
 			<div class="table-wrap">
-				<div class="table-cell" id="tsd-search" data-index="assets/js/search.js" data-base=".">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
 					<div class="field">
 						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
 						<input id="tsd-search-field" type="text" />
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="index.html" class="title">JSON Forms Core</a>
+					<a href="index.html" class="title">&#x27;JSON</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -54,7 +54,7 @@
 					<a href="globals.html">Globals</a>
 				</li>
 			</ul>
-			<h1> JSON Forms Core</h1>
+			<h1>&#x27;JSON</h1>
 		</div>
 	</div>
 </header>
@@ -62,38 +62,51 @@
 	<div class="row">
 		<div class="col-8 col-content">
 			<div class="tsd-panel tsd-typography">
-				<a href="#jsonforms---more-forms-less-code" id="jsonforms---more-forms-less-code" style="color: inherit; text-decoration: none;">
-					<h1>JSONForms - More Forms. Less Code</h1>
+				<a href="#json-forms---more-forms-less-code" id="json-forms---more-forms-less-code" style="color: inherit; text-decoration: none;">
+					<h1>JSON Forms - More Forms. Less Code</h1>
 				</a>
-				<a href="#complex-forms-in-the-blink-of-an-eye" id="complex-forms-in-the-blink-of-an-eye" style="color: inherit; text-decoration: none;">
-					<h3>Complex Forms in the blink of an eye</h3>
-				</a>
-				<p>JSONForms eliminates the tedious task of writing fully-featured forms by hand by leveraging the capabilities of JSON, JSON Schema and Javascript.</p>
+				<p><em>Complex forms in the blink of an eye</em></p>
+				<p>JSON Forms eliminates the tedious task of writing fully-featured forms by hand by leveraging the capabilities of JSON, JSON Schema and Javascript.</p>
 				<a href="#core-package" id="core-package" style="color: inherit; text-decoration: none;">
-					<h1>Core Package</h1>
+					<h2>Core Package</h2>
 				</a>
-				<p>This is the JSONForms core package. This package provides basic functionality needed to render forms and is based on <a href="https://redux.js.org/">Redux</a>.</p>
-				<p>In order to use JSONForms Core you need to decide which UI framework you would like to use.</p>
-				<p>JSONForms currently supports <a href="https://www.npmjs.com/package/@jsonforms/react">React</a>. A proof of concept exists for <a href="https://github.com/eclipsesource/jsonforms/blob/master/packages/angular">Angular</a>.</p>
-				<p>See the <a href="https://www.npmjs.com/package/@jsonforms/examples">Example Package</a> on how to integrate JSONForms with your application.</p>
-				<p>Check <a href="https://www.npmjs.com/search?q=%40jsonforms">https://www.npmjs.com/search?q=%40jsonforms</a> for all published JSONForms packages.</p>
+				<p>This is the JSON Forms core package. It provides the basic functionality needed to render forms.</p>
+				<p>In order to use JSON Forms Core you need to decide which UI framework you would like to use.</p>
+				<p>JSON Forms currently supports <a href="https://github.com/eclipsesource/jsonforms/blob/master/packages/react">React</a>, <a href="https://github.com/eclipsesource/jsonforms/blob/master/packages/angular">Angular</a> and <a href="https://github.com/eclipsesource/jsonforms/blob/master/packages/vue">Vue</a>.</p>
+				<p>The following seeds are available:</p>
+				<ul>
+					<li><a href="https://github.com/eclipsesource/jsonforms-react-seed">React Seed</a></li>
+					<li><a href="https://github.com/eclipsesource/jsonforms-angular-seed">Angular Seed</a></li>
+					<li><a href="https://github.com/eclipsesource/jsonforms-vue-seed">Vue Seed</a></li>
+				</ul>
+				<p>See the official <a href="https://jsonforms.io/">documentation</a> and the <a href="https://github.com/eclipsesource/jsonforms/blob/master/packages/examples">Example Package</a> on how to integrate JSON Forms with your application.</p>
+				<p>Check <a href="https://www.npmjs.com/search?q=%40jsonforms">https://www.npmjs.com/search?q=%40jsonforms</a> for all published JSON Forms packages.</p>
+				<a href="#upgrading-to-json-forms-30" id="upgrading-to-json-forms-30" style="color: inherit; text-decoration: none;">
+					<h2>Upgrading to JSON Forms 3.0</h2>
+				</a>
+				<p>With version 3.0 of JSON Forms we removed <code>json-schema-ref-parser</code> from the core package.
+					This change only affects users of the React variant (Vue and Angular are not affected) and even for React only a few users will need to adjust their code.
+				To avoid issues and for more information, please have a look at our <a href="https://github.com/eclipsesource/jsonforms/blob/master/MIGRATION.md">migration guide</a>.</p>
 				<a href="#license" id="license" style="color: inherit; text-decoration: none;">
-					<h1>License</h1>
+					<h2>License</h2>
 				</a>
-				<p>The JSONForms project is licensed under the MIT License. See the <a href="https://github.com/eclipsesource/jsonforms/blob/master/LICENSE">LICENSE file</a> for more information.</p>
+				<p>The JSON Forms project is licensed under the MIT License. See the <a href="https://github.com/eclipsesource/jsonforms/blob/master/LICENSE">LICENSE file</a> for more information.</p>
 				<a href="#roadmap" id="roadmap" style="color: inherit; text-decoration: none;">
-					<h1>Roadmap</h1>
+					<h2>Roadmap</h2>
 				</a>
 				<p>Our current roadmap is available <a href="https://github.com/eclipsesource/jsonforms/blob/master/ROADMAP.md">here</a>.</p>
-				<a href="#development" id="development" style="color: inherit; text-decoration: none;">
-					<h1>Development</h1>
+				<a href="#feedback-help-and-support" id="feedback-help-and-support" style="color: inherit; text-decoration: none;">
+					<h2>Feedback, Help and Support</h2>
 				</a>
-				<p>JSONForms is developed by <a href="https://eclipsesource.com">EclipseSource</a>.
-				We are always very happy to have contributions, whether for trivial cleanups or big new features.</p>
+				<p>JSON Forms is developed by <a href="https://eclipsesource.com">EclipseSource</a>.</p>
+				<p>If you encounter any problems feel free to <a href="https://github.com/eclipsesource/jsonforms/issues/new/choose">open an issue</a> on the repo.
+					For questions and discussions please use the <a href="https://jsonforms.discourse.group">JSON Forms board</a>.
+					You can also reach us via <a href="mailto:jsonforms@eclipsesource.com?subject=JSON%20Forms">email</a>.
+				In addition, EclipseSource also offers <a href="https://jsonforms.io/support">professional support</a> for JSON Forms.</p>
 				<a href="#migration" id="migration" style="color: inherit; text-decoration: none;">
-					<h1>Migration</h1>
+					<h2>Migration</h2>
 				</a>
-				<p>If you are already using JSONForms 1, check our <a href="https://github.com/eclipsesource/jsonforms/blob/master/MIGRATION.md">migration guide</a>.</p>
+				<p>See our <a href="https://github.com/eclipsesource/jsonforms/blob/master/MIGRATION.md">migration guide</a> when updating JSON Forms.</p>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -109,7 +122,7 @@
 					<li class=" tsd-kind-enum">
 						<a href="enums/ruleeffect.html" class="tsd-kind-icon">Rule<wbr>Effect</a>
 					</li>
-					<li class=" tsd-kind-class tsd-is-not-exported">
+					<li class=" tsd-kind-class">
 						<a href="classes/gen.html" class="tsd-kind-icon">Gen</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-has-type-parameter">
@@ -136,10 +149,10 @@
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/arraylayoutprops.html" class="tsd-kind-icon">Array<wbr>Layout<wbr>Props</a>
 					</li>
-					<li class=" tsd-kind-interface">
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
 						<a href="interfaces/categorization.html" class="tsd-kind-icon">Categorization</a>
 					</li>
-					<li class=" tsd-kind-interface">
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
 						<a href="interfaces/category.html" class="tsd-kind-icon">Category</a>
 					</li>
 					<li class=" tsd-kind-interface">
@@ -182,6 +195,9 @@
 						<a href="interfaces/dispatchpropsofcontrol.html" class="tsd-kind-icon">Dispatch<wbr>Props<wbr>OfControl</a>
 					</li>
 					<li class=" tsd-kind-interface">
+						<a href="interfaces/dispatchpropsofmultienumcontrol.html" class="tsd-kind-icon">Dispatch<wbr>Props<wbr>OfMulti<wbr>Enum<wbr>Control</a>
+					</li>
+					<li class=" tsd-kind-interface">
 						<a href="interfaces/enumcellprops.html" class="tsd-kind-icon">Enum<wbr>Cell<wbr>Props</a>
 					</li>
 					<li class=" tsd-kind-interface">
@@ -190,7 +206,7 @@
 					<li class=" tsd-kind-interface tsd-has-type-parameter">
 						<a href="interfaces/formatted.html" class="tsd-kind-icon">Formatted</a>
 					</li>
-					<li class=" tsd-kind-interface">
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
 						<a href="interfaces/grouplayout.html" class="tsd-kind-icon">Group<wbr>Layout</a>
 					</li>
 					<li class=" tsd-kind-interface">
@@ -201,6 +217,9 @@
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/initactionoptions.html" class="tsd-kind-icon">Init<wbr>Action<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/internationalizable.html" class="tsd-kind-icon">Internationalizable</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/jsonformscellrendererregistryentry.html" class="tsd-kind-icon">Json<wbr>Forms<wbr>Cell<wbr>Renderer<wbr>Registry<wbr>Entry</a>
@@ -215,7 +234,7 @@
 						<a href="interfaces/jsonformsextendedstate.html" class="tsd-kind-icon">Json<wbr>Forms<wbr>Extended<wbr>State</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/jsonformslocalestate.html" class="tsd-kind-icon">Json<wbr>Forms<wbr>Locale<wbr>State</a>
+						<a href="interfaces/jsonformsi18nstate.html" class="tsd-kind-icon">Json<wbr>Forms<wbr>I18n<wbr>State</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/jsonformsprops.html" class="tsd-kind-icon">Json<wbr>Forms<wbr>Props</a>
@@ -248,7 +267,13 @@
 						<a href="interfaces/labelelement.html" class="tsd-kind-icon">Label<wbr>Element</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/labels.html" class="tsd-kind-icon">Labels</a>
+						<a href="interfaces/labelprops.html" class="tsd-kind-icon">Label<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/labelable.html" class="tsd-kind-icon">Labelable</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/labeled.html" class="tsd-kind-icon">Labeled</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/layout.html" class="tsd-kind-icon">Layout</a>
@@ -276,6 +301,9 @@
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/ownpropsofjsonformsrenderer.html" class="tsd-kind-icon">Own<wbr>Props<wbr>OfJson<wbr>Forms<wbr>Renderer</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ownpropsoflabel.html" class="tsd-kind-icon">Own<wbr>Props<wbr>OfLabel</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/ownpropsoflayout.html" class="tsd-kind-icon">Own<wbr>Props<wbr>OfLayout</a>
@@ -311,13 +339,10 @@
 						<a href="interfaces/schemabasedcondition.html" class="tsd-kind-icon">Schema<wbr>Based<wbr>Condition</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/schemaref.html" class="tsd-kind-icon">Schema<wbr>Ref</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/schemarefs.html" class="tsd-kind-icon">Schema<wbr>Refs</a>
-					</li>
-					<li class=" tsd-kind-interface">
 						<a href="interfaces/scopable.html" class="tsd-kind-icon">Scopable</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/scoped.html" class="tsd-kind-icon">Scoped</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/setajvaction.html" class="tsd-kind-icon">Set<wbr>Ajv<wbr>Action</a>
@@ -329,13 +354,10 @@
 						<a href="interfaces/setlocaleaction.html" class="tsd-kind-icon">Set<wbr>Locale<wbr>Action</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/setlocalizedschemasaction.html" class="tsd-kind-icon">Set<wbr>Localized<wbr>Schemas<wbr>Action</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/setlocalizeduischemasaction.html" class="tsd-kind-icon">Set<wbr>LocalizedUISchemas<wbr>Action</a>
-					</li>
-					<li class=" tsd-kind-interface">
 						<a href="interfaces/setschemaaction.html" class="tsd-kind-icon">Set<wbr>Schema<wbr>Action</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/settranslatoraction.html" class="tsd-kind-icon">Set<wbr>Translator<wbr>Action</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/setuischemaaction.html" class="tsd-kind-icon">SetUISchema<wbr>Action</a>
@@ -368,6 +390,9 @@
 						<a href="interfaces/statepropsofjsonformsrenderer.html" class="tsd-kind-icon">State<wbr>Props<wbr>OfJson<wbr>Forms<wbr>Renderer</a>
 					</li>
 					<li class=" tsd-kind-interface">
+						<a href="interfaces/statepropsoflabel.html" class="tsd-kind-icon">State<wbr>Props<wbr>OfLabel</a>
+					</li>
+					<li class=" tsd-kind-interface">
 						<a href="interfaces/statepropsoflayout.html" class="tsd-kind-icon">State<wbr>Props<wbr>OfLayout</a>
 					</li>
 					<li class=" tsd-kind-interface">
@@ -381,6 +406,9 @@
 					</li>
 					<li class=" tsd-kind-interface tsd-has-type-parameter">
 						<a href="interfaces/store.html" class="tsd-kind-icon">Store</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/testercontext.html" class="tsd-kind-icon">Tester<wbr>Context</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/uischemaelement.html" class="tsd-kind-icon">UISchema<wbr>Element</a>
@@ -398,6 +426,9 @@
 						<a href="interfaces/updateerrorsaction.html" class="tsd-kind-icon">Update<wbr>Errors<wbr>Action</a>
 					</li>
 					<li class=" tsd-kind-interface">
+						<a href="interfaces/updatei18naction.html" class="tsd-kind-icon">Update<wbr>I18n<wbr>Action</a>
+					</li>
+					<li class=" tsd-kind-interface">
 						<a href="interfaces/verticallayout.html" class="tsd-kind-icon">Vertical<wbr>Layout</a>
 					</li>
 					<li class=" tsd-kind-interface">
@@ -405,9 +436,6 @@
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="globals.html#combinatorkeyword" class="tsd-kind-icon">Combinator<wbr>Keyword</a>
-					</li>
-					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#combinatorprops" class="tsd-kind-icon">Combinator<wbr>Props</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="globals.html#coreactions" class="tsd-kind-icon">Core<wbr>Actions</a>
@@ -419,6 +447,12 @@
 						<a href="globals.html#dispatchpropsofcell" class="tsd-kind-icon">Dispatch<wbr>Props<wbr>OfCell</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#errortranslator" class="tsd-kind-icon">Error<wbr>Translator</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#i18nactions" class="tsd-kind-icon">I18n<wbr>Actions</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
 						<a href="globals.html#iteratecallback" class="tsd-kind-icon">Iterate<wbr>Callback</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
@@ -427,16 +461,13 @@
 					<li class=" tsd-kind-type-alias">
 						<a href="globals.html#jsonschema" class="tsd-kind-icon">Json<wbr>Schema</a>
 					</li>
-					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#localeactions" class="tsd-kind-icon">Locale<wbr>Actions</a>
-					</li>
 					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
 						<a href="globals.html#observable" class="tsd-kind-icon">Observable</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
 						<a href="globals.html#observer" class="tsd-kind-icon">Observer</a>
 					</li>
-					<li class=" tsd-kind-type-alias tsd-is-not-exported">
+					<li class=" tsd-kind-type-alias">
 						<a href="globals.html#properties" class="tsd-kind-icon">Properties</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
@@ -452,6 +483,9 @@
 						<a href="globals.html#tester" class="tsd-kind-icon">Tester</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#translator" class="tsd-kind-icon">Translator</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
 						<a href="globals.html#uischemaactions" class="tsd-kind-icon">UISchema<wbr>Actions</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
@@ -460,19 +494,22 @@
 					<li class=" tsd-kind-type-alias">
 						<a href="globals.html#unsubscribe" class="tsd-kind-icon">Unsubscribe</a>
 					</li>
-					<li class=" tsd-kind-type-alias tsd-is-not-exported">
+					<li class=" tsd-kind-type-alias">
 						<a href="globals.html#validcellreduceractions" class="tsd-kind-icon">Valid<wbr>Cell<wbr>Reducer<wbr>Actions</a>
 					</li>
-					<li class=" tsd-kind-type-alias tsd-is-not-exported">
+					<li class=" tsd-kind-type-alias">
 						<a href="globals.html#validdefaultdataactions" class="tsd-kind-icon">Valid<wbr>Default<wbr>Data<wbr>Actions</a>
 					</li>
-					<li class=" tsd-kind-type-alias tsd-is-not-exported">
+					<li class=" tsd-kind-type-alias">
 						<a href="globals.html#validrendererreduceractions" class="tsd-kind-icon">Valid<wbr>Renderer<wbr>Reducer<wbr>Actions</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="globals.html#validationmode" class="tsd-kind-icon">Validation<wbr>Mode</a>
 					</li>
-					<li class=" tsd-kind-variable tsd-is-not-exported">
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#i18njsonschema" class="tsd-kind-icon">i18n<wbr>Json<wbr>Schema</a>
+					</li>
+					<li class=" tsd-kind-variable">
 						<a href="globals.html#additional_properties" class="tsd-kind-icon">ADDITIONAL_<wbr>PROPERTIES</a>
 					</li>
 					<li class=" tsd-kind-variable">
@@ -505,7 +542,7 @@
 					<li class=" tsd-kind-variable">
 						<a href="globals.html#remove_ui_schema" class="tsd-kind-icon">REMOVE_<wbr>UI_<wbr>SCHEMA</a>
 					</li>
-					<li class=" tsd-kind-variable tsd-is-not-exported">
+					<li class=" tsd-kind-variable">
 						<a href="globals.html#required_properties" class="tsd-kind-icon">REQUIRED_<wbr>PROPERTIES</a>
 					</li>
 					<li class=" tsd-kind-variable">
@@ -518,13 +555,10 @@
 						<a href="globals.html#set_locale" class="tsd-kind-icon">SET_<wbr>LOCALE</a>
 					</li>
 					<li class=" tsd-kind-variable">
-						<a href="globals.html#set_localized_schemas" class="tsd-kind-icon">SET_<wbr>LOCALIZED_<wbr>SCHEMAS</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#set_localized_uischemas" class="tsd-kind-icon">SET_<wbr>LOCALIZED_<wbr>UISCHEMAS</a>
-					</li>
-					<li class=" tsd-kind-variable">
 						<a href="globals.html#set_schema" class="tsd-kind-icon">SET_<wbr>SCHEMA</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="globals.html#set_translator" class="tsd-kind-icon">SET_<wbr>TRANSLATOR</a>
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="globals.html#set_uischema" class="tsd-kind-icon">SET_<wbr>UISCHEMA</a>
@@ -542,10 +576,13 @@
 						<a href="globals.html#update_errors" class="tsd-kind-icon">UPDATE_<wbr>ERRORS</a>
 					</li>
 					<li class=" tsd-kind-variable">
+						<a href="globals.html#update_i18n" class="tsd-kind-icon">UPDATE_<wbr><wbr>I18N</a>
+					</li>
+					<li class=" tsd-kind-variable">
 						<a href="globals.html#validate" class="tsd-kind-icon">VALIDATE</a>
 					</li>
-					<li class=" tsd-kind-variable tsd-is-not-exported">
-						<a href="globals.html#badptrtokenregex" class="tsd-kind-icon">bad<wbr>Ptr<wbr>Token<wbr>Regex</a>
+					<li class=" tsd-kind-variable">
+						<a href="globals.html#filterederrorkeywords" class="tsd-kind-icon">filtered<wbr>Error<wbr>Keywords</a>
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="globals.html#isallofcontrol" class="tsd-kind-icon">is<wbr>All<wbr>OfControl</a>
@@ -610,22 +647,16 @@
 					<li class=" tsd-kind-variable">
 						<a href="globals.html#mapdispatchtocellprops" class="tsd-kind-icon">map<wbr>Dispatch<wbr>ToCell<wbr>Props</a>
 					</li>
-					<li class=" tsd-kind-variable tsd-is-not-exported">
-						<a href="globals.html#uridetailscache" class="tsd-kind-icon">uri<wbr>Details<wbr>Cache</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-not-exported">
+					<li class=" tsd-kind-variable">
 						<a href="globals.html#usedids" class="tsd-kind-icon">used<wbr>Ids</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
+					<li class=" tsd-kind-function">
 						<a href="globals.html#addlabel" class="tsd-kind-icon">add<wbr>Label</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
-						<a href="globals.html#alwaysvalid" class="tsd-kind-icon">always<wbr>Valid</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#and" class="tsd-kind-icon">and</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
+					<li class=" tsd-kind-function">
 						<a href="globals.html#applydefaultconfiguration" class="tsd-kind-icon">apply<wbr>Default<wbr>Configuration</a>
 					</li>
 					<li class=" tsd-kind-function">
@@ -673,17 +704,23 @@
 					<li class=" tsd-kind-function">
 						<a href="globals.html#createid" class="tsd-kind-icon">create<wbr>Id</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
+					<li class=" tsd-kind-function">
 						<a href="globals.html#createlabel" class="tsd-kind-icon">create<wbr>Label</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#createlabeldescriptionfrom" class="tsd-kind-icon">create<wbr>Label<wbr>Description<wbr>From</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
+					<li class=" tsd-kind-function">
 						<a href="globals.html#createlayout" class="tsd-kind-icon">create<wbr>Layout</a>
 					</li>
 					<li class=" tsd-kind-function">
+						<a href="globals.html#decode" class="tsd-kind-icon">decode</a>
+					</li>
+					<li class=" tsd-kind-function">
 						<a href="globals.html#defaultdatareducer" class="tsd-kind-icon">default<wbr>Data<wbr>Reducer</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#defaulterrortranslator" class="tsd-kind-icon">default<wbr>Error<wbr>Translator</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#defaultmapdispatchtocontrolprops" class="tsd-kind-icon">default<wbr>Map<wbr>Dispatch<wbr>ToControl<wbr>Props</a>
@@ -691,17 +728,23 @@
 					<li class=" tsd-kind-function">
 						<a href="globals.html#defaultmapstatetoenumcellprops" class="tsd-kind-icon">default<wbr>Map<wbr>State<wbr>ToEnum<wbr>Cell<wbr>Props</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
+					<li class=" tsd-kind-function">
+						<a href="globals.html#defaulttranslator" class="tsd-kind-icon">default<wbr>Translator</a>
+					</li>
+					<li class=" tsd-kind-function">
 						<a href="globals.html#derivelabel" class="tsd-kind-icon">derive<wbr>Label</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
+					<li class=" tsd-kind-function">
+						<a href="globals.html#derivelabelforuischemaelement" class="tsd-kind-icon">derive<wbr>Label<wbr>ForUISchema<wbr>Element</a>
+					</li>
+					<li class=" tsd-kind-function">
 						<a href="globals.html#derivetypes" class="tsd-kind-icon">derive<wbr>Types</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
+					<li class=" tsd-kind-function">
 						<a href="globals.html#distinct" class="tsd-kind-icon">distinct</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
-						<a href="globals.html#encodepath" class="tsd-kind-icon">encode<wbr>Path</a>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#encode" class="tsd-kind-icon">encode</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#enumtoenumoptionmapper" class="tsd-kind-icon">enum<wbr>ToEnum<wbr>Option<wbr>Mapper</a>
@@ -718,7 +761,7 @@
 					<li class=" tsd-kind-function">
 						<a href="globals.html#evalvisibility" class="tsd-kind-icon">eval<wbr>Visibility</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
+					<li class=" tsd-kind-function">
 						<a href="globals.html#evaluatecondition" class="tsd-kind-icon">evaluate<wbr>Condition</a>
 					</li>
 					<li class=" tsd-kind-function">
@@ -731,31 +774,25 @@
 						<a href="globals.html#extractdefaultdata" class="tsd-kind-icon">extract<wbr>Default<wbr>Data</a>
 					</li>
 					<li class=" tsd-kind-function">
-						<a href="globals.html#extractrefparseroptions" class="tsd-kind-icon">extract<wbr>Ref<wbr>Parser<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-function">
 						<a href="globals.html#extractschema" class="tsd-kind-icon">extract<wbr>Schema</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#extractuischema" class="tsd-kind-icon">extract<wbr>UiSchema</a>
 					</li>
 					<li class=" tsd-kind-function">
+						<a href="globals.html#fetcherrortranslator" class="tsd-kind-icon">fetch<wbr>Error<wbr>Translator</a>
+					</li>
+					<li class=" tsd-kind-function">
 						<a href="globals.html#fetchlocale" class="tsd-kind-icon">fetch<wbr>Locale</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#fetchtranslator" class="tsd-kind-icon">fetch<wbr>Translator</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#findallrefs" class="tsd-kind-icon">find<wbr>All<wbr>Refs</a>
 					</li>
 					<li class=" tsd-kind-function">
-						<a href="globals.html#findlocalizedschema" class="tsd-kind-icon">find<wbr>Localized<wbr>Schema</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#findlocalizeduischema" class="tsd-kind-icon">find<wbr>LocalizedUISchema</a>
-					</li>
-					<li class=" tsd-kind-function">
 						<a href="globals.html#findmatchinguischema" class="tsd-kind-icon">find<wbr>MatchingUISchema</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#findrefs" class="tsd-kind-icon">find<wbr>Refs</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#finduischema" class="tsd-kind-icon">findUISchema</a>
@@ -766,8 +803,8 @@
 					<li class=" tsd-kind-function">
 						<a href="globals.html#formatis" class="tsd-kind-icon">format<wbr>Is</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
-						<a href="globals.html#fromscopable" class="tsd-kind-icon">from<wbr>Scopable</a>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#fromscoped" class="tsd-kind-icon">from<wbr>Scoped</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#generatedefaultuischema" class="tsd-kind-icon">generate<wbr>DefaultUISchema</a>
@@ -775,8 +812,11 @@
 					<li class=" tsd-kind-function">
 						<a href="globals.html#generatejsonschema" class="tsd-kind-icon">generate<wbr>Json<wbr>Schema</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
+					<li class=" tsd-kind-function">
 						<a href="globals.html#generateuischema" class="tsd-kind-icon">generateUISchema</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#getadditionalerrors" class="tsd-kind-icon">get<wbr>Additional<wbr>Errors</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#getajv" class="tsd-kind-icon">get<wbr>Ajv</a>
@@ -784,11 +824,17 @@
 					<li class=" tsd-kind-function">
 						<a href="globals.html#getcells" class="tsd-kind-icon">get<wbr>Cells</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
+					<li class=" tsd-kind-function">
+						<a href="globals.html#getcombinederrormessage" class="tsd-kind-icon">get<wbr>Combined<wbr>Error<wbr>Message</a>
+					</li>
+					<li class=" tsd-kind-function">
 						<a href="globals.html#getconditionscope" class="tsd-kind-icon">get<wbr>Condition<wbr>Scope</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#getconfig" class="tsd-kind-icon">get<wbr>Config</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#getcontrolpath" class="tsd-kind-icon">get<wbr>Control<wbr>Path</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#getdata" class="tsd-kind-icon">get<wbr>Data</a>
@@ -797,34 +843,37 @@
 						<a href="globals.html#getdefaultdata" class="tsd-kind-icon">get<wbr>Default<wbr>Data</a>
 					</li>
 					<li class=" tsd-kind-function">
+						<a href="globals.html#getdirection" class="tsd-kind-icon">get<wbr>Direction</a>
+					</li>
+					<li class=" tsd-kind-function">
 						<a href="globals.html#geterrorat" class="tsd-kind-icon">get<wbr>Error<wbr>At</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
+					<li class=" tsd-kind-function">
+						<a href="globals.html#geterrortranslator" class="tsd-kind-icon">get<wbr>Error<wbr>Translator</a>
+					</li>
+					<li class=" tsd-kind-function">
 						<a href="globals.html#geterrorsat" class="tsd-kind-icon">get<wbr>Errors<wbr>At</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
-						<a href="globals.html#getextrarefkeys" class="tsd-kind-icon">get<wbr>Extra<wbr>Ref<wbr>Keys</a>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#getfirstprimitiveprop" class="tsd-kind-icon">get<wbr>First<wbr>Primitive<wbr>Prop</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#geti18nkey" class="tsd-kind-icon">get<wbr>I18n<wbr>Key</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#geti18nkeyprefix" class="tsd-kind-icon">get<wbr>I18n<wbr>Key<wbr>Prefix</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#geti18nkeyprefixbyschema" class="tsd-kind-icon">get<wbr>I18n<wbr>Key<wbr>Prefix<wbr>BySchema</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#getinvalidproperty" class="tsd-kind-icon">get<wbr>Invalid<wbr>Property</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#getlocale" class="tsd-kind-icon">get<wbr>Locale</a>
 					</li>
 					<li class=" tsd-kind-function">
-						<a href="globals.html#getlocalizedschema" class="tsd-kind-icon">get<wbr>Localized<wbr>Schema</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#getlocalizeduischema" class="tsd-kind-icon">get<wbr>LocalizedUISchema</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
 						<a href="globals.html#getorcreateajv" class="tsd-kind-icon">get<wbr>OrCreate<wbr>Ajv</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
-						<a href="globals.html#getrefdetails" class="tsd-kind-icon">get<wbr>Ref<wbr>Details</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
-						<a href="globals.html#getrefparseroptions" class="tsd-kind-icon">get<wbr>Ref<wbr>Parser<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
-						<a href="globals.html#getreftype" class="tsd-kind-icon">get<wbr>Ref<wbr>Type</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#getrenderers" class="tsd-kind-icon">get<wbr>Renderers</a>
@@ -836,15 +885,21 @@
 						<a href="globals.html#getsuberrorsat" class="tsd-kind-icon">get<wbr>Sub<wbr>Errors<wbr>At</a>
 					</li>
 					<li class=" tsd-kind-function">
+						<a href="globals.html#gettranslator" class="tsd-kind-icon">get<wbr>Translator</a>
+					</li>
+					<li class=" tsd-kind-function">
 						<a href="globals.html#getuischemas" class="tsd-kind-icon">getUISchemas</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#getuischema" class="tsd-kind-icon">get<wbr>UiSchema</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
+					<li class=" tsd-kind-function">
 						<a href="globals.html#getvalidationmode" class="tsd-kind-icon">get<wbr>Validation<wbr>Mode</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
+					<li class=" tsd-kind-function">
+						<a href="globals.html#hasadditionalerrorsoption" class="tsd-kind-icon">has<wbr>Additional<wbr>Errors<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-function">
 						<a href="globals.html#hasajvoption" class="tsd-kind-icon">has<wbr>Ajv<wbr>Option</a>
 					</li>
 					<li class=" tsd-kind-function">
@@ -853,16 +908,13 @@
 					<li class=" tsd-kind-function">
 						<a href="globals.html#hasenablerule" class="tsd-kind-icon">has<wbr>Enable<wbr>Rule</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
-						<a href="globals.html#hasrefparseroption" class="tsd-kind-icon">has<wbr>Ref<wbr>Parser<wbr>Option</a>
-					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#hasshowrule" class="tsd-kind-icon">has<wbr>Show<wbr>Rule</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
+					<li class=" tsd-kind-function">
 						<a href="globals.html#hastype" class="tsd-kind-icon">has<wbr>Type</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
+					<li class=" tsd-kind-function">
 						<a href="globals.html#hasvalidationmodeoption" class="tsd-kind-icon">has<wbr>Validation<wbr>Mode<wbr>Option</a>
 					</li>
 					<li class=" tsd-kind-function">
@@ -871,10 +923,13 @@
 					<li class=" tsd-kind-function">
 						<a href="globals.html#init" class="tsd-kind-icon">init</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
+					<li class=" tsd-kind-function">
+						<a href="globals.html#invalidsegment" class="tsd-kind-icon">invalid<wbr>Segment</a>
+					</li>
+					<li class=" tsd-kind-function">
 						<a href="globals.html#isandcondition" class="tsd-kind-icon">is<wbr>And<wbr>Condition</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
+					<li class=" tsd-kind-function">
 						<a href="globals.html#isarrayschema" class="tsd-kind-icon">is<wbr>Array<wbr>Schema</a>
 					</li>
 					<li class=" tsd-kind-function">
@@ -883,7 +938,7 @@
 					<li class=" tsd-kind-function">
 						<a href="globals.html#iscategory" class="tsd-kind-icon">is<wbr>Category</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
+					<li class=" tsd-kind-function">
 						<a href="globals.html#iscombinator" class="tsd-kind-icon">is<wbr>Combinator</a>
 					</li>
 					<li class=" tsd-kind-function">
@@ -899,39 +954,48 @@
 						<a href="globals.html#isgroup" class="tsd-kind-icon">is<wbr>Group</a>
 					</li>
 					<li class=" tsd-kind-function">
+						<a href="globals.html#isinherentlyenabled" class="tsd-kind-icon">is<wbr>Inherently<wbr>Enabled</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#isinternationalized" class="tsd-kind-icon">is<wbr>Internationalized</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#islabelable" class="tsd-kind-icon">is<wbr>Labelable</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter">
+						<a href="globals.html#islabeled" class="tsd-kind-icon">is<wbr>Labeled</a>
+					</li>
+					<li class=" tsd-kind-function">
 						<a href="globals.html#islayout" class="tsd-kind-icon">is<wbr>Layout</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
+					<li class=" tsd-kind-function">
 						<a href="globals.html#isleafcondition" class="tsd-kind-icon">is<wbr>Leaf<wbr>Condition</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#isobjectarraywithnesting" class="tsd-kind-icon">is<wbr>Object<wbr>Array<wbr>With<wbr>Nesting</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
+					<li class=" tsd-kind-function">
 						<a href="globals.html#isobjectschema" class="tsd-kind-icon">is<wbr>Object<wbr>Schema</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
+					<li class=" tsd-kind-function">
 						<a href="globals.html#isorcondition" class="tsd-kind-icon">is<wbr>OrCondition</a>
 					</li>
 					<li class=" tsd-kind-function">
-						<a href="globals.html#isplainlabel" class="tsd-kind-icon">is<wbr>Plain<wbr>Label</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
-						<a href="globals.html#isptr" class="tsd-kind-icon">is<wbr>Ptr</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
-						<a href="globals.html#isreflike" class="tsd-kind-icon">is<wbr>Ref<wbr>Like</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
 						<a href="globals.html#isrequired" class="tsd-kind-icon">is<wbr>Required</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
+					<li class=" tsd-kind-function">
 						<a href="globals.html#isrulefulfilled" class="tsd-kind-icon">is<wbr>Rule<wbr>Fulfilled</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
+					<li class=" tsd-kind-function">
 						<a href="globals.html#isschemacondition" class="tsd-kind-icon">is<wbr>Schema<wbr>Condition</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
+					<li class=" tsd-kind-function">
+						<a href="globals.html#isscopable" class="tsd-kind-icon">is<wbr>Scopable</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#isscoped" class="tsd-kind-icon">is<wbr>Scoped</a>
+					</li>
+					<li class=" tsd-kind-function">
 						<a href="globals.html#isuniqueid" class="tsd-kind-icon">is<wbr>Unique<wbr>Id</a>
 					</li>
 					<li class=" tsd-kind-function">
@@ -940,10 +1004,10 @@
 					<li class=" tsd-kind-function">
 						<a href="globals.html#iterateschema" class="tsd-kind-icon">iterate<wbr>Schema</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
+					<li class=" tsd-kind-function">
 						<a href="globals.html#labeldescription" class="tsd-kind-icon">label<wbr>Description</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
+					<li class=" tsd-kind-function">
 						<a href="globals.html#makeid" class="tsd-kind-icon">make<wbr>Id</a>
 					</li>
 					<li class=" tsd-kind-function">
@@ -951,6 +1015,9 @@
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#mapdispatchtocontrolprops" class="tsd-kind-icon">map<wbr>Dispatch<wbr>ToControl<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#mapdispatchtomultienumprops" class="tsd-kind-icon">map<wbr>Dispatch<wbr>ToMulti<wbr>Enum<wbr>Props</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#mapstatetoallofprops" class="tsd-kind-icon">map<wbr>State<wbr>ToAll<wbr>OfProps</a>
@@ -967,7 +1034,7 @@
 					<li class=" tsd-kind-function">
 						<a href="globals.html#mapstatetocellprops" class="tsd-kind-icon">map<wbr>State<wbr>ToCell<wbr>Props</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
+					<li class=" tsd-kind-function">
 						<a href="globals.html#mapstatetocombinatorrendererprops" class="tsd-kind-icon">map<wbr>State<wbr>ToCombinator<wbr>Renderer<wbr>Props</a>
 					</li>
 					<li class=" tsd-kind-function">
@@ -986,10 +1053,19 @@
 						<a href="globals.html#mapstatetojsonformsrendererprops" class="tsd-kind-icon">map<wbr>State<wbr>ToJson<wbr>Forms<wbr>Renderer<wbr>Props</a>
 					</li>
 					<li class=" tsd-kind-function">
+						<a href="globals.html#mapstatetolabelprops" class="tsd-kind-icon">map<wbr>State<wbr>ToLabel<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-function">
 						<a href="globals.html#mapstatetolayoutprops" class="tsd-kind-icon">map<wbr>State<wbr>ToLayout<wbr>Props</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#mapstatetomasterlistitemprops" class="tsd-kind-icon">map<wbr>State<wbr>ToMaster<wbr>List<wbr>Item<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#mapstatetomultienumcontrolprops" class="tsd-kind-icon">map<wbr>State<wbr>ToMulti<wbr>Enum<wbr>Control<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#mapstatetooneofenumcellprops" class="tsd-kind-icon">map<wbr>State<wbr>ToOne<wbr>OfEnum<wbr>Cell<wbr>Props</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#mapstatetooneofenumcontrolprops" class="tsd-kind-icon">map<wbr>State<wbr>ToOne<wbr>OfEnum<wbr>Control<wbr>Props</a>
@@ -997,29 +1073,26 @@
 					<li class=" tsd-kind-function">
 						<a href="globals.html#mapstatetooneofprops" class="tsd-kind-icon">map<wbr>State<wbr>ToOne<wbr>OfProps</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
+					<li class=" tsd-kind-function">
 						<a href="globals.html#move" class="tsd-kind-icon">move</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
+					<li class=" tsd-kind-function">
 						<a href="globals.html#movedown" class="tsd-kind-icon">move<wbr>Down</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
+					<li class=" tsd-kind-function">
 						<a href="globals.html#moveup" class="tsd-kind-icon">move<wbr>Up</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#not" class="tsd-kind-icon">not</a>
 					</li>
 					<li class=" tsd-kind-function">
+						<a href="globals.html#oneoftoenumoptionmapper" class="tsd-kind-icon">one<wbr>OfTo<wbr>Enum<wbr>Option<wbr>Mapper</a>
+					</li>
+					<li class=" tsd-kind-function">
 						<a href="globals.html#optionis" class="tsd-kind-icon">option<wbr>Is</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#or" class="tsd-kind-icon">or</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
-						<a href="globals.html#parseuri" class="tsd-kind-icon">parseURI</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
-						<a href="globals.html#pathtoptr" class="tsd-kind-icon">path<wbr>ToPtr</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#rankwith" class="tsd-kind-icon">rank<wbr>With</a>
@@ -1049,16 +1122,10 @@
 						<a href="globals.html#resolveschema" class="tsd-kind-icon">resolve<wbr>Schema</a>
 					</li>
 					<li class=" tsd-kind-function">
-						<a href="globals.html#resolvesubschemas" class="tsd-kind-icon">resolve<wbr>Sub<wbr>Schemas</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
-						<a href="globals.html#retrieveresolvableschema" class="tsd-kind-icon">retrieve<wbr>Resolvable<wbr>Schema</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
-						<a href="globals.html#reuseajvforschema" class="tsd-kind-icon">reuse<wbr>Ajv<wbr>For<wbr>Schema</a>
+						<a href="globals.html#resolveschemawithsegments" class="tsd-kind-icon">resolve<wbr>Schema<wbr>With<wbr>Segments</a>
 					</li>
 					<li class=" tsd-kind-function">
-						<a href="globals.html#sanitizeerrors" class="tsd-kind-icon">sanitize<wbr>Errors</a>
+						<a href="globals.html#reuseajvforschema" class="tsd-kind-icon">reuse<wbr>Ajv<wbr>For<wbr>Schema</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#schemamatches" class="tsd-kind-icon">schema<wbr>Matches</a>
@@ -1085,25 +1152,25 @@
 						<a href="globals.html#setlocale" class="tsd-kind-icon">set<wbr>Locale</a>
 					</li>
 					<li class=" tsd-kind-function">
-						<a href="globals.html#setlocalizedschemas" class="tsd-kind-icon">set<wbr>Localized<wbr>Schemas</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#setlocalizeduischemas" class="tsd-kind-icon">set<wbr>LocalizedUISchemas</a>
-					</li>
-					<li class=" tsd-kind-function">
 						<a href="globals.html#setreadonly" class="tsd-kind-icon">set<wbr>Readonly</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
+					<li class=" tsd-kind-function">
 						<a href="globals.html#setreadonlypropertyvalue" class="tsd-kind-icon">set<wbr>Readonly<wbr>Property<wbr>Value</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#setschema" class="tsd-kind-icon">set<wbr>Schema</a>
 					</li>
 					<li class=" tsd-kind-function">
+						<a href="globals.html#settranslator" class="tsd-kind-icon">set<wbr>Translator</a>
+					</li>
+					<li class=" tsd-kind-function">
 						<a href="globals.html#setuischema" class="tsd-kind-icon">setUISchema</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#setvalidationmode" class="tsd-kind-icon">set<wbr>Validation<wbr>Mode</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#showasrequired" class="tsd-kind-icon">show<wbr>AsRequired</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#suberrorsat" class="tsd-kind-icon">sub<wbr>Errors<wbr>At</a>
@@ -1114,7 +1181,10 @@
 					<li class=" tsd-kind-function">
 						<a href="globals.html#todatapathsegments" class="tsd-kind-icon">to<wbr>Data<wbr>Path<wbr>Segments</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
+					<li class=" tsd-kind-function">
+						<a href="globals.html#transformpathtoi18nprefix" class="tsd-kind-icon">transform<wbr>Path<wbr>ToI18n<wbr>Prefix</a>
+					</li>
+					<li class=" tsd-kind-function">
 						<a href="globals.html#traverse" class="tsd-kind-icon">traverse</a>
 					</li>
 					<li class=" tsd-kind-function">
@@ -1147,16 +1217,16 @@
 					<li class=" tsd-kind-function">
 						<a href="globals.html#updateerrors" class="tsd-kind-icon">update<wbr>Errors</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
-						<a href="globals.html#validate" class="tsd-kind-icon">validate</a>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#updatei18n" class="tsd-kind-icon">update<wbr>I18n</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
-						<a href="globals.html#walk" class="tsd-kind-icon">walk</a>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#validate" class="tsd-kind-icon">validate</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#withincreasedrank" class="tsd-kind-icon">with<wbr>Increased<wbr>Rank</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
+					<li class=" tsd-kind-function">
 						<a href="globals.html#wrapinlayoutifnecessary" class="tsd-kind-icon">wrap<wbr>InLayout<wbr>IfNecessary</a>
 					</li>
 					<li class=" tsd-kind-object-literal">
@@ -1165,16 +1235,16 @@
 					<li class=" tsd-kind-object-literal">
 						<a href="globals.html#generate" class="tsd-kind-icon">Generate</a>
 					</li>
-					<li class=" tsd-kind-object-literal tsd-is-not-exported">
+					<li class=" tsd-kind-object-literal">
 						<a href="globals.html#helpers" class="tsd-kind-icon">Helpers</a>
 					</li>
-					<li class=" tsd-kind-object-literal tsd-is-not-exported">
+					<li class=" tsd-kind-object-literal">
 						<a href="globals.html#paths" class="tsd-kind-icon">Paths</a>
 					</li>
-					<li class=" tsd-kind-object-literal tsd-is-not-exported">
+					<li class=" tsd-kind-object-literal">
 						<a href="globals.html#resolve" class="tsd-kind-icon">Resolve</a>
 					</li>
-					<li class=" tsd-kind-object-literal tsd-is-not-exported">
+					<li class=" tsd-kind-object-literal">
 						<a href="globals.html#runtime" class="tsd-kind-icon">Runtime</a>
 					</li>
 					<li class=" tsd-kind-object-literal">
@@ -1183,7 +1253,10 @@
 					<li class=" tsd-kind-object-literal">
 						<a href="globals.html#controldefaultprops" class="tsd-kind-icon">control<wbr>Default<wbr>Props</a>
 					</li>
-					<li class=" tsd-kind-object-literal tsd-is-not-exported">
+					<li class=" tsd-kind-object-literal">
+						<a href="globals.html#defaultjsonformsi18nstate" class="tsd-kind-icon">default<wbr>Json<wbr>Forms<wbr>I18n<wbr>State</a>
+					</li>
+					<li class=" tsd-kind-object-literal">
 						<a href="globals.html#initstate" class="tsd-kind-icon">init<wbr>State</a>
 					</li>
 					<li class=" tsd-kind-object-literal">
@@ -1202,57 +1275,15 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
-				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
-				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
-				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
-				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
-				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
-				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
-				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
-				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
-				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
-				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
 				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
-				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
 				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
 				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
 			</ul>
 		</div>
 	</div>
@@ -1262,6 +1293,5 @@
 </div>
 <div class="overlay"></div>
 <script src="assets/js/main.js"></script>
-<script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
 </body>
 </html>

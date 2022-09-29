@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>JSON Forms Angular Material Renderers</title>
-	<meta name="description" content="">
+	<title>&#x27;JSON</title>
+	<meta name="description" content="Documentation for &#x27;JSON">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/main.css">
 </head>
@@ -13,7 +13,7 @@
 	<div class="tsd-page-toolbar">
 		<div class="container">
 			<div class="table-wrap">
-				<div class="table-cell" id="tsd-search" data-index="assets/js/search.js" data-base=".">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
 					<div class="field">
 						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
 						<input id="tsd-search-field" type="text" />
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="index.html" class="title">JSON Forms Angular Material Renderers</a>
+					<a href="index.html" class="title">&#x27;JSON</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -56,7 +56,7 @@
 					<a href="globals.html">Globals</a>
 				</li>
 			</ul>
-			<h1> JSON Forms Angular Material Renderers</h1>
+			<h1>&#x27;JSON</h1>
 		</div>
 	</div>
 </header>
@@ -64,42 +64,132 @@
 	<div class="row">
 		<div class="col-8 col-content">
 			<div class="tsd-panel tsd-typography">
-				<a href="#jsonforms---more-forms-less-code" id="jsonforms---more-forms-less-code" style="color: inherit; text-decoration: none;">
-					<h1>JSONForms - More Forms. Less Code</h1>
+				<a href="#json-forms---more-forms-less-code" id="json-forms---more-forms-less-code" style="color: inherit; text-decoration: none;">
+					<h1>JSON Forms - More Forms. Less Code</h1>
 				</a>
-				<a href="#complex-forms-in-the-blink-of-an-eye" id="complex-forms-in-the-blink-of-an-eye" style="color: inherit; text-decoration: none;">
-					<h3>Complex Forms in the blink of an eye</h3>
-				</a>
-				<p>JSONForms eliminates the tedious task of writing fully-featured forms by hand by leveraging the capabilities of JSON, JSON Schema and Javascript.</p>
+				<p><em>Complex forms in the blink of an eye</em></p>
+				<p>JSON Forms eliminates the tedious task of writing fully-featured forms by hand by leveraging the capabilities of JSON, JSON Schema and Javascript.</p>
 				<a href="#angular-material-renderers-package" id="angular-material-renderers-package" style="color: inherit; text-decoration: none;">
-					<h1>Angular Material Renderers Package</h1>
+					<h2>Angular Material Renderers Package</h2>
 				</a>
-				<p>This is the JSONForms Angular Material renderers package. This package only contains renderers and must be combined with <a href="https://github.com/eclipsesource/jsonforms/blob/master/packages/angular">JSONForms Angular</a>.</p>
-				<a href="#get-started" id="get-started" style="color: inherit; text-decoration: none;">
-					<h1>Get started</h1>
+				<p>This is the JSONForms Angular Material renderers package. This package only contains renderers and must be combined with <a href="https://github.com/eclipsesource/jsonforms/blob/master/packages/angular">JSON Forms Angular</a>.</p>
+				<p>See the official <a href="https://jsonforms.io/docs/integrations/angular">documentation</a> and the JSON Forms Angular <a href="https://github.com/eclipsesource/jsonforms-angular-seed">seed repository</a> for examples on how to integrate JSON Forms with your application.</p>
+				<p>Check <a href="https://www.npmjs.com/search?q=%40jsonforms">https://www.npmjs.com/search?q=%40jsonforms</a> for all published JSON Forms packages.</p>
+				<a href="#quick-start" id="quick-start" style="color: inherit; text-decoration: none;">
+					<h3>Quick start</h3>
 				</a>
-				<ol>
-					<li>Clone and setup repo as descriped <a href="https://github.com/eclipsesource/jsonforms">in the JSON Forms Readme</a></li>
-					<li><code>cd</code> to <code>packages/&lt;this package&gt;</code></li>
-					<li>Run <code>npm run dev</code></li>
-				</ol>
+				<p>Install JSON Forms Core, Angular and Angular Material Renderers</p>
+				<pre><code class="language-bash">npm i --save @jsonforms/core @jsonforms/angular @jsonforms/angular-material
+</code></pre>
+				<p>Use the <code>json-forms</code> component for each form you want to render and hand over the renderer set.</p>
+				<p>Example component file <code>app.component.ts</code>:</p>
+				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { Component } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@angular/core&quot;</span>;
+<span class="hljs-keyword">import</span> { angularMaterialRenderers } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@jsonforms/angular-material&quot;</span>;
+
+<span class="hljs-meta">@Component</span>({
+  <span class="hljs-attr">selector</span>: <span class="hljs-string">&quot;app-root&quot;</span>,
+  <span class="hljs-attr">template</span>: <span class="hljs-string">`&lt;jsonforms
+    [data]=&quot;data&quot;
+    [schema]=&quot;schema&quot;
+    [uischema]=&quot;uischema&quot;
+    [renderers]=&quot;renderers&quot;
+  &gt;&lt;/jsonforms&gt;`</span>,
+})
+<span class="hljs-keyword">export</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AppComponent</span> </span>{
+  renderers = angularMaterialRenderers;
+  uischema = {
+    <span class="hljs-attr">type</span>: <span class="hljs-string">&quot;VerticalLayout&quot;</span>,
+    <span class="hljs-attr">elements</span>: [
+      {
+        <span class="hljs-attr">type</span>: <span class="hljs-string">&quot;Control&quot;</span>,
+        <span class="hljs-attr">label</span>: <span class="hljs-literal">false</span>,
+        <span class="hljs-attr">scope</span>: <span class="hljs-string">&quot;#/properties/done&quot;</span>,
+      },
+      {
+        <span class="hljs-attr">type</span>: <span class="hljs-string">&quot;Control&quot;</span>,
+        <span class="hljs-attr">scope</span>: <span class="hljs-string">&quot;#/properties/name&quot;</span>,
+      },
+      {
+        <span class="hljs-attr">type</span>: <span class="hljs-string">&quot;HorizontalLayout&quot;</span>,
+        <span class="hljs-attr">elements</span>: [
+          {
+            <span class="hljs-attr">type</span>: <span class="hljs-string">&quot;Control&quot;</span>,
+            <span class="hljs-attr">scope</span>: <span class="hljs-string">&quot;#/properties/due_date&quot;</span>,
+          },
+          {
+            <span class="hljs-attr">type</span>: <span class="hljs-string">&quot;Control&quot;</span>,
+            <span class="hljs-attr">scope</span>: <span class="hljs-string">&quot;#/properties/recurrence&quot;</span>,
+          },
+        ],
+      },
+    ],
+  };
+  schema = {
+    <span class="hljs-attr">type</span>: <span class="hljs-string">&quot;object&quot;</span>,
+    <span class="hljs-attr">properties</span>: {
+      <span class="hljs-attr">name</span>: {
+        <span class="hljs-attr">type</span>: <span class="hljs-string">&quot;string&quot;</span>,
+        <span class="hljs-attr">minLength</span>: <span class="hljs-number">1</span>,
+      },
+      <span class="hljs-attr">done</span>: {
+        <span class="hljs-attr">type</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
+      },
+      <span class="hljs-attr">due_date</span>: {
+        <span class="hljs-attr">type</span>: <span class="hljs-string">&quot;string&quot;</span>,
+        <span class="hljs-attr">format</span>: <span class="hljs-string">&quot;date&quot;</span>,
+      },
+      <span class="hljs-attr">recurrence</span>: {
+        <span class="hljs-attr">type</span>: <span class="hljs-string">&quot;string&quot;</span>,
+        <span class="hljs-attr">enum</span>: [<span class="hljs-string">&quot;Never&quot;</span>, <span class="hljs-string">&quot;Daily&quot;</span>, <span class="hljs-string">&quot;Weekly&quot;</span>, <span class="hljs-string">&quot;Monthly&quot;</span>],
+      },
+    },
+    <span class="hljs-attr">required</span>: [<span class="hljs-string">&quot;name&quot;</span>, <span class="hljs-string">&quot;due_date&quot;</span>],
+  };
+  data = {};
+}
+</code></pre>
+				<p>Example module file <code>app.module.ts</code>:</p>
+				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { NgModule } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@angular/core&quot;</span>;
+<span class="hljs-keyword">import</span> { BrowserModule } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@angular/platform-browser&quot;</span>;
+<span class="hljs-keyword">import</span> { BrowserAnimationsModule } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@angular/platform-browser/animations&quot;</span>;
+<span class="hljs-keyword">import</span> { JsonFormsModule } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@jsonforms/angular&quot;</span>;
+<span class="hljs-keyword">import</span> { JsonFormsAngularMaterialModule } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@jsonforms/angular-material&quot;</span>;
+<span class="hljs-keyword">import</span> { AppComponent } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;./app.component&quot;</span>;
+
+<span class="hljs-meta">@NgModule</span>({
+  <span class="hljs-attr">declarations</span>: [AppComponent],
+  <span class="hljs-attr">imports</span>: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    JsonFormsModule,
+    JsonFormsAngularMaterialModule,
+  ],
+  <span class="hljs-attr">schemas</span>: [],
+  <span class="hljs-attr">bootstrap</span>: [AppComponent],
+})
+
+<span class="hljs-keyword">export</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AppModule</span> </span>{ }
+</code></pre>
 				<a href="#license" id="license" style="color: inherit; text-decoration: none;">
-					<h1>License</h1>
+					<h2>License</h2>
 				</a>
-				<p>The JSONForms project is licensed under the MIT License. See the <a href="https://github.com/eclipsesource/jsonforms/blob/master/LICENSE">LICENSE file</a> for more information.</p>
+				<p>The JSON Forms project is licensed under the MIT License. See the <a href="https://github.com/eclipsesource/jsonforms/blob/master/LICENSE">LICENSE file</a> for more information.</p>
 				<a href="#roadmap" id="roadmap" style="color: inherit; text-decoration: none;">
-					<h1>Roadmap</h1>
+					<h2>Roadmap</h2>
 				</a>
 				<p>Our current roadmap is available <a href="https://github.com/eclipsesource/jsonforms/blob/master/ROADMAP.md">here</a>.</p>
-				<a href="#development" id="development" style="color: inherit; text-decoration: none;">
-					<h1>Development</h1>
+				<a href="#feedback-help-and-support" id="feedback-help-and-support" style="color: inherit; text-decoration: none;">
+					<h2>Feedback, Help and Support</h2>
 				</a>
-				<p>JSONForms is developed by <a href="https://eclipsesource.com">EclipseSource</a>.
-				We are always very happy to have contributions, whether for trivial cleanups or big new features.</p>
+				<p>JSON Forms is developed by <a href="https://eclipsesource.com">EclipseSource</a>.</p>
+				<p>If you encounter any problems feel free to <a href="https://github.com/eclipsesource/jsonforms/issues/new/choose">open an issue</a> on the repo.
+					For questions and discussions please use the <a href="https://jsonforms.discourse.group">JSON Forms board</a>.
+					You can also reach us via <a href="mailto:jsonforms@eclipsesource.com?subject=JSON%20Forms">email</a>.
+				In addition, EclipseSource also offers <a href="https://jsonforms.io/support">professional support</a> for JSON Forms.</p>
 				<a href="#migration" id="migration" style="color: inherit; text-decoration: none;">
-					<h1>Migration</h1>
+					<h2>Migration</h2>
 				</a>
-				<p>If you are already using JSONForms 1, check our <a href="https://github.com/eclipsesource/jsonforms/blob/master/MIGRATION.md">migration guide</a>.</p>
+				<p>See our <a href="https://github.com/eclipsesource/jsonforms/blob/master/MIGRATION.md">migration guide</a> when updating JSON Forms.</p>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -172,10 +262,10 @@
 					<li class=" tsd-kind-class">
 						<a href="classes/verticallayoutrenderer.html" class="tsd-kind-icon">Vertical<wbr>Layout<wbr>Renderer</a>
 					</li>
-					<li class=" tsd-kind-interface tsd-is-not-exported">
+					<li class=" tsd-kind-interface">
 						<a href="interfaces/columndescription.html" class="tsd-kind-icon">Column<wbr>Description</a>
 					</li>
-					<li class=" tsd-kind-interface tsd-is-not-exported">
+					<li class=" tsd-kind-interface">
 						<a href="interfaces/ownpropsofautocomplete.html" class="tsd-kind-icon">Own<wbr>Props<wbr>OfAuto<wbr>Complete</a>
 					</li>
 					<li class=" tsd-kind-variable">
@@ -226,7 +316,7 @@
 					<li class=" tsd-kind-variable">
 						<a href="globals.html#horizontallayouttester" class="tsd-kind-icon">horizontal<wbr>Layout<wbr>Tester</a>
 					</li>
-					<li class=" tsd-kind-variable tsd-is-not-exported">
+					<li class=" tsd-kind-variable">
 						<a href="globals.html#keywords" class="tsd-kind-icon">keywords</a>
 					</li>
 					<li class=" tsd-kind-variable">
@@ -235,11 +325,11 @@
 					<li class=" tsd-kind-variable">
 						<a href="globals.html#verticallayouttester" class="tsd-kind-icon">vertical<wbr>Layout<wbr>Tester</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
+					<li class=" tsd-kind-function">
 						<a href="globals.html#controlwithoutlabel" class="tsd-kind-icon">control<wbr>Without<wbr>Label</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
-						<a href="globals.html#mapstatetoprops" class="tsd-kind-icon">map<wbr>State<wbr>ToProps</a>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#mapstatetovisible" class="tsd-kind-icon">map<wbr>State<wbr>ToVisible</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#removeschemakeywords" class="tsd-kind-icon">remove<wbr>Schema<wbr>Keywords</a>
@@ -254,57 +344,24 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
-				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
-				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
-				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
-				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
-				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
-				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
-				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
-				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
-				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
-				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
-				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
 				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
 				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
 				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
 				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
 				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
 			</ul>
 		</div>
 	</div>
@@ -314,6 +371,5 @@
 </div>
 <div class="overlay"></div>
 <script src="assets/js/main.js"></script>
-<script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
 </body>
 </html>

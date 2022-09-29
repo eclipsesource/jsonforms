@@ -100,7 +100,7 @@ const Code = (props) => {
 }
 
 export const Demo = (props) => {
-  const { data: inputData, schema, uischema, id } = props;
+  const { data: inputData, schema, uischema, id, i18n } = props;
   const [data, setData] = useState(inputData);
 
   const classes = demoStyles();
@@ -122,6 +122,7 @@ export const Demo = (props) => {
                 renderers={materialRenderers}
                 cells={materialCells}
                 onChange={({ data }) => setData(data)}
+                i18n= {i18n}
                 {...props}
               />
             </ThemeProvider>
