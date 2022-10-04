@@ -145,3 +145,41 @@ Now default values within the schema file can be used:
   "default": "Max"
 }
 ```
+## How can I use multipleOf with values smaller than 1?
+
+JSON Forms uses AJV for the validation of data.
+By default, the `multipleOf` option of AJV only works with integers.
+If you are using fractional dividers, you also need to set the `multipleOfPrecision` option in AJV and pass your AJV instance to JSON Forms.
+To create the AJV instance with suitable options, you can call the `createAjv(options)` method exported by JSON Forms Core.
+AJV suggests setting the `multipleOfPrecision` to some positive integer N using this formula:
+
+`Math.abs(Math.round(multipleOf) - multipleOf) < 1e-N`
+
+In the following example `multipleOf` is set to `0.1` and `multipleOfPrecision` is set to `2`.
+
+```js
+const schema = {
+    price: {
+      type: 'number',
+      multipleOf: 0.1
+    },
+};
+```
+
+
+```js
+import { createAjv } from '@jsonforms/core';
+import Ajv from 'ajv';
+
+const [ajvInstance] = useState<Ajv>(createAjv({ multipleOfPrecision: 2 }));
+
+<JsonForms
+  data={data}
+  schema={schema}
+  uischema={uischema}
+  renderers={renderers}
+  cells={cells}
+  onChange={({ errors, data }) => setData(data)}
+  ajv={ajvInstance}
+/>
+```
