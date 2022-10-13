@@ -44,6 +44,10 @@ Alternatively you can also clone the [seed app](https://github.com/eclipsesource
 
   npm install --save @mui/material
   npm install --save @mui/icons-material
+  npm install --save @mui/x-date-pickers
+
+  npm install --save @emotion/styled
+  npm install --save @emotion/react 
   ```
 
 3. Switch to the `src` directory and open `App.js` (`App.tsx` when using typescript) with an editor of your choice.
@@ -89,7 +93,7 @@ Alternatively you can also clone the [seed app](https://github.com/eclipsesource
           data={data}
           renderers={materialRenderers}
           cells={materialCells}
-          onChange={({ data, _errors }) => setData(data)}
+          onChange={({ data, errors }) => setData(data)}
         />
       </div>
     );

@@ -141,14 +141,15 @@ const uischema = {
   ],
 };
 
-const data = {};
-
 const InterLinkedForms = () => {
+  const [data, setData] = useState({});
+
   return (
     <JsonForms
+      data={data}
+      onChange={({ errors, data }) => setData(data)}
       schema={schema}
       uischema={uischema}
-      data={data}
       renderers={materialRenderers}
     />
   );
@@ -214,7 +215,7 @@ const addressUISchema = {
           elements: [
             {
               type: 'Control',
-              scope: '#/properties/shippingAddress',
+              scope: '#/properties/addressId',
             },
             {
               type: 'Control',
@@ -239,14 +240,21 @@ const addressUISchema = {
     };
 
 const IndependentForms = () => {
+  const [person, setPerson] = useState({});
+  const [address, setAddress] = useState({});
+  
   return (
     <div>
       <JsonForms
+        data={person}
+        onChange={({ errors, data }) => setPerson(data)}
         schema={personSchema}
         uischema={personUISchema}
         renderers={materialRenderers}
       />
       <JsonForms
+        data={address}
+        onChange={({ errors, data }) => setAddress(data)}
         schema={addressSchema}
         uischema={addressUISchema}
         renderers={materialRenderers}
