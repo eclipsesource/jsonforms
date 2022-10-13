@@ -10,6 +10,7 @@ module.exports = {
       items: ['uischema/uischema', 'uischema/controls', 'uischema/layouts', 'uischema/rules'],
     },
     'labels',
+    'i18n',
     'renderer-sets',
     'ref-resolving',
     'readonly',
