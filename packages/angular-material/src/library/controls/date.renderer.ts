@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { isDateControl, RankedTester, rankWith } from '@jsonforms/core';
 import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 
@@ -66,12 +67,14 @@ import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 })
 export class DateControlRenderer extends JsonFormsControl {
   focused = false;
-
-  constructor(jsonformsService: JsonFormsAngularService) {
+  private datePipe: DatePipe;
+  constructor(jsonformsService: JsonFormsAngularService, datePipe: DatePipe) {
     super(jsonformsService);
+    this.datePipe = datePipe;
   }
 
-  getEventValue = (event: any) => event.value.toISOString().substr(0, 10);
+  getEventValue = (event: any) =>
+    this.datePipe.transform(event.value, 'yyyy-MM-dd');
 }
 
 export const DateControlRendererTester: RankedTester = rankWith(
