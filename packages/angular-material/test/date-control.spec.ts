@@ -42,6 +42,7 @@ import { DateControlRenderer, DateControlRendererTester } from '../src';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { JsonFormsAngularService } from '@jsonforms/angular';
 import { createTesterContext } from './util';
+import { DatePipe } from '@angular/common';
 
 const data = { foo: '2018-01-01' };
 const schema: JsonSchema = {
@@ -72,7 +73,7 @@ const imports = [
   ReactiveFormsModule,
   FlexLayoutModule
 ];
-const providers = [JsonFormsAngularService];
+const providers = [JsonFormsAngularService, DatePipe];
 const componentUT: any = DateControlRenderer;
 const errorTest: ErrorTestExpectation = {
   errorInstance: MatError,

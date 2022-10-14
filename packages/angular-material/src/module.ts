@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
 import {
@@ -155,6 +155,6 @@ import { ArrayLayoutRenderer } from './layouts/array-layout.renderer';
     MatAutocompleteModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  providers: []
+  providers: [DatePipe]
 })
 export class JsonFormsAngularMaterialModule { }
