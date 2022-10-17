@@ -48,7 +48,6 @@ import {
 @Component({
   selector: 'TableRenderer',
   template: `
-
     <table
       mat-table
       [dataSource]="data"
@@ -58,17 +57,19 @@ import {
       <ng-container matColumnDef="action">
         <tr>
           <th mat-header-cell *matHeaderCellDef>
-            <button mat-icon-button color="primary" (click)="add()" [disabled]="!isEnabled()" title="Add"><mat-icon>add</mat-icon></button>
+            <button mat-button color="primary" (click)="add()" [disabled]="!isEnabled()" matTooltip="Add"><mat-icon>add</mat-icon></button>
           </th>
         </tr>
         <tr>
-          <td mat-cell *matCellDef="let row; let i = index" style="width:20%">
+          <td mat-cell *matCellDef="let row; let i = index">
             <button
                 mat-button
                 color="warn"
                 (click)="remove(i)"
                 [disabled]="!isEnabled()"
                 matTooltipPosition="right"
+                matTooltip="Delete"
+
             >
               <mat-icon>delete</mat-icon>
             </button>
@@ -91,7 +92,9 @@ import {
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
   `,
-  styles: ['table {width: 100%;}']
+  styles: [
+      'table {width: 100%;}',
+      '.cdk-column-action { width: 5%}']
 })
 export class TableRenderer extends JsonFormsArrayControl {
   detailUiSchema: UISchemaElement;
@@ -110,6 +113,7 @@ export class TableRenderer extends JsonFormsArrayControl {
   mapAdditionalProps(props: ArrayControlProps) {
     this.items = this.generateCells(props.schema, props.path);
     this.displayedColumns = this.items.map(item => item.property);
+    console.log(this.displayedColumns, this.items );
     if (this.isEnabled()) {
       this.displayedColumns.push('action');
     }
