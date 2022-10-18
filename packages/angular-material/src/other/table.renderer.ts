@@ -69,7 +69,6 @@ import {
                 [disabled]="!isEnabled()"
                 matTooltipPosition="right"
                 matTooltip="Delete"
-
             >
               <mat-icon>delete</mat-icon>
             </button>
@@ -113,7 +112,6 @@ export class TableRenderer extends JsonFormsArrayControl {
   mapAdditionalProps(props: ArrayControlProps) {
     this.items = this.generateCells(props.schema, props.path);
     this.displayedColumns = this.items.map(item => item.property);
-    console.log(this.displayedColumns, this.items );
     if (this.isEnabled()) {
       this.displayedColumns.push('action');
     }
