@@ -4,33 +4,23 @@ import TableHead from '@mui/material/TableHead/TableHead';
 import Table from '@mui/material/Table/Table';
 import TableBody from '@mui/material/TableBody/TableBody';
 import TableRow from '@mui/material/TableRow/TableRow';
-import { makeStyles } from '@mui/styles';
-
-const useStyles = makeStyles({
-  tableSupported: {
-    backgroundColor: '#7da01f',
-    opacity: 0.5
-  },
-  tableNotSupported: {
-    opacity: 0.5
-  },
-  featureTable: {
-    ['@media only screen and (max-width: 850px)']: {
-      display: 'none'
-    },
-  }
-});
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
 
 const Supported = () => (
-  <TableCell className={useStyles().tableSupported} />
+  <TableCell style = {{ textAlign: 'center' }} >
+    <CheckIcon style = {{ color: '#187d0f' }}/>
+  </TableCell>
 );
 
 const NotSupported = () => (
-  <TableCell className={useStyles().tableNotSupported} />
+  <TableCell style = {{  textAlign: 'center' }} >
+    <CloseIcon style = {{ color: '#d40d0d' }} />
+  </TableCell>
 );
 
 export const RendererSetSchemaFeatureTable = () => (
-  <div className={useStyles().featureTable}>
+  <div>
     <h2>JSON Schema Features</h2>
     <Table>
       <TableHead>
@@ -226,7 +216,7 @@ export const RendererSetSchemaFeatureTable = () => (
 );
 
 export const RendererSetUISchemaFeatureTable = () => (
-  <div className={useStyles().featureTable}>
+  <div>
     <h2>UI Schema Features</h2>
     <Table>
       <TableHead>
