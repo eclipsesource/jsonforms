@@ -455,7 +455,7 @@ const controlRenderer = defineComponent({
         schema: this.control.schema,
         uischema: this.control.uischema,
         path: this.control.path,
-        data: this.data,
+        data: this.control.data,
         ...additionalContext,
       };
       const translation = this.t(i18nKey, undefined, context);

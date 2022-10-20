@@ -64,9 +64,8 @@ const controlRenderer = defineComponent({
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    return useVuetifyControl(
-      useJsonFormsOneOfEnumControl(props),
-      (value) => value || undefined
+    return useVuetifyControl(useJsonFormsOneOfEnumControl(props), (value) =>
+      value !== null ? value : undefined
     );
   },
 });
