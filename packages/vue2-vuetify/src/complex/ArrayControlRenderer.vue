@@ -26,7 +26,7 @@
                 (appliedOptions.restrict &&
                   arraySchema !== undefined &&
                   arraySchema.maxItems !== undefined &&
-                  control.data.length >= arraySchema.maxItems)
+                  dataLength >= arraySchema.maxItems)
               "
               @click="addButtonClick"
             >
@@ -122,9 +122,7 @@
                         elevation="0"
                         small
                         aria-label="Move down"
-                        :disabled="
-                          index >= control.data.length - 1 || !control.enabled
-                        "
+                        :disabled="index >= dataLength - 1 || !control.enabled"
                         :class="styles.arrayList.itemMoveDown"
                         @click.native="moveDownClick($event, index)"
                       >
@@ -148,7 +146,7 @@
                           (appliedOptions.restrict &&
                             arraySchema !== undefined &&
                             arraySchema.minItems !== undefined &&
-                            control.data.length <= arraySchema.minItems)
+                            dataLength <= arraySchema.minItems)
                         "
                         @click.native="removeItemsClick($event, [index])"
                       >
@@ -163,7 +161,7 @@
           </v-simple-table>
         </v-row>
       </v-container>
-      <v-container v-if="noData" :class="styles.arrayList.noData">
+      <v-container v-if="dataLength === 0" :class="styles.arrayList.noData">
         No data
       </v-container>
     </v-card-text>
@@ -247,8 +245,8 @@ const controlRenderer = defineComponent({
         this.control.rootSchema
       );
     },
-    noData(): boolean {
-      return !this.control.data || this.control.data.length === 0;
+    dataLength(): number {
+      return this.control.data ? this.control.data.length : 0;
     },
   },
   methods: {

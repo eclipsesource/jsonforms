@@ -131,8 +131,7 @@
                             class="v-expansion-panel-header__icon"
                             :aria-label="translatedLabels.moveDown"
                             :disabled="
-                              index >= control.data.length - 1 ||
-                              !control.enabled
+                              index >= dataLength - 1 || !control.enabled
                             "
                             :class="styles.arrayList.itemMoveDown"
                             @click.native="moveDownClick($event, index)"
@@ -160,7 +159,7 @@
                               (appliedOptions.restrict &&
                                 arraySchema !== undefined &&
                                 arraySchema.minItems !== undefined &&
-                                control.data.length <= arraySchema.minItems)
+                                dataLength <= arraySchema.minItems)
                             "
                             @click.stop.native="suggestToDelete = index"
                           >
@@ -187,7 +186,7 @@
           </v-expansion-panels>
         </v-row>
       </v-container>
-      <v-container v-if="noData" :class="styles.arrayList.noData">
+      <v-container v-if="dataLength === 0" :class="styles.arrayList.noData">
         No data
       </v-container>
     </v-card-text>
@@ -356,11 +355,11 @@ const controlRenderer = defineComponent({
         (this.appliedOptions.restrict &&
           this.arraySchema !== undefined &&
           this.arraySchema.maxItems !== undefined &&
-          this.control.data.length >= this.arraySchema.maxItems)
+          this.dataLength >= this.arraySchema.maxItems)
       );
     },
-    noData(): boolean {
-      return !this.control.data || this.control.data.length === 0;
+    dataLength(): number {
+      return this.control.data ? this.control.data.length : 0;
     },
     foundUISchema(): UISchemaElement {
       return findUISchema(
@@ -416,7 +415,7 @@ const controlRenderer = defineComponent({
         createDefaultValue(this.control.schema)
       )();
       if (!this.appliedOptions.collapseNewItems && this.control.data?.length) {
-        this.currentlyExpanded = this.control.data.length - 1;
+        this.currentlyExpanded = this.dataLength - 1;
       }
     },
     moveUpClick(event: Event, toMove: number): void {

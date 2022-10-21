@@ -32,7 +32,7 @@
                   (appliedOptions.restrict &&
                     arraySchema !== undefined &&
                     arraySchema.maxItems !== undefined &&
-                    control.data.length >= arraySchema.maxItems)
+                    dataLength >= arraySchema.maxItems)
                 "
               >
                 <v-icon>mdi-plus</v-icon>
@@ -43,7 +43,7 @@
         </v-toolbar>
       </v-col>
     </v-row>
-    <v-row v-if="noData" :class="styles.listWithDetail.noData">
+    <v-row v-if="dataLength === 0" :class="styles.listWithDetail.noData">
       <v-col>No data</v-col>
     </v-row>
     <v-row v-else>
@@ -130,9 +130,7 @@
                         small
                         class="ma-0"
                         aria-label="Move down"
-                        :disabled="
-                          index >= control.data.length - 1 || !control.enabled
-                        "
+                        :disabled="index >= dataLength - 1 || !control.enabled"
                         :class="styles.listWithDetail.itemMoveDown"
                         @click.native="moveDownClick($event, index)"
                       >
@@ -160,7 +158,7 @@
                           (appliedOptions.restrict &&
                             arraySchema !== undefined &&
                             arraySchema.minItems !== undefined &&
-                            control.data.length <= arraySchema.minItems)
+                            dataLength <= arraySchema.minItems)
                         "
                       >
                         <v-icon class="notranslate">mdi-delete</v-icon>
@@ -282,8 +280,8 @@ const controlRenderer = defineComponent({
     };
   },
   computed: {
-    noData(): boolean {
-      return !this.control.data || this.control.data.length === 0;
+    dataLength(): number {
+      return this.control.data ? this.control.data.length : 0;
     },
     foundUISchema(): UISchemaElement {
       return findUISchema(
