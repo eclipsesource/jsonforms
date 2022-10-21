@@ -28,6 +28,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -115,6 +116,7 @@ describe('Table', () => {
         MatCardModule,
         NoopAnimationsModule,
         MatFormFieldModule,
+        MatIconModule,
         MatInputModule,
         ReactiveFormsModule,
         FlexLayoutModule,
@@ -147,11 +149,11 @@ describe('Table', () => {
     component.ngOnInit();
     fixture.whenStable().then(() => {
       // 2 columns
-      expect(fixture.nativeElement.querySelectorAll('th').length).toBe(2);
+      expect(fixture.nativeElement.querySelectorAll('th').length).toBe(3);
       // 1 head row and 2 data rows
       expect(fixture.nativeElement.querySelectorAll('tr').length).toBe(1 + 2);
       // 4 data entries
-      expect(fixture.nativeElement.querySelectorAll('td').length).toBe(4);
+      expect(fixture.nativeElement.querySelectorAll('td').length).toBe(6);
     });
   }));
   it('renders object array on path', async(() => {
@@ -171,11 +173,11 @@ describe('Table', () => {
     component.ngOnInit();
     fixture.whenStable().then(() => {
       // 2 columns
-      expect(fixture.nativeElement.querySelectorAll('th').length).toBe(2);
+      expect(fixture.nativeElement.querySelectorAll('th').length).toBe(3);
       // 1 head row and 2 data rows
       expect(fixture.nativeElement.querySelectorAll('tr').length).toBe(1 + 2);
       // 4 data entries
-      expect(fixture.nativeElement.querySelectorAll('td').length).toBe(4);
+      expect(fixture.nativeElement.querySelectorAll('td').length).toBe(6);
     });
   }));
 
@@ -190,11 +192,11 @@ describe('Table', () => {
     component.ngOnInit();
     fixture.whenStable().then(() => {
       // 1 column
-      expect(fixture.nativeElement.querySelectorAll('th').length).toBe(1);
+      expect(fixture.nativeElement.querySelectorAll('th').length).toBe(2);
       // 1 head row and 2 data rows
       expect(fixture.nativeElement.querySelectorAll('tr').length).toBe(1 + 2);
       // 2 data entries
-      expect(fixture.nativeElement.querySelectorAll('td').length).toBe(2);
+      expect(fixture.nativeElement.querySelectorAll('td').length).toBe(4);
     });
   }));
   it('renders simple array on path', async(() => {
@@ -208,11 +210,11 @@ describe('Table', () => {
     component.ngOnInit();
     fixture.whenStable().then(() => {
       // 1 columns
-      expect(fixture.nativeElement.querySelectorAll('th').length).toBe(1);
+      expect(fixture.nativeElement.querySelectorAll('th').length).toBe(2);
       // 1 head row and 2 data rows
       expect(fixture.nativeElement.querySelectorAll('tr').length).toBe(1 + 2);
       // 2 data entries
-      expect(fixture.nativeElement.querySelectorAll('td').length).toBe(2);
+      expect(fixture.nativeElement.querySelectorAll('td').length).toBe(4);
     });
   }));
 
@@ -246,8 +248,83 @@ describe('Table', () => {
     fixture.detectChanges();
     component.ngOnInit();
     fixture.whenStable().then(() => {
+      component.add();
       expect(fixture.nativeElement.querySelectorAll('input').length).toBe(2);
       expect(fixture.nativeElement.querySelector('input').disabled).toBeFalsy();
     });
   }));
+
+  it('renderer handles removing of rows', async(() => {
+    setupMockStore(fixture, {
+      uischema: uischema1,
+      schema: schema_object1,
+      data: [
+        { foo: 'foo_1', bar: 'bar_1' },
+        { foo: 'foo_2', bar: 'bar_2' }
+      ],
+      renderers
+    });
+
+    fixture.detectChanges();
+    component.ngOnInit();
+    component.remove(0);
+    component.remove(0);
+    fixture.detectChanges();
+
+    fixture.whenStable().then(() => {
+
+      // 1 row
+      expect(fixture.nativeElement.querySelectorAll('tr').length).toBe(1 + 0);
+    });
+  }));
+
+  it('renderer handles adding of rows', async(() => {
+    setupMockStore(fixture, {
+      uischema: uischema1,
+      schema: schema_object1,
+      data: [
+        { foo: 'foo_1', bar: 'bar_1' },
+        { foo: 'foo_2', bar: 'bar_2' }
+      ],
+      renderers
+    });
+
+    fixture.detectChanges();
+    component.ngOnInit();
+
+    component.add();
+    component.add();
+    fixture.detectChanges();
+
+    fixture.whenStable().then(() => {
+      // 3 row
+      expect(fixture.nativeElement.querySelectorAll('tr').length).toBe(1 + 4);
+
+    });
+  }));
+
+  it('when disabled doesnt render `add` nor `remove` icons', async(() => {
+    setupMockStore(fixture, {
+      uischema: uischema1,
+      schema: schema_object1,
+      data: [
+        { foo: 'foo_1', bar: 'bar_1' },
+        { foo: 'foo_2', bar: 'bar_2' }
+      ],
+      renderers
+    });
+    component.disabled = true;
+    fixture.detectChanges();
+
+    component.ngOnInit();
+    fixture.whenStable().then(() => {
+      // 2 columns
+      expect(fixture.nativeElement.querySelectorAll('th').length).toBe(2);
+      // 2 rows
+      expect(fixture.nativeElement.querySelectorAll('tr').length).toBe(1 + 2);
+      // 2 data entries
+      expect(fixture.nativeElement.querySelectorAll('td').length).toBe(4);
+    });
+  }));
+
 });

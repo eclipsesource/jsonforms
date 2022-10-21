@@ -30,12 +30,12 @@ import {
 } from '@jsonforms/angular';
 import {
   ArrayControlProps,
-  ControlElement,
+  ControlElement, createDefaultValue,
   deriveTypes,
   encode,
   isObjectArrayControl,
   isPrimitiveArrayControl,
-  JsonSchema,
+  JsonSchema, mapDispatchToArrayControlProps,
   or,
   OwnPropsOfRenderer,
   Paths,
@@ -54,6 +54,27 @@ import {
       class="mat-elevation-z8"
       [trackBy]="trackElement"
     >
+      <ng-container matColumnDef="action">
+        <tr>
+          <th mat-header-cell *matHeaderCellDef>
+            <button mat-button color="primary" (click)="add()" [disabled]="!isEnabled()" matTooltip="Add"><mat-icon>add</mat-icon></button>
+          </th>
+        </tr>
+        <tr>
+          <td mat-cell *matCellDef="let row; let i = index">
+            <button
+                mat-button
+                color="warn"
+                (click)="remove(i)"
+                [disabled]="!isEnabled()"
+                matTooltipPosition="right"
+                matTooltip="Delete"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        <tr>
+      </ng-container>
       <ng-container
         *ngFor="let item of items"
         matColumnDef="{{ item.property }}"
@@ -70,13 +91,17 @@ import {
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
   `,
-  styles: ['table {width: 100%;}']
+  styles: [
+      'table {width: 100%;}',
+      '.cdk-column-action { width: 5%}']
 })
 export class TableRenderer extends JsonFormsArrayControl {
   detailUiSchema: UISchemaElement;
   displayedColumns: string[];
   items: ColumnDescription[];
   readonly columnsToIgnore = ['array', 'object'];
+  addItem: (path: string, value: any) => () => void;
+  removeItems: (path: string, toDelete: number[]) => () => void;
 
   constructor(jsonformsService: JsonFormsAngularService) {
     super(jsonformsService);
@@ -87,6 +112,9 @@ export class TableRenderer extends JsonFormsArrayControl {
   mapAdditionalProps(props: ArrayControlProps) {
     this.items = this.generateCells(props.schema, props.path);
     this.displayedColumns = this.items.map(item => item.property);
+    if (this.isEnabled()) {
+      this.displayedColumns.push('action');
+    }
   }
   getProps(index: number, props: OwnPropsOfRenderer): OwnPropsOfRenderer {
     const rowPath = Paths.compose(props.path, `${index}`);
@@ -96,6 +124,23 @@ export class TableRenderer extends JsonFormsArrayControl {
       path: rowPath
     };
   }
+
+  remove(index: number): void {
+    this.removeItems(this.propsPath, [index])();
+  }
+  add(): void {
+    this.addItem(this.propsPath, createDefaultValue(this.scopedSchema))();
+  }
+  ngOnInit() {
+    super.ngOnInit();
+
+    const { addItem, removeItems } = mapDispatchToArrayControlProps(
+        this.jsonFormsService.updateCore.bind(this.jsonFormsService)
+    );
+    this.addItem = addItem;
+    this.removeItems = removeItems;
+  }
+
   generateCells = (
     schema: JsonSchema,
     rowPath: string
