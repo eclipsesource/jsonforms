@@ -41,13 +41,15 @@ import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
         [id]="id"
         [formControl]="form"
         [matDatepicker]="datepicker"
+        (focus)="focused = true" 
+        (focusout)="focused = false"
       />
       <mat-datepicker-toggle
         matSuffix
         [for]="datepicker"
       ></mat-datepicker-toggle>
       <mat-datepicker #datepicker></mat-datepicker>
-      <mat-hint *ngIf="shouldShowUnfocusedDescription()">{{ description }}</mat-hint>
+      <mat-hint *ngIf="shouldShowUnfocusedDescription() || focused">{{ description }}</mat-hint>
       <mat-error>{{ error }}</mat-error>
     </mat-form-field>
   `,
