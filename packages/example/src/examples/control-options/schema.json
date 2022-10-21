@@ -32,10 +32,29 @@
     "toggle": {
       "type": "boolean",
       "description": "The \"toggle\" option renders boolean values as a toggle."
+    },
+    "phone": {
+      "type": "string",
+      "pattern": "^[0-9]{13}$"
+    },
+    "formattedPhone": {
+      "type": "string",
+      "pattern": "^\\([0-9]{3}\\)-[0-9]{3}-[0-9]{4}$"
+    },
+    "placeholderInfo": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "placeholder": {
+            "type": "string"
+          },
+          "format": {
+            "type": "string"
+          }
+        }
+      }
     }
   },
-  "required": [
-    "hideRequiredAsterisk",
-    "restrictText"
-  ]
+  "required": ["hideRequiredAsterisk", "restrictText", "phone"]
 }

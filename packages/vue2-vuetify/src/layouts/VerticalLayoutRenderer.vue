@@ -2,13 +2,12 @@
   <v-container
     v-if="layout.visible"
     fill-height
-    :class="`pa-0 ${styles.verticalLayout.root}`"
+    :class="`${styles.verticalLayout.root}`"
     v-bind="vuetifyProps('v-container')"
   >
     <v-row
       v-for="(element, index) in layout.uischema.elements"
       :key="`${layout.path}-${index}`"
-      no-gutters
       v-bind="vuetifyProps(`v-row[${index}]`)"
     >
       <v-col

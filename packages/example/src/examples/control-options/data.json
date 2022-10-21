@@ -3,5 +3,25 @@
   "slider": 4,
   "trimText": "abcdefg",
   "restrictText": "abcde",
-  "toggle": false
+  "toggle": false,
+  "phone": "1115554444888",
+  "formattedPhone": "(333)555-4444",
+  "placeholderInfo": [
+    {
+      "placeholder": "#",
+      "format": "Number (0-9)"
+    },
+    {
+      "placeholder": "A",
+      "format": "Letter in any case (a-z,A-Z)"
+    },
+    {
+      "placeholder": "N",
+      "format": "Number or letter (a-z,A-Z,0-9)"
+    },
+    {
+      "placeholder": "X",
+      "format": "Any symbol"
+    }
+  ]
 }

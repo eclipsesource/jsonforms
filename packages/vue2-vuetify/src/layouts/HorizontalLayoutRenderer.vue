@@ -1,7 +1,7 @@
 <template>
   <v-container
     v-if="layout.visible"
-    :class="`pa-0 ${styles.horizontalLayout.root}`"
+    :class="`${styles.horizontalLayout.root}`"
     v-bind="vuetifyProps('v-container')"
   >
     <v-row v-bind="vuetifyProps('v-row')">

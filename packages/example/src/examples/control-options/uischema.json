@@ -50,6 +50,46 @@
       "options": {
         "toggle": true
       }
+    },
+    {
+      "type": "GroupLayout",
+      "name": "Masked input",
+      "elements": [
+        {
+          "type": "Label",
+          "text": "Supported default mask replacers: (If you place value null then it will ignore the default)"
+        },
+        {
+          "type": "Control",
+          "scope": "#/properties/placeholderInfo",
+          "options": {
+            "readonly": true
+          }
+        }
+      ]
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/phone",
+      "label": "Phone (format not stored)",
+      "options": {
+        "mask": "(SSS) SSS - SSSS #SSS",
+        "maskReplacers": {
+          "S": "\\d",
+          "#": null
+        }
+      }
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/formattedPhone",
+      "label": "Phone (format is stored)",
+      "options": {
+        "placeholder": "(###)-###-####",
+        "mask": "(###)-###-####",
+        "returnMaskedValue": true
+
+      }
     }
   ]
 }
