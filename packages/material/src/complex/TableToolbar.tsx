@@ -33,7 +33,7 @@ import {
   TableRow,
   Tooltip
 } from '@mui/material';
-import { Grid, Hidden, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import ValidationIcon from './ValidationIcon';
 import NoBorderTableCell from './NoBorderTableCell';
@@ -77,14 +77,14 @@ const TableToolbar = React.memo(
             <Typography variant={'h6'}>{label}</Typography>
           </Grid>
           <Grid item>
-            <Hidden smUp={errors.length === 0}>
+            {errors.length !== 0 &&
               <Grid item>
                 <ValidationIcon
                   id='tooltip-validation'
                   errorMessages={errors}
                 />
               </Grid>
-            </Hidden>
+            }
           </Grid>
         </Grid>
       </NoBorderTableCell>
