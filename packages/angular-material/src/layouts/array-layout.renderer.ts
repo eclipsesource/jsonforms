@@ -82,7 +82,8 @@ import {
           let item of [].constructor(data);
           let idx = index;
           trackBy: trackByFn;
-          last as last
+          last as last;
+          first as first
         "
       >
         <mat-card>
@@ -90,6 +91,28 @@ import {
             <jsonforms-outlet [renderProps]="getProps(idx)"></jsonforms-outlet>
           </mat-card-content>
           <mat-card-actions *ngIf="isEnabled()">
+          <button
+              class="item-up"
+              mat-button
+              [disabled]="first"
+              (click)="up(idx)"
+              attr.aria-label="{{ this.upAriaLabel }}"
+              matTooltip="{{ this.upTooltip }}"
+              matTooltipPosition="right"
+            >
+              <mat-icon>arrow_upward</mat-icon>
+            </button>
+            <button
+              class="item-down"
+              mat-button
+              [disabled]="last"
+              (click)="down(idx)"
+              attr.aria-label="{{ this.downAriaLabel }}"
+              matTooltip="{{ this.downTooltip }}"
+              matTooltipPosition="right"
+            >
+              <mat-icon>arrow_downward</mat-icon>
+            </button>
             <button
               mat-button
               color="warn"
@@ -128,8 +151,14 @@ export class ArrayLayoutRenderer
   noDataMessage: string;
   removeTooltip: string;
   removeAriaLabel: string;
+  upTooltip: string;
+  upAriaLabel: string;
+  downTooltip: string;
+  downAriaLabel:string;
   noData: boolean;
   addItem: (path: string, value: any) => () => void;
+  moveItemUp: (path: string, index: number) => () => void;
+  moveItemDown: (path: string, index: number) => () => void;
   removeItems: (path: string, toDelete: number[]) => () => void;
   uischemas: {
     tester: UISchemaTester;
@@ -148,12 +177,20 @@ export class ArrayLayoutRenderer
   add(): void {
     this.addItem(this.propsPath, createDefaultValue(this.scopedSchema))();
   }
+  up(index: number): void {
+    this.moveItemUp(this.propsPath, index)();
+  }
+  down(index: number): void {
+    this.moveItemDown(this.propsPath, index)();
+  }
   ngOnInit() {
     super.ngOnInit();
-    const { addItem, removeItems } = mapDispatchToArrayControlProps(
+    const { addItem, removeItems, moveUp, moveDown } = mapDispatchToArrayControlProps(
       this.jsonFormsService.updateCore.bind(this.jsonFormsService)
     );
     this.addItem = addItem;
+    this.moveItemUp = moveUp;
+    this.moveItemDown = moveDown;
     this.removeItems = removeItems;
   }
   mapAdditionalProps(props: ArrayLayoutProps) {
@@ -161,6 +198,8 @@ export class ArrayLayoutRenderer
     this.uischemas = props.uischemas;
     this.addTooltip = `Add to ${this.label}`;
     this.addAriaLabel = `Add to ${this.label} button`;
+    this.upAriaLabel = `Move ${this.label} up`;
+    this.downAriaLabel = `Move ${this.label} down`;
     this.removeTooltip = `Delete`;
     this.removeAriaLabel = `Delete button`;
     this.noDataMessage = `No data`;
