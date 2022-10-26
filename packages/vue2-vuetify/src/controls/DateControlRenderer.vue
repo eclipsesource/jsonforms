@@ -50,13 +50,17 @@
               :min="minDate"
               :max="maxDate"
               :type="pickerType"
+              @click:year="onYear"
+              @input="onInput"
             >
-              <v-btn text @click="clear"> {{ clearLabel }} </v-btn>
-              <v-spacer></v-spacer>
-              <v-btn text @click="showMenu = false">
+              <v-btn v-if="showActions" text @click="clear">
+                {{ clearLabel }}
+              </v-btn>
+              <v-spacer v-if="showActions"></v-spacer>
+              <v-btn v-if="showActions" text @click="showMenu = false">
                 {{ cancelLabel }}
               </v-btn>
-              <v-btn text color="primary" @click="okHandler">
+              <v-btn v-if="showActions" text color="primary" @click="okHandler">
                 {{ okLabel }}
               </v-btn>
             </v-date-picker>
@@ -173,6 +177,9 @@ const controlRenderer = defineComponent({
       ];
     },
     pickerType(): string {
+      if (!this.dateFormat.includes('M')) {
+        return 'year';
+      }
       if (!this.dateFormat.includes('D')) {
         return 'month';
       }
@@ -241,7 +248,7 @@ const controlRenderer = defineComponent({
           ? this.appliedOptions.clearLabel
           : 'Clear';
 
-      return label;
+      return this.t(label, label);
     },
     cancelLabel(): string {
       const label =
@@ -249,14 +256,17 @@ const controlRenderer = defineComponent({
           ? this.appliedOptions.cancelLabel
           : 'Cancel';
 
-      return label;
+      return this.t(label, label);
     },
     okLabel(): string {
       const label =
         typeof this.appliedOptions.okLabel == 'string'
           ? this.appliedOptions.okLabel
           : 'OK';
-      return label;
+      return this.t(label, label);
+    },
+    showActions(): boolean {
+      return this.appliedOptions.showActions === true;
     },
   },
   methods: {
@@ -279,6 +289,22 @@ const controlRenderer = defineComponent({
     okHandler(): void {
       (this.$refs.menu as any).save(this.pickerValue);
       this.showMenu = false;
+    },
+    onYear(year: number): void {
+      if (this.pickerType === 'year') {
+        this.pickerValue = `${year}`;
+        if (this.$refs?.picker) {
+          (this.$refs.picker as any).internalActivePicker = 'YEAR';
+        }
+        if (!this.showActions) {
+          this.okHandler();
+        }
+      }
+    },
+    onInput(): void {
+      if (!this.showActions) {
+        this.okHandler();
+      }
     },
     maskFunction(value: string): (string | RegExp)[] {
       const format = this.dateFormat;

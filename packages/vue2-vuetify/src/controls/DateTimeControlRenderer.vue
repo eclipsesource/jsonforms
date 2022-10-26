@@ -73,6 +73,8 @@
                     :max="maxTime"
                     :use-seconds="useSeconds"
                     :format="ampm ? 'ampm' : '24hr'"
+                    @click:minute="onMinute"
+                    @click:second="onSecond"
                   ></v-time-picker>
                 </v-tab-item>
               </v-tabs>
@@ -97,10 +99,12 @@
                     :max="maxTime"
                     :use-seconds="useSeconds"
                     :format="ampm ? 'ampm' : '24hr'"
+                    @click:minute="onMinute"
+                    @click:second="onSecond"
                   ></v-time-picker>
                 </v-col>
               </v-row>
-              <v-card-actions>
+              <v-card-actions v-if="showActions">
                 <v-btn text @click="clear"> {{ clearLabel }} </v-btn>
                 <v-spacer></v-spacer>
                 <v-btn text @click="showMenu = false">
@@ -450,7 +454,7 @@ const controlRenderer = defineComponent({
           ? this.appliedOptions.clearLabel
           : 'Clear';
 
-      return label;
+      return this.t(label, label);
     },
     cancelLabel(): string {
       const label =
@@ -458,14 +462,17 @@ const controlRenderer = defineComponent({
           ? this.appliedOptions.cancelLabel
           : 'Cancel';
 
-      return label;
+      return this.t(label, label);
     },
     okLabel(): string {
       const label =
         typeof this.appliedOptions.okLabel == 'string'
           ? this.appliedOptions.okLabel
           : 'OK';
-      return label;
+      return this.t(label, label);
+    },
+    showActions(): boolean {
+      return this.appliedOptions.showActions === true;
     },
   },
   methods: {
@@ -497,6 +504,16 @@ const controlRenderer = defineComponent({
     okHandler(): void {
       (this.$refs.menu as any).save(this.pickerValue);
       this.showMenu = false;
+    },
+    onMinute(): void {
+      if (!this.showActions && !this.useSeconds) {
+        this.okHandler();
+      }
+    },
+    onSecond(): void {
+      if (!this.showActions && this.useSeconds) {
+        this.okHandler();
+      }
     },
     clear(): void {
       this.mask = undefined;

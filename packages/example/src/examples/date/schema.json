@@ -8,6 +8,9 @@
     "stringDate": {
       "type": "string"
     },
+    "stringYear": {
+      "type": "string"
+    },
     "stringDateFull": {
       "type": "string"
     }
