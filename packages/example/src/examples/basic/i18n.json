@@ -1,0 +1,126 @@
+{
+  "en": {
+    "name": {
+      "label": "Name",
+      "description": "The name of the person"
+    },
+    "vegetarian": {
+      "label": "Vegetarian",
+      "description": "Whether the person is a vegetarian"
+    },
+    "birth": {
+      "label": "Birth Date",
+      "description": ""
+    },
+    "nationality": {
+      "label": "Nationality",
+      "description": ""
+    },
+    "personal-data": {
+      "age": {
+        "label": "Age"
+      },
+      "driving": {
+        "label": "Driving Skill",
+        "description": "Indicating experience level"
+      }
+    },
+    "height": {
+      "label": "Height"
+    },
+    "occupation": {
+      "label": "Occupation",
+      "description": ""
+    },
+    "postal-code": {
+      "label": "Postal Code"
+    },
+    "error": {
+      "required": "field is required"
+    }
+  },
+  "de": {
+    "name": {
+      "label": "Name",
+      "description": "Der Name der Person"
+    },
+    "vegetarian": {
+      "label": "Vegetarier",
+      "description": "Isst die Person vegetarisch?"
+    },
+    "birth": {
+      "label": "Geburtsdatum",
+      "description": ""
+    },
+    "nationality": {
+      "label": "Nationalität",
+      "description": "",
+      "Other": "Andere"
+    },
+    "personal-data": {
+      "age": {
+        "label": "Alter"
+      },
+      "driving": {
+        "label": "Fahrkenntnisse",
+        "description": "Fahrerfahrung der Person"
+      }
+    },
+    "height": {
+      "label": "Größe"
+    },
+    "occupation": {
+      "label": "Beruf",
+      "description": ""
+    },
+    "postal-code": {
+      "label": "Postleitzahl"
+    },
+    "error": {
+      "required": "Pflichtfeld"
+    },
+    "Additional Information": "Zusätzliche Informationen"
+  },
+  "bg": {
+    "name": {
+      "label": "Име",
+      "description": "Името на лицето"
+    },
+    "vegetarian": {
+      "label": "Вегетарианец",
+      "description": "Дали човекът е вегетарианец"
+    },
+    "birth": {
+      "label": "Рождена дата",
+      "description": ""
+    },
+    "nationality": {
+      "label": "Националност",
+      "description": ""
+    },
+    "personal-data": {
+      "age": {
+        "label": "Възраст",
+        "description": "Моля, въведете вашата възраст."
+      },
+      "driving": {
+        "label": "Шофьорски умения",
+        "description": "Показва ниво на опит"
+      }
+    },
+    "height": {
+      "label": "Височина"
+    },
+    "occupation": {
+      "label": "Професия",
+      "description": ""
+    },
+    "postal-code": {
+      "label": "Пощенски код"
+    },
+    "error": {
+      "required": "полето е задължително"
+    },
+    "Additional Information": "Допълнителна информация"
+  }
+}

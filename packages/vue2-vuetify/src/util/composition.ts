@@ -16,7 +16,9 @@ import { computed, ComputedRef, inject, ref } from 'vue';
 import Ajv from 'ajv';
 import { provide } from 'vue';
 
-const useControlAppliedOptions = <I extends { control: any }>(input: I) => {
+export const useControlAppliedOptions = <I extends { control: any }>(
+  input: I
+) => {
   return computed(() =>
     merge(
       {},
@@ -26,7 +28,7 @@ const useControlAppliedOptions = <I extends { control: any }>(input: I) => {
   );
 };
 
-const useComputedLabel = <I extends { control: any }>(
+export const useComputedLabel = <I extends { control: any }>(
   input: I,
   appliedOptions: ComputedRef<any>
 ) => {

@@ -298,6 +298,8 @@ export default {
       locales: [
         { text: 'English (en)', value: 'en' },
         { text: 'German (de)', value: 'de' },
+        { text: 'Bulgarian (bg)', value: 'bg' },
+        { text: 'Browser Language', value: navigator.language },
       ],
       breakHorizontals: [
         { text: 'None', value: false },

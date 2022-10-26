@@ -21,7 +21,7 @@
         :clearable="hover"
         :value="control.data"
         :items="control.options"
-        item-text="label"
+        :item-text="(item) => t(item.label, item.label)"
         item-value="value"
         v-bind="vuetifyProps('v-select')"
         @change="onChange"
@@ -35,19 +35,19 @@
 <script lang="ts">
 import {
   ControlElement,
+  isEnumControl,
   JsonFormsRendererRegistryEntry,
   rankWith,
-  isEnumControl,
 } from '@jsonforms/core';
-import { defineComponent } from 'vue';
 import {
   rendererProps,
-  useJsonFormsEnumControl,
   RendererProps,
+  useJsonFormsEnumControl,
 } from '@jsonforms/vue2';
+import { defineComponent } from 'vue';
+import { VHover, VSelect } from 'vuetify/lib';
+import { useTranslator, useVuetifyControl } from '../util';
 import { default as ControlWrapper } from './ControlWrapper.vue';
-import { useVuetifyControl } from '../util';
-import { VSelect, VHover } from 'vuetify/lib';
 import { DisabledIconFocus } from './directives';
 
 const controlRenderer = defineComponent({
@@ -64,9 +64,13 @@ const controlRenderer = defineComponent({
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    return useVuetifyControl(useJsonFormsEnumControl(props), (value) =>
+    const t = useTranslator();
+
+    const control = useVuetifyControl(useJsonFormsEnumControl(props), (value) =>
       value !== null ? value : undefined
     );
+
+    return { ...control, t };
   },
 });
 

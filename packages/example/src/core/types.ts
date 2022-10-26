@@ -11,6 +11,7 @@ export type Example = {
     schema?: JsonSchema;
     uischema?: UISchemaElement;
     data: Record<string, any>;
+    i18n?: Record<string, any>;
     renderers?: JsonFormsRendererRegistryEntry[];
   };
 };

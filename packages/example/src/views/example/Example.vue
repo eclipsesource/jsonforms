@@ -11,6 +11,7 @@
               <v-tab :key="1">Schema</v-tab>
               <v-tab :key="2">UI Schema</v-tab>
               <v-tab :key="3">Data</v-tab>
+              <v-tab :key="4">Internationalization</v-tab>
               <v-tab-item :key="0">
                 <v-card>
                   <v-card-title>
@@ -173,6 +174,44 @@
                   ></monaco-editor>
                 </v-card>
               </v-tab-item>
+              <v-tab-item :key="4">
+                <v-card>
+                  <v-card-title>
+                    <v-toolbar flat>
+                      <v-toolbar-title>Internationalization</v-toolbar-title>
+                      <v-spacer></v-spacer>
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on: onTooltip }">
+                          <v-btn
+                            icon
+                            @click="reloadMonacoI18N"
+                            v-on="onTooltip"
+                          >
+                            <v-icon>mdi-reload</v-icon>
+                          </v-btn>
+                        </template>
+                        {{ `Reload Example Internationalization` }}
+                      </v-tooltip>
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on: onTooltip }">
+                          <v-btn icon @click="saveMonacoI18N" v-on="onTooltip">
+                            <v-icon>mdi-content-save</v-icon>
+                          </v-btn>
+                        </template>
+                        {{ `Apply Change To Example Data` }}
+                      </v-tooltip>
+                    </v-toolbar>
+                  </v-card-title>
+                  <v-divider class="mx-4"></v-divider>
+                  <monaco-editor
+                    :theme="$vuetify.theme.dark ? 'vs-dark' : 'vs'"
+                    height="500"
+                    language="json"
+                    v-model="monacoI18NModel"
+                    :editorBeforeMount="registerValidations"
+                  ></monaco-editor>
+                </v-card>
+              </v-tab-item>
             </v-tabs>
           </v-card-text>
         </v-card>
@@ -254,6 +293,7 @@ export default {
     monacoSchemaModel: sync('app/monaco@schemaModel'),
     monacoUiSchemaModel: sync('app/monaco@uischemaModel'),
     monacoDataModel: sync('app/monaco@dataModel'),
+    monacoI18NModel: sync('app/monaco@i18nModel'),
     locale: sync('app/jsonforms@locale'),
     formonly(): boolean {
       return this.$route.query?.view === 'form-only';
@@ -288,6 +328,7 @@ export default {
             schema: example.input.schema,
             uischema: example.input.uischema,
             data: example.input.data,
+            i18n: example.input.i18n,
             renderers: example.input.renderers,
           },
         };
@@ -422,6 +463,49 @@ export default {
         }
       }
     },
+    reloadMonacoI18N() {
+      const example = find(
+        this.examples,
+        (example) => example.id === this.$route.params.id
+      );
+
+      if (example) {
+        this.$store.set(
+          'app/monaco@i18nModel',
+          getMonacoModelForUri(
+            monaco.Uri.parse(this.toI18NUri(example.id)),
+            example.input.i18n
+              ? JSON.stringify(example.input.i18n, null, 2)
+              : ''
+          )
+        );
+        this.toast('Original example i18n loaded. Apply it to take effect.');
+      }
+    },
+    saveMonacoI18N() {
+      const model = this.monacoI18NModel as monaco.editor.ITextModel;
+      const example = this.example;
+
+      if (model && example) {
+        // do not check for monaco errors just if this is valid JSON becase we want to see when we have validation errors
+
+        const modelValue = model.getValue();
+        if (modelValue) {
+          let newJson: Record<string, any> | undefined = undefined;
+
+          try {
+            newJson = JSON.parse(modelValue);
+          } catch (error) {
+            this.toast(`Error: ${error}`);
+          }
+
+          if (newJson) {
+            example.input.i18n = newJson;
+            this.toast('New i18n applied');
+          }
+        }
+      }
+    },
     registerValidations(editor: EditorApi) {
       configureJsonSchemaValidation(editor, ['*.schema.json']);
       configureUISchemaValidation(editor, ['*.uischema.json']);
@@ -467,6 +551,13 @@ export default {
           example.input.data ? JSON.stringify(example.input.data, null, 2) : ''
         )
       );
+      this.$store.set(
+        'app/monaco@i18nModel',
+        getMonacoModelForUri(
+          monaco.Uri.parse(this.toI18NUri(example.id)),
+          example.input.i18n ? JSON.stringify(example.input.i18n, null, 2) : ''
+        )
+      );
     },
     toSchemaUri(id: string): string {
       return `${id}.schema.json`;
@@ -476,6 +567,9 @@ export default {
     },
     toDataUri(id: string): string {
       return `${id}.data.json`;
+    },
+    toI18NUri(id: string): string {
+      return `${id}.i18n.json`;
     },
     toast(message: string): void {
       this.snackbar = true;

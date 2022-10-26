@@ -121,7 +121,7 @@ export default {
       } as ResolvedSchema,
       i18n: {
         locale: this.locale,
-        translate: createTranslator(this.locale),
+        translate: createTranslator(this.locale, this.example?.input?.i18n),
       } as JsonFormsI18nState,
     };
   },
@@ -130,12 +130,19 @@ export default {
       deep: true,
       handler(newExample: Example, oldExample: Example): void {
         this.resolveSchema(newExample.input.schema);
+        this.i18n.translate = createTranslator(
+          this.locale,
+          newExample?.input?.i18n as any
+        );
       },
     },
     locale(newLocale: string): void {
       console.log('LOCALE SWITCH', newLocale);
       this.i18n.locale = newLocale;
-      this.i18n.translate = createTranslator(newLocale);
+      this.i18n.translate = createTranslator(
+        newLocale,
+        this.example?.input?.i18n as any
+      );
     },
   },
   mounted() {
