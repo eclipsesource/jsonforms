@@ -89,7 +89,7 @@ export abstract class JsonFormsAbstractControl<
   }
 
   shouldShowUnfocusedDescription(): boolean {
-    const config = this.jsonFormsService.getState().jsonforms.config;
+    const config = this.jsonFormsService.getConfig();
     const appliedUiSchemaOptions = merge({}, config, this.uischema.options);
     return !!appliedUiSchemaOptions.showUnfocusedDescription;
   }

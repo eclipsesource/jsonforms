@@ -66,6 +66,7 @@ import { GroupLayoutRenderer } from './layouts/group-layout.renderer';
 import { HorizontalLayoutRenderer } from './layouts/horizontal-layout.renderer';
 import { VerticalLayoutRenderer } from './layouts/vertical-layout.renderer';
 import { ArrayLayoutRenderer } from './layouts/array-layout.renderer';
+import { LayoutChildrenRenderPropsPipe } from './layouts';
 
 @NgModule({
   imports: [
@@ -111,7 +112,8 @@ import { ArrayLayoutRenderer } from './layouts/array-layout.renderer';
     ObjectControlRenderer,
     AutocompleteControlRenderer,
     TableRenderer,
-    ArrayLayoutRenderer
+    ArrayLayoutRenderer,
+    LayoutChildrenRenderPropsPipe
   ],
   entryComponents: [
     BooleanControlRenderer,

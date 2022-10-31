@@ -32,7 +32,7 @@ import { JsonFormsAngularService } from '@jsonforms/angular';
   template: `
     <mat-card fxLayout="column" [fxHide]="hidden">
       <mat-card-title class="mat-title">{{ label }}</mat-card-title>
-      <div *ngFor="let props of renderProps; trackBy: trackElement" fxFlex>
+      <div *ngFor="let props of uischema | layoutChildrenRenderProps: schema: path; trackBy: trackElement" fxFlex>
         <jsonforms-outlet [renderProps]="props"></jsonforms-outlet>
       </div>
     </mat-card>

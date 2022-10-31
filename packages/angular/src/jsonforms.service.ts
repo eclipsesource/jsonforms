@@ -186,6 +186,10 @@ export class JsonFormsAngularService {
         }
     }
 
+    getLocale(): string | undefined {
+        return this._state.i18n?.locale;
+    }
+
     setLocale(locale: string): void {
         this._state.i18n.locale = locale;
         this.updateSubject();
@@ -198,6 +202,10 @@ export class JsonFormsAngularService {
 
     getState(): JsonFormsState {
         return cloneDeep({ jsonforms: this._state });
+    }
+
+    getConfig(): any {
+        return cloneDeep(this._state.config)
     }
 
     refresh(): void {

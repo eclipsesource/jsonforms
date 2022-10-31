@@ -30,6 +30,7 @@ import {
   VerticalLayoutRenderer,
   verticalLayoutTester
 } from '../src/layouts/vertical-layout.renderer';
+import { LayoutChildrenRenderPropsPipe } from '../src/layouts/layout.renderer';
 
 describe('Vertical layout tester', () => {
   it('should succeed', () => {
@@ -42,6 +43,7 @@ describe('Vertical layout', () => {
 
   beforeEach(() => {
     fixture = beforeEachLayoutTest(VerticalLayoutRenderer, {
+      declarations: [LayoutChildrenRenderPropsPipe],
       imports: [FlexLayoutModule]
     });
     component = fixture.componentInstance;
