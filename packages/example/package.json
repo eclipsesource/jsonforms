@@ -10,7 +10,7 @@
   "dependencies": {
     "@jsonforms/core": "3.0.0",
     "@jsonforms/vue2": "3.0.0",
-    "@jsonforms/vue2-vuetify": "3.0.0-rc.1",
+    "@jsonforms/vue2-vuetify": "3.0.0",
     "core-js": "^3.9.1",
     "json-refs": "^3.0.15",
     "monaco-editor": "^0.26.0",
