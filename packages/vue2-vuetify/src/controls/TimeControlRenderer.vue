@@ -174,7 +174,7 @@ const controlRenderer = defineComponent({
     timeSaveFormat(): string {
       return typeof this.appliedOptions.timeSaveFormat == 'string'
         ? this.appliedOptions.timeSaveFormat
-        : 'HH:mm:ss';
+        : 'HH:mm:ssZ';
     },
     formats(): string[] {
       return [

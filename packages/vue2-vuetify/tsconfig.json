@@ -30,5 +30,8 @@
   "exclude": [
     "node_modules",
     "lib"
-  ]
+  ],
+  "vueCompilerOptions": {
+    "target": 2.7
+  }
 }

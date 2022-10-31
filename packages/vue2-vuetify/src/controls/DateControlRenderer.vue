@@ -293,9 +293,6 @@ const controlRenderer = defineComponent({
     onYear(year: number): void {
       if (this.pickerType === 'year') {
         this.pickerValue = `${year}`;
-        if (this.$refs?.picker) {
-          (this.$refs.picker as any).internalActivePicker = 'YEAR';
-        }
         if (!this.showActions) {
           this.okHandler();
         }

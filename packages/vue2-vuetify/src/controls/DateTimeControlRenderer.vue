@@ -414,7 +414,7 @@ const controlRenderer = defineComponent({
         return date ? date.format('YYYY-MM-DD') : undefined;
       },
       set(val: string) {
-        this.onPickerChange(val, (this.$refs.timePicker as any).genValue());
+        this.onPickerChange(val, this.timePickerValue);
       },
     },
     timePickerValue: {
@@ -430,7 +430,7 @@ const controlRenderer = defineComponent({
           : undefined;
       },
       set(val: string) {
-        this.onPickerChange((this.$refs.datePicker as any).inputDate, val);
+        this.onPickerChange(this.datePickerValue, val);
       },
     },
     pickerValue: {
@@ -445,7 +445,9 @@ const controlRenderer = defineComponent({
       },
       set(val: string) {
         const dateTime = parseDateTime(val, 'YYYY-MM-DDTHH:mm:ss.SSSZ');
-        this.onChange(dateTime!.format(this.dateTimeSaveFormat));
+        if (dateTime && this.showActions) {
+          this.onChange(dateTime.format(this.dateTimeSaveFormat));
+        }
       },
     },
     clearLabel(): string {
@@ -484,7 +486,7 @@ const controlRenderer = defineComponent({
         this.onChange(newdata);
       }
     },
-    onPickerChange(dateValue: string, timeValue: string): void {
+    onPickerChange(dateValue?: string, timeValue?: string): void {
       const date = parseDateTime(dateValue, 'YYYY-MM-DD');
       const time = parseDateTime(
         timeValue ?? (this.useSeconds ? '00:00:00' : '00:00'),
