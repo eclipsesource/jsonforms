@@ -92,6 +92,7 @@ import {
           </mat-card-content>
           <mat-card-actions *ngIf="isEnabled()">
           <button
+              *ngIf="uischema?.options?.showSortButtons"
               class="item-up"
               mat-button
               [disabled]="first"
@@ -103,6 +104,7 @@ import {
               <mat-icon>arrow_upward</mat-icon>
             </button>
             <button
+              *ngIf="uischema?.options?.showSortButtons"
               class="item-down"
               mat-button
               [disabled]="last"
