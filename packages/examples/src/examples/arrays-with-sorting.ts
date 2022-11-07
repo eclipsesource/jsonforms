@@ -123,7 +123,7 @@ const actions = [
 registerExamples([
   {
     name: 'array-with-sorting',
-    label: 'array-with-sorting',
+    label: 'Array with sorting',
     data,
     schema,
     uischema,
