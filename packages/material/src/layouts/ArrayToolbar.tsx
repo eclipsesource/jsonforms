@@ -1,7 +1,6 @@
 import { 
   Grid,
   IconButton,
-  Hidden,
   Toolbar,
   Tooltip,
   Typography
@@ -30,11 +29,11 @@ export const ArrayLayoutToolbar = React.memo(
           <Grid item>
             <Typography variant={'h6'}>{label}</Typography>
           </Grid>
-          <Hidden smUp={errors.length === 0}>
+          {errors.length !== 0 &&
             <Grid item>
               <ValidationIcon id='tooltip-validation' errorMessages={errors} />
             </Grid>
-          </Hidden>
+          }
           <Grid item>
             <Grid container>
               <Grid item>
