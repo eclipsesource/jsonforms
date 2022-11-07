@@ -48,6 +48,13 @@ const uischema2: ControlElement = {
   type: 'Control',
   scope: '#/properties/my'
 };
+const uischemaWithSorting: ControlElement = {
+  type: 'Control',
+  scope: '#',
+  options: {
+    showSortButtons: true
+  }
+};
 const schema_object1 = {
   type: 'array',
   items: {
@@ -324,6 +331,38 @@ describe('Table', () => {
       expect(fixture.nativeElement.querySelectorAll('tr').length).toBe(1 + 2);
       // 2 data entries
       expect(fixture.nativeElement.querySelectorAll('td').length).toBe(4);
+    });
+  }));
+  it('when options.showSortButtons is True, it should render sort buttons', async(() => {
+    setupMockStore(fixture, {
+      uischema: uischemaWithSorting,
+      schema: schema_simple1,
+      data: ['foo', 'bar'],
+      renderers
+    });
+    component.disabled = false;
+    fixture.detectChanges();
+
+    component.ngOnInit();
+    fixture.whenStable().then(() => {
+      expect(fixture.nativeElement.querySelectorAll('.item-up').length).toBe(2);
+      expect(fixture.nativeElement.querySelectorAll('.item-down').length).toBe(2);
+    });
+  }));
+  it('when options.showSortButtons is False, it should NOT render sort buttons', async(() => {
+    setupMockStore(fixture, {
+      uischema: uischema1,
+      schema: schema_simple1,
+      data: ['foo', 'bar'],
+      renderers
+    });
+    component.disabled = false;
+    fixture.detectChanges();
+
+    component.ngOnInit();
+    fixture.whenStable().then(() => {
+      expect(fixture.nativeElement.querySelectorAll('.item-up').length).toBe(0);
+      expect(fixture.nativeElement.querySelectorAll('.item-down').length).toBe(0);
     });
   }));
 

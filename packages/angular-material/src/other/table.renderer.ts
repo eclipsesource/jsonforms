@@ -61,7 +61,29 @@ import {
           </th>
         </tr>
         <tr>
-          <td mat-cell *matCellDef="let row; let i = index">
+          <td mat-cell *matCellDef="let row; let i = index; let first = first; let last = last;">
+          <button
+              *ngIf="uischema?.options?.showSortButtons"
+              class="item-up"
+              mat-button
+              [disabled]="first"
+              (click)="up(i)"
+              matTooltip="Move item up"
+              matTooltipPosition="right"
+              >
+              <mat-icon>arrow_upward</mat-icon>
+            </button>
+            <button
+              *ngIf="uischema?.options?.showSortButtons"
+              class="item-down"
+              mat-button
+              [disabled]="last"
+              (click)="down(i)"
+              matTooltip="Move item down"
+              matTooltipPosition="right"
+            >
+              <mat-icon>arrow_downward</mat-icon>
+            </button>
             <button
                 mat-button
                 color="warn"
@@ -93,7 +115,7 @@ import {
   `,
   styles: [
       'table {width: 100%;}',
-      '.cdk-column-action { width: 5%}']
+      '.cdk-column-action { width: 15%}']
 })
 export class TableRenderer extends JsonFormsArrayControl {
   detailUiSchema: UISchemaElement;
@@ -101,6 +123,8 @@ export class TableRenderer extends JsonFormsArrayControl {
   items: ColumnDescription[];
   readonly columnsToIgnore = ['array', 'object'];
   addItem: (path: string, value: any) => () => void;
+  moveItemUp: (path: string, index: number) => () => void;
+  moveItemDown: (path: string, index: number) => () => void;
   removeItems: (path: string, toDelete: number[]) => () => void;
 
   constructor(jsonformsService: JsonFormsAngularService) {
@@ -131,13 +155,21 @@ export class TableRenderer extends JsonFormsArrayControl {
   add(): void {
     this.addItem(this.propsPath, createDefaultValue(this.scopedSchema))();
   }
+  up(index: number): void {
+    this.moveItemUp(this.propsPath, index)();
+  }
+  down(index: number): void {
+    this.moveItemDown(this.propsPath, index)();
+  }
   ngOnInit() {
     super.ngOnInit();
 
-    const { addItem, removeItems } = mapDispatchToArrayControlProps(
+    const { addItem, removeItems, moveUp, moveDown } = mapDispatchToArrayControlProps(
         this.jsonFormsService.updateCore.bind(this.jsonFormsService)
     );
     this.addItem = addItem;
+    this.moveItemUp = moveUp;
+    this.moveItemDown = moveDown;
     this.removeItems = removeItems;
   }
 

@@ -63,7 +63,7 @@ export const uischema = {
       type: 'Control',
       scope: '#/properties/comments',
       options: {
-        showSortButtons: false
+        showSortButtons: true
       }
     }
   ]
@@ -80,7 +80,7 @@ export const uischemaWithSorting = {
       type: 'Control',
       scope: '#/properties/comments',
       options: {
-        showSortButtons: false
+        showSortButtons: true
       }
     }
   ]
@@ -90,7 +90,7 @@ export const data = {
   comments: [
     {
       date: new Date(2001, 8, 11).toISOString().substr(0, 10),
-      message: 'This is an example message'
+      message: 'This is an example message With sorting'
     },
     {
       date: new Date().toISOString().substr(0, 10),
@@ -122,8 +122,8 @@ const actions = [
 
 registerExamples([
   {
-    name: 'array',
-    label: 'Array',
+    name: 'array-with-sorting',
+    label: 'Array with sorting',
     data,
     schema,
     uischema,
