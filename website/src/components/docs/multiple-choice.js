@@ -55,6 +55,60 @@ export const radioGroup = {
   data: {},
 };
 
+export const autocompleteEnum = {
+  schema: {
+  type: 'object',
+  properties: {
+    autocompleteEnum: {
+      type: 'string',
+      enum: ['foo', 'bar', 'foobar']
+    }
+  }
+  },
+  uischema: {
+    type: 'VerticalLayout',
+    elements: [
+      {
+        type: 'Control',
+        scope: '#/properties/autocompleteEnum',
+        options: {
+          autocomplete: true
+        }
+      }
+    ]
+  },
+  data: {},
+};
+
+export const autocompleteOneOf = {
+  schema: {
+  type: 'object',
+  properties: {
+    autocompleteOneOf: {
+      type: 'string',
+      oneOf: [
+        {const: 'foo', title: 'Foo'},
+        {const: 'bar', title: 'Bar'},
+        {const: 'foobar', title: 'FooBar'}
+      ]
+    }
+  }
+  },
+  uischema: {
+    type: 'VerticalLayout',
+    elements: [
+      {
+        type: 'Control',
+        scope: '#/properties/autocompleteOneOf',
+        options: {
+          autocomplete: true
+        }
+      }
+    ]
+  },
+  data: {},
+};
+
 export const multiEnumInput = {
   schema: {
   type: 'object',
@@ -186,6 +240,22 @@ export const RadioGroup = () => (
     data={radioGroup.data}
     schema={radioGroup.schema}
     uischema={radioGroup.uischema}
+  />
+);
+
+export const AutocompleteEnum= () => (
+  <Demo
+    data={autocompleteEnum.data}
+    schema={autocompleteEnum.schema}
+    uischema={autocompleteEnum.uischema}
+  />
+);
+
+export const AutocompleteOneOf= () => (
+  <Demo
+    data={autocompleteOneOf.data}
+    schema={autocompleteOneOf.schema}
+    uischema={autocompleteOneOf.uischema}
   />
 );
 

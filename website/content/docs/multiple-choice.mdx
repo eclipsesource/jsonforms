@@ -11,14 +11,15 @@ import {
   OneOfMultiEnum,
   PlainEnum,
   OneOfEnum,
-  RadioGroup
+  RadioGroup,
+  AutocompleteEnum
 } from '../../src/components/docs/multiple-choice';
 
 JSON Forms supports different multiple-choice options. It is possible to configure a single select, where only one option can be selected, or a multi select, where several options can be selected.
 
 ## Single Select
 
-A single select can be achieved by using an `enum` or a `oneOf` in the JSON schema.
+A single select can be achieved by using an `enum` or an `oneOf` in the JSON schema.
 
 ### Enum
 You can define an enum in your schema like this:
@@ -71,6 +72,25 @@ Both `enum` and `oneOf` support the option to use radio buttons instead of a dro
 ```
 
 <RadioGroup />
+
+### Autocomplete Option
+
+There is also the option to use the autocomplete renderer.
+The autocomplete renderer is available for data of type `enum` and `oneOf` and is rendered by using the `autocomplete` option in the UI schema:
+
+```js
+{
+  type: "Control",
+  scope: "#/properties/autocompleteEnum",
+  options: {
+    autocomplete: true
+  }
+}
+```
+
+<AutocompleteEnum />
+
+Note: For JSON Forms < 3.0 this renderer is only available in the extended React Material renderer set (`extendedMaterialRenderers`). The renderer set can be imported from `@jsonforms/material-renderers/extended `. This renderer set requires the `@material-ui/lab` peer dependency.
 
 ## Multi Select
 
