@@ -35,7 +35,7 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import React from 'react';
 
-const ListWithDetailMasterItem = ({ index, childLabel, selected, handleSelect, removeItem, path }: StatePropsOfMasterItem) => {
+const ListWithDetailMasterItem = ({ index, childLabel, selected, enabled, handleSelect, removeItem, path }: StatePropsOfMasterItem) => {
     return (
         <ListItem
             button
@@ -46,11 +46,13 @@ const ListWithDetailMasterItem = ({ index, childLabel, selected, handleSelect, r
                 <Avatar aria-label='Index'>{index + 1}</Avatar>
             </ListItemAvatar>
             <ListItemText primary={childLabel} />
-            <ListItemSecondaryAction>
-                <IconButton aria-label='Delete' onClick={removeItem(path, index)} size='large'>
-                    <DeleteIcon />
-                </IconButton>
-            </ListItemSecondaryAction>
+            { enabled &&
+                <ListItemSecondaryAction>
+                    <IconButton aria-label='Delete' onClick={removeItem(path, index)} size='large'>
+                        <DeleteIcon />
+                    </IconButton>
+                </ListItemSecondaryAction>
+            }
         </ListItem>
     );
 };
