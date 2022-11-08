@@ -43,6 +43,12 @@ body:
       label: In which browser are you experiencing the issue?
       placeholder: Google Chrome 91.0.4472.114
       description: Provide the full name and don't forget to add the version!
+  - type: input
+    validations:
+      required: true
+    attributes:
+      label: Which Version of JSON Forms are you using?
+      placeholder: v3.0.0
   - type: dropdown
     attributes:
       label: Framework
