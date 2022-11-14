@@ -5,7 +5,7 @@ var copyWebpackPlugin = require("copy-webpack-plugin");
 module.exports = merge(baseConfig, {
     plugins: [
         new copyWebpackPlugin([
-            { from: '../example/src/logo.svg'  },
+            { from: '../examples-react/src/logo.svg'  },
         ])
     ],
 });

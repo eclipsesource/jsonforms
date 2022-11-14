@@ -7,7 +7,7 @@ module.exports = merge(baseConfig, {
         new copyWebpackPlugin([
             { from: './example/example.css' },
             { from: './example/example.dark.css' },
-            { from: '../example/src/logo.svg'  },
+            { from: '../examples-react/src/logo.svg'  },
         ])
     ],
 });

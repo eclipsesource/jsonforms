@@ -27,7 +27,7 @@ import {
   vanillaCells,
   vanillaRenderers,
 } from '../src';
-import { renderExample } from '../../example/src/index';
+import { renderExample } from '../../examples-react/src/index';
 
 renderExample(vanillaRenderers, vanillaCells);
 createThemeSelection();
