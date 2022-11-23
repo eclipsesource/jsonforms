@@ -466,7 +466,7 @@ export const isObjectArrayWithNesting = (
         if (val.$ref !== undefined) {
           return false;
         }
-        if (val.anyOf || val.oneOf) {
+        if (val.anyOf || val.oneOf || val.allOf) {
           return true;
         }
         if (hasType(val, 'object')) {
