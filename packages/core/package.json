@@ -72,7 +72,7 @@
     "ava": "~2.4.0",
     "cross-env": "^7.0.2",
     "document-register-element": "^1.14.3",
-    "jsdom": "^15.2.1",
+    "jsdom": "^16.5.0",
     "jsdom-global": "^3.0.2",
     "nyc": "^15.1.0",
     "redux": "^4.0.4",
