@@ -63,10 +63,12 @@
     "@angular/material": "^12.0.0 || ^13.0.0 || ^14.0.0",
     "@angular/platform-browser": "^12.0.0 || ^13.0.0 || ^14.0.0",
     "@angular/router": "^12.0.0 || ^13.0.0 || ^14.0.0",
+    "@angular/material-moment-adapter": "^12.0.0 || ^13.0.0 || ^14.0.0",
     "@jsonforms/angular": "3.0.0",
     "@jsonforms/core": "3.0.0",
     "core-js": "^2.5.3",
-    "rxjs": "^6.5.3 || ^7.4.0"
+    "rxjs": "^6.5.3 || ^7.4.0",
+    "moment": "^2.29.4"
   },
   "dependencies": {
     "hammerjs": "2.0.8"
@@ -84,6 +86,7 @@
     "@angular/platform-browser": "^12.0.0",
     "@angular/platform-browser-dynamic": "^12.0.0",
     "@angular/router": "^12.0.0",
+    "@angular/material-moment-adapter": "^12.0.0",
     "@jsonforms/angular": "^3.0.0",
     "@jsonforms/angular-test": "^3.0.0",
     "@jsonforms/core": "^3.0.0",
@@ -115,6 +118,7 @@
     "webpack": "^4.41.2",
     "webpack-cli": "^3.2.1",
     "webpack-dev-server": "^3.9.0",
-    "zone.js": "^0.11.4"
+    "zone.js": "^0.11.4",
+    "moment": "^2.29.4"
   }
 }

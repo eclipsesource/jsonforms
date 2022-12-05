@@ -38,7 +38,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
-import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSliderModule } from '@angular/material/slider';
@@ -46,6 +45,13 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { 
+  DateAdapter,
+  MatNativeDateModule,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE
+} from '@angular/material/core';
+import { MomentDateAdapter, MAT_MOMENT_DATE_FORMATS } from '@angular/material-moment-adapter';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { JsonFormsModule } from '@jsonforms/angular';
 import { AutocompleteControlRenderer } from './controls/autocomplete.renderer';
@@ -155,6 +161,14 @@ import { ArrayLayoutRenderer } from './layouts/array-layout.renderer';
     MatAutocompleteModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  providers: [DatePipe]
+  providers: [
+    DatePipe,
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE]
+    },
+    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS }
+  ]
 })
-export class JsonFormsAngularMaterialModule { }
+export class JsonFormsAngularMaterialModule {}
