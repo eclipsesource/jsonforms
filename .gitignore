@@ -13,4 +13,4 @@ stats.html
 !.vscode/settings.json
 
 .coveralls.yml
-packages/example/build
+packages/examples-react/build

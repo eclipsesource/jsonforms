@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { renderExample } from '../../example/src/index';
+import { renderExample } from '../../examples-react/src/index';
 import { materialRenderers, materialCells } from '../src';
 
 renderExample(
