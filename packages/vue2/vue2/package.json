@@ -62,7 +62,7 @@
     "cp-cli": "^2.0.0",
     "cross-env": "^7.0.2",
     "rimraf": "^3.0.2",
-    "rollup": "^2.7.3",
+    "rollup": "^2.78.0",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-cleanup": "^3.2.1",
     "rollup-plugin-typescript2": "^0.31.1",
