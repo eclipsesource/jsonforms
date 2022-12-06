@@ -41,6 +41,7 @@ import {
   mapStateToArrayControlProps,
   RankedTester,
   rankWith,
+  setReadonly,
   StatePropsOfArrayControl,
   uiTypeIs
 } from '@jsonforms/core';
@@ -182,6 +183,10 @@ export class MasterListComponent extends JsonFormsArrayControl {
         controlElement,
         props.rootSchema
       );
+
+    if (!this.isEnabled()) {
+      setReadonly(detailUISchema);
+    }
 
     const masterItems = (data || []).map((d: any, index: number) => {
       const labelRefInstancePath = controlElement.options?.labelRef && removeSchemaKeywords(
