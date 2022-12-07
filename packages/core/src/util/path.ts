@@ -69,12 +69,15 @@ export const toDataPathSegments = (schemaPath: string): string[] => {
 };
 
 /**
- * Remove all schema-specific keywords (e.g. 'properties') from a given path.
+ * Convert a schema path (i.e. JSON pointer) to a data path.
+ * 
+ * Data paths can be used in field change event handlers like handleChange.
+ * 
  * @example
- * toDataPath('#/properties/foo/properties/bar') === '#/foo/bar')
+ * toDataPath('#/properties/foo/properties/bar') === 'foo.bar')
  *
  * @param {string} schemaPath the schema path to be converted
- * @returns {string} the path without schema-specific keywords
+ * @returns {string} the data path
  */
 export const toDataPath = (schemaPath: string): string => {
   return toDataPathSegments(schemaPath).join('.');
