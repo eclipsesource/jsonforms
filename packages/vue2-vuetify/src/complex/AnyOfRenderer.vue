@@ -79,7 +79,7 @@ const controlRenderer = defineComponent({
   },
   computed: {
     anyOfRenderInfos(): CombinatorSubSchemaRenderInfo[] {
-      return createCombinatorRenderInfos(
+      const result = createCombinatorRenderInfos(
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         this.control.schema.anyOf!,
         this.control.rootSchema,
@@ -88,6 +88,7 @@ const controlRenderer = defineComponent({
         this.control.path,
         this.control.uischemas
       );
+      return result.filter((info) => info.uischema);
     },
   },
 });

@@ -298,7 +298,7 @@
     "scope": {
       "type": "string",
       "$id": "#scope",
-      "pattern": "^#\\/properties\\/{1}"
+      "pattern": "^#$|^#\\/$|^#\\/properties\\/{1}"
     },
     "options": {
       "type": "object",

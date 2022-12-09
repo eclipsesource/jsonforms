@@ -21,6 +21,7 @@ export interface AppState {
       breakHorizontal: false | string;
       hideAvatar: boolean;
       hideArraySummaryValidation: boolean;
+      vuetify?: Record<string, any>;
     };
     renderers: JsonFormsRendererRegistryEntry[];
     cells: JsonFormsCellRendererRegistryEntry[];

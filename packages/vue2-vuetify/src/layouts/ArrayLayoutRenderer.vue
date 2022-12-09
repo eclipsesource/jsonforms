@@ -255,7 +255,7 @@ import {
   getControlPath,
   getI18nKey,
 } from '@jsonforms/core';
-import { defineComponent } from 'vue';
+import { defineComponent, computed, ref } from 'vue';
 import {
   DispatchRenderer,
   rendererProps,
@@ -291,7 +291,6 @@ import {
 } from 'vuetify/lib';
 import { ValidationIcon, ValidationBadge } from '../controls/components/index';
 import { ErrorObject } from 'ajv';
-import { computed, ref } from 'vue';
 import merge from 'lodash/merge';
 
 type I18nArrayLayoutKey = keyof typeof i18nDefaultMessages.arraylayout;

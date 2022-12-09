@@ -6,47 +6,40 @@
       :path="path"
     />
 
-    <v-hover v-slot="{ hover }">
-      <v-select
-        v-disabled-icon-focus
-        :id="control.id + '-input'"
-        :class="styles.control.input"
-        :disabled="!control.enabled"
-        :autofocus="appliedOptions.focus"
-        :placeholder="appliedOptions.placeholder"
-        :label="computedLabel"
-        :hint="control.description"
-        :persistent-hint="persistentHint()"
-        :required="control.required"
-        :error-messages="control.errors"
-        :clearable="hover"
-        :items="indexedOneOfRenderInfos"
-        @change="handleSelectChange"
-        :item-text="(item) => t(item.label, item.label)"
-        item-value="index"
-        v-model="selectIndex"
-        v-bind="vuetifyProps('v-select')"
-        @focus="isFocused = true"
-        @blur="isFocused = false"
-      ></v-select>
-    </v-hover>
-    <dispatch-renderer
-      v-if="selectedIndex !== undefined && selectedIndex !== null"
-      :schema="indexedOneOfRenderInfos[selectedIndex].schema"
-      :uischema="indexedOneOfRenderInfos[selectedIndex].uischema"
-      :path="control.path"
-      :renderers="control.renderers"
-      :cells="control.cells"
-      :enabled="control.enabled"
-    />
+    <v-tabs v-model="tabIndex">
+      <v-tab
+        @change="handleTabChange"
+        v-for="(oneOfRenderInfo, oneOfIndex) in oneOfRenderInfos"
+        :key="`${control.path}-${oneOfIndex}`"
+      >
+        {{ oneOfRenderInfo.label }}
+      </v-tab>
+    </v-tabs>
+
+    <v-tabs-items v-model="selectedIndex">
+      <v-tab-item
+        v-for="(oneOfRenderInfo, oneOfIndex) in oneOfRenderInfos"
+        :key="`${control.path}-${oneOfIndex}`"
+      >
+        <dispatch-renderer
+          v-if="selectedIndex === oneOfIndex"
+          :schema="oneOfRenderInfo.schema"
+          :uischema="oneOfRenderInfo.uischema"
+          :path="control.path"
+          :renderers="control.renderers"
+          :cells="control.cells"
+          :enabled="control.enabled"
+        />
+      </v-tab-item>
+    </v-tabs-items>
 
     <v-dialog v-model="dialog" persistent max-width="600" @keydown.esc="cancel">
       <v-card>
         <v-card-title class="text-h5"> Clear form? </v-card-title>
 
         <v-card-text>
-          Your data will be cleared if you select this new option. Do you want
-          to proceed?
+          Your data will be cleared if you navigate away from this tab. Do you
+          want to proceed?
         </v-card-text>
 
         <v-card-actions>
@@ -62,12 +55,14 @@
 
 <script lang="ts">
 import {
+  and,
   CombinatorSubSchemaRenderInfo,
   ControlElement,
   createCombinatorRenderInfos,
   createDefaultValue,
   isOneOfControl,
   JsonFormsRendererRegistryEntry,
+  optionIs,
   rankWith,
 } from '@jsonforms/core';
 import {
@@ -85,16 +80,17 @@ import {
   VCardText,
   VCardTitle,
   VDialog,
-  VHover,
-  VSelect,
   VSpacer,
+  VTab,
+  VTabItem,
+  VTabs,
+  VTabsItems,
 } from 'vuetify/lib';
-import { DisabledIconFocus } from '../controls/directives';
-import { useTranslator, useVuetifyControl } from '../util';
+import { useVuetifyControl } from '../util';
 import { CombinatorProperties } from './components';
 
 const controlRenderer = defineComponent({
-  name: 'one-of-select-renderer',
+  name: 'one-of-renderer',
   components: {
     DispatchRenderer,
     CombinatorProperties,
@@ -105,11 +101,10 @@ const controlRenderer = defineComponent({
     VCardActions,
     VSpacer,
     VBtn,
-    VSelect,
-    VHover,
-  },
-  directives: {
-    DisabledIconFocus,
+    VTabs,
+    VTab,
+    VTabsItems,
+    VTabItem,
   },
   props: {
     ...rendererProps<ControlElement>(),
@@ -118,25 +113,21 @@ const controlRenderer = defineComponent({
     const input = useJsonFormsOneOfControl(props);
     const control = (input.control as any).value as typeof input.control;
 
-    const selectedIndex = ref(control.indexOfFittingSchema);
-    const selectIndex = ref(selectedIndex.value);
+    const selectedIndex = ref(control.indexOfFittingSchema || 0);
+    const tabIndex = ref(selectedIndex.value);
     const newSelectedIndex = ref(0);
     const dialog = ref(false);
-    const t = useTranslator();
 
     return {
       ...useVuetifyControl(input),
       selectedIndex,
-      selectIndex,
+      tabIndex,
       dialog,
       newSelectedIndex,
-      t,
     };
   },
   computed: {
-    indexedOneOfRenderInfos(): (CombinatorSubSchemaRenderInfo & {
-      index: number;
-    })[] {
+    oneOfRenderInfos(): CombinatorSubSchemaRenderInfo[] {
       const result = createCombinatorRenderInfos(
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         this.control.schema.oneOf!,
@@ -146,20 +137,17 @@ const controlRenderer = defineComponent({
         this.control.path,
         this.control.uischemas
       );
-
-      return result
-        .filter((info) => info.uischema)
-        .map((info, index) => ({ ...info, index: index }));
+      return result.filter((info) => info.uischema);
     },
   },
   methods: {
-    handleSelectChange(): void {
+    handleTabChange(): void {
       if (this.control.enabled && !isEmpty(this.control.data)) {
         this.dialog = true;
         this.$nextTick(() => {
-          this.newSelectedIndex = this.selectIndex;
+          this.newSelectedIndex = this.tabIndex;
           // revert the selection while the dialog is open
-          this.selectIndex = this.selectedIndex;
+          this.tabIndex = this.selectedIndex;
         });
         // this.$nextTick does not work so use setTimeout
         setTimeout(() =>
@@ -168,28 +156,24 @@ const controlRenderer = defineComponent({
         );
       } else {
         this.$nextTick(() => {
-          this.selectedIndex = this.selectIndex;
+          this.selectedIndex = this.tabIndex;
         });
       }
     },
     confirm(): void {
-      this.newSelection();
+      this.openNewTab();
       this.dialog = false;
     },
     cancel(): void {
       this.newSelectedIndex = this.selectedIndex;
       this.dialog = false;
     },
-    newSelection(): void {
+    openNewTab(): void {
       this.handleChange(
         this.path,
-        this.newSelectedIndex !== undefined && this.newSelectedIndex !== null
-          ? createDefaultValue(
-              this.indexedOneOfRenderInfos[this.newSelectedIndex].schema
-            )
-          : {}
+        createDefaultValue(this.oneOfRenderInfos[this.newSelectedIndex].schema)
       );
-      this.selectIndex = this.newSelectedIndex;
+      this.tabIndex = this.newSelectedIndex;
       this.selectedIndex = this.newSelectedIndex;
     },
   },
@@ -199,6 +183,6 @@ export default controlRenderer;
 
 export const entry: JsonFormsRendererRegistryEntry = {
   renderer: controlRenderer,
-  tester: rankWith(3, isOneOfControl),
+  tester: rankWith(4, and(isOneOfControl, optionIs('variant', 'tab'))),
 };
 </script>

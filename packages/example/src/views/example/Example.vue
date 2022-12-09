@@ -6,7 +6,12 @@
           <v-card-title>{{ example.title }}</v-card-title>
           <v-card-text>
             <v-tabs v-model="activeTab">
-              <v-tab :key="0">Demo</v-tab>
+              <v-tab :key="0"
+                >Demo<validation-icon
+                  v-if="errors"
+                  :errors="errors"
+                ></validation-icon
+              ></v-tab>
               <v-spacer expand />
               <v-tab :key="1">Schema</v-tab>
               <v-tab :key="2">UI Schema</v-tab>
@@ -245,20 +250,26 @@ import { examples } from '@/examples';
 import { find } from 'lodash';
 import { sync } from 'vuex-pathify';
 
-import { mergeStyles, defaultStyles } from '@jsonforms/vue2-vuetify';
-import { JsonFormsChangeEvent } from '@jsonforms/vue2';
-import MonacoEditor from '@/components/MonacoEditor.vue';
 import DemoForm from '@/components/DemoForm.vue';
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
+import MonacoEditor from '@/components/MonacoEditor.vue';
 import {
+  configureDataValidation,
   configureJsonSchemaValidation,
   configureUISchemaValidation,
-  configureDataValidation,
   EditorApi,
   getMonacoModelForUri,
 } from '@/core/jsonSchemaValidation';
 import { Example } from '@/core/types';
 import type { JsonFormsRendererRegistryEntry } from '@jsonforms/core';
+import { JsonFormsChangeEvent } from '@jsonforms/vue2';
+import {
+  defaultStyles,
+  mergeStyles,
+  ValidationIcon,
+} from '@jsonforms/vue2-vuetify';
+import { ErrorObject } from 'ajv';
+import cloneDeep from 'lodash/cloneDeep';
+import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 
 const myStyles = mergeStyles(defaultStyles, {
   control: { root: 'my-control' },
@@ -269,12 +280,16 @@ export default {
   components: {
     MonacoEditor,
     DemoForm,
+    ValidationIcon,
   },
   data() {
     return {
       activeTab: 0,
       examples,
       example: undefined,
+      errors: undefined as
+        | ErrorObject<string, Record<string, any>, unknown>[]
+        | undefined,
       snackbar: false,
       snackbarText: '',
       snackbarTimeout: 3000,
@@ -318,20 +333,11 @@ export default {
           event.data ? JSON.stringify(event.data, null, 2) : ''
         )
       );
+      this.errors = event.errors;
     },
     setExample(example: Example): void {
       if (example) {
-        this.example = {
-          id: example.id,
-          title: example.title,
-          input: {
-            schema: example.input.schema,
-            uischema: example.input.uischema,
-            data: example.input.data,
-            i18n: example.input.i18n,
-            renderers: example.input.renderers,
-          },
-        };
+        this.example = cloneDeep(example);
         this.updateMonacoModels(this.example);
       }
     },
@@ -366,11 +372,12 @@ export default {
             .filter((d) => d.options.className === 'squiggly-error')
             .map((e) => e).length > 0;
 
-        const modelValue = model.getValue();
-        if (modelValue && !hasError) {
-          const newJson: Record<string, any> = JSON.parse(modelValue);
-          example.input.schema = newJson;
-
+        const modelValue = model.getValue().trim();
+        if (!hasError) {
+          const newJson: Record<string, any> = modelValue
+            ? JSON.parse(modelValue)
+            : undefined;
+          this.$set(example.input, 'schema', newJson);
           this.toast('New schema applied');
         } else if (hasError) {
           this.toast('Error: schema is invalid');
@@ -410,10 +417,13 @@ export default {
             .filter((d) => d.options.className === 'squiggly-error')
             .map((e) => e).length > 0;
 
-        const modelValue = model.getValue();
-        if (modelValue && !hasError) {
-          const newJson: Record<string, any> = JSON.parse(modelValue);
-          example.input.uischema = newJson;
+        const modelValue = model.getValue().trim();
+        if (!hasError) {
+          const newJson: Record<string, any> = modelValue
+            ? JSON.parse(modelValue)
+            : undefined;
+
+          this.$set(example.input, 'uischema', newJson);
           this.toast('New UI schema applied');
         } else if (hasError) {
           this.toast('Error: UI schema is invalid');
@@ -446,7 +456,7 @@ export default {
       if (model && example) {
         // do not check for monaco errors just if this is valid JSON becase we want to see when we have validation errors
 
-        const modelValue = model.getValue();
+        const modelValue = model.getValue().trim();
         if (modelValue) {
           let newJson: Record<string, any> | undefined = undefined;
 
@@ -457,7 +467,7 @@ export default {
           }
 
           if (newJson) {
-            example.input.data = newJson;
+            this.$set(example.input, 'data', newJson);
             this.toast('New data applied');
           }
         }
@@ -487,22 +497,23 @@ export default {
       const example = this.example;
 
       if (model && example) {
-        // do not check for monaco errors just if this is valid JSON becase we want to see when we have validation errors
+        // TODO: is there a better way how to get errors including the error message from monaco editor ?
+        const hasError =
+          model
+            .getAllDecorations()
+            .filter((d) => d.options.className === 'squiggly-error')
+            .map((e) => e).length > 0;
 
-        const modelValue = model.getValue();
-        if (modelValue) {
-          let newJson: Record<string, any> | undefined = undefined;
+        const modelValue = model.getValue().trim();
+        if (!hasError) {
+          const newJson: Record<string, any>[] = modelValue
+            ? JSON.parse(modelValue)
+            : undefined;
 
-          try {
-            newJson = JSON.parse(modelValue);
-          } catch (error) {
-            this.toast(`Error: ${error}`);
-          }
-
-          if (newJson) {
-            example.input.i18n = newJson;
-            this.toast('New i18n applied');
-          }
+          this.$set(example.input, 'i18n', newJson);
+          this.toast('New i18n applied');
+        } else if (hasError) {
+          this.toast('Error: i18n is invalid');
         }
       }
     },

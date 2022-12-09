@@ -16,7 +16,7 @@ import { DispatchRenderer } from '@jsonforms/vue2';
 
 interface CombinatorProps {
   schema: JsonSchema;
-  combinatorKeyword: 'oneOf' | 'anyOf';
+  combinatorKeyword: 'oneOf' | 'anyOf' | 'allOf';
   path: string;
 }
 
@@ -31,7 +31,7 @@ export default defineComponent({
       required: true,
     },
     combinatorKeyword: {
-      type: String as PropType<'oneOf' | 'anyOf'>,
+      type: String as PropType<'oneOf' | 'anyOf' | 'allOf'>,
       required: true,
     },
     path: {

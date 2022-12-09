@@ -1,0 +1,16 @@
+{
+  "en": {
+    "root": {
+      "additionalProperties": {
+        "title": "Additional Properties",
+        "newProperty": {
+          "placeholder": "New Property"
+        },
+        "btn": {
+          "add": "Add to ${additionalProperties.title}",
+          "delete": "Delete from ${additionalProperties.title}"
+        }
+      }
+    }
+  }
+}

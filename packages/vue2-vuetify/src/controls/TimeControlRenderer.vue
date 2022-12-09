@@ -27,7 +27,9 @@
         @blur="isFocused = false"
       >
         <template slot="append">
-          <v-icon v-if="hover" tabindex="-1" @click="clear">$clear</v-icon>
+          <v-icon v-if="hover && control.enabled" tabindex="-1" @click="clear"
+            >$clear</v-icon
+          >
         </template>
         <template slot="prepend-inner">
           <v-menu
@@ -39,6 +41,7 @@
             offset-y
             min-width="290px"
             v-bind="vuetifyProps('v-menu')"
+            :disabled="!control.enabled"
           >
             <template v-slot:activator="{ on: onMenu }">
               <v-icon v-on="onMenu" tabindex="-1">{{ pickerIcon }}</v-icon>

@@ -7,3 +7,7 @@
 <script lang="ts">
 export default { name: 'App' };
 </script>
+
+<style scoped>
+@import '~@jsonforms/vue2-vuetify/lib/jsonforms-vue2-vuetify.esm.css';
+</style>

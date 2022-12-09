@@ -56,6 +56,7 @@ export default defineComponent({
   },
 });
 </script>
+
 <template>
   <json-forms
     :data="data"
@@ -65,6 +66,10 @@ export default defineComponent({
     @change="onChange"
   />
 </template>
+
+<style scoped>
+@import '~@jsonforms/vue2-vuetify/lib/jsonforms-vue2-vuetify.esm.css';
+</style>
 ```
 
 As JSON Forms uses the Composition API you need to use at least Vue 2.7.

@@ -4,6 +4,7 @@ import typescript from 'rollup-plugin-typescript2';
 import resolve from '@rollup/plugin-node-resolve';
 import cleanup from 'rollup-plugin-cleanup';
 import visualizer from 'rollup-plugin-visualizer';
+import styles from 'rollup-plugin-styles';
 
 import packageJson from './package.json';
 
@@ -26,13 +27,17 @@ const buildFormats = [
       file: packageJson.module,
       format: 'esm',
       sourcemap: true,
+      assetFileNames: '[name][extname]',
     },
     plugins: [
       resolve({
         extensions: ['.js', '.jsx', '.ts', '.tsx', '.vue'],
       }),
+      styles({
+        mode: ['extract'],
+      }),
       vue({
-        css: true,
+        css: false,
         template: {
           isProduction: true,
         },
@@ -59,13 +64,17 @@ const buildFormats = [
       file: packageJson.main,
       format: 'cjs',
       sourcemap: true,
+      assetFileNames: '[name][extname]',
     },
     plugins: [
       resolve({
         extensions: ['.js', '.jsx', '.ts', '.tsx', '.vue'],
       }),
+      styles({
+        mode: ['extract'],
+      }),
       vue({
-        css: true,
+        css: false,
         template: {
           isProduction: true,
         },

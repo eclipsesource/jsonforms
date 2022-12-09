@@ -5,25 +5,28 @@
     :isFocused="isFocused"
     :appliedOptions="appliedOptions"
   >
-    <v-text-field
-      type="number"
-      :step="step"
-      :id="control.id + '-input'"
-      :class="styles.control.input"
-      :disabled="!control.enabled"
-      :autofocus="appliedOptions.focus"
-      :placeholder="appliedOptions.placeholder"
-      :label="computedLabel"
-      :hint="control.description"
-      :persistent-hint="persistentHint()"
-      :required="control.required"
-      :error-messages="control.errors"
-      :value="control.data"
-      v-bind="vuetifyProps('v-text-field')"
-      @input="onChange"
-      @focus="isFocused = true"
-      @blur="isFocused = false"
-    />
+    <v-hover v-slot="{ hover }">
+      <v-text-field
+        ref="input"
+        :step="step"
+        :id="control.id + '-input'"
+        :class="styles.control.input"
+        :disabled="!control.enabled"
+        :autofocus="appliedOptions.focus"
+        :placeholder="appliedOptions.placeholder"
+        :label="computedLabel"
+        :hint="control.description"
+        :persistent-hint="persistentHint()"
+        :required="control.required"
+        :error-messages="control.errors"
+        :value="inputValue"
+        :clearable="hover"
+        v-bind="vuetifyProps('v-text-field')"
+        @input="onInputChange"
+        @focus="isFocused = true"
+        @blur="isFocused = false"
+      ></v-text-field>
+    </v-hover>
   </control-wrapper>
 </template>
 
@@ -34,7 +37,7 @@ import {
   rankWith,
   isIntegerControl,
 } from '@jsonforms/core';
-import { defineComponent } from 'vue';
+import { defineComponent, ref, unref } from 'vue';
 import {
   rendererProps,
   useJsonFormsControl,
@@ -42,28 +45,57 @@ import {
 } from '@jsonforms/vue2';
 import { default as ControlWrapper } from './ControlWrapper.vue';
 import { useVuetifyControl } from '../util';
-import { VTextField } from 'vuetify/lib';
+import { VHover, VTextField } from 'vuetify/lib';
+
+const NUMBER_REGEX_TEST = /^[+-]?\d+([.]\d+)?([eE][+-]?\d+)?$/;
 
 const controlRenderer = defineComponent({
   name: 'integer-control-renderer',
   components: {
     ControlWrapper,
+    VHover,
     VTextField,
   },
   props: {
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    return useVuetifyControl(
-      useJsonFormsControl(props),
-      (value) => parseInt(value, 10) || undefined,
-      300
-    );
+    const adaptValue = (value: any) =>
+      typeof value === 'number' ? value : value || undefined;
+    const input = useVuetifyControl(useJsonFormsControl(props), adaptValue);
+
+    // preserve the value as it was typed by the user - for example when the user type very long number if we rely on the control.data to return back the actual data then the string could appear with exponent form and etc.
+    // otherwise while typing the string in the input can suddenly change
+    const inputValue = ref((unref(input.control).data as string) || '');
+    return { ...input, adaptValue, inputValue };
   },
   computed: {
     step(): number {
       const options: any = this.appliedOptions;
       return options.step ?? 1;
+    },
+    allowUnsafeInteger(): boolean {
+      return this.appliedOptions.allowUnsafeInteger;
+    },
+  },
+  methods: {
+    onInputChange(value: string): void {
+      this.inputValue = value;
+      this.onChange(this.toNumberOrString(value));
+    },
+    toNumberOrString(value: string): number | string {
+      // have a regex test before parseFloat to make sure that invalid input won't be ignored and will lead to errors, parseFloat will parse invalid input such 7.22m6 as 7.22
+      if (NUMBER_REGEX_TEST.test(value)) {
+        const num = Number.parseFloat(value);
+        if (
+          Number.isFinite(num) &&
+          (this.allowUnsafeInteger || Number.isSafeInteger(num))
+        ) {
+          // return the parsed number only if it is not NaN or Infinite and it is safe integer (no potential lost of precision otherwise the input will show one value while the data will have different value ) or allowUnsafeInteger options is true
+          return num;
+        }
+      }
+      return value;
     },
   },
 });

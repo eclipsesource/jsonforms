@@ -84,6 +84,7 @@
     "rimraf": "^3.0.2",
     "rollup": "^2.52.8",
     "rollup-plugin-cleanup": "^3.2.1",
+    "rollup-plugin-styles": "^4.0.0",
     "rollup-plugin-typescript2": "^0.30.0",
     "rollup-plugin-visualizer": "^5.5.2",
     "rollup-plugin-vue": "^5.1.9",

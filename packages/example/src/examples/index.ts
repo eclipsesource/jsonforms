@@ -1,5 +1,7 @@
 import { input as allOf } from './allOf';
+import { input as allOfWithProps } from './allOf-with-props';
 import { input as anyOf } from './anyOf';
+import { input as anyOfWithProps } from './anyOf-with-props';
 import { input as anyOfSimple } from './anyOf-simple';
 import { input as array } from './array';
 import { input as arrayRestrict } from './array-restrict';
@@ -33,10 +35,13 @@ import { input as noUISchema } from './no-ui-schema';
 import { input as object } from './object';
 import { input as objectNested } from './object-nested';
 import { input as oneOf } from './oneOf';
+import { input as oneOfWithProps } from './oneOf-with-props';
+import { input as oneOfTab } from './oneOf-tab';
 import { input as oneOfRecursive } from './oneOf-recursive';
 import { input as radio } from './radio';
 import { input as radioGroup } from './radio-group';
 import { input as rootObject } from './root-object';
+import { input as additionalProperties } from './additionalProperties';
 import { input as rule } from './rule';
 import { input as verticalLayout } from './vertical-layout';
 import { input as huge } from './huge';
@@ -199,6 +204,11 @@ export const examples = [
     input: rootObject,
   },
   {
+    id: 'additional-properties',
+    title: 'Additional Properties',
+    input: additionalProperties,
+  },
+  {
     id: 'no-ui-schema',
     title: 'Generate UI Schema',
     input: noUISchema,
@@ -214,6 +224,16 @@ export const examples = [
     input: oneOf,
   },
   {
+    id: 'one-of-with-props',
+    title: 'Combinators oneOf with props',
+    input: oneOfWithProps,
+  },
+  {
+    id: 'one-of-tab',
+    title: 'Combinators oneOf tab',
+    input: oneOfTab,
+  },
+  {
     id: 'one-of-recursive',
     title: 'Combinators oneOf recursive',
     input: oneOfRecursive,
@@ -224,6 +244,11 @@ export const examples = [
     input: anyOf,
   },
   {
+    id: 'any-of-with-props',
+    title: 'Combinators anyOf with props',
+    input: anyOfWithProps,
+  },
+  {
     id: 'any-of-simple',
     title: 'Combinators anyOf simple',
     input: anyOfSimple,
@@ -232,6 +257,11 @@ export const examples = [
     id: 'all-of',
     title: 'Combinators allOf',
     input: allOf,
+  },
+  {
+    id: 'all-of-with-props',
+    title: 'Combinators allOf with props',
+    input: allOfWithProps,
   },
   {
     id: 'list-with-details',

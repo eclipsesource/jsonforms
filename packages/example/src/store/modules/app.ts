@@ -3,9 +3,10 @@ import { make } from 'vuex-pathify';
 import { AppState } from './types';
 import { RootState } from '../types';
 import { Module } from 'vuex';
-import { createAjv, extendedVuetifyRenderers } from '@jsonforms/vue2-vuetify';
+import { extendedVuetifyRenderers } from '@jsonforms/vue2-vuetify';
+import { createAjv } from '../validate/validate';
 
-const ajv = createAjv({ useDefaults: true });
+const ajv = createAjv();
 
 // Data
 const state: AppState = {

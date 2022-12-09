@@ -11,16 +11,23 @@
       />
     </template>
     <template v-else-if="allOfRenderInfos">
-      <dispatch-renderer
-        v-for="(allOfRenderInfo, allOfIndex) in allOfRenderInfos"
-        :key="`${control.path}-${allOfIndex}`"
-        :schema="allOfRenderInfo.schema"
-        :uischema="allOfRenderInfo.uischema"
-        :path="control.path"
-        :enabled="control.enabled"
-        :renderers="control.renderers"
-        :cells="control.cells"
-      />
+      <div>
+        <combinator-properties
+          :schema="control.schema"
+          combinatorKeyword="allOf"
+          :path="path"
+        />
+        <dispatch-renderer
+          v-for="(allOfRenderInfo, allOfIndex) in allOfRenderInfos"
+          :key="`${control.path}-${allOfIndex}`"
+          :schema="allOfRenderInfo.schema"
+          :uischema="allOfRenderInfo.uischema"
+          :path="control.path"
+          :enabled="control.enabled"
+          :renderers="control.renderers"
+          :cells="control.cells"
+        />
+      </div>
     </template>
   </div>
 </template>
@@ -44,11 +51,13 @@ import {
 } from '@jsonforms/vue2';
 import { defineComponent } from 'vue';
 import { useVuetifyControl } from '../util';
+import { CombinatorProperties } from './components';
 
 const controlRenderer = defineComponent({
   name: 'all-of-renderer',
   components: {
     DispatchRenderer,
+    CombinatorProperties,
   },
   props: {
     ...rendererProps<ControlElement>(),
@@ -65,7 +74,7 @@ const controlRenderer = defineComponent({
       );
     },
     allOfRenderInfos(): CombinatorSubSchemaRenderInfo[] {
-      return createCombinatorRenderInfos(
+      const result = createCombinatorRenderInfos(
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         this.control.schema.allOf!,
         this.control.rootSchema,
@@ -74,6 +83,8 @@ const controlRenderer = defineComponent({
         this.control.path,
         this.control.uischemas
       );
+
+      return result.filter((info) => info.uischema);
     },
   },
 });
