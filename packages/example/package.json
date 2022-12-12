@@ -1,6 +1,6 @@
 {
   "name": "example",
-  "version": "0.1.0",
+  "version": "3.1.0-alpha.0",
   "private": true,
   "scripts": {
     "build": "vue-cli-service build",
@@ -10,10 +10,10 @@
   "dependencies": {
     "@jsonforms/core": "3.1.0-alpha.0",
     "@jsonforms/vue2": "3.1.0-alpha.0",
-    "@jsonforms/vue2-vuetify": "3.0.0",
+    "@jsonforms/vue2-vuetify": "3.1.0-alpha.0",
+    "ajv-keywords": "^5.1.0",
     "core-js": "^3.9.1",
     "json-refs": "^3.0.15",
-    "ajv-keywords": "^5.1.0",
     "monaco-editor": "^0.26.0",
     "vue": "^2.7.0",
     "vue-router": "^3.2.0",
