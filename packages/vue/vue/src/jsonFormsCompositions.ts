@@ -39,6 +39,7 @@ import {
 import {
   PropType,
   computed,
+  ComputedRef,
   inject,
   onBeforeMount,
   onUnmounted,
@@ -151,12 +152,12 @@ export type Required<T> = T extends object
 export function useControl<R, D, P extends {}>(
   props: P,
   stateMap: (state: JsonFormsState, props: P) => R
-): { control: Required<R> };
+): { control: ComputedRef<Required<R>> };
 export function useControl<R, D, P extends {}>(
   props: P,
   stateMap: (state: JsonFormsState, props: P) => R,
   dispatchMap: (dispatch: Dispatch<CoreActions>) => D
-): { control: Required<R> } & D;
+): { control: ComputedRef<Required<R>> } & D;
 export function useControl<R, D, P extends {}>(
   props: P,
   stateMap: (state: JsonFormsState, props: P) => R,
@@ -192,7 +193,7 @@ export function useControl<R, D, P extends {}>(
   });
 
   return {
-    control: (control as unknown) as R,
+    control: (control as unknown) as ComputedRef<R>,
     ...dispatchMethods
   };
 }
