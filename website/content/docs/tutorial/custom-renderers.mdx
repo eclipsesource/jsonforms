@@ -183,7 +183,7 @@ This is useful when you don't really care about the renderer's props but would l
 
 The unwrapped variants are the ones you want to use when you would like to access the same detailed props as the pure renderer.
 As we want to access the schema's price attribute as well as modify the calculated label, we'll use the unwrapped renderer.
-The unwrapped controls are all exported in an object called Unwrapped in ['@jsonforms/material-renderers'](https://github.com/eclipsesource/jsonforms/blob/master/packages/material/src/controls/index.ts).
+The unwrapped controls are all exported in an object called Unwrapped in ['@jsonforms/material-renderers'](https://github.com/eclipsesource/jsonforms/blob/master/packages/material-renderers/src/controls/index.ts).
 We can import that object, and then use destructuring to access a specific Control.
 
 ```js
@@ -191,7 +191,7 @@ import { Unwrapped } from '@jsonforms/material-renderers';
 const { MaterialBooleanControl } = Unwrapped;
 ```
 
-To determine which HOC to use, we can look at the [source](https://github.com/eclipsesource/jsonforms/tree/master/packages/material/src/controls) for the respective control.
+To determine which HOC to use, we can look at the [source](https://github.com/eclipsesource/jsonforms/tree/master/packages/material-renderers/src/controls) for the respective control.
 Most controls use `withJsonFormsControlProps`, with some exceptions for more specialized controls.
 Having determined that, we can export our extended control using the same HOC, so that it maintains compatibility.
 
