@@ -8,7 +8,7 @@ JSON Forms eliminates the tedious task of writing fully-featured forms by hand b
 
 This is the examples package which demonstrates how to integrate JSON Forms with your application.
 
-You can use the examples with any renderer set you want, for example the [Material Renderers](https://github.com/eclipsesource/jsonforms/tree/master/packages/material) or the [Angular Renderers](https://github.com/eclipsesource/jsonforms/tree/master/packages/angular-material).
+You can use the examples with any renderer set you want, for example the [Material Renderers](https://github.com/eclipsesource/jsonforms/tree/master/packages/material-renderers) or the [Angular Renderers](https://github.com/eclipsesource/jsonforms/tree/master/packages/angular-material).
 
 Check <https://www.npmjs.com/search?q=%40jsonforms> for all published JSON Forms packages.
 
