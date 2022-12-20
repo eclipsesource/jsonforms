@@ -14,7 +14,7 @@ See the official [documentation](https://jsonforms.io/docs/integrations/react/) 
 
 Check <https://www.npmjs.com/search?q=%40jsonforms> for all published JSONForms packages.
 
-If you want to customize styling, have a look at our [styles guide](https://github.com/eclipsesource/jsonforms/blob/master/packages/vanilla/Styles.md).
+If you want to customize styling, have a look at our [styles guide](https://github.com/eclipsesource/jsonforms/blob/master/packages/vanilla-renderers/Styles.md).
 
 ### Quick start
 
