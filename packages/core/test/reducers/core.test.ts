@@ -1175,6 +1175,42 @@ test('subErrorsAt filters array inner', t => {
   t.deepEqual(filtered[0], state.errors[1]);
 });
 
+test('subErrorsAt only returning suberrors', t => {
+  const ajv = createAjv();
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      numbers: {
+        title: 'Numbers',
+        type: 'array',
+        minItems: 1,
+        items: {
+          title: 'Type',
+          type: 'string',
+          enum: ['One', 'Two', 'Three']
+        },
+      }
+    }
+  };
+  const data: { numbers: string[] } = {
+    numbers: []
+  };
+  const v = ajv.compile(schema);
+  const errors = validate(v, data);
+
+  const state: JsonFormsCore = {
+    data,
+    schema,
+    uischema: undefined,
+    errors
+  };
+  const subErrors = subErrorsAt(
+    'numbers',
+    schema.properties.numbers.items as JsonSchema
+  )(state);
+  t.is(subErrors.length, 0);
+});
+
 test('subErrorsAt filters oneOf array inner', t => {
   const ajv = createAjv();
   const schema: JsonSchema = {
