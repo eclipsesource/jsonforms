@@ -8,5 +8,5 @@ JSON Forms eliminates the tedious task of writing fully-featured forms by hand b
 
 This package aggregates JSON Forms examples and makes them reachable via single `index.html` file.
 
-Aggregating the examples assumes that packages were built and their e examples bundled.
+Aggregating the examples assumes that packages were built and their examples bundled.
 Afterwards, the examples app can be aggregated with [prepare-examples-app.js](./prepare-examples-app.js) into folder `dist`.

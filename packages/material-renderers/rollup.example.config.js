@@ -41,7 +41,7 @@ const config = {
           rename: () => 'index.html'
         },
         {
-          src: '../example/src/logo.svg',
+          src: '../examples-react/src/logo.svg',
           dest: 'example/dist/assets'
         }
       ]

@@ -12,7 +12,7 @@
     "test": "lerna run test",
     "test-cov": "lerna run test-cov",
     "lint": "tslint 'packages/**/*.{ts,tsx}' -c ./tslint.json",
-    "examples-app": "lerna run build && lerna run example:bundle && node packages/examples-app/prepare-examples-app.js"
+    "build:examples-app": "lerna run build:examples-app && node packages/examples-app/prepare-examples-app.js"
   },
   "devDependencies": {
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.16.5",

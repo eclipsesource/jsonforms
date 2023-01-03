@@ -11,8 +11,8 @@ const __dirname = dirname(__filename);
 const distDir = join(__dirname, 'dist');
 const packagesDir = join(__dirname, '..');
 const examples = {
-  'react-vanilla': join(packagesDir, 'vanilla', 'example', 'dist'),
-  'react-material': join(packagesDir, 'material', 'example', 'dist')
+  'react-vanilla': join(packagesDir, 'vanilla-renderers', 'example', 'dist'),
+  'react-material': join(packagesDir, 'material-renderers', 'example', 'dist')
 }
 
 // Clean and recreate dist dir
