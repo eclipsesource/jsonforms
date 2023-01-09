@@ -23,15 +23,17 @@
   THE SOFTWARE.
 */
 import isEmpty from 'lodash/isEmpty';
+import merge from 'lodash/merge';
 import React from 'react';
 import {
   isBooleanControl,
   RankedTester,
   rankWith,
-  ControlProps
+  ControlProps,
+  isDescriptionHidden
 } from '@jsonforms/core';
 import { withJsonFormsControlProps } from '@jsonforms/react';
-import { FormControlLabel, Hidden } from '@mui/material';
+import { FormControlLabel, FormHelperText, Tooltip, Hidden } from '@mui/material';
 import { MuiCheckbox } from '../mui-controls/MuiCheckbox';
 
 export const MaterialBooleanControl = ({
@@ -46,30 +48,64 @@ export const MaterialBooleanControl = ({
   handleChange,
   errors,
   path,
-  config
+  config,
+  description
 }: ControlProps) => {
+
+  const isValid = errors.length === 0;
+  const appliedUiSchemaOptions = merge({}, config, uischema.options);
+
+  const showDescription = !isDescriptionHidden(
+    visible,
+    description,
+    false,
+    appliedUiSchemaOptions.showUnfocusedDescription
+  );
+
+  const showTooltip = !showDescription && !isDescriptionHidden(
+    visible,
+    description,
+    true,
+    true
+  );
+
+  const firstFormHelperText = showDescription
+    ? description
+    : !isValid
+    ? errors
+    : null;
+  const secondFormHelperText = showDescription && !isValid ? errors : null;
+
   return (
     <Hidden xsUp={!visible}>
-      <FormControlLabel
-        label={label}
-        id={id}
-        control={
-          <MuiCheckbox
-            id={`${id}-input`}
-            isValid={isEmpty(errors)}
-            data={data}
-            enabled={enabled}
-            visible={visible}
-            path={path}
-            uischema={uischema}
-            schema={schema}
-            rootSchema={rootSchema}
-            handleChange={handleChange}
-            errors={errors}
-            config={config}
-          />
-        }
-      />
+      <Tooltip title={(showTooltip) ? description : ''}>
+        <FormControlLabel
+          label={label}
+          id={id}
+          control={
+            <MuiCheckbox
+              id={`${id}-input`}
+              isValid={isEmpty(errors)}
+              data={data}
+              enabled={enabled}
+              visible={visible}
+              path={path}
+              uischema={uischema}
+              schema={schema}
+              rootSchema={rootSchema}
+              handleChange={handleChange}
+              errors={errors}
+              config={config}
+            />
+          }
+        />
+      </Tooltip>
+      <FormHelperText error={!isValid && !showDescription}>
+        {firstFormHelperText}
+      </FormHelperText>
+      <FormHelperText error={!isValid}>
+        {secondFormHelperText}
+      </FormHelperText>
     </Hidden>
   );
 };
