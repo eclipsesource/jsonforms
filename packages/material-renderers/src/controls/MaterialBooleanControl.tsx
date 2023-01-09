@@ -58,6 +58,9 @@ export const MaterialBooleanControl = ({
   const showDescription = !isDescriptionHidden(
     visible,
     description,
+    // Checkboxes do not receive focus until they are used, so
+    // we cannot rely on focus as criteria for showing descriptions.
+    // So we pass "false" to treat it as unfocused.
     false,
     appliedUiSchemaOptions.showUnfocusedDescription
   );
@@ -65,7 +68,11 @@ export const MaterialBooleanControl = ({
   const showTooltip = !showDescription && !isDescriptionHidden(
     visible,
     description,
+    // Tooltips have their own focus handlers, so we do not need to rely
+    // on focus state here. So we pass 'true' to treat it as focused.
     true,
+    // We also pass true here for showUnfocusedDescription since it should
+    // render regardless of that setting.
     true
   );
 
