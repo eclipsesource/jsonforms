@@ -31,7 +31,8 @@ export const schema = {
         type: 'string'
       },
       boolean: {
-        type: 'boolean'
+        type: 'boolean',
+        description: 'Boolean description as a tooltip'
       },
       number: {
         type: 'number'
