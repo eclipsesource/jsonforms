@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import isEmpty from 'lodash/isEmpty';
+import merge from 'lodash/merge';
 import React from 'react';
 import {
   isBooleanControl,
@@ -30,10 +31,11 @@ import {
   rankWith,
   ControlProps,
   optionIs,
-  and
+  and,
+  isDescriptionHidden
 } from '@jsonforms/core';
 import { withJsonFormsControlProps } from '@jsonforms/react';
-import { FormControlLabel, Hidden } from '@mui/material';
+import { FormControlLabel, FormHelperText, Tooltip, Hidden } from '@mui/material';
 import { MuiToggle } from '../mui-controls/MuiToggle';
 
 export const MaterialBooleanToggleControl = ({
@@ -48,30 +50,71 @@ export const MaterialBooleanToggleControl = ({
   handleChange,
   errors,
   path,
-  config
+  config,
+  description
 }: ControlProps) => {
+
+  const isValid = errors.length === 0;
+  const appliedUiSchemaOptions = merge({}, config, uischema.options);
+
+  const showDescription = !isDescriptionHidden(
+    visible,
+    description,
+    // Checkboxes do not receive focus until they are used, so
+    // we cannot rely on focus as criteria for showing descriptions.
+    // So we pass "false" to treat it as unfocused.
+    false,
+    appliedUiSchemaOptions.showUnfocusedDescription
+  );
+
+  const showTooltip = !showDescription && !isDescriptionHidden(
+    visible,
+    description,
+    // Tooltips have their own focus handlers, so we do not need to rely
+    // on focus state here. So we pass 'true' to treat it as focused.
+    true,
+    // We also pass true here for showUnfocusedDescription since it should
+    // render regardless of that setting.
+    true
+  );
+
+  const firstFormHelperText = showDescription
+    ? description
+    : !isValid
+    ? errors
+    : null;
+  const secondFormHelperText = showDescription && !isValid ? errors : null;
+
   return (
     <Hidden xsUp={!visible}>
-      <FormControlLabel
-        label={label}
-        id={id}
-        control={
-          <MuiToggle
-            id={`${id}-input`}
-            isValid={isEmpty(errors)}
-            data={data}
-            enabled={enabled}
-            visible={visible}
-            path={path}
-            uischema={uischema}
-            schema={schema}
-            rootSchema={rootSchema}
-            handleChange={handleChange}
-            errors={errors}
-            config={config}
-          />
-        }
-      />
+      <Tooltip title={(showTooltip) ? description : ''}>
+        <FormControlLabel
+          label={label}
+          id={id}
+          control={
+            <MuiToggle
+              id={`${id}-input`}
+              isValid={isEmpty(errors)}
+              data={data}
+              enabled={enabled}
+              visible={visible}
+              path={path}
+              uischema={uischema}
+              schema={schema}
+              rootSchema={rootSchema}
+              handleChange={handleChange}
+              errors={errors}
+              config={config}
+            />
+          }
+        />
+      </Tooltip>
+      <FormHelperText error={!isValid && !showDescription}>
+        {firstFormHelperText}
+      </FormHelperText>
+      <FormHelperText error={!isValid}>
+        {secondFormHelperText}
+      </FormHelperText>
     </Hidden>
   );
 };
