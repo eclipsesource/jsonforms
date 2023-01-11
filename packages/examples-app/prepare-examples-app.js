@@ -13,7 +13,8 @@ const packagesDir = join(__dirname, '..');
 const examples = {
   'react-vanilla': join(packagesDir, 'vanilla-renderers', 'example', 'dist'),
   'react-material': join(packagesDir, 'material-renderers', 'example', 'dist'),
-  'angular-material': join(packagesDir, 'angular-material', 'example', 'dist')
+  'angular-material': join(packagesDir, 'angular-material', 'example', 'dist'),
+  'vue-vanilla': join(packagesDir, 'vue', 'vue-vanilla', 'example', 'dist')
 }
 
 // Clean and recreate dist dir
