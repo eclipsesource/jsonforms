@@ -83,9 +83,23 @@ export const MaterialBooleanControl = ({
     : null;
   const secondFormHelperText = showDescription && !isValid ? errors : null;
 
+  let ariaDescribedBy = '';
+  const tooltipId = `${id}-tip`;
+  const helpId1 = `${id}-help1`;
+  const helpId2 = `${id}-help2`;
+  if (showTooltip) {
+    ariaDescribedBy += tooltipId;
+  }
+  if (firstFormHelperText) {
+    ariaDescribedBy += ` ${helpId1}`;
+  }
+  if (secondFormHelperText) {
+    ariaDescribedBy += ` ${helpId2}`;
+  }
+
   return (
     <Hidden xsUp={!visible}>
-      <Tooltip title={(showTooltip) ? description : ''}>
+      <Tooltip id={tooltipId} title={(showTooltip) ? description : ''}>
         <FormControlLabel
           label={label}
           id={id}
@@ -103,14 +117,17 @@ export const MaterialBooleanControl = ({
               handleChange={handleChange}
               errors={errors}
               config={config}
+              inputProps={{
+                'aria-describedby': ariaDescribedBy
+              }}
             />
           }
         />
       </Tooltip>
-      <FormHelperText error={!isValid && !showDescription}>
+      <FormHelperText id={helpId1} error={!isValid && !showDescription}>
         {firstFormHelperText}
       </FormHelperText>
-      <FormHelperText error={!isValid}>
+      <FormHelperText id={helpId2} error={!isValid}>
         {secondFormHelperText}
       </FormHelperText>
     </Hidden>

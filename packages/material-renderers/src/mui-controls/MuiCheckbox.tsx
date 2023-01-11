@@ -36,10 +36,13 @@ export const MuiCheckbox = React.memo((props: CellProps & WithClassname) => {
     uischema,
     path,
     handleChange,
-    config
+    config,
+    inputProps
   } = props;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
-  const inputProps = { autoFocus: !!appliedUiSchemaOptions.focus };
+  const inputPropsMerged = merge({}, inputProps, {
+    autoFocus: !!appliedUiSchemaOptions.focus
+  });
   // !! causes undefined value to be converted to false, otherwise has no effect
   const checked = !!data;
 
@@ -50,7 +53,7 @@ export const MuiCheckbox = React.memo((props: CellProps & WithClassname) => {
       className={className}
       id={id}
       disabled={!enabled}
-      inputProps={inputProps}
+      inputProps={inputPropsMerged}
     />
   );
 });

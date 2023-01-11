@@ -87,7 +87,7 @@ export const MaterialBooleanToggleControl = ({
 
   return (
     <Hidden xsUp={!visible}>
-      <Tooltip title={(showTooltip) ? description : ''}>
+      <Tooltip id={`${id}-tip`} title={(showTooltip) ? description : ''}>
         <FormControlLabel
           label={label}
           id={id}
@@ -105,14 +105,17 @@ export const MaterialBooleanToggleControl = ({
               handleChange={handleChange}
               errors={errors}
               config={config}
+              inputProps={{
+                'aria-describedby': `${id}-help1 ${id}-help2 ${id}-tip`
+              }}
             />
           }
         />
       </Tooltip>
-      <FormHelperText error={!isValid && !showDescription}>
+      <FormHelperText id={`${id}-help1`} error={!isValid && !showDescription}>
         {firstFormHelperText}
       </FormHelperText>
-      <FormHelperText error={!isValid}>
+      <FormHelperText id={`${id}-help2`} error={!isValid}>
         {secondFormHelperText}
       </FormHelperText>
     </Hidden>
