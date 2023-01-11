@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 
-import { ControlElement, JsonSchema, UISchemaElement } from '../models';
+import type { ControlElement, JsonSchema, UISchemaElement } from '../models';
 import { findUISchema, JsonFormsUISchemaRegistryEntry } from '../reducers';
 import { Resolve } from './util';
 

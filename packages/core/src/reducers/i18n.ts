@@ -25,7 +25,7 @@
 
 import { defaultErrorTranslator, defaultTranslator, JsonFormsI18nState } from '../i18n';
 import { I18nActions, SET_LOCALE, SET_TRANSLATOR, UPDATE_I18N } from '../actions';
-import { Reducer } from '../util';
+import type { Reducer } from '../util';
 
 export const defaultJsonFormsI18nState: Required<JsonFormsI18nState> = {
   locale: 'en',

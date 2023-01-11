@@ -23,14 +23,14 @@
   THE SOFTWARE.
 */
 
-import { RankedTester } from '../testers';
+import type { RankedTester } from '../testers';
 import {
   ADD_RENDERER,
   AddRendererAction,
   REMOVE_RENDERER,
   RemoveRendererAction
 } from '../actions';
-import { Reducer } from '../util';
+import type { Reducer } from '../util';
 
 export interface JsonFormsRendererRegistryEntry {
   tester: RankedTester;

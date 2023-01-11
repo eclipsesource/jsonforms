@@ -24,7 +24,8 @@
 */
 import maxBy from 'lodash/maxBy';
 import React, { ComponentType, useMemo } from 'react';
-import Ajv, { ErrorObject } from 'ajv';
+import type Ajv from 'ajv';
+import type { ErrorObject } from 'ajv';
 import { UnknownRenderer } from './UnknownRenderer';
 import {
   createId,

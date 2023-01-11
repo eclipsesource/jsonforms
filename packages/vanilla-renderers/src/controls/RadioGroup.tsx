@@ -29,7 +29,7 @@ import {
   isDescriptionHidden,
   OwnPropsOfEnum
 } from '@jsonforms/core';
-import { VanillaRendererProps } from '../index';
+import type { VanillaRendererProps } from '../index';
 import { findStyleAsClassName } from '../reducers/styling';
 import { useStyles } from '../styles';
 import merge from 'lodash/merge';

@@ -29,7 +29,7 @@ import {
   StatePropsOfControl,
   StatePropsOfControlWithDetail
 } from '@jsonforms/core';
-import { OnDestroy, OnInit } from '@angular/core';
+import type { OnDestroy, OnInit } from '@angular/core';
 import { JsonFormsAbstractControl } from './abstract-control';
 
 export class JsonFormsControl

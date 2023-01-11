@@ -27,7 +27,7 @@ import React, { FunctionComponent } from 'react';
 import { GroupLayout, LayoutProps, RankedTester, rankWith, uiTypeIs } from '@jsonforms/core';
 import { withJsonFormsLayoutProps } from '@jsonforms/react';
 import { renderChildren } from './util';
-import { VanillaRendererProps } from '../index';
+import type { VanillaRendererProps } from '../index';
 import { withVanillaControlProps } from '../util';
 
 /**

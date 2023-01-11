@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 
-import { JsonSchema4 } from '../models';
+import type { JsonSchema4 } from '../models';
 
 const ADDITIONAL_PROPERTIES = 'additionalProperties';
 const REQUIRED_PROPERTIES = 'required';

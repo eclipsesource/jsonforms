@@ -25,7 +25,7 @@
 
 import isEmpty from 'lodash/isEmpty';
 import get from 'lodash/get';
-import { JsonSchema, JsonSchema7 } from '../models';
+import type { JsonSchema, JsonSchema7 } from '../models';
 import { decode } from './path';
 
 /**

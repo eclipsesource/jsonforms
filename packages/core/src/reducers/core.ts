@@ -29,7 +29,8 @@ import get from 'lodash/get';
 import filter from 'lodash/filter';
 import isEqual from 'lodash/isEqual';
 import isFunction from 'lodash/isFunction';
-import Ajv, { ErrorObject, ValidateFunction } from 'ajv';
+import type Ajv from 'ajv';
+import type { ErrorObject, ValidateFunction } from 'ajv';
 import {
   CoreActions,
   INIT,
@@ -45,7 +46,7 @@ import {
   UpdateCoreAction
 } from '../actions';
 import { createAjv, Reducer } from '../util';
-import { JsonSchema, UISchemaElement } from '../models';
+import type { JsonSchema, UISchemaElement } from '../models';
 
 export const validate = (validator: ValidateFunction | undefined, data: any): ErrorObject[] => {
   if (validator === undefined) {

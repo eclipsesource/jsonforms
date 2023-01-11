@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { Category, JsonSchema } from '@jsonforms/core';
+import type { Category, JsonSchema } from '@jsonforms/core';
 import { JsonFormsDispatch } from '@jsonforms/react';
 
 export interface CategoryProps {

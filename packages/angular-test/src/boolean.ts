@@ -22,10 +22,10 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { DebugElement, Type } from '@angular/core';
+import type { DebugElement, Type } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { JsonFormsControl } from '@jsonforms/angular';
+import type { JsonFormsControl } from '@jsonforms/angular';
 import { ControlElement, JsonSchema, Actions } from '@jsonforms/core';
 import {
   baseSetup,

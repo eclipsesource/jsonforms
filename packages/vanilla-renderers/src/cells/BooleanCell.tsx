@@ -30,8 +30,8 @@ import {
   rankWith,
 } from '@jsonforms/core';
 import { withJsonFormsCellProps } from '@jsonforms/react';
-import { StatelessComponent } from 'react';
-import { VanillaRendererProps } from '../index';
+import type { StatelessComponent } from 'react';
+import type { VanillaRendererProps } from '../index';
 import { withVanillaBooleanCellProps } from '../util/index';
 
 export const BooleanCell: StatelessComponent<CellProps> =

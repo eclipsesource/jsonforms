@@ -27,11 +27,11 @@ import isEmpty from 'lodash/isEmpty';
 import isArray from 'lodash/isArray';
 import includes from 'lodash/includes';
 import find from 'lodash/find';
-import { JsonSchema, Scoped, UISchemaElement } from '..';
+import type { JsonSchema, Scoped, UISchemaElement } from '..';
 import { resolveData, resolveSchema } from './resolvers';
 import { composePaths, toDataPathSegments } from './path';
 import { isEnabled, isVisible } from './runtime';
-import Ajv from 'ajv';
+import type Ajv from 'ajv';
 
 /**
  * Escape the given string such that it can be used as a class name,

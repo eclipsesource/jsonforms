@@ -44,7 +44,7 @@ import {
 } from '@jsonforms/core';
 import { DispatchCell, withJsonFormsArrayControlProps } from '@jsonforms/react';
 import { withVanillaControlProps } from '../util';
-import { VanillaRendererProps } from '../index';
+import type { VanillaRendererProps } from '../index';
 
 const { createLabelDescriptionFrom, convertToValidClassName } = Helpers;
 

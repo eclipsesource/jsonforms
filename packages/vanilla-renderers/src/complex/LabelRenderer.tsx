@@ -25,7 +25,7 @@
 import React, { FunctionComponent } from 'react';
 import { LabelProps, RankedTester, rankWith, uiTypeIs } from '@jsonforms/core';
 import { withJsonFormsLabelProps } from '@jsonforms/react';
-import { VanillaRendererProps } from '../index';
+import type { VanillaRendererProps } from '../index';
 import { withVanillaControlProps } from '../util';
 
 /**

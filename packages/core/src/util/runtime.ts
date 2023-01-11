@@ -37,9 +37,9 @@ import {
 } from '../models';
 import { resolveData } from './resolvers';
 import { composeWithUi } from './path';
-import Ajv from 'ajv';
+import type Ajv from 'ajv';
 import { getAjv } from '../reducers';
-import { JsonFormsState } from '../store';
+import type { JsonFormsState } from '../store';
 
 const isOrCondition = (condition: Condition): condition is OrCondition =>
   condition.type === 'OR';

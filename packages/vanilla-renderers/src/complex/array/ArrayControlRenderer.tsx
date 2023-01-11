@@ -26,7 +26,7 @@ import range from 'lodash/range';
 import React, { useMemo } from 'react';
 import { ArrayControlProps, composePaths, createDefaultValue, findUISchema, Helpers, ControlElement } from '@jsonforms/core';
 import { JsonFormsDispatch,withJsonFormsArrayControlProps } from '@jsonforms/react';
-import { VanillaRendererProps } from '../../index';
+import type { VanillaRendererProps } from '../../index';
 import { withVanillaControlProps } from '../../util';
 
 const { convertToValidClassName } = Helpers;

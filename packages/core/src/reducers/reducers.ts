@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 
-import { ControlElement, UISchemaElement } from '../models';
+import type { ControlElement, UISchemaElement } from '../models';
 import {
   coreReducer,
   errorAt,
@@ -31,7 +31,7 @@ import {
 } from './core';
 import { defaultDataReducer } from './default-data';
 import { rendererReducer } from './renderers';
-import { JsonFormsState } from '../store';
+import type { JsonFormsState } from '../store';
 import type { JsonFormsUISchemaRegistryEntry } from './uischemas';
 import {
   findMatchingUISchema,
@@ -44,13 +44,13 @@ import {
 } from './i18n';
 
 import { Generate } from '../generators';
-import { JsonSchema } from '../models/jsonSchema';
+import type { JsonSchema } from '../models/jsonSchema';
 
 import { cellReducer } from './cells';
 import { configReducer } from './config';
 import get from 'lodash/get';
 import { fetchTranslator } from '.';
-import { ErrorTranslator, Translator } from '../i18n';
+import type { ErrorTranslator, Translator } from '../i18n';
 
 export const jsonFormsReducerConfig = {
   core: coreReducer,

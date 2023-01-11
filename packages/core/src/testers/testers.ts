@@ -31,7 +31,7 @@ import isArray from 'lodash/isArray';
 import reduce from 'lodash/reduce';
 import toPairs from 'lodash/toPairs';
 import includes from 'lodash/includes';
-import {
+import type {
   Categorization,
   ControlElement,
   JsonSchema,
