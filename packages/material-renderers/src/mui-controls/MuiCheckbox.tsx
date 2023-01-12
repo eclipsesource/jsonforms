@@ -24,10 +24,14 @@
 */
 import React from 'react';
 import { CellProps, WithClassname } from '@jsonforms/core';
-import { Checkbox } from '@mui/material';
+import { Checkbox, InputProps } from '@mui/material';
 import merge from 'lodash/merge';
 
-export const MuiCheckbox = React.memo((props: CellProps & WithClassname) => {
+interface MuiCheckboxInputProps {
+  inputProps?: InputProps['inputProps'];
+}
+
+export const MuiCheckbox = React.memo((props: CellProps & WithClassname & MuiCheckboxInputProps) => {
   const {
     data,
     className,
