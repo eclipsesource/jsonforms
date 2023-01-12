@@ -24,10 +24,14 @@
 */
 import React from 'react';
 import { CellProps, WithClassname } from '@jsonforms/core';
-import { Switch } from '@mui/material';
+import { Switch, InputProps } from '@mui/material';
 import merge from 'lodash/merge';
 
-export const MuiToggle = React.memo((props: CellProps & WithClassname) => {
+interface MuiToggleInputProps {
+  inputProps?: InputProps['inputProps'];
+}
+
+export const MuiToggle = React.memo((props: CellProps & WithClassname & MuiToggleInputProps) => {
   const {
     data,
     className,
@@ -36,10 +40,13 @@ export const MuiToggle = React.memo((props: CellProps & WithClassname) => {
     uischema,
     path,
     handleChange,
-    config
+    config,
+    inputProps
   } = props;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
-  const inputProps = { autoFocus: !!appliedUiSchemaOptions.focus };
+  const inputPropsMerged = merge({}, inputProps, {
+    autoFocus: !!appliedUiSchemaOptions.focus
+  });
   const checked = !!data;
 
   return (
@@ -49,7 +56,7 @@ export const MuiToggle = React.memo((props: CellProps & WithClassname) => {
       className={className}
       id={id}
       disabled={!enabled}
-      inputProps={inputProps}
+      inputProps={inputPropsMerged}
     />
   );
 });
