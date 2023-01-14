@@ -85,9 +85,24 @@ export const MaterialBooleanToggleControl = ({
     : null;
   const secondFormHelperText = showDescription && !isValid ? errors : null;
 
+  const descriptionIds = [];
+  const tooltipId = `${id}-tip`;
+  const helpId1 = `${id}-help1`;
+  const helpId2 = `${id}-help2`;
+  if (showTooltip) {
+    descriptionIds.push(tooltipId);
+  }
+  if (firstFormHelperText) {
+    descriptionIds.push(helpId1);
+  }
+  if (secondFormHelperText) {
+    descriptionIds.push(helpId2);
+  }
+  const ariaDescribedBy = descriptionIds.join(' ');
+
   return (
     <Hidden xsUp={!visible}>
-      <Tooltip id={`${id}-tip`} title={(showTooltip) ? description : ''}>
+      <Tooltip id={tooltipId} title={(showTooltip) ? description : ''}>
         <FormControlLabel
           label={label}
           id={id}
@@ -106,16 +121,16 @@ export const MaterialBooleanToggleControl = ({
               errors={errors}
               config={config}
               inputProps={{
-                'aria-describedby': `${id}-help1 ${id}-help2 ${id}-tip`
+                'aria-describedby': ariaDescribedBy
               }}
             />
           }
         />
       </Tooltip>
-      <FormHelperText id={`${id}-help1`} error={!isValid && !showDescription}>
+      <FormHelperText id={helpId1} error={!isValid && !showDescription}>
         {firstFormHelperText}
       </FormHelperText>
-      <FormHelperText id={`${id}-help2`} error={!isValid}>
+      <FormHelperText id={helpId2} error={!isValid}>
         {secondFormHelperText}
       </FormHelperText>
     </Hidden>

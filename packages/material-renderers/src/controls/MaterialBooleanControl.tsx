@@ -83,19 +83,20 @@ export const MaterialBooleanControl = ({
     : null;
   const secondFormHelperText = showDescription && !isValid ? errors : null;
 
-  let ariaDescribedBy = '';
+  const descriptionIds = [];
   const tooltipId = `${id}-tip`;
   const helpId1 = `${id}-help1`;
   const helpId2 = `${id}-help2`;
   if (showTooltip) {
-    ariaDescribedBy += tooltipId;
+    descriptionIds.push(tooltipId);
   }
   if (firstFormHelperText) {
-    ariaDescribedBy += ` ${helpId1}`;
+    descriptionIds.push(helpId1);
   }
   if (secondFormHelperText) {
-    ariaDescribedBy += ` ${helpId2}`;
+    descriptionIds.push(helpId2);
   }
+  const ariaDescribedBy = descriptionIds.join(' ');
 
   return (
     <Hidden xsUp={!visible}>
