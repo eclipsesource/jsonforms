@@ -16,7 +16,7 @@ module.exports = {
       src: 'https://static.cloudflareinsights.com/beacon.min.js',
       defer: true,
       'data-cf-beacon':
-        '{&quot;token&quot;: &quot;b2ec7b485fc04039bf1a9fbd51005477&quot;}',
+        '{"token": "b2ec7b485fc04039bf1a9fbd51005477"}',
     },
   ],
   themeConfig: {
