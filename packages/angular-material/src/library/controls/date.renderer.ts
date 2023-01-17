@@ -23,9 +23,9 @@
   THE SOFTWARE.
 */
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { DatePipe } from '@angular/common';
 import { isDateControl, RankedTester, rankWith } from '@jsonforms/core';
 import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
+import { DateAdapter } from '@angular/material/core';
 
 @Component({
   selector: 'DateControlRenderer',
@@ -46,7 +46,7 @@ import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
         [for]="datepicker"
       ></mat-datepicker-toggle>
       <mat-datepicker #datepicker></mat-datepicker>
-      <mat-hint *ngIf="shouldShowUnfocusedDescription() || focused">{{
+      <mat-hint *ngIf="shouldShowUnfocusedDescription()">{{
         description
       }}</mat-hint>
       <mat-error>{{ error }}</mat-error>
@@ -66,15 +66,16 @@ import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DateControlRenderer extends JsonFormsControl {
-  focused = false;
-  private datePipe: DatePipe;
-  constructor(jsonformsService: JsonFormsAngularService, datePipe: DatePipe) {
+  constructor(
+    jsonformsService: JsonFormsAngularService,
+    private dateAdapter: DateAdapter<Date>
+  ) {
     super(jsonformsService);
-    this.datePipe = datePipe;
   }
 
-  getEventValue = (event: any) =>
-    this.datePipe.transform(event.value, 'yyyy-MM-dd');
+  getEventValue = (event: any) => {
+    return this.dateAdapter.format(event.value, 'YYYY-MM-DD');
+  };
 }
 
 export const DateControlRendererTester: RankedTester = rankWith(
