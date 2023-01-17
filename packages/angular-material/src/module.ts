@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
 import {
@@ -49,9 +49,7 @@ import {
   DateAdapter,
   MatNativeDateModule,
   MAT_DATE_FORMATS,
-  MAT_DATE_LOCALE
 } from '@angular/material/core';
-import { MomentDateAdapter, MAT_MOMENT_DATE_FORMATS } from '@angular/material-moment-adapter';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { JsonFormsModule } from '@jsonforms/angular';
 import { AutocompleteControlRenderer } from './controls/autocomplete.renderer';
@@ -72,6 +70,7 @@ import { GroupLayoutRenderer } from './layouts/group-layout.renderer';
 import { HorizontalLayoutRenderer } from './layouts/horizontal-layout.renderer';
 import { VerticalLayoutRenderer } from './layouts/vertical-layout.renderer';
 import { ArrayLayoutRenderer } from './layouts/array-layout.renderer';
+import { DayJsDateAdapter } from './util/dayjs-date-adapter';
 
 @NgModule({
   imports: [
@@ -162,13 +161,24 @@ import { ArrayLayoutRenderer } from './layouts/array-layout.renderer';
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [
-    DatePipe,
     {
       provide: DateAdapter,
-      useClass: MomentDateAdapter,
-      deps: [MAT_DATE_LOCALE]
+      useClass: DayJsDateAdapter
     },
-    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS }
+    {
+      provide: MAT_DATE_FORMATS,
+      useValue: {
+        parse: {
+          dateInput: 'YYYY-MM-DD'
+        },
+        display: {
+          dateInput: 'YYYY-MM-DD',
+          monthYearLabel: 'YYYY-MM',
+          dateA11yLabel: 'YYYY-MM-DD',
+          monthYearA11yLabel: 'YYYY-MM'
+        }
+      }
+    }
   ]
 })
 export class JsonFormsAngularMaterialModule {}
