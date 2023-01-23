@@ -34,7 +34,7 @@ import {
   getSchema,
   getTranslator,
 } from '../reducers';
-import { AnyAction, Dispatch } from './type';
+import type { AnyAction, Dispatch } from './type';
 import {
   formatErrorMessage,
   Resolve,
@@ -53,8 +53,8 @@ import {
   OwnPropsOfEnum,
   StatePropsOfScopedRenderer,
 } from './renderer';
-import { JsonFormsState } from '../store';
-import { JsonSchema } from '../models';
+import type { JsonFormsState } from '../store';
+import type { JsonSchema } from '../models';
 import { getI18nKeyPrefix } from '../i18n';
 
 export type { JsonFormsCellRendererRegistryEntry };

@@ -22,15 +22,15 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { Type } from '@angular/core';
+import type { Type } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
-import {
+import type {
   JsonFormsRendererRegistryEntry,
   JsonSchema,
   UISchemaElement
 } from '@jsonforms/core';
-import { ErrorObject } from 'ajv';
+import type { ErrorObject } from 'ajv';
 
 export interface ErrorTestExpectation {
   errorInstance: Type<any>;

@@ -1,5 +1,5 @@
-import { ErrorObject } from 'ajv';
-import { JsonSchema, UISchemaElement } from '../models';
+import type { ErrorObject } from 'ajv';
+import type { JsonSchema, UISchemaElement } from '../models';
 
 export type Translator = {
     (id: string, defaultMessage: string, values?: any): string;

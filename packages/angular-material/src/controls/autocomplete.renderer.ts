@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import type { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 import {
   Actions,
@@ -34,7 +34,7 @@ import {
   RankedTester,
   rankWith
 } from '@jsonforms/core';
-import { Observable } from 'rxjs';
+import type { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { startWith } from 'rxjs/operators';
 

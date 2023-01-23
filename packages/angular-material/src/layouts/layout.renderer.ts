@@ -35,7 +35,7 @@ import {
   UISchemaElement,
   JsonSchema
 } from '@jsonforms/core';
-import { Subscription } from 'rxjs';
+import type { Subscription } from 'rxjs';
 
 @Component({
   template: ''

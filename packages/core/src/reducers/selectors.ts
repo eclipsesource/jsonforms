@@ -24,9 +24,9 @@
 */
 
 import get from 'lodash/get';
-import Ajv from 'ajv';
-import { JsonFormsState } from '../store';
-import { JsonSchema, UISchemaElement } from '../models';
+import type Ajv from 'ajv';
+import type { JsonFormsState } from '../store';
+import type { JsonSchema, UISchemaElement } from '../models';
 import {
   extractAjv,
   extractData,
@@ -37,9 +37,9 @@ import {
   extractDefaultData,
   JsonFormsDefaultDataRegistryEntry
 } from './default-data';
-import { JsonFormsRendererRegistryEntry } from './renderers';
-import { JsonFormsCellRendererRegistryEntry } from './cells';
-import { JsonFormsUISchemaRegistryEntry } from './uischemas';
+import type { JsonFormsRendererRegistryEntry } from './renderers';
+import type { JsonFormsCellRendererRegistryEntry } from './cells';
+import type { JsonFormsUISchemaRegistryEntry } from './uischemas';
 
 export const getData = (state: JsonFormsState) =>
   extractData(get(state, 'jsonforms.core'));

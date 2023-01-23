@@ -45,17 +45,17 @@ import {
   getUiSchema,
   JsonFormsUISchemaRegistryEntry,
 } from '../reducers';
-import { RankedTester } from '../testers';
+import type { RankedTester } from '../testers';
 import { hasShowRule, isInherentlyEnabled, isVisible } from './runtime';
 import { createLabelDescriptionFrom } from './label';
-import { CombinatorKeyword } from './combinators';
+import type { CombinatorKeyword } from './combinators';
 import { moveDown, moveUp } from './array';
-import { AnyAction, Dispatch } from './type';
+import type { AnyAction, Dispatch } from './type';
 import { Resolve } from './util';
 import { composePaths, composeWithUi } from './path';
 import { CoreActions, update } from '../actions';
-import { ErrorObject } from 'ajv';
-import { JsonFormsState } from '../store';
+import type { ErrorObject } from 'ajv';
+import type { JsonFormsState } from '../store';
 import { deriveLabelForUISchemaElement, getCombinedErrorMessage, getI18nKey, getI18nKeyPrefix, getI18nKeyPrefixBySchema, Translator } from '../i18n';
 
 const isRequired = (

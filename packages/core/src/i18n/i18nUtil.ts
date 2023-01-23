@@ -1,8 +1,8 @@
-import { ErrorObject } from 'ajv';
+import type { ErrorObject } from 'ajv';
 import { isInternationalized, Labelable, UISchemaElement } from '../models';
 import { getControlPath } from '../reducers';
 import { formatErrorMessage } from '../util';
-import { i18nJsonSchema, ErrorTranslator, Translator } from './i18nTypes';
+import type { i18nJsonSchema, ErrorTranslator, Translator } from './i18nTypes';
 
 export const getI18nKeyPrefixBySchema = (
   schema: i18nJsonSchema | undefined,

@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import {
+import type {
   Categorization,
   Category,
   LayoutProps
@@ -33,7 +33,7 @@ import { CategorizationList } from './CategorizationList';
 import { SingleCategory } from './SingleCategory';
 import { isCategorization } from './tester';
 import { withVanillaControlProps } from '../../util';
-import { VanillaRendererProps } from '../../index';
+import type { VanillaRendererProps } from '../../index';
 
 export interface CategorizationState {
   selectedCategory: Category;

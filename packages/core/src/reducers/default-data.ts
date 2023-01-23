@@ -29,7 +29,7 @@ import {
   REMOVE_DEFAULT_DATA,
   UnregisterDefaultDataAction
 } from '../actions';
-import { Reducer } from '../util';
+import type { Reducer } from '../util';
 
 export interface JsonFormsDefaultDataRegistryEntry {
   schemaPath: string;

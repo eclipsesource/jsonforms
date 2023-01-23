@@ -46,10 +46,11 @@ import {
     updateI18n
 } from '@jsonforms/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { JsonFormsBaseRenderer } from './base.renderer';
+import type { JsonFormsBaseRenderer } from './base.renderer';
 
 import { cloneDeep } from 'lodash';
-import Ajv, { ErrorObject } from 'ajv';
+import type Ajv from 'ajv';
+import type { ErrorObject } from 'ajv';
 
 export const USE_STATE_VALUE = Symbol('Marker to use state value');
 export class JsonFormsAngularService {

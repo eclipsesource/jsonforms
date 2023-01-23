@@ -27,8 +27,8 @@ import maxBy from 'lodash/maxBy';
 import remove from 'lodash/remove';
 import { ADD_UI_SCHEMA, REMOVE_UI_SCHEMA, UISchemaActions } from '../actions';
 import { NOT_APPLICABLE } from '../testers';
-import { JsonSchema, UISchemaElement } from '../models';
-import { Reducer } from '../util';
+import type { JsonSchema, UISchemaElement } from '../models';
+import type { Reducer } from '../util';
 
 export type UISchemaTester = (
   schema: JsonSchema,

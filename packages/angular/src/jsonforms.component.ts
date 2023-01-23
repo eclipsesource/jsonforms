@@ -46,7 +46,7 @@ import {
 } from '@jsonforms/core';
 import { UnknownRenderer } from './unknown.component';
 import { JsonFormsBaseRenderer } from './base.renderer';
-import { Subscription } from 'rxjs';
+import type { Subscription } from 'rxjs';
 import { JsonFormsControl } from './control';
 import { JsonFormsAngularService } from './jsonforms.service';
 

@@ -23,13 +23,14 @@
   THE SOFTWARE.
 */
 
-import AJV, { ErrorObject } from 'ajv';
-import { JsonSchema, UISchemaElement } from '../models';
+import type AJV from 'ajv';
+import type { ErrorObject } from 'ajv';
+import type { JsonSchema, UISchemaElement } from '../models';
 import { generateDefaultUISchema, generateJsonSchema } from '../generators';
 
-import { RankedTester } from '../testers';
-import { UISchemaTester, ValidationMode } from '../reducers';
-import { ErrorTranslator, Translator } from '../i18n';
+import type { RankedTester } from '../testers';
+import type { UISchemaTester, ValidationMode } from '../reducers';
+import type { ErrorTranslator, Translator } from '../i18n';
 
 export const INIT: 'jsonforms/INIT' = 'jsonforms/INIT';
 export const UPDATE_CORE: 'jsonforms/UPDATE_CORE' = `jsonforms/UPDATE_CORE`;

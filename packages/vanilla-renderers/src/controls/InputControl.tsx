@@ -40,7 +40,7 @@ import {
   withJsonFormsControlProps
 } from '@jsonforms/react';
 import { withVanillaControlProps } from '../util';
-import { VanillaRendererProps } from '../index';
+import type { VanillaRendererProps } from '../index';
 import merge from 'lodash/merge';
 
 export class InputControl extends Control<

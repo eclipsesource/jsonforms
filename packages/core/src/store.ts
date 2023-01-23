@@ -23,14 +23,14 @@
   THE SOFTWARE.
 */
 
-import { Store } from './util';
-import {
+import type { Store } from './util';
+import type {
   JsonFormsCore,
   JsonFormsCellRendererRegistryEntry,
   JsonFormsRendererRegistryEntry,
   JsonFormsUISchemaRegistryEntry
 } from './reducers';
-import { JsonFormsI18nState } from './i18n';
+import type { JsonFormsI18nState } from './i18n';
 
 /**
  * JSONForms store.

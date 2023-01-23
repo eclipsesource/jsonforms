@@ -32,7 +32,7 @@ import {
 import { withJsonFormsEnumProps } from '@jsonforms/react';
 import { RadioGroup } from './RadioGroup';
 import { withVanillaControlProps } from '../util';
-import { VanillaRendererProps } from '../index';
+import type { VanillaRendererProps } from '../index';
 export const RadioGroupControl = (props: ControlProps & VanillaRendererProps) => {
   return <RadioGroup {...props} />;
 };

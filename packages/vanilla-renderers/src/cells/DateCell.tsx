@@ -30,7 +30,7 @@ import {
   rankWith,
 } from '@jsonforms/core';
 import { withJsonFormsCellProps } from '@jsonforms/react';
-import { VanillaRendererProps } from '../index';
+import type { VanillaRendererProps } from '../index';
 import { withVanillaCellProps } from '../util/index';
 
 export const DateCell = (props: CellProps & VanillaRendererProps) => {

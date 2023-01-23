@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 
-import { JsonSchema } from './jsonSchema';
+import type { JsonSchema } from './jsonSchema';
 
 /**
  * Interface for describing an UI schema element that is referencing

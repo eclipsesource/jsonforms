@@ -32,7 +32,7 @@ import {
   rankWith,
 } from '@jsonforms/core';
 import { withVanillaControlProps } from '../util';
-import { VanillaRendererProps } from '../index';
+import type { VanillaRendererProps } from '../index';
 import { withJsonFormsOneOfEnumProps } from '@jsonforms/react';
 import { RadioGroup } from './RadioGroup';
 

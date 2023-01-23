@@ -23,14 +23,14 @@
   THE SOFTWARE.
 */
 
-import { RankedTester } from '../testers';
+import type { RankedTester } from '../testers';
 import {
   ADD_CELL,
   AddCellRendererAction,
   REMOVE_CELL,
   RemoveCellRendererAction
 } from '../actions';
-import { Reducer } from '../util';
+import type { Reducer } from '../util';
 
 type ValidCellReducerActions = AddCellRendererAction | RemoveCellRendererAction;
 

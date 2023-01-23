@@ -26,7 +26,7 @@
 import merge from 'lodash/merge';
 import { SET_CONFIG, SetConfigAction } from '../actions';
 import { configDefault } from '../configDefault';
-import { Reducer } from '../util';
+import type { Reducer } from '../util';
 
 const applyDefaultConfiguration = (config: any = {}) =>
   merge({}, configDefault, config);
