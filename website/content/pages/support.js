@@ -7,7 +7,7 @@ function Support() {
   return (
     <Layout
       title="Professional Support"
-      description="Description will go into a meta tag in <head />">
+      description="JSON Forms Support Options">
       <div className='support__main' style={{ justifyContent: 'center', alignItems: 'center', display: 'flex', flexDirection: 'column' }}>
         <div className={styles.comparison_container} style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center'}}>
           <div className={styles.community} style={{flex: '1'}}>
