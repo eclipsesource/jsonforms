@@ -49,6 +49,11 @@ module.exports = {
           position: 'left',
         },
         {
+          to: 'community',
+          label: 'Community',
+          position: 'left'
+        },
+        {
           to: 'news',
           label: 'News',
           position: 'left',
@@ -161,6 +166,15 @@ module.exports = {
         path: 'content/faq',
         routeBasePath: 'faq',
         sidebarPath: require.resolve('./src/sidebars/faq.js'),
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'community',
+        path: 'content/community',
+        routeBasePath: 'community',
+        sidebarPath: require.resolve('./src/sidebars/community.js'),
       },
     ],
     [
