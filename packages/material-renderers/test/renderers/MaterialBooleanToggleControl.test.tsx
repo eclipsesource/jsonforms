@@ -48,7 +48,8 @@ const schema = {
   type: 'object',
   properties: {
     foo: {
-      type: 'boolean'
+      type: 'boolean',
+      description: 'My description'
    }
   }
 };
@@ -465,5 +466,48 @@ describe('Material boolean toggle control', () => {
     );
     const input = wrapper.find('input');
     expect(input.props().id).toBe('myid-input');
+  });
+
+  it('unfocused description displays and is referenced by aria-describedby', () => {
+    const core = initCore(schema, uischema, data);
+    const config = {
+      showUnfocusedDescription: true
+    }
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{
+          renderers: materialRenderers,
+          config: config,
+          core
+        }}
+      >
+        <BooleanToggleControl
+          schema={schema}
+          uischema={uischema}
+          id='myid'
+        />
+      </JsonFormsStateProvider>
+    );
+    const input = wrapper.find('input');
+    expect(input.props()['aria-describedby']).toBe('myid-help1');
+    const description = wrapper.find('#myid-help1').first();
+    expect(description.text()).toBe('My description');
+  });
+
+  it('tooltip description is referenced by aria-describedby', () => {
+    const core = initCore(schema, uischema, data);
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
+        <BooleanToggleControl
+          schema={schema}
+          uischema={uischema}
+          id='myid'
+        />
+      </JsonFormsStateProvider>
+    );
+    const input = wrapper.find('input');
+    expect(input.props()['aria-describedby']).toBe('myid-tip');
   });
 });
