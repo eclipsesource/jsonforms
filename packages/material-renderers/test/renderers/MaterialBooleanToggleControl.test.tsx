@@ -470,9 +470,7 @@ describe('Material boolean toggle control', () => {
 
   it('unfocused description displays and is referenced by aria-describedby', () => {
     const core = initCore(schema, uischema, data);
-    const config = {
-      showUnfocusedDescription: true
-    }
+    const config = { showUnfocusedDescription: true };
     wrapper = mount(
       <JsonFormsStateProvider
         initState={{
