@@ -65,6 +65,7 @@ import NoBorderTableCell from './NoBorderTableCell';
 import TableToolbar from './TableToolbar';
 import { ErrorObject } from 'ajv';
 import merge from 'lodash/merge';
+import { ArrayTranslations } from '@jsonforms/core';
 
 // we want a cell that doesn't automatically span
 const styles = {
@@ -129,12 +130,13 @@ const getValidColumnProps = (scopedSchema: JsonSchema) => {
 
 export interface EmptyTableProps {
   numColumns: number;
+  translations: ArrayTranslations;
 }
 
-const EmptyTable = ({ numColumns }: EmptyTableProps) => (
+const EmptyTable = ({ numColumns, translations }: EmptyTableProps) => (
   <TableRow>
     <NoBorderTableCell colSpan={numColumns}>
-      <Typography align='center'>No data</Typography>
+      <Typography align='center'>{translations.noDataMessage}</Typography>
     </NoBorderTableCell>
   </TableRow>
 );
@@ -333,6 +335,7 @@ interface TableRowsProp {
   cells?: JsonFormsCellRendererRegistryEntry[];
   moveUp?(path: string, toMove: number): () => void;
   moveDown?(path: string, toMove: number): () => void;
+  translations: ArrayTranslations;
 }
 const TableRows = ({
   data,
@@ -344,12 +347,13 @@ const TableRows = ({
   uischema,
   config,
   enabled,
-  cells
+  cells,
+  translations
 }: TableRowsProp & WithDeleteDialogSupport) => {
   const isEmptyTable = data === 0;
 
   if (isEmptyTable) {
-    return <EmptyTable numColumns={getValidColumnProps(schema).length + 1} />;
+    return <EmptyTable numColumns={getValidColumnProps(schema).length + 1} translations={translations}/>;
   }
 
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
@@ -397,7 +401,8 @@ export class MaterialTableControl extends React.Component<
       openDeleteDialog,
       visible,
       enabled,
-      cells
+      cells,
+      translations
     } = this.props;
 
     const controlElement = uischema as ControlElement;
@@ -420,6 +425,7 @@ export class MaterialTableControl extends React.Component<
               schema={schema}
               rootSchema={rootSchema}
               enabled={enabled}
+              translations={translations}
             />
             {isObjectSchema && (
               <TableRow>
@@ -429,7 +435,7 @@ export class MaterialTableControl extends React.Component<
             )}
           </TableHead>
           <TableBody>
-            <TableRows openDeleteDialog={openDeleteDialog} {...this.props} />
+            <TableRows openDeleteDialog={openDeleteDialog} translations={translations} {...this.props} />
           </TableBody>
         </Table>
       </Hidden>

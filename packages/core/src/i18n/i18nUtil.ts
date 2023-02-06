@@ -3,6 +3,7 @@ import { isInternationalized, Labelable, UISchemaElement } from '../models';
 import { getControlPath } from '../reducers';
 import { formatErrorMessage } from '../util';
 import type { i18nJsonSchema, ErrorTranslator, Translator } from './i18nTypes';
+import { ArrayDefaultTranslation, ArrayTranslations } from './arrayTranslations'
 
 export const getI18nKeyPrefixBySchema = (
   schema: i18nJsonSchema | undefined,
@@ -45,6 +46,13 @@ export const getI18nKey = (
   key: string
 ): string => {
   return `${getI18nKeyPrefix(schema, uischema, path)}.${key}`;
+};
+
+export const addI18nKeyToPrefix = (
+  i18nKeyPrefix: string,
+  key: string
+): string => {
+  return `${i18nKeyPrefix}.${key}`;
 };
 
 export const defaultTranslator: Translator = (_id: string, defaultMessage: string | undefined) => defaultMessage;
@@ -122,4 +130,18 @@ export const deriveLabelForUISchemaElement = (uischema: Labelable<boolean>, t: T
   const i18nKeyPrefix = getI18nKeyPrefixBySchema(undefined, uischema);
   const i18nKey = typeof i18nKeyPrefix === 'string' ? `${i18nKeyPrefix}.label` : stringifiedLabel;
   return t(i18nKey, stringifiedLabel, { uischema: uischema });
+}
+
+export const getArrayTranslations = (
+  t: Translator,
+  defaultTranslations: ArrayDefaultTranslation [],
+  i18nKeyPrefix: string,
+  label: string
+): ArrayTranslations => {
+  const translations:ArrayTranslations = {};
+  defaultTranslations.forEach((controlElement)=>{
+    const key = addI18nKeyToPrefix(i18nKeyPrefix, controlElement.key);
+    translations[controlElement.key]=t(key, controlElement.default(label));
+  })
+  return translations;
 }

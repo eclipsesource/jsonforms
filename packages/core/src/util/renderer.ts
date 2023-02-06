@@ -56,7 +56,8 @@ import { composePaths, composeWithUi } from './path';
 import { CoreActions, update } from '../actions';
 import type { ErrorObject } from 'ajv';
 import type { JsonFormsState } from '../store';
-import { deriveLabelForUISchemaElement, getCombinedErrorMessage, getI18nKey, getI18nKeyPrefix, getI18nKeyPrefixBySchema, Translator } from '../i18n';
+import { deriveLabelForUISchemaElement, getCombinedErrorMessage, getI18nKey, getI18nKeyPrefix, getI18nKeyPrefixBySchema, getArrayTranslations, Translator } from '../i18n';
+import { arrayDefaultTranslations, ArrayTranslations } from '../i18n/arrayTranslations';
 
 const isRequired = (
   schema: JsonSchema,
@@ -370,6 +371,8 @@ export interface StatePropsOfControl extends StatePropsOfScopedRenderer {
    */
   required?: boolean;
 
+  i18nKeyPrefix?: string;
+
   // TODO: renderers?
 }
 
@@ -469,6 +472,7 @@ export const mapStateToControlProps = (
   const schema = resolvedSchema ?? rootSchema;
   const t = getTranslator()(state);
   const te = getErrorTranslator()(state);
+  const i18nKeyPrefix = getI18nKeyPrefix(schema, uischema, path);
   const i18nLabel = t(getI18nKey(schema, uischema, path, 'label'), label, {schema, uischema, path, errors} );
   const i18nDescription = t(getI18nKey(schema, uischema, path, 'description'), description, {schema, uischema, path, errors});
   const i18nErrorMessage = getCombinedErrorMessage(errors, te, t, schema, uischema, path);
@@ -487,7 +491,8 @@ export const mapStateToControlProps = (
     schema,
     config: getConfig(state),
     cells: ownProps.cells || state.jsonforms.cells,
-    rootSchema
+    rootSchema,
+    i18nKeyPrefix
   };
 };
 
@@ -703,6 +708,7 @@ export const mapStateToArrayControlProps = (
   const resolvedSchema = Resolve.schema(schema, 'items', props.rootSchema);
   const childErrors = getSubErrorsAt(path, resolvedSchema)(state);
 
+
   return {
     ...props,
     path,
@@ -710,7 +716,7 @@ export const mapStateToArrayControlProps = (
     schema: resolvedSchema,
     childErrors,
     renderers: ownProps.renderers || getRenderers(state),
-    cells: ownProps.cells || getCells(state)
+    cells: ownProps.cells || getCells(state),
   };
 };
 
@@ -771,7 +777,7 @@ export const mapDispatchToArrayControlProps = (
         return array;
       })
     );
-  }
+  },
 });
 
 export interface DispatchPropsOfMultiEnumControl {
@@ -1011,6 +1017,7 @@ export const mapStateToOneOfProps = (
 
 export interface StatePropsOfArrayLayout extends StatePropsOfControlWithDetail {
   data: number;
+  translations: ArrayTranslations;
   minItems?: number;
 }
 /**
@@ -1029,16 +1036,19 @@ export const mapStateToArrayLayoutProps = (
     schema,
     uischema,
     errors,
+    i18nKeyPrefix,
+    label,
     ...props
   } = mapStateToControlWithDetailProps(state, ownProps);
 
+  
   const resolvedSchema = Resolve.schema(schema, 'items', props.rootSchema);
-
+  const t = getTranslator()(state);
   // TODO Does not consider 'i18n' keys which are specified in the ui schemas of the sub errors
   const childErrors = getCombinedErrorMessage(
     getSubErrorsAt(path, resolvedSchema)(state),
     getErrorTranslator()(state),
-    getTranslator()(state),
+    t,
     undefined,
     undefined,
     undefined
@@ -1050,12 +1060,14 @@ export const mapStateToArrayLayoutProps = (
     childErrors;
   return {
     ...props,
+    label,
     path,
     uischema,
     schema: resolvedSchema,
     data: props.data ? props.data.length : 0,
     errors: allErrors,
-    minItems: schema.minItems
+    minItems: schema.minItems,
+    translations: getArrayTranslations(t,arrayDefaultTranslations,i18nKeyPrefix, label)
   };
 };
 

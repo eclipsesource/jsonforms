@@ -8,12 +8,14 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import React from 'react';
 import ValidationIcon from '../complex/ValidationIcon';
+import { ArrayTranslations } from '@jsonforms/core';
 export interface ArrayLayoutToolbarProps {
   label: string;
   errors: string;
   path: string;
   addItem(path: string, data: any): () => void;
   createDefault(): any;
+  translations: ArrayTranslations
 }
 export const ArrayLayoutToolbar = React.memo(
   ({
@@ -21,7 +23,8 @@ export const ArrayLayoutToolbar = React.memo(
     errors,
     addItem,
     path,
-    createDefault
+    createDefault,
+    translations
   }: ArrayLayoutToolbarProps) => {
     return (
       <Toolbar disableGutters={true}>
@@ -39,11 +42,11 @@ export const ArrayLayoutToolbar = React.memo(
               <Grid item>
                 <Tooltip
                   id='tooltip-add'
-                  title={`Add to ${label}`}
+                  title={translations.addTooltip}
                   placement='bottom'
                 >
                   <IconButton
-                    aria-label={`Add to ${label}`}
+                    aria-label={translations.addTooltip}
                     onClick={addItem(path, createDefault())}
                     size='large'>
                     <AddIcon />

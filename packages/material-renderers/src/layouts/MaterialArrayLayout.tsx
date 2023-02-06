@@ -58,7 +58,8 @@ const MaterialArrayLayoutComponent = (props: ArrayLayoutProps)=> {
     required,
     rootSchema,
     config,
-    uischemas
+    uischemas,
+    translations
   } = props;
   const appliedUiSchemaOptions = merge(
     {},
@@ -69,6 +70,7 @@ const MaterialArrayLayoutComponent = (props: ArrayLayoutProps)=> {
   return (
     <div>
       <ArrayLayoutToolbar
+        translations={translations}
         label={computeLabel(
           label,
           required,
