@@ -23,7 +23,7 @@
     "@types/lodash": "^4.14.149",
     "ajv": "^8.6.1",
     "ajv-formats": "^2.1.0",
-    "ava": "~2.4.0",
+    "ava": "~5.2.0",
     "babel-loader": "^8.0.6",
     "core-js": "^3.9.1",
     "coveralls": "^3.0.9",
