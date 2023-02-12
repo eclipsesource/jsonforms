@@ -155,4 +155,5 @@ export interface JsonSchema4 {
 
   format?: string;
   const?: any;
+  [x: string | number | symbol]: unknown;
 }
