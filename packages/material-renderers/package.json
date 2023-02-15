@@ -11,6 +11,10 @@
     "src": "src",
     "webpack": "webpack"
   },
+  "files": [
+    "lib",
+    "src"
+  ],
   "keywords": [
     "material",
     "renderer",

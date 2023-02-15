@@ -13,6 +13,10 @@
     "src": "src",
     "test": "test"
   },
+  "files": [
+    "lib",
+    "src"
+  ],
   "keywords": [
     "react",
     "form",

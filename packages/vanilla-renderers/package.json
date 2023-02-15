@@ -20,6 +20,12 @@
     "test-cov": "jest --no-cache --coverage",
     "doc": "typedoc --name 'JSON Forms Vanilla Renderers' --mode file --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
   },
+  "files": [
+    "lib",
+    "src",
+    "example",
+    "Styles.md"
+  ],
   "keywords": [
     "vanilla",
     "form",
