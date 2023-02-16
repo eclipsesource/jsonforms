@@ -135,6 +135,19 @@ export interface LeafCondition extends Condition, Scoped {
 
 export interface SchemaBasedCondition extends Condition, Scoped {
   schema: JsonSchema;
+
+  /**
+   * When the scope resolves to undefined and `failWhenUndefined` is set to `true`, the condition
+   * will fail. Therefore the reverse effect will be applied.
+   *
+   * Background:
+   * Most JSON Schemas will successfully validate against `undefined` data. Specifying that a
+   * condition shall fail when data is `undefined` requires to lift the scope to being able to use
+   * JSON Schema's `required`.
+   *
+   * Using `failWhenUndefined` allows to more conveniently express this condition.
+   */
+  failWhenUndefined?: boolean;
 }
 
 /**
