@@ -10,30 +10,113 @@ import ApiLink from '../../../src/components/common/ApiLink';
 
 Rules allow for dynamic aspects for a form, e.g. by hiding or disabling UI schema elements.
 
-A rule may be attached to any UI schema element and can be defined with the `rule` property.
-We'll first look at an example definition of a rule and then explain it in detail.
+A rule may be attached to any UI schema element and can be defined with the `rule` property which looks like:
 
 ```js
 "rule": {
-  "effect": "HIDE",
+  "effect": "HIDE" | "SHOW" | "ENABLE" | "DISABLE",
   "condition": {
-    "scope": "#/properties/name",
-    "schema": { enum: ["foo"] }
+    "scope": "<UI Schema scope>",
+    "schema": JSON Schema
   }
 }
 ```
 
 A rule basically works by first evaluating the `condition` property and in case it evaluates to true, executing the associated `effect`.
 
-## RuleEffect
 
-The `effect` property determines what should happen to the attached UI schema element once the `condition` is met. In the example above, if the `name` property has the value of `foo`, we'll hide the UI schema element the rule is attached to. Current effects include:
+## Rule Effect
+
+The `effect` property determines what should happen to the attached UI schema element once the `condition` is met.
+Current effects include:
 
 - `HIDE`: hide the UI schema element
 - `SHOW`: show the UI schema element
 - `DISABLE`: disable the UI schema element
 - `ENABLE`: enable the UI schema element
 
-The `condition` property describes what value should be observed and validates that value with against the JSON schema that is specified with `schema`. If validation succeeds the condition is fulfilled and the associated `effect` will be triggered.
+## Rule Condition
 
-`SchemaBasedCondition`s have been introduced with version 2.0.6 and have become the new default. The previous format via `type` and `expectedValue` properties is still supported for the time being.
+The rule `condition` object contains a `scope` and a `schema` property.
+The `schema` property is a standard JSON schema object.
+This means, everything that can be specified using JSON schema can be used in the rule condition.
+The `schema` is validated against the data specified in the `scope` property.
+If the `scope` data matches the `schema` the rule evaluates to true and the rule effect is applied.
+
+Note, `SchemaBasedCondition`s have been introduced with version 2.0.6 and have become the new default.
+The previous format via `type` and `expectedValue` properties is still supported for the time being.
+
+## Examples
+
+Below are some common rule examples.
+
+To match a scope variable to a specific value, "const" can be used:
+
+```js
+"rule": {
+  "effect": "HIDE",
+  "condition": {
+    "scope": "#/properties/counter",
+    "schema": { const: 10 }
+  }
+}
+```
+Here, the control is hidden when the `counter` property is equal to `10`.
+
+Similar, to match multiple values, `enum` can be used:
+
+```js
+"rule": {
+  "effect": "HIDE",
+  "condition": {
+    "scope": "#/properties/name",
+    "schema": { enum: ["foo", "bar"] }
+  }
+}
+```
+The rule evaluates to true if the `scope` property `name` is either "foo" or "bar".
+
+A rule can be negated using "not":
+
+```js
+"rule": {
+  "effect": "SHOW",
+  "condition": {
+    "scope": "#/properties/counter",
+    "schema": { not: { const: 10 } }
+  }
+}
+```
+
+The following rule evaluates to true if the `counter` property is `1 <= counter < 10`:
+
+```js
+"rule": {
+  "effect": "SHOW",
+  "condition": {
+    "scope": "#/properties/counter",
+    "schema": {  minimum: 1, exclusiveMaximum: 10 }
+  }
+}
+```
+
+
+A rule can even operate on the full form data object and over multiple properties:
+
+```js
+"rule": {
+  "effect": "SHOW",
+  "condition": {
+    "scope": "#",
+    "schema": {
+      "properties": {
+        "stringArray": { "contains": { "const": "Foo"  }  }
+      },
+      "required": ["stringArray", "otherProperty"]
+    }
+  }
+}
+```
+
+In this example, the condition is true if the properties "stringArray" and "otherProperty" are set in the form data and the "stringArray" property contains an element "Foo".
+Note, that the schema rule in this example looks more like a normal JSON schema as it is commonly used.
