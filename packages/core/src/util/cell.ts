@@ -24,8 +24,7 @@
 */
 
 import isEmpty from 'lodash/isEmpty';
-import union from 'lodash/union';
-import type { JsonFormsCellRendererRegistryEntry } from '../reducers';
+import { getErrorTranslator, JsonFormsCellRendererRegistryEntry } from '../reducers';
 import {
   getAjv,
   getConfig,
@@ -35,10 +34,7 @@ import {
   getTranslator,
 } from '../reducers';
 import type { AnyAction, Dispatch } from './type';
-import {
-  formatErrorMessage,
-  Resolve,
-} from './util';
+import { Resolve } from './util';
 import {
   isInherentlyEnabled,
   isVisible,
@@ -53,9 +49,12 @@ import {
   OwnPropsOfEnum,
   StatePropsOfScopedRenderer,
 } from './renderer';
+import {
+  getCombinedErrorMessage,
+  getI18nKeyPrefix,
+} from '../i18n';
 import type { JsonFormsState } from '../store';
 import type { JsonSchema } from '../models';
-import { getI18nKeyPrefix } from '../i18n';
 
 export type { JsonFormsCellRendererRegistryEntry };
 
@@ -148,9 +147,9 @@ export const mapStateToCellProps = (
     );
   }
 
-  const errors = formatErrorMessage(
-    union(getErrorAt(path, schema)(state).map(error => error.message))
-  );
+  const t = getTranslator()(state);
+  const te = getErrorTranslator()(state);
+  const errors = getCombinedErrorMessage(getErrorAt(path, schema)(state), te, t, schema, uischema, path);
   const isValid = isEmpty(errors);
 
   return {
