@@ -142,7 +142,7 @@ module.exports = {
     [
       '@docusaurus/plugin-content-docs',
       {
-        id: 'docs',
+        id: 'default',
         breadcrumbs: false,
         path: 'content/docs',
         routeBasePath: 'docs',
