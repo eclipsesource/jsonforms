@@ -24,58 +24,27 @@
 */
 import { registerExamples } from '../register';
 import {
-  data as day3Data,
-  schema as day3Schema,
-  uischema as day3UiSchema
-} from './day3';
+  data as categorizationData,
+  schema as categorizationSchema,
+  uischema as categorizationUiSchema
+} from './categorization';
 
-export const schema = {
-  type: 'object',
-  properties: {
-    ...day3Schema.properties,
-    recurrence: {
-      type: 'string',
-      enum: ['Never', 'Daily', 'Weekly', 'Monthly']
-    },
-    recurrenceInterval: {
-      type: 'integer'
-    }
-  },
-  required: ['name']
-};
+export const schema = categorizationSchema;
 
 export const uischema = {
-  type: 'VerticalLayout',
-  elements: [
-    ...day3UiSchema.elements,
-    {
-      type: 'Control',
-      scope: '#/properties/recurrence'
-    },
-    {
-      type: 'Control',
-      scope: '#/properties/recurrenceInterval',
-      rule: {
-        effect: 'HIDE',
-        condition: {
-          scope: '#/properties/recurrence',
-          schema: { enum: ['Never'] }
-        }
-      }
-    }
-  ]
+  ...categorizationUiSchema,
+  options: {
+    variant: 'stepper',
+    showNavButtons: true
+  }
 };
 
-export const data = {
-  ...day3Data,
-  recurrence: 'Daily',
-  recurrenceInterval: 5
-};
+export const data = categorizationData;
 
 registerExamples([
   {
-    name: 'day4',
-    label: 'Day 4',
+    name: 'categorization-stepper-nav-buttons',
+    label: 'Categorization (Stepper - Nav Buttons)',
     data,
     schema,
     uischema

@@ -308,36 +308,36 @@ registerExamples([
     uischema
   },
   {
-    name: '1265_array',
-    label: '1265 Array',
+    name: 'oneOf_1265_array',
+    label: 'oneOf - Validation for Arrays (Issue 1265)',
     data: { coloursOrNumbers: ['Foo'] },
     schema: schema_1265_array,
     uischema: undefined
   },
   {
-    name: '1265_object',
-    label: '1265 Object',
+    name: 'oneOf_1265_object',
+    label: 'oneOf - Validation for Objects (Issue 1265)',
     data: { coloursOrNumbers: { colour: 'Foo' } },
     schema: schema_1265_object,
     uischema: undefined
   },
   {
-    name: '1265_simple',
-    label: '1265 Simple',
+    name: 'oneOf_1265_simple',
+    label: 'oneOf - Validation for Primitives (Issue 1265)',
     data: { coloursOrNumbers: 'Foo' },
     schema: schema_1265_simple,
     uischema: undefined
   },
   {
-    name: '1273',
-    label: '1273',
+    name: 'oneOf_1273',
+    label: 'oneOf - Preselection for Objects (Issue 1273)',
     data: data_1273,
     schema: schema_1273,
     uischema: undefined
   },
   {
-    name: '1273_simple',
-    label: 'Simple 1273',
+    name: 'oneOf_1273_simple',
+    label: 'oneOf - Preselection for Primitives (Issue 1273 )',
     data: { quantity: 5 },
     schema: schema_1273_simple,
     uischema: undefined

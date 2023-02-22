@@ -1,7 +1,7 @@
 /*
   The MIT License
   
-  Copyright (c) 2017-2019 EclipseSource Munich
+  Copyright (c) 2017-2020 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
   
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,28 +22,55 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { StateProps } from '../example';
 import { registerExamples } from '../register';
 
-const actions = [
-  {
-    'label': 'Change data',
-    'apply': (props: StateProps) => {
-      return {
-        ...props,
-        data: { id: 'aaa' }
+export const schema = {
+  type: 'object',
+  properties: {
+    oneOfMultiEnum: {
+      type: 'array',
+      uniqueItems: true,
+      items: {
+        oneOf: [
+          { const: 'foo', title: 'My Foo' },
+          { const: 'bar', title: 'My Bar' },
+          { const: 'foobar', title: 'My FooBar' }
+        ]
+      }
+    },
+    multiEnum: {
+      type: 'array',
+      uniqueItems: true,
+      items: {
+        type: 'string',
+        enum: ['foo', 'bar', 'foobar']
       }
     }
-  },
-]
+  }
+};
+
+export const uischema = {
+  type: 'VerticalLayout',
+  elements: [
+    {
+      type: 'Control',
+      scope: '#/properties/oneOfMultiEnum'
+    },
+    {
+      type: 'Control',
+      scope: '#/properties/multiEnum'
+    }
+  ]
+};
+
+export const data = { oneOfMultiEnum: ['foo'], multiEnum: ['bar'] };
 
 registerExamples([
   {
-    name: 'dynamic',
-    label: 'Dynamic Change',
-    schema: undefined,
-    uischema: undefined,
-    data: { name: 'bla' },
-    actions
+    name: 'multi-enum',
+    label: 'Enum - Multi selection',
+    data,
+    schema,
+    uischema
   }
 ]);

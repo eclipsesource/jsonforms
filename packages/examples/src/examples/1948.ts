@@ -72,14 +72,14 @@ export const data = {
 registerExamples([
   {
     name: '1948_with',
-    label: 'Issue 1948 with schema',
+    label: 'Issue 1948 - Array renderer selection (with schema)',
     data,
     schema,
     uischema
   },
   {
     name: '1948_without',
-    label: 'Issue 1948 w/o schema',
+    label: 'Issue 1948 - Array renderer selection (w/o schema)',
     data,
     schema: undefined,
     uischema

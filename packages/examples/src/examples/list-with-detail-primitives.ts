@@ -1,7 +1,7 @@
 /*
   The MIT License
   
-  Copyright (c) 2017-2020 EclipseSource Munich
+  Copyright (c) 2017-2021 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
   
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,53 +24,60 @@
 */
 import { registerExamples } from '../register';
 
-export const schema = {
-  type: 'object',
-  properties: {
-    oneOfMultiEnum: {
-      type: 'array',
-      uniqueItems: true,
-      items: {
-        oneOf: [
-          { const: 'foo', title: 'My Foo' },
-          { const: 'bar', title: 'My Bar' },
-          { const: 'foobar', title: 'My FooBar' }
-        ]
-      }
-    },
-    multiEnum: {
-      type: 'array',
-      uniqueItems: true,
-      items: {
-        type: 'string',
-        enum: ['foo', 'bar', 'foobar']
-      }
-    }
-  }
+const data = {
+    'an-array-of-strings': ['foo', 'bar', 'foobar']
 };
-
-export const uischema = {
-  type: 'VerticalLayout',
-  elements: [
-    {
-      type: 'Control',
-      scope: '#/properties/oneOfMultiEnum'
-    },
-    {
-      type: 'Control',
-      scope: '#/properties/multiEnum'
+const schema = {
+    type: 'object',
+    properties: {
+        'an-array-of-strings': {
+            type: 'array',
+            items: {
+                type: 'string'
+            }
+        }
     }
-  ]
 };
-
-export const data = { oneOfMultiEnum: ['foo'], multiEnum: ['bar'] };
+const uischema = {
+    "type": "ListWithDetail",
+    "scope": "#/properties/an-array-of-strings"
+};
 
 registerExamples([
-  {
-    name: 'multi-enum',
-    label: 'Multi Enum',
-    data,
-    schema,
-    uischema
-  }
+    {
+        name: 'list-with-detail-primitive-string',
+        label: 'List With Detail primitive (string)',
+        data,
+        schema,
+        uischema
+    }
+]);
+
+const data_number = {
+    'an-array-of-numbers': [1, 2, 3]
+};
+const schema_number = {
+    type: 'object',
+    properties: {
+        'an-array-of-numbers': {
+            type: 'array',
+            items: {
+                type: 'number'
+            }
+        }
+    }
+};
+const uischema_number = {
+    "type": "ListWithDetail",
+    "scope": "#/properties/an-array-of-numbers"
+};
+
+registerExamples([
+    {
+        name: 'list-with-detail-primitive-number',
+        label: 'List With Detail primitive (number)',
+        data: data_number,
+        schema: schema_number,
+        uischema: uischema_number
+    }
 ]);

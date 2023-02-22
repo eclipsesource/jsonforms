@@ -66,6 +66,15 @@ export const schema = {
         { $ref: '#/definitions/addresses' },
         { $ref: '#/definitions/users' }
       ]
+    },
+    addressesOrUsersAnyOfItems: {
+      type: 'array',
+      items: {
+        anyOf: [
+          { $ref: '#/definitions/addresses' },
+          { $ref: '#/definitions/users' }
+        ]
+      }
     }
   }
 };
@@ -79,7 +88,13 @@ export const uischema = {
     },
     {
       type: 'Control',
-      scope: '#/properties/addressesOrUsers'
+      scope: '#/properties/addressesOrUsers',
+      label: 'Addresses or Users (AnyOf Schema)'
+    },
+    {
+      type: 'Control',
+      scope: '#/properties/addressesOrUsersAnyOfItems',
+      label: 'Addresses or Users (AnyOf Array Items)'
     }
   ]
 };

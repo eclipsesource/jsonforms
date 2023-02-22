@@ -91,7 +91,7 @@ const data = {
 registerExamples([
   {
     name: 'oneOfArray',
-    label: 'oneOf (in array)',
+    label: 'oneOf - Inside array items',
     data,
     schema,
     uischema

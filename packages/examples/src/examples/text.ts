@@ -89,7 +89,7 @@ export const data = {
 registerExamples([
   {
     name: 'text',
-    label: 'Text',
+    label: 'Text Control Options',
     data,
     schema,
     uischema
