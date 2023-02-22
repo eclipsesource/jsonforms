@@ -24,10 +24,14 @@
 */
 import React from 'react';
 import { CellProps, WithClassname } from '@jsonforms/core';
-import { Checkbox } from '@mui/material';
+import { Checkbox, InputProps } from '@mui/material';
 import merge from 'lodash/merge';
 
-export const MuiCheckbox = React.memo((props: CellProps & WithClassname) => {
+interface MuiCheckboxInputProps {
+  inputProps?: InputProps['inputProps'];
+}
+
+export const MuiCheckbox = React.memo((props: CellProps & WithClassname & MuiCheckboxInputProps) => {
   const {
     data,
     className,
@@ -36,10 +40,13 @@ export const MuiCheckbox = React.memo((props: CellProps & WithClassname) => {
     uischema,
     path,
     handleChange,
-    config
+    config,
+    inputProps
   } = props;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
-  const inputProps = { autoFocus: !!appliedUiSchemaOptions.focus };
+  const inputPropsMerged = merge({}, inputProps, {
+    autoFocus: !!appliedUiSchemaOptions.focus
+  });
   // !! causes undefined value to be converted to false, otherwise has no effect
   const checked = !!data;
 
@@ -50,7 +57,7 @@ export const MuiCheckbox = React.memo((props: CellProps & WithClassname) => {
       className={className}
       id={id}
       disabled={!enabled}
-      inputProps={inputProps}
+      inputProps={inputPropsMerged}
     />
   );
 });
