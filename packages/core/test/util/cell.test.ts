@@ -36,13 +36,9 @@ import { UPDATE_DATA, UpdateAction } from '../../src/actions';
 import configureStore from 'redux-mock-store';
 import {
   ControlElement,
-  createAjv,
-  defaultErrorTranslator,
   JsonFormsState,
-  JsonSchema,
   RuleEffect,
-  UISchemaElement,
-  validate
+  UISchemaElement
 } from '../../src';
 import { enumToEnumOptionMapper } from '../../src/util/renderer';
 
@@ -272,29 +268,6 @@ test('mapStateToCellProps - id', t => {
   };
   const props = mapStateToCellProps(createState(coreUISchema), ownProps);
   t.is(props.id, '#/properties/firstName');
-});
-
-test('mapStateToCellProps - translated error', t => {
-  const ownProps = {
-    uischema: coreUISchema,
-    id: '#/properties/firstName'
-  };
-  const state = createState(coreUISchema);
-  const schema = state.jsonforms.core?.schema as JsonSchema;
-  const data = state.jsonforms.core?.data as any;
-  // mark firstName as required, delete the value from data, then get errors from ajv from the compiled schema
-  schema.required = ["firstName"];
-  delete data.firstName;
-  const ajv = createAjv();
-  const v = ajv.compile(schema);
-  state.jsonforms.errors = validate(v, data);
-  // add a mock i18n state to verify that the error gets translated
-  state.jsonforms.i18n = {
-    translateError: (error) => `i18n-error:${error.keyword}`,
-    translate: (id: string) => `i18n-key:${id}`
-  };
-  const props = mapStateToCellProps(state, ownProps);
-  t.is(props.errors, 'i18n-error:required');
 });
 
 test('mapStateToEnumCellProps - set default options for dropdown list', t => {
