@@ -306,8 +306,8 @@ registerExamples([
     i18n: { locale: 'en', translate: translate }
   },
   {
-    name: '1713',
-    label: 'Bug 1713',
+    name: 'categorization_1713',
+    label: 'Categorization - Issue 1713',
     data,
     schema:schema_1713,
     uischema:uischema_1713

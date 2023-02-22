@@ -36,17 +36,11 @@ import * as arrayWithCustomChildLabel from './examples/arrays-with-custom-elemen
 import * as arrayWithSorting from './examples/arrays-with-sorting';
 import * as stringArray from './examples/stringArray';
 import * as categorization from './examples/categorization';
-import * as stepper from './examples/stepper';
-import * as steppershownav from './examples/steppershownav';
+import * as stepper from './examples/categorization-stepper';
+import * as steppershownav from './examples/categorization-stepper-nav-buttons';
 import * as controlOptions from './examples/control-options';
-import * as day1 from './examples/day1';
-import * as day2 from './examples/day2';
-import * as day3 from './examples/day3';
-import * as day4 from './examples/day4';
-import * as day5 from './examples/day5';
-import * as day6 from './examples/day6';
 import * as dates from './examples/dates';
-import * as dynamic from './examples/dynamic';
+import * as generateDynamic from './examples/generate-dynamic';
 import * as generateSchema from './examples/generate';
 import * as generateUISchema from './examples/generateUI';
 import * as layout from './examples/layout';
@@ -63,23 +57,16 @@ import * as listWithDetailRegistered from './examples/list-with-detail-registere
 import * as object from './examples/object';
 import * as i18n from './examples/i18n';
 import * as issue_1948 from './examples/1948';
-import * as issue_1996 from './examples/1996';
-import * as issue_1169 from './examples/1169';
-import * as issue_1220 from './examples/1220';
-import * as issue_1253 from './examples/1253';
-import * as issue_1254 from './examples/1254';
 import * as oneOfRecursive from './examples/oneOf-recursive';
 import * as huge from './examples/huge';
 import * as defaultExample from './examples/default';
 import * as onChange from './examples/onChange';
 import * as enumExample from './examples/enum';
 import * as radioGroupExample from './examples/radioGroup';
-import * as booleanToggle from './examples/booleanToggle';
-import * as multiEnum from './examples/multi-enum';
+import * as multiEnum from './examples/enum-multi';
 import * as enumInArray from './examples/enumInArray';
 import * as readonly from './examples/readonly';
-import * as bug_1779 from './examples/1779';
-import * as bug_1645 from './examples/1645';
+import * as listWithDetailPrimitives from './examples/list-with-detail-primitives';
 import * as conditionalSchemaComposition from './examples/conditional-schema-compositions';
 import * as additionalErrors from './examples/additional-errors';
 export * from './register';
@@ -89,7 +76,6 @@ import * as ifThenElse from './examples/if_then_else';
 
 export {
   issue_1948,
-  issue_1996,
   defaultExample,
   allOf,
   anyOf,
@@ -108,12 +94,6 @@ export {
   stepper,
   steppershownav,
   controlOptions,
-  day1,
-  day2,
-  day3,
-  day4,
-  day5,
-  day6,
   generateSchema,
   generateUISchema,
   layout,
@@ -121,7 +101,7 @@ export {
   rule,
   ruleInheritance,
   dates,
-  dynamic,
+  generateDynamic,
   config,
   text,
   numbers,
@@ -130,22 +110,16 @@ export {
   listWithDetailRegistered,
   object,
   i18n,
-  issue_1169,
-  issue_1220,
-  issue_1253,
-  issue_1254,
   oneOfRecursive,
   huge,
   ifThenElse,
   onChange,
   enumExample,
   radioGroupExample,
-  booleanToggle,
   multiEnum,
   enumInArray,
   readonly,
-  bug_1779,
-  bug_1645,
+  listWithDetailPrimitives,
   conditionalSchemaComposition,
   additionalErrors,
   issue_1884,

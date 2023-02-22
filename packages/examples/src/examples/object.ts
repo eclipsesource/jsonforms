@@ -101,7 +101,7 @@ const data = {
 registerExamples([
   {
     name: 'rootObject',
-    label: 'Root Object',
+    label: 'Object - Root Scope',
     data,
     schema,
     uischema: uischemaRoot

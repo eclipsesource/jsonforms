@@ -97,7 +97,7 @@ const uischema = {
 registerExamples([
   {
     name: 'list-with-detail-registered',
-    label: 'List With Detail (Registered)',
+    label: 'List With Detail (Registered Detail UISchema)',
     data,
     schema,
     uischema

@@ -50,7 +50,10 @@ export const schema = {
           {const: 'bar', title: 'Bar'},
           {const: 'foobar', title: 'FooBar'}
       ]
-  }
+    },
+    constEnum: {
+      const: 'Const Value'
+    }
   }
 };
 
@@ -61,6 +64,10 @@ export const uischema = {
       type: 'Group',
       label: 'Enums',
       elements: [
+        {
+          type: 'Control',
+          scope: '#/properties/constEnum'
+        },
         {
           type: 'Control',
           scope: '#/properties/plainEnum'

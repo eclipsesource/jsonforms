@@ -84,6 +84,10 @@ export const uischema = {
   type: 'VerticalLayout',
   elements: [
     {
+      type: 'Label',
+      text: 'Toggle the committer boolean to enable/disable the address block.'
+    },
+    {
       type: 'HorizontalLayout',
       elements: [
         {
@@ -179,7 +183,7 @@ export const data = {
 registerExamples([
   {
     name: '1884',
-    label: 'Issue 1884 - Committer enable/disable Address',
+    label: 'Issue 1884 - Nested enable/disable',
     data,
     schema,
     uischema

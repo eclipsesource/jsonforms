@@ -67,7 +67,7 @@ export const data = {};
 registerExamples([
   {
     name: 'onChange',
-    label: 'On Change',
+    label: 'On Change Listener',
     data,
     schema,
     uischema
