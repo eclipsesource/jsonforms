@@ -164,5 +164,5 @@ export interface JsonSchema7 {
   then?: JsonSchema7;
   else?: JsonSchema7;
   errorMessage?: any;
-  [x: string | number]: unknown;
+  [x: string]: unknown;
 }
