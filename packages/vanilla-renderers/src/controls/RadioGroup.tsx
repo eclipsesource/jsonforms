@@ -70,10 +70,11 @@ export const RadioGroup = ({
   );
   const hasRadioClass = !radioControl || radioControl === 'radio';
   let groupStyle: { [x: string]: any } = {};
+  // compute flexDirection based on the optional option 'orientation=vertical|horizontal'
   if (hasRadioClass) {
     groupStyle = {
       display: 'flex',
-      flexDirection: 'row'
+      flexDirection: ('vertical' === uischema.options.orientation) ? 'column' : 'row'
     };
   }
   return (
@@ -90,7 +91,6 @@ export const RadioGroup = ({
           appliedUiSchemaOptions.hideRequiredAsterisk
         )}
       </label>
-
       <div className={radioControl} style={groupStyle}>
         {options.map(option => (
           <div key={option.label} className={radioOption}>

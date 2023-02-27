@@ -55,7 +55,8 @@ const schema = {
            type: 'Control',
            scope: '#/properties/exampleRadioEnum',
            options: {
-             format: 'radio'
+             format: 'radio',
+             orientation: 'vertical'
            }
          }
        ]
