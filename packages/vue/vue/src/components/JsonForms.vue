@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts">
-import { PropType } from 'vue';
+import { PropType, reactive } from 'vue';
 import { defineComponent } from 'vue';
 import {
   coreReducer,
@@ -33,6 +33,8 @@ import Ajv, { ErrorObject } from 'ajv';
 const isObject = (elem: any): elem is Object => {
   return elem && typeof elem === 'object';
 };
+
+const EMPTY: ErrorObject[] = reactive([]);
 
 export default defineComponent({
   name: 'json-forms',
@@ -97,22 +99,23 @@ export default defineComponent({
     additionalErrors: {
       required: false,
       type: Array as PropType<ErrorObject[]>,
-      default: () => []
+      default: () => EMPTY
     },
   },
   data() {
-    const generatorData = isObject(this.data) ? this.data : {};
+    const dataToUse = this.data;
+    const generatorData = isObject(dataToUse) ? dataToUse : {};
     const schemaToUse = this.schema ?? Generate.jsonSchema(generatorData);
     const uischemaToUse = this.uischema ?? Generate.uiSchema(schemaToUse);
     const initCore = (): JsonFormsCore => {
       const initialCore = {
-        data: this.data,
+        data: dataToUse,
         schema: schemaToUse,
         uischema: uischemaToUse
       };
       const core = coreReducer(
         initialCore,
-        Actions.init(this.data, schemaToUse, uischemaToUse, {
+        Actions.init(dataToUse, schemaToUse, uischemaToUse, {
           validationMode: this.validationMode,
           ajv: this.ajv,
           additionalErrors: this.additionalErrors
@@ -122,6 +125,7 @@ export default defineComponent({
     };
     return {
       schemaToUse,
+      dataToUse,
       uischemaToUse,
       jsonforms: {
         core: initCore(),
@@ -144,6 +148,9 @@ export default defineComponent({
     },
     uischema(newUischema) {
       this.uischemaToUse = newUischema ?? Generate.uiSchema(this.schemaToUse);
+    },
+    data(newData) {
+      this.dataToUse = newData;
     },
     renderers(newRenderers) {
       this.jsonforms.renderers = newRenderers;
@@ -169,7 +176,7 @@ export default defineComponent({
     coreDataToUpdate() {
       this.jsonforms.core = coreReducer(
         this.jsonforms.core as JsonFormsCore,
-        Actions.updateCore(this.data, this.schemaToUse, this.uischemaToUse, {
+        Actions.updateCore(this.dataToUse, this.schemaToUse, this.uischemaToUse, {
           validationMode: this.validationMode,
           ajv: this.ajv,
           additionalErrors: this.additionalErrors
@@ -192,7 +199,7 @@ export default defineComponent({
   computed: {
     coreDataToUpdate(): any {
       return [
-        this.data,
+        this.dataToUse,
         this.schemaToUse,
         this.uischemaToUse,
         this.validationMode,
