@@ -73,7 +73,7 @@ export const RadioGroup = ({
   if (hasRadioClass) {
     groupStyle = {
       display: 'flex',
-      flexDirection: ('vertical' === uischema.options.orientation) ? 'column' : 'row'
+      flexDirection: ('vertical' === appliedUiSchemaOptions.orientation) ? 'column' : 'row'
     };
   }
   return (
