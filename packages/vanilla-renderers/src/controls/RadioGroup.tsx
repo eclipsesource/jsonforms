@@ -70,7 +70,6 @@ export const RadioGroup = ({
   );
   const hasRadioClass = !radioControl || radioControl === 'radio';
   let groupStyle: { [x: string]: any } = {};
-  // compute flexDirection based on the optional option 'orientation=vertical|horizontal'
   if (hasRadioClass) {
     groupStyle = {
       display: 'flex',
