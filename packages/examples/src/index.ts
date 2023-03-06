@@ -28,6 +28,7 @@ import * as oneOf from './examples/oneOf';
 import * as oneOfArray from './examples/oneOfArray';
 import * as anyOfOneOfAllOfResolve from './examples/anyOf-oneOf-allOf-resolve';
 import * as array from './examples/arrays';
+import * as arrayI18n from './examples/arraysI18n';
 import * as nestedArray from './examples/nestedArrays';
 import * as arrayWithDetail from './examples/arrays-with-detail';
 import * as arrayWithDetailAndRule from './examples/arrays-with-detail-and-rule';
@@ -97,6 +98,7 @@ export {
   anyOfOneOfAllOfResolve,
   stringArray,
   array,
+  arrayI18n,
   nestedArray,
   arrayWithDetail,
   arrayWithDetailAndRule,

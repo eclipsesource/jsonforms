@@ -37,13 +37,17 @@ export interface DeleteDialogProps {
     onClose(): void;
     onConfirm(): void;
     onCancel(): void;
+    title: string,
+    message: string,
+    acceptText: string,
+    declineText: string
 }
 
 export interface WithDeleteDialogSupport {
   openDeleteDialog(path: string, data: number): void;
 }
 
-export const DeleteDialog = React.memo(({ open, onClose, onConfirm, onCancel }: DeleteDialogProps) => {
+export const DeleteDialog = React.memo(({ open, onClose, onConfirm, onCancel, title, message, acceptText, declineText }: DeleteDialogProps) => {
     return (
         <Dialog
             open={open}
@@ -53,19 +57,19 @@ export const DeleteDialog = React.memo(({ open, onClose, onConfirm, onCancel }: 
             aria-describedby='alert-dialog-confirmdelete-description'
         >
             <DialogTitle id='alert-dialog-confirmdelete-title'>
-                {'Confirm Deletion'}
+                {title}
             </DialogTitle>
             <DialogContent>
                 <DialogContentText id='alert-dialog-confirmdelete-description'>
-                    Are you sure you want to delete the selected entry?
+                    {message}
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
                 <Button onClick={onCancel} color='primary'>
-                    No
+                    {declineText}
                 </Button>
                 <Button onClick={onConfirm} color='primary'>
-                    Yes
+                    {acceptText}
                 </Button>
             </DialogActions>
         </Dialog>

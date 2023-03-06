@@ -59,6 +59,10 @@ export const MaterialArrayControlRenderer = (props: ArrayLayoutProps) => {
         onCancel={deleteCancel}
         onConfirm={deleteConfirm}
         onClose={deleteClose}
+        acceptText={props.translations.deleteDialogAccept}
+        declineText={props.translations.deleteDialogDecline}
+        title={props.translations.deleteDialogTitle}
+        message={props.translations.deleteDialogMessage}
       />
     </Hidden>
   );

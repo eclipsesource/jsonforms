@@ -37,6 +37,7 @@ import { Grid, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import ValidationIcon from './ValidationIcon';
 import NoBorderTableCell from './NoBorderTableCell';
+import { ArrayTranslations } from '@jsonforms/core';
 
 export interface MaterialTableToolbarProps {
   numColumns: number;
@@ -47,6 +48,7 @@ export interface MaterialTableToolbarProps {
   schema: JsonSchema;
   rootSchema: JsonSchema;
   enabled: boolean;
+  translations: ArrayTranslations;
   addItem(path: string, value: any): () => void;
 }
 
@@ -63,7 +65,8 @@ const TableToolbar = React.memo(
     path,
     addItem,
     schema,
-    enabled
+    enabled,
+    translations
   }: MaterialTableToolbarProps) => (
     <TableRow>
       <NoBorderTableCell colSpan={numColumns}>
@@ -92,11 +95,11 @@ const TableToolbar = React.memo(
         <NoBorderTableCell align='right' style={ fixedCellSmall }>
           <Tooltip
             id='tooltip-add'
-            title={`Add to ${label}`}
+            title={translations.addTooltip}
             placement='bottom'
           >
             <IconButton
-              aria-label={`Add to ${label}`}
+              aria-label={translations.addTooltip}
               onClick={addItem(path, createDefaultValue(schema))}
               size='large'>
               <AddIcon />

@@ -61,7 +61,8 @@ export const MaterialListWithDetailRenderer = ({
   renderers,
   cells,
   config,
-  rootSchema
+  rootSchema,
+  translations
 }: ArrayLayoutProps) => {
   const [selectedIndex, setSelectedIndex] = useState(undefined);
   const handleRemoveItem = useCallback(
@@ -92,7 +93,7 @@ export const MaterialListWithDetailRenderer = ({
         path,
         undefined,
         uischema,
-        rootSchema
+        rootSchema,
       ),
     [uischemas, schema, uischema.scope, path, uischema, rootSchema]
   );
@@ -105,6 +106,7 @@ export const MaterialListWithDetailRenderer = ({
   return (
     <Hidden xsUp={!visible}>
       <ArrayLayoutToolbar
+        translations={translations}
         label={computeLabel(
           label,
           required,
@@ -146,7 +148,7 @@ export const MaterialListWithDetailRenderer = ({
               path={composePaths(path, `${selectedIndex}`)}
             />
           ) : (
-            <Typography variant='h6'>No Selection</Typography>
+            <Typography variant='h6'>{translations.noSelection}</Typography>
           )}
         </Grid>
       </Grid>
