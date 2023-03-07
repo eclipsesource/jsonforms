@@ -17,13 +17,13 @@ https://github.com/eclipsesource/jsonforms/issues/1826
 The translate functionality of JSON Forms is integrated into the core component.
 In order to translate JSON Forms, you need to set a translation function and provide it to the JSON Forms component:
 ```ts
-const translator = (key, defaultMessage) => {
-  console.log(`Key: ${key}, Default Message: ${defaultMessage}`);
+const createTranslator = (locale) => (key, defaultMessage) => {
+  console.log(`Locale: ${locale}, Key: ${key}, Default Message: ${defaultMessage}`);
   return defaultMessage;
 };
 
 const [locale, setLocale] = useState<'de'|'en'>('de');
-const translation = useMemo(() => translator(locale), [locale]);
+const translation = useMemo(() => createTranslator(locale), [locale]);
 
 <JsonForms
   i18n={{locale: locale, translate: translation}}
