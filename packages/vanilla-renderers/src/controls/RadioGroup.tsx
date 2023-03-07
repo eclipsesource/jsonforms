@@ -73,7 +73,7 @@ export const RadioGroup = ({
   if (hasRadioClass) {
     groupStyle = {
       display: 'flex',
-      flexDirection: 'row'
+      flexDirection: ('vertical' === appliedUiSchemaOptions.orientation) ? 'column' : 'row'
     };
   }
   return (
@@ -90,7 +90,6 @@ export const RadioGroup = ({
           appliedUiSchemaOptions.hideRequiredAsterisk
         )}
       </label>
-
       <div className={radioControl} style={groupStyle}>
         {options.map(option => (
           <div key={option.label} className={radioOption}>
