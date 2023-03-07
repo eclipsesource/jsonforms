@@ -37,12 +37,11 @@ import configureStore from 'redux-mock-store';
 import {
   ControlElement,
   createAjv,
-  defaultErrorTranslator,
   JsonFormsState,
   JsonSchema,
   RuleEffect,
   UISchemaElement,
-  validate
+  validate,
 } from '../../src';
 import { enumToEnumOptionMapper } from '../../src/util/renderer';
 
@@ -277,7 +276,8 @@ test('mapStateToCellProps - id', t => {
 test('mapStateToCellProps - translated error', t => {
   const ownProps = {
     uischema: coreUISchema,
-    id: '#/properties/firstName'
+    id: '#/properties/firstName',
+    path: 'firstName'
   };
   const state = createState(coreUISchema);
   const schema = state.jsonforms.core?.schema as JsonSchema;
@@ -287,11 +287,10 @@ test('mapStateToCellProps - translated error', t => {
   delete data.firstName;
   const ajv = createAjv();
   const v = ajv.compile(schema);
-  state.jsonforms.errors = validate(v, data);
+  state.jsonforms.core!.errors = validate(v, data);
   // add a mock i18n state to verify that the error gets translated
   state.jsonforms.i18n = {
-    translateError: (error) => `i18n-error:${error.keyword}`,
-    translate: (id: string) => `i18n-key:${id}`
+    translateError: error => `i18n-error:${error.keyword}`
   };
   const props = mapStateToCellProps(state, ownProps);
   t.is(props.errors, 'i18n-error:required');
