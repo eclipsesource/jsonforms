@@ -10,7 +10,6 @@
   "angularCompilerOptions": {
     "strictMetadataEmit": true,
     "generateCodeForLibraries": false,
-    "skipTemplateCodegen": true,
-    "enableIvy": false
+    "skipTemplateCodegen": true
   }
 }
