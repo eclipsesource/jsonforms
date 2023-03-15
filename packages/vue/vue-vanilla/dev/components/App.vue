@@ -107,6 +107,7 @@ export default defineComponent({
 
     <div class="form">
       <json-forms
+        :key="example.name"
         :data="example.data"
         :schema="example.schema"
         :uischema="example.uischema"
