@@ -46,7 +46,8 @@ export const ArrayControl = ({
   uischemas,
   getStyleAsClassName,
   renderers,
-  rootSchema
+  rootSchema,
+  translations
 }: ArrayControlProps & VanillaRendererProps) => {
 	
   const controlElement = uischema as ControlElement;
@@ -99,30 +100,30 @@ export const ArrayControl = ({
                 <div className={childControlsClass}>
                   <button
                     className={buttonClassUp}
-              	    aria-label={`Up`}
+              	    aria-label={translations.upAriaLabel}
                     onClick={() => {
                       moveUp(path,index)();
-                  }}>Up</button>
+                  }}>{translations.up}</button>
                   <button
                     className={buttonClassDown}
-                    aria-label={`Down`}
+                    aria-label={translations.downAriaLabel}
                     onClick={() => {
                       moveDown(path,index)();
-                  }}>Down</button>
+                  }}>{translations.down}</button>
                   <button
                     className={buttonClassDelete}
-                    aria-label={`Delete`}
+                    aria-label={translations.removeAriaLabel}
                     onClick={() => {
                       if (window.confirm('Are you sure you wish to delete this item?')) {
                         removeItems(path,[index])();
                       }
-                  }}>Delete</button>
+                  }}>{translations.removeTooltip}</button>
                 </div>
               </div>
             );
           })
         ) : (
-            <p>No data</p>
+            <p>{translations.noDataMessage}</p>
         )}
       </div>
     </div>
@@ -147,7 +148,8 @@ export const ArrayControlRenderer =
         id,
         visible,
         enabled,
-        errors
+        errors,
+        translations
     }: ArrayControlProps & VanillaRendererProps) => {
         const controlElement = uischema as ControlElement;
         const labelDescription = Helpers.createLabelDescriptionFrom(controlElement, schema);
@@ -184,6 +186,7 @@ export const ArrayControlRenderer =
                 visible={visible}
                 enabled={enabled}
                 getStyle={getStyle}
+                translations={translations}
             />
         );
     };

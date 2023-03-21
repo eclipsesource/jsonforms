@@ -31,6 +31,7 @@ import {
 } from '@jsonforms/angular';
 import {
   ArrayControlProps,
+  ArrayTranslations,
   ControlElement,
   createDefaultValue,
   decode,
@@ -64,7 +65,7 @@ export const removeSchemaKeywords = (path: string) => {
       <mat-sidenav mode="side" opened>
         <mat-nav-list>
           <mat-list-item *ngIf="masterItems.length === 0"
-            >No items</mat-list-item
+            >{{ translations.noDataMessage }}</mat-list-item
           >
           <mat-list-item
             *ngFor="
@@ -96,7 +97,7 @@ export const removeSchemaKeywords = (path: string) => {
           (click)="onAddClick()"
           *ngIf="isEnabled()"
         >
-          <mat-icon aria-label="Add item to list">add</mat-icon>
+          <mat-icon [attr.aria-label]="translations.addAriaLabel">add</mat-icon>
         </button>
       </mat-sidenav>
       <mat-sidenav-content class="content">
@@ -149,6 +150,7 @@ export class MasterListComponent extends JsonFormsArrayControl {
   removeItems: (path: string, toDelete: number[]) => () => void;
   propsPath: string;
   highlightedIdx: number;
+  translations: ArrayTranslations;
 
   constructor(jsonformsService: JsonFormsAngularService, private changeDetectorRef: ChangeDetectorRef) {
     super(jsonformsService);
@@ -187,6 +189,8 @@ export class MasterListComponent extends JsonFormsArrayControl {
     if (!this.isEnabled()) {
       setReadonly(detailUISchema);
     }
+
+    this.translations=props.translations;
 
     const masterItems = (data || []).map((d: any, index: number) => {
       const labelRefInstancePath = controlElement.options?.labelRef && removeSchemaKeywords(

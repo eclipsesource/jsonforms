@@ -37,7 +37,7 @@
       </array-list-element>
     </div>
     <div v-if="noData" :class="styles.arrayList.noData">
-      No data
+      {{control.translations.noDataMessage}}
     </div>
   </fieldset>
 </template>

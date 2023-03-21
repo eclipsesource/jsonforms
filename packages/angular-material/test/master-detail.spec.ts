@@ -41,6 +41,7 @@ import { MasterListComponent } from '../src/other/master-detail/master';
 import { JsonFormsDetailComponent } from '../src/other/master-detail/detail';
 import { getJsonFormsService, setupMockStore } from '@jsonforms/angular-test';
 import { Actions } from '@jsonforms/core';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 describe('Master detail', () => {
   let fixture: ComponentFixture<MasterListComponent>;
@@ -114,7 +115,8 @@ describe('Master detail', () => {
         MatIconModule,
         MatButtonModule,
         FlexLayoutModule,
-        NoopAnimationsModule
+        NoopAnimationsModule,
+        MatTooltipModule
       ],
       providers: [JsonFormsAngularService]
     })

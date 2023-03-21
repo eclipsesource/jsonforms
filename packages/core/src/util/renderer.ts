@@ -652,6 +652,7 @@ export interface OwnPropsOfMasterListItem {
   schema: JsonSchema;
   handleSelect(index: number): () => void;
   removeItem(path: string, value: number): () => void;
+  translations: ArrayTranslations;
 }
 
 export interface StatePropsOfMasterItem extends OwnPropsOfMasterListItem {
@@ -686,6 +687,7 @@ export interface ControlWithDetailProps
  */
 export interface StatePropsOfArrayControl
   extends StatePropsOfControlWithDetail {
+  translations: ArrayTranslations;
   childErrors?: ErrorObject[];
 }
 
@@ -700,23 +702,25 @@ export const mapStateToArrayControlProps = (
   state: JsonFormsState,
   ownProps: OwnPropsOfControl
 ): StatePropsOfArrayControl => {
-  const { path, schema, uischema, ...props } = mapStateToControlWithDetailProps(
+  const { path, schema, uischema, i18nKeyPrefix, label, ...props } = mapStateToControlWithDetailProps(
     state,
     ownProps
   );
 
   const resolvedSchema = Resolve.schema(schema, 'items', props.rootSchema);
   const childErrors = getSubErrorsAt(path, resolvedSchema)(state);
-
+  const t = getTranslator()(state);
 
   return {
     ...props,
+    label,
     path,
     uischema,
     schema: resolvedSchema,
     childErrors,
     renderers: ownProps.renderers || getRenderers(state),
     cells: ownProps.cells || getCells(state),
+    translations: getArrayTranslations(t,arrayDefaultTranslations,i18nKeyPrefix, label)
   };
 };
 

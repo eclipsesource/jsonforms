@@ -130,6 +130,7 @@ export const MaterialListWithDetailRenderer = ({
                   removeItem={handleRemoveItem}
                   selected={selectedIndex === index}
                   key={index}
+                  translations={translations}
                 />
               ))
             ) : (

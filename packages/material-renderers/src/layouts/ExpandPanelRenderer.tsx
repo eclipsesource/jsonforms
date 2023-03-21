@@ -20,7 +20,8 @@ import {
   JsonFormsUISchemaRegistryEntry,
   getFirstPrimitiveProp,
   createId,
-  removeId
+  removeId,
+  ArrayTranslations
 } from '@jsonforms/core';
 import {
   Accordion,
@@ -53,6 +54,7 @@ interface OwnPropsOfExpandPanel {
   config: any;
   childLabelProp?: string;
   handleExpansion(panel: string): (event: any, expanded: boolean) => void;
+  translations: ArrayTranslations;
 }
 
 interface StatePropsOfExpandPanel extends OwnPropsOfExpandPanel {
@@ -103,7 +105,8 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
     uischemas,
     renderers,
     cells,
-    config
+    config,
+    translations
   } = props;
 
   const foundUISchema = useMemo(
@@ -157,7 +160,7 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
                           onClick={moveUp(path, index)}
                           style={iconStyle}
                           disabled={!enableMoveUp}
-                          aria-label={`Move up`}
+                          aria-label={translations.upAriaLabel}
                           size='large'>
                           <ArrowUpward />
                         </IconButton>
@@ -167,7 +170,7 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
                           onClick={moveDown(path, index)}
                           style={iconStyle}
                           disabled={!enableMoveDown}
-                          aria-label={`Move down`}
+                          aria-label={translations.downAriaLabel}
                           size='large'>
                           <ArrowDownward />
                         </IconButton>
@@ -180,7 +183,7 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
                     <IconButton
                       onClick={removeItems(path, [index])}
                       style={iconStyle}
-                      aria-label={`Delete`}
+                      aria-label={translations.removeAriaLabel}
                       size='large'>
                       <DeleteIcon />
                     </IconButton>

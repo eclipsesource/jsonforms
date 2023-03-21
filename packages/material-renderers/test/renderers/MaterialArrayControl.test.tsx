@@ -487,11 +487,11 @@ describe('Material array control', () => {
     );
     // up button
     expect(
-      wrapper.find('button').find({ 'aria-label': 'Move up' }).length
+      wrapper.find('button').find({ 'aria-label': 'Move item up' }).length
     ).toBe(1);
     // down button
     expect(
-      wrapper.find('button').find({ 'aria-label': 'Move down' }).length
+      wrapper.find('button').find({ 'aria-label': 'Move item down' }).length
     ).toBe(1);
   });
   it('should be able to move item down if down button is clicked', () => {
@@ -517,7 +517,7 @@ describe('Material array control', () => {
       .find('tr')
       .at(1)
       .find('button')
-      .find({ 'aria-label': 'Move down' });
+      .find({ 'aria-label': 'Move item down' });
     downButton.simulate('click');
     expect(onChangeData.data).toEqual({
       test: ['baz', 'foo', 'bar']
@@ -546,7 +546,7 @@ describe('Material array control', () => {
       .find('tr')
       .at(3)
       .find('button')
-      .find({ 'aria-label': 'Move up' });
+      .find({ 'aria-label': 'Move item up' });
     upButton.simulate('click');
     expect(onChangeData.data).toEqual({
       test: ['foo', 'bar', 'baz']
@@ -567,7 +567,7 @@ describe('Material array control', () => {
       .find('tr')
       .at(1)
       .find('button')
-      .find({ 'aria-label': 'Move up' });
+      .find({ 'aria-label': 'Move item up' });
     expect(upButton.is('[disabled]')).toBe(true);
   });
 
@@ -627,7 +627,7 @@ describe('Material array control', () => {
       .find('tr')
       .at(3)
       .find('button')
-      .find({ 'aria-label': 'Move down' });
+      .find({ 'aria-label': 'Move item down' });
     expect(downButton.is('[disabled]')).toBe(true);
   });
 });

@@ -99,7 +99,7 @@ const TableToolbar = React.memo(
             placement='bottom'
           >
             <IconButton
-              aria-label={translations.addTooltip}
+              aria-label={translations.addAriaLabel}
               onClick={addItem(path, createDefaultValue(schema))}
               size='large'>
               <AddIcon />
