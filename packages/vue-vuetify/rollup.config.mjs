@@ -3,10 +3,10 @@ import babel from '@rollup/plugin-babel';
 import typescript from 'rollup-plugin-typescript2';
 import resolve from '@rollup/plugin-node-resolve';
 import cleanup from 'rollup-plugin-cleanup';
-import visualizer from 'rollup-plugin-visualizer';
+import { visualizer } from 'rollup-plugin-visualizer';
 import styles from 'rollup-plugin-styles';
 
-import packageJson from './package.json';
+import packageJson from './package.json' assert { type: 'json' };
 
 const baseConfig = {
   input: 'src/index.ts',
