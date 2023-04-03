@@ -3,7 +3,7 @@
   "version": "3.1.0-alpha.0",
   "private": true,
   "scripts": {
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build --mode development",
     "serve": "vue-cli-service serve",
     "clean": "rimraf dist"
   },
