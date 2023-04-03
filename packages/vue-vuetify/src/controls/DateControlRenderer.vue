@@ -19,9 +19,8 @@
         :required="control.required"
         :error-messages="control.errors"
         v-bind="vuetifyProps('v-text-field')"
-        v-mask="mask"
-        :value="inputValue"
-        @input="onInputChange"
+        :model-value="inputValue"
+        @update:model-value="onInputChange"
         @focus="isFocused = true"
         @blur="isFocused = false"
       >
@@ -45,7 +44,7 @@
             <template v-slot:activator="{ on: onMenu }">
               <v-icon v-on="onMenu" tabindex="-1">{{ pickerIcon }}</v-icon>
             </template>
-            <v-date-picker
+            <!--v-date-picker
               v-if="showMenu"
               v-model="pickerValue"
               ref="picker"
@@ -66,7 +65,7 @@
               <v-btn v-if="showActions" text color="primary" @click="okHandler">
                 {{ okLabel }}
               </v-btn>
-            </v-date-picker>
+            </v-date-picker-->
           </v-menu>
         </template>
       </v-text-field>
@@ -82,27 +81,26 @@ import {
   JsonSchema,
   rankWith,
 } from '@jsonforms/core';
-import { VueMaskDirective as Mask } from 'v-mask';
+// import { VueMaskDirective as Mask } from 'v-mask';
 import { defineComponent, ref } from 'vue';
 
 import {
   rendererProps,
   RendererProps,
   useJsonFormsControl,
-} from '@jsonforms/vue2';
+} from '@jsonforms/vue';
 import dayjs from 'dayjs';
 import {
   VBtn,
-  VDatePicker,
+  // VDatePicker,
   VHover,
   VIcon,
   VMenu,
   VSpacer,
   VTextField,
-} from 'vuetify/lib';
+} from 'vuetify/components';
 import { parseDateTime, useTranslator, useVuetifyControl } from '../util';
 import { default as ControlWrapper } from './ControlWrapper.vue';
-import { DisabledIconFocus } from './directives';
 
 const JSON_SCHEMA_DATE_FORMATS = ['YYYY-MM-DD'];
 
@@ -121,12 +119,12 @@ const controlRenderer = defineComponent({
     VHover,
     VTextField,
     VMenu,
-    VDatePicker,
+    // VDatePicker,
     VIcon,
     VSpacer,
     VBtn,
   },
-  directives: { DisabledIconFocus, Mask },
+  // directives: { DisabledIconFocus, Mask },
   props: {
     ...rendererProps<ControlElement>(),
   },
@@ -349,7 +347,7 @@ const controlRenderer = defineComponent({
 
       let index = 0;
 
-      let result: (string | RegExp)[] = [];
+      const result: (string | RegExp)[] = [];
       for (const part of parts) {
         if (!part || part === '') {
           continue;
@@ -416,7 +414,7 @@ const controlRenderer = defineComponent({
         } else if (part == 'MMMM') {
           let increment = 0;
           let maxLength = 0;
-          let months: string[] = [];
+          const months: string[] = [];
 
           for (let i = 0; i <= 11; i++) {
             const month = dayjs().month(i).format('MMMM');

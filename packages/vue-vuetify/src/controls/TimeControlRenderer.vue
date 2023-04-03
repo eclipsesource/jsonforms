@@ -21,8 +21,8 @@
         v-bind="vuetifyProps('v-text-field')"
         v-mask="mask"
         v-on="onMenu"
-        :value="inputValue"
-        @input="onInputChange"
+        :model-value="inputValue"
+        @update:model-value="onInputChange"
         @focus="isFocused = true"
         @blur="isFocused = false"
       >
@@ -46,7 +46,7 @@
             <template v-slot:activator="{ on: onMenu }">
               <v-icon v-on="onMenu" tabindex="-1">{{ pickerIcon }}</v-icon>
             </template>
-            <v-time-picker
+            <!--v-time-picker
               v-if="showMenu"
               v-model="pickerValue"
               ref="picker"
@@ -68,7 +68,7 @@
               <v-btn v-if="showActions" text color="primary" @click="okHandler">
                 {{ okLabel }}
               </v-btn></v-time-picker
-            >
+            -->
           </v-menu>
         </template>
       </v-text-field>
@@ -89,8 +89,8 @@ import {
   rendererProps,
   RendererProps,
   useJsonFormsControl,
-} from '@jsonforms/vue2';
-import { VueMaskDirective as Mask } from 'v-mask';
+} from '@jsonforms/vue';
+// import { VueMaskDirective as Mask } from 'v-mask';
 import {
   VBtn,
   VHover,
@@ -98,8 +98,8 @@ import {
   VMenu,
   VSpacer,
   VTextField,
-  VTimePicker,
-} from 'vuetify/lib';
+  // VTimePicker,
+} from 'vuetify/components';
 import { parseDateTime, useTranslator, useVuetifyControl } from '../util';
 import { default as ControlWrapper } from './ControlWrapper.vue';
 import { DisabledIconFocus } from './directives';
@@ -126,12 +126,12 @@ const controlRenderer = defineComponent({
     VHover,
     VTextField,
     VMenu,
-    VTimePicker,
+    // VTimePicker,
     VIcon,
     VSpacer,
     VBtn,
   },
-  directives: { DisabledIconFocus, Mask },
+  directives: { DisabledIconFocus },
   props: {
     ...rendererProps<ControlElement>(),
   },
@@ -343,7 +343,7 @@ const controlRenderer = defineComponent({
 
       let index = 0;
 
-      let result: (string | RegExp)[] = [];
+      const result: (string | RegExp)[] = [];
       for (const part of parts) {
         if (!part || part === '') {
           continue;

@@ -17,7 +17,7 @@
       :required="control.required"
       :error-messages="control.errors"
       :input-value="control.data"
-      :value="control.data"
+      :model-value="control.data"
       :true-value="true"
       :false-value="false"
       v-bind="vuetifyProps('v-switch')"
@@ -42,10 +42,10 @@ import {
   rendererProps,
   useJsonFormsControl,
   RendererProps,
-} from '@jsonforms/vue2';
+} from '@jsonforms/vue';
 import { default as ControlWrapper } from './ControlWrapper.vue';
 import { useVuetifyControl } from '../util';
-import { VSwitch } from 'vuetify/lib';
+import { VSwitch } from 'vuetify/components';
 
 const controlRenderer = defineComponent({
   name: 'boolean-toggle-control-renderer',

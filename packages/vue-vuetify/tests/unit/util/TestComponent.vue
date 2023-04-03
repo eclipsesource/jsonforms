@@ -12,9 +12,9 @@
 </template>
 
 <script lang="ts">
-import { JsonForms, JsonFormsChangeEvent } from '@jsonforms/vue2';
+import { JsonForms, JsonFormsChangeEvent } from '@jsonforms/vue';
 import { defineComponent } from 'vue';
-import { VApp } from 'vuetify/lib';
+import { VApp } from 'vuetify/components';
 
 export default defineComponent({
   name: 'test-component',

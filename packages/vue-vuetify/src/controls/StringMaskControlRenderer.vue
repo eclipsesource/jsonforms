@@ -51,11 +51,11 @@ import {
   rendererProps,
   RendererProps,
   useJsonFormsControl,
-} from '@jsonforms/vue2';
+} from '@jsonforms/vue';
 import isEmpty from 'lodash/isEmpty';
 import { VueMaskPlugin } from 'v-mask';
 import { defineComponent, DirectiveOptions, VNode, VNodeDirective } from 'vue';
-import { VHover, VTextField } from 'vuetify/lib';
+import { VHover, VTextField } from 'vuetify/components';
 import { useVuetifyControl } from '../util';
 import { default as ControlWrapper } from './ControlWrapper.vue';
 import { DisabledIconFocus } from './directives';

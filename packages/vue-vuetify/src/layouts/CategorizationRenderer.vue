@@ -18,13 +18,13 @@
           </v-tab>
         </v-tabs>
       </v-col>
-      <v-col v-bind="vuetifyProps('v-col.v-tabs-items')">
-        <v-tabs-items
+      <v-col v-bind="vuetifyProps('v-col.v-window')">
+        <v-window
           v-model="activeCategory"
           vertical
-          v-bind="vuetifyProps('v-tabs-items')"
+          v-bind="vuetifyProps('v-window')"
         >
-          <v-tab-item
+          <v-window-item
             v-for="(element, index) in visibleCategories"
             :key="`${layout.path}-${index}`"
           >
@@ -36,8 +36,8 @@
               :renderers="layout.renderers"
               :cells="layout.cells"
             />
-          </v-tab-item>
-        </v-tabs-items>
+          </v-window-item>
+        </v-window>
       </v-col>
     </v-row>
     <v-row v-else v-bind="vuetifyProps('v-row')">
@@ -50,11 +50,11 @@
         </v-tab>
       </v-tabs>
 
-      <v-tabs-items
+      <v-window
         v-model="activeCategory"
-        v-bind="vuetifyProps('v-tabs-items')"
+        v-bind="vuetifyProps('v-window')"
       >
-        <v-tab-item
+        <v-window-item
           v-for="(element, index) in visibleCategories"
           :key="`${layout.path}-${index}`"
         >
@@ -66,8 +66,8 @@
             :renderers="layout.renderers"
             :cells="layout.cells"
           />
-        </v-tab-item>
-      </v-tabs-items>
+        </v-window-item>
+      </v-window>
     </v-row>
   </v-container>
 </template>
@@ -92,17 +92,17 @@ import {
   rendererProps,
   useJsonFormsLayout,
   RendererProps,
-} from '@jsonforms/vue2';
+} from '@jsonforms/vue';
 import { useAjv, useTranslator, useVuetifyLayout } from '../util';
 import {
   VContainer,
   VTabs,
   VTab,
-  VTabsItems,
-  VTabItem,
+  VWindow,
+  VWindowItem,
   VRow,
   VCol,
-} from 'vuetify/lib';
+} from 'vuetify/components';
 
 const layoutRenderer = defineComponent({
   name: 'categorization-renderer',
@@ -111,8 +111,8 @@ const layoutRenderer = defineComponent({
     VContainer,
     VTabs,
     VTab,
-    VTabsItems,
-    VTabItem,
+    VWindow,
+    VWindowItem,
     VRow,
     VCol,
   },

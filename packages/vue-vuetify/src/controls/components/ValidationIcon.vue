@@ -8,7 +8,7 @@
 import { defineComponent, PropType } from 'vue';
 import { ErrorObject } from 'ajv';
 import { default as ValidationBadge } from './ValidationBadge.vue';
-import { VIcon } from 'vuetify/lib';
+import { VIcon } from 'vuetify/components';
 
 export default defineComponent({
   name: 'validation-icon',

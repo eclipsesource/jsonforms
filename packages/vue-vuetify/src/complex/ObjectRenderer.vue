@@ -32,7 +32,7 @@ import {
   rendererProps,
   RendererProps,
   useJsonFormsControlWithDetail,
-} from '@jsonforms/vue2';
+} from '@jsonforms/vue';
 import cloneDeep from 'lodash/cloneDeep';
 import isEmpty from 'lodash/isEmpty';
 import isObject from 'lodash/isObject';

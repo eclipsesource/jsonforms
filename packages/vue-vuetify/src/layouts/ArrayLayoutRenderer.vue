@@ -62,7 +62,7 @@
               :key="`${control.path}-${index}`"
               :class="styles.arrayList.item"
             >
-              <v-expansion-panel-header :class="styles.arrayList.itemHeader">
+              <v-expansion-panel-title :class="styles.arrayList.itemHeader">
                 <v-container py-0 :class="styles.arrayList.itemContainer">
                   <v-row
                     :style="`display: grid; grid-template-columns: ${
@@ -104,7 +104,7 @@
                             text
                             elevation="0"
                             small
-                            class="v-expansion-panel-header__icon"
+                            class="v-expansion-panel-title__icon"
                             :aria-label="translatedLabels.moveUp"
                             :disabled="index <= 0 || !control.enabled"
                             :class="styles.arrayList.itemMoveUp"
@@ -128,7 +128,7 @@
                             text
                             elevation="0"
                             small
-                            class="v-expansion-panel-header__icon"
+                            class="v-expansion-panel-title__icon"
                             :aria-label="translatedLabels.moveDown"
                             :disabled="
                               index >= dataLength - 1 || !control.enabled
@@ -151,7 +151,7 @@
                             text
                             elevation="0"
                             small
-                            class="v-expansion-panel-header__icon"
+                            class="v-expansion-panel-title__icon"
                             :aria-label="translatedLabels.delete"
                             :class="styles.arrayList.itemDelete"
                             :disabled="
@@ -171,8 +171,8 @@
                     </v-col>
                   </v-row>
                 </v-container>
-              </v-expansion-panel-header>
-              <v-expansion-panel-content :class="styles.arrayList.itemContent">
+              </v-expansion-panel-title>
+              <v-expansion-panel-text :class="styles.arrayList.itemContent">
                 <dispatch-renderer
                   :schema="control.schema"
                   :uischema="foundUISchema"
@@ -181,7 +181,7 @@
                   :renderers="control.renderers"
                   :cells="control.cells"
                 />
-              </v-expansion-panel-content>
+              </v-expansion-panel-text>
             </v-expansion-panel>
           </v-expansion-panels>
         </v-row>
@@ -190,7 +190,7 @@
         No data
       </v-container>
     </v-card-text>
-    <v-card-actions v-if="$scopedSlots.actions" class="pb-8">
+    <v-card-actions v-if="$slots.actions" class="pb-8">
       <slot
         name="actions"
         :labels="translatedLabels"
@@ -261,7 +261,7 @@ import {
   rendererProps,
   useJsonFormsArrayControl,
   RendererProps,
-} from '@jsonforms/vue2';
+} from '@jsonforms/vue';
 import {
   useNested,
   useVuetifyArrayControl,
@@ -286,9 +286,9 @@ import {
   VSpacer,
   VExpansionPanels,
   VExpansionPanel,
-  VExpansionPanelHeader,
-  VExpansionPanelContent,
-} from 'vuetify/lib';
+  VExpansionPanelTitle,
+  VExpansionPanelText,
+} from 'vuetify/components';
 import { ValidationIcon, ValidationBadge } from '../controls/components/index';
 import { ErrorObject } from 'ajv';
 import merge from 'lodash/merge';
@@ -315,8 +315,8 @@ const controlRenderer = defineComponent({
     VSpacer,
     VExpansionPanels,
     VExpansionPanel,
-    VExpansionPanelHeader,
-    VExpansionPanelContent,
+    VExpansionPanelTitle,
+    VExpansionPanelText,
     VContainer,
     ValidationIcon,
     ValidationBadge,

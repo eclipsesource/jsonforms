@@ -20,8 +20,8 @@
         :error-messages="control.errors"
         v-bind="vuetifyProps('v-text-field')"
         v-mask="mask"
-        :value="inputValue"
-        @input="onInputChange"
+        :model-value="inputValue"
+        @update:model-value="onInputChange"
         @focus="isFocused = true"
         @blur="isFocused = false"
       >
@@ -46,7 +46,7 @@
               <v-icon v-on="onMenu" tabindex="-1">{{ pickerIcon }}</v-icon>
             </template>
             <v-card v-if="showMenu">
-              <v-tabs v-if="useTabLayout" v-model="activeTab">
+              <v-window v-if="useTabLayout" v-model="activeTab">
                 <v-tab key="date" href="#date" class="primary--text">
                   <v-icon>mdi-calendar</v-icon>
                 </v-tab>
@@ -55,8 +55,8 @@
                   <v-icon>mdi-clock-outline</v-icon>
                 </v-tab>
 
-                <v-tab-item value="date"
-                  ><v-date-picker
+                <v-window-item value="date"
+                  ><!--v-date-picker
                     v-if="showMenu"
                     v-model="datePickerValue"
                     ref="datePicker"
@@ -65,10 +65,10 @@
                     :max="maxDate"
                     @input="activeTab = 'time'"
                   >
-                  </v-date-picker>
-                </v-tab-item>
-                <v-tab-item value="time"
-                  ><v-time-picker
+                  </v-date-picker-->
+                </v-window-item>
+                <v-window-item value="time"
+                  ><!--v-time-picker
                     v-model="timePickerValue"
                     ref="timePicker"
                     v-bind="vuetifyProps('v-time-picker')"
@@ -78,12 +78,12 @@
                     :format="ampm ? 'ampm' : '24hr'"
                     @click:minute="onMinute"
                     @click:second="onSecond"
-                  ></v-time-picker>
-                </v-tab-item>
-              </v-tabs>
+                  ></v-time-picker-->
+                </v-window-item>
+              </v-window>
               <v-row no-gutters v-else>
                 <v-col min-width="290px" cols="auto">
-                  <v-date-picker
+                  <!--v-date-picker
                     v-if="showMenu"
                     v-model="datePickerValue"
                     ref="datePicker"
@@ -91,10 +91,10 @@
                     :min="minDate"
                     :max="maxDate"
                   >
-                  </v-date-picker>
+                  </v-date-picker-->
                 </v-col>
                 <v-col min-width="290px" cols="auto">
-                  <v-time-picker
+                  <!--v-time-picker
                     v-model="timePickerValue"
                     ref="timePicker"
                     v-bind="vuetifyProps('v-time-picker')"
@@ -104,7 +104,7 @@
                     :format="ampm ? 'ampm' : '24hr'"
                     @click:minute="onMinute"
                     @click:second="onSecond"
-                  ></v-time-picker>
+                  ></v-time-picker-->
                 </v-col>
               </v-row>
               <v-card-actions v-if="showActions">
@@ -138,16 +138,16 @@ import {
   rendererProps,
   RendererProps,
   useJsonFormsControl,
-} from '@jsonforms/vue2';
+} from '@jsonforms/vue';
 import {
   VBtn,
-  VDatePicker,
+  // VDatePicker,
   VHover,
   VIcon,
   VMenu,
   VSpacer,
   VTextField,
-  VTimePicker,
+  // VTimePicker,
   VRow,
   VCol,
   VCard,
@@ -155,12 +155,12 @@ import {
   VCardActions,
   VTabs,
   VTab,
-  VTabItem,
-} from 'vuetify/lib';
+  VWindowItem,
+} from 'vuetify/components';
 import { parseDateTime, useTranslator, useVuetifyControl } from '../util';
 import { default as ControlWrapper } from './ControlWrapper.vue';
 import { DisabledIconFocus } from './directives';
-import { VueMaskDirective as Mask } from 'v-mask';
+// import { VueMaskDirective as Mask } from 'v-mask';
 import dayjs from 'dayjs';
 
 const JSON_SCHEMA_DATE_TIME_FORMATS = [
@@ -183,8 +183,8 @@ const controlRenderer = defineComponent({
   components: {
     ControlWrapper,
     VBtn,
-    VDatePicker,
-    VTimePicker,
+    // VDatePicker,
+    // VTimePicker,
     VHover,
     VIcon,
     VMenu,
@@ -197,9 +197,9 @@ const controlRenderer = defineComponent({
     VCardActions,
     VTabs,
     VTab,
-    VTabItem,
+    VWindowItem,
   },
-  directives: { DisabledIconFocus, Mask },
+  directives: { DisabledIconFocus },
   props: {
     ...rendererProps<ControlElement>(),
   },
@@ -242,7 +242,7 @@ const controlRenderer = defineComponent({
         : 'mdi-calendar-clock';
     },
     useTabLayout(): boolean {
-      if (this.$vuetify.breakpoint.smAndDown) {
+      if (this.$vuetify.display.smAndDown) {
         return true;
       }
       return false;
@@ -533,7 +533,7 @@ const controlRenderer = defineComponent({
 
       let index = 0;
 
-      let result: (string | RegExp)[] = [];
+      const result: (string | RegExp)[] = [];
       for (const part of parts) {
         if (!part || part === '') {
           continue;
@@ -600,7 +600,7 @@ const controlRenderer = defineComponent({
         } else if (part == 'MMMM') {
           let increment = 0;
           let maxLength = 0;
-          let months: string[] = [];
+          const months: string[] = [];
 
           for (let i = 0; i <= 11; i++) {
             const month = dayjs().month(i).format('MMMM');
@@ -853,7 +853,7 @@ export const entry: JsonFormsRendererRegistryEntry = {
 };
 </script>
 
-<style lang="scss" scoped>
+<!-- <style lang="scss" scoped>
 .v-picker::v-deep {
   border-radius: 0px;
 
@@ -861,4 +861,4 @@ export const entry: JsonFormsRendererRegistryEntry = {
     min-height: 102px;
   }
 }
-</style>
+</style> -->

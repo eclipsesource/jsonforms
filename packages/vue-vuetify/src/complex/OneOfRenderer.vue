@@ -22,7 +22,7 @@
         :clearable="hover"
         :items="indexedOneOfRenderInfos"
         @change="handleSelectChange"
-        :item-text="(item) => t(item.label, item.label)"
+        :item-title="(item) => t(item.label, item.label)"
         item-value="index"
         v-model="selectIndex"
         v-bind="vuetifyProps('v-select')"
@@ -75,7 +75,7 @@ import {
   rendererProps,
   RendererProps,
   useJsonFormsOneOfControl,
-} from '@jsonforms/vue2';
+} from '@jsonforms/vue';
 import isEmpty from 'lodash/isEmpty';
 import { defineComponent, ref } from 'vue';
 import {
@@ -88,7 +88,7 @@ import {
   VHover,
   VSelect,
   VSpacer,
-} from 'vuetify/lib';
+} from 'vuetify/components';
 import { DisabledIconFocus } from '../controls/directives';
 import { useTranslator, useVuetifyControl } from '../util';
 import { CombinatorProperties } from './components';

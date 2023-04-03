@@ -18,7 +18,7 @@
         :persistent-hint="persistentHint()"
         :required="control.required"
         :error-messages="control.errors"
-        :value="control.data"
+        :model-value="control.data"
         :maxlength="
           appliedOptions.restrict ? control.schema.maxLength : undefined
         "
@@ -30,7 +30,7 @@
         :clearable="hover"
         multi-line
         v-bind="vuetifyProps('v-textarea')"
-        @input="onChange"
+        @update:model-value="onChange"
         @focus="isFocused = true"
         @blur="isFocused = false"
       />
@@ -52,10 +52,10 @@ import {
   rendererProps,
   useJsonFormsControl,
   RendererProps,
-} from '@jsonforms/vue2';
+} from '@jsonforms/vue';
 import { default as ControlWrapper } from './ControlWrapper.vue';
 import { useVuetifyControl } from '../util';
-import { VHover, VTextarea } from 'vuetify/lib';
+import { VHover, VTextarea } from 'vuetify/components';
 import { DisabledIconFocus } from './directives';
 
 const controlRenderer = defineComponent({

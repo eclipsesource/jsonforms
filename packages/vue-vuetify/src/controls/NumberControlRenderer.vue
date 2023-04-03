@@ -19,10 +19,10 @@
         :persistent-hint="persistentHint()"
         :required="control.required"
         :error-messages="control.errors"
-        :value="inputValue"
+        :model-value="inputValue"
         :clearable="hover"
         v-bind="vuetifyProps('v-text-field')"
-        @input="onInputChange"
+        @update:model-value="onInputChange"
         @focus="isFocused = true"
         @blur="isFocused = false"
       ></v-text-field>
@@ -42,10 +42,10 @@ import {
   rendererProps,
   useJsonFormsControl,
   RendererProps,
-} from '@jsonforms/vue2';
+} from '@jsonforms/vue';
 import { default as ControlWrapper } from './ControlWrapper.vue';
 import { useVuetifyControl } from '../util';
-import { VHover, VTextField } from 'vuetify/lib';
+import { VHover, VTextField } from 'vuetify/components';
 
 const NUMBER_REGEX_TEST = /^[+-]?\d+([.]\d+)?([eE][+-]?\d+)?$/;
 

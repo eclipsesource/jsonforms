@@ -38,9 +38,9 @@ import {
   rendererProps,
   useJsonFormsLayout,
   RendererProps,
-} from '@jsonforms/vue2';
+} from '@jsonforms/vue';
 import { useVuetifyLayout } from '../util';
-import { VContainer, VRow, VCol } from 'vuetify/lib';
+import { VContainer, VRow, VCol } from 'vuetify/components';
 
 const layoutRenderer = defineComponent({
   name: 'horizontal-layout-renderer',
@@ -58,7 +58,7 @@ const layoutRenderer = defineComponent({
   },
   computed: {
     collapse() {
-      const { xs, sm, md, lg, xl } = this.$vuetify.breakpoint;
+      const { xs, sm, md, lg, xl } = this.$vuetify.display;
       if (this.appliedOptions.breakHorizontal === 'xs' && xs) {
         return true;
       }

@@ -48,7 +48,7 @@ import {
   rendererProps,
   RendererProps,
   useJsonFormsAllOfControl,
-} from '@jsonforms/vue2';
+} from '@jsonforms/vue';
 import { defineComponent } from 'vue';
 import { useVuetifyControl } from '../util';
 import { CombinatorProperties } from './components';

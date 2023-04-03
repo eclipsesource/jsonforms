@@ -32,7 +32,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
-import { VBadge, VTooltip } from 'vuetify/lib';
+import { VBadge, VTooltip } from 'vuetify/components';
 import { ErrorObject } from 'ajv';
 import findIndex from 'lodash/findIndex';
 import {

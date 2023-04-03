@@ -19,9 +19,9 @@
         :required="control.required"
         :error-messages="control.errors"
         :clearable="hover"
-        :value="control.data"
+        :model-value="control.data"
         :items="control.options"
-        :item-text="(item) => t(item.label, item.label)"
+        :item-title="(item) => t(item.label, item.label)"
         item-value="value"
         v-bind="vuetifyProps('v-select')"
         @change="onChange"
@@ -43,9 +43,9 @@ import {
   rendererProps,
   RendererProps,
   useJsonFormsEnumControl,
-} from '@jsonforms/vue2';
+} from '@jsonforms/vue';
 import { defineComponent } from 'vue';
-import { VHover, VSelect } from 'vuetify/lib';
+import { VHover, VSelect } from 'vuetify/components';
 import { useTranslator, useVuetifyControl } from '../util';
 import { default as ControlWrapper } from './ControlWrapper.vue';
 import { DisabledIconFocus } from './directives';

@@ -19,7 +19,7 @@
       :required="control.required"
       :error-messages="control.errors"
       v-bind="vuetifyProps('v-radio-group')"
-      :value="control.data"
+      :model-value="control.data"
       @change="onChange"
       @focus="isFocused = true"
       @blur="isFocused = false"
@@ -29,7 +29,7 @@
         v-bind="vuetifyProps(`v-radio[${o.value}]`)"
         :key="o.value"
         :label="o.label"
-        :value="o.value"
+        :model-value="o.value"
       ></v-radio>
     </v-radio-group>
   </control-wrapper>
@@ -49,10 +49,10 @@ import {
   rendererProps,
   useJsonFormsOneOfEnumControl,
   RendererProps,
-} from '@jsonforms/vue2';
+} from '@jsonforms/vue';
 import { default as ControlWrapper } from './ControlWrapper.vue';
 import { useVuetifyControl } from '../util';
-import { VRadioGroup, VRadio, VLabel } from 'vuetify/lib';
+import { VRadioGroup, VRadio, VLabel } from 'vuetify/components';
 
 const controlRenderer = defineComponent({
   name: 'oneof-radio-group-control-renderer',

@@ -4,7 +4,7 @@ import typescript from 'rollup-plugin-typescript2';
 import resolve from '@rollup/plugin-node-resolve';
 import cleanup from 'rollup-plugin-cleanup';
 import { visualizer } from 'rollup-plugin-visualizer';
-import styles from 'rollup-plugin-styles';
+import css from 'rollup-plugin-css-only';
 
 import packageJson from './package.json' assert { type: 'json' };
 
@@ -14,7 +14,7 @@ const baseConfig = {
     ...Object.keys(packageJson.dependencies),
     ...Object.keys(packageJson.peerDependencies),
     /^lodash\/.*/,
-    'vuetify/lib',
+    'vuetify/components',
     '@mdi/font',
     /^dayjs\/.*/,
   ],
@@ -33,8 +33,8 @@ const buildFormats = [
       resolve({
         extensions: ['.js', '.jsx', '.ts', '.tsx', '.vue'],
       }),
-      styles({
-        mode: ['extract'],
+      css({
+        output: `${packageJson.module.split('/')[1].split('.')[0]}.esm.css`,
       }),
       vue({
         css: false,
@@ -70,8 +70,8 @@ const buildFormats = [
       resolve({
         extensions: ['.js', '.jsx', '.ts', '.tsx', '.vue'],
       }),
-      styles({
-        mode: ['extract'],
+      css({
+        output: `${packageJson.module.split('/')[1].split('.')[0]}.cjs.css`,
       }),
       vue({
         css: false,
@@ -95,6 +95,7 @@ const buildFormats = [
         babelHelpers: 'bundled',
       }),
       cleanup({ extensions: ['js', 'ts', 'jsx', 'tsx', 'vue'] }),
+      css(),
     ],
   },
 ];

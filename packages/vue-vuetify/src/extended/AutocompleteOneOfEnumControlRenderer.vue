@@ -20,9 +20,9 @@
         :required="control.required"
         :error-messages="control.errors"
         :clearable="hover"
-        :value="control.data"
+        :model-value="control.data"
         :items="control.options"
-        :item-text="(item) => t(item.label, item.label)"
+        :item-title="(item) => t(item.label, item.label)"
         item-value="value"
         v-bind="vuetifyProps('v-select')"
         @change="onChange"
@@ -43,12 +43,12 @@
         :required="control.required"
         :error-messages="control.errors"
         :clearable="hover"
-        :value="control.data"
+        :model-value="control.data"
         :items="control.options"
-        :item-text="(item) => t(item.label, item.label)"
+        :item-title="(item) => t(item.label, item.label)"
         item-value="value"
         v-bind="vuetifyProps('v-autocomplete')"
-        @input="onChange"
+        @update:model-value="onChange"
         @focus="isFocused = true"
         @blur="isFocused = false"
       />
@@ -67,9 +67,9 @@ import {
   rendererProps,
   RendererProps,
   useJsonFormsOneOfEnumControl,
-} from '@jsonforms/vue2';
+} from '@jsonforms/vue';
 import { defineComponent } from 'vue';
-import { VAutocomplete, VHover, VSelect } from 'vuetify/lib';
+import { VAutocomplete, VHover, VSelect } from 'vuetify/components';
 import { default as ControlWrapper } from '../controls/ControlWrapper.vue';
 import { DisabledIconFocus } from '../controls/directives';
 import { useTranslator, useVuetifyControl } from '../util';

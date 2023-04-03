@@ -18,7 +18,7 @@
       :error-messages="control.errors"
       :indeterminate="control.data === undefined"
       :input-value="control.data"
-      :value="control.data"
+      :model-value="control.data"
       v-bind="vuetifyProps('v-checkbox')"
       @change="onChange"
       @focus="isFocused = true"
@@ -39,10 +39,10 @@ import {
   rendererProps,
   useJsonFormsControl,
   RendererProps,
-} from '@jsonforms/vue2';
+} from '@jsonforms/vue';
 import { default as ControlWrapper } from './ControlWrapper.vue';
 import { useVuetifyControl } from '../util';
-import { VCheckbox } from 'vuetify/lib';
+import { VCheckbox } from 'vuetify/components';
 
 const controlRenderer = defineComponent({
   name: 'boolean-control-renderer',

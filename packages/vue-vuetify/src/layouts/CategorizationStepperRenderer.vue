@@ -6,16 +6,15 @@
       v-model="activeCategory"
       v-bind="vuetifyProps('v-stepper')"
     >
-      <template v-for="(element, index) in visibleCategories">
+      <template v-for="(element, index) in visibleCategories" :key="index">
         <v-stepper-step
-          :key="`${layout.path}-${index}`"
           :step="index + 1"
           editable
         >
           {{ visibleCategoryLabels[index] }}
         </v-stepper-step>
 
-        <v-stepper-content :key="`${layout.path}-${index}`" :step="index + 1">
+        <v-stepper-content :step="index + 1">
           <v-card elevation="0">
             <dispatch-renderer
               :schema="layout.schema"
@@ -61,9 +60,8 @@
       v-bind="vuetifyProps('v-stepper')"
     >
       <v-stepper-header>
-        <template v-for="(_, index) in visibleCategories">
+        <template v-for="(_, index) in visibleCategories" :key="index">
           <v-stepper-step
-            :key="`${layout.path}-${index}`"
             :step="index + 1"
             editable
           >
@@ -79,7 +77,6 @@
       <v-stepper-items>
         <v-stepper-content
           v-for="(element, index) in visibleCategories"
-          :key="`${layout.path}-${index}`"
           :step="index + 1"
         >
           <v-card elevation="0">
@@ -144,7 +141,7 @@ import {
   rendererProps,
   useJsonFormsLayout,
   RendererProps,
-} from '@jsonforms/vue2';
+} from '@jsonforms/vue';
 import { useAjv, useTranslator, useVuetifyLayout } from '../util';
 import {
   VStepper,
@@ -157,7 +154,7 @@ import {
   VCard,
   VCardActions,
   VBtn,
-} from 'vuetify/lib';
+} from 'vuetify/components';
 
 const layoutRenderer = defineComponent({
   name: 'categorization-stepper-renderer',

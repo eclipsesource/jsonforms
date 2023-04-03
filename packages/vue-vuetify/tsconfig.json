@@ -14,24 +14,11 @@
     "sourceMap": true,
     "outDir": "./lib",
     "jsx": "preserve",
-    "types": [
-      "node",
-      "vue",
-      "vuetify",
-      "jest"
-    ],
-    "lib": [
-      "esnext",
-      "dom",
-      "dom.iterable",
-      "scripthost"
-    ]
+    "types": ["node", "vue", "vuetify", "jest"],
+    "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
   },
-  "exclude": [
-    "node_modules",
-    "lib"
-  ],
+  "exclude": ["node_modules", "lib"],
   "vueCompilerOptions": {
-    "target": 2.7
+    "target": 3
   }
 }

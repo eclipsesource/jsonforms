@@ -12,7 +12,7 @@
 import { Generate, JsonSchema, Layout, UISchemaElement } from '@jsonforms/core';
 import omit from 'lodash/omit';
 import { PropType, defineComponent } from 'vue';
-import { DispatchRenderer } from '@jsonforms/vue2';
+import { DispatchRenderer } from '@jsonforms/vue';
 
 interface CombinatorProps {
   schema: JsonSchema;

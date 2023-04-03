@@ -94,7 +94,7 @@ import {
 import {
   DispatchRenderer,
   useJsonFormsControlWithDetail,
-} from '@jsonforms/vue2';
+} from '@jsonforms/vue';
 import Ajv, { ValidateFunction } from 'ajv';
 import get from 'lodash/get';
 import isPlainObject from 'lodash/isPlainObject';
@@ -114,7 +114,7 @@ import {
   VToolbar,
   VToolbarTitle,
   VTooltip,
-} from 'vuetify/lib';
+} from 'vuetify/components';
 import { DisabledIconFocus } from '../../controls/directives';
 import { useStyles } from '../../styles';
 import { useAjv, useControlAppliedOptions, useTranslator } from '../../util';

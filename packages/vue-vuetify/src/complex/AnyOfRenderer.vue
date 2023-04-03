@@ -15,8 +15,8 @@
       </v-tab>
     </v-tabs>
 
-    <v-tabs-items v-model="selectedIndex">
-      <v-tab-item
+    <v-window v-model="selectedIndex">
+      <v-window-item
         v-for="(anyOfRenderInfo, anyOfIndex) in anyOfRenderInfos"
         :key="`${control.path}-${anyOfIndex}`"
       >
@@ -29,8 +29,8 @@
           :cells="control.cells"
           :enabled="control.enabled"
         />
-      </v-tab-item>
-    </v-tabs-items>
+      </v-window-item>
+    </v-window>
   </div>
 </template>
 
@@ -48,8 +48,8 @@ import {
   rendererProps,
   RendererProps,
   useJsonFormsAnyOfControl,
-} from '@jsonforms/vue2';
-import { VTabs, VTab, VTabsItems, VTabItem } from 'vuetify/lib';
+} from '@jsonforms/vue';
+import { VTabs, VTab, VWindow, VWindowItem } from 'vuetify/components';
 import { defineComponent, ref } from 'vue';
 import { useVuetifyControl } from '../util';
 import { CombinatorProperties } from './components';
@@ -61,8 +61,8 @@ const controlRenderer = defineComponent({
     CombinatorProperties,
     VTabs,
     VTab,
-    VTabsItems,
-    VTabItem,
+    VWindow,
+    VWindowItem,
   },
   props: {
     ...rendererProps<ControlElement>(),

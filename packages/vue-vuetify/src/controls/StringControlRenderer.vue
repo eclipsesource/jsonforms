@@ -28,17 +28,16 @@
             : undefined
         "
         :clearable="hover"
-        :value="control.data"
+        :model-value="control.data"
         :items="suggestions"
         hide-no-data
         v-bind="vuetifyProps('v-combobox')"
-        @input="onChange"
+        @update:model-value="onChange"
         @focus="isFocused = true"
         @blur="isFocused = false"
       />
       <v-text-field
         v-else
-        v-disabled-icon-focus
         :id="control.id + '-input'"
         :class="styles.control.input"
         :disabled="!control.enabled"
@@ -49,7 +48,7 @@
         :persistent-hint="persistentHint()"
         :required="control.required"
         :error-messages="control.errors"
-        :value="control.data"
+        :model-value="control.data"
         :maxlength="
           appliedOptions.restrict ? control.schema.maxLength : undefined
         "
@@ -60,7 +59,7 @@
         "
         :clearable="hover"
         v-bind="vuetifyProps('v-text-field')"
-        @input="onChange"
+        @update:model-value="onChange"
         @focus="isFocused = true"
         @blur="isFocused = false"
       />
@@ -80,10 +79,10 @@ import {
   rendererProps,
   useJsonFormsControl,
   RendererProps,
-} from '@jsonforms/vue2';
+} from '@jsonforms/vue';
 import { default as ControlWrapper } from './ControlWrapper.vue';
 import { useVuetifyControl } from '../util';
-import { VHover, VTextField, VCombobox } from 'vuetify/lib';
+import { VHover, VTextField, VCombobox } from 'vuetify/components';
 import { DisabledIconFocus } from './directives';
 import isArray from 'lodash/isArray';
 import every from 'lodash/every';

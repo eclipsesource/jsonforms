@@ -19,7 +19,7 @@
       :persistent-hint="persistentHint()"
       :required="control.required"
       :error-messages="control.errors"
-      :value="control.data"
+      :model-value="control.data"
       :maxlength="
         appliedOptions.restrict ? control.schema.maxLength : undefined
       "
@@ -29,7 +29,7 @@
           : undefined
       "
       v-bind="vuetifyProps('v-text-field')"
-      @input="onChange"
+      @update:model-value="onChange"
       @focus="isFocused = true"
       @blur="isFocused = false"
     />
@@ -50,10 +50,10 @@ import {
   rendererProps,
   useJsonFormsControl,
   RendererProps,
-} from '@jsonforms/vue2';
+} from '@jsonforms/vue';
 import { default as ControlWrapper } from './ControlWrapper.vue';
 import { useVuetifyControl } from '../util';
-import { VTextField } from 'vuetify/lib';
+import { VTextField } from 'vuetify/components';
 
 const controlRenderer = defineComponent({
   name: 'password-control-renderer',

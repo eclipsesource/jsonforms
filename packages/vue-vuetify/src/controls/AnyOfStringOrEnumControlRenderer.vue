@@ -18,7 +18,7 @@
         :persistent-hint="persistentHint()"
         :required="control.required"
         :error-messages="control.errors"
-        :value="control.data"
+        :model-value="control.data"
         :maxlength="
           appliedOptions.restrict ? control.schema.maxLength : undefined
         "
@@ -53,10 +53,10 @@ import {
   rendererProps,
   useJsonFormsControl,
   RendererProps,
-} from '@jsonforms/vue2';
+} from '@jsonforms/vue';
 import { default as ControlWrapper } from './ControlWrapper.vue';
 import { useVuetifyControl } from '../util';
-import { VHover, VCombobox } from 'vuetify/lib';
+import { VHover, VCombobox } from 'vuetify/components';
 import { DisabledIconFocus } from './directives';
 
 const controlRenderer = defineComponent({

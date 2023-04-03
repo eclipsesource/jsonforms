@@ -17,7 +17,7 @@ export { default as PasswordControlRenderer } from './PasswordControlRenderer.vu
 export { default as RadioGroupControlRenderer } from './RadioGroupControlRenderer.vue';
 export { default as SliderControlRenderer } from './SliderControlRenderer.vue';
 export { default as StringControlRenderer } from './StringControlRenderer.vue';
-export { default as StringMaskControlRenderer } from './StringMaskControlRenderer.vue';
+// export { default as StringMaskControlRenderer } from './StringMaskControlRenderer.vue';
 export { default as TimeControlRenderer } from './TimeControlRenderer.vue';
 
 import { entry as anyOfStringOrEnumControlRendererEntry } from './AnyOfStringOrEnumControlRenderer.vue';
@@ -35,7 +35,7 @@ import { entry as passwordControlRendererEntry } from './PasswordControlRenderer
 import { entry as radioGroupControlRendererEntry } from './RadioGroupControlRenderer.vue';
 import { entry as sliderControlRendererEntry } from './SliderControlRenderer.vue';
 import { entry as stringControlRendererEntry } from './StringControlRenderer.vue';
-import { entry as stringMaskControlRendererEntry } from './StringMaskControlRenderer.vue';
+// import { entry as stringMaskControlRendererEntry } from './StringMaskControlRenderer.vue';
 import { entry as timeControlRendererEntry } from './TimeControlRenderer.vue';
 
 export const controlRenderers = [
@@ -54,6 +54,6 @@ export const controlRenderers = [
   radioGroupControlRendererEntry,
   sliderControlRendererEntry,
   stringControlRendererEntry,
-  stringMaskControlRendererEntry,
+  // stringMaskControlRendererEntry,
   timeControlRendererEntry,
 ];
