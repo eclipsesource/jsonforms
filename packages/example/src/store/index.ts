@@ -7,8 +7,7 @@
  */
 
 // Vue
-import Vue from 'vue';
-import Vuex from 'vuex';
+import { createStore } from 'vuex';
 import { RootState } from './types';
 
 // Utilities
@@ -17,15 +16,15 @@ import pathify from '../plugins/vuex-pathify';
 
 // Modules
 // https://vuex.vuejs.org/guide/modules.html
-import * as modules from './modules';
+import appModule from './modules/app';
 
-Vue.use(Vuex);
-
-export default new Vuex.Store<RootState>({
+export default createStore<RootState>({
   state: {
     version: '1.0.0',
   },
-  modules,
+  modules: {
+    app: appModule,
+  },
   plugins: [pathify.plugin],
 });
 

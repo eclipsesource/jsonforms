@@ -5,7 +5,7 @@
         <v-card>
           <v-card-title>{{ example.title }}</v-card-title>
           <v-card-text>
-            <v-tabs v-model="activeTab">
+            <v-window v-model="activeTab">
               <v-tab :key="0"
                 >Demo<validation-icon
                   v-if="errors"
@@ -17,7 +17,7 @@
               <v-tab :key="2">UI Schema</v-tab>
               <v-tab :key="3">Data</v-tab>
               <v-tab :key="4">Internationalization</v-tab>
-              <v-tab-item :key="0">
+              <v-window-item :key="0">
                 <v-card>
                   <v-card-title>
                     <v-toolbar flat>
@@ -56,8 +56,8 @@
                     />
                   </div>
                 </v-card>
-              </v-tab-item>
-              <v-tab-item :key="1">
+              </v-window-item>
+              <v-window-item :key="1">
                 <v-card>
                   <v-card-title>
                     <v-toolbar flat>
@@ -98,8 +98,8 @@
                     :editorBeforeMount="registerValidations"
                   ></monaco-editor>
                 </v-card>
-              </v-tab-item>
-              <v-tab-item :key="2">
+              </v-window-item>
+              <v-window-item :key="2">
                 <v-card>
                   <v-card-title>
                     <v-toolbar flat>
@@ -140,8 +140,8 @@
                     :editorBeforeMount="registerValidations"
                   ></monaco-editor>
                 </v-card>
-              </v-tab-item>
-              <v-tab-item :key="3">
+              </v-window-item>
+              <v-window-item :key="3">
                 <v-card>
                   <v-card-title>
                     <v-toolbar flat>
@@ -178,8 +178,8 @@
                     :editorBeforeMount="registerValidations"
                   ></monaco-editor>
                 </v-card>
-              </v-tab-item>
-              <v-tab-item :key="4">
+              </v-window-item>
+              <v-window-item :key="4">
                 <v-card>
                   <v-card-title>
                     <v-toolbar flat>
@@ -216,8 +216,8 @@
                     :editorBeforeMount="registerValidations"
                   ></monaco-editor>
                 </v-card>
-              </v-tab-item>
-            </v-tabs>
+              </v-window-item>
+            </v-window>
           </v-card-text>
         </v-card>
         <v-snackbar v-model="snackbar" :timeout="snackbarTimeout">
@@ -261,12 +261,12 @@ import {
 } from '@/core/jsonSchemaValidation';
 import { Example } from '@/core/types';
 import type { JsonFormsRendererRegistryEntry } from '@jsonforms/core';
-import { JsonFormsChangeEvent } from '@jsonforms/vue2';
+import { JsonFormsChangeEvent } from '@jsonforms/vue';
 import {
   defaultStyles,
   mergeStyles,
   ValidationIcon,
-} from '@jsonforms/vue2-vuetify';
+} from '@jsonforms/vue-vuetify';
 import { ErrorObject } from 'ajv';
 import cloneDeep from 'lodash/cloneDeep';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
@@ -295,21 +295,25 @@ export default {
       snackbarTimeout: 3000,
     };
   },
+  setup() {
+    return {
+      renderers: sync('app/jsonforms@renderers'),
+      cells: sync('app/jsonforms@cells'),
+      config: sync('app/jsonforms@config'),
+      validationMode: sync('app/jsonforms@validationMode'),
+      ajv: sync('app/jsonforms@ajv'),
+      readonly: sync('app/jsonforms@readonly'),
+      monacoSchemaModel: sync('app/monaco@schemaModel'),
+      monacoUiSchemaModel: sync('app/monaco@uischemaModel'),
+      monacoDataModel: sync('app/monaco@dataModel'),
+      monacoI18NModel: sync('app/monaco@i18nModel'),
+      locale: sync('app/jsonforms@locale'),
+    };
+  },
   computed: {
-    renderers: sync('app/jsonforms@renderers'),
     allRenderers(): JsonFormsRendererRegistryEntry[] {
       return (this.example?.input.renderers ?? []).concat(this.renderers);
     },
-    cells: sync('app/jsonforms@cells'),
-    config: sync('app/jsonforms@config'),
-    validationMode: sync('app/jsonforms@validationMode'),
-    ajv: sync('app/jsonforms@ajv'),
-    readonly: sync('app/jsonforms@readonly'),
-    monacoSchemaModel: sync('app/monaco@schemaModel'),
-    monacoUiSchemaModel: sync('app/monaco@uischemaModel'),
-    monacoDataModel: sync('app/monaco@dataModel'),
-    monacoI18NModel: sync('app/monaco@i18nModel'),
-    locale: sync('app/jsonforms@locale'),
     formonly(): boolean {
       return this.$route.query?.view === 'form-only';
     },
@@ -520,7 +524,7 @@ export default {
     registerValidations(editor: EditorApi) {
       configureJsonSchemaValidation(editor, ['*.schema.json']);
       configureUISchemaValidation(editor, ['*.uischema.json']);
-      for (let example of examples) {
+      for (const example of examples) {
         const schema = {
           ...example.input.schema,
           title: example.title,

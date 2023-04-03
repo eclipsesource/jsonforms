@@ -269,23 +269,25 @@
 import { sync } from 'vuex-pathify';
 
 export default {
-  name: 'Settings',
-  computed: {
-    validationMode: sync('app/jsonforms@validationMode'),
-    hideRequiredAsterisk: sync('app/jsonforms@config.hideRequiredAsterisk'),
-    showUnfocusedDescription: sync(
-      'app/jsonforms@config.showUnfocusedDescription'
-    ),
-    restrict: sync('app/jsonforms@config.restrict'),
-    collapseNewItems: sync('app/jsonforms@config.collapseNewItems'),
-    initCollapsed: sync('app/jsonforms@config.initCollapsed'),
-    breakHorizontal: sync('app/jsonforms@config.breakHorizontal'),
-    readonly: sync('app/jsonforms@readonly'),
-    locale: sync('app/jsonforms@locale'),
-    hideAvatar: sync('app/jsonforms@config.hideAvatar'),
-    hideArraySummaryValidation: sync(
-      'app/jsonforms@config.hideArraySummaryValidation'
-    ),
+  name: 'AppSettings',
+  setup() {
+    return {
+      validationMode: sync('app/jsonforms@validationMode'),
+      hideRequiredAsterisk: sync('app/jsonforms@config.hideRequiredAsterisk'),
+      showUnfocusedDescription: sync(
+        'app/jsonforms@config.showUnfocusedDescription'
+      ),
+      restrict: sync('app/jsonforms@config.restrict'),
+      collapseNewItems: sync('app/jsonforms@config.collapseNewItems'),
+      initCollapsed: sync('app/jsonforms@config.initCollapsed'),
+      breakHorizontal: sync('app/jsonforms@config.breakHorizontal'),
+      readonly: sync('app/jsonforms@readonly'),
+      locale: sync('app/jsonforms@locale'),
+      hideAvatar: sync('app/jsonforms@config.hideAvatar'),
+      hideArraySummaryValidation: sync(
+        'app/jsonforms@config.hideArraySummaryValidation'
+      ),
+    };
   },
   data: function () {
     return {

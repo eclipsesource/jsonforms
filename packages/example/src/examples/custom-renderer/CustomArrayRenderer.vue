@@ -28,12 +28,12 @@ import {
   JsonFormsRendererRegistryEntry,
   withIncreasedRank,
 } from '@jsonforms/core';
-import { rendererProps } from '@jsonforms/vue2';
+import { rendererProps } from '@jsonforms/vue';
 import {
   ArrayLayoutRenderer,
   arrayLayoutRendererEntry,
-} from '@jsonforms/vue2-vuetify';
-import { VTooltip, VIcon, VBtn } from 'vuetify/lib';
+} from '@jsonforms/vue-vuetify';
+import { VTooltip, VIcon, VBtn } from 'vuetify/components';
 import { defineComponent } from 'vue';
 
 const controlRenderer = defineComponent({

@@ -1,16 +1,14 @@
-import Vue from 'vue';
-import Router from 'vue-router';
+import { createRouter, createWebHashHistory } from 'vue-router';
+import { defineAsyncComponent } from 'vue';
+export default createRouter({
+  // base: process.env.BASE_URL,
+  // scrollBehavior: (to, _, savedPosition) => {
+  //   if (to.hash) return { selector: to.hash };
+  //   if (savedPosition) return savedPosition;
 
-Vue.use(Router);
-
-export default new Router({
-  base: process.env.BASE_URL,
-  scrollBehavior: (to, _, savedPosition) => {
-    if (to.hash) return { selector: to.hash };
-    if (savedPosition) return savedPosition;
-
-    return { x: 0, y: 0 };
-  },
+  //   return { x: 0, y: 0 };
+  // },
+  history: createWebHashHistory(),
   routes: [
     {
       path: '/',

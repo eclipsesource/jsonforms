@@ -61,8 +61,7 @@ import {
   JsonSchema,
   JsonFormsI18nState,
 } from '@jsonforms/core';
-import { JsonForms, JsonFormsChangeEvent } from '@jsonforms/vue2';
-import JsonRefs from 'json-refs';
+import { JsonForms, JsonFormsChangeEvent } from '@jsonforms/vue';
 import { createTranslator } from '../i18n';
 
 export default {
@@ -159,16 +158,18 @@ export default {
       resolvedSchema.error = undefined;
 
       if (schema) {
-        JsonRefs.resolveRefs(schema).then(
-          function (res) {
-            resolvedSchema.schema = res.resolved;
-            resolvedSchema.resolved = true;
-          },
-          function (err: Error) {
-            resolvedSchema.resolved = true;
-            resolvedSchema.error = err.message;
-          }
-        );
+        resolvedSchema.schema = schema;
+        resolvedSchema.resolved = true;
+        // JsonRefs.resolveRefs(schema).then(
+        //   function (res) {
+        //     resolvedSchema.schema = res.resolved;
+        //     resolvedSchema.resolved = true;
+        //   },
+        //   function (err: Error) {
+        //     resolvedSchema.resolved = true;
+        //     resolvedSchema.error = err.message;
+        //   }
+        // );
       } else {
         // nothing to resolve
         resolvedSchema.resolved = true;

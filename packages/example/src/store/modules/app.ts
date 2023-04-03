@@ -3,7 +3,7 @@ import { make } from 'vuex-pathify';
 import { AppState } from './types';
 import { RootState } from '../types';
 import { Module } from 'vuex';
-import { extendedVuetifyRenderers } from '@jsonforms/vue2-vuetify';
+import { extendedVuetifyRenderers } from '@jsonforms/vue-vuetify';
 import { createAjv } from '../validate/validate';
 
 const ajv = createAjv();
@@ -45,7 +45,7 @@ const getters = {};
 
 const app: Module<AppState, RootState> = {
   namespaced: true,
-  state,
+  state: () => state,
   mutations,
   actions,
   getters,

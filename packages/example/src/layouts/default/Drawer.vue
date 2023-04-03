@@ -44,13 +44,16 @@ import { examples } from '@/examples';
 
 export default {
   name: 'DefaultDrawer',
+  setup() {
+    const drawer = sync('app/drawer');
+    return {
+      drawer,
+    };
+  },
   data() {
     return {
       examples,
     };
-  },
-  computed: {
-    drawer: sync('app/drawer'),
   },
 };
 </script>

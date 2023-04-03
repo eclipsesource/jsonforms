@@ -1,5 +1,5 @@
 import { Options } from 'ajv';
-import { createAjv as createDefaultAjv } from '@jsonforms/vue2-vuetify';
+import { createAjv as createDefaultAjv } from '@jsonforms/vue-vuetify';
 import { ajvKeywords } from './keywords';
 
 export const createAjv = () => {

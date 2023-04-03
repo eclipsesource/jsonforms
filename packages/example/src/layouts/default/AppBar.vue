@@ -25,7 +25,7 @@
     <v-toolbar-items>
       <v-container fill-height fluid justify-end
         ><v-row dense>
-          <v-col><settings /> </v-col>
+          <v-col><app-settings /> </v-col>
           <v-col><theme-changer /> </v-col>
         </v-row>
       </v-container>
@@ -35,7 +35,7 @@
 
 <script lang="ts">
 import { sync } from 'vuex-pathify';
-import Settings from '@/components/Settings.vue';
+import AppSettings from '@/components/Settings.vue';
 import ThemeChanger from '@/components/ThemeChanger.vue';
 import { AppStore } from '../store/modules/types';
 
@@ -43,10 +43,11 @@ export default {
   name: 'DefaultAppBar',
   components: {
     ThemeChanger,
-    Settings,
+    AppSettings,
   },
-  computed: {
-    app: sync<AppStore>('app/'),
+  setup() {
+    const app = sync<AppStore>('app/');
+    return { app };
   },
   data() {
     return {

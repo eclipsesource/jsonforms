@@ -1,7 +1,5 @@
 <template>
-  <v-fade-transition mode="out-in">
-    <router-view />
-  </v-fade-transition>
+  <router-view />
 </template>
 
 <script lang="ts">
@@ -9,5 +7,5 @@ export default { name: 'App' };
 </script>
 
 <style scoped>
-@import '~@jsonforms/vue2-vuetify/lib/jsonforms-vue2-vuetify.esm.css';
+@import '~@jsonforms/vue-vuetify/lib/jsonforms-vue-vuetify.esm.css';
 </style>

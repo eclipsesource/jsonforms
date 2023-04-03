@@ -9,13 +9,15 @@
 </template>
 
 <script lang="ts">
+import { defineAsyncComponent } from 'vue';
+
 export default {
   name: 'DefaultLayout',
 
   components: {
-    DefaultAppBar: () => import('./AppBar'),
-    DefaultDrawer: () => import('./Drawer'),
-    DefaultView: () => import('./View'),
+    DefaultAppBar: defineAsyncComponent(() => import('./AppBar.vue')),
+    DefaultDrawer: defineAsyncComponent(() => import('./Drawer.vue')),
+    DefaultView: defineAsyncComponent(() => import('./View.vue')),
   },
   computed: {
     formonly(): boolean {
