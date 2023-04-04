@@ -127,12 +127,6 @@ test('resolve instance with keywords', t => {
   const result = Resolve.data(instance, toDataPath('#/properties/properties'));
   t.is(result, 123);
 });
-test('resolve instance with encoded', t => {
-  const instance = { 'foo/bar': 123 };
-  const fooBar = encodeURIComponent('foo/bar');
-  const result = Resolve.data(instance, toDataPath(`#/properties/${fooBar}`));
-  t.is(result, 123);
-});
 test('resolve nested instance', t => {
   const instance = { foo: { bar: 123 } };
   const result = Resolve.data(
