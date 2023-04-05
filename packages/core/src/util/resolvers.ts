@@ -127,7 +127,14 @@ const resolveSchemaWithSegments = (
   }
 
   if (schema.$ref) {
+    const originalSchema: JsonSchema = schema;
     schema = resolveSchema(rootSchema, schema.$ref, rootSchema);
+    if (originalSchema.title) {
+      schema.title = originalSchema.title;
+    }
+    if (originalSchema.description) {
+      schema.description = originalSchema.description;
+    }
   }
 
   if (!pathSegments || pathSegments.length === 0) {
