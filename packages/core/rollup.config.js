@@ -1,4 +1,4 @@
-import typescript from 'rollup-plugin-typescript2';
+import typescript from '@rollup/plugin-typescript';
 import cleanup from 'rollup-plugin-cleanup';
 import { visualizer } from 'rollup-plugin-visualizer';
 
@@ -32,10 +32,8 @@ export default [
     },
     plugins: [
       typescript({
-        tsconfigOverride: {
-          compilerOptions: {
-            target: 'ES5'
-          }
+        compilerOptions: {
+          target: 'ES5'
         }
       }),
       cleanup({ extensions: ['js', 'ts', 'jsx', 'tsx'] })

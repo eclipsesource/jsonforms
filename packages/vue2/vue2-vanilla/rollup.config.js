@@ -27,10 +27,8 @@ const buildFormats = [
     plugins: [
       typescript({
         check: false, // types are incompatible with Vue3
-        tsconfigOverride: {
-          include: null,
-          exclude: ['node_modules', 'tests', 'dev']
-        }
+        include: null,
+        exclude: ['node_modules', 'tests', 'dev']
       }),
       alias({
         resolve: ['.js', '.jsx', '.ts', '.tsx', '.vue']
@@ -59,11 +57,9 @@ const buildFormats = [
     plugins: [
       typescript({
         check: false, // types are incompatible with Vue3
-        tsconfigOverride: {
-          include: null,
-          exclude: ['node_modules', 'tests', 'dev'],
-          target: 'ES5'
-        }
+        include: null,
+        exclude: ['node_modules', 'tests', 'dev'],
+        target: 'ES5'
       }),
       alias({
         resolve: ['.js', '.jsx', '.ts', '.tsx', '.vue']

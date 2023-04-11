@@ -29,12 +29,10 @@ const config = {
     css(),
     json(),
     typescript({
-      tsconfigOverride: {
-        include: null,
-        compilerOptions: {
-          // Do not emit typescript declarations for our bundled example app
-          declaration: false
-        }
+      include: null,
+      compilerOptions: {
+        // Do not emit typescript declarations for our bundled example app
+        declaration: false
       }
     }),
     copy({

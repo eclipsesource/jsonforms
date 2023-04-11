@@ -49,10 +49,8 @@ export default [
     },
     plugins: [
       typescript({
-        tsconfigOverride: {
-          compilerOptions: {
-            target: 'ES5'
-          }
+        compilerOptions: {
+          target: 'ES5'
         }
       }),
       cleanup({ extensions: ['js', 'ts', 'jsx', 'tsx'] })
@@ -91,10 +89,8 @@ export default [
       typescript({
         tsconfig: './tsconfig.redux.json',
         useTsconfigDeclarationDir: true,
-        tsconfigOverride: {
-          compilerOptions: {
-            target: 'ES5'
-          }
+        compilerOptions: {
+          target: 'ES5'
         }
       }),
       cleanup({ extensions: ['js', 'ts', 'jsx', 'tsx'] })
