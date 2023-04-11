@@ -18,17 +18,18 @@
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.16.5",
     "@babel/plugin-proposal-optional-chaining": "^7.16.5",
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
-    "istanbul-lib-coverage": "^3.2.0",
     "@types/jest": "^24.0.23",
     "@types/lodash": "^4.14.149",
     "ajv": "^8.6.1",
     "ajv-formats": "^2.1.0",
+    "ajv-keywords": "^5.1.0",
     "ava": "~2.4.0",
     "babel-loader": "^8.0.6",
     "core-js": "^3.9.1",
     "coveralls": "^3.0.9",
     "cross-env": "^7.0.2",
     "css-loader": "^3.2.0",
+    "istanbul-lib-coverage": "^3.2.0",
     "lcov-result-merger": "^3.1.0",
     "lerna": "^3.19.0",
     "nan": "^2.14.2",
@@ -42,9 +43,9 @@
     "tslint": "^5.20.1",
     "tslint-loader": "^3.5.4",
     "tslint-react": "^4.1.0",
-    "typedoc": "^0.19.2",
-    "typescript": "4.2.3",
-    "webpack": "^4.41.2",
-    "webpack-merge": "^4.2.2"
+    "typedoc": "^0.24.1",
+    "typescript": "^5.0.4",
+    "webpack": "^5.78.0",
+    "webpack-merge": "^5.8.0"
   }
 }
