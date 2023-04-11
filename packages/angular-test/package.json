@@ -10,13 +10,13 @@
   "devDependencies": {
     "jasmine": "^3.2.0",
     "jasmine-spec-reporter": "^4.2.1",
-    "karma": "^3.1.1",
+    "karma": "^6.4.1",
     "karma-chrome-launcher": "^2.2.0",
     "karma-coverage-istanbul-reporter": "^2.0.4",
     "karma-jasmine": "^2.0.1",
     "karma-sourcemap-loader": "^0.3.7",
-    "karma-webpack": "^3.0.5",
-    "typescript": "4.2.3"
+    "karma-webpack": "^5.0.0",
+    "typescript": "^4.8.4"
   },
   "scripts": {
     "build": "tsc",

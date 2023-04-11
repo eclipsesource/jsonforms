@@ -1,7 +1,7 @@
 import vue from 'rollup-plugin-vue';
 import alias from '@rollup/plugin-alias';
 import babel from 'rollup-plugin-babel';
-import typescript from 'rollup-plugin-typescript2';
+import typescript from '@rollup/plugin-typescript';
 import cleanup from 'rollup-plugin-cleanup';
 import { visualizer } from 'rollup-plugin-visualizer';
 

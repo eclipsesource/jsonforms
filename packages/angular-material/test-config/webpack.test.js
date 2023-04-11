@@ -33,7 +33,7 @@ module.exports = {
       {
         test: /.+\.ts$/,
         exclude: /(index.ts|mocks.ts|\.spec\.ts|\.test\.ts$)/,
-        loader: 'istanbul-instrumenter-loader',
+        loader: 'coverage-istanbul-loader',
         enforce: 'post',
         query: {
           esModules: true

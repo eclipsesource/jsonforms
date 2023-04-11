@@ -4,7 +4,7 @@ import nodeResolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 import copy from 'rollup-plugin-copy';
 import css from 'rollup-plugin-import-css';
-import typescript from 'rollup-plugin-typescript2';
+import typescript from '@rollup/plugin-typescript';
 
 /**
  * @type {import('rollup').RollupOptions}
