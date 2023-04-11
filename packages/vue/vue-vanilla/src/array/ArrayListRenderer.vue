@@ -13,7 +13,7 @@
       </label>
     </legend>
     <div
-      v-for="(element, index) in control.data"
+      v-for="(_, index) in control.data"
       :key="`${control.path}-${index}`"
       :class="styles.arrayList.itemWrapper"
     >

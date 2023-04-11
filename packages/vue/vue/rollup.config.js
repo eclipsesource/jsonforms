@@ -1,7 +1,7 @@
 import vue from 'rollup-plugin-vue';
 import alias from '@rollup/plugin-alias';
 import babel from 'rollup-plugin-babel';
-import typescript from '@rollup/plugin-typescript';
+import typescript from 'rollup-plugin-typescript2';
 import cleanup from 'rollup-plugin-cleanup';
 import { visualizer } from 'rollup-plugin-visualizer';
 
@@ -26,10 +26,11 @@ const buildFormats = [
     },
     plugins: [
       typescript({
+        tsconfigOverride: {
           include: null,
           exclude: ['node_modules', 'tests', 'dev']
         }
-      ),
+      }),
       alias({
         resolve: ['.js', '.jsx', '.ts', '.tsx', '.vue']
       }),
@@ -56,9 +57,11 @@ const buildFormats = [
     },
     plugins: [
       typescript({
-        include: null,
-        exclude: ['node_modules', 'tests', 'dev'],
-        target: "ES5"
+        tsconfigOverride: {
+          include: null,
+          exclude: ['node_modules', 'tests', 'dev'],
+          target: "ES5"
+        }
       }),
       alias({
         resolve: ['.js', '.jsx', '.ts', '.tsx', '.vue']

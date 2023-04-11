@@ -4,8 +4,9 @@
   "private": true,
   "main": "./lib/index.js",
   "dependencies": {
-    "@jsonforms/angular": "^3.1.0-alpha.1",
-    "@jsonforms/core": "^3.1.0-alpha.1"
+    "@angular/platform-browser-dynamic": "^14.2.0 || ^15.0.0 || ^15.2.6",
+    "@jsonforms/angular": "file:../angular",
+    "@jsonforms/core": "file:../core"
   },
   "devDependencies": {
     "jasmine": "^3.2.0",

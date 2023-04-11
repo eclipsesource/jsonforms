@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 import { isMultiLineControl, RankedTester, rankWith } from '@jsonforms/core';
 
@@ -46,6 +46,8 @@ import { isMultiLineControl, RankedTester, rankWith } from '@jsonforms/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TextAreaRenderer extends JsonFormsControl {
+  @Input() focused: boolean;
+  
   constructor(jsonformsService: JsonFormsAngularService) {
     super(jsonformsService);
   }

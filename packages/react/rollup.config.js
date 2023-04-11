@@ -1,4 +1,4 @@
-import typescript from '@rollup/plugin-typescript';
+import typescript from 'rollup-plugin-typescript2';
 import cleanup from 'rollup-plugin-cleanup';
 import { visualizer } from 'rollup-plugin-visualizer';
 import alias from '@rollup/plugin-alias';

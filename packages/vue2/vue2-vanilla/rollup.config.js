@@ -1,9 +1,9 @@
 import vue from 'rollup-plugin-vue';
 import alias from '@rollup/plugin-alias';
 import babel from 'rollup-plugin-babel';
-import typescript from '@rollup/plugin-typescript';
 import cleanup from 'rollup-plugin-cleanup';
 import { visualizer } from 'rollup-plugin-visualizer';
+import typescript from 'rollup-plugin-typescript2';
 
 const packageJson = require('./package.json');
 
@@ -27,8 +27,10 @@ const buildFormats = [
     plugins: [
       typescript({
         check: false, // types are incompatible with Vue3
-        include: null,
-        exclude: ['node_modules', 'tests', 'dev']
+        tsconfigOverride: {
+          include: null,
+          exclude: ['node_modules', 'tests', 'dev']
+        }
       }),
       alias({
         resolve: ['.js', '.jsx', '.ts', '.tsx', '.vue']
@@ -56,10 +58,12 @@ const buildFormats = [
     },
     plugins: [
       typescript({
-        check: false, // types are incompatible with Vue3
-        include: null,
-        exclude: ['node_modules', 'tests', 'dev'],
-        target: 'ES5'
+        check: false, // types are incompatible with Vue
+        tsconfigOverride: {
+          include: null,
+          exclude: ['node_modules', 'tests', 'dev'],
+          target: 'ES5'
+        }
       }),
       alias({
         resolve: ['.js', '.jsx', '.ts', '.tsx', '.vue']

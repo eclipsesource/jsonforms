@@ -371,6 +371,11 @@ export interface StatePropsOfControl extends StatePropsOfScopedRenderer {
    */
   required?: boolean;
 
+  /**
+   * Whether the rendered data is focused.
+   */
+  focused?: boolean;
+
   i18nKeyPrefix?: string;
 
   // TODO: renderers?

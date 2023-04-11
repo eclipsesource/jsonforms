@@ -62,6 +62,7 @@ export abstract class JsonFormsAbstractControl<
   scopedSchema: JsonSchema;
   rootSchema: JsonSchema;
   enabled: boolean;
+  focused: boolean;
   hidden: boolean;
   propsPath: string;
 
@@ -101,6 +102,7 @@ export abstract class JsonFormsAbstractControl<
         const {
           data,
           enabled,
+          focused,
           errors,
           label,
           required,
@@ -118,6 +120,7 @@ export abstract class JsonFormsAbstractControl<
         this.data = data;
         this.error = errors;
         this.enabled = enabled;
+        this.focused = focused;
         this.isEnabled() ? this.form.enable() : this.form.disable();
         this.hidden = !visible;
         this.scopedSchema = schema;

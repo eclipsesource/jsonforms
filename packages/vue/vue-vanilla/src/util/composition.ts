@@ -126,7 +126,7 @@ export const useVanillaArrayControl = <I extends { control: any }>(
       input.control.value.data,
       composePaths(`${index}`, childLabelProp)
     );
-    if (labelValue === undefined || labelValue === null || labelValue === NaN) {
+    if (labelValue === undefined || labelValue === null || Number.isNaN(labelValue)) {
       return '';
     }
     return `${labelValue}`;
