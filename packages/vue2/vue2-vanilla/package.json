@@ -46,7 +46,7 @@
     "build": "run-s --continue-on-error build:pre build:do build:after",
     "build:after": "symlink-dir ../../core ../vue2/node_modules/@jsonforms/core",
     "clean": "rimraf lib",
-    "doc": "typedoc --name 'JSON Forms Vue 2 Vanilla Renderers' --mode file --out docs src --ignoreCompilerErrors"
+    "doc": "typedoc --name 'JSON Forms Vue 2 Vanilla Renderers'  --out docs src --ignoreCompilerErrors"
   },
   "dependencies": {
     "lodash": "^4.17.15"

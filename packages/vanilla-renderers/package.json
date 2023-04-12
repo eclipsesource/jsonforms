@@ -18,7 +18,7 @@
     "report": "nyc report --reporter=html",
     "test": "jest --no-cache",
     "test-cov": "jest --no-cache --coverage",
-    "doc": "typedoc --name 'JSON Forms Vanilla Renderers' --mode file --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
+    "doc": "typedoc --name 'JSON Forms Vanilla Renderers'  --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
   },
   "files": [
     "lib",

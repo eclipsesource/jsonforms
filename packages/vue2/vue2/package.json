@@ -42,7 +42,7 @@
     "build:do": "cross-env NODE_ENV=production rollup --config rollup.config.js",
     "build": "npm run build:pre && npm run build:do",
     "clean": "rimraf lib",
-    "doc": "typedoc --name 'JSON Forms Vue 2' --mode file --out docs src/jsonFormsCompositions.ts"
+    "doc": "typedoc --name 'JSON Forms Vue 2'  --out docs src/jsonFormsCompositions.ts"
   },
   "dependencies": {
     "lodash": "^4.17.15"

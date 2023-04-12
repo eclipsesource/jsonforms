@@ -44,7 +44,7 @@
     "test": "jest --no-cache",
     "test-cov": "jest --no-cache --coverage",
     "report": "nyc report --reporter=html",
-    "doc": "typedoc --name 'JSON Forms React Material Renderers' --mode file --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
+    "doc": "typedoc --name 'JSON Forms React Material Renderers'  --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
   },
   "jest": {
     "moduleFileExtensions": [

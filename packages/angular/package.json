@@ -43,7 +43,7 @@
     "report": "nyc report --reporter=html",
     "test": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} ava",
     "test-cov": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} nyc ava",
-    "doc": "typedoc --name 'JSON Forms Angular Core' --mode file --out docs src"
+    "doc": "typedoc --name 'JSON Forms Angular Core' --out docs src"
   },
   "nyc": {
     "reporter": [

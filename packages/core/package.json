@@ -44,7 +44,7 @@
     "report": "nyc report --reporter=html",
     "test": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\",\\\"target\\\":\\\"es5\\\"} ava",
     "test-cov": "rimraf -rf .nyc_output && cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\",\\\"target\\\":\\\"es5\\\"} nyc ava",
-    "doc": "typedoc --name 'JSON Forms Core' --mode file --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
+    "doc": "typedoc --name 'JSON Forms Core'  --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
   },
   "ava": {
     "files": [

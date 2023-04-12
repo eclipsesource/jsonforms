@@ -43,7 +43,7 @@
     "report": "nyc report --reporter=html",
     "test": "jest --no-cache",
     "test-cov": "jest --no-cache --coverage",
-    "doc": "typedoc --name 'JSON Forms React Core' --mode file --out docs src"
+    "doc": "typedoc --name 'JSON Forms React Core'  --out docs src"
   },
   "ava": {
     "verbose": true,

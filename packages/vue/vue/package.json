@@ -38,7 +38,7 @@
     "serve": "vue-cli-service serve dev/serve.ts",
     "build": "cross-env NODE_ENV=production rollup --config rollup.config.js",
     "clean": "rimraf lib",
-    "doc": "typedoc --name 'JSON Forms Vue' --mode file --out docs src/jsonFormsCompositions.ts",
+    "doc": "typedoc --name 'JSON Forms Vue'  --out docs src/jsonFormsCompositions.ts",
     "test": "vue-cli-service test:unit"
   },
   "dependencies": {
