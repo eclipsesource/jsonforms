@@ -60,7 +60,7 @@
     "@vue/vue3-jest": "^27.0.0",
     "core-js": "^3.9.1",
     "cross-env": "^7.0.2",
-    "rimraf": "^3.0.2",
+    "rimraf": "^4.4.1",
     "rollup": "^2.78.0",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-cleanup": "^3.2.1",

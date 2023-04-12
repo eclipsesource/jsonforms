@@ -83,7 +83,7 @@
     "nyc": "^15.1.0",
     "redux": "^4.0.4",
     "redux-mock-store": "1.5.3",
-    "rimraf": "^3.0.2",
+    "rimraf": "^4.4.1",
     "rollup": "^2.78.0",
     "rollup-plugin-cleanup": "^3.2.1",
     "rollup-plugin-visualizer": "^5.4.1",

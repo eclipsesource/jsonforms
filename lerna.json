@@ -9,6 +9,7 @@
     "core-js",
     "vue",
     "rollup-plugin-vue",
-    "@vue/test-utils"
+    "@vue/test-utils",
+    "jsonforms-typedoc-theme"
   ]
 }
