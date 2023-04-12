@@ -44,7 +44,7 @@
     "test": "jest --no-cache",
     "test-cov": "jest --no-cache --coverage",
     "report": "nyc report --reporter=html",
-    "doc": "typedoc --name 'JSON Forms React Material Renderers'  --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
+    "doc": "typedoc --name 'JSON Forms React Material Renderers'  --excludeExternals --plugin jsonforms-typedoc-theme --theme jsonforms-theme --out docs src"
   },
   "jest": {
     "moduleFileExtensions": [
@@ -106,6 +106,7 @@
     "copy-webpack-plugin": "^11.0.0",
     "enzyme": "^3.10.0",
     "jest": "^26.6.3",
+    "jsonforms-typedoc-theme": "^1.0.1",
     "nyc": "^15.1.0",
     "react-dom": "^17.0.2",
     "rimraf": "^3.0.2",
