@@ -44,7 +44,7 @@
     "report": "nyc report --reporter=html",
     "test": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\",\\\"target\\\":\\\"es5\\\"} ava",
     "test-cov": "rimraf -rf .nyc_output && cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\",\\\"target\\\":\\\"es5\\\"} nyc ava",
-    "doc": "typedoc --name 'JSON Forms Core'  --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
+    "doc": "typedoc --name 'JSON Forms Core' --excludeExternals --plugin jsonforms-typedoc-theme --theme jsonforms-theme --out docs src"
   },
   "ava": {
     "files": [
@@ -79,6 +79,7 @@
     "document-register-element": "^1.14.3",
     "jsdom": "^21.1.1",
     "jsdom-global": "^3.0.2",
+    "jsonforms-typedoc-theme": "^1.0.1",
     "nyc": "^15.1.0",
     "redux": "^4.0.4",
     "redux-mock-store": "1.5.3",

@@ -1,0 +1,30 @@
+{
+  "name": "jsonforms-typedoc-theme",
+  "version": "1.0.1",
+  "main": "dist/index.js",
+  "license": "MIT",
+  "keywords": [
+    "typedoc-theme"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">= 14"
+  },
+  "devDependencies": {
+    "typescript": "^4.8.4"
+  },
+  "peerDependencies": {
+    "typedoc": "^0.24.1"
+  },
+  "scripts": {
+    "build": "tsc",
+    "predocs": "tsc",
+    "docs": "typedoc src --plugin dist/index.js"
+  }
+}
