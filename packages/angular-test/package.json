@@ -5,8 +5,8 @@
   "main": "./lib/index.js",
   "dependencies": {
     "@angular/platform-browser-dynamic": "^14.2.0 || ^15.0.0 || ^15.2.6",
-    "@jsonforms/angular": "file:../angular",
-    "@jsonforms/core": "file:../core"
+    "@jsonforms/angular": "^3.1.0-alpha.1",
+    "@jsonforms/core": "^3.1.0-alpha.1"
   },
   "devDependencies": {
     "jasmine": "^3.2.0",

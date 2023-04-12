@@ -66,7 +66,7 @@
   "peerDependencies": {
     "@angular/core": "^14.2.0 || ^15.0.0",
     "@angular/forms": "^14.2.0 || ^15.0.0",
-    "@jsonforms/core": "file:../core",
+    "@jsonforms/core": "^3.1.0-alpha.1",
     "rxjs": "^6.5.3 || ^7.4.0"
   },
   "devDependencies": {
@@ -74,7 +74,7 @@
     "@angular/compiler-cli": "^14.2.0",
     "@angular/core": "^14.2.0",
     "@angular/forms": "^14.2.0",
-    "@jsonforms/core": "file:../core",
+    "@jsonforms/core": "^3.1.0-alpha.1",
     "ava": "^5.2.0",
     "copy-webpack-plugin": "^11.0.0",
     "cross-env": "^7.0.2",
