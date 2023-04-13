@@ -30,6 +30,7 @@ import * as anyOfOneOfAllOfResolve from './examples/anyOf-oneOf-allOf-resolve';
 import * as array from './examples/arrays';
 import * as arrayI18n from './examples/arraysI18n';
 import * as nestedArray from './examples/nestedArrays';
+import * as nestedCategorization from './examples/nestedCategorization';
 import * as arrayWithDetail from './examples/arrays-with-detail';
 import * as arrayWithDetailAndRule from './examples/arrays-with-detail-and-rule';
 import * as arrayWithCustomChildLabel from './examples/arrays-with-custom-element-label';
@@ -86,6 +87,7 @@ export {
   array,
   arrayI18n,
   nestedArray,
+  nestedCategorization,
   arrayWithDetail,
   arrayWithDetailAndRule,
   arrayWithCustomChildLabel,
