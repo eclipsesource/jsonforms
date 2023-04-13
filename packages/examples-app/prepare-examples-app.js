@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { copySync } from 'fs-extra/esm';
-import { copyFileSync, mkdirSync, rmdirSync } from 'fs';
+import { copyFileSync, mkdirSync, rmdirSync, existsSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -29,7 +29,11 @@ copyFileSync(join(__dirname, 'index.html'), join(distDir, 'index.html'));
 Object.keys(examples).forEach(key => {
   console.log(`Copying example ${key}...`);
   const path = examples[key];
-  copySync(path, join(distDir, key));
+  if (existsSync(path)){
+    copySync(path, join(distDir, key));
+    return;
+  }
+  console.warn(`Path ${path} does not exist.`)
 });
 
 console.log('...finished');

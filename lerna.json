@@ -3,8 +3,8 @@
     "packages/core",
     "packages/angular",
     "packages/angular-material",
-    "packages/angular-test"
-
+    "packages/angular-test",
+    "packages/examples-app"
   ],
   "version": "3.1.0-alpha.1",
   "nohoist": [
