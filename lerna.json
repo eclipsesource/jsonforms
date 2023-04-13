@@ -1,15 +1,16 @@
 {
   "packages": [
-    "packages/*",
-    "packages/vue/*",
-    "packages/vue2/*"
+    "packages/core",
+    "packages/angular",
+    "packages/angular-material",
+    "packages/angular-test"
+
   ],
   "version": "3.1.0-alpha.1",
   "nohoist": [
     "core-js",
     "vue",
     "rollup-plugin-vue",
-    "@vue/test-utils",
-    "jsonforms-typedoc-theme"
+    "@vue/test-utils"
   ]
 }
