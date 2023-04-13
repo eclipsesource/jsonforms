@@ -35,7 +35,8 @@ import { withJsonFormsControlProps } from '@jsonforms/react';
 import { FormHelperText, Hidden } from '@mui/material';
 import {
   DateTimePicker,
-  LocalizationProvider 
+  LocalizationProvider, 
+  PickersActionBarAction
 } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import {
@@ -99,39 +100,37 @@ export const MaterialDateTimeControl = (props: ControlProps) => {
           label={label}
           value={value}
           onChange={onChange}
-          inputFormat={format}
-          disableMaskedInput
+          format={format}
           ampm={!!appliedUiSchemaOptions.ampm}
           views={views}
           disabled={!enabled}
-          componentsProps={{
-            actionBar: {
-              actions: (variant) => (variant === 'desktop' ? [] : ['clear', 'cancel', 'accept'])
-            }
+          slotProps={{
+            actionBar: ({ wrapperVariant }) => ({
+              actions: wrapperVariant === 'desktop' ? [] : ['clear' , 'cancel', 'accept'] as PickersActionBarAction[],
+            }),
+            textField: (params) => (
+              <ResettableTextField 
+                {...params}
+                rawValue={data}
+                dayjsValueIsValid={value !== null}
+                valueInInputFormat={valueInInputFormat}
+                focused={focused}
+                id={id + '-input'}
+                required={required && !appliedUiSchemaOptions.hideRequiredAsterisk}
+                autoFocus={appliedUiSchemaOptions.focus}
+                error={!isValid}
+                fullWidth={!appliedUiSchemaOptions.trim}
+                inputProps={{
+                  ...params.inputProps,
+                  type: 'text',
+                }}
+                InputLabelProps={data ? { shrink: true } : undefined}
+                onFocus={onFocus}
+                onBlur={onBlur}
+                variant={'standard'}
+              />
+            )
           }}
-          renderInput={params => (
-            <ResettableTextField 
-              {...params}
-              rawValue={data}
-              dayjsValueIsValid={value !== null}
-              valueInInputFormat={valueInInputFormat}
-              focused={focused}
-              id={id + '-input'}
-              required={required && !appliedUiSchemaOptions.hideRequiredAsterisk}
-              autoFocus={appliedUiSchemaOptions.focus}
-              error={!isValid}
-              fullWidth={!appliedUiSchemaOptions.trim}
-              inputProps={{
-                ...params.inputProps,
-                type: 'text',
-              }}
-              InputLabelProps={data ? { shrink: true } : undefined}
-              onFocus={onFocus}
-              onBlur={onBlur}
-              variant={'standard'}
-            />
-          )
-          }
         />
         <FormHelperText error={!isValid && !showDescription}>
           {firstFormHelperText}
