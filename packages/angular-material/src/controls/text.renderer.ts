@@ -50,6 +50,7 @@ export class TextControlRenderer extends JsonFormsControl {
   constructor(jsonformsService: JsonFormsAngularService) {
     super(jsonformsService);
   }
+  focused: boolean = false;
   getEventValue = (event: any) => event.target.value || undefined;
   getType = (): string => {
     if (this.uischema.options && this.uischema.options.format) {

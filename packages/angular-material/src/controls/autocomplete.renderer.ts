@@ -97,6 +97,8 @@ import { startWith } from 'rxjs/operators';
 })
 export class AutocompleteControlRenderer extends JsonFormsControl {
   @Input() options: string[];
+  
+  focused: boolean = false;
   filteredOptions: Observable<string[]>;
   shouldFilter: boolean;
 

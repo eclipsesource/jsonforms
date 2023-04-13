@@ -67,6 +67,7 @@ export class NumberControlRenderer extends JsonFormsControl {
   locale: string;
   numberFormat: Intl.NumberFormat;
   decimalSeparator: string;
+  focused: boolean = false;
 
   constructor(jsonformsService: JsonFormsAngularService) {
     super(jsonformsService);

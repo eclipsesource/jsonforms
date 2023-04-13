@@ -5,6 +5,8 @@
   "main": "./lib/index.js",
   "dependencies": {
     "@angular/platform-browser-dynamic": "^14.2.0 || ^15.0.0 || ^15.2.6",
+    "@angular/core": "^14.2.0 || ^15.0.0 || ^15.2.6",
+    "@angular/platform-browser": "^14.2.0 || ^15.0.0 || ^15.2.6",
     "@jsonforms/angular": "^3.1.0-alpha.1",
     "@jsonforms/core": "^3.1.0-alpha.1"
   },

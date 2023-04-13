@@ -44,12 +44,14 @@ const uiSchema = {
 const defaultI18n: JsonFormsI18nState = {
   locale: 'en-US'
 };
+
 const itemTester: UISchemaTester = (_schema, schemaPath, _path) => {
   if (schemaPath === '#/properties/warehouseitems/items') {
     return 10;
   }
   return -1;
 };
+
 @Component({
   selector: 'app-root',
   template: `
@@ -92,9 +94,11 @@ export class AppComponent {
   readonly examples = getExamples();
   selectedExample: ExampleDescription;
   i18n: JsonFormsI18nState;
+  currentLocale: string = defaultI18n.locale;
   private dateAdapter;
-  private readonly = false;
+  readonly = false;
   data: any;
+  config: any = {};
   uischemas: { tester: UISchemaTester; uischema: UISchemaElement; }[] = [
     { tester: itemTester, uischema: uiSchema }
   ];

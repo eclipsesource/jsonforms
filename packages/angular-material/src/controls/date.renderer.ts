@@ -62,6 +62,8 @@ export class DateControlRenderer extends JsonFormsControl {
     super(jsonformsService);
   }
 
+  focused: boolean = false;
+
   getEventValue = (event: any) => event.value.toISOString().substr(0, 10);
 }
 
