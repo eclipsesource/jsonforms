@@ -39,7 +39,7 @@ import {
   TableRenderer,
   TableRendererTester
 } from '../src/other/table.renderer';
-import { FlexLayoutModule } from '@angular/flex-layout';
+
 import { setupMockStore } from '@jsonforms/angular-test';
 import { createTesterContext } from './util';
 

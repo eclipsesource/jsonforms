@@ -31,7 +31,7 @@ import {
   beforeEachLayoutTest,
   setupMockStore
 } from '@jsonforms/angular-test';
-import { FlexLayoutModule } from '@angular/flex-layout';
+
 import { LayoutChildrenRenderPropsPipe } from '../src/layouts/layout.renderer';
 import {
   GroupLayoutRenderer,

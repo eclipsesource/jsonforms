@@ -31,7 +31,7 @@ import {
   ErrorTestExpectation
 } from '@jsonforms/angular-test';
 import { BooleanControlRenderer, booleanControlTester } from '../src';
-import { FlexLayoutModule } from '@angular/flex-layout';
+
 import { JsonFormsAngularService } from '@jsonforms/angular';
 
 describe('Material boolean field tester', () => {

@@ -39,7 +39,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ErrorTestExpectation, getJsonFormsService, setupMockStore } from '@jsonforms/angular-test';
 import { Actions, ControlElement, JsonSchema } from '@jsonforms/core';
 import { DateControlRenderer, DateControlRendererTester } from '../src';
-import { FlexLayoutModule } from '@angular/flex-layout';
+
 import { JsonFormsAngularService } from '@jsonforms/angular';
 import { createTesterContext } from './util';
 

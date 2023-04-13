@@ -36,7 +36,7 @@ import {
 } from '@jsonforms/angular-test';
 import { TextAreaRenderer, TextAreaRendererTester } from '../src';
 import { ControlElement, JsonSchema } from '@jsonforms/core';
-import { FlexLayoutModule } from '@angular/flex-layout';
+
 import { JsonFormsAngularService } from '@jsonforms/angular';
 
 describe('Material text field tester', () => {

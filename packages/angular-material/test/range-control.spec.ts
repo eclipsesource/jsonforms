@@ -33,7 +33,7 @@ import {
   rangeInputEventTest
 } from '@jsonforms/angular-test';
 import { RangeControlRenderer, RangeControlRendererTester } from '../src';
-import { FlexLayoutModule } from '@angular/flex-layout';
+
 import { JsonFormsAngularService } from '@jsonforms/angular';
 
 describe('Material number field tester', () => {

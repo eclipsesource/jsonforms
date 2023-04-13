@@ -25,7 +25,7 @@
 import { ComponentFixture } from '@angular/core/testing';
 import { HorizontalLayout, UISchemaElement } from '@jsonforms/core';
 import { beforeEachLayoutTest, setupMockStore } from '@jsonforms/angular-test';
-import { FlexLayoutModule } from '@angular/flex-layout';
+
 import {
   HorizontalLayoutRenderer,
   horizontalLayoutTester
