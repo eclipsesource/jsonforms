@@ -39,7 +39,7 @@
     "clean": "rimraf lib coverage dist .nyc_output 2> /dev/null",
     "lint": "tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
     "test": "echo 'Nothing to do for `examples` package'",
-    "doc": "typedoc --name 'JSON Forms Examples'  --excludeExternals --plugin jsonforms-typedoc-theme --theme jsonforms-theme --out docs src"
+    "doc": "typedoc --name 'JSON Forms Examples'  --excludeExternals  --out docs src"
   },
   "dependencies": {
     "ajv-i18n": "^3.5.0"

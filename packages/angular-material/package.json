@@ -44,7 +44,7 @@
     "clean": "rimraf lib coverage dist .nyc_output 2> /dev/null",
     "lint": "tslint --project tsconfig.json --exclude src/models/jsonSchema.ts",
     "report": "nyc report --reporter=html",
-    "doc": "typedoc --name 'JSON Forms Angular Material Renderers' --plugin jsonforms-typedoc-theme --theme jsonforms-theme --out docs src",
+    "doc": "typedoc --name 'JSON Forms Angular Material Renderers'  --out docs src",
     "test": "karma start ./test-config/karma.conf.js --single-run",
     "test-ci": "karma start ./test-config/karma.conf.js --single-run",
     "test-cov": "karma start ./test-config/karma.conf.js --coverage --single-run",
