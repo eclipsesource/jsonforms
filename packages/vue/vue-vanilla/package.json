@@ -46,7 +46,7 @@
     "build:after": "symlink-dir ../../core ../vue/node_modules/@jsonforms/core",
     "build:examples-app": "rollup -c rollup.example.config.js",
     "clean": "rimraf lib example/dist",
-    "doc": "typedoc --name 'JSON Forms Vue Vanilla Renderers'  --out docs src --ignoreCompilerErrors",
+    "doc": "typedoc --name 'JSON Forms Vue Vanilla Renderers' --out docs src",
     "test": "vue-cli-service test:unit"
   },
   "dependencies": {
