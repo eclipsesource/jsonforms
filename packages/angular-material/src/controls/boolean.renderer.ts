@@ -30,10 +30,7 @@ import { isBooleanControl, RankedTester, rankWith } from '@jsonforms/core';
   selector: 'BooleanControlRenderer',
   template: `
     <div
-      [fxHide]="hidden"
-      fxLayout="column"
-      fxLayoutAlign="center"
-      style="height:100%"
+    [ngClass]="{'boolean-control': true, 'd-none': hidden}"
     >
       <mat-checkbox
         (change)="onChange($event)"
@@ -47,6 +44,19 @@ import { isBooleanControl, RankedTester, rankWith } from '@jsonforms/core';
       <mat-error class="mat-caption">{{ error }}</mat-error>
     </div>
   `,
+  styles: [
+    `.d-none {
+      display: none;
+    }
+    .boolean-control {
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: 'center';
+      height: 100%;
+    }
+    `
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BooleanControlRenderer extends JsonFormsControl {

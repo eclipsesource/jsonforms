@@ -35,12 +35,29 @@ import { JsonFormsAngularService } from '@jsonforms/angular';
 @Component({
   selector: 'VerticalLayoutRenderer',
   template: `
-    <div fxLayout="column" fxLayoutGap="16px" [fxHide]="hidden">
-      <div *ngFor="let props of uischema | layoutChildrenRenderProps: schema: path; trackBy: trackElement" fxFlex>
+    <div [ngClass]="{'horizontal-layout-row': true, 'd-none': hidden}">
+      <div *ngFor="let props of uischema | layoutChildrenRenderProps: schema: path; trackBy: trackElement" [ngClass]="'simple-flex-item'">
         <jsonforms-outlet [renderProps]="props"></jsonforms-outlet>
       </div>
     </div>
   `,
+  styles: [
+    `
+    .horizontal-layout-row {
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+      gap: 1rem;
+    }
+    .d-none {
+      display: none;
+    }
+    .simple-flex-item {
+      flex: 1 1 0%;
+      box-sizing: border-box;
+    }
+    `
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class VerticalLayoutRenderer extends LayoutRenderer<VerticalLayout> {

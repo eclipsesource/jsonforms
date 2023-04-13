@@ -30,13 +30,29 @@ import { JsonFormsAngularService } from '@jsonforms/angular';
 @Component({
   selector: 'GroupLayoutRenderer',
   template: `
-    <mat-card fxLayout="column" [fxHide]="hidden">
+    <mat-card [ngClass]="{'group-layout-col': true, 'd-none': hidden}">
       <mat-card-title class="mat-title">{{ label }}</mat-card-title>
-      <div *ngFor="let props of uischema | layoutChildrenRenderProps: schema: path; trackBy: trackElement" fxFlex>
+      <div *ngFor="let props of uischema | layoutChildrenRenderProps: schema: path; trackBy: trackElement" [ngClass]="'simple-flex-item'">
         <jsonforms-outlet [renderProps]="props"></jsonforms-outlet>
       </div>
     </mat-card>
   `,
+  styles: [
+    `
+    .d-none {
+      display: none;
+    }
+    .group-layout-col {
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+    }
+    .simple-flex-item {
+      flex: 1 1 0%;
+      box-sizing: border-box;
+    }
+    `
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GroupLayoutRenderer extends LayoutRenderer<GroupLayout> {

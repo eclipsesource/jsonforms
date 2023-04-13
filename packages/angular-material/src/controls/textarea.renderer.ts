@@ -29,7 +29,7 @@ import { isMultiLineControl, RankedTester, rankWith } from '@jsonforms/core';
 @Component({
   selector: 'TextAreaRenderer',
   template: `
-    <mat-form-field fxFlex [fxHide]="hidden">
+    <mat-form-field  [ngClass]="{'simple-flex-item': true, 'd-none': hidden}">
       <mat-label>{{ label }}</mat-label>
       <textarea
         matInput
@@ -43,6 +43,16 @@ import { isMultiLineControl, RankedTester, rankWith } from '@jsonforms/core';
       <mat-error>{{ error }}</mat-error>
     </mat-form-field>
   `,
+  styles: [
+    `.d-none {
+      display: none;
+    }
+    .simple-flex-item {
+      flex: 1 1 0%;
+      box-sizing: border-box;
+    }
+    `
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TextAreaRenderer extends JsonFormsControl {

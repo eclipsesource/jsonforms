@@ -48,7 +48,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'jsonforms-categorization-layout',
   template: `
-    <mat-tab-group dynamicHeight="true" [fxHide]="hidden">
+    <mat-tab-group dynamicHeight="true" [ngClass]="{'d-none': hidden}">
       <mat-tab
         *ngFor="let category of visibleCategories; let i = index"
         [label]="categoryLabels[i]"
@@ -58,7 +58,14 @@ import { Subscription } from 'rxjs';
         </div>
       </mat-tab>
     </mat-tab-group>
-  `
+  `,
+  styles: [
+    `
+    .d-none{
+      display: none
+    }
+    `
+  ]
 })
 export class CategorizationTabLayoutRenderer
   extends JsonFormsBaseRenderer<Categorization>

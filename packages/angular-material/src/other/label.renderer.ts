@@ -41,8 +41,15 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'LabelRenderer',
   template: `
-    <label class="mat-title" fxFlex> {{ label }} </label>
-  `
+    <label class="mat-title" [ngClass]="'simple-flex-item'"> {{ label }} </label>
+  `,
+  styles: [
+    `.simple-flex-item {
+      flex: 1 1 0%;
+      box-sizing: border-box;
+    }
+    `
+  ]
 })
 export class LabelRenderer extends JsonFormsBaseRenderer<LabelElement> {
   label: string;

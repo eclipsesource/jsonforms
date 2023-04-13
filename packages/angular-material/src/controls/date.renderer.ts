@@ -33,7 +33,7 @@ import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 @Component({
   selector: 'DateControlRenderer',
   template: `
-    <mat-form-field fxFlex [fxHide]="hidden">
+    <mat-form-field  [ngClass]="{'simple-flex-item': true, 'd-none': hidden}">
       <mat-label>{{ label }}</mat-label>
       <input
         matInput
@@ -53,6 +53,16 @@ import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
       <mat-error>{{ error }}</mat-error>
     </mat-form-field>
   `,
+  styles: [
+    `.d-none {
+      display: none;
+    }
+    .simple-flex-item {
+      flex: 1 1 0%;
+      box-sizing: border-box;
+    }
+    `
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DateControlRenderer extends JsonFormsControl {

@@ -29,7 +29,7 @@ import { isRangeControl, RankedTester, rankWith } from '@jsonforms/core';
 @Component({
   selector: 'RangeControlRenderer',
   template: `
-    <div fxFlex fxLayout="column" [fxHide]="hidden">
+    <div [ngClass]="{'simple-flex-item': true, 'd-none': hidden}">
       <label class="mat-caption" style="color:rgba(0,0,0,.54)">{{
         label
       }}</label>
@@ -48,6 +48,22 @@ import { isRangeControl, RankedTester, rankWith } from '@jsonforms/core';
       <mat-error class="mat-caption">{{ error }}</mat-error>
     </div>
   `,
+  styles: [
+    `
+    .range-control {
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+    }
+    .d-none {
+      display: none;
+    }
+    .simple-flex-item {
+      flex: 1 1 0%;
+      box-sizing: border-box;
+    }
+    `
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RangeControlRenderer extends JsonFormsControl {

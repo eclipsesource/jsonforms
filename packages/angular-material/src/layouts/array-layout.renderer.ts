@@ -51,10 +51,10 @@ import {
 @Component({
   selector: 'app-array-layout-renderer',
   template: `
-    <div fxLayout="column" fxLayoutGap="16px" [fxHide]="hidden">
+    <div [ngClass]="{'array-layout-col': true, 'd-none': hidden}">
       <div [ngClass]="'array-layout-toolbar'">
         <h2 [ngClass]="['mat-h2', 'array-layout-title']">{{ label }}</h2>
-        <span fxFlex></span>
+        <span ></span>
         <mat-icon
           *ngIf="this.error?.length"
           color="warn"
@@ -65,7 +65,7 @@ import {
           >
             error_outline
         </mat-icon>
-        <span fxFlex></span>
+        <span [ngClass]="'simple-flex-item'"></span>
         <button
           mat-button
           matTooltip="{{ this.addTooltip }}"
@@ -131,7 +131,20 @@ import {
     </div>
   `,
   styles: [
-    `.array-layout-toolbar {
+    `
+    .d-none {
+      display: none;
+    }
+    .array-layout-col {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem; /** 16px */
+    }
+    .simple-flex-item {
+      flex: 1 1 0%;
+      box-sizing: border-box;
+    }
+    .array-layout-toolbar {
        display: flex;
        align-items: center;
       }
