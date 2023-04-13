@@ -6,7 +6,7 @@
     "target": "es5"
   },
   "exclude": ["node_modules"],
-  "files": ["./src/index.ts"],
+  "files": ["./src/index.ts", "./example/main.ts"],
   "angularCompilerOptions": {
     "strictMetadataEmit": true,
     "generateCodeForLibraries": false,
