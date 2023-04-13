@@ -1,4 +1,5 @@
 import { TextField, TextFieldProps } from '@mui/material';
+import { PickerChangeHandlerContext } from '@mui/x-date-pickers/internals/hooks/usePicker/usePickerValue';
 import dayjs from 'dayjs';
 import customParsing from 'dayjs/plugin/customParseFormat';
 import React, { useRef} from 'react';
@@ -10,13 +11,13 @@ export const createOnChangeHandler = (
   path: string,
   handleChange: (path: string, value: any) => void,
   saveFormat: string | undefined
-) => (time: dayjs.Dayjs, textInputValue: string) => {
+) => (time: dayjs.Dayjs) => {
   if (!time) {
     handleChange(path, undefined);
     return;
   }
   const result = dayjs(time).format(saveFormat);
-  handleChange(path, result === 'Invalid Date' ? textInputValue : result);
+  handleChange(path, result === 'Invalid Date' ? null : result);
 };
 
 export const getData = (

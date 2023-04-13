@@ -35,7 +35,8 @@ import { withJsonFormsControlProps } from '@jsonforms/react';
 import { FormHelperText, Hidden } from '@mui/material';
 import {
   TimePicker,
-  LocalizationProvider 
+  LocalizationProvider, 
+  PickersActionBarAction
 } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import {
@@ -99,17 +100,15 @@ export const MaterialTimeControl = (props: ControlProps) => {
           label={label}
           value={value}
           onChange={onChange}
-          inputFormat={format}
-          disableMaskedInput
+          format={format}
           ampm={!!appliedUiSchemaOptions.ampm}
           views={views}
           disabled={!enabled}
-          componentsProps={{
-            actionBar: {
-              actions: (variant) => (variant === 'desktop' ? [] : ['clear', 'cancel', 'accept'])
-            }
-          }}
-          renderInput={params => (
+          slotProps={{
+            actionBar: ({ wrapperVariant }) => ({
+              actions: wrapperVariant === 'desktop' ? [] : ['clear' , 'cancel', 'accept'] as PickersActionBarAction[],
+           }),
+           textField: (params) => (
             <ResettableTextField 
               {...params}
               rawValue={data}
@@ -130,7 +129,8 @@ export const MaterialTimeControl = (props: ControlProps) => {
               onBlur={onBlur}
               variant={'standard'}
             />
-          )}
+          )
+          }}
         />
         <FormHelperText error={!isValid && !showDescription}>
           {firstFormHelperText}
