@@ -5,14 +5,7 @@
     "target": "es6",
     "inlineSourceMap": true
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx"
-  ],
-  "exclude":[
-    "node_modules"
-  ],
-  "files": [
-    "../src/index.ts"
-  ]
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"],
+  "files": ["../src/index.ts"]
 }

@@ -6,7 +6,7 @@ module.exports = {
     process.env.NODE_ENV === 'test'
       ? [
           '@babel/plugin-proposal-optional-chaining',
-          '@babel/plugin-proposal-nullish-coalescing-operator'
+          '@babel/plugin-proposal-nullish-coalescing-operator',
         ]
-      : []
+      : [],
 };

@@ -1,6 +1,6 @@
 # JSON Forms - More Forms. Less Code
 
-*Complex forms in the blink of an eye*
+_Complex forms in the blink of an eye_
 
 ## Documentation
 
@@ -32,28 +32,28 @@ In addition, EclipseSource also offers [professional support](https://jsonforms.
 
 ### First time setup
 
-* Install [node.js](https://nodejs.org/) (only Node 14 and npm 6 is currently supported)
-* Clone this repository
-* Install dependencies: `npm ci`
-* Hook up dependencies between packages: `npm run init`
+- Install [node.js](https://nodejs.org/) (only Node 14 and npm 6 is currently supported)
+- Clone this repository
+- Install dependencies: `npm ci`
+- Hook up dependencies between packages: `npm run init`
 
 ### VS Code dev container
 
 As an alternative to the first time setup, you can use the provided [VS Code dev container](https://code.visualstudio.com/docs/remote/containers) configured in [devcontainer.json](.devcontainer/devcontainer.json).
 
-* Execute command: `Remote Containers: Reopen in container`
-* Wait until the container is built and loaded
-* First time setup and an initial build of all packages has been executed in the container
+- Execute command: `Remote Containers: Reopen in container`
+- Wait until the container is built and loaded
+- First time setup and an initial build of all packages has been executed in the container
 
 ### Build & Testing
 
-* Build (all packages): `npm run build`
-* Test (all packages): `npm run test`
-* Clean (delete `dist` folder of all packages): `npm run clean`
-* Run React Vanilla examples: `cd packages/vanilla && npm run dev`
-* Run React Material examples: `cd packages/material && npm run dev`
-* Run Angular Material examples: `cd packages/angular-material && npm run dev`
-* Run Vue Vanilla dev setup: `cd packages/vue/vue-vanilla && npm run serve`
+- Build (all packages): `npm run build`
+- Test (all packages): `npm run test`
+- Clean (delete `dist` folder of all packages): `npm run clean`
+- Run React Vanilla examples: `cd packages/vanilla && npm run dev`
+- Run React Material examples: `cd packages/material && npm run dev`
+- Run Angular Material examples: `cd packages/angular-material && npm run dev`
+- Run Vue Vanilla dev setup: `cd packages/vue/vue-vanilla && npm run serve`
 
 ### Dependency & Release management
 

@@ -1,6 +1,6 @@
 # JSON Forms - More Forms. Less Code
 
-*Complex Forms in the blink of an eye*
+_Complex Forms in the blink of an eye_
 
 JSON Forms eliminates the tedious task of writing fully-featured forms by hand by leveraging the capabilities of JSON, JSON Schema and Javascript.
 
@@ -24,8 +24,12 @@ Also add the packages to the transpile dependencies in the `vue.config.js` file:
 
 ```js
 module.exports = {
-    transpileDependencies: ['@jsonforms/core', '@jsonforms/vue2', '@jsonforms/vue2-vanilla']
-}
+  transpileDependencies: [
+    '@jsonforms/core',
+    '@jsonforms/vue2',
+    '@jsonforms/vue2-vanilla',
+  ],
+};
 ```
 
 Use the `json-forms` component for each form you want to render and hand over the renderer set.
@@ -39,42 +43,42 @@ import { defineComponent } from 'vue';
 const renderers = [
   ...vanillaRenderers,
   // here you can add custom renderers
-]
+];
 
 export default defineComponent({
   components: {
-    JsonForms
+    JsonForms,
   },
   data() {
     return {
       renderers: Object.freeze(renderers),
-      
+
       data: {
-        number: 5
+        number: 5,
       },
       schema: {
         properties: {
           number: {
-            type: 'number'
-          }
-        }
+            type: 'number',
+          },
+        },
       },
       uischema: {
         type: 'VerticalLayout',
         elements: [
           {
             type: 'Control',
-            scope: '#/properties/number'
-          }
-        ]
-      }
+            scope: '#/properties/number',
+          },
+        ],
+      },
     };
   },
   methods: {
     onChange(event) {
       this.data = event.data;
     },
-  }
+  },
 });
 </script>
 <template>
@@ -108,39 +112,45 @@ If you want to fall back to `defaultStyles` or combine them with your own classe
 ```vue
 <script>
 import { JsonForms } from '@jsonforms/vue';
-import { defaultStyles, mergeStyles, vanillaRenderers } from '@jsonforms/vue-vanilla'
+import {
+  defaultStyles,
+  mergeStyles,
+  vanillaRenderers,
+} from '@jsonforms/vue-vanilla';
 import { defineComponent } from 'vue';
 
 // mergeStyles combines all classes from both styles definitions
-const myStyles = mergeStyles(defaultStyles, { control: { root: 'my-control' } });
+const myStyles = mergeStyles(defaultStyles, {
+  control: { root: 'my-control' },
+});
 
 export default defineComponent({
   name: 'app',
   components: {
-    JsonForms
+    JsonForms,
   },
   data() {
     return {
       renderers: Object.freeze(vanillaRenderers),
       data: {
-        number: 5
+        number: 5,
       },
       schema: {
         properties: {
           number: {
-            type: 'number'
-          }
-        }
+            type: 'number',
+          },
+        },
       },
       uischema: {
         type: 'VerticalLayout',
         elements: [
           {
             type: 'Control',
-            scope: '#/properties/number'
-          }
-        ]
-      }
+            scope: '#/properties/number',
+          },
+        ],
+      },
     };
   },
   methods: {
@@ -150,9 +160,9 @@ export default defineComponent({
   },
   provide() {
     return {
-      styles: myStyles
-    }
-  }
+      styles: myStyles,
+    };
+  },
 });
 </script>
 <template>

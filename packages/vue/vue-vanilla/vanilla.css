@@ -8,7 +8,8 @@
   flex-direction: column;
 }
 
-.horizontal-layout-item, .vertical-layout-item {
+.horizontal-layout-item,
+.vertical-layout-item {
   flex: 1;
 }
 
@@ -28,7 +29,7 @@
 .control > .wrapper > input,
 .control > .wrapper > select,
 .control > .wrapper > textarea {
-  flex: 1
+  flex: 1;
 }
 
 .control > .error,
@@ -54,11 +55,11 @@
   cursor: pointer;
 }
 .array-list-item-toolbar > button:disabled {
-  cursor:initial;
+  cursor: initial;
 }
 
 .array-list-item-label {
-  background-color: rgb(238,238,238);
+  background-color: rgb(238, 238, 238);
   flex: 1;
   padding-left: 0.5em;
   height: 1.5em;

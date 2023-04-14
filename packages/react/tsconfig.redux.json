@@ -3,9 +3,7 @@
   "compilerOptions": {
     "outDir": "./lib/redux",
     "declarationDir": "./lib",
-    "sourceMap": true,
+    "sourceMap": true
   },
-  "files": [
-    "./src/redux/index.ts"
-  ]
+  "files": ["./src/redux/index.ts"]
 }
