@@ -46,7 +46,7 @@ import { DispatchCell, withJsonFormsArrayControlProps } from '@jsonforms/react';
 import { withVanillaControlProps } from '../util';
 import type { VanillaRendererProps } from '../index';
 
-const { createLabelDescriptionFrom, convertToValidClassName } = Helpers;
+const { convertToValidClassName } = Helpers;
 
 const { or, isObjectArrayControl, isPrimitiveArrayControl, rankWith } = Test;
 
@@ -79,7 +79,8 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
       errors,
       label,
       getStyleAsClassName,
-      childErrors
+      childErrors,
+      translations
     } = this.props;
 
     const controlElement = uischema as ControlElement;
@@ -96,7 +97,6 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
       label: false,
       scope: schema.type === 'object' ? `#/properties/${key}` : '#'
     });
-    const labelObject = createLabelDescriptionFrom(controlElement, schema);
     const isValid = errors.length === 0;
     const divClassNames = [validationClass]
       .concat(isValid ? '' : getStyleAsClassName('array.table.validation.error'))
@@ -110,7 +110,7 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
             className={buttonClass}
             onClick={addItem(path, createDefaultValue(schema))}
           >
-            Add to {labelObject.text}
+            {translations.addTooltip}
           </button>
         </header>
         <div className={divClassNames}>
@@ -135,7 +135,7 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
           <tbody>
             {!data || !Array.isArray(data) || data.length === 0 ? (
               <tr>
-                <td>No data</td>
+                <td>{translations.noDataMessage}</td>
               </tr>
             ) : (
                 data.map((_child, index) => {
@@ -205,14 +205,14 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
                       </td>
                       <td>
                         <button
-                          aria-label={`Delete`}
+                          aria-label={translations.removeAriaLabel}
                           onClick={() => {
-                            if (window.confirm('Are you sure you wish to delete this item?')) {
+                            if (window.confirm(translations.deleteDialogMessage)) {
                               this.confirmDelete(childPath, index);
                             }
                           }}
                         >
-                          Delete
+                          {translations.removeTooltip}
                         </button>
                       </td>
                     </tr>

@@ -260,9 +260,10 @@ interface NonEmptyRowProps {
   enabled: boolean;
   cells?: JsonFormsCellRendererRegistryEntry[];
   path: string;
+  translations: ArrayTranslations
 }
 
-const NonEmptyRowComponent = 
+const NonEmptyRowComponent =
   ({
     childPath,
     schema,
@@ -275,7 +276,8 @@ const NonEmptyRowComponent =
     showSortButtons,
     enabled,
     cells,
-    path
+    path,
+    translations
   }: NonEmptyRowProps & WithDeleteDialogSupport) => {
     const moveUp = useMemo(() => moveUpCreator(path, rowIndex),[moveUpCreator, path, rowIndex]);
     const moveDown = useMemo(() => moveDownCreator(path, rowIndex),[moveDownCreator, path, rowIndex]);
@@ -295,13 +297,13 @@ const NonEmptyRowComponent =
               {showSortButtons ? (
                 <Fragment>
                   <Grid item>
-                    <IconButton aria-label={`Move up`} onClick={moveUp} disabled={!enableUp} size='large'>
+                    <IconButton aria-label={translations.upAriaLabel} onClick={moveUp} disabled={!enableUp} size='large'>
                       <ArrowUpward />
                     </IconButton>
                   </Grid>
                   <Grid item>
                     <IconButton
-                      aria-label={`Move down`}
+                      aria-label={translations.downAriaLabel}
                       onClick={moveDown}
                       disabled={!enableDown}
                       size='large'>
@@ -312,7 +314,7 @@ const NonEmptyRowComponent =
               ) : null}
               <Grid item>
                 <IconButton
-                  aria-label={`Delete`}
+                  aria-label={translations.removeAriaLabel}
                   onClick={() => openDeleteDialog(childPath, rowIndex)}
                   size='large'>
                   <DeleteIcon />
@@ -378,6 +380,7 @@ const TableRows = ({
             enabled={enabled}
             cells={cells}
             path={path}
+            translations={translations}
           />
         );
       })}

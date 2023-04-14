@@ -102,6 +102,7 @@ const MaterialArrayLayoutComponent = (props: ArrayLayoutProps)=> {
                 config={config}
                 childLabelProp={appliedUiSchemaOptions.elementLabelProp}
                 uischemas={uischemas}
+                translations={translations}
               />
             );
           })

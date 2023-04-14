@@ -286,7 +286,7 @@ describe('Table array control', () => {
 
     const button = legendChildren.item(1);
     expect(button.tagName).toBe('BUTTON');
-    expect(button.textContent).toBe('Add to Test');
+    expect(button.textContent).toBe('Add');
 
     const table = wrapper.find('table').getDOMNode();
     const tableChildren = table.children;

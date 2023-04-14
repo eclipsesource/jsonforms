@@ -30,6 +30,7 @@ import {
 } from '@jsonforms/angular';
 import {
   ArrayControlProps,
+  ArrayTranslations,
   ControlElement, createDefaultValue,
   deriveTypes,
   encode,
@@ -57,7 +58,7 @@ import {
       <ng-container matColumnDef="action">
         <tr>
           <th mat-header-cell *matHeaderCellDef>
-            <button mat-button color="primary" (click)="add()" [disabled]="!isEnabled()" matTooltip="Add"><mat-icon>add</mat-icon></button>
+            <button mat-button color="primary" (click)="add()" [disabled]="!isEnabled()" [matTooltip]="translations.addTooltip"><mat-icon>add</mat-icon></button>
           </th>
         </tr>
         <tr>
@@ -68,7 +69,7 @@ import {
               mat-button
               [disabled]="first"
               (click)="up(i)"
-              matTooltip="Move item up"
+              [matTooltip]="translations.upAriaLabel"
               matTooltipPosition="right"
               >
               <mat-icon>arrow_upward</mat-icon>
@@ -79,7 +80,7 @@ import {
               mat-button
               [disabled]="last"
               (click)="down(i)"
-              matTooltip="Move item down"
+              [matTooltip]="translations.downAriaLabel"
               matTooltipPosition="right"
             >
               <mat-icon>arrow_downward</mat-icon>
@@ -90,7 +91,7 @@ import {
                 (click)="remove(i)"
                 [disabled]="!isEnabled()"
                 matTooltipPosition="right"
-                matTooltip="Delete"
+                [matTooltip]="translations.removeTooltip"
             >
               <mat-icon>delete</mat-icon>
             </button>
@@ -126,6 +127,7 @@ export class TableRenderer extends JsonFormsArrayControl {
   moveItemUp: (path: string, index: number) => () => void;
   moveItemDown: (path: string, index: number) => () => void;
   removeItems: (path: string, toDelete: number[]) => () => void;
+  translations: ArrayTranslations;
 
   constructor(jsonformsService: JsonFormsAngularService) {
     super(jsonformsService);
@@ -139,6 +141,7 @@ export class TableRenderer extends JsonFormsArrayControl {
     if (this.isEnabled()) {
       this.displayedColumns.push('action');
     }
+    this.translations = props.translations;
   }
   getProps(index: number, props: OwnPropsOfRenderer): OwnPropsOfRenderer {
     const rowPath = Paths.compose(props.path, `${index}`);

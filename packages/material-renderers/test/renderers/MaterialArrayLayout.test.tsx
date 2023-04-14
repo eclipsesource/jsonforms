@@ -322,7 +322,7 @@ describe('Material array layout', () => {
         .find('Memo(ExpandPanelRendererComponent)')
         .at(0)
         .find('button')
-        .find({ 'aria-label': 'Move up' }).length
+        .find({ 'aria-label': 'Move item up' }).length
     ).toBe(1);
     // down button
     expect(
@@ -330,7 +330,7 @@ describe('Material array layout', () => {
         .find('Memo(ExpandPanelRendererComponent)')
         .at(0)
         .find('button')
-        .find({ 'aria-label': 'Move down' }).length
+        .find({ 'aria-label': 'Move item down' }).length
     ).toBe(1);
   });
   it('should render sort buttons if showSortButtons is true in config', () => {
@@ -352,7 +352,7 @@ describe('Material array layout', () => {
         .find('Memo(ExpandPanelRendererComponent)')
         .at(0)
         .find('button')
-        .find({ 'aria-label': 'Move up' }).length
+        .find({ 'aria-label': 'Move item up' }).length
     ).toBe(1);
     // down button
     expect(
@@ -360,7 +360,7 @@ describe('Material array layout', () => {
         .find('Memo(ExpandPanelRendererComponent)')
         .at(0)
         .find('button')
-        .find({ 'aria-label': 'Move down' }).length
+        .find({ 'aria-label': 'Move item down' }).length
     ).toBe(1);
   });
   it('should move item up if up button is presses', (done) => {
@@ -387,7 +387,7 @@ describe('Material array layout', () => {
       .find('Memo(ExpandPanelRendererComponent)')
       .at(1)
       .find('button')
-      .find({ 'aria-label': 'Move up' });
+      .find({ 'aria-label': 'Move item up' });
     upButton.simulate('click');
     // events are debounced for some time, so let's wait
     setTimeout(() => {
@@ -428,7 +428,7 @@ describe('Material array layout', () => {
       .find('Memo(ExpandPanelRendererComponent)')
       .at(0)
       .find('button')
-      .find({ 'aria-label': 'Move down' });
+      .find({ 'aria-label': 'Move item down' });
     upButton.simulate('click');
     // events are debounced for some time, so let's wait
     setTimeout(() => {
@@ -462,7 +462,7 @@ describe('Material array layout', () => {
       .find('Memo(ExpandPanelRendererComponent)')
       .at(0)
       .find('button')
-      .find({ 'aria-label': 'Move up' });
+      .find({ 'aria-label': 'Move item up' });
     expect(upButton.is('[disabled]')).toBe(true);
   });
   it('should have down button disabled for last element', () => {
@@ -482,7 +482,7 @@ describe('Material array layout', () => {
       .find('Memo(ExpandPanelRendererComponent)')
       .at(1)
       .find('button')
-      .find({ 'aria-label': 'Move down' });
+      .find({ 'aria-label': 'Move item down' });
     expect(downButton.is('[disabled]')).toBe(true);
   });
 

@@ -42,6 +42,7 @@ import {
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { setupMockStore } from '@jsonforms/angular-test';
 import { createTesterContext } from './util';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 const uischema1: ControlElement = { type: 'Control', scope: '#' };
 const uischema2: ControlElement = {
@@ -127,7 +128,8 @@ describe('Table', () => {
         MatInputModule,
         ReactiveFormsModule,
         FlexLayoutModule,
-        MatTableModule
+        MatTableModule,
+        MatTooltipModule,
       ],
       providers: [JsonFormsAngularService]
     })
