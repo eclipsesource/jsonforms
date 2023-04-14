@@ -4,14 +4,14 @@ import { mountJsonForms } from '../util';
 const schema = {
   type: 'string',
   title: 'My Date',
-  format: 'date'
+  format: 'date',
 };
 const uischema = {
   type: 'Control',
   scope: '#',
   options: {
-    placeholder: 'date placeholder'
-  }
+    placeholder: 'date placeholder',
+  },
 };
 
 describe('DateControlRenderer.vue', () => {

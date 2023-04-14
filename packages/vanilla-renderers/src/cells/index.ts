@@ -57,6 +57,6 @@ export {
   TextAreaCell,
   textAreaCellTester,
   TimeCell,
-  timeCellTester
+  timeCellTester,
 };
 export { Customizable };

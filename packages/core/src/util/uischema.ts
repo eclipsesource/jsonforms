@@ -28,14 +28,14 @@ import { isLayout, UISchemaElement } from '../models';
 
 export type IterateCallback = (uischema: UISchemaElement) => void;
 
-const setReadonlyPropertyValue = (value: boolean): IterateCallback => (
-  child: UISchemaElement
-): void => {
-  if (!child.options) {
-    child.options = {};
-  }
-  child.options.readonly = value;
-};
+const setReadonlyPropertyValue =
+  (value: boolean): IterateCallback =>
+  (child: UISchemaElement): void => {
+    if (!child.options) {
+      child.options = {};
+    }
+    child.options.readonly = value;
+  };
 export const setReadonly = (uischema: UISchemaElement): void => {
   iterateSchema(uischema, setReadonlyPropertyValue(true));
 };
@@ -50,7 +50,7 @@ export const iterateSchema = (
     return;
   }
   if (isLayout(uischema)) {
-    uischema.elements.forEach(child => iterateSchema(child, toApply));
+    uischema.elements.forEach((child) => iterateSchema(child, toApply));
     return;
   }
   toApply(uischema);

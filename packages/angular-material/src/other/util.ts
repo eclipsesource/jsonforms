@@ -22,12 +22,19 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { ControlElement, getAjv, getData, isVisible, JsonFormsState, OwnPropsOfRenderer } from '@jsonforms/core';
+import {
+  ControlElement,
+  getAjv,
+  getData,
+  isVisible,
+  JsonFormsState,
+  OwnPropsOfRenderer,
+} from '@jsonforms/core';
 
 export const controlWithoutLabel = (scope: string): ControlElement => ({
   type: 'Control',
   scope: scope,
-  label: false
+  label: false,
 });
 
 export const mapStateToVisible = (
@@ -40,6 +47,6 @@ export const mapStateToVisible = (
       : isVisible(ownProps.uischema, getData(state), undefined, getAjv(state));
 
   return {
-    visible
+    visible,
   };
 };

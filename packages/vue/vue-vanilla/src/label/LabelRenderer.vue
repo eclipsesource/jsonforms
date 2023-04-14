@@ -9,30 +9,30 @@ import {
   JsonFormsRendererRegistryEntry,
   LabelElement,
   rankWith,
-  uiTypeIs
+  uiTypeIs,
 } from '@jsonforms/core';
 import { defineComponent } from 'vue';
 import {
   rendererProps,
   RendererProps,
-  useJsonFormsLabel
+  useJsonFormsLabel,
 } from '../../config/jsonforms';
 import { useVanillaLabel } from '../util';
 
 const labelRenderer = defineComponent({
-  name: 'label-renderer',
+  name: 'LabelRenderer',
   props: {
-    ...rendererProps<LabelElement>()
+    ...rendererProps<LabelElement>(),
   },
   setup(props: RendererProps<LabelElement>) {
     return useVanillaLabel(useJsonFormsLabel(props));
-  }
+  },
 });
 
 export default labelRenderer;
 
 export const entry: JsonFormsRendererRegistryEntry = {
   renderer: labelRenderer,
-  tester: rankWith(1, uiTypeIs('Label'))
+  tester: rankWith(1, uiTypeIs('Label')),
 };
 </script>

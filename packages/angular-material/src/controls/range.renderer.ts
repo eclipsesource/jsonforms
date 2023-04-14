@@ -22,7 +22,11 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { ChangeDetectionStrategy, Component, ChangeDetectorRef } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 import { isRangeControl, RankedTester, rankWith } from '@jsonforms/core';
 
@@ -44,18 +48,23 @@ import { isRangeControl, RankedTester, rankWith } from '@jsonforms/core';
         tickInterval="auto"
         [id]="id"
       ></mat-slider>
-      <mat-hint class="mat-caption" *ngIf="shouldShowUnfocusedDescription()">{{ description }}</mat-hint>
+      <mat-hint class="mat-caption" *ngIf="shouldShowUnfocusedDescription()">{{
+        description
+      }}</mat-hint>
       <mat-error class="mat-caption">{{ error }}</mat-error>
     </div>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RangeControlRenderer extends JsonFormsControl {
   min: number;
   max: number;
   multipleOf: number;
 
-  constructor(jsonformsService: JsonFormsAngularService, private changeDetectorRef: ChangeDetectorRef) {
+  constructor(
+    jsonformsService: JsonFormsAngularService,
+    private changeDetectorRef: ChangeDetectorRef
+  ) {
     super(jsonformsService);
   }
   getEventValue = (event: any) => Number(event.value);

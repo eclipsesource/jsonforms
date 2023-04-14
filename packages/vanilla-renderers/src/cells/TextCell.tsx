@@ -27,7 +27,7 @@ import {
   CellProps,
   isStringControl,
   RankedTester,
-  rankWith
+  rankWith,
 } from '@jsonforms/core';
 import { withJsonFormsCellProps } from '@jsonforms/react';
 import type { VanillaRendererProps } from '../index';
@@ -44,7 +44,7 @@ export const TextCell = (props: CellProps & VanillaRendererProps) => {
     uischema,
     schema,
     path,
-    handleChange
+    handleChange,
   } = props;
   const maxLength = schema.maxLength;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
@@ -52,7 +52,9 @@ export const TextCell = (props: CellProps & VanillaRendererProps) => {
     <input
       type='text'
       value={data || ''}
-      onChange={ev => handleChange(path, ev.target.value === '' ? undefined : ev.target.value)}
+      onChange={(ev) =>
+        handleChange(path, ev.target.value === '' ? undefined : ev.target.value)
+      }
       className={className}
       id={id}
       disabled={!enabled}

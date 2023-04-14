@@ -29,7 +29,7 @@ export interface JsonFormsTheme extends Theme {
     input?: {
       delete?: {
         background?: string;
-      }
-    }
+      };
+    };
   };
 }

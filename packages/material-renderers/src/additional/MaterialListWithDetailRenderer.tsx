@@ -32,11 +32,11 @@ import {
   isObjectArray,
   RankedTester,
   rankWith,
-  uiTypeIs
+  uiTypeIs,
 } from '@jsonforms/core';
 import {
   JsonFormsDispatch,
-  withJsonFormsArrayLayoutProps
+  withJsonFormsArrayLayoutProps,
 } from '@jsonforms/react';
 import { Grid, Hidden, List, Typography } from '@mui/material';
 import map from 'lodash/map';
@@ -62,7 +62,7 @@ export const MaterialListWithDetailRenderer = ({
   cells,
   config,
   rootSchema,
-  translations
+  translations,
 }: ArrayLayoutProps) => {
   const [selectedIndex, setSelectedIndex] = useState(undefined);
   const handleRemoveItem = useCallback(
@@ -93,7 +93,7 @@ export const MaterialListWithDetailRenderer = ({
         path,
         undefined,
         uischema,
-        rootSchema,
+        rootSchema
       ),
     [uischemas, schema, uischema.scope, path, uischema, rootSchema]
   );
@@ -121,7 +121,7 @@ export const MaterialListWithDetailRenderer = ({
         <Grid item xs={3}>
           <List>
             {data > 0 ? (
-              map(range(data), index => (
+              map(range(data), (index) => (
                 <ListWithDetailMasterItem
                   index={index}
                   path={path}

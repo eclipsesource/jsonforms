@@ -34,19 +34,19 @@ export const schema = {
         oneOf: [
           { const: 'foo', title: 'My Foo' },
           { const: 'bar', title: 'My Bar' },
-          { const: 'foobar', title: 'My FooBar' }
-        ]
-      }
+          { const: 'foobar', title: 'My FooBar' },
+        ],
+      },
     },
     multiEnum: {
       type: 'array',
       uniqueItems: true,
       items: {
         type: 'string',
-        enum: ['foo', 'bar', 'foobar']
-      }
-    }
-  }
+        enum: ['foo', 'bar', 'foobar'],
+      },
+    },
+  },
 };
 
 export const uischema = {
@@ -54,13 +54,13 @@ export const uischema = {
   elements: [
     {
       type: 'Control',
-      scope: '#/properties/oneOfMultiEnum'
+      scope: '#/properties/oneOfMultiEnum',
     },
     {
       type: 'Control',
-      scope: '#/properties/multiEnum'
-    }
-  ]
+      scope: '#/properties/multiEnum',
+    },
+  ],
 };
 
 export const data = { oneOfMultiEnum: ['foo'], multiEnum: ['bar'] };
@@ -71,6 +71,6 @@ registerExamples([
     label: 'Enum - Multi selection',
     data,
     schema,
-    uischema
-  }
+    uischema,
+  },
 ]);

@@ -5,12 +5,12 @@ const schema = {
   type: 'array',
   title: 'My Array',
   items: {
-    type: 'string'
-  }
+    type: 'string',
+  },
 };
 const uischema = {
   type: 'Control',
-  scope: '#'
+  scope: '#',
 };
 
 describe('ArrayListRenderer.vue', () => {
@@ -61,8 +61,8 @@ describe('ArrayListRenderer.vue', () => {
   it('all buttons have type button', async () => {
     const wrapper = mountJsonForms(['a'], schema, uischema);
     const buttons = wrapper.findAll('button');
-    for (let button of buttons) {
-      let type = button.attributes('type');
+    for (const button of buttons) {
+      const type = button.attributes('type');
       expect(type).to.equal('button');
     }
   });

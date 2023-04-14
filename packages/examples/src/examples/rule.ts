@@ -28,23 +28,23 @@ export const schema = {
   type: 'object',
   properties: {
     name: {
-      type: 'string'
+      type: 'string',
     },
     dead: {
-      type: 'boolean'
+      type: 'boolean',
     },
     kindOfDead: {
       type: 'string',
-      enum: ['Zombie', 'Vampire', 'Ghoul']
+      enum: ['Zombie', 'Vampire', 'Ghoul'],
     },
     vegetables: {
-      type: 'boolean'
+      type: 'boolean',
     },
     kindOfVegetables: {
       type: 'string',
-      enum: ['All', 'Some', 'Only potatoes']
-    }
-  }
+      enum: ['All', 'Some', 'Only potatoes'],
+    },
+  },
 };
 
 export const uischema = {
@@ -53,7 +53,7 @@ export const uischema = {
     {
       type: 'Control',
       label: 'Name',
-      scope: '#/properties/name'
+      scope: '#/properties/name',
     },
     {
       type: 'Group',
@@ -61,7 +61,7 @@ export const uischema = {
         {
           type: 'Control',
           label: 'Is Dead?',
-          scope: '#/properties/dead'
+          scope: '#/properties/dead',
         },
         {
           type: 'Control',
@@ -72,12 +72,12 @@ export const uischema = {
             condition: {
               scope: '#/properties/dead',
               schema: {
-                const: true
-              }
-            }
-          }
-        }
-      ]
+                const: true,
+              },
+            },
+          },
+        },
+      ],
     },
     {
       type: 'Group',
@@ -85,7 +85,7 @@ export const uischema = {
         {
           type: 'Control',
           label: 'Eats vegetables?',
-          scope: '#/properties/vegetables'
+          scope: '#/properties/vegetables',
         },
         {
           type: 'Control',
@@ -96,14 +96,14 @@ export const uischema = {
             condition: {
               scope: '#/properties/vegetables',
               schema: {
-                const: false
-              }
-            }
-          }
-        }
-      ]
-    }
-  ]
+                const: false,
+              },
+            },
+          },
+        },
+      ],
+    },
+  ],
 };
 
 export const data = {
@@ -118,6 +118,6 @@ registerExamples([
     label: 'Rule',
     data,
     schema,
-    uischema
-  }
+    uischema,
+  },
 ]);

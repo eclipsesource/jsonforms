@@ -34,5 +34,5 @@ export const Helpers: {
   convertToValidClassName(s: string): string;
 } = {
   createLabelDescriptionFrom,
-  convertToValidClassName
+  convertToValidClassName,
 };

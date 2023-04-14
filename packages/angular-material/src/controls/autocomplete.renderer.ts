@@ -32,11 +32,10 @@ import {
   isEnumControl,
   OwnPropsOfControl,
   RankedTester,
-  rankWith
+  rankWith,
 } from '@jsonforms/core';
 import type { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { startWith } from 'rxjs/operators';
+import { map, startWith } from 'rxjs/operators';
 
 /**
  * To use this component you will need to add your own tester:
@@ -74,7 +73,7 @@ import { startWith } from 'rxjs/operators';
         [formControl]="form"
         [matAutocomplete]="auto"
         (keydown)="updateFilter($event)"
-        (focus)="focused = true" 
+        (focus)="focused = true"
         (focusout)="focused = false"
       />
       <mat-autocomplete
@@ -89,11 +88,13 @@ import { startWith } from 'rxjs/operators';
           {{ option }}
         </mat-option>
       </mat-autocomplete>
-      <mat-hint *ngIf="shouldShowUnfocusedDescription() || focused">{{ description }}</mat-hint>
+      <mat-hint *ngIf="shouldShowUnfocusedDescription() || focused">{{
+        description
+      }}</mat-hint>
       <mat-error>{{ error }}</mat-error>
     </mat-form-field>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AutocompleteControlRenderer extends JsonFormsControl {
   @Input() options: string[];
@@ -110,7 +111,7 @@ export class AutocompleteControlRenderer extends JsonFormsControl {
     this.shouldFilter = false;
     this.filteredOptions = this.form.valueChanges.pipe(
       startWith(''),
-      map(val => this.filter(val))
+      map((val) => this.filter(val))
     );
   }
 
@@ -126,13 +127,15 @@ export class AutocompleteControlRenderer extends JsonFormsControl {
   onSelect(ev: MatAutocompleteSelectedEvent) {
     const path = composeWithUi(this.uischema as ControlElement, this.path);
     this.shouldFilter = false;
-    this.jsonFormsService.updateCore(Actions.update(path, () => ev.option.value));
+    this.jsonFormsService.updateCore(
+      Actions.update(path, () => ev.option.value)
+    );
     this.triggerValidation();
   }
 
   filter(val: string): string[] {
     return (this.options || this.scopedSchema.enum || []).filter(
-      option =>
+      (option) =>
         !this.shouldFilter ||
         !val ||
         option.toLowerCase().indexOf(val.toLowerCase()) === 0
@@ -141,7 +144,7 @@ export class AutocompleteControlRenderer extends JsonFormsControl {
   protected getOwnProps(): OwnPropsOfAutoComplete {
     return {
       ...super.getOwnProps(),
-      options: this.options
+      options: this.options,
     };
   }
 }

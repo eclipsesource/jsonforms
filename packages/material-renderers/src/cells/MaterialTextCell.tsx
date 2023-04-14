@@ -28,7 +28,7 @@ import {
   isStringControl,
   RankedTester,
   rankWith,
-  WithClassname
+  WithClassname,
 } from '@jsonforms/core';
 import { withJsonFormsCellProps } from '@jsonforms/react';
 import { MuiInputText } from '../mui-controls/MuiInputText';

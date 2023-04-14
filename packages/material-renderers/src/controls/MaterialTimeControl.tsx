@@ -29,25 +29,22 @@ import {
   isTimeControl,
   isDescriptionHidden,
   RankedTester,
-  rankWith
+  rankWith,
 } from '@jsonforms/core';
 import { withJsonFormsControlProps } from '@jsonforms/react';
 import { FormHelperText, Hidden } from '@mui/material';
-import {
-  TimePicker,
-  LocalizationProvider 
-} from '@mui/x-date-pickers';
+import { TimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import {
   createOnChangeHandler,
   getData,
   ResettableTextField,
-  useFocus
+  useFocus,
 } from '../util';
 
 export const MaterialTimeControl = (props: ControlProps) => {
   const [focused, onFocus, onBlur] = useFocus();
-    const {
+  const {
     id,
     description,
     errors,
@@ -59,7 +56,7 @@ export const MaterialTimeControl = (props: ControlProps) => {
     path,
     handleChange,
     data,
-    config
+    config,
   } = props;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
   const isValid = errors.length === 0;
@@ -83,11 +80,10 @@ export const MaterialTimeControl = (props: ControlProps) => {
     : null;
   const secondFormHelperText = showDescription && !isValid ? errors : null;
 
-  const onChange = useMemo(() => createOnChangeHandler(
-    path,
-    handleChange,
-    saveFormat
-  ),[path, handleChange, saveFormat]);
+  const onChange = useMemo(
+    () => createOnChangeHandler(path, handleChange, saveFormat),
+    [path, handleChange, saveFormat]
+  );
 
   const value = getData(data, saveFormat);
   const valueInInputFormat = value ? value.format(format) : '';
@@ -106,24 +102,27 @@ export const MaterialTimeControl = (props: ControlProps) => {
           disabled={!enabled}
           componentsProps={{
             actionBar: {
-              actions: (variant) => (variant === 'desktop' ? [] : ['clear', 'cancel', 'accept'])
-            }
+              actions: (variant) =>
+                variant === 'desktop' ? [] : ['clear', 'cancel', 'accept'],
+            },
           }}
-          renderInput={params => (
-            <ResettableTextField 
+          renderInput={(params) => (
+            <ResettableTextField
               {...params}
               rawValue={data}
               dayjsValueIsValid={value !== null}
               valueInInputFormat={valueInInputFormat}
               focused={focused}
               id={id + '-input'}
-              required={required && !appliedUiSchemaOptions.hideRequiredAsterisk}
+              required={
+                required && !appliedUiSchemaOptions.hideRequiredAsterisk
+              }
               autoFocus={appliedUiSchemaOptions.focus}
               error={!isValid}
               fullWidth={!appliedUiSchemaOptions.trim}
               inputProps={{
                 ...params.inputProps,
-                type: 'text'
+                type: 'text',
               }}
               InputLabelProps={data ? { shrink: true } : undefined}
               onFocus={onFocus}
@@ -135,9 +134,7 @@ export const MaterialTimeControl = (props: ControlProps) => {
         <FormHelperText error={!isValid && !showDescription}>
           {firstFormHelperText}
         </FormHelperText>
-        <FormHelperText error={!isValid}>
-          {secondFormHelperText}
-        </FormHelperText>
+        <FormHelperText error={!isValid}>{secondFormHelperText}</FormHelperText>
       </LocalizationProvider>
     </Hidden>
   );

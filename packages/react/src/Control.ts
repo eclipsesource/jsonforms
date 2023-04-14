@@ -39,7 +39,7 @@ export class Control<
     super(props);
     this.state = {
       value: props.data ? props.data : '',
-      isFocused: false
+      isFocused: false,
     } as S;
   }
 

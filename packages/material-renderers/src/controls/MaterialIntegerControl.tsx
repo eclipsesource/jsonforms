@@ -27,7 +27,7 @@ import {
   ControlProps,
   isIntegerControl,
   RankedTester,
-  rankWith
+  rankWith,
 } from '@jsonforms/core';
 import { MuiInputInteger } from '../mui-controls/MuiInputInteger';
 import { MaterialInputControl } from './MaterialInputControl';

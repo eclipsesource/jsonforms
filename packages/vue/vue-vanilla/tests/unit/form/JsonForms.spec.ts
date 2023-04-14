@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { mountJsonForms } from '../util';
 
 const schema = {
-  type: 'string'
+  type: 'string',
 };
 const uischema = {
   type: 'HorizontalLayout',
@@ -12,28 +12,28 @@ const uischema = {
       elements: [
         {
           type: 'Control',
-          scope: '#'
+          scope: '#',
         },
         {
           type: 'Control',
-          scope: '#'
-        }
-      ]
+          scope: '#',
+        },
+      ],
     },
     {
       type: 'VerticalLayout',
       elements: [
         {
           type: 'Control',
-          scope: '#'
+          scope: '#',
         },
         {
           type: 'Control',
-          scope: '#'
-        }
-      ]
-    }
-  ]
+          scope: '#',
+        },
+      ],
+    },
+  ],
 };
 const reducedUiSchema = {
   type: 'HorizontalLayout',
@@ -43,15 +43,15 @@ const reducedUiSchema = {
       elements: [
         {
           type: 'Control',
-          scope: '#'
+          scope: '#',
         },
         {
           type: 'Control',
-          scope: '#'
-        }
-      ]
-    }
-  ]
+          scope: '#',
+        },
+      ],
+    },
+  ],
 };
 
 describe('JsonForms.vue', () => {
@@ -63,7 +63,7 @@ describe('JsonForms.vue', () => {
   it('reacts to uischema changes', async () => {
     const wrapper = mountJsonForms('', schema, uischema);
     await wrapper.setProps({
-      uischema: reducedUiSchema
+      uischema: reducedUiSchema,
     });
     expect(wrapper.findAll('input').length).to.equal(2);
   });

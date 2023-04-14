@@ -23,11 +23,7 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
-import {
-  ControlElement,
-  HorizontalLayout,
-  JsonSchema,
-} from '@jsonforms/core';
+import { ControlElement, HorizontalLayout, JsonSchema } from '@jsonforms/core';
 import { JsonFormsStateProvider } from '@jsonforms/react';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
@@ -43,22 +39,22 @@ const control: ControlElement = {
 };
 
 const fixture = {
-  data: { 'foo': 42 },
+  data: { foo: 42 },
   schema: {
     type: 'integer',
-    minimum: 5
+    minimum: 5,
   },
   uischema: control,
   styles: [
     {
       name: 'control',
-      classNames: ['control']
+      classNames: ['control'],
     },
     {
       name: 'control.validation',
-      classNames: ['validation']
-    }
-  ]
+      classNames: ['validation'],
+    },
+  ],
 };
 
 describe('Integer cell tester', () => {
@@ -66,11 +62,13 @@ describe('Integer cell tester', () => {
     expect(integerCellTester(undefined, undefined, undefined)).toBe(-1);
     expect(integerCellTester(null, undefined, undefined)).toBe(-1);
     expect(integerCellTester({ type: 'Foo' }, undefined, undefined)).toBe(-1);
-    expect(integerCellTester({ type: 'Control' }, undefined, undefined)).toBe(-1);
+    expect(integerCellTester({ type: 'Control' }, undefined, undefined)).toBe(
+      -1
+    );
 
     const controlElement: ControlElement = {
       type: 'Control',
-      scope: '#/properties/foo'
+      scope: '#/properties/foo',
     };
     expect(
       integerCellTester(
@@ -82,7 +80,10 @@ describe('Integer cell tester', () => {
     expect(
       integerCellTester(
         controlElement,
-        { type: 'object', properties: { foo: { type: 'string' }, bar: { type: 'integer' } } },
+        {
+          type: 'object',
+          properties: { foo: { type: 'string' }, bar: { type: 'integer' } },
+        },
         undefined
       )
     ).toBe(-1);
@@ -90,14 +91,13 @@ describe('Integer cell tester', () => {
       integerCellTester(
         controlElement,
         { type: 'object', properties: { foo: { type: 'integer' } } },
-        undefined)
+        undefined
+      )
     ).toBe(2);
   });
-
 });
 
 describe('Integer cell', () => {
-
   let wrapper: ReactWrapper;
 
   afterEach(() => wrapper.unmount());
@@ -107,33 +107,30 @@ describe('Integer cell', () => {
       type: 'object',
       properties: {
         firstIntegerCell: { type: 'integer', minimum: 5 },
-        secondIntegerCell: { type: 'integer', minimum: 5 }
-      }
+        secondIntegerCell: { type: 'integer', minimum: 5 },
+      },
     };
     const firstControlElement: ControlElement = {
       type: 'Control',
       scope: '#/properties/firstIntegerCell',
       options: {
-        focus: true
-      }
+        focus: true,
+      },
     };
     const secondControlElement: ControlElement = {
       type: 'Control',
       scope: '#/properties/secondIntegerCell',
       options: {
-        focus: true
-      }
+        focus: true,
+      },
     };
     const uischema: HorizontalLayout = {
       type: 'HorizontalLayout',
-      elements: [
-        firstControlElement,
-        secondControlElement
-      ]
+      elements: [firstControlElement, secondControlElement],
     };
     const data = {
-      'firstIntegerCell': 10,
-      'secondIntegerCell': 12
+      firstIntegerCell: 10,
+      secondIntegerCell: 12,
     };
     const core = initCore(schema, uischema, data);
     wrapper = mount(
@@ -151,8 +148,8 @@ describe('Integer cell', () => {
       type: 'Control',
       scope: '#/properties/foo',
       options: {
-        focus: true
-      }
+        focus: true,
+      },
     };
     const core = initCore(fixture.schema, uischema, fixture.data);
     wrapper = mount(
@@ -169,8 +166,8 @@ describe('Integer cell', () => {
       type: 'Control',
       scope: '#/properties/foo',
       options: {
-        focus: false
-      }
+        focus: false,
+      },
     };
     const core = initCore(fixture.schema, uischema, fixture.data);
 
@@ -186,7 +183,7 @@ describe('Integer cell', () => {
   test('autofocus inactive by default', () => {
     const uischema: ControlElement = {
       type: 'Control',
-      scope: '#/properties/foo'
+      scope: '#/properties/foo',
     };
     const core = initCore(fixture.schema, uischema, fixture.data);
 
@@ -203,7 +200,11 @@ describe('Integer cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <IntegerCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <IntegerCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
 
@@ -217,7 +218,11 @@ describe('Integer cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <IntegerCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <IntegerCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
 
@@ -229,7 +234,7 @@ describe('Integer cell', () => {
 
   test('update via input event', () => {
     const onChangeData: any = {
-      data: undefined
+      data: undefined,
     };
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
@@ -239,7 +244,11 @@ describe('Integer cell', () => {
             onChangeData.data = data;
           }}
         />
-        <IntegerCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <IntegerCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input');
@@ -248,16 +257,20 @@ describe('Integer cell', () => {
   });
 
   test('update via action', () => {
-    const data = { 'foo': 13 };
+    const data = { foo: 13 };
     const core = initCore(fixture.schema, fixture.uischema, data);
 
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <IntegerCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <IntegerCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, foo: 42 };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.value).toBe('42');
@@ -267,11 +280,15 @@ describe('Integer cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <IntegerCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <IntegerCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, foo: undefined };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.value).toBe('');
@@ -281,11 +298,15 @@ describe('Integer cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <IntegerCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <IntegerCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, foo: null };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.value).toBe('');
@@ -295,11 +316,15 @@ describe('Integer cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <IntegerCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <IntegerCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, bar: 11 };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.value).toBe('42');
@@ -309,11 +334,15 @@ describe('Integer cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <IntegerCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <IntegerCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, null: 13 };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.value).toBe('42');
@@ -323,11 +352,15 @@ describe('Integer cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <IntegerCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <IntegerCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, undefined: 13 };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.value).toBe('42');
@@ -337,7 +370,11 @@ describe('Integer cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <IntegerCell schema={fixture.schema} uischema={fixture.uischema} enabled={false} />
+        <IntegerCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          enabled={false}
+        />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
@@ -348,7 +385,11 @@ describe('Integer cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <IntegerCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <IntegerCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
@@ -359,7 +400,11 @@ describe('Integer cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, { foo: 0 });
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <IntegerCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <IntegerCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;

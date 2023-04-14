@@ -23,17 +23,29 @@
   THE SOFTWARE.
 */
 
-import { defaultErrorTranslator, defaultTranslator, JsonFormsI18nState } from '../i18n';
-import { I18nActions, SET_LOCALE, SET_TRANSLATOR, UPDATE_I18N } from '../actions';
+import {
+  defaultErrorTranslator,
+  defaultTranslator,
+  JsonFormsI18nState,
+} from '../i18n';
+import {
+  I18nActions,
+  SET_LOCALE,
+  SET_TRANSLATOR,
+  UPDATE_I18N,
+} from '../actions';
 import type { Reducer } from '../util';
 
 export const defaultJsonFormsI18nState: Required<JsonFormsI18nState> = {
   locale: 'en',
   translate: defaultTranslator,
-  translateError: defaultErrorTranslator
+  translateError: defaultErrorTranslator,
 };
 
-export const i18nReducer: Reducer<JsonFormsI18nState, I18nActions> = (state = defaultJsonFormsI18nState, action) => {
+export const i18nReducer: Reducer<JsonFormsI18nState, I18nActions> = (
+  state = defaultJsonFormsI18nState,
+  action
+) => {
   switch (action.type) {
     case UPDATE_I18N: {
       const locale = action.locale ?? defaultJsonFormsI18nState.locale;
@@ -51,7 +63,7 @@ export const i18nReducer: Reducer<JsonFormsI18nState, I18nActions> = (state = de
           ...state,
           locale,
           translate,
-          translateError
+          translateError,
         };
       }
       return state;
@@ -60,12 +72,12 @@ export const i18nReducer: Reducer<JsonFormsI18nState, I18nActions> = (state = de
       return {
         ...state,
         translate: action.translator ?? defaultTranslator,
-        translateError: action.errorTranslator ?? defaultErrorTranslator
+        translateError: action.errorTranslator ?? defaultErrorTranslator,
       };
     case SET_LOCALE:
       return {
         ...state,
-        locale: action.locale ?? navigator.languages[0]
+        locale: action.locale ?? navigator.languages[0],
       };
     default:
       return state;
@@ -84,11 +96,11 @@ export const fetchTranslator = (state?: JsonFormsI18nState) => {
     return defaultTranslator;
   }
   return state.translate;
-}
+};
 
 export const fetchErrorTranslator = (state?: JsonFormsI18nState) => {
   if (state === undefined) {
     return defaultErrorTranslator;
   }
   return state.translateError;
-}
+};

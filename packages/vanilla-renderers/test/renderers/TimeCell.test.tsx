@@ -23,11 +23,7 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
-import {
-  ControlElement,
-  HorizontalLayout,
-  JsonSchema,
-} from '@jsonforms/core';
+import { ControlElement, HorizontalLayout, JsonSchema } from '@jsonforms/core';
 import { JsonFormsStateProvider } from '@jsonforms/react';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
@@ -39,20 +35,19 @@ Enzyme.configure({ adapter: new Adapter() });
 
 const controlElement: ControlElement = {
   type: 'Control',
-  scope: '#/properties/foo'
+  scope: '#/properties/foo',
 };
 
 const fixture = {
-  data: { 'foo': '13:37' },
+  data: { foo: '13:37' },
   schema: {
     type: 'string',
-    format: 'time'
+    format: 'time',
   },
-  uischema: controlElement
+  uischema: controlElement,
 };
 
 describe('Time cell tester', () => {
-
   test('tester', () => {
     expect(timeCellTester(undefined, undefined, undefined)).toBe(-1);
     expect(timeCellTester(null, undefined, undefined)).toBe(-1);
@@ -85,7 +80,7 @@ describe('Time cell tester', () => {
             foo: { type: 'string' },
             bar: {
               type: 'string',
-              format: 'time'
+              format: 'time',
             },
           },
         },
@@ -114,7 +109,6 @@ describe('Time cell tester', () => {
 });
 
 describe('Time cell', () => {
-
   let wrapper: ReactWrapper;
 
   afterEach(() => wrapper.unmount());
@@ -124,33 +118,30 @@ describe('Time cell', () => {
       type: 'object',
       properties: {
         firstDate: { type: 'string', format: 'date' },
-        secondDate: { type: 'string', format: 'date' }
-      }
+        secondDate: { type: 'string', format: 'date' },
+      },
     };
     const firstControlElement: ControlElement = {
       type: 'Control',
       scope: '#/properties/firstDate',
       options: {
-        focus: true
-      }
+        focus: true,
+      },
     };
     const secondControlElement: ControlElement = {
       type: 'Control',
       scope: '#/properties/secondDate',
       options: {
-        focus: true
-      }
+        focus: true,
+      },
     };
     const uischema: HorizontalLayout = {
       type: 'HorizontalLayout',
-      elements: [
-        firstControlElement,
-        secondControlElement
-      ]
+      elements: [firstControlElement, secondControlElement],
     };
     const data = {
-      'firstDate': '1980-04-04',
-      'secondDate': '1980-04-04'
+      firstDate: '1980-04-04',
+      secondDate: '1980-04-04',
     };
     const core = initCore(schema, uischema, data);
     wrapper = mount(
@@ -168,8 +159,8 @@ describe('Time cell', () => {
       type: 'Control',
       scope: '#/properties/foo',
       options: {
-        focus: true
-      }
+        focus: true,
+      },
     };
     const core = initCore(fixture.schema, uischema, fixture.data);
     wrapper = mount(
@@ -186,8 +177,8 @@ describe('Time cell', () => {
       type: 'Control',
       scope: '#/properties/foo',
       options: {
-        focus: false
-      }
+        focus: false,
+      },
     };
     const core = initCore(fixture.schema, uischema, fixture.data);
     wrapper = mount(
@@ -202,7 +193,7 @@ describe('Time cell', () => {
   test('autofocus inactive by default', () => {
     const uischema: ControlElement = {
       type: 'Control',
-      scope: '#/properties/foo'
+      scope: '#/properties/foo',
     };
     const core = initCore(fixture.schema, uischema, fixture.data);
     wrapper = mount(
@@ -218,7 +209,11 @@ describe('Time cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TimeCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <TimeCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
 
@@ -231,7 +226,11 @@ describe('Time cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TimeCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <TimeCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
 
@@ -243,7 +242,7 @@ describe('Time cell', () => {
 
   test('update via event', () => {
     const onChangeData: any = {
-      data: undefined
+      data: undefined,
     };
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
@@ -253,7 +252,11 @@ describe('Time cell', () => {
             onChangeData.data = data;
           }}
         />
-        <TimeCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <TimeCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input');
@@ -266,11 +269,15 @@ describe('Time cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TimeCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <TimeCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, foo: '20:15' };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.value).toBe('20:15');
@@ -280,11 +287,15 @@ describe('Time cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TimeCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <TimeCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, foo: null };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.value).toBe('');
@@ -294,11 +305,15 @@ describe('Time cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TimeCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <TimeCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, foo: undefined };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.value).toBe('');
@@ -308,11 +323,15 @@ describe('Time cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TimeCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <TimeCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, bar: 'Bar' };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.value).toBe('13:37');
@@ -322,11 +341,15 @@ describe('Time cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TimeCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <TimeCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, null: '20:15' };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.value).toBe('13:37');
@@ -336,12 +359,16 @@ describe('Time cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TimeCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <TimeCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     core.data = { ...core.data, undefined: '20:15' };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     expect(input.value).toBe('13:37');
   });
@@ -350,7 +377,12 @@ describe('Time cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TimeCell schema={fixture.schema} uischema={fixture.uischema} path='foo' enabled={false} />
+        <TimeCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+          enabled={false}
+        />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
@@ -361,7 +393,11 @@ describe('Time cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TimeCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <TimeCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;

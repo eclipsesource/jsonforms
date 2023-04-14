@@ -29,30 +29,30 @@ import configureStore from 'redux-mock-store';
 import {
   findMatchingUISchema,
   uischemaRegistryReducer,
-  UISchemaTester
+  UISchemaTester,
 } from '../../src/reducers/uischemas';
 import {
   registerUISchema,
   RemoveUISchemaAction,
-  unregisterUISchema
+  unregisterUISchema,
 } from '../../src/actions';
 import { findUISchema, getSchema } from '../../src/reducers';
 import { Generate } from '../../src/generators';
 import { JsonFormsState } from '../../src';
 
-test('init state empty', t => {
+test('init state empty', (t) => {
   const dummyAction: RemoveUISchemaAction = {
     type: 'jsonforms/REMOVE_UI_SCHEMA',
-    tester: undefined
+    tester: undefined,
   };
   t.deepEqual(uischemaRegistryReducer(undefined, dummyAction), []);
 });
 
-test('add ui schema', t => {
+test('add ui schema', (t) => {
   const tester: UISchemaTester = () => 1;
   const control = {
     type: 'Control',
-    scope: '#/definitions/foo'
+    scope: '#/definitions/foo',
   };
   const after = uischemaRegistryReducer(
     undefined,
@@ -61,46 +61,46 @@ test('add ui schema', t => {
   t.is(after.length, 1);
 });
 
-test('remove ui schema', t => {
+test('remove ui schema', (t) => {
   const tester: UISchemaTester = () => 1;
   const control = {
     type: 'Control',
-    scope: '#/definitions/foo'
+    scope: '#/definitions/foo',
   };
   const after = uischemaRegistryReducer(
     [
       {
         tester,
-        uischema: control
-      }
+        uischema: control,
+      },
     ],
     unregisterUISchema(tester)
   );
   t.is(after.length, 0);
 });
 
-test('findMatchingUISchema', t => {
+test('findMatchingUISchema', (t) => {
   const testerA: UISchemaTester = (_schema, schemaPath) =>
     _.endsWith(schemaPath, 'foo') ? 1 : 0;
   const testerB: UISchemaTester = (_schema, schemaPath) =>
     _.endsWith(schemaPath, 'bar') ? 1 : 0;
   const controlA = {
     type: 'Control',
-    scope: '#/definitions/foo'
+    scope: '#/definitions/foo',
   };
   const controlB = {
     type: 'Control',
-    scope: '#/definitions/bar'
+    scope: '#/definitions/bar',
   };
   const before = [
     {
       tester: testerA,
-      uischema: controlA
+      uischema: controlA,
     },
     {
       tester: testerB,
-      uischema: controlB
-    }
+      uischema: controlB,
+    },
   ];
   t.deepEqual(
     findMatchingUISchema(before)(undefined, '#/defintions/foo', undefined),
@@ -112,7 +112,7 @@ test('findMatchingUISchema', t => {
   );
 });
 
-test('findUISchema returns generated UI schema if no match has been found', t => {
+test('findUISchema returns generated UI schema if no match has been found', (t) => {
   const middlewares: Redux.Middleware[] = [];
   const mockStore = configureStore<JsonFormsState>(middlewares);
   const store = mockStore({
@@ -121,15 +121,15 @@ test('findUISchema returns generated UI schema if no match has been found', t =>
         schema: {
           definitions: {
             baz: {
-              type: 'number'
-            }
-          }
+              type: 'number',
+            },
+          },
         },
         data: undefined,
-        uischema: undefined
+        uischema: undefined,
       },
-      uischemas: []
-    }
+      uischemas: [],
+    },
   });
 
   t.deepEqual(
@@ -143,28 +143,28 @@ test('findUISchema returns generated UI schema if no match has been found', t =>
   );
 });
 
-test('findMatchingUISchema with highest priority', t => {
+test('findMatchingUISchema with highest priority', (t) => {
   const testerA: UISchemaTester = (_schema, schemaPath) =>
     _.endsWith(schemaPath, 'foo') ? 2 : 0;
   const testerB: UISchemaTester = (_schema, schemaPath) =>
     _.endsWith(schemaPath, 'foo') ? 1 : 0;
   const controlA = {
     type: 'Control',
-    scope: '#/definitions/foo'
+    scope: '#/definitions/foo',
   };
   const controlB = {
     type: 'Control',
-    scope: '#/definitions/foo'
+    scope: '#/definitions/foo',
   };
   const before = [
     {
       tester: testerA,
-      uischema: controlA
+      uischema: controlA,
     },
     {
       tester: testerB,
-      uischema: controlB
-    }
+      uischema: controlB,
+    },
   ];
   t.deepEqual(
     findMatchingUISchema(before)(undefined, '#/definitions/foo', undefined),

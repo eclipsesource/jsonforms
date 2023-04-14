@@ -32,7 +32,7 @@ import {
   JsonSchema,
   RankedTester,
   rankWith,
-  StatePropsOfCombinator
+  StatePropsOfCombinator,
 } from '@jsonforms/core';
 import { JsonFormsDispatch, withJsonFormsAllOfProps } from '@jsonforms/react';
 
@@ -44,7 +44,7 @@ export const MaterialAllOfRenderer = ({
   cells,
   path,
   uischemas,
-  uischema
+  uischema,
 }: StatePropsOfCombinator) => {
   const delegateUISchema = findMatchingUISchema(uischemas)(
     schema,

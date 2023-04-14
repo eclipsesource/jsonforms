@@ -35,7 +35,7 @@ import {
 } from './core';
 import {
   extractDefaultData,
-  JsonFormsDefaultDataRegistryEntry
+  JsonFormsDefaultDataRegistryEntry,
 } from './default-data';
 import type { JsonFormsRendererRegistryEntry } from './renderers';
 import type { JsonFormsCellRendererRegistryEntry } from './cells';
@@ -47,9 +47,8 @@ export const getSchema = (state: JsonFormsState): JsonSchema =>
   extractSchema(get(state, 'jsonforms.core'));
 export const getUiSchema = (state: JsonFormsState): UISchemaElement =>
   extractUiSchema(get(state, 'jsonforms.core'));
-export const getAjv = (
-  state: JsonFormsState
-): Ajv => extractAjv(get(state, 'jsonforms.core'));
+export const getAjv = (state: JsonFormsState): Ajv =>
+  extractAjv(get(state, 'jsonforms.core'));
 export const getDefaultData = (
   state: JsonFormsState
 ): JsonFormsDefaultDataRegistryEntry[] =>
@@ -62,4 +61,4 @@ export const getCells = (
 ): JsonFormsCellRendererRegistryEntry[] => get(state, 'jsonforms.cells');
 export const getUISchemas = (
   state: JsonFormsState
-): JsonFormsUISchemaRegistryEntry[] => get(state, 'jsonforms.uischemas')
+): JsonFormsUISchemaRegistryEntry[] => get(state, 'jsonforms.uischemas');

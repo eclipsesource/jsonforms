@@ -30,7 +30,7 @@ import {
   JsonSchema,
   RankedTester,
   rankWith,
-  StatePropsOfCombinator
+  StatePropsOfCombinator,
 } from '@jsonforms/core';
 import { JsonFormsDispatch, withJsonFormsAnyOfProps } from '@jsonforms/react';
 import { Hidden, Tab, Tabs } from '@mui/material';
@@ -45,7 +45,7 @@ export const MaterialAnyOfRenderer = ({
   renderers,
   cells,
   uischema,
-  uischemas
+  uischemas,
 }: StatePropsOfCombinator) => {
   const [selectedAnyOf, setSelectedAnyOf] = useState(indexOfFittingSchema || 0);
   const handleChange = useCallback(
@@ -70,7 +70,7 @@ export const MaterialAnyOfRenderer = ({
         path={path}
       />
       <Tabs value={selectedAnyOf} onChange={handleChange}>
-        {anyOfRenderInfos.map(anyOfRenderInfo => (
+        {anyOfRenderInfos.map((anyOfRenderInfo) => (
           <Tab key={anyOfRenderInfo.label} label={anyOfRenderInfo.label} />
         ))}
       </Tabs>

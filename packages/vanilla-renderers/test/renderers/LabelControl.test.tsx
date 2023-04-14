@@ -28,7 +28,7 @@ import { JsonFormsStateProvider } from '@jsonforms/react';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import LabelRenderer, {
-  labelRendererTester
+  labelRendererTester,
 } from '../../src/complex/LabelRenderer';
 import { initCore } from '../util';
 import { JsonFormsStyleContext } from '../../src/styles';
@@ -39,15 +39,15 @@ const fixture = {
   data: { name: 'Foo' },
   schema: {
     type: 'object',
-    properties: { name: { type: 'string' } }
+    properties: { name: { type: 'string' } },
   },
   uischema: { type: 'Label', text: 'Bar' },
   styles: [
     {
       name: 'label-control',
-      classNames: ['jsf-label']
-    }
-  ]
+      classNames: ['jsf-label'],
+    },
+  ],
 };
 
 describe('Label tester', () => {
@@ -55,12 +55,13 @@ describe('Label tester', () => {
     expect(labelRendererTester(undefined, undefined, undefined)).toBe(-1);
     expect(labelRendererTester(null, undefined, undefined)).toBe(-1);
     expect(labelRendererTester({ type: 'Foo' }, undefined, undefined)).toBe(-1);
-    expect(labelRendererTester({ type: 'Label' }, undefined, undefined)).toBe(1);
+    expect(labelRendererTester({ type: 'Label' }, undefined, undefined)).toBe(
+      1
+    );
   });
 });
 
 describe('Label', () => {
-
   let wrapper: ReactWrapper;
 
   afterEach(() => wrapper.unmount());
@@ -71,10 +72,7 @@ describe('Label', () => {
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
         <JsonFormsStyleContext.Provider value={{ styles: fixture.styles }}>
-          <LabelRenderer
-            schema={fixture.schema}
-            uischema={uischema}
-            />
+          <LabelRenderer schema={fixture.schema} uischema={uischema} />
         </JsonFormsStyleContext.Provider>
       </JsonFormsStateProvider>
     );
@@ -87,17 +85,14 @@ describe('Label', () => {
   test('render with null text', () => {
     const uischema: LabelElement = {
       type: 'Label',
-      text: null
+      text: null,
     };
     const core = initCore(fixture.schema, uischema, fixture.data);
 
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
         <JsonFormsStyleContext.Provider value={{ styles: fixture.styles }}>
-          <LabelRenderer
-            schema={fixture.schema}
-            uischema={uischema}
-            />
+          <LabelRenderer schema={fixture.schema} uischema={uischema} />
         </JsonFormsStyleContext.Provider>
       </JsonFormsStateProvider>
     );
@@ -111,10 +106,7 @@ describe('Label', () => {
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
         <JsonFormsStyleContext.Provider value={{ styles: fixture.styles }}>
-          <LabelRenderer
-            schema={fixture.schema}
-            uischema={fixture.uischema}
-            />
+          <LabelRenderer schema={fixture.schema} uischema={fixture.uischema} />
         </JsonFormsStyleContext.Provider>
       </JsonFormsStateProvider>
     );
@@ -143,10 +135,7 @@ describe('Label', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <LabelRenderer
-          schema={fixture.schema}
-          uischema={fixture.uischema}
-        />
+        <LabelRenderer schema={fixture.schema} uischema={fixture.uischema} />
       </JsonFormsStateProvider>
     );
     const label = wrapper.find('label').getDOMNode() as HTMLLabelElement;

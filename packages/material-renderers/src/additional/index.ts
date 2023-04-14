@@ -23,10 +23,10 @@
   THE SOFTWARE.
 */
 import MaterialLabelRenderer, {
-  materialLabelRendererTester
+  materialLabelRendererTester,
 } from './MaterialLabelRenderer';
 export { MaterialLabelRenderer, materialLabelRendererTester };
 import MaterialListWithDetailRenderer, {
-  materialListWithDetailTester
+  materialListWithDetailTester,
 } from './MaterialListWithDetailRenderer';
 export { MaterialListWithDetailRenderer, materialListWithDetailTester };

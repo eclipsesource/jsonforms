@@ -36,14 +36,21 @@ interface CombinatorPropertiesProps {
 export const isLayout = (uischema: UISchemaElement): uischema is Layout =>
   uischema.hasOwnProperty('elements');
 
-export class CombinatorProperties extends React.Component<CombinatorPropertiesProps, {}> {
-
+export class CombinatorProperties extends React.Component<
+  CombinatorPropertiesProps,
+  {}
+> {
   render() {
-
     const { schema, combinatorKeyword, path } = this.props;
 
-    const otherProps: JsonSchema = omit(schema, combinatorKeyword) as JsonSchema;
-    const foundUISchema: UISchemaElement = Generate.uiSchema(otherProps, 'VerticalLayout');
+    const otherProps: JsonSchema = omit(
+      schema,
+      combinatorKeyword
+    ) as JsonSchema;
+    const foundUISchema: UISchemaElement = Generate.uiSchema(
+      otherProps,
+      'VerticalLayout'
+    );
     let isLayoutWithElements = false;
     if (foundUISchema !== null && isLayout(foundUISchema)) {
       isLayoutWithElements = foundUISchema.elements.length > 0;

@@ -25,14 +25,15 @@
 import {
   JsonFormsState,
   mapStateToArrayControlProps,
-  StatePropsOfArrayControl
+  StatePropsOfArrayControl,
 } from '@jsonforms/core';
 import type { OnDestroy, OnInit } from '@angular/core';
 import { JsonFormsAbstractControl } from './abstract-control';
 
 export class JsonFormsArrayControl
   extends JsonFormsAbstractControl<StatePropsOfArrayControl>
-  implements OnInit, OnDestroy {
+  implements OnInit, OnDestroy
+{
   protected mapToProps(state: JsonFormsState): StatePropsOfArrayControl {
     const props = mapStateToArrayControlProps(state, this.getOwnProps());
     return { ...props };

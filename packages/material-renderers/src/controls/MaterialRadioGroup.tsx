@@ -28,7 +28,7 @@ import {
   ControlProps,
   showAsRequired,
   isDescriptionHidden,
-  OwnPropsOfEnum
+  OwnPropsOfEnum,
 } from '@jsonforms/core';
 import {
   FormControl,
@@ -37,7 +37,7 @@ import {
   FormLabel,
   Hidden,
   Radio,
-  RadioGroup
+  RadioGroup,
 } from '@mui/material';
 import { useFocus } from '../util';
 
@@ -55,21 +55,17 @@ export const MaterialRadioGroup = (props: ControlProps & OwnPropsOfEnum) => {
     options,
     handleChange,
     path,
-    enabled
+    enabled,
   } = props;
   const isValid = errors.length === 0;
-  const appliedUiSchemaOptions = merge(
-    {},
-    config,
-    props.uischema.options
-  );
+  const appliedUiSchemaOptions = merge({}, config, props.uischema.options);
   const showDescription = !isDescriptionHidden(
     visible,
     description,
     focused,
     appliedUiSchemaOptions.showUnfocusedDescription
   );
-  const onChange = (_ev:any, value:any) => handleChange(path, value);
+  const onChange = (_ev: any, value: any) => handleChange(path, value);
 
   return (
     <Hidden xsUp={!visible}>
@@ -83,18 +79,16 @@ export const MaterialRadioGroup = (props: ControlProps & OwnPropsOfEnum) => {
           htmlFor={id}
           error={!isValid}
           component={'legend' as 'label'}
-          required={showAsRequired(required,
-            appliedUiSchemaOptions.hideRequiredAsterisk)}
+          required={showAsRequired(
+            required,
+            appliedUiSchemaOptions.hideRequiredAsterisk
+          )}
         >
           {label}
         </FormLabel>
 
-        <RadioGroup
-          value={props.data ?? ''}
-          onChange={onChange}
-          row={true}
-        >
-          {options.map(option => (
+        <RadioGroup value={props.data ?? ''} onChange={onChange} row={true}>
+          {options.map((option) => (
             <FormControlLabel
               value={option.value}
               key={option.label}

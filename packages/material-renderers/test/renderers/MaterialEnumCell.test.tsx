@@ -24,11 +24,9 @@
 */
 import './MatchMediaMock';
 import * as React from 'react';
-import {
-  ControlElement
-} from '@jsonforms/core';
+import { ControlElement } from '@jsonforms/core';
 import MaterialEnumCell, {
-  materialEnumCellTester
+  materialEnumCellTester,
 } from '../../src/cells/MaterialEnumCell';
 import { materialRenderers } from '../../src';
 
@@ -42,30 +40,33 @@ Enzyme.configure({ adapter: new Adapter() });
 const data = { nationality: 'JP' };
 const schema = {
   type: 'string',
-  enum: ['DE', 'IT', 'JP', 'US', 'RU', 'Other']
+  enum: ['DE', 'IT', 'JP', 'US', 'RU', 'Other'],
 };
 const uischema: ControlElement = {
   type: 'Control',
-  scope: '#/properties/nationality'
+  scope: '#/properties/nationality',
 };
 
 describe('Material enum cell tester', () => {
   it('should succeed with matching prop type', () => {
     const control: ControlElement = {
       type: 'Control',
-      scope: '#/properties/nationality'
+      scope: '#/properties/nationality',
     };
     expect(
-      materialEnumCellTester(control, {
-        type: 'object',
-        properties: {
-          nationality: {
-            type: 'string',
-            enum: ['DE', 'IT', 'JP', 'US', 'RU', 'Other']
-          }
-        }
-      },
-      undefined)
+      materialEnumCellTester(
+        control,
+        {
+          type: 'object',
+          properties: {
+            nationality: {
+              type: 'string',
+              enum: ['DE', 'IT', 'JP', 'US', 'RU', 'Other'],
+            },
+          },
+        },
+        undefined
+      )
     ).toBe(2);
   });
 });
@@ -74,7 +75,9 @@ describe('Material enum cell', () => {
   it('should select an item from dropdown list', () => {
     const core = initCore(schema, uischema, data);
     const wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <MaterialEnumCell
           schema={schema}
           uischema={uischema}

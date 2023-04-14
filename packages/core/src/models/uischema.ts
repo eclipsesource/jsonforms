@@ -54,7 +54,7 @@ export interface Labelable<T = string> {
   /**
    * Label for UI schema element.
    */
-  label?: string|T;
+  label?: string | T;
 }
 
 /**
@@ -108,7 +108,7 @@ export enum RuleEffect {
   /**
    * Effect that disables the associated element.
    */
-  DISABLE = 'DISABLE'
+  DISABLE = 'DISABLE',
 }
 
 /**
@@ -240,7 +240,11 @@ export interface LabelElement extends UISchemaElement, Internationalizable {
  * A control element. The scope property of the control determines
  * to which part of the schema the control should be bound.
  */
-export interface ControlElement extends UISchemaElement, Scoped, Labelable<string | boolean | LabelDescription>, Internationalizable {
+export interface ControlElement
+  extends UISchemaElement,
+    Scoped,
+    Labelable<string | boolean | LabelDescription>,
+    Internationalizable {
   type: 'Control';
 }
 
@@ -256,7 +260,10 @@ export interface Category extends Layout, Labeled, Internationalizable {
  * A child element may either be itself a Categorization or a Category, hence
  * the categorization element can be used to represent recursive structures like trees.
  */
-export interface Categorization extends UISchemaElement, Labeled, Internationalizable {
+export interface Categorization
+  extends UISchemaElement,
+    Labeled,
+    Internationalizable {
   type: 'Categorization';
   /**
    * The child elements of this categorization which are either of type
@@ -265,8 +272,12 @@ export interface Categorization extends UISchemaElement, Labeled, Internationali
   elements: (Category | Categorization)[];
 }
 
-export const isInternationalized = (element: unknown): element is Required<Internationalizable> =>
-  typeof element === 'object' && element !== null && typeof (element as Internationalizable).i18n === 'string';
+export const isInternationalized = (
+  element: unknown
+): element is Required<Internationalizable> =>
+  typeof element === 'object' &&
+  element !== null &&
+  typeof (element as Internationalizable).i18n === 'string';
 
 export const isGroup = (layout: Layout): layout is GroupLayout =>
   layout.type === 'Group';

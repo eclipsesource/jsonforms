@@ -25,9 +25,7 @@
 import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
-import {
-  MatAutocompleteModule
-} from '@angular/material/autocomplete';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatCardModule } from '@angular/material/card';
@@ -92,7 +90,7 @@ import { LayoutChildrenRenderPropsPipe } from './layouts';
     MatTableModule,
     MatToolbarModule,
     MatTooltipModule,
-    MatBadgeModule
+    MatBadgeModule,
   ],
   declarations: [
     BooleanControlRenderer,
@@ -113,7 +111,7 @@ import { LayoutChildrenRenderPropsPipe } from './layouts';
     AutocompleteControlRenderer,
     TableRenderer,
     ArrayLayoutRenderer,
-    LayoutChildrenRenderPropsPipe
+    LayoutChildrenRenderPropsPipe,
   ],
   entryComponents: [
     BooleanControlRenderer,
@@ -133,7 +131,7 @@ import { LayoutChildrenRenderPropsPipe } from './layouts';
     ObjectControlRenderer,
     AutocompleteControlRenderer,
     TableRenderer,
-    ArrayLayoutRenderer
+    ArrayLayoutRenderer,
   ],
   exports: [
     CommonModule,
@@ -154,9 +152,9 @@ import { LayoutChildrenRenderPropsPipe } from './layouts';
     MatSelectModule,
     MatButtonModule,
     MatIconModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  providers: []
+  providers: [],
 })
-export class JsonFormsAngularMaterialModule { }
+export class JsonFormsAngularMaterialModule {}

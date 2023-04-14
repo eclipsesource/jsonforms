@@ -30,7 +30,7 @@ import {
   OnDestroy,
   OnInit,
   Type,
-  ViewContainerRef
+  ViewContainerRef,
 } from '@angular/core';
 import {
   createId,
@@ -42,7 +42,7 @@ import {
   mapStateToJsonFormsRendererProps,
   OwnPropsOfRenderer,
   StatePropsOfJsonFormsRenderer,
-  UISchemaElement
+  UISchemaElement,
 } from '@jsonforms/core';
 import { UnknownRenderer } from './unknown.component';
 import { JsonFormsBaseRenderer } from './base.renderer';
@@ -52,20 +52,27 @@ import { JsonFormsAngularService } from './jsonforms.service';
 
 import { get, isEqual } from 'lodash';
 
-const areEqual = (prevProps: StatePropsOfJsonFormsRenderer, nextProps: StatePropsOfJsonFormsRenderer) => {
-  return get(prevProps, 'renderers.length') === get(nextProps, 'renderers.length')
-    && get(prevProps, 'cells.length') === get(nextProps, 'cells.length')
-    && get(prevProps, 'uischemas.length') === get(nextProps, 'uischemas.length')
-    && get(prevProps, 'schema') === get(nextProps, 'schema')
-    && isEqual(get(prevProps, 'uischema'), get(nextProps, 'uischema'))
-    && get(prevProps, 'path') === get(nextProps, 'path');
+const areEqual = (
+  prevProps: StatePropsOfJsonFormsRenderer,
+  nextProps: StatePropsOfJsonFormsRenderer
+) => {
+  return (
+    get(prevProps, 'renderers.length') === get(nextProps, 'renderers.length') &&
+    get(prevProps, 'cells.length') === get(nextProps, 'cells.length') &&
+    get(prevProps, 'uischemas.length') === get(nextProps, 'uischemas.length') &&
+    get(prevProps, 'schema') === get(nextProps, 'schema') &&
+    isEqual(get(prevProps, 'uischema'), get(nextProps, 'uischema')) &&
+    get(prevProps, 'path') === get(nextProps, 'path')
+  );
 };
 
 @Directive({
-  selector: 'jsonforms-outlet'
+  selector: 'jsonforms-outlet',
 })
-export class JsonFormsOutlet extends JsonFormsBaseRenderer<UISchemaElement>
-  implements OnInit, OnDestroy {
+export class JsonFormsOutlet
+  extends JsonFormsBaseRenderer<UISchemaElement>
+  implements OnInit, OnDestroy
+{
   private subscription: Subscription;
   private previousProps: StatePropsOfJsonFormsRenderer;
 
@@ -87,7 +94,7 @@ export class JsonFormsOutlet extends JsonFormsBaseRenderer<UISchemaElement>
 
   ngOnInit(): void {
     this.subscription = this.jsonformsService.$state.subscribe({
-      next: (state: JsonFormsState) => this.update(state)
+      next: (state: JsonFormsState) => this.update(state),
     });
   }
 
@@ -95,7 +102,7 @@ export class JsonFormsOutlet extends JsonFormsBaseRenderer<UISchemaElement>
     const props = mapStateToJsonFormsRendererProps(state, {
       schema: this.schema,
       uischema: this.uischema,
-      path: this.path
+      path: this.path,
     });
     if (areEqual(this.previousProps, props)) {
       return;
@@ -107,21 +114,29 @@ export class JsonFormsOutlet extends JsonFormsBaseRenderer<UISchemaElement>
     const uischema = this.uischema || props.uischema;
     const testerContext = {
       rootSchema: props.rootSchema,
-      config: getConfig(state)
+      config: getConfig(state),
     };
 
-    const renderer = maxBy(renderers, r => r.tester(uischema, schema, testerContext));
+    const renderer = maxBy(renderers, (r) =>
+      r.tester(uischema, schema, testerContext)
+    );
     let bestComponent: Type<any> = UnknownRenderer;
-    if (renderer !== undefined && renderer.tester(uischema, schema, testerContext) !== -1) {
+    if (
+      renderer !== undefined &&
+      renderer.tester(uischema, schema, testerContext) !== -1
+    ) {
       bestComponent = renderer.renderer;
     }
 
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(bestComponent);
+    const componentFactory =
+      this.componentFactoryResolver.resolveComponentFactory(bestComponent);
     this.viewContainerRef.clear();
-    const currentComponentRef = this.viewContainerRef.createComponent(componentFactory);
+    const currentComponentRef =
+      this.viewContainerRef.createComponent(componentFactory);
 
     if (currentComponentRef.instance instanceof JsonFormsBaseRenderer) {
-      const instance = currentComponentRef.instance as JsonFormsBaseRenderer<UISchemaElement>;
+      const instance =
+        currentComponentRef.instance as JsonFormsBaseRenderer<UISchemaElement>;
       instance.uischema = uischema;
       instance.schema = schema;
       instance.path = this.path;

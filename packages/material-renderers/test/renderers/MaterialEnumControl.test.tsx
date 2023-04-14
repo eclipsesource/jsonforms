@@ -24,30 +24,27 @@
 */
 import './MatchMediaMock';
 import * as React from 'react';
-import {
-  ControlElement
-} from '@jsonforms/core';
-import { materialRenderers, MuiSelect } from '../../src';
+import { ControlElement } from '@jsonforms/core';
+import { materialRenderers, MuiSelect, MaterialEnumControl } from '../../src';
 
 import Enzyme, { mount } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { JsonFormsStateProvider } from '@jsonforms/react';
 import { initCore } from './util';
-import { MaterialEnumControl } from '../../src';
 
 Enzyme.configure({ adapter: new Adapter() });
 
 const data = { nationality: 'JP' };
 const schema = {
   type: 'string',
-  enum: ['DE', 'IT', 'JP', 'US', 'RU', 'Other']
+  enum: ['DE', 'IT', 'JP', 'US', 'RU', 'Other'],
 };
 const uischema: ControlElement = {
   type: 'Control',
   scope: '#/properties/nationality',
   options: {
-    autocomplete: false
-  }
+    autocomplete: false,
+  },
 };
 
 describe('Material enum control', () => {
@@ -56,7 +53,9 @@ describe('Material enum control', () => {
     const translate = () => 'Translated';
     const changedTranslate = () => 'OtherTranslation';
     const wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core, i18n: {translate} }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core, i18n: { translate } }}
+      >
         <MaterialEnumControl
           schema={schema}
           uischema={uischema}
@@ -67,9 +66,17 @@ describe('Material enum control', () => {
 
     expect(wrapper.find(MuiSelect).props().options[0].label).toBe('Translated');
 
-    wrapper.setProps({ initState: { renderers: materialRenderers, core, i18n: {translate: changedTranslate} }} );
+    wrapper.setProps({
+      initState: {
+        renderers: materialRenderers,
+        core,
+        i18n: { translate: changedTranslate },
+      },
+    });
     wrapper.update();
 
-    expect(wrapper.find(MuiSelect).props().options[0].label).toBe('OtherTranslation');
+    expect(wrapper.find(MuiSelect).props().options[0].label).toBe(
+      'OtherTranslation'
+    );
   });
 });

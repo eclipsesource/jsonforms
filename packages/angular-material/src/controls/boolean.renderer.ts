@@ -22,7 +22,12 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ViewRef,
+} from '@angular/core';
 import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 import { isBooleanControl, RankedTester, rankWith } from '@jsonforms/core';
 
@@ -43,14 +48,19 @@ import { isBooleanControl, RankedTester, rankWith } from '@jsonforms/core';
       >
         {{ label }}
       </mat-checkbox>
-      <mat-hint class="mat-caption" *ngIf="shouldShowUnfocusedDescription()">{{ description }}</mat-hint>
+      <mat-hint class="mat-caption" *ngIf="shouldShowUnfocusedDescription()">{{
+        description
+      }}</mat-hint>
       <mat-error class="mat-caption">{{ error }}</mat-error>
     </div>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BooleanControlRenderer extends JsonFormsControl {
-  constructor(jsonformsService: JsonFormsAngularService, private changeDetectionRef: ChangeDetectorRef) {
+  constructor(
+    jsonformsService: JsonFormsAngularService,
+    private changeDetectionRef: ChangeDetectorRef
+  ) {
     super(jsonformsService);
   }
   isChecked = () => this.data || false;

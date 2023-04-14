@@ -26,9 +26,12 @@ import {
   ChangeDetectionStrategy,
   Component,
   OnDestroy,
-  OnInit
+  OnInit,
 } from '@angular/core';
-import { JsonFormsAngularService, JsonFormsAbstractControl } from '@jsonforms/angular';
+import {
+  JsonFormsAngularService,
+  JsonFormsAbstractControl,
+} from '@jsonforms/angular';
 import {
   ArrayLayoutProps,
   ArrayTranslations,
@@ -46,7 +49,7 @@ import {
   StatePropsOfArrayLayout,
   UISchemaElement,
   UISchemaTester,
-  unsetReadonly
+  unsetReadonly,
 } from '@jsonforms/core';
 
 @Component({
@@ -59,12 +62,17 @@ import {
         <mat-icon
           *ngIf="this.error?.length"
           color="warn"
-          matBadge="{{ this.error.split('\n').length }}"
+          matBadge="{{
+            this.error.split(
+              '
+'
+            ).length
+          }}"
           matBadgeColor="warn"
           matTooltip="{{ this.error }}"
           matTooltipClass="error-message-tooltip"
-          >
-            error_outline
+        >
+          error_outline
         </mat-icon>
         <span fxFlex></span>
         <button
@@ -92,7 +100,7 @@ import {
             <jsonforms-outlet [renderProps]="getProps(idx)"></jsonforms-outlet>
           </mat-card-content>
           <mat-card-actions *ngIf="isEnabled()">
-          <button
+            <button
               *ngIf="uischema?.options?.showSortButtons"
               class="item-up"
               mat-button
@@ -132,9 +140,10 @@ import {
     </div>
   `,
   styles: [
-    `.array-layout-toolbar {
-       display: flex;
-       align-items: center;
+    `
+      .array-layout-toolbar {
+        display: flex;
+        align-items: center;
       }
       .array-layout-title {
         margin: 0;
@@ -142,13 +151,14 @@ import {
       ::ng-deep .error-message-tooltip {
         white-space: pre-line;
       }
-      `
+    `,
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArrayLayoutRenderer
   extends JsonFormsAbstractControl<StatePropsOfArrayLayout>
-  implements OnInit, OnDestroy {
+  implements OnInit, OnDestroy
+{
   noData: boolean;
   translations: ArrayTranslations;
   addItem: (path: string, value: any) => () => void;
@@ -180,9 +190,10 @@ export class ArrayLayoutRenderer
   }
   ngOnInit() {
     super.ngOnInit();
-    const { addItem, removeItems, moveUp, moveDown } = mapDispatchToArrayControlProps(
-      this.jsonFormsService.updateCore.bind(this.jsonFormsService)
-    );
+    const { addItem, removeItems, moveUp, moveDown } =
+      mapDispatchToArrayControlProps(
+        this.jsonFormsService.updateCore.bind(this.jsonFormsService)
+      );
     this.addItem = addItem;
     this.moveItemUp = moveUp;
     this.moveItemDown = moveDown;
@@ -211,7 +222,7 @@ export class ArrayLayoutRenderer
     return {
       schema: this.scopedSchema,
       path: Paths.compose(this.propsPath, `${index}`),
-      uischema
+      uischema,
     };
   }
   trackByFn(index: number) {

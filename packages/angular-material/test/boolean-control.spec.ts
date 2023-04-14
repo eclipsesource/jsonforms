@@ -28,7 +28,7 @@ import {
   booleanBaseTest,
   booleanErrorTest,
   booleanInputEventTest,
-  ErrorTestExpectation
+  ErrorTestExpectation,
 } from '@jsonforms/angular-test';
 import { BooleanControlRenderer, booleanControlTester } from '../src';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -37,19 +37,23 @@ import { JsonFormsAngularService } from '@jsonforms/angular';
 describe('Material boolean field tester', () => {
   const uischema = {
     type: 'Control',
-    scope: '#/properties/foo'
+    scope: '#/properties/foo',
   };
 
   it('should succeed', () => {
     expect(
-      booleanControlTester(uischema, {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'boolean'
-          }
-        }
-      }, undefined)
+      booleanControlTester(
+        uischema,
+        {
+          type: 'object',
+          properties: {
+            foo: {
+              type: 'boolean',
+            },
+          },
+        },
+        undefined
+      )
     ).toBe(2);
   });
 });
@@ -59,7 +63,7 @@ const componentUT: any = BooleanControlRenderer;
 const errorTest: ErrorTestExpectation = {
   errorInstance: MatError,
   numberOfElements: 1,
-  indexOfElement: 0
+  indexOfElement: 0,
 };
 const testConfig = { imports, providers, componentUT };
 describe(

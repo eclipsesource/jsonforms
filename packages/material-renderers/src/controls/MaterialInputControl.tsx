@@ -29,8 +29,7 @@ import {
   isDescriptionHidden,
 } from '@jsonforms/core';
 
-import { Hidden, InputLabel } from '@mui/material';
-import { FormControl, FormHelperText } from '@mui/material';
+import { Hidden, InputLabel, FormControl, FormHelperText } from '@mui/material';
 import merge from 'lodash/merge';
 import { useFocus } from '../util';
 
@@ -49,7 +48,7 @@ export const MaterialInputControl = (props: ControlProps & WithInput) => {
     visible,
     required,
     config,
-    input
+    input,
   } = props;
   const isValid = errors.length === 0;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
@@ -81,8 +80,10 @@ export const MaterialInputControl = (props: ControlProps & WithInput) => {
         <InputLabel
           htmlFor={id + '-input'}
           error={!isValid}
-          required={showAsRequired(required,
-            appliedUiSchemaOptions.hideRequiredAsterisk)}
+          required={showAsRequired(
+            required,
+            appliedUiSchemaOptions.hideRequiredAsterisk
+          )}
         >
           {label}
         </InputLabel>
@@ -95,9 +96,7 @@ export const MaterialInputControl = (props: ControlProps & WithInput) => {
         <FormHelperText error={!isValid && !showDescription}>
           {firstFormHelperText}
         </FormHelperText>
-        <FormHelperText error={!isValid}>
-          {secondFormHelperText}
-        </FormHelperText>
+        <FormHelperText error={!isValid}>{secondFormHelperText}</FormHelperText>
       </FormControl>
     </Hidden>
   );

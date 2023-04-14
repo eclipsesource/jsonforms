@@ -24,8 +24,9 @@
 */
 
 import isEmpty from 'lodash/isEmpty';
-import { getErrorTranslator, JsonFormsCellRendererRegistryEntry } from '../reducers';
 import {
+  getErrorTranslator,
+  JsonFormsCellRendererRegistryEntry,
   getAjv,
   getConfig,
   getData,
@@ -35,10 +36,7 @@ import {
 } from '../reducers';
 import type { AnyAction, Dispatch } from './type';
 import { Resolve } from './util';
-import {
-  isInherentlyEnabled,
-  isVisible,
-} from './runtime';
+import { isInherentlyEnabled, isVisible } from './runtime';
 import {
   DispatchPropsOfControl,
   EnumOption,
@@ -49,10 +47,7 @@ import {
   OwnPropsOfEnum,
   StatePropsOfScopedRenderer,
 } from './renderer';
-import {
-  getCombinedErrorMessage,
-  getI18nKeyPrefix,
-} from '../i18n';
+import { getCombinedErrorMessage, getI18nKeyPrefix } from '../i18n';
 import type { JsonFormsState } from '../store';
 import type { JsonSchema } from '../models';
 
@@ -125,7 +120,7 @@ export const mapStateToCellProps = (
 
   /* When determining the enabled state of cells we take a shortcut: At the
    * moment it's only possible to configure enablement and disablement at the
-   * control level. Therefore the renderer using the cell, for example a 
+   * control level. Therefore the renderer using the cell, for example a
    * table renderer, determines whether a cell is enabled and should hand
    * over the prop themselves. If that prop was given, we prefer it over
    * anything else to save evaluation effort (except for the global readonly
@@ -149,7 +144,14 @@ export const mapStateToCellProps = (
 
   const t = getTranslator()(state);
   const te = getErrorTranslator()(state);
-  const errors = getCombinedErrorMessage(getErrorAt(path, schema)(state), te, t, schema, uischema, path);
+  const errors = getCombinedErrorMessage(
+    getErrorAt(path, schema)(state),
+    te,
+    t,
+    schema,
+    uischema,
+    path
+  );
   const isValid = isEmpty(errors);
 
   return {
@@ -165,7 +167,7 @@ export const mapStateToCellProps = (
     config: getConfig(state),
     rootSchema,
     renderers,
-    cells
+    cells,
   };
 };
 
@@ -178,7 +180,7 @@ export const mapStateToDispatchCellProps = (
   return {
     ...props,
     ...otherOwnProps,
-    cells: cells || state.jsonforms.cells || []
+    cells: cells || state.jsonforms.cells || [],
   };
 };
 
@@ -197,7 +199,7 @@ export const defaultMapStateToEnumCellProps = (
   const props: StatePropsOfCell = mapStateToCellProps(state, ownProps);
   const options: EnumOption[] =
     ownProps.options ||
-    props.schema.enum?.map(e =>
+    props.schema.enum?.map((e) =>
       enumToEnumOptionMapper(
         e,
         getTranslator()(state),
@@ -209,11 +211,11 @@ export const defaultMapStateToEnumCellProps = (
         props.schema.const,
         getTranslator()(state),
         getI18nKeyPrefix(props.schema, props.uischema, props.path)
-      )
+      ),
     ]);
   return {
     ...props,
-    options
+    options,
   };
 };
 
@@ -230,7 +232,7 @@ export const mapStateToOneOfEnumCellProps = (
   const props: StatePropsOfCell = mapStateToCellProps(state, ownProps);
   const options: EnumOption[] =
     ownProps.options ||
-    (props.schema.oneOf as JsonSchema[])?.map(oneOfSubSchema =>
+    (props.schema.oneOf as JsonSchema[])?.map((oneOfSubSchema) =>
       oneOfToEnumOptionMapper(
         oneOfSubSchema,
         getTranslator()(state),
@@ -239,10 +241,9 @@ export const mapStateToOneOfEnumCellProps = (
     );
   return {
     ...props,
-    options
+    options,
   };
 };
-
 
 /**
  * Synonym for mapDispatchToControlProps.
@@ -263,6 +264,6 @@ export const defaultMapDispatchToControlProps =
     const { handleChange } = mapDispatchToCellProps(dispatch);
 
     return {
-      handleChange: ownProps.handleChange || handleChange
+      handleChange: ownProps.handleChange || handleChange,
     };
   };

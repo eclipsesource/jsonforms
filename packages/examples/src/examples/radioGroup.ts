@@ -24,59 +24,57 @@
 */
 import { registerExamples } from '../register';
 
-const data = {
-};
+const data = {};
 
 const schema = {
-    type: 'object',
-    properties: {
-      exampleRadioEnum: {
-        type: 'string',
-        enum: ['One', 'Two', 'Three']
-      },
-      exampleRadioOneOfEnum: {
-        type: 'string',
-        oneOf: [
-            {const: 'foo', title: 'Foo'},
-            {const: 'bar', title: 'Bar'},
-            {const: 'foobar', title: 'FooBar'}
-        ]
-    }
-    }
-  };
- const uischema = {
-   type: 'VerticalLayout',
-   elements: [
-     {
-       type: 'Group',
-       label: 'Simple enum',
-       elements: [
-         {
-           type: 'Control',
-           scope: '#/properties/exampleRadioEnum',
-           options: {
-             format: 'radio',
-             orientation: 'vertical'
-           }
-         }
-       ]
-     },
-     {
-       type: 'Group',
-       label: 'One of Enum',
-       elements: [
-         {
-           type: 'Control',
-           scope: '#/properties/exampleRadioOneOfEnum',
-           options: {
-             format: 'radio'
-           }
-         }
-       ]
-     }
-   ]
- };
-
+  type: 'object',
+  properties: {
+    exampleRadioEnum: {
+      type: 'string',
+      enum: ['One', 'Two', 'Three'],
+    },
+    exampleRadioOneOfEnum: {
+      type: 'string',
+      oneOf: [
+        { const: 'foo', title: 'Foo' },
+        { const: 'bar', title: 'Bar' },
+        { const: 'foobar', title: 'FooBar' },
+      ],
+    },
+  },
+};
+const uischema = {
+  type: 'VerticalLayout',
+  elements: [
+    {
+      type: 'Group',
+      label: 'Simple enum',
+      elements: [
+        {
+          type: 'Control',
+          scope: '#/properties/exampleRadioEnum',
+          options: {
+            format: 'radio',
+            orientation: 'vertical',
+          },
+        },
+      ],
+    },
+    {
+      type: 'Group',
+      label: 'One of Enum',
+      elements: [
+        {
+          type: 'Control',
+          scope: '#/properties/exampleRadioOneOfEnum',
+          options: {
+            format: 'radio',
+          },
+        },
+      ],
+    },
+  ],
+};
 
 registerExamples([
   {
@@ -84,6 +82,6 @@ registerExamples([
     label: 'Radio Group',
     data,
     schema,
-    uischema
-  }
+    uischema,
+  },
 ]);

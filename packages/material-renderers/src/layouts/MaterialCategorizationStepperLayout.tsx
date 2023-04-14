@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React, {useState, useMemo} from 'react';
+import React, { useState, useMemo } from 'react';
 import merge from 'lodash/merge';
 import { Button, Hidden, Step, StepButton, Stepper } from '@mui/material';
 import {
@@ -36,14 +36,18 @@ import {
   RankedTester,
   rankWith,
   StatePropsOfLayout,
-  uiTypeIs
+  uiTypeIs,
 } from '@jsonforms/core';
-import { TranslateProps, withJsonFormsLayoutProps, withTranslateProps } from '@jsonforms/react';
+import {
+  TranslateProps,
+  withJsonFormsLayoutProps,
+  withTranslateProps,
+} from '@jsonforms/react';
 import {
   AjvProps,
   MaterialLayoutRenderer,
   MaterialLayoutRendererProps,
-  withAjvProps
+  withAjvProps,
 } from '../util/layout';
 
 export const materialCategorizationStepperTester: RankedTester = rankWith(
@@ -60,15 +64,19 @@ export interface CategorizationStepperState {
 }
 
 export interface MaterialCategorizationStepperLayoutRendererProps
-  extends StatePropsOfLayout, AjvProps, TranslateProps {
-    data: any;
+  extends StatePropsOfLayout,
+    AjvProps,
+    TranslateProps {
+  data: any;
 }
 
-export const MaterialCategorizationStepperLayoutRenderer = (props: MaterialCategorizationStepperLayoutRendererProps)=> {
+export const MaterialCategorizationStepperLayoutRenderer = (
+  props: MaterialCategorizationStepperLayoutRendererProps
+) => {
   const [activeCategory, setActiveCategory] = useState<number>(0);
 
   const handleStep = (step: number) => {
-    setActiveCategory( step);
+    setActiveCategory(step);
   };
 
   const {
@@ -81,24 +89,28 @@ export const MaterialCategorizationStepperLayoutRenderer = (props: MaterialCateg
     cells,
     config,
     ajv,
-    t
+    t,
   } = props;
   const categorization = uischema as Categorization;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
   const buttonWrapperStyle = {
-    textAlign: 'right' as 'right',
+    textAlign: 'right' as const,
     width: '100%',
-    margin: '1em auto'
+    margin: '1em auto',
   };
   const buttonNextStyle = {
-    float: 'right' as 'right'
+    float: 'right' as const,
   };
   const buttonStyle = {
-    marginRight: '1em'
+    marginRight: '1em',
   };
-  const categories = useMemo(() => categorization.elements.filter((category: Category) =>
-    isVisible(category, data, undefined, ajv)
-  ),[categorization, data, ajv]);
+  const categories = useMemo(
+    () =>
+      categorization.elements.filter((category: Category) =>
+        isVisible(category, data, undefined, ajv)
+      ),
+    [categorization, data, ajv]
+  );
   const childProps: MaterialLayoutRendererProps = {
     elements: categories[activeCategory].elements,
     schema,
@@ -106,13 +118,11 @@ export const MaterialCategorizationStepperLayoutRenderer = (props: MaterialCateg
     direction: 'column',
     visible,
     renderers,
-    cells
+    cells,
   };
   const tabLabels = useMemo(() => {
-    return categories.map((e: Category) => 
-      deriveLabelForUISchemaElement(e, t)
-    )
-  }, [categories, t])
+    return categories.map((e: Category) => deriveLabelForUISchemaElement(e, t));
+  }, [categories, t]);
   return (
     <Hidden xsUp={!visible}>
       <Stepper activeStep={activeCategory} nonLinear>
@@ -127,30 +137,36 @@ export const MaterialCategorizationStepperLayoutRenderer = (props: MaterialCateg
       <div>
         <MaterialLayoutRenderer {...childProps} />
       </div>
-      { !!appliedUiSchemaOptions.showNavButtons ? (<div style={buttonWrapperStyle}>
-        <Button
-          style={buttonNextStyle}
-          variant="contained"
-          color="primary"
-          disabled={activeCategory >= categories.length - 1}
-          onClick={() => handleStep(activeCategory + 1)}
-        >
-          Next
-        </Button>
-        <Button
-          style={buttonStyle}
-          color="secondary"
-          variant="contained"
-          disabled={activeCategory <= 0}
-          onClick={() => handleStep(activeCategory - 1)}
-        >
-          Previous
-        </Button>
-      </div>) : (<></>)}
+      {appliedUiSchemaOptions.showNavButtons ? (
+        <div style={buttonWrapperStyle}>
+          <Button
+            style={buttonNextStyle}
+            variant='contained'
+            color='primary'
+            disabled={activeCategory >= categories.length - 1}
+            onClick={() => handleStep(activeCategory + 1)}
+          >
+            Next
+          </Button>
+          <Button
+            style={buttonStyle}
+            color='secondary'
+            variant='contained'
+            disabled={activeCategory <= 0}
+            onClick={() => handleStep(activeCategory - 1)}
+          >
+            Previous
+          </Button>
+        </div>
+      ) : (
+        <></>
+      )}
     </Hidden>
   );
 };
 
-export default withAjvProps(withTranslateProps(
-  withJsonFormsLayoutProps(MaterialCategorizationStepperLayoutRenderer
-)));
+export default withAjvProps(
+  withTranslateProps(
+    withJsonFormsLayoutProps(MaterialCategorizationStepperLayoutRenderer)
+  )
+);

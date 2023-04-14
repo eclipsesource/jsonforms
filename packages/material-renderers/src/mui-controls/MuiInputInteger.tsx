@@ -29,10 +29,10 @@ import merge from 'lodash/merge';
 import { useDebouncedChange } from '../util';
 
 const toNumber = (value: string) =>
-      value === '' ? undefined : parseInt(value, 10);
-const eventToValue = (ev:any) => toNumber(ev.target.value);
+  value === '' ? undefined : parseInt(value, 10);
+const eventToValue = (ev: any) => toNumber(ev.target.value);
 
-export const MuiInputInteger = React.memo( 
+export const MuiInputInteger = React.memo(
   (props: CellProps & WithClassname) => {
     const {
       data,
@@ -42,13 +42,19 @@ export const MuiInputInteger = React.memo(
       uischema,
       path,
       handleChange,
-      config
+      config,
     } = props;
     const inputProps = { step: '1' };
-    
+
     const appliedUiSchemaOptions = merge({}, config, uischema.options);
 
-    const [inputValue, onChange] = useDebouncedChange(handleChange, '', data, path, eventToValue);
+    const [inputValue, onChange] = useDebouncedChange(
+      handleChange,
+      '',
+      data,
+      path,
+      eventToValue
+    );
 
     return (
       <Input
@@ -63,4 +69,5 @@ export const MuiInputInteger = React.memo(
         fullWidth={true}
       />
     );
-  });
+  }
+);

@@ -32,7 +32,7 @@ import {
   textBaseTest,
   textErrorTest,
   textInputEventTest,
-  textTypeTest
+  textTypeTest,
 } from '@jsonforms/angular-test';
 import { TextControlRenderer, TextControlRendererTester } from '../src';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -41,19 +41,23 @@ import { JsonFormsAngularService } from '@jsonforms/angular';
 describe('Material text field tester', () => {
   const uischema = {
     type: 'Control',
-    scope: '#/properties/foo'
+    scope: '#/properties/foo',
   };
 
   it('should succeed', () => {
     expect(
-      TextControlRendererTester(uischema, {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'string'
-          }
-        }
-      }, undefined)
+      TextControlRendererTester(
+        uischema,
+        {
+          type: 'object',
+          properties: {
+            foo: {
+              type: 'string',
+            },
+          },
+        },
+        undefined
+      )
     ).toBe(1);
   });
 });
@@ -62,14 +66,14 @@ const imports = [
   MatInputModule,
   NoopAnimationsModule,
   ReactiveFormsModule,
-  FlexLayoutModule
+  FlexLayoutModule,
 ];
 const providers = [JsonFormsAngularService];
 const componentUT: any = TextControlRenderer;
 const errorTest: ErrorTestExpectation = {
   errorInstance: MatError,
   numberOfElements: 1,
-  indexOfElement: 0
+  indexOfElement: 0,
 };
 const toSelect = (el: DebugElement) => el.nativeElement;
 const testConfig = { imports, providers, componentUT };

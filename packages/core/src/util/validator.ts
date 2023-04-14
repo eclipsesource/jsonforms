@@ -31,7 +31,7 @@ export const createAjv = (options?: Options) => {
     allErrors: true,
     verbose: true,
     strict: false,
-    ...options
+    ...options,
   });
   addFormats(ajv);
   return ajv;

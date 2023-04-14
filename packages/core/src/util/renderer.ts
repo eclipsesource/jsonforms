@@ -24,14 +24,18 @@
 */
 
 import get from 'lodash/get';
-import { ControlElement, isLabelable, JsonSchema, LabelElement, UISchemaElement } from '../models';
+import {
+  ControlElement,
+  isLabelable,
+  JsonSchema,
+  LabelElement,
+  UISchemaElement,
+} from '../models';
 import find from 'lodash/find';
 import {
   getUISchemas,
   JsonFormsCellRendererRegistryEntry,
   JsonFormsRendererRegistryEntry,
-} from '../reducers';
-import {
   getAjv,
   getCells,
   getConfig,
@@ -56,8 +60,19 @@ import { composePaths, composeWithUi } from './path';
 import { CoreActions, update } from '../actions';
 import type { ErrorObject } from 'ajv';
 import type { JsonFormsState } from '../store';
-import { deriveLabelForUISchemaElement, getCombinedErrorMessage, getI18nKey, getI18nKeyPrefix, getI18nKeyPrefixBySchema, getArrayTranslations, Translator } from '../i18n';
-import { arrayDefaultTranslations, ArrayTranslations } from '../i18n/arrayTranslations';
+import {
+  deriveLabelForUISchemaElement,
+  getCombinedErrorMessage,
+  getI18nKey,
+  getI18nKeyPrefix,
+  getI18nKeyPrefixBySchema,
+  getArrayTranslations,
+  Translator,
+} from '../i18n';
+import {
+  arrayDefaultTranslations,
+  ArrayTranslations,
+} from '../i18n/arrayTranslations';
 
 const isRequired = (
   schema: JsonSchema,
@@ -99,7 +114,7 @@ export const computeLabel = (
   required: boolean,
   hideRequiredAsterisk: boolean
 ): string => {
-  return `${label ?? ''}${ required && !hideRequiredAsterisk ? '*' : ''}`;
+  return `${label ?? ''}${required && !hideRequiredAsterisk ? '*' : ''}`;
 };
 
 /**
@@ -109,7 +124,7 @@ export const computeLabel = (
  * @param {boolean} hideRequiredAsterisk applied UI Schema option
  * @returns {boolean} should the field be marked as required
  */
- export const showAsRequired = (
+export const showAsRequired = (
   required: boolean,
   hideRequiredAsterisk: boolean
 ): boolean => {
@@ -453,7 +468,7 @@ export const mapStateToControlProps = (
     rootSchema
   );
   const errors = getErrorAt(path, resolvedSchema)(state);
-  
+
   const description =
     resolvedSchema !== undefined ? resolvedSchema.description : '';
   const data = Resolve.data(rootData, path);
@@ -473,9 +488,25 @@ export const mapStateToControlProps = (
   const t = getTranslator()(state);
   const te = getErrorTranslator()(state);
   const i18nKeyPrefix = getI18nKeyPrefix(schema, uischema, path);
-  const i18nLabel = t(getI18nKey(schema, uischema, path, 'label'), label, {schema, uischema, path, errors} );
-  const i18nDescription = t(getI18nKey(schema, uischema, path, 'description'), description, {schema, uischema, path, errors});
-  const i18nErrorMessage = getCombinedErrorMessage(errors, te, t, schema, uischema, path);
+  const i18nLabel = t(getI18nKey(schema, uischema, path, 'label'), label, {
+    schema,
+    uischema,
+    path,
+    errors,
+  });
+  const i18nDescription = t(
+    getI18nKey(schema, uischema, path, 'description'),
+    description,
+    { schema, uischema, path, errors }
+  );
+  const i18nErrorMessage = getCombinedErrorMessage(
+    errors,
+    te,
+    t,
+    schema,
+    uischema,
+    path
+  );
 
   return {
     data,
@@ -492,7 +523,7 @@ export const mapStateToControlProps = (
     config: getConfig(state),
     cells: ownProps.cells || state.jsonforms.cells,
     rootSchema,
-    i18nKeyPrefix
+    i18nKeyPrefix,
   };
 };
 
@@ -508,7 +539,7 @@ export const mapDispatchToControlProps = (
 ): DispatchPropsOfControl => ({
   handleChange(path, value) {
     dispatch(update(path, () => value));
-  }
+  },
 });
 
 /**
@@ -524,7 +555,7 @@ export const mapStateToEnumControlProps = (
   const props: StatePropsOfControl = mapStateToControlProps(state, ownProps);
   const options: EnumOption[] =
     ownProps.options ||
-    props.schema.enum?.map(e =>
+    props.schema.enum?.map((e) =>
       enumToEnumOptionMapper(
         e,
         getTranslator()(state),
@@ -536,11 +567,11 @@ export const mapStateToEnumControlProps = (
         props.schema.const,
         getTranslator()(state),
         getI18nKeyPrefix(props.schema, props.uischema, props.path)
-      )
+      ),
     ]);
   return {
     ...props,
-    options
+    options,
   };
 };
 
@@ -557,7 +588,7 @@ export const mapStateToOneOfEnumControlProps = (
   const props: StatePropsOfControl = mapStateToControlProps(state, ownProps);
   const options: EnumOption[] =
     ownProps.options ||
-    (props.schema.oneOf as JsonSchema[])?.map(oneOfSubSchema =>
+    (props.schema.oneOf as JsonSchema[])?.map((oneOfSubSchema) =>
       oneOfToEnumOptionMapper(
         oneOfSubSchema,
         getTranslator()(state),
@@ -566,7 +597,7 @@ export const mapStateToOneOfEnumControlProps = (
     );
   return {
     ...props,
-    options
+    options,
   };
 };
 
@@ -585,14 +616,14 @@ export const mapStateToMultiEnumControlProps = (
   const options: EnumOption[] =
     ownProps.options ||
     (items?.oneOf &&
-      (items.oneOf as JsonSchema[]).map(oneOfSubSchema =>
+      (items.oneOf as JsonSchema[]).map((oneOfSubSchema) =>
         oneOfToEnumOptionMapper(
           oneOfSubSchema,
           state.jsonforms.i18n?.translate,
           getI18nKeyPrefix(props.schema, props.uischema, props.path)
         )
       )) ||
-    items?.enum?.map(e =>
+    items?.enum?.map((e) =>
       enumToEnumOptionMapper(
         e,
         state.jsonforms.i18n?.translate,
@@ -601,7 +632,7 @@ export const mapStateToMultiEnumControlProps = (
     );
   return {
     ...props,
-    options
+    options,
   };
 };
 
@@ -617,7 +648,7 @@ export const mapStateToMasterListItemProps = (
 ): StatePropsOfMasterItem => {
   const { schema, path, index } = ownProps;
   const firstPrimitiveProp = schema.properties
-    ? find(Object.keys(schema.properties), propName => {
+    ? find(Object.keys(schema.properties), (propName) => {
         const prop = schema.properties[propName];
         return (
           prop.type === 'string' ||
@@ -632,7 +663,7 @@ export const mapStateToMasterListItemProps = (
 
   return {
     ...ownProps,
-    childLabel
+    childLabel,
   };
 };
 
@@ -674,7 +705,7 @@ export const mapStateToControlWithDetailProps = (
 
   return {
     ...props,
-    uischemas: state.jsonforms.uischemas
+    uischemas: state.jsonforms.uischemas,
   };
 };
 
@@ -702,10 +733,8 @@ export const mapStateToArrayControlProps = (
   state: JsonFormsState,
   ownProps: OwnPropsOfControl
 ): StatePropsOfArrayControl => {
-  const { path, schema, uischema, i18nKeyPrefix, label, ...props } = mapStateToControlWithDetailProps(
-    state,
-    ownProps
-  );
+  const { path, schema, uischema, i18nKeyPrefix, label, ...props } =
+    mapStateToControlWithDetailProps(state, ownProps);
 
   const resolvedSchema = Resolve.schema(schema, 'items', props.rootSchema);
   const childErrors = getSubErrorsAt(path, resolvedSchema)(state);
@@ -720,7 +749,12 @@ export const mapStateToArrayControlProps = (
     childErrors,
     renderers: ownProps.renderers || getRenderers(state),
     cells: ownProps.cells || getCells(state),
-    translations: getArrayTranslations(t,arrayDefaultTranslations,i18nKeyPrefix, label)
+    translations: getArrayTranslations(
+      t,
+      arrayDefaultTranslations,
+      i18nKeyPrefix,
+      label
+    ),
   };
 };
 
@@ -745,7 +779,7 @@ export const mapDispatchToArrayControlProps = (
 ): DispatchPropsOfArrayControl => ({
   addItem: (path: string, value: any) => () => {
     dispatch(
-      update(path, array => {
+      update(path, (array) => {
         if (array === undefined || array === null) {
           return [value];
         }
@@ -757,18 +791,18 @@ export const mapDispatchToArrayControlProps = (
   },
   removeItems: (path: string, toDelete: number[]) => () => {
     dispatch(
-      update(path, array => {
+      update(path, (array) => {
         toDelete
           .sort()
           .reverse()
-          .forEach(s => array.splice(s, 1));
+          .forEach((s) => array.splice(s, 1));
         return array;
       })
     );
   },
   moveUp: (path, toMove: number) => () => {
     dispatch(
-      update(path, array => {
+      update(path, (array) => {
         moveUp(array, toMove);
         return array;
       })
@@ -776,7 +810,7 @@ export const mapDispatchToArrayControlProps = (
   },
   moveDown: (path, toMove: number) => () => {
     dispatch(
-      update(path, array => {
+      update(path, (array) => {
         moveDown(array, toMove);
         return array;
       })
@@ -794,7 +828,7 @@ export const mapDispatchToMultiEnumProps = (
 ): DispatchPropsOfMultiEnumControl => ({
   addItem: (path: string, value: any) => {
     dispatch(
-      update(path, data => {
+      update(path, (data) => {
         if (data === undefined || data === null) {
           return [value];
         }
@@ -805,13 +839,13 @@ export const mapDispatchToMultiEnumProps = (
   },
   removeItem: (path: string, toDelete: any) => {
     dispatch(
-      update(path, data => {
+      update(path, (data) => {
         const indexInData = data.indexOf(toDelete);
         data.splice(indexInData, 1);
         return data;
       })
     );
-  }
+  },
 });
 
 /**
@@ -830,7 +864,7 @@ export const layoutDefaultProps: {
   visible: true,
   enabled: true,
   path: '',
-  direction: 'column'
+  direction: 'column',
 };
 
 const getDirection = (uischema: UISchemaElement) => {
@@ -873,7 +907,9 @@ export const mapStateToLayoutProps = (
 
   // some layouts have labels which might need to be translated
   const t = getTranslator()(state);
-  const label = isLabelable(uischema) ? deriveLabelForUISchemaElement(uischema, t) : undefined;
+  const label = isLabelable(uischema)
+    ? deriveLabelForUISchemaElement(uischema, t)
+    : undefined;
 
   return {
     ...layoutDefaultProps,
@@ -887,7 +923,7 @@ export const mapStateToLayoutProps = (
     schema: ownProps.schema,
     direction: ownProps.direction ?? getDirection(uischema),
     config,
-    label
+    label,
   };
 };
 
@@ -915,13 +951,13 @@ export const mapStateToJsonFormsRendererProps = (
     uischema: ownProps.uischema || getUiSchema(state),
     path: ownProps.path,
     enabled: ownProps.enabled,
-    config: getConfig(state)
+    config: getConfig(state),
   };
 };
 
 export const controlDefaultProps = {
   ...layoutDefaultProps,
-  errors: [] as string[]
+  errors: [] as string[],
 };
 
 export interface StatePropsOfCombinator extends StatePropsOfControl {
@@ -940,7 +976,7 @@ export const mapStateToCombinatorRendererProps = (
 ): StatePropsOfCombinator => {
   const { data, schema, rootSchema, ...props } = mapStateToControlProps(
     state,
-    ownProps,
+    ownProps
   );
 
   const ajv = state.jsonforms.core.ajv;
@@ -949,13 +985,13 @@ export const mapStateToCombinatorRendererProps = (
     'additionalProperties',
     'type',
     'enum',
-    'const'
+    'const',
   ];
   const dataIsValid = (errors: ErrorObject[]): boolean => {
     return (
       !errors ||
       errors.length === 0 ||
-      !errors.find(e => structuralKeywords.indexOf(e.keyword) !== -1)
+      !errors.find((e) => structuralKeywords.indexOf(e.keyword) !== -1)
     );
   };
   let indexOfFittingSchema: number;
@@ -965,9 +1001,8 @@ export const mapStateToCombinatorRendererProps = (
   for (let i = 0; i < schema[keyword]?.length; i++) {
     try {
       let _schema = schema[keyword][i];
-      if(_schema.$ref){
-        _schema = Resolve.schema( rootSchema, _schema.$ref, rootSchema
-        );
+      if (_schema.$ref) {
+        _schema = Resolve.schema(rootSchema, _schema.$ref, rootSchema);
       }
       const valFn = ajv.compile(_schema);
       valFn(data);
@@ -976,7 +1011,9 @@ export const mapStateToCombinatorRendererProps = (
         break;
       }
     } catch (error) {
-      console.debug("Combinator subschema is not self contained, can't hand it over to AJV");
+      console.debug(
+        "Combinator subschema is not self contained, can't hand it over to AJV"
+      );
     }
   }
 
@@ -986,7 +1023,7 @@ export const mapStateToCombinatorRendererProps = (
     rootSchema,
     ...props,
     indexOfFittingSchema,
-    uischemas: getUISchemas(state)
+    uischemas: getUISchemas(state),
   };
 };
 
@@ -1035,17 +1072,9 @@ export const mapStateToArrayLayoutProps = (
   state: JsonFormsState,
   ownProps: OwnPropsOfControl
 ): StatePropsOfArrayLayout => {
-  const {
-    path,
-    schema,
-    uischema,
-    errors,
-    i18nKeyPrefix,
-    label,
-    ...props
-  } = mapStateToControlWithDetailProps(state, ownProps);
+  const { path, schema, uischema, errors, i18nKeyPrefix, label, ...props } =
+    mapStateToControlWithDetailProps(state, ownProps);
 
-  
   const resolvedSchema = Resolve.schema(schema, 'items', props.rootSchema);
   const t = getTranslator()(state);
   // TODO Does not consider 'i18n' keys which are specified in the ui schemas of the sub errors
@@ -1071,7 +1100,12 @@ export const mapStateToArrayLayoutProps = (
     data: props.data ? props.data.length : 0,
     errors: allErrors,
     minItems: schema.minItems,
-    translations: getArrayTranslations(t,arrayDefaultTranslations,i18nKeyPrefix, label)
+    translations: getArrayTranslations(
+      t,
+      arrayDefaultTranslations,
+      i18nKeyPrefix,
+      label
+    ),
   };
 };
 
@@ -1085,8 +1119,7 @@ export interface ArrayLayoutProps
 export interface StatePropsOfLabel extends StatePropsOfRenderer {
   text?: string;
 }
-export interface LabelProps extends StatePropsOfLabel{
-}
+export interface LabelProps extends StatePropsOfLabel {}
 
 export const mapStateToLabelProps = (
   state: JsonFormsState,
@@ -1104,12 +1137,12 @@ export const mapStateToLabelProps = (
   const i18nKeyPrefix = getI18nKeyPrefixBySchema(undefined, uischema);
   const i18nKey = i18nKeyPrefix ? `${i18nKeyPrefix}.text` : text ?? '';
   const i18nText = t(i18nKey, text, { uischema });
-  
+
   return {
     text: i18nText,
     visible,
     config: getConfig(state),
     renderers: props.renderers || getRenderers(state),
     cells: props.cells || getCells(state),
-  }
-}
+  };
+};

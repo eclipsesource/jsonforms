@@ -23,11 +23,7 @@
   THE SOFTWARE.
 */
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import {
-  isDateControl,
-  RankedTester,
-  rankWith
-} from '@jsonforms/core';
+import { isDateControl, RankedTester, rankWith } from '@jsonforms/core';
 import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 
 @Component({
@@ -41,7 +37,7 @@ import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
         [id]="id"
         [formControl]="form"
         [matDatepicker]="datepicker"
-        (focus)="focused = true" 
+        (focus)="focused = true"
         (focusout)="focused = false"
       />
       <mat-datepicker-toggle
@@ -49,16 +45,16 @@ import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
         [for]="datepicker"
       ></mat-datepicker-toggle>
       <mat-datepicker #datepicker></mat-datepicker>
-      <mat-hint *ngIf="shouldShowUnfocusedDescription() || focused">{{ description }}</mat-hint>
+      <mat-hint *ngIf="shouldShowUnfocusedDescription() || focused">{{
+        description
+      }}</mat-hint>
       <mat-error>{{ error }}</mat-error>
     </mat-form-field>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DateControlRenderer extends JsonFormsControl {
-  constructor(
-    jsonformsService: JsonFormsAngularService,
-  ) {
+  constructor(jsonformsService: JsonFormsAngularService) {
     super(jsonformsService);
   }
 

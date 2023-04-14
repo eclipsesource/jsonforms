@@ -23,8 +23,7 @@
   THE SOFTWARE.
 */
 import isEmpty from 'lodash/isEmpty';
-import React from 'react';
-import { ComponentType } from 'react';
+import React, { ComponentType } from 'react';
 import Ajv from 'ajv';
 import type { UISchemaElement } from '@jsonforms/core';
 import {
@@ -63,54 +62,57 @@ export interface MaterialLayoutRendererProps extends OwnPropsOfRenderer {
   elements: UISchemaElement[];
   direction: 'row' | 'column';
 }
-const MaterialLayoutRendererComponent =
-  ({
-    visible,
-    elements,
-    schema,
-    path,
-    enabled,
-    direction,
-    renderers,
-    cells
-  }: MaterialLayoutRendererProps) => {
-    if (isEmpty(elements)) {
-      return null;
-    } else {
-      return (
-        <Hidden xsUp={!visible}>
-          <Grid
-            container
-            direction={direction}
-            spacing={direction === 'row' ? 2 : 0}
-          >
-            {renderLayoutElements(
-              elements,
-              schema,
-              path,
-              enabled,
-              renderers,
-              cells
-            )}
-          </Grid>
-        </Hidden>
-      );
-    }
-  };
-export const MaterialLayoutRenderer = React.memo(MaterialLayoutRendererComponent);
+const MaterialLayoutRendererComponent = ({
+  visible,
+  elements,
+  schema,
+  path,
+  enabled,
+  direction,
+  renderers,
+  cells,
+}: MaterialLayoutRendererProps) => {
+  if (isEmpty(elements)) {
+    return null;
+  } else {
+    return (
+      <Hidden xsUp={!visible}>
+        <Grid
+          container
+          direction={direction}
+          spacing={direction === 'row' ? 2 : 0}
+        >
+          {renderLayoutElements(
+            elements,
+            schema,
+            path,
+            enabled,
+            renderers,
+            cells
+          )}
+        </Grid>
+      </Hidden>
+    );
+  }
+};
+export const MaterialLayoutRenderer = React.memo(
+  MaterialLayoutRendererComponent
+);
 
 export interface AjvProps {
   ajv: Ajv;
 }
 
-export const withAjvProps = <P extends {}>(Component: ComponentType<AjvProps & P>) =>
+export const withAjvProps =
+  <P extends {}>(Component: ComponentType<AjvProps & P>) =>
   (props: P) => {
     const ctx = useJsonForms();
-    const ajv = getAjv({jsonforms: {...ctx}});
+    const ajv = getAjv({ jsonforms: { ...ctx } });
 
-    return (<Component {...props} ajv={ajv} />);
+    return <Component {...props} ajv={ajv} />;
   };
 
-export interface MaterialLabelableLayoutRendererProps extends MaterialLayoutRendererProps {
+export interface MaterialLabelableLayoutRendererProps
+  extends MaterialLayoutRendererProps {
   label?: string;
 }

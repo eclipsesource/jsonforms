@@ -27,13 +27,11 @@ import { TableCell } from '@mui/material';
 import React from 'react';
 
 const StyledTableCell = styled(TableCell)({
-  borderBottom: 'none'
+  borderBottom: 'none',
 });
 
 const NoBorderTableCell = ({ children, ...otherProps }: any) => (
-  <StyledTableCell {...otherProps}>
-    {children}
-  </StyledTableCell>
+  <StyledTableCell {...otherProps}>{children}</StyledTableCell>
 );
 
-export default (NoBorderTableCell);
+export default NoBorderTableCell;

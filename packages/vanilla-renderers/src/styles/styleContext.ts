@@ -31,12 +31,10 @@ export interface StyleContext {
 }
 
 const defaultContext: StyleContext = {
-  styles: vanillaStyles
+  styles: vanillaStyles,
 };
 
-export const JsonFormsStyleContext = React.createContext(
-  defaultContext
-);
+export const JsonFormsStyleContext = React.createContext(defaultContext);
 
 export const useStyleContext = (): StyleContext =>
   useContext(JsonFormsStyleContext);

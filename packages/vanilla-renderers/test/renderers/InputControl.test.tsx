@@ -23,22 +23,16 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
-import {
-  ControlElement,
-  HorizontalLayout,
-  JsonSchema
-} from '@jsonforms/core';
-import { JsonFormsDispatch } from '@jsonforms/react';
-import { JsonFormsStateProvider } from '@jsonforms/react';
+import { ControlElement, HorizontalLayout, JsonSchema } from '@jsonforms/core';
+import { JsonFormsDispatch, JsonFormsStateProvider } from '@jsonforms/react';
 import { vanillaRenderers } from '../../src';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
-import '../../src';
 import HorizontalLayoutRenderer, {
-  horizontalLayoutTester
+  horizontalLayoutTester,
 } from '../../src/layouts/HorizontalLayout';
 import InputControl, {
-  inputControlTester
+  inputControlTester,
 } from '../../src/controls/InputControl';
 import BooleanCell, { booleanCellTester } from '../../src/cells/BooleanCell';
 import TextCell, { textCellTester } from '../../src/cells/TextCell';
@@ -54,30 +48,31 @@ const fixture = {
     type: 'object',
     properties: {
       foo: {
-        type: 'boolean'
-      }
-    }
+        type: 'boolean',
+      },
+    },
   },
   uischema: {
     type: 'Control',
-    scope: '#/properties/foo'
-  }
+    scope: '#/properties/foo',
+  },
 };
 
 test('tester', () => {
   expect(inputControlTester(undefined, undefined, undefined)).toBe(-1);
   expect(inputControlTester(null, undefined, undefined)).toBe(-1);
   expect(inputControlTester({ type: 'Foo' }, undefined, undefined)).toBe(-1);
-  expect(inputControlTester({ type: 'Control' }, undefined, undefined)).toBe(-1);
+  expect(inputControlTester({ type: 'Control' }, undefined, undefined)).toBe(
+    -1
+  );
   const control: ControlElement = {
     type: 'Control',
-    scope: '#/properties/foo'
+    scope: '#/properties/foo',
   };
   expect(inputControlTester(control, undefined, undefined)).toBe(1);
 });
 
 describe('Input control', () => {
-
   let wrapper: ReactWrapper;
 
   afterEach(() => wrapper.unmount());
@@ -87,39 +82,41 @@ describe('Input control', () => {
       type: 'object',
       properties: {
         firstBooleanCell: { type: 'boolean' },
-        secondBooleanCell: { type: 'boolean' }
-      }
+        secondBooleanCell: { type: 'boolean' },
+      },
     };
     const firstControlElement: ControlElement = {
       type: 'Control',
       scope: '#/properties/firstBooleanCell',
       options: {
-        focus: true
-      }
+        focus: true,
+      },
     };
     const secondControlElement: ControlElement = {
       type: 'Control',
       scope: 'properties/secondBooleanCell',
       options: {
-        focus: true
-      }
+        focus: true,
+      },
     };
     const uischema: HorizontalLayout = {
       type: 'HorizontalLayout',
-      elements: [firstControlElement, secondControlElement]
+      elements: [firstControlElement, secondControlElement],
     };
     const data = {
       firstBooleanCell: true,
-      secondBooleanCell: false
+      secondBooleanCell: false,
     };
     const core = initCore(schema, uischema, data);
     const renderes = [
       { tester: inputControlTester, renderer: InputControl },
-      { tester: horizontalLayoutTester, renderer: HorizontalLayoutRenderer }
+      { tester: horizontalLayoutTester, renderer: HorizontalLayoutRenderer },
     ];
     const cells = [{ tester: booleanCellTester, cell: BooleanCell }];
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core, cells, renderes }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: vanillaRenderers, core, cells, renderes }}
+      >
         <JsonFormsDispatch />
       </JsonFormsStateProvider>
     );
@@ -150,7 +147,9 @@ describe('Input control', () => {
     expect(input).toBeDefined();
     expect(input).not.toBeNull();
 
-    const validation = wrapper.find('.validation').getDOMNode() as HTMLDivElement;
+    const validation = wrapper
+      .find('.validation')
+      .getDOMNode() as HTMLDivElement;
     expect(validation.tagName).toBe('DIV');
     expect(validation.children).toHaveLength(0);
   });
@@ -159,13 +158,15 @@ describe('Input control', () => {
     const uischema: ControlElement = {
       type: 'Control',
       scope: '#/properties/foo',
-      label: false
+      label: false,
     };
     const core = initCore(fixture.schema, uischema, fixture.data);
     const renderes = [{ tester: inputControlTester, renderer: InputControl }];
     const cells = [{ tester: booleanCellTester, cell: BooleanCell }];
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core, cells, renderes }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: vanillaRenderers, core, cells, renderes }}
+      >
         <JsonFormsDispatch />
       </JsonFormsStateProvider>
     );
@@ -182,7 +183,9 @@ describe('Input control', () => {
     expect(input).toBeDefined();
     expect(input).not.toBeNull();
 
-    const validation = wrapper.find('.validation').getDOMNode() as HTMLDivElement;
+    const validation = wrapper
+      .find('.validation')
+      .getDOMNode() as HTMLDivElement;
     expect(validation.tagName).toBe('DIV');
     expect(validation.children).toHaveLength(0);
   });
@@ -223,12 +226,21 @@ describe('Input control', () => {
     const renderes = [{ tester: inputControlTester, renderer: InputControl }];
     const cells = [{ tester: booleanCellTester, cell: BooleanCell }];
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core, cells, renderes }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: vanillaRenderers, core, cells, renderes }}
+      >
         <InputControl schema={fixture.schema} uischema={fixture.uischema} />
       </JsonFormsStateProvider>
     );
-    const newCore = {...core, data: {...core.data, foo: 2}};
-    wrapper.setProps({ initState: { renderers: vanillaRenderers, core: newCore, cells, renderes }} );
+    const newCore = { ...core, data: { ...core.data, foo: 2 } };
+    wrapper.setProps({
+      initState: {
+        renderers: vanillaRenderers,
+        core: newCore,
+        cells,
+        renderes,
+      },
+    });
     const validation = wrapper.find('.validation');
     expect(validation.text()).toBe('must be boolean');
   });
@@ -238,12 +250,21 @@ describe('Input control', () => {
     const renderes = [{ tester: inputControlTester, renderer: InputControl }];
     const cells = [{ tester: booleanCellTester, cell: BooleanCell }];
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core, cells, renderes }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: vanillaRenderers, core, cells, renderes }}
+      >
         <InputControl schema={fixture.schema} uischema={fixture.uischema} />
       </JsonFormsStateProvider>
     );
-    const newCore = {...core, data: {...core.data, foo: 3}};
-    wrapper.setProps({ initState: { renderers: vanillaRenderers, core: newCore, cells, renderes }} );
+    const newCore = { ...core, data: { ...core.data, foo: 3 } };
+    wrapper.setProps({
+      initState: {
+        renderers: vanillaRenderers,
+        core: newCore,
+        cells,
+        renderes,
+      },
+    });
     const validation = wrapper.find('.validation');
     expect(validation.text()).toBe('must be boolean');
   });
@@ -253,7 +274,9 @@ describe('Input control', () => {
     const renderes = [{ tester: inputControlTester, renderer: InputControl }];
     const cells = [{ tester: booleanCellTester, cell: BooleanCell }];
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core, cells, renderes }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: vanillaRenderers, core, cells, renderes }}
+      >
         <JsonFormsDispatch />
       </JsonFormsStateProvider>
     );
@@ -265,14 +288,18 @@ describe('Input control', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     const renderes = [{ tester: inputControlTester, renderer: InputControl }];
     const cells = [{ tester: booleanCellTester, cell: BooleanCell }];
-    const styleContextValue = { styles: [
-      {
-        name: 'control.validation',
-        classNames: ['custom-validation']
-      },
-    ]};
+    const styleContextValue = {
+      styles: [
+        {
+          name: 'control.validation',
+          classNames: ['custom-validation'],
+        },
+      ],
+    };
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core, cells, renderes }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: vanillaRenderers, core, cells, renderes }}
+      >
         <JsonFormsStyleContext.Provider value={styleContextValue}>
           <JsonFormsDispatch />
         </JsonFormsStyleContext.Provider>
@@ -287,14 +314,16 @@ describe('Input control', () => {
     const renderes = [{ tester: inputControlTester, renderer: InputControl }];
     const cells = [{ tester: booleanCellTester, cell: BooleanCell }];
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core, cells, renderes }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: vanillaRenderers, core, cells, renderes }}
+      >
         <JsonFormsDispatch />
       </JsonFormsStateProvider>
     );
     const validation = wrapper.find('.validation');
     core.data = { ...core.data, foo: 3 };
     core.data = { ...core.data, foo: true };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     expect(validation.text()).toBe('');
   });
@@ -304,48 +333,54 @@ describe('Input control', () => {
       type: 'object',
       properties: {
         name: {
-          type: 'string'
+          type: 'string',
         },
         personalData: {
           type: 'object',
           properties: {
             middleName: {
-              type: 'string'
+              type: 'string',
             },
             lastName: {
-              type: 'string'
-            }
+              type: 'string',
+            },
           },
-          required: ['middleName', 'lastName']
-        }
+          required: ['middleName', 'lastName'],
+        },
       },
-      required: ['name']
+      required: ['name'],
     };
     const firstControlElement: ControlElement = {
       type: 'Control',
-      scope: '#/properties/name'
+      scope: '#/properties/name',
     };
     const secondControlElement: ControlElement = {
       type: 'Control',
-      scope: '#/properties/personalData/properties/middleName'
+      scope: '#/properties/personalData/properties/middleName',
     };
     const thirdControlElement: ControlElement = {
       type: 'Control',
-      scope: '#/properties/personalData/properties/lastName'
+      scope: '#/properties/personalData/properties/lastName',
     };
     const uischema: HorizontalLayout = {
       type: 'HorizontalLayout',
-      elements: [firstControlElement, secondControlElement, thirdControlElement]
+      elements: [
+        firstControlElement,
+        secondControlElement,
+        thirdControlElement,
+      ],
     };
     const data = {
       name: 'John Doe',
-      personalData: {}
+      personalData: {},
     };
     const core = initCore(schema, uischema, data);
     const renderes = [{ tester: inputControlTester, renderer: InputControl }];
     const cells = [{ tester: textCellTester, cell: TextCell }];
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core, cells, renderes }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: vanillaRenderers, core, cells, renderes }}
+      >
         <HorizontalLayoutRenderer schema={schema} uischema={uischema} />
       </JsonFormsStateProvider>
     );
@@ -360,14 +395,14 @@ describe('Input control', () => {
       properties: {
         dateCell: {
           type: 'string',
-          format: 'date'
-        }
+          format: 'date',
+        },
       },
-      required: ['dateCell']
+      required: ['dateCell'],
     };
     const uischema: ControlElement = {
       type: 'Control',
-      scope: '#/properties/dateCell'
+      scope: '#/properties/dateCell',
     };
     const core = initCore(schema, uischema, {});
     const renderes = [{ tester: inputControlTester, renderer: InputControl }];
@@ -387,13 +422,13 @@ describe('Input control', () => {
       properties: {
         dateCell: {
           type: 'string',
-          format: 'date'
-        }
-      }
+          format: 'date',
+        },
+      },
     };
     const uischema: ControlElement = {
       type: 'Control',
-      scope: '#/properties/dateCell'
+      scope: '#/properties/dateCell',
     };
     const core = initCore(schema, uischema, {});
     const renderes = [{ tester: inputControlTester, renderer: InputControl }];
@@ -413,13 +448,13 @@ describe('Input control', () => {
       properties: {
         name: {
           type: 'string',
-          description: 'Enter your first name'
-        }
-      }
+          description: 'Enter your first name',
+        },
+      },
     };
     const uischema: ControlElement = {
       type: 'Control',
-      scope: '#/properties/name'
+      scope: '#/properties/name',
     };
     const data = { isFocused: false };
     const core = initCore(schema, uischema, data);
@@ -442,13 +477,13 @@ describe('Input control', () => {
       properties: {
         name: {
           type: 'string',
-          description: 'Enter your first name'
-        }
-      }
+          description: 'Enter your first name',
+        },
+      },
     };
     const uischema: ControlElement = {
       type: 'Control',
-      scope: '#/properties/name'
+      scope: '#/properties/name',
     };
     const data = { isFocused: false };
     const core = initCore(schema, uischema, data);
@@ -469,20 +504,22 @@ describe('Input control', () => {
       properties: {
         name: {
           type: 'string',
-          description: 'Enter your first name'
-        }
-      }
+          description: 'Enter your first name',
+        },
+      },
     };
     const uischema: ControlElement = {
       type: 'Control',
-      scope: '#/properties/name'
+      scope: '#/properties/name',
     };
     const data = { isFocused: false };
     const core = initCore(schema, uischema, data);
     const renderes = [{ tester: inputControlTester, renderer: InputControl }];
     const cells = [{ tester: textCellTester, cell: DateCell }];
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core, cells, renderes }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: vanillaRenderers, core, cells, renderes }}
+      >
         <JsonFormsDispatch />
       </JsonFormsStateProvider>
     );
@@ -500,20 +537,22 @@ describe('Input control', () => {
       type: 'object',
       properties: {
         name: {
-          type: 'string'
-        }
-      }
+          type: 'string',
+        },
+      },
     };
     const uischema: ControlElement = {
       type: 'Control',
-      scope: '#/properties/name'
+      scope: '#/properties/name',
     };
     const data = { isFocused: false };
     const core = initCore(schema, uischema, data);
     const renderes = [{ tester: inputControlTester, renderer: InputControl }];
     const cells = [{ tester: textCellTester, cell: DateCell }];
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core, cells, renderes }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: vanillaRenderers, core, cells, renderes }}
+      >
         <JsonFormsDispatch />
       </JsonFormsStateProvider>
     );
@@ -526,13 +565,13 @@ describe('Input control', () => {
       type: 'object',
       properties: {
         expectedValue: {
-          type: ['string', 'integer', 'number', 'boolean']
-        }
-      }
+          type: ['string', 'integer', 'number', 'boolean'],
+        },
+      },
     };
     const uischema: ControlElement = {
       type: 'Control',
-      scope: '#/properties/expectedValue'
+      scope: '#/properties/expectedValue',
     };
     const core = initCore(schema, uischema, {});
     const renderes = [{ tester: inputControlTester, renderer: InputControl }];

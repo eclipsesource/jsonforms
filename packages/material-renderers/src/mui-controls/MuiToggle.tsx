@@ -31,32 +31,34 @@ interface MuiToggleInputProps {
   inputProps?: InputProps['inputProps'];
 }
 
-export const MuiToggle = React.memo((props: CellProps & WithClassname & MuiToggleInputProps) => {
-  const {
-    data,
-    className,
-    id,
-    enabled,
-    uischema,
-    path,
-    handleChange,
-    config,
-    inputProps
-  } = props;
-  const appliedUiSchemaOptions = merge({}, config, uischema.options);
-  const inputPropsMerged = merge({}, inputProps, {
-    autoFocus: !!appliedUiSchemaOptions.focus
-  });
-  const checked = !!data;
+export const MuiToggle = React.memo(
+  (props: CellProps & WithClassname & MuiToggleInputProps) => {
+    const {
+      data,
+      className,
+      id,
+      enabled,
+      uischema,
+      path,
+      handleChange,
+      config,
+      inputProps,
+    } = props;
+    const appliedUiSchemaOptions = merge({}, config, uischema.options);
+    const inputPropsMerged = merge({}, inputProps, {
+      autoFocus: !!appliedUiSchemaOptions.focus,
+    });
+    const checked = !!data;
 
-  return (
-    <Switch
-      checked={checked}
-      onChange={(_ev, isChecked) => handleChange(path, isChecked)}
-      className={className}
-      id={id}
-      disabled={!enabled}
-      inputProps={inputPropsMerged}
-    />
-  );
-});
+    return (
+      <Switch
+        checked={checked}
+        onChange={(_ev, isChecked) => handleChange(path, isChecked)}
+        className={className}
+        id={id}
+        disabled={!enabled}
+        inputProps={inputPropsMerged}
+      />
+    );
+  }
+);

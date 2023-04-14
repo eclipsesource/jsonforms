@@ -23,10 +23,7 @@
   THE SOFTWARE.
 */
 import { createThemeSelection } from './theme.switcher';
-import {
-  vanillaCells,
-  vanillaRenderers,
-} from '../src';
+import { vanillaCells, vanillaRenderers } from '../src';
 import { renderExample } from '../../examples-react/src/index';
 
 renderExample(vanillaRenderers, vanillaCells);

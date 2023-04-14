@@ -41,11 +41,11 @@ import {
   OwnPropsOfJsonFormsRenderer,
   removeId,
   UISchemaElement,
-  ValidationMode
+  ValidationMode,
 } from '@jsonforms/core';
 import {
   JsonFormsStateProvider,
-  withJsonFormsRendererProps
+  withJsonFormsRendererProps,
 } from './JsonFormsContext';
 
 interface JsonFormsRendererState {
@@ -74,9 +74,18 @@ export class JsonFormsDispatchRenderer extends React.Component<
       removeId(this.state.id);
     }
   }
-  
+
   render() {
-    const { schema, rootSchema, uischema, path, enabled, renderers, cells, config } = this.props as JsonFormsProps;
+    const {
+      schema,
+      rootSchema,
+      uischema,
+      path,
+      enabled,
+      renderers,
+      cells,
+      config,
+    } = this.props as JsonFormsProps;
 
     return (
       <TestAndRender
@@ -109,12 +118,15 @@ const TestAndRender = React.memo(
     const testerContext = useMemo(
       () => ({
         rootSchema: props.rootSchema,
-        config: props.config
+        config: props.config,
       }),
       [props.rootSchema, props.config]
     );
     const renderer = useMemo(
-      () => maxBy(props.renderers, r => r.tester(props.uischema, props.schema, testerContext)),
+      () =>
+        maxBy(props.renderers, (r) =>
+          r.tester(props.uischema, props.schema, testerContext)
+        ),
       [props.renderers, props.uischema, props.schema, testerContext]
     );
     if (
@@ -142,7 +154,7 @@ const TestAndRender = React.memo(
 /**
  * @deprecated Since Version 3.0 this optimization renderer is no longer necessary.
  * Use `JsonFormsDispatch` instead.
- * We still export it for backward compatibility 
+ * We still export it for backward compatibility
  */
 export class ResolvedJsonFormsDispatchRenderer extends JsonFormsDispatchRenderer {
   constructor(props: JsonFormsProps) {
@@ -156,7 +168,7 @@ export const JsonFormsDispatch: ComponentType<OwnPropsOfJsonFormsRenderer> =
 /**
  * @deprecated Since Version 3.0 this optimization component is no longer necessary.
  * Use `JsonFormsDispatch` instead.
- * We still export it for backward compatibility 
+ * We still export it for backward compatibility
  */
 export const ResolvedJsonFormsDispatch: ComponentType<OwnPropsOfJsonFormsRenderer> =
   withJsonFormsRendererProps(ResolvedJsonFormsDispatchRenderer);
@@ -192,7 +204,7 @@ export const JsonForms = (
     readonly,
     validationMode,
     i18n,
-    additionalErrors
+    additionalErrors,
   } = props;
   const schemaToUse = useMemo(
     () => (schema !== undefined ? schema : Generate.jsonSchema(data)),
@@ -213,14 +225,14 @@ export const JsonForms = (
           schema: schemaToUse,
           uischema: uischemaToUse,
           validationMode: validationMode,
-          additionalErrors: additionalErrors
+          additionalErrors: additionalErrors,
         },
         config,
         uischemas,
         renderers,
         cells,
         readonly,
-        i18n
+        i18n,
       }}
       onChange={onChange}
     >

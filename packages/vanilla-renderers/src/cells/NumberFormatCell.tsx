@@ -34,16 +34,11 @@ import { withJsonFormsCellProps } from '@jsonforms/react';
 import type { VanillaRendererProps } from '../index';
 import { withVanillaCellProps } from '../util/index';
 
-export const NumberFormatCell = (props: CellProps & VanillaRendererProps & Formatted<number|undefined>) => {
-  const {
-    className,
-    id,
-    enabled,
-    uischema,
-    path,
-    handleChange,
-    schema
-  } = props;
+export const NumberFormatCell = (
+  props: CellProps & VanillaRendererProps & Formatted<number | undefined>
+) => {
+  const { className, id, enabled, uischema, path, handleChange, schema } =
+    props;
   const maxLength = schema.maxLength;
   const formattedNumber: string = props.toFormatted(props.data);
 
@@ -61,7 +56,9 @@ export const NumberFormatCell = (props: CellProps & VanillaRendererProps & Forma
       id={id}
       disabled={!enabled}
       autoFocus={uischema.options && uischema.options.focus}
-      maxLength={uischema.options && uischema.options.restrict ? maxLength : undefined}
+      maxLength={
+        uischema.options && uischema.options.restrict ? maxLength : undefined
+      }
       size={uischema.options && uischema.options.trim ? maxLength : undefined}
     />
   );
@@ -71,6 +68,9 @@ export const NumberFormatCell = (props: CellProps & VanillaRendererProps & Forma
  * Default tester for text-based/string controls.
  * @type {RankedTester}
  */
-export const numberFormatCellTester: RankedTester = rankWith(4, isNumberFormatControl);
+export const numberFormatCellTester: RankedTester = rankWith(
+  4,
+  isNumberFormatControl
+);
 
 export default withJsonFormsCellProps(withVanillaCellProps(NumberFormatCell));

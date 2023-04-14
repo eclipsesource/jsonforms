@@ -28,32 +28,32 @@ export const orderSchema = {
   type: 'object',
   properties: {
     orderId: {
-      type: 'string'
+      type: 'string',
     },
     purchaseDate: {
       type: 'string',
-      format: 'date'
+      format: 'date',
     },
     price: {
-      type: 'number'
+      type: 'number',
     },
     shippingAddress: {
-      $ref: '#/definitions/shippingAddress'
-    }
+      $ref: '#/definitions/shippingAddress',
+    },
   },
   definitions: {
     shippingAddress: {
       type: 'object',
       properties: {
         aptNo: {
-          type: 'integer'
+          type: 'integer',
         },
         streetNumber: {
-          type: 'integer'
-        }
-      }
-    }
-  }
+          type: 'integer',
+        },
+      },
+    },
+  },
 };
 
 export const uischema = {
@@ -64,32 +64,32 @@ export const uischema = {
       elements: [
         {
           type: 'Control',
-          scope: '#/properties/orderId'
+          scope: '#/properties/orderId',
         },
         {
           type: 'Control',
-          scope: '#/properties/purchaseDate'
+          scope: '#/properties/purchaseDate',
         },
         {
           type: 'Control',
-          scope: '#/properties/price'
-        }
-      ]
+          scope: '#/properties/price',
+        },
+      ],
     },
     {
       type: 'HorizontalLayout',
       elements: [
         {
           type: 'Control',
-          scope: '#/properties/shippingAddress/properties/aptNo'
+          scope: '#/properties/shippingAddress/properties/aptNo',
         },
         {
           type: 'Control',
-          scope: '#/properties/shippingAddress/properties/streetNumber'
-        }
-      ]
-    }
-  ]
+          scope: '#/properties/shippingAddress/properties/streetNumber',
+        },
+      ],
+    },
+  ],
 };
 
 export const data = {
@@ -98,8 +98,8 @@ export const data = {
   price: 16,
   shippingAddress: {
     aptNo: 3,
-    streetNumber: 12
-  }
+    streetNumber: 12,
+  },
 };
 
 registerExamples([
@@ -108,6 +108,6 @@ registerExamples([
     label: 'Scope',
     data,
     schema: orderSchema,
-    uischema
-  }
+    uischema,
+  },
 ]);

@@ -34,24 +34,23 @@ import type { StatelessComponent } from 'react';
 import type { VanillaRendererProps } from '../index';
 import { withVanillaBooleanCellProps } from '../util/index';
 
-export const BooleanCell: StatelessComponent<CellProps> =
-  (props: CellProps & VanillaRendererProps) => {
-    const { data, className, id, enabled, uischema, path, handleChange } = props;
+export const BooleanCell: StatelessComponent<CellProps> = (
+  props: CellProps & VanillaRendererProps
+) => {
+  const { data, className, id, enabled, uischema, path, handleChange } = props;
 
-    return (
-      <input
-        type='checkbox'
-        checked={!!data}
-        onChange={ev =>
-          handleChange(path, ev.target.checked)
-        }
-        className={className}
-        id={id}
-        disabled={!enabled}
-        autoFocus={uischema.options && uischema.options.focus}
-      />
-    );
-  };
+  return (
+    <input
+      type='checkbox'
+      checked={!!data}
+      onChange={(ev) => handleChange(path, ev.target.checked)}
+      className={className}
+      id={id}
+      disabled={!enabled}
+      autoFocus={uischema.options && uischema.options.focus}
+    />
+  );
+};
 
 /**
  * Default tester for boolean controls.

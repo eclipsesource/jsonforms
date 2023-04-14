@@ -23,24 +23,24 @@
   THE SOFTWARE.
 */
 import MaterialBooleanCell, {
-  materialBooleanCellTester
+  materialBooleanCellTester,
 } from './MaterialBooleanCell';
 import MaterialBooleanToggleCell, {
-  materialBooleanToggleCellTester
+  materialBooleanToggleCellTester,
 } from './MaterialBooleanToggleCell';
 import MaterialDateCell, { materialDateCellTester } from './MaterialDateCell';
 import MaterialEnumCell, { materialEnumCellTester } from './MaterialEnumCell';
 import MaterialIntegerCell, {
-  materialIntegerCellTester
+  materialIntegerCellTester,
 } from './MaterialIntegerCell';
 import MaterialNumberCell, {
-  materialNumberCellTester
+  materialNumberCellTester,
 } from './MaterialNumberCell';
 import MaterialNumberFormatCell, {
-  materialNumberFormatCellTester
+  materialNumberFormatCellTester,
 } from './MaterialNumberFormatCell';
 import MaterialOneOfEnumCell, {
-  materialOneOfEnumCellTester
+  materialOneOfEnumCellTester,
 } from './MaterialOneOfEnumCell';
 import MaterialTextCell, { materialTextCellTester } from './MaterialTextCell';
 import MaterialTimeCell, { materialTimeCellTester } from './MaterialTimeCell';
@@ -65,7 +65,7 @@ export {
   MaterialTextCell,
   materialTextCellTester,
   MaterialTimeCell,
-  materialTimeCellTester
+  materialTimeCellTester,
 };
 import * as Customizable from './CustomizableCells';
 export { Customizable };

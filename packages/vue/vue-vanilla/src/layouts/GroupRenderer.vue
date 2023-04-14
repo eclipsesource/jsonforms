@@ -27,34 +27,34 @@ import {
   rankWith,
   and,
   isLayout,
-  uiTypeIs
+  uiTypeIs,
 } from '@jsonforms/core';
 import { defineComponent } from 'vue';
 import {
   DispatchRenderer,
   rendererProps,
   useJsonFormsLayout,
-  RendererProps
+  RendererProps,
 } from '../../config/jsonforms';
 import { useVanillaLayout } from '../util';
 
 const layoutRenderer = defineComponent({
-  name: 'group-renderer',
+  name: 'GroupRenderer',
   components: {
-    DispatchRenderer
+    DispatchRenderer,
   },
   props: {
-    ...rendererProps<Layout>()
+    ...rendererProps<Layout>(),
   },
   setup(props: RendererProps<Layout>) {
     return useVanillaLayout(useJsonFormsLayout(props));
-  }
+  },
 });
 
 export default layoutRenderer;
 
 export const entry: JsonFormsRendererRegistryEntry = {
   renderer: layoutRenderer,
-  tester: rankWith(2, and(isLayout, uiTypeIs('Group')))
+  tester: rankWith(2, and(isLayout, uiTypeIs('Group'))),
 };
 </script>

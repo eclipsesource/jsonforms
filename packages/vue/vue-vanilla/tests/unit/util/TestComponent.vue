@@ -5,22 +5,22 @@ import { vanillaRenderers } from '../../../src';
 import { JsonFormsChangeEvent } from '@jsonforms/vue';
 
 export default defineComponent({
-  name: 'test-component',
+  name: 'TestComponent',
   components: {
-    JsonForms
+    JsonForms,
   },
   props: ['initialData', 'schema', 'uischema', 'config'],
   data() {
     return {
       renderers: Object.freeze(vanillaRenderers),
-      data: this.initialData
+      data: this.initialData,
     };
   },
   methods: {
-    onChange(event: JsonFormsChangeEvent){
+    onChange(event: JsonFormsChangeEvent) {
       this.data = event.data;
-    }
-  }
+    },
+  },
 });
 </script>
 

@@ -22,12 +22,16 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+} from '@angular/core';
 import {
   RankedTester,
   rankWith,
   uiTypeIs,
-  VerticalLayout
+  VerticalLayout,
 } from '@jsonforms/core';
 import { LayoutRenderer } from './layout.renderer';
 import { JsonFormsAngularService } from '@jsonforms/angular';
@@ -36,15 +40,24 @@ import { JsonFormsAngularService } from '@jsonforms/angular';
   selector: 'VerticalLayoutRenderer',
   template: `
     <div fxLayout="column" fxLayoutGap="16px" [fxHide]="hidden">
-      <div *ngFor="let props of uischema | layoutChildrenRenderProps: schema: path; trackBy: trackElement" fxFlex>
+      <div
+        *ngFor="
+          let props of uischema | layoutChildrenRenderProps : schema : path;
+          trackBy: trackElement
+        "
+        fxFlex
+      >
         <jsonforms-outlet [renderProps]="props"></jsonforms-outlet>
       </div>
     </div>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VerticalLayoutRenderer extends LayoutRenderer<VerticalLayout> {
-  constructor(jsonFormsService: JsonFormsAngularService, changeDetectionRef: ChangeDetectorRef) {
+  constructor(
+    jsonFormsService: JsonFormsAngularService,
+    changeDetectionRef: ChangeDetectorRef
+  ) {
     super(jsonFormsService, changeDetectionRef);
   }
 }

@@ -24,66 +24,66 @@
 */
 import MaterialBooleanControl, {
   materialBooleanControlTester,
-  MaterialBooleanControl as MaterialBooleanControlUnwrapped
+  MaterialBooleanControl as MaterialBooleanControlUnwrapped,
 } from './MaterialBooleanControl';
 import MaterialBooleanToggleControl, {
   materialBooleanToggleControlTester,
-  MaterialBooleanToggleControl as MaterialBooleanToggleControlUnwrapped
+  MaterialBooleanToggleControl as MaterialBooleanToggleControlUnwrapped,
 } from './MaterialBooleanToggleControl';
 import MaterialEnumControl, {
   materialEnumControlTester,
-  MaterialEnumControl as MaterialEnumControlUnwrapped
+  MaterialEnumControl as MaterialEnumControlUnwrapped,
 } from './MaterialEnumControl';
 import MaterialNativeControl, {
   materialNativeControlTester,
-  MaterialNativeControl as MaterialNativeControlUnwrapped
+  MaterialNativeControl as MaterialNativeControlUnwrapped,
 } from './MaterialNativeControl';
 import MaterialDateControl, {
   materialDateControlTester,
-  MaterialDateControl as MaterialDateControlUnwrapped
+  MaterialDateControl as MaterialDateControlUnwrapped,
 } from './MaterialDateControl';
 import MaterialDateTimeControl, {
   materialDateTimeControlTester,
-  MaterialDateTimeControl as MaterialDateTimeControlUnwrapped
+  MaterialDateTimeControl as MaterialDateTimeControlUnwrapped,
 } from './MaterialDateTimeControl';
 import MaterialTimeControl, {
   materialTimeControlTester,
-  MaterialTimeControl as MaterialTimeControlUnwrapped
+  MaterialTimeControl as MaterialTimeControlUnwrapped,
 } from './MaterialTimeControl';
 import MaterialSliderControl, {
   materialSliderControlTester,
-  MaterialSliderControl as MaterialSliderControlUnwrapped
+  MaterialSliderControl as MaterialSliderControlUnwrapped,
 } from './MaterialSliderControl';
 import MaterialRadioGroupControl, {
   materialRadioGroupControlTester,
-  MaterialRadioGroupControl as MaterialRadioGroupControlUnwrapped
+  MaterialRadioGroupControl as MaterialRadioGroupControlUnwrapped,
 } from './MaterialRadioGroupControl';
 import MaterialIntegerControl, {
   materialIntegerControlTester,
-  MaterialIntegerControl as MaterialIntegerControlUnwrapped
+  MaterialIntegerControl as MaterialIntegerControlUnwrapped,
 } from './MaterialIntegerControl';
 import MaterialNumberControl, {
   materialNumberControlTester,
-  MaterialNumberControl as MaterialNumberControlUnwrapped
+  MaterialNumberControl as MaterialNumberControlUnwrapped,
 } from './MaterialNumberControl';
 import MaterialTextControl, {
   materialTextControlTester,
-  MaterialTextControl as MaterialTextControlUnwrapped
+  MaterialTextControl as MaterialTextControlUnwrapped,
 } from './MaterialTextControl';
 
 import MaterialAnyOfStringOrEnumControl, {
   materialAnyOfStringOrEnumControlTester,
-  MaterialAnyOfStringOrEnumControl as MaterialAnyOfStringOrEnumControlUnwrapped
+  MaterialAnyOfStringOrEnumControl as MaterialAnyOfStringOrEnumControlUnwrapped,
 } from './MaterialAnyOfStringOrEnumControl';
 
 import MaterialOneOfEnumControl, {
   materialOneOfEnumControlTester,
-  MaterialOneOfEnumControl as MaterialOneOfEnumControlUnwrapped
+  MaterialOneOfEnumControl as MaterialOneOfEnumControlUnwrapped,
 } from './MaterialOneOfEnumControl';
 
 import MaterialOneOfRadioGroupControl, {
   materialOneOfRadioGroupControlTester,
-  MaterialOneOfRadioGroupControl as MaterialOneOfRadioGroupControlUnwrapped
+  MaterialOneOfRadioGroupControl as MaterialOneOfRadioGroupControlUnwrapped,
 } from './MaterialOneOfRadioGroupControl';
 
 export const Unwrapped = {
@@ -101,7 +101,7 @@ export const Unwrapped = {
   MaterialTextControl: MaterialTextControlUnwrapped,
   MaterialAnyOfStringOrEnumControl: MaterialAnyOfStringOrEnumControlUnwrapped,
   MaterialOneOfEnumControl: MaterialOneOfEnumControlUnwrapped,
-  MaterialOneOfRadioGroupControl: MaterialOneOfRadioGroupControlUnwrapped
+  MaterialOneOfRadioGroupControl: MaterialOneOfRadioGroupControlUnwrapped,
 };
 
 export {
@@ -134,7 +134,7 @@ export {
   MaterialOneOfEnumControl,
   materialOneOfEnumControlTester,
   MaterialOneOfRadioGroupControl,
-  materialOneOfRadioGroupControlTester
+  materialOneOfRadioGroupControlTester,
 };
 
 export * from './MaterialInputControl';

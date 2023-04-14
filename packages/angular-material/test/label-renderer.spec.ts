@@ -35,13 +35,13 @@ const schema: JsonSchema = {
   type: 'object',
   properties: {
     foo: {
-      type: 'string'
-    }
-  }
+      type: 'string',
+    },
+  },
 };
 const uischema: LabelElement = {
   type: 'Label',
-  text: 'FooBar'
+  text: 'FooBar',
 };
 
 describe('Material label field tester', () => {
@@ -59,7 +59,7 @@ describe('Label Renderer Base Tests', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [componentUT],
-      providers: providers
+      providers: providers,
     }).compileComponents();
   });
   beforeEach(() => {

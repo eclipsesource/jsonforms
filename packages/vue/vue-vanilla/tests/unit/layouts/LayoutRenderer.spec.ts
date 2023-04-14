@@ -9,18 +9,18 @@ const vertical = {
   elements: [
     {
       type: 'Control',
-      scope: '#'
+      scope: '#',
     },
     {
       type: 'Control',
-      scope: '#'
-    }
-  ]
+      scope: '#',
+    },
+  ],
 };
 const horizontal = {
   ...vertical,
-  type: "HorizontalLayout"
-}
+  type: 'HorizontalLayout',
+};
 
 describe('LayoutRenderer.vue', () => {
   it('renders a vertical container div', () => {

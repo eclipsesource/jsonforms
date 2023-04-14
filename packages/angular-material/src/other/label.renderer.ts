@@ -25,7 +25,7 @@
 import { Component } from '@angular/core';
 import {
   JsonFormsAngularService,
-  JsonFormsBaseRenderer
+  JsonFormsBaseRenderer,
 } from '@jsonforms/angular';
 import {
   JsonFormsState,
@@ -40,9 +40,7 @@ import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'LabelRenderer',
-  template: `
-    <label class="mat-title" fxFlex> {{ label }} </label>
-  `
+  template: ` <label class="mat-title" fxFlex> {{ label }} </label> `,
 })
 export class LabelRenderer extends JsonFormsBaseRenderer<LabelElement> {
   label: string;
@@ -56,10 +54,13 @@ export class LabelRenderer extends JsonFormsBaseRenderer<LabelElement> {
   ngOnInit() {
     this.subscription = this.jsonFormsService.$state.subscribe({
       next: (state: JsonFormsState) => {
-        const props = mapStateToLabelProps(state, this.getOwnProps() as OwnPropsOfLabel);
+        const props = mapStateToLabelProps(
+          state,
+          this.getOwnProps() as OwnPropsOfLabel
+        );
         this.visible = props.visible;
-        this.label = props.text
-      }
+        this.label = props.text;
+      },
     });
   }
 

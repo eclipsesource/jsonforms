@@ -8,8 +8,8 @@ const schema = {
       enum: [
         'http://gedcomx.org/High',
         'http://gedcomx.org/Medium',
-        'http://gedcomx.org/Low'
-      ]
+        'http://gedcomx.org/Low',
+      ],
     },
     genderTypes: {
       type: 'string',
@@ -17,8 +17,8 @@ const schema = {
         'http://gedcomx.org/Male',
         'http://gedcomx.org/Female',
         'http://gedcomx.org/Unknown',
-        'http://gedcomx.org/Intersex'
-      ]
+        'http://gedcomx.org/Intersex',
+      ],
     },
     nameTypes: {
       type: 'string',
@@ -29,16 +29,16 @@ const schema = {
         'http://gedcomx.org/Nickname',
         'http://gedcomx.org/AdoptiveName',
         'http://gedcomx.org/FormalName',
-        'http://gedcomx.org/ReligiousName'
-      ]
+        'http://gedcomx.org/ReligiousName',
+      ],
     },
     namePartTypes: {
       enum: [
         'http://gedcomx.org/Prefix',
         'http://gedcomx.org/Suffix',
         'http://gedcomx.org/Given',
-        'http://gedcomx.org/Surname'
-      ]
+        'http://gedcomx.org/Surname',
+      ],
     },
     personFactTypes: {
       type: 'string',
@@ -103,25 +103,25 @@ const schema = {
         'http://gedcomx.org/Stillbirth',
         'http://gedcomx.org/Will',
         'http://gedcomx.org/Visit',
-        'http://gedcomx.org/Yahrzeit'
-      ]
+        'http://gedcomx.org/Yahrzeit',
+      ],
     },
     uri: {
-      type: 'string'
+      type: 'string',
     },
     localeTag: {
-      type: 'string'
+      type: 'string',
       //   pattern:
       //     "^(((((?'language'[a-z]{2,3})(-(?'extlang'[a-z]{3})){0,3})|(?'language'[a-z]{4})|(?'language'[a-z]{5,8}))(-(?'script'[a-z]{4}))?(-(?'region'[a-z]{2}|[0-9]{3}))?(-(?'variant'[a-z0-9]{5,8}|[0-9][a-z0-9]{3}))*(-(?'extensions'[a-z0-9-[x]](-[a-z0-9]{2,8})+))*(-x(- (?'privateuse'[a-z0-9]{1,8}))+)?)|(x(- (?'privateuse'[a-z0-9]{1,8}))+)|(?'grandfathered'(?'irregular'en-GB-oed |i-ami |i-bnn |i-default |i-enochian |i-hak |i-klingon |i-lux |i-mingo |i-navajo |i-pwn |i-tao |i-tay |i-tsu |sgn-BE-FR |sgn-BE-NL |sgn-CH-DE)|(?'regular'art-lojban |cel-gaulish |no-bok |no-nyn |zh-guoyu |zh-hakka |zh-min |zh-min-nan |zh-xiang)))$"
     },
     resourceReference: {
       type: 'object',
       properties: {
-        resource: { $ref: '#/definitions/uri' }
-      }
+        resource: { $ref: '#/definitions/uri' },
+      },
     },
     identifier: {
-      type: 'object'
+      type: 'object',
     },
     attribution: {
       title: 'Attribution',
@@ -129,129 +129,130 @@ const schema = {
         contributor: {
           $ref: '#/definitions/resourceReference',
           description:
-            'Reference to the agent to whom the attributed data is attributed.'
+            'Reference to the agent to whom the attributed data is attributed.',
         },
         modified: {
           type: 'number',
-          description: 'Timestamp of when the attributed data was contributed.'
+          description: 'Timestamp of when the attributed data was contributed.',
         },
         changeMessage: {
           type: 'string',
           description:
-            'A statement of why the attributed data is being provided by the contributor.'
+            'A statement of why the attributed data is being provided by the contributor.',
         },
         creator: {
           $ref: '#/definitions/resourceReference',
           description:
-            'Reference to the agent that created the attributed data. The creator MAY be different from the contributor if changes were made to the attributed data.'
+            'Reference to the agent that created the attributed data. The creator MAY be different from the contributor if changes were made to the attributed data.',
         },
         created: {
           type: 'number',
-          description: 'Timestamp of when the attributed data was contributed.'
-        }
-      }
+          description: 'Timestamp of when the attributed data was contributed.',
+        },
+      },
     },
     note: {
       title: 'Note',
       properties: {
         lang: {
           $ref: '#/definitions/localeTag',
-          description: 'The locale identifier for the note.'
+          description: 'The locale identifier for the note.',
         },
         subject: {
           type: 'string',
-          description: 'A subject or title for the note.'
+          description: 'A subject or title for the note.',
         },
         text: { type: 'string', description: 'The text of the note.' },
         attribution: {
           $ref: '#/definitions/attribution',
-          description: 'The attribution of this note.'
-        }
+          description: 'The attribution of this note.',
+        },
       },
-      required: ['text']
+      required: ['text'],
     },
     textValue: {
       type: 'object',
       properties: {
         lang: {
           $ref: '#/definitions/localeTag',
-          description: 'The locale identifier for the value of the text.'
+          description: 'The locale identifier for the value of the text.',
         },
-        value: { type: 'string', description: 'The text value.' }
+        value: { type: 'string', description: 'The text value.' },
       },
-      required: ['value']
+      required: ['value'],
     },
     sourceCitation: {
       type: 'object',
       properties: {
         lang: {
           $ref: '#/definitions/localeTag',
-          description: 'The locale identifier for the bibliographic metadata.'
+          description: 'The locale identifier for the bibliographic metadata.',
         },
         value: {
           type: 'string',
-          description: 'The bibliographic metadata rendered as a full citation.'
-        }
+          description:
+            'The bibliographic metadata rendered as a full citation.',
+        },
       },
-      required: ['value']
+      required: ['value'],
     },
     sourceReference: {
       title: 'SourceReference',
       properties: {
         description: {
           $ref: '#/definitions/uri',
-          description: 'Reference to a description of the target source.'
+          description: 'Reference to a description of the target source.',
         },
         descriptionId: {
           type: 'string',
-          description: 'The id of the target source.'
+          description: 'The id of the target source.',
         },
         attribution: {
           $ref: '#/definitions/attribution',
-          description: 'The attribution of this source reference.'
+          description: 'The attribution of this source reference.',
         },
         qualifiers: {
           items: { $ref: '#/definitions/sourceReferenceQualifier' },
           description:
-            'Qualifiers for the reference, used to identify specific fragments of the source that are being referenced.'
-        }
+            'Qualifiers for the reference, used to identify specific fragments of the source that are being referenced.',
+        },
       },
-      required: ['description']
+      required: ['description'],
     },
     sourceReferenceQualifier: {
       properties: {
         name: {
           anyOf: [
             { $ref: '#/definitions/sourceReferenceQualifierNames' },
-            { $ref: '#/definitions/uri' }
-          ]
+            { $ref: '#/definitions/uri' },
+          ],
         },
-        value: { type: 'string' }
+        value: { type: 'string' },
       },
-      required: ['name']
+      required: ['name'],
     },
     sourceReferenceQualifierNames: {
       enum: [
         'http://gedcomx.org/CharacterRegion',
         'http://gedcomx.org/RectangleRegion',
-        'http://gedcomx.org/TimeRegion'
-      ]
+        'http://gedcomx.org/TimeRegion',
+      ],
     },
     evidenceReference: {
       title: 'EvidenceReference',
       properties: {
         resource: { $ref: '#/definitions/uri' }, //subject
-        attribution: { $ref: '#/definitions/attribution' }
+        attribution: { $ref: '#/definitions/attribution' },
       },
-      required: ['resource']
+      required: ['resource'],
     },
     onlineAccount: {
       type: 'object',
       properties: {
         serviceHomepage: { $ref: '#/definitions/resourceReference' },
-        accountName: { type: 'string' }
+        accountName: { type: 'string' },
       },
-      required: ['serviceHomepage', 'accountName']
+      required: ['serviceHomepage', 'accountName'],
     },
     address: {
       type: 'object',
@@ -266,8 +267,8 @@ const schema = {
         street3: { type: 'string' },
         street4: { type: 'string' },
         street5: { type: 'string' },
-        street6: { type: 'string' }
-      }
+        street6: { type: 'string' },
+      },
     },
     conclusion: {
       type: 'object',
@@ -275,38 +276,38 @@ const schema = {
       properties: {
         id: {
           type: 'string',
-          description: 'An identifier for the conclusion data.'
+          description: 'An identifier for the conclusion data.',
         },
         lang: {
           $ref: '#/definitions/localeTag',
-          description: 'The locale identifier for the conclusion.'
+          description: 'The locale identifier for the conclusion.',
         },
         sources: {
           items: { $ref: '#/definitions/sourceReference' },
           description:
-            'The list of references to the sources of related to this conclusion.'
+            'The list of references to the sources of related to this conclusion.',
         },
         analysis: {
           $ref: '#/definitions/resourceReference',
           description:
-            'Reference to a document containing analysis supporting this conclusion.'
+            'Reference to a document containing analysis supporting this conclusion.',
         },
         notes: {
           items: { $ref: '#/definitions/note' },
-          description: 'A list of notes about this conclusion.'
+          description: 'A list of notes about this conclusion.',
         },
         confidence: {
           anyOf: [
             { $ref: '#/definitions/uri' },
-            { $ref: '#/definitions/confidenceTypes' }
+            { $ref: '#/definitions/confidenceTypes' },
           ],
-          description: 'Reference to a confidence level for this conclusion.'
+          description: 'Reference to a confidence level for this conclusion.',
         },
         attribution: {
           $ref: '#/definitions/attribution',
-          description: 'The attribution of this conclusion.'
-        }
-      }
+          description: 'The attribution of this conclusion.',
+        },
+      },
     },
     subject: {
       title: 'Subject',
@@ -317,25 +318,25 @@ const schema = {
             extracted: {
               type: 'boolean',
               description:
-                'Whether this subject is to be constrained as an extracted conclusion.'
+                'Whether this subject is to be constrained as an extracted conclusion.',
             },
             evidence: {
               items: { $ref: '#/definitions/evidenceReference' },
               description:
-                'References to other subjects that support this subject.'
+                'References to other subjects that support this subject.',
             },
             media: {
               items: { $ref: '#/definitions/sourceReference' },
               description:
-                'References to multimedia resources for this subject, such as photos or videos, intended to provide additional context or illustration for the subject and not considered evidence supporting the identity of the subject or its supporting conclusions.'
+                'References to multimedia resources for this subject, such as photos or videos, intended to provide additional context or illustration for the subject and not considered evidence supporting the identity of the subject or its supporting conclusions.',
             },
             identifiers: {
               $ref: '#/definitions/identifier',
-              description: 'A list of identifiers for the subject.'
-            }
-          }
-        }
-      ]
+              description: 'A list of identifiers for the subject.',
+            },
+          },
+        },
+      ],
     },
     gender: {
       allOf: [
@@ -345,14 +346,14 @@ const schema = {
             type: {
               anyOf: [
                 { $ref: '#/definitions/uri' },
-                { $ref: '#/definitions/genderTypes' }
+                { $ref: '#/definitions/genderTypes' },
               ],
-              description: 'Enumerated value identifying the gender.'
-            }
+              description: 'Enumerated value identifying the gender.',
+            },
           },
-          required: ['type']
-        }
-      ]
+          required: ['type'],
+        },
+      ],
     },
     date: {
       type: 'object',
@@ -360,16 +361,16 @@ const schema = {
         original: {
           type: 'string',
           description:
-            'The original value of the date as supplied by the contributor.'
+            'The original value of the date as supplied by the contributor.',
         },
         formal: {
           type: 'string',
           pattern:
             '^(A?[\\+-]\\d{4}(-\\d{2})?(-\\d{2})?T?(\\d{2})?(:\\d{2})?(:\\d{2})?([\\+-]\\d{2}(:\\d{2})?|Z)?)|(P(\\d{0,4}Y)?(\\d{0,4}M)?(\\d{0,4}D)?(T(\\d{0,4}H)?(\\d{0,4}M)?(\\d{0,4}S)?)?)$',
           description:
-            'The standardized formal value of the date, formatted according to the GEDCOM X Date Format specification.'
-        }
-      }
+            'The standardized formal value of the date, formatted according to the GEDCOM X Date Format specification.',
+        },
+      },
     },
     name: {
       title: 'Name',
@@ -380,25 +381,25 @@ const schema = {
             type: {
               anyOf: [
                 { $ref: '#/definitions/uri' },
-                { $ref: '#/definitions/nameTypes' }
+                { $ref: '#/definitions/nameTypes' },
               ],
-              description: 'Enumerated value identifying the name type.'
+              description: 'Enumerated value identifying the name type.',
             },
             date: {
               $ref: '#/definitions/date',
-              description: 'The date of applicability of the name.'
+              description: 'The date of applicability of the name.',
             },
             nameForms: {
               items: {
-                $ref: '#/definitions/nameForm'
+                $ref: '#/definitions/nameForm',
               },
               description:
-                "The name form(s) that best express this name, usually representations considered proper and well formed in the person's native, historical cultural context."
-            }
+                "The name form(s) that best express this name, usually representations considered proper and well formed in the person's native, historical cultural context.",
+            },
           },
-          required: ['nameForms']
-        }
-      ]
+          required: ['nameForms'],
+        },
+      ],
     },
     namePart: {
       title: 'NamePart',
@@ -408,33 +409,34 @@ const schema = {
         type: {
           anyOf: [
             { $ref: '#/definitions/uri' },
-            { $ref: '#/definitions/namePartTypes' }
+            { $ref: '#/definitions/namePartTypes' },
           ],
-          description: 'Enumerated value identifying the type of the name part.'
+          description:
+            'Enumerated value identifying the type of the name part.',
         },
         value: {
           type: 'string',
-          description: 'The term(s) from the name that make up this name part.'
+          description: 'The term(s) from the name that make up this name part.',
         },
         qualifiers: {
           items: { $ref: '#/definitions/namePartQualifier' },
           description:
-            'Qualifiers to add additional semantic meaning to the name part.'
-        }
+            'Qualifiers to add additional semantic meaning to the name part.',
+        },
       },
-      required: ['value']
+      required: ['value'],
     },
     namePartQualifier: {
       properties: {
         name: {
           anyOf: [
             { $ref: '#/definitions/namePartQualifierNames' },
-            { $ref: '#/definitions/uri' }
-          ]
+            { $ref: '#/definitions/uri' },
+          ],
         },
-        value: { type: 'string' }
+        value: { type: 'string' },
       },
-      required: ['name']
+      required: ['name'],
     },
     namePartQualifierNames: {
       enum: [
@@ -453,8 +455,8 @@ const schema = {
         'http://gedcomx.org/Characteristic', //A name derived from a characteristic. Name part qualifiers of type Characteristic SHOULD NOT provide a value.
         'http://gedcomx.org/Postnom', //A name mandated by law for populations from Congo Free State / Belgian Congo / Congo / Democratic Republic of Congo (formerly Zaire). Name part qualifiers of type Postnom SHOULD NOT provide a value.
         'http://gedcomx.org/Particle', //A grammatical designation for articles (a, the, dem, las, el, etc.), prepositions (of, from, aus, zu, op, etc.), initials, annotations (e.g. twin, wife of, infant, unknown), comparators (e.g. Junior, Senior, younger, little), ordinals (e.g. III, eighth), descendancy words (e.g. ben, ibn, bat, bin, bint, bar), and conjunctions (e.g. and, or, nee, ou, y, o, ne, &). Name part qualifiers of type Particle SHOULD NOT provide a value.
-        'http://gedcomx.org/RootName' //The "root" of a name part as distinguished from prefixes or suffixes. For example, the root of the Polish name "Wilkówna" is "Wilk". A RootName qualifier MUST provide a value property.
-      ]
+        'http://gedcomx.org/RootName', //The "root" of a name part as distinguished from prefixes or suffixes. For example, the root of the Polish name "Wilkówna" is "Wilk". A RootName qualifier MUST provide a value property.
+      ],
     },
     nameForm: {
       title: 'NameForm',
@@ -466,20 +468,20 @@ const schema = {
       properties: {
         lang: {
           $ref: '#/definitions/localeTag',
-          description: 'The locale identifier for the name form.'
+          description: 'The locale identifier for the name form.',
         },
         fullText: {
           type: 'string',
           description:
-            'A full rendering of the name (or as much of the name as is known).'
+            'A full rendering of the name (or as much of the name as is known).',
         },
         parts: {
           items: {
-            $ref: '#/definitions/namePart'
+            $ref: '#/definitions/namePart',
           },
-          description: 'Any identified name parts from the name.'
-        }
-      }
+          description: 'Any identified name parts from the name.',
+        },
+      },
     },
     fact: {
       title: 'PersonFact',
@@ -490,40 +492,40 @@ const schema = {
             type: {
               anyOf: [
                 { $ref: '#/definitions/uri' },
-                { $ref: '#/definitions/personFactTypes' }
+                { $ref: '#/definitions/personFactTypes' },
               ],
-              description: 'Enumerated value identifying the type of the fact.'
+              description: 'Enumerated value identifying the type of the fact.',
             },
             date: {
               $ref: '#/definitions/date',
-              description: 'The date of applicability of the fact.'
+              description: 'The date of applicability of the fact.',
             },
             place: {
               $ref: '#/definitions/placeReference',
-              description: 'A reference to the place applicable to this fact.'
+              description: 'A reference to the place applicable to this fact.',
             },
             value: { type: 'string', description: 'The value of the fact.' },
             qualifiers: {
               items: { $ref: '#/definitions/factQualifier' },
               description:
-                'Qualifiers to add additional details about the fact.'
-            }
+                'Qualifiers to add additional details about the fact.',
+            },
           },
-          required: ['type']
-        }
-      ]
+          required: ['type'],
+        },
+      ],
     },
     factQualifier: {
       properties: {
         name: {
           anyOf: [
             { $ref: '#/definitions/factQualifierNames' },
-            { $ref: '#/definitions/uri' }
-          ]
+            { $ref: '#/definitions/uri' },
+          ],
         },
-        value: { type: 'string' }
+        value: { type: 'string' },
       },
-      required: ['name']
+      required: ['name'],
     },
     factQualifierNames: {
       enum: [
@@ -531,8 +533,8 @@ const schema = {
         'http://gedcomx.org/Cause',
         'http://gedcomx.org/Religion',
         'http://gedcomx.org/Transport',
-        'http://gedcomx.org/NonConsensual'
-      ]
+        'http://gedcomx.org/NonConsensual',
+      ],
     },
     eventRole: {
       allOf: [
@@ -541,32 +543,33 @@ const schema = {
           properties: {
             person: {
               $ref: '#/definitions/resourceReference',
-              description: 'Reference to the event participant.'
+              description: 'Reference to the event participant.',
             },
             type: {
               anyOf: [
                 { $ref: '#/definitions/uri' },
-                { $ref: '#/definitions/eventRoleTypes' }
+                { $ref: '#/definitions/eventRoleTypes' },
               ],
               description:
-                "Enumerated value identifying the participant's role."
+                "Enumerated value identifying the participant's role.",
             },
             details: {
               type: 'string',
-              description: 'Details about the role of participant in the event.'
-            }
+              description:
+                'Details about the role of participant in the event.',
+            },
           },
-          required: ['person']
-        }
-      ]
+          required: ['person'],
+        },
+      ],
     },
     eventRoleTypes: {
       enum: [
         'http://gedcomx.org/Principal',
         'http://gedcomx.org/Participant',
         'http://gedcomx.org/Official',
-        'http://gedcomx.org/Witness'
-      ]
+        'http://gedcomx.org/Witness',
+      ],
     },
     placeReference: {
       type: 'object',
@@ -574,25 +577,25 @@ const schema = {
         original: {
           type: 'string',
           description:
-            'The original place name text as supplied by the contributor.'
+            'The original place name text as supplied by the contributor.',
         },
         description: {
           $ref: '#/definitions/uri',
-          description: 'A reference to a description of this place.'
-        }
-      }
+          description: 'A reference to a description of this place.',
+        },
+      },
     },
     coverage: {
       properties: {
         spatial: {
           $ref: '#/definitions/placeReference',
-          description: 'The spatial (i.e., geographic) coverage.'
+          description: 'The spatial (i.e., geographic) coverage.',
         },
         temporal: {
           $ref: '#/definitions/date',
-          description: 'The temporal coverage.'
-        }
-      }
+          description: 'The temporal coverage.',
+        },
+      },
     },
     groupRole: {
       allOf: [
@@ -601,26 +604,26 @@ const schema = {
           properties: {
             person: {
               $ref: '#/definitions/resourceReference',
-              description: 'Reference to the group participant.'
+              description: 'Reference to the group participant.',
             },
             type: {
               $ref: '#/definitions/uri',
               description:
-                "Enumerated value identifying the participant's role."
+                "Enumerated value identifying the participant's role.",
             },
             date: {
               $ref: '#/definitions/date',
-              description: 'The date of applicability of the role.'
+              description: 'The date of applicability of the role.',
             },
             details: {
               type: 'string',
               description:
-                'Details about the role of he participant in the group.'
-            }
+                'Details about the role of he participant in the group.',
+            },
           },
-          required: ['person']
-        }
-      ]
+          required: ['person'],
+        },
+      ],
     },
     person: {
       title: 'Person',
@@ -631,23 +634,23 @@ const schema = {
             private: {
               type: 'boolean',
               description:
-                'Whether this instance of Person has been designated for limited distribution or display.'
+                'Whether this instance of Person has been designated for limited distribution or display.',
             },
             gender: {
               $ref: '#/definitions/gender',
-              description: 'The sex of the person as assigned at birth.'
+              description: 'The sex of the person as assigned at birth.',
             },
             names: {
               items: { $ref: '#/definitions/name' },
-              description: 'The names of the person.'
+              description: 'The names of the person.',
             },
             facts: {
               items: { $ref: '#/definitions/fact' },
-              description: 'The facts of the person.'
-            }
-          }
-        }
-      ]
+              description: 'The facts of the person.',
+            },
+          },
+        },
+      ],
     },
     relationship: {
       allOf: [
@@ -657,34 +660,35 @@ const schema = {
             type: {
               anyOf: [
                 { $ref: '#/definitions/relationshipType' },
-                { $ref: '#/definitions/uri' }
+                { $ref: '#/definitions/uri' },
               ],
               description:
-                'Enumerated value identifying the type of the relationship.'
+                'Enumerated value identifying the type of the relationship.',
             },
             person1: {
               $ref: '#/definitions/resourceReference',
-              description: 'Reference to the first person in the relationship.'
+              description: 'Reference to the first person in the relationship.',
             },
             person2: {
               $ref: '#/definitions/resourceReference',
-              description: 'Reference to the second person in the relationship.'
+              description:
+                'Reference to the second person in the relationship.',
             },
             facts: {
               items: { $ref: '#/definitions/fact' },
-              description: 'The facts about the relationship.'
-            }
+              description: 'The facts about the relationship.',
+            },
           },
-          required: ['person1', 'person2']
-        }
-      ]
+          required: ['person1', 'person2'],
+        },
+      ],
     },
     relationshipType: {
       enum: [
         'http://gedcomx.org/Couple', //	A relationship of a pair of persons.
         'http://gedcomx.org/ParentChild', //	A relationship from a parent to a child.
-        'http://gedcomx.org/EnslavedBy' //	A relationship from an enslaved person to the enslaver or slaveholder of the person.
-      ]
+        'http://gedcomx.org/EnslavedBy', //	A relationship from an enslaved person to the enslaver or slaveholder of the person.
+      ],
     },
     sourceDescription: {
       title: 'SourceDescription',
@@ -692,108 +696,109 @@ const schema = {
         id: {
           type: 'string',
           description:
-            'An identifier for the data structure holding the source description data.'
+            'An identifier for the data structure holding the source description data.',
         },
         resourceType: {
           anyOf: [
             { $ref: '#/definitions/resourceTypes' },
-            { $ref: '#/definitions/uri' }
+            { $ref: '#/definitions/uri' },
           ],
           description:
-            'Enumerated value identifying the type of resource being described.'
+            'Enumerated value identifying the type of resource being described.',
         },
         citations: {
           items: { $ref: '#/definitions/sourceCitation' },
-          description: 'The citation(s) for this source.'
+          description: 'The citation(s) for this source.',
         },
         mediaType: {
           type: 'string',
           description:
-            'A hint about the media type of the resource being described.'
+            'A hint about the media type of the resource being described.',
         },
         about: {
           $ref: '#/definitions/uri',
           description:
-            'A uniform resource identifier (URI) for the resource being described.'
+            'A uniform resource identifier (URI) for the resource being described.',
         },
         mediator: {
           $ref: '#/definitions/resourceReference',
           description:
-            'A reference to the entity that mediates access to the described source.'
+            'A reference to the entity that mediates access to the described source.',
         },
         publisher: {
           $ref: '#/definitions/resourceReference',
           description:
-            'A reference to the entity responsible for making the described source available.'
+            'A reference to the entity responsible for making the described source available.',
         },
         sources: {
           items: { $ref: '#/definitions/sourceReference' },
           description:
-            'A list of references to any sources from which this source is derived.'
+            'A list of references to any sources from which this source is derived.',
         },
         analysis: {
           $ref: '#/definitions/resourceReference',
           description:
-            'A reference to a document containing analysis about this source.'
+            'A reference to a document containing analysis about this source.',
         },
         componentOf: {
           $ref: '#/definitions/sourceReference',
           description:
-            'A reference to the source that contains this source, i.e. its parent context. Used when the description of a source is not complete without the description of its parent (or containing) source.'
+            'A reference to the source that contains this source, i.e. its parent context. Used when the description of a source is not complete without the description of its parent (or containing) source.',
         },
         titles: {
           items: { $ref: '#/definitions/textValue' },
-          description: 'The display name(s) for this source.'
+          description: 'The display name(s) for this source.',
         },
         notes: {
           items: { $ref: '#/definitions/note' },
-          description: 'A list of notes about a source.'
+          description: 'A list of notes about a source.',
         },
         attribution: {
           $ref: '#/definitions/attribution',
-          description: 'The attribution of this source description.'
+          description: 'The attribution of this source description.',
         },
         rights: {
           items: { $ref: '#/definitions/resourceReference' },
-          description: 'The rights for this resource.'
+          description: 'The rights for this resource.',
         },
         coverage: {
           $ref: '#/definitions/coverage',
-          description: 'The coverage of the resource.'
+          description: 'The coverage of the resource.',
         },
         descriptions: {
           items: { $ref: '#/definitions/textValue' },
-          description: 'Human-readable descriptions of this source.'
+          description: 'Human-readable descriptions of this source.',
         },
         identifiers: {
           items: { $ref: '#/definitions/identifier' },
-          description: 'A list of identifiers for the resource being described.'
+          description:
+            'A list of identifiers for the resource being described.',
         },
         created: {
           type: 'number',
           description:
-            'Timestamp of when the resource being described was created.'
+            'Timestamp of when the resource being described was created.',
         },
         modified: {
           type: 'number',
           description:
-            'Timestamp of when the resource being described was modified.'
+            'Timestamp of when the resource being described was modified.',
         },
         repository: {
           $ref: '#/definitions/resourceReference',
           description:
-            'A reference to the repository that contains the described resource.'
-        }
+            'A reference to the repository that contains the described resource.',
+        },
       },
-      required: ['citations']
+      required: ['citations'],
     },
     resourceTypes: {
       enum: [
         'http://gedcomx.org/Collection', //A collection of genealogical resources. A collection may contain physical artifacts (such as a collection of books in a library), records (such as the 1940 U.S. Census), or digital artifacts (such as an online genealogical application).
         'http://gedcomx.org/PhysicalArtifact', //A physical artifact, such as a book.
         'http://gedcomx.org/DigitalArtifact', //A digital artifact, such as a digital image of a birth certificate or other record.
-        'http://gedcomx.org/Record' //A historical record, such as a census record or a vital record.
-      ]
+        'http://gedcomx.org/Record', //A historical record, such as a census record or a vital record.
+      ],
     },
     agent: {
       title: 'Agent',
@@ -801,34 +806,34 @@ const schema = {
         id: { type: 'string' },
         identifiers: {
           type: 'array',
-          items: { $ref: '#/definitions/identifier' }
+          items: { $ref: '#/definitions/identifier' },
         },
         names: {
           type: 'array',
-          items: { $ref: '#/definitions/textValue' }
+          items: { $ref: '#/definitions/textValue' },
         },
         homepage: { $ref: '#/definitions/resourceReference' },
         openid: { $ref: '#/definitions/resourceReference' },
         accounts: {
           type: 'array',
-          items: { $ref: '#/definitions/onlineAccount' }
+          items: { $ref: '#/definitions/onlineAccount' },
         },
         emails: {
           type: 'array',
-          items: { $ref: '#/definitions/resourceReference' }
+          items: { $ref: '#/definitions/resourceReference' },
         },
         phones: {
           type: 'array',
-          items: { $ref: '#/definitions/resourceReference' }
+          items: { $ref: '#/definitions/resourceReference' },
         },
         addresses: {
           type: 'array',
-          items: { $ref: '#/definitions/address' }
+          items: { $ref: '#/definitions/address' },
         },
         person: {
-          $ref: '#/definitions/resourceReference'
-        }
-      }
+          $ref: '#/definitions/resourceReference',
+        },
+      },
     },
     event: {
       allOf: [
@@ -838,18 +843,18 @@ const schema = {
             type: {
               anyOf: [
                 { $ref: '#/definitions/eventTypes' },
-                { $ref: '#/definitions/uri' }
-              ]
+                { $ref: '#/definitions/uri' },
+              ],
             },
             date: { $ref: '#/definitions/date' },
             place: { $ref: '#/definitions/placeReference' },
             roles: {
               type: 'array',
-              items: { $ref: '#/definitions/eventRole' }
-            }
-          }
-        }
-      ]
+              items: { $ref: '#/definitions/eventRole' },
+            },
+          },
+        },
+      ],
     },
     eventTypes: {
       enum: [
@@ -886,8 +891,8 @@ const schema = {
         'http://gedcomx.org/MoveTo', //An event of a move (i.e. change of residence) to a location.
         'http://gedcomx.org/Naturalization', //A naturalization event (i.e. acquisition of citizenship and nationality).
         'http://gedcomx.org/Ordination', //An ordination event.
-        'http://gedcomx.org/Retirement' //A retirement event.
-      ]
+        'http://gedcomx.org/Retirement', //A retirement event.
+      ],
     },
     document: {
       title: 'Document',
@@ -898,25 +903,25 @@ const schema = {
             type: {
               anyOf: [
                 { $ref: '#/definitions/documentTypes' },
-                { $ref: '#/definitions/uri' }
-              ]
+                { $ref: '#/definitions/uri' },
+              ],
             },
             extracted: { type: 'boolean' },
             textType: { type: 'string' },
             text: { type: 'string' },
-            attribution: { $ref: '#/definitions/attribution' }
+            attribution: { $ref: '#/definitions/attribution' },
           },
-          required: ['text']
-        }
-      ]
+          required: ['text'],
+        },
+      ],
     },
     documentTypes: {
       enum: [
         'http://gedcomx.org/Abstract', //The document is an abstract of a record or document.
         'http://gedcomx.org/Transcription', //The document is a transcription of a record or document.
         'http://gedcomx.org/Translation', //The document is a translation of a record or document.
-        'http://gedcomx.org/Analysis' //The document is an analysis done by a researcher; a genealogical proof statement is an example of one kind of analysis document.
-      ]
+        'http://gedcomx.org/Analysis', //The document is an analysis done by a researcher; a genealogical proof statement is an example of one kind of analysis document.
+      ],
     },
     placeDescription: {
       title: 'PlaceDescription',
@@ -925,21 +930,21 @@ const schema = {
         {
           properties: {
             names: {
-              items: { $ref: '#/definitions/textValue' }
+              items: { $ref: '#/definitions/textValue' },
             },
             type: { $ref: '#/definitions/uri' },
             place: { $ref: '#/definitions/resourceReference' },
             jurisdiction: {
-              $ref: '#/definitions/resourceReference'
+              $ref: '#/definitions/resourceReference',
             },
             latitude: { type: 'number' },
             longitude: { type: 'number' },
             temporalDescription: { $ref: '#/definitions/date' },
-            spatialDescription: { $ref: '#/definitions/resourceReference' }
+            spatialDescription: { $ref: '#/definitions/resourceReference' },
           },
-          required: ['names']
-        }
-      ]
+          required: ['names'],
+        },
+      ],
     },
     group: {
       allOf: [
@@ -948,68 +953,68 @@ const schema = {
           properties: {
             names: {
               type: 'array',
-              items: { $ref: '#/definitions/textValue' }
+              items: { $ref: '#/definitions/textValue' },
             },
             date: { $ref: '#/definitions/date' },
             place: { $ref: '#/definitions/resourceReference' },
             roles: {
               type: 'array',
-              items: { $ref: '#/definitions/groupRole' }
-            }
+              items: { $ref: '#/definitions/groupRole' },
+            },
           },
-          required: ['names']
-        }
-      ]
-    }
+          required: ['names'],
+        },
+      ],
+    },
   },
 
   type: 'object',
   properties: {
     persons: {
       type: 'array',
-      items: { $ref: '#/definitions/person' }
+      items: { $ref: '#/definitions/person' },
     },
     relationships: {
       type: 'array',
-      items: { $ref: '#/definitions/relationship' }
+      items: { $ref: '#/definitions/relationship' },
     },
     sourceDescriptions: {
       type: 'array',
-      items: { $ref: '#/definitions/sourceDescription' }
+      items: { $ref: '#/definitions/sourceDescription' },
     },
     agents: {
       type: 'array',
-      items: { $ref: '#/definitions/agent' }
+      items: { $ref: '#/definitions/agent' },
     },
     events: {
       type: 'array',
-      items: { $ref: '#/definitions/event' }
+      items: { $ref: '#/definitions/event' },
     },
     documents: {
       type: 'array',
-      items: { $ref: '#/definitions/document' }
+      items: { $ref: '#/definitions/document' },
     },
     places: {
       type: 'array',
-      items: { $ref: '#/definitions/placeDescription' }
+      items: { $ref: '#/definitions/placeDescription' },
     },
     groups: {
       type: 'array',
-      items: { $ref: '#/definitions/group' }
+      items: { $ref: '#/definitions/group' },
     },
     description: { $ref: '#/definitions/uri' },
     id: { type: 'string' },
     lang: { $ref: '#/definitions/localeTag' },
-    attribution: { $ref: '#/definitions/attribution' }
-  }
+    attribution: { $ref: '#/definitions/attribution' },
+  },
 };
 
 const data: any = {
   attribution: {
     contributor: {
-      resource: '#A-1'
+      resource: '#A-1',
     },
-    modified: 1398405600000
+    modified: 1398405600000,
   },
   persons: [
     {
@@ -1017,150 +1022,150 @@ const data: any = {
         {
           nameForms: [
             {
-              fullText: 'Samuel Ham'
-            }
-          ]
-        }
+              fullText: 'Samuel Ham',
+            },
+          ],
+        },
       ],
       gender: {
-        type: 'http://gedcomx.org/Male'
+        type: 'http://gedcomx.org/Male',
       },
       facts: [
         {
           type: 'http://gedcomx.org/Residence',
           date: {
             original: '3 November 1828',
-            formal: '+1828-11-03'
+            formal: '+1828-11-03',
           },
           place: {
-            original: 'parish of Honiton, Devon, England'
-          }
-        }
+            original: 'parish of Honiton, Devon, England',
+          },
+        },
       ],
       extracted: true,
       sources: [
         {
-          description: '#S-2'
-        }
+          description: '#S-2',
+        },
       ],
-      id: 'P-1'
+      id: 'P-1',
     },
     {
       names: [
         {
           nameForms: [
             {
-              fullText: 'Elizabeth Spiller'
-            }
-          ]
-        }
+              fullText: 'Elizabeth Spiller',
+            },
+          ],
+        },
       ],
       gender: {
-        type: 'http://gedcomx.org/Female'
+        type: 'http://gedcomx.org/Female',
       },
       facts: [
         {
           type: 'http://gedcomx.org/Residence',
           date: {
             original: '3 November 1828',
-            formal: '+1828-11-03'
+            formal: '+1828-11-03',
           },
           place: {
-            original: 'parish of Wilton, Somerset, England'
-          }
-        }
+            original: 'parish of Wilton, Somerset, England',
+          },
+        },
       ],
       extracted: true,
       sources: [
         {
-          description: '#S-2'
-        }
+          description: '#S-2',
+        },
       ],
-      id: 'P-2'
+      id: 'P-2',
     },
     {
       names: [
         {
           nameForms: [
             {
-              fullText: 'Jno. Pain'
-            }
-          ]
-        }
+              fullText: 'Jno. Pain',
+            },
+          ],
+        },
       ],
       extracted: true,
       sources: [
         {
-          description: '#S-2'
-        }
+          description: '#S-2',
+        },
       ],
-      id: 'P-3'
+      id: 'P-3',
     },
     {
       names: [
         {
           nameForms: [
             {
-              fullText: 'R.G. Halls'
-            }
-          ]
-        }
+              fullText: 'R.G. Halls',
+            },
+          ],
+        },
       ],
       extracted: true,
       sources: [
         {
-          description: '#S-2'
-        }
+          description: '#S-2',
+        },
       ],
-      id: 'P-4'
+      id: 'P-4',
     },
     {
       names: [
         {
           nameForms: [
             {
-              fullText: 'Peggy Hammet'
-            }
-          ]
-        }
+              fullText: 'Peggy Hammet',
+            },
+          ],
+        },
       ],
       extracted: true,
       sources: [
         {
-          description: '#S-2'
-        }
+          description: '#S-2',
+        },
       ],
-      id: 'P-5'
+      id: 'P-5',
     },
     {
       names: [
         {
           nameForms: [
             {
-              fullText: 'David Smith Stone'
-            }
-          ]
-        }
+              fullText: 'David Smith Stone',
+            },
+          ],
+        },
       ],
       extracted: true,
       sources: [
         {
-          description: '#S-2'
-        }
+          description: '#S-2',
+        },
       ],
-      id: 'P-6'
+      id: 'P-6',
     },
     {
       evidence: [
         {
-          resource: '#P-1'
-        }
+          resource: '#P-1',
+        },
       ],
       analysis: {
-        resource: '#D-2'
+        resource: '#D-2',
       },
-      id: 'C-1'
-    }
+      id: 'C-1',
+    },
   ],
   relationships: [
     {
@@ -1171,175 +1176,174 @@ const data: any = {
           type: 'http://gedcomx.org/Marriage',
           date: {
             original: '3 November 1828',
-            formal: '+1828-11-03'
+            formal: '+1828-11-03',
           },
           place: {
-            original: 'Wilton St George, Wilton, Somerset, England'
-          }
-        }
+            original: 'Wilton St George, Wilton, Somerset, England',
+          },
+        },
       ],
       person1: {
-        resource: '#P-1'
+        resource: '#P-1',
       },
       person2: {
-        resource: '#P-2'
-      }
-    }
+        resource: '#P-2',
+      },
+    },
   ],
   sourceDescriptions: [
     {
       description: [
         {
           value:
-            'Marriage entry for Samuel Ham and Elizabeth in a copy of the registers of the baptisms, marriages, and burials at the church of St. George in the parish of Wilton : adjoining Taunton, in the county of Somerset from A.D. 1558 to A.D. 1837.'
-        }
+            'Marriage entry for Samuel Ham and Elizabeth in a copy of the registers of the baptisms, marriages, and burials at the church of St. George in the parish of Wilton : adjoining Taunton, in the county of Somerset from A.D. 1558 to A.D. 1837.',
+        },
       ],
       resourceType: 'http://gedcomx.org/PhysicalArtifact',
       citations: [
         {
           value:
-            'Joseph Houghton Spencer, transcriber, Church of England, Parish Church of Wilton (Somerset). A copy of the registers of the baptisms, marriages, and burials at the church of St. George in the parish of Wilton : adjoining Taunton, in the county of Somerset from A.D. 1558 to A.D. 1837; Marriage entry for Samuel Ham and Elizabeth Spiller (3 November 1828), (Taunton: Barnicott, 1890), p. 224, No. 86.'
-        }
+            'Joseph Houghton Spencer, transcriber, Church of England, Parish Church of Wilton (Somerset). A copy of the registers of the baptisms, marriages, and burials at the church of St. George in the parish of Wilton : adjoining Taunton, in the county of Somerset from A.D. 1558 to A.D. 1837; Marriage entry for Samuel Ham and Elizabeth Spiller (3 November 1828), (Taunton: Barnicott, 1890), p. 224, No. 86.',
+        },
       ],
       titles: [
         {
           value:
-            'Marriage entry for Samuel Ham and Elizabeth Spiller, Parish Register, Wilton, Somerset, England'
-        }
+            'Marriage entry for Samuel Ham and Elizabeth Spiller, Parish Register, Wilton, Somerset, England',
+        },
       ],
       repository: {
-        resource: '#A-2'
+        resource: '#A-2',
       },
-      id: 'S-1'
+      id: 'S-1',
     },
     {
       description: [
         {
           value:
-            'Transcription of marriage entry for Samuel Ham and Elizabeth in a copy of the registers of the baptisms, marriages, and burials at the church of St. George in the parish of Wilton : adjoining Taunton, in the county of Somerset from A.D. 1558 to A.D. 1837.'
-        }
+            'Transcription of marriage entry for Samuel Ham and Elizabeth in a copy of the registers of the baptisms, marriages, and burials at the church of St. George in the parish of Wilton : adjoining Taunton, in the county of Somerset from A.D. 1558 to A.D. 1837.',
+        },
       ],
       sources: [
         {
-          description: '#S-1'
-        }
+          description: '#S-1',
+        },
       ],
       resourceType: 'http://gedcomx.org/DigitalArtifact',
       citations: [
         {
           value:
-            'Joseph Houghton Spencer, transcriber, Church of England, Parish Church of Wilton (Somerset). A copy of the registers of the baptisms, marriages, and burials at the church of St. George in the parish of Wilton : adjoining Taunton, in the county of Somerset from A.D. 1558 to A.D. 1837; Marriage entry for Samuel Ham and Elizabeth Spiller (3 November 1828), (Taunton: Barnicott, 1890), p. 224, No. 86.'
-        }
+            'Joseph Houghton Spencer, transcriber, Church of England, Parish Church of Wilton (Somerset). A copy of the registers of the baptisms, marriages, and burials at the church of St. George in the parish of Wilton : adjoining Taunton, in the county of Somerset from A.D. 1558 to A.D. 1837; Marriage entry for Samuel Ham and Elizabeth Spiller (3 November 1828), (Taunton: Barnicott, 1890), p. 224, No. 86.',
+        },
       ],
       about: '#D-1',
       titles: [
         {
           value:
-            'Transcription of marriage entry for Samuel Ham and Elizabeth Spiller, Parish Register, Wilton, Somerset, England'
-        }
+            'Transcription of marriage entry for Samuel Ham and Elizabeth Spiller, Parish Register, Wilton, Somerset, England',
+        },
       ],
-      id: 'S-2'
-    }
+      id: 'S-2',
+    },
   ],
   agents: [
     {
       names: [
         {
-          value: 'Jane Doe'
-        }
+          value: 'Jane Doe',
+        },
       ],
       emails: [
         {
-          resource: 'mailto:example@example.org'
-        }
+          resource: 'mailto:example@example.org',
+        },
       ],
-      id: 'A-1'
+      id: 'A-1',
     },
     {
       names: [
         {
-          value: 'Family History Library'
-        }
+          value: 'Family History Library',
+        },
       ],
       addresses: [
         {
           city: 'Salt Lake City',
-          stateOrProvince: 'Utah'
-        }
+          stateOrProvince: 'Utah',
+        },
       ],
-      id: 'A-2'
-    }
+      id: 'A-2',
+    },
   ],
   events: [
     {
       type: 'http://gedcomx.org/Marriage',
       date: {
         original: '3 November 1828',
-        formal: '+1828-11-03'
+        formal: '+1828-11-03',
       },
       place: {
-        original: 'Wilton St George, Wilton, Somerset, England'
+        original: 'Wilton St George, Wilton, Somerset, England',
       },
       roles: [
         {
           type: 'http://gedcomx.org/Principal',
           person: {
-            resource: '#P-1'
-          }
+            resource: '#P-1',
+          },
         },
         {
           type: 'http://gedcomx.org/Principal',
           person: {
-            resource: '#P-2'
-          }
+            resource: '#P-2',
+          },
         },
         {
           type: 'http://gedcomx.org/Witness',
           person: {
-            resource: '#P-3'
-          }
+            resource: '#P-3',
+          },
         },
         {
           type: 'http://gedcomx.org/Witness',
           person: {
-            resource: '#P-4'
-          }
+            resource: '#P-4',
+          },
         },
         {
           type: 'http://gedcomx.org/Witness',
           person: {
-            resource: '#P-5'
-          }
+            resource: '#P-5',
+          },
         },
         {
           type: 'http://gedcomx.org/Official',
           person: {
-            resource: '#P-6'
-          }
-        }
+            resource: '#P-6',
+          },
+        },
       ],
       extracted: true,
-      id: 'E-1'
-    }
+      id: 'E-1',
+    },
   ],
   documents: [
     {
       type: 'http://gedcomx.org/Transcription',
-      text:
-        'Samuel Ham of the parish of Honiton and Elizabeth Spiller\nwere married this 3rd day of November 1828 by David Smith\nStone, Pl Curate,\nIn the Presence of\nJno Pain.\nR.G. Halls.  Peggy Hammet.\nNo. 86.',
+      text: 'Samuel Ham of the parish of Honiton and Elizabeth Spiller\nwere married this 3rd day of November 1828 by David Smith\nStone, Pl Curate,\nIn the Presence of\nJno Pain.\nR.G. Halls.  Peggy Hammet.\nNo. 86.',
       sources: [
         {
-          description: '#S-1'
-        }
+          description: '#S-1',
+        },
       ],
       lang: 'en',
-      id: 'D-1'
+      id: 'D-1',
     },
     {
       text: '...Jane Doe`s analysis document...',
-      id: 'D-2'
-    }
-  ]
+      id: 'D-2',
+    },
+  ],
 };
 
 export const uischema: any = {
@@ -1348,41 +1352,41 @@ export const uischema: any = {
     {
       type: 'Category',
       label: 'Persons',
-      elements: [{ type: 'ListWithDetail', scope: '#/properties/persons' }]
+      elements: [{ type: 'ListWithDetail', scope: '#/properties/persons' }],
     },
     {
       type: 'Category',
       label: 'Relationships',
       elements: [
-        { type: 'ListWithDetail', scope: '#/properties/relationships' }
-      ]
+        { type: 'ListWithDetail', scope: '#/properties/relationships' },
+      ],
     },
     {
       type: 'Category',
       label: 'SourceDescriptions',
       elements: [
-        { type: 'ListWithDetail', scope: '#/properties/sourceDescriptions' }
-      ]
+        { type: 'ListWithDetail', scope: '#/properties/sourceDescriptions' },
+      ],
     },
     {
       type: 'Category',
       label: 'Agents',
-      elements: [{ type: 'ListWithDetail', scope: '#/properties/agents' }]
+      elements: [{ type: 'ListWithDetail', scope: '#/properties/agents' }],
     },
     {
       type: 'Category',
       label: 'Events',
-      elements: [{ type: 'ListWithDetail', scope: '#/properties/events' }]
+      elements: [{ type: 'ListWithDetail', scope: '#/properties/events' }],
     },
     {
       type: 'Category',
       label: 'Documents',
-      elements: [{ type: 'ListWithDetail', scope: '#/properties/documents' }]
+      elements: [{ type: 'ListWithDetail', scope: '#/properties/documents' }],
     },
     {
       type: 'Category',
       label: 'Places',
-      elements: [{ type: 'ListWithDetail', scope: '#/properties/places' }]
+      elements: [{ type: 'ListWithDetail', scope: '#/properties/places' }],
     },
     {
       type: 'Category',
@@ -1391,10 +1395,10 @@ export const uischema: any = {
         { type: 'Control', scope: '#/properties/description' },
         { type: 'Control', scope: '#/properties/lang' },
         { type: 'Control', scope: '#/properties/attribution' },
-        { type: 'Control', scope: '#/properties/id' }
-      ]
-    }
-  ]
+        { type: 'Control', scope: '#/properties/id' },
+      ],
+    },
+  ],
 };
 
 registerExamples([
@@ -1403,6 +1407,6 @@ registerExamples([
     label: 'Huge Test',
     data,
     schema,
-    uischema
-  }
+    uischema,
+  },
 ]);

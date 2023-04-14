@@ -35,14 +35,17 @@ export const MaterialArrayControlRenderer = (props: ArrayLayoutProps) => {
   const [rowData, setRowData] = useState(undefined);
   const { removeItems, visible } = props;
 
-  const openDeleteDialog = useCallback((p: string, rowIndex: number) => {
-    setOpen(true);
-    setPath(p);
-    setRowData(rowIndex);
-  }, [setOpen, setPath, setRowData]);
+  const openDeleteDialog = useCallback(
+    (p: string, rowIndex: number) => {
+      setOpen(true);
+      setPath(p);
+      setRowData(rowIndex);
+    },
+    [setOpen, setPath, setRowData]
+  );
   const deleteCancel = useCallback(() => setOpen(false), [setOpen]);
   const deleteConfirm = useCallback(() => {
-    const p = path.substring(0, path.lastIndexOf(('.')));
+    const p = path.substring(0, path.lastIndexOf('.'));
     removeItems(p, [rowData])();
     setOpen(false);
   }, [setOpen, path, rowData]);
@@ -50,10 +53,7 @@ export const MaterialArrayControlRenderer = (props: ArrayLayoutProps) => {
 
   return (
     <Hidden xsUp={!visible}>
-      <MaterialTableControl
-        {...props}
-        openDeleteDialog={openDeleteDialog}
-      />
+      <MaterialTableControl {...props} openDeleteDialog={openDeleteDialog} />
       <DeleteDialog
         open={open}
         onCancel={deleteCancel}

@@ -41,87 +41,87 @@ import type Ajv from 'ajv';
  * @returns {string} the escaped string
  */
 export const convertToValidClassName = (s: string): string =>
-s.replace('#', 'root').replace(new RegExp('/', 'g'), '_');
+  s.replace('#', 'root').replace(new RegExp('/', 'g'), '_');
 
 export const formatErrorMessage = (errors: string[]) => {
- if (errors === undefined || errors === null) {
-   return '';
- }
+  if (errors === undefined || errors === null) {
+    return '';
+  }
 
- return errors.join('\n');
+  return errors.join('\n');
 };
 
 export const hasType = (jsonSchema: JsonSchema, expected: string): boolean => {
- return includes(deriveTypes(jsonSchema), expected);
+  return includes(deriveTypes(jsonSchema), expected);
 };
 
 /**
  * Derives the type of the jsonSchema element
  */
 export const deriveTypes = (jsonSchema: JsonSchema): string[] => {
- if (isEmpty(jsonSchema)) {
-   return [];
- }
- if (!isEmpty(jsonSchema.type) && typeof jsonSchema.type === 'string') {
-   return [jsonSchema.type];
- }
- if (isArray(jsonSchema.type)) {
-   return jsonSchema.type;
- }
- if (
-   !isEmpty(jsonSchema.properties) ||
-   !isEmpty(jsonSchema.additionalProperties)
- ) {
-   return ['object'];
- }
- if (!isEmpty(jsonSchema.items)) {
-   return ['array'];
- }
+  if (isEmpty(jsonSchema)) {
+    return [];
+  }
+  if (!isEmpty(jsonSchema.type) && typeof jsonSchema.type === 'string') {
+    return [jsonSchema.type];
+  }
+  if (isArray(jsonSchema.type)) {
+    return jsonSchema.type;
+  }
+  if (
+    !isEmpty(jsonSchema.properties) ||
+    !isEmpty(jsonSchema.additionalProperties)
+  ) {
+    return ['object'];
+  }
+  if (!isEmpty(jsonSchema.items)) {
+    return ['array'];
+  }
 
- if (!isEmpty(jsonSchema.allOf)) {
-   const allOfType = find(
-     jsonSchema.allOf,
-     (schema: JsonSchema) => deriveTypes(schema).length !== 0
-   );
+  if (!isEmpty(jsonSchema.allOf)) {
+    const allOfType = find(
+      jsonSchema.allOf,
+      (schema: JsonSchema) => deriveTypes(schema).length !== 0
+    );
 
-   if (allOfType) {
-     return deriveTypes(allOfType);
-   }
- }
- // ignore all remaining cases
- return [];
+    if (allOfType) {
+      return deriveTypes(allOfType);
+    }
+  }
+  // ignore all remaining cases
+  return [];
 };
 
 /**
  * Convenience wrapper around resolveData and resolveSchema.
  */
 export const Resolve: {
- schema(
-   schema: JsonSchema,
-   schemaPath: string,
-   rootSchema: JsonSchema
- ): JsonSchema;
- data(data: any, path: string): any;
+  schema(
+    schema: JsonSchema,
+    schemaPath: string,
+    rootSchema: JsonSchema
+  ): JsonSchema;
+  data(data: any, path: string): any;
 } = {
- schema: resolveSchema,
- data: resolveData
+  schema: resolveSchema,
+  data: resolveData,
 };
 
 // Paths --
 const fromScoped = (scopable: Scoped): string =>
- toDataPathSegments(scopable.scope).join('.');
+  toDataPathSegments(scopable.scope).join('.');
 
 export const Paths = {
- compose: composePaths,
- fromScoped
+  compose: composePaths,
+  fromScoped,
 };
 
 // Runtime --
 export const Runtime = {
- isEnabled(uischema: UISchemaElement, data: any, ajv: Ajv): boolean {
-   return isEnabled(uischema, data, undefined, ajv);
- },
- isVisible(uischema: UISchemaElement, data: any, ajv: Ajv): boolean {
-   return isVisible(uischema, data, undefined, ajv);
- }
+  isEnabled(uischema: UISchemaElement, data: any, ajv: Ajv): boolean {
+    return isEnabled(uischema, data, undefined, ajv);
+  },
+  isVisible(uischema: UISchemaElement, data: any, ajv: Ajv): boolean {
+    return isVisible(uischema, data, undefined, ajv);
+  },
 };

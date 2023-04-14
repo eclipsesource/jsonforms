@@ -36,14 +36,16 @@ import { isMultiLineControl, RankedTester, rankWith } from '@jsonforms/core';
         (input)="onChange($event)"
         [id]="id"
         [formControl]="form"
-        (focus)="focused = true" 
+        (focus)="focused = true"
         (focusout)="focused = false"
       ></textarea>
-      <mat-hint *ngIf="shouldShowUnfocusedDescription() || focused">{{ description }}</mat-hint>
+      <mat-hint *ngIf="shouldShowUnfocusedDescription() || focused">{{
+        description
+      }}</mat-hint>
       <mat-error>{{ error }}</mat-error>
     </mat-form-field>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TextAreaRenderer extends JsonFormsControl {
   constructor(jsonformsService: JsonFormsAngularService) {

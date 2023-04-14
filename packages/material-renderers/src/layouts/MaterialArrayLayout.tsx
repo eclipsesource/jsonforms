@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import range from 'lodash/range';
-import React, {useState, useCallback} from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   ArrayLayoutProps,
   composePaths,
@@ -35,15 +35,21 @@ import { ArrayLayoutToolbar } from './ArrayToolbar';
 import ExpandPanelRenderer from './ExpandPanelRenderer';
 import merge from 'lodash/merge';
 
-const MaterialArrayLayoutComponent = (props: ArrayLayoutProps)=> {
-  const [expanded, setExpanded] = useState<string|boolean>(false);
-  const innerCreateDefaultValue = useCallback(() => createDefaultValue(props.schema), [props.schema]);
-  const handleChange = useCallback((panel: string) => (_event: any, expandedPanel: boolean) => {
-    setExpanded(expandedPanel ? panel : false)
-  }, []);
-  const isExpanded = (index: number) => 
+const MaterialArrayLayoutComponent = (props: ArrayLayoutProps) => {
+  const [expanded, setExpanded] = useState<string | boolean>(false);
+  const innerCreateDefaultValue = useCallback(
+    () => createDefaultValue(props.schema),
+    [props.schema]
+  );
+  const handleChange = useCallback(
+    (panel: string) => (_event: any, expandedPanel: boolean) => {
+      setExpanded(expandedPanel ? panel : false);
+    },
+    []
+  );
+  const isExpanded = (index: number) =>
     expanded === composePaths(props.path, `${index}`);
-  
+
   const {
     enabled,
     data,
@@ -59,13 +65,9 @@ const MaterialArrayLayoutComponent = (props: ArrayLayoutProps)=> {
     rootSchema,
     config,
     uischemas,
-    translations
+    translations,
   } = props;
-  const appliedUiSchemaOptions = merge(
-    {},
-    config,
-    props.uischema.options
-  );
+  const appliedUiSchemaOptions = merge({}, config, props.uischema.options);
 
   return (
     <div>
@@ -83,7 +85,7 @@ const MaterialArrayLayoutComponent = (props: ArrayLayoutProps)=> {
       />
       <div>
         {data > 0 ? (
-          map(range(data), index => {
+          map(range(data), (index) => {
             return (
               <ExpandPanelRenderer
                 enabled={enabled}

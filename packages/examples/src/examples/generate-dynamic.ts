@@ -27,15 +27,15 @@ import { registerExamples } from '../register';
 
 const actions = [
   {
-    'label': 'Change data',
-    'apply': (props: StateProps) => {
+    label: 'Change data',
+    apply: (props: StateProps) => {
       return {
         ...props,
-        data: { id: 'aaa' }
-      }
-    }
+        data: { id: 'aaa' },
+      };
+    },
   },
-]
+];
 
 registerExamples([
   {
@@ -44,6 +44,6 @@ registerExamples([
     schema: undefined,
     uischema: undefined,
     data: { name: 'bla' },
-    actions
-  }
+    actions,
+  },
 ]);

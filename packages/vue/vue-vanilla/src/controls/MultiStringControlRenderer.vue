@@ -2,8 +2,8 @@
   <control-wrapper
     v-bind="controlWrapper"
     :styles="styles"
-    :isFocused="isFocused"
-    :appliedOptions="appliedOptions"
+    :is-focused="isFocused"
+    :applied-options="appliedOptions"
   >
     <textarea
       :id="control.id + '-input'"
@@ -26,30 +26,37 @@ import {
   rankWith,
   isStringControl,
   isMultiLineControl,
-  and
+  and,
 } from '@jsonforms/core';
 import { defineComponent } from 'vue';
-import { rendererProps, useJsonFormsControl, RendererProps } from '../../config/jsonforms';
+import {
+  rendererProps,
+  useJsonFormsControl,
+  RendererProps,
+} from '../../config/jsonforms';
 import { default as ControlWrapper } from './ControlWrapper.vue';
 import { useVanillaControl } from '../util';
 
 const controlRenderer = defineComponent({
-  name: 'multi-string-control-renderer',
+  name: 'MultiStringControlRenderer',
   components: {
-    ControlWrapper
+    ControlWrapper,
   },
   props: {
-    ...rendererProps<ControlElement>()
+    ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    return useVanillaControl(useJsonFormsControl(props), target => target.value || undefined);
-  }
+    return useVanillaControl(
+      useJsonFormsControl(props),
+      (target) => target.value || undefined
+    );
+  },
 });
 
 export default controlRenderer;
 
 export const entry: JsonFormsRendererRegistryEntry = {
   renderer: controlRenderer,
-  tester: rankWith(2, and(isStringControl, isMultiLineControl))
+  tester: rankWith(2, and(isStringControl, isMultiLineControl)),
 };
 </script>

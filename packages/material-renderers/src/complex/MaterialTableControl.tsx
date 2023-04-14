@@ -27,7 +27,7 @@ import union from 'lodash/union';
 import {
   DispatchCell,
   JsonFormsStateContext,
-  useJsonForms
+  useJsonForms,
 } from '@jsonforms/react';
 import startCase from 'lodash/startCase';
 import range from 'lodash/range';
@@ -42,7 +42,7 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  Typography
+  Typography,
 } from '@mui/material';
 import {
   ArrayLayoutProps,
@@ -54,7 +54,8 @@ import {
   Resolve,
   JsonFormsRendererRegistryEntry,
   JsonFormsCellRendererRegistryEntry,
-  encode
+  encode,
+  ArrayTranslations,
 } from '@jsonforms/core';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowDownward from '@mui/icons-material/ArrowDownward';
@@ -65,7 +66,6 @@ import NoBorderTableCell from './NoBorderTableCell';
 import TableToolbar from './TableToolbar';
 import { ErrorObject } from 'ajv';
 import merge from 'lodash/merge';
-import { ArrayTranslations } from '@jsonforms/core';
 
 // we want a cell that doesn't automatically span
 const styles = {
@@ -74,15 +74,15 @@ const styles = {
     height: '50px',
     paddingLeft: 0,
     paddingRight: 0,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   fixedCellSmall: {
     width: '50px',
     height: '50px',
     paddingLeft: 0,
     paddingRight: 0,
-    textAlign: 'center'
-  }
+    textAlign: 'center',
+  },
 };
 
 const generateCells = (
@@ -93,7 +93,7 @@ const generateCells = (
   cells?: JsonFormsCellRendererRegistryEntry[]
 ) => {
   if (schema.type === 'object') {
-    return getValidColumnProps(schema).map(prop => {
+    return getValidColumnProps(schema).map((prop) => {
       const cellPath = Paths.compose(rowPath, prop);
       const props = {
         propName: prop,
@@ -102,7 +102,7 @@ const generateCells = (
         rowPath,
         cellPath,
         enabled,
-        cells
+        cells,
       };
       return <Cell key={cellPath} {...props} />;
     });
@@ -112,16 +112,19 @@ const generateCells = (
       schema,
       rowPath,
       cellPath: rowPath,
-      enabled
+      enabled,
     };
     return <Cell key={rowPath} {...props} />;
   }
 };
 
 const getValidColumnProps = (scopedSchema: JsonSchema) => {
-  if (scopedSchema.type === 'object' && typeof scopedSchema.properties === 'object') {
+  if (
+    scopedSchema.type === 'object' &&
+    typeof scopedSchema.properties === 'object'
+  ) {
     return Object.keys(scopedSchema.properties).filter(
-      prop => scopedSchema.properties[prop].type !== 'array'
+      (prop) => scopedSchema.properties[prop].type !== 'array'
     );
   }
   // primitives
@@ -175,7 +178,7 @@ const ctxToNonEmptyCellProps = (
       errorsAt(
         path,
         ownProps.schema,
-        p => p === path
+        (p) => p === path
       )(ctx.core.errors).map((error: ErrorObject) => error.message)
     )
   );
@@ -188,144 +191,168 @@ const ctxToNonEmptyCellProps = (
     path,
     enabled: ownProps.enabled,
     cells: ownProps.cells || ctx.cells,
-    renderers: ownProps.renderers || ctx.renderers
+    renderers: ownProps.renderers || ctx.renderers,
   };
 };
 
 const controlWithoutLabel = (scope: string): ControlElement => ({
   type: 'Control',
   scope: scope,
-  label: false
+  label: false,
 });
 
 interface NonEmptyCellComponentProps {
-  path: string,
-  propName?: string,
-  schema: JsonSchema,
-  rootSchema: JsonSchema,
-  errors: string,
-  enabled: boolean,
-  renderers?: JsonFormsRendererRegistryEntry[],
-  cells?: JsonFormsCellRendererRegistryEntry[],
-  isValid: boolean
+  path: string;
+  propName?: string;
+  schema: JsonSchema;
+  rootSchema: JsonSchema;
+  errors: string;
+  enabled: boolean;
+  renderers?: JsonFormsRendererRegistryEntry[];
+  cells?: JsonFormsCellRendererRegistryEntry[];
+  isValid: boolean;
 }
-const NonEmptyCellComponent = React.memo(({path, propName, schema, rootSchema, errors, enabled, renderers, cells, isValid}:NonEmptyCellComponentProps) => {
-  return (
-    <NoBorderTableCell>
-      {schema.properties ? (
-        <DispatchCell
-          schema={Resolve.schema(
-            schema,
-            `#/properties/${encode(propName)}`,
-            rootSchema
-          )}
-          uischema={controlWithoutLabel(`#/properties/${encode(propName)}`)}
-          path={path}
-          enabled={enabled}
-          renderers={renderers}
-          cells={cells}
-        />
-      ) : (
-        <DispatchCell
-          schema={schema}
-          uischema={controlWithoutLabel('#')}
-          path={path}
-          enabled={enabled}
-          renderers={renderers}
-          cells={cells}
-        />
-      )}
-      <FormHelperText error={!isValid}>{!isValid && errors}</FormHelperText>
-    </NoBorderTableCell>
-  );
-});
+const NonEmptyCellComponent = React.memo(
+  ({
+    path,
+    propName,
+    schema,
+    rootSchema,
+    errors,
+    enabled,
+    renderers,
+    cells,
+    isValid,
+  }: NonEmptyCellComponentProps) => {
+    return (
+      <NoBorderTableCell>
+        {schema.properties ? (
+          <DispatchCell
+            schema={Resolve.schema(
+              schema,
+              `#/properties/${encode(propName)}`,
+              rootSchema
+            )}
+            uischema={controlWithoutLabel(`#/properties/${encode(propName)}`)}
+            path={path}
+            enabled={enabled}
+            renderers={renderers}
+            cells={cells}
+          />
+        ) : (
+          <DispatchCell
+            schema={schema}
+            uischema={controlWithoutLabel('#')}
+            path={path}
+            enabled={enabled}
+            renderers={renderers}
+            cells={cells}
+          />
+        )}
+        <FormHelperText error={!isValid}>{!isValid && errors}</FormHelperText>
+      </NoBorderTableCell>
+    );
+  }
+);
 
 const NonEmptyCell = (ownProps: OwnPropsOfNonEmptyCell) => {
   const ctx = useJsonForms();
   const emptyCellProps = ctxToNonEmptyCellProps(ctx, ownProps);
 
   const isValid = isEmpty(emptyCellProps.errors);
-  return <NonEmptyCellComponent {...emptyCellProps} isValid={isValid}/>
+  return <NonEmptyCellComponent {...emptyCellProps} isValid={isValid} />;
 };
 
 interface NonEmptyRowProps {
   childPath: string;
   schema: JsonSchema;
   rowIndex: number;
-  moveUpCreator: (path:string, position: number)=> ()=> void;
-  moveDownCreator: (path:string, position: number)=> ()=> void;
+  moveUpCreator: (path: string, position: number) => () => void;
+  moveDownCreator: (path: string, position: number) => () => void;
   enableUp: boolean;
   enableDown: boolean;
   showSortButtons: boolean;
   enabled: boolean;
   cells?: JsonFormsCellRendererRegistryEntry[];
   path: string;
-  translations: ArrayTranslations
+  translations: ArrayTranslations;
 }
 
-const NonEmptyRowComponent =
-  ({
-    childPath,
-    schema,
-    rowIndex,
-    openDeleteDialog,
-    moveUpCreator,
-    moveDownCreator,
-    enableUp,
-    enableDown,
-    showSortButtons,
-    enabled,
-    cells,
-    path,
-    translations
-  }: NonEmptyRowProps & WithDeleteDialogSupport) => {
-    const moveUp = useMemo(() => moveUpCreator(path, rowIndex),[moveUpCreator, path, rowIndex]);
-    const moveDown = useMemo(() => moveDownCreator(path, rowIndex),[moveDownCreator, path, rowIndex]);
-    return (
-      <TableRow key={childPath} hover>
-        {generateCells(NonEmptyCell, schema, childPath, enabled, cells)}
-        {enabled ? (
-          <NoBorderTableCell
-            style={showSortButtons ? styles.fixedCell : styles.fixedCellSmall}
+const NonEmptyRowComponent = ({
+  childPath,
+  schema,
+  rowIndex,
+  openDeleteDialog,
+  moveUpCreator,
+  moveDownCreator,
+  enableUp,
+  enableDown,
+  showSortButtons,
+  enabled,
+  cells,
+  path,
+  translations,
+}: NonEmptyRowProps & WithDeleteDialogSupport) => {
+  const moveUp = useMemo(
+    () => moveUpCreator(path, rowIndex),
+    [moveUpCreator, path, rowIndex]
+  );
+  const moveDown = useMemo(
+    () => moveDownCreator(path, rowIndex),
+    [moveDownCreator, path, rowIndex]
+  );
+  return (
+    <TableRow key={childPath} hover>
+      {generateCells(NonEmptyCell, schema, childPath, enabled, cells)}
+      {enabled ? (
+        <NoBorderTableCell
+          style={showSortButtons ? styles.fixedCell : styles.fixedCellSmall}
+        >
+          <Grid
+            container
+            direction='row'
+            justifyContent='flex-end'
+            alignItems='center'
           >
-            <Grid
-              container
-              direction='row'
-              justifyContent='flex-end'
-              alignItems='center'
-            >
-              {showSortButtons ? (
-                <Fragment>
-                  <Grid item>
-                    <IconButton aria-label={translations.upAriaLabel} onClick={moveUp} disabled={!enableUp} size='large'>
-                      <ArrowUpward />
-                    </IconButton>
-                  </Grid>
-                  <Grid item>
-                    <IconButton
-                      aria-label={translations.downAriaLabel}
-                      onClick={moveDown}
-                      disabled={!enableDown}
-                      size='large'>
-                      <ArrowDownward />
-                    </IconButton>
-                  </Grid>
-                </Fragment>
-              ) : null}
-              <Grid item>
-                <IconButton
-                  aria-label={translations.removeAriaLabel}
-                  onClick={() => openDeleteDialog(childPath, rowIndex)}
-                  size='large'>
-                  <DeleteIcon />
-                </IconButton>
-              </Grid>
+            {showSortButtons ? (
+              <Fragment>
+                <Grid item>
+                  <IconButton
+                    aria-label={translations.upAriaLabel}
+                    onClick={moveUp}
+                    disabled={!enableUp}
+                    size='large'
+                  >
+                    <ArrowUpward />
+                  </IconButton>
+                </Grid>
+                <Grid item>
+                  <IconButton
+                    aria-label={translations.downAriaLabel}
+                    onClick={moveDown}
+                    disabled={!enableDown}
+                    size='large'
+                  >
+                    <ArrowDownward />
+                  </IconButton>
+                </Grid>
+              </Fragment>
+            ) : null}
+            <Grid item>
+              <IconButton
+                aria-label={translations.removeAriaLabel}
+                onClick={() => openDeleteDialog(childPath, rowIndex)}
+                size='large'
+              >
+                <DeleteIcon />
+              </IconButton>
             </Grid>
-          </NoBorderTableCell>
-        ) : null}
-      </TableRow>
-    );
-  };
+          </Grid>
+        </NoBorderTableCell>
+      ) : null}
+    </TableRow>
+  );
+};
 export const NonEmptyRow = React.memo(NonEmptyRowComponent);
 interface TableRowsProp {
   data: number;
@@ -350,12 +377,17 @@ const TableRows = ({
   config,
   enabled,
   cells,
-  translations
+  translations,
 }: TableRowsProp & WithDeleteDialogSupport) => {
   const isEmptyTable = data === 0;
 
   if (isEmptyTable) {
-    return <EmptyTable numColumns={getValidColumnProps(schema).length + 1} translations={translations}/>;
+    return (
+      <EmptyTable
+        numColumns={getValidColumnProps(schema).length + 1}
+        translations={translations}
+      />
+    );
   }
 
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
@@ -376,7 +408,10 @@ const TableRows = ({
             moveDownCreator={moveDown}
             enableUp={index !== 0}
             enableDown={index !== data - 1}
-            showSortButtons={appliedUiSchemaOptions.showSortButtons || appliedUiSchemaOptions.showArrayTableSortButtons}
+            showSortButtons={
+              appliedUiSchemaOptions.showSortButtons ||
+              appliedUiSchemaOptions.showArrayTableSortButtons
+            }
             enabled={enabled}
             cells={cells}
             path={path}
@@ -405,7 +440,7 @@ export class MaterialTableControl extends React.Component<
       visible,
       enabled,
       cells,
-      translations
+      translations,
     } = this.props;
 
     const controlElement = uischema as ControlElement;
@@ -438,7 +473,11 @@ export class MaterialTableControl extends React.Component<
             )}
           </TableHead>
           <TableBody>
-            <TableRows openDeleteDialog={openDeleteDialog} translations={translations} {...this.props} />
+            <TableRows
+              openDeleteDialog={openDeleteDialog}
+              translations={translations}
+              {...this.props}
+            />
           </TableBody>
         </Table>
       </Hidden>

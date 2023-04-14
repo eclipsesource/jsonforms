@@ -25,152 +25,152 @@
 import { registerExamples } from '../register';
 
 export const schema = {
-    type: 'object',
-    properties: {
-        cat1: {
-            type: 'object',
-            properties: {
-                subcat11: {
-                    type: 'string'
-                }
-            }
+  type: 'object',
+  properties: {
+    cat1: {
+      type: 'object',
+      properties: {
+        subcat11: {
+          type: 'string',
         },
-        cat2: {
-            type: 'object',
-            properties: {
-                subcat21: {
-                    type: 'string'
-                },
-                subcat22: {
-                    type: 'string'
-                }
-            }
+      },
+    },
+    cat2: {
+      type: 'object',
+      properties: {
+        subcat21: {
+          type: 'string',
         },
-        cat3: {
-            type: 'object',
-            properties: {
-                subcat31: {
-                    type: 'string'
-                },
-                subcat32: {
-                    type: 'string'
-                },
-                subcat33: {
-                    type: 'string'
-                }
-            }
-        }
-    }
-}
+        subcat22: {
+          type: 'string',
+        },
+      },
+    },
+    cat3: {
+      type: 'object',
+      properties: {
+        subcat31: {
+          type: 'string',
+        },
+        subcat32: {
+          type: 'string',
+        },
+        subcat33: {
+          type: 'string',
+        },
+      },
+    },
+  },
+};
 
 export const uischema = {
-    type: 'Categorization',
-    elements: [
+  type: 'Categorization',
+  elements: [
+    {
+      type: 'Category',
+      label: 'Cat1',
+      elements: [
         {
-            type: 'Category',
-            label: 'Cat1',
-            elements: [
+          type: 'Categorization',
+          elements: [
+            {
+              type: 'Category',
+              label: 'SubCat1-1',
+              elements: [
                 {
-                    type: 'Categorization',
-                    elements: [
-                        {
-                            type: 'Category',
-                            label: 'SubCat1-1',
-                            elements: [
-                                {
-                                    type: 'Control',
-                                    scope: '#/properties/cat1/properties/subcat11'
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
+                  type: 'Control',
+                  scope: '#/properties/cat1/properties/subcat11',
+                },
+              ],
+            },
+          ],
         },
+      ],
+    },
+    {
+      type: 'Category',
+      label: 'Cat2',
+      elements: [
         {
-            type: 'Category',
-            label: 'Cat2',
-            elements: [
+          type: 'Categorization',
+          elements: [
+            {
+              type: 'Category',
+              label: 'SubCat2-1',
+              elements: [
                 {
-                    type: 'Categorization',
-                    elements: [
-                        {
-                            type: 'Category',
-                            label: 'SubCat2-1',
-                            elements: [
-                                {
-                                    type: 'Control',
-                                    scope: '#/properties/cat2/properties/subcat21'
-                                }
-                            ]
-                        },
-                        {
-                            type: 'Category',
-                            label: 'SubCat2-2',
-                            elements: [
-                                {
-                                    type: 'Control',
-                                    scope: '#/properties/cat2/properties/subcat22'
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
+                  type: 'Control',
+                  scope: '#/properties/cat2/properties/subcat21',
+                },
+              ],
+            },
+            {
+              type: 'Category',
+              label: 'SubCat2-2',
+              elements: [
+                {
+                  type: 'Control',
+                  scope: '#/properties/cat2/properties/subcat22',
+                },
+              ],
+            },
+          ],
         },
-        ,
+      ],
+    },
+    ,
+    {
+      type: 'Category',
+      label: 'Cat3',
+      elements: [
         {
-            type: 'Category',
-            label: 'Cat3',
-            elements: [
+          type: 'Categorization',
+          elements: [
+            {
+              type: 'Category',
+              label: 'SubCat3-1',
+              elements: [
                 {
-                    type: 'Categorization',
-                    elements: [
-                        {
-                            type: 'Category',
-                            label: 'SubCat3-1',
-                            elements: [
-                                {
-                                    type: 'Control',
-                                    scope: '#/properties/cat3/properties/subcat31'
-                                }
-                            ]
-                        },
-                        {
-                            type: 'Category',
-                            label: 'SubCat3-2',
-                            elements: [
-                                {
-                                    type: 'Control',
-                                    scope: '#/properties/cat3/properties/subcat32'
-                                }
-                            ]
-                        },
-                        {
-                            type: 'Category',
-                            label: 'SubCat3-3',
-                            elements: [
-                                {
-                                    type: 'Control',
-                                    scope: '#/properties/cat3/properties/subcat33'
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        }
-    ]
+                  type: 'Control',
+                  scope: '#/properties/cat3/properties/subcat31',
+                },
+              ],
+            },
+            {
+              type: 'Category',
+              label: 'SubCat3-2',
+              elements: [
+                {
+                  type: 'Control',
+                  scope: '#/properties/cat3/properties/subcat32',
+                },
+              ],
+            },
+            {
+              type: 'Category',
+              label: 'SubCat3-3',
+              elements: [
+                {
+                  type: 'Control',
+                  scope: '#/properties/cat3/properties/subcat33',
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  ],
 };
 
 export const data = {};
 
 registerExamples([
-    {
-        name: 'nestedCategorization',
-        label: 'Nested Categorization',
-        data,
-        schema,
-        uischema
-    }
+  {
+    name: 'nestedCategorization',
+    label: 'Nested Categorization',
+    data,
+    schema,
+    uischema,
+  },
 ]);

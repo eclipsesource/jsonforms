@@ -22,14 +22,18 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { ChangeDetectionStrategy, Component, ChangeDetectorRef } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 import {
   and,
   isBooleanControl,
   optionIs,
   RankedTester,
-  rankWith
+  rankWith,
 } from '@jsonforms/core';
 
 @Component({
@@ -44,14 +48,19 @@ import {
       >
         {{ label }}
       </mat-slide-toggle>
-      <mat-hint class="mat-caption" *ngIf="shouldShowUnfocusedDescription()">{{ description }}</mat-hint>
+      <mat-hint class="mat-caption" *ngIf="shouldShowUnfocusedDescription()">{{
+        description
+      }}</mat-hint>
       <mat-error class="mat-caption">{{ error }}</mat-error>
     </div>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ToggleControlRenderer extends JsonFormsControl {
-  constructor(jsonformsService: JsonFormsAngularService, private changeDetectorRef: ChangeDetectorRef) {
+  constructor(
+    jsonformsService: JsonFormsAngularService,
+    private changeDetectorRef: ChangeDetectorRef
+  ) {
     super(jsonformsService);
   }
   isChecked = () => this.data || false;

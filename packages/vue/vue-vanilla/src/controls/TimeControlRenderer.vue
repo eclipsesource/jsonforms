@@ -2,12 +2,12 @@
   <control-wrapper
     v-bind="controlWrapper"
     :styles="styles"
-    :isFocused="isFocused"
-    :appliedOptions="appliedOptions"
+    :is-focused="isFocused"
+    :applied-options="appliedOptions"
   >
     <input
-      type="time"
       :id="control.id + '-input'"
+      type="time"
       :class="styles.control.input"
       :value="control.data"
       :disabled="!control.enabled"
@@ -25,30 +25,37 @@ import {
   ControlElement,
   JsonFormsRendererRegistryEntry,
   rankWith,
-  isTimeControl
+  isTimeControl,
 } from '@jsonforms/core';
 import { defineComponent } from 'vue';
-import { rendererProps, useJsonFormsControl, RendererProps } from '../../config/jsonforms';
+import {
+  rendererProps,
+  useJsonFormsControl,
+  RendererProps,
+} from '../../config/jsonforms';
 import { default as ControlWrapper } from './ControlWrapper.vue';
 import { useVanillaControl } from '../util';
 
 const controlRenderer = defineComponent({
-  name: 'time-control-renderer',
+  name: 'TimeControlRenderer',
   components: {
-    ControlWrapper
+    ControlWrapper,
   },
   props: {
-    ...rendererProps<ControlElement>()
+    ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    return useVanillaControl(useJsonFormsControl(props), target => target.value || undefined);
-  }
+    return useVanillaControl(
+      useJsonFormsControl(props),
+      (target) => target.value || undefined
+    );
+  },
 });
 
 export default controlRenderer;
 
 export const entry: JsonFormsRendererRegistryEntry = {
   renderer: controlRenderer,
-  tester: rankWith(2, isTimeControl)
+  tester: rankWith(2, isTimeControl),
 };
 </script>

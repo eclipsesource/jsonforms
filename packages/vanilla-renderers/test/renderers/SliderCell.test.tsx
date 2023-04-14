@@ -23,11 +23,7 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
-import {
-  ControlElement,
-  HorizontalLayout,
-  JsonSchema,
-} from '@jsonforms/core';
+import { ControlElement, HorizontalLayout, JsonSchema } from '@jsonforms/core';
 import { JsonFormsStateProvider } from '@jsonforms/react';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
@@ -39,28 +35,28 @@ Enzyme.configure({ adapter: new Adapter() });
 
 const controlElement: ControlElement = {
   type: 'Control',
-  scope: '#/properties/foo'
+  scope: '#/properties/foo',
 };
 
 const fixture = {
-  data: { 'foo': 5 },
+  data: { foo: 5 },
   schema: {
     type: 'number',
     maximum: 10,
     minimum: 2,
-    default: 6
+    default: 6,
   },
   uischema: controlElement,
   styles: [
     {
       name: 'control',
-      classNames: ['control']
+      classNames: ['control'],
     },
     {
       name: 'control.validation',
-      classNames: ['validation']
-    }
-  ]
+      classNames: ['validation'],
+    },
+  ],
 };
 
 describe('Slider cell tester', () => {
@@ -68,7 +64,9 @@ describe('Slider cell tester', () => {
     expect(sliderCellTester(undefined, undefined, undefined)).toBe(-1);
     expect(sliderCellTester(null, undefined, undefined)).toBe(-1);
     expect(sliderCellTester({ type: 'Foo' }, undefined, undefined)).toBe(-1);
-    expect(sliderCellTester({ type: 'Control' }, undefined, undefined)).toBe(-1);
+    expect(sliderCellTester({ type: 'Control' }, undefined, undefined)).toBe(
+      -1
+    );
   });
 
   test('tester with wrong schema type', () => {
@@ -79,8 +77,8 @@ describe('Slider cell tester', () => {
         {
           type: 'object',
           properties: {
-            foo: { type: 'string' }
-          }
+            foo: { type: 'string' },
+          },
         },
         undefined
       )
@@ -96,8 +94,8 @@ describe('Slider cell tester', () => {
           type: 'object',
           properties: {
             foo: { type: 'string' },
-            bar: { type: 'number' }
-          }
+            bar: { type: 'number' },
+          },
         },
         undefined
       )
@@ -112,8 +110,8 @@ describe('Slider cell tester', () => {
         {
           type: 'object',
           properties: {
-            foo: { type: 'number' }
-          }
+            foo: { type: 'number' },
+          },
         },
         undefined
       )
@@ -129,9 +127,9 @@ describe('Slider cell tester', () => {
           properties: {
             foo: {
               type: 'number',
-              minimum: 2
-            }
-          }
+              minimum: 2,
+            },
+          },
         },
         undefined
       )
@@ -147,9 +145,9 @@ describe('Slider cell tester', () => {
           properties: {
             foo: {
               type: 'number',
-              maximum: 10
-            }
-          }
+              maximum: 10,
+            },
+          },
         },
         undefined
       )
@@ -166,9 +164,9 @@ describe('Slider cell tester', () => {
             foo: {
               type: 'number',
               maximum: 10,
-              minimum: 2
-            }
-          }
+              minimum: 2,
+            },
+          },
         },
         undefined
       )
@@ -185,9 +183,9 @@ describe('Slider cell tester', () => {
             foo: {
               type: 'integer',
               maximum: 10,
-              minimum: 2
-            }
-          }
+              minimum: 2,
+            },
+          },
         },
         undefined
       )
@@ -197,7 +195,7 @@ describe('Slider cell tester', () => {
   test('tester with matching schema type (number) with default', () => {
     const control: ControlElement = {
       ...fixture.uischema,
-      options: { slider: true }
+      options: { slider: true },
     };
     expect(
       sliderCellTester(
@@ -209,9 +207,9 @@ describe('Slider cell tester', () => {
               type: 'number',
               maximum: 10,
               minimum: 2,
-              default: 3
-            }
-          }
+              default: 3,
+            },
+          },
         },
         undefined
       )
@@ -231,9 +229,9 @@ describe('Slider cell tester', () => {
               type: 'integer',
               maximum: 10,
               minimum: 2,
-              default: 4
-            }
-          }
+              default: 4,
+            },
+          },
         },
         undefined
       )
@@ -242,7 +240,6 @@ describe('Slider cell tester', () => {
 });
 
 describe('Slider cell', () => {
-
   let wrapper: ReactWrapper;
 
   afterEach(() => wrapper.unmount());
@@ -252,33 +249,30 @@ describe('Slider cell', () => {
       type: 'object',
       properties: {
         firstSliderCell: { type: 'number', minimum: 5, maximum: 10 },
-        secondSliderCell: { type: 'number', minimum: 5, maximum: 10 }
-      }
+        secondSliderCell: { type: 'number', minimum: 5, maximum: 10 },
+      },
     };
     const firstControlElement: ControlElement = {
       type: 'Control',
       scope: '#/properties/firstSliderCell',
       options: {
-        focus: true
-      }
+        focus: true,
+      },
     };
     const secondControlElement: ControlElement = {
       type: 'Control',
       scope: '#/properties/secondSliderCell',
       options: {
-        focus: true
-      }
+        focus: true,
+      },
     };
     const uischema: HorizontalLayout = {
       type: 'HorizontalLayout',
-      elements: [
-        firstControlElement,
-        secondControlElement
-      ]
+      elements: [firstControlElement, secondControlElement],
     };
     const data = {
       firstSliderCell: 3.14,
-      secondSliderCell: 5.12
+      secondSliderCell: 5.12,
     };
     const core = initCore(schema, uischema, data);
     wrapper = mount(
@@ -296,16 +290,12 @@ describe('Slider cell', () => {
     const uischema: ControlElement = {
       type: 'Control',
       scope: '#/properties/foo',
-      options: { focus: true }
+      options: { focus: true },
     };
     const core = initCore(fixture.schema, uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <SliderCell
-          schema={fixture.schema}
-          uischema={uischema}
-          path='foo'
-        />
+        <SliderCell schema={fixture.schema} uischema={uischema} path='foo' />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input');
@@ -316,16 +306,12 @@ describe('Slider cell', () => {
     const uischema: ControlElement = {
       type: 'Control',
       scope: '#/properties/foo',
-      options: { focus: false }
+      options: { focus: false },
     };
     const core = initCore(fixture.schema, uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <SliderCell
-          schema={fixture.schema}
-          uischema={uischema}
-          path='foo'
-        />
+        <SliderCell schema={fixture.schema} uischema={uischema} path='foo' />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
@@ -355,18 +341,14 @@ describe('Slider cell', () => {
           type: 'number',
           maximum: 10,
           minimum: 2,
-          default: 6
-        }
-      }
+          default: 6,
+        },
+      },
     };
-    const core = initCore(schema, fixture.uischema, { 'foo': 5 });
+    const core = initCore(schema, fixture.uischema, { foo: 5 });
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <SliderCell
-          schema={schema}
-          uischema={fixture.uischema}
-          path='foo'
-        />
+        <SliderCell schema={schema} uischema={fixture.uischema} path='foo' />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
@@ -394,7 +376,7 @@ describe('Slider cell', () => {
 
   test('update via input event', () => {
     const onChangeData: any = {
-      data: undefined
+      data: undefined,
     };
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
@@ -418,7 +400,7 @@ describe('Slider cell', () => {
   });
 
   test('update via action', () => {
-    const core = initCore(fixture.schema, fixture.uischema, { 'foo': 3 });
+    const core = initCore(fixture.schema, fixture.uischema, { foo: 3 });
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
         <SliderCell

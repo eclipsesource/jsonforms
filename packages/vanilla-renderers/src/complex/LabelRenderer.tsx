@@ -37,19 +37,17 @@ export const labelRendererTester: RankedTester = rankWith(1, uiTypeIs('Label'));
 /**
  * Default renderer for a label.
  */
-export const LabelRenderer: FunctionComponent<LabelProps & VanillaRendererProps> =
-  ({ text, visible, getStyleAsClassName }) => {
-    const classNames = getStyleAsClassName('label-control');
-    const isHidden = !visible;
+export const LabelRenderer: FunctionComponent<
+  LabelProps & VanillaRendererProps
+> = ({ text, visible, getStyleAsClassName }) => {
+  const classNames = getStyleAsClassName('label-control');
+  const isHidden = !visible;
 
-    return (
-      <label
-        hidden={isHidden}
-        className={classNames}
-      >
-        {text}
-      </label>
-    );
-  };
+  return (
+    <label hidden={isHidden} className={classNames}>
+      {text}
+    </label>
+  );
+};
 
 export default withVanillaControlProps(withJsonFormsLabelProps(LabelRenderer));

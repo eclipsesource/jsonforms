@@ -1,4 +1,4 @@
-import { Styles } from "./styles";
+import { Styles } from './styles';
 
 export const defaultStyles: Styles = {
   control: {
@@ -10,20 +10,20 @@ export const defaultStyles: Styles = {
     error: 'error',
     textarea: 'text-area',
     select: 'select',
-    option: 'option'
+    option: 'option',
   },
   verticalLayout: {
     root: 'vertical-layout',
-    item: 'vertical-layout-item'
+    item: 'vertical-layout-item',
   },
   horizontalLayout: {
     root: 'horizontal-layout',
-    item: 'horizontal-layout-item'
+    item: 'horizontal-layout-item',
   },
   group: {
     root: 'group',
     label: 'group-label',
-    item: 'group-item'
+    item: 'group-item',
   },
   arrayList: {
     root: 'array-list',
@@ -39,9 +39,9 @@ export const defaultStyles: Styles = {
     itemExpanded: 'expanded',
     itemMoveUp: 'array-list-item-move-up',
     itemMoveDown: 'array-list-item-move-down',
-    itemDelete: 'array-list-item-delete'
+    itemDelete: 'array-list-item-delete',
   },
   label: {
-    root: 'label-element'
-  }
+    root: 'label-element',
+  },
 };

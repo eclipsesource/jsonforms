@@ -23,11 +23,7 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
-import {
-  ControlElement,
-  HorizontalLayout,
-  JsonSchema,
-} from '@jsonforms/core';
+import { ControlElement, HorizontalLayout, JsonSchema } from '@jsonforms/core';
 import { JsonFormsStateProvider } from '@jsonforms/react';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
@@ -42,31 +38,31 @@ const defaultSize = 20;
 
 const controlElement: ControlElement = {
   type: 'Control',
-  scope: '#/properties/name'
+  scope: '#/properties/name',
 };
 
 const fixture = {
   data: { name: 'Foo' },
   minLengthSchema: {
     type: 'string',
-    minLength: 3
+    minLength: 3,
   },
   maxLengthSchema: {
     type: 'string',
-    maxLength: 5
+    maxLength: 5,
   },
   schema: { type: 'string' },
   uischema: controlElement,
   styles: [
     {
       name: 'control',
-      classNames: ['control']
+      classNames: ['control'],
     },
     {
       name: 'control.validation',
-      classNames: ['validation']
-    }
-  ]
+      classNames: ['validation'],
+    },
+  ],
 };
 
 test('Text cell tester', () => {
@@ -77,7 +73,6 @@ test('Text cell tester', () => {
 });
 
 describe('Text cell', () => {
-
   let wrapper: ReactWrapper;
 
   afterEach(() => wrapper.unmount());
@@ -87,24 +82,27 @@ describe('Text cell', () => {
       type: 'object',
       properties: {
         firstName: { type: 'string' },
-        lastName: { type: 'string' }
-      }
+        lastName: { type: 'string' },
+      },
     };
     const firstControlElement: ControlElement = {
       type: 'Control',
       scope: '#/properties/firstName',
-      options: { focus: true }
+      options: { focus: true },
     };
     const secondControlElement: ControlElement = {
       type: 'Control',
       scope: '#/properties/lastName',
-      options: { focus: true }
+      options: { focus: true },
     };
     const uischema: HorizontalLayout = {
       type: 'HorizontalLayout',
-      elements: [firstControlElement, secondControlElement]
+      elements: [firstControlElement, secondControlElement],
     };
-    const core = initCore(schema, uischema, { firstName: 'Foo', lastName: 'Boo' });
+    const core = initCore(schema, uischema, {
+      firstName: 'Foo',
+      lastName: 'Boo',
+    });
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
         <HorizontalLayoutRenderer schema={schema} uischema={uischema} />
@@ -119,7 +117,7 @@ describe('Text cell', () => {
     const uischema: ControlElement = {
       type: 'Control',
       scope: '#/properties/name',
-      options: { focus: true }
+      options: { focus: true },
     };
     const core = initCore(fixture.minLengthSchema, uischema, fixture.data);
     wrapper = mount(
@@ -139,12 +137,16 @@ describe('Text cell', () => {
     const uischema: ControlElement = {
       type: 'Control',
       scope: '#/properties/name',
-      options: { focus: false }
+      options: { focus: false },
     };
     const core = initCore(fixture.minLengthSchema, uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TextCell schema={fixture.minLengthSchema} uischema={uischema} path='name' />
+        <TextCell
+          schema={fixture.minLengthSchema}
+          uischema={uischema}
+          path='name'
+        />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode();
@@ -152,10 +154,18 @@ describe('Text cell', () => {
   });
 
   test('autofocus inactive by default', () => {
-    const core = initCore(fixture.minLengthSchema, fixture.uischema, fixture.data);
+    const core = initCore(
+      fixture.minLengthSchema,
+      fixture.uischema,
+      fixture.data
+    );
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TextCell schema={fixture.minLengthSchema} uischema={fixture.uischema} path='name' />
+        <TextCell
+          schema={fixture.minLengthSchema}
+          uischema={fixture.uischema}
+          path='name'
+        />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode();
@@ -166,8 +176,8 @@ describe('Text cell', () => {
     const schema: JsonSchema = {
       type: 'object',
       properties: {
-        name: { type: 'string' }
-      }
+        name: { type: 'string' },
+      },
     };
     const core = initCore(schema, fixture.uischema, { name: 'Foo' });
     wrapper = mount(
@@ -183,7 +193,11 @@ describe('Text cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TextCell schema={fixture.schema} uischema={fixture.uischema} path='name' />
+        <TextCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='name'
+        />
       </JsonFormsStateProvider>
     );
 
@@ -195,9 +209,13 @@ describe('Text cell', () => {
 
   test('update via input event', () => {
     const onChangeData: any = {
-      data: undefined
+      data: undefined,
     };
-    const core = initCore(fixture.minLengthSchema, fixture.uischema, fixture.data);
+    const core = initCore(
+      fixture.minLengthSchema,
+      fixture.uischema,
+      fixture.data
+    );
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
         <TestEmitter
@@ -205,7 +223,11 @@ describe('Text cell', () => {
             onChangeData.data = data;
           }}
         />
-        <TextCell schema={fixture.minLengthSchema} uischema={fixture.uischema} path='name' />
+        <TextCell
+          schema={fixture.minLengthSchema}
+          uischema={fixture.uischema}
+          path='name'
+        />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input');
@@ -214,94 +236,151 @@ describe('Text cell', () => {
   });
 
   test('update via action', () => {
-    const core = initCore(fixture.minLengthSchema, fixture.uischema, fixture.data);
+    const core = initCore(
+      fixture.minLengthSchema,
+      fixture.uischema,
+      fixture.data
+    );
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TextCell schema={fixture.minLengthSchema} uischema={fixture.uischema} path='name' />
+        <TextCell
+          schema={fixture.minLengthSchema}
+          uischema={fixture.uischema}
+          path='name'
+        />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     core.data = { ...core.data, name: 'Bar' };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     expect(input.value).toBe('Bar');
   });
 
   test('update with undefined value', () => {
-    const core = initCore(fixture.minLengthSchema, fixture.uischema, fixture.data);
+    const core = initCore(
+      fixture.minLengthSchema,
+      fixture.uischema,
+      fixture.data
+    );
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TextCell schema={fixture.minLengthSchema} uischema={fixture.uischema} path='name' />
+        <TextCell
+          schema={fixture.minLengthSchema}
+          uischema={fixture.uischema}
+          path='name'
+        />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, name: undefined };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.value).toBe('');
   });
 
   test('update with null value', () => {
-    const core = initCore(fixture.minLengthSchema, fixture.uischema, fixture.data);
+    const core = initCore(
+      fixture.minLengthSchema,
+      fixture.uischema,
+      fixture.data
+    );
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TextCell schema={fixture.minLengthSchema} uischema={fixture.uischema} path='name' />
+        <TextCell
+          schema={fixture.minLengthSchema}
+          uischema={fixture.uischema}
+          path='name'
+        />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, name: null };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.value).toBe('');
   });
 
   test('update with wrong ref', () => {
-    const core = initCore(fixture.minLengthSchema, fixture.uischema, fixture.data);
+    const core = initCore(
+      fixture.minLengthSchema,
+      fixture.uischema,
+      fixture.data
+    );
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TextCell schema={fixture.minLengthSchema} uischema={fixture.uischema} path='name' />
+        <TextCell
+          schema={fixture.minLengthSchema}
+          uischema={fixture.uischema}
+          path='name'
+        />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, firstname: 'Bar' };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.value).toBe('Foo');
   });
 
   test('update with null ref', () => {
-    const core = initCore(fixture.minLengthSchema, fixture.uischema, fixture.data);
+    const core = initCore(
+      fixture.minLengthSchema,
+      fixture.uischema,
+      fixture.data
+    );
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TextCell schema={fixture.minLengthSchema} uischema={fixture.uischema} path='name' />
+        <TextCell
+          schema={fixture.minLengthSchema}
+          uischema={fixture.uischema}
+          path='name'
+        />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, null: 'Bar' };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.value).toBe('Foo');
   });
 
   test('update with undefined ref', () => {
-    const core = initCore(fixture.minLengthSchema, fixture.uischema, fixture.data);
+    const core = initCore(
+      fixture.minLengthSchema,
+      fixture.uischema,
+      fixture.data
+    );
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TextCell schema={fixture.minLengthSchema} uischema={fixture.uischema} path='name' />
+        <TextCell
+          schema={fixture.minLengthSchema}
+          uischema={fixture.uischema}
+          path='name'
+        />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, undefined: 'Bar' };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.value).toBe('Foo');
   });
 
   test('disable', () => {
-    const core = initCore(fixture.minLengthSchema, fixture.uischema, fixture.data);
+    const core = initCore(
+      fixture.minLengthSchema,
+      fixture.uischema,
+      fixture.data
+    );
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TextCell schema={fixture.minLengthSchema} uischema={fixture.uischema} path='name' enabled={false} />
+        <TextCell
+          schema={fixture.minLengthSchema}
+          uischema={fixture.uischema}
+          path='name'
+          enabled={false}
+        />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
@@ -309,10 +388,18 @@ describe('Text cell', () => {
   });
 
   test('enabled by default', () => {
-    const core = initCore(fixture.minLengthSchema, fixture.uischema, fixture.data);
+    const core = initCore(
+      fixture.minLengthSchema,
+      fixture.uischema,
+      fixture.data
+    );
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TextCell schema={fixture.minLengthSchema} uischema={fixture.uischema} path='name' />
+        <TextCell
+          schema={fixture.minLengthSchema}
+          uischema={fixture.uischema}
+          path='name'
+        />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
@@ -324,8 +411,8 @@ describe('Text cell', () => {
       type: 'Control',
       scope: '#/properties/name',
       options: {
-        placeholder: 'Placeholder for name field'
-      }
+        placeholder: 'Placeholder for name field',
+      },
     };
     const core = initCore(fixture.schema, uischema, fixture.data);
     wrapper = mount(
@@ -343,13 +430,17 @@ describe('Text cell', () => {
       scope: '#/properties/name',
       options: {
         trim: true,
-        restrict: true
-      }
+        restrict: true,
+      },
     };
     const core = initCore(fixture.maxLengthSchema, uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TextCell schema={fixture.maxLengthSchema} uischema={uischema} path='name' />
+        <TextCell
+          schema={fixture.maxLengthSchema}
+          uischema={uischema}
+          path='name'
+        />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
@@ -363,13 +454,17 @@ describe('Text cell', () => {
       scope: '#/properties/name',
       options: {
         trim: true,
-        restrict: false
-      }
+        restrict: false,
+      },
     };
     const core = initCore(fixture.maxLengthSchema, uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TextCell schema={fixture.maxLengthSchema} uischema={uischema} path='name' />
+        <TextCell
+          schema={fixture.maxLengthSchema}
+          uischema={uischema}
+          path='name'
+        />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
@@ -383,13 +478,17 @@ describe('Text cell', () => {
       scope: '#/properties/name',
       options: {
         trim: false,
-        restrict: true
-      }
+        restrict: true,
+      },
     };
     const core = initCore(fixture.maxLengthSchema, uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TextCell schema={fixture.maxLengthSchema} uischema={uischema} path='name' />
+        <TextCell
+          schema={fixture.maxLengthSchema}
+          uischema={uischema}
+          path='name'
+        />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
@@ -398,10 +497,18 @@ describe('Text cell', () => {
   });
 
   test('do not use maxLength by default', () => {
-    const core = initCore(fixture.maxLengthSchema, fixture.uischema, fixture.data);
+    const core = initCore(
+      fixture.maxLengthSchema,
+      fixture.uischema,
+      fixture.data
+    );
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TextCell schema={fixture.maxLengthSchema} uischema={fixture.uischema} path='name' />
+        <TextCell
+          schema={fixture.maxLengthSchema}
+          uischema={fixture.uischema}
+          path='name'
+        />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
@@ -415,8 +522,8 @@ describe('Text cell', () => {
       scope: '#/properties/name',
       options: {
         trim: true,
-        restrict: true
-      }
+        restrict: true,
+      },
     };
     const core = initCore(fixture.schema, uischema, fixture.data);
     wrapper = mount(
@@ -435,8 +542,8 @@ describe('Text cell', () => {
       scope: '#/properties/name',
       options: {
         trim: true,
-        restrict: false
-      }
+        restrict: false,
+      },
     };
     const core = initCore(fixture.schema, uischema, fixture.data);
     wrapper = mount(
@@ -455,8 +562,8 @@ describe('Text cell', () => {
       scope: '#/properties/name',
       options: {
         trim: false,
-        restrict: true
-      }
+        restrict: true,
+      },
     };
     const core = initCore(fixture.schema, uischema, fixture.data);
     wrapper = mount(
@@ -473,7 +580,11 @@ describe('Text cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TextCell schema={fixture.schema} uischema={fixture.uischema} path='name' />
+        <TextCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='name'
+        />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
