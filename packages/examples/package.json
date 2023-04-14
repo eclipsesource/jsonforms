@@ -37,7 +37,8 @@
   "scripts": {
     "build": "rollup -c rollup.config.js",
     "clean": "rimraf lib coverage dist .nyc_output 2> /dev/null",
-    "lint": "tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
     "test": "echo 'Nothing to do for `examples` package'",
     "doc": "typedoc --name 'JSON Forms Examples' --mode file --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
   },
@@ -49,13 +50,19 @@
   },
   "devDependencies": {
     "@jsonforms/core": "^3.1.0-alpha.1",
+    "@typescript-eslint/eslint-plugin": "^5.54.1",
+    "@typescript-eslint/parser": "^5.54.1",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.7.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.8.4",
     "rimraf": "^3.0.2",
     "rollup": "^2.78.0",
     "rollup-plugin-cleanup": "^3.2.1",
     "rollup-plugin-typescript2": "^0.31.1",
     "rollup-plugin-visualizer": "^5.4.1",
     "tslib": "^2.2.0",
-    "tslint": "^5.20.1",
     "typedoc": "^0.19.2",
     "typescript": "4.2.3"
   }

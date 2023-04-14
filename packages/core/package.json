@@ -39,7 +39,8 @@
   "scripts": {
     "build": "rollup -c rollup.config.js",
     "clean": "rimraf -rf lib coverage dist .nyc_output 2> /dev/null",
-    "lint": "tslint --project tsconfig.json --exclude src/models/jsonSchema.ts",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
     "report": "nyc report --reporter=html",
     "test": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\",\\\"target\\\":\\\"es5\\\"} ava",
     "test-cov": "rimraf -rf .nyc_output && cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\",\\\"target\\\":\\\"es5\\\"} nyc ava",
@@ -73,12 +74,19 @@
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
     "@types/redux-mock-store": "^1.0.1",
+    "@typescript-eslint/eslint-plugin": "^5.54.1",
+    "@typescript-eslint/parser": "^5.54.1",
     "ava": "~2.4.0",
     "cross-env": "^7.0.2",
     "document-register-element": "^1.14.3",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.7.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-prettier": "^4.2.1",
     "jsdom": "^15.2.1",
     "jsdom-global": "^3.0.2",
     "nyc": "^15.1.0",
+    "prettier": "^2.8.4",
     "redux": "^4.0.4",
     "redux-mock-store": "1.5.3",
     "rimraf": "^3.0.2",
@@ -88,7 +96,6 @@
     "rollup-plugin-visualizer": "^5.4.1",
     "source-map-support": "0.5.16",
     "ts-node": "^10.4.0",
-    "tslint": "^5.20.1",
     "typedoc": "^0.19.2",
     "typescript": "4.2.3"
   }
