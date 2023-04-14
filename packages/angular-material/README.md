@@ -1,6 +1,6 @@
 # JSON Forms - More Forms. Less Code
 
-*Complex forms in the blink of an eye*
+_Complex forms in the blink of an eye_
 
 JSON Forms eliminates the tedious task of writing fully-featured forms by hand by leveraging the capabilities of JSON, JSON Schema and Javascript.
 
@@ -25,11 +25,11 @@ Use the `json-forms` component for each form you want to render and hand over th
 Example component file `app.component.ts`:
 
 ```ts
-import { Component } from "@angular/core";
-import { angularMaterialRenderers } from "@jsonforms/angular-material";
+import { Component } from '@angular/core';
+import { angularMaterialRenderers } from '@jsonforms/angular-material';
 
 @Component({
-  selector: "app-root",
+  selector: 'app-root',
   template: `<jsonforms
     [data]="data"
     [schema]="schema"
@@ -40,65 +40,66 @@ import { angularMaterialRenderers } from "@jsonforms/angular-material";
 export class AppComponent {
   renderers = angularMaterialRenderers;
   uischema = {
-    type: "VerticalLayout",
+    type: 'VerticalLayout',
     elements: [
       {
-        type: "Control",
+        type: 'Control',
         label: false,
-        scope: "#/properties/done",
+        scope: '#/properties/done',
       },
       {
-        type: "Control",
-        scope: "#/properties/name",
+        type: 'Control',
+        scope: '#/properties/name',
       },
       {
-        type: "HorizontalLayout",
+        type: 'HorizontalLayout',
         elements: [
           {
-            type: "Control",
-            scope: "#/properties/due_date",
+            type: 'Control',
+            scope: '#/properties/due_date',
           },
           {
-            type: "Control",
-            scope: "#/properties/recurrence",
+            type: 'Control',
+            scope: '#/properties/recurrence',
           },
         ],
       },
     ],
   };
   schema = {
-    type: "object",
+    type: 'object',
     properties: {
       name: {
-        type: "string",
+        type: 'string',
         minLength: 1,
       },
       done: {
-        type: "boolean",
+        type: 'boolean',
       },
       due_date: {
-        type: "string",
-        format: "date",
+        type: 'string',
+        format: 'date',
       },
       recurrence: {
-        type: "string",
-        enum: ["Never", "Daily", "Weekly", "Monthly"],
+        type: 'string',
+        enum: ['Never', 'Daily', 'Weekly', 'Monthly'],
       },
     },
-    required: ["name", "due_date"],
+    required: ['name', 'due_date'],
   };
   data = {};
 }
 ```
+
 Example module file `app.module.ts`:
 
 ```ts
-import { NgModule } from "@angular/core";
-import { BrowserModule } from "@angular/platform-browser";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { JsonFormsModule } from "@jsonforms/angular";
-import { JsonFormsAngularMaterialModule } from "@jsonforms/angular-material";
-import { AppComponent } from "./app.component";
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { JsonFormsModule } from '@jsonforms/angular';
+import { JsonFormsAngularMaterialModule } from '@jsonforms/angular-material';
+import { AppComponent } from './app.component';
 
 @NgModule({
   declarations: [AppComponent],
@@ -111,8 +112,7 @@ import { AppComponent } from "./app.component";
   schemas: [],
   bootstrap: [AppComponent],
 })
-
-export class AppModule { }
+export class AppModule {}
 ```
 
 ## License

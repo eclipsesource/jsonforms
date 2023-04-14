@@ -5,7 +5,7 @@ module.exports = {
   devtool: 'inline-source-map',
 
   resolve: {
-    extensions: ['.ts', '.js']
+    extensions: ['.ts', '.js'],
   },
 
   module: {
@@ -16,19 +16,19 @@ module.exports = {
         options: {
           plugins: [
             '@babel/plugin-proposal-optional-chaining',
-            '@babel/plugin-proposal-nullish-coalescing-operator'
-          ]
+            '@babel/plugin-proposal-nullish-coalescing-operator',
+          ],
         },
-        exclude: /node_modules/
+        exclude: /node_modules/,
       },
       {
         test: /\.ts$/,
         loaders: [
           {
-            loader: 'ts-loader'
+            loader: 'ts-loader',
           },
-          'angular2-template-loader'
-        ]
+          'angular2-template-loader',
+        ],
       },
       {
         test: /.+\.ts$/,
@@ -36,18 +36,18 @@ module.exports = {
         loader: 'istanbul-instrumenter-loader',
         enforce: 'post',
         query: {
-          esModules: true
-        }
+          esModules: true,
+        },
       },
       {
         test: /\.html$/,
-        loader: 'html-loader?attrs=false'
+        loader: 'html-loader?attrs=false',
       },
       {
         test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
-        loader: 'null-loader'
-      }
-    ]
+        loader: 'null-loader',
+      },
+    ],
   },
 
   plugins: [
@@ -56,8 +56,8 @@ module.exports = {
       /(angular(\\|\/)core(\\|\/)@angular)/,
       root('./src'), // location of your src
       {} // a map of your routes
-    )
-  ]
+    ),
+  ],
 };
 
 function root(localPath) {

@@ -9,13 +9,13 @@ import vue from 'rollup-plugin-vue';
 
 /**
  * @type {import('rollup').RollupOptions}
-*/
+ */
 const config = {
   input: 'dev/serve.ts',
   output: {
     file: 'example/dist/bundle.js',
     format: 'iife',
-    sourcemap: true
+    sourcemap: true,
   },
   plugins: [
     replace({
@@ -33,20 +33,20 @@ const config = {
         include: null,
         compilerOptions: {
           // Do not emit typescript declarations for our bundled example app
-          declaration: false
-        }
-      }
+          declaration: false,
+        },
+      },
     }),
     copy({
       targets: [
         {
           src: 'example/index.bundled.html',
           dest: 'example/dist',
-          rename: () => 'index.html'
+          rename: () => 'index.html',
         },
-      ]
+      ],
     }),
-  ]
-}
+  ],
+};
 
 export default config;

@@ -165,6 +165,8 @@ body {
 .react-tabs .panel-wrapper .react-tabs__tab-panel {
   display: none;
 }
-.react-tabs .panel-wrapper .react-tabs__tab-panel.react-tabs__tab-panel--selected {
+.react-tabs
+  .panel-wrapper
+  .react-tabs__tab-panel.react-tabs__tab-panel--selected {
   display: block;
 }

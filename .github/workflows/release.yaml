@@ -6,7 +6,7 @@ on:
 
 jobs:
   release:
-    if: | 
+    if: |
       startsWith(github.ref, 'refs/tags/v') &&
       !contains(github.ref, 'alpha') &&
       !contains(github.ref, 'beta') &&

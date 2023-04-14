@@ -1,6 +1,6 @@
 # JSON Forms - More Forms. Less Code
 
-*Complex forms in the blink of an eye*
+_Complex forms in the blink of an eye_
 
 JSON Forms eliminates the tedious task of writing fully-featured forms by hand by leveraging the capabilities of JSON, JSON Schema and Javascript.
 
@@ -20,30 +20,30 @@ Use the `JsonForms` component to render a form for your data.
 
 Mandatory props:
 
-* `data: any` - the data to show
-* `renderers: JsonFormsRendererRegistryEntry[]` - the Angular renderer set to use
+- `data: any` - the data to show
+- `renderers: JsonFormsRendererRegistryEntry[]` - the Angular renderer set to use
 
 Optional props:
 
-* `schema: JsonSchema` - the data schema for the given data. Will be generated when not given.
-* `uischema: UISchemaElement` - the UI schema for the given data schema. Will be generated when not given.
-* `config: any` - form-wide options. May contain default ui schema options.
-* `readonly: boolean` - whether all controls shall be readonly.
-* `uischemas: JsonFormsUiSchemaEntry[]` - registry for dynamic ui schema dispatching
-* `validationMode: 'ValidateAndShow' | 'ValidateAndHide' | 'NoValidation'` - the validation mode for the form
-* `ajv: AJV` - custom Ajv instance for the form
-* `locale` - string, for example for formatting numbers 
-* `dataChange` - event emitter which is called on each data change, containing the updated data and the validation result.
-* `errors` - event emitter which is called with all validations errors.
+- `schema: JsonSchema` - the data schema for the given data. Will be generated when not given.
+- `uischema: UISchemaElement` - the UI schema for the given data schema. Will be generated when not given.
+- `config: any` - form-wide options. May contain default ui schema options.
+- `readonly: boolean` - whether all controls shall be readonly.
+- `uischemas: JsonFormsUiSchemaEntry[]` - registry for dynamic ui schema dispatching
+- `validationMode: 'ValidateAndShow' | 'ValidateAndHide' | 'NoValidation'` - the validation mode for the form
+- `ajv: AJV` - custom Ajv instance for the form
+- `locale` - string, for example for formatting numbers
+- `dataChange` - event emitter which is called on each data change, containing the updated data and the validation result.
+- `errors` - event emitter which is called with all validations errors.
 
 Example component file `app.component.ts`:
 
 ```ts
-import { Component } from "@angular/core";
-import { angularMaterialRenderers } from "@jsonforms/angular-material";
+import { Component } from '@angular/core';
+import { angularMaterialRenderers } from '@jsonforms/angular-material';
 
 @Component({
-  selector: "app-root",
+  selector: 'app-root',
   template: `<jsonforms
     [data]="data"
     [schema]="schema"
@@ -54,52 +54,52 @@ import { angularMaterialRenderers } from "@jsonforms/angular-material";
 export class AppComponent {
   renderers = angularMaterialRenderers;
   uischema = {
-    type: "VerticalLayout",
+    type: 'VerticalLayout',
     elements: [
       {
-        type: "Control",
+        type: 'Control',
         label: false,
-        scope: "#/properties/done",
+        scope: '#/properties/done',
       },
       {
-        type: "Control",
-        scope: "#/properties/name",
+        type: 'Control',
+        scope: '#/properties/name',
       },
       {
-        type: "HorizontalLayout",
+        type: 'HorizontalLayout',
         elements: [
           {
-            type: "Control",
-            scope: "#/properties/due_date",
+            type: 'Control',
+            scope: '#/properties/due_date',
           },
           {
-            type: "Control",
-            scope: "#/properties/recurrence",
+            type: 'Control',
+            scope: '#/properties/recurrence',
           },
         ],
       },
     ],
   };
   schema = {
-    type: "object",
+    type: 'object',
     properties: {
       name: {
-        type: "string",
+        type: 'string',
         minLength: 1,
       },
       done: {
-        type: "boolean",
+        type: 'boolean',
       },
       due_date: {
-        type: "string",
-        format: "date",
+        type: 'string',
+        format: 'date',
       },
       recurrence: {
-        type: "string",
-        enum: ["Never", "Daily", "Weekly", "Monthly"],
+        type: 'string',
+        enum: ['Never', 'Daily', 'Weekly', 'Monthly'],
       },
     },
-    required: ["name", "due_date"],
+    required: ['name', 'due_date'],
   };
   data = {};
 }
@@ -108,12 +108,12 @@ export class AppComponent {
 Example module file:
 
 ```ts
-import { NgModule } from "@angular/core";
-import { BrowserModule } from "@angular/platform-browser";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { JsonFormsModule } from "@jsonforms/angular";
-import { JsonFormsAngularMaterialModule } from "@jsonforms/angular-material";
-import { AppComponent } from "./app.component";
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { JsonFormsModule } from '@jsonforms/angular';
+import { JsonFormsAngularMaterialModule } from '@jsonforms/angular-material';
+import { AppComponent } from './app.component';
 
 @NgModule({
   declarations: [AppComponent],
@@ -126,8 +126,7 @@ import { AppComponent } from "./app.component";
   schemas: [],
   bootstrap: [AppComponent],
 })
-
-export class AppModule { }
+export class AppModule {}
 ```
 
 ## License

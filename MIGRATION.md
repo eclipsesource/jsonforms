@@ -24,8 +24,16 @@ interface TesterContext {
   config: any;
 }
 
-type Tester = (uischema: UISchemaElement, schema: JsonSchema, context: TesterContext) => boolean;
-type RankedTester = (uischema: UISchemaElement, schema: JsonSchema, context: TesterContext) => number;
+type Tester = (
+  uischema: UISchemaElement,
+  schema: JsonSchema,
+  context: TesterContext
+) => boolean;
+type RankedTester = (
+  uischema: UISchemaElement,
+  schema: JsonSchema,
+  context: TesterContext
+) => number;
 ```
 
 This allows the testers to resolve any `$ref` they might encounter in their handed over `schema` by using the context's `rootSchema`.
@@ -50,7 +58,10 @@ To restore the old behavior, you can use `json-schema-ref-parser` or other libra
 ```ts
 import React, { useState } from 'react';
 import { JsonForms } from '@jsonforms/react';
-import { materialCells, materialRenderers } from '@jsonforms/material-renderers';
+import {
+  materialCells,
+  materialRenderers,
+} from '@jsonforms/material-renderers';
 import $RefParser from '@apidevtools/json-schema-ref-parser';
 import JsonRefs from 'json-refs';
 
@@ -58,22 +69,26 @@ import mySchemaWithReferences from 'myschema.json';
 
 const refParserOptions = {
   dereference: {
-    circular: false
-  }
-}
+    circular: false,
+  },
+};
 
 function App() {
   const [data, setData] = useState(initialData);
   const [resolvedSchema, setSchema] = useState();
 
   useEffect(() => {
-    $RefParser.dereference(mySchemaWithReferences).then(res => setSchema(res.$schema));
+    $RefParser
+      .dereference(mySchemaWithReferences)
+      .then((res) => setSchema(res.$schema));
     // or
-    JsonRefs.resolveRefs(mySchemaWithReferences).then(res => setSchema(res.resolved));
-  },[]);
+    JsonRefs.resolveRefs(mySchemaWithReferences).then((res) =>
+      setSchema(res.resolved)
+    );
+  }, []);
 
-  if(resolvedSchema === undefined) {
-    return <div> Loading... </div>
+  if (resolvedSchema === undefined) {
+    return <div> Loading... </div>;
   }
 
   return (
@@ -143,12 +158,12 @@ export const schema = {
   type: 'object',
   properties: {
     name: {
-      type: 'string'
-    }
+      type: 'string',
+    },
   },
-  required: ['name']
+  required: ['name'],
 };
-export const data = {name: 'Send email to Adrian'};
+export const data = { name: 'Send email to Adrian' };
 
 @Component({
   selector: 'app-root',
@@ -160,7 +175,7 @@ export const data = {name: 'Send email to Adrian'};
       [renderers]="renderers"
       (dataChange)="onDataChange($event)"
     ></jsonforms>
-  `
+  `,
 })
 export class AppComponent {
   readonly renderers = angularMaterialRenderers;
@@ -201,15 +216,12 @@ All current Redux functionally can also be achieved with the standalone version.
 Previously the store was initialized like this:
 
 ```ts
-const store = createStore(
-  combineReducers({ jsonforms: jsonformsReducer() }),
-  {
-    jsonforms: {
-      cells: materialCells,
-      renderers: materialRenderers
-    }
-  }
-);
+const store = createStore(combineReducers({ jsonforms: jsonformsReducer() }), {
+  jsonforms: {
+    cells: materialCells,
+    renderers: materialRenderers,
+  },
+});
 store.dispatch(Actions.init(data, schema, uischema));
 return (
   <Provider store={store}>
@@ -250,7 +262,7 @@ Within the standalone version, the renderer can just be provided to the `<JsonFo
 const renderers = [
   ...materialRenderers,
   // register custom renderer
-  { tester: customControlTester, renderer: CustomControl }
+  { tester: customControlTester, renderer: CustomControl },
 ];
 
 const MyApp = () => (
@@ -259,7 +271,6 @@ const MyApp = () => (
     renderers={renderers}
   />
 );
-
 ```
 
 ##### Example 3: Listen to data and validation changes
@@ -286,7 +297,10 @@ If you want to keep using the Redux variant of JSON Forms for now (which is not 
 The new imports are available at `@jsonforms/react/lib/redux`, i.e.
 
 ```ts
-import { jsonformsReducer, JsonFormsReduxProvider } from '@jsonforms/react/lib/redux';
+import {
+  jsonformsReducer,
+  JsonFormsReduxProvider,
+} from '@jsonforms/react/lib/redux';
 ```
 
 ## Migrating from JSON Forms 1.x (AngularJS 1.x)
@@ -298,8 +312,8 @@ The complexity of the migration of an existing JSON Forms 1.x application, which
 There are two big changes between JSON Forms 1 and JSON Forms 2 you need to understand when migrating your existing application.
 
 1. JSON Forms 2.x does not rely on any specific UI framework [or library].
-  The `2.0.0` initial release featured renderers based on [React](https://reactjs.org).
-  An [Angular](https://angular.io) based renderer set was released with `2.1.0`.
+   The `2.0.0` initial release featured renderers based on [React](https://reactjs.org).
+   An [Angular](https://angular.io) based renderer set was released with `2.1.0`.
 
 2. Since JSON Forms 2.x maintains its internal state via [redux](https://redux.js.org/), you will need to add it as a dependency to your application.
 
@@ -314,20 +328,20 @@ Instead of:
 
 ```ts
 const uischema = {
-    type: 'Control',
-    scope: {
-        $ref: '#/properties/name'
-    }
-}
+  type: 'Control',
+  scope: {
+    $ref: '#/properties/name',
+  },
+};
 ```
 
 simply write:
 
 ```ts
 const uischema = {
-    type: 'Control',
-    scope: '#/properties/name'
-}
+  type: 'Control',
+  scope: '#/properties/name',
+};
 ```
 
 Otherwise the UI schema remains unchanged and works like in JSON Forms 1.x.
