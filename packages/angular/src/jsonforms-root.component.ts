@@ -115,7 +115,6 @@ export class JsonForms implements OnChanges, OnInit {
         }
     }
 
-    // tslint:disable-next-line: cyclomatic-complexity
     ngOnChanges(changes: SimpleChanges): void {
         if (!this.initialized) {
             return;

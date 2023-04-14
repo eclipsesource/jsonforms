@@ -153,7 +153,6 @@ const getAdditionalErrors = (
   return state.additionalErrors;
 };
 
-// tslint:disable-next-line: cyclomatic-complexity
 export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
   state = initState,
   action
