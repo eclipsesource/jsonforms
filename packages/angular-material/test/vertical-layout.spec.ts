@@ -28,13 +28,15 @@ import { beforeEachLayoutTest, setupMockStore } from '@jsonforms/angular-test';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import {
   VerticalLayoutRenderer,
-  verticalLayoutTester
+  verticalLayoutTester,
 } from '../src/layouts/vertical-layout.renderer';
 import { LayoutChildrenRenderPropsPipe } from '../src/layouts/layout.renderer';
 
 describe('Vertical layout tester', () => {
   it('should succeed', () => {
-    expect(verticalLayoutTester({ type: 'VerticalLayout' }, undefined, undefined)).toBe(1);
+    expect(
+      verticalLayoutTester({ type: 'VerticalLayout' }, undefined, undefined)
+    ).toBe(1);
   });
 });
 describe('Vertical layout', () => {
@@ -44,19 +46,19 @@ describe('Vertical layout', () => {
   beforeEach(() => {
     fixture = beforeEachLayoutTest(VerticalLayoutRenderer, {
       declarations: [LayoutChildrenRenderPropsPipe],
-      imports: [FlexLayoutModule]
+      imports: [FlexLayoutModule],
     });
     component = fixture.componentInstance;
   });
 
   it('render with undefined elements', () => {
     const uischema: UISchemaElement = {
-      type: 'VerticalLayout'
+      type: 'VerticalLayout',
     };
     setupMockStore(fixture, {
       data: {},
       schema: {},
-      uischema
+      uischema,
     });
     fixture.componentInstance.ngOnInit();
     fixture.detectChanges();
@@ -68,13 +70,13 @@ describe('Vertical layout', () => {
   it('render with null elements', () => {
     const uischema: VerticalLayout = {
       type: 'VerticalLayout',
-      elements: null
+      elements: null,
     };
 
     setupMockStore(fixture, {
       data: {},
       schema: {},
-      uischema
+      uischema,
     });
     fixture.componentInstance.ngOnInit();
     fixture.detectChanges();
@@ -84,12 +86,12 @@ describe('Vertical layout', () => {
   it('render with children', () => {
     const uischema: VerticalLayout = {
       type: 'VerticalLayout',
-      elements: [{ type: 'Control' }, { type: 'Control' }]
+      elements: [{ type: 'Control' }, { type: 'Control' }],
     };
     setupMockStore(fixture, {
       data: {},
       schema: {},
-      uischema
+      uischema,
     });
     fixture.componentInstance.ngOnInit();
     fixture.detectChanges();
@@ -101,13 +103,13 @@ describe('Vertical layout', () => {
   xit('can be hidden', () => {
     const uischema: VerticalLayout = {
       type: 'VerticalLayout',
-      elements: [{ type: 'Control' }, { type: 'Control' }]
+      elements: [{ type: 'Control' }, { type: 'Control' }],
     };
     component.visible = false;
     setupMockStore(fixture, {
       data: {},
       schema: {},
-      uischema
+      uischema,
     });
     component.ngOnInit();
     expect(fixture.nativeElement.children[0].style.display).toBe('none');

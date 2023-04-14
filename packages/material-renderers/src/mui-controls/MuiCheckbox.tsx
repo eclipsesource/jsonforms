@@ -31,33 +31,35 @@ interface MuiCheckboxInputProps {
   inputProps?: InputProps['inputProps'];
 }
 
-export const MuiCheckbox = React.memo((props: CellProps & WithClassname & MuiCheckboxInputProps) => {
-  const {
-    data,
-    className,
-    id,
-    enabled,
-    uischema,
-    path,
-    handleChange,
-    config,
-    inputProps
-  } = props;
-  const appliedUiSchemaOptions = merge({}, config, uischema.options);
-  const inputPropsMerged = merge({}, inputProps, {
-    autoFocus: !!appliedUiSchemaOptions.focus
-  });
-  // !! causes undefined value to be converted to false, otherwise has no effect
-  const checked = !!data;
+export const MuiCheckbox = React.memo(
+  (props: CellProps & WithClassname & MuiCheckboxInputProps) => {
+    const {
+      data,
+      className,
+      id,
+      enabled,
+      uischema,
+      path,
+      handleChange,
+      config,
+      inputProps,
+    } = props;
+    const appliedUiSchemaOptions = merge({}, config, uischema.options);
+    const inputPropsMerged = merge({}, inputProps, {
+      autoFocus: !!appliedUiSchemaOptions.focus,
+    });
+    // !! causes undefined value to be converted to false, otherwise has no effect
+    const checked = !!data;
 
-  return (
-    <Checkbox
-      checked={checked}
-      onChange={(_ev, isChecked) => handleChange(path, isChecked)}
-      className={className}
-      id={id}
-      disabled={!enabled}
-      inputProps={inputPropsMerged}
-    />
-  );
-});
+    return (
+      <Checkbox
+        checked={checked}
+        onChange={(_ev, isChecked) => handleChange(path, isChecked)}
+        className={className}
+        id={id}
+        disabled={!enabled}
+        inputProps={inputPropsMerged}
+      />
+    );
+  }
+);

@@ -32,7 +32,7 @@ export {
   CategorizationList,
   CategorizationProps,
   CategorizationRenderer,
-  SingleCategory
+  SingleCategory,
 };
 
 export default CategorizationRenderer;

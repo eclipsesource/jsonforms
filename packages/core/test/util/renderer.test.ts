@@ -31,9 +31,38 @@ import { ErrorObject } from 'ajv';
 import { JsonFormsState } from '../../src/store';
 import { coreReducer, JsonFormsCore } from '../../src/reducers/core';
 import { Dispatch } from '../../src/util/type';
-import { CoreActions, init, setValidationMode, update, UpdateAction, UPDATE_DATA } from '../../src/actions/actions';
-import { ControlElement, LabelElement, RuleEffect, UISchemaElement } from '../../src/models/uischema';
-import { computeLabel, createDefaultValue, mapDispatchToArrayControlProps, mapDispatchToControlProps, mapDispatchToMultiEnumProps, mapStateToAnyOfProps, mapStateToArrayLayoutProps, mapStateToControlProps, mapStateToEnumControlProps, mapStateToJsonFormsRendererProps, mapStateToLabelProps, mapStateToLayoutProps, mapStateToMultiEnumControlProps, mapStateToOneOfEnumControlProps, mapStateToOneOfProps, OwnPropsOfControl } from '../../src/util/renderer';
+import {
+  CoreActions,
+  init,
+  setValidationMode,
+  update,
+  UpdateAction,
+  UPDATE_DATA,
+} from '../../src/actions/actions';
+import {
+  ControlElement,
+  LabelElement,
+  RuleEffect,
+  UISchemaElement,
+} from '../../src/models/uischema';
+import {
+  computeLabel,
+  createDefaultValue,
+  mapDispatchToArrayControlProps,
+  mapDispatchToControlProps,
+  mapDispatchToMultiEnumProps,
+  mapStateToAnyOfProps,
+  mapStateToArrayLayoutProps,
+  mapStateToControlProps,
+  mapStateToEnumControlProps,
+  mapStateToJsonFormsRendererProps,
+  mapStateToLabelProps,
+  mapStateToLayoutProps,
+  mapStateToMultiEnumControlProps,
+  mapStateToOneOfEnumControlProps,
+  mapStateToOneOfProps,
+  OwnPropsOfControl,
+} from '../../src/util/renderer';
 import { clearAllIds } from '../../src/util/ids';
 import { JsonSchema } from '../../src/models/jsonSchema';
 import { rankWith } from '../../src/testers/testers';
@@ -49,7 +78,9 @@ const mockDispatch = (
   initialCore: JsonFormsCore
 ): [() => JsonFormsCore, Dispatch<CoreActions>] => {
   const coreContainer = { core: initialCore };
-  const dispatch: Dispatch<CoreActions> = <T extends CoreActions> (action: T) : T => {
+  const dispatch: Dispatch<CoreActions> = <T extends CoreActions>(
+    action: T
+  ): T => {
     coreContainer.core = coreReducer(coreContainer.core, action);
     return action;
   };
@@ -62,8 +93,8 @@ const hideRule = {
   condition: {
     type: 'LEAF',
     scope: '#/properties/firstName',
-    expectedValue: 'Homer'
-  }
+    expectedValue: 'Homer',
+  },
 };
 
 const disableRule = {
@@ -71,8 +102,8 @@ const disableRule = {
   condition: {
     type: 'LEAF',
     scope: '#/properties/firstName',
-    expectedValue: 'Homer'
-  }
+    expectedValue: 'Homer',
+  },
 };
 
 const enableRule = {
@@ -80,13 +111,13 @@ const enableRule = {
   condition: {
     type: 'LEAF',
     scope: '#/properties/firstName',
-    expectedValue: 'Homer'
-  }
+    expectedValue: 'Homer',
+  },
 };
 
 const coreUISchema: ControlElement = {
   type: 'Control',
-  scope: '#/properties/firstName'
+  scope: '#/properties/firstName',
 };
 
 const createState = (uischema: UISchemaElement) => ({
@@ -96,63 +127,63 @@ const createState = (uischema: UISchemaElement) => ({
         type: 'object',
         properties: {
           firstName: { type: 'string' },
-          lastName: { type: 'string' }
-        }
+          lastName: { type: 'string' },
+        },
       },
       data: {
-        firstName: 'Homer'
+        firstName: 'Homer',
       },
       uischema,
-      errors: [] as ErrorObject[]
-    }
-  }
+      errors: [] as ErrorObject[],
+    },
+  },
 });
 
-test('mapStateToControlProps - visible via ownProps ', t => {
+test('mapStateToControlProps - visible via ownProps ', (t) => {
   const uischema = {
     ...coreUISchema,
-    rule: hideRule
+    rule: hideRule,
   };
   const ownProps = {
     visible: true,
-    uischema
+    uischema,
   };
   const props = mapStateToControlProps(createState(uischema), ownProps);
   t.false(props.visible);
 });
 
-test('mapStateToControlProps - hidden via ownProps ', t => {
+test('mapStateToControlProps - hidden via ownProps ', (t) => {
   const uischema = {
     ...coreUISchema,
-    rule: hideRule
+    rule: hideRule,
   };
   const ownProps = {
     visible: false,
-    uischema
+    uischema,
   };
   const props = mapStateToControlProps(createState(uischema), ownProps);
   t.false(props.visible);
 });
 
-test('mapStateToControlProps - hidden via state ', t => {
+test('mapStateToControlProps - hidden via state ', (t) => {
   const uischema = {
     ...coreUISchema,
-    rule: hideRule
+    rule: hideRule,
   };
   const ownProps = {
-    uischema
+    uischema,
   };
   const props = mapStateToControlProps(createState(uischema), ownProps);
   t.false(props.visible);
 });
 
-test('mapStateToControlProps - visible via state ', t => {
+test('mapStateToControlProps - visible via state ', (t) => {
   const uischema = {
     ...coreUISchema,
-    rule: hideRule
+    rule: hideRule,
   };
   const ownProps = {
-    uischema
+    uischema,
   };
   const clonedState = _.cloneDeep(createState(uischema));
   clonedState.jsonforms.core.data.firstName = 'Lisa';
@@ -160,14 +191,14 @@ test('mapStateToControlProps - visible via state ', t => {
   t.true(props.visible);
 });
 
-test('mapStateToControlProps - visible via state with path from ownProps ', t => {
+test('mapStateToControlProps - visible via state with path from ownProps ', (t) => {
   const uischema = {
     ...coreUISchema,
-    rule: hideRule
+    rule: hideRule,
   };
   const ownProps = {
     uischema,
-    path: 'foo'
+    path: 'foo',
   };
   const state = {
     jsonforms: {
@@ -176,36 +207,24 @@ test('mapStateToControlProps - visible via state with path from ownProps ', t =>
           type: 'object',
           properties: {
             firstName: { type: 'string' },
-            lastName: { type: 'string' }
-          }
+            lastName: { type: 'string' },
+          },
         },
         data: {
-          foo: { firstName: 'Lisa' }
+          foo: { firstName: 'Lisa' },
         },
         uischema,
-        errors: [] as ErrorObject[]
-      }
-    }
+        errors: [] as ErrorObject[],
+      },
+    },
   };
   const props = mapStateToControlProps(state, ownProps);
   t.true(props.visible);
 });
 
-test('mapStateToControlProps - disabled via global readonly', t => {
-  const ownProps = {
-    uischema: coreUISchema
-  };
-  const state: JsonFormsState = createState(coreUISchema);
-  state.jsonforms.readonly = true;
-
-  const props = mapStateToControlProps(state, ownProps);
-  t.false(props.enabled);
-});
-
-test('mapStateToControlProps - disabled via global readonly beats enabled via ownProps', t => {
+test('mapStateToControlProps - disabled via global readonly', (t) => {
   const ownProps = {
     uischema: coreUISchema,
-    enabled: true
   };
   const state: JsonFormsState = createState(coreUISchema);
   state.jsonforms.readonly = true;
@@ -214,13 +233,25 @@ test('mapStateToControlProps - disabled via global readonly beats enabled via ow
   t.false(props.enabled);
 });
 
-test('mapStateToControlProps - disabled via global readonly beats enabled via rule', t => {
+test('mapStateToControlProps - disabled via global readonly beats enabled via ownProps', (t) => {
+  const ownProps = {
+    uischema: coreUISchema,
+    enabled: true,
+  };
+  const state: JsonFormsState = createState(coreUISchema);
+  state.jsonforms.readonly = true;
+
+  const props = mapStateToControlProps(state, ownProps);
+  t.false(props.enabled);
+});
+
+test('mapStateToControlProps - disabled via global readonly beats enabled via rule', (t) => {
   const uischema = {
     ...coreUISchema,
-    rule: enableRule
+    rule: enableRule,
   };
   const ownProps = {
-    uischema
+    uischema,
   };
   const state: JsonFormsState = createState(uischema);
   state.jsonforms.readonly = true;
@@ -229,15 +260,15 @@ test('mapStateToControlProps - disabled via global readonly beats enabled via ru
   t.false(props.enabled);
 });
 
-test('mapStateToControlProps - enabled via state with path from ownProps ', t => {
+test('mapStateToControlProps - enabled via state with path from ownProps ', (t) => {
   const uischema = {
     ...coreUISchema,
-    rule: disableRule
+    rule: disableRule,
   };
   const ownProps = {
     visible: true,
     uischema,
-    path: 'foo'
+    path: 'foo',
   };
   const state = {
     jsonforms: {
@@ -246,66 +277,66 @@ test('mapStateToControlProps - enabled via state with path from ownProps ', t =>
           type: 'object',
           properties: {
             firstName: { type: 'string' },
-            lastName: { type: 'string' }
-          }
+            lastName: { type: 'string' },
+          },
         },
         data: {
-          foo: { firstName: 'Lisa' }
+          foo: { firstName: 'Lisa' },
         },
         uischema,
-        errors: [] as ErrorObject[]
-      }
-    }
+        errors: [] as ErrorObject[],
+      },
+    },
   };
   const props = mapStateToControlProps(state, ownProps);
   t.true(props.enabled);
 });
 
-test('mapStateToControlProps - enabled via ownProps ', t => {
+test('mapStateToControlProps - enabled via ownProps ', (t) => {
   const uischema = {
     ...coreUISchema,
-    rule: disableRule
+    rule: disableRule,
   };
   const ownProps = {
     enabled: true,
-    uischema
+    uischema,
   };
   const props = mapStateToControlProps(createState(uischema), ownProps);
   t.false(props.enabled);
 });
 
-test('mapStateToControlProps - disabled via ownProps ', t => {
+test('mapStateToControlProps - disabled via ownProps ', (t) => {
   const uischema = {
     ...coreUISchema,
-    rule: disableRule
+    rule: disableRule,
   };
   const ownProps = {
     enabled: false,
-    uischema
+    uischema,
   };
   const props = mapStateToControlProps(createState(uischema), ownProps);
   t.false(props.enabled);
 });
 
-test('mapStateToControlProps - disabled via state ', t => {
+test('mapStateToControlProps - disabled via state ', (t) => {
   const uischema = {
     ...coreUISchema,
-    rule: disableRule
+    rule: disableRule,
   };
   const ownProps = {
-    uischema
+    uischema,
   };
   const props = mapStateToControlProps(createState(uischema), ownProps);
   t.false(props.enabled);
 });
 
-test('mapStateToControlProps - enabled via state ', t => {
+test('mapStateToControlProps - enabled via state ', (t) => {
   const uischema = {
     ...coreUISchema,
-    rule: disableRule
+    rule: disableRule,
   };
   const ownProps = {
-    uischema
+    uischema,
   };
   const clonedState = _.cloneDeep(createState(uischema));
   clonedState.jsonforms.core.data.firstName = 'Lisa';
@@ -313,55 +344,55 @@ test('mapStateToControlProps - enabled via state ', t => {
   t.true(props.enabled);
 });
 
-test('mapStateToControlProps - path', t => {
+test('mapStateToControlProps - path', (t) => {
   const ownProps = {
-    uischema: coreUISchema
+    uischema: coreUISchema,
   };
   const props = mapStateToControlProps(createState(coreUISchema), ownProps);
   t.is(props.path, 'firstName');
 });
 
-test('mapStateToControlProps - compose path with ownProps.path', t => {
+test('mapStateToControlProps - compose path with ownProps.path', (t) => {
   const ownProps = {
     uischema: coreUISchema,
-    path: 'yo'
+    path: 'yo',
   };
   const props = mapStateToControlProps(createState(coreUISchema), ownProps);
   t.is(props.path, 'yo.firstName');
 });
 
-test('mapStateToControlProps - derive label', t => {
+test('mapStateToControlProps - derive label', (t) => {
   const ownProps = {
-    uischema: coreUISchema
+    uischema: coreUISchema,
   };
   const props = mapStateToControlProps(createState(coreUISchema), ownProps);
   t.is(props.label, 'First Name');
 });
 
-test('mapStateToControlProps - do not show label', t => {
+test('mapStateToControlProps - do not show label', (t) => {
   const ownProps = {
     uischema: {
       ...coreUISchema,
       label: {
-        show: false
-      }
-    }
+        show: false,
+      },
+    },
   };
   const props = mapStateToControlProps(createState(coreUISchema), ownProps);
   t.is(props.label, '');
 });
 
-test('mapStateToControlProps - data', t => {
+test('mapStateToControlProps - data', (t) => {
   const ownProps = {
-    uischema: coreUISchema
+    uischema: coreUISchema,
   };
   const props = mapStateToControlProps(createState(coreUISchema), ownProps);
   t.is(props.data, 'Homer');
 });
 
-test('mapStateToControlProps - errors', t => {
+test('mapStateToControlProps - errors', (t) => {
   const ownProps = {
-    uischema: coreUISchema
+    uischema: coreUISchema,
   };
   const clonedState = _.cloneDeep(createState(coreUISchema));
   const error: ErrorObject = {
@@ -370,24 +401,24 @@ test('mapStateToControlProps - errors', t => {
     keyword: 'whatever',
     schemaPath: '',
     params: undefined,
-    parentSchema: { type: 'string' }
+    parentSchema: { type: 'string' },
   };
   clonedState.jsonforms.core.errors = [error];
   const props = mapStateToControlProps(clonedState, ownProps);
   t.is(props.errors, 'Duff beer');
 });
 
-test('mapStateToControlProps - no duplicate error messages', t => {
+test('mapStateToControlProps - no duplicate error messages', (t) => {
   const schema = {
     type: 'object',
     properties: {
       firstName: {
         anyOf: [
           { type: 'string', minLength: 5 },
-          { type: 'string', enum: ['foo', 'bar'] }
-        ]
-      }
-    }
+          { type: 'string', enum: ['foo', 'bar'] },
+        ],
+      },
+    },
   };
   const initCoreState = coreReducer(undefined, init({}, schema, coreUISchema));
   const updateCoreState = coreReducer(
@@ -401,34 +432,37 @@ test('mapStateToControlProps - no duplicate error messages', t => {
   t.is(props.errors.split('\n').length, 1);
 });
 
-test('mapStateToControlProps - id', t => {
+test('mapStateToControlProps - id', (t) => {
   clearAllIds();
   const ownProps = {
     uischema: coreUISchema,
-    id: '#/properties/firstName'
+    id: '#/properties/firstName',
   };
   const props = mapStateToControlProps(createState(coreUISchema), ownProps);
   t.is(props.id, '#/properties/firstName');
 });
 
-test('mapStateToControlProps - hide errors in hide validation mode', t => {
+test('mapStateToControlProps - hide errors in hide validation mode', (t) => {
   const schema = {
     type: 'object',
     properties: {
       animal: {
-        type: 'string'
-      }
-    }
+        type: 'string',
+      },
+    },
   };
   const uischema: ControlElement = {
     type: 'Control',
-    scope: '#/properties/animal'
+    scope: '#/properties/animal',
   };
-  const initCoreState = coreReducer(undefined, init({ animal: 100 }, schema, uischema));
+  const initCoreState = coreReducer(
+    undefined,
+    init({ animal: 100 }, schema, uischema)
+  );
   t.is(initCoreState.errors.length, 1);
 
   const ownProps = {
-    uischema
+    uischema,
   };
   const props = mapStateToControlProps(
     { jsonforms: { core: initCoreState } },
@@ -449,7 +483,7 @@ test('mapStateToControlProps - hide errors in hide validation mode', t => {
   t.is(hideErrorsProps.errors, '');
 });
 
-test('mapDispatchToControlProps', t => {
+test('mapDispatchToControlProps', (t) => {
   const store = mockStore(createState(coreUISchema));
   const props = mapDispatchToControlProps(store.dispatch);
   props.handleChange('foo', 42);
@@ -459,12 +493,12 @@ test('mapDispatchToControlProps', t => {
   t.is(updateAction.updater(), 42);
 });
 
-test('createDefaultValue', t => {
+test('createDefaultValue', (t) => {
   t.true(
     _.isDate(
       createDefaultValue({
         type: 'string',
-        format: 'date'
+        format: 'date',
       })
     )
   );
@@ -472,7 +506,7 @@ test('createDefaultValue', t => {
     _.isDate(
       createDefaultValue({
         type: 'string',
-        format: 'date-time'
+        format: 'date-time',
       })
     )
   );
@@ -480,7 +514,7 @@ test('createDefaultValue', t => {
     _.isDate(
       createDefaultValue({
         type: 'string',
-        format: 'time'
+        format: 'time',
       })
     )
   );
@@ -494,69 +528,69 @@ test('createDefaultValue', t => {
   t.deepEqual(createDefaultValue({ type: 'something' }), {});
 });
 
-test(`mapStateToJsonFormsRendererProps should use registered UI schema given ownProps schema`, t => {
+test(`mapStateToJsonFormsRendererProps should use registered UI schema given ownProps schema`, (t) => {
   const store = mockStore(createState(coreUISchema));
   const schema = {
     type: 'object',
     properties: {
       bar: {
-        type: 'number'
-      }
-    }
+        type: 'number',
+      },
+    },
   };
 
   const props = mapStateToJsonFormsRendererProps(store.getState(), { schema });
   t.deepEqual(props.uischema, coreUISchema);
 });
 
-test(`mapStateToJsonFormsRendererProps should use registered UI schema given no ownProps`, t => {
+test(`mapStateToJsonFormsRendererProps should use registered UI schema given no ownProps`, (t) => {
   const store = mockStore(createState(coreUISchema));
   const props = mapStateToJsonFormsRendererProps(store.getState(), {});
   t.deepEqual(props.uischema, coreUISchema);
 });
 
-test(`mapStateToJsonFormsRendererProps should use UI schema if given via ownProps`, t => {
+test(`mapStateToJsonFormsRendererProps should use UI schema if given via ownProps`, (t) => {
   const store = mockStore(createState(coreUISchema));
   const schema = {
     type: 'object',
     properties: {
       foo: {
-        type: 'string'
+        type: 'string',
       },
       bar: {
-        type: 'number'
-      }
-    }
+        type: 'number',
+      },
+    },
   };
   const uischema = {
     type: 'Control',
-    scope: '#/properties/foo'
+    scope: '#/properties/foo',
   };
 
   const props = mapStateToJsonFormsRendererProps(store.getState(), {
     schema,
-    uischema
+    uischema,
   });
   t.deepEqual(props.uischema, uischema);
 });
 
-test('mapDispatchToArrayControlProps should adding items to array', t => {
+test('mapDispatchToArrayControlProps should adding items to array', (t) => {
   const data: any = ['foo'];
   const schema: JsonSchema = {
     type: 'array',
     items: {
-      type: 'string'
-    }
+      type: 'string',
+    },
   };
   const uischema: ControlElement = {
     type: 'Control',
-    scope: '#'
+    scope: '#',
   };
   const initCore: JsonFormsCore = {
     uischema,
     schema,
     data,
-    errors: [] as ErrorObject[]
+    errors: [] as ErrorObject[],
   };
   const [getCore, dispatch] = mockDispatch(initCore);
   dispatch(init(data, schema, uischema));
@@ -565,23 +599,23 @@ test('mapDispatchToArrayControlProps should adding items to array', t => {
   t.is(getCore().data.length, 2);
 });
 
-test('mapDispatchToArrayControlProps should remove items from array', t => {
+test('mapDispatchToArrayControlProps should remove items from array', (t) => {
   const data = ['foo', 'bar', 'quux'];
   const schema: JsonSchema = {
     type: 'array',
     items: {
-      type: 'string'
-    }
+      type: 'string',
+    },
   };
   const uischema: ControlElement = {
     type: 'Control',
-    scope: '#'
+    scope: '#',
   };
   const initCore: JsonFormsCore = {
     uischema,
     schema,
     data,
-    errors: [] as ErrorObject[]
+    errors: [] as ErrorObject[],
   };
   const [getCore, dispatch] = mockDispatch(initCore);
   dispatch(init(data, schema, uischema));
@@ -591,15 +625,15 @@ test('mapDispatchToArrayControlProps should remove items from array', t => {
   t.is(getCore().data[0], 'quux');
 });
 
-test('mapStateToLayoutProps - visible via state with path from ownProps ', t => {
+test('mapStateToLayoutProps - visible via state with path from ownProps ', (t) => {
   const uischema = {
     type: 'VerticalLayout',
     elements: [coreUISchema],
-    rule: hideRule
+    rule: hideRule,
   };
   const ownProps = {
     uischema,
-    path: 'foo'
+    path: 'foo',
   };
   const state = {
     jsonforms: {
@@ -608,22 +642,22 @@ test('mapStateToLayoutProps - visible via state with path from ownProps ', t => 
           type: 'object',
           properties: {
             firstName: { type: 'string' },
-            lastName: { type: 'string' }
-          }
+            lastName: { type: 'string' },
+          },
         },
         data: {
-          foo: { firstName: 'Lisa' }
+          foo: { firstName: 'Lisa' },
         },
         uischema,
-        errors: [] as ErrorObject[]
-      }
-    }
+        errors: [] as ErrorObject[],
+      },
+    },
   };
   const props = mapStateToLayoutProps(state, ownProps);
   t.true(props.visible);
 });
 
-test('mapStateToArrayLayoutProps - should include minItems in array layout props', t => {
+test('mapStateToArrayLayoutProps - should include minItems in array layout props', (t) => {
   const schema: JsonSchema = {
     type: 'array',
     minItems: 42,
@@ -632,15 +666,15 @@ test('mapStateToArrayLayoutProps - should include minItems in array layout props
       properties: {
         message: {
           type: 'string',
-          default: 'foo'
-        }
-      }
-    }
+          default: 'foo',
+        },
+      },
+    },
   };
 
   const uischema: ControlElement = {
     type: 'Control',
-    scope: '#'
+    scope: '#',
   };
 
   const state = {
@@ -649,23 +683,23 @@ test('mapStateToArrayLayoutProps - should include minItems in array layout props
         schema,
         data: {},
         uischema,
-        errors: [] as ErrorObject[]
-      }
-    }
+        errors: [] as ErrorObject[],
+      },
+    },
   };
 
   const ownProps = {
-    uischema
+    uischema,
   };
 
   const props = mapStateToArrayLayoutProps(state, ownProps);
   t.is(props.minItems, 42);
 });
 
-test('mapStateToLayoutProps should return renderers prop via ownProps', t => {
+test('mapStateToLayoutProps should return renderers prop via ownProps', (t) => {
   const uischema = {
     type: 'VerticalLayout',
-    elements: [] as UISchemaElement[]
+    elements: [] as UISchemaElement[],
   };
   const state = {
     jsonforms: {
@@ -674,16 +708,16 @@ test('mapStateToLayoutProps should return renderers prop via ownProps', t => {
           type: 'object',
           properties: {
             firstName: { type: 'string' },
-            lastName: { type: 'string' }
-          }
+            lastName: { type: 'string' },
+          },
         },
         data: {
-          foo: { firstName: 'Homer' }
+          foo: { firstName: 'Homer' },
         },
         uischema,
-        errors: [] as ErrorObject[]
-      }
-    }
+        errors: [] as ErrorObject[],
+      },
+    },
   };
   const props = mapStateToLayoutProps(state, {
     uischema,
@@ -691,36 +725,20 @@ test('mapStateToLayoutProps should return renderers prop via ownProps', t => {
     renderers: [
       {
         tester: rankWith(1, () => true),
-        renderer: undefined
-      }
-    ]
+        renderer: undefined,
+      },
+    ],
   });
   t.is(props.renderers.length, 1);
 });
 
-test('mapStateToLayoutProps - disabled via global readonly', t => {
-  const uischema = {
-    type: 'VerticalLayout',
-    elements: [coreUISchema],
-  };
-  const ownProps = {
-    uischema
-  };
-  const state: JsonFormsState = createState(uischema);
-  state.jsonforms.readonly = true;
-
-  const props = mapStateToLayoutProps(state, ownProps);
-  t.false(props.enabled);
-});
-
-test('mapStateToLayoutProps - disabled via global readonly beats enabled via ownProps', t => {
+test('mapStateToLayoutProps - disabled via global readonly', (t) => {
   const uischema = {
     type: 'VerticalLayout',
     elements: [coreUISchema],
   };
   const ownProps = {
     uischema,
-    enabled: true
   };
   const state: JsonFormsState = createState(uischema);
   state.jsonforms.readonly = true;
@@ -729,31 +747,47 @@ test('mapStateToLayoutProps - disabled via global readonly beats enabled via own
   t.false(props.enabled);
 });
 
-test('mapStateToLayoutProps - disabled via global readonly beats enabled via rule', t => {
+test('mapStateToLayoutProps - disabled via global readonly beats enabled via ownProps', (t) => {
   const uischema = {
     type: 'VerticalLayout',
     elements: [coreUISchema],
-    rule: enableRule
-  };
-  const ownProps = {
-    uischema
-  };
-  const state: JsonFormsState = createState(uischema);
-  state.jsonforms.readonly = true;
-
-  const props = mapStateToLayoutProps(state, ownProps);
-  t.false(props.enabled);
-});
-
-test('mapStateToLayoutProps - hidden via state with path from ownProps ', t => {
-  const uischema = {
-    type: 'VerticalLayout',
-    elements: [coreUISchema],
-    rule: hideRule
   };
   const ownProps = {
     uischema,
-    path: 'foo'
+    enabled: true,
+  };
+  const state: JsonFormsState = createState(uischema);
+  state.jsonforms.readonly = true;
+
+  const props = mapStateToLayoutProps(state, ownProps);
+  t.false(props.enabled);
+});
+
+test('mapStateToLayoutProps - disabled via global readonly beats enabled via rule', (t) => {
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [coreUISchema],
+    rule: enableRule,
+  };
+  const ownProps = {
+    uischema,
+  };
+  const state: JsonFormsState = createState(uischema);
+  state.jsonforms.readonly = true;
+
+  const props = mapStateToLayoutProps(state, ownProps);
+  t.false(props.enabled);
+});
+
+test('mapStateToLayoutProps - hidden via state with path from ownProps ', (t) => {
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [coreUISchema],
+    rule: hideRule,
+  };
+  const ownProps = {
+    uischema,
+    path: 'foo',
   };
   const state = {
     jsonforms: {
@@ -762,29 +796,29 @@ test('mapStateToLayoutProps - hidden via state with path from ownProps ', t => {
           type: 'object',
           properties: {
             firstName: { type: 'string' },
-            lastName: { type: 'string' }
-          }
+            lastName: { type: 'string' },
+          },
         },
         data: {
-          foo: { firstName: 'Homer' }
+          foo: { firstName: 'Homer' },
         },
         uischema,
-        errors: [] as ErrorObject[]
-      }
-    }
+        errors: [] as ErrorObject[],
+      },
+    },
   };
   const props = mapStateToLayoutProps(state, ownProps);
   t.false(props.visible);
 });
 
-test("mapStateToOneOfProps - indexOfFittingSchema should not select schema if enum doesn't match", t => {
+test("mapStateToOneOfProps - indexOfFittingSchema should not select schema if enum doesn't match", (t) => {
   const uischema: ControlElement = {
     type: 'Control',
-    scope: '#/properties/method'
+    scope: '#/properties/method',
   };
 
   const ownProps = {
-    uischema
+    uischema,
   };
 
   const state = {
@@ -804,10 +838,10 @@ test("mapStateToOneOfProps - indexOfFittingSchema should not select schema if en
                       title: 'Method',
                       type: 'string',
                       enum: ['Injection'],
-                      default: 'Injection'
-                    }
+                      default: 'Injection',
+                    },
                   },
-                  required: ['method']
+                  required: ['method'],
                 },
                 {
                   title: 'Infusion',
@@ -817,33 +851,33 @@ test("mapStateToOneOfProps - indexOfFittingSchema should not select schema if en
                       title: 'Method',
                       type: 'string',
                       enum: ['Infusion'],
-                      default: 'Infusion'
-                    }
+                      default: 'Infusion',
+                    },
                   },
-                  required: ['method']
-                }
-              ]
-            }
-          }
+                  required: ['method'],
+                },
+              ],
+            },
+          },
         },
         data: {
           method: {
-            method: 'Infusion'
-          }
+            method: 'Infusion',
+          },
         },
-        uischema
-      }
-    }
+        uischema,
+      },
+    },
   };
 
   const oneOfProps = mapStateToOneOfProps(state, ownProps);
   t.is(oneOfProps.indexOfFittingSchema, 1);
 });
 
-test('mapStateToMultiEnumControlProps - oneOf items', t => {
+test('mapStateToMultiEnumControlProps - oneOf items', (t) => {
   const uischema: ControlElement = {
     type: 'Control',
-    scope: '#/properties/colors'
+    scope: '#/properties/colors',
   };
   const state = {
     jsonforms: {
@@ -856,39 +890,39 @@ test('mapStateToMultiEnumControlProps - oneOf items', t => {
               items: {
                 oneOf: [
                   {
-                    const: 'red'
+                    const: 'red',
                   },
                   {
                     const: 'pink',
-                    title: 'almost red'
-                  }
-                ]
+                    title: 'almost red',
+                  },
+                ],
               },
-              uniqueItems: true
-            }
-          }
+              uniqueItems: true,
+            },
+          },
         },
         data: {},
         uischema,
-        errors: [] as ErrorObject[]
-      }
-    }
+        errors: [] as ErrorObject[],
+      },
+    },
   };
   const ownProps = {
     uischema,
-    path: 'colors'
+    path: 'colors',
   };
   const props = mapStateToMultiEnumControlProps(state, ownProps);
   t.deepEqual(props.options, [
     { label: 'red', value: 'red' },
-    { label: 'almost red', value: 'pink' }
+    { label: 'almost red', value: 'pink' },
   ]);
 });
 
-test('mapStateToMultiEnumControlProps - enum items', t => {
+test('mapStateToMultiEnumControlProps - enum items', (t) => {
   const uischema: ControlElement = {
     type: 'Control',
-    scope: '#/properties/colors'
+    scope: '#/properties/colors',
   };
   const state = {
     jsonforms: {
@@ -900,34 +934,34 @@ test('mapStateToMultiEnumControlProps - enum items', t => {
               type: 'array',
               items: {
                 type: 'string',
-                enum: ['red', 'green', 'pink']
+                enum: ['red', 'green', 'pink'],
               },
-              uniqueItems: true
-            }
-          }
+              uniqueItems: true,
+            },
+          },
         },
         data: {},
         uischema,
-        errors: [] as ErrorObject[]
-      }
-    }
+        errors: [] as ErrorObject[],
+      },
+    },
   };
   const ownProps = {
     uischema,
-    path: 'colors'
+    path: 'colors',
   };
   const props = mapStateToMultiEnumControlProps(state, ownProps);
   t.deepEqual(props.options, [
     { label: 'red', value: 'red' },
     { label: 'green', value: 'green' },
-    { label: 'pink', value: 'pink' }
+    { label: 'pink', value: 'pink' },
   ]);
 });
 
-test('mapDispatchToMultiEnumProps - enum schema - addItem', t => {
+test('mapDispatchToMultiEnumProps - enum schema - addItem', (t) => {
   const uischema: ControlElement = {
     type: 'Control',
-    scope: '#/properties/colors'
+    scope: '#/properties/colors',
   };
   const schema = {
     type: 'object',
@@ -936,18 +970,18 @@ test('mapDispatchToMultiEnumProps - enum schema - addItem', t => {
         type: 'array',
         items: {
           type: 'string',
-          enum: ['red', 'green', 'pink']
+          enum: ['red', 'green', 'pink'],
         },
-        uniqueItems: true
-      }
-    }
+        uniqueItems: true,
+      },
+    },
   };
-  const data = {colors:['green']};
-  const initCore : JsonFormsCore = {
+  const data = { colors: ['green'] };
+  const initCore: JsonFormsCore = {
     uischema,
     schema,
     data,
-    errors: [] as ErrorObject[]
+    errors: [] as ErrorObject[],
   };
   const [getCore, dispatch] = mockDispatch(initCore);
   dispatch(init(data, schema, uischema, createAjv({ useDefaults: true })));
@@ -959,10 +993,10 @@ test('mapDispatchToMultiEnumProps - enum schema - addItem', t => {
   t.deepEqual(getCore().data.colors[1], 'pink');
 });
 
-test('mapDispatchToMultiEnumProps - enum schema - removeItem', t => {
+test('mapDispatchToMultiEnumProps - enum schema - removeItem', (t) => {
   const uischema: ControlElement = {
     type: 'Control',
-    scope: '#/properties/colors'
+    scope: '#/properties/colors',
   };
   const schema = {
     type: 'object',
@@ -971,18 +1005,18 @@ test('mapDispatchToMultiEnumProps - enum schema - removeItem', t => {
         type: 'array',
         items: {
           type: 'string',
-          enum: ['red', 'green', 'pink']
+          enum: ['red', 'green', 'pink'],
         },
-        uniqueItems: true
-      }
-    }
+        uniqueItems: true,
+      },
+    },
   };
-  const data = {colors:['green', 'red']};
-  const initCore : JsonFormsCore = {
+  const data = { colors: ['green', 'red'] };
+  const initCore: JsonFormsCore = {
     uischema,
     schema,
     data,
-    errors: [] as ErrorObject[]
+    errors: [] as ErrorObject[],
   };
   const [getCore, dispatch] = mockDispatch(initCore);
   dispatch(init(data, schema, uischema, createAjv({ useDefaults: true })));
@@ -993,10 +1027,10 @@ test('mapDispatchToMultiEnumProps - enum schema - removeItem', t => {
   t.deepEqual(getCore().data.colors[0], 'green');
 });
 
-test('mapDispatchToMultiEnumProps - oneOf schema - addItem', t => {
+test('mapDispatchToMultiEnumProps - oneOf schema - addItem', (t) => {
   const uischema: ControlElement = {
     type: 'Control',
-    scope: '#/properties/colors'
+    scope: '#/properties/colors',
   };
   const schema = {
     type: 'object',
@@ -1006,24 +1040,24 @@ test('mapDispatchToMultiEnumProps - oneOf schema - addItem', t => {
         items: {
           oneOf: [
             {
-              const: 'red'
+              const: 'red',
             },
             {
               const: 'pink',
-              title: 'almost red'
-            }
-          ]
+              title: 'almost red',
+            },
+          ],
         },
-        uniqueItems: true
-      }
-    }
+        uniqueItems: true,
+      },
+    },
   };
   const data = {};
-  const initCore : JsonFormsCore = {
+  const initCore: JsonFormsCore = {
     uischema,
     schema,
     data,
-    errors: [] as ErrorObject[]
+    errors: [] as ErrorObject[],
   };
   const [getCore, dispatch] = mockDispatch(initCore);
   dispatch(init(data, schema, uischema, createAjv({ useDefaults: true })));
@@ -1034,10 +1068,10 @@ test('mapDispatchToMultiEnumProps - oneOf schema - addItem', t => {
   t.deepEqual(getCore().data.colors[0], 'pink');
 });
 
-test('mapDispatchToMultiEnumProps - oneOf schema - removeItem', t => {
+test('mapDispatchToMultiEnumProps - oneOf schema - removeItem', (t) => {
   const uischema: ControlElement = {
     type: 'Control',
-    scope: '#/properties/colors'
+    scope: '#/properties/colors',
   };
   const schema = {
     type: 'object',
@@ -1047,24 +1081,24 @@ test('mapDispatchToMultiEnumProps - oneOf schema - removeItem', t => {
         items: {
           oneOf: [
             {
-              const: 'red'
+              const: 'red',
             },
             {
               const: 'pink',
-              title: 'almost red'
-            }
-          ]
+              title: 'almost red',
+            },
+          ],
         },
-        uniqueItems: true
-      }
-    }
+        uniqueItems: true,
+      },
+    },
   };
-  const data = {colors:['pink']};
-  const initCore : JsonFormsCore = {
+  const data = { colors: ['pink'] };
+  const initCore: JsonFormsCore = {
     uischema,
     schema,
     data,
-    errors: [] as ErrorObject[]
+    errors: [] as ErrorObject[],
   };
   const [getCore, dispatch] = mockDispatch(initCore);
   dispatch(init(data, schema, uischema, createAjv({ useDefaults: true })));
@@ -1074,26 +1108,26 @@ test('mapDispatchToMultiEnumProps - oneOf schema - removeItem', t => {
   t.is(getCore().data.colors.length, 0);
 });
 
-test('should assign defaults to enum', t => {
+test('should assign defaults to enum', (t) => {
   const schema: JsonSchema = {
     type: 'object',
     properties: {
       name: {
         type: 'string',
-        minLength: 1
+        minLength: 1,
       },
       color: {
         type: 'string',
         enum: ['red', 'green', 'blue'],
-        default: 'green'
-      }
-    }
+        default: 'green',
+      },
+    },
   };
 
   const uischema: UISchemaElement = undefined;
 
   const data = {
-    name: 'foo'
+    name: 'foo',
   };
 
   const initState: JsonFormsState = {
@@ -1102,15 +1136,18 @@ test('should assign defaults to enum', t => {
         uischema,
         schema,
         data,
-        errors: [] as ErrorObject[]
-      }
-    }
+        errors: [] as ErrorObject[],
+      },
+    },
   };
-  const newCore = coreReducer(initState.jsonforms.core, init(data, schema, uischema, createAjv({ useDefaults: true })));
+  const newCore = coreReducer(
+    initState.jsonforms.core,
+    init(data, schema, uischema, createAjv({ useDefaults: true }))
+  );
   t.is(newCore.data.color, 'green');
 });
 
-test('should assign defaults to empty item within nested object of an array', t => {
+test('should assign defaults to empty item within nested object of an array', (t) => {
   const schema: JsonSchema = {
     type: 'array',
     items: {
@@ -1118,15 +1155,15 @@ test('should assign defaults to empty item within nested object of an array', t 
       properties: {
         message: {
           type: 'string',
-          default: 'foo'
-        }
-      }
-    }
+          default: 'foo',
+        },
+      },
+    },
   };
 
   const uischema: ControlElement = {
     type: 'Control',
-    scope: '#'
+    scope: '#',
   };
 
   const data = [{}];
@@ -1137,17 +1174,20 @@ test('should assign defaults to empty item within nested object of an array', t 
         uischema,
         schema,
         data,
-        errors: [] as ErrorObject[]
-      }
-    }
+        errors: [] as ErrorObject[],
+      },
+    },
   };
 
-  const newCore = coreReducer(initState.jsonforms.core, init(data, schema, uischema, createAjv({ useDefaults: true })));
+  const newCore = coreReducer(
+    initState.jsonforms.core,
+    init(data, schema, uischema, createAjv({ useDefaults: true }))
+  );
   t.is(newCore.data.length, 1);
   t.deepEqual(newCore.data[0], { message: 'foo' });
 });
 
-test('should assign defaults to newly added item within nested object of an array', t => {
+test('should assign defaults to newly added item within nested object of an array', (t) => {
   const schema: JsonSchema = {
     type: 'array',
     items: {
@@ -1155,15 +1195,15 @@ test('should assign defaults to newly added item within nested object of an arra
       properties: {
         message: {
           type: 'string',
-          default: 'foo'
-        }
-      }
-    }
+          default: 'foo',
+        },
+      },
+    },
   };
 
   const uischema: ControlElement = {
     type: 'Control',
-    scope: '#'
+    scope: '#',
   };
 
   const data = [{}];
@@ -1172,7 +1212,7 @@ test('should assign defaults to newly added item within nested object of an arra
     uischema,
     schema,
     data,
-    errors: [] as ErrorObject[]
+    errors: [] as ErrorObject[],
   };
   const [getCore, dispatch] = mockDispatch(initCore);
   dispatch(init(data, schema, uischema, createAjv({ useDefaults: true })));
@@ -1183,63 +1223,63 @@ test('should assign defaults to newly added item within nested object of an arra
   t.deepEqual(getCore().data[0], { message: 'foo' });
 });
 
-test('computeLabel - should not edit label if not required and hideRequiredAsterisk is false', t => {
+test('computeLabel - should not edit label if not required and hideRequiredAsterisk is false', (t) => {
   const computedLabel = computeLabel('Test Label', false, false);
   t.is(computedLabel, 'Test Label');
 });
 
-test('computeLabel - should not edit label if not required and hideRequiredAsterisk is true', t => {
+test('computeLabel - should not edit label if not required and hideRequiredAsterisk is true', (t) => {
   const computedLabel = computeLabel('Test Label', false, true);
   t.is(computedLabel, 'Test Label');
 });
 
-test('computeLabel - should not edit label if required but hideRequiredAsterisk is true', t => {
+test('computeLabel - should not edit label if required but hideRequiredAsterisk is true', (t) => {
   const computedLabel = computeLabel('Test Label', true, true);
   t.is(computedLabel, 'Test Label');
 });
 
-test('computeLabel - should add asterisk if required but hideRequiredAsterisk is false', t => {
+test('computeLabel - should add asterisk if required but hideRequiredAsterisk is false', (t) => {
   const computedLabel = computeLabel('Test Label', true, false);
   t.is(computedLabel, 'Test Label*');
 });
 
-test('mapStateToAnyOfProps - const constraint in anyOf schema should return correct indexOfFittingSchema', t => {
+test('mapStateToAnyOfProps - const constraint in anyOf schema should return correct indexOfFittingSchema', (t) => {
   const uischema: ControlElement = {
     type: 'Control',
-    scope: '#'
+    scope: '#',
   };
   const schema: JsonSchema7 = {
     anyOf: [
       {
-        type: "object",
+        type: 'object',
         properties: {
           type: {
-            const: "type1"
-          }
-        }
+            const: 'type1',
+          },
+        },
       },
       {
-        type: "object",
+        type: 'object',
         properties: {
           type: {
-            const: "type2"
-          }
-        }
+            const: 'type2',
+          },
+        },
       },
       {
-        type: "object",
+        type: 'object',
         properties: {
           type: {
-            const: "type3"
-          }
-        }
-      }
-    ]
+            const: 'type3',
+          },
+        },
+      },
+    ],
   };
   const ownProps: OwnPropsOfControl = {
     visible: true,
     uischema,
-    path: 'foo'
+    path: 'foo',
   };
   const state = {
     jsonforms: {
@@ -1247,20 +1287,20 @@ test('mapStateToAnyOfProps - const constraint in anyOf schema should return corr
         ajv: createAjv(),
         schema,
         data: {
-          foo: { type: "type3"}
+          foo: { type: 'type3' },
         },
         uischema,
-        errors: [] as ErrorObject[]
-      }
-    }
+        errors: [] as ErrorObject[],
+      },
+    },
   };
   const props = mapStateToAnyOfProps(state, ownProps);
   t.is(props.indexOfFittingSchema, 2);
 });
 
-test('mapStateToControlProps - i18n - mapStateToControlProps should not crash without i18n', t => {
+test('mapStateToControlProps - i18n - mapStateToControlProps should not crash without i18n', (t) => {
   const ownProps = {
-    uischema: coreUISchema
+    uischema: coreUISchema,
   };
   const state: JsonFormsState = createState(coreUISchema);
   state.jsonforms.i18n = undefined;
@@ -1269,9 +1309,9 @@ test('mapStateToControlProps - i18n - mapStateToControlProps should not crash wi
   t.is(props.label, 'First Name');
 });
 
-test('mapStateToControlProps - i18n - default translation has no effect', t => {
+test('mapStateToControlProps - i18n - default translation has no effect', (t) => {
   const ownProps = {
-    uischema: coreUISchema
+    uischema: coreUISchema,
   };
   const state: JsonFormsState = createState(coreUISchema);
   state.jsonforms.i18n = defaultJsonFormsI18nState;
@@ -1281,88 +1321,111 @@ test('mapStateToControlProps - i18n - default translation has no effect', t => {
   t.is(props.description, undefined);
 });
 
-test('mapStateToControlProps - i18n - translation via path key', t => {
+test('mapStateToControlProps - i18n - translation via path key', (t) => {
   const ownProps = {
-    uischema: coreUISchema
+    uischema: coreUISchema,
   };
   const state: JsonFormsState = createState(coreUISchema);
   state.jsonforms.i18n = defaultJsonFormsI18nState;
-  state.jsonforms.i18n.translate = (key: string, defaultMessage: string | undefined) => {
-    switch(key){
-      case 'firstName.label': return 'my translation';
-      default: return defaultMessage;
+  state.jsonforms.i18n.translate = (
+    key: string,
+    defaultMessage: string | undefined
+  ) => {
+    switch (key) {
+      case 'firstName.label':
+        return 'my translation';
+      default:
+        return defaultMessage;
     }
-  }
+  };
 
   const props = mapStateToControlProps(state, ownProps);
   t.is(props.label, 'my translation');
   t.is(props.description, undefined);
 });
 
-test('mapStateToControlProps - i18n - translation via default message', t => {
+test('mapStateToControlProps - i18n - translation via default message', (t) => {
   const ownProps = {
-    uischema: coreUISchema
+    uischema: coreUISchema,
   };
   const state: JsonFormsState = createState(coreUISchema);
   state.jsonforms.i18n = defaultJsonFormsI18nState;
-  state.jsonforms.i18n.translate = (_key: string, defaultMessage: string | undefined) => {
-    switch(defaultMessage){
-      case 'First Name': return 'my translation';
-      default: return defaultMessage;
+  state.jsonforms.i18n.translate = (
+    _key: string,
+    defaultMessage: string | undefined
+  ) => {
+    switch (defaultMessage) {
+      case 'First Name':
+        return 'my translation';
+      default:
+        return defaultMessage;
     }
-  }
+  };
 
   const props = mapStateToControlProps(state, ownProps);
   t.is(props.label, 'my translation');
   t.is(props.description, undefined);
 });
 
-test('mapStateToControlProps - i18n - translation via JSON Schema i18n key', t => {
+test('mapStateToControlProps - i18n - translation via JSON Schema i18n key', (t) => {
   const ownProps = {
-    uischema: coreUISchema
+    uischema: coreUISchema,
   };
   const state: JsonFormsState = createState(coreUISchema);
   state.jsonforms.i18n = defaultJsonFormsI18nState;
-  (state.jsonforms.core.schema.properties.firstName as i18nJsonSchema).i18n = 'my-key';
-  state.jsonforms.i18n.translate = (key: string, defaultMessage: string | undefined) => {
-    switch(key){
-      case 'my-key.label': return 'my label';
-      case 'my-key.description': return 'my description';
-      default: return defaultMessage;
+  (state.jsonforms.core.schema.properties.firstName as i18nJsonSchema).i18n =
+    'my-key';
+  state.jsonforms.i18n.translate = (
+    key: string,
+    defaultMessage: string | undefined
+  ) => {
+    switch (key) {
+      case 'my-key.label':
+        return 'my label';
+      case 'my-key.description':
+        return 'my description';
+      default:
+        return defaultMessage;
     }
-  }
+  };
 
   const props = mapStateToControlProps(state, ownProps);
   t.is(props.label, 'my label');
   t.is(props.description, 'my description');
 });
 
-test('mapStateToControlProps - i18n - translation via UI Schema i18n key', t => {
+test('mapStateToControlProps - i18n - translation via UI Schema i18n key', (t) => {
   const ownProps = {
-    uischema: coreUISchema
+    uischema: coreUISchema,
   };
   const state: JsonFormsState = createState(coreUISchema);
   state.jsonforms.i18n = defaultJsonFormsI18nState;
-  ownProps.uischema = {...ownProps.uischema, i18n: 'my-key'};
-  state.jsonforms.i18n.translate = (key: string, defaultMessage: string | undefined) => {
-    switch(key){
-      case 'my-key.label': return 'my label';
-      case 'my-key.description': return 'my description';
-      default: return defaultMessage;
+  ownProps.uischema = { ...ownProps.uischema, i18n: 'my-key' };
+  state.jsonforms.i18n.translate = (
+    key: string,
+    defaultMessage: string | undefined
+  ) => {
+    switch (key) {
+      case 'my-key.label':
+        return 'my label';
+      case 'my-key.description':
+        return 'my description';
+      default:
+        return defaultMessage;
     }
-  }
+  };
 
   const props = mapStateToControlProps(state, ownProps);
   t.is(props.label, 'my label');
   t.is(props.description, 'my description');
 });
 
-test('mapStateToControlProps - i18n errors - should not crash without i18n', t => {
+test('mapStateToControlProps - i18n errors - should not crash without i18n', (t) => {
   const ownProps = {
-    uischema: coreUISchema
+    uischema: coreUISchema,
   };
   const state: JsonFormsState = createState(coreUISchema);
-  state.jsonforms.core.schema.properties.firstName.pattern = "[0-9]+"
+  state.jsonforms.core.schema.properties.firstName.pattern = '[0-9]+';
   state.jsonforms.core = coreReducer(
     state.jsonforms.core,
     init(
@@ -1378,12 +1441,12 @@ test('mapStateToControlProps - i18n errors - should not crash without i18n', t =
   t.is(props.errors, 'must match pattern "[0-9]+"');
 });
 
-test('mapStateToControlProps - i18n errors - default translation has no effect', t => {
+test('mapStateToControlProps - i18n errors - default translation has no effect', (t) => {
   const ownProps = {
-    uischema: coreUISchema
+    uischema: coreUISchema,
   };
   const state: JsonFormsState = createState(coreUISchema);
-  state.jsonforms.core.schema.properties.firstName.pattern = "[0-9]+"
+  state.jsonforms.core.schema.properties.firstName.pattern = '[0-9]+';
   state.jsonforms.core = coreReducer(
     state.jsonforms.core,
     init(
@@ -1399,12 +1462,12 @@ test('mapStateToControlProps - i18n errors - default translation has no effect',
   t.is(props.errors, 'must match pattern "[0-9]+"');
 });
 
-test('mapStateToControlProps - i18n errors - translate via error message key', t => {
+test('mapStateToControlProps - i18n errors - translate via error message key', (t) => {
   const ownProps = {
-    uischema: coreUISchema
+    uischema: coreUISchema,
   };
   const state: JsonFormsState = createState(coreUISchema);
-  state.jsonforms.core.schema.properties.firstName.pattern = "[0-9]+"
+  state.jsonforms.core.schema.properties.firstName.pattern = '[0-9]+';
   state.jsonforms.core = coreReducer(
     state.jsonforms.core,
     init(
@@ -1415,24 +1478,30 @@ test('mapStateToControlProps - i18n errors - translate via error message key', t
     )
   );
   state.jsonforms.i18n = defaultJsonFormsI18nState;
-  state.jsonforms.i18n.translate = (key: string, defaultMessage: string | undefined) => {
-    switch(key){
-      case 'must match pattern "[0-9]+"': return 'my error message';
-      default: return defaultMessage;
+  state.jsonforms.i18n.translate = (
+    key: string,
+    defaultMessage: string | undefined
+  ) => {
+    switch (key) {
+      case 'must match pattern "[0-9]+"':
+        return 'my error message';
+      default:
+        return defaultMessage;
     }
-  }
+  };
 
   const props = mapStateToControlProps(state, ownProps);
   t.is(props.errors, 'my error message');
 });
 
-test('mapStateToControlProps - i18n errors - translate via i18 specialized error keyword key', t => {
+test('mapStateToControlProps - i18n errors - translate via i18 specialized error keyword key', (t) => {
   const ownProps = {
-    uischema: coreUISchema
+    uischema: coreUISchema,
   };
   const state: JsonFormsState = createState(coreUISchema);
-  state.jsonforms.core.schema.properties.firstName.pattern = "[0-9]+";
-  (state.jsonforms.core.schema.properties.firstName as i18nJsonSchema).i18n = 'my-key';
+  state.jsonforms.core.schema.properties.firstName.pattern = '[0-9]+';
+  (state.jsonforms.core.schema.properties.firstName as i18nJsonSchema).i18n =
+    'my-key';
   state.jsonforms.core = coreReducer(
     state.jsonforms.core,
     init(
@@ -1443,24 +1512,30 @@ test('mapStateToControlProps - i18n errors - translate via i18 specialized error
     )
   );
   state.jsonforms.i18n = defaultJsonFormsI18nState;
-  state.jsonforms.i18n.translate = (key: string, defaultMessage: string | undefined) => {
-    switch(key){
-      case 'my-key.error.pattern': return 'my error message';
-      default: return defaultMessage;
+  state.jsonforms.i18n.translate = (
+    key: string,
+    defaultMessage: string | undefined
+  ) => {
+    switch (key) {
+      case 'my-key.error.pattern':
+        return 'my error message';
+      default:
+        return defaultMessage;
     }
-  }
+  };
 
   const props = mapStateToControlProps(state, ownProps);
   t.is(props.errors, 'my error message');
 });
 
-test('mapStateToControlProps - i18n errors - translate via i18 general error keyword key', t => {
+test('mapStateToControlProps - i18n errors - translate via i18 general error keyword key', (t) => {
   const ownProps = {
-    uischema: coreUISchema
+    uischema: coreUISchema,
   };
   const state: JsonFormsState = createState(coreUISchema);
-  state.jsonforms.core.schema.properties.firstName.pattern = "[0-9]+";
-  (state.jsonforms.core.schema.properties.firstName as i18nJsonSchema).i18n = 'my-key';
+  state.jsonforms.core.schema.properties.firstName.pattern = '[0-9]+';
+  (state.jsonforms.core.schema.properties.firstName as i18nJsonSchema).i18n =
+    'my-key';
   state.jsonforms.core = coreReducer(
     state.jsonforms.core,
     init(
@@ -1471,24 +1546,30 @@ test('mapStateToControlProps - i18n errors - translate via i18 general error key
     )
   );
   state.jsonforms.i18n = defaultJsonFormsI18nState;
-  state.jsonforms.i18n.translate = (key: string, defaultMessage: string | undefined) => {
-    switch(key){
-      case 'error.pattern': return 'my error message';
-      default: return defaultMessage;
+  state.jsonforms.i18n.translate = (
+    key: string,
+    defaultMessage: string | undefined
+  ) => {
+    switch (key) {
+      case 'error.pattern':
+        return 'my error message';
+      default:
+        return defaultMessage;
     }
-  }
+  };
 
   const props = mapStateToControlProps(state, ownProps);
   t.is(props.errors, 'my error message');
 });
 
-test('mapStateToControlProps - i18n errors - specialized keyword wins over generic keyword', t => {
+test('mapStateToControlProps - i18n errors - specialized keyword wins over generic keyword', (t) => {
   const ownProps = {
-    uischema: coreUISchema
+    uischema: coreUISchema,
   };
   const state: JsonFormsState = createState(coreUISchema);
-  state.jsonforms.core.schema.properties.firstName.pattern = "[0-9]+";
-  (state.jsonforms.core.schema.properties.firstName as i18nJsonSchema).i18n = 'my-key';
+  state.jsonforms.core.schema.properties.firstName.pattern = '[0-9]+';
+  (state.jsonforms.core.schema.properties.firstName as i18nJsonSchema).i18n =
+    'my-key';
   state.jsonforms.core = coreReducer(
     state.jsonforms.core,
     init(
@@ -1499,26 +1580,33 @@ test('mapStateToControlProps - i18n errors - specialized keyword wins over gener
     )
   );
   state.jsonforms.i18n = defaultJsonFormsI18nState;
-  state.jsonforms.i18n.translate = (key: string, defaultMessage: string | undefined) => {
-    switch(key){
-      case 'my-key.error.pattern': return 'my key error message';
-      case 'error.pattern': return 'my error message';
-      default: return defaultMessage;
+  state.jsonforms.i18n.translate = (
+    key: string,
+    defaultMessage: string | undefined
+  ) => {
+    switch (key) {
+      case 'my-key.error.pattern':
+        return 'my key error message';
+      case 'error.pattern':
+        return 'my error message';
+      default:
+        return defaultMessage;
     }
-  }
+  };
 
   const props = mapStateToControlProps(state, ownProps);
   t.is(props.errors, 'my key error message');
 });
 
-test('mapStateToControlProps - i18n errors - multiple errors customization', t => {
+test('mapStateToControlProps - i18n errors - multiple errors customization', (t) => {
   const ownProps = {
-    uischema: coreUISchema
+    uischema: coreUISchema,
   };
   const state: JsonFormsState = createState(coreUISchema);
-  state.jsonforms.core.schema.properties.firstName.pattern = "[0-9]+";
+  state.jsonforms.core.schema.properties.firstName.pattern = '[0-9]+';
   state.jsonforms.core.schema.properties.firstName.maxLength = 2;
-  (state.jsonforms.core.schema.properties.firstName as i18nJsonSchema).i18n = 'my-key';
+  (state.jsonforms.core.schema.properties.firstName as i18nJsonSchema).i18n =
+    'my-key';
   state.jsonforms.core = coreReducer(
     state.jsonforms.core,
     init(
@@ -1529,26 +1617,33 @@ test('mapStateToControlProps - i18n errors - multiple errors customization', t =
     )
   );
   state.jsonforms.i18n = defaultJsonFormsI18nState;
-  state.jsonforms.i18n.translate = (key: string, defaultMessage: string | undefined) => {
-    switch(key){
-      case 'error.maxLength': return 'max length message';
-      case 'my-key.error.pattern': return 'my key error message';
-      default: return defaultMessage;
+  state.jsonforms.i18n.translate = (
+    key: string,
+    defaultMessage: string | undefined
+  ) => {
+    switch (key) {
+      case 'error.maxLength':
+        return 'max length message';
+      case 'my-key.error.pattern':
+        return 'my key error message';
+      default:
+        return defaultMessage;
     }
-  }
+  };
 
   const props = mapStateToControlProps(state, ownProps);
   t.is(props.errors, 'max length message\nmy key error message');
 });
 
-test('mapStateToControlProps - i18n errors - custom keyword wins over all other errors', t => {
+test('mapStateToControlProps - i18n errors - custom keyword wins over all other errors', (t) => {
   const ownProps = {
-    uischema: coreUISchema
+    uischema: coreUISchema,
   };
   const state: JsonFormsState = createState(coreUISchema);
-  state.jsonforms.core.schema.properties.firstName.pattern = "[0-9]+";
+  state.jsonforms.core.schema.properties.firstName.pattern = '[0-9]+';
   state.jsonforms.core.schema.properties.firstName.maxLength = 2;
-  (state.jsonforms.core.schema.properties.firstName as i18nJsonSchema).i18n = 'my-key';
+  (state.jsonforms.core.schema.properties.firstName as i18nJsonSchema).i18n =
+    'my-key';
   state.jsonforms.core = coreReducer(
     state.jsonforms.core,
     init(
@@ -1559,22 +1654,29 @@ test('mapStateToControlProps - i18n errors - custom keyword wins over all other 
     )
   );
   state.jsonforms.i18n = defaultJsonFormsI18nState;
-  state.jsonforms.i18n.translate = (key: string, defaultMessage: string | undefined) => {
-    switch(key){
-      case 'my-key.error.custom': return 'this is my error custom error message';
-      case 'my-key.error.pattern': return 'my key error message';
-      case 'error.pattern': return 'my error message';
-      default: return defaultMessage;
+  state.jsonforms.i18n.translate = (
+    key: string,
+    defaultMessage: string | undefined
+  ) => {
+    switch (key) {
+      case 'my-key.error.custom':
+        return 'this is my error custom error message';
+      case 'my-key.error.pattern':
+        return 'my key error message';
+      case 'error.pattern':
+        return 'my error message';
+      default:
+        return defaultMessage;
     }
-  }
+  };
 
   const props = mapStateToControlProps(state, ownProps);
   t.is(props.errors, 'this is my error custom error message');
 });
 
-test('mapStateToEnumControlProps - i18n - should not crash without i18n', t => {
+test('mapStateToEnumControlProps - i18n - should not crash without i18n', (t) => {
   const ownProps = {
-    uischema: coreUISchema
+    uischema: coreUISchema,
   };
   const state: JsonFormsState = createState(coreUISchema);
   state.jsonforms.core.schema.properties.firstName.enum = ['a', 'b'];
@@ -1584,9 +1686,9 @@ test('mapStateToEnumControlProps - i18n - should not crash without i18n', t => {
   t.is(props.options[0].label, 'a');
 });
 
-test('mapStateToEnumControlProps - i18n - default translation has no effect', t => {
+test('mapStateToEnumControlProps - i18n - default translation has no effect', (t) => {
   const ownProps = {
-    uischema: coreUISchema
+    uischema: coreUISchema,
   };
   const state: JsonFormsState = createState(coreUISchema);
   state.jsonforms.core.schema.properties.firstName.enum = ['a', 'b'];
@@ -1596,149 +1698,193 @@ test('mapStateToEnumControlProps - i18n - default translation has no effect', t 
   t.is(props.options[0].label, 'a');
 });
 
-test('mapStateToEnumControlProps - i18n - path label translation', t => {
+test('mapStateToEnumControlProps - i18n - path label translation', (t) => {
   const ownProps = {
-    uischema: coreUISchema
+    uischema: coreUISchema,
   };
   const state: JsonFormsState = createState(coreUISchema);
   state.jsonforms.core.schema.properties.firstName.enum = ['a', 'b'];
   state.jsonforms.i18n = defaultJsonFormsI18nState;
-  state.jsonforms.i18n.translate = (key: string, defaultMessage: string | undefined) => {
-    switch(key){
-      case 'firstName.a': return 'my message';
-      default: return defaultMessage;
+  state.jsonforms.i18n.translate = (
+    key: string,
+    defaultMessage: string | undefined
+  ) => {
+    switch (key) {
+      case 'firstName.a':
+        return 'my message';
+      default:
+        return defaultMessage;
     }
-  }
+  };
 
   const props = mapStateToEnumControlProps(state, ownProps);
   t.is(props.options[0].label, 'my message');
 });
 
-test('mapStateToEnumControlProps - i18n - defaultMessage translation', t => {
+test('mapStateToEnumControlProps - i18n - defaultMessage translation', (t) => {
   const ownProps = {
-    uischema: coreUISchema
+    uischema: coreUISchema,
   };
   const state: JsonFormsState = createState(coreUISchema);
   state.jsonforms.core.schema.properties.firstName.enum = ['a', 'b'];
   state.jsonforms.i18n = defaultJsonFormsI18nState;
-  state.jsonforms.i18n.translate = (_key: string, defaultMessage: string | undefined) => {
-    switch(defaultMessage){
-      case 'a': return 'my message';
-      default: return defaultMessage;
+  state.jsonforms.i18n.translate = (
+    _key: string,
+    defaultMessage: string | undefined
+  ) => {
+    switch (defaultMessage) {
+      case 'a':
+        return 'my message';
+      default:
+        return defaultMessage;
     }
-  }
+  };
 
   const props = mapStateToEnumControlProps(state, ownProps);
   t.is(props.options[0].label, 'my message');
 });
 
-test('mapStateToEnumControlProps - i18n - i18n key translation', t => {
+test('mapStateToEnumControlProps - i18n - i18n key translation', (t) => {
   const ownProps = {
-    uischema: coreUISchema
+    uischema: coreUISchema,
   };
   const state: JsonFormsState = createState(coreUISchema);
   state.jsonforms.core.schema.properties.firstName.enum = ['a', 'b'];
-  (state.jsonforms.core.schema.properties.firstName as i18nJsonSchema).i18n = 'my-key';
+  (state.jsonforms.core.schema.properties.firstName as i18nJsonSchema).i18n =
+    'my-key';
   state.jsonforms.i18n = defaultJsonFormsI18nState;
-  state.jsonforms.i18n.translate = (key: string, defaultMessage: string | undefined) => {
-    switch(key){
-      case 'my-key.a': return 'my message';
-      default: return defaultMessage;
+  state.jsonforms.i18n.translate = (
+    key: string,
+    defaultMessage: string | undefined
+  ) => {
+    switch (key) {
+      case 'my-key.a':
+        return 'my message';
+      default:
+        return defaultMessage;
     }
-  }
+  };
 
   const props = mapStateToEnumControlProps(state, ownProps);
   t.is(props.options[0].label, 'my message');
 });
 
-test('mapStateToOneOfEnumControlProps - i18n - should not crash without i18n', t => {
+test('mapStateToOneOfEnumControlProps - i18n - should not crash without i18n', (t) => {
   const ownProps = {
-    uischema: coreUISchema
+    uischema: coreUISchema,
   };
   const state: JsonFormsState = createState(coreUISchema);
-  state.jsonforms.core.schema.properties.firstName.oneOf = [{const: 'a', title: 'foo'}, {const: 'b', title: 'bar'}]
+  state.jsonforms.core.schema.properties.firstName.oneOf = [
+    { const: 'a', title: 'foo' },
+    { const: 'b', title: 'bar' },
+  ];
   state.jsonforms.i18n = undefined;
 
   const props = mapStateToOneOfEnumControlProps(state, ownProps);
   t.is(props.options[0].label, 'foo');
 });
 
-test('mapStateToOneOfEnumControlProps- i18n - default translation has no effect', t => {
+test('mapStateToOneOfEnumControlProps- i18n - default translation has no effect', (t) => {
   const ownProps = {
-    uischema: coreUISchema
+    uischema: coreUISchema,
   };
   const state: JsonFormsState = createState(coreUISchema);
-  state.jsonforms.core.schema.properties.firstName.oneOf = [{const: 'a', title: 'foo'}, {const: 'b', title: 'bar'}]
+  state.jsonforms.core.schema.properties.firstName.oneOf = [
+    { const: 'a', title: 'foo' },
+    { const: 'b', title: 'bar' },
+  ];
   state.jsonforms.i18n = defaultJsonFormsI18nState;
 
   const props = mapStateToOneOfEnumControlProps(state, ownProps);
   t.is(props.options[0].label, 'foo');
 });
 
-test('mapStateToOneOfEnumControlProps - i18n - path label translation', t => {
+test('mapStateToOneOfEnumControlProps - i18n - path label translation', (t) => {
   const ownProps = {
-    uischema: coreUISchema
+    uischema: coreUISchema,
   };
   const state: JsonFormsState = createState(coreUISchema);
-  state.jsonforms.core.schema.properties.firstName.oneOf = [{const: 'a', title: 'foo'}, {const: 'b', title: 'bar'}]
+  state.jsonforms.core.schema.properties.firstName.oneOf = [
+    { const: 'a', title: 'foo' },
+    { const: 'b', title: 'bar' },
+  ];
   state.jsonforms.i18n = defaultJsonFormsI18nState;
-  state.jsonforms.i18n.translate = (key: string, defaultMessage: string | undefined) => {
-    switch(key){
-      case 'firstName.foo': return 'my message';
-      default: return defaultMessage;
+  state.jsonforms.i18n.translate = (
+    key: string,
+    defaultMessage: string | undefined
+  ) => {
+    switch (key) {
+      case 'firstName.foo':
+        return 'my message';
+      default:
+        return defaultMessage;
     }
-  }
+  };
 
   const props = mapStateToOneOfEnumControlProps(state, ownProps);
   t.is(props.options[0].label, 'my message');
 });
 
-test('mapStateToOneOfEnumControlProps - i18n - default message translation', t => {
+test('mapStateToOneOfEnumControlProps - i18n - default message translation', (t) => {
   const ownProps = {
-    uischema: coreUISchema
+    uischema: coreUISchema,
   };
   const state: JsonFormsState = createState(coreUISchema);
-  state.jsonforms.core.schema.properties.firstName.oneOf = [{const: 'a', title: 'foo'}, {const: 'b', title: 'bar'}]
+  state.jsonforms.core.schema.properties.firstName.oneOf = [
+    { const: 'a', title: 'foo' },
+    { const: 'b', title: 'bar' },
+  ];
   state.jsonforms.i18n = defaultJsonFormsI18nState;
-  state.jsonforms.i18n.translate = (_key: string, defaultMessage: string | undefined) => {
-    switch(defaultMessage){
-      case 'foo': return 'my message';
-      default: return defaultMessage;
+  state.jsonforms.i18n.translate = (
+    _key: string,
+    defaultMessage: string | undefined
+  ) => {
+    switch (defaultMessage) {
+      case 'foo':
+        return 'my message';
+      default:
+        return defaultMessage;
     }
-  }
+  };
 
   const props = mapStateToOneOfEnumControlProps(state, ownProps);
   t.is(props.options[0].label, 'my message');
 });
 
-test('mapStateToOneOfEnumControlProps - i18n - i18n key translation', t => {
+test('mapStateToOneOfEnumControlProps - i18n - i18n key translation', (t) => {
   const ownProps = {
-    uischema: coreUISchema
+    uischema: coreUISchema,
   };
   const state: JsonFormsState = createState(coreUISchema);
-  (state.jsonforms.core.schema.properties.firstName.oneOf as any) =
-    [{const: 'a', title: 'foo', i18n: 'my-foo'}, {const: 'b', title: 'bar', i18n:'my-bar'}];
+  (state.jsonforms.core.schema.properties.firstName.oneOf as any) = [
+    { const: 'a', title: 'foo', i18n: 'my-foo' },
+    { const: 'b', title: 'bar', i18n: 'my-bar' },
+  ];
   state.jsonforms.i18n = defaultJsonFormsI18nState;
-  state.jsonforms.i18n.translate = (key: string, defaultMessage: string | undefined) => {
-    switch(key){
-      case 'my-foo': return 'my message';
-      default: return defaultMessage;
+  state.jsonforms.i18n.translate = (
+    key: string,
+    defaultMessage: string | undefined
+  ) => {
+    switch (key) {
+      case 'my-foo':
+        return 'my message';
+      default:
+        return defaultMessage;
     }
-  }
+  };
 
   const props = mapStateToOneOfEnumControlProps(state, ownProps);
   t.is(props.options[0].label, 'my message');
 });
 
-
-test('mapStateToLabelProps - i18n - should not crash without i18n', t => {
-  const labelUISchema : LabelElement = {
+test('mapStateToLabelProps - i18n - should not crash without i18n', (t) => {
+  const labelUISchema: LabelElement = {
     type: 'Label',
     text: 'foo',
-    i18n: 'bar'
-  }
+    i18n: 'bar',
+  };
   const ownProps = {
-    uischema: labelUISchema
+    uischema: labelUISchema,
   };
   const state: JsonFormsState = createState(labelUISchema);
   state.jsonforms.i18n = undefined;
@@ -1747,14 +1893,14 @@ test('mapStateToLabelProps - i18n - should not crash without i18n', t => {
   t.is(props.text, 'foo');
 });
 
-test('mapStateToLabelProps - i18n - default translation has no effect', t => {
-  const labelUISchema : LabelElement = {
+test('mapStateToLabelProps - i18n - default translation has no effect', (t) => {
+  const labelUISchema: LabelElement = {
     type: 'Label',
     text: 'foo',
-    i18n: 'bar'
-  }
+    i18n: 'bar',
+  };
   const ownProps = {
-    uischema: labelUISchema
+    uischema: labelUISchema,
   };
   const state: JsonFormsState = createState(labelUISchema);
   state.jsonforms.i18n = defaultJsonFormsI18nState;
@@ -1763,67 +1909,81 @@ test('mapStateToLabelProps - i18n - default translation has no effect', t => {
   t.is(props.text, 'foo');
 });
 
-test('mapStateToLabelProps - i18n - default key translation', t => {
-  const labelUISchema : LabelElement = {
+test('mapStateToLabelProps - i18n - default key translation', (t) => {
+  const labelUISchema: LabelElement = {
     type: 'Label',
-    text: 'foo'
-  }
+    text: 'foo',
+  };
   const ownProps = {
-    uischema: labelUISchema
+    uischema: labelUISchema,
   };
   const state: JsonFormsState = createState(labelUISchema);
   state.jsonforms.i18n = defaultJsonFormsI18nState;
-  state.jsonforms.i18n.translate = (key: string, defaultMessage: string | undefined) => {
-    switch(key){
-      case 'foo': return 'my message';
-      default: return defaultMessage;
+  state.jsonforms.i18n.translate = (
+    key: string,
+    defaultMessage: string | undefined
+  ) => {
+    switch (key) {
+      case 'foo':
+        return 'my message';
+      default:
+        return defaultMessage;
     }
-  }
+  };
 
   const props = mapStateToLabelProps(state, ownProps);
   t.is(props.text, 'my message');
 });
 
-
-test('mapStateToLabelProps - i18n - default message translation', t => {
-  const labelUISchema : LabelElement = {
+test('mapStateToLabelProps - i18n - default message translation', (t) => {
+  const labelUISchema: LabelElement = {
     type: 'Label',
     text: 'foo',
-    i18n: 'bar'
-  }
+    i18n: 'bar',
+  };
   const ownProps = {
-    uischema: labelUISchema
+    uischema: labelUISchema,
   };
   const state: JsonFormsState = createState(labelUISchema);
   state.jsonforms.i18n = defaultJsonFormsI18nState;
-  state.jsonforms.i18n.translate = (_key: string, defaultMessage: string | undefined) => {
-    switch(defaultMessage){
-      case 'foo': return 'my message';
-      default: return defaultMessage;
+  state.jsonforms.i18n.translate = (
+    _key: string,
+    defaultMessage: string | undefined
+  ) => {
+    switch (defaultMessage) {
+      case 'foo':
+        return 'my message';
+      default:
+        return defaultMessage;
     }
-  }
+  };
 
   const props = mapStateToLabelProps(state, ownProps);
   t.is(props.text, 'my message');
 });
 
-test('mapStateToLabelProps - i18n - i18n key translation', t => {
-  const labelUISchema : LabelElement = {
+test('mapStateToLabelProps - i18n - i18n key translation', (t) => {
+  const labelUISchema: LabelElement = {
     type: 'Label',
     text: 'foo',
-    i18n: 'bar'
-  }
+    i18n: 'bar',
+  };
   const ownProps = {
-    uischema: labelUISchema
+    uischema: labelUISchema,
   };
   const state: JsonFormsState = createState(labelUISchema);
   state.jsonforms.i18n = defaultJsonFormsI18nState;
-  state.jsonforms.i18n.translate = (key: string, defaultMessage: string | undefined): string | undefined => {
-    switch(key){
-      case 'bar.text': return 'my message';
-      default: return defaultMessage;
+  state.jsonforms.i18n.translate = (
+    key: string,
+    defaultMessage: string | undefined
+  ): string | undefined => {
+    switch (key) {
+      case 'bar.text':
+        return 'my message';
+      default:
+        return defaultMessage;
     }
-  }
+  };
 
   const props = mapStateToLabelProps(state, ownProps);
   t.is(props.text, 'my message');

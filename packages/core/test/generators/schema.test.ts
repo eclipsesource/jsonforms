@@ -26,14 +26,14 @@ import test from 'ava';
 
 import { generateJsonSchema } from '../../src/generators/schema';
 
-test('default schema generation basic types', t => {
+test('default schema generation basic types', (t) => {
   const instance: any = {
     boolean: false,
     number: 3.14,
     integer: 3,
     string: 'PI',
     null: null,
-    undefined: undefined
+    undefined: undefined,
   };
   const schema = generateJsonSchema(instance);
   // FIXME: Should a property be generated for properties with undefined?
@@ -41,34 +41,34 @@ test('default schema generation basic types', t => {
     type: 'object',
     properties: {
       boolean: {
-        type: 'boolean'
+        type: 'boolean',
       },
       number: {
-        type: 'number'
+        type: 'number',
       },
       integer: {
-        type: 'integer'
+        type: 'integer',
       },
       string: {
-        type: 'string'
+        type: 'string',
       },
       null: {
-        type: 'null'
+        type: 'null',
       },
-      undefined: {}
+      undefined: {},
     },
     additionalProperties: true,
-    required: ['boolean', 'number', 'integer', 'string', 'null', 'undefined']
+    required: ['boolean', 'number', 'integer', 'string', 'null', 'undefined'],
   });
 });
-test('default schema generation array types', t => {
+test('default schema generation array types', (t) => {
   const instance: any = {
     emptyArray: [],
     booleanArray: [false, false],
     numberArray: [3.14, 2.71],
     integerArray: [3, 2],
     stringArray: ['PI', 'e'],
-    nullArray: [null, null]
+    nullArray: [null, null],
   };
   const schema = generateJsonSchema(instance);
   t.deepEqual(schema, {
@@ -76,28 +76,28 @@ test('default schema generation array types', t => {
     properties: {
       emptyArray: {
         type: 'array',
-        items: {}
+        items: {},
       },
       booleanArray: {
         type: 'array',
-        items: { type: 'boolean' }
+        items: { type: 'boolean' },
       },
       numberArray: {
         type: 'array',
-        items: { type: 'number' }
+        items: { type: 'number' },
       },
       integerArray: {
         type: 'array',
-        items: { type: 'integer' }
+        items: { type: 'integer' },
       },
       stringArray: {
         type: 'array',
-        items: { type: 'string' }
+        items: { type: 'string' },
       },
       nullArray: {
         type: 'array',
-        items: { type: 'null' }
-      }
+        items: { type: 'null' },
+      },
     },
     additionalProperties: true,
     required: [
@@ -106,11 +106,11 @@ test('default schema generation array types', t => {
       'numberArray',
       'integerArray',
       'stringArray',
-      'nullArray'
-    ]
+      'nullArray',
+    ],
   });
 });
-test.failing('default schema generation tuple array types', t => {
+test.failing('default schema generation tuple array types', (t) => {
   const instance: any = { tupleArray: [3.14, 'PI'] };
   const schema = generateJsonSchema(instance);
   // FIXME: This assumption is the correct one, but we crteate a oneOf in this case
@@ -119,26 +119,26 @@ test.failing('default schema generation tuple array types', t => {
     properties: {
       tupleArray: {
         type: 'array',
-        items: [{ type: 'number' }, { type: 'string' }]
-      }
+        items: [{ type: 'number' }, { type: 'string' }],
+      },
     },
     additionalProperties: true,
-    required: ['tupleArray']
+    required: ['tupleArray'],
   });
 });
-test('default schema generation ', t => {
+test('default schema generation ', (t) => {
   const instance: any = {
     address: {
       streetAddress: '21 2nd Street',
-      city: 'New York'
+      city: 'New York',
     },
     phoneNumber: [
       {
         location: 'home',
         code: 44,
-        private: true
-      }
-    ]
+        private: true,
+      },
+    ],
   };
   const schema = generateJsonSchema(instance);
   t.deepEqual(schema, {
@@ -148,14 +148,14 @@ test('default schema generation ', t => {
         type: 'object',
         properties: {
           streetAddress: {
-            type: 'string'
+            type: 'string',
           },
           city: {
-            type: 'string'
-          }
+            type: 'string',
+          },
         },
         additionalProperties: true,
-        required: ['streetAddress', 'city']
+        required: ['streetAddress', 'city'],
       },
       phoneNumber: {
         type: 'array',
@@ -163,31 +163,31 @@ test('default schema generation ', t => {
           type: 'object',
           properties: {
             location: {
-              type: 'string'
+              type: 'string',
             },
             code: {
-              type: 'integer'
+              type: 'integer',
             },
             private: {
-              type: 'boolean'
-            }
+              type: 'boolean',
+            },
           },
           additionalProperties: true,
-          required: ['location', 'code', 'private']
-        }
-      }
+          required: ['location', 'code', 'private'],
+        },
+      },
     },
     additionalProperties: true,
-    required: ['address', 'phoneNumber']
+    required: ['address', 'phoneNumber'],
   });
 });
 
-test('schema generation with options ', t => {
+test('schema generation with options ', (t) => {
   const instance: any = {
     address: {
       streetAddress: '21 2nd Street',
-      city: 'New York'
-    }
+      city: 'New York',
+    },
   };
   const schema = generateJsonSchema(instance, {
     additionalProperties: false,
@@ -198,7 +198,7 @@ test('schema generation with options ', t => {
       } else {
         return [];
       }
-    }
+    },
   });
 
   t.deepEqual(schema, {
@@ -208,17 +208,17 @@ test('schema generation with options ', t => {
         type: 'object',
         properties: {
           streetAddress: {
-            type: 'string'
+            type: 'string',
           },
           city: {
-            type: 'string'
-          }
+            type: 'string',
+          },
         },
         additionalProperties: false,
-        required: ['streetAddress']
-      }
+        required: ['streetAddress'],
+      },
     },
     additionalProperties: false,
-    required: ['address']
+    required: ['address'],
   });
 });

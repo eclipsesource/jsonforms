@@ -44,19 +44,19 @@ const fixture = {
           type: 'object',
           properties: {
             x: { type: 'integer' },
-            y: { type: 'integer' }
-          }
-        }
-      }
-    }
+            y: { type: 'integer' },
+          },
+        },
+      },
+    },
   },
   uischema: {
     type: 'Control',
-    scope: '#/properties/test'
+    scope: '#/properties/test',
   },
   data: {
-    test: [{ x: 1, y: 3 }]
-  }
+    test: [{ x: 1, y: 3 }],
+  },
 };
 
 describe('Array control renderer', () => {
@@ -64,11 +64,10 @@ describe('Array control renderer', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     const cells = [{ tester: integerCellTester, cell: IntegerCell }];
     const wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, cells, core }}>
-        <ArrayControl
-          schema={fixture.schema}
-          uischema={fixture.uischema}
-        />
+      <JsonFormsStateProvider
+        initState={{ renderers: vanillaRenderers, cells, core }}
+      >
+        <ArrayControl schema={fixture.schema} uischema={fixture.uischema} />
       </JsonFormsStateProvider>
     );
 

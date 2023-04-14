@@ -11,17 +11,22 @@ import get from 'lodash/get';
 
 // mergeStyles combines all classes from both styles definitions into one
 const myStyles = mergeStyles(defaultStyles, {
-  control: { root: 'my-control' }
+  control: { root: 'my-control' },
 });
 
 const examples = getExamples();
 
 export default defineComponent({
-  name: 'app',
+  name: 'App',
   components: {
-    JsonForms
+    JsonForms,
   },
-  data: function() {
+  provide() {
+    return {
+      styles: myStyles,
+    };
+  },
+  data: function () {
     const i18n: Partial<JsonFormsI18nState> = { locale: 'en' };
     const additionalErrors: ErrorObject[] = [];
     return {
@@ -30,17 +35,17 @@ export default defineComponent({
       currentExampleName: examples[0].name,
       examples,
       config: {
-        hideRequiredAsterisk: true
+        hideRequiredAsterisk: true,
       },
       i18n,
-      additionalErrors
+      additionalErrors,
     };
   },
   computed: {
     example() {
       const name = (this as any).currentExampleName;
-      return examples.find(ex => ex.name === name)!;
-    }
+      return examples.find((ex) => ex.name === name)!;
+    },
   },
   methods: {
     onChange(event: JsonFormsChangeEvent) {
@@ -53,7 +58,10 @@ export default defineComponent({
     translationChange(event: any) {
       try {
         const input = JSON.parse(event.target.value);
-        (this as any).i18n.translate = (key: string, defaultMessage: string | undefined) => {
+        (this as any).i18n.translate = (
+          key: string,
+          defaultMessage: string | undefined
+        ) => {
           const translated = get(input, key) as string;
           return translated ?? defaultMessage;
         };
@@ -62,43 +70,27 @@ export default defineComponent({
       }
     },
   },
-  provide() {
-    return {
-      styles: myStyles
-    };
-  }
 });
 </script>
-
-<style scoped>
-.form {
-  max-width: 500px;
-  flex: 1;
-}
-.container {
-  display: flex;
-}
-.data {
-  flex: 1;
-}
-</style>
 
 <template>
   <div class="container">
     <div className="example-selector">
       <h4>Select Example:</h4>
-      <select @change="onExampleChange($event)" v-model="currentExampleName">
+      <select v-model="currentExampleName" @change="onExampleChange($event)">
         <option
           v-for="option in examples"
           :key="option.name"
           :value="option.name"
           :label="option.label"
-          >{{ option.label }}</option
         >
+          {{ option.label }}
+        </option>
       </select>
       <div class="data">
         <h5>data</h5>
-        <pre>{{ JSON.stringify(data, null, 2) }}
+        <pre
+          >{{ JSON.stringify(data, null, 2) }}
         </pre>
         <h5>i18n translator</h5>
         <textarea @change="translationChange"></textarea>
@@ -115,8 +107,22 @@ export default defineComponent({
         :config="config"
         :i18n="i18n"
         :additional-errors="additionalErrors"
-        @change="onChange">
+        @change="onChange"
+      >
       </json-forms>
     </div>
   </div>
 </template>
+
+<style scoped>
+.form {
+  max-width: 500px;
+  flex: 1;
+}
+.container {
+  display: flex;
+}
+.data {
+  flex: 1;
+}
+</style>

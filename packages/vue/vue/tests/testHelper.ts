@@ -1,1 +1,1 @@
-export const bindings = <B> (b:B) : B => b;
+export const bindings = <B>(b: B): B => b;

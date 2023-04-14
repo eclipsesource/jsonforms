@@ -27,14 +27,15 @@ import {
   mapStateToControlProps,
   mapStateToControlWithDetailProps,
   StatePropsOfControl,
-  StatePropsOfControlWithDetail
+  StatePropsOfControlWithDetail,
 } from '@jsonforms/core';
 import type { OnDestroy, OnInit } from '@angular/core';
 import { JsonFormsAbstractControl } from './abstract-control';
 
 export class JsonFormsControl
   extends JsonFormsAbstractControl<StatePropsOfControl>
-  implements OnInit, OnDestroy {
+  implements OnInit, OnDestroy
+{
   protected mapToProps(state: JsonFormsState): StatePropsOfControl {
     const props = mapStateToControlProps(state, this.getOwnProps());
     return { ...props };
@@ -43,7 +44,8 @@ export class JsonFormsControl
 
 export class JsonFormsControlWithDetail
   extends JsonFormsAbstractControl<StatePropsOfControlWithDetail>
-  implements OnInit, OnDestroy {
+  implements OnInit, OnDestroy
+{
   protected mapToProps(state: JsonFormsState): StatePropsOfControlWithDetail {
     const props = mapStateToControlWithDetailProps(state, this.getOwnProps());
     return { ...props };

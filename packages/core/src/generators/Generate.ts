@@ -39,5 +39,5 @@ export const Generate: {
 } = {
   jsonSchema: generateJsonSchema,
   uiSchema: generateDefaultUISchema,
-  controlElement: createControlElement
+  controlElement: createControlElement,
 };

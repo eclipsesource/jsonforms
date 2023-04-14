@@ -41,9 +41,7 @@ export interface UnknownRendererProps {
 export class UnknownRenderer extends Component<UnknownRendererProps, any> {
   render() {
     return (
-      <div style={{color: 'red'}}>
-        No applicable {this.props.type} found.
-      </div>
+      <div style={{ color: 'red' }}>No applicable {this.props.type} found.</div>
     );
   }
 }

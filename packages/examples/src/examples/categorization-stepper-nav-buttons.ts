@@ -26,7 +26,7 @@ import { registerExamples } from '../register';
 import {
   data as categorizationData,
   schema as categorizationSchema,
-  uischema as categorizationUiSchema
+  uischema as categorizationUiSchema,
 } from './categorization';
 
 export const schema = categorizationSchema;
@@ -35,8 +35,8 @@ export const uischema = {
   ...categorizationUiSchema,
   options: {
     variant: 'stepper',
-    showNavButtons: true
-  }
+    showNavButtons: true,
+  },
 };
 
 export const data = categorizationData;
@@ -47,6 +47,6 @@ registerExamples([
     label: 'Categorization (Stepper - Nav Buttons)',
     data,
     schema,
-    uischema
-  }
+    uischema,
+  },
 ]);

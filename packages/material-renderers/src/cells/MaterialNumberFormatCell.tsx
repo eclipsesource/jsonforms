@@ -29,7 +29,7 @@ import {
   isNumberFormatControl,
   RankedTester,
   rankWith,
-  WithClassname
+  WithClassname,
 } from '@jsonforms/core';
 import { withJsonFormsCellProps } from '@jsonforms/react';
 import { MuiInputNumberFormat } from '../mui-controls/MuiInputNumberFormat';

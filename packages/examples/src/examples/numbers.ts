@@ -31,15 +31,15 @@ export const schema = {
       type: 'number',
       maximum: 100,
       minimum: 1,
-      default: 50
+      default: 50,
     },
     age: {
-      type: 'integer'
+      type: 'integer',
     },
     height: {
-      type: 'number'
-    }
-  }
+      type: 'number',
+    },
+  },
 };
 
 export const uischema = {
@@ -52,28 +52,28 @@ export const uischema = {
           type: 'Control',
           scope: '#/properties/price',
           label: {
-            text: 'Price'
-          }
+            text: 'Price',
+          },
         },
         {
           type: 'Control',
-          scope: '#/properties/age'
+          scope: '#/properties/age',
         },
         {
           type: 'Control',
-          scope: '#/properties/height'
+          scope: '#/properties/height',
         },
         {
           type: 'Control',
           scope: '#/properties/price',
           label: {
-            text: 'Price with Slider'
+            text: 'Price with Slider',
           },
-          options: { slider: true }
-        }
-      ]
-    }
-  ]
+          options: { slider: true },
+        },
+      ],
+    },
+  ],
 };
 
 export const data = {};
@@ -84,6 +84,6 @@ registerExamples([
     label: 'Numbers',
     data,
     schema,
-    uischema
-  }
+    uischema,
+  },
 ]);

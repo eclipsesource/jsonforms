@@ -39,138 +39,138 @@ export interface StyleDef {
 export const vanillaStyles: StyleDef[] = [
   {
     name: 'control',
-    classNames: ['control']
+    classNames: ['control'],
   },
   {
     name: 'control.trim',
-    classNames: ['trim']
+    classNames: ['trim'],
   },
   {
     name: 'control.input',
-    classNames: ['input']
+    classNames: ['input'],
   },
   {
     name: 'control.select',
-    classNames: ['select']
+    classNames: ['select'],
   },
   {
     name: 'control.checkbox',
-    classNames: ['checkbox']
+    classNames: ['checkbox'],
   },
   {
     name: 'control.radio',
-    classNames: ['radio']
+    classNames: ['radio'],
   },
   {
     name: 'control.radio.option',
-    classNames: ['radio-option']
+    classNames: ['radio-option'],
   },
   {
     name: 'control.radio.input',
-    classNames: ['radio-input']
+    classNames: ['radio-input'],
   },
   {
     name: 'control.radio.label',
-    classNames: ['radio-label']
+    classNames: ['radio-label'],
   },
   {
     name: 'control.validation.error',
-    classNames: ['validation_error']
+    classNames: ['validation_error'],
   },
   {
     name: 'control.validation',
-    classNames: ['validation']
+    classNames: ['validation'],
   },
   {
     name: 'categorization',
-    classNames: ['categorization']
+    classNames: ['categorization'],
   },
   {
     name: 'categorization.master',
-    classNames: ['categorization-master']
+    classNames: ['categorization-master'],
   },
   {
     name: 'categorization.detail',
-    classNames: ['categorization-detail']
+    classNames: ['categorization-detail'],
   },
   {
     name: 'category.group',
-    classNames: ['category-group']
+    classNames: ['category-group'],
   },
   {
     name: 'category.subcategories',
-    classNames: ['category-subcategories']
+    classNames: ['category-subcategories'],
   },
   {
     name: 'array.layout',
-    classNames: ['array-layout']
+    classNames: ['array-layout'],
   },
   {
     name: 'array.children',
-    classNames: ['children']
+    classNames: ['children'],
   },
   {
     name: 'group.layout',
-    classNames: ['group-layout']
+    classNames: ['group-layout'],
   },
   {
     name: 'horizontal.layout',
-    classNames: ['horizontal-layout']
+    classNames: ['horizontal-layout'],
   },
   {
     name: 'horizontal.layout.item',
-    classNames: ([size]: number[]) => [`horizontal-layout-${size}`]
+    classNames: ([size]: number[]) => [`horizontal-layout-${size}`],
   },
   {
     name: 'vertical.layout',
-    classNames: ['vertical-layout']
+    classNames: ['vertical-layout'],
   },
   {
     name: 'array.table.validation.error',
-    classNames: ['validation_error']
+    classNames: ['validation_error'],
   },
   {
     name: 'array.table.validation',
-    classNames: ['validation']
+    classNames: ['validation'],
   },
   {
     name: 'array.table',
-    classNames: ['array-table-layout', 'control']
+    classNames: ['array-table-layout', 'control'],
   },
   {
     name: 'array.control.validation.error',
-    classNames: ['validation_error']
+    classNames: ['validation_error'],
   },
   {
     name: 'array.control.validation',
-    classNames: ['validation']
+    classNames: ['validation'],
   },
   {
     name: 'array.control.add',
-    classNames: ['button-add']
-  },  
+    classNames: ['button-add'],
+  },
   {
     name: 'array.child.controls',
-    classNames: ['child-controls']
+    classNames: ['child-controls'],
   },
   {
     name: 'array.child.controls.up',
-    classNames: ['button-up']
-  },  
+    classNames: ['button-up'],
+  },
   {
     name: 'array.child.controls.down',
-    classNames: ['button-down']
-  },  
+    classNames: ['button-down'],
+  },
   {
     name: 'array.child.controls.delete',
-    classNames: ['button-delete']
-  },  
+    classNames: ['button-delete'],
+  },
   {
     name: 'array.control',
-    classNames: ['array-control-layout', 'control']
-  },    
+    classNames: ['array-control-layout', 'control'],
+  },
   {
     name: 'input.description',
-    classNames: ['input-description']
-  }
+    classNames: ['input-description'],
+  },
 ];

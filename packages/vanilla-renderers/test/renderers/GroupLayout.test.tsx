@@ -27,7 +27,9 @@ import { GroupLayout } from '@jsonforms/core';
 import { JsonFormsStateProvider } from '@jsonforms/react';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
-import GroupLayoutRenderer, { groupTester } from '../../src/layouts/GroupLayout';
+import GroupLayoutRenderer, {
+  groupTester,
+} from '../../src/layouts/GroupLayout';
 import { initCore } from '../util';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -35,8 +37,8 @@ Enzyme.configure({ adapter: new Adapter() });
 const fixture = {
   uischema: {
     type: 'Group',
-    elements: [{ type: 'Control' }]
-  }
+    elements: [{ type: 'Control' }],
+  },
 };
 
 test('tester', () => {
@@ -47,7 +49,6 @@ test('tester', () => {
 });
 
 describe('Group layout', () => {
-
   let wrapper: ReactWrapper;
 
   afterEach(() => wrapper.unmount());
@@ -77,7 +78,7 @@ describe('Group layout', () => {
   test('render with null elements', () => {
     const uischema: GroupLayout = {
       type: 'Group',
-      elements: null
+      elements: null,
     };
     const core = initCore({}, uischema, {});
     wrapper = mount(
@@ -93,10 +94,7 @@ describe('Group layout', () => {
   test('render with children', () => {
     const uischema: GroupLayout = {
       type: 'Group',
-      elements: [
-        { type: 'Control' },
-        { type: 'Control' }
-      ]
+      elements: [{ type: 'Control' }, { type: 'Control' }],
     };
     const core = initCore({}, uischema, {});
     wrapper = mount(
@@ -113,10 +111,7 @@ describe('Group layout', () => {
     const core = initCore({}, fixture.uischema, {});
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <GroupLayoutRenderer
-          uischema={fixture.uischema}
-          visible={false}
-        />
+        <GroupLayoutRenderer uischema={fixture.uischema} visible={false} />
       </JsonFormsStateProvider>
     );
     const groupLayout = wrapper.find('.group-layout');
@@ -127,10 +122,7 @@ describe('Group layout', () => {
     const core = initCore({}, fixture.uischema, {});
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <GroupLayoutRenderer
-          uischema={fixture.uischema}
-          enabled={false}
-        />
+        <GroupLayoutRenderer uischema={fixture.uischema} enabled={false} />
       </JsonFormsStateProvider>
     );
     const child = wrapper.find('JsonFormsDispatchRenderer');

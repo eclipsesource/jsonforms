@@ -32,10 +32,15 @@ import {
   ControlProps,
   optionIs,
   and,
-  isDescriptionHidden
+  isDescriptionHidden,
 } from '@jsonforms/core';
 import { withJsonFormsControlProps } from '@jsonforms/react';
-import { FormControlLabel, FormHelperText, Tooltip, Hidden } from '@mui/material';
+import {
+  FormControlLabel,
+  FormHelperText,
+  Tooltip,
+  Hidden,
+} from '@mui/material';
 import { MuiToggle } from '../mui-controls/MuiToggle';
 
 export const MaterialBooleanToggleControl = ({
@@ -51,9 +56,8 @@ export const MaterialBooleanToggleControl = ({
   errors,
   path,
   config,
-  description
+  description,
 }: ControlProps) => {
-
   const isValid = errors.length === 0;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
 
@@ -67,16 +71,18 @@ export const MaterialBooleanToggleControl = ({
     appliedUiSchemaOptions.showUnfocusedDescription
   );
 
-  const showTooltip = !showDescription && !isDescriptionHidden(
-    visible,
-    description,
-    // Tooltips have their own focus handlers, so we do not need to rely
-    // on focus state here. So we pass 'true' to treat it as focused.
-    true,
-    // We also pass true here for showUnfocusedDescription since it should
-    // render regardless of that setting.
-    true
-  );
+  const showTooltip =
+    !showDescription &&
+    !isDescriptionHidden(
+      visible,
+      description,
+      // Tooltips have their own focus handlers, so we do not need to rely
+      // on focus state here. So we pass 'true' to treat it as focused.
+      true,
+      // We also pass true here for showUnfocusedDescription since it should
+      // render regardless of that setting.
+      true
+    );
 
   const firstFormHelperText = showDescription
     ? description
@@ -102,7 +108,7 @@ export const MaterialBooleanToggleControl = ({
 
   return (
     <Hidden xsUp={!visible}>
-      <Tooltip id={tooltipId} title={(showTooltip) ? description : ''}>
+      <Tooltip id={tooltipId} title={showTooltip ? description : ''}>
         <FormControlLabel
           label={label}
           id={id}
@@ -121,7 +127,7 @@ export const MaterialBooleanToggleControl = ({
               errors={errors}
               config={config}
               inputProps={{
-                'aria-describedby': ariaDescribedBy
+                'aria-describedby': ariaDescribedBy,
               }}
             />
           }

@@ -30,7 +30,7 @@ import {
   optionIs,
   RankedTester,
   rankWith,
-  WithClassname
+  WithClassname,
 } from '@jsonforms/core';
 import { withJsonFormsCellProps } from '@jsonforms/react';
 import { MuiToggle } from '../mui-controls/MuiToggle';
@@ -42,6 +42,6 @@ export const MaterialBooleanToggleCell = (props: CellProps & WithClassname) => {
 export const materialBooleanToggleCellTester: RankedTester = rankWith(
   3,
   and(isBooleanControl, optionIs('toggle', true))
-);;
+);
 
 export default withJsonFormsCellProps(MaterialBooleanToggleCell);

@@ -24,11 +24,7 @@
 */
 
 import * as React from 'react';
-import {
-  ControlElement,
-  HorizontalLayout,
-  JsonSchema,
-} from '@jsonforms/core';
+import { ControlElement, HorizontalLayout, JsonSchema } from '@jsonforms/core';
 import { JsonFormsStateProvider } from '@jsonforms/react';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
@@ -42,7 +38,7 @@ Enzyme.configure({ adapter: new Adapter() });
 
 const control: ControlElement = {
   type: 'Control',
-  scope: '#/properties/foo'
+  scope: '#/properties/foo',
 };
 
 const fixture = {
@@ -52,17 +48,17 @@ const fixture = {
   styles: [
     {
       name: 'control',
-      classNames: ['control']
+      classNames: ['control'],
     },
     {
       name: 'control.checkbox',
-      classNames: ['checkbox']
+      classNames: ['checkbox'],
     },
     {
       name: 'control.validation',
-      classNames: ['validation']
-    }
-  ]
+      classNames: ['validation'],
+    },
+  ],
 };
 
 describe('Boolean cell tester', () => {
@@ -70,66 +66,75 @@ describe('Boolean cell tester', () => {
     expect(booleanCellTester(undefined, undefined, undefined)).toBe(-1);
     expect(booleanCellTester(null, undefined, undefined)).toBe(-1);
     expect(booleanCellTester({ type: 'Foo' }, undefined, undefined)).toBe(-1);
-    expect(booleanCellTester({ type: 'Control' }, undefined, undefined)).toBe(-1);
+    expect(booleanCellTester({ type: 'Control' }, undefined, undefined)).toBe(
+      -1
+    );
   });
 
   test('tester with wrong prop type', () => {
     const controlElement: ControlElement = {
       type: 'Control',
-      scope: '#/properties/foo'
+      scope: '#/properties/foo',
     };
     expect(
-      booleanCellTester(controlElement, {
-        type: 'object',
-        properties: { foo: { type: 'string' } }
-      },
-      undefined),
+      booleanCellTester(
+        controlElement,
+        {
+          type: 'object',
+          properties: { foo: { type: 'string' } },
+        },
+        undefined
+      )
     ).toBe(-1);
   });
 
   test('tester with wrong prop type, but sibling has correct one', () => {
     const controlElement = {
       type: 'Control',
-      scope: '#/properties/foo'
+      scope: '#/properties/foo',
     };
     expect(
-      booleanCellTester(controlElement, {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'string'
+      booleanCellTester(
+        controlElement,
+        {
+          type: 'object',
+          properties: {
+            foo: {
+              type: 'string',
+            },
+            bar: {
+              type: 'boolean',
+            },
           },
-          bar: {
-            type: 'boolean'
-          }
-        }
-      },
-      undefined)
+        },
+        undefined
+      )
     ).toBe(-1);
   });
 
   test('tester with matching prop type', () => {
     const controlElement = {
       type: 'Control',
-      scope: '#/properties/foo'
+      scope: '#/properties/foo',
     };
     expect(
-      booleanCellTester(controlElement, {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'boolean'
-          }
-        }
-      },
-      undefined)
+      booleanCellTester(
+        controlElement,
+        {
+          type: 'object',
+          properties: {
+            foo: {
+              type: 'boolean',
+            },
+          },
+        },
+        undefined
+      )
     ).toBe(2);
   });
-
 });
 
 describe('Boolean cell', () => {
-
   let wrapper: ReactWrapper;
 
   afterEach(() => wrapper.unmount());
@@ -139,30 +144,30 @@ describe('Boolean cell', () => {
       type: 'object',
       properties: {
         firstBooleanCell: { type: 'boolean' },
-        secondBooleanCell: { type: 'boolean' }
-      }
+        secondBooleanCell: { type: 'boolean' },
+      },
     };
     const firstControlElement: ControlElement = {
       type: 'Control',
       scope: '#/properties/firstBooleanCell',
       options: {
-        focus: true
-      }
+        focus: true,
+      },
     };
     const secondControlElement: ControlElement = {
       type: 'Control',
       scope: '#/properties/secondBooleanCell',
       options: {
-        focus: true
-      }
+        focus: true,
+      },
     };
     const uischema: HorizontalLayout = {
       type: 'HorizontalLayout',
-      elements: [firstControlElement, secondControlElement]
+      elements: [firstControlElement, secondControlElement],
     };
     const data = {
       firstBooleanCell: true,
-      secondBooleanCell: false
+      secondBooleanCell: false,
     };
     const core = initCore(schema, uischema, data);
     wrapper = mount(
@@ -180,8 +185,8 @@ describe('Boolean cell', () => {
       type: 'Control',
       scope: '#/properties/foo',
       options: {
-        focus: true
-      }
+        focus: true,
+      },
     };
     const core = initCore(fixture.schema, uischema, fixture.data);
     wrapper = mount(
@@ -198,8 +203,8 @@ describe('Boolean cell', () => {
       type: 'Control',
       scope: '#/properties/foo',
       options: {
-        focus: false
-      }
+        focus: false,
+      },
     };
     const core = initCore(fixture.schema, uischema, fixture.data);
     wrapper = mount(
@@ -214,7 +219,7 @@ describe('Boolean cell', () => {
   test('autofocus inactive by default', () => {
     const uischema: ControlElement = {
       type: 'Control',
-      scope: '#/properties/foo'
+      scope: '#/properties/foo',
     };
     const core = initCore(fixture.schema, uischema, fixture.data);
     wrapper = mount(
@@ -230,7 +235,11 @@ describe('Boolean cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core }}>
-        <BooleanCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <BooleanCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
 
@@ -243,7 +252,11 @@ describe('Boolean cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core }}>
-        <BooleanCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <BooleanCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input');
@@ -254,7 +267,7 @@ describe('Boolean cell', () => {
 
   test('update via input event', () => {
     const onChangeData: any = {
-      data: undefined
+      data: undefined,
     };
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
@@ -264,7 +277,11 @@ describe('Boolean cell', () => {
             onChangeData.data = data;
           }}
         />
-        <BooleanCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <BooleanCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
 
@@ -276,7 +293,7 @@ describe('Boolean cell', () => {
   test('update via action', () => {
     const data = { foo: false };
     const onChangeData: any = {
-      data: undefined
+      data: undefined,
     };
     const core = initCore(fixture.schema, fixture.uischema, data);
     wrapper = mount(
@@ -286,12 +303,16 @@ describe('Boolean cell', () => {
             onChangeData.data = data;
           }}
         />
-        <BooleanCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <BooleanCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     core.data = { ...core.data, foo: false };
-    wrapper.setProps({ initState: { renderers: vanillaRenderers, core }} );
+    wrapper.setProps({ initState: { renderers: vanillaRenderers, core } });
     wrapper.update();
     expect(input.checked).toBe(false);
     expect(onChangeData.data.foo).toBe(false);
@@ -301,12 +322,16 @@ describe('Boolean cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core }}>
-        <BooleanCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <BooleanCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     core.data = { ...core.data, foo: undefined };
-    wrapper.setProps({ initState: { renderers: vanillaRenderers, core }} );
+    wrapper.setProps({ initState: { renderers: vanillaRenderers, core } });
     wrapper.update();
     expect(input.value).toEqual('');
   });
@@ -315,12 +340,16 @@ describe('Boolean cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core }}>
-        <BooleanCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <BooleanCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     core.data = { ...core.data, foo: null };
-    wrapper.setProps({ initState: { renderers: vanillaRenderers, core }} );
+    wrapper.setProps({ initState: { renderers: vanillaRenderers, core } });
     wrapper.update();
     expect(input.value).toEqual('');
   });
@@ -329,12 +358,16 @@ describe('Boolean cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core }}>
-        <BooleanCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <BooleanCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input');
     core.data = { ...core.data, bar: 11 };
-    wrapper.setProps({ initState: { renderers: vanillaRenderers, core }} );
+    wrapper.setProps({ initState: { renderers: vanillaRenderers, core } });
     wrapper.update();
     expect(input.props().checked).toBe(true);
   });
@@ -343,12 +376,16 @@ describe('Boolean cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core }}>
-        <BooleanCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <BooleanCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     core.data = { ...core.data, null: false };
-    wrapper.setProps({ initState: { renderers: vanillaRenderers, core }} );
+    wrapper.setProps({ initState: { renderers: vanillaRenderers, core } });
     wrapper.update();
     expect(input.checked).toBe(true);
   });
@@ -357,11 +394,15 @@ describe('Boolean cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core }}>
-        <BooleanCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <BooleanCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, undefined: false };
-    wrapper.setProps({ initState: { renderers: vanillaRenderers, core }} );
+    wrapper.setProps({ initState: { renderers: vanillaRenderers, core } });
     wrapper.update();
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
     expect(input.checked).toBe(true);
@@ -371,7 +412,11 @@ describe('Boolean cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core }}>
-        <BooleanCell schema={fixture.schema} uischema={fixture.uischema} enabled={false} />
+        <BooleanCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          enabled={false}
+        />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
@@ -382,7 +427,11 @@ describe('Boolean cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core }}>
-        <BooleanCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <BooleanCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
@@ -393,7 +442,11 @@ describe('Boolean cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core }}>
-        <BooleanCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <BooleanCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;

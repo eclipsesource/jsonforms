@@ -25,7 +25,7 @@
 import {
   isObjectArrayWithNesting,
   RankedTester,
-  rankWith
+  rankWith,
 } from '@jsonforms/core';
 import ArrayControlRenderer, { ArrayControl } from './ArrayControlRenderer';
 export { ArrayControlRenderer, ArrayControl };

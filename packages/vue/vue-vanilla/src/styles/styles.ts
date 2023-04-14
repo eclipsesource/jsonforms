@@ -9,7 +9,7 @@ const createEmptyStyles = (): Styles => ({
   horizontalLayout: {},
   group: {},
   arrayList: {},
-  label: {}
+  label: {},
 });
 
 export interface Styles {

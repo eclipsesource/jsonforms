@@ -32,195 +32,195 @@ import {
   LeafCondition,
   OrCondition,
   RuleEffect,
-  SchemaBasedCondition
+  SchemaBasedCondition,
 } from '../../src';
 import { evalEnablement, evalVisibility } from '../../src/util/runtime';
 
-test('evalVisibility show valid case', t => {
+test('evalVisibility show valid case', (t) => {
   const leafCondition: LeafCondition = {
     type: 'LEAF',
     scope: '#/properties/ruleValue',
-    expectedValue: 'bar'
+    expectedValue: 'bar',
   };
   const uischema: ControlElement = {
     type: 'Control',
     scope: '#/properties/value',
     rule: {
       effect: RuleEffect.SHOW,
-      condition: leafCondition
-    }
+      condition: leafCondition,
+    },
   };
   const data = {
     value: 'foo',
-    ruleValue: 'bar'
+    ruleValue: 'bar',
   };
   t.is(evalVisibility(uischema, data, undefined, createAjv()), true);
 });
 
-test('evalVisibility show valid case based on AndCondition', t => {
+test('evalVisibility show valid case based on AndCondition', (t) => {
   const leafCondition1: LeafCondition = {
     type: 'LEAF',
     scope: '#/properties/ruleValue1',
-    expectedValue: 'bar'
+    expectedValue: 'bar',
   };
   const leafCondition2: LeafCondition = {
     type: 'LEAF',
     scope: '#/properties/ruleValue2',
-    expectedValue: 'foo'
+    expectedValue: 'foo',
   };
   const condition: AndCondition = {
     type: 'AND',
-    conditions: [leafCondition1, leafCondition2]
+    conditions: [leafCondition1, leafCondition2],
   };
   const uischema: ControlElement = {
     type: 'Control',
     scope: '#/properties/value',
     rule: {
       effect: RuleEffect.SHOW,
-      condition: condition
-    }
+      condition: condition,
+    },
   };
   const data = {
     value: 'hello',
     ruleValue1: 'bar',
-    ruleValue2: 'foo'
+    ruleValue2: 'foo',
   };
   t.is(evalVisibility(uischema, data, undefined, createAjv()), true);
 });
 
-test('evalVisibility show invalid case based on AndCondition', t => {
+test('evalVisibility show invalid case based on AndCondition', (t) => {
   const leafCondition1: LeafCondition = {
     type: 'LEAF',
     scope: '#/properties/ruleValue1',
-    expectedValue: 'bar'
+    expectedValue: 'bar',
   };
   const leafCondition2: LeafCondition = {
     type: 'LEAF',
     scope: '#/properties/ruleValue2',
-    expectedValue: 'bar'
+    expectedValue: 'bar',
   };
   const condition: AndCondition = {
     type: 'AND',
-    conditions: [leafCondition1, leafCondition2]
+    conditions: [leafCondition1, leafCondition2],
   };
   const uischema: ControlElement = {
     type: 'Control',
     scope: '#/properties/value',
     rule: {
       effect: RuleEffect.SHOW,
-      condition: condition
-    }
+      condition: condition,
+    },
   };
   const data = {
     value: 'hello',
     ruleValue1: 'bar',
-    ruleValue2: 'foo'
+    ruleValue2: 'foo',
   };
   t.is(evalVisibility(uischema, data, undefined, createAjv()), false);
 });
 
-test('evalVisibility show valid case based on OrCondition', t => {
+test('evalVisibility show valid case based on OrCondition', (t) => {
   const leafCondition1: LeafCondition = {
     type: 'LEAF',
     scope: '#/properties/ruleValue1',
-    expectedValue: 'bar'
+    expectedValue: 'bar',
   };
   const leafCondition2: LeafCondition = {
     type: 'LEAF',
     scope: '#/properties/ruleValue2',
-    expectedValue: 'foo'
+    expectedValue: 'foo',
   };
   const condition: OrCondition = {
     type: 'OR',
-    conditions: [leafCondition1, leafCondition2]
+    conditions: [leafCondition1, leafCondition2],
   };
   const uischema: ControlElement = {
     type: 'Control',
     scope: '#/properties/value',
     rule: {
       effect: RuleEffect.SHOW,
-      condition: condition
-    }
+      condition: condition,
+    },
   };
   const data = {
     value: 'hello',
     ruleValue1: 'bar1',
-    ruleValue2: 'foo'
+    ruleValue2: 'foo',
   };
   t.is(evalVisibility(uischema, data, undefined, createAjv()), true);
 });
 
-test('evalVisibility show invalid case based on OrCondition', t => {
+test('evalVisibility show invalid case based on OrCondition', (t) => {
   const leafCondition1: LeafCondition = {
     type: 'LEAF',
     scope: '#/properties/ruleValue1',
-    expectedValue: 'foo'
+    expectedValue: 'foo',
   };
   const leafCondition2: LeafCondition = {
     type: 'LEAF',
     scope: '#/properties/ruleValue2',
-    expectedValue: 'bar'
+    expectedValue: 'bar',
   };
   const condition: OrCondition = {
     type: 'OR',
-    conditions: [leafCondition1, leafCondition2]
+    conditions: [leafCondition1, leafCondition2],
   };
   const uischema: ControlElement = {
     type: 'Control',
     scope: '#/properties/value',
     rule: {
       effect: RuleEffect.SHOW,
-      condition: condition
-    }
+      condition: condition,
+    },
   };
   const data = {
     value: 'hello',
     ruleValue1: 'bar',
-    ruleValue2: 'foo'
+    ruleValue2: 'foo',
   };
   t.is(evalVisibility(uischema, data, undefined, createAjv()), false);
 });
 
-test('evalVisibility show valid case based on schema condition', t => {
+test('evalVisibility show valid case based on schema condition', (t) => {
   const condition: SchemaBasedCondition = {
     scope: '#/properties/ruleValue',
     schema: {
-      const: 'bar'
-    }
+      const: 'bar',
+    },
   };
   const uischema: ControlElement = {
     type: 'Control',
     scope: '#/properties/value',
     rule: {
       effect: RuleEffect.SHOW,
-      condition
-    }
+      condition,
+    },
   };
   const data = {
     value: 'foo',
-    ruleValue: 'bar'
+    ruleValue: 'bar',
   };
   t.is(evalVisibility(uischema, data, undefined, createAjv()), true);
 });
 
-test('evalVisibility show valid case based on schema condition and enum', t => {
+test('evalVisibility show valid case based on schema condition and enum', (t) => {
   const condition: SchemaBasedCondition = {
     scope: '#/properties/ruleValue',
     schema: {
-      enum: ['bar', 'baz']
-    }
+      enum: ['bar', 'baz'],
+    },
   };
   const uischema: ControlElement = {
     type: 'Control',
     scope: '#/properties/value',
     rule: {
       effect: RuleEffect.SHOW,
-      condition
-    }
+      condition,
+    },
   };
   const data = {
     value: 'foo',
-    ruleValue: 'bar'
+    ruleValue: 'bar',
   };
   t.is(evalVisibility(uischema, data, undefined, createAjv()), true);
   t.is(
@@ -243,293 +243,293 @@ test('evalVisibility show valid case based on schema condition and enum', t => {
   );
 });
 
-test('evalVisibility show invalid case', t => {
+test('evalVisibility show invalid case', (t) => {
   const leafCondition: LeafCondition = {
     type: 'LEAF',
     scope: '#/properties/ruleValue',
-    expectedValue: 'bar'
+    expectedValue: 'bar',
   };
   const uischema: ControlElement = {
     type: 'Control',
     scope: '#/properties/value',
     rule: {
       effect: RuleEffect.SHOW,
-      condition: leafCondition
-    }
+      condition: leafCondition,
+    },
   };
   const data = {
     value: 'foo',
-    ruleValue: 'foobar'
+    ruleValue: 'foobar',
   };
   t.deepEqual(evalVisibility(uischema, data, undefined, createAjv()), false);
 });
-test('evalVisibility hide valid case', t => {
+test('evalVisibility hide valid case', (t) => {
   const leafCondition: LeafCondition = {
     type: 'LEAF',
     scope: '#/properties/ruleValue',
-    expectedValue: 'bar'
+    expectedValue: 'bar',
   };
   const uischema: ControlElement = {
     type: 'Control',
     scope: '#/properties/value',
     rule: {
       effect: RuleEffect.HIDE,
-      condition: leafCondition
-    }
+      condition: leafCondition,
+    },
   };
   const data = {
     value: 'foo',
-    ruleValue: 'bar'
+    ruleValue: 'bar',
   };
   t.is(evalVisibility(uischema, data, undefined, createAjv()), false);
 });
 
-test('evalVisibility hide invalid case', t => {
+test('evalVisibility hide invalid case', (t) => {
   const leafCondition: LeafCondition = {
     type: 'LEAF',
     scope: '#/properties/ruleValue',
-    expectedValue: 'bar'
+    expectedValue: 'bar',
   };
   const uischema: ControlElement = {
     type: 'Control',
     scope: '#/properties/value',
     rule: {
       effect: RuleEffect.HIDE,
-      condition: leafCondition
-    }
+      condition: leafCondition,
+    },
   };
   const data = {
     value: 'foo',
-    ruleValue: 'foobar'
+    ruleValue: 'foobar',
   };
   t.is(evalVisibility(uischema, data, undefined, createAjv()), true);
 });
 
-test('evalEnablement enable valid case', t => {
+test('evalEnablement enable valid case', (t) => {
   const leafCondition: LeafCondition = {
     type: 'LEAF',
     scope: '#/properties/ruleValue',
-    expectedValue: 'bar'
+    expectedValue: 'bar',
   };
   const uischema: ControlElement = {
     type: 'Control',
     scope: '#/properties/value',
     rule: {
       effect: RuleEffect.ENABLE,
-      condition: leafCondition
-    }
+      condition: leafCondition,
+    },
   };
   const data = {
     value: 'foo',
-    ruleValue: 'bar'
+    ruleValue: 'bar',
   };
   t.is(evalEnablement(uischema, data, undefined, createAjv()), true);
 });
 
-test('evalEnablement show valid case based on AndCondition', t => {
+test('evalEnablement show valid case based on AndCondition', (t) => {
   const leafCondition1: LeafCondition = {
     type: 'LEAF',
     scope: '#/properties/ruleValue1',
-    expectedValue: 'bar'
+    expectedValue: 'bar',
   };
   const leafCondition2: LeafCondition = {
     type: 'LEAF',
     scope: '#/properties/ruleValue2',
-    expectedValue: 'foo'
+    expectedValue: 'foo',
   };
   const condition: AndCondition = {
     type: 'AND',
-    conditions: [leafCondition1, leafCondition2]
+    conditions: [leafCondition1, leafCondition2],
   };
   const uischema: ControlElement = {
     type: 'Control',
     scope: '#/properties/value',
     rule: {
       effect: RuleEffect.ENABLE,
-      condition: condition
-    }
+      condition: condition,
+    },
   };
   const data = {
     value: 'hello',
     ruleValue1: 'bar',
-    ruleValue2: 'foo'
+    ruleValue2: 'foo',
   };
   t.is(evalEnablement(uischema, data, undefined, createAjv()), true);
 });
 
-test('evalEnablement show invalid case based on AndCondition', t => {
+test('evalEnablement show invalid case based on AndCondition', (t) => {
   const leafCondition1: LeafCondition = {
     type: 'LEAF',
     scope: '#/properties/ruleValue1',
-    expectedValue: 'bar'
+    expectedValue: 'bar',
   };
   const leafCondition2: LeafCondition = {
     type: 'LEAF',
     scope: '#/properties/ruleValue2',
-    expectedValue: 'bar'
+    expectedValue: 'bar',
   };
   const condition: AndCondition = {
     type: 'AND',
-    conditions: [leafCondition1, leafCondition2]
+    conditions: [leafCondition1, leafCondition2],
   };
   const uischema: ControlElement = {
     type: 'Control',
     scope: '#/properties/value',
     rule: {
       effect: RuleEffect.ENABLE,
-      condition: condition
-    }
+      condition: condition,
+    },
   };
   const data = {
     value: 'hello',
     ruleValue1: 'bar',
-    ruleValue2: 'foo'
+    ruleValue2: 'foo',
   };
   t.is(evalEnablement(uischema, data, undefined, createAjv()), false);
 });
 
-test('evalEnablement show valid case based on OrCondition', t => {
+test('evalEnablement show valid case based on OrCondition', (t) => {
   const leafCondition1: LeafCondition = {
     type: 'LEAF',
     scope: '#/properties/ruleValue1',
-    expectedValue: 'bar'
+    expectedValue: 'bar',
   };
   const leafCondition2: LeafCondition = {
     type: 'LEAF',
     scope: '#/properties/ruleValue2',
-    expectedValue: 'foo'
+    expectedValue: 'foo',
   };
   const condition: OrCondition = {
     type: 'OR',
-    conditions: [leafCondition1, leafCondition2]
+    conditions: [leafCondition1, leafCondition2],
   };
   const uischema: ControlElement = {
     type: 'Control',
     scope: '#/properties/value',
     rule: {
       effect: RuleEffect.ENABLE,
-      condition: condition
-    }
+      condition: condition,
+    },
   };
   const data = {
     value: 'hello',
     ruleValue1: 'bar1',
-    ruleValue2: 'foo'
+    ruleValue2: 'foo',
   };
   t.is(evalEnablement(uischema, data, undefined, createAjv()), true);
 });
 
-test('evalEnablement show invalid case based on OrCondition', t => {
+test('evalEnablement show invalid case based on OrCondition', (t) => {
   const leafCondition1: LeafCondition = {
     type: 'LEAF',
     scope: '#/properties/ruleValue1',
-    expectedValue: 'foo'
+    expectedValue: 'foo',
   };
   const leafCondition2: LeafCondition = {
     type: 'LEAF',
     scope: '#/properties/ruleValue2',
-    expectedValue: 'bar'
+    expectedValue: 'bar',
   };
   const condition: OrCondition = {
     type: 'OR',
-    conditions: [leafCondition1, leafCondition2]
+    conditions: [leafCondition1, leafCondition2],
   };
   const uischema: ControlElement = {
     type: 'Control',
     scope: '#/properties/value',
     rule: {
       effect: RuleEffect.ENABLE,
-      condition: condition
-    }
+      condition: condition,
+    },
   };
   const data = {
     value: 'hello',
     ruleValue1: 'bar',
-    ruleValue2: 'foo'
+    ruleValue2: 'foo',
   };
   t.is(evalEnablement(uischema, data, undefined, createAjv()), false);
 });
 
-test('evalEnablement enable invalid case', t => {
+test('evalEnablement enable invalid case', (t) => {
   const leafCondition: LeafCondition = {
     type: 'LEAF',
     scope: '#/properties/ruleValue',
-    expectedValue: 'bar'
+    expectedValue: 'bar',
   };
   const uischema: ControlElement = {
     type: 'Control',
     scope: '#/properties/value',
     rule: {
       effect: RuleEffect.ENABLE,
-      condition: leafCondition
-    }
+      condition: leafCondition,
+    },
   };
   const data = {
     value: 'foo',
-    ruleValue: 'foobar'
+    ruleValue: 'foobar',
   };
   t.is(evalEnablement(uischema, data, undefined, createAjv()), false);
 });
-test('evalEnablement disable valid case', t => {
+test('evalEnablement disable valid case', (t) => {
   const leafCondition: LeafCondition = {
     type: 'LEAF',
     scope: '#/properties/ruleValue',
-    expectedValue: 'bar'
+    expectedValue: 'bar',
   };
   const uischema: ControlElement = {
     type: 'Control',
     scope: '#/properties/value',
     rule: {
       effect: RuleEffect.DISABLE,
-      condition: leafCondition
-    }
+      condition: leafCondition,
+    },
   };
   const data = {
     value: 'foo',
-    ruleValue: 'bar'
+    ruleValue: 'bar',
   };
   t.is(evalEnablement(uischema, data, undefined, createAjv()), false);
 });
 
-test('evalEnablement disable invalid case', t => {
+test('evalEnablement disable invalid case', (t) => {
   const leafCondition: LeafCondition = {
     type: 'LEAF',
     scope: '#/properties/ruleValue',
-    expectedValue: 'bar'
+    expectedValue: 'bar',
   };
   const uischema: ControlElement = {
     type: 'Control',
     scope: '#/properties/value',
     rule: {
       effect: RuleEffect.DISABLE,
-      condition: leafCondition
-    }
+      condition: leafCondition,
+    },
   };
   const data = {
     value: 'foo',
-    ruleValue: 'foobar'
+    ruleValue: 'foobar',
   };
   t.is(evalEnablement(uischema, data, undefined, createAjv()), true);
 });
 
-test('evalEnablement disable invalid case based on schema condition', t => {
+test('evalEnablement disable invalid case based on schema condition', (t) => {
   const condition: SchemaBasedCondition = {
     scope: '#/properties/ruleValue',
     schema: {
-      enum: ['bar', 'baz']
-    }
+      enum: ['bar', 'baz'],
+    },
   };
   const uischema: ControlElement = {
     type: 'Control',
     scope: '#/properties/value',
     rule: {
       effect: RuleEffect.DISABLE,
-      condition
-    }
+      condition,
+    },
   };
   const data = {
     value: 'foo',
-    ruleValue: 'bar'
+    ruleValue: 'bar',
   };
   t.is(evalEnablement(uischema, data, undefined, createAjv()), false);
   t.is(
@@ -552,7 +552,7 @@ test('evalEnablement disable invalid case based on schema condition', t => {
   );
 });
 
-test('isInherentlyEnabled disabled globally', t => {
+test('isInherentlyEnabled disabled globally', (t) => {
   t.false(
     isInherentlyEnabled(
       { jsonforms: { readonly: true } },
@@ -565,22 +565,22 @@ test('isInherentlyEnabled disabled globally', t => {
   );
 });
 
-test('isInherentlyEnabled disabled by ownProps', t => {
+test('isInherentlyEnabled disabled by ownProps', (t) => {
   t.false(
     isInherentlyEnabled(null, { enabled: false }, null, null, null, null)
   );
 });
 
-test('isInherentlyEnabled enabled by ownProps', t => {
+test('isInherentlyEnabled enabled by ownProps', (t) => {
   t.true(isInherentlyEnabled(null, { enabled: true }, null, null, null, null));
 });
 
-test('isInherentlyEnabled disabled by uischema', t => {
+test('isInherentlyEnabled disabled by uischema', (t) => {
   t.false(
     isInherentlyEnabled(
       null,
       null,
-      ({ options: { readonly: true } } as unknown) as ControlElement,
+      { options: { readonly: true } } as unknown as ControlElement,
       null,
       null,
       null
@@ -588,12 +588,12 @@ test('isInherentlyEnabled disabled by uischema', t => {
   );
 });
 
-test('isInherentlyEnabled disabled by uischema over ownProps', t => {
+test('isInherentlyEnabled disabled by uischema over ownProps', (t) => {
   t.false(
     isInherentlyEnabled(
       null,
       { enabled: true },
-      ({ options: { readonly: true } } as unknown) as ControlElement,
+      { options: { readonly: true } } as unknown as ControlElement,
       null,
       null,
       null
@@ -601,12 +601,12 @@ test('isInherentlyEnabled disabled by uischema over ownProps', t => {
   );
 });
 
-test('isInherentlyEnabled enabled by uischema over schema', t => {
+test('isInherentlyEnabled enabled by uischema over schema', (t) => {
   t.true(
     isInherentlyEnabled(
       null,
       null,
-      ({ options: { readonly: false } } as unknown) as ControlElement,
+      { options: { readonly: false } } as unknown as ControlElement,
       { readOnly: true },
       null,
       null
@@ -614,11 +614,11 @@ test('isInherentlyEnabled enabled by uischema over schema', t => {
   );
 });
 
-test('isInherentlyEnabled disabled by ownProps over schema enablement', t => {
+test('isInherentlyEnabled disabled by ownProps over schema enablement', (t) => {
   t.false(
     isInherentlyEnabled(
       null,
-      { enabled: false},
+      { enabled: false },
       null,
       { readOnly: false },
       null,
@@ -627,12 +627,12 @@ test('isInherentlyEnabled disabled by ownProps over schema enablement', t => {
   );
 });
 
-test('isInherentlyEnabled disabled by uischema over schema', t => {
+test('isInherentlyEnabled disabled by uischema over schema', (t) => {
   t.false(
     isInherentlyEnabled(
       null,
       null,
-      ({ options: { readonly: true } } as unknown) as ControlElement,
+      { options: { readonly: true } } as unknown as ControlElement,
       { readOnly: false },
       null,
       null
@@ -640,13 +640,13 @@ test('isInherentlyEnabled disabled by uischema over schema', t => {
   );
 });
 
-test('isInherentlyEnabled disabled by schema', t => {
+test('isInherentlyEnabled disabled by schema', (t) => {
   t.false(
     isInherentlyEnabled(null, null, null, { readOnly: true }, null, null)
   );
 });
 
-test('isInherentlyEnabled disabled by schema over ownProps', t => {
+test('isInherentlyEnabled disabled by schema over ownProps', (t) => {
   t.false(
     isInherentlyEnabled(
       null,
@@ -659,22 +659,22 @@ test('isInherentlyEnabled disabled by schema over ownProps', t => {
   );
 });
 
-test('isInherentlyEnabled disabled by rule', t => {
+test('isInherentlyEnabled disabled by rule', (t) => {
   const leafCondition: SchemaBasedCondition = {
     scope: '#/properties/ruleValue',
-    schema: { type: 'string', pattern: 'bar' }
+    schema: { type: 'string', pattern: 'bar' },
   };
   const uischema: ControlElement = {
     type: 'Control',
     scope: '#/properties/value',
     rule: {
       effect: RuleEffect.DISABLE,
-      condition: leafCondition
-    }
+      condition: leafCondition,
+    },
   };
   const data = {
     value: 'foo',
-    ruleValue: 'bar'
+    ruleValue: 'bar',
   };
 
   t.false(
@@ -689,22 +689,22 @@ test('isInherentlyEnabled disabled by rule', t => {
   );
 });
 
-test('isInherentlyEnabled disabled by global over rule ', t => {
+test('isInherentlyEnabled disabled by global over rule ', (t) => {
   const leafCondition: SchemaBasedCondition = {
     scope: '#/properties/ruleValue',
-    schema: { type: 'string', pattern: 'bar' }
+    schema: { type: 'string', pattern: 'bar' },
   };
   const uischema: ControlElement = {
     type: 'Control',
     scope: '#/properties/value',
     rule: {
       effect: RuleEffect.ENABLE,
-      condition: leafCondition
-    }
+      condition: leafCondition,
+    },
   };
   const data = {
     value: 'foo',
-    ruleValue: 'bar'
+    ruleValue: 'bar',
   };
 
   t.false(
@@ -712,8 +712,8 @@ test('isInherentlyEnabled disabled by global over rule ', t => {
       {
         jsonforms: {
           readonly: true,
-          core: { ajv: createAjv() } as JsonFormsCore
-        }
+          core: { ajv: createAjv() } as JsonFormsCore,
+        },
       },
       null,
       uischema,
@@ -724,26 +724,26 @@ test('isInherentlyEnabled disabled by global over rule ', t => {
   );
 });
 
-test('isInherentlyEnabled disabled by config', t => {
+test('isInherentlyEnabled disabled by config', (t) => {
   t.false(
     isInherentlyEnabled(null, null, null, null, null, { readonly: true })
   );
 });
 
-test('isInherentlyEnabled enabled by config over ownProps', t => {
+test('isInherentlyEnabled enabled by config over ownProps', (t) => {
   t.true(
     isInherentlyEnabled(null, { enabled: false }, null, null, null, {
-      readonly: false
+      readonly: false,
     })
   );
 });
 
-test('isInherentlyEnabled enabled by uischema over config', t => {
+test('isInherentlyEnabled enabled by uischema over config', (t) => {
   t.true(
     isInherentlyEnabled(
       null,
       null,
-      ({ options: { readonly: false } } as unknown) as ControlElement,
+      { options: { readonly: false } } as unknown as ControlElement,
       null,
       null,
       { readonly: true }
@@ -751,12 +751,14 @@ test('isInherentlyEnabled enabled by uischema over config', t => {
   );
 });
 
-test('isInherentlyEnabled prefer readonly over readOnly', t => {
+test('isInherentlyEnabled prefer readonly over readOnly', (t) => {
   t.true(
     isInherentlyEnabled(
       null,
       null,
-      ({ options: { readonly: false, readOnly: true } } as unknown) as ControlElement,
+      {
+        options: { readonly: false, readOnly: true },
+      } as unknown as ControlElement,
       null,
       null,
       null
@@ -766,7 +768,9 @@ test('isInherentlyEnabled prefer readonly over readOnly', t => {
     isInherentlyEnabled(
       null,
       null,
-      ({ options: { readonly: true, readOnly: false } } as unknown) as ControlElement,
+      {
+        options: { readonly: true, readOnly: false },
+      } as unknown as ControlElement,
       null,
       null,
       null
@@ -774,6 +778,6 @@ test('isInherentlyEnabled prefer readonly over readOnly', t => {
   );
 });
 
-test('isInherentlyEnabled enabled', t => {
+test('isInherentlyEnabled enabled', (t) => {
   t.true(isInherentlyEnabled(null, null, null, null, null, null));
 });

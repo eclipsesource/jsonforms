@@ -8,6 +8,6 @@ export const mountJsonForms = (
   config?: any
 ) => {
   return mount(TestComponent, {
-    props: { initialData: data, schema, uischema, config }
+    props: { initialData: data, schema, uischema, config },
   });
 };

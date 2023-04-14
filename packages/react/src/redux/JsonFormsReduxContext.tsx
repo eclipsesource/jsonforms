@@ -39,12 +39,16 @@ import React from 'react';
 // This import will be aliased to '@jsonforms/react' via rollup
 import { JsonFormsContext, JsonFormsReduxContextProps } from '..';
 
-const JsonFormsReduxProvider = ({ children, dispatch, ...other }: JsonFormsReduxContextProps) => {
+const JsonFormsReduxProvider = ({
+  children,
+  dispatch,
+  ...other
+}: JsonFormsReduxContextProps) => {
   return (
     <JsonFormsContext.Provider
       value={{
         dispatch,
-        ...other
+        ...other,
       }}
     >
       {children}
@@ -52,11 +56,9 @@ const JsonFormsReduxProvider = ({ children, dispatch, ...other }: JsonFormsRedux
   );
 };
 
-export const JsonFormsReduxContext = connect(
-  (state: JsonFormsState) => ({
-    ...state.jsonforms
-  })
-)(JsonFormsReduxProvider);
+export const JsonFormsReduxContext = connect((state: JsonFormsState) => ({
+  ...state.jsonforms,
+}))(JsonFormsReduxProvider);
 
 export const jsonformsReducer = (
   additionalReducers = {}
@@ -68,5 +70,5 @@ export const jsonformsReducer = (
     config: configReducer,
     uischemas: uischemaRegistryReducer,
     i18n: i18nReducer,
-    ...additionalReducers
-});
+    ...additionalReducers,
+  });

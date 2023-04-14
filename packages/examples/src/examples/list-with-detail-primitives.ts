@@ -25,59 +25,59 @@
 import { registerExamples } from '../register';
 
 const data = {
-    'an-array-of-strings': ['foo', 'bar', 'foobar']
+  'an-array-of-strings': ['foo', 'bar', 'foobar'],
 };
 const schema = {
-    type: 'object',
-    properties: {
-        'an-array-of-strings': {
-            type: 'array',
-            items: {
-                type: 'string'
-            }
-        }
-    }
+  type: 'object',
+  properties: {
+    'an-array-of-strings': {
+      type: 'array',
+      items: {
+        type: 'string',
+      },
+    },
+  },
 };
 const uischema = {
-    "type": "ListWithDetail",
-    "scope": "#/properties/an-array-of-strings"
+  type: 'ListWithDetail',
+  scope: '#/properties/an-array-of-strings',
 };
 
 registerExamples([
-    {
-        name: 'list-with-detail-primitive-string',
-        label: 'List With Detail primitive (string)',
-        data,
-        schema,
-        uischema
-    }
+  {
+    name: 'list-with-detail-primitive-string',
+    label: 'List With Detail primitive (string)',
+    data,
+    schema,
+    uischema,
+  },
 ]);
 
 const data_number = {
-    'an-array-of-numbers': [1, 2, 3]
+  'an-array-of-numbers': [1, 2, 3],
 };
 const schema_number = {
-    type: 'object',
-    properties: {
-        'an-array-of-numbers': {
-            type: 'array',
-            items: {
-                type: 'number'
-            }
-        }
-    }
+  type: 'object',
+  properties: {
+    'an-array-of-numbers': {
+      type: 'array',
+      items: {
+        type: 'number',
+      },
+    },
+  },
 };
 const uischema_number = {
-    "type": "ListWithDetail",
-    "scope": "#/properties/an-array-of-numbers"
+  type: 'ListWithDetail',
+  scope: '#/properties/an-array-of-numbers',
 };
 
 registerExamples([
-    {
-        name: 'list-with-detail-primitive-number',
-        label: 'List With Detail primitive (number)',
-        data: data_number,
-        schema: schema_number,
-        uischema: uischema_number
-    }
+  {
+    name: 'list-with-detail-primitive-number',
+    label: 'List With Detail primitive (number)',
+    data: data_number,
+    schema: schema_number,
+    uischema: uischema_number,
+  },
 ]);

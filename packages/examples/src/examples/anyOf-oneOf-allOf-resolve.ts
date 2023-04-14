@@ -30,9 +30,9 @@ export const schema = {
       type: 'object',
       properties: {
         width: {
-          type: 'integer'
-        }
-      }
+          type: 'integer',
+        },
+      },
     },
     Child: {
       type: 'object',
@@ -41,19 +41,19 @@ export const schema = {
         {
           properties: {
             geometry: {
-              type: 'string'
-            }
-          }
-        }
-      ]
-    }
+              type: 'string',
+            },
+          },
+        },
+      ],
+    },
   },
   type: 'object',
   properties: {
     element: {
-      $ref: '#/$defs/Child'
-    }
-  }
+      $ref: '#/$defs/Child',
+    },
+  },
 };
 
 export const uischema = {
@@ -61,25 +61,25 @@ export const uischema = {
   elements: [
     {
       type: 'Label',
-      text: 'AllOfRenderer'
+      text: 'AllOfRenderer',
     },
     {
       type: 'Control',
-      scope: '#/properties/element'
+      scope: '#/properties/element',
     },
     {
       type: 'Label',
-      text: 'Manual controls'
+      text: 'Manual controls',
     },
     {
       type: 'Control',
-      scope: '#/properties/element/properties/width'
+      scope: '#/properties/element/properties/width',
     },
     {
       type: 'Control',
-      scope: '#/properties/element/properties/geometry'
-    }
-  ]
+      scope: '#/properties/element/properties/geometry',
+    },
+  ],
 };
 
 const data = {};
@@ -90,6 +90,6 @@ registerExamples([
     label: 'AnyOf OneOf AllOf Resolve',
     data,
     schema,
-    uischema
-  }
+    uischema,
+  },
 ]);

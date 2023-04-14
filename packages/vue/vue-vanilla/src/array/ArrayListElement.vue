@@ -1,27 +1,27 @@
 <template>
   <div :class="styles.arrayList.item">
-    <div @click="expandClicked" :class="toolbarClasses">
+    <div :class="toolbarClasses" @click="expandClicked">
       <div :class="styles.arrayList.itemLabel">{{ label }}</div>
       <button
-        @click="moveUpClicked"
         :disabled="!moveUpEnabled"
         :class="styles.arrayList.itemMoveUp"
         type="button"
+        @click="moveUpClicked"
       >
         ↑
       </button>
       <button
-        @click="moveDownClicked"
         :disabled="!moveDownEnabled"
         :class="styles.arrayList.itemMoveDown"
         type="button"
+        @click="moveDownClicked"
       >
         ↓
       </button>
       <button
-        @click="deleteClicked"
         :class="styles.arrayList.itemDelete"
         type="button"
+        @click="deleteClicked"
       >
         🗙
       </button>
@@ -37,62 +37,64 @@ import { defineComponent, PropType } from 'vue';
 import { classes, Styles } from '../styles';
 
 const listItem = defineComponent({
-  name: 'array-list-element',
+  name: 'ArrayListElement',
   props: {
     initiallyExpanded: {
       required: false,
       type: Boolean,
-      default: false
+      default: false,
     },
     label: {
       required: false,
       type: String,
-      default: ''
+      default: '',
     },
     moveUpEnabled: {
       required: false,
       type: Boolean,
-      default: true
+      default: true,
     },
     moveDownEnabled: {
       required: false,
       type: Boolean,
-      default: true
+      default: true,
     },
     moveUp: {
       required: false,
       type: Function,
-      default: undefined
+      default: undefined,
     },
     moveDown: {
       required: false,
       type: Function,
-      default: undefined
+      default: undefined,
     },
     delete: {
       required: false,
       type: Function,
-      default: undefined
+      default: undefined,
     },
     styles: {
       required: true,
-      type: Object as PropType<Styles>
-    }
+      type: Object as PropType<Styles>,
+    },
   },
   data() {
     return {
-      expanded: this.initiallyExpanded
+      expanded: this.initiallyExpanded,
     };
   },
   computed: {
     contentClasses(): string {
-      return classes`${this.styles.arrayList.itemContent} ${this.expanded &&
-        this.styles.arrayList.itemExpanded}`;
+      return classes`${this.styles.arrayList.itemContent} ${
+        this.expanded && this.styles.arrayList.itemExpanded
+      }`;
     },
     toolbarClasses(): string {
-      return classes`${this.styles.arrayList.itemToolbar} ${this.expanded &&
-        this.styles.arrayList.itemExpanded}`;
-    }
+      return classes`${this.styles.arrayList.itemToolbar} ${
+        this.expanded && this.styles.arrayList.itemExpanded
+      }`;
+    },
   },
   methods: {
     expandClicked(): void {
@@ -109,8 +111,8 @@ const listItem = defineComponent({
     deleteClicked(event: Event): void {
       event.stopPropagation();
       this.delete?.();
-    }
-  }
+    },
+  },
 });
 
 export default listItem;

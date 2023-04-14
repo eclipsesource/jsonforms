@@ -27,17 +27,12 @@ import {
   ControlElement,
   createDefaultValue,
   JsonSchema,
+  ArrayTranslations,
 } from '@jsonforms/core';
-import {
-  IconButton,
-  TableRow,
-  Tooltip
-} from '@mui/material';
-import { Grid, Typography } from '@mui/material';
+import { IconButton, TableRow, Tooltip, Grid, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import ValidationIcon from './ValidationIcon';
 import NoBorderTableCell from './NoBorderTableCell';
-import { ArrayTranslations } from '@jsonforms/core';
 
 export interface MaterialTableToolbarProps {
   numColumns: number;
@@ -55,7 +50,7 @@ export interface MaterialTableToolbarProps {
 const fixedCellSmall = {
   paddingLeft: 0,
   paddingRight: 0,
-}
+};
 
 const TableToolbar = React.memo(
   ({
@@ -66,7 +61,7 @@ const TableToolbar = React.memo(
     addItem,
     schema,
     enabled,
-    translations
+    translations,
   }: MaterialTableToolbarProps) => (
     <TableRow>
       <NoBorderTableCell colSpan={numColumns}>
@@ -80,19 +75,19 @@ const TableToolbar = React.memo(
             <Typography variant={'h6'}>{label}</Typography>
           </Grid>
           <Grid item>
-            {errors.length !== 0 &&
+            {errors.length !== 0 && (
               <Grid item>
                 <ValidationIcon
                   id='tooltip-validation'
                   errorMessages={errors}
                 />
               </Grid>
-            }
+            )}
           </Grid>
         </Grid>
       </NoBorderTableCell>
       {enabled ? (
-        <NoBorderTableCell align='right' style={ fixedCellSmall }>
+        <NoBorderTableCell align='right' style={fixedCellSmall}>
           <Tooltip
             id='tooltip-add'
             title={translations.addTooltip}
@@ -101,7 +96,8 @@ const TableToolbar = React.memo(
             <IconButton
               aria-label={translations.addAriaLabel}
               onClick={addItem(path, createDefaultValue(schema))}
-              size='large'>
+              size='large'
+            >
               <AddIcon />
             </IconButton>
           </Tooltip>

@@ -32,13 +32,13 @@ import {
   Layout,
   layoutDefaultProps,
   RuleEffect,
-  SchemaBasedCondition
+  SchemaBasedCondition,
 } from '@jsonforms/core';
 import { JsonFormsStateProvider } from '@jsonforms/react';
 import Enzyme, { mount } from 'enzyme';
 
 import MaterialCategorizationLayoutRenderer, {
-  materialCategorizationTester
+  materialCategorizationTester,
 } from '../../src/layouts/MaterialCategorizationLayout';
 import { MaterialLayoutRenderer, materialRenderers } from '../../src';
 import { Tab, Tabs } from '@mui/material';
@@ -53,19 +53,19 @@ const fixture = {
     type: 'object',
     properties: {
       name: {
-        type: 'string'
-      }
-    }
+        type: 'string',
+      },
+    },
   },
   uischema: {
     type: 'Categorization',
     elements: [
       {
         type: 'Category',
-        label: 'B'
-      }
-    ]
-  }
+        label: 'B',
+      },
+    ],
+  },
 };
 
 const testDefaultProps = {
@@ -73,33 +73,45 @@ const testDefaultProps = {
   data: fixture.data,
   ajv: createAjv(),
   t: defaultJsonFormsI18nState.translate,
-  locale: defaultJsonFormsI18nState.locale
-}
+  locale: defaultJsonFormsI18nState.locale,
+};
 
 describe('Material categorization layout tester', () => {
   it('should not fail when given undefined data', () => {
-    expect(materialCategorizationTester(undefined, undefined, undefined)).toBe(-1);
+    expect(materialCategorizationTester(undefined, undefined, undefined)).toBe(
+      -1
+    );
     expect(materialCategorizationTester(null, undefined, undefined)).toBe(-1);
-    expect(materialCategorizationTester({ type: 'Foo' }, undefined, undefined)).toBe(-1);
     expect(
-      materialCategorizationTester({ type: 'Categorization' }, undefined, undefined)
+      materialCategorizationTester({ type: 'Foo' }, undefined, undefined)
+    ).toBe(-1);
+    expect(
+      materialCategorizationTester(
+        { type: 'Categorization' },
+        undefined,
+        undefined
+      )
     ).toBe(-1);
   });
 
   it('should not fail with null elements and no schema', () => {
     const uischema: Layout = {
       type: 'Categorization',
-      elements: null
+      elements: null,
     };
-    expect(materialCategorizationTester(uischema, undefined, undefined)).toBe(-1);
+    expect(materialCategorizationTester(uischema, undefined, undefined)).toBe(
+      -1
+    );
   });
 
   it('should succeed with empty elements and no schema', () => {
     const uischema: Layout = {
       type: 'Categorization',
-      elements: []
+      elements: [],
     };
-    expect(materialCategorizationTester(uischema, undefined, undefined)).toBe(1);
+    expect(materialCategorizationTester(uischema, undefined, undefined)).toBe(
+      1
+    );
   });
 
   it('should not fail tester with single unknown element and no schema', () => {
@@ -107,11 +119,13 @@ describe('Material categorization layout tester', () => {
       type: 'Categorization',
       elements: [
         {
-          type: 'Foo'
-        }
-      ]
+          type: 'Foo',
+        },
+      ],
     };
-    expect(materialCategorizationTester(uischema, undefined, undefined)).toBe(-1);
+    expect(materialCategorizationTester(uischema, undefined, undefined)).toBe(
+      -1
+    );
   });
 
   it('should succeed with a single category and no schema', () => {
@@ -119,11 +133,13 @@ describe('Material categorization layout tester', () => {
       type: 'Categorization',
       elements: [
         {
-          type: 'Category'
-        }
-      ]
+          type: 'Category',
+        },
+      ],
     };
-    expect(materialCategorizationTester(categorization, undefined, undefined)).toBe(1);
+    expect(
+      materialCategorizationTester(categorization, undefined, undefined)
+    ).toBe(1);
   });
 
   it('should not apply to a nested categorization with single category and no schema', () => {
@@ -131,15 +147,17 @@ describe('Material categorization layout tester', () => {
       type: 'Categorization',
       elements: [
         {
-          type: 'Category'
-        }
-      ]
+          type: 'Category',
+        },
+      ],
     };
     const categorization: Layout = {
       type: 'Categorization',
-      elements: [nestedCategorization]
+      elements: [nestedCategorization],
     };
-    expect(materialCategorizationTester(categorization, undefined, undefined)).toBe(-1);
+    expect(
+      materialCategorizationTester(categorization, undefined, undefined)
+    ).toBe(-1);
   });
 
   it('should not apply to nested categorizations without categories and no schema', () => {
@@ -147,11 +165,13 @@ describe('Material categorization layout tester', () => {
       type: 'Categorization',
       elements: [
         {
-          type: 'Categorization'
-        }
-      ]
+          type: 'Categorization',
+        },
+      ],
     };
-    expect(materialCategorizationTester(categorization, undefined, undefined)).toBe(-1);
+    expect(
+      materialCategorizationTester(categorization, undefined, undefined)
+    ).toBe(-1);
   });
 
   it('should not apply to a nested categorization with null elements and no schema', () => {
@@ -161,12 +181,14 @@ describe('Material categorization layout tester', () => {
         {
           type: 'Categorization',
           label: 'Test',
-          elements: null
-        }
-      ]
+          elements: null,
+        },
+      ],
     };
 
-    expect(materialCategorizationTester(categorization, undefined, undefined)).toBe(-1);
+    expect(
+      materialCategorizationTester(categorization, undefined, undefined)
+    ).toBe(-1);
   });
 
   it('should not apply to a nested categorizations with empty elements and no schema', () => {
@@ -175,11 +197,13 @@ describe('Material categorization layout tester', () => {
       elements: [
         {
           type: 'Categorization',
-          elements: []
-        }
-      ]
+          elements: [],
+        },
+      ],
     };
-    expect(materialCategorizationTester(categorization, undefined, undefined)).toBe(-1);
+    expect(
+      materialCategorizationTester(categorization, undefined, undefined)
+    ).toBe(-1);
   });
 });
 
@@ -187,7 +211,7 @@ describe('Material categorization layout', () => {
   it('should render', () => {
     const nameControl = {
       type: 'Control',
-      scope: '#/properties/name'
+      scope: '#/properties/name',
     };
     const uischema: Categorization = {
       type: 'Categorization',
@@ -200,21 +224,23 @@ describe('Material categorization layout', () => {
             {
               type: 'Category',
               label: 'A',
-              elements: [nameControl]
-            }
-          ]
+              elements: [nameControl],
+            },
+          ],
         },
         {
           type: 'Category',
           label: 'B',
-          elements: [nameControl]
-        }
-      ]
+          elements: [nameControl],
+        },
+      ],
     };
 
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     const wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <MaterialCategorizationLayoutRenderer
           {...testDefaultProps}
           schema={fixture.schema}
@@ -231,7 +257,7 @@ describe('Material categorization layout', () => {
     const data = { name: 'Foo' };
     const nameControl: ControlElement = {
       type: 'Control',
-      scope: '#/properties/name'
+      scope: '#/properties/name',
     };
     const innerCategorization: Categorization = {
       type: 'Categorization',
@@ -240,9 +266,9 @@ describe('Material categorization layout', () => {
         {
           type: 'Category',
           label: 'A',
-          elements: [nameControl]
-        }
-      ]
+          elements: [nameControl],
+        },
+      ],
     };
     const uischema: Categorization = {
       type: 'Categorization',
@@ -252,24 +278,26 @@ describe('Material categorization layout', () => {
         {
           type: 'Category',
           label: 'B',
-          elements: [nameControl, nameControl]
+          elements: [nameControl, nameControl],
         },
         {
           type: 'Category',
           label: 'C',
-          elements: undefined
+          elements: undefined,
         },
         {
           type: 'Category',
           label: 'D',
-          elements: null
-        }
-      ]
+          elements: null,
+        },
+      ],
     };
     const core = initCore(fixture.schema, fixture.uischema, data);
 
     const wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <MaterialCategorizationLayoutRenderer
           {...testDefaultProps}
           schema={fixture.schema}
@@ -279,10 +307,7 @@ describe('Material categorization layout', () => {
     );
 
     const beforeClick = wrapper.find(Tabs).props().value;
-    wrapper
-      .find('button[role="tab"]')
-      .at(1)
-      .simulate('click');
+    wrapper.find('button[role="tab"]').at(1).simulate('click');
     const afterClick = wrapper.find(Tabs).props().value;
 
     expect(beforeClick).toBe(0);
@@ -294,7 +319,9 @@ describe('Material categorization layout', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
 
     const wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <MaterialCategorizationLayoutRenderer
           {...testDefaultProps}
           schema={fixture.schema}
@@ -311,7 +338,9 @@ describe('Material categorization layout', () => {
   it('is shown by default', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     const wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <MaterialCategorizationLayoutRenderer
           {...testDefaultProps}
           schema={fixture.schema}
@@ -327,7 +356,7 @@ describe('Material categorization layout', () => {
   it('allows categories to be hidden', () => {
     const condition: SchemaBasedCondition = {
       scope: '#/properties/name',
-      schema: { minLength: 3 }
+      schema: { minLength: 3 },
     };
 
     const uischema: Categorization = {
@@ -337,7 +366,7 @@ describe('Material categorization layout', () => {
         {
           type: 'Category',
           label: 'A',
-          elements: []
+          elements: [],
         },
         {
           type: 'Category',
@@ -345,14 +374,16 @@ describe('Material categorization layout', () => {
           elements: [],
           rule: {
             effect: RuleEffect.HIDE,
-            condition
-          }
-        }
-      ]
+            condition,
+          },
+        },
+      ],
     };
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     const wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <MaterialCategorizationLayoutRenderer
           {...testDefaultProps}
           schema={fixture.schema}
@@ -369,7 +400,9 @@ describe('Material categorization layout', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     const renderers: any[] = [];
     const wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <MaterialCategorizationLayoutRenderer
           {...testDefaultProps}
           schema={fixture.schema}
@@ -384,26 +417,26 @@ describe('Material categorization layout', () => {
   });
 
   it('display correct content when hiding a tab', () => {
-    const data = { name : 'fo' };
+    const data = { name: 'fo' };
     const condition: SchemaBasedCondition = {
       scope: '#/properties/name',
-      schema: { maxLength: 3 }
+      schema: { maxLength: 3 },
     };
     const nameControl: ControlElement = {
       type: 'Control',
-      scope: '#/properties/name'
+      scope: '#/properties/name',
     };
     const uischema: Categorization = {
       type: 'Categorization',
       label: '',
       options: {
-          showNavButtons: true
+        showNavButtons: true,
       },
       elements: [
         {
           type: 'Category',
           label: 'A',
-          elements: undefined
+          elements: undefined,
         },
         {
           type: 'Category',
@@ -411,8 +444,8 @@ describe('Material categorization layout', () => {
           elements: undefined,
           rule: {
             effect: RuleEffect.SHOW,
-            condition: condition
-          }
+            condition: condition,
+          },
         },
         {
           type: 'Category',
@@ -420,39 +453,38 @@ describe('Material categorization layout', () => {
           elements: [nameControl],
           rule: {
             effect: RuleEffect.HIDE,
-            condition: condition
-          }
-        }
-      ]
+            condition: condition,
+          },
+        },
+      ],
     };
 
     const core = initCore(fixture.schema, uischema, data);
 
     const wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <MaterialCategorizationLayoutRenderer
-            {...testDefaultProps}
-            schema={fixture.schema}
-            uischema={uischema}
+          {...testDefaultProps}
+          schema={fixture.schema}
+          uischema={uischema}
         />
       </JsonFormsStateProvider>
     );
-    
-    wrapper
-      .find('button[role="tab"]')
-      .at(1)
-      .simulate('click');
+
+    wrapper.find('button[role="tab"]').at(1).simulate('click');
 
     let isCategoryCshown = wrapper.find('input[type="text"]').length > 0;
     expect(isCategoryCshown).toBe(false);
 
     core.data = { ...core.data, name: 'Barr' };
-    wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
+    wrapper.setProps({ initState: { renderers: materialRenderers, core } });
     wrapper.update();
 
     isCategoryCshown = wrapper.find('input[type="text"]').length > 0;
     expect(isCategoryCshown).toBe(true);
-    
+
     wrapper.unmount();
   });
 });

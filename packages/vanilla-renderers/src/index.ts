@@ -43,10 +43,17 @@ import {
   TextCell,
   textCellTester,
   TimeCell,
-  timeCellTester
+  timeCellTester,
 } from './cells';
 
-import { InputControl, inputControlTester, RadioGroupControl, radioGroupControlTester, OneOfRadioGroupControl, oneOfRadioGroupControlTester,  } from './controls';
+import {
+  InputControl,
+  inputControlTester,
+  RadioGroupControl,
+  radioGroupControlTester,
+  OneOfRadioGroupControl,
+  oneOfRadioGroupControlTester,
+} from './controls';
 
 import {
   ArrayControl,
@@ -56,7 +63,7 @@ import {
   LabelRenderer,
   labelRendererTester,
   TableArrayControl,
-  tableArrayControlTester
+  tableArrayControlTester,
 } from './complex';
 
 import {
@@ -65,7 +72,7 @@ import {
   HorizontalLayout,
   horizontalLayoutTester,
   VerticalLayout,
-  verticalLayoutTester
+  verticalLayoutTester,
 } from './layouts';
 import DateTimeCell from './cells/DateTimeCell';
 
@@ -118,7 +125,7 @@ export const vanillaRenderers: { tester: RankedTester; renderer: any }[] = [
   { tester: tableArrayControlTester, renderer: TableArrayControl },
   { tester: groupTester, renderer: GroupLayout },
   { tester: verticalLayoutTester, renderer: VerticalLayout },
-  { tester: horizontalLayoutTester, renderer: HorizontalLayout }
+  { tester: horizontalLayoutTester, renderer: HorizontalLayout },
 ];
 
 export const vanillaCells: { tester: RankedTester; cell: any }[] = [
@@ -131,5 +138,5 @@ export const vanillaCells: { tester: RankedTester; cell: any }[] = [
   { tester: sliderCellTester, cell: SliderCell },
   { tester: textAreaCellTester, cell: TextAreaCell },
   { tester: textCellTester, cell: TextCell },
-  { tester: timeCellTester, cell: TimeCell }
+  { tester: timeCellTester, cell: TimeCell },
 ];

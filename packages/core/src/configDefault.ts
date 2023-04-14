@@ -44,5 +44,5 @@ export const configDefault = {
   /*
    * [text] if asterisks in labels for required fields should be hidden
    */
-  hideRequiredAsterisk: false
+  hideRequiredAsterisk: false,
 };

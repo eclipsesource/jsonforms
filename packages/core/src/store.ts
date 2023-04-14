@@ -28,7 +28,7 @@ import type {
   JsonFormsCore,
   JsonFormsCellRendererRegistryEntry,
   JsonFormsRendererRegistryEntry,
-  JsonFormsUISchemaRegistryEntry
+  JsonFormsUISchemaRegistryEntry,
 } from './reducers';
 import type { JsonFormsI18nState } from './i18n';
 

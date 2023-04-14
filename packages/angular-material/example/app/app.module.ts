@@ -33,10 +33,9 @@ import { JsonFormsAngularMaterialModule } from '../../src/module';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    JsonFormsAngularMaterialModule
+    JsonFormsAngularMaterialModule,
   ],
   bootstrap: [AppComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class AppModule {
-}
+export class AppModule {}

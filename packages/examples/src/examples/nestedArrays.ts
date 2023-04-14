@@ -23,7 +23,12 @@
   THE SOFTWARE.
 */
 import { registerExamples } from '../register';
-import { ControlElement, JsonFormsUISchemaRegistryEntry, JsonSchema, NOT_APPLICABLE } from '@jsonforms/core';
+import {
+  ControlElement,
+  JsonFormsUISchemaRegistryEntry,
+  JsonSchema,
+  NOT_APPLICABLE,
+} from '@jsonforms/core';
 import { StateProps } from '..';
 
 const schema = {
@@ -35,21 +40,21 @@ const schema = {
         choices: {
           type: 'array',
           items: {
-            type: 'string'
-          }
-        }
-      }
-    }
+            type: 'string',
+          },
+        },
+      },
+    },
   },
   type: 'object',
   properties: {
     exampleArray: {
       type: 'array',
       items: {
-        $ref: '#/definitions/choicesContainer'
-      }
-    }
-  }
+        $ref: '#/definitions/choicesContainer',
+      },
+    },
+  },
 };
 
 export const uischema = {
@@ -59,30 +64,30 @@ export const uischema = {
       type: 'Control',
       label: {
         text: 'Example Array',
-        show: true
+        show: true,
       },
-      scope: '#/properties/exampleArray'
-    }
-  ]
+      scope: '#/properties/exampleArray',
+    },
+  ],
 };
 
 const data = {
   exampleArray: [
     {
       choices: ['This', 'is', 'an', 'example'],
-      name: 'Hi there'
-    }
-  ]
+      name: 'Hi there',
+    },
+  ],
 };
 
 const control1: ControlElement = {
   type: 'Control',
-  scope: '#/properties/name'
+  scope: '#/properties/name',
 };
 // register inner layout
 const control2: ControlElement = {
   type: 'Control',
-  scope: '#/properties/choices'
+  scope: '#/properties/choices',
 };
 
 const uischemas = [
@@ -92,32 +97,32 @@ const uischemas = [
     },
     uischema: {
       type: 'VerticalLayout',
-      elements: [control1, control2]
-    }
-  }
+      elements: [control1, control2],
+    },
+  },
 ];
 
 const actions = [
   {
-    'label': 'Register NestedArray UISchema',
-    'apply': (props: StateProps) => {
+    label: 'Register NestedArray UISchema',
+    apply: (props: StateProps) => {
       return {
         ...props,
-        uischemas: uischemas
-      }
-    }
+        uischemas: uischemas,
+      };
+    },
   },
   {
-    'label': 'Unregister NestedArray UISchema',
-    'apply': (props: StateProps) => {
+    label: 'Unregister NestedArray UISchema',
+    apply: (props: StateProps) => {
       const uischemas: JsonFormsUISchemaRegistryEntry[] = undefined;
       return {
         ...props,
-        uischemas: uischemas
-      }
-    }
+        uischemas: uischemas,
+      };
+    },
   },
-]
+];
 
 registerExamples([
   {
@@ -126,6 +131,6 @@ registerExamples([
     data,
     schema,
     uischema,
-    actions
-  }
+    actions,
+  },
 ]);

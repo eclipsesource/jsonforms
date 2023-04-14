@@ -56,7 +56,9 @@ export const createCombinatorRenderInfos = (
   uischemas: JsonFormsUISchemaRegistryEntry[]
 ): CombinatorSubSchemaRenderInfo[] =>
   combinatorSubSchemas.map((subSchema, subSchemaIndex) => {
-    const schema = subSchema.$ref ? Resolve.schema(rootSchema, subSchema.$ref, rootSchema) : subSchema;
+    const schema = subSchema.$ref
+      ? Resolve.schema(rootSchema, subSchema.$ref, rootSchema)
+      : subSchema;
     return {
       schema,
       uischema: findUISchema(
@@ -68,6 +70,6 @@ export const createCombinatorRenderInfos = (
         control,
         rootSchema
       ),
-      label: createLabel(subSchema, subSchemaIndex, keyword)
-    }
+      label: createLabel(subSchema, subSchemaIndex, keyword),
+    };
   });

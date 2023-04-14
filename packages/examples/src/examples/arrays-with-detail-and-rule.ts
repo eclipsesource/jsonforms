@@ -39,17 +39,17 @@ export const schema = {
         properties: {
           date: {
             type: 'string',
-            format: 'date'
+            format: 'date',
           },
           message: {
             type: 'string',
-            maxLength: 5
-          }
-        }
-      }
-    }
+            maxLength: 5,
+          },
+        },
+      },
+    },
   },
-  required: ['occupation', 'nationality']
+  required: ['occupation', 'nationality'],
 };
 
 export const uischema = {
@@ -57,11 +57,11 @@ export const uischema = {
   elements: [
     {
       type: 'Control',
-      scope: '#/properties/occupation'
+      scope: '#/properties/occupation',
     },
     {
       type: 'Control',
-      scope: '#/properties/enableArray'
+      scope: '#/properties/enableArray',
     },
     {
       type: 'Control',
@@ -73,14 +73,14 @@ export const uischema = {
           conditions: [
             {
               schema: { const: 'developer' },
-              scope: '#/properties/occupation'
+              scope: '#/properties/occupation',
             },
             {
               schema: { const: true },
-              scope: '/properties/enableArray'
-            }
-          ]
-        }
+              scope: '/properties/enableArray',
+            },
+          ],
+        },
       },
       options: {
         detail: {
@@ -88,17 +88,17 @@ export const uischema = {
           elements: [
             {
               type: 'Control',
-              scope: '#/properties/message'
+              scope: '#/properties/message',
             },
             {
               type: 'Control',
-              scope: '#/properties/date'
-            }
-          ]
-        }
-      }
-    }
-  ]
+              scope: '#/properties/date',
+            },
+          ],
+        },
+      },
+    },
+  ],
 };
 
 export const data = {
@@ -106,13 +106,13 @@ export const data = {
   comments: [
     {
       date: new Date(2001, 8, 11).toISOString().substr(0, 10),
-      message: 'This is an example message'
+      message: 'This is an example message',
     },
     {
       date: new Date().toISOString().substr(0, 10),
-      message: 'Get ready for booohay'
-    }
-  ]
+      message: 'Get ready for booohay',
+    },
+  ],
 };
 
 registerExamples([
@@ -121,6 +121,6 @@ registerExamples([
     label: 'Array with detail and rule',
     data,
     schema,
-    uischema
-  }
+    uischema,
+  },
 ]);

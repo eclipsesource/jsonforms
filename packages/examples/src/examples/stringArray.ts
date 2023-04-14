@@ -31,10 +31,10 @@ export const schema = {
       type: 'array',
       items: {
         type: 'string',
-        maxLength: 5
-      }
-    }
-  }
+        maxLength: 5,
+      },
+    },
+  },
 };
 
 export const uischema = {
@@ -42,13 +42,13 @@ export const uischema = {
   elements: [
     {
       type: 'Control',
-      scope: '#/properties/comments'
-    }
-  ]
+      scope: '#/properties/comments',
+    },
+  ],
 };
 
 export const data = {
-  comments: ['one string', 'two strings']
+  comments: ['one string', 'two strings'],
 };
 
 registerExamples([
@@ -57,6 +57,6 @@ registerExamples([
     label: 'Array of Strings',
     data,
     schema,
-    uischema
-  }
+    uischema,
+  },
 ]);

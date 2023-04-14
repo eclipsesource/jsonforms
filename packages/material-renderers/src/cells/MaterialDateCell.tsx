@@ -28,23 +28,15 @@ import {
   isDateControl,
   RankedTester,
   rankWith,
-  WithClassname
+  WithClassname,
 } from '@jsonforms/core';
 import { withJsonFormsCellProps } from '@jsonforms/react';
 import Input from '@mui/material/Input';
 import merge from 'lodash/merge';
 
 export const MaterialDateCell = (props: CellProps & WithClassname) => {
-  const {
-    data,
-    className,
-    id,
-    enabled,
-    uischema,
-    path,
-    handleChange,
-    config
-  } = props;
+  const { data, className, id, enabled, uischema, path, handleChange, config } =
+    props;
 
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
 
@@ -52,7 +44,7 @@ export const MaterialDateCell = (props: CellProps & WithClassname) => {
     <Input
       type='date'
       value={data || ''}
-      onChange={ev => handleChange(path, ev.target.value)}
+      onChange={(ev) => handleChange(path, ev.target.value)}
       className={className}
       id={id}
       disabled={!enabled}

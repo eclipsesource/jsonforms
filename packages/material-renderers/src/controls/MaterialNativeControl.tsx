@@ -31,7 +31,7 @@ import {
   isTimeControl,
   or,
   RankedTester,
-  rankWith
+  rankWith,
 } from '@jsonforms/core';
 import { Hidden, TextField } from '@mui/material';
 import { withJsonFormsControlProps } from '@jsonforms/react';
@@ -52,15 +52,16 @@ export const MaterialNativeControl = (props: ControlProps) => {
     path,
     handleChange,
     data,
-    config
+    config,
   } = props;
   const isValid = errors.length === 0;
-  const appliedUiSchemaOptions = merge(
-    {},
-    config,
-    props.uischema.options
+  const appliedUiSchemaOptions = merge({}, config, props.uischema.options);
+  const [inputValue, onChange] = useDebouncedChange(
+    handleChange,
+    '',
+    data,
+    path
   );
-  const [inputValue, onChange] = useDebouncedChange(handleChange, '', data, path);
   const fieldType = appliedUiSchemaOptions.format ?? schema.format;
   const showDescription = !isDescriptionHidden(
     visible,
@@ -72,8 +73,10 @@ export const MaterialNativeControl = (props: ControlProps) => {
   return (
     <Hidden xsUp={!visible}>
       <TextField
-        required={showAsRequired(required,
-          appliedUiSchemaOptions.hideRequiredAsterisk)}
+        required={showAsRequired(
+          required,
+          appliedUiSchemaOptions.hideRequiredAsterisk
+        )}
         id={id + '-input'}
         label={label}
         type={fieldType}

@@ -25,38 +25,38 @@
 import { registerExamples } from '../register';
 
 export const schema = {
-    type: 'object',
-    properties: {
-      string: {
-        type: 'string'
-      },
-      boolean: {
-        type: 'boolean',
-        description: 'Boolean description as a tooltip'
-      },
-      number: {
-        type: 'number'
-      },
-      integer: {
-        type: 'integer'
-      },
-      date: {
-        type: 'string',
-        format: 'date'
-      },
-      time: {
-        type: 'string',
-        format: 'time'
-      },
-      dateTime: {
-        type: 'string',
-        format: 'date-time'
-      },
-      enum: {
-        type: 'string',
-        enum: ['One', 'Two', 'Three']
-      }
-    }
+  type: 'object',
+  properties: {
+    string: {
+      type: 'string',
+    },
+    boolean: {
+      type: 'boolean',
+      description: 'Boolean description as a tooltip',
+    },
+    number: {
+      type: 'number',
+    },
+    integer: {
+      type: 'integer',
+    },
+    date: {
+      type: 'string',
+      format: 'date',
+    },
+    time: {
+      type: 'string',
+      format: 'time',
+    },
+    dateTime: {
+      type: 'string',
+      format: 'date-time',
+    },
+    enum: {
+      type: 'string',
+      enum: ['One', 'Two', 'Three'],
+    },
+  },
 };
 
 export const uischema = {
@@ -64,37 +64,37 @@ export const uischema = {
   elements: [
     {
       type: 'Control',
-      scope: '#/properties/string'
+      scope: '#/properties/string',
     },
     {
       type: 'Control',
-      scope: '#/properties/boolean'
+      scope: '#/properties/boolean',
     },
     {
       type: 'Control',
-      scope: '#/properties/number'
+      scope: '#/properties/number',
     },
     {
       type: 'Control',
-      scope: '#/properties/integer'
+      scope: '#/properties/integer',
     },
     {
       type: 'Control',
-      scope: '#/properties/date'
+      scope: '#/properties/date',
     },
     {
       type: 'Control',
-      scope: '#/properties/time'
+      scope: '#/properties/time',
     },
     {
       type: 'Control',
-      scope: '#/properties/dateTime'
+      scope: '#/properties/dateTime',
     },
     {
       type: 'Control',
-      scope: '#/properties/enum'
-    }
-  ]
+      scope: '#/properties/enum',
+    },
+  ],
 };
 
 export const data = {
@@ -105,7 +105,7 @@ export const data = {
   date: '2020-06-25',
   time: '23:08:00',
   dateTime: '2020-06-25T23:08:42+02:00',
-  enum: 'Two'
+  enum: 'Two',
 };
 
 export const extendedSchema = {
@@ -124,16 +124,19 @@ export const extendedSchema = {
     },
     trimText: {
       type: 'string',
-      description: 'Trim indicates whether the control shall grab the full width available',
+      description:
+        'Trim indicates whether the control shall grab the full width available',
     },
     restrictText: {
       type: 'string',
       maxLength: 5,
-      description: 'Restricts the input length to the set value (in this case: 5)',
+      description:
+        'Restricts the input length to the set value (in this case: 5)',
     },
     unfocusedDescription: {
       type: 'string',
-      description: 'This description is shown even when the control is not focused',
+      description:
+        'This description is shown even when the control is not focused',
     },
     hideRequiredAsterisk: {
       type: 'string',
@@ -141,10 +144,10 @@ export const extendedSchema = {
     },
     toggle: {
       type: 'boolean',
-      description: 'The "toggle" option renders boolean values as a toggle.'
-    }
+      description: 'The "toggle" option renders boolean values as a toggle.',
+    },
   },
-  required: ['hideRequiredAsterisk', 'restrictText']
+  required: ['hideRequiredAsterisk', 'restrictText'],
 };
 
 export const extendedUischema = {
@@ -154,53 +157,53 @@ export const extendedUischema = {
       type: 'Control',
       scope: '#/properties/multilineString',
       options: {
-        multi: true
-      }
+        multi: true,
+      },
     },
     {
       type: 'Control',
       scope: '#/properties/slider',
       options: {
-        slider: true
-      }
+        slider: true,
+      },
     },
     {
       type: 'Control',
       scope: '#/properties/trimText',
       options: {
-        trim: true
-      }
+        trim: true,
+      },
     },
     {
       type: 'Control',
       scope: '#/properties/restrictText',
       options: {
-        restrict: true
-      }
+        restrict: true,
+      },
     },
     {
       type: 'Control',
       scope: '#/properties/unfocusedDescription',
       options: {
-        showUnfocusedDescription: true
-      }
+        showUnfocusedDescription: true,
+      },
     },
     {
       type: 'Control',
       scope: '#/properties/hideRequiredAsterisk',
       options: {
-        hideRequiredAsterisk: true
-      }
+        hideRequiredAsterisk: true,
+      },
     },
     {
       type: 'Control',
       scope: '#/properties/toggle',
       label: 'Boolean as Toggle',
       options: {
-        toggle: true
-      }
-    }
-  ]
+        toggle: true,
+      },
+    },
+  ],
 };
 
 export const extendedData = {
@@ -208,16 +211,16 @@ export const extendedData = {
   slider: 4,
   trimText: 'abcdefg',
   restrictText: 'abcde',
-  toggle: false
+  toggle: false,
 };
 
 const combinedSchema = {
   ...extendedSchema,
   properties: {
     ...schema.properties,
-    ...extendedSchema.properties
-  }
-}
+    ...extendedSchema.properties,
+  },
+};
 
 const combinedUiSchema = {
   type: 'Categorization',
@@ -225,24 +228,20 @@ const combinedUiSchema = {
     {
       type: 'Category',
       label: 'Normal controls',
-      elements: [
-        uischema
-      ]
+      elements: [uischema],
     },
     {
       type: 'Category',
       label: 'Configured controls',
-      elements: [
-        extendedUischema
-      ]
-    }
-  ]
-}
+      elements: [extendedUischema],
+    },
+  ],
+};
 
 const combinedData = {
   ...data,
-  ...extendedData
-}
+  ...extendedData,
+};
 
 registerExamples([
   {
@@ -250,6 +249,6 @@ registerExamples([
     label: 'Control Options',
     data: combinedData,
     schema: combinedSchema,
-    uischema: combinedUiSchema
-  }
+    uischema: combinedUiSchema,
+  },
 ]);

@@ -2,8 +2,8 @@
   <control-wrapper
     v-bind="controlWrapper"
     :styles="styles"
-    :isFocused="isFocused"
-    :appliedOptions="appliedOptions"
+    :is-focused="isFocused"
+    :applied-options="appliedOptions"
   >
     <input
       :id="control.id + '-input'"
@@ -24,30 +24,37 @@ import {
   ControlElement,
   JsonFormsRendererRegistryEntry,
   rankWith,
-  isStringControl
+  isStringControl,
 } from '@jsonforms/core';
 import { defineComponent } from 'vue';
-import { rendererProps, useJsonFormsControl, RendererProps } from '../../config/jsonforms';
+import {
+  rendererProps,
+  useJsonFormsControl,
+  RendererProps,
+} from '../../config/jsonforms';
 import { default as ControlWrapper } from './ControlWrapper.vue';
 import { useVanillaControl } from '../util';
 
 const controlRenderer = defineComponent({
-  name: 'string-control-renderer',
+  name: 'StringControlRenderer',
   components: {
-    ControlWrapper
+    ControlWrapper,
   },
   props: {
-    ...rendererProps<ControlElement>()
+    ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    return useVanillaControl(useJsonFormsControl(props), target => target.value || undefined);
-  }
+    return useVanillaControl(
+      useJsonFormsControl(props),
+      (target) => target.value || undefined
+    );
+  },
 });
 
 export default controlRenderer;
 
 export const entry: JsonFormsRendererRegistryEntry = {
   renderer: controlRenderer,
-  tester: rankWith(1, isStringControl)
+  tester: rankWith(1, isStringControl),
 };
 </script>

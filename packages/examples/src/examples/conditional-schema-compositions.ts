@@ -30,7 +30,7 @@ export const schema = {
     name: {
       type: 'string',
       minLength: 1,
-      description: 'The task\'s name',
+      description: "The task's name",
     },
     recurrence: {
       type: 'string',
@@ -42,22 +42,22 @@ export const schema = {
       if: {
         properties: {
           recurrence: {
-            const: 'Never'
-          }
-        }
+            const: 'Never',
+          },
+        },
       },
       then: {
         properties: {
           lastname: {
-            type: 'string'
+            type: 'string',
           },
           age: {
-            type: 'number'
-          }
-        }
-      }
+            type: 'number',
+          },
+        },
+      },
     },
-  ]
+  ],
 };
 
 export const uischema = {
@@ -82,10 +82,10 @@ export const uischema = {
             condition: {
               scope: '#/properties/recurrence',
               schema: {
-                const: 'Never'
-              }
-            }
-          }
+                const: 'Never',
+              },
+            },
+          },
         },
         {
           type: 'Control',
@@ -95,10 +95,10 @@ export const uischema = {
             condition: {
               scope: '#/properties/recurrence',
               schema: {
-                const: 'Never'
-              }
-            }
-          }
+                const: 'Never',
+              },
+            },
+          },
         },
       ],
     },
@@ -113,6 +113,6 @@ registerExamples([
     label: 'Conditional Schema Compositions',
     data,
     schema,
-    uischema
-  }
+    uischema,
+  },
 ]);

@@ -28,7 +28,7 @@ import {
   isTimeControl,
   RankedTester,
   rankWith,
-  WithClassname
+  WithClassname,
 } from '@jsonforms/core';
 import { withJsonFormsCellProps } from '@jsonforms/react';
 import { MuiInputTime } from '../mui-controls/MuiInputTime';

@@ -47,20 +47,20 @@ describe('Material allOf renderer', () => {
           allOf: [
             {
               title: 'String',
-              type: 'string'
+              type: 'string',
             },
             {
               title: 'Number',
-              type: 'number'
-            }
-          ]
-        }
-      }
+              type: 'number',
+            },
+          ],
+        },
+      },
     };
     const uischema: ControlElement = {
       type: 'Control',
       label: 'Value',
-      scope: '#/properties/value'
+      scope: '#/properties/value',
     };
     wrapper = mount(
       <JsonForms
@@ -83,24 +83,26 @@ describe('Material allOf renderer', () => {
           allOf: [
             {
               title: 'String',
-              type: 'string'
+              type: 'string',
             },
             {
               title: 'Number',
-              type: 'number'
-            }
-          ]
-        }
-      }
+              type: 'number',
+            },
+          ],
+        },
+      },
     };
     const uischema: ControlElement = {
       type: 'Control',
       label: 'Value',
-      scope: '#/properties/value'
+      scope: '#/properties/value',
     };
     const core = initCore(schema, uischema);
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <MaterialAllOfRenderer
           schema={schema}
           uischema={uischema}

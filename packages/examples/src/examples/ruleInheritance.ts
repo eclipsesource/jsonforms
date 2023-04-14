@@ -29,21 +29,21 @@ export const schema = {
   type: 'object',
   properties: {
     toggleTopLayout: {
-      type: 'boolean'
+      type: 'boolean',
     },
     topString: {
-      type: 'string'
+      type: 'string',
     },
     middleNumber: {
-      type: 'number'
+      type: 'number',
     },
     toggleBottomLayout: {
-      type: 'boolean'
+      type: 'boolean',
     },
     bottomBoolean: {
-      type: 'boolean'
-    }
-  }
+      type: 'boolean',
+    },
+  },
 };
 export const uischema = {
   type: 'VerticalLayout',
@@ -51,20 +51,20 @@ export const uischema = {
     effect: 'ENABLE',
     condition: {
       scope: '#/properties/toggleTopLayout',
-      schema: { const: true }
-    }
+      schema: { const: true },
+    },
   },
   elements: [
     {
       type: 'Control',
-      scope: '#/properties/topString'
+      scope: '#/properties/topString',
     },
     {
       type: 'HorizontalLayout',
       elements: [
         {
           type: 'Control',
-          scope: '#/properties/middleNumber'
+          scope: '#/properties/middleNumber',
         },
         {
           type: 'Group',
@@ -73,47 +73,50 @@ export const uischema = {
             effect: 'SHOW',
             condition: {
               scope: '#/properties/toggleBottomLayout',
-              schema: { const: true }
-            }
+              schema: { const: true },
+            },
           },
           elements: [
             {
               type: 'Control',
-              scope: '#/properties/bottomBoolean'
-            }
-          ]
-        }
-      ]
-    }
-  ]
+              scope: '#/properties/bottomBoolean',
+            },
+          ],
+        },
+      ],
+    },
+  ],
 } as any;
 
 export const data = {
   toggleTopLayout: true,
   toggleBottomLayout: true,
-  toggleControl: true
+  toggleControl: true,
 };
 
 const actions = [
   {
-    'label': 'Enable/Disable top layout',
-    'apply': (props: StateProps) => {
+    label: 'Enable/Disable top layout',
+    apply: (props: StateProps) => {
       return {
         ...props,
-        data: { ...props.data, toggleTopLayout: !props.data.toggleTopLayout }
-      }
-    }
+        data: { ...props.data, toggleTopLayout: !props.data.toggleTopLayout },
+      };
+    },
   },
   {
-    'label': 'Show/Hide bottom layout',
-    'apply': (props: StateProps) => {
+    label: 'Show/Hide bottom layout',
+    apply: (props: StateProps) => {
       return {
         ...props,
-        data: { ...props.data, toggleBottomLayout: !props.data.toggleBottomLayout }
-      }
-    }
+        data: {
+          ...props.data,
+          toggleBottomLayout: !props.data.toggleBottomLayout,
+        },
+      };
+    },
   },
-]
+];
 
 registerExamples([
   {
@@ -122,6 +125,6 @@ registerExamples([
     data,
     schema,
     uischema,
-    actions
-  }
+    actions,
+  },
 ]);

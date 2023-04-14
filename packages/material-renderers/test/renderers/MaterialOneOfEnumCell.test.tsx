@@ -24,13 +24,11 @@
 */
 import './MatchMediaMock';
 import * as React from 'react';
-import {
-  ControlElement
-} from '@jsonforms/core';
+import { ControlElement } from '@jsonforms/core';
 import MaterialOneOfEnumCell, {
-  materialOneOfEnumCellTester
+  materialOneOfEnumCellTester,
 } from '../../src/cells/MaterialOneOfEnumCell';
-import {  materialRenderers } from '../../src';
+import { materialRenderers } from '../../src';
 
 import Enzyme, { mount } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
@@ -45,33 +43,36 @@ const schema = {
   oneOf: [
     {
       const: 'AU',
-      title: 'Australia'
+      title: 'Australia',
     },
     {
       const: 'NZ',
-      title: 'New Zealand'
-    }
-  ]
+      title: 'New Zealand',
+    },
+  ],
 };
 const uischema: ControlElement = {
   type: 'Control',
-  scope: '#/properties/country'
+  scope: '#/properties/country',
 };
 
 describe('Material one of enum cell tester', () => {
   it('should succeed with matching prop type', () => {
     const control: ControlElement = {
       type: 'Control',
-      scope: '#/properties/country'
+      scope: '#/properties/country',
     };
     expect(
-      materialOneOfEnumCellTester(control, {
-        type: 'object',
-        properties: {
-          country: schema
-        }
-      },
-      undefined)
+      materialOneOfEnumCellTester(
+        control,
+        {
+          type: 'object',
+          properties: {
+            country: schema,
+          },
+        },
+        undefined
+      )
     ).toBe(2);
   });
 });
@@ -80,7 +81,9 @@ describe('Material enum cell', () => {
   it('should select an item from dropdown list', () => {
     const core = initCore(schema, uischema, data);
     const wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <MaterialOneOfEnumCell
           schema={schema}
           uischema={uischema}

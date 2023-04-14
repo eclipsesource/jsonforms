@@ -22,14 +22,14 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React, {useCallback} from 'react';
+import React, { useCallback } from 'react';
 import {
   ControlProps,
   showAsRequired,
   isDescriptionHidden,
   isRangeControl,
   RankedTester,
-  rankWith
+  rankWith,
 } from '@jsonforms/core';
 import { withJsonFormsControlProps } from '@jsonforms/react';
 
@@ -39,7 +39,7 @@ import {
   FormLabel,
   Hidden,
   Slider,
-  Typography
+  Typography,
 } from '@mui/material';
 import merge from 'lodash/merge';
 import { useFocus } from '../util';
@@ -58,28 +58,24 @@ export const MaterialSliderControl = (props: ControlProps) => {
     visible,
     path,
     required,
-    config
+    config,
   } = props;
   const isValid = errors.length === 0;
-  const appliedUiSchemaOptions = merge(
-    {},
-    config,
-    props.uischema.options
-  );
+  const appliedUiSchemaOptions = merge({}, config, props.uischema.options);
   const labelStyle: { [x: string]: any } = {
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
-    width: '100%'
+    width: '100%',
   };
   const rangeContainerStyle: { [x: string]: any } = {
-    display: 'flex'
+    display: 'flex',
   };
   const rangeItemStyle: { [x: string]: any } = {
-    flexGrow: '1'
+    flexGrow: '1',
   };
   const sliderStyle: { [x: string]: any } = {
-    marginTop: '7px'
+    marginTop: '7px',
   };
 
   const showDescription = !isDescriptionHidden(
@@ -89,7 +85,10 @@ export const MaterialSliderControl = (props: ControlProps) => {
     appliedUiSchemaOptions.showUnfocusedDescription
   );
 
-  const onChange = useCallback((_ev: any, value: any) => handleChange(path, Number(value)), [path, handleChange]);
+  const onChange = useCallback(
+    (_ev: any, value: any) => handleChange(path, Number(value)),
+    [path, handleChange]
+  );
 
   return (
     <Hidden xsUp={!visible}>
@@ -103,8 +102,10 @@ export const MaterialSliderControl = (props: ControlProps) => {
           htmlFor={id}
           error={!isValid}
           component={'legend' as 'label'}
-          required={showAsRequired(required,
-            appliedUiSchemaOptions.hideRequiredAsterisk)}
+          required={showAsRequired(
+            required,
+            appliedUiSchemaOptions.hideRequiredAsterisk
+          )}
         >
           <Typography id={id + '-typo'} style={labelStyle} variant='caption'>
             {label}

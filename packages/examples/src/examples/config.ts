@@ -30,14 +30,14 @@ export const schema = {
     postalCode: {
       type: 'string',
       description: 'A Postal Code',
-      maxLength: 5
+      maxLength: 5,
     },
     recurrenceInterval: {
       type: 'integer',
-      description: 'A recurrence interval'
-    }
+      description: 'A recurrence interval',
+    },
   },
-  required: ['postalCode']
+  required: ['postalCode'],
 };
 
 export const uischema = {
@@ -49,27 +49,27 @@ export const uischema = {
         {
           type: 'Control',
           scope: '#/properties/postalCode',
-          label: 'Postal Code'
+          label: 'Postal Code',
         },
         {
           type: 'Control',
           scope: '#/properties/recurrenceInterval',
-          label: 'Recurrence Interval'
-        }
-      ]
-    }
-  ]
+          label: 'Recurrence Interval',
+        },
+      ],
+    },
+  ],
 };
 
 export const data = {
-  postalCode: '12345'
+  postalCode: '12345',
 };
 
 const config = {
   restrict: true,
   trim: true,
   showUnfocusedDescription: true,
-  hideRequiredAsterisk: true
+  hideRequiredAsterisk: true,
 };
 
 registerExamples([
@@ -78,7 +78,7 @@ registerExamples([
     label: 'Configuration (Default)',
     data,
     schema,
-    uischema: uischema
+    uischema: uischema,
   },
   {
     name: 'configCustom',
@@ -86,6 +86,6 @@ registerExamples([
     data,
     schema,
     uischema,
-    config
-  }
+    config,
+  },
 ]);

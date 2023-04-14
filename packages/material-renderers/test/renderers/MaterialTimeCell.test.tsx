@@ -24,12 +24,9 @@
 */
 import './MatchMediaMock';
 import * as React from 'react';
-import {
-  ControlElement,
-  NOT_APPLICABLE
-} from '@jsonforms/core';
+import { ControlElement, NOT_APPLICABLE } from '@jsonforms/core';
 import TimeCell, {
-  materialTimeCellTester
+  materialTimeCellTester,
 } from '../../src/cells/MaterialTimeCell';
 import { materialRenderers } from '../../src';
 
@@ -44,66 +41,79 @@ const data = { foo: '13:37' };
 
 const schema = {
   type: 'string',
-  format: 'time'
+  format: 'time',
 };
 
 const uischema: ControlElement = {
   type: 'Control',
-  scope: '#/properties/foo'
+  scope: '#/properties/foo',
 };
 
 describe('Material time cell tester', () => {
   it('should fail', () => {
-    expect(materialTimeCellTester(undefined, undefined, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialTimeCellTester(null, undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialTimeCellTester(undefined, undefined, undefined)).toBe(
+      NOT_APPLICABLE
+    );
+    expect(materialTimeCellTester(null, undefined, undefined)).toBe(
+      NOT_APPLICABLE
+    );
     expect(materialTimeCellTester({ type: 'Foo' }, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
-    expect(materialTimeCellTester({ type: 'Control' }, undefined, undefined)).toBe(
-      NOT_APPLICABLE
-    );
+    expect(
+      materialTimeCellTester({ type: 'Control' }, undefined, undefined)
+    ).toBe(NOT_APPLICABLE);
   });
 
   it('should fail with wrong prop type', () => {
     expect(
-      materialTimeCellTester(uischema, {
-        type: 'object',
-        properties: {
-          foo: { type: 'string' }
-        }
-      },
-      undefined)
+      materialTimeCellTester(
+        uischema,
+        {
+          type: 'object',
+          properties: {
+            foo: { type: 'string' },
+          },
+        },
+        undefined
+      )
     ).toBe(NOT_APPLICABLE);
   });
 
   it('should fail if only sibling prop has correct type', () => {
     expect(
-      materialTimeCellTester(uischema, {
-        type: 'object',
-        properties: {
-          foo: { type: 'string' },
-          bar: {
-            type: 'string',
-            format: 'time'
-          }
-        }
-      },
-      undefined)
+      materialTimeCellTester(
+        uischema,
+        {
+          type: 'object',
+          properties: {
+            foo: { type: 'string' },
+            bar: {
+              type: 'string',
+              format: 'time',
+            },
+          },
+        },
+        undefined
+      )
     ).toBe(NOT_APPLICABLE);
   });
 
   it('should succeed with correct prop type', () => {
     expect(
-      materialTimeCellTester(uischema, {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'string',
-            format: 'time'
-          }
-        }
-      },
-      undefined)
+      materialTimeCellTester(
+        uischema,
+        {
+          type: 'object',
+          properties: {
+            foo: {
+              type: 'string',
+              format: 'time',
+            },
+          },
+        },
+        undefined
+      )
     ).toBe(2);
   });
 });
@@ -118,12 +128,14 @@ describe('Material time cell', () => {
       type: 'Control',
       scope: '#/properties/foo',
       options: {
-        focus: true
-      }
+        focus: true,
+      },
     };
     const core = initCore(schema, control, data);
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <TimeCell schema={schema} uischema={control} />
       </JsonFormsStateProvider>
     );
@@ -136,12 +148,14 @@ describe('Material time cell', () => {
       type: 'Control',
       scope: '#/properties/foo',
       options: {
-        focus: false
-      }
+        focus: false,
+      },
     };
     const core = initCore(schema, control, data);
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <TimeCell schema={schema} uischema={control} />
       </JsonFormsStateProvider>
     );
@@ -152,11 +166,13 @@ describe('Material time cell', () => {
   it('should not autofocus by default', () => {
     const control: ControlElement = {
       type: 'Control',
-      scope: '#/properties/foo'
+      scope: '#/properties/foo',
     };
     const core = initCore(schema, control, data);
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <TimeCell schema={schema} uischema={control} path='foo' />
       </JsonFormsStateProvider>
     );
@@ -167,7 +183,9 @@ describe('Material time cell', () => {
   it('should render', () => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <TimeCell schema={schema} uischema={uischema} path='foo' />
       </JsonFormsStateProvider>
     );
@@ -180,10 +198,12 @@ describe('Material time cell', () => {
   it('should update via event', (done) => {
     const core = initCore(schema, uischema, data);
     const onChangeData: any = {
-      data: undefined
+      data: undefined,
     };
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <TestEmitter
           onChange={({ data }) => {
             onChangeData.data = data;
@@ -203,12 +223,14 @@ describe('Material time cell', () => {
   it('should update via action', (done) => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <TimeCell schema={schema} uischema={uischema} path='foo' />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, foo: '20:15' };
-    wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
+    wrapper.setProps({ initState: { renderers: materialRenderers, core } });
     wrapper.update();
     setTimeout(() => {
       const input = wrapper.find('input').first();
@@ -220,12 +242,14 @@ describe('Material time cell', () => {
   it('should update with null value', (done) => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <TimeCell schema={schema} uischema={uischema} path='foo' />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, foo: null };
-    wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
+    wrapper.setProps({ initState: { renderers: materialRenderers, core } });
     wrapper.update();
     setTimeout(() => {
       const input = wrapper.find('input').first();
@@ -237,12 +261,14 @@ describe('Material time cell', () => {
   it('update with undefined value', (done) => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <TimeCell schema={schema} uischema={uischema} path='foo' />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, foo: undefined };
-    wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
+    wrapper.setProps({ initState: { renderers: materialRenderers, core } });
     wrapper.update();
     setTimeout(() => {
       const input = wrapper.find('input').first();
@@ -254,12 +280,14 @@ describe('Material time cell', () => {
   it('should update with wrong ref', (done) => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <TimeCell schema={schema} uischema={uischema} path='foo' />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, bar: 'Bar' };
-    wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
+    wrapper.setProps({ initState: { renderers: materialRenderers, core } });
     wrapper.update();
     setTimeout(() => {
       const input = wrapper.find('input').first();
@@ -271,12 +299,14 @@ describe('Material time cell', () => {
   it('should update with null ref', (done) => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <TimeCell schema={schema} uischema={uischema} path='foo' />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, null: '20:15' };
-    wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
+    wrapper.setProps({ initState: { renderers: materialRenderers, core } });
     wrapper.update();
     setTimeout(() => {
       const input = wrapper.find('input').first();
@@ -288,12 +318,14 @@ describe('Material time cell', () => {
   it('should update with undefined ref', (done) => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <TimeCell schema={schema} uischema={uischema} path='foo' />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, undefined: '20:15' };
-    wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
+    wrapper.setProps({ initState: { renderers: materialRenderers, core } });
     wrapper.update();
     setTimeout(() => {
       const input = wrapper.find('input').first();
@@ -305,7 +337,9 @@ describe('Material time cell', () => {
   it('can be disabled', () => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <TimeCell
           schema={schema}
           uischema={uischema}
@@ -321,7 +355,9 @@ describe('Material time cell', () => {
   it('should be enabled by default', () => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <TimeCell schema={schema} uischema={uischema} path='foo' />
       </JsonFormsStateProvider>
     );

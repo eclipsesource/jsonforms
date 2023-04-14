@@ -42,23 +42,44 @@ import { withJsonFormsLayoutProps } from '@jsonforms/react';
 export const groupTester: RankedTester = rankWith(1, uiTypeIs('Group'));
 const style: { [x: string]: any } = { marginBottom: '10px' };
 
-const GroupComponent = React.memo(({ visible, enabled, uischema, label, ...props }: MaterialLabelableLayoutRendererProps) => {
-  const groupLayout = uischema as GroupLayout;
-  return (
-    <Hidden xsUp={!visible}>
-      <Card style={style}>
-        {!isEmpty(label) && (
-          <CardHeader title={label} />
-        )}
-        <CardContent>
-          <MaterialLayoutRenderer {...props} visible={visible} enabled={enabled} elements={groupLayout.elements} />
-        </CardContent>
-      </Card>
-    </Hidden>
-  );
-});
+const GroupComponent = React.memo(
+  ({
+    visible,
+    enabled,
+    uischema,
+    label,
+    ...props
+  }: MaterialLabelableLayoutRendererProps) => {
+    const groupLayout = uischema as GroupLayout;
+    return (
+      <Hidden xsUp={!visible}>
+        <Card style={style}>
+          {!isEmpty(label) && <CardHeader title={label} />}
+          <CardContent>
+            <MaterialLayoutRenderer
+              {...props}
+              visible={visible}
+              enabled={enabled}
+              elements={groupLayout.elements}
+            />
+          </CardContent>
+        </Card>
+      </Hidden>
+    );
+  }
+);
 
-export const MaterializedGroupLayoutRenderer = ({ uischema, schema, path, visible, enabled, renderers, cells, direction, label }: LayoutProps) => {
+export const MaterializedGroupLayoutRenderer = ({
+  uischema,
+  schema,
+  path,
+  visible,
+  enabled,
+  renderers,
+  cells,
+  direction,
+  label,
+}: LayoutProps) => {
   const groupLayout = uischema as GroupLayout;
 
   return (

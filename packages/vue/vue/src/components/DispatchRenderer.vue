@@ -1,5 +1,5 @@
 <template>
-  <component v-bind:is="determinedRenderer" v-bind="renderer"></component>
+  <component :is="determinedRenderer" v-bind="renderer"></component>
 </template>
 
 <script lang="ts">
@@ -9,28 +9,35 @@ import maxBy from 'lodash/maxBy';
 import { rendererProps, useJsonFormsRenderer } from '../jsonFormsCompositions';
 
 export default defineComponent({
-  name: 'dispatch-renderer',
+  name: 'DispatchRenderer',
   props: {
-    ...rendererProps()
+    ...rendererProps(),
   },
   setup(props) {
     return useJsonFormsRenderer(props);
   },
   computed: {
     determinedRenderer(): any {
-      const testerContext = { rootSchema: this.rootSchema, config: this.config };
-      const renderer = maxBy(this.renderer.renderers, r =>
+      const testerContext = {
+        rootSchema: this.rootSchema,
+        config: this.config,
+      };
+      const renderer = maxBy(this.renderer.renderers, (r) =>
         r.tester(this.renderer.uischema, this.renderer.schema, testerContext)
       );
       if (
         renderer === undefined ||
-        renderer.tester(this.renderer.uischema, this.renderer.schema, testerContext) === -1
+        renderer.tester(
+          this.renderer.uischema,
+          this.renderer.schema,
+          testerContext
+        ) === -1
       ) {
         return UnknownRenderer;
       } else {
         return renderer.renderer;
       }
-    }
-  }
+    },
+  },
 });
 </script>

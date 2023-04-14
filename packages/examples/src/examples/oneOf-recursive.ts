@@ -29,14 +29,14 @@ export const schema = {
   definitions: {
     fileOrFolder: {
       title: 'fileOrFolder',
-      oneOf: [{ $ref: '#/definitions/file' }, { $ref: '#/definitions/folder' }]
+      oneOf: [{ $ref: '#/definitions/file' }, { $ref: '#/definitions/folder' }],
     },
     file: {
       title: 'File',
       type: 'object',
       properties: {
-        name: { type: 'string' }
-      }
+        name: { type: 'string' },
+      },
     },
     folder: {
       type: 'object',
@@ -46,26 +46,26 @@ export const schema = {
         children: {
           type: 'array',
           items: {
-            $ref: '#/definitions/fileOrFolder'
-          }
-        }
-      }
-    }
+            $ref: '#/definitions/fileOrFolder',
+          },
+        },
+      },
+    },
   },
   type: 'object',
   properties: {
     root: {
       type: 'array',
       items: {
-        $ref: '#/definitions/folder'
-      }
-    }
-  }
+        $ref: '#/definitions/folder',
+      },
+    },
+  },
 };
 
 export const uischema = {
   type: 'Control',
-  scope: '#'
+  scope: '#',
 };
 
 const data = {};
@@ -76,6 +76,6 @@ registerExamples([
     label: 'oneOf recursive',
     data,
     schema,
-    uischema
-  }
+    uischema,
+  },
 ]);

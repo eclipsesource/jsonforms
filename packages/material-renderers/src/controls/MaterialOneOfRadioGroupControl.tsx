@@ -24,7 +24,7 @@
 */
 import React from 'react';
 import {
-    and,
+  and,
   ControlProps,
   isOneOfEnumControl,
   optionIs,
@@ -35,8 +35,10 @@ import {
 import { withJsonFormsOneOfEnumProps } from '@jsonforms/react';
 import { MaterialRadioGroup } from './MaterialRadioGroup';
 
-export const MaterialOneOfRadioGroupControl = (props: ControlProps & OwnPropsOfEnum) => {
-  return <MaterialRadioGroup {...props}/>;
+export const MaterialOneOfRadioGroupControl = (
+  props: ControlProps & OwnPropsOfEnum
+) => {
+  return <MaterialRadioGroup {...props} />;
 };
 
 export const materialOneOfRadioGroupControlTester: RankedTester = rankWith(

@@ -23,19 +23,19 @@
   THE SOFTWARE.
 */
 import MaterialGroupLayout, {
-  materialGroupTester
+  materialGroupTester,
 } from './MaterialGroupLayout';
 import MaterialHorizontalLayout, {
-  materialHorizontalLayoutTester
+  materialHorizontalLayoutTester,
 } from './MaterialHorizontalLayout';
 import MaterialVerticalLayout, {
-  materialVerticalLayoutTester
+  materialVerticalLayoutTester,
 } from './MaterialVerticalLayout';
 import MaterialCategorizationLayout, {
-  materialCategorizationTester
+  materialCategorizationTester,
 } from './MaterialCategorizationLayout';
 import MaterialArrayLayout, {
-  materialArrayLayoutTester
+  materialArrayLayoutTester,
 } from './MaterialArrayLayoutRenderer';
 
 export {
@@ -48,5 +48,5 @@ export {
   MaterialHorizontalLayout,
   materialHorizontalLayoutTester,
   MaterialVerticalLayout,
-  materialVerticalLayoutTester
+  materialVerticalLayoutTester,
 };

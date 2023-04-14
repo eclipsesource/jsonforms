@@ -28,7 +28,7 @@ import {
   isNumberControl,
   RankedTester,
   rankWith,
-  WithClassname
+  WithClassname,
 } from '@jsonforms/core';
 import { withJsonFormsCellProps } from '@jsonforms/react';
 import { MuiInputNumber } from '../mui-controls/MuiInputNumber';

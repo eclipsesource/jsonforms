@@ -22,13 +22,13 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { 
+import {
   JsonFormsCellRendererRegistryEntry,
   JsonFormsUISchemaRegistryEntry,
   JsonFormsRendererRegistryEntry,
   JsonSchema,
   UISchemaElement,
-  JsonFormsI18nState
+  JsonFormsI18nState,
 } from '@jsonforms/core';
 
 export interface ExampleDescription {
@@ -39,7 +39,7 @@ export interface ExampleDescription {
   uischema: UISchemaElement;
   uischemas?: JsonFormsUISchemaRegistryEntry[];
   config?: any;
-  actions?: { label: string, apply: (props: StateProps) => any }[];
+  actions?: { label: string; apply: (props: StateProps) => any }[];
   i18n?: JsonFormsI18nState;
 }
 

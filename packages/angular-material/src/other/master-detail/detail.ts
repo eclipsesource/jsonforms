@@ -30,14 +30,14 @@ import { Component, Input } from '@angular/core';
     <div *ngIf="initialized">
       <jsonforms-outlet [renderProps]="_item"></jsonforms-outlet>
     </div>
-  `
+  `,
 })
 export class JsonFormsDetailComponent {
   _item: any;
   _schema: any;
   initialized = false;
 
-  @Input('item')
+  @Input()
   set item(item: any) {
     if (item) {
       this._item = item;

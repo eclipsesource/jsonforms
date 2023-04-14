@@ -12,13 +12,16 @@ export const classes = (strings: TemplateStringsArray, ...variables: any[]) => {
 
 /**
  * Helper function to merge two styles definitions. The contained classes will be combined, not overwritten.
- * 
+ *
  * Example usage:
  * ```ts
  * const myStyles = mergeStyles(defaultStyles, { control: { root: 'mycontrol' } });
  * ```
  */
-export const mergeStyles = (stylesA: Partial<Styles>, stylesB: Partial<Styles>): Partial<Styles> => {
+export const mergeStyles = (
+  stylesA: Partial<Styles>,
+  stylesB: Partial<Styles>
+): Partial<Styles> => {
   const styles = cloneDeep(stylesA);
   mergeWith(styles, stylesB, (aValue, bValue) => {
     if (typeof aValue === 'string' && typeof bValue === 'string') {

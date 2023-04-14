@@ -25,7 +25,7 @@
 import {
   JsonFormsAngularService,
   JsonFormsOutlet,
-  UnknownRenderer
+  UnknownRenderer,
 } from '@jsonforms/angular';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -37,12 +37,12 @@ export const beforeEachLayoutTest = <LAYOUT>(
   TestBed.configureTestingModule({
     declarations: [Renderer, UnknownRenderer, JsonFormsOutlet, ...declarations],
     imports,
-    providers: [JsonFormsAngularService, ...providers]
+    providers: [JsonFormsAngularService, ...providers],
   })
     .overrideModule(BrowserDynamicTestingModule, {
       set: {
-        entryComponents: [UnknownRenderer]
-      }
+        entryComponents: [UnknownRenderer],
+      },
     })
     .compileComponents();
   return TestBed.createComponent(Renderer);

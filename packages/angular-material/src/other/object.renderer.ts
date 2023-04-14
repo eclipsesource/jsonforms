@@ -27,7 +27,7 @@ import startCase from 'lodash/startCase';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import {
   JsonFormsAngularService,
-  JsonFormsControlWithDetail
+  JsonFormsControlWithDetail,
 } from '@jsonforms/angular';
 import {
   ControlWithDetailProps,
@@ -37,7 +37,7 @@ import {
   RankedTester,
   rankWith,
   setReadonly,
-  UISchemaElement
+  UISchemaElement,
 } from '@jsonforms/core';
 
 @Component({
@@ -52,7 +52,7 @@ import {
       </jsonforms-outlet>
     </mat-card>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ObjectControlRenderer extends JsonFormsControlWithDetail {
   detailUiSchema: UISchemaElement;

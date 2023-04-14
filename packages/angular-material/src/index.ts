@@ -27,67 +27,67 @@ import { RankedTester } from '@jsonforms/core';
 export * from './module';
 import {
   BooleanControlRenderer,
-  booleanControlTester
+  booleanControlTester,
 } from './controls/boolean.renderer';
 import {
   TextControlRenderer,
-  TextControlRendererTester
+  TextControlRendererTester,
 } from './controls/text.renderer';
 import {
   TextAreaRenderer,
-  TextAreaRendererTester
+  TextAreaRendererTester,
 } from './controls/textarea.renderer';
 import {
   NumberControlRenderer,
-  NumberControlRendererTester
+  NumberControlRendererTester,
 } from './controls/number.renderer';
 import {
   RangeControlRenderer,
-  RangeControlRendererTester
+  RangeControlRendererTester,
 } from './controls/range.renderer';
 import {
   DateControlRenderer,
-  DateControlRendererTester
+  DateControlRendererTester,
 } from './controls/date.renderer';
 import {
   ToggleControlRenderer,
-  ToggleControlRendererTester
+  ToggleControlRendererTester,
 } from './controls/toggle.renderer';
 import {
   AutocompleteControlRenderer,
-  enumControlTester
+  enumControlTester,
 } from './controls/autocomplete.renderer';
 import {
   ObjectControlRenderer,
-  ObjectControlRendererTester
+  ObjectControlRendererTester,
 } from './other/object.renderer';
 import {
   VerticalLayoutRenderer,
-  verticalLayoutTester
+  verticalLayoutTester,
 } from './layouts/vertical-layout.renderer';
 import {
   HorizontalLayoutRenderer,
-  horizontalLayoutTester
+  horizontalLayoutTester,
 } from './layouts/horizontal-layout.renderer';
 
 import {
   CategorizationTabLayoutRenderer,
-  categorizationTester
+  categorizationTester,
 } from './layouts/categorization-layout.renderer';
 
 import { LabelRenderer, LabelRendererTester } from './other/label.renderer';
 import {
   masterDetailTester,
-  MasterListComponent
+  MasterListComponent,
 } from './other/master-detail/master';
 import {
   GroupLayoutRenderer,
-  groupLayoutTester
+  groupLayoutTester,
 } from './layouts/group-layout.renderer';
 import { TableRenderer, TableRendererTester } from './other/table.renderer';
 import {
   ArrayLayoutRenderer,
-  ArrayLayoutRendererTester
+  ArrayLayoutRendererTester,
 } from './layouts/array-layout.renderer';
 
 export * from './controls';
@@ -117,5 +117,5 @@ export const angularMaterialRenderers: {
   { tester: ArrayLayoutRendererTester, renderer: ArrayLayoutRenderer },
   // other
   { tester: masterDetailTester, renderer: MasterListComponent },
-  { tester: TableRendererTester, renderer: TableRenderer }
+  { tester: TableRendererTester, renderer: TableRenderer },
 ];

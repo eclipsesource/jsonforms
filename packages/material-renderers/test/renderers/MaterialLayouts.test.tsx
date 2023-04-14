@@ -30,7 +30,7 @@ import {
   ControlElement,
   Layout,
   RuleEffect,
-  UISchemaElement
+  UISchemaElement,
 } from '@jsonforms/core';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { JsonForms } from '@jsonforms/react';
@@ -41,38 +41,38 @@ const schema = {
   type: 'object',
   properties: {
     toggleTopLayout: {
-      type: 'boolean'
+      type: 'boolean',
     },
     topString: {
-      type: 'string'
+      type: 'string',
     },
     toggleMiddleLayout: {
-      type: 'boolean'
+      type: 'boolean',
     },
     middleNumber: {
-      type: 'number'
+      type: 'number',
     },
     toggleBottomLayout: {
-      type: 'boolean'
+      type: 'boolean',
     },
     bottomBoolean: {
-      type: 'boolean'
-    }
-  }
+      type: 'boolean',
+    },
+  },
 };
 const baseUischema = () => ({
   type: 'VerticalLayout',
   elements: [
     {
       type: 'Control',
-      scope: '#/properties/topString'
+      scope: '#/properties/topString',
     },
     {
       type: 'HorizontalLayout',
       elements: [
         {
           type: 'Control',
-          scope: '#/properties/middleNumber'
+          scope: '#/properties/middleNumber',
         },
         {
           type: 'Group',
@@ -80,21 +80,21 @@ const baseUischema = () => ({
           elements: [
             {
               type: 'Control',
-              scope: '#/properties/bottomBoolean'
-            }
-          ]
-        }
-      ]
-    }
-  ]
+              scope: '#/properties/bottomBoolean',
+            },
+          ],
+        },
+      ],
+    },
+  ],
 });
 
 const rule = (effect: RuleEffect, propertyName: string) => ({
   effect: effect,
   condition: {
     scope: '#/properties/' + propertyName,
-    schema: { const: true }
-  }
+    schema: { const: true },
+  },
 });
 
 const topRule = (rule: any, uischema: UISchemaElement) => {
@@ -193,7 +193,7 @@ describe('Layout Tests', () => {
       const data = {
         toggleTopLayout: true,
         toggleMiddleLayout: true,
-        toggleBottomLayout: true
+        toggleBottomLayout: true,
       };
       createWrapper(data, baseUischema());
       expect(controlIsShown('top')).toBe(true);
@@ -205,7 +205,7 @@ describe('Layout Tests', () => {
       const data = {
         toggleTopLayout: true,
         toggleMiddleLayout: true,
-        toggleBottomLayout: true
+        toggleBottomLayout: true,
       };
       const uischema = topShowRule(
         middleShowRule(bottomShowRule(baseUischema()))
@@ -220,7 +220,7 @@ describe('Layout Tests', () => {
       const data = {
         toggleTopLayout: true,
         toggleMiddleLayout: true,
-        toggleBottomLayout: true
+        toggleBottomLayout: true,
       };
       const uischema = topEnableRule(
         middleEnableRule(bottomEnableRule(baseUischema()))
@@ -237,7 +237,7 @@ describe('Layout Tests', () => {
       const data = {
         toggleTopLayout: false,
         toggleMiddleLayout: true,
-        toggleBottomLayout: true
+        toggleBottomLayout: true,
       };
       const uischema = topShowRule(baseUischema());
       createWrapper(data, uischema);
@@ -250,7 +250,7 @@ describe('Layout Tests', () => {
       const data = {
         toggleTopLayout: true,
         toggleMiddleLayout: false,
-        toggleBottomLayout: true
+        toggleBottomLayout: true,
       };
       const uischema = middleShowRule(baseUischema());
       createWrapper(data, uischema);
@@ -263,7 +263,7 @@ describe('Layout Tests', () => {
       const data = {
         toggleTopLayout: true,
         toggleMiddleLayout: true,
-        toggleBottomLayout: false
+        toggleBottomLayout: false,
       };
       const uischema = bottomShowRule(baseUischema());
       createWrapper(data, uischema);
@@ -276,7 +276,7 @@ describe('Layout Tests', () => {
       const data = {
         toggleTopLayout: false,
         toggleMiddleLayout: true,
-        toggleBottomLayout: true
+        toggleBottomLayout: true,
       };
       const uischema = topEnableRule(baseUischema());
       createWrapper(data, uischema);
@@ -289,7 +289,7 @@ describe('Layout Tests', () => {
       const data = {
         toggleTopLayout: true,
         toggleMiddleLayout: false,
-        toggleBottomLayout: true
+        toggleBottomLayout: true,
       };
       const uischema = middleEnableRule(baseUischema());
       createWrapper(data, uischema);
@@ -302,7 +302,7 @@ describe('Layout Tests', () => {
       const data = {
         toggleTopLayout: true,
         toggleMiddleLayout: true,
-        toggleBottomLayout: false
+        toggleBottomLayout: false,
       };
       const uischema = bottomEnableRule(baseUischema());
       createWrapper(data, uischema);
@@ -316,7 +316,7 @@ describe('Layout Tests', () => {
         toggleTopLayout: true,
         toggleMiddleLayout: true,
         toggleBottomLayout: true,
-        toggleControl: false
+        toggleControl: false,
       };
       const uischema = controlEnableRule(baseUischema());
       createWrapper(data, uischema);
@@ -331,7 +331,7 @@ describe('Layout Tests', () => {
       const data = {
         toggleTopLayout: true,
         toggleMiddleLayout: false,
-        toggleBottomLayout: true
+        toggleBottomLayout: true,
       };
       const uischema = middleEnableRule(bottomShowRule(baseUischema()));
       createWrapper(data, uischema);
@@ -345,7 +345,7 @@ describe('Layout Tests', () => {
         toggleTopLayout: true,
         toggleMiddleLayout: true,
         toggleBottomLayout: false,
-        toggleControl: true
+        toggleControl: true,
       };
       const uischema = bottomEnableRule(controlEnableRule(baseUischema()));
       createWrapper(data, uischema);
@@ -362,18 +362,18 @@ describe('Special Layout Tests', () => {
       type: 'object',
       properties: {
         name: {
-          type: 'string'
+          type: 'string',
         },
         age: {
-          type: 'integer'
+          type: 'integer',
         },
         topCheck: {
-          type: 'boolean'
+          type: 'boolean',
         },
         bottomCheck: {
-          type: 'boolean'
-        }
-      }
+          type: 'boolean',
+        },
+      },
     };
 
     const uischema = {
@@ -391,33 +391,33 @@ describe('Special Layout Tests', () => {
                 condition: {
                   scope: '#/properties/bottomCheck',
                   schema: {
-                    const: true
-                  }
-                }
-              }
+                    const: true,
+                  },
+                },
+              },
             },
             {
               type: 'Control',
-              scope: '#/properties/age'
-            }
+              scope: '#/properties/age',
+            },
           ],
           rule: {
             effect: RuleEffect.ENABLE,
             condition: {
               scope: '#/properties/topCheck',
               schema: {
-                const: true
-              }
-            }
-          }
-        }
-      ]
+                const: true,
+              },
+            },
+          },
+        },
+      ],
     };
 
     it('enabling top rule and disabling bottom rule should disable control', () => {
       const data = {
         topCheck: true,
-        bottomCheck: false
+        bottomCheck: false,
       };
       const wrapper = mount(
         <JsonForms
@@ -427,18 +427,15 @@ describe('Special Layout Tests', () => {
           renderers={materialRenderers}
         />
       );
-      expect(
-        wrapper
-          .find('input[type="text"]')
-          .first()
-          .props().disabled
-      ).toBe(true);
+      expect(wrapper.find('input[type="text"]').first().props().disabled).toBe(
+        true
+      );
     });
 
     it('disabling top rule and enabling bottom rule should enable control', () => {
       const data = {
         topCheck: false,
-        bottomCheck: true
+        bottomCheck: true,
       };
       const wrapper = mount(
         <JsonForms
@@ -448,12 +445,9 @@ describe('Special Layout Tests', () => {
           renderers={materialRenderers}
         />
       );
-      expect(
-        wrapper
-          .find('input[type="text"]')
-          .first()
-          .props().disabled
-      ).toBe(false);
+      expect(wrapper.find('input[type="text"]').first().props().disabled).toBe(
+        false
+      );
     });
   });
 
@@ -462,15 +456,15 @@ describe('Special Layout Tests', () => {
       type: 'object',
       properties: {
         name: {
-          type: 'string'
+          type: 'string',
         },
         age: {
-          type: 'integer'
+          type: 'integer',
         },
         check: {
-          type: 'boolean'
-        }
-      }
+          type: 'boolean',
+        },
+      },
     };
 
     const uischema: ControlElement = {
@@ -481,15 +475,15 @@ describe('Special Layout Tests', () => {
         condition: {
           scope: '#/properties/check',
           schema: {
-            const: true
-          }
-        } as any
-      }
+            const: true,
+          },
+        } as any,
+      },
     };
 
     it('enabling object control should enable child controls', () => {
       const data = {
-        check: true
+        check: true,
       };
       const wrapper = mount(
         <JsonForms
@@ -499,23 +493,17 @@ describe('Special Layout Tests', () => {
           renderers={materialRenderers}
         />
       );
+      expect(wrapper.find('input[type="text"]').first().props().disabled).toBe(
+        false
+      );
       expect(
-        wrapper
-          .find('input[type="text"]')
-          .first()
-          .props().disabled
-      ).toBe(false);
-      expect(
-        wrapper
-          .find('input[type="number"]')
-          .first()
-          .props().disabled
+        wrapper.find('input[type="number"]').first().props().disabled
       ).toBe(false);
     });
 
     it('disabling object control should disable child controls', () => {
       const data = {
-        check: false
+        check: false,
       };
       const wrapper = mount(
         <JsonForms
@@ -525,17 +513,11 @@ describe('Special Layout Tests', () => {
           renderers={materialRenderers}
         />
       );
+      expect(wrapper.find('input[type="text"]').first().props().disabled).toBe(
+        true
+      );
       expect(
-        wrapper
-          .find('input[type="text"]')
-          .first()
-          .props().disabled
-      ).toBe(true);
-      expect(
-        wrapper
-          .find('input[type="number"]')
-          .first()
-          .props().disabled
+        wrapper.find('input[type="number"]').first().props().disabled
       ).toBe(true);
     });
   });

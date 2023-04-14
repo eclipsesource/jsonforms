@@ -29,20 +29,17 @@ import {
   isDateTimeControl,
   isDescriptionHidden,
   RankedTester,
-  rankWith
+  rankWith,
 } from '@jsonforms/core';
 import { withJsonFormsControlProps } from '@jsonforms/react';
 import { FormHelperText, Hidden } from '@mui/material';
-import {
-  DateTimePicker,
-  LocalizationProvider 
-} from '@mui/x-date-pickers';
+import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import {
   createOnChangeHandler,
   getData,
   ResettableTextField,
-  useFocus
+  useFocus,
 } from '../util';
 
 export const MaterialDateTimeControl = (props: ControlProps) => {
@@ -59,7 +56,7 @@ export const MaterialDateTimeControl = (props: ControlProps) => {
     path,
     handleChange,
     data,
-    config
+    config,
   } = props;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
   const isValid = errors.length === 0;
@@ -74,7 +71,12 @@ export const MaterialDateTimeControl = (props: ControlProps) => {
   const format = appliedUiSchemaOptions.dateTimeFormat ?? 'YYYY-MM-DD HH:mm';
   const saveFormat = appliedUiSchemaOptions.dateTimeSaveFormat ?? undefined;
 
-  const views = appliedUiSchemaOptions.views ?? ['year', 'day', 'hours', 'minutes'];
+  const views = appliedUiSchemaOptions.views ?? [
+    'year',
+    'day',
+    'hours',
+    'minutes',
+  ];
 
   const firstFormHelperText = showDescription
     ? description
@@ -83,11 +85,10 @@ export const MaterialDateTimeControl = (props: ControlProps) => {
     : null;
   const secondFormHelperText = showDescription && !isValid ? errors : null;
 
-  const onChange = useMemo(() => createOnChangeHandler(
-    path,
-    handleChange,
-    saveFormat
-  ),[path, handleChange, saveFormat]);
+  const onChange = useMemo(
+    () => createOnChangeHandler(path, handleChange, saveFormat),
+    [path, handleChange, saveFormat]
+  );
 
   const value = getData(data, saveFormat);
   const valueInInputFormat = value ? value.format(format) : '';
@@ -106,18 +107,21 @@ export const MaterialDateTimeControl = (props: ControlProps) => {
           disabled={!enabled}
           componentsProps={{
             actionBar: {
-              actions: (variant) => (variant === 'desktop' ? [] : ['clear', 'cancel', 'accept'])
-            }
+              actions: (variant) =>
+                variant === 'desktop' ? [] : ['clear', 'cancel', 'accept'],
+            },
           }}
-          renderInput={params => (
-            <ResettableTextField 
+          renderInput={(params) => (
+            <ResettableTextField
               {...params}
               rawValue={data}
               dayjsValueIsValid={value !== null}
               valueInInputFormat={valueInInputFormat}
               focused={focused}
               id={id + '-input'}
-              required={required && !appliedUiSchemaOptions.hideRequiredAsterisk}
+              required={
+                required && !appliedUiSchemaOptions.hideRequiredAsterisk
+              }
               autoFocus={appliedUiSchemaOptions.focus}
               error={!isValid}
               fullWidth={!appliedUiSchemaOptions.trim}
@@ -130,15 +134,12 @@ export const MaterialDateTimeControl = (props: ControlProps) => {
               onBlur={onBlur}
               variant={'standard'}
             />
-          )
-          }
+          )}
         />
         <FormHelperText error={!isValid && !showDescription}>
           {firstFormHelperText}
         </FormHelperText>
-        <FormHelperText error={!isValid}>
-          {secondFormHelperText}
-        </FormHelperText>
+        <FormHelperText error={!isValid}>{secondFormHelperText}</FormHelperText>
       </LocalizationProvider>
     </Hidden>
   );

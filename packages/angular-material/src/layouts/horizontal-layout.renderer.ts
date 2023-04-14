@@ -22,12 +22,16 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+} from '@angular/core';
 import {
   HorizontalLayout,
   RankedTester,
   rankWith,
-  uiTypeIs
+  uiTypeIs,
 } from '@jsonforms/core';
 import { LayoutRenderer } from './layout.renderer';
 import { JsonFormsAngularService } from '@jsonforms/angular';
@@ -41,15 +45,24 @@ import { JsonFormsAngularService } from '@jsonforms/angular';
       [fxHide]="hidden"
       fxLayoutAlign="center start"
     >
-      <div *ngFor="let props of uischema | layoutChildrenRenderProps: schema: path; trackBy: trackElement" fxFlex>
+      <div
+        *ngFor="
+          let props of uischema | layoutChildrenRenderProps : schema : path;
+          trackBy: trackElement
+        "
+        fxFlex
+      >
         <jsonforms-outlet [renderProps]="props"></jsonforms-outlet>
       </div>
     </div>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HorizontalLayoutRenderer extends LayoutRenderer<HorizontalLayout> {
-  constructor(jsonFormsService: JsonFormsAngularService, changeDetectionRef: ChangeDetectorRef) {
+  constructor(
+    jsonFormsService: JsonFormsAngularService,
+    changeDetectionRef: ChangeDetectorRef
+  ) {
     super(jsonFormsService, changeDetectionRef);
   }
 }

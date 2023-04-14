@@ -28,7 +28,7 @@ import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 import type {
   JsonFormsRendererRegistryEntry,
   JsonSchema,
-  UISchemaElement
+  UISchemaElement,
 } from '@jsonforms/core';
 import type { ErrorObject } from 'ajv';
 
@@ -50,7 +50,7 @@ export const baseSetup = <C extends JsonFormsControl>(
     TestBed.configureTestingModule({
       declarations: [testConfig.componentUT],
       imports: testConfig.imports,
-      providers: [JsonFormsAngularService].concat(testConfig.providers)
+      providers: [JsonFormsAngularService].concat(testConfig.providers),
     }).compileComponents();
   });
 };
@@ -82,8 +82,8 @@ export const setupMockStore = (
       data: testData.data,
       schema: testData.schema,
       errors: testData.errors,
-      uischema: testData.uischema
-    }
+      uischema: testData.uischema,
+    },
   });
   getJsonFormsService(component).registerRenderers(testData.renderers);
 };

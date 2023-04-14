@@ -40,7 +40,7 @@ export const DateCell = (props: CellProps & VanillaRendererProps) => {
     <input
       type='date'
       value={data || ''}
-      onChange={ev => handleChange(path, ev.target.value)}
+      onChange={(ev) => handleChange(path, ev.target.value)}
       className={className}
       id={id}
       disabled={!enabled}

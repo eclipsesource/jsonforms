@@ -33,7 +33,7 @@ import {
   setupMockStore,
   TestConfig,
   TestData,
-  getJsonFormsService
+  getJsonFormsService,
 } from './util';
 import { ControlElement, JsonSchema, Actions } from '@jsonforms/core';
 
@@ -61,289 +61,335 @@ export const rangeDefaultSchema: JsonSchema = {
       type: 'number',
       minimum: -42.42,
       maximum: 42.42,
-      default: 0.42
-    }
-  }
+      default: 0.42,
+    },
+  },
 };
 export const rangeDefaultUischema: ControlElement = {
   type: 'Control',
   scope: '#/properties/foo',
-  options: { slider: true }
+  options: { slider: true },
 };
 export const rangeDefaultTestData: TestData<ControlElement> = {
   data: rangeDefaultData,
   schema: rangeDefaultSchema,
-  uischema: rangeDefaultUischema
+  uischema: rangeDefaultUischema,
 };
 
-export const rangeBaseTest = <C extends JsonFormsControl, I>(
-  testConfig: TestConfig<C>,
-  instance: Type<I>
-) => () => {
-  let fixture: ComponentFixture<any>;
-  let rangeElement: DebugElement;
-  let component: C;
+export const rangeBaseTest =
+  <C extends JsonFormsControl, I>(
+    testConfig: TestConfig<C>,
+    instance: Type<I>
+  ) =>
+  () => {
+    let fixture: ComponentFixture<any>;
+    let rangeElement: DebugElement;
+    let component: C;
 
-  baseSetup(testConfig);
+    baseSetup(testConfig);
 
-  beforeEach(() => {
-    const preparedComponents = prepareComponent(testConfig, instance);
-    fixture = preparedComponents.fixture;
-    rangeElement = preparedComponents.rangeElement;
-    component = preparedComponents.component;
-  });
-
-  it('should render floats', () => {
-    component.uischema = rangeDefaultTestData.uischema;
-    component.schema = rangeDefaultTestData.schema;
-
-    getJsonFormsService(component).init(
-      {core: {data: rangeDefaultTestData.data, schema: rangeDefaultTestData.schema, uischema: rangeDefaultTestData.uischema}}
-    );
-    component.ngOnInit();
-    fixture.detectChanges();
-    expect(component.data).toBe(1.234);
-    expect(rangeElement.componentInstance.value).toBe(1.234);
-    // step is of type string
-    expect(rangeElement.componentInstance.step).toBe(1);
-    expect(rangeElement.componentInstance.min).toBe(-42.42);
-    expect(rangeElement.componentInstance.max).toBe(42.42);
-    expect(rangeElement.componentInstance.disabled).toBe(false);
-    expect(fixture.nativeElement.children[0].style.display).not.toBe('none');
-  });
-
-  it('should render integer', () => {
-    component.uischema = rangeDefaultTestData.uischema;
-    const schema = JSON.parse(JSON.stringify(rangeDefaultTestData.schema));
-    schema.properties.foo.type = 'integer';
-    schema.properties.foo.minimum = -42;
-    schema.properties.foo.maximum = 42;
-    schema.properties.foo.default = 1;
-    setupMockStore(fixture, {
-      uischema: rangeDefaultTestData.uischema,
-      schema,
-      data: { foo: 12 }
+    beforeEach(() => {
+      const preparedComponents = prepareComponent(testConfig, instance);
+      fixture = preparedComponents.fixture;
+      rangeElement = preparedComponents.rangeElement;
+      component = preparedComponents.component;
     });
-    getJsonFormsService(component).updateCore(
-      Actions.init({ foo: 12 }, schema, rangeDefaultTestData.uischema)
-    );
 
-    fixture.componentInstance.ngOnInit();
-    fixture.detectChanges();
-    expect(component.data).toBe(12);
-    expect(rangeElement.componentInstance.value).toBe(12);
-    // step is of type string
-    expect(rangeElement.componentInstance.step).toBe(1);
-    expect(rangeElement.componentInstance.min).toBe(-42);
-    expect(rangeElement.componentInstance.max).toBe(42);
-    expect(rangeElement.componentInstance.disabled).toBe(false);
-    // the component is wrapped in a div
-    expect(fixture.nativeElement.children[0].style.display).not.toBe('none');
-  });
+    it('should render floats', () => {
+      component.uischema = rangeDefaultTestData.uischema;
+      component.schema = rangeDefaultTestData.schema;
 
-  it('should support updating the state', () => {
-    component.uischema = rangeDefaultTestData.uischema;
-    component.schema = rangeDefaultTestData.schema;
-
-    getJsonFormsService(component).init(
-      {core: {data: rangeDefaultTestData.data, schema: rangeDefaultTestData.schema, uischema: rangeDefaultTestData.uischema}}
-    );
-    component.ngOnInit();
-    fixture.detectChanges();
-
-    getJsonFormsService(component).updateCore(
-      Actions.update('foo', () => 4.56)
-    );
-    fixture.detectChanges();
-    expect(component.data).toBe(4.56);
-    expect(rangeElement.componentInstance.value).toBe(4.56);
-  });
-  it('should update with undefined value', () => {
-    component.uischema = rangeDefaultTestData.uischema;
-    component.schema = rangeDefaultTestData.schema;
-
-    getJsonFormsService(component).init(
-      {core: {data: rangeDefaultTestData.data, schema: rangeDefaultTestData.schema, uischema: rangeDefaultTestData.uischema}}
-    );
-    component.ngOnInit();
-    fixture.detectChanges();
-
-    getJsonFormsService(component).updateCore(
-      Actions.update('foo', () => undefined)
-    );
-    fixture.detectChanges();
-    expect(component.data).toBe(undefined);
-    expect(rangeElement.componentInstance.value).toBe(0.42);
-  });
-  it('should update with null value', () => {
-    component.uischema = rangeDefaultTestData.uischema;
-    component.schema = rangeDefaultTestData.schema;
-
-    getJsonFormsService(component).init(
-      {core: {data: rangeDefaultTestData.data, schema: rangeDefaultTestData.schema, uischema: rangeDefaultTestData.uischema}}
-    );
-    component.ngOnInit();
-    fixture.detectChanges();
-
-    getJsonFormsService(component).updateCore(
-      Actions.update('foo', () => null)
-    );
-    fixture.detectChanges();
-    expect(component.data).toBe(null);
-    expect(rangeElement.componentInstance.value).toBe(0.42);
-  });
-  it('should not update with wrong ref', () => {
-    component.uischema = rangeDefaultTestData.uischema;
-    component.schema = rangeDefaultTestData.schema;
-
-    getJsonFormsService(component).init(
-      {core: {data: rangeDefaultTestData.data, schema: rangeDefaultTestData.schema, uischema: rangeDefaultTestData.uischema}}
-    );
-    component.ngOnInit();
-    fixture.detectChanges();
-
-    getJsonFormsService(component).updateCore(
-      Actions.update('foo', () => 1.234)
-    );
-    getJsonFormsService(component).updateCore(
-      Actions.update('bar', () => 456.456)
-    );
-
-    fixture.detectChanges();
-    expect(component.data).toBe(1.234);
-    expect(rangeElement.componentInstance.value).toBe(1.234);
-  });
-  // store needed as we evaluate the calculated enabled value to disable/enable the control
-  it('can be disabled', () => {
-    component.uischema = rangeDefaultTestData.uischema;
-    component.schema = rangeDefaultTestData.schema;
-    component.disabled = true;
-
-    getJsonFormsService(component).init(
-      {core: {data: rangeDefaultTestData.data, schema: rangeDefaultTestData.schema, uischema: rangeDefaultTestData.uischema}}
-    );
-    component.ngOnInit();
-    fixture.detectChanges();
-    expect(rangeElement.componentInstance.disabled).toBe(true);
-  });
-  it('can be hidden', () => {
-    component.uischema = rangeDefaultTestData.uischema;
-    component.schema = rangeDefaultTestData.schema;
-    component.visible = false;
-
-    getJsonFormsService(component).init(
-      {core: {data: rangeDefaultTestData.data, schema: rangeDefaultTestData.schema, uischema: rangeDefaultTestData.uischema}}
-    );
-    fixture.detectChanges();
-    component.ngOnInit();
-    expect(fixture.nativeElement.children[0].style.display).toBe('none');
-  });
-  it('id should be present in output', () => {
-    component.uischema = rangeDefaultTestData.uischema;
-    component.schema = rangeDefaultTestData.schema;
-    component.id = 'myId';
-    getJsonFormsService(component).init(
-      {core: {data: rangeDefaultTestData.data, schema: rangeDefaultTestData.schema, uischema: rangeDefaultTestData.uischema}}
-    );
-    component.ngOnInit();
-    fixture.detectChanges();
-    expect(rangeElement.nativeElement.id).toBe('myId');
-  });
-};
-export const rangeInputEventTest = <C extends JsonFormsControl, I>(
-  testConfig: TestConfig<C>,
-  instance: Type<I>
-) => () => {
-  let fixture: ComponentFixture<any>;
-  let component: C;
-
-  baseSetup(testConfig);
-
-  beforeEach(() => {
-    const preparedComponents = prepareComponent(testConfig, instance);
-    fixture = preparedComponents.fixture;
-    component = preparedComponents.component;
-  });
-
-  xit('should update via input event', async () => {
-    component.uischema = rangeDefaultTestData.uischema;
-    component.schema = rangeDefaultTestData.schema;
-
-    getJsonFormsService(component).init(
-      {core: {data: rangeDefaultTestData.data, schema: rangeDefaultTestData.schema, uischema: rangeDefaultTestData.uischema}}
-    );
-    component.ngOnInit();
-    fixture.detectChanges();
-
-    const spy = spyOn(component, 'onChange');
-
-    const sliderElement = fixture.debugElement.query(By.css('.mat-slider'))
-      .nativeElement;
-
-    const trackElement = fixture.debugElement.query(
-      By.css('.mat-slider-wrapper')
-    ).nativeElement;
-    const dimensions = trackElement.getBoundingClientRect();
-    const x = dimensions.left + dimensions.width * 0.2;
-    const y = dimensions.top + dimensions.height * 0.2;
-
-    dispatchEvent(sliderElement, createMouseEvent('mousedown', x, y, 0));
-
-    // trigger change detection
-    fixture.detectChanges();
-    await fixture.whenStable();
-    expect(spy).toHaveBeenCalled();
-  });
-};
-export const rangeErrorTest = <C extends JsonFormsControl, I>(
-  testConfig: TestConfig<C>,
-  instance: Type<I>,
-  errorTestInformation: ErrorTestExpectation
-) => () => {
-  let fixture: ComponentFixture<any>;
-  let component: C;
-
-  baseSetup(testConfig);
-
-  beforeEach(() => {
-    const preparedComponents = prepareComponent(testConfig, instance);
-    fixture = preparedComponents.fixture;
-    component = preparedComponents.component;
-  });
-  it('should display errors', () => {
-    component.uischema = rangeDefaultTestData.uischema;
-    component.schema = rangeDefaultTestData.schema;
-
-    const formsService = getJsonFormsService(component);
-    formsService.init({
-      core: {
-        data: rangeDefaultTestData.data,
-        schema: rangeDefaultTestData.schema,
-        uischema: undefined
-      }
+      getJsonFormsService(component).init({
+        core: {
+          data: rangeDefaultTestData.data,
+          schema: rangeDefaultTestData.schema,
+          uischema: rangeDefaultTestData.uischema,
+        },
+      });
+      component.ngOnInit();
+      fixture.detectChanges();
+      expect(component.data).toBe(1.234);
+      expect(rangeElement.componentInstance.value).toBe(1.234);
+      // step is of type string
+      expect(rangeElement.componentInstance.step).toBe(1);
+      expect(rangeElement.componentInstance.min).toBe(-42.42);
+      expect(rangeElement.componentInstance.max).toBe(42.42);
+      expect(rangeElement.componentInstance.disabled).toBe(false);
+      expect(fixture.nativeElement.children[0].style.display).not.toBe('none');
     });
-    formsService.updateCore(Actions.updateErrors([
-      {
-        instancePath: '/foo',
-        message: 'Hi, this is me, test error!',
-        keyword: '',
-        schemaPath: '',
-        params: {}
-      }
-    ]));
-    formsService.refresh();
 
-    component.ngOnInit();
-    fixture.detectChanges();
-    const debugErrors: DebugElement[] = fixture.debugElement.queryAll(
-      By.directive(errorTestInformation.errorInstance)
-    );
-    expect(debugErrors.length).toBe(errorTestInformation.numberOfElements);
-    expect(
-      debugErrors[errorTestInformation.indexOfElement].nativeElement.textContent
-    ).toBe('Hi, this is me, test error!');
-  });
-};
+    it('should render integer', () => {
+      component.uischema = rangeDefaultTestData.uischema;
+      const schema = JSON.parse(JSON.stringify(rangeDefaultTestData.schema));
+      schema.properties.foo.type = 'integer';
+      schema.properties.foo.minimum = -42;
+      schema.properties.foo.maximum = 42;
+      schema.properties.foo.default = 1;
+      setupMockStore(fixture, {
+        uischema: rangeDefaultTestData.uischema,
+        schema,
+        data: { foo: 12 },
+      });
+      getJsonFormsService(component).updateCore(
+        Actions.init({ foo: 12 }, schema, rangeDefaultTestData.uischema)
+      );
+
+      fixture.componentInstance.ngOnInit();
+      fixture.detectChanges();
+      expect(component.data).toBe(12);
+      expect(rangeElement.componentInstance.value).toBe(12);
+      // step is of type string
+      expect(rangeElement.componentInstance.step).toBe(1);
+      expect(rangeElement.componentInstance.min).toBe(-42);
+      expect(rangeElement.componentInstance.max).toBe(42);
+      expect(rangeElement.componentInstance.disabled).toBe(false);
+      // the component is wrapped in a div
+      expect(fixture.nativeElement.children[0].style.display).not.toBe('none');
+    });
+
+    it('should support updating the state', () => {
+      component.uischema = rangeDefaultTestData.uischema;
+      component.schema = rangeDefaultTestData.schema;
+
+      getJsonFormsService(component).init({
+        core: {
+          data: rangeDefaultTestData.data,
+          schema: rangeDefaultTestData.schema,
+          uischema: rangeDefaultTestData.uischema,
+        },
+      });
+      component.ngOnInit();
+      fixture.detectChanges();
+
+      getJsonFormsService(component).updateCore(
+        Actions.update('foo', () => 4.56)
+      );
+      fixture.detectChanges();
+      expect(component.data).toBe(4.56);
+      expect(rangeElement.componentInstance.value).toBe(4.56);
+    });
+    it('should update with undefined value', () => {
+      component.uischema = rangeDefaultTestData.uischema;
+      component.schema = rangeDefaultTestData.schema;
+
+      getJsonFormsService(component).init({
+        core: {
+          data: rangeDefaultTestData.data,
+          schema: rangeDefaultTestData.schema,
+          uischema: rangeDefaultTestData.uischema,
+        },
+      });
+      component.ngOnInit();
+      fixture.detectChanges();
+
+      getJsonFormsService(component).updateCore(
+        Actions.update('foo', () => undefined)
+      );
+      fixture.detectChanges();
+      expect(component.data).toBe(undefined);
+      expect(rangeElement.componentInstance.value).toBe(0.42);
+    });
+    it('should update with null value', () => {
+      component.uischema = rangeDefaultTestData.uischema;
+      component.schema = rangeDefaultTestData.schema;
+
+      getJsonFormsService(component).init({
+        core: {
+          data: rangeDefaultTestData.data,
+          schema: rangeDefaultTestData.schema,
+          uischema: rangeDefaultTestData.uischema,
+        },
+      });
+      component.ngOnInit();
+      fixture.detectChanges();
+
+      getJsonFormsService(component).updateCore(
+        Actions.update('foo', () => null)
+      );
+      fixture.detectChanges();
+      expect(component.data).toBe(null);
+      expect(rangeElement.componentInstance.value).toBe(0.42);
+    });
+    it('should not update with wrong ref', () => {
+      component.uischema = rangeDefaultTestData.uischema;
+      component.schema = rangeDefaultTestData.schema;
+
+      getJsonFormsService(component).init({
+        core: {
+          data: rangeDefaultTestData.data,
+          schema: rangeDefaultTestData.schema,
+          uischema: rangeDefaultTestData.uischema,
+        },
+      });
+      component.ngOnInit();
+      fixture.detectChanges();
+
+      getJsonFormsService(component).updateCore(
+        Actions.update('foo', () => 1.234)
+      );
+      getJsonFormsService(component).updateCore(
+        Actions.update('bar', () => 456.456)
+      );
+
+      fixture.detectChanges();
+      expect(component.data).toBe(1.234);
+      expect(rangeElement.componentInstance.value).toBe(1.234);
+    });
+    // store needed as we evaluate the calculated enabled value to disable/enable the control
+    it('can be disabled', () => {
+      component.uischema = rangeDefaultTestData.uischema;
+      component.schema = rangeDefaultTestData.schema;
+      component.disabled = true;
+
+      getJsonFormsService(component).init({
+        core: {
+          data: rangeDefaultTestData.data,
+          schema: rangeDefaultTestData.schema,
+          uischema: rangeDefaultTestData.uischema,
+        },
+      });
+      component.ngOnInit();
+      fixture.detectChanges();
+      expect(rangeElement.componentInstance.disabled).toBe(true);
+    });
+    it('can be hidden', () => {
+      component.uischema = rangeDefaultTestData.uischema;
+      component.schema = rangeDefaultTestData.schema;
+      component.visible = false;
+
+      getJsonFormsService(component).init({
+        core: {
+          data: rangeDefaultTestData.data,
+          schema: rangeDefaultTestData.schema,
+          uischema: rangeDefaultTestData.uischema,
+        },
+      });
+      fixture.detectChanges();
+      component.ngOnInit();
+      expect(fixture.nativeElement.children[0].style.display).toBe('none');
+    });
+    it('id should be present in output', () => {
+      component.uischema = rangeDefaultTestData.uischema;
+      component.schema = rangeDefaultTestData.schema;
+      component.id = 'myId';
+      getJsonFormsService(component).init({
+        core: {
+          data: rangeDefaultTestData.data,
+          schema: rangeDefaultTestData.schema,
+          uischema: rangeDefaultTestData.uischema,
+        },
+      });
+      component.ngOnInit();
+      fixture.detectChanges();
+      expect(rangeElement.nativeElement.id).toBe('myId');
+    });
+  };
+export const rangeInputEventTest =
+  <C extends JsonFormsControl, I>(
+    testConfig: TestConfig<C>,
+    instance: Type<I>
+  ) =>
+  () => {
+    let fixture: ComponentFixture<any>;
+    let component: C;
+
+    baseSetup(testConfig);
+
+    beforeEach(() => {
+      const preparedComponents = prepareComponent(testConfig, instance);
+      fixture = preparedComponents.fixture;
+      component = preparedComponents.component;
+    });
+
+    xit('should update via input event', async () => {
+      component.uischema = rangeDefaultTestData.uischema;
+      component.schema = rangeDefaultTestData.schema;
+
+      getJsonFormsService(component).init({
+        core: {
+          data: rangeDefaultTestData.data,
+          schema: rangeDefaultTestData.schema,
+          uischema: rangeDefaultTestData.uischema,
+        },
+      });
+      component.ngOnInit();
+      fixture.detectChanges();
+
+      const spy = spyOn(component, 'onChange');
+
+      const sliderElement = fixture.debugElement.query(
+        By.css('.mat-slider')
+      ).nativeElement;
+
+      const trackElement = fixture.debugElement.query(
+        By.css('.mat-slider-wrapper')
+      ).nativeElement;
+      const dimensions = trackElement.getBoundingClientRect();
+      const x = dimensions.left + dimensions.width * 0.2;
+      const y = dimensions.top + dimensions.height * 0.2;
+
+      dispatchEvent(sliderElement, createMouseEvent('mousedown', x, y, 0));
+
+      // trigger change detection
+      fixture.detectChanges();
+      await fixture.whenStable();
+      expect(spy).toHaveBeenCalled();
+    });
+  };
+export const rangeErrorTest =
+  <C extends JsonFormsControl, I>(
+    testConfig: TestConfig<C>,
+    instance: Type<I>,
+    errorTestInformation: ErrorTestExpectation
+  ) =>
+  () => {
+    let fixture: ComponentFixture<any>;
+    let component: C;
+
+    baseSetup(testConfig);
+
+    beforeEach(() => {
+      const preparedComponents = prepareComponent(testConfig, instance);
+      fixture = preparedComponents.fixture;
+      component = preparedComponents.component;
+    });
+    it('should display errors', () => {
+      component.uischema = rangeDefaultTestData.uischema;
+      component.schema = rangeDefaultTestData.schema;
+
+      const formsService = getJsonFormsService(component);
+      formsService.init({
+        core: {
+          data: rangeDefaultTestData.data,
+          schema: rangeDefaultTestData.schema,
+          uischema: undefined,
+        },
+      });
+      formsService.updateCore(
+        Actions.updateErrors([
+          {
+            instancePath: '/foo',
+            message: 'Hi, this is me, test error!',
+            keyword: '',
+            schemaPath: '',
+            params: {},
+          },
+        ])
+      );
+      formsService.refresh();
+
+      component.ngOnInit();
+      fixture.detectChanges();
+      const debugErrors: DebugElement[] = fixture.debugElement.queryAll(
+        By.directive(errorTestInformation.errorInstance)
+      );
+      expect(debugErrors.length).toBe(errorTestInformation.numberOfElements);
+      expect(
+        debugErrors[errorTestInformation.indexOfElement].nativeElement
+          .textContent
+      ).toBe('Hi, this is me, test error!');
+    });
+  };
 
 /** Creates a browser MouseEvent with the specified options. */
 const createMouseEvent = (type: string, x = 0, y = 0, button = 0) => {

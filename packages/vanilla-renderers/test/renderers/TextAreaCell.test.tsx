@@ -23,15 +23,11 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
-import {
-  ControlElement,
-  HorizontalLayout,
-  JsonSchema,
-} from '@jsonforms/core';
+import { ControlElement, HorizontalLayout, JsonSchema } from '@jsonforms/core';
 import { JsonFormsStateProvider } from '@jsonforms/react';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
-import TextAreaCell, { textAreaCellTester, } from '../../src/cells/TextAreaCell';
+import TextAreaCell, { textAreaCellTester } from '../../src/cells/TextAreaCell';
 import HorizontalLayoutRenderer from '../../src/layouts/HorizontalLayout';
 import { initCore, TestEmitter } from '../util';
 
@@ -39,30 +35,29 @@ Enzyme.configure({ adapter: new Adapter() });
 
 const controlElement: ControlElement = {
   type: 'Control',
-  scope: '#/properties/name'
+  scope: '#/properties/name',
 };
 
 const fixture = {
-  data: { 'name': 'Foo' },
+  data: { name: 'Foo' },
   schema: {
     type: 'string',
-    minLength: 3
+    minLength: 3,
   },
   uischema: controlElement,
   styles: [
     {
       name: 'control',
-      classNames: ['control']
+      classNames: ['control'],
     },
     {
       name: 'control.validation',
-      classNames: ['validation']
-    }
-  ]
+      classNames: ['validation'],
+    },
+  ],
 };
 
 describe('Text area cell', () => {
-
   let wrapper: ReactWrapper;
 
   afterEach(() => wrapper.unmount());
@@ -72,33 +67,30 @@ describe('Text area cell', () => {
       type: 'object',
       properties: {
         firstName: { type: 'string', minLength: 3 },
-        lastName: { type: 'string', minLength: 3 }
-      }
+        lastName: { type: 'string', minLength: 3 },
+      },
     };
     const firstControlElement: ControlElement = {
       type: 'Control',
       scope: '#/properties/firstName',
       options: {
-        focus: true
-      }
+        focus: true,
+      },
     };
     const secondControlElement: ControlElement = {
       type: 'Control',
       scope: '#/properties/lastName',
       options: {
-        focus: true
-      }
+        focus: true,
+      },
     };
     const uischema: HorizontalLayout = {
       type: 'HorizontalLayout',
-      elements: [
-        firstControlElement,
-        secondControlElement
-      ]
+      elements: [firstControlElement, secondControlElement],
     };
     const data = {
-      'firstName': 'Foo',
-      'lastName': 'Boo'
+      firstName: 'Foo',
+      lastName: 'Boo',
     };
     const core = initCore(schema, uischema, data);
     wrapper = mount(
@@ -116,8 +108,8 @@ describe('Text area cell', () => {
       type: 'Control',
       scope: '#/properties/name',
       options: {
-        focus: true
-      }
+        focus: true,
+      },
     };
     const core = initCore(fixture.schema, uischema, fixture.data);
     wrapper = mount(
@@ -134,8 +126,8 @@ describe('Text area cell', () => {
       type: 'Control',
       scope: '#/properties/name',
       options: {
-        focus: false
-      }
+        focus: false,
+      },
     };
     const core = initCore(fixture.schema, uischema, fixture.data);
     wrapper = mount(
@@ -150,7 +142,7 @@ describe('Text area cell', () => {
   test('autofocus inactive by default', () => {
     const uischema: ControlElement = {
       type: 'Control',
-      scope: '#/properties/name'
+      scope: '#/properties/name',
     };
     const core = initCore(fixture.schema, uischema, fixture.data);
     wrapper = mount(
@@ -166,10 +158,16 @@ describe('Text area cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TextAreaCell schema={fixture.schema} uischema={fixture.uischema} path='name' />
+        <TextAreaCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='name'
+        />
       </JsonFormsStateProvider>
     );
-    const textarea = wrapper.find('textarea').getDOMNode() as HTMLTextAreaElement;
+    const textarea = wrapper
+      .find('textarea')
+      .getDOMNode() as HTMLTextAreaElement;
     expect(textarea.value).toBe('Foo');
   });
 
@@ -177,7 +175,11 @@ describe('Text area cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TextAreaCell schema={fixture.schema} uischema={fixture.uischema} path='name' />
+        <TextAreaCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='name'
+        />
       </JsonFormsStateProvider>
     );
 
@@ -189,7 +191,7 @@ describe('Text area cell', () => {
 
   test('update via input event', () => {
     const onChangeData: any = {
-      data: undefined
+      data: undefined,
     };
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
@@ -199,7 +201,11 @@ describe('Text area cell', () => {
             onChangeData.data = data;
           }}
         />
-        <TextAreaCell schema={fixture.schema} uischema={fixture.uischema} path='name' />
+        <TextAreaCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='name'
+        />
       </JsonFormsStateProvider>
     );
 
@@ -212,13 +218,19 @@ describe('Text area cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TextAreaCell schema={fixture.schema} uischema={fixture.uischema} path='name' />
+        <TextAreaCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='name'
+        />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, name: 'Bar' };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
-    const textarea = wrapper.find('textarea').getDOMNode() as HTMLTextAreaElement;
+    const textarea = wrapper
+      .find('textarea')
+      .getDOMNode() as HTMLTextAreaElement;
     expect(textarea.value).toBe('Bar');
   });
 
@@ -226,12 +238,18 @@ describe('Text area cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TextAreaCell schema={fixture.schema} uischema={fixture.uischema} path='name' />
+        <TextAreaCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='name'
+        />
       </JsonFormsStateProvider>
     );
-    const textArea = wrapper.find('textarea').getDOMNode() as HTMLTextAreaElement;
+    const textArea = wrapper
+      .find('textarea')
+      .getDOMNode() as HTMLTextAreaElement;
     core.data = { ...core.data, name: undefined };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     expect(textArea.value).toBe('');
   });
@@ -240,13 +258,19 @@ describe('Text area cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TextAreaCell schema={fixture.schema} uischema={fixture.uischema} path='name' />
+        <TextAreaCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='name'
+        />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, name: null };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
-    const textArea = wrapper.find('textarea').getDOMNode() as HTMLTextAreaElement;
+    const textArea = wrapper
+      .find('textarea')
+      .getDOMNode() as HTMLTextAreaElement;
     expect(textArea.value).toBe('');
   });
 
@@ -254,13 +278,19 @@ describe('Text area cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TextAreaCell schema={fixture.schema} uischema={fixture.uischema} path='name' />
+        <TextAreaCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='name'
+        />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, firstname: 'Bar' };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
-    const textArea = wrapper.find('textarea').getDOMNode() as HTMLTextAreaElement;
+    const textArea = wrapper
+      .find('textarea')
+      .getDOMNode() as HTMLTextAreaElement;
     expect(textArea.value).toBe('Foo');
   });
 
@@ -268,13 +298,19 @@ describe('Text area cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TextAreaCell schema={fixture.schema} uischema={fixture.uischema} path='name' />
+        <TextAreaCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='name'
+        />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, null: 'Bar' };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
-    const textArea = wrapper.find('textarea').getDOMNode() as HTMLTextAreaElement;
+    const textArea = wrapper
+      .find('textarea')
+      .getDOMNode() as HTMLTextAreaElement;
     expect(textArea.value).toBe('Foo');
   });
 
@@ -282,12 +318,18 @@ describe('Text area cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TextAreaCell schema={fixture.schema} uischema={fixture.uischema} path='name' />
+        <TextAreaCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='name'
+        />
       </JsonFormsStateProvider>
     );
-    const textArea = wrapper.find('textarea').getDOMNode() as HTMLTextAreaElement;
+    const textArea = wrapper
+      .find('textarea')
+      .getDOMNode() as HTMLTextAreaElement;
     core.data = { ...core.data, undefined: 'Bar' };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     expect(textArea.value).toBe('Foo');
   });
@@ -296,10 +338,16 @@ describe('Text area cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TextAreaCell schema={fixture.schema} uischema={fixture.uischema} enabled={false} />
+        <TextAreaCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          enabled={false}
+        />
       </JsonFormsStateProvider>
     );
-    const textArea = wrapper.find('textarea').getDOMNode() as HTMLTextAreaElement;
+    const textArea = wrapper
+      .find('textarea')
+      .getDOMNode() as HTMLTextAreaElement;
     expect(textArea.disabled).toBe(true);
   });
 
@@ -307,10 +355,16 @@ describe('Text area cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TextAreaCell schema={fixture.schema} uischema={fixture.uischema} path='name' />
+        <TextAreaCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='name'
+        />
       </JsonFormsStateProvider>
     );
-    const textArea = wrapper.find('textarea').getDOMNode() as HTMLTextAreaElement;
+    const textArea = wrapper
+      .find('textarea')
+      .getDOMNode() as HTMLTextAreaElement;
     expect(textArea.disabled).toBe(false);
   });
 
@@ -319,8 +373,8 @@ describe('Text area cell', () => {
       type: 'Control',
       scope: '#/properties/name',
       options: {
-        placeholder: 'Placeholder for name field'
-      }
+        placeholder: 'Placeholder for name field',
+      },
     };
     const core = initCore(fixture.schema, uischema, fixture.data);
     wrapper = mount(
@@ -328,7 +382,9 @@ describe('Text area cell', () => {
         <TextAreaCell schema={fixture.schema} uischema={uischema} path='name' />
       </JsonFormsStateProvider>
     );
-    const textArea = wrapper.find('textarea').getDOMNode() as HTMLTextAreaElement;
+    const textArea = wrapper
+      .find('textarea')
+      .getDOMNode() as HTMLTextAreaElement;
     expect(textArea.placeholder).toBe('Placeholder for name field');
   });
 });
@@ -338,7 +394,15 @@ describe('Text area cell tester', () => {
     expect(textAreaCellTester(undefined, undefined, undefined)).toBe(-1);
     expect(textAreaCellTester(null, undefined, undefined)).toBe(-1);
     expect(textAreaCellTester({ type: 'Foo' }, undefined, undefined)).toBe(-1);
-    expect(textAreaCellTester({ type: 'Control' }, undefined, undefined)).toBe(-1);
-    expect(textAreaCellTester({ type: 'Control', options: { multi: true } }, undefined, undefined)).toBe(2);
+    expect(textAreaCellTester({ type: 'Control' }, undefined, undefined)).toBe(
+      -1
+    );
+    expect(
+      textAreaCellTester(
+        { type: 'Control', options: { multi: true } },
+        undefined,
+        undefined
+      )
+    ).toBe(2);
   });
 });

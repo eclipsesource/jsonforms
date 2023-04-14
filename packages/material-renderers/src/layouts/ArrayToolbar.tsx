@@ -1,10 +1,4 @@
-import { 
-  Grid,
-  IconButton,
-  Toolbar,
-  Tooltip,
-  Typography
-} from '@mui/material';
+import { Grid, IconButton, Toolbar, Tooltip, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import React from 'react';
 import ValidationIcon from '../complex/ValidationIcon';
@@ -15,7 +9,7 @@ export interface ArrayLayoutToolbarProps {
   path: string;
   addItem(path: string, data: any): () => void;
   createDefault(): any;
-  translations: ArrayTranslations
+  translations: ArrayTranslations;
 }
 export const ArrayLayoutToolbar = React.memo(
   ({
@@ -24,7 +18,7 @@ export const ArrayLayoutToolbar = React.memo(
     addItem,
     path,
     createDefault,
-    translations
+    translations,
   }: ArrayLayoutToolbarProps) => {
     return (
       <Toolbar disableGutters={true}>
@@ -32,11 +26,11 @@ export const ArrayLayoutToolbar = React.memo(
           <Grid item>
             <Typography variant={'h6'}>{label}</Typography>
           </Grid>
-          {errors.length !== 0 &&
+          {errors.length !== 0 && (
             <Grid item>
               <ValidationIcon id='tooltip-validation' errorMessages={errors} />
             </Grid>
-          }
+          )}
           <Grid item>
             <Grid container>
               <Grid item>
@@ -48,7 +42,8 @@ export const ArrayLayoutToolbar = React.memo(
                   <IconButton
                     aria-label={translations.addAriaLabel}
                     onClick={addItem(path, createDefault())}
-                    size='large'>
+                    size='large'
+                  >
                     <AddIcon />
                   </IconButton>
                 </Tooltip>

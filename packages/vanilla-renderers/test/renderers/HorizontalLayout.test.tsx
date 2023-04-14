@@ -23,14 +23,11 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
-import {
-  HorizontalLayout,
-  UISchemaElement
-} from '@jsonforms/core';
+import { HorizontalLayout, UISchemaElement } from '@jsonforms/core';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import HorizontalLayoutRenderer, {
-  horizontalLayoutTester
+  horizontalLayoutTester,
 } from '../../src/layouts/HorizontalLayout';
 import { initCore } from '../util';
 import { JsonFormsStateProvider } from '@jsonforms/react';
@@ -40,26 +37,29 @@ Enzyme.configure({ adapter: new Adapter() });
 const fixture = {
   uischema: {
     type: 'HorizontalLayout',
-    elements: [{ type: 'Control' }]
-  }
+    elements: [{ type: 'Control' }],
+  },
 };
 
 test('tester', () => {
   expect(horizontalLayoutTester(undefined, undefined, undefined)).toBe(-1);
   expect(horizontalLayoutTester(null, undefined, undefined)).toBe(-1);
-  expect(horizontalLayoutTester({ type: 'Foo' }, undefined, undefined)).toBe(-1);
-  expect(horizontalLayoutTester({ type: 'HorizontalLayout' }, undefined, undefined)).toBe(1);
+  expect(horizontalLayoutTester({ type: 'Foo' }, undefined, undefined)).toBe(
+    -1
+  );
+  expect(
+    horizontalLayoutTester({ type: 'HorizontalLayout' }, undefined, undefined)
+  ).toBe(1);
 });
 
 describe('Horizontal layout', () => {
-
   let wrapper: ReactWrapper;
 
   afterEach(() => wrapper.unmount());
 
   test('render with undefined elements', () => {
     const uischema: UISchemaElement = {
-      type: 'HorizontalLayout'
+      type: 'HorizontalLayout',
     };
     const core = initCore({}, uischema, {});
     wrapper = mount(
@@ -68,7 +68,9 @@ describe('Horizontal layout', () => {
       </JsonFormsStateProvider>
     );
 
-    const horizontalLayout = wrapper.find('JsonFormsLayout').getDOMNode() as HTMLDivElement;
+    const horizontalLayout = wrapper
+      .find('JsonFormsLayout')
+      .getDOMNode() as HTMLDivElement;
 
     expect(horizontalLayout).toBeDefined();
     expect(horizontalLayout.children).toHaveLength(0);
@@ -77,7 +79,7 @@ describe('Horizontal layout', () => {
   test('render with null elements', () => {
     const uischema: HorizontalLayout = {
       type: 'HorizontalLayout',
-      elements: null
+      elements: null,
     };
     const core = initCore({}, uischema, {});
     wrapper = mount(
@@ -93,10 +95,7 @@ describe('Horizontal layout', () => {
   test('render with children', () => {
     const uischema: HorizontalLayout = {
       type: 'HorizontalLayout',
-      elements: [
-        { type: 'Control' },
-        { type: 'Control' }
-      ]
+      elements: [{ type: 'Control' }, { type: 'Control' }],
     };
     const core = initCore({}, uischema, {});
     wrapper = mount(
@@ -104,7 +103,9 @@ describe('Horizontal layout', () => {
         <HorizontalLayoutRenderer uischema={uischema} />
       </JsonFormsStateProvider>
     );
-    const horizontalLayout = wrapper.find('JsonFormsLayout').getDOMNode() as HTMLDivElement;
+    const horizontalLayout = wrapper
+      .find('JsonFormsLayout')
+      .getDOMNode() as HTMLDivElement;
     expect(horizontalLayout).toBeDefined();
     expect(horizontalLayout.children).toHaveLength(2);
   });
@@ -113,13 +114,12 @@ describe('Horizontal layout', () => {
     const core = initCore({}, fixture.uischema, {});
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <HorizontalLayoutRenderer
-          uischema={fixture.uischema}
-          visible={false}
-        />
+        <HorizontalLayoutRenderer uischema={fixture.uischema} visible={false} />
       </JsonFormsStateProvider>
     );
-    const horizontalLayout = wrapper.find('JsonFormsLayout').getDOMNode() as HTMLDivElement;
+    const horizontalLayout = wrapper
+      .find('JsonFormsLayout')
+      .getDOMNode() as HTMLDivElement;
     expect(horizontalLayout.hidden).toBe(true);
   });
 
@@ -130,7 +130,9 @@ describe('Horizontal layout', () => {
         <HorizontalLayoutRenderer uischema={fixture.uischema} />
       </JsonFormsStateProvider>
     );
-    const horizontalLayout = wrapper.find('JsonFormsLayout').getDOMNode() as HTMLDivElement;
+    const horizontalLayout = wrapper
+      .find('JsonFormsLayout')
+      .getDOMNode() as HTMLDivElement;
     expect(horizontalLayout.hidden).toBe(false);
   });
 });

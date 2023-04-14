@@ -3,11 +3,11 @@ import { mountJsonForms } from '../util';
 
 const schema = {
   type: 'integer',
-  title: 'My Integer'
+  title: 'My Integer',
 };
 const uischema = {
   type: 'Control',
-  scope: '#'
+  scope: '#',
 };
 
 describe('IntegerControlRenderer.vue', () => {

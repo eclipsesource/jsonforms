@@ -36,20 +36,20 @@ export const schema = {
         properties: {
           date: {
             type: 'string',
-            format: 'date'
+            format: 'date',
           },
           message: {
             type: 'string',
-            maxLength: 5
+            maxLength: 5,
           },
           enum: {
             type: 'string',
-            const: 'foo'
-          }
-        }
-      }
+            const: 'foo',
+          },
+        },
+      },
     },
-  }
+  },
 };
 
 export const uischema = {
@@ -60,22 +60,22 @@ export const uischema = {
       scope: '#/properties/comments',
       options: {
         showSortButtons: true,
-      }
-    }
-  ]
+      },
+    },
+  ],
 };
 
 export const data = {
   comments: [
     {
       date: new Date(2001, 8, 11).toISOString().substr(0, 10),
-      message: 'This is an example message'
+      message: 'This is an example message',
     },
     {
       date: new Date().toISOString().substr(0, 10),
-      message: 'Get ready for booohay'
-    }
-  ]
+      message: 'Get ready for booohay',
+    },
+  ],
 };
 
 export const translations = {
@@ -84,8 +84,9 @@ export const translations = {
     [ArrayTranslationEnum.addTooltip]: 'Add a Comment',
     [ArrayTranslationEnum.deleteDialogAccept]: 'Delete!',
     [ArrayTranslationEnum.deleteDialogDecline]: 'Cancel!',
-    [ArrayTranslationEnum.deleteDialogMessage]: 'Are you sure you want to delete this comment?'
-  }
+    [ArrayTranslationEnum.deleteDialogMessage]:
+      'Are you sure you want to delete this comment?',
+  },
 };
 export const translate: Translator = (key: string, defaultMessage: string) => {
   return get(translations, key) ?? defaultMessage;
@@ -100,7 +101,7 @@ registerExamples([
     uischema,
     i18n: {
       translate: translate,
-      locale: 'en'
-    }
-  }
+      locale: 'en',
+    },
+  },
 ]);

@@ -38,7 +38,7 @@ const control: ControlElement = {
 };
 
 const fixture = {
-  data: { 'foo': 'a' },
+  data: { foo: 'a' },
   schema: {
     type: 'string',
     enum: ['a', 'b'],
@@ -47,13 +47,13 @@ const fixture = {
   styles: [
     {
       name: 'control',
-      classNames: ['control']
+      classNames: ['control'],
     },
     {
       name: 'control.validation',
-      classNames: ['validation']
-    }
-  ]
+      classNames: ['validation'],
+    },
+  ],
 };
 
 test('tester', () => {
@@ -78,16 +78,16 @@ test('tester with wrong prop type, but sibling has correct one', () => {
     enumCellTester(
       fixture.uischema,
       {
-        'type': 'object',
-        'properties': {
-          'foo': {
-            'type': 'string'
+        type: 'object',
+        properties: {
+          foo: {
+            type: 'string',
           },
-          'bar': {
-            'type': 'string',
-            'enum': ['a', 'b']
-          }
-        }
+          bar: {
+            type: 'string',
+            enum: ['a', 'b'],
+          },
+        },
       },
       undefined
     )
@@ -99,13 +99,13 @@ test('tester with matching string type', () => {
     enumCellTester(
       fixture.uischema,
       {
-        'type': 'object',
-        'properties': {
-          'foo': {
-            'type': 'string',
-            'enum': ['a', 'b']
-          }
-        }
+        type: 'object',
+        properties: {
+          foo: {
+            type: 'string',
+            enum: ['a', 'b'],
+          },
+        },
       },
       undefined
     )
@@ -118,13 +118,13 @@ test('tester with matching numeric type', () => {
     enumCellTester(
       fixture.uischema,
       {
-        'type': 'object',
-        'properties': {
-          'foo': {
-            'type': 'number',
-            'enum': [1, 2]
-          }
-        }
+        type: 'object',
+        properties: {
+          foo: {
+            type: 'number',
+            enum: [1, 2],
+          },
+        },
       },
       undefined
     )
@@ -132,7 +132,6 @@ test('tester with matching numeric type', () => {
 });
 
 describe('Enum cell', () => {
-
   let wrapper: ReactWrapper;
 
   afterEach(() => wrapper.unmount());
@@ -141,7 +140,11 @@ describe('Enum cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <EnumCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
 
@@ -158,7 +161,11 @@ describe('Enum cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <EnumCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
 
@@ -170,7 +177,7 @@ describe('Enum cell', () => {
 
   test('update via input event', () => {
     const onChangeData: any = {
-      data: undefined
+      data: undefined,
     };
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
@@ -180,7 +187,11 @@ describe('Enum cell', () => {
             onChangeData.data = data;
           }}
         />
-        <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <EnumCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     const select = wrapper.find('select');
@@ -190,7 +201,7 @@ describe('Enum cell', () => {
 
   test('empty selection should lead to data deletion', () => {
     const onChangeData: any = {
-      data: undefined
+      data: undefined,
     };
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
@@ -200,7 +211,11 @@ describe('Enum cell', () => {
             onChangeData.data = data;
           }}
         />
-        <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <EnumCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     expect(onChangeData.data.foo).toBe('a');
@@ -210,16 +225,20 @@ describe('Enum cell', () => {
   });
 
   test('update via action', () => {
-    const data = { 'foo': 'b' };
+    const data = { foo: 'b' };
     const core = initCore(fixture.schema, fixture.uischema, data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <EnumCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     const select = wrapper.find('select').getDOMNode() as HTMLSelectElement;
     core.data = { ...core.data, foo: 'b' };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     expect(select.value).toBe('b');
     expect(select.selectedIndex).toBe(2);
@@ -229,12 +248,16 @@ describe('Enum cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <EnumCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     const select = wrapper.find('select').getDOMNode() as HTMLSelectElement;
     core.data = { ...core.data, foo: undefined };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     expect(select.selectedIndex).toBe(0);
     expect(select.value).toBe('');
@@ -244,12 +267,16 @@ describe('Enum cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <EnumCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     const select = wrapper.find('select').getDOMNode() as HTMLSelectElement;
     core.data = { ...core.data, foo: null };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     expect(select.selectedIndex).toBe(0);
     expect(select.value).toBe('');
@@ -259,11 +286,15 @@ describe('Enum cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <EnumCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, bar: 'Bar' };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     const select = wrapper.find('select').getDOMNode() as HTMLSelectElement;
     expect(select.selectedIndex).toBe(1);
@@ -274,11 +305,15 @@ describe('Enum cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <EnumCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, null: false };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     const select = wrapper.find('select').getDOMNode() as HTMLSelectElement;
     expect(select.selectedIndex).toBe(1);
@@ -289,11 +324,15 @@ describe('Enum cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <EnumCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, undefined: false };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     const select = wrapper.find('select').getDOMNode() as HTMLSelectElement;
     expect(select.selectedIndex).toBe(1);
@@ -304,7 +343,11 @@ describe('Enum cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <EnumCell schema={fixture.schema} uischema={fixture.uischema} enabled={false} />
+        <EnumCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          enabled={false}
+        />
       </JsonFormsStateProvider>
     );
     const select = wrapper.find('select');
@@ -315,10 +358,14 @@ describe('Enum cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <EnumCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <EnumCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     const select = wrapper.find('select');
     expect(select.props().disabled).toBe(false);
   });
-})
+});

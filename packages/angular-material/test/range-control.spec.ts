@@ -30,7 +30,7 @@ import {
   ErrorTestExpectation,
   rangeBaseTest,
   rangeErrorTest,
-  rangeInputEventTest
+  rangeInputEventTest,
 } from '@jsonforms/angular-test';
 import { RangeControlRenderer, RangeControlRendererTester } from '../src';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -40,37 +40,45 @@ describe('Material number field tester', () => {
   const uischema = {
     type: 'Control',
     scope: '#/properties/foo',
-    options: { slider: true }
+    options: { slider: true },
   };
 
   it('should succeed with floats', () => {
     expect(
-      RangeControlRendererTester(uischema, {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'number',
-            minimum: -42.42,
-            maximum: 42.42,
-            default: 0.42
-          }
-        }
-      }, undefined)
+      RangeControlRendererTester(
+        uischema,
+        {
+          type: 'object',
+          properties: {
+            foo: {
+              type: 'number',
+              minimum: -42.42,
+              maximum: 42.42,
+              default: 0.42,
+            },
+          },
+        },
+        undefined
+      )
     ).toBe(4);
   });
   it('should succeed with integers', () => {
     expect(
-      RangeControlRendererTester(uischema, {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'integer',
-            minimum: -42,
-            maximum: 42,
-            default: 1
-          }
-        }
-      }, undefined)
+      RangeControlRendererTester(
+        uischema,
+        {
+          type: 'object',
+          properties: {
+            foo: {
+              type: 'integer',
+              minimum: -42,
+              maximum: 42,
+              default: 1,
+            },
+          },
+        },
+        undefined
+      )
     ).toBe(4);
   });
 });
@@ -79,14 +87,14 @@ const imports = [
   MatSliderModule,
   MatFormFieldModule,
   ReactiveFormsModule,
-  FlexLayoutModule
+  FlexLayoutModule,
 ];
 const providers = [JsonFormsAngularService];
 const componentUT: any = RangeControlRenderer;
 const errorTest: ErrorTestExpectation = {
   errorInstance: MatError,
   numberOfElements: 1,
-  indexOfElement: 0
+  indexOfElement: 0,
 };
 const defaultTestConfig = { imports, providers, componentUT };
 

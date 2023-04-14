@@ -22,13 +22,13 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React, {useCallback} from 'react';
+import React, { useCallback } from 'react';
 import { CellProps, Formatted, WithClassname } from '@jsonforms/core';
 import { Input } from '@mui/material';
 import merge from 'lodash/merge';
 import { useDebouncedChange } from '../util';
 
-export const MuiInputNumberFormat = React.memo( 
+export const MuiInputNumberFormat = React.memo(
   (props: CellProps & WithClassname & Formatted<number>) => {
     const {
       className,
@@ -39,7 +39,7 @@ export const MuiInputNumberFormat = React.memo(
       path,
       handleChange,
       schema,
-      config
+      config,
     } = props;
     const maxLength = schema.maxLength;
     const appliedUiSchemaOptions = merge({}, config, uischema.options);
@@ -51,9 +51,17 @@ export const MuiInputNumberFormat = React.memo(
     }
     const formattedNumber = props.toFormatted(props.data);
 
-    const validStringNumber = useCallback((ev:any) => props.fromFormatted(ev.currentTarget.value),[props.fromFormatted]);
-    const [inputValue, onChange] = useDebouncedChange(handleChange, '', formattedNumber, path, validStringNumber);
-
+    const validStringNumber = useCallback(
+      (ev: any) => props.fromFormatted(ev.currentTarget.value),
+      [props.fromFormatted]
+    );
+    const [inputValue, onChange] = useDebouncedChange(
+      handleChange,
+      '',
+      formattedNumber,
+      path,
+      validStringNumber
+    );
 
     return (
       <Input
@@ -70,4 +78,5 @@ export const MuiInputNumberFormat = React.memo(
         error={!isValid}
       />
     );
-  });
+  }
+);

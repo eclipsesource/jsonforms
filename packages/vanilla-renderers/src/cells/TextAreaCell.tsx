@@ -35,12 +35,15 @@ import { withVanillaCellProps } from '../util/index';
 import merge from 'lodash/merge';
 
 export const TextAreaCell = (props: CellProps & VanillaRendererProps) => {
-  const { data, className, id, enabled, config, uischema, path, handleChange } = props;
+  const { data, className, id, enabled, config, uischema, path, handleChange } =
+    props;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
   return (
     <textarea
       value={data || ''}
-      onChange={ev => handleChange(path, ev.target.value === '' ? undefined : ev.target.value)}
+      onChange={(ev) =>
+        handleChange(path, ev.target.value === '' ? undefined : ev.target.value)
+      }
       className={className}
       id={id}
       disabled={!enabled}

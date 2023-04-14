@@ -38,7 +38,7 @@ import {
   numberBaseTest,
   numberErrorTest,
   numberInputEventTest,
-  prepareComponent
+  prepareComponent,
 } from '@jsonforms/angular-test';
 import { Actions, ControlElement, JsonFormsCore } from '@jsonforms/core';
 import { NumberControlRenderer, NumberControlRendererTester } from '../src';
@@ -46,31 +46,39 @@ import { NumberControlRenderer, NumberControlRendererTester } from '../src';
 describe('Material number field tester', () => {
   const uischema = {
     type: 'Control',
-    scope: '#/properties/foo'
+    scope: '#/properties/foo',
   };
 
   it('should succeed with floats', () => {
     expect(
-      NumberControlRendererTester(uischema, {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'number'
-          }
-        }
-      }, undefined)
+      NumberControlRendererTester(
+        uischema,
+        {
+          type: 'object',
+          properties: {
+            foo: {
+              type: 'number',
+            },
+          },
+        },
+        undefined
+      )
     ).toBe(2);
   });
   it('should succeed with integers', () => {
     expect(
-      NumberControlRendererTester(uischema, {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'integer'
-          }
-        }
-      }, undefined)
+      NumberControlRendererTester(
+        uischema,
+        {
+          type: 'object',
+          properties: {
+            foo: {
+              type: 'integer',
+            },
+          },
+        },
+        undefined
+      )
     ).toBe(2);
   });
 });
@@ -80,14 +88,14 @@ const imports = [
   MatInputModule,
   NoopAnimationsModule,
   ReactiveFormsModule,
-  FlexLayoutModule
+  FlexLayoutModule,
 ];
 const providers = [JsonFormsAngularService];
 const componentUT: any = NumberControlRenderer;
 const errorTest: ErrorTestExpectation = {
   errorInstance: MatError,
   numberOfElements: 1,
-  indexOfElement: 0
+  indexOfElement: 0,
 };
 const toSelect = (el: DebugElement) => el.nativeElement;
 const testConfig = { imports, providers, componentUT };
@@ -106,103 +114,105 @@ describe(
   numberAdditionalPropsTest(testConfig, 'input', toSelect)
 );
 
-describe(
-  'Number control custom', () => {
-    let fixture: ComponentFixture<any>;
-    let numberNativeElement: any;
-    let component: JsonFormsControl;
-    baseSetup(testConfig);
+describe('Number control custom', () => {
+  let fixture: ComponentFixture<any>;
+  let numberNativeElement: any;
+  let component: JsonFormsControl;
+  baseSetup(testConfig);
 
-    const defaultSchema =  {
-      type: 'object',
-      properties: {
-        foo: { type: 'number' }
-      }
+  const defaultSchema = {
+    type: 'object',
+    properties: {
+      foo: { type: 'number' },
+    },
+  };
+  const defaultData = { foo: 1000000 };
+  const defaultUischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/foo',
+  };
+
+  beforeEach(() => {
+    const preparedComponents = prepareComponent(testConfig, 'input', toSelect);
+    fixture = preparedComponents.fixture;
+    numberNativeElement = preparedComponents.numberNativeElement;
+    component = preparedComponents.component;
+  });
+
+  it('default grouping behavior', () => {
+    const uischema = Object.assign({}, defaultUischema);
+    component.uischema = uischema;
+    const state: JsonFormsCore = {
+      data: defaultData,
+      schema: defaultSchema,
+      uischema: uischema,
     };
-    const defaultData = {foo:1000000};
-    const defaultUischema: ControlElement = {
-      type: 'Control',
-      scope: '#/properties/foo'
+    getJsonFormsService(component).init({
+      core: state,
+      i18n: {
+        locale: 'en',
+      },
+    });
+    getJsonFormsService(component).updateCore(
+      Actions.init(state.data, state.schema)
+    );
+    component.ngOnInit();
+    fixture.detectChanges();
+
+    expect(numberNativeElement.value).toBe('1,000,000');
+  });
+
+  it('should use config for grouping', () => {
+    const uischema = Object.assign({}, defaultUischema);
+    component.uischema = uischema;
+    const state: JsonFormsCore = {
+      data: defaultData,
+      schema: defaultSchema,
+      uischema: uischema,
     };
-
-    beforeEach(() => {
-      const preparedComponents = prepareComponent(
-        testConfig, 'input', toSelect);
-      fixture = preparedComponents.fixture;
-      numberNativeElement = preparedComponents.numberNativeElement;
-      component = preparedComponents.component;
+    getJsonFormsService(component).init({
+      core: state,
+      i18n: {
+        locale: 'en',
+      },
+      config: {
+        useGrouping: false,
+      },
     });
+    getJsonFormsService(component).updateCore(
+      Actions.init(state.data, state.schema)
+    );
+    component.ngOnInit();
+    fixture.detectChanges();
 
-    it('default grouping behavior', () => {
-      const uischema = Object.assign({},defaultUischema);
-      component.uischema = uischema;
-      const state:JsonFormsCore = {
-        data: defaultData,
-        schema: defaultSchema,
-        uischema: uischema
-      };
-      getJsonFormsService(component).init({
-        core: state, i18n: {
-          locale: 'en',
-        }
-      });
-      getJsonFormsService(component).updateCore(
-        Actions.init(state.data, state.schema)
-      );
-      component.ngOnInit();
-      fixture.detectChanges();
-
-      expect(numberNativeElement.value).toBe('1,000,000');
+    expect(numberNativeElement.value).toBe('1000000');
+  });
+  it('should use uischema for grouping', () => {
+    const uischema = Object.assign({}, defaultUischema);
+    uischema.options = {
+      useGrouping: false,
+    };
+    component.uischema = uischema;
+    const state: JsonFormsCore = {
+      data: defaultData,
+      schema: defaultSchema,
+      uischema: uischema,
+    };
+    getJsonFormsService(component).init({
+      core: state,
+      i18n: {
+        locale: 'en',
+      },
+      config: {
+        useGrouping: true,
+      },
     });
+    getJsonFormsService(component).updateCore(
+      Actions.init(state.data, state.schema)
+    );
+    component.ngOnInit();
+    fixture.detectChanges();
 
-    it('should use config for grouping', () => {
-      const uischema = Object.assign({},defaultUischema);
-      component.uischema = uischema;
-      const state:JsonFormsCore = {
-        data: defaultData,
-        schema: defaultSchema,
-        uischema: uischema
-      };
-      getJsonFormsService(component).init({
-        core: state, i18n: {
-          locale: 'en',
-        },config: {
-          useGrouping: false
-        },
-      });
-      getJsonFormsService(component).updateCore(
-        Actions.init(state.data, state.schema)
-      );
-      component.ngOnInit();
-      fixture.detectChanges();
-
-      expect(numberNativeElement.value).toBe('1000000');
-    });
-    it('should use uischema for grouping', () => {
-      const uischema = Object.assign({},defaultUischema);
-      uischema.options = {
-        useGrouping: false
-      }
-      component.uischema = uischema;
-      const state:JsonFormsCore = {
-        data: defaultData,
-        schema: defaultSchema,
-        uischema: uischema
-      };
-      getJsonFormsService(component).init({
-        core: state, i18n: {
-          locale: 'en',
-        },config: {
-          useGrouping: true
-        },
-      });
-      getJsonFormsService(component).updateCore(
-        Actions.init(state.data, state.schema)
-      );
-      component.ngOnInit();
-      fixture.detectChanges();
-
-      expect(numberNativeElement.value).toBe('1000000');
-    });
-  }
-);
+    expect(numberNativeElement.value).toBe('1000000');
+  });
+});

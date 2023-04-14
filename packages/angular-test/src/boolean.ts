@@ -31,7 +31,7 @@ import {
   baseSetup,
   ErrorTestExpectation,
   TestConfig,
-  getJsonFormsService
+  getJsonFormsService,
 } from './util';
 
 const prepareComponent = <C extends JsonFormsControl, I>(
@@ -54,250 +54,295 @@ export const defaultBooleanTestSchema: JsonSchema = {
   type: 'object',
   properties: {
     foo: {
-      type: 'boolean'
-    }
-  }
+      type: 'boolean',
+    },
+  },
 };
 const uischema: ControlElement = {
   type: 'Control',
-  scope: '#/properties/foo'
+  scope: '#/properties/foo',
 };
 export const defaultBooleanTestData = {
   data,
   schema: defaultBooleanTestSchema,
-  uischema
+  uischema,
 };
 
-export const booleanBaseTest = <C extends JsonFormsControl, I>(
-  testConfig: TestConfig<C>,
-  instance: Type<I>
-) => () => {
-  let fixture: ComponentFixture<any>;
-  let checkboxNativeElement: HTMLElement;
-  let checkboxInstance: any;
-  let component: C;
+export const booleanBaseTest =
+  <C extends JsonFormsControl, I>(
+    testConfig: TestConfig<C>,
+    instance: Type<I>
+  ) =>
+  () => {
+    let fixture: ComponentFixture<any>;
+    let checkboxNativeElement: HTMLElement;
+    let checkboxInstance: any;
+    let component: C;
 
-  baseSetup(testConfig);
+    baseSetup(testConfig);
 
-  beforeEach(() => {
-    const preparedComponents = prepareComponent(testConfig, instance);
-    fixture = preparedComponents.fixture;
-    checkboxNativeElement = preparedComponents.checkboxNativeElement;
-    checkboxInstance = preparedComponents.checkboxInstance;
-    component = preparedComponents.component;
-  });
-
-  it('should render', () => {
-    component.uischema = uischema;
-
-    getJsonFormsService(component).init(
-      {core: {data: data, schema: defaultBooleanTestSchema, uischema: uischema}}
-    );
-    component.ngOnInit();
-    fixture.detectChanges();
-    expect(component.data).toBe(true);
-    expect(checkboxInstance.checked).toBe(true);
-    expect(checkboxInstance.disabled).toBe(false);
-    // the component is wrapped in a div
-    const hasDisplayNone =
-      'none' === fixture.nativeElement.children[0].style.display;
-    const hasHidden = fixture.nativeElement.children[0].hidden;
-    expect(hasDisplayNone || hasHidden).toBeFalsy();
-  });
-  it('should support updating the state', () => {
-    component.uischema = uischema;
-
-    getJsonFormsService(component).init(
-      {core: {data: data, schema: defaultBooleanTestSchema, uischema: uischema}}
-    );
-    component.ngOnInit();
-    fixture.detectChanges();
-
-    getJsonFormsService(component).updateCore(
-      Actions.update('foo', () => false)
-    );
-    fixture.detectChanges();
-    expect(component.data).toBe(false);
-    expect(checkboxInstance.checked).toBe(false);
-  });
-  it('should update with undefined value', () => {
-    component.uischema = uischema;
-
-    getJsonFormsService(component).init(
-      {core: {data: data, schema: defaultBooleanTestSchema, uischema: uischema}}
-    );
-    component.ngOnInit();
-    fixture.detectChanges();
-
-    getJsonFormsService(component).updateCore(
-      Actions.update('foo', () => undefined)
-    );
-    fixture.detectChanges();
-    expect(component.data).toBe(undefined);
-    expect(checkboxInstance.checked).toBe(false);
-  });
-  it('should update with null value', () => {
-    component.uischema = uischema;
-
-    getJsonFormsService(component).init(
-      {core: {data: data, schema: defaultBooleanTestSchema, uischema: uischema}}
-    );
-    component.ngOnInit();
-    fixture.detectChanges();
-
-    getJsonFormsService(component).updateCore(
-      Actions.update('foo', () => null)
-    );
-    fixture.detectChanges();
-    expect(component.data).toBe(null);
-    expect(checkboxInstance.checked).toBe(false);
-  });
-  it('should not update with wrong ref', () => {
-    component.uischema = uischema;
-
-    getJsonFormsService(component).init(
-      {core: {data: data, schema: defaultBooleanTestSchema, uischema: uischema}}
-    );
-    component.ngOnInit();
-    fixture.detectChanges();
-
-    getJsonFormsService(component).updateCore(
-      Actions.update('foo', () => true)
-    );
-    getJsonFormsService(component).updateCore(
-      Actions.update('bar', () => false)
-    );
-    fixture.detectChanges();
-    expect(component.data).toBe(true);
-    expect(checkboxInstance.checked).toBe(true);
-  });
-  // store needed as we evaluate the calculated enabled value to disable/enable the control
-  it('can be disabled', () => {
-    component.uischema = uischema;
-    component.disabled = true;
-
-    getJsonFormsService(component).init(
-      {core: {data: data, schema: defaultBooleanTestSchema, uischema: uischema}}
-    );
-    component.ngOnInit();
-    fixture.detectChanges();
-    expect(checkboxInstance.disabled).toBe(true);
-  });
-  // store needed as we evaluate the calculated enabled value to disable/enable the control
-  it('can be hidden', () => {
-    component.uischema = uischema;
-    component.visible = false;
-
-    getJsonFormsService(component).init(
-      {core: {data: data, schema: defaultBooleanTestSchema, uischema: uischema}}
-    );
-    component.ngOnInit();
-    fixture.detectChanges();
-    // the component is wrapped in a div
-    const hasDisplayNone =
-      'none' === fixture.nativeElement.children[0].style.display;
-    const hasHidden = fixture.nativeElement.children[0].hidden;
-    expect(hasDisplayNone || hasHidden).toBeTruthy();
-  });
-
-  it('id should be present in output', () => {
-    component.uischema = uischema;
-    component.id = 'myId';
-
-    getJsonFormsService(component).init(
-      {core: {data: data, schema: defaultBooleanTestSchema, uischema: uischema}}
-    );
-    component.ngOnInit();
-    fixture.detectChanges();
-    expect(checkboxNativeElement.id).toBe('myId');
-  });
-};
-export const booleanInputEventTest = <C extends JsonFormsControl, I>(
-  testConfig: TestConfig<C>,
-  instance: Type<I>,
-  selectorForClick: string
-) => () => {
-  let fixture: ComponentFixture<any>;
-  let checkboxNativeElement: HTMLElement;
-  let checkboxInstance: any;
-  let component: C;
-  let elementToClick: any;
-
-  baseSetup(testConfig);
-
-  beforeEach(() => {
-    const preparedComponents = prepareComponent(testConfig, instance);
-    fixture = preparedComponents.fixture;
-    checkboxNativeElement = preparedComponents.checkboxNativeElement;
-    checkboxInstance = preparedComponents.checkboxInstance;
-    component = preparedComponents.component;
-
-    elementToClick = checkboxNativeElement.querySelector(selectorForClick);
-  });
-
-  it('should update via input event', () => {
-    component.uischema = uischema;
-    getJsonFormsService(component).init(
-      {core: {data: data, schema: defaultBooleanTestSchema, uischema: uischema}}
-    );
-    fixture.detectChanges();
-    component.ngOnInit();
-
-    const spy = spyOn(component, 'onChange');
-    elementToClick.click();
-    // trigger change detection
-    fixture.detectChanges();
-
-    expect(spy).toHaveBeenCalled();
-    expect(checkboxInstance.checked).toBe(false);
-  });
-};
-
-export const booleanErrorTest = <C extends JsonFormsControl, I>(
-  testConfig: TestConfig<C>,
-  instance: Type<I>,
-  errorTestInformation: ErrorTestExpectation
-) => () => {
-  let fixture: ComponentFixture<any>;
-  let component: C;
-
-  baseSetup(testConfig);
-
-  beforeEach(() => {
-    const preparedComponents = prepareComponent(testConfig, instance);
-    fixture = preparedComponents.fixture;
-    component = preparedComponents.component;
-  });
-  it('should display errors', () => {
-    component.uischema = uischema;
-
-    const formsService = getJsonFormsService(component);
-    formsService.init({
-      core: {
-        data,
-        schema: defaultBooleanTestSchema,
-        uischema: uischema
-      }
+    beforeEach(() => {
+      const preparedComponents = prepareComponent(testConfig, instance);
+      fixture = preparedComponents.fixture;
+      checkboxNativeElement = preparedComponents.checkboxNativeElement;
+      checkboxInstance = preparedComponents.checkboxInstance;
+      component = preparedComponents.component;
     });
-    formsService.updateCore(Actions.updateErrors([
-      {
-        instancePath: '/foo',
-        message: 'Hi, this is me, test error!',
-        keyword: '',
-        schemaPath: '',
-        params: {}
-      }
-    ]));
-    formsService.refresh();
 
-    component.ngOnInit();
-    fixture.detectChanges();
-    const debugErrors: DebugElement[] = fixture.debugElement.queryAll(
-      By.directive(errorTestInformation.errorInstance)
-    );
-    expect(debugErrors.length).toBe(errorTestInformation.numberOfElements);
-    expect(
-      debugErrors[errorTestInformation.indexOfElement].nativeElement.textContent
-    ).toBe('Hi, this is me, test error!');
-  });
-};
+    it('should render', () => {
+      component.uischema = uischema;
+
+      getJsonFormsService(component).init({
+        core: {
+          data: data,
+          schema: defaultBooleanTestSchema,
+          uischema: uischema,
+        },
+      });
+      component.ngOnInit();
+      fixture.detectChanges();
+      expect(component.data).toBe(true);
+      expect(checkboxInstance.checked).toBe(true);
+      expect(checkboxInstance.disabled).toBe(false);
+      // the component is wrapped in a div
+      const hasDisplayNone =
+        'none' === fixture.nativeElement.children[0].style.display;
+      const hasHidden = fixture.nativeElement.children[0].hidden;
+      expect(hasDisplayNone || hasHidden).toBeFalsy();
+    });
+    it('should support updating the state', () => {
+      component.uischema = uischema;
+
+      getJsonFormsService(component).init({
+        core: {
+          data: data,
+          schema: defaultBooleanTestSchema,
+          uischema: uischema,
+        },
+      });
+      component.ngOnInit();
+      fixture.detectChanges();
+
+      getJsonFormsService(component).updateCore(
+        Actions.update('foo', () => false)
+      );
+      fixture.detectChanges();
+      expect(component.data).toBe(false);
+      expect(checkboxInstance.checked).toBe(false);
+    });
+    it('should update with undefined value', () => {
+      component.uischema = uischema;
+
+      getJsonFormsService(component).init({
+        core: {
+          data: data,
+          schema: defaultBooleanTestSchema,
+          uischema: uischema,
+        },
+      });
+      component.ngOnInit();
+      fixture.detectChanges();
+
+      getJsonFormsService(component).updateCore(
+        Actions.update('foo', () => undefined)
+      );
+      fixture.detectChanges();
+      expect(component.data).toBe(undefined);
+      expect(checkboxInstance.checked).toBe(false);
+    });
+    it('should update with null value', () => {
+      component.uischema = uischema;
+
+      getJsonFormsService(component).init({
+        core: {
+          data: data,
+          schema: defaultBooleanTestSchema,
+          uischema: uischema,
+        },
+      });
+      component.ngOnInit();
+      fixture.detectChanges();
+
+      getJsonFormsService(component).updateCore(
+        Actions.update('foo', () => null)
+      );
+      fixture.detectChanges();
+      expect(component.data).toBe(null);
+      expect(checkboxInstance.checked).toBe(false);
+    });
+    it('should not update with wrong ref', () => {
+      component.uischema = uischema;
+
+      getJsonFormsService(component).init({
+        core: {
+          data: data,
+          schema: defaultBooleanTestSchema,
+          uischema: uischema,
+        },
+      });
+      component.ngOnInit();
+      fixture.detectChanges();
+
+      getJsonFormsService(component).updateCore(
+        Actions.update('foo', () => true)
+      );
+      getJsonFormsService(component).updateCore(
+        Actions.update('bar', () => false)
+      );
+      fixture.detectChanges();
+      expect(component.data).toBe(true);
+      expect(checkboxInstance.checked).toBe(true);
+    });
+    // store needed as we evaluate the calculated enabled value to disable/enable the control
+    it('can be disabled', () => {
+      component.uischema = uischema;
+      component.disabled = true;
+
+      getJsonFormsService(component).init({
+        core: {
+          data: data,
+          schema: defaultBooleanTestSchema,
+          uischema: uischema,
+        },
+      });
+      component.ngOnInit();
+      fixture.detectChanges();
+      expect(checkboxInstance.disabled).toBe(true);
+    });
+    // store needed as we evaluate the calculated enabled value to disable/enable the control
+    it('can be hidden', () => {
+      component.uischema = uischema;
+      component.visible = false;
+
+      getJsonFormsService(component).init({
+        core: {
+          data: data,
+          schema: defaultBooleanTestSchema,
+          uischema: uischema,
+        },
+      });
+      component.ngOnInit();
+      fixture.detectChanges();
+      // the component is wrapped in a div
+      const hasDisplayNone =
+        'none' === fixture.nativeElement.children[0].style.display;
+      const hasHidden = fixture.nativeElement.children[0].hidden;
+      expect(hasDisplayNone || hasHidden).toBeTruthy();
+    });
+
+    it('id should be present in output', () => {
+      component.uischema = uischema;
+      component.id = 'myId';
+
+      getJsonFormsService(component).init({
+        core: {
+          data: data,
+          schema: defaultBooleanTestSchema,
+          uischema: uischema,
+        },
+      });
+      component.ngOnInit();
+      fixture.detectChanges();
+      expect(checkboxNativeElement.id).toBe('myId');
+    });
+  };
+export const booleanInputEventTest =
+  <C extends JsonFormsControl, I>(
+    testConfig: TestConfig<C>,
+    instance: Type<I>,
+    selectorForClick: string
+  ) =>
+  () => {
+    let fixture: ComponentFixture<any>;
+    let checkboxNativeElement: HTMLElement;
+    let checkboxInstance: any;
+    let component: C;
+    let elementToClick: any;
+
+    baseSetup(testConfig);
+
+    beforeEach(() => {
+      const preparedComponents = prepareComponent(testConfig, instance);
+      fixture = preparedComponents.fixture;
+      checkboxNativeElement = preparedComponents.checkboxNativeElement;
+      checkboxInstance = preparedComponents.checkboxInstance;
+      component = preparedComponents.component;
+
+      elementToClick = checkboxNativeElement.querySelector(selectorForClick);
+    });
+
+    it('should update via input event', () => {
+      component.uischema = uischema;
+      getJsonFormsService(component).init({
+        core: {
+          data: data,
+          schema: defaultBooleanTestSchema,
+          uischema: uischema,
+        },
+      });
+      fixture.detectChanges();
+      component.ngOnInit();
+
+      const spy = spyOn(component, 'onChange');
+      elementToClick.click();
+      // trigger change detection
+      fixture.detectChanges();
+
+      expect(spy).toHaveBeenCalled();
+      expect(checkboxInstance.checked).toBe(false);
+    });
+  };
+
+export const booleanErrorTest =
+  <C extends JsonFormsControl, I>(
+    testConfig: TestConfig<C>,
+    instance: Type<I>,
+    errorTestInformation: ErrorTestExpectation
+  ) =>
+  () => {
+    let fixture: ComponentFixture<any>;
+    let component: C;
+
+    baseSetup(testConfig);
+
+    beforeEach(() => {
+      const preparedComponents = prepareComponent(testConfig, instance);
+      fixture = preparedComponents.fixture;
+      component = preparedComponents.component;
+    });
+    it('should display errors', () => {
+      component.uischema = uischema;
+
+      const formsService = getJsonFormsService(component);
+      formsService.init({
+        core: {
+          data,
+          schema: defaultBooleanTestSchema,
+          uischema: uischema,
+        },
+      });
+      formsService.updateCore(
+        Actions.updateErrors([
+          {
+            instancePath: '/foo',
+            message: 'Hi, this is me, test error!',
+            keyword: '',
+            schemaPath: '',
+            params: {},
+          },
+        ])
+      );
+      formsService.refresh();
+
+      component.ngOnInit();
+      fixture.detectChanges();
+      const debugErrors: DebugElement[] = fixture.debugElement.queryAll(
+        By.directive(errorTestInformation.errorInstance)
+      );
+      expect(debugErrors.length).toBe(errorTestInformation.numberOfElements);
+      expect(
+        debugErrors[errorTestInformation.indexOfElement].nativeElement
+          .textContent
+      ).toBe('Hi, this is me, test error!');
+    });
+  };

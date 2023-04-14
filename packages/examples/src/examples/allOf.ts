@@ -33,10 +33,10 @@ export const schema = {
       properties: {
         street_address: { type: 'string' },
         city: { type: 'string' },
-        state: { type: 'string' }
+        state: { type: 'string' },
       },
-      required: ['street_address', 'city', 'state']
-    }
+      required: ['street_address', 'city', 'state'],
+    },
   },
 
   type: 'object',
@@ -51,14 +51,14 @@ export const schema = {
           properties: {
             type: {
               type: 'string',
-              enum: ['residential', 'business']
-            }
+              enum: ['residential', 'business'],
+            },
           },
-          required: ['type']
-        }
-      ]
-    }
-  }
+          required: ['type'],
+        },
+      ],
+    },
+  },
 };
 
 export const uischema = {
@@ -67,21 +67,21 @@ export const uischema = {
     {
       label: 'Billing address',
       type: 'Control',
-      scope: '#/properties/billing_address'
+      scope: '#/properties/billing_address',
     },
     {
       type: 'Control',
-      scope: '#/properties/shipping_address'
-    }
-  ]
+      scope: '#/properties/shipping_address',
+    },
+  ],
 };
 
 const data = {
   billing_address: {
     street_address: '1600 Pennsylvania Avenue NW',
     city: 'Washington',
-    state: 'DC'
-  }
+    state: 'DC',
+  },
 };
 
 registerExamples([
@@ -90,6 +90,6 @@ registerExamples([
     label: 'allOf',
     data,
     schema,
-    uischema
-  }
+    uischema,
+  },
 ]);

@@ -24,13 +24,10 @@
 */
 import './MatchMediaMock';
 import * as React from 'react';
-import {
-  LabelElement,
-  NOT_APPLICABLE
-} from '@jsonforms/core';
+import { LabelElement, NOT_APPLICABLE } from '@jsonforms/core';
 import '../../src/cells';
 import MaterialLabelRenderer, {
-  materialLabelRendererTester
+  materialLabelRendererTester,
 } from '../../src/additional/MaterialLabelRenderer';
 import { materialRenderers } from '../../src';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
@@ -43,11 +40,11 @@ Enzyme.configure({ adapter: new Adapter() });
 const data = {};
 const schema = {
   type: 'object',
-  properties: {}
+  properties: {},
 };
 const uischema: LabelElement = {
   type: 'Label',
-  text: 'Foo'
+  text: 'Foo',
 };
 
 describe('Material Label Renderer tester', () => {
@@ -55,11 +52,15 @@ describe('Material Label Renderer tester', () => {
     expect(materialLabelRendererTester(undefined, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
-    expect(materialLabelRendererTester(null, undefined, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialLabelRendererTester({ type: 'Foo' }, undefined, undefined)).toBe(
+    expect(materialLabelRendererTester(null, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
-    expect(materialLabelRendererTester({ type: 'Label' }, undefined, undefined)).toBe(1);
+    expect(
+      materialLabelRendererTester({ type: 'Foo' }, undefined, undefined)
+    ).toBe(NOT_APPLICABLE);
+    expect(
+      materialLabelRendererTester({ type: 'Label' }, undefined, undefined)
+    ).toBe(1);
   });
 });
 
@@ -86,7 +87,9 @@ describe('Material Label Renderer', () => {
   it('can be hidden', () => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <MaterialLabelRenderer
           schema={schema}
           uischema={uischema}

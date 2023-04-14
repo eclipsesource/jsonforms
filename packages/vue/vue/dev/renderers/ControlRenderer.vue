@@ -17,34 +17,25 @@
       Computed Props:
       <pre>{{ JSON.stringify(control, null, 2) }}</pre>
     </div>
-    <input v-bind:value="control.data" @change="onChange" />
-    <div class="error" v-if="control.errors">{{ control.errors }}</div>
+    <input :value="control.data" @change="onChange" />
+    <div v-if="control.errors" class="error">{{ control.errors }}</div>
   </div>
 </template>
-
-<style scoped>
-.error {
-  color: red;
-}
-pre {
-  background-color: lightgray;
-}
-</style>
 
 <script lang="ts">
 import {
   ControlElement,
   isControl,
   JsonFormsRendererRegistryEntry,
-  rankWith
+  rankWith,
 } from '@jsonforms/core';
 import { defineComponent } from 'vue';
 import { rendererProps, useJsonFormsControl } from '../../src/';
 
 const controlRenderer = defineComponent({
-  name: 'control-renderer',
+  name: 'ControlRenderer',
   props: {
-    ...rendererProps<ControlElement>()
+    ...rendererProps<ControlElement>(),
   },
   setup(props) {
     return useJsonFormsControl(props);
@@ -55,14 +46,23 @@ const controlRenderer = defineComponent({
         this.control.path,
         (event.target as HTMLInputElement).value
       );
-    }
-  }
+    },
+  },
 });
 
 export default controlRenderer;
 
 export const entry: JsonFormsRendererRegistryEntry = {
   renderer: controlRenderer,
-  tester: rankWith(1, isControl)
+  tester: rankWith(1, isControl),
 };
 </script>
+
+<style scoped>
+.error {
+  color: red;
+}
+pre {
+  background-color: lightgray;
+}
+</style>
