@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { resolveSchema } from '../../src/util/resolvers';
+import { resolveData, resolveSchema } from '../../src/util/resolvers';
 import test from 'ava';
 
 test('resolveSchema - resolves schema with any ', t => {
@@ -154,4 +154,12 @@ test('resolveSchema - resolves schema with encoded characters', t => {
   };
   t.deepEqual(resolveSchema(schema, '#/properties/foo ~1 ~0 bar', schema), {type: 'integer'});
   t.is(resolveSchema(schema, '#/properties/foo / bar', schema), undefined);
+});
+
+
+test('resolveData - resolves data with % characters', t => {
+  const data = {
+    'foo%': '123'
+  };
+  t.deepEqual(resolveData(data, 'foo%'), '123');
 });

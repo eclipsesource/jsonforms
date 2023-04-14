@@ -49,7 +49,6 @@ export const resolveData = (instance: any, dataPath: string): any => {
   const dataPathSegments = dataPath.split('.');
 
   return dataPathSegments
-    .map(segment => decodeURIComponent(segment))
     .reduce((curInstance, decodedSegment) => {
       if (!curInstance || !curInstance.hasOwnProperty(decodedSegment)) {
         return undefined;
