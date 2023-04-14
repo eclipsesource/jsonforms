@@ -825,6 +825,17 @@ test('tester isObjectArrayWithNesting', t => {
     }
   };
 
+  const schemaWithOneOfEnum = {
+    type: 'array',
+    items: {
+      type: 'string',
+      oneOf: [
+        { const: 'A', title: 'ENUM A' },
+        { const: 'B', title: 'ENUM B' },
+      ],
+    },
+  }
+
   const uischemaOptions: {
     generate: ControlElement;
     default: ControlElement;
@@ -877,6 +888,8 @@ test('tester isObjectArrayWithNesting', t => {
 
   t.true(isObjectArrayWithNesting(uischema, nestedSchemaWithAnyOf, undefined));
   t.true(isObjectArrayWithNesting(uischema, nestedSchemaWithOneOf, undefined));
+
+  t.false(isObjectArrayWithNesting(undefined,schemaWithOneOfEnum, undefined));
 });
 
 test('tester schemaSubPathMatches', t => {

@@ -466,7 +466,10 @@ export const isObjectArrayWithNesting = (
         if (val.$ref !== undefined) {
           return false;
         }
-        if (val.anyOf || val.oneOf || val.allOf) {
+        if (val.anyOf || val.allOf) {
+          return true;
+        }
+        if(val.oneOf && !isOneOfEnumControl(uischema,val,context)){
           return true;
         }
         if (hasType(val, 'object')) {
