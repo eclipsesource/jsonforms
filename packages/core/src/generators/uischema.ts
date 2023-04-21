@@ -191,11 +191,12 @@ const generateUISchema = (
     /* falls through */
     case 'integer':
     /* falls through */
-    case 'boolean':
+    case 'boolean': {
       const controlObject: ControlElement = createControlElement(currentRef);
       schemaElements.push(controlObject);
 
       return controlObject;
+    }
     default:
       throw new Error('Unknown type: ' + JSON.stringify(jsonSchema));
   }

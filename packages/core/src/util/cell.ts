@@ -26,7 +26,6 @@
 import isEmpty from 'lodash/isEmpty';
 import {
   getErrorTranslator,
-  JsonFormsCellRendererRegistryEntry,
   getAjv,
   getConfig,
   getData,
@@ -34,6 +33,7 @@ import {
   getSchema,
   getTranslator,
 } from '../reducers';
+import type { JsonFormsCellRendererRegistryEntry } from '../reducers';
 import type { AnyAction, Dispatch } from './type';
 import { Resolve } from './util';
 import { isInherentlyEnabled, isVisible } from './runtime';
@@ -50,8 +50,6 @@ import {
 import { getCombinedErrorMessage, getI18nKeyPrefix } from '../i18n';
 import type { JsonFormsState } from '../store';
 import type { JsonSchema } from '../models';
-
-export type { JsonFormsCellRendererRegistryEntry };
 
 export interface OwnPropsOfCell extends OwnPropsOfControl {
   data?: any;
@@ -176,7 +174,7 @@ export const mapStateToDispatchCellProps = (
   ownProps: OwnPropsOfCell
 ): DispatchCellStateProps => {
   const props: StatePropsOfCell = mapStateToCellProps(state, ownProps);
-  const { renderers, cells, ...otherOwnProps } = ownProps;
+  const { renderers: _renderers, cells, ...otherOwnProps } = ownProps;
   return {
     ...props,
     ...otherOwnProps,

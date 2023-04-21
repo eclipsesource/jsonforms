@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent } from '../../config';
+import { defineComponent } from 'vue';
 import { JsonForms, JsonFormsChangeEvent } from '../../src';
 import { vueRenderers } from '../renderers';
 

@@ -34,8 +34,6 @@ import {
 import find from 'lodash/find';
 import {
   getUISchemas,
-  JsonFormsCellRendererRegistryEntry,
-  JsonFormsRendererRegistryEntry,
   getAjv,
   getCells,
   getConfig,
@@ -47,6 +45,10 @@ import {
   getSubErrorsAt,
   getTranslator,
   getUiSchema,
+} from '../reducers';
+import type {
+  JsonFormsCellRendererRegistryEntry,
+  JsonFormsRendererRegistryEntry,
   JsonFormsUISchemaRegistryEntry,
 } from '../reducers';
 import type { RankedTester } from '../testers';

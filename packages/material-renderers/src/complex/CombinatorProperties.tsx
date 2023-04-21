@@ -38,6 +38,8 @@ export const isLayout = (uischema: UISchemaElement): uischema is Layout =>
 
 export class CombinatorProperties extends React.Component<
   CombinatorPropertiesProps,
+  // TODO fix @typescript-eslint/ban-types
+  // eslint-disable-next-line @typescript-eslint/ban-types
   {}
 > {
   render() {

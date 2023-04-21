@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   computeLabel,
   ControlProps,
@@ -33,7 +33,6 @@ import type { VanillaRendererProps } from '../index';
 import { findStyleAsClassName } from '../reducers/styling';
 import { useStyles } from '../styles';
 import merge from 'lodash/merge';
-import { useMemo, useState } from 'react';
 
 export const RadioGroup = ({
   classNames,

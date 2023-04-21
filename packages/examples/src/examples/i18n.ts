@@ -32,6 +32,8 @@ import {
   Translator,
 } from '@jsonforms/core';
 import get from 'lodash/get';
+// TODO change import when types are available for ajv-i18n (from v4.x)
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const localize = require('ajv-i18n');
 
 export const onChange =

@@ -233,7 +233,7 @@ describe('AutoComplete control Input Event Tests', () => {
     fixture = TestBed.createComponent(componentUT);
     component = fixture.componentInstance;
     zone = TestBed.inject(NgZone);
-    spyOn(zone, 'runOutsideAngular').and.callFake((fn: Function) => fn());
+    spyOn(zone, 'runOutsideAngular').and.callFake((fn: () => any) => fn());
     inputElement = fixture.debugElement.query(By.css('input')).nativeElement;
   });
 

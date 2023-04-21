@@ -22,7 +22,12 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
 import type { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 import {
@@ -96,7 +101,10 @@ import { map, startWith } from 'rxjs/operators';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AutocompleteControlRenderer extends JsonFormsControl {
+export class AutocompleteControlRenderer
+  extends JsonFormsControl
+  implements OnInit
+{
   @Input() options: string[];
   filteredOptions: Observable<string[]>;
   shouldFilter: boolean;

@@ -22,7 +22,7 @@ export default defineComponent({
   name: 'ControlWrapper',
   props: {
     id: {
-      required: true as const,
+      required: true,
       type: String,
     },
     description: {

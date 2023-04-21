@@ -96,8 +96,8 @@ export const addVanillaControlProps =
     };
   };
 
-export const withVanillaControlProps =
-  (Component: ComponentType<any>) => (props: any) => {
+export const withVanillaControlProps = (Component: ComponentType<any>) =>
+  function WithVanillaControlProps(props: any) {
     const ctx = useJsonForms();
     const contextStyles = useStyles();
     const controlElement = props.uischema as ControlElement;
@@ -219,25 +219,26 @@ export const addVanillaCellProps =
   };
 
 const withVanillaCellPropsForType =
-  (type: string) => (Component: ComponentType<any>) => (props: any) => {
-    const inputClassName = ['validate'].concat(
-      props.isValid ? 'valid' : 'invalid'
-    );
-    const styles = useStyles();
-    const definedStyle = findStyleAsClassName(styles)(type);
-    if (definedStyle) {
-      inputClassName.push(definedStyle);
-    }
+  (type: string) => (Component: ComponentType<any>) =>
+    function WithVanillaCellPropsForType(props: any) {
+      const inputClassName = ['validate'].concat(
+        props.isValid ? 'valid' : 'invalid'
+      );
+      const styles = useStyles();
+      const definedStyle = findStyleAsClassName(styles)(type);
+      if (definedStyle) {
+        inputClassName.push(definedStyle);
+      }
 
-    return (
-      <Component
-        {...props}
-        getStyleAsClassName={findStyleAsClassName(styles)}
-        getStyle={findStyle(styles)}
-        className={inputClassName.join(' ')}
-      />
-    );
-  };
+      return (
+        <Component
+          {...props}
+          getStyleAsClassName={findStyleAsClassName(styles)}
+          getStyle={findStyle(styles)}
+          className={inputClassName.join(' ')}
+        />
+      );
+    };
 
 export const withVanillaCellProps =
   withVanillaCellPropsForType('control.input');

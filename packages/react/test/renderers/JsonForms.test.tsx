@@ -255,7 +255,7 @@ test('ids should be unique within the same form', () => {
   });
 
   const ids: string[] = [];
-  const MyCustomRenderer: StatelessRenderer<any> = (props) => {
+  const MyCustomRenderer: StatelessRenderer<any> = (props: any) => {
     ids.push(props.id);
     return <div>Custom</div>;
   };
@@ -431,7 +431,9 @@ test('JsonForms renderer should pick most applicable cell renderer via ownProps'
   });
   store.dispatch(registerCell(() => 50, CellRenderer1));
 
-  const ArrayRenderer: StatelessRenderer<RendererProps> = (props) => {
+  const ArrayRenderer: StatelessRenderer<RendererProps> = (
+    props: RendererProps
+  ) => {
     return (
       <DispatchCell
         schema={props.schema}
@@ -552,7 +554,9 @@ test('JsonForms renderer should pick schema from ownProps', () => {
 });
 
 test('JsonForms renderer should pick enabled prop from ownProps', () => {
-  const CustomRenderer4: StatelessRenderer<RendererProps> = (props) => {
+  const CustomRenderer4: StatelessRenderer<RendererProps> = (
+    props: RendererProps
+  ) => {
     return <h3>{`${props.enabled}`}</h3>;
   };
 
@@ -1007,7 +1011,7 @@ test('JsonForms should update if data prop is updated', () => {
 test('JsonForms should use additionalErrors if provided', () => {
   const CustomRendererWithError: StatelessRenderer<ControlProps> = ({
     errors,
-  }) => {
+  }: ControlProps) => {
     return <h5>{errors}</h5>;
   };
 
@@ -1045,7 +1049,7 @@ test('JsonForms should use additionalErrors if provided', () => {
 test('JsonForms should use react to additionalErrors update', () => {
   const CustomRendererWithError: StatelessRenderer<ControlProps> = ({
     errors,
-  }) => {
+  }: ControlProps) => {
     return <h5>{errors}</h5>;
   };
 

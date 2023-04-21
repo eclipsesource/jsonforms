@@ -103,53 +103,51 @@ export class JsonFormsDispatchRenderer extends React.Component<
   }
 }
 
-const TestAndRender = React.memo(
-  (props: {
-    uischema: UISchemaElement;
-    schema: JsonSchema;
-    rootSchema: JsonSchema;
-    path: string;
-    enabled: boolean;
-    renderers: JsonFormsRendererRegistryEntry[];
-    cells: JsonFormsCellRendererRegistryEntry[];
-    id: string;
-    config: any;
-  }) => {
-    const testerContext = useMemo(
-      () => ({
-        rootSchema: props.rootSchema,
-        config: props.config,
-      }),
-      [props.rootSchema, props.config]
+const TestAndRender = React.memo(function TestAndRender(props: {
+  uischema: UISchemaElement;
+  schema: JsonSchema;
+  rootSchema: JsonSchema;
+  path: string;
+  enabled: boolean;
+  renderers: JsonFormsRendererRegistryEntry[];
+  cells: JsonFormsCellRendererRegistryEntry[];
+  id: string;
+  config: any;
+}) {
+  const testerContext = useMemo(
+    () => ({
+      rootSchema: props.rootSchema,
+      config: props.config,
+    }),
+    [props.rootSchema, props.config]
+  );
+  const renderer = useMemo(
+    () =>
+      maxBy(props.renderers, (r) =>
+        r.tester(props.uischema, props.schema, testerContext)
+      ),
+    [props.renderers, props.uischema, props.schema, testerContext]
+  );
+  if (
+    renderer === undefined ||
+    renderer.tester(props.uischema, props.schema, testerContext) === -1
+  ) {
+    return <UnknownRenderer type={'renderer'} />;
+  } else {
+    const Render = renderer.renderer;
+    return (
+      <Render
+        uischema={props.uischema}
+        schema={props.schema}
+        path={props.path}
+        enabled={props.enabled}
+        renderers={props.renderers}
+        cells={props.cells}
+        id={props.id}
+      />
     );
-    const renderer = useMemo(
-      () =>
-        maxBy(props.renderers, (r) =>
-          r.tester(props.uischema, props.schema, testerContext)
-        ),
-      [props.renderers, props.uischema, props.schema, testerContext]
-    );
-    if (
-      renderer === undefined ||
-      renderer.tester(props.uischema, props.schema, testerContext) === -1
-    ) {
-      return <UnknownRenderer type={'renderer'} />;
-    } else {
-      const Render = renderer.renderer;
-      return (
-        <Render
-          uischema={props.uischema}
-          schema={props.schema}
-          path={props.path}
-          enabled={props.enabled}
-          renderers={props.renderers}
-          cells={props.cells}
-          id={props.id}
-        />
-      );
-    }
   }
-);
+});
 
 /**
  * @deprecated Since Version 3.0 this optimization renderer is no longer necessary.

@@ -24,6 +24,7 @@
 */
 import {
   Component,
+  DoCheck,
   EventEmitter,
   Input,
   OnChanges,
@@ -42,12 +43,15 @@ import {
 } from '@jsonforms/core';
 import Ajv, { ErrorObject } from 'ajv';
 import { JsonFormsAngularService, USE_STATE_VALUE } from './jsonforms.service';
+
+// TODO Can this be rewritten to not use DoCheck and OnChanges?
+/* eslint-disable @angular-eslint/no-conflicting-lifecycle */
 @Component({
   selector: 'jsonforms',
   template: '<jsonforms-outlet></jsonforms-outlet>',
   providers: [JsonFormsAngularService],
 })
-export class JsonForms implements OnChanges, OnInit {
+export class JsonForms implements DoCheck, OnChanges, OnInit {
   @Input() uischema: UISchemaElement;
   @Input() schema: JsonSchema;
   @Input() data: any;

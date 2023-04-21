@@ -52,17 +52,17 @@ const fixedCellSmall = {
   paddingRight: 0,
 };
 
-const TableToolbar = React.memo(
-  ({
-    numColumns,
-    errors,
-    label,
-    path,
-    addItem,
-    schema,
-    enabled,
-    translations,
-  }: MaterialTableToolbarProps) => (
+const TableToolbar = React.memo(function TableToolbar({
+  numColumns,
+  errors,
+  label,
+  path,
+  addItem,
+  schema,
+  enabled,
+  translations,
+}: MaterialTableToolbarProps) {
+  return (
     <TableRow>
       <NoBorderTableCell colSpan={numColumns}>
         <Grid
@@ -104,7 +104,7 @@ const TableToolbar = React.memo(
         </NoBorderTableCell>
       ) : null}
     </TableRow>
-  )
-);
+  );
+});
 
 export default TableToolbar;

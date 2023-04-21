@@ -28,6 +28,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  OnInit,
 } from '@angular/core';
 import {
   JsonFormsAngularService,
@@ -146,7 +147,10 @@ export const removeSchemaKeywords = (path: string) => {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MasterListComponent extends JsonFormsArrayControl {
+export class MasterListComponent
+  extends JsonFormsArrayControl
+  implements OnInit
+{
   masterItems: any[];
   selectedItem: any;
   selectedItemIdx: number;

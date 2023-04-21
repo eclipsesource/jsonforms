@@ -11,47 +11,45 @@ export interface ArrayLayoutToolbarProps {
   createDefault(): any;
   translations: ArrayTranslations;
 }
-export const ArrayLayoutToolbar = React.memo(
-  ({
-    label,
-    errors,
-    addItem,
-    path,
-    createDefault,
-    translations,
-  }: ArrayLayoutToolbarProps) => {
-    return (
-      <Toolbar disableGutters={true}>
-        <Grid container alignItems='center' justifyContent='space-between'>
+export const ArrayLayoutToolbar = React.memo(function ArrayLayoutToolbar({
+  label,
+  errors,
+  addItem,
+  path,
+  createDefault,
+  translations,
+}: ArrayLayoutToolbarProps) {
+  return (
+    <Toolbar disableGutters={true}>
+      <Grid container alignItems='center' justifyContent='space-between'>
+        <Grid item>
+          <Typography variant={'h6'}>{label}</Typography>
+        </Grid>
+        {errors.length !== 0 && (
           <Grid item>
-            <Typography variant={'h6'}>{label}</Typography>
+            <ValidationIcon id='tooltip-validation' errorMessages={errors} />
           </Grid>
-          {errors.length !== 0 && (
+        )}
+        <Grid item>
+          <Grid container>
             <Grid item>
-              <ValidationIcon id='tooltip-validation' errorMessages={errors} />
-            </Grid>
-          )}
-          <Grid item>
-            <Grid container>
-              <Grid item>
-                <Tooltip
-                  id='tooltip-add'
-                  title={translations.addTooltip}
-                  placement='bottom'
+              <Tooltip
+                id='tooltip-add'
+                title={translations.addTooltip}
+                placement='bottom'
+              >
+                <IconButton
+                  aria-label={translations.addAriaLabel}
+                  onClick={addItem(path, createDefault())}
+                  size='large'
                 >
-                  <IconButton
-                    aria-label={translations.addAriaLabel}
-                    onClick={addItem(path, createDefault())}
-                    size='large'
-                  >
-                    <AddIcon />
-                  </IconButton>
-                </Tooltip>
-              </Grid>
+                  <AddIcon />
+                </IconButton>
+              </Tooltip>
             </Grid>
           </Grid>
         </Grid>
-      </Toolbar>
-    );
-  }
-);
+      </Grid>
+    </Toolbar>
+  );
+});

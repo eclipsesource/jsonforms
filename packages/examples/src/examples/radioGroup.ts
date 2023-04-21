@@ -24,9 +24,9 @@
 */
 import { registerExamples } from '../register';
 
-const data = {};
+export const data = {};
 
-const schema = {
+export const schema = {
   type: 'object',
   properties: {
     exampleRadioEnum: {
@@ -43,7 +43,7 @@ const schema = {
     },
   },
 };
-const uischema = {
+export const uischema = {
   type: 'VerticalLayout',
   elements: [
     {

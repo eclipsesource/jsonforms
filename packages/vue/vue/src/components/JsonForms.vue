@@ -29,6 +29,8 @@ import DispatchRenderer from './DispatchRenderer.vue';
 
 import Ajv, { ErrorObject } from 'ajv';
 
+// TODO fix @typescript-eslint/ban-types
+// eslint-disable-next-line @typescript-eslint/ban-types
 const isObject = (elem: any): elem is Object => {
   return elem && typeof elem === 'object';
 };

@@ -33,6 +33,8 @@ import type { RendererProps } from '@jsonforms/core';
  */
 export class RendererComponent<
   P extends RendererProps,
+  // TODO fix @typescript-eslint/ban-types
+  // eslint-disable-next-line @typescript-eslint/ban-types
   S = {}
 > extends React.Component<P, S> {
   constructor(props: P) {
@@ -52,5 +54,7 @@ export type StatelessRenderer<P extends RendererProps> =
  * Represents a Renderer, which might either be a component or a function.
  */
 export type Renderer =
+  // TODO fix @typescript-eslint/ban-types
+  // eslint-disable-next-line @typescript-eslint/ban-types
   | RendererComponent<RendererProps & any, {}>
   | StatelessRenderer<RendererProps & any>;

@@ -53,6 +53,7 @@ const createMaterialTextControl = (props: ControlProps) => {
 
 const defaultControlProps = (): ControlProps => {
   return {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     handleChange: () => {},
     enabled: true,
     visible: true,
@@ -98,7 +99,7 @@ describe('Material text control', () => {
     const props = defaultControlProps();
     wrapper = mount(createMaterialTextControl(props));
     // call onPointerEnter prop manually as the tests seem to ignore 'pointerenter' events, 'mouseover' events work however.
-    wrapper.find(Input).props().onPointerEnter.call(this);
+    wrapper.find(Input).props().onPointerEnter?.call(this);
     wrapper.update();
     expect(wrapper.find(InputAdornment).props().style).not.toHaveProperty(
       'display',
@@ -111,7 +112,7 @@ describe('Material text control', () => {
     delete props.data;
     wrapper = mount(createMaterialTextControl(props));
     // call onPointerEnter prop manually as the tests seem to ignore 'pointerenter' events, 'mouseover' events work however.
-    wrapper.find(Input).props().onPointerEnter.call(this);
+    wrapper.find(Input).props().onPointerEnter?.call(this);
     wrapper.update();
     expect(wrapper.find(InputAdornment).props().style).toHaveProperty(
       'display',

@@ -25,7 +25,7 @@
 import { StateProps } from '../example';
 import { registerExamples } from '../register';
 
-const actions = [
+export const actions = [
   {
     label: 'Change data',
     apply: (props: StateProps) => {

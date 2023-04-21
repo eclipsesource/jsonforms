@@ -24,10 +24,10 @@
 */
 import { registerExamples } from '../register';
 
-const data = {
+export const data = {
   'an-array-of-strings': ['foo', 'bar', 'foobar'],
 };
-const schema = {
+export const schema = {
   type: 'object',
   properties: {
     'an-array-of-strings': {
@@ -38,7 +38,7 @@ const schema = {
     },
   },
 };
-const uischema = {
+export const uischema = {
   type: 'ListWithDetail',
   scope: '#/properties/an-array-of-strings',
 };
@@ -53,10 +53,10 @@ registerExamples([
   },
 ]);
 
-const data_number = {
+export const data_number = {
   'an-array-of-numbers': [1, 2, 3],
 };
-const schema_number = {
+export const schema_number = {
   type: 'object',
   properties: {
     'an-array-of-numbers': {
@@ -67,7 +67,7 @@ const schema_number = {
     },
   },
 };
-const uischema_number = {
+export const uischema_number = {
   type: 'ListWithDetail',
   scope: '#/properties/an-array-of-numbers',
 };
