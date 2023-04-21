@@ -22,45 +22,11 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import type { StatePropsOfMasterItem } from '@jsonforms/core';
-import { withJsonFormsMasterListItemProps } from '@jsonforms/react';
-import {
-  Avatar,
-  IconButton,
-  ListItem,
-  ListItemAvatar,
-  ListItemSecondaryAction,
-  ListItemText,
-} from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import React from 'react';
+import { MaterialLabelRenderer } from './MaterialLabelRenderer';
 
-export const ListWithDetailMasterItem = ({
-  index,
-  childLabel,
-  selected,
-  handleSelect,
-  removeItem,
-  path,
-  translations,
-}: StatePropsOfMasterItem) => {
-  return (
-    <ListItem button selected={selected} onClick={handleSelect(index)}>
-      <ListItemAvatar>
-        <Avatar aria-label='Index'>{index + 1}</Avatar>
-      </ListItemAvatar>
-      <ListItemText primary={childLabel} />
-      <ListItemSecondaryAction>
-        <IconButton
-          aria-label={translations.removeAriaLabel}
-          onClick={removeItem(path, index)}
-          size='large'
-        >
-          <DeleteIcon />
-        </IconButton>
-      </ListItemSecondaryAction>
-    </ListItem>
-  );
+import { MaterialListWithDetailRenderer } from './MaterialListWithDetailRenderer';
+
+export const UnwrappedAdditional = {
+  MaterialLabelRenderer,
+  MaterialListWithDetailRenderer,
 };
-
-export default withJsonFormsMasterListItemProps(ListWithDetailMasterItem);

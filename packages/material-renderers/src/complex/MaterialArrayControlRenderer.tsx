@@ -23,7 +23,14 @@
   THE SOFTWARE.
 */
 import React, { useCallback, useState } from 'react';
-import { ArrayLayoutProps } from '@jsonforms/core';
+import {
+  ArrayLayoutProps,
+  RankedTester,
+  isObjectArrayControl,
+  isPrimitiveArrayControl,
+  or,
+  rankWith,
+} from '@jsonforms/core';
 import { withJsonFormsArrayLayoutProps } from '@jsonforms/react';
 import { MaterialTableControl } from './MaterialTableControl';
 import { Hidden } from '@mui/material';
@@ -67,5 +74,10 @@ export const MaterialArrayControlRenderer = (props: ArrayLayoutProps) => {
     </Hidden>
   );
 };
+
+export const materialArrayControlTester: RankedTester = rankWith(
+  3,
+  or(isObjectArrayControl, isPrimitiveArrayControl)
+);
 
 export default withJsonFormsArrayLayoutProps(MaterialArrayControlRenderer);

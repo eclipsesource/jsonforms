@@ -116,10 +116,11 @@ import MaterialCategorizationStepperLayout, {
   materialCategorizationStepperTester,
 } from './layouts/MaterialCategorizationStepperLayout';
 
+export * from './additional';
+export * from './cells';
 export * from './complex';
 export * from './controls';
 export * from './layouts';
-export * from './cells';
 export * from './mui-controls';
 export * from './util';
 
@@ -203,3 +204,15 @@ export const materialCells: JsonFormsCellRendererRegistryEntry[] = [
   { tester: materialTextCellTester, cell: MaterialTextCell },
   { tester: materialTimeCellTester, cell: MaterialTimeCell },
 ];
+
+import { UnwrappedAdditional } from './additional/unwrapped';
+import { UnwrappedComplex } from './complex/unwrapped';
+import { UnwrappedControls } from './controls/unwrapped';
+import { UnwrappedLayouts } from './layouts/unwrapped';
+
+export const Unwrapped = {
+  ...UnwrappedAdditional,
+  ...UnwrappedComplex,
+  ...UnwrappedControls,
+  ...UnwrappedLayouts,
+};
