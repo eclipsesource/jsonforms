@@ -26,6 +26,9 @@ jobs:
           npm run init
           npm run build
           npm run bundle
+      - name: Lint
+        if: matrix.os == 'ubuntu-latest'
+        run: npm run lint
       - name: Test
         if: matrix.os == 'windows-latest'
         run: |
