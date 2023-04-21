@@ -32,12 +32,12 @@ import {
   isDescriptionHidden,
   NOT_APPLICABLE,
   RankedTester,
-  rankWith
+  rankWith,
 } from '@jsonforms/core';
 import {
   Control,
   DispatchCell,
-  withJsonFormsControlProps
+  withJsonFormsControlProps,
 } from '@jsonforms/react';
 import { withVanillaControlProps } from '../util';
 import type { VanillaRendererProps } from '../index';
@@ -62,7 +62,7 @@ export class InputControl extends Control<
       required,
       path,
       cells,
-      config
+      config,
     } = this.props;
 
     const isValid = errors.length === 0;
@@ -80,9 +80,9 @@ export class InputControl extends Control<
     );
     const testerContext = {
       rootSchema: rootSchema,
-      config: config
+      config: config,
     };
-    const cell = maxBy(cells, r => r.tester(uischema, schema, testerContext));
+    const cell = maxBy(cells, (r) => r.tester(uischema, schema, testerContext));
     if (
       cell === undefined ||
       cell.tester(uischema, schema, testerContext) === NOT_APPLICABLE

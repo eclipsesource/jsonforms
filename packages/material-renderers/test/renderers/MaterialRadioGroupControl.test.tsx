@@ -24,11 +24,10 @@
 */
 import './MatchMediaMock';
 import * as React from 'react';
-import {
-  ControlElement,
-  NOT_APPLICABLE
-} from '@jsonforms/core';
-import MaterialRadioGroupControl, { materialRadioGroupControlTester } from '../../src/controls/MaterialRadioGroupControl';
+import { ControlElement, NOT_APPLICABLE } from '@jsonforms/core';
+import MaterialRadioGroupControl, {
+  materialRadioGroupControlTester,
+} from '../../src/controls/MaterialRadioGroupControl';
 import { materialRenderers } from '../../src';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
@@ -42,16 +41,16 @@ const schema = {
   properties: {
     foo: {
       type: 'string',
-      enum: ['A', 'B', 'C', 'D']
-    }
-  }
+      enum: ['A', 'B', 'C', 'D'],
+    },
+  },
 };
 const uischema: ControlElement = {
   type: 'Control',
   scope: '#/properties/foo',
   options: {
-    format: 'radio'
-  }
+    format: 'radio',
+  },
 };
 
 describe('Material radio group tester', () => {
@@ -63,9 +62,13 @@ describe('Material radio group tester', () => {
   it('should return NOT_APPLICABLE for enums without radio format', () => {
     const uiSchemaNoRadio = {
       type: 'Control',
-      scope: '#/properties/foo'
+      scope: '#/properties/foo',
     };
-    const rank = materialRadioGroupControlTester(uiSchemaNoRadio, schema, undefined);
+    const rank = materialRadioGroupControlTester(
+      uiSchemaNoRadio,
+      schema,
+      undefined
+    );
     expect(rank).toBe(NOT_APPLICABLE);
   });
 });
@@ -78,7 +81,9 @@ describe('Material radio group control', () => {
   it('should have option selected', () => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <MaterialRadioGroupControl schema={schema} uischema={uischema} />
       </JsonFormsStateProvider>
     );
@@ -94,11 +99,13 @@ describe('Material radio group control', () => {
 
     core.data = { ...core.data, foo: 'A' };
     core.data = { ...core.data, foo: 'B' };
-    wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
+    wrapper.setProps({ initState: { renderers: materialRenderers, core } });
     wrapper.update();
 
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <MaterialRadioGroupControl schema={schema} uischema={uischema} />
       </JsonFormsStateProvider>
     );
@@ -110,7 +117,9 @@ describe('Material radio group control', () => {
   it('should be hideable ', () => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <MaterialRadioGroupControl
           schema={schema}
           uischema={uischema}

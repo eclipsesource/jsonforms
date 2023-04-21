@@ -33,7 +33,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
   JsonFormsAngularService,
   JsonFormsOutlet,
-  UnknownRenderer
+  UnknownRenderer,
 } from '@jsonforms/angular';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { DebugElement } from '@angular/core';
@@ -41,6 +41,7 @@ import { MasterListComponent } from '../src/other/master-detail/master';
 import { JsonFormsDetailComponent } from '../src/other/master-detail/detail';
 import { getJsonFormsService, setupMockStore } from '@jsonforms/angular-test';
 import { Actions } from '@jsonforms/core';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 describe('Master detail', () => {
   let fixture: ComponentFixture<MasterListComponent>;
@@ -50,11 +51,11 @@ describe('Master detail', () => {
     orders: [
       {
         customer: {
-          name: 'ACME'
+          name: 'ACME',
         },
-        title: 'Carrots'
-      }
-    ]
+        title: 'Carrots',
+      },
+    ],
   };
   const schema = {
     definitions: {
@@ -64,24 +65,24 @@ describe('Master detail', () => {
           customer: {
             type: 'object',
             properties: {
-              name: { type: 'string' }
-            }
+              name: { type: 'string' },
+            },
           },
           title: {
-            type: 'string'
-          }
-        }
-      }
+            type: 'string',
+          },
+        },
+      },
     },
     type: 'object',
     properties: {
       orders: {
         type: 'array',
         items: {
-          $ref: '#/definitions/order'
-        }
-      }
-    }
+          $ref: '#/definitions/order',
+        },
+      },
+    },
   };
   const uischema = {
     type: 'ListWithDetail',
@@ -93,11 +94,11 @@ describe('Master detail', () => {
         elements: [
           {
             type: 'Control',
-            scope: '#/properties/customer/properties/name'
-          }
-        ]
-      }
-    }
+            scope: '#/properties/customer/properties/name',
+          },
+        ],
+      },
+    },
   };
 
   beforeEach(() => {
@@ -106,7 +107,7 @@ describe('Master detail', () => {
         JsonFormsOutlet,
         MasterListComponent,
         UnknownRenderer,
-        JsonFormsDetailComponent
+        JsonFormsDetailComponent,
       ],
       imports: [
         MatListModule,
@@ -114,14 +115,15 @@ describe('Master detail', () => {
         MatIconModule,
         MatButtonModule,
         FlexLayoutModule,
-        NoopAnimationsModule
+        NoopAnimationsModule,
+        MatTooltipModule,
       ],
-      providers: [JsonFormsAngularService]
+      providers: [JsonFormsAngularService],
     })
       .overrideModule(BrowserDynamicTestingModule, {
         set: {
-          entryComponents: [UnknownRenderer]
-        }
+          entryComponents: [UnknownRenderer],
+        },
       })
       .compileComponents();
 
@@ -194,23 +196,23 @@ describe('Master detail', () => {
       orders: [
         {
           customer: { name: 'Carrot Chipmunk' },
-          title: 'Carrots'
+          title: 'Carrots',
         },
         {
           customer: { name: 'Banana Joe' },
-          title: 'Bananas'
+          title: 'Bananas',
         },
         {
           customer: { name: 'Fry' },
-          title: 'Slurm'
-        }
-      ]
+          title: 'Slurm',
+        },
+      ],
     };
 
     setupMockStore(fixture, {
       uischema,
       schema,
-      data: moreData
+      data: moreData,
     });
     getJsonFormsService(component).updateCore(Actions.init(moreData, schema));
     component.ngOnInit();
@@ -226,7 +228,9 @@ describe('Master detail', () => {
 
     // delete 1st item
     spyOn(component, 'removeItems').and.callFake(() => () => {
-      getJsonFormsService(component).updateCore(Actions.update('orders', () => moreData.orders.slice(1)));
+      getJsonFormsService(component).updateCore(
+        Actions.update('orders', () => moreData.orders.slice(1))
+      );
       fixture.detectChanges();
     });
     const buttons: DebugElement[] = fixture.debugElement.queryAll(
@@ -243,22 +247,22 @@ describe('Master detail', () => {
       orders: [
         {
           customer: { name: 'Carrot Chipmunk' },
-          title: 'Carrots'
+          title: 'Carrots',
         },
         {
           customer: { name: 'Banana Joe' },
-          title: 'Bananas'
+          title: 'Bananas',
         },
         {
           customer: { name: 'Fry' },
-          title: 'Slurm'
-        }
-      ]
+          title: 'Slurm',
+        },
+      ],
     };
     setupMockStore(fixture, {
       uischema,
       schema,
-      data: moreData
+      data: moreData,
     });
     getJsonFormsService(component).updateCore(Actions.init(moreData, schema));
     component.ngOnInit();
@@ -268,7 +272,9 @@ describe('Master detail', () => {
     spyOn(component, 'removeItems').and.callFake(() => () => {
       const copy = moreData.orders.slice();
       copy.splice(1, 1);
-      getJsonFormsService(component).updateCore(Actions.update('orders', () => copy));
+      getJsonFormsService(component).updateCore(
+        Actions.update('orders', () => copy)
+      );
       fixture.detectChanges();
     });
     const buttons: DebugElement[] = fixture.debugElement.queryAll(
@@ -285,22 +291,22 @@ describe('Master detail', () => {
       orders: [
         {
           customer: { name: 'Carrot Chipmunk' },
-          title: 'Carrots'
+          title: 'Carrots',
         },
         {
           customer: { name: 'Banana Joe' },
-          title: 'Bananas'
+          title: 'Bananas',
         },
         {
           customer: { name: 'Fry' },
-          title: 'Slurm'
-        }
-      ]
+          title: 'Slurm',
+        },
+      ],
     };
     setupMockStore(fixture, {
       uischema,
       schema,
-      data: moreData
+      data: moreData,
     });
     getJsonFormsService(component).updateCore(Actions.init(moreData, schema));
     component.ngOnInit();
@@ -308,7 +314,9 @@ describe('Master detail', () => {
 
     // delete 1st item
     spyOn(component, 'removeItems').and.callFake(() => () => {
-      getJsonFormsService(component).updateCore(Actions.update('orders', () => moreData.orders.slice(1)));
+      getJsonFormsService(component).updateCore(
+        Actions.update('orders', () => moreData.orders.slice(1))
+      );
       fixture.detectChanges();
     });
     const buttons: DebugElement[] = fixture.debugElement.queryAll(
@@ -325,14 +333,14 @@ describe('Master detail', () => {
       orders: [
         {
           customer: { name: 'Carrot Chipmunk' },
-          title: 'Carrots'
-        }
-      ]
+          title: 'Carrots',
+        },
+      ],
     };
     setupMockStore(fixture, {
       uischema,
       schema,
-      data: moreData
+      data: moreData,
     });
     getJsonFormsService(component).updateCore(Actions.init(moreData, schema));
     component.ngOnInit();
@@ -340,7 +348,9 @@ describe('Master detail', () => {
 
     // delete item
     spyOn(component, 'removeItems').and.callFake(() => () => {
-      getJsonFormsService(component).updateCore(Actions.update('orders', () => []));
+      getJsonFormsService(component).updateCore(
+        Actions.update('orders', () => [])
+      );
       fixture.detectChanges();
     });
     const buttons: DebugElement[] = fixture.debugElement.queryAll(
@@ -360,8 +370,9 @@ describe('Master detail', () => {
     fixture.detectChanges();
     fixture.whenStable().then(() => {
       spyOn(component, 'onSelect');
-      const select = fixture.debugElement.query(By.directive(MatListItem))
-        .nativeElement;
+      const select = fixture.debugElement.query(
+        By.directive(MatListItem)
+      ).nativeElement;
       select.click();
       fixture.detectChanges();
       fixture.whenStable().then(() => {
@@ -375,7 +386,7 @@ describe('Master detail', () => {
             label: 'ACME',
             data: {
               customer: { name: 'ACME' },
-              title: 'Carrots'
+              title: 'Carrots',
             },
             path: 'orders.0',
             schema: schema.definitions.order,
@@ -384,10 +395,10 @@ describe('Master detail', () => {
               elements: [
                 {
                   type: 'Control',
-                  scope: '#/properties/customer/properties/name'
-                }
-              ]
-            }
+                  scope: '#/properties/customer/properties/name',
+                },
+              ],
+            },
           },
           0
         );

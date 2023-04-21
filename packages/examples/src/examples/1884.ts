@@ -31,100 +31,104 @@ export const schema = {
     firstName: {
       type: 'string',
       minLength: 2,
-      maxLength: 20
+      maxLength: 20,
     },
     lastName: {
       type: 'string',
       minLength: 5,
-      maxLength: 15
+      maxLength: 15,
     },
     age: {
       type: 'integer',
       minimum: 18,
-      maximum: 100
+      maximum: 100,
     },
     gender: {
       type: 'string',
-      enum: ['Male', 'Female', 'Undisclosed']
+      enum: ['Male', 'Female', 'Undisclosed'],
     },
     height: {
-      type: 'number'
+      type: 'number',
     },
     dateOfBirth: {
       type: 'string',
-      format: 'date'
+      format: 'date',
     },
     rating: {
-      type: 'integer'
+      type: 'integer',
     },
     committer: {
-      type: 'boolean'
+      type: 'boolean',
     },
     address: {
       type: 'object',
       properties: {
         street: {
-          type: 'string'
+          type: 'string',
         },
         streetnumber: {
-          type: 'string'
+          type: 'string',
         },
         postalCode: {
-          type: 'string'
+          type: 'string',
         },
         city: {
-          type: 'string'
-        }
-      }
-    }
-  }
+          type: 'string',
+        },
+      },
+    },
+  },
 };
 
 export const uischema = {
   type: 'VerticalLayout',
   elements: [
     {
-      type: 'HorizontalLayout',
-      elements: [
-        {
-          type: 'Control',
-          scope: '#/properties/firstName'
-        },
-        {
-          type: 'Control',
-          scope: '#/properties/lastName'
-        }
-      ]
+      type: 'Label',
+      text: 'Toggle the committer boolean to enable/disable the address block.',
     },
     {
       type: 'HorizontalLayout',
       elements: [
         {
           type: 'Control',
-          scope: '#/properties/age'
+          scope: '#/properties/firstName',
         },
         {
           type: 'Control',
-          scope: '#/properties/dateOfBirth'
-        }
-      ]
+          scope: '#/properties/lastName',
+        },
+      ],
     },
     {
       type: 'HorizontalLayout',
       elements: [
         {
           type: 'Control',
-          scope: '#/properties/height'
+          scope: '#/properties/age',
         },
         {
           type: 'Control',
-          scope: '#/properties/gender'
+          scope: '#/properties/dateOfBirth',
+        },
+      ],
+    },
+    {
+      type: 'HorizontalLayout',
+      elements: [
+        {
+          type: 'Control',
+          scope: '#/properties/height',
         },
         {
           type: 'Control',
-          scope: '#/properties/committer'
-        }
-      ]
+          scope: '#/properties/gender',
+        },
+        {
+          type: 'Control',
+          scope: '#/properties/committer',
+        },
+      ],
     },
     {
       type: 'Group',
@@ -135,53 +139,53 @@ export const uischema = {
           elements: [
             {
               type: 'Control',
-              scope: '#/properties/address/properties/street'
+              scope: '#/properties/address/properties/street',
             },
             {
               type: 'Control',
-              scope: '#/properties/address/properties/streetnumber'
-            }
-          ]
+              scope: '#/properties/address/properties/streetnumber',
+            },
+          ],
         },
         {
           type: 'HorizontalLayout',
           elements: [
             {
               type: 'Control',
-              scope: '#/properties/address/properties/postalCode'
+              scope: '#/properties/address/properties/postalCode',
             },
             {
               type: 'Control',
-              scope: '#/properties/address/properties/city'
-            }
-          ]
-        }
+              scope: '#/properties/address/properties/city',
+            },
+          ],
+        },
       ],
       rule: {
         effect: 'ENABLE',
         condition: {
           scope: '#/properties/committer',
           schema: {
-            const: true
-          }
-        }
-      }
-    }
-  ]
+            const: true,
+          },
+        },
+      },
+    },
+  ],
 };
 
 export const data = {
   firstName: 'Max',
   lastName: 'Power',
-  committer: false
+  committer: false,
 };
 
 registerExamples([
   {
     name: '1884',
-    label: 'Issue 1884 - Committer enable/disable Address',
+    label: 'Issue 1884 - Nested enable/disable',
     data,
     schema,
-    uischema
-  }
+    uischema,
+  },
 ]);

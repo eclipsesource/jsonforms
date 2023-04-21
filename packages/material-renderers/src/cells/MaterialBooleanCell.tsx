@@ -28,7 +28,7 @@ import {
   isBooleanControl,
   RankedTester,
   rankWith,
-  WithClassname
+  WithClassname,
 } from '@jsonforms/core';
 import { withJsonFormsCellProps } from '@jsonforms/react';
 import { MuiCheckbox } from '../mui-controls/MuiCheckbox';

@@ -29,17 +29,17 @@ export const schema = {
   properties: {
     zipCode: {
       type: 'string',
-      maxLength: 5
+      maxLength: 5,
     },
     zipCodeWithoutTrim: {
       type: 'string',
-      maxLength: 5
+      maxLength: 5,
     },
     zipCodeWithoutRestrict: {
       type: 'string',
-      maxLength: 5
-    }
-  }
+      maxLength: 5,
+    },
+  },
 };
 
 export const uischema = {
@@ -54,8 +54,8 @@ export const uischema = {
           label: 'ZIP Code (with trim and restrict options)',
           options: {
             trim: true,
-            restrict: true
-          }
+            restrict: true,
+          },
         },
         {
           type: 'Control',
@@ -63,8 +63,8 @@ export const uischema = {
           label: 'ZIP Code (without trimming)',
           options: {
             trim: false,
-            restrict: true
-          }
+            restrict: true,
+          },
         },
         {
           type: 'Control',
@@ -72,26 +72,26 @@ export const uischema = {
           label: 'ZIP Code (without restricting)',
           options: {
             trim: true,
-            restrict: false
-          }
-        }
-      ]
-    }
-  ]
+            restrict: false,
+          },
+        },
+      ],
+    },
+  ],
 };
 
 export const data = {
   zipCode: '12345',
   zipCodeWithoutTrim: '12345678',
-  zipCodeWithoutRestrict: '12345678'
+  zipCodeWithoutRestrict: '12345678',
 };
 
 registerExamples([
   {
     name: 'text',
-    label: 'Text',
+    label: 'Text Control Options',
     data,
     schema,
-    uischema
-  }
+    uischema,
+  },
 ]);

@@ -23,11 +23,7 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
-import {
-  ControlElement,
-  HorizontalLayout,
-  JsonSchema,
-} from '@jsonforms/core';
+import { ControlElement, HorizontalLayout, JsonSchema } from '@jsonforms/core';
 import { JsonFormsStateProvider } from '@jsonforms/react';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
@@ -43,22 +39,22 @@ const controlElement: ControlElement = {
 };
 
 const fixture = {
-  data: { 'foo': 3.14 },
+  data: { foo: 3.14 },
   schema: {
     type: 'number',
-    minimum: 5
+    minimum: 5,
   },
   uischema: controlElement,
   styles: [
     {
       name: 'control',
-      classNames: ['control']
+      classNames: ['control'],
     },
     {
       name: 'control.validation',
-      classNames: ['validation']
-    }
-  ]
+      classNames: ['validation'],
+    },
+  ],
 };
 
 describe('Number cell tester', () => {
@@ -66,13 +62,15 @@ describe('Number cell tester', () => {
     expect(numberCellTester(undefined, undefined, undefined)).toBe(-1);
     expect(numberCellTester(null, undefined, undefined)).toBe(-1);
     expect(numberCellTester({ type: 'Foo' }, undefined, undefined)).toBe(-1);
-    expect(numberCellTester({ type: 'Control' }, undefined, undefined)).toBe(-1);
+    expect(numberCellTester({ type: 'Control' }, undefined, undefined)).toBe(
+      -1
+    );
   });
 
   test('tester with wrong schema type', () => {
     const control: ControlElement = {
       type: 'Control',
-      scope: '#/properties/foo'
+      scope: '#/properties/foo',
     };
     expect(
       numberCellTester(
@@ -81,9 +79,9 @@ describe('Number cell tester', () => {
           type: 'object',
           properties: {
             foo: {
-              type: 'string'
-            }
-          }
+              type: 'string',
+            },
+          },
         },
         undefined
       )
@@ -93,7 +91,7 @@ describe('Number cell tester', () => {
   test('tester with wrong schema type, but sibling has correct one', () => {
     const control: ControlElement = {
       type: 'Control',
-      scope: '#/properties/foo'
+      scope: '#/properties/foo',
     };
     expect(
       numberCellTester(
@@ -102,12 +100,12 @@ describe('Number cell tester', () => {
           type: 'object',
           properties: {
             foo: {
-              type: 'string'
+              type: 'string',
             },
             bar: {
-              type: 'number'
-            }
-          }
+              type: 'number',
+            },
+          },
         },
         undefined
       )
@@ -117,7 +115,7 @@ describe('Number cell tester', () => {
   test('tester with machting schema type', () => {
     const control: ControlElement = {
       type: 'Control',
-      scope: '#/properties/foo'
+      scope: '#/properties/foo',
     };
     expect(
       numberCellTester(
@@ -126,9 +124,9 @@ describe('Number cell tester', () => {
           type: 'object',
           properties: {
             foo: {
-              type: 'number'
-            }
-          }
+              type: 'number',
+            },
+          },
         },
         undefined
       )
@@ -137,7 +135,6 @@ describe('Number cell tester', () => {
 });
 
 describe('Number cell', () => {
-
   let wrapper: ReactWrapper;
 
   afterEach(() => wrapper.unmount());
@@ -147,33 +144,30 @@ describe('Number cell', () => {
       type: 'object',
       properties: {
         firstNumberCell: { type: 'number', minimum: 5 },
-        secondNumberCell: { type: 'number', minimum: 5 }
-      }
+        secondNumberCell: { type: 'number', minimum: 5 },
+      },
     };
     const firstControlElement: ControlElement = {
       type: 'Control',
       scope: '#/properties/firstNumberCell',
       options: {
-        focus: true
-      }
+        focus: true,
+      },
     };
     const secondControlElement: ControlElement = {
       type: 'Control',
       scope: '#/properties/secondNumberCell',
       options: {
-        focus: true
-      }
+        focus: true,
+      },
     };
     const uischema: HorizontalLayout = {
       type: 'HorizontalLayout',
-      elements: [
-        firstControlElement,
-        secondControlElement
-      ]
+      elements: [firstControlElement, secondControlElement],
     };
     const data = {
-      'firstNumberCell': 3.14,
-      'secondNumberCell': 5.12
+      firstNumberCell: 3.14,
+      secondNumberCell: 5.12,
     };
     const core = initCore(schema, uischema, data);
     wrapper = mount(
@@ -192,8 +186,8 @@ describe('Number cell', () => {
       type: 'Control',
       scope: '#/properties/foo',
       options: {
-        focus: true
-      }
+        focus: true,
+      },
     };
     const core = initCore(fixture.schema, uischema, fixture.data);
     wrapper = mount(
@@ -210,8 +204,8 @@ describe('Number cell', () => {
       type: 'Control',
       scope: '#/properties/foo',
       options: {
-        focus: false
-      }
+        focus: false,
+      },
     };
     const core = initCore(fixture.schema, uischema, fixture.data);
 
@@ -227,7 +221,7 @@ describe('Number cell', () => {
   test('autofocus inactive by default', () => {
     const uischema: ControlElement = {
       type: 'Control',
-      scope: '#/properties/foo'
+      scope: '#/properties/foo',
     };
     const core = initCore(fixture.schema, uischema, fixture.data);
     wrapper = mount(
@@ -241,7 +235,7 @@ describe('Number cell', () => {
 
   test('render', () => {
     const schema: JsonSchema = { type: 'number' };
-    const core = initCore(schema, fixture.uischema, { 'foo': 3.14 });
+    const core = initCore(schema, fixture.uischema, { foo: 3.14 });
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
         <NumberCell schema={schema} uischema={fixture.uischema} path='foo' />
@@ -258,7 +252,11 @@ describe('Number cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <NumberCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <NumberCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
 
@@ -270,7 +268,7 @@ describe('Number cell', () => {
 
   test('update via input event', () => {
     const onChangeData: any = {
-      data: undefined
+      data: undefined,
     };
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
@@ -280,7 +278,11 @@ describe('Number cell', () => {
             onChangeData.data = data;
           }}
         />
-        <NumberCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <NumberCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input');
@@ -293,7 +295,11 @@ describe('Number cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, { foo: 2.72 });
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <NumberCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <NumberCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
@@ -308,7 +314,11 @@ describe('Number cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <NumberCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <NumberCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
@@ -322,7 +332,11 @@ describe('Number cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <NumberCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <NumberCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
@@ -336,7 +350,11 @@ describe('Number cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <NumberCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <NumberCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
@@ -350,7 +368,11 @@ describe('Number cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <NumberCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <NumberCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
@@ -364,7 +386,11 @@ describe('Number cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <NumberCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <NumberCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, undefined: 13 };
@@ -378,7 +404,11 @@ describe('Number cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <NumberCell schema={fixture.schema} uischema={fixture.uischema} enabled={false} />
+        <NumberCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          enabled={false}
+        />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
@@ -389,7 +419,11 @@ describe('Number cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <NumberCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <NumberCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
@@ -400,7 +434,11 @@ describe('Number cell', () => {
     const core = initCore(fixture.schema, fixture.uischema, { foo: 0 });
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <NumberCell schema={fixture.schema} uischema={fixture.uischema} path='foo' />
+        <NumberCell
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          path='foo'
+        />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;

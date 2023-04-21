@@ -35,17 +35,13 @@ export interface CategoryProps {
 export const SingleCategory = ({ category, schema, path }: CategoryProps) => (
   // TODO: add selected style
   <div id='categorization.detail'>
-    {
-      (category.elements || []).map((child, index) =>
-        (
-          <JsonFormsDispatch
-            key={`${path}-${index}`}
-            uischema={child}
-            schema={schema}
-            path={path}
-          />
-        )
-      )
-    }
+    {(category.elements || []).map((child, index) => (
+      <JsonFormsDispatch
+        key={`${path}-${index}`}
+        uischema={child}
+        schema={schema}
+        path={path}
+      />
+    ))}
   </div>
 );

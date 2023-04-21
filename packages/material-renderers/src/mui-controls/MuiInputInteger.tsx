@@ -29,38 +29,37 @@ import merge from 'lodash/merge';
 import { useDebouncedChange } from '../util';
 
 const toNumber = (value: string) =>
-      value === '' ? undefined : parseInt(value, 10);
-const eventToValue = (ev:any) => toNumber(ev.target.value);
+  value === '' ? undefined : parseInt(value, 10);
+const eventToValue = (ev: any) => toNumber(ev.target.value);
 
-export const MuiInputInteger = React.memo( 
-  (props: CellProps & WithClassname) => {
-    const {
-      data,
-      className,
-      id,
-      enabled,
-      uischema,
-      path,
-      handleChange,
-      config
-    } = props;
-    const inputProps = { step: '1' };
-    
-    const appliedUiSchemaOptions = merge({}, config, uischema.options);
+export const MuiInputInteger = React.memo(function MuiInputInteger(
+  props: CellProps & WithClassname
+) {
+  const { data, className, id, enabled, uischema, path, handleChange, config } =
+    props;
+  const inputProps = { step: '1' };
 
-    const [inputValue, onChange] = useDebouncedChange(handleChange, '', data, path, eventToValue);
+  const appliedUiSchemaOptions = merge({}, config, uischema.options);
 
-    return (
-      <Input
-        type='number'
-        value={inputValue}
-        onChange={onChange}
-        className={className}
-        id={id}
-        disabled={!enabled}
-        autoFocus={appliedUiSchemaOptions.focus}
-        inputProps={inputProps}
-        fullWidth={true}
-      />
-    );
-  });
+  const [inputValue, onChange] = useDebouncedChange(
+    handleChange,
+    '',
+    data,
+    path,
+    eventToValue
+  );
+
+  return (
+    <Input
+      type='number'
+      value={inputValue}
+      onChange={onChange}
+      className={className}
+      id={id}
+      disabled={!enabled}
+      autoFocus={appliedUiSchemaOptions.focus}
+      inputProps={inputProps}
+      fullWidth={true}
+    />
+  );
+});

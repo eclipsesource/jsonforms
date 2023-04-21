@@ -3,8 +3,8 @@
     <legend :class="styles.arrayList.legend">
       <button
         :class="styles.arrayList.addButton"
-        @click="addButtonClick"
         type="button"
+        @click="addButtonClick"
       >
         +
       </button>
@@ -18,10 +18,10 @@
       :class="styles.arrayList.itemWrapper"
     >
       <array-list-element
-        :moveUp="moveUp(control.path, index)"
-        :moveUpEnabled="index > 0"
-        :moveDown="moveDown(control.path, index)"
-        :moveDownEnabled="index < control.data.length - 1"
+        :move-up="moveUp(control.path, index)"
+        :move-up-enabled="index > 0"
+        :move-down="moveDown(control.path, index)"
+        :move-down-enabled="index < control.data.length - 1"
         :delete="removeItems(control.path, [index])"
         :label="childLabelForIndex(index)"
         :styles="styles"
@@ -37,7 +37,7 @@
       </array-list-element>
     </div>
     <div v-if="noData" :class="styles.arrayList.noData">
-      No data
+      {{ control.translations.noDataMessage }}
     </div>
   </fieldset>
 </template>
@@ -49,26 +49,26 @@ import {
   JsonFormsRendererRegistryEntry,
   rankWith,
   ControlElement,
-  schemaTypeIs
+  schemaTypeIs,
 } from '@jsonforms/core';
 import { defineComponent } from 'vue';
 import {
   DispatchRenderer,
   rendererProps,
   useJsonFormsArrayControl,
-  RendererProps
+  RendererProps,
 } from '../../config/jsonforms';
 import { useVanillaArrayControl } from '../util';
 import ArrayListElement from './ArrayListElement.vue';
 
 const controlRenderer = defineComponent({
-  name: 'array-list-renderer',
+  name: 'ArrayListRenderer',
   components: {
     ArrayListElement,
-    DispatchRenderer
+    DispatchRenderer,
   },
   props: {
-    ...rendererProps<ControlElement>()
+    ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
     return useVanillaArrayControl(useJsonFormsArrayControl(props));
@@ -76,7 +76,7 @@ const controlRenderer = defineComponent({
   computed: {
     noData(): boolean {
       return !this.control.data || this.control.data.length === 0;
-    }
+    },
   },
   methods: {
     composePaths,
@@ -86,14 +86,14 @@ const controlRenderer = defineComponent({
         this.control.path,
         createDefaultValue(this.control.schema)
       )();
-    }
-  }
+    },
+  },
 });
 
 export default controlRenderer;
 
 export const entry: JsonFormsRendererRegistryEntry = {
   renderer: controlRenderer,
-  tester: rankWith(2, schemaTypeIs('array'))
+  tester: rankWith(2, schemaTypeIs('array')),
 };
 </script>

@@ -33,18 +33,18 @@ export const schema = {
       properties: {
         street_address: { type: 'string' },
         city: { type: 'string' },
-        state: { type: 'string' }
+        state: { type: 'string' },
       },
-      required: ['street_address', 'city', 'state']
+      required: ['street_address', 'city', 'state'],
     },
     user: {
       type: 'object',
       properties: {
         name: { type: 'string' },
-        mail: { type: 'string' }
+        mail: { type: 'string' },
       },
-      required: ['name', 'mail']
-    }
+      required: ['name', 'mail'],
+    },
   },
 
   type: 'object',
@@ -56,11 +56,11 @@ export const schema = {
       items: {
         oneOf: [
           { $ref: '#/definitions/address' },
-          { $ref: '#/definitions/user' }
-        ]
-      }
-    }
-  }
+          { $ref: '#/definitions/user' },
+        ],
+      },
+    },
+  },
 };
 
 export const uischema = {
@@ -68,9 +68,9 @@ export const uischema = {
   elements: [
     {
       type: 'Control',
-      scope: '#/properties/addressOrUsers'
-    }
-  ]
+      scope: '#/properties/addressOrUsers',
+    },
+  ],
 };
 
 const data = {
@@ -79,21 +79,21 @@ const data = {
     {
       street_address: '1600 Pennsylvania Avenue NW',
       city: 'Washington',
-      state: 'DC'
+      state: 'DC',
     },
     {
       name: 'User',
-      mail: 'user@user.user'
-    }
-  ]
+      mail: 'user@user.user',
+    },
+  ],
 };
 
 registerExamples([
   {
     name: 'oneOfArray',
-    label: 'oneOf (in array)',
+    label: 'oneOf - Inside array items',
     data,
     schema,
-    uischema
-  }
+    uischema,
+  },
 ]);

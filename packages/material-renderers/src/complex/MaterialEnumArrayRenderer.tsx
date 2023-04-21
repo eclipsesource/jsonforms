@@ -10,7 +10,7 @@ import {
   rankWith,
   schemaMatches,
   schemaSubPathMatches,
-  uiTypeIs
+  uiTypeIs,
 } from '@jsonforms/core';
 
 import { withJsonFormsMultiEnumProps } from '@jsonforms/react';
@@ -20,7 +20,7 @@ import {
   FormControlLabel,
   FormGroup,
   FormHelperText,
-  Hidden
+  Hidden,
 } from '@mui/material';
 import isEmpty from 'lodash/isEmpty';
 import React from 'react';
@@ -34,7 +34,7 @@ export const MaterialEnumArrayRenderer = ({
   data,
   addItem,
   removeItem,
-  handleChange,
+  handleChange: _handleChange,
   ...otherProps
 }: ControlProps & OwnPropsOfEnum & DispatchPropsOfMultiEnumControl) => {
   return (
@@ -72,9 +72,7 @@ export const MaterialEnumArrayRenderer = ({
             );
           })}
         </FormGroup>
-        <FormHelperText error>
-          {errors}
-        </FormHelperText>
+        <FormHelperText error>{errors}</FormHelperText>
       </FormControl>
     </Hidden>
   );
@@ -96,12 +94,12 @@ export const materialEnumArrayRendererTester: RankedTester = rankWith(
     uiTypeIs('Control'),
     and(
       schemaMatches(
-        schema =>
+        (schema) =>
           hasType(schema, 'array') &&
           !Array.isArray(schema.items) &&
           schema.uniqueItems === true
       ),
-      schemaSubPathMatches('items', schema => {
+      schemaSubPathMatches('items', (schema) => {
         return hasOneOfItems(schema) || hasEnumItems(schema);
       })
     )

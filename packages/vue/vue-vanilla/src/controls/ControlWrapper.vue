@@ -1,5 +1,5 @@
 <template>
-  <div v-if="visible" :class="styles.control.root" :id="id">
+  <div v-if="visible" :id="id" :class="styles.control.root">
     <label :for="id + '-input'" :class="styles.control.label">
       {{ computedLabel }}
     </label>
@@ -19,51 +19,51 @@ import { Styles } from '../styles';
 import { Options } from '../util';
 
 export default defineComponent({
-  name: 'control-wrapper',
+  name: 'ControlWrapper',
   props: {
     id: {
-      required: true as true,
-      type: String
+      required: true,
+      type: String,
     },
     description: {
-      required: false as false,
+      required: false as const,
       type: String,
-      default: undefined
+      default: undefined,
     },
     errors: {
-      required: false as false,
+      required: false as const,
       type: String,
-      default: undefined
+      default: undefined,
     },
     label: {
-      required: false as false,
+      required: false as const,
       type: String,
-      default: undefined
+      default: undefined,
     },
     appliedOptions: {
-      required: false as false,
+      required: false as const,
       type: Object as PropType<Options>,
-      default: undefined
+      default: undefined,
     },
     visible: {
-      required: false as false,
+      required: false as const,
       type: Boolean,
-      default: true
+      default: true,
     },
     required: {
-      required: false as false,
+      required: false as const,
       type: Boolean,
-      default: false
+      default: false,
     },
     isFocused: {
-      required: false as false,
+      required: false as const,
       type: Boolean,
-      default: false
+      default: false,
     },
     styles: {
       required: true,
-      type: Object as PropType<Styles>
-    }
+      type: Object as PropType<Styles>,
+    },
   },
   computed: {
     showDescription(): boolean {
@@ -80,7 +80,7 @@ export default defineComponent({
         this.required,
         !!this.appliedOptions?.hideRequiredAsterisk
       );
-    }
-  }
+    },
+  },
 });
 </script>

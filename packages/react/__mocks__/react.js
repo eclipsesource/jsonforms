@@ -1,2 +1,2 @@
-const React = require('react')
-module.exports = Object.assign({}, React, { useEffect: React.useLayoutEffect })
+const React = require('react');
+module.exports = Object.assign({}, React, { useEffect: React.useLayoutEffect });

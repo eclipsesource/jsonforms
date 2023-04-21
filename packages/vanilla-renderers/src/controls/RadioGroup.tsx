@@ -22,18 +22,17 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   computeLabel,
   ControlProps,
   isDescriptionHidden,
-  OwnPropsOfEnum
+  OwnPropsOfEnum,
 } from '@jsonforms/core';
 import type { VanillaRendererProps } from '../index';
 import { findStyleAsClassName } from '../reducers/styling';
 import { useStyles } from '../styles';
 import merge from 'lodash/merge';
-import { useMemo, useState } from 'react';
 
 export const RadioGroup = ({
   classNames,
@@ -49,14 +48,26 @@ export const RadioGroup = ({
   config,
   enabled,
   path,
-  handleChange
+  handleChange,
 }: ControlProps & VanillaRendererProps & OwnPropsOfEnum) => {
   const contextStyles = useStyles();
   const [isFocused, setFocus] = useState(false);
-  const radioControl = useMemo(() => findStyleAsClassName(contextStyles)('control.radio'), [contextStyles]);
-  const radioOption = useMemo(() => findStyleAsClassName(contextStyles)('control.radio.option'), [contextStyles]);
-  const radioInput = useMemo(() => findStyleAsClassName(contextStyles)('control.radio.input'), [contextStyles]);
-  const radioLabel = useMemo(() => findStyleAsClassName(contextStyles)('control.radio.label'), [contextStyles]);
+  const radioControl = useMemo(
+    () => findStyleAsClassName(contextStyles)('control.radio'),
+    [contextStyles]
+  );
+  const radioOption = useMemo(
+    () => findStyleAsClassName(contextStyles)('control.radio.option'),
+    [contextStyles]
+  );
+  const radioInput = useMemo(
+    () => findStyleAsClassName(contextStyles)('control.radio.input'),
+    [contextStyles]
+  );
+  const radioLabel = useMemo(
+    () => findStyleAsClassName(contextStyles)('control.radio.label'),
+    [contextStyles]
+  );
   const isValid = errors.length === 0;
   const divClassNames = [classNames.validation]
     .concat(isValid ? classNames.description : classNames.validationError)
@@ -73,7 +84,8 @@ export const RadioGroup = ({
   if (hasRadioClass) {
     groupStyle = {
       display: 'flex',
-      flexDirection: 'row'
+      flexDirection:
+        'vertical' === appliedUiSchemaOptions.orientation ? 'column' : 'row',
     };
   }
   return (
@@ -90,9 +102,8 @@ export const RadioGroup = ({
           appliedUiSchemaOptions.hideRequiredAsterisk
         )}
       </label>
-
       <div className={radioControl} style={groupStyle}>
-        {options.map(option => (
+        {options.map((option) => (
           <div key={option.label} className={radioOption}>
             <input
               type='radio'
@@ -100,14 +111,11 @@ export const RadioGroup = ({
               id={option.value}
               name={id}
               checked={data === option.value}
-              onChange={ev => handleChange(path, ev.currentTarget.value)}
+              onChange={(ev) => handleChange(path, ev.currentTarget.value)}
               disabled={!enabled}
               className={radioInput}
             />
-            <label
-              htmlFor={option.value}
-              className={radioLabel}
-            >
+            <label htmlFor={option.value} className={radioLabel}>
               {option.label}
             </label>
           </div>
@@ -119,4 +127,3 @@ export const RadioGroup = ({
     </div>
   );
 };
-

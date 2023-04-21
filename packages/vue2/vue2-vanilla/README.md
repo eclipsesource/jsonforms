@@ -1,7 +1,6 @@
-
 # JSON Forms - More Forms. Less Code
 
-*Complex Forms in the blink of an eye*
+_Complex Forms in the blink of an eye_
 
 JSON Forms eliminates the tedious task of writing fully-featured forms by hand by leveraging the capabilities of JSON, JSON Schema and Javascript.
 
@@ -26,8 +25,12 @@ Also add the packages to the transpile dependencies in the `vue.config.js` file:
 
 ```js
 module.exports = {
-    transpileDependencies: ['@jsonforms/core', '@jsonforms/vue2', '@jsonforms/vue2-vanilla']
-}
+  transpileDependencies: [
+    '@jsonforms/core',
+    '@jsonforms/vue2',
+    '@jsonforms/vue2-vanilla',
+  ],
+};
 ```
 
 Use the `json-forms` component for each form you want to render and hand over the renderer set.
@@ -35,34 +38,34 @@ Use the `json-forms` component for each form you want to render and hand over th
 ```vue
 <script>
 import { JsonForms } from '@jsonforms/vue2';
-import { vanillaRenderers } from '@jsonforms/vue2-vanilla'
-import { defineComponent } from "vue";
+import { vanillaRenderers } from '@jsonforms/vue2-vanilla';
+import { defineComponent } from 'vue';
 
 const renderers = [
   ...vanillaRenderers,
   // here you can add custom renderers
-]
+];
 
 const schema = {
   type: 'object',
   properties: {
     name: {
       type: 'string',
-      minLength: 1
+      minLength: 1,
     },
     done: {
-      type: 'boolean'
+      type: 'boolean',
     },
     due_date: {
       type: 'string',
-      format: 'date'
+      format: 'date',
     },
     recurrence: {
       type: 'string',
-      enum: ['Never', 'Daily', 'Weekly', 'Monthly']
-    }
+      enum: ['Never', 'Daily', 'Weekly', 'Monthly'],
+    },
   },
-  required: ['name', 'due_date']
+  required: ['name', 'due_date'],
 };
 
 const uischema = {
@@ -71,33 +74,33 @@ const uischema = {
     {
       type: 'Control',
       label: false,
-      scope: '#/properties/done'
+      scope: '#/properties/done',
     },
     {
       type: 'Control',
-      scope: '#/properties/name'
+      scope: '#/properties/name',
     },
     {
       type: 'HorizontalLayout',
       elements: [
         {
           type: 'Control',
-          scope: '#/properties/due_date'
+          scope: '#/properties/due_date',
         },
         {
           type: 'Control',
-          scope: '#/properties/recurrence'
-        }
-      ]
-    }
-  ]
+          scope: '#/properties/recurrence',
+        },
+      ],
+    },
+  ],
 };
 const data = {};
 
 export default defineComponent({
   name: 'app',
   components: {
-    JsonForms
+    JsonForms,
   },
   data() {
     return {
@@ -111,7 +114,7 @@ export default defineComponent({
     onChange(event) {
       this.data = event.data;
     },
-  }
+  },
 });
 </script>
 <template>
@@ -145,21 +148,27 @@ If you want to fall back to `defaultStyles` or combine them with your own classe
 ```vue
 <script>
 import { JsonForms } from '@jsonforms/vue2';
-import { defaultStyles, mergeStyles, vanillaRenderers } from '@jsonforms/vue2-vanilla'
-import { defineComponent } from "vue";
+import {
+  defaultStyles,
+  mergeStyles,
+  vanillaRenderers,
+} from '@jsonforms/vue2-vanilla';
+import { defineComponent } from 'vue';
 
 const renderers = [
   ...vanillaRenderers,
   // here you can add custom renderers
-]
+];
 
 // mergeStyles combines all classes from both styles definitions
-const myStyles = mergeStyles(defaultStyles, { control: { root: 'my-control' } });
+const myStyles = mergeStyles(defaultStyles, {
+  control: { root: 'my-control' },
+});
 
 export default defineComponent({
   name: 'app',
   components: {
-    JsonForms
+    JsonForms,
   },
   data() {
     return {
@@ -176,9 +185,9 @@ export default defineComponent({
   },
   provide() {
     return {
-      styles: myStyles
-    }
-  }
+      styles: myStyles,
+    };
+  },
 });
 </script>
 <template>

@@ -3,14 +3,14 @@ import { mountJsonForms } from '../util';
 
 const schema = {
   type: 'string',
-  title: 'My String'
+  title: 'My String',
 };
 const uischema = {
   type: 'Control',
   scope: '#',
   options: {
-    placeholder: 'string placeholder'
-  }
+    placeholder: 'string placeholder',
+  },
 };
 
 describe('StringControlRenderer.vue', () => {

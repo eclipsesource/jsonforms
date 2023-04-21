@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React, {useState, useMemo} from 'react';
+import React, { useState, useMemo } from 'react';
 import { AppBar, Hidden, Tab, Tabs } from '@mui/material';
 import {
   and,
@@ -35,14 +35,18 @@ import {
   StatePropsOfLayout,
   Tester,
   UISchemaElement,
-  uiTypeIs
+  uiTypeIs,
 } from '@jsonforms/core';
-import { TranslateProps, withJsonFormsLayoutProps, withTranslateProps } from '@jsonforms/react';
+import {
+  TranslateProps,
+  withJsonFormsLayoutProps,
+  withTranslateProps,
+} from '@jsonforms/react';
 import {
   AjvProps,
   MaterialLayoutRenderer,
   MaterialLayoutRendererProps,
-  withAjvProps
+  withAjvProps,
 } from '../util/layout';
 
 export const isSingleLevelCategorization: Tester = and(
@@ -69,14 +73,18 @@ export interface CategorizationState {
 }
 
 export interface MaterialCategorizationLayoutRendererProps
-  extends StatePropsOfLayout, AjvProps, TranslateProps {
+  extends StatePropsOfLayout,
+    AjvProps,
+    TranslateProps {
   selected?: number;
   ownState?: boolean;
   data?: any;
   onChange?(selected: number, prevSelected: number): void;
 }
 
-export const MaterialCategorizationLayoutRenderer = (props: MaterialCategorizationLayoutRendererProps) => {
+export const MaterialCategorizationLayoutRenderer = (
+  props: MaterialCategorizationLayoutRendererProps
+) => {
   const {
     data,
     path,
@@ -89,50 +97,73 @@ export const MaterialCategorizationLayoutRenderer = (props: MaterialCategorizati
     selected,
     onChange,
     ajv,
-    t
+    t,
   } = props;
   const categorization = uischema as Categorization;
-  const [activeCategory, setActiveCategory]= useState<number|undefined>(selected??0);
-  const categories = useMemo(() => categorization.elements.filter((category: Category) =>
-    isVisible(category, data, undefined, ajv)
-  ),[categorization, data, ajv]);
+  const [previousCategorization, setPreviousCategorization] =
+    useState<Categorization>(uischema as Categorization);
+  const [activeCategory, setActiveCategory] = useState<number>(selected ?? 0);
+  const categories = useMemo(
+    () =>
+      categorization.elements.filter((category: Category) =>
+        isVisible(category, data, undefined, ajv)
+      ),
+    [categorization, data, ajv]
+  );
+
+  if (categorization !== previousCategorization) {
+    setActiveCategory(0);
+    setPreviousCategorization(categorization);
+  }
+
+  const safeCategory =
+    activeCategory >= categorization.elements.length ? 0 : activeCategory;
+
   const childProps: MaterialLayoutRendererProps = {
-    elements: categories[activeCategory].elements,
+    elements: categories[safeCategory] ? categories[safeCategory].elements : [],
     schema,
     path,
     direction: 'column',
     enabled,
     visible,
     renderers,
-    cells
+    cells,
   };
   const onTabChange = (_event: any, value: any) => {
     if (onChange) {
-      onChange(value, activeCategory);
+      onChange(value, safeCategory);
     }
     setActiveCategory(value);
   };
 
   const tabLabels = useMemo(() => {
-    return categories.map((e: Category) => 
-      deriveLabelForUISchemaElement(e, t)
-    )
-  }, [categories, t])
+    return categories.map((e: Category) => deriveLabelForUISchemaElement(e, t));
+  }, [categories, t]);
 
   return (
     <Hidden xsUp={!visible}>
       <AppBar position='static'>
-        <Tabs value={activeCategory} onChange={onTabChange} textColor='inherit' indicatorColor='secondary' variant='scrollable'>
+        <Tabs
+          value={safeCategory}
+          onChange={onTabChange}
+          textColor='inherit'
+          indicatorColor='secondary'
+          variant='scrollable'
+        >
           {categories.map((_, idx: number) => (
             <Tab key={idx} label={tabLabels[idx]} />
           ))}
         </Tabs>
       </AppBar>
       <div style={{ marginTop: '0.5em' }}>
-        <MaterialLayoutRenderer {...childProps} />
+        <MaterialLayoutRenderer {...childProps} key={safeCategory} />
       </div>
     </Hidden>
   );
 };
 
-export default withAjvProps(withTranslateProps(withJsonFormsLayoutProps(MaterialCategorizationLayoutRenderer)));
+export default withAjvProps(
+  withTranslateProps(
+    withJsonFormsLayoutProps(MaterialCategorizationLayoutRenderer)
+  )
+);

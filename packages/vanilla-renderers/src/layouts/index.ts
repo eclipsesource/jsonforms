@@ -32,5 +32,5 @@ export {
   HorizontalLayout,
   horizontalLayoutTester,
   VerticalLayout,
-  verticalLayoutTester
+  verticalLayoutTester,
 };

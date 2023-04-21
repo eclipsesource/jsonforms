@@ -2,13 +2,13 @@
   <control-wrapper
     v-bind="controlWrapper"
     :styles="styles"
-    :isFocused="isFocused"
-    :appliedOptions="appliedOptions"
+    :is-focused="isFocused"
+    :applied-options="appliedOptions"
   >
     <input
+      :id="control.id + '-input'"
       type="number"
       :step="1"
-      :id="control.id + '-input'"
       :class="styles.control.input"
       :value="control.data"
       :disabled="!control.enabled"
@@ -26,23 +26,29 @@ import {
   ControlElement,
   JsonFormsRendererRegistryEntry,
   rankWith,
-  isIntegerControl
+  isIntegerControl,
 } from '@jsonforms/core';
 import { defineComponent } from 'vue';
-import { rendererProps, useJsonFormsControl, RendererProps } from '../../config/jsonforms';
+import {
+  rendererProps,
+  useJsonFormsControl,
+  RendererProps,
+} from '../../config/jsonforms';
 import { default as ControlWrapper } from './ControlWrapper.vue';
 import { useVanillaControl } from '../util';
 
 const controlRenderer = defineComponent({
-  name: 'integer-control-renderer',
+  name: 'IntegerControlRenderer',
   components: {
-    ControlWrapper
+    ControlWrapper,
   },
   props: {
-    ...rendererProps<ControlElement>()
+    ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    return useVanillaControl(useJsonFormsControl(props), target => target.value === '' ? undefined : parseInt(target.value, 10));
+    return useVanillaControl(useJsonFormsControl(props), (target) =>
+      target.value === '' ? undefined : parseInt(target.value, 10)
+    );
   },
 });
 
@@ -50,6 +56,6 @@ export default controlRenderer;
 
 export const entry: JsonFormsRendererRegistryEntry = {
   renderer: controlRenderer,
-  tester: rankWith(1, isIntegerControl)
+  tester: rankWith(1, isIntegerControl),
 };
 </script>

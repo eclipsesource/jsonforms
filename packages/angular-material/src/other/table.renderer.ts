@@ -23,26 +23,29 @@
   THE SOFTWARE.
 */
 import startCase from 'lodash/startCase';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   JsonFormsAngularService,
-  JsonFormsArrayControl
+  JsonFormsArrayControl,
 } from '@jsonforms/angular';
 import {
   ArrayControlProps,
-  ControlElement, createDefaultValue,
+  ArrayTranslations,
+  ControlElement,
+  createDefaultValue,
   deriveTypes,
   encode,
   isObjectArrayControl,
   isPrimitiveArrayControl,
-  JsonSchema, mapDispatchToArrayControlProps,
+  JsonSchema,
+  mapDispatchToArrayControlProps,
   or,
   OwnPropsOfRenderer,
   Paths,
   RankedTester,
   rankWith,
   setReadonly,
-  UISchemaElement
+  UISchemaElement,
 } from '@jsonforms/core';
 
 @Component({
@@ -57,20 +60,36 @@ import {
       <ng-container matColumnDef="action">
         <tr>
           <th mat-header-cell *matHeaderCellDef>
-            <button mat-button color="primary" (click)="add()" [disabled]="!isEnabled()" matTooltip="Add"><mat-icon>add</mat-icon></button>
+            <button
+              mat-button
+              color="primary"
+              (click)="add()"
+              [disabled]="!isEnabled()"
+              [matTooltip]="translations.addTooltip"
+            >
+              <mat-icon>add</mat-icon>
+            </button>
           </th>
         </tr>
         <tr>
-          <td mat-cell *matCellDef="let row; let i = index; let first = first; let last = last;">
-          <button
+          <td
+            mat-cell
+            *matCellDef="
+              let row;
+              let i = index;
+              let first = first;
+              let last = last
+            "
+          >
+            <button
               *ngIf="uischema?.options?.showSortButtons"
               class="item-up"
               mat-button
               [disabled]="first"
               (click)="up(i)"
-              matTooltip="Move item up"
+              [matTooltip]="translations.upAriaLabel"
               matTooltipPosition="right"
-              >
+            >
               <mat-icon>arrow_upward</mat-icon>
             </button>
             <button
@@ -79,24 +98,27 @@ import {
               mat-button
               [disabled]="last"
               (click)="down(i)"
-              matTooltip="Move item down"
+              [matTooltip]="translations.downAriaLabel"
               matTooltipPosition="right"
             >
               <mat-icon>arrow_downward</mat-icon>
             </button>
             <button
-                mat-button
-                color="warn"
-                (click)="remove(i)"
-                [disabled]="!isEnabled()"
-                matTooltipPosition="right"
-                matTooltip="Delete"
+              mat-button
+              color="warn"
+              (click)="remove(i)"
+              [disabled]="!isEnabled()"
+              matTooltipPosition="right"
+              [matTooltip]="translations.removeTooltip"
             >
               <mat-icon>delete</mat-icon>
             </button>
           </td>
-        <tr>
-      </ng-container>
+        </tr>
+
+        <tr></tr
+      ></ng-container>
+
       <ng-container
         *ngFor="let item of items"
         matColumnDef="{{ item.property }}"
@@ -113,11 +135,9 @@ import {
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
   `,
-  styles: [
-      'table {width: 100%;}',
-      '.cdk-column-action { width: 15%}']
+  styles: ['table {width: 100%;}', '.cdk-column-action { width: 15%}'],
 })
-export class TableRenderer extends JsonFormsArrayControl {
+export class TableRenderer extends JsonFormsArrayControl implements OnInit {
   detailUiSchema: UISchemaElement;
   displayedColumns: string[];
   items: ColumnDescription[];
@@ -126,6 +146,7 @@ export class TableRenderer extends JsonFormsArrayControl {
   moveItemUp: (path: string, index: number) => () => void;
   moveItemDown: (path: string, index: number) => () => void;
   removeItems: (path: string, toDelete: number[]) => () => void;
+  translations: ArrayTranslations;
 
   constructor(jsonformsService: JsonFormsAngularService) {
     super(jsonformsService);
@@ -135,17 +156,18 @@ export class TableRenderer extends JsonFormsArrayControl {
   }
   mapAdditionalProps(props: ArrayControlProps) {
     this.items = this.generateCells(props.schema, props.path);
-    this.displayedColumns = this.items.map(item => item.property);
+    this.displayedColumns = this.items.map((item) => item.property);
     if (this.isEnabled()) {
       this.displayedColumns.push('action');
     }
+    this.translations = props.translations;
   }
   getProps(index: number, props: OwnPropsOfRenderer): OwnPropsOfRenderer {
     const rowPath = Paths.compose(props.path, `${index}`);
     return {
       schema: props.schema,
       uischema: props.uischema,
-      path: rowPath
+      path: rowPath,
     };
   }
 
@@ -164,9 +186,10 @@ export class TableRenderer extends JsonFormsArrayControl {
   ngOnInit() {
     super.ngOnInit();
 
-    const { addItem, removeItems, moveUp, moveDown } = mapDispatchToArrayControlProps(
+    const { addItem, removeItems, moveUp, moveDown } =
+      mapDispatchToArrayControlProps(
         this.jsonFormsService.updateCore.bind(this.jsonFormsService)
-    );
+      );
     this.addItem = addItem;
     this.moveItemUp = moveUp;
     this.moveItemDown = moveDown;
@@ -178,7 +201,7 @@ export class TableRenderer extends JsonFormsArrayControl {
     rowPath: string
   ): ColumnDescription[] => {
     if (schema.type === 'object') {
-      return this.getValidColumnProps(schema).map(prop => {
+      return this.getValidColumnProps(schema).map((prop) => {
         const encProp = encode(prop);
         const uischema = controlWithoutLabel(`#/properties/${encProp}`);
         if (!this.isEnabled()) {
@@ -190,8 +213,8 @@ export class TableRenderer extends JsonFormsArrayControl {
           props: {
             schema: schema,
             uischema,
-            path: rowPath
-          }
+            path: rowPath,
+          },
         };
       });
     }
@@ -203,15 +226,15 @@ export class TableRenderer extends JsonFormsArrayControl {
         props: {
           schema: schema,
           uischema: controlWithoutLabel(`#`),
-          path: rowPath
-        }
-      }
+          path: rowPath,
+        },
+      },
     ];
   };
 
   getValidColumnProps = (scopedSchema: JsonSchema) => {
     if (scopedSchema.type === 'object') {
-      return Object.keys(scopedSchema.properties).filter(prop => {
+      return Object.keys(scopedSchema.properties).filter((prop) => {
         const types = deriveTypes(scopedSchema.properties[prop]);
         if (types.length > 1) {
           return false;
@@ -237,5 +260,5 @@ interface ColumnDescription {
 export const controlWithoutLabel = (scope: string): ControlElement => ({
   type: 'Control',
   scope: scope,
-  label: false
+  label: false,
 });

@@ -14,7 +14,7 @@
     "sourceMap": true,
     "outDir": "./lib",
     "types": ["node", "vue", "mocha", "chai"],
-    "lib": ["esnext", "dom", "dom.iterable", "scripthost"],
+    "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
   },
   "exclude": ["node_modules", "lib"]
 }

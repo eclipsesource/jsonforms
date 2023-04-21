@@ -22,8 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React from 'react';
-import { Component } from 'react';
+import React, { Component } from 'react';
 
 /**
  * Props of an {@link UnknownRenderer}
@@ -41,9 +40,7 @@ export interface UnknownRendererProps {
 export class UnknownRenderer extends Component<UnknownRendererProps, any> {
   render() {
     return (
-      <div style={{color: 'red'}}>
-        No applicable {this.props.type} found.
-      </div>
+      <div style={{ color: 'red' }}>No applicable {this.props.type} found.</div>
     );
   }
 }

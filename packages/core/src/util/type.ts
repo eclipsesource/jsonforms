@@ -62,7 +62,9 @@ export interface AnyAction extends Action {
  * @template A The type of things (actions or otherwise) which may be
  *   dispatched.
  */
-export type Dispatch<A extends Action = AnyAction> = <T extends A>(action: T) => T;
+export type Dispatch<A extends Action = AnyAction> = <T extends A>(
+  action: T
+) => T;
 
 // Copied from https://github.com/reduxjs/redux/blob/master/src/types/store.ts
 /**
@@ -171,7 +173,7 @@ export type Observable<T> = {
    * emission of values from the observable.
    */
   subscribe(observer: Observer<T>): { unsubscribe: Unsubscribe };
-  [Symbol.observable](): Observable<T>
+  [Symbol.observable](): Observable<T>;
 };
 
 // Copied from https://github.com/reduxjs/redux/blob/master/src/types/store.ts
@@ -180,7 +182,7 @@ export type Observable<T> = {
  * an argument to subscribe.
  */
 export type Observer<T> = {
-  next?(value: T): void
+  next?(value: T): void;
 };
 
 // Copied from https://github.com/reduxjs/redux/blob/master/src/types/reducers.ts

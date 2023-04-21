@@ -14,8 +14,8 @@ const examples = {
   'react-vanilla': join(packagesDir, 'vanilla-renderers', 'example', 'dist'),
   'react-material': join(packagesDir, 'material-renderers', 'example', 'dist'),
   'angular-material': join(packagesDir, 'angular-material', 'example', 'dist'),
-  'vue-vanilla': join(packagesDir, 'vue', 'vue-vanilla', 'example', 'dist')
-}
+  'vue-vanilla': join(packagesDir, 'vue', 'vue-vanilla', 'example', 'dist'),
+};
 
 // Clean and recreate dist dir
 console.log('Clean and recreate dist dir...');
@@ -26,7 +26,7 @@ mkdirSync(distDir, { recursive: true });
 console.log('Copy index.html...');
 console.log('Copy example apps...');
 copyFileSync(join(__dirname, 'index.html'), join(distDir, 'index.html'));
-Object.keys(examples).forEach(key => {
+Object.keys(examples).forEach((key) => {
   console.log(`Copying example ${key}...`);
   const path = examples[key];
   copySync(path, join(distDir, key));

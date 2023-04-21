@@ -29,34 +29,34 @@ export const schema = {
   properties: {
     name: {
       type: 'string',
-      default: 'foo'
+      default: 'foo',
     },
     name_noDefault: {
-      type: 'string'
+      type: 'string',
     },
     description: {
       type: 'string',
-      default: 'bar'
+      default: 'bar',
     },
     done: {
       type: 'boolean',
-      default: false
+      default: false,
     },
     rating: {
       type: 'integer',
-      default: 5
+      default: 5,
     },
     cost: {
       type: 'number',
-      default: 5.5
+      default: 5.5,
     },
     dueDate: {
       type: 'string',
       format: 'date',
-      default: '2019-04-01'
-    }
+      default: '2019-04-01',
+    },
   },
-  required: ['name', 'name_noDefault']
+  required: ['name', 'name_noDefault'],
 };
 
 export const uischema = {
@@ -64,37 +64,37 @@ export const uischema = {
   elements: [
     {
       type: 'Control',
-      scope: '#/properties/name'
+      scope: '#/properties/name',
     },
     {
       type: 'Control',
-      scope: '#/properties/name_noDefault'
+      scope: '#/properties/name_noDefault',
     },
     {
       type: 'Control',
       label: false,
-      scope: '#/properties/done'
+      scope: '#/properties/done',
     },
     {
       type: 'Control',
       scope: '#/properties/description',
       options: {
-        multi: true
-      }
+        multi: true,
+      },
     },
     {
       type: 'Control',
-      scope: '#/properties/rating'
+      scope: '#/properties/rating',
     },
     {
       type: 'Control',
-      scope: '#/properties/cost'
+      scope: '#/properties/cost',
     },
     {
       type: 'Control',
-      scope: '#/properties/dueDate'
-    }
-  ]
+      scope: '#/properties/dueDate',
+    },
+  ],
 };
 
 export const data = {
@@ -104,7 +104,7 @@ export const data = {
   done: true,
   rating: 1,
   cost: 3.14,
-  dueDate: '2019-05-01'
+  dueDate: '2019-05-01',
 };
 
 registerExamples([
@@ -113,6 +113,6 @@ registerExamples([
     label: 'Default',
     data,
     schema,
-    uischema
-  }
+    uischema,
+  },
 ]);

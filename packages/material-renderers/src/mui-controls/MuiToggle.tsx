@@ -31,7 +31,9 @@ interface MuiToggleInputProps {
   inputProps?: InputProps['inputProps'];
 }
 
-export const MuiToggle = React.memo((props: CellProps & WithClassname & MuiToggleInputProps) => {
+export const MuiToggle = React.memo(function MuiToggle(
+  props: CellProps & WithClassname & MuiToggleInputProps
+) {
   const {
     data,
     className,
@@ -41,11 +43,11 @@ export const MuiToggle = React.memo((props: CellProps & WithClassname & MuiToggl
     path,
     handleChange,
     config,
-    inputProps
+    inputProps,
   } = props;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
   const inputPropsMerged = merge({}, inputProps, {
-    autoFocus: !!appliedUiSchemaOptions.focus
+    autoFocus: !!appliedUiSchemaOptions.focus,
   });
   const checked = !!data;
 

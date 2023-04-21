@@ -31,7 +31,7 @@ import { StyleDef } from '../styles';
 
 const removeStyle = (styles: StyleDef[], name: string) => {
   const copy = styles.slice();
-  remove(copy, styleDef => styleDef.name === name);
+  remove(copy, (styleDef) => styleDef.name === name);
 
   return copy;
 };
@@ -43,23 +43,26 @@ const registerStyle = (styles: StyleDef[], { name, classNames }: StyleDef) => {
   return copy;
 };
 
-export const findStyle = (styles: StyleDef[]) => (
-  style: string,
-  ...args: any[]
-): string[] => {
-  const foundStyles = filter(styles, s => s.name === style);
-  return reduce(foundStyles, (res: string[], style: StyleDef) => {
-    if (typeof style.classNames === 'function') {
-      return res.concat(style.classNames(args));
-    }
-    return res.concat(style.classNames);
-  }, []);
-};
+export const findStyle =
+  (styles: StyleDef[]) =>
+  (style: string, ...args: any[]): string[] => {
+    const foundStyles = filter(styles, (s) => s.name === style);
+    return reduce(
+      foundStyles,
+      (res: string[], style: StyleDef) => {
+        if (typeof style.classNames === 'function') {
+          return res.concat(style.classNames(args));
+        }
+        return res.concat(style.classNames);
+      },
+      []
+    );
+  };
 
-export const findStyleAsClassName = (styles: StyleDef[]) => (
-  style: string,
-  ...args: any[]
-): string => join(findStyle(styles)(style, args), ' ');
+export const findStyleAsClassName =
+  (styles: StyleDef[]) =>
+  (style: string, ...args: any[]): string =>
+    join(findStyle(styles)(style, args), ' ');
 
 // TODO
 export const stylingReducer = (state: StyleDef[] = [], action: any) => {
@@ -67,7 +70,7 @@ export const stylingReducer = (state: StyleDef[] = [], action: any) => {
     case REGISTER_STYLE: {
       return registerStyle(state, {
         name: action.name,
-        classNames: action.classNames
+        classNames: action.classNames,
       });
     }
     case REGISTER_STYLES: {

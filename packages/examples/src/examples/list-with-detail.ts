@@ -24,13 +24,13 @@
 */
 import { registerExamples } from '../register';
 
-const data = {
+export const data = {
   orders: [
     {
       customer: {
         id: '471201',
         name: 'Sirius Cybernetics Corporation',
-        department: 'Complaints Division'
+        department: 'Complaints Division',
       },
       title: '42 killer robots',
       ordered: true,
@@ -38,23 +38,23 @@ const data = {
       assignee: 'Philip J. Fry',
       status: 'ordered',
       startDate: '2018-06-01',
-      endDate: '2018-08-01'
+      endDate: '2018-08-01',
     },
     {
       customer: {
         id: '471202',
-        name: 'Very Big Corporation of America'
+        name: 'Very Big Corporation of America',
       },
       title: '1000 gallons of MomCorp Oil',
       processId: '1890004499',
       assignee: 'Jen Barber',
       startDate: '2018-07-01',
-      status: 'planned'
-    }
-  ]
+      status: 'planned',
+    },
+  ],
 };
 
-const schema = {
+export const schema = {
   definitions: {
     order: {
       type: 'object',
@@ -64,48 +64,48 @@ const schema = {
           properties: {
             id: { type: 'string' },
             name: { type: 'string', format: 'email' },
-            department: { type: 'string' }
-          }
+            department: { type: 'string' },
+          },
         },
         title: {
           type: 'string',
           minLength: 5,
-          title: 'Official Title'
+          title: 'Official Title',
         },
         ordered: { type: 'boolean' },
         processId: {
           type: 'number',
-          minimum: 0
+          minimum: 0,
         },
         assignee: { type: 'string' },
         startDate: {
           type: 'string',
-          format: 'date'
+          format: 'date',
         },
         endDate: {
           type: 'string',
-          format: 'date'
+          format: 'date',
         },
         status: {
           type: 'string',
-          enum: ['unordered', 'planned', 'ordered']
-        }
+          enum: ['unordered', 'planned', 'ordered'],
+        },
       },
-      required: ['title']
-    }
+      required: ['title'],
+    },
   },
   type: 'object',
   properties: {
     orders: {
       type: 'array',
       items: {
-        $ref: '#/definitions/order'
-      }
-    }
-  }
+        $ref: '#/definitions/order',
+      },
+    },
+  },
 };
 
-const uischema = {
+export const uischema = {
   type: 'ListWithDetail',
   scope: '#/properties/orders',
   options: {
@@ -118,13 +118,13 @@ const uischema = {
           elements: [
             {
               type: 'Control',
-              scope: '#/properties/title'
+              scope: '#/properties/title',
             },
             {
               type: 'Control',
-              scope: '#/properties/processId'
-            }
-          ]
+              scope: '#/properties/processId',
+            },
+          ],
         },
         {
           type: 'Group',
@@ -133,19 +133,19 @@ const uischema = {
             {
               type: 'Control',
               label: 'ID',
-              scope: '#/properties/customer/properties/id'
+              scope: '#/properties/customer/properties/id',
             },
             {
               type: 'Control',
               label: 'Name',
-              scope: '#/properties/customer/properties/name'
+              scope: '#/properties/customer/properties/name',
             },
             {
               type: 'Control',
               label: 'Department',
-              scope: '#/properties/customer/properties/department'
-            }
-          ]
+              scope: '#/properties/customer/properties/department',
+            },
+          ],
         },
         {
           type: 'VerticalLayout',
@@ -160,42 +160,42 @@ const uischema = {
                       type: 'Control',
                       scope: '#/properties/ordered',
                       options: {
-                        toggle: true
-                      }
+                        toggle: true,
+                      },
                     },
                     {
                       type: 'Control',
-                      scope: '#/properties/assignee'
-                    }
-                  ]
+                      scope: '#/properties/assignee',
+                    },
+                  ],
                 },
                 {
                   type: 'HorizontalLayout',
                   elements: [
                     {
                       type: 'Control',
-                      scope: '#/properties/startDate'
+                      scope: '#/properties/startDate',
                     },
                     {
                       type: 'Control',
-                      scope: '#/properties/endDate'
-                    }
-                  ]
+                      scope: '#/properties/endDate',
+                    },
+                  ],
                 },
                 {
                   type: 'Control',
-                  scope: '#/properties/status'
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  }
+                  scope: '#/properties/status',
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  },
 };
 
-const uischemaNoLabelRef = {
+export const uischemaNoLabelRef = {
   type: 'ListWithDetail',
   scope: '#/properties/orders',
   options: {
@@ -207,13 +207,13 @@ const uischemaNoLabelRef = {
           elements: [
             {
               type: 'Control',
-              scope: '#/properties/title'
+              scope: '#/properties/title',
             },
             {
               type: 'Control',
-              scope: '#/properties/processId'
-            }
-          ]
+              scope: '#/properties/processId',
+            },
+          ],
         },
         {
           type: 'Group',
@@ -222,19 +222,19 @@ const uischemaNoLabelRef = {
             {
               type: 'Control',
               label: 'ID',
-              scope: '#/properties/customer/properties/id'
+              scope: '#/properties/customer/properties/id',
             },
             {
               type: 'Control',
               label: 'Name',
-              scope: '#/properties/customer/properties/name'
+              scope: '#/properties/customer/properties/name',
             },
             {
               type: 'Control',
               label: 'Department',
-              scope: '#/properties/customer/properties/department'
-            }
-          ]
+              scope: '#/properties/customer/properties/department',
+            },
+          ],
         },
         {
           type: 'VerticalLayout',
@@ -249,39 +249,39 @@ const uischemaNoLabelRef = {
                       type: 'Control',
                       scope: '#/properties/ordered',
                       options: {
-                        toggle: true
-                      }
+                        toggle: true,
+                      },
                     },
                     {
                       type: 'Control',
-                      scope: '#/properties/assignee'
-                    }
-                  ]
+                      scope: '#/properties/assignee',
+                    },
+                  ],
                 },
                 {
                   type: 'HorizontalLayout',
                   elements: [
                     {
                       type: 'Control',
-                      scope: '#/properties/startDate'
+                      scope: '#/properties/startDate',
                     },
                     {
                       type: 'Control',
-                      scope: '#/properties/endDate'
-                    }
-                  ]
+                      scope: '#/properties/endDate',
+                    },
+                  ],
                 },
                 {
                   type: 'Control',
-                  scope: '#/properties/status'
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  }
+                  scope: '#/properties/status',
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  },
 };
 
 registerExamples([
@@ -290,8 +290,8 @@ registerExamples([
     label: 'List With Detail',
     data,
     schema,
-    uischema
-  }
+    uischema,
+  },
 ]);
 
 registerExamples([
@@ -300,6 +300,6 @@ registerExamples([
     label: 'List With Detail (No Label Ref)',
     data,
     schema,
-    uischema:uischemaNoLabelRef
-  }
+    uischema: uischemaNoLabelRef,
+  },
 ]);

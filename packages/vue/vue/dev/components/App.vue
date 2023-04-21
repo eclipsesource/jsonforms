@@ -1,26 +1,26 @@
 <script lang="ts">
-import { defineComponent } from "../../config";
+import { defineComponent } from 'vue';
 import { JsonForms, JsonFormsChangeEvent } from '../../src';
 import { vueRenderers } from '../renderers';
 
 export default defineComponent({
-  name: 'app',
+  name: 'App',
   components: {
-    JsonForms
+    JsonForms,
   },
-  data: function() {
+  data: function () {
     return {
       renderers: Object.freeze(vueRenderers),
       data: {
-        number: 5
+        number: 5,
       },
       schema: {
         properties: {
           number: {
-            type: 'number'
-          }
-        }
-      } as any
+            type: 'number',
+          },
+        },
+      } as any,
     };
   },
   methods: {
@@ -28,25 +28,25 @@ export default defineComponent({
       this.schema = {
         properties: {
           name: {
-            type: 'string'
-          }
-        }
+            type: 'string',
+          },
+        },
       };
     },
     onChange(event: JsonFormsChangeEvent) {
       console.log(event);
       this.data = event.data;
-    }
-  }
+    },
+  },
 });
 </script>
 
 <template>
   <div id="app">
     <json-forms
-      v-bind:data="data"
-      v-bind:schema="schema"
-      v-bind:renderers="renderers"
+      :data="data"
+      :schema="schema"
+      :renderers="renderers"
       @change="onChange"
     />
     <button @click="setSchema">Set Schema</button>

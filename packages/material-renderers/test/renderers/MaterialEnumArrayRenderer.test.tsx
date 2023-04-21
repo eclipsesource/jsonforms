@@ -6,12 +6,12 @@ import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import React from 'react';
 import {
   materialEnumArrayRendererTester,
-  MaterialEnumArrayRenderer
+  MaterialEnumArrayRenderer,
 } from '../../src';
 
 const MaterialEnumArrayRendererRegistration = {
   tester: materialEnumArrayRendererTester,
-  renderer: MaterialEnumArrayRenderer
+  renderer: MaterialEnumArrayRenderer,
 };
 const data = ['bar'];
 const oneOfSchema = {
@@ -20,27 +20,27 @@ const oneOfSchema = {
     oneOf: [
       {
         const: 'foo',
-        title: 'My Title'
+        title: 'My Title',
       },
       {
-        const: 'bar'
-      }
-    ]
+        const: 'bar',
+      },
+    ],
   },
-  uniqueItems: true
+  uniqueItems: true,
 };
 
 const enumSchema = {
   type: 'array',
   items: {
     type: 'string',
-    enum: ['a', 'b', 'c']
+    enum: ['a', 'b', 'c'],
   },
-  uniqueItems: true
+  uniqueItems: true,
 };
 const uischema: ControlElement = {
   type: 'Control',
-  scope: '#'
+  scope: '#',
 };
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -48,25 +48,33 @@ Enzyme.configure({ adapter: new Adapter() });
 describe('EnumArrayControl tester', () => {
   test('should fail', () => {
     expect(
-      materialEnumArrayRendererTester(uischema, {
-        type: 'array',
-        items: {}
-      },
-      undefined)
+      materialEnumArrayRendererTester(
+        uischema,
+        {
+          type: 'array',
+          items: {},
+        },
+        undefined
+      )
     ).toBe(NOT_APPLICABLE);
     expect(
-      materialEnumArrayRendererTester(uischema, {
-        type: 'array',
-        items: {
-          anyOf: []
-        }
-      },
-      undefined)
+      materialEnumArrayRendererTester(
+        uischema,
+        {
+          type: 'array',
+          items: {
+            anyOf: [],
+          },
+        },
+        undefined
+      )
     ).toBe(NOT_APPLICABLE);
   });
 
   it('should succeed for schema with enum items', () => {
-    expect(materialEnumArrayRendererTester(uischema, enumSchema, undefined)).toBe(5);
+    expect(
+      materialEnumArrayRendererTester(uischema, enumSchema, undefined)
+    ).toBe(5);
   });
 });
 

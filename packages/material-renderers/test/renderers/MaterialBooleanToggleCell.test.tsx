@@ -27,10 +27,10 @@ import * as React from 'react';
 import {
   ControlElement,
   NOT_APPLICABLE,
-  UISchemaElement
+  UISchemaElement,
 } from '@jsonforms/core';
 import BooleanToggleCell, {
-  materialBooleanToggleCellTester
+  materialBooleanToggleCellTester,
 } from '../../src/cells/MaterialBooleanToggleCell';
 import * as ReactDOM from 'react-dom';
 import { materialRenderers } from '../../src';
@@ -45,14 +45,14 @@ Enzyme.configure({ adapter: new Adapter() });
 
 const data = { foo: true };
 const schema = {
-  type: 'boolean'
+  type: 'boolean',
 };
 const uischema: ControlElement = {
   type: 'Control',
   scope: '#/properties/foo',
   options: {
-    toggle: true
-  }
+    toggle: true,
+  },
 };
 
 describe('Material boolean toggle cell tester', () => {
@@ -60,43 +60,49 @@ describe('Material boolean toggle cell tester', () => {
     type: 'Control',
     scope: '#/properties/foo',
     options: {
-      toggle: true
-    }
+      toggle: true,
+    },
   };
 
   it('should fail', () => {
-    expect(materialBooleanToggleCellTester(undefined, undefined, undefined)).toBe(
-      NOT_APPLICABLE
-    );
+    expect(
+      materialBooleanToggleCellTester(undefined, undefined, undefined)
+    ).toBe(NOT_APPLICABLE);
     expect(materialBooleanToggleCellTester(null, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
-    expect(materialBooleanToggleCellTester({ type: 'Foo' }, undefined, undefined)).toBe(
-      NOT_APPLICABLE
-    );
+    expect(
+      materialBooleanToggleCellTester({ type: 'Foo' }, undefined, undefined)
+    ).toBe(NOT_APPLICABLE);
     expect(
       materialBooleanToggleCellTester({ type: 'Control' }, undefined, undefined)
     ).toBe(NOT_APPLICABLE);
     expect(
-      materialBooleanToggleCellTester(control, {
-        type: 'object',
-        properties: { foo: { type: 'string' } }
-      },
-      undefined)
+      materialBooleanToggleCellTester(
+        control,
+        {
+          type: 'object',
+          properties: { foo: { type: 'string' } },
+        },
+        undefined
+      )
     ).toBe(NOT_APPLICABLE);
     expect(
-      materialBooleanToggleCellTester(control, {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'string'
+      materialBooleanToggleCellTester(
+        control,
+        {
+          type: 'object',
+          properties: {
+            foo: {
+              type: 'string',
+            },
+            bar: {
+              type: 'boolean',
+            },
           },
-          bar: {
-            type: 'boolean'
-          }
-        }
-      },
-      undefined)
+        },
+        undefined
+      )
     ).toBe(NOT_APPLICABLE);
 
     // Not applicable for boolean cell if toggle option is false
@@ -106,16 +112,16 @@ describe('Material boolean toggle cell tester', () => {
           type: 'Control',
           scope: '#/properties/foo',
           options: {
-            toggle: false
-          }
+            toggle: false,
+          },
         } as UISchemaElement,
         {
           type: 'object',
           properties: {
             foo: {
-              type: 'boolean'
-            }
-          }
+              type: 'boolean',
+            },
+          },
         },
         undefined
       )
@@ -132,9 +138,9 @@ describe('Material boolean toggle cell tester', () => {
           type: 'object',
           properties: {
             foo: {
-              type: 'boolean'
-            }
-          }
+              type: 'boolean',
+            },
+          },
         },
         undefined
       )
@@ -143,15 +149,18 @@ describe('Material boolean toggle cell tester', () => {
 
   it('should succeed', () => {
     expect(
-      materialBooleanToggleCellTester(control, {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'boolean'
-          }
-        }
-      },
-      undefined)
+      materialBooleanToggleCellTester(
+        control,
+        {
+          type: 'object',
+          properties: {
+            foo: {
+              type: 'boolean',
+            },
+          },
+        },
+        undefined
+      )
     ).toBe(3);
   });
 });
@@ -176,7 +185,7 @@ describe('Material boolean toggle cell', () => {
       options: {
         focus: true,
         toggle: true,
-      }
+      },
     };
     const core = initCore(schema, uischema, data);
     wrapper = mount(
@@ -197,7 +206,7 @@ describe('Material boolean toggle cell', () => {
       options: {
         focus: false,
         toggle: true,
-      }
+      },
     };
     const core = initCore(schema, uischema, data);
     wrapper = mount(
@@ -217,7 +226,7 @@ describe('Material boolean toggle cell', () => {
       scope: '#/properties/foo',
       options: {
         toggle: true,
-      }
+      },
     };
     const core = initCore(schema, uischema, data);
     wrapper = mount(
@@ -252,7 +261,7 @@ describe('Material boolean toggle cell', () => {
   it('should update via input event', () => {
     const core = initCore(schema, uischema, data);
     const onChangeData: any = {
-      data: undefined
+      data: undefined,
     };
     wrapper = mount(
       <JsonFormsStateProvider
@@ -275,7 +284,7 @@ describe('Material boolean toggle cell', () => {
   it('should update via action', () => {
     const core = initCore(schema, uischema, data);
     const onChangeData: any = {
-      data: undefined
+      data: undefined,
     };
     wrapper = mount(
       <JsonFormsStateProvider
@@ -300,7 +309,7 @@ describe('Material boolean toggle cell', () => {
   it('should update with undefined value', () => {
     const core = initCore(schema, uischema, data);
     const onChangeData: any = {
-      data: undefined
+      data: undefined,
     };
     wrapper = mount(
       <JsonFormsStateProvider
@@ -324,7 +333,7 @@ describe('Material boolean toggle cell', () => {
   it('should update with null value', () => {
     const core = initCore(schema, uischema, data);
     const onChangeData: any = {
-      data: undefined
+      data: undefined,
     };
     wrapper = mount(
       <JsonFormsStateProvider
@@ -348,7 +357,7 @@ describe('Material boolean toggle cell', () => {
   it('should not update with wrong ref', () => {
     const core = initCore(schema, uischema, data);
     const onChangeData: any = {
-      data: undefined
+      data: undefined,
     };
     wrapper = mount(
       <JsonFormsStateProvider
@@ -371,7 +380,7 @@ describe('Material boolean toggle cell', () => {
   it('should not update with null ref', () => {
     const core = initCore(schema, uischema, data);
     const onChangeData: any = {
-      data: undefined
+      data: undefined,
     };
     wrapper = mount(
       <JsonFormsStateProvider
@@ -394,7 +403,7 @@ describe('Material boolean toggle cell', () => {
   it('should not update with an undefined ref', () => {
     const core = initCore(schema, uischema, data);
     const onChangeData: any = {
-      data: undefined
+      data: undefined,
     };
     wrapper = mount(
       <JsonFormsStateProvider

@@ -29,7 +29,7 @@ import {
   isObjectControl,
   RankedTester,
   rankWith,
-  StatePropsOfControlWithDetail
+  StatePropsOfControlWithDetail,
 } from '@jsonforms/core';
 import { JsonFormsDispatch, withJsonFormsDetailProps } from '@jsonforms/react';
 import { Hidden } from '@mui/material';
@@ -45,7 +45,7 @@ export const MaterialObjectRenderer = ({
   visible,
   enabled,
   uischema,
-  rootSchema
+  rootSchema,
 }: StatePropsOfControlWithDetail) => {
   const detailUiSchema = useMemo(
     () =>
@@ -54,7 +54,10 @@ export const MaterialObjectRenderer = ({
         schema,
         uischema.scope,
         path,
-        () => isEmpty(path) ? Generate.uiSchema(schema, 'VerticalLayout') : {...Generate.uiSchema(schema, 'Group'), label},
+        () =>
+          isEmpty(path)
+            ? Generate.uiSchema(schema, 'VerticalLayout')
+            : { ...Generate.uiSchema(schema, 'Group'), label },
         uischema,
         rootSchema
       ),

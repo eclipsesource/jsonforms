@@ -31,7 +31,12 @@ import type { RendererProps } from '@jsonforms/core';
  * @template P type of any renderer props
  * @template S state of the Renderer
  */
-export class RendererComponent<P extends RendererProps, S = {}> extends React.Component<P, S> {
+export class RendererComponent<
+  P extends RendererProps,
+  // TODO fix @typescript-eslint/ban-types
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  S = {}
+> extends React.Component<P, S> {
   constructor(props: P) {
     super(props);
   }
@@ -42,12 +47,14 @@ export class RendererComponent<P extends RendererProps, S = {}> extends React.Co
  *
  * @template P type of any renderer props
  */
-export interface StatelessRenderer<P extends RendererProps> extends React.StatelessComponent<P> {
-
-}
+export type StatelessRenderer<P extends RendererProps> =
+  React.StatelessComponent<P>;
 
 /**
  * Represents a Renderer, which might either be a component or a function.
  */
 export type Renderer =
-  RendererComponent<RendererProps & any, {}> | StatelessRenderer<RendererProps & any>;
+  // TODO fix @typescript-eslint/ban-types
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  | RendererComponent<RendererProps & any, {}>
+  | StatelessRenderer<RendererProps & any>;

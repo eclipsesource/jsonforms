@@ -3,14 +3,14 @@ import { mountJsonForms } from '../util';
 
 const schema = {
   type: 'number',
-  title: 'My Number'
+  title: 'My Number',
 };
 const uischema = {
   type: 'Control',
   scope: '#',
   options: {
-    placeholder: 'number placeholder'
-  }
+    placeholder: 'number placeholder',
+  },
 };
 
 describe('NumberControlRenderer.vue', () => {
@@ -30,7 +30,7 @@ describe('NumberControlRenderer.vue', () => {
     await input.setValue(2);
     expect(wrapper.vm.data).to.equal(2);
   });
-  
+
   it('should have a placeholder', async () => {
     const wrapper = mountJsonForms(1, schema, uischema);
     const input = wrapper.find('input');

@@ -30,21 +30,21 @@ export const personCoreSchema = {
     name: {
       type: 'string',
       minLength: 3,
-      description: 'Please enter your name'
+      description: 'Please enter your name',
     },
     vegetarian: {
-      type: 'boolean'
+      type: 'boolean',
     },
     birthDate: {
       type: 'string',
       format: 'date',
-      description: 'Please enter your birth date.'
+      description: 'Please enter your birth date.',
     },
     nationality: {
       type: 'string',
-      enum: ['DE', 'IT', 'JP', 'US', 'RU', 'Other']
-    }
-  }
+      enum: ['DE', 'IT', 'JP', 'US', 'RU', 'Other'],
+    },
+  },
 };
 
 export const schema = {
@@ -56,36 +56,36 @@ export const schema = {
       properties: {
         age: {
           type: 'integer',
-          description: 'Please enter your age.'
+          description: 'Please enter your age.',
         },
         height: {
-          type: 'number'
+          type: 'number',
         },
         drivingSkill: {
           type: 'number',
           maximum: 10,
           minimum: 1,
-          default: 7
-        }
+          default: 7,
+        },
       },
-      required: ['age', 'height']
+      required: ['age', 'height'],
     },
     vegetarian: {
-      type: 'boolean'
+      type: 'boolean',
     },
     birthDate: {
       type: 'string',
-      format: 'date'
+      format: 'date',
     },
     occupation: {
-      type: 'string'
+      type: 'string',
     },
     postalCode: {
       type: 'string',
-      maxLength: 5
-    }
+      maxLength: 5,
+    },
   },
-  required: ['occupation', 'nationality']
+  required: ['occupation', 'nationality'],
 };
 
 export const uischema = {
@@ -96,32 +96,32 @@ export const uischema = {
       elements: [
         {
           type: 'Control',
-          scope: '#/properties/name'
+          scope: '#/properties/name',
         },
         {
           type: 'Control',
-          scope: '#/properties/personalData/properties/age'
+          scope: '#/properties/personalData/properties/age',
         },
         {
           type: 'Control',
-          scope: '#/properties/birthDate'
-        }
-      ]
+          scope: '#/properties/birthDate',
+        },
+      ],
     },
     {
       type: 'Label',
-      text: 'Additional Information'
+      text: 'Additional Information',
     },
     {
       type: 'HorizontalLayout',
       elements: [
         {
           type: 'Control',
-          scope: '#/properties/personalData/properties/height'
+          scope: '#/properties/personalData/properties/height',
         },
         {
           type: 'Control',
-          scope: '#/properties/nationality'
+          scope: '#/properties/nationality',
         },
         {
           type: 'Control',
@@ -134,12 +134,12 @@ export const uischema = {
             'Physician',
             'Student',
             'Teacher',
-            'Other'
-          ]
-        }
-      ]
-    }
-  ]
+            'Other',
+          ],
+        },
+      ],
+    },
+  ],
 };
 
 export const data = {
@@ -147,9 +147,9 @@ export const data = {
   vegetarian: false,
   birthDate: '1985-06-02',
   personalData: {
-    age: 34
+    age: 34,
   },
-  postalCode: '12345'
+  postalCode: '12345',
 };
 
 registerExamples([
@@ -158,6 +158,6 @@ registerExamples([
     label: 'Person',
     data,
     schema,
-    uischema
-  }
+    uischema,
+  },
 ]);

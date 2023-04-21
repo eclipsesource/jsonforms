@@ -24,60 +24,60 @@
 */
 import { registerExamples } from '../register';
 
-const data = {
-    'an-array-of-strings': ['foo', 'bar', 'foobar']
+export const data = {
+  'an-array-of-strings': ['foo', 'bar', 'foobar'],
 };
-const schema = {
-    type: 'object',
-    properties: {
-        'an-array-of-strings': {
-            type: 'array',
-            items: {
-                type: 'string'
-            }
-        }
-    }
+export const schema = {
+  type: 'object',
+  properties: {
+    'an-array-of-strings': {
+      type: 'array',
+      items: {
+        type: 'string',
+      },
+    },
+  },
 };
-const uischema = {
-    "type": "ListWithDetail",
-    "scope": "#/properties/an-array-of-strings"
+export const uischema = {
+  type: 'ListWithDetail',
+  scope: '#/properties/an-array-of-strings',
 };
 
 registerExamples([
-    {
-        name: '1779-string',
-        label: 'List With Detail primitive (string)',
-        data,
-        schema,
-        uischema
-    }
+  {
+    name: 'list-with-detail-primitive-string',
+    label: 'List With Detail primitive (string)',
+    data,
+    schema,
+    uischema,
+  },
 ]);
 
-const data_number = {
-    'an-array-of-numbers': [1, 2, 3]
+export const data_number = {
+  'an-array-of-numbers': [1, 2, 3],
 };
-const schema_number = {
-    type: 'object',
-    properties: {
-        'an-array-of-numbers': {
-            type: 'array',
-            items: {
-                type: 'number'
-            }
-        }
-    }
+export const schema_number = {
+  type: 'object',
+  properties: {
+    'an-array-of-numbers': {
+      type: 'array',
+      items: {
+        type: 'number',
+      },
+    },
+  },
 };
-const uischema_number = {
-    "type": "ListWithDetail",
-    "scope": "#/properties/an-array-of-numbers"
+export const uischema_number = {
+  type: 'ListWithDetail',
+  scope: '#/properties/an-array-of-numbers',
 };
 
 registerExamples([
-    {
-        name: '1779-number',
-        label: 'List With Detail primitive (number)',
-        data: data_number,
-        schema: schema_number,
-        uischema: uischema_number
-    }
+  {
+    name: 'list-with-detail-primitive-number',
+    label: 'List With Detail primitive (number)',
+    data: data_number,
+    schema: schema_number,
+    uischema: uischema_number,
+  },
 ]);

@@ -24,13 +24,19 @@
 */
 import some from 'lodash/some';
 import get from 'lodash/get';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+} from '@angular/core';
 import {
   JsonFormsAngularService,
-  JsonFormsArrayControl
+  JsonFormsArrayControl,
 } from '@jsonforms/angular';
 import {
   ArrayControlProps,
+  ArrayTranslations,
   ControlElement,
   createDefaultValue,
   decode,
@@ -43,7 +49,7 @@ import {
   rankWith,
   setReadonly,
   StatePropsOfArrayControl,
-  uiTypeIs
+  uiTypeIs,
 } from '@jsonforms/core';
 
 const keywords = ['#', 'properties', 'items'];
@@ -52,7 +58,7 @@ export const removeSchemaKeywords = (path: string) => {
   return decode(
     path
       .split('/')
-      .filter(s => !some(keywords, key => key === s))
+      .filter((s) => !some(keywords, (key) => key === s))
       .join('.')
   );
 };
@@ -63,9 +69,9 @@ export const removeSchemaKeywords = (path: string) => {
     <mat-sidenav-container class="container" [fxHide]="hidden">
       <mat-sidenav mode="side" opened>
         <mat-nav-list>
-          <mat-list-item *ngIf="masterItems.length === 0"
-            >No items</mat-list-item
-          >
+          <mat-list-item *ngIf="masterItems.length === 0">{{
+            translations.noDataMessage
+          }}</mat-list-item>
           <mat-list-item
             *ngFor="
               let item of masterItems;
@@ -96,7 +102,7 @@ export const removeSchemaKeywords = (path: string) => {
           (click)="onAddClick()"
           *ngIf="isEnabled()"
         >
-          <mat-icon aria-label="Add item to list">add</mat-icon>
+          <mat-icon [attr.aria-label]="translations.addAriaLabel">add</mat-icon>
         </button>
       </mat-sidenav>
       <mat-sidenav-content class="content">
@@ -137,11 +143,14 @@ export const removeSchemaKeywords = (path: string) => {
       mat-sidenav {
         width: 20%;
       }
-    `
+    `,
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MasterListComponent extends JsonFormsArrayControl {
+export class MasterListComponent
+  extends JsonFormsArrayControl
+  implements OnInit
+{
   masterItems: any[];
   selectedItem: any;
   selectedItemIdx: number;
@@ -149,8 +158,12 @@ export class MasterListComponent extends JsonFormsArrayControl {
   removeItems: (path: string, toDelete: number[]) => () => void;
   propsPath: string;
   highlightedIdx: number;
+  translations: ArrayTranslations;
 
-  constructor(jsonformsService: JsonFormsAngularService, private changeDetectorRef: ChangeDetectorRef) {
+  constructor(
+    jsonformsService: JsonFormsAngularService,
+    private changeDetectorRef: ChangeDetectorRef
+  ) {
     super(jsonformsService);
   }
 
@@ -164,7 +177,9 @@ export class MasterListComponent extends JsonFormsArrayControl {
 
   ngOnInit() {
     super.ngOnInit();
-    const dispatch = this.jsonFormsService.updateCore.bind(this.jsonFormsService);
+    const dispatch = this.jsonFormsService.updateCore.bind(
+      this.jsonFormsService
+    );
     const { addItem, removeItems } = mapDispatchToArrayControlProps(dispatch);
     this.addItem = addItem;
     this.removeItems = removeItems;
@@ -175,30 +190,34 @@ export class MasterListComponent extends JsonFormsArrayControl {
     const controlElement = uischema as ControlElement;
     this.propsPath = props.path;
     const detailUISchema = findUISchema(
-        props.uischemas,
-        schema,
-        `${controlElement.scope}/items`,
-        props.path,
-        'VerticalLayout',
-        controlElement,
-        props.rootSchema
-      );
+      props.uischemas,
+      schema,
+      `${controlElement.scope}/items`,
+      props.path,
+      'VerticalLayout',
+      controlElement,
+      props.rootSchema
+    );
 
     if (!this.isEnabled()) {
       setReadonly(detailUISchema);
     }
 
+    this.translations = props.translations;
+
     const masterItems = (data || []).map((d: any, index: number) => {
-      const labelRefInstancePath = controlElement.options?.labelRef && removeSchemaKeywords(
-        controlElement.options.labelRef
-      );
+      const labelRefInstancePath =
+        controlElement.options?.labelRef &&
+        removeSchemaKeywords(controlElement.options.labelRef);
       const isPrimitive = d !== undefined && typeof d !== 'object';
       const masterItem = {
-        label: isPrimitive ? d.toString() : get(d, labelRefInstancePath ?? getFirstPrimitiveProp(schema)),
+        label: isPrimitive
+          ? d.toString()
+          : get(d, labelRefInstancePath ?? getFirstPrimitiveProp(schema)),
         data: d,
         path: `${path}.${index}`,
         schema,
-        uischema: detailUISchema
+        uischema: detailUISchema,
       };
       return masterItem;
     });

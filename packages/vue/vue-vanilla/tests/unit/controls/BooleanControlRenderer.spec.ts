@@ -3,14 +3,14 @@ import { mountJsonForms } from '../util';
 
 const schema = {
   type: 'boolean',
-  title: 'My Boolean'
+  title: 'My Boolean',
 };
 const uischema = {
   type: 'Control',
   scope: '#',
   options: {
-    placeholder: 'boolean placeholder'
-  }
+    placeholder: 'boolean placeholder',
+  },
 };
 
 describe('BooleanControlRenderer.vue', () => {

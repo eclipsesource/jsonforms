@@ -27,15 +27,12 @@ import { GroupLayout, UISchemaElement } from '@jsonforms/core';
 import { MatCard, MatCardTitle } from '@angular/material/card';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
-import {
-  beforeEachLayoutTest,
-  setupMockStore
-} from '@jsonforms/angular-test';
+import { beforeEachLayoutTest, setupMockStore } from '@jsonforms/angular-test';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { LayoutChildrenRenderPropsPipe } from '../src/layouts/layout.renderer';
 import {
   GroupLayoutRenderer,
-  groupLayoutTester
+  groupLayoutTester,
 } from '../src/layouts/group-layout.renderer';
 
 describe('Group layout tester', () => {
@@ -49,13 +46,13 @@ describe('Group layout', () => {
   beforeEach(() => {
     fixture = beforeEachLayoutTest(GroupLayoutRenderer, {
       declarations: [LayoutChildrenRenderPropsPipe, MatCard, MatCardTitle],
-      imports: [FlexLayoutModule]
+      imports: [FlexLayoutModule],
     });
   });
 
   it('render with undefined elements', () => {
     const uischema: UISchemaElement = {
-      type: 'Group'
+      type: 'Group',
     };
     setupMockStore(fixture, { data: {}, schema: {}, uischema });
     fixture.componentInstance.ngOnInit();
@@ -70,7 +67,7 @@ describe('Group layout', () => {
   it('render with null elements', () => {
     const uischema: GroupLayout = {
       type: 'Group',
-      elements: null
+      elements: null,
     };
     setupMockStore(fixture, { data: {}, schema: {}, uischema });
     fixture.componentInstance.ngOnInit();
@@ -86,7 +83,7 @@ describe('Group layout', () => {
     const uischema: GroupLayout = {
       type: 'Group',
       label: 'foo',
-      elements: [{ type: 'Control' }, { type: 'Control' }]
+      elements: [{ type: 'Control' }, { type: 'Control' }],
     };
     setupMockStore(fixture, { data: {}, schema: {}, uischema });
     fixture.componentInstance.ngOnInit();

@@ -27,13 +27,9 @@ import {
   ControlElement,
   createDefaultValue,
   JsonSchema,
+  ArrayTranslations,
 } from '@jsonforms/core';
-import {
-  IconButton,
-  TableRow,
-  Tooltip
-} from '@mui/material';
-import { Grid, Typography } from '@mui/material';
+import { IconButton, TableRow, Tooltip, Grid, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import ValidationIcon from './ValidationIcon';
 import NoBorderTableCell from './NoBorderTableCell';
@@ -47,24 +43,26 @@ export interface MaterialTableToolbarProps {
   schema: JsonSchema;
   rootSchema: JsonSchema;
   enabled: boolean;
+  translations: ArrayTranslations;
   addItem(path: string, value: any): () => void;
 }
 
 const fixedCellSmall = {
   paddingLeft: 0,
   paddingRight: 0,
-}
+};
 
-const TableToolbar = React.memo(
-  ({
-    numColumns,
-    errors,
-    label,
-    path,
-    addItem,
-    schema,
-    enabled
-  }: MaterialTableToolbarProps) => (
+const TableToolbar = React.memo(function TableToolbar({
+  numColumns,
+  errors,
+  label,
+  path,
+  addItem,
+  schema,
+  enabled,
+  translations,
+}: MaterialTableToolbarProps) {
+  return (
     <TableRow>
       <NoBorderTableCell colSpan={numColumns}>
         <Grid
@@ -77,35 +75,36 @@ const TableToolbar = React.memo(
             <Typography variant={'h6'}>{label}</Typography>
           </Grid>
           <Grid item>
-            {errors.length !== 0 &&
+            {errors.length !== 0 && (
               <Grid item>
                 <ValidationIcon
                   id='tooltip-validation'
                   errorMessages={errors}
                 />
               </Grid>
-            }
+            )}
           </Grid>
         </Grid>
       </NoBorderTableCell>
       {enabled ? (
-        <NoBorderTableCell align='right' style={ fixedCellSmall }>
+        <NoBorderTableCell align='right' style={fixedCellSmall}>
           <Tooltip
             id='tooltip-add'
-            title={`Add to ${label}`}
+            title={translations.addTooltip}
             placement='bottom'
           >
             <IconButton
-              aria-label={`Add to ${label}`}
+              aria-label={translations.addAriaLabel}
               onClick={addItem(path, createDefaultValue(schema))}
-              size='large'>
+              size='large'
+            >
               <AddIcon />
             </IconButton>
           </Tooltip>
         </NoBorderTableCell>
       ) : null}
     </TableRow>
-  )
-);
+  );
+});
 
 export default TableToolbar;

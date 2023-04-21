@@ -10,13 +10,13 @@ const uischema = {
   elements: [
     {
       type: 'Control',
-      scope: '#'
+      scope: '#',
     },
     {
       type: 'Control',
-      scope: '#'
-    }
-  ]
+      scope: '#',
+    },
+  ],
 };
 
 describe('GroupRenderer.vue', () => {

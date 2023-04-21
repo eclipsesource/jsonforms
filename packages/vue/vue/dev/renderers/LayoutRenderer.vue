@@ -20,54 +20,54 @@
     <div>Children:</div>
     <div
       v-for="(element, index) in layout.uischema.elements"
-      v-bind:key="`${layout.path}-${index}`"
+      :key="`${layout.path}-${index}`"
     >
       <dispatch-renderer
-        v-bind:schema="layout.schema"
-        v-bind:uischema="element"
-        v-bind:path="layout.path"
+        :schema="layout.schema"
+        :uischema="element"
+        :path="layout.path"
       />
     </div>
   </div>
 </template>
-
-<style scoped>
-pre {
-  background-color: lightgray;
-}
-</style>
 
 <script lang="ts">
 import {
   isLayout,
   JsonFormsRendererRegistryEntry,
   Layout,
-  rankWith
+  rankWith,
 } from '@jsonforms/core';
-import { defineComponent } from "../../config";
+import { defineComponent } from 'vue';
 import {
   DispatchRenderer,
   rendererProps,
-  useJsonFormsLayout
+  useJsonFormsLayout,
 } from '../../src/';
 
 const layoutRenderer = defineComponent({
-  name: 'layout-renderer',
+  name: 'LayoutRenderer',
   components: {
-    DispatchRenderer
+    DispatchRenderer,
   },
   props: {
-    ...rendererProps<Layout>()
+    ...rendererProps<Layout>(),
   },
   setup(props) {
     return useJsonFormsLayout(props);
-  }
+  },
 });
 
 export default layoutRenderer;
 
 export const entry: JsonFormsRendererRegistryEntry = {
   renderer: layoutRenderer,
-  tester: rankWith(1, isLayout)
+  tester: rankWith(1, isLayout),
 };
 </script>
+
+<style scoped>
+pre {
+  background-color: lightgray;
+}
+</style>

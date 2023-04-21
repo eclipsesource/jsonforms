@@ -23,11 +23,7 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
-import {
-  ControlElement,
-  HorizontalLayout,
-  JsonSchema,
-} from '@jsonforms/core';
+import { ControlElement, HorizontalLayout, JsonSchema } from '@jsonforms/core';
 import { JsonFormsStateProvider } from '@jsonforms/react';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
@@ -43,22 +39,22 @@ const control: ControlElement = {
 };
 
 const fixture = {
-  data: { 'foo': '1980-04-04T13:37:00.000Z' },
+  data: { foo: '1980-04-04T13:37:00.000Z' },
   schema: {
     type: 'string',
-    format: 'date-time'
+    format: 'date-time',
   },
   uischema: control,
   styles: [
     {
       name: 'control',
-      classNames: ['control']
+      classNames: ['control'],
     },
     {
       name: 'control.validation',
-      classNames: ['validation']
-    }
-  ]
+      classNames: ['validation'],
+    },
+  ],
 };
 
 describe('Date time cell tester', () => {
@@ -66,7 +62,9 @@ describe('Date time cell tester', () => {
     expect(dateTimeCellTester(undefined, undefined, undefined)).toBe(-1);
     expect(dateTimeCellTester(null, undefined, undefined)).toBe(-1);
     expect(dateTimeCellTester({ type: 'Foo' }, undefined, undefined)).toBe(-1);
-    expect(dateTimeCellTester({ type: 'Control' }, undefined, undefined)).toBe(-1);
+    expect(dateTimeCellTester({ type: 'Control' }, undefined, undefined)).toBe(
+      -1
+    );
   });
 
   test('tester with wrong prop type', () => {
@@ -123,7 +121,6 @@ describe('Date time cell tester', () => {
 });
 
 describe('date time cell', () => {
-
   let wrapper: ReactWrapper;
 
   afterEach(() => wrapper.unmount());
@@ -133,33 +130,30 @@ describe('date time cell', () => {
       type: 'object',
       properties: {
         firstDate: { type: 'string', format: 'date-time' },
-        secondDate: { type: 'string', format: 'date-time' }
-      }
+        secondDate: { type: 'string', format: 'date-time' },
+      },
     };
     const firstControlElement: ControlElement = {
       type: 'Control',
       scope: '#/properties/firstDate',
       options: {
-        focus: true
-      }
+        focus: true,
+      },
     };
     const secondControlElement: ControlElement = {
       type: 'Control',
       scope: '#/properties/secondDate',
       options: {
-        focus: true
-      }
+        focus: true,
+      },
     };
     const uischema: HorizontalLayout = {
       type: 'HorizontalLayout',
-      elements: [
-        firstControlElement,
-        secondControlElement
-      ]
+      elements: [firstControlElement, secondControlElement],
     };
     const data = {
-      'firstDate': '1980-04-04T13:37:00.000Z',
-      'secondDate': '1980-04-04T13:37:00.000Z'
+      firstDate: '1980-04-04T13:37:00.000Z',
+      secondDate: '1980-04-04T13:37:00.000Z',
     };
     const core = initCore(schema, uischema, data);
     wrapper = mount(
@@ -177,18 +171,14 @@ describe('date time cell', () => {
       type: 'Control',
       scope: '#/properties/foo',
       options: {
-        focus: true
-      }
+        focus: true,
+      },
     };
     const core = initCore(fixture.schema, uischema, fixture.data);
 
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <DateTimeCell
-          schema={fixture.schema}
-          uischema={uischema}
-          path='foo'
-        />
+        <DateTimeCell schema={fixture.schema} uischema={uischema} path='foo' />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode();
@@ -200,18 +190,14 @@ describe('date time cell', () => {
       type: 'Control',
       scope: '#/properties/foo',
       options: {
-        focus: false
-      }
+        focus: false,
+      },
     };
     const core = initCore(fixture.schema, uischema, fixture.data);
 
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <DateTimeCell
-          schema={fixture.schema}
-          uischema={uischema}
-          path='foo'
-        />
+        <DateTimeCell schema={fixture.schema} uischema={uischema} path='foo' />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
@@ -221,17 +207,13 @@ describe('date time cell', () => {
   test('autofocus inactive by default', () => {
     const uischema: ControlElement = {
       type: 'Control',
-      scope: '#/properties/foo'
+      scope: '#/properties/foo',
     };
     const core = initCore(fixture.schema, uischema, fixture.data);
 
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <DateTimeCell
-          schema={fixture.schema}
-          uischema={uischema}
-          path='foo'
-        />
+        <DateTimeCell schema={fixture.schema} uischema={uischema} path='foo' />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
@@ -275,7 +257,7 @@ describe('date time cell', () => {
 
   test('update via event', () => {
     const onChangeData: any = {
-      data: undefined
+      data: undefined,
     };
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
@@ -309,7 +291,7 @@ describe('date time cell', () => {
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, foo: '1961-04-12T20:15:00.000Z' };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     const input = wrapper.find('input');
     expect(input.props().value).toBe('1961-04-12T20:15');
@@ -327,7 +309,7 @@ describe('date time cell', () => {
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, foo: null };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     const input = wrapper.find('input');
     expect(input.props().value).toBe('');
@@ -345,7 +327,7 @@ describe('date time cell', () => {
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, foo: undefined };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     const input = wrapper.find('input');
     expect(input.props().value).toBe('');
@@ -363,7 +345,7 @@ describe('date time cell', () => {
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, bar: 'Bar' };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     const input = wrapper.find('input');
     expect(input.props().value).toBe('1980-04-04T13:37');
@@ -382,7 +364,7 @@ describe('date time cell', () => {
     );
     const input = wrapper.find('input');
     core.data = { ...core.data, null: '1961-04-12T20:15:00.000Z' };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     expect(input.props().value).toBe('1980-04-04T13:37');
   });
@@ -400,7 +382,7 @@ describe('date time cell', () => {
     );
     const input = wrapper.find('input');
     core.data = { ...core.data, undefined: '1961-04-12T20:15:00.000Z' };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     expect(input.props().value).toBe('1980-04-04T13:37');
   });

@@ -30,15 +30,20 @@ import {
   defaultMapDispatchToControlProps,
   defaultMapStateToEnumCellProps,
   DispatchPropsOfCell,
-  mapStateToCellProps, mapStateToOneOfEnumCellProps, oneOfToEnumOptionMapper
+  mapStateToCellProps,
+  mapStateToOneOfEnumCellProps,
+  oneOfToEnumOptionMapper,
 } from '../../src/util';
 import { UPDATE_DATA, UpdateAction } from '../../src/actions';
 import configureStore from 'redux-mock-store';
 import {
   ControlElement,
+  createAjv,
   JsonFormsState,
+  JsonSchema,
   RuleEffect,
-  UISchemaElement
+  UISchemaElement,
+  validate,
 } from '../../src';
 import { enumToEnumOptionMapper } from '../../src/util/renderer';
 
@@ -50,8 +55,8 @@ const hideRule = {
   condition: {
     type: 'LEAF',
     scope: '#/properties/firstName',
-    expectedValue: 'Homer'
-  }
+    expectedValue: 'Homer',
+  },
 };
 
 const disableRule = {
@@ -59,8 +64,8 @@ const disableRule = {
   condition: {
     type: 'LEAF',
     scope: '#/properties/firstName',
-    expectedValue: 'Homer'
-  }
+    expectedValue: 'Homer',
+  },
 };
 
 const enableRule = {
@@ -68,13 +73,13 @@ const enableRule = {
   condition: {
     type: 'LEAF',
     scope: '#/properties/firstName',
-    expectedValue: 'Homer'
-  }
+    expectedValue: 'Homer',
+  },
 };
 
 const coreUISchema: ControlElement = {
   type: 'Control',
-  scope: '#/properties/firstName'
+  scope: '#/properties/firstName',
 };
 
 const createState = (uischema: UISchemaElement): JsonFormsState => ({
@@ -87,64 +92,64 @@ const createState = (uischema: UISchemaElement): JsonFormsState => ({
           lastName: { type: 'string' },
           nationality: {
             type: 'string',
-            enum: ['DE', 'IT', 'JP', 'US', 'RU', 'Other']
-          }
-        }
+            enum: ['DE', 'IT', 'JP', 'US', 'RU', 'Other'],
+          },
+        },
       },
       data: {
-        firstName: 'Homer'
+        firstName: 'Homer',
       },
       uischema,
-      errors: []
-    }
-  }
+      errors: [],
+    },
+  },
 });
 
-test('mapStateToCellProps - visible via ownProps ', t => {
+test('mapStateToCellProps - visible via ownProps ', (t) => {
   const uischema: ControlElement = {
     ...coreUISchema,
-    rule: hideRule
+    rule: hideRule,
   };
   const ownProps = {
     visible: true,
-    uischema
+    uischema,
   };
   const props = mapStateToCellProps(createState(uischema), ownProps);
   t.true(props.visible);
 });
 
-test('mapStateToCellProps - hidden via ownProps ', t => {
+test('mapStateToCellProps - hidden via ownProps ', (t) => {
   const uischema = {
     ...coreUISchema,
-    rule: hideRule
+    rule: hideRule,
   };
   const ownProps = {
     visible: false,
-    uischema
+    uischema,
   };
   const props = mapStateToCellProps(createState(uischema), ownProps);
   t.false(props.visible);
 });
 
-test('mapStateToCellProps - hidden via state ', t => {
+test('mapStateToCellProps - hidden via state ', (t) => {
   const uischema = {
     ...coreUISchema,
-    rule: hideRule
+    rule: hideRule,
   };
   const ownProps = {
-    uischema
+    uischema,
   };
   const props = mapStateToCellProps(createState(uischema), ownProps);
   t.false(props.visible);
 });
 
-test('mapStateToCellProps - visible via state ', t => {
+test('mapStateToCellProps - visible via state ', (t) => {
   const uischema = {
     ...coreUISchema,
-    rule: hideRule
+    rule: hideRule,
   };
   const ownProps = {
-    uischema
+    uischema,
   };
   const clonedState = _.cloneDeep(createState(uischema));
   clonedState.jsonforms.core.data.firstName = 'Lisa';
@@ -152,51 +157,51 @@ test('mapStateToCellProps - visible via state ', t => {
   t.true(props.visible);
 });
 
-test('mapStateToCellProps - enabled via ownProps ', t => {
+test('mapStateToCellProps - enabled via ownProps ', (t) => {
   const uischema = {
     ...coreUISchema,
-    rule: disableRule
+    rule: disableRule,
   };
   const ownProps = {
     enabled: true,
-    uischema
+    uischema,
   };
   const props = mapStateToCellProps(createState(uischema), ownProps);
   t.true(props.enabled);
 });
 
-test('mapStateToCellProps - disabled via ownProps ', t => {
+test('mapStateToCellProps - disabled via ownProps ', (t) => {
   const uischema = {
     ...coreUISchema,
-    rule: disableRule
+    rule: disableRule,
   };
   const ownProps = {
     enabled: false,
-    uischema
+    uischema,
   };
   const props = mapStateToCellProps(createState(uischema), ownProps);
   t.false(props.enabled);
 });
 
-test('mapStateToCellProps - disabled via state ', t => {
+test('mapStateToCellProps - disabled via state ', (t) => {
   const uischema = {
     ...coreUISchema,
-    rule: disableRule
+    rule: disableRule,
   };
   const ownProps = {
-    uischema
+    uischema,
   };
   const props = mapStateToCellProps(createState(uischema), ownProps);
   t.false(props.enabled);
 });
 
-test('mapStateToCellProps - enabled via state ', t => {
+test('mapStateToCellProps - enabled via state ', (t) => {
   const uischema = {
     ...coreUISchema,
-    rule: disableRule
+    rule: disableRule,
   };
   const ownProps = {
-    uischema
+    uischema,
   };
   const clonedState = _.cloneDeep(createState(uischema));
   clonedState.jsonforms.core.data.firstName = 'Lisa';
@@ -204,21 +209,9 @@ test('mapStateToCellProps - enabled via state ', t => {
   t.true(props.enabled);
 });
 
-test('mapStateToCellProps - disabled via global readonly', t => {
-  const ownProps = {
-    uischema: coreUISchema
-  };
-  const state: JsonFormsState = createState(coreUISchema);
-  state.jsonforms.readonly = true;
-
-  const props = mapStateToCellProps(state, ownProps);
-  t.false(props.enabled);
-});
-
-test('mapStateToCellProps - disabled via global readonly beats enabled via ownProps', t => {
+test('mapStateToCellProps - disabled via global readonly', (t) => {
   const ownProps = {
     uischema: coreUISchema,
-    enabled: true
   };
   const state: JsonFormsState = createState(coreUISchema);
   state.jsonforms.readonly = true;
@@ -227,13 +220,25 @@ test('mapStateToCellProps - disabled via global readonly beats enabled via ownPr
   t.false(props.enabled);
 });
 
-test('mapStateToCellProps - disabled via global readonly beats enabled via rule', t => {
+test('mapStateToCellProps - disabled via global readonly beats enabled via ownProps', (t) => {
+  const ownProps = {
+    uischema: coreUISchema,
+    enabled: true,
+  };
+  const state: JsonFormsState = createState(coreUISchema);
+  state.jsonforms.readonly = true;
+
+  const props = mapStateToCellProps(state, ownProps);
+  t.false(props.enabled);
+});
+
+test('mapStateToCellProps - disabled via global readonly beats enabled via rule', (t) => {
   const uischema = {
     ...coreUISchema,
-    rule: enableRule
+    rule: enableRule,
   };
   const ownProps = {
-    uischema
+    uischema,
   };
   const state: JsonFormsState = createState(uischema);
   state.jsonforms.readonly = true;
@@ -242,93 +247,126 @@ test('mapStateToCellProps - disabled via global readonly beats enabled via rule'
   t.false(props.enabled);
 });
 
-test('mapStateToCellProps - path', t => {
+test('mapStateToCellProps - path', (t) => {
   const ownProps = {
     uischema: coreUISchema,
-    path: 'firstName'
+    path: 'firstName',
   };
   const props = mapStateToCellProps(createState(coreUISchema), ownProps);
   t.is(props.path, 'firstName');
 });
 
-test('mapStateToCellProps - data', t => {
+test('mapStateToCellProps - data', (t) => {
   const ownProps = {
     uischema: coreUISchema,
-    path: 'firstName'
+    path: 'firstName',
   };
   const props = mapStateToCellProps(createState(coreUISchema), ownProps);
   t.is(props.data, 'Homer');
 });
 
-test('mapStateToCellProps - id', t => {
+test('mapStateToCellProps - id', (t) => {
   clearAllIds();
   const ownProps = {
     uischema: coreUISchema,
-    id: '#/properties/firstName'
+    id: '#/properties/firstName',
   };
   const props = mapStateToCellProps(createState(coreUISchema), ownProps);
   t.is(props.id, '#/properties/firstName');
 });
 
-test('mapStateToEnumCellProps - set default options for dropdown list', t => {
+test('mapStateToCellProps - translated error', (t) => {
+  const ownProps = {
+    uischema: coreUISchema,
+    id: '#/properties/firstName',
+    path: 'firstName',
+  };
+  const state = createState(coreUISchema);
+  if (state.jsonforms.core === undefined) {
+    fail('Failed to create jsonforms core state');
+  }
+  const schema = state.jsonforms.core?.schema as JsonSchema;
+  const data = state.jsonforms.core?.data as any;
+  // mark firstName as required, delete the value from data, then get errors from ajv from the compiled schema
+  schema.required = ['firstName'];
+  delete data.firstName;
+  const ajv = createAjv();
+  const v = ajv.compile(schema);
+  state.jsonforms.core.errors = validate(v, data);
+  // add a mock i18n state to verify that the error gets translated
+  state.jsonforms.i18n = {
+    translateError: (error) => `i18n-error:${error.keyword}`,
+  };
+  const props = mapStateToCellProps(state, ownProps);
+  t.is(props.errors, 'i18n-error:required');
+});
+
+test('mapStateToEnumCellProps - set default options for dropdown list', (t) => {
   const uischema: ControlElement = {
     type: 'Control',
-    scope: '#/properties/nationality'
+    scope: '#/properties/nationality',
   };
   const ownProps = {
     schema: {
-      enum: ['DE', 'IT', 'JP', 'US', 'RU', 'Other']
+      enum: ['DE', 'IT', 'JP', 'US', 'RU', 'Other'],
     },
     uischema,
-    path: 'nationality'
+    path: 'nationality',
   };
 
   const props = defaultMapStateToEnumCellProps(createState(uischema), ownProps);
   t.deepEqual(
     props.options,
-    ['DE', 'IT', 'JP', 'US', 'RU', 'Other'].map(e => enumToEnumOptionMapper(e))
+    ['DE', 'IT', 'JP', 'US', 'RU', 'Other'].map((e) =>
+      enumToEnumOptionMapper(e)
+    )
   );
   t.is(props.data, undefined);
 });
 
-
-test('mapStateToOneOfEnumCellProps - set one of options for dropdown list', t => {
+test('mapStateToOneOfEnumCellProps - set one of options for dropdown list', (t) => {
   const uischema: ControlElement = {
     type: 'Control',
-    scope: '#/properties/country'
+    scope: '#/properties/country',
   };
   const ownProps = {
     schema: {
       oneOf: [
         {
           const: 'AU',
-          title: 'Australia'
+          title: 'Australia',
         },
         {
           const: 'NZ',
-          title: 'New Zealand'
-        }
-      ]
+          title: 'New Zealand',
+        },
+      ],
     },
     uischema,
-    path: 'country'
+    path: 'country',
   };
 
   const props = mapStateToOneOfEnumCellProps(createState(uischema), ownProps);
-  t.deepEqual(props.options, [{title: 'Australia' , const: 'AU', }, { title: 'New Zealand', const: 'NZ' }].map(schema => oneOfToEnumOptionMapper(schema)));
+  t.deepEqual(
+    props.options,
+    [
+      { title: 'Australia', const: 'AU' },
+      { title: 'New Zealand', const: 'NZ' },
+    ].map((schema) => oneOfToEnumOptionMapper(schema))
+  );
   t.is(props.data, undefined);
 });
 
-test('defaultMapDispatchToControlProps, initialized with custom handleChange', t => {
+test('defaultMapDispatchToControlProps, initialized with custom handleChange', (t) => {
   let didChange = false;
   const uiSchema = {
     type: 'Control',
-    scope: '#/properties/nationality'
+    scope: '#/properties/nationality',
   };
   const ownProps = {
     handleChange: () => {
       didChange = true;
-    }
+    },
   };
   const store = mockStore(createState(uiSchema));
   const props: DispatchPropsOfCell = defaultMapDispatchToControlProps(
@@ -339,10 +377,10 @@ test('defaultMapDispatchToControlProps, initialized with custom handleChange', t
   t.true(didChange);
 });
 
-test('defaultMapDispatchToControlProps, with default handleChange', t => {
+test('defaultMapDispatchToControlProps, with default handleChange', (t) => {
   const uiSchema = {
     type: 'Control',
-    scope: '#/properties/nationality'
+    scope: '#/properties/nationality',
   };
   const store = mockStore(createState(uiSchema));
   const props = defaultMapDispatchToControlProps(store.dispatch, {});

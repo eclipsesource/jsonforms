@@ -1,6 +1,6 @@
 # JSON Forms - More Forms. Less Code
 
-*Complex forms in the blink of an eye*
+_Complex forms in the blink of an eye_
 
 JSON Forms eliminates the tedious task of writing fully-featured forms by hand by leveraging the capabilities of JSON, JSON Schema and Javascript.
 
@@ -13,6 +13,7 @@ In order to use JSON Forms Core you need to decide which UI framework you would 
 JSON Forms currently supports [React](https://github.com/eclipsesource/jsonforms/blob/master/packages/react), [Angular](https://github.com/eclipsesource/jsonforms/blob/master/packages/angular) and [Vue](https://github.com/eclipsesource/jsonforms/blob/master/packages/vue).
 
 The following seeds are available:
+
 - [React Seed](https://github.com/eclipsesource/jsonforms-react-seed)
 - [Angular Seed](https://github.com/eclipsesource/jsonforms-angular-seed)
 - [Vue Seed](https://github.com/eclipsesource/jsonforms-vue-seed)
@@ -43,7 +44,6 @@ If you encounter any problems feel free to [open an issue](https://github.com/ec
 For questions and discussions please use the [JSON Forms board](https://jsonforms.discourse.group).
 You can also reach us via [email](mailto:jsonforms@eclipsesource.com?subject=JSON%20Forms).
 In addition, EclipseSource also offers [professional support](https://jsonforms.io/support) for JSON Forms.
-
 
 ## Migration
 

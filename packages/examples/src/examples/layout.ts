@@ -33,14 +33,14 @@ export const uischemaVertical = {
     {
       type: 'Control',
       label: 'Name',
-      scope: '#/properties/name'
+      scope: '#/properties/name',
     },
     {
       type: 'Control',
       label: 'Birth Date',
-      scope: '#/properties/birthDate'
-    }
-  ]
+      scope: '#/properties/birthDate',
+    },
+  ],
 };
 export const uischemaHorizontal = {
   type: 'HorizontalLayout',
@@ -48,14 +48,14 @@ export const uischemaHorizontal = {
     {
       type: 'Control',
       label: 'Name',
-      scope: '#/properties/name'
+      scope: '#/properties/name',
     },
     {
       type: 'Control',
       label: 'Birth Date',
-      scope: '#/properties/birthDate'
-    }
-  ]
+      scope: '#/properties/birthDate',
+    },
+  ],
 };
 export const uischemaGroup = {
   type: 'Group',
@@ -64,14 +64,14 @@ export const uischemaGroup = {
     {
       type: 'Control',
       label: 'Name',
-      scope: '#/properties/name'
+      scope: '#/properties/name',
     },
     {
       type: 'Control',
       label: 'Birth Date',
-      scope: '#/properties/birthDate'
-    }
-  ]
+      scope: '#/properties/birthDate',
+    },
+  ],
 };
 export const uischemaComplex = {
   type: 'Group',
@@ -86,14 +86,14 @@ export const uischemaComplex = {
             {
               type: 'Control',
               label: 'Name',
-              scope: '#/properties/name'
+              scope: '#/properties/name',
             },
             {
               type: 'Control',
               label: 'Birth Date',
-              scope: '#/properties/birthDate'
-            }
-          ]
+              scope: '#/properties/birthDate',
+            },
+          ],
         },
         {
           type: 'VerticalLayout',
@@ -101,18 +101,18 @@ export const uischemaComplex = {
             {
               type: 'Control',
               label: 'Name',
-              scope: '#/properties/name'
+              scope: '#/properties/name',
             },
             {
               type: 'Control',
               label: 'Birth Date',
-              scope: '#/properties/birthDate'
-            }
-          ]
-        }
-      ]
-    }
-  ]
+              scope: '#/properties/birthDate',
+            },
+          ],
+        },
+      ],
+    },
+  ],
 };
 export const data = personData;
 
@@ -122,27 +122,27 @@ registerExamples([
     label: 'Layout Vertical',
     data,
     schema,
-    uischema: uischemaVertical
+    uischema: uischemaVertical,
   },
   {
     name: 'layout-horizontal',
     label: 'Layout Horizontal',
     data,
     schema,
-    uischema: uischemaHorizontal
+    uischema: uischemaHorizontal,
   },
   {
     name: 'layout-group',
     label: 'Layout Group',
     data,
     schema,
-    uischema: uischemaGroup
+    uischema: uischemaGroup,
   },
   {
     name: 'layout-complex',
     label: 'Layout Complex',
     data,
     schema,
-    uischema: uischemaComplex
-  }
+    uischema: uischemaComplex,
+  },
 ]);

@@ -37,23 +37,24 @@ import { ControlElement } from '@jsonforms/core';
 import { TextControlRenderer, TextControlRendererTester } from '../src';
 import {
   TableRenderer,
-  TableRendererTester
+  TableRendererTester,
 } from '../src/other/table.renderer';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { setupMockStore } from '@jsonforms/angular-test';
 import { createTesterContext } from './util';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 const uischema1: ControlElement = { type: 'Control', scope: '#' };
 const uischema2: ControlElement = {
   type: 'Control',
-  scope: '#/properties/my'
+  scope: '#/properties/my',
 };
 const uischemaWithSorting: ControlElement = {
   type: 'Control',
   scope: '#',
   options: {
-    showSortButtons: true
-  }
+    showSortButtons: true,
+  },
 };
 const schema_object1 = {
   type: 'array',
@@ -61,9 +62,9 @@ const schema_object1 = {
     type: 'object',
     properties: {
       foo: { type: 'string' },
-      bar: { type: 'string' }
-    }
-  }
+      bar: { type: 'string' },
+    },
+  },
 };
 const schema_object2 = {
   type: 'object',
@@ -74,17 +75,17 @@ const schema_object2 = {
         type: 'object',
         properties: {
           foo: { type: 'string' },
-          bar: { type: 'string' }
-        }
-      }
-    }
-  }
+          bar: { type: 'string' },
+        },
+      },
+    },
+  },
 };
 const schema_simple1 = {
   type: 'array',
   items: {
-    type: 'string'
-  }
+    type: 'string',
+  },
 };
 const schema_simple2 = {
   type: 'object',
@@ -92,22 +93,46 @@ const schema_simple2 = {
     my: {
       type: 'array',
       items: {
-        type: 'string'
-      }
-    }
-  }
+        type: 'string',
+      },
+    },
+  },
 };
 const renderers = [
   { tester: TextControlRendererTester, renderer: TextControlRenderer },
-  { tester: TableRendererTester, renderer: TableRenderer }
+  { tester: TableRendererTester, renderer: TableRenderer },
 ];
 
 describe('Table tester', () => {
   it('should succeed', () => {
-    expect(TableRendererTester(uischema1, schema_object1, createTesterContext(schema_object1))).toBe(3);
-    expect(TableRendererTester(uischema1, schema_simple1, createTesterContext(schema_simple1))).toBe(3);
-    expect(TableRendererTester(uischema2, schema_object2, createTesterContext(schema_object2))).toBe(3);
-    expect(TableRendererTester(uischema2, schema_simple2, createTesterContext(schema_simple2))).toBe(3);
+    expect(
+      TableRendererTester(
+        uischema1,
+        schema_object1,
+        createTesterContext(schema_object1)
+      )
+    ).toBe(3);
+    expect(
+      TableRendererTester(
+        uischema1,
+        schema_simple1,
+        createTesterContext(schema_simple1)
+      )
+    ).toBe(3);
+    expect(
+      TableRendererTester(
+        uischema2,
+        schema_object2,
+        createTesterContext(schema_object2)
+      )
+    ).toBe(3);
+    expect(
+      TableRendererTester(
+        uischema2,
+        schema_simple2,
+        createTesterContext(schema_simple2)
+      )
+    ).toBe(3);
   });
 });
 describe('Table', () => {
@@ -127,14 +152,15 @@ describe('Table', () => {
         MatInputModule,
         ReactiveFormsModule,
         FlexLayoutModule,
-        MatTableModule
+        MatTableModule,
+        MatTooltipModule,
       ],
-      providers: [JsonFormsAngularService]
+      providers: [JsonFormsAngularService],
     })
       .overrideModule(BrowserDynamicTestingModule, {
         set: {
-          entryComponents: [TextControlRenderer]
-        }
+          entryComponents: [TextControlRenderer],
+        },
       })
       .compileComponents();
 
@@ -148,9 +174,9 @@ describe('Table', () => {
       schema: schema_object1,
       data: [
         { foo: 'foo_1', bar: 'bar_1' },
-        { foo: 'foo_2', bar: 'bar_2' }
+        { foo: 'foo_2', bar: 'bar_2' },
       ],
-      renderers
+      renderers,
     });
     fixture.detectChanges();
     component.ngOnInit();
@@ -170,10 +196,10 @@ describe('Table', () => {
       data: {
         my: [
           { foo: 'foo_1', bar: 'bar_1' },
-          { foo: 'foo_2', bar: 'bar_2' }
-        ]
+          { foo: 'foo_2', bar: 'bar_2' },
+        ],
       },
-      renderers
+      renderers,
     });
 
     fixture.detectChanges();
@@ -193,7 +219,7 @@ describe('Table', () => {
       uischema: uischema1,
       schema: schema_simple1,
       data: ['foo', 'bar'],
-      renderers
+      renderers,
     });
     fixture.detectChanges();
     component.ngOnInit();
@@ -211,7 +237,7 @@ describe('Table', () => {
       uischema: uischema2,
       schema: schema_simple2,
       data: { my: ['foo', 'bar'] },
-      renderers
+      renderers,
     });
     fixture.detectChanges();
     component.ngOnInit();
@@ -230,7 +256,7 @@ describe('Table', () => {
       uischema: uischema1,
       schema: schema_object1,
       data: [{ foo: 'foo_1', bar: 'bar_1' }],
-      renderers
+      renderers,
     });
     component.disabled = true;
     fixture.detectChanges();
@@ -250,7 +276,7 @@ describe('Table', () => {
       uischema: uischema1,
       schema: schema_object1,
       data: [{ foo: 'foo_1', bar: 'bar_1' }],
-      renderers
+      renderers,
     });
     fixture.detectChanges();
     component.ngOnInit();
@@ -267,9 +293,9 @@ describe('Table', () => {
       schema: schema_object1,
       data: [
         { foo: 'foo_1', bar: 'bar_1' },
-        { foo: 'foo_2', bar: 'bar_2' }
+        { foo: 'foo_2', bar: 'bar_2' },
       ],
-      renderers
+      renderers,
     });
 
     fixture.detectChanges();
@@ -279,7 +305,6 @@ describe('Table', () => {
     fixture.detectChanges();
 
     fixture.whenStable().then(() => {
-
       // 1 row
       expect(fixture.nativeElement.querySelectorAll('tr').length).toBe(1 + 0);
     });
@@ -291,9 +316,9 @@ describe('Table', () => {
       schema: schema_object1,
       data: [
         { foo: 'foo_1', bar: 'bar_1' },
-        { foo: 'foo_2', bar: 'bar_2' }
+        { foo: 'foo_2', bar: 'bar_2' },
       ],
-      renderers
+      renderers,
     });
 
     fixture.detectChanges();
@@ -306,7 +331,6 @@ describe('Table', () => {
     fixture.whenStable().then(() => {
       // 3 row
       expect(fixture.nativeElement.querySelectorAll('tr').length).toBe(1 + 4);
-
     });
   }));
 
@@ -316,9 +340,9 @@ describe('Table', () => {
       schema: schema_object1,
       data: [
         { foo: 'foo_1', bar: 'bar_1' },
-        { foo: 'foo_2', bar: 'bar_2' }
+        { foo: 'foo_2', bar: 'bar_2' },
       ],
-      renderers
+      renderers,
     });
     component.disabled = true;
     fixture.detectChanges();
@@ -338,7 +362,7 @@ describe('Table', () => {
       uischema: uischemaWithSorting,
       schema: schema_simple1,
       data: ['foo', 'bar'],
-      renderers
+      renderers,
     });
     component.disabled = false;
     fixture.detectChanges();
@@ -346,7 +370,9 @@ describe('Table', () => {
     component.ngOnInit();
     fixture.whenStable().then(() => {
       expect(fixture.nativeElement.querySelectorAll('.item-up').length).toBe(2);
-      expect(fixture.nativeElement.querySelectorAll('.item-down').length).toBe(2);
+      expect(fixture.nativeElement.querySelectorAll('.item-down').length).toBe(
+        2
+      );
     });
   }));
   it('when options.showSortButtons is False, it should NOT render sort buttons', async(() => {
@@ -354,7 +380,7 @@ describe('Table', () => {
       uischema: uischema1,
       schema: schema_simple1,
       data: ['foo', 'bar'],
-      renderers
+      renderers,
     });
     component.disabled = false;
     fixture.detectChanges();
@@ -362,8 +388,9 @@ describe('Table', () => {
     component.ngOnInit();
     fixture.whenStable().then(() => {
       expect(fixture.nativeElement.querySelectorAll('.item-up').length).toBe(0);
-      expect(fixture.nativeElement.querySelectorAll('.item-down').length).toBe(0);
+      expect(fixture.nativeElement.querySelectorAll('.item-down').length).toBe(
+        0
+      );
     });
   }));
-
 });

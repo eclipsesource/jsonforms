@@ -2,12 +2,12 @@
   <control-wrapper
     v-bind="controlWrapper"
     :styles="styles"
-    :isFocused="isFocused"
-    :appliedOptions="appliedOptions"
+    :is-focused="isFocused"
+    :applied-options="appliedOptions"
   >
     <input
-      type="date"
       :id="control.id + '-input'"
+      type="date"
       :class="styles.control.input"
       :value="control.data"
       :disabled="!control.enabled"
@@ -25,23 +25,30 @@ import {
   ControlElement,
   JsonFormsRendererRegistryEntry,
   rankWith,
-  isDateControl
+  isDateControl,
 } from '@jsonforms/core';
 import { defineComponent } from 'vue';
-import { rendererProps, useJsonFormsControl, RendererProps } from '../../config/jsonforms';
+import {
+  rendererProps,
+  useJsonFormsControl,
+  RendererProps,
+} from '../../config/jsonforms';
 import { default as ControlWrapper } from './ControlWrapper.vue';
 import { useVanillaControl } from '../util';
 
 const controlRenderer = defineComponent({
-  name: 'date-control-renderer',
+  name: 'DateControlRenderer',
   components: {
-    ControlWrapper
+    ControlWrapper,
   },
   props: {
-    ...rendererProps<ControlElement>()
+    ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    return useVanillaControl(useJsonFormsControl(props), target => target.value || undefined);
+    return useVanillaControl(
+      useJsonFormsControl(props),
+      (target) => target.value || undefined
+    );
   },
 });
 
@@ -49,6 +56,6 @@ export default controlRenderer;
 
 export const entry: JsonFormsRendererRegistryEntry = {
   renderer: controlRenderer,
-  tester: rankWith(2, isDateControl)
+  tester: rankWith(2, isDateControl),
 };
 </script>

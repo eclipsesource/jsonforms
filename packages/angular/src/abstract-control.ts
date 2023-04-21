@@ -29,14 +29,14 @@ import {
   JsonFormsState,
   JsonSchema,
   OwnPropsOfControl,
-  StatePropsOfControl
+  StatePropsOfControl,
 } from '@jsonforms/core';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormControl,
   ValidationErrors,
-  ValidatorFn
+  ValidatorFn,
 } from '@angular/forms';
 import type { Subscription } from 'rxjs';
 
@@ -44,11 +44,14 @@ import { JsonFormsBaseRenderer } from './base.renderer';
 import { JsonFormsAngularService } from './jsonforms.service';
 import merge from 'lodash/merge';
 @Component({
-  template: ''
+  template: '',
 })
 export abstract class JsonFormsAbstractControl<
-  Props extends StatePropsOfControl
-> extends JsonFormsBaseRenderer<ControlElement> implements OnInit, OnDestroy {
+    Props extends StatePropsOfControl
+  >
+  extends JsonFormsBaseRenderer<ControlElement>
+  implements OnInit, OnDestroy
+{
   @Input() id: string;
   @Input() disabled: boolean;
   @Input() visible: boolean;
@@ -70,11 +73,11 @@ export abstract class JsonFormsAbstractControl<
     this.form = new FormControl(
       {
         value: '',
-        disabled: true
+        disabled: true,
       },
       {
         updateOn: 'change',
-        validators: this.validator.bind(this)
+        validators: this.validator.bind(this),
       }
     );
   }
@@ -108,7 +111,7 @@ export abstract class JsonFormsAbstractControl<
           rootSchema,
           visible,
           path,
-          config
+          config,
         } = props;
         this.label = computeLabel(
           label,
@@ -128,7 +131,7 @@ export abstract class JsonFormsAbstractControl<
         this.form.setValue(data);
         this.propsPath = path;
         this.mapAdditionalProps(props);
-      }
+      },
     });
     this.triggerValidation();
   }
@@ -137,8 +140,7 @@ export abstract class JsonFormsAbstractControl<
     return this.error ? { error: this.error } : null;
   };
 
-  // @ts-ignore
-  mapAdditionalProps(props: Props) {
+  mapAdditionalProps(_props: Props) {
     // do nothing by default
   }
 
@@ -157,7 +159,7 @@ export abstract class JsonFormsAbstractControl<
       uischema: this.uischema,
       schema: this.schema,
       path: this.path,
-      id: this.id
+      id: this.id,
     };
     if (this.disabled !== undefined) {
       props.enabled = !this.disabled;

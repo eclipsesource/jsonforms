@@ -24,19 +24,24 @@
 */
 import test from 'ava';
 
-import { ControlElement, getI18nKeyPrefixBySchema, i18nJsonSchema, transformPathToI18nPrefix } from '../../src';
+import {
+  ControlElement,
+  getI18nKeyPrefixBySchema,
+  i18nJsonSchema,
+  transformPathToI18nPrefix,
+} from '../../src';
 
-test('transformPathToI18nPrefix returns root when empty', t => {
+test('transformPathToI18nPrefix returns root when empty', (t) => {
   t.is(transformPathToI18nPrefix(''), 'root');
 });
 
-test('transformPathToI18nPrefix does not modify non-array paths', t => {
+test('transformPathToI18nPrefix does not modify non-array paths', (t) => {
   t.is(transformPathToI18nPrefix('foo'), 'foo');
   t.is(transformPathToI18nPrefix('foo.bar'), 'foo.bar');
   t.is(transformPathToI18nPrefix('bar3.foo2'), 'bar3.foo2');
 });
 
-test('transformPathToI18nPrefix removes array indices', t => {
+test('transformPathToI18nPrefix removes array indices', (t) => {
   t.is(transformPathToI18nPrefix('foo.2.bar'), 'foo.bar');
   t.is(transformPathToI18nPrefix('foo.234324234.bar'), 'foo.bar');
   t.is(transformPathToI18nPrefix('foo.0.bar'), 'foo.bar');
@@ -47,42 +52,42 @@ test('transformPathToI18nPrefix removes array indices', t => {
   t.is(transformPathToI18nPrefix('3'), 'root');
 });
 
-test('getI18nKeyPrefixBySchema gets key from uischema over schema', t => {
+test('getI18nKeyPrefixBySchema gets key from uischema over schema', (t) => {
   const control: ControlElement = {
     type: 'Control',
     scope: '#/properties/foo',
-    i18n: 'controlFoo'
+    i18n: 'controlFoo',
   };
   const schema: i18nJsonSchema = {
     type: 'string',
-    i18n: 'schemaFoo'
-  }
+    i18n: 'schemaFoo',
+  };
   t.is(getI18nKeyPrefixBySchema(schema, control), 'controlFoo');
 });
 
-test('getI18nKeyPrefixBySchema gets schema key for missing uischema key', t => {
+test('getI18nKeyPrefixBySchema gets schema key for missing uischema key', (t) => {
   const control: ControlElement = {
     type: 'Control',
     scope: '#/properties/foo',
   };
   const schema: i18nJsonSchema = {
     type: 'string',
-    i18n: 'schemaFoo'
-  }
+    i18n: 'schemaFoo',
+  };
   t.is(getI18nKeyPrefixBySchema(schema, control), 'schemaFoo');
 });
 
-test('getI18nKeyPrefixBySchema returns undefined for missing uischema and schema keys', t => {
+test('getI18nKeyPrefixBySchema returns undefined for missing uischema and schema keys', (t) => {
   const control: ControlElement = {
     type: 'Control',
     scope: '#/properties/foo',
   };
   const schema: i18nJsonSchema = {
     type: 'string',
-  }
+  };
   t.is(getI18nKeyPrefixBySchema(schema, control), undefined);
 });
 
-test('getI18nKeyPrefixBySchema returns undefined for undefined parameters', t => {
+test('getI18nKeyPrefixBySchema returns undefined for undefined parameters', (t) => {
   t.is(getI18nKeyPrefixBySchema(undefined, undefined), undefined);
 });

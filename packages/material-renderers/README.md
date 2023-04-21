@@ -1,6 +1,6 @@
 # JSON Forms - More Forms. Less Code
 
-*Complex forms in the blink of an eye*
+_Complex forms in the blink of an eye_
 
 JSON Forms eliminates the tedious task of writing fully-featured forms by hand by leveraging the capabilities of JSON, JSON Schema and Javascript.
 
@@ -24,12 +24,11 @@ npm i --save @jsonforms/core @jsonforms/react @jsonforms/material-renderers
 
 Use the `JsonForms` component for each form you want to render and hand over the renderer set.
 
-
 ```ts
 import React, { useState } from 'react';
 import {
   materialRenderers,
-  materialCells
+  materialCells,
 } from '@jsonforms/material-renderers';
 import { JsonForms } from '@jsonforms/react';
 
@@ -38,21 +37,21 @@ const schema = {
   properties: {
     name: {
       type: 'string',
-      minLength: 1
+      minLength: 1,
     },
     done: {
-      type: 'boolean'
+      type: 'boolean',
     },
     due_date: {
       type: 'string',
-      format: 'date'
+      format: 'date',
     },
     recurrence: {
       type: 'string',
-      enum: ['Never', 'Daily', 'Weekly', 'Monthly']
-    }
+      enum: ['Never', 'Daily', 'Weekly', 'Monthly'],
+    },
   },
-  required: ['name', 'due_date']
+  required: ['name', 'due_date'],
 };
 
 const uischema = {
@@ -61,26 +60,26 @@ const uischema = {
     {
       type: 'Control',
       label: false,
-      scope: '#/properties/done'
+      scope: '#/properties/done',
     },
     {
       type: 'Control',
-      scope: '#/properties/name'
+      scope: '#/properties/name',
     },
     {
       type: 'HorizontalLayout',
       elements: [
         {
           type: 'Control',
-          scope: '#/properties/due_date'
+          scope: '#/properties/due_date',
         },
         {
           type: 'Control',
-          scope: '#/properties/recurrence'
-        }
-      ]
-    }
-  ]
+          scope: '#/properties/recurrence',
+        },
+      ],
+    },
+  ],
 };
 
 const initialData = {};

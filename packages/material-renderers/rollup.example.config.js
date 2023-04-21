@@ -8,13 +8,13 @@ import typescript from 'rollup-plugin-typescript2';
 
 /**
  * @type {import('rollup').RollupOptions}
-*/
+ */
 const config = {
   input: 'example/index.ts',
   output: {
     file: 'example/dist/bundle.js',
     format: 'iife',
-    sourcemap: true
+    sourcemap: true,
   },
   plugins: [
     replace({
@@ -30,23 +30,24 @@ const config = {
       tsconfigOverride: {
         compilerOptions: {
           // Do not emit typescript declarations for our bundled example app
-          declaration: false
-        }
-    }}),
+          declaration: false,
+        },
+      },
+    }),
     copy({
       targets: [
         {
           src: 'example/index.bundled.html',
           dest: 'example/dist',
-          rename: () => 'index.html'
+          rename: () => 'index.html',
         },
         {
           src: '../examples-react/src/logo.svg',
-          dest: 'example/dist/assets'
-        }
-      ]
+          dest: 'example/dist/assets',
+        },
+      ],
     }),
-  ]
-}
+  ],
+};
 
 export default config;

@@ -7,18 +7,18 @@ export const schema = {
     properties: {
       plainEnum: {
         type: 'string',
-        enum: ['foo', 'bar']
+        enum: ['foo', 'bar'],
       },
       oneOfEnum: {
         type: 'string',
         oneOf: [
           { const: 'foo', title: 'Foo' },
           { const: 'bar', title: 'Bar' },
-          { const: 'foobar', title: 'FooBar' }
-        ]
+          { const: 'foobar', title: 'FooBar' },
+        ],
       },
-    }
-  }
+    },
+  },
 };
 
 export const uischema = {
@@ -26,9 +26,9 @@ export const uischema = {
   elements: [
     {
       type: 'Control',
-      scope: '#'
-    }
-  ]
+      scope: '#',
+    },
+  ],
 };
 
 export const data: any[] = [];
@@ -39,6 +39,6 @@ registerExamples([
     label: 'Array containing enums',
     data,
     schema,
-    uischema
-  }
+    uischema,
+  },
 ]);

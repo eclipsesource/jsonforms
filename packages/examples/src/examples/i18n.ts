@@ -24,20 +24,29 @@
 */
 import { registerExamples } from '../register';
 import { personCoreSchema } from './person';
-import { JsonFormsCore, updateErrors, AnyAction, Dispatch, Translator } from '@jsonforms/core';
+import {
+  JsonFormsCore,
+  updateErrors,
+  AnyAction,
+  Dispatch,
+  Translator,
+} from '@jsonforms/core';
 import get from 'lodash/get';
+// TODO change import when types are available for ajv-i18n (from v4.x)
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const localize = require('ajv-i18n');
 
-export const onChange = (dispatch: Dispatch<AnyAction>) => (
-  extensionState: any
-) => ({ errors }: Pick<JsonFormsCore, 'data' | 'errors'>) => {
-  if (!extensionState) {
-    return;
-  }
-  const localiseFunc = localize[extensionState.locale.split('-')[0]];
-  localiseFunc(errors);
-  dispatch(updateErrors(errors));
-};
+export const onChange =
+  (dispatch: Dispatch<AnyAction>) =>
+  (extensionState: any) =>
+  ({ errors }: Pick<JsonFormsCore, 'data' | 'errors'>) => {
+    if (!extensionState) {
+      return;
+    }
+    const localiseFunc = localize[extensionState.locale.split('-')[0]];
+    localiseFunc(errors);
+    dispatch(updateErrors(errors));
+  };
 
 export const uischema = {
   type: 'VerticalLayout',
@@ -48,13 +57,13 @@ export const uischema = {
       elements: [
         {
           type: 'Control',
-          scope: '#/properties/name'
+          scope: '#/properties/name',
         },
         {
           type: 'Control',
-          scope: '#/properties/birthDate'
-        }
-      ]
+          scope: '#/properties/birthDate',
+        },
+      ],
     },
     {
       type: 'Label',
@@ -65,31 +74,31 @@ export const uischema = {
       elements: [
         {
           type: 'Control',
-          scope: '#/properties/nationality'
+          scope: '#/properties/nationality',
         },
         {
           type: 'Control',
-          scope: '#/properties/vegetarian'
-        }
-      ]
-    }
-  ]
+          scope: '#/properties/vegetarian',
+        },
+      ],
+    },
+  ],
 };
 
 export const data = {
   vegetarian: false,
   birthDate: '1985-06-02',
   personalData: {
-    age: 34
+    age: 34,
   },
-  postalCode: '12345'
+  postalCode: '12345',
 };
 
 export const translations = {
   basicInfoGroup: {
-    label: 'Basic Information'
+    label: 'Basic Information',
   },
-  additionalInformationLabel: 'Additional Information'
+  additionalInformationLabel: 'Additional Information',
 };
 export const translate: Translator = (key: string, defaultMessage: string) => {
   return get(translations, key) ?? defaultMessage;
@@ -104,7 +113,7 @@ registerExamples([
     uischema,
     i18n: {
       translate: translate,
-      locale: 'en'
-    }
-  }
+      locale: 'en',
+    },
+  },
 ]);

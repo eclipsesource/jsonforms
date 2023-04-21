@@ -48,15 +48,13 @@ export const resolveData = (instance: any, dataPath: string): any => {
   }
   const dataPathSegments = dataPath.split('.');
 
-  return dataPathSegments
-    .map(segment => decodeURIComponent(segment))
-    .reduce((curInstance, decodedSegment) => {
-      if (!curInstance || !curInstance.hasOwnProperty(decodedSegment)) {
-        return undefined;
-      }
+  return dataPathSegments.reduce((curInstance, decodedSegment) => {
+    if (!curInstance || !curInstance.hasOwnProperty(decodedSegment)) {
+      return undefined;
+    }
 
-      return curInstance[decodedSegment];
-    }, instance);
+    return curInstance[decodedSegment];
+  }, instance);
 };
 
 /**
@@ -73,7 +71,7 @@ export const findAllRefs = (
   resolveTuples = false
 ): ReferenceSchemaMap => {
   if (isObjectSchema(schema)) {
-    Object.keys(schema.properties).forEach(key =>
+    Object.keys(schema.properties).forEach((key) =>
       findAllRefs(schema.properties[key], result)
     );
   }
@@ -81,7 +79,7 @@ export const findAllRefs = (
     if (Array.isArray(schema.items)) {
       if (resolveTuples) {
         const items: JsonSchema[] = schema.items;
-        items.forEach(child => findAllRefs(child, result));
+        items.forEach((child) => findAllRefs(child, result));
       }
     } else {
       findAllRefs(schema.items, result);
@@ -89,7 +87,7 @@ export const findAllRefs = (
   }
   if (Array.isArray(schema.anyOf)) {
     const anyOf: JsonSchema[] = schema.anyOf;
-    anyOf.forEach(child => findAllRefs(child, result));
+    anyOf.forEach((child) => findAllRefs(child, result));
   }
   if (schema.$ref !== undefined) {
     result[schema.$ref] = schema;
@@ -142,7 +140,11 @@ const resolveSchemaWithSegments = (
 
   const singleSegmentResolveSchema = get(schema, segment);
 
-  const resolvedSchema = resolveSchemaWithSegments(singleSegmentResolveSchema, remainingSegments, rootSchema);
+  const resolvedSchema = resolveSchemaWithSegments(
+    singleSegmentResolveSchema,
+    remainingSegments,
+    rootSchema
+  );
   if (resolvedSchema) {
     return resolvedSchema;
   }
@@ -175,4 +177,4 @@ const resolveSchemaWithSegments = (
   }
 
   return undefined;
-}
+};

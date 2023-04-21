@@ -30,7 +30,7 @@ import {
   InputAdornment,
   InputBaseComponentProps,
   InputProps,
-  useTheme
+  useTheme,
 } from '@mui/material';
 import merge from 'lodash/merge';
 import Close from '@mui/icons-material/Close';
@@ -41,9 +41,12 @@ interface MuiTextInputProps {
   inputComponent?: InputProps['inputComponent'];
 }
 
-const eventToValue = (ev:any) => ev.target.value === '' ? undefined : ev.target.value;
+const eventToValue = (ev: any) =>
+  ev.target.value === '' ? undefined : ev.target.value;
 
-export const MuiInputText = React.memo((props: CellProps & WithClassname & MuiTextInputProps) => { 
+export const MuiInputText = React.memo(function MuiInputText(
+  props: CellProps & WithClassname & MuiTextInputProps
+) {
   const [showAdornment, setShowAdornment] = useState(false);
   const {
     data,
@@ -57,7 +60,7 @@ export const MuiInputText = React.memo((props: CellProps & WithClassname & MuiTe
     handleChange,
     schema,
     muiInputProps,
-    inputComponent
+    inputComponent,
   } = props;
   const maxLength = schema.maxLength;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
@@ -67,29 +70,35 @@ export const MuiInputText = React.memo((props: CellProps & WithClassname & MuiTe
   } else {
     inputProps = {};
   }
-  
+
   inputProps = merge(inputProps, muiInputProps);
-  
+
   if (appliedUiSchemaOptions.trim && maxLength !== undefined) {
     inputProps.size = maxLength;
-  };
-  
-  const [inputText, onChange, onClear] = useDebouncedChange(handleChange, '', data, path, eventToValue);
+  }
+
+  const [inputText, onChange, onClear] = useDebouncedChange(
+    handleChange,
+    '',
+    data,
+    path,
+    eventToValue
+  );
   const onPointerEnter = () => setShowAdornment(true);
   const onPointerLeave = () => setShowAdornment(false);
 
   const theme: JsonFormsTheme = useTheme();
-  
+
   const closeStyle = {
-    background: theme.jsonforms?.input?.delete?.background || theme.palette.background.default,
-    borderRadius: '50%'
+    background:
+      theme.jsonforms?.input?.delete?.background ||
+      theme.palette.background.default,
+    borderRadius: '50%',
   };
 
   return (
     <Input
-      type={
-        appliedUiSchemaOptions.format === 'password' ? 'password' : 'text'
-      }
+      type={appliedUiSchemaOptions.format === 'password' ? 'password' : 'text'}
       value={inputText}
       onChange={onChange}
       className={className}
@@ -107,17 +116,19 @@ export const MuiInputText = React.memo((props: CellProps & WithClassname & MuiTe
           position='end'
           style={{
             display:
-              !showAdornment || !enabled || data === undefined ? 'none' : 'flex',
+              !showAdornment || !enabled || data === undefined
+                ? 'none'
+                : 'flex',
             position: 'absolute',
-            right: 0
+            right: 0,
           }}
         >
           <IconButton
             aria-label='Clear input field'
-            onClick={onClear}   
+            onClick={onClear}
             size='large'
           >
-            <Close style={closeStyle}/>
+            <Close style={closeStyle} />
           </IconButton>
         </InputAdornment>
       }

@@ -3,14 +3,14 @@ import { mountJsonForms } from '../util';
 
 const schema = {
   type: 'string',
-  title: 'My Multi String'
+  title: 'My Multi String',
 };
 const uischema = {
   type: 'Control',
   scope: '#',
   options: {
-    multi: true
-  }
+    multi: true,
+  },
 };
 
 describe('MultiStringControlRenderer.vue', () => {

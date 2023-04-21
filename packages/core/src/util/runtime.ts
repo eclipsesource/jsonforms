@@ -33,7 +33,7 @@ import {
   RuleEffect,
   SchemaBasedCondition,
   Scopable,
-  UISchemaElement
+  UISchemaElement,
 } from '../models';
 import { resolveData } from './resolvers';
 import { composeWithUi } from './path';
@@ -191,7 +191,7 @@ export const isInherentlyEnabled = (
   state: JsonFormsState,
   ownProps: any,
   uischema: UISchemaElement,
-  schema: JsonSchema & { readOnly?: boolean } | undefined,
+  schema: (JsonSchema & { readOnly?: boolean }) | undefined,
   rootData: any,
   config: any
 ) => {

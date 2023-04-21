@@ -40,13 +40,13 @@ import {
   Resolve,
   Test,
   getControlPath,
-  encode
+  encode,
 } from '@jsonforms/core';
 import { DispatchCell, withJsonFormsArrayControlProps } from '@jsonforms/react';
 import { withVanillaControlProps } from '../util';
 import type { VanillaRendererProps } from '../index';
 
-const { createLabelDescriptionFrom, convertToValidClassName } = Helpers;
+const { convertToValidClassName } = Helpers;
 
 const { or, isObjectArrayControl, isPrimitiveArrayControl, rankWith } = Test;
 
@@ -60,10 +60,12 @@ export const tableArrayControlTester: RankedTester = rankWith(
   or(isObjectArrayControl, isPrimitiveArrayControl)
 );
 
-class TableArrayControl extends React.Component<ArrayControlProps & VanillaRendererProps, any> {
-
+class TableArrayControl extends React.Component<
+  ArrayControlProps & VanillaRendererProps,
+  any
+> {
   confirmDelete = (path: string, index: number) => {
-    const p = path.substring(0, path.lastIndexOf(('.')));
+    const p = path.substring(0, path.lastIndexOf('.'));
     this.props.removeItems(p, [index])();
   };
 
@@ -79,7 +81,8 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
       errors,
       label,
       getStyleAsClassName,
-      childErrors
+      childErrors,
+      translations,
     } = this.props;
 
     const controlElement = uischema as ControlElement;
@@ -89,17 +92,18 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
     const validationClass = getStyleAsClassName('array.table.validation');
     const controlClass = [
       getStyleAsClassName('array.table'),
-      convertToValidClassName(controlElement.scope)
+      convertToValidClassName(controlElement.scope),
     ].join(' ');
     const createControlElement = (key?: string): ControlElement => ({
       type: 'Control',
       label: false,
-      scope: schema.type === 'object' ? `#/properties/${key}` : '#'
+      scope: schema.type === 'object' ? `#/properties/${key}` : '#',
     });
-    const labelObject = createLabelDescriptionFrom(controlElement, schema);
     const isValid = errors.length === 0;
     const divClassNames = [validationClass]
-      .concat(isValid ? '' : getStyleAsClassName('array.table.validation.error'))
+      .concat(
+        isValid ? '' : getStyleAsClassName('array.table.validation.error')
+      )
       .join(' ');
 
     return (
@@ -110,24 +114,26 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
             className={buttonClass}
             onClick={addItem(path, createDefaultValue(schema))}
           >
-            Add to {labelObject.text}
+            {translations.addTooltip}
           </button>
         </header>
-        <div className={divClassNames}>
-          {!isValid ? errors : ''}
-        </div>
+        <div className={divClassNames}>{!isValid ? errors : ''}</div>
         <table className={tableClass}>
           <thead>
             <tr>
               {schema.properties ? (
                 fpflow(
                   fpkeys,
-                  fpfilter(prop => schema.properties[prop].type !== 'array'),
-                  fpmap(prop => <th key={prop}>{schema.properties[prop].title ?? fpstartCase(prop)}</th>)
+                  fpfilter((prop) => schema.properties[prop].type !== 'array'),
+                  fpmap((prop) => (
+                    <th key={prop}>
+                      {schema.properties[prop].title ?? fpstartCase(prop)}
+                    </th>
+                  ))
                 )(schema.properties)
               ) : (
-                  <th>Items</th>
-                )}
+                <th>Items</th>
+              )}
               <th>Valid</th>
               <th>&nbsp;</th>
             </tr>
@@ -135,90 +141,95 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
           <tbody>
             {!data || !Array.isArray(data) || data.length === 0 ? (
               <tr>
-                <td>No data</td>
+                <td>{translations.noDataMessage}</td>
               </tr>
             ) : (
-                data.map((_child, index) => {
-                  const childPath = Paths.compose(
-                    path,
-                    `${index}`
-                  );
-                  // TODO
-                  const errorsPerEntry: any[] = filter(childErrors, error => {
-                    const errorPath = getControlPath(error);
-                    return errorPath.startsWith(childPath);
-                  });
+              data.map((_child, index) => {
+                const childPath = Paths.compose(path, `${index}`);
+                // TODO
+                const errorsPerEntry: any[] = filter(childErrors, (error) => {
+                  const errorPath = getControlPath(error);
+                  return errorPath.startsWith(childPath);
+                });
 
-                  const validationClassName = getStyleAsClassName('array.validation');
-                  const errorValidationClassName = getStyleAsClassName('array.validation.error');
-                  const errorClassNames = errorsPerEntry ? 
-                    [validationClassName].concat(errorValidationClassName).join(' ') : 
-                    validationClassName;
+                const validationClassName =
+                  getStyleAsClassName('array.validation');
+                const errorValidationClassName = getStyleAsClassName(
+                  'array.validation.error'
+                );
+                const errorClassNames = errorsPerEntry
+                  ? [validationClassName]
+                      .concat(errorValidationClassName)
+                      .join(' ')
+                  : validationClassName;
 
-                  return (
-                    <tr key={childPath}>
-                      {schema.properties ? (
-                        fpflow(
-                          fpkeys,
-                          fpfilter(
-                            prop => schema.properties[prop].type !== 'array'
-                          ),
-                          fpmap(prop => {
-                            const childPropPath = Paths.compose(
-                              childPath,
-                              prop.toString()
-                            );
-                            return (
-                              <td key={childPropPath}>
-                                <DispatchCell
-                                  schema={Resolve.schema(schema, `#/properties/${encode(prop)}`, rootSchema)}
-                                  uischema={createControlElement(encode(prop))}
-                                  path={childPath + '.' + prop}
-                                />
-                              </td>
-                            );
-                          })
-                        )(schema.properties)
-                      ) : (
-                          <td
-                            key={Paths.compose(
-                              childPath,
-                              index.toString()
-                            )}
-                          >
-                            <DispatchCell
-                              schema={schema}
-                              uischema={createControlElement()}
-                              path={childPath}
-                            />
-                          </td>
-                        )}
-                      <td>
-                        {errorsPerEntry ? (
-                          <span className={errorClassNames}
-                          >
-                            {join(errorsPerEntry.map(e => e.message), ' and ')}
-                          </span>
-                        ) : (
-                            <span className={errorClassNames}>OK</span>
+                return (
+                  <tr key={childPath}>
+                    {schema.properties ? (
+                      fpflow(
+                        fpkeys,
+                        fpfilter(
+                          (prop) => schema.properties[prop].type !== 'array'
+                        ),
+                        fpmap((prop) => {
+                          const childPropPath = Paths.compose(
+                            childPath,
+                            prop.toString()
+                          );
+                          return (
+                            <td key={childPropPath}>
+                              <DispatchCell
+                                schema={Resolve.schema(
+                                  schema,
+                                  `#/properties/${encode(prop)}`,
+                                  rootSchema
+                                )}
+                                uischema={createControlElement(encode(prop))}
+                                path={childPath + '.' + prop}
+                              />
+                            </td>
+                          );
+                        })
+                      )(schema.properties)
+                    ) : (
+                      <td key={Paths.compose(childPath, index.toString())}>
+                        <DispatchCell
+                          schema={schema}
+                          uischema={createControlElement()}
+                          path={childPath}
+                        />
+                      </td>
+                    )}
+                    <td>
+                      {errorsPerEntry ? (
+                        <span className={errorClassNames}>
+                          {join(
+                            errorsPerEntry.map((e) => e.message),
+                            ' and '
                           )}
-                      </td>
-                      <td>
-                        <button
-                          aria-label={`Delete`}
-                          onClick={() => {
-                            if (window.confirm('Are you sure you wish to delete this item?')) {
-                              this.confirmDelete(childPath, index);
-                            }
-                          }}
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })
-              )}
+                        </span>
+                      ) : (
+                        <span className={errorClassNames}>OK</span>
+                      )}
+                    </td>
+                    <td>
+                      <button
+                        aria-label={translations.removeAriaLabel}
+                        onClick={() => {
+                          if (
+                            window.confirm(translations.deleteDialogMessage)
+                          ) {
+                            this.confirmDelete(childPath, index);
+                          }
+                        }}
+                      >
+                        {translations.removeTooltip}
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })
+            )}
           </tbody>
         </table>
       </div>
@@ -226,4 +237,6 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
   }
 }
 
-export default withVanillaControlProps(withJsonFormsArrayControlProps(TableArrayControl));
+export default withVanillaControlProps(
+  withJsonFormsArrayControlProps(TableArrayControl)
+);

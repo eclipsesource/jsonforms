@@ -34,7 +34,7 @@ import {
   mapStateToMultiEnumControlProps,
   mapDispatchToMultiEnumProps,
   mapStateToLabelProps,
-  LabelElement
+  LabelElement,
 } from '@jsonforms/core';
 import {
   PropType,
@@ -43,7 +43,7 @@ import {
   inject,
   onBeforeMount,
   onUnmounted,
-  ref
+  ref,
 } from 'vue';
 
 /**
@@ -57,41 +57,37 @@ import {
  */
 export const rendererProps = <U = UISchemaElement>() => ({
   schema: {
-    required: true as true,
-    type: [Object, Boolean] as PropType<
-      JsonSchema
-    >
+    required: true as const,
+    type: [Object, Boolean] as PropType<JsonSchema>,
   },
   uischema: {
-    required: true as true,
-    type: Object as PropType<U>
+    required: true as const,
+    type: Object as PropType<U>,
   },
   path: {
-    required: true as true,
-    type: String
+    required: true as const,
+    type: String,
   },
   enabled: {
-    required: false as false,
+    required: false as const,
     type: Boolean,
-    default: undefined
+    default: undefined,
   },
   renderers: {
     required: false,
     type: Array as PropType<JsonFormsRendererRegistryEntry[]>,
-    default: undefined
+    default: undefined,
   },
   cells: {
     required: false,
-    type: Array as PropType<
-      JsonFormsCellRendererRegistryEntry[]
-    >,
-    default: undefined
+    type: Array as PropType<JsonFormsCellRendererRegistryEntry[]>,
+    default: undefined,
   },
   config: {
     required: false,
     type: Object,
-    default: undefined
-  }
+    default: undefined,
+  },
 });
 
 /**
@@ -100,35 +96,31 @@ export const rendererProps = <U = UISchemaElement>() => ({
  */
 export const masterListItemProps = () => ({
   index: {
-    required: true as true,
-    type: Number
+    required: true as const,
+    type: Number,
   },
   selected: {
-    required: true as true,
-    type: Boolean
+    required: true as const,
+    type: Boolean,
   },
   path: {
-    required: true as true,
-    type: String
+    required: true as const,
+    type: String,
   },
   schema: {
-    required: true as true,
-    type: [Object, Boolean] as PropType<
-      JsonSchema
-    >
+    required: true as const,
+    type: [Object, Boolean] as PropType<JsonSchema>,
   },
   handleSelect: {
-    required: false as false,
+    required: false as const,
     type: Function as PropType<(index: number) => void>,
-    default: undefined
+    default: undefined,
   },
   removeItem: {
-    required: false as false,
-    type: Function as PropType<
-      (path: string, value: number) => void
-    >,
-    default: undefined
-  }
+    required: false as const,
+    type: Function as PropType<(path: string, value: number) => void>,
+    default: undefined,
+  },
 });
 
 export interface RendererProps<U = UISchemaElement> {
@@ -149,15 +141,21 @@ export type Required<T> = T extends object
   ? { [P in keyof T]-?: NonNullable<T[P]> }
   : T;
 
+// TODO fix @typescript-eslint/ban-types
+// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-unused-vars
 export function useControl<R, D, P extends {}>(
   props: P,
   stateMap: (state: JsonFormsState, props: P) => R
 ): { control: ComputedRef<Required<R>> };
+// TODO fix @typescript-eslint/ban-types
+// eslint-disable-next-line @typescript-eslint/ban-types
 export function useControl<R, D, P extends {}>(
   props: P,
   stateMap: (state: JsonFormsState, props: P) => R,
   dispatchMap: (dispatch: Dispatch<CoreActions>) => D
 ): { control: ComputedRef<Required<R>> } & D;
+// TODO fix @typescript-eslint/ban-types
+// eslint-disable-next-line @typescript-eslint/ban-types
 export function useControl<R, D, P extends {}>(
   props: P,
   stateMap: (state: JsonFormsState, props: P) => R,
@@ -174,7 +172,7 @@ export function useControl<R, D, P extends {}>(
   const control = computed(() => ({
     ...props,
     ...stateMap({ jsonforms }, props),
-    id: id.value
+    id: id.value,
   }));
 
   const dispatchMethods = dispatchMap?.(dispatch);
@@ -193,8 +191,8 @@ export function useControl<R, D, P extends {}>(
   });
 
   return {
-    control: (control as unknown) as ComputedRef<R>,
-    ...dispatchMethods
+    control: control as unknown as ComputedRef<R>,
+    ...dispatchMethods,
   };
 }
 
@@ -304,7 +302,11 @@ export const useJsonFormsOneOfControl = (props: ControlProps) => {
  * Dispatch changes via the provided `handleChange` method.
  */
 export const useJsonFormsMultiEnumControl = (props: ControlProps) => {
-  return useControl(props, mapStateToMultiEnumControlProps, mapDispatchToMultiEnumProps);
+  return useControl(
+    props,
+    mapStateToMultiEnumControlProps,
+    mapDispatchToMultiEnumProps
+  );
 };
 
 export interface LayoutProps extends RendererProps {
@@ -372,13 +374,13 @@ export const useJsonFormsRenderer = (props: RendererProps) => {
 
   const rootSchema = computed(() => rawProps.value.rootSchema);
   const renderer = computed(() => {
-    const { rootSchema, ...rest} = rawProps.value;
+    const { rootSchema: _rootSchema, ...rest } = rawProps.value;
     return rest;
   });
 
   return {
     renderer,
-    rootSchema
+    rootSchema,
   };
 };
 
@@ -433,9 +435,9 @@ export const useJsonFormsEnumCell = (props: ControlProps) => {
  */
 export const useJsonFormsOneOfEnumCell = (props: ControlProps) => {
   const { control, ...other } = useControl(
-      props,
-      mapStateToOneOfEnumCellProps,
-      mapDispatchToControlProps
+    props,
+    mapStateToOneOfEnumCellProps,
+    mapDispatchToControlProps
   );
   return { cell: control, ...other };
 };

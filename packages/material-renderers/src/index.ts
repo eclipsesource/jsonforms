@@ -24,7 +24,7 @@
 */
 import {
   JsonFormsCellRendererRegistryEntry,
-  JsonFormsRendererRegistryEntry
+  JsonFormsRendererRegistryEntry,
 } from '@jsonforms/core';
 import {
   materialAllOfControlTester,
@@ -38,13 +38,13 @@ import {
   materialOneOfControlTester,
   MaterialOneOfRenderer,
   MaterialEnumArrayRenderer,
-  materialEnumArrayRendererTester
+  materialEnumArrayRendererTester,
 } from './complex';
 import {
   MaterialLabelRenderer,
   materialLabelRendererTester,
   MaterialListWithDetailRenderer,
-  materialListWithDetailTester
+  materialListWithDetailTester,
 } from './additional';
 import {
   MaterialAnyOfStringOrEnumControl,
@@ -76,7 +76,7 @@ import {
   MaterialTextControl,
   materialTextControlTester,
   MaterialOneOfRadioGroupControl,
-  materialOneOfRadioGroupControlTester
+  materialOneOfRadioGroupControlTester,
 } from './controls';
 import {
   MaterialArrayLayout,
@@ -88,7 +88,7 @@ import {
   MaterialHorizontalLayout,
   materialHorizontalLayoutTester,
   MaterialVerticalLayout,
-  materialVerticalLayoutTester
+  materialVerticalLayoutTester,
 } from './layouts';
 import {
   MaterialBooleanCell,
@@ -110,16 +110,17 @@ import {
   MaterialTextCell,
   materialTextCellTester,
   MaterialTimeCell,
-  materialTimeCellTester
+  materialTimeCellTester,
 } from './cells';
 import MaterialCategorizationStepperLayout, {
-  materialCategorizationStepperTester
+  materialCategorizationStepperTester,
 } from './layouts/MaterialCategorizationStepperLayout';
 
+export * from './additional';
+export * from './cells';
 export * from './complex';
 export * from './controls';
 export * from './layouts';
-export * from './cells';
 export * from './mui-controls';
 export * from './util';
 
@@ -127,10 +128,13 @@ export const materialRenderers: JsonFormsRendererRegistryEntry[] = [
   // controls
   {
     tester: materialArrayControlTester,
-    renderer: MaterialArrayControlRenderer
+    renderer: MaterialArrayControlRenderer,
   },
   { tester: materialBooleanControlTester, renderer: MaterialBooleanControl },
-  { tester: materialBooleanToggleControlTester, renderer: MaterialBooleanToggleControl },
+  {
+    tester: materialBooleanToggleControlTester,
+    renderer: MaterialBooleanToggleControl,
+  },
   { tester: materialNativeControlTester, renderer: MaterialNativeControl },
   { tester: materialEnumControlTester, renderer: MaterialEnumControl },
   { tester: materialIntegerControlTester, renderer: MaterialIntegerControl },
@@ -138,7 +142,7 @@ export const materialRenderers: JsonFormsRendererRegistryEntry[] = [
   { tester: materialTextControlTester, renderer: MaterialTextControl },
   { tester: materialDateTimeControlTester, renderer: MaterialDateTimeControl },
   { tester: materialDateControlTester, renderer: MaterialDateControl },
-  { tester: materialTimeControlTester, renderer: MaterialTimeControl }, 
+  { tester: materialTimeControlTester, renderer: MaterialTimeControl },
   { tester: materialSliderControlTester, renderer: MaterialSliderControl },
   { tester: materialObjectControlTester, renderer: MaterialObjectRenderer },
   { tester: materialAllOfControlTester, renderer: MaterialAllOfRenderer },
@@ -146,43 +150,46 @@ export const materialRenderers: JsonFormsRendererRegistryEntry[] = [
   { tester: materialOneOfControlTester, renderer: MaterialOneOfRenderer },
   {
     tester: materialRadioGroupControlTester,
-    renderer: MaterialRadioGroupControl
+    renderer: MaterialRadioGroupControl,
   },
   {
     tester: materialOneOfRadioGroupControlTester,
-    renderer: MaterialOneOfRadioGroupControl
+    renderer: MaterialOneOfRadioGroupControl,
   },
-  { tester: materialOneOfEnumControlTester, renderer: MaterialOneOfEnumControl },
+  {
+    tester: materialOneOfEnumControlTester,
+    renderer: MaterialOneOfEnumControl,
+  },
   // layouts
   { tester: materialGroupTester, renderer: MaterialGroupLayout },
   {
     tester: materialHorizontalLayoutTester,
-    renderer: MaterialHorizontalLayout
+    renderer: MaterialHorizontalLayout,
   },
   { tester: materialVerticalLayoutTester, renderer: MaterialVerticalLayout },
   {
     tester: materialCategorizationTester,
-    renderer: MaterialCategorizationLayout
+    renderer: MaterialCategorizationLayout,
   },
   {
     tester: materialCategorizationStepperTester,
-    renderer: MaterialCategorizationStepperLayout
+    renderer: MaterialCategorizationStepperLayout,
   },
   { tester: materialArrayLayoutTester, renderer: MaterialArrayLayout },
   // additional
   { tester: materialLabelRendererTester, renderer: MaterialLabelRenderer },
   {
     tester: materialListWithDetailTester,
-    renderer: MaterialListWithDetailRenderer
+    renderer: MaterialListWithDetailRenderer,
   },
   {
     tester: materialAnyOfStringOrEnumControlTester,
-    renderer: MaterialAnyOfStringOrEnumControl
+    renderer: MaterialAnyOfStringOrEnumControl,
   },
   {
     tester: materialEnumArrayRendererTester,
-    renderer: MaterialEnumArrayRenderer
-  }
+    renderer: MaterialEnumArrayRenderer,
+  },
 ];
 
 export const materialCells: JsonFormsCellRendererRegistryEntry[] = [
@@ -195,5 +202,17 @@ export const materialCells: JsonFormsCellRendererRegistryEntry[] = [
   { tester: materialNumberFormatCellTester, cell: MaterialNumberFormatCell },
   { tester: materialOneOfEnumCellTester, cell: MaterialOneOfEnumCell },
   { tester: materialTextCellTester, cell: MaterialTextCell },
-  { tester: materialTimeCellTester, cell: MaterialTimeCell }
+  { tester: materialTimeCellTester, cell: MaterialTimeCell },
 ];
+
+import { UnwrappedAdditional } from './additional/unwrapped';
+import { UnwrappedComplex } from './complex/unwrapped';
+import { UnwrappedControls } from './controls/unwrapped';
+import { UnwrappedLayouts } from './layouts/unwrapped';
+
+export const Unwrapped = {
+  ...UnwrappedAdditional,
+  ...UnwrappedComplex,
+  ...UnwrappedControls,
+  ...UnwrappedLayouts,
+};

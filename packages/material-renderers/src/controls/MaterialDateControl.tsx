@@ -33,10 +33,7 @@ import {
 } from '@jsonforms/core';
 import { withJsonFormsControlProps } from '@jsonforms/react';
 import { FormHelperText, Hidden } from '@mui/material';
-import {
-  DatePicker,
-  LocalizationProvider 
-} from '@mui/x-date-pickers';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import {
   createOnChangeHandler,
@@ -45,7 +42,7 @@ import {
   useFocus,
 } from '../util';
 
-export const MaterialDateControl = (props: ControlProps)=> {
+export const MaterialDateControl = (props: ControlProps) => {
   const [focused, onFocus, onBlur] = useFocus();
   const {
     description,
@@ -59,7 +56,7 @@ export const MaterialDateControl = (props: ControlProps)=> {
     path,
     handleChange,
     data,
-    config
+    config,
   } = props;
   const isValid = errors.length === 0;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
@@ -81,11 +78,10 @@ export const MaterialDateControl = (props: ControlProps)=> {
     ? errors
     : null;
   const secondFormHelperText = showDescription && !isValid ? errors : null;
-  const onChange = useMemo(() => createOnChangeHandler(
-    path,
-    handleChange,
-    saveFormat
-  ),[path, handleChange, saveFormat]);
+  const onChange = useMemo(
+    () => createOnChangeHandler(path, handleChange, saveFormat),
+    [path, handleChange, saveFormat]
+  );
 
   const value = getData(data, saveFormat);
   const valueInInputFormat = value ? value.format(format) : '';
@@ -103,18 +99,21 @@ export const MaterialDateControl = (props: ControlProps)=> {
           disabled={!enabled}
           componentsProps={{
             actionBar: {
-              actions: (variant) => (variant === 'desktop' ? [] : ['clear', 'cancel', 'accept'])
-            }
+              actions: (variant) =>
+                variant === 'desktop' ? [] : ['clear', 'cancel', 'accept'],
+            },
           }}
-          renderInput={params => (
-            <ResettableTextField 
+          renderInput={(params) => (
+            <ResettableTextField
               {...params}
               rawValue={data}
               dayjsValueIsValid={value !== null}
               valueInInputFormat={valueInInputFormat}
               focused={focused}
               id={id + '-input'}
-              required={required && !appliedUiSchemaOptions.hideRequiredAsterisk}
+              required={
+                required && !appliedUiSchemaOptions.hideRequiredAsterisk
+              }
               autoFocus={appliedUiSchemaOptions.focus}
               error={!isValid}
               fullWidth={!appliedUiSchemaOptions.trim}
@@ -132,9 +131,7 @@ export const MaterialDateControl = (props: ControlProps)=> {
         <FormHelperText error={!isValid && !showDescription}>
           {firstFormHelperText}
         </FormHelperText>
-        <FormHelperText error={!isValid}>
-          {secondFormHelperText}
-        </FormHelperText>
+        <FormHelperText error={!isValid}>{secondFormHelperText}</FormHelperText>
       </LocalizationProvider>
     </Hidden>
   );

@@ -24,7 +24,7 @@
 */
 import { registerExamples } from '../register';
 
-const schema = {
+export const schema = {
   type: 'object',
   properties: {
     schemaBased: {
@@ -33,40 +33,40 @@ const schema = {
         date: {
           type: 'string',
           format: 'date',
-          description: 'schema-based date picker'
+          description: 'schema-based date picker',
         },
         time: {
           type: 'string',
           format: 'time',
-          description: 'schema-based time picker'
+          description: 'schema-based time picker',
         },
         datetime: {
           type: 'string',
           format: 'date-time',
-          description: 'schema-based datetime picker'
-        }
-      }
+          description: 'schema-based datetime picker',
+        },
+      },
     },
     uiSchemaBased: {
       type: 'object',
       properties: {
         date: {
           type: 'string',
-          description: 'does not allow to select days'
+          description: 'does not allow to select days',
         },
         time: {
           type: 'string',
-          description: '24 hour format'
+          description: '24 hour format',
         },
         datetime: {
           type: 'string',
-          description: 'uischema-based datetime picker'
-        }
-      }
-    }
-  }
+          description: 'uischema-based datetime picker',
+        },
+      },
+    },
+  },
 };
-const uischema = {
+export const uischema = {
   type: 'VerticalLayout',
   elements: [
     {
@@ -74,17 +74,17 @@ const uischema = {
       elements: [
         {
           type: 'Control',
-          scope: '#/properties/schemaBased/properties/date'
+          scope: '#/properties/schemaBased/properties/date',
         },
         {
           type: 'Control',
-          scope: '#/properties/schemaBased/properties/time'
+          scope: '#/properties/schemaBased/properties/time',
         },
         {
           type: 'Control',
-          scope: '#/properties/schemaBased/properties/datetime'
-        }
-      ]
+          scope: '#/properties/schemaBased/properties/datetime',
+        },
+      ],
     },
     {
       type: 'HorizontalLayout',
@@ -100,7 +100,7 @@ const uischema = {
             okLabel: 'Do it',
             views: ['year', 'month'],
             dateFormat: 'YYYY.MM',
-            dateSaveFormat: 'YYYY-MM'
+            dateSaveFormat: 'YYYY-MM',
           },
         },
         {
@@ -108,8 +108,8 @@ const uischema = {
           scope: '#/properties/uiSchemaBased/properties/time',
           options: {
             format: 'time',
-            ampm: true
-          }
+            ampm: true,
+          },
         },
         {
           type: 'Control',
@@ -118,25 +118,25 @@ const uischema = {
             format: 'date-time',
             dateTimeFormat: 'DD-MM-YY hh:mm:a',
             dateTimeSaveFormat: 'YYYY/MM/DD h:mm a',
-            ampm: true
-          }
-        }
-      ]
-    }
-  ]
+            ampm: true,
+          },
+        },
+      ],
+    },
+  ],
 };
 
-const data = {
+export const data = {
   schemaBased: {
     date: new Date().toISOString().substr(0, 10),
     time: '13:37',
-    datetime: new Date().toISOString()
+    datetime: new Date().toISOString(),
   },
   uiSchemaBased: {
     date: new Date().toISOString().substr(0, 10),
     time: '13:37',
-    datetime: '1999/12/11 10:05 am'
-  }
+    datetime: '1999/12/11 10:05 am',
+  },
 };
 registerExamples([
   {
@@ -144,6 +144,6 @@ registerExamples([
     label: 'Dates',
     data,
     schema,
-    uischema
-  }
+    uischema,
+  },
 ]);

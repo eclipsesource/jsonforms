@@ -24,7 +24,11 @@
 */
 import { Component } from '@angular/core';
 import { ExampleDescription, getExamples } from '@jsonforms/examples';
-import { JsonFormsI18nState, UISchemaElement, UISchemaTester } from '@jsonforms/core';
+import {
+  JsonFormsI18nState,
+  UISchemaElement,
+  UISchemaTester,
+} from '@jsonforms/core';
 import { angularMaterialRenderers } from '../../src/index';
 import { DateAdapter } from '@angular/material/core';
 
@@ -33,16 +37,16 @@ const uiSchema = {
   elements: [
     {
       type: 'Control',
-      scope: '#/properties/buyer/properties/email'
+      scope: '#/properties/buyer/properties/email',
     },
     {
       type: 'Control',
-      scope: '#/properties/status'
-    }
-  ]
+      scope: '#/properties/status',
+    },
+  ],
 };
 const defaultI18n: JsonFormsI18nState = {
-  locale: 'en-US'
+  locale: 'en-US',
 };
 const itemTester: UISchemaTester = (_schema, schemaPath, _path) => {
   if (schemaPath === '#/properties/warehouseitems/items') {
@@ -85,7 +89,7 @@ const itemTester: UISchemaTester = (_schema, schemaPath, _path) => {
       [readonly]="readonly"
       [config]="config"
     ></jsonforms>
-  `
+  `,
 })
 export class AppComponent {
   readonly renderers = angularMaterialRenderers;
@@ -95,8 +99,8 @@ export class AppComponent {
   private dateAdapter;
   private readonly = false;
   data: any;
-  uischemas: { tester: UISchemaTester; uischema: UISchemaElement; }[] = [
-    { tester: itemTester, uischema: uiSchema }
+  uischemas: { tester: UISchemaTester; uischema: UISchemaElement }[] = [
+    { tester: itemTester, uischema: uiSchema },
   ];
 
   constructor(dateAdapter: DateAdapter<Date>) {
@@ -107,7 +111,9 @@ export class AppComponent {
   }
 
   onChange(ev: any) {
-    this.selectedExample = this.examples.find(e => e.name === ev.target.value);
+    this.selectedExample = this.examples.find(
+      (e) => e.name === ev.target.value
+    );
     this.i18n = this.selectedExample.i18n ?? defaultI18n;
   }
 

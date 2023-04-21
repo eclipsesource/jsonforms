@@ -36,7 +36,7 @@ const distinct = (
 ): JsonSchema4[] => {
   const known: { [property: string]: boolean } = {};
 
-  return properties.filter(item => {
+  return properties.filter((item) => {
     const discriminatorValue = discriminator(item);
     if (known.hasOwnProperty(discriminatorValue)) {
       return false;
@@ -52,12 +52,14 @@ class Gen {
     private findOption: (props: Properties) => (optionName: string) => any
   ) {}
 
+  // TODO fix @typescript-eslint/ban-types
+  // eslint-disable-next-line @typescript-eslint/ban-types
   schemaObject = (data: Object): JsonSchema4 => {
     const props: Properties = this.properties(data);
     const schema: JsonSchema4 = {
       type: 'object',
       properties: props,
-      additionalProperties: this.findOption(props)(ADDITIONAL_PROPERTIES)
+      additionalProperties: this.findOption(props)(ADDITIONAL_PROPERTIES),
     };
     const required = this.findOption(props)(REQUIRED_PROPERTIES);
     if (required.length > 0) {
@@ -111,26 +113,26 @@ class Gen {
   schemaArray = (data: any[]): JsonSchema4 => {
     if (data.length > 0) {
       const allProperties: JsonSchema4[] = data.map(this.property);
-      const uniqueProperties = distinct(allProperties, prop =>
+      const uniqueProperties = distinct(allProperties, (prop) =>
         JSON.stringify(prop)
       );
       if (uniqueProperties.length === 1) {
         return {
           type: 'array',
-          items: uniqueProperties[0]
+          items: uniqueProperties[0],
         };
       } else {
         return {
           type: 'array',
           items: {
-            oneOf: uniqueProperties
-          }
+            oneOf: uniqueProperties,
+          },
         };
       }
     } else {
       return {
         type: 'array',
-        items: {}
+        items: {},
       };
     }
   };
@@ -143,29 +145,31 @@ class Gen {
  * @returns {JsonSchema} the generated schema
  */
 export const generateJsonSchema = (
+  // TODO fix @typescript-eslint/ban-types
+  // eslint-disable-next-line @typescript-eslint/ban-types
   instance: Object,
   options: any = {}
 ): JsonSchema4 => {
-  const findOption = (props: Properties) => (
-    optionName: string
-  ): boolean | string[] => {
-    switch (optionName) {
-      case ADDITIONAL_PROPERTIES:
-        if (options.hasOwnProperty(ADDITIONAL_PROPERTIES)) {
-          return options[ADDITIONAL_PROPERTIES];
-        }
+  const findOption =
+    (props: Properties) =>
+    (optionName: string): boolean | string[] => {
+      switch (optionName) {
+        case ADDITIONAL_PROPERTIES:
+          if (options.hasOwnProperty(ADDITIONAL_PROPERTIES)) {
+            return options[ADDITIONAL_PROPERTIES];
+          }
 
-        return true;
-      case REQUIRED_PROPERTIES:
-        if (options.hasOwnProperty(REQUIRED_PROPERTIES)) {
-          return options[REQUIRED_PROPERTIES](props);
-        }
+          return true;
+        case REQUIRED_PROPERTIES:
+          if (options.hasOwnProperty(REQUIRED_PROPERTIES)) {
+            return options[REQUIRED_PROPERTIES](props);
+          }
 
-        return Object.keys(props);
-      default:
-        return;
-    }
-  };
+          return Object.keys(props);
+        default:
+          return;
+      }
+    };
 
   const gen = new Gen(findOption);
 

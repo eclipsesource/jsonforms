@@ -23,12 +23,13 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import type {
-  Categorization,
-  Category,
-  LayoutProps
-} from '@jsonforms/core';
-import { RendererComponent, TranslateProps, withJsonFormsLayoutProps, withTranslateProps } from '@jsonforms/react';
+import type { Categorization, Category, LayoutProps } from '@jsonforms/core';
+import {
+  RendererComponent,
+  TranslateProps,
+  withJsonFormsLayoutProps,
+  withTranslateProps,
+} from '@jsonforms/react';
 import { CategorizationList } from './CategorizationList';
 import { SingleCategory } from './SingleCategory';
 import { isCategorization } from './tester';
@@ -104,4 +105,6 @@ class CategorizationRenderer extends RendererComponent<
   }
 }
 
-export default withVanillaControlProps(withTranslateProps(withJsonFormsLayoutProps(CategorizationRenderer)));
+export default withVanillaControlProps(
+  withTranslateProps(withJsonFormsLayoutProps(CategorizationRenderer))
+);

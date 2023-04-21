@@ -32,7 +32,7 @@ import {
   TestData,
   textBaseTest,
   textErrorTest,
-  textInputEventTest
+  textInputEventTest,
 } from '@jsonforms/angular-test';
 import { TextAreaRenderer, TextAreaRendererTester } from '../src';
 import { ControlElement, JsonSchema } from '@jsonforms/core';
@@ -43,19 +43,23 @@ describe('Material text field tester', () => {
   const uischema = {
     type: 'Control',
     scope: '#/properties/foo',
-    options: { multi: true }
+    options: { multi: true },
   };
 
   it('should succeed', () => {
     expect(
-      TextAreaRendererTester(uischema, {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'string'
-          }
-        }
-      }, undefined)
+      TextAreaRendererTester(
+        uischema,
+        {
+          type: 'object',
+          properties: {
+            foo: {
+              type: 'string',
+            },
+          },
+        },
+        undefined
+      )
     ).toBe(2);
   });
 });
@@ -64,14 +68,14 @@ const imports = [
   MatInputModule,
   NoopAnimationsModule,
   ReactiveFormsModule,
-  FlexLayoutModule
+  FlexLayoutModule,
 ];
 const providers = [JsonFormsAngularService];
 const componentUT: any = TextAreaRenderer;
 const errorTest: ErrorTestExpectation = {
   errorInstance: MatError,
   numberOfElements: 1,
-  indexOfElement: 0
+  indexOfElement: 0,
 };
 const toSelect = (el: DebugElement) => el.nativeElement;
 const testConfig = { imports, providers, componentUT };
@@ -80,19 +84,19 @@ const defaultSchema: JsonSchema = {
   type: 'object',
   properties: {
     foo: {
-      type: 'string'
-    }
-  }
+      type: 'string',
+    },
+  },
 };
 const defaultUischema: ControlElement = {
   type: 'Control',
   scope: '#/properties/foo',
-  options: { multi: true }
+  options: { multi: true },
 };
 const defaultTestData: TestData<ControlElement> = {
   data: defaultData,
   schema: defaultSchema,
-  uischema: defaultUischema
+  uischema: defaultUischema,
 };
 describe(
   'Text control Base Tests',

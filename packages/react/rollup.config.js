@@ -10,8 +10,8 @@ const baseConfig = {
   external: [
     ...Object.keys(packageJson.dependencies),
     ...Object.keys(packageJson.peerDependencies),
-    /^lodash\/.*/
-  ]
+    /^lodash\/.*/,
+  ],
 };
 
 const baseReduxConfig = {
@@ -22,8 +22,8 @@ const baseReduxConfig = {
     ...Object.keys(packageJson.optionalPeerDependencies),
     /^lodash\/.*/,
     '@jsonforms/react',
-    'redux'
-  ]
+    'redux',
+  ],
 };
 
 export default [
@@ -32,31 +32,31 @@ export default [
     output: {
       file: packageJson.module,
       format: 'esm',
-      sourcemap: true
+      sourcemap: true,
     },
     plugins: [
       typescript(),
       cleanup({ extensions: ['js', 'ts', 'jsx', 'tsx'] }),
-      visualizer({ open: false })
-    ]
+      visualizer({ open: false }),
+    ],
   },
   {
     ...baseConfig,
     output: {
       file: packageJson.main,
       format: 'cjs',
-      sourcemap: true
+      sourcemap: true,
     },
     plugins: [
       typescript({
         tsconfigOverride: {
           compilerOptions: {
-            target: 'ES5'
-          }
-        }
+            target: 'ES5',
+          },
+        },
       }),
-      cleanup({ extensions: ['js', 'ts', 'jsx', 'tsx'] })
-    ]
+      cleanup({ extensions: ['js', 'ts', 'jsx', 'tsx'] }),
+    ],
   },
   // Redux compatibility
   {
@@ -64,40 +64,40 @@ export default [
     output: {
       file: 'lib/redux/index.js',
       format: 'esm',
-      sourcemap: true
+      sourcemap: true,
     },
     plugins: [
       alias({
-        entries: [{ find: '..', replacement: '@jsonforms/react' }]
+        entries: [{ find: '..', replacement: '@jsonforms/react' }],
       }),
       typescript({
         tsconfig: './tsconfig.redux.json',
-        useTsconfigDeclarationDir: true
+        useTsconfigDeclarationDir: true,
       }),
-      cleanup({ extensions: ['js', 'ts', 'jsx', 'tsx'] })
-    ]
+      cleanup({ extensions: ['js', 'ts', 'jsx', 'tsx'] }),
+    ],
   },
   {
     ...baseReduxConfig,
     output: {
       file: 'lib/redux/index.cjs.js',
       format: 'cjs',
-      sourcemap: true
+      sourcemap: true,
     },
     plugins: [
       alias({
-        entries: [{ find: '..', replacement: '@jsonforms/react' }]
+        entries: [{ find: '..', replacement: '@jsonforms/react' }],
       }),
       typescript({
         tsconfig: './tsconfig.redux.json',
         useTsconfigDeclarationDir: true,
         tsconfigOverride: {
           compilerOptions: {
-            target: 'ES5'
-          }
-        }
+            target: 'ES5',
+          },
+        },
       }),
-      cleanup({ extensions: ['js', 'ts', 'jsx', 'tsx'] })
-    ]
-  }
+      cleanup({ extensions: ['js', 'ts', 'jsx', 'tsx'] }),
+    ],
+  },
 ];

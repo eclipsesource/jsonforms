@@ -36,17 +36,21 @@ import 'highlight.js/styles/default.css';
 import './App.css';
 
 type AppProps = {
-  examples: ExampleDescription[],
-  cells: JsonFormsCellRendererRegistryEntry[],
-  renderers: JsonFormsRendererRegistryEntry[],
+  examples: ExampleDescription[];
+  cells: JsonFormsCellRendererRegistryEntry[];
+  renderers: JsonFormsRendererRegistryEntry[];
 };
 
 type Action = {
-  label: string,
-  apply: any
+  label: string;
+  apply: any;
 };
 
-const getProps = (example: ExampleDescription, cells?: any, renderers?: any) => {
+const getProps = (
+  example: ExampleDescription,
+  cells?: any,
+  renderers?: any
+) => {
   const schema = example.schema;
   const uischema = example.uischema;
   const data = example.data;
@@ -61,38 +65,48 @@ const getProps = (example: ExampleDescription, cells?: any, renderers?: any) => 
     uischemas,
     cells,
     renderers,
-    i18n
-  }
-}
+    i18n,
+  };
+};
 
-const App = ({ examples, cells, renderers}: AppProps) => {
-  const [currentExample, setExample] = useState<ExampleDescription>(examples[0]);
+const App = ({ examples, cells, renderers }: AppProps) => {
+  const [currentExample, setExample] = useState<ExampleDescription>(
+    examples[0]
+  );
   const [currentIndex, setIndex] = useState<number>(0);
   const [dataAsString, setDataAsString] = useState<any>('');
-  const [props, setProps] = useState<any>(getProps(currentExample, cells, renderers));
+  const [exampleProps, setExampleProps] = useState(
+    getProps(currentExample, cells, renderers)
+  );
   const [showPanel, setShowPanel] = useState<boolean>(true);
-  const schemaAsString = useMemo(() => JSON.stringify(props.schema, null, 2), [props.schema]);
-  const uiSchemaAsString = useMemo(() => JSON.stringify(props.uischema, null, 2), [props.uischema]);
+  const schemaAsString = useMemo(
+    () => JSON.stringify(exampleProps.schema, null, 2),
+    [exampleProps.schema]
+  );
+  const uiSchemaAsString = useMemo(
+    () => JSON.stringify(exampleProps.uischema, null, 2),
+    [exampleProps.uischema]
+  );
 
   const actions: Action[] = currentExample.actions;
 
   useEffect(() => {
     const hash = window.location.hash.replace('#', '');
-    const exampleIndex = examples.findIndex(example => {
-      return example.name === hash
+    const exampleIndex = examples.findIndex((example) => {
+      return example.name === hash;
     });
-    if(exampleIndex !== -1) {
+    if (exampleIndex !== -1) {
       changeExample(exampleIndex);
     }
   }, []);
 
   const changeExample = (exampleID: number) => {
-    let example = examples[exampleID];
+    const example = examples[exampleID];
     setIndex(exampleID);
     setExample(example);
-    setProps(getProps(example, cells, renderers));
+    setExampleProps(getProps(example, cells, renderers));
     window.location.hash = example.name;
-    if(example.name == 'huge') {
+    if (example.name == 'huge') {
       setShowPanel(false);
     }
   };
@@ -115,27 +129,31 @@ const App = ({ examples, cells, renderers}: AppProps) => {
               <h4>Select Example:</h4>
               <select
                 value={currentIndex}
-                onChange={ev => changeExample(Number(ev.currentTarget.value))}
+                onChange={(ev) => changeExample(Number(ev.currentTarget.value))}
               >
-                {examples.map((optionValue: ExampleDescription, index: number) => (
-                  <option
-                    value={index}
-                    label={optionValue.label}
-                    key={index}
-                  >
-                    {optionValue.label}
-                  </option>
-                ))}
+                {examples.map(
+                  (optionValue: ExampleDescription, index: number) => (
+                    <option value={index} label={optionValue.label} key={index}>
+                      {optionValue.label}
+                    </option>
+                  )
+                )}
               </select>
             </div>
             <div className='toggle-panel'>
-              <input type='checkbox' id='panel' name='panel' checked={showPanel} onChange={() => setShowPanel(prevShow => !prevShow)} />
+              <input
+                type='checkbox'
+                id='panel'
+                name='panel'
+                checked={showPanel}
+                onChange={() => setShowPanel((prevShow) => !prevShow)}
+              />
               <label htmlFor='panel'>Show sidepanel</label>
             </div>
           </div>
 
           <div className='demo-wrapper'>
-            { showPanel && 
+            {showPanel && (
               <div className='props-panel'>
                 <Tabs>
                   <TabList>
@@ -143,36 +161,40 @@ const App = ({ examples, cells, renderers}: AppProps) => {
                     <Tab>Schema</Tab>
                     <Tab>UISchema</Tab>
                   </TabList>
-                  <div className="panel-wrapper">
+                  <div className='panel-wrapper'>
                     <TabPanel>
-                      <Highlight className='json'>
-                        {dataAsString}
-                      </Highlight>
+                      <Highlight className='json'>{dataAsString}</Highlight>
                     </TabPanel>
                     <TabPanel>
-                      <Highlight className='json'>
-                        {schemaAsString}
-                      </Highlight>
+                      <Highlight className='json'>{schemaAsString}</Highlight>
                     </TabPanel>
                     <TabPanel>
-                      <Highlight className='json'>
-                        {uiSchemaAsString}
-                      </Highlight>
+                      <Highlight className='json'>{uiSchemaAsString}</Highlight>
                     </TabPanel>
                   </div>
                 </Tabs>
               </div>
-            }
+            )}
             <div className='demoform'>
               <div className='buttons'>
                 {actions?.map((action: Action, index: number) => (
-                  <button className='action-button' onClick={ () => setProps((oldProps: JsonFormsInitStateProps) => action.apply(oldProps))} key={index}>{action.label}</button>
+                  <button
+                    className='action-button'
+                    onClick={() =>
+                      setExampleProps((oldProps: JsonFormsInitStateProps) =>
+                        action.apply(oldProps)
+                      )
+                    }
+                    key={index}
+                  >
+                    {action.label}
+                  </button>
                 ))}
               </div>
               <div className='demo'>
                 <JsonForms
                   key={currentIndex}
-                  {...props}
+                  {...exampleProps}
                   onChange={({ data }) => changeData(data)}
                 />
               </div>
@@ -182,6 +204,6 @@ const App = ({ examples, cells, renderers}: AppProps) => {
       </div>
     </div>
   );
-}
+};
 
 export default App;

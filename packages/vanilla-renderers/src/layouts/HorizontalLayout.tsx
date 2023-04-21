@@ -28,7 +28,7 @@ import {
   RankedTester,
   rankWith,
   RendererProps,
-  uiTypeIs
+  uiTypeIs,
 } from '@jsonforms/core';
 import { withJsonFormsLayoutProps } from '@jsonforms/react';
 import { withVanillaControlProps } from '../util';
@@ -40,28 +40,34 @@ import { VanillaRendererProps } from '../index';
  * Default tester for a horizontal layout.
  * @type {RankedTester}
  */
-export const horizontalLayoutTester: RankedTester = rankWith(1, uiTypeIs('HorizontalLayout'));
+export const horizontalLayoutTester: RankedTester = rankWith(
+  1,
+  uiTypeIs('HorizontalLayout')
+);
 
-export const HorizontalLayoutRenderer = (props: RendererProps & VanillaRendererProps) => {
-  const {data, ...otherProps} = props;
-  // We don't hand over data to the layout renderer to avoid rerendering it with every data change
-  return <HorizontalLayoutRendererComponent {...otherProps}/>;
-}
-
-const HorizontalLayoutRendererComponent: FunctionComponent<RendererProps & VanillaRendererProps> = React.memo((
-  {
-    schema,
-    uischema,
-    getStyle,
-    getStyleAsClassName,
-    enabled,
-    visible,
-    path
-  }: RendererProps & VanillaRendererProps
+export const HorizontalLayoutRenderer = (
+  props: RendererProps & VanillaRendererProps
 ) => {
+  const { data: _data, ...otherProps } = props;
+  // We don't hand over data to the layout renderer to avoid rerendering it with every data change
+  return <HorizontalLayoutRendererComponent {...otherProps} />;
+};
 
+const HorizontalLayoutRendererComponent: FunctionComponent<
+  RendererProps & VanillaRendererProps
+> = React.memo(function HorizontalLayoutRendererComponent({
+  schema,
+  uischema,
+  getStyle,
+  getStyleAsClassName,
+  enabled,
+  visible,
+  path,
+}: RendererProps & VanillaRendererProps) {
   const horizontalLayout = uischema as HorizontalLayout;
-  const elementsSize = horizontalLayout.elements ? horizontalLayout.elements.length : 0;
+  const elementsSize = horizontalLayout.elements
+    ? horizontalLayout.elements.length
+    : 0;
   const layoutClassName = getStyleAsClassName('horizontal.layout');
   const childClassNames = ['horizontal-layout-item']
     .concat(getStyle('horizontal.layout.item', elementsSize))
@@ -83,4 +89,6 @@ const HorizontalLayoutRendererComponent: FunctionComponent<RendererProps & Vanil
   );
 });
 
-export default withVanillaControlProps(withJsonFormsLayoutProps(HorizontalLayoutRenderer, false));
+export default withVanillaControlProps(
+  withJsonFormsLayoutProps(HorizontalLayoutRenderer, false)
+);

@@ -22,25 +22,34 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import ExpandPanelRenderer, {
+  ctxDispatchToExpandPanelProps,
+  withContextToExpandPanelProps,
+  withJsonFormsExpandPanelProps,
+} from './ExpandPanelRenderer';
 import MaterialGroupLayout, {
-  materialGroupTester
+  materialGroupTester,
 } from './MaterialGroupLayout';
 import MaterialHorizontalLayout, {
-  materialHorizontalLayoutTester
+  materialHorizontalLayoutTester,
 } from './MaterialHorizontalLayout';
 import MaterialVerticalLayout, {
-  materialVerticalLayoutTester
+  materialVerticalLayoutTester,
 } from './MaterialVerticalLayout';
 import MaterialCategorizationLayout, {
-  materialCategorizationTester
+  materialCategorizationTester,
 } from './MaterialCategorizationLayout';
 import MaterialArrayLayout, {
-  materialArrayLayoutTester
+  materialArrayLayoutTester,
 } from './MaterialArrayLayoutRenderer';
 
 export {
-  materialArrayLayoutTester,
+  ExpandPanelRenderer,
+  ctxDispatchToExpandPanelProps,
+  withContextToExpandPanelProps,
+  withJsonFormsExpandPanelProps,
   MaterialArrayLayout,
+  materialArrayLayoutTester,
   MaterialCategorizationLayout,
   materialCategorizationTester,
   MaterialGroupLayout,
@@ -48,5 +57,7 @@ export {
   MaterialHorizontalLayout,
   materialHorizontalLayoutTester,
   MaterialVerticalLayout,
-  materialVerticalLayoutTester
+  materialVerticalLayoutTester,
 };
+
+export * from './ArrayToolbar';

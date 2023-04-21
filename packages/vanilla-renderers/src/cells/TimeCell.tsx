@@ -46,7 +46,7 @@ const appendSecondsIfNecessary = (value: unknown) => {
     return splitValue.join(':');
   }
   return value;
-}
+};
 
 export const TimeCell = (props: CellProps & VanillaRendererProps) => {
   const { data, className, id, enabled, uischema, path, handleChange } = props;
@@ -55,7 +55,9 @@ export const TimeCell = (props: CellProps & VanillaRendererProps) => {
     <input
       type='time'
       value={data || ''}
-      onChange={ev => handleChange(path, appendSecondsIfNecessary(ev.target.value))}
+      onChange={(ev) =>
+        handleChange(path, appendSecondsIfNecessary(ev.target.value))
+      }
       className={className}
       id={id}
       disabled={!enabled}

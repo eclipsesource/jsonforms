@@ -22,24 +22,24 @@ import {
   isLayout,
   JsonFormsRendererRegistryEntry,
   Layout,
-  rankWith
+  rankWith,
 } from '@jsonforms/core';
 import { defineComponent } from 'vue';
 import {
   DispatchRenderer,
   rendererProps,
   useJsonFormsLayout,
-  RendererProps
+  RendererProps,
 } from '../../config/jsonforms';
 import { useVanillaLayout } from '../util';
 
 const layoutRenderer = defineComponent({
-  name: 'layout-renderer',
+  name: 'LayoutRenderer',
   components: {
-    DispatchRenderer
+    DispatchRenderer,
   },
   props: {
-    ...rendererProps<Layout>()
+    ...rendererProps<Layout>(),
   },
   setup(props: RendererProps<Layout>) {
     return useVanillaLayout(useJsonFormsLayout(props));
@@ -49,14 +49,14 @@ const layoutRenderer = defineComponent({
       return this.layout.direction === 'row'
         ? this.styles.horizontalLayout
         : this.styles.verticalLayout;
-    }
-  }
+    },
+  },
 });
 
 export default layoutRenderer;
 
 export const entry: JsonFormsRendererRegistryEntry = {
   renderer: layoutRenderer,
-  tester: rankWith(1, isLayout)
+  tester: rankWith(1, isLayout),
 };
 </script>

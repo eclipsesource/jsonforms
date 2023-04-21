@@ -1,7 +1,7 @@
 module.exports = {
-  chainWebpack: config => {
+  chainWebpack: (config) => {
     // remove typecheck
     config.plugins.delete('fork-ts-checker');
     return config;
-  }
+  },
 };

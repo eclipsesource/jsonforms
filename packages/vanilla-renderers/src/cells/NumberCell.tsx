@@ -33,8 +33,7 @@ import { withJsonFormsCellProps } from '@jsonforms/react';
 import type { VanillaRendererProps } from '../index';
 import { withVanillaCellProps } from '../util/index';
 
-const toNumber = (value: string) =>
-      value === '' ? undefined : Number(value);
+const toNumber = (value: string) => (value === '' ? undefined : Number(value));
 
 export const NumberCell = (props: CellProps & VanillaRendererProps) => {
   const { data, className, id, enabled, uischema, path, handleChange } = props;
@@ -44,7 +43,7 @@ export const NumberCell = (props: CellProps & VanillaRendererProps) => {
       type='number'
       step='0.1'
       value={data ?? ''}
-      onChange={ev => handleChange(path, toNumber(ev.target.value))}
+      onChange={(ev) => handleChange(path, toNumber(ev.target.value))}
       className={className}
       id={id}
       disabled={!enabled}

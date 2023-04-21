@@ -27,7 +27,9 @@ import { UISchemaElement, VerticalLayout } from '@jsonforms/core';
 import { JsonFormsStateProvider } from '@jsonforms/react';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
-import VerticalLayoutRenderer, { verticalLayoutTester } from '../../src/layouts/VerticalLayout';
+import VerticalLayoutRenderer, {
+  verticalLayoutTester,
+} from '../../src/layouts/VerticalLayout';
 import { initCore } from '../util';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -36,18 +38,19 @@ test('tester', () => {
   expect(verticalLayoutTester(undefined, undefined, undefined)).toBe(-1);
   expect(verticalLayoutTester(null, undefined, undefined)).toBe(-1);
   expect(verticalLayoutTester({ type: 'Foo' }, undefined, undefined)).toBe(-1);
-  expect(verticalLayoutTester({ type: 'VerticalLayout' }, undefined, undefined)).toBe(1);
+  expect(
+    verticalLayoutTester({ type: 'VerticalLayout' }, undefined, undefined)
+  ).toBe(1);
 });
 
 describe('Vertical layout', () => {
-
   let wrapper: ReactWrapper;
 
   afterEach(() => wrapper.unmount());
 
   test('render with undefined elements', () => {
     const uischema: UISchemaElement = {
-      type: 'VerticalLayout'
+      type: 'VerticalLayout',
     };
     const core = initCore({}, uischema, {});
     wrapper = mount(
@@ -62,7 +65,7 @@ describe('Vertical layout', () => {
   test('render with null elements', () => {
     const uischema: VerticalLayout = {
       type: 'VerticalLayout',
-      elements: null
+      elements: null,
     };
     const core = initCore({}, uischema, {});
     wrapper = mount(
@@ -77,7 +80,7 @@ describe('Vertical layout', () => {
   test('render with children', () => {
     const uischema: VerticalLayout = {
       type: 'VerticalLayout',
-      elements: [{ type: 'Control' }, { type: 'Control' }]
+      elements: [{ type: 'Control' }, { type: 'Control' }],
     };
     const core = initCore({}, uischema, {});
     wrapper = mount(
@@ -100,13 +103,12 @@ describe('Vertical layout', () => {
 
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <VerticalLayoutRenderer
-          uischema={uischema}
-          visible={false}
-        />
+        <VerticalLayoutRenderer uischema={uischema} visible={false} />
       </JsonFormsStateProvider>
     );
-    const verticalLayout = wrapper.find('JsonFormsLayout').getDOMNode() as HTMLDivElement;
+    const verticalLayout = wrapper
+      .find('JsonFormsLayout')
+      .getDOMNode() as HTMLDivElement;
     expect(verticalLayout.hidden).toBe(true);
   });
 
@@ -122,7 +124,9 @@ describe('Vertical layout', () => {
         <VerticalLayoutRenderer uischema={uischema} />
       </JsonFormsStateProvider>
     );
-    const verticalLayout = wrapper.find('JsonFormsLayout').getDOMNode() as HTMLDivElement;
+    const verticalLayout = wrapper
+      .find('JsonFormsLayout')
+      .getDOMNode() as HTMLDivElement;
     expect(verticalLayout.hidden).toBe(false);
   });
 });

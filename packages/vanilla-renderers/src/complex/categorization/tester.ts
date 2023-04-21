@@ -29,7 +29,7 @@ import {
   Category,
   RankedTester,
   rankWith,
-  uiTypeIs
+  uiTypeIs,
 } from '@jsonforms/core';
 
 export const isCategorization = (
@@ -38,14 +38,14 @@ export const isCategorization = (
 
 export const categorizationTester: RankedTester = rankWith(
   1,
-  and(uiTypeIs('Categorization'), uischema => {
+  and(uiTypeIs('Categorization'), (uischema) => {
     const hasCategory = (element: Categorization): boolean => {
       if (isEmpty(element.elements)) {
         return false;
       }
 
       return element.elements
-        .map(elem =>
+        .map((elem) =>
           isCategorization(elem) ? hasCategory(elem) : elem.type === 'Category'
         )
         .reduce((prev, curr) => prev && curr, true);

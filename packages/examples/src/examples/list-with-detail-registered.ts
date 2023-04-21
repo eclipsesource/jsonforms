@@ -24,36 +24,36 @@
 */
 import { registerExamples } from '../register';
 
-const data = {
+export const data = {
   warehouseitems: [
     {
       name: 'Fantasy Book',
       buyer: {
         email: 'buyerA@info.org',
-        age: 18
+        age: 18,
       },
-      status: 'warehouse'
+      status: 'warehouse',
     },
     {
       name: 'Boardgame',
       buyer: {
         email: 'buyerB@info.org',
-        age: 45
+        age: 45,
       },
-      status: 'shipping'
+      status: 'shipping',
     },
     {
       name: 'Energy Drink',
       buyer: {
         email: 'buyerC@info.org',
-        age: 90
+        age: 90,
       },
-      status: 'delivered'
-    }
-  ]
+      status: 'delivered',
+    },
+  ],
 };
 
-const schema = {
+export const schema = {
   definitions: {
     warehouseitem: {
       type: 'object',
@@ -63,43 +63,43 @@ const schema = {
           type: 'object',
           properties: {
             email: { type: 'string', format: 'email' },
-            age: { type: 'number' }
-          }
+            age: { type: 'number' },
+          },
         },
         status: {
           type: 'string',
-          enum: ['warehouse', 'shipping', 'delivered']
-        }
+          enum: ['warehouse', 'shipping', 'delivered'],
+        },
       },
-      required: ['name']
-    }
+      required: ['name'],
+    },
   },
   type: 'object',
   properties: {
     warehouseitems: {
       type: 'array',
       items: {
-        $ref: '#/definitions/warehouseitem'
-      }
-    }
-  }
+        $ref: '#/definitions/warehouseitem',
+      },
+    },
+  },
 };
 
-const uischema = {
+export const uischema = {
   type: 'ListWithDetail',
   scope: '#/properties/warehouseitems',
   options: {
-    labelRef: '#/items/properties/name'
+    labelRef: '#/items/properties/name',
     // detail uischema is registered in example itself
-  }
+  },
 };
 
 registerExamples([
   {
     name: 'list-with-detail-registered',
-    label: 'List With Detail (Registered)',
+    label: 'List With Detail (Registered Detail UISchema)',
     data,
     schema,
-    uischema
-  }
+    uischema,
+  },
 ]);

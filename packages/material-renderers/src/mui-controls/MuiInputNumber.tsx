@@ -26,26 +26,26 @@ import React from 'react';
 import { CellProps, WithClassname } from '@jsonforms/core';
 import { Input } from '@mui/material';
 import merge from 'lodash/merge';
-import {useDebouncedChange} from '../util';
+import { useDebouncedChange } from '../util';
 
 const toNumber = (value: string) =>
-    value === '' ? undefined : parseFloat(value);
-const eventToValue = (ev:any) => toNumber(ev.target.value);
-export const MuiInputNumber = React.memo((props: CellProps & WithClassname) => {
-  const {
-    data,
-    className,
-    id,
-    enabled,
-    uischema,
-    path,
-    handleChange,
-    config
-  } = props;
+  value === '' ? undefined : parseFloat(value);
+const eventToValue = (ev: any) => toNumber(ev.target.value);
+export const MuiInputNumber = React.memo(function MuiInputNumber(
+  props: CellProps & WithClassname
+) {
+  const { data, className, id, enabled, uischema, path, handleChange, config } =
+    props;
   const inputProps = { step: '0.1' };
-  
+
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
-  const [inputValue, onChange] = useDebouncedChange(handleChange, '', data, path, eventToValue);
+  const [inputValue, onChange] = useDebouncedChange(
+    handleChange,
+    '',
+    data,
+    path,
+    eventToValue
+  );
 
   return (
     <Input

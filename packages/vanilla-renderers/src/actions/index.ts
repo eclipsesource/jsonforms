@@ -29,17 +29,17 @@ export const UNREGISTER_STYLE = 'UNREGISTER_STYLE';
 export const registerStyle = (styleName: string, classNames: string[]) => ({
   type: REGISTER_STYLE,
   name: styleName,
-  classNames
+  classNames,
 });
 
 export const unregisterStyle = (styleName: string) => ({
   type: UNREGISTER_STYLE,
-  name: styleName
+  name: styleName,
 });
 
 export const registerStyles = (
   styleDefs: { name: string; classNames: string[] }[]
 ) => ({
   type: REGISTER_STYLES,
-  styles: styleDefs
+  styles: styleDefs,
 });

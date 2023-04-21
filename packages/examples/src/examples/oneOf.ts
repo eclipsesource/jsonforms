@@ -33,20 +33,20 @@ export const schema = {
       properties: {
         street_address: { type: 'string' },
         city: { type: 'string' },
-        state: { type: 'string' }
+        state: { type: 'string' },
       },
       required: ['street_address', 'city', 'state'],
-      additionalProperties: false
+      additionalProperties: false,
     },
     user: {
       type: 'object',
       properties: {
         name: { type: 'string' },
-        mail: { type: 'string' }
+        mail: { type: 'string' },
       },
       required: ['name', 'mail'],
-      additionalProperties: false
-    }
+      additionalProperties: false,
+    },
   },
 
   type: 'object',
@@ -54,10 +54,13 @@ export const schema = {
   properties: {
     name: { type: 'string' },
     addressOrUser: {
-      oneOf: [{ $ref: '#/definitions/address' }, { $ref: '#/definitions/user' }]
-    }
+      oneOf: [
+        { $ref: '#/definitions/address' },
+        { $ref: '#/definitions/user' },
+      ],
+    },
   },
-  required: ['name']
+  required: ['name'],
 };
 
 export const uischema = {
@@ -65,13 +68,13 @@ export const uischema = {
   elements: [
     {
       type: 'Control',
-      scope: '#/properties/name'
+      scope: '#/properties/name',
     },
     {
       type: 'Control',
-      scope: '#/properties/addressOrUser'
-    }
-  ]
+      scope: '#/properties/addressOrUser',
+    },
+  ],
 };
 
 const data = {
@@ -79,7 +82,7 @@ const data = {
   addressOrUser: {
     name: 'User',
     mail: 'mail@example.com',
-  }
+  },
 };
 
 const schema_1265_array = {
@@ -88,16 +91,16 @@ const schema_1265_array = {
     coloursOrNumbers: {
       oneOf: [
         {
-          $ref: '#/definitions/colours'
+          $ref: '#/definitions/colours',
         },
         {
-          $ref: '#/definitions/numbers'
+          $ref: '#/definitions/numbers',
         },
         {
-          $ref: '#/definitions/shapes'
-        }
-      ]
-    }
+          $ref: '#/definitions/shapes',
+        },
+      ],
+    },
   },
   definitions: {
     colours: {
@@ -107,8 +110,8 @@ const schema_1265_array = {
       items: {
         title: 'Type',
         type: 'string',
-        enum: ['Red', 'Green', 'Blue']
-      }
+        enum: ['Red', 'Green', 'Blue'],
+      },
     },
     numbers: {
       title: 'Numbers',
@@ -117,8 +120,8 @@ const schema_1265_array = {
       items: {
         title: 'Type',
         type: 'string',
-        enum: ['One', 'Two', 'Three']
-      }
+        enum: ['One', 'Two', 'Three'],
+      },
     },
     shapes: {
       title: 'Shapes',
@@ -127,10 +130,10 @@ const schema_1265_array = {
       items: {
         title: 'Type',
         type: 'string',
-        enum: ['Circle', 'Triangle', 'Square']
-      }
-    }
-  }
+        enum: ['Circle', 'Triangle', 'Square'],
+      },
+    },
+  },
 };
 
 const schema_1265_object = {
@@ -139,16 +142,16 @@ const schema_1265_object = {
     coloursOrNumbers: {
       oneOf: [
         {
-          $ref: '#/definitions/colours'
+          $ref: '#/definitions/colours',
         },
         {
-          $ref: '#/definitions/numbers'
+          $ref: '#/definitions/numbers',
         },
         {
-          $ref: '#/definitions/shapes'
-        }
-      ]
-    }
+          $ref: '#/definitions/shapes',
+        },
+      ],
+    },
   },
   additionalProperties: false,
   definitions: {
@@ -159,10 +162,10 @@ const schema_1265_object = {
         colour: {
           title: 'Type',
           type: 'string',
-          enum: ['Red', 'Green', 'Blue']
-        }
+          enum: ['Red', 'Green', 'Blue'],
+        },
       },
-      additionalProperties: false
+      additionalProperties: false,
     },
     numbers: {
       title: 'Numbers',
@@ -171,10 +174,10 @@ const schema_1265_object = {
         number: {
           title: 'Type',
           type: 'string',
-          enum: ['One', 'Two', 'Three']
-        }
+          enum: ['One', 'Two', 'Three'],
+        },
       },
-      additionalProperties: false
+      additionalProperties: false,
     },
     shapes: {
       title: 'Shapes',
@@ -183,12 +186,12 @@ const schema_1265_object = {
         shape: {
           title: 'Type',
           type: 'string',
-          enum: ['Circle', 'Triangle', 'Square']
-        }
+          enum: ['Circle', 'Triangle', 'Square'],
+        },
       },
-      additionalProperties: false
-    }
-  }
+      additionalProperties: false,
+    },
+  },
 };
 
 const schema_1265_simple = {
@@ -197,34 +200,34 @@ const schema_1265_simple = {
     coloursOrNumbers: {
       oneOf: [
         {
-          $ref: '#/definitions/colours'
+          $ref: '#/definitions/colours',
         },
         {
-          $ref: '#/definitions/numbers'
+          $ref: '#/definitions/numbers',
         },
         {
-          $ref: '#/definitions/shapes'
-        }
-      ]
-    }
+          $ref: '#/definitions/shapes',
+        },
+      ],
+    },
   },
   definitions: {
     colours: {
       title: 'Colours',
       type: 'string',
-      enum: ['Red', 'Green', 'Blue']
+      enum: ['Red', 'Green', 'Blue'],
     },
     numbers: {
       title: 'Numbers',
       type: 'string',
-      enum: ['One', 'Two', 'Three']
+      enum: ['One', 'Two', 'Three'],
     },
     shapes: {
       title: 'Shapes',
       type: 'string',
-      enum: ['Circle', 'Triangle', 'Square']
-    }
-  }
+      enum: ['Circle', 'Triangle', 'Square'],
+    },
+  },
 };
 
 const schema_1273 = {
@@ -233,13 +236,13 @@ const schema_1273 = {
     quantity: {
       oneOf: [
         {
-          $ref: '#/definitions/unrangedQuantity'
+          $ref: '#/definitions/unrangedQuantity',
         },
         {
-          $ref: '#/definitions/rangedQuantity'
-        }
-      ]
-    }
+          $ref: '#/definitions/rangedQuantity',
+        },
+      ],
+    },
   },
   definitions: {
     unrangedQuantity: {
@@ -247,32 +250,32 @@ const schema_1273 = {
       type: 'object',
       properties: {
         value: {
-          type: 'number'
+          type: 'number',
         },
         unit: {
-          type: 'string'
-        }
+          type: 'string',
+        },
       },
-      required: ['value', 'unit']
+      required: ['value', 'unit'],
     },
     rangedQuantity: {
       title: 'Range',
       type: 'object',
       properties: {
         valueLow: {
-          type: 'number'
+          type: 'number',
         },
         valueHigh: {
           type: 'number',
-          maximum: 10
+          maximum: 10,
         },
         unit: {
-          type: 'string'
-        }
+          type: 'string',
+        },
       },
-      required: ['valueLow', 'valueHigh', 'unit']
-    }
-  }
+      required: ['valueLow', 'valueHigh', 'unit'],
+    },
+  },
 };
 
 const schema_1273_simple = {
@@ -281,22 +284,22 @@ const schema_1273_simple = {
     quantity: {
       oneOf: [
         {
-          type: 'string'
+          type: 'string',
         },
         {
-          type: 'number'
-        }
-      ]
-    }
-  }
+          type: 'number',
+        },
+      ],
+    },
+  },
 };
 
 const data_1273 = {
   quantity: {
     valueLow: 1,
     valueHigh: 100,
-    unit: 'kg'
-  }
+    unit: 'kg',
+  },
 };
 
 registerExamples([
@@ -305,41 +308,41 @@ registerExamples([
     label: 'oneOf',
     data,
     schema,
-    uischema
+    uischema,
   },
   {
-    name: '1265_array',
-    label: '1265 Array',
+    name: 'oneOf_1265_array',
+    label: 'oneOf - Validation for Arrays (Issue 1265)',
     data: { coloursOrNumbers: ['Foo'] },
     schema: schema_1265_array,
-    uischema: undefined
+    uischema: undefined,
   },
   {
-    name: '1265_object',
-    label: '1265 Object',
+    name: 'oneOf_1265_object',
+    label: 'oneOf - Validation for Objects (Issue 1265)',
     data: { coloursOrNumbers: { colour: 'Foo' } },
     schema: schema_1265_object,
-    uischema: undefined
+    uischema: undefined,
   },
   {
-    name: '1265_simple',
-    label: '1265 Simple',
+    name: 'oneOf_1265_simple',
+    label: 'oneOf - Validation for Primitives (Issue 1265)',
     data: { coloursOrNumbers: 'Foo' },
     schema: schema_1265_simple,
-    uischema: undefined
+    uischema: undefined,
   },
   {
-    name: '1273',
-    label: '1273',
+    name: 'oneOf_1273',
+    label: 'oneOf - Preselection for Objects (Issue 1273)',
     data: data_1273,
     schema: schema_1273,
-    uischema: undefined
+    uischema: undefined,
   },
   {
-    name: '1273_simple',
-    label: 'Simple 1273',
+    name: 'oneOf_1273_simple',
+    label: 'oneOf - Preselection for Primitives (Issue 1273 )',
     data: { quantity: 5 },
     schema: schema_1273_simple,
-    uischema: undefined
-  }
+    uischema: undefined,
+  },
 ]);

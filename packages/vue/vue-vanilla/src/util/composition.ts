@@ -6,7 +6,7 @@ import {
   composePaths,
   findUISchema,
   getFirstPrimitiveProp,
-  Resolve
+  Resolve,
 } from '@jsonforms/core';
 
 /**
@@ -16,7 +16,7 @@ export const useVanillaControl = <
   I extends { control: any; handleChange: any }
 >(
   input: I,
-  adaptTarget: (target: any) => any = v => v.value
+  adaptTarget: (target: any) => any = (v) => v.value
 ) => {
   const appliedOptions = computed(() =>
     merge(
@@ -32,14 +32,8 @@ export const useVanillaControl = <
   };
 
   const controlWrapper = computed(() => {
-    const {
-      id,
-      description,
-      errors,
-      label,
-      visible,
-      required
-    } = input.control.value;
+    const { id, description, errors, label, visible, required } =
+      input.control.value;
     return { id, description, errors, label, visible, required };
   });
 
@@ -49,7 +43,7 @@ export const useVanillaControl = <
     isFocused,
     appliedOptions,
     controlWrapper,
-    onChange
+    onChange,
   };
 };
 
@@ -67,7 +61,7 @@ export const useVanillaLayout = <I extends { layout: any }>(input: I) => {
   return {
     ...input,
     styles: useStyles(input.layout.value.uischema),
-    appliedOptions
+    appliedOptions,
   };
 };
 
@@ -85,7 +79,7 @@ export const useVanillaLabel = <I extends { label: any }>(input: I) => {
   return {
     ...input,
     styles: useStyles(input.label.value.uischema),
-    appliedOptions
+    appliedOptions,
   };
 };
 
@@ -126,7 +120,7 @@ export const useVanillaArrayControl = <I extends { control: any }>(
       input.control.value.data,
       composePaths(`${index}`, childLabelProp)
     );
-    if (labelValue === undefined || labelValue === null || labelValue === NaN) {
+    if (labelValue === undefined || labelValue === null || isNaN(labelValue)) {
       return '';
     }
     return `${labelValue}`;
@@ -136,6 +130,6 @@ export const useVanillaArrayControl = <I extends { control: any }>(
     styles: useStyles(input.control.value.uischema),
     appliedOptions,
     childUiSchema,
-    childLabelForIndex
+    childLabelForIndex,
   };
 };

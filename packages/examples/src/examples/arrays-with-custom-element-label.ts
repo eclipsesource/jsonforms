@@ -34,15 +34,15 @@ export const schema = {
         type: 'object',
         properties: {
           message1: {
-            type: 'string'
+            type: 'string',
           },
           message2: {
-            type: 'string'
-          }
-        }
-      }
-    }
-  }
+            type: 'string',
+          },
+        },
+      },
+    },
+  },
 };
 
 export const uischema = {
@@ -58,30 +58,30 @@ export const uischema = {
           elements: [
             {
               type: 'Control',
-              scope: '#/properties/message1'
+              scope: '#/properties/message1',
             },
             {
               type: 'Control',
-              scope: '#/properties/message2'
-            }
-          ]
-        }
-      }
-    }
-  ]
+              scope: '#/properties/message2',
+            },
+          ],
+        },
+      },
+    },
+  ],
 };
 
 export const data = {
   comments: [
     {
       message1: 'This is an example message',
-      message2: 'This is an example message 2'
+      message2: 'This is an example message 2',
     },
     {
       message1: 'Get ready for booohay 1',
-      message2: 'Get ready for booohay 2'
-    }
-  ]
+      message2: 'Get ready for booohay 2',
+    },
+  ],
 };
 
 registerExamples([
@@ -90,6 +90,6 @@ registerExamples([
     label: 'Array with custom element label',
     data,
     schema,
-    uischema
-  }
+    uischema,
+  },
 ]);

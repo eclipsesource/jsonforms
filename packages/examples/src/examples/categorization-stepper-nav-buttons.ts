@@ -1,7 +1,7 @@
 /*
   The MIT License
   
-  Copyright (c) 2017-2021 EclipseSource Munich
+  Copyright (c) 2017-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
   
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,49 +22,31 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-
 import { registerExamples } from '../register';
+import {
+  data as categorizationData,
+  schema as categorizationSchema,
+  uischema as categorizationUiSchema,
+} from './categorization';
 
-export const schema = {
-  type: 'object',
-  properties: {
-    checkbox: {
-      type: 'boolean'
-    },
-    toggle: {
-      type: 'boolean'
-    }
-  }
-};
+export const schema = categorizationSchema;
 
 export const uischema = {
-  type: 'VerticalLayout',
-  elements: [
-    {
-      type: 'Control',
-      scope: '#/properties/checkbox'
-    },
-    {
-      type: 'Control',
-      scope: '#/properties/toggle',
-      options: {
-        toggle: true
-      }
-    }
-  ]
+  ...categorizationUiSchema,
+  options: {
+    variant: 'stepper',
+    showNavButtons: true,
+  },
 };
 
-export const data = {
-  checkbox: false,
-  toggle: false
-};
+export const data = categorizationData;
 
-export const booleanToggleExample = {
-  name: 'booleanToggle',
-  label: 'Boolean Toggle',
-  data,
-  schema,
-  uischema
-};
-
-registerExamples([booleanToggleExample]);
+registerExamples([
+  {
+    name: 'categorization-stepper-nav-buttons',
+    label: 'Categorization (Stepper - Nav Buttons)',
+    data,
+    schema,
+    uischema,
+  },
+]);

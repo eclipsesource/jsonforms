@@ -22,19 +22,19 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { resolveSchema } from '../../src/util/resolvers';
+import { resolveData, resolveSchema } from '../../src/util/resolvers';
 import test from 'ava';
 
-test('resolveSchema - resolves schema with any ', t => {
+test('resolveSchema - resolves schema with any ', (t) => {
   const schema = {
     $defs: {
       Base: {
         type: 'object',
         properties: {
           width: {
-            type: 'integer'
-          }
-        }
+            type: 'integer',
+          },
+        },
       },
       Child: {
         type: 'object',
@@ -43,68 +43,72 @@ test('resolveSchema - resolves schema with any ', t => {
           {
             properties: {
               geometry: {
-                type: 'string'
-              }
-            }
-          }
-        ]
-      }
+                type: 'string',
+              },
+            },
+          },
+        ],
+      },
     },
     type: 'object',
     properties: {
       description: {
-        oneOf: [{
-          type: 'object',
-          properties: {
-            name: {
-              type: 'string'
-            }
-          }
-        }, {
-          type: 'object',
-          properties: {
-            index: {
-              type: 'number'
-            }
-          }
-        }, {
-          type: 'object',
-          properties: {
-            exist: {
-              type: 'boolean'
-            }
-          }
-        },
-        {
-          type: 'object',
-          properties: {
-            element: {
-              $ref: '#/$defs/Child'
-            }
-          }
-        }]
-      }
+        oneOf: [
+          {
+            type: 'object',
+            properties: {
+              name: {
+                type: 'string',
+              },
+            },
+          },
+          {
+            type: 'object',
+            properties: {
+              index: {
+                type: 'number',
+              },
+            },
+          },
+          {
+            type: 'object',
+            properties: {
+              exist: {
+                type: 'boolean',
+              },
+            },
+          },
+          {
+            type: 'object',
+            properties: {
+              element: {
+                $ref: '#/$defs/Child',
+              },
+            },
+          },
+        ],
+      },
     },
     anyOf: [
       {
         if: {
           properties: {
             exist: {
-              const: true
-            }
-          }
+              const: true,
+            },
+          },
         },
         then: {
           properties: {
             lastname: {
-              type: 'string'
-            }
-          }
+              type: 'string',
+            },
+          },
         },
         else: {
           properties: {
             firstname: {
-              type: 'string'
+              type: 'string',
             },
             address: {
               type: 'object',
@@ -112,46 +116,118 @@ test('resolveSchema - resolves schema with any ', t => {
                 {
                   properties: {
                     street: {
-                      type: 'string'
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        }
-      }
-    ]
+                      type: 'string',
+                    },
+                  },
+                },
+              ],
+            },
+          },
+        },
+      },
+    ],
   };
   // test backward compatibility
-  t.deepEqual(resolveSchema(schema, '#/properties/description/oneOf/0/properties/name', schema), {type: 'string'});
-  t.deepEqual(resolveSchema(schema, '#/properties/description/oneOf/1/properties/index', schema), {type: 'number'});
-  t.deepEqual(resolveSchema(schema, '#/anyOf/0/then/properties/lastname', schema), {type: 'string'});
-  t.deepEqual(resolveSchema(schema, '#/anyOf/0/else/properties/firstname', schema), {type: 'string'});
-  t.deepEqual(resolveSchema(schema, '#/anyOf/0/else/properties/address/anyOf/0/properties/street', schema), {type: 'string'});
+  t.deepEqual(
+    resolveSchema(
+      schema,
+      '#/properties/description/oneOf/0/properties/name',
+      schema
+    ),
+    { type: 'string' }
+  );
+  t.deepEqual(
+    resolveSchema(
+      schema,
+      '#/properties/description/oneOf/1/properties/index',
+      schema
+    ),
+    { type: 'number' }
+  );
+  t.deepEqual(
+    resolveSchema(schema, '#/anyOf/0/then/properties/lastname', schema),
+    { type: 'string' }
+  );
+  t.deepEqual(
+    resolveSchema(schema, '#/anyOf/0/else/properties/firstname', schema),
+    { type: 'string' }
+  );
+  t.deepEqual(
+    resolveSchema(
+      schema,
+      '#/anyOf/0/else/properties/address/anyOf/0/properties/street',
+      schema
+    ),
+    { type: 'string' }
+  );
   // new simple approach
-  t.deepEqual(resolveSchema(schema, '#/properties/description/properties/name', schema), {type: 'string'});
-  t.deepEqual(resolveSchema(schema, '#/properties/description/properties/index', schema), {type: 'number'});
-  t.deepEqual(resolveSchema(schema, '#/properties/description/properties/exist', schema), {type: 'boolean'});
-  t.deepEqual(resolveSchema(schema, '#/properties/lastname', schema), {type: 'string'});
-  t.deepEqual(resolveSchema(schema, '#/properties/firstname', schema), {type: 'string'});
-  t.deepEqual(resolveSchema(schema, '#/properties/address/properties/street', schema), {type: 'string'});
-  t.is(resolveSchema(schema, '#/properties/description/properties/notfound', schema), undefined);
+  t.deepEqual(
+    resolveSchema(schema, '#/properties/description/properties/name', schema),
+    { type: 'string' }
+  );
+  t.deepEqual(
+    resolveSchema(schema, '#/properties/description/properties/index', schema),
+    { type: 'number' }
+  );
+  t.deepEqual(
+    resolveSchema(schema, '#/properties/description/properties/exist', schema),
+    { type: 'boolean' }
+  );
+  t.deepEqual(resolveSchema(schema, '#/properties/lastname', schema), {
+    type: 'string',
+  });
+  t.deepEqual(resolveSchema(schema, '#/properties/firstname', schema), {
+    type: 'string',
+  });
+  t.deepEqual(
+    resolveSchema(schema, '#/properties/address/properties/street', schema),
+    { type: 'string' }
+  );
+  t.is(
+    resolveSchema(
+      schema,
+      '#/properties/description/properties/notfound',
+      schema
+    ),
+    undefined
+  );
   // refs
-  t.deepEqual(resolveSchema(schema, '#/properties/description/properties/element/properties/geometry', schema), {type: 'string'});
-  t.deepEqual(resolveSchema(schema, '#/properties/description/properties/element/properties/width', schema), {type: 'integer'});
-
+  t.deepEqual(
+    resolveSchema(
+      schema,
+      '#/properties/description/properties/element/properties/geometry',
+      schema
+    ),
+    { type: 'string' }
+  );
+  t.deepEqual(
+    resolveSchema(
+      schema,
+      '#/properties/description/properties/element/properties/width',
+      schema
+    ),
+    { type: 'integer' }
+  );
 });
 
-test('resolveSchema - resolves schema with encoded characters', t => {
+test('resolveSchema - resolves schema with encoded characters', (t) => {
   const schema = {
     type: 'object',
     properties: {
       'foo / ~ bar': {
-        type: 'integer'
-      }
-    }
+        type: 'integer',
+      },
+    },
   };
-  t.deepEqual(resolveSchema(schema, '#/properties/foo ~1 ~0 bar', schema), {type: 'integer'});
+  t.deepEqual(resolveSchema(schema, '#/properties/foo ~1 ~0 bar', schema), {
+    type: 'integer',
+  });
   t.is(resolveSchema(schema, '#/properties/foo / bar', schema), undefined);
+});
+
+test('resolveData - resolves data with % characters', (t) => {
+  const data = {
+    'foo%': '123',
+  };
+  t.deepEqual(resolveData(data, 'foo%'), '123');
 });

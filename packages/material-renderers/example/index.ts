@@ -25,7 +25,4 @@
 import { renderExample } from '../../examples-react/src/index';
 import { materialRenderers, materialCells } from '../src';
 
-renderExample(
-  materialRenderers,
-  materialCells
-);
+renderExample(materialRenderers, materialCells);

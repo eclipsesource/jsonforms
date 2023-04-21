@@ -24,14 +24,13 @@
 */
 import * as React from 'react';
 import * as _ from 'lodash';
-import {
-  ControlElement,
-  HorizontalLayout,
-} from '@jsonforms/core';
+import { ControlElement, HorizontalLayout } from '@jsonforms/core';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import { JsonFormsStateProvider } from '@jsonforms/react';
-import TableArrayControl, { tableArrayControlTester, } from '../../src/complex/TableArrayControl';
+import TableArrayControl, {
+  tableArrayControlTester,
+} from '../../src/complex/TableArrayControl';
 import HorizontalLayoutRenderer from '../../src/layouts/HorizontalLayout';
 import '../../src';
 import { initCore, TestEmitter } from '../util';
@@ -49,19 +48,19 @@ const fixture = {
           type: 'object',
           properties: {
             x: { type: 'integer' },
-            y: { type: 'integer' }
-          }
-        }
-      }
-    }
+            y: { type: 'integer' },
+          },
+        },
+      },
+    },
   },
   uischema: {
     type: 'Control',
-    scope: '#/properties/test'
+    scope: '#/properties/test',
   },
   data: {
-    test: [{ x: 1, y: 3 }]
-  }
+    test: [{ x: 1, y: 3 }],
+  },
 };
 
 const fixture2 = {
@@ -77,26 +76,26 @@ const fixture2 = {
               type: 'integer',
               title: 'Column X',
             },
-            y: { type: 'integer' }
-          }
-        }
-      }
-    }
+            y: { type: 'integer' },
+          },
+        },
+      },
+    },
   },
   uischema: {
     type: 'Control',
-    scope: '#/properties/test'
+    scope: '#/properties/test',
   },
   data: {
-    test: [{ x: 1, y: 3 }]
-  }
+    test: [{ x: 1, y: 3 }],
+  },
 };
 
 describe('Table array tester', () => {
   test('tester with recursive document ref only', () => {
     const control: ControlElement = {
       type: 'Control',
-      scope: '#'
+      scope: '#',
     };
     expect(tableArrayControlTester(control, undefined, undefined)).toBe(-1);
   });
@@ -104,7 +103,7 @@ describe('Table array tester', () => {
   test(' tester with prop of wrong type', () => {
     const control: ControlElement = {
       type: 'Control',
-      scope: '#/properties/x'
+      scope: '#/properties/x',
     };
     expect(
       tableArrayControlTester(
@@ -112,8 +111,8 @@ describe('Table array tester', () => {
         {
           type: 'object',
           properties: {
-            x: { type: 'integer' }
-          }
+            x: { type: 'integer' },
+          },
         },
         undefined
       )
@@ -123,7 +122,7 @@ describe('Table array tester', () => {
   test('tester with correct prop type, but without items', () => {
     const control: ControlElement = {
       type: 'Control',
-      scope: '#/properties/foo'
+      scope: '#/properties/foo',
     };
     expect(
       tableArrayControlTester(
@@ -131,8 +130,8 @@ describe('Table array tester', () => {
         {
           type: 'object',
           properties: {
-            foo: { type: 'array' }
-          }
+            foo: { type: 'array' },
+          },
         },
         undefined
       )
@@ -142,7 +141,7 @@ describe('Table array tester', () => {
   test('tester with correct prop type, but different item types', () => {
     const control: ControlElement = {
       type: 'Control',
-      scope: '#/properties/foo'
+      scope: '#/properties/foo',
     };
     expect(
       tableArrayControlTester(
@@ -152,12 +151,9 @@ describe('Table array tester', () => {
           properties: {
             foo: {
               type: 'array',
-              items: [
-                { type: 'integer' },
-                { type: 'string' },
-              ]
-            }
-          }
+              items: [{ type: 'integer' }, { type: 'string' }],
+            },
+          },
         },
         undefined
       )
@@ -167,7 +163,7 @@ describe('Table array tester', () => {
   test('tester with primitive item type', () => {
     const control: ControlElement = {
       type: 'Control',
-      scope: '#/properties/foo'
+      scope: '#/properties/foo',
     };
     expect(
       tableArrayControlTester(
@@ -177,9 +173,9 @@ describe('Table array tester', () => {
           properties: {
             foo: {
               type: 'array',
-              items: { type: 'integer' }
-            }
-          }
+              items: { type: 'integer' },
+            },
+          },
         },
         undefined
       )
@@ -189,17 +185,19 @@ describe('Table array tester', () => {
   test('tester', () => {
     const uischema: ControlElement = {
       type: 'Control',
-      scope: '#/properties/test'
+      scope: '#/properties/test',
     };
 
-    expect(tableArrayControlTester(uischema, fixture.schema, undefined)).toBe(3);
+    expect(tableArrayControlTester(uischema, fixture.schema, undefined)).toBe(
+      3
+    );
   });
 
-  test('tester - wrong type', () => expect(tableArrayControlTester({ type: 'Foo' }, null, undefined)).toBe(-1));
+  test('tester - wrong type', () =>
+    expect(tableArrayControlTester({ type: 'Foo' }, null, undefined)).toBe(-1));
 });
 
 describe('Table array control', () => {
-
   let wrapper: ReactWrapper;
 
   afterEach(() => wrapper.unmount());
@@ -266,15 +264,12 @@ describe('Table array control', () => {
     const control: ControlElement = {
       label: false,
       type: 'Control',
-      scope: '#/properties/test'
+      scope: '#/properties/test',
     };
     const core = initCore(fixture.schema, control, {});
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TableArrayControl
-          schema={fixture.schema}
-          uischema={control}
-        />
+        <TableArrayControl schema={fixture.schema} uischema={control} />
       </JsonFormsStateProvider>
     );
 
@@ -286,7 +281,7 @@ describe('Table array control', () => {
 
     const button = legendChildren.item(1);
     expect(button.tagName).toBe('BUTTON');
-    expect(button.textContent).toBe('Add to Test');
+    expect(button.textContent).toBe('Add');
 
     const table = wrapper.find('table').getDOMNode();
     const tableChildren = table.children;
@@ -336,15 +331,15 @@ describe('Table array control', () => {
     const headers = wrapper.find('thead').find('th');
 
     // the first property has a title, so we expect it to be rendered as the first column heading
-    expect(headers.at(0).text()).toEqual("Column X");
+    expect(headers.at(0).text()).toEqual('Column X');
 
     // the second property has no title, so we expect to see the property name in start case
-    expect(headers.at(1).text()).toEqual("Y");
+    expect(headers.at(1).text()).toEqual('Y');
   });
 
   test('render new child (empty init data)', () => {
     const onChangeData: any = {
-      data: undefined
+      data: undefined,
     };
     const core = initCore(fixture.schema, fixture.uischema, { test: [] });
     wrapper = mount(
@@ -371,9 +366,11 @@ describe('Table array control', () => {
 
   test('render new child (undefined data)', () => {
     const onChangeData: any = {
-      data: undefined
+      data: undefined,
     };
-    const core = initCore(fixture.schema, fixture.uischema, { test: undefined });
+    const core = initCore(fixture.schema, fixture.uischema, {
+      test: undefined,
+    });
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
         <TestEmitter
@@ -398,7 +395,7 @@ describe('Table array control', () => {
 
   test('render new child (null data)', () => {
     const onChangeData: any = {
-      data: undefined
+      data: undefined,
     };
     const core = initCore(fixture.schema, fixture.uischema, { test: null });
     wrapper = mount(
@@ -425,7 +422,7 @@ describe('Table array control', () => {
 
   test('render new child', () => {
     const onChangeData: any = {
-      data: undefined
+      data: undefined,
     };
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
@@ -455,27 +452,26 @@ describe('Table array control', () => {
           type: 'array',
           items: {
             type: 'string',
-            maxLength: 3
-          }
-        }
-      }
+            maxLength: 3,
+          },
+        },
+      },
     };
     const uischema: ControlElement = {
       type: 'Control',
-      scope: '#/properties/test'
+      scope: '#/properties/test',
     };
     const core = initCore(schema, uischema, { test: ['foo', 'bars'] });
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TableArrayControl
-          schema={schema}
-          uischema={uischema}
-        />
+        <TableArrayControl schema={schema} uischema={uischema} />
       </JsonFormsStateProvider>
     );
     const rows = wrapper.find('tr');
     const lastRow = rows.last().getDOMNode() as HTMLTableRowElement;
-    expect(lastRow.children.item(1).textContent).toBe('must NOT have more than 3 characters');
+    expect(lastRow.children.item(1).textContent).toBe(
+      'must NOT have more than 3 characters'
+    );
     expect(rows).toHaveLength(3);
   });
 
@@ -493,13 +489,26 @@ describe('Table array control', () => {
     const children = wrapper.find('tbody').getDOMNode();
     expect(children.childNodes).toHaveLength(1);
 
-    core.data = { ...core.data, test: [{ x: 1, y: 3 }, { x: 2, y: 3 }] };
-    wrapper.setProps({ initState: { core }} );
+    core.data = {
+      ...core.data,
+      test: [
+        { x: 1, y: 3 },
+        { x: 2, y: 3 },
+      ],
+    };
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     expect(children.childNodes).toHaveLength(2);
 
-    core.data = { ...core.data, undefined: [{ x: 1, y: 3 }, { x: 2, y: 3 }, { x: 3, y: 3 }] };
-    wrapper.setProps({ initState: { core }} );
+    core.data = {
+      ...core.data,
+      undefined: [
+        { x: 1, y: 3 },
+        { x: 2, y: 3 },
+        { x: 3, y: 3 },
+      ],
+    };
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     expect(children.childNodes).toHaveLength(2);
   });
@@ -544,7 +553,7 @@ describe('Table array control', () => {
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, test: 2 };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     const validation = wrapper.find('.validation').getDOMNode();
     expect(validation.textContent).toBe('must be array');
@@ -561,7 +570,7 @@ describe('Table array control', () => {
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, test: 3 };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     const validation = wrapper.find('.validation').getDOMNode();
     expect(validation.textContent).toBe('must be array');
@@ -593,11 +602,11 @@ describe('Table array control', () => {
     );
     const validation = wrapper.find('.validation').getDOMNode();
     core.data = { ...core.data, test: 3 };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     expect(validation.textContent).toBe('must be array');
     core.data = { ...core.data, test: [] };
-    wrapper.setProps({ initState: { core }} );
+    wrapper.setProps({ initState: { core } });
     wrapper.update();
     expect(validation.textContent).toBe('');
   });
@@ -611,30 +620,33 @@ describe('Table array control', () => {
           type: 'object',
           properties: {
             middleName: { type: 'string' },
-            lastName: { type: 'string' }
+            lastName: { type: 'string' },
           },
-          required: ['middleName', 'lastName']
-        }
+          required: ['middleName', 'lastName'],
+        },
       },
-      required: ['name']
+      required: ['name'],
     };
     const firstControl: ControlElement = {
       type: 'Control',
-      scope: '#/properties/name'
+      scope: '#/properties/name',
     };
     const secondControl: ControlElement = {
       type: 'Control',
-      scope: '#/properties/personalData/properties/middleName'
+      scope: '#/properties/personalData/properties/middleName',
     };
     const thirdControl: ControlElement = {
       type: 'Control',
-      scope: '#/properties/personalData/properties/lastName'
+      scope: '#/properties/personalData/properties/lastName',
     };
     const uischema: HorizontalLayout = {
       type: 'HorizontalLayout',
-      elements: [firstControl, secondControl, thirdControl]
+      elements: [firstControl, secondControl, thirdControl],
     };
-    const core = initCore(fixture.schema, fixture.uischema, {name: 'John Doe', personalData: {} });
+    const core = initCore(fixture.schema, fixture.uischema, {
+      name: 'John Doe',
+      personalData: {},
+    });
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
         <HorizontalLayoutRenderer schema={schema} uischema={uischema} />
@@ -642,7 +654,11 @@ describe('Table array control', () => {
     );
     const validation = wrapper.find('.valdiation');
     expect(validation.at(0).getDOMNode().textContent).toBe('');
-    expect(validation.at(1).getDOMNode().textContent).toBe('is a required property');
-    expect(validation.at(2).getDOMNode().textContent).toBe('is a required property');
+    expect(validation.at(1).getDOMNode().textContent).toBe(
+      'is a required property'
+    );
+    expect(validation.at(2).getDOMNode().textContent).toBe(
+      'is a required property'
+    );
   });
 });

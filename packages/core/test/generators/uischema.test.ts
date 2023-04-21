@@ -27,311 +27,311 @@ import { generateDefaultUISchema } from '../../src/generators/uischema';
 import {
   ControlElement,
   Layout,
-  VerticalLayout
+  VerticalLayout,
 } from '../../src/models/uischema';
 import { JsonSchema } from '../../src';
 
-test('generate ui schema for Control element by resolving refs', t => {
+test('generate ui schema for Control element by resolving refs', (t) => {
   const schema: JsonSchema = {
     type: 'object',
     properties: {
       type: {
         type: 'string',
         const: 'Control',
-        default: 'Control'
+        default: 'Control',
       },
       label: {
-        type: 'string'
+        type: 'string',
       },
       scope: {
-        $ref: '#/definitions/scope'
+        $ref: '#/definitions/scope',
       },
       rule: {
-        $ref: '#/definitions/rule'
-      }
+        $ref: '#/definitions/rule',
+      },
     },
     required: ['type', 'scope'],
     definitions: {
       scope: {
         type: 'string',
-        pattern: '^#\\/properties\\/{1}'
+        pattern: '^#\\/properties\\/{1}',
       },
       rule: {
         type: 'object',
         properties: {
           effect: {
             type: 'string',
-            enum: ['HIDE', 'SHOW', 'DISABLE', 'ENABLE']
+            enum: ['HIDE', 'SHOW', 'DISABLE', 'ENABLE'],
           },
           condition: {
             type: 'object',
             properties: {
               type: {
                 type: 'string',
-                const: 'LEAF'
+                const: 'LEAF',
               },
               scope: {
-                $ref: '#/definitions/scope'
+                $ref: '#/definitions/scope',
               },
               expectedValue: {
-                type: ['string', 'integer', 'number', 'boolean']
-              }
+                type: ['string', 'integer', 'number', 'boolean'],
+              },
             },
-            required: ['type', 'scope', 'expectedValue']
-          }
+            required: ['type', 'scope', 'expectedValue'],
+          },
         },
-        required: ['effect', 'condition']
-      }
-    }
+        required: ['effect', 'condition'],
+      },
+    },
   };
   const typeControl: ControlElement = {
     type: 'Control',
-    scope: '#/properties/type'
+    scope: '#/properties/type',
   };
   const labelControl: ControlElement = {
     type: 'Control',
-    scope: '#/properties/label'
+    scope: '#/properties/label',
   };
   const scopeControl: ControlElement = {
     type: 'Control',
-    scope: '#/properties/scope'
+    scope: '#/properties/scope',
   };
   const ruleControl: ControlElement = {
     type: 'Control',
-    scope: '#/properties/rule'
+    scope: '#/properties/rule',
   };
 
   const uischema: VerticalLayout = {
     type: 'VerticalLayout',
-    elements: [typeControl, labelControl, scopeControl, ruleControl]
+    elements: [typeControl, labelControl, scopeControl, ruleControl],
   };
   const generatedUiSchema = generateDefaultUISchema(schema);
   t.deepEqual(generatedUiSchema, uischema);
 });
 
-test('generate ui schema for schema w/o properties', t => {
+test('generate ui schema for schema w/o properties', (t) => {
   const schema: JsonSchema = {
-    type: 'object'
+    type: 'object',
   };
   const uischema: Layout = {
     type: 'VerticalLayout',
-    elements: []
+    elements: [],
   };
   t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
 
-test('generate ui schema for schema with one property', t => {
+test('generate ui schema for schema with one property', (t) => {
   const schema: JsonSchema = {
     type: 'object',
     properties: {
       name: {
-        type: 'string'
-      }
-    }
+        type: 'string',
+      },
+    },
   };
   const control = {
     type: 'Control',
-    scope: '#/properties/name'
+    scope: '#/properties/name',
   };
   const uischema: Layout = {
     type: 'VerticalLayout',
-    elements: [control]
+    elements: [control],
   };
   t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
 
-test('generate ui schema for schema without object root', t => {
+test('generate ui schema for schema without object root', (t) => {
   const schema: JsonSchema = {
-    type: 'string'
+    type: 'string',
   };
   const control: ControlElement = {
     type: 'Control',
-    scope: '#'
+    scope: '#',
   };
   const uischema: Layout = {
     type: 'VerticalLayout',
-    elements: [control]
+    elements: [control],
   };
   t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
 
-test('generate ui schema for schema with unspecified object root', t => {
+test('generate ui schema for schema with unspecified object root', (t) => {
   const schema: JsonSchema = {
     properties: {
       age: {
-        type: 'integer'
-      }
-    }
+        type: 'integer',
+      },
+    },
   };
   const controlElement = {
     type: 'Control',
-    scope: '#/properties/age'
+    scope: '#/properties/age',
   };
   const uischema: Layout = {
     type: 'VerticalLayout',
-    elements: [controlElement]
+    elements: [controlElement],
   };
   t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
 
-test(`nested object not expanded`, t => {
+test(`nested object not expanded`, (t) => {
   const schema = {
     type: 'object',
     properties: {
       id: {
-        type: 'string'
+        type: 'string',
       },
       private: {
         type: 'object',
         properties: {
           name: {
-            type: 'string'
-          }
-        }
-      }
-    }
+            type: 'string',
+          },
+        },
+      },
+    },
   };
   const idControl: ControlElement = {
     type: 'Control',
-    scope: '#/properties/id'
+    scope: '#/properties/id',
   };
   const privateControl: ControlElement = {
     type: 'Control',
-    scope: '#/properties/private'
+    scope: '#/properties/private',
   };
   const uischema: Layout = {
     type: 'VerticalLayout',
-    elements: [idControl, privateControl]
+    elements: [idControl, privateControl],
   };
   t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
 
-test(`don't ignore non-json-schema id attributes`, t => {
+test(`don't ignore non-json-schema id attributes`, (t) => {
   const schema = {
     type: 'object',
     properties: {
       id: {
-        type: 'string'
+        type: 'string',
       },
       name: {
-        type: 'string'
-      }
-    }
+        type: 'string',
+      },
+    },
   };
   const idControl: ControlElement = {
     type: 'Control',
-    scope: '#/properties/id'
+    scope: '#/properties/id',
   };
   const nameControl: ControlElement = {
     type: 'Control',
-    scope: '#/properties/name'
+    scope: '#/properties/name',
   };
   const uischema: Layout = {
     type: 'VerticalLayout',
-    elements: [idControl, nameControl]
+    elements: [idControl, nameControl],
   };
   t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
 
-test('generate ui schema for schema with multiple properties', t => {
+test('generate ui schema for schema with multiple properties', (t) => {
   const schema: JsonSchema = {
     type: 'object',
     properties: {
       id: {
         type: 'string',
-        format: 'objectId'
+        format: 'objectId',
       },
       lastName: {
-        type: 'string'
+        type: 'string',
       },
       email: {
-        type: 'string'
+        type: 'string',
       },
       firstName: {
-        type: 'string'
+        type: 'string',
       },
       gender: {
         type: 'string',
-        enum: ['Male', 'Female']
+        enum: ['Male', 'Female'],
       },
       active: {
-        type: 'boolean'
+        type: 'boolean',
       },
       registrationTime: {
         type: 'string',
-        format: 'date-time'
+        format: 'date-time',
       },
       weight: {
-        type: 'number'
+        type: 'number',
       },
       height: {
-        type: 'integer'
+        type: 'integer',
       },
       nationality: {
         type: 'string',
-        enum: ['German', 'French', 'UK', 'US', 'Spanish', 'Italian', 'Russian']
+        enum: ['German', 'French', 'UK', 'US', 'Spanish', 'Italian', 'Russian'],
       },
       birthDate: {
         type: 'string',
-        format: 'date-time'
-      }
+        format: 'date-time',
+      },
     },
     additionalProperties: false,
-    required: ['id', 'lastName', 'email']
+    required: ['id', 'lastName', 'email'],
   };
   const uischema: Layout = {
     type: 'VerticalLayout',
     elements: [
       {
         type: 'Control',
-        scope: '#/properties/id'
+        scope: '#/properties/id',
       },
       {
         type: 'Control',
-        scope: '#/properties/lastName'
+        scope: '#/properties/lastName',
       },
       {
         type: 'Control',
-        scope: '#/properties/email'
+        scope: '#/properties/email',
       },
       {
         type: 'Control',
-        scope: '#/properties/firstName'
+        scope: '#/properties/firstName',
       },
       {
         type: 'Control',
-        scope: '#/properties/gender'
+        scope: '#/properties/gender',
       },
       {
         type: 'Control',
-        scope: '#/properties/active'
+        scope: '#/properties/active',
       },
       {
         type: 'Control',
-        scope: '#/properties/registrationTime'
+        scope: '#/properties/registrationTime',
       },
       {
         type: 'Control',
-        scope: '#/properties/weight'
+        scope: '#/properties/weight',
       },
       {
         type: 'Control',
-        scope: '#/properties/height'
+        scope: '#/properties/height',
       },
       {
         type: 'Control',
-        scope: '#/properties/nationality'
+        scope: '#/properties/nationality',
       },
       {
         type: 'Control',
-        scope: '#/properties/birthDate'
-      }
-    ] as ControlElement[]
+        scope: '#/properties/birthDate',
+      },
+    ] as ControlElement[],
   };
   t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
 
-test('generate named array control', t => {
+test('generate named array control', (t) => {
   const schema: JsonSchema = {
     type: 'object',
     properties: {
@@ -339,159 +339,159 @@ test('generate named array control', t => {
         type: 'array',
         items: {
           properties: {
-            msg: { type: 'string' }
-          }
-        }
-      }
-    }
+            msg: { type: 'string' },
+          },
+        },
+      },
+    },
   };
   const control: ControlElement = {
     type: 'Control',
-    scope: '#/properties/comments'
+    scope: '#/properties/comments',
   };
   const uischema: Layout = {
     type: 'VerticalLayout',
-    elements: [control]
+    elements: [control],
   };
   t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
 
-test('generate unnamed array control', t => {
+test('generate unnamed array control', (t) => {
   const schema: JsonSchema = {
     type: 'array',
     items: {
       properties: {
-        msg: { type: 'string' }
-      }
-    }
+        msg: { type: 'string' },
+      },
+    },
   };
   const control: ControlElement = {
     type: 'Control',
-    scope: '#'
+    scope: '#',
   };
   const uischema: Layout = {
     type: 'VerticalLayout',
-    elements: [control]
+    elements: [control],
   };
   t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
 
-test('generate unnamed array control w/o type', t => {
+test('generate unnamed array control w/o type', (t) => {
   const schema: JsonSchema = {
     items: {
       properties: {
-        msg: { type: 'string' }
-      }
-    }
+        msg: { type: 'string' },
+      },
+    },
   };
   const control = {
     type: 'Control',
-    scope: '#'
+    scope: '#',
   };
   const uischema: Layout = {
     type: 'VerticalLayout',
-    elements: [control]
+    elements: [control],
   };
   t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
 
-test('generate for empty schema', t => {
+test('generate for empty schema', (t) => {
   const schema: JsonSchema = {};
   const uischema: Layout = null;
   t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
 
-test('generate for null schema', t => {
+test('generate for null schema', (t) => {
   const schema: JsonSchema = null;
   const uischema: Layout = null;
   t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
 
-test('generate for undefined schema', t => {
+test('generate for undefined schema', (t) => {
   const schema: JsonSchema = undefined;
   const uischema: Layout = null;
   t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
 
-test('generate control for oneOf', t => {
+test('generate control for oneOf', (t) => {
   const schema: JsonSchema = {
     oneOf: [
       {
         properties: {
           name: {
-            type: 'string'
-          }
-        }
+            type: 'string',
+          },
+        },
       },
       {
-        type: 'number'
-      }
-    ]
+        type: 'number',
+      },
+    ],
   };
   const control = {
     type: 'Control',
-    scope: '#'
+    scope: '#',
   };
   const uischema: Layout = {
     type: 'VerticalLayout',
-    elements: [control]
+    elements: [control],
   };
   t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
 
-test('generate control for anyOf', t => {
+test('generate control for anyOf', (t) => {
   const schema: JsonSchema = {
     anyOf: [
       {
         properties: {
           name: {
-            type: 'string'
-          }
-        }
+            type: 'string',
+          },
+        },
       },
       {
-        type: 'number'
-      }
-    ]
+        type: 'number',
+      },
+    ],
   };
   const control = {
     type: 'Control',
-    scope: '#'
+    scope: '#',
   };
   const uischema: Layout = {
     type: 'VerticalLayout',
-    elements: [control]
+    elements: [control],
   };
   t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
 
-test('generate control for allOf', t => {
+test('generate control for allOf', (t) => {
   const schema: JsonSchema = {
     allOf: [
       {
         properties: {
           name: {
-            type: 'string'
-          }
-        }
+            type: 'string',
+          },
+        },
       },
       {
-        type: 'number'
-      }
-    ]
+        type: 'number',
+      },
+    ],
   };
   const control = {
     type: 'Control',
-    scope: '#'
+    scope: '#',
   };
   const uischema: Layout = {
     type: 'VerticalLayout',
-    elements: [control]
+    elements: [control],
   };
   t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
 
-test('no separate control for oneOf in array', t => {
+test('no separate control for oneOf in array', (t) => {
   const schema: JsonSchema = {
     properties: {
       myarray: {
@@ -500,30 +500,30 @@ test('no separate control for oneOf in array', t => {
             {
               properties: {
                 name: {
-                  type: 'string'
-                }
-              }
+                  type: 'string',
+                },
+              },
             },
             {
-              type: 'number'
-            }
-          ]
-        }
-      }
-    }
+              type: 'number',
+            },
+          ],
+        },
+      },
+    },
   };
   const control = {
     type: 'Control',
-    scope: '#/properties/myarray'
+    scope: '#/properties/myarray',
   };
   const uischema: Layout = {
     type: 'VerticalLayout',
-    elements: [control]
+    elements: [control],
   };
   t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
 
-test('generate control for nested oneOf', t => {
+test('generate control for nested oneOf', (t) => {
   const schema: JsonSchema = {
     properties: {
       myarray: {
@@ -533,44 +533,46 @@ test('generate control for nested oneOf', t => {
               {
                 properties: {
                   name: {
-                    type: 'string'
-                  }
-                }
+                    type: 'string',
+                  },
+                },
               },
               {
-                type: 'number'
-              }
-            ]
-          }
-        }
-      }
-    }
+                type: 'number',
+              },
+            ],
+          },
+        },
+      },
+    },
   };
   const control = {
     type: 'Control',
-    scope: '#/properties/myarray'
+    scope: '#/properties/myarray',
   };
   const uischema: Layout = {
     type: 'VerticalLayout',
-    elements: [control]
+    elements: [control],
   };
   t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
 
-test('encode "/" in generated ui schema', t => {
+test('encode "/" in generated ui schema', (t) => {
   const schema: JsonSchema = {
     properties: {
       'some / initial / value': {
-        type : 'integer'
-      }
-    }
+        type: 'integer',
+      },
+    },
   };
   const uischema: Layout = {
     type: 'VerticalLayout',
-    elements: [{
-      type: 'Control',
-      scope: '#/properties/some ~1 initial ~1 value'
-    }] as ControlElement[]
+    elements: [
+      {
+        type: 'Control',
+        scope: '#/properties/some ~1 initial ~1 value',
+      },
+    ] as ControlElement[],
   };
   t.deepEqual(generateDefaultUISchema(schema), uischema);
 });

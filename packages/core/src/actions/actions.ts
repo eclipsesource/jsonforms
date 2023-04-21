@@ -32,34 +32,29 @@ import type { RankedTester } from '../testers';
 import type { UISchemaTester, ValidationMode } from '../reducers';
 import type { ErrorTranslator, Translator } from '../i18n';
 
-export const INIT: 'jsonforms/INIT' = 'jsonforms/INIT';
-export const UPDATE_CORE: 'jsonforms/UPDATE_CORE' = `jsonforms/UPDATE_CORE`;
-export const SET_AJV: 'jsonforms/SET_AJV' = 'jsonforms/SET_AJV';
-export const UPDATE_DATA: 'jsonforms/UPDATE' = 'jsonforms/UPDATE';
-export const UPDATE_ERRORS: 'jsonforms/UPDATE_ERRORS' =
-  'jsonforms/UPDATE_ERRORS';
-export const VALIDATE: 'jsonforms/VALIDATE' = 'jsonforms/VALIDATE';
-export const ADD_RENDERER: 'jsonforms/ADD_RENDERER' = 'jsonforms/ADD_RENDERER';
-export const REMOVE_RENDERER: 'jsonforms/REMOVE_RENDERER' =
-  'jsonforms/REMOVE_RENDERER';
-export const ADD_CELL: 'jsonforms/ADD_CELL' = 'jsonforms/ADD_CELL';
-export const REMOVE_CELL: 'jsonforms/REMOVE_CELL' = 'jsonforms/REMOVE_CELL';
-export const SET_CONFIG: 'jsonforms/SET_CONFIG' = 'jsonforms/SET_CONFIG';
-export const ADD_UI_SCHEMA: 'jsonforms/ADD_UI_SCHEMA' = `jsonforms/ADD_UI_SCHEMA`;
-export const REMOVE_UI_SCHEMA: 'jsonforms/REMOVE_UI_SCHEMA' = `jsonforms/REMOVE_UI_SCHEMA`;
-export const SET_SCHEMA: 'jsonforms/SET_SCHEMA' = `jsonforms/SET_SCHEMA`;
-export const SET_UISCHEMA: 'jsonforms/SET_UISCHEMA' = `jsonforms/SET_UISCHEMA`;
-export const SET_VALIDATION_MODE: 'jsonforms/SET_VALIDATION_MODE' =
-  'jsonforms/SET_VALIDATION_MODE';
+export const INIT = 'jsonforms/INIT' as const;
+export const UPDATE_CORE = 'jsonforms/UPDATE_CORE' as const;
+export const SET_AJV = 'jsonforms/SET_AJV' as const;
+export const UPDATE_DATA = 'jsonforms/UPDATE' as const;
+export const UPDATE_ERRORS = 'jsonforms/UPDATE_ERRORS' as const;
+export const VALIDATE = 'jsonforms/VALIDATE' as const;
+export const ADD_RENDERER = 'jsonforms/ADD_RENDERER' as const;
+export const REMOVE_RENDERER = 'jsonforms/REMOVE_RENDERER' as const;
+export const ADD_CELL = 'jsonforms/ADD_CELL' as const;
+export const REMOVE_CELL = 'jsonforms/REMOVE_CELL' as const;
+export const SET_CONFIG = 'jsonforms/SET_CONFIG' as const;
+export const ADD_UI_SCHEMA = 'jsonforms/ADD_UI_SCHEMA' as const;
+export const REMOVE_UI_SCHEMA = 'jsonforms/REMOVE_UI_SCHEMA' as const;
+export const SET_SCHEMA = 'jsonforms/SET_SCHEMA' as const;
+export const SET_UISCHEMA = 'jsonforms/SET_UISCHEMA' as const;
+export const SET_VALIDATION_MODE = 'jsonforms/SET_VALIDATION_MODE' as const;
 
-export const SET_LOCALE: 'jsonforms/SET_LOCALE' = `jsonforms/SET_LOCALE`;
-export const SET_TRANSLATOR: 'jsonforms/SET_TRANSLATOR' =
-  'jsonforms/SET_TRANSLATOR';
-export const UPDATE_I18N: 'jsonforms/UPDATE_I18N' =
-  'jsonforms/UPDATE_I18N';
+export const SET_LOCALE = 'jsonforms/SET_LOCALE' as const;
+export const SET_TRANSLATOR = 'jsonforms/SET_TRANSLATOR' as const;
+export const UPDATE_I18N = 'jsonforms/UPDATE_I18N' as const;
 
-export const ADD_DEFAULT_DATA: 'jsonforms/ADD_DEFAULT_DATA' = `jsonforms/ADD_DEFAULT_DATA`;
-export const REMOVE_DEFAULT_DATA: 'jsonforms/REMOVE_DEFAULT_DATA' = `jsonforms/REMOVE_DEFAULT_DATA`;
+export const ADD_DEFAULT_DATA = 'jsonforms/ADD_DEFAULT_DATA' as const;
+export const REMOVE_DEFAULT_DATA = 'jsonforms/REMOVE_DEFAULT_DATA' as const;
 
 export type CoreActions =
   | InitAction
@@ -105,8 +100,8 @@ export interface InitActionOptions {
 }
 
 export interface SetValidationModeAction {
-  type: 'jsonforms/SET_VALIDATION_MODE'
-  validationMode: ValidationMode
+  type: 'jsonforms/SET_VALIDATION_MODE';
+  validationMode: ValidationMode;
 }
 
 export const init = (
@@ -120,7 +115,7 @@ export const init = (
   schema,
   uischema:
     typeof uischema === 'object' ? uischema : generateDefaultUISchema(schema),
-  options
+  options,
 });
 
 export const updateCore = (
@@ -133,7 +128,7 @@ export const updateCore = (
   data,
   schema,
   uischema,
-  options
+  options,
 });
 
 export interface RegisterDefaultDataAction {
@@ -145,7 +140,7 @@ export interface RegisterDefaultDataAction {
 export const registerDefaultData = (schemaPath: string, data: any) => ({
   type: ADD_DEFAULT_DATA,
   schemaPath,
-  data
+  data,
 });
 
 export interface UnregisterDefaultDataAction {
@@ -155,7 +150,7 @@ export interface UnregisterDefaultDataAction {
 
 export const unregisterDefaultData = (schemaPath: string) => ({
   type: REMOVE_DEFAULT_DATA,
-  schemaPath
+  schemaPath,
 });
 
 export interface SetAjvAction {
@@ -165,7 +160,7 @@ export interface SetAjvAction {
 
 export const setAjv = (ajv: AJV) => ({
   type: SET_AJV,
-  ajv
+  ajv,
 });
 
 export const update = (
@@ -174,12 +169,12 @@ export const update = (
 ): UpdateAction => ({
   type: UPDATE_DATA,
   path,
-  updater
+  updater,
 });
 
 export const updateErrors = (errors: ErrorObject[]): UpdateErrorsAction => ({
   type: UPDATE_ERRORS,
-  errors
+  errors,
 });
 
 export interface AddRendererAction {
@@ -191,7 +186,7 @@ export interface AddRendererAction {
 export const registerRenderer = (tester: RankedTester, renderer: any) => ({
   type: ADD_RENDERER,
   tester,
-  renderer
+  renderer,
 });
 
 export interface AddCellRendererAction {
@@ -203,7 +198,7 @@ export interface AddCellRendererAction {
 export const registerCell = (tester: RankedTester, cell: any) => ({
   type: ADD_CELL,
   tester,
-  cell
+  cell,
 });
 
 export interface RemoveCellRendererAction {
@@ -215,7 +210,7 @@ export interface RemoveCellRendererAction {
 export const unregisterCell = (tester: RankedTester, cell: any) => ({
   type: REMOVE_CELL,
   tester,
-  cell
+  cell,
 });
 
 export interface RemoveRendererAction {
@@ -227,7 +222,7 @@ export interface RemoveRendererAction {
 export const unregisterRenderer = (tester: RankedTester, renderer: any) => ({
   type: REMOVE_RENDERER,
   tester,
-  renderer
+  renderer,
 });
 
 export interface SetConfigAction {
@@ -237,13 +232,15 @@ export interface SetConfigAction {
 
 export const setConfig = (config: any): SetConfigAction => ({
   type: SET_CONFIG,
-  config
+  config,
 });
 
-export const setValidationMode = (validationMode: ValidationMode): SetValidationModeAction => ({
+export const setValidationMode = (
+  validationMode: ValidationMode
+): SetValidationModeAction => ({
   type: SET_VALIDATION_MODE,
-  validationMode
-})
+  validationMode,
+});
 
 export type UISchemaActions = AddUISchemaAction | RemoveUISchemaAction;
 
@@ -260,7 +257,7 @@ export const registerUISchema = (
   return {
     type: ADD_UI_SCHEMA,
     tester,
-    uischema
+    uischema,
   };
 };
 
@@ -274,14 +271,14 @@ export const unregisterUISchema = (
 ): RemoveUISchemaAction => {
   return {
     type: REMOVE_UI_SCHEMA,
-    tester
+    tester,
   };
 };
 
 export type I18nActions =
   | SetLocaleAction
   | SetTranslatorAction
-  | UpdateI18nAction
+  | UpdateI18nAction;
 
 export interface SetLocaleAction {
   type: 'jsonforms/SET_LOCALE';
@@ -290,7 +287,7 @@ export interface SetLocaleAction {
 
 export const setLocale = (locale: string | undefined): SetLocaleAction => ({
   type: SET_LOCALE,
-  locale
+  locale,
 });
 
 export interface SetSchemaAction {
@@ -300,13 +297,13 @@ export interface SetSchemaAction {
 
 export const setSchema = (schema: JsonSchema): SetSchemaAction => ({
   type: SET_SCHEMA,
-  schema
+  schema,
 });
 
 export interface SetTranslatorAction {
   type: 'jsonforms/SET_TRANSLATOR';
   translator?: Translator;
-  errorTranslator?: ErrorTranslator; 
+  errorTranslator?: ErrorTranslator;
 }
 
 export const setTranslator = (
@@ -315,14 +312,14 @@ export const setTranslator = (
 ): SetTranslatorAction => ({
   type: SET_TRANSLATOR,
   translator,
-  errorTranslator
+  errorTranslator,
 });
 
 export interface UpdateI18nAction {
   type: 'jsonforms/UPDATE_I18N';
   locale: string | undefined;
   translator: Translator | undefined;
-  errorTranslator: ErrorTranslator | undefined; 
+  errorTranslator: ErrorTranslator | undefined;
 }
 
 export const updateI18n = (
@@ -333,7 +330,7 @@ export const updateI18n = (
   type: UPDATE_I18N,
   locale,
   translator,
-  errorTranslator
+  errorTranslator,
 });
 
 export interface SetUISchemaAction {
@@ -343,5 +340,5 @@ export interface SetUISchemaAction {
 
 export const setUISchema = (uischema: UISchemaElement): SetUISchemaAction => ({
   type: SET_UISCHEMA,
-  uischema
+  uischema,
 });

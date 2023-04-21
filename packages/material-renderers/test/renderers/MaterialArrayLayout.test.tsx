@@ -23,15 +23,13 @@
   THE SOFTWARE.
 */
 import './MatchMediaMock';
-import {
-  ControlElement
-} from '@jsonforms/core';
+import { ControlElement } from '@jsonforms/core';
 import * as React from 'react';
 
 import { materialRenderers } from '../../src';
 import {
   MaterialArrayLayout,
-  materialArrayLayoutTester
+  materialArrayLayoutTester,
 } from '../../src/layouts';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
@@ -45,12 +43,12 @@ const data = [
   {
     message: 'El Barto was here',
     message2: 'El Barto was here 2',
-    done: true
+    done: true,
   },
   {
     message: 'Yolo',
-    message2: 'Yolo 2'
-  }
+    message2: 'Yolo 2',
+  },
 ];
 const schema = {
   type: 'array',
@@ -59,37 +57,37 @@ const schema = {
     properties: {
       message: {
         type: 'string',
-        maxLength: 3
+        maxLength: 3,
       },
       done: {
-        type: 'boolean'
-      }
-    }
-  }
+        type: 'boolean',
+      },
+    },
+  },
 };
 
 const nestedSchema = {
   type: 'array',
   items: {
-    ...schema
-  }
+    ...schema,
+  },
 };
 
 const nestedSchemaWithRef = {
   definitions: {
     arrayItems: {
-      ...schema
-    }
+      ...schema,
+    },
   },
   type: 'array',
   items: {
-    $ref: '#/definitions/arrayItems'
-  }
-}
+    $ref: '#/definitions/arrayItems',
+  },
+};
 
 const uischema: ControlElement = {
   type: 'Control',
-  scope: '#'
+  scope: '#',
 };
 
 const nestedSchema2 = {
@@ -103,41 +101,41 @@ const nestedSchema2 = {
           choices: {
             type: 'array',
             items: {
-              type: 'string'
-            }
-          }
-        }
-      }
-    }
-  }
+              type: 'string',
+            },
+          },
+        },
+      },
+    },
+  },
 };
 
 const nestedSchema2WithRef = {
   definitions: {
     arrayItems: {
-      ...nestedSchema2
-    }
+      ...nestedSchema2,
+    },
   },
   type: 'array',
   items: {
-    $ref: '#/definitions/arrayItems'
-  }
-}
+    $ref: '#/definitions/arrayItems',
+  },
+};
 
 const uischemaWithSortOption: ControlElement = {
   type: 'Control',
   scope: '#',
   options: {
-    showSortButtons: true
-  }
+    showSortButtons: true,
+  },
 };
 
 const uischemaWithChildLabelProp: ControlElement = {
   type: 'Control',
   scope: '#',
   options: {
-    elementLabelProp: 'message2'
-  }
+    elementLabelProp: 'message2',
+  },
 };
 
 const uischemaOptions: {
@@ -149,15 +147,15 @@ const uischemaOptions: {
     type: 'Control',
     scope: '#',
     options: {
-      detail: 'DEFAULT'
-    }
+      detail: 'DEFAULT',
+    },
   },
   generate: {
     type: 'Control',
     scope: '#',
     options: {
-      detail: 'GENERATE'
-    }
+      detail: 'GENERATE',
+    },
   },
   inline: {
     type: 'Control',
@@ -168,26 +166,54 @@ const uischemaOptions: {
         elements: [
           {
             type: 'Control',
-            scope: '#/properties/message'
-          }
-        ]
-      }
-    }
-  }
+            scope: '#/properties/message',
+          },
+        ],
+      },
+    },
+  },
 };
 
 describe('Material array layout tester', () => {
   it('should only be applicable for intermediate array or when containing proper options', () => {
     expect(materialArrayLayoutTester(uischema, schema, undefined)).toBe(-1);
-    expect(materialArrayLayoutTester(uischema, nestedSchema, undefined)).toBe(4);
-    expect(materialArrayLayoutTester(uischema, nestedSchema2, undefined)).toBe(4);
-    expect(materialArrayLayoutTester(uischema, nestedSchemaWithRef, createTesterContext(nestedSchemaWithRef))).toBe(4);
-    expect(materialArrayLayoutTester(uischema, nestedSchemaWithRef, createTesterContext(nestedSchemaWithRef))).toBe(4);
-    expect(materialArrayLayoutTester(uischema, nestedSchema2WithRef, createTesterContext(nestedSchema2WithRef))).toBe(4);
+    expect(materialArrayLayoutTester(uischema, nestedSchema, undefined)).toBe(
+      4
+    );
+    expect(materialArrayLayoutTester(uischema, nestedSchema2, undefined)).toBe(
+      4
+    );
+    expect(
+      materialArrayLayoutTester(
+        uischema,
+        nestedSchemaWithRef,
+        createTesterContext(nestedSchemaWithRef)
+      )
+    ).toBe(4);
+    expect(
+      materialArrayLayoutTester(
+        uischema,
+        nestedSchemaWithRef,
+        createTesterContext(nestedSchemaWithRef)
+      )
+    ).toBe(4);
+    expect(
+      materialArrayLayoutTester(
+        uischema,
+        nestedSchema2WithRef,
+        createTesterContext(nestedSchema2WithRef)
+      )
+    ).toBe(4);
 
-    expect(materialArrayLayoutTester(uischemaOptions.default, schema, undefined)).toBe(-1);
-    expect(materialArrayLayoutTester(uischemaOptions.generate, schema, undefined)).toBe(4);
-    expect(materialArrayLayoutTester(uischemaOptions.inline, schema, undefined)).toBe(4);
+    expect(
+      materialArrayLayoutTester(uischemaOptions.default, schema, undefined)
+    ).toBe(-1);
+    expect(
+      materialArrayLayoutTester(uischemaOptions.generate, schema, undefined)
+    ).toBe(4);
+    expect(
+      materialArrayLayoutTester(uischemaOptions.inline, schema, undefined)
+    ).toBe(4);
   });
 });
 
@@ -199,7 +225,9 @@ describe('Material array layout', () => {
   it('should render two by two children', () => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <MaterialArrayLayout schema={schema} uischema={uischema} />
       </JsonFormsStateProvider>
     );
@@ -212,8 +240,13 @@ describe('Material array layout', () => {
   it('should generate uischema when options.detail=GENERATE', () => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
-        <MaterialArrayLayout schema={schema} uischema={uischemaOptions.generate} />
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
+        <MaterialArrayLayout
+          schema={schema}
+          uischema={uischemaOptions.generate}
+        />
       </JsonFormsStateProvider>
     );
 
@@ -225,8 +258,13 @@ describe('Material array layout', () => {
   it('should use inline options.detail uischema', () => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
-        <MaterialArrayLayout schema={schema} uischema={uischemaOptions.inline} />
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
+        <MaterialArrayLayout
+          schema={schema}
+          uischema={uischemaOptions.inline}
+        />
       </JsonFormsStateProvider>
     );
 
@@ -238,7 +276,9 @@ describe('Material array layout', () => {
   it('should be hideable', () => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <MaterialArrayLayout
           schema={schema}
           uischema={uischema}
@@ -255,7 +295,9 @@ describe('Material array layout', () => {
   it('should have renderers prop via ownProps', () => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <MaterialArrayLayout
           schema={schema}
           uischema={uischema}
@@ -271,7 +313,7 @@ describe('Material array layout', () => {
   it('ui schema label for array', () => {
     const uischemaWithLabel = {
       ...uischema,
-      label: 'My awesome label'
+      label: 'My awesome label',
     };
     wrapper = mount(
       <JsonForms
@@ -291,11 +333,13 @@ describe('Material array layout', () => {
   it('schema title for array', () => {
     const titleSchema = {
       ...schema,
-      title: 'My awesome title'
+      title: 'My awesome title',
     };
     const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <MaterialArrayLayout schema={titleSchema} uischema={uischema} />
       </JsonFormsStateProvider>
     );
@@ -322,7 +366,7 @@ describe('Material array layout', () => {
         .find('Memo(ExpandPanelRendererComponent)')
         .at(0)
         .find('button')
-        .find({ 'aria-label': 'Move up' }).length
+        .find({ 'aria-label': 'Move item up' }).length
     ).toBe(1);
     // down button
     expect(
@@ -330,7 +374,7 @@ describe('Material array layout', () => {
         .find('Memo(ExpandPanelRendererComponent)')
         .at(0)
         .find('button')
-        .find({ 'aria-label': 'Move down' }).length
+        .find({ 'aria-label': 'Move item down' }).length
     ).toBe(1);
   });
   it('should render sort buttons if showSortButtons is true in config', () => {
@@ -340,7 +384,7 @@ describe('Material array layout', () => {
         schema={nestedSchema}
         uischema={uischema}
         renderers={materialRenderers}
-        config={{showSortButtons: true}}
+        config={{ showSortButtons: true }}
       />
     );
 
@@ -352,7 +396,7 @@ describe('Material array layout', () => {
         .find('Memo(ExpandPanelRendererComponent)')
         .at(0)
         .find('button')
-        .find({ 'aria-label': 'Move up' }).length
+        .find({ 'aria-label': 'Move item up' }).length
     ).toBe(1);
     // down button
     expect(
@@ -360,19 +404,19 @@ describe('Material array layout', () => {
         .find('Memo(ExpandPanelRendererComponent)')
         .at(0)
         .find('button')
-        .find({ 'aria-label': 'Move down' }).length
+        .find({ 'aria-label': 'Move item down' }).length
     ).toBe(1);
   });
   it('should move item up if up button is presses', (done) => {
     const onChangeData: any = {
-      data: undefined
+      data: undefined,
     };
     wrapper = mount(
       <JsonForms
         data={data}
         schema={nestedSchema}
         uischema={uischema}
-        config={{showSortButtons: true}}
+        config={{ showSortButtons: true }}
         renderers={materialRenderers}
         onChange={({ data }) => {
           onChangeData.data = data;
@@ -387,27 +431,27 @@ describe('Material array layout', () => {
       .find('Memo(ExpandPanelRendererComponent)')
       .at(1)
       .find('button')
-      .find({ 'aria-label': 'Move up' });
+      .find({ 'aria-label': 'Move item up' });
     upButton.simulate('click');
     // events are debounced for some time, so let's wait
     setTimeout(() => {
       expect(onChangeData.data).toEqual([
         {
           message: 'Yolo',
-          message2: 'Yolo 2'
+          message2: 'Yolo 2',
         },
         {
           message: 'El Barto was here',
           message2: 'El Barto was here 2',
-          done: true
-        }
+          done: true,
+        },
       ]);
       done();
     }, 50);
   });
   it('should move item down if down button is pressed', (done) => {
     const onChangeData: any = {
-      data: undefined
+      data: undefined,
     };
     wrapper = mount(
       <JsonForms
@@ -428,21 +472,22 @@ describe('Material array layout', () => {
       .find('Memo(ExpandPanelRendererComponent)')
       .at(0)
       .find('button')
-      .find({ 'aria-label': 'Move down' });
+      .find({ 'aria-label': 'Move item down' });
     upButton.simulate('click');
     // events are debounced for some time, so let's wait
     setTimeout(() => {
       expect(onChangeData.data).toEqual([
         {
           message: 'Yolo',
-          message2: 'Yolo 2'
+          message2: 'Yolo 2',
         },
         {
           message: 'El Barto was here',
           message2: 'El Barto was here 2',
-          done: true
-        }
-      ]); done();
+          done: true,
+        },
+      ]);
+      done();
     }, 50);
   });
   it('should have up button disabled for first element', () => {
@@ -462,7 +507,7 @@ describe('Material array layout', () => {
       .find('Memo(ExpandPanelRendererComponent)')
       .at(0)
       .find('button')
-      .find({ 'aria-label': 'Move up' });
+      .find({ 'aria-label': 'Move item up' });
     expect(upButton.is('[disabled]')).toBe(true);
   });
   it('should have down button disabled for last element', () => {
@@ -482,27 +527,25 @@ describe('Material array layout', () => {
       .find('Memo(ExpandPanelRendererComponent)')
       .at(1)
       .find('button')
-      .find({ 'aria-label': 'Move down' });
+      .find({ 'aria-label': 'Move item down' });
     expect(downButton.is('[disabled]')).toBe(true);
   });
 
   const getChildLabel = (wrapper: ReactWrapper, index: number) =>
     wrapper
-      .find(
-        `#${
-        wrapper
-          .find(Accordion)
-          .at(index)
-          .props()['aria-labelledby']
-        }`
-      )
+      .find(`#${wrapper.find(Accordion).at(index).props()['aria-labelledby']}`)
       .text();
 
   it('should render first simple property as child label', () => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
-        <MaterialArrayLayout schema={schema} uischema={uischemaWithSortOption} />
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
+        <MaterialArrayLayout
+          schema={schema}
+          uischema={uischemaWithSortOption}
+        />
       </JsonFormsStateProvider>
     );
 

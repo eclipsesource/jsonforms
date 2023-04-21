@@ -5,12 +5,13 @@ const schema = {
   type: 'string',
   title: 'My OneOf Enum',
   oneOf: [
-    { const: 'a', title: 'Foo'}, { const: 'b', title: 'Bar'}
-  ]
+    { const: 'a', title: 'Foo' },
+    { const: 'b', title: 'Bar' },
+  ],
 };
 const uischema = {
   type: 'Control',
-  scope: '#'
+  scope: '#',
 };
 
 describe('EnumOneOfControlRenderer.vue', () => {

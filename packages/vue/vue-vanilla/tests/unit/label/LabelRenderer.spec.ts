@@ -6,7 +6,7 @@ const schema = {
 };
 const uischema = {
   type: 'Label',
-  text: 'My Label'
+  text: 'My Label',
 };
 
 describe('LabelRenderer.vue', () => {

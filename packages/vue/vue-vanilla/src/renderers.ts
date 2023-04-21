@@ -7,5 +7,5 @@ export const vanillaRenderers = [
   ...controlRenderers,
   ...layoutRenderers,
   ...arrayRenderers,
-  ...labelRenderers
+  ...labelRenderers,
 ];

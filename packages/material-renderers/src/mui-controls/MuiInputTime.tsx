@@ -28,19 +28,18 @@ import { Input } from '@mui/material';
 import merge from 'lodash/merge';
 import { useDebouncedChange } from '../util';
 
-export const MuiInputTime = React.memo((props: CellProps & WithClassname) => {
-  const {
-    data,
-    className,
-    id,
-    enabled,
-    uischema,
-    path,
-    handleChange,
-    config
-  } = props;
+export const MuiInputTime = React.memo(function MuiInputTime(
+  props: CellProps & WithClassname
+) {
+  const { data, className, id, enabled, uischema, path, handleChange, config } =
+    props;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
-  const [inputValue, onChange] = useDebouncedChange(handleChange, '', data, path);
+  const [inputValue, onChange] = useDebouncedChange(
+    handleChange,
+    '',
+    data,
+    path
+  );
 
   return (
     <Input

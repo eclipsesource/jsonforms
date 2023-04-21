@@ -38,13 +38,13 @@ const schema = {
   type: 'object',
   properties: {
     foo: {
-      type: 'string'
-    }
-  }
+      type: 'string',
+    },
+  },
 };
 const uischema: ControlElement = {
   type: 'Control',
-  scope: '#/properties/foo'
+  scope: '#/properties/foo',
 };
 
 const createMaterialTextControl = (props: ControlProps) => {
@@ -53,6 +53,7 @@ const createMaterialTextControl = (props: ControlProps) => {
 
 const defaultControlProps = (): ControlProps => {
   return {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     handleChange: () => {},
     enabled: true,
     visible: true,
@@ -63,7 +64,7 @@ const defaultControlProps = (): ControlProps => {
     label: 'Foo',
     id: 'foo-id',
     errors: '',
-    data: ''
+    data: '',
   };
 };
 
@@ -79,7 +80,7 @@ describe('Material text control', () => {
     wrapper = mount(createMaterialTextControl(props));
     expect(wrapper.find(MaterialInputControl).props()).toEqual({
       ...props,
-      input: MuiInputText
+      input: MuiInputText,
     });
 
     expect(wrapper.find('input').props().id).toEqual(`${props.id}-input`);
@@ -88,7 +89,7 @@ describe('Material text control', () => {
   it('allows adding of mui input props', () => {
     const props = {
       ...defaultControlProps(),
-      muiInputProps: { spellCheck: false }
+      muiInputProps: { spellCheck: false },
     };
     wrapper = mount(createMaterialTextControl(props));
     expect(wrapper.find('input').props().spellCheck).toEqual(false);
@@ -98,9 +99,12 @@ describe('Material text control', () => {
     const props = defaultControlProps();
     wrapper = mount(createMaterialTextControl(props));
     // call onPointerEnter prop manually as the tests seem to ignore 'pointerenter' events, 'mouseover' events work however.
-    wrapper.find(Input).props().onPointerEnter.call(this);
+    wrapper.find(Input).props().onPointerEnter?.call(this);
     wrapper.update();
-    expect(wrapper.find(InputAdornment).props().style).not.toHaveProperty('display', 'none');
+    expect(wrapper.find(InputAdornment).props().style).not.toHaveProperty(
+      'display',
+      'none'
+    );
   });
 
   it('hides clear button when data is undefined', () => {
@@ -108,8 +112,11 @@ describe('Material text control', () => {
     delete props.data;
     wrapper = mount(createMaterialTextControl(props));
     // call onPointerEnter prop manually as the tests seem to ignore 'pointerenter' events, 'mouseover' events work however.
-    wrapper.find(Input).props().onPointerEnter.call(this);
+    wrapper.find(Input).props().onPointerEnter?.call(this);
     wrapper.update();
-    expect(wrapper.find(InputAdornment).props().style).toHaveProperty('display', 'none');
+    expect(wrapper.find(InputAdornment).props().style).toHaveProperty(
+      'display',
+      'none'
+    );
   });
 });

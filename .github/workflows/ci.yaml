@@ -15,29 +15,32 @@ jobs:
           - windows-latest
     name: Run on ${{ matrix.os }}
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup node
-      uses: actions/setup-node@v2
-      with:
-        node-version: 14
-    - name: Build
-      run: |
-        npm ci
-        npm run init
-        npm run build
-        npm run bundle
-    - name: Test
-      if: matrix.os == 'windows-latest'
-      run: |
-        npm run test
-    - name: Test & Coverage
-      if: matrix.os == 'ubuntu-latest'
-      run: |
-        npm run test-cov
-        npm run check-format
-        npm run merge-report && cat coverage/lcov.info
-    - name: Upload Coveralls Report
-      if: success() && matrix.os == 'ubuntu-latest'
-      uses: coverallsapp/github-action@master
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+      - name: Build
+        run: |
+          npm ci
+          npm run init
+          npm run build
+          npm run bundle
+      - name: Lint
+        if: matrix.os == 'ubuntu-latest'
+        run: npm run lint
+      - name: Test
+        if: matrix.os == 'windows-latest'
+        run: |
+          npm run test
+      - name: Test & Coverage
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          npm run test-cov
+          npm run check-format
+          npm run merge-report && cat coverage/lcov.info
+      - name: Upload Coveralls Report
+        if: success() && matrix.os == 'ubuntu-latest'
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}

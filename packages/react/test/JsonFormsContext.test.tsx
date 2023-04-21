@@ -33,11 +33,15 @@ import {
   NOT_APPLICABLE,
   OwnPropsOfEnum,
   rankWith,
-  StatePropsOfControlWithDetail
+  StatePropsOfControlWithDetail,
 } from '@jsonforms/core';
 
 import { JsonForms } from '../src/JsonForms';
-import { withJsonFormsDetailProps, withJsonFormsEnumCellProps, withJsonFormsEnumProps } from '../src/JsonFormsContext';
+import {
+  withJsonFormsDetailProps,
+  withJsonFormsEnumCellProps,
+  withJsonFormsEnumProps,
+} from '../src/JsonFormsContext';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -52,22 +56,22 @@ test('withJsonFormsEnumProps - constant: should supply control and enum props', 
     type: 'object',
     properties: {
       name: {
-        const: 'Cambodia'
-      }
+        const: 'Cambodia',
+      },
     },
-    required: ['country']
+    required: ['country'],
   };
 
   const renderers = [
     {
       tester: rankWith(1, () => true),
-      renderer: MockEnumControl
-    }
+      renderer: MockEnumControl,
+    },
   ];
 
   const uischema = {
     type: 'Control',
-    scope: '#/properties/name'
+    scope: '#/properties/name',
   };
 
   const wrapper = mount(
@@ -86,7 +90,9 @@ test('withJsonFormsEnumProps - constant: should supply control and enum props', 
   expect(mockEnumControlUnwrappedProps.schema).toEqual(schema.properties.name);
   expect(mockEnumControlUnwrappedProps.path).toEqual('name');
   expect(mockEnumControlUnwrappedProps.id).toEqual('#/properties/name');
-  expect(mockEnumControlUnwrappedProps.options).toEqual([{value: 'Cambodia', label: 'Cambodia'}]);
+  expect(mockEnumControlUnwrappedProps.options).toEqual([
+    { value: 'Cambodia', label: 'Cambodia' },
+  ]);
 });
 
 test('withJsonFormsEnumProps - enum: should supply control and enum props', () => {
@@ -101,22 +107,22 @@ test('withJsonFormsEnumProps - enum: should supply control and enum props', () =
     properties: {
       color: {
         type: 'string',
-        enum: ['red', 'amber', 'green', null]
-      }
+        enum: ['red', 'amber', 'green', null],
+      },
     },
-    required: ['color']
+    required: ['color'],
   };
 
   const renderers = [
     {
       tester: rankWith(1, () => true),
-      renderer: MockEnumControl
-    }
+      renderer: MockEnumControl,
+    },
   ];
 
   const uischema = {
     type: 'Control',
-    scope: '#/properties/color'
+    scope: '#/properties/color',
   };
 
   const wrapper = mount(
@@ -127,16 +133,18 @@ test('withJsonFormsEnumProps - enum: should supply control and enum props', () =
       renderers={renderers}
     />
   );
-  const mockEnumControlUnwrappedProps = wrapper.find(MockEnumControlUnwrapped).props();
+  const mockEnumControlUnwrappedProps = wrapper
+    .find(MockEnumControlUnwrapped)
+    .props();
   expect(mockEnumControlUnwrappedProps.uischema).toEqual(uischema);
   expect(mockEnumControlUnwrappedProps.schema).toEqual(schema.properties.color);
   expect(mockEnumControlUnwrappedProps.path).toEqual('color');
   expect(mockEnumControlUnwrappedProps.id).toEqual('#/properties/color');
   expect(mockEnumControlUnwrappedProps.options).toEqual([
-    {value: 'red', label: 'red'},
-    {value: 'amber', label: 'amber'},
-    {value: 'green', label: 'green'},
-    {value: null, label: 'null'}
+    { value: 'red', label: 'red' },
+    { value: 'amber', label: 'amber' },
+    { value: 'green', label: 'green' },
+    { value: null, label: 'null' },
   ]);
 });
 
@@ -148,19 +156,19 @@ test('withJsonFormsEnumCellProps - constant: should supply control and enum prop
   const MockEnumControl = withJsonFormsEnumCellProps(MockEnumCellUnwrapped);
 
   const schema = {
-    const: 'Cambodia'
+    const: 'Cambodia',
   };
 
   const renderers = [
     {
       tester: rankWith(1, () => true),
-      renderer: MockEnumControl
-    }
+      renderer: MockEnumControl,
+    },
   ];
 
   const uischema = {
     type: 'Control',
-    scope: '#/properties/name'
+    scope: '#/properties/name',
   };
 
   const wrapper = mount(
@@ -177,7 +185,9 @@ test('withJsonFormsEnumCellProps - constant: should supply control and enum prop
 
   expect(mockEnumControlUnwrappedProps.uischema).toEqual(uischema);
   expect(mockEnumControlUnwrappedProps.schema).toEqual(schema);
-  expect(mockEnumControlUnwrappedProps.options).toEqual([{label: 'Cambodia', value: 'Cambodia'}]);
+  expect(mockEnumControlUnwrappedProps.options).toEqual([
+    { label: 'Cambodia', value: 'Cambodia' },
+  ]);
 });
 
 test('withJsonFormsEnumCellProps - enum: should supply control and enum props', () => {
@@ -189,19 +199,19 @@ test('withJsonFormsEnumCellProps - enum: should supply control and enum props', 
 
   const schema = {
     type: 'string',
-    enum: ['red', 'amber', 'green', null]
+    enum: ['red', 'amber', 'green', null],
   };
 
   const renderers = [
     {
       tester: rankWith(1, () => true),
-      renderer: MockEnumControl
-    }
+      renderer: MockEnumControl,
+    },
   ];
 
   const uischema = {
     type: 'Control',
-    scope: '#/properties/color'
+    scope: '#/properties/color',
   };
 
   const wrapper = mount(
@@ -212,14 +222,16 @@ test('withJsonFormsEnumCellProps - enum: should supply control and enum props', 
       renderers={renderers}
     />
   );
-  const mockEnumControlUnwrappedProps = wrapper.find(MockEnumCellUnwrapped).props();
+  const mockEnumControlUnwrappedProps = wrapper
+    .find(MockEnumCellUnwrapped)
+    .props();
   expect(mockEnumControlUnwrappedProps.uischema).toEqual(uischema);
   expect(mockEnumControlUnwrappedProps.schema).toEqual(schema);
   expect(mockEnumControlUnwrappedProps.options).toEqual([
-    {value: 'red', label: 'red'},
-    {value: 'amber', label: 'amber'},
-    {value: 'green', label: 'green'},
-    {value: null, label: 'null'}
+    { value: 'red', label: 'red' },
+    { value: 'amber', label: 'amber' },
+    { value: 'green', label: 'green' },
+    { value: null, label: 'null' },
   ]);
 });
 
@@ -237,16 +249,16 @@ test('withJsonFormsDetailProps - should use uischemas props', () => {
         type: 'string',
       },
       bar: {
-        type: 'number'
-      }
-    }
+        type: 'number',
+      },
+    },
   };
 
   const renderers = [
     {
       tester: rankWith(1, () => true),
-      renderer: MockBasicRenderer
-    }
+      renderer: MockBasicRenderer,
+    },
   ];
 
   const uischemas = [
@@ -259,20 +271,20 @@ test('withJsonFormsDetailProps - should use uischemas props', () => {
         elements: [
           {
             type: 'Control',
-            scope: '#/properties/foo'
+            scope: '#/properties/foo',
           },
           {
             type: 'Control',
-            scope: '#/properties/bar'
-          }
-        ]
-      }
-    }
+            scope: '#/properties/bar',
+          },
+        ],
+      },
+    },
   ];
 
   const uischema = {
     type: 'Control',
-    scope: '#'
+    scope: '#',
   };
 
   const wrapper = mount(
@@ -304,16 +316,16 @@ test('withJsonFormsDetailProps - should update uischemas after change', () => {
         type: 'string',
       },
       bar: {
-        type: 'number'
-      }
-    }
+        type: 'number',
+      },
+    },
   };
 
   const renderers = [
     {
       tester: rankWith(1, () => true),
-      renderer: MockBasicRenderer
-    }
+      renderer: MockBasicRenderer,
+    },
   ];
 
   const newUischemas = [
@@ -326,20 +338,20 @@ test('withJsonFormsDetailProps - should update uischemas after change', () => {
         elements: [
           {
             type: 'Control',
-            scope: '#/properties/foo'
+            scope: '#/properties/foo',
           },
           {
             type: 'Control',
-            scope: '#/properties/bar'
-          }
-        ]
-      }
-    }
+            scope: '#/properties/bar',
+          },
+        ],
+      },
+    },
   ];
 
   const uischema = {
     type: 'Control',
-    scope: '#'
+    scope: '#',
   };
 
   const wrapper = mount(

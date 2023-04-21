@@ -4,14 +4,14 @@ import { mountJsonForms } from '../util';
 const schema = {
   type: 'string',
   title: 'My Time',
-  format: 'time'
+  format: 'time',
 };
 const uischema = {
   type: 'Control',
   scope: '#',
   options: {
-    placeholder: 'time placeholder'
-  }
+    placeholder: 'time placeholder',
+  },
 };
 
 describe('TimeControlRenderer.vue', () => {

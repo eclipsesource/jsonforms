@@ -24,50 +24,61 @@
 */
 import React from 'react';
 import {
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
 } from '@mui/material';
 
 export interface DeleteDialogProps {
-    open: boolean;
-    onClose(): void;
-    onConfirm(): void;
-    onCancel(): void;
+  open: boolean;
+  onClose(): void;
+  onConfirm(): void;
+  onCancel(): void;
+  title: string;
+  message: string;
+  acceptText: string;
+  declineText: string;
 }
 
 export interface WithDeleteDialogSupport {
   openDeleteDialog(path: string, data: number): void;
 }
 
-export const DeleteDialog = React.memo(({ open, onClose, onConfirm, onCancel }: DeleteDialogProps) => {
-    return (
-        <Dialog
-            open={open}
-            keepMounted
-            onClose={onClose}
-            aria-labelledby='alert-dialog-confirmdelete-title'
-            aria-describedby='alert-dialog-confirmdelete-description'
-        >
-            <DialogTitle id='alert-dialog-confirmdelete-title'>
-                {'Confirm Deletion'}
-            </DialogTitle>
-            <DialogContent>
-                <DialogContentText id='alert-dialog-confirmdelete-description'>
-                    Are you sure you want to delete the selected entry?
-                </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={onCancel} color='primary'>
-                    No
-                </Button>
-                <Button onClick={onConfirm} color='primary'>
-                    Yes
-                </Button>
-            </DialogActions>
-        </Dialog>
-    );
+export const DeleteDialog = React.memo(function DeleteDialog({
+  open,
+  onClose,
+  onConfirm,
+  onCancel,
+  title,
+  message,
+  acceptText,
+  declineText,
+}: DeleteDialogProps) {
+  return (
+    <Dialog
+      open={open}
+      keepMounted
+      onClose={onClose}
+      aria-labelledby='alert-dialog-confirmdelete-title'
+      aria-describedby='alert-dialog-confirmdelete-description'
+    >
+      <DialogTitle id='alert-dialog-confirmdelete-title'>{title}</DialogTitle>
+      <DialogContent>
+        <DialogContentText id='alert-dialog-confirmdelete-description'>
+          {message}
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onCancel} color='primary'>
+          {declineText}
+        </Button>
+        <Button onClick={onConfirm} color='primary'>
+          {acceptText}
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
 });

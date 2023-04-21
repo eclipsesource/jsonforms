@@ -33,41 +33,53 @@ export const schema = {
       properties: {
         street_address: { type: 'string' },
         city: { type: 'string' },
-        state: { type: 'string' }
+        state: { type: 'string' },
       },
-      required: ['street_address', 'city', 'state']
+      required: ['street_address', 'city', 'state'],
     },
     user: {
       type: 'object',
       properties: {
         name: { type: 'string' },
-        mail: { type: 'string' }
+        mail: { type: 'string' },
       },
-      required: ['name', 'mail']
+      required: ['name', 'mail'],
     },
     users: {
       type: 'array',
-      items: { $ref: '#/definitions/user' }
+      items: { $ref: '#/definitions/user' },
     },
     addresses: {
       type: 'array',
-      items: { $ref: '#/definitions/address' }
-    }
+      items: { $ref: '#/definitions/address' },
+    },
   },
 
   type: 'object',
 
   properties: {
     addressOrUser: {
-      anyOf: [{ $ref: '#/definitions/address' }, { $ref: '#/definitions/user' }]
+      anyOf: [
+        { $ref: '#/definitions/address' },
+        { $ref: '#/definitions/user' },
+      ],
     },
     addressesOrUsers: {
       anyOf: [
         { $ref: '#/definitions/addresses' },
-        { $ref: '#/definitions/users' }
-      ]
-    }
-  }
+        { $ref: '#/definitions/users' },
+      ],
+    },
+    addressesOrUsersAnyOfItems: {
+      type: 'array',
+      items: {
+        anyOf: [
+          { $ref: '#/definitions/addresses' },
+          { $ref: '#/definitions/users' },
+        ],
+      },
+    },
+  },
 };
 
 export const uischema = {
@@ -75,30 +87,36 @@ export const uischema = {
   elements: [
     {
       type: 'Control',
-      scope: '#/properties/addressOrUser'
+      scope: '#/properties/addressOrUser',
     },
     {
       type: 'Control',
-      scope: '#/properties/addressesOrUsers'
-    }
-  ]
+      scope: '#/properties/addressesOrUsers',
+      label: 'Addresses or Users (AnyOf Schema)',
+    },
+    {
+      type: 'Control',
+      scope: '#/properties/addressesOrUsersAnyOfItems',
+      label: 'Addresses or Users (AnyOf Array Items)',
+    },
+  ],
 };
 
 const data = {
   addressOrUser: {
     street_address: '1600 Pennsylvania Avenue NW',
     city: 'Washington',
-    state: 'DC'
-  }
+    state: 'DC',
+  },
 };
 
 const schema_simple = {
   type: 'object',
   properties: {
     foo: {
-      anyOf: [{ type: 'string' }, { enum: ['foo', 'bar'] }]
-    }
-  }
+      anyOf: [{ type: 'string' }, { enum: ['foo', 'bar'] }],
+    },
+  },
 };
 
 registerExamples([
@@ -107,13 +125,13 @@ registerExamples([
     label: 'anyOf',
     data,
     schema,
-    uischema
+    uischema,
   },
   {
     name: 'anyOf_simple',
     label: 'AnyOf Simple',
     data: { foo: 'foo' },
     schema: schema_simple,
-    uischema: undefined
-  }
+    uischema: undefined,
+  },
 ]);

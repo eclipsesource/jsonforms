@@ -79,5 +79,5 @@ export const createLabelDescriptionFrom = (
 
 const labelDescription = (text: string, show: boolean): LabelDescription => ({
   text: text,
-  show: show
+  show: show,
 });

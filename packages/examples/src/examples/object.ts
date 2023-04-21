@@ -35,24 +35,24 @@ export const schema = {
       properties: {
         street_address: { type: 'string' },
         city: { type: 'string' },
-        state: { type: 'string' }
+        state: { type: 'string' },
       },
-      required: ['street_address', 'city', 'state']
+      required: ['street_address', 'city', 'state'],
     },
     user: {
       type: 'object',
       properties: {
         name: { type: 'string' },
-        mail: { type: 'string' }
+        mail: { type: 'string' },
       },
-      required: ['name', 'mail']
-    }
-  }
+      required: ['name', 'mail'],
+    },
+  },
 };
 
 export const uischemaRoot = {
   type: 'Control',
-  scope: '#'
+  scope: '#',
 };
 
 export const uischemaNonRoot = {
@@ -60,7 +60,7 @@ export const uischemaNonRoot = {
   elements: [
     {
       type: 'Control',
-      scope: '#/properties/address'
+      scope: '#/properties/address',
     },
     {
       type: 'Control',
@@ -70,47 +70,47 @@ export const uischemaNonRoot = {
         condition: {
           type: 'LEAF',
           scope: '#/properties/address/properties/state',
-          expectedValue: 'DC'
-        }
+          expectedValue: 'DC',
+        },
       },
       options: {
         detail: {
           type: 'Group',
           label: 'User Data',
           elements: [
-            { type: 'Control', scope: '#/properties/name'},
+            { type: 'Control', scope: '#/properties/name' },
             {
               type: 'Control',
-              scope: '#/properties/mail'
-            }
-          ]
-        }
-      }
-    }
-  ]
+              scope: '#/properties/mail',
+            },
+          ],
+        },
+      },
+    },
+  ],
 };
 
 const data = {
   address: {
     street_address: '1600 Pennsylvania Avenue NW',
     city: 'Washington',
-    state: 'DC'
-  }
+    state: 'DC',
+  },
 };
 
 registerExamples([
   {
     name: 'rootObject',
-    label: 'Root Object',
+    label: 'Object - Root Scope',
     data,
     schema,
-    uischema: uischemaRoot
+    uischema: uischemaRoot,
   },
   {
     name: 'object',
     label: 'Object',
     data,
     schema,
-    uischema: uischemaNonRoot
-  }
+    uischema: uischemaNonRoot,
+  },
 ]);

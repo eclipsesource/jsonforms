@@ -28,7 +28,7 @@ import { beforeEachLayoutTest, setupMockStore } from '@jsonforms/angular-test';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import {
   HorizontalLayoutRenderer,
-  horizontalLayoutTester
+  horizontalLayoutTester,
 } from '../src/layouts/horizontal-layout.renderer';
 import { LayoutChildrenRenderPropsPipe } from '../src/layouts/layout.renderer';
 
@@ -45,18 +45,18 @@ describe('Horizontal layout', () => {
   beforeEach(() => {
     fixture = beforeEachLayoutTest(HorizontalLayoutRenderer, {
       declarations: [LayoutChildrenRenderPropsPipe],
-      imports: [FlexLayoutModule]
+      imports: [FlexLayoutModule],
     });
   });
 
   it('render with undefined elements', () => {
     const uischema: UISchemaElement = {
-      type: 'HorizontalLayout'
+      type: 'HorizontalLayout',
     };
     setupMockStore(fixture, {
       data: {},
       schema: {},
-      uischema
+      uischema,
     });
     fixture.componentInstance.ngOnInit();
     fixture.detectChanges();
@@ -66,12 +66,12 @@ describe('Horizontal layout', () => {
   it('render with null elements', () => {
     const uischema: HorizontalLayout = {
       type: 'HorizontalLayout',
-      elements: null
+      elements: null,
     };
     setupMockStore(fixture, {
       data: {},
       schema: {},
-      uischema
+      uischema,
     });
     fixture.componentInstance.ngOnInit();
     fixture.detectChanges();
@@ -81,12 +81,12 @@ describe('Horizontal layout', () => {
   it('render with children', () => {
     const uischema: HorizontalLayout = {
       type: 'HorizontalLayout',
-      elements: [{ type: 'Control' }, { type: 'Control' }]
+      elements: [{ type: 'Control' }, { type: 'Control' }],
     };
     setupMockStore(fixture, {
       data: {},
       schema: {},
-      uischema
+      uischema,
     });
     fixture.componentInstance.ngOnInit();
     fixture.detectChanges();

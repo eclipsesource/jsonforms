@@ -33,28 +33,28 @@ export const schema = {
       type: 'object',
       properties: {
         eClass: {
-          const: 'http://my_schema/1.0.0#//Import'
+          const: 'http://my_schema/1.0.0#//Import',
         },
         document: {
-          type: 'string'
+          type: 'string',
         },
         package: {
-          type: 'string'
+          type: 'string',
         },
         prefix: {
-          type: 'string'
-        }
-      }
-    }
+          type: 'string',
+        },
+      },
+    },
   },
   properties: {
     import: {
       type: 'array',
       items: {
-        $ref: '#/definitions/import'
-      }
-    }
-  }
+        $ref: '#/definitions/import',
+      },
+    },
+  },
 };
 
 export const uischema: UISchemaElement = undefined;
@@ -64,24 +64,24 @@ export const data = {
     {
       document: 'Document1',
       package: 'Package1',
-      prefix: 'Prefix'
-    }
-  ]
+      prefix: 'Prefix',
+    },
+  ],
 };
 
 registerExamples([
   {
     name: '1948_with',
-    label: 'Issue 1948 with schema',
+    label: 'Issue 1948 - Array renderer selection (with schema)',
     data,
     schema,
-    uischema
+    uischema,
   },
   {
     name: '1948_without',
-    label: 'Issue 1948 w/o schema',
+    label: 'Issue 1948 - Array renderer selection (w/o schema)',
     data,
     schema: undefined,
-    uischema
-  }
+    uischema,
+  },
 ]);

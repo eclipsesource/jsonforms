@@ -23,12 +23,15 @@
   THE SOFTWARE.
 */
 import { MatError, MatFormFieldModule } from '@angular/material/form-field';
-import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-toggle';
+import {
+  MatSlideToggle,
+  MatSlideToggleModule,
+} from '@angular/material/slide-toggle';
 import {
   booleanBaseTest,
   booleanErrorTest,
   booleanInputEventTest,
-  ErrorTestExpectation
+  ErrorTestExpectation,
 } from '@jsonforms/angular-test';
 import { ToggleControlRenderer, ToggleControlRendererTester } from '../src';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -38,19 +41,23 @@ describe('Material boolean field tester', () => {
   const uischema = {
     type: 'Control',
     scope: '#/properties/foo',
-    options: { toggle: true }
+    options: { toggle: true },
   };
 
   it('should succeed', () => {
     expect(
-      ToggleControlRendererTester(uischema, {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'boolean'
-          }
-        }
-      }, undefined)
+      ToggleControlRendererTester(
+        uischema,
+        {
+          type: 'object',
+          properties: {
+            foo: {
+              type: 'boolean',
+            },
+          },
+        },
+        undefined
+      )
     ).toBe(3);
   });
 });
@@ -60,7 +67,7 @@ const componentUT: any = ToggleControlRenderer;
 const errorTest: ErrorTestExpectation = {
   errorInstance: MatError,
   numberOfElements: 1,
-  indexOfElement: 0
+  indexOfElement: 0,
 };
 const testConfig = { imports, providers, componentUT };
 describe(

@@ -4,11 +4,11 @@ import { mountJsonForms } from '../util';
 const schema = {
   type: 'string',
   title: 'My Enum',
-  enum: ['a', 'b']
+  enum: ['a', 'b'],
 };
 const uischema = {
   type: 'Control',
-  scope: '#'
+  scope: '#',
 };
 
 describe('EnumControlRenderer.vue', () => {

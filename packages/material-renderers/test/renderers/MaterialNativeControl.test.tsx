@@ -37,13 +37,13 @@ const schema = {
   properties: {
     foo: {
       type: 'string',
-      format: 'time'
-    }
-  }
+      format: 'time',
+    },
+  },
 };
 const uischema: ControlElement = {
   type: 'Control',
-  scope: '#/properties/foo'
+  scope: '#/properties/foo',
 };
 
 const createMaterialNativeControl = (props: ControlProps) => {
@@ -52,7 +52,8 @@ const createMaterialNativeControl = (props: ControlProps) => {
 
 const defaultControlProps = (): ControlProps => {
   return {
-    handleChange: () => { },
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    handleChange: () => {},
     enabled: false,
     visible: true,
     path: 'path',
@@ -62,7 +63,7 @@ const defaultControlProps = (): ControlProps => {
     label: 'Foo',
     id: 'foo-id',
     errors: '',
-    data: ''
+    data: '',
   };
 };
 

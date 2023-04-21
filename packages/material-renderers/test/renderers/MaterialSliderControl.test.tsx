@@ -24,13 +24,9 @@
 */
 import './MatchMediaMock';
 import * as React from 'react';
-import {
-  ControlElement,
-  JsonSchema,
-  NOT_APPLICABLE
-} from '@jsonforms/core';
+import { ControlElement, JsonSchema, NOT_APPLICABLE } from '@jsonforms/core';
 import SliderControl, {
-  materialSliderControlTester
+  materialSliderControlTester,
 } from '../../src/controls/MaterialSliderControl';
 import { materialRenderers } from '../../src';
 import { Slider } from '@mui/material';
@@ -50,16 +46,16 @@ const schema = {
       type: 'number',
       maximum: 10,
       minimum: 2,
-      default: 6
-    }
-  }
+      default: 6,
+    },
+  },
 };
 const uischema: ControlElement = {
   type: 'Control',
   scope: '#/properties/foo',
   options: {
-    slider: true
-  }
+    slider: true,
+  },
 };
 
 describe('Material slider tester', () => {
@@ -67,129 +63,155 @@ describe('Material slider tester', () => {
     expect(materialSliderControlTester(undefined, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
-    expect(materialSliderControlTester(null, undefined, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialSliderControlTester({ type: 'Foo' }, undefined, undefined)).toBe(
+    expect(materialSliderControlTester(null, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
-    expect(materialSliderControlTester({ type: 'Control' }, undefined, undefined)).toBe(
-      NOT_APPLICABLE
-    );
+    expect(
+      materialSliderControlTester({ type: 'Foo' }, undefined, undefined)
+    ).toBe(NOT_APPLICABLE);
+    expect(
+      materialSliderControlTester({ type: 'Control' }, undefined, undefined)
+    ).toBe(NOT_APPLICABLE);
   });
 
   it('should fail with wrong schema type', () => {
     expect(
-      materialSliderControlTester(uischema, {
-        type: 'object',
-        properties: {
-          foo: { type: 'string' }
-        }
-      },
-      undefined)
+      materialSliderControlTester(
+        uischema,
+        {
+          type: 'object',
+          properties: {
+            foo: { type: 'string' },
+          },
+        },
+        undefined
+      )
     ).toBe(NOT_APPLICABLE);
   });
 
   it('should fail if only sibling has correct prop type', () => {
     expect(
-      materialSliderControlTester(uischema, {
-        type: 'object',
-        properties: {
-          foo: { type: 'string' },
-          bar: { type: 'number' }
-        }
-      },
-      undefined)
+      materialSliderControlTester(
+        uischema,
+        {
+          type: 'object',
+          properties: {
+            foo: { type: 'string' },
+            bar: { type: 'number' },
+          },
+        },
+        undefined
+      )
     ).toBe(NOT_APPLICABLE);
   });
 
   it('should fail if maximum and minimum are missing', () => {
     expect(
-      materialSliderControlTester(uischema, {
-        type: 'object',
-        properties: {
-          foo: { type: 'number' }
-        }
-      },
-      undefined)
+      materialSliderControlTester(
+        uischema,
+        {
+          type: 'object',
+          properties: {
+            foo: { type: 'number' },
+          },
+        },
+        undefined
+      )
     ).toBe(NOT_APPLICABLE);
   });
 
   it('should fail if maximum is missing', () => {
     expect(
-      materialSliderControlTester(uischema, {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'number',
-            minimum: 2
-          }
-        }
-      },
-      undefined)
+      materialSliderControlTester(
+        uischema,
+        {
+          type: 'object',
+          properties: {
+            foo: {
+              type: 'number',
+              minimum: 2,
+            },
+          },
+        },
+        undefined
+      )
     ).toBe(NOT_APPLICABLE);
   });
 
   it('should fail if minimum is missing', () => {
     expect(
-      materialSliderControlTester(uischema, {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'number',
-            maximum: 10
-          }
-        }
-      },
-      undefined)
+      materialSliderControlTester(
+        uischema,
+        {
+          type: 'object',
+          properties: {
+            foo: {
+              type: 'number',
+              maximum: 10,
+            },
+          },
+        },
+        undefined
+      )
     ).toBe(NOT_APPLICABLE);
   });
 
   it('should fail is default is missing', () => {
     expect(
-      materialSliderControlTester(uischema, {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'number',
-            maximum: 10,
-            minimum: 2
-          }
-        }
-      },
-      undefined)
+      materialSliderControlTester(
+        uischema,
+        {
+          type: 'object',
+          properties: {
+            foo: {
+              type: 'number',
+              maximum: 10,
+              minimum: 2,
+            },
+          },
+        },
+        undefined
+      )
     ).toBe(NOT_APPLICABLE);
   });
 
   it('should succeed with number type', () => {
     expect(
-      materialSliderControlTester(uischema, {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'number',
-            maximum: 10,
-            minimum: 2,
-            default: 6
-          }
-        }
-      },
-      undefined)
+      materialSliderControlTester(
+        uischema,
+        {
+          type: 'object',
+          properties: {
+            foo: {
+              type: 'number',
+              maximum: 10,
+              minimum: 2,
+              default: 6,
+            },
+          },
+        },
+        undefined
+      )
     ).toBe(4);
   });
 
   it('should succeed with integer type', () => {
     expect(
-      materialSliderControlTester(uischema, {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'integer',
-            maximum: 10,
-            minimum: 2,
-            default: 6
-          }
-        }
-      },
-      undefined)
+      materialSliderControlTester(
+        uischema,
+        {
+          type: 'object',
+          properties: {
+            foo: {
+              type: 'integer',
+              maximum: 10,
+              minimum: 2,
+              default: 6,
+            },
+          },
+        },
+        undefined
+      )
     ).toBe(4);
   });
 });
@@ -207,17 +229,16 @@ describe('Material slider control', () => {
           type: 'number',
           maximum: 10,
           minimum: 2,
-          default: 6
-        }
-      }
+          default: 6,
+        },
+      },
     };
     const core = initCore(jsonSchema, uischema, data);
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
-        <SliderControl
-          schema={jsonSchema}
-          uischema={uischema}
-        />
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
+        <SliderControl schema={jsonSchema} uischema={uischema} />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find(Slider).first();
@@ -226,7 +247,7 @@ describe('Material slider control', () => {
 
   it('should update via action', () => {
     let data = {
-      foo: 3
+      foo: 3,
     };
     wrapper = mount(
       <JsonForms
@@ -255,12 +276,12 @@ describe('Material slider control', () => {
           maximum: 10,
           minimum: 2,
           default: 6,
-          multipleOf: 2
-        }
-      }
+          multipleOf: 2,
+        },
+      },
     };
     const data = {
-      foo: 6
+      foo: 6,
     };
     wrapper = mount(
       <JsonForms
@@ -363,12 +384,10 @@ describe('Material slider control', () => {
   it('can be disabled', () => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
-        <SliderControl
-          schema={schema}
-          uischema={uischema}
-          enabled={false}
-        />
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
+        <SliderControl schema={schema} uischema={uischema} enabled={false} />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find(Slider).first();
@@ -392,7 +411,9 @@ describe('Material slider control', () => {
   it('should render id and input id', () => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <SliderControl
           schema={schema}
           uischema={uischema}
@@ -417,13 +438,15 @@ describe('Material slider control', () => {
           type: 'number',
           maximum: 10,
           minimum: 2,
-          default: 6
-        }
-      }
+          default: 6,
+        },
+      },
     };
     const core = initCore(schema, uischema, { foo: 5 });
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <SliderControl
           schema={jsonSchema}
           uischema={uischema}

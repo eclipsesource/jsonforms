@@ -24,5 +24,7 @@
 */
 import { JsonSchema, TesterContext } from '@jsonforms/core';
 
-export const createTesterContext =
-  (rootSchema: JsonSchema, config?: any): TesterContext => ({ rootSchema, config });
+export const createTesterContext = (
+  rootSchema: JsonSchema,
+  config?: any
+): TesterContext => ({ rootSchema, config });

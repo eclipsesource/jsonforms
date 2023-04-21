@@ -30,7 +30,7 @@ import {
   or,
   RankedTester,
   rankWith,
-  StatePropsOfControl
+  StatePropsOfControl,
 } from '@jsonforms/core';
 import merge from 'lodash/merge';
 
@@ -48,14 +48,16 @@ import merge from 'lodash/merge';
         [min]="min"
         [max]="max"
         [step]="multipleOf"
-        (focus)="focused = true" 
+        (focus)="focused = true"
         (focusout)="focused = false"
       />
-      <mat-hint *ngIf="shouldShowUnfocusedDescription()" || focused>{{ description }}</mat-hint>
+      <mat-hint *ngIf="shouldShowUnfocusedDescription()" || focused>{{
+        description
+      }}</mat-hint>
       <mat-error>{{ error }}</mat-error>
     </mat-form-field>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NumberControlRenderer extends JsonFormsControl {
   private readonly MAXIMUM_FRACTIONAL_DIGITS = 20;
@@ -126,25 +128,33 @@ export class NumberControlRenderer extends JsonFormsControl {
     return '';
   };
 
-  mapAdditionalProps(props:StatePropsOfControl) {
+  mapAdditionalProps(props: StatePropsOfControl) {
     if (this.scopedSchema) {
       const testerContext = {
         rootSchema: this.rootSchema,
-        config: props.config
-      }
-      const defaultStep = isNumberControl(this.uischema, this.rootSchema, testerContext)
+        config: props.config,
+      };
+      const defaultStep = isNumberControl(
+        this.uischema,
+        this.rootSchema,
+        testerContext
+      )
         ? 0.1
         : 1;
       this.min = this.scopedSchema.minimum;
       this.max = this.scopedSchema.maximum;
       this.multipleOf = this.scopedSchema.multipleOf || defaultStep;
-      const appliedUiSchemaOptions = merge({}, props.config, this.uischema.options);
+      const appliedUiSchemaOptions = merge(
+        {},
+        props.config,
+        this.uischema.options
+      );
       const currentLocale = this.jsonFormsService.getLocale();
       if (this.locale === undefined || this.locale !== currentLocale) {
         this.locale = currentLocale;
         this.numberFormat = new Intl.NumberFormat(this.locale, {
           useGrouping: appliedUiSchemaOptions.useGrouping,
-          maximumFractionDigits: this.MAXIMUM_FRACTIONAL_DIGITS
+          maximumFractionDigits: this.MAXIMUM_FRACTIONAL_DIGITS,
         });
         this.determineDecimalSeparator();
         this.oldValue = this.getValue();

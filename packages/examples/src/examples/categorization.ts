@@ -32,61 +32,61 @@ export const schema = {
     firstName: {
       type: 'string',
       minLength: 3,
-      description: 'Please enter your first name'
+      description: 'Please enter your first name',
     },
     secondName: {
       type: 'string',
       minLength: 3,
-      description: 'Please enter your second name'
+      description: 'Please enter your second name',
     },
     vegetarian: {
-      type: 'boolean'
+      type: 'boolean',
     },
     birthDate: {
       type: 'string',
       format: 'date',
-      description: 'Please enter your birth date.'
+      description: 'Please enter your birth date.',
     },
     nationality: {
       type: 'string',
-      enum: ['DE', 'IT', 'JP', 'US', 'RU', 'Other']
+      enum: ['DE', 'IT', 'JP', 'US', 'RU', 'Other'],
     },
     provideAddress: {
-      type: 'boolean'
+      type: 'boolean',
     },
     address: {
       type: 'object',
       properties: {
         street: {
-          type: 'string'
+          type: 'string',
         },
         streetNumber: {
-          type: 'string'
+          type: 'string',
         },
         city: {
-          type: 'string'
+          type: 'string',
         },
         postalCode: {
           type: 'string',
-          maxLength: 5
+          maxLength: 5,
         },
-      }
+      },
     },
     vegetarianOptions: {
       type: 'object',
       properties: {
         vegan: {
-          type: 'boolean'
+          type: 'boolean',
         },
         favoriteVegetable: {
           type: 'string',
-          enum: ['Tomato', 'Potato', 'Salad', 'Aubergine', 'Cucumber', 'Other']
+          enum: ['Tomato', 'Potato', 'Salad', 'Aubergine', 'Cucumber', 'Other'],
         },
         otherFavoriteVegetable: {
-          type: 'string'
-        }
-      }
-    }
+          type: 'string',
+        },
+      },
+    },
   },
 };
 
@@ -102,36 +102,36 @@ export const uischema = {
           elements: [
             {
               type: 'Control',
-              scope: '#/properties/firstName'
+              scope: '#/properties/firstName',
             },
             {
               type: 'Control',
-              scope: '#/properties/secondName'
-            }
-          ]
+              scope: '#/properties/secondName',
+            },
+          ],
         },
         {
           type: 'HorizontalLayout',
           elements: [
             {
               type: 'Control',
-              scope: '#/properties/birthDate'
+              scope: '#/properties/birthDate',
             },
             {
               type: 'Control',
-              scope: '#/properties/nationality'
-            }
-          ]
+              scope: '#/properties/nationality',
+            },
+          ],
         },
         {
           type: 'Control',
-          scope: '#/properties/provideAddress'
+          scope: '#/properties/provideAddress',
         },
         {
           type: 'Control',
-          scope: '#/properties/vegetarian'
-        }
-      ]
+          scope: '#/properties/vegetarian',
+        },
+      ],
     },
     {
       type: 'Category',
@@ -142,35 +142,35 @@ export const uischema = {
           elements: [
             {
               type: 'Control',
-              scope: '#/properties/address/properties/street'
+              scope: '#/properties/address/properties/street',
             },
             {
               type: 'Control',
-              scope: '#/properties/address/properties/streetNumber'
+              scope: '#/properties/address/properties/streetNumber',
             },
-          ]
+          ],
         },
         {
           type: 'HorizontalLayout',
           elements: [
             {
               type: 'Control',
-              scope: '#/properties/address/properties/city'
+              scope: '#/properties/address/properties/city',
             },
             {
               type: 'Control',
-              scope: '#/properties/address/properties/postalCode'
-            }
-          ]
+              scope: '#/properties/address/properties/postalCode',
+            },
+          ],
         },
       ],
       rule: {
         effect: 'SHOW',
         condition: {
           scope: '#/properties/provideAddress',
-          schema: { const: true }
-        }
-      }
+          schema: { const: true },
+        },
+      },
     },
     {
       type: 'Category',
@@ -178,122 +178,122 @@ export const uischema = {
       elements: [
         {
           type: 'Control',
-          scope: '#/properties/vegetarianOptions/properties/vegan'
+          scope: '#/properties/vegetarianOptions/properties/vegan',
         },
         {
           type: 'Control',
-          scope: '#/properties/vegetarianOptions/properties/favoriteVegetable'
+          scope: '#/properties/vegetarianOptions/properties/favoriteVegetable',
         },
         {
           type: 'Control',
-          scope: '#/properties/vegetarianOptions/properties/otherFavoriteVegetable',
+          scope:
+            '#/properties/vegetarianOptions/properties/otherFavoriteVegetable',
           rule: {
             effect: 'SHOW',
             condition: {
-              scope: '#/properties/vegetarianOptions/properties/favoriteVegetable',
-              schema: { const: 'Other' }
-            }
-          }
+              scope:
+                '#/properties/vegetarianOptions/properties/favoriteVegetable',
+              schema: { const: 'Other' },
+            },
+          },
         },
       ],
       rule: {
         effect: 'SHOW',
         condition: {
           scope: '#/properties/vegetarian',
-          schema: { const: true }
-        }
-      }
-    }
-  ]
+          schema: { const: true },
+        },
+      },
+    },
+  ],
 };
 
 export const data = {
   provideAddress: true,
-  vegetarian: false
+  vegetarian: false,
 };
 
 const schema_1713 = {
-  "type": "object",
-  "properties": {
-    "experiments": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "ID": {
-            "type": "string"
-          }
+  type: 'object',
+  properties: {
+    experiments: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          ID: {
+            type: 'string',
+          },
         },
-        "additionalProperties": false,
-        "additionalItems": false
-      }
-    }
+        additionalProperties: false,
+        additionalItems: false,
+      },
+    },
   },
-  "required": [
-    "experiments"
-  ]
+  required: ['experiments'],
 };
 const uischema_1713 = {
-  "type": "Categorization",
-  "elements": [
+  type: 'Categorization',
+  elements: [
     {
-      "type": "Category",
-      "label": "Experiments",
-      "elements": [
+      type: 'Category',
+      label: 'Experiments',
+      elements: [
         {
-          "type": "ListWithDetail",
-          "scope": "#/properties/experiments",
-          "options": {
-            "labelRef": "#/items/properties/ID",
-            "detail": {
-              "type": "VerticalLayout",
-              "elements": [
+          type: 'ListWithDetail',
+          scope: '#/properties/experiments',
+          options: {
+            labelRef: '#/items/properties/ID',
+            detail: {
+              type: 'VerticalLayout',
+              elements: [
                 {
-                  "type": "HorizontalLayout",
-                  "elements": [
+                  type: 'HorizontalLayout',
+                  elements: [
                     {
-                      "type": "Control",
-                      "scope": "#/properties/ID"
-                    }
-                  ]
+                      type: 'Control',
+                      scope: '#/properties/ID',
+                    },
+                  ],
                 },
                 {
-                  "type": "Categorization",
-                  "elements": [
+                  type: 'Categorization',
+                  elements: [
                     {
-                      "type": "Category",
-                      "label": "Sequential",
-                      "elements": [
+                      type: 'Category',
+                      label: 'Sequential',
+                      elements: [
                         {
-                          "type": "VerticalLayout",
-                          "elements": [
+                          type: 'VerticalLayout',
+                          elements: [
                             {
-                              "type": "Control",
-                              "scope": "#/properties/ID"
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          }
-        }
-      ]
-    }
-  ]
-  };
+                              type: 'Control',
+                              scope: '#/properties/ID',
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          },
+        },
+      ],
+    },
+  ],
+};
 
 export const translations = {
   categoryLabelKey: 'Basic',
   address: {
-    label: "Address",
+    label: 'Address',
   },
 };
 export const translate: Translator = (key: string, defaultMessage: string) => {
-  return get(translations, key) ?? defaultMessage
+  return get(translations, key) ?? defaultMessage;
 };
 
 registerExamples([
@@ -303,13 +303,13 @@ registerExamples([
     data,
     schema,
     uischema,
-    i18n: { locale: 'en', translate: translate }
+    i18n: { locale: 'en', translate: translate },
   },
   {
-    name: '1713',
-    label: 'Bug 1713',
+    name: 'categorization_1713',
+    label: 'Categorization - Issue 1713',
     data,
-    schema:schema_1713,
-    uischema:uischema_1713
-  }
+    schema: schema_1713,
+    uischema: uischema_1713,
+  },
 ]);

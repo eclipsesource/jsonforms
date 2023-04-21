@@ -27,7 +27,7 @@ import find from 'lodash/find';
 
 export const getFirstPrimitiveProp = (schema: any) => {
   if (schema.properties) {
-    return find(Object.keys(schema.properties), propName => {
+    return find(Object.keys(schema.properties), (propName) => {
       const prop = schema.properties[propName];
       return (
         prop.type === 'string' ||

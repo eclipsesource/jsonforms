@@ -24,12 +24,9 @@
 */
 import './MatchMediaMock';
 import * as React from 'react';
-import {
-  ControlElement,
-  NOT_APPLICABLE
-} from '@jsonforms/core';
+import { ControlElement, NOT_APPLICABLE } from '@jsonforms/core';
 import IntegerCell, {
-  materialIntegerCellTester
+  materialIntegerCellTester,
 } from '../../src/cells/MaterialIntegerCell';
 import { materialRenderers } from '../../src';
 
@@ -43,53 +40,64 @@ Enzyme.configure({ adapter: new Adapter() });
 const data = { foo: 42 };
 const schema = {
   type: 'integer',
-  minimum: 5
+  minimum: 5,
 };
 const uischema: ControlElement = {
   type: 'Control',
-  scope: '#/properties/foo'
+  scope: '#/properties/foo',
 };
 
 describe('Material integer cells tester', () => {
   const controlElement: ControlElement = {
     type: 'Control',
-    scope: '#/properties/foo'
+    scope: '#/properties/foo',
   };
 
   it('should fail', () => {
     expect(materialIntegerCellTester(undefined, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
-    expect(materialIntegerCellTester(null, undefined, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialIntegerCellTester({ type: 'Foo' }, undefined, undefined)).toBe(
-      NOT_APPLICABLE
-    );
-    expect(materialIntegerCellTester({ type: 'Control' }, undefined, undefined)).toBe(
+    expect(materialIntegerCellTester(null, undefined, undefined)).toBe(
       NOT_APPLICABLE
     );
     expect(
-      materialIntegerCellTester(controlElement, {
-        type: 'object',
-        properties: { foo: { type: 'string' } }
-      },
-      undefined)
+      materialIntegerCellTester({ type: 'Foo' }, undefined, undefined)
     ).toBe(NOT_APPLICABLE);
     expect(
-      materialIntegerCellTester(controlElement, {
-        type: 'object',
-        properties: { foo: { type: 'string' }, bar: { type: 'integer' } }
-      },
-      undefined)
+      materialIntegerCellTester({ type: 'Control' }, undefined, undefined)
+    ).toBe(NOT_APPLICABLE);
+    expect(
+      materialIntegerCellTester(
+        controlElement,
+        {
+          type: 'object',
+          properties: { foo: { type: 'string' } },
+        },
+        undefined
+      )
+    ).toBe(NOT_APPLICABLE);
+    expect(
+      materialIntegerCellTester(
+        controlElement,
+        {
+          type: 'object',
+          properties: { foo: { type: 'string' }, bar: { type: 'integer' } },
+        },
+        undefined
+      )
     ).toBe(NOT_APPLICABLE);
   });
 
   it('should succeed', () => {
     expect(
-      materialIntegerCellTester(controlElement, {
-        type: 'object',
-        properties: { foo: { type: 'integer' } }
-      },
-      undefined)
+      materialIntegerCellTester(
+        controlElement,
+        {
+          type: 'object',
+          properties: { foo: { type: 'integer' } },
+        },
+        undefined
+      )
     ).toBe(2);
   });
 });
@@ -104,12 +112,14 @@ describe('Material integer cells', () => {
       type: 'Control',
       scope: '#/properties/foo',
       options: {
-        focus: true
-      }
+        focus: true,
+      },
     };
     const core = initCore(schema, control, data);
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <IntegerCell schema={schema} uischema={control} path='foo' />
       </JsonFormsStateProvider>
     );
@@ -122,12 +132,14 @@ describe('Material integer cells', () => {
       type: 'Control',
       scope: '#/properties/foo',
       options: {
-        focus: false
-      }
+        focus: false,
+      },
     };
     const core = initCore(schema, control, data);
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <IntegerCell schema={schema} uischema={control} path='foo' />
       </JsonFormsStateProvider>
     );
@@ -138,11 +150,13 @@ describe('Material integer cells', () => {
   it('should not autofocus by default', () => {
     const control: ControlElement = {
       type: 'Control',
-      scope: '#/properties/foo'
+      scope: '#/properties/foo',
     };
     const core = initCore(schema, control, data);
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <IntegerCell schema={schema} uischema={control} path='foo' />
       </JsonFormsStateProvider>
     );
@@ -153,7 +167,9 @@ describe('Material integer cells', () => {
   it('should render', () => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <IntegerCell schema={schema} uischema={uischema} path='foo' />
       </JsonFormsStateProvider>
     );
@@ -167,7 +183,9 @@ describe('Material integer cells', () => {
   it('should render 0', () => {
     const core = initCore(schema, uischema, { foo: 0 });
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <IntegerCell schema={schema} uischema={uischema} path='foo' />
       </JsonFormsStateProvider>
     );
@@ -181,10 +199,12 @@ describe('Material integer cells', () => {
   it('should update via input event', (done) => {
     const core = initCore(schema, uischema, data);
     const onChangeData: any = {
-      data: undefined
+      data: undefined,
     };
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <TestEmitter
           onChange={({ data }) => {
             onChangeData.data = data;
@@ -199,18 +219,20 @@ describe('Material integer cells', () => {
     setTimeout(() => {
       expect(onChangeData.data.foo).toBe(13);
       done();
-    }, 1000)
+    }, 1000);
   });
 
   it('should update via action', (done) => {
     const core = initCore(schema, uischema, { foo: 13 });
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <IntegerCell schema={schema} uischema={uischema} path='foo' />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, foo: 42 };
-    wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
+    wrapper.setProps({ initState: { renderers: materialRenderers, core } });
     wrapper.update();
     setTimeout(() => {
       const input = wrapper.find('input').first();
@@ -222,12 +244,14 @@ describe('Material integer cells', () => {
   it('should not update with undefined value', (done) => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <IntegerCell schema={schema} uischema={uischema} path='foo' />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, foo: undefined };
-    wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
+    wrapper.setProps({ initState: { renderers: materialRenderers, core } });
     wrapper.update();
     setTimeout(() => {
       const input = wrapper.find('input');
@@ -239,12 +263,14 @@ describe('Material integer cells', () => {
   it('should not update with null value', (done) => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <IntegerCell schema={schema} uischema={uischema} path='foo' />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, foo: null };
-    wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
+    wrapper.setProps({ initState: { renderers: materialRenderers, core } });
     wrapper.update();
     setTimeout(() => {
       const input = wrapper.find('input').first();
@@ -256,12 +282,14 @@ describe('Material integer cells', () => {
   it('should not update with wrong ref', (done) => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <IntegerCell schema={schema} uischema={uischema} path='foo' />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, bar: 11 };
-    wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
+    wrapper.setProps({ initState: { renderers: materialRenderers, core } });
     wrapper.update();
     setTimeout(() => {
       const input = wrapper.find('input');
@@ -273,12 +301,14 @@ describe('Material integer cells', () => {
   it('should not update with null ref', (done) => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <IntegerCell schema={schema} uischema={uischema} path='foo' />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, null: 13 };
-    wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
+    wrapper.setProps({ initState: { renderers: materialRenderers, core } });
     wrapper.update();
     setTimeout(() => {
       const input = wrapper.find('input');
@@ -290,12 +320,14 @@ describe('Material integer cells', () => {
   it('should not update with undefined ref', (done) => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <IntegerCell schema={schema} uischema={uischema} path='foo' />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, undefined: 13 };
-    wrapper.setProps({ initState: { renderers: materialRenderers, core }} );
+    wrapper.setProps({ initState: { renderers: materialRenderers, core } });
     wrapper.update();
     setTimeout(() => {
       const input = wrapper.find('input');
@@ -307,7 +339,9 @@ describe('Material integer cells', () => {
   it('can be disabled', () => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <IntegerCell
           schema={schema}
           uischema={uischema}
@@ -323,7 +357,9 @@ describe('Material integer cells', () => {
   it('should be enabled by default', () => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
         <IntegerCell schema={schema} uischema={uischema} path='foo' />
       </JsonFormsStateProvider>
     );

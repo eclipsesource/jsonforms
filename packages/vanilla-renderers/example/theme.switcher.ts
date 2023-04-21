@@ -24,7 +24,7 @@
 */
 const knownThemes: { [key: string]: string } = {
   normal: 'Normal Label Top',
-  dark: 'Dark label Top'
+  dark: 'Dark label Top',
 };
 const changeTheme = (style: string) => {
   document.body.className = style;
@@ -34,7 +34,7 @@ export const createThemeSelection = () => {
 
   const select = document.createElement('select');
   select.id = 'example_theme';
-  Object.keys(knownThemes).forEach(key => {
+  Object.keys(knownThemes).forEach((key) => {
     const style = knownThemes[key];
     const option = document.createElement('option');
     option.value = key;
