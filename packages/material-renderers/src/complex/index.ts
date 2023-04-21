@@ -22,42 +22,45 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import {
-  isObjectArrayControl,
-  isPrimitiveArrayControl,
-  or,
-  RankedTester,
-  rankWith,
-} from '@jsonforms/core';
-import MaterialArrayControlRenderer from './MaterialArrayControlRenderer';
-import MaterialObjectRenderer, {
-  materialObjectControlTester,
-} from './MaterialObjectRenderer';
 import MaterialAllOfRenderer, {
   materialAllOfControlTester,
 } from './MaterialAllOfRenderer';
 import MaterialAnyOfRenderer, {
   materialAnyOfControlTester,
 } from './MaterialAnyOfRenderer';
-import MaterialOneOfRenderer, {
-  materialOneOfControlTester,
-} from './MaterialOneOfRenderer';
+import MaterialArrayControlRenderer, {
+  materialArrayControlTester,
+} from './MaterialArrayControlRenderer';
 import MaterialEnumArrayRenderer, {
   materialEnumArrayRendererTester,
 } from './MaterialEnumArrayRenderer';
+import MaterialObjectRenderer, {
+  materialObjectControlTester,
+} from './MaterialObjectRenderer';
+import MaterialOneOfRenderer, {
+  materialOneOfControlTester,
+} from './MaterialOneOfRenderer';
 
-export const materialArrayControlTester: RankedTester = rankWith(
-  3,
-  or(isObjectArrayControl, isPrimitiveArrayControl)
-);
-export { MaterialArrayControlRenderer };
-export { MaterialObjectRenderer };
-export { MaterialAllOfRenderer };
-export { MaterialAnyOfRenderer };
-export { MaterialOneOfRenderer };
-export { MaterialEnumArrayRenderer };
-export { materialObjectControlTester };
-export { materialAllOfControlTester };
-export { materialAnyOfControlTester };
-export { materialOneOfControlTester };
-export { materialEnumArrayRendererTester };
+export {
+  materialAllOfControlTester,
+  MaterialAllOfRenderer,
+  materialAnyOfControlTester,
+  MaterialAnyOfRenderer,
+  materialArrayControlTester,
+  MaterialArrayControlRenderer,
+  materialEnumArrayRendererTester,
+  MaterialEnumArrayRenderer,
+  materialObjectControlTester,
+  MaterialObjectRenderer,
+  materialOneOfControlTester,
+  MaterialOneOfRenderer,
+};
+
+export * from './CombinatorProperties';
+export * from './DeleteDialog';
+export * from './MaterialTableControl';
+export * from './TableToolbar';
+export * from './ValidationIcon';
+
+import NoBorderTableCell from './NoBorderTableCell';
+export { NoBorderTableCell };

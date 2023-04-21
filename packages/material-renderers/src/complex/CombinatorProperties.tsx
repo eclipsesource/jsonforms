@@ -23,7 +23,12 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { Generate, JsonSchema, Layout, UISchemaElement } from '@jsonforms/core';
+import {
+  Generate,
+  JsonSchema,
+  UISchemaElement,
+  isLayout,
+} from '@jsonforms/core';
 import { JsonFormsDispatch } from '@jsonforms/react';
 import omit from 'lodash/omit';
 
@@ -32,9 +37,6 @@ interface CombinatorPropertiesProps {
   combinatorKeyword: 'oneOf' | 'anyOf';
   path: string;
 }
-
-export const isLayout = (uischema: UISchemaElement): uischema is Layout =>
-  uischema.hasOwnProperty('elements');
 
 export class CombinatorProperties extends React.Component<
   CombinatorPropertiesProps,

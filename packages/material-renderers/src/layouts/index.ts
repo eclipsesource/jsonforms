@@ -22,6 +22,11 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import ExpandPanelRenderer, {
+  ctxDispatchToExpandPanelProps,
+  withContextToExpandPanelProps,
+  withJsonFormsExpandPanelProps,
+} from './ExpandPanelRenderer';
 import MaterialGroupLayout, {
   materialGroupTester,
 } from './MaterialGroupLayout';
@@ -39,8 +44,12 @@ import MaterialArrayLayout, {
 } from './MaterialArrayLayoutRenderer';
 
 export {
-  materialArrayLayoutTester,
+  ExpandPanelRenderer,
+  ctxDispatchToExpandPanelProps,
+  withContextToExpandPanelProps,
+  withJsonFormsExpandPanelProps,
   MaterialArrayLayout,
+  materialArrayLayoutTester,
   MaterialCategorizationLayout,
   materialCategorizationTester,
   MaterialGroupLayout,
@@ -50,3 +59,5 @@ export {
   MaterialVerticalLayout,
   materialVerticalLayoutTester,
 };
+
+export * from './ArrayToolbar';

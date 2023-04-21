@@ -223,7 +223,7 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
   );
 };
 
-const ExpandPanelRenderer = React.memo(ExpandPanelRendererComponent);
+export const ExpandPanelRenderer = React.memo(ExpandPanelRendererComponent);
 
 /**
  * Maps state to dispatch properties of an expand pandel control.

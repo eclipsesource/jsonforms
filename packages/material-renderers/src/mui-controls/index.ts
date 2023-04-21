@@ -22,10 +22,12 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+export * from './MuiAutocomplete';
 export * from './MuiCheckbox';
-export * from './MuiSelect';
 export * from './MuiInputInteger';
 export * from './MuiInputNumber';
 export * from './MuiInputNumberFormat';
 export * from './MuiInputText';
 export * from './MuiInputTime';
+export * from './MuiSelect';
+export * from './MuiToggle';
