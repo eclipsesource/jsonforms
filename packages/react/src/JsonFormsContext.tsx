@@ -470,182 +470,225 @@ interface WithContext {
   ctx: JsonFormsStateContext;
 }
 
-export const withJsonFormsContext =
-  (Component: ComponentType<WithContext & any>): ComponentType<any> =>
-  (props: any) => {
+export const withJsonFormsContext = (
+  Component: ComponentType<WithContext & any>
+): ComponentType<any> =>
+  function WithJsonFormsContext(props: any) {
     const ctx = useJsonForms();
     return <Component ctx={ctx} props={props} />;
   };
 
-export const withContextToJsonFormsRendererProps =
-  (
-    Component: ComponentType<JsonFormsProps>
-  ): ComponentType<OwnPropsOfJsonFormsRenderer> =>
-  ({ ctx, props }: JsonFormsStateContext & JsonFormsProps) => {
+export const withContextToJsonFormsRendererProps = (
+  Component: ComponentType<JsonFormsProps>
+): ComponentType<OwnPropsOfJsonFormsRenderer> =>
+  function WithContextToJsonFormsRendererProps({
+    ctx,
+    props,
+  }: JsonFormsStateContext & JsonFormsProps) {
     const contextProps = ctxToJsonFormsRendererProps(ctx, props);
     return <Component {...props} {...contextProps} />;
   };
 
-const withContextToControlProps =
-  (Component: ComponentType<ControlProps>): ComponentType<OwnPropsOfControl> =>
-  ({ ctx, props }: JsonFormsStateContext & ControlProps) => {
+const withContextToControlProps = (
+  Component: ComponentType<ControlProps>
+): ComponentType<OwnPropsOfControl> =>
+  function WithContextToControlProps({
+    ctx,
+    props,
+  }: JsonFormsStateContext & ControlProps) {
     const controlProps = ctxToControlProps(ctx, props);
     const dispatchProps = ctxDispatchToControlProps(ctx.dispatch);
     return <Component {...props} {...controlProps} {...dispatchProps} />;
   };
 
-const withContextToLayoutProps =
-  (
-    Component: ComponentType<LayoutProps>
-  ): ComponentType<OwnPropsOfJsonFormsRenderer> =>
-  ({ ctx, props }: JsonFormsStateContext & LayoutProps) => {
+const withContextToLayoutProps = (
+  Component: ComponentType<LayoutProps>
+): ComponentType<OwnPropsOfJsonFormsRenderer> =>
+  function WithContextToLayoutProps({
+    ctx,
+    props,
+  }: JsonFormsStateContext & LayoutProps) {
     const layoutProps = ctxToLayoutProps(ctx, props);
     return <Component {...props} {...layoutProps} />;
   };
 
-const withContextToOneOfProps =
-  (
-    Component: ComponentType<CombinatorRendererProps>
-  ): ComponentType<OwnPropsOfControl> =>
-  ({ ctx, props }: JsonFormsStateContext & CombinatorRendererProps) => {
+const withContextToOneOfProps = (
+  Component: ComponentType<CombinatorRendererProps>
+): ComponentType<OwnPropsOfControl> =>
+  function WithContextToOneOfProps({
+    ctx,
+    props,
+  }: JsonFormsStateContext & CombinatorRendererProps) {
     const oneOfProps = ctxToOneOfProps(ctx, props);
     const dispatchProps = ctxDispatchToControlProps(ctx.dispatch);
     return <Component {...props} {...oneOfProps} {...dispatchProps} />;
   };
 
-const withContextToAnyOfProps =
-  (
-    Component: ComponentType<CombinatorRendererProps>
-  ): ComponentType<OwnPropsOfControl> =>
-  ({ ctx, props }: JsonFormsStateContext & CombinatorRendererProps) => {
+const withContextToAnyOfProps = (
+  Component: ComponentType<CombinatorRendererProps>
+): ComponentType<OwnPropsOfControl> =>
+  function WithContextToAnyOfProps({
+    ctx,
+    props,
+  }: JsonFormsStateContext & CombinatorRendererProps) {
     const oneOfProps = ctxToAnyOfProps(ctx, props);
     const dispatchProps = ctxDispatchToControlProps(ctx.dispatch);
     return <Component {...props} {...oneOfProps} {...dispatchProps} />;
   };
 
-const withContextToAllOfProps =
-  (
-    Component: ComponentType<CombinatorRendererProps>
-  ): ComponentType<OwnPropsOfControl> =>
-  ({ ctx, props }: JsonFormsStateContext & CombinatorRendererProps) => {
+const withContextToAllOfProps = (
+  Component: ComponentType<CombinatorRendererProps>
+): ComponentType<OwnPropsOfControl> =>
+  function WithContextToAllOfProps({
+    ctx,
+    props,
+  }: JsonFormsStateContext & CombinatorRendererProps) {
     const allOfProps = ctxToAllOfProps(ctx, props);
     const dispatchProps = ctxDispatchToControlProps(ctx.dispatch);
     return <Component {...props} {...allOfProps} {...dispatchProps} />;
   };
 
-const withContextToDetailProps =
-  (
-    Component: ComponentType<StatePropsOfControlWithDetail>
-  ): ComponentType<OwnPropsOfControl> =>
-  ({ ctx, props }: JsonFormsStateContext & StatePropsOfControlWithDetail) => {
+const withContextToDetailProps = (
+  Component: ComponentType<StatePropsOfControlWithDetail>
+): ComponentType<OwnPropsOfControl> =>
+  function WithContextToDetailProps({
+    ctx,
+    props,
+  }: JsonFormsStateContext & StatePropsOfControlWithDetail) {
     const detailProps = ctxToControlWithDetailProps(ctx, props);
     return <Component {...props} {...detailProps} />;
   };
 
-const withContextToArrayLayoutProps =
-  (
-    Component: ComponentType<ArrayLayoutProps>
-  ): ComponentType<OwnPropsOfControl> =>
-  ({ ctx, props }: JsonFormsStateContext & ArrayLayoutProps) => {
+const withContextToArrayLayoutProps = (
+  Component: ComponentType<ArrayLayoutProps>
+): ComponentType<OwnPropsOfControl> =>
+  function WithContextToArrayLayoutProps({
+    ctx,
+    props,
+  }: JsonFormsStateContext & ArrayLayoutProps) {
     const arrayLayoutProps = ctxToArrayLayoutProps(ctx, props);
     const dispatchProps = ctxDispatchToArrayControlProps(ctx.dispatch);
     return <Component {...props} {...arrayLayoutProps} {...dispatchProps} />;
   };
 
-const withContextToArrayControlProps =
-  (
-    Component: ComponentType<ArrayControlProps>
-  ): ComponentType<OwnPropsOfControl> =>
-  ({ ctx, props }: JsonFormsStateContext & ArrayControlProps) => {
+const withContextToArrayControlProps = (
+  Component: ComponentType<ArrayControlProps>
+): ComponentType<OwnPropsOfControl> =>
+  function WithContextToArrayControlProps({
+    ctx,
+    props,
+  }: JsonFormsStateContext & ArrayControlProps) {
     const stateProps = ctxToArrayControlProps(ctx, props);
     const dispatchProps = ctxDispatchToArrayControlProps(ctx.dispatch);
 
     return <Component {...props} {...stateProps} {...dispatchProps} />;
   };
 
-const withContextToMasterListItemProps =
-  (
-    Component: ComponentType<StatePropsOfMasterItem>
-  ): ComponentType<OwnPropsOfMasterListItem> =>
-  ({ ctx, props }: JsonFormsStateContext & StatePropsOfMasterItem) => {
+const withContextToMasterListItemProps = (
+  Component: ComponentType<StatePropsOfMasterItem>
+): ComponentType<OwnPropsOfMasterListItem> =>
+  function WithContextToMasterListItemProps({
+    ctx,
+    props,
+  }: JsonFormsStateContext & StatePropsOfMasterItem) {
     const stateProps = ctxToMasterListItemProps(ctx, props);
     return <Component {...props} {...stateProps} />;
   };
 
-const withContextToCellProps =
-  (Component: ComponentType<CellProps>): ComponentType<OwnPropsOfCell> =>
-  ({ ctx, props }: JsonFormsStateContext & CellProps) => {
+const withContextToCellProps = (
+  Component: ComponentType<CellProps>
+): ComponentType<OwnPropsOfCell> =>
+  function WithContextToCellProps({
+    ctx,
+    props,
+  }: JsonFormsStateContext & CellProps) {
     const cellProps = ctxToCellProps(ctx, props);
     const dispatchProps = ctxDispatchToControlProps(ctx.dispatch);
 
     return <Component {...props} {...dispatchProps} {...cellProps} />;
   };
 
-const withContextToDispatchCellProps =
-  (
-    Component: ComponentType<DispatchCellProps>
-  ): ComponentType<OwnPropsOfCell> =>
-  ({ ctx, props }: JsonFormsStateContext & CellProps) => {
+const withContextToDispatchCellProps = (
+  Component: ComponentType<DispatchCellProps>
+): ComponentType<OwnPropsOfCell> =>
+  function WithContextToDispatchCellProps({
+    ctx,
+    props,
+  }: JsonFormsStateContext & CellProps) {
     const cellProps = ctxToDispatchCellProps(ctx, props);
     const dispatchProps = ctxDispatchToControlProps(ctx.dispatch);
 
     return <Component {...props} {...dispatchProps} {...cellProps} />;
   };
 
-const withContextToEnumCellProps =
-  (
-    Component: ComponentType<EnumCellProps>
-  ): ComponentType<OwnPropsOfEnumCell> =>
-  ({ ctx, props }: JsonFormsStateContext & EnumCellProps) => {
+const withContextToEnumCellProps = (
+  Component: ComponentType<EnumCellProps>
+): ComponentType<OwnPropsOfEnumCell> =>
+  function WithContextToEnumCellProps({
+    ctx,
+    props,
+  }: JsonFormsStateContext & EnumCellProps) {
     const cellProps = ctxToEnumCellProps(ctx, props);
     const dispatchProps = ctxDispatchToControlProps(ctx.dispatch);
     return <Component {...props} {...dispatchProps} {...cellProps} />;
   };
 
-const withContextToEnumProps =
-  (
-    Component: ComponentType<ControlProps & OwnPropsOfEnum>
-  ): ComponentType<OwnPropsOfControl & OwnPropsOfEnum> =>
-  ({ ctx, props }: JsonFormsStateContext & ControlProps & OwnPropsOfEnum) => {
+const withContextToEnumProps = (
+  Component: ComponentType<ControlProps & OwnPropsOfEnum>
+): ComponentType<OwnPropsOfControl & OwnPropsOfEnum> =>
+  function WithContextToEnumProps({
+    ctx,
+    props,
+  }: JsonFormsStateContext & ControlProps & OwnPropsOfEnum) {
     const stateProps = ctxToEnumControlProps(ctx, props);
     const dispatchProps = ctxDispatchToControlProps(ctx.dispatch);
 
     return <Component {...props} {...dispatchProps} {...stateProps} />;
   };
 
-const withContextToOneOfEnumCellProps =
-  (
-    Component: ComponentType<EnumCellProps>
-  ): ComponentType<OwnPropsOfEnumCell> =>
-  ({ ctx, props }: JsonFormsStateContext & EnumCellProps) => {
+const withContextToOneOfEnumCellProps = (
+  Component: ComponentType<EnumCellProps>
+): ComponentType<OwnPropsOfEnumCell> =>
+  function WithContextToOneOfEnumCellProps({
+    ctx,
+    props,
+  }: JsonFormsStateContext & EnumCellProps) {
     const cellProps = ctxToOneOfEnumCellProps(ctx, props);
     const dispatchProps = ctxDispatchToControlProps(ctx.dispatch);
     return <Component {...props} {...dispatchProps} {...cellProps} />;
   };
 
-const withContextToOneOfEnumProps =
-  (
-    Component: ComponentType<ControlProps & OwnPropsOfEnum>
-  ): ComponentType<OwnPropsOfControl & OwnPropsOfEnum> =>
-  ({ ctx, props }: JsonFormsStateContext & ControlProps & OwnPropsOfEnum) => {
+const withContextToOneOfEnumProps = (
+  Component: ComponentType<ControlProps & OwnPropsOfEnum>
+): ComponentType<OwnPropsOfControl & OwnPropsOfEnum> =>
+  function WithContextToOneOfEnumProps({
+    ctx,
+    props,
+  }: JsonFormsStateContext & ControlProps & OwnPropsOfEnum) {
     const stateProps = ctxToOneOfEnumControlProps(ctx, props);
     const dispatchProps = ctxDispatchToControlProps(ctx.dispatch);
     return <Component {...props} {...dispatchProps} {...stateProps} />;
   };
 
-const withContextToMultiEnumProps =
-  (
-    Component: ComponentType<ControlProps & OwnPropsOfEnum>
-  ): ComponentType<OwnPropsOfControl & OwnPropsOfEnum> =>
-  ({ ctx, props }: JsonFormsStateContext & ControlProps & OwnPropsOfEnum) => {
+const withContextToMultiEnumProps = (
+  Component: ComponentType<ControlProps & OwnPropsOfEnum>
+): ComponentType<OwnPropsOfControl & OwnPropsOfEnum> =>
+  function WithContextToMultiEnumProps({
+    ctx,
+    props,
+  }: JsonFormsStateContext & ControlProps & OwnPropsOfEnum) {
     const stateProps = ctxToMultiEnumControlProps(ctx, props);
     const dispatchProps = ctxDispatchToMultiEnumProps(ctx.dispatch);
     return <Component {...props} {...dispatchProps} {...stateProps} />;
   };
 
-const withContextToLabelProps =
-  (Component: ComponentType<LabelProps>): ComponentType<OwnPropsOfLabel> =>
-  ({ ctx, props }: JsonFormsStateContext & LabelProps & OwnPropsOfLabel) => {
+const withContextToLabelProps = (
+  Component: ComponentType<LabelProps>
+): ComponentType<OwnPropsOfLabel> =>
+  function WithContextToLabelProps({
+    ctx,
+    props,
+  }: JsonFormsStateContext & LabelProps & OwnPropsOfLabel) {
     const stateProps = ctxToLabelProps(ctx, props);
     return <Component {...props} {...stateProps} />;
   };
@@ -813,9 +856,12 @@ export interface TranslateProps {
   locale: string;
 }
 
-export const withTranslateProps =
-  <P extends {}>(Component: ComponentType<TranslateProps & P>) =>
-  (props: P) => {
+// TODO fix @typescript-eslint/ban-types
+// eslint-disable-next-line @typescript-eslint/ban-types
+export const withTranslateProps = <P extends {}>(
+  Component: ComponentType<TranslateProps & P>
+) =>
+  function WithTranslateProps(props: P) {
     const ctx = useJsonForms();
     const locale = ctx.i18n?.locale ?? defaultJsonFormsI18nState.locale;
     const t = ctx.i18n?.translate ?? defaultJsonFormsI18nState.translate;

@@ -24,7 +24,7 @@
 */
 import { registerExamples } from '../register';
 
-const data = {
+export const data = {
   warehouseitems: [
     {
       name: 'Fantasy Book',
@@ -53,7 +53,7 @@ const data = {
   ],
 };
 
-const schema = {
+export const schema = {
   definitions: {
     warehouseitem: {
       type: 'object',
@@ -85,7 +85,7 @@ const schema = {
   },
 };
 
-const uischema = {
+export const uischema = {
   type: 'ListWithDetail',
   scope: '#/properties/warehouseitems',
   options: {

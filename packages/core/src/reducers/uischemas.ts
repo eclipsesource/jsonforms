@@ -50,10 +50,11 @@ export const uischemaRegistryReducer: Reducer<
       return state
         .slice()
         .concat({ tester: action.tester, uischema: action.uischema });
-    case REMOVE_UI_SCHEMA:
+    case REMOVE_UI_SCHEMA: {
       const copy = state.slice();
       remove(copy, (entry) => entry.tester === action.tester);
       return copy;
+    }
     default:
       return state;
   }

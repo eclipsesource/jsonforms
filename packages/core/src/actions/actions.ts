@@ -32,33 +32,29 @@ import type { RankedTester } from '../testers';
 import type { UISchemaTester, ValidationMode } from '../reducers';
 import type { ErrorTranslator, Translator } from '../i18n';
 
-export const INIT: 'jsonforms/INIT' = 'jsonforms/INIT';
-export const UPDATE_CORE: 'jsonforms/UPDATE_CORE' = `jsonforms/UPDATE_CORE`;
-export const SET_AJV: 'jsonforms/SET_AJV' = 'jsonforms/SET_AJV';
-export const UPDATE_DATA: 'jsonforms/UPDATE' = 'jsonforms/UPDATE';
-export const UPDATE_ERRORS: 'jsonforms/UPDATE_ERRORS' =
-  'jsonforms/UPDATE_ERRORS';
-export const VALIDATE: 'jsonforms/VALIDATE' = 'jsonforms/VALIDATE';
-export const ADD_RENDERER: 'jsonforms/ADD_RENDERER' = 'jsonforms/ADD_RENDERER';
-export const REMOVE_RENDERER: 'jsonforms/REMOVE_RENDERER' =
-  'jsonforms/REMOVE_RENDERER';
-export const ADD_CELL: 'jsonforms/ADD_CELL' = 'jsonforms/ADD_CELL';
-export const REMOVE_CELL: 'jsonforms/REMOVE_CELL' = 'jsonforms/REMOVE_CELL';
-export const SET_CONFIG: 'jsonforms/SET_CONFIG' = 'jsonforms/SET_CONFIG';
-export const ADD_UI_SCHEMA: 'jsonforms/ADD_UI_SCHEMA' = `jsonforms/ADD_UI_SCHEMA`;
-export const REMOVE_UI_SCHEMA: 'jsonforms/REMOVE_UI_SCHEMA' = `jsonforms/REMOVE_UI_SCHEMA`;
-export const SET_SCHEMA: 'jsonforms/SET_SCHEMA' = `jsonforms/SET_SCHEMA`;
-export const SET_UISCHEMA: 'jsonforms/SET_UISCHEMA' = `jsonforms/SET_UISCHEMA`;
-export const SET_VALIDATION_MODE: 'jsonforms/SET_VALIDATION_MODE' =
-  'jsonforms/SET_VALIDATION_MODE';
+export const INIT = 'jsonforms/INIT' as const;
+export const UPDATE_CORE = 'jsonforms/UPDATE_CORE' as const;
+export const SET_AJV = 'jsonforms/SET_AJV' as const;
+export const UPDATE_DATA = 'jsonforms/UPDATE' as const;
+export const UPDATE_ERRORS = 'jsonforms/UPDATE_ERRORS' as const;
+export const VALIDATE = 'jsonforms/VALIDATE' as const;
+export const ADD_RENDERER = 'jsonforms/ADD_RENDERER' as const;
+export const REMOVE_RENDERER = 'jsonforms/REMOVE_RENDERER' as const;
+export const ADD_CELL = 'jsonforms/ADD_CELL' as const;
+export const REMOVE_CELL = 'jsonforms/REMOVE_CELL' as const;
+export const SET_CONFIG = 'jsonforms/SET_CONFIG' as const;
+export const ADD_UI_SCHEMA = 'jsonforms/ADD_UI_SCHEMA' as const;
+export const REMOVE_UI_SCHEMA = 'jsonforms/REMOVE_UI_SCHEMA' as const;
+export const SET_SCHEMA = 'jsonforms/SET_SCHEMA' as const;
+export const SET_UISCHEMA = 'jsonforms/SET_UISCHEMA' as const;
+export const SET_VALIDATION_MODE = 'jsonforms/SET_VALIDATION_MODE' as const;
 
-export const SET_LOCALE: 'jsonforms/SET_LOCALE' = `jsonforms/SET_LOCALE`;
-export const SET_TRANSLATOR: 'jsonforms/SET_TRANSLATOR' =
-  'jsonforms/SET_TRANSLATOR';
-export const UPDATE_I18N: 'jsonforms/UPDATE_I18N' = 'jsonforms/UPDATE_I18N';
+export const SET_LOCALE = 'jsonforms/SET_LOCALE' as const;
+export const SET_TRANSLATOR = 'jsonforms/SET_TRANSLATOR' as const;
+export const UPDATE_I18N = 'jsonforms/UPDATE_I18N' as const;
 
-export const ADD_DEFAULT_DATA: 'jsonforms/ADD_DEFAULT_DATA' = `jsonforms/ADD_DEFAULT_DATA`;
-export const REMOVE_DEFAULT_DATA: 'jsonforms/REMOVE_DEFAULT_DATA' = `jsonforms/REMOVE_DEFAULT_DATA`;
+export const ADD_DEFAULT_DATA = 'jsonforms/ADD_DEFAULT_DATA' as const;
+export const REMOVE_DEFAULT_DATA = 'jsonforms/REMOVE_DEFAULT_DATA' as const;
 
 export type CoreActions =
   | InitAction

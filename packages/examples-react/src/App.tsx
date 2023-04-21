@@ -75,17 +75,17 @@ const App = ({ examples, cells, renderers }: AppProps) => {
   );
   const [currentIndex, setIndex] = useState<number>(0);
   const [dataAsString, setDataAsString] = useState<any>('');
-  const [props, setProps] = useState<any>(
+  const [exampleProps, setExampleProps] = useState(
     getProps(currentExample, cells, renderers)
   );
   const [showPanel, setShowPanel] = useState<boolean>(true);
   const schemaAsString = useMemo(
-    () => JSON.stringify(props.schema, null, 2),
-    [props.schema]
+    () => JSON.stringify(exampleProps.schema, null, 2),
+    [exampleProps.schema]
   );
   const uiSchemaAsString = useMemo(
-    () => JSON.stringify(props.uischema, null, 2),
-    [props.uischema]
+    () => JSON.stringify(exampleProps.uischema, null, 2),
+    [exampleProps.uischema]
   );
 
   const actions: Action[] = currentExample.actions;
@@ -104,7 +104,7 @@ const App = ({ examples, cells, renderers }: AppProps) => {
     const example = examples[exampleID];
     setIndex(exampleID);
     setExample(example);
-    setProps(getProps(example, cells, renderers));
+    setExampleProps(getProps(example, cells, renderers));
     window.location.hash = example.name;
     if (example.name == 'huge') {
       setShowPanel(false);
@@ -181,7 +181,7 @@ const App = ({ examples, cells, renderers }: AppProps) => {
                   <button
                     className='action-button'
                     onClick={() =>
-                      setProps((oldProps: JsonFormsInitStateProps) =>
+                      setExampleProps((oldProps: JsonFormsInitStateProps) =>
                         action.apply(oldProps)
                       )
                     }
@@ -194,7 +194,7 @@ const App = ({ examples, cells, renderers }: AppProps) => {
               <div className='demo'>
                 <JsonForms
                   key={currentIndex}
-                  {...props}
+                  {...exampleProps}
                   onChange={({ data }) => changeData(data)}
                 />
               </div>

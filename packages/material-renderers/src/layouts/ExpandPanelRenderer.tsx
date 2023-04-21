@@ -284,11 +284,13 @@ export const ctxDispatchToExpandPanelProps: (
  * @param ownProps any own props
  * @returns {StatePropsOfControl} state props for a control
  */
-export const withContextToExpandPanelProps =
-  (
-    Component: ComponentType<ExpandPanelProps>
-  ): ComponentType<OwnPropsOfExpandPanel> =>
-  ({ ctx, props }: JsonFormsStateContext & ExpandPanelProps) => {
+export const withContextToExpandPanelProps = (
+  Component: ComponentType<ExpandPanelProps>
+): ComponentType<OwnPropsOfExpandPanel> =>
+  function WithContextToExpandPanelProps({
+    ctx,
+    props,
+  }: JsonFormsStateContext & ExpandPanelProps) {
     const dispatchProps = ctxDispatchToExpandPanelProps(ctx.dispatch);
     const { childLabelProp, schema, path, index, uischemas } = props;
     const childPath = composePaths(path, `${index}`);

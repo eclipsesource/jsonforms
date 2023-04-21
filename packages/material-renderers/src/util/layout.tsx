@@ -103,9 +103,12 @@ export interface AjvProps {
   ajv: Ajv;
 }
 
-export const withAjvProps =
-  <P extends {}>(Component: ComponentType<AjvProps & P>) =>
-  (props: P) => {
+// TODO fix @typescript-eslint/ban-types
+// eslint-disable-next-line @typescript-eslint/ban-types
+export const withAjvProps = <P extends {}>(
+  Component: ComponentType<AjvProps & P>
+) =>
+  function WithAjvProps(props: P) {
     const ctx = useJsonForms();
     const ajv = getAjv({ jsonforms: { ...ctx } });
 

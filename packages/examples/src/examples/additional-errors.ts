@@ -27,9 +27,9 @@ import { StateProps } from '../example';
 import { registerExamples } from '../register';
 import { schema, uischema, data } from './person';
 
-const additionalErrors: ErrorObject[] = [];
+export const additionalErrors: ErrorObject[] = [];
 
-const actions = [
+export const actions = [
   {
     label: 'Add additional error',
     apply: (props: StateProps) => {

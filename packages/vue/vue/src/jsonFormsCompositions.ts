@@ -141,15 +141,21 @@ export type Required<T> = T extends object
   ? { [P in keyof T]-?: NonNullable<T[P]> }
   : T;
 
+// TODO fix @typescript-eslint/ban-types
+// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-unused-vars
 export function useControl<R, D, P extends {}>(
   props: P,
   stateMap: (state: JsonFormsState, props: P) => R
 ): { control: ComputedRef<Required<R>> };
+// TODO fix @typescript-eslint/ban-types
+// eslint-disable-next-line @typescript-eslint/ban-types
 export function useControl<R, D, P extends {}>(
   props: P,
   stateMap: (state: JsonFormsState, props: P) => R,
   dispatchMap: (dispatch: Dispatch<CoreActions>) => D
 ): { control: ComputedRef<Required<R>> } & D;
+// TODO fix @typescript-eslint/ban-types
+// eslint-disable-next-line @typescript-eslint/ban-types
 export function useControl<R, D, P extends {}>(
   props: P,
   stateMap: (state: JsonFormsState, props: P) => R,
@@ -368,7 +374,7 @@ export const useJsonFormsRenderer = (props: RendererProps) => {
 
   const rootSchema = computed(() => rawProps.value.rootSchema);
   const renderer = computed(() => {
-    const { rootSchema, ...rest } = rawProps.value;
+    const { rootSchema: _rootSchema, ...rest } = rawProps.value;
     return rest;
   });
 

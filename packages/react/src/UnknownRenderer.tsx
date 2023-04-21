@@ -22,8 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React from 'react';
-import { Component } from 'react';
+import React, { Component } from 'react';
 
 /**
  * Props of an {@link UnknownRenderer}

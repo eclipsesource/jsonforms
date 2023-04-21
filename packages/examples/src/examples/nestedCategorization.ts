@@ -118,7 +118,6 @@ export const uischema = {
         },
       ],
     },
-    ,
     {
       type: 'Category',
       label: 'Cat3',

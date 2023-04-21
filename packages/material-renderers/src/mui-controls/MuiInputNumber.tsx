@@ -31,7 +31,9 @@ import { useDebouncedChange } from '../util';
 const toNumber = (value: string) =>
   value === '' ? undefined : parseFloat(value);
 const eventToValue = (ev: any) => toNumber(ev.target.value);
-export const MuiInputNumber = React.memo((props: CellProps & WithClassname) => {
+export const MuiInputNumber = React.memo(function MuiInputNumber(
+  props: CellProps & WithClassname
+) {
   const { data, className, id, enabled, uischema, path, handleChange, config } =
     props;
   const inputProps = { step: '0.1' };

@@ -148,9 +148,11 @@ interface TableHeaderCellProps {
   title: string;
 }
 
-const TableHeaderCell = React.memo(({ title }: TableHeaderCellProps) => (
-  <TableCell>{title}</TableCell>
-));
+const TableHeaderCell = React.memo(function TableHeaderCell({
+  title,
+}: TableHeaderCellProps) {
+  return <TableCell>{title}</TableCell>;
+});
 
 interface NonEmptyCellProps extends OwnPropsOfNonEmptyCell {
   rootSchema: JsonSchema;
@@ -212,48 +214,46 @@ interface NonEmptyCellComponentProps {
   cells?: JsonFormsCellRendererRegistryEntry[];
   isValid: boolean;
 }
-const NonEmptyCellComponent = React.memo(
-  ({
-    path,
-    propName,
-    schema,
-    rootSchema,
-    errors,
-    enabled,
-    renderers,
-    cells,
-    isValid,
-  }: NonEmptyCellComponentProps) => {
-    return (
-      <NoBorderTableCell>
-        {schema.properties ? (
-          <DispatchCell
-            schema={Resolve.schema(
-              schema,
-              `#/properties/${encode(propName)}`,
-              rootSchema
-            )}
-            uischema={controlWithoutLabel(`#/properties/${encode(propName)}`)}
-            path={path}
-            enabled={enabled}
-            renderers={renderers}
-            cells={cells}
-          />
-        ) : (
-          <DispatchCell
-            schema={schema}
-            uischema={controlWithoutLabel('#')}
-            path={path}
-            enabled={enabled}
-            renderers={renderers}
-            cells={cells}
-          />
-        )}
-        <FormHelperText error={!isValid}>{!isValid && errors}</FormHelperText>
-      </NoBorderTableCell>
-    );
-  }
-);
+const NonEmptyCellComponent = React.memo(function NonEmptyCellComponent({
+  path,
+  propName,
+  schema,
+  rootSchema,
+  errors,
+  enabled,
+  renderers,
+  cells,
+  isValid,
+}: NonEmptyCellComponentProps) {
+  return (
+    <NoBorderTableCell>
+      {schema.properties ? (
+        <DispatchCell
+          schema={Resolve.schema(
+            schema,
+            `#/properties/${encode(propName)}`,
+            rootSchema
+          )}
+          uischema={controlWithoutLabel(`#/properties/${encode(propName)}`)}
+          path={path}
+          enabled={enabled}
+          renderers={renderers}
+          cells={cells}
+        />
+      ) : (
+        <DispatchCell
+          schema={schema}
+          uischema={controlWithoutLabel('#')}
+          path={path}
+          enabled={enabled}
+          renderers={renderers}
+          cells={cells}
+        />
+      )}
+      <FormHelperText error={!isValid}>{!isValid && errors}</FormHelperText>
+    </NoBorderTableCell>
+  );
+});
 
 const NonEmptyCell = (ownProps: OwnPropsOfNonEmptyCell) => {
   const ctx = useJsonForms();

@@ -46,48 +46,44 @@ export const groupTester: RankedTester = rankWith(1, uiTypeIs('Group'));
 export const GroupLayoutRenderer = (
   props: LayoutProps & VanillaRendererProps
 ) => {
-  const { data, ...otherProps } = props;
+  const { data: _data, ...otherProps } = props;
   // We don't hand over data to the layout renderer to avoid rerendering it with every data change
   return <GroupLayoutRendererComponent {...otherProps} />;
 };
 
 const GroupLayoutRendererComponent: FunctionComponent<
   LayoutProps & VanillaRendererProps
-> = React.memo(
-  ({
-    schema,
-    uischema,
-    path,
-    enabled,
-    visible,
-    label,
-    getStyle,
-    getStyleAsClassName,
-  }: LayoutProps & VanillaRendererProps) => {
-    const group = uischema as GroupLayout;
-    const elementsSize = group.elements ? group.elements.length : 0;
-    const classNames = getStyleAsClassName('group.layout');
-    const childClassNames = ['group-layout-item']
-      .concat(getStyle('group.layout.item', elementsSize))
-      .join(' ');
+> = React.memo(function GroupLayoutRendererComponent({
+  schema,
+  uischema,
+  path,
+  enabled,
+  visible,
+  label,
+  getStyle,
+  getStyleAsClassName,
+}: LayoutProps & VanillaRendererProps) {
+  const group = uischema as GroupLayout;
+  const elementsSize = group.elements ? group.elements.length : 0;
+  const classNames = getStyleAsClassName('group.layout');
+  const childClassNames = ['group-layout-item']
+    .concat(getStyle('group.layout.item', elementsSize))
+    .join(' ');
 
-    return (
-      <fieldset
-        className={classNames}
-        hidden={visible === undefined || visible === null ? false : !visible}
-      >
-        {!isEmpty(label) ? (
-          <legend className={getStyleAsClassName('group.label')}>
-            {label}
-          </legend>
-        ) : (
-          ''
-        )}
-        {renderChildren(group, schema, childClassNames, path, enabled)}
-      </fieldset>
-    );
-  }
-);
+  return (
+    <fieldset
+      className={classNames}
+      hidden={visible === undefined || visible === null ? false : !visible}
+    >
+      {!isEmpty(label) ? (
+        <legend className={getStyleAsClassName('group.label')}>{label}</legend>
+      ) : (
+        ''
+      )}
+      {renderChildren(group, schema, childClassNames, path, enabled)}
+    </fieldset>
+  );
+});
 
 export default withVanillaControlProps(
   withJsonFormsLayoutProps(GroupLayoutRenderer)

@@ -9,6 +9,7 @@ export default defineComponent({
   components: {
     JsonForms,
   },
+  // eslint-disable-next-line vue/require-prop-types
   props: ['initialData', 'schema', 'uischema', 'config'],
   data() {
     return {

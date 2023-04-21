@@ -140,8 +140,7 @@ export abstract class JsonFormsAbstractControl<
     return this.error ? { error: this.error } : null;
   };
 
-  // @ts-ignore
-  mapAdditionalProps(props: Props) {
+  mapAdditionalProps(_props: Props) {
     // do nothing by default
   }
 

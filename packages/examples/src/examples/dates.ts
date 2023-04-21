@@ -24,7 +24,7 @@
 */
 import { registerExamples } from '../register';
 
-const schema = {
+export const schema = {
   type: 'object',
   properties: {
     schemaBased: {
@@ -66,7 +66,7 @@ const schema = {
     },
   },
 };
-const uischema = {
+export const uischema = {
   type: 'VerticalLayout',
   elements: [
     {
@@ -126,7 +126,7 @@ const uischema = {
   ],
 };
 
-const data = {
+export const data = {
   schemaBased: {
     date: new Date().toISOString().substr(0, 10),
     time: '13:37',

@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import startCase from 'lodash/startCase';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   JsonFormsAngularService,
   JsonFormsArrayControl,
@@ -137,7 +137,7 @@ import {
   `,
   styles: ['table {width: 100%;}', '.cdk-column-action { width: 15%}'],
 })
-export class TableRenderer extends JsonFormsArrayControl {
+export class TableRenderer extends JsonFormsArrayControl implements OnInit {
   detailUiSchema: UISchemaElement;
   displayedColumns: string[];
   items: ColumnDescription[];

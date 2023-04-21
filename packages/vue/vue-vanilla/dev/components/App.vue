@@ -44,6 +44,7 @@ export default defineComponent({
   computed: {
     example() {
       const name = (this as any).currentExampleName;
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       return examples.find((ex) => ex.name === name)!;
     },
   },

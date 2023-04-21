@@ -24,7 +24,7 @@
 */
 import { registerExamples } from '../register';
 
-const data = {
+export const data = {
   orders: [
     {
       customer: {
@@ -54,7 +54,7 @@ const data = {
   ],
 };
 
-const schema = {
+export const schema = {
   definitions: {
     order: {
       type: 'object',
@@ -105,7 +105,7 @@ const schema = {
   },
 };
 
-const uischema = {
+export const uischema = {
   type: 'ListWithDetail',
   scope: '#/properties/orders',
   options: {
@@ -195,7 +195,7 @@ const uischema = {
   },
 };
 
-const uischemaNoLabelRef = {
+export const uischemaNoLabelRef = {
   type: 'ListWithDetail',
   scope: '#/properties/orders',
   options: {

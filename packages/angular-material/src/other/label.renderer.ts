@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   JsonFormsAngularService,
   JsonFormsBaseRenderer,
@@ -42,7 +42,10 @@ import { Subscription } from 'rxjs';
   selector: 'LabelRenderer',
   template: ` <label class="mat-title" fxFlex> {{ label }} </label> `,
 })
-export class LabelRenderer extends JsonFormsBaseRenderer<LabelElement> {
+export class LabelRenderer
+  extends JsonFormsBaseRenderer<LabelElement>
+  implements OnDestroy, OnInit
+{
   label: string;
   visible: boolean;
 

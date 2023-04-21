@@ -282,6 +282,9 @@ test('mapStateToCellProps - translated error', (t) => {
     path: 'firstName',
   };
   const state = createState(coreUISchema);
+  if (state.jsonforms.core === undefined) {
+    fail('Failed to create jsonforms core state');
+  }
   const schema = state.jsonforms.core?.schema as JsonSchema;
   const data = state.jsonforms.core?.data as any;
   // mark firstName as required, delete the value from data, then get errors from ajv from the compiled schema
@@ -289,7 +292,7 @@ test('mapStateToCellProps - translated error', (t) => {
   delete data.firstName;
   const ajv = createAjv();
   const v = ajv.compile(schema);
-  state.jsonforms.core!.errors = validate(v, data);
+  state.jsonforms.core.errors = validate(v, data);
   // add a mock i18n state to verify that the error gets translated
   state.jsonforms.i18n = {
     translateError: (error) => `i18n-error:${error.keyword}`,
