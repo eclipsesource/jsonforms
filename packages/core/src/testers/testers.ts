@@ -37,7 +37,12 @@ import type {
   JsonSchema,
   UISchemaElement,
 } from '../models';
-import { deriveTypes, hasType, resolveSchema } from '../util';
+import {
+  deriveTypes,
+  hasType,
+  isOneOfEnumSchema,
+  resolveSchema,
+} from '../util';
 
 /**
  * Constant that indicates that a tester is not capable of handling
@@ -353,11 +358,7 @@ export const isEnumControl = and(
  */
 export const isOneOfEnumControl = and(
   uiTypeIs('Control'),
-  schemaMatches(
-    (schema) =>
-      schema.hasOwnProperty('oneOf') &&
-      (schema.oneOf as JsonSchema[]).every((s) => s.const !== undefined)
-  )
+  schemaMatches((schema) => isOneOfEnumSchema(schema))
 );
 
 /**
@@ -517,7 +518,7 @@ export const isObjectArrayWithNesting = (
           if (val.anyOf || val.allOf) {
             return true;
           }
-          if (val.oneOf && !isOneOfEnumControl(uischema, val, context)) {
+          if (val.oneOf && !isOneOfEnumSchema(val)) {
             return true;
           }
           if (hasType(val, 'object')) {

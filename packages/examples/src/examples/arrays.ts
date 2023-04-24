@@ -45,6 +45,10 @@ export const schema = {
             type: 'string',
             const: 'foo',
           },
+          oneOfEnum: {
+            type: 'string',
+            oneOf: [{ const: 'foo' }, { const: 'bar' }],
+          },
         },
       },
     },
@@ -95,6 +99,7 @@ export const data = {
     {
       date: new Date().toISOString().substr(0, 10),
       message: 'Get ready for booohay',
+      oneOfEnum: 'test',
     },
   ],
 };
