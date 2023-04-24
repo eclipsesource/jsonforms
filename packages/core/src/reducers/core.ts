@@ -45,7 +45,7 @@ import {
   UPDATE_CORE,
   UpdateCoreAction,
 } from '../actions';
-import { createAjv, Reducer } from '../util';
+import { createAjv, isOneOfEnumSchema, Reducer } from '../util';
 import type { JsonSchema, UISchemaElement } from '../models';
 
 export const validate = (
@@ -389,7 +389,11 @@ export const errorsAt =
 
     return filter(errors, (error) => {
       // Filter errors that match any keyword that we don't want to show in the UI
-      if (filteredErrorKeywords.indexOf(error.keyword) !== -1) {
+      // but keep the errors for oneOf enums
+      if (
+        filteredErrorKeywords.indexOf(error.keyword) !== -1 &&
+        !isOneOfEnumSchema(error.parentSchema)
+      ) {
         return false;
       }
       const controlPath = getControlPath(error);
@@ -400,12 +404,13 @@ export const errorsAt =
       // In the primitive case the error's data path is the same for all subschemas:
       // It directly points to the property defining the anyOf/oneOf.
       // The same holds true for errors on the array level (e.g. min item amount).
-      // In contrast, this comparison must not be done for errors whose parent schema defines an object
+      // In contrast, this comparison must not be done for errors whose parent schema defines an object or a oneOf enum,
       // because the parent schema can never match the property schema (e.g. for 'required' checks).
       const parentSchema: JsonSchema | undefined = error.parentSchema;
       if (
         result &&
         !isObjectSchema(parentSchema) &&
+        !isOneOfEnumSchema(parentSchema) &&
         combinatorPaths.findIndex((p) => instancePath.startsWith(p)) !== -1
       ) {
         result = result && isEqual(parentSchema, schema);

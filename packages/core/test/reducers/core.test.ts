@@ -861,6 +861,80 @@ test('errorAt filters array inner value', (t) => {
   t.deepEqual(filtered[0], state.errors[1]);
 });
 
+test('errorAt filters oneOf enum', (t) => {
+  const ajv = createAjv();
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      oneOfEnum: {
+        type: 'string',
+        oneOf: [
+          { title: 'Number', const: '1' },
+          { title: 'Color', const: '2' },
+        ],
+      },
+    },
+  };
+  const data: { oneOfEnum: string } = { oneOfEnum: '3' };
+  const v = ajv.compile(schema);
+  const errors = validate(v, data);
+
+  const state: JsonFormsCore = {
+    data,
+    schema,
+    uischema: undefined,
+    errors,
+  };
+  const filtered = errorAt('oneOfEnum', schema.properties.oneOfEnum)(state);
+  t.is(filtered.length, 1);
+  // in the state, we get 3 errors: one for each const value in the oneOf (we have two consts here) and one for the oneOf property itself
+  // we only display the last error on the control
+  t.deepEqual(filtered[0], state.errors[2]);
+});
+
+test('errorAt filters array with inner oneOf enum', (t) => {
+  const ajv = createAjv();
+  const schema = {
+    type: 'object',
+    properties: {
+      parentArray: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            oneOfEnumWithError: {
+              type: 'string',
+              oneOf: [
+                { title: 'Number', const: '1' },
+                { title: 'Color', const: '2' },
+              ],
+            },
+          },
+        },
+      },
+    },
+  };
+  const data: { parentArray: { oneOfEnumWithError: string }[] } = {
+    parentArray: [{ oneOfEnumWithError: 'test' }],
+  };
+  const v = ajv.compile(schema);
+  const errors = validate(v, data);
+  const state: JsonFormsCore = {
+    data,
+    schema,
+    uischema: undefined,
+    errors,
+  };
+  const filtered = errorAt(
+    'parentArray.0.oneOfEnumWithError',
+    schema.properties.parentArray.items.properties.oneOfEnumWithError
+  )(state);
+  t.is(filtered.length, 1);
+  // in the state, we get 3 errors: one for each const value in the oneOf (we have two consts here) and one for the oneOf property itself
+  // we only display the last error on the control
+  t.deepEqual(filtered[0], state.errors[2]);
+});
+
 test('errorAt filters oneOf simple', (t) => {
   const ajv = createAjv();
   const schema: JsonSchema = {

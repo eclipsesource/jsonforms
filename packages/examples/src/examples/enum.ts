@@ -35,6 +35,10 @@ export const schema = {
       type: 'string',
       enum: ['foo', 'bar'],
     },
+    enumWithError: {
+      type: 'string',
+      enum: ['foo', 'bar'],
+    },
     oneOfEnum: {
       type: 'string',
       oneOf: [
@@ -44,6 +48,14 @@ export const schema = {
       ],
     },
     oneOfEnumSet: {
+      type: 'string',
+      oneOf: [
+        { const: 'foo', title: 'Foo' },
+        { const: 'bar', title: 'Bar' },
+        { const: 'foobar', title: 'FooBar' },
+      ],
+    },
+    oneOfEnumWithError: {
       type: 'string',
       oneOf: [
         { const: 'foo', title: 'Foo' },
@@ -90,6 +102,10 @@ export const uischema = {
             autocomplete: false,
           },
         },
+        {
+          type: 'Control',
+          scope: '#/properties/enumWithError',
+        },
       ],
     },
     {
@@ -118,12 +134,21 @@ export const uischema = {
             autocomplete: false,
           },
         },
+        {
+          type: 'Control',
+          scope: '#/properties/oneOfEnumWithError',
+        },
       ],
     },
   ],
 };
 
-export const data = { plainEnumSet: 'foo', oneOfEnumSet: 'bar' };
+export const data = {
+  plainEnumSet: 'foo',
+  enumWithError: 'bogus',
+  oneOfEnumSet: 'bar',
+  oneOfEnumWithError: 'bogus',
+};
 
 registerExamples([
   {
