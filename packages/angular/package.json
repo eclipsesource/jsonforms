@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/angular",
-  "version": "3.1.0-alpha.2",
+  "version": "3.1.0-alpha.3",
   "description": "Angular module of JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -68,7 +68,7 @@
   "peerDependencies": {
     "@angular/core": "^12.0.0 || ^13.0.0 || ^14.0.0",
     "@angular/forms": "^12.0.0 || ^13.0.0 || ^14.0.0",
-    "@jsonforms/core": "3.1.0-alpha.2",
+    "@jsonforms/core": "3.1.0-alpha.3",
     "rxjs": "^6.5.3 || ^7.4.0"
   },
   "devDependencies": {
@@ -80,7 +80,7 @@
     "@angular/compiler-cli": "^12.0.0",
     "@angular/core": "^12.0.0",
     "@angular/forms": "^12.0.0",
-    "@jsonforms/core": "^3.1.0-alpha.2",
+    "@jsonforms/core": "^3.1.0-alpha.3",
     "@typescript-eslint/eslint-plugin": "^5.54.1",
     "@typescript-eslint/parser": "^5.54.1",
     "ava": "~2.4.0",
