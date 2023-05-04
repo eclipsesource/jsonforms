@@ -49,7 +49,10 @@ export const resolveData = (instance: any, dataPath: string): any => {
   const dataPathSegments = dataPath.split('.');
 
   return dataPathSegments.reduce((curInstance, decodedSegment) => {
-    if (!curInstance || !curInstance.hasOwnProperty(decodedSegment)) {
+    if (
+      !curInstance ||
+      !Object.prototype.hasOwnProperty.call(curInstance, decodedSegment)
+    ) {
       return undefined;
     }
 

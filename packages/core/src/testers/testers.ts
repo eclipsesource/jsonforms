@@ -325,17 +325,23 @@ export const isObjectControl = and(uiTypeIs('Control'), schemaTypeIs('object'));
 
 export const isAllOfControl = and(
   uiTypeIs('Control'),
-  schemaMatches((schema) => schema.hasOwnProperty('allOf'))
+  schemaMatches((schema) =>
+    Object.prototype.hasOwnProperty.call(schema, 'allOf')
+  )
 );
 
 export const isAnyOfControl = and(
   uiTypeIs('Control'),
-  schemaMatches((schema) => schema.hasOwnProperty('anyOf'))
+  schemaMatches((schema) =>
+    Object.prototype.hasOwnProperty.call(schema, 'anyOf')
+  )
 );
 
 export const isOneOfControl = and(
   uiTypeIs('Control'),
-  schemaMatches((schema) => schema.hasOwnProperty('oneOf'))
+  schemaMatches((schema) =>
+    Object.prototype.hasOwnProperty.call(schema, 'oneOf')
+  )
 );
 
 /**
@@ -346,8 +352,12 @@ export const isOneOfControl = and(
 export const isEnumControl = and(
   uiTypeIs('Control'),
   or(
-    schemaMatches((schema) => schema.hasOwnProperty('enum')),
-    schemaMatches((schema) => schema.hasOwnProperty('const'))
+    schemaMatches((schema) =>
+      Object.prototype.hasOwnProperty.call(schema, 'enum')
+    ),
+    schemaMatches((schema) =>
+      Object.prototype.hasOwnProperty.call(schema, 'const')
+    )
   )
 );
 
@@ -592,9 +602,9 @@ export const isRangeControl = and(
   or(schemaTypeIs('number'), schemaTypeIs('integer')),
   schemaMatches(
     (schema) =>
-      schema.hasOwnProperty('maximum') &&
-      schema.hasOwnProperty('minimum') &&
-      schema.hasOwnProperty('default')
+      Object.prototype.hasOwnProperty.call(schema, 'maximum') &&
+      Object.prototype.hasOwnProperty.call(schema, 'minimum') &&
+      Object.prototype.hasOwnProperty.call(schema, 'default')
   ),
   optionIs('slider', true)
 );

@@ -38,7 +38,7 @@ const distinct = (
 
   return properties.filter((item) => {
     const discriminatorValue = discriminator(item);
-    if (known.hasOwnProperty(discriminatorValue)) {
+    if (Object.prototype.hasOwnProperty.call(known, discriminatorValue)) {
       return false;
     } else {
       known[discriminatorValue] = true;
@@ -155,13 +155,17 @@ export const generateJsonSchema = (
     (optionName: string): boolean | string[] => {
       switch (optionName) {
         case ADDITIONAL_PROPERTIES:
-          if (options.hasOwnProperty(ADDITIONAL_PROPERTIES)) {
+          if (
+            Object.prototype.hasOwnProperty.call(options, ADDITIONAL_PROPERTIES)
+          ) {
             return options[ADDITIONAL_PROPERTIES];
           }
 
           return true;
         case REQUIRED_PROPERTIES:
-          if (options.hasOwnProperty(REQUIRED_PROPERTIES)) {
+          if (
+            Object.prototype.hasOwnProperty.call(options, REQUIRED_PROPERTIES)
+          ) {
             return options[REQUIRED_PROPERTIES](props);
           }
 
