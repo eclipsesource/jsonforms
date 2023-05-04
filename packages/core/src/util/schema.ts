@@ -44,6 +44,7 @@ export const getFirstPrimitiveProp = (schema: any) => {
  * Tests whether the schema has an enum based on oneOf.
  */
 export const isOneOfEnumSchema = (schema: JsonSchema) =>
-  schema?.hasOwnProperty('oneOf') &&
-  schema?.oneOf &&
+  !!schema &&
+  Object.prototype.hasOwnProperty.call(schema, 'oneOf') &&
+  schema.oneOf &&
   (schema.oneOf as JsonSchema[]).every((s) => s.const !== undefined);

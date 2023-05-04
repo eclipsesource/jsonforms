@@ -23,7 +23,6 @@ module.exports = {
     '@angular-eslint/directive-class-suffix': 'off',
     '@angular-eslint/no-conflicting-lifecycle': 'warn',
     '@typescript-eslint/no-explicit-any': 'off',
-    'no-prototype-builtins': 'off',
     // Base rule must be disabled to avoid incorrect errors
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': [

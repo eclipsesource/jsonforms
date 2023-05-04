@@ -133,7 +133,9 @@ const hasEnumAndText = (schemas: JsonSchema[]) => {
 const simpleAnyOf = and(
   uiTypeIs('Control'),
   schemaMatches(
-    (schema) => schema.hasOwnProperty('anyOf') && hasEnumAndText(schema.anyOf)
+    (schema) =>
+      Object.prototype.hasOwnProperty.call(schema, 'anyOf') &&
+      hasEnumAndText(schema.anyOf)
   )
 );
 export const materialAnyOfStringOrEnumControlTester: RankedTester = rankWith(

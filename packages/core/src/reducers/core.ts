@@ -90,7 +90,10 @@ const initState: JsonFormsCore = {
 };
 
 const reuseAjvForSchema = (ajv: Ajv, schema: JsonSchema): Ajv => {
-  if (schema.hasOwnProperty('id') || schema.hasOwnProperty('$id')) {
+  if (
+    Object.prototype.hasOwnProperty.call(schema, 'id') ||
+    Object.prototype.hasOwnProperty.call(schema, '$id')
+  ) {
     ajv.removeSchema(schema);
   }
   return ajv;
