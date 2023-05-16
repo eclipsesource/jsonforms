@@ -45,5 +45,6 @@
     "**/docs": true,
     "**/node_modules": true,
     "**/lib": true
-  }
+  },
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

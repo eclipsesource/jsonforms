@@ -115,7 +115,9 @@ describe('Text area cell', () => {
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
         <TextAreaCell schema={fixture.schema} uischema={uischema} path='name' />
-      </JsonFormsStateProvider>
+      </JsonFormsStateProvider>,
+      // Attach to body to get focus to work with JSDom
+      { attachTo: document.body }
     );
     const input = wrapper.find('textarea').getDOMNode();
     expect(document.activeElement).toBe(input);

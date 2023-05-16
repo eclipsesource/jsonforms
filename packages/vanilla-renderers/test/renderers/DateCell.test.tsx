@@ -178,7 +178,9 @@ describe('Date cell', () => {
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core }}>
         <DateCell schema={fixture.schema} uischema={uischema} path='foo' />
-      </JsonFormsStateProvider>
+      </JsonFormsStateProvider>,
+      // Attach to body to get focus to work with JSDom
+      { attachTo: document.body }
     );
     const input = wrapper.find('input').getDOMNode();
     expect(document.activeElement).toBe(input);

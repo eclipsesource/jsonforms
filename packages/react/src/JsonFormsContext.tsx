@@ -233,7 +233,7 @@ export const JsonFormsStateProvider = ({
    * even on low-end mobile device settings in the Chrome simulator.
    */
   const debouncedEmit = useCallback(
-    debounce((...args) => onChangeRef.current?.(...args), 10),
+    debounce((...args: any[]) => onChangeRef.current?.(...args), 10),
     []
   );
   useEffect(() => {

@@ -1,5 +1,9 @@
 {
   "name": "jsonforms-monorepo",
+  "engines": {
+    "node": "^16.13",
+    "pnpm": ">=8.5"
+  },
   "scripts": {
     "lerna": "lerna",
     "preparePublish": "git clean -dfx && npm ci && npm run init && npm run clean && npm run build && npm run test",
@@ -19,8 +23,7 @@
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.16.5",
     "@babel/plugin-proposal-optional-chaining": "^7.16.5",
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
-    "istanbul-lib-coverage": "^3.2.0",
-    "@types/jest": "^24.0.23",
+    "@types/jest": "^27.4.1",
     "@types/lodash": "^4.14.149",
     "ajv": "^8.6.1",
     "ajv-formats": "^2.1.0",
@@ -30,8 +33,9 @@
     "coveralls": "^3.0.9",
     "cross-env": "^7.0.2",
     "css-loader": "^3.2.0",
+    "istanbul-lib-coverage": "^3.2.0",
     "lcov-result-merger": "^3.1.0",
-    "lerna": "^3.19.0",
+    "lerna": "^6.6.2",
     "nan": "^2.14.2",
     "nyc": "^15.1.0",
     "prettier": "^2.8.4",
@@ -40,7 +44,7 @@
     "style-loader": "^1.0.1",
     "ts-loader": "^6.2.1",
     "ts-node": "^10.4.0",
-    "typedoc": "^0.19.2",
+    "tslib": "^2.5.0",
     "typescript": "4.2.3",
     "webpack": "^4.41.2",
     "webpack-merge": "^4.2.2"

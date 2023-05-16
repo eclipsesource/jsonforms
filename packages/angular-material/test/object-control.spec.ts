@@ -24,7 +24,7 @@
 */
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { CommonModule } from '@angular/common';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -93,7 +93,7 @@ describe('Object Control', () => {
   let fixture: ComponentFixture<any>;
   let component: any;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
         ObjectControlRenderer,
@@ -130,7 +130,7 @@ describe('Object Control', () => {
     component = fixture.componentInstance;
   }));
 
-  it('object control creates group', async(() => {
+  it('object control creates group', waitForAsync(() => {
     component.uischema = uischema2;
     component.schema = schema2;
 
@@ -153,7 +153,7 @@ describe('Object Control', () => {
     });
   }));
 
-  it('render all elements', async(() => {
+  it('render all elements', waitForAsync(() => {
     component.uischema = uischema1;
     component.schema = schema2;
 
@@ -173,7 +173,7 @@ describe('Object Control', () => {
     });
   }));
 
-  it('render only own elements', async(() => {
+  it('render only own elements', waitForAsync(() => {
     component.uischema = uischema2;
     component.schema = schema2;
 
@@ -192,7 +192,7 @@ describe('Object Control', () => {
     });
   }));
 
-  xit('can be disabled', async(() => {
+  xit('can be disabled', waitForAsync(() => {
     component.uischema = uischema1;
     component.schema = schema1;
     component.disabled = true;
@@ -211,7 +211,7 @@ describe('Object Control', () => {
       expect(fixture.nativeElement.querySelector('input').disabled).toBe(true);
     });
   }));
-  xit('should be enabled by default', async(() => {
+  xit('should be enabled by default', waitForAsync(() => {
     component.uischema = uischema1;
     component.schema = schema1;
 

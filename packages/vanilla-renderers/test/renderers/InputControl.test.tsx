@@ -118,7 +118,9 @@ describe('Input control', () => {
         initState={{ renderers: vanillaRenderers, core, cells, renderes }}
       >
         <JsonFormsDispatch />
-      </JsonFormsStateProvider>
+      </JsonFormsStateProvider>,
+      // Attach to body to get focus to work with JSDom
+      { attachTo: document.body }
     );
     const inputs = wrapper.find('input');
     expect(document.activeElement).not.toBe(inputs.at(0).getDOMNode());
