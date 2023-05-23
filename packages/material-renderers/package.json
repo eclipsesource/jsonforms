@@ -84,8 +84,8 @@
     "@emotion/styled": "^11.3.0",
     "@jsonforms/core": "3.1.0-alpha.3",
     "@jsonforms/react": "3.1.0-alpha.3",
-    "@mui/icons-material": "~5.2.2",
-    "@mui/material": "~5.2.2",
+    "@mui/icons-material": "~5.11.16",
+    "@mui/material": "~5.13.0",
     "@mui/x-date-pickers": "^6.0.0"
   },
   "devDependencies": {
@@ -93,8 +93,8 @@
     "@emotion/styled": "^11.3.0",
     "@jsonforms/core": "^3.1.0-alpha.3",
     "@jsonforms/react": "^3.1.0-alpha.3",
-    "@mui/icons-material": "~5.2.0",
-    "@mui/material": "~5.2.2",
+    "@mui/icons-material": "~5.11.16",
+    "@mui/material": "~5.13.0",
     "@mui/x-date-pickers": "^6.5.0",
     "@rollup/plugin-commonjs": "^23.0.3",
     "@rollup/plugin-json": "^5.0.2",
