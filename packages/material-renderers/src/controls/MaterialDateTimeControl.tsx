@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
+
   Copyright (c) 2017-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -38,7 +38,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import {
   createOnChangeHandler,
   getData,
-  ResettableTextField,
+  PickersActionBarParams,
   useFocus,
 } from '../util';
 
@@ -58,6 +58,8 @@ export const MaterialDateTimeControl = (props: ControlProps) => {
     data,
     config,
   } = props;
+  const inputRef = React.useRef<HTMLInputElement | null>(null);
+
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
   const isValid = errors.length === 0;
 
@@ -91,50 +93,42 @@ export const MaterialDateTimeControl = (props: ControlProps) => {
   );
 
   const value = getData(data, saveFormat);
-  const valueInInputFormat = value ? value.format(format) : '';
 
   return (
     <Hidden xsUp={!visible}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DateTimePicker
+          inputRef={inputRef}
           label={label}
           value={value}
           onChange={onChange}
-          inputFormat={format}
-          disableMaskedInput
+          format={format}
           ampm={!!appliedUiSchemaOptions.ampm}
           views={views}
           disabled={!enabled}
-          componentsProps={{
-            actionBar: {
-              actions: (variant) =>
-                variant === 'desktop' ? [] : ['clear', 'cancel', 'accept'],
+          slotProps={{
+            actionBar: ({ wrapperVariant }: PickersActionBarParams) => ({
+              actions:
+                wrapperVariant === 'desktop'
+                  ? []
+                  : ['clear', 'cancel', 'accept'],
+            }),
+            textField: {
+              id: id + '-input',
+              required:
+                required && !appliedUiSchemaOptions.hideRequiredAsterisk,
+              autoFocus: appliedUiSchemaOptions.focus,
+              error: !isValid,
+              fullWidth: !appliedUiSchemaOptions.trim,
+              inputProps: {
+                type: 'text',
+              },
+              InputLabelProps: data ? { shrink: true } : undefined,
+              onFocus: onFocus,
+              onBlur: onBlur,
+              variant: 'standard',
             },
           }}
-          renderInput={(params) => (
-            <ResettableTextField
-              {...params}
-              rawValue={data}
-              dayjsValueIsValid={value !== null}
-              valueInInputFormat={valueInInputFormat}
-              focused={focused}
-              id={id + '-input'}
-              required={
-                required && !appliedUiSchemaOptions.hideRequiredAsterisk
-              }
-              autoFocus={appliedUiSchemaOptions.focus}
-              error={!isValid}
-              fullWidth={!appliedUiSchemaOptions.trim}
-              inputProps={{
-                ...params.inputProps,
-                type: 'text',
-              }}
-              InputLabelProps={data ? { shrink: true } : undefined}
-              onFocus={onFocus}
-              onBlur={onBlur}
-              variant={'standard'}
-            />
-          )}
         />
         <FormHelperText error={!isValid && !showDescription}>
           {firstFormHelperText}

@@ -1,7 +1,7 @@
 /*
   The MIT License
 
-  Copyright (c) 2017-2019 EclipseSource Munich
+  Copyright (c) 2023 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,10 +22,9 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-export * from './datejs';
-export * from './layout';
-export * from './theme';
-export * from './debounce';
-export * from './focus';
-export * from './i18nDefaults';
-export * from './types';
+
+// @mui/x-date-pickers does not provide types for the functional ActionBar API, therefore this
+// helper interface was introduced to satisfy TS
+export interface PickersActionBarParams {
+  wrapperVariant: 'mobile' | 'desktop' | null;
+}
