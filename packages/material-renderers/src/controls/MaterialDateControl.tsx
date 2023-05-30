@@ -58,8 +58,6 @@ export const MaterialDateControl = (props: ControlProps) => {
     data,
     config,
   } = props;
-  const inputRef = React.useRef<HTMLInputElement | null>(null);
-
   const isValid = errors.length === 0;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
   const showDescription = !isDescriptionHidden(
@@ -93,7 +91,6 @@ export const MaterialDateControl = (props: ControlProps) => {
         <DatePicker
           label={label}
           value={value}
-          inputRef={inputRef}
           onChange={onChange}
           format={format}
           views={views}

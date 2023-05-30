@@ -58,8 +58,6 @@ export const MaterialTimeControl = (props: ControlProps) => {
     data,
     config,
   } = props;
-  const inputRef = React.useRef<HTMLInputElement | null>(null);
-
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
   const isValid = errors.length === 0;
 
@@ -92,7 +90,6 @@ export const MaterialTimeControl = (props: ControlProps) => {
     <Hidden xsUp={!visible}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <TimePicker
-          inputRef={inputRef}
           label={label}
           value={value}
           onChange={onChange}
