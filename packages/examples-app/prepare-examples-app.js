@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { copySync } from 'fs-extra/esm';
-import { copyFileSync, mkdirSync, rmdirSync } from 'fs';
+import { copyFileSync, existsSync, mkdirSync, rmdirSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -18,8 +18,11 @@ const examples = {
 };
 
 // Clean and recreate dist dir
-console.log('Clean and recreate dist dir...');
-rmdirSync(distDir, { recursive: true, force: true });
+if (existsSync(distDir)) {
+  console.log('Remove existing dist dir...');
+  rmdirSync(distDir, { recursive: true, force: true });
+}
+console.log('Create dist dir...');
 mkdirSync(distDir, { recursive: true });
 
 // Copy index and built examples
