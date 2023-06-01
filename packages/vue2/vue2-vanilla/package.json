@@ -49,7 +49,7 @@
     "doc": "typedoc --name 'JSON Forms Vue 2 Vanilla Renderers' --out docs src --ignoreCompilerErrors"
   },
   "dependencies": {
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",

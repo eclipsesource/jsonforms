@@ -76,7 +76,7 @@
   },
   "dependencies": {
     "hammerjs": "2.0.8",
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
     "@angular-eslint/eslint-plugin": "^12.0.0",

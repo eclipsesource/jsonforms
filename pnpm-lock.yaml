@@ -92,7 +92,7 @@ importers:
   packages/angular:
     dependencies:
       lodash:
-        specifier: ^4.17.15
+        specifier: ^4.17.21
         version: 4.17.21
     devDependencies:
       '@angular-eslint/eslint-plugin':
@@ -174,7 +174,7 @@ importers:
         specifier: 2.0.8
         version: 2.0.8
       lodash:
-        specifier: ^4.17.15
+        specifier: ^4.17.21
         version: 4.17.21
     devDependencies:
       '@angular-eslint/eslint-plugin':
@@ -473,7 +473,7 @@ importers:
         specifier: ^2.1.0
         version: 2.1.0(ajv@8.6.1)
       lodash:
-        specifier: ^4.17.15
+        specifier: ^4.17.21
         version: 4.17.21
     devDependencies:
       '@istanbuljs/nyc-config-typescript':
@@ -563,6 +563,9 @@ importers:
       ajv-i18n:
         specifier: ^3.5.0
         version: 3.5.0(ajv@6.12.6)
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
     devDependencies:
       '@jsonforms/core':
         specifier: workspace:*
@@ -652,7 +655,7 @@ importers:
         specifier: 3.0.15
         version: 3.0.15
       lodash:
-        specifier: ^4.17.15
+        specifier: ^4.17.21
         version: 4.17.21
       react:
         specifier: ^17.0.2
@@ -709,6 +712,9 @@ importers:
       dayjs:
         specifier: 1.10.6
         version: 1.10.6
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
     devDependencies:
       '@emotion/react':
         specifier: ^11.5.0
@@ -855,7 +861,7 @@ importers:
   packages/react:
     dependencies:
       lodash:
-        specifier: ^4.17.15
+        specifier: ^4.17.21
         version: 4.17.21
     devDependencies:
       '@jsonforms/core':
@@ -965,6 +971,10 @@ importers:
         version: 4.2.3
 
   packages/vanilla-renderers:
+    dependencies:
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
     devDependencies:
       '@istanbuljs/nyc-config-typescript':
         specifier: ^1.0.2
@@ -1099,7 +1109,7 @@ importers:
   packages/vue/vue:
     dependencies:
       lodash:
-        specifier: ^4.17.15
+        specifier: ^4.17.21
         version: 4.17.21
     devDependencies:
       '@babel/core':
@@ -1217,7 +1227,7 @@ importers:
   packages/vue/vue-vanilla:
     dependencies:
       lodash:
-        specifier: ^4.17.15
+        specifier: ^4.17.21
         version: 4.17.21
     devDependencies:
       '@babel/core':
