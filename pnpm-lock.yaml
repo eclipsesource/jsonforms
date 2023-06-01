@@ -90,6 +90,10 @@ importers:
         version: 4.2.2
 
   packages/angular:
+    dependencies:
+      lodash:
+        specifier: ^4.17.15
+        version: 4.17.21
     devDependencies:
       '@angular-eslint/eslint-plugin':
         specifier: ^12.0.0
@@ -169,6 +173,9 @@ importers:
       hammerjs:
         specifier: 2.0.8
         version: 2.0.8
+      lodash:
+        specifier: ^4.17.15
+        version: 4.17.21
     devDependencies:
       '@angular-eslint/eslint-plugin':
         specifier: ^12.0.0
