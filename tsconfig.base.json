@@ -4,7 +4,10 @@
     "declaration": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "lib": ["es6", "dom"],
+    "lib": [
+      "ES2016",
+      "dom"
+    ],
     "module": "ESNext",
     "moduleResolution": "node",
     "target": "ESNext",
@@ -17,5 +20,7 @@
     "esModuleInterop": true,
     "importHelpers": true
   },
-  "types": ["jest"]
+  "types": [
+    "jest"
+  ]
 }
