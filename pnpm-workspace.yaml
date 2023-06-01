@@ -1,4 +1,4 @@
 packages:
   - 'packages/*'
-  # - 'packages/vue/*'
+  - 'packages/vue/*'
   # - 'packages/vue2/*'

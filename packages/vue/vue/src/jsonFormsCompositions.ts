@@ -251,13 +251,30 @@ export const useJsonFormsOneOfEnumControl = (props: ControlProps) => {
   );
 };
 
+// Explicitly create type to avoid TS2732.
+// This is due to core's StatePropsOfArrayControl exposing AJV's ErrorObject type.
+// The same as the parameterized return type of useControl
+// Could alternatively be created like the following with Typescript 4.7+
+// but this does not work with the ESLint typescript parser, yet:
+// type UseJsonFormsArrayControlReturnType = typeof useControl<
+//   ReturnType<typeof mapStateToArrayControlProps>,
+//   ReturnType<typeof mapDispatchToArrayControlProps>,
+//   ControlProps
+// >;
+type UseJsonFormsArrayControlReturnType = {
+  control: ComputedRef<
+    Required<ReturnType<typeof mapStateToArrayControlProps>>
+  >;
+} & ReturnType<typeof mapDispatchToArrayControlProps>;
 /**
  * Provides bindings for 'Control' elements which resolve to 'array' schema elements.
  *
  * Access bindings via the provided reactive `control` object.
  * Dispatch changes via the provided `handleChange` method.
  */
-export const useJsonFormsArrayControl = (props: ControlProps) => {
+export const useJsonFormsArrayControl: (
+  props: ControlProps
+) => UseJsonFormsArrayControlReturnType = (props: ControlProps) => {
   return useControl(
     props,
     mapStateToArrayControlProps,
