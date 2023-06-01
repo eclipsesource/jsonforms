@@ -53,6 +53,7 @@
     "@jsonforms/core": "workspace:*",
     "@rollup/plugin-alias": "^3.1.8",
     "@types/jest": "^27.4.1",
+    "@types/node": "^16.18.34",
     "@typescript-eslint/eslint-plugin": "^5.54.1",
     "@typescript-eslint/parser": "^5.54.1",
     "@vue/cli-plugin-babel": "~4.5.19",

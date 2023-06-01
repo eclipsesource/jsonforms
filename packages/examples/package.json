@@ -50,6 +50,7 @@
   },
   "devDependencies": {
     "@jsonforms/core": "workspace:*",
+    "@types/node": "^16.18.34",
     "@typescript-eslint/eslint-plugin": "^5.54.1",
     "@typescript-eslint/parser": "^5.54.1",
     "eslint": "^7.32.0",
