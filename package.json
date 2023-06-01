@@ -6,10 +6,9 @@
   },
   "scripts": {
     "lerna": "lerna",
-    "preparePublish": "git clean -dfx && npm ci && npm run init && npm run clean && npm run build && npm run test",
+    "preparePublish": "git clean -dfx && pnpm i --frozen-lockfile && pnpm run clean && pnpm run build && pnpm run test",
     "merge-report": "mkdir -p coverage && lcov-result-merger 'packages/**/coverage/lcov.info' 'coverage/lcov.info'",
     "check-format": "echo 'temporarily disabled'",
-    "init": "lerna bootstrap --hoist",
     "build": "lerna run build && lerna run doc",
     "bundle": "lerna run bundle",
     "clean": "lerna run clean",
