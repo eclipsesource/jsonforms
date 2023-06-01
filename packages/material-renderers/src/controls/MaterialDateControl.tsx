@@ -35,12 +35,7 @@ import { withJsonFormsControlProps } from '@jsonforms/react';
 import { FormHelperText, Hidden } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import {
-  createOnChangeHandler,
-  getData,
-  useFocus,
-  PickersActionBarParams,
-} from '../util';
+import { createOnChangeHandler, getData, useFocus } from '../util';
 
 export const MaterialDateControl = (props: ControlProps) => {
   const [focused, onFocus, onBlur] = useFocus();
@@ -96,7 +91,7 @@ export const MaterialDateControl = (props: ControlProps) => {
           views={views}
           disabled={!enabled}
           slotProps={{
-            actionBar: ({ wrapperVariant }: PickersActionBarParams) => ({
+            actionBar: ({ wrapperVariant }) => ({
               actions:
                 wrapperVariant === 'desktop'
                   ? []
