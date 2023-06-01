@@ -1180,6 +1180,9 @@ importers:
       eslint-plugin-vue:
         specifier: ^9.9.0
         version: 9.9.0(eslint@7.32.0)
+      jest:
+        specifier: ^27.5.1
+        version: 27.5.1(ts-node@10.4.0)
       prettier:
         specifier: ^2.8.4
         version: 2.8.4

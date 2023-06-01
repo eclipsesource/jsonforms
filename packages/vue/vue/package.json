@@ -70,6 +70,7 @@
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier-vue": "^4.2.0",
     "eslint-plugin-vue": "^9.9.0",
+    "jest": "^27.5.1",
     "prettier": "^2.8.4",
     "rimraf": "^3.0.2",
     "rollup": "^2.78.0",
