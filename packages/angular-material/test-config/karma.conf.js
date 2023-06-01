@@ -10,6 +10,7 @@ module.exports = function (config) {
       'karma-chrome-launcher',
       'karma-webpack',
       'karma-sourcemap-loader',
+      'karma-coverage-istanbul-reporter',
     ],
 
     frameworks: ['jasmine'],
