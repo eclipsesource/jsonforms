@@ -26,7 +26,7 @@ import './MatchMediaMock';
 import React from 'react';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import { MaterialNativeControl } from '../../src/controls/MaterialNativeControl';
-import TextField from '@mui/material/TextField';
+import TextField, { TextFieldProps } from '@mui/material/TextField';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { ControlElement, ControlProps } from '@jsonforms/core';
 
@@ -77,6 +77,8 @@ describe('Material native control', () => {
   it('is disabled', () => {
     const props = defaultControlProps();
     wrapper = mount(createMaterialNativeControl(props));
-    expect(wrapper.find(TextField).props().disabled).toEqual(true);
+    expect(
+      (wrapper.find(TextField).props() as TextFieldProps).disabled
+    ).toEqual(true);
   });
 });

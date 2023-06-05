@@ -6,7 +6,7 @@
     "@jsonforms/core": "^3.1.0-alpha.3",
     "@jsonforms/examples": "^3.1.0-alpha.3",
     "@jsonforms/react": "^3.1.0-alpha.3",
-    "@mui/material": "~5.2.2",
+    "@mui/material": "~5.13.0",
     "@types/react-highlight": "^0.12.5",
     "@types/react-tabs": "^2.3.3",
     "highlight.js": "^11.3.1",
