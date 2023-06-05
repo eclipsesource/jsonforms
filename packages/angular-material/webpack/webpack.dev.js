@@ -22,7 +22,7 @@ module.exports = merge(baseConfig, {
     new webpack.HotModuleReplacementPlugin(),
     new copyWebpackPlugin([
       {
-        from: '../../node_modules/@angular/material/prebuilt-themes/indigo-pink.css',
+        from: 'node_modules/@angular/material/prebuilt-themes/indigo-pink.css',
       },
     ]),
   ],
