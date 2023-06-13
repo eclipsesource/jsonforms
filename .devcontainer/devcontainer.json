@@ -4,9 +4,9 @@
   "name": "Node.js",
   "build": {
     "dockerfile": "Dockerfile",
-    // Update 'VARIANT' to pick a Node version: 14, 16
+    // Update 'VARIANT' to pick a Node version: 16
     "args": {
-      "VARIANT": "14"
+      "VARIANT": "16"
     }
   },
   // Set *default* container specific settings.json values on container create.
@@ -20,7 +20,7 @@
     ]
   },
   // Use 'postCreateCommand' to run commands after the container is created.
-  "postCreateCommand": "npm ci && npm run init && npm run build",
+  "postCreateCommand": "pnpm i --frozen-lockfile && pnpm run build",
   // Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
   "remoteUser": "node"
 }
