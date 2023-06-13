@@ -45,7 +45,7 @@ import {
   UPDATE_CORE,
   UpdateCoreAction,
 } from '../actions';
-import { createAjv, isOneOfEnumSchema, Reducer } from '../util';
+import { createAjv, decode, isOneOfEnumSchema, Reducer } from '../util';
 import type { JsonSchema, UISchemaElement } from '../models';
 
 export const validate = (
@@ -356,13 +356,9 @@ const getInvalidProperty = (error: ErrorObject): string | undefined => {
 };
 
 export const getControlPath = (error: ErrorObject) => {
-  const dataPath = (error as any).dataPath;
-  // older AJV version
-  if (dataPath) {
-    return dataPath.replace(/\//g, '.').substr(1);
-  }
-  // dataPath was renamed to instancePath in AJV v8
-  let controlPath: string = error.instancePath;
+  // Up until AJV v7 the path property was called 'dataPath'
+  // With AJV v8 the property was renamed to 'instancePath'
+  let controlPath = (error as any).dataPath || error.instancePath || '';
 
   // change '/' chars to '.'
   controlPath = controlPath.replace(/\//g, '.');
@@ -374,6 +370,9 @@ export const getControlPath = (error: ErrorObject) => {
 
   // remove '.' chars at the beginning of paths
   controlPath = controlPath.replace(/^./, '');
+
+  // decode JSON Pointer escape sequences
+  controlPath = decode(controlPath);
   return controlPath;
 };
 

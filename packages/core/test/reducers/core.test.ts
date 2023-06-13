@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import test from 'ava';
-import Ajv from 'ajv';
+import Ajv, { ErrorObject } from 'ajv';
 import { coreReducer } from '../../src/reducers';
 import {
   init,
@@ -39,6 +39,7 @@ import {
   JsonFormsCore,
   validate,
   subErrorsAt,
+  getControlPath,
 } from '../../src/reducers/core';
 
 import { cloneDeep } from 'lodash';
@@ -1811,4 +1812,28 @@ test('core reducer - setSchema - schema with id', (t) => {
 
   const after: JsonFormsCore = coreReducer(before, setSchema(updatedSchema));
   t.is(after.schema.properties.animal.minLength, 5);
+});
+
+test('core reducer helpers - getControlPath - converts JSON Pointer notation to dot notation', (t) => {
+  const errorObject = { instancePath: '/group/name' } as ErrorObject;
+  const controlPath = getControlPath(errorObject);
+  t.is(controlPath, 'group.name');
+});
+
+test('core reducer helpers - getControlPath - fallback to AJV <=7 errors', (t) => {
+  const errorObject = { dataPath: '/group/name' } as unknown as ErrorObject;
+  const controlPath = getControlPath(errorObject);
+  t.is(controlPath, 'group.name');
+});
+
+test('core reducer helpers - getControlPath - fallback to AJV <=7 errors does not crash for empty paths', (t) => {
+  const errorObject = { dataPath: '' } as unknown as ErrorObject;
+  const controlPath = getControlPath(errorObject);
+  t.is(controlPath, '');
+});
+
+test('core reducer helpers - getControlPath - decodes JSON Pointer escape sequences', (t) => {
+  const errorObject = { instancePath: '/~0group/~1name' } as ErrorObject;
+  const controlPath = getControlPath(errorObject);
+  t.is(controlPath, '~group./name');
 });
