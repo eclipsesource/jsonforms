@@ -41,11 +41,14 @@ jobs:
 
       - name: Test
         if: matrix.os == 'windows-latest'
-        run: pnpm run test
+        run: |
+          set NODE_OPTIONS=--max_old_space_size=4096
+          pnpm run test
 
       - name: Test & Coverage
         if: matrix.os == 'ubuntu-latest'
         run: |
+          export NODE_OPTIONS=--max_old_space_size=4096
           pnpm run test-cov
           pnpm run check-format
           pnpm run merge-report && cat coverage/lcov.info
