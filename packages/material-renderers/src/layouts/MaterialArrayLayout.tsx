@@ -80,6 +80,7 @@ const MaterialArrayLayoutComponent = (props: ArrayLayoutProps) => {
         )}
         errors={errors}
         path={path}
+        enabled={enabled}
         addItem={addItem}
         createDefault={innerCreateDefaultValue}
       />

@@ -164,7 +164,7 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
                   justifyContent='center'
                   alignItems='center'
                 >
-                  {showSortButtons ? (
+                  {showSortButtons && enabled ? (
                     <Fragment>
                       <Grid item>
                         <IconButton
@@ -192,16 +192,18 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
                   ) : (
                     ''
                   )}
-                  <Grid item>
-                    <IconButton
-                      onClick={removeItems(path, [index])}
-                      style={iconStyle}
-                      aria-label={translations.removeAriaLabel}
-                      size='large'
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </Grid>
+                  {enabled && (
+                    <Grid item>
+                      <IconButton
+                        onClick={removeItems(path, [index])}
+                        style={iconStyle}
+                        aria-label={translations.removeAriaLabel}
+                        size='large'
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </Grid>
+                  )}
                 </Grid>
               </Grid>
             </Grid>

@@ -39,6 +39,7 @@ export const ListWithDetailMasterItem = ({
   index,
   childLabel,
   selected,
+  enabled,
   handleSelect,
   removeItem,
   path,
@@ -50,15 +51,17 @@ export const ListWithDetailMasterItem = ({
         <Avatar aria-label='Index'>{index + 1}</Avatar>
       </ListItemAvatar>
       <ListItemText primary={childLabel} />
-      <ListItemSecondaryAction>
-        <IconButton
-          aria-label={translations.removeAriaLabel}
-          onClick={removeItem(path, index)}
-          size='large'
-        >
-          <DeleteIcon />
-        </IconButton>
-      </ListItemSecondaryAction>
+      {enabled && (
+        <ListItemSecondaryAction>
+          <IconButton
+            aria-label={translations.removeAriaLabel}
+            onClick={removeItem(path, index)}
+            size='large'
+          >
+            <DeleteIcon />
+          </IconButton>
+        </ListItemSecondaryAction>
+      )}
     </ListItem>
   );
 };

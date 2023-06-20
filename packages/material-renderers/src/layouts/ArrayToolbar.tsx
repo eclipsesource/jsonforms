@@ -7,6 +7,7 @@ export interface ArrayLayoutToolbarProps {
   label: string;
   errors: string;
   path: string;
+  enabled: boolean;
   addItem(path: string, data: any): () => void;
   createDefault(): any;
   translations: ArrayTranslations;
@@ -16,6 +17,7 @@ export const ArrayLayoutToolbar = React.memo(function ArrayLayoutToolbar({
   errors,
   addItem,
   path,
+  enabled,
   createDefault,
   translations,
 }: ArrayLayoutToolbarProps) {
@@ -23,32 +25,48 @@ export const ArrayLayoutToolbar = React.memo(function ArrayLayoutToolbar({
     <Toolbar disableGutters={true}>
       <Grid container alignItems='center' justifyContent='space-between'>
         <Grid item>
-          <Typography variant={'h6'}>{label}</Typography>
-        </Grid>
-        {errors.length !== 0 && (
-          <Grid item>
-            <ValidationIcon id='tooltip-validation' errorMessages={errors} />
-          </Grid>
-        )}
-        <Grid item>
-          <Grid container>
+          <Grid
+            container
+            justifyContent={'flex-start'}
+            alignItems={'center'}
+            spacing={2}
+          >
             <Grid item>
-              <Tooltip
-                id='tooltip-add'
-                title={translations.addTooltip}
-                placement='bottom'
-              >
-                <IconButton
-                  aria-label={translations.addAriaLabel}
-                  onClick={addItem(path, createDefault())}
-                  size='large'
-                >
-                  <AddIcon />
-                </IconButton>
-              </Tooltip>
+              <Typography variant={'h6'}>{label}</Typography>
+            </Grid>
+            <Grid item>
+              {errors.length !== 0 && (
+                <Grid item>
+                  <ValidationIcon
+                    id='tooltip-validation'
+                    errorMessages={errors}
+                  />
+                </Grid>
+              )}
             </Grid>
           </Grid>
         </Grid>
+        {enabled && (
+          <Grid item>
+            <Grid container>
+              <Grid item>
+                <Tooltip
+                  id='tooltip-add'
+                  title={translations.addTooltip}
+                  placement='bottom'
+                >
+                  <IconButton
+                    aria-label={translations.addTooltip}
+                    onClick={addItem(path, createDefault())}
+                    size='large'
+                  >
+                    <AddIcon />
+                  </IconButton>
+                </Tooltip>
+              </Grid>
+            </Grid>
+          </Grid>
+        )}
       </Grid>
     </Toolbar>
   );

@@ -51,6 +51,7 @@ export const MaterialListWithDetailRenderer = ({
   schema,
   uischema,
   path,
+  enabled,
   errors,
   visible,
   label,
@@ -114,6 +115,7 @@ export const MaterialListWithDetailRenderer = ({
         )}
         errors={errors}
         path={path}
+        enabled={enabled}
         addItem={addItem}
         createDefault={handleCreateDefaultValue}
       />
@@ -126,6 +128,7 @@ export const MaterialListWithDetailRenderer = ({
                   index={index}
                   path={path}
                   schema={schema}
+                  enabled={enabled}
                   handleSelect={handleListItemClick}
                   removeItem={handleRemoveItem}
                   selected={selectedIndex === index}

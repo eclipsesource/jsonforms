@@ -682,6 +682,7 @@ export interface OwnPropsOfMasterListItem {
   index: number;
   selected: boolean;
   path: string;
+  enabled: boolean;
   schema: JsonSchema;
   handleSelect(index: number): () => void;
   removeItem(path: string, value: number): () => void;
