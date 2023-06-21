@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>JSON Forms React Core</title>
+	<title>JSON Forms</title>
 	<meta name="description" content="Documentation for JSON Forms">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/main.css">
@@ -85,7 +85,6 @@
 								<li class="tsd-kind-interface"><a href="interfaces/jsonformsreduxcontextprops.html" class="tsd-kind-icon">Json<wbr>Forms<wbr>Redux<wbr>Context<wbr>Props</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/jsonformsrendererstate.html" class="tsd-kind-icon">Json<wbr>Forms<wbr>Renderer<wbr>State</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/jsonformsstatecontext.html" class="tsd-kind-icon">Json<wbr>Forms<wbr>State<wbr>Context</a></li>
-								<li class="tsd-kind-interface tsd-has-type-parameter"><a href="interfaces/statelessrenderer.html" class="tsd-kind-icon">Stateless<wbr>Renderer</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/translateprops.html" class="tsd-kind-icon">Translate<wbr>Props</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/unknownrendererprops.html" class="tsd-kind-icon">Unknown<wbr>Renderer<wbr>Props</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/withcontext.html" class="tsd-kind-icon">With<wbr>Context</a></li>
@@ -95,6 +94,7 @@
 							<h3>Type aliases</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-type-alias"><a href="globals.html#renderer" class="tsd-kind-icon">Renderer</a></li>
+								<li class="tsd-kind-type-alias tsd-has-type-parameter"><a href="globals.html#statelessrenderer" class="tsd-kind-icon">Stateless<wbr>Renderer</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -193,10 +193,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias">
 					<a name="renderer" class="tsd-anchor"></a>
 					<h3>Renderer</h3>
-					<div class="tsd-signature tsd-kind-icon">Renderer<span class="tsd-signature-symbol">:</span> <a href="classes/renderercomponent.html" class="tsd-signature-type">RendererComponent</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">RendererProps</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="interfaces/statelessrenderer.html" class="tsd-signature-type">StatelessRenderer</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">RendererProps</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">Renderer<span class="tsd-signature-symbol">:</span> <a href="classes/renderercomponent.html" class="tsd-signature-type">RendererComponent</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">RendererProps</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="globals.html#statelessrenderer" class="tsd-signature-type">StatelessRenderer</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">RendererProps</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/Renderer.tsx#L52">packages/react/src/Renderer.tsx:52</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/Renderer.tsx#L56">packages/react/src/Renderer.tsx:56</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -204,6 +204,32 @@
 							<p>Represents a Renderer, which might either be a component or a function.</p>
 						</div>
 					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-has-type-parameter">
+					<a name="statelessrenderer" class="tsd-anchor"></a>
+					<h3>Stateless<wbr>Renderer</h3>
+					<div class="tsd-signature tsd-kind-icon">Stateless<wbr>Renderer&lt;P&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">React.StatelessComponent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">P</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/Renderer.tsx#L50">packages/react/src/Renderer.tsx:50</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Stateless Renderer.</p>
+						</div>
+					</div>
+					<h4 class="tsd-type-parameters-title">Type parameters</h4>
+					<ul class="tsd-type-parameters">
+						<li>
+							<h4>P<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">RendererProps</span></h4>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>type of any renderer props</p>
+								</div>
+							</div>
+						</li>
+					</ul>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
@@ -214,17 +240,17 @@
 					<div class="tsd-signature tsd-kind-icon">Dispatch<wbr>Cell<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ComponentType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">OwnPropsOfCell</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = withJsonFormsDispatchCellProps(Dispatch)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/DispatchCell.tsx#L64">packages/react/src/DispatchCell.tsx:64</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/DispatchCell.tsx#L77">packages/react/src/DispatchCell.tsx:77</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-variable">
 					<a name="jsonformscontext" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> Json<wbr>Forms<wbr>Context</h3>
-					<div class="tsd-signature tsd-kind-icon">Json<wbr>Forms<wbr>Context<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Context</span><span class="tsd-signature-symbol">&lt;</span><a href="interfaces/jsonformsstatecontext.html" class="tsd-signature-type">JsonFormsStateContext</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = React.createContext&lt;JsonFormsStateContext&gt;({core: initialCoreState,renderers: []})</span></div>
+					<div class="tsd-signature tsd-kind-icon">Json<wbr>Forms<wbr>Context<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Context</span><span class="tsd-signature-symbol">&lt;</span><a href="interfaces/jsonformsstatecontext.html" class="tsd-signature-type">JsonFormsStateContext</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = React.createContext&lt;JsonFormsStateContext&gt;({core: initialCoreState,renderers: [],})</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L96">packages/react/src/JsonFormsContext.tsx:96</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L106">packages/react/src/JsonFormsContext.tsx:106</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -234,17 +260,17 @@
 					<div class="tsd-signature tsd-kind-icon">Json<wbr>Forms<wbr>Dispatch<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ComponentType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">OwnPropsOfJsonFormsRenderer</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = withJsonFormsRendererProps(JsonFormsDispatchRenderer)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonForms.tsx#L152">packages/react/src/JsonForms.tsx:152</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonForms.tsx#L163">packages/react/src/JsonForms.tsx:163</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-variable">
 					<a name="jsonformsreduxcontext" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> Json<wbr>Forms<wbr>Redux<wbr>Context</h3>
-					<div class="tsd-signature tsd-kind-icon">Json<wbr>Forms<wbr>Redux<wbr>Context<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ConnectedComponent</span><span class="tsd-signature-symbol">&lt;</span><a href="globals.html#jsonformsreduxprovider" class="tsd-signature-type">JsonFormsReduxProvider</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Omit</span><span class="tsd-signature-symbol">&lt;</span><a href="interfaces/jsonformsreduxcontextprops.html" class="tsd-signature-type">JsonFormsReduxContextProps</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = connect((state: JsonFormsState) &#x3D;&gt; ({...state.jsonforms}))(JsonFormsReduxProvider)</span></div>
+					<div class="tsd-signature tsd-kind-icon">Json<wbr>Forms<wbr>Redux<wbr>Context<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ConnectedComponent</span><span class="tsd-signature-symbol">&lt;</span><a href="globals.html#jsonformsreduxprovider" class="tsd-signature-type">JsonFormsReduxProvider</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Omit</span><span class="tsd-signature-symbol">&lt;</span><a href="interfaces/jsonformsreduxcontextprops.html" class="tsd-signature-type">JsonFormsReduxContextProps</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = connect((state: JsonFormsState) &#x3D;&gt; ({...state.jsonforms,}))(JsonFormsReduxProvider)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/redux/JsonFormsReduxContext.tsx#L55">packages/react/src/redux/JsonFormsReduxContext.tsx:55</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/redux/JsonFormsReduxContext.tsx#L59">packages/react/src/redux/JsonFormsReduxContext.tsx:59</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -254,7 +280,7 @@
 					<div class="tsd-signature tsd-kind-icon">Resolved<wbr>Json<wbr>Forms<wbr>Dispatch<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ComponentType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">OwnPropsOfJsonFormsRenderer</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = withJsonFormsRendererProps(ResolvedJsonFormsDispatchRenderer)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonForms.tsx#L160">packages/react/src/JsonForms.tsx:160</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonForms.tsx#L171">packages/react/src/JsonForms.tsx:171</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -270,10 +296,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-variable">
 					<a name="testandrender" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> Test<wbr>And<wbr>Render</h3>
-					<div class="tsd-signature tsd-kind-icon">Test<wbr>And<wbr>Render<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">MemoExoticComponent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">(Anonymous function)</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = React.memo((props: {uischema: UISchemaElement;schema: JsonSchema;rootSchema: JsonSchema;path: string;enabled: boolean;renderers: JsonFormsRendererRegistryEntry[];cells: JsonFormsCellRendererRegistryEntry[];id: string;config: any;}) &#x3D;&gt; {const testerContext &#x3D; useMemo(() &#x3D;&gt; ({rootSchema: props.rootSchema,config: props.config}),[props.rootSchema, props.config]);const renderer &#x3D; useMemo(() &#x3D;&gt; maxBy(props.renderers, r &#x3D;&gt; r.tester(props.uischema, props.schema, testerContext)),[props.renderers, props.uischema, props.schema, testerContext]);if (renderer &#x3D;&#x3D;&#x3D; undefined ||renderer.tester(props.uischema, props.schema, testerContext) &#x3D;&#x3D;&#x3D; -1) {return &lt;UnknownRenderer type&#x3D;{&#x27;renderer&#x27;} /&gt;;} else {const Render &#x3D; renderer.renderer;return (&lt;Renderuischema&#x3D;{props.uischema}schema&#x3D;{props.schema}path&#x3D;{props.path}enabled&#x3D;{props.enabled}renderers&#x3D;{props.renderers}cells&#x3D;{props.cells}id&#x3D;{props.id}/&gt;);}})</span></div>
+					<div class="tsd-signature tsd-kind-icon">Test<wbr>And<wbr>Render<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">NamedExoticComponent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>cells<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonFormsCellRendererRegistryEntry</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>config<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>enabled<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>renderers<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonFormsRendererRegistryEntry</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>rootSchema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonSchema</span><span class="tsd-signature-symbol">; </span>schema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonSchema</span><span class="tsd-signature-symbol">; </span>uischema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">UISchemaElement</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = React.memo(function TestAndRender(props: {uischema: UISchemaElement;schema: JsonSchema;rootSchema: JsonSchema;path: string;enabled: boolean;renderers: JsonFormsRendererRegistryEntry[];cells: JsonFormsCellRendererRegistryEntry[];id: string;config: any;}) {const testerContext &#x3D; useMemo(() &#x3D;&gt; ({rootSchema: props.rootSchema,config: props.config,}),[props.rootSchema, props.config]);const renderer &#x3D; useMemo(() &#x3D;&gt;maxBy(props.renderers, (r) &#x3D;&gt;r.tester(props.uischema, props.schema, testerContext)),[props.renderers, props.uischema, props.schema, testerContext]);if (renderer &#x3D;&#x3D;&#x3D; undefined ||renderer.tester(props.uischema, props.schema, testerContext) &#x3D;&#x3D;&#x3D; -1) {return &lt;UnknownRenderer type&#x3D;{&#x27;renderer&#x27;} /&gt;;} else {const Render &#x3D; renderer.renderer;return (&lt;Renderuischema&#x3D;{props.uischema}schema&#x3D;{props.schema}path&#x3D;{props.path}enabled&#x3D;{props.enabled}renderers&#x3D;{props.renderers}cells&#x3D;{props.cells}id&#x3D;{props.id}/&gt;);}})</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonForms.tsx#L96">packages/react/src/JsonForms.tsx:96</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonForms.tsx#L106">packages/react/src/JsonForms.tsx:106</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -290,7 +316,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/DispatchCell.tsx#L34">packages/react/src/DispatchCell.tsx:34</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/DispatchCell.tsx#L34">packages/react/src/DispatchCell.tsx:34</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -347,7 +373,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonForms.tsx#L178">packages/react/src/JsonForms.tsx:178</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonForms.tsx#L189">packages/react/src/JsonForms.tsx:189</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -370,7 +396,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/redux/JsonFormsReduxContext.tsx#L42">packages/react/src/redux/JsonFormsReduxContext.tsx:42</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/redux/JsonFormsReduxContext.tsx#L42">packages/react/src/redux/JsonFormsReduxContext.tsx:42</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -404,7 +430,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L119">packages/react/src/JsonFormsContext.tsx:119</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L129">packages/react/src/JsonFormsContext.tsx:129</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -438,7 +464,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L309">packages/react/src/JsonFormsContext.tsx:309</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L387">packages/react/src/JsonFormsContext.tsx:387</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -463,7 +489,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L275">packages/react/src/JsonFormsContext.tsx:275</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L351">packages/react/src/JsonFormsContext.tsx:351</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -486,7 +512,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L359">packages/react/src/JsonFormsContext.tsx:359</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L451">packages/react/src/JsonFormsContext.tsx:451</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -511,7 +537,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L265">packages/react/src/JsonFormsContext.tsx:265</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L341">packages/react/src/JsonFormsContext.tsx:341</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -539,7 +565,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L280">packages/react/src/JsonFormsContext.tsx:280</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L358">packages/react/src/JsonFormsContext.tsx:358</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -565,7 +591,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L220">packages/react/src/JsonFormsContext.tsx:220</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L263">packages/react/src/JsonFormsContext.tsx:263</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -591,7 +617,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L217">packages/react/src/JsonFormsContext.tsx:217</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L258">packages/react/src/JsonFormsContext.tsx:258</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -617,7 +643,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L319">packages/react/src/JsonFormsContext.tsx:319</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L399">packages/react/src/JsonFormsContext.tsx:399</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -643,7 +669,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L226">packages/react/src/JsonFormsContext.tsx:226</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L273">packages/react/src/JsonFormsContext.tsx:273</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -669,7 +695,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L259">packages/react/src/JsonFormsContext.tsx:259</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L335">packages/react/src/JsonFormsContext.tsx:335</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -695,7 +721,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L352">packages/react/src/JsonFormsContext.tsx:352</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L444">packages/react/src/JsonFormsContext.tsx:444</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -721,7 +747,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L326">packages/react/src/JsonFormsContext.tsx:326</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L406">packages/react/src/JsonFormsContext.tsx:406</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -752,7 +778,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L229">packages/react/src/JsonFormsContext.tsx:229</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L278">packages/react/src/JsonFormsContext.tsx:278</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -783,7 +809,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L304">packages/react/src/JsonFormsContext.tsx:304</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L382">packages/react/src/JsonFormsContext.tsx:382</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -809,7 +835,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L364">packages/react/src/JsonFormsContext.tsx:364</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L458">packages/react/src/JsonFormsContext.tsx:458</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -852,7 +878,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L223">packages/react/src/JsonFormsContext.tsx:223</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L268">packages/react/src/JsonFormsContext.tsx:268</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -878,7 +904,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L314">packages/react/src/JsonFormsContext.tsx:314</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L394">packages/react/src/JsonFormsContext.tsx:394</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -904,7 +930,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L249">packages/react/src/JsonFormsContext.tsx:249</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L316">packages/react/src/JsonFormsContext.tsx:316</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -935,7 +961,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L339">packages/react/src/JsonFormsContext.tsx:339</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L425">packages/react/src/JsonFormsContext.tsx:425</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -966,7 +992,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L239">packages/react/src/JsonFormsContext.tsx:239</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L297">packages/react/src/JsonFormsContext.tsx:297</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -997,7 +1023,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L292">packages/react/src/JsonFormsContext.tsx:292</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L370">packages/react/src/JsonFormsContext.tsx:370</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1023,7 +1049,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/redux/JsonFormsReduxContext.tsx#L61">packages/react/src/redux/JsonFormsReduxContext.tsx:61</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/redux/JsonFormsReduxContext.tsx#L63">packages/react/src/redux/JsonFormsReduxContext.tsx:63</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1048,7 +1074,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L105">packages/react/src/JsonFormsContext.tsx:105</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L115">packages/react/src/JsonFormsContext.tsx:115</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1092,7 +1118,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L209">packages/react/src/JsonFormsContext.tsx:209</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L250">packages/react/src/JsonFormsContext.tsx:250</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="interfaces/jsonformsstatecontext.html" class="tsd-signature-type">JsonFormsStateContext</a></h4>
@@ -1109,7 +1135,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L423">packages/react/src/JsonFormsContext.tsx:423</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L539">packages/react/src/JsonFormsContext.tsx:539</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1132,7 +1158,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L415">packages/react/src/JsonFormsContext.tsx:415</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L527">packages/react/src/JsonFormsContext.tsx:527</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1155,7 +1181,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L446">packages/react/src/JsonFormsContext.tsx:446</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L574">packages/react/src/JsonFormsContext.tsx:574</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1178,7 +1204,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L438">packages/react/src/JsonFormsContext.tsx:438</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L562">packages/react/src/JsonFormsContext.tsx:562</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1201,7 +1227,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L462">packages/react/src/JsonFormsContext.tsx:462</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L598">packages/react/src/JsonFormsContext.tsx:598</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1224,7 +1250,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L392">packages/react/src/JsonFormsContext.tsx:392</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L492">packages/react/src/JsonFormsContext.tsx:492</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1247,7 +1273,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L431">packages/react/src/JsonFormsContext.tsx:431</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L551">packages/react/src/JsonFormsContext.tsx:551</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1270,7 +1296,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L471">packages/react/src/JsonFormsContext.tsx:471</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L611">packages/react/src/JsonFormsContext.tsx:611</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1293,7 +1319,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L483">packages/react/src/JsonFormsContext.tsx:483</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L624">packages/react/src/JsonFormsContext.tsx:624</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1316,7 +1342,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L491">packages/react/src/JsonFormsContext.tsx:491</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L636">packages/react/src/JsonFormsContext.tsx:636</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1339,7 +1365,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L385">packages/react/src/JsonFormsContext.tsx:385</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L481">packages/react/src/JsonFormsContext.tsx:481</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1362,7 +1388,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L524">packages/react/src/JsonFormsContext.tsx:524</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L685">packages/react/src/JsonFormsContext.tsx:685</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1385,7 +1411,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L400">packages/react/src/JsonFormsContext.tsx:400</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L504">packages/react/src/JsonFormsContext.tsx:504</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1408,7 +1434,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L455">packages/react/src/JsonFormsContext.tsx:455</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L587">packages/react/src/JsonFormsContext.tsx:587</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1431,7 +1457,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L516">packages/react/src/JsonFormsContext.tsx:516</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L673">packages/react/src/JsonFormsContext.tsx:673</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1454,7 +1480,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L500">packages/react/src/JsonFormsContext.tsx:500</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L649">packages/react/src/JsonFormsContext.tsx:649</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1477,7 +1503,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L508">packages/react/src/JsonFormsContext.tsx:508</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L661">packages/react/src/JsonFormsContext.tsx:661</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1500,7 +1526,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L407">packages/react/src/JsonFormsContext.tsx:407</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L515">packages/react/src/JsonFormsContext.tsx:515</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1523,7 +1549,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L555">packages/react/src/JsonFormsContext.tsx:555</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L742">packages/react/src/JsonFormsContext.tsx:742</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1549,7 +1575,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L551">packages/react/src/JsonFormsContext.tsx:551</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L734">packages/react/src/JsonFormsContext.tsx:734</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1575,7 +1601,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L567">packages/react/src/JsonFormsContext.tsx:567</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L766">packages/react/src/JsonFormsContext.tsx:766</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1601,7 +1627,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L563">packages/react/src/JsonFormsContext.tsx:563</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L758">packages/react/src/JsonFormsContext.tsx:758</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1627,7 +1653,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L575">packages/react/src/JsonFormsContext.tsx:575</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L784">packages/react/src/JsonFormsContext.tsx:784</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1653,7 +1679,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L379">packages/react/src/JsonFormsContext.tsx:379</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L473">packages/react/src/JsonFormsContext.tsx:473</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1676,7 +1702,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L539">packages/react/src/JsonFormsContext.tsx:539</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L710">packages/react/src/JsonFormsContext.tsx:710</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1702,7 +1728,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L559">packages/react/src/JsonFormsContext.tsx:559</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L750">packages/react/src/JsonFormsContext.tsx:750</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1728,7 +1754,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L579">packages/react/src/JsonFormsContext.tsx:579</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L792">packages/react/src/JsonFormsContext.tsx:792</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1754,7 +1780,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L584">packages/react/src/JsonFormsContext.tsx:584</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L800">packages/react/src/JsonFormsContext.tsx:800</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1780,7 +1806,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L588">packages/react/src/JsonFormsContext.tsx:588</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L808">packages/react/src/JsonFormsContext.tsx:808</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1806,7 +1832,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L605">packages/react/src/JsonFormsContext.tsx:605</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L844">packages/react/src/JsonFormsContext.tsx:844</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1832,7 +1858,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L543">packages/react/src/JsonFormsContext.tsx:543</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L718">packages/react/src/JsonFormsContext.tsx:718</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -1864,7 +1890,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L571">packages/react/src/JsonFormsContext.tsx:571</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L774">packages/react/src/JsonFormsContext.tsx:774</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1890,7 +1916,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L600">packages/react/src/JsonFormsContext.tsx:600</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L832">packages/react/src/JsonFormsContext.tsx:832</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1916,7 +1942,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L592">packages/react/src/JsonFormsContext.tsx:592</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L816">packages/react/src/JsonFormsContext.tsx:816</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1942,7 +1968,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L596">packages/react/src/JsonFormsContext.tsx:596</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L824">packages/react/src/JsonFormsContext.tsx:824</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1968,7 +1994,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L547">packages/react/src/JsonFormsContext.tsx:547</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L726">packages/react/src/JsonFormsContext.tsx:726</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1994,7 +2020,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L535">packages/react/src/JsonFormsContext.tsx:535</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L700">packages/react/src/JsonFormsContext.tsx:700</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2014,13 +2040,13 @@
 					<a name="withtranslateprops" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> with<wbr>Translate<wbr>Props</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">with<wbr>Translate<wbr>Props&lt;P&gt;<span class="tsd-signature-symbol">(</span>Component<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ComponentType</span><span class="tsd-signature-symbol">&lt;</span><a href="interfaces/translateprops.html" class="tsd-signature-type">TranslateProps</a><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">P</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">(Anonymous function)</span></li>
+						<li class="tsd-signature tsd-kind-icon">with<wbr>Translate<wbr>Props&lt;P&gt;<span class="tsd-signature-symbol">(</span>Component<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ComponentType</span><span class="tsd-signature-symbol">&lt;</span><a href="interfaces/translateprops.html" class="tsd-signature-type">TranslateProps</a><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">P</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">WithTranslateProps</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L616">packages/react/src/JsonFormsContext.tsx:616</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L861">packages/react/src/JsonFormsContext.tsx:861</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -2035,7 +2061,7 @@
 									<h5>Component: <span class="tsd-signature-type">ComponentType</span><span class="tsd-signature-symbol">&lt;</span><a href="interfaces/translateprops.html" class="tsd-signature-type">TranslateProps</a><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">P</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">(Anonymous function)</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">WithTranslateProps</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -2048,7 +2074,7 @@
 					<div class="tsd-signature tsd-kind-icon">initial<wbr>Core<wbr>State<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L82">packages/react/src/JsonFormsContext.tsx:82</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L92">packages/react/src/JsonFormsContext.tsx:92</a></li>
 						</ul>
 					</aside>
 					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
@@ -2057,7 +2083,7 @@
 						<div class="tsd-signature tsd-kind-icon">additional<wbr>Errors<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = []</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L87">packages/react/src/JsonFormsContext.tsx:87</a></li>
+								<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L97">packages/react/src/JsonFormsContext.tsx:97</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -2067,7 +2093,7 @@
 						<div class="tsd-signature tsd-kind-icon">ajv<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> = undefined</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L89">packages/react/src/JsonFormsContext.tsx:89</a></li>
+								<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L99">packages/react/src/JsonFormsContext.tsx:99</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -2077,7 +2103,7 @@
 						<div class="tsd-signature tsd-kind-icon">data<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{}</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L83">packages/react/src/JsonFormsContext.tsx:83</a></li>
+								<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L93">packages/react/src/JsonFormsContext.tsx:93</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-type-declaration">
@@ -2092,7 +2118,7 @@
 						<div class="tsd-signature tsd-kind-icon">errors<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = []</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L86">packages/react/src/JsonFormsContext.tsx:86</a></li>
+								<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L96">packages/react/src/JsonFormsContext.tsx:96</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -2102,7 +2128,7 @@
 						<div class="tsd-signature tsd-kind-icon">schema<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{}</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L84">packages/react/src/JsonFormsContext.tsx:84</a></li>
+								<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L94">packages/react/src/JsonFormsContext.tsx:94</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-type-declaration">
@@ -2117,7 +2143,7 @@
 						<div class="tsd-signature tsd-kind-icon">uischema<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> = undefined</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L85">packages/react/src/JsonFormsContext.tsx:85</a></li>
+								<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L95">packages/react/src/JsonFormsContext.tsx:95</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -2127,7 +2153,7 @@
 						<div class="tsd-signature tsd-kind-icon">validator<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> = undefined</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/20e9e0fd/packages/react/src/JsonFormsContext.tsx#L88">packages/react/src/JsonFormsContext.tsx:88</a></li>
+								<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/7e0115fe/packages/react/src/JsonFormsContext.tsx#L98">packages/react/src/JsonFormsContext.tsx:98</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -2174,9 +2200,6 @@
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/jsonformsstatecontext.html" class="tsd-kind-icon">Json<wbr>Forms<wbr>State<wbr>Context</a>
 					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter">
-						<a href="interfaces/statelessrenderer.html" class="tsd-kind-icon">Stateless<wbr>Renderer</a>
-					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/translateprops.html" class="tsd-kind-icon">Translate<wbr>Props</a>
 					</li>
@@ -2188,6 +2211,9 @@
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="globals.html#renderer" class="tsd-kind-icon">Renderer</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#statelessrenderer" class="tsd-kind-icon">Stateless<wbr>Renderer</a>
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="globals.html#dispatchcell" class="tsd-kind-icon">Dispatch<wbr>Cell</a>

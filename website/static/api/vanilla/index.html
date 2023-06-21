@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>JSON Forms</title>
-	<meta name="description" content="Documentation for JSON Forms">
+	<meta name="description" content="Documentation for Json Forms">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/main.css">
 </head>
@@ -71,10 +71,10 @@
 					<h2>Vanilla Renderers Package</h2>
 				</a>
 				<p>This is the JSONForms Vanilla Renderers Package. This package only contains renderers and must be combined with <a href="https://github.com/eclipsesource/jsonforms/blob/master/packages/react">JSON Forms React</a>.</p>
-				<p>You can combine <a href="https://github.com/eclipsesource/jsonforms/blob/master/packages/react">JSON Forms React</a> with other renderers too, for example with the <a href="https://github.com/eclipsesource/jsonforms/tree/master/packages/material-renderers">Material Renderers</a>.</p>
+				<p>You can combine <a href="https://github.com/eclipsesource/jsonforms/blob/master/packages/react">JSON Forms React</a> with other renderers too, for example with the <a href="https://github.com/eclipsesource/jsonforms/tree/master/packages/material">Material Renderers</a>.</p>
 				<p>See the official <a href="https://jsonforms.io/docs/integrations/react/">documentation</a> and the JSON Forms React <a href="https://github.com/eclipsesource/jsonforms-react-seed">seed repository</a> for examples on how to integrate JSON Forms with your application.</p>
 				<p>Check <a href="https://www.npmjs.com/search?q=%40jsonforms">https://www.npmjs.com/search?q=%40jsonforms</a> for all published JSONForms packages.</p>
-				<p>If you want to customize styling, have a look at our <a href="https://github.com/eclipsesource/jsonforms/blob/master/packages/vanilla/Styles.md">styles guide</a>.</p>
+				<p>If you want to customize styling, have a look at our <a href="https://github.com/eclipsesource/jsonforms/blob/master/packages/vanilla-renderers/Styles.md">styles guide</a>.</p>
 				<a href="#quick-start" id="quick-start" style="color: inherit; text-decoration: none;">
 					<h3>Quick start</h3>
 				</a>
@@ -91,21 +91,21 @@
   <span class="hljs-attr">properties</span>: {
     <span class="hljs-attr">name</span>: {
       <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;string&#x27;</span>,
-      <span class="hljs-attr">minLength</span>: <span class="hljs-number">1</span>
+      <span class="hljs-attr">minLength</span>: <span class="hljs-number">1</span>,
     },
     <span class="hljs-attr">done</span>: {
-      <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;boolean&#x27;</span>
+      <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;boolean&#x27;</span>,
     },
     <span class="hljs-attr">due_date</span>: {
       <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;string&#x27;</span>,
-      <span class="hljs-attr">format</span>: <span class="hljs-string">&#x27;date&#x27;</span>
+      <span class="hljs-attr">format</span>: <span class="hljs-string">&#x27;date&#x27;</span>,
     },
     <span class="hljs-attr">recurrence</span>: {
       <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;string&#x27;</span>,
-      <span class="hljs-attr">enum</span>: [<span class="hljs-string">&#x27;Never&#x27;</span>, <span class="hljs-string">&#x27;Daily&#x27;</span>, <span class="hljs-string">&#x27;Weekly&#x27;</span>, <span class="hljs-string">&#x27;Monthly&#x27;</span>]
-    }
+      <span class="hljs-attr">enum</span>: [<span class="hljs-string">&#x27;Never&#x27;</span>, <span class="hljs-string">&#x27;Daily&#x27;</span>, <span class="hljs-string">&#x27;Weekly&#x27;</span>, <span class="hljs-string">&#x27;Monthly&#x27;</span>],
+    },
   },
-  <span class="hljs-attr">required</span>: [<span class="hljs-string">&#x27;name&#x27;</span>, <span class="hljs-string">&#x27;due_date&#x27;</span>]
+  <span class="hljs-attr">required</span>: [<span class="hljs-string">&#x27;name&#x27;</span>, <span class="hljs-string">&#x27;due_date&#x27;</span>],
 };
 <span class="hljs-keyword">const</span> uischema = {
   <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;VerticalLayout&#x27;</span>,
@@ -113,26 +113,26 @@
     {
       <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;Control&#x27;</span>,
       <span class="hljs-attr">label</span>: <span class="hljs-literal">false</span>,
-      <span class="hljs-attr">scope</span>: <span class="hljs-string">&#x27;#/properties/done&#x27;</span>
+      <span class="hljs-attr">scope</span>: <span class="hljs-string">&#x27;#/properties/done&#x27;</span>,
     },
     {
       <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;Control&#x27;</span>,
-      <span class="hljs-attr">scope</span>: <span class="hljs-string">&#x27;#/properties/name&#x27;</span>
+      <span class="hljs-attr">scope</span>: <span class="hljs-string">&#x27;#/properties/name&#x27;</span>,
     },
     {
       <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;HorizontalLayout&#x27;</span>,
       <span class="hljs-attr">elements</span>: [
         {
           <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;Control&#x27;</span>,
-          <span class="hljs-attr">scope</span>: <span class="hljs-string">&#x27;#/properties/due_date&#x27;</span>
+          <span class="hljs-attr">scope</span>: <span class="hljs-string">&#x27;#/properties/due_date&#x27;</span>,
         },
         {
           <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;Control&#x27;</span>,
-          <span class="hljs-attr">scope</span>: <span class="hljs-string">&#x27;#/properties/recurrence&#x27;</span>
-        }
-      ]
-    }
-  ]
+          <span class="hljs-attr">scope</span>: <span class="hljs-string">&#x27;#/properties/recurrence&#x27;</span>,
+        },
+      ],
+    },
+  ],
 };
 <span class="hljs-keyword">const</span> initialData = {};
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">App</span>(<span class="hljs-params"></span>) </span>{
@@ -249,9 +249,6 @@
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="globals.html#converttovalidclassname" class="tsd-kind-icon">convert<wbr>ToValid<wbr>Class<wbr>Name</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#createlabeldescriptionfrom" class="tsd-kind-icon">create<wbr>Label<wbr>Description<wbr>From</a>
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="globals.html#datecelltester" class="tsd-kind-icon">date<wbr>Cell<wbr>Tester</a>

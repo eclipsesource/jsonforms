@@ -8,7 +8,7 @@ Some static files such as images, logos etc. can be found within the `static` fo
 
 ## Installation
 
-Use Node >= 12
+Use Node >= 16
 
 ```console
 npm ci

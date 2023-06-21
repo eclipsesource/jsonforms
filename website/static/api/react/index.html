@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>JSON Forms React Core</title>
+	<title>JSON Forms</title>
 	<meta name="description" content="Documentation for JSON Forms">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/main.css">
@@ -101,7 +101,7 @@
 				<pre><code class="language-ts"><span class="hljs-keyword">import</span> React, { useState } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
 <span class="hljs-keyword">import</span> {
   materialRenderers,
-  materialCells
+  materialCells,
 } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@jsonforms/material-renderers&#x27;</span>;
 <span class="hljs-keyword">import</span> { JsonForms } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@jsonforms/react&#x27;</span>;
 
@@ -110,21 +110,21 @@
   <span class="hljs-attr">properties</span>: {
     <span class="hljs-attr">name</span>: {
       <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;string&#x27;</span>,
-      <span class="hljs-attr">minLength</span>: <span class="hljs-number">1</span>
+      <span class="hljs-attr">minLength</span>: <span class="hljs-number">1</span>,
     },
     <span class="hljs-attr">done</span>: {
-      <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;boolean&#x27;</span>
+      <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;boolean&#x27;</span>,
     },
     <span class="hljs-attr">due_date</span>: {
       <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;string&#x27;</span>,
-      <span class="hljs-attr">format</span>: <span class="hljs-string">&#x27;date&#x27;</span>
+      <span class="hljs-attr">format</span>: <span class="hljs-string">&#x27;date&#x27;</span>,
     },
     <span class="hljs-attr">recurrence</span>: {
       <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;string&#x27;</span>,
-      <span class="hljs-attr">enum</span>: [<span class="hljs-string">&#x27;Never&#x27;</span>, <span class="hljs-string">&#x27;Daily&#x27;</span>, <span class="hljs-string">&#x27;Weekly&#x27;</span>, <span class="hljs-string">&#x27;Monthly&#x27;</span>]
-    }
+      <span class="hljs-attr">enum</span>: [<span class="hljs-string">&#x27;Never&#x27;</span>, <span class="hljs-string">&#x27;Daily&#x27;</span>, <span class="hljs-string">&#x27;Weekly&#x27;</span>, <span class="hljs-string">&#x27;Monthly&#x27;</span>],
+    },
   },
-  <span class="hljs-attr">required</span>: [<span class="hljs-string">&#x27;name&#x27;</span>, <span class="hljs-string">&#x27;due_date&#x27;</span>]
+  <span class="hljs-attr">required</span>: [<span class="hljs-string">&#x27;name&#x27;</span>, <span class="hljs-string">&#x27;due_date&#x27;</span>],
 };
 <span class="hljs-keyword">const</span> uischema = {
   <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;VerticalLayout&#x27;</span>,
@@ -132,26 +132,26 @@
     {
       <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;Control&#x27;</span>,
       <span class="hljs-attr">label</span>: <span class="hljs-literal">false</span>,
-      <span class="hljs-attr">scope</span>: <span class="hljs-string">&#x27;#/properties/done&#x27;</span>
+      <span class="hljs-attr">scope</span>: <span class="hljs-string">&#x27;#/properties/done&#x27;</span>,
     },
     {
       <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;Control&#x27;</span>,
-      <span class="hljs-attr">scope</span>: <span class="hljs-string">&#x27;#/properties/name&#x27;</span>
+      <span class="hljs-attr">scope</span>: <span class="hljs-string">&#x27;#/properties/name&#x27;</span>,
     },
     {
       <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;HorizontalLayout&#x27;</span>,
       <span class="hljs-attr">elements</span>: [
         {
           <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;Control&#x27;</span>,
-          <span class="hljs-attr">scope</span>: <span class="hljs-string">&#x27;#/properties/due_date&#x27;</span>
+          <span class="hljs-attr">scope</span>: <span class="hljs-string">&#x27;#/properties/due_date&#x27;</span>,
         },
         {
           <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;Control&#x27;</span>,
-          <span class="hljs-attr">scope</span>: <span class="hljs-string">&#x27;#/properties/recurrence&#x27;</span>
-        }
-      ]
-    }
-  ]
+          <span class="hljs-attr">scope</span>: <span class="hljs-string">&#x27;#/properties/recurrence&#x27;</span>,
+        },
+      ],
+    },
+  ],
 };
 <span class="hljs-keyword">const</span> initialData = {};
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">App</span>(<span class="hljs-params"></span>) </span>{
@@ -231,9 +231,6 @@
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/jsonformsstatecontext.html" class="tsd-kind-icon">Json<wbr>Forms<wbr>State<wbr>Context</a>
 					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter">
-						<a href="interfaces/statelessrenderer.html" class="tsd-kind-icon">Stateless<wbr>Renderer</a>
-					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/translateprops.html" class="tsd-kind-icon">Translate<wbr>Props</a>
 					</li>
@@ -245,6 +242,9 @@
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="globals.html#renderer" class="tsd-kind-icon">Renderer</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#statelessrenderer" class="tsd-kind-icon">Stateless<wbr>Renderer</a>
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="globals.html#dispatchcell" class="tsd-kind-icon">Dispatch<wbr>Cell</a>

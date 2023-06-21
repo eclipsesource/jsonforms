@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>JSON Forms</title>
-	<meta name="description" content="Documentation for JSON Forms">
+	<meta name="description" content="Documentation for Json Forms">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/main.css">
 </head>
@@ -112,38 +112,38 @@
 </code></pre>
 				<pre><code class="language-ts"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> defineComponent({
   <span class="hljs-attr">components</span>: {
-    JsonForms
+    JsonForms,
   },
   <span class="hljs-function"><span class="hljs-title">data</span>(<span class="hljs-params"></span>)</span> {
     <span class="hljs-keyword">return</span> {
       <span class="hljs-comment">// freeze renderers for performance gains</span>
       <span class="hljs-attr">renderers</span>: <span class="hljs-built_in">Object</span>.freeze(renderers),
       <span class="hljs-attr">data</span>: {
-        <span class="hljs-attr">number</span>: <span class="hljs-number">5</span>
+        <span class="hljs-attr">number</span>: <span class="hljs-number">5</span>,
       },
       <span class="hljs-attr">schema</span>: {
         <span class="hljs-attr">properties</span>: {
           <span class="hljs-attr">number</span>: {
-            <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;number&#x27;</span>
-          }
-        }
+            <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;number&#x27;</span>,
+          },
+        },
       },
       <span class="hljs-attr">uischema</span>: {
         <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;VerticalLayout&#x27;</span>,
         <span class="hljs-attr">elements</span>: [
           {
             <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;Control&#x27;</span>,
-            <span class="hljs-attr">scope</span>: <span class="hljs-string">&#x27;#/properties/number&#x27;</span>
-          }
-        ]
-      }
+            <span class="hljs-attr">scope</span>: <span class="hljs-string">&#x27;#/properties/number&#x27;</span>,
+          },
+        ],
+      },
     };
   },
   <span class="hljs-attr">methods</span>: {
     <span class="hljs-function"><span class="hljs-title">onChange</span>(<span class="hljs-params">event: JsonFormsChangeEvent</span>)</span> {
       <span class="hljs-built_in">this</span>.data = event.data;
-    }
-  }
+    },
+  },
 });
 </code></pre>
 				<a href="#renderer-set" id="renderer-set" style="color: inherit; text-decoration: none;">
@@ -162,7 +162,7 @@
 <span class="hljs-keyword">const</span> controlRenderer = defineComponent({
   <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;control-renderer&#x27;</span>,
   <span class="hljs-attr">props</span>: {
-    ...rendererProps&lt;ControlElement&gt;()
+    ...rendererProps&lt;ControlElement&gt;(),
   },
   <span class="hljs-function"><span class="hljs-title">setup</span>(<span class="hljs-params">props</span>)</span> {
     <span class="hljs-keyword">return</span> useJsonFormsControl(props);
@@ -173,8 +173,8 @@
         <span class="hljs-built_in">this</span>.control.path,
         (event.target <span class="hljs-keyword">as</span> HTMLInputElement).value
       );
-    }
-  }
+    },
+  },
 });
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> controlRenderer;
 </code></pre>
@@ -195,11 +195,11 @@
 				<pre><code class="language-ts"><span class="hljs-keyword">import</span> {
   isControl,
   JsonFormsRendererRegistryEntry,
-  rankWith
+  rankWith,
 } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@jsonforms/core&#x27;</span>;
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> entry: JsonFormsRendererRegistryEntry = {
   <span class="hljs-attr">renderer</span>: controlRenderer,
-  <span class="hljs-attr">tester</span>: rankWith(<span class="hljs-number">1</span>, isControl)
+  <span class="hljs-attr">tester</span>: rankWith(<span class="hljs-number">1</span>, isControl),
 };
 </code></pre>
 				<p>It&#39;s convenient to create the <code>JsonFormsRendererRegistryEntry</code> within the same file as the renderer.
@@ -214,33 +214,33 @@
   isLayout,
   JsonFormsRendererRegistryEntry,
   Layout,
-  rankWith
+  rankWith,
 } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@jsonforms/core&#x27;</span>;
 <span class="hljs-keyword">import</span> { defineComponent } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
 <span class="hljs-keyword">import</span> {
   DispatchRenderer,
   rendererProps,
-  useJsonFormsLayout
+  useJsonFormsLayout,
 } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@jsonforms/vue&#x27;</span>;
 
 <span class="hljs-keyword">const</span> layoutRenderer = defineComponent({
   <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;layout-renderer&#x27;</span>,
   <span class="hljs-attr">components</span>: {
-    DispatchRenderer
+    DispatchRenderer,
   },
   <span class="hljs-attr">props</span>: {
-    ...rendererProps&lt;Layout&gt;()
+    ...rendererProps&lt;Layout&gt;(),
   },
   <span class="hljs-function"><span class="hljs-title">setup</span>(<span class="hljs-params">props</span>)</span> {
     <span class="hljs-keyword">return</span> useJsonFormsLayout(props);
-  }
+  },
 });
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> layoutRenderer;
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> entry: JsonFormsRendererRegistryEntry = {
   <span class="hljs-attr">renderer</span>: layoutRenderer,
-  <span class="hljs-attr">tester</span>: rankWith(<span class="hljs-number">1</span>, isLayout)
+  <span class="hljs-attr">tester</span>: rankWith(<span class="hljs-number">1</span>, isLayout),
 };
 </code></pre>
 				<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
@@ -315,17 +315,17 @@
 				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { inject } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
 
 <span class="hljs-keyword">const</span> useCustomBinding = <span class="hljs-function">(<span class="hljs-params">props</span>) =&gt;</span> {
-  <span class="hljs-keyword">const</span> jsonforms = inject&lt;JsonFormsSubStates&gt;(<span class="hljs-string">JSONforms&#x27;</span>);
+  <span class="hljs-keyword">const</span> jsonforms = inject&lt;JsonFormsSubStates&gt;(<span class="hljs-string">JSON Forms Vue 3 Coreforms&#x27;</span>);
   <span class="hljs-keyword">const</span> dispatch = inject&lt;Dispatch&lt;CoreActions&gt;&gt;(<span class="hljs-string">&#x27;dispatch&#x27;</span>);
 
   <span class="hljs-keyword">return</span> {
     <span class="hljs-comment">// use props, jsonforms and dispatch to construct own binding</span>
-  }
-}
+  };
+};
 </code></pre>
 				<p>Of course these can also be directly injected into your components, e.g.</p>
 				<pre><code class="language-ts"><span class="hljs-keyword">const</span> myComponent = defineComponent({
-  <span class="hljs-attr">inject</span>: [<span class="hljs-string">JSONforms&#x27;</span>, <span class="hljs-string">&#x27;dispatch&#x27;</span>]
+  <span class="hljs-attr">inject</span>: [<span class="hljs-string">JSON Forms Vue 3 Coreforms&#x27;</span>, <span class="hljs-string">&#x27;dispatch&#x27;</span>],
 });
 </code></pre>
 				<p>The injected <code>jsonforms</code> object is not meant to be modified directly.

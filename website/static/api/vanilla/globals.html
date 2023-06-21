@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>JSON Forms</title>
-	<meta name="description" content="Documentation for JSON Forms">
+	<meta name="description" content="Documentation for Json Forms">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/main.css">
 </head>
@@ -101,7 +101,6 @@
 								<li class="tsd-kind-variable"><a href="globals.html#booleancelltester" class="tsd-kind-icon">boolean<wbr>Cell<wbr>Tester</a></li>
 								<li class="tsd-kind-variable"><a href="globals.html#categorizationtester" class="tsd-kind-icon">categorization<wbr>Tester</a></li>
 								<li class="tsd-kind-variable"><a href="globals.html#converttovalidclassname" class="tsd-kind-icon">convert<wbr>ToValid<wbr>Class<wbr>Name</a></li>
-								<li class="tsd-kind-variable"><a href="globals.html#createlabeldescriptionfrom" class="tsd-kind-icon">create<wbr>Label<wbr>Description<wbr>From</a></li>
 								<li class="tsd-kind-variable"><a href="globals.html#datecelltester" class="tsd-kind-icon">date<wbr>Cell<wbr>Tester</a></li>
 								<li class="tsd-kind-variable"><a href="globals.html#datetimecelltester" class="tsd-kind-icon">date<wbr>Time<wbr>Cell<wbr>Tester</a></li>
 								<li class="tsd-kind-variable"><a href="globals.html#enumcelltester" class="tsd-kind-icon">enum<wbr>Cell<wbr>Tester</a></li>
@@ -196,20 +195,20 @@
 				<section class="tsd-panel tsd-member tsd-kind-variable">
 					<a name="grouplayoutrenderercomponent" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> Group<wbr>Layout<wbr>Renderer<wbr>Component</h3>
-					<div class="tsd-signature tsd-kind-icon">Group<wbr>Layout<wbr>Renderer<wbr>Component<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">FunctionComponent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">LayoutProps</span><span class="tsd-signature-symbol"> &amp; </span><a href="interfaces/vanillarendererprops.html" class="tsd-signature-type">VanillaRendererProps</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = React.memo(({schema,uischema,path,enabled,visible,label,getStyle,getStyleAsClassName}: LayoutProps &amp; VanillaRendererProps) &#x3D;&gt; {const group &#x3D; uischema as GroupLayout;const elementsSize &#x3D; group.elements ? group.elements.length : 0;const classNames &#x3D; getStyleAsClassName(&#x27;group.layout&#x27;);const childClassNames &#x3D; [&#x27;group-layout-item&#x27;].concat(getStyle(&#x27;group.layout.item&#x27;, elementsSize)).join(&#x27; &#x27;);return (&lt;fieldsetclassName&#x3D;{classNames}hidden&#x3D;{visible &#x3D;&#x3D;&#x3D; undefined || visible &#x3D;&#x3D;&#x3D; null ? false : !visible}&gt;{!isEmpty(label) ?&lt;legend className&#x3D;{getStyleAsClassName(&#x27;group.label&#x27;)}&gt;{label}&lt;/legend&gt; : &#x27;&#x27;}{renderChildren(group, schema, childClassNames, path, enabled)}&lt;/fieldset&gt;);})</span></div>
+					<div class="tsd-signature tsd-kind-icon">Group<wbr>Layout<wbr>Renderer<wbr>Component<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">FunctionComponent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">LayoutProps</span><span class="tsd-signature-symbol"> &amp; </span><a href="interfaces/vanillarendererprops.html" class="tsd-signature-type">VanillaRendererProps</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = React.memo(function GroupLayoutRendererComponent({schema,uischema,path,enabled,visible,label,getStyle,getStyleAsClassName,}: LayoutProps &amp; VanillaRendererProps) {const group &#x3D; uischema as GroupLayout;const elementsSize &#x3D; group.elements ? group.elements.length : 0;const classNames &#x3D; getStyleAsClassName(&#x27;group.layout&#x27;);const childClassNames &#x3D; [&#x27;group-layout-item&#x27;].concat(getStyle(&#x27;group.layout.item&#x27;, elementsSize)).join(&#x27; &#x27;);return (&lt;fieldsetclassName&#x3D;{classNames}hidden&#x3D;{visible &#x3D;&#x3D;&#x3D; undefined || visible &#x3D;&#x3D;&#x3D; null ? false : !visible}&gt;{!isEmpty(label) ? (&lt;legend className&#x3D;{getStyleAsClassName(&#x27;group.label&#x27;)}&gt;{label}&lt;/legend&gt;) : (&#x27;&#x27;)}{renderChildren(group, schema, childClassNames, path, enabled)}&lt;/fieldset&gt;);})</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/vanilla/src/layouts/GroupLayout.tsx:46</li>
+							<li>Defined in packages/vanilla-renderers/src/layouts/GroupLayout.tsx:54</li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-variable">
 					<a name="horizontallayoutrenderercomponent" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> Horizontal<wbr>Layout<wbr>Renderer<wbr>Component</h3>
-					<div class="tsd-signature tsd-kind-icon">Horizontal<wbr>Layout<wbr>Renderer<wbr>Component<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">FunctionComponent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">RendererProps</span><span class="tsd-signature-symbol"> &amp; </span><a href="interfaces/vanillarendererprops.html" class="tsd-signature-type">VanillaRendererProps</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = React.memo(({schema,uischema,getStyle,getStyleAsClassName,enabled,visible,path}: RendererProps &amp; VanillaRendererProps) &#x3D;&gt; {const horizontalLayout &#x3D; uischema as HorizontalLayout;const elementsSize &#x3D; horizontalLayout.elements ? horizontalLayout.elements.length : 0;const layoutClassName &#x3D; getStyleAsClassName(&#x27;horizontal.layout&#x27;);const childClassNames &#x3D; [&#x27;horizontal-layout-item&#x27;].concat(getStyle(&#x27;horizontal.layout.item&#x27;, elementsSize)).join(&#x27; &#x27;);return (&lt;JsonFormsLayoutclassName&#x3D;{layoutClassName}visible&#x3D;{visible}enabled&#x3D;{enabled}path&#x3D;{path}uischema&#x3D;{uischema}schema&#x3D;{schema}getStyle&#x3D;{getStyle}getStyleAsClassName&#x3D;{getStyleAsClassName}&gt;{renderChildren(horizontalLayout, schema, childClassNames, path, enabled)}&lt;/JsonFormsLayout&gt;);})</span></div>
+					<div class="tsd-signature tsd-kind-icon">Horizontal<wbr>Layout<wbr>Renderer<wbr>Component<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">FunctionComponent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">RendererProps</span><span class="tsd-signature-symbol"> &amp; </span><a href="interfaces/vanillarendererprops.html" class="tsd-signature-type">VanillaRendererProps</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = React.memo(function HorizontalLayoutRendererComponent({schema,uischema,getStyle,getStyleAsClassName,enabled,visible,path,}: RendererProps &amp; VanillaRendererProps) {const horizontalLayout &#x3D; uischema as HorizontalLayout;const elementsSize &#x3D; horizontalLayout.elements? horizontalLayout.elements.length: 0;const layoutClassName &#x3D; getStyleAsClassName(&#x27;horizontal.layout&#x27;);const childClassNames &#x3D; [&#x27;horizontal-layout-item&#x27;].concat(getStyle(&#x27;horizontal.layout.item&#x27;, elementsSize)).join(&#x27; &#x27;);return (&lt;JsonFormsLayoutclassName&#x3D;{layoutClassName}visible&#x3D;{visible}enabled&#x3D;{enabled}path&#x3D;{path}uischema&#x3D;{uischema}schema&#x3D;{schema}getStyle&#x3D;{getStyle}getStyleAsClassName&#x3D;{getStyleAsClassName}&gt;{renderChildren(horizontalLayout, schema, childClassNames, path, enabled)}&lt;/JsonFormsLayout&gt;);})</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/vanilla/src/layouts/HorizontalLayout.tsx:51</li>
+							<li>Defined in packages/vanilla-renderers/src/layouts/HorizontalLayout.tsx:56</li>
 						</ul>
 					</aside>
 				</section>
@@ -219,7 +218,7 @@
 					<div class="tsd-signature tsd-kind-icon">Json<wbr>Forms<wbr>Style<wbr>Context<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Context</span><span class="tsd-signature-symbol">&lt;</span><a href="interfaces/stylecontext.html" class="tsd-signature-type">StyleContext</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = React.createContext(defaultContext)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/vanilla/src/styles/styleContext.ts:37</li>
+							<li>Defined in packages/vanilla-renderers/src/styles/styleContext.ts:37</li>
 						</ul>
 					</aside>
 				</section>
@@ -229,7 +228,7 @@
 					<div class="tsd-signature tsd-kind-icon">REGISTER_<wbr>STYLE<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"REGISTER_STYLE"</span><span class="tsd-signature-symbol"> = &quot;REGISTER_STYLE&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/vanilla/src/actions/index.ts:25</li>
+							<li>Defined in packages/vanilla-renderers/src/actions/index.ts:25</li>
 						</ul>
 					</aside>
 				</section>
@@ -239,7 +238,7 @@
 					<div class="tsd-signature tsd-kind-icon">REGISTER_<wbr>STYLES<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"REGISTER_STYLES"</span><span class="tsd-signature-symbol"> = &quot;REGISTER_STYLES&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/vanilla/src/actions/index.ts:26</li>
+							<li>Defined in packages/vanilla-renderers/src/actions/index.ts:26</li>
 						</ul>
 					</aside>
 				</section>
@@ -249,17 +248,17 @@
 					<div class="tsd-signature tsd-kind-icon">UNREGISTER_<wbr>STYLE<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"UNREGISTER_STYLE"</span><span class="tsd-signature-symbol"> = &quot;UNREGISTER_STYLE&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/vanilla/src/actions/index.ts:27</li>
+							<li>Defined in packages/vanilla-renderers/src/actions/index.ts:27</li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-variable">
 					<a name="verticallayoutrenderercomponent" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> Vertical<wbr>Layout<wbr>Renderer<wbr>Component</h3>
-					<div class="tsd-signature tsd-kind-icon">Vertical<wbr>Layout<wbr>Renderer<wbr>Component<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">FunctionComponent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">RendererProps</span><span class="tsd-signature-symbol"> &amp; </span><a href="interfaces/vanillarendererprops.html" class="tsd-signature-type">VanillaRendererProps</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = React.memo(({schema,uischema,path,visible,enabled,getStyle,getStyleAsClassName}: RendererProps &amp; VanillaRendererProps) &#x3D;&gt; {const verticalLayout &#x3D; uischema as VerticalLayout;const elementsSize &#x3D; verticalLayout.elements ? verticalLayout.elements.length : 0;const layoutClassName &#x3D; getStyleAsClassName(&#x27;vertical.layout&#x27;);const childClassNames &#x3D; [&#x27;vertical-layout-item&#x27;].concat(getStyle(&#x27;vertical.layout.item&#x27;, elementsSize)).join(&#x27; &#x27;);return (&lt;JsonFormsLayoutclassName&#x3D;{layoutClassName}uischema&#x3D;{uischema}schema&#x3D;{schema}visible&#x3D;{visible}enabled&#x3D;{enabled}path&#x3D;{path}getStyle&#x3D;{getStyle}getStyleAsClassName&#x3D;{getStyleAsClassName}&gt;{renderChildren(verticalLayout, schema, childClassNames, path, enabled)}&lt;/JsonFormsLayout&gt;);})</span></div>
+					<div class="tsd-signature tsd-kind-icon">Vertical<wbr>Layout<wbr>Renderer<wbr>Component<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">FunctionComponent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">RendererProps</span><span class="tsd-signature-symbol"> &amp; </span><a href="interfaces/vanillarendererprops.html" class="tsd-signature-type">VanillaRendererProps</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = React.memo(function VerticalLayoutRendererComponent({schema,uischema,path,visible,enabled,getStyle,getStyleAsClassName,}: RendererProps &amp; VanillaRendererProps) {const verticalLayout &#x3D; uischema as VerticalLayout;const elementsSize &#x3D; verticalLayout.elements? verticalLayout.elements.length: 0;const layoutClassName &#x3D; getStyleAsClassName(&#x27;vertical.layout&#x27;);const childClassNames &#x3D; [&#x27;vertical-layout-item&#x27;].concat(getStyle(&#x27;vertical.layout.item&#x27;, elementsSize)).join(&#x27; &#x27;);return (&lt;JsonFormsLayoutclassName&#x3D;{layoutClassName}uischema&#x3D;{uischema}schema&#x3D;{schema}visible&#x3D;{visible}enabled&#x3D;{enabled}path&#x3D;{path}getStyle&#x3D;{getStyle}getStyleAsClassName&#x3D;{getStyleAsClassName}&gt;{renderChildren(verticalLayout, schema, childClassNames, path, enabled)}&lt;/JsonFormsLayout&gt;);})</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/vanilla/src/layouts/VerticalLayout.tsx:51</li>
+							<li>Defined in packages/vanilla-renderers/src/layouts/VerticalLayout.tsx:56</li>
 						</ul>
 					</aside>
 				</section>
@@ -269,7 +268,7 @@
 					<div class="tsd-signature tsd-kind-icon">array<wbr>Control<wbr>Tester<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> = rankWith(4,isObjectArrayWithNesting)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/vanilla/src/complex/array/index.ts:33</li>
+							<li>Defined in packages/vanilla-renderers/src/complex/array/index.ts:33</li>
 						</ul>
 					</aside>
 				</section>
@@ -279,7 +278,7 @@
 					<div class="tsd-signature tsd-kind-icon">boolean<wbr>Cell<wbr>Tester<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> = rankWith(2, isBooleanControl)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/vanilla/src/cells/BooleanCell.tsx:60</li>
+							<li>Defined in packages/vanilla-renderers/src/cells/BooleanCell.tsx:59</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -291,10 +290,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-variable">
 					<a name="categorizationtester" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> categorization<wbr>Tester</h3>
-					<div class="tsd-signature tsd-kind-icon">categorization<wbr>Tester<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> = rankWith(1,and(uiTypeIs(&#x27;Categorization&#x27;), uischema &#x3D;&gt; {const hasCategory &#x3D; (element: Categorization): boolean &#x3D;&gt; {if (isEmpty(element.elements)) {return false;}return element.elements.map(elem &#x3D;&gt;isCategorization(elem) ? hasCategory(elem) : elem.type &#x3D;&#x3D;&#x3D; &#x27;Category&#x27;).reduce((prev, curr) &#x3D;&gt; prev &amp;&amp; curr, true);};return hasCategory(uischema as Categorization);}))</span></div>
+					<div class="tsd-signature tsd-kind-icon">categorization<wbr>Tester<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> = rankWith(1,and(uiTypeIs(&#x27;Categorization&#x27;), (uischema) &#x3D;&gt; {const hasCategory &#x3D; (element: Categorization): boolean &#x3D;&gt; {if (isEmpty(element.elements)) {return false;}return element.elements.map((elem) &#x3D;&gt;isCategorization(elem) ? hasCategory(elem) : elem.type &#x3D;&#x3D;&#x3D; &#x27;Category&#x27;).reduce((prev, curr) &#x3D;&gt; prev &amp;&amp; curr, true);};return hasCategory(uischema as Categorization);}))</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/vanilla/src/complex/categorization/tester.ts:39</li>
+							<li>Defined in packages/vanilla-renderers/src/complex/categorization/tester.ts:39</li>
 						</ul>
 					</aside>
 				</section>
@@ -304,18 +303,8 @@
 					<div class="tsd-signature tsd-kind-icon">convert<wbr>ToValid<wbr>Class<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">convertToValidClassName</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/vanilla/src/complex/array/ArrayControlRenderer.tsx:32</li>
-							<li>Defined in packages/vanilla/src/complex/TableArrayControl.tsx:49</li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-variable">
-					<a name="createlabeldescriptionfrom" class="tsd-anchor"></a>
-					<h3>create<wbr>Label<wbr>Description<wbr>From</h3>
-					<div class="tsd-signature tsd-kind-icon">create<wbr>Label<wbr>Description<wbr>From<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">createLabelDescriptionFrom</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in packages/vanilla/src/complex/TableArrayControl.tsx:49</li>
+							<li>Defined in packages/vanilla-renderers/src/complex/array/ArrayControlRenderer.tsx:42</li>
+							<li>Defined in packages/vanilla-renderers/src/complex/TableArrayControl.tsx:49</li>
 						</ul>
 					</aside>
 				</section>
@@ -325,7 +314,7 @@
 					<div class="tsd-signature tsd-kind-icon">date<wbr>Cell<wbr>Tester<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> = rankWith(2, isDateControl)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/vanilla/src/cells/DateCell.tsx:55</li>
+							<li>Defined in packages/vanilla-renderers/src/cells/DateCell.tsx:55</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -340,7 +329,7 @@
 					<div class="tsd-signature tsd-kind-icon">date<wbr>Time<wbr>Cell<wbr>Tester<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> = rankWith(2, isDateTimeControl)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/vanilla/src/cells/DateTimeCell.tsx:58</li>
+							<li>Defined in packages/vanilla-renderers/src/cells/DateTimeCell.tsx:58</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -355,7 +344,7 @@
 					<div class="tsd-signature tsd-kind-icon">enum<wbr>Cell<wbr>Tester<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> = rankWith(2, isEnumControl)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/vanilla/src/cells/EnumCell.tsx:64</li>
+							<li>Defined in packages/vanilla-renderers/src/cells/EnumCell.tsx:93</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -370,7 +359,7 @@
 					<div class="tsd-signature tsd-kind-icon">group<wbr>Tester<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> = rankWith(1, uiTypeIs(&#x27;Group&#x27;))</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/vanilla/src/layouts/GroupLayout.tsx:38</li>
+							<li>Defined in packages/vanilla-renderers/src/layouts/GroupLayout.tsx:44</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -382,10 +371,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-variable">
 					<a name="horizontallayouttester" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> horizontal<wbr>Layout<wbr>Tester</h3>
-					<div class="tsd-signature tsd-kind-icon">horizontal<wbr>Layout<wbr>Tester<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> = rankWith(1, uiTypeIs(&#x27;HorizontalLayout&#x27;))</span></div>
+					<div class="tsd-signature tsd-kind-icon">horizontal<wbr>Layout<wbr>Tester<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> = rankWith(1,uiTypeIs(&#x27;HorizontalLayout&#x27;))</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/vanilla/src/layouts/HorizontalLayout.tsx:43</li>
+							<li>Defined in packages/vanilla-renderers/src/layouts/HorizontalLayout.tsx:43</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -400,7 +389,7 @@
 					<div class="tsd-signature tsd-kind-icon">input<wbr>Control<wbr>Tester<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> = rankWith(1, isControl)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/vanilla/src/controls/InputControl.tsx:124</li>
+							<li>Defined in packages/vanilla-renderers/src/controls/InputControl.tsx:124</li>
 						</ul>
 					</aside>
 				</section>
@@ -410,7 +399,7 @@
 					<div class="tsd-signature tsd-kind-icon">integer<wbr>Cell<wbr>Tester<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> = rankWith(2, isIntegerControl)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/vanilla/src/cells/IntegerCell.tsx:59</li>
+							<li>Defined in packages/vanilla-renderers/src/cells/IntegerCell.tsx:59</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -425,7 +414,7 @@
 					<div class="tsd-signature tsd-kind-icon">is<wbr>Object<wbr>Array<wbr>Control<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Tester</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/vanilla/src/complex/TableArrayControl.tsx:51</li>
+							<li>Defined in packages/vanilla-renderers/src/complex/TableArrayControl.tsx:51</li>
 						</ul>
 					</aside>
 				</section>
@@ -435,7 +424,7 @@
 					<div class="tsd-signature tsd-kind-icon">is<wbr>Primitive<wbr>Array<wbr>Control<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Tester</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/vanilla/src/complex/TableArrayControl.tsx:51</li>
+							<li>Defined in packages/vanilla-renderers/src/complex/TableArrayControl.tsx:51</li>
 						</ul>
 					</aside>
 				</section>
@@ -445,7 +434,7 @@
 					<div class="tsd-signature tsd-kind-icon">label<wbr>Renderer<wbr>Tester<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> = rankWith(1, uiTypeIs(&#x27;Label&#x27;))</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/vanilla/src/complex/LabelRenderer.tsx:35</li>
+							<li>Defined in packages/vanilla-renderers/src/complex/LabelRenderer.tsx:35</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -460,7 +449,7 @@
 					<div class="tsd-signature tsd-kind-icon">number<wbr>Cell<wbr>Tester<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> = rankWith(2, isNumberControl)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/vanilla/src/cells/NumberCell.tsx:60</li>
+							<li>Defined in packages/vanilla-renderers/src/cells/NumberCell.tsx:59</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -472,10 +461,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-variable">
 					<a name="numberformatcelltester" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> number<wbr>Format<wbr>Cell<wbr>Tester</h3>
-					<div class="tsd-signature tsd-kind-icon">number<wbr>Format<wbr>Cell<wbr>Tester<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> = rankWith(4, isNumberFormatControl)</span></div>
+					<div class="tsd-signature tsd-kind-icon">number<wbr>Format<wbr>Cell<wbr>Tester<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> = rankWith(4,isNumberFormatControl)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/vanilla/src/cells/NumberFormatCell.tsx:74</li>
+							<li>Defined in packages/vanilla-renderers/src/cells/NumberFormatCell.tsx:71</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -490,7 +479,7 @@
 					<div class="tsd-signature tsd-kind-icon">one<wbr>OfRadio<wbr>Group<wbr>Control<wbr>Tester<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> = rankWith(3,and(isOneOfEnumControl, optionIs(&#x27;format&#x27;, &#x27;radio&#x27;)))</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/vanilla/src/controls/OneOfRadioGroupControl.tsx:43</li>
+							<li>Defined in packages/vanilla-renderers/src/controls/OneOfRadioGroupControl.tsx:45</li>
 						</ul>
 					</aside>
 				</section>
@@ -500,7 +489,7 @@
 					<div class="tsd-signature tsd-kind-icon">or<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>testers<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Tester</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Tester</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/vanilla/src/complex/TableArrayControl.tsx:51</li>
+							<li>Defined in packages/vanilla-renderers/src/complex/TableArrayControl.tsx:51</li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -531,7 +520,7 @@
 					<div class="tsd-signature tsd-kind-icon">radio<wbr>Group<wbr>Control<wbr>Tester<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> = rankWith(3,and(isEnumControl, optionIs(&#x27;format&#x27;, &#x27;radio&#x27;)))</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/vanilla/src/controls/RadioGroupControl.tsx:40</li>
+							<li>Defined in packages/vanilla-renderers/src/controls/RadioGroupControl.tsx:44</li>
 						</ul>
 					</aside>
 				</section>
@@ -541,7 +530,7 @@
 					<div class="tsd-signature tsd-kind-icon">rank<wbr>With<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>rank<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, tester<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Tester</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-symbol">(</span>uischema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">UISchemaElement</span>, schema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonSchema</span>, context<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TesterContext</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/vanilla/src/complex/TableArrayControl.tsx:51</li>
+							<li>Defined in packages/vanilla-renderers/src/complex/TableArrayControl.tsx:51</li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -599,7 +588,7 @@
 					<div class="tsd-signature tsd-kind-icon">slider<wbr>Cell<wbr>Tester<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> = rankWith(4, isRangeControl)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/vanilla/src/cells/SliderCell.tsx:58</li>
+							<li>Defined in packages/vanilla-renderers/src/cells/SliderCell.tsx:59</li>
 						</ul>
 					</aside>
 				</section>
@@ -609,7 +598,7 @@
 					<div class="tsd-signature tsd-kind-icon">table<wbr>Array<wbr>Control<wbr>Tester<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> = rankWith(3,or(isObjectArrayControl, isPrimitiveArrayControl))</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/vanilla/src/complex/TableArrayControl.tsx:58</li>
+							<li>Defined in packages/vanilla-renderers/src/complex/TableArrayControl.tsx:58</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -625,7 +614,7 @@
 					<div class="tsd-signature tsd-kind-icon">text<wbr>Area<wbr>Cell<wbr>Tester<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> = rankWith(2, isMultiLineControl)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/vanilla/src/cells/TextAreaCell.tsx:57</li>
+							<li>Defined in packages/vanilla-renderers/src/cells/TextAreaCell.tsx:60</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -640,7 +629,7 @@
 					<div class="tsd-signature tsd-kind-icon">text<wbr>Cell<wbr>Tester<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> = rankWith(1, isStringControl)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/vanilla/src/cells/TextCell.tsx:71</li>
+							<li>Defined in packages/vanilla-renderers/src/cells/TextCell.tsx:73</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -655,7 +644,7 @@
 					<div class="tsd-signature tsd-kind-icon">time<wbr>Cell<wbr>Tester<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> = rankWith(2, isTimeControl)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/vanilla/src/cells/TimeCell.tsx:71</li>
+							<li>Defined in packages/vanilla-renderers/src/cells/TimeCell.tsx:73</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -667,30 +656,30 @@
 				<section class="tsd-panel tsd-member tsd-kind-variable">
 					<a name="vanillacells" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> vanilla<wbr>Cells</h3>
-					<div class="tsd-signature tsd-kind-icon">vanilla<wbr>Cells<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>cell<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>tester<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = [{ tester: booleanCellTester, cell: BooleanCell },{ tester: dateCellTester, cell: DateCell },{ tester: dateTimeCellTester, cell: DateTimeCell },{ tester: enumCellTester, cell: EnumCell },{ tester: integerCellTester, cell: IntegerCell },{ tester: numberCellTester, cell: NumberCell },{ tester: sliderCellTester, cell: SliderCell },{ tester: textAreaCellTester, cell: TextAreaCell },{ tester: textCellTester, cell: TextCell },{ tester: timeCellTester, cell: TimeCell }]</span></div>
+					<div class="tsd-signature tsd-kind-icon">vanilla<wbr>Cells<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>cell<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>tester<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = [{ tester: booleanCellTester, cell: BooleanCell },{ tester: dateCellTester, cell: DateCell },{ tester: dateTimeCellTester, cell: DateTimeCell },{ tester: enumCellTester, cell: EnumCell },{ tester: integerCellTester, cell: IntegerCell },{ tester: numberCellTester, cell: NumberCell },{ tester: sliderCellTester, cell: SliderCell },{ tester: textAreaCellTester, cell: TextAreaCell },{ tester: textCellTester, cell: TextCell },{ tester: timeCellTester, cell: TimeCell },]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/vanilla/src/index.ts:124</li>
+							<li>Defined in packages/vanilla-renderers/src/index.ts:131</li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-variable">
 					<a name="vanillarenderers" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> vanilla<wbr>Renderers</h3>
-					<div class="tsd-signature tsd-kind-icon">vanilla<wbr>Renderers<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>renderer<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>tester<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = [{ tester: inputControlTester, renderer: InputControl },{ tester: radioGroupControlTester, renderer: RadioGroupControl },{ tester: oneOfRadioGroupControlTester, renderer: OneOfRadioGroupControl },{ tester: arrayControlTester, renderer: ArrayControl },{ tester: labelRendererTester, renderer: LabelRenderer },{ tester: categorizationTester, renderer: Categorization },{ tester: tableArrayControlTester, renderer: TableArrayControl },{ tester: groupTester, renderer: GroupLayout },{ tester: verticalLayoutTester, renderer: VerticalLayout },{ tester: horizontalLayoutTester, renderer: HorizontalLayout }]</span></div>
+					<div class="tsd-signature tsd-kind-icon">vanilla<wbr>Renderers<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>renderer<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>tester<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = [{ tester: inputControlTester, renderer: InputControl },{ tester: radioGroupControlTester, renderer: RadioGroupControl },{ tester: oneOfRadioGroupControlTester, renderer: OneOfRadioGroupControl },{ tester: arrayControlTester, renderer: ArrayControl },{ tester: labelRendererTester, renderer: LabelRenderer },{ tester: categorizationTester, renderer: Categorization },{ tester: tableArrayControlTester, renderer: TableArrayControl },{ tester: groupTester, renderer: GroupLayout },{ tester: verticalLayoutTester, renderer: VerticalLayout },{ tester: horizontalLayoutTester, renderer: HorizontalLayout },]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/vanilla/src/index.ts:111</li>
+							<li>Defined in packages/vanilla-renderers/src/index.ts:118</li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-variable">
 					<a name="vanillastyles" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> vanilla<wbr>Styles</h3>
-					<div class="tsd-signature tsd-kind-icon">vanilla<wbr>Styles<span class="tsd-signature-symbol">:</span> <a href="interfaces/styledef.html" class="tsd-signature-type">StyleDef</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = [{name: &#x27;control&#x27;,classNames: [&#x27;control&#x27;]},{name: &#x27;control.trim&#x27;,classNames: [&#x27;trim&#x27;]},{name: &#x27;control.input&#x27;,classNames: [&#x27;input&#x27;]},{name: &#x27;control.select&#x27;,classNames: [&#x27;select&#x27;]},{name: &#x27;control.checkbox&#x27;,classNames: [&#x27;checkbox&#x27;]},{name: &#x27;control.radio&#x27;,classNames: [&#x27;radio&#x27;]},{name: &#x27;control.radio.option&#x27;,classNames: [&#x27;radio-option&#x27;]},{name: &#x27;control.radio.input&#x27;,classNames: [&#x27;radio-input&#x27;]},{name: &#x27;control.radio.label&#x27;,classNames: [&#x27;radio-label&#x27;]},{name: &#x27;control.validation.error&#x27;,classNames: [&#x27;validation_error&#x27;]},{name: &#x27;control.validation&#x27;,classNames: [&#x27;validation&#x27;]},{name: &#x27;categorization&#x27;,classNames: [&#x27;categorization&#x27;]},{name: &#x27;categorization.master&#x27;,classNames: [&#x27;categorization-master&#x27;]},{name: &#x27;categorization.detail&#x27;,classNames: [&#x27;categorization-detail&#x27;]},{name: &#x27;category.group&#x27;,classNames: [&#x27;category-group&#x27;]},{name: &#x27;category.subcategories&#x27;,classNames: [&#x27;category-subcategories&#x27;]},{name: &#x27;array.layout&#x27;,classNames: [&#x27;array-layout&#x27;]},{name: &#x27;array.children&#x27;,classNames: [&#x27;children&#x27;]},{name: &#x27;group.layout&#x27;,classNames: [&#x27;group-layout&#x27;]},{name: &#x27;horizontal.layout&#x27;,classNames: [&#x27;horizontal-layout&#x27;]},{name: &#x27;horizontal.layout.item&#x27;,classNames: ([size]: number[]) &#x3D;&gt; [&#x60;horizontal-layout-${size}&#x60;]},{name: &#x27;vertical.layout&#x27;,classNames: [&#x27;vertical-layout&#x27;]},{name: &#x27;array.table.validation.error&#x27;,classNames: [&#x27;validation_error&#x27;]},{name: &#x27;array.table.validation&#x27;,classNames: [&#x27;validation&#x27;]},{name: &#x27;array.table&#x27;,classNames: [&#x27;array-table-layout&#x27;, &#x27;control&#x27;]},{name: &#x27;array.control.validation.error&#x27;,classNames: [&#x27;validation_error&#x27;]},{name: &#x27;array.control.validation&#x27;,classNames: [&#x27;validation&#x27;]},{name: &#x27;array.control.add&#x27;,classNames: [&#x27;button-add&#x27;]},{name: &#x27;array.child.controls&#x27;,classNames: [&#x27;child-controls&#x27;]},{name: &#x27;array.child.controls.up&#x27;,classNames: [&#x27;button-up&#x27;]},{name: &#x27;array.child.controls.down&#x27;,classNames: [&#x27;button-down&#x27;]},{name: &#x27;array.child.controls.delete&#x27;,classNames: [&#x27;button-delete&#x27;]},{name: &#x27;array.control&#x27;,classNames: [&#x27;array-control-layout&#x27;, &#x27;control&#x27;]},{name: &#x27;input.description&#x27;,classNames: [&#x27;input-description&#x27;]}]</span></div>
+					<div class="tsd-signature tsd-kind-icon">vanilla<wbr>Styles<span class="tsd-signature-symbol">:</span> <a href="interfaces/styledef.html" class="tsd-signature-type">StyleDef</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = [{name: &#x27;control&#x27;,classNames: [&#x27;control&#x27;],},{name: &#x27;control.trim&#x27;,classNames: [&#x27;trim&#x27;],},{name: &#x27;control.input&#x27;,classNames: [&#x27;input&#x27;],},{name: &#x27;control.select&#x27;,classNames: [&#x27;select&#x27;],},{name: &#x27;control.checkbox&#x27;,classNames: [&#x27;checkbox&#x27;],},{name: &#x27;control.radio&#x27;,classNames: [&#x27;radio&#x27;],},{name: &#x27;control.radio.option&#x27;,classNames: [&#x27;radio-option&#x27;],},{name: &#x27;control.radio.input&#x27;,classNames: [&#x27;radio-input&#x27;],},{name: &#x27;control.radio.label&#x27;,classNames: [&#x27;radio-label&#x27;],},{name: &#x27;control.validation.error&#x27;,classNames: [&#x27;validation_error&#x27;],},{name: &#x27;control.validation&#x27;,classNames: [&#x27;validation&#x27;],},{name: &#x27;categorization&#x27;,classNames: [&#x27;categorization&#x27;],},{name: &#x27;categorization.master&#x27;,classNames: [&#x27;categorization-master&#x27;],},{name: &#x27;categorization.detail&#x27;,classNames: [&#x27;categorization-detail&#x27;],},{name: &#x27;category.group&#x27;,classNames: [&#x27;category-group&#x27;],},{name: &#x27;category.subcategories&#x27;,classNames: [&#x27;category-subcategories&#x27;],},{name: &#x27;array.layout&#x27;,classNames: [&#x27;array-layout&#x27;],},{name: &#x27;array.children&#x27;,classNames: [&#x27;children&#x27;],},{name: &#x27;group.layout&#x27;,classNames: [&#x27;group-layout&#x27;],},{name: &#x27;horizontal.layout&#x27;,classNames: [&#x27;horizontal-layout&#x27;],},{name: &#x27;horizontal.layout.item&#x27;,classNames: ([size]: number[]) &#x3D;&gt; [&#x60;horizontal-layout-${size}&#x60;],},{name: &#x27;vertical.layout&#x27;,classNames: [&#x27;vertical-layout&#x27;],},{name: &#x27;array.table.validation.error&#x27;,classNames: [&#x27;validation_error&#x27;],},{name: &#x27;array.table.validation&#x27;,classNames: [&#x27;validation&#x27;],},{name: &#x27;array.table&#x27;,classNames: [&#x27;array-table-layout&#x27;, &#x27;control&#x27;],},{name: &#x27;array.control.validation.error&#x27;,classNames: [&#x27;validation_error&#x27;],},{name: &#x27;array.control.validation&#x27;,classNames: [&#x27;validation&#x27;],},{name: &#x27;array.control.add&#x27;,classNames: [&#x27;button-add&#x27;],},{name: &#x27;array.child.controls&#x27;,classNames: [&#x27;child-controls&#x27;],},{name: &#x27;array.child.controls.up&#x27;,classNames: [&#x27;button-up&#x27;],},{name: &#x27;array.child.controls.down&#x27;,classNames: [&#x27;button-down&#x27;],},{name: &#x27;array.child.controls.delete&#x27;,classNames: [&#x27;button-delete&#x27;],},{name: &#x27;array.control&#x27;,classNames: [&#x27;array-control-layout&#x27;, &#x27;control&#x27;],},{name: &#x27;input.description&#x27;,classNames: [&#x27;input-description&#x27;],},]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/vanilla/src/styles/styles.ts:39</li>
+							<li>Defined in packages/vanilla-renderers/src/styles/styles.ts:39</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -702,10 +691,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-variable">
 					<a name="verticallayouttester" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> vertical<wbr>Layout<wbr>Tester</h3>
-					<div class="tsd-signature tsd-kind-icon">vertical<wbr>Layout<wbr>Tester<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> = rankWith(1, uiTypeIs(&#x27;VerticalLayout&#x27;))</span></div>
+					<div class="tsd-signature tsd-kind-icon">vertical<wbr>Layout<wbr>Tester<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RankedTester</span><span class="tsd-signature-symbol"> = rankWith(1,uiTypeIs(&#x27;VerticalLayout&#x27;))</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/vanilla/src/layouts/VerticalLayout.tsx:43</li>
+							<li>Defined in packages/vanilla-renderers/src/layouts/VerticalLayout.tsx:43</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -720,7 +709,7 @@
 					<div class="tsd-signature tsd-kind-icon">with<wbr>Vanilla<wbr>Boolean<wbr>Cell<wbr>Props<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">(Anonymous function)</span><span class="tsd-signature-symbol"> = withVanillaCellPropsForType(&#x27;control.checkbox&#x27;)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/vanilla/src/util/index.tsx:213</li>
+							<li>Defined in packages/vanilla-renderers/src/util/index.tsx:249</li>
 						</ul>
 					</aside>
 				</section>
@@ -730,7 +719,7 @@
 					<div class="tsd-signature tsd-kind-icon">with<wbr>Vanilla<wbr>Cell<wbr>Props<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">(Anonymous function)</span><span class="tsd-signature-symbol"> = withVanillaCellPropsForType(&#x27;control.input&#x27;)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/vanilla/src/util/index.tsx:205</li>
+							<li>Defined in packages/vanilla-renderers/src/util/index.tsx:243</li>
 						</ul>
 					</aside>
 				</section>
@@ -740,7 +729,7 @@
 					<div class="tsd-signature tsd-kind-icon">with<wbr>Vanilla<wbr>Enum<wbr>Cell<wbr>Props<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">(Anonymous function)</span><span class="tsd-signature-symbol"> = withVanillaCellPropsForType(&#x27;control.select&#x27;)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/vanilla/src/util/index.tsx:209</li>
+							<li>Defined in packages/vanilla-renderers/src/util/index.tsx:246</li>
 						</ul>
 					</aside>
 				</section>
@@ -751,19 +740,19 @@
 					<a name="arraycontrol" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> Array<wbr>Control</h3>
 					<ul class="tsd-signatures tsd-kind-function">
-						<li class="tsd-signature tsd-kind-icon">Array<wbr>Control<span class="tsd-signature-symbol">(</span>__namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>addItem<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">addItem</span><span class="tsd-signature-symbol">; </span>classNames<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">; </span>data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>errors<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>getStyleAsClassName<span class="tsd-signature-symbol">: </span><a href="interfaces/vanillarendererprops.html#getstyleasclassname" class="tsd-signature-type">getStyleAsClassName</a><span class="tsd-signature-symbol">; </span>label<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>moveDown<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">moveDown</span><span class="tsd-signature-symbol">; </span>moveUp<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">moveUp</span><span class="tsd-signature-symbol">; </span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>removeItems<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">removeItems</span><span class="tsd-signature-symbol">; </span>renderers<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonFormsRendererRegistryEntry</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>rootSchema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonSchema</span><span class="tsd-signature-symbol">; </span>schema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonSchema</span><span class="tsd-signature-symbol">; </span>uischema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ControlElement</span><span class="tsd-signature-symbol">; </span>uischemas<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonFormsUISchemaRegistryEntry</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Element</span></li>
+						<li class="tsd-signature tsd-kind-icon">Array<wbr>Control<span class="tsd-signature-symbol">(</span>__namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>addItem<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">addItem</span><span class="tsd-signature-symbol">; </span>classNames<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">; </span>data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>errors<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>getStyleAsClassName<span class="tsd-signature-symbol">: </span><a href="interfaces/vanillarendererprops.html#getstyleasclassname" class="tsd-signature-type">getStyleAsClassName</a><span class="tsd-signature-symbol">; </span>label<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>moveDown<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">moveDown</span><span class="tsd-signature-symbol">; </span>moveUp<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">moveUp</span><span class="tsd-signature-symbol">; </span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>removeItems<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">removeItems</span><span class="tsd-signature-symbol">; </span>renderers<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonFormsRendererRegistryEntry</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>rootSchema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonSchema</span><span class="tsd-signature-symbol">; </span>schema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonSchema</span><span class="tsd-signature-symbol">; </span>translations<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ArrayTranslations</span><span class="tsd-signature-symbol">; </span>uischema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ControlElement</span><span class="tsd-signature-symbol">; </span>uischemas<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonFormsUISchemaRegistryEntry</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Element</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/complex/array/ArrayControlRenderer.tsx:34</li>
+									<li>Defined in packages/vanilla-renderers/src/complex/array/ArrayControlRenderer.tsx:44</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>__namedParameters: <span class="tsd-signature-symbol">{ </span>addItem<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">addItem</span><span class="tsd-signature-symbol">; </span>classNames<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">; </span>data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>errors<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>getStyleAsClassName<span class="tsd-signature-symbol">: </span><a href="interfaces/vanillarendererprops.html#getstyleasclassname" class="tsd-signature-type">getStyleAsClassName</a><span class="tsd-signature-symbol">; </span>label<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>moveDown<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">moveDown</span><span class="tsd-signature-symbol">; </span>moveUp<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">moveUp</span><span class="tsd-signature-symbol">; </span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>removeItems<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">removeItems</span><span class="tsd-signature-symbol">; </span>renderers<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonFormsRendererRegistryEntry</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>rootSchema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonSchema</span><span class="tsd-signature-symbol">; </span>schema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonSchema</span><span class="tsd-signature-symbol">; </span>uischema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ControlElement</span><span class="tsd-signature-symbol">; </span>uischemas<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonFormsUISchemaRegistryEntry</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span></h5>
+									<h5>__namedParameters: <span class="tsd-signature-symbol">{ </span>addItem<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">addItem</span><span class="tsd-signature-symbol">; </span>classNames<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">; </span>data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>errors<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>getStyleAsClassName<span class="tsd-signature-symbol">: </span><a href="interfaces/vanillarendererprops.html#getstyleasclassname" class="tsd-signature-type">getStyleAsClassName</a><span class="tsd-signature-symbol">; </span>label<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>moveDown<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">moveDown</span><span class="tsd-signature-symbol">; </span>moveUp<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">moveUp</span><span class="tsd-signature-symbol">; </span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>removeItems<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">removeItems</span><span class="tsd-signature-symbol">; </span>renderers<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonFormsRendererRegistryEntry</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>rootSchema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonSchema</span><span class="tsd-signature-symbol">; </span>schema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonSchema</span><span class="tsd-signature-symbol">; </span>translations<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ArrayTranslations</span><span class="tsd-signature-symbol">; </span>uischema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ControlElement</span><span class="tsd-signature-symbol">; </span>uischemas<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonFormsUISchemaRegistryEntry</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span></h5>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter">
 											<h5>add<wbr>Item<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">addItem</span></h5>
@@ -810,6 +799,9 @@
 											<h5>schema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonSchema</span></h5>
 										</li>
 										<li class="tsd-parameter">
+											<h5>translations<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ArrayTranslations</span></h5>
+										</li>
+										<li class="tsd-parameter">
 											<h5>uischema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ControlElement</span></h5>
 										</li>
 										<li class="tsd-parameter">
@@ -826,19 +818,19 @@
 					<a name="arraycontrolrenderer" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> Array<wbr>Control<wbr>Renderer</h3>
 					<ul class="tsd-signatures tsd-kind-function">
-						<li class="tsd-signature tsd-kind-icon">Array<wbr>Control<wbr>Renderer<span class="tsd-signature-symbol">(</span>__namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>addItem<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">addItem</span><span class="tsd-signature-symbol">; </span>data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>enabled<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span>errors<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>getStyle<span class="tsd-signature-symbol">: </span><a href="interfaces/vanillarendererprops.html#getstyle" class="tsd-signature-type">getStyle</a><span class="tsd-signature-symbol">; </span>getStyleAsClassName<span class="tsd-signature-symbol">: </span><a href="interfaces/vanillarendererprops.html#getstyleasclassname" class="tsd-signature-type">getStyleAsClassName</a><span class="tsd-signature-symbol">; </span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>moveDown<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">moveDown</span><span class="tsd-signature-symbol">; </span>moveUp<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">moveUp</span><span class="tsd-signature-symbol">; </span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>removeItems<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">removeItems</span><span class="tsd-signature-symbol">; </span>rootSchema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonSchema</span><span class="tsd-signature-symbol">; </span>schema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonSchema</span><span class="tsd-signature-symbol">; </span>uischema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ControlElement</span><span class="tsd-signature-symbol">; </span>uischemas<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonFormsUISchemaRegistryEntry</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>visible<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Element</span></li>
+						<li class="tsd-signature tsd-kind-icon">Array<wbr>Control<wbr>Renderer<span class="tsd-signature-symbol">(</span>__namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>addItem<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">addItem</span><span class="tsd-signature-symbol">; </span>data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>enabled<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span>errors<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>getStyle<span class="tsd-signature-symbol">: </span><a href="interfaces/vanillarendererprops.html#getstyle" class="tsd-signature-type">getStyle</a><span class="tsd-signature-symbol">; </span>getStyleAsClassName<span class="tsd-signature-symbol">: </span><a href="interfaces/vanillarendererprops.html#getstyleasclassname" class="tsd-signature-type">getStyleAsClassName</a><span class="tsd-signature-symbol">; </span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>moveDown<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">moveDown</span><span class="tsd-signature-symbol">; </span>moveUp<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">moveUp</span><span class="tsd-signature-symbol">; </span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>removeItems<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">removeItems</span><span class="tsd-signature-symbol">; </span>rootSchema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonSchema</span><span class="tsd-signature-symbol">; </span>schema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonSchema</span><span class="tsd-signature-symbol">; </span>translations<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ArrayTranslations</span><span class="tsd-signature-symbol">; </span>uischema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ControlElement</span><span class="tsd-signature-symbol">; </span>uischemas<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonFormsUISchemaRegistryEntry</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>visible<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Element</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/complex/array/ArrayControlRenderer.tsx:133</li>
+									<li>Defined in packages/vanilla-renderers/src/complex/array/ArrayControlRenderer.tsx:165</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>__namedParameters: <span class="tsd-signature-symbol">{ </span>addItem<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">addItem</span><span class="tsd-signature-symbol">; </span>data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>enabled<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span>errors<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>getStyle<span class="tsd-signature-symbol">: </span><a href="interfaces/vanillarendererprops.html#getstyle" class="tsd-signature-type">getStyle</a><span class="tsd-signature-symbol">; </span>getStyleAsClassName<span class="tsd-signature-symbol">: </span><a href="interfaces/vanillarendererprops.html#getstyleasclassname" class="tsd-signature-type">getStyleAsClassName</a><span class="tsd-signature-symbol">; </span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>moveDown<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">moveDown</span><span class="tsd-signature-symbol">; </span>moveUp<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">moveUp</span><span class="tsd-signature-symbol">; </span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>removeItems<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">removeItems</span><span class="tsd-signature-symbol">; </span>rootSchema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonSchema</span><span class="tsd-signature-symbol">; </span>schema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonSchema</span><span class="tsd-signature-symbol">; </span>uischema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ControlElement</span><span class="tsd-signature-symbol">; </span>uischemas<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonFormsUISchemaRegistryEntry</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>visible<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> }</span></h5>
+									<h5>__namedParameters: <span class="tsd-signature-symbol">{ </span>addItem<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">addItem</span><span class="tsd-signature-symbol">; </span>data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>enabled<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span>errors<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>getStyle<span class="tsd-signature-symbol">: </span><a href="interfaces/vanillarendererprops.html#getstyle" class="tsd-signature-type">getStyle</a><span class="tsd-signature-symbol">; </span>getStyleAsClassName<span class="tsd-signature-symbol">: </span><a href="interfaces/vanillarendererprops.html#getstyleasclassname" class="tsd-signature-type">getStyleAsClassName</a><span class="tsd-signature-symbol">; </span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>moveDown<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">moveDown</span><span class="tsd-signature-symbol">; </span>moveUp<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">moveUp</span><span class="tsd-signature-symbol">; </span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>removeItems<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">removeItems</span><span class="tsd-signature-symbol">; </span>rootSchema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonSchema</span><span class="tsd-signature-symbol">; </span>schema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonSchema</span><span class="tsd-signature-symbol">; </span>translations<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ArrayTranslations</span><span class="tsd-signature-symbol">; </span>uischema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ControlElement</span><span class="tsd-signature-symbol">; </span>uischemas<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonFormsUISchemaRegistryEntry</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>visible<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> }</span></h5>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter">
 											<h5>add<wbr>Item<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">addItem</span></h5>
@@ -880,6 +872,9 @@
 											<h5>schema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonSchema</span></h5>
 										</li>
 										<li class="tsd-parameter">
+											<h5>translations<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ArrayTranslations</span></h5>
+										</li>
+										<li class="tsd-parameter">
 											<h5>uischema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ControlElement</span></h5>
 										</li>
 										<li class="tsd-parameter">
@@ -905,7 +900,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/cells/BooleanCell.tsx:37</li>
+									<li>Defined in packages/vanilla-renderers/src/cells/BooleanCell.tsx:37</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -928,7 +923,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/complex/categorization/CategorizationList.tsx:42</li>
+									<li>Defined in packages/vanilla-renderers/src/complex/categorization/CategorizationList.tsx:49</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -974,7 +969,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/cells/DateCell.tsx:36</li>
+									<li>Defined in packages/vanilla-renderers/src/cells/DateCell.tsx:36</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -997,7 +992,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/cells/DateTimeCell.tsx:36</li>
+									<li>Defined in packages/vanilla-renderers/src/cells/DateTimeCell.tsx:36</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1020,7 +1015,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/cells/EnumCell.tsx:36</li>
+									<li>Defined in packages/vanilla-renderers/src/cells/EnumCell.tsx:40</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1043,7 +1038,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/layouts/GroupLayout.tsx:40</li>
+									<li>Defined in packages/vanilla-renderers/src/layouts/GroupLayout.tsx:46</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1066,7 +1061,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/layouts/HorizontalLayout.tsx:45</li>
+									<li>Defined in packages/vanilla-renderers/src/layouts/HorizontalLayout.tsx:48</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1089,7 +1084,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/cells/IntegerCell.tsx:39</li>
+									<li>Defined in packages/vanilla-renderers/src/cells/IntegerCell.tsx:39</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1112,7 +1107,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/layouts/JsonFormsLayout.tsx:29</li>
+									<li>Defined in packages/vanilla-renderers/src/layouts/JsonFormsLayout.tsx:29</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1146,7 +1141,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/complex/LabelRenderer.tsx:40</li>
+									<li>Defined in packages/vanilla-renderers/src/complex/LabelRenderer.tsx:42</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1185,7 +1180,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/cells/NumberCell.tsx:39</li>
+									<li>Defined in packages/vanilla-renderers/src/cells/NumberCell.tsx:38</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1208,7 +1203,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/cells/NumberFormatCell.tsx:37</li>
+									<li>Defined in packages/vanilla-renderers/src/cells/NumberFormatCell.tsx:37</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1231,7 +1226,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/controls/OneOfRadioGroupControl.tsx:39</li>
+									<li>Defined in packages/vanilla-renderers/src/controls/OneOfRadioGroupControl.tsx:39</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1254,7 +1249,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/controls/RadioGroup.tsx:38</li>
+									<li>Defined in packages/vanilla-renderers/src/controls/RadioGroup.tsx:37</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1326,7 +1321,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/controls/RadioGroupControl.tsx:36</li>
+									<li>Defined in packages/vanilla-renderers/src/controls/RadioGroupControl.tsx:38</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1349,7 +1344,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/complex/categorization/SingleCategory.tsx:35</li>
+									<li>Defined in packages/vanilla-renderers/src/complex/categorization/SingleCategory.tsx:35</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1383,7 +1378,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/cells/SliderCell.tsx:36</li>
+									<li>Defined in packages/vanilla-renderers/src/cells/SliderCell.tsx:36</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1406,7 +1401,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/cells/TextAreaCell.tsx:37</li>
+									<li>Defined in packages/vanilla-renderers/src/cells/TextAreaCell.tsx:37</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1429,7 +1424,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/cells/TextCell.tsx:37</li>
+									<li>Defined in packages/vanilla-renderers/src/cells/TextCell.tsx:37</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1452,7 +1447,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/cells/TimeCell.tsx:51</li>
+									<li>Defined in packages/vanilla-renderers/src/cells/TimeCell.tsx:51</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1475,7 +1470,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/layouts/VerticalLayout.tsx:45</li>
+									<li>Defined in packages/vanilla-renderers/src/layouts/VerticalLayout.tsx:48</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1498,7 +1493,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/util/index.tsx:162</li>
+									<li>Defined in packages/vanilla-renderers/src/util/index.tsx:198</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1542,7 +1537,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/util/index.tsx:54</li>
+									<li>Defined in packages/vanilla-renderers/src/util/index.tsx:53</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1604,7 +1599,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/util/index.tsx:147</li>
+									<li>Defined in packages/vanilla-renderers/src/util/index.tsx:181</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1660,7 +1655,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/cells/TimeCell.tsx:40</li>
+									<li>Defined in packages/vanilla-renderers/src/cells/TimeCell.tsx:40</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1689,7 +1684,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/reducers/styling.ts:46</li>
+									<li>Defined in packages/vanilla-renderers/src/reducers/styling.ts:46</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1712,7 +1707,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/reducers/styling.ts:59</li>
+									<li>Defined in packages/vanilla-renderers/src/reducers/styling.ts:62</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1735,7 +1730,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/complex/categorization/CategorizationList.tsx:29</li>
+									<li>Defined in packages/vanilla-renderers/src/complex/categorization/CategorizationList.tsx:34</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1761,7 +1756,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/reducers/index.ts:29</li>
+									<li>Defined in packages/vanilla-renderers/src/reducers/index.ts:29</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1784,7 +1779,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/reducers/index.ts:33</li>
+									<li>Defined in packages/vanilla-renderers/src/reducers/index.ts:33</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1807,7 +1802,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/complex/categorization/tester.ts:35</li>
+									<li>Defined in packages/vanilla-renderers/src/complex/categorization/tester.ts:35</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1831,7 +1826,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/actions/index.ts:29</li>
+									<li>Defined in packages/vanilla-renderers/src/actions/index.ts:29</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1859,7 +1854,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/reducers/styling.ts:39</li>
+									<li>Defined in packages/vanilla-renderers/src/reducers/styling.ts:39</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1893,7 +1888,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/actions/index.ts:40</li>
+									<li>Defined in packages/vanilla-renderers/src/actions/index.ts:40</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1924,7 +1919,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/reducers/styling.ts:32</li>
+									<li>Defined in packages/vanilla-renderers/src/reducers/styling.ts:32</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1950,7 +1945,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/layouts/util.tsx:36</li>
+									<li>Defined in packages/vanilla-renderers/src/layouts/util.tsx:36</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1985,7 +1980,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/reducers/styling.ts:65</li>
+									<li>Defined in packages/vanilla-renderers/src/reducers/styling.ts:68</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2012,7 +2007,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/cells/IntegerCell.tsx:36</li>
+									<li>Defined in packages/vanilla-renderers/src/cells/IntegerCell.tsx:36</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2026,7 +2021,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/cells/NumberCell.tsx:36</li>
+									<li>Defined in packages/vanilla-renderers/src/cells/NumberCell.tsx:36</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2049,7 +2044,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/actions/index.ts:35</li>
+									<li>Defined in packages/vanilla-renderers/src/actions/index.ts:35</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2080,7 +2075,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/styles/styleContext.ts:41</li>
+									<li>Defined in packages/vanilla-renderers/src/styles/styleContext.ts:39</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="interfaces/stylecontext.html" class="tsd-signature-type">StyleContext</a></h4>
@@ -2097,7 +2092,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/styles/styleContext.ts:44</li>
+									<li>Defined in packages/vanilla-renderers/src/styles/styleContext.ts:42</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="interfaces/styledef.html" class="tsd-signature-type">StyleDef</a><span class="tsd-signature-symbol">[]</span></h4>
@@ -2114,7 +2109,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/util/index.tsx:183</li>
+									<li>Defined in packages/vanilla-renderers/src/util/index.tsx:221</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2131,13 +2126,13 @@
 					<a name="withvanillacontrolprops" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> with<wbr>Vanilla<wbr>Control<wbr>Props</h3>
 					<ul class="tsd-signatures tsd-kind-function">
-						<li class="tsd-signature tsd-kind-icon">with<wbr>Vanilla<wbr>Control<wbr>Props<span class="tsd-signature-symbol">(</span>Component<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ComponentType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">(Anonymous function)</span></li>
+						<li class="tsd-signature tsd-kind-icon">with<wbr>Vanilla<wbr>Control<wbr>Props<span class="tsd-signature-symbol">(</span>Component<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ComponentType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">WithVanillaControlProps</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in packages/vanilla/src/util/index.tsx:94</li>
+									<li>Defined in packages/vanilla-renderers/src/util/index.tsx:99</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2146,7 +2141,7 @@
 									<h5>Component: <span class="tsd-signature-type">ComponentType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">(Anonymous function)</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">WithVanillaControlProps</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -2159,7 +2154,7 @@
 					<div class="tsd-signature tsd-kind-icon">default<wbr>Context<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/vanilla/src/styles/styleContext.ts:33</li>
+							<li>Defined in packages/vanilla-renderers/src/styles/styleContext.ts:33</li>
 						</ul>
 					</aside>
 					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
@@ -2168,7 +2163,7 @@
 						<div class="tsd-signature tsd-kind-icon">styles<span class="tsd-signature-symbol">:</span> <a href="interfaces/styledef.html" class="tsd-signature-type">StyleDef</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = vanillaStyles</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in packages/vanilla/src/styles/styleContext.ts:34</li>
+								<li>Defined in packages/vanilla-renderers/src/styles/styleContext.ts:34</li>
 							</ul>
 						</aside>
 					</section>
@@ -2179,7 +2174,7 @@
 					<div class="tsd-signature tsd-kind-icon">i18n<wbr>Defaults<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in packages/vanilla/src/util/i18nDefaults.ts:1</li>
+							<li>Defined in packages/vanilla-renderers/src/util/i18nDefaults.ts:1</li>
 						</ul>
 					</aside>
 					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
@@ -2188,7 +2183,7 @@
 						<div class="tsd-signature tsd-kind-icon">enum.none<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &quot;None&quot;</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in packages/vanilla/src/util/i18nDefaults.ts:2</li>
+								<li>Defined in packages/vanilla-renderers/src/util/i18nDefaults.ts:2</li>
 							</ul>
 						</aside>
 					</section>
@@ -2273,9 +2268,6 @@
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="globals.html#converttovalidclassname" class="tsd-kind-icon">convert<wbr>ToValid<wbr>Class<wbr>Name</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#createlabeldescriptionfrom" class="tsd-kind-icon">create<wbr>Label<wbr>Description<wbr>From</a>
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="globals.html#datecelltester" class="tsd-kind-icon">date<wbr>Cell<wbr>Tester</a>

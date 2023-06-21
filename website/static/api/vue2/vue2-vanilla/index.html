@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>JSON Forms</title>
-	<meta name="description" content="Documentation for JSON Forms">
+	<meta name="description" content="Documentation for Json Forms">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/main.css">
 </head>
@@ -86,40 +86,44 @@
 </code></pre>
 				<p>Also add the packages to the transpile dependencies in the <code>vue.config.js</code> file:</p>
 				<pre><code class="language-js"><span class="hljs-built_in">module</span>.exports = {
-    <span class="hljs-attr">transpileDependencies</span>: [<span class="hljs-string">&#x27;@jsonforms/core&#x27;</span>, <span class="hljs-string">&#x27;@jsonforms/vue2&#x27;</span>, <span class="hljs-string">&#x27;@jsonforms/vue2-vanilla&#x27;</span>]
-}
+  <span class="hljs-attr">transpileDependencies</span>: [
+    <span class="hljs-string">&#x27;@jsonforms/core&#x27;</span>,
+    <span class="hljs-string">&#x27;@jsonforms/vue2&#x27;</span>,
+    <span class="hljs-string">&#x27;@jsonforms/vue2-vanilla&#x27;</span>,
+  ],
+};
 </code></pre>
 				<p>Use the <code>json-forms</code> component for each form you want to render and hand over the renderer set.</p>
 				<pre><code class="language-vue">&lt;script&gt;
 import { JsonForms } from &#39;@jsonforms/vue2&#39;;
-import { vanillaRenderers } from &#39;@jsonforms/vue2-vanilla&#39;
-import { defineComponent } from &quot;vue&quot;;
+import { vanillaRenderers } from &#39;@jsonforms/vue2-vanilla&#39;;
+import { defineComponent } from &#39;vue&#39;;
 
 const renderers = [
   ...vanillaRenderers,
   // here you can add custom renderers
-]
+];
 
 const schema = {
   type: &#39;object&#39;,
   properties: {
     name: {
       type: &#39;string&#39;,
-      minLength: 1
+      minLength: 1,
     },
     done: {
-      type: &#39;boolean&#39;
+      type: &#39;boolean&#39;,
     },
     due_date: {
       type: &#39;string&#39;,
-      format: &#39;date&#39;
+      format: &#39;date&#39;,
     },
     recurrence: {
       type: &#39;string&#39;,
-      enum: [&#39;Never&#39;, &#39;Daily&#39;, &#39;Weekly&#39;, &#39;Monthly&#39;]
-    }
+      enum: [&#39;Never&#39;, &#39;Daily&#39;, &#39;Weekly&#39;, &#39;Monthly&#39;],
+    },
   },
-  required: [&#39;name&#39;, &#39;due_date&#39;]
+  required: [&#39;name&#39;, &#39;due_date&#39;],
 };
 
 const uischema = {
@@ -128,33 +132,33 @@ const uischema = {
     {
       type: &#39;Control&#39;,
       label: false,
-      scope: &#39;#/properties/done&#39;
+      scope: &#39;#/properties/done&#39;,
     },
     {
       type: &#39;Control&#39;,
-      scope: &#39;#/properties/name&#39;
+      scope: &#39;#/properties/name&#39;,
     },
     {
       type: &#39;HorizontalLayout&#39;,
       elements: [
         {
           type: &#39;Control&#39;,
-          scope: &#39;#/properties/due_date&#39;
+          scope: &#39;#/properties/due_date&#39;,
         },
         {
           type: &#39;Control&#39;,
-          scope: &#39;#/properties/recurrence&#39;
-        }
-      ]
-    }
-  ]
+          scope: &#39;#/properties/recurrence&#39;,
+        },
+      ],
+    },
+  ],
 };
 const data = {};
 
 export default defineComponent({
   name: &#39;app&#39;,
   components: {
-    JsonForms
+    JsonForms,
   },
   data() {
     return {
@@ -168,7 +172,7 @@ export default defineComponent({
     onChange(event) {
       this.data = event.data;
     },
-  }
+  },
 });
 &lt;/script&gt;
 &lt;template&gt;
@@ -196,21 +200,27 @@ export default defineComponent({
 				If you want to fall back to <code>defaultStyles</code> or combine them with your own classes you&#39;ll need to do so programmatically, e.g.:</p>
 				<pre><code class="language-vue">&lt;script&gt;
 import { JsonForms } from &#39;@jsonforms/vue2&#39;;
-import { defaultStyles, mergeStyles, vanillaRenderers } from &#39;@jsonforms/vue2-vanilla&#39;
-import { defineComponent } from &quot;vue&quot;;
+import {
+  defaultStyles,
+  mergeStyles,
+  vanillaRenderers,
+} from &#39;@jsonforms/vue2-vanilla&#39;;
+import { defineComponent } from &#39;vue&#39;;
 
 const renderers = [
   ...vanillaRenderers,
   // here you can add custom renderers
-]
+];
 
 // mergeStyles combines all classes from both styles definitions
-const myStyles = mergeStyles(defaultStyles, { control: { root: &#39;my-control&#39; } });
+const myStyles = mergeStyles(defaultStyles, {
+  control: { root: &#39;my-control&#39; },
+});
 
 export default defineComponent({
   name: &#39;app&#39;,
   components: {
-    JsonForms
+    JsonForms,
   },
   data() {
     return {
@@ -227,9 +237,9 @@ export default defineComponent({
   },
   provide() {
     return {
-      styles: myStyles
-    }
-  }
+      styles: myStyles,
+    };
+  },
 });
 &lt;/script&gt;
 &lt;template&gt;
