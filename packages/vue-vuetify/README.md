@@ -4,23 +4,23 @@ _Complex Forms in the blink of an eye_
 
 JSON Forms eliminates the tedious task of writing fully-featured forms by hand by leveraging the capabilities of JSON, JSON Schema and Javascript.
 
-## Vue 2 Vuetify Renderers
+## Vue Vuetify Renderers
 
-This is the JSON Forms Vue 2 Vuetify renderers package which provides a Vuetify based renderer set for [JSON Forms Vue 2](https://github.com/eclipsesource/jsonforms/blob/master/packages/vue2/vue2).
+This is the JSON Forms Vue Vuetify renderers package which provides a Vuetify based renderer set for [JSON Forms Vue](https://github.com/eclipsesource/jsonforms/blob/master/packages/vue/vue).
 
 ### Quick start
 
-Install JSON Forms Core, Vue 2 and Vue 2 Vuetify Renderers.
+Install JSON Forms Core, Vue 3 and Vue 3 Vuetify Renderers.
 
 ```bash
-npm i --save @jsonforms/core @jsonforms/vue2 @jsonforms/vue2-vuetify
+npm i --save @jsonforms/core @jsonforms/vue @jsonforms/vue-vuetify
 ```
 
 Also add the packages to the transpile dependencies in the `vue.config.js` file:
 
 ```js
 module.exports = {
-    transpileDependencies: ['@jsonforms/core', '@jsonforms/vue2', '@jsonforms/vue2-vuetify']
+    transpileDependencies: ['@jsonforms/core', '@jsonforms/vue', '@jsonforms/vue-vuetify']
 }
 ```
 
@@ -28,8 +28,8 @@ Use the `json-forms` component for each form you want to render and hand over th
 
 ```vue
 <script>
-import { JsonForms } from '@jsonforms/vue2';
-import { vuetifyRenderers } from '@jsonforms/vue2-vuetify';
+import { JsonForms } from '@jsonforms/vue';
+import { vuetifyRenderers } from '@jsonforms/vue-vuetify';
 
 const renderers = [
   ...vuetifyRenderers,
@@ -68,15 +68,13 @@ export default defineComponent({
 </template>
 
 <style scoped>
-@import '~@jsonforms/vue2-vuetify/lib/jsonforms-vue2-vuetify.esm.css';
+@import '~@jsonforms/vue-vuetify/lib/jsonforms-vue-vuetify.esm.css';
 </style>
 ```
 
-As JSON Forms uses the Composition API you need to use at least Vue 2.7.
+If note done yet, please [install Vuetify for Vue](https://vuetifyjs.com/en/getting-started/installation/).
 
-If note done yet, please [install Vuetify for Vue 2](https://vuetifyjs.com/en/getting-started/installation/).
-
-For more information on how JSON Forms can be configured, please see the [README of `@jsonforms/vue2`](https://github.com/eclipsesource/jsonforms/blob/master/packages/vue2/vue2/README.md).
+For more information on how JSON Forms can be configured, please see the [README of `@jsonforms/vue`](https://github.com/eclipsesource/jsonforms/blob/master/packages/vue/vue/README.md).
 
 ## License
 
