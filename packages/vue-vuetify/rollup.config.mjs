@@ -31,7 +31,7 @@ const buildFormats = [
     },
     plugins: [
       resolve({
-        extensions: ['.js', '.jsx', '.ts', '.tsx', '.vue'],
+        extensions: ['.js', '.jsx', '.ts', '.tsx', '.mts', '.vue'],
       }),
       css({
         output: `${packageJson.module.split('/')[1].split('.')[0]}.esm.css`,
@@ -68,7 +68,7 @@ const buildFormats = [
     },
     plugins: [
       resolve({
-        extensions: ['.js', '.jsx', '.ts', '.tsx', '.vue'],
+        extensions: ['.js', '.jsx', '.ts', '.tsx', '.mts', '.vue'],
       }),
       css({
         output: `${packageJson.module.split('/')[1].split('.')[0]}.cjs.css`,

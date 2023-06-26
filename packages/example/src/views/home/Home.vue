@@ -12,7 +12,7 @@
 
       <v-col cols="12" class="text-center">
         <h1 class="display-2 font-weight-bold mb-3">
-          Welcome to JSON Forms Vue 2 Vuetify
+          Welcome to JSON Forms Vue 3 Vuetify
         </h1>
 
         <p class="subheading font-weight-regular">

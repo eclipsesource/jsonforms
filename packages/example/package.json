@@ -37,7 +37,7 @@
     "rimraf": "^4.4.1",
     "sass": "~1.32.0",
     "sass-loader": "^10.0.0",
-    "typescript": "~4.5.5",
+    "typescript": "~4.7.4",
     "vue-cli-plugin-vuetify": "~2.5.8",
     "vuex-pathify": "^3.0.0-beta",
     "webpack-plugin-vuetify": "^2.0.1"
