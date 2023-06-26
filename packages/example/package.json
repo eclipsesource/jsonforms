@@ -1,6 +1,6 @@
 {
   "name": "example",
-  "version": "3.1.0-alpha.0",
+  "version": "3.1.0-preview.0",
   "private": true,
   "scripts": {
     "build": "vue-cli-service build",
@@ -10,7 +10,7 @@
   "dependencies": {
     "@jsonforms/core": "3.1.0",
     "@jsonforms/vue": "3.1.0",
-    "@jsonforms/vue-vuetify": "3.1.0-alpha.0",
+    "@jsonforms/vue-vuetify": "^3.1.0-preview.0",
     "ajv-keywords": "^5.1.0",
     "core-js": "^3.9.1",
     "json-refs": "^3.0.15",
@@ -39,7 +39,7 @@
     "sass-loader": "^10.0.0",
     "typescript": "~4.5.5",
     "vue-cli-plugin-vuetify": "~2.5.8",
-    "webpack-plugin-vuetify": "^2.0.1",
-    "vuex-pathify": "^3.0.0-beta"
+    "vuex-pathify": "^3.0.0-beta",
+    "webpack-plugin-vuetify": "^2.0.1"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/vue-vuetify",
-  "version": "3.1.0-alpha.0",
+  "version": "3.1.0-preview.0",
   "description": "Vue Vuetify renderers for JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms-vuetify-renderers",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
