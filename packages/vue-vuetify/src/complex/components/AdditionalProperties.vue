@@ -99,7 +99,7 @@ import Ajv, { ValidateFunction } from 'ajv';
 import get from 'lodash/get';
 import isPlainObject from 'lodash/isPlainObject';
 import startCase from 'lodash/startCase';
-import { defineComponent, PropType, Ref, ref } from 'vue';
+import { defineComponent, PropType, ref } from 'vue';
 import {
   VBtn,
   VCard,
@@ -165,9 +165,8 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const control = props.input.control as any as Ref<
-      typeof props.input.control
-    >;
+    // eslint-disable-next-line vue/no-setup-props-destructure
+    const control = props.input.control;
     const reservedPropertyNames = Object.keys(
       control.value.schema.properties || {}
     );

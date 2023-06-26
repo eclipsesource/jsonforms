@@ -111,7 +111,7 @@ const controlRenderer = defineComponent({
   },
   setup(props: RendererProps<ControlElement>) {
     const input = useJsonFormsOneOfControl(props);
-    const control = (input.control as any).value as typeof input.control;
+    const control = input.control.value;
 
     const selectedIndex = ref(control.indexOfFittingSchema || 0);
     const tabIndex = ref(selectedIndex.value);
