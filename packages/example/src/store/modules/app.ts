@@ -3,7 +3,6 @@ import { make } from 'vuex-pathify';
 import { AppState } from './types';
 import { RootState } from '../types';
 import { Module } from 'vuex';
-import { extendedVuetifyRenderers } from '@jsonforms/vue-vuetify';
 import { createAjv } from '../validate/validate';
 
 const ajv = createAjv();
@@ -11,6 +10,7 @@ const ajv = createAjv();
 // Data
 const state: AppState = {
   drawer: null,
+  settings: null,
   jsonforms: {
     readonly: false,
     validationMode: 'ValidateAndShow',
@@ -25,9 +25,6 @@ const state: AppState = {
       hideAvatar: false,
       hideArraySummaryValidation: false,
     },
-    renderers: extendedVuetifyRenderers,
-    cells: extendedVuetifyRenderers,
-    ajv,
     locale: 'en',
   },
   monaco: {

@@ -1,13 +1,9 @@
-import {
-  JsonFormsRendererRegistryEntry,
-  JsonFormsCellRendererRegistryEntry,
-} from '@jsonforms/core';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
-import Ajv from 'ajv';
 
 // declare your own store states
 export interface AppState {
   drawer: boolean | null;
+  settings: boolean | null;
   jsonforms: {
     readonly: boolean;
     validationMode: 'ValidateAndShow' | 'ValidateAndHide' | 'NoValidation';
@@ -23,9 +19,6 @@ export interface AppState {
       hideArraySummaryValidation: boolean;
       vuetify?: Record<string, any>;
     };
-    renderers: JsonFormsRendererRegistryEntry[];
-    cells: JsonFormsCellRendererRegistryEntry[];
-    ajv: Ajv;
     locale: string;
   };
   monaco: {

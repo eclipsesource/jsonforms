@@ -5,28 +5,7 @@
       "type": "string",
       "format": "time"
     },
-    "timeFull": {
-      "type": "string",
-      "format": "time"
-    },
-    "timeWithZone": {
-      "type": "string",
-      "format": "time"
-    },
-    "timeFullWithZone": {
-      "type": "string",
-      "format": "time"
-    },
     "stringTime": {
-      "type": "string"
-    },
-    "stringTimeFull": {
-      "type": "string"
-    },
-    "stringTimeWithZone": {
-      "type": "string"
-    },
-    "stringTimeFullWithZone": {
       "type": "string"
     }
   }

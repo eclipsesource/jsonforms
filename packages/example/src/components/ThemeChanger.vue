@@ -5,11 +5,16 @@
     :nudge-width="200"
     offset-y
   >
-    <template v-slot:activator="{ on }">
+    <template v-slot:activator="{ props: propsMenu }">
       <v-tooltip bottom>
-        <template v-slot:activator="{ on: onTooltip }">
-          <v-btn large icon dark v-on="{ ...on, ...onTooltip }">
-            <v-icon size="30" color="primary">mdi-palette</v-icon>
+        <template v-slot:activator="{ props: propsTooltip }">
+          <v-btn large icon dark>
+            <v-icon
+              size="30"
+              color="primary"
+              v-bind="mergeProps(propsMenu, propsTooltip)"
+              >mdi-palette</v-icon
+            >
           </v-btn>
         </template>
         Theme Colors
@@ -38,11 +43,9 @@
           :key="index"
         >
           <v-list-item>
-            <v-list-item-content>
-              <v-list-item-title class="font-weight-bold">
-                {{ theme.name }}</v-list-item-title
-              >
-            </v-list-item-content>
+            <v-list-item-title class="font-weight-bold">
+              {{ theme.name }}</v-list-item-title
+            >
             <v-list-item-action>
               <v-avatar
                 color="success"
@@ -85,6 +88,7 @@
 import { VuetifyThemeVariant } from 'vuetify/types/services/theme';
 import merge from 'lodash/merge';
 import cloneDeep from 'lodash/cloneDeep';
+import { mergeProps } from 'vue';
 
 const defaultTheme = {
   name: 'Default',
@@ -191,6 +195,7 @@ export default {
       // also save theme name to disable selection
       this.$vuetify.theme.currentTheme.name = name;
     },
+    mergeProps,
   },
 };
 </script>

@@ -5,7 +5,7 @@
     :isFocused="isFocused"
     :appliedOptions="appliedOptions"
   >
-    <v-hover v-slot="{ hover }">
+    <v-hover v-slot="{ isHovering }">
       <v-combobox
         v-if="suggestions !== undefined"
         v-disabled-icon-focus
@@ -27,7 +27,7 @@
             ? control.schema.maxLength
             : undefined
         "
-        :clearable="hover"
+        :clearable="isHovering"
         :model-value="control.data"
         :items="suggestions"
         hide-no-data
@@ -57,7 +57,7 @@
             ? control.schema.maxLength
             : undefined
         "
-        :clearable="hover"
+        :clearable="isHovering"
         v-bind="vuetifyProps('v-text-field')"
         @update:model-value="onChange"
         @focus="isFocused = true"

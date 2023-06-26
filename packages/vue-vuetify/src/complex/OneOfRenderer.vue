@@ -6,7 +6,7 @@
       :path="path"
     />
 
-    <v-hover v-slot="{ hover }">
+    <v-hover v-slot="{ isHovering }">
       <v-select
         v-disabled-icon-focus
         :id="control.id + '-input'"
@@ -19,7 +19,7 @@
         :persistent-hint="persistentHint()"
         :required="control.required"
         :error-messages="control.errors"
-        :clearable="hover"
+        :clearable="isHovering"
         :items="indexedOneOfRenderInfos"
         @change="handleSelectChange"
         :item-title="(item) => t(item.label, item.label)"

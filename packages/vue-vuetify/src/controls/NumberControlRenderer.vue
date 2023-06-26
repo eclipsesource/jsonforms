@@ -5,7 +5,7 @@
     :isFocused="isFocused"
     :appliedOptions="appliedOptions"
   >
-    <v-hover v-slot="{ hover }">
+    <v-hover v-slot="{ isHovering }">
       <v-text-field
         ref="input"
         :step="step"
@@ -20,7 +20,7 @@
         :required="control.required"
         :error-messages="control.errors"
         :model-value="inputValue"
-        :clearable="hover"
+        :clearable="isHovering"
         v-bind="vuetifyProps('v-text-field')"
         @update:model-value="onInputChange"
         @focus="isFocused = true"

@@ -6,7 +6,6 @@
       :schema="resolvedSchema.schema"
       :uischema="example.input.uischema"
       :renderers="renderers"
-      :cells="cells"
       :config="config"
       :uischemas="uischemas"
       :validationMode="validationMode"
@@ -52,12 +51,11 @@
 <script lang="ts">
 import { PropType } from 'vue';
 import { Example, ResolvedSchema } from '@/core/types';
-import { Ajv } from 'ajv';
+import type Ajv from 'ajv';
 import {
   ValidationMode,
   JsonFormsUISchemaRegistryEntry,
   JsonFormsRendererRegistryEntry,
-  JsonFormsCellRendererRegistryEntry,
   JsonSchema,
   JsonFormsI18nState,
 } from '@jsonforms/core';
@@ -74,11 +72,6 @@ export default {
     renderers: {
       required: true,
       type: Array as PropType<JsonFormsRendererRegistryEntry[]>,
-    },
-    cells: {
-      required: false,
-      type: Array as PropType<JsonFormsCellRendererRegistryEntry[]>,
-      default: () => [],
     },
     config: {
       required: false,
@@ -149,7 +142,8 @@ export default {
   },
   methods: {
     onChange(event: JsonFormsChangeEvent): void {
-      this.$emit('change', event);
+      console.log(event);
+      this.$emit('jsfchange', event);
     },
     resolveSchema(schema?: JsonSchema): void {
       const resolvedSchema = this.resolvedSchema;

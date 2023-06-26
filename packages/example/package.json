@@ -3,7 +3,7 @@
   "version": "3.1.0-alpha.0",
   "private": true,
   "scripts": {
-    "build": "vue-cli-service build --mode development",
+    "build": "vue-cli-service build",
     "serve": "vue-cli-service serve",
     "clean": "rimraf dist"
   },
@@ -14,7 +14,7 @@
     "ajv-keywords": "^5.1.0",
     "core-js": "^3.9.1",
     "json-refs": "^3.0.15",
-    "monaco-editor": "^0.26.0",
+    "monaco-editor": "^0.38.0",
     "vue": "^3.2.47",
     "vue-router": "^4.1.6",
     "vuetify": "^3.1.12",
@@ -32,7 +32,7 @@
     "eslint": "^8.37.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-vue": "^9.10.0",
-    "monaco-editor-webpack-plugin": "^4.1.1",
+    "monaco-editor-webpack-plugin": "^7.0.1",
     "prettier": "^2.8.7",
     "rimraf": "^4.4.1",
     "sass": "~1.32.0",

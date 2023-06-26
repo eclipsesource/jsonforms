@@ -1,149 +1,42 @@
 {
-  "type": "Categorization",
+  "type": "VerticalLayout",
   "elements": [
     {
-      "type": "Category",
-      "label": "Hide Actions",
+      "type": "Group",
+      "label": "Schema Based",
       "elements": [
         {
-          "type": "VerticalLayout",
+          "type": "HorizontalLayout",
           "elements": [
             {
-              "type": "Group",
-              "label": "Schema Based",
-              "elements": [
-                {
-                  "type": "HorizontalLayout",
-                  "elements": [
-                    {
-                      "type": "Control",
-                      "scope": "#/properties/date",
-                      "label": "Date",
-                      "options": {
-                        "dateFormat": "MM/DD/YYYY",
-                        "dateSaveFormat": "YYYY-MM-DD"
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "type": "Group",
-              "label": "UI Schema Based",
-              "elements": [
-                {
-                  "type": "HorizontalLayout",
-                  "elements": [
-                    {
-                      "type": "Control",
-                      "scope": "#/properties/stringDateFull",
-                      "label": "Full Date",
-                      "options": {
-                        "format": "date",
-                        "dateFormat": "MM/DD/YYYY",
-                        "dateSaveFormat": "MM/DD/YYYY"
-                      }
-                    },
-                    {
-                      "type": "Control",
-                      "scope": "#/properties/stringDate",
-                      "label": "Year and Month only",
-                      "options": {
-                        "format": "date",
-                        "dateFormat": "YYYY-MM",
-                        "dateSaveFormat": "YYYY-MM"
-                      }
-                    },
-                    {
-                      "type": "Control",
-                      "scope": "#/properties/stringYear",
-                      "label": "Year only",
-                      "options": {
-                        "format": "date",
-                        "dateFormat": "YYYY",
-                        "dateSaveFormat": "YYYY"
-                      }
-                    }
-                  ]
-                }
-              ]
+              "type": "Control",
+              "scope": "#/properties/date",
+              "label": "Date",
+              "options": {
+                "dateFormat": "MM/DD/YYYY",
+                "dateSaveFormat": "YYYY-MM-DD"
+              }
             }
           ]
         }
       ]
     },
     {
-      "type": "Category",
-      "label": "Show Actions",
+      "type": "Group",
+      "label": "UI Schema Based",
       "elements": [
         {
-          "type": "VerticalLayout",
+          "type": "HorizontalLayout",
           "elements": [
             {
-              "type": "Group",
-              "label": "Schema Based",
-              "elements": [
-                {
-                  "type": "HorizontalLayout",
-                  "elements": [
-                    {
-                      "type": "Control",
-                      "scope": "#/properties/date",
-                      "label": "Date",
-                      "options": {
-                        "dateFormat": "MM/DD/YYYY",
-                        "dateSaveFormat": "YYYY-MM-DD",
-                        "showActions": true
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "type": "Group",
-              "label": "UI Schema Based",
-              "elements": [
-                {
-                  "type": "HorizontalLayout",
-                  "elements": [
-                    {
-                      "type": "Control",
-                      "scope": "#/properties/stringDateFull",
-                      "label": "Full Date",
-                      "options": {
-                        "format": "date",
-                        "dateFormat": "MM/DD/YYYY",
-                        "dateSaveFormat": "MM/DD/YYYY",
-                        "showActions": true
-                      }
-                    },
-                    {
-                      "type": "Control",
-                      "scope": "#/properties/stringDate",
-                      "label": "Year and Month only",
-                      "options": {
-                        "format": "date",
-                        "dateFormat": "YYYY-MM",
-                        "dateSaveFormat": "YYYY-MM",
-                        "showActions": true
-                      }
-                    },
-                    {
-                      "type": "Control",
-                      "scope": "#/properties/stringYear",
-                      "label": "Year only",
-                      "options": {
-                        "format": "date",
-                        "dateFormat": "YYYY",
-                        "dateSaveFormat": "YYYY",
-                        "showActions": true
-                      }
-                    }
-                  ]
-                }
-              ]
+              "type": "Control",
+              "scope": "#/properties/stringDateFull",
+              "label": "Full Date",
+              "options": {
+                "format": "date",
+                "dateFormat": "MM/DD/YYYY",
+                "dateSaveFormat": "MM/DD/YYYY"
+              }
             }
           ]
         }

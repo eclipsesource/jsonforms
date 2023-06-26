@@ -38,7 +38,7 @@
   "scripts": {
     "prebuild": "rimraf lib",
     "build": "cross-env NODE_ENV=production rollup --config rollup.config.mjs",
-    "watch": "rollup --watch --config rollup.config.js",
+    "watch": "rollup --watch --config rollup.config.mjs",
     "test": "vue-cli-service test:unit"
   },
   "dependencies": {

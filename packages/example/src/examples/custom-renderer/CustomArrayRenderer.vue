@@ -3,12 +3,12 @@
     <template v-slot:toolbar-elements>{{ null }}</template>
     <template v-slot:actions="actionsProps">
       <v-tooltip bottom>
-        <template v-slot:activator="{ on: onTooltip }">
+        <template v-slot:activator="{ props }">
           <v-btn
             color="primary"
             rounded
             :aria-label="actionsProps.labels.add"
-            v-on="onTooltip"
+            v-bind="props"
             :class="actionsProps.styles.arrayList.addButton"
             :disabled="actionsProps.addDisabled"
             @click="actionsProps.addClick"

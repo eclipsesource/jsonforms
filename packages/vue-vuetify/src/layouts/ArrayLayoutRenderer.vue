@@ -25,14 +25,14 @@
           :styles="styles"
         >
           <v-tooltip bottom>
-            <template v-slot:activator="{ on: onTooltip }">
+            <template v-slot:activator="{ props }">
               <v-btn
                 fab
                 text
                 elevation="0"
                 small
                 :aria-label="translatedLabels.add"
-                v-on="onTooltip"
+                v-bind="props"
                 :class="styles.arrayList.addButton"
                 :disabled="addDisabled"
                 @click="addButtonClick"
@@ -97,9 +97,9 @@
                       v-if="appliedOptions.showSortButtons"
                     >
                       <v-tooltip bottom>
-                        <template v-slot:activator="{ on: onTooltip }">
+                        <template v-slot:activator="{ props }">
                           <v-btn
-                            v-on="onTooltip"
+                            v-bind="props"
                             fab
                             text
                             elevation="0"
@@ -121,9 +121,9 @@
                       v-if="appliedOptions.showSortButtons"
                     >
                       <v-tooltip bottom>
-                        <template v-slot:activator="{ on: onTooltip }">
+                        <template v-slot:activator="{ props }">
                           <v-btn
-                            v-on="onTooltip"
+                            v-bind="props"
                             fab
                             text
                             elevation="0"
@@ -144,9 +144,9 @@
                     </v-col>
                     <v-col align-self="center">
                       <v-tooltip bottom>
-                        <template v-slot:activator="{ on: onTooltip }">
+                        <template v-slot:activator="{ props }">
                           <v-btn
-                            v-on="onTooltip"
+                            v-bind="props"
                             fab
                             text
                             elevation="0"
@@ -204,7 +204,7 @@
       </slot>
     </v-card-actions>
     <v-dialog
-      :value="suggestToDelete !== null"
+      :model-value="suggestToDelete !== null"
       max-width="600"
       @keydown.esc="suggestToDelete = null"
       @click:outside="suggestToDelete = null"

@@ -5,7 +5,7 @@
     :isFocused="isFocused"
     :appliedOptions="appliedOptions"
   >
-    <v-hover v-slot="{ hover }">
+    <v-hover v-slot="{ isHovering }">
       <v-textarea
         v-disabled-icon-focus
         :id="control.id + '-input'"
@@ -27,7 +27,7 @@
             ? control.schema.maxLength
             : undefined
         "
-        :clearable="hover"
+        :clearable="isHovering"
         multi-line
         v-bind="vuetifyProps('v-textarea')"
         @update:model-value="onChange"

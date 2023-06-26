@@ -50,10 +50,7 @@
         </v-tab>
       </v-tabs>
 
-      <v-window
-        v-model="activeCategory"
-        v-bind="vuetifyProps('v-window')"
-      >
+      <v-window v-model="activeCategory" v-bind="vuetifyProps('v-window')">
         <v-window-item
           v-for="(element, index) in visibleCategories"
           :key="`${layout.path}-${index}`"
@@ -157,3 +154,9 @@ export const entry: JsonFormsRendererRegistryEntry = {
   tester: rankWith(2, isSingleLevelCategorization),
 };
 </script>
+
+<style>
+.v-window {
+  width: 100%;
+}
+</style>

@@ -4,14 +4,14 @@
       <v-col v-for="(o, index) in control.options" :key="o.value">
         <v-checkbox
           :label="o.label"
-          :input-value="dataHasEnum(o.value)"
+          :model-value="dataHasEnum(o.value)"
           :id="control.id + `-input-${index}`"
           :path="composePaths(control.path, `${index}`)"
           :error-messages="control.errors"
           :disabled="!control.enabled"
           :indeterminate="control.data === undefined"
           v-bind="vuetifyProps(`v-checkbox[${o.value}]`)"
-          @change="(value) => toggle(o.value, value)"
+          @change="(value) => toggle(o.value)"
         ></v-checkbox>
       </v-col>
     </v-row>
@@ -33,7 +33,6 @@ import {
 } from '@jsonforms/core';
 import { VCheckbox, VContainer, VRow, VCol } from 'vuetify/components';
 import {
-  DispatchRenderer,
   rendererProps,
   RendererProps,
   useJsonFormsMultiEnumControl,
@@ -44,7 +43,6 @@ import { useVuetifyBasicControl } from '../util';
 const controlRenderer = defineComponent({
   name: 'enum-array-renderer',
   components: {
-    DispatchRenderer,
     VCheckbox,
     VContainer,
     VRow,
@@ -61,8 +59,8 @@ const controlRenderer = defineComponent({
       return !!this.control.data?.includes(value);
     },
     composePaths,
-    toggle(value: any, add: boolean) {
-      if (add) {
+    toggle(value: any) {
+      if (!this.dataHasEnum(value)) {
         this.addItem(this.control.path, value);
       } else {
         // mistyped in core

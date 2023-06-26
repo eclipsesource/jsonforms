@@ -4,19 +4,23 @@
 
     <default-drawer v-if="!formonly" />
 
+    <default-settings v-if="!formonly" />
     <default-view />
   </v-app>
 </template>
 
 <script lang="ts">
-import { defineAsyncComponent } from 'vue';
+import { defineAsyncComponent, defineComponent } from 'vue';
 
-export default {
+export default defineComponent({
   name: 'DefaultLayout',
 
   components: {
     DefaultAppBar: defineAsyncComponent(() => import('./AppBar.vue')),
     DefaultDrawer: defineAsyncComponent(() => import('./Drawer.vue')),
+    DefaultSettings: defineAsyncComponent(
+      () => import('../../components/Settings.vue')
+    ),
     DefaultView: defineAsyncComponent(() => import('./View.vue')),
   },
   computed: {
@@ -24,5 +28,5 @@ export default {
       return this.$route.query?.view === 'form-only';
     },
   },
-};
+});
 </script>

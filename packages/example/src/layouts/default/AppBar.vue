@@ -25,8 +25,23 @@
     <v-toolbar-items>
       <v-container fill-height fluid justify-end
         ><v-row dense>
-          <v-col><app-settings /> </v-col>
           <v-col><theme-changer /> </v-col>
+          <v-col>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ props }">
+                <v-btn
+                  large
+                  icon
+                  dark
+                  v-bind="props"
+                  @click="app.settings = !app.settings"
+                >
+                  <v-icon size="30" color="primary">mdi-cog</v-icon>
+                </v-btn>
+              </template>
+              Settings
+            </v-tooltip>
+          </v-col>
         </v-row>
       </v-container>
     </v-toolbar-items>
@@ -35,18 +50,17 @@
 
 <script lang="ts">
 import { sync } from 'vuex-pathify';
-import AppSettings from '@/components/Settings.vue';
 import ThemeChanger from '@/components/ThemeChanger.vue';
-import { AppStore } from '../store/modules/types';
+import { AppState } from '@/store/modules/types';
+import { defineComponent } from 'vue';
 
-export default {
+export default defineComponent({
   name: 'DefaultAppBar',
   components: {
     ThemeChanger,
-    AppSettings,
   },
   setup() {
-    const app = sync<AppStore>('app/');
+    const app = sync<AppState>('app/');
     return { app };
   },
   data() {
@@ -54,5 +68,5 @@ export default {
       activeTab: 0,
     };
   },
-};
+});
 </script>

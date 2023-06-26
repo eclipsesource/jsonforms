@@ -8,7 +8,7 @@
 
 <script lang="ts">
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
-import { PropType } from 'vue';
+import { PropType, toRaw } from 'vue';
 
 export type MonacoApi = typeof monaco;
 
@@ -19,8 +19,6 @@ function processSize(size: number | string) {
 }
 
 interface BaseComponentData {
-  editor?: monaco.editor.IStandaloneCodeEditor;
-  subscription?: monaco.IDisposable;
   prevent_trigger_change_event?: boolean;
 }
 
@@ -28,7 +26,7 @@ export default {
   props: {
     width: { type: [String, Number], default: '100%' },
     height: { type: [String, Number], default: '100%' },
-    value: { type: Object as PropType<monaco.editor.ITextModel> },
+    modelValue: { type: Object as PropType<monaco.editor.ITextModel> },
     language: { type: String, default: 'javascript' },
     theme: { type: String, default: 'vs' },
     options: {
@@ -59,10 +57,11 @@ export default {
     className: { type: String, required: false },
   },
   data(): BaseComponentData {
+    this.editor = null;
+    this.subscription = null;
+    this.foo = null;
     return {
-      editor: undefined,
-      subscription: undefined,
-      prevent_trigger_change_event: undefined,
+      prevent_trigger_change_event: true,
     };
   },
   mounted() {
@@ -83,12 +82,13 @@ export default {
         }
       },
     },
-    value(newModel: monaco.editor.ITextModel) {
+    modelValue(newModel: monaco.editor.ITextModel) {
       if (this.editor) {
         const { editor } = this;
 
         if (!newModel.isDisposed()) {
-          editor.setModel(newModel);
+          console.log('Update Monaco with', toRaw(newModel));
+          editor.setModel(toRaw(newModel));
         }
       }
     },
@@ -146,10 +146,11 @@ export default {
       // Before initializing monaco editor
       const options = { ...this.options, ...this.editorWillMount() };
 
+      console.log('initialize monaco with', toRaw(this.modelValue));
       this.editor = monaco.editor.create(
         this.$refs.containerElement as HTMLElement,
         {
-          model: this.value,
+          model: toRaw(this.modelValue),
           language,
           ...(className ? { extraEditorClassName: className } : {}),
           ...options,

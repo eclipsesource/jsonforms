@@ -5,7 +5,7 @@
     :isFocused="isFocused"
     :appliedOptions="appliedOptions"
   >
-    <v-hover v-slot="{ hover }">
+    <v-hover v-slot="{ isHovering }">
       <v-select
         v-if="appliedOptions.autocomplete === false"
         v-disabled-icon-focus
@@ -19,7 +19,7 @@
         :persistent-hint="persistentHint()"
         :required="control.required"
         :error-messages="control.errors"
-        :clearable="hover"
+        :clearable="isHovering"
         :model-value="control.data"
         :items="control.options"
         :item-title="(item) => t(item.label, item.label)"
@@ -42,7 +42,7 @@
         :persistent-hint="persistentHint()"
         :required="control.required"
         :error-messages="control.errors"
-        :clearable="hover"
+        :clearable="isHovering"
         :model-value="control.data"
         :items="control.options"
         :item-title="(item) => t(item.label, item.label)"

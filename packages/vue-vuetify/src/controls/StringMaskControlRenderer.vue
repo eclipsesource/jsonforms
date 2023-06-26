@@ -5,7 +5,7 @@
     :isFocused="isFocused"
     :appliedOptions="appliedOptions"
   >
-    <v-hover v-slot="{ hover }">
+    <v-hover v-slot="{ isHovering }">
       <v-text-field
         v-disabled-icon-focus
         :id="control.id + '-input'"
@@ -26,7 +26,7 @@
             ? control.schema.maxLength
             : undefined
         "
-        :clearable="hover"
+        :clearable="isHovering"
         v-bind="vuetifyProps('v-text-field')"
         @focus="isFocused = true"
         @blur="isFocused = false"

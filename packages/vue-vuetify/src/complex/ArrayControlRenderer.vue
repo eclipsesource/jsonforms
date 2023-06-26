@@ -12,14 +12,14 @@
         <v-spacer></v-spacer>
 
         <v-tooltip bottom>
-          <template v-slot:activator="{ on: onTooltip }">
+          <template v-slot:activator="{ props }">
             <v-btn
               fab
               text
               elevation="0"
               small
               :aria-label="`Add to ${control.label}`"
-              v-on="onTooltip"
+              v-bind="props"
               :class="styles.arrayList.addButton"
               :disabled="
                 !control.enabled ||
@@ -94,9 +94,9 @@
                   "
                 >
                   <v-tooltip bottom>
-                    <template v-slot:activator="{ on: onTooltip }">
+                    <template v-slot:activator="{ props }">
                       <v-btn
-                        v-on="onTooltip"
+                        v-bind="props"
                         v-if="appliedOptions.showSortButtons"
                         fab
                         text
@@ -113,9 +113,9 @@
                     Move Up
                   </v-tooltip>
                   <v-tooltip bottom>
-                    <template v-slot:activator="{ on: onTooltip }">
+                    <template v-slot:activator="{ props }">
                       <v-btn
-                        v-on="onTooltip"
+                        v-bind="props"
                         v-if="appliedOptions.showSortButtons"
                         fab
                         text
@@ -132,9 +132,9 @@
                     Move Down
                   </v-tooltip>
                   <v-tooltip bottom>
-                    <template v-slot:activator="{ on: onTooltip }">
+                    <template v-slot:activator="{ props }">
                       <v-btn
-                        v-on="onTooltip"
+                        v-bind="props"
                         fab
                         text
                         elevation="0"
@@ -305,22 +305,23 @@ export const entry: JsonFormsRendererRegistryEntry = {
 </script>
 
 <style scoped>
-/* .fixed-cell {
+.fixed-cell {
   width: 150px;
-  height: 50px;
   padding-left: 0 !important;
   padding-right: 0 !important;
   text-align: center;
-} */
+}
 
-/* .fixed-cell-small {
+.fixed-cell-small {
   width: 50px;
-  height: 50px;
   padding-left: 0 !important;
   padding-right: 0 !important;
   text-align: center;
-} */
+}
 
+.array-container {
+  width: 100%;
+}
 .array-container tbody tr td {
   border-bottom: none !important;
 }

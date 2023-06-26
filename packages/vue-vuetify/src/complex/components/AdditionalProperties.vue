@@ -5,14 +5,14 @@
         <v-toolbar-title>{{ additionalPropertiesTitle }}</v-toolbar-title>
         <v-spacer></v-spacer>
 
-        <v-hover v-slot="{ hover }">
+        <v-hover v-slot="{ isHovering }">
           <v-text-field
             v-disabled-icon-focus
             :required="true"
             :class="styles.control.input"
             :error-messages="newPropertyErrors"
             v-model="newPropertyName"
-            :clearable="hover"
+            :clearable="isHovering"
             :placeholder="placeholder"
             :disabled="!control.enabled"
             v-bind="vuetifyProps('v-text-field')"
@@ -20,14 +20,14 @@
           </v-text-field>
         </v-hover>
         <v-tooltip bottom>
-          <template v-slot:activator="{ on: onTooltip }">
+          <template v-slot:activator="{ props }">
             <v-btn
               fab
               text
               elevation="0"
               small
               :aria-label="addToLabel"
-              v-on="onTooltip"
+              v-bind="props"
               :disabled="addPropertyDisabled"
               @click="addProperty"
             >
@@ -55,9 +55,9 @@
         /></v-col>
         <v-col v-if="control.enabled" class="shrink">
           <v-tooltip bottom>
-            <template v-slot:activator="{ on: onTooltip }">
+            <template v-slot:activator="{ props }">
               <v-btn
-                v-on="onTooltip"
+                v-bind="props"
                 fab
                 text
                 elevation="0"

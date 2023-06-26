@@ -5,7 +5,7 @@
     :isFocused="isFocused"
     :appliedOptions="appliedOptions"
   >
-    <v-hover v-slot="{ hover }">
+    <v-hover v-slot="{ isHovering }">
       <v-combobox
         v-disabled-icon-focus
         :id="control.id + '-input'"
@@ -28,7 +28,7 @@
             : undefined
         "
         :items="items"
-        :clearable="hover"
+        :clearable="isHovering"
         v-bind="vuetifyProps('v-combobox')"
         @change="onChange"
         @focus="isFocused = true"

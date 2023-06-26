@@ -22,7 +22,7 @@
       :error-messages="control.errors"
       :model-value="control.data"
       v-bind="vuetifyProps('v-slider')"
-      @change="onChange"
+      @update:model-value="onChange"
       @focus="isFocused = true"
       @blur="isFocused = false"
     />
@@ -56,9 +56,9 @@ const controlRenderer = defineComponent({
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    return useVuetifyControl(useJsonFormsControl(props), (value) =>
-      Number(value)
-    );
+    return useVuetifyControl(useJsonFormsControl(props), (value) => {
+      return Number(value);
+    });
   },
 });
 
