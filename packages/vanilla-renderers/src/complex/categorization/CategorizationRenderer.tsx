@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { Categorization, Category, LayoutProps } from '@jsonforms/core';
 import {
   TranslateProps,
@@ -63,6 +63,10 @@ export const CategorizationRenderer = ({
   const detailClassNames = getStyleAsClassName('categorization.detail');
   const subcategoriesClassName = getStyleAsClassName('category.subcategories');
   const groupClassName = getStyleAsClassName('category.group');
+
+  useEffect(() => {
+    setSelectedCategory(findCategory(categorization));
+  }, [uischema, schema]);
 
   const [selectedCategory, setSelectedCategory] = useState(
     findCategory(categorization)
