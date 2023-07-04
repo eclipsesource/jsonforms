@@ -6,10 +6,11 @@
         type="button"
         @click="addButtonClick"
         :disabled="!control.enabled ||
-          (control.schema !== undefined &&
-          control.schema.maxItems !== undefined &&
-          control.data.length >= control.schema.maxItems)"
-      >
+            (arraySchema !== undefined &&
+            arraySchema.maxItems !== undefined &&
+            control.data !== undefined &&
+            control.data.length >= arraySchema.maxItems)"
+        >
         +
       </button>
       <label :class="styles.arrayList.label">
@@ -54,6 +55,8 @@ import {
   rankWith,
   ControlElement,
   schemaTypeIs,
+  Resolve,
+  JsonSchema
 } from '@jsonforms/core';
 import { defineComponent } from 'vue';
 import {
@@ -81,6 +84,12 @@ const controlRenderer = defineComponent({
     noData(): boolean {
       return !this.control.data || this.control.data.length === 0;
     },
+    arraySchema(): JsonSchema | undefined {
+      return Resolve.schema(
+          this.control.rootSchema,
+          this.control.uischema.scope,
+          this.control.rootSchema);
+    } 
   },
   methods: {
     composePaths,
