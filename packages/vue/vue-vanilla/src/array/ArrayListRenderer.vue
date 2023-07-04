@@ -5,6 +5,10 @@
         :class="styles.arrayList.addButton"
         type="button"
         @click="addButtonClick"
+        :disabled="!control.enabled ||
+          (control.schema !== undefined &&
+          control.schema.maxItems !== undefined &&
+          control.data.length >= control.schema.maxItems)"
       >
         +
       </button>
