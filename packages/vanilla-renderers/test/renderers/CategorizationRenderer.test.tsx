@@ -386,4 +386,39 @@ describe('Categorization renderer', () => {
     const div: HTMLDivElement = wrapper.find('.categorization').getDOMNode();
     expect(div.hidden).toBe(false);
   });
+
+  test('reset selected category on schema change', () => {
+    const uischema: Categorization = {
+      type: 'Categorization',
+      label: '',
+      elements: [
+        {
+          type: 'Category',
+          label: 'B',
+          elements: [],
+        },
+      ],
+    };
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
+
+    wrapper = mount(
+      <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core }}>
+        <CategorizationRenderer
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    let firstItem = wrapper.find('li').at(0);
+    firstItem.simulate('click');
+    expect(firstItem.hasClass('selected')).toBe(true);
+
+    core.uischema = uischema;
+    wrapper.setProps({ initState: { renderers: vanillaRenderers, core } });
+    wrapper.update();
+
+    firstItem = wrapper.find('li').at(0);
+    expect(firstItem.hasClass('selected')).toBe(false);
+  });
 });
