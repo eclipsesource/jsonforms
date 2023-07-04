@@ -27,7 +27,7 @@
     "jasmine": "^3.99.0",
     "jasmine-spec-reporter": "^4.2.1",
     "karma": "^3.1.4",
-    "karma-chrome-launcher": "^2.2.0",
+    "karma-chrome-launcher": "^3.2.0",
     "karma-coverage-istanbul-reporter": "^2.1.1",
     "karma-jasmine": "^2.0.1",
     "karma-sourcemap-loader": "^0.3.8",
