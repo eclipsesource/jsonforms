@@ -46,7 +46,13 @@ import {
   UPDATE_CORE,
   UpdateCoreAction,
 } from '../actions';
-import { createAjv, decode, isOneOfEnumSchema, Reducer } from '../util';
+import {
+  composePaths,
+  createAjv,
+  isOneOfEnumSchema,
+  Reducer,
+  toLodashSegments,
+} from '../util';
 import type { JsonSchema, UISchemaElement } from '../models';
 
 export const validate = (
@@ -284,18 +290,19 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
           errors,
         };
       } else {
-        const oldData: any = get(state.data, action.path);
+        const lodashDataPathSegments = toLodashSegments(action.path);
+        const oldData: any = get(state.data, lodashDataPathSegments);
         const newData = action.updater(cloneDeep(oldData));
         let newState: any;
         if (newData !== undefined) {
           newState = setFp(
-            action.path,
+            lodashDataPathSegments,
             newData,
             state.data === undefined ? {} : state.data
           );
         } else {
           newState = unsetFp(
-            action.path,
+            lodashDataPathSegments,
             state.data === undefined ? {} : state.data
           );
         }
@@ -369,19 +376,11 @@ export const getControlPath = (error: ErrorObject) => {
   // With AJV v8 the property was renamed to 'instancePath'
   let controlPath = (error as any).dataPath || error.instancePath || '';
 
-  // change '/' chars to '.'
-  controlPath = controlPath.replace(/\//g, '.');
-
   const invalidProperty = getInvalidProperty(error);
   if (invalidProperty !== undefined && !controlPath.endsWith(invalidProperty)) {
-    controlPath = `${controlPath}.${invalidProperty}`;
+    controlPath = composePaths(controlPath, invalidProperty);
   }
 
-  // remove '.' chars at the beginning of paths
-  controlPath = controlPath.replace(/^./, '');
-
-  // decode JSON Pointer escape sequences
-  controlPath = decode(controlPath);
   return controlPath;
 };
 
@@ -479,5 +478,5 @@ export const errorAt = (instancePath: string, schema: JsonSchema) =>
   getErrorsAt(instancePath, schema, (path) => path === instancePath);
 export const subErrorsAt = (instancePath: string, schema: JsonSchema) =>
   getErrorsAt(instancePath, schema, (path) =>
-    path.startsWith(instancePath + '.')
+    path.startsWith(instancePath + '/')
   );

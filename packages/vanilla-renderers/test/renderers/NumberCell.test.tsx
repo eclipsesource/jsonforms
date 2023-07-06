@@ -192,7 +192,7 @@ describe('Number cell', () => {
     const core = initCore(fixture.schema, uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <NumberCell schema={fixture.schema} uischema={uischema} path='foo' />
+        <NumberCell schema={fixture.schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>,
       // Attach to body to get focus to work with JSDom
       { attachTo: document.body }
@@ -213,7 +213,7 @@ describe('Number cell', () => {
 
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <NumberCell schema={fixture.schema} uischema={uischema} path='foo' />
+        <NumberCell schema={fixture.schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
@@ -228,7 +228,7 @@ describe('Number cell', () => {
     const core = initCore(fixture.schema, uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <NumberCell schema={fixture.schema} uischema={uischema} path='foo' />
+        <NumberCell schema={fixture.schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
@@ -240,7 +240,7 @@ describe('Number cell', () => {
     const core = initCore(schema, fixture.uischema, { foo: 3.14 });
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <NumberCell schema={schema} uischema={fixture.uischema} path='foo' />
+        <NumberCell schema={schema} uischema={fixture.uischema} path='/foo' />
       </JsonFormsStateProvider>
     );
 
@@ -257,7 +257,7 @@ describe('Number cell', () => {
         <NumberCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -283,7 +283,7 @@ describe('Number cell', () => {
         <NumberCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -300,7 +300,7 @@ describe('Number cell', () => {
         <NumberCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -319,7 +319,7 @@ describe('Number cell', () => {
         <NumberCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -337,7 +337,7 @@ describe('Number cell', () => {
         <NumberCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -355,7 +355,7 @@ describe('Number cell', () => {
         <NumberCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -373,7 +373,7 @@ describe('Number cell', () => {
         <NumberCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -391,7 +391,7 @@ describe('Number cell', () => {
         <NumberCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -424,7 +424,7 @@ describe('Number cell', () => {
         <NumberCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -439,7 +439,7 @@ describe('Number cell', () => {
         <NumberCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );

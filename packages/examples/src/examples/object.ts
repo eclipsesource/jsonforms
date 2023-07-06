@@ -30,7 +30,7 @@ export const schema = {
   type: 'object',
 
   properties: {
-    address: {
+    'addr..ess': {
       type: 'object',
       properties: {
         street_address: { type: 'string' },
@@ -39,7 +39,7 @@ export const schema = {
       },
       required: ['street_address', 'city', 'state'],
     },
-    user: {
+    'us/e[r': {
       type: 'object',
       properties: {
         name: { type: 'string' },
@@ -91,10 +91,13 @@ export const uischemaNonRoot = {
 };
 
 const data = {
-  address: {
+  'addr..ess': {
     street_address: '1600 Pennsylvania Avenue NW',
     city: 'Washington',
     state: 'DC',
+  },
+  'us/e[r': {
+    name: 'test',
   },
 };
 

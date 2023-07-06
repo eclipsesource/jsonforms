@@ -81,7 +81,7 @@ describe('Material enum cell', () => {
         <MaterialEnumCell
           schema={schema}
           uischema={uischema}
-          path='nationality'
+          path='/nationality'
         />
       </JsonFormsStateProvider>
     );

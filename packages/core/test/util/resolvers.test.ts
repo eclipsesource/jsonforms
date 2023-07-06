@@ -229,5 +229,5 @@ test('resolveData - resolves data with % characters', (t) => {
   const data = {
     'foo%': '123',
   };
-  t.deepEqual(resolveData(data, 'foo%'), '123');
+  t.deepEqual(resolveData(data, '/foo%'), '123');
 });

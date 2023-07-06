@@ -1,7 +1,7 @@
 import type { ErrorObject } from 'ajv';
 import { isInternationalized, Labelable, UISchemaElement } from '../models';
 import { getControlPath } from '../reducers';
-import { formatErrorMessage } from '../util';
+import { formatErrorMessage, toLodashPath } from '../util';
 import type { i18nJsonSchema, ErrorTranslator, Translator } from './i18nTypes';
 import {
   ArrayDefaultTranslation,
@@ -28,7 +28,7 @@ export const getI18nKeyPrefixBySchema = (
  */
 export const transformPathToI18nPrefix = (path: string): string => {
   return (
-    path
+    toLodashPath(path)
       ?.split('.')
       .filter((segment) => !/^\d+$/.test(segment))
       .join('.') || 'root'

@@ -349,16 +349,16 @@ test('mapStateToControlProps - path', (t) => {
     uischema: coreUISchema,
   };
   const props = mapStateToControlProps(createState(coreUISchema), ownProps);
-  t.is(props.path, 'firstName');
+  t.is(props.path, '/firstName');
 });
 
 test('mapStateToControlProps - compose path with ownProps.path', (t) => {
   const ownProps = {
     uischema: coreUISchema,
-    path: 'yo',
+    path: '/yo',
   };
   const props = mapStateToControlProps(createState(coreUISchema), ownProps);
-  t.is(props.path, 'yo.firstName');
+  t.is(props.path, '/yo/firstName');
 });
 
 test('mapStateToControlProps - derive label', (t) => {
@@ -787,7 +787,7 @@ test('mapStateToLayoutProps - hidden via state with path from ownProps ', (t) =>
   };
   const ownProps = {
     uischema,
-    path: 'foo',
+    path: '/foo',
   };
   const state = {
     jsonforms: {
@@ -986,7 +986,7 @@ test('mapDispatchToMultiEnumProps - enum schema - addItem', (t) => {
   const [getCore, dispatch] = mockDispatch(initCore);
   dispatch(init(data, schema, uischema, createAjv({ useDefaults: true })));
   const props = mapDispatchToMultiEnumProps(dispatch);
-  props.addItem('colors', 'pink');
+  props.addItem('/colors', 'pink');
 
   t.is(getCore().data.colors.length, 2);
   t.deepEqual(getCore().data.colors[0], 'green');
@@ -1062,7 +1062,7 @@ test('mapDispatchToMultiEnumProps - oneOf schema - addItem', (t) => {
   const [getCore, dispatch] = mockDispatch(initCore);
   dispatch(init(data, schema, uischema, createAjv({ useDefaults: true })));
   const props = mapDispatchToMultiEnumProps(dispatch);
-  props.addItem('colors', 'pink');
+  props.addItem('/colors', 'pink');
 
   t.is(getCore().data.colors.length, 1);
   t.deepEqual(getCore().data.colors[0], 'pink');
@@ -1279,7 +1279,7 @@ test('mapStateToAnyOfProps - const constraint in anyOf schema should return corr
   const ownProps: OwnPropsOfControl = {
     visible: true,
     uischema,
-    path: 'foo',
+    path: '/foo',
   };
   const state = {
     jsonforms: {
@@ -1516,6 +1516,7 @@ test('mapStateToControlProps - i18n errors - translate via i18 specialized error
     key: string,
     defaultMessage: string | undefined
   ) => {
+    console.log('received Key: ', key);
     switch (key) {
       case 'my-key.error.pattern':
         return 'my error message';

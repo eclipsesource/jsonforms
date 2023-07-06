@@ -114,7 +114,11 @@ describe('Text area cell', () => {
     const core = initCore(fixture.schema, uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TextAreaCell schema={fixture.schema} uischema={uischema} path='name' />
+        <TextAreaCell
+          schema={fixture.schema}
+          uischema={uischema}
+          path='/name'
+        />
       </JsonFormsStateProvider>,
       // Attach to body to get focus to work with JSDom
       { attachTo: document.body }
@@ -134,7 +138,11 @@ describe('Text area cell', () => {
     const core = initCore(fixture.schema, uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TextAreaCell schema={fixture.schema} uischema={uischema} path='name' />
+        <TextAreaCell
+          schema={fixture.schema}
+          uischema={uischema}
+          path='/name'
+        />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('textarea').getDOMNode() as HTMLInputElement;
@@ -149,7 +157,11 @@ describe('Text area cell', () => {
     const core = initCore(fixture.schema, uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TextAreaCell schema={fixture.schema} uischema={uischema} path='name' />
+        <TextAreaCell
+          schema={fixture.schema}
+          uischema={uischema}
+          path='/name'
+        />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('textarea').getDOMNode() as HTMLInputElement;
@@ -163,7 +175,7 @@ describe('Text area cell', () => {
         <TextAreaCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='name'
+          path='/name'
         />
       </JsonFormsStateProvider>
     );
@@ -180,7 +192,7 @@ describe('Text area cell', () => {
         <TextAreaCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='name'
+          path='/name'
         />
       </JsonFormsStateProvider>
     );
@@ -206,7 +218,7 @@ describe('Text area cell', () => {
         <TextAreaCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='name'
+          path='/name'
         />
       </JsonFormsStateProvider>
     );
@@ -223,7 +235,7 @@ describe('Text area cell', () => {
         <TextAreaCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='name'
+          path='/name'
         />
       </JsonFormsStateProvider>
     );
@@ -243,7 +255,7 @@ describe('Text area cell', () => {
         <TextAreaCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='name'
+          path='/name'
         />
       </JsonFormsStateProvider>
     );
@@ -263,7 +275,7 @@ describe('Text area cell', () => {
         <TextAreaCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='name'
+          path='/name'
         />
       </JsonFormsStateProvider>
     );
@@ -283,7 +295,7 @@ describe('Text area cell', () => {
         <TextAreaCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='name'
+          path='/name'
         />
       </JsonFormsStateProvider>
     );
@@ -303,7 +315,7 @@ describe('Text area cell', () => {
         <TextAreaCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='name'
+          path='/name'
         />
       </JsonFormsStateProvider>
     );
@@ -323,7 +335,7 @@ describe('Text area cell', () => {
         <TextAreaCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='name'
+          path='/name'
         />
       </JsonFormsStateProvider>
     );
@@ -360,7 +372,7 @@ describe('Text area cell', () => {
         <TextAreaCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='name'
+          path='/name'
         />
       </JsonFormsStateProvider>
     );
@@ -381,7 +393,11 @@ describe('Text area cell', () => {
     const core = initCore(fixture.schema, uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <TextAreaCell schema={fixture.schema} uischema={uischema} path='name' />
+        <TextAreaCell
+          schema={fixture.schema}
+          uischema={uischema}
+          path='/name'
+        />
       </JsonFormsStateProvider>
     );
     const textArea = wrapper

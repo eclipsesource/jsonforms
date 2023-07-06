@@ -154,7 +154,7 @@ describe('Material text cell', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <TextCell schema={minLengthSchema} uischema={control} path='name' />
+        <TextCell schema={minLengthSchema} uischema={control} path='/name' />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').first();
@@ -172,7 +172,7 @@ describe('Material text cell', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <TextCell schema={minLengthSchema} uischema={control} path={'name'} />
+        <TextCell schema={minLengthSchema} uischema={control} path={'/name'} />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').first();
@@ -189,7 +189,7 @@ describe('Material text cell', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <TextCell schema={minLengthSchema} uischema={control} path='name' />
+        <TextCell schema={minLengthSchema} uischema={control} path='/name' />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').first();
@@ -208,7 +208,7 @@ describe('Material text cell', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <TextCell schema={jsonSchema} uischema={uischema} path={'name'} />
+        <TextCell schema={jsonSchema} uischema={uischema} path={'/name'} />
       </JsonFormsStateProvider>
     );
 
@@ -230,7 +230,7 @@ describe('Material text cell', () => {
             onChangeData.data = data;
           }}
         />
-        <TextCell schema={minLengthSchema} uischema={uischema} path='name' />
+        <TextCell schema={minLengthSchema} uischema={uischema} path='/name' />
       </JsonFormsStateProvider>
     );
 
@@ -248,7 +248,7 @@ describe('Material text cell', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <TextCell schema={minLengthSchema} uischema={uischema} path='name' />
+        <TextCell schema={minLengthSchema} uischema={uischema} path='/name' />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, name: 'Bar' };
@@ -267,7 +267,7 @@ describe('Material text cell', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <TextCell schema={minLengthSchema} uischema={uischema} path='name' />
+        <TextCell schema={minLengthSchema} uischema={uischema} path='/name' />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, name: undefined };
@@ -286,7 +286,7 @@ describe('Material text cell', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <TextCell schema={minLengthSchema} uischema={uischema} path='name' />
+        <TextCell schema={minLengthSchema} uischema={uischema} path='/name' />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, name: null };
@@ -305,7 +305,7 @@ describe('Material text cell', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <TextCell schema={minLengthSchema} uischema={uischema} path='name' />
+        <TextCell schema={minLengthSchema} uischema={uischema} path='/name' />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, firstname: 'Bar' };
@@ -324,7 +324,7 @@ describe('Material text cell', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <TextCell schema={minLengthSchema} uischema={uischema} path='name' />
+        <TextCell schema={minLengthSchema} uischema={uischema} path='/name' />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, null: 'Bar' };
@@ -343,7 +343,7 @@ describe('Material text cell', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <TextCell schema={minLengthSchema} uischema={uischema} path='name' />
+        <TextCell schema={minLengthSchema} uischema={uischema} path='/name' />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, undefined: 'Bar' };
@@ -365,7 +365,7 @@ describe('Material text cell', () => {
         <TextCell
           schema={minLengthSchema}
           uischema={uischema}
-          path='name'
+          path='/name'
           enabled={false}
         />
       </JsonFormsStateProvider>
@@ -380,7 +380,7 @@ describe('Material text cell', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <TextCell schema={minLengthSchema} uischema={uischema} path='name' />
+        <TextCell schema={minLengthSchema} uischema={uischema} path='/name' />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').first();
@@ -401,7 +401,7 @@ describe('Material text cell', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <TextCell schema={maxLengthSchema} uischema={control} path='name' />
+        <TextCell schema={maxLengthSchema} uischema={control} path='/name' />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').first();
@@ -421,7 +421,7 @@ describe('Material text cell', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <TextCell schema={maxLengthSchema} uischema={control} path='name' />
+        <TextCell schema={maxLengthSchema} uischema={control} path='/name' />
       </JsonFormsStateProvider>
     );
     const input = wrapper
@@ -446,7 +446,7 @@ describe('Material text cell', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <TextCell schema={maxLengthSchema} uischema={control} path='name' />
+        <TextCell schema={maxLengthSchema} uischema={control} path='/name' />
       </JsonFormsStateProvider>
     );
     const input = wrapper
@@ -466,7 +466,7 @@ describe('Material text cell', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <TextCell schema={schema} uischema={uischema} path='name' />
+        <TextCell schema={schema} uischema={uischema} path='/name' />
       </JsonFormsStateProvider>
     );
     const input = wrapper
@@ -494,7 +494,7 @@ describe('Material text cell', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <TextCell schema={schema} uischema={control} path='name' />
+        <TextCell schema={schema} uischema={control} path='/name' />
       </JsonFormsStateProvider>
     );
     const input = wrapper
@@ -519,7 +519,7 @@ describe('Material text cell', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <TextCell schema={schema} uischema={control} path='name' />
+        <TextCell schema={schema} uischema={control} path='/name' />
       </JsonFormsStateProvider>
     );
 
@@ -544,7 +544,7 @@ describe('Material text cell', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <TextCell schema={schema} uischema={control} path='name' />
+        <TextCell schema={schema} uischema={control} path='/name' />
       </JsonFormsStateProvider>
     );
 
@@ -564,7 +564,7 @@ describe('Material text cell', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <TextCell schema={schema} uischema={uischema} path='name' />
+        <TextCell schema={schema} uischema={uischema} path='/name' />
       </JsonFormsStateProvider>
     );
     const input = wrapper
@@ -586,7 +586,7 @@ describe('Material text cell', () => {
         <TextCell
           schema={schema}
           uischema={uischema}
-          path={'name'}
+          path={'/name'}
           enabled={false}
         />
       </JsonFormsStateProvider>
