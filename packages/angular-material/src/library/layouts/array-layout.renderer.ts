@@ -243,7 +243,7 @@ export class ArrayLayoutRenderer
     }
     return {
       schema: this.scopedSchema,
-      path: Paths.compose(this.propsPath, `${index}`),
+      path: Paths.compose(this.propsPath, `/${index}`),
       uischema,
     };
   }

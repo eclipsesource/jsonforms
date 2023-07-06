@@ -295,7 +295,7 @@ describe('Slider cell', () => {
     const core = initCore(fixture.schema, uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <SliderCell schema={fixture.schema} uischema={uischema} path='foo' />
+        <SliderCell schema={fixture.schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>,
       // Attach to body to get focus to work with JSDom
       { attachTo: document.body }
@@ -313,7 +313,7 @@ describe('Slider cell', () => {
     const core = initCore(fixture.schema, uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <SliderCell schema={fixture.schema} uischema={uischema} path='foo' />
+        <SliderCell schema={fixture.schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
@@ -327,7 +327,7 @@ describe('Slider cell', () => {
         <SliderCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -350,7 +350,7 @@ describe('Slider cell', () => {
     const core = initCore(schema, fixture.uischema, { foo: 5 });
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <SliderCell schema={schema} uischema={fixture.uischema} path='foo' />
+        <SliderCell schema={schema} uischema={fixture.uischema} path='/foo' />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
@@ -365,7 +365,7 @@ describe('Slider cell', () => {
         <SliderCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -391,7 +391,7 @@ describe('Slider cell', () => {
         <SliderCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -408,7 +408,7 @@ describe('Slider cell', () => {
         <SliderCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -426,7 +426,7 @@ describe('Slider cell', () => {
         <SliderCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -444,7 +444,7 @@ describe('Slider cell', () => {
         <SliderCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -462,7 +462,7 @@ describe('Slider cell', () => {
         <SliderCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -480,7 +480,7 @@ describe('Slider cell', () => {
         <SliderCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -498,7 +498,7 @@ describe('Slider cell', () => {
         <SliderCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -516,7 +516,7 @@ describe('Slider cell', () => {
         <SliderCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
           enabled={false}
         />
       </JsonFormsStateProvider>
@@ -532,7 +532,7 @@ describe('Slider cell', () => {
         <SliderCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );

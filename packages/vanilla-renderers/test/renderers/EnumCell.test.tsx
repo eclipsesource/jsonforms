@@ -143,7 +143,7 @@ describe('Enum cell', () => {
         <EnumCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -164,7 +164,7 @@ describe('Enum cell', () => {
         <EnumCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -190,7 +190,7 @@ describe('Enum cell', () => {
         <EnumCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -214,7 +214,7 @@ describe('Enum cell', () => {
         <EnumCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -232,7 +232,7 @@ describe('Enum cell', () => {
         <EnumCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -251,7 +251,7 @@ describe('Enum cell', () => {
         <EnumCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -270,7 +270,7 @@ describe('Enum cell', () => {
         <EnumCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -289,7 +289,7 @@ describe('Enum cell', () => {
         <EnumCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -308,7 +308,7 @@ describe('Enum cell', () => {
         <EnumCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -327,7 +327,7 @@ describe('Enum cell', () => {
         <EnumCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -361,7 +361,7 @@ describe('Enum cell', () => {
         <EnumCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );

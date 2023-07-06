@@ -24,7 +24,7 @@
 */
 
 import { ErrorObject } from 'ajv';
-import { decode } from './path';
+import { composePaths } from './path';
 import { JsonSchema } from '../models';
 import { isOneOfEnumSchema } from './schema';
 import filter from 'lodash/filter';
@@ -47,19 +47,11 @@ export const getControlPath = (error: ErrorObject) => {
   // With AJV v8 the property was renamed to 'instancePath'
   let controlPath = (error as any).dataPath || error.instancePath || '';
 
-  // change '/' chars to '.'
-  controlPath = controlPath.replace(/\//g, '.');
-
   const invalidProperty = getInvalidProperty(error);
   if (invalidProperty !== undefined && !controlPath.endsWith(invalidProperty)) {
-    controlPath = `${controlPath}.${invalidProperty}`;
+    controlPath = composePaths(controlPath, invalidProperty);
   }
 
-  // remove '.' chars at the beginning of paths
-  controlPath = controlPath.replace(/^./, '');
-
-  // decode JSON Pointer escape sequences
-  controlPath = decode(controlPath);
   return controlPath;
 };
 

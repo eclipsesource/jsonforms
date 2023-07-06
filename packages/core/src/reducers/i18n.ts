@@ -23,7 +23,13 @@
   THE SOFTWARE.
 */
 
-import { defaultErrorTranslator, defaultTranslator } from '../i18n';
+import {
+  defaultErrorTranslator,
+  defaultTranslator,
+  ErrorTranslator,
+  JsonFormsI18nState,
+  Translator,
+} from '../i18n';
 import {
   I18nActions,
   SET_LOCALE,
@@ -32,6 +38,7 @@ import {
 } from '../actions';
 import { Reducer } from '../store/type';
 import { JsonFormsI18nState } from '../store';
+import { UISchemaElement } from '../models';
 
 export const defaultJsonFormsI18nState: Required<JsonFormsI18nState> = {
   locale: 'en',
@@ -50,7 +57,6 @@ export const i18nReducer: Reducer<JsonFormsI18nState, I18nActions> = (
         action.translator ?? defaultJsonFormsI18nState.translate;
       const translateError =
         action.errorTranslator ?? defaultJsonFormsI18nState.translateError;
-
       if (
         locale !== state.locale ||
         translate !== state.translate ||
@@ -79,4 +85,20 @@ export const i18nReducer: Reducer<JsonFormsI18nState, I18nActions> = (
     default:
       return state;
   }
+};
+
+export const wrapTranslateFunction = (translator: Translator): Translator => {
+  return (id: string, defaultMessage?: string | undefined, values?: any) => {
+    return translator(toLodashPath(id), defaultMessage, values);
+  };
+};
+
+export const wrapErrorTranslateFunction = (
+  translator: ErrorTranslator
+): ErrorTranslator => {
+  return (
+    error: ErrorObject,
+    translate: Translator,
+    uischema?: UISchemaElement
+  ) => translator(error, wrapTranslateFunction(translate), uischema);
 };

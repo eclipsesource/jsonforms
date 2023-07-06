@@ -172,7 +172,7 @@ describe('Material time cell', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <TimeCell schema={schema} uischema={control} path='foo' />
+        <TimeCell schema={schema} uischema={control} path='/foo' />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').first();
@@ -185,7 +185,7 @@ describe('Material time cell', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <TimeCell schema={schema} uischema={uischema} path='foo' />
+        <TimeCell schema={schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>
     );
 
@@ -208,7 +208,7 @@ describe('Material time cell', () => {
             onChangeData.data = data;
           }}
         />
-        <TimeCell schema={schema} uischema={uischema} path='foo' />
+        <TimeCell schema={schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').first();
@@ -225,7 +225,7 @@ describe('Material time cell', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <TimeCell schema={schema} uischema={uischema} path='foo' />
+        <TimeCell schema={schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, foo: '20:15' };
@@ -244,7 +244,7 @@ describe('Material time cell', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <TimeCell schema={schema} uischema={uischema} path='foo' />
+        <TimeCell schema={schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, foo: null };
@@ -263,7 +263,7 @@ describe('Material time cell', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <TimeCell schema={schema} uischema={uischema} path='foo' />
+        <TimeCell schema={schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, foo: undefined };
@@ -282,7 +282,7 @@ describe('Material time cell', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <TimeCell schema={schema} uischema={uischema} path='foo' />
+        <TimeCell schema={schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, bar: 'Bar' };
@@ -301,7 +301,7 @@ describe('Material time cell', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <TimeCell schema={schema} uischema={uischema} path='foo' />
+        <TimeCell schema={schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, null: '20:15' };
@@ -320,7 +320,7 @@ describe('Material time cell', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <TimeCell schema={schema} uischema={uischema} path='foo' />
+        <TimeCell schema={schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, undefined: '20:15' };
@@ -343,7 +343,7 @@ describe('Material time cell', () => {
           schema={schema}
           uischema={uischema}
           enabled={false}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -357,7 +357,7 @@ describe('Material time cell', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <TimeCell schema={schema} uischema={uischema} path='foo' />
+        <TimeCell schema={schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').first();

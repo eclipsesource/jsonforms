@@ -275,7 +275,7 @@ export const controlWithoutLabel = (scope: string): ControlElement => ({
 @Pipe({ name: 'getProps' })
 export class GetProps implements PipeTransform {
   transform(index: number, props: OwnPropsOfRenderer) {
-    const rowPath = Paths.compose(props.path, `${index}`);
+    const rowPath = Paths.compose(props.path, `/${index}`);
     return {
       schema: props.schema,
       uischema: props.uischema,
