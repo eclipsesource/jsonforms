@@ -36,19 +36,19 @@ test('transformPathToI18nPrefix returns root when empty', (t) => {
 });
 
 test('transformPathToI18nPrefix does not modify non-array paths', (t) => {
-  t.is(transformPathToI18nPrefix('foo'), 'foo');
-  t.is(transformPathToI18nPrefix('foo.bar'), 'foo.bar');
-  t.is(transformPathToI18nPrefix('bar3.foo2'), 'bar3.foo2');
+  t.is(transformPathToI18nPrefix('/foo'), 'foo');
+  t.is(transformPathToI18nPrefix('/foo/bar'), 'foo.bar');
+  t.is(transformPathToI18nPrefix('/bar3/foo2'), 'bar3.foo2');
 });
 
 test('transformPathToI18nPrefix removes array indices', (t) => {
-  t.is(transformPathToI18nPrefix('foo.2.bar'), 'foo.bar');
-  t.is(transformPathToI18nPrefix('foo.234324234.bar'), 'foo.bar');
-  t.is(transformPathToI18nPrefix('foo.0.bar'), 'foo.bar');
-  t.is(transformPathToI18nPrefix('foo.0.bar.1.foobar'), 'foo.bar.foobar');
-  t.is(transformPathToI18nPrefix('3.foobar'), 'foobar');
-  t.is(transformPathToI18nPrefix('foobar.3'), 'foobar');
-  t.is(transformPathToI18nPrefix('foo1.23.b2ar3.1.5.foo'), 'foo1.b2ar3.foo');
+  t.is(transformPathToI18nPrefix('foo/2/bar'), 'foo.bar');
+  t.is(transformPathToI18nPrefix('foo/234324234/bar'), 'foo.bar');
+  t.is(transformPathToI18nPrefix('foo/0/bar'), 'foo.bar');
+  t.is(transformPathToI18nPrefix('foo/0/bar/1/foobar'), 'foo.bar.foobar');
+  t.is(transformPathToI18nPrefix('3/foobar'), 'foobar');
+  t.is(transformPathToI18nPrefix('foobar/3'), 'foobar');
+  t.is(transformPathToI18nPrefix('foo1/23/b2ar3/1/5/foo'), 'foo1.b2ar3.foo');
   t.is(transformPathToI18nPrefix('3'), 'root');
 });
 

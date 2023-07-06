@@ -247,16 +247,16 @@ test('mapStateToCellProps - disabled via global readonly beats enabled via rule'
 test('mapStateToCellProps - path', (t) => {
   const ownProps = {
     uischema: coreUISchema,
-    path: 'firstName',
+    path: '/firstName',
   };
   const props = mapStateToCellProps(createState(coreUISchema), ownProps);
-  t.is(props.path, 'firstName');
+  t.is(props.path, '/firstName');
 });
 
 test('mapStateToCellProps - data', (t) => {
   const ownProps = {
     uischema: coreUISchema,
-    path: 'firstName',
+    path: '/firstName',
   };
   const props = mapStateToCellProps(createState(coreUISchema), ownProps);
   t.is(props.data, 'Homer');
@@ -276,7 +276,7 @@ test('mapStateToCellProps - translated error', (t) => {
   const ownProps = {
     uischema: coreUISchema,
     id: '#/properties/firstName',
-    path: 'firstName',
+    path: '/firstName',
   };
   const state = createState(coreUISchema);
   if (state.jsonforms.core === undefined) {
@@ -308,7 +308,7 @@ test('mapStateToEnumCellProps - set default options for dropdown list', (t) => {
       enum: ['DE', 'IT', 'JP', 'US', 'RU', 'Other'],
     },
     uischema,
-    path: 'nationality',
+    path: '/nationality',
   };
 
   const props = defaultMapStateToEnumCellProps(createState(uischema), ownProps);
@@ -340,7 +340,7 @@ test('mapStateToOneOfEnumCellProps - set one of options for dropdown list', (t) 
       ],
     },
     uischema,
-    path: 'country',
+    path: '/country',
   };
 
   const props = mapStateToOneOfEnumCellProps(createState(uischema), ownProps);

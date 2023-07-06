@@ -45,7 +45,14 @@ import {
 import { JsonFormsCore, Reducer, ValidationMode } from '../store';
 import Ajv, { ErrorObject } from 'ajv';
 import { isFunction } from 'lodash';
-import { createAjv, validate } from '../util';
+import {
+  composePaths,
+  createAjv,
+  isOneOfEnumSchema,
+  Reducer,
+  toLodashSegments,
+  validate,
+} from '../util';
 
 export const initState: JsonFormsCore = {
   data: {},
@@ -237,18 +244,19 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
           errors,
         };
       } else {
-        const oldData: any = get(state.data, action.path);
+        const lodashDataPathSegments = toLodashSegments(action.path);
+        const oldData: any = get(state.data, lodashDataPathSegments);
         const newData = action.updater(cloneDeep(oldData));
         let newState: any;
         if (newData !== undefined) {
           newState = setFp(
-            action.path,
+            lodashDataPathSegments,
             newData,
             state.data === undefined ? {} : state.data
           );
         } else {
           newState = unsetFp(
-            action.path,
+            lodashDataPathSegments,
             state.data === undefined ? {} : state.data
           );
         }
