@@ -88,7 +88,7 @@ test('withJsonFormsEnumProps - constant: should supply control and enum props', 
 
   expect(mockEnumControlUnwrappedProps.uischema).toEqual(uischema);
   expect(mockEnumControlUnwrappedProps.schema).toEqual(schema.properties.name);
-  expect(mockEnumControlUnwrappedProps.path).toEqual('name');
+  expect(mockEnumControlUnwrappedProps.path).toEqual('/name');
   expect(mockEnumControlUnwrappedProps.id).toEqual('#/properties/name');
   expect(mockEnumControlUnwrappedProps.options).toEqual([
     { value: 'Cambodia', label: 'Cambodia' },
@@ -138,7 +138,7 @@ test('withJsonFormsEnumProps - enum: should supply control and enum props', () =
     .props();
   expect(mockEnumControlUnwrappedProps.uischema).toEqual(uischema);
   expect(mockEnumControlUnwrappedProps.schema).toEqual(schema.properties.color);
-  expect(mockEnumControlUnwrappedProps.path).toEqual('color');
+  expect(mockEnumControlUnwrappedProps.path).toEqual('/color');
   expect(mockEnumControlUnwrappedProps.id).toEqual('#/properties/color');
   expect(mockEnumControlUnwrappedProps.options).toEqual([
     { value: 'red', label: 'red' },

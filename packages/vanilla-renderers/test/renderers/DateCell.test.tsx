@@ -177,7 +177,7 @@ describe('Date cell', () => {
 
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core }}>
-        <DateCell schema={fixture.schema} uischema={uischema} path='foo' />
+        <DateCell schema={fixture.schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>,
       // Attach to body to get focus to work with JSDom
       { attachTo: document.body }
@@ -197,7 +197,7 @@ describe('Date cell', () => {
     const core = initCore(fixture.schema, uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core }}>
-        <DateCell schema={fixture.schema} uischema={uischema} path='foo' />
+        <DateCell schema={fixture.schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
@@ -212,7 +212,7 @@ describe('Date cell', () => {
     const core = initCore(fixture.schema, uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core }}>
-        <DateCell schema={fixture.schema} uischema={uischema} path='foo' />
+        <DateCell schema={fixture.schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
@@ -226,7 +226,7 @@ describe('Date cell', () => {
         <DateCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -243,7 +243,7 @@ describe('Date cell', () => {
         <DateCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -268,7 +268,7 @@ describe('Date cell', () => {
         <DateCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -284,7 +284,7 @@ describe('Date cell', () => {
         <DateCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -302,7 +302,7 @@ describe('Date cell', () => {
         <DateCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -320,7 +320,7 @@ describe('Date cell', () => {
         <DateCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -338,7 +338,7 @@ describe('Date cell', () => {
         <DateCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -356,7 +356,7 @@ describe('Date cell', () => {
         <DateCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -374,7 +374,7 @@ describe('Date cell', () => {
         <DateCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -407,7 +407,7 @@ describe('Date cell', () => {
         <DateCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );

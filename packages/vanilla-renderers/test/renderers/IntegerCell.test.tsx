@@ -154,7 +154,7 @@ describe('Integer cell', () => {
     const core = initCore(fixture.schema, uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <IntegerCell schema={fixture.schema} uischema={uischema} path='foo' />
+        <IntegerCell schema={fixture.schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>,
       // Attach to body to get focus to work with JSDom
       { attachTo: document.body }
@@ -175,7 +175,7 @@ describe('Integer cell', () => {
 
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <IntegerCell schema={fixture.schema} uischema={uischema} path='foo' />
+        <IntegerCell schema={fixture.schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
@@ -191,7 +191,7 @@ describe('Integer cell', () => {
 
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
-        <IntegerCell schema={fixture.schema} uischema={uischema} path='foo' />
+        <IntegerCell schema={fixture.schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
@@ -205,7 +205,7 @@ describe('Integer cell', () => {
         <IntegerCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -223,7 +223,7 @@ describe('Integer cell', () => {
         <IntegerCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -249,7 +249,7 @@ describe('Integer cell', () => {
         <IntegerCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -267,7 +267,7 @@ describe('Integer cell', () => {
         <IntegerCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -285,7 +285,7 @@ describe('Integer cell', () => {
         <IntegerCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -303,7 +303,7 @@ describe('Integer cell', () => {
         <IntegerCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -321,7 +321,7 @@ describe('Integer cell', () => {
         <IntegerCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -339,7 +339,7 @@ describe('Integer cell', () => {
         <IntegerCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -357,7 +357,7 @@ describe('Integer cell', () => {
         <IntegerCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -390,7 +390,7 @@ describe('Integer cell', () => {
         <IntegerCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -405,7 +405,7 @@ describe('Integer cell', () => {
         <IntegerCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
