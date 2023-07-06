@@ -27,18 +27,26 @@ import isEmpty from 'lodash/isEmpty';
 import range from 'lodash/range';
 import { isScoped, Scopable } from '../models';
 
-export const compose = (path1: string, path2: string) => {
-  let p1 = path1;
-  if (!isEmpty(path1) && !isEmpty(path2) && !path2.startsWith('[')) {
-    p1 = path1 + '.';
+/**
+ * Composes two JSON pointer. Pointer1 is appended to pointer2.
+ * JSON pointer is seperated and start with '/' e.g: /foo/0
+ *
+ * @param {string} pointer1 JSON pointer
+ * @param {string} pointer2 JSON pointer
+ * @returns {string} resulting JSON pointer
+ */
+export const compose = (pointer1: string, pointer2: string) => {
+  let p2 = pointer2;
+  if (!isEmpty(pointer2) && !pointer2.startsWith('/')) {
+    p2 = '/' + pointer2;
   }
 
-  if (isEmpty(p1)) {
-    return path2;
-  } else if (isEmpty(path2)) {
-    return p1;
+  if (isEmpty(pointer1)) {
+    return p2;
+  } else if (isEmpty(pointer2)) {
+    return pointer1;
   } else {
-    return `${p1}${path2}`;
+    return `${pointer1}${p2}`;
   }
 };
 
@@ -76,13 +84,13 @@ export const toDataPathSegments = (schemaPath: string): string[] => {
  * Data paths can be used in field change event handlers like handleChange.
  *
  * @example
- * toDataPath('#/properties/foo/properties/bar') === 'foo.bar')
+ * toDataPath('#/properties/foo/properties/bar') === '/foo/bar')
  *
  * @param {string} schemaPath the schema path to be converted
  * @returns {string} the data path
  */
 export const toDataPath = (schemaPath: string): string => {
-  return toDataPathSegments(schemaPath).join('.');
+  return '/' + toDataPathSegments(schemaPath).join('/');
 };
 
 export const composeWithUi = (scopableUi: Scopable, path: string): string => {
@@ -96,7 +104,19 @@ export const composeWithUi = (scopableUi: Scopable, path: string): string => {
     return path ?? '';
   }
 
-  return compose(path, segments.join('.'));
+  return compose(path, '/' + segments.join('/'));
+};
+
+export const toLodashSegments = (jsonPointer: string): string[] => {
+  let path = jsonPointer;
+  if (jsonPointer && jsonPointer.startsWith('/')) {
+    path = jsonPointer.substring(1);
+  }
+  return path ? path.split('/').map(decode) : [];
+};
+
+export const toLodashPath = (jsonPointer: string) => {
+  return toLodashSegments(jsonPointer).join('.');
 };
 
 /**

@@ -91,7 +91,7 @@ export const removeSchemaKeywords = (path: string) => {
             <button
               mat-icon-button
               class="button item-button hide"
-              (click)="onDeleteClick(i)"
+              (click)="onDeleteClick($event, i)"
               [ngClass]="{ show: highlightedIdx == i }"
               *ngIf="isEnabled()"
             >
@@ -224,7 +224,7 @@ export class MasterListComponent
           ? d.toString()
           : get(d, labelRefInstancePath ?? getFirstPrimitiveProp(schema)),
         data: d,
-        path: `${path}.${index}`,
+        path: `${path}/${index}`,
         schema,
         uischema: detailUISchema,
       };
@@ -278,7 +278,8 @@ export class MasterListComponent
     )();
   }
 
-  onDeleteClick(item: number) {
+  onDeleteClick(e: any, item: number) {
+    e.stopPropagation();
     this.removeItems(this.propsPath, [item])();
   }
 

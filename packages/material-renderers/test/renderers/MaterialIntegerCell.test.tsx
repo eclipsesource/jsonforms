@@ -120,7 +120,7 @@ describe('Material integer cells', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <IntegerCell schema={schema} uischema={control} path='foo' />
+        <IntegerCell schema={schema} uischema={control} path='/foo' />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').first();
@@ -140,7 +140,7 @@ describe('Material integer cells', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <IntegerCell schema={schema} uischema={control} path='foo' />
+        <IntegerCell schema={schema} uischema={control} path='/foo' />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input');
@@ -157,7 +157,7 @@ describe('Material integer cells', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <IntegerCell schema={schema} uischema={control} path='foo' />
+        <IntegerCell schema={schema} uischema={control} path='/foo' />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').first();
@@ -170,7 +170,7 @@ describe('Material integer cells', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <IntegerCell schema={schema} uischema={uischema} path='foo' />
+        <IntegerCell schema={schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>
     );
 
@@ -186,7 +186,7 @@ describe('Material integer cells', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <IntegerCell schema={schema} uischema={uischema} path='foo' />
+        <IntegerCell schema={schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>
     );
 
@@ -210,7 +210,7 @@ describe('Material integer cells', () => {
             onChangeData.data = data;
           }}
         />
-        <IntegerCell schema={schema} uischema={uischema} path='foo' />
+        <IntegerCell schema={schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>
     );
 
@@ -228,7 +228,7 @@ describe('Material integer cells', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <IntegerCell schema={schema} uischema={uischema} path='foo' />
+        <IntegerCell schema={schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, foo: 42 };
@@ -247,7 +247,7 @@ describe('Material integer cells', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <IntegerCell schema={schema} uischema={uischema} path='foo' />
+        <IntegerCell schema={schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, foo: undefined };
@@ -266,7 +266,7 @@ describe('Material integer cells', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <IntegerCell schema={schema} uischema={uischema} path='foo' />
+        <IntegerCell schema={schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, foo: null };
@@ -285,7 +285,7 @@ describe('Material integer cells', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <IntegerCell schema={schema} uischema={uischema} path='foo' />
+        <IntegerCell schema={schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, bar: 11 };
@@ -304,7 +304,7 @@ describe('Material integer cells', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <IntegerCell schema={schema} uischema={uischema} path='foo' />
+        <IntegerCell schema={schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, null: 13 };
@@ -323,7 +323,7 @@ describe('Material integer cells', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <IntegerCell schema={schema} uischema={uischema} path='foo' />
+        <IntegerCell schema={schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, undefined: 13 };
@@ -346,7 +346,7 @@ describe('Material integer cells', () => {
           schema={schema}
           uischema={uischema}
           enabled={false}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -360,7 +360,7 @@ describe('Material integer cells', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <IntegerCell schema={schema} uischema={uischema} path='foo' />
+        <IntegerCell schema={schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').first();

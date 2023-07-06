@@ -161,8 +161,9 @@ export const Resolve: {
 };
 
 // Paths --
-const fromScoped = (scopable: Scoped): string =>
-  toDataPathSegments(scopable.scope).join('.');
+const fromScoped = (scopable: Scoped): string => {
+  return '/' + toDataPathSegments(scopable.scope).join('/');
+};
 
 export const Paths = {
   compose: composePaths,

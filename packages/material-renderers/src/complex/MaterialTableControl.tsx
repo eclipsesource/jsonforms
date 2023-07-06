@@ -96,7 +96,7 @@ const generateCells = (
 ) => {
   if (schema.type === 'object') {
     return getValidColumnProps(schema).map((prop) => {
-      const cellPath = Paths.compose(rowPath, prop);
+      const cellPath = Paths.compose(rowPath, '/' + prop);
       const props = {
         propName: prop,
         schema,
@@ -176,7 +176,7 @@ const ctxToNonEmptyCellProps = (
 ): NonEmptyCellProps => {
   const path =
     ownProps.rowPath +
-    (ownProps.schema.type === 'object' ? '.' + ownProps.propName : '');
+    (ownProps.schema.type === 'object' ? '/' + ownProps.propName : '');
   const errors = formatErrorMessage(
     union(
       errorsAt(
@@ -423,7 +423,7 @@ const TableRows = ({
   return (
     <React.Fragment>
       {range(data).map((index: number) => {
-        const childPath = Paths.compose(path, `${index}`);
+        const childPath = Paths.compose(path, `/${index}`);
 
         return (
           <NonEmptyRow
