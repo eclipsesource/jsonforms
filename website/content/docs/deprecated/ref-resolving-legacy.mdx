@@ -29,7 +29,7 @@ ajv.addSchema(yourSchemaObject, 'yourSchemaIdentifier');
 
 Next, we'll set up the ref resolver. The implementation is up to you, but you'll need to implement a `canRead` method that determines whether a current ref needs to be resolved and a `read` method that returns the actual schema.
 The `order` property determines the order in which resolvers are executed, until the first one returns true for `canRead`.
-For more info about ref resolving please see the [JSON Schema \$Ref parser documentation](https://apidevtools.org/json-schema-ref-parser/docs/plugins/resolvers.html).
+For more info about ref resolving please see the [JSON Schema \$Ref parser documentation](https://apitools.dev/json-schema-ref-parser/docs/plugins/resolvers.html).
 Note that the name for the actual resolver, which we called `foo` here, does not actually matter.
 
 ```js
