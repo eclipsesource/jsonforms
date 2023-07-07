@@ -44,4 +44,12 @@ export const defaultStyles: Styles = {
   label: {
     root: 'label-element',
   },
+  dialog: {
+    root: 'dialog-root',
+    title: 'dialog-title',
+    body: 'dialog-body',
+    actions: 'dialog-actions',
+    buttonPrimary: 'dialog-button-primary',
+    buttonSecondary: 'dialog-button-secondary',
+  },
 };

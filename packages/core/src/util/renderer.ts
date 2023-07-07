@@ -70,6 +70,9 @@ import {
   getI18nKeyPrefixBySchema,
   getArrayTranslations,
   Translator,
+  CombinatorTranslations,
+  getCombinatorTranslations,
+  combinatorDefaultTranslations,
 } from '../i18n';
 import {
   arrayDefaultTranslations,
@@ -970,6 +973,7 @@ export interface StatePropsOfCombinator extends StatePropsOfControl {
   indexOfFittingSchema: number;
   uischemas: JsonFormsUISchemaRegistryEntry[];
   data: any;
+  translations: CombinatorTranslations;
 }
 
 export const mapStateToCombinatorRendererProps = (
@@ -977,12 +981,17 @@ export const mapStateToCombinatorRendererProps = (
   ownProps: OwnPropsOfControl,
   keyword: CombinatorKeyword
 ): StatePropsOfCombinator => {
-  const { data, schema, rootSchema, ...props } = mapStateToControlProps(
-    state,
-    ownProps
-  );
+  const { data, schema, rootSchema, i18nKeyPrefix, label, ...props } =
+    mapStateToControlProps(state, ownProps);
 
   const ajv = state.jsonforms.core.ajv;
+  const t = getTranslator()(state);
+  const translations = getCombinatorTranslations(
+    t,
+    combinatorDefaultTranslations,
+    i18nKeyPrefix,
+    label
+  );
   const structuralKeywords = [
     'required',
     'additionalProperties',
@@ -1025,8 +1034,11 @@ export const mapStateToCombinatorRendererProps = (
     schema,
     rootSchema,
     ...props,
+    i18nKeyPrefix,
+    label,
     indexOfFittingSchema,
     uischemas: getUISchemas(state),
+    translations,
   };
 };
 

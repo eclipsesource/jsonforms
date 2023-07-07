@@ -7,6 +7,10 @@ import {
   ArrayDefaultTranslation,
   ArrayTranslations,
 } from './arrayTranslations';
+import {
+  CombinatorDefaultTranslation,
+  CombinatorTranslations,
+} from './combinatorTranslations';
 
 export const getI18nKeyPrefixBySchema = (
   schema: i18nJsonSchema | undefined,
@@ -167,6 +171,20 @@ export const getArrayTranslations = (
   label: string
 ): ArrayTranslations => {
   const translations: ArrayTranslations = {};
+  defaultTranslations.forEach((controlElement) => {
+    const key = addI18nKeyToPrefix(i18nKeyPrefix, controlElement.key);
+    translations[controlElement.key] = t(key, controlElement.default(label));
+  });
+  return translations;
+};
+
+export const getCombinatorTranslations = (
+  t: Translator,
+  defaultTranslations: CombinatorDefaultTranslation[],
+  i18nKeyPrefix: string,
+  label: string
+): CombinatorTranslations => {
+  const translations: CombinatorTranslations = {};
   defaultTranslations.forEach((controlElement) => {
     const key = addI18nKeyToPrefix(i18nKeyPrefix, controlElement.key);
     translations[controlElement.key] = t(key, controlElement.default(label));

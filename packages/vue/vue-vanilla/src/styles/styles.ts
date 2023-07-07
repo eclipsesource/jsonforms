@@ -10,6 +10,7 @@ const createEmptyStyles = (): Styles => ({
   group: {},
   arrayList: {},
   label: {},
+  dialog: {},
 });
 
 export interface Styles {
@@ -23,6 +24,14 @@ export interface Styles {
     textarea?: string;
     select?: string;
     option?: string;
+  };
+  dialog: {
+    root?: string;
+    title?: string;
+    body?: string;
+    actions?: string;
+    buttonPrimary?: string;
+    buttonSecondary?: string;
   };
   verticalLayout: {
     root?: string;
