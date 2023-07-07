@@ -131,7 +131,7 @@ export default defineComponent({
 By default the Vanilla Renderers don't apply any CSS at all.
 For a quick start you can use `@jsonforms/vue-vanilla/vanilla.css`.
 
-For more information on how JSON Forms can be configured, please see the [README of `@jsonforms/vue2`](../vue2/README.md).
+For more information on how JSON Forms can be configured, please see the [README of `@jsonforms/vue2`](https://github.com/eclipsesource/jsonforms/blob/master/packages/vue2/vue2/README.md).
 
 ### Styling
 
@@ -139,7 +139,7 @@ Each rendered HTML element specifies a CSS class which can be used to style it.
 This process can also be customized so that each element declares user-specified CSS classes.
 Therefore JSON Forms Vue Vanilla can be integrated with any CSS-only UI framework quite easily.
 
-You can find the default CSS classes in `[defaultStyles.ts](src/styles/defaultStyles.ts).
+You can find the default CSS classes in `[defaultStyles.ts](https://github.com/eclipsesource/jsonforms/blob/master/packages/vue/vue-vanilla/src/styles/defaultStyles.ts).
 
 To render your own classes simply `provide` them as `styles`.
 These `styles` replace the `defaultStyles`.
