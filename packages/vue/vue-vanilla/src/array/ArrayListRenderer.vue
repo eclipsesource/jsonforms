@@ -4,13 +4,9 @@
       <button
         :class="styles.arrayList.addButton"
         type="button"
+        :disabled="!control.enabled || (appliedOptions.restrict && maxItemsReached)"
         @click="addButtonClick"
-        :disabled="!control.enabled ||
-            (arraySchema !== undefined &&
-            arraySchema.maxItems !== undefined &&
-            control.data !== undefined &&
-            control.data.length >= arraySchema.maxItems)"
-        >
+      >
         +
       </button>
       <label :class="styles.arrayList.label">
@@ -46,7 +42,6 @@
     </div>
   </fieldset>
 </template>
-
 <script lang="ts">
 import {
   composePaths,
@@ -56,7 +51,7 @@ import {
   ControlElement,
   schemaTypeIs,
   Resolve,
-  JsonSchema
+  JsonSchema,
 } from '@jsonforms/core';
 import { defineComponent } from 'vue';
 import {
@@ -84,12 +79,21 @@ const controlRenderer = defineComponent({
     noData(): boolean {
       return !this.control.data || this.control.data.length === 0;
     },
+    maxItemsReached(): boolean | undefined {
+      return (
+        this.control.rootSchema !== undefined &&
+        this.control.rootSchema.maxItems !== undefined &&
+        this.control.data !== undefined &&
+        this.control.data.length >= this.control.rootSchema.maxItems
+      );
+    },
     arraySchema(): JsonSchema | undefined {
       return Resolve.schema(
-          this.control.rootSchema,
-          this.control.uischema.scope,
-          this.control.rootSchema);
-    } 
+        this.schema,
+        this.control.uischema.scope,
+        this.control.rootSchema
+      );
+    },
   },
   methods: {
     composePaths,
