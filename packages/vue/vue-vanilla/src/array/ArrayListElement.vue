@@ -19,6 +19,7 @@
         ↓
       </button>
       <button
+        :disabled="!deleteEnabled"
         :class="styles.arrayList.itemDelete"
         type="button"
         @click="deleteClicked"
@@ -68,6 +69,11 @@ const listItem = defineComponent({
       required: false,
       type: Function,
       default: undefined,
+    },
+    deleteEnabled: {
+      required: false,
+      type: Boolean,
+      default: true,
     },
     delete: {
       required: false,
