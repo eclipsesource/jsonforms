@@ -13,6 +13,9 @@ const schema = {
 const uischema = {
   type: 'Control',
   scope: '#',
+  options: {
+    restrict: true,
+  },
 };
 
 describe('ArrayListRenderer.vue', () => {

@@ -4,7 +4,7 @@
       <button
         :class="styles.arrayList.addButton"
         type="button"
-        :disabled="!control.enabled || maxItemsReached"
+        :disabled="!control.enabled || (appliedOptions.restrict && maxItemsReached)"
         @click="addButtonClick"
       >
         +
@@ -20,10 +20,10 @@
     >
       <array-list-element
         :move-up="moveUp(control.path, index)"
-        :move-up-enabled="index > 0"
+        :move-up-enabled="control.enabled && index > 0"
         :move-down="moveDown(control.path, index)"
-        :move-down-enabled="index < control.data.length - 1"
-        :delete-enabled="!minItemsReached"
+        :move-down-enabled="control.enabled && index < control.data.length - 1"
+        :delete-enabled="control.enabled && !minItemsReached"
         :delete="removeItems(control.path, [index])"
         :label="childLabelForIndex(index)"
         :styles="styles"
