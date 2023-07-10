@@ -4,6 +4,8 @@ import { mountJsonForms } from '../util';
 const schema = {
   type: 'array',
   title: 'My Array',
+  maxItems: 3,
+  minItems: 1,
   items: {
     type: 'string',
   },
@@ -37,11 +39,28 @@ describe('ArrayListRenderer.vue', () => {
     expect(wrapper.vm.data).to.deep.equal(['a', 'b', '']);
   });
 
+  it('add button disabled if maxItems is reached', async () => {
+    const wrapper = mountJsonForms(['a', 'b'], schema, uischema);
+    const addButton = wrapper.find('.array-list-add');
+    expect(addButton.attributes().disabled).to.not.exist;
+    await addButton.trigger('click');
+    expect(addButton.attributes().disabled).to.exist;
+  });
+
   it('remove element from array', async () => {
     const wrapper = mountJsonForms(['a', 'b', 'c'], schema, uischema);
     const deleteButtons = wrapper.findAll('.array-list-item-delete');
     await deleteButtons[1].trigger('click');
     expect(wrapper.vm.data).to.deep.equal(['a', 'c']);
+  });
+
+  it('remove button disabled if minItems is reached', async () => {
+    const wrapper = mountJsonForms(['a', 'b'], schema, uischema);
+    const deleteButtons = wrapper.findAll('.array-list-item-delete');
+    expect(deleteButtons[0].attributes().disabled).to.not.exist;
+    expect(deleteButtons[1].attributes().disabled).to.not.exist;
+    await deleteButtons[0].trigger('click');
+    expect(deleteButtons[0].attributes().disabled).to.exist;
   });
 
   it('move element up', async () => {
