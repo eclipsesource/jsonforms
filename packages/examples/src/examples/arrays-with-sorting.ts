@@ -30,6 +30,8 @@ export const schema = {
   properties: {
     comments: {
       type: 'array',
+      minItems: 2,
+      maxItems: 8,
       items: {
         type: 'object',
         properties: {
@@ -64,6 +66,7 @@ export const uischema = {
       scope: '#/properties/comments',
       options: {
         showSortButtons: true,
+        restrict: true,
       },
     },
   ],
@@ -81,6 +84,7 @@ export const uischemaWithSorting = {
       scope: '#/properties/comments',
       options: {
         showSortButtons: true,
+        restrict: true,
       },
     },
   ],
