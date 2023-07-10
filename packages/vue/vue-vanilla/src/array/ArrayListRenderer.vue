@@ -4,7 +4,7 @@
       <button
         :class="styles.arrayList.addButton"
         type="button"
-        :disabled="!control.enabled || (appliedOptions.restrict && maxItemsReached)"
+        :disabled="!control.enabled || maxItemsReached"
         @click="addButtonClick"
       >
         +
