@@ -33,6 +33,7 @@ jobs:
         run: |
           pnpm i --frozen-lockfile
           pnpm run build
+          pnpm run doc
           pnpm run bundle
 
       - name: Lint
