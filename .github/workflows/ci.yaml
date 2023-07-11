@@ -16,29 +16,44 @@ jobs:
     name: Run on ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
+
       - name: Setup node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: 14
+          node-version: 16
+
+      - uses: pnpm/action-setup@v2.2.4
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 8
+          run_install: false
+
       - name: Build
         run: |
-          npm ci
-          npm run init
-          npm run build
-          npm run bundle
+          pnpm i --frozen-lockfile
+          pnpm run build
+          pnpm run doc
+          pnpm run bundle
+
       - name: Lint
         if: matrix.os == 'ubuntu-latest'
-        run: npm run lint
+        run: pnpm run lint
+
       - name: Test
         if: matrix.os == 'windows-latest'
         run: |
-          npm run test
+          set NODE_OPTIONS=--max_old_space_size=4096
+          pnpm run test
+
       - name: Test & Coverage
         if: matrix.os == 'ubuntu-latest'
         run: |
-          npm run test-cov
-          npm run check-format
-          npm run merge-report && cat coverage/lcov.info
+          export NODE_OPTIONS=--max_old_space_size=4096
+          pnpm run test-cov
+          pnpm run check-format
+          pnpm run merge-report && cat coverage/lcov.info
+
       - name: Upload Coveralls Report
         if: success() && matrix.os == 'ubuntu-latest'
         uses: coverallsapp/github-action@master

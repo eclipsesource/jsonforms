@@ -44,7 +44,7 @@
     "report": "nyc report --reporter=html",
     "test": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\",\\\"target\\\":\\\"es5\\\"} ava",
     "test-cov": "rimraf -rf .nyc_output && cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\",\\\"target\\\":\\\"es5\\\"} nyc ava",
-    "doc": "typedoc --name 'JSON Forms Core' --mode file --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
+    "doc": "typedoc --name 'JSON Forms Core' --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
   },
   "ava": {
     "files": [
@@ -69,7 +69,7 @@
     "@types/json-schema": "^7.0.3",
     "ajv": "^8.6.1",
     "ajv-formats": "^2.1.0",
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
@@ -83,7 +83,7 @@
     "eslint-config-prettier": "^8.7.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier": "^4.2.1",
-    "jsdom": "^15.2.1",
+    "jsdom": "^22.0.0",
     "jsdom-global": "^3.0.2",
     "nyc": "^15.1.0",
     "prettier": "^2.8.4",
@@ -92,11 +92,12 @@
     "rimraf": "^3.0.2",
     "rollup": "^2.78.0",
     "rollup-plugin-cleanup": "^3.2.1",
-    "rollup-plugin-typescript2": "^0.31.1",
+    "rollup-plugin-typescript2": "^0.34.1",
     "rollup-plugin-visualizer": "^5.4.1",
     "source-map-support": "0.5.16",
     "ts-node": "^10.4.0",
-    "typedoc": "^0.19.2",
+    "tslib": "^2.5.0",
+    "typedoc": "~0.21.9",
     "typescript": "4.2.3"
   }
 }

@@ -3,21 +3,23 @@
   "version": "3.1.0",
   "private": true,
   "dependencies": {
-    "@jsonforms/core": "^3.1.0",
-    "@jsonforms/examples": "^3.1.0",
-    "@jsonforms/react": "^3.1.0",
+    "@jsonforms/core": "workspace:*",
+    "@jsonforms/examples": "workspace:*",
+    "@jsonforms/react": "workspace:*",
     "@mui/material": "~5.13.0",
     "@types/react-highlight": "^0.12.5",
     "@types/react-tabs": "^2.3.3",
     "highlight.js": "^11.3.1",
     "json-refs": "3.0.15",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-highlight": "^0.14.0",
     "react-tabs": "^3.2.3"
   },
   "devDependencies": {
+    "@types/react": "^17.0.24",
+    "@types/react-dom": "^17.0.9",
     "@typescript-eslint/eslint-plugin": "^5.54.1",
     "@typescript-eslint/parser": "^5.54.1",
     "eslint": "^7.32.0",
@@ -25,7 +27,8 @@
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.32.2",
-    "prettier": "^2.8.4"
+    "prettier": "^2.8.4",
+    "tslib": "^2.5.0"
   },
   "scripts": {
     "build": "echo 'Nothing to do'",

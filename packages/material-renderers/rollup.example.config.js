@@ -64,6 +64,9 @@ const config = {
         compilerOptions: {
           // Do not emit typescript declarations for our bundled example app
           declaration: false,
+          // With importing the examples-react's index directly from source instead of properly building the examples-react package,
+          // the React types can not be found during the build
+          noImplicitAny: false,
         },
       },
     }),

@@ -4,6 +4,15 @@ module.exports = function (config) {
   var _config = {
     basePath: '../',
 
+    plugins: [
+      'karma-jasmine',
+      'karma-jasmine-html-reporter',
+      'karma-chrome-launcher',
+      'karma-webpack',
+      'karma-sourcemap-loader',
+      'karma-coverage-istanbul-reporter',
+    ],
+
     frameworks: ['jasmine'],
 
     files: [

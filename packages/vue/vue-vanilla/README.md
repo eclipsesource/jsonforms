@@ -26,8 +26,8 @@ Also add the packages to the transpile dependencies in the `vue.config.js` file:
 module.exports = {
   transpileDependencies: [
     '@jsonforms/core',
-    '@jsonforms/vue2',
-    '@jsonforms/vue2-vanilla',
+    '@jsonforms/vue',
+    '@jsonforms/vue-vanilla',
   ],
 };
 ```

@@ -44,7 +44,7 @@
     "report": "nyc report --reporter=html",
     "test": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} ava",
     "test-cov": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} nyc ava",
-    "doc": "typedoc --name 'JSON Forms Angular Core' --mode file --out docs src"
+    "doc": "typedoc --name 'JSON Forms Angular Core' --out docs src"
   },
   "nyc": {
     "reporter": [
@@ -65,6 +65,9 @@
       "source-map-support/register"
     ]
   },
+  "dependencies": {
+    "lodash": "^4.17.21"
+  },
   "peerDependencies": {
     "@angular/core": "^12.0.0 || ^13.0.0 || ^14.0.0",
     "@angular/forms": "^12.0.0 || ^13.0.0 || ^14.0.0",
@@ -80,7 +83,7 @@
     "@angular/compiler-cli": "^12.0.0",
     "@angular/core": "^12.0.0",
     "@angular/forms": "^12.0.0",
-    "@jsonforms/core": "^3.1.0",
+    "@jsonforms/core": "workspace:*",
     "@typescript-eslint/eslint-plugin": "^5.54.1",
     "@typescript-eslint/parser": "^5.54.1",
     "ava": "~2.4.0",
@@ -94,6 +97,7 @@
     "prettier": "^2.8.4",
     "rimraf": "^3.0.2",
     "rxjs": "^6.5.3",
-    "typedoc": "^0.19.2"
+    "tslib": "^2.5.0",
+    "typedoc": "~0.21.9"
   }
 }

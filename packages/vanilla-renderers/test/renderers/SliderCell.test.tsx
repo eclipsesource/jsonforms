@@ -296,7 +296,9 @@ describe('Slider cell', () => {
     wrapper = mount(
       <JsonFormsStateProvider initState={{ core }}>
         <SliderCell schema={fixture.schema} uischema={uischema} path='foo' />
-      </JsonFormsStateProvider>
+      </JsonFormsStateProvider>,
+      // Attach to body to get focus to work with JSDom
+      { attachTo: document.body }
     );
     const input = wrapper.find('input');
     expect(document.activeElement).toBe(input.getDOMNode());

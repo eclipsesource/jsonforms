@@ -32,10 +32,10 @@ In addition, EclipseSource also offers [professional support](https://jsonforms.
 
 ### First time setup
 
-- Install [node.js](https://nodejs.org/) (only Node 14 and npm 6 is currently supported)
+- Install [node.js](https://nodejs.org/) (only Node v16.13+ < 17 is currently supported)
+- Install pnpm: <https://pnpm.io/installation> (use pnpm 8.6.2+)
 - Clone this repository
-- Install dependencies: `npm ci`
-- Hook up dependencies between packages: `npm run init`
+- Install dependencies: `pnpm i --frozen-lockfile`
 
 ### VS Code dev container
 
@@ -47,13 +47,13 @@ As an alternative to the first time setup, you can use the provided [VS Code dev
 
 ### Build & Testing
 
-- Build (all packages): `npm run build`
-- Test (all packages): `npm run test`
-- Clean (delete `dist` folder of all packages): `npm run clean`
-- Run React Vanilla examples: `cd packages/vanilla && npm run dev`
-- Run React Material examples: `cd packages/material && npm run dev`
-- Run Angular Material examples: `cd packages/angular-material && npm run dev`
-- Run Vue Vanilla dev setup: `cd packages/vue/vue-vanilla && npm run serve`
+- Build (all packages): `pnpm run build`
+- Test (all packages): `pnpm run test`
+- Clean (delete `dist` folder of all packages): `pnpm run clean`
+- Run React Vanilla examples: `cd packages/vanilla && pnpm run dev`
+- Run React Material examples: `cd packages/material && pnpm run dev`
+- Run Angular Material examples: `cd packages/angular-material && pnpm run dev`
+- Run Vue Vanilla dev setup: `cd packages/vue/vue-vanilla && pnpm run serve`
 
 ### Dependency & Release management
 

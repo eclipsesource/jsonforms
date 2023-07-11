@@ -37,7 +37,7 @@ const config = {
     copy({
       targets: [
         {
-          src: '../../node_modules/@angular/material/prebuilt-themes/indigo-pink.css',
+          src: 'node_modules/@angular/material/prebuilt-themes/indigo-pink.css',
           dest: 'example/dist',
         },
         {

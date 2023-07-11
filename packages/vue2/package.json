@@ -1,8 +1,0 @@
-{
-  "name": "vue2-meta",
-  "private": true,
-  "description": "Meta package for JSON Forms Vue 2 development",
-  "devDependencies": {
-    "vue": "^2.7.0"
-  }
-}

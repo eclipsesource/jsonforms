@@ -127,7 +127,9 @@ describe('Text cell', () => {
           uischema={uischema}
           path='name'
         />
-      </JsonFormsStateProvider>
+      </JsonFormsStateProvider>,
+      // Attach to body to get focus to work with JSDom
+      { attachTo: document.body }
     );
     const input = wrapper.find('input').getDOMNode();
     expect(document.activeElement).toBe(input);

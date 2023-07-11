@@ -38,7 +38,7 @@ import { initCore, TestEmitter } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-const waitForAsync = () => new Promise((resolve) => setImmediate(resolve));
+const waitForAsync = () => new Promise((resolve) => setTimeout(resolve, 0));
 
 const clickAddButton = (wrapper: ReactWrapper, times: number) => {
   const buttons = wrapper.find('button');
@@ -179,7 +179,7 @@ describe('Material anyOf renderer', () => {
     expect(nrOfRowsAfterAdd.length).toBe(4);
   });
 
-  it('should switch to "yourThing" edit, then switch back, then edit', async (done) => {
+  it('should switch to "yourThing" edit, then switch back, then edit', async () => {
     const schema = {
       type: 'object',
       properties: {
@@ -259,12 +259,17 @@ describe('Material anyOf renderer', () => {
     input.simulate('change', { target: { value: 'test' } });
     wrapper.update();
 
+    let done: (value: undefined) => void;
+    const donePromise = new Promise<undefined>((resolve) => {
+      done = resolve;
+    });
     setTimeout(() => {
       expect(onChangeData.data).toEqual({
         myThingsAndOrYourThings: [{ age: 5, name: 'test' }],
       });
-      done();
+      done(undefined);
     }, 1000);
+    return donePromise;
   });
 
   it('should be hideable', () => {

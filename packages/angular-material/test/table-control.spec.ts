@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import { CommonModule } from '@angular/common';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -139,7 +139,7 @@ describe('Table', () => {
   let fixture: ComponentFixture<any>;
   let component: any;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [TableRenderer, TextControlRenderer],
       imports: [
@@ -168,7 +168,7 @@ describe('Table', () => {
     component = fixture.componentInstance;
   }));
 
-  it('renders object array on root', async(() => {
+  it('renders object array on root', waitForAsync(() => {
     setupMockStore(fixture, {
       uischema: uischema1,
       schema: schema_object1,
@@ -189,7 +189,7 @@ describe('Table', () => {
       expect(fixture.nativeElement.querySelectorAll('td').length).toBe(6);
     });
   }));
-  it('renders object array on path', async(() => {
+  it('renders object array on path', waitForAsync(() => {
     setupMockStore(fixture, {
       uischema: uischema2,
       schema: schema_object2,
@@ -214,7 +214,7 @@ describe('Table', () => {
     });
   }));
 
-  it('renders simple array on root', async(() => {
+  it('renders simple array on root', waitForAsync(() => {
     setupMockStore(fixture, {
       uischema: uischema1,
       schema: schema_simple1,
@@ -232,7 +232,7 @@ describe('Table', () => {
       expect(fixture.nativeElement.querySelectorAll('td').length).toBe(4);
     });
   }));
-  it('renders simple array on path', async(() => {
+  it('renders simple array on path', waitForAsync(() => {
     setupMockStore(fixture, {
       uischema: uischema2,
       schema: schema_simple2,
@@ -251,7 +251,7 @@ describe('Table', () => {
     });
   }));
 
-  it('can be disabled', async(() => {
+  it('can be disabled', waitForAsync(() => {
     setupMockStore(fixture, {
       uischema: uischema1,
       schema: schema_object1,
@@ -271,7 +271,7 @@ describe('Table', () => {
       ).toBeTruthy();
     });
   }));
-  it('should be enabled by default', async(() => {
+  it('should be enabled by default', waitForAsync(() => {
     setupMockStore(fixture, {
       uischema: uischema1,
       schema: schema_object1,
@@ -287,7 +287,7 @@ describe('Table', () => {
     });
   }));
 
-  it('renderer handles removing of rows', async(() => {
+  it('renderer handles removing of rows', waitForAsync(() => {
     setupMockStore(fixture, {
       uischema: uischema1,
       schema: schema_object1,
@@ -310,7 +310,7 @@ describe('Table', () => {
     });
   }));
 
-  it('renderer handles adding of rows', async(() => {
+  it('renderer handles adding of rows', waitForAsync(() => {
     setupMockStore(fixture, {
       uischema: uischema1,
       schema: schema_object1,
@@ -334,7 +334,7 @@ describe('Table', () => {
     });
   }));
 
-  it('when disabled doesnt render `add` nor `remove` icons', async(() => {
+  it('when disabled doesnt render `add` nor `remove` icons', waitForAsync(() => {
     setupMockStore(fixture, {
       uischema: uischema1,
       schema: schema_object1,
@@ -357,7 +357,7 @@ describe('Table', () => {
       expect(fixture.nativeElement.querySelectorAll('td').length).toBe(4);
     });
   }));
-  it('when options.showSortButtons is True, it should render sort buttons', async(() => {
+  it('when options.showSortButtons is True, it should render sort buttons', waitForAsync(() => {
     setupMockStore(fixture, {
       uischema: uischemaWithSorting,
       schema: schema_simple1,
@@ -375,7 +375,7 @@ describe('Table', () => {
       );
     });
   }));
-  it('when options.showSortButtons is False, it should NOT render sort buttons', async(() => {
+  it('when options.showSortButtons is False, it should NOT render sort buttons', waitForAsync(() => {
     setupMockStore(fixture, {
       uischema: uischema1,
       schema: schema_simple1,
