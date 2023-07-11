@@ -4,6 +4,9 @@
       <button
         :class="styles.arrayList.addButton"
         type="button"
+        :disabled="
+          !control.enabled || (appliedOptions.restrict && maxItemsReached)
+        "
         @click="addButtonClick"
       >
         +
@@ -19,9 +22,10 @@
     >
       <array-list-element
         :move-up="moveUp(control.path, index)"
-        :move-up-enabled="index > 0"
+        :move-up-enabled="control.enabled && index > 0"
         :move-down="moveDown(control.path, index)"
-        :move-down-enabled="index < control.data.length - 1"
+        :move-down-enabled="control.enabled && index < control.data.length - 1"
+        :delete-enabled="control.enabled && !minItemsReached"
         :delete="removeItems(control.path, [index])"
         :label="childLabelForIndex(index)"
         :styles="styles"
@@ -50,6 +54,8 @@ import {
   rankWith,
   ControlElement,
   schemaTypeIs,
+  Resolve,
+  JsonSchema,
 } from '@jsonforms/core';
 import { defineComponent } from 'vue';
 import {
@@ -76,6 +82,29 @@ const controlRenderer = defineComponent({
   computed: {
     noData(): boolean {
       return !this.control.data || this.control.data.length === 0;
+    },
+    arraySchema(): JsonSchema | undefined {
+      return Resolve.schema(
+        this.schema,
+        this.control.uischema.scope,
+        this.control.rootSchema
+      );
+    },
+    maxItemsReached(): boolean | undefined {
+      return (
+        this.arraySchema !== undefined &&
+        this.arraySchema.maxItems !== undefined &&
+        this.control.data !== undefined &&
+        this.control.data.length >= this.arraySchema.maxItems
+      );
+    },
+    minItemsReached(): boolean | undefined {
+      return (
+        this.arraySchema !== undefined &&
+        this.arraySchema.minItems !== undefined &&
+        this.control.data !== undefined &&
+        this.control.data.length <= this.arraySchema.minItems
+      );
     },
   },
   methods: {

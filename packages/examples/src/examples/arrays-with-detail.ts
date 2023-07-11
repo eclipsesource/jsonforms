@@ -32,6 +32,8 @@ export const schema = {
     occupation: { type: 'string' },
     comments: {
       type: 'array',
+      minItems: 2,
+      maxItems: 8,
       items: {
         type: 'object',
         properties: {
@@ -58,6 +60,7 @@ export const uischema = {
       scope: '#/properties/comments',
       options: {
         showSortButtons: true,
+        restrict: true,
         detail: {
           type: 'VerticalLayout',
           elements: [
