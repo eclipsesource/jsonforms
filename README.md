@@ -33,7 +33,7 @@ In addition, EclipseSource also offers [professional support](https://jsonforms.
 ### First time setup
 
 - Install [node.js](https://nodejs.org/) (only Node v16.13+ < 17 is currently supported)
-- Install pnpm: <https://pnpm.io/installation>
+- Install pnpm: <https://pnpm.io/installation> (use pnpm 8.6.2+)
 - Clone this repository
 - Install dependencies: `pnpm i --frozen-lockfile`
 
