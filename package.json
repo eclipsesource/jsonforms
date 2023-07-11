@@ -2,7 +2,7 @@
   "name": "jsonforms-monorepo",
   "engines": {
     "node": "^16.13",
-    "pnpm": ">=8.6.2"
+    "pnpm": ">=7.13.4"
   },
   "scripts": {
     "lerna": "lerna",
