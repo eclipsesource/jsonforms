@@ -562,6 +562,44 @@ test('core reducer - update - should update errors', (t) => {
   });
 });
 
+test('core reducer - update - setting a state slice as undefined should remove the slice', (t) => {
+  const schema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'string',
+      },
+      fizz: {
+        type: 'string',
+      }
+    },
+  };
+
+  const before: JsonFormsCore = {
+    data: {
+      foo: 'bar',
+      fizz: 42
+    },
+    schema: schema,
+    uischema: {
+      type: 'Label',
+    },
+    errors: [],
+    validator: new Ajv().compile(schema),
+  };
+
+  const after = coreReducer(
+    before,
+    update('foo', (_) => {
+      return undefined;
+    })
+  );
+
+  t.not(before, after);
+  t.not(before.data, after.data);
+  t.is(Object.keys(after), ['fizz']);
+});
+
 test('core reducer - updateErrors - should update errors with empty list', (t) => {
   const before: JsonFormsCore = {
     data: {},
