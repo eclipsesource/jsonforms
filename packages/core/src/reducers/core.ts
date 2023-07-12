@@ -295,7 +295,7 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
           );
         } else {
           newState = unsetFp(
-            action.path, 
+            action.path,
             state.data === undefined ? {} : state.data
           );
         }
