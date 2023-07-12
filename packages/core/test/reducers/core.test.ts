@@ -571,14 +571,14 @@ test('core reducer - update - setting a state slice as undefined should remove t
       },
       fizz: {
         type: 'string',
-      }
+      },
     },
   };
 
   const before: JsonFormsCore = {
     data: {
       foo: 'bar',
-      fizz: 42
+      fizz: 42,
     },
     schema: schema,
     uischema: {
@@ -597,7 +597,7 @@ test('core reducer - update - setting a state slice as undefined should remove t
 
   t.not(before, after);
   t.not(before.data, after.data);
-  t.is(Object.keys(after.data), ['fizz']);
+  t.like(Object.keys(after.data), ['fizz']);
 });
 
 test('core reducer - updateErrors - should update errors with empty list', (t) => {
