@@ -286,16 +286,18 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
       } else {
         const oldData: any = get(state.data, action.path);
         const newData = action.updater(cloneDeep(oldData));
-        let newState: any
+        let newState: any;
         if (newData !== undefined) {
           newState = setFp(
             action.path,
             newData,
             state.data === undefined ? {} : state.data
           );
-        }
-        else {
-          newState = unsetFp(action.path, state.data === undefined ? {} : state.data);
+        } else {
+          newState = unsetFp(
+            action.path, 
+            state.data === undefined ? {} : state.data
+          );
         }
         const errors = validate(state.validator, newState);
         return {
