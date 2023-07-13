@@ -597,7 +597,7 @@ test('core reducer - update - setting a state slice as undefined should remove t
 
   t.not(before, after);
   t.not(before.data, after.data);
-  t.like(Object.keys(after.data), ['fizz']);
+  t.deepEqual(Object.keys(after.data), ['fizz']);
 });
 
 test('core reducer - updateErrors - should update errors with empty list', (t) => {
