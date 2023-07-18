@@ -70,6 +70,6 @@ export const createCombinatorRenderInfos = (
         control,
         rootSchema
       ),
-      label: createLabel(subSchema, subSchemaIndex, keyword),
+      label: createLabel(schema, subSchemaIndex, keyword),
     };
   });
