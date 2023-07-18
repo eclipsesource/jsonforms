@@ -25,10 +25,8 @@
 export * from './i18nDefaults';
 import React, { ComponentType, useMemo } from 'react';
 import isEmpty from 'lodash/isEmpty';
-import {
+import type {
   ControlElement,
-  convertToValidClassName,
-  getConfig,
   JsonFormsState,
   OwnPropsOfCell,
   OwnPropsOfControl,
@@ -37,9 +35,10 @@ import {
   StatePropsOfCell,
   StatePropsOfControl,
 } from '@jsonforms/core';
+import { convertToValidClassName, getAjv, getConfig } from '@jsonforms/core';
 import { useJsonForms } from '@jsonforms/react';
 import { getStyle, getStyleAsClassName } from '../reducers';
-import { VanillaRendererProps } from '../index';
+import type { AjvProps, VanillaRendererProps } from '../index';
 import { findStyle, findStyleAsClassName } from '../reducers/styling';
 import { useStyles } from '../styles';
 
@@ -239,6 +238,16 @@ const withVanillaCellPropsForType =
         />
       );
     };
+
+export const withAjvProps = <P extends object>(
+  Component: ComponentType<AjvProps & P>
+) =>
+  function WithAjvProps(props: P) {
+    const ctx = useJsonForms();
+    const ajv = getAjv({ jsonforms: { ...ctx } });
+
+    return <Component {...props} ajv={ajv} />;
+  };
 
 export const withVanillaCellProps =
   withVanillaCellPropsForType('control.input');

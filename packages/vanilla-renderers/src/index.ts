@@ -22,6 +22,8 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import Ajv from 'ajv';
+
 import { RankedTester } from '@jsonforms/core';
 
 import {
@@ -100,6 +102,10 @@ export interface VanillaRendererProps extends WithClassname {
    * @returns {string[]} array of class names
    */
   getStyleAsClassName?(string: string, ...args: any[]): string;
+}
+
+export interface AjvProps {
+  ajv: Ajv;
 }
 
 export interface WithChildren {
