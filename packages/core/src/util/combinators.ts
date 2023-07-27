@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 
+import merge from 'lodash/merge';
 import type { ControlElement, JsonSchema, UISchemaElement } from '../models';
 import { findUISchema, JsonFormsUISchemaRegistryEntry } from '../reducers';
 import { Resolve } from './util';
@@ -42,9 +43,8 @@ const createLabel = (
 ): string => {
   if (subSchema.title) {
     return subSchema.title;
-  } else {
-    return keyword + '-' + subSchemaIndex;
   }
+  return keyword + '-' + subSchemaIndex;
 };
 
 export const createCombinatorRenderInfos = (
@@ -56,9 +56,11 @@ export const createCombinatorRenderInfos = (
   uischemas: JsonFormsUISchemaRegistryEntry[]
 ): CombinatorSubSchemaRenderInfo[] =>
   combinatorSubSchemas.map((subSchema, subSchemaIndex) => {
-    const schema = subSchema.$ref
-      ? Resolve.schema(rootSchema, subSchema.$ref, rootSchema)
-      : subSchema;
+    const resolvedSubschema =
+      subSchema.$ref && Resolve.schema(rootSchema, subSchema.$ref, rootSchema);
+
+    const schema = resolvedSubschema ?? subSchema;
+
     return {
       schema,
       uischema: findUISchema(
@@ -70,6 +72,10 @@ export const createCombinatorRenderInfos = (
         control,
         rootSchema
       ),
-      label: createLabel(schema, subSchemaIndex, keyword),
+      label: createLabel(
+        merge({}, resolvedSubschema, subSchema),
+        subSchemaIndex,
+        keyword
+      ),
     };
   });
