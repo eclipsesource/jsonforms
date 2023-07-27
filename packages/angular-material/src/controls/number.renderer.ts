@@ -51,7 +51,7 @@ import merge from 'lodash/merge';
         (focus)="focused = true"
         (focusout)="focused = false"
       />
-      <mat-hint *ngIf="shouldShowUnfocusedDescription()" || focused>{{
+      <mat-hint *ngIf="shouldShowUnfocusedDescription() || focused">{{
         description
       }}</mat-hint>
       <mat-error>{{ error }}</mat-error>
