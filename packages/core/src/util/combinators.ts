@@ -72,10 +72,6 @@ export const createCombinatorRenderInfos = (
         control,
         rootSchema
       ),
-      label: createLabel(
-        merge({}, resolvedSubSchema, subSchema),
-        subSchemaIndex,
-        keyword
-      ),
+      label: subSchema.title ?? resolvedSubSchema.title ?? `${keyword}-${subSchemaIndex}`
     };
   });
