@@ -36,17 +36,6 @@ export interface CombinatorSubSchemaRenderInfo {
 
 export type CombinatorKeyword = 'anyOf' | 'oneOf' | 'allOf';
 
-const createLabel = (
-  subSchema: JsonSchema,
-  subSchemaIndex: number,
-  keyword: CombinatorKeyword
-): string => {
-  if (subSchema.title) {
-    return subSchema.title;
-  }
-  return keyword + '-' + subSchemaIndex;
-};
-
 export const createCombinatorRenderInfos = (
   combinatorSubSchemas: JsonSchema[],
   rootSchema: JsonSchema,
