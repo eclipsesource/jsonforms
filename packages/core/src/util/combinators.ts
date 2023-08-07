@@ -23,7 +23,6 @@
   THE SOFTWARE.
 */
 
-import merge from 'lodash/merge';
 import type { ControlElement, JsonSchema, UISchemaElement } from '../models';
 import { findUISchema, JsonFormsUISchemaRegistryEntry } from '../reducers';
 import { Resolve } from './util';
