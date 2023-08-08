@@ -60,6 +60,9 @@ export const createCombinatorRenderInfos = (
         control,
         rootSchema
       ),
-      label: subSchema.title ?? resolvedSubSchema.title ?? `${keyword}-${subSchemaIndex}`
+      label:
+        subSchema.title ??
+        resolvedSubSchema.title ??
+        `${keyword}-${subSchemaIndex}`,
     };
   });
