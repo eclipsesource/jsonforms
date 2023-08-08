@@ -35,18 +35,6 @@ export interface CombinatorSubSchemaRenderInfo {
 
 export type CombinatorKeyword = 'anyOf' | 'oneOf' | 'allOf';
 
-const createLabel = (
-  subSchema: JsonSchema,
-  subSchemaIndex: number,
-  keyword: CombinatorKeyword
-): string => {
-  if (subSchema.title) {
-    return subSchema.title;
-  } else {
-    return keyword + '-' + subSchemaIndex;
-  }
-};
-
 export const createCombinatorRenderInfos = (
   combinatorSubSchemas: JsonSchema[],
   rootSchema: JsonSchema,
@@ -56,9 +44,11 @@ export const createCombinatorRenderInfos = (
   uischemas: JsonFormsUISchemaRegistryEntry[]
 ): CombinatorSubSchemaRenderInfo[] =>
   combinatorSubSchemas.map((subSchema, subSchemaIndex) => {
-    const schema = subSchema.$ref
-      ? Resolve.schema(rootSchema, subSchema.$ref, rootSchema)
-      : subSchema;
+    const resolvedSubSchema =
+      subSchema.$ref && Resolve.schema(rootSchema, subSchema.$ref, rootSchema);
+
+    const schema = resolvedSubSchema ?? subSchema;
+
     return {
       schema,
       uischema: findUISchema(
@@ -70,6 +60,9 @@ export const createCombinatorRenderInfos = (
         control,
         rootSchema
       ),
-      label: createLabel(subSchema, subSchemaIndex, keyword),
+      label:
+        subSchema.title ??
+        resolvedSubSchema.title ??
+        `${keyword}-${subSchemaIndex}`,
     };
   });
