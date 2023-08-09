@@ -32,6 +32,7 @@ import {
 import {
   ControlWithDetailProps,
   findUISchema,
+  Generate,
   GroupLayout,
   isObjectControl,
   RankedTester,
@@ -39,6 +40,7 @@ import {
   setReadonly,
   UISchemaElement,
 } from '@jsonforms/core';
+import { cloneDeep } from 'lodash';
 
 @Component({
   selector: 'ObjectRenderer',
@@ -65,7 +67,14 @@ export class ObjectControlRenderer extends JsonFormsControlWithDetail {
       props.schema,
       props.uischema.scope,
       props.path,
-      'Group',
+      () => {
+        const newSchema = cloneDeep(props.schema);
+        // delete unsupported operators
+        delete newSchema.oneOf;
+        delete newSchema.anyOf;
+        delete newSchema.allOf;
+        return Generate.uiSchema(newSchema, 'Group');
+      },
       props.uischema,
       props.rootSchema
     );
