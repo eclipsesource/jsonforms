@@ -2,11 +2,13 @@
 
 # [Choice] Node.js version: 16
 ARG VARIANT="16"
-FROM mcr.microsoft.com/vscode/devcontainers/javascript-node:0-${VARIANT}
+FROM mcr.microsoft.com/vscode/devcontainers/javascript-node:1-${VARIANT}
 
-# [Optional] Uncomment this section to install additional OS packages.
-# RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-#     && apt-get -y install --no-install-recommends <your-package-list-here>
+# Install chromium and point the CHROME_BIN environment variable to it
+# This allows running angular-material's tests in the dev container
+RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+  && apt-get -y install --no-install-recommends chromium
+ENV CHROME_BIN=/usr/bin/chromium
 
 # [Optional] Uncomment if you want to install an additional version of node using nvm
 # ARG EXTRA_NODE_VERSION=10

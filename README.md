@@ -43,6 +43,9 @@ As an alternative to the first time setup, you can use the provided [VS Code dev
 - Wait until the container is built and loaded
 - First time setup and an initial build of all packages has been executed in the container
 
+**Note:** If you have installed dependencies before opening the remote container, its initialization might fail.
+In this case, you can try to clean the repository with `git clean -dfx`. Beware that this removes all untracked files!
+
 ### Build & Testing
 
 - Build (all packages): `pnpm run build`
