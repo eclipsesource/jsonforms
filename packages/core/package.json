@@ -77,7 +77,6 @@
     "@typescript-eslint/eslint-plugin": "^5.54.1",
     "@typescript-eslint/parser": "^5.54.1",
     "ava": "~2.4.0",
-    "cross-env": "^7.0.2",
     "document-register-element": "^1.14.3",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.7.0",
