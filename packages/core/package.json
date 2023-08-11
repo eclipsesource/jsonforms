@@ -42,8 +42,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "report": "nyc report --reporter=html",
-    "test": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\",\\\"target\\\":\\\"es5\\\"} ava",
-    "test-cov": "rimraf -rf .nyc_output && cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\",\\\"target\\\":\\\"es5\\\"} nyc ava",
+    "test": "ava",
+    "test-cov": "rimraf -rf .nyc_output && nyc ava",
     "doc": "typedoc --name 'JSON Forms Core' --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
   },
   "ava": {
@@ -55,7 +55,7 @@
       "ts"
     ],
     "require": [
-      "ts-node/register",
+      "./test-config/ts-node.config.js",
       "source-map-support/register"
     ]
   },
