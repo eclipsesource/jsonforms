@@ -41,7 +41,7 @@ jobs:
         run: pnpm run lint
 
       - name: Test
-        if: matrix.os == 'windows-latest'
+        if: matrix.os == 'windows-latest' || matrix.os == 'macos-latest'
         run: |
           set NODE_OPTIONS=--max_old_space_size=4096
           pnpm run test
