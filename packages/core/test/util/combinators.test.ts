@@ -80,3 +80,34 @@ test('createCombinatorRenderInfos - uses overrides for labels when subschemas ar
   t.deepEqual(duaRenderInfo.label, 'DuaOverride');
   t.deepEqual(lipaRenderInfo.label, 'LipaOverride');
 });
+
+const schemaWithoutRefs = {
+  type: 'object',
+  properties: {
+    widget: {
+      anyOf: [
+        {
+          type: 'object',
+          properties: { name: { type: 'string' } },
+        },
+        {
+          type: 'object',
+          properties: { name: { type: 'string' } },
+        },
+      ],
+    },
+  },
+};
+
+test('createCombinatorRenderInfos - uses keyword + index when no labels provided', (t) => {
+  const [duaRenderInfo, lipaRenderInfo] = createCombinatorRenderInfos(
+    schemaWithoutRefs.properties.widget.anyOf,
+    schemaWithoutRefs,
+    'anyOf',
+    control,
+    'widget',
+    []
+  );
+  t.deepEqual(duaRenderInfo.label, 'anyOf-0');
+  t.deepEqual(lipaRenderInfo.label, 'anyOf-1');
+});

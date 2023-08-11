@@ -62,7 +62,7 @@ export const createCombinatorRenderInfos = (
       ),
       label:
         subSchema.title ??
-        resolvedSubSchema.title ??
+        resolvedSubSchema?.title ??
         `${keyword}-${subSchemaIndex}`,
     };
   });
