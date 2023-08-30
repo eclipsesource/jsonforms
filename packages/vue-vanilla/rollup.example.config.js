@@ -26,7 +26,9 @@ const config = {
     nodeResolve({ browser: true }),
     // Transform mixed because some JsonForms modules use import and require
     commonjs({ transformMixedEsModules: true }),
-    css(),
+    css({
+      output: 'bundle.css',
+    }),
     json(),
     typescript({
       tsconfigOverride: {
