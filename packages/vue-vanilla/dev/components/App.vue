@@ -6,7 +6,7 @@ import '../../vanilla.css';
 import { JsonFormsI18nState } from '@jsonforms/core';
 import { ErrorObject } from 'ajv';
 
-import { getExamples } from '../../../../examples';
+import { getExamples } from '../../../examples';
 import get from 'lodash/get';
 
 // mergeStyles combines all classes from both styles definitions into one
