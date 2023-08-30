@@ -40,10 +40,7 @@
   ],
   "scripts": {
     "serve": "vue-cli-service serve dev/serve.ts",
-    "build:pre": "rimraf ../vue/node_modules/@jsonforms/core",
-    "build:do": "cross-env NODE_ENV=production rollup --config rollup.config.js",
-    "build": "run-s --continue-on-error build:pre build:do build:after",
-    "build:after": "symlink-dir ../../core ../vue/node_modules/@jsonforms/core",
+    "build": "cross-env NODE_ENV=production rollup --config rollup.config.js",
     "build:examples-app": "rollup -c rollup.example.config.js",
     "clean": "rimraf lib example/dist",
     "lint": "eslint .",
