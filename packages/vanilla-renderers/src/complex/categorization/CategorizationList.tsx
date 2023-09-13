@@ -85,7 +85,7 @@ export const CategorizationList = ({
           return (
             <li
               key={categoryLabels[idx]}
-              onClick={onSelect(category)}
+              onClick={onSelect(idx)}
               className={getCategoryClassName(category, selectedCategory)}
             >
               <span>{categoryLabels[idx]}</span>
