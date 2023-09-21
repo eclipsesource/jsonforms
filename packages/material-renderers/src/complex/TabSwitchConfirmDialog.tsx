@@ -46,7 +46,7 @@ export const TabSwitchConfirmDialog = ({
           onClick={confirm}
           color='primary'
           autoFocus
-          id={id + -'confirm-yes'}
+          id={`${id}-confirm-yes`}
         >
           Yes
         </Button>
