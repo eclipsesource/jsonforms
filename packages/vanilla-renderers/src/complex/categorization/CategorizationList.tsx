@@ -24,7 +24,6 @@
 */
 import React, { useMemo } from 'react';
 import {
-  Categorization,
   Category,
   deriveLabelForUISchemaElement,
   Translator,
@@ -37,7 +36,7 @@ const getCategoryClassName = (
 ): string => (selectedCategory === category ? 'selected' : '');
 
 export interface CategorizationProps {
-  categorization: Categorization;
+  filteredCategories: [Category];
   selectedCategory: Category;
   depth: number;
   onSelect: any;
@@ -47,8 +46,8 @@ export interface CategorizationProps {
 }
 
 export const CategorizationList = ({
-  categorization,
   selectedCategory,
+  filteredCategories,
   depth,
   onSelect,
   subcategoriesClassName,
@@ -57,22 +56,20 @@ export const CategorizationList = ({
 }: CategorizationProps) => {
   const categoryLabels = useMemo(
     () =>
-      categorization.elements.map((cat) =>
-        deriveLabelForUISchemaElement(cat, t)
-      ),
-    [categorization, t]
+      filteredCategories.map((cat) => deriveLabelForUISchemaElement(cat, t)),
+    [filteredCategories, t]
   );
 
   return (
     <ul className={subcategoriesClassName}>
-      {categorization.elements.map((category, idx) => {
+      {filteredCategories.map((category, idx) => {
         if (isCategorization(category)) {
           return (
             <li key={categoryLabels[idx]} className={groupClassName}>
               <span>{categoryLabels[idx]}</span>
               <CategorizationList
-                categorization={category}
                 selectedCategory={selectedCategory}
+                filteredCategories={filteredCategories}
                 depth={depth + 1}
                 onSelect={onSelect}
                 subcategoriesClassName={subcategoriesClassName}

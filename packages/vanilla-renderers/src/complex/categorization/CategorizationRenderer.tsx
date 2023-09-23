@@ -27,6 +27,7 @@ import type { Categorization, Category, LayoutProps } from '@jsonforms/core';
 import { isVisible } from '@jsonforms/core';
 import {
   TranslateProps,
+  useJsonForms,
   withJsonFormsLayoutProps,
   withTranslateProps,
 } from '@jsonforms/react';
@@ -34,7 +35,6 @@ import { CategorizationList } from './CategorizationList';
 import { SingleCategory } from './SingleCategory';
 import { withVanillaControlProps } from '../../util';
 import type { AjvProps, VanillaRendererProps } from '../../index';
-import { withAjvProps } from '../../index';
 
 export interface CategorizationState {
   selectedCategory: Category;
@@ -55,14 +55,14 @@ export const CategorizationRenderer = ({
   visible,
   getStyleAsClassName,
   onChange,
-  ajv,
 }: LayoutProps &
   VanillaRendererProps &
   TranslateProps &
   CategorizationProps &
   AjvProps) => {
+  const ajv = useJsonForms().core.ajv;
   const categorization = uischema as Categorization;
-  const categories = useMemo(
+  const filteredCategories = useMemo(
     () =>
       categorization.elements.filter((category: Category) =>
         isVisible(category, data, undefined, ajv)
@@ -101,8 +101,8 @@ export const CategorizationRenderer = ({
     >
       <div className={masterClassNames}>
         <CategorizationList
-          categorization={categorization}
-          selectedCategory={categories[safeCategory]}
+          filteredCategories={filteredCategories}
+          selectedCategory={filteredCategories[safeCategory]}
           depth={0}
           onSelect={onCategorySelected}
           subcategoriesClassName={subcategoriesClassName}
@@ -112,7 +112,7 @@ export const CategorizationRenderer = ({
       </div>
       <div className={detailClassNames}>
         <SingleCategory
-          category={categories[safeCategory]}
+          category={filteredCategories[safeCategory]}
           schema={schema}
           path={path}
           key={safeCategory}
@@ -122,8 +122,6 @@ export const CategorizationRenderer = ({
   );
 };
 
-export default withAjvProps(
-  withVanillaControlProps(
-    withTranslateProps(withJsonFormsLayoutProps(CategorizationRenderer))
-  )
+export default withVanillaControlProps(
+  withTranslateProps(withJsonFormsLayoutProps(CategorizationRenderer))
 );
