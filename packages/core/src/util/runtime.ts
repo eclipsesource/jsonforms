@@ -79,6 +79,9 @@ const evaluateCondition = (
     return value === condition.expectedValue;
   } else if (isSchemaCondition(condition)) {
     const value = resolveData(data, getConditionScope(condition, path));
+    if (condition.failWhenUndefined && value === undefined) {
+      return false;
+    }
     return ajv.validate(condition.schema, value) as boolean;
   } else {
     // unknown condition

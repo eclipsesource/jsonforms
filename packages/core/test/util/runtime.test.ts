@@ -552,6 +552,59 @@ test('evalEnablement disable invalid case based on schema condition', (t) => {
   );
 });
 
+test('evalEnablement fail on failWhenUndefined', (t) => {
+  const condition: SchemaBasedCondition = {
+    scope: '#/properties/ruleValue',
+    schema: {
+      enum: ['bar', 'baz'],
+    },
+  };
+  const failConditionTrue: SchemaBasedCondition = {
+    ...condition,
+    failWhenUndefined: true,
+  };
+  const failConditionFalse: SchemaBasedCondition = {
+    ...condition,
+    failWhenUndefined: false,
+  };
+
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/value',
+    rule: {
+      effect: RuleEffect.DISABLE,
+      condition: failConditionTrue,
+    },
+  };
+  const failConditionTrueUischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/value',
+    rule: {
+      effect: RuleEffect.DISABLE,
+      condition: failConditionTrue,
+    },
+  };
+  const failConditionFalseUischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/value',
+    rule: {
+      effect: RuleEffect.DISABLE,
+      condition: failConditionFalse,
+    },
+  };
+  const data = {
+    value: 'foo',
+  };
+  t.is(
+    evalEnablement(failConditionTrueUischema, data, undefined, createAjv()),
+    true
+  );
+  t.is(
+    evalEnablement(failConditionFalseUischema, data, undefined, createAjv()),
+    evalEnablement(uischema, data, undefined, createAjv())
+  );
+});
+
 test('isInherentlyEnabled disabled globally', (t) => {
   t.false(
     isInherentlyEnabled(
