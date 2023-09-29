@@ -799,7 +799,7 @@ export const mapDispatchToArrayControlProps = (
     dispatch(
       update(path, (array) => {
         toDelete
-          .sort()
+          .sort((a, b) => a - b)
           .reverse()
           .forEach((s) => array.splice(s, 1));
         return array;

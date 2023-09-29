@@ -625,6 +625,31 @@ test('mapDispatchToArrayControlProps should remove items from array', (t) => {
   t.is(getCore().data[0], 'quux');
 });
 
+test('mapDispatchToArrayControlProps should remove items from array with more than 10 items', (t) => {
+  const data = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
+  const schema: JsonSchema = {
+    type: 'array',
+    items: {
+      type: 'string',
+    },
+  };
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#',
+  };
+  const initCore: JsonFormsCore = {
+    uischema,
+    schema,
+    data,
+    errors: [] as ErrorObject[],
+  };
+  const [getCore, dispatch] = mockDispatch(initCore);
+  dispatch(init(data, schema, uischema));
+  const props = mapDispatchToArrayControlProps(dispatch);
+  props.removeItems('', [11, 2])();
+  t.is(getCore().data.length, 10);
+});
+
 test('mapStateToLayoutProps - visible via state with path from ownProps ', (t) => {
   const uischema = {
     type: 'VerticalLayout',
