@@ -30,11 +30,17 @@ import { getExamples } from '@jsonforms/examples';
 
 export const renderExample = (
   renderers: { tester: RankedTester; renderer: any }[],
-  cells: { tester: RankedTester; cell: any }[]
+  cells: { tester: RankedTester; cell: any }[],
+  Wrapper?: React.JSXElementConstructor<any>
 ) => {
   const examples = getExamples();
   ReactDOM.render(
-    <App examples={examples} renderers={renderers} cells={cells} />,
+    <App
+      examples={examples}
+      renderers={renderers}
+      cells={cells}
+      Wrapper={Wrapper}
+    />,
     document.getElementById('root')
   );
 };

@@ -32,10 +32,12 @@ import {
 } from '@jsonforms/core';
 import { withJsonFormsCellProps } from '@jsonforms/react';
 import { MuiInputText } from '../mui-controls/MuiInputText';
+import { useInputComponent } from '../util';
 
-export const MaterialTextCell = (props: CellProps & WithClassname) => (
-  <MuiInputText {...props} />
-);
+export const MaterialTextCell = (props: CellProps & WithClassname) => {
+  const { InputComponent } = useInputComponent(props);
+  return <MuiInputText {...props} InputComponent={InputComponent} />;
+};
 
 /**
  * Default tester for text-based/string controls.

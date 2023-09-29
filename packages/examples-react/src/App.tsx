@@ -39,6 +39,7 @@ type AppProps = {
   examples: ExampleDescription[];
   cells: JsonFormsCellRendererRegistryEntry[];
   renderers: JsonFormsRendererRegistryEntry[];
+  Wrapper?: React.JSXElementConstructor<any>;
 };
 
 type Action = {
@@ -69,7 +70,12 @@ const getProps = (
   };
 };
 
-const App = ({ examples, cells, renderers }: AppProps) => {
+const App = ({
+  examples,
+  cells,
+  renderers,
+  Wrapper = React.Fragment,
+}: AppProps) => {
   const [currentExample, setExample] = useState<ExampleDescription>(
     examples[0]
   );
@@ -88,7 +94,7 @@ const App = ({ examples, cells, renderers }: AppProps) => {
     [exampleProps.uischema]
   );
 
-  const actions: Action[] = currentExample.actions;
+  const actions: Action[] = currentExample.actions ?? [];
 
   useEffect(() => {
     const hash = window.location.hash.replace('#', '');
@@ -192,11 +198,13 @@ const App = ({ examples, cells, renderers }: AppProps) => {
                 ))}
               </div>
               <div className='demo'>
-                <JsonForms
-                  key={currentIndex}
-                  {...exampleProps}
-                  onChange={({ data }) => changeData(data)}
-                />
+                <Wrapper>
+                  <JsonForms
+                    key={currentIndex}
+                    {...exampleProps}
+                    onChange={({ data }) => changeData(data)}
+                  />
+                </Wrapper>
               </div>
             </div>
           </div>

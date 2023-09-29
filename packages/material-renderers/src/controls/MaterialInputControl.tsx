@@ -31,7 +31,7 @@ import {
 
 import { Hidden, InputLabel, FormControl, FormHelperText } from '@mui/material';
 import merge from 'lodash/merge';
-import { useFocus } from '../util';
+import { useFocus, useInputComponent } from '../util';
 
 export interface WithInput {
   input: any;
@@ -50,6 +50,7 @@ export const MaterialInputControl = (props: ControlProps & WithInput) => {
     config,
     input,
   } = props;
+  const { InputComponent, variant } = useInputComponent(props);
   const isValid = errors.length === 0;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
 
@@ -68,14 +69,20 @@ export const MaterialInputControl = (props: ControlProps & WithInput) => {
   const secondFormHelperText = showDescription && !isValid ? errors : null;
   const InnerComponent = input;
 
+  const InputMore: { label?: string } = {};
+
+  if (variant === 'outlined') {
+    InputMore.label = label;
+  }
+
   return (
     <Hidden xsUp={!visible}>
       <FormControl
         fullWidth={!appliedUiSchemaOptions.trim}
         onFocus={onFocus}
         onBlur={onBlur}
+        variant={variant}
         id={id}
-        variant={'standard'}
       >
         <InputLabel
           htmlFor={id + '-input'}
@@ -89,9 +96,11 @@ export const MaterialInputControl = (props: ControlProps & WithInput) => {
         </InputLabel>
         <InnerComponent
           {...props}
+          {...InputMore}
           id={id + '-input'}
           isValid={isValid}
           visible={visible}
+          InputComponent={InputComponent}
         />
         <FormHelperText error={!isValid && !showDescription}>
           {firstFormHelperText}

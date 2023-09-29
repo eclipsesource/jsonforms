@@ -28,10 +28,13 @@ import { EnumCellProps, WithClassname } from '@jsonforms/core';
 import { MenuItem, Select } from '@mui/material';
 import merge from 'lodash/merge';
 import { TranslateProps } from '@jsonforms/react';
-import { i18nDefaults } from '../util';
+import { i18nDefaults, WithInputProps } from '../util';
 
 export const MuiSelect = React.memo(function MuiSelect(
-  props: EnumCellProps & WithClassname & TranslateProps
+  props: EnumCellProps &
+    WithClassname &
+    TranslateProps &
+    Omit<WithInputProps, 'InputComponent'>
 ) {
   const {
     data,
@@ -44,6 +47,7 @@ export const MuiSelect = React.memo(function MuiSelect(
     handleChange,
     options,
     config,
+    label,
     t,
   } = props;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
@@ -56,12 +60,12 @@ export const MuiSelect = React.memo(function MuiSelect(
     <Select
       className={className}
       id={id}
+      label={label}
       disabled={!enabled}
       autoFocus={appliedUiSchemaOptions.focus}
       value={data !== undefined ? data : ''}
       onChange={(ev) => handleChange(path, ev.target.value || undefined)}
       fullWidth={true}
-      variant={'standard'}
     >
       {[
         <MenuItem value={''} key='jsonforms.enum.none'>

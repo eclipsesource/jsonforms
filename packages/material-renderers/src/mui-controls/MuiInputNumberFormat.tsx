@@ -24,12 +24,11 @@
 */
 import React, { useCallback } from 'react';
 import { CellProps, Formatted, WithClassname } from '@jsonforms/core';
-import { Input } from '@mui/material';
 import merge from 'lodash/merge';
-import { useDebouncedChange } from '../util';
+import { useDebouncedChange, WithInputProps } from '../util';
 
 export const MuiInputNumberFormat = React.memo(function MuiInputNumberFormat(
-  props: CellProps & WithClassname & Formatted<number>
+  props: CellProps & WithClassname & Formatted<number> & WithInputProps
 ) {
   const {
     className,
@@ -41,6 +40,7 @@ export const MuiInputNumberFormat = React.memo(function MuiInputNumberFormat(
     handleChange,
     schema,
     config,
+    InputComponent,
   } = props;
   const maxLength = schema.maxLength;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
@@ -65,7 +65,7 @@ export const MuiInputNumberFormat = React.memo(function MuiInputNumberFormat(
   );
 
   return (
-    <Input
+    <InputComponent
       type='text'
       value={inputValue}
       onChange={onChange}
