@@ -41,10 +41,9 @@ export interface JsonFormsTheme extends Theme {
   };
 }
 
-export type WithInputProps = {
-  InputComponent: React.JSXElementConstructor<any>;
+export interface WithInputProps {
   label?: string;
-};
+}
 
 const variantToInput = {
   standard: Input,
