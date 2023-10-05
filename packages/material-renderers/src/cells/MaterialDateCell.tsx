@@ -31,22 +31,37 @@ import {
   WithClassname,
 } from '@jsonforms/core';
 import { withJsonFormsCellProps } from '@jsonforms/react';
-import Input from '@mui/material/Input';
 import merge from 'lodash/merge';
+import { useInputComponent, WithInputProps } from '../util';
 
-export const MaterialDateCell = (props: CellProps & WithClassname) => {
-  const { data, className, id, enabled, uischema, path, handleChange, config } =
-    props;
+export const MaterialDateCell = (
+  props: CellProps & WithClassname & WithInputProps
+) => {
+  const {
+    data,
+    className,
+    id,
+    enabled,
+    uischema,
+    path,
+    handleChange,
+    config,
+    label,
+  } = props;
 
+  const InputComponent = useInputComponent();
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
 
   return (
-    <Input
+    <InputComponent
       type='date'
       value={data || ''}
-      onChange={(ev) => handleChange(path, ev.target.value)}
+      onChange={(ev: React.ChangeEvent<HTMLInputElement>) =>
+        handleChange(path, ev.target.value)
+      }
       className={className}
       id={id}
+      label={label}
       disabled={!enabled}
       autoFocus={appliedUiSchemaOptions.focus}
       fullWidth={true}

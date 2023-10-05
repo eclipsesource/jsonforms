@@ -31,7 +31,7 @@ import {
 
 import { Hidden, InputLabel, FormControl, FormHelperText } from '@mui/material';
 import merge from 'lodash/merge';
-import { useFocus, useInputComponent } from '../util';
+import { useFocus, useInputVariant } from '../util';
 
 export interface WithInput {
   input: any;
@@ -50,7 +50,7 @@ export const MaterialInputControl = (props: ControlProps & WithInput) => {
     config,
     input,
   } = props;
-  const { InputComponent, variant } = useInputComponent(props);
+  const variant = useInputVariant();
   const isValid = errors.length === 0;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
 
@@ -100,7 +100,6 @@ export const MaterialInputControl = (props: ControlProps & WithInput) => {
           id={id + '-input'}
           isValid={isValid}
           visible={visible}
-          InputComponent={InputComponent}
         />
         <FormHelperText error={!isValid && !showDescription}>
           {firstFormHelperText}

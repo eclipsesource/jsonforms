@@ -35,10 +35,10 @@ import {
   WithClassname,
 } from '@jsonforms/core';
 import { Control, withJsonFormsControlProps } from '@jsonforms/react';
-import { Input, InputBaseComponentProps } from '@mui/material';
+import { InputBaseComponentProps } from '@mui/material';
 import merge from 'lodash/merge';
 import React, { useMemo } from 'react';
-import { useDebouncedChange } from '../util';
+import { useDebouncedChange, useInputComponent, WithInputProps } from '../util';
 import { MaterialInputControl } from './MaterialInputControl';
 
 const findEnumSchema = (schemas: JsonSchema[]) =>
@@ -48,7 +48,9 @@ const findEnumSchema = (schemas: JsonSchema[]) =>
 const findTextSchema = (schemas: JsonSchema[]) =>
   schemas.find((s) => s.type === 'string' && s.enum === undefined);
 
-const MuiAutocompleteInputText = (props: EnumCellProps & WithClassname) => {
+const MuiAutocompleteInputText = (
+  props: EnumCellProps & WithClassname & WithInputProps
+) => {
   const {
     data,
     config,
@@ -60,7 +62,9 @@ const MuiAutocompleteInputText = (props: EnumCellProps & WithClassname) => {
     path,
     handleChange,
     schema,
+    label,
   } = props;
+  const InputComponent = useInputComponent();
   const enumSchema = findEnumSchema(schema.anyOf);
   const stringSchema = findTextSchema(schema.anyOf);
   const maxLength = stringSchema.maxLength;
@@ -94,12 +98,13 @@ const MuiAutocompleteInputText = (props: EnumCellProps & WithClassname) => {
     </datalist>
   );
   return (
-    <Input
+    <InputComponent
       type='text'
       value={inputText}
       onChange={onChange}
       className={className}
       id={id}
+      label={label}
       disabled={!enabled}
       autoFocus={appliedUiSchemaOptions.focus}
       fullWidth={!appliedUiSchemaOptions.trim || maxLength === undefined}

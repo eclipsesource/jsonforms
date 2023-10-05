@@ -29,6 +29,7 @@ import {
   OutlinedInput,
   TextFieldProps,
   useThemeProps,
+  InputBaseProps,
 } from '@mui/material';
 
 export interface JsonFormsTheme extends Theme {
@@ -51,17 +52,19 @@ const variantToInput = {
   outlined: OutlinedInput,
 };
 
-export function useInputComponent(props: unknown): {
-  InputComponent: React.JSXElementConstructor<any>;
-  variant: TextFieldProps['variant'];
-} {
-  const { variant = 'standard' } = useThemeProps({
-    props: props as TextFieldProps,
+export const defaultInputVariant: TextFieldProps['variant'] = 'standard';
+
+export function useInputVariant(): TextFieldProps['variant'] {
+  const { variant = defaultInputVariant } = useThemeProps({
+    props: {} as TextFieldProps,
     name: 'MuiTextField',
   });
+  return variant;
+}
 
-  return {
-    variant,
-    InputComponent: variantToInput[variant],
-  };
+export function useInputComponent(): React.JSXElementConstructor<
+  InputBaseProps & WithInputProps
+> {
+  const variant = useInputVariant();
+  return variantToInput[variant] ?? variantToInput[defaultInputVariant];
 }

@@ -67,7 +67,7 @@ export const MuiInputText = React.memo(function MuiInputText(
     label,
     inputComponent,
   } = props;
-  const { InputComponent } = useInputComponent(props);
+  const InputComponent = useInputComponent();
   const maxLength = schema.maxLength;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
   let inputProps: InputBaseComponentProps;
