@@ -31,10 +31,7 @@ import { TranslateProps } from '@jsonforms/react';
 import { i18nDefaults, WithInputProps } from '../util';
 
 export const MuiSelect = React.memo(function MuiSelect(
-  props: EnumCellProps &
-    WithClassname &
-    TranslateProps &
-    Omit<WithInputProps, 'InputComponent'>
+  props: EnumCellProps & WithClassname & TranslateProps & WithInputProps
 ) {
   const {
     data,
