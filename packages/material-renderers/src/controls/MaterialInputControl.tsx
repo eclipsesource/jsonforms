@@ -69,12 +69,6 @@ export const MaterialInputControl = (props: ControlProps & WithInput) => {
   const secondFormHelperText = showDescription && !isValid ? errors : null;
   const InnerComponent = input;
 
-  const InputMore: { label?: string } = {};
-
-  if (variant === 'outlined') {
-    InputMore.label = label;
-  }
-
   return (
     <Hidden xsUp={!visible}>
       <FormControl
@@ -96,7 +90,6 @@ export const MaterialInputControl = (props: ControlProps & WithInput) => {
         </InputLabel>
         <InnerComponent
           {...props}
-          {...InputMore}
           id={id + '-input'}
           isValid={isValid}
           visible={visible}
