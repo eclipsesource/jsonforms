@@ -55,6 +55,11 @@ const MuiWrapper = ({ children }: React.PropsWithChildren<unknown>) => {
             variant,
           },
         },
+        MuiSelect: {
+          defaultProps: {
+            variant,
+          },
+        },
         // avoid jammed look of input fields when variant is not 'standard'
         ...(variant !== 'standard'
           ? {
