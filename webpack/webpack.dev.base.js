@@ -9,7 +9,7 @@ module.exports = merge(baseConfig, {
     'webpack/hot/dev-server',
     './src/index.ts',
     '../examples/src/index.ts',
-    './example/index.ts',
+    './example/index.tsx',
   ],
   output: {
     publicPath: '/assets/',

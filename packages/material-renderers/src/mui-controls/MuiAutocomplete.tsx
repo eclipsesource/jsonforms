@@ -123,7 +123,6 @@ export const MuiAutocomplete = (
           return (
             <TextField
               label={label}
-              variant={'standard'}
               type='text'
               inputProps={params.inputProps}
               inputRef={params.InputProps.ref}

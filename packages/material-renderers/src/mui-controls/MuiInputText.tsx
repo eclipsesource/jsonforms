@@ -26,7 +26,6 @@ import React, { useState } from 'react';
 import { CellProps, WithClassname } from '@jsonforms/core';
 import {
   IconButton,
-  Input,
   InputAdornment,
   InputBaseComponentProps,
   InputProps,
@@ -34,7 +33,12 @@ import {
 } from '@mui/material';
 import merge from 'lodash/merge';
 import Close from '@mui/icons-material/Close';
-import { JsonFormsTheme, useDebouncedChange } from '../util';
+import {
+  JsonFormsTheme,
+  WithInputProps,
+  useDebouncedChange,
+  useInputComponent,
+} from '../util';
 
 interface MuiTextInputProps {
   muiInputProps?: InputProps['inputProps'];
@@ -45,7 +49,7 @@ const eventToValue = (ev: any) =>
   ev.target.value === '' ? undefined : ev.target.value;
 
 export const MuiInputText = React.memo(function MuiInputText(
-  props: CellProps & WithClassname & MuiTextInputProps
+  props: CellProps & WithClassname & MuiTextInputProps & WithInputProps
 ) {
   const [showAdornment, setShowAdornment] = useState(false);
   const {
@@ -60,8 +64,10 @@ export const MuiInputText = React.memo(function MuiInputText(
     handleChange,
     schema,
     muiInputProps,
+    label,
     inputComponent,
   } = props;
+  const InputComponent = useInputComponent();
   const maxLength = schema.maxLength;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
   let inputProps: InputBaseComponentProps;
@@ -97,7 +103,8 @@ export const MuiInputText = React.memo(function MuiInputText(
   };
 
   return (
-    <Input
+    <InputComponent
+      label={label}
       type={appliedUiSchemaOptions.format === 'password' ? 'password' : 'text'}
       value={inputText}
       onChange={onChange}

@@ -43,7 +43,7 @@ function cjsCompatPlugin() {
  * @type {import('rollup').RollupOptions}
  */
 const config = {
-  input: 'example/index.ts',
+  input: 'example/index.tsx',
   output: {
     file: 'example/dist/bundle.js',
     format: 'iife',
