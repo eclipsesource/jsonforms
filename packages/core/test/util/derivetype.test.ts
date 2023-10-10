@@ -65,6 +65,23 @@ test('derive type w/o type - items array', (t) => {
   t.is(deriveTypes(schema)[0], 'array');
 });
 
+test('derive type w/o type - enum', (t) => {
+  const schema: JsonSchema = {
+    enum: ['foo', 'bar'],
+  };
+  t.is(deriveTypes(schema).length, 1);
+  t.is(deriveTypes(schema)[0], 'string');
+});
+
+test('derive type w/o type - enum with two types', (t) => {
+  const schema: JsonSchema = {
+    enum: ['foo', 'bar', { properties: { foo: { type: 'string' } } }],
+  };
+  t.is(deriveTypes(schema).length, 2);
+  t.is(deriveTypes(schema)[0], 'string');
+  t.is(deriveTypes(schema)[1], 'object');
+});
+
 test('derive type with type - union', (t) => {
   const schema: JsonSchema = {
     type: ['string', 'number'],
