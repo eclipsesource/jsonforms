@@ -65,7 +65,7 @@ class TableArrayControl extends React.Component<
   any
 > {
   confirmDelete = (path: string, index: number) => {
-    const p = path.substring(0, path.lastIndexOf('.'));
+    const p = path.substring(0, path.lastIndexOf('/'));
     this.props.removeItems(p, [index])();
   };
 
@@ -145,7 +145,7 @@ class TableArrayControl extends React.Component<
               </tr>
             ) : (
               data.map((_child, index) => {
-                const childPath = Paths.compose(path, `${index}`);
+                const childPath = Paths.compose(path, `/${index}`);
                 // TODO
                 const errorsPerEntry: any[] = filter(childErrors, (error) => {
                   const errorPath = getControlPath(error);
@@ -174,7 +174,7 @@ class TableArrayControl extends React.Component<
                         fpmap((prop) => {
                           const childPropPath = Paths.compose(
                             childPath,
-                            prop.toString()
+                            '/' + prop.toString()
                           );
                           return (
                             <td key={childPropPath}>
@@ -185,14 +185,16 @@ class TableArrayControl extends React.Component<
                                   rootSchema
                                 )}
                                 uischema={createControlElement(encode(prop))}
-                                path={childPath + '.' + prop}
+                                path={childPath + '/' + prop}
                               />
                             </td>
                           );
                         })
                       )(schema.properties)
                     ) : (
-                      <td key={Paths.compose(childPath, index.toString())}>
+                      <td
+                        key={Paths.compose(childPath, '/' + index.toString())}
+                      >
                         <DispatchCell
                           schema={schema}
                           uischema={createControlElement()}

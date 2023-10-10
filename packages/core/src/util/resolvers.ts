@@ -46,7 +46,7 @@ export const resolveData = (instance: any, dataPath: string): any => {
   if (isEmpty(dataPath)) {
     return instance;
   }
-  const dataPathSegments = dataPath.split('.');
+  const dataPathSegments = dataPath.split('/').slice(1);
 
   return dataPathSegments.reduce((curInstance, decodedSegment) => {
     if (

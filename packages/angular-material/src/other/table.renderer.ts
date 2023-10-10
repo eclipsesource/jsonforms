@@ -163,7 +163,7 @@ export class TableRenderer extends JsonFormsArrayControl implements OnInit {
     this.translations = props.translations;
   }
   getProps(index: number, props: OwnPropsOfRenderer): OwnPropsOfRenderer {
-    const rowPath = Paths.compose(props.path, `${index}`);
+    const rowPath = Paths.compose(props.path, `/${index}`);
     return {
       schema: props.schema,
       uischema: props.uischema,

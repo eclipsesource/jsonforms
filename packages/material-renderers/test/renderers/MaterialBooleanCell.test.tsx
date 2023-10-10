@@ -139,7 +139,7 @@ describe('Material boolean cell', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <BooleanCell schema={schema} uischema={control} path='foo' />
+        <BooleanCell schema={schema} uischema={control} path='/foo' />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').first();
@@ -159,7 +159,7 @@ describe('Material boolean cell', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <BooleanCell schema={schema} uischema={control} path='foo' />
+        <BooleanCell schema={schema} uischema={control} path='/foo' />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').first();
@@ -176,7 +176,7 @@ describe('Material boolean cell', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <BooleanCell schema={schema} uischema={control} path='foo' />
+        <BooleanCell schema={schema} uischema={control} path='/foo' />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').first();
@@ -189,7 +189,7 @@ describe('Material boolean cell', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <BooleanCell schema={schema} uischema={uischema} path='foo' />
+        <BooleanCell schema={schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>
     );
 
@@ -212,7 +212,7 @@ describe('Material boolean cell', () => {
             onChangeData.data = data;
           }}
         />
-        <BooleanCell schema={schema} uischema={uischema} path='foo' />
+        <BooleanCell schema={schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>
     );
 
@@ -235,7 +235,7 @@ describe('Material boolean cell', () => {
             onChangeData.data = data;
           }}
         />
-        <BooleanCell schema={schema} uischema={uischema} path='foo' />
+        <BooleanCell schema={schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, foo: false };
@@ -260,7 +260,7 @@ describe('Material boolean cell', () => {
             onChangeData.data = data;
           }}
         />
-        <BooleanCell schema={schema} uischema={uischema} path='foo' />
+        <BooleanCell schema={schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, foo: undefined };
@@ -284,7 +284,7 @@ describe('Material boolean cell', () => {
             onChangeData.data = data;
           }}
         />
-        <BooleanCell schema={schema} uischema={uischema} path='foo' />
+        <BooleanCell schema={schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, foo: null };
@@ -308,7 +308,7 @@ describe('Material boolean cell', () => {
             onChangeData.data = data;
           }}
         />
-        <BooleanCell schema={schema} uischema={uischema} path='foo' />
+        <BooleanCell schema={schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, bar: 11 };
@@ -331,7 +331,7 @@ describe('Material boolean cell', () => {
             onChangeData.data = data;
           }}
         />
-        <BooleanCell schema={schema} uischema={uischema} path='foo' />
+        <BooleanCell schema={schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, null: false };
@@ -354,7 +354,7 @@ describe('Material boolean cell', () => {
             onChangeData.data = data;
           }}
         />
-        <BooleanCell schema={schema} uischema={uischema} path='foo' />
+        <BooleanCell schema={schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, undefined: false };
@@ -374,7 +374,7 @@ describe('Material boolean cell', () => {
           schema={schema}
           uischema={uischema}
           enabled={false}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -388,7 +388,7 @@ describe('Material boolean cell', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <BooleanCell schema={schema} uischema={uischema} path='foo' />
+        <BooleanCell schema={schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').first();
@@ -401,7 +401,12 @@ describe('Material boolean cell', () => {
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
-        <BooleanCell schema={schema} uischema={uischema} path='foo' id='myid' />
+        <BooleanCell
+          schema={schema}
+          uischema={uischema}
+          path='/foo'
+          id='myid'
+        />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input');

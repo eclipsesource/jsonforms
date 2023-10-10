@@ -41,51 +41,60 @@ test('resolve ', (t) => {
 });
 
 test('toDataPath ', (t) => {
-  t.is(toDataPath('#/properties/foo/properties/bar'), 'foo.bar');
+  t.is(toDataPath('#/properties/foo/properties/bar'), '/foo/bar');
 });
 test('toDataPath replace anyOf', (t) => {
-  t.is(toDataPath('/anyOf/1/properties/foo/anyOf/1/properties/bar'), 'foo.bar');
+  t.is(
+    toDataPath('/anyOf/1/properties/foo/anyOf/1/properties/bar'),
+    '/foo/bar'
+  );
 });
 test('toDataPath replace anyOf in combination with conditional schema compositions', (t) => {
-  t.is(toDataPath('/anyOf/1/then/properties/foo'), 'foo');
+  t.is(toDataPath('/anyOf/1/then/properties/foo'), '/foo');
 });
 test('toDataPath replace multiple directly nested anyOf in combination with conditional schema compositions', (t) => {
-  t.is(toDataPath('/anyOf/1/then/anyOf/0/then/properties/foo'), 'foo');
+  t.is(toDataPath('/anyOf/1/then/anyOf/0/then/properties/foo'), '/foo');
 });
 test('toDataPath replace multiple nested properties with anyOf in combination with conditional schema compositions', (t) => {
   t.is(
     toDataPath('/anyOf/1/properties/foo/anyOf/0/then/properties/bar'),
-    'foo.bar'
+    '/foo/bar'
   );
 });
 test('toDataPath replace allOf', (t) => {
-  t.is(toDataPath('/allOf/1/properties/foo/allOf/1/properties/bar'), 'foo.bar');
+  t.is(
+    toDataPath('/allOf/1/properties/foo/allOf/1/properties/bar'),
+    '/foo/bar'
+  );
 });
 test('toDataPath replace allOf in combination with conditional schema compositions', (t) => {
-  t.is(toDataPath('/allOf/1/then/properties/foo'), 'foo');
+  t.is(toDataPath('/allOf/1/then/properties/foo'), '/foo');
 });
 test('toDataPath replace multiple directly nested allOf in combination with conditional schema compositions', (t) => {
-  t.is(toDataPath('/allOf/1/then/allOf/0/then/properties/foo'), 'foo');
+  t.is(toDataPath('/allOf/1/then/allOf/0/then/properties/foo'), '/foo');
 });
 test('toDataPath replace multiple nested properties with allOf in combination with conditional schema compositions', (t) => {
   t.is(
     toDataPath('/allOf/1/properties/foo/allOf/0/then/properties/bar'),
-    'foo.bar'
+    '/foo/bar'
   );
 });
 test('toDataPath replace oneOf', (t) => {
-  t.is(toDataPath('/oneOf/1/properties/foo/oneOf/1/properties/bar'), 'foo.bar');
+  t.is(
+    toDataPath('/oneOf/1/properties/foo/oneOf/1/properties/bar'),
+    '/foo/bar'
+  );
 });
 test('toDataPath replace oneOf in combination with conditional schema compositions', (t) => {
-  t.is(toDataPath('/oneOf/1/then/properties/foo'), 'foo');
+  t.is(toDataPath('/oneOf/1/then/properties/foo'), '/foo');
 });
 test('toDataPath replace multiple directly nested oneOf in combination with conditional schema compositions', (t) => {
-  t.is(toDataPath('/oneOf/1/then/oneOf/0/then/properties/foo'), 'foo');
+  t.is(toDataPath('/oneOf/1/then/oneOf/0/then/properties/foo'), '/foo');
 });
 test('toDataPath replace multiple nested properties with oneOf in combination with conditional schema compositions', (t) => {
   t.is(
     toDataPath('/oneOf/1/properties/foo/oneOf/0/then/properties/bar'),
-    'foo.bar'
+    '/foo/bar'
   );
 });
 test('toDataPath replace all combinators', (t) => {
@@ -93,38 +102,38 @@ test('toDataPath replace all combinators', (t) => {
     toDataPath(
       '/oneOf/1/properties/foo/anyOf/1/properties/bar/allOf/1/properties/foobar'
     ),
-    'foo.bar.foobar'
+    '/foo/bar/foobar'
   );
 });
 test('toDataPath use of keywords', (t) => {
-  t.is(toDataPath('#/properties/properties'), 'properties');
+  t.is(toDataPath('#/properties/properties'), '/properties');
 });
 test('toDataPath use of encoded paths', (t) => {
   const fooBar = encodeURIComponent('foo.bar');
-  t.is(toDataPath(`#/properties/${fooBar}`), `${fooBar}`);
+  t.is(toDataPath(`#/properties/${fooBar}`), `/${fooBar}`);
 });
 test('toDataPath relative with /', (t) => {
-  t.is(toDataPath('/properties/foo/properties/bar'), 'foo.bar');
+  t.is(toDataPath('/properties/foo/properties/bar'), '/foo/bar');
 });
 test('toDataPath use of keywords relative with /', (t) => {
-  t.is(toDataPath('/properties/properties'), 'properties');
+  t.is(toDataPath('/properties/properties'), '/properties');
 });
 test('toDataPath use of encoded paths relative with /', (t) => {
   const fooBar = encodeURIComponent('foo/bar');
-  t.is(toDataPath(`/properties/${fooBar}`), `${fooBar}`);
+  t.is(toDataPath(`/properties/${fooBar}`), `/${fooBar}`);
 });
 test('toDataPath relative without /', (t) => {
-  t.is(toDataPath('properties/foo/properties/bar'), 'foo.bar');
+  t.is(toDataPath('properties/foo/properties/bar'), '/foo/bar');
 });
 test('toDataPath use of keywords relative without /', (t) => {
-  t.is(toDataPath('properties/properties'), 'properties');
+  t.is(toDataPath('properties/properties'), '/properties');
 });
 test('toDataPath use of encoded paths relative without /', (t) => {
   const fooBar = encodeURIComponent('foo/bar');
-  t.is(toDataPath(`properties/${fooBar}`), `${fooBar}`);
+  t.is(toDataPath(`properties/${fooBar}`), `/${fooBar}`);
 });
 test('toDataPath use of encoded special character in pathname', (t) => {
-  t.is(toDataPath('properties/foo~0bar~1baz'), 'foo~bar/baz');
+  t.is(toDataPath('properties/foo~0bar~1baz'), '/foo~bar/baz');
 });
 test('resolve instance', (t) => {
   const instance = { foo: 123 };
