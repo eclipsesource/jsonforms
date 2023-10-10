@@ -77,7 +77,17 @@ export const deriveTypes = (jsonSchema: JsonSchema): string[] => {
   if (!isEmpty(jsonSchema.items)) {
     return ['array'];
   }
-
+  if (!isEmpty(jsonSchema.enum)) {
+    const types: Set<string> = new Set();
+    jsonSchema.enum.forEach((enumElement) => {
+      if (typeof enumElement === 'string') {
+        types.add('string');
+      } else {
+        deriveTypes(enumElement).forEach((type) => types.add(type));
+      }
+    });
+    return Array.from(types);
+  }
   if (!isEmpty(jsonSchema.allOf)) {
     const allOfType = find(
       jsonSchema.allOf,
