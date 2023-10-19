@@ -57,7 +57,7 @@ export { compose as composePaths };
  */
 export const toDataPathSegments = (schemaPath: string): string[] => {
   const s = schemaPath
-    .replace(/(anyOf|allOf|oneOf)\/[\d]\//g, '')
+    .replace(/(anyOf|allOf|oneOf)\/[\d]+\//g, '')
     .replace(/(then|else)\//g, '');
   const segments = s.split('/');
 

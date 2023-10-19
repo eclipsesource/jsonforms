@@ -44,7 +44,10 @@ test('toDataPath ', (t) => {
   t.is(toDataPath('#/properties/foo/properties/bar'), 'foo.bar');
 });
 test('toDataPath replace anyOf', (t) => {
-  t.is(toDataPath('/anyOf/1/properties/foo/anyOf/1/properties/bar'), 'foo.bar');
+  t.is(
+    toDataPath('/anyOf/11/properties/foo/anyOf/11/properties/bar'),
+    'foo.bar'
+  );
 });
 test('toDataPath replace anyOf in combination with conditional schema compositions', (t) => {
   t.is(toDataPath('/anyOf/1/then/properties/foo'), 'foo');
@@ -59,7 +62,10 @@ test('toDataPath replace multiple nested properties with anyOf in combination wi
   );
 });
 test('toDataPath replace allOf', (t) => {
-  t.is(toDataPath('/allOf/1/properties/foo/allOf/1/properties/bar'), 'foo.bar');
+  t.is(
+    toDataPath('/allOf/11/properties/foo/allOf/11/properties/bar'),
+    'foo.bar'
+  );
 });
 test('toDataPath replace allOf in combination with conditional schema compositions', (t) => {
   t.is(toDataPath('/allOf/1/then/properties/foo'), 'foo');
@@ -74,7 +80,10 @@ test('toDataPath replace multiple nested properties with allOf in combination wi
   );
 });
 test('toDataPath replace oneOf', (t) => {
-  t.is(toDataPath('/oneOf/1/properties/foo/oneOf/1/properties/bar'), 'foo.bar');
+  t.is(
+    toDataPath('/oneOf/11/properties/foo/oneOf/11/properties/bar'),
+    'foo.bar'
+  );
 });
 test('toDataPath replace oneOf in combination with conditional schema compositions', (t) => {
   t.is(toDataPath('/oneOf/1/then/properties/foo'), 'foo');
