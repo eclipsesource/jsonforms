@@ -18,6 +18,42 @@ const uischema = {
   },
 };
 
+const schemaWithNameAndRate = {
+  type: 'array',
+  title: 'My Array',
+  maxItems: 3,
+  minItems: 1,
+  items: {
+    type: 'object',
+    properties: {
+      name: {
+        type: 'string',
+      },
+      rate: {
+        type: 'number',
+      },
+    },
+  },
+};
+
+const schemaWithCountAndName = {
+  type: 'array',
+  title: 'My Array',
+  maxItems: 3,
+  minItems: 1,
+  items: {
+    type: 'object',
+    properties: {
+      count: {
+        type: 'number',
+      },
+      name: {
+        type: 'string',
+      },
+    },
+  },
+};
+
 describe('ArrayListRenderer.vue', () => {
   it('renders a fieldset', () => {
     const wrapper = mountJsonForms(['a'], schema, uischema);
@@ -87,5 +123,45 @@ describe('ArrayListRenderer.vue', () => {
       const type = button.attributes('type');
       expect(type).to.equal('button');
     }
+  });
+
+  it('compute default label', async () => {
+    const wrapper = mountJsonForms(
+      [{ name: 'name1', rate: 5 }],
+      schemaWithNameAndRate,
+      uischema
+    );
+    const labels = wrapper.findAll('.array-list-item-label');
+    const labelText = labels[0].text();
+    expect(labelText).to.equal('name1');
+  });
+
+  it('compute default label with undefined', async () => {
+    const wrapper = mountJsonForms([{}], schemaWithNameAndRate, uischema);
+    const labels = wrapper.findAll('.array-list-item-label');
+    const labelText = labels[0].text();
+    expect(labelText).to.equal('');
+  });
+
+  it('compute default label with number', async () => {
+    const wrapper = mountJsonForms(
+      [{ count: 1, name: 'name1' }],
+      schemaWithCountAndName,
+      uischema
+    );
+    const labels = wrapper.findAll('.array-list-item-label');
+    const labelText = labels[0].text();
+    expect(labelText).to.equal('1');
+  });
+
+  it('compute default label with NaN', async () => {
+    const wrapper = mountJsonForms(
+      [{ count: Number(undefined), name: 'name1' }],
+      schemaWithCountAndName,
+      uischema
+    );
+    const labels = wrapper.findAll('.array-list-item-label');
+    const labelText = labels[0].text();
+    expect(labelText).to.equal('');
   });
 });
