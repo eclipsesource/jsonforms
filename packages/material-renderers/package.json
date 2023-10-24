@@ -59,7 +59,8 @@
     },
     "testEnvironment": "jsdom",
     "testMatch": [
-      "**/test/**/*.test.tsx"
+      "**/test/**/*.test.tsx",
+      "**/test/**.test.ts"
     ],
     "testPathIgnorePatterns": [
       "/node_modules/",
