@@ -36,6 +36,7 @@ interface CombinatorPropertiesProps {
   schema: JsonSchema;
   combinatorKeyword: 'oneOf' | 'anyOf';
   path: string;
+  rootSchema: JsonSchema;
 }
 
 export class CombinatorProperties extends React.Component<
@@ -45,7 +46,7 @@ export class CombinatorProperties extends React.Component<
   {}
 > {
   render() {
-    const { schema, combinatorKeyword, path } = this.props;
+    const { schema, combinatorKeyword, path, rootSchema } = this.props;
 
     const otherProps: JsonSchema = omit(
       schema,
@@ -53,7 +54,9 @@ export class CombinatorProperties extends React.Component<
     ) as JsonSchema;
     const foundUISchema: UISchemaElement = Generate.uiSchema(
       otherProps,
-      'VerticalLayout'
+      'VerticalLayout',
+      undefined,
+      rootSchema
     );
     let isLayoutWithElements = false;
     if (foundUISchema !== null && isLayout(foundUISchema)) {

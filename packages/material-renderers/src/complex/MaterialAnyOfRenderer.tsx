@@ -104,6 +104,7 @@ export const MaterialAnyOfRenderer = ({
         schema={schema}
         combinatorKeyword={anyOf}
         path={path}
+        rootSchema={rootSchema}
       />
       <Tabs value={selectedAnyOf} onChange={handleTabChange}>
         {anyOfRenderInfos.map((anyOfRenderInfo) => (

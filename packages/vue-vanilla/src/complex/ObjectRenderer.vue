@@ -51,7 +51,12 @@ const controlRenderer = defineComponent({
   computed: {
     detailUiSchema(): UISchemaElement {
       const uiSchemaGenerator = () => {
-        const uiSchema = Generate.uiSchema(this.control.schema, 'Group');
+        const uiSchema = Generate.uiSchema(
+          this.control.schema,
+          'Group',
+          undefined,
+          this.control.rootSchema
+        );
         if (isEmpty(this.control.path)) {
           uiSchema.type = 'VerticalLayout';
         } else {

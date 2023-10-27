@@ -56,8 +56,11 @@ export const MaterialObjectRenderer = ({
         path,
         () =>
           isEmpty(path)
-            ? Generate.uiSchema(schema, 'VerticalLayout')
-            : { ...Generate.uiSchema(schema, 'Group'), label },
+            ? Generate.uiSchema(schema, 'VerticalLayout', undefined, rootSchema)
+            : {
+                ...Generate.uiSchema(schema, 'Group', undefined, rootSchema),
+                label,
+              },
         uischema,
         rootSchema
       ),

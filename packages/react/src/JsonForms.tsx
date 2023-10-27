@@ -210,7 +210,9 @@ export const JsonForms = (
   );
   const uischemaToUse = useMemo(
     () =>
-      typeof uischema === 'object' ? uischema : Generate.uiSchema(schemaToUse),
+      typeof uischema === 'object'
+        ? uischema
+        : Generate.uiSchema(schemaToUse, undefined, undefined, schemaToUse),
     [uischema, schemaToUse]
   );
 
