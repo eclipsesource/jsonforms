@@ -73,7 +73,12 @@ export class ObjectControlRenderer extends JsonFormsControlWithDetail {
         delete newSchema.oneOf;
         delete newSchema.anyOf;
         delete newSchema.allOf;
-        return Generate.uiSchema(newSchema, 'Group');
+        return Generate.uiSchema(
+          newSchema,
+          'Group',
+          undefined,
+          this.rootSchema
+        );
       },
       props.uischema,
       props.rootSchema

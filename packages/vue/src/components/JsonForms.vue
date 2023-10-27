@@ -114,8 +114,11 @@ export default defineComponent({
   data() {
     const dataToUse = this.data;
     const generatorData = isObject(dataToUse) ? dataToUse : {};
-    const schemaToUse = this.schema ?? Generate.jsonSchema(generatorData);
-    const uischemaToUse = this.uischema ?? Generate.uiSchema(schemaToUse);
+    const schemaToUse: JsonSchema =
+      this.schema ?? Generate.jsonSchema(generatorData);
+    const uischemaToUse =
+      this.uischema ??
+      Generate.uiSchema(schemaToUse, undefined, undefined, schemaToUse);
     const initCore = (): JsonFormsCore => {
       const initialCore = {
         data: dataToUse,
@@ -177,11 +180,23 @@ export default defineComponent({
       const generatorData = isObject(this.data) ? this.data : {};
       this.schemaToUse = newSchema ?? Generate.jsonSchema(generatorData);
       if (!this.uischema) {
-        this.uischemaToUse = Generate.uiSchema(this.schemaToUse);
+        this.uischemaToUse = Generate.uiSchema(
+          this.schemaToUse,
+          undefined,
+          undefined,
+          this.schemaToUse
+        );
       }
     },
     uischema(newUischema) {
-      this.uischemaToUse = newUischema ?? Generate.uiSchema(this.schemaToUse);
+      this.uischemaToUse =
+        newUischema ??
+        Generate.uiSchema(
+          this.schemaToUse,
+          undefined,
+          undefined,
+          this.schemaToUse
+        );
     },
     data(newData) {
       this.dataToUse = newData;
