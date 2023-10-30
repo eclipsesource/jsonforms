@@ -78,6 +78,7 @@ import {
   arrayDefaultTranslations,
   ArrayTranslations,
 } from '../i18n/arrayTranslations';
+import { resolveSchema } from './resolvers';
 
 const isRequired = (
   schema: JsonSchema,
@@ -617,7 +618,11 @@ export const mapStateToMultiEnumControlProps = (
   ownProps: OwnPropsOfControl & OwnPropsOfEnum
 ): StatePropsOfControl & OwnPropsOfEnum => {
   const props: StatePropsOfControl = mapStateToControlProps(state, ownProps);
-  const items = props.schema.items as JsonSchema;
+  let items = props.schema.items as JsonSchema;
+  items =
+    items && items.$ref
+      ? resolveSchema(props.rootSchema, items.$ref, props.rootSchema)
+      : items;
   const options: EnumOption[] =
     ownProps.options ||
     (items?.oneOf &&
