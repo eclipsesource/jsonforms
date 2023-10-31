@@ -215,4 +215,43 @@ describe('Radio group control', () => {
     expect(currentlyChecked).toHaveLength(1);
     expect((currentlyChecked.getDOMNode() as HTMLInputElement).value).toBe('B');
   });
+
+  test('Radio group should preserve option type', () => {
+    const renderers = [
+      { tester: rankWith(10, isEnumControl), renderer: RadioGroupControl },
+    ];
+    const schema = {
+      type: 'object',
+      properties: {
+        amount: {
+          type: 'integer',
+          enum: [50, 100, 250, 500],
+        },
+      },
+    };
+    const uischema = {
+      type: 'Control',
+      scope: '#/properties/amount',
+      options: {
+        format: 'radio',
+      },
+    };
+    const core = initCore(schema, uischema, fixture.data);
+    wrapper = mount(
+      <JsonFormsStateProvider initState={{ core, renderers }}>
+        <RadioGroupControl schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
+    );
+
+    // Simulate a click event to change the selection
+    const radioInput = wrapper.find('input[value=100]');
+    radioInput.simulate('change');
+
+    const currentlyChecked = wrapper.find('input[checked=true]');
+    expect(currentlyChecked).toHaveLength(1);
+
+    // Check the type of the selected radio element's value
+    const selectedValue = currentlyChecked.props().value;
+    expect(typeof selectedValue).toBe('number');
+  });
 });
