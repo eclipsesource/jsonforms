@@ -28,6 +28,7 @@ import type Ajv from 'ajv';
 import type { ErrorObject } from 'ajv';
 import { UnknownRenderer } from './UnknownRenderer';
 import {
+  CoreActions,
   createId,
   Generate,
   isControl,
@@ -45,6 +46,7 @@ import {
 } from '@jsonforms/core';
 import {
   JsonFormsStateProvider,
+  Middleware,
   withJsonFormsRendererProps,
 } from './JsonFormsContext';
 
@@ -54,6 +56,7 @@ interface JsonFormsRendererState {
 
 export interface JsonFormsReactProps {
   onChange?(state: Pick<JsonFormsCore, 'data' | 'errors'>): void;
+  middleware?: Middleware;
 }
 
 export class JsonFormsDispatchRenderer extends React.Component<
@@ -203,6 +206,7 @@ export const JsonForms = (
     validationMode,
     i18n,
     additionalErrors,
+    middleware,
   } = props;
   const schemaToUse = useMemo(
     () => (schema !== undefined ? schema : Generate.jsonSchema(data)),
@@ -235,6 +239,7 @@ export const JsonForms = (
         i18n,
       }}
       onChange={onChange}
+      middleware={middleware}
     >
       <JsonFormsDispatch />
     </JsonFormsStateProvider>
