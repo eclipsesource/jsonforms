@@ -263,7 +263,10 @@ export class MasterListComponent
   }
 
   onAddClick() {
-    this.addItem(this.propsPath, createDefaultValue(this.scopedSchema))();
+    this.addItem(
+      this.propsPath,
+      createDefaultValue(this.scopedSchema, this.rootSchema)
+    )();
   }
 
   onDeleteClick(item: number) {

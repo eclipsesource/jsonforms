@@ -70,6 +70,7 @@ import { createAjv } from '../../src/util/validator';
 import { JsonSchema7 } from '../../src/models/jsonSchema7';
 import { defaultJsonFormsI18nState } from '../../src/reducers/i18n';
 import { i18nJsonSchema } from '../../src/i18n/i18nTypes';
+import { convertDateToString } from '../../src/util';
 
 const middlewares: Redux.Middleware[] = [];
 const mockStore = configureStore<JsonFormsState>(middlewares);
@@ -494,38 +495,170 @@ test('mapDispatchToControlProps', (t) => {
 });
 
 test('createDefaultValue', (t) => {
-  t.true(
-    _.isDate(
-      createDefaultValue({
+  t.is(
+    createDefaultValue(
+      {
         type: 'string',
         format: 'date',
-      })
-    )
+      },
+      {
+        type: 'string',
+        format: 'date',
+      }
+    ),
+    convertDateToString(new Date(), 'date')
   );
-  t.true(
-    _.isDate(
-      createDefaultValue({
+  t.regex(
+    createDefaultValue(
+      {
         type: 'string',
         format: 'date-time',
-      })
-    )
+      },
+      {
+        type: 'string',
+        format: 'date-time',
+      }
+    ),
+    /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/
   );
-  t.true(
-    _.isDate(
-      createDefaultValue({
+  t.regex(
+    createDefaultValue(
+      {
         type: 'string',
         format: 'time',
-      })
-    )
+      },
+      {
+        type: 'string',
+        format: 'time',
+      }
+    ),
+    /^\d{2}:\d{2}:\d{2}$/
   );
-  t.is(createDefaultValue({ type: 'string' }), '');
-  t.is(createDefaultValue({ type: 'number' }), 0);
-  t.falsy(createDefaultValue({ type: 'boolean' }));
-  t.is(createDefaultValue({ type: 'integer' }), 0);
-  t.deepEqual(createDefaultValue({ type: 'array' }), []);
-  t.is(createDefaultValue({ type: 'null' }), null);
-  t.deepEqual(createDefaultValue({ type: 'object' }), {});
-  t.deepEqual(createDefaultValue({ type: 'something' }), {});
+  t.is(createDefaultValue({ type: 'string' }, { type: 'string' }), '');
+  t.is(createDefaultValue({ type: 'number' }, { type: 'number' }), 0);
+  t.falsy(createDefaultValue({ type: 'boolean' }, { type: 'boolean' }));
+  t.is(createDefaultValue({ type: 'integer' }, { type: 'integer' }), 0);
+  t.deepEqual(createDefaultValue({ type: 'array' }, { type: 'array' }), []);
+  t.is(createDefaultValue({ type: 'null' }, { type: 'null' }), null);
+  t.deepEqual(createDefaultValue({ type: 'object' }, { type: 'object' }), {});
+  t.deepEqual(
+    createDefaultValue({ type: 'something' }, { type: 'something' }),
+    {}
+  );
+
+  // defaults:
+  t.deepEqual(
+    createDefaultValue(
+      {
+        type: 'string',
+        default: '2023-10-10',
+      },
+      {
+        type: 'string',
+        default: '2023-10-10',
+      }
+    ),
+    '2023-10-10'
+  );
+  t.is(
+    createDefaultValue(
+      { type: 'string', default: 'excellent' },
+      { type: 'string', default: 'excellent' }
+    ),
+    'excellent'
+  );
+  t.is(
+    createDefaultValue(
+      { type: 'number', default: 10 },
+      { type: 'number', default: 10 }
+    ),
+    10
+  );
+  t.is(
+    createDefaultValue(
+      { type: 'boolean', default: true },
+      { type: 'boolean', default: true }
+    ),
+    true
+  );
+  t.is(
+    createDefaultValue(
+      { type: 'integer', default: 11 },
+      { type: 'integer', default: 11 }
+    ),
+    11
+  );
+  t.deepEqual(
+    createDefaultValue(
+      { type: 'array', default: ['a', 'b', 'c'] },
+      { type: 'array', default: ['a', 'b', 'c'] }
+    ),
+    ['a', 'b', 'c']
+  );
+  t.deepEqual(
+    createDefaultValue(
+      { type: 'object', default: { foo: 'bar' } },
+      { type: 'object', default: { foo: 'bar' } }
+    ),
+    {
+      foo: 'bar',
+    }
+  );
+  const objectSchema = {
+    type: 'object',
+    properties: {
+      string1: { type: 'string', default: 'excellent' },
+      string2: { type: 'string' },
+      number: { type: 'number', default: 10 },
+      int: { type: 'integer', default: 11 },
+      bool: { type: 'boolean', default: true },
+      array: { type: 'array', default: ['a', 'b', 'c'] },
+    },
+  };
+  t.deepEqual(createDefaultValue(objectSchema, objectSchema), {
+    string1: 'excellent',
+    number: 10,
+    int: 11,
+    bool: true,
+    array: ['a', 'b', 'c'],
+  });
+
+  const rootSchemaWithRefs = {
+    definitions: {
+      stringDef: { type: 'string', default: 'excellent' },
+      numberDef: { type: 'number', default: 10 },
+      intDef: { type: 'integer', default: 11 },
+      boolDef: { type: 'boolean', default: true },
+      arrayDef: { type: 'array', default: ['a', 'b', 'c'] },
+    },
+    type: 'object',
+    properties: {
+      string1: { $ref: '#/definitions/stringDef' },
+      string2: { type: 'string' },
+      number: { $ref: '#/definitions/numberDef' },
+      int: { $ref: '#/definitions/intDef' },
+      bool: { $ref: '#/definitions/boolDef' },
+      array: { $ref: '#/definitions/arrayDef' },
+    },
+  };
+  const schemaWithRefs = {
+    type: 'object',
+    properties: {
+      string1: { $ref: '#/definitions/stringDef' },
+      string2: { type: 'string' },
+      number: { $ref: '#/definitions/numberDef' },
+      int: { $ref: '#/definitions/intDef' },
+      bool: { $ref: '#/definitions/boolDef' },
+      array: { $ref: '#/definitions/arrayDef' },
+    },
+  };
+  t.deepEqual(createDefaultValue(schemaWithRefs, rootSchemaWithRefs), {
+    string1: 'excellent',
+    number: 10,
+    int: 11,
+    bool: true,
+    array: ['a', 'b', 'c'],
+  });
 });
 
 test(`mapStateToJsonFormsRendererProps should use registered UI schema given ownProps schema`, (t) => {
@@ -595,7 +728,7 @@ test('mapDispatchToArrayControlProps should adding items to array', (t) => {
   const [getCore, dispatch] = mockDispatch(initCore);
   dispatch(init(data, schema, uischema));
   const props = mapDispatchToArrayControlProps(dispatch);
-  props.addItem('', createDefaultValue(schema))();
+  props.addItem('', createDefaultValue(schema, schema))();
   t.is(getCore().data.length, 2);
 });
 
@@ -1286,7 +1419,7 @@ test('should assign defaults to newly added item within nested object of an arra
   const [getCore, dispatch] = mockDispatch(initCore);
   dispatch(init(data, schema, uischema, createAjv({ useDefaults: true })));
   const props = mapDispatchToArrayControlProps(dispatch);
-  props.addItem('', createDefaultValue(schema))();
+  props.addItem('', createDefaultValue(schema, schema))();
 
   t.is(getCore().data.length, 2);
   t.deepEqual(getCore().data[0], { message: 'foo' });

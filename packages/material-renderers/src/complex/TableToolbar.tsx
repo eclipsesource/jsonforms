@@ -61,6 +61,7 @@ const TableToolbar = React.memo(function TableToolbar({
   schema,
   enabled,
   translations,
+  rootSchema,
 }: MaterialTableToolbarProps) {
   return (
     <TableRow>
@@ -95,7 +96,7 @@ const TableToolbar = React.memo(function TableToolbar({
           >
             <IconButton
               aria-label={translations.addAriaLabel}
-              onClick={addItem(path, createDefaultValue(schema))}
+              onClick={addItem(path, createDefaultValue(schema, rootSchema))}
               size='large'
             >
               <AddIcon />
