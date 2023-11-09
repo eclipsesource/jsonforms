@@ -57,7 +57,7 @@ import { createLabelDescriptionFrom } from './label';
 import type { CombinatorKeyword } from './combinators';
 import { moveDown, moveUp } from './array';
 import type { AnyAction, Dispatch } from './type';
-import { Resolve } from './util';
+import { Resolve, convertDateToString, hasType } from './util';
 import { composePaths, composeWithUi } from './path';
 import { CoreActions, update } from '../actions';
 import type { ErrorObject } from 'ajv';
@@ -79,6 +79,7 @@ import {
   ArrayTranslations,
 } from '../i18n/arrayTranslations';
 import { resolveSchema } from './resolvers';
+import cloneDeep from 'lodash/cloneDeep';
 
 const isRequired = (
   schema: JsonSchema,
@@ -138,33 +139,65 @@ export const showAsRequired = (
 };
 
 /**
- * Create a default value based on the given scheam.
+ * Create a default value based on the given schema.
  * @param schema the schema for which to create a default value.
  * @returns {any}
  */
-export const createDefaultValue = (schema: JsonSchema) => {
-  switch (schema.type) {
-    case 'string':
-      if (
-        schema.format === 'date-time' ||
-        schema.format === 'date' ||
-        schema.format === 'time'
-      ) {
-        return new Date();
-      }
-      return '';
-    case 'integer':
-    case 'number':
-      return 0;
-    case 'boolean':
-      return false;
-    case 'array':
-      return [];
-    case 'null':
-      return null;
-    default:
-      return {};
+export const createDefaultValue = (
+  schema: JsonSchema,
+  rootSchema: JsonSchema
+) => {
+  const resolvedSchema = Resolve.schema(schema, schema.$ref, rootSchema);
+  if (resolvedSchema.default !== undefined) {
+    return extractDefaults(resolvedSchema, rootSchema);
   }
+  if (hasType(resolvedSchema, 'string')) {
+    if (
+      resolvedSchema.format === 'date-time' ||
+      resolvedSchema.format === 'date' ||
+      resolvedSchema.format === 'time'
+    ) {
+      return convertDateToString(new Date(), resolvedSchema.format);
+    }
+    return '';
+  } else if (
+    hasType(resolvedSchema, 'integer') ||
+    hasType(resolvedSchema, 'number')
+  ) {
+    return 0;
+  } else if (hasType(resolvedSchema, 'boolean')) {
+    return false;
+  } else if (hasType(resolvedSchema, 'array')) {
+    return [];
+  } else if (hasType(resolvedSchema, 'object')) {
+    return extractDefaults(resolvedSchema, rootSchema);
+  } else if (hasType(resolvedSchema, 'null')) {
+    return null;
+  } else {
+    return {};
+  }
+};
+
+/**
+ * Returns the default value defined in the given schema.
+ * @param schema the schema for which to create a default value.
+ * @returns {any}
+ */
+export const extractDefaults = (schema: JsonSchema, rootSchema: JsonSchema) => {
+  if (hasType(schema, 'object') && schema.default === undefined) {
+    const result: { [key: string]: any } = {};
+    for (const key in schema.properties) {
+      const property = schema.properties[key];
+      const resolvedProperty = property.$ref
+        ? Resolve.schema(rootSchema, property.$ref, rootSchema)
+        : property;
+      if (resolvedProperty.default !== undefined) {
+        result[key] = cloneDeep(resolvedProperty.default);
+      }
+    }
+    return result;
+  }
+  return cloneDeep(schema.default);
 };
 
 /**

@@ -180,7 +180,10 @@ export class ArrayLayoutRenderer
     this.removeItems(this.propsPath, [index])();
   }
   add(): void {
-    this.addItem(this.propsPath, createDefaultValue(this.scopedSchema))();
+    this.addItem(
+      this.propsPath,
+      createDefaultValue(this.scopedSchema, this.rootSchema)
+    )();
   }
   up(index: number): void {
     this.moveItemUp(this.propsPath, index)();

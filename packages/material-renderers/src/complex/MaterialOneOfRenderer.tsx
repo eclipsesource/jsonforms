@@ -79,7 +79,10 @@ export const MaterialOneOfRenderer = ({
   );
 
   const openNewTab = (newIndex: number) => {
-    handleChange(path, createDefaultValue(oneOfRenderInfos[newIndex].schema));
+    handleChange(
+      path,
+      createDefaultValue(oneOfRenderInfos[newIndex].schema, rootSchema)
+    );
     setSelectedIndex(newIndex);
   };
 

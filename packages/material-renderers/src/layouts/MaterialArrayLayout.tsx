@@ -38,7 +38,7 @@ import merge from 'lodash/merge';
 const MaterialArrayLayoutComponent = (props: ArrayLayoutProps) => {
   const [expanded, setExpanded] = useState<string | boolean>(false);
   const innerCreateDefaultValue = useCallback(
-    () => createDefaultValue(props.schema),
+    () => createDefaultValue(props.schema, props.rootSchema),
     [props.schema]
   );
   const handleChange = useCallback(
