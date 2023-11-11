@@ -34,7 +34,7 @@ import {
 import { CategorizationList } from './CategorizationList';
 import { SingleCategory } from './SingleCategory';
 import { withVanillaControlProps } from '../../util';
-import type { AjvProps, VanillaRendererProps } from '../../index';
+import type { AjvProps, VanillaRendererProps } from '../../util';
 
 export interface CategorizationState {
   selectedCategory: Category;
