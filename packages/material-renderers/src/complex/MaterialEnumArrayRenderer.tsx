@@ -8,6 +8,7 @@ import {
   Paths,
   RankedTester,
   rankWith,
+  resolveSchema,
   schemaMatches,
   schemaSubPathMatches,
   uiTypeIs,
@@ -99,8 +100,11 @@ export const materialEnumArrayRendererTester: RankedTester = rankWith(
           !Array.isArray(schema.items) &&
           schema.uniqueItems === true
       ),
-      schemaSubPathMatches('items', (schema) => {
-        return hasOneOfItems(schema) || hasEnumItems(schema);
+      schemaSubPathMatches('items', (schema, rootSchema) => {
+        const resolvedSchema = schema.$ref
+          ? resolveSchema(rootSchema, schema.$ref, rootSchema)
+          : schema;
+        return hasOneOfItems(resolvedSchema) || hasEnumItems(resolvedSchema);
       })
     )
   )

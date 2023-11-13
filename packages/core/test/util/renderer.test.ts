@@ -983,6 +983,50 @@ test('mapStateToMultiEnumControlProps - enum items', (t) => {
   ]);
 });
 
+test('mapStateToMultiEnumControlProps - enum with ref', (t) => {
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/colors',
+  };
+  const state = {
+    jsonforms: {
+      core: {
+        schema: {
+          definitions: {
+            colors: {
+              type: 'string',
+              enum: ['red', 'green', 'pink'],
+            },
+          },
+          type: 'object',
+          properties: {
+            colors: {
+              type: 'array',
+              items: {
+                $ref: '#/definitions/colors',
+              },
+              uniqueItems: true,
+            },
+          },
+        },
+        data: {},
+        uischema,
+        errors: [] as ErrorObject[],
+      },
+    },
+  };
+  const ownProps = {
+    uischema,
+    path: 'colors',
+  };
+  const props = mapStateToMultiEnumControlProps(state, ownProps);
+  t.deepEqual(props.options, [
+    { label: 'red', value: 'red' },
+    { label: 'green', value: 'green' },
+    { label: 'pink', value: 'pink' },
+  ]);
+});
+
 test('mapDispatchToMultiEnumProps - enum schema - addItem', (t) => {
   const uischema: ControlElement = {
     type: 'Control',
