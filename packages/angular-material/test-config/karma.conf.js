@@ -5,15 +5,36 @@ module.exports = function (config) {
     basePath: '../',
 
     plugins: [
-      'karma-jasmine',
-      'karma-jasmine-html-reporter',
-      'karma-chrome-launcher',
-      'karma-webpack',
-      'karma-sourcemap-loader',
-      'karma-coverage-istanbul-reporter',
+      require('karma-jasmine'),
+      require('karma-jasmine-html-reporter'),
+      require('karma-chrome-launcher'),
+      require('karma-webpack'),
+      require('karma-sourcemap-loader'),
+      require('karma-coverage-istanbul-reporter'),
     ],
 
     frameworks: ['jasmine'],
+
+    client: {
+      jasmine: {
+        // you can add configuration options for Jasmine here
+        // the possible options are listed at https://jasmine.github.io/api/edge/Configuration.html
+        // for example, you can disable the random execution with `random: false`
+        // or set a specific seed with `seed: 4321`
+      },
+      clearContext: false // leave Jasmine Spec Runner output visible in browser
+    },
+    jasmineHtmlReporter: {
+      suppressAll: true // removes the duplicated traces
+    },
+    coverageReporter: {
+      dir: require('path').join(__dirname, '../../coverage/foobar'),
+      subdir: '.',
+      reporters: [
+        { type: 'html' },
+        { type: 'text-summary' }
+      ]
+    },
 
     files: [
       {
@@ -55,13 +76,14 @@ module.exports = function (config) {
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
-    browsers: ['ChromeHeadlessNoSandbox'],
-    customLaunchers: {
-      ChromeHeadlessNoSandbox: {
-        base: 'ChromeHeadless',
-        flags: ['--no-sandbox'],
-      },
-    },
+    // browsers: ['ChromeHeadlessNoSandbox'],
+    // customLaunchers: {
+    //   ChromeHeadlessNoSandbox: {
+    //     base: 'ChromeHeadless',
+    //     flags: ['--no-sandbox'],
+    //   },
+    // },
+    browsers: ['Chrome'],
     singleRun: false,
   };
 

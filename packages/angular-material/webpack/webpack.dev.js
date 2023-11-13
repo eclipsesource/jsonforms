@@ -20,18 +20,23 @@ module.exports = merge(baseConfig, {
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new copyWebpackPlugin([
-      {
-        from: 'node_modules/@angular/material/prebuilt-themes/indigo-pink.css',
-      },
-    ]),
+    new copyWebpackPlugin({ 
+      patterns: [
+        {
+          from: 'node_modules/@angular/material/prebuilt-themes/indigo-pink.css',
+        },
+      ]
+    }),
   ],
   module: {
     rules: [
       {
         test: /\.html$/,
         exclude: /node_modules/,
-        loader: 'html-loader?exportAsEs6Default',
+        loader: 'html-loader',
+        options: {
+          esModule: false
+        }
       },
     ],
   },

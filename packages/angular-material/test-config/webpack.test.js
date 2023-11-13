@@ -1,5 +1,6 @@
 var webpack = require('webpack');
 var path = require('path');
+const AngularWebpackPlugin = require('@ngtools/webpack').AngularWebpackPlugin;
 
 module.exports = {
   devtool: 'inline-source-map',
@@ -9,39 +10,44 @@ module.exports = {
   },
 
   module: {
+    parser: { javascript: { strictExportPresence: true } },
     rules: [
       {
-        test: /\.jsx?$/,
-        loader: 'babel-loader',
-        options: {
-          plugins: [
-            '@babel/plugin-proposal-optional-chaining',
-            '@babel/plugin-proposal-nullish-coalescing-operator',
-          ],
-        },
-        exclude: /node_modules/,
+        test: /\.?(svg|html)$/,
+        resourceQuery: /\?ngResource/,
+        type: 'asset/source'
       },
+      { test: /[/\\]rxjs[/\\]add[/\\].+\.js$/, sideEffects: true },
       {
-        test: /\.ts$/,
-        loaders: [
-          {
-            loader: 'ts-loader',
-          },
-          'angular2-template-loader',
-        ],
+        test: /\.[cm]?tsx?$/,
+        loader: '@ngtools/webpack',
+        exclude: [
+          /[\\/]node_modules[/\\](?:css-loader|mini-css-extract-plugin|webpack-dev-server|webpack)[/\\]/
+        ]
       },
-      {
-        test: /.+\.ts$/,
-        exclude: /(index.ts|mocks.ts|\.spec\.ts|\.test\.ts$)/,
-        loader: 'istanbul-instrumenter-loader',
-        enforce: 'post',
-        query: {
-          esModules: true,
+      { // Angular linker needed to link partial-ivy code
+        // See https://angular.io/guide/creating-libraries#consuming-partial-ivy-code-outside-the-angular-cli
+        test: /[/\\]@angular[/\\].+\.m?js$/,
+        resolve: {
+          fullySpecified: false,
         },
+        use: {
+          loader: 'babel-loader',
+          options: {
+            plugins: ['@angular/compiler-cli/linker/babel'],
+            compact: false,
+            cacheDirectory: true
+          }
+        }
       },
+      // {
+      //   test: /.+\.ts$/,
+      //   exclude: /(index.ts|mocks.ts|\.spec\.ts|\.test\.ts$)/,
+      //   use: "coverage-istanbul-loader"
+      // },
       {
         test: /\.html$/,
-        loader: 'html-loader?attrs=false',
+        loader: 'html-loader',
       },
       {
         test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
@@ -57,6 +63,9 @@ module.exports = {
       root('./src'), // location of your src
       {} // a map of your routes
     ),
+    new AngularWebpackPlugin({
+      tsconfig: './test/tsconfig.test.json'
+    })
   ],
 };
 
