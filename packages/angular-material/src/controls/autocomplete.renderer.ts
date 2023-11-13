@@ -108,6 +108,7 @@ export class AutocompleteControlRenderer
   @Input() options: string[];
   filteredOptions: Observable<string[]>;
   shouldFilter: boolean;
+  focused: boolean = false;
 
   constructor(jsonformsService: JsonFormsAngularService) {
     super(jsonformsService);

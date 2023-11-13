@@ -95,14 +95,14 @@ describe('Object Control', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
+    declarations: [
         ObjectControlRenderer,
         TextControlRenderer,
         VerticalLayoutRenderer,
         GroupLayoutRenderer,
         LayoutChildrenRenderPropsPipe,
-      ],
-      imports: [
+    ],
+    imports: [
         CommonModule,
         JsonFormsModule,
         MatCardModule,
@@ -111,9 +111,10 @@ describe('Object Control', () => {
         MatInputModule,
         ReactiveFormsModule,
         FlexLayoutModule,
-      ],
-      providers: [JsonFormsAngularService],
-    })
+    ],
+    providers: [JsonFormsAngularService],
+    teardown: { destroyAfterEach: false }
+})
       .overrideModule(BrowserDynamicTestingModule, {
         set: {
           entryComponents: [

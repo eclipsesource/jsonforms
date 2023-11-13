@@ -103,13 +103,13 @@ describe('Master detail', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [
+    declarations: [
         JsonFormsOutlet,
         MasterListComponent,
         UnknownRenderer,
         JsonFormsDetailComponent,
-      ],
-      imports: [
+    ],
+    imports: [
         MatListModule,
         MatSidenavModule,
         MatIconModule,
@@ -117,9 +117,10 @@ describe('Master detail', () => {
         FlexLayoutModule,
         NoopAnimationsModule,
         MatTooltipModule,
-      ],
-      providers: [JsonFormsAngularService],
-    })
+    ],
+    providers: [JsonFormsAngularService],
+    teardown: { destroyAfterEach: false }
+})
       .overrideModule(BrowserDynamicTestingModule, {
         set: {
           entryComponents: [UnknownRenderer],

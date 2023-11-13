@@ -95,7 +95,7 @@ import {
           first as first
         "
       >
-        <mat-card>
+        <mat-card appearance="outlined">
           <mat-card-content>
             <jsonforms-outlet [renderProps]="getProps(idx)"></jsonforms-outlet>
           </mat-card-content>
@@ -141,17 +141,17 @@ import {
   `,
   styles: [
     `
-      .array-layout-toolbar {
-        display: flex;
-        align-items: center;
-      }
-      .array-layout-title {
-        margin: 0;
-      }
-      ::ng-deep .error-message-tooltip {
-        white-space: pre-line;
-      }
-    `,
+                .array-layout-toolbar {
+                  display: flex;
+                  align-items: center;
+                }
+                .array-layout-title {
+                  margin: 0;
+                }
+                ::ng-deep .error-message-tooltip {
+                  white-space: pre-line;
+                }
+              `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -58,9 +58,10 @@ describe('Label Renderer Base Tests', () => {
   let labelElement: HTMLLabelElement;
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [componentUT],
-      providers: providers,
-    }).compileComponents();
+    declarations: [componentUT],
+    providers: providers,
+    teardown: { destroyAfterEach: false }
+}).compileComponents();
   });
   beforeEach(() => {
     fixture = TestBed.createComponent(componentUT);

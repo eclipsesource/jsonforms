@@ -115,35 +115,36 @@ export const removeSchemaKeywords = (path: string) => {
   `,
   styles: [
     `
-      mat-list-item.selected {
-        background: rgba(0, 0, 0, 0.04);
-      }
-      .container {
-        height: 100vh;
-      }
-      .content {
-        padding: 15px;
-        background-color: #fff;
-      }
-      .add-button {
-        float: right;
-        margin-top: 0.5em;
-        margin-right: 0.25em;
-      }
-      .button {
-        float: right;
-        margin-right: 0.25em;
-      }
-      .hide {
-        display: none;
-      }
-      .show {
-        display: inline-block;
-      }
-      mat-sidenav {
-        width: 20%;
-      }
-    `,
+                /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
+                mat-list-item.selected {
+                  background: rgba(0, 0, 0, 0.04);
+                }
+                .container {
+                  height: 100vh;
+                }
+                .content {
+                  padding: 15px;
+                  background-color: #fff;
+                }
+                .add-button {
+                  float: right;
+                  margin-top: 0.5em;
+                  margin-right: 0.25em;
+                }
+                .button {
+                  float: right;
+                  margin-right: 0.25em;
+                }
+                .hide {
+                  display: none;
+                }
+                .show {
+                  display: inline-block;
+                }
+                mat-sidenav {
+                  width: 20%;
+                }
+              `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

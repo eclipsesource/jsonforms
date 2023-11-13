@@ -8,9 +8,9 @@
   "exclude": ["node_modules"],
   "files": ["./src/index.ts"],
   "angularCompilerOptions": {
+    "compilationMode": "partial",
     "strictMetadataEmit": true,
     "generateCodeForLibraries": false,
-    "skipTemplateCodegen": true,
-    "enableIvy": false
+    "skipTemplateCodegen": true
   }
 }

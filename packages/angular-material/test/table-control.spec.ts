@@ -141,8 +141,8 @@ describe('Table', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [TableRenderer, TextControlRenderer],
-      imports: [
+    declarations: [TableRenderer, TextControlRenderer],
+    imports: [
         CommonModule,
         JsonFormsModule,
         MatCardModule,
@@ -154,9 +154,10 @@ describe('Table', () => {
         FlexLayoutModule,
         MatTableModule,
         MatTooltipModule,
-      ],
-      providers: [JsonFormsAngularService],
-    })
+    ],
+    providers: [JsonFormsAngularService],
+    teardown: { destroyAfterEach: false }
+})
       .overrideModule(BrowserDynamicTestingModule, {
         set: {
           entryComponents: [TextControlRenderer],
