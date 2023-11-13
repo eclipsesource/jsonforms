@@ -111,7 +111,7 @@ export const RadioGroup = ({
               id={option.value}
               name={id}
               checked={data === option.value}
-              onChange={(ev) => handleChange(path, ev.currentTarget.value)}
+              onChange={(_) => handleChange(path, option.value)}
               disabled={!enabled}
               className={radioInput}
             />
