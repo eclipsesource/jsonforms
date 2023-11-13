@@ -28,8 +28,10 @@ import {
   Categorization,
   deriveLabelForUISchemaElement,
   Translator,
+  isVisible,
 } from '@jsonforms/core';
 import { isCategorization } from './tester';
+import { AjvProps } from '../../util';
 
 const getCategoryClassName = (
   category: Category,
@@ -37,9 +39,10 @@ const getCategoryClassName = (
 ): string => (selectedCategory === category ? 'selected' : '');
 
 export interface CategorizationProps {
-  filteredCategorization: (Category | Categorization)[];
+  elements: (Category | Categorization)[];
   selectedCategory: Category;
   depth: number;
+  data: any;
   onSelect: any;
   subcategoriesClassName: string;
   groupClassName: string;
@@ -48,31 +51,38 @@ export interface CategorizationProps {
 
 export const CategorizationList = ({
   selectedCategory,
-  filteredCategorization,
+  elements,
+  data,
   depth,
   onSelect,
   subcategoriesClassName,
   groupClassName,
   t,
-}: CategorizationProps) => {
+  ajv,
+}: CategorizationProps & AjvProps) => {
+  const filteredElements = elements.filter(
+    (category: Category | Categorization) => {
+      isVisible(category, data, undefined, ajv);
+    }
+  );
+
   const categoryLabels = useMemo(
-    () =>
-      filteredCategorization.map((cat) =>
-        deriveLabelForUISchemaElement(cat, t)
-      ),
-    [filteredCategorization, t]
+    () => filteredElements.map((cat) => deriveLabelForUISchemaElement(cat, t)),
+    [filteredElements, t]
   );
 
   return (
     <ul className={subcategoriesClassName}>
-      {filteredCategorization.map((category, idx) => {
+      {filteredElements.map((category, idx) => {
         if (isCategorization(category)) {
           return (
             <li key={categoryLabels[idx]} className={groupClassName}>
               <span>{categoryLabels[idx]}</span>
               <CategorizationList
                 selectedCategory={selectedCategory}
-                filteredCategorization={category.elements}
+                elements={category.elements}
+                data={data}
+                ajv={ajv}
                 depth={depth + 1}
                 onSelect={onSelect}
                 subcategoriesClassName={subcategoriesClassName}

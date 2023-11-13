@@ -24,7 +24,6 @@
 */
 import React, { useMemo, useState } from 'react';
 import type { Categorization, Category, LayoutProps } from '@jsonforms/core';
-import { isVisible } from '@jsonforms/core';
 import {
   TranslateProps,
   withJsonFormsLayoutProps,
@@ -61,11 +60,8 @@ export const CategorizationRenderer = ({
   CategorizationProps &
   AjvProps) => {
   const categorization = uischema as Categorization;
-  const filteredCategorization = useMemo(
-    () =>
-      categorization.elements.filter((category: Category | Categorization) =>
-        isVisible(category, data, undefined, ajv)
-      ),
+  const elements = useMemo(
+    () => categorization.elements,
     [categorization, data, ajv]
   ) as (Category | Categorization)[];
   const classNames = getStyleAsClassName('categorization');
@@ -100,8 +96,10 @@ export const CategorizationRenderer = ({
     >
       <div className={masterClassNames}>
         <CategorizationList
-          filteredCategorization={filteredCategorization}
-          selectedCategory={filteredCategorization[safeCategory]}
+          elements={elements}
+          selectedCategory={elements[safeCategory] as Category}
+          data={data}
+          ajv={ajv}
           depth={0}
           onSelect={onCategorySelected}
           subcategoriesClassName={subcategoriesClassName}
@@ -111,7 +109,7 @@ export const CategorizationRenderer = ({
       </div>
       <div className={detailClassNames}>
         <SingleCategory
-          category={filteredCategorization[safeCategory]}
+          category={elements[safeCategory] as Category}
           schema={schema}
           path={path}
           key={safeCategory}
