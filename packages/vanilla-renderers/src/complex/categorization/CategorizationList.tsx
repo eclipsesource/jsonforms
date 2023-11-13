@@ -25,6 +25,7 @@
 import React, { useMemo } from 'react';
 import {
   Category,
+  Categorization,
   deriveLabelForUISchemaElement,
   Translator,
 } from '@jsonforms/core';
@@ -36,7 +37,7 @@ const getCategoryClassName = (
 ): string => (selectedCategory === category ? 'selected' : '');
 
 export interface CategorizationProps {
-  filteredCategories: [Category];
+  filteredCategorization: (Category | Categorization)[];
   selectedCategory: Category;
   depth: number;
   onSelect: any;
@@ -47,7 +48,7 @@ export interface CategorizationProps {
 
 export const CategorizationList = ({
   selectedCategory,
-  filteredCategories,
+  filteredCategorization,
   depth,
   onSelect,
   subcategoriesClassName,
@@ -56,20 +57,22 @@ export const CategorizationList = ({
 }: CategorizationProps) => {
   const categoryLabels = useMemo(
     () =>
-      filteredCategories.map((cat) => deriveLabelForUISchemaElement(cat, t)),
-    [filteredCategories, t]
+      filteredCategorization.map((cat) =>
+        deriveLabelForUISchemaElement(cat, t)
+      ),
+    [filteredCategorization, t]
   );
 
   return (
     <ul className={subcategoriesClassName}>
-      {filteredCategories.map((category, idx) => {
+      {filteredCategorization.map((category, idx) => {
         if (isCategorization(category)) {
           return (
             <li key={categoryLabels[idx]} className={groupClassName}>
               <span>{categoryLabels[idx]}</span>
               <CategorizationList
                 selectedCategory={selectedCategory}
-                filteredCategories={filteredCategories}
+                filteredCategorization={category.elements}
                 depth={depth + 1}
                 onSelect={onSelect}
                 subcategoriesClassName={subcategoriesClassName}

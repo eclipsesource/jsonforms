@@ -27,13 +27,12 @@ import type { Categorization, Category, LayoutProps } from '@jsonforms/core';
 import { isVisible } from '@jsonforms/core';
 import {
   TranslateProps,
-  useJsonForms,
   withJsonFormsLayoutProps,
   withTranslateProps,
 } from '@jsonforms/react';
 import { CategorizationList } from './CategorizationList';
 import { SingleCategory } from './SingleCategory';
-import { withVanillaControlProps } from '../../util';
+import { withAjvProps, withVanillaControlProps } from '../../util';
 import type { AjvProps, VanillaRendererProps } from '../../util';
 
 export interface CategorizationState {
@@ -55,20 +54,20 @@ export const CategorizationRenderer = ({
   visible,
   getStyleAsClassName,
   onChange,
+  ajv,
 }: LayoutProps &
   VanillaRendererProps &
   TranslateProps &
   CategorizationProps &
   AjvProps) => {
-  const ajv = useJsonForms().core.ajv;
   const categorization = uischema as Categorization;
-  const filteredCategories = useMemo(
+  const filteredCategorization = useMemo(
     () =>
-      categorization.elements.filter((category: Category) =>
+      categorization.elements.filter((category: Category | Categorization) =>
         isVisible(category, data, undefined, ajv)
       ),
     [categorization, data, ajv]
-  ) as [Category];
+  ) as (Category | Categorization)[];
   const classNames = getStyleAsClassName('categorization');
   const masterClassNames = getStyleAsClassName('categorization.master');
   const detailClassNames = getStyleAsClassName('categorization.detail');
@@ -101,8 +100,8 @@ export const CategorizationRenderer = ({
     >
       <div className={masterClassNames}>
         <CategorizationList
-          filteredCategories={filteredCategories}
-          selectedCategory={filteredCategories[safeCategory]}
+          filteredCategorization={filteredCategorization}
+          selectedCategory={filteredCategorization[safeCategory]}
           depth={0}
           onSelect={onCategorySelected}
           subcategoriesClassName={subcategoriesClassName}
@@ -112,7 +111,7 @@ export const CategorizationRenderer = ({
       </div>
       <div className={detailClassNames}>
         <SingleCategory
-          category={filteredCategories[safeCategory]}
+          category={filteredCategorization[safeCategory]}
           schema={schema}
           path={path}
           key={safeCategory}
@@ -122,6 +121,8 @@ export const CategorizationRenderer = ({
   );
 };
 
-export default withVanillaControlProps(
-  withTranslateProps(withJsonFormsLayoutProps(CategorizationRenderer))
+export default withAjvProps(
+  withVanillaControlProps(
+    withTranslateProps(withJsonFormsLayoutProps(CategorizationRenderer))
+  )
 );
