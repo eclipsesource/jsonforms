@@ -45,7 +45,7 @@ import {
   textCellTester,
   TimeCell,
   timeCellTester,
-} from '../cells';
+} from './cells';
 
 import {
   InputControl,
@@ -54,7 +54,7 @@ import {
   radioGroupControlTester,
   OneOfRadioGroupControl,
   oneOfRadioGroupControlTester,
-} from '../controls';
+} from './controls';
 
 import {
   ArrayControl,
@@ -65,7 +65,7 @@ import {
   labelRendererTester,
   TableArrayControl,
   tableArrayControlTester,
-} from '../complex';
+} from './complex';
 
 import {
   GroupLayout,
@@ -74,8 +74,8 @@ import {
   horizontalLayoutTester,
   VerticalLayout,
   verticalLayoutTester,
-} from '../layouts';
-import DateTimeCell from '../cells/DateTimeCell';
+} from './layouts';
+import DateTimeCell from './cells/DateTimeCell';
 
 export const vanillaRenderers: { tester: RankedTester; renderer: any }[] = [
   { tester: inputControlTester, renderer: InputControl },
