@@ -60,11 +60,11 @@ export const CategorizationList = ({
   t,
   ajv,
 }: CategorizationProps & AjvProps) => {
-  const filteredElements = elements.filter(
-    (category: Category | Categorization) => {
-      isVisible(category, data, undefined, ajv);
-    }
-  );
+  const filteredElements = useMemo(() => {
+    return elements.filter((category: Category | Categorization) =>
+      isVisible(category, data, undefined, ajv)
+    );
+  }, [elements, data, ajv]);
 
   const categoryLabels = useMemo(
     () => filteredElements.map((cat) => deriveLabelForUISchemaElement(cat, t)),

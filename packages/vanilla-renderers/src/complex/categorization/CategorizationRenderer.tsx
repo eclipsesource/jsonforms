@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import type { Categorization, Category, LayoutProps } from '@jsonforms/core';
 import {
   TranslateProps,
@@ -60,10 +60,7 @@ export const CategorizationRenderer = ({
   CategorizationProps &
   AjvProps) => {
   const categorization = uischema as Categorization;
-  const elements = useMemo(
-    () => categorization.elements,
-    [categorization, data, ajv]
-  ) as (Category | Categorization)[];
+  const elements = categorization.elements as (Category | Categorization)[];
   const classNames = getStyleAsClassName('categorization');
   const masterClassNames = getStyleAsClassName('categorization.master');
   const detailClassNames = getStyleAsClassName('categorization.detail');
