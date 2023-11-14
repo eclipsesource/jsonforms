@@ -35,6 +35,7 @@ import * as arrayWithDetail from './examples/arrays-with-detail';
 import * as arrayWithDetailAndRule from './examples/arrays-with-detail-and-rule';
 import * as arrayWithCustomChildLabel from './examples/arrays-with-custom-element-label';
 import * as arrayWithSorting from './examples/arrays-with-sorting';
+import * as arrayWithDefaults from './examples/arrays-with-defaults';
 import * as stringArray from './examples/stringArray';
 import * as categorization from './examples/categorization';
 import * as stepper from './examples/categorization-stepper';
@@ -125,4 +126,5 @@ export {
   conditionalSchemaComposition,
   additionalErrors,
   issue_1884,
+  arrayWithDefaults,
 };

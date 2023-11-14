@@ -77,7 +77,7 @@ export const findUISchema = (
           return fallback();
         }
         // force generation of uischema
-        return Generate.uiSchema(schema, fallback);
+        return Generate.uiSchema(schema, fallback, undefined, rootSchema);
       }
     } else if (typeof control.options.detail === 'object') {
       // check if detail is a valid uischema

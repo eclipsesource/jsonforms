@@ -67,7 +67,10 @@ export const MaterialAnyOfRenderer = ({
       if (
         isEmpty(data) ||
         typeof data ===
-          typeof createDefaultValue(anyOfRenderInfos[newIndex].schema)
+          typeof createDefaultValue(
+            anyOfRenderInfos[newIndex].schema,
+            rootSchema
+          )
       ) {
         setSelectedAnyOf(newIndex);
       } else {
@@ -79,7 +82,10 @@ export const MaterialAnyOfRenderer = ({
   );
 
   const openNewTab = (newIndex: number) => {
-    handleChange(path, createDefaultValue(anyOfRenderInfos[newIndex].schema));
+    handleChange(
+      path,
+      createDefaultValue(anyOfRenderInfos[newIndex].schema, rootSchema)
+    );
     setSelectedAnyOf(newIndex);
   };
 
@@ -104,6 +110,7 @@ export const MaterialAnyOfRenderer = ({
         schema={schema}
         combinatorKeyword={anyOf}
         path={path}
+        rootSchema={rootSchema}
       />
       <Tabs value={selectedAnyOf} onChange={handleTabChange}>
         {anyOfRenderInfos.map((anyOfRenderInfo) => (

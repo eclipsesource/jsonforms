@@ -65,7 +65,6 @@ export const MaterialRadioGroup = (props: ControlProps & OwnPropsOfEnum) => {
     focused,
     appliedUiSchemaOptions.showUnfocusedDescription
   );
-  const onChange = (_ev: any, value: any) => handleChange(path, value);
 
   return (
     <Hidden xsUp={!visible}>
@@ -87,12 +86,17 @@ export const MaterialRadioGroup = (props: ControlProps & OwnPropsOfEnum) => {
           {label}
         </FormLabel>
 
-        <RadioGroup value={props.data ?? ''} onChange={onChange} row={true}>
+        <RadioGroup value={props.data ?? ''} row={true}>
           {options.map((option) => (
             <FormControlLabel
               value={option.value}
               key={option.label}
-              control={<Radio checked={data === option.value} />}
+              control={
+                <Radio
+                  checked={data === option.value}
+                  onChange={() => handleChange(path, option.value)}
+                />
+              }
               label={option.label}
               disabled={!enabled}
             />

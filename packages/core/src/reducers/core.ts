@@ -90,16 +90,6 @@ const initState: JsonFormsCore = {
   additionalErrors: [],
 };
 
-const reuseAjvForSchema = (ajv: Ajv, schema: JsonSchema): Ajv => {
-  if (
-    Object.prototype.hasOwnProperty.call(schema, 'id') ||
-    Object.prototype.hasOwnProperty.call(schema, '$id')
-  ) {
-    ajv.removeSchema(schema);
-  }
-  return ajv;
-};
-
 const getOrCreateAjv = (
   state: JsonFormsCore,
   action?: InitAction | UpdateCoreAction
@@ -115,12 +105,7 @@ const getOrCreateAjv = (
       }
     }
   }
-  if (state.ajv) {
-    return action?.schema
-      ? reuseAjvForSchema(state.ajv, action.schema)
-      : state.ajv;
-  }
-  return createAjv();
+  return state.ajv ? state.ajv : createAjv();
 };
 
 const hasAjvOption = (option: any): option is InitActionOptions => {
@@ -255,7 +240,7 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
       const needsNewValidator =
         action.schema && state.ajv && state.validationMode !== 'NoValidation';
       const v = needsNewValidator
-        ? reuseAjvForSchema(state.ajv, action.schema).compile(action.schema)
+        ? state.ajv.compile(action.schema)
         : state.validator;
       const errors = validate(v, state.data);
       return {
@@ -326,9 +311,7 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
         };
       }
       if (state.validationMode === 'NoValidation') {
-        const validator = reuseAjvForSchema(state.ajv, state.schema).compile(
-          state.schema
-        );
+        const validator = state.ajv.compile(state.schema);
         const errors = validate(validator, state.data);
         return {
           ...state,

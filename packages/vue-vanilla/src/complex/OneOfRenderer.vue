@@ -176,7 +176,8 @@ const controlRenderer = defineComponent({
         this.control.path,
         this.newSelectedIndex !== undefined && this.newSelectedIndex !== null
           ? createDefaultValue(
-              this.indexedOneOfRenderInfos[this.newSelectedIndex].schema
+              this.indexedOneOfRenderInfos[this.newSelectedIndex].schema,
+              this.control.rootSchema
             )
           : {}
       );
@@ -193,4 +194,3 @@ export const entry: JsonFormsRendererRegistryEntry = {
   tester: rankWith(3, isOneOfControl),
 };
 </script>
-  

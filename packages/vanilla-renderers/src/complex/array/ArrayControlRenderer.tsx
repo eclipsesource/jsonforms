@@ -97,7 +97,7 @@ export const ArrayControl = ({
         <label className={labelClass}>{label}</label>
         <button
           className={buttonClassAdd}
-          onClick={addItem(path, createDefaultValue(schema))}
+          onClick={addItem(path, createDefaultValue(schema, rootSchema))}
         >
           Add to {label}
         </button>

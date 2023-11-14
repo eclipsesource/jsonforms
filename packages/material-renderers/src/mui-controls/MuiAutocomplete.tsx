@@ -129,7 +129,7 @@ export const MuiAutocomplete = (
               autoFocus={appliedUiSchemaOptions.focus}
               disabled={!enabled}
               {...params}
-              id={id + '-input'}
+              id={id}
               required={
                 required && !appliedUiSchemaOptions.hideRequiredAsterisk
               }
