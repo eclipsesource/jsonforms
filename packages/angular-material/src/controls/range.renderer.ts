@@ -43,7 +43,7 @@ import { isRangeControl, RankedTester, rankWith } from '@jsonforms/core';
         [max]="max"
         [min]="min"
         [step]="multipleOf"
-        [thumbLabel]="true"
+        [discrete]="true"
         [id]="id"
        #ngSlider><input matSliderThumb [value]="data || scopedSchema.default" (change)="onChange({source: ngSliderThumb, parent: ngSlider, value: ngSliderThumb.value})" #ngSliderThumb="matSliderThumb" /></mat-slider>
       <mat-hint class="mat-caption" *ngIf="shouldShowUnfocusedDescription()">{{

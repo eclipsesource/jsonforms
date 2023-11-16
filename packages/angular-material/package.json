@@ -46,9 +46,10 @@
     "lint:fix": "eslint --fix .",
     "report": "nyc report --reporter=html",
     "doc": "typedoc --name 'JSON Forms Angular Material Renderers' --out docs src",
-    "test": "karma start ./test-config/karma.conf.js --single-run",
-    "test-ci": "karma start ./test-config/karma.conf.js --single-run",
-    "test-cov": "karma start ./test-config/karma.conf.js --coverage --single-run",
+    "test-dbg": "node ./test-runner",
+    "test": "node ./test-runner --single-run",
+    "test-ci": "node ./test-runner --single-run",
+    "test-cov": "node ./test-runner --coverage --single-run",
     "e2e": "npm run e2e-update && npm run e2e-test",
     "e2e-test": "protractor ./test-config/protractor.conf.js",
     "e2e-update": "webdriver-manager update --standalone false --gecko false"
@@ -72,7 +73,6 @@
     "@jsonforms/angular": "3.2.0-alpha.3",
     "@jsonforms/angular-test": "^3.2.0-alpha.3",
     "@jsonforms/core": "3.2.0-alpha.3",
-    "core-js": "^2.5.3",
     "rxjs": "^6.6.0 || ^7.4.0"
   },
   "dependencies": {
@@ -115,8 +115,6 @@
     "@typescript-eslint/parser": "^5.54.1",
     "babel-loader": "^8.0.6",
     "copy-webpack-plugin": "^11.0.0",
-    "core-js": "^2.5.3",
-    "coverage-istanbul-loader": "^3.0.5",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.7.0",
     "eslint-plugin-import": "^2.27.5",
@@ -126,7 +124,7 @@
     "jasmine-spec-reporter": "^4.2.1",
     "karma": "^6.4.1",
     "karma-chrome-launcher": "^3.2.0",
-    "karma-coverage-istanbul-reporter": "^2.1.1",
+    "karma-coverage": "~2.0.3",
     "karma-jasmine": "^2.0.1",
     "karma-jasmine-html-reporter": "^1.7.0",
     "karma-sourcemap-loader": "^0.3.8",
@@ -136,7 +134,6 @@
     "nyc": "^15.1.0",
     "prettier": "^2.8.4",
     "protractor": "^7.0.0",
-    "request": "^2.88.0",
     "rimraf": "^3.0.2",
     "rollup": "^2.78.0",
     "rollup-plugin-cleanup": "^3.2.1",
@@ -152,6 +149,7 @@
     "webpack": "^5.78.0",
     "webpack-cli": "^5.0.1",
     "webpack-dev-server": "^4.13.2",
+    "yargs": "^17.7.2",
     "zone.js": "^0.11.4"
   }
 }
