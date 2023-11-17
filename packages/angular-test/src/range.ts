@@ -41,6 +41,7 @@ interface ComponentResult<C extends JsonFormsControl> {
   fixture: ComponentFixture<any>;
   component: C;
   rangeElement: DebugElement;
+  thumbElement: DebugElement;
 }
 
 const prepareComponent = <C extends JsonFormsControl, I>(
@@ -50,7 +51,8 @@ const prepareComponent = <C extends JsonFormsControl, I>(
   const fixture = TestBed.createComponent(testConfig.componentUT);
   const component = fixture.componentInstance;
   const rangeElement = fixture.debugElement.query(By.directive(instance));
-  const result: ComponentResult<C> = { fixture, component, rangeElement };
+  const thumbElement = fixture.debugElement.query(By.css('[matsliderthumb]')); //rangeElement.nativeElement.children[0]; // todo: find a safer way to get the 'matSliderThumb'
+  const result: ComponentResult<C> = { fixture, component, rangeElement, thumbElement };
   return result;
 };
 export const rangeDefaultData = { foo: 1.234 };
@@ -79,11 +81,12 @@ export const rangeDefaultTestData: TestData<ControlElement> = {
 export const rangeBaseTest =
   <C extends JsonFormsControl, I>(
     testConfig: TestConfig<C>,
-    instance: Type<I>
+    instance: Type<I>,
   ) =>
   () => {
     let fixture: ComponentFixture<any>;
     let rangeElement: DebugElement;
+    let thumbElement: DebugElement;
     let component: C;
 
     baseSetup(testConfig);
@@ -92,6 +95,7 @@ export const rangeBaseTest =
       const preparedComponents = prepareComponent(testConfig, instance);
       fixture = preparedComponents.fixture;
       rangeElement = preparedComponents.rangeElement;
+      thumbElement = preparedComponents.thumbElement;
       component = preparedComponents.component;
     });
 
@@ -109,7 +113,7 @@ export const rangeBaseTest =
       component.ngOnInit();
       fixture.detectChanges();
       expect(component.data).toBe(1.234);
-      expect(rangeElement.componentInstance.value).toBe(1.234);
+      expect(thumbElement.componentInstance.data).toBe(1.234);
       // step is of type string
       expect(rangeElement.componentInstance.step).toBe(1);
       expect(rangeElement.componentInstance.min).toBe(-42.42);
@@ -137,7 +141,7 @@ export const rangeBaseTest =
       fixture.componentInstance.ngOnInit();
       fixture.detectChanges();
       expect(component.data).toBe(12);
-      expect(rangeElement.componentInstance.value).toBe(12);
+      expect(thumbElement.componentInstance.data).toBe(12);
       // step is of type string
       expect(rangeElement.componentInstance.step).toBe(1);
       expect(rangeElement.componentInstance.min).toBe(-42);
@@ -166,7 +170,7 @@ export const rangeBaseTest =
       );
       fixture.detectChanges();
       expect(component.data).toBe(4.56);
-      expect(rangeElement.componentInstance.value).toBe(4.56);
+      expect(thumbElement.componentInstance.data).toBe(4.56);
     });
     it('should update with undefined value', () => {
       component.uischema = rangeDefaultTestData.uischema;
@@ -187,7 +191,7 @@ export const rangeBaseTest =
       );
       fixture.detectChanges();
       expect(component.data).toBe(undefined);
-      expect(rangeElement.componentInstance.value).toBe(0.42);
+      expect(thumbElement.componentInstance.data).toBe(undefined);
     });
     it('should update with null value', () => {
       component.uischema = rangeDefaultTestData.uischema;
@@ -208,7 +212,7 @@ export const rangeBaseTest =
       );
       fixture.detectChanges();
       expect(component.data).toBe(null);
-      expect(rangeElement.componentInstance.value).toBe(0.42);
+      expect(thumbElement.componentInstance.data).toBe(null);
     });
     it('should not update with wrong ref', () => {
       component.uischema = rangeDefaultTestData.uischema;
@@ -233,7 +237,7 @@ export const rangeBaseTest =
 
       fixture.detectChanges();
       expect(component.data).toBe(1.234);
-      expect(rangeElement.componentInstance.value).toBe(1.234);
+      expect(thumbElement.componentInstance.data).toBe(1.234);
     });
     // store needed as we evaluate the calculated enabled value to disable/enable the control
     it('can be disabled', () => {
