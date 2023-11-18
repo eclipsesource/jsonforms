@@ -49,7 +49,7 @@ import { isStringControl, RankedTester, rankWith } from '@jsonforms/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TextControlRenderer extends JsonFormsControl {
-  focused: boolean = false;
+  focused = false;
   constructor(jsonformsService: JsonFormsAngularService) {
     super(jsonformsService);
   }

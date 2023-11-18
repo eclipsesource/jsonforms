@@ -52,7 +52,12 @@ const prepareComponent = <C extends JsonFormsControl, I>(
   const component = fixture.componentInstance;
   const rangeElement = fixture.debugElement.query(By.directive(instance));
   const thumbElement = fixture.debugElement.query(By.css('[matsliderthumb]')); //rangeElement.nativeElement.children[0]; // todo: find a safer way to get the 'matSliderThumb'
-  const result: ComponentResult<C> = { fixture, component, rangeElement, thumbElement };
+  const result: ComponentResult<C> = {
+    fixture,
+    component,
+    rangeElement,
+    thumbElement,
+  };
   return result;
 };
 export const rangeDefaultData = { foo: 1.234 };
@@ -81,7 +86,7 @@ export const rangeDefaultTestData: TestData<ControlElement> = {
 export const rangeBaseTest =
   <C extends JsonFormsControl, I>(
     testConfig: TestConfig<C>,
-    instance: Type<I>,
+    instance: Type<I>
   ) =>
   () => {
     let fixture: ComponentFixture<any>;

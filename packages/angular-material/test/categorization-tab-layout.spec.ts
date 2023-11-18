@@ -73,8 +73,8 @@ describe('Categorization tab layout', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-    declarations: [CategorizationTabLayoutRenderer, TextControlRenderer],
-    imports: [
+      declarations: [CategorizationTabLayoutRenderer, TextControlRenderer],
+      imports: [
         CommonModule,
         MatTabsModule,
         FlexLayoutModule,
@@ -83,10 +83,10 @@ describe('Categorization tab layout', () => {
         MatFormFieldModule,
         MatInputModule,
         ReactiveFormsModule,
-    ],
-    providers: [JsonFormsAngularService],
-    teardown: { destroyAfterEach: false }
-})
+      ],
+      providers: [JsonFormsAngularService],
+      teardown: { destroyAfterEach: false },
+    })
       .overrideModule(BrowserDynamicTestingModule, {
         set: {
           entryComponents: [TextControlRenderer],

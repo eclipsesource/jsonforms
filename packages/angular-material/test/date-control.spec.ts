@@ -95,11 +95,11 @@ describe('Date control Base Tests', () => {
   let inputElement: HTMLInputElement;
   beforeEach(() => {
     TestBed.configureTestingModule({
-    declarations: [componentUT],
-    imports: imports,
-    providers: providers,
-    teardown: { destroyAfterEach: false }
-}).compileComponents();
+      declarations: [componentUT],
+      imports: imports,
+      providers: providers,
+      teardown: { destroyAfterEach: false },
+    }).compileComponents();
   });
   beforeEach(() => {
     fixture = TestBed.createComponent(componentUT);
@@ -229,11 +229,11 @@ describe('Date control Input Event Tests', () => {
   let inputElement: HTMLInputElement;
   beforeEach(() => {
     TestBed.configureTestingModule({
-    declarations: [componentUT],
-    imports: imports,
-    providers: providers,
-    teardown: { destroyAfterEach: false }
-}).compileComponents();
+      declarations: [componentUT],
+      imports: imports,
+      providers: providers,
+      teardown: { destroyAfterEach: false },
+    }).compileComponents();
   });
   beforeEach(() => {
     fixture = TestBed.createComponent(componentUT);
@@ -275,11 +275,11 @@ describe('Date control Error Tests', () => {
   let component: DateControlRenderer;
   beforeEach(() => {
     TestBed.configureTestingModule({
-    declarations: [componentUT],
-    imports: imports,
-    providers: providers,
-    teardown: { destroyAfterEach: false }
-}).compileComponents();
+      declarations: [componentUT],
+      imports: imports,
+      providers: providers,
+      teardown: { destroyAfterEach: false },
+    }).compileComponents();
   });
   beforeEach(() => {
     fixture = TestBed.createComponent(componentUT);

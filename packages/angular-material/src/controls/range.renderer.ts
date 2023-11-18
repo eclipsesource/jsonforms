@@ -45,7 +45,21 @@ import { isRangeControl, RankedTester, rankWith } from '@jsonforms/core';
         [step]="multipleOf"
         [discrete]="true"
         [id]="id"
-       #ngSlider><input matSliderThumb [value]="data || scopedSchema.default" (change)="onChange({source: ngSliderThumb, parent: ngSlider, value: ngSliderThumb.value})" #ngSliderThumb="matSliderThumb" /></mat-slider>
+        #ngSlider
+      >
+        <input
+          matSliderThumb
+          [value]="data || scopedSchema.default"
+          (change)="
+            onChange({
+              source: ngSliderThumb,
+              parent: ngSlider,
+              value: ngSliderThumb.value
+            })
+          "
+          #ngSliderThumb="matSliderThumb"
+        />
+      </mat-slider>
       <mat-hint class="mat-caption" *ngIf="shouldShowUnfocusedDescription()">{{
         description
       }}</mat-hint>
@@ -58,7 +72,7 @@ export class RangeControlRenderer extends JsonFormsControl {
   min: number;
   max: number;
   multipleOf: number;
-  focused: boolean = false;
+  focused = false;
 
   constructor(
     jsonformsService: JsonFormsAngularService,

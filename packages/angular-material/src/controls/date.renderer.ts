@@ -54,8 +54,8 @@ import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DateControlRenderer extends JsonFormsControl {
-  focused: boolean = false;
-  
+  focused = false;
+
   constructor(jsonformsService: JsonFormsAngularService) {
     super(jsonformsService);
   }

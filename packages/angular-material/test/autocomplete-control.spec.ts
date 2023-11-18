@@ -88,11 +88,11 @@ describe('Autocomplete control Base Tests', () => {
   let inputElement: HTMLInputElement;
   beforeEach(() => {
     TestBed.configureTestingModule({
-    declarations: [componentUT],
-    imports: imports,
-    providers: providers,
-    teardown: { destroyAfterEach: false }
-}).compileComponents();
+      declarations: [componentUT],
+      imports: imports,
+      providers: providers,
+      teardown: { destroyAfterEach: false },
+    }).compileComponents();
   });
   beforeEach(() => {
     fixture = TestBed.createComponent(componentUT);
@@ -220,11 +220,11 @@ describe('AutoComplete control Input Event Tests', () => {
   let zone: NgZone;
   beforeEach(() => {
     TestBed.configureTestingModule({
-    declarations: [componentUT],
-    imports: imports,
-    providers: [...providers],
-    teardown: { destroyAfterEach: false }
-}).compileComponents();
+      declarations: [componentUT],
+      imports: imports,
+      providers: [...providers],
+      teardown: { destroyAfterEach: false },
+    }).compileComponents();
 
     inject([OverlayContainer], (oc: OverlayContainer) => {
       overlayContainer = oc;
@@ -310,11 +310,11 @@ describe('AutoComplete control Error Tests', () => {
   let component: AutocompleteControlRenderer;
   beforeEach(() => {
     TestBed.configureTestingModule({
-    declarations: [componentUT],
-    imports: imports,
-    providers: providers,
-    teardown: { destroyAfterEach: false }
-}).compileComponents();
+      declarations: [componentUT],
+      imports: imports,
+      providers: providers,
+      teardown: { destroyAfterEach: false },
+    }).compileComponents();
   });
   beforeEach(() => {
     fixture = TestBed.createComponent(componentUT);
