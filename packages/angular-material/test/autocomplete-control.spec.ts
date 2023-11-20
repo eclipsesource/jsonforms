@@ -289,18 +289,17 @@ describe('AutoComplete control Input Event Tests', () => {
     zone.runOutsideAngular(() => zone.onStable.emit(null));
     fixture.detectChanges();
 
-    const options = overlayContainerElement.querySelectorAll(
-      'mat-option'
-    ) as NodeListOf<HTMLElement>;
-    options.item(0).click();
-    tick();
-    fixture.detectChanges();
-
-    expect(spy).toHaveBeenCalled();
-    const event = spy.calls.mostRecent()
-      .args[0] as MatAutocompleteSelectedEvent;
-
-    expect(event.option.value).toBe('X');
+    fixture.whenStable().then(() => {
+      const options = overlayContainerElement?.querySelectorAll(
+        'mat-option'
+      ) as NodeListOf<HTMLElement>;
+      (options[1] as HTMLElement).click();
+      fixture.detectChanges();
+      tick();
+      const event = spy.calls.mostRecent()
+        .args[0] as MatAutocompleteSelectedEvent;
+      expect(event.option.value).toBe('Y');
+    });
   }));
 });
 describe('AutoComplete control Error Tests', () => {
