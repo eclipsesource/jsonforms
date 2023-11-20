@@ -346,3 +346,51 @@ describe('AutoComplete control Error Tests', () => {
     ).toBe('Hi, this is me, test error!');
   });
 });
+
+describe('AutoComplete control updateFilter function', () => {
+  let fixture: ComponentFixture<AutocompleteControlRenderer>;
+  let component: AutocompleteControlRenderer;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [componentUT],
+      imports: imports,
+      providers: providers,
+    }).compileComponents();
+  });
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(componentUT);
+    component = fixture.componentInstance;
+  });
+
+  it('should not filter options on ENTER key press', () => {
+    component.shouldFilter = false;
+    component.options = ['X', 'Y', 'Z'];
+    setupMockStore(fixture, { uischema, schema, data });
+    getJsonFormsService(component).updateCore(
+      Actions.init(data, schema, uischema)
+    );
+    component.ngOnInit();
+    fixture.detectChanges();
+    component.updateFilter({ keyCode: 13 });
+    fixture.detectChanges();
+    expect(component.shouldFilter).toBe(false);
+  });
+
+  it('should filter options when a key other than ENTER is pressed', () => {
+    component.shouldFilter = false;
+    component.options = ['X', 'Y', 'Z'];
+    setupMockStore(fixture, { uischema, schema, data });
+    getJsonFormsService(component).updateCore(
+      Actions.init(data, schema, uischema)
+    );
+    component.ngOnInit();
+    fixture.detectChanges();
+
+    component.updateFilter({ keyCode: 65 });
+    fixture.detectChanges();
+
+    expect(component.shouldFilter).toBe(true);
+  });
+});
