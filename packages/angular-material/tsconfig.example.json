@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.base",
+  "compilerOptions": {
+    "outDir": "./example/dist",
+    "sourceMap": true,
+    "target": "es5"
+  },
+  "exclude": ["node_modules"],
+  "files": ["./example/main.ts"],
+  "angularCompilerOptions": {
+    "compilationMode": "partial",
+    "strictMetadataEmit": true,
+    "generateCodeForLibraries": true,
+    "skipTemplateCodegen": true,
+  }
+}
