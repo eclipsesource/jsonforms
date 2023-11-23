@@ -97,10 +97,17 @@
     "@emotion/styled": "^11.11.0",
     "@jsonforms/core": "workspace:*",
     "@jsonforms/react": "workspace:*",
+<<<<<<< HEAD
     "@mui/icons-material": "^5.14.18",
     "@mui/material": "~5.13.7",
     "@mui/x-date-pickers": "^6.18.1",
     "@rollup/plugin-commonjs": "^23.0.7",
+=======
+    "@mui/icons-material": "~5.11.16",
+    "@mui/material": "~5.13.0",
+    "@mui/x-date-pickers": "^6.5.0",
+    "@rollup/plugin-commonjs": "^23.0.3",
+>>>>>>> parent of f78e988a (update material-renderers dependency of icons-material)
     "@rollup/plugin-json": "^5.0.2",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-replace": "^5.0.5",
