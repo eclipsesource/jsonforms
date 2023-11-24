@@ -28,7 +28,6 @@ import type Ajv from 'ajv';
 import type { ErrorObject } from 'ajv';
 import { UnknownRenderer } from './UnknownRenderer';
 import {
-  CoreActions,
   createId,
   Generate,
   isControl,
