@@ -1,6 +1,6 @@
 {
   "name": "example",
-  "version": "3.1.0-preview.0",
+  "version": "3.2.0-preview-alpha.3",
   "private": true,
   "scripts": {
     "build": "vue-cli-service build",
@@ -10,7 +10,7 @@
   "dependencies": {
     "@jsonforms/core": "3.2.0-alpha.3",
     "@jsonforms/vue": "3.2.0-alpha.3",
-    "@jsonforms/vue-vuetify": "^3.1.0-preview.0",
+    "@jsonforms/vue-vuetify": "^3.2.0-preview-alpha.3",
     "ajv-keywords": "^5.1.0",
     "core-js": "^3.9.1",
     "json-refs": "^3.0.15",

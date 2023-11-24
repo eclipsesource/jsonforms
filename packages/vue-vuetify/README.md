@@ -7,6 +7,7 @@ JSON Forms eliminates the tedious task of writing fully-featured forms by hand b
 ## Vue Vuetify Renderers
 
 This is the JSON Forms Vue Vuetify renderers package which provides a Vuetify based renderer set for [JSON Forms Vue](https://github.com/eclipsesource/jsonforms/blob/master/packages/vue/vue).
+The renderers are in a preview state.
 
 ### Quick start
 
