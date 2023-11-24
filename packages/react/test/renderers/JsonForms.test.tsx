@@ -58,6 +58,7 @@ import {
 } from '../../src/JsonForms';
 import {
   JsonFormsStateProvider,
+  Middleware,
   useJsonForms,
   withJsonFormsControlProps,
 } from '../../src/JsonFormsContext';
@@ -1098,5 +1099,51 @@ test('JsonForms should use react to additionalErrors update', () => {
   });
   wrapper.update();
   expect(wrapper.find('h5').text()).toBe('Foobar');
+  wrapper.unmount();
+});
+
+test('JsonForms should used provided middleware if available', () => {
+  // given
+  const onChangeHandler = jest.fn();
+  const customMiddleware = jest.fn();
+  const TestInputRenderer = withJsonFormsControlProps((props) => (
+    <input onChange={(ev) => props.handleChange('foo', ev.target.value)} />
+  ));
+  const renderers = [
+    {
+      tester: () => 10,
+      renderer: TestInputRenderer,
+    },
+  ];
+  const controlledMiddleware: Middleware = (state, action, reducer) => {
+    if (action.type === 'jsonforms/UPDATE') {
+      customMiddleware();
+      return state;
+    } else {
+      return reducer(state, action);
+    }
+  };
+  const wrapper = mount(
+    <JsonForms
+      data={fixture.data}
+      uischema={fixture.uischema}
+      schema={fixture.schema}
+      middleware={controlledMiddleware}
+      onChange={onChangeHandler}
+      renderers={renderers}
+    />
+  );
+
+  // when
+  wrapper.find('input').simulate('change', {
+    target: {
+      value: 'Test Value',
+    },
+  });
+
+  // then
+  expect(customMiddleware).toHaveBeenCalledTimes(1);
+  expect(onChangeHandler).not.toHaveBeenCalled();
+
   wrapper.unmount();
 });
