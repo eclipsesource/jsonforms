@@ -1102,12 +1102,15 @@ test('JsonForms should use react to additionalErrors update', () => {
   wrapper.unmount();
 });
 
-test('JsonForms should used provided middleware if available', () => {
+test('JsonForms middleware should be called if provided', () => {
   // given
   const onChangeHandler = jest.fn();
   const customMiddleware = jest.fn();
   const TestInputRenderer = withJsonFormsControlProps((props) => (
-    <input onChange={(ev) => props.handleChange('foo', ev.target.value)} />
+    <input
+      onChange={(ev) => props.handleChange('foo', ev.target.value)}
+      value={props.data}
+    />
   ));
   const renderers = [
     {
@@ -1144,6 +1147,62 @@ test('JsonForms should used provided middleware if available', () => {
   // then
   expect(customMiddleware).toHaveBeenCalledTimes(1);
   expect(onChangeHandler).not.toHaveBeenCalled();
+  expect(wrapper.find('input').getDOMNode<HTMLInputElement>().value).toBe(
+    'John Doe'
+  );
+
+  wrapper.unmount();
+});
+
+test('JsonForms middleware should update state if modified', () => {
+  // given
+  const onChangeHandler = jest.fn();
+  const customMiddleware = jest.fn();
+  const TestInputRenderer = withJsonFormsControlProps((props) => (
+    <input
+      onChange={(ev) => props.handleChange('foo', ev.target.value)}
+      value={props.data}
+    />
+  ));
+  const renderers = [
+    {
+      tester: () => 10,
+      renderer: TestInputRenderer,
+    },
+  ];
+  const controlledMiddleware: Middleware = (state, action, reducer) => {
+    if (action.type === 'jsonforms/UPDATE') {
+      customMiddleware();
+      const newState = reducer(state, action);
+      return { ...newState, data: { foo: `${newState.data.foo} Test` } };
+    } else {
+      return reducer(state, action);
+    }
+  };
+  const wrapper = mount(
+    <JsonForms
+      data={fixture.data}
+      uischema={fixture.uischema}
+      schema={fixture.schema}
+      middleware={controlledMiddleware}
+      onChange={onChangeHandler}
+      renderers={renderers}
+    />
+  );
+
+  // when
+  wrapper.find('input').simulate('change', {
+    target: {
+      value: 'Test Value',
+    },
+  });
+
+  // then
+  expect(customMiddleware).toHaveBeenCalledTimes(1);
+  expect(onChangeHandler).not.toHaveBeenCalled();
+  expect(wrapper.find('input').getDOMNode<HTMLInputElement>().value).toBe(
+    'Test Value Test'
+  );
 
   wrapper.unmount();
 });
