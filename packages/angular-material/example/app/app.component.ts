@@ -92,7 +92,7 @@ const itemTester: UISchemaTester = (_schema, schemaPath, _path) => {
 export class AppComponent {
   readonly renderers = angularMaterialRenderers;
   readonly examples = getExamples();
-  selectedExample: ExampleDescription|undefined;
+  selectedExample: ExampleDescription | undefined;
   i18n: JsonFormsI18nState;
   private dateAdapter;
   readonly = false;

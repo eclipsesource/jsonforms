@@ -39,8 +39,8 @@
   "typings": "./lib/esm/index.d.ts",
   "scripts": {
     "build": "ngc && ngc -p tsconfig.cjs.json",
-    "build:examples-app": "rollup -c rollup.example.config.js",
-    "dev": "ngc -p tsconfig.example.json && pnpm run build:examples-app && npx http-server ./example/dist/ -c-1 -o",
+    "build:examples-app": "ngc -p tsconfig.example.json && rollup -c rollup.example.config.js",
+    "dev": "pnpm run build:examples-app && npx http-server ./example/dist/ -c-1 -o",
     "clean": "rimraf lib coverage dist .nyc_output 2> /dev/null",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
