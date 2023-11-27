@@ -37,6 +37,7 @@ export interface Styles {
   arrayList: {
     root?: string;
     toolbar?: string;
+    title?: string,
     validationIcon?: string;
     container?: string;
     addButton?: string;

@@ -23,6 +23,7 @@ export const defaultStyles: Styles = {
   arrayList: {
     root: 'array-list',
     toolbar: 'array-list-toolbar',
+    title: 'array-list-title',
     validationIcon: 'array-list-validation',
     addButton: 'array-list-add',
     label: 'array-list-label',

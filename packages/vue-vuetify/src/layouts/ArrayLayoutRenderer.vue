@@ -1,6 +1,6 @@
 <template>
-  <v-card v-if="control.visible" :class="styles.arrayList.root">
-    <v-card-title>
+  <v-card v-if="control.visible" :class="styles.arrayList.root" v-bind="cardProps">
+    <v-card-title :class="styles.arrayList.title">
       <v-toolbar flat :class="styles.arrayList.toolbar">
         <v-toolbar-title :class="styles.arrayList.label">{{
           computedLabel
@@ -335,6 +335,7 @@ const controlRenderer = defineComponent({
         control.vuetifyProps('v-expansion-panels')
       )
     );
+    const cardProps = computed(() => control.vuetifyProps('v-card') )
     const suggestToDelete = ref<null | number>(null);
     // indicate to our child renderers that we are increasing the "nested" level
     useNested('array');
@@ -342,6 +343,7 @@ const controlRenderer = defineComponent({
     return {
       ...control,
       currentlyExpanded,
+      cardProps,
       expansionPanelsProps,
       suggestToDelete,
       t,
