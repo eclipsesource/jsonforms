@@ -86,7 +86,7 @@ export const removeSchemaKeywords = (path: string) => {
             <a matLine>{{ item.label || 'No label set' }}</a>
             <button
               mat-icon-button
-              class="button hide"
+              class="button item-button hide"
               (click)="onDeleteClick(i)"
               [ngClass]="{ show: highlightedIdx == i }"
               *ngIf="isEnabled()"
@@ -134,6 +134,11 @@ export const removeSchemaKeywords = (path: string) => {
       .button {
         float: right;
         margin-right: 0.25em;
+      }
+      .item-button {
+        position: absolute;
+        top: 0;
+        right: 0;
       }
       .hide {
         display: none;
