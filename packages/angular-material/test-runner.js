@@ -14,7 +14,7 @@ const defaultWebpackOptions = {
     includePaths: [],
   },
   include: [
-    '**/*.spec.ts'
+    '../test/**/*.spec.ts'
   ],
   exclude: [],
   sourceMap: true,
@@ -71,7 +71,7 @@ const karmaConfigOptionsTransform = (options, context, karmaConfigOptions) => {
     karmaConfig: 'packages/angular-material/karma.conf.js'
   }
   const root = `packages/${project}`;
-  const sourceRoot = root + '/test';
+  const sourceRoot = root + '/src';
   const teardownLogics = [];
   const context = {
     workspaceRoot,
