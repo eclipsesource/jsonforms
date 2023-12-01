@@ -33,7 +33,6 @@ const normalizeOptions = (options, context) => {
 };
 
 const webpackConfigTransform = (options, context, webpackConfig) => {
-  //console.log(webpackConfig);
   const projectRoot = context.getProjectMetadata().root;
   webpackConfig.resolve.modules.push(projectRoot + '/node_modules');
   return webpackConfig;
@@ -46,7 +45,6 @@ const karmaConfigOptionsTransform = (options, context, karmaConfigOptions) => {
       configFile?: string;
   };
   */
-  //console.log(karmaConfigOptions);
   return karmaConfigOptions;
 };
  const main = async (params) => new Promise((resolve, reject) => {
@@ -55,9 +53,7 @@ const karmaConfigOptionsTransform = (options, context, karmaConfigOptions) => {
   const project = 'angular-material';
   const target = 'test';
   const configuration = '';
-  //const workspace = await AngularWorkspace.load(path.join(process.cwd(), '../..'));
   const workspaceRoot = path.join(process.cwd(), '../..');
-  //const projectConfig = workspace.projects.get(project);
   const options = {
     singleRun,
     watch: !singleRun, // angular uses the opposite of watch as single run in karmaConfigOptions
@@ -100,15 +96,11 @@ const karmaConfigOptionsTransform = (options, context, karmaConfigOptions) => {
   let exitCode = 1;
   execute(normalizeOptions(options, context), context, transforms).subscribe({
     next: out => {
-      //console.log(out);
       if (out.success) {
         exitCode = 0;
       }
     },
-    error: err => {
-      //console.error(err);
-      reject(err);
-    },
+    error: reject,
     complete: () => {
       if (!exitCode) return resolve();
       reject();

@@ -37,7 +37,6 @@ import { isRangeControl, RankedTester, rankWith } from '@jsonforms/core';
       <label class="mat-caption" style="color:rgba(0,0,0,.54)">{{
         label
       }}</label>
-      <!-- TODO: The 'tickInterval' property no longer exists -->
       <mat-slider
         [disabled]="!isEnabled()"
         [max]="max"
@@ -45,20 +44,10 @@ import { isRangeControl, RankedTester, rankWith } from '@jsonforms/core';
         [step]="multipleOf"
         [discrete]="true"
         [id]="id"
+        showTickMarks
         #ngSlider
       >
-        <input
-          matSliderThumb
-          [value]="data || scopedSchema.default"
-          (change)="
-            onChange({
-              source: ngSliderThumb,
-              parent: ngSlider,
-              value: ngSliderThumb.value
-            })
-          "
-          #ngSliderThumb="matSliderThumb"
-        />
+        <input matSliderThumb />
       </mat-slider>
       <mat-hint class="mat-caption" *ngIf="shouldShowUnfocusedDescription()">{{
         description
