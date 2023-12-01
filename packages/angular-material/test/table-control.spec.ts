@@ -156,7 +156,6 @@ describe('Table', () => {
         MatTooltipModule,
       ],
       providers: [JsonFormsAngularService],
-      teardown: { destroyAfterEach: false },
     })
       .overrideModule(BrowserDynamicTestingModule, {
         set: {

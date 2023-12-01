@@ -38,7 +38,6 @@ export const beforeEachLayoutTest = <LAYOUT>(
     declarations: [Renderer, UnknownRenderer, JsonFormsOutlet, ...declarations],
     imports,
     providers: [JsonFormsAngularService, ...providers],
-    teardown: { destroyAfterEach: false },
   })
     .overrideModule(BrowserDynamicTestingModule, {
       set: {

@@ -60,7 +60,6 @@ describe('Label Renderer Base Tests', () => {
     TestBed.configureTestingModule({
       declarations: [componentUT],
       providers: providers,
-      teardown: { destroyAfterEach: false },
     }).compileComponents();
   });
   beforeEach(() => {

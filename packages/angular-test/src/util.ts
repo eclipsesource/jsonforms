@@ -51,7 +51,6 @@ export const baseSetup = <C extends JsonFormsControl>(
       declarations: [testConfig.componentUT],
       imports: testConfig.imports,
       providers: [JsonFormsAngularService].concat(testConfig.providers),
-      teardown: { destroyAfterEach: false },
     }).compileComponents();
   });
 };
