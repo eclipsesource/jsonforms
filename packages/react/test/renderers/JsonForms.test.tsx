@@ -1136,6 +1136,12 @@ test('JsonForms middleware should be called if provided', () => {
       renderers={renderers}
     />
   );
+  setTimeout(() => {
+    const calls = onChangeHandler.mock.calls;
+    const lastCallParameter = calls[calls.length - 1][0];
+    expect(lastCallParameter.data).toEqual({ foo: 'John Doe' });
+    expect(lastCallParameter.errors).toEqual([]);
+  }, 50);
 
   // when
   wrapper.find('input').simulate('change', {
@@ -1189,6 +1195,12 @@ test('JsonForms middleware should update state if modified', () => {
       renderers={renderers}
     />
   );
+  setTimeout(() => {
+    const calls = onChangeHandler.mock.calls;
+    const lastCallParameter = calls[calls.length - 1][0];
+    expect(lastCallParameter.data).toEqual({ foo: 'John Doe' });
+    expect(lastCallParameter.errors).toEqual([]);
+  }, 50);
 
   // when
   wrapper.find('input').simulate('change', {
@@ -1199,10 +1211,15 @@ test('JsonForms middleware should update state if modified', () => {
 
   // then
   expect(customMiddleware).toHaveBeenCalledTimes(1);
-  expect(onChangeHandler).not.toHaveBeenCalled();
   expect(wrapper.find('input').getDOMNode<HTMLInputElement>().value).toBe(
     'Test Value Test'
   );
+  setTimeout(() => {
+    const calls = onChangeHandler.mock.calls;
+    const lastCallParameter = calls[calls.length - 1][1];
+    expect(lastCallParameter.data).toEqual({ foo: 'Test Value Test' });
+    expect(lastCallParameter.errors).toEqual([]);
+  }, 50);
 
   wrapper.unmount();
 });
