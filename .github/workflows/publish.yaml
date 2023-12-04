@@ -1,0 +1,57 @@
+name: Publish
+
+on:
+  workflow_dispatch:
+    inputs:
+      next_version:
+        description: 'version (e.g. 3.4.0)'
+        required: true
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Configure Git Credentials
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - uses: pnpm/action-setup@v2.2.4
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 8
+          run_install: false
+
+      - name: Install Packages
+        run: pnpm i --frozen-lockfile
+
+      - name: Versioning
+        run: pnpm exec lerna version ${{ github.event.inputs.next_version }} --no-push --force-publish -y
+
+      - name: Adjust Peerdependencies
+        run: |
+          cd packages/angular && pnpm pkg set peerDependencies.@jsonforms/core="${{ github.event.inputs.next_version }}"
+          cd ../angular-material && pnpm pkg set peerDependencies.@jsonforms/core="${{ github.event.inputs.next_version }}" && pnpm pkg set peerDependencies.@jsonforms/angular="${{ github.event.inputs.next_version }}"
+          cd ../examples && pnpm pkg set peerDependencies.@jsonforms/core="${{ github.event.inputs.next_version }}"
+          cd ../material-renderers && pnpm pkg set peerDependencies.@jsonforms/core="${{ github.event.inputs.next_version }}" && pnpm pkg set peerDependencies.@jsonforms/react="${{ github.event.inputs.next_version }}"
+          cd ../react && pnpm pkg set peerDependencies.@jsonforms/core="${{ github.event.inputs.next_version }}"
+          cd ../vanilla-renderers && pnpm pkg set peerDependencies.@jsonforms/core="${{ github.event.inputs.next_version }}" && pnpm pkg set peerDependencies.@jsonforms/react="${{ github.event.inputs.next_version }}"
+          cd ../vue && pnpm pkg set peerDependencies.@jsonforms/core="${{ github.event.inputs.next_version }}"
+          cd ../vue-vanilla && pnpm pkg set peerDependencies.@jsonforms/core="${{ github.event.inputs.next_version }}" && pnpm pkg set peerDependencies.@jsonforms/vue="${{ github.event.inputs.next_version }}"
+
+      - name: Tag and Commit
+        run: |
+          git add -A && git commit --amend --no-edit
+          git tag v${{ github.event.inputs.next_version }} -f
+
+      - name: push
+        run: |
+          git push
+          git push origin v${{ github.event.inputs.next_version }}
