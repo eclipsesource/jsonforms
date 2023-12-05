@@ -28,6 +28,8 @@ import {
   ControlElement,
   isLabelable,
   JsonSchema,
+  JsonSchema4,
+  JsonSchema7,
   LabelElement,
   UISchemaElement,
 } from '../models';
@@ -80,11 +82,67 @@ import {
 } from '../i18n/arrayTranslations';
 import { resolveSchema } from './resolvers';
 import cloneDeep from 'lodash/cloneDeep';
+import { has } from 'lodash';
+import { all, any } from 'lodash/fp';
+
+/**
+ * Check if property's required attribute is set based on if-then-else condition
+ *
+ */
+const checkRequiredInIf = (schema: JsonSchema, segment: string, data: any) => {
+  const propertiesCondition = get(get(schema, 'if'), 'properties') as any;
+
+  const condition = all((property) => {
+    //TODO: add pattern
+    if (has(propertiesCondition[property], 'const')) {
+      return data[property] === get(propertiesCondition[property], 'const');
+    } else if (has(propertiesCondition[property], 'enum')) {
+      return (get(propertiesCondition[property], 'enum') as unknown[]).includes(
+        data[property]
+      );
+    }
+
+    return false;
+  }, Object.keys(propertiesCondition));
+
+  if (has(get(schema, 'then'), 'required') && condition) {
+    const requiredProperties = get(get(schema, 'then'), 'required') as string[];
+
+    return requiredProperties.includes(segment);
+  } else if (has(get(schema, 'else'), 'required') && !condition) {
+    const requiredProperties = get(get(schema, 'else'), 'required') as string[];
+
+    return requiredProperties.includes(segment);
+  }
+
+  return false;
+};
+
+/**
+ * Check if property becomes required based on some if-then-else condition
+ * that is part of allOf combinator
+ */
+const conditionallyRequired = (
+  schema: JsonSchema,
+  segment: string,
+  data: any
+) => {
+  const nestedAllOfSchema = get(schema, 'allOf');
+
+  return any((subschema: JsonSchema4 | JsonSchema7) => {
+    if (has(subschema, 'if')) {
+      return checkRequiredInIf(subschema, segment, data);
+    }
+
+    return false;
+  }, nestedAllOfSchema);
+};
 
 const isRequired = (
   schema: JsonSchema,
   schemaPath: string,
-  rootSchema: JsonSchema
+  rootSchema: JsonSchema,
+  data: any
 ): boolean => {
   const pathSegments = schemaPath.split('/');
   const lastSegment = pathSegments[pathSegments.length - 1];
@@ -100,10 +158,22 @@ const isRequired = (
     rootSchema
   );
 
+  const requiredInIf =
+    has(nextHigherSchema, 'if') &&
+    checkRequiredInIf(nextHigherSchema, lastSegment, data);
+
+  const requiredConditionally = conditionallyRequired(
+    nextHigherSchema,
+    lastSegment,
+    data
+  );
+
   return (
-    nextHigherSchema !== undefined &&
-    nextHigherSchema.required !== undefined &&
-    nextHigherSchema.required.indexOf(lastSegment) !== -1
+    (nextHigherSchema !== undefined &&
+      nextHigherSchema.required !== undefined &&
+      nextHigherSchema.required.indexOf(lastSegment) !== -1) ||
+    requiredInIf ||
+    requiredConditionally
   );
 };
 
@@ -500,7 +570,7 @@ export const mapStateToControlProps = (
   const rootSchema = getSchema(state);
   const required =
     controlElement.scope !== undefined &&
-    isRequired(ownProps.schema, controlElement.scope, rootSchema);
+    isRequired(ownProps.schema, controlElement.scope, rootSchema, rootData);
   const resolvedSchema = Resolve.schema(
     ownProps.schema || rootSchema,
     controlElement.scope,
