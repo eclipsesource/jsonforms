@@ -66,14 +66,18 @@ export const schema = {
       then: { required: ['baz'] },
     },
     {
-      if: {
-        properties: {
-          foo: { pattern: 'foo.' },
+      allOf: [
+        {
+          if: {
+            properties: {
+              foo: { pattern: 'foo.' },
+            },
+          },
+          then: {
+            required: ['baz', 'bar'],
+          },
         },
-      },
-      then: {
-        required: ['baz', 'bar'],
-      },
+      ],
     },
   ],
 };

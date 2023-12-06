@@ -89,8 +89,15 @@ import { all, any } from 'lodash/fp';
  * Check if property's required attribute is set based on if-then-else condition
  *
  */
-const checkRequiredInIf = (schema: JsonSchema, segment: string, data: any) => {
-  const propertiesCondition = get(get(schema, 'if'), 'properties') as any;
+const checkRequiredInIf = (
+  schema: JsonSchema,
+  segment: string,
+  data: Record<string, unknown>
+): boolean => {
+  const propertiesCondition = get(get(schema, 'if'), 'properties') as Record<
+    string,
+    unknown
+  >;
 
   const condition = all((property) => {
     if (has(propertiesCondition[property], 'const')) {
@@ -108,23 +115,36 @@ const checkRequiredInIf = (schema: JsonSchema, segment: string, data: any) => {
     } else if (has(propertiesCondition[property], 'pattern')) {
       const pattern = new RegExp(get(propertiesCondition[property], 'pattern'));
 
-      return has(data, property) && pattern.test(data[property]);
+      return (
+        has(data, property) &&
+        typeof data[property] === 'string' &&
+        pattern.test(data[property] as string)
+      );
     }
 
     return false;
   }, Object.keys(propertiesCondition));
 
-  if (has(get(schema, 'then'), 'required') && condition) {
-    const requiredProperties = get(get(schema, 'then'), 'required') as string[];
+  const requiredInThen = has(get(schema, 'then'), 'required');
+  const requiredInElse = has(get(schema, 'else'), 'required');
+  const ifInThen = has(get(schema, 'then'), 'if');
+  const ifInElse = has(get(schema, 'else'), 'if');
+  const allOfInThen = has(get(schema, 'then'), 'allOf');
+  const allOfInElse = has(get(schema, 'else'), 'allOf');
 
-    return requiredProperties.includes(segment);
-  } else if (has(get(schema, 'else'), 'required') && !condition) {
-    const requiredProperties = get(get(schema, 'else'), 'required') as string[];
-
-    return requiredProperties.includes(segment);
-  }
-
-  return false;
+  return (
+    (requiredInThen &&
+      condition &&
+      (get(get(schema, 'then'), 'required') as string[]).includes(segment)) ||
+    (requiredInElse &&
+      !condition &&
+      (get(get(schema, 'else'), 'required') as string[]).includes(segment)) ||
+    (ifInThen && checkRequiredInIf(get(schema, 'then'), segment, data)) ||
+    (ifInElse && checkRequiredInIf(get(schema, 'else'), segment, data)) ||
+    (allOfInThen &&
+      conditionallyRequired(get(schema, 'then'), segment, data)) ||
+    (allOfInElse && conditionallyRequired(get(schema, 'else'), segment, data))
+  );
 };
 
 /**
@@ -138,12 +158,11 @@ const conditionallyRequired = (
 ) => {
   const nestedAllOfSchema = get(schema, 'allOf');
 
-  return any((subschema: JsonSchema4 | JsonSchema7) => {
-    if (has(subschema, 'if')) {
-      return checkRequiredInIf(subschema, segment, data);
-    }
-
-    return false;
+  return any((subschema: JsonSchema4 | JsonSchema7): boolean => {
+    return (
+      (has(subschema, 'if') && checkRequiredInIf(subschema, segment, data)) ||
+      conditionallyRequired(subschema, segment, data)
+    );
   }, nestedAllOfSchema);
 };
 
