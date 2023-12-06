@@ -60,7 +60,7 @@ import type { CombinatorKeyword } from './combinators';
 import { moveDown, moveUp } from './array';
 import type { AnyAction, Dispatch } from './type';
 import { Resolve, convertDateToString, hasType } from './util';
-import { composePaths, composeWithUi } from './path';
+import { composePaths, composeWithUi, toDataPath } from './path';
 import { CoreActions, update } from '../actions';
 import type { ErrorObject } from 'ajv';
 import type { JsonFormsState } from '../store';
@@ -93,13 +93,22 @@ const checkRequiredInIf = (schema: JsonSchema, segment: string, data: any) => {
   const propertiesCondition = get(get(schema, 'if'), 'properties') as any;
 
   const condition = all((property) => {
-    //TODO: add pattern
     if (has(propertiesCondition[property], 'const')) {
-      return data[property] === get(propertiesCondition[property], 'const');
-    } else if (has(propertiesCondition[property], 'enum')) {
-      return (get(propertiesCondition[property], 'enum') as unknown[]).includes(
-        data[property]
+      return (
+        has(data, property) &&
+        data[property] === get(propertiesCondition[property], 'const')
       );
+    } else if (has(propertiesCondition[property], 'enum')) {
+      return (
+        has(data, property) &&
+        (get(propertiesCondition[property], 'enum') as unknown[]).includes(
+          data[property]
+        )
+      );
+    } else if (has(propertiesCondition[property], 'pattern')) {
+      const pattern = new RegExp(get(propertiesCondition[property], 'pattern'));
+
+      return has(data, property) && pattern.test(data[property]);
     }
 
     return false;
@@ -157,15 +166,16 @@ const isRequired = (
     nextHigherSchemaPath,
     rootSchema
   );
+  const currentData = Resolve.data(data, toDataPath(nextHigherSchemaPath));
 
   const requiredInIf =
     has(nextHigherSchema, 'if') &&
-    checkRequiredInIf(nextHigherSchema, lastSegment, data);
+    checkRequiredInIf(nextHigherSchema, lastSegment, currentData);
 
   const requiredConditionally = conditionallyRequired(
     nextHigherSchema,
     lastSegment,
-    data
+    currentData
   );
 
   return (
