@@ -1,7 +1,7 @@
 /*
   The MIT License
   
-  Copyright (c) 2017-2019 EclipseSource Munich
+  Copyright (c) 2023-2023 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
   
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,13 +23,35 @@
   THE SOFTWARE.
 */
 
-export * from './cells';
-export * from './config';
-export * from './core';
-export * from './default-data';
-export * from './i18n';
-export * from './reducers';
-export * from './renderers';
-export * from './selectors';
-export * from './uischemas';
-export * from './middleware';
+import { ControlElement, JsonSchema } from '@jsonforms/core';
+import { JsonFormsAngularService } from '../src/jsonforms.service';
+
+import test from 'ava';
+
+test('Should callMiddleware', (t) => {
+  const data = { foo: true };
+  const testSchema: JsonSchema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'boolean',
+      },
+    },
+  };
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/foo',
+  };
+
+  const jsonFormsService = new JsonFormsAngularService();
+
+  jsonFormsService.init({
+    core: {
+      data: data,
+      schema: testSchema,
+      uischema: uischema,
+    },
+    middleware: (_state, _action) => t.pass,
+  });
+  t.fail('schould have called middleware');
+});
