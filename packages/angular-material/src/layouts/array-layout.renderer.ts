@@ -95,7 +95,7 @@ import {
           first as first
         "
       >
-        <mat-card>
+        <mat-card appearance="outlined">
           <mat-card-content>
             <jsonforms-outlet [renderProps]="getProps(idx)"></jsonforms-outlet>
           </mat-card-content>

@@ -13,7 +13,7 @@ describe('JsonForms.vue', () => {
         props: { data, renderers },
       })
     );
-    expect(wrapper.props('schema')).toBe(undefined);
+    expect((wrapper as any).props('schema')).toBe(undefined);
   });
 
   it('generates schema when not given via prop', () => {

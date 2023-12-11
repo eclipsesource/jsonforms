@@ -45,7 +45,7 @@ import { cloneDeep } from 'lodash';
 @Component({
   selector: 'ObjectRenderer',
   template: `
-    <mat-card>
+    <mat-card appearance="outlined">
       <jsonforms-outlet
         [uischema]="detailUiSchema"
         [schema]="scopedSchema"

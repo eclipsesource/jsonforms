@@ -69,20 +69,20 @@
     "lodash": "^4.17.21"
   },
   "peerDependencies": {
-    "@angular/core": "^12.0.0 || ^13.0.0 || ^14.0.0",
-    "@angular/forms": "^12.0.0 || ^13.0.0 || ^14.0.0",
+    "@angular/core": "^15.0.0",
+    "@angular/forms": "^15.0.0",
     "@jsonforms/core": "3.2.0-alpha.3",
-    "rxjs": "^6.5.3 || ^7.4.0"
+    "rxjs": "^6.6.0 || ^7.4.0"
   },
   "devDependencies": {
-    "@angular-eslint/eslint-plugin": "^12.0.0",
-    "@angular-eslint/eslint-plugin-template": "^12.0.0",
-    "@angular-eslint/schematics": "^12.0.0",
-    "@angular-eslint/template-parser": "^12.0.0",
-    "@angular/compiler": "^12.0.0",
-    "@angular/compiler-cli": "^12.0.0",
-    "@angular/core": "^12.0.0",
-    "@angular/forms": "^12.0.0",
+    "@angular-eslint/eslint-plugin": "^15.0.0",
+    "@angular-eslint/eslint-plugin-template": "^15.0.0",
+    "@angular-eslint/schematics": "^15.0.0",
+    "@angular-eslint/template-parser": "^15.0.0",
+    "@angular/compiler": "^15.0.0",
+    "@angular/compiler-cli": "^15.0.0",
+    "@angular/core": "^15.0.0",
+    "@angular/forms": "^15.0.0",
     "@jsonforms/core": "workspace:*",
     "@typescript-eslint/eslint-plugin": "^5.54.1",
     "@typescript-eslint/parser": "^5.54.1",
@@ -92,11 +92,13 @@
     "eslint-config-prettier": "^8.7.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier": "^4.2.1",
+    "ng-packagr": "^15.0.0",
     "nyc": "^15.1.0",
     "prettier": "^2.8.4",
     "rimraf": "^3.0.2",
-    "rxjs": "^6.5.3",
-    "tslib": "^2.5.0",
-    "typedoc": "~0.21.9"
+    "rxjs": "^6.6.0",
+    "tslib": "^2.3.0",
+    "typedoc": "~0.25.3",
+    "typescript": "~4.9.5"
   }
 }

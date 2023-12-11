@@ -34,8 +34,8 @@ import { JsonFormsAngularService } from '@jsonforms/angular';
 @Component({
   selector: 'GroupLayoutRenderer',
   template: `
-    <mat-card fxLayout="column" [fxHide]="hidden">
-      <mat-card-title class="mat-title">{{ label }}</mat-card-title>
+    <mat-card appearance="outlined" fxLayout="column" [fxHide]="hidden">
+      <mat-card-title class="mat-headline-6">{{ label }}</mat-card-title>
       <div
         *ngFor="
           let props of uischema | layoutChildrenRenderProps : schema : path;

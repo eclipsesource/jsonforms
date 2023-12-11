@@ -86,7 +86,7 @@ export const removeSchemaKeywords = (path: string) => {
             <a matLine>{{ item.label || 'No label set' }}</a>
             <button
               mat-icon-button
-              class="button hide"
+              class="button item-button hide"
               (click)="onDeleteClick(i)"
               [ngClass]="{ show: highlightedIdx == i }"
               *ngIf="isEnabled()"
@@ -115,6 +115,7 @@ export const removeSchemaKeywords = (path: string) => {
   `,
   styles: [
     `
+      /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
       mat-list-item.selected {
         background: rgba(0, 0, 0, 0.04);
       }
@@ -133,6 +134,11 @@ export const removeSchemaKeywords = (path: string) => {
       .button {
         float: right;
         margin-right: 0.25em;
+      }
+      .item-button {
+        position: absolute;
+        top: 0;
+        right: 0;
       }
       .hide {
         display: none;
@@ -156,7 +162,6 @@ export class MasterListComponent
   selectedItemIdx: number;
   addItem: (path: string, value: any) => () => void;
   removeItems: (path: string, toDelete: number[]) => () => void;
-  propsPath: string;
   highlightedIdx: number;
   translations: ArrayTranslations;
 
