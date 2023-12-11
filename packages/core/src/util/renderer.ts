@@ -85,6 +85,118 @@ import cloneDeep from 'lodash/cloneDeep';
 import { has } from 'lodash';
 import { all, any } from 'lodash/fp';
 
+const checkPropertyCondition = (
+  propertiesCondition: Record<string, unknown>,
+  property: string,
+  data: Record<string, unknown>
+): boolean => {
+  if (has(propertiesCondition[property], 'not')) {
+    return !checkPropertyCondition(
+      get(propertiesCondition[property], 'not'),
+      property,
+      data
+    );
+  }
+
+  if (has(propertiesCondition[property], 'properties')) {
+    const nextPropertyConditions = get(
+      propertiesCondition[property],
+      'properties'
+    );
+
+    return all(
+      (prop) =>
+        checkPropertyCondition(
+          nextPropertyConditions,
+          prop,
+          data[property] as Record<string, unknown>
+        ),
+      Object.keys(nextPropertyConditions)
+    );
+  }
+
+  if (has(propertiesCondition[property], 'const')) {
+    return (
+      has(data, property) &&
+      data[property] === get(propertiesCondition[property], 'const')
+    );
+  } else if (has(propertiesCondition[property], 'enum')) {
+    return (
+      has(data, property) &&
+      (get(propertiesCondition[property], 'enum') as unknown[]).includes(
+        data[property]
+      )
+    );
+  } else if (has(propertiesCondition[property], 'pattern')) {
+    const pattern = new RegExp(get(propertiesCondition[property], 'pattern'));
+
+    return (
+      has(data, property) &&
+      typeof data[property] === 'string' &&
+      pattern.test(data[property] as string)
+    );
+  }
+
+  return false;
+};
+
+const evaluateCondition = (
+  schema: JsonSchema,
+  data: Record<string, unknown>
+): boolean => {
+  if (has(schema, 'allOf')) {
+    return all(
+      (subschema: JsonSchema) => evaluateCondition(subschema, data),
+      get(schema, 'allOf')
+    );
+  }
+
+  if (has(schema, 'anyOf')) {
+    return any(
+      (subschema: JsonSchema) => evaluateCondition(subschema, data),
+      get(schema, 'anyOf')
+    );
+  }
+
+  if (has(schema, 'oneOf')) {
+    const subschemas = get(schema, 'oneOf');
+
+    let satisfied = false;
+
+    for (let i = 0; i < subschemas.length; i++) {
+      if (satisfied) {
+        return false;
+      }
+
+      satisfied = evaluateCondition(subschemas[i], data);
+    }
+
+    return satisfied;
+  }
+
+  let requiredProperties: string[] = [];
+  if (has(schema, 'required')) {
+    requiredProperties = get(schema, 'required');
+  }
+
+  const requiredCondition = all(
+    (property) => data[property],
+    requiredProperties
+  );
+
+  const propertiesCondition = get(schema, 'properties') as Record<
+    string,
+    unknown
+  >;
+
+  const valueCondition = all(
+    (property) => checkPropertyCondition(propertiesCondition, property, data),
+    Object.keys(propertiesCondition)
+  );
+
+  return requiredCondition && valueCondition;
+};
+
 /**
  * Check if property's required attribute is set based on if-then-else condition
  *
@@ -94,36 +206,9 @@ const checkRequiredInIf = (
   segment: string,
   data: Record<string, unknown>
 ): boolean => {
-  const propertiesCondition = get(get(schema, 'if'), 'properties') as Record<
-    string,
-    unknown
-  >;
+  const propertiesConditionSchema = get(schema, 'if');
 
-  const condition = all((property) => {
-    if (has(propertiesCondition[property], 'const')) {
-      return (
-        has(data, property) &&
-        data[property] === get(propertiesCondition[property], 'const')
-      );
-    } else if (has(propertiesCondition[property], 'enum')) {
-      return (
-        has(data, property) &&
-        (get(propertiesCondition[property], 'enum') as unknown[]).includes(
-          data[property]
-        )
-      );
-    } else if (has(propertiesCondition[property], 'pattern')) {
-      const pattern = new RegExp(get(propertiesCondition[property], 'pattern'));
-
-      return (
-        has(data, property) &&
-        typeof data[property] === 'string' &&
-        pattern.test(data[property] as string)
-      );
-    }
-
-    return false;
-  }, Object.keys(propertiesCondition));
+  const condition = evaluateCondition(propertiesConditionSchema, data);
 
   const requiredInThen = has(get(schema, 'then'), 'required');
   const requiredInElse = has(get(schema, 'else'), 'required');
