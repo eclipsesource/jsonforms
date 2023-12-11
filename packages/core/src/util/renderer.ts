@@ -85,13 +85,40 @@ import cloneDeep from 'lodash/cloneDeep';
 import { has } from 'lodash';
 import { all, any } from 'lodash/fp';
 
+const checkDataCondition = (
+  propertyCondition: unknown,
+  property: string,
+  data: Record<string, unknown>
+) => {
+  if (has(propertyCondition, 'const')) {
+    return (
+      has(data, property) && data[property] === get(propertyCondition, 'const')
+    );
+  } else if (has(propertyCondition, 'enum')) {
+    return (
+      has(data, property) &&
+      (get(propertyCondition, 'enum') as unknown[]).includes(data[property])
+    );
+  } else if (has(propertyCondition, 'pattern')) {
+    const pattern = new RegExp(get(propertyCondition, 'pattern'));
+
+    return (
+      has(data, property) &&
+      typeof data[property] === 'string' &&
+      pattern.test(data[property] as string)
+    );
+  }
+
+  return false;
+};
+
 const checkPropertyCondition = (
   propertiesCondition: Record<string, unknown>,
   property: string,
   data: Record<string, unknown>
 ): boolean => {
   if (has(propertiesCondition[property], 'not')) {
-    return !checkPropertyCondition(
+    return !checkDataCondition(
       get(propertiesCondition[property], 'not'),
       property,
       data
@@ -115,29 +142,7 @@ const checkPropertyCondition = (
     );
   }
 
-  if (has(propertiesCondition[property], 'const')) {
-    return (
-      has(data, property) &&
-      data[property] === get(propertiesCondition[property], 'const')
-    );
-  } else if (has(propertiesCondition[property], 'enum')) {
-    return (
-      has(data, property) &&
-      (get(propertiesCondition[property], 'enum') as unknown[]).includes(
-        data[property]
-      )
-    );
-  } else if (has(propertiesCondition[property], 'pattern')) {
-    const pattern = new RegExp(get(propertiesCondition[property], 'pattern'));
-
-    return (
-      has(data, property) &&
-      typeof data[property] === 'string' &&
-      pattern.test(data[property] as string)
-    );
-  }
-
-  return false;
+  return checkDataCondition(propertiesCondition[property], property, data);
 };
 
 const evaluateCondition = (
@@ -224,11 +229,18 @@ const checkRequiredInIf = (
     (requiredInElse &&
       !condition &&
       (get(get(schema, 'else'), 'required') as string[]).includes(segment)) ||
-    (ifInThen && checkRequiredInIf(get(schema, 'then'), segment, data)) ||
-    (ifInElse && checkRequiredInIf(get(schema, 'else'), segment, data)) ||
+    (ifInThen &&
+      condition &&
+      checkRequiredInIf(get(schema, 'then'), segment, data)) ||
+    (ifInElse &&
+      !condition &&
+      checkRequiredInIf(get(schema, 'else'), segment, data)) ||
     (allOfInThen &&
+      condition &&
       conditionallyRequired(get(schema, 'then'), segment, data)) ||
-    (allOfInElse && conditionallyRequired(get(schema, 'else'), segment, data))
+    (allOfInElse &&
+      !condition &&
+      conditionallyRequired(get(schema, 'else'), segment, data))
   );
 };
 
