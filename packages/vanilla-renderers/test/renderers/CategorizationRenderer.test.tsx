@@ -30,7 +30,7 @@ import {
   JsonSchema,
   Layout,
 } from '@jsonforms/core';
-import { JsonFormsStateProvider } from '@jsonforms/react';
+import { JsonForms, JsonFormsStateProvider } from '@jsonforms/react';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import CategorizationRenderer, {
@@ -388,37 +388,62 @@ describe('Categorization renderer', () => {
   });
 
   test('reset selected category on schema change', () => {
-    const uischema: Categorization = {
+    const oldUischema: Categorization = {
       type: 'Categorization',
       label: '',
       elements: [
         {
           type: 'Category',
+          label: 'A',
+          elements: [],
+        },
+        {
+          type: 'Category',
           label: 'B',
+          elements: [],
+        },
+        {
+          type: 'Category',
+          label: 'C',
           elements: [],
         },
       ],
     };
-    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
+    const newUischema: Categorization = {
+      type: 'Categorization',
+      label: '',
+      elements: [
+        {
+          type: 'Category',
+          label: 'A',
+          elements: [],
+        },
+        {
+          type: 'Category',
+          label: 'C',
+          elements: [],
+        },
+      ],
+    };
 
     wrapper = mount(
-      <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core }}>
-        <CategorizationRenderer
-          schema={fixture.schema}
-          uischema={fixture.uischema}
-        />
-      </JsonFormsStateProvider>
+      <JsonForms
+        renderers={vanillaRenderers}
+        schema={fixture.schema}
+        uischema={oldUischema}
+        data={fixture.data}
+      ></JsonForms>
     );
 
-    let firstItem = wrapper.find('li').at(0);
-    firstItem.simulate('click');
-    expect(firstItem.hasClass('selected')).toBe(true);
+    let secondItem = wrapper.find('li').at(1);
+    secondItem.simulate('click');
+    secondItem = wrapper.find('li').at(1);
+    expect(secondItem.hasClass('selected')).toBe(true);
 
-    core.uischema = uischema;
-    wrapper.setProps({ initState: { renderers: vanillaRenderers, core } });
+    wrapper.setProps({ uischema: newUischema });
     wrapper.update();
 
-    firstItem = wrapper.find('li').at(0);
-    expect(firstItem.hasClass('selected')).toBe(false);
+    secondItem = wrapper.find('li').at(1);
+    expect(secondItem.hasClass('selected')).toBe(false);
   });
 });
