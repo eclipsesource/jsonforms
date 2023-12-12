@@ -203,44 +203,77 @@ const evaluateCondition = (
 };
 
 /**
+ * Go through parent's properties untill the segment is found at the exact level it is defined and check if it is required
+ */
+const extractRequired = (
+  schema: JsonSchema,
+  segment: string,
+  prevSegments: string[]
+) => {
+  let i = 0;
+  let currentSchema = schema;
+  while (
+    i < prevSegments.length &&
+    has(currentSchema, 'properties') &&
+    has(get(currentSchema, 'properties'), prevSegments[i])
+  ) {
+    currentSchema = get(get(currentSchema, 'properties'), prevSegments[i]);
+    ++i;
+  }
+
+  if (i < prevSegments.length) {
+    return false;
+  }
+
+  return (
+    has(currentSchema, 'required') &&
+    (get(currentSchema, 'required') as string[]).includes(segment)
+  );
+};
+
+/**
  * Check if property's required attribute is set based on if-then-else condition
  *
  */
 const checkRequiredInIf = (
   schema: JsonSchema,
   segment: string,
+  prevSegments: string[],
   data: Record<string, unknown>
 ): boolean => {
   const propertiesConditionSchema = get(schema, 'if');
 
   const condition = evaluateCondition(propertiesConditionSchema, data);
 
-  const requiredInThen = has(get(schema, 'then'), 'required');
-  const requiredInElse = has(get(schema, 'else'), 'required');
   const ifInThen = has(get(schema, 'then'), 'if');
   const ifInElse = has(get(schema, 'else'), 'if');
   const allOfInThen = has(get(schema, 'then'), 'allOf');
   const allOfInElse = has(get(schema, 'else'), 'allOf');
 
   return (
-    (requiredInThen &&
+    (has(schema, 'then') &&
       condition &&
-      (get(get(schema, 'then'), 'required') as string[]).includes(segment)) ||
-    (requiredInElse &&
+      extractRequired(get(schema, 'then'), segment, prevSegments)) ||
+    (has(schema, 'else') &&
       !condition &&
-      (get(get(schema, 'else'), 'required') as string[]).includes(segment)) ||
+      extractRequired(get(schema, 'else'), segment, prevSegments)) ||
     (ifInThen &&
       condition &&
-      checkRequiredInIf(get(schema, 'then'), segment, data)) ||
+      checkRequiredInIf(get(schema, 'then'), segment, prevSegments, data)) ||
     (ifInElse &&
       !condition &&
-      checkRequiredInIf(get(schema, 'else'), segment, data)) ||
+      checkRequiredInIf(get(schema, 'else'), segment, prevSegments, data)) ||
     (allOfInThen &&
       condition &&
-      conditionallyRequired(get(schema, 'then'), segment, data)) ||
+      conditionallyRequired(
+        get(schema, 'then'),
+        segment,
+        prevSegments,
+        data
+      )) ||
     (allOfInElse &&
       !condition &&
-      conditionallyRequired(get(schema, 'else'), segment, data))
+      conditionallyRequired(get(schema, 'else'), segment, prevSegments, data))
   );
 };
 
@@ -251,16 +284,75 @@ const checkRequiredInIf = (
 const conditionallyRequired = (
   schema: JsonSchema,
   segment: string,
+  prevSegments: string[],
   data: any
 ) => {
   const nestedAllOfSchema = get(schema, 'allOf');
 
   return any((subschema: JsonSchema4 | JsonSchema7): boolean => {
     return (
-      (has(subschema, 'if') && checkRequiredInIf(subschema, segment, data)) ||
-      conditionallyRequired(subschema, segment, data)
+      (has(subschema, 'if') &&
+        checkRequiredInIf(subschema, segment, prevSegments, data)) ||
+      conditionallyRequired(subschema, segment, prevSegments, data)
     );
   }, nestedAllOfSchema);
+};
+
+/**
+ * Check if property is being required in the parent schema
+ */
+const isRequiredInParent = (
+  schema: JsonSchema,
+  rootSchema: JsonSchema,
+  path: string,
+  segment: string,
+  prevSegments: string[],
+  data: Record<string, unknown>
+): boolean => {
+  const pathSegments = path.split('/');
+  const lastSegment = pathSegments[pathSegments.length - 3];
+  const nextHigherSchemaSegments = pathSegments.slice(
+    0,
+    pathSegments.length - 4
+  );
+
+  if (!nextHigherSchemaSegments.length) {
+    return false;
+  }
+
+  const nextHigherSchemaPath = nextHigherSchemaSegments.join('/');
+
+  const nextHigherSchema = Resolve.schema(
+    schema,
+    nextHigherSchemaPath,
+    rootSchema
+  );
+
+  const currentData = Resolve.data(data, toDataPath(nextHigherSchemaPath));
+
+  return (
+    conditionallyRequired(
+      nextHigherSchema,
+      segment,
+      [lastSegment, ...prevSegments],
+      currentData
+    ) ||
+    (has(nextHigherSchema, 'if') &&
+      checkRequiredInIf(
+        nextHigherSchema,
+        segment,
+        [lastSegment, ...prevSegments],
+        currentData
+      )) ||
+    isRequiredInParent(
+      schema,
+      rootSchema,
+      nextHigherSchemaPath,
+      segment,
+      [lastSegment, ...prevSegments],
+      currentData
+    )
+  );
 };
 
 const isRequired = (
@@ -286,12 +378,22 @@ const isRequired = (
 
   const requiredInIf =
     has(nextHigherSchema, 'if') &&
-    checkRequiredInIf(nextHigherSchema, lastSegment, currentData);
+    checkRequiredInIf(nextHigherSchema, lastSegment, [], currentData);
 
   const requiredConditionally = conditionallyRequired(
     nextHigherSchema,
     lastSegment,
+    [],
     currentData
+  );
+
+  const requiredConditionallyInParent = isRequiredInParent(
+    rootSchema,
+    rootSchema,
+    schemaPath,
+    lastSegment,
+    [],
+    data
   );
 
   return (
@@ -299,7 +401,8 @@ const isRequired = (
       nextHigherSchema.required !== undefined &&
       nextHigherSchema.required.indexOf(lastSegment) !== -1) ||
     requiredInIf ||
-    requiredConditionally
+    requiredConditionally ||
+    requiredConditionallyInParent
   );
 };
 
