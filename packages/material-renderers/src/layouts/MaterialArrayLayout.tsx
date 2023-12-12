@@ -66,6 +66,7 @@ const MaterialArrayLayoutComponent = (props: ArrayLayoutProps) => {
     config,
     uischemas,
     translations,
+    description,
   } = props;
   const appliedUiSchemaOptions = merge({}, config, props.uischema.options);
 
@@ -78,6 +79,7 @@ const MaterialArrayLayoutComponent = (props: ArrayLayoutProps) => {
           required,
           appliedUiSchemaOptions.hideRequiredAsterisk
         )}
+        description={description}
         errors={errors}
         path={path}
         enabled={enabled}
