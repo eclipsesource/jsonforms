@@ -29,7 +29,15 @@ import {
   JsonSchema,
   ArrayTranslations,
 } from '@jsonforms/core';
-import { IconButton, TableRow, Tooltip, Grid, Typography } from '@mui/material';
+import {
+  IconButton,
+  TableRow,
+  Tooltip,
+  Grid,
+  Typography,
+  FormHelperText,
+  Stack,
+} from '@mui/material';
 import { Add as AddIcon } from '@mui/icons-material';
 import ValidationIcon from './ValidationIcon';
 import NoBorderTableCell from './NoBorderTableCell';
@@ -38,6 +46,7 @@ export interface MaterialTableToolbarProps {
   numColumns: number;
   errors: string;
   label: string;
+  description: string;
   path: string;
   uischema: ControlElement;
   schema: JsonSchema;
@@ -56,6 +65,7 @@ const TableToolbar = React.memo(function TableToolbar({
   numColumns,
   errors,
   label,
+  description,
   path,
   addItem,
   schema,
@@ -66,26 +76,29 @@ const TableToolbar = React.memo(function TableToolbar({
   return (
     <TableRow>
       <NoBorderTableCell colSpan={numColumns}>
-        <Grid
-          container
-          justifyContent={'flex-start'}
-          alignItems={'center'}
-          spacing={2}
-        >
-          <Grid item>
-            <Typography variant={'h6'}>{label}</Typography>
+        <Stack>
+          <Grid
+            container
+            justifyContent={'flex-start'}
+            alignItems={'center'}
+            spacing={2}
+          >
+            <Grid item>
+              <Typography variant={'h6'}>{label}</Typography>
+            </Grid>
+            <Grid item>
+              {errors.length !== 0 && (
+                <Grid item>
+                  <ValidationIcon
+                    id='tooltip-validation'
+                    errorMessages={errors}
+                  />
+                </Grid>
+              )}
+            </Grid>
           </Grid>
-          <Grid item>
-            {errors.length !== 0 && (
-              <Grid item>
-                <ValidationIcon
-                  id='tooltip-validation'
-                  errorMessages={errors}
-                />
-              </Grid>
-            )}
-          </Grid>
-        </Grid>
+          {description ?? <FormHelperText>{description}</FormHelperText>}
+        </Stack>
       </NoBorderTableCell>
       {enabled ? (
         <NoBorderTableCell align='right' style={fixedCellSmall}>
