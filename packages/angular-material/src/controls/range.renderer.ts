@@ -38,16 +38,17 @@ import { isRangeControl, RankedTester, rankWith } from '@jsonforms/core';
         label
       }}</label>
       <mat-slider
-        [value]="data || scopedSchema.default"
-        (change)="onChange($event)"
         [disabled]="!isEnabled()"
         [max]="max"
         [min]="min"
         [step]="multipleOf"
-        [thumbLabel]="true"
-        tickInterval="auto"
+        [discrete]="true"
         [id]="id"
-      ></mat-slider>
+        showTickMarks
+        #ngSlider
+      >
+        <input matSliderThumb />
+      </mat-slider>
       <mat-hint class="mat-caption" *ngIf="shouldShowUnfocusedDescription()">{{
         description
       }}</mat-hint>
@@ -60,6 +61,7 @@ export class RangeControlRenderer extends JsonFormsControl {
   min: number;
   max: number;
   multipleOf: number;
+  focused = false;
 
   constructor(
     jsonformsService: JsonFormsAngularService,

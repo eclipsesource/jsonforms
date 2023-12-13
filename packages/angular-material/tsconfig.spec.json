@@ -1,12 +1,17 @@
 {
   "extends": "../../tsconfig.base",
   "compilerOptions": {
-    "outDir": "./lib/esm",
+    "outDir": "../../out-tsc/spec",
+    "inlineSourceMap": true,
     "sourceMap": true,
-    "target": "es5"
+    "types": [
+      "jasmine"
+    ]
   },
-  "exclude": ["node_modules"],
-  "files": ["./src/index.ts"],
+  "include": [
+    "**/*.spec.ts",
+    "**/*.d.ts"
+  ],
   "angularCompilerOptions": {
     "compilationMode": "partial",
     "strictMetadataEmit": true,

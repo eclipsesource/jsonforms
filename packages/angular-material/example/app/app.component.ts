@@ -74,7 +74,7 @@ const itemTester: UISchemaTester = (_schema, schemaPath, _path) => {
     <div>
       <button (click)="changeLocale('de-DE')">Change locale to de-DE</button>
       <button (click)="changeLocale('en-US')">Change locale to en-US</button>
-      Current locale: {{ currentLocale }}
+      Current locale: {{ i18n.locale }}
       <button (click)="toggleReadonly()">
         {{ readonly ? 'Unset' : 'Set' }} Readonly
       </button>
@@ -85,19 +85,17 @@ const itemTester: UISchemaTester = (_schema, schemaPath, _path) => {
       [uischema]="selectedExample.uischema"
       [renderers]="renderers"
       [i18n]="i18n"
-      [uischemas]="uischemas"
       [readonly]="readonly"
-      [config]="config"
     ></jsonforms>
   `,
 })
 export class AppComponent {
   readonly renderers = angularMaterialRenderers;
   readonly examples = getExamples();
-  selectedExample: ExampleDescription;
+  selectedExample: ExampleDescription | undefined;
   i18n: JsonFormsI18nState;
   private dateAdapter;
-  private readonly = false;
+  readonly = false;
   data: any;
   uischemas: { tester: UISchemaTester; uischema: UISchemaElement }[] = [
     { tester: itemTester, uischema: uiSchema },
@@ -114,7 +112,7 @@ export class AppComponent {
     this.selectedExample = this.examples.find(
       (e) => e.name === ev.target.value
     );
-    this.i18n = this.selectedExample.i18n ?? defaultI18n;
+    this.i18n = this.selectedExample?.i18n ?? defaultI18n;
   }
 
   changeLocale(locale: string) {

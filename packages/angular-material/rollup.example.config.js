@@ -10,7 +10,7 @@ import typescript from 'rollup-plugin-typescript2';
  * @type {import('rollup').RollupOptions}
  */
 const config = {
-  input: 'example/main.ts',
+  input: 'example/dist/example/main.js',
   output: {
     file: 'example/dist/bundle.js',
     format: 'iife',

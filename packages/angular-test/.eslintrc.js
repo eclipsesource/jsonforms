@@ -33,5 +33,16 @@ module.exports = {
         caughtErrorsIgnorePattern: '^_',
       },
     ],
+    // workaround for
+    // https://github.com/import-js/eslint-plugin-import/issues/1810:
+    "import/no-unresolved": [
+      "error",
+      {
+        ignore: [
+          "@angular/core/.*",
+          "@angular/platform-browser-dynamic/.*",
+        ] 
+      }
+    ],
   },
 };
