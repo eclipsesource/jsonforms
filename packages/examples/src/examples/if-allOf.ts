@@ -30,6 +30,23 @@ export const schema = {
     foo: { type: 'string' },
     bar: { type: 'string' },
     baz: { type: 'string' },
+    nested: {
+      type: 'object',
+      properties: {
+        foo: { type: 'string' },
+        bar: { type: 'string' },
+      },
+      allOf: [
+        {
+          if: {
+            properties: {
+              foo: { const: 'bar' },
+            },
+          },
+          then: { required: ['bar'] },
+        },
+      ],
+    },
   },
   allOf: [
     {
@@ -47,6 +64,20 @@ export const schema = {
         },
       },
       then: { required: ['baz'] },
+    },
+    {
+      allOf: [
+        {
+          if: {
+            properties: {
+              foo: { pattern: 'foo.' },
+            },
+          },
+          then: {
+            required: ['baz', 'bar'],
+          },
+        },
+      ],
     },
   ],
 };
@@ -68,6 +99,16 @@ export const uischema = {
       type: 'Control',
       label: 'baz',
       scope: '#/properties/baz',
+    },
+    {
+      type: 'Control',
+      label: 'foo1',
+      scope: '#/properties/nested/properties/foo',
+    },
+    {
+      type: 'Control',
+      label: 'bar1',
+      scope: '#/properties/nested/properties/bar',
     },
   ],
 };
