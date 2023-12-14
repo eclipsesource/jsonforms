@@ -7,9 +7,17 @@ on:
         type: "string"
         description: "version (e.g. 3.4.0-alpha.0)"
         required: true
+      skip_publish:
+        type: "boolean"
+        description: "mark in case only the version update shall be executed, skipping the release to npm"
+        required: true
+      skip_push:
+        type: "boolean"
+        description: "mark in case the version update shall not be pushed back to the repository"
+        required: true
       stable_release:
         type: "boolean"
-        description: "mark in case this is a full stable release"
+        description: "mark in case this is a full stable release (flag is ignored in case publish is skipped)"
         required: true
 
 jobs:
@@ -65,11 +73,13 @@ jobs:
           git tag v${{ github.event.inputs.next_version }} -f
 
       - name: "Publish to npm"
-        run: "pnpm exec lerna publish from-git --yes ${{  github.event.inputs.stable_release == 'true' && ' ' || '--dist-tag next' }}"
+        if: "github.event.inputs.skip_publish == 'false'"
+        run: "pnpm publish --recursive ${{  github.event.inputs.stable_release == 'true' && ' ' || '--tag next' }}"
         env:
           NODE_AUTH_TOKEN: "${{ secrets.NPM_TOKEN }}"
 
       - name: "push"
+        if: "github.event.inputs.skip_push == 'false'"
         run: |
           git push
           git push origin v${{ github.event.inputs.next_version }}
