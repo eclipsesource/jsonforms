@@ -79,7 +79,7 @@
     "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~15.2.10",
+    "@angular-devkit/build-angular": "~15.2.10 || ^16.0.0 || ^17.0.0",
     "@angular-eslint/eslint-plugin": "^15.0.0 || ^16.0.0 || ^17.0.0",
     "@angular-eslint/eslint-plugin-template": "^15.0.0 || ^16.0.0 || ^17.0.0",
     "@angular-eslint/schematics": "^15.0.0 || ^16.0.0 || ^17.0.0",
