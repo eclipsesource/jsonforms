@@ -87,7 +87,6 @@ export const booleanBaseTest =
       checkboxNativeElement = preparedComponents.checkboxNativeElement;
       checkboxInstance = preparedComponents.checkboxInstance;
       component = preparedComponents.component;
-      console.log('hidden', component.hidden);
     });
 
     it('should render', () => {

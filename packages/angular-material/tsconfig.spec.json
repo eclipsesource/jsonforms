@@ -11,11 +11,5 @@
   "include": [
     "**/*.spec.ts",
     "**/*.d.ts"
-  ],
-  "angularCompilerOptions": {
-    "compilationMode": "partial",
-    "strictMetadataEmit": true,
-    "generateCodeForLibraries": false,
-    "skipTemplateCodegen": true
-  }
+  ]
 }

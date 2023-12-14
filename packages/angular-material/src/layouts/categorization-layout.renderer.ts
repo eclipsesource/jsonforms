@@ -66,7 +66,6 @@ import { Subscription } from 'rxjs';
       </mat-tab>
     </mat-tab-group>
   `,
-  styles: [``],
 })
 export class CategorizationTabLayoutRenderer
   extends JsonFormsBaseRenderer<Categorization>

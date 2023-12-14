@@ -54,7 +54,6 @@ import {
       <mat-error class="mat-caption">{{ error }}</mat-error>
     </div>
   `,
-  styles: [``],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ToggleControlRenderer extends JsonFormsControl {

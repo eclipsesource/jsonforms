@@ -102,7 +102,6 @@ export const rangeBaseTest =
       rangeElement = preparedComponents.rangeElement;
       thumbElement = preparedComponents.thumbElement;
       component = preparedComponents.component;
-      console.log('hidden', component.hidden);
     });
 
     it('should render floats', () => {

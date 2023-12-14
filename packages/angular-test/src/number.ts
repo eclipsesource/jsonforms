@@ -121,7 +121,6 @@ export const numberBaseTest =
       numberNativeElement = preparedComponents.numberNativeElement;
       numberElement = preparedComponents.numberElement;
       component = preparedComponents.component;
-      console.log('hidden', component.hidden);
     });
 
     it('should render floats', () => {

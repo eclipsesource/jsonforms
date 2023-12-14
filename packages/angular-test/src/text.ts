@@ -101,7 +101,6 @@ export const textBaseTest =
       textNativeElement = preparedComponents.textNativeElement;
       textElement = preparedComponents.textElement;
       component = preparedComponents.component;
-      console.log('hidden', component.hidden);
     });
 
     it('should render', () => {
