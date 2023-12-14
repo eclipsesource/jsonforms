@@ -55,26 +55,21 @@ import {
 @Component({
   selector: 'app-array-layout-renderer',
   template: `
-    <div fxLayout="column" fxLayoutGap="16px" [fxHide]="hidden">
-      <div [ngClass]="'array-layout-toolbar'">
-        <h2 [ngClass]="['mat-h2', 'array-layout-title']">{{ label }}</h2>
-        <span fxFlex></span>
+    <div [ngStyle]="{ display: hidden ? 'none' : '' }" class="array-layout">
+      <div class="array-layout-toolbar">
+        <h2 class="mat-h2 array-layout-title">{{ label }}</h2>
+        <span></span>
         <mat-icon
           *ngIf="this.error?.length"
           color="warn"
-          matBadge="{{
-            this.error.split(
-              '
-'
-            ).length
-          }}"
+          matBadge="{{ this.error.split('').length }}"
           matBadgeColor="warn"
           matTooltip="{{ this.error }}"
           matTooltipClass="error-message-tooltip"
         >
           error_outline
         </mat-icon>
-        <span fxFlex></span>
+        <span></span>
         <button
           mat-button
           matTooltip="{{ translations.addTooltip }}"
@@ -141,12 +136,23 @@ import {
   `,
   styles: [
     `
+      .array-layout {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .array-layout > * {
+        flex: 1 1 auto;
+      }
       .array-layout-toolbar {
         display: flex;
         align-items: center;
       }
       .array-layout-title {
         margin: 0;
+      }
+      .array-layout-toolbar > span {
+        flex: 1 1 auto;
       }
       ::ng-deep .error-message-tooltip {
         white-space: pre-line;

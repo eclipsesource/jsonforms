@@ -39,7 +39,6 @@ import {
   TableRenderer,
   TableRendererTester,
 } from '../src/other/table.renderer';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { setupMockStore } from '@jsonforms/angular-test';
 import { createTesterContext } from './util';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -151,7 +150,6 @@ describe('Table', () => {
         MatIconModule,
         MatInputModule,
         ReactiveFormsModule,
-        FlexLayoutModule,
         MatTableModule,
         MatTooltipModule,
       ],

@@ -39,7 +39,7 @@ import {
 @Component({
   selector: 'ToggleControlRenderer',
   template: `
-    <div [fxHide]="hidden">
+    <div [ngStyle]="{ display: hidden ? 'none' : '' }">
       <mat-slide-toggle
         (change)="onChange($event)"
         [checked]="isChecked()"
@@ -54,6 +54,7 @@ import {
       <mat-error class="mat-caption">{{ error }}</mat-error>
     </div>
   `,
+  styles: [``],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ToggleControlRenderer extends JsonFormsControl {

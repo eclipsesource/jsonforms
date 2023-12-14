@@ -29,7 +29,7 @@ import { isStringControl, RankedTester, rankWith } from '@jsonforms/core';
 @Component({
   selector: 'TextControlRenderer',
   template: `
-    <mat-form-field fxFlex [fxHide]="hidden">
+    <mat-form-field [ngStyle]="{ display: hidden ? 'none' : '' }">
       <mat-label>{{ label }}</mat-label>
       <input
         matInput
@@ -46,6 +46,17 @@ import { isStringControl, RankedTester, rankWith } from '@jsonforms/core';
       <mat-error>{{ error }}</mat-error>
     </mat-form-field>
   `,
+  styles: [
+    `
+      :host {
+        display: flex;
+        flex-direction: row;
+      }
+      mat-form-field {
+        flex: 1 1 auto;
+      }
+    `,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TextControlRenderer extends JsonFormsControl {

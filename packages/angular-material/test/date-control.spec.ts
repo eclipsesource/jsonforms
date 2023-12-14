@@ -46,7 +46,6 @@ import {
 } from '@jsonforms/angular-test';
 import { Actions, ControlElement, JsonSchema } from '@jsonforms/core';
 import { DateControlRenderer, DateControlRendererTester } from '../src';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { JsonFormsAngularService } from '@jsonforms/angular';
 import { createTesterContext } from './util';
 
@@ -79,7 +78,6 @@ const imports = [
   MatFormFieldModule,
   NoopAnimationsModule,
   ReactiveFormsModule,
-  FlexLayoutModule,
 ];
 const providers = [JsonFormsAngularService];
 const componentUT: any = DateControlRenderer;

@@ -37,7 +37,7 @@ import merge from 'lodash/merge';
 @Component({
   selector: 'NumberControlRenderer',
   template: `
-    <mat-form-field fxFlex [fxHide]="hidden">
+    <mat-form-field [ngStyle]="{ display: hidden ? 'none' : '' }">
       <mat-label>{{ label }}</mat-label>
       <input
         matInput
@@ -57,6 +57,17 @@ import merge from 'lodash/merge';
       <mat-error>{{ error }}</mat-error>
     </mat-form-field>
   `,
+  styles: [
+    `
+      :host {
+        display: flex;
+        flex-direction: row;
+      }
+      mat-form-field {
+        flex: 1 1 auto;
+      }
+    `,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NumberControlRenderer extends JsonFormsControl {
