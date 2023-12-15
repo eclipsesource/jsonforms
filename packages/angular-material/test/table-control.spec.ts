@@ -30,7 +30,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
-import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { JsonFormsAngularService, JsonFormsModule } from '@jsonforms/angular';
 import { ControlElement } from '@jsonforms/core';
@@ -154,13 +153,7 @@ describe('Table', () => {
         MatTooltipModule,
       ],
       providers: [JsonFormsAngularService],
-    })
-      .overrideModule(BrowserDynamicTestingModule, {
-        set: {
-          entryComponents: [TextControlRenderer],
-        },
-      })
-      .compileComponents();
+    }).compileComponents();
 
     fixture = TestBed.createComponent(TableRenderer);
     component = fixture.componentInstance;

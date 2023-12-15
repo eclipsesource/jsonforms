@@ -37,7 +37,6 @@ import {
   JsonFormsModule,
   JsonFormsOutlet,
 } from '@jsonforms/angular';
-import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import {
   CategorizationTabLayoutRenderer,
   TextControlRenderer,
@@ -83,13 +82,7 @@ describe('Categorization tab layout', () => {
         ReactiveFormsModule,
       ],
       providers: [JsonFormsAngularService],
-    })
-      .overrideModule(BrowserDynamicTestingModule, {
-        set: {
-          entryComponents: [TextControlRenderer],
-        },
-      })
-      .compileComponents();
+    }).compileComponents();
 
     fixture = TestBed.createComponent(CategorizationTabLayoutRenderer);
     component = fixture.componentInstance;

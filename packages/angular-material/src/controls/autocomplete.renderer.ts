@@ -59,8 +59,7 @@ import { map, startWith } from 'rxjs/operators';
  * <pre><code>
  * ...
  * imports: [JsonFormsAngularMaterialModule, MatAutocompleteModule],
- * declarations: [AutocompleteControlRenderer],
- * entryComponents: [AutocompleteControlRenderer]
+ * declarations: [AutocompleteControlRenderer]
  * ...
  * </code></pre>
  *

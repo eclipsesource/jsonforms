@@ -16,6 +16,9 @@ const config = {
     format: 'iife',
     sourcemap: true,
   },
+  // Disable treeshaking when generating bundles
+  // see: https://github.com/angular/angular/pull/32069
+  treeshake: false,
   plugins: [
     replace({
       'process.env.NODE_ENV': JSON.stringify('production'),

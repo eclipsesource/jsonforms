@@ -22,7 +22,6 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { CommonModule } from '@angular/common';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -111,18 +110,7 @@ describe('Object Control', () => {
         ReactiveFormsModule,
       ],
       providers: [JsonFormsAngularService],
-    })
-      .overrideModule(BrowserDynamicTestingModule, {
-        set: {
-          entryComponents: [
-            TextControlRenderer,
-            VerticalLayoutRenderer,
-            GroupLayoutRenderer,
-            ObjectControlRenderer,
-          ],
-        },
-      })
-      .compileComponents();
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ObjectControlRenderer);
     component = fixture.componentInstance;

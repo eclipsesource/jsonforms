@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import 'core-js/es7/reflect';
+import 'core-js/es/reflect'
 import 'zone.js/dist/zone';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
