@@ -57,7 +57,7 @@ import { JsonFormsAngularService } from '@jsonforms/angular';
         flex-direction: column;
         gap: 16px;
       }
-      .group-layout > * {
+      .group-layout > div {
         flex: 1 1 auto;
       }
     `,

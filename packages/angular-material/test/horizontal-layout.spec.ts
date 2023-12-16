@@ -44,7 +44,6 @@ describe('Horizontal layout', () => {
   beforeEach(() => {
     fixture = beforeEachLayoutTest(HorizontalLayoutRenderer, {
       declarations: [LayoutChildrenRenderPropsPipe],
-      imports: [],
     });
   });
 

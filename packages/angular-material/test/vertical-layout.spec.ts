@@ -45,7 +45,6 @@ describe('Vertical layout', () => {
   beforeEach(() => {
     fixture = beforeEachLayoutTest(VerticalLayoutRenderer, {
       declarations: [LayoutChildrenRenderPropsPipe],
-      imports: [],
     });
     component = fixture.componentInstance;
   });

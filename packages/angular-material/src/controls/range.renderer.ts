@@ -37,7 +37,6 @@ import { isRangeControl, RankedTester, rankWith } from '@jsonforms/core';
       <label class="mat-caption" style="color:rgba(0,0,0,.54)">{{
         label
       }}</label>
-      <!-- TODO: The 'tickInterval' property no longer exists -->
       <mat-slider
         [disabled]="!isEnabled()"
         [max]="max"

@@ -45,7 +45,6 @@ describe('Group layout', () => {
   beforeEach(() => {
     fixture = beforeEachLayoutTest(GroupLayoutRenderer, {
       declarations: [LayoutChildrenRenderPropsPipe, MatCard, MatCardTitle],
-      imports: [],
     });
   });
 
