@@ -26,12 +26,14 @@ jobs:
       contents: "write"
     runs-on: "ubuntu-latest"
     steps:
-      - uses: "actions/checkout@v3"
+      - uses: "actions/checkout@v4"
+        with:
+          token: "${{ secrets.JSONFORMS_PUBLISH_PAT }}"
 
       - name: "Configure Git Credentials"
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "jsonforms-publish[bot]"
+          git config user.email "jsonforms-publish@eclipsesource.com"
 
       - name: "Setup node"
         uses: "actions/setup-node@v3"
