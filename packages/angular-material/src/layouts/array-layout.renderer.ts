@@ -90,7 +90,7 @@ import {
           first as first
         "
       >
-        <mat-card appearance="outlined">
+        <mat-card class="array-item" appearance="outlined">
           <mat-card-content>
             <jsonforms-outlet [renderProps]="getProps(idx)"></jsonforms-outlet>
           </mat-card-content>
@@ -153,6 +153,9 @@ import {
       }
       .array-layout-toolbar > span {
         flex: 1 1 auto;
+      }
+      .array-item {
+        padding: 16px;
       }
       ::ng-deep .error-message-tooltip {
         white-space: pre-line;
