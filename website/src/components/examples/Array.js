@@ -1,23 +1,6 @@
 import React from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { createStyles, makeStyles } from '@mui/styles';
 import { Demo } from '../common/Demo';
-
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    example_array_note: {
-      display: 'none',
-      "@media only screen and (max-width: 850px)": {
-        display: 'block'
-      }
-    },
-    example_array: {
-      "@media only screen and (max-width: 850px)": {
-        display: 'none'
-      }
-    }
-  })
-);
 
 export const Array = () => {
   const theme = createTheme({
@@ -79,12 +62,10 @@ export const Array = () => {
     ],
   };
 
-  const classes = useStyles();
-
   return (
     <div>
       <ThemeProvider theme={theme}>
-        <div className={classes.example_array}>
+        <div sx={{ display: { xs: 'none', md: 'block' }}}>
           <Demo
             id='array-demo'
             schema={schema}
@@ -96,7 +77,7 @@ export const Array = () => {
           />
         </div>
       </ThemeProvider>
-      <div className={classes.example_array_note}>
+      <div sx={{ display: { xs: 'block', md: 'none' }}}>
         Our current array renderer is not supported on mobile, sorry.
       </div>
     </div>

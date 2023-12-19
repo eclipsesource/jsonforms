@@ -1,7 +1,7 @@
 import React from 'react';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import Layout from '@theme/Layout';
-import styles from './assets/support.module.scss';
+import styles from './assets/support.module.css';
 
 function Support() {
   return (

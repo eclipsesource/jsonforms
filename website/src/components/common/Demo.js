@@ -1,36 +1,14 @@
 import React, { useState } from 'react';
-import clsx from 'clsx';
 import { JsonForms } from '@jsonforms/react';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { createStyles, makeStyles } from '@mui/styles';
+import { createTheme, styled, ThemeProvider } from '@mui/material/styles';
 import {
   materialCells,
   materialRenderers,
 } from '@jsonforms/material-renderers';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
-import Highlight, { defaultProps } from "prism-react-renderer";
+import { Highlight, themes } from "prism-react-renderer";
 import { usePrismTheme } from '@docusaurus/theme-common';
-
-const demoStyles = makeStyles((theme) =>
-  createStyles({
-    root: {
-      color: '#000',
-      marginBottom: 20,
-      margin: 'auto',
-    },
-    tabs: {
-      '& li:first-child': {
-        marginRight: 'auto'
-      }
-    },
-    demoTab: {
-      borderRadius: 'var(--ifm-pre-border-radius)',
-      padding: '16px',
-      border: '1px solid #eee'
-    },
-  })
-);
 
 const theme = createTheme({
   components: {
@@ -46,28 +24,41 @@ const theme = createTheme({
 
 const defaultTheme = createTheme();
 
-const codeStyle = makeStyles((theme) =>
-  createStyles({
-    codeblockName: {
-      backgroundColor: '#292d3e',
-      color: '#fff',
-      borderTopRightRadius: 'var(--ifm-pre-border-radius)',
-      borderTopLeftRadius: 'var(--ifm-pre-border-radius)',
-      borderBottom: '1px solid #eee',
-      fontSize: 'var(--ifm-code-font-size)',
-      fontWeight: 500,
-      padding: '.75rem var(--ifm-pre-padding)'
-    },
-    codeBlockWithTitle: {
-      borderTopRightRadius: 0,
-      borderTopLeftRadius: 0,
-    }
-  })
-);
+const CodeBlockName = styled('div')({
+  backgroundColor: '#292d3e',
+  color: '#fff',
+  borderTopRightRadius: 'var(--ifm-pre-border-radius)',
+  borderTopLeftRadius: 'var(--ifm-pre-border-radius)',
+  borderBottom: '1px solid #eee',
+  fontSize: 'var(--ifm-code-font-size)',
+  fontWeight: 500,
+  padding: '.75rem var(--ifm-pre-padding)'
+});
+
+const CodeBlock = styled('pre')({
+  borderTopRightRadius: 0,
+  borderTopLeftRadius: 0,
+});
+
+const TabsWrapper = styled('div')({
+  color: '#000',
+  marginBottom: 20,
+  margin: 'auto',
+});
+
+const TabsContainer = styled(Tabs)({
+  '& li:first-child': {
+    marginRight: 'auto',
+  },
+});
+
+const DemoTab = styled(TabItem)({
+  borderRadius: 'var(--ifm-pre-border-radius)',
+  padding: '16px',
+  border: '1px solid #eee'
+});
 
 const Code = (props) => {
-  const classes = codeStyle();
-
   let content = props.children;
   let codeBlockTitle = props.name;
   if(content === undefined) {
@@ -76,15 +67,15 @@ const Code = (props) => {
   const code = JSON.stringify(content, null, 2).replace(/\n$/, '');
   const prismTheme = usePrismTheme();
   return (
-    <Highlight {...defaultProps} code={code} language="json" theme={prismTheme}>
+    <Highlight code={code} language="json" theme={prismTheme}>
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
         <div>
           {codeBlockTitle && (
-            <div className={classes.codeblockName}>
+            <CodeBlockName>
               {codeBlockTitle}
-            </div>
+            </CodeBlockName>
           )}
-          <pre className={clsx(className, { [classes.codeBlockWithTitle]: codeBlockTitle })} style={style}>
+          <CodeBlock style={style}>
             {tokens.map((line, i) => (
               <div {...getLineProps({ line, key: i })}>
                 {line.map((token, key) => (
@@ -92,7 +83,7 @@ const Code = (props) => {
                 ))}
               </div>
             ))}
-          </pre>
+          </CodeBlock>
         </div>
       )}
     </Highlight>
@@ -103,20 +94,18 @@ export const Demo = (props) => {
   const { data: inputData, schema, uischema, id, i18n } = props;
   const [data, setData] = useState(inputData);
 
-  const classes = demoStyles();
   return (
     <ThemeProvider theme={defaultTheme}>
-      <div className={classes.root} id={id}>
-        <Tabs
+      <TabsWrapper id={id}>
+        <TabsContainer
           defaultValue="demo"
           values={[
             {label: 'Demo', value: 'demo'},
             {label: 'Schema', value: 'schema'},
             {label: 'UI Schema', value: 'uischema'},
             {label: 'Data', value: 'data'},
-          ]}
-          className={classes.tabs}>
-          <TabItem value="demo" className={clsx('demoTab', classes.demoTab)}>
+          ]}>
+          <DemoTab value="demo">
             <ThemeProvider theme={theme}>
               <JsonForms
                 renderers={materialRenderers}
@@ -126,7 +115,7 @@ export const Demo = (props) => {
                 {...props}
               />
             </ThemeProvider>
-          </TabItem>
+          </DemoTab>
           <TabItem value="schema">
             <Code name="schema.json">{schema}</Code>
           </TabItem>
@@ -136,8 +125,8 @@ export const Demo = (props) => {
           <TabItem value="data">
             <Code>{data}</Code>
           </TabItem>
-        </Tabs>
-      </div>
+        </TabsContainer>
+      </TabsWrapper>
     </ThemeProvider>
   );
 };

@@ -4,7 +4,7 @@ import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import useBaseUrl from '@docusaurus/useBaseUrl';
-import styles from './assets/index.module.scss';
+import styles from './assets/index.module.css';
 import corePackageJson from '@jsonforms/core/package';
 
 import SchemaIcon from '../../static/img/schemaIcon.svg';
