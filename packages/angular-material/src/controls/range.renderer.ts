@@ -47,7 +47,7 @@ import { isRangeControl, RankedTester, rankWith } from '@jsonforms/core';
         showTickMarks
         #ngSlider
       >
-        <input matSliderThumb />
+        <input matSliderThumb (valueChange)="onChange($event)" />
       </mat-slider>
       <mat-hint class="mat-caption" *ngIf="shouldShowUnfocusedDescription()">{{
         description
@@ -82,7 +82,7 @@ export class RangeControlRenderer extends JsonFormsControl {
   ) {
     super(jsonformsService);
   }
-  getEventValue = (event: any) => Number(event.value);
+  getEventValue = (event: number) => Number(event);
   mapAdditionalProps() {
     if (this.scopedSchema) {
       this.min = this.scopedSchema.minimum;
