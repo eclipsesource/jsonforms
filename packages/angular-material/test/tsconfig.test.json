@@ -7,5 +7,5 @@
   },
   "include": ["**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"],
-  "files": ["../src/index.ts"]
+  "files": ["../src/library/index.ts"]
 }

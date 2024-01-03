@@ -37,7 +37,7 @@ import { TextControlRenderer, TextControlRendererTester } from '../src';
 import {
   TableRenderer,
   TableRendererTester,
-} from '../src/other/table.renderer';
+} from '../src/library/other/table.renderer';
 import { setupMockStore } from '@jsonforms/angular-test';
 import { createTesterContext } from './util';
 import { MatTooltipModule } from '@angular/material/tooltip';

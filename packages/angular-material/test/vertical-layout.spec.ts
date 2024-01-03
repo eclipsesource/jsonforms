@@ -28,8 +28,8 @@ import { beforeEachLayoutTest, setupMockStore } from '@jsonforms/angular-test';
 import {
   VerticalLayoutRenderer,
   verticalLayoutTester,
-} from '../src/layouts/vertical-layout.renderer';
-import { LayoutChildrenRenderPropsPipe } from '../src/layouts/layout.renderer';
+} from '../src/library/layouts/vertical-layout.renderer';
+import { LayoutChildrenRenderPropsPipe } from '../src/library/layouts/layout.renderer';
 
 describe('Vertical layout tester', () => {
   it('should succeed', () => {

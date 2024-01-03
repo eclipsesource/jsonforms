@@ -2,7 +2,8 @@
   "name": "@jsonforms/angular-test",
   "version": "3.2.0-alpha.4",
   "private": true,
-  "main": "./lib/index.js",
+  "module": "./lib/fesm2022/jsonforms-angular-test.mjs",
+  "typings": "./lib/index.d.ts",
   "dependencies": {
     "@jsonforms/angular": "workspace:*",
     "@jsonforms/core": "workspace:*"
@@ -37,7 +38,7 @@
     "typescript": "~4.9.5"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "node ./build-package.js",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "test": "echo 'Nothing to do'"

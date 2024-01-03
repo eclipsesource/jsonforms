@@ -34,12 +34,11 @@
     "layout",
     "customization"
   ],
-  "main": "./lib/cjs/index.js",
-  "module": "./lib/esm/index.js",
-  "typings": "./lib/esm/index.d.ts",
+  "module": "./lib/fesm2022/jsonforms-angular-material.mjs",
+  "typings": "./lib/index.d.ts",
   "scripts": {
-    "build": "ngc && ngc -p tsconfig.cjs.json",
-    "build:examples-app": "ngc -p tsconfig.example.json && rollup -c rollup.example.config.js --bundleConfigAsCjs",
+    "build": "node ./build-package.js",
+    "build:examples-app": "ngc -p tsconfig.example.json && rollup -c rollup.example.config.mjs",
     "dev": "pnpm run build:examples-app && npx http-server ./example/dist/ -c-1 -o",
     "clean": "rimraf lib coverage dist .nyc_output 2> /dev/null",
     "lint": "eslint .",

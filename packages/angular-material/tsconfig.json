@@ -1,12 +1,18 @@
 {
   "extends": "../../tsconfig.base",
   "compilerOptions": {
-    "outDir": "./lib/esm",
+    "paths": {
+      "@jsonforms/angular-material": [
+        "./lib"
+      ]
+    },
+    "declaration": true,
+    "declarationMap": true,
+    "inlineSources": true,
     "sourceMap": true,
-    "target": "es5"
   },
   "exclude": ["node_modules"],
-  "files": ["./src/index.ts"],
+  "files": ["src/index.ts"],
   "angularCompilerOptions": {
     "compilationMode": "partial",
     "strictMetadataEmit": true,

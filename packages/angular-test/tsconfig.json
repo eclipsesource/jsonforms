@@ -1,9 +1,17 @@
 {
   "extends": "../../tsconfig.base",
   "compilerOptions": {
-    "outDir": "./lib",
-    "sourceMap": true
+    "declaration": true,
+    "declarationMap": true,
+    "inlineSources": true,
+    "sourceMap": true,
   },
   "exclude": ["node_modules"],
-  "files": ["./src/index.ts"]
+  "files": ["src/index.ts"],
+  "angularCompilerOptions": {
+    "compilationMode": "partial",
+    "strictMetadataEmit": true,
+    "generateCodeForLibraries": false,
+    "skipTemplateCodegen": true
+  }
 }

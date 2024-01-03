@@ -33,11 +33,10 @@
     "layout",
     "customization"
   ],
-  "main": "./lib/cjs/index.js",
-  "module": "./lib/esm/index.js",
-  "typings": "./lib/esm/index.d.ts",
+  "module": "./lib/fesm2022/jsonforms-angular.mjs",
+  "typings": "./lib/index.d.ts",
   "scripts": {
-    "build": "ngc && ngc -p tsconfig.cjs.json",
+    "build": "node ./build-package.js",
     "clean": "rimraf lib coverage dist .nyc_output 2> /dev/null",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
