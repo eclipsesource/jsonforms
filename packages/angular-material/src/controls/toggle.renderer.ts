@@ -39,7 +39,7 @@ import {
 @Component({
   selector: 'ToggleControlRenderer',
   template: `
-    <div [fxHide]="hidden">
+    <div [ngStyle]="{ display: hidden ? 'none' : '' }">
       <mat-slide-toggle
         (change)="onChange($event)"
         [checked]="isChecked()"

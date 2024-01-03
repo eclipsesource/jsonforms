@@ -28,7 +28,6 @@ import { MatCard, MatCardTitle } from '@angular/material/card';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { beforeEachLayoutTest, setupMockStore } from '@jsonforms/angular-test';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { LayoutChildrenRenderPropsPipe } from '../src/layouts/layout.renderer';
 import {
   GroupLayoutRenderer,
@@ -46,7 +45,6 @@ describe('Group layout', () => {
   beforeEach(() => {
     fixture = beforeEachLayoutTest(GroupLayoutRenderer, {
       declarations: [LayoutChildrenRenderPropsPipe, MatCard, MatCardTitle],
-      imports: [FlexLayoutModule],
     });
   });
 

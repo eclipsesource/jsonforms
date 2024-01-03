@@ -49,7 +49,6 @@ import { ControlElement, JsonSchema, Actions } from '@jsonforms/core';
 import { AutocompleteControlRenderer } from '../src';
 import { JsonFormsAngularService } from '@jsonforms/angular';
 import { ErrorObject } from 'ajv';
-import { FlexLayoutModule } from '@angular/flex-layout';
 
 const data = { foo: 'A' };
 const schema: JsonSchema = {
@@ -72,7 +71,6 @@ const imports = [
   MatFormFieldModule,
   NoopAnimationsModule,
   ReactiveFormsModule,
-  FlexLayoutModule,
 ];
 const providers = [JsonFormsAngularService];
 const componentUT: any = AutocompleteControlRenderer;

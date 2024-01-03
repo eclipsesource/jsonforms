@@ -24,7 +24,6 @@
 */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListItem, MatListModule } from '@angular/material/list';
@@ -35,7 +34,6 @@ import {
   JsonFormsOutlet,
   UnknownRenderer,
 } from '@jsonforms/angular';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { DebugElement } from '@angular/core';
 import { MasterListComponent } from '../src/other/master-detail/master';
 import { JsonFormsDetailComponent } from '../src/other/master-detail/detail';
@@ -114,18 +112,11 @@ describe('Master detail', () => {
         MatSidenavModule,
         MatIconModule,
         MatButtonModule,
-        FlexLayoutModule,
         NoopAnimationsModule,
         MatTooltipModule,
       ],
       providers: [JsonFormsAngularService],
-    })
-      .overrideModule(BrowserDynamicTestingModule, {
-        set: {
-          entryComponents: [UnknownRenderer],
-        },
-      })
-      .compileComponents();
+    }).compileComponents();
 
     fixture = TestBed.createComponent(MasterListComponent);
     component = fixture.componentInstance;

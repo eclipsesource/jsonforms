@@ -40,7 +40,14 @@ import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'LabelRenderer',
-  template: ` <label class="mat-headline-6" fxFlex> {{ label }} </label> `,
+  template: ` <label class="mat-headline-6"> {{ label }} </label> `,
+  styles: [
+    `
+      :host {
+        flex: 1 1 auto;
+      }
+    `,
+  ],
 })
 export class LabelRenderer
   extends JsonFormsBaseRenderer<LabelElement>

@@ -45,7 +45,7 @@ import { cloneDeep } from 'lodash';
 @Component({
   selector: 'ObjectRenderer',
   template: `
-    <mat-card appearance="outlined">
+    <mat-card class="object-layout" appearance="outlined">
       <jsonforms-outlet
         [uischema]="detailUiSchema"
         [schema]="scopedSchema"
@@ -54,6 +54,13 @@ import { cloneDeep } from 'lodash';
       </jsonforms-outlet>
     </mat-card>
   `,
+  styles: [
+    `
+      .object-layout {
+        padding: 16px;
+      }
+    `,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ObjectControlRenderer extends JsonFormsControlWithDetail {

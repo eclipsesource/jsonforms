@@ -59,8 +59,7 @@ import { map, startWith } from 'rxjs/operators';
  * <pre><code>
  * ...
  * imports: [JsonFormsAngularMaterialModule, MatAutocompleteModule],
- * declarations: [AutocompleteControlRenderer],
- * entryComponents: [AutocompleteControlRenderer]
+ * declarations: [AutocompleteControlRenderer]
  * ...
  * </code></pre>
  *
@@ -68,7 +67,7 @@ import { map, startWith } from 'rxjs/operators';
 @Component({
   selector: 'AutocompleteControlRenderer',
   template: `
-    <mat-form-field fxFlex [fxHide]="hidden">
+    <mat-form-field [ngStyle]="{ display: hidden ? 'none' : '' }">
       <mat-label>{{ label }}</mat-label>
       <input
         matInput
@@ -99,6 +98,17 @@ import { map, startWith } from 'rxjs/operators';
       <mat-error>{{ error }}</mat-error>
     </mat-form-field>
   `,
+  styles: [
+    `
+      :host {
+        display: flex;
+        flex-direction: row;
+      }
+      mat-form-field {
+        flex: 1 1 auto;
+      }
+    `,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AutocompleteControlRenderer
