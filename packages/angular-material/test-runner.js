@@ -47,7 +47,7 @@ const karmaConfigOptionsTransform = (options, context, karmaConfigOptions) => {
   */
   return karmaConfigOptions;
 };
- const main = async (params) => new Promise((resolve, reject) => {
+const main = async (params) => new Promise((resolve, reject) => {
   const singleRun = !!params.singleRun;
   const coverage = !!params.coverage;
   const project = 'angular-material';
@@ -65,7 +65,7 @@ const karmaConfigOptionsTransform = (options, context, karmaConfigOptions) => {
     ],
     tsConfig: 'packages/angular-material/tsconfig.spec.json',
     karmaConfig: 'packages/angular-material/karma.conf.js'
-  }
+  };
   const root = `packages/${project}`;
   const sourceRoot = root + '/src';
   const teardownLogics = [];

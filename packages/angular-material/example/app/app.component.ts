@@ -29,7 +29,7 @@ import {
   UISchemaElement,
   UISchemaTester,
 } from '@jsonforms/core';
-import { angularMaterialRenderers } from '../../src/index';
+import { angularMaterialRenderers } from '../../lib';
 import { DateAdapter } from '@angular/material/core';
 
 const uiSchema = {

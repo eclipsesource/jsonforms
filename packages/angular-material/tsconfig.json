@@ -1,11 +1,6 @@
 {
   "extends": "../../tsconfig.base",
   "compilerOptions": {
-    "paths": {
-      "@jsonforms/angular-material": [
-        "./lib"
-      ]
-    },
     "declaration": true,
     "declarationMap": true,
     "inlineSources": true,
