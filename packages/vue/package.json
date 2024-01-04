@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/vue",
-  "version": "3.2.0-alpha.4",
+  "version": "3.2.0-beta.0",
   "description": "Vue 3 module of JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -86,7 +86,7 @@
     "vue": "^3.2.26"
   },
   "peerDependencies": {
-    "@jsonforms/core": "3.2.0-alpha.4",
+    "@jsonforms/core": "v3.2.0-beta.0",
     "vue": "^3.2.26"
   }
 }
