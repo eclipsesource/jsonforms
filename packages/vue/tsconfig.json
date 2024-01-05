@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
+    "target": "ES2021",
+    "module": "ES2020",
     "skipLibCheck": true,
     "strict": true,
     "declaration": true,
@@ -14,7 +14,7 @@
     "sourceMap": true,
     "outDir": "./lib",
     "types": ["node", "vue", "jest"],
-    "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
+    "lib": ["ES2021", "dom", "dom.iterable", "scripthost"]
   },
   "exclude": ["node_modules", "lib"]
 }

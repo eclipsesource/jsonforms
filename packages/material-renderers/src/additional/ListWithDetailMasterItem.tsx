@@ -32,7 +32,7 @@ import {
   ListItemSecondaryAction,
   ListItemText,
 } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { Delete as DeleteIcon } from '@mui/icons-material';
 import React from 'react';
 
 export const ListWithDetailMasterItem = ({
