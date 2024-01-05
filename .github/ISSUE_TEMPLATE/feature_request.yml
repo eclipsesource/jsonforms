@@ -39,8 +39,7 @@ body:
         - Core
         - React
         - Angular
-        - Vue 3
-        - Vue 2
+        - Vue
         - Other (please specify in the Additional context field)
   - type: dropdown
     attributes:
