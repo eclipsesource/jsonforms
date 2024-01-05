@@ -11,6 +11,9 @@ overrides:
 importers:
   .:
     devDependencies:
+      '@angular/core':
+        specifier: ^16.0.0
+        version: 16.2.12(rxjs@6.6.7)(zone.js@0.13.3)
       '@babel/plugin-proposal-nullish-coalescing-operator':
         specifier: ^7.16.5
         version: 7.18.6(@babel/core@7.23.7)
@@ -190,6 +193,9 @@ importers:
       '@angular-devkit/build-angular':
         specifier: ^16.0.0
         version: 16.2.11(@angular/compiler-cli@16.2.12)(@types/node@18.19.4)(karma@6.4.2)(ng-packagr@16.2.3)(protractor@7.0.0)(typescript@4.9.5)
+      '@angular-devkit/core':
+        specifier: ^16.0.0
+        version: 16.2.11(chokidar@3.5.3)
       '@angular-eslint/eslint-plugin':
         specifier: ^16.0.0
         version: 16.3.1(eslint@7.32.0)(typescript@4.9.5)
@@ -8722,27 +8728,6 @@ packages:
       rollup: 2.79.1
     dev: true
 
-  /@rollup/plugin-commonjs@23.0.7(rollup@3.29.4):
-    resolution:
-      {
-        integrity: sha512-hsSD5Qzyuat/swzrExGG5l7EuIlPhwTsT7KwKbSCQzIcJWjRxiimi/0tyMYY2bByitNb3i1p+6JWEDGa0NvT0Q==,
-      }
-    engines: { node: '>=14.0.0' }
-    peerDependencies:
-      rollup: ^2.68.0||^3.0.0
-    peerDependenciesMeta:
-      rollup:
-        optional: true
-    dependencies:
-      '@rollup/pluginutils': 5.1.0(rollup@3.29.4)
-      commondir: 1.0.1
-      estree-walker: 2.0.2
-      glob: 8.1.0
-      is-reference: 1.2.1
-      magic-string: 0.27.0
-      rollup: 3.29.4
-    dev: true
-
   /@rollup/plugin-json@5.0.2(rollup@2.79.1):
     resolution:
       {
@@ -8832,23 +8817,6 @@ packages:
       '@rollup/pluginutils': 5.1.0(rollup@2.79.1)
       magic-string: 0.30.5
       rollup: 2.79.1
-    dev: true
-
-  /@rollup/plugin-replace@5.0.5(rollup@3.29.4):
-    resolution:
-      {
-        integrity: sha512-rYO4fOi8lMaTg/z5Jb+hKnrHHVn8j2lwkqwyS4kTRhKyWOLf2wST2sWXr4WzWiTcoHTp2sTjqUbqIj2E39slKQ==,
-      }
-    engines: { node: '>=14.0.0' }
-    peerDependencies:
-      rollup: ^1.20.0||^2.0.0||^3.0.0||^4.0.0
-    peerDependenciesMeta:
-      rollup:
-        optional: true
-    dependencies:
-      '@rollup/pluginutils': 5.1.0(rollup@3.29.4)
-      magic-string: 0.30.5
-      rollup: 3.29.4
     dev: true
 
   /@rollup/pluginutils@4.2.1:
@@ -30655,19 +30623,6 @@ packages:
       rollup: 2.79.1
     dev: true
 
-  /rollup-plugin-import-css@3.3.5(rollup@3.29.4):
-    resolution:
-      {
-        integrity: sha512-wSfzveEzvUDlVevo70kmVD5Mk785UN55NG4C7VVnrmdE0qZ8apcVVFajyCPfFYSNxq5YkccOcrGUT2T/2HnEcQ==,
-      }
-    engines: { node: '>=16' }
-    peerDependencies:
-      rollup: ^2.x.x || ^3.x.x || ^4.x.x
-    dependencies:
-      '@rollup/pluginutils': 5.1.0(rollup@3.29.4)
-      rollup: 3.29.4
-    dev: true
-
   /rollup-plugin-typescript2@0.34.1(rollup@2.79.1)(typescript@4.2.3):
     resolution:
       {
@@ -30684,24 +30639,6 @@ packages:
       semver: 7.5.4
       tslib: 2.6.2
       typescript: 4.2.3
-    dev: true
-
-  /rollup-plugin-typescript2@0.34.1(rollup@3.29.4)(typescript@4.9.5):
-    resolution:
-      {
-        integrity: sha512-P4cHLtGikESmqi1CA+tdMDUv8WbQV48mzPYt77TSTOPJpERyZ9TXdDgjSDix8Fkqce6soYz3+fa4lrC93IEkcw==,
-      }
-    peerDependencies:
-      rollup: '>=1.26.3'
-      typescript: '>=2.4.0'
-    dependencies:
-      '@rollup/pluginutils': 4.2.1
-      find-cache-dir: 3.3.2
-      fs-extra: 10.1.0
-      rollup: 3.29.4
-      semver: 7.5.4
-      tslib: 2.6.2
-      typescript: 4.9.5
     dev: true
 
   /rollup-plugin-visualizer@5.12.0(rollup@2.79.1):
