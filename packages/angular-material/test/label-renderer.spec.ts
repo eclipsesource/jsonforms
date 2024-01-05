@@ -26,7 +26,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { JsonSchema, LabelElement } from '@jsonforms/core';
 
-import { LabelRenderer, LabelRendererTester } from '../src/other';
+import { LabelRenderer, LabelRendererTester } from '../src/library/other';
 import { setupMockStore } from '@jsonforms/angular-test';
 import { JsonFormsAngularService } from '@jsonforms/angular';
 

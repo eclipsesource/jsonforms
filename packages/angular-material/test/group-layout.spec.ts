@@ -28,11 +28,11 @@ import { MatCard, MatCardTitle } from '@angular/material/card';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { beforeEachLayoutTest, setupMockStore } from '@jsonforms/angular-test';
-import { LayoutChildrenRenderPropsPipe } from '../src/layouts/layout.renderer';
+import { LayoutChildrenRenderPropsPipe } from '../src/library/layouts/layout.renderer';
 import {
   GroupLayoutRenderer,
   groupLayoutTester,
-} from '../src/layouts/group-layout.renderer';
+} from '../src/library/layouts/group-layout.renderer';
 
 describe('Group layout tester', () => {
   it('should succeed', () => {

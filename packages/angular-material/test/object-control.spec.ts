@@ -42,9 +42,9 @@ import {
 import {
   ObjectControlRenderer,
   ObjectControlRendererTester,
-} from '../src/other/object.renderer';
+} from '../src/library/other/object.renderer';
 import { getJsonFormsService } from '@jsonforms/angular-test';
-import { LayoutChildrenRenderPropsPipe } from '../src/layouts/layout.renderer';
+import { LayoutChildrenRenderPropsPipe } from '../src/library/layouts/layout.renderer';
 
 const uischema1: ControlElement = { type: 'Control', scope: '#' };
 const uischema2: ControlElement = {
