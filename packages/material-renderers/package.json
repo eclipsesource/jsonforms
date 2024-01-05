@@ -45,7 +45,7 @@
     "test": "jest --no-cache",
     "test-cov": "jest --no-cache --coverage",
     "report": "nyc report --reporter=html",
-    "doc": "typedoc --name 'JSON Forms React Material Renderers' --excludeExternals --theme ../../typedoc-jsonforms --out docs src",
+    "doc": "typedoc --name 'JSON Forms React Material Renderers' --excludeExternals --out docs src",
     "tsc": "tsc --build tsconfig.json"
   },
   "jest": {
@@ -135,8 +135,8 @@
     "ts-jest": "^27.1.4",
     "ts-loader": "^6.2.1",
     "tslib": "^2.5.0",
-    "typedoc": "~0.21.9",
-    "typescript": "4.2.3",
+    "typedoc": "~0.25.3",
+    "typescript": "~4.9.5",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.2.1",
     "webpack-dev-server": "^3.9.0"

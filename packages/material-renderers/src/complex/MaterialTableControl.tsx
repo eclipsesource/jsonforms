@@ -57,9 +57,11 @@ import {
   encode,
   ArrayTranslations,
 } from '@jsonforms/core';
-import DeleteIcon from '@mui/icons-material/Delete';
-import ArrowDownward from '@mui/icons-material/ArrowDownward';
-import ArrowUpward from '@mui/icons-material/ArrowUpward';
+import {
+  Delete as DeleteIcon,
+  ArrowDownward,
+  ArrowUpward,
+} from '@mui/icons-material';
 
 import { WithDeleteDialogSupport } from './DeleteDialog';
 import NoBorderTableCell from './NoBorderTableCell';

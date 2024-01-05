@@ -1,5 +1,5 @@
 import { Grid, IconButton, Toolbar, Tooltip, Typography } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import { Add as AddIcon } from '@mui/icons-material';
 import React from 'react';
 import ValidationIcon from '../complex/ValidationIcon';
 import { ArrayTranslations } from '@jsonforms/core';
