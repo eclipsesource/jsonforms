@@ -25,12 +25,11 @@
 import { ComponentFixture } from '@angular/core/testing';
 import { UISchemaElement, VerticalLayout } from '@jsonforms/core';
 import { beforeEachLayoutTest, setupMockStore } from '@jsonforms/angular-test';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import {
   VerticalLayoutRenderer,
   verticalLayoutTester,
-} from '../src/layouts/vertical-layout.renderer';
-import { LayoutChildrenRenderPropsPipe } from '../src/layouts/layout.renderer';
+} from '../src/library/layouts/vertical-layout.renderer';
+import { LayoutChildrenRenderPropsPipe } from '../src/library/layouts/layout.renderer';
 
 describe('Vertical layout tester', () => {
   it('should succeed', () => {
@@ -46,7 +45,6 @@ describe('Vertical layout', () => {
   beforeEach(() => {
     fixture = beforeEachLayoutTest(VerticalLayoutRenderer, {
       declarations: [LayoutChildrenRenderPropsPipe],
-      imports: [FlexLayoutModule],
     });
     component = fixture.componentInstance;
   });

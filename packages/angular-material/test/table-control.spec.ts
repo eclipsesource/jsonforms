@@ -30,7 +30,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
-import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { JsonFormsAngularService, JsonFormsModule } from '@jsonforms/angular';
 import { ControlElement } from '@jsonforms/core';
@@ -38,8 +37,7 @@ import { TextControlRenderer, TextControlRendererTester } from '../src';
 import {
   TableRenderer,
   TableRendererTester,
-} from '../src/other/table.renderer';
-import { FlexLayoutModule } from '@angular/flex-layout';
+} from '../src/library/other/table.renderer';
 import { setupMockStore } from '@jsonforms/angular-test';
 import { createTesterContext } from './util';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -151,18 +149,11 @@ describe('Table', () => {
         MatIconModule,
         MatInputModule,
         ReactiveFormsModule,
-        FlexLayoutModule,
         MatTableModule,
         MatTooltipModule,
       ],
       providers: [JsonFormsAngularService],
-    })
-      .overrideModule(BrowserDynamicTestingModule, {
-        set: {
-          entryComponents: [TextControlRenderer],
-        },
-      })
-      .compileComponents();
+    }).compileComponents();
 
     fixture = TestBed.createComponent(TableRenderer);
     component = fixture.componentInstance;

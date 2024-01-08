@@ -37,13 +37,11 @@ import {
   JsonFormsModule,
   JsonFormsOutlet,
 } from '@jsonforms/angular';
-import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import {
   CategorizationTabLayoutRenderer,
   TextControlRenderer,
   TextControlRendererTester,
 } from '../src';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { setupMockStore, getJsonFormsService } from '@jsonforms/angular-test';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -77,7 +75,6 @@ describe('Categorization tab layout', () => {
       imports: [
         CommonModule,
         MatTabsModule,
-        FlexLayoutModule,
         NoopAnimationsModule,
         JsonFormsModule,
         MatFormFieldModule,
@@ -85,13 +82,7 @@ describe('Categorization tab layout', () => {
         ReactiveFormsModule,
       ],
       providers: [JsonFormsAngularService],
-    })
-      .overrideModule(BrowserDynamicTestingModule, {
-        set: {
-          entryComponents: [TextControlRenderer],
-        },
-      })
-      .compileComponents();
+    }).compileComponents();
 
     fixture = TestBed.createComponent(CategorizationTabLayoutRenderer);
     component = fixture.componentInstance;

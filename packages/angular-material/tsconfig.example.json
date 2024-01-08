@@ -1,16 +1,13 @@
 {
-  "extends": "../../tsconfig.base",
+  "extends": "./tsconfig",
   "compilerOptions": {
-    "outDir": "./example/dist",
-    "sourceMap": true,
-    "target": "es5"
+    "outDir": "./example/dist"
   },
-  "exclude": ["node_modules"],
   "files": ["./example/main.ts"],
   "angularCompilerOptions": {
-    "compilationMode": "partial",
+    "compilationMode": "full",
     "strictMetadataEmit": true,
-    "generateCodeForLibraries": true,
-    "skipTemplateCodegen": true,
+    "generateCodeForLibraries": false,
+    "skipTemplateCodegen": true
   }
 }
