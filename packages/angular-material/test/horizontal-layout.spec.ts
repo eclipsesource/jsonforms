@@ -25,12 +25,11 @@
 import { ComponentFixture } from '@angular/core/testing';
 import { HorizontalLayout, UISchemaElement } from '@jsonforms/core';
 import { beforeEachLayoutTest, setupMockStore } from '@jsonforms/angular-test';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import {
   HorizontalLayoutRenderer,
   horizontalLayoutTester,
-} from '../src/layouts/horizontal-layout.renderer';
-import { LayoutChildrenRenderPropsPipe } from '../src/layouts/layout.renderer';
+} from '../src/library/layouts/horizontal-layout.renderer';
+import { LayoutChildrenRenderPropsPipe } from '../src/library/layouts/layout.renderer';
 
 describe('Horizontal layout tester', () => {
   it('should succeed', () => {
@@ -45,7 +44,6 @@ describe('Horizontal layout', () => {
   beforeEach(() => {
     fixture = beforeEachLayoutTest(HorizontalLayoutRenderer, {
       declarations: [LayoutChildrenRenderPropsPipe],
-      imports: [FlexLayoutModule],
     });
   });
 

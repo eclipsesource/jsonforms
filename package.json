@@ -1,13 +1,13 @@
 {
   "name": "jsonforms-monorepo",
   "engines": {
-    "node": "^16.13",
+    "node": "^18.19.0",
     "pnpm": ">=7.13.4"
   },
   "scripts": {
     "lerna": "lerna",
     "preparePublish": "git clean -dfx && pnpm i --frozen-lockfile && pnpm run clean && pnpm run build && pnpm run doc && pnpm run test",
-    "merge-report": "mkdir -p coverage && lcov-result-merger 'packages/**/coverage/lcov.info' 'coverage/lcov.info'",
+    "merge-report": "mkdir -p coverage && lcov-result-merger 'packages/**/coverage/lcov.info' 'coverage/lcov.info' --prepend-source-files",
     "check-format": "echo 'temporarily disabled'",
     "build": "lerna run build",
     "bundle": "lerna run bundle",
@@ -20,6 +20,7 @@
     "build:examples-app": "lerna run build:examples-app && node packages/examples-app/prepare-examples-app.js"
   },
   "devDependencies": {
+    "@angular/core": "^16.0.0",
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.16.5",
     "@babel/plugin-proposal-optional-chaining": "^7.16.5",
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
@@ -48,5 +49,11 @@
     "typescript": "4.2.3",
     "webpack": "^4.41.2",
     "webpack-merge": "^4.2.2"
+  },
+  "pnpm": {
+    "overrides": {
+      "vue": "~3.3.13",
+      "@vue/compiler-sfc": "~3.3.13"
+    }
   }
 }

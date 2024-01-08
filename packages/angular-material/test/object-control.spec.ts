@@ -22,10 +22,8 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { CommonModule } from '@angular/common';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -44,9 +42,9 @@ import {
 import {
   ObjectControlRenderer,
   ObjectControlRendererTester,
-} from '../src/other/object.renderer';
+} from '../src/library/other/object.renderer';
 import { getJsonFormsService } from '@jsonforms/angular-test';
-import { LayoutChildrenRenderPropsPipe } from '../src/layouts/layout.renderer';
+import { LayoutChildrenRenderPropsPipe } from '../src/library/layouts/layout.renderer';
 
 const uischema1: ControlElement = { type: 'Control', scope: '#' };
 const uischema2: ControlElement = {
@@ -110,21 +108,9 @@ describe('Object Control', () => {
         MatFormFieldModule,
         MatInputModule,
         ReactiveFormsModule,
-        FlexLayoutModule,
       ],
       providers: [JsonFormsAngularService],
-    })
-      .overrideModule(BrowserDynamicTestingModule, {
-        set: {
-          entryComponents: [
-            TextControlRenderer,
-            VerticalLayoutRenderer,
-            GroupLayoutRenderer,
-            ObjectControlRenderer,
-          ],
-        },
-      })
-      .compileComponents();
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ObjectControlRenderer);
     component = fixture.componentInstance;

@@ -34,7 +34,6 @@ import {
   ErrorTestExpectation,
 } from '@jsonforms/angular-test';
 import { ToggleControlRenderer, ToggleControlRendererTester } from '../src';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { JsonFormsAngularService } from '@jsonforms/angular';
 
 describe('Material boolean field tester', () => {
@@ -61,7 +60,7 @@ describe('Material boolean field tester', () => {
     ).toBe(3);
   });
 });
-const imports = [MatSlideToggleModule, MatFormFieldModule, FlexLayoutModule];
+const imports = [MatSlideToggleModule, MatFormFieldModule];
 const providers = [JsonFormsAngularService];
 const componentUT: any = ToggleControlRenderer;
 const errorTest: ErrorTestExpectation = {
