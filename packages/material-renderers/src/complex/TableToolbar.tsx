@@ -97,7 +97,7 @@ const TableToolbar = React.memo(function TableToolbar({
               )}
             </Grid>
           </Grid>
-          {description ?? <FormHelperText>{description}</FormHelperText>}
+          {description && <FormHelperText>{description}</FormHelperText>}
         </Stack>
       </NoBorderTableCell>
       {enabled ? (
