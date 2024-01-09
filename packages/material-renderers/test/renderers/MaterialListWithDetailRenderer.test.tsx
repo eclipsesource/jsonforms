@@ -258,6 +258,29 @@ describe('Material list with detail renderer', () => {
     expect(label.text()).toBe('Schema Title');
   });
 
+  it('should render description', () => {
+    const descriptionSchema = {
+      ...schema,
+      description: 'This is an array description',
+    };
+
+    const core = initCore(schema, uischema, data);
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
+        <MaterialListWithDetailRenderer
+          schema={descriptionSchema}
+          uischema={uischema}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    expect(
+      wrapper.text().includes('This is an array description')
+    ).toBeTruthy();
+  });
+
   it('add data to the array', () => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
