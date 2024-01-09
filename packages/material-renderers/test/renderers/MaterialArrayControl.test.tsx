@@ -303,6 +303,28 @@ describe('Material array control', () => {
     expect(
       wrapper.text().includes('This is an array description')
     ).toBeTruthy();
+    expect(wrapper.find('thead .MuiFormHelperText-root').exists()).toBeTruthy();
+  });
+
+  it('should not render description container if there is none', () => {
+    const descriptionSchema = {
+      ...fixture.schema,
+    };
+    // make sure there is no description
+    delete descriptionSchema.description;
+
+    const core = initCore(descriptionSchema, fixture.uischema, fixture.data);
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
+        <MaterialArrayControlRenderer
+          schema={descriptionSchema}
+          uischema={fixture.uischema}
+        />
+      </JsonFormsStateProvider>
+    );
+    expect(wrapper.find('thead .MuiFormHelperText-root').exists()).toBeFalsy();
   });
 
   it('should delete an item', () => {

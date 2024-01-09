@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import './MatchMediaMock';
-import { ControlElement } from '@jsonforms/core';
+import { ControlElement, JsonSchema7 } from '@jsonforms/core';
 import * as React from 'react';
 
 import { materialRenderers } from '../../src';
@@ -47,7 +47,7 @@ const data = [
     message: 'Yolo',
   },
 ];
-const schema = {
+const schema: JsonSchema7 = {
   type: 'array',
   items: {
     type: 'object',
@@ -69,7 +69,7 @@ const uischema: ControlElement = {
   scope: '#',
 };
 
-const nestedSchema = {
+const nestedSchema: JsonSchema7 = {
   type: 'array',
   items: {
     ...schema,
@@ -279,6 +279,33 @@ describe('Material list with detail renderer', () => {
     expect(
       wrapper.text().includes('This is an array description')
     ).toBeTruthy();
+    expect(
+      wrapper.find('.MuiToolbar-root .MuiFormHelperText-root').exists()
+    ).toBeTruthy();
+  });
+
+  it('should not render description container if there is none', () => {
+    const descriptionSchema = {
+      ...schema,
+    };
+    // make sure there is no description
+    delete descriptionSchema.description;
+
+    const core = initCore(schema, uischema, data);
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
+        <MaterialListWithDetailRenderer
+          schema={descriptionSchema}
+          uischema={uischema}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    expect(
+      wrapper.find('.MuiToolbar-root .MuiFormHelperText-root').exists()
+    ).toBeFalsy();
   });
 
   it('add data to the array', () => {
