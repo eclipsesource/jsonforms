@@ -24,6 +24,7 @@ jobs:
   publish:
     permissions:
       contents: "write"
+      id-token: "write"
     runs-on: "ubuntu-latest"
     steps:
       - uses: "actions/checkout@v4"
@@ -81,6 +82,7 @@ jobs:
         run: "pnpm publish --recursive ${{  github.event.inputs.stable_release == 'true' && ' ' || '--tag next' }}"
         env:
           NODE_AUTH_TOKEN: "${{ secrets.NPM_TOKEN }}"
+          NPM_CONFIG_PROVENANCE: "true"
 
       - name: "push"
         if: "github.event.inputs.skip_push == 'false'"
