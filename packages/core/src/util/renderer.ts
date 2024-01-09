@@ -82,8 +82,10 @@ import {
 } from '../i18n/arrayTranslations';
 import { resolveSchema } from './resolvers';
 import cloneDeep from 'lodash/cloneDeep';
-import { has } from 'lodash';
-import { all, any } from 'lodash/fp';
+import isEqual from 'lodash/isEqual';
+import has from 'lodash/has';
+import any from 'lodash/fp/any';
+import all from 'lodash/fp/all';
 
 const checkDataCondition = (
   propertyCondition: unknown,
@@ -92,12 +94,15 @@ const checkDataCondition = (
 ) => {
   if (has(propertyCondition, 'const')) {
     return (
-      has(data, property) && data[property] === get(propertyCondition, 'const')
+      has(data, property) &&
+      isEqual(data[property], get(propertyCondition, 'const'))
     );
   } else if (has(propertyCondition, 'enum')) {
     return (
       has(data, property) &&
-      (get(propertyCondition, 'enum') as unknown[]).includes(data[property])
+      (get(propertyCondition, 'enum') as unknown[]).find((value) =>
+        isEqual(value, data[property])
+      ) !== undefined
     );
   } else if (has(propertyCondition, 'pattern')) {
     const pattern = new RegExp(get(propertyCondition, 'pattern'));
@@ -169,11 +174,14 @@ const evaluateCondition = (
     let satisfied = false;
 
     for (let i = 0; i < subschemas.length; i++) {
-      if (satisfied) {
+      const current = evaluateCondition(subschemas[i], data);
+      if (current && satisfied) {
         return false;
       }
 
-      satisfied = evaluateCondition(subschemas[i], data);
+      if (current && !satisfied) {
+        satisfied = true;
+      }
     }
 
     return satisfied;
@@ -185,21 +193,25 @@ const evaluateCondition = (
   }
 
   const requiredCondition = all(
-    (property) => data[property],
+    (property) => has(data, property),
     requiredProperties
   );
 
-  const propertiesCondition = get(schema, 'properties') as Record<
-    string,
-    unknown
-  >;
+  if (has(schema, 'properties')) {
+    const propertiesCondition = get(schema, 'properties') as Record<
+      string,
+      unknown
+    >;
 
-  const valueCondition = all(
-    (property) => checkPropertyCondition(propertiesCondition, property, data),
-    Object.keys(propertiesCondition)
-  );
+    const valueCondition = all(
+      (property) => checkPropertyCondition(propertiesCondition, property, data),
+      Object.keys(propertiesCondition)
+    );
 
-  return requiredCondition && valueCondition;
+    return requiredCondition && valueCondition;
+  }
+
+  return requiredCondition;
 };
 
 /**
