@@ -79,7 +79,7 @@ export const ArrayLayoutToolbar = React.memo(function ArrayLayoutToolbar({
             </Grid>
           )}
         </Grid>
-        {description ?? <FormHelperText>{description}</FormHelperText>}
+        {description && <FormHelperText>{description}</FormHelperText>}
       </Stack>
     </Toolbar>
   );
