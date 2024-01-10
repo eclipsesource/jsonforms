@@ -64,6 +64,7 @@ export const MaterialListWithDetailRenderer = ({
   config,
   rootSchema,
   translations,
+  description,
 }: ArrayLayoutProps) => {
   const [selectedIndex, setSelectedIndex] = useState(undefined);
   const handleRemoveItem = useCallback(
@@ -113,6 +114,7 @@ export const MaterialListWithDetailRenderer = ({
           required,
           appliedUiSchemaOptions.hideRequiredAsterisk
         )}
+        description={description}
         errors={errors}
         path={path}
         enabled={enabled}

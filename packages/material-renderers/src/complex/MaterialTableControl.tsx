@@ -433,6 +433,7 @@ export class MaterialTableControl extends React.Component<
   render() {
     const {
       label,
+      description,
       path,
       schema,
       rootSchema,
@@ -458,6 +459,7 @@ export class MaterialTableControl extends React.Component<
             <TableToolbar
               errors={errors}
               label={label}
+              description={description}
               addItem={this.addItem}
               numColumns={isObjectSchema ? headerCells.length : 1}
               path={path}
