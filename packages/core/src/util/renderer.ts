@@ -371,7 +371,8 @@ const isRequired = (
   schema: JsonSchema,
   schemaPath: string,
   rootSchema: JsonSchema,
-  data: any
+  data: any,
+  config: any
 ): boolean => {
   const pathSegments = schemaPath.split('/');
   const lastSegment = pathSegments[pathSegments.length - 1];
@@ -387,6 +388,14 @@ const isRequired = (
     rootSchema
   );
   const currentData = Resolve.data(data, toDataPath(nextHigherSchemaPath));
+
+  if (!config?.allowDynamicCheck) {
+    return (
+      nextHigherSchema !== undefined &&
+      nextHigherSchema.required !== undefined &&
+      nextHigherSchema.required.indexOf(lastSegment) !== -1
+    );
+  }
 
   const requiredInIf =
     has(nextHigherSchema, 'if') &&
@@ -809,9 +818,16 @@ export const mapStateToControlProps = (
   const controlElement = uischema as ControlElement;
   const id = ownProps.id;
   const rootSchema = getSchema(state);
+  const config = getConfig(state);
   const required =
     controlElement.scope !== undefined &&
-    isRequired(ownProps.schema, controlElement.scope, rootSchema, rootData);
+    isRequired(
+      ownProps.schema,
+      controlElement.scope,
+      rootSchema,
+      rootData,
+      config
+    );
   const resolvedSchema = Resolve.schema(
     ownProps.schema || rootSchema,
     controlElement.scope,
@@ -824,7 +840,6 @@ export const mapStateToControlProps = (
   const data = Resolve.data(rootData, path);
   const labelDesc = createLabelDescriptionFrom(uischema, resolvedSchema);
   const label = labelDesc.show ? labelDesc.text : '';
-  const config = getConfig(state);
   const enabled: boolean = isInherentlyEnabled(
     state,
     ownProps,
