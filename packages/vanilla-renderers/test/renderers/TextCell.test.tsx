@@ -614,7 +614,7 @@ describe('Text cell', () => {
       type: 'Control',
       scope: '#/properties/name',
       options: {
-        type: 'password',
+        format: 'password',
       },
     };
     const core = initCore(fixture.schema, uischema, fixture.data);
