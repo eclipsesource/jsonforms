@@ -593,4 +593,37 @@ describe('Text cell', () => {
     expect(input.maxLength).toBe(defaultMaxLength);
     expect(input.size).toBe(defaultSize);
   });
+
+  test('default type is text', () => {
+    const uischema: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/name'
+    };
+    const core = initCore(fixture.schema, uischema, fixture.data);
+    wrapper = mount(
+      <JsonFormsStateProvider initState={{ core }}>
+        <TextCell schema={fixture.schema} uischema={uischema} path='name' />
+      </JsonFormsStateProvider>
+    );
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.type).toBe('text');
+  });
+
+  test('change type to password', () => {
+    const uischema: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/name',
+      options: {
+        type: 'password',
+      },
+    };
+    const core = initCore(fixture.schema, uischema, fixture.data);
+    wrapper = mount(
+      <JsonFormsStateProvider initState={{ core }}>
+        <TextCell schema={fixture.schema} uischema={uischema} path='name' />
+      </JsonFormsStateProvider>
+    );
+    const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
+    expect(input.type).toBe('password');
+  });
 });
