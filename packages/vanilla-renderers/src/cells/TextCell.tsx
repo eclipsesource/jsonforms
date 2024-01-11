@@ -51,7 +51,9 @@ export const TextCell = (props: CellProps & VanillaRendererProps) => {
   return (
     <input
       
-      type={appliedUiSchemaOptions.format ? appliedUiSchemaOptions.format : 'text'}
+      type={
+        appliedUiSchemaOptions.format ? appliedUiSchemaOptions.format : 'text'
+      }
       
       value={data || ''}
       onChange={(ev) =>
