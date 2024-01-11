@@ -50,7 +50,7 @@ export const TextCell = (props: CellProps & VanillaRendererProps) => {
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
   return (
     <input
-      type={appliedUiSchemaOptions.type ? appliedUiSchemaOptions.type : 'text'}
+      type={appliedUiSchemaOptions.format ? appliedUiSchemaOptions.format : 'text'}
       value={data || ''}
       onChange={(ev) =>
         handleChange(path, ev.target.value === '' ? undefined : ev.target.value)
