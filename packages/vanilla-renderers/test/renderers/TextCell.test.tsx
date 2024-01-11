@@ -597,7 +597,7 @@ describe('Text cell', () => {
   test('default type is text', () => {
     const uischema: ControlElement = {
       type: 'Control',
-      scope: '#/properties/name'
+      scope: '#/properties/name',
     };
     const core = initCore(fixture.schema, uischema, fixture.data);
     wrapper = mount(
