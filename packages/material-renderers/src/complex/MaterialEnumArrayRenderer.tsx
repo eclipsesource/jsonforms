@@ -39,7 +39,7 @@ export const MaterialEnumArrayRenderer = ({
   ...otherProps
 }: ControlProps & OwnPropsOfEnum & DispatchPropsOfMultiEnumControl) => {
   return (
-    <Hidden xlUp={!visible}>
+    <Hidden xsUp={!visible}>
       <FormControl component='fieldset'>
         <FormGroup row>
           {options.map((option: any, index: number) => {
