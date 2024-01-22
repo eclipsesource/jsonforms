@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/angular",
-  "version": "3.2.0-beta.0",
+  "version": "3.2.0-beta.1",
   "description": "Angular module of JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -70,7 +70,7 @@
   "peerDependencies": {
     "@angular/core": "^16.0.0 || ^17.0.0",
     "@angular/forms": "^16.0.0 || ^17.0.0",
-    "@jsonforms/core": "v3.2.0-beta.0",
+    "@jsonforms/core": "3.2.0-beta.1",
     "rxjs": "^6.6.0 || ^7.4.0"
   },
   "devDependencies": {
