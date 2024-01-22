@@ -22,13 +22,5 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-
-export * from './actions';
-export * from './controls';
-export * from './complex';
-export * from './cells';
-export * from './layouts';
-export * from './reducers';
-export * from './util';
-export * from './styles';
-export * from './renderers';
+export * from './i18nDefaults';
+export * from './props';
