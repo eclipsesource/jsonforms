@@ -191,6 +191,8 @@ const generateUISchema = (
     /* falls through */
     case 'integer':
     /* falls through */
+    case 'null':
+    /* falls through */
     case 'boolean': {
       const controlObject: ControlElement = createControlElement(currentRef);
       schemaElements.push(controlObject);
