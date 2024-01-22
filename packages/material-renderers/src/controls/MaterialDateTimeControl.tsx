@@ -22,10 +22,11 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import merge from 'lodash/merge';
 import {
   ControlProps,
+  defaultDateTimeFormat,
   isDateTimeControl,
   isDescriptionHidden,
   RankedTester,
@@ -35,7 +36,12 @@ import { withJsonFormsControlProps } from '@jsonforms/react';
 import { FormHelperText, Hidden } from '@mui/material';
 import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { createOnChangeHandler, getData, useFocus } from '../util';
+import {
+  createOnBlurHandler,
+  createOnChangeHandler,
+  getData,
+  useFocus,
+} from '../util';
 
 export const MaterialDateTimeControl = (props: ControlProps) => {
   const [focused, onFocus, onBlur] = useFocus();
@@ -64,7 +70,10 @@ export const MaterialDateTimeControl = (props: ControlProps) => {
   );
 
   const format = appliedUiSchemaOptions.dateTimeFormat ?? 'YYYY-MM-DD HH:mm';
-  const saveFormat = appliedUiSchemaOptions.dateTimeSaveFormat ?? undefined;
+  const saveFormat =
+    appliedUiSchemaOptions.dateTimeSaveFormat ?? defaultDateTimeFormat;
+
+  const [key, setKey] = useState<number>(0);
 
   const views = appliedUiSchemaOptions.views ?? [
     'year',
@@ -80,20 +89,35 @@ export const MaterialDateTimeControl = (props: ControlProps) => {
     : null;
   const secondFormHelperText = showDescription && !isValid ? errors : null;
 
+  const updateChild = useCallback(() => setKey((key) => key + 1), []);
+
   const onChange = useMemo(
     () => createOnChangeHandler(path, handleChange, saveFormat),
     [path, handleChange, saveFormat]
   );
 
+  const onBlurHandler = useMemo(
+    () =>
+      createOnBlurHandler(
+        path,
+        handleChange,
+        format,
+        saveFormat,
+        updateChild,
+        onBlur
+      ),
+    [path, handleChange, format, saveFormat, updateChild]
+  );
   const value = getData(data, saveFormat);
 
   return (
     <Hidden xsUp={!visible}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DateTimePicker
+          key={key}
           label={label}
           value={value}
-          onChange={onChange}
+          onAccept={onChange}
           format={format}
           ampm={!!appliedUiSchemaOptions.ampm}
           views={views}
@@ -117,7 +141,7 @@ export const MaterialDateTimeControl = (props: ControlProps) => {
               },
               InputLabelProps: data ? { shrink: true } : undefined,
               onFocus: onFocus,
-              onBlur: onBlur,
+              onBlur: onBlurHandler,
             },
           }}
         />

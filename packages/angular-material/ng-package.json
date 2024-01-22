@@ -1,0 +1,10 @@
+{
+  "$schema": "./node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "./lib",
+  "allowedNonPeerDependencies": [
+    "@jsonforms/angular",
+    "@jsonforms/core",
+    "hammerjs", 
+    "lodash"
+  ]
+}

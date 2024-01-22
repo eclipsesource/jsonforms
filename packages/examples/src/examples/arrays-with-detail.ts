@@ -32,6 +32,7 @@ export const schema = {
     occupation: { type: 'string' },
     comments: {
       type: 'array',
+      description: 'Description for array with details',
       minItems: 2,
       maxItems: 8,
       items: {

@@ -1,0 +1,21 @@
+{
+  "extends": "../../tsconfig.base",
+  "compilerOptions": {
+    "outDir": "../../out-tsc/spec",
+    "inlineSourceMap": true,
+    "sourceMap": true,
+    "types": [
+      "jasmine"
+    ]
+  },
+  "include": [
+    "**/*.spec.ts",
+    "**/*.d.ts"
+  ],
+  "angularCompilerOptions": {
+    "compilationMode": "partial",
+    "strictMetadataEmit": true,
+    "generateCodeForLibraries": false,
+    "skipTemplateCodegen": true
+  }
+}

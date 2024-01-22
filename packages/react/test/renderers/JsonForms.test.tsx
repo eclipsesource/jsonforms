@@ -33,6 +33,7 @@ import type {
   JsonFormsStore,
   JsonSchema,
   Layout,
+  Middleware,
   RendererProps,
   UISchemaElement,
 } from '@jsonforms/core';
@@ -1098,5 +1099,146 @@ test('JsonForms should use react to additionalErrors update', () => {
   });
   wrapper.update();
   expect(wrapper.find('h5').text()).toBe('Foobar');
+  wrapper.unmount();
+});
+
+test('JsonForms middleware should be called if provided', async () => {
+  // given
+  const onChangeHandler = jest.fn();
+  const customMiddleware = jest.fn();
+  const TestInputRenderer = withJsonFormsControlProps((props) => (
+    <input
+      onChange={(ev) => props.handleChange('foo', ev.target.value)}
+      value={props.data}
+    />
+  ));
+  const renderers = [
+    {
+      tester: () => 10,
+      renderer: TestInputRenderer,
+    },
+  ];
+  const controlledMiddleware: Middleware = (state, action, reducer) => {
+    if (action.type === 'jsonforms/UPDATE') {
+      customMiddleware();
+      return state;
+    } else {
+      return reducer(state, action);
+    }
+  };
+  const wrapper = mount(
+    <JsonForms
+      data={fixture.data}
+      uischema={fixture.uischema}
+      schema={fixture.schema}
+      middleware={controlledMiddleware}
+      onChange={onChangeHandler}
+      renderers={renderers}
+    />
+  );
+
+  // wait for 50 ms for the change handler invocation
+  await new Promise((resolve) => setTimeout(resolve, 50));
+
+  // initial rendering should call onChange 1 time
+  expect(onChangeHandler).toHaveBeenCalledTimes(1);
+  const calls = onChangeHandler.mock.calls;
+  const lastCallParameter = calls[calls.length - 1][0];
+  expect(lastCallParameter.data).toEqual({ foo: 'John Doe' });
+  expect(lastCallParameter.errors).toEqual([]);
+
+  // adapt test input
+  wrapper.find('input').simulate('change', {
+    target: {
+      value: 'Test Value',
+    },
+  });
+
+  expect(customMiddleware).toHaveBeenCalledTimes(1);
+
+  // wait for 50 ms for the change handler invocation
+  await new Promise((resolve) => setTimeout(resolve, 50));
+  // change handler should not have been called another time as we blocked the update in the middleware
+  expect(onChangeHandler).toHaveBeenCalledTimes(1);
+  // The rendered field should also not have been updated
+  expect(wrapper.find('input').getDOMNode<HTMLInputElement>().value).toBe(
+    'John Doe'
+  );
+
+  wrapper.unmount();
+});
+
+test('JsonForms middleware should update state if modified', async () => {
+  // given
+  const onChangeHandler = jest.fn();
+  const customMiddleware = jest.fn();
+  const TestInputRenderer = withJsonFormsControlProps((props) => (
+    <input
+      onChange={(ev) => props.handleChange('foo', ev.target.value)}
+      value={props.data}
+    />
+  ));
+  const renderers = [
+    {
+      tester: () => 10,
+      renderer: TestInputRenderer,
+    },
+  ];
+  const controlledMiddleware: Middleware = (state, action, reducer) => {
+    if (action.type === 'jsonforms/UPDATE') {
+      customMiddleware();
+      const newState = reducer(state, action);
+      return { ...newState, data: { foo: `${newState.data.foo} Test` } };
+    } else {
+      return reducer(state, action);
+    }
+  };
+  const wrapper = mount(
+    <JsonForms
+      data={fixture.data}
+      uischema={fixture.uischema}
+      schema={fixture.schema}
+      middleware={controlledMiddleware}
+      onChange={onChangeHandler}
+      renderers={renderers}
+    />
+  );
+
+  // wait for 50 ms for the change handler invocation
+  await new Promise((resolve) => setTimeout(resolve, 50));
+
+  // initial rendering should call onChange 1 time
+  expect(onChangeHandler).toHaveBeenCalledTimes(1);
+  {
+    const calls = onChangeHandler.mock.calls;
+    const lastCallParameter = calls[calls.length - 1][0];
+    expect(lastCallParameter.data).toEqual({ foo: 'John Doe' });
+    expect(lastCallParameter.errors).toEqual([]);
+  }
+
+  // adapt input
+  wrapper.find('input').simulate('change', {
+    target: {
+      value: 'Test Value',
+    },
+  });
+
+  // then
+  expect(customMiddleware).toHaveBeenCalledTimes(1);
+  expect(wrapper.find('input').getDOMNode<HTMLInputElement>().value).toBe(
+    'Test Value Test'
+  );
+
+  // wait for 50 ms for the change handler invocation
+  await new Promise((resolve) => setTimeout(resolve, 50));
+  // onChangeHandler should have been called after the state update
+  expect(onChangeHandler).toHaveBeenCalledTimes(2);
+  {
+    const calls = onChangeHandler.mock.calls;
+    const lastCallParameter = calls[calls.length - 1][0];
+    expect(lastCallParameter.data).toEqual({ foo: 'Test Value Test' });
+    expect(lastCallParameter.errors).toEqual([]);
+  }
+
   wrapper.unmount();
 });

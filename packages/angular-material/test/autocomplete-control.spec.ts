@@ -49,7 +49,6 @@ import { ControlElement, JsonSchema, Actions } from '@jsonforms/core';
 import { AutocompleteControlRenderer } from '../src';
 import { JsonFormsAngularService } from '@jsonforms/angular';
 import { ErrorObject } from 'ajv';
-import { FlexLayoutModule } from '@angular/flex-layout';
 
 const data = { foo: 'A' };
 const schema: JsonSchema = {
@@ -72,7 +71,6 @@ const imports = [
   MatFormFieldModule,
   NoopAnimationsModule,
   ReactiveFormsModule,
-  FlexLayoutModule,
 ];
 const providers = [JsonFormsAngularService];
 const componentUT: any = AutocompleteControlRenderer;
@@ -289,18 +287,17 @@ describe('AutoComplete control Input Event Tests', () => {
     zone.runOutsideAngular(() => zone.onStable.emit(null));
     fixture.detectChanges();
 
-    const options = overlayContainerElement.querySelectorAll(
-      'mat-option'
-    ) as NodeListOf<HTMLElement>;
-    options.item(0).click();
-    tick();
-    fixture.detectChanges();
-
-    expect(spy).toHaveBeenCalled();
-    const event = spy.calls.mostRecent()
-      .args[0] as MatAutocompleteSelectedEvent;
-
-    expect(event.option.value).toBe('X');
+    fixture.whenStable().then(() => {
+      const options = overlayContainerElement?.querySelectorAll(
+        'mat-option'
+      ) as NodeListOf<HTMLElement>;
+      (options[1] as HTMLElement).click();
+      fixture.detectChanges();
+      tick();
+      const event = spy.calls.mostRecent()
+        .args[0] as MatAutocompleteSelectedEvent;
+      expect(event.option.value).toBe('Y');
+    });
   }));
 });
 describe('AutoComplete control Error Tests', () => {
@@ -345,5 +342,53 @@ describe('AutoComplete control Error Tests', () => {
     expect(
       debugErrors[errorTest.indexOfElement].nativeElement.textContent
     ).toBe('Hi, this is me, test error!');
+  });
+});
+
+describe('AutoComplete control updateFilter function', () => {
+  let fixture: ComponentFixture<AutocompleteControlRenderer>;
+  let component: AutocompleteControlRenderer;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [componentUT],
+      imports: imports,
+      providers: providers,
+    }).compileComponents();
+  });
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(componentUT);
+    component = fixture.componentInstance;
+  });
+
+  it('should not filter options on ENTER key press', () => {
+    component.shouldFilter = false;
+    component.options = ['X', 'Y', 'Z'];
+    setupMockStore(fixture, { uischema, schema, data });
+    getJsonFormsService(component).updateCore(
+      Actions.init(data, schema, uischema)
+    );
+    component.ngOnInit();
+    fixture.detectChanges();
+    component.updateFilter({ keyCode: 13 });
+    fixture.detectChanges();
+    expect(component.shouldFilter).toBe(false);
+  });
+
+  it('should filter options when a key other than ENTER is pressed', () => {
+    component.shouldFilter = false;
+    component.options = ['X', 'Y', 'Z'];
+    setupMockStore(fixture, { uischema, schema, data });
+    getJsonFormsService(component).updateCore(
+      Actions.init(data, schema, uischema)
+    );
+    component.ngOnInit();
+    fixture.detectChanges();
+
+    component.updateFilter({ keyCode: 65 });
+    fixture.detectChanges();
+
+    expect(component.shouldFilter).toBe(true);
   });
 });

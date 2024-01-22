@@ -75,6 +75,9 @@ import {
   OwnPropsOfLabel,
   LabelProps,
   mapStateToLabelProps,
+  CoreActions,
+  Middleware,
+  defaultMiddleware,
 } from '@jsonforms/core';
 import debounce from 'lodash/debounce';
 import React, {
@@ -87,6 +90,7 @@ import React, {
   useMemo,
   useReducer,
   useRef,
+  useState,
 } from 'react';
 
 const initialCoreState: JsonFormsCore = {
@@ -130,29 +134,41 @@ export const JsonFormsStateProvider = ({
   children,
   initState,
   onChange,
+  middleware,
 }: any) => {
   const { data, schema, uischema, ajv, validationMode, additionalErrors } =
     initState.core;
 
-  const [core, coreDispatch] = useReducer(coreReducer, undefined, () =>
-    coreReducer(
+  const middlewareRef = useRef<Middleware>(middleware ?? defaultMiddleware);
+  middlewareRef.current = middleware ?? defaultMiddleware;
+
+  const [core, setCore] = useState<JsonFormsCore>(() =>
+    middlewareRef.current(
       initState.core,
       Actions.init(data, schema, uischema, {
         ajv,
         validationMode,
         additionalErrors,
-      })
+      }),
+      coreReducer
     )
   );
-  useEffect(() => {
-    coreDispatch(
-      Actions.updateCore(data, schema, uischema, {
-        ajv,
-        validationMode,
-        additionalErrors,
-      })
-    );
-  }, [data, schema, uischema, ajv, validationMode, additionalErrors]);
+
+  useEffect(
+    () =>
+      setCore((currentCore) =>
+        middlewareRef.current(
+          currentCore,
+          Actions.updateCore(data, schema, uischema, {
+            ajv,
+            validationMode,
+            additionalErrors,
+          }),
+          coreReducer
+        )
+      ),
+    [data, schema, uischema, ajv, validationMode, additionalErrors]
+  );
 
   const [config, configDispatch] = useReducer(configReducer, undefined, () =>
     configReducer(undefined, Actions.setConfig(initState.config))
@@ -185,6 +201,12 @@ export const JsonFormsStateProvider = ({
     initState.i18n?.translateError,
   ]);
 
+  const dispatch = useCallback((action: CoreActions) => {
+    setCore((currentCore) =>
+      middlewareRef.current(currentCore, action, coreReducer)
+    );
+  }, []);
+
   const contextValue = useMemo(
     () => ({
       core,
@@ -194,8 +216,7 @@ export const JsonFormsStateProvider = ({
       uischemas: initState.uischemas,
       readonly: initState.readonly,
       i18n: i18n,
-      // only core dispatch available
-      dispatch: coreDispatch,
+      dispatch: dispatch,
     }),
     [
       core,

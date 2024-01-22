@@ -1,25 +1,26 @@
 {
   "name": "@jsonforms/angular-test",
-  "version": "3.2.0-alpha.1",
+  "version": "3.2.0-beta.0",
   "private": true,
-  "main": "./lib/index.js",
+  "module": "./lib/fesm2022/jsonforms-angular-test.mjs",
+  "typings": "./lib/index.d.ts",
   "dependencies": {
     "@jsonforms/angular": "workspace:*",
     "@jsonforms/core": "workspace:*"
   },
   "peerDependencies": {
-    "@angular/core": "^12.0.0 || ^13.0.0 || ^14.0.0",
-    "@angular/platform-browser": "^12.0.0 || ^13.0.0 || ^14.0.0",
-    "@angular/platform-browser-dynamic": "^12.0.0 || ^13.0.0 || ^14.0.0"
+    "@angular/core": "^16.0.0 || ^17.0.0",
+    "@angular/platform-browser": "^16.0.0 || ^17.0.0",
+    "@angular/platform-browser-dynamic": "^16.0.0 || ^17.0.0"
   },
   "devDependencies": {
-    "@angular-eslint/eslint-plugin": "^12.0.0",
-    "@angular-eslint/eslint-plugin-template": "^12.0.0",
-    "@angular-eslint/schematics": "^12.0.0",
-    "@angular-eslint/template-parser": "^12.0.0",
-    "@angular/core": "^12.0.0",
-    "@angular/platform-browser": "^12.0.0",
-    "@angular/platform-browser-dynamic": "^12.0.0",
+    "@angular-eslint/eslint-plugin": "^16.0.0",
+    "@angular-eslint/eslint-plugin-template": "^16.0.0",
+    "@angular-eslint/schematics": "^16.0.0",
+    "@angular-eslint/template-parser": "^16.0.0",
+    "@angular/core": "^16.0.0",
+    "@angular/platform-browser": "^16.0.0",
+    "@angular/platform-browser-dynamic": "^16.0.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.7.0",
     "eslint-plugin-import": "^2.27.5",
@@ -33,11 +34,11 @@
     "karma-sourcemap-loader": "^0.3.8",
     "karma-webpack": "^4.0.2",
     "prettier": "^2.8.4",
-    "tslib": "^2.5.0",
-    "typescript": "4.2.3"
+    "tslib": "^2.3.0",
+    "typescript": "~4.9.5"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "node ./build-package.js",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "test": "echo 'Nothing to do'"

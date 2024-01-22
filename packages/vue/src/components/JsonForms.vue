@@ -23,6 +23,8 @@ import {
   CoreActions,
   i18nReducer,
   JsonFormsI18nState,
+  defaultMiddleware,
+  Middleware,
 } from '@jsonforms/core';
 import { JsonFormsChangeEvent, MaybeReadonly } from '../types';
 import DispatchRenderer from './DispatchRenderer.vue';
@@ -109,6 +111,11 @@ export default defineComponent({
       type: Array as PropType<ErrorObject[]>,
       default: () => EMPTY,
     },
+    middleware: {
+      required: false,
+      type: Function as PropType<Middleware>,
+      default: defaultMiddleware,
+    },
   },
   emits: ['change'],
   data() {
@@ -125,13 +132,14 @@ export default defineComponent({
         schema: schemaToUse,
         uischema: uischemaToUse,
       };
-      const core = coreReducer(
+      const core = this.middleware(
         initialCore,
         Actions.init(dataToUse, schemaToUse, uischemaToUse, {
           validationMode: this.validationMode,
           ajv: this.ajv,
           additionalErrors: this.additionalErrors,
-        })
+        }),
+        coreReducer
       );
       return core;
     };
@@ -223,7 +231,7 @@ export default defineComponent({
       this.jsonforms.readonly = newReadonly;
     },
     coreDataToUpdate() {
-      this.jsonforms.core = coreReducer(
+      this.jsonforms.core = this.middleware(
         this.jsonforms.core as JsonFormsCore,
         Actions.updateCore(
           this.dataToUse,
@@ -234,7 +242,8 @@ export default defineComponent({
             ajv: this.ajv,
             additionalErrors: this.additionalErrors,
           }
-        )
+        ),
+        coreReducer
       );
     },
     eventToEmit(newEvent) {
@@ -263,9 +272,10 @@ export default defineComponent({
   },
   methods: {
     dispatch(action: CoreActions) {
-      this.jsonforms.core = coreReducer(
+      this.jsonforms.core = this.middleware(
         this.jsonforms.core as JsonFormsCore,
-        action
+        action,
+        coreReducer
       );
     },
   },

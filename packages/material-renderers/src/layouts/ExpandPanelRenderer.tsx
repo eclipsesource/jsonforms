@@ -40,10 +40,12 @@ import {
   Grid,
   IconButton,
 } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import DeleteIcon from '@mui/icons-material/Delete';
-import ArrowUpward from '@mui/icons-material/ArrowUpward';
-import ArrowDownward from '@mui/icons-material/ArrowDownward';
+import {
+  ExpandMore as ExpandMoreIcon,
+  Delete as DeleteIcon,
+  ArrowUpward,
+  ArrowDownward,
+} from '@mui/icons-material';
 
 const iconStyle: any = { float: 'right' };
 
