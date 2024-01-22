@@ -31,4 +31,4 @@ export * from './layouts';
 export * from './reducers';
 export * from './util';
 export * from './styles';
-export * from './renderer';
+export * from './renderers';

@@ -30,6 +30,7 @@ import {
   booleanCellTester,
   DateCell,
   dateCellTester,
+  DateTimeCell,
   dateTimeCellTester,
   EnumCell,
   enumCellTester,
@@ -75,7 +76,6 @@ import {
   VerticalLayout,
   verticalLayoutTester,
 } from './layouts';
-import DateTimeCell from './cells/DateTimeCell';
 
 export const vanillaRenderers: { tester: RankedTester; renderer: any }[] = [
   { tester: inputControlTester, renderer: InputControl },
