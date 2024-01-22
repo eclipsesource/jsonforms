@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
-  Copyright (c) 2017-2019 EclipseSource Munich
+
+  Copyright (c) 2023 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,14 +22,15 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import { CoreActions } from '../actions';
+import { JsonFormsCore } from './core';
 
-export * from './cells';
-export * from './config';
-export * from './core';
-export * from './default-data';
-export * from './i18n';
-export * from './reducers';
-export * from './renderers';
-export * from './selectors';
-export * from './uischemas';
-export * from './middleware';
+export interface Middleware {
+  (
+    state: JsonFormsCore,
+    action: CoreActions,
+    defaultReducer: (state: JsonFormsCore, action: CoreActions) => JsonFormsCore
+  ): JsonFormsCore;
+}
+export const defaultMiddleware: Middleware = (state, action, defaultReducer) =>
+  defaultReducer(state, action);
