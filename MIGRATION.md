@@ -2,7 +2,7 @@
 
 ## Migrating to JSON Forms 3.2
 
-### Material Renderers using Outlined Inputs
+### React Material Renderers using Outlined Inputs
 
 JSON Forms now uses the `outlined` input variant as the default, aligning with the default style of Material UI since version 5.
 If you would like to use the `standard` input variant, as was default in previous versions of JSON Forms, then this can be accomplished using the Material UI `ThemeProvider`:
@@ -37,6 +37,16 @@ const theme = createTheme({
   <JsonForms {...props} />
 </ThemeProvider>;
 ```
+
+### Angular support now targets Angular 16 and Angular 17
+
+When using JSON Forms 3.2 your Angular application now needs to target Angular 16 or 17.
+Some refactorings, especially in Angular Material, were necessary to accomplish this.
+
+Use JSON Forms 3.1 if need to stay in Angular 14.
+
+> [!NOTE]
+> Angular 15 is only supported by the JSON Forms prerelease `3.2.0-alpha.4`.
 
 ## Migrating to JSON Forms 3.0
 
