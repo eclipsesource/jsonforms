@@ -52,7 +52,7 @@ const variantToInput = {
   outlined: OutlinedInput,
 };
 
-export const defaultInputVariant: TextFieldProps['variant'] = 'standard';
+export const defaultInputVariant: TextFieldProps['variant'] = 'outlined';
 
 export function useInputVariant(): TextFieldProps['variant'] {
   const { variant = defaultInputVariant } = useThemeProps({
