@@ -1,5 +1,43 @@
 # Migration guide
 
+## Migrating to JSON Forms 3.2
+
+### Material Renderers using Outlined Inputs
+
+JSON Forms now uses the `outlined` input variant as the default, aligning with the default style of Material UI since version 5.
+If you would like to use the `standard` input variant, as was default in previous versions of JSON Forms, then this can be accomplished using the Material UI `ThemeProvider`:
+
+```ts
+import { JsonForms } from '@jsonforms/react';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+const theme = createTheme({
+  components: {
+    MuiFormControl: {
+      defaultProps: {
+        variant: 'standard',
+      },
+    },
+    MuiTextField: {
+      defaultProps: {
+        variant: 'standard',
+      },
+    },
+    MuiSelect: {
+      defaultProps: {
+        variant: 'standard',
+      },
+    },
+  },
+});
+
+...
+
+<ThemeProvider theme={theme}>
+  <JsonForms {...props} />
+</ThemeProvider>;
+```
+
 ## Migrating to JSON Forms 3.0
 
 ### Additional parameter for testers
