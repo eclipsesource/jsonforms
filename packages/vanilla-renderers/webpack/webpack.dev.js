@@ -1,4 +1,4 @@
-const merge = require('webpack-merge');
+const merge = require('webpack-merge').merge;
 const baseConfig = require('../../../webpack/webpack.dev.base.js');
 var copyWebpackPlugin = require('copy-webpack-plugin');
 
