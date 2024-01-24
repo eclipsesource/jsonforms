@@ -17,8 +17,21 @@ const theme = createTheme({
         root: {
           margin: '0.8em 0',
         },
+      },
+      defaultProps: {
+        variant: 'standard'
       }
     },
+    MuiTextField: {
+      defaultProps: {
+        variant: 'standard'
+      }
+    },
+    MuiSelect: {
+      defaultProps: {
+        variant: 'standard'
+      }
+    }
   },
 });
 

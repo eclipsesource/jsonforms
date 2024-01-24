@@ -31,7 +31,7 @@ export const RendererSetSchemaFeatureTable = () => (
           <TableCell>Angular Material</TableCell>
           <TableCell>React Vanilla</TableCell>
           <TableCell>Vue Vanilla</TableCell>
-          <TableCell>Vue2 Vuetify</TableCell>
+          <TableCell>Vue Vuetify</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -250,7 +250,7 @@ export const RendererSetUISchemaFeatureTable = () => (
           <TableCell>Angular Material</TableCell>
           <TableCell>React Vanilla</TableCell>
           <TableCell>Vue Vanilla</TableCell>
-          <TableCell>Vue2 Vuetify</TableCell>
+          <TableCell>Vue Vuetify</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>

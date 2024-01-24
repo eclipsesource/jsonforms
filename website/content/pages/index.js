@@ -107,11 +107,15 @@ function Home() {
           <section className={styles.sectionNews}>
             <Card className={styles.newsCard}>
               <CardContent>
-                Great news! We are in the final stretches of the long awaited JSON Forms 3.0 release. Today we published the release candidate "3.0.0-rc.0" 🎉
+                We released v3.2.0 🎉. Besides various fixes and improved developer tooling, this release adds middleware support to all bindings. This makes it a breeze to hook into data updates!
                 <br/>
-                We welcome any feedback of curious users. Any questions? Check out our community forum <a href="https://jsonforms.discourse.group">jsonforms.discourse.group</a>.
+                With this release, the Angular bindings and Angular Material renderer set now support Angular 16 and 17. Special thanks to <a href="https://github.com/JBBianchi">JBBianchi</a> for contributing this massive upgrade.
+                <br />
+                You can find the full changelog in the <a href="https://github.com/eclipsesource/jsonforms/releases/tag/v3.2.0">Github release</a>.
+                <br />
+                We welcome any feedback of curious users. Any questions? Check out our <a href="http://jsonforms.discourse.group">community forum</a>. See also our <a href="https://github.com/eclipsesource/jsonforms/blob/master/MIGRATION.md">migration guide</a>.
                 <br/>
-                <span style={{ display: 'block', textAlign: 'right', width: '100%'}}>25th July 2022</span>
+                <span style={{ display: 'block', textAlign: 'right', width: '100%'}}>24th January 2024</span>
               </CardContent>
             </Card>
             <Link to='/news' className={styles.newsButton}>

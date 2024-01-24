@@ -25,10 +25,6 @@
  from = "/public/api/vue/*"
  to = "/api/vue/"
 
-[[redirects]]
- from = "/public/api/vue2/*"
- to = "/api/vue2/"
-
 [[headers]]
    for = "/*"
    [headers.values]
