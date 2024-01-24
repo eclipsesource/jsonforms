@@ -43,7 +43,7 @@ const theme = createTheme({
 When using JSON Forms 3.2 your Angular application now needs to target Angular 16 or 17.
 Some refactorings, especially in Angular Material, were necessary to accomplish this.
 
-Use JSON Forms 3.1 if need to stay in Angular 14.
+Use JSON Forms 3.1 if you need to stay on Angular 14.
 
 > [!NOTE]
 > Angular 15 is only supported by the JSON Forms prerelease `3.2.0-alpha.4`.
