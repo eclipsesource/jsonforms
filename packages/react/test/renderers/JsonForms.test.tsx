@@ -33,6 +33,7 @@ import type {
   JsonFormsStore,
   JsonSchema,
   Layout,
+  Middleware,
   RendererProps,
   UISchemaElement,
 } from '@jsonforms/core';
@@ -58,7 +59,6 @@ import {
 } from '../../src/JsonForms';
 import {
   JsonFormsStateProvider,
-  Middleware,
   useJsonForms,
   withJsonFormsControlProps,
 } from '../../src/JsonFormsContext';

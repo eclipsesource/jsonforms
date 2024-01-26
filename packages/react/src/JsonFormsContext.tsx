@@ -76,6 +76,8 @@ import {
   LabelProps,
   mapStateToLabelProps,
   CoreActions,
+  Middleware,
+  defaultMiddleware,
 } from '@jsonforms/core';
 import debounce from 'lodash/debounce';
 import React, {
@@ -127,17 +129,6 @@ const useEffectAfterFirstRender = (
     effect();
   }, dependencies);
 };
-
-export interface Middleware {
-  (
-    state: JsonFormsCore,
-    action: CoreActions,
-    defaultReducer: (state: JsonFormsCore, action: CoreActions) => JsonFormsCore
-  ): JsonFormsCore;
-}
-
-const defaultMiddleware: Middleware = (state, action, defaultReducer) =>
-  defaultReducer(state, action);
 
 export const JsonFormsStateProvider = ({
   children,

@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/vanilla-renderers",
-  "version": "3.2.0-beta.0",
+  "version": "3.2.1",
   "description": "Default Renderer Set for JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -12,14 +12,14 @@
   "scripts": {
     "build": "rollup -c rollup.config.js",
     "build:examples-app": "rollup -c rollup.example.config.js",
-    "dev": "webpack --config ./webpack/webpack.dev.js && webpack-dev-server --config webpack/webpack.dev.js --env=dev --inline",
+    "dev": "webpack-dev-server --config webpack/webpack.dev.js --env=dev",
     "clean": "rimraf lib coverage dist .nyc_output example/dist 2> /dev/null",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "report": "nyc report --reporter=html",
     "test": "jest --no-cache",
     "test-cov": "jest --no-cache --coverage",
-    "doc": "typedoc --name 'JSON Forms Vanilla Renderers' --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
+    "doc": "typedoc --name 'JSON Forms Vanilla Renderers' --excludeExternals --out docs src"
   },
   "files": [
     "lib",
@@ -47,8 +47,8 @@
     "lodash": "^4.17.21"
   },
   "peerDependencies": {
-    "@jsonforms/core": "v3.2.0-beta.0",
-    "@jsonforms/react": "v3.2.0-beta.0",
+    "@jsonforms/core": "3.2.1",
+    "@jsonforms/react": "3.2.1",
     "react": "^16.12.0 || ^17.0.0 || ^18.0.0"
   },
   "devDependencies": {
@@ -88,13 +88,13 @@
     "source-map-loader": "^0.2.4",
     "source-map-support": "0.5.16",
     "ts-jest": "^27.1.4",
-    "ts-loader": "^6.2.1",
+    "ts-loader": "^9.5.1",
     "ts-node": "^10.4.0",
     "tslib": "^2.5.0",
-    "typedoc": "~0.21.9",
-    "webpack": "^4.41.2",
-    "webpack-cli": "^3.2.1",
-    "webpack-dev-server": "^3.9.0"
+    "typedoc": "~0.25.3",
+    "webpack": "^5.78.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
   },
   "jest": {
     "moduleFileExtensions": [

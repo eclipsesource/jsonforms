@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/angular-test",
-  "version": "3.2.0-beta.0",
+  "version": "3.2.1",
   "private": true,
   "module": "./lib/fesm2022/jsonforms-angular-test.mjs",
   "typings": "./lib/index.d.ts",

@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/angular-material",
-  "version": "3.2.0-beta.0",
+  "version": "3.2.1",
   "description": "Material Renderer Set for Angular module of JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -68,8 +68,8 @@
     "@angular/material": "^16.0.0 || ^17.0.0",
     "@angular/platform-browser": "^16.0.0 || ^17.0.0",
     "@angular/router": "^16.0.0 || ^17.0.0",
-    "@jsonforms/angular": "v3.2.0-beta.0",
-    "@jsonforms/core": "v3.2.0-beta.0",
+    "@jsonforms/angular": "3.2.1",
+    "@jsonforms/core": "3.2.1",
     "rxjs": "^6.6.0 || ^7.4.0"
   },
   "dependencies": {
@@ -130,7 +130,7 @@
     "protractor": "^7.0.0",
     "rimraf": "^3.0.2",
     "rxjs": "^6.6.0",
-    "ts-loader": "^6.2.1",
+    "ts-loader": "^9.5.1",
     "tslib": "^2.5.0",
     "typedoc": "~0.25.3",
     "typescript": "~4.9.5",

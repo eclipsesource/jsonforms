@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/material-renderers",
-  "version": "3.2.0-beta.0",
+  "version": "3.2.1",
   "description": "Material Renderer Set for JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -38,14 +38,14 @@
   "scripts": {
     "build": "rollup -c rollup.config.js",
     "build:examples-app": "rollup -c rollup.example.config.js",
-    "dev": "webpack --config webpack/webpack.dev.js && webpack-dev-server --config webpack/webpack.dev.js --env=dev --inline",
+    "dev": "webpack-dev-server --config webpack/webpack.dev.js --env=dev",
     "clean": "rimraf lib coverage dist .nyc_output example/dist 2> /dev/null",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "test": "jest --no-cache",
     "test-cov": "jest --no-cache --coverage",
     "report": "nyc report --reporter=html",
-    "doc": "typedoc --name 'JSON Forms React Material Renderers' --excludeExternals --theme ../../typedoc-jsonforms --out docs src",
+    "doc": "typedoc --name 'JSON Forms React Material Renderers' --excludeExternals --out docs src",
     "tsc": "tsc --build tsconfig.json"
   },
   "jest": {
@@ -59,7 +59,8 @@
     },
     "testEnvironment": "jsdom",
     "testMatch": [
-      "**/test/**/*.test.tsx"
+      "**/test/**/*.test.tsx",
+      "**/test/**.test.ts"
     ],
     "testPathIgnorePatterns": [
       "/node_modules/",
@@ -85,8 +86,8 @@
   "peerDependencies": {
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
-    "@jsonforms/core": "v3.2.0-beta.0",
-    "@jsonforms/react": "v3.2.0-beta.0",
+    "@jsonforms/core": "3.2.1",
+    "@jsonforms/react": "3.2.1",
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.13.0",
     "@mui/x-date-pickers": "^6.0.0",
@@ -133,12 +134,12 @@
     "rollup-plugin-visualizer": "^5.4.1",
     "source-map-loader": "^0.2.4",
     "ts-jest": "^27.1.4",
-    "ts-loader": "^6.2.1",
+    "ts-loader": "^9.5.1",
     "tslib": "^2.5.0",
-    "typedoc": "~0.21.9",
-    "typescript": "4.2.3",
-    "webpack": "^4.41.2",
-    "webpack-cli": "^3.2.1",
-    "webpack-dev-server": "^3.9.0"
+    "typedoc": "~0.25.3",
+    "typescript": "~4.9.5",
+    "webpack": "^5.78.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
   }
 }
