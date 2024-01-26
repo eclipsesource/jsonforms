@@ -22,49 +22,5 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import {
-  Theme,
-  FilledInput,
-  Input,
-  OutlinedInput,
-  TextFieldProps,
-  useThemeProps,
-  InputBaseProps,
-} from '@mui/material';
-
-export interface JsonFormsTheme extends Theme {
-  jsonforms?: {
-    input?: {
-      delete?: {
-        background?: string;
-      };
-    };
-  };
-}
-
-export interface WithInputProps {
-  label?: string;
-}
-
-const variantToInput = {
-  standard: Input,
-  filled: FilledInput,
-  outlined: OutlinedInput,
-};
-
-export const defaultInputVariant: TextFieldProps['variant'] = 'outlined';
-
-export function useInputVariant(): TextFieldProps['variant'] {
-  const { variant = defaultInputVariant } = useThemeProps({
-    props: {} as TextFieldProps,
-    name: 'MuiTextField',
-  });
-  return variant;
-}
-
-export function useInputComponent(): React.JSXElementConstructor<
-  InputBaseProps & WithInputProps
-> {
-  const variant = useInputVariant();
-  return variantToInput[variant] ?? variantToInput[defaultInputVariant];
-}
+export * from './i18nDefaults';
+export * from './props';

@@ -44,6 +44,8 @@ import {
   UISchemaTester,
   ValidationMode,
   updateI18n,
+  Middleware,
+  defaultMiddleware,
 } from '@jsonforms/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import type { JsonFormsBaseRenderer } from './base.renderer';
@@ -56,6 +58,7 @@ export const USE_STATE_VALUE = Symbol('Marker to use state value');
 export class JsonFormsAngularService {
   private _state: JsonFormsSubStates;
   private state: BehaviorSubject<JsonFormsState>;
+  private middleware: Middleware;
 
   init(
     initialState: JsonFormsSubStates = {
@@ -66,8 +69,10 @@ export class JsonFormsAngularService {
         validationMode: 'ValidateAndShow',
         additionalErrors: undefined,
       },
-    }
+    },
+    middleware: Middleware = defaultMiddleware
   ) {
+    this.middleware = middleware;
     this._state = initialState;
     this._state.config = configReducer(
       undefined,
@@ -143,9 +148,10 @@ export class JsonFormsAngularService {
   }
 
   updateValidationMode(validationMode: ValidationMode): void {
-    const coreState = coreReducer(
+    const coreState = this.middleware(
       this._state.core,
-      Actions.setValidationMode(validationMode)
+      Actions.setValidationMode(validationMode),
+      coreReducer
     );
     this._state.core = coreState;
     this.updateSubject();
@@ -161,7 +167,11 @@ export class JsonFormsAngularService {
   }
 
   updateCore<T extends CoreActions>(coreAction: T): T {
-    const coreState = coreReducer(this._state.core, coreAction);
+    const coreState = this.middleware(
+      this._state.core,
+      coreAction,
+      coreReducer
+    );
     if (coreState !== this._state.core) {
       this._state.core = coreState;
       this.updateSubject();
@@ -199,13 +209,14 @@ export class JsonFormsAngularService {
   setUiSchema(uischema: UISchemaElement | undefined): void {
     const newUiSchema =
       uischema ?? generateDefaultUISchema(this._state.core.schema);
-    const coreState = coreReducer(
+    const coreState = this.middleware(
       this._state.core,
       Actions.updateCore(
         this._state.core.data,
         this._state.core.schema,
         newUiSchema
-      )
+      ),
+      coreReducer
     );
     if (coreState !== this._state.core) {
       this._state.core = coreState;
@@ -214,13 +225,14 @@ export class JsonFormsAngularService {
   }
 
   setSchema(schema: JsonSchema | undefined): void {
-    const coreState = coreReducer(
+    const coreState = this.middleware(
       this._state.core,
       Actions.updateCore(
         this._state.core.data,
         schema ?? generateJsonSchema(this._state.core.data),
         this._state.core.uischema
-      )
+      ),
+      coreReducer
     );
     if (coreState !== this._state.core) {
       this._state.core = coreState;
@@ -229,13 +241,14 @@ export class JsonFormsAngularService {
   }
 
   setData(data: any): void {
-    const coreState = coreReducer(
+    const coreState = this.middleware(
       this._state.core,
       Actions.updateCore(
         data,
         this._state.core.schema,
         this._state.core.uischema
-      )
+      ),
+      coreReducer
     );
     if (coreState !== this._state.core) {
       this._state.core = coreState;
@@ -254,6 +267,11 @@ export class JsonFormsAngularService {
 
   setReadonly(readonly: boolean): void {
     this._state.readonly = readonly;
+    this.updateSubject();
+  }
+
+  setMiddleware(middleware: Middleware): void {
+    this._state.middleware = middleware;
     this.updateSubject();
   }
 

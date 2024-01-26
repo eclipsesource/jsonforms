@@ -1,7 +1,7 @@
 /*
   The MIT License
 
-  Copyright (c) 2017-2019 EclipseSource Munich
+  Copyright (c) 2023 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,49 +22,15 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import {
-  Theme,
-  FilledInput,
-  Input,
-  OutlinedInput,
-  TextFieldProps,
-  useThemeProps,
-  InputBaseProps,
-} from '@mui/material';
+import { CoreActions } from '../actions';
+import { JsonFormsCore } from './core';
 
-export interface JsonFormsTheme extends Theme {
-  jsonforms?: {
-    input?: {
-      delete?: {
-        background?: string;
-      };
-    };
-  };
+export interface Middleware {
+  (
+    state: JsonFormsCore,
+    action: CoreActions,
+    defaultReducer: (state: JsonFormsCore, action: CoreActions) => JsonFormsCore
+  ): JsonFormsCore;
 }
-
-export interface WithInputProps {
-  label?: string;
-}
-
-const variantToInput = {
-  standard: Input,
-  filled: FilledInput,
-  outlined: OutlinedInput,
-};
-
-export const defaultInputVariant: TextFieldProps['variant'] = 'outlined';
-
-export function useInputVariant(): TextFieldProps['variant'] {
-  const { variant = defaultInputVariant } = useThemeProps({
-    props: {} as TextFieldProps,
-    name: 'MuiTextField',
-  });
-  return variant;
-}
-
-export function useInputComponent(): React.JSXElementConstructor<
-  InputBaseProps & WithInputProps
-> {
-  const variant = useInputVariant();
-  return variantToInput[variant] ?? variantToInput[defaultInputVariant];
-}
+export const defaultMiddleware: Middleware = (state, action, defaultReducer) =>
+  defaultReducer(state, action);

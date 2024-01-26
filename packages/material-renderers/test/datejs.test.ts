@@ -1,7 +1,7 @@
 /*
   The MIT License
 
-  Copyright (c) 2017-2019 EclipseSource Munich
+  Copyright (c) 2024-2024 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,49 +22,31 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import {
-  Theme,
-  FilledInput,
-  Input,
-  OutlinedInput,
-  TextFieldProps,
-  useThemeProps,
-  InputBaseProps,
-} from '@mui/material';
+import dayjs from 'dayjs';
+import { formatDate } from '../src/util/datejs';
 
-export interface JsonFormsTheme extends Theme {
-  jsonforms?: {
-    input?: {
-      delete?: {
-        background?: string;
-      };
-    };
-  };
-}
-
-export interface WithInputProps {
-  label?: string;
-}
-
-const variantToInput = {
-  standard: Input,
-  filled: FilledInput,
-  outlined: OutlinedInput,
-};
-
-export const defaultInputVariant: TextFieldProps['variant'] = 'outlined';
-
-export function useInputVariant(): TextFieldProps['variant'] {
-  const { variant = defaultInputVariant } = useThemeProps({
-    props: {} as TextFieldProps,
-    name: 'MuiTextField',
+describe('Date Util tester', () => {
+  test('format default', () => {
+    const date = dayjs('2024-01-01');
+    const actual = formatDate(date, 'YYYY-MM-DD');
+    expect(actual).toBe('2024-01-01');
   });
-  return variant;
-}
 
-export function useInputComponent(): React.JSXElementConstructor<
-  InputBaseProps & WithInputProps
-> {
-  const variant = useInputVariant();
-  return variantToInput[variant] ?? variantToInput[defaultInputVariant];
-}
+  test('format year < 1000', () => {
+    const date = dayjs('999-01-01');
+    const actual = formatDate(date, 'YYYY-MM-DD');
+    expect(actual).toBe('0999-01-01');
+  });
+
+  test('format 100 < year < 1000', () => {
+    const date = dayjs(new Date('0099-01-01'));
+    const actual = formatDate(date, 'YYYY-MM-DD');
+    expect(actual).toBe('0099-01-01');
+  });
+
+  test('format 10 < year < 100', () => {
+    const date = dayjs(new Date('0019-01-01'));
+    const actual = formatDate(date, 'YYYY-MM-DD');
+    expect(actual).toBe('0019-01-01');
+  });
+});

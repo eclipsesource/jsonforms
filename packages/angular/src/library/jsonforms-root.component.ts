@@ -37,9 +37,11 @@ import {
   JsonFormsI18nState,
   JsonFormsRendererRegistryEntry,
   JsonSchema,
+  Middleware,
   UISchemaElement,
   UISchemaTester,
   ValidationMode,
+  defaultMiddleware,
 } from '@jsonforms/core';
 import Ajv, { ErrorObject } from 'ajv';
 import { JsonFormsAngularService, USE_STATE_VALUE } from './jsonforms.service';
@@ -64,6 +66,7 @@ export class JsonForms implements DoCheck, OnChanges, OnInit {
   @Input() config: any;
   @Input() i18n: JsonFormsI18nState;
   @Input() additionalErrors: ErrorObject[];
+  @Input() middleware: Middleware = defaultMiddleware;
   @Output() errors = new EventEmitter<ErrorObject[]>();
 
   private previousData: any;
@@ -75,21 +78,24 @@ export class JsonForms implements DoCheck, OnChanges, OnInit {
   constructor(private jsonformsService: JsonFormsAngularService) {}
 
   ngOnInit(): void {
-    this.jsonformsService.init({
-      core: {
-        data: this.data,
-        uischema: this.uischema,
-        schema: this.schema,
-        ajv: this.ajv,
-        validationMode: this.validationMode,
-        additionalErrors: this.additionalErrors,
+    this.jsonformsService.init(
+      {
+        core: {
+          data: this.data,
+          uischema: this.uischema,
+          schema: this.schema,
+          ajv: this.ajv,
+          validationMode: this.validationMode,
+          additionalErrors: this.additionalErrors,
+        },
+        uischemas: this.uischemas,
+        i18n: this.i18n,
+        renderers: this.renderers,
+        config: this.config,
+        readonly: this.readonly,
       },
-      uischemas: this.uischemas,
-      i18n: this.i18n,
-      renderers: this.renderers,
-      config: this.config,
-      readonly: this.readonly,
-    });
+      this.middleware
+    );
     this.jsonformsService.$state.subscribe((state) => {
       const data = state?.jsonforms?.core?.data;
       const errors = state?.jsonforms?.core?.errors;

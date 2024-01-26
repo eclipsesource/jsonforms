@@ -22,89 +22,102 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React from 'react';
+import React, { useState } from 'react';
 import type { Categorization, Category, LayoutProps } from '@jsonforms/core';
 import {
-  RendererComponent,
   TranslateProps,
   withJsonFormsLayoutProps,
   withTranslateProps,
 } from '@jsonforms/react';
 import { CategorizationList } from './CategorizationList';
 import { SingleCategory } from './SingleCategory';
-import { isCategorization } from './tester';
-import { withVanillaControlProps } from '../../util';
-import type { VanillaRendererProps } from '../../index';
+import { withAjvProps, withVanillaControlProps } from '../../util';
+import type { AjvProps, VanillaRendererProps } from '../../util';
 
 export interface CategorizationState {
   selectedCategory: Category;
 }
 
-class CategorizationRenderer extends RendererComponent<
-  LayoutProps & VanillaRendererProps & TranslateProps,
-  CategorizationState
-> {
-  onCategorySelected = (category: Category) => () => {
-    return this.setState({ selectedCategory: category });
-  };
-
-  /**
-   * @inheritDoc
-   */
-  render() {
-    const { uischema, visible, getStyleAsClassName, t } = this.props;
-    const categorization = uischema as Categorization;
-    const classNames = getStyleAsClassName('categorization');
-    const masterClassNames = getStyleAsClassName('categorization.master');
-    const detailClassNames = getStyleAsClassName('categorization.detail');
-    const selectedCategory = this.findCategory(categorization);
-    const subcategoriesClassName = getStyleAsClassName(
-      'category.subcategories'
-    );
-    const groupClassName = getStyleAsClassName('category.group');
-
-    return (
-      <div
-        className={classNames}
-        hidden={visible === null || visible === undefined ? false : !visible}
-      >
-        <div className={masterClassNames}>
-          <CategorizationList
-            categorization={categorization}
-            selectedCategory={selectedCategory}
-            depth={0}
-            onSelect={this.onCategorySelected}
-            subcategoriesClassName={subcategoriesClassName}
-            groupClassName={groupClassName}
-            t={t}
-          />
-        </div>
-        <div className={detailClassNames}>
-          <SingleCategory
-            category={selectedCategory}
-            schema={this.props.schema}
-            path={this.props.path}
-          />
-        </div>
-      </div>
-    );
-  }
-
-  private findCategory(categorization: Categorization): Category {
-    const category = categorization.elements[0];
-
-    if (this.state && this.state.selectedCategory) {
-      return this.state.selectedCategory;
-    }
-
-    if (isCategorization(category)) {
-      return this.findCategory(category);
-    }
-
-    return category;
-  }
+interface CategorizationProps {
+  selected?: number;
+  onChange?(selected: number, prevSelected: number): void;
 }
 
-export default withVanillaControlProps(
-  withTranslateProps(withJsonFormsLayoutProps(CategorizationRenderer))
+export const CategorizationRenderer = ({
+  data,
+  uischema,
+  schema,
+  path,
+  selected,
+  t,
+  visible,
+  getStyleAsClassName,
+  onChange,
+  ajv,
+}: LayoutProps &
+  VanillaRendererProps &
+  TranslateProps &
+  CategorizationProps &
+  AjvProps) => {
+  const categorization = uischema as Categorization;
+  const elements = categorization.elements as (Category | Categorization)[];
+  const classNames = getStyleAsClassName('categorization');
+  const masterClassNames = getStyleAsClassName('categorization.master');
+  const detailClassNames = getStyleAsClassName('categorization.detail');
+  const subcategoriesClassName = getStyleAsClassName('category.subcategories');
+  const groupClassName = getStyleAsClassName('category.group');
+
+  const [previousCategorization, setPreviousCategorization] =
+    useState<Categorization>(uischema as Categorization);
+  const [activeCategory, setActiveCategory] = useState<number>(selected ?? 0);
+
+  const safeCategory =
+    activeCategory >= categorization.elements.length ? 0 : activeCategory;
+
+  if (categorization !== previousCategorization) {
+    setActiveCategory(0);
+    setPreviousCategorization(categorization);
+  }
+
+  const onCategorySelected = (categoryIndex: number) => () => {
+    if (onChange) {
+      return onChange(categoryIndex, safeCategory);
+    }
+    return setActiveCategory(categoryIndex);
+  };
+
+  return (
+    <div
+      className={classNames}
+      hidden={visible === null || visible === undefined ? false : !visible}
+    >
+      <div className={masterClassNames}>
+        <CategorizationList
+          elements={elements}
+          selectedCategory={elements[safeCategory] as Category}
+          data={data}
+          ajv={ajv}
+          depth={0}
+          onSelect={onCategorySelected}
+          subcategoriesClassName={subcategoriesClassName}
+          groupClassName={groupClassName}
+          t={t}
+        />
+      </div>
+      <div className={detailClassNames}>
+        <SingleCategory
+          category={elements[safeCategory] as Category}
+          schema={schema}
+          path={path}
+          key={safeCategory}
+        />
+      </div>
+    </div>
+  );
+};
+
+export default withAjvProps(
+  withVanillaControlProps(
+    withTranslateProps(withJsonFormsLayoutProps(CategorizationRenderer))
+  )
 );

@@ -38,6 +38,7 @@ import {
   JsonFormsRendererRegistryEntry,
   JsonFormsUISchemaRegistryEntry,
   JsonSchema,
+  Middleware,
   OwnPropsOfJsonFormsRenderer,
   removeId,
   UISchemaElement,
@@ -45,7 +46,6 @@ import {
 } from '@jsonforms/core';
 import {
   JsonFormsStateProvider,
-  Middleware,
   withJsonFormsRendererProps,
 } from './JsonFormsContext';
 

@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import './MatchMediaMock';
-import { ControlElement } from '@jsonforms/core';
+import { ControlElement, JsonSchema7 } from '@jsonforms/core';
 import * as React from 'react';
 
 import { materialRenderers } from '../../src';
@@ -50,7 +50,7 @@ const data = [
     message2: 'Yolo 2',
   },
 ];
-const schema = {
+const schema: JsonSchema7 = {
   type: 'array',
   items: {
     type: 'object',
@@ -66,7 +66,7 @@ const schema = {
   },
 };
 
-const nestedSchema = {
+const nestedSchema: JsonSchema7 = {
   type: 'array',
   items: {
     ...schema,
@@ -567,5 +567,47 @@ describe('Material array layout', () => {
 
     expect(getChildLabel(wrapper, 0)).toBe('El Barto was here 2');
     expect(getChildLabel(wrapper, 1)).toBe('Yolo 2');
+  });
+
+  it('should render description', () => {
+    const descriptionSchema = {
+      ...nestedSchema,
+      description: 'This is an array description',
+    };
+
+    wrapper = mount(
+      <JsonForms
+        data={data}
+        schema={descriptionSchema}
+        uischema={uischema}
+        renderers={materialRenderers}
+      />
+    );
+    expect(
+      wrapper.text().includes('This is an array description')
+    ).toBeTruthy();
+    expect(
+      wrapper.find('.MuiToolbar-root .MuiFormHelperText-root').exists()
+    ).toBeTruthy();
+  });
+
+  it('should not render description container if there is none', () => {
+    const descriptionSchema = {
+      ...nestedSchema,
+    };
+    // make sure there is no description
+    delete descriptionSchema.description;
+
+    wrapper = mount(
+      <JsonForms
+        data={data}
+        schema={descriptionSchema}
+        uischema={uischema}
+        renderers={materialRenderers}
+      />
+    );
+    expect(
+      wrapper.find('.MuiToolbar-root .MuiFormHelperText-root').exists()
+    ).toBeFalsy();
   });
 });
