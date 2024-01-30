@@ -50,6 +50,7 @@ import { BooleanControlRenderer } from './controls/boolean.renderer';
 import { DateControlRenderer } from './controls/date.renderer';
 import { NumberControlRenderer } from './controls/number.renderer';
 import { RangeControlRenderer } from './controls/range.renderer';
+import { SelectControlRenderer } from './controls/select.renderer';
 import { TextAreaRenderer } from './controls/textarea.renderer';
 import { TextControlRenderer } from './controls/text.renderer';
 import { ToggleControlRenderer } from './controls/toggle.renderer';
@@ -96,6 +97,7 @@ import { LayoutChildrenRenderPropsPipe } from './layouts';
     TextControlRenderer,
     NumberControlRenderer,
     RangeControlRenderer,
+    SelectControlRenderer,
     DateControlRenderer,
     ToggleControlRenderer,
     VerticalLayoutRenderer,

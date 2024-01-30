@@ -46,6 +46,10 @@ import {
   RangeControlRendererTester,
 } from './controls/range.renderer';
 import {
+  SelectControlRenderer,
+  SelectControlRendererTester,
+} from './controls/select.renderer';
+import {
   DateControlRenderer,
   DateControlRendererTester,
 } from './controls/date.renderer';
@@ -104,6 +108,7 @@ export const angularMaterialRenderers: {
   { tester: TextAreaRendererTester, renderer: TextAreaRenderer },
   { tester: NumberControlRendererTester, renderer: NumberControlRenderer },
   { tester: RangeControlRendererTester, renderer: RangeControlRenderer },
+  { tester: SelectControlRendererTester, renderer: SelectControlRenderer },
   { tester: DateControlRendererTester, renderer: DateControlRenderer },
   { tester: ToggleControlRendererTester, renderer: ToggleControlRenderer },
   { tester: enumControlTester, renderer: AutocompleteControlRenderer },

@@ -58,7 +58,9 @@ const itemTester: UISchemaTester = (_schema, schemaPath, _path) => {
   selector: 'app-root',
   template: `
     <h1>Angular Material Examples</h1>
-    Data: {{ selectedExample.data | json }}
+    <p>Data: {{ selectedExample.data | json }}</p>
+    <p>Schema: {{ selectedExample.schema | json }}</p>
+    <p>UI Schema: {{ selectedExample.uischema | json }}</p>
     <div>
       Example:
       <select (change)="onChange($event)">
