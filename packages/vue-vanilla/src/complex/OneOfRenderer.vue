@@ -4,6 +4,7 @@
       :schema="control.schema"
       combinator-keyword="oneOf"
       :path="path"
+      :root-schema="control.rootSchema"
     />
 
     <control-wrapper
