@@ -77,15 +77,15 @@ jobs:
           git add -A && git commit --amend --no-edit
           git tag v${{ github.event.inputs.next_version }} -f
 
+      - name: "push"
+        if: "github.event.inputs.skip_push == 'false'"
+        run: |
+          git push
+          git push origin v${{ github.event.inputs.next_version }}
+
       - name: "Publish to npm"
         if: "github.event.inputs.skip_publish == 'false'"
         run: "pnpm publish --recursive ${{  github.event.inputs.stable_release == 'true' && ' ' || '--tag next' }}"
         env:
           NODE_AUTH_TOKEN: "${{ secrets.NPM_TOKEN }}"
           NPM_CONFIG_PROVENANCE: "true"
-
-      - name: "push"
-        if: "github.event.inputs.skip_push == 'false'"
-        run: |
-          git push
-          git push origin v${{ github.event.inputs.next_version }}
