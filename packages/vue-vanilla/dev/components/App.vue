@@ -48,10 +48,22 @@ export default defineComponent({
       return examples.find((ex) => ex.name === name)!;
     },
   },
+  beforeMount() {
+    const searchURL = new URL(String(window.location));
+    const name = searchURL.hash?.substring(1);
+    const exists = name && examples.find((ex) => ex.name === name);
+    if (name && exists) {
+      this.currentExampleName = name;
+    }
+  },
   methods: {
     onChange(event: JsonFormsChangeEvent) {
       console.log(event);
       this.data = event.data;
+
+      const searchURL = new URL(String(window.location));
+      searchURL.hash = this.currentExampleName;
+      window.history.pushState({}, '', searchURL);
     },
     onExampleChange(event: any) {
       this.currentExampleName = event.target.value;
@@ -76,7 +88,40 @@ export default defineComponent({
 
 <template>
   <div class="container">
-    <div className="example-selector">
+    <header>
+      <h1>Welcome to JSON Forms with Vue Vanilla</h1>
+      <p>More Forms. Less Code.</p>
+    </header>
+
+    <aside class="example-selector">
+      <div class="data">
+        <details>
+          <summary>data</summary>
+          <textarea readonly
+            >{{ JSON.stringify(data, null, 2) }}
+          </textarea>
+        </details>
+
+        <details>
+          <summary>schema</summary>
+          <textarea readonly
+            >{{ JSON.stringify(example.schema, null, 2) }}
+          </textarea>
+        </details>
+
+        <details>
+          <summary>uischema</summary>
+          <textarea readonly
+            >{{ JSON.stringify(example.uischema, null, 2) }}
+          </textarea>
+        </details>
+
+        <h5>i18n translator</h5>
+        <textarea @change="translationChange"></textarea>
+      </div>
+    </aside>
+
+    <div class="tools">
       <h4>Select Example:</h4>
       <select v-model="currentExampleName" @change="onExampleChange($event)">
         <option
@@ -88,42 +133,94 @@ export default defineComponent({
           {{ option.label }}
         </option>
       </select>
-      <div class="data">
-        <h5>data</h5>
-        <pre
-          >{{ JSON.stringify(data, null, 2) }}
-        </pre>
-        <h5>i18n translator</h5>
-        <textarea @change="translationChange"></textarea>
-      </div>
     </div>
 
-    <div class="form">
-      <json-forms
-        :key="example.name"
-        :data="example.data"
-        :schema="example.schema"
-        :uischema="example.uischema"
-        :renderers="renderers"
-        :config="config"
-        :i18n="i18n"
-        :additional-errors="additionalErrors"
-        @change="onChange"
-      >
-      </json-forms>
-    </div>
+    <main class="form">
+      <article>
+        <json-forms
+          :key="example.name"
+          :data="example.data"
+          :schema="example.schema"
+          :uischema="example.uischema"
+          :renderers="renderers"
+          :config="config"
+          :i18n="i18n"
+          :additional-errors="additionalErrors"
+          @change="onChange"
+        >
+        </json-forms>
+      </article>
+    </main>
   </div>
 </template>
 
 <style scoped>
-.form {
-  max-width: 500px;
-  flex: 1;
-}
 .container {
-  display: flex;
+  display: grid;
+  grid-template-columns: 0 3fr 8fr 0;
+  grid-column-gap: 2rem;
+  grid-row-gap: 1rem;
+  grid-template-areas:
+    'header header header header'
+    '. tools tools .'
+    '. aside main .';
 }
-.data {
-  flex: 1;
+.container > header {
+  grid-area: header;
+
+  background-color: #00021e;
+  padding: 2rem;
+  color: white;
+  text-align: center;
+}
+.container > aside {
+  grid-area: aside;
+}
+.container > main {
+  grid-area: main;
+}
+.container > .tools {
+  grid-area: tools;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+aside .data {
+  background-color: white;
+  padding: 2rem;
+}
+aside summary,
+aside h5 {
+  font-size: 0.83em;
+  font-weight: bold;
+  margin: 0 0 1em;
+}
+aside summary {
+  cursor: default;
+}
+aside details textarea {
+  background: #eee;
+  width: 100%;
+  border: 0;
+  min-height: 300px;
+  max-height: 500px;
+}
+
+main article {
+  background-color: white;
+  padding: 1rem;
+}
+</style>
+
+
+<style>
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  background: #f3f4fa;
 }
 </style>
