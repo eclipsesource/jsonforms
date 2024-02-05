@@ -12,6 +12,7 @@ const createEmptyStyles = (): Styles => ({
   label: {},
   dialog: {},
   oneOf: {},
+  categorization: {},
 });
 
 export interface Styles {
@@ -70,6 +71,18 @@ export interface Styles {
   };
   oneOf: {
     root?: string;
+  };
+  categorization: {
+    root?: string;
+    category?: string;
+    selected?: string;
+    panel?: string;
+    stepper?: string;
+    stepperBadge?:string;
+    stepperLine?:string;
+    stepperFooter?:string;
+    stepperButtonBack?:string;
+    stepperButtonNext?:string;
   };
 }
 

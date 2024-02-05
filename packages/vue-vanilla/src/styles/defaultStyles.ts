@@ -57,4 +57,16 @@ export const defaultStyles: Styles = {
   oneOf: {
     root: 'one-of',
   },
+  categorization: {
+    root: 'categorization',
+    category: 'categorization-category',
+    selected: 'categorization-selected',
+    panel: 'categorization-panel',
+    stepper: 'categorization-stepper',
+    stepperBadge: 'categorization-stepper-badge',
+    stepperLine: 'categorization-stepper-line',
+    stepperFooter: 'categorization-stepper-footer',
+    stepperButtonBack: 'categorization-stepper-button-back',
+    stepperButtonNext: 'categorization-stepper-button-next',
+  }
 };
