@@ -78,11 +78,11 @@ export interface Styles {
     selected?: string;
     panel?: string;
     stepper?: string;
-    stepperBadge?:string;
-    stepperLine?:string;
-    stepperFooter?:string;
-    stepperButtonBack?:string;
-    stepperButtonNext?:string;
+    stepperBadge?: string;
+    stepperLine?: string;
+    stepperFooter?: string;
+    stepperButtonBack?: string;
+    stepperButtonNext?: string;
   };
 }
 

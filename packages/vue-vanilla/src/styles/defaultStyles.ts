@@ -68,5 +68,5 @@ export const defaultStyles: Styles = {
     stepperFooter: 'categorization-stepper-footer',
     stepperButtonBack: 'categorization-stepper-button-back',
     stepperButtonNext: 'categorization-stepper-button-next',
-  }
+  },
 };

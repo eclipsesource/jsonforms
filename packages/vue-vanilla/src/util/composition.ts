@@ -7,7 +7,7 @@ import {
   findUISchema,
   getFirstPrimitiveProp,
   Resolve,
-  type JsonFormsSubStates
+  type JsonFormsSubStates,
 } from '@jsonforms/core';
 
 /**
@@ -144,13 +144,13 @@ export const useTranslator = () => {
 
   if (!jsonforms) {
     throw new Error(
-        "'jsonforms couldn't be injected. Are you within JSON Forms?"
+      "'jsonforms couldn't be injected. Are you within JSON Forms?"
     );
   }
 
   if (!jsonforms.i18n || !jsonforms.i18n.translate) {
     throw new Error(
-        "'jsonforms i18n couldn't be injected. Are you within JSON Forms?"
+      "'jsonforms i18n couldn't be injected. Are you within JSON Forms?"
     );
   }
 
