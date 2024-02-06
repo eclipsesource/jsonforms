@@ -72,8 +72,8 @@ export default defineComponent({
       try {
         const input = JSON.parse(event.target.value);
         (this as any).i18n.translate = (
-            key: string,
-            defaultMessage: string | undefined
+          key: string,
+          defaultMessage: string | undefined
         ) => {
           const translated = get(input, key) as string;
           return translated ?? defaultMessage;
@@ -97,23 +97,23 @@ export default defineComponent({
       <div class="data">
         <details>
           <summary>data</summary>
-          <textarea readonly
-          >{{ JSON.stringify(data, null, 2) }}
-          </textarea>
+          <pre
+            >{{ JSON.stringify(data, null, 2) }}
+          </pre>
         </details>
 
         <details>
           <summary>schema</summary>
-          <textarea readonly
-          >{{ JSON.stringify(example.schema, null, 2) }}
-          </textarea>
+          <pre
+            >{{ JSON.stringify(example.schema, null, 2) }}
+          </pre>
         </details>
 
         <details>
           <summary>uischema</summary>
-          <textarea readonly
-          >{{ JSON.stringify(example.uischema, null, 2) }}
-          </textarea>
+          <pre
+            >{{ JSON.stringify(example.uischema, null, 2) }}
+          </pre>
         </details>
 
         <h5>i18n translator</h5>
@@ -125,10 +125,10 @@ export default defineComponent({
       <h4>Select Example:</h4>
       <select v-model="currentExampleName" @change="onExampleChange($event)">
         <option
-            v-for="option in examples"
-            :key="option.name"
-            :value="option.name"
-            :label="option.label"
+          v-for="option in examples"
+          :key="option.name"
+          :value="option.name"
+          :label="option.label"
         >
           {{ option.label }}
         </option>
@@ -138,15 +138,15 @@ export default defineComponent({
     <main class="form">
       <article>
         <json-forms
-            :key="example.name"
-            :data="example.data"
-            :schema="example.schema"
-            :uischema="example.uischema"
-            :renderers="renderers"
-            :config="config"
-            :i18n="i18n"
-            :additional-errors="additionalErrors"
-            @change="onChange"
+          :key="example.name"
+          :data="example.data"
+          :schema="example.schema"
+          :uischema="example.uischema"
+          :renderers="renderers"
+          :config="config"
+          :i18n="i18n"
+          :additional-errors="additionalErrors"
+          @change="onChange"
         >
         </json-forms>
       </article>
@@ -157,7 +157,7 @@ export default defineComponent({
 <style scoped>
 .container {
   display: grid;
-  grid-template-columns: 0 3fr 8fr 0;
+  grid-template-columns: 0 30% auto 0;
   grid-column-gap: 2rem;
   grid-row-gap: 1rem;
   grid-template-areas:
@@ -201,12 +201,12 @@ aside h5 {
 aside summary {
   cursor: default;
 }
-aside details textarea {
+aside details pre {
   background: #eee;
-  width: 100%;
   border: 0;
   min-height: 300px;
   max-height: 500px;
+  overflow: scroll;
 }
 
 main article {
