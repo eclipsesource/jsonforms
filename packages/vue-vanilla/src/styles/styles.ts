@@ -11,6 +11,7 @@ const createEmptyStyles = (): Styles => ({
   arrayList: {},
   label: {},
   dialog: {},
+  oneOf: {},
 });
 
 export interface Styles {
@@ -63,6 +64,9 @@ export interface Styles {
     itemDelete?: string;
   };
   label: {
+    root?: string;
+  };
+  oneOf: {
     root?: string;
   };
 }

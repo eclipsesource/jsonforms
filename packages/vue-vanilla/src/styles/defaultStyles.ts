@@ -52,4 +52,7 @@ export const defaultStyles: Styles = {
     buttonPrimary: 'dialog-button-primary',
     buttonSecondary: 'dialog-button-secondary',
   },
+  oneOf: {
+    root: 'one-of',
+  },
 };
