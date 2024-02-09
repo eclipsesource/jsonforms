@@ -21,6 +21,23 @@ const uischema = {
   scope: '#',
 };
 
+const schemaRequired = {
+  type: "object",
+  properties: {
+    a: {
+      type: 'string',
+    },
+  },
+  required: ["a"]
+};
+const uischemaRequired = {
+  type: 'Control',
+  scope: '#/properties/a',
+  options: {
+    "hideRequiredAsterisk": true
+  }
+};
+
 describe('ObjectRenderer.vue', () => {
   it('renders a fieldset', () => {
     const wrapper = mountJsonForms(
@@ -48,5 +65,15 @@ describe('ObjectRenderer.vue', () => {
     );
     const inputs = wrapper.findAll('input');
     expect(inputs.length).to.equal(2);
+  });
+
+  it('renders a string input with an asterisk', () => {
+    const wrapper = mountJsonForms('a', schemaRequired, uischema);
+    expect(wrapper.find('label span.asterisk').exists()).to.be.true;
+  });
+
+  it('renders a string input but hide asterisk', () => {
+    const wrapper = mountJsonForms('a', schemaRequired, uischemaRequired);
+    expect(wrapper.find('label span.asterisk').exists()).to.be.false;
   });
 });

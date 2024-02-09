@@ -25,6 +25,7 @@ export interface Styles {
     textarea?: string;
     select?: string;
     option?: string;
+    asterisk?: string;
   };
   dialog: {
     root?: string;

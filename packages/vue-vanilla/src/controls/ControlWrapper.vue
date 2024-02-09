@@ -1,7 +1,7 @@
 <template>
   <div v-if="visible" :id="id" :class="styles.control.root">
     <label :for="id + '-input'" :class="styles.control.label">
-      {{ computedLabel }}
+      {{ computedLabel }}<span v-if="showAsterisk" :class="styles.control.asterisk">*</span>
     </label>
     <div :class="styles.control.wrapper">
       <slot></slot>
@@ -78,9 +78,12 @@ export default defineComponent({
       return computeLabel(
         this.label,
         this.required,
-        !!this.appliedOptions?.hideRequiredAsterisk
+        true
       );
     },
+    showAsterisk():  boolean {
+      return this.required && !this.appliedOptions?.hideRequiredAsterisk;
+    }
   },
 });
 </script>

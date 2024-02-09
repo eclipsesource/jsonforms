@@ -11,6 +11,7 @@ export const defaultStyles: Styles = {
     textarea: 'text-area',
     select: 'select',
     option: 'option',
+    asterisk: 'asterisk',
   },
   verticalLayout: {
     root: 'vertical-layout',
