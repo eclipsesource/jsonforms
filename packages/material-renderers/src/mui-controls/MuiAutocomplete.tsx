@@ -113,7 +113,6 @@ export const MuiAutocomplete = (
           setInputValue(newInputValue);
         }}
         autoHighlight
-        autoSelect
         autoComplete
         fullWidth
         options={options}
