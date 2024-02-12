@@ -20,6 +20,7 @@ const uischema = {
   type: 'Control',
   scope: '#',
 };
+
 describe('ObjectRenderer.vue', () => {
   it('renders a fieldset', () => {
     const wrapper = mountJsonForms(
