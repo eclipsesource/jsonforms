@@ -34,9 +34,6 @@ export default defineComponent({
       renderers: Object.freeze(vanillaRenderers),
       currentExampleName: examples[0].name,
       examples,
-      config: {
-        hideRequiredAsterisk: true,
-      },
       i18n,
       additionalErrors,
     };
