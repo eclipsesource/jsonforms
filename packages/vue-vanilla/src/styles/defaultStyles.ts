@@ -12,6 +12,7 @@ export const defaultStyles: Styles = {
     select: 'select',
     option: 'option',
     asterisk: 'asterisk',
+    required: 'required',
   },
   verticalLayout: {
     root: 'vertical-layout',

@@ -1,7 +1,11 @@
 <template>
   <div v-if="visible" :id="id" :class="styles.control.root">
-    <label :for="id + '-input'" :class="styles.control.label">
-      {{ computedLabel }}<span v-if="showAsterisk" :class="styles.control.asterisk">*</span>
+    <label
+      :for="id + '-input'"
+      :class="[styles.control.label, required ? styles.control.required : '']"
+    >
+      {{ label }}
+      <span v-if="showAsterisk" :class="styles.control.asterisk">*</span>
     </label>
     <div :class="styles.control.wrapper">
       <slot></slot>
@@ -13,7 +17,7 @@
 </template>
 
 <script lang="ts">
-import { isDescriptionHidden, computeLabel } from '@jsonforms/core';
+import { isDescriptionHidden } from '@jsonforms/core';
 import { defineComponent, PropType } from 'vue';
 import { Styles } from '../styles';
 import { Options } from '../util';
@@ -74,16 +78,9 @@ export default defineComponent({
         !!this.appliedOptions?.showUnfocusedDescription
       );
     },
-    computedLabel(): string {
-      return computeLabel(
-        this.label,
-        this.required,
-        true
-      );
-    },
-    showAsterisk():  boolean {
+    showAsterisk(): boolean {
       return this.required && !this.appliedOptions?.hideRequiredAsterisk;
-    }
+    },
   },
 });
 </script>

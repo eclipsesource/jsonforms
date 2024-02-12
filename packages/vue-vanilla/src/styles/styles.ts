@@ -26,6 +26,7 @@ export interface Styles {
     select?: string;
     option?: string;
     asterisk?: string;
+    required?: string;
   };
   dialog: {
     root?: string;
