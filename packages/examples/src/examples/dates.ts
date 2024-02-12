@@ -133,7 +133,7 @@ export const data = {
     datetime: new Date().toISOString(),
   },
   uiSchemaBased: {
-    date: new Date().toISOString().substr(0, 10),
+    date: '2024-01',
     time: '13:37:00',
     datetime: '1999/12/11 10:05 am',
   },

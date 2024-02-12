@@ -48,7 +48,6 @@ import { Actions, ControlElement, JsonSchema } from '@jsonforms/core';
 import { DateControlRenderer, DateControlRendererTester } from '../src';
 import { JsonFormsAngularService } from '@jsonforms/angular';
 import { createTesterContext } from './util';
-import { DatePipe } from '@angular/common';
 
 const data = { foo: '2018-01-01' };
 const schema: JsonSchema = {
@@ -80,7 +79,7 @@ const imports = [
   NoopAnimationsModule,
   ReactiveFormsModule,
 ];
-const providers = [JsonFormsAngularService, DatePipe];
+const providers = [JsonFormsAngularService];
 const componentUT: any = DateControlRenderer;
 const errorTest: ErrorTestExpectation = {
   errorInstance: MatError,
@@ -113,7 +112,9 @@ describe('Date control Base Tests', () => {
     );
     component.ngOnInit();
     fixture.detectChanges();
-    expect(component.data).toBe('2018-01-01');
+    expect(component.data.toString()).toEqual(
+      new Date('2018-01-01T00:00').toString()
+    );
     // auto? shown with US layout
     expect(inputElement.value).toBe('1/1/2018');
     expect(inputElement.disabled).toBe(false);
@@ -133,7 +134,9 @@ describe('Date control Base Tests', () => {
       Actions.update('foo', () => '2018-03-03')
     );
     fixture.detectChanges();
-    expect(component.data).toBe('2018-03-03');
+    expect(component.data.toString()).toEqual(
+      new Date('2018-03-03T00:00').toString()
+    );
     expect(inputElement.value).toBe('3/3/2018');
   });
   it('should update with undefined value', () => {
@@ -148,7 +151,7 @@ describe('Date control Base Tests', () => {
       Actions.update('foo', () => undefined)
     );
     fixture.detectChanges();
-    expect(component.data).toBe(undefined);
+    expect(component.data).toBe(null);
     expect(inputElement.value).toBe('');
   });
   it('should update with null value', () => {
@@ -181,8 +184,10 @@ describe('Date control Base Tests', () => {
       Actions.update('bar', () => '2018-03-03')
     );
     fixture.detectChanges();
-    expect(component.data).toBe('2018-01-01');
-    expect(inputElement.value).toBe('1/1/2018');
+    expect(component.data.toString()).toEqual(
+      new Date('2018-01-01T00:00').toString()
+    );
+    expect(inputElement.value).toEqual('1/1/2018');
   });
   // store needed as we evaluate the calculated enabled value to disable/enable the control
   it('can be disabled', () => {

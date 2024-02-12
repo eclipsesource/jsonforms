@@ -23,7 +23,9 @@
   THE SOFTWARE.
 */
 
+import { Injectable } from '@angular/core';
 import { NativeDateAdapter } from '@angular/material/core';
+import { defaultDateFormat } from '@jsonforms/core';
 import dayjs from 'dayjs';
 import customParsing from 'dayjs/plugin/customParseFormat';
 
@@ -31,19 +33,31 @@ import customParsing from 'dayjs/plugin/customParseFormat';
 dayjs.extend(customParsing);
 
 /**
- * date adapter for dayjs to parse and format dates 
+ * date adapter for dayjs to parse and format dates
  */
+@Injectable()
 export class DayJsDateAdapter extends NativeDateAdapter {
+  saveFormat: string = defaultDateFormat;
+
+  setSaveFormat(format: string) {
+    this.saveFormat = format;
+  }
+
   /**
-  * parses a given user input string in the YYYY-MM-DD format into a date object
-  * @param value date string to be parsed (YYYY-MM-DD)
-  * @returns date object or null if parsing failed
-  */
-  parse(value: any): Date | null {
+   * parses a given data prop string in the save-format into a date object
+   * @param value date string to be parsed
+   * @returns date object or null if parsing failed
+   */
+  parseSaveFormat(value: string): Date | null {
+    return this.parse(value, this.saveFormat);
+  }
+
+  parse(value: string, format: string): Date | null {
     if (!value) {
       return null;
-    }    
-    const date = dayjs(value, 'YYYY-MM-DD', true);    
+    }
+    const date = dayjs(value, format);
+
     if (date.isValid()) {
       return date.toDate();
     } else {
@@ -51,12 +65,24 @@ export class DayJsDateAdapter extends NativeDateAdapter {
     }
   }
 
+  toSaveFormat(value: Date) {
+    if (!value) {
+      return undefined;
+    }
+    const date = dayjs(value);
+    if (date.isValid()) {
+      return date.format(this.saveFormat);
+    } else {
+      return undefined;
+    }
+  }
+
   /**
-  * transforms the date to a string representation for display
-  * @param date date to be formatted
-  * @param displayFormat format to be used for formatting the date e.g. YYYY-MM-DD
-  * @returns string representation of the date
-  */
+   * transforms the date to a string representation for display
+   * @param date date to be formatted
+   * @param displayFormat format to be used for formatting the date e.g. YYYY-MM-DD
+   * @returns string representation of the date
+   */
   format(date: Date, displayFormat: string): string {
     return dayjs(date).format(displayFormat);
   }
@@ -72,5 +98,4 @@ export class DayJsDateAdapter extends NativeDateAdapter {
       return null;
     }
   }
-
 }

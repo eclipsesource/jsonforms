@@ -5,7 +5,6 @@
     "declarationMap": true,
     "inlineSources": true,
     "sourceMap": true,
-    "target": "es6"
   },
   "exclude": ["node_modules"],
   "files": ["src/index.ts"],

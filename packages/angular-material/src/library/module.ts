@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -35,6 +35,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
+import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSliderModule } from '@angular/material/slider';
@@ -42,11 +43,6 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import {
-  DateAdapter,
-  MatNativeDateModule,
-  MAT_DATE_FORMATS,
-} from '@angular/material/core';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { JsonFormsModule } from '@jsonforms/angular';
 import { AutocompleteControlRenderer } from './controls/autocomplete.renderer';
@@ -68,7 +64,6 @@ import { HorizontalLayoutRenderer } from './layouts/horizontal-layout.renderer';
 import { VerticalLayoutRenderer } from './layouts/vertical-layout.renderer';
 import { ArrayLayoutRenderer } from './layouts/array-layout.renderer';
 import { LayoutChildrenRenderPropsPipe } from './layouts';
-import { DayJsDateAdapter } from './util/dayjs-date-adapter';
 
 @NgModule({
   imports: [
@@ -137,25 +132,6 @@ import { DayJsDateAdapter } from './util/dayjs-date-adapter';
     MatAutocompleteModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  providers: [
-    {
-      provide: DateAdapter,
-      useClass: DayJsDateAdapter,
-    },
-    {
-      provide: MAT_DATE_FORMATS,
-      useValue: {
-        parse: {
-          dateInput: 'YYYY-MM-DD',
-        },
-        display: {
-          dateInput: 'YYYY-MM-DD',
-          monthYearLabel: 'YYYY-MM',
-          dateA11yLabel: 'YYYY-MM-DD',
-          monthYearA11yLabel: 'YYYY-MM',
-        },
-      },
-    },
-  ],
+  providers: [],
 })
 export class JsonFormsAngularMaterialModule {}
