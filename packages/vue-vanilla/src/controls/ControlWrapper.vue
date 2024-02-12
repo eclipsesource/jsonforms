@@ -1,5 +1,13 @@
 <template>
-  <div v-if="visible" :id="id" :class="styles.control.root">
+  <component
+    :is="customControlWrapper.component"
+    v-bind="customControlWrapper.props"
+    v-if="visible && customControlWrapper && customControlWrapper.component"
+  >
+    <slot></slot>
+  </component>
+
+  <div v-else-if="visible" :id="id" :class="styles.control.root">
     <label :for="id + '-input'" :class="styles.control.label">
       {{ computedLabel }}
     </label>
@@ -14,9 +22,9 @@
 
 <script lang="ts">
 import { isDescriptionHidden, computeLabel } from '@jsonforms/core';
-import { defineComponent, PropType } from 'vue';
+import { defineComponent, inject, PropType } from 'vue';
 import { Styles } from '../styles';
-import { Options } from '../util';
+import { type CustomControllWrapper, Options } from '../util';
 
 export default defineComponent({
   name: 'ControlWrapper',
@@ -64,6 +72,17 @@ export default defineComponent({
       required: true,
       type: Object as PropType<Styles>,
     },
+  },
+  setup(props: any) {
+    const customControlWrapper = inject<CustomControllWrapper | undefined>(
+      'custom-control-wrapper',
+      undefined
+    );
+    if (customControlWrapper?.component) {
+      customControlWrapper.props = { ...props, ...customControlWrapper?.props };
+    }
+
+    return { customControlWrapper };
   },
   computed: {
     showDescription(): boolean {
