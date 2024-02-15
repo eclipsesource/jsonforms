@@ -1,30 +1,22 @@
 <template>
   <div :class="styles.categorization.root">
-    <div
-      :class="[
-        isStepper
-          ? styles.categorization.stepper
-          : styles.categorization.category,
-      ]"
-    >
+    <div :class="styles.categorization.stepper">
       <template v-for="(item, index) in categories" :key="`tab-${index}`">
         <div @click="selected = index">
           <button
             :class="[selected === index ? styles.categorization.selected : '']"
             :disabled="!item.isEnabled"
           >
-            <span
-              v-if="isStepper"
-              :class="styles.categorization.stepperBadge"
-              >{{ index + 1 }}</span
-            >
+            <span :class="styles.categorization.stepperBadge">{{
+              index + 1
+            }}</span>
 
             <label>{{ item.label }}</label>
           </button>
         </div>
 
         <hr
-          v-if="isStepper && index !== categories.length - 1"
+          v-if="index !== categories.length - 1"
           :class="styles.categorization.stepperLine"
         />
       </template>
@@ -75,13 +67,13 @@ import {
   isEnabled,
   and,
   categorizationHasCategory,
-  uiTypeIs,
   deriveLabelForUISchemaElement,
+  optionIs,
+  isCategorization,
 } from '@jsonforms/core';
 import type {
   JsonFormsRendererRegistryEntry,
   Layout,
-  Category,
   Categorization,
   UISchemaElement,
 } from '@jsonforms/core';
@@ -91,10 +83,10 @@ import {
   useJsonFormsLayout,
   type RendererProps,
 } from '@jsonforms/vue';
-import { useTranslator, useVanillaLayout } from '../util';
+import { type CategoryItem, useTranslator, useVanillaLayout } from '../util';
 
 const layoutRenderer = defineComponent({
-  name: 'CategorizationRenderer',
+  name: 'CategorizationStepperRenderer',
   components: {
     DispatchRenderer,
   },
@@ -103,13 +95,10 @@ const layoutRenderer = defineComponent({
   },
   setup(props: RendererProps<Layout>) {
     const input = useVanillaLayout(useJsonFormsLayout(props));
-    const isStepper = 'stepper' === input.appliedOptions?.value.variant;
-    const showNavButtons =
-      isStepper && !!input.appliedOptions?.value.showNavButtons;
+    const showNavButtons = !!input.appliedOptions?.value.showNavButtons;
 
     return {
       ...input,
-      isStepper,
       showNavButtons,
       ajv: createAjv(),
       t: useTranslator(),
@@ -125,22 +114,16 @@ const layoutRenderer = defineComponent({
     currentUischema(): UISchemaElement {
       return this.categories[this.selected].element;
     },
-    categories(): any {
+    categories(): CategoryItem[] {
+      const { data, path } = this.layout;
       return (this.layout.uischema as Categorization).elements
-        .filter((category: Category | Categorization) =>
-          isVisible(category, this.layout.data, this.layout.path, this.ajv)
-        )
-        .map((category: Category | Categorization) => {
+        .filter((category) => isVisible(category, data, path, this.ajv))
+        .map((category) => {
           return {
             element: category,
-            isEnabled: isEnabled(
-              category,
-              this.layout.data,
-              this.layout.path,
-              this.ajv
-            ),
+            isEnabled: isEnabled(category, data, path, this.ajv),
             label: deriveLabelForUISchemaElement(category, this.t),
-          };
+          } as CategoryItem;
         });
     },
   },
@@ -150,8 +133,12 @@ export default layoutRenderer;
 export const entry: JsonFormsRendererRegistryEntry = {
   renderer: layoutRenderer,
   tester: rankWith(
-    2,
-    and(uiTypeIs('Categorization'), categorizationHasCategory)
+    3,
+    and(
+      isCategorization,
+      categorizationHasCategory,
+      optionIs('variant', 'stepper')
+    )
   ),
 };
 </script>
