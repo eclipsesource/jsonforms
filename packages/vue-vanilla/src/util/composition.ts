@@ -12,6 +12,35 @@ import {
 /**
  * Adds styles, isFocused, appliedOptions and onChange
  */
+export const useVanillaCell = <I extends { cell: any; handleChange: any }>(
+  input: I,
+  adaptTarget: (target: any) => any = (v) => v.value
+) => {
+  const appliedOptions = computed(() =>
+    merge(
+      {},
+      cloneDeep(input.cell.value.config),
+      cloneDeep(input.cell.value.uischema.options)
+    )
+  );
+
+  const isFocused = ref(false);
+  const onChange = (event: Event) => {
+    input.handleChange(input.cell.value.path, adaptTarget(event.target));
+  };
+
+  return {
+    ...input,
+    styles: useStyles(input.cell.value.uischema),
+    isFocused,
+    appliedOptions,
+    onChange,
+  };
+};
+
+/**
+ * Adds styles, isFocused, appliedOptions and onChange
+ */
 export const useVanillaControl = <
   I extends { control: any; handleChange: any }
 >(

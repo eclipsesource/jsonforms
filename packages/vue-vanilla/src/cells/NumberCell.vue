@@ -1,11 +1,11 @@
 <template>
   <input
-    :id="control.id + '-input'"
+    :id="cell.id + '-input'"
     type="number"
     :step="step"
     :class="styles.control.input"
-    :value="control.data"
-    :disabled="!control.enabled"
+    :value="cell.data"
+    :disabled="!cell.enabled"
     :autofocus="appliedOptions.focus"
     :placeholder="appliedOptions.placeholder"
     @change="onChange"
@@ -16,21 +16,20 @@
 
 <script setup lang="ts">
 import {
-  ControlElement,
+  CellProps,
   isNumberControl,
   type RankedTester,
   rankWith,
 } from '@jsonforms/core';
-import { rendererProps, useJsonFormsControl } from '@jsonforms/vue';
-import { useVanillaControl } from '../util';
+import { useJsonFormsCell } from '@jsonforms/vue';
+import { useVanillaCell } from '../util';
 import { computed } from 'vue';
 
-const props = defineProps(rendererProps<ControlElement>());
-
-const input = useVanillaControl(useJsonFormsControl(props), (target) =>
+const props = defineProps<CellProps>();
+const input = useVanillaCell(useJsonFormsCell(props), (target) =>
   target.value === '' ? undefined : Number(target.value)
 );
-const { styles, control, appliedOptions, onChange, isFocused } = input;
+const { styles, cell, appliedOptions, onChange, isFocused } = input;
 
 const step = computed(() => {
   const options: any = appliedOptions;
