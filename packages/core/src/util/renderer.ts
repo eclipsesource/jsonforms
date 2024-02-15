@@ -88,19 +88,13 @@ import any from 'lodash/fp/any';
 import all from 'lodash/fp/all';
 
 const dataPathToJsonPointer = (dataPath: string): string => {
-  // Split the path into parts
   const parts = dataPath.split('.');
-
-  // Initialize the JSON Pointer with a hash symbol
   let jsonPointer = '#';
 
-  // Iterate over the parts to build the JSON Pointer
   parts.forEach((part) => {
     if (part.match(/^\d+$/)) {
-      // Check if the part is a numeric index, indicating an array
       jsonPointer += '/items';
     } else {
-      // For non-numeric parts, prefix with "/properties"
       jsonPointer += `/properties/${part}`;
     }
   });
