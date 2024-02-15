@@ -1,10 +1,9 @@
 <template>
   <input
     :id="cell.id + '-input'"
-    type="number"
-    :step="1"
+    v-model="dataTime"
+    type="datetime-local"
     :class="styles.control.input"
-    :value="cell.data"
     :disabled="!cell.enabled"
     :autofocus="appliedOptions.focus"
     :placeholder="appliedOptions.placeholder"
@@ -15,19 +14,31 @@
 </template>
 
 <script setup lang="ts">
-import type { CellProps, RankedTester } from '@jsonforms/core';
-import { isIntegerControl, rankWith } from '@jsonforms/core';
+import { ref, watch } from 'vue';
 import { useJsonFormsCell } from '@jsonforms/vue';
+import type { CellProps, RankedTester } from '@jsonforms/core';
+import { isDateTimeControl, rankWith } from '@jsonforms/core';
 import { useVanillaCell } from '../util';
 
 const props = defineProps<CellProps>();
 
 const input = useVanillaCell(useJsonFormsCell(props), (target) =>
-  target.value === '' ? undefined : parseInt(target.value, 10)
+  '' !== target.value ? toISO(target.value) : undefined
 );
 const { styles, cell, appliedOptions, onChange, isFocused } = input;
 
+const fromISO = (str: string | undefined) => str?.slice(0, 16);
+const toISO = (str: string) => str + ':00.000Z';
+
+const dataTime = ref();
+const setDateTime = (str: string | undefined) => {
+  dataTime.value = fromISO(str);
+};
+
+setDateTime(props.data.value);
+watch(() => props.data, setDateTime);
+
 defineOptions({
-  tester: rankWith(1, isIntegerControl) as RankedTester,
+  tester: rankWith(2, isDateTimeControl) as RankedTester,
 });
 </script>

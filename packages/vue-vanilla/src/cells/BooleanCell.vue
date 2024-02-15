@@ -1,10 +1,9 @@
 <template>
   <input
     :id="cell.id + '-input'"
-    type="number"
-    :step="1"
+    type="checkbox"
     :class="styles.control.input"
-    :value="cell.data"
+    :checked="!!cell.data"
     :disabled="!cell.enabled"
     :autofocus="appliedOptions.focus"
     :placeholder="appliedOptions.placeholder"
@@ -16,18 +15,19 @@
 
 <script setup lang="ts">
 import type { CellProps, RankedTester } from '@jsonforms/core';
-import { isIntegerControl, rankWith } from '@jsonforms/core';
+import { isBooleanControl, rankWith } from '@jsonforms/core';
 import { useJsonFormsCell } from '@jsonforms/vue';
 import { useVanillaCell } from '../util';
 
 const props = defineProps<CellProps>();
 
-const input = useVanillaCell(useJsonFormsCell(props), (target) =>
-  target.value === '' ? undefined : parseInt(target.value, 10)
+const input = useVanillaCell(
+  useJsonFormsCell(props),
+  (target) => target.checked
 );
 const { styles, cell, appliedOptions, onChange, isFocused } = input;
 
 defineOptions({
-  tester: rankWith(1, isIntegerControl) as RankedTester,
+  tester: rankWith(1, isBooleanControl) as RankedTester,
 });
 </script>

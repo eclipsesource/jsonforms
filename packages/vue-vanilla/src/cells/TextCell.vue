@@ -13,12 +13,8 @@
 </template>
 
 <script setup lang="ts">
-import {
-  CellProps,
-  isStringControl,
-  type RankedTester,
-  rankWith,
-} from '@jsonforms/core';
+import type { CellProps, RankedTester } from '@jsonforms/core';
+import { isStringControl, rankWith } from '@jsonforms/core';
 import { useJsonFormsCell } from '@jsonforms/vue';
 import { useVanillaCell } from '../util';
 

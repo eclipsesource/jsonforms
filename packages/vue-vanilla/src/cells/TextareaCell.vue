@@ -1,9 +1,7 @@
 <template>
-  <input
+  <textarea
     :id="cell.id + '-input'"
-    type="number"
-    :step="1"
-    :class="styles.control.input"
+    :class="styles.control.textarea"
     :value="cell.data"
     :disabled="!cell.enabled"
     :autofocus="appliedOptions.focus"
@@ -15,19 +13,25 @@
 </template>
 
 <script setup lang="ts">
-import type { CellProps, RankedTester } from '@jsonforms/core';
-import { isIntegerControl, rankWith } from '@jsonforms/core';
 import { useJsonFormsCell } from '@jsonforms/vue';
+import type { CellProps, RankedTester } from '@jsonforms/core';
+import {
+  and,
+  isMultiLineControl,
+  isStringControl,
+  rankWith,
+} from '@jsonforms/core';
 import { useVanillaCell } from '../util';
 
 const props = defineProps<CellProps>();
 
-const input = useVanillaCell(useJsonFormsCell(props), (target) =>
-  target.value === '' ? undefined : parseInt(target.value, 10)
+const input = useVanillaCell(
+  useJsonFormsCell(props),
+  (target) => target.value || undefined
 );
 const { styles, cell, appliedOptions, onChange, isFocused } = input;
 
 defineOptions({
-  tester: rankWith(1, isIntegerControl) as RankedTester,
+  tester: rankWith(2, and(isStringControl, isMultiLineControl)) as RankedTester,
 });
 </script>

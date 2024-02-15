@@ -15,17 +15,14 @@
 </template>
 
 <script setup lang="ts">
-import {
-  CellProps,
-  isNumberControl,
-  type RankedTester,
-  rankWith,
-} from '@jsonforms/core';
+import { computed } from 'vue';
+import type { CellProps, RankedTester } from '@jsonforms/core';
+import { isNumberControl, rankWith } from '@jsonforms/core';
 import { useJsonFormsCell } from '@jsonforms/vue';
 import { useVanillaCell } from '../util';
-import { computed } from 'vue';
 
 const props = defineProps<CellProps>();
+
 const input = useVanillaCell(useJsonFormsCell(props), (target) =>
   target.value === '' ? undefined : Number(target.value)
 );

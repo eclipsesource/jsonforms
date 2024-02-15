@@ -1,8 +1,7 @@
 <template>
   <input
     :id="cell.id + '-input'"
-    type="number"
-    :step="1"
+    type="date"
     :class="styles.control.input"
     :value="cell.data"
     :disabled="!cell.enabled"
@@ -15,19 +14,20 @@
 </template>
 
 <script setup lang="ts">
-import type { CellProps, RankedTester } from '@jsonforms/core';
-import { isIntegerControl, rankWith } from '@jsonforms/core';
 import { useJsonFormsCell } from '@jsonforms/vue';
+import type { CellProps, RankedTester } from '@jsonforms/core';
+import { isDateControl, rankWith } from '@jsonforms/core';
 import { useVanillaCell } from '../util';
 
 const props = defineProps<CellProps>();
 
-const input = useVanillaCell(useJsonFormsCell(props), (target) =>
-  target.value === '' ? undefined : parseInt(target.value, 10)
+const input = useVanillaCell(
+  useJsonFormsCell(props),
+  (target) => target.value || undefined
 );
 const { styles, cell, appliedOptions, onChange, isFocused } = input;
 
 defineOptions({
-  tester: rankWith(1, isIntegerControl) as RankedTester,
+  tester: rankWith(2, isDateControl) as RankedTester,
 });
 </script>
