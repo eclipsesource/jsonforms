@@ -46,17 +46,17 @@
         :class="styles.categorization.stepperButtonNext"
         @click="selected = selected - 1"
       >
-        <button :disabled="!categories[selected - 1].value.visible">
+        <button :disabled="!visibleCategories[selected - 1].value.enabled">
           {{ 'back' }}
         </button>
       </div>
 
       <div
-        v-if="selected + 1 <= categories.length - 1"
+        v-if="selected + 1 <= visibleCategories.length - 1"
         :class="styles.categorization.stepperButtonNext"
         @click="selected = selected + 1"
       >
-        <button :disabled="!categories[selected + 1].value.visible">
+        <button :disabled="!visibleCategories[selected + 1].value.enabled">
           {{ 'next' }}
         </button>
       </div>
