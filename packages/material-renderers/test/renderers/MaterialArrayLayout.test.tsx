@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import './MatchMediaMock';
-import {ControlElement, JsonSchema7} from '@jsonforms/core';
+import { ControlElement, JsonSchema7 } from '@jsonforms/core';
 import * as React from 'react';
 
 import { materialRenderers } from '../../src';
@@ -617,18 +617,16 @@ describe('Material array layout', () => {
     const translate = () => 'Translated';
     const core = initCore(schema, uischema, emptyData);
     wrapper = mount(
-        <JsonFormsStateProvider
-            initState={{ renderers: materialRenderers, core, i18n: { translate } }}
-        >
-          <MaterialArrayLayout
-              schema={schema}
-              uischema={uischemaOptions.inline}
-          />
-        </JsonFormsStateProvider>
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core, i18n: { translate } }}
+      >
+        <MaterialArrayLayout
+          schema={schema}
+          uischema={uischemaOptions.inline}
+        />
+      </JsonFormsStateProvider>
     );
     const noDataLabel = wrapper.find('div>div>p').text();
-    expect(
-        noDataLabel.includes('Translated')
-    ).toBeTruthy();
+    expect(noDataLabel.includes('Translated')).toBeTruthy();
   });
 });
