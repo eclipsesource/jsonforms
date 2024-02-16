@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import './MatchMediaMock';
-import { ControlElement, JsonSchema7 } from '@jsonforms/core';
+import {ControlElement, JsonSchema7} from '@jsonforms/core';
 import * as React from 'react';
 
 import { materialRenderers } from '../../src';
@@ -50,6 +50,8 @@ const data = [
     message2: 'Yolo 2',
   },
 ];
+
+const emptyData = [];
 const schema: JsonSchema7 = {
   type: 'array',
   items: {
@@ -609,5 +611,24 @@ describe('Material array layout', () => {
     expect(
       wrapper.find('.MuiToolbar-root .MuiFormHelperText-root').exists()
     ).toBeFalsy();
+  });
+
+  it('should have a translation for no data', () => {
+    const translate = () => 'Translated';
+    const core = initCore(schema, uischema, emptyData);
+    wrapper = mount(
+        <JsonFormsStateProvider
+            initState={{ renderers: materialRenderers, core, i18n: { translate } }}
+        >
+          <MaterialArrayLayout
+              schema={schema}
+              uischema={uischemaOptions.inline}
+          />
+        </JsonFormsStateProvider>
+    );
+    const noDataLabel = wrapper.find('div>div>p').text();
+    expect(
+        noDataLabel.includes('Translated')
+    ).toBeTruthy();
   });
 });
