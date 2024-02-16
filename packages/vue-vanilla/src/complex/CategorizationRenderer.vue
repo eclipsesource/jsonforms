@@ -1,13 +1,16 @@
 <template>
   <div :class="styles.categorization.root">
     <div :class="styles.categorization.category">
-      <template v-for="(item, index) in categories" :key="`tab-${index}`">
-        <div @click="selected = index">
+      <template
+        v-for="(category, index) in categories"
+        :key="`category-${index}`"
+      >
+        <div v-if="category.value.visible" @click="selected = index">
           <button
             :class="[selected === index ? styles.categorization.selected : '']"
-            :disabled="!item.isEnabled"
+            :disabled="!category.value.enabled"
           >
-            <label>{{ item.label }}</label>
+            <label>{{ category.value.label }}</label>
           </button>
         </div>
       </template>
@@ -15,8 +18,9 @@
 
     <div :class="styles.categorization.panel">
       <DispatchRenderer
+        v-if="categories[selected]"
         :schema="layout.schema"
-        :uischema="currentUischema"
+        :uischema="categories[selected].value.uischema"
         :path="layout.path"
         :enabled="layout.enabled"
         :renderers="layout.renderers"
@@ -28,29 +32,19 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import type {
-  Categorization,
-  JsonFormsRendererRegistryEntry,
-  Layout,
-  UISchemaElement,
-} from '@jsonforms/core';
+import type { JsonFormsRendererRegistryEntry, Layout } from '@jsonforms/core';
 import {
   and,
   categorizationHasCategory,
-  createAjv,
-  deriveLabelForUISchemaElement,
-  isEnabled,
-  isVisible,
-  rankWith,
   isCategorization,
+  rankWith,
 } from '@jsonforms/core';
 import {
   DispatchRenderer,
   rendererProps,
   type RendererProps,
-  useJsonFormsLayout,
 } from '@jsonforms/vue';
-import { type CategoryItem, useTranslator, useVanillaLayout } from '../util';
+import { useJsonFormsCategorization, useVanillaLayout } from '../util';
 
 const layoutRenderer = defineComponent({
   name: 'CategorizationRenderer',
@@ -61,36 +55,12 @@ const layoutRenderer = defineComponent({
     ...rendererProps<Layout>(),
   },
   setup(props: RendererProps<Layout>) {
-    const input = useVanillaLayout(useJsonFormsLayout(props));
-
-    return {
-      ...input,
-      ajv: createAjv(),
-      t: useTranslator(),
-    };
+    return useVanillaLayout(useJsonFormsCategorization(props));
   },
   data() {
     return {
       selected: 0,
     };
-  },
-
-  computed: {
-    currentUischema(): UISchemaElement {
-      return this.categories[this.selected].element;
-    },
-    categories(): CategoryItem[] {
-      const { data, path } = this.layout;
-      return (this.layout.uischema as Categorization).elements
-        .filter((category) => isVisible(category, data, path, this.ajv))
-        .map((category): CategoryItem => {
-          return {
-            element: category,
-            isEnabled: isEnabled(category, data, path, this.ajv),
-            label: deriveLabelForUISchemaElement(category, this.t),
-          };
-        });
-    },
   },
 });
 
@@ -101,92 +71,5 @@ export const entry: JsonFormsRendererRegistryEntry = {
 };
 </script>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<script setup lang="ts">
+</script>

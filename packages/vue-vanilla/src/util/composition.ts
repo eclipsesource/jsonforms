@@ -1,5 +1,5 @@
 import { useStyles } from '../styles';
-import { computed, ref, inject } from 'vue';
+import { computed, ref } from 'vue';
 import merge from 'lodash/merge';
 import cloneDeep from 'lodash/cloneDeep';
 import {
@@ -7,7 +7,6 @@ import {
   findUISchema,
   getFirstPrimitiveProp,
   Resolve,
-  type JsonFormsSubStates,
 } from '@jsonforms/core';
 
 /**
@@ -137,25 +136,4 @@ export const useVanillaArrayControl = <I extends { control: any }>(
     childUiSchema,
     childLabelForIndex,
   };
-};
-
-export const useTranslator = () => {
-  const jsonforms = inject<JsonFormsSubStates>('jsonforms');
-
-  if (!jsonforms) {
-    throw new Error(
-      "'jsonforms couldn't be injected. Are you within JSON Forms?"
-    );
-  }
-
-  if (!jsonforms.i18n || !jsonforms.i18n.translate) {
-    throw new Error(
-      "'jsonforms i18n couldn't be injected. Are you within JSON Forms?"
-    );
-  }
-
-  return computed(() => {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return jsonforms.i18n!.translate!;
-  });
 };

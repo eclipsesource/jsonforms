@@ -1,22 +1,25 @@
 <template>
   <div :class="styles.categorization.root">
     <div :class="styles.categorization.stepper">
-      <template v-for="(item, index) in categories" :key="`tab-${index}`">
-        <div @click="selected = index">
+      <template
+        v-for="(category, index) in visibleCategories"
+        :key="`tab-${index}`"
+      >
+        <div v-if="category.value.visible" @click="selected = index">
           <button
             :class="[selected === index ? styles.categorization.selected : '']"
-            :disabled="!item.isEnabled"
+            :disabled="!category.value.enabled"
           >
             <span :class="styles.categorization.stepperBadge">{{
               index + 1
             }}</span>
 
-            <label>{{ item.label }}</label>
+            <label>{{ category.value.label }}</label>
           </button>
         </div>
 
         <hr
-          v-if="index !== categories.length - 1"
+          v-if="index !== visibleCategories.length - 1"
           :class="styles.categorization.stepperLine"
         />
       </template>
@@ -24,8 +27,9 @@
 
     <div :class="styles.categorization.panel">
       <DispatchRenderer
+        v-if="visibleCategories[selected]"
         :schema="layout.schema"
-        :uischema="currentUischema"
+        :uischema="visibleCategories[selected].value.uischema"
         :path="layout.path"
         :enabled="layout.enabled"
         :renderers="layout.renderers"
@@ -33,14 +37,17 @@
       />
     </div>
 
-    <footer v-if="showNavButtons" :class="styles.categorization.stepperFooter">
+    <footer
+      v-if="appliedOptions?.showNavButtons"
+      :class="styles.categorization.stepperFooter"
+    >
       <div
         v-if="selected > 0"
         :class="styles.categorization.stepperButtonNext"
         @click="selected = selected - 1"
       >
-        <button :disabled="!categories[selected - 1].isEnabled">
-          {{ t('categorizationStepperBack', 'back') }}
+        <button :disabled="!categories[selected - 1].value.visible">
+          {{ 'back' }}
         </button>
       </div>
 
@@ -49,41 +56,30 @@
         :class="styles.categorization.stepperButtonNext"
         @click="selected = selected + 1"
       >
-        <button :disabled="!categories[selected + 1].isEnabled">
-          {{ t('categorizationStepperNext', 'next') }}
+        <button :disabled="!categories[selected + 1].value.visible">
+          {{ 'next' }}
         </button>
       </div>
     </footer>
   </div>
 </template>
 
-
 <script lang="ts">
 import { defineComponent } from 'vue';
+import type { JsonFormsRendererRegistryEntry, Layout } from '@jsonforms/core';
 import {
-  isVisible,
-  rankWith,
-  createAjv,
-  isEnabled,
   and,
   categorizationHasCategory,
-  deriveLabelForUISchemaElement,
-  optionIs,
   isCategorization,
-} from '@jsonforms/core';
-import type {
-  JsonFormsRendererRegistryEntry,
-  Layout,
-  Categorization,
-  UISchemaElement,
+  optionIs,
+  rankWith,
 } from '@jsonforms/core';
 import {
   DispatchRenderer,
   rendererProps,
-  useJsonFormsLayout,
   type RendererProps,
 } from '@jsonforms/vue';
-import { type CategoryItem, useTranslator, useVanillaLayout } from '../util';
+import { useJsonFormsCategorization, useVanillaLayout } from '../util';
 
 const layoutRenderer = defineComponent({
   name: 'CategorizationStepperRenderer',
@@ -94,37 +90,16 @@ const layoutRenderer = defineComponent({
     ...rendererProps<Layout>(),
   },
   setup(props: RendererProps<Layout>) {
-    const input = useVanillaLayout(useJsonFormsLayout(props));
-    const showNavButtons = !!input.appliedOptions?.value.showNavButtons;
-
-    return {
-      ...input,
-      showNavButtons,
-      ajv: createAjv(),
-      t: useTranslator(),
-    };
+    return useVanillaLayout(useJsonFormsCategorization(props));
   },
   data() {
     return {
       selected: 0,
     };
   },
-
   computed: {
-    currentUischema(): UISchemaElement {
-      return this.categories[this.selected].element;
-    },
-    categories(): CategoryItem[] {
-      const { data, path } = this.layout;
-      return (this.layout.uischema as Categorization).elements
-        .filter((category) => isVisible(category, data, path, this.ajv))
-        .map((category) => {
-          return {
-            element: category,
-            isEnabled: isEnabled(category, data, path, this.ajv),
-            label: deriveLabelForUISchemaElement(category, this.t),
-          } as CategoryItem;
-        });
+    visibleCategories() {
+      return this.categories.filter((category) => category.value.visible);
     },
   },
 });
