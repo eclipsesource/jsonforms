@@ -3,9 +3,7 @@ import { defineComponent } from 'vue';
 import { JsonForms, JsonFormsChangeEvent } from '../../config/jsonforms';
 import { vanillaRenderers, mergeStyles, defaultStyles } from '../../src';
 import '../../vanilla.css';
-import { JsonFormsI18nState } from '@jsonforms/core';
 import { ErrorObject } from 'ajv';
-
 import { getExamples } from '../../../examples';
 import get from 'lodash/get';
 
@@ -27,14 +25,13 @@ export default defineComponent({
     };
   },
   data: function () {
-    const i18n: Partial<JsonFormsI18nState> = { locale: 'en' };
     const additionalErrors: ErrorObject[] = [];
     return {
       data: {},
       renderers: Object.freeze(vanillaRenderers),
       currentExampleName: examples[0].name,
       examples,
-      i18n,
+      i18n: examples[0].i18n,
       additionalErrors,
     };
   },
@@ -140,8 +137,7 @@ export default defineComponent({
           :schema="example.schema"
           :uischema="example.uischema"
           :renderers="renderers"
-          :config="config"
-          :i18n="i18n"
+          :i18n="example.i18n"
           :additional-errors="additionalErrors"
           @change="onChange"
         >
