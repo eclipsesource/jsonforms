@@ -31,6 +31,7 @@ import isArray from 'lodash/isArray';
 import reduce from 'lodash/reduce';
 import toPairs from 'lodash/toPairs';
 import includes from 'lodash/includes';
+import isUndefined from 'lodash/isUndefined';
 import type {
   Categorization,
   ControlElement,
@@ -213,6 +214,23 @@ export const optionIs =
 
     const options = uischema.options;
     return !isEmpty(options) && options[optionName] === optionValue;
+  };
+
+/**
+ * Checks whether the given UI schema has an option with the given
+ * name. If no options property is set, returns false.
+ *
+ * @param {string} optionName the name of the option to check
+ */
+export const hasOption =
+  (optionName: string): Tester =>
+  (uischema: UISchemaElement): boolean => {
+    if (isEmpty(uischema)) {
+      return false;
+    }
+
+    const options = uischema.options;
+    return !isEmpty(options) && !isUndefined(options[optionName]);
   };
 
 /**
