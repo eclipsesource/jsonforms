@@ -51,7 +51,7 @@ const data = [
   },
 ];
 
-const emptyData = [];
+const emptyData: any[] = [];
 const schema: JsonSchema7 = {
   type: 'array',
   items: {
