@@ -218,8 +218,7 @@ export const optionIs =
 
 /**
  * Checks whether the given UI schema has an option with the given
- * name. If no options property
- * is set, returns false.
+ * name. If no options property is set, returns false.
  *
  * @param {string} optionName the name of the option to check
  */
