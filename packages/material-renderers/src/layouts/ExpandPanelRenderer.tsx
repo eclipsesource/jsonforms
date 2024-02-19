@@ -21,6 +21,8 @@ import {
   findUISchema,
   JsonFormsRendererRegistryEntry,
   JsonSchema,
+  JsonSchema4,
+  JsonSchema7,
   moveDown,
   moveUp,
   Resolve,
@@ -31,6 +33,10 @@ import {
   createId,
   removeId,
   ArrayTranslations,
+  encode,
+  enumToEnumOptionMapper,
+  oneOfToEnumOptionMapper,
+  getI18nKeyPrefix,
 } from '@jsonforms/core';
 import {
   Accordion,
@@ -296,12 +302,36 @@ export const withContextToExpandPanelProps = (
     props,
   }: JsonFormsStateContext & ExpandPanelProps) {
     const dispatchProps = ctxDispatchToExpandPanelProps(ctx.dispatch);
-    const { childLabelProp, schema, path, index, uischemas } = props;
+    const {
+      childLabelProp,
+      schema,
+      uischema,
+      rootSchema,
+      path,
+      index,
+      uischemas,
+    } = props;
     const childPath = composePaths(path, `${index}`);
-    const childData = Resolve.data(ctx.core.data, childPath);
-    const childLabel = childLabelProp
-      ? get(childData, childLabelProp, '')
-      : get(childData, getFirstPrimitiveProp(schema), '');
+
+    const childLabel = useMemo(() => {
+      return computeChildLabel(
+        ctx.core.data,
+        childPath,
+        childLabelProp,
+        schema,
+        rootSchema,
+        ctx.i18n.translate,
+        uischema
+      );
+    }, [
+      ctx.core.data,
+      childPath,
+      childLabelProp,
+      schema,
+      rootSchema,
+      ctx.i18n.translate,
+      uischema,
+    ]);
 
     return (
       <Component
@@ -313,6 +343,65 @@ export const withContextToExpandPanelProps = (
       />
     );
   };
+
+function hasEnumField(schema: JsonSchema4 | JsonSchema7) {
+  return schema && (schema.enum !== undefined || schema.const !== undefined);
+}
+
+function hasOneOfField(schema: JsonSchema4 | JsonSchema7) {
+  return schema && schema.oneOf !== undefined;
+}
+
+function computeChildLabel(
+  data: any,
+  childPath: string,
+  childLabelProp: any,
+  schema: any,
+  rootSchema: any,
+  translateFct: any,
+  uiSchema: any
+) {
+  const childData = Resolve.data(data, childPath);
+
+  if (childLabelProp) {
+    const currentValue = get(childData, childLabelProp, '');
+
+    const childSchema = Resolve.schema(
+      schema,
+      `#/properties/${encode(childLabelProp)}`,
+      rootSchema
+    );
+
+    if (hasEnumField(childSchema)) {
+      const enumChildLabel = enumToEnumOptionMapper(
+        currentValue,
+        translateFct,
+        getI18nKeyPrefix(schema, uiSchema, childPath)
+      );
+
+      return enumChildLabel.label;
+    } else if (hasOneOfField(childSchema)) {
+      const oneOfArray = childSchema.oneOf as (JsonSchema4 | JsonSchema7)[];
+      const oneOfSchema = oneOfArray.find(
+        (e: JsonSchema4 | JsonSchema7) => e.const === currentValue
+      );
+
+      if (oneOfSchema === undefined) return currentValue;
+
+      const oneOfChildLabel = oneOfToEnumOptionMapper(
+        oneOfSchema,
+        translateFct,
+        getI18nKeyPrefix(schema, uiSchema, childPath)
+      );
+
+      return oneOfChildLabel.label;
+    } else {
+      return currentValue;
+    }
+  } else {
+    return get(childData, getFirstPrimitiveProp(schema), '');
+  }
+}
 
 export const withJsonFormsExpandPanelProps = (
   Component: ComponentType<ExpandPanelProps>

@@ -52,6 +52,17 @@ const data = [
 ];
 
 const emptyData: any[] = [];
+
+const enumOrOneOfData = [
+  {
+    message: 'El Barto was here',
+    messageType: 'MSG_TYPE_1',
+  },
+  {
+    message: 'Yolo',
+  },
+];
+
 const schema: JsonSchema7 = {
   type: 'array',
   items: {
@@ -63,6 +74,49 @@ const schema: JsonSchema7 = {
       },
       done: {
         type: 'boolean',
+      },
+    },
+  },
+};
+
+const enumSchema: JsonSchema7 = {
+  type: 'array',
+  items: {
+    type: 'object',
+    properties: {
+      message: {
+        type: 'string',
+        maxLength: 3,
+      },
+      messageType: {
+        type: 'string',
+        enum: ['MSG_TYPE_1', 'MSG_TYPE_2'],
+      },
+    },
+  },
+};
+
+const oneOfSchema = {
+  type: 'array',
+  items: {
+    type: 'object',
+    properties: {
+      message: {
+        type: 'string',
+        maxLength: 3,
+      },
+      messageType: {
+        type: 'string',
+        oneOf: [
+          {
+            const: 'MSG_TYPE_1',
+            title: 'First message type',
+          },
+          {
+            const: 'MSG_TYPE_2',
+            title: 'Second message type',
+          },
+        ],
       },
     },
   },
@@ -137,6 +191,21 @@ const uischemaWithChildLabelProp: ControlElement = {
   scope: '#',
   options: {
     elementLabelProp: 'message2',
+  },
+};
+
+const uiSchemaWithEnumOrOneOfChildLabelProp: ControlElement = {
+  type: 'Control',
+  scope: '#',
+  options: {
+    elementLabelProp: 'messageType',
+    detail: {
+      type: 'HorizontalLayout',
+      elements: [
+        { type: 'Control', scope: '#/properties/message' },
+        { type: 'Control', scope: '#/properties/messageType' },
+      ],
+    },
   },
 };
 
@@ -628,5 +697,87 @@ describe('Material array layout', () => {
     );
     const noDataLabel = wrapper.find('div>div>p').text();
     expect(noDataLabel.includes('Translated')).toBeTruthy();
+  });
+
+  it('should render configured enum child label property as translated label', () => {
+    const core = initCore(
+      enumSchema,
+      uiSchemaWithEnumOrOneOfChildLabelProp,
+      enumOrOneOfData
+    );
+    const translate = () => 'Translated';
+
+    // Enum Case - No translation
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
+        <MaterialArrayLayout
+          schema={enumSchema}
+          uischema={uiSchemaWithEnumOrOneOfChildLabelProp}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
+
+    expect(getChildLabel(wrapper, 0)).toBe('MSG_TYPE_1');
+
+    // Enum Case - Translation
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core, i18n: { translate } }}
+      >
+        <MaterialArrayLayout
+          schema={enumSchema}
+          uischema={uiSchemaWithEnumOrOneOfChildLabelProp}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
+
+    expect(getChildLabel(wrapper, 0)).toBe('Translated');
+  });
+
+  it('should render configured oneOf child label property as translated label', () => {
+    const core = initCore(
+      oneOfSchema,
+      uiSchemaWithEnumOrOneOfChildLabelProp,
+      enumOrOneOfData
+    );
+    const translate = () => 'Translated';
+
+    // OneOf - No translation
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
+        <MaterialArrayLayout
+          schema={oneOfSchema}
+          uischema={uiSchemaWithEnumOrOneOfChildLabelProp}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
+
+    expect(getChildLabel(wrapper, 0)).toBe('First message type');
+
+    // OneOf Case - Translation
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core, i18n: { translate } }}
+      >
+        <MaterialArrayLayout
+          schema={oneOfSchema}
+          uischema={uiSchemaWithEnumOrOneOfChildLabelProp}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
+
+    expect(getChildLabel(wrapper, 0)).toBe('Translated');
   });
 });
