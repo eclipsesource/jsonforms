@@ -42,9 +42,10 @@ import {
 import {
   DispatchRenderer,
   rendererProps,
+  useJsonFormsCategorization,
   type RendererProps,
 } from '@jsonforms/vue';
-import { useJsonFormsCategorization, useVanillaLayout } from '../util';
+import { useVanillaLayout } from '../util';
 
 const layoutRenderer = defineComponent({
   name: 'CategorizationRenderer',
@@ -69,7 +70,4 @@ export const entry: JsonFormsRendererRegistryEntry = {
   renderer: layoutRenderer,
   tester: rankWith(2, and(isCategorization, categorizationHasCategory)),
 };
-</script>
-
-<script setup lang="ts">
 </script>

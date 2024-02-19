@@ -43,7 +43,7 @@
     >
       <div
         v-if="selected > 0"
-        :class="styles.categorization.stepperButtonNext"
+        :class="styles.categorization.stepperButtonBack"
         @click="selected = selected - 1"
       >
         <button :disabled="!visibleCategories[selected - 1].value.enabled">
@@ -52,7 +52,7 @@
       </div>
 
       <div
-        v-if="selected + 1 <= visibleCategories.length - 1"
+        v-if="selected + 1 < visibleCategories.length"
         :class="styles.categorization.stepperButtonNext"
         @click="selected = selected + 1"
       >
@@ -77,9 +77,10 @@ import {
 import {
   DispatchRenderer,
   rendererProps,
+  useJsonFormsCategorization,
   type RendererProps,
 } from '@jsonforms/vue';
-import { useJsonFormsCategorization, useVanillaLayout } from '../util';
+import { useVanillaLayout } from '../util';
 
 const layoutRenderer = defineComponent({
   name: 'CategorizationStepperRenderer',

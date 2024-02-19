@@ -84,8 +84,8 @@
 }
 .categorization .categorization-stepper-line {
   flex-grow: 1;
-  height:1px;
-  border-width:0 0 1px 0;
+  height: 1px;
+  border-width: 0 0 1px 0;
 }
 .categorization .categorization-stepper-footer {
   display: flex;
