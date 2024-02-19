@@ -145,7 +145,7 @@ const checkPropertyCondition = (
     );
   }
 
-  if (has(propertiesCondition[property], 'properties')) {
+  if (has(propertiesCondition[property], 'properties') && has(data, property)) {
     const nextPropertyConditions = get(
       propertiesCondition[property],
       'properties'
@@ -245,7 +245,6 @@ const extractRequired = (
       (has(currentSchema, 'properties') &&
         has(get(currentSchema, 'properties'), prevSegments[i])))
   ) {
-    // TODO: Verify this always works in trees with `items`
     if (has(currentSchema, 'properties')) {
       currentSchema = get(currentSchema, 'properties');
     }
