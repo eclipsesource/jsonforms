@@ -112,7 +112,7 @@ const MaterialArrayLayoutComponent = (props: ArrayLayoutProps) => {
             );
           })
         ) : (
-          <p>No data</p>
+          <p>{translations.noDataMessage}</p>
         )}
       </div>
     </div>
