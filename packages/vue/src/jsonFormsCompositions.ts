@@ -476,7 +476,6 @@ export const useJsonFormsDispatchCell = (props: ControlProps) => {
   return { cell: control, ...other };
 };
 
-
 /**
  * Provides bindings for 'Categorization' elements.
  *
@@ -486,14 +485,14 @@ export const useJsonFormsCategorization = (props: LayoutProps) => {
   const { layout, ...other } = useJsonFormsLayout(props);
 
   const categories = (layout.value.uischema as Categorization).elements.map(
-      (category) => {
-        const categoryProps: LayoutProps = {
-          ...props,
-          uischema: category,
-        };
+    (category) => {
+      const categoryProps: LayoutProps = {
+        ...props,
+        uischema: category,
+      };
 
-        return useJsonFormsLayout(categoryProps).layout;
-      }
+      return useJsonFormsLayout(categoryProps).layout;
+    }
   );
 
   return { layout, categories, ...other };
