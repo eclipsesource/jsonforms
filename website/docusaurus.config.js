@@ -93,10 +93,6 @@ module.exports = {
           title: 'More',
           items: [
             {
-              label: 'Twitter',
-              href: 'https://twitter.com/JSONForms',
-            },
-            {
               label: 'EclipseSource Blog',
               href: 'https://eclipsesource.com/blogs/tag/jsonforms',
             },
@@ -180,7 +176,7 @@ module.exports = {
       },
     ],
     [
-      '@docusaurus/plugin-content-blog',
+      './plugins/custom-blog-plugin',
       {
         id: 'news',
         path: 'content/news',

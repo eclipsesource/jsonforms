@@ -2,8 +2,6 @@
 slug: jsonforms-2-4-1-beta0
 title: JSON Forms v2.4.1-beta.0
 author: JSON Forms
-author_title: Twitter
-author_url: https://twitter.com/jsonforms
 author_image_url: /img/logo.svg
 ---
 

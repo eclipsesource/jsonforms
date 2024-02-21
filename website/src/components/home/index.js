@@ -4,24 +4,24 @@ import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import useBaseUrl from '@docusaurus/useBaseUrl';
-import styles from './assets/index.module.css';
+import styles from '../../../content/pages/assets/index.module.css';
 import corePackageJson from '@jsonforms/core/package';
 
-import SchemaIcon from '../../static/img/schemaIcon.svg';
+import SchemaIcon from '../../../static/img/schemaIcon.svg';
 import FeaturesIcon from '@mui/icons-material/Report';
 import CustomizeIcon from '@mui/icons-material/Brush';
-import ArchitectureSmall from '../../static/img/architecture_small.svg';
-import AngularLogo from '../../static/img/angular-logo.svg';
-import ReactLogo from '../../static/img/react-logo.svg';
-import VueLogo from '../../static/img/vue-logo.svg';
+import ArchitectureSmall from '../../../static/img/architecture_small.svg';
+import AngularLogo from '../../../static/img/angular-logo.svg';
+import ReactLogo from '../../../static/img/react-logo.svg';
+import VueLogo from '../../../static/img/vue-logo.svg';
 
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 
-import { Demo } from '../../src/components/common/Demo';
-import schema from './assets/schema.json';
-import uischema from './assets/uischema.json';
+import { Demo } from '../common/Demo';
+import schema from '../../../content/pages/assets/schema.json';
+import uischema from '../../../content/pages/assets/uischema.json';
 
 const currentVersion = process.env.CURRENTVERSION ?? corePackageJson.version;
 const nextVersion = process.env.NEXTVERSION;
@@ -32,9 +32,12 @@ const nextVersionText =
 
 const data = { firstName: 'Max', lastName: 'Power' };
 
-function Home() {
+function Home({ recentPosts }) {
   const context = useDocusaurusContext();
   const {siteConfig = {}} = context;
+  const recentPost = recentPosts[0];
+  const { BlogPost } = recentPost;
+
   return (
     <Layout
       title={siteConfig.tagline}
@@ -107,15 +110,8 @@ function Home() {
           <section className={styles.sectionNews}>
             <Card className={styles.newsCard}>
               <CardContent>
-                We released v3.2.0 🎉. Besides various fixes and improved developer tooling, this release adds middleware support to all bindings. This makes it a breeze to hook into data updates!
-                <br/>
-                With this release, the Angular bindings and Angular Material renderer set now support Angular 16 and 17. Special thanks to <a href="https://github.com/JBBianchi">JBBianchi</a> for contributing this massive upgrade.
-                <br />
-                You can find the full changelog in the <a href="https://github.com/eclipsesource/jsonforms/releases/tag/v3.2.0">Github release</a>.
-                <br />
-                We welcome any feedback of curious users. Any questions? Check out our <a href="http://jsonforms.discourse.group">community forum</a>. See also our <a href="https://github.com/eclipsesource/jsonforms/blob/master/MIGRATION.md">migration guide</a>.
-                <br/>
-                <span style={{ display: 'block', textAlign: 'right', width: '100%'}}>24th January 2024</span>
+                <BlogPost />
+                <span style={{ display: 'block', textAlign: 'right', width: '100%'}}>{recentPost.metadata.formattedDate}</span>
               </CardContent>
             </Card>
             <Link to='/news' className={styles.newsButton}>

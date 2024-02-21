@@ -2,8 +2,6 @@
 slug: move-to-discourse
 title: Moving to Discourse
 author: JSON Forms
-author_title: Twitter
-author_url: https://twitter.com/jsonforms
 author_image_url: /img/logo.svg
 ---
 
