@@ -40,6 +40,15 @@
   filter: invert(1);
 }
 
+.versionwrapper {
+  margin-bottom: 20px;
+}
+
+.version, .nextversion {
+  height: 25px;
+  margin-bottom: 0;
+}
+
 .home h2 {
   text-align: center;
   padding-top: 20px;

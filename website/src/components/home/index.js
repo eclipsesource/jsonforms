@@ -6,6 +6,7 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import styles from '../../../content/pages/assets/index.module.css';
 import corePackageJson from '@jsonforms/core/package';
+import { currentVersion, nextVersion } from '../../../static/current-version';
 
 import SchemaIcon from '../../../static/img/schemaIcon.svg';
 import FeaturesIcon from '@mui/icons-material/Report';
@@ -23,13 +24,6 @@ import { Demo } from '../common/Demo';
 import schema from '../../../content/pages/assets/schema.json';
 import uischema from '../../../content/pages/assets/uischema.json';
 
-const currentVersion = process.env.CURRENTVERSION ?? corePackageJson.version;
-const nextVersion = process.env.NEXTVERSION;
-const nextVersionText =
-  nextVersion && nextVersion !== currentVersion
-    ? `@next: ${nextVersion}`
-    : '';
-
 const data = { firstName: 'Max', lastName: 'Power' };
 
 function Home({ recentPosts }) {
@@ -37,6 +31,14 @@ function Home({ recentPosts }) {
   const {siteConfig = {}} = context;
   const recentPost = recentPosts[0];
   const { BlogPost } = recentPost;
+
+  const currentVersionText = 
+    `Version: ${currentVersion ? currentVersion : corePackageJson.version}`;
+
+  const nextVersionText =
+    nextVersion && nextVersion !== currentVersion
+      ? `@next: ${nextVersion}`
+      : '';
 
   return (
     <Layout
@@ -49,15 +51,10 @@ function Home({ recentPosts }) {
             <img className={styles.logo} src='img/logo.svg' />
             <p className={styles.subtitle}>{siteConfig.tagline}</p>
             <p className={styles.subsubtitle}>Complex forms in the blink of an eye</p>
-            <p className={styles.version}>
-            Version: {currentVersion}
-              {nextVersionText && (
-                <>
-                  <br />
-                  {nextVersionText}
-                </>
-              )}
-            </p>
+            <div className={styles.versionwrapper}>
+              <p className={styles.version}>{currentVersionText}</p>
+              <p className={styles.nextversion}>{nextVersionText}</p>
+            </div>
             <div className={styles.buttons}>
               <Link
                 className={clsx(

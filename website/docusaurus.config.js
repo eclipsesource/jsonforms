@@ -130,7 +130,6 @@ module.exports = {
   ],
   plugins: [
     path.resolve(__dirname, './src/custom-webpack'),
-    'docusaurus2-dotenv',
     [
       '@docusaurus/plugin-content-pages',
       {
