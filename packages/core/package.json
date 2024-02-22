@@ -78,7 +78,7 @@
     "@typescript-eslint/parser": "^5.54.1",
     "ava": "~2.4.0",
     "document-register-element": "^1.14.3",
-    "eslint": "^7.32.0",
+    "eslint": "^8.56.0",
     "eslint-config-prettier": "^8.7.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier": "^4.2.1",
