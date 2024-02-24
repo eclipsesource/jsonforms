@@ -108,9 +108,9 @@ import { LayoutChildrenRenderPropsPipe } from './layouts';
     ObjectControlRenderer,
     AutocompleteControlRenderer,
     TableRenderer,
-    GetProps,
     ArrayLayoutRenderer,
     LayoutChildrenRenderPropsPipe,
+    GetProps
   ],
   exports: [
     CommonModule,
