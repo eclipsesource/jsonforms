@@ -34,6 +34,11 @@ const uischema = {
 };
 
 describe('OneOfRenderer.vue', () => {
+  it('render has a class', () => {
+    const wrapper = mountJsonForms({ variant: 'b', b: 'b' }, schema, uischema);
+    expect(wrapper.find('div.one-of').exists()).to.be.true;
+  });
+
   it('renders select label', () => {
     const wrapper = mountJsonForms({ variant: 'b', b: 'b' }, schema, uischema);
     expect(wrapper.find('label').text()).to.equal('My Object');

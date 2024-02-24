@@ -35,6 +35,7 @@ import {
   mapDispatchToMultiEnumProps,
   mapStateToLabelProps,
   LabelElement,
+  Categorization,
 } from '@jsonforms/core';
 import {
   PropType,
@@ -473,4 +474,26 @@ export const useJsonFormsDispatchCell = (props: ControlProps) => {
     mapDispatchToControlProps
   );
   return { cell: control, ...other };
+};
+
+/**
+ * Provides bindings for 'Categorization' elements.
+ *
+ * Access bindings via the provided `categories` array with reactive category objects.
+ */
+export const useJsonFormsCategorization = (props: LayoutProps) => {
+  const { layout, ...other } = useJsonFormsLayout(props);
+
+  const categories = (layout.value.uischema as Categorization).elements.map(
+    (category) => {
+      const categoryProps: LayoutProps = {
+        ...props,
+        uischema: category,
+      };
+
+      return useJsonFormsLayout(categoryProps).layout;
+    }
+  );
+
+  return { layout, categories, ...other };
 };
