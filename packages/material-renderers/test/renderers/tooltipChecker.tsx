@@ -14,7 +14,7 @@ export const checkTooltip = (
   schema: JsonSchema,
   uiSchema: ControlElement,
   wrapper: ReactWrapper<any, any>,
-  wrapperFindFunction: (
+  findTooltipWrapper: (
     wrapper: ReactWrapper<any, any>
   ) => ReactWrapper<any, any>,
   tooltipEnum: ArrayTranslationEnum,
@@ -31,7 +31,7 @@ export const checkTooltip = (
   );
 
   expect(
-    wrapperFindFunction(wrapper).find(Tooltip).filter(tooltipFilter).props()[
+    findTooltipWrapper(wrapper).find(Tooltip).filter(tooltipFilter).props()[
       'title'
     ]
   ).toBe(
@@ -44,7 +44,7 @@ export const checkTooltipTranslation = (
   schema: JsonSchema,
   uiSchema: ControlElement,
   wrapper: ReactWrapper<any, any>,
-  wrapperFindFunction: (
+  findTooltipWrapper: (
     wrapper: ReactWrapper<any, any>
   ) => ReactWrapper<any, any>,
   tooltipFilter: EnzymePropSelector | string,
@@ -62,7 +62,7 @@ export const checkTooltipTranslation = (
   );
 
   expect(
-    wrapperFindFunction(wrapper).find(Tooltip).filter(tooltipFilter).props()[
+    findTooltipWrapper(wrapper).find(Tooltip).filter(tooltipFilter).props()[
       'title'
     ]
   ).toBe('Translated');
