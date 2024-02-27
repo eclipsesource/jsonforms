@@ -23,10 +23,14 @@
   THE SOFTWARE.
 */
 import './MatchMediaMock';
-import { ControlElement, JsonSchema7 } from '@jsonforms/core';
+import {
+  ArrayTranslationEnum,
+  ControlElement,
+  JsonSchema7,
+} from '@jsonforms/core';
 import * as React from 'react';
 
-import { materialRenderers } from '../../src';
+import { ArrayLayoutToolbar, materialRenderers } from '../../src';
 import {
   MaterialArrayLayout,
   materialArrayLayoutTester,
@@ -36,6 +40,7 @@ import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { JsonForms, JsonFormsStateProvider } from '@jsonforms/react';
 import { Accordion } from '@mui/material';
 import { createTesterContext, initCore } from './util';
+import { checkTooltip, checkTooltipTranslation } from './tooltipChecker';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -628,5 +633,109 @@ describe('Material array layout', () => {
     );
     const noDataLabel = wrapper.find('div>div>p').text();
     expect(noDataLabel.includes('Translated')).toBeTruthy();
+  });
+
+  it('should have a tooltip for add button', () => {
+    wrapper = checkTooltip(
+      nestedSchema,
+      uischemaWithSortOption,
+      wrapper,
+      (wrapper) => wrapper.find(ArrayLayoutToolbar),
+      ArrayTranslationEnum.addTooltip,
+      {
+        id: 'tooltip-add',
+      },
+      data
+    );
+  });
+  it('should have a translatable tooltip for add button', () => {
+    wrapper = checkTooltipTranslation(
+      nestedSchema,
+      uischemaWithSortOption,
+      wrapper,
+      (wrapper) => wrapper.find(ArrayLayoutToolbar),
+      {
+        id: 'tooltip-add',
+      },
+      data
+    );
+  });
+
+  it('should have a tooltip for delete button', () => {
+    wrapper = checkTooltip(
+      nestedSchema,
+      uischemaWithSortOption,
+      wrapper,
+      (wrapper) => wrapper.find('Memo(ExpandPanelRendererComponent)').at(0),
+      ArrayTranslationEnum.removeTooltip,
+      {
+        id: 'tooltip-remove',
+      },
+      data
+    );
+  });
+  it('should have a translatable tooltip for delete button', () => {
+    wrapper = checkTooltipTranslation(
+      nestedSchema,
+      uischemaWithSortOption,
+      wrapper,
+      (wrapper) => wrapper.find('Memo(ExpandPanelRendererComponent)').at(0),
+      {
+        id: 'tooltip-remove',
+      },
+      data
+    );
+  });
+
+  it('should have a tooltip for up button', () => {
+    wrapper = checkTooltip(
+      nestedSchema,
+      uischemaWithSortOption,
+      wrapper,
+      (wrapper) => wrapper.find('Memo(ExpandPanelRendererComponent)').at(0),
+      ArrayTranslationEnum.up,
+      {
+        id: 'tooltip-up',
+      },
+      data
+    );
+  });
+  it('should have a translatable tooltip for up button', () => {
+    wrapper = checkTooltipTranslation(
+      nestedSchema,
+      uischemaWithSortOption,
+      wrapper,
+      (wrapper) => wrapper.find('Memo(ExpandPanelRendererComponent)').at(0),
+      {
+        id: 'tooltip-up',
+      },
+      data
+    );
+  });
+
+  it('should have a tooltip for down button', () => {
+    wrapper = checkTooltip(
+      nestedSchema,
+      uischemaWithSortOption,
+      wrapper,
+      (wrapper) => wrapper.find('Memo(ExpandPanelRendererComponent)').at(0),
+      ArrayTranslationEnum.down,
+      {
+        id: 'tooltip-down',
+      },
+      data
+    );
+  });
+  it('should have a translatable tooltip for down button', () => {
+    wrapper = checkTooltipTranslation(
+      nestedSchema,
+      uischemaWithSortOption,
+      wrapper,
+      (wrapper) => wrapper.find('Memo(ExpandPanelRendererComponent)').at(0),
+      {
+        id: 'tooltip-down',
+      },
+      data
+    );
   });
 });

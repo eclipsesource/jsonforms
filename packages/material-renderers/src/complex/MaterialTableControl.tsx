@@ -42,6 +42,7 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  Tooltip,
   Typography,
 } from '@mui/material';
 import {
@@ -319,35 +320,55 @@ const NonEmptyRowComponent = ({
             {showSortButtons ? (
               <Fragment>
                 <Grid item>
-                  <IconButton
-                    aria-label={translations.upAriaLabel}
-                    onClick={moveUp}
-                    disabled={!enableUp}
-                    size='large'
+                  <Tooltip
+                    id='tooltip-up'
+                    title={translations.up}
+                    placement='bottom'
+                    open={enableUp ? undefined : false}
                   >
-                    <ArrowUpward />
-                  </IconButton>
+                    <IconButton
+                      aria-label={translations.upAriaLabel}
+                      onClick={moveUp}
+                      disabled={!enableUp}
+                      size='large'
+                    >
+                      <ArrowUpward />
+                    </IconButton>
+                  </Tooltip>
                 </Grid>
                 <Grid item>
-                  <IconButton
-                    aria-label={translations.downAriaLabel}
-                    onClick={moveDown}
-                    disabled={!enableDown}
-                    size='large'
+                  <Tooltip
+                    id='tooltip-down'
+                    title={translations.down}
+                    placement='bottom'
+                    open={enableDown ? undefined : false}
                   >
-                    <ArrowDownward />
-                  </IconButton>
+                    <IconButton
+                      aria-label={translations.downAriaLabel}
+                      onClick={moveDown}
+                      disabled={!enableDown}
+                      size='large'
+                    >
+                      <ArrowDownward />
+                    </IconButton>
+                  </Tooltip>
                 </Grid>
               </Fragment>
             ) : null}
             <Grid item>
-              <IconButton
-                aria-label={translations.removeAriaLabel}
-                onClick={() => openDeleteDialog(childPath, rowIndex)}
-                size='large'
+              <Tooltip
+                id='tooltip-remove'
+                title={translations.removeTooltip}
+                placement='bottom'
               >
-                <DeleteIcon />
-              </IconButton>
+                <IconButton
+                  aria-label={translations.removeAriaLabel}
+                  onClick={() => openDeleteDialog(childPath, rowIndex)}
+                  size='large'
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </Tooltip>
             </Grid>
           </Grid>
         </NoBorderTableCell>

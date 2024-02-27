@@ -23,7 +23,12 @@
   THE SOFTWARE.
 */
 import './MatchMediaMock';
-import { ControlElement, DispatchCellProps, JsonSchema } from '@jsonforms/core';
+import {
+  ArrayTranslationEnum,
+  ControlElement,
+  DispatchCellProps,
+  JsonSchema,
+} from '@jsonforms/core';
 import * as React from 'react';
 
 import MaterialArrayControlRenderer from '../../src/complex/MaterialArrayControlRenderer';
@@ -32,6 +37,7 @@ import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { JsonFormsStateProvider, StatelessRenderer } from '@jsonforms/react';
 import { initCore, TestEmitter } from './util';
+import { checkTooltip, checkTooltipTranslation } from './tooltipChecker';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -698,5 +704,109 @@ describe('Material array control', () => {
       .find('button')
       .find({ 'aria-label': 'Move item down' });
     expect(downButton.is('[disabled]')).toBe(true);
+  });
+
+  it('should have a tooltip for add button', () => {
+    wrapper = checkTooltip(
+      fixture.schema,
+      fixture.uischema,
+      wrapper,
+      (wrapper) => wrapper.find('tr').at(0),
+      ArrayTranslationEnum.addTooltip,
+      {
+        id: 'tooltip-add',
+      },
+      fixture.data
+    );
+  });
+  it('should have a translatable tooltip for add button', () => {
+    wrapper = checkTooltipTranslation(
+      fixture.schema,
+      fixture.uischema,
+      wrapper,
+      (wrapper) => wrapper.find('tr').at(0),
+      {
+        id: 'tooltip-add',
+      },
+      fixture.data
+    );
+  });
+
+  it('should have a tooltip for delete button', () => {
+    wrapper = checkTooltip(
+      fixture2.schema,
+      fixture2.uischema,
+      wrapper,
+      (wrapper) => wrapper.find('tr').at(1),
+      ArrayTranslationEnum.removeTooltip,
+      {
+        id: 'tooltip-remove',
+      },
+      fixture2.data
+    );
+  });
+  it('should have a translatable tooltip for delete button', () => {
+    wrapper = checkTooltipTranslation(
+      fixture2.schema,
+      fixture2.uischema,
+      wrapper,
+      (wrapper) => wrapper.find('tr').at(1),
+      {
+        id: 'tooltip-remove',
+      },
+      fixture2.data
+    );
+  });
+
+  it('should have a tooltip for up button', () => {
+    wrapper = checkTooltip(
+      fixture2.schema,
+      fixture2.uischema,
+      wrapper,
+      (wrapper) => wrapper.find('tr').at(1),
+      ArrayTranslationEnum.up,
+      {
+        id: 'tooltip-up',
+      },
+      fixture2.data
+    );
+  });
+  it('should have a translatable tooltip for up button', () => {
+    wrapper = checkTooltipTranslation(
+      fixture2.schema,
+      fixture2.uischema,
+      wrapper,
+      (wrapper) => wrapper.find('tr').at(1),
+      {
+        id: 'tooltip-up',
+      },
+      fixture2.data
+    );
+  });
+
+  it('should have a tooltip for down button', () => {
+    wrapper = checkTooltip(
+      fixture2.schema,
+      fixture2.uischema,
+      wrapper,
+      (wrapper) => wrapper.find('tr').at(1),
+      ArrayTranslationEnum.down,
+      {
+        id: 'tooltip-down',
+      },
+      fixture2.data
+    );
+  });
+  it('should have a translatable tooltip for down button', () => {
+    wrapper = checkTooltipTranslation(
+      fixture2.schema,
+      fixture2.uischema,
+      wrapper,
+      (wrapper) => wrapper.find('tr').at(1),
+      {
+        id: 'tooltip-down',
+      },
+      fixture2.data
+    );
   });
 });
