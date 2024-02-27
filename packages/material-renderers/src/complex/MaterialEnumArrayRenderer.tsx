@@ -3,6 +3,7 @@ import {
   ControlProps,
   DispatchPropsOfMultiEnumControl,
   hasType,
+  isDescriptionHidden,
   JsonSchema,
   OwnPropsOfEnum,
   Paths,
@@ -11,6 +12,7 @@ import {
   resolveSchema,
   schemaMatches,
   schemaSubPathMatches,
+  showAsRequired,
   uiTypeIs,
 } from '@jsonforms/core';
 
@@ -21,15 +23,23 @@ import {
   FormControlLabel,
   FormGroup,
   FormHelperText,
+  FormLabel,
   Hidden,
 } from '@mui/material';
 import isEmpty from 'lodash/isEmpty';
 import React from 'react';
+import merge from 'lodash/merge';
+import { useFocus } from '../util';
 
 export const MaterialEnumArrayRenderer = ({
+  config,
+  id,
   schema,
   visible,
   errors,
+  description,
+  label,
+  required,
   path,
   options,
   data,
@@ -38,9 +48,35 @@ export const MaterialEnumArrayRenderer = ({
   handleChange: _handleChange,
   ...otherProps
 }: ControlProps & OwnPropsOfEnum & DispatchPropsOfMultiEnumControl) => {
+  const [focused, onFocus, onBlur] = useFocus();
+  const isValid = errors.length === 0;
+  const appliedUiSchemaOptions = merge({}, config, otherProps.uischema.options);
+  const showDescription = !isDescriptionHidden(
+    visible,
+    description,
+    focused,
+    appliedUiSchemaOptions.showUnfocusedDescription
+  );
+
   return (
     <Hidden xsUp={!visible}>
-      <FormControl component='fieldset'>
+      <FormControl
+        component='fieldset'
+        fullWidth={!appliedUiSchemaOptions.trim}
+        onFocus={onFocus}
+        onBlur={onBlur}
+      >
+        <FormLabel
+          htmlFor={id}
+          error={!isValid}
+          component={'legend' as 'label'}
+          required={showAsRequired(
+            required,
+            appliedUiSchemaOptions.hideRequiredAsterisk
+          )}
+        >
+          {label}
+        </FormLabel>
         <FormGroup row>
           {options.map((option: any, index: number) => {
             const optionPath = Paths.compose(path, `${index}`);
@@ -53,6 +89,7 @@ export const MaterialEnumArrayRenderer = ({
                 key={option.value}
                 control={
                   <MuiCheckbox
+                    id={id}
                     key={'checkbox-' + option.value}
                     isValid={isEmpty(errors)}
                     path={optionPath}
@@ -73,7 +110,9 @@ export const MaterialEnumArrayRenderer = ({
             );
           })}
         </FormGroup>
-        <FormHelperText error>{errors}</FormHelperText>
+        <FormHelperText error={!isValid}>
+          {!isValid ? errors : showDescription ? description : null}
+        </FormHelperText>
       </FormControl>
     </Hidden>
   );
