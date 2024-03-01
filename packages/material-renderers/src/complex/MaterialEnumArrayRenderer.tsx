@@ -69,7 +69,7 @@ export const MaterialEnumArrayRenderer = ({
         <FormLabel
           htmlFor={id}
           error={!isValid}
-          component={'legend' as 'label'}
+          component='legend'
           required={showAsRequired(
             required,
             appliedUiSchemaOptions.hideRequiredAsterisk

@@ -101,7 +101,7 @@ export const MaterialSliderControl = (props: ControlProps) => {
         <FormLabel
           htmlFor={id}
           error={!isValid}
-          component={'legend' as 'label'}
+          component='legend'
           required={showAsRequired(
             required,
             appliedUiSchemaOptions.hideRequiredAsterisk

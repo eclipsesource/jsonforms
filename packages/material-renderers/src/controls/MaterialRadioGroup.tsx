@@ -69,7 +69,7 @@ export const MaterialRadioGroup = (props: ControlProps & OwnPropsOfEnum) => {
   return (
     <Hidden xsUp={!visible}>
       <FormControl
-        component={'fieldset' as 'div'}
+        component='fieldset'
         fullWidth={!appliedUiSchemaOptions.trim}
         onFocus={onFocus}
         onBlur={onBlur}
@@ -77,7 +77,7 @@ export const MaterialRadioGroup = (props: ControlProps & OwnPropsOfEnum) => {
         <FormLabel
           htmlFor={id}
           error={!isValid}
-          component={'legend' as 'label'}
+          component='legend'
           required={showAsRequired(
             required,
             appliedUiSchemaOptions.hideRequiredAsterisk
