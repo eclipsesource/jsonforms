@@ -45,7 +45,6 @@ export const MaterialRadioGroup = (props: ControlProps & OwnPropsOfEnum) => {
   const [focused, onFocus, onBlur] = useFocus();
   const {
     config,
-    id,
     label,
     required,
     description,
@@ -75,7 +74,6 @@ export const MaterialRadioGroup = (props: ControlProps & OwnPropsOfEnum) => {
         onBlur={onBlur}
       >
         <FormLabel
-          htmlFor={id}
           error={!isValid}
           component='legend'
           required={showAsRequired(

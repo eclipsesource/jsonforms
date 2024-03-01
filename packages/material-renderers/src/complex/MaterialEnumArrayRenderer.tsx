@@ -67,7 +67,6 @@ export const MaterialEnumArrayRenderer = ({
         onBlur={onBlur}
       >
         <FormLabel
-          htmlFor={id}
           error={!isValid}
           component='legend'
           required={showAsRequired(
@@ -85,11 +84,11 @@ export const MaterialEnumArrayRenderer = ({
               : undefined;
             return (
               <FormControlLabel
-                id={option.value}
+                id={id + '-label-' + option.value}
                 key={option.value}
                 control={
                   <MuiCheckbox
-                    id={id}
+                    id={id + '-' + option.value}
                     key={'checkbox-' + option.value}
                     isValid={isEmpty(errors)}
                     path={optionPath}
