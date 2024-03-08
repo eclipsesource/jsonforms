@@ -37,6 +37,7 @@ import {
   getI18nKeyPrefix,
   Translator,
   UISchemaElement,
+  EnumOption,
 } from '@jsonforms/core';
 import {
   Accordion,
@@ -399,44 +400,47 @@ const computeChildLabel = (
 ) => {
   const childData = Resolve.data(data, childPath);
 
-  if (childLabelProp) {
-    const currentValue = get(childData, childLabelProp, '');
+  if (!childLabelProp) return get(childData, getFirstPrimitiveProp(schema), '');
 
-    const childSchema = Resolve.schema(
-      schema,
-      `#/properties/${encode(childLabelProp)}`,
-      rootSchema
+  const currentValue = get(childData, childLabelProp, '');
+
+  const childSchema = Resolve.schema(
+    schema,
+    `#/properties/${childLabelProp
+      .split('.')
+      .map((p) => encode(p))
+      .join('/properties/')}`,
+    rootSchema
+  );
+
+  const fallbackI18nKey =
+    getI18nKeyPrefix(schema, uiSchema, childPath) +
+    '.' +
+    getI18nKeyPrefix(schema, uiSchema, childLabelProp);
+
+  let enumOption: EnumOption = undefined;
+  if (hasEnumField(childSchema)) {
+    enumOption = enumToEnumOptionMapper(
+      currentValue,
+      translateFct,
+      fallbackI18nKey
+    );
+  } else if (hasOneOfField(childSchema)) {
+    const oneOfArray = childSchema.oneOf as JsonSchema[];
+    const oneOfSchema = oneOfArray.find(
+      (e: JsonSchema) => e.const === currentValue
     );
 
-    if (hasEnumField(childSchema)) {
-      const enumChildLabel = enumToEnumOptionMapper(
-        currentValue,
-        translateFct,
-        getI18nKeyPrefix(schema, uiSchema, childPath)
-      );
-
-      return enumChildLabel.label;
-    } else if (hasOneOfField(childSchema)) {
-      const oneOfArray = childSchema.oneOf as JsonSchema[];
-      const oneOfSchema = oneOfArray.find(
-        (e: JsonSchema) => e.const === currentValue
-      );
-
-      if (oneOfSchema === undefined) return currentValue;
-
-      const oneOfChildLabel = oneOfToEnumOptionMapper(
+    if (oneOfSchema) {
+      enumOption = oneOfToEnumOptionMapper(
         oneOfSchema,
         translateFct,
-        getI18nKeyPrefix(schema, uiSchema, childPath)
+        fallbackI18nKey
       );
-
-      return oneOfChildLabel.label;
-    } else {
-      return currentValue;
     }
-  } else {
-    return get(childData, getFirstPrimitiveProp(schema), '');
   }
+
+  return enumOption ? enumOption.label : currentValue;
 };
 
 export const withJsonFormsExpandPanelProps = (

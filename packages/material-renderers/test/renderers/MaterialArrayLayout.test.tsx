@@ -39,7 +39,7 @@ import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { JsonForms, JsonFormsStateProvider } from '@jsonforms/react';
 import { Accordion } from '@mui/material';
-import { createTesterContext, initCore } from './util';
+import { createTesterContext, testTranslator, initCore } from './util';
 import { checkTooltip, checkTooltipTranslation } from './tooltipChecker';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -62,6 +62,10 @@ const enumOrOneOfData = [
   {
     message: 'El Barto was here',
     messageType: 'MSG_TYPE_1',
+  },
+  {
+    message: 'El Barto was not here',
+    messageType: 'MSG_TYPE_2',
   },
   {
     message: 'Yolo',
@@ -115,7 +119,6 @@ const oneOfSchema = {
         oneOf: [
           {
             const: 'MSG_TYPE_1',
-            title: 'First message type',
           },
           {
             const: 'MSG_TYPE_2',
@@ -123,6 +126,106 @@ const oneOfSchema = {
           },
         ],
       },
+    },
+  },
+};
+
+const deepEnumOrOneOfData = {
+  article: {
+    title: 'title',
+    comments: [
+      {
+        author: {
+          name: 'John',
+          type: 'WRITER',
+          role: 'ROLE_1',
+        },
+      },
+      {
+        author: {
+          name: 'John',
+          type: 'AUTHOR',
+          role: 'ROLE_2',
+        },
+      },
+    ],
+  },
+};
+
+const deepEnumOrOneOfSchema: JsonSchema7 = {
+  type: 'object',
+  properties: {
+    article: {
+      type: 'object',
+      properties: {
+        title: {
+          type: 'string',
+        },
+        comments: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              author: {
+                type: 'object',
+                properties: {
+                  name: {
+                    type: 'string',
+                  },
+                  type: {
+                    type: 'string',
+                    enum: ['AUTHOR', 'WRITER'],
+                  },
+                  role: {
+                    type: 'string',
+                    oneOf: [
+                      {
+                        const: 'ROLE_1',
+                      },
+                      {
+                        const: 'ROLE_2',
+                        title: 'Second role',
+                      },
+                    ],
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+};
+
+const deepUiSchemaWithEnumChildLabelProp: ControlElement = {
+  type: 'Control',
+  scope: '#/properties/article/properties/comments',
+  options: {
+    elementLabelProp: 'author.type',
+    detail: {
+      type: 'HorizontalLayout',
+      elements: [
+        { type: 'Control', scope: '#/properties/author/properties/name' },
+        { type: 'Control', scope: '#/properties/author/properties/type' },
+        { type: 'Control', scope: '#/properties/author/properties/role' },
+      ],
+    },
+  },
+};
+
+const deepUiSchemaWithOneOfChildLabelProp: ControlElement = {
+  type: 'Control',
+  scope: '#/properties/article/properties/comments',
+  options: {
+    elementLabelProp: 'author.role',
+    detail: {
+      type: 'HorizontalLayout',
+      elements: [
+        { type: 'Control', scope: '#/properties/author/properties/name' },
+        { type: 'Control', scope: '#/properties/author/properties/type' },
+        { type: 'Control', scope: '#/properties/author/properties/role' },
+      ],
     },
   },
 };
@@ -808,13 +911,12 @@ describe('Material array layout', () => {
     );
   });
 
-  it('should render configured enum child label property as translated label', () => {
+  it('should render configured enum child label property as-is if no translator', () => {
     const core = initCore(
       enumSchema,
       uiSchemaWithEnumOrOneOfChildLabelProp,
       enumOrOneOfData
     );
-    const translate = () => 'Translated';
 
     // Enum Case - No translation
     wrapper = mount(
@@ -831,11 +933,23 @@ describe('Material array layout', () => {
     expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
 
     expect(getChildLabel(wrapper, 0)).toBe('MSG_TYPE_1');
+  });
+
+  it('should render configured enum child label property as translated label', () => {
+    const core = initCore(
+      enumSchema,
+      uiSchemaWithEnumOrOneOfChildLabelProp,
+      enumOrOneOfData
+    );
 
     // Enum Case - Translation
     wrapper = mount(
       <JsonFormsStateProvider
-        initState={{ renderers: materialRenderers, core, i18n: { translate } }}
+        initState={{
+          renderers: materialRenderers,
+          core,
+          i18n: { translate: testTranslator },
+        }}
       >
         <MaterialArrayLayout
           schema={enumSchema}
@@ -846,16 +960,17 @@ describe('Material array layout', () => {
 
     expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
 
-    expect(getChildLabel(wrapper, 0)).toBe('Translated');
+    expect(getChildLabel(wrapper, 0)).toBe(
+      'translator.root.messageType.MSG_TYPE_1'
+    );
   });
 
-  it('should render configured oneOf child label property as translated label', () => {
+  it('should render configured oneOf child label property as-is if no translator', () => {
     const core = initCore(
       oneOfSchema,
       uiSchemaWithEnumOrOneOfChildLabelProp,
       enumOrOneOfData
     );
-    const translate = () => 'Translated';
 
     // OneOf - No translation
     wrapper = mount(
@@ -871,12 +986,25 @@ describe('Material array layout', () => {
 
     expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
 
-    expect(getChildLabel(wrapper, 0)).toBe('First message type');
+    expect(getChildLabel(wrapper, 0)).toBe('MSG_TYPE_1');
+    expect(getChildLabel(wrapper, 1)).toBe('Second message type');
+  });
+
+  it('should render configured oneOf child label property as translated label', () => {
+    const core = initCore(
+      oneOfSchema,
+      uiSchemaWithEnumOrOneOfChildLabelProp,
+      enumOrOneOfData
+    );
 
     // OneOf Case - Translation
     wrapper = mount(
       <JsonFormsStateProvider
-        initState={{ renderers: materialRenderers, core, i18n: { translate } }}
+        initState={{
+          renderers: materialRenderers,
+          core,
+          i18n: { translate: testTranslator },
+        }}
       >
         <MaterialArrayLayout
           schema={oneOfSchema}
@@ -887,6 +1015,131 @@ describe('Material array layout', () => {
 
     expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
 
-    expect(getChildLabel(wrapper, 0)).toBe('Translated');
+    expect(getChildLabel(wrapper, 0)).toBe(
+      'translator.root.messageType.MSG_TYPE_1'
+    );
+    // TODO Possible impact to existing jsonForm setup, previously if the translate fonction was setup,
+    //  the enumOf title was written as-is and not pushed to the translation function with a key.
+    //  The oneOf title is pushed for translation over the const value in renderer.ts/oneOfToEnumOptionMapper(),
+    //  seems a bug to me
+    expect(getChildLabel(wrapper, 1)).toBe(
+      'translator.root.messageType.Second message type'
+    );
+  });
+
+  it('should render configured deep enum child label property as-is if no translator', () => {
+    const core = initCore(
+      deepEnumOrOneOfSchema,
+      deepUiSchemaWithEnumChildLabelProp,
+      deepEnumOrOneOfData
+    );
+
+    // Enum Case - No translation
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
+        <MaterialArrayLayout
+          schema={deepEnumOrOneOfSchema}
+          uischema={deepUiSchemaWithEnumChildLabelProp}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
+
+    expect(getChildLabel(wrapper, 0)).toBe('WRITER');
+    expect(getChildLabel(wrapper, 1)).toBe('AUTHOR');
+  });
+
+  it('should render configured deep enum child label property as translated label', () => {
+    const core = initCore(
+      deepEnumOrOneOfSchema,
+      deepUiSchemaWithEnumChildLabelProp,
+      deepEnumOrOneOfData
+    );
+
+    // Enum Case - Translation
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{
+          renderers: materialRenderers,
+          core,
+          i18n: { translate: testTranslator },
+        }}
+      >
+        <MaterialArrayLayout
+          schema={deepEnumOrOneOfSchema}
+          uischema={deepUiSchemaWithEnumChildLabelProp}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
+
+    expect(getChildLabel(wrapper, 0)).toBe(
+      'translator.article.comments.author.type.WRITER'
+    );
+    expect(getChildLabel(wrapper, 1)).toBe(
+      'translator.article.comments.author.type.AUTHOR'
+    );
+  });
+
+  it('should render configured deep oneOf child label property as-is if no translator', () => {
+    const core = initCore(
+      deepEnumOrOneOfSchema,
+      deepUiSchemaWithOneOfChildLabelProp,
+      deepEnumOrOneOfData
+    );
+
+    // OneOf Case - No translation
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
+        <MaterialArrayLayout
+          schema={deepEnumOrOneOfSchema}
+          uischema={deepUiSchemaWithOneOfChildLabelProp}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
+
+    expect(getChildLabel(wrapper, 0)).toBe('ROLE_1');
+    expect(getChildLabel(wrapper, 1)).toBe('Second role');
+  });
+
+  it('should render configured deep oneOf child label property as translated label', () => {
+    const core = initCore(
+      deepEnumOrOneOfSchema,
+      deepUiSchemaWithOneOfChildLabelProp,
+      deepEnumOrOneOfData
+    );
+
+    // OneOf Case - Translation
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{
+          renderers: materialRenderers,
+          core,
+          i18n: { translate: testTranslator },
+        }}
+      >
+        <MaterialArrayLayout
+          schema={deepEnumOrOneOfSchema}
+          uischema={deepUiSchemaWithOneOfChildLabelProp}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
+
+    expect(getChildLabel(wrapper, 0)).toBe(
+      'translator.article.comments.author.role.ROLE_1'
+    );
+    expect(getChildLabel(wrapper, 1)).toBe(
+      'translator.article.comments.author.role.Second role'
+    );
   });
 });
