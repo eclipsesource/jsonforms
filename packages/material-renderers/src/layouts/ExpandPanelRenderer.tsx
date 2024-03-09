@@ -39,6 +39,7 @@ import {
   Avatar,
   Grid,
   IconButton,
+  Tooltip,
 } from '@mui/material';
 import {
   ExpandMore as ExpandMoreIcon,
@@ -169,26 +170,40 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
                   {showSortButtons && enabled ? (
                     <Fragment>
                       <Grid item>
-                        <IconButton
-                          onClick={moveUp(path, index)}
-                          style={iconStyle}
-                          disabled={!enableMoveUp}
-                          aria-label={translations.upAriaLabel}
-                          size='large'
+                        <Tooltip
+                          id='tooltip-up'
+                          title={translations.up}
+                          placement='bottom'
+                          open={enableMoveUp ? undefined : false}
                         >
-                          <ArrowUpward />
-                        </IconButton>
+                          <IconButton
+                            onClick={moveUp(path, index)}
+                            style={iconStyle}
+                            disabled={!enableMoveUp}
+                            aria-label={translations.upAriaLabel}
+                            size='large'
+                          >
+                            <ArrowUpward />
+                          </IconButton>
+                        </Tooltip>
                       </Grid>
                       <Grid item>
-                        <IconButton
-                          onClick={moveDown(path, index)}
-                          style={iconStyle}
-                          disabled={!enableMoveDown}
-                          aria-label={translations.downAriaLabel}
-                          size='large'
+                        <Tooltip
+                          id='tooltip-down'
+                          title={translations.down}
+                          placement='bottom'
+                          open={enableMoveDown ? undefined : false}
                         >
-                          <ArrowDownward />
-                        </IconButton>
+                          <IconButton
+                            onClick={moveDown(path, index)}
+                            style={iconStyle}
+                            disabled={!enableMoveDown}
+                            aria-label={translations.downAriaLabel}
+                            size='large'
+                          >
+                            <ArrowDownward />
+                          </IconButton>
+                        </Tooltip>
                       </Grid>
                     </Fragment>
                   ) : (
@@ -196,14 +211,20 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
                   )}
                   {enabled && (
                     <Grid item>
-                      <IconButton
-                        onClick={removeItems(path, [index])}
-                        style={iconStyle}
-                        aria-label={translations.removeAriaLabel}
-                        size='large'
+                      <Tooltip
+                        id='tooltip-remove'
+                        title={translations.removeTooltip}
+                        placement='bottom'
                       >
-                        <DeleteIcon />
-                      </IconButton>
+                        <IconButton
+                          onClick={removeItems(path, [index])}
+                          style={iconStyle}
+                          aria-label={translations.removeAriaLabel}
+                          size='large'
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </Tooltip>
                     </Grid>
                   )}
                 </Grid>
