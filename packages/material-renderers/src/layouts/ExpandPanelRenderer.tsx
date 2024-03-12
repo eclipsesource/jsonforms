@@ -400,9 +400,11 @@ const computeChildLabel = (
 ) => {
   const childData = Resolve.data(data, childPath);
 
-  if (!childLabelProp) return get(childData, getFirstPrimitiveProp(schema), '');
+  childLabelProp ??= getFirstPrimitiveProp(schema);
 
   const currentValue = get(childData, childLabelProp, '');
+
+  if (!childLabelProp) return currentValue;
 
   const childSchema = Resolve.schema(
     schema,
