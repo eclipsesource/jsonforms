@@ -25,8 +25,10 @@
 import './MatchMediaMock';
 import {
   ArrayTranslationEnum,
-  ControlElement, i18nJsonSchema,
+  ControlElement,
+  i18nJsonSchema,
   JsonSchema7,
+  Translator,
 } from '@jsonforms/core';
 import * as React from 'react';
 
@@ -41,6 +43,7 @@ import { JsonForms, JsonFormsStateProvider } from '@jsonforms/react';
 import { Accordion } from '@mui/material';
 import { createTesterContext, testTranslator, initCore } from './util';
 import { checkTooltip, checkTooltipTranslation } from './tooltipChecker';
+import { cloneDeep } from 'lodash';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -506,13 +509,13 @@ describe('Material array layout', () => {
       ...schema,
       title: 'My awesome title',
     };
-    const core = initCore(schema, uischema, data);
-    wrapper = mount(
-      <JsonFormsStateProvider
-        initState={{ renderers: materialRenderers, core }}
-      >
-        <MaterialArrayLayout schema={titleSchema} uischema={uischema} />
-      </JsonFormsStateProvider>
+
+    wrapper = arrayLayoutWrapper(
+      wrapper,
+      data,
+      titleSchema,
+      uischema,
+      undefined
     );
 
     const listTitle = wrapper.find('h6').at(0);
@@ -708,16 +711,12 @@ describe('Material array layout', () => {
       .text();
 
   it('should render first simple property as child label', () => {
-    const core = initCore(schema, uischema, data);
-    wrapper = mount(
-      <JsonFormsStateProvider
-        initState={{ renderers: materialRenderers, core }}
-      >
-        <MaterialArrayLayout
-          schema={schema}
-          uischema={uischemaWithSortOption}
-        />
-      </JsonFormsStateProvider>
+    wrapper = arrayLayoutWrapper(
+      wrapper,
+      data,
+      schema,
+      uischemaWithSortOption,
+      undefined
     );
 
     expect(getChildLabel(wrapper, 0)).toBe('El Barto was here');
@@ -907,195 +906,108 @@ describe('Material array layout', () => {
     const lightUiSchema = { ...uiSchemaWithEnumOrOneOfChildLabelProp };
     delete lightUiSchema.options.elementLabelProp;
 
-    const core = initCore(enumSchema, lightUiSchema, enumOrOneOfData);
-
-    // Enum Case - Translation
-    wrapper = mount(
-      <JsonFormsStateProvider
-        initState={{ renderers: materialRenderers, core }}
-      >
-        <MaterialArrayLayout schema={enumSchema} uischema={lightUiSchema} />
-      </JsonFormsStateProvider>
+    wrapper = arrayLayoutWrapper(
+      wrapper,
+      enumOrOneOfData,
+      enumSchema,
+      lightUiSchema,
+      undefined
     );
-
-    expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
 
     expect(getChildLabel(wrapper, 0)).toBe('MSG_TYPE_1');
   });
 
   it('should render first simple enum property as translated child label', () => {
-    const lightUiSchema = { ...uiSchemaWithEnumOrOneOfChildLabelProp };
+    const lightUiSchema = cloneDeep(uiSchemaWithEnumOrOneOfChildLabelProp);
     delete lightUiSchema.options.elementLabelProp;
 
-    const core = initCore(enumSchema, lightUiSchema, enumOrOneOfData);
-
-    // Enum Case - Translation
-    wrapper = mount(
-      <JsonFormsStateProvider
-        initState={{
-          renderers: materialRenderers,
-          core,
-          i18n: { translate: testTranslator },
-        }}
-      >
-        <MaterialArrayLayout schema={enumSchema} uischema={lightUiSchema} />
-      </JsonFormsStateProvider>
+    wrapper = arrayLayoutWrapper(
+      wrapper,
+      enumOrOneOfData,
+      enumSchema,
+      lightUiSchema,
+      testTranslator
     );
-
-    expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
 
     expect(getChildLabel(wrapper, 0)).toBe('translator.messageType.MSG_TYPE_1');
   });
 
   it('should render configured enum child label property as-is if no translator', () => {
-    const core = initCore(
+    wrapper = arrayLayoutWrapper(
+      wrapper,
+      enumOrOneOfData,
       enumSchema,
       uiSchemaWithEnumOrOneOfChildLabelProp,
-      enumOrOneOfData
+      undefined
     );
-
-    // Enum Case - No translation
-    wrapper = mount(
-      <JsonFormsStateProvider
-        initState={{ renderers: materialRenderers, core }}
-      >
-        <MaterialArrayLayout
-          schema={enumSchema}
-          uischema={uiSchemaWithEnumOrOneOfChildLabelProp}
-        />
-      </JsonFormsStateProvider>
-    );
-
-    expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
 
     expect(getChildLabel(wrapper, 0)).toBe('MSG_TYPE_1');
   });
 
   it('should render configured enum child label property as translated label', () => {
-    const core = initCore(
+    wrapper = arrayLayoutWrapper(
+      wrapper,
+      enumOrOneOfData,
       enumSchema,
       uiSchemaWithEnumOrOneOfChildLabelProp,
-      enumOrOneOfData
+      testTranslator
     );
-
-    // Enum Case - Translation
-    wrapper = mount(
-      <JsonFormsStateProvider
-        initState={{
-          renderers: materialRenderers,
-          core,
-          i18n: { translate: testTranslator },
-        }}
-      >
-        <MaterialArrayLayout
-          schema={enumSchema}
-          uischema={uiSchemaWithEnumOrOneOfChildLabelProp}
-        />
-      </JsonFormsStateProvider>
-    );
-
-    expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
 
     expect(getChildLabel(wrapper, 0)).toBe('translator.messageType.MSG_TYPE_1');
   });
 
   it('should render first simple oneOf property as-is if no translator', () => {
-    const lightUiSchema = { ...uiSchemaWithEnumOrOneOfChildLabelProp };
+    const lightUiSchema = cloneDeep(uiSchemaWithEnumOrOneOfChildLabelProp);
     delete lightUiSchema.options.elementLabelProp;
 
-    const core = initCore(oneOfSchema, lightUiSchema, enumOrOneOfData);
-
-    // Enum Case - Translation
-    wrapper = mount(
-      <JsonFormsStateProvider
-        initState={{ renderers: materialRenderers, core }}
-      >
-        <MaterialArrayLayout schema={oneOfSchema} uischema={lightUiSchema} />
-      </JsonFormsStateProvider>
+    wrapper = arrayLayoutWrapper(
+      wrapper,
+      enumOrOneOfData,
+      oneOfSchema,
+      lightUiSchema,
+      undefined
     );
-
-    expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
 
     expect(getChildLabel(wrapper, 0)).toBe('MSG_TYPE_1');
     expect(getChildLabel(wrapper, 1)).toBe('Second message type');
   });
 
-  it('should render first simple enum property as translated child label', () => {
-    const lightUiSchema = { ...uiSchemaWithEnumOrOneOfChildLabelProp };
+  it('should render first simple oneOf property as translated child label', () => {
+    const lightUiSchema = cloneDeep(uiSchemaWithEnumOrOneOfChildLabelProp);
     delete lightUiSchema.options.elementLabelProp;
 
-    const core = initCore(enumSchema, lightUiSchema, enumOrOneOfData);
-
-    // Enum Case - Translation
-    wrapper = mount(
-      <JsonFormsStateProvider
-        initState={{
-          renderers: materialRenderers,
-          core,
-          i18n: { translate: testTranslator },
-        }}
-      >
-        <MaterialArrayLayout
-          schema={enumSchema}
-          uischema={uiSchemaWithEnumOrOneOfChildLabelProp}
-        />
-      </JsonFormsStateProvider>
+    wrapper = arrayLayoutWrapper(
+      wrapper,
+      enumOrOneOfData,
+      oneOfSchema,
+      lightUiSchema,
+      testTranslator
     );
-
-    expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
 
     expect(getChildLabel(wrapper, 0)).toBe('translator.messageType.MSG_TYPE_1');
   });
 
   it('should render configured oneOf child label property as-is if no translator', () => {
-    const core = initCore(
+    wrapper = arrayLayoutWrapper(
+      wrapper,
+      enumOrOneOfData,
       oneOfSchema,
       uiSchemaWithEnumOrOneOfChildLabelProp,
-      enumOrOneOfData
+      undefined
     );
-
-    // OneOf - No translation
-    wrapper = mount(
-      <JsonFormsStateProvider
-        initState={{ renderers: materialRenderers, core }}
-      >
-        <MaterialArrayLayout
-          schema={oneOfSchema}
-          uischema={uiSchemaWithEnumOrOneOfChildLabelProp}
-        />
-      </JsonFormsStateProvider>
-    );
-
-    expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
 
     expect(getChildLabel(wrapper, 0)).toBe('MSG_TYPE_1');
     expect(getChildLabel(wrapper, 1)).toBe('Second message type');
   });
 
   it('should render configured oneOf child label property as translated label', () => {
-    const core = initCore(
+    wrapper = arrayLayoutWrapper(
+      wrapper,
+      enumOrOneOfData,
       oneOfSchema,
       uiSchemaWithEnumOrOneOfChildLabelProp,
-      enumOrOneOfData
+      testTranslator
     );
-
-    // OneOf Case - Translation
-    wrapper = mount(
-      <JsonFormsStateProvider
-        initState={{
-          renderers: materialRenderers,
-          core,
-          i18n: { translate: testTranslator },
-        }}
-      >
-        <MaterialArrayLayout
-          schema={oneOfSchema}
-          uischema={uiSchemaWithEnumOrOneOfChildLabelProp}
-        />
-      </JsonFormsStateProvider>
-    );
-
-    expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
 
     expect(getChildLabel(wrapper, 0)).toBe('translator.messageType.MSG_TYPE_1');
     expect(getChildLabel(wrapper, 1)).toBe(
@@ -1104,54 +1016,26 @@ describe('Material array layout', () => {
   });
 
   it('should render configured deep enum child label property as-is if no translator', () => {
-    const core = initCore(
+    wrapper = arrayLayoutWrapper(
+      wrapper,
+      deepEnumOrOneOfData,
       deepEnumOrOneOfSchema,
       deepUiSchemaWithEnumChildLabelProp,
-      deepEnumOrOneOfData
+      undefined
     );
-
-    // Enum Case - No translation
-    wrapper = mount(
-      <JsonFormsStateProvider
-        initState={{ renderers: materialRenderers, core }}
-      >
-        <MaterialArrayLayout
-          schema={deepEnumOrOneOfSchema}
-          uischema={deepUiSchemaWithEnumChildLabelProp}
-        />
-      </JsonFormsStateProvider>
-    );
-
-    expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
 
     expect(getChildLabel(wrapper, 0)).toBe('WRITER');
     expect(getChildLabel(wrapper, 1)).toBe('AUTHOR');
   });
 
   it('should render configured deep enum child label property as translated label', () => {
-    const core = initCore(
+    wrapper = arrayLayoutWrapper(
+      wrapper,
+      deepEnumOrOneOfData,
       deepEnumOrOneOfSchema,
       deepUiSchemaWithEnumChildLabelProp,
-      deepEnumOrOneOfData
+      testTranslator
     );
-
-    // Enum Case - Translation
-    wrapper = mount(
-      <JsonFormsStateProvider
-        initState={{
-          renderers: materialRenderers,
-          core,
-          i18n: { translate: testTranslator },
-        }}
-      >
-        <MaterialArrayLayout
-          schema={deepEnumOrOneOfSchema}
-          uischema={deepUiSchemaWithEnumChildLabelProp}
-        />
-      </JsonFormsStateProvider>
-    );
-
-    expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
 
     expect(getChildLabel(wrapper, 0)).toBe(
       'translator.article.comments.author.type.WRITER'
@@ -1162,54 +1046,26 @@ describe('Material array layout', () => {
   });
 
   it('should render configured deep oneOf child label property as-is if no translator', () => {
-    const core = initCore(
+    wrapper = arrayLayoutWrapper(
+      wrapper,
+      deepEnumOrOneOfData,
       deepEnumOrOneOfSchema,
       deepUiSchemaWithOneOfChildLabelProp,
-      deepEnumOrOneOfData
+      undefined
     );
-
-    // OneOf Case - No translation
-    wrapper = mount(
-      <JsonFormsStateProvider
-        initState={{ renderers: materialRenderers, core }}
-      >
-        <MaterialArrayLayout
-          schema={deepEnumOrOneOfSchema}
-          uischema={deepUiSchemaWithOneOfChildLabelProp}
-        />
-      </JsonFormsStateProvider>
-    );
-
-    expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
 
     expect(getChildLabel(wrapper, 0)).toBe('ROLE_1');
     expect(getChildLabel(wrapper, 1)).toBe('Second role');
   });
 
   it('should render configured deep oneOf child label property as translated label', () => {
-    const core = initCore(
+    wrapper = arrayLayoutWrapper(
+      wrapper,
+      deepEnumOrOneOfData,
       deepEnumOrOneOfSchema,
       deepUiSchemaWithOneOfChildLabelProp,
-      deepEnumOrOneOfData
+      testTranslator
     );
-
-    // OneOf Case - Translation
-    wrapper = mount(
-      <JsonFormsStateProvider
-        initState={{
-          renderers: materialRenderers,
-          core,
-          i18n: { translate: testTranslator },
-        }}
-      >
-        <MaterialArrayLayout
-          schema={deepEnumOrOneOfSchema}
-          uischema={deepUiSchemaWithOneOfChildLabelProp}
-        />
-      </JsonFormsStateProvider>
-    );
-
-    expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
 
     expect(getChildLabel(wrapper, 0)).toBe(
       'translator.article.comments.author.role.ROLE_1'
@@ -1220,71 +1076,103 @@ describe('Material array layout', () => {
   });
 
   it('should render configured enum child label property with schema i18n as translated label', () => {
-    const i18nSchema = { ...enumSchema };
+    const i18nSchema = cloneDeep(enumSchema);
     const properties = (i18nSchema.items as JsonSchema7).properties;
     const childSchema = properties.messageType as i18nJsonSchema;
     childSchema.i18n = 'myI18n';
 
-    const core = initCore(
+    wrapper = arrayLayoutWrapper(
+      wrapper,
+      enumOrOneOfData,
       i18nSchema,
       uiSchemaWithEnumOrOneOfChildLabelProp,
-      enumOrOneOfData
+      testTranslator
     );
-
-    // Enum Case - Translation
-    wrapper = mount(
-      <JsonFormsStateProvider
-        initState={{
-          renderers: materialRenderers,
-          core,
-          i18n: { translate: testTranslator },
-        }}
-      >
-        <MaterialArrayLayout
-          schema={i18nSchema}
-          uischema={uiSchemaWithEnumOrOneOfChildLabelProp}
-        />
-      </JsonFormsStateProvider>
-    );
-
-    expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
 
     expect(getChildLabel(wrapper, 0)).toBe('translator.myI18n.MSG_TYPE_1');
   });
 
   it('should render configured oneOf child label property with schema i18n as translated label', () => {
-    const i18nSchema = { ...oneOfSchema };
+    const i18nSchema = cloneDeep(oneOfSchema);
     const properties = (i18nSchema.items as JsonSchema7).properties;
     const oneOfArray = properties.messageType.oneOf;
     for (const oneOfValue of oneOfArray) {
       (oneOfValue as i18nJsonSchema).i18n = 'myI18n_' + oneOfValue.const;
     }
 
-    const core = initCore(
+    wrapper = arrayLayoutWrapper(
+      wrapper,
+      enumOrOneOfData,
       i18nSchema,
       uiSchemaWithEnumOrOneOfChildLabelProp,
-      enumOrOneOfData
+      testTranslator
     );
-
-    // OneOf Case - Translation
-    wrapper = mount(
-      <JsonFormsStateProvider
-        initState={{
-          renderers: materialRenderers,
-          core,
-          i18n: { translate: testTranslator },
-        }}
-      >
-        <MaterialArrayLayout
-          schema={i18nSchema}
-          uischema={uiSchemaWithEnumOrOneOfChildLabelProp}
-        />
-      </JsonFormsStateProvider>
-    );
-
-    expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
 
     expect(getChildLabel(wrapper, 0)).toBe('translator.myI18n_MSG_TYPE_1');
     expect(getChildLabel(wrapper, 1)).toBe('translator.myI18n_MSG_TYPE_2');
   });
+
+  it('should render configured enum child label property with UiSchema i18n as translated label', () => {
+    const i18nUiSchema = cloneDeep(uiSchemaWithEnumOrOneOfChildLabelProp);
+    const elements = i18nUiSchema.options.detail.elements as ControlElement[];
+    const control = elements.find(
+      (e) => e.scope === '#/properties/messageType'
+    );
+    control.i18n = 'myI18n';
+
+    wrapper = arrayLayoutWrapper(
+      wrapper,
+      enumOrOneOfData,
+      enumSchema,
+      i18nUiSchema,
+      testTranslator
+    );
+
+    expect(getChildLabel(wrapper, 0)).toBe('translator.myI18n.MSG_TYPE_1');
+  });
+
+  it('should render configured deep enum child label property with UiSchema i18n as translated label', () => {
+    const i18nUiSchema = cloneDeep(deepUiSchemaWithEnumChildLabelProp);
+    const elements = i18nUiSchema.options.detail.elements as ControlElement[];
+    const control = elements.find(
+      (e) => e.scope === '#/properties/author/properties/type'
+    );
+    control.i18n = 'myI18n';
+
+    wrapper = arrayLayoutWrapper(
+      wrapper,
+      deepEnumOrOneOfData,
+      deepEnumOrOneOfSchema,
+      i18nUiSchema,
+      testTranslator
+    );
+
+    expect(getChildLabel(wrapper, 0)).toBe('translator.myI18n.WRITER');
+    expect(getChildLabel(wrapper, 1)).toBe('translator.myI18n.AUTHOR');
+  });
 });
+
+function arrayLayoutWrapper(
+  wrapper: ReactWrapper<any, any>,
+  data: any,
+  schema: JsonSchema7,
+  uiSchema: ControlElement,
+  translator: Translator
+) {
+  const core = initCore(schema, uiSchema, data);
+
+  wrapper = mount(
+    <JsonFormsStateProvider
+      initState={{
+        renderers: materialRenderers,
+        core,
+        i18n: translator ? { translate: translator } : undefined,
+      }}
+    >
+      <MaterialArrayLayout schema={schema} uischema={uiSchema} />
+    </JsonFormsStateProvider>
+  );
+
+  expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
+  return wrapper;
+}

@@ -38,6 +38,8 @@ import {
   Translator,
   UISchemaElement,
   EnumOption,
+  isLayout,
+  isScoped,
 } from '@jsonforms/core';
 import {
   Accordion,
@@ -389,6 +391,42 @@ const hasOneOfField = (schema: JsonSchema) => {
   return schema && schema.oneOf !== undefined;
 };
 
+function getChildPropPath(childLabelProp: string) {
+  return `/properties/${childLabelProp
+    .split('.')
+    .map((p) => encode(p))
+    .join('/properties/')}`;
+}
+
+const isControlElement = (
+  uiSchema: UISchemaElement
+): uiSchema is ControlElement => uiSchema.type === 'Control';
+
+const findUiControl = (
+  uiSchema: UISchemaElement,
+  childLabelProp: string
+): unknown | undefined => {
+  if (isControlElement(uiSchema)) {
+    if (
+      isScoped(uiSchema) &&
+      uiSchema.scope.endsWith(getChildPropPath(childLabelProp))
+    ) {
+      return uiSchema;
+    } else if (uiSchema.options?.detail) {
+      return findUiControl(uiSchema.options.detail, childLabelProp);
+    }
+  }
+
+  if (isLayout(uiSchema)) {
+    for (const elem of uiSchema.elements) {
+      const result = findUiControl(elem, childLabelProp);
+      if (result !== undefined) return result;
+    }
+  }
+
+  return undefined;
+};
+
 const computeChildLabel = (
   data: any,
   childPath: string,
@@ -408,10 +446,7 @@ const computeChildLabel = (
 
   const childSchema = Resolve.schema(
     schema,
-    `#/properties/${childLabelProp
-      .split('.')
-      .map((p) => encode(p))
-      .join('/properties/')}`,
+    '#' + getChildPropPath(childLabelProp),
     rootSchema
   );
 
@@ -420,7 +455,11 @@ const computeChildLabel = (
     enumOption = enumToEnumOptionMapper(
       currentValue,
       translateFct,
-      getI18nKeyPrefix(childSchema, undefined, childPath + '.' + childLabelProp)
+      getI18nKeyPrefix(
+        childSchema,
+        findUiControl(uiSchema, childLabelProp),
+        childPath + '.' + childLabelProp
+      )
     );
   } else if (hasOneOfField(childSchema)) {
     const oneOfArray = childSchema.oneOf as JsonSchema[];
