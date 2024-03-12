@@ -415,17 +415,12 @@ const computeChildLabel = (
     rootSchema
   );
 
-  const fallbackI18nKey =
-    getI18nKeyPrefix(schema, uiSchema, childPath) +
-    '.' +
-    getI18nKeyPrefix(schema, uiSchema, childLabelProp);
-
   let enumOption: EnumOption = undefined;
   if (hasEnumField(childSchema)) {
     enumOption = enumToEnumOptionMapper(
       currentValue,
       translateFct,
-      fallbackI18nKey
+      getI18nKeyPrefix(childSchema, undefined, childPath + '.' + childLabelProp)
     );
   } else if (hasOneOfField(childSchema)) {
     const oneOfArray = childSchema.oneOf as JsonSchema[];
@@ -437,7 +432,11 @@ const computeChildLabel = (
       enumOption = oneOfToEnumOptionMapper(
         oneOfSchema,
         translateFct,
-        fallbackI18nKey
+        getI18nKeyPrefix(
+          oneOfSchema,
+          undefined,
+          childPath + '.' + childLabelProp
+        )
       );
     }
   }

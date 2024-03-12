@@ -25,7 +25,7 @@
 import './MatchMediaMock';
 import {
   ArrayTranslationEnum,
-  ControlElement,
+  ControlElement, i18nJsonSchema,
   JsonSchema7,
 } from '@jsonforms/core';
 import * as React from 'react';
@@ -944,9 +944,7 @@ describe('Material array layout', () => {
 
     expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
 
-    expect(getChildLabel(wrapper, 0)).toBe(
-      'translator.root.messageType.MSG_TYPE_1'
-    );
+    expect(getChildLabel(wrapper, 0)).toBe('translator.messageType.MSG_TYPE_1');
   });
 
   it('should render configured enum child label property as-is if no translator', () => {
@@ -998,9 +996,7 @@ describe('Material array layout', () => {
 
     expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
 
-    expect(getChildLabel(wrapper, 0)).toBe(
-      'translator.root.messageType.MSG_TYPE_1'
-    );
+    expect(getChildLabel(wrapper, 0)).toBe('translator.messageType.MSG_TYPE_1');
   });
 
   it('should render first simple oneOf property as-is if no translator', () => {
@@ -1048,9 +1044,7 @@ describe('Material array layout', () => {
 
     expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
 
-    expect(getChildLabel(wrapper, 0)).toBe(
-      'translator.root.messageType.MSG_TYPE_1'
-    );
+    expect(getChildLabel(wrapper, 0)).toBe('translator.messageType.MSG_TYPE_1');
   });
 
   it('should render configured oneOf child label property as-is if no translator', () => {
@@ -1103,11 +1097,9 @@ describe('Material array layout', () => {
 
     expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
 
-    expect(getChildLabel(wrapper, 0)).toBe(
-      'translator.root.messageType.MSG_TYPE_1'
-    );
+    expect(getChildLabel(wrapper, 0)).toBe('translator.messageType.MSG_TYPE_1');
     expect(getChildLabel(wrapper, 1)).toBe(
-      'translator.root.messageType.Second message type'
+      'translator.messageType.Second message type'
     );
   });
 
@@ -1225,5 +1217,74 @@ describe('Material array layout', () => {
     expect(getChildLabel(wrapper, 1)).toBe(
       'translator.article.comments.author.role.Second role'
     );
+  });
+
+  it('should render configured enum child label property with schema i18n as translated label', () => {
+    const i18nSchema = { ...enumSchema };
+    const properties = (i18nSchema.items as JsonSchema7).properties;
+    const childSchema = properties.messageType as i18nJsonSchema;
+    childSchema.i18n = 'myI18n';
+
+    const core = initCore(
+      i18nSchema,
+      uiSchemaWithEnumOrOneOfChildLabelProp,
+      enumOrOneOfData
+    );
+
+    // Enum Case - Translation
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{
+          renderers: materialRenderers,
+          core,
+          i18n: { translate: testTranslator },
+        }}
+      >
+        <MaterialArrayLayout
+          schema={i18nSchema}
+          uischema={uiSchemaWithEnumOrOneOfChildLabelProp}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
+
+    expect(getChildLabel(wrapper, 0)).toBe('translator.myI18n.MSG_TYPE_1');
+  });
+
+  it('should render configured oneOf child label property with schema i18n as translated label', () => {
+    const i18nSchema = { ...oneOfSchema };
+    const properties = (i18nSchema.items as JsonSchema7).properties;
+    const oneOfArray = properties.messageType.oneOf;
+    for (const oneOfValue of oneOfArray) {
+      (oneOfValue as i18nJsonSchema).i18n = 'myI18n_' + oneOfValue.const;
+    }
+
+    const core = initCore(
+      i18nSchema,
+      uiSchemaWithEnumOrOneOfChildLabelProp,
+      enumOrOneOfData
+    );
+
+    // OneOf Case - Translation
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{
+          renderers: materialRenderers,
+          core,
+          i18n: { translate: testTranslator },
+        }}
+      >
+        <MaterialArrayLayout
+          schema={i18nSchema}
+          uischema={uiSchemaWithEnumOrOneOfChildLabelProp}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
+
+    expect(getChildLabel(wrapper, 0)).toBe('translator.myI18n_MSG_TYPE_1');
+    expect(getChildLabel(wrapper, 1)).toBe('translator.myI18n_MSG_TYPE_2');
   });
 });
