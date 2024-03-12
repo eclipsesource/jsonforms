@@ -33,7 +33,7 @@ import {
   rankWith,
 } from '@jsonforms/core';
 import { withJsonFormsControlProps } from '@jsonforms/react';
-import { FormHelperText, Hidden } from '@mui/material';
+import { FormHelperText } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import {
@@ -69,6 +69,7 @@ export const MaterialDateControl = (props: ControlProps) => {
   );
 
   const [key, setKey] = useState<number>(0);
+  const [open, setOpen] = useState<boolean>(false);
 
   const format = appliedUiSchemaOptions.dateFormat ?? 'YYYY-MM-DD';
   const saveFormat = appliedUiSchemaOptions.dateSaveFormat ?? defaultDateFormat;
@@ -103,46 +104,48 @@ export const MaterialDateControl = (props: ControlProps) => {
   );
   const value = getData(data, saveFormat);
 
+  if (!visible) {
+    return null;
+  }
+
   return (
-    <Hidden xsUp={!visible}>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DatePicker
-          key={key}
-          label={label}
-          value={value}
-          onAccept={onChange}
-          format={format}
-          views={views}
-          disabled={!enabled}
-          slotProps={{
-            actionBar: ({ wrapperVariant }) => ({
-              actions:
-                wrapperVariant === 'desktop'
-                  ? []
-                  : ['clear', 'cancel', 'accept'],
-            }),
-            textField: {
-              id: id + '-input',
-              required:
-                required && !appliedUiSchemaOptions.hideRequiredAsterisk,
-              autoFocus: appliedUiSchemaOptions.focus,
-              error: !isValid,
-              fullWidth: !appliedUiSchemaOptions.trim,
-              inputProps: {
-                type: 'text',
-              },
-              InputLabelProps: data ? { shrink: true } : undefined,
-              onFocus: onFocus,
-              onBlur: onBlurHandler,
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <DatePicker
+        open={open}
+        onOpen={() => setOpen(true)}
+        onClose={() => setOpen(false)}
+        key={key}
+        label={label}
+        value={value}
+        onAccept={onChange}
+        format={format}
+        views={views}
+        disabled={!enabled}
+        slotProps={{
+          actionBar: ({ wrapperVariant }) => ({
+            actions:
+              wrapperVariant === 'desktop' ? [] : ['clear', 'cancel', 'accept'],
+          }),
+          textField: {
+            id: id + '-input',
+            required: required && !appliedUiSchemaOptions.hideRequiredAsterisk,
+            autoFocus: appliedUiSchemaOptions.focus,
+            error: !isValid,
+            fullWidth: !appliedUiSchemaOptions.trim,
+            inputProps: {
+              type: 'text',
             },
-          }}
-        />
-        <FormHelperText error={!isValid && !showDescription}>
-          {firstFormHelperText}
-        </FormHelperText>
-        <FormHelperText error={!isValid}>{secondFormHelperText}</FormHelperText>
-      </LocalizationProvider>
-    </Hidden>
+            InputLabelProps: data ? { shrink: true } : undefined,
+            onFocus: onFocus,
+            onBlur: onBlurHandler,
+          },
+        }}
+      />
+      <FormHelperText error={!isValid && !showDescription}>
+        {firstFormHelperText}
+      </FormHelperText>
+      <FormHelperText error={!isValid}>{secondFormHelperText}</FormHelperText>
+    </LocalizationProvider>
   );
 };
 
