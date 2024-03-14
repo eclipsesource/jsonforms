@@ -24,6 +24,7 @@
 */
 import { registerExamples } from '../register';
 import { personCoreSchema } from './person';
+import { StateProps } from '../example';
 
 export const schema = {
   type: 'object',
@@ -93,6 +94,15 @@ export const data = {
   ],
 };
 
+const actions = [
+  {
+    label: 'Toggle readonly',
+    apply: (props: StateProps) => {
+      return { ...props, readonly: !props.readonly };
+    }
+  }
+];
+
 registerExamples([
   {
     name: 'array-with-detail',
@@ -100,5 +110,6 @@ registerExamples([
     data,
     schema,
     uischema,
+    actions,
   },
 ]);
