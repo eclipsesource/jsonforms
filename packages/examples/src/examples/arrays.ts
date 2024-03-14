@@ -127,7 +127,7 @@ const actions = [
     label: 'Toggle readonly',
     apply: (props: StateProps) => {
       return { ...props, readonly: !props.readonly };
-    }
+    },
   }
 ];
 
