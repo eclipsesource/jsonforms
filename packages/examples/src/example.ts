@@ -41,6 +41,7 @@ export interface ExampleDescription {
   config?: any;
   actions?: { label: string; apply: (props: StateProps) => any }[];
   i18n?: JsonFormsI18nState;
+  readonly?: boolean;
 }
 
 export interface StateProps {
@@ -51,4 +52,5 @@ export interface StateProps {
   cells?: JsonFormsCellRendererRegistryEntry[];
   config?: any;
   uischemas?: JsonFormsUISchemaRegistryEntry[];
+  readonly?: boolean;
 }
