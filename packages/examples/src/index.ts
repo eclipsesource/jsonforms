@@ -71,6 +71,7 @@ import * as readonly from './examples/readonly';
 import * as listWithDetailPrimitives from './examples/list-with-detail-primitives';
 import * as conditionalSchemaComposition from './examples/conditional-schema-compositions';
 import * as additionalErrors from './examples/additional-errors';
+import * as multiEnumWithLabelAndDesc from './examples/enum-multi-with-label-and-desc';
 export * from './register';
 export * from './example';
 
@@ -120,6 +121,7 @@ export {
   enumExample,
   radioGroupExample,
   multiEnum,
+  multiEnumWithLabelAndDesc,
   enumInArray,
   readonly,
   listWithDetailPrimitives,
