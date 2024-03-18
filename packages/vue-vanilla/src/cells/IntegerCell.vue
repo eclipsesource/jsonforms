@@ -15,12 +15,12 @@
 </template>
 
 <script setup lang="ts">
-import type { CellProps, RankedTester } from '@jsonforms/core';
+import type { RankedTester, ControlElement } from '@jsonforms/core';
 import { isIntegerControl, rankWith } from '@jsonforms/core';
-import { useJsonFormsCell } from '@jsonforms/vue';
+import { rendererProps, useJsonFormsCell } from '@jsonforms/vue';
 import { useVanillaCell } from '../util';
 
-const props = defineProps<CellProps>();
+const props = defineProps(rendererProps<ControlElement>());
 
 const input = useVanillaCell(useJsonFormsCell(props), (target) =>
   target.value === '' ? undefined : parseInt(target.value, 10)

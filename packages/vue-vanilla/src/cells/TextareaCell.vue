@@ -13,8 +13,8 @@
 </template>
 
 <script setup lang="ts">
-import { useJsonFormsCell } from '@jsonforms/vue';
-import type { CellProps, RankedTester } from '@jsonforms/core';
+import { rendererProps, useJsonFormsCell } from '@jsonforms/vue';
+import type { ControlElement, RankedTester } from '@jsonforms/core';
 import {
   and,
   isMultiLineControl,
@@ -23,7 +23,7 @@ import {
 } from '@jsonforms/core';
 import { useVanillaCell } from '../util';
 
-const props = defineProps<CellProps>();
+const props = defineProps(rendererProps<ControlElement>());
 
 const input = useVanillaCell(
   useJsonFormsCell(props),

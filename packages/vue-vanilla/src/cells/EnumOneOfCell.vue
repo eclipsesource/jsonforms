@@ -21,12 +21,12 @@
 </template>
 
 <script setup lang="ts">
-import { useJsonFormsOneOfEnumCell } from '@jsonforms/vue';
-import type { CellProps, RankedTester } from '@jsonforms/core';
+import { rendererProps, useJsonFormsOneOfEnumCell } from '@jsonforms/vue';
+import type { RankedTester, ControlElement } from '@jsonforms/core';
 import { isOneOfEnumControl, rankWith } from '@jsonforms/core';
 import { useVanillaCell } from '../util';
 
-const props = defineProps<CellProps>();
+const props = defineProps(rendererProps<ControlElement>());
 
 const input = useVanillaCell(useJsonFormsOneOfEnumCell(props), (target) =>
   target.selectedIndex === 0 ? undefined : target.value

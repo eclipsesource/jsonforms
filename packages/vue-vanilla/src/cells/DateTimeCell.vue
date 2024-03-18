@@ -15,12 +15,12 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import { useJsonFormsCell } from '@jsonforms/vue';
-import type { CellProps, RankedTester } from '@jsonforms/core';
+import { rendererProps, useJsonFormsCell } from '@jsonforms/vue';
+import type { RankedTester, ControlElement } from '@jsonforms/core';
 import { isDateTimeControl, rankWith } from '@jsonforms/core';
 import { useVanillaCell } from '../util';
 
-const props = defineProps<CellProps>();
+const props = defineProps(rendererProps<ControlElement>());
 
 const input = useVanillaCell(useJsonFormsCell(props), (target) =>
   '' !== target.value ? toISO(target.value) : undefined
@@ -35,8 +35,8 @@ const setDateTime = (str: string | undefined) => {
   dataTime.value = fromISO(str);
 };
 
-setDateTime(props.data.value);
-watch(() => props.data, setDateTime);
+setDateTime(input.cell.value.data);
+watch(() => input.cell.value.data, setDateTime);
 
 defineOptions({
   tester: rankWith(2, isDateTimeControl) as RankedTester,

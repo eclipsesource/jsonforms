@@ -14,12 +14,12 @@
 </template>
 
 <script setup lang="ts">
-import type { CellProps, RankedTester } from '@jsonforms/core';
+import type { ControlElement, RankedTester } from '@jsonforms/core';
 import { isBooleanControl, rankWith } from '@jsonforms/core';
-import { useJsonFormsCell } from '@jsonforms/vue';
+import { rendererProps, useJsonFormsCell } from '@jsonforms/vue';
 import { useVanillaCell } from '../util';
 
-const props = defineProps<CellProps>();
+const props = defineProps(rendererProps<ControlElement>());
 
 const input = useVanillaCell(
   useJsonFormsCell(props),
@@ -27,7 +27,14 @@ const input = useVanillaCell(
 );
 const { styles, cell, appliedOptions, onChange, isFocused } = input;
 
-defineOptions({
-  tester: rankWith(1, isBooleanControl) as RankedTester,
-});
+/**
+ * JUST AN PROPOSAL!!!
+ * @see https://github.com/eclipsesource/jsonforms/pull/2279#discussion_r1528101480
+ */
+defineOptions(
+  ((): { tester: RankedTester } => {
+    const tester: RankedTester = rankWith(1, isBooleanControl);
+    return { tester };
+  })()
+);
 </script>
