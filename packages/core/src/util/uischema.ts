@@ -24,7 +24,13 @@
 */
 
 import isEmpty from 'lodash/isEmpty';
-import { isLayout, UISchemaElement } from '../models';
+import {
+  isControlElement,
+  isLayout,
+  isScoped,
+  UISchemaElement,
+} from '../models';
+import { encode } from './path';
 
 export type IterateCallback = (uischema: UISchemaElement) => void;
 
@@ -54,4 +60,44 @@ export const iterateSchema = (
     return;
   }
   toApply(uischema);
+};
+
+/**
+ * Transform a dotted path to a uiSchema properties path
+ * @param path a dotted prop path to a schema value (i.e. articles.comment.author)
+ * @return the uiSchema properties path (i.e. /properties/articles/properties/comment/properties/author)
+ */
+export const getPropPath = (path: string): string => {
+  return `/properties/${path
+    .split('.')
+    .map((p) => encode(p))
+    .join('/properties/')}`;
+};
+
+/**
+ * Find a control in a uiSchema, based on the dotted path of the schema value
+ * @param {UISchemaElement} uiSchema the uiSchema to search from
+ * @param path a dotted prop path to a schema value (i.e. articles.comment.author)
+ * @return {UISchemaElement} or undefined if not found
+ */
+export const findUiControl = (
+  uiSchema: UISchemaElement,
+  path: string
+): UISchemaElement | undefined => {
+  if (isControlElement(uiSchema)) {
+    if (isScoped(uiSchema) && uiSchema.scope.endsWith(getPropPath(path))) {
+      return uiSchema;
+    } else if (uiSchema.options?.detail) {
+      return findUiControl(uiSchema.options.detail, path);
+    }
+  }
+
+  if (isLayout(uiSchema)) {
+    for (const elem of uiSchema.elements) {
+      const result = findUiControl(elem, path);
+      if (result !== undefined) return result;
+    }
+  }
+
+  return undefined;
 };

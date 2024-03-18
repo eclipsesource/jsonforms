@@ -1,5 +1,4 @@
 import merge from 'lodash/merge';
-import get from 'lodash/get';
 import React, {
   ComponentType,
   Dispatch,
@@ -23,23 +22,13 @@ import {
   JsonSchema,
   moveDown,
   moveUp,
-  Resolve,
   update,
   JsonFormsCellRendererRegistryEntry,
   JsonFormsUISchemaRegistryEntry,
-  getFirstPrimitiveProp,
   createId,
   removeId,
   ArrayTranslations,
-  encode,
-  enumToEnumOptionMapper,
-  oneOfToEnumOptionMapper,
-  getI18nKeyPrefix,
-  Translator,
-  UISchemaElement,
-  EnumOption,
-  isLayout,
-  isScoped,
+  computeChildLabel,
 } from '@jsonforms/core';
 import {
   Accordion,
@@ -381,106 +370,6 @@ export const withContextToExpandPanelProps = (
       />
     );
   };
-};
-
-const hasEnumField = (schema: JsonSchema) => {
-  return schema && (schema.enum !== undefined || schema.const !== undefined);
-};
-
-const hasOneOfField = (schema: JsonSchema) => {
-  return schema && schema.oneOf !== undefined;
-};
-
-function getChildPropPath(childLabelProp: string) {
-  return `/properties/${childLabelProp
-    .split('.')
-    .map((p) => encode(p))
-    .join('/properties/')}`;
-}
-
-const isControlElement = (
-  uiSchema: UISchemaElement
-): uiSchema is ControlElement => uiSchema.type === 'Control';
-
-const findUiControl = (
-  uiSchema: UISchemaElement,
-  childLabelProp: string
-): unknown | undefined => {
-  if (isControlElement(uiSchema)) {
-    if (
-      isScoped(uiSchema) &&
-      uiSchema.scope.endsWith(getChildPropPath(childLabelProp))
-    ) {
-      return uiSchema;
-    } else if (uiSchema.options?.detail) {
-      return findUiControl(uiSchema.options.detail, childLabelProp);
-    }
-  }
-
-  if (isLayout(uiSchema)) {
-    for (const elem of uiSchema.elements) {
-      const result = findUiControl(elem, childLabelProp);
-      if (result !== undefined) return result;
-    }
-  }
-
-  return undefined;
-};
-
-const computeChildLabel = (
-  data: any,
-  childPath: string,
-  childLabelProp: string,
-  schema: JsonSchema,
-  rootSchema: JsonSchema,
-  translateFct: Translator,
-  uiSchema: UISchemaElement
-) => {
-  const childData = Resolve.data(data, childPath);
-
-  childLabelProp ??= getFirstPrimitiveProp(schema);
-
-  const currentValue = get(childData, childLabelProp, '');
-
-  if (!childLabelProp) return currentValue;
-
-  const childSchema = Resolve.schema(
-    schema,
-    '#' + getChildPropPath(childLabelProp),
-    rootSchema
-  );
-
-  let enumOption: EnumOption = undefined;
-  if (hasEnumField(childSchema)) {
-    enumOption = enumToEnumOptionMapper(
-      currentValue,
-      translateFct,
-      getI18nKeyPrefix(
-        childSchema,
-        findUiControl(uiSchema, childLabelProp),
-        childPath + '.' + childLabelProp
-      )
-    );
-  } else if (hasOneOfField(childSchema)) {
-    const oneOfArray = childSchema.oneOf as JsonSchema[];
-    const oneOfSchema = oneOfArray.find(
-      (e: JsonSchema) => e.const === currentValue
-    );
-
-    if (oneOfSchema) {
-      enumOption = oneOfToEnumOptionMapper(
-        oneOfSchema,
-        translateFct,
-        getI18nKeyPrefix(
-          oneOfSchema,
-          undefined,
-          childPath + '.' + childLabelProp
-        )
-      );
-    }
-  }
-
-  return enumOption ? enumOption.label : currentValue;
 };
 
 export const withJsonFormsExpandPanelProps = (

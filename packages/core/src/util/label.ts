@@ -25,8 +25,27 @@
 
 import startCase from 'lodash/startCase';
 
-import type { ControlElement, JsonSchema, LabelDescription } from '../models';
+import {
+  ControlElement,
+  JsonSchema,
+  LabelDescription,
+  UISchemaElement,
+} from '../models';
 import { decode } from './path';
+import { getI18nKeyPrefix, Translator } from '../i18n';
+import { Resolve } from './util';
+import {
+  getFirstPrimitiveProp,
+  isEnumSchema,
+  isOneOfEnumSchema,
+} from './schema';
+import get from 'lodash/get';
+import { findUiControl, getPropPath } from './uischema';
+import {
+  EnumOption,
+  enumToEnumOptionMapper,
+  oneOfToEnumOptionMapper,
+} from './renderer';
 
 const deriveLabel = (
   controlElement: ControlElement,
@@ -81,3 +100,69 @@ const labelDescription = (text: string, show: boolean): LabelDescription => ({
   text: text,
   show: show,
 });
+
+/**
+ * Compute the child label title for array based controls
+ * @param data the data of the control
+ * @param childPath the child path
+ * @param childLabelProp the dotted path to the value used as child label
+ * @param {JsonSchema} schema the json schema for this control
+ * @param {JsonSchema} rootSchema the root json schema
+ * @param {Translator} translateFct the translator fonction
+ * @param {UISchemaElement} uiSchema the uiSchema of the control
+ */
+export const computeChildLabel = (
+  data: any,
+  childPath: string,
+  childLabelProp: string,
+  schema: JsonSchema,
+  rootSchema: JsonSchema,
+  translateFct: Translator,
+  uiSchema: UISchemaElement
+): any => {
+  const childData = Resolve.data(data, childPath);
+
+  childLabelProp ??= getFirstPrimitiveProp(schema);
+
+  const currentValue = get(childData, childLabelProp, '');
+
+  if (!childLabelProp) return currentValue;
+
+  const childSchema = Resolve.schema(
+    schema,
+    '#' + getPropPath(childLabelProp),
+    rootSchema
+  );
+
+  let enumOption: EnumOption = undefined;
+  if (isEnumSchema(childSchema)) {
+    enumOption = enumToEnumOptionMapper(
+      currentValue,
+      translateFct,
+      getI18nKeyPrefix(
+        childSchema,
+        findUiControl(uiSchema, childLabelProp),
+        childPath + '.' + childLabelProp
+      )
+    );
+  } else if (isOneOfEnumSchema(childSchema)) {
+    const oneOfArray = childSchema.oneOf as JsonSchema[];
+    const oneOfSchema = oneOfArray.find(
+      (e: JsonSchema) => e.const === currentValue
+    );
+
+    if (oneOfSchema) {
+      enumOption = oneOfToEnumOptionMapper(
+        oneOfSchema,
+        translateFct,
+        getI18nKeyPrefix(
+          oneOfSchema,
+          undefined,
+          childPath + '.' + childLabelProp
+        )
+      );
+    }
+  }
+
+  return enumOption ? enumOption.label : currentValue;
+};
