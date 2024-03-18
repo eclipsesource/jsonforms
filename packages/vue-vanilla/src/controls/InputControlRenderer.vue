@@ -6,9 +6,11 @@
     :applied-options="appliedOptions"
   >
     <DispatchCell
-      v-bind="control"
-      :id="controlWrapper.id"
-      :handle-change="handleChange"
+      :id="control.id + '-input'"
+      :schema="control.schema"
+      :uischema="control.uischema"
+      :enabled="control.enabled"
+      :path="control.path"
     />
   </control-wrapper>
 </template>
