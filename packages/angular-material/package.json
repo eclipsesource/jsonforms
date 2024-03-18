@@ -70,6 +70,7 @@
     "@angular/router": "^16.0.0 || ^17.0.0",
     "@jsonforms/angular": "3.2.1",
     "@jsonforms/core": "3.2.1",
+    "dayjs": "^1.11.7",
     "rxjs": "^6.6.0 || ^7.4.0"
   },
   "dependencies": {
@@ -108,6 +109,7 @@
     "@typescript-eslint/parser": "^5.54.1",
     "babel-loader": "^8.0.6",
     "copy-webpack-plugin": "^11.0.0",
+    "dayjs": "^1.11.10",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^8.7.0",
     "eslint-plugin-import": "^2.27.5",
