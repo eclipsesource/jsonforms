@@ -68,6 +68,7 @@ export const removeSchemaKeywords = (path: string) => {
   template: `
     <mat-sidenav-container
       [ngStyle]="{ display: hidden ? 'none' : '' }"
+      autosize="true"
       class="container"
     >
       <mat-sidenav mode="side" opened>
