@@ -171,7 +171,10 @@ const controlRenderer = defineComponent({
     openNewTab(): void {
       this.handleChange(
         this.path,
-        createDefaultValue(this.oneOfRenderInfos[this.newSelectedIndex].schema)
+        createDefaultValue(
+            this.oneOfRenderInfos[this.newSelectedIndex].schema,
+            this.control.rootSchema
+        )
       );
       this.tabIndex = this.newSelectedIndex;
       this.selectedIndex = this.newSelectedIndex;

@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/vue-vuetify",
-  "version": "3.2.0-preview-alpha.3",
+  "version": "3.2.1",
   "description": "Vue Vuetify renderers for JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms-vuetify-renderers",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -47,8 +47,8 @@
     "lodash": "^4.17.15"
   },
   "peerDependencies": {
-    "@jsonforms/core": "3.2.0-alpha.3",
-    "@jsonforms/vue": "3.2.0-alpha.3",
+    "@jsonforms/core": "3.2.1",
+    "@jsonforms/vue": "3.2.1",
     "@mdi/font": "^7.0.96",
     "vue": "^3.2.47",
     "vuetify": "^3.1.12"
@@ -57,8 +57,8 @@
     "@babel/core": "^7.14.6",
     "@babel/preset-env": "^7.14.7",
     "@babel/preset-typescript": "^7.14.5",
-    "@jsonforms/core": "3.2.0-alpha.3",
-    "@jsonforms/vue": "3.2.0-alpha.3",
+    "@jsonforms/core": "3.2.1",
+    "@jsonforms/vue": "3.2.1",
     "@mdi/font": "^7.0.96",
     "@rollup/plugin-babel": "^6.0.3",
     "@rollup/plugin-node-resolve": "^15.0.1",

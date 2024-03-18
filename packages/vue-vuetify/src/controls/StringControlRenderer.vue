@@ -1,4 +1,5 @@
 <template>
+  <p class="text-red">live</p>
   <control-wrapper
     v-bind="controlWrapper"
     :styles="styles"

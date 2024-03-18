@@ -425,7 +425,10 @@ export default defineComponent({
                 (newData[ap.propertyName] === null &&
                   ap.schema.type !== 'null')) // createDefaultValue will return null only when the ap.schema.type is 'null'
             ) {
-              const newValue = createDefaultValue(ap.schema);
+              const newValue = createDefaultValue(
+                  ap.schema,
+                  this.control.rootSchema
+              );
               hasChanges = newData[ap.propertyName] !== newValue;
               newData[ap.propertyName] = newValue;
             }
@@ -466,7 +469,7 @@ export default defineComponent({
           additionalProperty.schema
         ) {
           this.control.data[this.newPropertyName] = createDefaultValue(
-            additionalProperty.schema
+            additionalProperty.schema, this.control.rootSchema
           );
           // we need always to preserve the key even when the value is "empty"
           this.input.handleChange(this.control.path, this.control.data);

@@ -1,6 +1,6 @@
 {
   "name": "example",
-  "version": "3.2.0-preview-alpha.3",
+  "version": "3.2.1",
   "private": true,
   "scripts": {
     "build": "vue-cli-service build",
@@ -8,9 +8,9 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
-    "@jsonforms/core": "3.2.0-alpha.3",
-    "@jsonforms/vue": "3.2.0-alpha.3",
-    "@jsonforms/vue-vuetify": "^3.2.0-preview-alpha.3",
+    "@jsonforms/core": "3.2.1",
+    "@jsonforms/vue": "3.2.1",
+    "@jsonforms/vue-vuetify": "3.2.1",
     "ajv-keywords": "^5.1.0",
     "core-js": "^3.9.1",
     "json-refs": "^3.0.15",
