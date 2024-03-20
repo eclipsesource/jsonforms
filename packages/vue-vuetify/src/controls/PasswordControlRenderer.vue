@@ -30,8 +30,8 @@
       "
       v-bind="vuetifyProps('v-text-field')"
       @update:model-value="onChange"
-      @focus="isFocused = true"
-      @blur="isFocused = false"
+      @focus="handleFocus"
+      @blur="handleBlur"
     />
   </control-wrapper>
 </template>

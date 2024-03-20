@@ -31,8 +31,8 @@
         :clearable="isHovering"
         v-bind="vuetifyProps('v-combobox')"
         @change="onChange"
-        @focus="isFocused = true"
-        @blur="isFocused = false"
+        @focus="handleFocus"
+        @blur="handleBlur"
       />
     </v-hover>
   </control-wrapper>

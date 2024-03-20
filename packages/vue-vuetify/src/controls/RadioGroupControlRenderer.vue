@@ -21,8 +21,8 @@
       :model-value="control.data"
       v-bind="vuetifyProps('v-radio-group')"
       @change="onChange"
-      @focus="isFocused = true"
-      @blur="isFocused = false"
+      @focus="handleFocus"
+      @blur="handleBlur"
     >
       <v-radio
         v-for="o in control.options"

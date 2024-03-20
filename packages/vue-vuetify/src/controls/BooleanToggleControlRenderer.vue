@@ -22,8 +22,8 @@
       :false-value="false"
       v-bind="vuetifyProps('v-switch')"
       @change="onChange"
-      @focus="isFocused = true"
-      @blur="isFocused = false"
+      @focus="handleFocus"
+      @blur="handleBlur"
     />
   </control-wrapper>
 </template>

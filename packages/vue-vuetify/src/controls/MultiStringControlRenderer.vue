@@ -31,8 +31,8 @@
         multi-line
         v-bind="vuetifyProps('v-textarea')"
         @update:model-value="onChange"
-        @focus="isFocused = true"
-        @blur="isFocused = false"
+        @focus="handleFocus"
+        @blur="handleBlur"
       />
     </v-hover>
   </control-wrapper>

@@ -28,8 +28,8 @@
         "
         :clearable="isHovering"
         v-bind="vuetifyProps('v-text-field')"
-        @focus="isFocused = true"
-        @blur="isFocused = false"
+        @focus="handleFocus"
+        @blur="handleBlur"
         v-model="maskModel"
         v-mask="mask"
       />

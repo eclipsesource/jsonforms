@@ -19,8 +19,8 @@
       v-bind="vuetifyProps('v-text-field')"
       :model-value="control.data"
       @update:model-value="onChange"
-      @focus="isFocused = true"
-      @blur="isFocused = false"
+      @focus="handleFocus"
+      @blur="handleBlur"
       type="date"
     />
   </control-wrapper>

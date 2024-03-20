@@ -20,8 +20,8 @@
       :model-value="control.data"
       v-bind="vuetifyProps('v-checkbox')"
       @change="onChange"
-      @focus="isFocused = true"
-      @blur="isFocused = false"
+      @focus="handleFocus"
+      @blur="handleBlur"
     />
   </control-wrapper>
 </template>

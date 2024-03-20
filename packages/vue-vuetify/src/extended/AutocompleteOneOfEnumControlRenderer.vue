@@ -26,8 +26,8 @@
         item-value="value"
         v-bind="vuetifyProps('v-select')"
         @change="onChange"
-        @focus="isFocused = true"
-        @blur="isFocused = false"
+        @focus="handleFocus"
+        @blur="handleBlur"
       />
       <v-autocomplete
         v-else
@@ -49,8 +49,8 @@
         item-value="value"
         v-bind="vuetifyProps('v-autocomplete')"
         @update:model-value="onChange"
-        @focus="isFocused = true"
-        @blur="isFocused = false"
+        @focus="handleFocus"
+        @blur="handleBlur"
       />
     </v-hover>
   </control-wrapper>

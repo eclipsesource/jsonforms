@@ -26,8 +26,8 @@
         item-value="index"
         v-model="selectIndex"
         v-bind="vuetifyProps('v-select')"
-        @focus="isFocused = true"
-        @blur="isFocused = false"
+        @focus="handleFocus"
+        @blur="handleBlur"
       ></v-select>
     </v-hover>
     <dispatch-renderer

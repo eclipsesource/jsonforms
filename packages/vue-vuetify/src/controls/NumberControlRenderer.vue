@@ -23,8 +23,8 @@
         :clearable="isHovering"
         v-bind="vuetifyProps('v-text-field')"
         @update:model-value="onInputChange"
-        @focus="isFocused = true"
-        @blur="isFocused = false"
+        @focus="handleFocus"
+        @blur="handleBlur"
       ></v-text-field>
     </v-hover>
   </control-wrapper>

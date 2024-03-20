@@ -25,8 +25,8 @@
         item-value="value"
         v-bind="vuetifyProps('v-select')"
         @update:modelValue="onChange"
-        @focus="isFocused = true"
-        @blur="isFocused = false"
+        @focus="handleFocus"
+        @blur="handleBlur"
       />
     </v-hover>
   </control-wrapper>
