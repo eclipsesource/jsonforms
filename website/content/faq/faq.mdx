@@ -61,14 +61,14 @@ const uischema = person.uischema;
 const initialData = person.data;
 
 function App() {
-  const [stateData, setData] = useState(initialData);
+  const [data, setData] = useState(initialData);
 
   return (
     <div className="App">
       <JsonForms
         schema={schema}
         uischema={uischema}
-        data={initialData}
+        data={data}
         renderers={materialRenderers}
         onChange={({ errors, data }) => setData(data)}
       />
@@ -100,21 +100,58 @@ const RatingControl = ({ data, handleChange, path }) => (
   />
 );
 
+// renderers should be static or memoized
+const renderers = [
+    ...materialRenderers,
+    //register custom renderer
+    { tester: rankWith(3,scopeEndsWith('rating')), renderer: RatingControl }
+  ]
+
+...
+
 <JsonForms
   schema={schema}
   uischema={uischema}
   data={stateData}
-  renderers={[
-    ...materialRenderers,
-    //register custom renderer
-    { tester: rankWith(3,scopeEndsWith('rating')), renderer: RatingControl }
-  ]}
+  renderers={renderers}
 />
 ```
 
 For more information about custom renderers, have a look [here](/docs/tutorial/custom-renderers).
 
-## How can I use default values within JSON Forms
+## How can I minimize re-rendering?
+
+JSON Forms uses `React.memo` to avoid any unnecessary re-rendering.
+Therefore props should in general be stable, for example by memoizing them.
+There are three exceptions: JSON Forms can handle "onChange" and "middleware" changes, for example to support anonymous functions. Also new "i18n" objects will be ignored as long as their properties are stable.
+
+JSON Forms is able to recognize `data` objects it emitted via `onChange`, so handing them over is safe too.
+However whenever a different `data` object is handed over, JSON Forms will revalidate and rerender.
+
+```js
+const [data, setData] = useState(initialData);
+
+<JsonForms
+  data={data}
+  onChange={({ data }) => setData(data)}
+/>
+```
+In this scenario, onChange will set the data in the parent component.
+Afterwards the data is passed on to JSON Forms, but JSON Forms will not revalidate and render again, since the data prop is the object emitted by the onChange method.
+On the other hand an anti pattern can be seen when looking at the `data` prop in the following example:
+
+```js
+const [data, setData] = useState(initialData);
+
+<JsonForms
+  data={data}
+  onChange={({ data }) => setData({ ...data })}
+/>
+```
+Updating the state with a new object in the `onChange` function leads to a new render cycle, in which JSON Forms will revalidate the data and retrigger the onChange method, resulting in an endless loop.
+Only provide a new object to JSON Forms if necessary, for example if the data was modified outside of JSON Forms.
+
+## How can I use default values within JSON Forms?
 
 We use Ajv for handling JSON Schema's default values.
 To enable the creation of default values, you need to create a custom Ajv instance and hand it over to JSON Forms.
