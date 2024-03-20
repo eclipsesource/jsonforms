@@ -23,18 +23,25 @@
   THE SOFTWARE.
 */
 import './MatchMediaMock';
-import { ControlElement, JsonSchema7 } from '@jsonforms/core';
+import {
+  ArrayTranslationEnum,
+  ControlElement,
+  JsonSchema7,
+  Scoped,
+  UISchemaElement,
+} from '@jsonforms/core';
 import * as React from 'react';
 
-import { materialRenderers } from '../../src';
+import { ArrayLayoutToolbar, materialRenderers } from '../../src';
 import MaterialListWithDetailRenderer, {
   materialListWithDetailTester,
 } from '../../src/additional/MaterialListWithDetailRenderer';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { JsonFormsStateProvider } from '@jsonforms/react';
-import { ListItem } from '@mui/material';
-import { initCore } from './util';
+import { ListItem, Typography } from '@mui/material';
+import { initCore, testTranslator } from './util';
+import { checkTooltip, checkTooltipTranslation } from './tooltipChecker';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -47,6 +54,23 @@ const data = [
     message: 'Yolo',
   },
 ];
+
+const emptyData: any[] = [];
+
+const enumOrOneOfData = [
+  {
+    message: 'El Barto was here',
+    messageType: 'MSG_TYPE_1',
+  },
+  {
+    message: 'El Barto was not here',
+    messageType: 'MSG_TYPE_2',
+  },
+  {
+    message: 'Yolo',
+  },
+];
+
 const schema: JsonSchema7 = {
   type: 'array',
   items: {
@@ -67,6 +91,24 @@ const schema: JsonSchema7 = {
 const uischema: ControlElement = {
   type: 'Control',
   scope: '#',
+};
+
+const uischemaListWithDetail: UISchemaElement & Scoped = {
+  type: 'ListWithDetail',
+  scope: '#',
+};
+
+const enumSchema: JsonSchema7 = {
+  type: 'array',
+  items: {
+    type: 'object',
+    properties: {
+      messageType: {
+        type: 'string',
+        enum: ['MSG_TYPE_1', 'MSG_TYPE_2'],
+      },
+    },
+  },
 };
 
 const nestedSchema: JsonSchema7 = {
@@ -345,5 +387,132 @@ describe('Material list with detail renderer', () => {
 
     const lis = wrapper.find(ListItem);
     expect(lis).toHaveLength(1);
+  });
+
+  it('should render first simple property', () => {
+    const core = initCore(schema, uischema, data);
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
+        <MaterialListWithDetailRenderer schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
+    );
+
+    expect(wrapper.find(ListItem)).toHaveLength(2);
+
+    expect(wrapper.find(ListItem).find(Typography).at(0).text()).toBe(
+      'El Barto was here'
+    );
+    expect(wrapper.find(ListItem).find(Typography).at(1).text()).toBe('Yolo');
+  });
+
+  it('should render first simple enum property as translated child label', () => {
+    const core = initCore(enumSchema, uischema, enumOrOneOfData);
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core, i18n: testTranslator }}
+      >
+        <MaterialListWithDetailRenderer
+          schema={enumSchema}
+          uischema={uischema}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    expect(wrapper.find(ListItem)).toHaveLength(3);
+
+    expect(wrapper.find(ListItem).find(Typography).at(0).text()).toBe(
+      'MSG_TYPE_1'
+    );
+    expect(wrapper.find(ListItem).find(Typography).at(1).text()).toBe(
+      'MSG_TYPE_2'
+    );
+    expect(wrapper.find(ListItem).find(Typography).at(2).text()).toBe('');
+  });
+
+  it('should have no data message when no translator set', () => {
+    const core = initCore(schema, uischema, emptyData);
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
+        <MaterialListWithDetailRenderer schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
+    );
+
+    const noDataLabel = wrapper.find('ul>p').text();
+    expect(noDataLabel).toBe('No data');
+  });
+
+  it('should have a translation for no data', () => {
+    const core = initCore(schema, uischema, emptyData);
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{
+          renderers: materialRenderers,
+          core,
+          i18n: { translate: testTranslator },
+        }}
+      >
+        <MaterialListWithDetailRenderer schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
+    );
+
+    const noDataLabel = wrapper.find('ul>p').text();
+    expect(noDataLabel).toBe('translator.root.noDataMessage');
+  });
+
+  it('should have a tooltip for add button', () => {
+    wrapper = checkTooltip(
+      schema,
+      uischemaListWithDetail,
+      wrapper,
+      (wrapper) => wrapper.find(ArrayLayoutToolbar),
+      ArrayTranslationEnum.addTooltip,
+      {
+        id: 'tooltip-add',
+      },
+      data
+    );
+  });
+  it('should have a translatable tooltip for add button', () => {
+    wrapper = checkTooltipTranslation(
+      schema,
+      uischemaListWithDetail,
+      wrapper,
+      (wrapper) => wrapper.find(ArrayLayoutToolbar),
+      {
+        id: 'tooltip-add',
+      },
+      data
+    );
+  });
+
+  it('should have a tooltip for delete button', () => {
+    wrapper = checkTooltip(
+      schema,
+      uischemaListWithDetail,
+      wrapper,
+      (wrapper) => wrapper.find('Memo(ListWithDetailMasterItem)').at(0),
+      ArrayTranslationEnum.removeTooltip,
+      {
+        id: 'tooltip-remove',
+      },
+      data
+    );
+  });
+
+  it('should have a translatable tooltip for delete button', () => {
+    wrapper = checkTooltipTranslation(
+      schema,
+      uischemaListWithDetail,
+      wrapper,
+      (wrapper) => wrapper.find('Memo(ListWithDetailMasterItem)').at(0),
+      {
+        id: 'tooltip-remove',
+      },
+      data
+    );
   });
 });

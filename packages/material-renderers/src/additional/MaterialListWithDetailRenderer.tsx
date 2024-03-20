@@ -139,11 +139,13 @@ export const MaterialListWithDetailRenderer = ({
                   removeItem={handleRemoveItem}
                   selected={selectedIndex === index}
                   key={index}
+                  uischema={foundUISchema}
+                  childLabelProp={appliedUiSchemaOptions.elementLabelProp}
                   translations={translations}
                 />
               ))
             ) : (
-              <p>No data</p>
+              <p>{translations.noDataMessage}</p>
             )}
           </List>
         </Grid>
