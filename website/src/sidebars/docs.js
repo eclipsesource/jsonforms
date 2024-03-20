@@ -17,6 +17,7 @@ module.exports = {
     'validation',
     'date-time-picker',
     'multiple-choice',
+    'middleware',
     {
       type: 'category',
       label: 'Tutorials',
