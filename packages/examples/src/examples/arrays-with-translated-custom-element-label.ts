@@ -174,7 +174,8 @@ export const uischema = {
     },
     {
       type: 'Group',
-      label: 'ListWithDetail with elementLabelProp pointing on an direct enum (expected translated PUBLIC/PRIVATE)',
+      label:
+        'ListWithDetail with elementLabelProp pointing on an direct enum (expected translated PUBLIC/PRIVATE)',
       elements: [
         {
           type: 'ListWithDetail',
