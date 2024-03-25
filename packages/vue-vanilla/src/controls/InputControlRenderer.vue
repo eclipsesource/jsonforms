@@ -5,42 +5,37 @@
     :is-focused="isFocused"
     :applied-options="appliedOptions"
   >
-    <textarea
+    <DispatchCell
       :id="control.id + '-input'"
-      :class="styles.control.textarea"
-      :value="control.data"
-      :disabled="!control.enabled"
-      :autofocus="appliedOptions.focus"
-      :placeholder="appliedOptions.placeholder"
-      @change="onChange"
-      @focus="isFocused = true"
-      @blur="isFocused = false"
+      :schema="control.schema"
+      :uischema="control.uischema"
+      :enabled="control.enabled"
+      :path="control.path"
     />
   </control-wrapper>
 </template>
 
 <script lang="ts">
-import {
+import type {
   ControlElement,
   JsonFormsRendererRegistryEntry,
-  rankWith,
-  isStringControl,
-  isMultiLineControl,
-  and,
 } from '@jsonforms/core';
+import { isControl, rankWith } from '@jsonforms/core';
 import { defineComponent } from 'vue';
 import {
+  DispatchCell,
   rendererProps,
+  type RendererProps,
   useJsonFormsControl,
-  RendererProps,
 } from '../../config/jsonforms';
 import { default as ControlWrapper } from './ControlWrapper.vue';
 import { useVanillaControl } from '../util';
 
 const controlRenderer = defineComponent({
-  name: 'MultiStringControlRenderer',
+  name: 'InputControlRenderer',
   components: {
     ControlWrapper,
+    DispatchCell,
   },
   props: {
     ...rendererProps<ControlElement>(),
@@ -57,6 +52,6 @@ export default controlRenderer;
 
 export const entry: JsonFormsRendererRegistryEntry = {
   renderer: controlRenderer,
-  tester: rankWith(2, and(isStringControl, isMultiLineControl)),
+  tester: rankWith(1, isControl),
 };
 </script>

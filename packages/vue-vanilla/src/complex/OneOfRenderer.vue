@@ -70,12 +70,15 @@
 
 <script lang="ts">
 import {
+  and,
   CombinatorSubSchemaRenderInfo,
   ControlElement,
   createCombinatorRenderInfos,
   createDefaultValue,
   isOneOfControl,
+  isOneOfEnumControl,
   JsonFormsRendererRegistryEntry,
+  not,
   rankWith,
 } from '@jsonforms/core';
 import {
@@ -192,6 +195,6 @@ export default controlRenderer;
 
 export const entry: JsonFormsRendererRegistryEntry = {
   renderer: controlRenderer,
-  tester: rankWith(3, isOneOfControl),
+  tester: rankWith(3, and(isOneOfControl, not(isOneOfEnumControl))),
 };
 </script>
