@@ -122,7 +122,7 @@ export const computeChildLabel = (
 ): any => {
   const childData = Resolve.data(data, childPath);
 
-  childLabelProp ??= getFirstPrimitiveProp(schema);
+  if (!childLabelProp) childLabelProp = getFirstPrimitiveProp(schema);
 
   const currentValue = get(childData, childLabelProp, '');
 
