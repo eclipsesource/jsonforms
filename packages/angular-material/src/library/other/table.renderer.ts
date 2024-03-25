@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import startCase from 'lodash/startCase';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Pipe, PipeTransform } from '@angular/core';
 import {
   JsonFormsAngularService,
   JsonFormsArrayControl,
@@ -126,7 +126,7 @@ import {
         <th mat-header-cell *matHeaderCellDef>{{ item.header }}</th>
         <td mat-cell *matCellDef="let index = index">
           <jsonforms-outlet
-            [renderProps]="getProps(index, item.props)"
+            [renderProps]="index | getProps : item.props"
           ></jsonforms-outlet>
         </td>
       </ng-container>
@@ -161,14 +161,6 @@ export class TableRenderer extends JsonFormsArrayControl implements OnInit {
       this.displayedColumns.push('action');
     }
     this.translations = props.translations;
-  }
-  getProps(index: number, props: OwnPropsOfRenderer): OwnPropsOfRenderer {
-    const rowPath = Paths.compose(props.path, `${index}`);
-    return {
-      schema: props.schema,
-      uischema: props.uischema,
-      path: rowPath,
-    };
   }
 
   remove(index: number): void {
@@ -265,3 +257,15 @@ export const controlWithoutLabel = (scope: string): ControlElement => ({
   scope: scope,
   label: false,
 });
+
+@Pipe({ name: 'getProps' })
+export class GetProps implements PipeTransform {
+  transform(index: number, props: OwnPropsOfRenderer) {
+    const rowPath = Paths.compose(props.path, `${index}`);
+    return {
+      schema: props.schema,
+      uischema: props.uischema,
+      path: rowPath,
+    };
+  }
+}
