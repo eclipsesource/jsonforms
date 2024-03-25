@@ -35,6 +35,7 @@ import { JsonFormsAngularService, JsonFormsModule } from '@jsonforms/angular';
 import { ControlElement } from '@jsonforms/core';
 import { TextControlRenderer, TextControlRendererTester } from '../src';
 import {
+  GetProps,
   TableRenderer,
   TableRendererTester,
 } from '../src/library/other/table.renderer';
@@ -139,7 +140,7 @@ describe('Table', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [TableRenderer, TextControlRenderer],
+      declarations: [TableRenderer, TextControlRenderer, GetProps],
       imports: [
         CommonModule,
         JsonFormsModule,

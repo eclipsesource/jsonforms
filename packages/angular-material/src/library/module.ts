@@ -110,7 +110,7 @@ import { LayoutChildrenRenderPropsPipe } from './layouts';
     TableRenderer,
     ArrayLayoutRenderer,
     LayoutChildrenRenderPropsPipe,
-    GetProps
+    GetProps,
   ],
   exports: [
     CommonModule,
