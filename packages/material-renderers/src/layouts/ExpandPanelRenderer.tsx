@@ -1,5 +1,4 @@
 import merge from 'lodash/merge';
-import get from 'lodash/get';
 import React, {
   ComponentType,
   Dispatch,
@@ -23,14 +22,13 @@ import {
   JsonSchema,
   moveDown,
   moveUp,
-  Resolve,
   update,
   JsonFormsCellRendererRegistryEntry,
   JsonFormsUISchemaRegistryEntry,
-  getFirstPrimitiveProp,
   createId,
   removeId,
   ArrayTranslations,
+  computeChildLabel,
 } from '@jsonforms/core';
 import {
   Accordion,
@@ -311,18 +309,56 @@ export const ctxDispatchToExpandPanelProps: (
  */
 export const withContextToExpandPanelProps = (
   Component: ComponentType<ExpandPanelProps>
-): ComponentType<OwnPropsOfExpandPanel> =>
-  function WithContextToExpandPanelProps({
+): ComponentType<{
+  ctx: JsonFormsStateContext;
+  props: OwnPropsOfExpandPanel;
+}> => {
+  return function WithContextToExpandPanelProps({
     ctx,
     props,
-  }: JsonFormsStateContext & ExpandPanelProps) {
+  }: {
+    ctx: JsonFormsStateContext;
+    props: ExpandPanelProps;
+  }) {
     const dispatchProps = ctxDispatchToExpandPanelProps(ctx.dispatch);
-    const { childLabelProp, schema, path, index, uischemas } = props;
+    const {
+      // eslint is unable to detect that these props are "checked" via Typescript already
+      // eslint-disable-next-line react/prop-types
+      childLabelProp,
+      // eslint-disable-next-line react/prop-types
+      schema,
+      // eslint-disable-next-line react/prop-types
+      uischema,
+      // eslint-disable-next-line react/prop-types
+      rootSchema,
+      // eslint-disable-next-line react/prop-types
+      path,
+      // eslint-disable-next-line react/prop-types
+      index,
+      // eslint-disable-next-line react/prop-types
+      uischemas,
+    } = props;
     const childPath = composePaths(path, `${index}`);
-    const childData = Resolve.data(ctx.core.data, childPath);
-    const childLabel = childLabelProp
-      ? get(childData, childLabelProp, '')
-      : get(childData, getFirstPrimitiveProp(schema), '');
+
+    const childLabel = useMemo(() => {
+      return computeChildLabel(
+        ctx.core.data,
+        childPath,
+        childLabelProp,
+        schema,
+        rootSchema,
+        ctx.i18n.translate,
+        uischema
+      );
+    }, [
+      ctx.core.data,
+      childPath,
+      childLabelProp,
+      schema,
+      rootSchema,
+      ctx.i18n.translate,
+      uischema,
+    ]);
 
     return (
       <Component
@@ -334,6 +370,7 @@ export const withContextToExpandPanelProps = (
       />
     );
   };
+};
 
 export const withJsonFormsExpandPanelProps = (
   Component: ComponentType<ExpandPanelProps>
