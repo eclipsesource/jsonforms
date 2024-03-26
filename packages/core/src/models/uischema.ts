@@ -309,3 +309,7 @@ export const isLabelable = (obj: unknown): obj is Labelable =>
 
 export const isLabeled = <T = never>(obj: unknown): obj is Labeled<T> =>
   isLabelable(obj) && ['string', 'boolean'].includes(typeof obj.label);
+
+export const isControlElement = (
+  uiSchema: UISchemaElement
+): uiSchema is ControlElement => uiSchema.type === 'Control';

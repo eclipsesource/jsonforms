@@ -2,8 +2,8 @@ import { EnzymePropSelector, mount, ReactWrapper } from 'enzyme';
 import {
   arrayDefaultTranslations,
   ArrayTranslationEnum,
-  ControlElement,
   JsonSchema,
+  UISchemaElement,
 } from '@jsonforms/core';
 import { JsonForms } from '@jsonforms/react';
 import { materialRenderers } from '../../src';
@@ -12,7 +12,7 @@ import * as React from 'react';
 
 export const checkTooltip = (
   schema: JsonSchema,
-  uiSchema: ControlElement,
+  uiSchema: UISchemaElement,
   wrapper: ReactWrapper<any, any>,
   findTooltipWrapper: (
     wrapper: ReactWrapper<any, any>
@@ -42,7 +42,7 @@ export const checkTooltip = (
 
 export const checkTooltipTranslation = (
   schema: JsonSchema,
-  uiSchema: ControlElement,
+  uiSchema: UISchemaElement,
   wrapper: ReactWrapper<any, any>,
   findTooltipWrapper: (
     wrapper: ReactWrapper<any, any>
