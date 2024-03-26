@@ -36,6 +36,7 @@ import {
   mapStateToLabelProps,
   LabelElement,
   Categorization,
+  isControl,
 } from '@jsonforms/core';
 import {
   PropType,
@@ -45,6 +46,7 @@ import {
   onBeforeMount,
   onUnmounted,
   ref,
+  watch,
 } from 'vue';
 
 /**
@@ -183,6 +185,21 @@ export function useControl<R, D, P extends {}>(
       id.value = createId((control.value as any).uischema.scope);
     }
   });
+
+  watch(
+    () => (props as unknown as RendererProps).schema,
+    (newSchema, prevSchem) => {
+      if (
+        newSchema !== prevSchem &&
+        isControl((control.value as any).uischema)
+      ) {
+        if (id.value) {
+          removeId(id.value);
+        }
+        id.value = createId((control.value as any).uischema.scope);
+      }
+    }
+  );
 
   onUnmounted(() => {
     if (id.value) {
