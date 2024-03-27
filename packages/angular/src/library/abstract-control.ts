@@ -29,6 +29,7 @@ import {
   JsonFormsState,
   JsonSchema,
   OwnPropsOfControl,
+  removeId,
   StatePropsOfControl,
 } from '@jsonforms/core';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
@@ -148,6 +149,7 @@ export abstract class JsonFormsAbstractControl<
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+    removeId(this.id);
   }
 
   isEnabled(): boolean {
