@@ -58,6 +58,7 @@ export const ArrayControl = ({
   renderers,
   rootSchema,
   translations,
+  enabled,
 }: ArrayControlProps & VanillaRendererProps) => {
   const controlElement = uischema as ControlElement;
   const childUiSchema = useMemo(
@@ -98,6 +99,7 @@ export const ArrayControl = ({
         <button
           type='button'
           className={buttonClassAdd}
+          disabled={!enabled}
           onClick={addItem(path, createDefaultValue(schema, rootSchema))}
         >
           Add to {label}
@@ -121,6 +123,7 @@ export const ArrayControl = ({
                   <button
                     type='button'
                     className={buttonClassUp}
+                    disabled={!enabled}
                     aria-label={translations.upAriaLabel}
                     onClick={() => {
                       moveUp(path, index)();
@@ -131,6 +134,7 @@ export const ArrayControl = ({
                   <button
                     type='button'
                     className={buttonClassDown}
+                    disabled={!enabled}
                     aria-label={translations.downAriaLabel}
                     onClick={() => {
                       moveDown(path, index)();
@@ -141,6 +145,7 @@ export const ArrayControl = ({
                   <button
                     type='button'
                     className={buttonClassDelete}
+                    disabled={!enabled}
                     aria-label={translations.removeAriaLabel}
                     onClick={() => {
                       if (
