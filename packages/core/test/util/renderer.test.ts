@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
+
   Copyright (c) 2017-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -71,6 +71,9 @@ import { JsonSchema7 } from '../../src/models/jsonSchema7';
 import { defaultJsonFormsI18nState } from '../../src/reducers/i18n';
 import { i18nJsonSchema } from '../../src/i18n/i18nTypes';
 import { convertDateToString } from '../../src/util';
+import { configReducer, setConfig } from '../../src';
+
+type Combinator = 'allOf' | 'anyOf' | 'oneOf';
 
 const middlewares: Redux.Middleware[] = [];
 const mockStore = configureStore<JsonFormsState>(middlewares);
@@ -441,6 +444,725 @@ test('mapStateToControlProps - id', (t) => {
   };
   const props = mapStateToControlProps(createState(coreUISchema), ownProps);
   t.is(props.id, '#/properties/firstName');
+});
+
+test('mapStateToControlProps - required not checked dynamically if not explicitly specified in config', (t) => {
+  const schema = {
+    type: 'object',
+    properties: {
+      notifications: { type: 'boolean' },
+      firstName: { type: 'string' },
+    },
+    required: ['notifications'],
+    if: {
+      properties: {
+        notifications: { const: true },
+      },
+    },
+    then: {
+      required: ['firstName'],
+    },
+  };
+
+  const ownProps: OwnPropsOfControl = {
+    uischema: coreUISchema,
+    schema,
+  };
+
+  const createState = (data: {
+    notifications: boolean;
+    firstName: string;
+  }) => ({
+    jsonforms: {
+      core: {
+        schema,
+        uischema: coreUISchema,
+        data,
+        errors: [] as ErrorObject[],
+      },
+    },
+  });
+
+  const stateTrue = createState({ notifications: true, firstName: 'Bart' });
+  const stateFalse = createState({ notifications: false, firstName: 'Bart' });
+
+  const propsTrue = mapStateToControlProps(stateTrue, ownProps);
+  const propsFalse = mapStateToControlProps(stateFalse, ownProps);
+  t.false(propsTrue.required);
+  t.false(propsFalse.required);
+});
+
+test('mapStateToControlProps - required with dynamic check based on single condition', (t) => {
+  const schema = {
+    type: 'object',
+    properties: {
+      notifications: { type: 'boolean' },
+      firstName: { type: 'string' },
+    },
+    required: ['notifications'],
+    if: {
+      properties: {
+        notifications: { const: true },
+      },
+    },
+    then: {
+      required: ['firstName'],
+    },
+  };
+
+  const ownProps: OwnPropsOfControl = {
+    uischema: coreUISchema,
+    schema,
+  };
+
+  const config = setConfig({
+    allowDynamicCheck: true,
+  });
+
+  const createState = (data: {
+    notifications: boolean;
+    firstName: string;
+  }) => ({
+    jsonforms: {
+      core: {
+        schema,
+        uischema: coreUISchema,
+        data,
+        errors: [] as ErrorObject[],
+      },
+      config: configReducer(undefined, config),
+    },
+  });
+
+  const stateTrue = createState({ notifications: true, firstName: 'Bart' });
+  const stateFalse = createState({ notifications: false, firstName: 'Bart' });
+
+  const propsTrue = mapStateToControlProps(stateTrue, ownProps);
+  const propsFalse = mapStateToControlProps(stateFalse, ownProps);
+  t.true(propsTrue.required);
+  t.false(propsFalse.required);
+});
+
+test('mapStateToControlProps - required with dynamic check based on condition with missing data', (t) => {
+  const schema = {
+    type: 'object',
+    properties: {
+      role: { type: 'string' },
+      firstName: { type: 'string' },
+    },
+    required: ['role'],
+    if: {
+      properties: {
+        role: {
+          not: {
+            const: 'manager',
+          },
+        },
+      },
+    },
+    then: {
+      required: ['firstName'],
+    },
+  };
+
+  const ownProps: OwnPropsOfControl = {
+    uischema: coreUISchema,
+    schema,
+  };
+
+  const createState = (data: { role?: string; firstName: string }) => {
+    const { role, ...rest } = data;
+
+    const config = setConfig({
+      allowDynamicCheck: true,
+    });
+
+    return {
+      jsonforms: {
+        core: {
+          schema,
+          uischema: coreUISchema,
+          data: role ? data : rest,
+          errors: [] as ErrorObject[],
+        },
+        config: configReducer(undefined, config),
+      },
+    };
+  };
+
+  const stateMissing = createState({ firstName: 'Bart' });
+  const stateTrue = createState({ role: 'lead', firstName: 'Bart' });
+  const stateFalse = createState({ role: 'manager', firstName: 'Bart' });
+
+  const propsMissing = mapStateToControlProps(stateMissing, ownProps);
+  const propsTrue = mapStateToControlProps(stateTrue, ownProps);
+  const propsFalse = mapStateToControlProps(stateFalse, ownProps);
+
+  t.true(propsMissing.required);
+  t.true(propsTrue.required);
+  t.false(propsFalse.required);
+});
+
+test('mapStateToControlProps - required with dynamic check based on condition with combinators', (t) => {
+  const createSchema = (combinator: Combinator) => ({
+    type: 'object',
+    properties: {
+      notifications: { type: 'boolean' },
+      email: { type: 'string' },
+      firstName: { type: 'string' },
+    },
+    required: ['notifications'],
+    if: {
+      [combinator]: [
+        {
+          properties: {
+            notifications: { const: true },
+          },
+        },
+        {
+          required: ['email'],
+        },
+      ],
+    },
+    then: {
+      required: ['firstName'],
+    },
+  });
+
+  const createState = (data: {
+    combinator: Combinator;
+    notifications: boolean;
+    email?: string;
+    firstName: string;
+  }) => {
+    const { email, ...rest } = data;
+    const config = setConfig({
+      allowDynamicCheck: true,
+    });
+
+    return {
+      jsonforms: {
+        core: {
+          schema: createSchema(data.combinator),
+          uischema: coreUISchema,
+          data: email ? data : rest,
+          errors: [] as ErrorObject[],
+        },
+        config: configReducer(undefined, config),
+      },
+    };
+  };
+
+  const stateAnyOfTrue = createState({
+    combinator: 'anyOf',
+    notifications: false,
+    email: 'bart@email.com',
+    firstName: 'Bart',
+  });
+
+  const stateAllOfTrue = createState({
+    combinator: 'allOf',
+    notifications: true,
+    email: 'bart@email.com',
+    firstName: 'Bart',
+  });
+
+  const stateOneOfTrue = createState({
+    combinator: 'oneOf',
+    notifications: true,
+    firstName: 'Bart',
+  });
+
+  const stateAnyOfFalse = createState({
+    combinator: 'anyOf',
+    notifications: false,
+    firstName: 'Bart',
+  });
+
+  const stateAllOfFalse = createState({
+    combinator: 'allOf',
+    notifications: true,
+    firstName: 'Bart',
+  });
+
+  const stateOneOfFalse = createState({
+    combinator: 'oneOf',
+    notifications: true,
+    email: 'bart@email.com',
+    firstName: 'Bart',
+  });
+
+  const ownPropsAnyOf: OwnPropsOfControl = {
+    uischema: coreUISchema,
+    schema: createSchema('anyOf'),
+  };
+
+  const ownPropsAllOf: OwnPropsOfControl = {
+    uischema: coreUISchema,
+    schema: createSchema('allOf'),
+  };
+
+  const ownPropsOneOf: OwnPropsOfControl = {
+    uischema: coreUISchema,
+    schema: createSchema('oneOf'),
+  };
+
+  const propsAnyOfTrue = mapStateToControlProps(stateAnyOfTrue, ownPropsAnyOf);
+  const propsAllOfTrue = mapStateToControlProps(stateAllOfTrue, ownPropsAllOf);
+  const propsOneOfTrue = mapStateToControlProps(stateOneOfTrue, ownPropsOneOf);
+  const propsAnyOfFalse = mapStateToControlProps(
+    stateAnyOfFalse,
+    ownPropsAnyOf
+  );
+  const propsAllOfFalse = mapStateToControlProps(
+    stateAllOfFalse,
+    ownPropsAllOf
+  );
+  const propsOneOfFalse = mapStateToControlProps(
+    stateOneOfFalse,
+    ownPropsOneOf
+  );
+
+  t.true(propsAnyOfTrue.required);
+  t.true(propsAllOfTrue.required);
+  t.true(propsOneOfTrue.required);
+  t.false(propsAnyOfFalse.required);
+  t.false(propsAllOfFalse.required);
+  t.false(propsOneOfFalse.required);
+});
+
+test('mapStateToControlProps - required with dynamic check based on multiple conditions', (t) => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      notifications: { type: 'boolean' },
+      role: { type: 'string' },
+      firstName: { type: 'string' },
+    },
+    required: ['notifications'],
+    allOf: [
+      {
+        if: {
+          properties: {
+            notifications: { const: true },
+          },
+        },
+        then: {
+          required: ['firstName'],
+        },
+      },
+      {
+        if: {
+          properties: {
+            role: { const: 'manager' },
+          },
+        },
+        then: {
+          required: ['firstName'],
+        },
+      },
+    ],
+  };
+
+  const ownProps: OwnPropsOfControl = {
+    uischema: coreUISchema,
+    schema,
+  };
+
+  const createState = (data: {
+    notifications?: boolean;
+    role: string;
+    firstName: string;
+  }) => {
+    const config = setConfig({
+      allowDynamicCheck: true,
+    });
+
+    return {
+      jsonforms: {
+        core: {
+          schema,
+          uischema: coreUISchema,
+          data,
+          errors: [] as ErrorObject[],
+        },
+        config: configReducer(undefined, config),
+      },
+    };
+  };
+
+  const stateFirstMatches = createState({
+    notifications: true,
+    role: 'employee',
+    firstName: 'Bart',
+  });
+
+  const stateSecondMatches = createState({
+    notifications: false,
+    role: 'manager',
+    firstName: 'Bart',
+  });
+
+  const propsFirstMatches = mapStateToControlProps(stateFirstMatches, ownProps);
+  const propsSecondMatcher = mapStateToControlProps(
+    stateSecondMatches,
+    ownProps
+  );
+  t.true(propsFirstMatches.required);
+  t.true(propsSecondMatcher.required);
+});
+
+test('mapStateToControlProps - required with dynamic check based on nested conditions', (t) => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      notifications: { type: 'boolean' },
+      role: { type: 'string' },
+      firstName: { type: 'string' },
+    },
+    required: ['notifications'],
+    if: {
+      properties: {
+        notifications: { const: true },
+      },
+    },
+    then: {
+      if: {
+        properties: {
+          role: {
+            pattern: '[a-zA-Z]+',
+          },
+        },
+      },
+      then: {
+        required: ['firstName'],
+      },
+    },
+  };
+
+  const ownProps: OwnPropsOfControl = {
+    uischema: coreUISchema,
+    schema,
+  };
+
+  const createState = (data: {
+    notifications?: boolean;
+    role: string;
+    firstName: string;
+  }) => {
+    const { notifications, ...rest } = data;
+
+    const config = setConfig({
+      allowDynamicCheck: true,
+    });
+
+    return {
+      jsonforms: {
+        core: {
+          schema,
+          uischema: coreUISchema,
+          data: notifications !== undefined ? data : rest,
+          errors: [] as ErrorObject[],
+        },
+        config: configReducer(undefined, config),
+      },
+    };
+  };
+
+  const stateAllTrue = createState({
+    notifications: true,
+    role: 'manager',
+    firstName: 'Bart',
+  });
+  const stateInnerFalse = createState({
+    notifications: true,
+    role: '398',
+    firstName: 'Bart',
+  });
+  const stateOuterFalse = createState({
+    role: 'manager',
+    firstName: 'Bart',
+  });
+
+  const propsAllTrue = mapStateToControlProps(stateAllTrue, ownProps);
+  const propsInnerFalse = mapStateToControlProps(stateInnerFalse, ownProps);
+  const propsOuterFalse = mapStateToControlProps(stateOuterFalse, ownProps);
+
+  t.true(propsAllTrue.required);
+  t.false(propsInnerFalse.required);
+  t.false(propsOuterFalse.required);
+});
+
+test('mapStateToControlProps - required with dynamic check based on multiple conditions in nested "allOf"-s', (t) => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      notifications: { type: 'boolean' },
+      role: { type: 'string' },
+      qualifies: { type: 'boolean' },
+      firstName: { type: 'string' },
+    },
+    required: ['notifications'],
+    allOf: [
+      {
+        allOf: [
+          {
+            if: {
+              properties: {
+                notifications: { const: true },
+              },
+            },
+            then: {
+              required: ['firstName'],
+            },
+          },
+          {
+            if: {
+              properties: {
+                role: { enum: ['manager', 'lead'] },
+              },
+            },
+            then: {
+              required: ['firstName'],
+            },
+          },
+        ],
+      },
+      {
+        if: {
+          properties: {
+            qualified: { const: true },
+          },
+        },
+        then: {
+          required: ['firstName'],
+        },
+      },
+    ],
+  };
+
+  const ownProps: OwnPropsOfControl = {
+    uischema: coreUISchema,
+    schema,
+  };
+
+  const createState = (data: {
+    notifications: boolean;
+    qualified: boolean;
+    role: string;
+    firstName: string;
+  }) => {
+    const config = setConfig({
+      allowDynamicCheck: true,
+    });
+
+    return {
+      jsonforms: {
+        core: {
+          schema,
+          uischema: coreUISchema,
+          data,
+          errors: [] as ErrorObject[],
+        },
+        config: configReducer(undefined, config),
+      },
+    };
+  };
+
+  const stateFirstMatches = createState({
+    notifications: true,
+    qualified: false,
+    role: 'employee',
+    firstName: 'Bart',
+  });
+
+  const stateSecondMatches = createState({
+    notifications: false,
+    qualified: false,
+    role: 'manager',
+    firstName: 'Bart',
+  });
+
+  const stateThirdMatches = createState({
+    notifications: false,
+    qualified: true,
+    role: 'employee',
+    firstName: 'Bart',
+  });
+
+  const propsFirstMatches = mapStateToControlProps(stateFirstMatches, ownProps);
+  const propsSecondMatcher = mapStateToControlProps(
+    stateSecondMatches,
+    ownProps
+  );
+  const propsThirdMatcher = mapStateToControlProps(stateThirdMatches, ownProps);
+
+  t.true(propsFirstMatches.required);
+  t.true(propsSecondMatcher.required);
+  t.true(propsThirdMatcher.required);
+});
+
+test('mapStateToControlProps - required with dynamic check based on condition for nested object', (t) => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      role: {
+        type: 'object',
+        properties: {
+          position: { type: 'string' },
+          experience: { type: 'number' },
+        },
+      },
+      firstName: { type: 'string' },
+    },
+    required: ['notifications'],
+    if: {
+      properties: {
+        role: {
+          properties: {
+            position: { enum: ['manager', 'lead'] },
+          },
+        },
+      },
+    },
+    then: {
+      required: ['firstName'],
+    },
+  };
+
+  const ownProps: OwnPropsOfControl = {
+    uischema: coreUISchema,
+    schema,
+  };
+
+  const createState = (data: {
+    role: {
+      position: string;
+      experience: number;
+    };
+    firstName: string;
+  }) => {
+    const config = setConfig({
+      allowDynamicCheck: true,
+    });
+
+    return {
+      jsonforms: {
+        core: {
+          schema,
+          uischema: coreUISchema,
+          data,
+          errors: [] as ErrorObject[],
+        },
+        config: configReducer(undefined, config),
+      },
+    };
+  };
+
+  const stateTrue = createState({
+    role: {
+      position: 'lead',
+      experience: 5,
+    },
+    firstName: 'Bart',
+  });
+
+  const stateFalse = createState({
+    role: {
+      position: 'employee',
+      experience: 1,
+    },
+    firstName: 'Bart',
+  });
+
+  const propsTrue = mapStateToControlProps(stateTrue, ownProps);
+  const propsFalse = mapStateToControlProps(stateFalse, ownProps);
+
+  t.true(propsTrue.required);
+  t.false(propsFalse.required);
+});
+
+test('mapStateToControlProps - required with dynamic check based on parent condition', (t) => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      notifications: { type: 'boolean' },
+      role: {
+        type: 'object',
+        properties: {
+          position: { type: 'string' },
+          firstName: { type: 'string' },
+        },
+      },
+    },
+    required: ['notifications'],
+    if: {
+      properties: {
+        notifications: { const: true },
+      },
+    },
+    then: {
+      properties: {
+        role: {
+          required: ['firstName'],
+        },
+      },
+    },
+  };
+
+  const ownProps: OwnPropsOfControl = {
+    uischema: {
+      type: 'Control',
+      scope: '#/properties/role/properties/firstName',
+    },
+    schema,
+  };
+
+  const createState = (data: {
+    notifications: boolean;
+    role: {
+      position: string;
+      firstName: string;
+    };
+  }) => {
+    const config = setConfig({
+      allowDynamicCheck: true,
+    });
+
+    return {
+      jsonforms: {
+        core: {
+          schema,
+          uischema: coreUISchema,
+          data,
+          errors: [] as ErrorObject[],
+        },
+        config: configReducer(undefined, config),
+      },
+    };
+  };
+
+  const stateTrue = createState({
+    notifications: true,
+    role: {
+      position: 'lead',
+      firstName: 'Bart',
+    },
+  });
+
+  const stateFalse = createState({
+    notifications: false,
+    role: {
+      position: 'lead',
+      firstName: 'Bart',
+    },
+  });
+
+  const propsTrue = mapStateToControlProps(stateTrue, ownProps);
+  const propsFalse = mapStateToControlProps(stateFalse, ownProps);
+
+  t.true(propsTrue.required);
+  t.false(propsFalse.required);
 });
 
 test('mapStateToControlProps - hide errors in hide validation mode', (t) => {
