@@ -35,7 +35,6 @@ import React, { Fragment, useMemo } from 'react';
 import {
   FormHelperText,
   Grid,
-  Hidden,
   IconButton,
   Table,
   TableBody,
@@ -473,39 +472,41 @@ export class MaterialTableControl extends React.Component<
       ? generateCells(TableHeaderCell, schema, path, enabled, cells)
       : undefined;
 
+    if (!visible) {
+      return null;
+    }
+
     return (
-      <Hidden xsUp={!visible}>
-        <Table>
-          <TableHead>
-            <TableToolbar
-              errors={errors}
-              label={label}
-              description={description}
-              addItem={this.addItem}
-              numColumns={isObjectSchema ? headerCells.length : 1}
-              path={path}
-              uischema={controlElement}
-              schema={schema}
-              rootSchema={rootSchema}
-              enabled={enabled}
-              translations={translations}
-            />
-            {isObjectSchema && (
-              <TableRow>
-                {headerCells}
-                {enabled ? <TableCell /> : null}
-              </TableRow>
-            )}
-          </TableHead>
-          <TableBody>
-            <TableRows
-              openDeleteDialog={openDeleteDialog}
-              translations={translations}
-              {...this.props}
-            />
-          </TableBody>
-        </Table>
-      </Hidden>
+      <Table>
+        <TableHead>
+          <TableToolbar
+            errors={errors}
+            label={label}
+            description={description}
+            addItem={this.addItem}
+            numColumns={isObjectSchema ? headerCells.length : 1}
+            path={path}
+            uischema={controlElement}
+            schema={schema}
+            rootSchema={rootSchema}
+            enabled={enabled}
+            translations={translations}
+          />
+          {isObjectSchema && (
+            <TableRow>
+              {headerCells}
+              {enabled ? <TableCell /> : null}
+            </TableRow>
+          )}
+        </TableHead>
+        <TableBody>
+          <TableRows
+            openDeleteDialog={openDeleteDialog}
+            translations={translations}
+            {...this.props}
+          />
+        </TableBody>
+      </Table>
     );
   }
 }
