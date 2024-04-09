@@ -22,6 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+export * from './array-layout.renderer';
 export * from './horizontal-layout.renderer';
 export * from './vertical-layout.renderer';
 export * from './categorization-layout.renderer';
