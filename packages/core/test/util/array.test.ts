@@ -1,7 +1,7 @@
 import { moveDown, moveUp } from '../../src/util/';
-import anyTest, { TestInterface } from 'ava';
+import anyTest, { TestFn } from 'ava';
 
-const test = anyTest as TestInterface<{ array: number[] }>;
+const test = anyTest as TestFn<{ array: number[] }>;
 
 test.beforeEach((t) => {
   t.context.array = [1, 2, 3, 4, 5];
