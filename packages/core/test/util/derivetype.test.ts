@@ -87,7 +87,7 @@ test('derive type with type - union', (t) => {
     type: ['string', 'number'],
   };
   t.is(deriveTypes(schema).length, 2);
-  t.is(deriveTypes(schema), schema.type);
+  t.is(deriveTypes(schema), schema.type as string[]);
 });
 
 test('derive type with type - allOf first has type', (t) => {

@@ -86,7 +86,6 @@
     "rollup-plugin-typescript2": "^0.34.1",
     "rollup-plugin-visualizer": "^5.4.1",
     "source-map-loader": "^0.2.4",
-    "source-map-support": "0.5.16",
     "ts-jest": "^27.1.4",
     "ts-loader": "^9.5.1",
     "ts-node": "^10.4.0",

@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import anyTest, { TestInterface } from 'ava';
+import anyTest, { TestFn } from 'ava';
 import {
   and,
   formatIs,
@@ -57,7 +57,7 @@ import {
   hasOption,
 } from '../src';
 
-const test = anyTest as TestInterface<{ uischema: ControlElement }>;
+const test = anyTest as TestFn<{ uischema: ControlElement }>;
 
 const createTesterContext = (
   rootSchema: JsonSchema,
