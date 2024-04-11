@@ -59,7 +59,7 @@ import { moveDown, moveUp } from './array';
 import type { AnyAction, Dispatch } from './type';
 import { Resolve, convertDateToString, hasType } from './util';
 import { composePaths, composeWithUi } from './path';
-import { CoreActions, update } from '../actions';
+import { CoreActions, update, UpdateArrayContext } from '../actions';
 import type { ErrorObject } from 'ajv';
 import type { JsonFormsState } from '../store';
 import {
@@ -823,41 +823,63 @@ export const mapDispatchToArrayControlProps = (
 ): DispatchPropsOfArrayControl => ({
   addItem: (path: string, value: any) => () => {
     dispatch(
-      update(path, (array) => {
-        if (array === undefined || array === null) {
-          return [value];
-        }
+      update(
+        path,
+        (array) => {
+          if (array === undefined || array === null) {
+            return [value];
+          }
 
-        array.push(value);
-        return array;
-      })
+          array.push(value);
+          return array;
+        },
+        { type: 'ADD', values: [value] } as UpdateArrayContext
+      )
     );
   },
   removeItems: (path: string, toDelete: number[]) => () => {
     dispatch(
-      update(path, (array) => {
-        toDelete
-          .sort((a, b) => a - b)
-          .reverse()
-          .forEach((s) => array.splice(s, 1));
-        return array;
-      })
+      update(
+        path,
+        (array) => {
+          toDelete
+            .sort((a, b) => a - b)
+            .reverse()
+            .forEach((s) => array.splice(s, 1));
+          return array;
+        },
+        { type: 'REMOVE', indices: toDelete } as UpdateArrayContext
+      )
     );
   },
   moveUp: (path, toMove: number) => () => {
     dispatch(
-      update(path, (array) => {
-        moveUp(array, toMove);
-        return array;
-      })
+      update(
+        path,
+        (array) => {
+          moveUp(array, toMove);
+          return array;
+        },
+        {
+          type: 'MOVE',
+          moves: [{ from: toMove, to: toMove - 1 }],
+        } as UpdateArrayContext
+      )
     );
   },
   moveDown: (path, toMove: number) => () => {
     dispatch(
-      update(path, (array) => {
-        moveDown(array, toMove);
-        return array;
-      })
+      update(
+        path,
+        (array) => {
+          moveDown(array, toMove);
+          return array;
+        },
+        {
+          type: 'MOVE',
+          moves: [{ from: toMove, to: toMove + 1 }],
+        } as UpdateArrayContext
+      )
     );
   },
 });
