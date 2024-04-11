@@ -5,6 +5,8 @@ description: Frequently Asked Questions
 slug: /
 ---
 
+import { DependentFieldExample } from '../../src/components/faq/faq';
+
 ## How can I listen to form changes in the React standalone component?
 
 When using JSON Forms within your react app, at some point you'll need to access the current form data.
@@ -182,6 +184,160 @@ Now default values within the schema file can be used:
   "default": "Max"
 }
 ```
+
+## How to update a field dependent on another field in JSON Forms?
+
+Consider a carwash application offering various services and calculating the resulting price.
+The schema includes a multiselect field called services and a price attribute, with the price field set as readonly.
+
+<DependentFieldExample/>
+
+There are three approaches to update a field in JSON Forms based on the value of another field: 
+Utilizeing the JSONF Forms middleware, using the onChange method or create a custom render.
+
+#### Approach 1: JSON Forms middleware
+
+We can utilize the JSON Forms middleware to compute and set the price.
+JSON Forms utilizes the reducer pattern and various actions to update its state.
+The middleware intercepts the call to the JSON Forms reducers and calls your custom code instead. 
+For detailed insights into the JSON Forms middleware, the reducer pattern, and JSON Forms actions, refer to the documentation [here](/docs/middleware). 
+In this scenario, we want to customize the behavior associated with the  `UPDATE_DATA` action, which is triggered when the form's data is changed by the user.
+We initially invoke JSON Forms default reducer to update the data and identify any errors.
+Subsequently, we adjust the price fields based on the selected services and update the state with the newly calculated data.
+We additionally override the `INIT` and `UPDATE_CORE` actions, in case the data prop passed to JSON Forms doesn't have the correct price set yet.
+
+```js
+import { INIT, UPDATE_CORE, UPDATE_DATA } from  '@jsonforms/core'
+
+...
+const middleware = useCallback((state, action, defaultReducer) => {
+  const newState = defaultReducer(state, action);
+  switch (action.type) {
+    case INIT:
+    case UPDATE_CORE:
+    case UPDATE_DATA: {
+      if (newState.data.services.length * 15 !== newState.data.price) {
+        newState.data.price = newState.data.services.length * 15;
+      }
+      return newState;
+    }
+    default:
+      return newState;
+  }
+});
+
+...
+
+<JsonForms
+  data={data}
+  schema={schema}
+  renderers={materialRenderers}
+  middleware={middleware}
+/>
+```
+
+#### Approach 2: Implementing functionality in the onChange method of JSON Forms
+
+In this approach, you can implement the logic in the onChange method of JSON Forms. 
+The onChange method triggers whenever a user changes the form data.
+
+:::info Note
+
+It's more performant to use the middleware approach, but this is a good approach for JSON Forms before version v3.2.0
+
+:::
+
+```js
+export const CarWash = () => {
+  const [formData, setFormData] = useState(inputData);
+  
+  const onChange = ({ data, _errors }) => {
+    const price = data.services.length*15;
+    if (data.price === price){
+        setFormData(data);
+    } else {
+        setFormData({...data, price: price})
+    }
+  }
+
+  return (
+    <JsonForms
+      data={formData}
+      schema={schema}
+      renderers={renderers}
+      onChange={onChange}
+    />
+  );
+};
+```
+
+In the onChange method, the price is calculated based on the selected services. 
+If the calculated price matches the existing value, the data remains unchanged.
+However, if the price differs, a new data object is created with the updated price and passed to JSON Forms.
+
+:::caution
+
+It's important to only create a new object when necessary to avoid infinite loops.
+
+:::
+
+#### Approach 3: Create a custom renderer
+
+Another possibility is to implement a custom renderer.
+A custom renderer allows you to define and use your rendering logic instead of relying on the default renderers provided by JSON Forms.
+For a comprehensive guide and additional information on creating custom renderers, refer to our [Custom Renderers Tutorial](/docs/tutorial/custom-renderers).
+
+In this tutorial, we'll create the ServicesRenderer designed to display offered services.
+While the default renderer will still handle displaying the price, we'll calculate and set the price within our custom renderer.
+
+The basis of the ServiceRenderer is the MaterialEnumArrayRenderer, which is the default renderer of JSON Forms for this data type.
+JSON Forms renderers usually use the handleChange, addItem, or removeItem functions to set data, so we adjust these functions to not only add or remove items but also dynamically calculate and set the current price based on the selected services.
+
+```js
+import { Unwrapped } from '@jsonforms/material-renderers';
+const { MaterialEnumArrayRenderer } = Unwrapped;
+
+const ServiceRenderer: React.FC<
+  ControlProps & OwnPropsOfEnum & DispatchPropsOfMultiEnumControl
+> = (props) => {
+  return (
+    <MaterialEnumArrayRenderer
+      {...props}
+      addItem={(path, value) => {
+        const currentLength = props.data ? props.data.length : 0;
+        props.handleChange('price', (currentLength + 1) * 15);
+        props.addItem(path, value);
+      }}
+      removeItem={(path, value) => {
+        if (props.removeItem) {
+          const currentLength = props.data ? props.data.length : 0;
+          props.removeItem(path, value);
+          props.handleChange('price', (currentLength - 1) * 15);
+        }
+      }}
+    />
+  );
+};
+export default withJsonFormsMultiEnumProps(ServiceRenderer);
+```
+To apply the custom renderer in JSON Forms, add the renderer and a tester to JSON Forms, as shown below:
+```js
+
+const renderers = [
+    ...materialRenderers,
+    //register custom renderer
+    { tester: rankWith(4,scopeEndsWith('rating')), renderer: ServiceRenderer }
+  ]
+
+<JsonForms
+  schema={schema}
+  uischema={uischema}
+  data={data}
+  renderers={renderers}
+/>
+```
+
+
 ## How can I use multipleOf with values smaller than 1?
 
 JSON Forms uses AJV for the validation of data.
