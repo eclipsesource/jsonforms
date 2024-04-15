@@ -24,7 +24,7 @@
 */
 import React, { useState, useMemo } from 'react';
 import merge from 'lodash/merge';
-import { Button, Hidden, Step, StepButton, Stepper } from '@mui/material';
+import { Button, Step, StepButton, Stepper } from '@mui/material';
 import {
   and,
   Categorization,
@@ -123,8 +123,13 @@ export const MaterialCategorizationStepperLayoutRenderer = (
   const tabLabels = useMemo(() => {
     return categories.map((e: Category) => deriveLabelForUISchemaElement(e, t));
   }, [categories, t]);
+
+  if (!visible) {
+    return null;
+  }
+
   return (
-    <Hidden xsUp={!visible}>
+    <>
       <Stepper activeStep={activeCategory} nonLinear>
         {categories.map((_: Category, idx: number) => (
           <Step key={tabLabels[idx]}>
@@ -161,7 +166,7 @@ export const MaterialCategorizationStepperLayoutRenderer = (
       ) : (
         <></>
       )}
-    </Hidden>
+    </>
   );
 };
 

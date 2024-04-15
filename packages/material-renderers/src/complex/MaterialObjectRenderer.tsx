@@ -32,7 +32,6 @@ import {
   StatePropsOfControlWithDetail,
 } from '@jsonforms/core';
 import { JsonFormsDispatch, withJsonFormsDetailProps } from '@jsonforms/react';
-import { Hidden } from '@mui/material';
 import React, { useMemo } from 'react';
 
 export const MaterialObjectRenderer = ({
@@ -66,18 +65,21 @@ export const MaterialObjectRenderer = ({
       ),
     [uischemas, schema, uischema.scope, path, label, uischema, rootSchema]
   );
+
+  if (!visible) {
+    return null;
+  }
+
   return (
-    <Hidden xsUp={!visible}>
-      <JsonFormsDispatch
-        visible={visible}
-        enabled={enabled}
-        schema={schema}
-        uischema={detailUiSchema}
-        path={path}
-        renderers={renderers}
-        cells={cells}
-      />
-    </Hidden>
+    <JsonFormsDispatch
+      visible={visible}
+      enabled={enabled}
+      schema={schema}
+      uischema={detailUiSchema}
+      path={path}
+      renderers={renderers}
+      cells={cells}
+    />
   );
 };
 

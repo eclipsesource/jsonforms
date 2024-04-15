@@ -33,7 +33,7 @@ import {
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
-import { Hidden, TextField } from '@mui/material';
+import { TextField } from '@mui/material';
 import { withJsonFormsControlProps } from '@jsonforms/react';
 import merge from 'lodash/merge';
 import { useDebouncedChange, useFocus } from '../util';
@@ -70,27 +70,29 @@ export const MaterialNativeControl = (props: ControlProps) => {
     appliedUiSchemaOptions.showUnfocusedDescription
   );
 
+  if (!visible) {
+    return null;
+  }
+
   return (
-    <Hidden xsUp={!visible}>
-      <TextField
-        required={showAsRequired(
-          required,
-          appliedUiSchemaOptions.hideRequiredAsterisk
-        )}
-        id={id + '-input'}
-        label={label}
-        type={fieldType}
-        error={!isValid}
-        disabled={!enabled}
-        fullWidth={!appliedUiSchemaOptions.trim}
-        onFocus={onFocus}
-        onBlur={onBlur}
-        helperText={!isValid ? errors : showDescription ? description : null}
-        InputLabelProps={{ shrink: true }}
-        value={inputValue}
-        onChange={onChange}
-      />
-    </Hidden>
+    <TextField
+      required={showAsRequired(
+        required,
+        appliedUiSchemaOptions.hideRequiredAsterisk
+      )}
+      id={id + '-input'}
+      label={label}
+      type={fieldType}
+      error={!isValid}
+      disabled={!enabled}
+      fullWidth={!appliedUiSchemaOptions.trim}
+      onFocus={onFocus}
+      onBlur={onBlur}
+      helperText={!isValid ? errors : showDescription ? description : null}
+      InputLabelProps={{ shrink: true }}
+      value={inputValue}
+      onChange={onChange}
+    />
   );
 };
 

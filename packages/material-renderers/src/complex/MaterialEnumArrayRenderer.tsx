@@ -24,7 +24,6 @@ import {
   FormGroup,
   FormHelperText,
   FormLabel,
-  Hidden,
 } from '@mui/material';
 import isEmpty from 'lodash/isEmpty';
 import React from 'react';
@@ -58,62 +57,64 @@ export const MaterialEnumArrayRenderer = ({
     appliedUiSchemaOptions.showUnfocusedDescription
   );
 
+  if (!visible) {
+    return null;
+  }
+
   return (
-    <Hidden xsUp={!visible}>
-      <FormControl
-        component='fieldset'
-        fullWidth={!appliedUiSchemaOptions.trim}
-        onFocus={onFocus}
-        onBlur={onBlur}
+    <FormControl
+      component='fieldset'
+      fullWidth={!appliedUiSchemaOptions.trim}
+      onFocus={onFocus}
+      onBlur={onBlur}
+    >
+      <FormLabel
+        error={!isValid}
+        component='legend'
+        required={showAsRequired(
+          required,
+          appliedUiSchemaOptions.hideRequiredAsterisk
+        )}
       >
-        <FormLabel
-          error={!isValid}
-          component='legend'
-          required={showAsRequired(
-            required,
-            appliedUiSchemaOptions.hideRequiredAsterisk
-          )}
-        >
-          {label}
-        </FormLabel>
-        <FormGroup row>
-          {options.map((option: any, index: number) => {
-            const optionPath = Paths.compose(path, `${index}`);
-            const checkboxValue = data?.includes(option.value)
-              ? option.value
-              : undefined;
-            return (
-              <FormControlLabel
-                id={id + '-label-' + option.value}
-                key={option.value}
-                control={
-                  <MuiCheckbox
-                    id={id + '-' + option.value}
-                    key={'checkbox-' + option.value}
-                    isValid={isEmpty(errors)}
-                    path={optionPath}
-                    handleChange={(_childPath, newValue) =>
-                      newValue
-                        ? addItem(path, option.value)
-                        : removeItem(path, option.value)
-                    }
-                    data={checkboxValue}
-                    errors={errors}
-                    schema={schema}
-                    visible={visible}
-                    {...otherProps}
-                  />
-                }
-                label={option.label}
-              />
-            );
-          })}
-        </FormGroup>
-        <FormHelperText error={!isValid}>
-          {!isValid ? errors : showDescription ? description : null}
-        </FormHelperText>
-      </FormControl>
-    </Hidden>
+        {label}
+      </FormLabel>
+      <FormGroup row>
+        {options.map((option: any, index: number) => {
+          const optionPath = Paths.compose(path, `${index}`);
+          const checkboxValue = data?.includes(option.value)
+            ? option.value
+            : undefined;
+          return (
+            <FormControlLabel
+              id={id + '-label-' + option.value}
+              key={option.value}
+              control={
+                <MuiCheckbox
+                  id={id + '-' + option.value}
+                  key={'checkbox-' + option.value}
+                  isValid={isEmpty(errors)}
+                  path={optionPath}
+                  handleChange={(_childPath, newValue) =>
+                    newValue
+                      ? addItem(path, option.value)
+                      : removeItem(path, option.value)
+                  }
+                  data={checkboxValue}
+                  errors={errors}
+                  schema={schema}
+                  visible={visible}
+                  {...otherProps}
+                />
+              }
+              label={option.label}
+            />
+          );
+        })}
+      </FormGroup>
+      <FormHelperText error={!isValid}>
+        {!isValid ? errors : showDescription ? description : null}
+      </FormHelperText>
+    </FormControl>
   );
 };
 

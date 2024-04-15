@@ -38,7 +38,7 @@ import {
   JsonFormsDispatch,
   withJsonFormsArrayLayoutProps,
 } from '@jsonforms/react';
-import { Grid, Hidden, List, Typography } from '@mui/material';
+import { Grid, List, Typography } from '@mui/material';
 import map from 'lodash/map';
 import range from 'lodash/range';
 import React, { useCallback, useMemo, useState } from 'react';
@@ -105,8 +105,12 @@ export const MaterialListWithDetailRenderer = ({
     setSelectedIndex(undefined);
   }, [schema]);
 
+  if (!visible) {
+    return null;
+  }
+
   return (
-    <Hidden xsUp={!visible}>
+    <>
       <ArrayLayoutToolbar
         translations={translations}
         label={computeLabel(
@@ -158,7 +162,7 @@ export const MaterialListWithDetailRenderer = ({
           )}
         </Grid>
       </Grid>
-    </Hidden>
+    </>
   );
 };
 

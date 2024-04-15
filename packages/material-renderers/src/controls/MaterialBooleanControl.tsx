@@ -33,12 +33,7 @@ import {
   isDescriptionHidden,
 } from '@jsonforms/core';
 import { withJsonFormsControlProps } from '@jsonforms/react';
-import {
-  FormControlLabel,
-  FormHelperText,
-  Tooltip,
-  Hidden,
-} from '@mui/material';
+import { FormControlLabel, FormHelperText, Tooltip } from '@mui/material';
 import { MuiCheckbox } from '../mui-controls/MuiCheckbox';
 
 export const MaterialBooleanControl = ({
@@ -104,8 +99,12 @@ export const MaterialBooleanControl = ({
   }
   const ariaDescribedBy = descriptionIds.join(' ');
 
+  if (!visible) {
+    return null;
+  }
+
   return (
-    <Hidden xsUp={!visible}>
+    <>
       <Tooltip id={tooltipId} title={showTooltip ? description : ''}>
         <FormControlLabel
           label={label}
@@ -137,7 +136,7 @@ export const MaterialBooleanControl = ({
       <FormHelperText id={helpId2} error={!isValid}>
         {secondFormHelperText}
       </FormHelperText>
-    </Hidden>
+    </>
   );
 };
 
