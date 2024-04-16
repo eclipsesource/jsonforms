@@ -77,6 +77,17 @@ export class JsonFormsDispatchRenderer extends React.Component<
     }
   }
 
+  componentDidUpdate(prevProps: JsonFormsProps) {
+    if (prevProps.schema !== this.props.schema) {
+      removeId(this.state.id);
+      this.setState({
+        id: isControl(this.props.uischema)
+          ? createId(this.props.uischema.scope)
+          : undefined,
+      });
+    }
+  }
+
   render() {
     const {
       schema,
