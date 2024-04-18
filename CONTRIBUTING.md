@@ -43,6 +43,17 @@ The better the quality of the contribution, the faster it can be merged.
 If you have an idea for a feature, we recommend first opening an issue or starting a discussion on the [Community Board](https://jsonforms.discourse.group) to assess whether it aligns with the goals and scope of JSON Forms.
 We aim to keep the core framework lean and clean, focusing on features that provide the most value.
 
+### Contributing Version Upgrades
+
+We strive to always support the latest versions of dependencies, while carefully managing the lower bounds of our (peer) dependency declarations.
+For seed applications, we use the latest dependencies as a testbed to ensure compatibility.
+
+When contributing version upgrades:
+
+- Only raise the lower bound of (peer) dependencies if necessary, or if avoiding such a raise requires substantial effort.
+- Extend the upper bounds to include the latest supported version, which should ideally be the latest available stable version
+- Test the new JSON Forms version in the respective seed application, both with and without updating the corresponding dependencies. Tip: tools like [yalc](https://github.com/wclr/yalc) can be particularly useful for this purpose.
+
 ## Repositories
 
 You can contribute to any of the following repositories:
