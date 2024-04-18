@@ -41,6 +41,7 @@ import type {
 import {
   deriveTypes,
   hasType,
+  isEnumSchema,
   isOneOfEnumSchema,
   resolveSchema,
 } from '../util';
@@ -369,14 +370,7 @@ export const isOneOfControl = and(
  */
 export const isEnumControl = and(
   uiTypeIs('Control'),
-  or(
-    schemaMatches((schema) =>
-      Object.prototype.hasOwnProperty.call(schema, 'enum')
-    ),
-    schemaMatches((schema) =>
-      Object.prototype.hasOwnProperty.call(schema, 'const')
-    )
-  )
+  schemaMatches((schema) => isEnumSchema(schema))
 );
 
 /**
