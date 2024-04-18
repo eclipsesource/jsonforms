@@ -120,11 +120,16 @@ export const computeChildLabel = (
   rootSchema: JsonSchema,
   translateFct: Translator,
   uiSchema: UISchemaElement
-): any => {
+): string => {
   const childData = Resolve.data(data, childPath);
 
   if (!childLabelProp) {
     childLabelProp = getFirstPrimitiveProp(schema);
+  }
+
+  // return early in case there is no prop we can query
+  if (!childLabelProp) {
+    return '';
   }
 
   const currentValue = get(childData, childLabelProp, '');
