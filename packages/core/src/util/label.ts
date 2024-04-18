@@ -46,6 +46,7 @@ import {
   enumToEnumOptionMapper,
   oneOfToEnumOptionMapper,
 } from './renderer';
+import isEqual from 'lodash/isEqual';
 
 const deriveLabel = (
   controlElement: ControlElement,
@@ -122,12 +123,13 @@ export const computeChildLabel = (
 ): any => {
   const childData = Resolve.data(data, childPath);
 
-  if (!childLabelProp) childLabelProp = getFirstPrimitiveProp(schema);
+  if (!childLabelProp) {
+    childLabelProp = getFirstPrimitiveProp(schema);
+  }
 
   const currentValue = get(childData, childLabelProp, '');
 
-  if (!childLabelProp) return currentValue;
-
+  // check whether the value is part of a oneOf or enum and needs to be translated
   const childSchema = Resolve.schema(
     schema,
     '#' + getPropPath(childLabelProp),
@@ -147,8 +149,8 @@ export const computeChildLabel = (
     );
   } else if (isOneOfEnumSchema(childSchema)) {
     const oneOfArray = childSchema.oneOf as JsonSchema[];
-    const oneOfSchema = oneOfArray.find(
-      (e: JsonSchema) => e.const === currentValue
+    const oneOfSchema = oneOfArray.find((e: JsonSchema) =>
+      isEqual(e.const, currentValue)
     );
 
     if (oneOfSchema) {

@@ -54,5 +54,6 @@ export const isOneOfEnumSchema = (schema: JsonSchema) =>
  */
 export const isEnumSchema = (schema: JsonSchema) =>
   !!schema &&
-  ((Object.prototype.hasOwnProperty.call(schema, 'enum') && schema.enum) ||
-    (Object.prototype.hasOwnProperty.call(schema, 'const') && schema.const));
+  typeof schema === 'object' &&
+  (Object.prototype.hasOwnProperty.call(schema, 'enum') ||
+    Object.prototype.hasOwnProperty.call(schema, 'const'));
