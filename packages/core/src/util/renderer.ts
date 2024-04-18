@@ -31,7 +31,6 @@ import {
   LabelElement,
   UISchemaElement,
 } from '../models';
-import find from 'lodash/find';
 import {
   getUISchemas,
   getAjv,
@@ -53,7 +52,7 @@ import type {
 } from '../reducers';
 import type { RankedTester } from '../testers';
 import { hasShowRule, isInherentlyEnabled, isVisible } from './runtime';
-import { createLabelDescriptionFrom } from './label';
+import { computeChildLabel, createLabelDescriptionFrom } from './label';
 import type { CombinatorKeyword } from './combinators';
 import { moveDown, moveUp } from './array';
 import type { AnyAction, Dispatch } from './type';
@@ -689,20 +688,17 @@ export const mapStateToMasterListItemProps = (
   state: JsonFormsState,
   ownProps: OwnPropsOfMasterListItem
 ): StatePropsOfMasterItem => {
-  const { schema, path, index } = ownProps;
-  const firstPrimitiveProp = schema.properties
-    ? find(Object.keys(schema.properties), (propName) => {
-        const prop = schema.properties[propName];
-        return (
-          prop.type === 'string' ||
-          prop.type === 'number' ||
-          prop.type === 'integer'
-        );
-      })
-    : undefined;
+  const { schema, path, uischema, childLabelProp, index } = ownProps;
   const childPath = composePaths(path, `${index}`);
-  const childData = Resolve.data(getData(state), childPath);
-  const childLabel = firstPrimitiveProp ? childData[firstPrimitiveProp] : '';
+  const childLabel = computeChildLabel(
+    getData(state),
+    childPath,
+    childLabelProp,
+    schema,
+    getSchema(state),
+    state.jsonforms.i18n.translate,
+    uischema
+  );
 
   return {
     ...ownProps,
@@ -725,6 +721,8 @@ export interface OwnPropsOfMasterListItem {
   path: string;
   enabled: boolean;
   schema: JsonSchema;
+  uischema: UISchemaElement;
+  childLabelProp?: string;
   handleSelect(index: number): () => void;
   removeItem(path: string, value: number): () => void;
   translations: ArrayTranslations;

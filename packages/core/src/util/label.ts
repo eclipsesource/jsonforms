@@ -132,7 +132,12 @@ export const computeChildLabel = (
     return '';
   }
 
-  const currentValue = get(childData, childLabelProp, '');
+  const currentValue = get(childData, childLabelProp);
+
+  // in case there is no value, then we can't map it to an enum or oneOf
+  if (currentValue === undefined) {
+    return '';
+  }
 
   // check whether the value is part of a oneOf or enum and needs to be translated
   const childSchema = Resolve.schema(
