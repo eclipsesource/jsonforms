@@ -23,3 +23,13 @@ export const complexRenderers = [
   oneOfRendererEntry,
   oneOfTabRendererEntry,
 ];
+
+export {
+  allOfRendererEntry,
+  anyOfRendererEntry,
+  arrayControlRendererEntry,
+  enumArrayRendererEntry,
+  objectRendererEntry,
+  oneOfRendererEntry,
+  oneOfTabRendererEntry,
+}

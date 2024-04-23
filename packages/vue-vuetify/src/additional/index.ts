@@ -8,3 +8,7 @@ export const additionalRenderers = [
   labelRendererEntry,
   // listWithDetailRendererEntry,
 ];
+
+export {
+  labelRendererEntry
+}

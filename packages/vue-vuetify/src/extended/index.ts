@@ -8,3 +8,8 @@ export const extendedRenderers = [
   autocompleteEnumControlRendererEntry,
   autocompleteOneOfEnumControlRendererEntry,
 ];
+
+export {
+  autocompleteEnumControlRendererEntry,
+  autocompleteOneOfEnumControlRendererEntry,
+}

@@ -57,3 +57,22 @@ export const controlRenderers = [
   // stringMaskControlRendererEntry,
   timeControlRendererEntry,
 ];
+export {
+  anyOfStringOrEnumControlRendererEntry,
+  booleanControlRendererEntry,
+  booleanToggleControlRendererEntry,
+  dateControlRendererEntry,
+  dateTimeControlRendererEntry,
+  enumControlRendererEntry,
+  integerControlRendererEntry,
+  multiStringControlRendererEntry,
+  numberControlRendererEntry,
+  oneOfEnumControlRendererEntry,
+  oneOfRadioGroupControlRendererEntry,
+  passwordControlRendererEntry,
+  radioGroupControlRendererEntry,
+  sliderControlRendererEntry,
+  stringControlRendererEntry,
+  // stringMaskControlRendererEntry,
+  timeControlRendererEntry,
+};
