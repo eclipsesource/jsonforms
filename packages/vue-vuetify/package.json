@@ -30,6 +30,14 @@
   ],
   "main": "lib/jsonforms-vue-vuetify.cjs.js",
   "module": "lib/jsonforms-vue-vuetify.esm.js",
+  "exports": {
+    ".": {
+      "import": "./lib/jsonforms-vue-vuetify.esm.js",
+      "require": "./lib/jsonforms-vue-vuetify.cjs.js"
+    },
+    "./lib/jsonforms-vue-vuetify.esm.css": "./lib/jsonforms-vue-vuetify.esm.css",
+    "./lib/jsonforms-vue-vuetify.cjs.css": "./lib/jsonforms-vue-vuetify.cjs.css"
+  },
   "typings": "lib/index.d.ts",
   "files": [
     "lib",
