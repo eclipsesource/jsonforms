@@ -67,6 +67,11 @@ The JSON Forms project is built and tested via Github actions on Linux, Mac and 
 Current status: ![Build status](https://github.com/eclipsesource/jsonforms/actions/workflows/ci.yaml/badge.svg?branch=master)
 [![Coverage Status](https://coveralls.io/repos/eclipsesource/jsonforms/badge.svg?branch=master&service=github)](https://coveralls.io/github/eclipsesource/jsonforms?branch=master)
 
+### Contributions
+
+We welcome community participation! Whether you're reporting bugs, proposing features, participating in discussions, or making direct contributions, your involvement is highly valued.
+See [here](https://github.com/eclipsesource/jsonforms/blob/master/CONTRIBUTING.md) for the contribution guidelines.
+
 ## License
 
 The JSON Forms project is licensed under the MIT License. See the [LICENSE file](https://github.com/eclipsesource/jsonforms/blob/master/LICENSE) for more information.
