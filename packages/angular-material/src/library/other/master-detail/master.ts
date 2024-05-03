@@ -144,6 +144,9 @@ export const removeSchemaKeywords = (path: string) => {
         top: 0;
         right: 0;
       }
+      .hide {
+        display: none;
+      }
       .show {
         display: inline-block;
       }
