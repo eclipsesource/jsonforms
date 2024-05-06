@@ -23,46 +23,45 @@
   THE SOFTWARE.
 */
 
-import type { ControlElement, JsonSchema, UISchemaElement } from '../models';
-import { findUISchema, JsonFormsUISchemaRegistryEntry } from '../reducers';
-import { Resolve } from './util';
+import get from 'lodash/get';
+import {
+  ErrorTranslator,
+  JsonFormsI18nState,
+  Translator,
+  JsonFormsState,
+} from '../store';
+import { defaultErrorTranslator, defaultTranslator } from './i18nUtil';
 
-export interface CombinatorSubSchemaRenderInfo {
-  schema: JsonSchema;
-  uischema: UISchemaElement;
-  label: string;
-}
+export const fetchLocale = (state?: JsonFormsI18nState) => {
+  if (state === undefined) {
+    return undefined;
+  }
+  return state.locale;
+};
 
-export type CombinatorKeyword = 'anyOf' | 'oneOf' | 'allOf';
+export const fetchTranslator = (state?: JsonFormsI18nState) => {
+  if (state === undefined) {
+    return defaultTranslator;
+  }
+  return state.translate;
+};
 
-export const createCombinatorRenderInfos = (
-  combinatorSubSchemas: JsonSchema[],
-  rootSchema: JsonSchema,
-  keyword: CombinatorKeyword,
-  control: ControlElement,
-  path: string,
-  uischemas: JsonFormsUISchemaRegistryEntry[]
-): CombinatorSubSchemaRenderInfo[] =>
-  combinatorSubSchemas.map((subSchema, subSchemaIndex) => {
-    const resolvedSubSchema =
-      subSchema.$ref && Resolve.schema(rootSchema, subSchema.$ref, rootSchema);
+export const fetchErrorTranslator = (state?: JsonFormsI18nState) => {
+  if (state === undefined) {
+    return defaultErrorTranslator;
+  }
+  return state.translateError;
+};
 
-    const schema = resolvedSubSchema ?? subSchema;
+export const getLocale = (state: JsonFormsState) =>
+  fetchLocale(get(state, 'jsonforms.i18n'));
 
-    return {
-      schema,
-      uischema: findUISchema(
-        uischemas,
-        schema,
-        control.scope,
-        path,
-        undefined,
-        control,
-        rootSchema
-      ),
-      label:
-        subSchema.title ??
-        resolvedSubSchema?.title ??
-        `${keyword}-${subSchemaIndex}`,
-    };
-  });
+export const getTranslator =
+  () =>
+  (state: JsonFormsState): Translator =>
+    fetchTranslator(get(state, 'jsonforms.i18n'));
+
+export const getErrorTranslator =
+  () =>
+  (state: JsonFormsState): ErrorTranslator =>
+    fetchErrorTranslator(get(state, 'jsonforms.i18n'));
