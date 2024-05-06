@@ -23,18 +23,15 @@
   THE SOFTWARE.
 */
 
-import {
-  defaultErrorTranslator,
-  defaultTranslator,
-  JsonFormsI18nState,
-} from '../i18n';
+import { defaultErrorTranslator, defaultTranslator } from '../i18n';
 import {
   I18nActions,
   SET_LOCALE,
   SET_TRANSLATOR,
   UPDATE_I18N,
 } from '../actions';
-import type { Reducer } from '../util';
+import { Reducer } from '../store/type';
+import { JsonFormsI18nState } from '../store';
 
 export const defaultJsonFormsI18nState: Required<JsonFormsI18nState> = {
   locale: 'en',
@@ -82,25 +79,4 @@ export const i18nReducer: Reducer<JsonFormsI18nState, I18nActions> = (
     default:
       return state;
   }
-};
-
-export const fetchLocale = (state?: JsonFormsI18nState) => {
-  if (state === undefined) {
-    return undefined;
-  }
-  return state.locale;
-};
-
-export const fetchTranslator = (state?: JsonFormsI18nState) => {
-  if (state === undefined) {
-    return defaultTranslator;
-  }
-  return state.translate;
-};
-
-export const fetchErrorTranslator = (state?: JsonFormsI18nState) => {
-  if (state === undefined) {
-    return defaultErrorTranslator;
-  }
-  return state.translateError;
 };

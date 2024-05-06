@@ -28,9 +28,8 @@ import configureStore from 'redux-mock-store';
 import test from 'ava';
 
 import { ErrorObject } from 'ajv';
-import { JsonFormsState } from '../../src/store';
-import { coreReducer, JsonFormsCore } from '../../src/reducers/core';
-import { Dispatch } from '../../src/util/type';
+import { JsonFormsCore, JsonFormsState, i18nJsonSchema } from '../../src/store';
+import { coreReducer, defaultJsonFormsI18nState } from '../../src/reducers';
 import {
   CoreActions,
   init,
@@ -38,14 +37,17 @@ import {
   update,
   UpdateAction,
   UPDATE_DATA,
-} from '../../src/actions/actions';
+} from '../../src/actions';
 import {
   ControlElement,
+  JsonSchema,
+  JsonSchema7,
   LabelElement,
   RuleEffect,
   UISchemaElement,
-} from '../../src/models/uischema';
+} from '../../src/models';
 import {
+  OwnPropsOfControl,
   computeLabel,
   createDefaultValue,
   mapDispatchToArrayControlProps,
@@ -61,25 +63,18 @@ import {
   mapStateToMultiEnumControlProps,
   mapStateToOneOfEnumControlProps,
   mapStateToOneOfProps,
-  OwnPropsOfControl,
-} from '../../src/util/renderer';
-import { clearAllIds } from '../../src/util/ids';
-import { JsonSchema } from '../../src/models/jsonSchema';
-import { rankWith } from '../../src/testers/testers';
-import { createAjv } from '../../src/util/validator';
-import { JsonSchema7 } from '../../src/models/jsonSchema7';
-import { defaultJsonFormsI18nState } from '../../src/reducers/i18n';
-import { i18nJsonSchema } from '../../src/i18n/i18nTypes';
-import { convertDateToString } from '../../src/util';
+} from '../../src/mappers';
+import { clearAllIds, convertDateToString, createAjv } from '../../src/util';
+import { rankWith } from '../../src';
 
 const middlewares: Redux.Middleware[] = [];
 const mockStore = configureStore<JsonFormsState>(middlewares);
 
 const mockDispatch = (
   initialCore: JsonFormsCore
-): [() => JsonFormsCore, Dispatch<CoreActions>] => {
+): [() => JsonFormsCore, Redux.Dispatch<CoreActions>] => {
   const coreContainer = { core: initialCore };
-  const dispatch: Dispatch<CoreActions> = <T extends CoreActions>(
+  const dispatch: Redux.Dispatch<CoreActions> = <T extends CoreActions>(
     action: T
   ): T => {
     coreContainer.core = coreReducer(coreContainer.core, action);

@@ -25,12 +25,17 @@
 
 import isEmpty from 'lodash/isEmpty';
 import {
-  isControlElement,
-  isLayout,
-  isScoped,
+  ControlElement,
+  GroupLayout,
+  Internationalizable,
+  Labelable,
+  Labeled,
+  Layout,
+  Scopable,
+  Scoped,
   UISchemaElement,
 } from '../models';
-import { encode } from './path';
+import { compose, getPropPath, toDataPathSegments } from './path';
 
 export type IterateCallback = (uischema: UISchemaElement) => void;
 
@@ -63,18 +68,6 @@ export const iterateSchema = (
 };
 
 /**
- * Transform a dotted path to a uiSchema properties path
- * @param path a dotted prop path to a schema value (i.e. articles.comment.author)
- * @return the uiSchema properties path (i.e. /properties/articles/properties/comment/properties/author)
- */
-export const getPropPath = (path: string): string => {
-  return `/properties/${path
-    .split('.')
-    .map((p) => encode(p))
-    .join('/properties/')}`;
-};
-
-/**
  * Find a control in a uiSchema, based on the dotted path of the schema value
  * @param {UISchemaElement} uiSchema the uiSchema to search from
  * @param path a dotted prop path to a schema value (i.e. articles.comment.author)
@@ -101,3 +94,46 @@ export const findUiControl = (
 
   return undefined;
 };
+
+export const composeWithUi = (scopableUi: Scopable, path: string): string => {
+  if (!isScoped(scopableUi)) {
+    return path ?? '';
+  }
+
+  const segments = toDataPathSegments(scopableUi.scope);
+
+  if (isEmpty(segments)) {
+    return path ?? '';
+  }
+
+  return compose(path, segments.join('.'));
+};
+
+export const isInternationalized = (
+  element: unknown
+): element is Required<Internationalizable> =>
+  typeof element === 'object' &&
+  element !== null &&
+  typeof (element as Internationalizable).i18n === 'string';
+
+export const isGroup = (layout: Layout): layout is GroupLayout =>
+  layout.type === 'Group';
+
+export const isLayout = (uischema: UISchemaElement): uischema is Layout =>
+  (uischema as Layout).elements !== undefined;
+
+export const isScopable = (obj: unknown): obj is Scopable =>
+  !!obj && typeof obj === 'object';
+
+export const isScoped = (obj: unknown): obj is Scoped =>
+  isScopable(obj) && typeof obj.scope === 'string';
+
+export const isLabelable = (obj: unknown): obj is Labelable =>
+  !!obj && typeof obj === 'object';
+
+export const isLabeled = <T = never>(obj: unknown): obj is Labeled<T> =>
+  isLabelable(obj) && ['string', 'boolean'].includes(typeof obj.label);
+
+export const isControlElement = (
+  uiSchema: UISchemaElement
+): uiSchema is ControlElement => uiSchema.type === 'Control';

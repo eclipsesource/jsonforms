@@ -23,14 +23,11 @@
   THE SOFTWARE.
 */
 
-import type { Store } from './util';
-import type {
-  JsonFormsCore,
-  JsonFormsCellRendererRegistryEntry,
-  JsonFormsRendererRegistryEntry,
-  JsonFormsUISchemaRegistryEntry,
-} from './reducers';
-import type { JsonFormsI18nState } from './i18n';
+import type { Store } from './type';
+import { RankedTester, UISchemaTester } from '../testers';
+import { JsonSchema, UISchemaElement } from '../models';
+import Ajv, { ErrorObject, ValidateFunction } from 'ajv';
+import { JsonFormsI18nState } from './i18nTypes';
 
 /**
  * JSONForms store.
@@ -78,6 +75,37 @@ export interface JsonFormsSubStates {
   readonly?: boolean;
   // allow additional state
   [additionalState: string]: any;
+}
+
+export type ValidationMode =
+  | 'ValidateAndShow'
+  | 'ValidateAndHide'
+  | 'NoValidation';
+
+export interface JsonFormsCore {
+  data: any;
+  schema: JsonSchema;
+  uischema: UISchemaElement;
+  errors?: ErrorObject[];
+  additionalErrors?: ErrorObject[];
+  validator?: ValidateFunction;
+  ajv?: Ajv;
+  validationMode?: ValidationMode;
+}
+
+export interface JsonFormsRendererRegistryEntry {
+  tester: RankedTester;
+  renderer: any;
+}
+
+export interface JsonFormsUISchemaRegistryEntry {
+  tester: UISchemaTester;
+  uischema: UISchemaElement;
+}
+
+export interface JsonFormsCellRendererRegistryEntry {
+  tester: RankedTester;
+  cell: any;
 }
 
 export interface JsonFormsExtendedState<T> extends JsonFormsState {
