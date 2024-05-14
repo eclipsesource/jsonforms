@@ -33,7 +33,8 @@ import {
   baseSetup,
   getJsonFormsService,
   prepareComponent,
-} from '@jsonforms/angular-test';
+} from './common';
+import { initTestEnvironment } from "./test";
 
 const imports = [
   MatFormFieldModule,
@@ -44,6 +45,8 @@ const imports = [
 const providers = [JsonFormsAngularService];
 const componentUT: any = NumberControlRenderer;
 const testConfig = { imports, providers, componentUT };
+
+initTestEnvironment();
 
 describe('middleware tests', () => {
   let component: JsonFormsControl;

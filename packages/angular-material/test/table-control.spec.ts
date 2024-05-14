@@ -39,9 +39,10 @@ import {
   TableRenderer,
   TableRendererTester,
 } from '../src/library/other/table.renderer';
-import { setupMockStore } from '@jsonforms/angular-test';
+import { setupMockStore } from './common';
 import { createTesterContext } from './util';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { initTestEnvironment } from "./test";
 
 const uischema1: ControlElement = { type: 'Control', scope: '#' };
 const uischema2: ControlElement = {
@@ -101,6 +102,8 @@ const renderers = [
   { tester: TextControlRendererTester, renderer: TextControlRenderer },
   { tester: TableRendererTester, renderer: TableRenderer },
 ];
+
+initTestEnvironment();
 
 describe('Table tester', () => {
   it('should succeed', () => {

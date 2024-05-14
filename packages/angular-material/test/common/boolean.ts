@@ -23,7 +23,6 @@
   THE SOFTWARE.
 */
 import type { DebugElement, Type } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import type { JsonFormsControl } from '@jsonforms/angular';
 import { ControlElement, JsonSchema, Actions } from '@jsonforms/core';
@@ -33,6 +32,7 @@ import {
   TestConfig,
   getJsonFormsService,
 } from './util';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 const prepareComponent = <C extends JsonFormsControl, I>(
   testConfig: TestConfig<C>,
@@ -283,6 +283,7 @@ export const booleanInputEventTest =
       fixture.detectChanges();
       component.ngOnInit();
 
+      // @ts-ignore
       const spy = spyOn(component, 'onChange');
       elementToClick.click();
       // trigger change detection

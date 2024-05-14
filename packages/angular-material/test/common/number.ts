@@ -23,7 +23,6 @@
   THE SOFTWARE.
 */
 import type { DebugElement } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import type { JsonFormsControl } from '@jsonforms/angular';
 import { Actions, ControlElement, JsonSchema } from '@jsonforms/core';
@@ -31,18 +30,20 @@ import {
   baseSetup,
   ErrorTestExpectation,
   getJsonFormsService,
+  setupMockStore,
   TestConfig,
   TestData,
 } from './util';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 interface ComponentResult<C extends JsonFormsControl> {
   fixture: ComponentFixture<any>;
   component: C;
-  textElement?: DebugElement;
-  textNativeElement?: any;
+  numberElement?: DebugElement;
+  numberNativeElement?: any;
 }
 
-const prepareComponent = <C extends JsonFormsControl>(
+export const prepareComponent = <C extends JsonFormsControl>(
   testConfig: TestConfig<C>,
   instance?: string,
   elementToUse?: (element: DebugElement) => any
@@ -51,19 +52,20 @@ const prepareComponent = <C extends JsonFormsControl>(
   const component = fixture.componentInstance;
   const result: ComponentResult<C> = { fixture, component };
   if (instance && elementToUse) {
-    const textElement = fixture.debugElement.query(By.css(instance));
-    const textNativeElement = elementToUse(textElement);
-    result.textElement = textElement;
-    result.textNativeElement = textNativeElement;
+    const numberElement = fixture.debugElement.query(By.css(instance));
+    const numberNativeElement = elementToUse(numberElement);
+    result.numberElement = numberElement;
+    result.numberNativeElement = numberNativeElement;
   }
+
   return result;
 };
-const defaultData = { foo: 'foo' };
+const defaultData = { foo: 123.123 };
 const defaultSchema: JsonSchema = {
   type: 'object',
   properties: {
     foo: {
-      type: 'string',
+      type: 'number',
     },
   },
 };
@@ -71,22 +73,40 @@ const defaultUischema: ControlElement = {
   type: 'Control',
   scope: '#/properties/foo',
 };
-export const defaultTextTestData: TestData<ControlElement> = {
+export const defaultNumberTestData: TestData<ControlElement> = {
   data: defaultData,
   schema: defaultSchema,
   uischema: defaultUischema,
 };
-export const textBaseTest =
+export const updateWithSiblingNumberValue = <C extends JsonFormsControl>(
+  fixture: ComponentFixture<C>,
+  testData: TestData<ControlElement>,
+  expectations: () => any
+) => {
+  setupMockStore(fixture, testData);
+  getJsonFormsService(fixture.componentInstance).init({
+    core: {
+      data: { foo: 123.123, bar: 456.456 },
+      schema: testData.schema,
+      uischema: undefined,
+    },
+  });
+  fixture.componentInstance.ngOnInit();
+  fixture.detectChanges();
+  expectations();
+};
+
+export const numberBaseTest =
   <C extends JsonFormsControl>(
     testConfig: TestConfig<C>,
     instance: string,
     elementToUse: (element: DebugElement) => any,
-    testData: TestData<ControlElement> = defaultTextTestData
+    testData: TestData<ControlElement> = defaultNumberTestData
   ) =>
   () => {
     let fixture: ComponentFixture<any>;
-    let textElement: DebugElement;
-    let textNativeElement: any;
+    let numberElement: DebugElement;
+    let numberNativeElement: any;
     let component: C;
 
     baseSetup(testConfig);
@@ -98,115 +118,121 @@ export const textBaseTest =
         elementToUse
       );
       fixture = preparedComponents.fixture;
-      textNativeElement = preparedComponents.textNativeElement;
-      textElement = preparedComponents.textElement;
+      numberNativeElement = preparedComponents.numberNativeElement;
+      numberElement = preparedComponents.numberElement;
       component = preparedComponents.component;
     });
 
-    it('should render', () => {
+    it('should render floats', () => {
       component.uischema = testData.uischema;
-      getJsonFormsService(component).init({
-        core: {
-          data: testData.data,
-          schema: testData.schema,
-          uischema: testData.uischema,
-        },
-      });
+      getJsonFormsService(component).init({ core: testData });
+      getJsonFormsService(component).updateCore(
+        Actions.init(testData.data, testData.schema)
+      );
       component.ngOnInit();
       fixture.detectChanges();
-      expect(component.data).toBe('foo');
-      expect(textNativeElement.value).toBe('foo');
-      expect(textNativeElement.disabled).toBe(false);
+      expect(component.data).toBe(123.123);
+      expect(numberNativeElement.value).toBe('123.123');
+      // step is of type string
+      expect(numberNativeElement.step).toBe('0.1');
+      expect(numberNativeElement.disabled).toBe(false);
       // the component is wrapped in a div
-      const hasDisplayNone =
-        'none' === fixture.nativeElement.children[0].style.display;
-      const hasHidden = fixture.nativeElement.children[0].hidden;
-      expect(!hasDisplayNone && !hasHidden).toBeTruthy();
+      expect(fixture.nativeElement.children[0].style.display).not.toBe('none');
+    });
+
+    it('should render integers', () => {
+      const state = {
+        data: { foo: 123 },
+        schema: {
+          type: 'object',
+          properties: {
+            foo: { type: 'integer' },
+          },
+        },
+        uischema: testData.uischema,
+      };
+      component.uischema = testData.uischema;
+      getJsonFormsService(component).init({ core: state });
+      getJsonFormsService(component).updateCore(
+        Actions.init(state.data, state.schema)
+      );
+      component.ngOnInit();
+      fixture.detectChanges();
+
+      expect(component.data).toBe(123);
+      expect(numberNativeElement.value).toBe('123');
+      // step is of type string
+      expect(numberNativeElement.step).toBe('1');
+      expect(numberNativeElement.disabled).toBe(false);
+      // the component is wrapped in a div
+      expect(fixture.nativeElement.children[0].style.display).not.toBe('none');
     });
 
     it('should support updating the state', () => {
       component.uischema = testData.uischema;
-
-      getJsonFormsService(component).init({
-        core: {
-          data: testData.data,
-          schema: testData.schema,
-          uischema: testData.uischema,
-        },
-      });
+      getJsonFormsService(component).init({ core: testData });
+      getJsonFormsService(component).updateCore(
+        Actions.init(testData.data, testData.schema)
+      );
       component.ngOnInit();
       fixture.detectChanges();
-
-      getJsonFormsService(component).updateCore(
-        Actions.update('foo', () => 'bar')
+      getJsonFormsService(fixture.componentInstance).updateCore(
+        Actions.update('foo', () => 456.456)
       );
       fixture.detectChanges();
-      expect(component.data).toBe('bar');
-      expect(textNativeElement.value).toBe('bar');
+      expect(component.data).toBe(456.456);
+      expect(Number(numberNativeElement.value)).toBe(456.456);
     });
+
     it('should update with undefined value', () => {
       component.uischema = testData.uischema;
-
-      getJsonFormsService(component).init({
-        core: {
-          data: testData.data,
-          schema: testData.schema,
-          uischema: testData.uischema,
-        },
-      });
+      getJsonFormsService(component).init({ core: testData });
+      getJsonFormsService(component).updateCore(
+        Actions.init(testData.data, testData.schema)
+      );
       component.ngOnInit();
       fixture.detectChanges();
-
-      getJsonFormsService(component).updateCore(
+      getJsonFormsService(fixture.componentInstance).updateCore(
         Actions.update('foo', () => undefined)
       );
       fixture.detectChanges();
+
       expect(component.data).toBe(undefined);
-      expect(textNativeElement.value).toBe('');
+      expect(numberNativeElement.value).toBe('');
     });
+
     it('should update with null value', () => {
       component.uischema = testData.uischema;
-
-      getJsonFormsService(component).init({
-        core: {
-          data: testData.data,
-          schema: testData.schema,
-          uischema: testData.uischema,
-        },
-      });
+      getJsonFormsService(component).init({ core: testData });
+      getJsonFormsService(component).updateCore(
+        Actions.init(testData.data, testData.schema)
+      );
       component.ngOnInit();
       fixture.detectChanges();
-
-      getJsonFormsService(component).updateCore(
+      getJsonFormsService(fixture.componentInstance).updateCore(
         Actions.update('foo', () => null)
       );
       fixture.detectChanges();
       expect(component.data).toBe(null);
-      expect(textNativeElement.value).toBe('');
+      expect(numberNativeElement.value).toBe('');
     });
+
     it('should not update with wrong ref', () => {
       component.uischema = testData.uischema;
-
-      getJsonFormsService(component).init({
-        core: {
-          data: testData.data,
-          schema: testData.schema,
-          uischema: testData.uischema,
-        },
-      });
+      getJsonFormsService(component).init({ core: testData });
+      getJsonFormsService(component).updateCore(
+        Actions.init(testData.data, testData.schema)
+      );
       component.ngOnInit();
       fixture.detectChanges();
-
-      getJsonFormsService(component).updateCore(
-        Actions.update('foo', () => 'foo')
-      );
-      getJsonFormsService(component).updateCore(
-        Actions.update('bar', () => 'bar')
+      getJsonFormsService(fixture.componentInstance).updateCore(
+        Actions.update('bar', () => 456.456)
       );
       fixture.detectChanges();
-      expect(component.data).toBe('foo');
-      expect(textNativeElement.value).toBe('foo');
+      expect(component.data).toBe(123.123);
+      expect(Number(numberNativeElement.value)).toBe(123.123);
     });
+
     // store needed as we evaluate the calculated enabled value to disable/enable the control
     it('can be disabled', () => {
       component.uischema = testData.uischema;
@@ -221,8 +247,9 @@ export const textBaseTest =
       });
       component.ngOnInit();
       fixture.detectChanges();
-      expect(textNativeElement.disabled).toBe(true);
+      expect(numberNativeElement.disabled).toBe(true);
     });
+    // store needed as we evaluate the calculated enabled value to disable/enable the control
     it('can be hidden', () => {
       component.uischema = testData.uischema;
       component.visible = false;
@@ -241,6 +268,7 @@ export const textBaseTest =
       const hasHidden = fixture.nativeElement.children[0].hidden;
       expect(hasDisplayNone || hasHidden).toBeTruthy();
     });
+
     it('id should be present in output', () => {
       component.uischema = testData.uischema;
       component.id = 'myId';
@@ -253,19 +281,19 @@ export const textBaseTest =
       });
       component.ngOnInit();
       fixture.detectChanges();
-      expect(textElement.nativeElement.id).toBe('myId');
+      expect(numberElement.nativeElement.id).toBe('myId');
     });
   };
-export const textInputEventTest =
+export const numberInputEventTest =
   <C extends JsonFormsControl>(
     testConfig: TestConfig<C>,
     instance: string,
     elementToUse: (element: DebugElement) => any,
-    testData: TestData<ControlElement> = defaultTextTestData
+    testData: TestData<ControlElement> = defaultNumberTestData
   ) =>
   () => {
     let fixture: ComponentFixture<any>;
-    let textNativeElement: any;
+    let numberNativeElement: any;
     let component: C;
 
     baseSetup(testConfig);
@@ -277,39 +305,40 @@ export const textInputEventTest =
         elementToUse
       );
       fixture = preparedComponents.fixture;
-      textNativeElement = preparedComponents.textNativeElement;
+      numberNativeElement = preparedComponents.numberNativeElement;
       component = preparedComponents.component;
     });
 
     it('should update via input event', () => {
-      component.uischema = testData.uischema;
+      component.uischema = testData.uischema as ControlElement;
 
       getJsonFormsService(component).init({
         core: {
           data: testData.data,
           schema: testData.schema,
-          uischema: testData.uischema,
+          uischema: undefined,
         },
       });
-      component.ngOnInit();
       fixture.detectChanges();
+      component.ngOnInit();
 
+      // @ts-ignore
       const spy = spyOn(component, 'onChange');
-      textNativeElement.value = 'bar';
-      if (textNativeElement.dispatchEvent) {
-        textNativeElement.dispatchEvent(new Event('input'));
+      numberNativeElement.value = 456.456;
+      if (numberNativeElement.dispatchEvent) {
+        numberNativeElement.dispatchEvent(new Event('input'));
       }
       // trigger change detection
       fixture.detectChanges();
       expect(spy).toHaveBeenCalled();
-      expect(textNativeElement.value).toBe('bar');
+      expect(Number(numberNativeElement.value)).toBe(456.456);
     });
   };
-export const textErrorTest =
+export const numberErrorTest =
   <C extends JsonFormsControl>(
     testConfig: TestConfig<C>,
     errorTestInformation: ErrorTestExpectation,
-    testData: TestData<ControlElement> = defaultTextTestData
+    testData: TestData<ControlElement> = defaultNumberTestData
   ) =>
   () => {
     let fixture: ComponentFixture<any>;
@@ -322,6 +351,7 @@ export const textErrorTest =
       fixture = preparedComponents.fixture;
       component = preparedComponents.component;
     });
+
     it('should display errors', () => {
       component.uischema = testData.uischema;
 
@@ -357,17 +387,34 @@ export const textErrorTest =
       ).toBe('Hi, this is me, test error!');
     });
   };
-export const textTypeTest =
+
+const additionalSchema: JsonSchema = {
+  type: 'object',
+  properties: {
+    foo: {
+      type: 'number',
+      minimum: -42.42,
+      maximum: 42,
+      multipleOf: 3,
+    },
+  },
+};
+export const additionalTestData: TestData<ControlElement> = {
+  data: defaultData,
+  schema: additionalSchema,
+  uischema: defaultUischema,
+};
+
+export const numberAdditionalPropsTest =
   <C extends JsonFormsControl>(
     testConfig: TestConfig<C>,
     instance: string,
     elementToUse: (element: DebugElement) => any,
-    testData: TestData<ControlElement> = defaultTextTestData
+    testData: TestData<ControlElement> = additionalTestData
   ) =>
   () => {
     let fixture: ComponentFixture<any>;
-    let component: C;
-    let textNativeElement: any;
+    let numberNativeElement: any;
 
     baseSetup(testConfig);
 
@@ -378,77 +425,20 @@ export const textTypeTest =
         elementToUse
       );
       fixture = preparedComponents.fixture;
-      component = preparedComponents.component;
-      textNativeElement = preparedComponents.textNativeElement;
+      numberNativeElement = preparedComponents.numberNativeElement;
     });
-    it('should show password independent of schema', () => {
-      const uischema = JSON.parse(JSON.stringify(testData.uischema));
-      uischema.options = { format: 'password' };
-      const schema = JSON.parse(JSON.stringify(testData.schema));
-      schema.properties.foo.format = 'email';
 
-      component.uischema = uischema;
-      component.schema = schema;
-
-      getJsonFormsService(component).init({
-        core: { data: testData.data, schema: schema, uischema: uischema },
-      });
-      component.ngOnInit();
+    it('should respect min,max,multipleOf', () => {
+      setupMockStore(fixture, testData);
+      getJsonFormsService(fixture.componentInstance).updateCore(
+        Actions.init(testData.data, testData.schema)
+      );
+      fixture.componentInstance.ngOnInit();
       fixture.detectChanges();
-      expect(textNativeElement.type).toBe('password');
-    });
-    it('should show email', () => {
-      const schema = JSON.parse(JSON.stringify(testData.schema));
-      schema.properties.foo.format = 'email';
 
-      component.uischema = testData.uischema;
-      component.schema = schema;
-
-      getJsonFormsService(component).init({
-        core: {
-          data: testData.data,
-          schema: schema,
-          uischema: testData.uischema,
-        },
-      });
-      component.ngOnInit();
-      fixture.detectChanges();
-      expect(textNativeElement.type).toBe('email');
-    });
-    xit('should show tel', () => {
-      const schema = JSON.parse(JSON.stringify(testData.schema));
-      schema.properties.foo.format = 'tel';
-
-      component.uischema = testData.uischema;
-      component.schema = schema;
-
-      getJsonFormsService(component).init({
-        core: {
-          data: testData.data,
-          schema: schema,
-          uischema: testData.uischema,
-        },
-      });
-      component.ngOnInit();
-      fixture.detectChanges();
-      expect(textNativeElement.type).toBe('tel');
-    });
-    xit('should fallback to text', () => {
-      const schema = JSON.parse(JSON.stringify(testData.schema));
-      schema.properties.foo.format = 'foo';
-
-      component.uischema = testData.uischema;
-      component.schema = schema;
-
-      getJsonFormsService(component).init({
-        core: {
-          data: testData.data,
-          schema: schema,
-          uischema: testData.uischema,
-        },
-      });
-      component.ngOnInit();
-      fixture.detectChanges();
-      expect(textNativeElement.type).toBe('text');
+      // step, min and max are of type string on an input control
+      expect(numberNativeElement.step).toBe('3');
+      expect(numberNativeElement.min).toBe('-42.42');
+      expect(numberNativeElement.max).toBe('42');
     });
   };

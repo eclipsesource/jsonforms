@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -37,9 +37,12 @@ import {
 import { DebugElement } from '@angular/core';
 import { MasterListComponent } from '../src/library/other/master-detail/master';
 import { JsonFormsDetailComponent } from '../src/library/other/master-detail/detail';
-import { getJsonFormsService, setupMockStore } from '@jsonforms/angular-test';
+import { getJsonFormsService, setupMockStore } from './common';
 import { Actions } from '@jsonforms/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { initTestEnvironment } from "./test";
+
+initTestEnvironment();
 
 describe('Master detail', () => {
   let fixture: ComponentFixture<MasterListComponent>;
@@ -99,7 +102,7 @@ describe('Master detail', () => {
     },
   };
 
-  beforeEach(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
         JsonFormsOutlet,
@@ -120,9 +123,9 @@ describe('Master detail', () => {
 
     fixture = TestBed.createComponent(MasterListComponent);
     component = fixture.componentInstance;
-  });
+  }));
 
-  it('should render', async(() => {
+  it('should render', waitForAsync(() => {
     setupMockStore(fixture, { uischema, schema, data });
     getJsonFormsService(component).updateCore(Actions.init(data, schema));
     component.ngOnInit();
@@ -139,7 +142,7 @@ describe('Master detail', () => {
     });
   }));
 
-  it('add a master item', async(() => {
+  it('add a master item', waitForAsync(() => {
     setupMockStore(fixture, { uischema, schema, data });
     getJsonFormsService(component).updateCore(Actions.init(data, schema));
     component.ngOnInit();
@@ -161,7 +164,7 @@ describe('Master detail', () => {
     });
   }));
 
-  it('remove an item', async(() => {
+  it('remove an item', waitForAsync(() => {
     setupMockStore(fixture, { uischema, schema, data });
     getJsonFormsService(component).updateCore(Actions.init(data, schema));
     component.ngOnInit();
@@ -353,7 +356,7 @@ describe('Master detail', () => {
     expect(component.selectedItem).toBe(undefined);
   });
 
-  it('setting detail on click', async(() => {
+  it('setting detail on click', waitForAsync(() => {
     setupMockStore(fixture, { uischema, schema, data });
     getJsonFormsService(component).updateCore(Actions.init(data, schema));
     component.ngOnInit();
@@ -397,7 +400,7 @@ describe('Master detail', () => {
     });
   }));
 
-  it('can be hidden', async(() => {
+  it('can be hidden', waitForAsync(() => {
     setupMockStore(fixture, { uischema, schema, data });
     getJsonFormsService(component).updateCore(Actions.init(data, schema));
     component.visible = false;
