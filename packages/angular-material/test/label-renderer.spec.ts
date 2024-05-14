@@ -22,13 +22,14 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { JsonSchema, LabelElement } from '@jsonforms/core';
 
 import { LabelRenderer, LabelRendererTester } from '../src/library/other';
-import { setupMockStore } from '@jsonforms/angular-test';
+import { setupMockStore } from './common';
 import { JsonFormsAngularService } from '@jsonforms/angular';
+import { initTestEnvironment } from './test';
 
 const data = {};
 const schema: JsonSchema = {
@@ -44,6 +45,8 @@ const uischema: LabelElement = {
   text: 'FooBar',
 };
 
+initTestEnvironment();
+
 describe('Material label field tester', () => {
   it('should succeed', () => {
     expect(LabelRendererTester(uischema, schema, undefined)).toBe(4);
@@ -56,12 +59,12 @@ describe('Label Renderer Base Tests', () => {
   let fixture: ComponentFixture<LabelRenderer>;
   let component: LabelRenderer;
   let labelElement: HTMLLabelElement;
-  beforeEach(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [componentUT],
       providers: providers,
     }).compileComponents();
-  });
+  }));
   beforeEach(() => {
     fixture = TestBed.createComponent(componentUT);
     component = fixture.componentInstance;

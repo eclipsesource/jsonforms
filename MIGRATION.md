@@ -1,5 +1,13 @@
 # Migration guide
 
+## Migrating to JSON Forms 3.3
+
+### Angular support now targets Angular 17 and Angular 18
+
+When using JSON Forms 3.3, your Angular application now needs to target Angular 17 or 18.
+
+Use JSON Forms 3.2 if you need to stay on Angular 16.
+
 ## Migrating to JSON Forms 3.2
 
 ### React Material Renderers using Outlined Inputs

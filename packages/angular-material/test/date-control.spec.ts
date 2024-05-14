@@ -28,6 +28,7 @@ import {
   fakeAsync,
   flush,
   TestBed,
+  waitForAsync,
 } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -43,11 +44,12 @@ import {
   ErrorTestExpectation,
   getJsonFormsService,
   setupMockStore,
-} from '@jsonforms/angular-test';
+} from './common';
 import { Actions, ControlElement, JsonSchema } from '@jsonforms/core';
 import { DateControlRenderer, DateControlRendererTester } from '../src';
 import { JsonFormsAngularService } from '@jsonforms/angular';
 import { createTesterContext } from './util';
+import { initTestEnvironment } from './test';
 
 const data = { foo: '2018-01-01' };
 const schema: JsonSchema = {
@@ -63,6 +65,8 @@ const uischema: ControlElement = {
   type: 'Control',
   scope: '#/properties/foo',
 };
+
+initTestEnvironment();
 
 describe('Material boolean field tester', () => {
   it('should succeed', () => {
@@ -91,13 +95,13 @@ describe('Date control Base Tests', () => {
   let fixture: ComponentFixture<DateControlRenderer>;
   let component: DateControlRenderer;
   let inputElement: HTMLInputElement;
-  beforeEach(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [componentUT],
       imports: imports,
       providers: providers,
     }).compileComponents();
-  });
+  }));
   beforeEach(() => {
     fixture = TestBed.createComponent(componentUT);
     component = fixture.componentInstance;
@@ -230,13 +234,13 @@ describe('Date control Input Event Tests', () => {
   let fixture: ComponentFixture<DateControlRenderer>;
   let component: DateControlRenderer;
   let inputElement: HTMLInputElement;
-  beforeEach(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [componentUT],
       imports: imports,
       providers: providers,
     }).compileComponents();
-  });
+  }));
   beforeEach(() => {
     fixture = TestBed.createComponent(componentUT);
     component = fixture.componentInstance;
@@ -275,13 +279,13 @@ describe('Date control Input Event Tests', () => {
 describe('Date control Error Tests', () => {
   let fixture: ComponentFixture<DateControlRenderer>;
   let component: DateControlRenderer;
-  beforeEach(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [componentUT],
       imports: imports,
       providers: providers,
     }).compileComponents();
-  });
+  }));
   beforeEach(() => {
     fixture = TestBed.createComponent(componentUT);
     component = fixture.componentInstance;

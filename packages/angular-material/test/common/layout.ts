@@ -22,12 +22,12 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
   JsonFormsAngularService,
   JsonFormsOutlet,
   UnknownRenderer,
 } from '@jsonforms/angular';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 export const beforeEachLayoutTest = <LAYOUT>(
   Renderer: any,
