@@ -22,17 +22,20 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { ComponentFixture } from '@angular/core/testing';
+import { ComponentFixture, waitForAsync } from '@angular/core/testing';
 import { GroupLayout, UISchemaElement } from '@jsonforms/core';
 import { MatCard, MatCardTitle } from '@angular/material/card';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
-import { beforeEachLayoutTest, setupMockStore } from '@jsonforms/angular-test';
+import { beforeEachLayoutTest, setupMockStore } from './common';
 import { LayoutChildrenRenderPropsPipe } from '../src/library/layouts/layout.renderer';
 import {
   GroupLayoutRenderer,
   groupLayoutTester,
 } from '../src/library/layouts/group-layout.renderer';
+import { initTestEnvironment } from './test';
+
+initTestEnvironment();
 
 describe('Group layout tester', () => {
   it('should succeed', () => {
@@ -42,11 +45,12 @@ describe('Group layout tester', () => {
 describe('Group layout', () => {
   let fixture: ComponentFixture<any>;
 
-  beforeEach(() => {
+  beforeEach(waitForAsync(() => {
     fixture = beforeEachLayoutTest(GroupLayoutRenderer, {
-      declarations: [LayoutChildrenRenderPropsPipe, MatCard, MatCardTitle],
+      declarations: [LayoutChildrenRenderPropsPipe],
+      imports: [MatCard, MatCardTitle],
     });
-  });
+  }));
 
   it('render with undefined elements', () => {
     const uischema: UISchemaElement = {

@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import type { Type } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 import type {
   JsonFormsRendererRegistryEntry,
@@ -46,13 +46,13 @@ export interface TestConfig<C extends JsonFormsControl> {
 export const baseSetup = <C extends JsonFormsControl>(
   testConfig: TestConfig<C>
 ) => {
-  beforeEach(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [testConfig.componentUT],
       imports: testConfig.imports,
       providers: [JsonFormsAngularService].concat(testConfig.providers),
     }).compileComponents();
-  });
+  }));
 };
 
 export interface TestData<T extends UISchemaElement> {

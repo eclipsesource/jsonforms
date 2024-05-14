@@ -266,7 +266,7 @@ export const textInputEventTest =
   () => {
     let fixture: ComponentFixture<any>;
     let textNativeElement: any;
-    let component: C;
+    let component: C & { onChange(evt: string): void };
 
     baseSetup(testConfig);
 

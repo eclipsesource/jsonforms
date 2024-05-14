@@ -29,11 +29,8 @@ import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { NumberControlRenderer } from '../src';
 import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
-import {
-  baseSetup,
-  getJsonFormsService,
-  prepareComponent,
-} from '@jsonforms/angular-test';
+import { baseSetup, getJsonFormsService, prepareComponent } from './common';
+import { initTestEnvironment } from './test';
 
 const imports = [
   MatFormFieldModule,
@@ -44,6 +41,8 @@ const imports = [
 const providers = [JsonFormsAngularService];
 const componentUT: any = NumberControlRenderer;
 const testConfig = { imports, providers, componentUT };
+
+initTestEnvironment();
 
 describe('middleware tests', () => {
   let component: JsonFormsControl;

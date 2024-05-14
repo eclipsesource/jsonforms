@@ -23,7 +23,6 @@
   THE SOFTWARE.
 */
 import type { DebugElement } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import type { JsonFormsControl } from '@jsonforms/angular';
 import { Actions, ControlElement, JsonSchema } from '@jsonforms/core';
@@ -35,6 +34,7 @@ import {
   TestConfig,
   TestData,
 } from './util';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 interface ComponentResult<C extends JsonFormsControl> {
   fixture: ComponentFixture<any>;
@@ -294,7 +294,7 @@ export const numberInputEventTest =
   () => {
     let fixture: ComponentFixture<any>;
     let numberNativeElement: any;
-    let component: C;
+    let component: C & { onChange(evt: string): void };
 
     baseSetup(testConfig);
 

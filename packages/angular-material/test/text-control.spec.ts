@@ -33,9 +33,12 @@ import {
   textErrorTest,
   textInputEventTest,
   textTypeTest,
-} from '@jsonforms/angular-test';
+} from './common';
 import { TextControlRenderer, TextControlRendererTester } from '../src';
 import { JsonFormsAngularService } from '@jsonforms/angular';
+import { initTestEnvironment } from './test';
+
+initTestEnvironment();
 
 describe('Material text field tester', () => {
   const uischema = {
