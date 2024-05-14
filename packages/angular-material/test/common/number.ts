@@ -34,7 +34,7 @@ import {
   TestConfig,
   TestData,
 } from './util';
-import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 interface ComponentResult<C extends JsonFormsControl> {
   fixture: ComponentFixture<any>;
@@ -322,7 +322,6 @@ export const numberInputEventTest =
       fixture.detectChanges();
       component.ngOnInit();
 
-      // @ts-ignore
       const spy = spyOn(component, 'onChange');
       numberNativeElement.value = 456.456;
       if (numberNativeElement.dispatchEvent) {

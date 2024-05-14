@@ -29,7 +29,7 @@ import { JsonSchema, LabelElement } from '@jsonforms/core';
 import { LabelRenderer, LabelRendererTester } from '../src/library/other';
 import { setupMockStore } from './common';
 import { JsonFormsAngularService } from '@jsonforms/angular';
-import { initTestEnvironment } from "./test";
+import { initTestEnvironment } from './test';
 
 const data = {};
 const schema: JsonSchema = {

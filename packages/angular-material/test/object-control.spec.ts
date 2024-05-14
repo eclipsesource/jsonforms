@@ -45,7 +45,7 @@ import {
 } from '../src/library/other/object.renderer';
 import { getJsonFormsService } from './common';
 import { LayoutChildrenRenderPropsPipe } from '../src/library/layouts/layout.renderer';
-import { initTestEnvironment } from "./test";
+import { initTestEnvironment } from './test';
 
 const uischema1: ControlElement = { type: 'Control', scope: '#' };
 const uischema2: ControlElement = {

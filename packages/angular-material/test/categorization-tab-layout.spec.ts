@@ -47,7 +47,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { initTestEnvironment } from "./test";
+import { initTestEnvironment } from './test';
 
 const renderers = [
   { tester: TextControlRendererTester, renderer: TextControlRenderer },

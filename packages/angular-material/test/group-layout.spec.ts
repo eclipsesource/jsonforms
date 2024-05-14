@@ -33,7 +33,7 @@ import {
   GroupLayoutRenderer,
   groupLayoutTester,
 } from '../src/library/layouts/group-layout.renderer';
-import { initTestEnvironment } from "./test";
+import { initTestEnvironment } from './test';
 
 initTestEnvironment();
 

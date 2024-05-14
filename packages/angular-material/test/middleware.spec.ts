@@ -29,12 +29,8 @@ import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { NumberControlRenderer } from '../src';
 import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
-import {
-  baseSetup,
-  getJsonFormsService,
-  prepareComponent,
-} from './common';
-import { initTestEnvironment } from "./test";
+import { baseSetup, getJsonFormsService, prepareComponent } from './common';
+import { initTestEnvironment } from './test';
 
 const imports = [
   MatFormFieldModule,

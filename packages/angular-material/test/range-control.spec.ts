@@ -34,7 +34,7 @@ import {
 } from './common';
 import { RangeControlRenderer, RangeControlRendererTester } from '../src';
 import { JsonFormsAngularService } from '@jsonforms/angular';
-import { initTestEnvironment } from "./test";
+import { initTestEnvironment } from './test';
 
 initTestEnvironment();
 

@@ -41,7 +41,7 @@ import {
 } from './common';
 import { Actions, ControlElement, JsonFormsCore } from '@jsonforms/core';
 import { NumberControlRenderer, NumberControlRendererTester } from '../src';
-import { initTestEnvironment } from "./test";
+import { initTestEnvironment } from './test';
 
 initTestEnvironment();
 

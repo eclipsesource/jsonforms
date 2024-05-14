@@ -30,7 +30,7 @@ import {
   horizontalLayoutTester,
 } from '../src/library/layouts/horizontal-layout.renderer';
 import { LayoutChildrenRenderPropsPipe } from '../src/library/layouts/layout.renderer';
-import { initTestEnvironment } from "./test";
+import { initTestEnvironment } from './test';
 
 initTestEnvironment();
 

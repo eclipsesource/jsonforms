@@ -294,7 +294,6 @@ export const textInputEventTest =
       component.ngOnInit();
       fixture.detectChanges();
 
-      // @ts-ignore
       const spy = spyOn(component, 'onChange');
       textNativeElement.value = 'bar';
       if (textNativeElement.dispatchEvent) {

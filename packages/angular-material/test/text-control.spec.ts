@@ -36,7 +36,7 @@ import {
 } from './common';
 import { TextControlRenderer, TextControlRendererTester } from '../src';
 import { JsonFormsAngularService } from '@jsonforms/angular';
-import { initTestEnvironment } from "./test";
+import { initTestEnvironment } from './test';
 
 initTestEnvironment();
 

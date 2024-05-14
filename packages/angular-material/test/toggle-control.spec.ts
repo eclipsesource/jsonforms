@@ -35,7 +35,7 @@ import {
 } from './common';
 import { ToggleControlRenderer, ToggleControlRendererTester } from '../src';
 import { JsonFormsAngularService } from '@jsonforms/angular';
-import { initTestEnvironment } from "./test";
+import { initTestEnvironment } from './test';
 
 initTestEnvironment();
 

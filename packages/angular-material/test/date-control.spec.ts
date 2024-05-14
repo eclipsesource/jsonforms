@@ -27,7 +27,8 @@ import {
   ComponentFixture,
   fakeAsync,
   flush,
-  TestBed, waitForAsync,
+  TestBed,
+  waitForAsync,
 } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -48,7 +49,7 @@ import { Actions, ControlElement, JsonSchema } from '@jsonforms/core';
 import { DateControlRenderer, DateControlRendererTester } from '../src';
 import { JsonFormsAngularService } from '@jsonforms/angular';
 import { createTesterContext } from './util';
-import { initTestEnvironment } from "./test";
+import { initTestEnvironment } from './test';
 
 const data = { foo: '2018-01-01' };
 const schema: JsonSchema = {

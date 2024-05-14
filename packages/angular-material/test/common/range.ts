@@ -324,7 +324,6 @@ export const rangeInputEventTest =
       component.ngOnInit();
       fixture.detectChanges();
 
-      // @ts-ignore
       const spy = spyOn(component, 'onChange');
 
       const sliderElement = fixture.debugElement.query(

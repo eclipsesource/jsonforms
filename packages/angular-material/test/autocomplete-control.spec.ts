@@ -33,7 +33,8 @@ import {
   ComponentFixture,
   fakeAsync,
   TestBed,
-  tick, waitForAsync,
+  tick,
+  waitForAsync,
 } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -47,10 +48,10 @@ import { ControlElement, JsonSchema, Actions } from '@jsonforms/core';
 import { AutocompleteControlRenderer } from '../src';
 import { JsonFormsAngularService } from '@jsonforms/angular';
 import { ErrorObject } from 'ajv';
-import { initTestEnvironment } from "./test";
-import { HarnessLoader } from "@angular/cdk/testing";
-import { TestbedHarnessEnvironment } from "@angular/cdk/testing/testbed";
-import { MatAutocompleteHarness } from "@angular/material/autocomplete/testing";
+import { initTestEnvironment } from './test';
+import { HarnessLoader } from '@angular/cdk/testing';
+import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
+import { MatAutocompleteHarness } from '@angular/material/autocomplete/testing';
 
 const data = { foo: 'A' };
 const schema: JsonSchema = {
@@ -239,11 +240,13 @@ describe('AutoComplete control Input Event Tests', () => {
     fixture.detectChanges();
 
     const spy = spyOn(component, 'onSelect');
-    
+
     await (await loader.getHarness(MatAutocompleteHarness)).focus();
     fixture.detectChanges();
-    
-    await (await loader.getHarness(MatAutocompleteHarness)).selectOption({ text: 'B' });
+
+    await (
+      await loader.getHarness(MatAutocompleteHarness)
+    ).selectOption({ text: 'B' });
     tick();
     fixture.detectChanges();
 
@@ -266,12 +269,15 @@ describe('AutoComplete control Input Event Tests', () => {
 
     await (await loader.getHarness(MatAutocompleteHarness)).focus();
     fixture.detectChanges();
-    
-    await (await loader.getHarness(MatAutocompleteHarness)).selectOption({ text: 'Y' });
+
+    await (
+      await loader.getHarness(MatAutocompleteHarness)
+    ).selectOption({ text: 'Y' });
     fixture.detectChanges();
     tick();
-    
-    const event = spy.calls.mostRecent().args[0] as MatAutocompleteSelectedEvent;
+
+    const event = spy.calls.mostRecent()
+      .args[0] as MatAutocompleteSelectedEvent;
     expect(event.option.value).toBe('Y');
   }));
 });
