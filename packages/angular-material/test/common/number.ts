@@ -294,7 +294,7 @@ export const numberInputEventTest =
   () => {
     let fixture: ComponentFixture<any>;
     let numberNativeElement: any;
-    let component: C;
+    let component: C & { onChange(evt: string): void };
 
     baseSetup(testConfig);
 

@@ -256,7 +256,7 @@ export const booleanInputEventTest =
     let fixture: ComponentFixture<any>;
     let checkboxNativeElement: HTMLElement;
     let checkboxInstance: any;
-    let component: C;
+    let component: C & { onChange(evt: string): void };
     let elementToClick: any;
 
     baseSetup(testConfig);

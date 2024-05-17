@@ -300,7 +300,7 @@ export const rangeInputEventTest =
   ) =>
   () => {
     let fixture: ComponentFixture<any>;
-    let component: C;
+    let component: C & { onChange(evt: string): void };
 
     baseSetup(testConfig);
 
