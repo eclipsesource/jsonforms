@@ -19,7 +19,7 @@
       :indeterminate="control.data === undefined"
       :model-value="control.data"
       v-bind="vuetifyProps('v-checkbox')"
-      @change="onChange"
+      @update:modelValue="onChange"
       @focus="handleFocus"
       @blur="handleBlur"
     />
@@ -53,8 +53,8 @@ const controlRenderer = defineComponent({
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    return useVuetifyControl(useJsonFormsControl(props), (event) => {
-      return event.target.checked || false;
+    return useVuetifyControl(useJsonFormsControl(props), (value) => {
+      return value || false;
     });
   },
 });

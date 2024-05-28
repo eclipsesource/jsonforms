@@ -20,7 +20,7 @@
       :error-messages="control.errors"
       :model-value="control.data"
       v-bind="vuetifyProps('v-radio-group')"
-      @change="onChange"
+      @update:modelValue="onChange"
       @focus="handleFocus"
       @blur="handleBlur"
     >
@@ -29,7 +29,7 @@
         v-bind="vuetifyProps(`v-radio[${o.value}]`)"
         :key="o.value"
         :label="o.label"
-        :model-value="o.value"
+        :value="o.value"
       ></v-radio>
     </v-radio-group>
   </control-wrapper>

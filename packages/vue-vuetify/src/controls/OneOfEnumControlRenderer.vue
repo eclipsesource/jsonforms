@@ -24,7 +24,7 @@
         :item-title="(item) => t(item.label, item.label)"
         item-value="value"
         v-bind="vuetifyProps('v-select')"
-        @change="onChange"
+        @update:modelValue="onChange"
         @focus="handleFocus"
         @blur="handleBlur"
       />

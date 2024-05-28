@@ -30,7 +30,7 @@
         :items="items"
         :clearable="isHovering"
         v-bind="vuetifyProps('v-combobox')"
-        @change="onChange"
+        @update:modelValue="onChange"
         @focus="handleFocus"
         @blur="handleBlur"
       />
