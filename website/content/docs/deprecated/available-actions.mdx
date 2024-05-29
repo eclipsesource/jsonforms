@@ -18,7 +18,7 @@ All actions might either be imported directly or via the Actions utility.
 
 ## `init(data: any, schema: JsonSchema, uischema: UISchemaElement, options: InitActionOptions | AJV.Ajv)`
 
-<ApiLink link='core/interfaces/initaction.html' title='API' />
+<ApiLink link='core/interfaces/Actions.InitAction.html' title='API' />
 
 The INIT action expects the data, schema and UI Schema and initializes the store accordingly.
 Currently, this action must be called in order for JSON Forms to work properly.
@@ -27,7 +27,7 @@ The `options` parameter allows customization of the validator and the ref resolv
 
 ## `update(path: string, updater: (existingData: any) => any`
 
-<ApiLink link='core/interfaces/updateaction.html' title='API' />
+<ApiLink link='core/interfaces/Actions.UpdateAction.html' title='API' />
 
 The update action is used to update the data substate within the store.
 It expects two arguments: a dot-separated path describing which part of the data should be updated as well as a function that returns the value that should be used.
@@ -36,14 +36,14 @@ The function gets passed the current value that might be used to calculate the u
 
 ## `registerRenderer(tester: RankedTester, renderer: any)`
 
-<ApiLink link='core/interfaces/addrendereraction.html' title='API' />
+<ApiLink link='core/interfaces/Actions.AddRendererAction.html' title='API' />
 
 This action allows you to register a renderer. It expects two arguments, the 1st being a tester and the 2nd the actual renderer.
 Please see the section about [Custom Renderers](/docs/tutorial/custom-renderers) for an example how to use these.
 
 ## `registerUISchema(tester: UISchemaTester, uischema: UISchemaElement)`
 
-<ApiLink link='core/interfaces/adduischemaaction.html' title='API' />
+<ApiLink link='core/interfaces/Actions.AddUISchemaAction.html' title='API' />
 
 When initializing JSON Forms you have to provide a UISchema. Generally this is already enough as it covers most use cases.
 But in some cases, especially when rendering (nested) arrays, you have to provide an UISchema which can be retrieved.
@@ -80,7 +80,7 @@ You can retrieve a registered UI schema via the `findUISchema` function.
 
 `findUISchema(uischemas: object[], schema: JsonSchema, schemaPath: string, path: string, fallbackLayoutType?: string, control?: ControlElement, rootSchema?: JsonSchema)`
 
-<ApiLink link='core/globals.html#finduischema' title='API' />
+<ApiLink link='core/functions/findUISchema.html' title='API' />
 
 To retrieve the registered UI schema you can call the 'findUISchema' function which is provided through the properties.
 This function needs the UI Schemas (which consists of a tester and a UI schema), the schema, the schemaPath and a subpath. Optionals parameters are a fallback layout type (`VerticalLayout`by default), a control and the root schema.
@@ -123,6 +123,6 @@ export const MyControl = ({ data, path, uischemas, schema, onAdd, uischema, find
 
 ## `unregisterUISchema(tester: UISchemaTester)`
 
-<ApiLink link='core/globals.html#unregisteruischema' title='API' />
+<ApiLink link='core/functions/Actions.unregisterUISchema.html' title='API' />
 
 This action allows to unregister a previously registered UI schema.
