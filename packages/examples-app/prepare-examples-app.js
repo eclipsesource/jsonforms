@@ -15,6 +15,7 @@ const examples = {
   'react-material': join(packagesDir, 'material-renderers', 'example', 'dist'),
   'angular-material': join(packagesDir, 'angular-material', 'example', 'dist'),
   'vue-vanilla': join(packagesDir, 'vue-vanilla', 'example', 'dist'),
+  'vue-vuetify': join(packagesDir, 'vue-vuetify', 'example', 'dist'),
 };
 
 // Clean and recreate dist dir
