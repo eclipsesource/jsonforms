@@ -75,6 +75,7 @@ import * as additionalErrors from './examples/additional-errors';
 import * as multiEnumWithLabelAndDesc from './examples/enum-multi-with-label-and-desc';
 import * as additionalProperties from './examples/additional-properties';
 import * as login from './examples/login';
+import * as string from './examples/string';
 export * from './register';
 export * from './example';
 
@@ -135,4 +136,5 @@ export {
   login,
   issue_1884,
   arrayWithDefaults,
+  string,
 };
