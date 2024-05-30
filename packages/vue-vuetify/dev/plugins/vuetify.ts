@@ -181,7 +181,7 @@ function createVuetifyInstance(
       messages: { en, bg, de },
     },
     icons: {
-      defaultSet: 'mdi', // Set the default icon set
+      defaultSet: iconset, // Set the default icon set
       sets: {
         mdi,
         fa,
