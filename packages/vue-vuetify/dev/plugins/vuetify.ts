@@ -12,8 +12,7 @@ import dayjs from 'dayjs';
 import { watch } from 'vue';
 import { fa, aliases as faAliases } from 'vuetify/iconsets/fa';
 import { mdi, aliases as mdiAliases } from 'vuetify/iconsets/mdi';
-import { aliases as vuetifyFaAliases } from '../../src/icons/fa';
-import { aliases as vuetifyMdiAliases } from '../../src/icons/mdi';
+import { mdiIconAliases, faIconAliases } from '../../src/icons';
 import { aliases as appFaAliases } from '../icons/fa';
 import { aliases as appMdiAliases } from '../icons/mdi';
 import { useAppStore } from '../store';
@@ -109,13 +108,13 @@ function toIconSetAliases(iconset: string) {
     // override vuetify calendar to use fa-regular calendar instead of fa-solid
     return {
       ...{ ...faAliases, ...{ calendar: 'far fa-calendar' } },
-      ...vuetifyFaAliases,
+      ...faIconAliases,
       ...appFaAliases,
     };
   }
 
   // default
-  return { ...mdiAliases, ...vuetifyMdiAliases, ...appMdiAliases };
+  return { ...mdiAliases, ...mdiIconAliases, ...appMdiAliases };
 }
 
 function toBlueprint(value: string): Blueprint {

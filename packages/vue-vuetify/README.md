@@ -79,6 +79,48 @@ export default defineComponent({
 </style>
 ```
 
+In your vuetify creation specify the icons used
+
+Material Design Icons (mdi)
+
+```js
+import { mdi, aliases as mdiAliases } from 'vuetify/iconsets/mdi';
+import { createVuetify } from 'vuetify';
+
+import { mdiIconAliases } from '@jsonforms/vue-vuetify';
+import '@mdi/font/css/materialdesignicons.css';
+
+createVuetify({
+    icons: {
+      defaultSet: 'mdi',
+      sets: {
+        mdi,
+      },
+      aliases: { ...mdiAliases, ...mdiIconAliases };,
+    },
+  });
+```
+
+Font Awesome (fa)
+
+```js
+import { fa, aliases as faAliases } from 'vuetify/iconsets/fa';
+import { createVuetify } from 'vuetify';
+
+import { faIconAliases } from '@jsonforms/vue-vuetify';
+import '@fortawesome/fontawesome-free/css/all.css';
+
+createVuetify({
+    icons: {
+      defaultSet: 'fa',
+      sets: {
+        fa,
+      },
+      aliases: { ...faAliases, ...faIconAliases };,
+    },
+  });
+```
+
 If note done yet, please [install Vuetify for Vue](https://vuetifyjs.com/en/getting-started/installation/).
 
 For more information on how JSON Forms can be configured, please see the [README of `@jsonforms/vue`](https://github.com/eclipsesource/jsonforms/blob/master/packages/vue/vue/README.md).
