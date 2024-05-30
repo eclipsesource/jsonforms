@@ -36,12 +36,14 @@ Use the `json-forms` component for each form you want to render and hand over th
 ```vue
 <script>
 import { JsonForms } from '@jsonforms/vue';
+import { markRaw } from 'vue';
+
 const { extendedVuetifyRenderers } = await import('@jsonforms/vue-vuetify');
 
-const renderers = [
+const renderers = markRaw([
   ...extendedVuetifyRenderers,
   // here you can add custom renderers
-];
+]);
 
 export default defineComponent({
   name: 'app',
