@@ -8,6 +8,7 @@ import {
   markRaw,
   onMounted,
   provide,
+  reactive,
   ref,
   shallowRef,
   watch,
@@ -43,8 +44,6 @@ const myStyles = mergeStyles(defaultStyles, {
 
 provide('styles', myStyles);
 
-const workingExample = shallowRef<ExampleDescription>(cloneDeep(props.example));
-
 const ajv = createAjv();
 const activeTab = ref(0);
 const errors = ref<
@@ -63,10 +62,33 @@ const uischemaModel = shallowRef<monaco.editor.ITextModel | undefined>(
 const dataModel = shallowRef<monaco.editor.ITextModel | undefined>(undefined);
 //const i18nModel = shallowRef<monaco.editor.ITextModel | undefined>(undefined);
 
+const initialState = (exampleProp: ExampleDescription) => {
+  const example = cloneDeep(exampleProp);
+
+  return {
+    data: example.data,
+    schema: example.schema,
+    uischema: example.uischema,
+    renderers: renderers,
+    cells: undefined, // not defined
+    config: appStore.jsonforms.config,
+    readonly: appStore.jsonforms.readonly,
+    uischemas: example.uischemas,
+    validationMode: appStore.jsonforms.validationMode,
+    ajv: ajv,
+    i18n: exampleProp.i18n ?? {
+      locale: appStore.jsonforms.locale,
+    },
+    additionalErrors: undefined,
+    middleware: undefined,
+  };
+};
+const state = reactive(initialState(props.example));
+
 const onChange = (event: JsonFormsChangeEvent): void => {
-  if (workingExample.value) {
+  if (props.example.name) {
     dataModel.value = getMonacoModelForUri(
-      monaco.Uri.parse(toDataUri(workingExample.value.name)),
+      monaco.Uri.parse(toDataUri(props.example.name)),
       event.data ? JSON.stringify(event.data, null, 2) : '',
     );
   }
@@ -91,20 +113,16 @@ const reloadMonacoSchema = () => {
 const saveMonacoSchema = () => {
   saveMonacoModel(
     schemaModel,
-    (modelValue) =>
-      (workingExample.value = {
-        ...workingExample.value,
-        schema: JSON.parse(modelValue),
-      } as ExampleDescription),
+    (modelValue) => (state.schema = JSON.parse(modelValue)),
     'New schema applied',
   );
 
-  if (workingExample.value && workingExample.value.schema) {
+  if (state.schema) {
     configureDataValidation(
       monaco,
-      `inmemory://${toSchemaUri(workingExample.value.name)}`,
-      toDataUri(workingExample.value.name),
-      cloneDeep(workingExample.value.schema),
+      `inmemory://${toSchemaUri(props.example.name)}`,
+      toDataUri(props.example.name),
+      cloneDeep(state.schema),
     );
   }
 };
@@ -128,10 +146,7 @@ const saveMonacoUiSchema = () => {
   saveMonacoModel(
     uischemaModel,
     (modelValue) =>
-      (workingExample.value = {
-        ...workingExample.value,
-        uischema: JSON.parse(modelValue),
-      } as ExampleDescription),
+      (state.uischema = modelValue ? JSON.parse(modelValue) : undefined),
     'New UI schema applied',
   );
 };
@@ -154,15 +169,30 @@ const reloadMonacoData = () => {
 const saveMonacoData = () => {
   saveMonacoModel(
     dataModel,
-    (modelValue) =>
-      (workingExample.value = {
-        ...workingExample.value,
-        data:
-          workingExample.value?.schema?.type === 'object' ||
-          workingExample.value?.schema?.type === 'array'
-            ? JSON.parse(modelValue)
-            : modelValue,
-      } as ExampleDescription),
+    (modelValue) => {
+      if (state.schema?.type === 'number' || state.schema?.type === 'integer') {
+        try {
+          state.data = parseFloat(modelValue);
+        } catch {
+          // not able to convert the value - invalid data
+          state.data = modelValue;
+        }
+      } else if (state.schema?.type === 'boolean') {
+        state.data = modelValue == 'true';
+      } else if (
+        state.schema?.type === 'object' ||
+        state.schema?.type === 'array'
+      ) {
+        try {
+          state.data = JSON.parse(modelValue);
+        } catch {
+          // not able to convert the value - invalid data
+          state.data = modelValue;
+        }
+      } else {
+        state.data = modelValue;
+      }
+    },
     'New data applied',
   );
 };
@@ -201,7 +231,7 @@ const saveMonacoModel = (
   apply: (value: string) => void,
   successToast: string,
 ) => {
-  if (model.value && workingExample.value) {
+  if (model.value) {
     const modelValue = model.value.getValue();
 
     try {
@@ -275,32 +305,45 @@ const toast = (message: string): void => {
 };
 
 onMounted(() => {
-  updateMonacoModels(workingExample.value);
+  updateMonacoModels(props.example);
 });
 
 watch(
   () => props.example,
   (value) => {
-    workingExample.value = cloneDeep(value);
+    updateMonacoModels(props.example);
+    // reset state when example changes
+    Object.assign(state, initialState(value));
   },
 );
 
 watch(
   () => appStore.formOnly,
   (value) => {
-    if (value == false) {
+    if (!value) {
       // we need to show the wrapper so make sure that the monaco models are updated
-      updateMonacoModels(workingExample.value);
+      updateMonacoModels(props.example);
     }
   },
 );
+
+type Action = NonNullable<ExampleDescription['actions']>[number];
+
+const handleAction = (action: Action) => {
+  if (action) {
+    const newState = action.apply(state);
+    if (newState) {
+      Object.assign(state, newState);
+    }
+  }
+};
 </script>
 
 <template>
   <div>
     <v-container fluid class="demo" v-if="!appStore.formOnly">
       <v-card>
-        <v-card-title>{{ workingExample.label }}</v-card-title>
+        <v-card-title>{{ example.label }}</v-card-title>
         <v-card-text>
           <v-tabs v-model="activeTab">
             <v-tab :key="0"
@@ -323,20 +366,19 @@ watch(
                 <v-toolbar flat>
                   <v-toolbar-title>JSONForm</v-toolbar-title>
                   <v-spacer></v-spacer>
+                  <v-toolbar-items v-if="example.actions">
+                    <v-btn
+                      v-for="(action, index) in example.actions"
+                      :key="index"
+                      @click="() => handleAction(action)"
+                      >{{ action.label }}</v-btn
+                    >
+                  </v-toolbar-items>
                 </v-toolbar>
               </v-card-title>
               <v-divider class="mx-4"></v-divider>
               <div class="json-forms">
-                <example-form
-                  :example="workingExample"
-                  :renderers="renderers"
-                  :config="appStore.jsonforms.config"
-                  :validationMode="appStore.jsonforms.validationMode"
-                  :ajv="ajv"
-                  :readonly="appStore.jsonforms.readonly"
-                  :locale="appStore.jsonforms.locale"
-                  @jsfchange="onChange"
-                />
+                <example-form :state="state" @jsfchange="onChange" />
               </div>
             </v-card>
           </v-window-item>
@@ -483,16 +525,7 @@ watch(
       </v-snackbar>
     </v-container>
     <div class="json-forms" v-else>
-      <example-form
-        :example="workingExample"
-        :renderers="renderers"
-        :config="appStore.jsonforms.config"
-        :validationMode="appStore.jsonforms.validationMode"
-        :ajv="ajv"
-        :readonly="appStore.jsonforms.readonly"
-        :locale="appStore.jsonforms.locale"
-        @jsfchange="onChange"
-      />
+      <example-form :state="state" @jsfchange="onChange" />
     </div>
   </div>
 </template>

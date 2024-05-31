@@ -1,15 +1,22 @@
 <script setup lang="ts">
 import type {
+  JsonFormsCellRendererRegistryEntry,
+  JsonFormsI18nState,
   JsonFormsRendererRegistryEntry,
+  JsonFormsUISchemaRegistryEntry,
   JsonSchema,
+  Middleware,
+  UISchemaElement,
   ValidationMode,
 } from '@jsonforms/core';
-import { JsonForms, type JsonFormsChangeEvent } from '@jsonforms/vue';
-import type Ajv from 'ajv';
-import type { ErrorObject } from 'ajv';
+import {
+  JsonForms,
+  type JsonFormsChangeEvent,
+  type MaybeReadonly,
+} from '@jsonforms/vue';
+import type { Ajv, ErrorObject } from 'ajv';
 import * as JsonRefs from 'json-refs';
-import { onMounted, reactive, watch } from 'vue';
-import type { ExampleDescription } from '../../../examples/lib';
+import { computed, onMounted, reactive, watch } from 'vue';
 
 export type ResolvedSchema = {
   schema?: JsonSchema;
@@ -17,35 +24,31 @@ export type ResolvedSchema = {
   error?: string;
 };
 
-const props = withDefaults(
-  defineProps<{
-    example: ExampleDescription;
-    renderers: readonly JsonFormsRendererRegistryEntry[];
-    config?: any;
-    readonly: boolean;
-    validationMode: ValidationMode;
-    ajv?: Ajv;
-    locale: string;
-  }>(),
-  {
-    readonly: false,
-    validationMode: 'ValidateAndShow',
-    locale: 'en',
-  },
-);
+export interface JsonFormsProps {
+  data: any;
+  schema?: JsonSchema;
+  uischema?: UISchemaElement;
+  renderers: MaybeReadonly<JsonFormsRendererRegistryEntry[]>;
+  cells?: MaybeReadonly<JsonFormsCellRendererRegistryEntry[]>;
+  config?: any;
+  readonly?: boolean;
+  uischemas?: MaybeReadonly<JsonFormsUISchemaRegistryEntry[]>;
+  validationMode?: ValidationMode;
+  ajv?: Ajv;
+  i18n?: JsonFormsI18nState;
+  additionalErrors?: ErrorObject<string, Record<string, any>, unknown>[];
+  middleware?: Middleware;
+}
+
+const props = defineProps<{
+  state: JsonFormsProps;
+}>();
 
 const resolvedSchema = reactive<ResolvedSchema>({
   schema: undefined,
   resolved: false,
   error: undefined,
 });
-
-// const i18n = reactive<JsonFormsI18nState>({
-//   locale: props.locale,
-//   translate: createTranslator(props.locale, props.example?.i18n),
-// });
-
-const additionalErrors: ErrorObject[] = [];
 
 const emits = defineEmits(['jsfchange']);
 
@@ -54,23 +57,11 @@ const onChange = (event: JsonFormsChangeEvent): void => {
 };
 
 watch(
-  () => props.example,
-  (newExample) => {
-    resolveSchema(newExample.schema);
-    //i18n.translate = createTranslator(props.locale, newExample?.i18n as any);
+  () => props.state.schema,
+  (schema) => {
+    resolveSchema(schema);
   },
 );
-
-// watch(
-//   () => props.locale,
-//   (newLocale) => {
-//     i18n.locale = newLocale;
-//     i18n.translate = createTranslator(
-//       newLocale,
-//       props.example?.i18n as any,
-//     );
-//   },
-// );
 
 const resolveSchema = (schema?: JsonSchema): void => {
   resolvedSchema.schema = undefined;
@@ -95,26 +86,20 @@ const resolveSchema = (schema?: JsonSchema): void => {
 };
 
 onMounted(() => {
-  resolveSchema(props.example.schema);
+  resolveSchema(props.state.schema);
 });
+
+const properties = computed<JsonFormsProps>(() => ({
+  ...props.state,
+  schema: resolvedSchema.schema ?? props.state.schema,
+}));
 </script>
 
 <template>
   <div>
     <json-forms
       v-if="resolvedSchema.resolved && resolvedSchema.error === undefined"
-      :key="example.name"
-      :data="example.data"
-      :schema="resolvedSchema.schema"
-      :uischema="example.uischema"
-      :renderers="renderers"
-      :config="config"
-      :validationMode="validationMode"
-      :ajv="ajv"
-      :readonly="readonly"
-      :i18n="example.i18n"
-      :additional-errors="additionalErrors"
-      :locale="locale"
+      v-bind="properties"
       @change="onChange"
     ></json-forms>
     <v-container v-else>
