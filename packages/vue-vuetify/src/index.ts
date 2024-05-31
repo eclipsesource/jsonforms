@@ -3,6 +3,7 @@ export * from './array';
 export * from './complex';
 export * from './controls';
 export * from './extended';
+export * from './i18n';
 export * from './icons';
 export * from './layouts';
 export * from './renderers';

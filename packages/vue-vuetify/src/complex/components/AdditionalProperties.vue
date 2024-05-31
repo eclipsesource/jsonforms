@@ -1,95 +1,114 @@
 <template>
-  <v-card v-if="control.visible" elevation="0" v-bind="vuetifyProps('v-card')">
-    <v-card-title>
-      <v-toolbar flat>
-        <v-toolbar-title>{{ additionalPropertiesTitle }}</v-toolbar-title>
-        <v-spacer></v-spacer>
+  <v-container>
+    <v-row>
+      <v-col cols="12">
+        <v-card v-if="control.visible" v-bind="vuetifyProps('v-card')" flat>
+          <v-toolbar>
+            <v-spacer></v-spacer>
 
-        <v-text-field
-          v-disabled-icon-focus
-          :required="true"
-          :class="styles.control.input"
-          :error-messages="newPropertyErrors"
-          v-model="newPropertyName"
-          :clearable="control.enabled"
-          :placeholder="placeholder"
-          :disabled="!control.enabled"
-          v-bind="vuetifyProps('v-text-field')"
-        >
-        </v-text-field>
-        <v-tooltip bottom>
-          <template v-slot:activator="{ props }">
-            <v-btn
-              icon
-              variant="text"
-              elevation="0"
-              small
-              :aria-label="addToLabel"
-              v-bind="props"
-              :disabled="addPropertyDisabled"
-              @click="addProperty"
+            <v-text-field
+              v-disabled-icon-focus
+              :id="control.id + '-additional-properties-input'"
+              :class="styles.control.input"
+              :disabled="!control.enabled"
+              :label="propertyNameLabel"
+              :hint="propertyNameDescription"
+              :required="true"
+              :error-messages="newPropertyErrors"
+              :maxlength="
+                appliedOptions.restrict && propertyNameSchema
+                  ? propertyNameSchema.maxLength
+                  : undefined
+              "
+              :counter="
+                propertyNameSchema && propertyNameSchema.maxLength !== undefined
+                  ? propertyNameSchema.maxLength
+                  : undefined
+              "
+              v-model="newPropertyName"
+              :clearable="control.enabled"
+              v-bind="vuetifyProps('v-text-field')"
             >
-              <v-icon>{{ icons.current.value.itemAdd }}</v-icon>
-            </v-btn>
-          </template>
-          {{ addToLabel }}
-        </v-tooltip>
-      </v-toolbar>
-    </v-card-title>
-    <v-container v-bind="vuetifyProps('v-container')">
-      <v-row
-        v-for="(element, index) in additionalPropertyItems"
-        :key="`${index}`"
-      >
-        <v-col class="flex-shrink-0 flex-grow-1">
-          <dispatch-renderer
-            v-if="element.schema && element.uischema"
-            :schema="element.schema"
-            :uischema="element.uischema"
-            :path="element.path"
-            :enabled="control.enabled"
-            :renderers="control.renderers"
-            :cells="control.cells"
-        /></v-col>
-        <v-col v-if="control.enabled" class="flex-shrink-1 flex-grow-0">
-          <v-tooltip bottom>
-            <template v-slot:activator="{ props }">
-              <v-btn
-                v-bind="props"
-                icon
-                variant="text"
-                elevation="0"
-                small
-                :aria-label="deleteLabel"
-                :disabled="removePropertyDisabled"
-                @click="removeProperty(element.propertyName)"
+            </v-text-field>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ props }">
+                <v-btn
+                  icon
+                  variant="text"
+                  elevation="0"
+                  small
+                  :aria-label="translations.addAriaLabel"
+                  v-bind="props"
+                  :disabled="addPropertyDisabled"
+                  @click="addProperty"
+                >
+                  <v-icon>{{ icons.current.value.itemAdd }}</v-icon>
+                </v-btn>
+              </template>
+              {{ translations.addTooltip }}
+            </v-tooltip>
+
+            <v-spacer></v-spacer>
+          </v-toolbar>
+          <v-container v-bind="vuetifyProps('v-container')">
+            <v-row
+              v-for="(element, index) in additionalPropertyItems"
+              :key="`${index}`"
+            >
+              <v-col class="flex-shrink-0 flex-grow-1">
+                <dispatch-renderer
+                  v-if="element.schema && element.uischema"
+                  :schema="element.schema"
+                  :uischema="element.uischema"
+                  :path="element.path"
+                  :enabled="control.enabled"
+                  :renderers="control.renderers"
+                  :cells="control.cells"
+              /></v-col>
+              <v-col v-if="control.enabled" class="flex-shrink-1 flex-grow-0">
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ props }">
+                    <v-btn
+                      v-bind="props"
+                      icon
+                      variant="text"
+                      elevation="0"
+                      small
+                      :aria-label="translations.removeAriaLabel"
+                      :disabled="removePropertyDisabled"
+                      @click="removeProperty(element.propertyName)"
+                    >
+                      <v-icon class="notranslate">{{
+                        icons.current.value.itemDelete
+                      }}</v-icon>
+                    </v-btn>
+                  </template>
+                  {{ translations.removeTooltip }}
+                </v-tooltip></v-col
               >
-                <v-icon class="notranslate">{{
-                  icons.current.value.itemDelete
-                }}</v-icon>
-              </v-btn>
-            </template>
-            {{ deleteLabel }}
-          </v-tooltip></v-col
-        >
-      </v-row>
-    </v-container>
-  </v-card>
+            </v-row>
+          </v-container>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script lang="ts">
+import { additionalPropertiesDefaultTranslations } from '@/i18n/additionalPropertiesTranslations';
+import { getAdditionalPropertiesTranslations } from '@/i18n/i18nUtil';
 import {
+  Generate,
   composePaths,
   createControlElement,
   createDefaultValue,
   encode,
-  Generate,
-  getI18nKey,
+  getI18nKeyPrefix,
+  validate,
   type GroupLayout,
   type JsonSchema,
   type JsonSchema7,
   type UISchemaElement,
-  validate,
 } from '@jsonforms/core';
 import {
   DispatchRenderer,
@@ -99,11 +118,10 @@ import Ajv, { type ValidateFunction } from 'ajv';
 import get from 'lodash/get';
 import isPlainObject from 'lodash/isPlainObject';
 import startCase from 'lodash/startCase';
-import { defineComponent, type PropType, ref } from 'vue';
+import { defineComponent, ref, unref, type PropType } from 'vue';
 import {
   VBtn,
   VCard,
-  VCardTitle,
   VCol,
   VContainer,
   VIcon,
@@ -111,7 +129,6 @@ import {
   VSpacer,
   VTextField,
   VToolbar,
-  VToolbarTitle,
   VTooltip,
 } from 'vuetify/components';
 import { DisabledIconFocus } from '../../controls/directives';
@@ -150,9 +167,7 @@ export default defineComponent({
     VToolbar,
     VIcon,
     VBtn,
-    VCardTitle,
     VSpacer,
-    VToolbarTitle,
     VTextField,
     VContainer,
     VRow,
@@ -285,11 +300,24 @@ export default defineComponent({
       return props && isPlainObject(props) ? props : {};
     };
 
-    const t = useTranslator();
     const icons = useIcons();
+    const t = useTranslator();
+
+    const i18nAdditionalPropertiesPrefix = getI18nKeyPrefix(
+      control.value.schema,
+      control.value.uischema,
+      control.value.path + '.additionalProperties',
+    );
+
+    const translations = getAdditionalPropertiesTranslations(
+      t.value,
+      additionalPropertiesDefaultTranslations,
+      i18nAdditionalPropertiesPrefix,
+      control.value.label,
+      newPropertyName,
+    );
 
     return {
-      t,
       vuetifyProps,
       ajv,
       propertyNameValidator,
@@ -300,6 +328,8 @@ export default defineComponent({
       toAdditionalPropertyType,
       newPropertyName,
       icons,
+      propertyNameSchema,
+      translations,
     };
   },
   computed: {
@@ -354,20 +384,26 @@ export default defineComponent({
           ) !== undefined
         ) {
           // already defined
-          messages.push(
-            `Property '${this.newPropertyName}' is already defined`,
+          const propertyAlreadyDefined = unref(
+            this.translations.propertyAlreadyDefined,
           );
+
+          if (propertyAlreadyDefined) {
+            messages.push(propertyAlreadyDefined);
+          }
         }
 
+        const invalidPropertyNameMessage = unref(
+          this.translations.propertyNameInvalid!,
+        );
         // JSONForms has special means for "[]." chars - those are part of the path composition so for not we can't support those without special handling
-        if (this.newPropertyName.includes('[')) {
-          messages.push('Property name contains invalid char: [');
-        }
-        if (this.newPropertyName.includes(']')) {
-          messages.push('Property name contains invalid char: ]');
-        }
-        if (this.newPropertyName.includes('.')) {
-          messages.push('Property name contains invalid char: .');
+        if (
+          (this.newPropertyName.includes('[') ||
+            this.newPropertyName.includes(']') ||
+            this.newPropertyName.includes('.')) &&
+          invalidPropertyNameMessage
+        ) {
+          messages.push(invalidPropertyNameMessage);
         }
 
         return messages;
@@ -375,44 +411,17 @@ export default defineComponent({
 
       return [];
     },
-    placeholder(): string {
-      return this.t(this.i18nKey('newProperty.placeholder'), 'New Property');
+    propertyNameLabel(): string | null {
+      return (
+        this.propertyNameSchema?.title ??
+        unref(this.translations.propertyNameLabel!)
+      );
+    },
+    propertyNameDescription(): string | undefined {
+      return this.propertyNameSchema?.description;
     },
     reservedPropertyNames(): string[] {
       return Object.keys(this.control.schema.properties || {});
-    },
-    additionalPropertiesTitle(): string | undefined {
-      const additionalProperties = this.control.schema.additionalProperties;
-
-      const label =
-        typeof additionalProperties === 'object' &&
-        Object.prototype.hasOwnProperty.call(additionalProperties, 'title')
-          ? additionalProperties.title ?? 'Additional Properties'
-          : 'Additional Properties';
-
-      return this.t(this.i18nKey('title'), label);
-    },
-    addToLabel(): string {
-      return this.t(
-        this.i18nKey('btn.add'),
-        'Add to ${additionalProperties.title}',
-        {
-          additionalProperties: {
-            title: this.additionalPropertiesTitle,
-          },
-        },
-      );
-    },
-    deleteLabel(): string {
-      return this.t(
-        this.i18nKey('btn.delete'),
-        'Delete from ${additionalProperties.title}',
-        {
-          additionalProperties: {
-            title: this.additionalPropertiesTitle,
-          },
-        },
-      );
     },
   },
   watch: {
@@ -449,14 +458,6 @@ export default defineComponent({
   },
   methods: {
     composePaths,
-    i18nKey(key: string): string {
-      return getI18nKey(
-        this.control.schema,
-        this.control.uischema,
-        this.control.path,
-        `additionalProperties.${key}`,
-      );
-    },
     addProperty() {
       if (this.newPropertyName) {
         const additionalProperty = this.toAdditionalPropertyType(
