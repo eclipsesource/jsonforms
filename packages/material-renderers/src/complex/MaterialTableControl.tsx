@@ -472,7 +472,14 @@ export class MaterialTableControl extends React.Component<
       cells,
       translations,
       disableAdd,
+      disableRemove,
+      config,
     } = this.props;
+
+    const appliedUiSchemaOptions = merge({}, config, uischema.options);
+    const doDisableAdd = disableAdd || appliedUiSchemaOptions.disableAdd;
+    const doDisableRemove =
+      disableRemove || appliedUiSchemaOptions.disableRemove;
 
     const controlElement = uischema as ControlElement;
     const isObjectSchema = schema.type === 'object';
@@ -499,7 +506,7 @@ export class MaterialTableControl extends React.Component<
             rootSchema={rootSchema}
             enabled={enabled}
             translations={translations}
-            disableAdd={disableAdd}
+            disableAdd={doDisableAdd}
           />
           {isObjectSchema && (
             <TableRow>
@@ -513,6 +520,7 @@ export class MaterialTableControl extends React.Component<
             openDeleteDialog={openDeleteDialog}
             translations={translations}
             {...this.props}
+            disableRemove={doDisableRemove}
           />
         </TableBody>
       </Table>

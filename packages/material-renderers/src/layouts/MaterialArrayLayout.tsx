@@ -71,6 +71,8 @@ const MaterialArrayLayoutComponent = (props: ArrayLayoutProps) => {
     disableRemove,
   } = props;
   const appliedUiSchemaOptions = merge({}, config, props.uischema.options);
+  const doDisableAdd = disableAdd || appliedUiSchemaOptions.disableAdd;
+  const doDisableRemove = disableRemove || appliedUiSchemaOptions.disableRemove;
 
   return (
     <div>
@@ -87,7 +89,7 @@ const MaterialArrayLayoutComponent = (props: ArrayLayoutProps) => {
         enabled={enabled}
         addItem={addItem}
         createDefault={innerCreateDefaultValue}
-        disableAdd={disableAdd}
+        disableAdd={doDisableAdd}
       />
       <div>
         {data > 0 ? (
@@ -111,7 +113,7 @@ const MaterialArrayLayoutComponent = (props: ArrayLayoutProps) => {
                 childLabelProp={appliedUiSchemaOptions.elementLabelProp}
                 uischemas={uischemas}
                 translations={translations}
-                disableRemove={disableRemove}
+                disableRemove={doDisableRemove}
               />
             );
           })

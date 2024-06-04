@@ -102,6 +102,8 @@ export const MaterialListWithDetailRenderer = ({
     [uischemas, schema, uischema.scope, path, uischema, rootSchema]
   );
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
+  const doDisableAdd = disableAdd || appliedUiSchemaOptions.disableAdd;
+  const doDisableRemove = disableRemove || appliedUiSchemaOptions.disableRemove;
 
   React.useEffect(() => {
     setSelectedIndex(undefined);
@@ -126,7 +128,7 @@ export const MaterialListWithDetailRenderer = ({
         enabled={enabled}
         addItem={addItem}
         createDefault={handleCreateDefaultValue}
-        disableAdd={disableAdd}
+        disableAdd={doDisableAdd}
       />
       <Grid container direction='row' spacing={2}>
         <Grid item xs={3}>
@@ -145,7 +147,7 @@ export const MaterialListWithDetailRenderer = ({
                   uischema={foundUISchema}
                   childLabelProp={appliedUiSchemaOptions.elementLabelProp}
                   translations={translations}
-                  disableRemove={disableRemove}
+                  disableRemove={doDisableRemove}
                 />
               ))
             ) : (

@@ -286,10 +286,17 @@ export const ctxDispatchToExpandPanelProps: (
       (event: any): void => {
         event.stopPropagation();
         dispatch(
-          update(path, (array) => {
-            moveUp(array, toMove);
-            return array;
-          })
+          update(
+            path,
+            (array) => {
+              moveUp(array, toMove);
+              return array;
+            },
+            {
+              type: 'MOVE',
+              moves: [{ from: toMove, to: toMove - 1 }],
+            } as UpdateArrayContext
+          )
         );
       },
     [dispatch]
@@ -299,10 +306,17 @@ export const ctxDispatchToExpandPanelProps: (
       (event: any): void => {
         event.stopPropagation();
         dispatch(
-          update(path, (array) => {
-            moveDown(array, toMove);
-            return array;
-          })
+          update(
+            path,
+            (array) => {
+              moveDown(array, toMove);
+              return array;
+            },
+            {
+              type: 'MOVE',
+              moves: [{ from: toMove, to: toMove + 1 }],
+            } as UpdateArrayContext
+          )
         );
       },
     [dispatch]
