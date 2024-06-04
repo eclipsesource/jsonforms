@@ -45,6 +45,7 @@ export const ListWithDetailMasterItem = ({
   removeItem,
   path,
   translations,
+  disableRemove,
 }: StatePropsOfMasterItem) => {
   return (
     <ListItem button selected={selected} onClick={handleSelect(index)}>
@@ -52,7 +53,7 @@ export const ListWithDetailMasterItem = ({
         <Avatar aria-label='Index'>{index + 1}</Avatar>
       </ListItemAvatar>
       <ListItemText primary={childLabel} />
-      {enabled && (
+      {enabled && !disableRemove && (
         <ListItemSecondaryAction>
           <Tooltip
             id='tooltip-remove'

@@ -54,6 +54,7 @@ export interface MaterialTableToolbarProps {
   enabled: boolean;
   translations: ArrayTranslations;
   addItem(path: string, value: any): () => void;
+  disableAdd?: boolean;
 }
 
 const fixedCellSmall = {
@@ -72,6 +73,7 @@ const TableToolbar = React.memo(function TableToolbar({
   enabled,
   translations,
   rootSchema,
+  disableAdd,
 }: MaterialTableToolbarProps) {
   return (
     <TableRow>
@@ -100,7 +102,7 @@ const TableToolbar = React.memo(function TableToolbar({
           {description && <FormHelperText>{description}</FormHelperText>}
         </Stack>
       </NoBorderTableCell>
-      {enabled ? (
+      {enabled && !disableAdd ? (
         <NoBorderTableCell align='right' style={fixedCellSmall}>
           <Tooltip
             id='tooltip-add'

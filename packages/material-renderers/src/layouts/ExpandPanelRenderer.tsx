@@ -29,6 +29,7 @@ import {
   removeId,
   ArrayTranslations,
   computeChildLabel,
+  UpdateArrayContext,
 } from '@jsonforms/core';
 import {
   Accordion,
@@ -65,6 +66,8 @@ interface OwnPropsOfExpandPanel {
   childLabelProp?: string;
   handleExpansion(panel: string): (event: any, expanded: boolean) => void;
   translations: ArrayTranslations;
+  disableAdd?: boolean;
+  disableRemove?: boolean;
 }
 
 interface StatePropsOfExpandPanel extends OwnPropsOfExpandPanel {
@@ -117,6 +120,7 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
     cells,
     config,
     translations,
+    disableRemove,
   } = props;
 
   const foundUISchema = useMemo(
@@ -207,7 +211,7 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
                   ) : (
                     ''
                   )}
-                  {enabled && (
+                  {enabled && !disableRemove && (
                     <Grid item>
                       <Tooltip
                         id='tooltip-remove'
@@ -262,13 +266,17 @@ export const ctxDispatchToExpandPanelProps: (
       (event: any): void => {
         event.stopPropagation();
         dispatch(
-          update(path, (array) => {
-            toDelete
-              .sort()
-              .reverse()
-              .forEach((s) => array.splice(s, 1));
-            return array;
-          })
+          update(
+            path,
+            (array) => {
+              toDelete
+                .sort()
+                .reverse()
+                .forEach((s) => array.splice(s, 1));
+              return array;
+            },
+            { type: 'REMOVE', indices: toDelete } as UpdateArrayContext
+          )
         );
       },
     [dispatch]
