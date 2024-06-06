@@ -32,8 +32,8 @@
       hide-no-data
       v-bind="vuetifyProps('v-combobox')"
       @update:model-value="onChange"
-      @focus="isFocused = true"
-      @blur="isFocused = false"
+      @focus="handleFocus"
+      @blur="handleBlur"
     />
     <v-text-field
       v-else
@@ -60,8 +60,8 @@
       :clearable="control.enabled"
       v-bind="vuetifyProps('v-text-field')"
       @update:model-value="onChange"
-      @focus="isFocused = true"
-      @blur="isFocused = false"
+      @focus="handleFocus"
+      @blur="handleBlur"
     />
   </control-wrapper>
 </template>

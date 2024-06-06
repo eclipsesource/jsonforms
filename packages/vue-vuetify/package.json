@@ -37,6 +37,13 @@
     "lib",
     "src"
   ],
+  "exports": {
+    ".": {
+      "import": "./lib/jsonforms-vue-vuetify.esm.js",
+      "require": "./lib/jsonforms-vue-vuetify.cjs.js"
+    },
+    "./lib/jsonforms-vue-vuetify.css": "./lib/jsonforms-vue-vuetify.css"
+  },
   "scripts": {
     "dev": "vite --config vite.example.config.ts",
     "build": "run-p type-check \"build-only {@}\" --",

@@ -27,8 +27,8 @@
       item-value="index"
       v-model="selectIndex"
       v-bind="vuetifyProps('v-select')"
-      @focus="isFocused = true"
-      @blur="isFocused = false"
+      @focus="handleFocus"
+      @blur="handleBlur"
     ></v-select>
     <dispatch-renderer
       v-if="selectedIndex !== undefined && selectedIndex !== null"

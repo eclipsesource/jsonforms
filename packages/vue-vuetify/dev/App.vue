@@ -46,5 +46,5 @@ const theme = computed(() => {
 </template>
 
 <style>
-/* @import '@jsonforms/vue-vuetify/lib/jsonforms-vue-vuetify.css'; */
+@import '@jsonforms/vue-vuetify/lib/jsonforms-vue-vuetify.css';
 </style>

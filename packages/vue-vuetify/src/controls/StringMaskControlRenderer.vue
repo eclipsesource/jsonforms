@@ -28,8 +28,8 @@
       :clearable="control.enabled"
       @click:clear="clear"
       v-bind="vuetifyProps('v-text-field')"
-      @focus="isFocused = true"
-      @blur="isFocused = false"
+      @focus="handleFocus"
+      @blur="handleBlur"
       v-model="maskModel"
       v-maska:[options]
     />

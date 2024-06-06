@@ -25,6 +25,7 @@ const appstore = reactive({
       initCollapsed: false,
       hideAvatar: false,
       hideArraySummaryValidation: false,
+      enableFilterErrorsBeforeTouch: false,
       vuetify: {},
     },
     locale: useLocalStorage('vuetify-example-locale', 'en'),

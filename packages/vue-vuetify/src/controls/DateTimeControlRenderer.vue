@@ -21,8 +21,8 @@
       v-model="inputModel"
       :clearable="control.enabled"
       @click:clear="clear"
-      @focus="isFocused = true"
-      @blur="isFocused = false"
+      @focus="handleFocus"
+      @blur="handleBlur"
       v-maska:[options]
     >
       <template v-slot:prepend-inner>

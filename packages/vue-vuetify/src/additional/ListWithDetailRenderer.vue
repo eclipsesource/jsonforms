@@ -308,7 +308,7 @@ const controlRenderer = defineComponent({
       this.removeItems?.(this.control.path, toDelete)();
     },
     childErrors(index: number): ErrorObject[] {
-      return this.control.childErrors.filter((e) =>
+      return this.control.childErrors.filter((e: ErrorObject) =>
         e.instancePath.startsWith(
           this.composePaths(this.control.path, `${index}`),
         ),

@@ -346,6 +346,22 @@ const iconsets = [
           </v-tooltip>
         </v-col>
       </v-row>
+      <v-row>
+        <v-col>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ props }">
+              <v-switch
+                v-model="
+                  appStore.jsonforms.config.enableFilterErrorsBeforeTouch
+                "
+                label="Enable Filter Errors Before Touch"
+                v-bind="props"
+              ></v-switch>
+            </template>
+            Whether the errors will be displayed for not touched controls
+          </v-tooltip>
+        </v-col>
+      </v-row>
     </v-container>
 
     <v-divider />
