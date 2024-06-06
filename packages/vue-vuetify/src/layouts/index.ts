@@ -11,15 +11,6 @@ import { entry as groupRendererEntry } from './GroupRenderer.vue';
 import { entry as horizontalLayoutRendererEntry } from './HorizontalLayoutRenderer.vue';
 import { entry as verticalLayoutRendererEntry } from './VerticalLayoutRenderer.vue';
 
-export {
-  arrayLayoutRendererEntry,
-  categorizationRendererEntry,
-  categorizationStepperRendererEntry,
-  groupRendererEntry,
-  horizontalLayoutRendererEntry,
-  verticalLayoutRendererEntry,
-};
-
 import { default as VerticalLayoutRenderer } from './VerticalLayoutRenderer.vue';
 export { default as ArrayLayoutRenderer } from './ArrayLayoutRenderer.vue';
 export { default as CategorizationRenderer } from './CategorizationRenderer.vue';
@@ -43,3 +34,13 @@ export const layoutRenderers = [
   horizontalLayoutRendererEntry,
   verticalLayoutRendererEntry,
 ];
+
+export {
+  layoutRendererEntry,
+  arrayLayoutRendererEntry,
+  categorizationRendererEntry,
+  categorizationStepperRendererEntry,
+  groupRendererEntry,
+  horizontalLayoutRendererEntry,
+  verticalLayoutRendererEntry,
+};
