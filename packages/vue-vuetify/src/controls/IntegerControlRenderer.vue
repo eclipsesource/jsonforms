@@ -40,7 +40,7 @@ import {
   useJsonFormsControl,
   type RendererProps,
 } from '@jsonforms/vue';
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 import { VTextField } from 'vuetify/components';
 import { useVuetifyControl } from '../util';
 import { default as ControlWrapper } from './ControlWrapper.vue';
@@ -68,7 +68,27 @@ const controlRenderer = defineComponent({
     // preserve the value as it was typed by the user - for example when the user type very long number if we rely on the control.data to return back the actual data then the string could appear with exponent form and etc.
     // otherwise while typing the string in the input can suddenly change
     const inputValue = ref((input.control.value.data as string) || '');
-    return { ...input, adaptValue, inputValue };
+
+    const allowUnsafeInteger = computed(
+      () => input.appliedOptions.value.allowUnsafeInteger,
+    );
+    const toNumberOrString = (value: string): number | string => {
+      // have a regex test before parseFloat to make sure that invalid input won't be ignored and will lead to errors, parseFloat will parse invalid input such 7.22m6 as 7.22
+      if (NUMBER_REGEX_TEST.test(value)) {
+        const num = Number.parseFloat(value);
+        if (
+          Number.isFinite(num) &&
+          (allowUnsafeInteger.value || Number.isSafeInteger(num))
+        ) {
+          // return the parsed number only if it is not NaN or Infinite and it is safe integer (no potential lost of precision otherwise the input will show one value while the data will have different value ) or allowUnsafeInteger options is true
+          return num;
+        }
+      }
+      return value;
+    };
+
+    const lastData = ref(toNumberOrString(inputValue.value));
+    return { ...input, adaptValue, inputValue, lastData, toNumberOrString };
   },
   computed: {
     step(): number {
@@ -79,24 +99,20 @@ const controlRenderer = defineComponent({
       return this.appliedOptions.allowUnsafeInteger;
     },
   },
+  watch: {
+    'control.data': {
+      handler(newData) {
+        if (newData !== this.lastData) {
+          // data was change from outside then synch our control
+          this.inputValue = newData;
+        }
+      },
+    },
+  },
   methods: {
     onInputChange(value: string): void {
       this.inputValue = value;
       this.onChange(this.toNumberOrString(value));
-    },
-    toNumberOrString(value: string): number | string {
-      // have a regex test before parseFloat to make sure that invalid input won't be ignored and will lead to errors, parseFloat will parse invalid input such 7.22m6 as 7.22
-      if (NUMBER_REGEX_TEST.test(value)) {
-        const num = Number.parseFloat(value);
-        if (
-          Number.isFinite(num) &&
-          (this.allowUnsafeInteger || Number.isSafeInteger(num))
-        ) {
-          // return the parsed number only if it is not NaN or Infinite and it is safe integer (no potential lost of precision otherwise the input will show one value while the data will have different value ) or allowUnsafeInteger options is true
-          return num;
-        }
-      }
-      return value;
     },
   },
 });
