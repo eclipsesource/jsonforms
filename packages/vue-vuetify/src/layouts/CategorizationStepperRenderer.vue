@@ -17,7 +17,7 @@
         <v-card elevation="0">
           <dispatch-renderer
             :schema="layout.schema"
-            :uischema="element"
+            :uischema="element.value.uischema"
             :path="layout.path"
             :enabled="layout.enabled"
             :renderers="layout.renderers"
@@ -57,7 +57,7 @@
             <v-card elevation="0">
               <dispatch-renderer
                 :schema="layout.schema"
-                :uischema="element"
+                :uischema="element.value.uischema"
                 :path="layout.path"
                 :enabled="layout.enabled"
                 :renderers="layout.renderers"
@@ -81,21 +81,16 @@
 import {
   and,
   categorizationHasCategory,
-  deriveLabelForUISchemaElement,
-  isVisible,
+  isCategorization,
   optionIs,
   rankWith,
-  uiTypeIs,
-  type Categorization,
-  type Category,
   type JsonFormsRendererRegistryEntry,
   type Layout,
-  type Tester,
 } from '@jsonforms/core';
 import {
   DispatchRenderer,
   rendererProps,
-  useJsonFormsLayout,
+  useJsonFormsCategorization,
   type RendererProps,
 } from '@jsonforms/vue';
 import { defineComponent, ref } from 'vue';
@@ -113,7 +108,7 @@ import {
   VStepperVertical,
   VStepperVerticalItem,
 } from 'vuetify/labs/VStepperVertical';
-import { useAjv, useTranslator, useVuetifyLayout } from '../util';
+import { useVuetifyLayout } from '../util';
 
 const layoutRenderer = defineComponent({
   name: 'categorization-stepper-renderer',
@@ -135,26 +130,19 @@ const layoutRenderer = defineComponent({
   },
   setup(props: RendererProps<Layout>) {
     const activeCategory = ref(1);
-    const ajv = useAjv();
-    const t = useTranslator();
 
     return {
-      ...useVuetifyLayout(useJsonFormsLayout(props)),
+      ...useVuetifyLayout(useJsonFormsCategorization(props)),
       activeCategory,
-      ajv,
-      t,
     };
   },
   computed: {
-    visibleCategories(): (Category | Categorization)[] {
-      return (this.layout.uischema as Categorization).elements.filter(
-        (category: Category | Categorization) =>
-          isVisible(category, this.layout.data, this.layout.path, this.ajv),
-      );
+    visibleCategories() {
+      return this.categories.filter((category) => category.value.visible);
     },
     visibleCategoryLabels(): string[] {
       return this.visibleCategories.map((element) => {
-        return deriveLabelForUISchemaElement(element, this.t) ?? '';
+        return element.value.label;
       });
     },
   },
@@ -162,14 +150,15 @@ const layoutRenderer = defineComponent({
 
 export default layoutRenderer;
 
-export const categorizationStepperTester: Tester = and(
-  uiTypeIs('Categorization'),
-  categorizationHasCategory,
-  optionIs('variant', 'stepper'),
-);
-
 export const entry: JsonFormsRendererRegistryEntry = {
   renderer: layoutRenderer,
-  tester: rankWith(3, categorizationStepperTester),
+  tester: rankWith(
+    3,
+    and(
+      isCategorization,
+      categorizationHasCategory,
+      optionIs('variant', 'stepper'),
+    ),
+  ),
 };
 </script>

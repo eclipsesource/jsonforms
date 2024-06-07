@@ -250,50 +250,50 @@
 
 <script lang="ts">
 import {
-  type JsonFormsRendererRegistryEntry,
-  type ControlElement,
-  rankWith,
-  isObjectArrayWithNesting,
+  Resolve,
   composePaths,
   createDefaultValue,
-  type UISchemaElement,
   findUISchema,
-  Resolve,
-  type JsonSchema,
   getControlPath,
+  isObjectArrayWithNesting,
+  rankWith,
+  type ControlElement,
+  type JsonFormsRendererRegistryEntry,
+  type JsonSchema,
+  type UISchemaElement,
 } from '@jsonforms/core';
-import { defineComponent, computed, ref } from 'vue';
 import {
   DispatchRenderer,
   rendererProps,
   useJsonFormsArrayControl,
   type RendererProps,
 } from '@jsonforms/vue';
-import { useIcons, useNested, useVuetifyArrayControl } from '../util';
+import type { ErrorObject } from 'ajv';
+import merge from 'lodash/merge';
+import { computed, defineComponent, ref } from 'vue';
 import {
+  VAvatar,
+  VBtn,
   VCard,
   VCardActions,
-  VCardTitle,
   VCardText,
-  VDialog,
-  VRow,
+  VCardTitle,
   VCol,
   VContainer,
+  VDialog,
+  VExpansionPanel,
+  VExpansionPanelText,
+  VExpansionPanelTitle,
+  VExpansionPanels,
+  VIcon,
+  VRow,
+  VSpacer,
   VToolbar,
   VToolbarTitle,
   VTooltip,
-  VIcon,
-  VBtn,
-  VAvatar,
-  VSpacer,
-  VExpansionPanels,
-  VExpansionPanel,
-  VExpansionPanelTitle,
-  VExpansionPanelText,
 } from 'vuetify/components';
-import { ValidationIcon, ValidationBadge } from '../controls/components/index';
-import type { ErrorObject } from 'ajv';
-import merge from 'lodash/merge';
+import { ValidationBadge, ValidationIcon } from '../controls/components/index';
+import { useIcons, useNested, useVuetifyArrayControl } from '../util';
 
 const controlRenderer = defineComponent({
   name: 'array-layout-renderer',
@@ -410,7 +410,7 @@ const controlRenderer = defineComponent({
       }
     },
     childErrors(index: number): ErrorObject[] {
-      return this.control.childErrors.filter((e: ErrorObject) => {
+      return this.control.childErrors.filter((e) => {
         const errorDataPath = getControlPath(e);
         return errorDataPath.startsWith(
           this.composePaths(this.control.path, `${index}`),

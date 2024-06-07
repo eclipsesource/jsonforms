@@ -40,7 +40,7 @@ import {
   useJsonFormsControl,
   type RendererProps,
 } from '@jsonforms/vue';
-import { defineComponent, ref, unref } from 'vue';
+import { defineComponent, ref } from 'vue';
 import { VTextField } from 'vuetify/components';
 import { useVuetifyControl } from '../util';
 import { default as ControlWrapper } from './ControlWrapper.vue';
@@ -67,7 +67,7 @@ const controlRenderer = defineComponent({
 
     // preserve the value as it was typed by the user - for example when the user type very long number if we rely on the control.data to return back the actual data then the string could appear with exponent form and etc.
     // otherwise while typing the string in the input can suddenly change
-    const inputValue = ref((unref(input.control).data as string) || '');
+    const inputValue = ref((input.control.value.data as string) || '');
     return { ...input, adaptValue, inputValue };
   },
   computed: {

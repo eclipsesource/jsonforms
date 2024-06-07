@@ -7,7 +7,11 @@ import {
   computeLabel,
   getFirstPrimitiveProp,
   isDescriptionHidden,
+  type ControlElement,
+  type DispatchPropsOfControl,
   type JsonFormsSubStates,
+  type JsonSchema,
+  type UISchemaElement,
 } from '@jsonforms/core';
 import Ajv, { type ErrorObject } from 'ajv';
 import cloneDeep from 'lodash/cloneDeep';
@@ -29,7 +33,12 @@ import { useStyles } from '../styles';
 export const IconSymbol: InjectionKey<Required<IconOptions>> =
   Symbol.for('vuetify:icons');
 
-export const useControlAppliedOptions = <I extends { control: any }>(
+export const useControlAppliedOptions = <
+  T extends { config: any; uischema: UISchemaElement },
+  I extends {
+    control: ComputedRef<T>;
+  },
+>(
   input: I,
 ) => {
   return computed(() =>
@@ -41,9 +50,29 @@ export const useControlAppliedOptions = <I extends { control: any }>(
   );
 };
 
-export const useComputedLabel = <I extends { control: any }>(
+export const useLayoutAppliedOptions = <
+  T extends { config: any; uischema: UISchemaElement },
+  I extends {
+    layout: ComputedRef<T>;
+  },
+>(
   input: I,
-  appliedOptions: ComputedRef<any>,
+) => {
+  return computed(() =>
+    merge(
+      {},
+      cloneDeep(input.layout.value.config),
+      cloneDeep(input.layout.value.uischema.options),
+    ),
+  );
+};
+
+export const useComputedLabel = <
+  T extends { label: string; required: boolean },
+  I extends { control: ComputedRef<T> },
+>(
+  input: I,
+  appliedOptions: ReturnType<typeof useControlAppliedOptions>,
 ) => {
   return computed((): string => {
     return computeLabel(
@@ -57,7 +86,18 @@ export const useComputedLabel = <I extends { control: any }>(
 /**
  * Adds styles, appliedOptions and vuetifyProps
  */
-export const useVuetifyLabel = <I extends { label: any }>(input: I) => {
+export const useVuetifyLabel = <
+  T extends {
+    schema: JsonSchema;
+    uischema: UISchemaElement;
+    config: any;
+  },
+  I extends {
+    label: ComputedRef<T>;
+  },
+>(
+  input: I,
+) => {
   const styles = useStyles(input.label.value.uischema);
   const appliedOptions = computed(() =>
     merge(
@@ -83,7 +123,20 @@ export const useVuetifyLabel = <I extends { label: any }>(input: I) => {
  * Adds styles, isFocused, appliedOptions and onChange
  */
 export const useVuetifyControl = <
-  I extends { control: any; handleChange: any },
+  T extends {
+    uischema: ControlElement;
+    path: string;
+    config: any;
+    label: string;
+    description: string;
+    required: boolean;
+    errors: string;
+    id: string;
+    visible: boolean;
+  },
+  I extends {
+    control: ComputedRef<T>;
+  } & DispatchPropsOfControl,
 >(
   input: I,
   adaptValue: (target: any) => any = (v) => v,
@@ -202,14 +255,13 @@ export const useTranslator = () => {
 /**
  * Adds styles and appliedOptions
  */
-export const useVuetifyLayout = <I extends { layout: any }>(input: I) => {
-  const appliedOptions = computed(() => {
-    return merge(
-      {},
-      cloneDeep(input.layout.value.config),
-      cloneDeep(input.layout.value.uischema.options),
-    );
-  });
+export const useVuetifyLayout = <
+  T extends { config: any; uischema: UISchemaElement },
+  I extends { layout: ComputedRef<T> },
+>(
+  input: I,
+) => {
+  const appliedOptions = useLayoutAppliedOptions(input);
 
   const vuetifyProps = (path: string) => {
     const props = get(appliedOptions.value?.vuetify, path);
@@ -228,7 +280,20 @@ export const useVuetifyLayout = <I extends { layout: any }>(input: I) => {
 /**
  * Adds styles, appliedOptions and childUiSchema
  */
-export const useVuetifyArrayControl = <I extends { control: any }>(
+export const useVuetifyArrayControl = <
+  T extends {
+    label: string;
+    required: boolean;
+    config: any;
+    uischema: UISchemaElement;
+    schema: JsonSchema;
+    data: any;
+    childErrors: ErrorObject[];
+  },
+  I extends {
+    control: ComputedRef<T>;
+  },
+>(
   input: I,
 ) => {
   const appliedOptions = useControlAppliedOptions(input);
@@ -294,7 +359,12 @@ export const useVuetifyArrayControl = <I extends { control: any }>(
 /**
  * Adds styles and appliedOptions
  */
-export const useVuetifyBasicControl = <I extends { control: any }>(
+export const useVuetifyBasicControl = <
+  T extends { config: any; uischema: UISchemaElement },
+  I extends {
+    control: ComputedRef<T>;
+  },
+>(
   input: I,
 ) => {
   const appliedOptions = useControlAppliedOptions(input);
@@ -327,6 +397,7 @@ export interface NestedInfo {
   level: number;
   parentElement?: 'array' | 'object';
 }
+
 export const useNested = (element: false | 'array' | 'object'): NestedInfo => {
   const nestedInfo = inject<NestedInfo>('jsonforms.nestedInfo', { level: 0 });
   if (element) {
