@@ -3,13 +3,22 @@
     <v-row>
       <v-col cols="12">
         <v-card v-if="control.visible" v-bind="vuetifyProps('v-card')" flat>
-          <v-toolbar>
-            <v-spacer></v-spacer>
+          <v-toolbar v-bind="vuetifyProps('v-toolbar')">
+            <v-toolbar-title
+              v-if="mdAndUp && additionalPropertiesTitle"
+              v-bind="vuetifyProps('v-toolbar-title')"
+            >
+              {{ additionalPropertiesTitle }}</v-toolbar-title
+            >
 
             <v-text-field
               v-disabled-icon-focus
               :id="control.id + '-additional-properties-input'"
-              :class="styles.control.input"
+              :class="[
+                styles.control.input,
+                { 'ml-3': !mdAndUp || !additionalPropertiesTitle },
+                { 'mt-3': true },
+              ]"
               :disabled="!control.enabled"
               :label="propertyNameLabel"
               :hint="propertyNameDescription"
@@ -47,8 +56,6 @@
               </template>
               {{ translations.addTooltip }}
             </v-tooltip>
-
-            <v-spacer></v-spacer>
           </v-toolbar>
           <v-container v-bind="vuetifyProps('v-container')">
             <v-row
@@ -119,6 +126,7 @@ import get from 'lodash/get';
 import isPlainObject from 'lodash/isPlainObject';
 import startCase from 'lodash/startCase';
 import { defineComponent, ref, unref, type PropType } from 'vue';
+import { useDisplay } from 'vuetify';
 import {
   VBtn,
   VCard,
@@ -126,9 +134,9 @@ import {
   VContainer,
   VIcon,
   VRow,
-  VSpacer,
   VTextField,
   VToolbar,
+  VToolbarTitle,
   VTooltip,
 } from 'vuetify/components';
 import { DisabledIconFocus } from '../../controls/directives';
@@ -165,9 +173,9 @@ export default defineComponent({
     VCard,
     VTooltip,
     VToolbar,
+    VToolbarTitle,
     VIcon,
     VBtn,
-    VSpacer,
     VTextField,
     VContainer,
     VRow,
@@ -317,7 +325,11 @@ export default defineComponent({
       newPropertyName,
     );
 
+    const { mdAndUp } = useDisplay();
+
     return {
+      t,
+      mdAndUp,
       vuetifyProps,
       ajv,
       propertyNameValidator,
@@ -411,14 +423,23 @@ export default defineComponent({
 
       return [];
     },
+    additionalPropertiesTitle(): string | undefined {
+      const title = (this.control.schema.additionalProperties as JsonSchema7)
+        ?.title;
+      return title ? this.t(title, title) : title;
+    },
     propertyNameLabel(): string | null {
-      return (
-        this.propertyNameSchema?.title ??
-        unref(this.translations.propertyNameLabel!)
-      );
+      return this.propertyNameSchema?.title
+        ? this.t(this.propertyNameSchema.title, this.propertyNameSchema.title)
+        : unref(this.translations.propertyNameLabel!);
     },
     propertyNameDescription(): string | undefined {
-      return this.propertyNameSchema?.description;
+      return this.propertyNameSchema?.description
+        ? this.t(
+            this.propertyNameSchema.description,
+            this.propertyNameSchema.description,
+          )
+        : this.propertyNameSchema?.description;
     },
     reservedPropertyNames(): string[] {
       return Object.keys(this.control.schema.properties || {});
