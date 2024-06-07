@@ -463,6 +463,116 @@ describe('Material list with detail renderer', () => {
     expect(noDataLabel).toBe('translator.root.noDataMessage');
   });
 
+  it('add and delete buttons should exist if enabled', () => {
+    const core = initCore(schema, uischema, data);
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
+        <MaterialListWithDetailRenderer
+          schema={schema}
+          uischema={uischema}
+          enabled={true}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    console.log(wrapper.debug());
+
+    const deleteButton = wrapper.find({ 'aria-label': 'Delete button' });
+    expect(deleteButton.exists()).toBeTruthy();
+    const addButton = wrapper.find({ 'aria-label': 'Add' });
+    expect(addButton.exists()).toBeTruthy();
+  });
+
+  it('add and delete buttons should be removed if disabled', () => {
+    const core = initCore(schema, uischema, data);
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
+        <MaterialListWithDetailRenderer
+          schema={schema}
+          uischema={uischema}
+          enabled={false}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    const deleteButton = wrapper.find({ 'aria-label': 'Delete button' });
+    expect(deleteButton.exists()).toBeFalsy();
+    const addButton = wrapper.find({ 'aria-label': 'Add' });
+    expect(addButton.exists()).toBeFalsy();
+  });
+
+  it('add button should be removed if indicated via ui schema', () => {
+    const disableUischema = { ...uischema };
+    disableUischema.options = {
+      ...disableUischema.options,
+      disableAdd: true,
+    };
+    const core = initCore(schema, disableUischema, data);
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
+        <MaterialListWithDetailRenderer
+          schema={schema}
+          uischema={disableUischema}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    const button = wrapper.find({ 'aria-label': 'Add' });
+    expect(button.exists()).toBeFalsy();
+  });
+
+  it('delete button should be removed if indicated via ui schema', () => {
+    const disableUischema = { ...uischema };
+    disableUischema.options = {
+      ...disableUischema.options,
+      disableRemove: true,
+    };
+    const core = initCore(schema, disableUischema, data);
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
+        <MaterialListWithDetailRenderer
+          schema={schema}
+          uischema={disableUischema}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    const button = wrapper.find({ 'aria-label': 'Delete button' });
+    expect(button.exists()).toBeFalsy();
+  });
+
+  it('add and delete buttons should be removed if indicated via config', () => {
+    const core = initCore(schema, uischema, data);
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{
+          renderers: materialRenderers,
+          core,
+          config: { disableAdd: true, disableRemove: true },
+        }}
+      >
+        <MaterialListWithDetailRenderer
+          schema={schema}
+          uischema={uischema}
+          enabled={false}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    const deleteButton = wrapper.find({ 'aria-label': 'Delete button' });
+    expect(deleteButton.exists()).toBeFalsy();
+    const addButton = wrapper.find({ 'aria-label': 'Add' });
+    expect(addButton.exists()).toBeFalsy();
+  });
+
   it('should have a tooltip for add button', () => {
     wrapper = checkTooltip(
       schema,

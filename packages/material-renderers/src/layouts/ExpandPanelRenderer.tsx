@@ -66,7 +66,6 @@ interface OwnPropsOfExpandPanel {
   childLabelProp?: string;
   handleExpansion(panel: string): (event: any, expanded: boolean) => void;
   translations: ArrayTranslations;
-  disableAdd?: boolean;
   disableRemove?: boolean;
 }
 
