@@ -21,7 +21,7 @@
       :clearable="control.enabled"
       :model-value="control.data"
       :items="control.options"
-      :item-title="(item) => t(item.label, item.label)"
+      item-title="label"
       item-value="value"
       v-bind="vuetifyProps('v-select')"
       @update:model-value="onChange"
@@ -44,7 +44,7 @@
       :clearable="control.enabled"
       :model-value="control.data"
       :items="control.options"
-      :item-title="(item) => t(item.label, item.label)"
+      item-title="label"
       item-value="value"
       v-bind="vuetifyProps('v-autocomplete')"
       @update:model-value="onChange"
@@ -70,7 +70,7 @@ import { defineComponent } from 'vue';
 import { VAutocomplete, VSelect } from 'vuetify/components';
 import { default as ControlWrapper } from '../controls/ControlWrapper.vue';
 import { DisabledIconFocus } from '../controls/directives';
-import { useTranslator, useVuetifyControl } from '../util';
+import { useVuetifyControl } from '../util';
 
 const controlRenderer = defineComponent({
   name: 'autocomplete-enum-control-renderer',
@@ -86,14 +86,11 @@ const controlRenderer = defineComponent({
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    const t = useTranslator();
-
-    const control = useVuetifyControl(
+    return useVuetifyControl(
       useJsonFormsEnumControl(props),
       (value) => (value !== null ? value : undefined),
       300,
     );
-    return { ...control, t };
   },
 });
 
