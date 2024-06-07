@@ -726,6 +726,7 @@ export interface OwnPropsOfMasterListItem {
   handleSelect(index: number): () => void;
   removeItem(path: string, value: number): () => void;
   translations: ArrayTranslations;
+  disableRemove?: boolean;
 }
 
 export interface StatePropsOfMasterItem extends OwnPropsOfMasterListItem {
@@ -1133,6 +1134,8 @@ export interface StatePropsOfArrayLayout extends StatePropsOfControlWithDetail {
   data: number;
   translations: ArrayTranslations;
   minItems?: number;
+  disableRemove?: boolean;
+  disableAdd?: boolean;
 }
 /**
  * Map state to table props

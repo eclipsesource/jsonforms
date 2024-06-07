@@ -705,6 +705,92 @@ describe('Material array layout', () => {
     expect(downButton.is('[disabled]')).toBe(true);
   });
 
+  it('add and delete buttons should exist if enabled', () => {
+    wrapper = mount(
+      <JsonForms
+        data={data}
+        schema={schema}
+        uischema={uischema}
+        renderers={materialRenderers}
+      />
+    );
+
+    const deleteButton = wrapper.find({ 'aria-label': 'Delete button' });
+    expect(deleteButton.exists()).toBeTruthy();
+    const addButton = wrapper.find({ 'aria-label': 'Add button' });
+    expect(addButton.exists()).toBeTruthy();
+  });
+
+  it('add and delete buttons should be removed if disabled', () => {
+    const readOnlySchema = { ...schema };
+    readOnlySchema.readOnly = true;
+    wrapper = mount(
+      <JsonForms
+        data={data}
+        schema={readOnlySchema}
+        uischema={uischema}
+        renderers={materialRenderers}
+      />
+    );
+
+    const deleteButton = wrapper.find({ 'aria-label': 'Delete button' });
+    expect(deleteButton.exists()).toBeFalsy();
+    const addButton = wrapper.find({ 'aria-label': 'Add button' });
+    expect(addButton.exists()).toBeFalsy();
+  });
+
+  it('add button should be removed if indicated via ui schema', () => {
+    const disableUischema = { ...uischema };
+    disableUischema.options = { ...uischema.options, disableAdd: true };
+    wrapper = mount(
+      <JsonForms
+        data={data}
+        schema={schema}
+        uischema={disableUischema}
+        renderers={materialRenderers}
+      />
+    );
+
+    const button = wrapper.find({ 'aria-label': 'Add button' });
+    expect(button.exists()).toBeFalsy();
+  });
+
+  it('delete button should be removed if indicated via ui schema', () => {
+    const disableUischema = { ...uischema };
+    disableUischema.options = { ...uischema.options, disableRemove: true };
+    wrapper = mount(
+      <JsonForms
+        data={data}
+        schema={schema}
+        uischema={disableUischema}
+        renderers={materialRenderers}
+      />
+    );
+
+    const button = wrapper.find({ 'aria-label': 'Delete button' });
+    expect(button.exists()).toBeFalsy();
+  });
+
+  it('add and delete buttons should be removed if indicated via config', () => {
+    wrapper = mount(
+      <JsonForms
+        data={data}
+        schema={schema}
+        uischema={uischema}
+        renderers={materialRenderers}
+        config={{
+          disableAdd: true,
+          disableRemove: true,
+        }}
+      />
+    );
+
+    const deleteButton = wrapper.find({ 'aria-label': 'Delete button' });
+    expect(deleteButton.exists()).toBeFalsy();
+    const addButton = wrapper.find({ 'aria-label': 'Add button' });
+    expect(addButton.exists()).toBeFalsy();
+  });
+
   const getChildLabel = (wrapper: ReactWrapper, index: number) =>
     wrapper
       .find(`#${wrapper.find(Accordion).at(index).props()['aria-labelledby']}`)
