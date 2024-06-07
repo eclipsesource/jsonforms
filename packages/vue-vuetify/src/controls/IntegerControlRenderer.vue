@@ -87,8 +87,8 @@ const controlRenderer = defineComponent({
       return value;
     };
 
-    const lastData = ref(toNumberOrString(inputValue.value));
-    return { ...input, adaptValue, inputValue, lastData, toNumberOrString };
+    const dataValue = computed(() => toNumberOrString(inputValue.value));
+    return { ...input, adaptValue, inputValue, dataValue, toNumberOrString };
   },
   computed: {
     step(): number {
@@ -102,7 +102,7 @@ const controlRenderer = defineComponent({
   watch: {
     'control.data': {
       handler(newData) {
-        if (newData !== this.lastData) {
+        if (newData !== this.dataValue) {
           // data was change from outside then synch our control
           this.inputValue = newData;
         }
