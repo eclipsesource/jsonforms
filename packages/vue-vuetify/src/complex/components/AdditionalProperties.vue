@@ -3,60 +3,56 @@
     <v-row>
       <v-col cols="12">
         <v-card v-if="control.visible" v-bind="vuetifyProps('v-card')" flat>
-          <v-toolbar v-bind="vuetifyProps('v-toolbar')">
-            <v-toolbar-title
-              v-if="mdAndUp && additionalPropertiesTitle"
-              v-bind="vuetifyProps('v-toolbar-title')"
-            >
-              {{ additionalPropertiesTitle }}</v-toolbar-title
-            >
+          <v-container>
+            <v-row>
+              <v-col v-if="mdAndUp && additionalPropertiesTitle">
+                {{ additionalPropertiesTitle }}</v-col
+              >
 
-            <v-text-field
-              v-disabled-icon-focus
-              :id="control.id + '-additional-properties-input'"
-              :class="[
-                styles.control.input,
-                { 'ml-3': !mdAndUp || !additionalPropertiesTitle },
-                { 'mt-3': true },
-              ]"
-              :disabled="!control.enabled"
-              :label="propertyNameLabel"
-              :hint="propertyNameDescription"
-              :required="true"
-              :error-messages="newPropertyErrors"
-              :maxlength="
-                appliedOptions.restrict && propertyNameSchema
-                  ? propertyNameSchema.maxLength
-                  : undefined
-              "
-              :counter="
-                propertyNameSchema && propertyNameSchema.maxLength !== undefined
-                  ? propertyNameSchema.maxLength
-                  : undefined
-              "
-              v-model="newPropertyName"
-              :clearable="control.enabled"
-              v-bind="vuetifyProps('v-text-field')"
-            >
-            </v-text-field>
-            <v-tooltip bottom>
-              <template v-slot:activator="{ props }">
-                <v-btn
-                  icon
-                  variant="text"
-                  elevation="0"
-                  small
-                  :aria-label="translations.addAriaLabel"
-                  v-bind="props"
-                  :disabled="addPropertyDisabled"
-                  @click="addProperty"
-                >
-                  <v-icon>{{ icons.current.value.itemAdd }}</v-icon>
-                </v-btn>
-              </template>
-              {{ translations.addTooltip }}
-            </v-tooltip>
-          </v-toolbar>
+              <v-text-field
+                v-disabled-icon-focus
+                :id="control.id + '-additional-properties-input'"
+                :class="styles.control.input"
+                :disabled="!control.enabled"
+                :label="propertyNameLabel"
+                :hint="propertyNameDescription"
+                :required="true"
+                :error-messages="newPropertyErrors"
+                :maxlength="
+                  appliedOptions.restrict && propertyNameSchema
+                    ? propertyNameSchema.maxLength
+                    : undefined
+                "
+                :counter="
+                  propertyNameSchema &&
+                  propertyNameSchema.maxLength !== undefined
+                    ? propertyNameSchema.maxLength
+                    : undefined
+                "
+                v-model="newPropertyName"
+                :clearable="control.enabled"
+                v-bind="vuetifyProps('v-text-field')"
+              >
+              </v-text-field>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ props }">
+                  <v-btn
+                    icon
+                    variant="text"
+                    elevation="0"
+                    small
+                    :aria-label="translations.addAriaLabel"
+                    v-bind="props"
+                    :disabled="addPropertyDisabled"
+                    @click="addProperty"
+                  >
+                    <v-icon>{{ icons.current.value.itemAdd }}</v-icon>
+                  </v-btn>
+                </template>
+                {{ translations.addTooltip }}
+              </v-tooltip>
+            </v-row>
+          </v-container>
           <v-container v-bind="vuetifyProps('v-container')">
             <v-row
               v-for="(element, index) in additionalPropertyItems"
@@ -135,8 +131,6 @@ import {
   VIcon,
   VRow,
   VTextField,
-  VToolbar,
-  VToolbarTitle,
   VTooltip,
 } from 'vuetify/components';
 import { DisabledIconFocus } from '../../controls/directives';
@@ -172,8 +166,6 @@ export default defineComponent({
     DispatchRenderer,
     VCard,
     VTooltip,
-    VToolbar,
-    VToolbarTitle,
     VIcon,
     VBtn,
     VTextField,
