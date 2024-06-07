@@ -9,7 +9,26 @@
                 {{ additionalPropertiesTitle }}</v-col
               >
 
+              <v-select
+                v-if="propertyNameOptions"
+                v-disabled-icon-focus
+                :id="control.id + '-additional-properties-input'"
+                :class="styles.control.input"
+                :disabled="!control.enabled"
+                :label="propertyNameLabel"
+                :hint="propertyNameDescription"
+                :required="true"
+                :error-messages="newPropertyErrors"
+                :items="propertyNameOptions"
+                item-title="label"
+                item-value="value"
+                v-model="newPropertyName"
+                :clearable="control.enabled"
+                v-bind="vuetifyProps('v-text-field')"
+              >
+              </v-select>
               <v-text-field
+                v-else
                 v-disabled-icon-focus
                 :id="control.id + '-additional-properties-input'"
                 :class="styles.control.input"
@@ -106,8 +125,11 @@ import {
   createControlElement,
   createDefaultValue,
   encode,
+  enumToEnumOptionMapper,
   getI18nKeyPrefix,
+  oneOfToEnumOptionMapper,
   validate,
+  type EnumOption,
   type GroupLayout,
   type JsonSchema,
   type JsonSchema7,
@@ -130,6 +152,7 @@ import {
   VContainer,
   VIcon,
   VRow,
+  VSelect,
   VTextField,
   VTooltip,
 } from 'vuetify/components';
@@ -168,6 +191,7 @@ export default defineComponent({
     VTooltip,
     VIcon,
     VBtn,
+    VSelect,
     VTextField,
     VContainer,
     VRow,
@@ -319,8 +343,20 @@ export default defineComponent({
 
     const { mdAndUp } = useDisplay();
 
+    let propertyNameOptions: EnumOption[] | undefined = undefined;
+    if (propertyNameSchema?.enum) {
+      propertyNameOptions = propertyNameSchema.enum.map((e) =>
+        enumToEnumOptionMapper(e, t.value),
+      );
+    } else if (propertyNameSchema?.oneOf) {
+      propertyNameOptions = propertyNameSchema.oneOf.map((schema) =>
+        oneOfToEnumOptionMapper(schema, t.value),
+      );
+    }
+
     return {
       t,
+      propertyNameOptions,
       mdAndUp,
       vuetifyProps,
       ajv,
