@@ -8,51 +8,28 @@
               <v-col v-if="mdAndUp && additionalPropertiesTitle">
                 {{ additionalPropertiesTitle }}</v-col
               >
-
-              <v-select
-                v-if="propertyNameOptions"
-                v-disabled-icon-focus
-                :id="control.id + '-additional-properties-input'"
-                :class="styles.control.input"
-                :disabled="!control.enabled"
-                :label="propertyNameLabel"
-                :hint="propertyNameDescription"
-                :required="true"
-                :error-messages="newPropertyErrors"
-                :items="propertyNameOptions"
-                item-title="label"
-                item-value="value"
-                v-model="newPropertyName"
-                :clearable="control.enabled"
-                v-bind="vuetifyProps('v-text-field')"
-              >
-              </v-select>
-              <v-text-field
-                v-else
-                v-disabled-icon-focus
-                :id="control.id + '-additional-properties-input'"
-                :class="styles.control.input"
-                :disabled="!control.enabled"
-                :label="propertyNameLabel"
-                :hint="propertyNameDescription"
-                :required="true"
-                :error-messages="newPropertyErrors"
-                :maxlength="
-                  appliedOptions.restrict && propertyNameSchema
-                    ? propertyNameSchema.maxLength
-                    : undefined
-                "
-                :counter="
-                  propertyNameSchema &&
-                  propertyNameSchema.maxLength !== undefined
-                    ? propertyNameSchema.maxLength
-                    : undefined
-                "
-                v-model="newPropertyName"
-                :clearable="control.enabled"
-                v-bind="vuetifyProps('v-text-field')"
-              >
-              </v-text-field>
+              <v-col>
+                <json-forms
+                  :data="newPropertyName"
+                  :uischema="
+                    {
+                      type: 'Control',
+                      scope: '#/',
+                    } as UISchemaElement
+                  "
+                  :schema="propertyNameSchema"
+                  :additionalErrors="additionalErrors"
+                  :renderers="control.renderers"
+                  :cells="control.cells"
+                  :config="control.config"
+                  :readonly="!control.enabled"
+                  :validation-mode="validationMode"
+                  :i18n="i18n"
+                  :ajv="ajv"
+                  :middleware="middleware"
+                  @change="propertyNameChange"
+                ></json-forms
+              ></v-col>
               <v-tooltip bottom>
                 <template v-slot:activator="{ props }">
                   <v-btn
@@ -74,8 +51,8 @@
           </v-container>
           <v-container v-bind="vuetifyProps('v-container')">
             <v-row
-              v-for="(element, index) in additionalPropertyItems"
-              :key="`${index}`"
+              v-for="element in additionalPropertyItems"
+              :key="`${element.propertyName}`"
             >
               <v-col class="flex-shrink-0 flex-grow-1">
                 <dispatch-renderer
@@ -125,11 +102,7 @@ import {
   createControlElement,
   createDefaultValue,
   encode,
-  enumToEnumOptionMapper,
   getI18nKeyPrefix,
-  oneOfToEnumOptionMapper,
-  validate,
-  type EnumOption,
   type GroupLayout,
   type JsonSchema,
   type JsonSchema7,
@@ -137,13 +110,23 @@ import {
 } from '@jsonforms/core';
 import {
   DispatchRenderer,
+  JsonForms,
   useJsonFormsControlWithDetail,
+  type JsonFormsChangeEvent,
 } from '@jsonforms/vue';
-import Ajv, { type ValidateFunction } from 'ajv';
+import { type ErrorObject } from 'ajv';
 import get from 'lodash/get';
 import isPlainObject from 'lodash/isPlainObject';
 import startCase from 'lodash/startCase';
-import { defineComponent, ref, unref, type PropType } from 'vue';
+import isEqual from 'lodash/isEqual';
+import {
+  computed,
+  defineComponent,
+  markRaw,
+  ref,
+  unref,
+  type PropType,
+} from 'vue';
 import { useDisplay } from 'vuetify';
 import {
   VBtn,
@@ -152,18 +135,17 @@ import {
   VContainer,
   VIcon,
   VRow,
-  VSelect,
-  VTextField,
   VTooltip,
 } from 'vuetify/components';
 import { DisabledIconFocus } from '../../controls/directives';
 import { useStyles } from '../../styles';
 import {
-  useAjv,
   useControlAppliedOptions,
   useIcons,
+  useJsonForms,
   useTranslator,
 } from '../../util';
+import { AdditionalPropertiesTranslationEnum } from '@/i18n';
 
 type Input = ReturnType<typeof useJsonFormsControlWithDetail>;
 interface AdditionalPropertyType {
@@ -173,16 +155,6 @@ interface AdditionalPropertyType {
   uischema: UISchemaElement | undefined;
 }
 
-const reuseAjvForSchema = (ajv: Ajv, schema: JsonSchema): Ajv => {
-  if (
-    Object.prototype.hasOwnProperty.call(schema, 'id') ||
-    Object.prototype.hasOwnProperty.call(schema, '$id')
-  ) {
-    ajv.removeSchema(schema);
-  }
-  return ajv;
-};
-
 export default defineComponent({
   name: 'additional-properties',
   components: {
@@ -191,11 +163,10 @@ export default defineComponent({
     VTooltip,
     VIcon,
     VBtn,
-    VSelect,
-    VTextField,
     VContainer,
     VRow,
     VCol,
+    JsonForms,
   },
   directives: {
     DisabledIconFocus,
@@ -209,12 +180,14 @@ export default defineComponent({
   setup(props) {
     // eslint-disable-next-line vue/no-setup-props-destructure
     const control = props.input.control;
-    const reservedPropertyNames = Object.keys(
-      control.value.schema.properties || {},
+    const reservedPropertyNames = computed(() =>
+      Object.keys(control.value.schema.properties || {}),
     );
 
-    const additionalKeys = Object.keys(control.value.data).filter(
-      (k) => !reservedPropertyNames.includes(k),
+    const additionalKeys = computed(() =>
+      Object.keys(control.value.data).filter(
+        (k) => !reservedPropertyNames.value.includes(k),
+      ),
     );
 
     const toAdditionalPropertyType = (
@@ -273,50 +246,85 @@ export default defineComponent({
     };
 
     const appliedOptions = useControlAppliedOptions(props.input);
-    const additionalPropertyItems = ref<AdditionalPropertyType[]>([]);
-
-    additionalKeys.forEach((propName) => {
-      const additionalProperty = toAdditionalPropertyType(
-        propName,
-        control.value.data[propName],
-      );
-      additionalPropertyItems.value.push(additionalProperty);
-    });
+    const additionalPropertyItems = ref<AdditionalPropertyType[]>(
+      additionalKeys.value.map((propName) =>
+        toAdditionalPropertyType(propName, control.value.data[propName]),
+      ),
+    );
 
     const styles = useStyles(control.value.uischema);
     const newPropertyName = ref<string | null>('');
-    const ajv = useAjv();
+    const newPropertyErrors = ref<ErrorObject[] | undefined>(undefined);
+    const additionalErrors = ref<ErrorObject[]>([]);
 
-    let propertyNameSchema: JsonSchema7 | undefined = undefined;
-    let propertyNameValidator: ValidateFunction<unknown> | undefined =
-      undefined;
-
-    // TODO: create issue against jsonforms to add propertyNames into the JsonSchema interface
-    // propertyNames exist in draft-6 but not defined in the JsonSchema
-    if (typeof (control.value.schema as any).propertyNames === 'object') {
-      propertyNameSchema = (control.value.schema as any).propertyNames;
-    }
-
-    if (
-      typeof control.value.schema.additionalProperties !== 'object' &&
-      typeof control.value.schema.patternProperties === 'object'
-    ) {
-      const matchPatternPropertiesKeys: JsonSchema7 = {
+    const propertyNameSchema = computed<JsonSchema7>(() => {
+      let result: JsonSchema7 = {
         type: 'string',
-        pattern: Object.keys(control.value.schema.patternProperties).join('|'),
       };
+      // TODO: create issue against jsonforms to add propertyNames into the JsonSchema interface
+      // propertyNames exist in draft-6 but not defined in the JsonSchema
+      if (typeof (control.value.schema as any).propertyNames === 'object') {
+        result = {
+          ...(control.value.schema as any).propertyNames,
+          ...result,
+        };
+      }
+      return result;
+    });
 
-      propertyNameSchema = propertyNameSchema
-        ? { allOf: [propertyNameSchema, matchPatternPropertiesKeys] }
-        : matchPatternPropertiesKeys;
-    }
+    const propertyNameChange = (event: JsonFormsChangeEvent) => {
+      newPropertyName.value = typeof event.data === 'string' ? event.data : '';
+      let newAdditionalErrors: ErrorObject[] = [];
 
-    if (propertyNameSchema) {
-      propertyNameValidator = reuseAjvForSchema(
-        ajv,
-        propertyNameSchema,
-      ).compile(propertyNameSchema);
-    }
+      if (
+        typeof control.value.data === 'object' &&
+        control.value.data &&
+        Object.keys(control.value.data).find((e) => e === newPropertyName.value)
+      ) {
+        newAdditionalErrors = [
+          {
+            data: newPropertyName.value,
+            instancePath: '',
+            keyword: '',
+            message: unref(
+              translations[
+                AdditionalPropertiesTranslationEnum.propertyAlreadyDefined
+              ],
+            )!,
+            params: { propertyName: newPropertyName.value },
+            schemaPath: '',
+          },
+        ];
+      }
+
+      // JSONForms has special means for "[]." chars - those are part of the path composition so for not we can't support those without special handling
+      if (
+        newPropertyName.value.includes('[') ||
+        newPropertyName.value.includes(']') ||
+        newPropertyName.value.includes('.')
+      ) {
+        newAdditionalErrors = [
+          {
+            data: newPropertyName.value,
+            instancePath: '',
+            keyword: '',
+            message: unref(
+              translations[
+                AdditionalPropertiesTranslationEnum.propertyNameInvalid
+              ],
+            )!,
+            params: { propertyName: newPropertyName.value },
+            schemaPath: '',
+          },
+        ];
+      }
+
+      if (!isEqual(additionalErrors.value, newAdditionalErrors)) {
+        // only change the additional errors if different to prevent recursive calls
+        additionalErrors.value = newAdditionalErrors;
+      }
+      newPropertyErrors.value = [...(event.errors ?? [])];
+    };
 
     const vuetifyProps = (path: string) => {
       const props = get(appliedOptions.value?.vuetify, path);
@@ -343,30 +351,35 @@ export default defineComponent({
 
     const { mdAndUp } = useDisplay();
 
-    let propertyNameOptions: EnumOption[] | undefined = undefined;
-    if (propertyNameSchema?.enum) {
-      propertyNameOptions = propertyNameSchema.enum.map((e) =>
-        enumToEnumOptionMapper(e, t.value),
-      );
-    } else if (propertyNameSchema?.oneOf) {
-      propertyNameOptions = propertyNameSchema.oneOf.map((schema) =>
-        oneOfToEnumOptionMapper(schema, t.value),
-      );
-    }
+    const {
+      validationMode: parentValidationMode,
+      i18n,
+      middleware,
+      ajv,
+    } = useJsonForms();
+
+    // if the new property name is not specified then hide any errors
+    const validationMode = computed(() =>
+      newPropertyName.value ? parentValidationMode : 'ValidateAndHide',
+    );
 
     return {
+      validationMode: validationMode,
+      i18n: i18n ? markRaw(i18n) : i18n,
+      middleware: i18n ? markRaw(middleware) : middleware,
       t,
-      propertyNameOptions,
       mdAndUp,
       vuetifyProps,
-      ajv,
-      propertyNameValidator,
+      ajv: markRaw(ajv),
       control,
       styles,
       appliedOptions,
       additionalPropertyItems,
       toAdditionalPropertyType,
       newPropertyName,
+      propertyNameChange,
+      newPropertyErrors,
+      additionalErrors,
       icons,
       propertyNameSchema,
       translations,
@@ -380,7 +393,8 @@ export default defineComponent({
         // add is disabled because of contraints
         (this.appliedOptions.restrict && this.maxPropertiesReached) ||
         // add is disabled because there are errors for the new property name or it is not specified
-        this.newPropertyErrors.length > 0 ||
+        (this.newPropertyErrors && this.newPropertyErrors.length > 0) ||
+        (this.additionalErrors && this.additionalErrors.length > 0) ||
         !this.newPropertyName
       );
     },
@@ -410,67 +424,10 @@ export default defineComponent({
           this.control.schema.minProperties
       );
     },
-    newPropertyErrors(): string[] {
-      if (this.newPropertyName) {
-        const messages = this.propertyNameValidator
-          ? (validate(this.propertyNameValidator, this.newPropertyName)
-              .map((error) => error.message)
-              .filter((message) => message) as string[])
-          : [];
-        if (
-          this.reservedPropertyNames.includes(this.newPropertyName) ||
-          this.additionalPropertyItems.find(
-            (ap) => ap.propertyName === this.newPropertyName,
-          ) !== undefined
-        ) {
-          // already defined
-          const propertyAlreadyDefined = unref(
-            this.translations.propertyAlreadyDefined,
-          );
-
-          if (propertyAlreadyDefined) {
-            messages.push(propertyAlreadyDefined);
-          }
-        }
-
-        const invalidPropertyNameMessage = unref(
-          this.translations.propertyNameInvalid!,
-        );
-        // JSONForms has special means for "[]." chars - those are part of the path composition so for not we can't support those without special handling
-        if (
-          (this.newPropertyName.includes('[') ||
-            this.newPropertyName.includes(']') ||
-            this.newPropertyName.includes('.')) &&
-          invalidPropertyNameMessage
-        ) {
-          messages.push(invalidPropertyNameMessage);
-        }
-
-        return messages;
-      }
-
-      return [];
-    },
     additionalPropertiesTitle(): string | undefined {
       const title = (this.control.schema.additionalProperties as JsonSchema7)
         ?.title;
       return title ? this.t(title, title) : title;
-    },
-    propertyNameLabel(): string | null {
-      return this.propertyNameSchema?.title
-        ? this.t(this.propertyNameSchema.title, this.propertyNameSchema.title)
-        : unref(this.translations.propertyNameLabel!);
-    },
-    propertyNameDescription(): string | undefined {
-      return this.propertyNameSchema?.description
-        ? this.t(
-            this.propertyNameSchema.description,
-            this.propertyNameSchema.description,
-          )
-        : this.propertyNameSchema?.description;
-    },
-    reservedPropertyNames(): string[] {
-      return Object.keys(this.control.schema.properties || {});
     },
   },
   watch: {
@@ -478,27 +435,30 @@ export default defineComponent({
       handler(newData) {
         // revert back any undefined values back to the default value when the key is part of the addtional properties since we want to preserved the key
         // for example when we have a string additonal property then when we clear the text component the componet by default sets the value to undefined to remove the property from the object - for additional properties we do not want that behaviour
-        if (typeof this.control.data === 'object') {
+        if (typeof newData === 'object' && newData) {
           const keys = Object.keys(newData);
           let hasChanges = false;
+          const updatedData = { ...newData };
+
           this.additionalPropertyItems.forEach((ap) => {
             if (
               ap.schema &&
               (!keys.includes(ap.propertyName) ||
-                newData[ap.propertyName] === undefined ||
-                (newData[ap.propertyName] === null &&
+                updatedData[ap.propertyName] === undefined ||
+                (updatedData[ap.propertyName] === null &&
                   ap.schema.type !== 'null')) // createDefaultValue will return null only when the ap.schema.type is 'null'
             ) {
               const newValue = createDefaultValue(
                 ap.schema,
                 this.control.rootSchema,
               );
-              hasChanges = newData[ap.propertyName] !== newValue;
-              newData[ap.propertyName] = newValue;
+              hasChanges = updatedData[ap.propertyName] !== newValue;
+
+              updatedData[ap.propertyName] = newValue;
             }
           });
           if (hasChanges) {
-            this.input.handleChange(this.control.path, newData);
+            this.input.handleChange(this.control.path, updatedData);
           }
         }
       },
@@ -524,12 +484,14 @@ export default defineComponent({
           typeof this.control.data === 'object' &&
           additionalProperty.schema
         ) {
-          this.control.data[this.newPropertyName] = createDefaultValue(
+          const updatedData = { ...this.control.data };
+
+          updatedData[this.newPropertyName] = createDefaultValue(
             additionalProperty.schema,
             this.control.rootSchema,
           );
           // we need always to preserve the key even when the value is "empty"
-          this.input.handleChange(this.control.path, this.control.data);
+          this.input.handleChange(this.control.path, updatedData);
         }
       }
       this.newPropertyName = '';
@@ -539,8 +501,9 @@ export default defineComponent({
         (d) => d.propertyName !== propName,
       );
       if (typeof this.control.data === 'object') {
-        delete this.control.data[propName];
-        this.input.handleChange(this.control.path, this.control.data);
+        const updatedData = { ...this.control.data };
+        delete updatedData[propName];
+        this.input.handleChange(this.control.path, updatedData);
       }
     },
   },

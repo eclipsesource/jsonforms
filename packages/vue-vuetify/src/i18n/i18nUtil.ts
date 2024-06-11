@@ -11,7 +11,7 @@ export const getAdditionalPropertiesTranslations = (
   defaultTranslations: AdditionalPropertiesDefaultTranslation[],
   i18nKeyPrefix: string,
   label: string,
-  invalidPropertyName: Ref<string | null>,
+  propertyName: Ref<string | null>,
 ): AdditionalPropertiesTranslations => {
   const translations: AdditionalPropertiesTranslations = {};
   defaultTranslations.forEach((controlElement) => {
@@ -22,11 +22,14 @@ export const getAdditionalPropertiesTranslations = (
       AdditionalPropertiesTranslationEnum.propertyAlreadyDefined
     ) {
       translations[controlElement.key] = computed(() =>
-        t(
-          key,
-          controlElement.default(invalidPropertyName.value),
-          invalidPropertyName.value,
-        ),
+        t(key, controlElement.default(propertyName.value), propertyName.value),
+      );
+    } else if (
+      controlElement.key ==
+      AdditionalPropertiesTranslationEnum.propertyNameInvalid
+    ) {
+      translations[controlElement.key] = computed(() =>
+        t(key, controlElement.default(propertyName.value), propertyName.value),
       );
     } else {
       translations[controlElement.key] = t(

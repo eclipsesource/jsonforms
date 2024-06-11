@@ -45,13 +45,16 @@ export const additionalPropertiesDefaultTranslations: AdditionalPropertiesDefaul
     },
     {
       key: AdditionalPropertiesTranslationEnum.propertyNameInvalid,
-      default: () => 'Property name is invalid',
+      default: (input) =>
+        input
+          ? `Property name '${input}' is invalid`
+          : 'Property name is invalid',
     },
     {
       key: AdditionalPropertiesTranslationEnum.propertyAlreadyDefined,
       default: (input) =>
         input
-          ? `Property ${input} already defined`
+          ? `Property '${input}' already defined`
           : 'Property already defined',
     },
   ];
