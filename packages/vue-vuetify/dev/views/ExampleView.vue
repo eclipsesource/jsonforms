@@ -318,6 +318,15 @@ watch(
 );
 
 watch(
+  () => appStore.jsonforms,
+  (value) => {
+    // reset state when store jsonforms changes
+    Object.assign(state, initialState(props.example));
+  },
+  { deep: true },
+);
+
+watch(
   () => appStore.formOnly,
   (value) => {
     if (!value) {
