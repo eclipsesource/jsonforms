@@ -27,11 +27,11 @@ import isEmpty from 'lodash/isEmpty';
 import range from 'lodash/range';
 
 /**
- * Composes two JSON pointer. Pointer1 is appended to pointer2.
- * JSON pointer is seperated and start with '/' e.g: /foo/0
+ * Composes two JSON pointer. Pointer2 is appended to pointer1.
+ * Example: pointer1 `'/foo/0'` and pointer2 `'/bar'` results in `'/foo/0/bar'`.
  *
- * @param {string} pointer1 JSON pointer
- * @param {string} pointer2 JSON pointer
+ * @param {string} pointer1 Initial JSON pointer
+ * @param {string} pointer2 JSON pointer to append to `pointer1`
  * @returns {string} resulting JSON pointer
  */
 export const compose = (pointer1: string, pointer2: string) => {
