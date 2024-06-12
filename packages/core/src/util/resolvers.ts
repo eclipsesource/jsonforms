@@ -46,6 +46,10 @@ export const resolveData = (instance: any, dataPath: string): any => {
   if (isEmpty(dataPath)) {
     return instance;
   }
+
+  // Remove the first segment with slice because it is either the empty string
+  // for paths starting with a '/' or '#' for paths starting with this.
+  // Both need to be removed for resolving below.
   const dataPathSegments = dataPath.split('/').slice(1);
 
   return dataPathSegments.reduce((curInstance, decodedSegment) => {
