@@ -34,7 +34,6 @@ import {
   ControlElement,
   createDefaultValue,
   deriveTypes,
-  encode,
   isObjectArrayControl,
   isPrimitiveArrayControl,
   JsonSchema,
@@ -209,8 +208,9 @@ export class TableRenderer extends JsonFormsArrayControl implements OnInit {
   ): ColumnDescription[] => {
     if (schema.type === 'object') {
       return this.getValidColumnProps(schema).map((prop) => {
-        const encProp = encode(prop);
-        const uischema = controlWithoutLabel(`#/properties/${encProp}`);
+        const uischema = controlWithoutLabel(
+          Paths.compose('#', 'properties', prop)
+        );
         if (!this.isEnabled()) {
           setReadonly(uischema);
         }
@@ -273,7 +273,7 @@ export const controlWithoutLabel = (scope: string): ControlElement => ({
 @Pipe({ name: 'getProps' })
 export class GetProps implements PipeTransform {
   transform(index: number, props: OwnPropsOfRenderer) {
-    const rowPath = Paths.compose(props.path, `/${index}`);
+    const rowPath = Paths.compose(props.path, `${index}`);
     return {
       schema: props.schema,
       uischema: props.uischema,
