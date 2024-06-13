@@ -1865,7 +1865,7 @@ test('core reducer helpers - getControlPath - fallback to AJV <=7 errors does no
   t.is(controlPath, '');
 });
 
-test('core reducer helpers - getControlPath - decodes JSON Pointer escape sequences', (t) => {
+test('core reducer helpers - getControlPath - does not decode JSON Pointer escape sequences', (t) => {
   const errorObject = { instancePath: '/~0group/~1name' } as ErrorObject;
   const controlPath = getControlPath(errorObject);
   t.is(controlPath, '/~0group/~1name');

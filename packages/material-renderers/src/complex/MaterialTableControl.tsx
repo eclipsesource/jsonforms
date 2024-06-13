@@ -54,7 +54,6 @@ import {
   Resolve,
   JsonFormsRendererRegistryEntry,
   JsonFormsCellRendererRegistryEntry,
-  encode,
   ArrayTranslations,
 } from '@jsonforms/core';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -94,7 +93,7 @@ const generateCells = (
 ) => {
   if (schema.type === 'object') {
     return getValidColumnProps(schema).map((prop) => {
-      const cellPath = Paths.compose(rowPath, '/' + prop);
+      const cellPath = Paths.compose(rowPath, prop);
       const props = {
         propName: prop,
         schema,
@@ -231,10 +230,12 @@ const NonEmptyCellComponent = React.memo(function NonEmptyCellComponent({
         <DispatchCell
           schema={Resolve.schema(
             schema,
-            `#/properties/${encode(propName)}`,
+            Paths.compose('#', 'properties', propName),
             rootSchema
           )}
-          uischema={controlWithoutLabel(`#/properties/${encode(propName)}`)}
+          uischema={controlWithoutLabel(
+            Paths.compose('#', 'properties', propName)
+          )}
           path={path}
           enabled={enabled}
           renderers={renderers}
@@ -421,7 +422,7 @@ const TableRows = ({
   return (
     <React.Fragment>
       {range(data).map((index: number) => {
-        const childPath = Paths.compose(path, `/${index}`);
+        const childPath = Paths.compose(path, index);
 
         return (
           <NonEmptyRow

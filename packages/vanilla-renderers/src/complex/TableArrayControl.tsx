@@ -40,7 +40,6 @@ import {
   Resolve,
   Test,
   getControlPath,
-  encode,
   ArrayTranslations,
 } from '@jsonforms/core';
 import {
@@ -105,7 +104,8 @@ class TableArrayControl extends React.Component<
     const createControlElement = (key?: string): ControlElement => ({
       type: 'Control',
       label: false,
-      scope: schema.type === 'object' ? `#/properties/${key}` : '#',
+      scope:
+        schema.type === 'object' ? Paths.compose('#', 'properties', key) : '#',
     });
     const isValid = errors.length === 0;
     const divClassNames = [validationClass]
@@ -155,8 +155,7 @@ class TableArrayControl extends React.Component<
               </tr>
             ) : (
               data.map((_child, index) => {
-                const childPath = Paths.compose(path, `/${index}`);
-                // TODO
+                const childPath = Paths.compose(path, index);
                 const errorsPerEntry: any[] = filter(childErrors, (error) => {
                   const errorPath = getControlPath(error);
                   return errorPath.startsWith(childPath);
@@ -182,29 +181,24 @@ class TableArrayControl extends React.Component<
                           (prop) => schema.properties[prop].type !== 'array'
                         ),
                         fpmap((prop) => {
-                          const childPropPath = Paths.compose(
-                            childPath,
-                            '/' + prop.toString()
-                          );
+                          const childPropPath = Paths.compose(childPath, prop);
                           return (
                             <td key={childPropPath}>
                               <DispatchCell
                                 schema={Resolve.schema(
                                   schema,
-                                  `#/properties/${encode(prop)}`,
+                                  Paths.compose('#', 'properties', prop),
                                   rootSchema
                                 )}
-                                uischema={createControlElement(encode(prop))}
-                                path={childPath + '/' + prop}
+                                uischema={createControlElement(prop)}
+                                path={childPropPath}
                               />
                             </td>
                           );
                         })
                       )(schema.properties)
                     ) : (
-                      <td
-                        key={Paths.compose(childPath, '/' + index.toString())}
-                      >
+                      <td key={Paths.compose(childPath, index)}>
                         <DispatchCell
                           schema={schema}
                           uischema={createControlElement()}

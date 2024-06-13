@@ -1,5 +1,121 @@
 # Migration guide
 
+## Migrating to JSON Forms 4.0
+
+### Unified internal path handling to JSON pointers
+
+Previously, JSON Forms used two different ways to express paths:
+
+- The `scope` JSON Pointer (see [RFC 6901](https://datatracker.ietf.org/doc/html/rfc6901)) paths used in UI Schemas to resolve subschemas of the provided JSON Schema
+- The dot-separated paths (lodash format) to resolve entries in the form-wide data object
+
+This led to confusion and prevented property names from containing dots (`.`) because lodash paths don't support escaping.
+
+The rework unifies these paths to all use the JSON Pointer format.
+Therefore, this breaks custom renderers that manually modify or create paths to resolve additional data.
+They used the dot-separated paths and need to be migrated to use JSON Pointers instead.
+
+To abstract the composition of paths away from renderers, the `Paths.compose` utility of `@jsonforms/core` should be used.
+It takes a valid JSON Pointer and an arbitrary number of _unencoded_ segments to append.
+The utility takes care of adding separators and encoding special characters in the given segments.
+
+#### How to migrate
+
+All paths that are manually composed or use the `Paths.compose` utility and add more than one segment need to be adapted.
+
+```ts
+import { Paths } from '@jsonforms/core';
+
+// Some base path we want to extend. This is usually available in the renderer props
+// or the empty string for the whole data object
+const path = '/foo'
+
+// Previous: Calculate the path manually
+const oldManual = `${path}.foo.~bar`;
+// Previous: Use the Paths.compose util
+const oldWithUtil = Paths.compose(path, 'foo.~bar');
+
+// Now: After the initial path, hand in each segment separately.
+// Segments must be unencoded. The util automatically encodes them.
+// In this case the ~ will be encoded.
+const new = Paths.compose(path, 'foo', '~bar');
+
+// Calculate a path relative to the root data that the path is resolved against
+const oldFromRoot = 'nested.prop';
+const newFromRoot = Paths.compose('', 'nested', 'prop'); // The empty JSON Pointer '' points to the whole data.
+```
+
+#### Custom Renderer Example
+
+This example shows in a more elaborate way, how path composition might be used in a custom renderer.
+This example uses a custom renderer implemented for the React bindings.
+However, the approach is similar for all bindings.
+
+To showcase how a migration could look like, assume a custom renderer that gets handed in this data object:
+
+```ts
+const data = {
+  foo: 'abc',
+  'b/ar': {
+    '~': 'tilde',
+  },
+  'array~Data': ['entry1', 'entry2'],
+};
+```
+
+The renderer wants to resolve the `~` property to directly use it and iterate over the array and use the dispatch to render each entry.
+
+<details>
+<summary>Renderer code</summary>
+
+```tsx
+import { Paths, Resolve } from '@jsonforms/core';
+import { JsonFormsDispatch } from '@jsonforms/react';
+
+export const CustomRenderer = (props: ControlProps & WithInput) => {
+  const {
+    // [...]
+    data, // The data object to be rendered. See content above
+    path, // Path to the data object handed into this renderer
+    schema, // JSON Schema describing this renderers data
+  } = props;
+
+  // Calculate path from the given data to the nested ~ property
+  // You could also do this manually without the Resolve.data util
+  const tildePath = Paths.compose('', 'b/ar', '~');
+  const tildeValue = Resolve.data(data, tildePath);
+
+  const arrayData = data['array~Data'];
+  // Resolve schema of array entries from this renderer's schema.
+  const entrySchemaPath = Paths.compose(
+    '#',
+    'properties',
+    'array~Data',
+    'items'
+  );
+  const entrySchema = Resolve.schema(schema, entrySchemaPath);
+  // Iterate over array~Data and dispatch for each entry
+  // Dispatch needs the path from the root of JSON Forms's data
+  // Thus, calculate it by extending this control's path
+  const dispatchEntries = arrayData.map((arrayEntry, index) => {
+    const entryPath = Paths.compose(path, 'array~Data', index);
+    const schema = Resolve.schema();
+    return (
+      <JsonFormsDispatch
+        key={index}
+        schema={entrySchema}
+        path={path}
+        // [...] other props like cells, etc
+      />
+    );
+  });
+
+  // [...]
+};
+```
+
+</details>
+
 ## Migrating to JSON Forms 3.3
 
 ### Angular support now targets Angular 17 and Angular 18
