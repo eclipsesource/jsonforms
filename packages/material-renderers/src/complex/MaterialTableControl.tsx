@@ -424,7 +424,7 @@ const TableRows = ({
   return (
     <React.Fragment>
       {range(data).map((index: number) => {
-        const childPath = Paths.compose(path, `${index}`);
+        const childPath = Paths.compose(path, index);
 
         return (
           <NonEmptyRow

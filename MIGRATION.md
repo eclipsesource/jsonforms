@@ -95,7 +95,7 @@ export const CustomRenderer = (props: ControlProps & WithInput) => {
   // Dispatch needs the path from the root of JSON Forms's data
   // Thus, calculate it by extending this control's path
   const dispatchEntries = arrayData.map((arrayEntry, index) => {
-    const entryPath = Paths.compose(path, 'array~Data', `${index}`);
+    const entryPath = Paths.compose(path, 'array~Data', index);
     const schema = Resolve.schema();
     return (
       <JsonFormsDispatch

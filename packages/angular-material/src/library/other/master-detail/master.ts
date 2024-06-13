@@ -225,7 +225,7 @@ export class MasterListComponent
           ? d.toString()
           : get(d, labelRefInstancePath ?? getFirstPrimitiveProp(schema)),
         data: d,
-        path: Paths.compose(path, `${index}`),
+        path: Paths.compose(path, index),
         schema,
         uischema: detailUISchema,
       };

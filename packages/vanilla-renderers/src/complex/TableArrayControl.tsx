@@ -146,7 +146,7 @@ class TableArrayControl extends React.Component<
               </tr>
             ) : (
               data.map((_child, index) => {
-                const childPath = Paths.compose(path, `${index}`);
+                const childPath = Paths.compose(path, index);
                 const errorsPerEntry: any[] = filter(childErrors, (error) => {
                   const errorPath = getControlPath(error);
                   return errorPath.startsWith(childPath);
@@ -189,7 +189,7 @@ class TableArrayControl extends React.Component<
                         })
                       )(schema.properties)
                     ) : (
-                      <td key={Paths.compose(childPath, `${index}`)}>
+                      <td key={Paths.compose(childPath, index)}>
                         <DispatchCell
                           schema={schema}
                           uischema={createControlElement()}
