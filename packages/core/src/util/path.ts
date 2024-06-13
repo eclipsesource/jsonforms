@@ -39,18 +39,24 @@ import range from 'lodash/range';
  * The segments are appended in order to the JSON pointer and the special characters `~` and `/` are automatically encoded.
  *
  * @param {string} pointer Initial valid JSON pointer
- * @param {...string[]} segments **unencoded** path segments to append to the JSON pointer
+ * @param {...(string | number)[]} segments **unencoded** path segments to append to the JSON pointer. May also be a number in case of indices.
  * @returns {string} resulting JSON pointer
  */
-export const compose = (pointer: string, ...segments: string[]): string => {
-  return segments.reduce((currentPointer, segment) => {
-    // Only skip undefined segments, as empty string segments are allowed
-    // and reference a property that has the empty string as property name.
-    if (segment === undefined) {
-      return currentPointer;
-    }
-    return `${currentPointer}/${encode(segment)}`;
-  }, pointer ?? '');
+export const compose = (
+  pointer: string,
+  ...segments: (string | number)[]
+): string => {
+  // Remove undefined segments and encode string segments. Number don't need encoding.
+  // Only skip undefined segments, as empty string segments are allowed
+  // and reference a property that has the empty string as property name.
+  const sanitizedSegments = segments
+    .filter((s) => s !== undefined)
+    .map((s) => (typeof s === 'string' ? encode(s) : s.toString()));
+
+  return sanitizedSegments.reduce(
+    (currentPointer, segment) => `${currentPointer}/${segment}`,
+    pointer ?? ''
+  );
 };
 
 export { compose as composePaths };

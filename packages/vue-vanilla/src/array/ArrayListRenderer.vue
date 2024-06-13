@@ -33,7 +33,7 @@
         <dispatch-renderer
           :schema="control.schema"
           :uischema="childUiSchema"
-          :path="composePaths(control.path, `${index}`)"
+          :path="composePaths(control.path, index)"
           :enabled="control.enabled"
           :renderers="control.renderers"
           :cells="control.cells"

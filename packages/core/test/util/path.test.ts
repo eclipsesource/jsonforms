@@ -304,6 +304,11 @@ test('compose - handles root json pointer', (t) => {
   t.is(result, '/foo');
 });
 
+test('compose - handles numbers', (t) => {
+  const result = compose('/foo', 0, 'bar');
+  t.is(result, '/foo/0/bar');
+});
+
 /*
  * Unexpected edge case but the RFC6901 standard defines that `/` points to a property with key `''`.
  * To point to the root object, the empty string `''` is used.
