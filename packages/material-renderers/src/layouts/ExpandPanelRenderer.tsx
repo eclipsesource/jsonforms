@@ -29,6 +29,7 @@ import {
   removeId,
   ArrayTranslations,
   computeChildLabel,
+  UpdateArrayContext,
 } from '@jsonforms/core';
 import {
   Accordion,
@@ -65,6 +66,7 @@ interface OwnPropsOfExpandPanel {
   childLabelProp?: string;
   handleExpansion(panel: string): (event: any, expanded: boolean) => void;
   translations: ArrayTranslations;
+  disableRemove?: boolean;
 }
 
 interface StatePropsOfExpandPanel extends OwnPropsOfExpandPanel {
@@ -117,6 +119,7 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
     cells,
     config,
     translations,
+    disableRemove,
   } = props;
 
   const foundUISchema = useMemo(
@@ -207,7 +210,7 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
                   ) : (
                     ''
                   )}
-                  {enabled && (
+                  {enabled && !disableRemove && (
                     <Grid item>
                       <Tooltip
                         id='tooltip-remove'
@@ -262,13 +265,17 @@ export const ctxDispatchToExpandPanelProps: (
       (event: any): void => {
         event.stopPropagation();
         dispatch(
-          update(path, (array) => {
-            toDelete
-              .sort()
-              .reverse()
-              .forEach((s) => array.splice(s, 1));
-            return array;
-          })
+          update(
+            path,
+            (array) => {
+              toDelete
+                .sort()
+                .reverse()
+                .forEach((s) => array.splice(s, 1));
+              return array;
+            },
+            { type: 'REMOVE', indices: toDelete } as UpdateArrayContext
+          )
         );
       },
     [dispatch]
@@ -278,10 +285,17 @@ export const ctxDispatchToExpandPanelProps: (
       (event: any): void => {
         event.stopPropagation();
         dispatch(
-          update(path, (array) => {
-            moveUp(array, toMove);
-            return array;
-          })
+          update(
+            path,
+            (array) => {
+              moveUp(array, toMove);
+              return array;
+            },
+            {
+              type: 'MOVE',
+              moves: [{ from: toMove, to: toMove - 1 }],
+            } as UpdateArrayContext
+          )
         );
       },
     [dispatch]
@@ -291,10 +305,17 @@ export const ctxDispatchToExpandPanelProps: (
       (event: any): void => {
         event.stopPropagation();
         dispatch(
-          update(path, (array) => {
-            moveDown(array, toMove);
-            return array;
-          })
+          update(
+            path,
+            (array) => {
+              moveDown(array, toMove);
+              return array;
+            },
+            {
+              type: 'MOVE',
+              moves: [{ from: toMove, to: toMove + 1 }],
+            } as UpdateArrayContext
+          )
         );
       },
     [dispatch]

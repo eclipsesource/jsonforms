@@ -278,6 +278,7 @@ interface NonEmptyRowProps {
   cells?: JsonFormsCellRendererRegistryEntry[];
   path: string;
   translations: ArrayTranslations;
+  disableRemove?: boolean;
 }
 
 const NonEmptyRowComponent = ({
@@ -294,6 +295,7 @@ const NonEmptyRowComponent = ({
   cells,
   path,
   translations,
+  disableRemove,
 }: NonEmptyRowProps & WithDeleteDialogSupport) => {
   const moveUp = useMemo(
     () => moveUpCreator(path, rowIndex),
@@ -354,21 +356,23 @@ const NonEmptyRowComponent = ({
                 </Grid>
               </Fragment>
             ) : null}
-            <Grid item>
-              <Tooltip
-                id='tooltip-remove'
-                title={translations.removeTooltip}
-                placement='bottom'
-              >
-                <IconButton
-                  aria-label={translations.removeAriaLabel}
-                  onClick={() => openDeleteDialog(childPath, rowIndex)}
-                  size='large'
+            {!disableRemove ? (
+              <Grid item>
+                <Tooltip
+                  id='tooltip-remove'
+                  title={translations.removeTooltip}
+                  placement='bottom'
                 >
-                  <DeleteIcon />
-                </IconButton>
-              </Tooltip>
-            </Grid>
+                  <IconButton
+                    aria-label={translations.removeAriaLabel}
+                    onClick={() => openDeleteDialog(childPath, rowIndex)}
+                    size='large'
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </Tooltip>
+              </Grid>
+            ) : null}
           </Grid>
         </NoBorderTableCell>
       ) : null}
@@ -387,6 +391,7 @@ interface TableRowsProp {
   moveUp?(path: string, toMove: number): () => void;
   moveDown?(path: string, toMove: number): () => void;
   translations: ArrayTranslations;
+  disableRemove?: boolean;
 }
 const TableRows = ({
   data,
@@ -400,6 +405,7 @@ const TableRows = ({
   enabled,
   cells,
   translations,
+  disableRemove,
 }: TableRowsProp & WithDeleteDialogSupport) => {
   const isEmptyTable = data === 0;
 
@@ -438,6 +444,7 @@ const TableRows = ({
             cells={cells}
             path={path}
             translations={translations}
+            disableRemove={disableRemove}
           />
         );
       })}
@@ -464,7 +471,15 @@ export class MaterialTableControl extends React.Component<
       enabled,
       cells,
       translations,
+      disableAdd,
+      disableRemove,
+      config,
     } = this.props;
+
+    const appliedUiSchemaOptions = merge({}, config, uischema.options);
+    const doDisableAdd = disableAdd || appliedUiSchemaOptions.disableAdd;
+    const doDisableRemove =
+      disableRemove || appliedUiSchemaOptions.disableRemove;
 
     const controlElement = uischema as ControlElement;
     const isObjectSchema = schema.type === 'object';
@@ -491,6 +506,7 @@ export class MaterialTableControl extends React.Component<
             rootSchema={rootSchema}
             enabled={enabled}
             translations={translations}
+            disableAdd={doDisableAdd}
           />
           {isObjectSchema && (
             <TableRow>
@@ -504,6 +520,7 @@ export class MaterialTableControl extends React.Component<
             openDeleteDialog={openDeleteDialog}
             translations={translations}
             {...this.props}
+            disableRemove={doDisableRemove}
           />
         </TableBody>
       </Table>

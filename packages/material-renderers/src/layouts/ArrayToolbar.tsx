@@ -20,6 +20,7 @@ export interface ArrayLayoutToolbarProps {
   addItem(path: string, data: any): () => void;
   createDefault(): any;
   translations: ArrayTranslations;
+  disableAdd?: boolean;
 }
 export const ArrayLayoutToolbar = React.memo(function ArrayLayoutToolbar({
   label,
@@ -30,6 +31,7 @@ export const ArrayLayoutToolbar = React.memo(function ArrayLayoutToolbar({
   enabled,
   createDefault,
   translations,
+  disableAdd,
 }: ArrayLayoutToolbarProps) {
   return (
     <Toolbar disableGutters={true}>
@@ -57,7 +59,7 @@ export const ArrayLayoutToolbar = React.memo(function ArrayLayoutToolbar({
               </Grid>
             </Grid>
           </Grid>
-          {enabled && (
+          {enabled && !disableAdd && (
             <Grid item>
               <Grid container>
                 <Grid item>
