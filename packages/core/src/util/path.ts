@@ -23,37 +23,42 @@
   THE SOFTWARE.
 */
 
-import isEmpty from 'lodash/isEmpty';
 import range from 'lodash/range';
 
 /**
- * Composes two JSON pointer. Pointer2 is appended to pointer1.
- * Example: pointer1 `'/foo/0'` and pointer2 `'/bar'` results in `'/foo/0/bar'`.
+ * Composes a valid JSON pointer with an arbitrary number of unencoded segments.
+ * This method encodes the segments to escape JSON pointer's special characters.
+ * Empty segments (i.e. empty strings) are skipped.
  *
- * @param {string} pointer1 Initial JSON pointer
- * @param {string} pointer2 JSON pointer to append to `pointer1`
+ * Example:
+ * ```ts
+ * const composed = compose('/path/to/object', '~foo', 'b/ar');
+ * // compose === '/path/to/object/~0foo/b~1ar'
+ * ```
+ *
+ * The segments are appended in order to the JSON pointer and the special characters `~` and `/` are automatically encoded.
+ *
+ * @param {string} pointer Initial valid JSON pointer
+ * @param {...string[]} segments **unencoded** path segments to append to the JSON pointer
  * @returns {string} resulting JSON pointer
  */
-export const compose = (pointer1: string, pointer2: string) => {
-  let p2 = pointer2;
-  if (!isEmpty(pointer2) && !pointer2.startsWith('/')) {
-    p2 = '/' + pointer2;
-  }
-
-  if (isEmpty(pointer1)) {
-    return p2;
-  } else if (isEmpty(pointer2)) {
-    return pointer1;
-  } else {
-    return `${pointer1}${p2}`;
-  }
+export const compose = (pointer: string, ...segments: string[]): string => {
+  return segments.reduce((currentPointer, segment) => {
+    // Only skip undefined segments, as empty string segments are allowed
+    // and reference a property that has the empty string as property name.
+    if (segment === undefined) {
+      return currentPointer;
+    }
+    return `${currentPointer}/${encode(segment)}`;
+  }, pointer ?? '');
 };
 
 export { compose as composePaths };
 
 /**
  * Convert a schema path (i.e. JSON pointer) to an array by splitting
- * at the '/' character and removing all schema-specific keywords.
+ * at the '/' character, removing all schema-specific keywords,
+ * and decoding each segment to remove JSON pointer specific escaping.
  *
  * The returned value can be used to de-reference a root object by folding over it
  * and de-referencing the single segments to obtain a new object.
