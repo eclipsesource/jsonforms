@@ -48,6 +48,7 @@ import {
   JsonFormsState,
   mapDispatchToArrayControlProps,
   mapStateToArrayControlProps,
+  Paths,
   RankedTester,
   rankWith,
   setReadonly,
@@ -229,7 +230,7 @@ export class MasterListComponent
           ? d.toString()
           : get(d, labelRefInstancePath ?? getFirstPrimitiveProp(schema)),
         data: d,
-        path: `${path}/${index}`,
+        path: Paths.compose(path, index),
         schema,
         uischema: detailUISchema,
       };

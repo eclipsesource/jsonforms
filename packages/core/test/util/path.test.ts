@@ -24,7 +24,7 @@
 */
 import test from 'ava';
 import { JsonSchema } from '../../src/models';
-import { Resolve, toDataPath } from '../../src';
+import { compose, Resolve, toDataPath } from '../../src/util';
 
 test('resolve ', (t) => {
   const schema: JsonSchema = {
@@ -268,4 +268,64 @@ test('resolve $ref complicated', (t) => {
       },
     },
   });
+});
+
+test('compose - encodes segments', (t) => {
+  const result = compose('/foo', '/bar', '~~prop');
+  t.is(result, '/foo/~1bar/~0~0prop');
+});
+
+test('compose - does not re-encode initial pointer', (t) => {
+  const result = compose('/f~0oo', 'bar');
+  t.is(result, '/f~0oo/bar');
+});
+
+/*
+ * Unexpected edge case but the RFC6901 standard defines that empty segments point to a property with key `''`.
+ * For instance, '/' points to a property with key `''` in the root object.
+ */
+test('compose - handles empty string segments', (t) => {
+  const result = compose('/foo', '', 'bar');
+  t.is(result, '/foo//bar');
+});
+
+test('compose - returns initial pointer for no given segments', (t) => {
+  const result = compose('/foo');
+  t.is(result, '/foo');
+});
+
+test("compose - accepts initial pointer starting with URI fragment '#'", (t) => {
+  const result = compose('#/foo', 'bar');
+  t.is(result, '#/foo/bar');
+});
+
+test('compose - handles root json pointer', (t) => {
+  const result = compose('', 'foo');
+  t.is(result, '/foo');
+});
+
+test('compose - handles numbers', (t) => {
+  const result = compose('/foo', 0, 'bar');
+  t.is(result, '/foo/0/bar');
+});
+
+/*
+ * Unexpected edge case but the RFC6901 standard defines that `/` points to a property with key `''`.
+ * To point to the root object, the empty string `''` is used.
+ */
+test('compose - handles json pointer pointing to property with empty string as key', (t) => {
+  const result = compose('/', 'foo');
+  t.is(result, '//foo');
+});
+
+/** undefined JSON pointers are not valid but we still expect compose to handle them gracefully. */
+test('compose - handles undefined root json pointer', (t) => {
+  const result = compose(undefined as any, 'foo');
+  t.is(result, '/foo');
+});
+
+/** undefined segment elements are not valid but we still expect compose to handle them gracefully. */
+test('compose - ignores undefined segments', (t) => {
+  const result = compose('/foo', undefined as any, 'bar');
+  t.is(result, '/foo/bar');
 });

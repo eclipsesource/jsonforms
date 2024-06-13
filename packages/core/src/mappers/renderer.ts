@@ -713,7 +713,7 @@ export const mapStateToMasterListItemProps = (
   ownProps: OwnPropsOfMasterListItem
 ): StatePropsOfMasterItem => {
   const { schema, path, uischema, childLabelProp, index } = ownProps;
-  const childPath = composePaths(path, `${index}`);
+  const childPath = composePaths(path, index);
   const childLabel = computeChildLabel(
     getData(state),
     childPath,
