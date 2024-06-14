@@ -19,13 +19,16 @@ To abstract the composition of paths away from renderers, the `Paths.compose` ut
 It takes a valid JSON Pointer and an arbitrary number of _unencoded_ segments to append.
 The utility takes care of adding separators and encoding special characters in the given segments.
 
-#### Brief example
+#### How to migrate
 
-This showcases only calculating a new path in the dot-separated way vs the new way.
-Assume `path` is a valid JSON Pointer that a sub property should be addressed of.
+All paths that are manually composed or use the `Paths.compose` utility and add more than one segment need to be adapted.
 
 ```ts
 import { Paths } from '@jsonforms/core';
+
+// Some base path we want to extend. This is usually available in the renderer props
+// or the empty string for the whole data object
+const path = '/foo'
 
 // Previous: Calculate the path manually
 const oldManual = `${path}.foo.~bar`;
@@ -42,7 +45,7 @@ const oldFromRoot = 'nested.prop';
 const newFromRoot = Paths.compose('', 'nested', 'prop'); // The empty JSON Pointer '' points to the whole data.
 ```
 
-#### Extensive Example
+#### Custom Renderer Example
 
 This example shows in a more elaborate way, how path composition might be used in a custom renderer.
 This example uses a custom renderer implemented for the React bindings.
