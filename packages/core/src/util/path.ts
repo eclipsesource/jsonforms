@@ -29,7 +29,7 @@ import { isScoped, Scopable } from '../models';
 /**
  * Composes a valid JSON pointer with an arbitrary number of unencoded segments.
  * This method encodes the segments to escape JSON pointer's special characters.
- * Empty segments (i.e. empty strings) are skipped.
+ * `undefined` segments are skipped.
  *
  * Example:
  * ```ts
@@ -47,7 +47,7 @@ export const compose = (
   pointer: string,
   ...segments: (string | number)[]
 ): string => {
-  // Remove undefined segments and encode string segments. Number don't need encoding.
+  // Remove undefined segments and encode string segments. Numbers don't need encoding.
   // Only skip undefined segments, as empty string segments are allowed
   // and reference a property that has the empty string as property name.
   const sanitizedSegments = segments
@@ -56,7 +56,7 @@ export const compose = (
 
   return sanitizedSegments.reduce(
     (currentPointer, segment) => `${currentPointer}/${segment}`,
-    pointer ?? ''
+    pointer ?? '' // Treat undefined and null the same as the empty string (root pointer)
   );
 };
 
