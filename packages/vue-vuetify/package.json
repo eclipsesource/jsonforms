@@ -40,7 +40,8 @@
   "exports": {
     ".": {
       "import": "./lib/jsonforms-vue-vuetify.esm.js",
-      "require": "./lib/jsonforms-vue-vuetify.cjs.js"
+      "require": "./lib/jsonforms-vue-vuetify.cjs.js",
+      "types": "./lib/index.d.ts"
     },
     "./lib/jsonforms-vue-vuetify.css": "./lib/jsonforms-vue-vuetify.css"
   },
