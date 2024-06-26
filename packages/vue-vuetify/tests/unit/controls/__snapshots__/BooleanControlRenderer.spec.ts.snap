@@ -1,0 +1,30 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`BooleanControlRenderer.vue > should render component and match snapshot 1`] = `
+"<div class="v-application v-theme--light v-layout v-layout--full-height v-locale--is-ltr">
+  <div class="v-application__wrap">
+    <div class="control" id="#6" errors="" label="My Boolean" required="false" isfocused="false" appliedoptions="[object Object]">
+      <div class="v-input v-input--horizontal v-input--center-affix v-input--density-default v-theme--light v-locale--is-ltr v-input--dirty v-checkbox input">
+        <!---->
+        <div class="v-input__control">
+          <div class="v-selection-control v-selection-control--dirty v-selection-control--density-default v-checkbox-btn">
+            <div class="v-selection-control__wrapper">
+              <!---->
+              <div class="v-selection-control__input"><i class="mdi-checkbox-marked mdi v-icon notranslate v-theme--light v-icon--size-default" aria-hidden="true"></i><input id="#6-input" aria-disabled="false" aria-label="My Boolean" type="checkbox" aria-describedby="#6-input-messages" placeholder="boolean placeholder" value="true"></div>
+            </div><label class="v-label v-label--clickable" for="#6-input">
+              <!---->My Boolean
+            </label>
+          </div>
+        </div>
+        <!---->
+        <div class="v-input__details">
+          <transition-group-stub name="slide-y-transition" tag="div" appear="false" persisted="false" css="true" class="v-messages" role="alert" aria-live="polite" id="#6-input-messages">
+            <!---->
+          </transition-group-stub>
+          <!---->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>"
+`;
