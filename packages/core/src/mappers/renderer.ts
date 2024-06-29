@@ -26,41 +26,21 @@
 import get from 'lodash/get';
 import {
   ControlElement,
-  isLabelable,
   JsonSchema,
   LabelElement,
   UISchemaElement,
 } from '../models';
-import {
-  getUISchemas,
-  getAjv,
-  getCells,
-  getConfig,
-  getData,
-  getErrorAt,
-  getErrorTranslator,
-  getRenderers,
-  getSchema,
-  getSubErrorsAt,
-  getTranslator,
-  getUiSchema,
-} from '../reducers';
-import type {
-  JsonFormsCellRendererRegistryEntry,
-  JsonFormsRendererRegistryEntry,
-  JsonFormsUISchemaRegistryEntry,
-} from '../reducers';
 import type { RankedTester } from '../testers';
-import { hasShowRule, isInherentlyEnabled, isVisible } from './runtime';
-import { computeChildLabel, createLabelDescriptionFrom } from './label';
-import type { CombinatorKeyword } from './combinators';
-import { moveDown, moveUp } from './array';
-import type { AnyAction, Dispatch } from './type';
-import { Resolve, convertDateToString, hasType } from './util';
-import { composePaths, composeWithUi } from './path';
 import { CoreActions, update, UpdateArrayContext } from '../actions';
 import type { ErrorObject } from 'ajv';
-import type { JsonFormsState } from '../store';
+import type {
+  AnyAction,
+  Dispatch,
+  JsonFormsCellRendererRegistryEntry,
+  JsonFormsRendererRegistryEntry,
+  JsonFormsState,
+  JsonFormsUISchemaRegistryEntry,
+} from '../store';
 import {
   deriveLabelForUISchemaElement,
   getCombinedErrorMessage,
@@ -68,17 +48,65 @@ import {
   getI18nKeyPrefix,
   getI18nKeyPrefixBySchema,
   getArrayTranslations,
-  Translator,
   CombinatorTranslations,
   getCombinatorTranslations,
   combinatorDefaultTranslations,
-} from '../i18n';
-import {
+  getTranslator,
+  getErrorTranslator,
   arrayDefaultTranslations,
   ArrayTranslations,
-} from '../i18n/arrayTranslations';
-import { resolveSchema } from './resolvers';
+} from '../i18n';
 import cloneDeep from 'lodash/cloneDeep';
+import {
+  composePaths,
+  composeWithUi,
+  convertDateToString,
+  createLabelDescriptionFrom,
+  findUiControl,
+  getFirstPrimitiveProp,
+  getPropPath,
+  hasShowRule,
+  hasType,
+  isEnumSchema,
+  isLabelable,
+  isOneOfEnumSchema,
+  isVisible,
+  Resolve,
+  resolveSchema,
+} from '../util';
+import {
+  Translator,
+  getAjv,
+  getCells,
+  getConfig,
+  getData,
+  getErrorAt,
+  getRenderers,
+  getSchema,
+  getSubErrorsAt,
+  getUISchemas,
+  getUiSchema,
+} from '../store';
+import { isInherentlyEnabled } from './util';
+import { CombinatorKeyword } from './combinators';
+import { isEqual } from 'lodash';
+
+const move = (array: any[], index: number, delta: number) => {
+  const newIndex: number = index + delta;
+  if (newIndex < 0 || newIndex >= array.length) {
+    return;
+  } // Already at the top or bottom.
+  const indexes: number[] = [index, newIndex].sort((a, b) => a - b); // Sort the indixes
+  array.splice(indexes[0], 2, array[indexes[1]], array[indexes[0]]);
+};
+
+export const moveUp = (array: any[], toMove: number) => {
+  move(array, toMove, -1);
+};
+
+export const moveDown = (array: any[], toMove: number) => {
+  move(array, toMove, 1);
+};
 
 const isRequired = (
   schema: JsonSchema,
@@ -1221,4 +1249,81 @@ export const mapStateToLabelProps = (
     renderers: props.renderers || getRenderers(state),
     cells: props.cells || getCells(state),
   };
+};
+
+/**
+ * Compute the child label title for array based controls
+ * @param data the data of the control
+ * @param childPath the child path
+ * @param childLabelProp the dotted path to the value used as child label
+ * @param {JsonSchema} schema the json schema for this control
+ * @param {JsonSchema} rootSchema the root json schema
+ * @param {Translator} translateFct the translator fonction
+ * @param {UISchemaElement} uiSchema the uiSchema of the control
+ */
+export const computeChildLabel = (
+  data: any,
+  childPath: string,
+  childLabelProp: string,
+  schema: JsonSchema,
+  rootSchema: JsonSchema,
+  translateFct: Translator,
+  uiSchema: UISchemaElement
+): string => {
+  const childData = Resolve.data(data, childPath);
+
+  if (!childLabelProp) {
+    childLabelProp = getFirstPrimitiveProp(schema);
+  }
+
+  // return early in case there is no prop we can query
+  if (!childLabelProp) {
+    return '';
+  }
+
+  const currentValue = get(childData, childLabelProp);
+
+  // in case there is no value, then we can't map it to an enum or oneOf
+  if (currentValue === undefined) {
+    return '';
+  }
+
+  // check whether the value is part of a oneOf or enum and needs to be translated
+  const childSchema = Resolve.schema(
+    schema,
+    '#' + getPropPath(childLabelProp),
+    rootSchema
+  );
+
+  let enumOption: EnumOption = undefined;
+  if (isEnumSchema(childSchema)) {
+    enumOption = enumToEnumOptionMapper(
+      currentValue,
+      translateFct,
+      getI18nKeyPrefix(
+        childSchema,
+        findUiControl(uiSchema, childLabelProp),
+        childPath + '.' + childLabelProp
+      )
+    );
+  } else if (isOneOfEnumSchema(childSchema)) {
+    const oneOfArray = childSchema.oneOf as JsonSchema[];
+    const oneOfSchema = oneOfArray.find((e: JsonSchema) =>
+      isEqual(e.const, currentValue)
+    );
+
+    if (oneOfSchema) {
+      enumOption = oneOfToEnumOptionMapper(
+        oneOfSchema,
+        translateFct,
+        getI18nKeyPrefix(
+          oneOfSchema,
+          undefined,
+          childPath + '.' + childLabelProp
+        )
+      );
+    }
+  }
+
+  return enumOption ? enumOption.label : currentValue;
 };

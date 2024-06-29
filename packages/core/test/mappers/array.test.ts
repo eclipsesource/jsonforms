@@ -1,5 +1,5 @@
-import { moveDown, moveUp } from '../../src/util/';
 import anyTest, { TestFn } from 'ava';
+import { moveDown, moveUp } from '../../src/mappers';
 
 const test = anyTest as TestFn<{ array: number[] }>;
 

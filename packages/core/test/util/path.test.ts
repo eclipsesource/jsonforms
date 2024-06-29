@@ -23,8 +23,8 @@
   THE SOFTWARE.
 */
 import test from 'ava';
-import { JsonSchema } from '../../src';
-import { Resolve, toDataPath } from '../../src/util';
+import { JsonSchema } from '../../src/models';
+import { Resolve, toDataPath } from '../../src';
 
 test('resolve ', (t) => {
   const schema: JsonSchema = {

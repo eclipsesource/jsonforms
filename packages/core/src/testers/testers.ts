@@ -81,6 +81,12 @@ export interface TesterContext {
   config: any;
 }
 
+export type UISchemaTester = (
+  schema: JsonSchema,
+  schemaPath: string,
+  path: string
+) => number;
+
 export const isControl = (uischema: any): uischema is ControlElement =>
   !isEmpty(uischema) && uischema.scope !== undefined;
 

@@ -25,28 +25,25 @@
 import test from 'ava';
 import * as _ from 'lodash';
 import * as Redux from 'redux';
-import {
-  clearAllIds,
-  defaultMapDispatchToControlProps,
-  defaultMapStateToEnumCellProps,
-  DispatchPropsOfCell,
-  mapStateToCellProps,
-  mapStateToOneOfEnumCellProps,
-  oneOfToEnumOptionMapper,
-} from '../../src/util';
+import { clearAllIds, createAjv, validate } from '../../src/util';
 import { UPDATE_DATA, UpdateAction } from '../../src/actions';
 import configureStore from 'redux-mock-store';
+import { JsonFormsState } from '../../src/store';
 import {
   ControlElement,
-  createAjv,
-  JsonFormsState,
   JsonSchema,
   RuleEffect,
   UISchemaElement,
-  validate,
-} from '../../src';
-import { enumToEnumOptionMapper } from '../../src/util/renderer';
-
+} from '../../src/models';
+import {
+  DispatchPropsOfCell,
+  defaultMapDispatchToControlProps,
+  defaultMapStateToEnumCellProps,
+  enumToEnumOptionMapper,
+  mapStateToCellProps,
+  mapStateToOneOfEnumCellProps,
+  oneOfToEnumOptionMapper,
+} from '../../src/mappers';
 const middlewares: Redux.Middleware[] = [];
 const mockStore = configureStore<JsonFormsState>(middlewares);
 

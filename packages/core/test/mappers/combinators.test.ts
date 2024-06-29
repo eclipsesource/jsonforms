@@ -1,6 +1,6 @@
 import test from 'ava';
-import { createCombinatorRenderInfos } from '../../src/util/combinators';
-import { ControlElement } from '../../src';
+import { ControlElement } from '../../src/models';
+import { createCombinatorRenderInfos } from '../../src/mappers';
 
 const rootSchema = {
   type: 'object',

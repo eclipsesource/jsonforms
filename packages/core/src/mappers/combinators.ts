@@ -23,48 +23,47 @@
   THE SOFTWARE.
 */
 
-import maxBy from 'lodash/maxBy';
-import remove from 'lodash/remove';
-import { ADD_UI_SCHEMA, REMOVE_UI_SCHEMA, UISchemaActions } from '../actions';
-import { NOT_APPLICABLE } from '../testers';
-import type { JsonSchema, UISchemaElement } from '../models';
-import type { Reducer } from '../store/type';
+import type { ControlElement, JsonSchema, UISchemaElement } from '../models';
+import { findUISchema } from '../reducers';
 import { JsonFormsUISchemaRegistryEntry } from '../store';
+import { Resolve } from '../util/util';
 
-export const uischemaRegistryReducer: Reducer<
-  JsonFormsUISchemaRegistryEntry[],
-  UISchemaActions
-> = (state = [], action) => {
-  switch (action.type) {
-    case ADD_UI_SCHEMA:
-      return state
-        .slice()
-        .concat({ tester: action.tester, uischema: action.uischema });
-    case REMOVE_UI_SCHEMA: {
-      const copy = state.slice();
-      remove(copy, (entry) => entry.tester === action.tester);
-      return copy;
-    }
-    default:
-      return state;
-  }
-};
+export interface CombinatorSubSchemaRenderInfo {
+  schema: JsonSchema;
+  uischema: UISchemaElement;
+  label: string;
+}
 
-export const findMatchingUISchema =
-  (state: JsonFormsUISchemaRegistryEntry[]) =>
-  (
-    jsonSchema: JsonSchema,
-    schemaPath: string,
-    path: string
-  ): UISchemaElement => {
-    const match = maxBy(state, (entry) =>
-      entry.tester(jsonSchema, schemaPath, path)
-    );
-    if (
-      match !== undefined &&
-      match.tester(jsonSchema, schemaPath, path) !== NOT_APPLICABLE
-    ) {
-      return match.uischema;
-    }
-    return undefined;
-  };
+export type CombinatorKeyword = 'anyOf' | 'oneOf' | 'allOf';
+
+export const createCombinatorRenderInfos = (
+  combinatorSubSchemas: JsonSchema[],
+  rootSchema: JsonSchema,
+  keyword: CombinatorKeyword,
+  control: ControlElement,
+  path: string,
+  uischemas: JsonFormsUISchemaRegistryEntry[]
+): CombinatorSubSchemaRenderInfo[] =>
+  combinatorSubSchemas.map((subSchema, subSchemaIndex) => {
+    const resolvedSubSchema =
+      subSchema.$ref && Resolve.schema(rootSchema, subSchema.$ref, rootSchema);
+
+    const schema = resolvedSubSchema ?? subSchema;
+
+    return {
+      schema,
+      uischema: findUISchema(
+        uischemas,
+        schema,
+        control.scope,
+        path,
+        undefined,
+        control,
+        rootSchema
+      ),
+      label:
+        subSchema.title ??
+        resolvedSubSchema?.title ??
+        `${keyword}-${subSchemaIndex}`,
+    };
+  });
