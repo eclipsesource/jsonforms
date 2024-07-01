@@ -1,7 +1,12 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { JsonForms, JsonFormsChangeEvent } from '../../config/jsonforms';
-import { vanillaRenderers, mergeStyles, defaultStyles } from '../../src';
+import {
+  vanillaRenderers,
+  vanillaCells,
+  mergeStyles,
+  defaultStyles,
+} from '../../src';
 import '../../vanilla.css';
 import { ErrorObject } from 'ajv';
 import { getExamples } from '../../../examples';
@@ -29,6 +34,7 @@ export default defineComponent({
     return {
       data: {},
       renderers: Object.freeze(vanillaRenderers),
+      cells: Object.freeze(vanillaCells),
       currentExampleName: examples[0].name,
       examples,
       i18n: examples[0].i18n,
@@ -137,6 +143,7 @@ export default defineComponent({
           :schema="example.schema"
           :uischema="example.uischema"
           :renderers="renderers"
+          :cells="cells"
           :i18n="example.i18n"
           :additional-errors="additionalErrors"
           @change="onChange"

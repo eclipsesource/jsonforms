@@ -1,7 +1,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { JsonForms } from '../../../config/jsonforms';
-import { vanillaRenderers } from '../../../src';
+import { vanillaRenderers, vanillaCells } from '../../../src';
 import { JsonFormsChangeEvent } from '@jsonforms/vue';
 
 export default defineComponent({
@@ -14,6 +14,7 @@ export default defineComponent({
   data() {
     return {
       renderers: Object.freeze(vanillaRenderers),
+      cells: Object.freeze(vanillaCells),
       data: this.initialData,
     };
   },
@@ -31,6 +32,7 @@ export default defineComponent({
     :schema="schema"
     :uischema="uischema"
     :renderers="renderers"
+    :cells="cells"
     :config="config"
     @change="onChange"
   />
