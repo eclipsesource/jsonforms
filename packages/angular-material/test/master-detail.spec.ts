@@ -223,7 +223,7 @@ describe('Master detail', () => {
     // delete 1st item
     spyOn(component, 'removeItems').and.callFake(() => () => {
       getJsonFormsService(component).updateCore(
-        Actions.update('orders', () => moreData.orders.slice(1))
+        Actions.update('/orders', () => moreData.orders.slice(1))
       );
       fixture.detectChanges();
     });
@@ -267,7 +267,7 @@ describe('Master detail', () => {
       const copy = moreData.orders.slice();
       copy.splice(1, 1);
       getJsonFormsService(component).updateCore(
-        Actions.update('orders', () => copy)
+        Actions.update('/orders', () => copy)
       );
       fixture.detectChanges();
     });
@@ -382,7 +382,7 @@ describe('Master detail', () => {
               customer: { name: 'ACME' },
               title: 'Carrots',
             },
-            path: 'orders.0',
+            path: '/orders/0',
             schema: schema.definitions.order,
             uischema: {
               type: 'VerticalLayout',

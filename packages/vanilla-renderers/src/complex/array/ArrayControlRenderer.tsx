@@ -107,7 +107,7 @@ export const ArrayControl = ({
       <div className={classNames.children}>
         {data ? (
           range(0, data.length).map((index) => {
-            const childPath = composePaths(path, `${index}`);
+            const childPath = composePaths(path, index);
             return (
               <div key={index}>
                 <JsonFormsDispatch
