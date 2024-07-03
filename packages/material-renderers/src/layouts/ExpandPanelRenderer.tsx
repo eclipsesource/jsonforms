@@ -40,12 +40,10 @@ import {
   IconButton,
   Tooltip,
 } from '@mui/material';
-import {
-  ExpandMore as ExpandMoreIcon,
-  Delete as DeleteIcon,
-  ArrowUpward,
-  ArrowDownward,
-} from '@mui/icons-material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ArrowUpward from '@mui/icons-material/ArrowUpward';
+import ArrowDownward from '@mui/icons-material/ArrowDownward';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const iconStyle: any = { float: 'right' };
 
