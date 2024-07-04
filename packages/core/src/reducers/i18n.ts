@@ -23,13 +23,7 @@
   THE SOFTWARE.
 */
 
-import {
-  defaultErrorTranslator,
-  defaultTranslator,
-  ErrorTranslator,
-  JsonFormsI18nState,
-  Translator,
-} from '../i18n';
+import { defaultErrorTranslator, defaultTranslator } from '../i18n';
 import {
   I18nActions,
   SET_LOCALE,
@@ -37,8 +31,10 @@ import {
   UPDATE_I18N,
 } from '../actions';
 import { Reducer } from '../store/type';
-import { JsonFormsI18nState } from '../store';
+import { ErrorTranslator, JsonFormsI18nState, Translator } from '../store';
 import { UISchemaElement } from '../models';
+import { toLodashPath } from '../util';
+import { ErrorObject } from 'ajv';
 
 export const defaultJsonFormsI18nState: Required<JsonFormsI18nState> = {
   locale: 'en',
