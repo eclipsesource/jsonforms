@@ -45,14 +45,7 @@ import {
 import { JsonFormsCore, Reducer, ValidationMode } from '../store';
 import Ajv, { ErrorObject } from 'ajv';
 import { isFunction } from 'lodash';
-import {
-  composePaths,
-  createAjv,
-  isOneOfEnumSchema,
-  Reducer,
-  toLodashSegments,
-  validate,
-} from '../util';
+import { createAjv, toLodashSegments, validate } from '../util';
 
 export const initState: JsonFormsCore = {
   data: {},
