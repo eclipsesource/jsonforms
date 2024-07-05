@@ -33,9 +33,9 @@ The project roadmap can be found in [ROADMAP.md](./ROADMAP.md).
 Issues are sorted in one the following milestones that indicate when their implementation is planned.
 Independently of the assigned milestone, contributions are always accepted and appreciated.
 
-- [3.4](https://github.com/eclipsesource/jsonforms/milestone/57): Issues which we plan to implement for the upcoming 3.4 release.
-- [4.0](https://github.com/eclipsesource/jsonforms/milestone/55): Issue which we plan to implement for the next major release 4.0. This is the next planned version after the 3.4. release.
-- [4.x](https://github.com/eclipsesource/jsonforms/milestone/58): Issues which are concrete candidates for one of the next versions after the 4.0 release.
+- A milestone for the next minor version. Issues planned to be implemented for the next release.
+- A milestone for the next major version. Issues planned to be implemented for the next major release.
+- A `.x` milestone. Issues which are concrete candidates for one of the next versions.
 - [next](https://github.com/eclipsesource/jsonforms/milestone/37): Issues which we would like to tackle soonish in one of the upcoming versions. However, they are not yet planned for a specific version.
 - [Backlog](https://github.com/eclipsesource/jsonforms/milestone/2): Issues which are interesting in some form but we don't plan to do ourselves in the foreseeable future. Still these might become part of JSON Forms via a community contribution or by prioritization of a paying customer.
 
