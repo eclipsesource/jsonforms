@@ -33,10 +33,13 @@ import {
   JsonFormsAbstractControl,
 } from '@jsonforms/angular';
 import {
+  arrayDefaultTranslations,
   ArrayLayoutProps,
   ArrayTranslations,
   createDefaultValue,
+  defaultJsonFormsI18nState,
   findUISchema,
+  getArrayTranslations,
   isObjectArrayWithNesting,
   JsonFormsState,
   mapDispatchToArrayControlProps,
@@ -169,7 +172,7 @@ export class ArrayLayoutRenderer
   implements OnInit, OnDestroy
 {
   noData: boolean;
-  translations: ArrayTranslations;
+  translations: ArrayTranslations = {};
   addItem: (path: string, value: any) => () => void;
   moveItemUp: (path: string, index: number) => () => void;
   moveItemDown: (path: string, index: number) => () => void;
@@ -181,9 +184,19 @@ export class ArrayLayoutRenderer
   constructor(jsonFormsService: JsonFormsAngularService) {
     super(jsonFormsService);
   }
-  mapToProps(state: JsonFormsState): StatePropsOfArrayLayout {
+  mapToProps(
+    state: JsonFormsState
+  ): StatePropsOfArrayLayout & { translations: ArrayTranslations } {
     const props = mapStateToArrayLayoutProps(state, this.getOwnProps());
-    return { ...props };
+    const t =
+      state.jsonforms.i18n?.translate ?? defaultJsonFormsI18nState.translate;
+    const translations = getArrayTranslations(
+      t,
+      arrayDefaultTranslations,
+      props.i18nKeyPrefix,
+      props.label
+    );
+    return { ...props, translations };
   }
   remove(index: number): void {
     this.removeItems(this.propsPath, [index])();
@@ -211,10 +224,12 @@ export class ArrayLayoutRenderer
     this.moveItemDown = moveDown;
     this.removeItems = removeItems;
   }
-  mapAdditionalProps(props: ArrayLayoutProps) {
-    this.translations = props.translations;
+  mapAdditionalProps(
+    props: ArrayLayoutProps & { translations: ArrayTranslations }
+  ) {
     this.noData = !props.data || props.data === 0;
     this.uischemas = props.uischemas;
+    this.translations = props.translations;
   }
   getProps(index: number): OwnPropsOfRenderer {
     const uischema = findUISchema(

@@ -23,6 +23,10 @@
   THE SOFTWARE.
 */
 import {
+  arrayDefaultTranslations,
+  ArrayTranslations,
+  defaultJsonFormsI18nState,
+  getArrayTranslations,
   JsonFormsState,
   mapStateToArrayControlProps,
   StatePropsOfArrayControl,
@@ -34,8 +38,18 @@ export class JsonFormsArrayControl
   extends JsonFormsAbstractControl<StatePropsOfArrayControl>
   implements OnInit, OnDestroy
 {
-  protected mapToProps(state: JsonFormsState): StatePropsOfArrayControl {
+  protected mapToProps(
+    state: JsonFormsState
+  ): StatePropsOfArrayControl & { translations: ArrayTranslations } {
     const props = mapStateToArrayControlProps(state, this.getOwnProps());
-    return { ...props };
+    const t =
+      state.jsonforms.i18n?.translate ?? defaultJsonFormsI18nState.translate;
+    const translations = getArrayTranslations(
+      t,
+      arrayDefaultTranslations,
+      props.i18nKeyPrefix,
+      props.label
+    );
+    return { ...props, translations };
   }
 }

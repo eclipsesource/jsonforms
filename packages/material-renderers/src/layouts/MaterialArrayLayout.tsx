@@ -23,19 +23,24 @@
   THE SOFTWARE.
 */
 import range from 'lodash/range';
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import {
   ArrayLayoutProps,
+  arrayDefaultTranslations,
   composePaths,
   computeLabel,
   createDefaultValue,
+  getArrayTranslations,
 } from '@jsonforms/core';
 import map from 'lodash/map';
 import { ArrayLayoutToolbar } from './ArrayToolbar';
 import ExpandPanelRenderer from './ExpandPanelRenderer';
 import merge from 'lodash/merge';
+import { TranslateProps, withTranslateProps } from '@jsonforms/react';
 
-const MaterialArrayLayoutComponent = (props: ArrayLayoutProps) => {
+const MaterialArrayLayoutComponent = (
+  props: ArrayLayoutProps & TranslateProps
+) => {
   const [expanded, setExpanded] = useState<string | boolean>(false);
   const innerCreateDefaultValue = useCallback(
     () => createDefaultValue(props.schema, props.rootSchema),
@@ -65,15 +70,22 @@ const MaterialArrayLayoutComponent = (props: ArrayLayoutProps) => {
     rootSchema,
     config,
     uischemas,
-    translations,
     description,
     disableAdd,
     disableRemove,
+    t,
+    i18nKeyPrefix,
   } = props;
   const appliedUiSchemaOptions = merge({}, config, props.uischema.options);
   const doDisableAdd = disableAdd || appliedUiSchemaOptions.disableAdd;
   const doDisableRemove = disableRemove || appliedUiSchemaOptions.disableRemove;
 
+  console.log('renderTable');
+  const translations = useMemo(
+    () =>
+      getArrayTranslations(t, arrayDefaultTranslations, i18nKeyPrefix, label),
+    [t, i18nKeyPrefix, label]
+  );
   return (
     <div>
       <ArrayLayoutToolbar
@@ -125,4 +137,6 @@ const MaterialArrayLayoutComponent = (props: ArrayLayoutProps) => {
   );
 };
 
-export const MaterialArrayLayout = React.memo(MaterialArrayLayoutComponent);
+export const MaterialArrayLayout = React.memo(
+  withTranslateProps(MaterialArrayLayoutComponent)
+);

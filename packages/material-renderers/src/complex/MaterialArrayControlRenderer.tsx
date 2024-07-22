@@ -22,24 +22,38 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import {
   ArrayLayoutProps,
   RankedTester,
+  arrayDefaultTranslations,
+  getArrayTranslations,
   isObjectArrayControl,
   isPrimitiveArrayControl,
   or,
   rankWith,
 } from '@jsonforms/core';
-import { withJsonFormsArrayLayoutProps } from '@jsonforms/react';
+import {
+  TranslateProps,
+  withJsonFormsArrayLayoutProps,
+  withTranslateProps,
+} from '@jsonforms/react';
 import { MaterialTableControl } from './MaterialTableControl';
 import { DeleteDialog } from './DeleteDialog';
 
-export const MaterialArrayControlRenderer = (props: ArrayLayoutProps) => {
+export const MaterialArrayControlRenderer = (
+  props: ArrayLayoutProps & TranslateProps
+) => {
   const [open, setOpen] = useState(false);
   const [path, setPath] = useState(undefined);
   const [rowData, setRowData] = useState(undefined);
-  const { removeItems, visible } = props;
+  const { removeItems, visible, t, i18nKeyPrefix, label } = props;
+
+  const translations = useMemo(
+    () =>
+      getArrayTranslations(t, arrayDefaultTranslations, i18nKeyPrefix, label),
+    [t, i18nKeyPrefix, label]
+  );
 
   const openDeleteDialog = useCallback(
     (p: string, rowIndex: number) => {
@@ -63,16 +77,20 @@ export const MaterialArrayControlRenderer = (props: ArrayLayoutProps) => {
 
   return (
     <>
-      <MaterialTableControl {...props} openDeleteDialog={openDeleteDialog} />
+      <MaterialTableControl
+        {...props}
+        openDeleteDialog={openDeleteDialog}
+        translations={translations}
+      />
       <DeleteDialog
         open={open}
         onCancel={deleteCancel}
         onConfirm={deleteConfirm}
         onClose={deleteClose}
-        acceptText={props.translations.deleteDialogAccept}
-        declineText={props.translations.deleteDialogDecline}
-        title={props.translations.deleteDialogTitle}
-        message={props.translations.deleteDialogMessage}
+        acceptText={translations.deleteDialogAccept}
+        declineText={translations.deleteDialogDecline}
+        title={translations.deleteDialogTitle}
+        message={translations.deleteDialogMessage}
       />
     </>
   );
@@ -83,4 +101,6 @@ export const materialArrayControlTester: RankedTester = rankWith(
   or(isObjectArrayControl, isPrimitiveArrayControl)
 );
 
-export default withJsonFormsArrayLayoutProps(MaterialArrayControlRenderer);
+export default withJsonFormsArrayLayoutProps(
+  withTranslateProps(MaterialArrayControlRenderer)
+);

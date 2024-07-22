@@ -47,13 +47,8 @@ import {
   getI18nKey,
   getI18nKeyPrefix,
   getI18nKeyPrefixBySchema,
-  getArrayTranslations,
-  CombinatorTranslations,
-  getCombinatorTranslations,
-  combinatorDefaultTranslations,
   getTranslator,
   getErrorTranslator,
-  arrayDefaultTranslations,
   ArrayTranslations,
 } from '../i18n';
 import cloneDeep from 'lodash/cloneDeep';
@@ -789,7 +784,6 @@ export interface ControlWithDetailProps
  */
 export interface StatePropsOfArrayControl
   extends StatePropsOfControlWithDetail {
-  translations: ArrayTranslations;
   childErrors?: ErrorObject[];
 }
 
@@ -804,12 +798,11 @@ export const mapStateToArrayControlProps = (
   state: JsonFormsState,
   ownProps: OwnPropsOfControl
 ): StatePropsOfArrayControl => {
-  const { path, schema, uischema, i18nKeyPrefix, label, ...props } =
+  const { path, schema, uischema, label, ...props } =
     mapStateToControlWithDetailProps(state, ownProps);
 
   const resolvedSchema = Resolve.schema(schema, 'items', props.rootSchema);
   const childErrors = getSubErrorsAt(path, resolvedSchema)(state);
-  const t = getTranslator()(state);
 
   return {
     ...props,
@@ -820,12 +813,6 @@ export const mapStateToArrayControlProps = (
     childErrors,
     renderers: ownProps.renderers || getRenderers(state),
     cells: ownProps.cells || getCells(state),
-    translations: getArrayTranslations(
-      t,
-      arrayDefaultTranslations,
-      i18nKeyPrefix,
-      label
-    ),
   };
 };
 
@@ -1060,7 +1047,6 @@ export interface StatePropsOfCombinator extends StatePropsOfControl {
   indexOfFittingSchema: number;
   uischemas: JsonFormsUISchemaRegistryEntry[];
   data: any;
-  translations: CombinatorTranslations;
 }
 
 export const mapStateToCombinatorRendererProps = (
@@ -1072,13 +1058,6 @@ export const mapStateToCombinatorRendererProps = (
     mapStateToControlProps(state, ownProps);
 
   const ajv = state.jsonforms.core.ajv;
-  const t = getTranslator()(state);
-  const translations = getCombinatorTranslations(
-    t,
-    combinatorDefaultTranslations,
-    i18nKeyPrefix,
-    label
-  );
   const structuralKeywords = [
     'required',
     'additionalProperties',
@@ -1125,7 +1104,6 @@ export const mapStateToCombinatorRendererProps = (
     label,
     indexOfFittingSchema,
     uischemas: getUISchemas(state),
-    translations,
   };
 };
 
@@ -1160,7 +1138,6 @@ export const mapStateToOneOfProps = (
 
 export interface StatePropsOfArrayLayout extends StatePropsOfControlWithDetail {
   data: number;
-  translations: ArrayTranslations;
   minItems?: number;
   disableRemove?: boolean;
   disableAdd?: boolean;
@@ -1176,7 +1153,7 @@ export const mapStateToArrayLayoutProps = (
   state: JsonFormsState,
   ownProps: OwnPropsOfControl
 ): StatePropsOfArrayLayout => {
-  const { path, schema, uischema, errors, i18nKeyPrefix, label, ...props } =
+  const { path, schema, uischema, errors, label, ...props } =
     mapStateToControlWithDetailProps(state, ownProps);
 
   const resolvedSchema = Resolve.schema(schema, 'items', props.rootSchema);
@@ -1204,12 +1181,6 @@ export const mapStateToArrayLayoutProps = (
     data: props.data ? props.data.length : 0,
     errors: allErrors,
     minItems: schema.minItems,
-    translations: getArrayTranslations(
-      t,
-      arrayDefaultTranslations,
-      i18nKeyPrefix,
-      label
-    ),
   };
 };
 
