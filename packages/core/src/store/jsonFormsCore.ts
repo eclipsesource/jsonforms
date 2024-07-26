@@ -34,7 +34,7 @@ export const errorAt = (instancePath: string, schema: JsonSchema) =>
   getErrorsAt(instancePath, schema, (path) => path === instancePath);
 export const subErrorsAt = (instancePath: string, schema: JsonSchema) =>
   getErrorsAt(instancePath, schema, (path) =>
-    path.startsWith(instancePath + '.')
+    path.startsWith(instancePath + '/')
   );
 
 export const getErrorAt =

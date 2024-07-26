@@ -48,7 +48,7 @@ const MaterialArrayLayoutComponent = (props: ArrayLayoutProps) => {
     []
   );
   const isExpanded = (index: number) =>
-    expanded === composePaths(props.path, `${index}`);
+    expanded === composePaths(props.path, index);
 
   const {
     enabled,
