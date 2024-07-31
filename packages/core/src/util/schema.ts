@@ -27,7 +27,7 @@ import find from 'lodash/find';
 import type { JsonSchema } from '../models';
 
 export const getFirstPrimitiveProp = (schema: any) => {
-  if (schema.properties) {
+  if (schema?.properties) {
     return find(Object.keys(schema.properties), (propName) => {
       const prop = schema.properties[propName];
       return (

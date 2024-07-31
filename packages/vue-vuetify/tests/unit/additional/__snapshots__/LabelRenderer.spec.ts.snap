@@ -1,0 +1,9 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`LabelRenderer.vue > should render component and match snapshot 1`] = `
+"<div class="v-application v-theme--light v-layout v-layout--full-height v-locale--is-ltr">
+  <div class="v-application__wrap"><label class="v-label label-element">
+      <!---->My Label
+    </label></div>
+</div>"
+`;
