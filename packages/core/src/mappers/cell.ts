@@ -24,19 +24,7 @@
 */
 
 import isEmpty from 'lodash/isEmpty';
-import {
-  getErrorTranslator,
-  getAjv,
-  getConfig,
-  getData,
-  getErrorAt,
-  getSchema,
-  getTranslator,
-} from '../reducers';
-import type { JsonFormsCellRendererRegistryEntry } from '../reducers';
-import type { AnyAction, Dispatch } from './type';
-import { Resolve } from './util';
-import { isInherentlyEnabled, isVisible } from './runtime';
+import { isVisible, Resolve } from '../util';
 import {
   DispatchPropsOfControl,
   EnumOption,
@@ -47,9 +35,25 @@ import {
   OwnPropsOfEnum,
   StatePropsOfScopedRenderer,
 } from './renderer';
-import { getCombinedErrorMessage, getI18nKeyPrefix } from '../i18n';
-import type { JsonFormsState } from '../store';
+import {
+  getCombinedErrorMessage,
+  getErrorTranslator,
+  getI18nKeyPrefix,
+  getTranslator,
+} from '../i18n';
 import type { JsonSchema } from '../models';
+import {
+  AnyAction,
+  Dispatch,
+  getAjv,
+  getConfig,
+  getData,
+  getErrorAt,
+  getSchema,
+  JsonFormsCellRendererRegistryEntry,
+  JsonFormsState,
+} from '../store';
+import { isInherentlyEnabled } from './util';
 
 export interface OwnPropsOfCell extends OwnPropsOfControl {
   data?: any;

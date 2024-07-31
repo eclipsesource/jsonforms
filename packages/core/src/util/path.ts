@@ -25,7 +25,6 @@
 
 import isEmpty from 'lodash/isEmpty';
 import range from 'lodash/range';
-import { isScoped, Scopable } from '../models';
 
 export const compose = (path1: string, path2: string) => {
   let p1 = path1;
@@ -85,20 +84,6 @@ export const toDataPath = (schemaPath: string): string => {
   return toDataPathSegments(schemaPath).join('.');
 };
 
-export const composeWithUi = (scopableUi: Scopable, path: string): string => {
-  if (!isScoped(scopableUi)) {
-    return path ?? '';
-  }
-
-  const segments = toDataPathSegments(scopableUi.scope);
-
-  if (isEmpty(segments)) {
-    return path ?? '';
-  }
-
-  return compose(path, segments.join('.'));
-};
-
 /**
  * Encodes the given segment to be used as part of a JSON Pointer
  *
@@ -111,3 +96,15 @@ export const encode = (segment: string) =>
  */
 export const decode = (pointerSegment: string) =>
   pointerSegment?.replace(/~1/g, '/').replace(/~0/, '~');
+
+/**
+ * Transform a dotted path to a uiSchema properties path
+ * @param path a dotted prop path to a schema value (i.e. articles.comment.author)
+ * @return the uiSchema properties path (i.e. /properties/articles/properties/comment/properties/author)
+ */
+export const getPropPath = (path: string): string => {
+  return `/properties/${path
+    .split('.')
+    .map((p) => encode(p))
+    .join('/properties/')}`;
+};

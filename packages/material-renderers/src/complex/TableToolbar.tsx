@@ -38,7 +38,7 @@ import {
   FormHelperText,
   Stack,
 } from '@mui/material';
-import { Add as AddIcon } from '@mui/icons-material';
+import AddIcon from '@mui/icons-material/Add';
 import ValidationIcon from './ValidationIcon';
 import NoBorderTableCell from './NoBorderTableCell';
 

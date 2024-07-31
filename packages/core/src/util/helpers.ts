@@ -23,8 +23,9 @@
   THE SOFTWARE.
 */
 
-import { convertToValidClassName, createLabelDescriptionFrom } from './util';
-import type { ControlElement, JsonSchema, LabelDescription } from './models';
+import type { ControlElement, JsonSchema, LabelDescription } from '../models';
+import { createLabelDescriptionFrom } from './label';
+import { convertToValidClassName } from './util';
 
 export const Helpers: {
   createLabelDescriptionFrom(
