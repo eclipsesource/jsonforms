@@ -158,7 +158,7 @@ export class TableRenderer extends JsonFormsArrayControl implements OnInit {
   moveItemUp: (path: string, index: number) => () => void;
   moveItemDown: (path: string, index: number) => () => void;
   removeItems: (path: string, toDelete: number[]) => () => void;
-  translations: ArrayTranslations;
+  translations: ArrayTranslations = {};
 
   constructor(jsonformsService: JsonFormsAngularService) {
     super(jsonformsService);
@@ -166,7 +166,9 @@ export class TableRenderer extends JsonFormsArrayControl implements OnInit {
   trackElement(index: number, _element: any) {
     return index ? index : null;
   }
-  mapAdditionalProps(props: ArrayControlProps) {
+  mapAdditionalProps(
+    props: ArrayControlProps & { translations: ArrayTranslations }
+  ) {
     this.items = this.generateCells(props.schema, props.path);
     this.displayedColumns = this.items.map((item) => item.property);
     if (this.isEnabled()) {
