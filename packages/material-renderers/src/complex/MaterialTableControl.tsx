@@ -451,7 +451,8 @@ const TableRows = ({
 };
 
 export class MaterialTableControl extends React.Component<
-  ArrayLayoutProps & WithDeleteDialogSupport,
+  ArrayLayoutProps &
+    WithDeleteDialogSupport & { translations: ArrayTranslations },
   any
 > {
   addItem = (path: string, value: any) => this.props.addItem(path, value);
