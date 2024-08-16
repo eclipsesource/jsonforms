@@ -1887,7 +1887,7 @@ test('mapStateToControlProps - required is calculated correctly from encoded JSO
     visible: true,
     uischema,
     path: 'foo',
-    schema
+    schema,
   };
   const state = {
     jsonforms: {

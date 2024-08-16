@@ -73,7 +73,7 @@ import {
   isVisible,
   Resolve,
   resolveSchema,
-  decode
+  decode,
 } from '../util';
 import {
   Translator,
