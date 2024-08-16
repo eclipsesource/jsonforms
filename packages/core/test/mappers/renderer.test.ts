@@ -1871,6 +1871,38 @@ test('mapStateToControlProps - i18n errors - custom keyword wins over all other 
   t.is(props.errors, 'this is my error custom error message');
 });
 
+test('mapStateToControlProps - required is calculated correctly from encoded JSON Pointer', (t) => {
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/~1firstName',
+  };
+  const schema = {
+    type: 'object',
+    properties: {
+      '/firstName': { type: 'string' },
+    },
+    required: ['/firstName'],
+  };
+  const ownProps = {
+    visible: true,
+    uischema,
+    path: 'foo',
+    schema,
+  };
+  const state = {
+    jsonforms: {
+      core: {
+        schema,
+        data: {},
+        uischema,
+        errors: [] as ErrorObject[],
+      },
+    },
+  };
+  const props = mapStateToControlProps(state, ownProps);
+  t.true(props.required === true);
+});
+
 test('mapStateToEnumControlProps - i18n - should not crash without i18n', (t) => {
   const ownProps = {
     uischema: coreUISchema,
