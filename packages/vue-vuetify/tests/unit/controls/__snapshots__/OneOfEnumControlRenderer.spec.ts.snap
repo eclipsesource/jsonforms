@@ -1,176 +1,127 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`OneOfEnumControlRenderer.vue should render component and match snapshot 1`] = `
-<div data-app="true"
-     class="v-application v-application--is-ltr theme--light"
-     id="app"
->
-  <div class="v-application--wrap">
-    <div id="#"
-         class="control"
-         appliedoptions="[object Object]"
-         errors
-         label="My OneOf Enum"
-    >
-      <div class="v-input v-input--is-label-active v-input--is-dirty theme--light v-text-field v-select input">
+exports[`OneOfEnumControlRenderer.vue > should render component and match snapshot 1`] = `
+"<div class="v-application v-theme--light v-layout v-layout--full-height v-locale--is-ltr">
+  <div class="v-application__wrap">
+    <div class="control" id="#4" errors="" label="My OneOf Enum" required="false" isfocused="false" appliedoptions="[object Object]">
+      <div class="v-input v-input--horizontal v-input--center-affix v-input--density-default v-theme--light v-locale--is-ltr v-input--dirty v-text-field v-select v-select--single v-select--selected input">
+        <!---->
         <div class="v-input__control">
-          <div role="button"
-               aria-haspopup="listbox"
-               aria-expanded="false"
-               aria-owns="list-66"
-               class="v-input__slot"
-          >
-            <div class="v-select__slot">
-              <label for="#-input"
-                     class="v-label v-label--active theme--light"
-                     style="left: 0px; position: absolute;"
-              >
-                My OneOf Enum
+          <div class="v-field v-field--active v-field--appended v-field--center-affix v-field--dirty v-field--variant-filled v-theme--light v-locale--is-ltr" role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-owns="v-menu-2">
+            <div class="v-field__overlay"></div>
+            <div class="v-field__loader">
+              <div class="v-progress-linear v-theme--light v-locale--is-ltr" style="top: 0px; height: 0px; --v-progress-linear-height: 2px;" role="progressbar" aria-hidden="true" aria-valuemin="0" aria-valuemax="100">
+                <!---->
+                <div class="v-progress-linear__background"></div>
+                <div class="v-progress-linear__buffer" style="width: 0%;"></div>
+                <transition-stub name="fade-transition" appear="false" persisted="false" css="true">
+                  <div class="v-progress-linear__indeterminate">
+                    <div class="v-progress-linear__indeterminate long"></div>
+                    <div class="v-progress-linear__indeterminate short"></div>
+                  </div>
+                </transition-stub>
+                <!---->
+              </div>
+            </div>
+            <!---->
+            <div class="v-field__field" data-no-activator=""><label class="v-label v-field-label v-field-label--floating" aria-hidden="true" for="#4-input">
+                <!---->My OneOf Enum
+              </label><label class="v-label v-field-label" for="#4-input">
+                <!---->My OneOf Enum
               </label>
-              <div class="v-select__selections">
-                <div class="v-select__selection v-select__selection--comma">
-                  Foo
-                </div>
-                <input id="#-input"
-                       readonly="readonly"
-                       type="text"
-                       aria-readonly="false"
-                       autocomplete="off"
-                >
+              <!---->
+              <div class="v-field__input" data-no-activator="">
+                <!---->
+                <!---->
+                <div class="v-select__selection"><span class="v-select__selection-text">Foo<!----></span></div><input size="1" type="text" id="#4-input" aria-describedby="#4-input-messages" inputmode="none" aria-label="Open" title="Open">
               </div>
-              <div class="v-input__append-inner">
-                <div class="v-input__icon v-input__icon--append">
-                  <i aria-hidden="true"
-                     class="v-icon notranslate mdi mdi-menu-down theme--light"
-                  >
-                  </i>
-                </div>
-              </div>
-              <input type="hidden"
-                     value="a"
-              >
+              <!---->
             </div>
-            <div class="v-menu">
+            <transition-stub name="expand-x-transition" appear="false" persisted="false" css="true">
+              <div class="v-field__clearable"><i class="mdi-close-circle mdi v-icon notranslate v-theme--light v-icon--size-default v-icon--clickable" role="button" aria-hidden="false" tabindex="-1" aria-label="Clear My OneOf Enum"></i></div>
+            </transition-stub>
+            <div class="v-field__append-inner">
+              <!----><i class="mdi-menu-down mdi v-icon notranslate v-theme--light v-icon--size-default v-select__menu-icon" aria-hidden="true"></i>
+              <!---->
+            </div>
+            <div class="v-field__outline">
+              <!---->
+              <!---->
             </div>
           </div>
-          <div class="v-text-field__details">
-            <div class="v-messages theme--light">
-              <transition-group-stub tag="div"
-                                     name="message-transition"
-                                     class="v-messages__wrapper"
-              >
-              </transition-group-stub>
-            </div>
-          </div>
+        </div>
+        <!---->
+        <div class="v-input__details">
+          <transition-group-stub name="slide-y-transition" tag="div" appear="false" persisted="false" css="true" class="v-messages" role="alert" aria-live="polite" id="#4-input-messages">
+            <!---->
+          </transition-group-stub>
+          <!---->
         </div>
       </div>
     </div>
   </div>
-</div>
+</div>"
 `;
 
-exports[`OneOfEnumControlRenderer.vue should render component and match snapshot when clicked 1`] = `
-<div data-app="true"
-     class="v-application v-application--is-ltr theme--light"
-     id="app"
->
-  <div class="v-application--wrap">
-    <div id="#"
-         class="control"
-         appliedoptions="[object Object]"
-         errors
-         label="My OneOf Enum"
-         isfocused="true"
-    >
-      <div class="v-input v-input--is-label-active v-input--is-dirty v-input--is-focused theme--light v-text-field v-select v-select--is-menu-active primary--text input">
+exports[`OneOfEnumControlRenderer.vue > should render component and match snapshot when clicked 1`] = `
+"<div class="v-application v-theme--light v-layout v-layout--full-height v-locale--is-ltr">
+  <div class="v-application__wrap">
+    <div class="control" id="#5" errors="" label="My OneOf Enum" required="false" isfocused="true" appliedoptions="[object Object]">
+      <div class="v-input v-input--horizontal v-input--center-affix v-input--density-default v-theme--light v-locale--is-ltr v-input--dirty v-text-field v-select v-select--single v-select--selected input">
+        <!---->
         <div class="v-input__control">
-          <div role="button"
-               aria-haspopup="listbox"
-               aria-expanded="true"
-               aria-owns="list-79"
-               class="v-input__slot"
-          >
-            <div class="v-select__slot">
-              <label for="#-input"
-                     class="v-label v-label--active theme--light primary--text"
-                     style="left: 0px; position: absolute;"
-              >
-                My OneOf Enum
+          <div class="v-field v-field--active v-field--appended v-field--center-affix v-field--dirty v-field--variant-filled v-theme--light v-field--focused v-locale--is-ltr" role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-owns="v-menu-2">
+            <div class="v-field__overlay"></div>
+            <div class="v-field__loader">
+              <div class="v-progress-linear v-theme--light v-locale--is-ltr" style="top: 0px; height: 0px; --v-progress-linear-height: 2px;" role="progressbar" aria-hidden="true" aria-valuemin="0" aria-valuemax="100">
+                <!---->
+                <div class="v-progress-linear__background"></div>
+                <div class="v-progress-linear__buffer" style="width: 0%;"></div>
+                <transition-stub name="fade-transition" appear="false" persisted="false" css="true">
+                  <div class="v-progress-linear__indeterminate">
+                    <div class="v-progress-linear__indeterminate long"></div>
+                    <div class="v-progress-linear__indeterminate short"></div>
+                  </div>
+                </transition-stub>
+                <!---->
+              </div>
+            </div>
+            <!---->
+            <div class="v-field__field" data-no-activator=""><label class="v-label v-field-label v-field-label--floating" aria-hidden="true" for="#5-input">
+                <!---->My OneOf Enum
+              </label><label class="v-label v-field-label" for="#5-input">
+                <!---->My OneOf Enum
               </label>
-              <div class="v-select__selections">
-                <div class="v-select__selection v-select__selection--comma">
-                  Foo
-                </div>
-                <input id="#-input"
-                       readonly="readonly"
-                       type="text"
-                       aria-readonly="false"
-                       autocomplete="off"
-                >
+              <!---->
+              <div class="v-field__input" data-no-activator="">
+                <!---->
+                <!---->
+                <div class="v-select__selection"><span class="v-select__selection-text">Foo<!----></span></div><input size="1" type="text" id="#5-input" aria-describedby="#5-input-messages" inputmode="none" aria-label="Open" title="Open">
               </div>
-              <div class="v-input__append-inner">
-                <div class="v-input__icon v-input__icon--append">
-                  <i aria-hidden="true"
-                     class="v-icon notranslate mdi mdi-menu-down theme--light primary--text"
-                  >
-                  </i>
-                </div>
-              </div>
-              <input type="hidden"
-                     value="a"
-              >
+              <!---->
             </div>
-            <div class="v-menu">
-              <transition-stub name="v-menu-transition">
-              </transition-stub>
+            <transition-stub name="expand-x-transition" appear="false" persisted="false" css="true">
+              <div class="v-field__clearable"><i class="mdi-close-circle mdi v-icon notranslate v-theme--light v-icon--size-default v-icon--clickable" role="button" aria-hidden="false" tabindex="-1" aria-label="Clear My OneOf Enum"></i></div>
+            </transition-stub>
+            <div class="v-field__append-inner">
+              <!----><i class="mdi-menu-down mdi v-icon notranslate v-theme--light v-icon--size-default v-select__menu-icon" aria-hidden="true"></i>
+              <!---->
+            </div>
+            <div class="v-field__outline">
+              <!---->
+              <!---->
             </div>
           </div>
-          <div class="v-text-field__details">
-            <div class="v-messages theme--light primary--text">
-              <transition-group-stub tag="div"
-                                     name="message-transition"
-                                     class="v-messages__wrapper"
-              >
-              </transition-group-stub>
-            </div>
-          </div>
+        </div>
+        <!---->
+        <div class="v-input__details">
+          <transition-group-stub name="slide-y-transition" tag="div" appear="false" persisted="false" css="true" class="v-messages" role="alert" aria-live="polite" id="#5-input-messages">
+            <!---->
+          </transition-group-stub>
+          <!---->
         </div>
       </div>
     </div>
   </div>
-  <div class="v-menu__content theme--light menuable__content__active "
-       style="max-height: 304px; min-width: 0px; max-width: auto; top: 12px; left: 0px; transform-origin: top left; z-index: 8; display: none;"
-  >
-    <div role="listbox"
-         tabindex="-1"
-         class="v-list v-select-list v-sheet theme--light theme--light"
-         id="list-79"
-    >
-      <div tabindex="0"
-           aria-selected="true"
-           id="list-item-86-0"
-           role="option"
-           class="v-list-item primary--text v-list-item--active v-list-item--link theme--light"
-      >
-        <div class="v-list-item__content">
-          <div class="v-list-item__title">
-            Foo
-          </div>
-        </div>
-      </div>
-      <div tabindex="0"
-           aria-selected="false"
-           id="list-item-86-1"
-           role="option"
-           class="v-list-item v-list-item--link theme--light"
-      >
-        <div class="v-list-item__content">
-          <div class="v-list-item__title">
-            Bar
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+</div>"
 `;

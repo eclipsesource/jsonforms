@@ -12,4 +12,4 @@ export const extendedRenderers = [
 export {
   autocompleteEnumControlRendererEntry,
   autocompleteOneOfEnumControlRendererEntry,
-}
+};

@@ -1,5 +1,5 @@
+import { describe, it, expect, beforeEach } from 'vitest';
 import { clearAllIds } from '@jsonforms/core';
-import { Wrapper } from '@vue/test-utils';
 import DateTimeControlRenderer, {
   entry as dateTimeControlRendererEntry,
 } from '../../../src/controls/DateTimeControlRenderer.vue';
@@ -19,19 +19,16 @@ describe('DateTimeControlRenderer.vue', () => {
     scope: '#',
     options: {
       placeholder: 'date-time placeholder',
+      dateTimeFormat: 'YYYY-MM-DDTHH:mm',
       dateTimeSaveFormat: 'YYYY-MM-DDTHH:mm:ss',
     },
   };
-  let wrapper: Wrapper<any, Element>;
+  let wrapper: ReturnType<typeof mountJsonForms>;
 
   beforeEach(() => {
     // clear all ids to guarantee that the snapshots will always be generated with the same ids
     clearAllIds();
     wrapper = mountJsonForms(data, schema, renderers, uischema);
-  });
-
-  afterEach(() => {
-    wrapper.destroy();
   });
 
   it('check if child DateTimeControlRenderer exists', () => {
@@ -49,12 +46,11 @@ describe('DateTimeControlRenderer.vue', () => {
   it('emits a data change', async () => {
     const input = wrapper.find('input[type="text"]');
     await input.setValue('2021-03-10T21:10');
-    expect(wrapper.vm.$data.data).toEqual('2021-03-10T21:10:00');
+    expect(wrapper.vm.$data.event.data).toEqual('2021-03-10T21:10:00');
   });
 
   it('should have a placeholder', async () => {
     const input = wrapper.find('input[type="text"]');
-    await input.trigger('focus');
     const placeholder = input.attributes('placeholder');
     expect(placeholder).toEqual('date-time placeholder');
   });

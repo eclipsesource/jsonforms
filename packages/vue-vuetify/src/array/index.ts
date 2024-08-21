@@ -1,7 +1,7 @@
 import {
-  JsonFormsRendererRegistryEntry,
   rankWith,
   schemaTypeIs,
+  type JsonFormsRendererRegistryEntry,
 } from '@jsonforms/core';
 import { ArrayLayoutRenderer } from '../layouts';
 

@@ -32,4 +32,4 @@ export {
   objectRendererEntry,
   oneOfRendererEntry,
   oneOfTabRendererEntry,
-}
+};

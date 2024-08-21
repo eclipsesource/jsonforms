@@ -1,7 +1,7 @@
 export const DisabledIconFocus = {
   updated(el: HTMLElement): void {
-    el.querySelectorAll('.v-input__icon button').forEach((x) =>
-      x.setAttribute('tabindex', '-1')
+    el.querySelectorAll('.v-field__clearable i').forEach((x) =>
+      x.setAttribute('tabindex', '-1'),
     );
   },
 };

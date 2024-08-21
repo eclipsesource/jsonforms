@@ -6,9 +6,8 @@
       :path="path"
     />
 
-    <v-tabs v-model="tabIndex">
+    <v-tabs v-model="tabIndex" @update:model-value="handleTabChange">
       <v-tab
-        @change="handleTabChange"
         v-for="(oneOfRenderInfo, oneOfIndex) in oneOfRenderInfos"
         :key="`${control.path}-${oneOfIndex}`"
       >
@@ -35,18 +34,23 @@
 
     <v-dialog v-model="dialog" persistent max-width="600" @keydown.esc="cancel">
       <v-card>
-        <v-card-title class="text-h5"> Clear form? </v-card-title>
+        <v-card-title class="text-h5">
+          {{ control.translations.clearDialogTitle }}
+        </v-card-title>
 
         <v-card-text>
-          Your data will be cleared if you navigate away from this tab. Do you
-          want to proceed?
+          {{ control.translations.clearDialogMessage }}
         </v-card-text>
 
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <v-btn text @click="cancel"> No </v-btn>
-          <v-btn text ref="confirm" @click="confirm"> Yes </v-btn>
+          <v-btn variant="text" @click="cancel">
+            {{ control.translations.clearDialogDecline }}
+          </v-btn>
+          <v-btn variant="text" ref="confirm" @click="confirm">
+            {{ control.translations.clearDialogAccept }}
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -56,19 +60,19 @@
 <script lang="ts">
 import {
   and,
-  CombinatorSubSchemaRenderInfo,
-  ControlElement,
+  type CombinatorSubSchemaRenderInfo,
+  type ControlElement,
   createCombinatorRenderInfos,
   createDefaultValue,
   isOneOfControl,
-  JsonFormsRendererRegistryEntry,
+  type JsonFormsRendererRegistryEntry,
   optionIs,
   rankWith,
 } from '@jsonforms/core';
 import {
   DispatchRenderer,
   rendererProps,
-  RendererProps,
+  type RendererProps,
   useJsonFormsOneOfControl,
 } from '@jsonforms/vue';
 import isEmpty from 'lodash/isEmpty';
@@ -135,7 +139,7 @@ const controlRenderer = defineComponent({
         'oneOf',
         this.control.uischema,
         this.control.path,
-        this.control.uischemas
+        this.control.uischemas,
       );
       return result.filter((info) => info.uischema);
     },
@@ -152,7 +156,7 @@ const controlRenderer = defineComponent({
         // this.$nextTick does not work so use setTimeout
         setTimeout(() =>
           // cast to 'any' instead of 'Vue' because of Typescript problems (excessive stack depth when comparing types) during rollup build
-          ((this.$refs.confirm as any).$el as HTMLElement).focus()
+          ((this.$refs.confirm as any).$el as HTMLElement).focus(),
         );
       } else {
         this.$nextTick(() => {
@@ -172,9 +176,9 @@ const controlRenderer = defineComponent({
       this.handleChange(
         this.path,
         createDefaultValue(
-            this.oneOfRenderInfos[this.newSelectedIndex].schema,
-            this.control.rootSchema
-        )
+          this.oneOfRenderInfos[this.newSelectedIndex].schema,
+          this.control.rootSchema,
+        ),
       );
       this.tabIndex = this.newSelectedIndex;
       this.selectedIndex = this.newSelectedIndex;

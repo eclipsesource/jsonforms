@@ -18,10 +18,11 @@
       :error-messages="control.errors"
       :input-value="control.data"
       :model-value="control.data"
+      :indeterminate="control.data === undefined"
       :true-value="true"
       :false-value="false"
       v-bind="vuetifyProps('v-switch')"
-      @update:modelValue="onChange"
+      @update:model-value="onChange"
       @focus="handleFocus"
       @blur="handleBlur"
     />
@@ -30,22 +31,22 @@
 
 <script lang="ts">
 import {
-  ControlElement,
-  JsonFormsRendererRegistryEntry,
-  rankWith,
+  and,
   isBooleanControl,
   optionIs,
-  and,
+  rankWith,
+  type ControlElement,
+  type JsonFormsRendererRegistryEntry,
 } from '@jsonforms/core';
-import { defineComponent } from 'vue';
 import {
   rendererProps,
   useJsonFormsControl,
-  RendererProps,
+  type RendererProps,
 } from '@jsonforms/vue';
-import { default as ControlWrapper } from './ControlWrapper.vue';
-import { useVuetifyControl } from '../util';
+import { defineComponent } from 'vue';
 import { VSwitch } from 'vuetify/components';
+import { useVuetifyControl } from '../util';
+import { default as ControlWrapper } from './ControlWrapper.vue';
 
 const controlRenderer = defineComponent({
   name: 'boolean-toggle-control-renderer',
@@ -57,10 +58,7 @@ const controlRenderer = defineComponent({
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    return useVuetifyControl(
-      useJsonFormsControl(props),
-      (value) => value || false
-    );
+    return useVuetifyControl(useJsonFormsControl(props));
   },
 });
 

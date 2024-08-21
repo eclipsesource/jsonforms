@@ -6,9 +6,13 @@
     :appliedOptions="appliedOptions"
   >
     <v-text-field
-      :type="passwordVisible ? 'text' : 'password'"
-      :append-icon="passwordVisible ? 'mdi-eye' : 'mdi-eye-off'"
-      @click:append="() => (passwordVisible = !passwordVisible)"
+      :type="showPassword ? 'text' : 'password'"
+      :append-icon="
+        showPassword
+          ? icons.current.value.passwordHide
+          : icons.current.value.passwordShow
+      "
+      @click:append="() => (showPassword = !showPassword)"
       :id="control.id + '-input'"
       :class="styles.control.input"
       :disabled="!control.enabled"
@@ -38,22 +42,22 @@
 
 <script lang="ts">
 import {
-  ControlElement,
-  JsonFormsRendererRegistryEntry,
-  rankWith,
-  isStringControl,
   and,
   formatIs,
+  isStringControl,
+  rankWith,
+  type ControlElement,
+  type JsonFormsRendererRegistryEntry,
 } from '@jsonforms/core';
-import { defineComponent, ref } from 'vue';
 import {
   rendererProps,
   useJsonFormsControl,
-  RendererProps,
+  type RendererProps,
 } from '@jsonforms/vue';
-import { default as ControlWrapper } from './ControlWrapper.vue';
-import { useVuetifyControl } from '../util';
+import { defineComponent, ref } from 'vue';
 import { VTextField } from 'vuetify/components';
+import { useIcons, useVuetifyControl } from '../util';
+import { default as ControlWrapper } from './ControlWrapper.vue';
 
 const controlRenderer = defineComponent({
   name: 'password-control-renderer',
@@ -65,15 +69,17 @@ const controlRenderer = defineComponent({
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    const passwordVisible = ref(false);
+    const showPassword = ref(false);
+    const icons = useIcons();
 
     return {
       ...useVuetifyControl(
         useJsonFormsControl(props),
         (value) => value || undefined,
-        300
+        300,
       ),
-      passwordVisible,
+      showPassword,
+      icons,
     };
   },
 });

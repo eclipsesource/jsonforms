@@ -1,4 +1,4 @@
-import { Styles } from './styles';
+import type { Styles } from './styles';
 
 export const defaultStyles: Styles = {
   control: {
@@ -23,7 +23,6 @@ export const defaultStyles: Styles = {
   arrayList: {
     root: 'array-list',
     toolbar: 'array-list-toolbar',
-    title: 'array-list-title',
     validationIcon: 'array-list-validation',
     addButton: 'array-list-add',
     label: 'array-list-label',

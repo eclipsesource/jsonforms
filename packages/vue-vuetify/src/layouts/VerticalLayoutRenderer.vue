@@ -6,7 +6,7 @@
     v-bind="vuetifyProps('v-container')"
   >
     <v-row
-      v-for="(element, index) in layout.uischema.elements"
+      v-for="(element, index) in (layout.uischema as Layout).elements"
       :key="`${layout.path}-${index}`"
       v-bind="vuetifyProps(`v-row[${index}]`)"
     >
@@ -30,20 +30,20 @@
 
 <script lang="ts">
 import {
-  uiTypeIs,
-  JsonFormsRendererRegistryEntry,
-  Layout,
   rankWith,
+  uiTypeIs,
+  type JsonFormsRendererRegistryEntry,
+  type Layout,
 } from '@jsonforms/core';
-import { defineComponent } from 'vue';
 import {
   DispatchRenderer,
   rendererProps,
   useJsonFormsLayout,
-  RendererProps,
+  type RendererProps,
 } from '@jsonforms/vue';
+import { defineComponent } from 'vue';
+import { VCol, VContainer, VRow } from 'vuetify/components';
 import { useVuetifyLayout } from '../util';
-import { VContainer, VRow, VCol } from 'vuetify/components';
 
 const layoutRenderer = defineComponent({
   name: 'vertical-layout-renderer',

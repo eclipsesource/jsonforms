@@ -6,7 +6,7 @@
   >
     <v-row v-bind="vuetifyProps('v-row')">
       <v-col
-        v-for="(element, index) in layout.uischema.elements"
+        v-for="(element, index) in (layout.uischema as Layout).elements"
         :key="`${layout.path}-${index}`"
         :class="styles.horizontalLayout.item"
         :cols="cols[index]"
@@ -27,20 +27,21 @@
 
 <script lang="ts">
 import {
-  uiTypeIs,
-  JsonFormsRendererRegistryEntry,
-  Layout,
   rankWith,
+  uiTypeIs,
+  type JsonFormsRendererRegistryEntry,
+  type Layout,
 } from '@jsonforms/core';
-import { defineComponent } from 'vue';
 import {
   DispatchRenderer,
   rendererProps,
   useJsonFormsLayout,
-  RendererProps,
+  type RendererProps,
 } from '@jsonforms/vue';
+import { defineComponent } from 'vue';
+import { useDisplay } from 'vuetify';
+import { VCol, VContainer, VRow } from 'vuetify/components';
 import { useVuetifyLayout } from '../util';
-import { VContainer, VRow, VCol } from 'vuetify/components';
 
 const layoutRenderer = defineComponent({
   name: 'horizontal-layout-renderer',
@@ -54,29 +55,42 @@ const layoutRenderer = defineComponent({
     ...rendererProps<Layout>(),
   },
   setup(props: RendererProps<Layout>) {
-    return useVuetifyLayout(useJsonFormsLayout(props));
+    const { xs, sm, md, lg, xl } = useDisplay();
+    return {
+      ...useVuetifyLayout(useJsonFormsLayout(props)),
+      xs,
+      sm,
+      md,
+      lg,
+      xl,
+    };
   },
   computed: {
     collapse() {
-      const { xs, sm, md, lg, xl } = this.$vuetify.display;
-      if (this.appliedOptions.breakHorizontal === 'xs' && xs) {
+      if (this.appliedOptions.breakHorizontal === 'xs' && this.xs) {
         return true;
       }
-      if (this.appliedOptions.breakHorizontal === 'sm' && (xs || sm)) {
+      if (
+        this.appliedOptions.breakHorizontal === 'sm' &&
+        (this.xs || this.sm)
+      ) {
         return true;
       }
-      if (this.appliedOptions.breakHorizontal === 'md' && (xs || sm || md)) {
+      if (
+        this.appliedOptions.breakHorizontal === 'md' &&
+        (this.xs || this.sm || this.md)
+      ) {
         return true;
       }
       if (
         this.appliedOptions.breakHorizontal === 'lg' &&
-        (xs || sm || md || lg)
+        (this.xs || this.sm || this.md || this.lg)
       ) {
         return true;
       }
       if (
         this.appliedOptions.breakHorizontal === 'xl' &&
-        (xs || sm || md || lg || xl)
+        (this.xs || this.sm || this.md || this.lg || this.xl)
       ) {
         return true;
       }

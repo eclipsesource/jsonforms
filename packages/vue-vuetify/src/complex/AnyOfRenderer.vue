@@ -36,17 +36,17 @@
 
 <script lang="ts">
 import {
-  CombinatorSubSchemaRenderInfo,
-  ControlElement,
+  type CombinatorSubSchemaRenderInfo,
+  type ControlElement,
   createCombinatorRenderInfos,
   isAnyOfControl,
-  JsonFormsRendererRegistryEntry,
+  type JsonFormsRendererRegistryEntry,
   rankWith,
 } from '@jsonforms/core';
 import {
   DispatchRenderer,
   rendererProps,
-  RendererProps,
+  type RendererProps,
   useJsonFormsAnyOfControl,
 } from '@jsonforms/vue';
 import { VTabs, VTab, VWindow, VWindowItem } from 'vuetify/components';
@@ -86,7 +86,7 @@ const controlRenderer = defineComponent({
         'anyOf',
         this.control.uischema,
         this.control.path,
-        this.control.uischemas
+        this.control.uischemas,
       );
       return result.filter((info) => info.uischema);
     },

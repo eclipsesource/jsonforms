@@ -17,12 +17,18 @@ Install JSON Forms Core, Vue 3 and Vue 3 Vuetify Renderers.
 npm i --save @jsonforms/core @jsonforms/vue @jsonforms/vue-vuetify
 ```
 
-Also add the packages to the transpile dependencies in the `vue.config.js` file:
+Also add the packages to the transpile dependencies in the `vite.config.js` file:
 
 ```js
-module.exports = {
-    transpileDependencies: ['@jsonforms/core', '@jsonforms/vue', '@jsonforms/vue-vuetify']
-}
+// https://vitejs.dev/config/
+export default defineConfig({
+  optimizeDeps: {
+    // Exclude vuetify since it has an issue with vite dev - TypeError: makeVExpansionPanelTextProps is not a function - the makeVExpansionPanelTextProps is used before it is defined
+    exclude: ['vuetify'],
+  },
+
+  // more config....
+});
 ```
 
 Use the `json-forms` component for each form you want to render and hand over the renderer set.
@@ -30,12 +36,14 @@ Use the `json-forms` component for each form you want to render and hand over th
 ```vue
 <script>
 import { JsonForms } from '@jsonforms/vue';
-import { vuetifyRenderers } from '@jsonforms/vue-vuetify';
+import { markRaw } from 'vue';
 
-const renderers = [
-  ...vuetifyRenderers,
+const { extendedVuetifyRenderers } = await import('@jsonforms/vue-vuetify');
+
+const renderers = markRaw([
+  ...extendedVuetifyRenderers,
   // here you can add custom renderers
-];
+]);
 
 export default defineComponent({
   name: 'app',
@@ -68,9 +76,51 @@ export default defineComponent({
   />
 </template>
 
-<style scoped>
-@import '~@jsonforms/vue-vuetify/lib/jsonforms-vue-vuetify.esm.css';
+<style>
+@import '@jsonforms/vue-vuetify/lib/jsonforms-vue-vuetify.css';
 </style>
+```
+
+In your vuetify creation specify the icons used
+
+Material Design Icons (mdi)
+
+```js
+import { mdi, aliases as mdiAliases } from 'vuetify/iconsets/mdi';
+import { createVuetify } from 'vuetify';
+
+import { mdiIconAliases } from '@jsonforms/vue-vuetify';
+import '@mdi/font/css/materialdesignicons.css';
+
+createVuetify({
+    icons: {
+      defaultSet: 'mdi',
+      sets: {
+        mdi,
+      },
+      aliases: { ...mdiAliases, ...mdiIconAliases };,
+    },
+  });
+```
+
+Font Awesome (fa)
+
+```js
+import { fa, aliases as faAliases } from 'vuetify/iconsets/fa';
+import { createVuetify } from 'vuetify';
+
+import { faIconAliases } from '@jsonforms/vue-vuetify';
+import '@fortawesome/fontawesome-free/css/all.css';
+
+createVuetify({
+    icons: {
+      defaultSet: 'fa',
+      sets: {
+        fa,
+      },
+      aliases: { ...faAliases, ...faIconAliases };,
+    },
+  });
 ```
 
 If note done yet, please [install Vuetify for Vue](https://vuetifyjs.com/en/getting-started/installation/).

@@ -18,20 +18,20 @@
 
 <script lang="ts">
 import {
-  ControlElement,
-  findUISchema,
   Generate,
-  GroupLayout,
+  findUISchema,
   isObjectControl,
-  JsonFormsRendererRegistryEntry,
   rankWith,
-  UISchemaElement,
+  type ControlElement,
+  type GroupLayout,
+  type JsonFormsRendererRegistryEntry,
+  type UISchemaElement,
 } from '@jsonforms/core';
 import {
   DispatchRenderer,
   rendererProps,
-  RendererProps,
   useJsonFormsControlWithDetail,
+  type RendererProps,
 } from '@jsonforms/vue';
 import cloneDeep from 'lodash/cloneDeep';
 import isEmpty from 'lodash/isEmpty';
@@ -92,7 +92,7 @@ const controlRenderer = defineComponent({
         this.control.path,
         uiSchemaGenerator,
         this.control.uischema,
-        this.control.rootSchema
+        this.control.rootSchema,
       );
 
       if (this.nested.level > 0) {

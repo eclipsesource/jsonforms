@@ -5,20 +5,19 @@
         <v-toolbar-title :class="styles.arrayList.label">{{
           computedLabel
         }}</v-toolbar-title>
+        <v-spacer></v-spacer>
         <validation-icon
           v-if="control.childErrors.length > 0"
           :errors="control.childErrors"
         />
-        <v-spacer></v-spacer>
-
         <v-tooltip bottom>
           <template v-slot:activator="{ props }">
             <v-btn
-              fab
-              text
+              icon
+              variant="text"
               elevation="0"
               small
-              :aria-label="`Add to ${control.label}`"
+              :aria-label="control.translations.addTooltip"
               v-bind="props"
               :class="styles.arrayList.addButton"
               :disabled="
@@ -30,17 +29,20 @@
               "
               @click="addButtonClick"
             >
-              <v-icon>mdi-plus</v-icon>
+              <v-icon>{{ icons.current.value.itemAdd }}</v-icon>
             </v-btn>
           </template>
-          {{ `Add to ${control.label}` }}
+          {{ control.translations.addTooltip }}
         </v-tooltip>
       </v-toolbar>
     </v-card-title>
     <v-card-text>
       <v-container justify-space-around align-content-center>
         <v-row justify="center">
-          <v-table class="array-container flex">
+          <v-table
+            class="array-container flex"
+            v-bind="vuetifyProps('v-table')"
+          >
             <thead v-if="control.schema.type === 'object'">
               <tr>
                 <th
@@ -72,7 +74,7 @@
                   :key="
                     composePaths(
                       composePaths(control.path, `${index}`),
-                      propName
+                      propName,
                     )
                   "
                 >
@@ -98,48 +100,52 @@
                       <v-btn
                         v-bind="props"
                         v-if="appliedOptions.showSortButtons"
-                        fab
-                        text
+                        icon
+                        variant="text"
                         elevation="0"
                         small
-                        aria-label="Move up"
+                        :aria-label="control.translations.upAriaLabel"
                         :disabled="index <= 0 || !control.enabled"
                         :class="styles.arrayList.itemMoveUp"
-                        @click.native="moveUpClick($event, index)"
+                        @click="moveUpClick($event, index)"
                       >
-                        <v-icon class="notranslate">mdi-arrow-up</v-icon>
+                        <v-icon class="notranslate">{{
+                          icons.current.value.itemMoveUp
+                        }}</v-icon>
                       </v-btn>
                     </template>
-                    Move Up
+                    {{ control.translations.up }}
                   </v-tooltip>
                   <v-tooltip bottom>
                     <template v-slot:activator="{ props }">
                       <v-btn
                         v-bind="props"
                         v-if="appliedOptions.showSortButtons"
-                        fab
-                        text
+                        icon
+                        variant="text"
                         elevation="0"
                         small
-                        aria-label="Move down"
+                        :aria-label="control.translations.downAriaLabel"
                         :disabled="index >= dataLength - 1 || !control.enabled"
                         :class="styles.arrayList.itemMoveDown"
-                        @click.native="moveDownClick($event, index)"
+                        @click="moveDownClick($event, index)"
                       >
-                        <v-icon class="notranslate">mdi-arrow-down</v-icon>
+                        <v-icon class="notranslate">{{
+                          icons.current.value.itemMoveDown
+                        }}</v-icon>
                       </v-btn>
                     </template>
-                    Move Down
+                    {{ control.translations.down }}
                   </v-tooltip>
                   <v-tooltip bottom>
                     <template v-slot:activator="{ props }">
                       <v-btn
                         v-bind="props"
-                        fab
-                        text
+                        icon
+                        variant="text"
                         elevation="0"
                         small
-                        aria-label="Delete"
+                        :aria-label="control.translations.removeAriaLabel"
                         :class="styles.arrayList.itemDelete"
                         :disabled="
                           !control.enabled ||
@@ -148,12 +154,14 @@
                             arraySchema.minItems !== undefined &&
                             dataLength <= arraySchema.minItems)
                         "
-                        @click.native="removeItemsClick($event, [index])"
+                        @click="removeItemsClick($event, [index])"
                       >
-                        <v-icon class="notranslate">mdi-delete</v-icon>
+                        <v-icon class="notranslate">{{
+                          icons.current.value.itemDelete
+                        }}</v-icon>
                       </v-btn>
                     </template>
-                    Delete
+                    {{ control.translations.removeTooltip }}
                   </v-tooltip>
                 </td>
               </tr>
@@ -162,7 +170,7 @@
         </v-row>
       </v-container>
       <v-container v-if="dataLength === 0" :class="styles.arrayList.noData">
-        No data
+        {{ control.translations.noDataMessage }}
       </v-container>
     </v-card-text>
   </v-card>
@@ -170,56 +178,50 @@
 
 <script lang="ts">
 import {
-  isObjectArrayControl,
-  isPrimitiveArrayControl,
-  JsonFormsRendererRegistryEntry,
-  or,
-  rankWith,
+  Resolve,
   composePaths,
   createDefaultValue,
-  ControlElement,
-  JsonSchema,
-  Resolve,
+  isObjectArrayControl,
+  isPrimitiveArrayControl,
+  or,
+  rankWith,
+  type ControlElement,
+  type JsonFormsRendererRegistryEntry,
+  type JsonSchema,
 } from '@jsonforms/core';
-import startCase from 'lodash/startCase';
-import { defineComponent } from 'vue';
 import {
-  DispatchCell,
   DispatchRenderer,
   rendererProps,
   useJsonFormsArrayControl,
-  RendererProps,
+  type RendererProps,
 } from '@jsonforms/vue';
-import { useVuetifyArrayControl } from '../util';
+import startCase from 'lodash/startCase';
+import { defineComponent } from 'vue';
 import {
+  VBtn,
   VCard,
-  VCardTitle,
   VCardText,
-  VRow,
-  VCol,
+  VCardTitle,
   VContainer,
+  VIcon,
+  VRow,
+  VSpacer,
+  VTable,
   VToolbar,
   VToolbarTitle,
   VTooltip,
-  VIcon,
-  VBtn,
-  VAvatar,
-  VSpacer,
-  VTable,
 } from 'vuetify/components';
-import { ValidationIcon, ValidationBadge } from '../controls/components/index';
+import { ValidationIcon } from '../controls/components/index';
+import { useIcons, useVuetifyArrayControl } from '../util';
 
 const controlRenderer = defineComponent({
   name: 'array-control-renderer',
   components: {
-    DispatchCell,
     DispatchRenderer,
     VCard,
     VCardTitle,
     VCardText,
-    VAvatar,
     VRow,
-    VCol,
     VToolbar,
     VToolbarTitle,
     VTooltip,
@@ -228,21 +230,25 @@ const controlRenderer = defineComponent({
     VSpacer,
     VContainer,
     ValidationIcon,
-    ValidationBadge,
     VTable,
   },
   props: {
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    return useVuetifyArrayControl(useJsonFormsArrayControl(props));
+    const icons = useIcons();
+
+    return {
+      ...useVuetifyArrayControl(useJsonFormsArrayControl(props)),
+      icons,
+    };
   },
   computed: {
     arraySchema(): JsonSchema | undefined {
       return Resolve.schema(
         this.control.rootSchema,
         this.control.uischema.scope,
-        this.control.rootSchema
+        this.control.rootSchema,
       );
     },
     dataLength(): number {
@@ -255,7 +261,7 @@ const controlRenderer = defineComponent({
     addButtonClick() {
       this.addItem(
         this.control.path,
-        createDefaultValue(this.control.schema, this.control.rootSchema)
+        createDefaultValue(this.control.schema, this.control.rootSchema),
       )();
     },
     moveUpClick(event: Event, toMove: number): void {
@@ -276,7 +282,7 @@ const controlRenderer = defineComponent({
         typeof scopedSchema.properties === 'object'
       ) {
         return Object.keys(scopedSchema.properties).filter(
-          (prop) => scopedSchema.properties![prop].type !== 'array'
+          (prop) => scopedSchema.properties![prop].type !== 'array',
         );
       }
       // primitives

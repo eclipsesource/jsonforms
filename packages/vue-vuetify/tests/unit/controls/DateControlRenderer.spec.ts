@@ -1,5 +1,5 @@
+import { describe, it, expect, beforeEach } from 'vitest';
 import { clearAllIds } from '@jsonforms/core';
-import { Wrapper } from '@vue/test-utils';
 import DateControlRenderer, {
   entry as dateControlRendererEntry,
 } from '../../../src/controls/DateControlRenderer.vue';
@@ -24,16 +24,12 @@ describe('DateControlRenderer.vue', () => {
     },
   };
 
-  let wrapper: Wrapper<any, Element>;
+  let wrapper: ReturnType<typeof mountJsonForms>;
 
   beforeEach(() => {
     // clear all ids to guarantee that the snapshots will always be generated with the same ids
     clearAllIds();
     wrapper = mountJsonForms(data, schema, renderers, uischema);
-  });
-
-  afterEach(() => {
-    wrapper.destroy();
   });
 
   it('check if child DateControlRenderer exists', () => {
@@ -51,12 +47,11 @@ describe('DateControlRenderer.vue', () => {
   it('emits a data change', async () => {
     const input = wrapper.find('input[type="text"]');
     await input.setValue('03/10/2021');
-    expect(wrapper.vm.$data.data).toEqual('2021-03-10');
+    expect(wrapper.vm.$data.event.data).toEqual('2021-03-10');
   });
 
   it('should have a placeholder', async () => {
     const input = wrapper.find('input[type="text"]');
-    await input.trigger('focus');
     const placeholder = input.attributes('placeholder');
     expect(placeholder).toEqual('date placeholder');
   });

@@ -19,7 +19,7 @@
       :indeterminate="control.data === undefined"
       :model-value="control.data"
       v-bind="vuetifyProps('v-checkbox')"
-      @update:modelValue="onChange"
+      @update:model-value="onChange"
       @focus="handleFocus"
       @blur="handleBlur"
     />
@@ -28,20 +28,20 @@
 
 <script lang="ts">
 import {
-  ControlElement,
-  JsonFormsRendererRegistryEntry,
-  rankWith,
   isBooleanControl,
+  rankWith,
+  type ControlElement,
+  type JsonFormsRendererRegistryEntry,
 } from '@jsonforms/core';
-import { defineComponent } from 'vue';
 import {
   rendererProps,
   useJsonFormsControl,
-  RendererProps,
+  type RendererProps,
 } from '@jsonforms/vue';
-import { default as ControlWrapper } from './ControlWrapper.vue';
-import { useVuetifyControl } from '../util';
+import { defineComponent } from 'vue';
 import { VCheckbox } from 'vuetify/components';
+import { useVuetifyControl } from '../util';
+import { default as ControlWrapper } from './ControlWrapper.vue';
 
 const controlRenderer = defineComponent({
   name: 'boolean-control-renderer',
@@ -53,9 +53,7 @@ const controlRenderer = defineComponent({
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    return useVuetifyControl(useJsonFormsControl(props), (value) => {
-      return value || false;
-    });
+    return useVuetifyControl(useJsonFormsControl(props));
   },
 });
 

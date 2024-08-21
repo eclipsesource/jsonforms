@@ -11,7 +11,7 @@
           :disabled="!control.enabled"
           :indeterminate="control.data === undefined"
           v-bind="vuetifyProps(`v-checkbox[${o.value}]`)"
-          @change="(value) => toggle(o.value)"
+          @update:model-value="() => toggle(o.value)"
         ></v-checkbox>
       </v-col>
     </v-row>
@@ -21,10 +21,10 @@
 <script lang="ts">
 import {
   and,
-  ControlElement,
+  type ControlElement,
   hasType,
-  JsonFormsRendererRegistryEntry,
-  JsonSchema,
+  type JsonFormsRendererRegistryEntry,
+  type JsonSchema,
   rankWith,
   schemaMatches,
   schemaSubPathMatches,
@@ -34,7 +34,7 @@ import {
 import { VCheckbox, VContainer, VRow, VCol } from 'vuetify/components';
 import {
   rendererProps,
-  RendererProps,
+  type RendererProps,
   useJsonFormsMultiEnumControl,
 } from '@jsonforms/vue';
 import { defineComponent } from 'vue';
@@ -93,13 +93,13 @@ export const entry: JsonFormsRendererRegistryEntry = {
           (schema) =>
             hasType(schema, 'array') &&
             !Array.isArray(schema.items) &&
-            schema.uniqueItems === true
+            schema.uniqueItems === true,
         ),
         schemaSubPathMatches('items', (schema) => {
           return hasOneOfItems(schema) || hasEnumItems(schema);
-        })
-      )
-    )
+        }),
+      ),
+    ),
   ),
 };
 </script>

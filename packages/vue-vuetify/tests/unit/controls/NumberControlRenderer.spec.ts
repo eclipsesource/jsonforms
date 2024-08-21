@@ -1,5 +1,5 @@
+import { describe, it, expect, beforeEach } from 'vitest';
 import { clearAllIds } from '@jsonforms/core';
-import { Wrapper } from '@vue/test-utils';
 import NumberControlRenderer, {
   entry as numberControlRendererEntry,
 } from '../../../src/controls/NumberControlRenderer.vue';
@@ -20,7 +20,7 @@ describe('NumberControlRenderer.vue', () => {
       placeholder: 'number placeholder',
     },
   };
-  let wrapper: Wrapper<any, Element>;
+  let wrapper: ReturnType<typeof mountJsonForms>;
 
   beforeEach(() => {
     // clear all ids to guarantee that the snapshots will always be generated with the same ids
@@ -28,16 +28,12 @@ describe('NumberControlRenderer.vue', () => {
     wrapper = mountJsonForms(data, schema, renderers, uischema);
   });
 
-  afterEach(() => {
-    wrapper.destroy();
-  });
-
   it('check if child NumberControlRenderer exists', () => {
     expect(wrapper.getComponent(NumberControlRenderer));
   });
 
   it('renders a number input', () => {
-    expect(wrapper.find('input[type="number"]').exists()).toBe(true);
+    expect(wrapper.find('input[type="text"]').exists()).toBe(true);
   });
 
   it('renders title as label', () => {
@@ -49,12 +45,11 @@ describe('NumberControlRenderer.vue', () => {
     await input.setValue(2);
     // 300 ms debounceWait
     await wait(300);
-    expect(wrapper.vm.$data.data).toEqual(2);
+    expect(wrapper.vm.$data.event.data).toEqual(2);
   });
 
   it('should have a placeholder', async () => {
-    const input = wrapper.find('input[type="number"]');
-    await input.trigger('focus');
+    const input = wrapper.find('input[type="text"]');
     const placeholder = input.attributes('placeholder');
     expect(placeholder).toEqual('number placeholder');
   });

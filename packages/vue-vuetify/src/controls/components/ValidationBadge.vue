@@ -8,7 +8,7 @@
           :inline="inline"
           :offsetX="offsetX"
           :offsetY="offsetY"
-          :overlap="overlap"
+          :floating="floating"
         >
           <template v-slot:badge>
             {{ errors.length }}
@@ -31,14 +31,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { defineComponent, type PropType } from 'vue';
 import { VBadge, VTooltip } from 'vuetify/components';
-import { ErrorObject } from 'ajv';
+import type { ErrorObject } from 'ajv';
 import findIndex from 'lodash/findIndex';
 import {
   createControlElement,
   createLabelDescriptionFrom,
-  JsonSchema,
+  type JsonSchema,
 } from '@jsonforms/core';
 
 export default defineComponent({
@@ -72,7 +72,7 @@ export default defineComponent({
       type: [Number, String],
       default: undefined,
     },
-    overlap: {
+    floating: {
       type: Boolean,
       default: false,
     },
@@ -97,7 +97,7 @@ export default defineComponent({
               labels: [
                 createLabelDescriptionFrom(
                   createControlElement(errorObject.instancePath),
-                  errorObject.schema as JsonSchema
+                  errorObject.schema as JsonSchema,
                 ).text,
               ],
               message: errorObject.message,
@@ -106,8 +106,8 @@ export default defineComponent({
             error[index].labels.push(
               createLabelDescriptionFrom(
                 createControlElement(errorObject.instancePath),
-                errorObject.schema as JsonSchema
-              ).text
+                errorObject.schema as JsonSchema,
+              ).text,
             );
           }
         }

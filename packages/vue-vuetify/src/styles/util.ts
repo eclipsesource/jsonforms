@@ -1,6 +1,6 @@
-import { Styles } from './styles';
 import cloneDeep from 'lodash/cloneDeep';
 import mergeWith from 'lodash/mergeWith';
+import type { Styles } from './styles';
 
 export const classes = (
   strings: TemplateStringsArray,
@@ -23,7 +23,7 @@ export const classes = (
  */
 export const mergeStyles = (
   stylesA: Partial<Styles>,
-  stylesB: Partial<Styles>
+  stylesB: Partial<Styles>,
 ): Partial<Styles> => {
   const styles = cloneDeep(stylesA);
   mergeWith(styles, stylesB, (aValue, bValue) => {

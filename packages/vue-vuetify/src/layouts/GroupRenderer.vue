@@ -15,7 +15,7 @@
 
     <v-card-text
       v-bind="vuetifyProps(`v-card-text[${index}]`)"
-      v-for="(element, index) in layout.uischema.elements"
+      v-for="(element, index) in (layout.uischema as Layout).elements"
       :key="`${layout.path}-${index}`"
       :class="styles.group.item"
     >
@@ -33,22 +33,22 @@
 
 <script lang="ts">
 import {
-  JsonFormsRendererRegistryEntry,
-  Layout,
-  rankWith,
   and,
   isLayout,
+  rankWith,
   uiTypeIs,
+  type JsonFormsRendererRegistryEntry,
+  type Layout,
 } from '@jsonforms/core';
-import { defineComponent } from 'vue';
 import {
   DispatchRenderer,
   rendererProps,
   useJsonFormsLayout,
-  RendererProps,
+  type RendererProps,
 } from '@jsonforms/vue';
+import { defineComponent } from 'vue';
+import { VCard, VCardText, VCardTitle } from 'vuetify/components';
 import { useVuetifyLayout } from '../util';
-import { VCard, VCardTitle, VCardText } from 'vuetify/components';
 
 const layoutRenderer = defineComponent({
   name: 'group-renderer',
@@ -93,7 +93,7 @@ export const entry: JsonFormsRendererRegistryEntry = {
 </script>
 
 <!-- Default styles for the 'nested' feature -->
-<style>
+<style scoped>
 .group.group-bare {
   border: 0;
 }

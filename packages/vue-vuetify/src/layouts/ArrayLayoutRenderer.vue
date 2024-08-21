@@ -1,10 +1,11 @@
 <template>
-  <v-card v-if="control.visible" :class="styles.arrayList.root" v-bind="cardProps">
-    <v-card-title :class="styles.arrayList.title">
+  <v-card v-if="control.visible" :class="styles.arrayList.root">
+    <v-card-title>
       <v-toolbar flat :class="styles.arrayList.toolbar">
         <v-toolbar-title :class="styles.arrayList.label">{{
           computedLabel
         }}</v-toolbar-title>
+        <v-spacer></v-spacer>
         <validation-icon
           v-if="
             control.childErrors.length > 0 &&
@@ -13,34 +14,33 @@
           :errors="control.childErrors"
           :class="styles.arrayList.validationIcon"
         />
-        <v-spacer></v-spacer>
         <slot
           name="toolbar-elements"
-          :labels="translatedLabels"
           :addClass="styles.arrayList.addButton"
           :addDisabled="addDisabled"
           :addClick="addButtonClick"
           :control="control"
           :appliedOptions="appliedOptions"
           :styles="styles"
+          :icons="icons"
         >
           <v-tooltip bottom>
             <template v-slot:activator="{ props }">
               <v-btn
-                fab
-                text
+                icon
+                variant="text"
                 elevation="0"
                 small
-                :aria-label="translatedLabels.add"
+                :aria-label="control.translations.addTooltip"
                 v-bind="props"
                 :class="styles.arrayList.addButton"
                 :disabled="addDisabled"
                 @click="addButtonClick"
               >
-                <v-icon>mdi-plus</v-icon>
+                <v-icon>{{ icons.current.value.itemAdd }}</v-icon>
               </v-btn>
             </template>
-            {{ translatedLabels.add }}
+            {{ control.translations.addTooltip }}
           </v-tooltip>
         </slot>
       </v-toolbar>
@@ -100,20 +100,22 @@
                         <template v-slot:activator="{ props }">
                           <v-btn
                             v-bind="props"
-                            fab
-                            text
+                            icon
+                            variant="text"
                             elevation="0"
                             small
                             class="v-expansion-panel-title__icon"
-                            :aria-label="translatedLabels.moveUp"
+                            :aria-label="control.translations.upAriaLabel"
                             :disabled="index <= 0 || !control.enabled"
                             :class="styles.arrayList.itemMoveUp"
-                            @click.native="moveUpClick($event, index)"
+                            @click="moveUpClick($event, index)"
                           >
-                            <v-icon class="notranslate">mdi-arrow-up</v-icon>
+                            <v-icon class="notranslate">{{
+                              icons.current.value.itemMoveUp
+                            }}</v-icon>
                           </v-btn>
                         </template>
-                        {{ translatedLabels.moveUp }}
+                        {{ control.translations.up }}
                       </v-tooltip>
                     </v-col>
                     <v-col
@@ -124,22 +126,24 @@
                         <template v-slot:activator="{ props }">
                           <v-btn
                             v-bind="props"
-                            fab
-                            text
+                            icon
+                            variant="text"
                             elevation="0"
                             small
                             class="v-expansion-panel-title__icon"
-                            :aria-label="translatedLabels.moveDown"
+                            :aria-label="control.translations.downAriaLabel"
                             :disabled="
                               index >= dataLength - 1 || !control.enabled
                             "
                             :class="styles.arrayList.itemMoveDown"
-                            @click.native="moveDownClick($event, index)"
+                            @click="moveDownClick($event, index)"
                           >
-                            <v-icon class="notranslate">mdi-arrow-down</v-icon>
+                            <v-icon class="notranslate">{{
+                              icons.current.value.itemMoveDown
+                            }}</v-icon>
                           </v-btn>
                         </template>
-                        {{ translatedLabels.moveDown }}
+                        {{ control.translations.down }}
                       </v-tooltip>
                     </v-col>
                     <v-col align-self="center">
@@ -147,12 +151,12 @@
                         <template v-slot:activator="{ props }">
                           <v-btn
                             v-bind="props"
-                            fab
-                            text
+                            icon
+                            variant="text"
                             elevation="0"
                             small
                             class="v-expansion-panel-title__icon"
-                            :aria-label="translatedLabels.delete"
+                            :aria-label="control.translations.removeAriaLabel"
                             :class="styles.arrayList.itemDelete"
                             :disabled="
                               !control.enabled ||
@@ -161,12 +165,14 @@
                                 arraySchema.minItems !== undefined &&
                                 dataLength <= arraySchema.minItems)
                             "
-                            @click.stop.native="suggestToDelete = index"
+                            @click.stop="suggestToDelete = index"
                           >
-                            <v-icon class="notranslate">mdi-delete</v-icon>
+                            <v-icon class="notranslate">{{
+                              icons.current.value.itemDelete
+                            }}</v-icon>
                           </v-btn>
                         </template>
-                        {{ translatedLabels.delete }}
+                        {{ control.translations.removeTooltip }}
                       </v-tooltip>
                     </v-col>
                   </v-row>
@@ -193,13 +199,13 @@
     <v-card-actions v-if="$slots.actions" class="pb-8">
       <slot
         name="actions"
-        :labels="translatedLabels"
         :addClass="styles.arrayList.addButton"
         :addDisabled="addDisabled"
         :addClick="addButtonClick"
         :control="control"
         :appliedOptions="appliedOptions"
         :styles="styles"
+        :icons="icons"
       >
       </slot>
     </v-card-actions>
@@ -211,28 +217,30 @@
     >
       <v-card>
         <v-card-title class="text-h5">
-          {{ translatedLabels.dialogTitle }}
+          {{ control.translations.deleteDialogTitle }}
         </v-card-title>
 
-        <v-card-text> {{ translatedLabels.dialogText }} </v-card-text>
+        <v-card-text>
+          {{ control.translations.deleteDialogMessage }}
+        </v-card-text>
 
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <v-btn text @click="suggestToDelete = null">
-            {{ translatedLabels.dialogCancel }}</v-btn
+          <v-btn variant="text" @click="suggestToDelete = null">
+            {{ control.translations.deleteDialogDecline }}</v-btn
           >
           <v-btn
-            text
+            variant="text"
             ref="confirm"
             @click="
               removeItemsClick(
-                suggestToDelete === null ? null : [suggestToDelete]
+                suggestToDelete === null ? null : [suggestToDelete],
               );
               suggestToDelete = null;
             "
           >
-            {{ translatedLabels.dialogConfirm }}
+            {{ control.translations.deleteDialogAccept }}
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -242,58 +250,50 @@
 
 <script lang="ts">
 import {
-  JsonFormsRendererRegistryEntry,
-  ControlElement,
-  rankWith,
-  isObjectArrayWithNesting,
+  Resolve,
   composePaths,
   createDefaultValue,
-  UISchemaElement,
   findUISchema,
-  Resolve,
-  JsonSchema,
   getControlPath,
-  getI18nKey,
+  isObjectArrayWithNesting,
+  rankWith,
+  type ControlElement,
+  type JsonFormsRendererRegistryEntry,
+  type JsonSchema,
+  type UISchemaElement,
 } from '@jsonforms/core';
-import { defineComponent, computed, ref } from 'vue';
 import {
   DispatchRenderer,
   rendererProps,
   useJsonFormsArrayControl,
-  RendererProps,
+  type RendererProps,
 } from '@jsonforms/vue';
+import type { ErrorObject } from 'ajv';
+import merge from 'lodash/merge';
+import { computed, defineComponent, ref } from 'vue';
 import {
-  useNested,
-  useVuetifyArrayControl,
-  useTranslator,
-  i18nDefaultMessages,
-} from '../util';
-import {
+  VAvatar,
+  VBtn,
   VCard,
   VCardActions,
-  VCardTitle,
   VCardText,
-  VDialog,
-  VRow,
+  VCardTitle,
   VCol,
   VContainer,
+  VDialog,
+  VExpansionPanel,
+  VExpansionPanelText,
+  VExpansionPanelTitle,
+  VExpansionPanels,
+  VIcon,
+  VRow,
+  VSpacer,
   VToolbar,
   VToolbarTitle,
   VTooltip,
-  VIcon,
-  VBtn,
-  VAvatar,
-  VSpacer,
-  VExpansionPanels,
-  VExpansionPanel,
-  VExpansionPanelTitle,
-  VExpansionPanelText,
 } from 'vuetify/components';
-import { ValidationIcon, ValidationBadge } from '../controls/components/index';
-import { ErrorObject } from 'ajv';
-import merge from 'lodash/merge';
-
-type I18nArrayLayoutKey = keyof typeof i18nDefaultMessages.arraylayout;
+import { ValidationBadge, ValidationIcon } from '../controls/components/index';
+import { useIcons, useNested, useVuetifyArrayControl } from '../util';
 
 const controlRenderer = defineComponent({
   name: 'array-layout-renderer',
@@ -327,26 +327,26 @@ const controlRenderer = defineComponent({
   setup(props: RendererProps<ControlElement>) {
     const control = useVuetifyArrayControl(useJsonFormsArrayControl(props));
     const currentlyExpanded = ref<null | number>(
-      control.appliedOptions.value.initCollapsed ? null : 0
+      control.appliedOptions.value.initCollapsed ? null : 0,
     );
     const expansionPanelsProps = computed(() =>
       merge(
         { flat: false, focusable: true },
-        control.vuetifyProps('v-expansion-panels')
-      )
+        control.vuetifyProps('v-expansion-panels'),
+      ),
     );
-    const cardProps = computed(() => control.vuetifyProps('v-card') )
     const suggestToDelete = ref<null | number>(null);
     // indicate to our child renderers that we are increasing the "nested" level
     useNested('array');
-    const t = useTranslator();
+
+    const icons = useIcons();
+
     return {
       ...control,
       currentlyExpanded,
-      cardProps,
       expansionPanelsProps,
       suggestToDelete,
-      t,
+      icons,
     };
   },
   computed: {
@@ -370,41 +370,18 @@ const controlRenderer = defineComponent({
         this.control.path,
         undefined,
         this.control.uischema,
-        this.control.rootSchema
+        this.control.rootSchema,
       );
     },
     arraySchema(): JsonSchema | undefined {
       return Resolve.schema(
         this.control.rootSchema,
         this.control.uischema.scope,
-        this.control.rootSchema
+        this.control.rootSchema,
       );
     },
     hideAvatar(): boolean {
       return !!this.appliedOptions.hideAvatar;
-    },
-    translatedLabels(): { [key in I18nArrayLayoutKey]: string } {
-      const elementToDeleteText = this.childLabelForIndex(this.suggestToDelete);
-      return {
-        add: this.translateLabel('add'),
-        delete: this.translateLabel('delete'),
-        moveUp: this.translateLabel('moveUp'),
-        moveDown: this.translateLabel('moveDown'),
-        dialogTitle: this.translateLabel(
-          'dialogTitle',
-          {
-            element: elementToDeleteText,
-          },
-          (message) =>
-            message.replace(
-              /\{\{\s?element\s?\}\}/,
-              elementToDeleteText || 'element'
-            )
-        ),
-        dialogText: this.translateLabel('dialogText'),
-        dialogCancel: this.translateLabel('dialogCancel'),
-        dialogConfirm: this.translateLabel('dialogConfirm'),
-      };
     },
   },
   methods: {
@@ -413,10 +390,7 @@ const controlRenderer = defineComponent({
     addButtonClick() {
       this.addItem(
         this.control.path,
-        createDefaultValue(
-            this.control.schema,
-            this.control.rootSchema
-        )
+        createDefaultValue(this.control.schema, this.control.rootSchema),
       )();
       if (!this.appliedOptions.collapseNewItems && this.control.data?.length) {
         this.currentlyExpanded = this.dataLength - 1;
@@ -436,40 +410,12 @@ const controlRenderer = defineComponent({
       }
     },
     childErrors(index: number): ErrorObject[] {
-      return this.control.childErrors.filter((e: ErrorObject) => {
+      return this.control.childErrors.filter((e) => {
         const errorDataPath = getControlPath(e);
         return errorDataPath.startsWith(
-          this.composePaths(this.control.path, `${index}`)
+          this.composePaths(this.control.path, `${index}`),
         );
       });
-    },
-    translateLabel(
-      labelType: I18nArrayLayoutKey,
-      additionalContext: Record<string, unknown> | undefined = undefined,
-      transformMessage: (message: string) => string = (text) => text
-    ): string {
-      const i18nKey = getI18nKey(
-        this.arraySchema,
-        this.control.uischema,
-        this.control.path,
-        labelType
-      );
-      const context = {
-        schema: this.control.schema,
-        uischema: this.control.uischema,
-        path: this.control.path,
-        data: this.control.data,
-        ...additionalContext,
-      };
-      const translation = this.t(i18nKey, undefined, context);
-      if (translation !== undefined) {
-        return translation;
-      }
-      return this.t(
-        `arraylayout.${labelType}`,
-        transformMessage(i18nDefaultMessages.arraylayout[labelType]),
-        context
-      );
     },
   },
 });
@@ -486,7 +432,8 @@ export const entry: JsonFormsRendererRegistryEntry = {
 .notranslate {
   transform: none !important;
 }
-/deep/ .v-toolbar__content {
+
+:deep(.v-toolbar__content) {
   padding-left: 0;
 }
 </style>

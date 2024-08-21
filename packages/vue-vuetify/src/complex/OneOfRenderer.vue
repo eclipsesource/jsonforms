@@ -6,30 +6,30 @@
       :path="path"
     />
 
-    <v-hover v-slot="{ isHovering }">
-      <v-select
-        v-disabled-icon-focus
-        :id="control.id + '-input'"
-        :class="styles.control.input"
-        :disabled="!control.enabled"
-        :autofocus="appliedOptions.focus"
-        :placeholder="appliedOptions.placeholder"
-        :label="computedLabel"
-        :hint="control.description"
-        :persistent-hint="persistentHint()"
-        :required="control.required"
-        :error-messages="control.errors"
-        :clearable="isHovering"
-        :items="indexedOneOfRenderInfos"
-        @change="handleSelectChange"
-        :item-title="(item) => t(item.label, item.label)"
-        item-value="index"
-        v-model="selectIndex"
-        v-bind="vuetifyProps('v-select')"
-        @focus="handleFocus"
-        @blur="handleBlur"
-      ></v-select>
-    </v-hover>
+    <v-select
+      v-disabled-icon-focus
+      :id="control.id + '-input'"
+      :class="styles.control.input"
+      :disabled="!control.enabled"
+      :autofocus="appliedOptions.focus"
+      :placeholder="appliedOptions.placeholder"
+      :label="computedLabel"
+      :hint="control.description"
+      :persistent-hint="persistentHint()"
+      :required="control.required"
+      :error-messages="control.errors"
+      :clearable="control.enabled"
+      :items="indexedOneOfRenderInfos"
+      @update:model-value="handleSelectChange"
+      :item-title="
+        (item: CombinatorSubSchemaRenderInfo) => t(item.label, item.label)
+      "
+      item-value="index"
+      v-model="selectIndex"
+      v-bind="vuetifyProps('v-select')"
+      @focus="handleFocus"
+      @blur="handleBlur"
+    ></v-select>
     <dispatch-renderer
       v-if="selectedIndex !== undefined && selectedIndex !== null"
       :schema="indexedOneOfRenderInfos[selectedIndex].schema"
@@ -42,18 +42,23 @@
 
     <v-dialog v-model="dialog" persistent max-width="600" @keydown.esc="cancel">
       <v-card>
-        <v-card-title class="text-h5"> Clear form? </v-card-title>
+        <v-card-title class="text-h5">
+          {{ control.translations.clearDialogTitle }}
+        </v-card-title>
 
         <v-card-text>
-          Your data will be cleared if you select this new option. Do you want
-          to proceed?
+          {{ control.translations.clearDialogMessage }}
         </v-card-text>
 
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <v-btn text @click="cancel"> No </v-btn>
-          <v-btn text ref="confirm" @click="confirm"> Yes </v-btn>
+          <v-btn variant="text" @click="cancel">
+            {{ control.translations.clearDialogDecline }}
+          </v-btn>
+          <v-btn variant="text" ref="confirm" @click="confirm">
+            {{ control.translations.clearDialogAccept }}
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -62,18 +67,18 @@
 
 <script lang="ts">
 import {
-  CombinatorSubSchemaRenderInfo,
-  ControlElement,
+  type CombinatorSubSchemaRenderInfo,
+  type ControlElement,
   createCombinatorRenderInfos,
   createDefaultValue,
   isOneOfControl,
-  JsonFormsRendererRegistryEntry,
+  type JsonFormsRendererRegistryEntry,
   rankWith,
 } from '@jsonforms/core';
 import {
   DispatchRenderer,
   rendererProps,
-  RendererProps,
+  type RendererProps,
   useJsonFormsOneOfControl,
 } from '@jsonforms/vue';
 import isEmpty from 'lodash/isEmpty';
@@ -85,7 +90,6 @@ import {
   VCardText,
   VCardTitle,
   VDialog,
-  VHover,
   VSelect,
   VSpacer,
 } from 'vuetify/components';
@@ -106,7 +110,6 @@ const controlRenderer = defineComponent({
     VSpacer,
     VBtn,
     VSelect,
-    VHover,
   },
   directives: {
     DisabledIconFocus,
@@ -144,7 +147,7 @@ const controlRenderer = defineComponent({
         'oneOf',
         this.control.uischema,
         this.control.path,
-        this.control.uischemas
+        this.control.uischemas,
       );
 
       return result
@@ -164,7 +167,7 @@ const controlRenderer = defineComponent({
         // this.$nextTick does not work so use setTimeout
         setTimeout(() =>
           // cast to 'any' instead of 'Vue' because of Typescript problems (excessive stack depth when comparing types) during rollup build
-          ((this.$refs.confirm as any).$el as HTMLElement).focus()
+          ((this.$refs.confirm as any).$el as HTMLElement).focus(),
         );
       } else {
         this.$nextTick(() => {
@@ -186,9 +189,9 @@ const controlRenderer = defineComponent({
         this.newSelectedIndex !== undefined && this.newSelectedIndex !== null
           ? createDefaultValue(
               this.indexedOneOfRenderInfos[this.newSelectedIndex].schema,
-              this.control.rootSchema
+              this.control.rootSchema,
             )
-          : {}
+          : {},
       );
       this.selectIndex = this.newSelectedIndex;
       this.selectedIndex = this.newSelectedIndex;

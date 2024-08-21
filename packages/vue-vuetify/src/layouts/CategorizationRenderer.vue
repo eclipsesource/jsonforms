@@ -4,11 +4,14 @@
       v-if="appliedOptions.vertical == true"
       v-bind="vuetifyProps('v-row')"
     >
-      <v-col v-bind="vuetifyProps('v-col.v-tabs')">
+      <v-col
+        v-bind="vuetifyProps('v-col.v-tabs')"
+        class="flex-shrink-1 flex-grow-0 pa-0"
+      >
         <v-tabs
           v-model="activeCategory"
           v-bind="vuetifyProps('v-tabs')"
-          vertical
+          direction="vertical"
         >
           <v-tab
             v-for="(_, index) in visibleCategories"
@@ -21,7 +24,7 @@
       <v-col v-bind="vuetifyProps('v-col.v-window')">
         <v-window
           v-model="activeCategory"
-          vertical
+          direction="vertical"
           v-bind="vuetifyProps('v-window')"
         >
           <v-window-item
@@ -30,7 +33,7 @@
           >
             <dispatch-renderer
               :schema="layout.schema"
-              :uischema="element"
+              :uischema="element.value.uischema"
               :path="layout.path"
               :enabled="layout.enabled"
               :renderers="layout.renderers"
@@ -57,7 +60,7 @@
         >
           <dispatch-renderer
             :schema="layout.schema"
-            :uischema="element"
+            :uischema="element.value.uischema"
             :path="layout.path"
             :enabled="layout.enabled"
             :renderers="layout.renderers"
@@ -71,35 +74,30 @@
 
 <script lang="ts">
 import {
-  JsonFormsRendererRegistryEntry,
-  Layout,
-  rankWith,
   and,
-  uiTypeIs,
-  Categorization,
-  Category,
-  Tester,
-  isVisible,
   categorizationHasCategory,
-  deriveLabelForUISchemaElement,
+  isCategorization,
+  rankWith,
+  type JsonFormsRendererRegistryEntry,
+  type Layout,
 } from '@jsonforms/core';
-import { defineComponent, ref } from 'vue';
 import {
   DispatchRenderer,
   rendererProps,
-  useJsonFormsLayout,
-  RendererProps,
+  useJsonFormsCategorization,
+  type RendererProps,
 } from '@jsonforms/vue';
-import { useAjv, useTranslator, useVuetifyLayout } from '../util';
+import { defineComponent, ref } from 'vue';
 import {
+  VCol,
   VContainer,
-  VTabs,
+  VRow,
   VTab,
+  VTabs,
   VWindow,
   VWindowItem,
-  VRow,
-  VCol,
 } from 'vuetify/components';
+import { useVuetifyLayout } from '../util';
 
 const layoutRenderer = defineComponent({
   name: 'categorization-renderer',
@@ -118,25 +116,18 @@ const layoutRenderer = defineComponent({
   },
   setup(props: RendererProps<Layout>) {
     const activeCategory = ref(0);
-    const ajv = useAjv();
-    const t = useTranslator();
     return {
-      ...useVuetifyLayout(useJsonFormsLayout(props)),
+      ...useVuetifyLayout(useJsonFormsCategorization(props)),
       activeCategory,
-      ajv,
-      t,
     };
   },
   computed: {
-    visibleCategories(): (Category | Categorization)[] {
-      return (this.layout.uischema as Categorization).elements.filter(
-        (category: Category | Categorization) =>
-          isVisible(category, this.layout.data, this.layout.path, this.ajv)
-      );
+    visibleCategories() {
+      return this.categories.filter((category) => category.value.visible);
     },
     visibleCategoryLabels(): string[] {
       return this.visibleCategories.map((element) => {
-        return deriveLabelForUISchemaElement(element, this.t) ?? '';
+        return element.value.label;
       });
     },
   },
@@ -144,18 +135,13 @@ const layoutRenderer = defineComponent({
 
 export default layoutRenderer;
 
-export const isSingleLevelCategorization: Tester = and(
-  uiTypeIs('Categorization'),
-  categorizationHasCategory
-);
-
 export const entry: JsonFormsRendererRegistryEntry = {
   renderer: layoutRenderer,
-  tester: rankWith(2, isSingleLevelCategorization),
+  tester: rankWith(2, and(isCategorization, categorizationHasCategory)),
 };
 </script>
 
-<style>
+<style scoped>
 .v-window {
   width: 100%;
 }

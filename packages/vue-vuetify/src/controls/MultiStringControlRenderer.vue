@@ -5,64 +5,61 @@
     :isFocused="isFocused"
     :appliedOptions="appliedOptions"
   >
-    <v-hover v-slot="{ isHovering }">
-      <v-textarea
-        v-disabled-icon-focus
-        :id="control.id + '-input'"
-        :class="styles.control.input"
-        :disabled="!control.enabled"
-        :autofocus="appliedOptions.focus"
-        :placeholder="appliedOptions.placeholder"
-        :label="computedLabel"
-        :hint="control.description"
-        :persistent-hint="persistentHint()"
-        :required="control.required"
-        :error-messages="control.errors"
-        :model-value="control.data"
-        :maxlength="
-          appliedOptions.restrict ? control.schema.maxLength : undefined
-        "
-        :size="
-          appliedOptions.trim && control.schema.maxLength !== undefined
-            ? control.schema.maxLength
-            : undefined
-        "
-        :clearable="isHovering"
-        multi-line
-        v-bind="vuetifyProps('v-textarea')"
-        @update:model-value="onChange"
-        @focus="handleFocus"
-        @blur="handleBlur"
-      />
-    </v-hover>
+    <v-textarea
+      v-disabled-icon-focus
+      :id="control.id + '-input'"
+      :class="styles.control.input"
+      :disabled="!control.enabled"
+      :autofocus="appliedOptions.focus"
+      :placeholder="appliedOptions.placeholder"
+      :label="computedLabel"
+      :hint="control.description"
+      :persistent-hint="persistentHint()"
+      :required="control.required"
+      :error-messages="control.errors"
+      :model-value="control.data"
+      :maxlength="
+        appliedOptions.restrict ? control.schema.maxLength : undefined
+      "
+      :size="
+        appliedOptions.trim && control.schema.maxLength !== undefined
+          ? control.schema.maxLength
+          : undefined
+      "
+      :clearable="control.enabled"
+      multi-line
+      v-bind="vuetifyProps('v-textarea')"
+      @update:model-value="onChange"
+      @focus="handleFocus"
+      @blur="handleBlur"
+    />
   </control-wrapper>
 </template>
 
 <script lang="ts">
 import {
-  ControlElement,
-  JsonFormsRendererRegistryEntry,
-  rankWith,
-  isStringControl,
-  isMultiLineControl,
   and,
+  isMultiLineControl,
+  isStringControl,
+  rankWith,
+  type ControlElement,
+  type JsonFormsRendererRegistryEntry,
 } from '@jsonforms/core';
-import { defineComponent } from 'vue';
 import {
   rendererProps,
   useJsonFormsControl,
-  RendererProps,
+  type RendererProps,
 } from '@jsonforms/vue';
-import { default as ControlWrapper } from './ControlWrapper.vue';
+import { defineComponent } from 'vue';
+import { VTextarea } from 'vuetify/components';
 import { useVuetifyControl } from '../util';
-import { VHover, VTextarea } from 'vuetify/components';
+import { default as ControlWrapper } from './ControlWrapper.vue';
 import { DisabledIconFocus } from './directives';
 
 const controlRenderer = defineComponent({
   name: 'multi-string-control-renderer',
   components: {
     ControlWrapper,
-    VHover,
     VTextarea,
   },
   directives: {
@@ -75,7 +72,7 @@ const controlRenderer = defineComponent({
     return useVuetifyControl(
       useJsonFormsControl(props),
       (value) => value || undefined,
-      300
+      300,
     );
   },
 });

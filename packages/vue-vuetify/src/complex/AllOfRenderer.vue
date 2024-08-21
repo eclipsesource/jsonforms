@@ -34,20 +34,20 @@
 
 <script lang="ts">
 import {
-  CombinatorSubSchemaRenderInfo,
-  ControlElement,
   createCombinatorRenderInfos,
   findMatchingUISchema,
   isAllOfControl,
-  JsonFormsRendererRegistryEntry,
   rankWith,
-  UISchemaElement,
+  type CombinatorSubSchemaRenderInfo,
+  type ControlElement,
+  type JsonFormsRendererRegistryEntry,
+  type UISchemaElement,
 } from '@jsonforms/core';
 import {
   DispatchRenderer,
   rendererProps,
-  RendererProps,
   useJsonFormsAllOfControl,
+  type RendererProps,
 } from '@jsonforms/vue';
 import { defineComponent } from 'vue';
 import { useVuetifyControl } from '../util';
@@ -70,7 +70,7 @@ const controlRenderer = defineComponent({
       return findMatchingUISchema(this.control.uischemas)(
         this.control.schema,
         this.control.uischema.scope,
-        this.control.path
+        this.control.path,
       );
     },
     allOfRenderInfos(): CombinatorSubSchemaRenderInfo[] {
@@ -81,7 +81,7 @@ const controlRenderer = defineComponent({
         'allOf',
         this.control.uischema,
         this.control.path,
-        this.control.uischemas
+        this.control.uischemas,
       );
 
       return result.filter((info) => info.uischema);

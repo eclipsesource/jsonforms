@@ -1,5 +1,5 @@
+import { describe, it, expect, beforeEach } from 'vitest';
 import { clearAllIds } from '@jsonforms/core';
-import { Wrapper } from '@vue/test-utils';
 import MultiStringControlRenderer, {
   entry as multiStringControlRendererEntry,
 } from '../../../src/controls/MultiStringControlRenderer.vue';
@@ -22,16 +22,12 @@ describe('MultiStringControlRenderer.vue', () => {
       placeholder: 'multi placeholder',
     },
   };
-  let wrapper: Wrapper<any, Element>;
+  let wrapper: ReturnType<typeof mountJsonForms>;
 
   beforeEach(() => {
     // clear all ids to guarantee that the snapshots will always be generated with the same ids
     clearAllIds();
     wrapper = mountJsonForms(data, schema, renderers, uischema);
-  });
-
-  afterEach(() => {
-    wrapper.destroy();
   });
 
   it('check if child MultiStringControlRenderer exists', () => {
@@ -51,12 +47,11 @@ describe('MultiStringControlRenderer.vue', () => {
     await select.setValue('b');
     // 300 ms debounceWait
     await wait(300);
-    expect(wrapper.vm.$data.data).toEqual('b');
+    expect(wrapper.vm.$data.event.data).toEqual('b');
   });
 
   it('should have a placeholder', async () => {
     const input = wrapper.find('textarea');
-    await input.trigger('focus');
     const placeholder = input.attributes('placeholder');
     expect(placeholder).toEqual('multi placeholder');
   });

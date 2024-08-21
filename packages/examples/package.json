@@ -43,7 +43,7 @@
     "doc": "typedoc --name 'JSON Forms Examples' --excludeExternals --out docs src"
   },
   "dependencies": {
-    "ajv-i18n": "^3.5.0",
+    "ajv-i18n": "^4.2.0",
     "lodash": "^4.17.21"
   },
   "peerDependencies": {

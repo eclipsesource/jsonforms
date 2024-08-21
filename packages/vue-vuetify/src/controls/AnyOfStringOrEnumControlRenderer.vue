@@ -5,65 +5,62 @@
     :isFocused="isFocused"
     :appliedOptions="appliedOptions"
   >
-    <v-hover v-slot="{ isHovering }">
-      <v-combobox
-        v-disabled-icon-focus
-        :id="control.id + '-input'"
-        :class="styles.control.input"
-        :disabled="!control.enabled"
-        :autofocus="appliedOptions.focus"
-        :placeholder="appliedOptions.placeholder"
-        :label="computedLabel"
-        :hint="control.description"
-        :persistent-hint="persistentHint()"
-        :required="control.required"
-        :error-messages="control.errors"
-        :model-value="control.data"
-        :maxlength="
-          appliedOptions.restrict ? control.schema.maxLength : undefined
-        "
-        :counter="
-          control.schema.maxLength !== undefined
-            ? control.schema.maxLength
-            : undefined
-        "
-        :items="items"
-        :clearable="isHovering"
-        v-bind="vuetifyProps('v-combobox')"
-        @update:modelValue="onChange"
-        @focus="handleFocus"
-        @blur="handleBlur"
-      />
-    </v-hover>
+    <v-combobox
+      v-disabled-icon-focus
+      :id="control.id + '-input'"
+      :class="styles.control.input"
+      :disabled="!control.enabled"
+      :autofocus="appliedOptions.focus"
+      :placeholder="appliedOptions.placeholder"
+      :label="computedLabel"
+      :hint="control.description"
+      :persistent-hint="persistentHint()"
+      :required="control.required"
+      :error-messages="control.errors"
+      :model-value="control.data"
+      :maxlength="
+        appliedOptions.restrict ? control.schema.maxLength : undefined
+      "
+      :counter="
+        control.schema.maxLength !== undefined
+          ? control.schema.maxLength
+          : undefined
+      "
+      :items="items"
+      :clearable="control.enabled"
+      v-bind="vuetifyProps('v-combobox')"
+      @update:model-value="onChange"
+      @focus="handleFocus"
+      @blur="handleBlur"
+    />
   </control-wrapper>
 </template>
 
 <script lang="ts">
 import {
-  ControlElement,
-  JsonFormsRendererRegistryEntry,
-  rankWith,
   and,
-  uiTypeIs,
+  rankWith,
   schemaMatches,
-  JsonSchema,
+  uiTypeIs,
+  type ControlElement,
+  type JsonFormsRendererRegistryEntry,
+  type JsonSchema,
 } from '@jsonforms/core';
-import { defineComponent } from 'vue';
 import {
   rendererProps,
   useJsonFormsControl,
-  RendererProps,
+  type RendererProps,
 } from '@jsonforms/vue';
-import { default as ControlWrapper } from './ControlWrapper.vue';
+import { defineComponent } from 'vue';
+import { VCombobox } from 'vuetify/components';
 import { useVuetifyControl } from '../util';
-import { VHover, VCombobox } from 'vuetify/components';
+import { default as ControlWrapper } from './ControlWrapper.vue';
 import { DisabledIconFocus } from './directives';
 
 const controlRenderer = defineComponent({
   name: 'anyof-string-or-enum-control-renderer',
   components: {
     ControlWrapper,
-    VHover,
     VCombobox,
   },
   directives: {
@@ -75,7 +72,7 @@ const controlRenderer = defineComponent({
   setup(props: RendererProps<ControlElement>) {
     return useVuetifyControl(
       useJsonFormsControl(props),
-      (value) => value || undefined
+      (value) => value || undefined,
     );
   },
   computed: {
@@ -91,7 +88,8 @@ export default controlRenderer;
 
 const findEnumSchema = (schemas: JsonSchema[]) =>
   schemas.find(
-    (s) => s.enum !== undefined && (s.type === 'string' || s.type === undefined)
+    (s) =>
+      s.enum !== undefined && (s.type === 'string' || s.type === undefined),
   );
 const findTextSchema = (schemas: JsonSchema[]) =>
   schemas.find((s) => s.type === 'string' && s.enum === undefined);
@@ -101,7 +99,7 @@ const hasEnumAndText = (schemas: JsonSchema[]): boolean => {
   const enumSchema = findEnumSchema(schemas);
   const stringSchema = findTextSchema(schemas);
   const remainingSchemas = schemas.filter(
-    (s) => s !== enumSchema || s !== stringSchema
+    (s) => s !== enumSchema || s !== stringSchema,
   );
   const wrongType = remainingSchemas.find((s) => s.type && s.type !== 'string');
   return !!enumSchema && !!stringSchema && !wrongType;
@@ -109,8 +107,8 @@ const hasEnumAndText = (schemas: JsonSchema[]): boolean => {
 const simpleAnyOf = and(
   uiTypeIs('Control'),
   schemaMatches(
-    (schema) => Array.isArray(schema.anyOf) && hasEnumAndText(schema.anyOf)
-  )
+    (schema) => Array.isArray(schema.anyOf) && hasEnumAndText(schema.anyOf),
+  ),
 );
 
 export const entry: JsonFormsRendererRegistryEntry = {

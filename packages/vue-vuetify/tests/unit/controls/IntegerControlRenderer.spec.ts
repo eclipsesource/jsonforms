@@ -1,5 +1,5 @@
+import { describe, it, expect, beforeEach } from 'vitest';
 import { clearAllIds } from '@jsonforms/core';
-import { Wrapper } from '@vue/test-utils';
 import IntegerControlRenderer, {
   entry as integerControlRendererEntry,
 } from '../../../src/controls/IntegerControlRenderer.vue';
@@ -21,7 +21,7 @@ describe('IntegerControlRenderer.vue', () => {
       placeholder: 'integer placeholder',
     },
   };
-  let wrapper: Wrapper<any, Element>;
+  let wrapper: ReturnType<typeof mountJsonForms>;
 
   beforeEach(() => {
     // clear all ids to guarantee that the snapshots will always be generated with the same ids
@@ -29,16 +29,12 @@ describe('IntegerControlRenderer.vue', () => {
     wrapper = mountJsonForms(data, schema, renderers, uischema);
   });
 
-  afterEach(() => {
-    wrapper.destroy();
-  });
-
   it('check if child IntegerControlRenderer exists', () => {
     expect(wrapper.getComponent(IntegerControlRenderer));
   });
 
   it('renders a number input', () => {
-    expect(wrapper.find('input[type="number"]').exists()).toBe(true);
+    expect(wrapper.find('input[type="text"]').exists()).toBe(true);
   });
 
   it('renders title as label', () => {
@@ -50,12 +46,11 @@ describe('IntegerControlRenderer.vue', () => {
     await input.setValue(2);
     // 300 ms debounceWait
     await wait(300);
-    expect(wrapper.vm.$data.data).toEqual(2);
+    expect(wrapper.vm.$data.event.data).toEqual(2);
   });
 
   it('should have a placeholder', async () => {
-    const input = wrapper.find('input[type="number"]');
-    await input.trigger('focus');
+    const input = wrapper.find('input[type="text"]');
     const placeholder = input.attributes('placeholder');
     expect(placeholder).toEqual('integer placeholder');
   });

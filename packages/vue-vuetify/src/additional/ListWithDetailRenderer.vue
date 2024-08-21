@@ -10,20 +10,19 @@
           <v-toolbar-title :class="styles.listWithDetail.label">{{
             computedLabel
           }}</v-toolbar-title>
+          <v-spacer></v-spacer>
           <validation-icon
             v-if="control.childErrors.length > 0"
             :errors="control.childErrors"
           />
-          <v-spacer></v-spacer>
-
           <v-tooltip bottom>
             <template v-slot:activator="{ props }">
               <v-btn
-                fab
-                text
+                icon
+                variant="text"
                 elevation="0"
                 small
-                :aria-label="`Add to ${control.label}`"
+                :aria-label="control.translations.addTooltip"
                 v-bind="props"
                 :class="styles.listWithDetail.addButton"
                 @click="addButtonClick"
@@ -35,24 +34,25 @@
                     dataLength >= arraySchema.maxItems)
                 "
               >
-                <v-icon>mdi-plus</v-icon>
+                <v-icon>{{ icons.current.value.itemAdd }}</v-icon>
               </v-btn>
             </template>
-            {{ `Add to ${control.label}` }}
+            {{ control.translations.addTooltip }}
           </v-tooltip>
         </v-toolbar>
       </v-col>
     </v-row>
     <v-row v-if="dataLength === 0" :class="styles.listWithDetail.noData">
-      <v-col>No data</v-col>
+      <v-col>
+        {{ control.translations.noDataMessage }}
+      </v-col>
     </v-row>
     <v-row v-else>
-      <v-col class="shrink pa-0">
-        <v-list-item-group v-model="selectedIndex">
+      <v-col class="flex-shrink-1 flex-grow-0 pa-0">
+        <v-list v-model:selected="selectedIndex">
           <v-virtual-scroll
             :items="control.data"
             :item-height="64"
-            bench="4"
             :min-height="`${4 * 64}`"
             :max-height="`${6 * 64}`"
             :min-width="appliedOptions.showSortButtons ? 350 : 250"
@@ -64,25 +64,21 @@
                 :value="index"
                 :class="styles.listWithDetail.item"
               >
-                <v-list-item-avatar
-                  aria-label="Index"
-                  size="64"
-                  class="ma-0"
-                  tile
-                  color="rgba(0,0,0,0)"
-                >
+                <template v-slot:prepend="{ isSelected }">
                   <validation-badge
                     overlap
                     bordered
                     :errors="childErrors(index)"
+                    style="margin-right: 8px"
                   >
-                    <v-avatar size="40" aria-label="Index" color="info"
-                      ><span class="info--text text--lighten-5">{{
-                        index + 1
-                      }}</span></v-avatar
+                    <v-avatar
+                      size="40"
+                      aria-label="Index"
+                      :color="isSelected ? 'primary' : undefined"
+                      ><span>{{ index + 1 }}</span></v-avatar
                     >
                   </validation-badge>
-                </v-list-item-avatar>
+                </template>
                 <v-list-item-title>
                   <v-tooltip bottom>
                     <template v-slot:activator="{ props }">
@@ -96,61 +92,61 @@
                     {{ childLabelForIndex(index) }}
                   </v-tooltip>
                 </v-list-item-title>
-                <v-list-item-action v-if="appliedOptions.showSortButtons">
-                  <v-tooltip bottom>
+                <template v-slot:append>
+                  <v-tooltip bottom v-if="appliedOptions.showSortButtons">
                     <template v-slot:activator="{ props }">
                       <v-btn
                         v-bind="props"
-                        fab
-                        text
+                        icon
+                        variant="text"
                         elevation="0"
                         small
                         class="ma-0"
-                        aria-label="Move up"
+                        :aria-label="control.translations.upAriaLabel"
                         :disabled="index <= 0 || !control.enabled"
                         :class="styles.listWithDetail.itemMoveUp"
-                        @click.native="moveUpClick($event, index)"
+                        @click="moveUpClick($event, index)"
                       >
-                        <v-icon class="notranslate">mdi-arrow-up</v-icon>
+                        <v-icon class="notranslate">{{
+                          icons.current.value.itemMoveUp
+                        }}</v-icon>
                       </v-btn>
                     </template>
-                    Move Up
+                    {{ control.translations.up }}
                   </v-tooltip>
-                </v-list-item-action>
-                <v-list-item-action v-if="appliedOptions.showSortButtons">
-                  <v-tooltip bottom>
+                  <v-tooltip bottom v-if="appliedOptions.showSortButtons">
                     <template v-slot:activator="{ props }">
                       <v-btn
                         v-bind="props"
-                        fab
-                        text
+                        icon
+                        variant="text"
                         elevation="0"
                         small
                         class="ma-0"
-                        aria-label="Move down"
+                        :aria-label="control.translations.downAriaLabel"
                         :disabled="index >= dataLength - 1 || !control.enabled"
                         :class="styles.listWithDetail.itemMoveDown"
-                        @click.native="moveDownClick($event, index)"
+                        @click="moveDownClick($event, index)"
                       >
-                        <v-icon class="notranslate">mdi-arrow-down</v-icon>
+                        <v-icon class="notranslate">{{
+                          icons.current.value.itemMoveDown
+                        }}</v-icon>
                       </v-btn>
                     </template>
-                    Move Down
+                    {{ control.translations.down }}
                   </v-tooltip>
-                </v-list-item-action>
-                <v-list-item-action>
                   <v-tooltip bottom>
                     <template v-slot:activator="{ props }">
                       <v-btn
                         v-bind="props"
-                        fab
-                        text
+                        icon
+                        variant="text"
                         elevation="0"
                         small
                         class="ma-0"
-                        aria-label="Delete"
+                        :aria-label="control.translations.removeAriaLabel"
                         :class="styles.listWithDetail.itemDelete"
-                        @click.native="removeItemsClick($event, [index])"
+                        @click="removeItemsClick($event, [index])"
                         :disabled="
                           !control.enabled ||
                           (appliedOptions.restrict &&
@@ -159,21 +155,26 @@
                             dataLength <= arraySchema.minItems)
                         "
                       >
-                        <v-icon class="notranslate">mdi-delete</v-icon>
+                        <v-icon class="notranslate">{{
+                          icons.current.value.itemDelete
+                        }}</v-icon>
                       </v-btn>
                     </template>
-                    Delete
+                    {{ control.translations.removeTooltip }}
                   </v-tooltip>
-                </v-list-item-action>
+                </template>
               </v-list-item>
             </template>
           </v-virtual-scroll>
-        </v-list-item-group>
+        </v-list>
       </v-col>
-      <v-col v-if="selectedIndex === undefined" class="grow">
-        <span class="text-h6">No Selection</span>
+      <v-col v-if="selectedIndex === undefined" class="flex-grow-1">
+        <span class="text-h6">{{ control.translations.noSelection }}</span>
       </v-col>
-      <v-col v-else :class="`grow ${styles.listWithDetail.itemContent}`">
+      <v-col
+        v-else
+        :class="`flex-shrink-0 flex-grow-1 ${styles.listWithDetail.itemContent}`"
+      >
         <dispatch-renderer
           :schema="control.schema"
           :uischema="foundUISchema"
@@ -189,65 +190,53 @@
 
 <script lang="ts">
 import {
-  JsonFormsRendererRegistryEntry,
-  ControlElement,
-  rankWith,
+  Resolve,
+  and,
   composePaths,
   createDefaultValue,
-  and,
-  uiTypeIs,
-  isObjectArray,
   findUISchema,
-  UISchemaElement,
-  Resolve,
-  JsonSchema,
+  isObjectArray,
+  rankWith,
+  uiTypeIs,
+  type ControlElement,
+  type JsonFormsRendererRegistryEntry,
+  type JsonSchema,
+  type UISchemaElement,
 } from '@jsonforms/core';
-import { defineComponent, ref } from 'vue';
 import {
   DispatchRenderer,
   rendererProps,
-  RendererProps,
   useJsonFormsArrayControl,
+  type RendererProps,
 } from '@jsonforms/vue';
-import { useVuetifyArrayControl } from '../util';
+import type { ErrorObject } from 'ajv';
+import { defineComponent, ref } from 'vue';
 import {
-  VList,
-  VListItemGroup,
-  VListItem,
-  VListItemTitle,
-  VListItemContent,
-  VListItemAction,
-  VListItemAvatar,
-  VRow,
+  VAvatar,
+  VBtn,
   VCol,
   VContainer,
+  VIcon,
+  VList,
+  VListItem,
+  VListItemTitle,
+  VRow,
+  VSpacer,
   VToolbar,
   VToolbarTitle,
   VTooltip,
-  VIcon,
-  VBtn,
-  VAvatar,
-  VSpacer,
-  VExpansionPanels,
-  VExpansionPanel,
-  VExpansionPanelTitle,
-  VExpansionPanelText,
   VVirtualScroll,
 } from 'vuetify/components';
-import { ValidationIcon, ValidationBadge } from '../controls/components/index';
-import { ErrorObject } from 'ajv';
+import { ValidationBadge, ValidationIcon } from '../controls/components/index';
+import { useIcons, useVuetifyArrayControl } from '../util';
 
 const controlRenderer = defineComponent({
   name: 'list-with-detail-renderer',
   components: {
     DispatchRenderer,
     VList,
-    VListItemGroup,
     VListItem,
     VListItemTitle,
-    VListItemContent,
-    VListItemAction,
-    VListItemAvatar,
     VAvatar,
     VRow,
     VCol,
@@ -257,10 +246,6 @@ const controlRenderer = defineComponent({
     VBtn,
     VIcon,
     VSpacer,
-    VExpansionPanels,
-    VExpansionPanel,
-    VExpansionPanelTitle,
-    VExpansionPanelText,
     VContainer,
     VVirtualScroll,
     ValidationIcon,
@@ -271,10 +256,12 @@ const controlRenderer = defineComponent({
   },
   setup(props: RendererProps<ControlElement>) {
     const selectedIndex = ref<number | undefined>(undefined);
+    const icons = useIcons();
 
     return {
       ...useVuetifyArrayControl(useJsonFormsArrayControl(props)),
       selectedIndex,
+      icons,
     };
   },
   computed: {
@@ -288,14 +275,14 @@ const controlRenderer = defineComponent({
         this.control.uischema.scope,
         this.control.path,
         undefined,
-        this.control.uischema
+        this.control.uischema,
       );
     },
     arraySchema(): JsonSchema | undefined {
       return Resolve.schema(
         this.control.rootSchema,
         this.control.uischema.scope,
-        this.control.rootSchema
+        this.control.rootSchema,
       );
     },
   },
@@ -305,7 +292,7 @@ const controlRenderer = defineComponent({
     addButtonClick() {
       this.addItem(
         this.control.path,
-        createDefaultValue(this.control.schema, this.control.rootSchema)
+        createDefaultValue(this.control.schema, this.control.rootSchema),
       )();
     },
     moveUpClick(event: Event, toMove: number): void {
@@ -323,8 +310,8 @@ const controlRenderer = defineComponent({
     childErrors(index: number): ErrorObject[] {
       return this.control.childErrors.filter((e) =>
         e.instancePath.startsWith(
-          this.composePaths(this.control.path, `${index}`)
-        )
+          this.composePaths(this.control.path, `${index}`),
+        ),
       );
     },
   },

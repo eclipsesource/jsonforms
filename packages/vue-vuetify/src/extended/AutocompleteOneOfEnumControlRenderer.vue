@@ -5,74 +5,72 @@
     :isFocused="isFocused"
     :appliedOptions="appliedOptions"
   >
-    <v-hover v-slot="{ isHovering }">
-      <v-select
-        v-if="appliedOptions.autocomplete === false"
-        v-disabled-icon-focus
-        :id="control.id + '-input'"
-        :class="styles.control.input"
-        :disabled="!control.enabled"
-        :autofocus="appliedOptions.focus"
-        :placeholder="appliedOptions.placeholder"
-        :label="computedLabel"
-        :hint="control.description"
-        :persistent-hint="persistentHint()"
-        :required="control.required"
-        :error-messages="control.errors"
-        :clearable="isHovering"
-        :model-value="control.data"
-        :items="control.options"
-        :item-title="(item) => t(item.label, item.label)"
-        item-value="value"
-        v-bind="vuetifyProps('v-select')"
-        @change="onChange"
-        @focus="handleFocus"
-        @blur="handleBlur"
-      />
-      <v-autocomplete
-        v-else
-        v-disabled-icon-focus
-        :id="control.id + '-input'"
-        :class="styles.control.input"
-        :disabled="!control.enabled"
-        :autofocus="appliedOptions.focus"
-        :placeholder="appliedOptions.placeholder"
-        :label="computedLabel"
-        :hint="control.description"
-        :persistent-hint="persistentHint()"
-        :required="control.required"
-        :error-messages="control.errors"
-        :clearable="isHovering"
-        :model-value="control.data"
-        :items="control.options"
-        :item-title="(item) => t(item.label, item.label)"
-        item-value="value"
-        v-bind="vuetifyProps('v-autocomplete')"
-        @update:model-value="onChange"
-        @focus="handleFocus"
-        @blur="handleBlur"
-      />
-    </v-hover>
+    <v-select
+      v-if="appliedOptions.autocomplete === false"
+      v-disabled-icon-focus
+      :id="control.id + '-input'"
+      :class="styles.control.input"
+      :disabled="!control.enabled"
+      :autofocus="appliedOptions.focus"
+      :placeholder="appliedOptions.placeholder"
+      :label="computedLabel"
+      :hint="control.description"
+      :persistent-hint="persistentHint()"
+      :required="control.required"
+      :error-messages="control.errors"
+      :clearable="control.enabled"
+      :model-value="control.data"
+      :items="control.options"
+      item-title="label"
+      item-value="value"
+      v-bind="vuetifyProps('v-select')"
+      @update:model-value="onChange"
+      @focus="handleFocus"
+      @blur="handleBlur"
+    />
+    <v-autocomplete
+      v-else
+      v-disabled-icon-focus
+      :id="control.id + '-input'"
+      :class="styles.control.input"
+      :disabled="!control.enabled"
+      :autofocus="appliedOptions.focus"
+      :placeholder="appliedOptions.placeholder"
+      :label="computedLabel"
+      :hint="control.description"
+      :persistent-hint="persistentHint()"
+      :required="control.required"
+      :error-messages="control.errors"
+      :clearable="control.enabled"
+      :model-value="control.data"
+      :items="control.options"
+      item-title="label"
+      item-value="value"
+      v-bind="vuetifyProps('v-autocomplete')"
+      @update:model-value="onChange"
+      @focus="handleFocus"
+      @blur="handleBlur"
+    />
   </control-wrapper>
 </template>
 
 <script lang="ts">
 import {
-  ControlElement,
   isOneOfEnumControl,
-  JsonFormsRendererRegistryEntry,
   rankWith,
+  type ControlElement,
+  type JsonFormsRendererRegistryEntry,
 } from '@jsonforms/core';
 import {
   rendererProps,
-  RendererProps,
   useJsonFormsOneOfEnumControl,
+  type RendererProps,
 } from '@jsonforms/vue';
 import { defineComponent } from 'vue';
-import { VAutocomplete, VHover, VSelect } from 'vuetify/components';
+import { VAutocomplete, VSelect } from 'vuetify/components';
 import { default as ControlWrapper } from '../controls/ControlWrapper.vue';
 import { DisabledIconFocus } from '../controls/directives';
-import { useTranslator, useVuetifyControl } from '../util';
+import { useVuetifyControl } from '../util';
 
 const controlRenderer = defineComponent({
   name: 'autocomplete-oneof-enum-control-renderer',
@@ -80,7 +78,6 @@ const controlRenderer = defineComponent({
     ControlWrapper,
     VSelect,
     VAutocomplete,
-    VHover,
   },
   directives: {
     DisabledIconFocus,
@@ -89,14 +86,11 @@ const controlRenderer = defineComponent({
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    const t = useTranslator();
-
-    const control = useVuetifyControl(
+    return useVuetifyControl(
       useJsonFormsOneOfEnumControl(props),
       (value) => (value !== null ? value : undefined),
-      300
+      300,
     );
-    return { ...control, t };
   },
 });
 

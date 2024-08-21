@@ -1,9 +1,0 @@
-{
-  "type": "object",
-  "properties": {
-    "exampleRadioEnum": {
-      "type": "string",
-      "enum": ["Red", "Green", "Blue"]
-    }
-  }
-}

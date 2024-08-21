@@ -1,5 +1,5 @@
+import { describe, it, expect, beforeEach } from 'vitest';
 import { clearAllIds } from '@jsonforms/core';
-import { Wrapper } from '@vue/test-utils';
 import BooleanControlRenderer, {
   entry as booleanControlRendererEntry,
 } from '../../../src/controls/BooleanControlRenderer.vue';
@@ -20,16 +20,12 @@ describe('BooleanControlRenderer.vue', () => {
       placeholder: 'boolean placeholder',
     },
   };
-  let wrapper: Wrapper<any, Element>;
+  let wrapper: ReturnType<typeof mountJsonForms>;
 
   beforeEach(() => {
     // clear all ids to guarantee that the snapshots will always be generated with the same ids
     clearAllIds();
     wrapper = mountJsonForms(data, schema, renderers, uischema);
-  });
-
-  afterEach(() => {
-    wrapper.destroy();
   });
 
   it('check if child BooleanControlRenderer exists', () => {
@@ -47,12 +43,11 @@ describe('BooleanControlRenderer.vue', () => {
   it('emits a data change', async () => {
     const input = wrapper.find('input[type="checkbox"]');
     await input.trigger('click');
-    expect(wrapper.vm.$data.data).toEqual(false);
+    expect(wrapper.vm.$data.event.data).toEqual(false);
   });
 
   it('should have a placeholder', async () => {
     const input = wrapper.find('input[type="checkbox"]');
-    await input.trigger('focus');
     const placeholder = input.attributes('placeholder');
     expect(placeholder).toEqual('boolean placeholder');
   });

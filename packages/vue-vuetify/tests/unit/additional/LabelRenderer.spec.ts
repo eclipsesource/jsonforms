@@ -1,5 +1,5 @@
+import { describe, it, expect, beforeEach } from 'vitest';
 import { clearAllIds } from '@jsonforms/core';
-import { Wrapper } from '@vue/test-utils';
 import LabelRenderer, {
   entry as labelRendererEntry,
 } from '../../../src/additional/LabelRenderer.vue';
@@ -17,16 +17,12 @@ describe('LabelRenderer.vue', () => {
     text: 'My Label',
   };
 
-  let wrapper: Wrapper<any, Element>;
+  let wrapper: ReturnType<typeof mountJsonForms>;
 
   beforeEach(() => {
     // clear all ids to guarantee that the snapshots will always be generated with the same ids
     clearAllIds();
     wrapper = mountJsonForms(data, schema, renderers, uischema);
-  });
-
-  afterEach(() => {
-    wrapper.destroy();
   });
 
   it('check if child LabelRenderer exists', () => {

@@ -1,201 +1,148 @@
 <template>
   <div v-if="layout.visible" :class="styles.categorization.root">
-    <v-stepper
+    <v-stepper-vertical
       v-if="appliedOptions.vertical == true"
       non-linear
       v-model="activeCategory"
-      v-bind="vuetifyProps('v-stepper')"
+      editable
+      v-bind="vuetifyProps('v-stepper-vertical')"
+      :hide-actions="!appliedOptions.showNavButtons"
     >
-      <template v-for="(element, index) in visibleCategories" :key="index">
-        <v-stepper-step
-          :step="index + 1"
-          editable
-        >
-          {{ visibleCategoryLabels[index] }}
-        </v-stepper-step>
-
-        <v-stepper-content :step="index + 1">
-          <v-card elevation="0">
-            <dispatch-renderer
-              :schema="layout.schema"
-              :uischema="element"
-              :path="layout.path"
-              :enabled="layout.enabled"
-              :renderers="layout.renderers"
-              :cells="layout.cells"
-            />
-
-            <div v-if="!!appliedOptions.showNavButtons">
-              <v-divider></v-divider>
-
-              <v-card-actions>
-                <v-btn
-                  text
-                  left
-                  :disabled="activeCategory - 1 <= 0"
-                  @click="activeCategory--"
-                >
-                  Back
-                </v-btn>
-                <v-spacer></v-spacer>
-                <v-btn
-                  text
-                  right
-                  color="primary"
-                  :disabled="activeCategory - 1 >= visibleCategories.length - 1"
-                  @click="activeCategory++"
-                >
-                  Next
-                </v-btn>
-              </v-card-actions>
-            </div>
-          </v-card>
-        </v-stepper-content>
-      </template>
-    </v-stepper>
+      <v-stepper-vertical-item
+        :title="visibleCategoryLabels[index]"
+        v-for="(element, index) in visibleCategories"
+        :value="index + 1"
+        :key="`${layout.path}-${index}`"
+      >
+        <v-card elevation="0">
+          <dispatch-renderer
+            :schema="layout.schema"
+            :uischema="element.value.uischema"
+            :path="layout.path"
+            :enabled="layout.enabled"
+            :renderers="layout.renderers"
+            :cells="layout.cells"
+          />
+        </v-card>
+      </v-stepper-vertical-item>
+    </v-stepper-vertical>
     <v-stepper
       v-else
       non-linear
       v-model="activeCategory"
       v-bind="vuetifyProps('v-stepper')"
     >
-      <v-stepper-header>
-        <template v-for="(_, index) in visibleCategories" :key="index">
-          <v-stepper-step
-            :step="index + 1"
-            editable
+      <template v-slot:default="{ prev, next }">
+        <v-stepper-header>
+          <template
+            v-for="(_, index) in visibleCategories"
+            :key="`${layout.path}-${index}`"
           >
-            {{ visibleCategoryLabels[index] }}
-          </v-stepper-step>
-          <v-divider
-            v-if="index !== visibleCategories.length - 1"
-            :key="index"
-          ></v-divider>
-        </template>
-      </v-stepper-header>
+            <v-stepper-item :value="index + 1" editable>
+              {{ visibleCategoryLabels[index] }}
+            </v-stepper-item>
+            <v-divider
+              v-if="index !== visibleCategories.length - 1"
+              :key="index"
+            ></v-divider>
+          </template>
+        </v-stepper-header>
 
-      <v-stepper-items>
-        <v-stepper-content
-          v-for="(element, index) in visibleCategories"
-          :step="index + 1"
-        >
-          <v-card elevation="0">
-            <dispatch-renderer
-              :schema="layout.schema"
-              :uischema="element"
-              :path="layout.path"
-              :enabled="layout.enabled"
-              :renderers="layout.renderers"
-              :cells="layout.cells"
-            />
+        <v-stepper-window>
+          <v-stepper-window-item
+            v-for="(element, index) in visibleCategories"
+            :value="index + 1"
+            :key="`${layout.path}-${index}`"
+          >
+            <v-card elevation="0">
+              <dispatch-renderer
+                :schema="layout.schema"
+                :uischema="element.value.uischema"
+                :path="layout.path"
+                :enabled="layout.enabled"
+                :renderers="layout.renderers"
+                :cells="layout.cells"
+              />
+            </v-card>
+          </v-stepper-window-item>
+        </v-stepper-window>
 
-            <div v-if="!!appliedOptions.showNavButtons">
-              <v-divider></v-divider>
-
-              <v-card-actions>
-                <v-btn
-                  text
-                  left
-                  :disabled="activeCategory - 1 <= 0"
-                  @click="activeCategory--"
-                >
-                  Back
-                </v-btn>
-                <v-spacer></v-spacer>
-                <v-btn
-                  text
-                  right
-                  color="primary"
-                  :disabled="activeCategory - 1 >= visibleCategories.length - 1"
-                  @click="activeCategory++"
-                >
-                  Next
-                </v-btn>
-              </v-card-actions>
-            </div>
-          </v-card>
-        </v-stepper-content>
-      </v-stepper-items>
+        <v-stepper-actions
+          v-if="appliedOptions.showNavButtons"
+          @click:next="next"
+          @click:prev="prev"
+        ></v-stepper-actions>
+      </template>
     </v-stepper>
   </div>
 </template>
 
 <script lang="ts">
 import {
-  JsonFormsRendererRegistryEntry,
-  Layout,
-  rankWith,
   and,
-  uiTypeIs,
-  Categorization,
-  Category,
-  optionIs,
-  Tester,
-  isVisible,
   categorizationHasCategory,
-  deriveLabelForUISchemaElement,
+  isCategorization,
+  optionIs,
+  rankWith,
+  type JsonFormsRendererRegistryEntry,
+  type Layout,
 } from '@jsonforms/core';
-import { defineComponent, ref } from 'vue';
 import {
   DispatchRenderer,
   rendererProps,
-  useJsonFormsLayout,
-  RendererProps,
+  useJsonFormsCategorization,
+  type RendererProps,
 } from '@jsonforms/vue';
-import { useAjv, useTranslator, useVuetifyLayout } from '../util';
+import { defineComponent, ref } from 'vue';
 import {
-  VStepper,
-  VStepperHeader,
-  VStepperStep,
-  VDivider,
-  VStepperItems,
-  VStepperContent,
-  VSpacer,
   VCard,
-  VCardActions,
-  VBtn,
+  VDivider,
+  VStepper,
+  VStepperActions,
+  VStepperHeader,
+  VStepperItem,
+  VStepperWindow,
+  VStepperWindowItem,
 } from 'vuetify/components';
+import {
+  VStepperVertical,
+  VStepperVerticalItem,
+} from 'vuetify/labs/VStepperVertical';
+import { useVuetifyLayout } from '../util';
 
 const layoutRenderer = defineComponent({
   name: 'categorization-stepper-renderer',
   components: {
     DispatchRenderer,
+    VStepperVertical,
+    VStepperVerticalItem,
     VStepper,
     VStepperHeader,
-    VStepperStep,
+    VStepperItem,
     VDivider,
-    VSpacer,
-    VStepperItems,
-    VStepperContent,
+    VStepperWindowItem,
+    VStepperWindow,
+    VStepperActions,
     VCard,
-    VCardActions,
-    VBtn,
   },
   props: {
     ...rendererProps<Layout>(),
   },
   setup(props: RendererProps<Layout>) {
     const activeCategory = ref(1);
-    const ajv = useAjv();
-    const t = useTranslator();
 
     return {
-      ...useVuetifyLayout(useJsonFormsLayout(props)),
+      ...useVuetifyLayout(useJsonFormsCategorization(props)),
       activeCategory,
-      ajv,
-      t,
     };
   },
   computed: {
-    visibleCategories(): (Category | Categorization)[] {
-      return (this.layout.uischema as Categorization).elements.filter(
-        (category: Category | Categorization) =>
-          isVisible(category, this.layout.data, this.layout.path, this.ajv)
-      );
+    visibleCategories() {
+      return this.categories.filter((category) => category.value.visible);
     },
     visibleCategoryLabels(): string[] {
       return this.visibleCategories.map((element) => {
-        return deriveLabelForUISchemaElement(element, this.t) ?? '';
+        return element.value.label;
       });
     },
   },
@@ -203,14 +150,15 @@ const layoutRenderer = defineComponent({
 
 export default layoutRenderer;
 
-export const categorizationStepperTester: Tester = and(
-  uiTypeIs('Categorization'),
-  categorizationHasCategory,
-  optionIs('variant', 'stepper')
-);
-
 export const entry: JsonFormsRendererRegistryEntry = {
   renderer: layoutRenderer,
-  tester: rankWith(3, categorizationStepperTester),
+  tester: rankWith(
+    3,
+    and(
+      isCategorization,
+      categorizationHasCategory,
+      optionIs('variant', 'stepper'),
+    ),
+  ),
 };
 </script>

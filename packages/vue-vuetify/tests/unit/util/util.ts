@@ -1,31 +1,38 @@
-import {
+import type {
   JsonFormsRendererRegistryEntry,
   JsonSchema,
   UISchemaElement,
 } from '@jsonforms/core';
-import { createLocalVue, mount } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
 import TestComponent from './TestComponent.vue';
-import Vuetify from 'vuetify';
+import { createVuetify } from 'vuetify';
+import * as components from 'vuetify/components';
+import * as directives from 'vuetify/directives';
 
-const localVue = createLocalVue();
-const vuetify = new Vuetify();
+const vuetify = createVuetify({
+  components,
+  directives,
+});
+
+global.ResizeObserver = require('resize-observer-polyfill');
 
 export const mountJsonForms = (
   data: any,
   schema: JsonSchema,
   renderers: JsonFormsRendererRegistryEntry[],
   uischema?: UISchemaElement,
-  config?: any
+  config?: any,
 ) => {
   return mount(TestComponent, {
-    localVue,
-    vuetify,
+    global: {
+      plugins: [vuetify],
+    },
     propsData: {
-      initialData: data,
+      data: data,
       schema,
       uischema,
       config,
-      initialRenderers: renderers,
+      renderers: renderers,
     },
     attachTo: document.body,
   });

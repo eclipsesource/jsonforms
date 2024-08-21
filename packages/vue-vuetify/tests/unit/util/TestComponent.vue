@@ -12,9 +12,27 @@
 </template>
 
 <script lang="ts">
-import { JsonForms, JsonFormsChangeEvent } from '@jsonforms/vue';
-import { defineComponent } from 'vue';
+import {
+  defaultMiddleware,
+  type JsonFormsCellRendererRegistryEntry,
+  type JsonFormsI18nState,
+  type JsonFormsRendererRegistryEntry,
+  type JsonFormsUISchemaRegistryEntry,
+  type JsonSchema,
+  type Middleware,
+  type UISchemaElement,
+  type ValidationMode,
+} from '@jsonforms/core';
+import {
+  JsonForms,
+  type JsonFormsChangeEvent,
+  type MaybeReadonly,
+} from '@jsonforms/vue';
+import Ajv, { type ErrorObject } from 'ajv';
+import { defineComponent, reactive, type PropType } from 'vue';
 import { VApp } from 'vuetify/components';
+
+const EMPTY: ErrorObject[] = reactive([]);
 
 export default defineComponent({
   name: 'test-component',
@@ -23,38 +41,80 @@ export default defineComponent({
     VApp,
   },
   props: {
-    initialData: {
+    data: {
       required: true,
-      type: [String, Number, Boolean, Array, Object],
+      type: [String, Number, Boolean, Array, Object] as PropType<any>,
     },
     schema: {
       required: false,
+      type: [Object, Boolean] as PropType<JsonSchema>,
       default: undefined,
-      type: [Object, Boolean],
     },
     uischema: {
       required: false,
-      type: Object,
+      type: Object as PropType<UISchemaElement>,
+      default: undefined,
+    },
+    renderers: {
+      required: true,
+      type: Array as PropType<MaybeReadonly<JsonFormsRendererRegistryEntry[]>>,
+    },
+    cells: {
+      required: false,
+      type: Array as PropType<
+        MaybeReadonly<JsonFormsCellRendererRegistryEntry[]>
+      >,
+      default: () => [],
     },
     config: {
       required: false,
+      type: Object as PropType<any>,
       default: undefined,
-      type: Object,
     },
-    initialRenderers: {
-      required: true,
-      type: Array,
+    readonly: {
+      required: false,
+      type: Boolean,
+      default: false,
+    },
+    uischemas: {
+      required: false,
+      type: Array as PropType<MaybeReadonly<JsonFormsUISchemaRegistryEntry[]>>,
+      default: () => [],
+    },
+    validationMode: {
+      required: false,
+      type: String as PropType<ValidationMode>,
+      default: 'ValidateAndShow',
+    },
+    ajv: {
+      required: false,
+      type: Object as PropType<Ajv>,
+      default: undefined,
+    },
+    i18n: {
+      required: false,
+      type: Object as PropType<JsonFormsI18nState>,
+      default: undefined,
+    },
+    additionalErrors: {
+      required: false,
+      type: Array as PropType<ErrorObject[]>,
+      default: () => EMPTY,
+    },
+    middleware: {
+      required: false,
+      type: Function as PropType<Middleware>,
+      default: defaultMiddleware,
     },
   },
   data() {
     return {
-      renderers: Object.freeze(this.initialRenderers),
-      data: this.initialData,
+      event: {} as JsonFormsChangeEvent,
     };
   },
   methods: {
     onChange(event: JsonFormsChangeEvent) {
-      this.data = event.data;
+      this.event = event;
     },
   },
 });

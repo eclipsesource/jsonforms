@@ -1,6 +1,6 @@
-import { UISchemaElement } from '@jsonforms/core';
-import { inject } from 'vue';
+import type { UISchemaElement } from '@jsonforms/core';
 import merge from 'lodash/merge';
+import { inject } from 'vue';
 import { defaultStyles } from './defaultStyles';
 
 const createEmptyStyles = (): Styles => ({
@@ -37,7 +37,6 @@ export interface Styles {
   arrayList: {
     root?: string;
     toolbar?: string;
-    title?: string,
     validationIcon?: string;
     container?: string;
     addButton?: string;

@@ -1,5 +1,5 @@
+import { describe, it, expect, beforeEach } from 'vitest';
 import { clearAllIds } from '@jsonforms/core';
-import { Wrapper } from '@vue/test-utils';
 import TimeControlRenderer, {
   entry as timeControlRendererEntry,
 } from '../../../src/controls/TimeControlRenderer.vue';
@@ -22,16 +22,12 @@ describe('TimeControlRenderer.vue', () => {
       timeSaveFormat: 'HH:mm:ss',
     },
   };
-  let wrapper: Wrapper<any, Element>;
+  let wrapper: ReturnType<typeof mountJsonForms>;
 
   beforeEach(() => {
     // clear all ids to guarantee that the snapshots will always be generated with the same ids
     clearAllIds();
     wrapper = mountJsonForms(data, schema, renderers, uischema);
-  });
-
-  afterEach(() => {
-    wrapper.destroy();
   });
 
   it('check if child TimeControlRenderer exists', () => {
@@ -49,12 +45,11 @@ describe('TimeControlRenderer.vue', () => {
   it('emits a data change', async () => {
     const input = wrapper.find('input[type="text"]');
     await input.setValue('01:51:10');
-    expect(wrapper.vm.$data.data).toEqual('01:51:10');
+    expect(wrapper.vm.$data.event.data).toEqual('01:51:10');
   });
 
   it('should have a placeholder', async () => {
     const input = wrapper.find('input[type="text"]');
-    await input.trigger('focus');
     const placeholder = input.attributes('placeholder');
     expect(placeholder).toEqual('time placeholder');
   });
