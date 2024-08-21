@@ -1,0 +1,22 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "Label",
+      "text": "Login Information"
+    },
+    {
+      "type": "HorizontalLayout",
+      "elements": [
+        {
+          "type": "Control",
+          "scope": "#/properties/username"
+        },
+        {
+          "type": "Control",
+          "scope": "#/properties/password"
+        }
+      ]
+    }
+  ]
+}

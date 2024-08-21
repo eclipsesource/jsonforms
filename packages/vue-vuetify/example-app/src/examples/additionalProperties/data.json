@@ -1,0 +1,15 @@
+{
+  "propertiesString": "data",
+  "string": "string value",
+  "number": 10.2,
+  "integer": 11,
+  "object": {
+    "prop1": "prop 1 value"
+  },
+  "boolean": true,
+  "stringArray": ["value1", "value2"],
+  "numberArray": [12.2],
+  "integerArray": [33],
+  "objectArray": [{ "prop1": "prop1 val" }, {}],
+  "booleanArray": [false, true]
+}

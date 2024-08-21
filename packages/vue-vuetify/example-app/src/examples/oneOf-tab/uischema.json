@@ -1,0 +1,13 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "Control",
+      "label": "Basic Information",
+      "scope": "#/properties/addressOrUser",
+      "options": {
+        "variant": "tab"
+      }
+    }
+  ]
+}

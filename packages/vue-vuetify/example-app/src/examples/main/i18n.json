@@ -1,0 +1,103 @@
+{
+  "en": {
+    "firstName": {
+      "label": "First Name",
+      "description": "First name of the person"
+    },
+    "lastName": {
+      "label": "Last Name",
+      "description": "Last name of the person"
+    },
+    "age": {
+      "label": "Age",
+      "description": "Person's age",
+      "error": {
+        "required": "Age is required"
+      }
+    },
+    "gender": {
+      "label": "Gender",
+      "description": "Gender of the person"
+    },
+    "height": {
+      "label": "Height",
+      "description": "Height of the person"
+    },
+    "dateOfBirth": {
+      "label": "Birth Date",
+      "description": "Birth date of the person"
+    },
+    "committer": {
+      "label": "Committer"
+    },
+    "address": {
+      "street": {
+        "label": "Street",
+        "description": "Shipping street address"
+      },
+      "streetnumber": {
+        "label": "Street Number",
+        "description": "Shipping street number"
+      },
+      "postalCode": {
+        "label": "Postal Code",
+        "description": "Shipping postal code"
+      },
+      "city": {
+        "label": "City",
+        "description": "Shipping city"
+      }
+    }
+  },
+  "bg": {
+    "firstName": {
+      "label": "Първо име",
+      "description": "Първо име на лицето"
+    },
+    "lastName": {
+      "label": "Фамилия",
+      "description": "Фамилия на лицето"
+    },
+    "age": {
+      "label": "Възраст",
+      "description": "Възраст на лицето",
+      "error": {
+        "required": "Изисква се възраст"
+      }
+    },
+    "gender": {
+      "label": "Пол",
+      "description": "Пол на лицето"
+    },
+    "height": {
+      "label": "Височина",
+      "description": "Височина на лицето"
+    },
+    "dateOfBirth": {
+      "label": "Рождена дата",
+      "description": "Рождена дата на лицето"
+    },
+    "committer": {
+      "label": "деятел"
+    },
+    "address": {
+      "street": {
+        "label": "Улица",
+        "description": "Улица за доставка"
+      },
+      "streetnumber": {
+        "label": "Номер на улица",
+        "description": "Номер на улицата за доставка"
+      },
+      "postalCode": {
+        "label": "Пощенски код",
+        "description": "Пощенски код за доставка"
+      },
+      "city": {
+        "label": "Град",
+        "description": "Град за доставка"
+      }
+    },
+    "Address for Shipping T-Shirt": "Адрес за доставка на тениска"
+  }
+}

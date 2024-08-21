@@ -1,0 +1,13 @@
+{
+  "type": "HorizontalLayout",
+  "elements": [
+    {
+      "type": "Control",
+      "label": {
+        "text": "Example Array",
+        "show": true
+      },
+      "scope": "#/properties/exampleArray"
+    }
+  ]
+}

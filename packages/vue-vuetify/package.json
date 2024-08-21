@@ -1,0 +1,101 @@
+{
+  "name": "@jsonforms/vue-vuetify",
+  "version": "3.3.0-preview.0",
+  "description": "Vue Vuetify renderers for JSON Forms",
+  "repository": "https://github.com/eclipsesource/jsonforms-vuetify-renderers",
+  "bugs": "https://github.com/eclipsesource/jsonforms/issues",
+  "homepage": "http://jsonforms.io/",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "vue",
+    "vue2",
+    "vue 2",
+    "vuetify",
+    "form",
+    "forms",
+    "json",
+    "jsonforms",
+    "frontend",
+    "generator",
+    "input",
+    "renderengine",
+    "jsonschema",
+    "schema",
+    "uischema",
+    "layout",
+    "customization"
+  ],
+  "main": "lib/jsonforms-vue-vuetify.cjs.js",
+  "module": "lib/jsonforms-vue-vuetify.esm.js",
+  "exports": {
+    ".": {
+      "import": "./lib/jsonforms-vue-vuetify.esm.js",
+      "require": "./lib/jsonforms-vue-vuetify.cjs.js"
+    },
+    "./lib/jsonforms-vue-vuetify.esm.css": "./lib/jsonforms-vue-vuetify.esm.css",
+    "./lib/jsonforms-vue-vuetify.cjs.css": "./lib/jsonforms-vue-vuetify.cjs.css"
+  },
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib",
+    "src"
+  ],
+  "scripts": {
+    "prebuild": "rimraf lib",
+    "build": "cross-env NODE_ENV=production rollup --config rollup.config.mjs",
+    "watch": "rollup --watch --config rollup.config.mjs",
+    "test": "vue-cli-service test:unit"
+  },
+  "dependencies": {
+    "ajv": "^8.6.1",
+    "dayjs": "^1.10.6",
+    "lodash": "^4.17.15"
+  },
+  "peerDependencies": {
+    "@jsonforms/core": "3.3.0",
+    "@jsonforms/vue": "3.3.0",
+    "@mdi/font": "^7.0.96",
+    "vue": "^3.2.47",
+    "vuetify": "^3.1.12"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.6",
+    "@babel/preset-env": "^7.14.7",
+    "@babel/preset-typescript": "^7.14.5",
+    "@jsonforms/core": "3.3.0",
+    "@jsonforms/vue": "3.3.0",
+    "@mdi/font": "^7.0.96",
+    "@rollup/plugin-babel": "^6.0.3",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@types/jest": "^28.1.1",
+    "@types/lodash": "^4.14.172",
+    "@typescript-eslint/eslint-plugin": "^5.4.0",
+    "@typescript-eslint/parser": "^5.4.0",
+    "@vue/cli-plugin-unit-jest": "^5.0.0",
+    "@vue/cli-service": "~5.0.0",
+    "@vue/eslint-config-prettier": "^7.1.0",
+    "@vue/eslint-config-typescript": "^11.0.0",
+    "@vue/test-utils": "^2.3.2",
+    "ajv": "^8.6.1",
+    "core-js": "^3.9.1",
+    "cross-env": "^7.0.2",
+    "eslint": "^8.37.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-vue": "^9.10.0",
+    "jest": "^28.1.1",
+    "prettier": "^2.8.7",
+    "rimraf": "^4.4.1",
+    "rollup": "^3.20.2",
+    "rollup-plugin-cleanup": "^3.2.1",
+    "rollup-plugin-css-only": "^4.3.0",
+    "rollup-plugin-typescript2": "^0.35.0",
+    "rollup-plugin-visualizer": "^5.5.2",
+    "rollup-plugin-vue": "^6.0.0",
+    "typescript": "~4.7.4",
+    "vue": "^3.2.47",
+    "vuetify": "^3.1.12"
+  }
+}

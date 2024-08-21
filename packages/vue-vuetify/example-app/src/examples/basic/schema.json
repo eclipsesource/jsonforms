@@ -1,0 +1,57 @@
+{
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "minLength": 3,
+      "description": "Please enter your name",
+      "i18n": "name"
+    },
+    "vegetarian": {
+      "type": "boolean",
+      "i18n": "vegetarian"
+    },
+    "birthDate": {
+      "type": "string",
+      "format": "date",
+      "i18n": "birth"
+    },
+    "nationality": {
+      "type": "string",
+      "enum": ["DE", "IT", "JP", "US", "RU", "Other"],
+      "i18n": "nationality"
+    },
+    "personalData": {
+      "type": "object",
+      "properties": {
+        "age": {
+          "type": "integer",
+          "description": "Please enter your age.",
+          "i18n": "personal-data.age"
+        },
+        "height": {
+          "type": "number",
+          "i18n": "height"
+        },
+        "drivingSkill": {
+          "type": "number",
+          "maximum": 10,
+          "minimum": 1,
+          "default": 7,
+          "i18n": "personal-data.driving"
+        }
+      },
+      "required": ["age", "height"]
+    },
+    "occupation": {
+      "type": "string",
+      "i18n": "occupation"
+    },
+    "postalCode": {
+      "type": "string",
+      "maxLength": 5,
+      "i18n": "postal-code"
+    }
+  },
+  "required": ["occupation", "nationality"]
+}

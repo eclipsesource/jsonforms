@@ -1,0 +1,3 @@
+# Make sure eslint does not check the output files of our renderer set
+../*
+!/*

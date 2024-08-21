@@ -1,0 +1,24 @@
+{
+  "type": "object",
+  "properties": {
+    "exampleArray": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "phones": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^(\\([0-9]{3}\\))?[0-9]{3}-[0-9]{4}$"
+            }
+          }
+        },
+        "required":[
+          "name"
+        ]
+      }
+    }
+  }
+}

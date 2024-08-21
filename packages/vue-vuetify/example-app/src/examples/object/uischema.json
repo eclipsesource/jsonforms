@@ -1,0 +1,21 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "Control",
+      "scope": "#/properties/address"
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/user",
+      "rule": {
+        "effect": "SHOW",
+        "condition": {
+          "type": "LEAF",
+          "scope": "#/properties/address/properties/state",
+          "expectedValue": "DC"
+        }
+      }
+    }
+  ]
+}

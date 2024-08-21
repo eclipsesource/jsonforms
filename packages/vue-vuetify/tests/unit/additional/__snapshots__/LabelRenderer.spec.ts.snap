@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LabelRenderer.vue should render component and match snapshot 1`] = `
+<div data-app="true"
+     class="v-application v-application--is-ltr theme--light"
+     id="app"
+>
+  <div class="v-application--wrap">
+    <label aria-hidden="true"
+           class="v-label theme--light"
+           style="left: 0px; position: relative;"
+    >
+      My Label
+    </label>
+  </div>
+</div>
+`;

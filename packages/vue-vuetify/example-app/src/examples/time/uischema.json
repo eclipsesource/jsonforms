@@ -1,0 +1,16 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "Control",
+      "scope": "#/properties/time"
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/stringTime",
+      "options": {
+        "format": "time"
+      }
+    }
+  ]
+}

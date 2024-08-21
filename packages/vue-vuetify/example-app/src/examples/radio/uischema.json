@@ -1,0 +1,25 @@
+{
+  "type": "Control",
+  "scope": "#/properties/exampleRadioEnum",
+  "options": {
+    "format": "radio",
+    "vuetify": {
+      "v-radio-group": {
+        "prepend-icon": "mdi-palette",
+        "column": false,
+        "row": true
+      },
+      "v-radio": {
+        "Blue": {
+          "color": "blue"
+        },
+        "Red": {
+          "color": "red"
+        },
+        "Green": {
+          "color": "green"
+        }
+      }
+    }
+  }
+}

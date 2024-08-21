@@ -1,0 +1,26 @@
+{
+  "type": "HorizontalLayout",
+  "elements": [
+    {
+      "type": "Control",
+      "label": "Name",
+      "scope": "#/properties/name"
+    },
+    {
+      "type": "Control",
+      "label": "Birth Date",
+      "scope": "#/properties/birthDate"
+    }
+  ],
+  "options": {
+    "vuetify": {
+      "v-container": {
+        "fluid": true
+      },
+      "v-row": {
+        "no-gutters": false
+      },
+      "v-col": [{ "cols": 8 }, { "cols": 4 }]
+    }
+  }
+}
