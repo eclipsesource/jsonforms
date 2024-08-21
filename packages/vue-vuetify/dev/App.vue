@@ -36,10 +36,12 @@ const theme = computed(() => {
         <example-app-bar></example-app-bar>
         <example-drawer></example-drawer>
         <example-settings></example-settings>
-        <v-main>
-          <example-view v-if="example" :example="example"></example-view>
-          <home-view v-else></home-view>
-        </v-main>
+        <suspense>
+          <v-main>
+            <example-view v-if="example" :example="example"></example-view>
+            <home-view v-else></home-view>
+          </v-main>
+        </suspense>
       </v-app>
     </v-theme-provider>
   </v-locale-provider>

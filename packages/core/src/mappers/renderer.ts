@@ -1249,6 +1249,7 @@ export const mapStateToLabelProps = (
     config: getConfig(state),
     renderers: props.renderers || getRenderers(state),
     cells: props.cells || getCells(state),
+    uischema,
   };
 };
 

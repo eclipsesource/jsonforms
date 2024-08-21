@@ -13,7 +13,8 @@ import {
   type JsonSchema,
   type UISchemaElement,
 } from '@jsonforms/core';
-import Ajv, { type ErrorObject } from 'ajv';
+import type Ajv from 'ajv';
+import type { ErrorObject } from 'ajv';
 import cloneDeep from 'lodash/cloneDeep';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
@@ -88,7 +89,6 @@ export const useComputedLabel = <
  */
 export const useVuetifyLabel = <
   T extends {
-    schema: JsonSchema;
     uischema: UISchemaElement;
     config: any;
   },

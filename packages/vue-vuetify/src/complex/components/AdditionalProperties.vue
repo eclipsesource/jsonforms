@@ -114,7 +114,7 @@ import {
   useJsonFormsControlWithDetail,
   type JsonFormsChangeEvent,
 } from '@jsonforms/vue';
-import { type ErrorObject } from 'ajv';
+import type { ErrorObject } from 'ajv';
 import get from 'lodash/get';
 import isPlainObject from 'lodash/isPlainObject';
 import startCase from 'lodash/startCase';

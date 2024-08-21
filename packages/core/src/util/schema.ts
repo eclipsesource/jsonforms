@@ -26,16 +26,27 @@
 import find from 'lodash/find';
 import type { JsonSchema } from '../models';
 
-export const getFirstPrimitiveProp = (schema: any) => {
-  if (schema.properties) {
-    return find(Object.keys(schema.properties), (propName) => {
-      const prop = schema.properties[propName];
-      return (
-        prop.type === 'string' ||
-        prop.type === 'number' ||
-        prop.type === 'integer'
-      );
-    });
+export const getFirstPrimitiveProp = (schema: unknown) => {
+  if (
+    schema &&
+    typeof schema === 'object' &&
+    'properties' in schema &&
+    schema.properties
+  ) {
+    return find(
+      Object.keys(schema.properties),
+      (propName: keyof typeof schema.properties) => {
+        const prop: unknown = schema.properties[propName];
+        return (
+          prop &&
+          typeof prop === 'object' &&
+          'type' in prop &&
+          (prop.type === 'string' ||
+            prop.type === 'number' ||
+            prop.type === 'integer')
+        );
+      }
+    );
   }
   return undefined;
 };

@@ -608,8 +608,8 @@ importers:
   packages/material-renderers:
     dependencies:
       '@date-io/dayjs':
-        specifier: 1.3.13
-        version: 1.3.13(dayjs@1.10.7)
+        specifier: ^3.0.0
+        version: 3.0.0(dayjs@1.10.7)
       dayjs:
         specifier: 1.10.7
         version: 1.10.7
@@ -4312,16 +4312,19 @@ packages:
       '@jridgewell/trace-mapping': 0.3.9
     dev: true
 
-  /@date-io/core@1.3.13:
-    resolution: {integrity: sha512-AlEKV7TxjeK+jxWVKcCFrfYAk8spX9aCyiToFIiLPtfQbsjmRGLIhb5VZgptQcJdHtLXo7+m0DuurwFgUToQuA==}
+  /@date-io/core@3.0.0:
+    resolution: {integrity: sha512-S3j+IAQVBYNkQzchVVhX40eBkGDreBpScy9RXwTS5j2+k07+62pMVPisQ44Gq76Rqy5AOG/EZXCwBpY/jbemvA==}
     dev: false
 
-  /@date-io/dayjs@1.3.13(dayjs@1.10.7):
-    resolution: {integrity: sha512-nD39xWYwQjDMIdpUzHIcADHxY9m1hm1DpOaRn3bc2rBdgmwQC0PfW0WYaHyGGP/6LEzEguINRbHuotMhf+T9Sg==}
+  /@date-io/dayjs@3.0.0(dayjs@1.10.7):
+    resolution: {integrity: sha512-vy7DSwoQiPA2L0stRqW3le7lcEBMjoMMEmbpCNkyoX3xXizKInFvhbnOBmCyusIQ7tL/WsNC4X5bVgdNWX0JLA==}
     peerDependencies:
       dayjs: ^1.8.17
+    peerDependenciesMeta:
+      dayjs:
+        optional: true
     dependencies:
-      '@date-io/core': 1.3.13
+      '@date-io/core': 3.0.0
       dayjs: 1.10.7
     dev: false
 

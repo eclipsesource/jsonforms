@@ -4,6 +4,10 @@ import examples from '../examples';
 import { useAppStore } from '../store';
 
 const appStore = useAppStore();
+
+const handleExampleClick = (exampleName: string) => {
+  appStore.exampleName = exampleName;
+};
 </script>
 
 <template>
@@ -28,10 +32,9 @@ const appStore = useAppStore();
         :value="example.name"
         link
         color="primary"
+        @click="handleExampleClick(example.name)"
       >
-        <v-list-item-title @click="appStore.exampleName = example.name">{{
-          example.label
-        }}</v-list-item-title>
+        <v-list-item-title>{{ example.label }}</v-list-item-title>
       </v-list-item>
     </v-list>
   </v-navigation-drawer>
