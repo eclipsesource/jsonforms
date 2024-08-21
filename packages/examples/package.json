@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/examples",
-  "version": "3.4.0-alpha.2",
+  "version": "3.4.0-alpha.3",
   "description": "JSON Forms Example Data",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -47,7 +47,7 @@
     "lodash": "^4.17.21"
   },
   "peerDependencies": {
-    "@jsonforms/core": "3.4.0-alpha.2"
+    "@jsonforms/core": "3.4.0-alpha.3"
   },
   "devDependencies": {
     "@jsonforms/core": "workspace:*",
