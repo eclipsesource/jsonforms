@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/vue",
-  "version": "3.2.0-beta.0",
+  "version": "3.4.0-alpha.3",
   "description": "Vue 3 module of JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -56,16 +56,15 @@
     "@types/node": "^18.19.4",
     "@typescript-eslint/eslint-plugin": "^5.54.1",
     "@typescript-eslint/parser": "^5.54.1",
-    "@vue/cli-plugin-babel": "~4.5.19",
-    "@vue/cli-plugin-typescript": "~4.5.19",
-    "@vue/cli-service": "~4.5.19",
-    "@vue/compiler-sfc": "^3.2.26",
+    "@vue/cli-plugin-babel": "~5.0.8",
+    "@vue/cli-plugin-typescript": "~5.0.8",
+    "@vue/cli-service": "~5.0.8",
     "@vue/eslint-config-typescript": "^11.0.2",
-    "@vue/test-utils": "^2.0.2",
+    "@vue/test-utils": "^2.4.5",
     "@vue/vue3-jest": "^27.0.0",
     "core-js": "^3.9.1",
     "cross-env": "^7.0.2",
-    "eslint": "^7.32.0",
+    "eslint": "^8.56.0",
     "eslint-config-prettier": "^8.7.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier-vue": "^4.2.0",
@@ -81,12 +80,12 @@
     "rollup-plugin-vue": "^6.0.0",
     "ts-jest": "^27.1.5",
     "tslib": "^2.5.0",
-    "typedoc": "~0.21.9",
-    "typescript": "4.2.3",
-    "vue": "^3.2.26"
+    "typedoc": "~0.25.3",
+    "typescript": "~5.2.2",
+    "vue": "^3.4.21"
   },
   "peerDependencies": {
-    "@jsonforms/core": "v3.2.0-beta.0",
+    "@jsonforms/core": "3.4.0-alpha.3",
     "vue": "^3.2.26"
   }
 }

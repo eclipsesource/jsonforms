@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import merge from 'lodash/merge';
 import {
   ControlProps,
@@ -30,12 +30,18 @@ import {
   isDescriptionHidden,
   RankedTester,
   rankWith,
+  defaultTimeFormat,
 } from '@jsonforms/core';
 import { withJsonFormsControlProps } from '@jsonforms/react';
-import { FormHelperText, Hidden } from '@mui/material';
+import { FormHelperText } from '@mui/material';
 import { TimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { createOnChangeHandler, getData, useFocus } from '../util';
+import {
+  createOnBlurHandler,
+  createOnChangeHandler,
+  getData,
+  useFocus,
+} from '../util';
 
 export const MaterialTimeControl = (props: ControlProps) => {
   const [focused, onFocus, onBlur] = useFocus();
@@ -56,6 +62,9 @@ export const MaterialTimeControl = (props: ControlProps) => {
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
   const isValid = errors.length === 0;
 
+  const [key, setKey] = useState<number>(0);
+  const [open, setOpen] = useState<boolean>(false);
+
   const showDescription = !isDescriptionHidden(
     visible,
     description,
@@ -64,7 +73,7 @@ export const MaterialTimeControl = (props: ControlProps) => {
   );
 
   const format = appliedUiSchemaOptions.timeFormat ?? 'HH:mm';
-  const saveFormat = appliedUiSchemaOptions.timeSaveFormat ?? 'HH:mm:ss';
+  const saveFormat = appliedUiSchemaOptions.timeSaveFormat ?? defaultTimeFormat;
 
   const views = appliedUiSchemaOptions.views ?? ['hours', 'minutes'];
 
@@ -75,52 +84,69 @@ export const MaterialTimeControl = (props: ControlProps) => {
     : null;
   const secondFormHelperText = showDescription && !isValid ? errors : null;
 
+  const updateChild = useCallback(() => setKey((key) => key + 1), []);
+
   const onChange = useMemo(
     () => createOnChangeHandler(path, handleChange, saveFormat),
     [path, handleChange, saveFormat]
   );
 
+  const onBlurHandler = useMemo(
+    () =>
+      createOnBlurHandler(
+        path,
+        handleChange,
+        format,
+        saveFormat,
+        updateChild,
+        onBlur
+      ),
+    [path, handleChange, format, saveFormat, updateChild]
+  );
   const value = getData(data, saveFormat);
+
+  if (!visible) {
+    return null;
+  }
   return (
-    <Hidden xsUp={!visible}>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <TimePicker
-          label={label}
-          value={value}
-          onChange={onChange}
-          format={format}
-          ampm={!!appliedUiSchemaOptions.ampm}
-          views={views}
-          disabled={!enabled}
-          slotProps={{
-            actionBar: ({ wrapperVariant }) => ({
-              actions:
-                wrapperVariant === 'desktop'
-                  ? []
-                  : ['clear', 'cancel', 'accept'],
-            }),
-            textField: {
-              id: id + '-input',
-              required:
-                required && !appliedUiSchemaOptions.hideRequiredAsterisk,
-              autoFocus: appliedUiSchemaOptions.focus,
-              error: !isValid,
-              fullWidth: !appliedUiSchemaOptions.trim,
-              inputProps: {
-                type: 'text',
-              },
-              InputLabelProps: data ? { shrink: true } : undefined,
-              onFocus: onFocus,
-              onBlur: onBlur,
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <TimePicker
+        open={open}
+        onOpen={() => setOpen(true)}
+        onClose={() => setOpen(false)}
+        key={key}
+        label={label}
+        value={value}
+        onAccept={onChange}
+        format={format}
+        ampm={!!appliedUiSchemaOptions.ampm}
+        views={views}
+        disabled={!enabled}
+        slotProps={{
+          actionBar: ({ wrapperVariant }) => ({
+            actions:
+              wrapperVariant === 'desktop' ? [] : ['clear', 'cancel', 'accept'],
+          }),
+          textField: {
+            id: id + '-input',
+            required: required && !appliedUiSchemaOptions.hideRequiredAsterisk,
+            autoFocus: appliedUiSchemaOptions.focus,
+            error: !isValid,
+            fullWidth: !appliedUiSchemaOptions.trim,
+            inputProps: {
+              type: 'text',
             },
-          }}
-        />
-        <FormHelperText error={!isValid && !showDescription}>
-          {firstFormHelperText}
-        </FormHelperText>
-        <FormHelperText error={!isValid}>{secondFormHelperText}</FormHelperText>
-      </LocalizationProvider>
-    </Hidden>
+            InputLabelProps: data ? { shrink: true } : undefined,
+            onFocus: onFocus,
+            onBlur: onBlurHandler,
+          },
+        }}
+      />
+      <FormHelperText error={!isValid && !showDescription}>
+        {firstFormHelperText}
+      </FormHelperText>
+      <FormHelperText error={!isValid}>{secondFormHelperText}</FormHelperText>
+    </LocalizationProvider>
   );
 };
 

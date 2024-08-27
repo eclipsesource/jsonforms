@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import anyTest, { TestInterface } from 'ava';
+import anyTest, { TestFn } from 'ava';
 import {
   and,
   formatIs,
@@ -54,9 +54,10 @@ import {
   JsonSchema,
   LabelElement,
   UISchemaElement,
+  hasOption,
 } from '../src';
 
-const test = anyTest as TestInterface<{ uischema: ControlElement }>;
+const test = anyTest as TestFn<{ uischema: ControlElement }>;
 
 const createTesterContext = (
   rootSchema: JsonSchema,
@@ -181,6 +182,30 @@ test('optionIs should return false for UI schema elements without options cell',
     scope: '#/properties/bar',
   };
   t.false(optionIs('answer', 42)(control, undefined, undefined));
+});
+
+test('hasOption should check for options', (t) => {
+  const control: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/bar',
+    options: {
+      answer: 42,
+    },
+  };
+  t.true(hasOption('answer')(control, undefined, undefined));
+});
+
+test('hasOption should not fail if uischema is undefined or null', (t) => {
+  const uischema: UISchemaElement = null;
+  t.false(hasOption('answer')(uischema, undefined, undefined));
+});
+
+test('hasOption should return false for UI schema elements without options cell', (t) => {
+  const control: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/bar',
+  };
+  t.false(hasOption('answer')(control, undefined, undefined));
 });
 
 test('schemaMatches should check type sub-schema of control via predicate', (t) => {

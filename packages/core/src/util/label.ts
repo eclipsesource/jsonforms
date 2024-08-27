@@ -25,7 +25,7 @@
 
 import startCase from 'lodash/startCase';
 
-import type { ControlElement, JsonSchema, LabelDescription } from '../models';
+import { ControlElement, JsonSchema, LabelDescription } from '../models';
 import { decode } from './path';
 
 const deriveLabel = (

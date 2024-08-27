@@ -38,7 +38,7 @@ import {
   JsonFormsDispatch,
   withJsonFormsArrayLayoutProps,
 } from '@jsonforms/react';
-import { Grid, Hidden, List, Typography } from '@mui/material';
+import { Grid, List, Typography } from '@mui/material';
 import map from 'lodash/map';
 import range from 'lodash/range';
 import React, { useCallback, useMemo, useState } from 'react';
@@ -64,6 +64,9 @@ export const MaterialListWithDetailRenderer = ({
   config,
   rootSchema,
   translations,
+  description,
+  disableAdd,
+  disableRemove,
 }: ArrayLayoutProps) => {
   const [selectedIndex, setSelectedIndex] = useState(undefined);
   const handleRemoveItem = useCallback(
@@ -99,13 +102,19 @@ export const MaterialListWithDetailRenderer = ({
     [uischemas, schema, uischema.scope, path, uischema, rootSchema]
   );
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
+  const doDisableAdd = disableAdd || appliedUiSchemaOptions.disableAdd;
+  const doDisableRemove = disableRemove || appliedUiSchemaOptions.disableRemove;
 
   React.useEffect(() => {
     setSelectedIndex(undefined);
   }, [schema]);
 
+  if (!visible) {
+    return null;
+  }
+
   return (
-    <Hidden xsUp={!visible}>
+    <>
       <ArrayLayoutToolbar
         translations={translations}
         label={computeLabel(
@@ -113,11 +122,13 @@ export const MaterialListWithDetailRenderer = ({
           required,
           appliedUiSchemaOptions.hideRequiredAsterisk
         )}
+        description={description}
         errors={errors}
         path={path}
         enabled={enabled}
         addItem={addItem}
         createDefault={handleCreateDefaultValue}
+        disableAdd={doDisableAdd}
       />
       <Grid container direction='row' spacing={2}>
         <Grid item xs={3}>
@@ -133,11 +144,14 @@ export const MaterialListWithDetailRenderer = ({
                   removeItem={handleRemoveItem}
                   selected={selectedIndex === index}
                   key={index}
+                  uischema={foundUISchema}
+                  childLabelProp={appliedUiSchemaOptions.elementLabelProp}
                   translations={translations}
+                  disableRemove={doDisableRemove}
                 />
               ))
             ) : (
-              <p>No data</p>
+              <p>{translations.noDataMessage}</p>
             )}
           </List>
         </Grid>
@@ -156,7 +170,7 @@ export const MaterialListWithDetailRenderer = ({
           )}
         </Grid>
       </Grid>
-    </Hidden>
+    </>
   );
 };
 

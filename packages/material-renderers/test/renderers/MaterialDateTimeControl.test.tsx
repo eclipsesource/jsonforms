@@ -24,7 +24,11 @@
 */
 import './MatchMediaMock';
 import React from 'react';
-import { ControlElement, NOT_APPLICABLE } from '@jsonforms/core';
+import {
+  ControlElement,
+  defaultDateTimeFormat,
+  NOT_APPLICABLE,
+} from '@jsonforms/core';
 import MaterialDateTimeControl, {
   materialDateTimeControlTester,
 } from '../../src/controls/MaterialDateTimeControl';
@@ -38,7 +42,7 @@ import { initCore, TestEmitter } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-const data = { foo: dayjs('1980-04-04 13:37').format() };
+const data = { foo: dayjs('1980-04-04 13:37').format(defaultDateTimeFormat) };
 const schema = {
   type: 'object',
   properties: {
@@ -228,8 +232,10 @@ describe('Material date time control', () => {
     );
     const input = wrapper.find('input').first();
     (input.getDOMNode() as HTMLInputElement).value = '1961-12-12 20:15';
-    input.simulate('change', input);
-    expect(onChangeData.data.foo).toBe(dayjs('1961-12-12 20:15').format());
+    input.simulate('blur', input);
+    expect(onChangeData.data.foo).toBe(
+      dayjs('1961-12-12 20:15').format(defaultDateTimeFormat)
+    );
   });
 
   it('should update via action', () => {
@@ -241,7 +247,10 @@ describe('Material date time control', () => {
         <MaterialDateTimeControl schema={schema} uischema={uischema} />
       </JsonFormsStateProvider>
     );
-    core.data = { ...core.data, foo: dayjs('1961-12-04 20:15').format() };
+    core.data = {
+      ...core.data,
+      foo: dayjs('1961-12-04 20:15').format(defaultDateTimeFormat),
+    };
     wrapper.setProps({ initState: { renderers: materialRenderers, core } });
     wrapper.update();
     const input = wrapper.find('input').first();
@@ -427,7 +436,7 @@ describe('Material date time control', () => {
     expect(input.props().value).toBe('23-04-80 01:37:pm');
 
     (input.getDOMNode() as HTMLInputElement).value = '10-12-05 11:22:am';
-    input.simulate('change', input);
+    input.simulate('blur', input);
     expect(onChangeData.data.foo).toBe('2005/12/10 11:22 am');
   });
 });

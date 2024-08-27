@@ -23,9 +23,9 @@
   THE SOFTWARE.
 */
 
+import { ControlElement, JsonSchema, UISchemaElement } from '../models';
 import { generateJsonSchema } from './schema';
 import { createControlElement, generateDefaultUISchema } from './uischema';
-import type { ControlElement, JsonSchema, UISchemaElement } from '../';
 
 export const Generate: {
   // TODO fix @typescript-eslint/ban-types

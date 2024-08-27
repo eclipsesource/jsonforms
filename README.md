@@ -26,6 +26,19 @@ In addition, EclipseSource also offers [professional support](https://jsonforms.
 
 See our [migration guide](https://github.com/eclipsesource/jsonforms/blob/master/MIGRATION.md) when updating JSON Forms.
 
+## Roadmap & Milestones
+
+The project roadmap can be found in [ROADMAP.md](./ROADMAP.md).
+
+Issues are sorted in one the following milestones that indicate when their implementation is planned.
+Independently of the assigned milestone, contributions are always accepted and appreciated.
+
+- A milestone for the next minor version. Issues planned to be implemented for the next release.
+- A milestone for the next major version. Issues planned to be implemented for the next major release.
+- A `.x` milestone. Issues which are concrete candidates for one of the next versions.
+- [next](https://github.com/eclipsesource/jsonforms/milestone/37): Issues which we would like to tackle soonish in one of the upcoming versions. However, they are not yet planned for a specific version.
+- [Backlog](https://github.com/eclipsesource/jsonforms/milestone/2): Issues which are interesting in some form but we don't plan to do ourselves in the foreseeable future. Still these might become part of JSON Forms via a community contribution or by prioritization of a paying customer.
+
 ## Developers Documentation
 
 ### First time setup
@@ -55,6 +68,7 @@ In this case, you can try to clean the repository with `git clean -dfx`. Beware 
 - Run React Material examples: `cd packages/material-renderers && pnpm run dev`
 - Run Angular Material examples: `cd packages/angular-material && pnpm run dev`
 - Run Vue Vanilla dev setup: `cd packages/vue-vanilla && pnpm run serve`
+- Run Vue Vuetify dev setup: `cd packages/vue-vuetify && pnpm run dev`
 
 ### Dependency & Release management
 
@@ -66,6 +80,11 @@ The JSON Forms project is built and tested via Github actions on Linux, Mac and 
 
 Current status: ![Build status](https://github.com/eclipsesource/jsonforms/actions/workflows/ci.yaml/badge.svg?branch=master)
 [![Coverage Status](https://coveralls.io/repos/eclipsesource/jsonforms/badge.svg?branch=master&service=github)](https://coveralls.io/github/eclipsesource/jsonforms?branch=master)
+
+### Contributions
+
+We welcome community participation! Whether you're reporting bugs, proposing features, participating in discussions, or making direct contributions, your involvement is highly valued.
+See [here](https://github.com/eclipsesource/jsonforms/blob/master/CONTRIBUTING.md) for the contribution guidelines.
 
 ## License
 

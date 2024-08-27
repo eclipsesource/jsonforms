@@ -35,6 +35,9 @@ import {
   mapDispatchToMultiEnumProps,
   mapStateToLabelProps,
   LabelElement,
+  Categorization,
+  isControl,
+  Scopable,
 } from '@jsonforms/core';
 import {
   PropType,
@@ -44,6 +47,7 @@ import {
   onBeforeMount,
   onUnmounted,
   ref,
+  watch,
 } from 'vue';
 
 /**
@@ -143,20 +147,32 @@ export type Required<T> = T extends object
 
 // TODO fix @typescript-eslint/ban-types
 // eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-unused-vars
-export function useControl<R, D, P extends {}>(
+export function useControl<
+  R,
+  D,
+  P extends { schema: JsonSchema; uischema: UISchemaElement & Scopable }
+>(
   props: P,
   stateMap: (state: JsonFormsState, props: P) => R
-): { control: ComputedRef<Required<R>> };
+): { control: ComputedRef<Required<P & R>> };
 // TODO fix @typescript-eslint/ban-types
 // eslint-disable-next-line @typescript-eslint/ban-types
-export function useControl<R, D, P extends {}>(
+export function useControl<
+  R,
+  D,
+  P extends { schema: JsonSchema; uischema: UISchemaElement & Scopable }
+>(
   props: P,
   stateMap: (state: JsonFormsState, props: P) => R,
   dispatchMap: (dispatch: Dispatch<CoreActions>) => D
-): { control: ComputedRef<Required<R>> } & D;
+): { control: ComputedRef<Required<P & R>> } & D;
 // TODO fix @typescript-eslint/ban-types
 // eslint-disable-next-line @typescript-eslint/ban-types
-export function useControl<R, D, P extends {}>(
+export function useControl<
+  R,
+  D,
+  P extends { schema: JsonSchema; uischema: UISchemaElement & Scopable }
+>(
   props: P,
   stateMap: (state: JsonFormsState, props: P) => R,
   dispatchMap?: (dispatch: Dispatch<CoreActions>) => D
@@ -165,7 +181,9 @@ export function useControl<R, D, P extends {}>(
   const dispatch = inject<Dispatch<CoreActions>>('dispatch');
 
   if (!jsonforms || !dispatch) {
-    throw "'jsonforms' or 'dispatch' couldn't be injected. Are you within JSON Forms?";
+    throw new Error(
+      "'jsonforms' or 'dispatch' couldn't be injected. Are you within JSON Forms?"
+    );
   }
 
   const id = ref<string | undefined>(undefined);
@@ -178,10 +196,22 @@ export function useControl<R, D, P extends {}>(
   const dispatchMethods = dispatchMap?.(dispatch);
 
   onBeforeMount(() => {
-    if ((control.value as any).uischema.scope) {
-      id.value = createId((control.value as any).uischema.scope);
+    if (control.value.uischema.scope) {
+      id.value = createId(control.value.uischema.scope);
     }
   });
+
+  watch(
+    () => props.schema,
+    (newSchema, prevSchem) => {
+      if (newSchema !== prevSchem && isControl(control.value.uischema)) {
+        if (id.value) {
+          removeId(id.value);
+        }
+        id.value = createId(control.value.uischema.scope);
+      }
+    }
+  );
 
   onUnmounted(() => {
     if (id.value) {
@@ -191,7 +221,7 @@ export function useControl<R, D, P extends {}>(
   });
 
   return {
-    control: control as unknown as ComputedRef<R>,
+    control: control,
     ...dispatchMethods,
   };
 }
@@ -378,7 +408,9 @@ export const useJsonFormsRenderer = (props: RendererProps) => {
   const dispatch = inject<Dispatch<CoreActions>>('dispatch');
 
   if (!jsonforms || !dispatch) {
-    throw "'jsonforms' or 'dispatch' couldn't be injected. Are you within JSON Forms?";
+    throw new Error(
+      "'jsonforms' or 'dispatch' couldn't be injected. Are you within JSON Forms?"
+    );
   }
 
   const rawProps = computed(
@@ -473,4 +505,26 @@ export const useJsonFormsDispatchCell = (props: ControlProps) => {
     mapDispatchToControlProps
   );
   return { cell: control, ...other };
+};
+
+/**
+ * Provides bindings for 'Categorization' elements.
+ *
+ * Access bindings via the provided `categories` array with reactive category objects.
+ */
+export const useJsonFormsCategorization = (props: LayoutProps) => {
+  const { layout, ...other } = useJsonFormsLayout(props);
+
+  const categories = (layout.value.uischema as Categorization).elements.map(
+    (category) => {
+      const categoryProps: LayoutProps = {
+        ...props,
+        uischema: category,
+      };
+
+      return useJsonFormsLayout(categoryProps).layout;
+    }
+  );
+
+  return { layout, categories, ...other };
 };

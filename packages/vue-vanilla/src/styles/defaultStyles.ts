@@ -11,6 +11,8 @@ export const defaultStyles: Styles = {
     textarea: 'text-area',
     select: 'select',
     option: 'option',
+    asterisk: 'asterisk',
+    required: 'required',
   },
   verticalLayout: {
     root: 'vertical-layout',
@@ -51,5 +53,20 @@ export const defaultStyles: Styles = {
     actions: 'dialog-actions',
     buttonPrimary: 'dialog-button-primary',
     buttonSecondary: 'dialog-button-secondary',
+  },
+  oneOf: {
+    root: 'one-of',
+  },
+  categorization: {
+    root: 'categorization',
+    category: 'categorization-category',
+    selected: 'categorization-selected',
+    panel: 'categorization-panel',
+    stepper: 'categorization-stepper',
+    stepperBadge: 'categorization-stepper-badge',
+    stepperLine: 'categorization-stepper-line',
+    stepperFooter: 'categorization-stepper-footer',
+    stepperButtonBack: 'categorization-stepper-button-back',
+    stepperButtonNext: 'categorization-stepper-button-next',
   },
 };

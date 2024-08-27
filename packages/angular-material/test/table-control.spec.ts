@@ -35,12 +35,14 @@ import { JsonFormsAngularService, JsonFormsModule } from '@jsonforms/angular';
 import { ControlElement } from '@jsonforms/core';
 import { TextControlRenderer, TextControlRendererTester } from '../src';
 import {
+  GetProps,
   TableRenderer,
   TableRendererTester,
 } from '../src/library/other/table.renderer';
-import { setupMockStore } from '@jsonforms/angular-test';
+import { setupMockStore } from './common';
 import { createTesterContext } from './util';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { initTestEnvironment } from './test';
 
 const uischema1: ControlElement = { type: 'Control', scope: '#' };
 const uischema2: ControlElement = {
@@ -101,6 +103,8 @@ const renderers = [
   { tester: TableRendererTester, renderer: TableRenderer },
 ];
 
+initTestEnvironment();
+
 describe('Table tester', () => {
   it('should succeed', () => {
     expect(
@@ -139,7 +143,7 @@ describe('Table', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [TableRenderer, TextControlRenderer],
+      declarations: [TableRenderer, TextControlRenderer, GetProps],
       imports: [
         CommonModule,
         JsonFormsModule,

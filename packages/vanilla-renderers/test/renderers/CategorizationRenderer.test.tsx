@@ -30,7 +30,7 @@ import {
   JsonSchema,
   Layout,
 } from '@jsonforms/core';
-import { JsonFormsStateProvider } from '@jsonforms/react';
+import { JsonForms, JsonFormsStateProvider } from '@jsonforms/react';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import CategorizationRenderer, {
@@ -385,5 +385,65 @@ describe('Categorization renderer', () => {
 
     const div: HTMLDivElement = wrapper.find('.categorization').getDOMNode();
     expect(div.hidden).toBe(false);
+  });
+
+  test('reset selected category on schema change', () => {
+    const oldUischema: Categorization = {
+      type: 'Categorization',
+      label: '',
+      elements: [
+        {
+          type: 'Category',
+          label: 'A',
+          elements: [],
+        },
+        {
+          type: 'Category',
+          label: 'B',
+          elements: [],
+        },
+        {
+          type: 'Category',
+          label: 'C',
+          elements: [],
+        },
+      ],
+    };
+    const newUischema: Categorization = {
+      type: 'Categorization',
+      label: '',
+      elements: [
+        {
+          type: 'Category',
+          label: 'A',
+          elements: [],
+        },
+        {
+          type: 'Category',
+          label: 'C',
+          elements: [],
+        },
+      ],
+    };
+
+    wrapper = mount(
+      <JsonForms
+        renderers={vanillaRenderers}
+        schema={fixture.schema}
+        uischema={oldUischema}
+        data={fixture.data}
+      ></JsonForms>
+    );
+
+    let secondItem = wrapper.find('li').at(1);
+    secondItem.simulate('click');
+    secondItem = wrapper.find('li').at(1);
+    expect(secondItem.hasClass('selected')).toBe(true);
+
+    wrapper.setProps({ uischema: newUischema });
+    wrapper.update();
+
+    secondItem = wrapper.find('li').at(1);
+    expect(secondItem.hasClass('selected')).toBe(false);
   });
 });

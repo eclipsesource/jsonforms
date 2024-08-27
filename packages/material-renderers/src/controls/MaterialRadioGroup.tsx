@@ -35,7 +35,6 @@ import {
   FormControlLabel,
   FormHelperText,
   FormLabel,
-  Hidden,
   Radio,
   RadioGroup,
 } from '@mui/material';
@@ -45,7 +44,6 @@ export const MaterialRadioGroup = (props: ControlProps & OwnPropsOfEnum) => {
   const [focused, onFocus, onBlur] = useFocus();
   const {
     config,
-    id,
     label,
     required,
     description,
@@ -66,46 +64,47 @@ export const MaterialRadioGroup = (props: ControlProps & OwnPropsOfEnum) => {
     appliedUiSchemaOptions.showUnfocusedDescription
   );
 
-  return (
-    <Hidden xsUp={!visible}>
-      <FormControl
-        component={'fieldset' as 'div'}
-        fullWidth={!appliedUiSchemaOptions.trim}
-        onFocus={onFocus}
-        onBlur={onBlur}
-      >
-        <FormLabel
-          htmlFor={id}
-          error={!isValid}
-          component={'legend' as 'label'}
-          required={showAsRequired(
-            required,
-            appliedUiSchemaOptions.hideRequiredAsterisk
-          )}
-        >
-          {label}
-        </FormLabel>
+  if (!visible) {
+    return null;
+  }
 
-        <RadioGroup value={props.data ?? ''} row={true}>
-          {options.map((option) => (
-            <FormControlLabel
-              value={option.value}
-              key={option.label}
-              control={
-                <Radio
-                  checked={data === option.value}
-                  onChange={() => handleChange(path, option.value)}
-                />
-              }
-              label={option.label}
-              disabled={!enabled}
-            />
-          ))}
-        </RadioGroup>
-        <FormHelperText error={!isValid}>
-          {!isValid ? errors : showDescription ? description : null}
-        </FormHelperText>
-      </FormControl>
-    </Hidden>
+  return (
+    <FormControl
+      component='fieldset'
+      fullWidth={!appliedUiSchemaOptions.trim}
+      onFocus={onFocus}
+      onBlur={onBlur}
+    >
+      <FormLabel
+        error={!isValid}
+        component='legend'
+        required={showAsRequired(
+          required,
+          appliedUiSchemaOptions.hideRequiredAsterisk
+        )}
+      >
+        {label}
+      </FormLabel>
+
+      <RadioGroup value={props.data ?? ''} row={true}>
+        {options.map((option) => (
+          <FormControlLabel
+            value={option.value}
+            key={option.label}
+            control={
+              <Radio
+                checked={data === option.value}
+                onChange={() => handleChange(path, option.value)}
+              />
+            }
+            label={option.label}
+            disabled={!enabled}
+          />
+        ))}
+      </RadioGroup>
+      <FormHelperText error={!isValid}>
+        {!isValid ? errors : showDescription ? description : null}
+      </FormHelperText>
+    </FormControl>
   );
 };

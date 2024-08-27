@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import startCase from 'lodash/startCase';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Pipe, PipeTransform } from '@angular/core';
 import {
   JsonFormsAngularService,
   JsonFormsArrayControl,
@@ -51,91 +51,103 @@ import {
 @Component({
   selector: 'TableRenderer',
   template: `
-    <table
-      mat-table
-      [dataSource]="data"
-      class="mat-elevation-z8"
-      [trackBy]="trackElement"
-    >
-      <ng-container matColumnDef="action">
-        <tr>
-          <th mat-header-cell *matHeaderCellDef>
-            <button
-              mat-button
-              color="primary"
-              (click)="add()"
-              [disabled]="!isEnabled()"
-              [matTooltip]="translations.addTooltip"
-            >
-              <mat-icon>add</mat-icon>
-            </button>
-          </th>
-        </tr>
-        <tr>
-          <td
-            mat-cell
-            *matCellDef="
-              let row;
-              let i = index;
-              let first = first;
-              let last = last
-            "
-          >
-            <button
-              *ngIf="uischema?.options?.showSortButtons"
-              class="item-up"
-              mat-button
-              [disabled]="first"
-              (click)="up(i)"
-              [matTooltip]="translations.upAriaLabel"
-              matTooltipPosition="right"
-            >
-              <mat-icon>arrow_upward</mat-icon>
-            </button>
-            <button
-              *ngIf="uischema?.options?.showSortButtons"
-              class="item-down"
-              mat-button
-              [disabled]="last"
-              (click)="down(i)"
-              [matTooltip]="translations.downAriaLabel"
-              matTooltipPosition="right"
-            >
-              <mat-icon>arrow_downward</mat-icon>
-            </button>
-            <button
-              mat-button
-              color="warn"
-              (click)="remove(i)"
-              [disabled]="!isEnabled()"
-              matTooltipPosition="right"
-              [matTooltip]="translations.removeTooltip"
-            >
-              <mat-icon>delete</mat-icon>
-            </button>
-          </td>
-        </tr>
-
-        <tr></tr
-      ></ng-container>
-
-      <ng-container
-        *ngFor="let item of items"
-        matColumnDef="{{ item.property }}"
+    <div class="table-container">
+      <table
+        mat-table
+        [dataSource]="data"
+        class="mat-elevation-z8"
+        [trackBy]="trackElement"
       >
-        <th mat-header-cell *matHeaderCellDef>{{ item.header }}</th>
-        <td mat-cell *matCellDef="let index = index">
-          <jsonforms-outlet
-            [renderProps]="getProps(index, item.props)"
-          ></jsonforms-outlet>
-        </td>
-      </ng-container>
+        <ng-container matColumnDef="action" stickyEnd>
+          <tr>
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              [ngClass]="{ 'sort-column': uischema?.options?.showSortButtons }"
+            >
+              <button
+                mat-button
+                color="primary"
+                (click)="add()"
+                [disabled]="!isEnabled()"
+                [matTooltip]="translations.addTooltip"
+              >
+                <mat-icon>add</mat-icon>
+              </button>
+            </th>
+          </tr>
+          <tr>
+            <td
+              [ngClass]="{ 'sort-column': uischema?.options?.showSortButtons }"
+              mat-cell
+              *matCellDef="
+                let row;
+                let i = index;
+                let first = first;
+                let last = last
+              "
+            >
+              <button
+                *ngIf="uischema?.options?.showSortButtons"
+                class="item-up"
+                mat-icon-button
+                [disabled]="first"
+                (click)="up(i)"
+                [matTooltip]="translations.upAriaLabel"
+                matTooltipPosition="right"
+              >
+                <mat-icon>arrow_upward</mat-icon>
+              </button>
+              <button
+                *ngIf="uischema?.options?.showSortButtons"
+                class="item-down"
+                mat-icon-button
+                [disabled]="last"
+                (click)="down(i)"
+                [matTooltip]="translations.downAriaLabel"
+                matTooltipPosition="right"
+              >
+                <mat-icon>arrow_downward</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                color="warn"
+                (click)="remove(i)"
+                [disabled]="!isEnabled()"
+                matTooltipPosition="right"
+                [matTooltip]="translations.removeTooltip"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </tr>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-    </table>
+          <tr></tr
+        ></ng-container>
+
+        <ng-container
+          *ngFor="let item of items"
+          matColumnDef="{{ item.property }}"
+        >
+          <th mat-header-cell *matHeaderCellDef>{{ item.header }}</th>
+          <td mat-cell *matCellDef="let index = index">
+            <jsonforms-outlet
+              [renderProps]="index | getProps : item.props"
+            ></jsonforms-outlet>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
   `,
-  styles: ['table {width: 100%;}', '.cdk-column-action { width: 15%}'],
+  styles: [
+    'table {width: 100%;}',
+    '.cdk-column-action { width: 15%;}',
+    '.sort-column { min-width: 12vw;}',
+    '.table-container {max-width: 100%; overflow: auto;}',
+  ],
 })
 export class TableRenderer extends JsonFormsArrayControl implements OnInit {
   detailUiSchema: UISchemaElement;
@@ -161,14 +173,6 @@ export class TableRenderer extends JsonFormsArrayControl implements OnInit {
       this.displayedColumns.push('action');
     }
     this.translations = props.translations;
-  }
-  getProps(index: number, props: OwnPropsOfRenderer): OwnPropsOfRenderer {
-    const rowPath = Paths.compose(props.path, `${index}`);
-    return {
-      schema: props.schema,
-      uischema: props.uischema,
-      path: rowPath,
-    };
   }
 
   remove(index: number): void {
@@ -265,3 +269,15 @@ export const controlWithoutLabel = (scope: string): ControlElement => ({
   scope: scope,
   label: false,
 });
+
+@Pipe({ name: 'getProps' })
+export class GetProps implements PipeTransform {
+  transform(index: number, props: OwnPropsOfRenderer) {
+    const rowPath = Paths.compose(props.path, `${index}`);
+    return {
+      schema: props.schema,
+      uischema: props.uischema,
+      path: rowPath,
+    };
+  }
+}

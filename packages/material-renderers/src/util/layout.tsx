@@ -34,7 +34,7 @@ import {
   OwnPropsOfRenderer,
 } from '@jsonforms/core';
 import { JsonFormsDispatch, useJsonForms } from '@jsonforms/react';
-import { Grid, Hidden } from '@mui/material';
+import { Grid } from '@mui/material';
 
 export const renderLayoutElements = (
   elements: UISchemaElement[],
@@ -72,26 +72,24 @@ const MaterialLayoutRendererComponent = ({
   renderers,
   cells,
 }: MaterialLayoutRendererProps) => {
-  if (isEmpty(elements)) {
+  if (isEmpty(elements) || !visible) {
     return null;
   } else {
     return (
-      <Hidden xsUp={!visible}>
-        <Grid
-          container
-          direction={direction}
-          spacing={direction === 'row' ? 2 : 0}
-        >
-          {renderLayoutElements(
-            elements,
-            schema,
-            path,
-            enabled,
-            renderers,
-            cells
-          )}
-        </Grid>
-      </Hidden>
+      <Grid
+        container
+        direction={direction}
+        spacing={direction === 'row' ? 2 : 0}
+      >
+        {renderLayoutElements(
+          elements,
+          schema,
+          path,
+          enabled,
+          renderers,
+          cells
+        )}
+      </Grid>
     );
   }
 };

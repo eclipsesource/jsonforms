@@ -24,6 +24,7 @@ jobs:
   publish:
     permissions:
       contents: "write"
+      id-token: "write"
     runs-on: "ubuntu-latest"
     steps:
       - uses: "actions/checkout@v4"
@@ -41,11 +42,11 @@ jobs:
           node-version: "18"
           registry-url: "https://registry.npmjs.org"
 
-      - uses: "pnpm/action-setup@v2.2.4"
-        name: "Install pnpm"
-        id: "pnpm-install"
+      - uses: pnpm/action-setup@v4.0.0
+        name: Install pnpm
+        id: pnpm-install
         with:
-          version: "8"
+          version: 8
           run_install: false
 
       - name: "Install Packages"
@@ -70,20 +71,22 @@ jobs:
           cd ../vanilla-renderers && pnpm pkg set peerDependencies.@jsonforms/core="${{ github.event.inputs.next_version }}" && pnpm pkg set peerDependencies.@jsonforms/react="${{ github.event.inputs.next_version }}"
           cd ../vue && pnpm pkg set peerDependencies.@jsonforms/core="${{ github.event.inputs.next_version }}"
           cd ../vue-vanilla && pnpm pkg set peerDependencies.@jsonforms/core="${{ github.event.inputs.next_version }}" && pnpm pkg set peerDependencies.@jsonforms/vue="${{ github.event.inputs.next_version }}"
+          cd ../vue-vuetify && pnpm pkg set peerDependencies.@jsonforms/core="${{ github.event.inputs.next_version }}" && pnpm pkg set peerDependencies.@jsonforms/vue="${{ github.event.inputs.next_version }}"
 
       - name: "Tag and Commit"
         run: |
           git add -A && git commit --amend --no-edit
           git tag v${{ github.event.inputs.next_version }} -f
 
-      - name: "Publish to npm"
-        if: "github.event.inputs.skip_publish == 'false'"
-        run: "pnpm publish --recursive ${{  github.event.inputs.stable_release == 'true' && ' ' || '--tag next' }}"
-        env:
-          NODE_AUTH_TOKEN: "${{ secrets.NPM_TOKEN }}"
-
       - name: "push"
         if: "github.event.inputs.skip_push == 'false'"
         run: |
           git push
           git push origin v${{ github.event.inputs.next_version }}
+
+      - name: "Publish to npm"
+        if: "github.event.inputs.skip_publish == 'false'"
+        run: "pnpm publish --recursive ${{  github.event.inputs.stable_release == 'true' && ' ' || '--tag next' }}"
+        env:
+          NODE_AUTH_TOKEN: "${{ secrets.NPM_TOKEN }}"
+          NPM_CONFIG_PROVENANCE: "true"

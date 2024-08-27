@@ -66,8 +66,13 @@ const MaterialArrayLayoutComponent = (props: ArrayLayoutProps) => {
     config,
     uischemas,
     translations,
+    description,
+    disableAdd,
+    disableRemove,
   } = props;
   const appliedUiSchemaOptions = merge({}, config, props.uischema.options);
+  const doDisableAdd = disableAdd || appliedUiSchemaOptions.disableAdd;
+  const doDisableRemove = disableRemove || appliedUiSchemaOptions.disableRemove;
 
   return (
     <div>
@@ -78,11 +83,13 @@ const MaterialArrayLayoutComponent = (props: ArrayLayoutProps) => {
           required,
           appliedUiSchemaOptions.hideRequiredAsterisk
         )}
+        description={description}
         errors={errors}
         path={path}
         enabled={enabled}
         addItem={addItem}
         createDefault={innerCreateDefaultValue}
+        disableAdd={doDisableAdd}
       />
       <div>
         {data > 0 ? (
@@ -106,11 +113,12 @@ const MaterialArrayLayoutComponent = (props: ArrayLayoutProps) => {
                 childLabelProp={appliedUiSchemaOptions.elementLabelProp}
                 uischemas={uischemas}
                 translations={translations}
+                disableRemove={doDisableRemove}
               />
             );
           })
         ) : (
-          <p>No data</p>
+          <p>{translations.noDataMessage}</p>
         )}
       </div>
     </div>

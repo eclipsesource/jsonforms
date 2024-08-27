@@ -6,7 +6,7 @@
     :applied-options="appliedOptions"
   >
     <select
-      :id="control.id + '-select'"
+      :id="control.id + '-input'"
       :class="styles.control.select"
       :value="control.data"
       :disabled="!control.enabled"

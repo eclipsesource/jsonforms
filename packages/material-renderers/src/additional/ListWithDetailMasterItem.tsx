@@ -31,6 +31,7 @@ import {
   ListItemAvatar,
   ListItemSecondaryAction,
   ListItemText,
+  Tooltip,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import React from 'react';
@@ -44,6 +45,7 @@ export const ListWithDetailMasterItem = ({
   removeItem,
   path,
   translations,
+  disableRemove,
 }: StatePropsOfMasterItem) => {
   return (
     <ListItem button selected={selected} onClick={handleSelect(index)}>
@@ -51,15 +53,21 @@ export const ListWithDetailMasterItem = ({
         <Avatar aria-label='Index'>{index + 1}</Avatar>
       </ListItemAvatar>
       <ListItemText primary={childLabel} />
-      {enabled && (
+      {enabled && !disableRemove && (
         <ListItemSecondaryAction>
-          <IconButton
-            aria-label={translations.removeAriaLabel}
-            onClick={removeItem(path, index)}
-            size='large'
+          <Tooltip
+            id='tooltip-remove'
+            title={translations.removeTooltip}
+            placement='bottom'
           >
-            <DeleteIcon />
-          </IconButton>
+            <IconButton
+              aria-label={translations.removeAriaLabel}
+              onClick={removeItem(path, index)}
+              size='large'
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
         </ListItemSecondaryAction>
       )}
     </ListItem>

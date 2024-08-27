@@ -29,9 +29,12 @@ import {
   booleanErrorTest,
   booleanInputEventTest,
   ErrorTestExpectation,
-} from '@jsonforms/angular-test';
+} from './common';
 import { BooleanControlRenderer, booleanControlTester } from '../src';
 import { JsonFormsAngularService } from '@jsonforms/angular';
+import { initTestEnvironment } from './test';
+
+initTestEnvironment();
 
 describe('Material boolean field tester', () => {
   const uischema = {

@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import { DebugElement } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import {
   MatTab,
   MatTabBody,
@@ -42,15 +42,18 @@ import {
   TextControlRenderer,
   TextControlRendererTester,
 } from '../src';
-import { setupMockStore, getJsonFormsService } from '@jsonforms/angular-test';
+import { setupMockStore, getJsonFormsService } from './common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { initTestEnvironment } from './test';
 
 const renderers = [
   { tester: TextControlRendererTester, renderer: TextControlRenderer },
 ];
+
+initTestEnvironment();
 
 describe('Categorization tab layout', () => {
   let fixture: ComponentFixture<any>;
@@ -69,7 +72,7 @@ describe('Categorization tab layout', () => {
     },
   };
 
-  beforeEach(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [CategorizationTabLayoutRenderer, TextControlRenderer],
       imports: [
@@ -86,9 +89,9 @@ describe('Categorization tab layout', () => {
 
     fixture = TestBed.createComponent(CategorizationTabLayoutRenderer);
     component = fixture.componentInstance;
-  });
+  }));
 
-  it('render categories initially', async(() => {
+  it('render categories initially', waitForAsync(() => {
     const uischema = {
       type: 'Categorization',
       elements: [
@@ -153,7 +156,7 @@ describe('Categorization tab layout', () => {
     });
   }));
 
-  it('pass path and schema to children', async(() => {
+  it('pass path and schema to children', waitForAsync(() => {
     const uischema = {
       type: 'Categorization',
       elements: [
@@ -195,7 +198,7 @@ describe('Categorization tab layout', () => {
     });
   }));
 
-  it('add category', async(() => {
+  it('add category', waitForAsync(() => {
     const uischema = {
       type: 'Categorization',
       elements: [
@@ -289,7 +292,7 @@ describe('Categorization tab layout', () => {
   }));
 
   // TODO: broken due to https://github.com/angular/flex-layout/issues/848
-  xit('can be hidden', async(() => {
+  xit('can be hidden', waitForAsync(() => {
     const uischema = {
       type: 'Categorization',
       elements: [

@@ -38,6 +38,7 @@ import {
   JsonFormsRendererRegistryEntry,
   JsonFormsUISchemaRegistryEntry,
   JsonSchema,
+  Middleware,
   OwnPropsOfJsonFormsRenderer,
   removeId,
   UISchemaElement,
@@ -45,7 +46,6 @@ import {
 } from '@jsonforms/core';
 import {
   JsonFormsStateProvider,
-  Middleware,
   withJsonFormsRendererProps,
 } from './JsonFormsContext';
 
@@ -74,6 +74,17 @@ export class JsonFormsDispatchRenderer extends React.Component<
   componentWillUnmount() {
     if (isControl(this.props.uischema)) {
       removeId(this.state.id);
+    }
+  }
+
+  componentDidUpdate(prevProps: JsonFormsProps) {
+    if (prevProps.schema !== this.props.schema) {
+      removeId(this.state.id);
+      this.setState({
+        id: isControl(this.props.uischema)
+          ? createId(this.props.uischema.scope)
+          : undefined,
+      });
     }
   }
 

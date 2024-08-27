@@ -34,16 +34,11 @@ import {
   updateErrors,
 } from '../../src/actions';
 import { JsonSchema } from '../../src/models/jsonSchema';
-import {
-  errorAt,
-  JsonFormsCore,
-  validate,
-  subErrorsAt,
-  getControlPath,
-} from '../../src/reducers/core';
 
 import { cloneDeep } from 'lodash';
-import { createAjv } from '../../src/util/validator';
+import { createAjv, validate } from '../../src/util/validator';
+import { JsonFormsCore, errorAt, subErrorsAt } from '../../src/store';
+import { getControlPath } from '../../src/util';
 
 test('core reducer should support v7', (t) => {
   const schema: JsonSchema = {

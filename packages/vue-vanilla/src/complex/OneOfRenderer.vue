@@ -1,9 +1,10 @@
 <template>
-  <div v-if="control.visible">
+  <div v-if="control.visible" :class="styles.oneOf.root">
     <combinator-properties
       :schema="control.schema"
       combinator-keyword="oneOf"
       :path="path"
+      :root-schema="control.rootSchema"
     />
 
     <control-wrapper
