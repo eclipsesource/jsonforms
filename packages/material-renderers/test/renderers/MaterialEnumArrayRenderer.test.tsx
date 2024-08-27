@@ -1,4 +1,3 @@
-import './MatchMediaMock';
 import { ControlElement, NOT_APPLICABLE } from '@jsonforms/core';
 import { JsonForms } from '@jsonforms/react';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
