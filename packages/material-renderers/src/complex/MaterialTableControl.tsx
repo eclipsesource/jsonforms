@@ -35,13 +35,13 @@ import React, { Fragment, useMemo } from 'react';
 import {
   FormHelperText,
   Grid,
-  Hidden,
   IconButton,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
+  Tooltip,
   Typography,
 } from '@mui/material';
 import {
@@ -276,6 +276,7 @@ interface NonEmptyRowProps {
   cells?: JsonFormsCellRendererRegistryEntry[];
   path: string;
   translations: ArrayTranslations;
+  disableRemove?: boolean;
 }
 
 const NonEmptyRowComponent = ({
@@ -292,6 +293,7 @@ const NonEmptyRowComponent = ({
   cells,
   path,
   translations,
+  disableRemove,
 }: NonEmptyRowProps & WithDeleteDialogSupport) => {
   const moveUp = useMemo(
     () => moveUpCreator(path, rowIndex),
@@ -317,36 +319,58 @@ const NonEmptyRowComponent = ({
             {showSortButtons ? (
               <Fragment>
                 <Grid item>
-                  <IconButton
-                    aria-label={translations.upAriaLabel}
-                    onClick={moveUp}
-                    disabled={!enableUp}
-                    size='large'
+                  <Tooltip
+                    id='tooltip-up'
+                    title={translations.up}
+                    placement='bottom'
+                    open={enableUp ? undefined : false}
                   >
-                    <ArrowUpward />
-                  </IconButton>
+                    <IconButton
+                      aria-label={translations.upAriaLabel}
+                      onClick={moveUp}
+                      disabled={!enableUp}
+                      size='large'
+                    >
+                      <ArrowUpward />
+                    </IconButton>
+                  </Tooltip>
                 </Grid>
                 <Grid item>
-                  <IconButton
-                    aria-label={translations.downAriaLabel}
-                    onClick={moveDown}
-                    disabled={!enableDown}
-                    size='large'
+                  <Tooltip
+                    id='tooltip-down'
+                    title={translations.down}
+                    placement='bottom'
+                    open={enableDown ? undefined : false}
                   >
-                    <ArrowDownward />
-                  </IconButton>
+                    <IconButton
+                      aria-label={translations.downAriaLabel}
+                      onClick={moveDown}
+                      disabled={!enableDown}
+                      size='large'
+                    >
+                      <ArrowDownward />
+                    </IconButton>
+                  </Tooltip>
                 </Grid>
               </Fragment>
             ) : null}
-            <Grid item>
-              <IconButton
-                aria-label={translations.removeAriaLabel}
-                onClick={() => openDeleteDialog(childPath, rowIndex)}
-                size='large'
-              >
-                <DeleteIcon />
-              </IconButton>
-            </Grid>
+            {!disableRemove ? (
+              <Grid item>
+                <Tooltip
+                  id='tooltip-remove'
+                  title={translations.removeTooltip}
+                  placement='bottom'
+                >
+                  <IconButton
+                    aria-label={translations.removeAriaLabel}
+                    onClick={() => openDeleteDialog(childPath, rowIndex)}
+                    size='large'
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </Tooltip>
+              </Grid>
+            ) : null}
           </Grid>
         </NoBorderTableCell>
       ) : null}
@@ -365,6 +389,7 @@ interface TableRowsProp {
   moveUp?(path: string, toMove: number): () => void;
   moveDown?(path: string, toMove: number): () => void;
   translations: ArrayTranslations;
+  disableRemove?: boolean;
 }
 const TableRows = ({
   data,
@@ -378,6 +403,7 @@ const TableRows = ({
   enabled,
   cells,
   translations,
+  disableRemove,
 }: TableRowsProp & WithDeleteDialogSupport) => {
   const isEmptyTable = data === 0;
 
@@ -416,6 +442,7 @@ const TableRows = ({
             cells={cells}
             path={path}
             translations={translations}
+            disableRemove={disableRemove}
           />
         );
       })}
@@ -431,6 +458,7 @@ export class MaterialTableControl extends React.Component<
   render() {
     const {
       label,
+      description,
       path,
       schema,
       rootSchema,
@@ -441,7 +469,15 @@ export class MaterialTableControl extends React.Component<
       enabled,
       cells,
       translations,
+      disableAdd,
+      disableRemove,
+      config,
     } = this.props;
+
+    const appliedUiSchemaOptions = merge({}, config, uischema.options);
+    const doDisableAdd = disableAdd || appliedUiSchemaOptions.disableAdd;
+    const doDisableRemove =
+      disableRemove || appliedUiSchemaOptions.disableRemove;
 
     const controlElement = uischema as ControlElement;
     const isObjectSchema = schema.type === 'object';
@@ -449,38 +485,43 @@ export class MaterialTableControl extends React.Component<
       ? generateCells(TableHeaderCell, schema, path, enabled, cells)
       : undefined;
 
+    if (!visible) {
+      return null;
+    }
+
     return (
-      <Hidden xsUp={!visible}>
-        <Table>
-          <TableHead>
-            <TableToolbar
-              errors={errors}
-              label={label}
-              addItem={this.addItem}
-              numColumns={isObjectSchema ? headerCells.length : 1}
-              path={path}
-              uischema={controlElement}
-              schema={schema}
-              rootSchema={rootSchema}
-              enabled={enabled}
-              translations={translations}
-            />
-            {isObjectSchema && (
-              <TableRow>
-                {headerCells}
-                {enabled ? <TableCell /> : null}
-              </TableRow>
-            )}
-          </TableHead>
-          <TableBody>
-            <TableRows
-              openDeleteDialog={openDeleteDialog}
-              translations={translations}
-              {...this.props}
-            />
-          </TableBody>
-        </Table>
-      </Hidden>
+      <Table>
+        <TableHead>
+          <TableToolbar
+            errors={errors}
+            label={label}
+            description={description}
+            addItem={this.addItem}
+            numColumns={isObjectSchema ? headerCells.length : 1}
+            path={path}
+            uischema={controlElement}
+            schema={schema}
+            rootSchema={rootSchema}
+            enabled={enabled}
+            translations={translations}
+            disableAdd={doDisableAdd}
+          />
+          {isObjectSchema && (
+            <TableRow>
+              {headerCells}
+              {enabled ? <TableCell /> : null}
+            </TableRow>
+          )}
+        </TableHead>
+        <TableBody>
+          <TableRows
+            openDeleteDialog={openDeleteDialog}
+            translations={translations}
+            {...this.props}
+            disableRemove={doDisableRemove}
+          />
+        </TableBody>
+      </Table>
     );
   }
 }

@@ -30,5 +30,5 @@ export * from './default-data';
 export * from './i18n';
 export * from './reducers';
 export * from './renderers';
-export * from './selectors';
 export * from './uischemas';
+export * from './middleware';

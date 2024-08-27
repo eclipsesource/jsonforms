@@ -22,14 +22,17 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { ComponentFixture } from '@angular/core/testing';
+import { ComponentFixture, waitForAsync } from '@angular/core/testing';
 import { HorizontalLayout, UISchemaElement } from '@jsonforms/core';
-import { beforeEachLayoutTest, setupMockStore } from '@jsonforms/angular-test';
+import { beforeEachLayoutTest, setupMockStore } from './common';
 import {
   HorizontalLayoutRenderer,
   horizontalLayoutTester,
 } from '../src/library/layouts/horizontal-layout.renderer';
 import { LayoutChildrenRenderPropsPipe } from '../src/library/layouts/layout.renderer';
+import { initTestEnvironment } from './test';
+
+initTestEnvironment();
 
 describe('Horizontal layout tester', () => {
   it('should succeed', () => {
@@ -41,11 +44,11 @@ describe('Horizontal layout tester', () => {
 describe('Horizontal layout', () => {
   let fixture: ComponentFixture<any>;
 
-  beforeEach(() => {
+  beforeEach(waitForAsync(() => {
     fixture = beforeEachLayoutTest(HorizontalLayoutRenderer, {
       declarations: [LayoutChildrenRenderPropsPipe],
     });
-  });
+  }));
 
   it('render with undefined elements', () => {
     const uischema: UISchemaElement = {

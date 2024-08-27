@@ -28,14 +28,12 @@ import startCase from 'lodash/startCase';
 import keys from 'lodash/keys';
 import {
   ControlElement,
-  isGroup,
-  isLayout,
   JsonSchema,
   LabelElement,
   Layout,
   UISchemaElement,
 } from '../models';
-import { deriveTypes, encode, resolveSchema } from '../util';
+import { deriveTypes, encode, isGroup, isLayout, resolveSchema } from '../util';
 
 /**
  * Creates a new ILayout.
@@ -190,6 +188,8 @@ const generateUISchema = (
     case 'number':
     /* falls through */
     case 'integer':
+    /* falls through */
+    case 'null':
     /* falls through */
     case 'boolean': {
       const controlObject: ControlElement = createControlElement(currentRef);

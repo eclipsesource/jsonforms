@@ -29,7 +29,7 @@ import {
   isDescriptionHidden,
 } from '@jsonforms/core';
 
-import { Hidden, InputLabel, FormControl, FormHelperText } from '@mui/material';
+import { InputLabel, FormControl, FormHelperText } from '@mui/material';
 import merge from 'lodash/merge';
 import { useFocus, useInputVariant } from '../util';
 
@@ -69,36 +69,38 @@ export const MaterialInputControl = (props: ControlProps & WithInput) => {
   const secondFormHelperText = showDescription && !isValid ? errors : null;
   const InnerComponent = input;
 
+  if (!visible) {
+    return null;
+  }
+
   return (
-    <Hidden xsUp={!visible}>
-      <FormControl
-        fullWidth={!appliedUiSchemaOptions.trim}
-        onFocus={onFocus}
-        onBlur={onBlur}
-        variant={variant}
-        id={id}
+    <FormControl
+      fullWidth={!appliedUiSchemaOptions.trim}
+      onFocus={onFocus}
+      onBlur={onBlur}
+      variant={variant}
+      id={id}
+    >
+      <InputLabel
+        htmlFor={id + '-input'}
+        error={!isValid}
+        required={showAsRequired(
+          required,
+          appliedUiSchemaOptions.hideRequiredAsterisk
+        )}
       >
-        <InputLabel
-          htmlFor={id + '-input'}
-          error={!isValid}
-          required={showAsRequired(
-            required,
-            appliedUiSchemaOptions.hideRequiredAsterisk
-          )}
-        >
-          {label}
-        </InputLabel>
-        <InnerComponent
-          {...props}
-          id={id + '-input'}
-          isValid={isValid}
-          visible={visible}
-        />
-        <FormHelperText error={!isValid && !showDescription}>
-          {firstFormHelperText}
-        </FormHelperText>
-        <FormHelperText error={!isValid}>{secondFormHelperText}</FormHelperText>
-      </FormControl>
-    </Hidden>
+        {label}
+      </InputLabel>
+      <InnerComponent
+        {...props}
+        id={id + '-input'}
+        isValid={isValid}
+        visible={visible}
+      />
+      <FormHelperText error={!isValid && !showDescription}>
+        {firstFormHelperText}
+      </FormHelperText>
+      <FormHelperText error={!isValid}>{secondFormHelperText}</FormHelperText>
+    </FormControl>
   );
 };

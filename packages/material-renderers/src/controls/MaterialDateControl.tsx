@@ -23,19 +23,25 @@
   THE SOFTWARE.
 */
 import merge from 'lodash/merge';
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import {
   ControlProps,
+  defaultDateFormat,
   isDateControl,
   isDescriptionHidden,
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
 import { withJsonFormsControlProps } from '@jsonforms/react';
-import { FormHelperText, Hidden } from '@mui/material';
+import { FormHelperText } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { createOnChangeHandler, getData, useFocus } from '../util';
+import {
+  createOnBlurHandler,
+  createOnChangeHandler,
+  getData,
+  useFocus,
+} from '../util';
 
 export const MaterialDateControl = (props: ControlProps) => {
   const [focused, onFocus, onBlur] = useFocus();
@@ -62,8 +68,11 @@ export const MaterialDateControl = (props: ControlProps) => {
     appliedUiSchemaOptions.showUnfocusedDescription
   );
 
+  const [key, setKey] = useState<number>(0);
+  const [open, setOpen] = useState<boolean>(false);
+
   const format = appliedUiSchemaOptions.dateFormat ?? 'YYYY-MM-DD';
-  const saveFormat = appliedUiSchemaOptions.dateSaveFormat ?? 'YYYY-MM-DD';
+  const saveFormat = appliedUiSchemaOptions.dateSaveFormat ?? defaultDateFormat;
 
   const views = appliedUiSchemaOptions.views ?? ['year', 'day'];
 
@@ -73,52 +82,70 @@ export const MaterialDateControl = (props: ControlProps) => {
     ? errors
     : null;
   const secondFormHelperText = showDescription && !isValid ? errors : null;
+
+  const updateChild = useCallback(() => setKey((key) => key + 1), []);
+
   const onChange = useMemo(
     () => createOnChangeHandler(path, handleChange, saveFormat),
     [path, handleChange, saveFormat]
   );
 
+  const onBlurHandler = useMemo(
+    () =>
+      createOnBlurHandler(
+        path,
+        handleChange,
+        format,
+        saveFormat,
+        updateChild,
+        onBlur
+      ),
+    [path, handleChange, format, saveFormat, updateChild]
+  );
   const value = getData(data, saveFormat);
 
+  if (!visible) {
+    return null;
+  }
+
   return (
-    <Hidden xsUp={!visible}>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DatePicker
-          label={label}
-          value={value}
-          onChange={onChange}
-          format={format}
-          views={views}
-          disabled={!enabled}
-          slotProps={{
-            actionBar: ({ wrapperVariant }) => ({
-              actions:
-                wrapperVariant === 'desktop'
-                  ? []
-                  : ['clear', 'cancel', 'accept'],
-            }),
-            textField: {
-              id: id + '-input',
-              required:
-                required && !appliedUiSchemaOptions.hideRequiredAsterisk,
-              autoFocus: appliedUiSchemaOptions.focus,
-              error: !isValid,
-              fullWidth: !appliedUiSchemaOptions.trim,
-              inputProps: {
-                type: 'text',
-              },
-              InputLabelProps: data ? { shrink: true } : undefined,
-              onFocus: onFocus,
-              onBlur: onBlur,
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <DatePicker
+        open={open}
+        onOpen={() => setOpen(true)}
+        onClose={() => setOpen(false)}
+        key={key}
+        label={label}
+        value={value}
+        onAccept={onChange}
+        format={format}
+        views={views}
+        disabled={!enabled}
+        slotProps={{
+          actionBar: ({ wrapperVariant }) => ({
+            actions:
+              wrapperVariant === 'desktop' ? [] : ['clear', 'cancel', 'accept'],
+          }),
+          textField: {
+            id: id + '-input',
+            required: required && !appliedUiSchemaOptions.hideRequiredAsterisk,
+            autoFocus: appliedUiSchemaOptions.focus,
+            error: !isValid,
+            fullWidth: !appliedUiSchemaOptions.trim,
+            inputProps: {
+              type: 'text',
             },
-          }}
-        />
-        <FormHelperText error={!isValid && !showDescription}>
-          {firstFormHelperText}
-        </FormHelperText>
-        <FormHelperText error={!isValid}>{secondFormHelperText}</FormHelperText>
-      </LocalizationProvider>
-    </Hidden>
+            InputLabelProps: data ? { shrink: true } : undefined,
+            onFocus: onFocus,
+            onBlur: onBlurHandler,
+          },
+        }}
+      />
+      <FormHelperText error={!isValid && !showDescription}>
+        {firstFormHelperText}
+      </FormHelperText>
+      <FormHelperText error={!isValid}>{secondFormHelperText}</FormHelperText>
+    </LocalizationProvider>
   );
 };
 

@@ -126,16 +126,18 @@ export const uischema = {
         {
           type: 'Control',
           scope: '#/properties/occupation',
-          suggestion: [
-            'Accountant',
-            'Engineer',
-            'Freelancer',
-            'Journalism',
-            'Physician',
-            'Student',
-            'Teacher',
-            'Other',
-          ],
+          options: {
+            suggestion: [
+              'Accountant',
+              'Engineer',
+              'Freelancer',
+              'Journalism',
+              'Physician',
+              'Student',
+              'Teacher',
+              'Other',
+            ],
+          },
         },
       ],
     },

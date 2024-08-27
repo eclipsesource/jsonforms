@@ -37,7 +37,7 @@ import {
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
-import { Hidden, Tab, Tabs } from '@mui/material';
+import { Tab, Tabs } from '@mui/material';
 import { JsonFormsDispatch, withJsonFormsOneOfProps } from '@jsonforms/react';
 import CombinatorProperties from './CombinatorProperties';
 
@@ -103,8 +103,12 @@ export const MaterialOneOfRenderer = ({
     [setConfirmDialogOpen, setSelectedIndex, data]
   );
 
+  if (!visible) {
+    return null;
+  }
+
   return (
-    <Hidden xsUp={!visible}>
+    <>
       <CombinatorProperties
         schema={schema}
         combinatorKeyword={'oneOf'}
@@ -136,7 +140,7 @@ export const MaterialOneOfRenderer = ({
         open={confirmDialogOpen}
         handleClose={handleClose}
       />
-    </Hidden>
+    </>
   );
 };
 

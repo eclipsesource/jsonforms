@@ -25,12 +25,11 @@
 
 import type AJV from 'ajv';
 import type { ErrorObject } from 'ajv';
-import type { JsonSchema, UISchemaElement } from '../models';
+import { JsonSchema, UISchemaElement } from '../models';
 import { generateDefaultUISchema, generateJsonSchema } from '../generators';
 
-import type { RankedTester } from '../testers';
-import type { UISchemaTester, ValidationMode } from '../reducers';
-import type { ErrorTranslator, Translator } from '../i18n';
+import { RankedTester, UISchemaTester } from '../testers';
+import { ErrorTranslator, Translator, ValidationMode } from '../store';
 
 export const INIT = 'jsonforms/INIT' as const;
 export const UPDATE_CORE = 'jsonforms/UPDATE_CORE' as const;
@@ -56,6 +55,57 @@ export const UPDATE_I18N = 'jsonforms/UPDATE_I18N' as const;
 export const ADD_DEFAULT_DATA = 'jsonforms/ADD_DEFAULT_DATA' as const;
 export const REMOVE_DEFAULT_DATA = 'jsonforms/REMOVE_DEFAULT_DATA' as const;
 
+export type UpdateArrayContext =
+  | { type: 'ADD'; values: any[] }
+  | { type: 'REMOVE'; indices: number[] }
+  | { type: 'MOVE'; moves: { from: number; to: number }[] };
+
+export const isUpdateArrayContext = (
+  context: object
+): context is UpdateArrayContext => {
+  if (!('type' in context)) {
+    return false;
+  }
+  if (typeof context.type !== 'string') {
+    return false;
+  }
+  switch (context.type) {
+    case 'ADD': {
+      return (
+        'values' in context &&
+        Array.isArray(context.values) &&
+        context.values.length > 0
+      );
+    }
+    case 'REMOVE': {
+      return (
+        'indices' in context &&
+        Array.isArray(context.indices) &&
+        context.indices.length > 0 &&
+        context.indices.every((i) => typeof i === 'number')
+      );
+    }
+    case 'MOVE': {
+      return (
+        'moves' in context &&
+        Array.isArray(context.moves) &&
+        context.moves.length > 0 &&
+        context.moves.every(
+          (m) =>
+            typeof m === 'object' &&
+            m !== null &&
+            'from' in m &&
+            'to' in m &&
+            typeof m.from === 'number' &&
+            typeof m.to === 'number'
+        )
+      );
+    }
+    default:
+      return false;
+  }
+};
+
 export type CoreActions =
   | InitAction
   | UpdateCoreAction
@@ -70,6 +120,7 @@ export interface UpdateAction {
   type: 'jsonforms/UPDATE';
   path: string;
   updater(existingData?: any): any;
+  context?: object;
 }
 
 export interface UpdateErrorsAction {
@@ -165,11 +216,13 @@ export const setAjv = (ajv: AJV) => ({
 
 export const update = (
   path: string,
-  updater: (existingData: any) => any
+  updater: (existingData: any) => any,
+  context?: object
 ): UpdateAction => ({
   type: UPDATE_DATA,
   path,
   updater,
+  context,
 });
 
 export const updateErrors = (errors: ErrorObject[]): UpdateErrorsAction => ({

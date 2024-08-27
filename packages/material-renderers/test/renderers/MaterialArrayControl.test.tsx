@@ -23,7 +23,12 @@
   THE SOFTWARE.
 */
 import './MatchMediaMock';
-import { ControlElement, DispatchCellProps, JsonSchema } from '@jsonforms/core';
+import {
+  ArrayTranslationEnum,
+  ControlElement,
+  DispatchCellProps,
+  JsonSchema,
+} from '@jsonforms/core';
 import * as React from 'react';
 
 import MaterialArrayControlRenderer from '../../src/complex/MaterialArrayControlRenderer';
@@ -32,6 +37,7 @@ import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { JsonFormsStateProvider, StatelessRenderer } from '@jsonforms/react';
 import { initCore, TestEmitter } from './util';
+import { checkTooltip, checkTooltipTranslation } from './tooltipChecker';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -281,6 +287,50 @@ describe('Material array control', () => {
     const rows = wrapper.find('tr');
     // header + 2 data entries
     expect(rows).toHaveLength(3);
+  });
+
+  it('should render description', () => {
+    const descriptionSchema = {
+      ...fixture.schema,
+      description: 'This is an array description',
+    };
+
+    const core = initCore(descriptionSchema, fixture.uischema, fixture.data);
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
+        <MaterialArrayControlRenderer
+          schema={descriptionSchema}
+          uischema={fixture.uischema}
+        />
+      </JsonFormsStateProvider>
+    );
+    expect(
+      wrapper.text().includes('This is an array description')
+    ).toBeTruthy();
+    expect(wrapper.find('thead .MuiFormHelperText-root').exists()).toBeTruthy();
+  });
+
+  it('should not render description container if there is none', () => {
+    const descriptionSchema = {
+      ...fixture.schema,
+    };
+    // make sure there is no description
+    delete descriptionSchema.description;
+
+    const core = initCore(descriptionSchema, fixture.uischema, fixture.data);
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
+        <MaterialArrayControlRenderer
+          schema={descriptionSchema}
+          uischema={fixture.uischema}
+        />
+      </JsonFormsStateProvider>
+    );
+    expect(wrapper.find('thead .MuiFormHelperText-root').exists()).toBeFalsy();
   });
 
   it('should delete an item', () => {
@@ -634,6 +684,108 @@ describe('Material array control', () => {
     expect(input.props().disabled).toBe(true);
   });
 
+  it('add and delete buttons should exist if enabled', () => {
+    const core = initCore(fixture2.schema, fixture2.uischema, fixture2.data);
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, cells: materialCells, core }}
+      >
+        <MaterialArrayControlRenderer
+          schema={fixture2.schema}
+          uischema={fixture2.uischema}
+          enabled={true}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    const deleteButton = wrapper.find({ 'aria-label': 'Delete button' });
+    expect(deleteButton.exists()).toBeTruthy();
+    const addButton = wrapper.find({ 'aria-label': 'Add to Test button' });
+    expect(addButton.exists()).toBeTruthy();
+  });
+
+  it('add and delete buttons should be removed if disabled', () => {
+    const core = initCore(fixture2.schema, fixture2.uischema, fixture2.data);
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, cells: materialCells, core }}
+      >
+        <MaterialArrayControlRenderer
+          schema={fixture2.schema}
+          uischema={fixture2.uischema}
+          enabled={false}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    const deleteButton = wrapper.find({ 'aria-label': 'Delete button' });
+    expect(deleteButton.exists()).toBeFalsy();
+    const addButton = wrapper.find({ 'aria-label': 'Add to Test button' });
+    expect(addButton.exists()).toBeFalsy();
+  });
+
+  it('add button should be removed if indicated via ui schema', () => {
+    const core = initCore(fixture2.schema, fixture2.uischema, fixture2.data);
+    const uischema = { ...fixture2.uischema };
+    uischema.options = { ...uischema.options, disableAdd: true };
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, cells: materialCells, core }}
+      >
+        <MaterialArrayControlRenderer
+          schema={fixture2.schema}
+          uischema={uischema}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    const button = wrapper.find({ 'aria-label': 'Add to Test button' });
+    expect(button.exists()).toBeFalsy();
+  });
+
+  it('delete button should be removed if indicated via ui schema', () => {
+    const core = initCore(fixture2.schema, fixture2.uischema, fixture2.data);
+    const uischema = { ...fixture2.uischema };
+    uischema.options = { ...uischema.options, disableRemove: true };
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, cells: materialCells, core }}
+      >
+        <MaterialArrayControlRenderer
+          schema={fixture2.schema}
+          uischema={uischema}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    const button = wrapper.find({ 'aria-label': 'Delete button' });
+    expect(button.exists()).toBeFalsy();
+  });
+
+  it('add and delete buttons should be removed if indicated via config', () => {
+    const core = initCore(fixture2.schema, fixture2.uischema, fixture2.data);
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{
+          renderers: materialRenderers,
+          cells: materialCells,
+          core,
+          config: { disableAdd: true, disableRemove: true },
+        }}
+      >
+        <MaterialArrayControlRenderer
+          schema={fixture2.schema}
+          uischema={fixture2.uischema}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    const deleteButton = wrapper.find({ 'aria-label': 'Delete button' });
+    expect(deleteButton.exists()).toBeFalsy();
+    const addButton = wrapper.find({ 'aria-label': 'Add to Test button' });
+    expect(addButton.exists()).toBeFalsy();
+  });
+
   it('should have down button disabled for last element', () => {
     const core = initCore(fixture2.schema, fixture2.uischema, fixture2.data);
     wrapper = mount(
@@ -654,5 +806,109 @@ describe('Material array control', () => {
       .find('button')
       .find({ 'aria-label': 'Move item down' });
     expect(downButton.is('[disabled]')).toBe(true);
+  });
+
+  it('should have a tooltip for add button', () => {
+    wrapper = checkTooltip(
+      fixture.schema,
+      fixture.uischema,
+      wrapper,
+      (wrapper) => wrapper.find('tr').at(0),
+      ArrayTranslationEnum.addTooltip,
+      {
+        id: 'tooltip-add',
+      },
+      fixture.data
+    );
+  });
+  it('should have a translatable tooltip for add button', () => {
+    wrapper = checkTooltipTranslation(
+      fixture.schema,
+      fixture.uischema,
+      wrapper,
+      (wrapper) => wrapper.find('tr').at(0),
+      {
+        id: 'tooltip-add',
+      },
+      fixture.data
+    );
+  });
+
+  it('should have a tooltip for delete button', () => {
+    wrapper = checkTooltip(
+      fixture2.schema,
+      fixture2.uischema,
+      wrapper,
+      (wrapper) => wrapper.find('tr').at(1),
+      ArrayTranslationEnum.removeTooltip,
+      {
+        id: 'tooltip-remove',
+      },
+      fixture2.data
+    );
+  });
+  it('should have a translatable tooltip for delete button', () => {
+    wrapper = checkTooltipTranslation(
+      fixture2.schema,
+      fixture2.uischema,
+      wrapper,
+      (wrapper) => wrapper.find('tr').at(1),
+      {
+        id: 'tooltip-remove',
+      },
+      fixture2.data
+    );
+  });
+
+  it('should have a tooltip for up button', () => {
+    wrapper = checkTooltip(
+      fixture2.schema,
+      fixture2.uischema,
+      wrapper,
+      (wrapper) => wrapper.find('tr').at(1),
+      ArrayTranslationEnum.up,
+      {
+        id: 'tooltip-up',
+      },
+      fixture2.data
+    );
+  });
+  it('should have a translatable tooltip for up button', () => {
+    wrapper = checkTooltipTranslation(
+      fixture2.schema,
+      fixture2.uischema,
+      wrapper,
+      (wrapper) => wrapper.find('tr').at(1),
+      {
+        id: 'tooltip-up',
+      },
+      fixture2.data
+    );
+  });
+
+  it('should have a tooltip for down button', () => {
+    wrapper = checkTooltip(
+      fixture2.schema,
+      fixture2.uischema,
+      wrapper,
+      (wrapper) => wrapper.find('tr').at(1),
+      ArrayTranslationEnum.down,
+      {
+        id: 'tooltip-down',
+      },
+      fixture2.data
+    );
+  });
+  it('should have a translatable tooltip for down button', () => {
+    wrapper = checkTooltipTranslation(
+      fixture2.schema,
+      fixture2.uischema,
+      wrapper,
+      (wrapper) => wrapper.find('tr').at(1),
+      {
+        id: 'tooltip-down',
+      },
+      fixture2.data
+    );
   });
 });

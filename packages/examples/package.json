@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/examples",
-  "version": "3.2.0-beta.0",
+  "version": "3.4.0-alpha.3",
   "description": "JSON Forms Example Data",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -40,21 +40,21 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "test": "echo 'Nothing to do for `examples` package'",
-    "doc": "typedoc --name 'JSON Forms Examples' --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
+    "doc": "typedoc --name 'JSON Forms Examples' --excludeExternals --out docs src"
   },
   "dependencies": {
-    "ajv-i18n": "^3.5.0",
+    "ajv-i18n": "^4.2.0",
     "lodash": "^4.17.21"
   },
   "peerDependencies": {
-    "@jsonforms/core": "v3.2.0-beta.0"
+    "@jsonforms/core": "3.4.0-alpha.3"
   },
   "devDependencies": {
     "@jsonforms/core": "workspace:*",
     "@types/node": "^18.19.4",
     "@typescript-eslint/eslint-plugin": "^5.54.1",
     "@typescript-eslint/parser": "^5.54.1",
-    "eslint": "^7.32.0",
+    "eslint": "^8.56.0",
     "eslint-config-prettier": "^8.7.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier": "^4.2.1",
@@ -65,7 +65,7 @@
     "rollup-plugin-typescript2": "^0.34.1",
     "rollup-plugin-visualizer": "^5.4.1",
     "tslib": "^2.5.0",
-    "typedoc": "~0.21.9",
-    "typescript": "4.2.3"
+    "typedoc": "~0.25.3",
+    "typescript": "~5.2.2"
   }
 }

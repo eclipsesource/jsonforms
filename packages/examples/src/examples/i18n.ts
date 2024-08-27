@@ -32,9 +32,7 @@ import {
   Translator,
 } from '@jsonforms/core';
 import get from 'lodash/get';
-// TODO change import when types are available for ajv-i18n (from v4.x)
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const localize = require('ajv-i18n');
+import localize from 'ajv-i18n/localize';
 
 export const onChange =
   (dispatch: Dispatch<AnyAction>) =>
@@ -43,7 +41,8 @@ export const onChange =
     if (!extensionState) {
       return;
     }
-    const localiseFunc = localize[extensionState.locale.split('-')[0]];
+    const localiseFunc =
+      localize[extensionState.locale.split('-')[0] as keyof typeof localize];
     localiseFunc(errors);
     dispatch(updateErrors(errors));
   };

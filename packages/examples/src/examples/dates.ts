@@ -129,12 +129,12 @@ export const uischema = {
 export const data = {
   schemaBased: {
     date: new Date().toISOString().substr(0, 10),
-    time: '13:37',
+    time: '13:37:00',
     datetime: new Date().toISOString(),
   },
   uiSchemaBased: {
-    date: new Date().toISOString().substr(0, 10),
-    time: '13:37',
+    date: '2024-01',
+    time: '13:37:00',
     datetime: '1999/12/11 10:05 am',
   },
 };

@@ -33,7 +33,6 @@ import {
 } from '@jsonforms/core';
 import { withJsonFormsArrayLayoutProps } from '@jsonforms/react';
 import { MaterialTableControl } from './MaterialTableControl';
-import { Hidden } from '@mui/material';
 import { DeleteDialog } from './DeleteDialog';
 
 export const MaterialArrayControlRenderer = (props: ArrayLayoutProps) => {
@@ -58,8 +57,12 @@ export const MaterialArrayControlRenderer = (props: ArrayLayoutProps) => {
   }, [setOpen, path, rowData]);
   const deleteClose = useCallback(() => setOpen(false), [setOpen]);
 
+  if (!visible) {
+    return null;
+  }
+
   return (
-    <Hidden xsUp={!visible}>
+    <>
       <MaterialTableControl {...props} openDeleteDialog={openDeleteDialog} />
       <DeleteDialog
         open={open}
@@ -71,7 +74,7 @@ export const MaterialArrayControlRenderer = (props: ArrayLayoutProps) => {
         title={props.translations.deleteDialogTitle}
         message={props.translations.deleteDialogMessage}
       />
-    </Hidden>
+    </>
   );
 };
 

@@ -1,0 +1,96 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://jsonforms.io/uischema/rule",
+  "title": "Rule UI schema meta-schema",
+  "type": ["object"],
+  "properties": {
+    "effect": {
+      "description": "The effect of the rule",
+      "type": "string",
+      "enum": ["HIDE", "SHOW", "ENABLE", "DISABLE"]
+    },
+    "condition": {
+      "description": "The condition of the rule that must evaluate to true in order to trigger the effect.",
+      "oneOf": [
+        { "$ref": "#/definitions/leafCondition" },
+        { "$ref": "#/definitions/schemaBasedCondition" },
+        { "$ref": "#/definitions/orCondition" },
+        { "$ref": "#/definitions/andCondition" }
+      ]
+    }
+  },
+  "required": ["effect", "condition"],
+  "definitions": {
+    "condition": {
+      "type": "object",
+      "properties": { "type": { "type": "string", "readOnly": true } }
+    },
+    "scopable": {
+      "type": "object",
+      "properties": {
+        "scope": { "type": "string" }
+      },
+      "required": ["scope"]
+    },
+    "leafCondition": {
+      "allOf": [
+        { "$ref": "#/definitions/scopable" },
+        {
+          "properties": {
+            "type": { "const": "LEAF" },
+            "expectedValue": {}
+          },
+          "required": ["type", "expectedValue"]
+        }
+      ]
+    },
+    "schemaBasedCondition": {
+      "allOf": [
+        { "$ref": "#/definitions/scopable" },
+        { "$ref": "#/definitions/condition" },
+        {
+          "properties": {
+            "schema": { "$ref": "http://json-schema.org/draft-07/schema#" }
+          },
+          "required": ["schema"]
+        }
+      ]
+    },
+    "composableCondition": {
+      "allOf": [
+        { "$ref": "#/definitions/condition" },
+        {
+          "properties": {
+            "conditions": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/condition" }
+            }
+          },
+          "required": ["conditions"]
+        }
+      ]
+    },
+    "orCondition": {
+      "allOf": [
+        { "$ref": "#/definitions/composableCondition" },
+        {
+          "properties": {
+            "type": { "const": "OR" }
+          },
+          "required": ["type"]
+        }
+      ]
+    },
+    "andCondition": {
+      "allOf": [
+        { "$ref": "#/definitions/composableCondition" },
+        {
+          "properties": {
+            "type": { "const": "AND" }
+          },
+          "required": ["type"]
+        }
+      ]
+    }
+  }
+}

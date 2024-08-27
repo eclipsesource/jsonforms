@@ -9,5 +9,8 @@ export const mountJsonForms = (
 ) => {
   return mount(TestComponent, {
     props: { initialData: data, schema, uischema, config },
+    // Attach mounted component to document. Without this, some events are not triggered as expected.
+    // E.g. a click on a checkbox input would not result in a change event.
+    attachTo: document.body,
   });
 };

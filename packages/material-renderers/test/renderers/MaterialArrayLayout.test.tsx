@@ -23,10 +23,16 @@
   THE SOFTWARE.
 */
 import './MatchMediaMock';
-import { ControlElement } from '@jsonforms/core';
+import {
+  ArrayTranslationEnum,
+  ControlElement,
+  i18nJsonSchema,
+  JsonSchema7,
+  Translator,
+} from '@jsonforms/core';
 import * as React from 'react';
 
-import { materialRenderers } from '../../src';
+import { ArrayLayoutToolbar, materialRenderers } from '../../src';
 import {
   MaterialArrayLayout,
   materialArrayLayoutTester,
@@ -35,7 +41,9 @@ import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { JsonForms, JsonFormsStateProvider } from '@jsonforms/react';
 import { Accordion } from '@mui/material';
-import { createTesterContext, initCore } from './util';
+import { createTesterContext, testTranslator, initCore } from './util';
+import { checkTooltip, checkTooltipTranslation } from './tooltipChecker';
+import { cloneDeep } from 'lodash';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -50,7 +58,24 @@ const data = [
     message2: 'Yolo 2',
   },
 ];
-const schema = {
+
+const emptyData: any[] = [];
+
+const enumOrOneOfData = [
+  {
+    message: 'El Barto was here',
+    messageType: 'MSG_TYPE_1',
+  },
+  {
+    message: 'El Barto was not here',
+    messageType: 'MSG_TYPE_2',
+  },
+  {
+    message: 'Yolo',
+  },
+];
+
+const schema: JsonSchema7 = {
   type: 'array',
   items: {
     type: 'object',
@@ -66,7 +91,141 @@ const schema = {
   },
 };
 
-const nestedSchema = {
+const enumSchema: JsonSchema7 = {
+  type: 'array',
+  items: {
+    type: 'object',
+    properties: {
+      messageType: {
+        type: 'string',
+        enum: ['MSG_TYPE_1', 'MSG_TYPE_2'],
+      },
+    },
+  },
+};
+
+const oneOfSchema = {
+  type: 'array',
+  items: {
+    type: 'object',
+    properties: {
+      messageType: {
+        type: 'string',
+        oneOf: [
+          {
+            const: 'MSG_TYPE_1',
+          },
+          {
+            const: 'MSG_TYPE_2',
+            title: 'Second message type',
+          },
+        ],
+      },
+    },
+  },
+};
+
+const deepEnumOrOneOfData = {
+  article: {
+    title: 'title',
+    comments: [
+      {
+        author: {
+          name: 'John',
+          type: 'WRITER',
+          role: 'ROLE_1',
+        },
+      },
+      {
+        author: {
+          name: 'John',
+          type: 'AUTHOR',
+          role: 'ROLE_2',
+        },
+      },
+    ],
+  },
+};
+
+const deepEnumOrOneOfSchema: JsonSchema7 = {
+  type: 'object',
+  properties: {
+    article: {
+      type: 'object',
+      properties: {
+        title: {
+          type: 'string',
+        },
+        comments: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              author: {
+                type: 'object',
+                properties: {
+                  name: {
+                    type: 'string',
+                  },
+                  type: {
+                    type: 'string',
+                    enum: ['AUTHOR', 'WRITER'],
+                  },
+                  role: {
+                    type: 'string',
+                    oneOf: [
+                      {
+                        const: 'ROLE_1',
+                      },
+                      {
+                        const: 'ROLE_2',
+                        title: 'Second role',
+                      },
+                    ],
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+};
+
+const deepUiSchemaWithEnumChildLabelProp: ControlElement = {
+  type: 'Control',
+  scope: '#/properties/article/properties/comments',
+  options: {
+    elementLabelProp: 'author.type',
+    detail: {
+      type: 'HorizontalLayout',
+      elements: [
+        { type: 'Control', scope: '#/properties/author/properties/name' },
+        { type: 'Control', scope: '#/properties/author/properties/type' },
+        { type: 'Control', scope: '#/properties/author/properties/role' },
+      ],
+    },
+  },
+};
+
+const deepUiSchemaWithOneOfChildLabelProp: ControlElement = {
+  type: 'Control',
+  scope: '#/properties/article/properties/comments',
+  options: {
+    elementLabelProp: 'author.role',
+    detail: {
+      type: 'HorizontalLayout',
+      elements: [
+        { type: 'Control', scope: '#/properties/author/properties/name' },
+        { type: 'Control', scope: '#/properties/author/properties/type' },
+        { type: 'Control', scope: '#/properties/author/properties/role' },
+      ],
+    },
+  },
+};
+
+const nestedSchema: JsonSchema7 = {
   type: 'array',
   items: {
     ...schema,
@@ -135,6 +294,21 @@ const uischemaWithChildLabelProp: ControlElement = {
   scope: '#',
   options: {
     elementLabelProp: 'message2',
+  },
+};
+
+const uiSchemaWithEnumOrOneOfChildLabelProp: ControlElement = {
+  type: 'Control',
+  scope: '#',
+  options: {
+    elementLabelProp: 'messageType',
+    detail: {
+      type: 'HorizontalLayout',
+      elements: [
+        { type: 'Control', scope: '#/properties/message' },
+        { type: 'Control', scope: '#/properties/messageType' },
+      ],
+    },
   },
 };
 
@@ -335,13 +509,13 @@ describe('Material array layout', () => {
       ...schema,
       title: 'My awesome title',
     };
-    const core = initCore(schema, uischema, data);
-    wrapper = mount(
-      <JsonFormsStateProvider
-        initState={{ renderers: materialRenderers, core }}
-      >
-        <MaterialArrayLayout schema={titleSchema} uischema={uischema} />
-      </JsonFormsStateProvider>
+
+    wrapper = arrayLayoutWrapper(
+      wrapper,
+      data,
+      titleSchema,
+      uischema,
+      undefined
     );
 
     const listTitle = wrapper.find('h6').at(0);
@@ -531,22 +705,104 @@ describe('Material array layout', () => {
     expect(downButton.is('[disabled]')).toBe(true);
   });
 
+  it('add and delete buttons should exist if enabled', () => {
+    wrapper = mount(
+      <JsonForms
+        data={data}
+        schema={schema}
+        uischema={uischema}
+        renderers={materialRenderers}
+      />
+    );
+
+    const deleteButton = wrapper.find({ 'aria-label': 'Delete button' });
+    expect(deleteButton.exists()).toBeTruthy();
+    const addButton = wrapper.find({ 'aria-label': 'Add button' });
+    expect(addButton.exists()).toBeTruthy();
+  });
+
+  it('add and delete buttons should be removed if disabled', () => {
+    const readOnlySchema = { ...schema };
+    readOnlySchema.readOnly = true;
+    wrapper = mount(
+      <JsonForms
+        data={data}
+        schema={readOnlySchema}
+        uischema={uischema}
+        renderers={materialRenderers}
+      />
+    );
+
+    const deleteButton = wrapper.find({ 'aria-label': 'Delete button' });
+    expect(deleteButton.exists()).toBeFalsy();
+    const addButton = wrapper.find({ 'aria-label': 'Add button' });
+    expect(addButton.exists()).toBeFalsy();
+  });
+
+  it('add button should be removed if indicated via ui schema', () => {
+    const disableUischema = { ...uischema };
+    disableUischema.options = { ...uischema.options, disableAdd: true };
+    wrapper = mount(
+      <JsonForms
+        data={data}
+        schema={schema}
+        uischema={disableUischema}
+        renderers={materialRenderers}
+      />
+    );
+
+    const button = wrapper.find({ 'aria-label': 'Add button' });
+    expect(button.exists()).toBeFalsy();
+  });
+
+  it('delete button should be removed if indicated via ui schema', () => {
+    const disableUischema = { ...uischema };
+    disableUischema.options = { ...uischema.options, disableRemove: true };
+    wrapper = mount(
+      <JsonForms
+        data={data}
+        schema={schema}
+        uischema={disableUischema}
+        renderers={materialRenderers}
+      />
+    );
+
+    const button = wrapper.find({ 'aria-label': 'Delete button' });
+    expect(button.exists()).toBeFalsy();
+  });
+
+  it('add and delete buttons should be removed if indicated via config', () => {
+    wrapper = mount(
+      <JsonForms
+        data={data}
+        schema={schema}
+        uischema={uischema}
+        renderers={materialRenderers}
+        config={{
+          disableAdd: true,
+          disableRemove: true,
+        }}
+      />
+    );
+
+    const deleteButton = wrapper.find({ 'aria-label': 'Delete button' });
+    expect(deleteButton.exists()).toBeFalsy();
+    const addButton = wrapper.find({ 'aria-label': 'Add button' });
+    expect(addButton.exists()).toBeFalsy();
+  });
+
   const getChildLabel = (wrapper: ReactWrapper, index: number) =>
     wrapper
       .find(`#${wrapper.find(Accordion).at(index).props()['aria-labelledby']}`)
       .text();
 
   it('should render first simple property as child label', () => {
-    const core = initCore(schema, uischema, data);
-    wrapper = mount(
-      <JsonFormsStateProvider
-        initState={{ renderers: materialRenderers, core }}
-      >
-        <MaterialArrayLayout
-          schema={schema}
-          uischema={uischemaWithSortOption}
-        />
-      </JsonFormsStateProvider>
+    wrapper = arrayLayoutWrapper(
+      wrapper,
+      data,
+      schema,
+      uischemaWithSortOption,
+      undefined
     );
 
     expect(getChildLabel(wrapper, 0)).toBe('El Barto was here');
@@ -568,4 +824,441 @@ describe('Material array layout', () => {
     expect(getChildLabel(wrapper, 0)).toBe('El Barto was here 2');
     expect(getChildLabel(wrapper, 1)).toBe('Yolo 2');
   });
+
+  it('should render description', () => {
+    const descriptionSchema = {
+      ...nestedSchema,
+      description: 'This is an array description',
+    };
+
+    wrapper = mount(
+      <JsonForms
+        data={data}
+        schema={descriptionSchema}
+        uischema={uischema}
+        renderers={materialRenderers}
+      />
+    );
+    expect(
+      wrapper.text().includes('This is an array description')
+    ).toBeTruthy();
+    expect(
+      wrapper.find('.MuiToolbar-root .MuiFormHelperText-root').exists()
+    ).toBeTruthy();
+  });
+
+  it('should not render description container if there is none', () => {
+    const descriptionSchema = {
+      ...nestedSchema,
+    };
+    // make sure there is no description
+    delete descriptionSchema.description;
+
+    wrapper = mount(
+      <JsonForms
+        data={data}
+        schema={descriptionSchema}
+        uischema={uischema}
+        renderers={materialRenderers}
+      />
+    );
+    expect(
+      wrapper.find('.MuiToolbar-root .MuiFormHelperText-root').exists()
+    ).toBeFalsy();
+  });
+
+  it('should have a translation for no data', () => {
+    const translate = () => 'Translated';
+    const core = initCore(schema, uischema, emptyData);
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core, i18n: { translate } }}
+      >
+        <MaterialArrayLayout
+          schema={schema}
+          uischema={uischemaOptions.inline}
+        />
+      </JsonFormsStateProvider>
+    );
+    const noDataLabel = wrapper.find('div>div>p').text();
+    expect(noDataLabel.includes('Translated')).toBeTruthy();
+  });
+
+  it('should have a tooltip for add button', () => {
+    wrapper = checkTooltip(
+      nestedSchema,
+      uischemaWithSortOption,
+      wrapper,
+      (wrapper) => wrapper.find(ArrayLayoutToolbar),
+      ArrayTranslationEnum.addTooltip,
+      {
+        id: 'tooltip-add',
+      },
+      data
+    );
+  });
+  it('should have a translatable tooltip for add button', () => {
+    wrapper = checkTooltipTranslation(
+      nestedSchema,
+      uischemaWithSortOption,
+      wrapper,
+      (wrapper) => wrapper.find(ArrayLayoutToolbar),
+      {
+        id: 'tooltip-add',
+      },
+      data
+    );
+  });
+
+  it('should have a tooltip for delete button', () => {
+    wrapper = checkTooltip(
+      nestedSchema,
+      uischemaWithSortOption,
+      wrapper,
+      (wrapper) => wrapper.find('Memo(ExpandPanelRendererComponent)').at(0),
+      ArrayTranslationEnum.removeTooltip,
+      {
+        id: 'tooltip-remove',
+      },
+      data
+    );
+  });
+  it('should have a translatable tooltip for delete button', () => {
+    wrapper = checkTooltipTranslation(
+      nestedSchema,
+      uischemaWithSortOption,
+      wrapper,
+      (wrapper) => wrapper.find('Memo(ExpandPanelRendererComponent)').at(0),
+      {
+        id: 'tooltip-remove',
+      },
+      data
+    );
+  });
+
+  it('should have a tooltip for up button', () => {
+    wrapper = checkTooltip(
+      nestedSchema,
+      uischemaWithSortOption,
+      wrapper,
+      (wrapper) => wrapper.find('Memo(ExpandPanelRendererComponent)').at(0),
+      ArrayTranslationEnum.up,
+      {
+        id: 'tooltip-up',
+      },
+      data
+    );
+  });
+  it('should have a translatable tooltip for up button', () => {
+    wrapper = checkTooltipTranslation(
+      nestedSchema,
+      uischemaWithSortOption,
+      wrapper,
+      (wrapper) => wrapper.find('Memo(ExpandPanelRendererComponent)').at(0),
+      {
+        id: 'tooltip-up',
+      },
+      data
+    );
+  });
+
+  it('should have a tooltip for down button', () => {
+    wrapper = checkTooltip(
+      nestedSchema,
+      uischemaWithSortOption,
+      wrapper,
+      (wrapper) => wrapper.find('Memo(ExpandPanelRendererComponent)').at(0),
+      ArrayTranslationEnum.down,
+      {
+        id: 'tooltip-down',
+      },
+      data
+    );
+  });
+  it('should have a translatable tooltip for down button', () => {
+    wrapper = checkTooltipTranslation(
+      nestedSchema,
+      uischemaWithSortOption,
+      wrapper,
+      (wrapper) => wrapper.find('Memo(ExpandPanelRendererComponent)').at(0),
+      {
+        id: 'tooltip-down',
+      },
+      data
+    );
+  });
+
+  it('should render first simple enum property as-is if no translator', () => {
+    const lightUiSchema = { ...uiSchemaWithEnumOrOneOfChildLabelProp };
+    delete lightUiSchema.options.elementLabelProp;
+
+    wrapper = arrayLayoutWrapper(
+      wrapper,
+      enumOrOneOfData,
+      enumSchema,
+      lightUiSchema,
+      undefined
+    );
+
+    expect(getChildLabel(wrapper, 0)).toBe('MSG_TYPE_1');
+  });
+
+  it('should render first simple enum property as translated child label', () => {
+    const lightUiSchema = cloneDeep(uiSchemaWithEnumOrOneOfChildLabelProp);
+    delete lightUiSchema.options.elementLabelProp;
+
+    wrapper = arrayLayoutWrapper(
+      wrapper,
+      enumOrOneOfData,
+      enumSchema,
+      lightUiSchema,
+      testTranslator
+    );
+
+    expect(getChildLabel(wrapper, 0)).toBe('translator.messageType.MSG_TYPE_1');
+  });
+
+  it('should render configured enum child label property as-is if no translator', () => {
+    wrapper = arrayLayoutWrapper(
+      wrapper,
+      enumOrOneOfData,
+      enumSchema,
+      uiSchemaWithEnumOrOneOfChildLabelProp,
+      undefined
+    );
+
+    expect(getChildLabel(wrapper, 0)).toBe('MSG_TYPE_1');
+  });
+
+  it('should render configured enum child label property as translated label', () => {
+    wrapper = arrayLayoutWrapper(
+      wrapper,
+      enumOrOneOfData,
+      enumSchema,
+      uiSchemaWithEnumOrOneOfChildLabelProp,
+      testTranslator
+    );
+
+    expect(getChildLabel(wrapper, 0)).toBe('translator.messageType.MSG_TYPE_1');
+  });
+
+  it('should render first simple oneOf property as-is if no translator', () => {
+    const lightUiSchema = cloneDeep(uiSchemaWithEnumOrOneOfChildLabelProp);
+    delete lightUiSchema.options.elementLabelProp;
+
+    wrapper = arrayLayoutWrapper(
+      wrapper,
+      enumOrOneOfData,
+      oneOfSchema,
+      lightUiSchema,
+      undefined
+    );
+
+    expect(getChildLabel(wrapper, 0)).toBe('MSG_TYPE_1');
+    expect(getChildLabel(wrapper, 1)).toBe('Second message type');
+  });
+
+  it('should render first simple oneOf property as translated child label', () => {
+    const lightUiSchema = cloneDeep(uiSchemaWithEnumOrOneOfChildLabelProp);
+    delete lightUiSchema.options.elementLabelProp;
+
+    wrapper = arrayLayoutWrapper(
+      wrapper,
+      enumOrOneOfData,
+      oneOfSchema,
+      lightUiSchema,
+      testTranslator
+    );
+
+    expect(getChildLabel(wrapper, 0)).toBe('translator.messageType.MSG_TYPE_1');
+  });
+
+  it('should render configured oneOf child label property as-is if no translator', () => {
+    wrapper = arrayLayoutWrapper(
+      wrapper,
+      enumOrOneOfData,
+      oneOfSchema,
+      uiSchemaWithEnumOrOneOfChildLabelProp,
+      undefined
+    );
+
+    expect(getChildLabel(wrapper, 0)).toBe('MSG_TYPE_1');
+    expect(getChildLabel(wrapper, 1)).toBe('Second message type');
+  });
+
+  it('should render configured oneOf child label property as translated label', () => {
+    wrapper = arrayLayoutWrapper(
+      wrapper,
+      enumOrOneOfData,
+      oneOfSchema,
+      uiSchemaWithEnumOrOneOfChildLabelProp,
+      testTranslator
+    );
+
+    expect(getChildLabel(wrapper, 0)).toBe('translator.messageType.MSG_TYPE_1');
+    expect(getChildLabel(wrapper, 1)).toBe(
+      'translator.messageType.Second message type'
+    );
+  });
+
+  it('should render configured deep enum child label property as-is if no translator', () => {
+    wrapper = arrayLayoutWrapper(
+      wrapper,
+      deepEnumOrOneOfData,
+      deepEnumOrOneOfSchema,
+      deepUiSchemaWithEnumChildLabelProp,
+      undefined
+    );
+
+    expect(getChildLabel(wrapper, 0)).toBe('WRITER');
+    expect(getChildLabel(wrapper, 1)).toBe('AUTHOR');
+  });
+
+  it('should render configured deep enum child label property as translated label', () => {
+    wrapper = arrayLayoutWrapper(
+      wrapper,
+      deepEnumOrOneOfData,
+      deepEnumOrOneOfSchema,
+      deepUiSchemaWithEnumChildLabelProp,
+      testTranslator
+    );
+
+    expect(getChildLabel(wrapper, 0)).toBe(
+      'translator.article.comments.author.type.WRITER'
+    );
+    expect(getChildLabel(wrapper, 1)).toBe(
+      'translator.article.comments.author.type.AUTHOR'
+    );
+  });
+
+  it('should render configured deep oneOf child label property as-is if no translator', () => {
+    wrapper = arrayLayoutWrapper(
+      wrapper,
+      deepEnumOrOneOfData,
+      deepEnumOrOneOfSchema,
+      deepUiSchemaWithOneOfChildLabelProp,
+      undefined
+    );
+
+    expect(getChildLabel(wrapper, 0)).toBe('ROLE_1');
+    expect(getChildLabel(wrapper, 1)).toBe('Second role');
+  });
+
+  it('should render configured deep oneOf child label property as translated label', () => {
+    wrapper = arrayLayoutWrapper(
+      wrapper,
+      deepEnumOrOneOfData,
+      deepEnumOrOneOfSchema,
+      deepUiSchemaWithOneOfChildLabelProp,
+      testTranslator
+    );
+
+    expect(getChildLabel(wrapper, 0)).toBe(
+      'translator.article.comments.author.role.ROLE_1'
+    );
+    expect(getChildLabel(wrapper, 1)).toBe(
+      'translator.article.comments.author.role.Second role'
+    );
+  });
+
+  it('should render configured enum child label property with schema i18n as translated label', () => {
+    const i18nSchema = cloneDeep(enumSchema);
+    const properties = (i18nSchema.items as JsonSchema7).properties;
+    const childSchema = properties.messageType as i18nJsonSchema;
+    childSchema.i18n = 'myI18n';
+
+    wrapper = arrayLayoutWrapper(
+      wrapper,
+      enumOrOneOfData,
+      i18nSchema,
+      uiSchemaWithEnumOrOneOfChildLabelProp,
+      testTranslator
+    );
+
+    expect(getChildLabel(wrapper, 0)).toBe('translator.myI18n.MSG_TYPE_1');
+  });
+
+  it('should render configured oneOf child label property with schema i18n as translated label', () => {
+    const i18nSchema = cloneDeep(oneOfSchema);
+    const properties = (i18nSchema.items as JsonSchema7).properties;
+    const oneOfArray = properties.messageType.oneOf;
+    for (const oneOfValue of oneOfArray) {
+      (oneOfValue as i18nJsonSchema).i18n = 'myI18n_' + oneOfValue.const;
+    }
+
+    wrapper = arrayLayoutWrapper(
+      wrapper,
+      enumOrOneOfData,
+      i18nSchema,
+      uiSchemaWithEnumOrOneOfChildLabelProp,
+      testTranslator
+    );
+
+    expect(getChildLabel(wrapper, 0)).toBe('translator.myI18n_MSG_TYPE_1');
+    expect(getChildLabel(wrapper, 1)).toBe('translator.myI18n_MSG_TYPE_2');
+  });
+
+  it('should render configured enum child label property with UiSchema i18n as translated label', () => {
+    const i18nUiSchema = cloneDeep(uiSchemaWithEnumOrOneOfChildLabelProp);
+    const elements = i18nUiSchema.options.detail.elements as ControlElement[];
+    const control = elements.find(
+      (e) => e.scope === '#/properties/messageType'
+    );
+    control.i18n = 'myI18n';
+
+    wrapper = arrayLayoutWrapper(
+      wrapper,
+      enumOrOneOfData,
+      enumSchema,
+      i18nUiSchema,
+      testTranslator
+    );
+
+    expect(getChildLabel(wrapper, 0)).toBe('translator.myI18n.MSG_TYPE_1');
+  });
+
+  it('should render configured deep enum child label property with UiSchema i18n as translated label', () => {
+    const i18nUiSchema = cloneDeep(deepUiSchemaWithEnumChildLabelProp);
+    const elements = i18nUiSchema.options.detail.elements as ControlElement[];
+    const control = elements.find(
+      (e) => e.scope === '#/properties/author/properties/type'
+    );
+    control.i18n = 'myI18n';
+
+    wrapper = arrayLayoutWrapper(
+      wrapper,
+      deepEnumOrOneOfData,
+      deepEnumOrOneOfSchema,
+      i18nUiSchema,
+      testTranslator
+    );
+
+    expect(getChildLabel(wrapper, 0)).toBe('translator.myI18n.WRITER');
+    expect(getChildLabel(wrapper, 1)).toBe('translator.myI18n.AUTHOR');
+  });
 });
+
+function arrayLayoutWrapper(
+  wrapper: ReactWrapper<any, any>,
+  data: any,
+  schema: JsonSchema7,
+  uiSchema: ControlElement,
+  translator: Translator
+) {
+  const core = initCore(schema, uiSchema, data);
+
+  wrapper = mount(
+    <JsonFormsStateProvider
+      initState={{
+        renderers: materialRenderers,
+        core,
+        i18n: translator ? { translate: translator } : undefined,
+      }}
+    >
+      <MaterialArrayLayout schema={schema} uischema={uiSchema} />
+    </JsonFormsStateProvider>
+  );
+
+  expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
+  return wrapper;
+}

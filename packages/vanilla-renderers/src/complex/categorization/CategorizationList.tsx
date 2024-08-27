@@ -24,12 +24,14 @@
 */
 import React, { useMemo } from 'react';
 import {
-  Categorization,
   Category,
+  Categorization,
   deriveLabelForUISchemaElement,
   Translator,
+  isVisible,
 } from '@jsonforms/core';
 import { isCategorization } from './tester';
+import { AjvProps } from '../../util';
 
 const getCategoryClassName = (
   category: Category,
@@ -37,9 +39,10 @@ const getCategoryClassName = (
 ): string => (selectedCategory === category ? 'selected' : '');
 
 export interface CategorizationProps {
-  categorization: Categorization;
+  elements: (Category | Categorization)[];
   selectedCategory: Category;
   depth: number;
+  data: any;
   onSelect: any;
   subcategoriesClassName: string;
   groupClassName: string;
@@ -47,32 +50,39 @@ export interface CategorizationProps {
 }
 
 export const CategorizationList = ({
-  categorization,
   selectedCategory,
+  elements,
+  data,
   depth,
   onSelect,
   subcategoriesClassName,
   groupClassName,
   t,
-}: CategorizationProps) => {
+  ajv,
+}: CategorizationProps & AjvProps) => {
+  const filteredElements = useMemo(() => {
+    return elements.filter((category: Category | Categorization) =>
+      isVisible(category, data, undefined, ajv)
+    );
+  }, [elements, data, ajv]);
+
   const categoryLabels = useMemo(
-    () =>
-      categorization.elements.map((cat) =>
-        deriveLabelForUISchemaElement(cat, t)
-      ),
-    [categorization, t]
+    () => filteredElements.map((cat) => deriveLabelForUISchemaElement(cat, t)),
+    [filteredElements, t]
   );
 
   return (
     <ul className={subcategoriesClassName}>
-      {categorization.elements.map((category, idx) => {
+      {filteredElements.map((category, idx) => {
         if (isCategorization(category)) {
           return (
             <li key={categoryLabels[idx]} className={groupClassName}>
               <span>{categoryLabels[idx]}</span>
               <CategorizationList
-                categorization={category}
                 selectedCategory={selectedCategory}
+                elements={category.elements}
+                data={data}
+                ajv={ajv}
                 depth={depth + 1}
                 onSelect={onSelect}
                 subcategoriesClassName={subcategoriesClassName}
@@ -85,7 +95,7 @@ export const CategorizationList = ({
           return (
             <li
               key={categoryLabels[idx]}
-              onClick={onSelect(category)}
+              onClick={onSelect(idx)}
               className={getCategoryClassName(category, selectedCategory)}
             >
               <span>{categoryLabels[idx]}</span>
