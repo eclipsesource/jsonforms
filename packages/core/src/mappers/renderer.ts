@@ -59,8 +59,10 @@ import {
   ArrayTranslations,
 } from '../i18n';
 import cloneDeep from 'lodash/cloneDeep';
-import { has, isEqual } from 'lodash';
-import { all, any } from 'lodash/fp';
+import isEqual from 'lodash/isEqual';
+import has from 'lodash/has';
+import any from 'lodash/fp/any';
+import all from 'lodash/fp/all';
 import {
   composePaths,
   composeWithUi,
@@ -120,12 +122,15 @@ const checkDataCondition = (
 ) => {
   if (has(propertyCondition, 'const')) {
     return (
-      has(data, property) && data[property] === get(propertyCondition, 'const')
+      has(data, property) &&
+      isEqual(data[property], get(propertyCondition, 'const'))
     );
   } else if (has(propertyCondition, 'enum')) {
     return (
       has(data, property) &&
-      (get(propertyCondition, 'enum') as unknown[]).includes(data[property])
+      (get(propertyCondition, 'enum') as unknown[]).find((value) =>
+        isEqual(value, data[property])
+      ) !== undefined
     );
   } else if (has(propertyCondition, 'pattern')) {
     const pattern = new RegExp(get(propertyCondition, 'pattern'));
@@ -197,11 +202,14 @@ const evaluateCondition = (
     let satisfied = false;
 
     for (let i = 0; i < subschemas.length; i++) {
-      if (satisfied) {
+      const current = evaluateCondition(subschemas[i], data);
+      if (current && satisfied) {
         return false;
       }
 
-      satisfied = evaluateCondition(subschemas[i], data);
+      if (current && !satisfied) {
+        satisfied = true;
+      }
     }
 
     return satisfied;
@@ -213,21 +221,25 @@ const evaluateCondition = (
   }
 
   const requiredCondition = all(
-    (property) => data[property],
+    (property) => has(data, property),
     requiredProperties
   );
 
-  const propertiesCondition = get(schema, 'properties') as Record<
-    string,
-    unknown
-  >;
+  if (has(schema, 'properties')) {
+    const propertiesCondition = get(schema, 'properties') as Record<
+      string,
+      unknown
+    >;
 
-  const valueCondition = all(
-    (property) => checkPropertyCondition(propertiesCondition, property, data),
-    Object.keys(propertiesCondition)
-  );
+    const valueCondition = all(
+      (property) => checkPropertyCondition(propertiesCondition, property, data),
+      Object.keys(propertiesCondition)
+    );
 
-  return requiredCondition && valueCondition;
+    return requiredCondition && valueCondition;
+  }
+
+  return requiredCondition;
 };
 
 /**
@@ -387,7 +399,8 @@ const isRequired = (
   schema: JsonSchema,
   schemaPath: string,
   rootSchema: JsonSchema,
-  data: any
+  data: any,
+  config: any
 ): boolean => {
   const pathSegments = schemaPath.split('/');
   const lastSegment = decode(pathSegments[pathSegments.length - 1]);
@@ -403,6 +416,14 @@ const isRequired = (
     rootSchema
   );
   const currentData = Resolve.data(data, toDataPath(nextHigherSchemaPath));
+
+  if (!config?.allowDynamicCheck) {
+    return (
+      nextHigherSchema !== undefined &&
+      nextHigherSchema.required !== undefined &&
+      nextHigherSchema.required.indexOf(lastSegment) !== -1
+    );
+  }
 
   const requiredInIf =
     has(nextHigherSchema, 'if') &&
@@ -825,9 +846,16 @@ export const mapStateToControlProps = (
   const controlElement = uischema as ControlElement;
   const id = ownProps.id;
   const rootSchema = getSchema(state);
+  const config = getConfig(state);
   const required =
     controlElement.scope !== undefined &&
-    isRequired(ownProps.schema, controlElement.scope, rootSchema, rootData);
+    isRequired(
+      ownProps.schema,
+      controlElement.scope,
+      rootSchema,
+      rootData,
+      config
+    );
   const resolvedSchema = Resolve.schema(
     ownProps.schema || rootSchema,
     controlElement.scope,
@@ -840,7 +868,6 @@ export const mapStateToControlProps = (
   const data = Resolve.data(rootData, path);
   const labelDesc = createLabelDescriptionFrom(uischema, resolvedSchema);
   const label = labelDesc.show ? labelDesc.text : '';
-  const config = getConfig(state);
   const enabled: boolean = isInherentlyEnabled(
     state,
     ownProps,
