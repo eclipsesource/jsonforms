@@ -50,7 +50,7 @@ export const TextCell = (props: CellProps & VanillaRendererProps) => {
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
   return (
     <input
-      type='text'
+      type={appliedUiSchemaOptions.format === 'password' ? 'password' : 'text'}
       value={data || ''}
       onChange={(ev) =>
         handleChange(path, ev.target.value === '' ? undefined : ev.target.value)

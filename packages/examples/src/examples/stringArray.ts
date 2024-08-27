@@ -28,6 +28,7 @@ export const schema = {
   type: 'object',
   properties: {
     comments: {
+      description: 'Description for array of String Type',
       type: 'array',
       items: {
         type: 'string',

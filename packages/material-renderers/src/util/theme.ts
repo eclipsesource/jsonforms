@@ -46,13 +46,17 @@ export interface WithInputProps {
   label?: string;
 }
 
+export interface WithSelectProps {
+  multiple?: boolean;
+}
+
 const variantToInput = {
   standard: Input,
   filled: FilledInput,
   outlined: OutlinedInput,
 };
 
-export const defaultInputVariant: TextFieldProps['variant'] = 'standard';
+export const defaultInputVariant: TextFieldProps['variant'] = 'outlined';
 
 export function useInputVariant(): TextFieldProps['variant'] {
   const { variant = defaultInputVariant } = useThemeProps({

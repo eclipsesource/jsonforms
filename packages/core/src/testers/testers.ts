@@ -31,6 +31,7 @@ import isArray from 'lodash/isArray';
 import reduce from 'lodash/reduce';
 import toPairs from 'lodash/toPairs';
 import includes from 'lodash/includes';
+import isUndefined from 'lodash/isUndefined';
 import type {
   Categorization,
   ControlElement,
@@ -40,6 +41,7 @@ import type {
 import {
   deriveTypes,
   hasType,
+  isEnumSchema,
   isOneOfEnumSchema,
   resolveSchema,
 } from '../util';
@@ -78,6 +80,12 @@ export interface TesterContext {
   /** The form wide configuration object given to JsonForms. */
   config: any;
 }
+
+export type UISchemaTester = (
+  schema: JsonSchema,
+  schemaPath: string,
+  path: string
+) => number;
 
 export const isControl = (uischema: any): uischema is ControlElement =>
   !isEmpty(uischema) && uischema.scope !== undefined;
@@ -216,6 +224,23 @@ export const optionIs =
   };
 
 /**
+ * Checks whether the given UI schema has an option with the given
+ * name. If no options property is set, returns false.
+ *
+ * @param {string} optionName the name of the option to check
+ */
+export const hasOption =
+  (optionName: string): Tester =>
+  (uischema: UISchemaElement): boolean => {
+    if (isEmpty(uischema)) {
+      return false;
+    }
+
+    const options = uischema.options;
+    return !isEmpty(options) && !isUndefined(options[optionName]);
+  };
+
+/**
  * Only applicable for Controls.
  *
  * Checks whether the scope of a control ends with the expected string.
@@ -351,14 +376,7 @@ export const isOneOfControl = and(
  */
 export const isEnumControl = and(
   uiTypeIs('Control'),
-  or(
-    schemaMatches((schema) =>
-      Object.prototype.hasOwnProperty.call(schema, 'enum')
-    ),
-    schemaMatches((schema) =>
-      Object.prototype.hasOwnProperty.call(schema, 'const')
-    )
-  )
+  schemaMatches((schema) => isEnumSchema(schema))
 );
 
 /**

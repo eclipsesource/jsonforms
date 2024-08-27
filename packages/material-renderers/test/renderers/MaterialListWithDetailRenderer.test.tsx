@@ -23,18 +23,25 @@
   THE SOFTWARE.
 */
 import './MatchMediaMock';
-import { ControlElement } from '@jsonforms/core';
+import {
+  ArrayTranslationEnum,
+  ControlElement,
+  JsonSchema7,
+  Scoped,
+  UISchemaElement,
+} from '@jsonforms/core';
 import * as React from 'react';
 
-import { materialRenderers } from '../../src';
+import { ArrayLayoutToolbar, materialRenderers } from '../../src';
 import MaterialListWithDetailRenderer, {
   materialListWithDetailTester,
 } from '../../src/additional/MaterialListWithDetailRenderer';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { JsonFormsStateProvider } from '@jsonforms/react';
-import { ListItem } from '@mui/material';
-import { initCore } from './util';
+import { ListItem, Typography } from '@mui/material';
+import { initCore, testTranslator } from './util';
+import { checkTooltip, checkTooltipTranslation } from './tooltipChecker';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -47,7 +54,24 @@ const data = [
     message: 'Yolo',
   },
 ];
-const schema = {
+
+const emptyData: any[] = [];
+
+const enumOrOneOfData = [
+  {
+    message: 'El Barto was here',
+    messageType: 'MSG_TYPE_1',
+  },
+  {
+    message: 'El Barto was not here',
+    messageType: 'MSG_TYPE_2',
+  },
+  {
+    message: 'Yolo',
+  },
+];
+
+const schema: JsonSchema7 = {
   type: 'array',
   items: {
     type: 'object',
@@ -69,7 +93,25 @@ const uischema: ControlElement = {
   scope: '#',
 };
 
-const nestedSchema = {
+const uischemaListWithDetail: UISchemaElement & Scoped = {
+  type: 'ListWithDetail',
+  scope: '#',
+};
+
+const enumSchema: JsonSchema7 = {
+  type: 'array',
+  items: {
+    type: 'object',
+    properties: {
+      messageType: {
+        type: 'string',
+        enum: ['MSG_TYPE_1', 'MSG_TYPE_2'],
+      },
+    },
+  },
+};
+
+const nestedSchema: JsonSchema7 = {
   type: 'array',
   items: {
     ...schema,
@@ -258,6 +300,56 @@ describe('Material list with detail renderer', () => {
     expect(label.text()).toBe('Schema Title');
   });
 
+  it('should render description', () => {
+    const descriptionSchema = {
+      ...schema,
+      description: 'This is an array description',
+    };
+
+    const core = initCore(schema, uischema, data);
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
+        <MaterialListWithDetailRenderer
+          schema={descriptionSchema}
+          uischema={uischema}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    expect(
+      wrapper.text().includes('This is an array description')
+    ).toBeTruthy();
+    expect(
+      wrapper.find('.MuiToolbar-root .MuiFormHelperText-root').exists()
+    ).toBeTruthy();
+  });
+
+  it('should not render description container if there is none', () => {
+    const descriptionSchema = {
+      ...schema,
+    };
+    // make sure there is no description
+    delete descriptionSchema.description;
+
+    const core = initCore(schema, uischema, data);
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
+        <MaterialListWithDetailRenderer
+          schema={descriptionSchema}
+          uischema={uischema}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    expect(
+      wrapper.find('.MuiToolbar-root .MuiFormHelperText-root').exists()
+    ).toBeFalsy();
+  });
+
   it('add data to the array', () => {
     const core = initCore(schema, uischema, data);
     wrapper = mount(
@@ -295,5 +387,242 @@ describe('Material list with detail renderer', () => {
 
     const lis = wrapper.find(ListItem);
     expect(lis).toHaveLength(1);
+  });
+
+  it('should render first simple property', () => {
+    const core = initCore(schema, uischema, data);
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
+        <MaterialListWithDetailRenderer schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
+    );
+
+    expect(wrapper.find(ListItem)).toHaveLength(2);
+
+    expect(wrapper.find(ListItem).find(Typography).at(0).text()).toBe(
+      'El Barto was here'
+    );
+    expect(wrapper.find(ListItem).find(Typography).at(1).text()).toBe('Yolo');
+  });
+
+  it('should render first simple enum property as translated child label', () => {
+    const core = initCore(enumSchema, uischema, enumOrOneOfData);
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core, i18n: testTranslator }}
+      >
+        <MaterialListWithDetailRenderer
+          schema={enumSchema}
+          uischema={uischema}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    expect(wrapper.find(ListItem)).toHaveLength(3);
+
+    expect(wrapper.find(ListItem).find(Typography).at(0).text()).toBe(
+      'MSG_TYPE_1'
+    );
+    expect(wrapper.find(ListItem).find(Typography).at(1).text()).toBe(
+      'MSG_TYPE_2'
+    );
+    expect(wrapper.find(ListItem).find(Typography).at(2).text()).toBe('');
+  });
+
+  it('should have no data message when no translator set', () => {
+    const core = initCore(schema, uischema, emptyData);
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
+        <MaterialListWithDetailRenderer schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
+    );
+
+    const noDataLabel = wrapper.find('ul>p').text();
+    expect(noDataLabel).toBe('No data');
+  });
+
+  it('should have a translation for no data', () => {
+    const core = initCore(schema, uischema, emptyData);
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{
+          renderers: materialRenderers,
+          core,
+          i18n: { translate: testTranslator },
+        }}
+      >
+        <MaterialListWithDetailRenderer schema={schema} uischema={uischema} />
+      </JsonFormsStateProvider>
+    );
+
+    const noDataLabel = wrapper.find('ul>p').text();
+    expect(noDataLabel).toBe('translator.root.noDataMessage');
+  });
+
+  it('add and delete buttons should exist if enabled', () => {
+    const core = initCore(schema, uischema, data);
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
+        <MaterialListWithDetailRenderer
+          schema={schema}
+          uischema={uischema}
+          enabled={true}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    console.log(wrapper.debug());
+
+    const deleteButton = wrapper.find({ 'aria-label': 'Delete button' });
+    expect(deleteButton.exists()).toBeTruthy();
+    const addButton = wrapper.find({ 'aria-label': 'Add' });
+    expect(addButton.exists()).toBeTruthy();
+  });
+
+  it('add and delete buttons should be removed if disabled', () => {
+    const core = initCore(schema, uischema, data);
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
+        <MaterialListWithDetailRenderer
+          schema={schema}
+          uischema={uischema}
+          enabled={false}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    const deleteButton = wrapper.find({ 'aria-label': 'Delete button' });
+    expect(deleteButton.exists()).toBeFalsy();
+    const addButton = wrapper.find({ 'aria-label': 'Add' });
+    expect(addButton.exists()).toBeFalsy();
+  });
+
+  it('add button should be removed if indicated via ui schema', () => {
+    const disableUischema = { ...uischema };
+    disableUischema.options = {
+      ...disableUischema.options,
+      disableAdd: true,
+    };
+    const core = initCore(schema, disableUischema, data);
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
+        <MaterialListWithDetailRenderer
+          schema={schema}
+          uischema={disableUischema}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    const button = wrapper.find({ 'aria-label': 'Add' });
+    expect(button.exists()).toBeFalsy();
+  });
+
+  it('delete button should be removed if indicated via ui schema', () => {
+    const disableUischema = { ...uischema };
+    disableUischema.options = {
+      ...disableUischema.options,
+      disableRemove: true,
+    };
+    const core = initCore(schema, disableUischema, data);
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
+        <MaterialListWithDetailRenderer
+          schema={schema}
+          uischema={disableUischema}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    const button = wrapper.find({ 'aria-label': 'Delete button' });
+    expect(button.exists()).toBeFalsy();
+  });
+
+  it('add and delete buttons should be removed if indicated via config', () => {
+    const core = initCore(schema, uischema, data);
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{
+          renderers: materialRenderers,
+          core,
+          config: { disableAdd: true, disableRemove: true },
+        }}
+      >
+        <MaterialListWithDetailRenderer
+          schema={schema}
+          uischema={uischema}
+          enabled={false}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    const deleteButton = wrapper.find({ 'aria-label': 'Delete button' });
+    expect(deleteButton.exists()).toBeFalsy();
+    const addButton = wrapper.find({ 'aria-label': 'Add' });
+    expect(addButton.exists()).toBeFalsy();
+  });
+
+  it('should have a tooltip for add button', () => {
+    wrapper = checkTooltip(
+      schema,
+      uischemaListWithDetail,
+      wrapper,
+      (wrapper) => wrapper.find(ArrayLayoutToolbar),
+      ArrayTranslationEnum.addTooltip,
+      {
+        id: 'tooltip-add',
+      },
+      data
+    );
+  });
+  it('should have a translatable tooltip for add button', () => {
+    wrapper = checkTooltipTranslation(
+      schema,
+      uischemaListWithDetail,
+      wrapper,
+      (wrapper) => wrapper.find(ArrayLayoutToolbar),
+      {
+        id: 'tooltip-add',
+      },
+      data
+    );
+  });
+
+  it('should have a tooltip for delete button', () => {
+    wrapper = checkTooltip(
+      schema,
+      uischemaListWithDetail,
+      wrapper,
+      (wrapper) => wrapper.find('Memo(ListWithDetailMasterItem)').at(0),
+      ArrayTranslationEnum.removeTooltip,
+      {
+        id: 'tooltip-remove',
+      },
+      data
+    );
+  });
+
+  it('should have a translatable tooltip for delete button', () => {
+    wrapper = checkTooltipTranslation(
+      schema,
+      uischemaListWithDetail,
+      wrapper,
+      (wrapper) => wrapper.find('Memo(ListWithDetailMasterItem)').at(0),
+      {
+        id: 'tooltip-remove',
+      },
+      data
+    );
   });
 });

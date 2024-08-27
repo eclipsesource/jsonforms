@@ -31,5 +31,18 @@ module.exports = {
         caughtErrorsIgnorePattern: '^_',
       },
     ],
+    'import/no-unresolved': [
+      'error',
+      {
+        // Ignore ava import because it is incorrectly reported as unresolved despite working as expected.
+        ignore: ['^ava$'],
+      },
+    ],
+    'import/no-cycle': [
+      'error',
+      {
+        ignoreExternal: true,
+      },
+    ],
   },
 };

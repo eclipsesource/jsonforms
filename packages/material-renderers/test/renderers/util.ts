@@ -27,6 +27,7 @@ import {
   createAjv,
   JsonSchema,
   TesterContext,
+  Translator,
   UISchemaElement,
 } from '@jsonforms/core';
 import { JsonFormsReactProps, useJsonForms } from '@jsonforms/react';
@@ -55,3 +56,5 @@ export const createTesterContext = (
 ): TesterContext => {
   return { rootSchema, config };
 };
+
+export const testTranslator: Translator = (key: string) => 'translator.' + key;

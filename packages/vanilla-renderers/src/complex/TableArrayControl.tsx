@@ -111,6 +111,7 @@ class TableArrayControl extends React.Component<
         <header>
           <label className={labelClass}>{label}</label>
           <button
+            type='button'
             className={buttonClass}
             onClick={addItem(path, createDefaultValue(schema, rootSchema))}
           >
@@ -214,6 +215,7 @@ class TableArrayControl extends React.Component<
                     </td>
                     <td>
                       <button
+                        type='button'
                         aria-label={translations.removeAriaLabel}
                         onClick={() => {
                           if (

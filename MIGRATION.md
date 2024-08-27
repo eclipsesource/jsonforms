@@ -1,5 +1,61 @@
 # Migration guide
 
+## Migrating to JSON Forms 3.3
+
+### Angular support now targets Angular 17 and Angular 18
+
+When using JSON Forms 3.3, your Angular application now needs to target Angular 17 or 18.
+
+Use JSON Forms 3.2 if you need to stay on Angular 16.
+
+## Migrating to JSON Forms 3.2
+
+### React Material Renderers using Outlined Inputs
+
+JSON Forms now uses the `outlined` input variant as the default, aligning with the default style of Material UI since version 5.
+If you would like to use the `standard` input variant, as was default in previous versions of JSON Forms, then this can be accomplished using the Material UI `ThemeProvider`:
+
+```ts
+import { JsonForms } from '@jsonforms/react';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+const theme = createTheme({
+  components: {
+    MuiFormControl: {
+      defaultProps: {
+        variant: 'standard',
+      },
+    },
+    MuiTextField: {
+      defaultProps: {
+        variant: 'standard',
+      },
+    },
+    MuiSelect: {
+      defaultProps: {
+        variant: 'standard',
+      },
+    },
+  },
+});
+
+...
+
+<ThemeProvider theme={theme}>
+  <JsonForms {...props} />
+</ThemeProvider>;
+```
+
+### Angular support now targets Angular 16 and Angular 17
+
+When using JSON Forms 3.2, your Angular application now needs to target Angular 16 or 17.
+Some refactorings, especially in Angular Material, were necessary to accomplish this.
+
+Use JSON Forms 3.1 if you need to stay on Angular 14.
+
+> [!NOTE]
+> Angular 15 is only supported by the JSON Forms prerelease `3.2.0-alpha.4`.
+
 ## Migrating to JSON Forms 3.0
 
 ### Additional parameter for testers

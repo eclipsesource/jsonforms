@@ -8,6 +8,7 @@ import {
   materialEnumArrayRendererTester,
   MaterialEnumArrayRenderer,
 } from '../../src';
+import { FormHelperText, FormLabel } from '@mui/material';
 
 const MaterialEnumArrayRendererRegistration = {
   tester: materialEnumArrayRendererTester,
@@ -41,6 +42,10 @@ const enumSchema = {
 const uischema: ControlElement = {
   type: 'Control',
   scope: '#',
+  label: 'Label',
+  options: {
+    showUnfocusedDescription: true,
+  },
 };
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -211,5 +216,59 @@ describe('EnumArrayControl', () => {
       expect(myData).toStrictEqual(['a']);
       done();
     }, 50);
+  });
+
+  test('oneOf items - renders label for the form group', () => {
+    wrapper = mount(
+      <JsonForms
+        schema={oneOfSchema}
+        uischema={uischema}
+        data={data}
+        renderers={[MaterialEnumArrayRendererRegistration]}
+      />
+    );
+    expect(wrapper.find(FormLabel).text()).toBe('Label');
+  });
+
+  test('enum items - renders label for the form group', () => {
+    wrapper = mount(
+      <JsonForms
+        schema={enumSchema}
+        uischema={uischema}
+        data={data}
+        renderers={[MaterialEnumArrayRendererRegistration]}
+      />
+    );
+    expect(wrapper.find(FormLabel).text()).toBe('Label');
+  });
+
+  test('oneOf items - renders description for the form group', () => {
+    wrapper = mount(
+      <JsonForms
+        schema={{
+          ...oneOfSchema,
+          description: 'Description',
+        }}
+        uischema={uischema}
+        data={data}
+        renderers={[MaterialEnumArrayRendererRegistration]}
+      />
+    );
+    expect(wrapper.find(FormHelperText).text()).toBe('Description');
+  });
+
+  test('enum items - renders description for the form group', () => {
+    wrapper = mount(
+      <JsonForms
+        schema={{
+          ...enumSchema,
+          description: 'Description',
+        }}
+        uischema={uischema}
+        data={data}
+        renderers={[MaterialEnumArrayRendererRegistration]}
+      />
+    );
+    expect(wrapper.find(FormHelperText).text()).toBe('Description');
   });
 });

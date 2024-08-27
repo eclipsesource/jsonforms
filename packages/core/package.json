@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/core",
-  "version": "3.2.0-beta.0",
+  "version": "3.4.0-alpha.3",
   "description": "Core module of JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -44,19 +44,18 @@
     "report": "nyc report --reporter=html",
     "test": "ava",
     "test-cov": "rimraf -rf .nyc_output && nyc ava",
-    "doc": "typedoc --name 'JSON Forms Core' --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
+    "doc": "typedoc --name 'JSON Forms Core' --excludeExternals --out docs src"
   },
   "ava": {
     "files": [
       "test/**/*"
     ],
-    "compileEnhancements": false,
     "extensions": [
       "ts"
     ],
     "require": [
       "./test-config/ts-node.config.js",
-      "source-map-support/register"
+      "source-map-support/register.js"
     ]
   },
   "nyc": {
@@ -76,9 +75,9 @@
     "@types/redux-mock-store": "^1.0.1",
     "@typescript-eslint/eslint-plugin": "^5.54.1",
     "@typescript-eslint/parser": "^5.54.1",
-    "ava": "~2.4.0",
+    "ava": "^6.1.2",
     "document-register-element": "^1.14.3",
-    "eslint": "^7.32.0",
+    "eslint": "^8.56.0",
     "eslint-config-prettier": "^8.7.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier": "^4.2.1",
@@ -93,10 +92,10 @@
     "rollup-plugin-cleanup": "^3.2.1",
     "rollup-plugin-typescript2": "^0.34.1",
     "rollup-plugin-visualizer": "^5.4.1",
-    "source-map-support": "0.5.16",
+    "source-map-support": "^0.5.21",
     "ts-node": "^10.4.0",
     "tslib": "^2.5.0",
-    "typedoc": "~0.21.9",
-    "typescript": "4.2.3"
+    "typedoc": "~0.25.3",
+    "typescript": "~5.2.2"
   }
 }

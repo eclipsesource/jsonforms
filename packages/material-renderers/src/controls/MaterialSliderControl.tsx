@@ -37,7 +37,6 @@ import {
   FormControl,
   FormHelperText,
   FormLabel,
-  Hidden,
   Slider,
   Typography,
 } from '@mui/material';
@@ -90,50 +89,52 @@ export const MaterialSliderControl = (props: ControlProps) => {
     [path, handleChange]
   );
 
+  if (!visible) {
+    return null;
+  }
+
   return (
-    <Hidden xsUp={!visible}>
-      <FormControl
-        fullWidth={!appliedUiSchemaOptions.trim}
-        onFocus={onFocus}
-        onBlur={onBlur}
-        id={id}
+    <FormControl
+      fullWidth={!appliedUiSchemaOptions.trim}
+      onFocus={onFocus}
+      onBlur={onBlur}
+      id={id}
+    >
+      <FormLabel
+        htmlFor={id}
+        error={!isValid}
+        component='legend'
+        required={showAsRequired(
+          required,
+          appliedUiSchemaOptions.hideRequiredAsterisk
+        )}
       >
-        <FormLabel
-          htmlFor={id}
-          error={!isValid}
-          component={'legend' as 'label'}
-          required={showAsRequired(
-            required,
-            appliedUiSchemaOptions.hideRequiredAsterisk
-          )}
-        >
-          <Typography id={id + '-typo'} style={labelStyle} variant='caption'>
-            {label}
-          </Typography>
-        </FormLabel>
-        <div style={rangeContainerStyle}>
-          <Typography style={rangeItemStyle} variant='caption' align='left'>
-            {schema.minimum}
-          </Typography>
-          <Typography style={rangeItemStyle} variant='caption' align='right'>
-            {schema.maximum}
-          </Typography>
-        </div>
-        <Slider
-          style={sliderStyle}
-          min={schema.minimum}
-          max={schema.maximum}
-          value={Number(data || schema.default)}
-          onChange={onChange}
-          id={id + '-input'}
-          disabled={!enabled}
-          step={schema.multipleOf || 1}
-        />
-        <FormHelperText error={!isValid}>
-          {!isValid ? errors : showDescription ? description : null}
-        </FormHelperText>
-      </FormControl>
-    </Hidden>
+        <Typography id={id + '-typo'} style={labelStyle} variant='caption'>
+          {label}
+        </Typography>
+      </FormLabel>
+      <div style={rangeContainerStyle}>
+        <Typography style={rangeItemStyle} variant='caption' align='left'>
+          {schema.minimum}
+        </Typography>
+        <Typography style={rangeItemStyle} variant='caption' align='right'>
+          {schema.maximum}
+        </Typography>
+      </div>
+      <Slider
+        style={sliderStyle}
+        min={schema.minimum}
+        max={schema.maximum}
+        value={Number(data || schema.default)}
+        onChange={onChange}
+        id={id + '-input'}
+        disabled={!enabled}
+        step={schema.multipleOf || 1}
+      />
+      <FormHelperText error={!isValid}>
+        {!isValid ? errors : showDescription ? description : null}
+      </FormHelperText>
+    </FormControl>
   );
 };
 export const materialSliderControlTester: RankedTester = rankWith(

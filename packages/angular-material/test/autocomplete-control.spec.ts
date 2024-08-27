@@ -28,14 +28,13 @@ import {
 } from '@angular/material/autocomplete';
 import { MatError, MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { OverlayContainer } from '@angular/cdk/overlay';
-import { DebugElement, NgZone } from '@angular/core';
+import { DebugElement } from '@angular/core';
 import {
   ComponentFixture,
   fakeAsync,
-  inject,
   TestBed,
   tick,
+  waitForAsync,
 } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -44,11 +43,15 @@ import {
   ErrorTestExpectation,
   setupMockStore,
   getJsonFormsService,
-} from '@jsonforms/angular-test';
+} from './common';
 import { ControlElement, JsonSchema, Actions } from '@jsonforms/core';
 import { AutocompleteControlRenderer } from '../src';
 import { JsonFormsAngularService } from '@jsonforms/angular';
 import { ErrorObject } from 'ajv';
+import { initTestEnvironment } from './test';
+import { HarnessLoader } from '@angular/cdk/testing';
+import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
+import { MatAutocompleteHarness } from '@angular/material/autocomplete/testing';
 
 const data = { foo: 'A' };
 const schema: JsonSchema = {
@@ -80,17 +83,19 @@ const errorTest: ErrorTestExpectation = {
   indexOfElement: 0,
 };
 
+initTestEnvironment();
+
 describe('Autocomplete control Base Tests', () => {
   let fixture: ComponentFixture<AutocompleteControlRenderer>;
   let component: AutocompleteControlRenderer;
   let inputElement: HTMLInputElement;
-  beforeEach(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [componentUT],
       imports: imports,
       providers: providers,
     }).compileComponents();
-  });
+  }));
   beforeEach(() => {
     fixture = TestBed.createComponent(componentUT);
     component = fixture.componentInstance;
@@ -211,40 +216,21 @@ describe('Autocomplete control Base Tests', () => {
 describe('AutoComplete control Input Event Tests', () => {
   let fixture: ComponentFixture<AutocompleteControlRenderer>;
   let component: AutocompleteControlRenderer;
-  let inputElement: HTMLInputElement;
-  let overlayContainer: OverlayContainer;
-  let overlayContainerElement: HTMLElement;
-  let zone: NgZone;
-  beforeEach(() => {
+  let loader: HarnessLoader;
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [componentUT],
       imports: imports,
       providers: [...providers],
     }).compileComponents();
-
-    inject([OverlayContainer], (oc: OverlayContainer) => {
-      overlayContainer = oc;
-      overlayContainerElement = oc.getContainerElement();
-    })();
-  });
-  beforeEach(() => {
+  }));
+  beforeEach(waitForAsync(() => {
     fixture = TestBed.createComponent(componentUT);
     component = fixture.componentInstance;
-    zone = TestBed.inject(NgZone);
-    spyOn(zone, 'runOutsideAngular').and.callFake((fn: () => any) => fn());
-    inputElement = fixture.debugElement.query(By.css('input')).nativeElement;
-  });
+    loader = TestbedHarnessEnvironment.loader(fixture);
+  }));
 
-  afterEach(inject(
-    [OverlayContainer],
-    (currentOverlayContainer: OverlayContainer) => {
-      // Since we're resetting the testing module in some of the tests,
-      // we can potentially have multiple overlay containers.
-      currentOverlayContainer.ngOnDestroy();
-      overlayContainer.ngOnDestroy();
-    }
-  ));
-  it('should update via input event', fakeAsync(() => {
+  it('should update via input event', fakeAsync(async () => {
     setupMockStore(fixture, { uischema, schema, data });
     getJsonFormsService(component).updateCore(
       Actions.init(data, schema, uischema)
@@ -255,14 +241,12 @@ describe('AutoComplete control Input Event Tests', () => {
 
     const spy = spyOn(component, 'onSelect');
 
-    inputElement.focus();
-    zone.runOutsideAngular(() => zone.onStable.emit(null));
+    await (await loader.getHarness(MatAutocompleteHarness)).focus();
     fixture.detectChanges();
 
-    const options = overlayContainerElement.querySelectorAll(
-      'mat-option'
-    ) as NodeListOf<HTMLElement>;
-    options.item(1).click();
+    await (
+      await loader.getHarness(MatAutocompleteHarness)
+    ).selectOption({ text: 'B' });
     tick();
     fixture.detectChanges();
 
@@ -272,7 +256,7 @@ describe('AutoComplete control Input Event Tests', () => {
 
     expect(event.option.value).toBe('B');
   }));
-  it('options should prefer own props', fakeAsync(() => {
+  it('options should prefer own props', fakeAsync(async () => {
     setupMockStore(fixture, { uischema, schema, data });
     getJsonFormsService(component).updateCore(
       Actions.init(data, schema, uischema)
@@ -283,33 +267,30 @@ describe('AutoComplete control Input Event Tests', () => {
     fixture.detectChanges();
     const spy = spyOn(component, 'onSelect');
 
-    inputElement.focus();
-    zone.runOutsideAngular(() => zone.onStable.emit(null));
+    await (await loader.getHarness(MatAutocompleteHarness)).focus();
     fixture.detectChanges();
 
-    fixture.whenStable().then(() => {
-      const options = overlayContainerElement?.querySelectorAll(
-        'mat-option'
-      ) as NodeListOf<HTMLElement>;
-      (options[1] as HTMLElement).click();
-      fixture.detectChanges();
-      tick();
-      const event = spy.calls.mostRecent()
-        .args[0] as MatAutocompleteSelectedEvent;
-      expect(event.option.value).toBe('Y');
-    });
+    await (
+      await loader.getHarness(MatAutocompleteHarness)
+    ).selectOption({ text: 'Y' });
+    fixture.detectChanges();
+    tick();
+
+    const event = spy.calls.mostRecent()
+      .args[0] as MatAutocompleteSelectedEvent;
+    expect(event.option.value).toBe('Y');
   }));
 });
 describe('AutoComplete control Error Tests', () => {
   let fixture: ComponentFixture<AutocompleteControlRenderer>;
   let component: AutocompleteControlRenderer;
-  beforeEach(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [componentUT],
       imports: imports,
       providers: providers,
     }).compileComponents();
-  });
+  }));
   beforeEach(() => {
     fixture = TestBed.createComponent(componentUT);
     component = fixture.componentInstance;
@@ -349,13 +330,13 @@ describe('AutoComplete control updateFilter function', () => {
   let fixture: ComponentFixture<AutocompleteControlRenderer>;
   let component: AutocompleteControlRenderer;
 
-  beforeEach(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [componentUT],
       imports: imports,
       providers: providers,
     }).compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(componentUT);

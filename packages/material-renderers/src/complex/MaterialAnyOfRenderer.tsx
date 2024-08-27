@@ -34,7 +34,7 @@ import {
   rankWith,
 } from '@jsonforms/core';
 import { JsonFormsDispatch, withJsonFormsAnyOfProps } from '@jsonforms/react';
-import { Hidden, Tab, Tabs } from '@mui/material';
+import { Tab, Tabs } from '@mui/material';
 import CombinatorProperties from './CombinatorProperties';
 import isEmpty from 'lodash/isEmpty';
 import { TabSwitchConfirmDialog } from './TabSwitchConfirmDialog';
@@ -104,8 +104,12 @@ export const MaterialAnyOfRenderer = ({
     uischemas
   );
 
+  if (!visible) {
+    return null;
+  }
+
   return (
-    <Hidden xsUp={!visible}>
+    <>
       <CombinatorProperties
         schema={schema}
         combinatorKeyword={anyOf}
@@ -137,7 +141,7 @@ export const MaterialAnyOfRenderer = ({
         open={confirmDialogOpen}
         handleClose={handleClose}
       />
-    </Hidden>
+    </>
   );
 };
 

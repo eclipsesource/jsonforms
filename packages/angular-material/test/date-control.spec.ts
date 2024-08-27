@@ -28,6 +28,7 @@ import {
   fakeAsync,
   flush,
   TestBed,
+  waitForAsync,
 } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -43,11 +44,12 @@ import {
   ErrorTestExpectation,
   getJsonFormsService,
   setupMockStore,
-} from '@jsonforms/angular-test';
+} from './common';
 import { Actions, ControlElement, JsonSchema } from '@jsonforms/core';
 import { DateControlRenderer, DateControlRendererTester } from '../src';
 import { JsonFormsAngularService } from '@jsonforms/angular';
 import { createTesterContext } from './util';
+import { initTestEnvironment } from './test';
 
 const data = { foo: '2018-01-01' };
 const schema: JsonSchema = {
@@ -63,6 +65,8 @@ const uischema: ControlElement = {
   type: 'Control',
   scope: '#/properties/foo',
 };
+
+initTestEnvironment();
 
 describe('Material boolean field tester', () => {
   it('should succeed', () => {
@@ -91,13 +95,13 @@ describe('Date control Base Tests', () => {
   let fixture: ComponentFixture<DateControlRenderer>;
   let component: DateControlRenderer;
   let inputElement: HTMLInputElement;
-  beforeEach(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [componentUT],
       imports: imports,
       providers: providers,
     }).compileComponents();
-  });
+  }));
   beforeEach(() => {
     fixture = TestBed.createComponent(componentUT);
     component = fixture.componentInstance;
@@ -112,7 +116,9 @@ describe('Date control Base Tests', () => {
     );
     component.ngOnInit();
     fixture.detectChanges();
-    expect(component.data).toBe('2018-01-01');
+    expect(component.data.toString()).toEqual(
+      new Date('2018-01-01T00:00').toString()
+    );
     // auto? shown with US layout
     expect(inputElement.value).toBe('1/1/2018');
     expect(inputElement.disabled).toBe(false);
@@ -132,7 +138,9 @@ describe('Date control Base Tests', () => {
       Actions.update('foo', () => '2018-03-03')
     );
     fixture.detectChanges();
-    expect(component.data).toBe('2018-03-03');
+    expect(component.data.toString()).toEqual(
+      new Date('2018-03-03T00:00').toString()
+    );
     expect(inputElement.value).toBe('3/3/2018');
   });
   it('should update with undefined value', () => {
@@ -147,7 +155,7 @@ describe('Date control Base Tests', () => {
       Actions.update('foo', () => undefined)
     );
     fixture.detectChanges();
-    expect(component.data).toBe(undefined);
+    expect(component.data).toBe(null);
     expect(inputElement.value).toBe('');
   });
   it('should update with null value', () => {
@@ -180,8 +188,10 @@ describe('Date control Base Tests', () => {
       Actions.update('bar', () => '2018-03-03')
     );
     fixture.detectChanges();
-    expect(component.data).toBe('2018-01-01');
-    expect(inputElement.value).toBe('1/1/2018');
+    expect(component.data.toString()).toEqual(
+      new Date('2018-01-01T00:00').toString()
+    );
+    expect(inputElement.value).toEqual('1/1/2018');
   });
   // store needed as we evaluate the calculated enabled value to disable/enable the control
   it('can be disabled', () => {
@@ -224,13 +234,13 @@ describe('Date control Input Event Tests', () => {
   let fixture: ComponentFixture<DateControlRenderer>;
   let component: DateControlRenderer;
   let inputElement: HTMLInputElement;
-  beforeEach(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [componentUT],
       imports: imports,
       providers: providers,
     }).compileComponents();
-  });
+  }));
   beforeEach(() => {
     fixture = TestBed.createComponent(componentUT);
     component = fixture.componentInstance;
@@ -269,13 +279,13 @@ describe('Date control Input Event Tests', () => {
 describe('Date control Error Tests', () => {
   let fixture: ComponentFixture<DateControlRenderer>;
   let component: DateControlRenderer;
-  beforeEach(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [componentUT],
       imports: imports,
       providers: providers,
     }).compileComponents();
-  });
+  }));
   beforeEach(() => {
     fixture = TestBed.createComponent(componentUT);
     component = fixture.componentInstance;

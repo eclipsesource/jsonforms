@@ -91,3 +91,73 @@ test('Init Action generates ui schema when not valid', (t) => {
     ],
   } as UISchemaElement);
 });
+
+test('isUpdateArrayContext correctly identifies ', (t) => {
+  t.deepEqual(Actions.isUpdateArrayContext({}), false);
+  t.deepEqual(Actions.isUpdateArrayContext({ type: 'ADD' }), false);
+  t.deepEqual(Actions.isUpdateArrayContext({ type: 'ADD', values: [] }), false);
+  t.deepEqual(
+    Actions.isUpdateArrayContext({ type: 'ADD', values: [0, ''] }),
+    true
+  );
+
+  t.deepEqual(Actions.isUpdateArrayContext({ type: 'REMOVE' }), false);
+  t.deepEqual(
+    Actions.isUpdateArrayContext({ type: 'REMOVE', indices: [] }),
+    false
+  );
+  t.deepEqual(
+    Actions.isUpdateArrayContext({ type: 'REMOVE', indices: [0, ''] }),
+    false
+  );
+  t.deepEqual(
+    Actions.isUpdateArrayContext({ type: 'REMOVE', indices: [0, 2] }),
+    true
+  );
+
+  t.deepEqual(Actions.isUpdateArrayContext({ type: 'MOVE' }), false);
+  t.deepEqual(Actions.isUpdateArrayContext({ type: 'MOVE', moves: [] }), false);
+  t.deepEqual(
+    Actions.isUpdateArrayContext({ type: 'MOVE', moves: [0] }),
+    false
+  );
+  t.deepEqual(
+    Actions.isUpdateArrayContext({ type: 'MOVE', moves: [null] }),
+    false
+  );
+  t.deepEqual(
+    Actions.isUpdateArrayContext({
+      type: 'MOVE',
+      moves: [{ from: 0, to: 1 }, { from: 2 }],
+    }),
+    false
+  );
+  t.deepEqual(
+    Actions.isUpdateArrayContext({
+      type: 'MOVE',
+      moves: [{ from: 0, to: 1 }, { to: 0 }],
+    }),
+    false
+  );
+  t.deepEqual(
+    Actions.isUpdateArrayContext({
+      type: 'MOVE',
+      moves: [{ from: 0, to: '' }],
+    }),
+    false
+  );
+  t.deepEqual(
+    Actions.isUpdateArrayContext({
+      type: 'MOVE',
+      moves: [
+        { from: 0, to: 1 },
+        { from: 0, to: '' },
+      ],
+    }),
+    false
+  );
+  t.deepEqual(
+    Actions.isUpdateArrayContext({ type: 'MOVE', moves: [{ from: 0, to: 1 }] }),
+    true
+  );
+});

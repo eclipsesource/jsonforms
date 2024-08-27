@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import React, { useState, useMemo } from 'react';
-import { AppBar, Hidden, Tab, Tabs } from '@mui/material';
+import { AppBar, Tab, Tabs } from '@mui/material';
 import {
   and,
   Categorization,
@@ -140,8 +140,12 @@ export const MaterialCategorizationLayoutRenderer = (
     return categories.map((e: Category) => deriveLabelForUISchemaElement(e, t));
   }, [categories, t]);
 
+  if (!visible) {
+    return null;
+  }
+
   return (
-    <Hidden xsUp={!visible}>
+    <>
       <AppBar position='static'>
         <Tabs
           value={safeCategory}
@@ -158,7 +162,7 @@ export const MaterialCategorizationLayoutRenderer = (
       <div style={{ marginTop: '0.5em' }}>
         <MaterialLayoutRenderer {...childProps} key={safeCategory} />
       </div>
-    </Hidden>
+    </>
   );
 };
 

@@ -25,7 +25,7 @@
 import React from 'react';
 import { LabelProps, RankedTester, rankWith, uiTypeIs } from '@jsonforms/core';
 import { withJsonFormsLabelProps } from '@jsonforms/react';
-import { Hidden, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 
 /**
  * Default tester for a label.
@@ -40,11 +40,10 @@ export const materialLabelRendererTester: RankedTester = rankWith(
  * Default renderer for a label.
  */
 export const MaterialLabelRenderer = ({ text, visible }: LabelProps) => {
-  return (
-    <Hidden xsUp={!visible}>
-      <Typography variant='h6'>{text}</Typography>
-    </Hidden>
-  );
+  if (!visible) {
+    return null;
+  }
+  return <Typography variant='h6'>{text}</Typography>;
 };
 
 export default withJsonFormsLabelProps(MaterialLabelRenderer);

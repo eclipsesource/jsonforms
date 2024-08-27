@@ -23,24 +23,18 @@
   THE SOFTWARE.
 */
 
-import type { RankedTester } from '../testers';
 import {
   ADD_CELL,
   AddCellRendererAction,
   REMOVE_CELL,
   RemoveCellRendererAction,
 } from '../actions';
-import type { Reducer } from '../util';
+import { JsonFormsCellRendererRegistryEntry, Reducer } from '../store';
 
 type ValidCellReducerActions = AddCellRendererAction | RemoveCellRendererAction;
 
 export type JsonFormsCellRendererRegistryState =
   JsonFormsCellRendererRegistryEntry[];
-
-export interface JsonFormsCellRendererRegistryEntry {
-  tester: RankedTester;
-  cell: any;
-}
 
 export const cellReducer: Reducer<
   JsonFormsCellRendererRegistryState,

@@ -57,7 +57,7 @@ import { LabelRenderer } from './other/label.renderer';
 import { JsonFormsDetailComponent } from './other/master-detail/detail';
 import { MasterListComponent } from './other/master-detail/master';
 import { ObjectControlRenderer } from './other/object.renderer';
-import { TableRenderer } from './other/table.renderer';
+import { TableRenderer, GetProps } from './other/table.renderer';
 import { CategorizationTabLayoutRenderer } from './layouts/categorization-layout.renderer';
 import { GroupLayoutRenderer } from './layouts/group-layout.renderer';
 import { HorizontalLayoutRenderer } from './layouts/horizontal-layout.renderer';
@@ -110,6 +110,7 @@ import { LayoutChildrenRenderPropsPipe } from './layouts';
     TableRenderer,
     ArrayLayoutRenderer,
     LayoutChildrenRenderPropsPipe,
+    GetProps,
   ],
   exports: [
     CommonModule,
