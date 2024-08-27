@@ -237,22 +237,22 @@ const extractRequired = (
   segment: string,
   prevSegments: string[]
 ) => {
-  let i = 0;
+  let segmentIndex = 0;
   let currentSchema = schema;
   while (
-    i < prevSegments.length &&
-    (has(currentSchema, prevSegments[i]) ||
+    segmentIndex < prevSegments.length &&
+    (has(currentSchema, prevSegments[segmentIndex]) ||
       (has(currentSchema, 'properties') &&
-        has(get(currentSchema, 'properties'), prevSegments[i])))
+        has(get(currentSchema, 'properties'), prevSegments[segmentIndex])))
   ) {
     if (has(currentSchema, 'properties')) {
       currentSchema = get(currentSchema, 'properties');
     }
-    currentSchema = get(currentSchema, prevSegments[i]);
-    ++i;
+    currentSchema = get(currentSchema, prevSegments[segmentIndex]);
+    ++segmentIndex;
   }
 
-  if (i < prevSegments.length) {
+  if (segmentIndex < prevSegments.length) {
     return false;
   }
 
@@ -264,7 +264,6 @@ const extractRequired = (
 
 /**
  * Check if property's required attribute is set based on if-then-else condition
- *
  */
 const checkRequiredInIf = (
   schema: JsonSchema,
@@ -387,16 +386,11 @@ const isRequiredInParent = (
         [lastSegment, ...prevSegments],
         currentData
       )) ||
-    // TODO: Were we previously skipping each other parent
-    // when calling `isRequiredInParent` recursively (because of
-    // the `slice` call with (pathSegments.length - 4) - hence going
-    // back two times on each call)
     isRequiredInParent(
       schema,
       nextHigherSchemaPath,
       segment,
       [lastSegment, ...prevSegments],
-      // TODO: Why was this currentData?
       data,
       nextHigherDataPath
     )
@@ -418,7 +412,6 @@ const isRequired = (
 ): boolean => {
   const pathSegments = schemaPath.split('/');
   const lastSegment = pathSegments[pathSegments.length - 1];
-  // TODO: This does not work correctly with "items" in the schemaPath
   // Skip "properties", "items" etc. to resolve the parent
   const nextHigherSchemaSegments = pathSegments.slice(
     0,
@@ -433,8 +426,6 @@ const isRequired = (
   return isRequiredInSchema(nextHigherSchema, lastSegment);
 };
 
-// TODO: This may now be combinable with `isRequiredInParent` in a
-// single function
 const isConditionallyRequired = (
   rootSchema: JsonSchema,
   schemaPath: string,
@@ -470,7 +461,6 @@ const isConditionallyRequired = (
 
   const requiredConditionallyInParent = isRequiredInParent(
     rootSchema,
-    // TODO: Why was this previously schemaPath
     nextHigherSchemaPath,
     lastSegment,
     [],
