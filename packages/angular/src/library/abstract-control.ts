@@ -39,7 +39,6 @@ import {
   ValidationErrors,
   ValidatorFn,
 } from '@angular/forms';
-import type { Subscription } from 'rxjs';
 
 import { JsonFormsBaseRenderer } from './base.renderer';
 import { JsonFormsAngularService } from './jsonforms.service';
@@ -58,7 +57,6 @@ export abstract class JsonFormsAbstractControl<
   @Input() visible: boolean;
 
   form: FormControl;
-  subscription: Subscription;
   data: any;
   label: string;
   description: string;
@@ -99,41 +97,45 @@ export abstract class JsonFormsAbstractControl<
   }
 
   ngOnInit() {
-    this.jsonFormsService.$state.subscribe({
-      next: (state: JsonFormsState) => {
-        const props = this.mapToProps(state);
-        const {
-          data,
-          enabled,
-          errors,
-          label,
-          required,
-          schema,
-          rootSchema,
-          visible,
-          path,
-          config,
-        } = props;
-        this.label = computeLabel(
-          label,
-          required,
-          config ? config.hideRequiredAsterisk : false
-        );
-        this.data = data;
-        this.error = errors;
-        this.enabled = enabled;
-        this.isEnabled() ? this.form.enable() : this.form.disable();
-        this.hidden = !visible;
-        this.scopedSchema = schema;
-        this.rootSchema = rootSchema;
-        this.description =
-          this.scopedSchema !== undefined ? this.scopedSchema.description : '';
-        this.id = props.id;
-        this.form.setValue(data);
-        this.propsPath = path;
-        this.mapAdditionalProps(props);
-      },
-    });
+    this.addSubscription(
+      this.jsonFormsService.$state.subscribe({
+        next: (state: JsonFormsState) => {
+          const props = this.mapToProps(state);
+          const {
+            data,
+            enabled,
+            errors,
+            label,
+            required,
+            schema,
+            rootSchema,
+            visible,
+            path,
+            config,
+          } = props;
+          this.label = computeLabel(
+            label,
+            required,
+            config ? config.hideRequiredAsterisk : false
+          );
+          this.data = data;
+          this.error = errors;
+          this.enabled = enabled;
+          this.isEnabled() ? this.form.enable() : this.form.disable();
+          this.hidden = !visible;
+          this.scopedSchema = schema;
+          this.rootSchema = rootSchema;
+          this.description =
+            this.scopedSchema !== undefined
+              ? this.scopedSchema.description
+              : '';
+          this.id = props.id;
+          this.form.setValue(data);
+          this.propsPath = path;
+          this.mapAdditionalProps(props);
+        },
+      })
+    );
     this.triggerValidation();
   }
 
@@ -146,9 +148,7 @@ export abstract class JsonFormsAbstractControl<
   }
 
   ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    super.ngOnDestroy();
     removeId(this.id);
   }
 

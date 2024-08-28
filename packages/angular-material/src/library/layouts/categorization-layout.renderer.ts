@@ -38,12 +38,11 @@ import {
   rankWith,
   uiTypeIs,
 } from '@jsonforms/core';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   JsonFormsAngularService,
   JsonFormsBaseRenderer,
 } from '@jsonforms/angular';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'jsonforms-categorization-layout',
@@ -69,11 +68,10 @@ import { Subscription } from 'rxjs';
 })
 export class CategorizationTabLayoutRenderer
   extends JsonFormsBaseRenderer<Categorization>
-  implements OnInit, OnDestroy
+  implements OnInit
 {
   hidden: boolean;
   visibleCategories: (Category | Categorization)[];
-  private subscription: Subscription;
   categoryLabels: string[];
 
   constructor(private jsonFormsService: JsonFormsAngularService) {
@@ -81,29 +79,25 @@ export class CategorizationTabLayoutRenderer
   }
 
   ngOnInit() {
-    this.subscription = this.jsonFormsService.$state.subscribe({
-      next: (state: JsonFormsState) => {
-        const props = mapStateToLayoutProps(state, this.getOwnProps());
-        this.hidden = !props.visible;
-        this.visibleCategories = this.uischema.elements.filter(
-          (category: Category | Categorization) =>
-            isVisible(category, props.data, undefined, getAjv(state))
-        );
-        this.categoryLabels = this.visibleCategories.map((element) =>
-          deriveLabelForUISchemaElement(
-            element as Labelable<boolean>,
-            state.jsonforms.i18n?.translate ??
-              defaultJsonFormsI18nState.translate
-          )
-        );
-      },
-    });
-  }
-
-  ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this.addSubscription(
+      this.jsonFormsService.$state.subscribe({
+        next: (state: JsonFormsState) => {
+          const props = mapStateToLayoutProps(state, this.getOwnProps());
+          this.hidden = !props.visible;
+          this.visibleCategories = this.uischema.elements.filter(
+            (category: Category | Categorization) =>
+              isVisible(category, props.data, undefined, getAjv(state))
+          );
+          this.categoryLabels = this.visibleCategories.map((element) =>
+            deriveLabelForUISchemaElement(
+              element as Labelable<boolean>,
+              state.jsonforms.i18n?.translate ??
+                defaultJsonFormsI18nState.translate
+            )
+          );
+        },
+      })
+    );
   }
 }
 
