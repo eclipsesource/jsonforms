@@ -1,6 +1,9 @@
 import test from 'ava';
 import { ControlElement } from '../../src/models';
-import { createCombinatorRenderInfos } from '../../src/mappers';
+import {
+  createCombinatorRenderInfos,
+  getCombinatorIndexOfFittingSchema,
+} from '../../src/mappers';
 
 const rootSchema = {
   type: 'object',
@@ -110,4 +113,171 @@ test('createCombinatorRenderInfos - uses keyword + index when no labels provided
   );
   t.deepEqual(duaRenderInfo.label, 'anyOf-0');
   t.deepEqual(lipaRenderInfo.label, 'anyOf-1');
+});
+
+const schemaWithTypeProperty = {
+  'x-jsf-type-property': 'customId',
+  properties: {
+    customId: { const: '123' },
+  },
+};
+
+const schemaWithId = {
+  properties: {
+    id: { const: '123' },
+  },
+};
+
+const schemaWithType = {
+  properties: {
+    type: { const: 'typeValue' },
+  },
+};
+
+const schemaWithKind = {
+  properties: {
+    kind: { const: 'kindValue' },
+  },
+};
+
+const schemaWithFirstString = {
+  properties: {
+    obj: { type: 'object' },
+    name: { const: 'John' },
+  },
+};
+
+const schemaWithFirstNumber = {
+  properties: {
+    obj: { type: 'object' },
+    identity: { const: 123 },
+  },
+};
+
+const indexRootSchema = {
+  definitions: {
+    schemaWithTypeProperty,
+    schemaWithId,
+    schemaWithType,
+    schemaWithKind,
+    schemaWithFirstString,
+    schemaWithFirstNumber,
+  },
+};
+
+test('getCombinatorIndexOfFittingSchema - schema with x-jsf-type-property', (t) => {
+  const data = { customId: '123' };
+  const keyword = 'anyOf';
+  const schema = { anyOf: [schemaWithId, schemaWithTypeProperty] };
+
+  const result = getCombinatorIndexOfFittingSchema(
+    data,
+    keyword,
+    schema,
+    indexRootSchema
+  );
+  t.is(result, 1);
+});
+
+test('getCombinatorIndexOfFittingSchema - data with id property', (t) => {
+  const data = { id: '123' };
+  const keyword = 'anyOf';
+  const schema = { anyOf: [schemaWithId, schemaWithKind] };
+
+  const result = getCombinatorIndexOfFittingSchema(
+    data,
+    keyword,
+    schema,
+    indexRootSchema
+  );
+  t.is(result, 0);
+});
+
+test('getCombinatorIndexOfFittingSchema - data with type property', (t) => {
+  const data = { type: 'typeValue' };
+  const keyword = 'anyOf';
+  const schema = { anyOf: [schemaWithId, schemaWithType] };
+
+  const result = getCombinatorIndexOfFittingSchema(
+    data,
+    keyword,
+    schema,
+    indexRootSchema
+  );
+  t.is(result, 1);
+});
+
+test('getCombinatorIndexOfFittingSchema - schema with refs and data with type property', (t) => {
+  const data = { type: 'typeValue' };
+  const keyword = 'anyOf';
+  const schema = {
+    anyOf: [
+      { $ref: '#/definitions/schemaWithId' },
+      { $ref: '#/definitions/schemaWithType' },
+    ],
+  };
+
+  const result = getCombinatorIndexOfFittingSchema(
+    data,
+    keyword,
+    schema,
+    indexRootSchema
+  );
+  t.is(result, 1);
+});
+
+test('getCombinatorIndexOfFittingSchema - data with kind property', (t) => {
+  const data = { kind: 'kindValue' };
+  const keyword = 'anyOf';
+  const schema = { anyOf: [schemaWithKind] };
+
+  const result = getCombinatorIndexOfFittingSchema(
+    data,
+    keyword,
+    schema,
+    indexRootSchema
+  );
+  t.is(result, 0);
+});
+
+test('getCombinatorIndexOfFittingSchema - data with first string property', (t) => {
+  const data = { obj: {}, name: 'John' };
+  const keyword = 'anyOf';
+  const schema = { anyOf: [{}, schemaWithFirstString] };
+
+  const result = getCombinatorIndexOfFittingSchema(
+    data,
+    keyword,
+    schema,
+    indexRootSchema
+  );
+  t.is(result, 1);
+});
+
+test('getCombinatorIndexOfFittingSchema - data with first number property', (t) => {
+  const data = { obj: {}, identity: 123 };
+  const keyword = 'anyOf';
+  const schema = { anyOf: [schemaWithFirstNumber] };
+
+  const result = getCombinatorIndexOfFittingSchema(
+    data,
+    keyword,
+    schema,
+    indexRootSchema
+  );
+  t.is(result, 0);
+});
+
+test('getCombinatorIndexOfFittingSchema - no matching schema', (t) => {
+  const data = { name: 'Doe' };
+  const keyword = 'anyOf';
+  const schema = { anyOf: [schemaWithFirstString] };
+
+  const result = getCombinatorIndexOfFittingSchema(
+    data,
+    keyword,
+    schema,
+    indexRootSchema
+  );
+  t.is(result, -1);
 });
