@@ -75,4 +75,54 @@ describe('Array control renderer', () => {
 
     expect(controls).toHaveLength(3);
   });
+
+  test('renders buttons', () => {
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
+    const cells = [{ tester: integerCellTester, cell: IntegerCell }];
+    const wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{
+          renderers: vanillaRenderers,
+          cells,
+          core,
+          uischemas: [{ tester: () => 1, uischema: { type: 'Control' } }],
+        }}
+      >
+        <ArrayControl schema={fixture.schema} uischema={fixture.uischema} />
+      </JsonFormsStateProvider>
+    );
+
+    const buttons = wrapper.find('button');
+    expect(buttons).toHaveLength(4);
+    buttons.forEach((button) => {
+      expect(button.prop('disabled')).toBe(false);
+    });
+  });
+
+  test('disabled control renders disabled buttons', () => {
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
+    const cells = [{ tester: integerCellTester, cell: IntegerCell }];
+    const wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{
+          renderers: vanillaRenderers,
+          cells,
+          core,
+          uischemas: [{ tester: () => 1, uischema: { type: 'Control' } }],
+        }}
+      >
+        <ArrayControl
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          enabled={false}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    const buttons = wrapper.find('button');
+    expect(buttons).toHaveLength(4);
+    buttons.forEach((button) => {
+      expect(button.prop('disabled')).toBe(true);
+    });
+  });
 });
