@@ -100,7 +100,7 @@ const actions = [
     apply: (props: StateProps) => {
       return { ...props, readonly: !props.readonly };
     },
-  }
+  },
 ];
 
 registerExamples([
