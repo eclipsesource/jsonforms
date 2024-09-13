@@ -94,7 +94,11 @@ import {
   VSpacer,
 } from 'vuetify/components';
 import { DisabledIconFocus } from '../controls/directives';
-import { useTranslator, useVuetifyControl } from '../util';
+import {
+  useCombinatorTranslations,
+  useTranslator,
+  useVuetifyControl,
+} from '../util';
 import { CombinatorProperties } from './components';
 
 const controlRenderer = defineComponent({
@@ -128,7 +132,7 @@ const controlRenderer = defineComponent({
     const t = useTranslator();
 
     return {
-      ...useVuetifyControl(input),
+      ...useCombinatorTranslations(useVuetifyControl(input)),
       selectedIndex,
       selectIndex,
       dialog,

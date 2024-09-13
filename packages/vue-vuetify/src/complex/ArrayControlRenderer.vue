@@ -179,14 +179,19 @@
 <script lang="ts">
 import {
   Resolve,
+  arrayDefaultTranslations,
   composePaths,
   createDefaultValue,
+  defaultJsonFormsI18nState,
+  getArrayTranslations,
   isObjectArrayControl,
   isPrimitiveArrayControl,
   or,
   rankWith,
+  type ArrayTranslations,
   type ControlElement,
   type JsonFormsRendererRegistryEntry,
+  type JsonFormsSubStates,
   type JsonSchema,
 } from '@jsonforms/core';
 import {
@@ -196,7 +201,7 @@ import {
   type RendererProps,
 } from '@jsonforms/vue';
 import startCase from 'lodash/startCase';
-import { defineComponent } from 'vue';
+import { defineComponent, inject } from 'vue';
 import {
   VBtn,
   VCard,
