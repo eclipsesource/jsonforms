@@ -31,10 +31,13 @@ import {
   findUISchema,
   Helpers,
   ControlElement,
+  ArrayTranslations,
 } from '@jsonforms/core';
 import {
   JsonFormsDispatch,
+  withArrayTranslationProps,
   withJsonFormsArrayControlProps,
+  withTranslateProps,
 } from '@jsonforms/react';
 import type { VanillaRendererProps } from '../../index';
 import { withVanillaControlProps } from '../../util';
@@ -59,7 +62,8 @@ export const ArrayControl = ({
   rootSchema,
   translations,
   enabled,
-}: ArrayControlProps & VanillaRendererProps) => {
+}: ArrayControlProps &
+  VanillaRendererProps & { translations: ArrayTranslations }) => {
   const controlElement = uischema as ControlElement;
   const childUiSchema = useMemo(
     () =>
@@ -189,7 +193,8 @@ export const ArrayControlRenderer = ({
   enabled,
   errors,
   translations,
-}: ArrayControlProps & VanillaRendererProps) => {
+}: ArrayControlProps &
+  VanillaRendererProps & { translations: ArrayTranslations }) => {
   const controlElement = uischema as ControlElement;
   const labelDescription = Helpers.createLabelDescriptionFrom(
     controlElement,
@@ -235,5 +240,7 @@ export const ArrayControlRenderer = ({
 };
 
 export default withVanillaControlProps(
-  withJsonFormsArrayControlProps(ArrayControlRenderer)
+  withJsonFormsArrayControlProps(
+    withTranslateProps(withArrayTranslationProps(ArrayControlRenderer))
+  )
 );

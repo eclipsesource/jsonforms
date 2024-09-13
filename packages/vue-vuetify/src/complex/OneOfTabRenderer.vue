@@ -90,7 +90,7 @@ import {
   VTabs,
   VWindowItem,
 } from 'vuetify/components';
-import { useVuetifyControl } from '../util';
+import { useCombinatorTranslations, useVuetifyControl } from '../util';
 import { CombinatorProperties } from './components';
 
 const controlRenderer = defineComponent({
@@ -123,7 +123,7 @@ const controlRenderer = defineComponent({
     const dialog = ref(false);
 
     return {
-      ...useVuetifyControl(input),
+      ...useCombinatorTranslations(useVuetifyControl(input)),
       selectedIndex,
       tabIndex,
       dialog,

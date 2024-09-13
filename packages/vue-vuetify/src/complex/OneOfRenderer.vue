@@ -53,10 +53,19 @@
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <v-btn variant="text" @click="cancel">
+          <v-btn
+            variant="text"
+            @click="cancel"
+            data-testid="clear-dialog-decline"
+          >
             {{ control.translations.clearDialogDecline }}
           </v-btn>
-          <v-btn variant="text" ref="confirm" @click="confirm">
+          <v-btn
+            variant="text"
+            ref="confirm"
+            @click="confirm"
+            data-testid="clear-dialog-accept"
+          >
             {{ control.translations.clearDialogAccept }}
           </v-btn>
         </v-card-actions>
@@ -94,7 +103,11 @@ import {
   VSpacer,
 } from 'vuetify/components';
 import { DisabledIconFocus } from '../controls/directives';
-import { useTranslator, useVuetifyControl } from '../util';
+import {
+  useCombinatorTranslations,
+  useTranslator,
+  useVuetifyControl,
+} from '../util';
 import { CombinatorProperties } from './components';
 
 const controlRenderer = defineComponent({
@@ -128,7 +141,7 @@ const controlRenderer = defineComponent({
     const t = useTranslator();
 
     return {
-      ...useVuetifyControl(input),
+      ...useCombinatorTranslations(useVuetifyControl(input)),
       selectedIndex,
       selectIndex,
       dialog,

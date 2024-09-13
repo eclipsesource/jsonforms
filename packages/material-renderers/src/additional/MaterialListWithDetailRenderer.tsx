@@ -25,6 +25,7 @@
 import {
   and,
   ArrayLayoutProps,
+  ArrayTranslations,
   composePaths,
   computeLabel,
   createDefaultValue,
@@ -36,7 +37,9 @@ import {
 } from '@jsonforms/core';
 import {
   JsonFormsDispatch,
+  withArrayTranslationProps,
   withJsonFormsArrayLayoutProps,
+  withTranslateProps,
 } from '@jsonforms/react';
 import { Grid, List, Typography } from '@mui/material';
 import map from 'lodash/map';
@@ -63,11 +66,11 @@ export const MaterialListWithDetailRenderer = ({
   cells,
   config,
   rootSchema,
-  translations,
   description,
   disableAdd,
   disableRemove,
-}: ArrayLayoutProps) => {
+  translations,
+}: ArrayLayoutProps & { translations: ArrayTranslations }) => {
   const [selectedIndex, setSelectedIndex] = useState(undefined);
   const handleRemoveItem = useCallback(
     (p: string, value: any) => () => {
@@ -101,6 +104,7 @@ export const MaterialListWithDetailRenderer = ({
       ),
     [uischemas, schema, uischema.scope, path, uischema, rootSchema]
   );
+
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
   const doDisableAdd = disableAdd || appliedUiSchemaOptions.disableAdd;
   const doDisableRemove = disableRemove || appliedUiSchemaOptions.disableRemove;
@@ -179,4 +183,6 @@ export const materialListWithDetailTester: RankedTester = rankWith(
   and(uiTypeIs('ListWithDetail'), isObjectArray)
 );
 
-export default withJsonFormsArrayLayoutProps(MaterialListWithDetailRenderer);
+export default withJsonFormsArrayLayoutProps(
+  withTranslateProps(withArrayTranslationProps(MaterialListWithDetailRenderer))
+);

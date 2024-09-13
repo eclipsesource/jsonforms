@@ -1,0 +1,66 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ArrayLayoutRenderer.vue > should render component and match snapshot 1`] = `
+"<div class="v-application v-theme--light v-layout v-layout--full-height v-locale--is-ltr">
+  <div class="v-application__wrap">
+    <div data-v-5f91636e="" class="v-card v-theme--light v-card--density-default v-card--variant-elevated array-list">
+      <!---->
+      <div class="v-card__loader">
+        <div class="v-progress-linear v-theme--light v-locale--is-ltr" style="top: 0px; height: 0px; --v-progress-linear-height: 2px;" role="progressbar" aria-hidden="true" aria-valuemin="0" aria-valuemax="100">
+          <!---->
+          <div class="v-progress-linear__background"></div>
+          <div class="v-progress-linear__buffer" style="width: 0%;"></div>
+          <transition-stub name="fade-transition" appear="false" persisted="false" css="true">
+            <div class="v-progress-linear__indeterminate">
+              <div class="v-progress-linear__indeterminate long"></div>
+              <div class="v-progress-linear__indeterminate short"></div>
+            </div>
+          </transition-stub>
+          <!---->
+        </div>
+      </div>
+      <!---->
+      <!---->
+      <div data-v-5f91636e="" class="v-card-title">
+        <header data-v-5f91636e="" class="v-toolbar v-toolbar--flat v-toolbar--density-default v-theme--light v-locale--is-ltr array-list-toolbar">
+          <!---->
+          <div class="v-toolbar__content" style="height: 64px;">
+            <!---->
+            <!---->
+            <div data-v-5f91636e="" class="v-toolbar-title array-list-label">
+              <div class="v-toolbar-title__placeholder">
+                <!---->
+              </div>
+            </div>
+            <div data-v-5f91636e="" class="v-spacer"></div>
+            <!--v-if--><button data-v-5f91636e="" type="button" class="v-btn v-btn--icon v-theme--light v-btn--density-default elevation-0 v-btn--size-default v-btn--variant-text array-list-add" small="" aria-label="MyAdd" aria-describedby="v-tooltip-0"><span class="v-btn__overlay"></span><span class="v-btn__underlay"></span>
+              <!----><span class="v-btn__content" data-no-activator=""><i data-v-5f91636e="" class="mdi-plus mdi v-icon notranslate v-theme--light v-icon--size-default" aria-hidden="true"></i></span>
+              <!---->
+              <!---->
+            </button>
+            <!--teleport start-->
+            <!--teleport end-->
+            <!---->
+          </div>
+          <transition-stub name="expand-transition" appear="false" persisted="false" css="true">
+            <!---->
+          </transition-stub>
+        </header>
+      </div>
+      <div data-v-5f91636e="" class="v-card-text">
+        <div data-v-5f91636e="" class="v-container v-locale--is-ltr" justify-space-around="" align-content-center="">
+          <div data-v-5f91636e="" class="v-row justify-center">
+            <div data-v-5f91636e="" class="v-expansion-panels v-theme--light v-expansion-panels--variant-default" accordion=""></div>
+          </div>
+        </div>
+        <div data-v-5f91636e="" class="v-container v-locale--is-ltr array-list-no-data"> No data </div>
+      </div>
+      <!--v-if-->
+      <!---->
+      <!---->
+      <!---->
+      <!----><span class="v-card__underlay"></span>
+    </div>
+  </div>
+</div>"
+`;

@@ -17,7 +17,7 @@
               variant="text"
               elevation="0"
               small
-              :aria-label="control.translations.addTooltip"
+              :aria-label="control.translations.addAriaLabel"
               v-bind="props"
               :class="styles.arrayList.addButton"
               :disabled="

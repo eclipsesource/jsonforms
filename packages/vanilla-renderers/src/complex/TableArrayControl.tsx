@@ -41,8 +41,14 @@ import {
   Test,
   getControlPath,
   encode,
+  ArrayTranslations,
 } from '@jsonforms/core';
-import { DispatchCell, withJsonFormsArrayControlProps } from '@jsonforms/react';
+import {
+  DispatchCell,
+  withArrayTranslationProps,
+  withJsonFormsArrayControlProps,
+  withTranslateProps,
+} from '@jsonforms/react';
 import { withVanillaControlProps } from '../util';
 import type { VanillaRendererProps } from '../index';
 
@@ -61,7 +67,8 @@ export const tableArrayControlTester: RankedTester = rankWith(
 );
 
 class TableArrayControl extends React.Component<
-  ArrayControlProps & VanillaRendererProps,
+  ArrayControlProps &
+    VanillaRendererProps & { translations: ArrayTranslations },
   any
 > {
   confirmDelete = (path: string, index: number) => {
@@ -243,5 +250,7 @@ class TableArrayControl extends React.Component<
 }
 
 export default withVanillaControlProps(
-  withJsonFormsArrayControlProps(TableArrayControl)
+  withJsonFormsArrayControlProps(
+    withTranslateProps(withArrayTranslationProps(TableArrayControl))
+  )
 );

@@ -3,8 +3,13 @@ import type { IconAliases } from '@/icons/icons';
 import { aliases as mdiIcons } from '@/icons/mdi';
 import {
   Resolve,
+  arrayDefaultTranslations,
+  combinatorDefaultTranslations,
   composePaths,
   computeLabel,
+  defaultJsonFormsI18nState,
+  getArrayTranslations,
+  getCombinatorTranslations,
   getFirstPrimitiveProp,
   isDescriptionHidden,
   type ControlElement,
@@ -223,6 +228,38 @@ export const useVuetifyControl = <
   };
 };
 
+export const useCombinatorTranslations = <
+  T extends {
+    i18nKeyPrefix: string;
+    label: string;
+  },
+  I extends {
+    control: ComputedRef<T>;
+  },
+>(
+  input: I,
+) => {
+  const jsonforms = inject<JsonFormsSubStates>('jsonforms');
+  const translations = getCombinatorTranslations(
+    jsonforms?.i18n?.translate ?? defaultJsonFormsI18nState.translate,
+    combinatorDefaultTranslations,
+    input.control.value.i18nKeyPrefix,
+    input.control.value.label,
+  );
+
+  const overwrittenControl = computed(() => {
+    return {
+      ...input.control.value,
+      translations,
+    };
+  });
+
+  return {
+    ...input,
+    control: overwrittenControl,
+  };
+};
+
 export const useJsonForms = () => {
   const jsonforms = inject<JsonFormsSubStates>('jsonforms');
 
@@ -289,6 +326,7 @@ export const useVuetifyArrayControl = <
     schema: JsonSchema;
     data: any;
     childErrors: ErrorObject[];
+    i18nKeyPrefix: string;
   },
   I extends {
     control: ComputedRef<T>;
@@ -338,12 +376,23 @@ export const useVuetifyArrayControl = <
       : input.control.value.childErrors;
     return filtered;
   });
+
+  const jsonforms = inject<JsonFormsSubStates>('jsonforms');
+  const translations = getArrayTranslations(
+    jsonforms?.i18n?.translate ?? defaultJsonFormsI18nState.translate,
+    arrayDefaultTranslations,
+    input.control.value.i18nKeyPrefix,
+    input.control.value.label,
+  );
+
   const overwrittenControl = computed(() => {
     return {
       ...input.control.value,
       childErrors: filteredChildErrors.value,
+      translations,
     };
   });
+
   return {
     ...input,
     control: overwrittenControl,
