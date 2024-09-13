@@ -228,9 +228,6 @@ export const useVuetifyControl = <
   };
 };
 
-/**
- * Adds styles, isFocused, appliedOptions and onChange
- */
 export const useCombinatorTranslations = <
   T extends {
     i18nKeyPrefix: string;
