@@ -91,6 +91,47 @@ const fixture2 = {
   },
 };
 
+describe('Table array control', () => {
+  test('renders buttons', () => {
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
+    const cells = [{ tester: integerCellTester, cell: IntegerCell }];
+    const wrapper = mount(
+      <JsonFormsStateProvider initState={{ core, cells }}>
+        <TableArrayControl
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    const buttons = wrapper.find('button');
+    expect(buttons).toHaveLength(2);
+    buttons.forEach((button) => {
+      expect(button.prop('disabled')).toBe(false);
+    });
+  });
+
+  test('disabled control renders disabled buttons', () => {
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
+    const cells = [{ tester: integerCellTester, cell: IntegerCell }];
+    const wrapper = mount(
+      <JsonFormsStateProvider initState={{ core, cells }}>
+        <TableArrayControl
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          enabled={false}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    const buttons = wrapper.find('button');
+    expect(buttons).toHaveLength(2);
+    buttons.forEach((button) => {
+      expect(button.prop('disabled')).toBe(true);
+    });
+  });
+});
+
 describe('Table array tester', () => {
   test('tester with recursive document ref only', () => {
     const control: ControlElement = {

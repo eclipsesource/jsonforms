@@ -90,6 +90,7 @@ class TableArrayControl extends React.Component<
       getStyleAsClassName,
       childErrors,
       translations,
+      enabled,
     } = this.props;
 
     const controlElement = uischema as ControlElement;
@@ -119,6 +120,7 @@ class TableArrayControl extends React.Component<
           <label className={labelClass}>{label}</label>
           <button
             type='button'
+            disabled={!enabled}
             className={buttonClass}
             onClick={addItem(path, createDefaultValue(schema, rootSchema))}
           >
@@ -223,6 +225,7 @@ class TableArrayControl extends React.Component<
                     <td>
                       <button
                         type='button'
+                        disabled={!enabled}
                         aria-label={translations.removeAriaLabel}
                         onClick={() => {
                           if (
