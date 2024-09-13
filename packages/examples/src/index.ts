@@ -73,6 +73,9 @@ import * as listWithDetailPrimitives from './examples/list-with-detail-primitive
 import * as conditionalSchemaComposition from './examples/conditional-schema-compositions';
 import * as additionalErrors from './examples/additional-errors';
 import * as multiEnumWithLabelAndDesc from './examples/enum-multi-with-label-and-desc';
+import * as additionalProperties from './examples/additional-properties';
+import * as login from './examples/login';
+import * as string from './examples/string';
 export * from './register';
 export * from './example';
 
@@ -129,6 +132,9 @@ export {
   listWithDetailPrimitives,
   conditionalSchemaComposition,
   additionalErrors,
+  additionalProperties,
+  login,
   issue_1884,
   arrayWithDefaults,
+  string,
 };

@@ -22,7 +22,6 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import './MatchMediaMock';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import { materialRenderers } from '../../src';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';

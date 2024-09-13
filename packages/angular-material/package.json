@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/angular-material",
-  "version": "3.4.0-alpha.1",
+  "version": "3.4.0-alpha.3",
   "description": "Material Renderer Set for Angular module of JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -68,9 +68,9 @@
     "@angular/material": "^17.0.0 || ^18.0.0",
     "@angular/platform-browser": "^17.0.0 || ^18.0.0",
     "@angular/router": "^17.0.0 || ^18.0.0",
-    "@jsonforms/angular": "3.4.0-alpha.1",
-    "@jsonforms/core": "3.4.0-alpha.1",
-    "dayjs": "^1.11.7",
+    "@jsonforms/angular": "3.4.0-alpha.3",
+    "@jsonforms/core": "3.4.0-alpha.3",
+    "dayjs": "^1.11.10",
     "rxjs": "^6.6.0 || ^7.4.0"
   },
   "dependencies": {

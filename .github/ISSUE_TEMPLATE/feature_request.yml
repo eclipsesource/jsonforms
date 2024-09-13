@@ -33,21 +33,18 @@ body:
         ## Describe for which setup you like to have the improvement
   - type: dropdown
     attributes:
-      label: Framework
+      label: Package
       multiple: true
       options:
         - Core
-        - React
-        - Angular
-        - Vue
-        - Other (please specify in the Additional context field)
-  - type: dropdown
-    attributes:
-      label: RendererSet
-      multiple: true
-      options:
-        - Material
-        - Vanilla
+        - React Bindings
+        - React Material Renderers
+        - React Vanilla Renderers
+        - Angular Bindings
+        - Angular Material Renderers
+        - Vue Bindings
+        - Vue Vanilla Renderers
+        - Vue Vuetify Renderers
         - Other (please specify in the Additional context field)
   - type: textarea
     attributes:

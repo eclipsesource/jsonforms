@@ -71,6 +71,7 @@ jobs:
           cd ../vanilla-renderers && pnpm pkg set peerDependencies.@jsonforms/core="${{ github.event.inputs.next_version }}" && pnpm pkg set peerDependencies.@jsonforms/react="${{ github.event.inputs.next_version }}"
           cd ../vue && pnpm pkg set peerDependencies.@jsonforms/core="${{ github.event.inputs.next_version }}"
           cd ../vue-vanilla && pnpm pkg set peerDependencies.@jsonforms/core="${{ github.event.inputs.next_version }}" && pnpm pkg set peerDependencies.@jsonforms/vue="${{ github.event.inputs.next_version }}"
+          cd ../vue-vuetify && pnpm pkg set peerDependencies.@jsonforms/core="${{ github.event.inputs.next_version }}" && pnpm pkg set peerDependencies.@jsonforms/vue="${{ github.event.inputs.next_version }}"
 
       - name: "Tag and Commit"
         run: |

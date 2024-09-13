@@ -1,0 +1,123 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`DateControlRenderer.vue > should render component and match snapshot 1`] = `
+"<div class="v-application v-theme--light v-layout v-layout--full-height v-locale--is-ltr">
+  <div class="v-application__wrap">
+    <div class="control" id="#6" errors="" label="My Date" required="false" isfocused="false" appliedoptions="[object Object]">
+      <div class="v-input v-input--horizontal v-input--center-affix v-input--density-default v-theme--light v-locale--is-ltr v-input--dirty v-text-field input">
+        <!---->
+        <div class="v-input__control">
+          <div class="v-field v-field--active v-field--appended v-field--center-affix v-field--dirty v-field--prepended v-field--variant-filled v-theme--light v-locale--is-ltr">
+            <div class="v-field__overlay"></div>
+            <div class="v-field__loader">
+              <div class="v-progress-linear v-theme--light v-locale--is-ltr" style="top: 0px; height: 0px; --v-progress-linear-height: 2px;" role="progressbar" aria-hidden="true" aria-valuemin="0" aria-valuemax="100">
+                <!---->
+                <div class="v-progress-linear__background"></div>
+                <div class="v-progress-linear__buffer" style="width: 0%;"></div>
+                <transition-stub name="fade-transition" appear="false" persisted="false" css="true">
+                  <div class="v-progress-linear__indeterminate">
+                    <div class="v-progress-linear__indeterminate long"></div>
+                    <div class="v-progress-linear__indeterminate short"></div>
+                  </div>
+                </transition-stub>
+                <!---->
+              </div>
+            </div>
+            <div class="v-field__prepend-inner" aria-haspopup="menu" aria-expanded="false" aria-owns="v-menu-2">
+              <!----><i class="mdi-calendar mdi v-icon notranslate v-theme--light v-icon--size-default v-icon--clickable" role="button" aria-hidden="false" tabindex="-1" aria-haspopup="menu" aria-expanded="false" aria-owns="v-menu-2"></i>
+              <!---->
+            </div>
+            <div class="v-field__field" data-no-activator=""><label class="v-label v-field-label v-field-label--floating" aria-hidden="true" for="#6-input">
+                <!---->My Date
+              </label><label class="v-label v-field-label" for="#6-input">
+                <!---->My Date
+              </label>
+              <!----><input placeholder="date placeholder" size="1" type="text" id="#6-input" aria-describedby="#6-input-messages" class="v-field__input" data-maska-value="03/09/2021">
+              <!---->
+            </div>
+            <transition-stub name="expand-x-transition" appear="false" persisted="false" css="true">
+              <div class="v-field__clearable"><i class="mdi-close-circle mdi v-icon notranslate v-theme--light v-icon--size-default v-icon--clickable" role="button" aria-hidden="false" tabindex="-1" aria-label="Clear My Date"></i></div>
+            </transition-stub>
+            <div class="v-field__append-inner">
+              <!---->
+              <!---->
+            </div>
+            <div class="v-field__outline">
+              <!---->
+              <!---->
+            </div>
+          </div>
+        </div>
+        <!---->
+        <div class="v-input__details">
+          <transition-group-stub name="slide-y-transition" tag="div" appear="false" persisted="false" css="true" class="v-messages" role="alert" aria-live="polite" id="#6-input-messages">
+            <!---->
+          </transition-group-stub>
+          <!---->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>"
+`;
+
+exports[`DateControlRenderer.vue > should render component and match snapshot when clicked 1`] = `
+"<div class="v-application v-theme--light v-layout v-layout--full-height v-locale--is-ltr">
+  <div class="v-application__wrap">
+    <div class="control" id="#7" errors="" label="My Date" required="false" isfocused="true" appliedoptions="[object Object]">
+      <div class="v-input v-input--horizontal v-input--center-affix v-input--density-default v-theme--light v-locale--is-ltr v-input--dirty v-text-field input">
+        <!---->
+        <div class="v-input__control">
+          <div class="v-field v-field--active v-field--appended v-field--center-affix v-field--dirty v-field--prepended v-field--variant-filled v-theme--light v-field--focused v-locale--is-ltr">
+            <div class="v-field__overlay"></div>
+            <div class="v-field__loader">
+              <div class="v-progress-linear v-theme--light v-locale--is-ltr" style="top: 0px; height: 0px; --v-progress-linear-height: 2px;" role="progressbar" aria-hidden="true" aria-valuemin="0" aria-valuemax="100">
+                <!---->
+                <div class="v-progress-linear__background"></div>
+                <div class="v-progress-linear__buffer" style="width: 0%;"></div>
+                <transition-stub name="fade-transition" appear="false" persisted="false" css="true">
+                  <div class="v-progress-linear__indeterminate">
+                    <div class="v-progress-linear__indeterminate long"></div>
+                    <div class="v-progress-linear__indeterminate short"></div>
+                  </div>
+                </transition-stub>
+                <!---->
+              </div>
+            </div>
+            <div class="v-field__prepend-inner" aria-haspopup="menu" aria-expanded="false" aria-owns="v-menu-2">
+              <!----><i class="mdi-calendar mdi v-icon notranslate v-theme--light v-icon--size-default v-icon--clickable" role="button" aria-hidden="false" tabindex="-1" aria-haspopup="menu" aria-expanded="false" aria-owns="v-menu-2"></i>
+              <!---->
+            </div>
+            <div class="v-field__field" data-no-activator=""><label class="v-label v-field-label v-field-label--floating" aria-hidden="true" for="#7-input">
+                <!---->My Date
+              </label><label class="v-label v-field-label" for="#7-input">
+                <!---->My Date
+              </label>
+              <!----><input placeholder="date placeholder" size="1" type="text" id="#7-input" aria-describedby="#7-input-messages" class="v-field__input" data-maska-value="03/09/2021">
+              <!---->
+            </div>
+            <transition-stub name="expand-x-transition" appear="false" persisted="false" css="true">
+              <div class="v-field__clearable"><i class="mdi-close-circle mdi v-icon notranslate v-theme--light v-icon--size-default v-icon--clickable" role="button" aria-hidden="false" tabindex="-1" aria-label="Clear My Date"></i></div>
+            </transition-stub>
+            <div class="v-field__append-inner">
+              <!---->
+              <!---->
+            </div>
+            <div class="v-field__outline">
+              <!---->
+              <!---->
+            </div>
+          </div>
+        </div>
+        <!---->
+        <div class="v-input__details">
+          <transition-group-stub name="slide-y-transition" tag="div" appear="false" persisted="false" css="true" class="v-messages" role="alert" aria-live="polite" id="#7-input-messages">
+            <!---->
+          </transition-group-stub>
+          <!---->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>"
+`;
