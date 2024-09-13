@@ -95,6 +95,6 @@
   "peerDependencies": {
     "@jsonforms/core": "3.4.0-alpha.3",
     "@jsonforms/vue": "3.4.0-alpha.3",
-    "vue": "^3.4.21"
+    "vue": "^3.2.26"
   }
 }
