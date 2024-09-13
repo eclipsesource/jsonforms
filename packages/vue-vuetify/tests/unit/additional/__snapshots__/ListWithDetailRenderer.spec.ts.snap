@@ -1,0 +1,41 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ListWithDetailRenderer.vue > should render component and match snapshot 1`] = `
+"<div class="v-application v-theme--light v-layout v-layout--full-height v-locale--is-ltr">
+  <div class="v-application__wrap">
+    <div data-v-7e93fcc2="" class="v-container v-locale--is-ltr list-with-detail" fill-height="">
+      <div data-v-7e93fcc2="" class="v-row">
+        <div data-v-7e93fcc2="" class="v-col pa-0">
+          <header data-v-7e93fcc2="" class="v-toolbar v-toolbar--flat v-toolbar--density-default v-theme--light v-locale--is-ltr list-with-detail-toolbar">
+            <!---->
+            <div class="v-toolbar__content" style="height: 64px;">
+              <!---->
+              <!---->
+              <div data-v-7e93fcc2="" class="v-toolbar-title list-with-detail-label">
+                <div class="v-toolbar-title__placeholder">
+                  <!---->
+                </div>
+              </div>
+              <div data-v-7e93fcc2="" class="v-spacer"></div>
+              <!--v-if--><button data-v-7e93fcc2="" type="button" class="v-btn v-btn--icon v-theme--light v-btn--density-default elevation-0 v-btn--size-default v-btn--variant-text list-with-detail-add" small="" aria-label="MyAdd" aria-describedby="v-tooltip-0"><span class="v-btn__overlay"></span><span class="v-btn__underlay"></span>
+                <!----><span class="v-btn__content" data-no-activator=""><i data-v-7e93fcc2="" class="mdi-plus mdi v-icon notranslate v-theme--light v-icon--size-default" aria-hidden="true"></i></span>
+                <!---->
+                <!---->
+              </button>
+              <!--teleport start-->
+              <!--teleport end-->
+              <!---->
+            </div>
+            <transition-stub name="expand-transition" appear="false" persisted="false" css="true">
+              <!---->
+            </transition-stub>
+          </header>
+        </div>
+      </div>
+      <div data-v-7e93fcc2="" class="v-row list-with-detail-no-data">
+        <div data-v-7e93fcc2="" class="v-col">No data</div>
+      </div>
+    </div>
+  </div>
+</div>"
+`;

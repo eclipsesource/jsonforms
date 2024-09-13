@@ -6,6 +6,7 @@
       :uischema="uischema"
       :renderers="renderers"
       :config="config"
+      :i18n="i18n"
       @change="onChange"
     />
   </v-app>

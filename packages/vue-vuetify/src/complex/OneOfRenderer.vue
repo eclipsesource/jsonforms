@@ -53,10 +53,19 @@
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <v-btn variant="text" @click="cancel">
+          <v-btn
+            variant="text"
+            @click="cancel"
+            data-testid="clear-dialog-decline"
+          >
             {{ control.translations.clearDialogDecline }}
           </v-btn>
-          <v-btn variant="text" ref="confirm" @click="confirm">
+          <v-btn
+            variant="text"
+            ref="confirm"
+            @click="confirm"
+            data-testid="clear-dialog-accept"
+          >
             {{ control.translations.clearDialogAccept }}
           </v-btn>
         </v-card-actions>
