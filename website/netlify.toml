@@ -30,7 +30,7 @@
    [headers.values]
       Access-Control-Allow-Origin = "*"
       Referrer-Policy = "strict-origin-when-cross-origin"
-      Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-eval' 'sha256-O8zYuOjyuzUZDv3fub7DKfAs5TEd1dG+fz+hCSCFmQA=' 'sha256-nlA5Eh6znySQnjHmn8Yf6Vfz2I3XgXggeuOKoXBiBC0=' static.cloudflareinsights.com cloudflareinsights.com/cdn-cgi/rum; connect-src 'self' cloudflareinsights.com/cdn-cgi/rum; style-src 'self' 'unsafe-inline'; img-src 'self' data:; object-src 'none'; frame-ancestors 'self';"
+      Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-eval' 'sha256-O8zYuOjyuzUZDv3fub7DKfAs5TEd1dG+fz+hCSCFmQA=' 'sha256-nlA5Eh6znySQnjHmn8Yf6Vfz2I3XgXggeuOKoXBiBC0=' 'sha256-pBkmluod9Ko4GzDfbWgKM/wxzujFXUdGVOePkwOQT+c=' static.cloudflareinsights.com cloudflareinsights.com/cdn-cgi/rum; connect-src 'self' cloudflareinsights.com/cdn-cgi/rum; style-src 'self' 'unsafe-inline'; img-src 'self' data:; object-src 'none'; frame-ancestors 'self';"
       X-Frame-Options = "SAMEORIGIN"
       X-Content-Type-Options = "nosniff"
       Permissions-Policy = "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
