@@ -431,7 +431,7 @@ export const DateOptionTable = () => (
         </TableRow>
         <TableRow>
           <TableCell>views</TableCell>
-          <TableCell>Array defining which views are displayed. Options: year, month, date</TableCell>
+          <TableCell>Array defining which views are displayed. Options: year, month, day</TableCell>
         </TableRow>
         <TableRow>
           <TableCell>clearLabel</TableCell>
