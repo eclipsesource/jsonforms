@@ -181,12 +181,7 @@ import {
   Resolve,
   composePaths,
   createDefaultValue,
-  isObjectArrayControl,
-  isPrimitiveArrayControl,
-  or,
-  rankWith,
   type ControlElement,
-  type JsonFormsRendererRegistryEntry,
   type JsonSchema,
 } from '@jsonforms/core';
 import {
@@ -303,11 +298,6 @@ const controlRenderer = defineComponent({
 });
 
 export default controlRenderer;
-
-export const entry: JsonFormsRendererRegistryEntry = {
-  renderer: controlRenderer,
-  tester: rankWith(3, or(isObjectArrayControl, isPrimitiveArrayControl)),
-};
 </script>
 
 <style scoped>

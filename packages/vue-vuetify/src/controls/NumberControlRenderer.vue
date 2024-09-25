@@ -29,12 +29,7 @@
 </template>
 
 <script lang="ts">
-import {
-  isNumberControl,
-  rankWith,
-  type ControlElement,
-  type JsonFormsRendererRegistryEntry,
-} from '@jsonforms/core';
+import { type ControlElement } from '@jsonforms/core';
 import {
   rendererProps,
   useJsonFormsControl,
@@ -129,9 +124,4 @@ const controlRenderer = defineComponent({
 });
 
 export default controlRenderer;
-
-export const entry: JsonFormsRendererRegistryEntry = {
-  renderer: controlRenderer,
-  tester: rankWith(1, isNumberControl),
-};
 </script>

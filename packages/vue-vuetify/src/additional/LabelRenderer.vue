@@ -9,12 +9,7 @@
 </template>
 
 <script lang="ts">
-import {
-  rankWith,
-  uiTypeIs,
-  type JsonFormsRendererRegistryEntry,
-  type LabelElement,
-} from '@jsonforms/core';
+import { type LabelElement } from '@jsonforms/core';
 import {
   rendererProps,
   useJsonFormsLabel,
@@ -38,9 +33,4 @@ const labelRenderer = defineComponent({
 });
 
 export default labelRenderer;
-
-export const entry: JsonFormsRendererRegistryEntry = {
-  renderer: labelRenderer,
-  tester: rankWith(1, uiTypeIs('Label')),
-};
 </script>

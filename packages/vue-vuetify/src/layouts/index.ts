@@ -4,12 +4,12 @@ import {
   type JsonFormsRendererRegistryEntry,
 } from '@jsonforms/core';
 
-import { entry as arrayLayoutRendererEntry } from './ArrayLayoutRenderer.vue';
-import { entry as categorizationRendererEntry } from './CategorizationRenderer.vue';
-import { entry as categorizationStepperRendererEntry } from './CategorizationStepperRenderer.vue';
-import { entry as groupRendererEntry } from './GroupRenderer.vue';
-import { entry as horizontalLayoutRendererEntry } from './HorizontalLayoutRenderer.vue';
-import { entry as verticalLayoutRendererEntry } from './VerticalLayoutRenderer.vue';
+import { entry as arrayLayoutRendererEntry } from './ArrayLayoutRenderer.entry';
+import { entry as categorizationRendererEntry } from './CategorizationRenderer.entry';
+import { entry as categorizationStepperRendererEntry } from './CategorizationStepperRenderer.entry';
+import { entry as groupRendererEntry } from './GroupRenderer.entry';
+import { entry as horizontalLayoutRendererEntry } from './HorizontalLayoutRenderer.entry';
+import { entry as verticalLayoutRendererEntry } from './VerticalLayoutRenderer.entry';
 
 import { default as VerticalLayoutRenderer } from './VerticalLayoutRenderer.vue';
 export { default as ArrayLayoutRenderer } from './ArrayLayoutRenderer.vue';

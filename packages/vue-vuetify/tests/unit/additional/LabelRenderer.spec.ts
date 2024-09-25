@@ -1,8 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { clearAllIds } from '@jsonforms/core';
-import LabelRenderer, {
-  entry as labelRendererEntry,
-} from '../../../src/additional/LabelRenderer.vue';
+import LabelRenderer from '../../../src/additional/LabelRenderer.vue';
+import { entry as labelRendererEntry } from '../../../src/additional/LabelRenderer.entry';
 import { mountJsonForms } from '../util';
 
 describe('LabelRenderer.vue', () => {
