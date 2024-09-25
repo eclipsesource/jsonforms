@@ -1,8 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { clearAllIds, type Translator } from '@jsonforms/core';
-import ListWithDetailRenderer, {
-  entry as listWithDetailRendererEntry,
-} from '../../../src/additional/ListWithDetailRenderer.vue';
+import ListWithDetailRenderer from '../../../src/additional/ListWithDetailRenderer.vue';
+import { entry as listWithDetailRendererEntry } from '../../../src/additional/ListWithDetailRenderer.entry';
 import { mountJsonForms } from '../util';
 
 describe('ListWithDetailRenderer.vue', () => {

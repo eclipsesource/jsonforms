@@ -1,8 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { clearAllIds, type Translator } from '@jsonforms/core';
-import ArrayControlRenderer, {
-  entry as arrayControlRendererEntry,
-} from '../../../src/complex/ArrayControlRenderer.vue';
+import ArrayControlRenderer from '../../../src/complex/ArrayControlRenderer.vue';
+import { entry as arrayControlRendererEntry } from '../../../src/complex/ArrayControlRenderer.entry';
 import { mountJsonForms } from '../util';
 
 describe('ArrayControlRenderer.vue', () => {

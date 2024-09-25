@@ -39,9 +39,6 @@ import {
   type CombinatorSubSchemaRenderInfo,
   type ControlElement,
   createCombinatorRenderInfos,
-  isAnyOfControl,
-  type JsonFormsRendererRegistryEntry,
-  rankWith,
 } from '@jsonforms/core';
 import {
   DispatchRenderer,
@@ -94,9 +91,4 @@ const controlRenderer = defineComponent({
 });
 
 export default controlRenderer;
-
-export const entry: JsonFormsRendererRegistryEntry = {
-  renderer: controlRenderer,
-  tester: rankWith(3, isAnyOfControl),
-};
 </script>

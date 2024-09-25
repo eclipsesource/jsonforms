@@ -41,14 +41,7 @@
 </template>
 
 <script lang="ts">
-import {
-  and,
-  formatIs,
-  isStringControl,
-  rankWith,
-  type ControlElement,
-  type JsonFormsRendererRegistryEntry,
-} from '@jsonforms/core';
+import { type ControlElement } from '@jsonforms/core';
 import {
   rendererProps,
   useJsonFormsControl,
@@ -85,9 +78,4 @@ const controlRenderer = defineComponent({
 });
 
 export default controlRenderer;
-
-export const entry: JsonFormsRendererRegistryEntry = {
-  renderer: controlRenderer,
-  tester: rankWith(2, and(isStringControl, formatIs('password'))),
-};
 </script>
