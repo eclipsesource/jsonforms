@@ -78,15 +78,7 @@
 </template>
 
 <script lang="ts">
-import {
-  and,
-  categorizationHasCategory,
-  isCategorization,
-  optionIs,
-  rankWith,
-  type JsonFormsRendererRegistryEntry,
-  type Layout,
-} from '@jsonforms/core';
+import { type Layout } from '@jsonforms/core';
 import {
   DispatchRenderer,
   rendererProps,
@@ -149,16 +141,4 @@ const layoutRenderer = defineComponent({
 });
 
 export default layoutRenderer;
-
-export const entry: JsonFormsRendererRegistryEntry = {
-  renderer: layoutRenderer,
-  tester: rankWith(
-    3,
-    and(
-      isCategorization,
-      categorizationHasCategory,
-      optionIs('variant', 'stepper'),
-    ),
-  ),
-};
 </script>

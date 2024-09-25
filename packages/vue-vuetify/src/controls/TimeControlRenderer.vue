@@ -80,13 +80,7 @@
 </template>
 
 <script lang="ts">
-import {
-  isTimeControl,
-  rankWith,
-  type ControlElement,
-  type JsonFormsRendererRegistryEntry,
-  type JsonSchema,
-} from '@jsonforms/core';
+import { type ControlElement, type JsonSchema } from '@jsonforms/core';
 import {
   rendererProps,
   useJsonFormsControl,
@@ -164,9 +158,9 @@ const controlRenderer = defineComponent({
     const timeFormat = computed(
       () =>
         typeof control.appliedOptions.value.timeFormat == 'string'
-          ? expandLocaleFormat(control.appliedOptions.value.timeFormat) ??
-            control.appliedOptions.value.timeFormat
-          : expandLocaleFormat('LT') ?? 'H:mm', // by default try to use localized default if unavailable then H:mm,
+          ? (expandLocaleFormat(control.appliedOptions.value.timeFormat) ??
+            control.appliedOptions.value.timeFormat)
+          : (expandLocaleFormat('LT') ?? 'H:mm'), // by default try to use localized default if unavailable then H:mm,
     );
 
     const useMask = control.appliedOptions.value.mask !== false;
@@ -374,9 +368,4 @@ const controlRenderer = defineComponent({
 });
 
 export default controlRenderer;
-
-export const entry: JsonFormsRendererRegistryEntry = {
-  renderer: controlRenderer,
-  tester: rankWith(2, isTimeControl),
-};
 </script>

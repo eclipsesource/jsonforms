@@ -1,8 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { clearAllIds } from '@jsonforms/core';
-import DateControlRenderer, {
-  entry as dateControlRendererEntry,
-} from '../../../src/controls/DateControlRenderer.vue';
+import DateControlRenderer from '../../../src/controls/DateControlRenderer.vue';
+import { entry as dateControlRendererEntry } from '../../../src/controls/DateControlRenderer.entry';
 import { mountJsonForms } from '../util';
 
 describe('DateControlRenderer.vue', () => {

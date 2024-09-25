@@ -36,11 +36,8 @@
 import {
   createCombinatorRenderInfos,
   findMatchingUISchema,
-  isAllOfControl,
-  rankWith,
   type CombinatorSubSchemaRenderInfo,
   type ControlElement,
-  type JsonFormsRendererRegistryEntry,
   type UISchemaElement,
 } from '@jsonforms/core';
 import {
@@ -90,9 +87,4 @@ const controlRenderer = defineComponent({
 });
 
 export default controlRenderer;
-
-export const entry: JsonFormsRendererRegistryEntry = {
-  renderer: controlRenderer,
-  tester: rankWith(3, isAllOfControl),
-};
 </script>

@@ -38,11 +38,7 @@
 
 <script lang="ts">
 import {
-  and,
   type ControlElement,
-  isStringControl,
-  type JsonFormsRendererRegistryEntry,
-  rankWith,
   type Tester,
   type UISchemaElement,
 } from '@jsonforms/core';
@@ -206,9 +202,4 @@ const hasOption =
       false
     );
   };
-
-export const entry: JsonFormsRendererRegistryEntry = {
-  renderer: controlRenderer,
-  tester: rankWith(2, and(isStringControl, hasOption('mask'))),
-};
 </script>
