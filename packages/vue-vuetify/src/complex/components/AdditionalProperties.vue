@@ -366,11 +366,11 @@ export default defineComponent({
     return {
       validationMode: validationMode,
       i18n: i18n ? markRaw(i18n) : i18n,
-      middleware: i18n ? markRaw(middleware) : middleware,
+      middleware: middleware ? markRaw(middleware) : middleware,
       t,
       mdAndUp,
       vuetifyProps,
-      ajv: markRaw(ajv),
+      ajv: ajv ? markRaw(ajv) : ajv,
       control,
       styles,
       appliedOptions,
