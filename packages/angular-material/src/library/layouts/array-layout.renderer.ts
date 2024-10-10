@@ -22,12 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import {
   JsonFormsAngularService,
   JsonFormsAbstractControl,
@@ -169,7 +164,7 @@ import {
 })
 export class ArrayLayoutRenderer
   extends JsonFormsAbstractControl<StatePropsOfArrayLayout>
-  implements OnInit, OnDestroy
+  implements OnInit
 {
   noData: boolean;
   translations: ArrayTranslations = {};

@@ -22,18 +22,30 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { Directive, Input } from '@angular/core';
+import { Directive, Input, OnDestroy } from '@angular/core';
 import {
   JsonSchema,
   OwnPropsOfRenderer,
   UISchemaElement,
 } from '@jsonforms/core';
+import { Subscription } from 'rxjs';
 
 @Directive()
-export class JsonFormsBaseRenderer<T extends UISchemaElement> {
+export class JsonFormsBaseRenderer<T extends UISchemaElement>
+  implements OnDestroy
+{
   @Input() uischema: T;
   @Input() schema: JsonSchema;
   @Input() path: string;
+  protected subscriptions: Subscription = new Subscription();
+
+  protected addSubscription(subscription: Subscription | Subscription[]) {
+    if (Array.isArray(subscription)) {
+      subscription.forEach((sub) => this.subscriptions.add(sub));
+    } else {
+      this.subscriptions.add(subscription);
+    }
+  }
 
   protected getOwnProps(): OwnPropsOfRenderer {
     return {
@@ -41,5 +53,9 @@ export class JsonFormsBaseRenderer<T extends UISchemaElement> {
       schema: this.schema,
       path: this.path,
     };
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 }
