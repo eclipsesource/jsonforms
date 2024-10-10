@@ -37,9 +37,9 @@ export class JsonFormsBaseRenderer<T extends UISchemaElement>
   @Input() uischema: T;
   @Input() schema: JsonSchema;
   @Input() path: string;
-  subscriptions: Subscription = new Subscription();
+  protected subscriptions: Subscription = new Subscription();
 
-  public addSubscription(subscription: Subscription | Subscription[]) {
+  protected addSubscription(subscription: Subscription | Subscription[]) {
     if (Array.isArray(subscription)) {
       subscription.forEach((sub) => this.subscriptions.add(sub));
     } else {
