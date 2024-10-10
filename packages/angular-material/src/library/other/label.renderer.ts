@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   JsonFormsAngularService,
   JsonFormsBaseRenderer,
@@ -36,7 +36,6 @@ import {
   rankWith,
   uiTypeIs,
 } from '@jsonforms/core';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'LabelRenderer',
@@ -51,33 +50,27 @@ import { Subscription } from 'rxjs';
 })
 export class LabelRenderer
   extends JsonFormsBaseRenderer<LabelElement>
-  implements OnDestroy, OnInit
+  implements OnInit
 {
   label: string;
   visible: boolean;
-
-  private subscription: Subscription;
 
   constructor(private jsonFormsService: JsonFormsAngularService) {
     super();
   }
   ngOnInit() {
-    this.subscription = this.jsonFormsService.$state.subscribe({
-      next: (state: JsonFormsState) => {
-        const props = mapStateToLabelProps(
-          state,
-          this.getOwnProps() as OwnPropsOfLabel
-        );
-        this.visible = props.visible;
-        this.label = props.text;
-      },
-    });
-  }
-
-  ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this.addSubscription(
+      this.jsonFormsService.$state.subscribe({
+        next: (state: JsonFormsState) => {
+          const props = mapStateToLabelProps(
+            state,
+            this.getOwnProps() as OwnPropsOfLabel
+          );
+          this.visible = props.visible;
+          this.label = props.text;
+        },
+      })
+    );
   }
 }
 
