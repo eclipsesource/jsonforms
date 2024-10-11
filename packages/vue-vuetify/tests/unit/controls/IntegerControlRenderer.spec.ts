@@ -1,8 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { clearAllIds } from '@jsonforms/core';
-import IntegerControlRenderer, {
-  entry as integerControlRendererEntry,
-} from '../../../src/controls/IntegerControlRenderer.vue';
+import IntegerControlRenderer from '../../../src/controls/IntegerControlRenderer.vue';
+import { entry as integerControlRendererEntry } from '../../../src/controls/IntegerControlRenderer.entry';
 import { wait } from '../../../tests';
 import { mountJsonForms } from '../util';
 

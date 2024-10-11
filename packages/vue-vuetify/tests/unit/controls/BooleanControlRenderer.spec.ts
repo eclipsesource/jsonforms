@@ -1,8 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { clearAllIds } from '@jsonforms/core';
-import BooleanControlRenderer, {
-  entry as booleanControlRendererEntry,
-} from '../../../src/controls/BooleanControlRenderer.vue';
+import BooleanControlRenderer from '../../../src/controls/BooleanControlRenderer.vue';
+import { entry as booleanControlRendererEntry } from '../../../src/controls/BooleanControlRenderer.entry';
 import { mountJsonForms } from '../util';
 
 describe('BooleanControlRenderer.vue', () => {

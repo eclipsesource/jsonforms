@@ -6,13 +6,13 @@ export { default as ObjectRenderer } from './ObjectRenderer.vue';
 export { default as OneOfRenderer } from './OneOfRenderer.vue';
 export { default as OneOfTabRenderer } from './OneOfTabRenderer.vue';
 
-import { entry as allOfRendererEntry } from './AllOfRenderer.vue';
-import { entry as anyOfRendererEntry } from './AnyOfRenderer.vue';
-import { entry as arrayControlRendererEntry } from './ArrayControlRenderer.vue';
-import { entry as enumArrayRendererEntry } from './EnumArrayRenderer.vue';
-import { entry as objectRendererEntry } from './ObjectRenderer.vue';
-import { entry as oneOfRendererEntry } from './OneOfRenderer.vue';
-import { entry as oneOfTabRendererEntry } from './OneOfTabRenderer.vue';
+import { entry as allOfRendererEntry } from './AllOfRenderer.entry';
+import { entry as anyOfRendererEntry } from './AnyOfRenderer.entry';
+import { entry as arrayControlRendererEntry } from './ArrayControlRenderer.entry';
+import { entry as enumArrayRendererEntry } from './EnumArrayRenderer.entry';
+import { entry as objectRendererEntry } from './ObjectRenderer.entry';
+import { entry as oneOfRendererEntry } from './OneOfRenderer.entry';
+import { entry as oneOfTabRendererEntry } from './OneOfTabRenderer.entry';
 
 export const complexRenderers = [
   allOfRendererEntry,

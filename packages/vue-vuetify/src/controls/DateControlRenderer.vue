@@ -77,13 +77,7 @@
 </template>
 
 <script lang="ts">
-import {
-  isDateControl,
-  rankWith,
-  type ControlElement,
-  type JsonFormsRendererRegistryEntry,
-  type JsonSchema,
-} from '@jsonforms/core';
+import { type ControlElement, type JsonSchema } from '@jsonforms/core';
 import { computed, defineComponent, ref, unref } from 'vue';
 
 import {
@@ -149,9 +143,9 @@ const controlRenderer = defineComponent({
     const dateFormat = computed<string>(
       () =>
         typeof control.appliedOptions.value.dateFormat == 'string'
-          ? expandLocaleFormat(control.appliedOptions.value.dateFormat) ??
-            control.appliedOptions.value.dateFormat
-          : expandLocaleFormat('L') ?? 'YYYY-MM-DD', // by default try to use localized default if unavailable then YYYY-MM-DD
+          ? (expandLocaleFormat(control.appliedOptions.value.dateFormat) ??
+            control.appliedOptions.value.dateFormat)
+          : (expandLocaleFormat('L') ?? 'YYYY-MM-DD'), // by default try to use localized default if unavailable then YYYY-MM-DD
     );
 
     const useMask = control.appliedOptions.value.mask !== false;
@@ -323,9 +317,4 @@ const controlRenderer = defineComponent({
 });
 
 export default controlRenderer;
-
-export const entry: JsonFormsRendererRegistryEntry = {
-  renderer: controlRenderer,
-  tester: rankWith(2, isDateControl),
-};
 </script>

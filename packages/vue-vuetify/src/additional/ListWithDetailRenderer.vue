@@ -318,11 +318,6 @@ const controlRenderer = defineComponent({
 });
 
 export default controlRenderer;
-
-export const entry: JsonFormsRendererRegistryEntry = {
-  renderer: controlRenderer,
-  tester: rankWith(4, and(uiTypeIs('ListWithDetail'), isObjectArray)),
-};
 </script>
 
 <style scoped>

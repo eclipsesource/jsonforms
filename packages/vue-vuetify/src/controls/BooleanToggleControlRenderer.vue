@@ -30,14 +30,7 @@
 </template>
 
 <script lang="ts">
-import {
-  and,
-  isBooleanControl,
-  optionIs,
-  rankWith,
-  type ControlElement,
-  type JsonFormsRendererRegistryEntry,
-} from '@jsonforms/core';
+import { type ControlElement } from '@jsonforms/core';
 import {
   rendererProps,
   useJsonFormsControl,
@@ -63,9 +56,4 @@ const controlRenderer = defineComponent({
 });
 
 export default controlRenderer;
-
-export const entry: JsonFormsRendererRegistryEntry = {
-  renderer: controlRenderer,
-  tester: rankWith(3, and(isBooleanControl, optionIs('toggle', true))),
-};
 </script>

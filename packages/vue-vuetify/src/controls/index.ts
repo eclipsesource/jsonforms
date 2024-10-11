@@ -20,23 +20,23 @@ export { default as StringControlRenderer } from './StringControlRenderer.vue';
 export { default as StringMaskControlRenderer } from './StringMaskControlRenderer.vue';
 export { default as TimeControlRenderer } from './TimeControlRenderer.vue';
 
-import { entry as anyOfStringOrEnumControlRendererEntry } from './AnyOfStringOrEnumControlRenderer.vue';
-import { entry as booleanControlRendererEntry } from './BooleanControlRenderer.vue';
-import { entry as booleanToggleControlRendererEntry } from './BooleanToggleControlRenderer.vue';
-import { entry as dateControlRendererEntry } from './DateControlRenderer.vue';
-import { entry as dateTimeControlRendererEntry } from './DateTimeControlRenderer.vue';
-import { entry as enumControlRendererEntry } from './EnumControlRenderer.vue';
-import { entry as integerControlRendererEntry } from './IntegerControlRenderer.vue';
-import { entry as multiStringControlRendererEntry } from './MultiStringControlRenderer.vue';
-import { entry as numberControlRendererEntry } from './NumberControlRenderer.vue';
-import { entry as oneOfEnumControlRendererEntry } from './OneOfEnumControlRenderer.vue';
-import { entry as oneOfRadioGroupControlRendererEntry } from './OneOfRadioGroupControlRenderer.vue';
-import { entry as passwordControlRendererEntry } from './PasswordControlRenderer.vue';
-import { entry as radioGroupControlRendererEntry } from './RadioGroupControlRenderer.vue';
-import { entry as sliderControlRendererEntry } from './SliderControlRenderer.vue';
-import { entry as stringControlRendererEntry } from './StringControlRenderer.vue';
-import { entry as stringMaskControlRendererEntry } from './StringMaskControlRenderer.vue';
-import { entry as timeControlRendererEntry } from './TimeControlRenderer.vue';
+import { entry as anyOfStringOrEnumControlRendererEntry } from './AnyOfStringOrEnumControlRenderer.entry';
+import { entry as booleanControlRendererEntry } from './BooleanControlRenderer.entry';
+import { entry as booleanToggleControlRendererEntry } from './BooleanToggleControlRenderer.entry';
+import { entry as dateControlRendererEntry } from './DateControlRenderer.entry';
+import { entry as dateTimeControlRendererEntry } from './DateTimeControlRenderer.entry';
+import { entry as enumControlRendererEntry } from './EnumControlRenderer.entry';
+import { entry as integerControlRendererEntry } from './IntegerControlRenderer.entry';
+import { entry as multiStringControlRendererEntry } from './MultiStringControlRenderer.entry';
+import { entry as numberControlRendererEntry } from './NumberControlRenderer.entry';
+import { entry as oneOfEnumControlRendererEntry } from './OneOfEnumControlRenderer.entry';
+import { entry as oneOfRadioGroupControlRendererEntry } from './OneOfRadioGroupControlRenderer.entry';
+import { entry as passwordControlRendererEntry } from './PasswordControlRenderer.entry';
+import { entry as radioGroupControlRendererEntry } from './RadioGroupControlRenderer.entry';
+import { entry as sliderControlRendererEntry } from './SliderControlRenderer.entry';
+import { entry as stringControlRendererEntry } from './StringControlRenderer.entry';
+import { entry as stringMaskControlRendererEntry } from './StringMaskControlRenderer.entry';
+import { entry as timeControlRendererEntry } from './TimeControlRenderer.entry';
 
 export const controlRenderers = [
   anyOfStringOrEnumControlRendererEntry,

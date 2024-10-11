@@ -30,12 +30,7 @@
 </template>
 
 <script lang="ts">
-import {
-  type ControlElement,
-  type JsonFormsRendererRegistryEntry,
-  rankWith,
-  isRangeControl,
-} from '@jsonforms/core';
+import { type ControlElement } from '@jsonforms/core';
 import { defineComponent } from 'vue';
 import {
   rendererProps,
@@ -63,9 +58,4 @@ const controlRenderer = defineComponent({
 });
 
 export default controlRenderer;
-
-export const entry: JsonFormsRendererRegistryEntry = {
-  renderer: controlRenderer,
-  tester: rankWith(4, isRangeControl),
-};
 </script>

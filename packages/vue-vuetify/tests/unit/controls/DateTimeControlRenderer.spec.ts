@@ -1,8 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { clearAllIds } from '@jsonforms/core';
-import DateTimeControlRenderer, {
-  entry as dateTimeControlRendererEntry,
-} from '../../../src/controls/DateTimeControlRenderer.vue';
+import DateTimeControlRenderer from '../../../src/controls/DateTimeControlRenderer.vue';
+import { entry as dateTimeControlRendererEntry } from '../../../src/controls/DateTimeControlRenderer.entry';
 import { mountJsonForms } from '../util';
 
 describe('DateTimeControlRenderer.vue', () => {

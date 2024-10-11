@@ -134,11 +134,6 @@ const layoutRenderer = defineComponent({
 });
 
 export default layoutRenderer;
-
-export const entry: JsonFormsRendererRegistryEntry = {
-  renderer: layoutRenderer,
-  tester: rankWith(2, and(isCategorization, categorizationHasCategory)),
-};
 </script>
 
 <style scoped>

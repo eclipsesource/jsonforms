@@ -31,12 +31,7 @@
 </template>
 
 <script lang="ts">
-import {
-  isEnumControl,
-  rankWith,
-  type ControlElement,
-  type JsonFormsRendererRegistryEntry,
-} from '@jsonforms/core';
+import { type ControlElement } from '@jsonforms/core';
 import {
   rendererProps,
   useJsonFormsEnumControl,
@@ -68,9 +63,4 @@ const controlRenderer = defineComponent({
 });
 
 export default controlRenderer;
-
-export const entry: JsonFormsRendererRegistryEntry = {
-  renderer: controlRenderer,
-  tester: rankWith(2, isEnumControl),
-};
 </script>

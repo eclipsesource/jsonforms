@@ -1,8 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { clearAllIds, type Translator } from '@jsonforms/core';
-import OneOfControlRenderer, {
-  entry as oneOfControlRendererEntry,
-} from '../../../src/complex/OneOfRenderer.vue';
+import OneOfControlRenderer from '../../../src/complex/OneOfRenderer.vue';
+import { entry as oneOfControlRendererEntry } from '../../../src/complex/OneOfRenderer.entry';
 import { mountJsonForms } from '../util';
 
 describe('OneOfRenderer.vue', () => {

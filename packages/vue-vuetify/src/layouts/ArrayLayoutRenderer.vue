@@ -255,10 +255,7 @@ import {
   createDefaultValue,
   findUISchema,
   getControlPath,
-  isObjectArrayWithNesting,
-  rankWith,
   type ControlElement,
-  type JsonFormsRendererRegistryEntry,
   type JsonSchema,
   type UISchemaElement,
 } from '@jsonforms/core';
@@ -421,11 +418,6 @@ const controlRenderer = defineComponent({
 });
 
 export default controlRenderer;
-
-export const entry: JsonFormsRendererRegistryEntry = {
-  renderer: controlRenderer,
-  tester: rankWith(4, isObjectArrayWithNesting),
-};
 </script>
 
 <style scoped>

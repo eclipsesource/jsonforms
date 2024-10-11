@@ -1,8 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { clearAllIds } from '@jsonforms/core';
-import MultiStringControlRenderer, {
-  entry as multiStringControlRendererEntry,
-} from '../../../src/controls/MultiStringControlRenderer.vue';
+import MultiStringControlRenderer from '../../../src/controls/MultiStringControlRenderer.vue';
+import { entry as multiStringControlRendererEntry } from '../../../src/controls/MultiStringControlRenderer.entry';
 import { wait } from '../../../tests';
 import { mountJsonForms } from '../util';
 
