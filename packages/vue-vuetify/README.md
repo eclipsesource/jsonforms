@@ -125,7 +125,7 @@ createVuetify({
 
 If note done yet, please [install Vuetify for Vue](https://vuetifyjs.com/en/getting-started/installation/).
 
-For more information on how JSON Forms can be configured, please see the [README of `@jsonforms/vue`](https://github.com/eclipsesource/jsonforms/blob/master/packages/vue/vue/README.md).
+For more information on how JSON Forms can be configured, please see the [README of `@jsonforms/vue`](https://github.com/eclipsesource/jsonforms/blob/master/packages/vue/README.md).
 
 ## License
 
