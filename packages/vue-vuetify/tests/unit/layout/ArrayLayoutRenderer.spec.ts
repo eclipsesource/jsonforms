@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { clearAllIds, type Translator } from '@jsonforms/core';
+import { seedIds, type Translator } from '@jsonforms/core';
 import ArrayLayoutRenderer from '../../../src/layouts/ArrayLayoutRenderer.vue';
 import { entry as arrayLayoutRendererEntry } from '../../../src/layouts/ArrayLayoutRenderer.entry';
 import { mountJsonForms } from '../util';
@@ -28,7 +28,7 @@ describe('ArrayLayoutRenderer.vue', () => {
 
   beforeEach(() => {
     // clear all ids to guarantee that the snapshots will always be generated with the same ids
-    clearAllIds();
+    seedIds();
     wrapper = mountJsonForms(data, schema, renderers, uischema, undefined, {
       translate: ((id, defaultMessage) => {
         if (id.endsWith('addAriaLabel')) {
