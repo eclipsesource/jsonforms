@@ -58,7 +58,7 @@ export const MaterialArrayControlRenderer = (
   );
   const deleteCancel = useCallback(() => setOpen(false), [setOpen]);
   const deleteConfirm = useCallback(() => {
-    const p = path.substring(0, path.lastIndexOf('.'));
+    const p = path.substring(0, path.lastIndexOf('/'));
     removeItems(p, [rowData])();
     setOpen(false);
   }, [setOpen, path, rowData]);
