@@ -29,8 +29,7 @@ import {
   mapStateToDispatchCellProps,
   mapStateToOneOfEnumCellProps,
   StatePropsOfJsonFormsRenderer,
-  createId,
-  removeId,
+  nextId,
   mapStateToMultiEnumControlProps,
   mapDispatchToMultiEnumProps,
   mapStateToLabelProps,
@@ -197,7 +196,7 @@ export function useControl<
 
   onBeforeMount(() => {
     if (control.value.uischema.scope) {
-      id.value = createId(control.value.uischema.scope);
+      id.value = nextId() + control.value.uischema.scope;
     }
   });
 
@@ -205,17 +204,13 @@ export function useControl<
     () => props.schema,
     (newSchema, prevSchem) => {
       if (newSchema !== prevSchem && isControl(control.value.uischema)) {
-        if (id.value) {
-          removeId(id.value);
-        }
-        id.value = createId(control.value.uischema.scope);
+        id.value = nextId() + control.value.uischema.scope;
       }
     }
   );
 
   onUnmounted(() => {
     if (id.value) {
-      removeId(id.value);
       id.value = undefined;
     }
   });

@@ -64,7 +64,7 @@ import {
   mapStateToOneOfEnumControlProps,
   mapStateToOneOfProps,
 } from '../../src/mappers';
-import { clearAllIds, convertDateToString, createAjv } from '../../src/util';
+import { seedIds, convertDateToString, createAjv } from '../../src/util';
 import { rankWith } from '../../src';
 
 const middlewares: Redux.Middleware[] = [];
@@ -429,7 +429,7 @@ test('mapStateToControlProps - no duplicate error messages', (t) => {
 });
 
 test('mapStateToControlProps - id', (t) => {
-  clearAllIds();
+  seedIds();
   const ownProps = {
     uischema: coreUISchema,
     id: '#/properties/firstName',

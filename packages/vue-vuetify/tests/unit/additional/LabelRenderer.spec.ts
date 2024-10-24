@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { clearAllIds } from '@jsonforms/core';
+import { seedIds } from '@jsonforms/core';
 import LabelRenderer from '../../../src/additional/LabelRenderer.vue';
 import { entry as labelRendererEntry } from '../../../src/additional/LabelRenderer.entry';
 import { mountJsonForms } from '../util';
@@ -20,7 +20,7 @@ describe('LabelRenderer.vue', () => {
 
   beforeEach(() => {
     // clear all ids to guarantee that the snapshots will always be generated with the same ids
-    clearAllIds();
+    seedIds();
     wrapper = mountJsonForms(data, schema, renderers, uischema);
   });
 

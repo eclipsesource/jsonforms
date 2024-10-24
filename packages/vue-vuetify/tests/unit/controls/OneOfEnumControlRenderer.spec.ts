@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { clearAllIds } from '@jsonforms/core';
+import { seedIds } from '@jsonforms/core';
 import OneOfEnumControlRenderer from '../../../src/controls/OneOfEnumControlRenderer.vue';
 import { entry as oneOfEnumControlRendererEntry } from '../../../src/controls/OneOfEnumControlRenderer.entry';
 import { wait } from '../../../tests';
@@ -26,7 +26,7 @@ describe('OneOfEnumControlRenderer.vue', () => {
 
   beforeEach(() => {
     // clear all ids to guarantee that the snapshots will always be generated with the same ids
-    clearAllIds();
+    seedIds();
     wrapper = mountJsonForms(data, schema, renderers, uischema);
   });
 

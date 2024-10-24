@@ -23,30 +23,21 @@
   THE SOFTWARE.
 */
 
-const usedIds: Set<string> = new Set<string>();
+let idNamespace: string;
+let idIndex: number;
 
-const makeId = (idBase: string, iteration: number) =>
-  iteration <= 1 ? idBase : idBase + iteration.toString();
-
-const isUniqueId = (idBase: string, iteration: number) => {
-  const newID = makeId(idBase, iteration);
-  return !usedIds.has(newID);
+export const seedIds = (namespace = 'jsonforms', index = 0) => {
+  idNamespace = namespace;
+  idIndex = index;
 };
 
-export const createId = (proposedId: string) => {
-  if (proposedId === undefined) {
-    // failsafe to avoid endless loops in error cases
-    proposedId = 'undefined';
-  }
-  let tries = 0;
-  while (!isUniqueId(proposedId, tries)) {
-    tries++;
-  }
-  const newID = makeId(proposedId, tries);
-  usedIds.add(newID);
-  return newID;
-};
+// This has a salt in the unlikely case that someone bundled multiple instances
+// of this module on a single site.
+seedIds(`jsonforms${Math.random().toString(32).slice(2)}`);
 
-export const removeId = (id: string) => usedIds.delete(id);
-
-export const clearAllIds = () => usedIds.clear();
+/**
+ * Generate an ID that's unique within the current execution context. This is
+ * intended for HTML ID generation. Does not guarantee stability across SSR
+ * boundaries!
+ */
+export const nextId = () => `:${idNamespace}:${(idIndex++).toString(36)}:`;

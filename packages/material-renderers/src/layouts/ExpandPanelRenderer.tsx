@@ -5,8 +5,6 @@ import React, {
   Fragment,
   ReducerAction,
   useMemo,
-  useState,
-  useEffect,
   useCallback,
 } from 'react';
 import {
@@ -25,8 +23,7 @@ import {
   update,
   JsonFormsCellRendererRegistryEntry,
   JsonFormsUISchemaRegistryEntry,
-  createId,
-  removeId,
+  nextId,
   ArrayTranslations,
   computeChildLabel,
   UpdateArrayContext,
@@ -88,13 +85,8 @@ export interface ExpandPanelProps
     DispatchPropsOfExpandPanel {}
 
 const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
-  const [labelHtmlId] = useState<string>(createId('expand-panel'));
-
-  useEffect(() => {
-    return () => {
-      removeId(labelHtmlId);
-    };
-  }, [labelHtmlId]);
+  // TODO: Should probably use React.useId() when support for React < 18 is dropped.
+  const labelHtmlId = useMemo(() => nextId() + 'expand-panel', []);
 
   const {
     enabled,

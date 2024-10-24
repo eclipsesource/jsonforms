@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { clearAllIds } from '@jsonforms/core';
+import { seedIds } from '@jsonforms/core';
 import DateControlRenderer from '../../../src/controls/DateControlRenderer.vue';
 import { entry as dateControlRendererEntry } from '../../../src/controls/DateControlRenderer.entry';
 import { mountJsonForms } from '../util';
@@ -27,7 +27,7 @@ describe('DateControlRenderer.vue', () => {
 
   beforeEach(() => {
     // clear all ids to guarantee that the snapshots will always be generated with the same ids
-    clearAllIds();
+    seedIds();
     wrapper = mountJsonForms(data, schema, renderers, uischema);
   });
 

@@ -25,7 +25,7 @@
 import test from 'ava';
 import * as _ from 'lodash';
 import * as Redux from 'redux';
-import { clearAllIds, createAjv, validate } from '../../src/util';
+import { seedIds, createAjv, validate } from '../../src/util';
 import { UPDATE_DATA, UpdateAction } from '../../src/actions';
 import configureStore from 'redux-mock-store';
 import { JsonFormsState } from '../../src/store';
@@ -263,7 +263,7 @@ test('mapStateToCellProps - data', (t) => {
 });
 
 test('mapStateToCellProps - id', (t) => {
-  clearAllIds();
+  seedIds();
   const ownProps = {
     uischema: coreUISchema,
     id: '#/properties/firstName',

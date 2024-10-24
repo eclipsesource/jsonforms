@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { clearAllIds } from '@jsonforms/core';
+import { seedIds } from '@jsonforms/core';
 import StringControlRenderer from '../../../src/controls/StringControlRenderer.vue';
 import { entry as stringControlRendererEntry } from '../../../src/controls/StringControlRenderer.entry';
 import { wait } from '../../../tests';
@@ -25,7 +25,7 @@ describe('StringControlRenderer.vue', () => {
 
   beforeEach(() => {
     // clear all ids to guarantee that the snapshots will always be generated with the same ids
-    clearAllIds();
+    seedIds();
     wrapper = mountJsonForms(data, schema, renderers, uischema);
   });
 
@@ -91,7 +91,7 @@ describe('StringControlRenderer.vue with suggestion', () => {
 
   beforeEach(() => {
     // clear all ids to guarantee that the snapshots will always be generated with the same ids
-    clearAllIds();
+    seedIds();
     wrapper = mountJsonForms(data, schema, renderers, uischema);
   });
 
