@@ -191,7 +191,7 @@ describe('Boolean cell', () => {
     const core = initCore(fixture.schema, uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core }}>
-        <BooleanCell schema={fixture.schema} uischema={uischema} path='foo' />
+        <BooleanCell schema={fixture.schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>,
       // Attach to body to get focus to work with JSDom
       { attachTo: document.body }
@@ -211,7 +211,7 @@ describe('Boolean cell', () => {
     const core = initCore(fixture.schema, uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core }}>
-        <BooleanCell schema={fixture.schema} uischema={uischema} path='foo' />
+        <BooleanCell schema={fixture.schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode() as HTMLInputElement;
@@ -226,7 +226,7 @@ describe('Boolean cell', () => {
     const core = initCore(fixture.schema, uischema, fixture.data);
     wrapper = mount(
       <JsonFormsStateProvider initState={{ renderers: vanillaRenderers, core }}>
-        <BooleanCell schema={fixture.schema} uischema={uischema} path='foo' />
+        <BooleanCell schema={fixture.schema} uischema={uischema} path='/foo' />
       </JsonFormsStateProvider>
     );
     const input = wrapper.find('input').getDOMNode();
@@ -240,7 +240,7 @@ describe('Boolean cell', () => {
         <BooleanCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -257,7 +257,7 @@ describe('Boolean cell', () => {
         <BooleanCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -282,7 +282,7 @@ describe('Boolean cell', () => {
         <BooleanCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -308,7 +308,7 @@ describe('Boolean cell', () => {
         <BooleanCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -327,7 +327,7 @@ describe('Boolean cell', () => {
         <BooleanCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -345,7 +345,7 @@ describe('Boolean cell', () => {
         <BooleanCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -363,7 +363,7 @@ describe('Boolean cell', () => {
         <BooleanCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -381,7 +381,7 @@ describe('Boolean cell', () => {
         <BooleanCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -399,7 +399,7 @@ describe('Boolean cell', () => {
         <BooleanCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -432,7 +432,7 @@ describe('Boolean cell', () => {
         <BooleanCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );
@@ -447,7 +447,7 @@ describe('Boolean cell', () => {
         <BooleanCell
           schema={fixture.schema}
           uischema={fixture.uischema}
-          path='foo'
+          path='/foo'
         />
       </JsonFormsStateProvider>
     );

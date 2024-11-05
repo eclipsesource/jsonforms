@@ -101,12 +101,7 @@ export const composeWithUi = (scopableUi: Scopable, path: string): string => {
   }
 
   const segments = toDataPathSegments(scopableUi.scope);
-
-  if (isEmpty(segments)) {
-    return path ?? '';
-  }
-
-  return compose(path, segments.join('.'));
+  return compose(path, ...segments);
 };
 
 export const isInternationalized = (

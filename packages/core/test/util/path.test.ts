@@ -24,7 +24,7 @@
 */
 import test from 'ava';
 import { JsonSchema } from '../../src/models';
-import { Resolve, toDataPath } from '../../src';
+import { compose, Resolve, toDataPath } from '../../src/util';
 
 test('resolve ', (t) => {
   const schema: JsonSchema = {
@@ -41,60 +41,60 @@ test('resolve ', (t) => {
 });
 
 test('toDataPath ', (t) => {
-  t.is(toDataPath('#/properties/foo/properties/bar'), 'foo.bar');
+  t.is(toDataPath('#/properties/foo/properties/bar'), '/foo/bar');
 });
 test('toDataPath replace anyOf', (t) => {
   t.is(
     toDataPath('/anyOf/11/properties/foo/anyOf/11/properties/bar'),
-    'foo.bar'
+    '/foo/bar'
   );
 });
 test('toDataPath replace anyOf in combination with conditional schema compositions', (t) => {
-  t.is(toDataPath('/anyOf/1/then/properties/foo'), 'foo');
+  t.is(toDataPath('/anyOf/1/then/properties/foo'), '/foo');
 });
 test('toDataPath replace multiple directly nested anyOf in combination with conditional schema compositions', (t) => {
-  t.is(toDataPath('/anyOf/1/then/anyOf/0/then/properties/foo'), 'foo');
+  t.is(toDataPath('/anyOf/1/then/anyOf/0/then/properties/foo'), '/foo');
 });
 test('toDataPath replace multiple nested properties with anyOf in combination with conditional schema compositions', (t) => {
   t.is(
     toDataPath('/anyOf/1/properties/foo/anyOf/0/then/properties/bar'),
-    'foo.bar'
+    '/foo/bar'
   );
 });
 test('toDataPath replace allOf', (t) => {
   t.is(
     toDataPath('/allOf/11/properties/foo/allOf/11/properties/bar'),
-    'foo.bar'
+    '/foo/bar'
   );
 });
 test('toDataPath replace allOf in combination with conditional schema compositions', (t) => {
-  t.is(toDataPath('/allOf/1/then/properties/foo'), 'foo');
+  t.is(toDataPath('/allOf/1/then/properties/foo'), '/foo');
 });
 test('toDataPath replace multiple directly nested allOf in combination with conditional schema compositions', (t) => {
-  t.is(toDataPath('/allOf/1/then/allOf/0/then/properties/foo'), 'foo');
+  t.is(toDataPath('/allOf/1/then/allOf/0/then/properties/foo'), '/foo');
 });
 test('toDataPath replace multiple nested properties with allOf in combination with conditional schema compositions', (t) => {
   t.is(
     toDataPath('/allOf/1/properties/foo/allOf/0/then/properties/bar'),
-    'foo.bar'
+    '/foo/bar'
   );
 });
 test('toDataPath replace oneOf', (t) => {
   t.is(
     toDataPath('/oneOf/11/properties/foo/oneOf/11/properties/bar'),
-    'foo.bar'
+    '/foo/bar'
   );
 });
 test('toDataPath replace oneOf in combination with conditional schema compositions', (t) => {
-  t.is(toDataPath('/oneOf/1/then/properties/foo'), 'foo');
+  t.is(toDataPath('/oneOf/1/then/properties/foo'), '/foo');
 });
 test('toDataPath replace multiple directly nested oneOf in combination with conditional schema compositions', (t) => {
-  t.is(toDataPath('/oneOf/1/then/oneOf/0/then/properties/foo'), 'foo');
+  t.is(toDataPath('/oneOf/1/then/oneOf/0/then/properties/foo'), '/foo');
 });
 test('toDataPath replace multiple nested properties with oneOf in combination with conditional schema compositions', (t) => {
   t.is(
     toDataPath('/oneOf/1/properties/foo/oneOf/0/then/properties/bar'),
-    'foo.bar'
+    '/foo/bar'
   );
 });
 test('toDataPath replace all combinators', (t) => {
@@ -102,38 +102,38 @@ test('toDataPath replace all combinators', (t) => {
     toDataPath(
       '/oneOf/1/properties/foo/anyOf/1/properties/bar/allOf/1/properties/foobar'
     ),
-    'foo.bar.foobar'
+    '/foo/bar/foobar'
   );
 });
 test('toDataPath use of keywords', (t) => {
-  t.is(toDataPath('#/properties/properties'), 'properties');
+  t.is(toDataPath('#/properties/properties'), '/properties');
 });
 test('toDataPath use of encoded paths', (t) => {
   const fooBar = encodeURIComponent('foo.bar');
-  t.is(toDataPath(`#/properties/${fooBar}`), `${fooBar}`);
+  t.is(toDataPath(`#/properties/${fooBar}`), `/${fooBar}`);
 });
 test('toDataPath relative with /', (t) => {
-  t.is(toDataPath('/properties/foo/properties/bar'), 'foo.bar');
+  t.is(toDataPath('/properties/foo/properties/bar'), '/foo/bar');
 });
 test('toDataPath use of keywords relative with /', (t) => {
-  t.is(toDataPath('/properties/properties'), 'properties');
+  t.is(toDataPath('/properties/properties'), '/properties');
 });
 test('toDataPath use of encoded paths relative with /', (t) => {
   const fooBar = encodeURIComponent('foo/bar');
-  t.is(toDataPath(`/properties/${fooBar}`), `${fooBar}`);
+  t.is(toDataPath(`/properties/${fooBar}`), `/${fooBar}`);
 });
 test('toDataPath relative without /', (t) => {
-  t.is(toDataPath('properties/foo/properties/bar'), 'foo.bar');
+  t.is(toDataPath('properties/foo/properties/bar'), '/foo/bar');
 });
 test('toDataPath use of keywords relative without /', (t) => {
-  t.is(toDataPath('properties/properties'), 'properties');
+  t.is(toDataPath('properties/properties'), '/properties');
 });
 test('toDataPath use of encoded paths relative without /', (t) => {
   const fooBar = encodeURIComponent('foo/bar');
-  t.is(toDataPath(`properties/${fooBar}`), `${fooBar}`);
+  t.is(toDataPath(`properties/${fooBar}`), `/${fooBar}`);
 });
 test('toDataPath use of encoded special character in pathname', (t) => {
-  t.is(toDataPath('properties/foo~0bar~1baz'), 'foo~bar/baz');
+  t.is(toDataPath('properties/foo~0bar~1baz'), '/foo~bar/baz');
 });
 test('resolve instance', (t) => {
   const instance = { foo: 123 };
@@ -268,4 +268,64 @@ test('resolve $ref complicated', (t) => {
       },
     },
   });
+});
+
+test('compose - encodes segments', (t) => {
+  const result = compose('/foo', '/bar', '~~prop');
+  t.is(result, '/foo/~1bar/~0~0prop');
+});
+
+test('compose - does not re-encode initial pointer', (t) => {
+  const result = compose('/f~0oo', 'bar');
+  t.is(result, '/f~0oo/bar');
+});
+
+/*
+ * Unexpected edge case but the RFC6901 standard defines that empty segments point to a property with key `''`.
+ * For instance, '/' points to a property with key `''` in the root object.
+ */
+test('compose - handles empty string segments', (t) => {
+  const result = compose('/foo', '', 'bar');
+  t.is(result, '/foo//bar');
+});
+
+test('compose - returns initial pointer for no given segments', (t) => {
+  const result = compose('/foo');
+  t.is(result, '/foo');
+});
+
+test("compose - accepts initial pointer starting with URI fragment '#'", (t) => {
+  const result = compose('#/foo', 'bar');
+  t.is(result, '#/foo/bar');
+});
+
+test('compose - handles root json pointer', (t) => {
+  const result = compose('', 'foo');
+  t.is(result, '/foo');
+});
+
+test('compose - handles numbers', (t) => {
+  const result = compose('/foo', 0, 'bar');
+  t.is(result, '/foo/0/bar');
+});
+
+/*
+ * Unexpected edge case but the RFC6901 standard defines that `/` points to a property with key `''`.
+ * To point to the root object, the empty string `''` is used.
+ */
+test('compose - handles json pointer pointing to property with empty string as key', (t) => {
+  const result = compose('/', 'foo');
+  t.is(result, '//foo');
+});
+
+/** undefined JSON pointers are not valid but we still expect compose to handle them gracefully. */
+test('compose - handles undefined root json pointer', (t) => {
+  const result = compose(undefined as any, 'foo');
+  t.is(result, '/foo');
+});
+
+/** undefined segment elements are not valid but we still expect compose to handle them gracefully. */
+test('compose - ignores undefined segments', (t) => {
+  const result = compose('/foo', undefined as any, 'bar');
+  t.is(result, '/foo/bar');
 });

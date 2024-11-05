@@ -80,7 +80,7 @@ export const MaterialEnumArrayRenderer = ({
       </FormLabel>
       <FormGroup row>
         {options.map((option: any, index: number) => {
-          const optionPath = Paths.compose(path, `${index}`);
+          const optionPath = Paths.compose(path, index);
           const checkboxValue = data?.includes(option.value)
             ? option.value
             : undefined;

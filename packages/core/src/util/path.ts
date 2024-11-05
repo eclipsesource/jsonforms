@@ -23,29 +23,48 @@
   THE SOFTWARE.
 */
 
-import isEmpty from 'lodash/isEmpty';
 import range from 'lodash/range';
 
-export const compose = (path1: string, path2: string) => {
-  let p1 = path1;
-  if (!isEmpty(path1) && !isEmpty(path2) && !path2.startsWith('[')) {
-    p1 = path1 + '.';
-  }
+/**
+ * Composes a valid JSON pointer with an arbitrary number of unencoded segments.
+ * This method encodes the segments to escape JSON pointer's special characters.
+ * `undefined` segments are skipped.
+ *
+ * Example:
+ * ```ts
+ * const composed = compose('/path/to/object', '~foo', 'b/ar');
+ * // compose === '/path/to/object/~0foo/b~1ar'
+ * ```
+ *
+ * The segments are appended in order to the JSON pointer and the special characters `~` and `/` are automatically encoded.
+ *
+ * @param {string} pointer Initial valid JSON pointer
+ * @param {...(string | number)[]} segments **unencoded** path segments to append to the JSON pointer. May also be a number in case of indices.
+ * @returns {string} resulting JSON pointer
+ */
+export const compose = (
+  pointer: string,
+  ...segments: (string | number)[]
+): string => {
+  // Remove undefined segments and encode string segments. Numbers don't need encoding.
+  // Only skip undefined segments, as empty string segments are allowed
+  // and reference a property that has the empty string as property name.
+  const sanitizedSegments = segments
+    .filter((s) => s !== undefined)
+    .map((s) => (typeof s === 'string' ? encode(s) : s.toString()));
 
-  if (isEmpty(p1)) {
-    return path2;
-  } else if (isEmpty(path2)) {
-    return p1;
-  } else {
-    return `${p1}${path2}`;
-  }
+  return sanitizedSegments.reduce(
+    (currentPointer, segment) => `${currentPointer}/${segment}`,
+    pointer ?? '' // Treat undefined and null the same as the empty string (root pointer)
+  );
 };
 
 export { compose as composePaths };
 
 /**
  * Convert a schema path (i.e. JSON pointer) to an array by splitting
- * at the '/' character and removing all schema-specific keywords.
+ * at the '/' character, removing all schema-specific keywords,
+ * and decoding each segment to remove JSON pointer specific escaping.
  *
  * The returned value can be used to de-reference a root object by folding over it
  * and de-referencing the single segments to obtain a new object.
@@ -75,13 +94,25 @@ export const toDataPathSegments = (schemaPath: string): string[] => {
  * Data paths can be used in field change event handlers like handleChange.
  *
  * @example
- * toDataPath('#/properties/foo/properties/bar') === 'foo.bar')
+ * toDataPath('#/properties/foo/properties/bar') === '/foo/bar')
  *
  * @param {string} schemaPath the schema path to be converted
  * @returns {string} the data path
  */
 export const toDataPath = (schemaPath: string): string => {
-  return toDataPathSegments(schemaPath).join('.');
+  return '/' + toDataPathSegments(schemaPath).join('/');
+};
+
+export const toLodashSegments = (jsonPointer: string): string[] => {
+  let path = jsonPointer;
+  if (jsonPointer && jsonPointer.startsWith('/')) {
+    path = jsonPointer.substring(1);
+  }
+  return path ? path.split('/').map(decode) : [];
+};
+
+export const toLodashPath = (jsonPointer: string) => {
+  return toLodashSegments(jsonPointer).join('.');
 };
 
 /**

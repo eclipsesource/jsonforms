@@ -13,6 +13,7 @@ import {
   formatErrorMessage,
   getControlPath,
   isInternationalized,
+  toLodashPath,
 } from '../util';
 
 export const getI18nKeyPrefixBySchema = (
@@ -31,7 +32,7 @@ export const getI18nKeyPrefixBySchema = (
  */
 export const transformPathToI18nPrefix = (path: string): string => {
   return (
-    path
+    toLodashPath(path)
       ?.split('.')
       .filter((segment) => !/^\d+$/.test(segment))
       .join('.') || 'root'

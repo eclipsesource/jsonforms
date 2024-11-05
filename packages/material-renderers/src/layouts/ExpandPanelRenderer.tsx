@@ -357,7 +357,7 @@ export const withContextToExpandPanelProps = (
       // eslint-disable-next-line react/prop-types
       uischemas,
     } = props;
-    const childPath = composePaths(path, `${index}`);
+    const childPath = composePaths(path, index);
 
     const childLabel = useMemo(() => {
       return computeChildLabel(

@@ -229,5 +229,12 @@ test('resolveData - resolves data with % characters', (t) => {
   const data = {
     'foo%': '123',
   };
-  t.deepEqual(resolveData(data, 'foo%'), '123');
+  t.deepEqual(resolveData(data, '/foo%'), '123');
+});
+
+test('resolveData - resolves data for path without leading #', (t) => {
+  const data = {
+    foo: '123',
+  };
+  t.deepEqual(resolveData(data, '/foo'), '123');
 });
