@@ -811,7 +811,7 @@ test('mapStateToLayoutProps - visible via state with path from ownProps ', (t) =
   t.true(props.visible);
 });
 
-test('mapStateToArrayControlProps - should include minItems in array layout props', (t) => {
+test('mapStateToArrayControlProps - should include minItems in array control props', (t) => {
   const schema: JsonSchema = {
     type: 'array',
     minItems: 42,
@@ -850,7 +850,7 @@ test('mapStateToArrayControlProps - should include minItems in array layout prop
   t.is(props.minItems, 42);
 });
 
-test('mapStateToArrayControlProps - should include maxItems in array layout props', (t) => {
+test('mapStateToArrayControlProps - should include maxItems in array control props', (t) => {
   const schema: JsonSchema = {
     type: 'array',
     maxItems: 42,
