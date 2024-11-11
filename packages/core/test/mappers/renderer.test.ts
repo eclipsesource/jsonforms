@@ -54,6 +54,7 @@ import {
   mapDispatchToControlProps,
   mapDispatchToMultiEnumProps,
   mapStateToAnyOfProps,
+  mapStateToArrayControlProps,
   mapStateToArrayLayoutProps,
   mapStateToControlProps,
   mapStateToEnumControlProps,
@@ -810,6 +811,84 @@ test('mapStateToLayoutProps - visible via state with path from ownProps ', (t) =
   t.true(props.visible);
 });
 
+test('mapStateToArrayControlProps - should include minItems in array layout props', (t) => {
+  const schema: JsonSchema = {
+    type: 'array',
+    minItems: 42,
+    items: {
+      type: 'object',
+      properties: {
+        message: {
+          type: 'string',
+          default: 'foo',
+        },
+      },
+    },
+  };
+
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#',
+  };
+
+  const state = {
+    jsonforms: {
+      core: {
+        schema,
+        data: {},
+        uischema,
+        errors: [] as ErrorObject[],
+      },
+    },
+  };
+
+  const ownProps = {
+    uischema,
+  };
+
+  const props = mapStateToArrayControlProps(state, ownProps);
+  t.is(props.minItems, 42);
+});
+
+test('mapStateToArrayControlProps - should include maxItems in array layout props', (t) => {
+  const schema: JsonSchema = {
+    type: 'array',
+    maxItems: 42,
+    items: {
+      type: 'object',
+      properties: {
+        message: {
+          type: 'string',
+          default: 'foo',
+        },
+      },
+    },
+  };
+
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#',
+  };
+
+  const state = {
+    jsonforms: {
+      core: {
+        schema,
+        data: {},
+        uischema,
+        errors: [] as ErrorObject[],
+      },
+    },
+  };
+
+  const ownProps = {
+    uischema,
+  };
+
+  const props = mapStateToArrayControlProps(state, ownProps);
+  t.is(props.maxItems, 42);
+});
+
 test('mapStateToArrayLayoutProps - should include minItems in array layout props', (t) => {
   const schema: JsonSchema = {
     type: 'array',
@@ -847,6 +926,45 @@ test('mapStateToArrayLayoutProps - should include minItems in array layout props
 
   const props = mapStateToArrayLayoutProps(state, ownProps);
   t.is(props.minItems, 42);
+});
+
+test('mapStateToArrayLayoutProps - should include maxItems in array layout props', (t) => {
+  const schema: JsonSchema = {
+    type: 'array',
+    maxItems: 42,
+    items: {
+      type: 'object',
+      properties: {
+        message: {
+          type: 'string',
+          default: 'foo',
+        },
+      },
+    },
+  };
+
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#',
+  };
+
+  const state = {
+    jsonforms: {
+      core: {
+        schema,
+        data: {},
+        uischema,
+        errors: [] as ErrorObject[],
+      },
+    },
+  };
+
+  const ownProps = {
+    uischema,
+  };
+
+  const props = mapStateToArrayLayoutProps(state, ownProps);
+  t.is(props.maxItems, 42);
 });
 
 test('mapStateToLayoutProps should return renderers prop via ownProps', (t) => {
