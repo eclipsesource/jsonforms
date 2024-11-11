@@ -786,6 +786,8 @@ export interface ControlWithDetailProps
 export interface StatePropsOfArrayControl
   extends StatePropsOfControlWithDetail {
   childErrors?: ErrorObject[];
+  minItems?: number;
+  maxItems?: number;
 }
 
 /**
@@ -814,6 +816,8 @@ export const mapStateToArrayControlProps = (
     childErrors,
     renderers: ownProps.renderers || getRenderers(state),
     cells: ownProps.cells || getCells(state),
+    minItems: schema.minItems,
+    maxItems: schema.maxItems,
   };
 };
 
@@ -1140,6 +1144,7 @@ export const mapStateToOneOfProps = (
 export interface StatePropsOfArrayLayout extends StatePropsOfControlWithDetail {
   data: number;
   minItems?: number;
+  maxItems?: number;
   disableRemove?: boolean;
   disableAdd?: boolean;
 }
@@ -1182,6 +1187,7 @@ export const mapStateToArrayLayoutProps = (
     data: props.data ? props.data.length : 0,
     errors: allErrors,
     minItems: schema.minItems,
+    maxItems: schema.maxItems,
   };
 };
 
