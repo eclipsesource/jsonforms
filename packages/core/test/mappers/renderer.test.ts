@@ -847,7 +847,7 @@ test('mapStateToArrayControlProps - should include minItems in array control pro
   };
 
   const props = mapStateToArrayControlProps(state, ownProps);
-  t.is(props.minItems, 42);
+  t.is(props.arraySchema.minItems, 42);
 });
 
 test('mapStateToArrayControlProps - should include maxItems in array control props', (t) => {
@@ -886,7 +886,7 @@ test('mapStateToArrayControlProps - should include maxItems in array control pro
   };
 
   const props = mapStateToArrayControlProps(state, ownProps);
-  t.is(props.maxItems, 42);
+  t.is(props.arraySchema.maxItems, 42);
 });
 
 test('mapStateToArrayLayoutProps - should include minItems in array layout props', (t) => {
@@ -925,7 +925,7 @@ test('mapStateToArrayLayoutProps - should include minItems in array layout props
   };
 
   const props = mapStateToArrayLayoutProps(state, ownProps);
-  t.is(props.minItems, 42);
+  t.is(props.arraySchema.minItems, 42);
 });
 
 test('mapStateToArrayLayoutProps - should include maxItems in array layout props', (t) => {
@@ -964,7 +964,7 @@ test('mapStateToArrayLayoutProps - should include maxItems in array layout props
   };
 
   const props = mapStateToArrayLayoutProps(state, ownProps);
-  t.is(props.maxItems, 42);
+  t.is(props.arraySchema.maxItems, 42);
 });
 
 test('mapStateToLayoutProps should return renderers prop via ownProps', (t) => {
