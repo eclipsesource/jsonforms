@@ -29,15 +29,23 @@ export const schema = {
   properties: {
     username: {
       type: 'string',
+      title: 'username',
       description: 'Login Name',
     },
     password: {
       type: 'string',
+      title: 'password',
       format: 'password',
       description: 'Login password',
     },
   },
   required: ['username', 'password'],
+  errorMessage: {
+    required: {
+      username: 'username is required',
+      password: 'password is required',
+    },
+  },
 };
 
 export const uischema = {

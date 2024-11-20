@@ -85,6 +85,7 @@
     "@vue/test-utils": "^2.4.5",
     "@vue/tsconfig": "^0.5.1",
     "ajv": "^8.6.1",
+    "ajv-errors": "^3.0.0",
     "ajv-keywords": "^5.1.0",
     "core-js": "^3.9.1",
     "cross-env": "^7.0.2",

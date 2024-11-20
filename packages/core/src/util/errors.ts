@@ -63,6 +63,31 @@ export const getControlPath = (error: ErrorObject) => {
   return controlPath;
 };
 
+export const unwrapErrorMessageErrors = (
+  errors: ErrorObject[]
+): ErrorObject[] => {
+  return (
+    errors
+      // filter out any errors that are marked as processed by ajv-errors
+      .filter((error) => (error as any)['emUsed'] !== true)
+      .map((error) => {
+        if (
+          error.keyword === 'errorMessage' &&
+          Array.isArray(error.params?.errors)
+        ) {
+          // error created by the ajv-errors, replace the error with the actual errors and change the error message
+          return error.params.errors.map((paramError) => ({
+            ...paramError,
+            message: error.message,
+          }));
+        }
+        // otherwise just return the current error that is not related to ajv-errors
+        return error;
+      })
+      .flat()
+  );
+};
+
 export const errorsAt =
   (
     instancePath: string,
@@ -70,6 +95,9 @@ export const errorsAt =
     matchPath: (path: string) => boolean
   ) =>
   (errors: ErrorObject[]): ErrorObject[] => {
+    // support ajv-errors
+    errors = unwrapErrorMessageErrors(errors);
+
     // Get data paths of oneOf and anyOf errors to later determine whether an error occurred inside a subschema of oneOf or anyOf.
     const combinatorPaths = filter(
       errors,
