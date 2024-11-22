@@ -219,7 +219,7 @@ importers:
         version: 19.0.0(@angular/compiler@19.0.0)(typescript@5.5.4)
       '@angular/core':
         specifier: ^18.0.0 || ^19.0.0
-        version: 18.2.12(rxjs@6.6.7)(zone.js@0.14.5)
+        version: 18.2.12(rxjs@6.6.7)(zone.js@0.15.0)
       '@angular/forms':
         specifier: ^18.0.0 || ^19.0.0
         version: 19.0.0(@angular/common@19.0.0)(@angular/core@18.2.12)(@angular/platform-browser@19.0.0)(rxjs@6.6.7)
@@ -362,8 +362,8 @@ importers:
         specifier: ^17.7.2
         version: 17.7.2
       zone.js:
-        specifier: ~0.14.0
-        version: 0.14.5
+        specifier: ~0.15.0
+        version: 0.15.0
 
   packages/core:
     dependencies:
@@ -1674,7 +1674,7 @@ packages:
     peerDependencies:
       '@angular/core': 19.0.0
     dependencies:
-      '@angular/core': 18.2.12(rxjs@6.6.7)(zone.js@0.14.5)
+      '@angular/core': 18.2.12(rxjs@6.6.7)(zone.js@0.15.0)
       tslib: 2.6.2
     dev: true
 
@@ -1752,7 +1752,7 @@ packages:
       rxjs: ^6.5.3 || ^7.4.0
     dependencies:
       '@angular/common': 19.0.0(@angular/core@18.2.12)(rxjs@6.6.7)
-      '@angular/core': 18.2.12(rxjs@6.6.7)(zone.js@0.14.5)
+      '@angular/core': 18.2.12(rxjs@6.6.7)(zone.js@0.15.0)
       rxjs: 6.6.7
       tslib: 2.6.2
     optionalDependencies:
@@ -1818,7 +1818,7 @@ packages:
       zone.js: 0.14.10
     dev: true
 
-  /@angular/core@18.2.12(rxjs@6.6.7)(zone.js@0.14.5):
+  /@angular/core@18.2.12(rxjs@6.6.7)(zone.js@0.15.0):
     resolution: {integrity: sha512-wCf/OObwS6bpM60rk6bpMpCRGp0DlMLB1WNAMtfcaPNyqimVV5Bm98mWRhkOuRyvU3fU7iHhM/10ePVaoyu9+A==}
     engines: {node: ^18.19.1 || ^20.11.1 || >=22.0.0}
     peerDependencies:
@@ -1827,7 +1827,7 @@ packages:
     dependencies:
       rxjs: 6.6.7
       tslib: 2.6.2
-      zone.js: 0.14.5
+      zone.js: 0.15.0
     dev: true
 
   /@angular/forms@19.0.0(@angular/common@19.0.0)(@angular/core@18.2.12)(@angular/platform-browser@19.0.0)(rxjs@6.6.7):
@@ -1860,7 +1860,7 @@ packages:
       '@angular/animations': 19.0.0(@angular/core@18.2.12)
       '@angular/cdk': 19.0.0(@angular/common@19.0.0)(@angular/core@18.2.12)(rxjs@6.6.7)
       '@angular/common': 19.0.0(@angular/core@18.2.12)(rxjs@6.6.7)
-      '@angular/core': 18.2.12(rxjs@6.6.7)(zone.js@0.14.5)
+      '@angular/core': 18.2.12(rxjs@6.6.7)(zone.js@0.15.0)
       '@angular/forms': 19.0.0(@angular/common@19.0.0)(@angular/core@18.2.12)(@angular/platform-browser@19.0.0)(rxjs@6.6.7)
       '@angular/platform-browser': 19.0.0(@angular/animations@19.0.0)(@angular/common@19.0.0)(@angular/core@18.2.12)
       rxjs: 6.6.7
@@ -1878,7 +1878,7 @@ packages:
     dependencies:
       '@angular/common': 19.0.0(@angular/core@18.2.12)(rxjs@6.6.7)
       '@angular/compiler': 19.0.0(@angular/core@18.2.12)
-      '@angular/core': 18.2.12(rxjs@6.6.7)(zone.js@0.14.5)
+      '@angular/core': 18.2.12(rxjs@6.6.7)(zone.js@0.15.0)
       '@angular/platform-browser': 19.0.0(@angular/animations@19.0.0)(@angular/common@19.0.0)(@angular/core@18.2.12)
       tslib: 2.6.2
     dev: true
@@ -1896,7 +1896,7 @@ packages:
     dependencies:
       '@angular/animations': 19.0.0(@angular/core@18.2.12)
       '@angular/common': 19.0.0(@angular/core@18.2.12)(rxjs@6.6.7)
-      '@angular/core': 18.2.12(rxjs@6.6.7)(zone.js@0.14.5)
+      '@angular/core': 18.2.12(rxjs@6.6.7)(zone.js@0.15.0)
       tslib: 2.6.2
     dev: true
 
@@ -1926,7 +1926,7 @@ packages:
       rxjs: ^6.5.3 || ^7.4.0
     dependencies:
       '@angular/common': 19.0.0(@angular/core@18.2.12)(rxjs@6.6.7)
-      '@angular/core': 18.2.12(rxjs@6.6.7)(zone.js@0.14.5)
+      '@angular/core': 18.2.12(rxjs@6.6.7)(zone.js@0.15.0)
       '@angular/platform-browser': 19.0.0(@angular/animations@19.0.0)(@angular/common@19.0.0)(@angular/core@18.2.12)
       rxjs: 6.6.7
       tslib: 2.6.2
@@ -27888,8 +27888,6 @@ packages:
     resolution: {integrity: sha512-YGAhaO7J5ywOXW6InXNlLmfU194F8lVgu7bRntUF3TiG8Y3nBK0x1UJJuHUP/e8IyihkjCYqhCScpSwnlaSRkQ==}
     dev: true
 
-  /zone.js@0.14.5:
-    resolution: {integrity: sha512-9XYWZzY6PhHOSdkYryNcMm7L8EK7a4q+GbTvxbIA2a9lMdRUpGuyaYvLDcg8D6bdn+JomSsbPcilVKg6SmUx6w==}
-    dependencies:
-      tslib: 2.6.2
+  /zone.js@0.15.0:
+    resolution: {integrity: sha512-9oxn0IIjbCZkJ67L+LkhYWRyAy7axphb3VgE2MBDlOqnmHMPWGYMxJxBYFueFq/JGY2GMwS0rU+UCLunEmy5UA==}
     dev: true
