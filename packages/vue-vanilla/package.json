@@ -88,7 +88,7 @@
     "symlink-dir": "^5.0.0",
     "tslib": "^2.5.0",
     "typedoc": "~0.25.3",
-    "typescript": "~5.2.2",
+    "typescript": "~5.5.0",
     "vue": "^3.4.21",
     "vue-jest": "^5.0.0-0"
   },

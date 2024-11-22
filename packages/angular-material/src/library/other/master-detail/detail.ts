@@ -31,6 +31,7 @@ import { Component, Input } from '@angular/core';
       <jsonforms-outlet [renderProps]="_item"></jsonforms-outlet>
     </div>
   `,
+  standalone: false,
 })
 export class JsonFormsDetailComponent {
   _item: any;
