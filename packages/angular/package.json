@@ -90,7 +90,7 @@
     "eslint-config-prettier": "^8.7.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier": "^4.2.1",
-    "ng-packagr": "^17.0.0",
+    "ng-packagr": "^18.0.0",
     "nyc": "^15.1.0",
     "prettier": "^2.8.4",
     "rimraf": "^3.0.2",

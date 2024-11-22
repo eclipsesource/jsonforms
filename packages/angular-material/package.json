@@ -124,7 +124,7 @@
     "karma-jasmine-html-reporter": "^1.7.0",
     "karma-sourcemap-loader": "^0.3.8",
     "karma-webpack": "^5.0.0",
-    "ng-packagr": "^17.0.0",
+    "ng-packagr": "^18.0.0",
     "null-loader": "^0.1.1",
     "nyc": "^15.1.0",
     "prettier": "^2.8.4",
