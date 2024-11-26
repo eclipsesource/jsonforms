@@ -19,21 +19,21 @@
       :required="control.required"
       :error-messages="control.errors"
       :clearable="control.enabled"
-      :items="indexedOneOfRenderInfos"
+      :items="oneOfRenderInfos"
       @update:model-value="handleSelectChange"
       :item-title="
         (item: CombinatorSubSchemaRenderInfo) => t(item.label, item.label)
       "
       item-value="index"
-      v-model="selectIndex"
+      :model-value="selectedIndex"
       v-bind="vuetifyProps('v-select')"
       @focus="handleFocus"
       @blur="handleBlur"
     ></v-select>
     <dispatch-renderer
       v-if="selectedIndex !== undefined && selectedIndex !== null"
-      :schema="indexedOneOfRenderInfos[selectedIndex].schema"
-      :uischema="indexedOneOfRenderInfos[selectedIndex].uischema"
+      :schema="oneOfRenderInfos[selectedIndex].schema"
+      :uischema="oneOfRenderInfos[selectedIndex].uischema"
       :path="control.path"
       :renderers="control.renderers"
       :cells="control.cells"
@@ -131,23 +131,29 @@ const controlRenderer = defineComponent({
     const input = useJsonFormsOneOfControl(props);
     const control = input.control.value;
 
-    const selectedIndex = ref(control.indexOfFittingSchema);
-    const selectIndex = ref(selectedIndex.value);
-    const newSelectedIndex = ref(0);
+    const selectedIndex = ref(
+      control.indexOfFittingSchema != null &&
+        control.indexOfFittingSchema != undefined // use the fitting schema if found
+        ? control.indexOfFittingSchema
+        : !isEmpty(input.control.value.data)
+          ? 0 // uses the first schema and report errors if not empty
+          : null,
+    );
+
+    const newSelectedIndex = ref<number | null>(null);
     const dialog = ref(false);
     const t = useTranslator();
 
     return {
       ...useCombinatorTranslations(useVuetifyControl(input)),
       selectedIndex,
-      selectIndex,
       dialog,
       newSelectedIndex,
       t,
     };
   },
   computed: {
-    indexedOneOfRenderInfos(): (CombinatorSubSchemaRenderInfo & {
+    oneOfRenderInfos(): (CombinatorSubSchemaRenderInfo & {
       index: number;
     })[] {
       const result = createCombinatorRenderInfos(
@@ -160,51 +166,41 @@ const controlRenderer = defineComponent({
         this.control.uischemas,
       );
 
-      return result
-        .filter((info) => info.uischema)
-        .map((info, index) => ({ ...info, index: index }));
+      return result.map((info, index) => ({ ...info, index: index }));
     },
   },
   methods: {
-    handleSelectChange(): void {
-      if (this.control.enabled && !isEmpty(this.control.data)) {
+    handleSelectChange(selectIndex: number | null): void {
+      this.newSelectedIndex = selectIndex;
+
+      if (isEmpty(this.control.data)) {
+        this.openNewTab(this.newSelectedIndex);
+      } else {
         this.dialog = true;
         this.$nextTick(() => {
-          this.newSelectedIndex = this.selectIndex;
-          // revert the selection while the dialog is open
-          this.selectIndex = this.selectedIndex;
-        });
-        // this.$nextTick does not work so use setTimeout
-        setTimeout(() =>
-          // cast to 'any' instead of 'Vue' because of Typescript problems (excessive stack depth when comparing types) during rollup build
-          ((this.$refs.confirm as any).$el as HTMLElement).focus(),
-        );
-      } else {
-        this.$nextTick(() => {
-          this.selectedIndex = this.selectIndex;
+          ((this.$refs.confirm as any).$el as HTMLElement).focus();
         });
       }
     },
     confirm(): void {
-      this.newSelection();
+      this.openNewTab(this.newSelectedIndex);
       this.dialog = false;
     },
     cancel(): void {
-      this.newSelectedIndex = this.selectedIndex;
       this.dialog = false;
     },
-    newSelection(): void {
+    openNewTab(newIndex: number | null): void {
       this.handleChange(
-        this.path,
-        this.newSelectedIndex !== undefined && this.newSelectedIndex !== null
+        this.control.path,
+        newIndex != null
           ? createDefaultValue(
-              this.indexedOneOfRenderInfos[this.newSelectedIndex].schema,
+              this.oneOfRenderInfos[newIndex].schema,
               this.control.rootSchema,
             )
-          : {},
+          : undefined,
       );
-      this.selectIndex = this.newSelectedIndex;
-      this.selectedIndex = this.newSelectedIndex;
+
+      this.selectedIndex = newIndex;
     },
   },
 });

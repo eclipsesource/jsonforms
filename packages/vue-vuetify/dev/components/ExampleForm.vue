@@ -16,7 +16,7 @@ import {
 } from '@jsonforms/vue';
 import type { Ajv, ErrorObject } from 'ajv';
 import * as JsonRefs from 'json-refs';
-import { computed, onMounted, reactive, watch } from 'vue';
+import { computed, onMounted, shallowReactive, watch } from 'vue';
 
 export type ResolvedSchema = {
   schema?: JsonSchema;
@@ -44,7 +44,7 @@ const props = defineProps<{
   state: JsonFormsProps;
 }>();
 
-const resolvedSchema = reactive<ResolvedSchema>({
+const resolvedSchema = shallowReactive<ResolvedSchema>({
   schema: undefined,
   resolved: false,
   error: undefined,

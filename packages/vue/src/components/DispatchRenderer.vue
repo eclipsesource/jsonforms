@@ -1,5 +1,10 @@
 <template>
-  <component :is="determinedRenderer" v-bind="renderer"></component>
+  <component :is="determinedRenderer" v-bind="renderer">
+    <!-- Forward all slots dynamically -->
+    <template v-for="(_, slotName) in $slots" :key="slotName" #[slotName]>
+      <slot :name="slotName"></slot>
+    </template>
+  </component>
 </template>
 
 <script lang="ts">

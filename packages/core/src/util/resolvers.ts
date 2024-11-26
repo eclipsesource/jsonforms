@@ -127,7 +127,8 @@ const resolveSchemaWithSegments = (
     return undefined;
   }
 
-  if (schema.$ref) {
+  // use typeof because schema can by of any type - check singleSegmentResolveSchema below
+  if (typeof schema.$ref === 'string') {
     schema = resolveSchema(rootSchema, schema.$ref, rootSchema);
   }
 

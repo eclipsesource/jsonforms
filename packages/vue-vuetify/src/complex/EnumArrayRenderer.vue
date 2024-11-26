@@ -1,6 +1,23 @@
 <template>
   <v-container fluid v-if="control.visible">
-    <v-row>
+    <template v-if="appliedOptions.vertical == true">
+      <v-row v-for="(o, index) in control.options" :key="o.value">
+        <v-col>
+          <v-checkbox
+            :label="o.label"
+            :model-value="dataHasEnum(o.value)"
+            :id="control.id + `-input-${index}`"
+            :path="composePaths(control.path, `${index}`)"
+            :error-messages="control.errors"
+            :disabled="!control.enabled"
+            :indeterminate="control.data === undefined"
+            v-bind="vuetifyProps(`v-checkbox[${o.value}]`)"
+            @update:model-value="() => toggle(o.value)"
+          ></v-checkbox>
+        </v-col>
+      </v-row>
+    </template>
+    <v-row v-else>
       <v-col v-for="(o, index) in control.options" :key="o.value">
         <v-checkbox
           :label="o.label"
