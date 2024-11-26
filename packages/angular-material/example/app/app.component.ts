@@ -87,6 +87,7 @@ const itemTester: UISchemaTester = (_schema, schemaPath, _path) => {
       [readonly]="readonly"
     ></jsonforms>
   `,
+  standalone: false,
 })
 export class AppComponent {
   readonly renderers = angularMaterialRenderers;
