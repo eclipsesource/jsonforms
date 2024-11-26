@@ -37,14 +37,17 @@ Current effects include:
 
 ## Rule Condition
 
-The rule `condition` object contains a `scope` and a `schema` property.
-The `schema` property is a standard JSON schema object.
-This means, everything that can be specified using JSON schema can be used in the rule condition.
+The rule `condition` object should conform to the <ApiLink link='core/interfaces/schemabasedcondition.html' title='SchemaBasedCondition' /> interface.
+
+It should contain a `scope` and `schema` property, where the `schema` is a standard JSON schema object.
+This means everything that can be specified using JSON schema can be used as a rule condition.
+
 The `schema` is validated against the data specified in the `scope` property.
 If the `scope` data matches the `schema` the rule evaluates to true and the rule effect is applied.
 
-Note, `SchemaBasedCondition`s have been introduced with version 2.0.6 and have become the new default.
-The previous format via `type` and `expectedValue` properties is still supported for the time being.
+If the `scope` resolves to `undefined`, the JSON schema will successfully validate and the condition will be applied.
+Optionally, `failWhenUndefined: true` can be specified to fail the condition in case the scope resolves to `undefined`.
+
 
 ## Examples
 
@@ -96,6 +99,20 @@ The following rule evaluates to true if the `counter` property is `1 <= counter 
   "condition": {
     "scope": "#/properties/counter",
     "schema": {  minimum: 1, exclusiveMaximum: 10 }
+  }
+}
+```
+
+This rule evaluates to true if the `counter` property exists *and* is larger than 1.
+This is in contrast with the previous rule, which will evaluate to true if the `counter` property is undefined.
+
+```js
+"rule": {
+  "effect": "SHOW",
+  "condition": {
+    "scope": "#/properties/counter",
+    "schema": {  minimum: 1 },
+    "failWhenUndefined": true
   }
 }
 ```
