@@ -34,9 +34,6 @@ import {
 } from './common';
 import { RangeControlRenderer, RangeControlRendererTester } from '../src';
 import { JsonFormsAngularService } from '@jsonforms/angular';
-import { initTestEnvironment } from './test';
-
-initTestEnvironment();
 
 describe('Material number field tester', () => {
   const uischema = {

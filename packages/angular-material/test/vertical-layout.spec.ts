@@ -30,9 +30,6 @@ import {
   verticalLayoutTester,
 } from '../src/library/layouts/vertical-layout.renderer';
 import { LayoutChildrenRenderPropsPipe } from '../src/library/layouts/layout.renderer';
-import { initTestEnvironment } from './test';
-
-initTestEnvironment();
 
 describe('Vertical layout tester', () => {
   it('should succeed', () => {

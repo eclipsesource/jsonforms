@@ -29,7 +29,6 @@ import { JsonSchema, LabelElement } from '@jsonforms/core';
 import { LabelRenderer, LabelRendererTester } from '../src/library/other';
 import { setupMockStore } from './common';
 import { JsonFormsAngularService } from '@jsonforms/angular';
-import { initTestEnvironment } from './test';
 
 const data = {};
 const schema: JsonSchema = {
@@ -44,8 +43,6 @@ const uischema: LabelElement = {
   type: 'Label',
   text: 'FooBar',
 };
-
-initTestEnvironment();
 
 describe('Material label field tester', () => {
   it('should succeed', () => {

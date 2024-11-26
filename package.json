@@ -20,8 +20,8 @@
     "build:examples-app": "lerna run build:examples-app && node packages/examples-app/prepare-examples-app.js"
   },
   "devDependencies": {
-    "@angular/core": "^19.0.0",
-    "@angular/cli": "^19.0.0",
+    "@angular/core": "^18.0.0",
+    "@angular/cli": "^18.0.0",
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.16.5",
     "@babel/plugin-proposal-optional-chaining": "^7.16.5",
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
