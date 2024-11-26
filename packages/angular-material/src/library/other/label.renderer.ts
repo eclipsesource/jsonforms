@@ -47,6 +47,7 @@ import {
       }
     `,
   ],
+  standalone: false,
 })
 export class LabelRenderer
   extends JsonFormsBaseRenderer<LabelElement>

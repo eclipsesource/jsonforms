@@ -63,6 +63,7 @@ import { JsonFormsAngularService } from '@jsonforms/angular';
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class VerticalLayoutRenderer extends LayoutRenderer<VerticalLayout> {
   constructor(

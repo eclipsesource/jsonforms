@@ -54,6 +54,7 @@ import { Subscription } from 'rxjs';
   selector: 'jsonforms',
   template: '<jsonforms-outlet></jsonforms-outlet>',
   providers: [JsonFormsAngularService],
+  standalone: false,
 })
 export class JsonForms implements DoCheck, OnChanges, OnInit, OnDestroy {
   @Input() uischema: UISchemaElement;
