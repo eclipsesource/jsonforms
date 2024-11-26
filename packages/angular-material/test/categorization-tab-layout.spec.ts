@@ -52,7 +52,6 @@ const renderers = [
   { tester: TextControlRendererTester, renderer: TextControlRenderer },
 ];
 
-
 describe('Categorization tab layout', () => {
   let fixture: ComponentFixture<any>;
   let component: any;
