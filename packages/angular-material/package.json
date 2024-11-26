@@ -134,7 +134,7 @@
     "ts-loader": "^9.5.1",
     "tslib": "^2.5.0",
     "typedoc": "~0.25.3",
-    "typescript": "~5.2.2",
+    "typescript": "~5.5.0",
     "webpack": "^5.78.0",
     "yargs": "^17.7.2",
     "zone.js": "~0.14.0"
