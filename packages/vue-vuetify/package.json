@@ -54,7 +54,7 @@
     "lint:fix": "eslint --fix .",
     "doc": "typedoc --tsconfig tsconfig.typedoc.json --name 'JSON Forms Vue Vuetify Renderers' --out docs --entryPoints 'src/**/*.ts' 'lib/index.d.ts'",
     "test": "vitest --watch=false",
-    "build-only": "NODE_OPTIONS=\"--max-old-space-size=4096\" vite build",
+    "build-only": "cross-env NODE_OPTIONS=\"--max-old-space-size=4096\" vite build",
     "type-check": "vue-tsc --build --force"
   },
   "peerDependencies": {
