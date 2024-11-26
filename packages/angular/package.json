@@ -98,6 +98,6 @@
     "source-map-support": "^0.5.21",
     "tslib": "^2.3.0",
     "typedoc": "~0.25.3",
-    "typescript": "~5.2.2"
+    "typescript": "~5.5.0"
   }
 }
