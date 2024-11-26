@@ -159,6 +159,7 @@ export const removeSchemaKeywords = (path: string) => {
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class MasterListComponent
   extends JsonFormsArrayControl
