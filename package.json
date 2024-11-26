@@ -45,7 +45,7 @@
     "ts-loader": "^9.5.1",
     "ts-node": "^10.4.0",
     "tslib": "^2.5.0",
-    "typescript": "~5.2.2",
+    "typescript": "~5.5.0",
     "webpack": "^5.78.0",
     "webpack-merge": "^5.10.0"
   }
