@@ -29,6 +29,7 @@ import { ExampleDescription } from '@jsonforms/examples';
 import {
   JsonFormsCellRendererRegistryEntry,
   JsonFormsRendererRegistryEntry,
+  ValidationMode,
 } from '@jsonforms/core';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import Highlight from 'react-highlight';
@@ -85,6 +86,9 @@ const App = ({
     getProps(currentExample, cells, renderers)
   );
   const [showPanel, setShowPanel] = useState<boolean>(true);
+  const [validationMode, setValidationMode] = useState<
+    ValidationMode | undefined
+  >(undefined);
   const schemaAsString = useMemo(
     () => JSON.stringify(exampleProps.schema, null, 2),
     [exampleProps.schema]
@@ -145,6 +149,28 @@ const App = ({
                   )
                 )}
               </select>
+              <h4>Select ValidationMode:</h4>
+              <select
+                value={validationMode}
+                onChange={(ev) =>
+                  setValidationMode(
+                    ev.currentTarget.value as ValidationMode | undefined
+                  )
+                }
+              >
+                <option value={undefined} label='Default'>
+                  Default
+                </option>
+                <option value='NoValidation' label='NoValidation'>
+                  NoValidation
+                </option>
+                <option value='ValidateAndHide' label='ValidateAndHide'>
+                  ValidateAndHide
+                </option>
+                <option value='ValidateAndShow' label='ValidateAndShow'>
+                  ValidateAndShow
+                </option>
+              </select>
             </div>
             <div className='toggle-panel'>
               <input
@@ -202,6 +228,7 @@ const App = ({
                   <JsonForms
                     key={currentIndex}
                     {...exampleProps}
+                    validationMode={validationMode}
                     onChange={({ data }) => changeData(data)}
                   />
                 </Wrapper>
