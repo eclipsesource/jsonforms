@@ -168,9 +168,13 @@ export const showAsRequired = (
  */
 export const createDefaultValue = (
   schema: JsonSchema,
-  rootSchema: JsonSchema
-) => {
-  const resolvedSchema = Resolve.schema(schema, schema.$ref, rootSchema);
+  rootSchema: JsonSchema,
+  defaultValue: any = {}
+): any => {
+  const resolvedSchema =
+    typeof schema.$ref === 'string'
+      ? Resolve.schema(rootSchema, schema.$ref, rootSchema)
+      : schema;
   if (resolvedSchema.default !== undefined) {
     return extractDefaults(resolvedSchema, rootSchema);
   }
@@ -196,8 +200,44 @@ export const createDefaultValue = (
     return extractDefaults(resolvedSchema, rootSchema);
   } else if (hasType(resolvedSchema, 'null')) {
     return null;
+  } else if (
+    schema.oneOf &&
+    Array.isArray(schema.oneOf) &&
+    schema.oneOf.length > 0
+  ) {
+    for (const combineSchema of schema.oneOf) {
+      const result = createDefaultValue(combineSchema, rootSchema, undefined);
+      if (result !== undefined) {
+        // return the first one that have type information
+        return result;
+      }
+    }
+  } else if (
+    schema.anyOf &&
+    Array.isArray(schema.anyOf) &&
+    schema.anyOf.length > 0
+  ) {
+    for (const combineSchema of schema.anyOf) {
+      const result = createDefaultValue(combineSchema, rootSchema, undefined);
+      if (result !== undefined) {
+        // return the first one that have type information
+        return result;
+      }
+    }
+  } else if (
+    schema.allOf &&
+    Array.isArray(schema.allOf) &&
+    schema.allOf.length > 0
+  ) {
+    for (const combineSchema of schema.allOf) {
+      const result = createDefaultValue(combineSchema, rootSchema, undefined);
+      if (result !== undefined) {
+        // return the first one that have type information
+        return result;
+      }
+    }
   } else {
-    return {};
+    return defaultValue;
   }
 };
 
