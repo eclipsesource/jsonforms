@@ -14,6 +14,7 @@ import {
   isDescriptionHidden,
   type ControlElement,
   type DispatchPropsOfControl,
+  type DispatchPropsOfMultiEnumControl,
   type JsonFormsSubStates,
   type JsonSchema,
   type UISchemaElement,
@@ -141,7 +142,7 @@ export const useVuetifyControl = <
   },
   I extends {
     control: ComputedRef<T>;
-  } & DispatchPropsOfControl,
+  } & (DispatchPropsOfControl | DispatchPropsOfMultiEnumControl),
 >(
   input: I,
   adaptValue: (target: any) => any = (v) => v,
@@ -149,14 +150,18 @@ export const useVuetifyControl = <
 ) => {
   const touched = ref(false);
 
-  const changeEmitter =
-    typeof debounceWait === 'number'
-      ? debounce(input.handleChange, debounceWait)
-      : input.handleChange;
+  let onChange = undefined;
 
-  const onChange = (value: any) => {
-    changeEmitter(input.control.value.path, adaptValue(value));
-  };
+  if ((input as DispatchPropsOfControl).handleChange) {
+    const changeEmitter =
+      typeof debounceWait === 'number'
+        ? debounce((input as DispatchPropsOfControl).handleChange, debounceWait)
+        : (input as DispatchPropsOfControl).handleChange;
+
+    onChange = (value: any) => {
+      changeEmitter(input.control.value.path, adaptValue(value));
+    };
+  }
 
   const appliedOptions = useControlAppliedOptions(input);
   const isFocused = ref(false);
