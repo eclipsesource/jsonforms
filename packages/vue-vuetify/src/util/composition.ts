@@ -150,18 +150,17 @@ export const useVuetifyControl = <
 ) => {
   const touched = ref(false);
 
-  let onChange = undefined;
+  const changeEmitter =
+    typeof debounceWait === 'number' &&
+    (input as DispatchPropsOfControl).handleChange
+      ? debounce((input as DispatchPropsOfControl).handleChange, debounceWait)
+      : (input as DispatchPropsOfControl).handleChange;
 
-  if ((input as DispatchPropsOfControl).handleChange) {
-    const changeEmitter =
-      typeof debounceWait === 'number'
-        ? debounce((input as DispatchPropsOfControl).handleChange, debounceWait)
-        : (input as DispatchPropsOfControl).handleChange;
-
-    onChange = (value: any) => {
+  const onChange = (value: any) => {
+    if (changeEmitter) {
       changeEmitter(input.control.value.path, adaptValue(value));
-    };
-  }
+    }
+  };
 
   const appliedOptions = useControlAppliedOptions(input);
   const isFocused = ref(false);
