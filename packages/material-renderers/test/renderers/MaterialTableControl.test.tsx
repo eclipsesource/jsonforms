@@ -41,7 +41,23 @@ const dataWithEmptyMessage = {
   ],
 };
 
-const schemaWithRequired: JsonSchema7 = {
+const dataWithNullMessage = {
+  nested: [
+    {
+      message: null as string | null,
+    },
+  ],
+};
+
+const dataWithUndefinedMessage = {
+  nested: [
+    {
+      message: undefined as string | undefined,
+    },
+  ],
+};
+
+const schemaWithMinLength: JsonSchema7 = {
   type: 'object',
   properties: {
     nested: {
@@ -52,6 +68,23 @@ const schemaWithRequired: JsonSchema7 = {
           message: { type: 'string', minLength: 3 },
           done: { type: 'boolean' },
         },
+      },
+    },
+  },
+};
+
+const schemaWithRequired: JsonSchema7 = {
+  type: 'object',
+  properties: {
+    nested: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          message: { type: 'string' },
+          done: { type: 'boolean' },
+        },
+        required: ['message'],
       },
     },
   },
@@ -70,67 +103,126 @@ const uischema = {
 describe('Material table control', () => {
   let wrapper: ReactWrapper;
 
+  const validSchemaDataPairs = [
+    {
+      schema: schemaWithRequired,
+      data: dataWithEmptyMessage,
+    },
+    {
+      schema: schemaWithMinLength,
+      data: dataWithUndefinedMessage,
+    },
+  ];
+
+  const invalidSchemaDataPairs = [
+    {
+      schema: schemaWithRequired,
+      data: dataWithNullMessage,
+      message: 'must be string',
+    },
+    {
+      schema: schemaWithRequired,
+      data: dataWithUndefinedMessage,
+      message: "must have required property 'message'",
+    },
+    {
+      schema: schemaWithMinLength,
+      data: dataWithEmptyMessage,
+      message: 'must NOT have fewer than 3 characters',
+    },
+  ];
+
   afterEach(() => wrapper.unmount());
 
-  it('should show error message for invalid property with validation mode ValidateAndShow', () => {
-    wrapper = mount(
-      <JsonForms
-        data={dataWithEmptyMessage}
-        schema={schemaWithRequired}
-        uischema={uischema}
-        renderers={materialRenderers}
-        cells={materialCells}
-        validationMode='ValidateAndShow'
-      />
-    );
-    const messageFormHelperText = wrapper.find(FormHelperText).at(0);
-    expect(messageFormHelperText.text()).toBe(
-      'must NOT have fewer than 3 characters'
-    );
-    expect(messageFormHelperText.props().error).toBe(true);
+  it.each(invalidSchemaDataPairs)(
+    'should show error message for invalid property with validation mode ValidateAndShow',
+    ({ schema, data, message }) => {
+      wrapper = mount(
+        <JsonForms
+          data={data}
+          schema={schema}
+          uischema={uischema}
+          renderers={materialRenderers}
+          cells={materialCells}
+          validationMode='ValidateAndShow'
+        />
+      );
+      const messageFormHelperText = wrapper.find(FormHelperText).at(0);
+      expect(messageFormHelperText.text()).toBe(message);
+      expect(messageFormHelperText.props().error).toBe(true);
 
-    const doneFormHelperText = wrapper.find(FormHelperText).at(1);
-    expect(doneFormHelperText.text()).toBe('');
-    expect(doneFormHelperText.props().error).toBe(false);
-  });
+      const doneFormHelperText = wrapper.find(FormHelperText).at(1);
+      expect(doneFormHelperText.text()).toBe('');
+      expect(doneFormHelperText.props().error).toBe(false);
+    }
+  );
 
-  it('should not show error message for invalid property with validation mode ValidateAndHide', () => {
-    wrapper = mount(
-      <JsonForms
-        data={dataWithEmptyMessage}
-        schema={schemaWithRequired}
-        uischema={uischema}
-        renderers={materialRenderers}
-        cells={materialCells}
-        validationMode='ValidateAndHide'
-      />
-    );
-    const messageFormHelperText = wrapper.find(FormHelperText).at(0);
-    expect(messageFormHelperText.text()).toBe('');
-    expect(messageFormHelperText.props().error).toBe(false);
+  it.each(invalidSchemaDataPairs)(
+    'should not show error message for invalid property with validation mode ValidateAndHide',
+    ({ schema, data }) => {
+      wrapper = mount(
+        <JsonForms
+          data={data}
+          schema={schema}
+          uischema={uischema}
+          renderers={materialRenderers}
+          cells={materialCells}
+          validationMode='ValidateAndHide'
+        />
+      );
+      const messageFormHelperText = wrapper.find(FormHelperText).at(0);
+      expect(messageFormHelperText.text()).toBe('');
+      expect(messageFormHelperText.props().error).toBe(false);
 
-    const doneFormHelperText = wrapper.find(FormHelperText).at(1);
-    expect(doneFormHelperText.text()).toBe('');
-    expect(doneFormHelperText.props().error).toBe(false);
-  });
+      const doneFormHelperText = wrapper.find(FormHelperText).at(1);
+      expect(doneFormHelperText.text()).toBe('');
+      expect(doneFormHelperText.props().error).toBe(false);
+    }
+  );
 
-  it('should not show error message for invalid property with validation mode NoValidation', () => {
-    wrapper = mount(
-      <JsonForms
-        data={dataWithEmptyMessage}
-        schema={schemaWithRequired}
-        uischema={uischema}
-        renderers={materialRenderers}
-        cells={materialCells}
-        validationMode='NoValidation'
-      />
-    );
-    const messageFormHelperText = wrapper.find(FormHelperText).at(0);
-    expect(messageFormHelperText.text()).toBe('');
-    expect(messageFormHelperText.props().error).toBe(false);
+  it.each(invalidSchemaDataPairs)(
+    'should not show error message for invalid property with validation mode NoValidation',
+    ({ schema, data }) => {
+      wrapper = mount(
+        <JsonForms
+          data={data}
+          schema={schema}
+          uischema={uischema}
+          renderers={materialRenderers}
+          cells={materialCells}
+          validationMode='NoValidation'
+        />
+      );
+      const messageFormHelperText = wrapper.find(FormHelperText).at(0);
+      expect(messageFormHelperText.text()).toBe('');
+      expect(messageFormHelperText.props().error).toBe(false);
 
-    const doneFormHelperText = wrapper.find(FormHelperText).at(1);
-    expect(doneFormHelperText.text()).toBe('');
-    expect(doneFormHelperText.props().error).toBe(false);
-  });
+      const doneFormHelperText = wrapper.find(FormHelperText).at(1);
+      expect(doneFormHelperText.text()).toBe('');
+      expect(doneFormHelperText.props().error).toBe(false);
+    }
+  );
+
+  it.each(validSchemaDataPairs)(
+    'should not show error message for valid property',
+    ({ schema, data }) => {
+      wrapper = mount(
+        <JsonForms
+          data={data}
+          schema={schema}
+          uischema={uischema}
+          renderers={materialRenderers}
+          cells={materialCells}
+          validationMode='ValidateAndShow'
+        />
+      );
+      const messageFormHelperText = wrapper.find(FormHelperText).at(0);
+      expect(messageFormHelperText.text()).toBe('');
+      expect(messageFormHelperText.props().error).toBe(false);
+
+      const doneFormHelperText = wrapper.find(FormHelperText).at(1);
+      expect(doneFormHelperText.text()).toBe('');
+      expect(doneFormHelperText.props().error).toBe(false);
+    }
+  );
 });
