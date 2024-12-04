@@ -69,6 +69,7 @@ import merge from 'lodash/merge';
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class NumberControlRenderer extends JsonFormsControl {
   private readonly MAXIMUM_FRACTIONAL_DIGITS = 20;
