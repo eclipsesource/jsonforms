@@ -182,7 +182,10 @@ export const createDefaultValue = (
  * @returns undefined if no default value, the default value to use otherwise
  */
 const doCreateDefaultValue = (schema: JsonSchema, rootSchema: JsonSchema) => {
-  const resolvedSchema = Resolve.schema(schema, schema.$ref, rootSchema);
+  const resolvedSchema =
+    typeof schema.$ref === 'string'
+      ? Resolve.schema(rootSchema, schema.$ref, rootSchema)
+      : schema;
   if (resolvedSchema.default !== undefined) {
     return extractDefaults(resolvedSchema, rootSchema);
   }
