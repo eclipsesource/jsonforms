@@ -193,6 +193,7 @@ export const ArrayControlRenderer = ({
   enabled,
   errors,
   translations,
+  arraySchema,
 }: ArrayControlProps &
   VanillaRendererProps & { translations: ArrayTranslations }) => {
   const controlElement = uischema as ControlElement;
@@ -221,6 +222,7 @@ export const ArrayControlRenderer = ({
       label={label}
       path={path}
       schema={schema}
+      arraySchema={arraySchema}
       errors={errors}
       addItem={addItem}
       removeItems={removeItems}
