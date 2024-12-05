@@ -253,6 +253,9 @@ const createDefaultValueForCombinatorSchema = (
       }
     }
   }
+
+  // no default value found
+  return undefined;
 };
 
 /**
