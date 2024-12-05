@@ -168,13 +168,21 @@ export const showAsRequired = (
  */
 export const createDefaultValue = (
   schema: JsonSchema,
-  rootSchema: JsonSchema,
-  defaultValue: any = {}
-): any => {
-  const resolvedSchema =
-    typeof schema.$ref === 'string'
-      ? Resolve.schema(rootSchema, schema.$ref, rootSchema)
-      : schema;
+  rootSchema: JsonSchema
+) => {
+  const defaultValue = doCreateDefaultValue(schema, rootSchema);
+
+  // preserve the backward compatibility where it is returning an empty object if we can't determine the default value
+  return defaultValue === undefined ? {} : defaultValue;
+};
+
+/**
+ * Create a default value based on the given schema.
+ * @param schema the schema for which to create a default value.
+ * @returns undefined if no default value, the default value to use otherwise
+ */
+const doCreateDefaultValue = (schema: JsonSchema, rootSchema: JsonSchema) => {
+  const resolvedSchema = Resolve.schema(schema, schema.$ref, rootSchema);
   if (resolvedSchema.default !== undefined) {
     return extractDefaults(resolvedSchema, rootSchema);
   }
@@ -228,7 +236,8 @@ export const createDefaultValue = (
     return combinatorDefault;
   }
 
-  return defaultValue;
+  // no default value found
+  return undefined;
 };
 
 const createDefaultValueForCombinatorSchema = (
@@ -240,14 +249,9 @@ const createDefaultValueForCombinatorSchema = (
     Array.isArray(combinatorSchema) &&
     combinatorSchema.length > 0
   ) {
-    const noDefaultValue = Symbol.for('noDefaultValue');
     for (const combineSchema of combinatorSchema) {
-      const result = createDefaultValue(
-        combineSchema,
-        rootSchema,
-        noDefaultValue
-      );
-      if (result !== noDefaultValue) {
+      const result: any = doCreateDefaultValue(combineSchema, rootSchema);
+      if (result !== undefined) {
         // return the first one that have type information
         return result;
       }
