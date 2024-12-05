@@ -65,6 +65,7 @@ import {
       </mat-tab>
     </mat-tab-group>
   `,
+  standalone: false,
 })
 export class CategorizationTabLayoutRenderer
   extends JsonFormsBaseRenderer<Categorization>

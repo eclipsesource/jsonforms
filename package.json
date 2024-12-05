@@ -20,7 +20,8 @@
     "build:examples-app": "lerna run build:examples-app && node packages/examples-app/prepare-examples-app.js"
   },
   "devDependencies": {
-    "@angular/core": "^17.0.0",
+    "@angular/core": "^18.0.0",
+    "@angular/cli": "^18.0.0",
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.16.5",
     "@babel/plugin-proposal-optional-chaining": "^7.16.5",
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
@@ -44,7 +45,7 @@
     "ts-loader": "^9.5.1",
     "ts-node": "^10.4.0",
     "tslib": "^2.5.0",
-    "typescript": "~5.2.2",
+    "typescript": "~5.5.0",
     "webpack": "^5.78.0",
     "webpack-merge": "^5.10.0"
   }

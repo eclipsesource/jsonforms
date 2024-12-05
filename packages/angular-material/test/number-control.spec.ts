@@ -41,9 +41,6 @@ import {
 } from './common';
 import { Actions, ControlElement, JsonFormsCore } from '@jsonforms/core';
 import { NumberControlRenderer, NumberControlRendererTester } from '../src';
-import { initTestEnvironment } from './test';
-
-initTestEnvironment();
 
 describe('Material number field tester', () => {
   const uischema = {

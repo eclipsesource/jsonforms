@@ -25,6 +25,7 @@
 
 import {
   createAjv,
+  JsonFormsCore,
   JsonSchema,
   TesterContext,
   Translator,
@@ -37,7 +38,7 @@ export const initCore = (
   schema: JsonSchema,
   uischema: UISchemaElement,
   data?: any
-) => {
+): JsonFormsCore => {
   return { schema, uischema, data, ajv: createAjv() };
 };
 

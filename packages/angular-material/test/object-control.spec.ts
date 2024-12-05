@@ -45,7 +45,6 @@ import {
 } from '../src/library/other/object.renderer';
 import { getJsonFormsService } from './common';
 import { LayoutChildrenRenderPropsPipe } from '../src/library/layouts/layout.renderer';
-import { initTestEnvironment } from './test';
 
 const uischema1: ControlElement = { type: 'Control', scope: '#' };
 const uischema2: ControlElement = {
@@ -81,8 +80,6 @@ const renderers = [
   { tester: groupLayoutTester, renderer: GroupLayoutRenderer },
   { tester: ObjectControlRendererTester, renderer: ObjectControlRenderer },
 ];
-
-initTestEnvironment();
 
 describe('Object Control tester', () => {
   it('should succeed', () => {

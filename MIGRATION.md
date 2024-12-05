@@ -1,5 +1,13 @@
 # Migration guide
 
+## Migrating to JSON Forms 3.5
+
+### Angular support now targets Angular 18 and Angular 19
+
+When using JSON Forms 3.5, your Angular application now needs to target Angular 18 or 19.
+
+Use JSON Forms 3.4 if you need to stay on Angular 17.
+
 ## Migrating to JSON Forms 3.3
 
 ### Angular support now targets Angular 17 and Angular 18

@@ -57,6 +57,7 @@ import { isMultiLineControl, RankedTester, rankWith } from '@jsonforms/core';
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class TextAreaRenderer extends JsonFormsControl {
   focused = false;
