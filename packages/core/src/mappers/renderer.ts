@@ -200,44 +200,58 @@ export const createDefaultValue = (
     return extractDefaults(resolvedSchema, rootSchema);
   } else if (hasType(resolvedSchema, 'null')) {
     return null;
-  } else if (
-    schema.oneOf &&
-    Array.isArray(schema.oneOf) &&
-    schema.oneOf.length > 0
+  }
+
+  let combinatorDefault = undefined;
+
+  combinatorDefault = createDefaultValueForCombinatorSchema(
+    schema.oneOf,
+    rootSchema
+  );
+  if (combinatorDefault !== undefined) {
+    return combinatorDefault;
+  }
+
+  combinatorDefault = createDefaultValueForCombinatorSchema(
+    schema.anyOf,
+    rootSchema
+  );
+  if (combinatorDefault !== undefined) {
+    return combinatorDefault;
+  }
+
+  combinatorDefault = createDefaultValueForCombinatorSchema(
+    schema.allOf,
+    rootSchema
+  );
+  if (combinatorDefault !== undefined) {
+    return combinatorDefault;
+  }
+
+  return defaultValue;
+};
+
+const createDefaultValueForCombinatorSchema = (
+  combinatorSchema: JsonSchema[],
+  rootSchema: JsonSchema
+) => {
+  if (
+    combinatorSchema &&
+    Array.isArray(combinatorSchema) &&
+    combinatorSchema.length > 0
   ) {
-    for (const combineSchema of schema.oneOf) {
-      const result = createDefaultValue(combineSchema, rootSchema, undefined);
-      if (result !== undefined) {
+    const noDefaultValue = Symbol.for('noDefaultValue');
+    for (const combineSchema of combinatorSchema) {
+      const result = createDefaultValue(
+        combineSchema,
+        rootSchema,
+        noDefaultValue
+      );
+      if (result !== noDefaultValue) {
         // return the first one that have type information
         return result;
       }
     }
-  } else if (
-    schema.anyOf &&
-    Array.isArray(schema.anyOf) &&
-    schema.anyOf.length > 0
-  ) {
-    for (const combineSchema of schema.anyOf) {
-      const result = createDefaultValue(combineSchema, rootSchema, undefined);
-      if (result !== undefined) {
-        // return the first one that have type information
-        return result;
-      }
-    }
-  } else if (
-    schema.allOf &&
-    Array.isArray(schema.allOf) &&
-    schema.allOf.length > 0
-  ) {
-    for (const combineSchema of schema.allOf) {
-      const result = createDefaultValue(combineSchema, rootSchema, undefined);
-      if (result !== undefined) {
-        // return the first one that have type information
-        return result;
-      }
-    }
-  } else {
-    return defaultValue;
   }
 };
 
