@@ -179,9 +179,12 @@ export const createDefaultValue = (
 /**
  * Create a default value based on the given schema.
  * @param schema the schema for which to create a default value.
- * @returns undefined if no default value, the default value to use otherwise
+ * @returns the default value to use, undefined if none was found
  */
-const doCreateDefaultValue = (schema: JsonSchema, rootSchema: JsonSchema) => {
+export const doCreateDefaultValue = (
+  schema: JsonSchema,
+  rootSchema: JsonSchema
+) => {
   const resolvedSchema =
     typeof schema.$ref === 'string'
       ? Resolve.schema(rootSchema, schema.$ref, rootSchema)
@@ -198,45 +201,34 @@ const doCreateDefaultValue = (schema: JsonSchema, rootSchema: JsonSchema) => {
       return convertDateToString(new Date(), resolvedSchema.format);
     }
     return '';
-  } else if (
-    hasType(resolvedSchema, 'integer') ||
-    hasType(resolvedSchema, 'number')
-  ) {
+  }
+  if (hasType(resolvedSchema, 'integer') || hasType(resolvedSchema, 'number')) {
     return 0;
-  } else if (hasType(resolvedSchema, 'boolean')) {
+  }
+  if (hasType(resolvedSchema, 'boolean')) {
     return false;
-  } else if (hasType(resolvedSchema, 'array')) {
+  }
+  if (hasType(resolvedSchema, 'array')) {
     return [];
-  } else if (hasType(resolvedSchema, 'object')) {
+  }
+  if (hasType(resolvedSchema, 'object')) {
     return extractDefaults(resolvedSchema, rootSchema);
-  } else if (hasType(resolvedSchema, 'null')) {
+  }
+  if (hasType(resolvedSchema, 'null')) {
     return null;
   }
 
-  let combinatorDefault = undefined;
-
-  combinatorDefault = createDefaultValueForCombinatorSchema(
-    schema.oneOf,
-    rootSchema
-  );
-  if (combinatorDefault !== undefined) {
-    return combinatorDefault;
-  }
-
-  combinatorDefault = createDefaultValueForCombinatorSchema(
-    schema.anyOf,
-    rootSchema
-  );
-  if (combinatorDefault !== undefined) {
-    return combinatorDefault;
-  }
-
-  combinatorDefault = createDefaultValueForCombinatorSchema(
-    schema.allOf,
-    rootSchema
-  );
-  if (combinatorDefault !== undefined) {
-    return combinatorDefault;
+  const combinators: CombinatorKeyword[] = ['oneOf', 'anyOf', 'allOf'];
+  for (const combinator of combinators) {
+    if (schema[combinator] && Array.isArray(schema[combinator])) {
+      const combinatorDefault = createDefaultValueForCombinatorSchema(
+        schema[combinator],
+        rootSchema
+      );
+      if (combinatorDefault !== undefined) {
+        return combinatorDefault;
+      }
+    }
   }
 
   // no default value found
@@ -244,18 +236,14 @@ const doCreateDefaultValue = (schema: JsonSchema, rootSchema: JsonSchema) => {
 };
 
 const createDefaultValueForCombinatorSchema = (
-  combinatorSchema: JsonSchema[],
+  combinatorSchemas: JsonSchema[],
   rootSchema: JsonSchema
-) => {
-  if (
-    combinatorSchema &&
-    Array.isArray(combinatorSchema) &&
-    combinatorSchema.length > 0
-  ) {
-    for (const combineSchema of combinatorSchema) {
-      const result: any = doCreateDefaultValue(combineSchema, rootSchema);
+): any => {
+  if (combinatorSchemas.length > 0) {
+    for (const combinatorSchema of combinatorSchemas) {
+      const result = doCreateDefaultValue(combinatorSchema, rootSchema);
       if (result !== undefined) {
-        // return the first one that have type information
+        // return the first one with type information
         return result;
       }
     }
@@ -278,9 +266,25 @@ export const extractDefaults = (schema: JsonSchema, rootSchema: JsonSchema) => {
       const resolvedProperty = property.$ref
         ? Resolve.schema(rootSchema, property.$ref, rootSchema)
         : property;
-      if (resolvedProperty.default !== undefined) {
+      if (resolvedProperty && resolvedProperty.default !== undefined) {
         result[key] = cloneDeep(resolvedProperty.default);
       }
+    }
+    // there could be more properties in allOf schemas
+    if (schema.allOf && Array.isArray(schema.allOf)) {
+      schema.allOf.forEach((allOfSchema) => {
+        if (allOfSchema && allOfSchema.properties) {
+          for (const key in allOfSchema.properties) {
+            const property = allOfSchema.properties[key];
+            const resolvedProperty = property.$ref
+              ? Resolve.schema(rootSchema, property.$ref, rootSchema)
+              : property;
+            if (resolvedProperty && resolvedProperty.default !== undefined) {
+              result[key] = cloneDeep(resolvedProperty.default);
+            }
+          }
+        }
+      });
     }
     return result;
   }
