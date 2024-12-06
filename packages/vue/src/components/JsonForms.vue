@@ -54,7 +54,7 @@ export default defineComponent({
     data: {
       required: false,
       type: [String, Number, Boolean, Array, Object] as PropType<any>,
-      default: undefined, // allow for cases like mixed schema and the data in not yet defined
+      default: undefined,
     },
     schema: {
       required: false,
