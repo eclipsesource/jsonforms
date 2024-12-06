@@ -178,6 +178,7 @@ const controlRenderer = defineComponent({
       } else {
         this.dialog = true;
         this.$nextTick(() => {
+          // cast to 'any' instead of 'Vue' because of Typescript problems (excessive stack depth when comparing types) during rollup build
           ((this.$refs.confirm as any).$el as HTMLElement).focus();
         });
       }
