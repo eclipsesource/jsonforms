@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { clearAllIds } from '@jsonforms/core';
+import { seedIds } from '@jsonforms/core';
 import IntegerControlRenderer from '../../../src/controls/IntegerControlRenderer.vue';
 import { entry as integerControlRendererEntry } from '../../../src/controls/IntegerControlRenderer.entry';
 import { wait } from '../../../tests';
@@ -24,7 +24,7 @@ describe('IntegerControlRenderer.vue', () => {
 
   beforeEach(() => {
     // clear all ids to guarantee that the snapshots will always be generated with the same ids
-    clearAllIds();
+    seedIds();
     wrapper = mountJsonForms(data, schema, renderers, uischema);
   });
 
