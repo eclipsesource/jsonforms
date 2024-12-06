@@ -853,6 +853,7 @@ export interface ControlWithDetailProps
  */
 export interface StatePropsOfArrayControl
   extends StatePropsOfControlWithDetail {
+  arraySchema: JsonSchema;
   childErrors?: ErrorObject[];
 }
 
@@ -879,6 +880,7 @@ export const mapStateToArrayControlProps = (
     path,
     uischema,
     schema: resolvedSchema,
+    arraySchema: schema,
     childErrors,
     renderers: ownProps.renderers || getRenderers(state),
     cells: ownProps.cells || getCells(state),
@@ -1207,6 +1209,10 @@ export const mapStateToOneOfProps = (
 
 export interface StatePropsOfArrayLayout extends StatePropsOfControlWithDetail {
   data: number;
+  arraySchema: JsonSchema;
+  /**
+   * @deprecated Use `arraySchema.minItems` instead.
+   */
   minItems?: number;
   disableRemove?: boolean;
   disableAdd?: boolean;
@@ -1247,6 +1253,7 @@ export const mapStateToArrayLayoutProps = (
     path,
     uischema,
     schema: resolvedSchema,
+    arraySchema: schema,
     data: props.data ? props.data.length : 0,
     errors: allErrors,
     minItems: schema.minItems,
