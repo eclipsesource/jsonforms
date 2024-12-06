@@ -55,7 +55,7 @@ describe('OneOfRenderer.vue', () => {
 
   it('respects translations', async () => {
     // trigger the selection change
-    wrapper.getComponent(OneOfControlRenderer).vm.handleSelectChange();
+    wrapper.getComponent(OneOfControlRenderer).vm.handleSelectChange(0);
     // wait until the dialog is rendered
     await wrapper.vm.$nextTick();
     // dialog is rendered in document outside of the wrapper

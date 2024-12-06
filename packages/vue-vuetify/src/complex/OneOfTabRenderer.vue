@@ -6,7 +6,7 @@
       :path="path"
     />
 
-    <v-tabs v-model="tabIndex" @update:model-value="handleTabChange">
+    <v-tabs v-model="selectIndex" @update:model-value="handleTabChange">
       <v-tab
         v-for="(oneOfRenderInfo, oneOfIndex) in oneOfRenderInfos"
         :key="`${control.path}-${oneOfIndex}`"
@@ -81,8 +81,8 @@ import {
   VDialog,
   VSpacer,
   VTab,
-  VWindow,
   VTabs,
+  VWindow,
   VWindowItem,
 } from 'vuetify/components';
 import { useCombinatorTranslations, useVuetifyControl } from '../util';
@@ -113,14 +113,14 @@ const controlRenderer = defineComponent({
     const control = input.control.value;
 
     const selectedIndex = ref(control.indexOfFittingSchema || 0);
-    const tabIndex = ref(selectedIndex.value);
+    const selectIndex = ref(selectedIndex.value);
     const newSelectedIndex = ref(0);
     const dialog = ref(false);
 
     return {
       ...useCombinatorTranslations(useVuetifyControl(input)),
       selectedIndex,
-      tabIndex,
+      selectIndex,
       dialog,
       newSelectedIndex,
     };
@@ -141,42 +141,37 @@ const controlRenderer = defineComponent({
   },
   methods: {
     handleTabChange(): void {
-      if (this.control.enabled && !isEmpty(this.control.data)) {
+      this.newSelectedIndex = this.selectIndex;
+      // revert back to the orginal value until the dialog is done
+      this.selectIndex = this.selectedIndex;
+
+      if (isEmpty(this.control.data)) {
+        this.openNewTab(this.newSelectedIndex);
+      } else {
         this.dialog = true;
         this.$nextTick(() => {
-          this.newSelectedIndex = this.tabIndex;
-          // revert the selection while the dialog is open
-          this.tabIndex = this.selectedIndex;
-        });
-        // this.$nextTick does not work so use setTimeout
-        setTimeout(() =>
           // cast to 'any' instead of 'Vue' because of Typescript problems (excessive stack depth when comparing types) during rollup build
-          ((this.$refs.confirm as any).$el as HTMLElement).focus(),
-        );
-      } else {
-        this.$nextTick(() => {
-          this.selectedIndex = this.tabIndex;
+          ((this.$refs.confirm as any).$el as HTMLElement).focus();
         });
       }
     },
     confirm(): void {
-      this.openNewTab();
+      this.openNewTab(this.newSelectedIndex);
       this.dialog = false;
     },
     cancel(): void {
-      this.newSelectedIndex = this.selectedIndex;
       this.dialog = false;
     },
-    openNewTab(): void {
+    openNewTab(newIndex: number): void {
       this.handleChange(
-        this.path,
+        this.control.path,
         createDefaultValue(
-          this.oneOfRenderInfos[this.newSelectedIndex].schema,
+          this.oneOfRenderInfos[newIndex].schema,
           this.control.rootSchema,
         ),
       );
-      this.tabIndex = this.newSelectedIndex;
-      this.selectedIndex = this.newSelectedIndex;
+      this.selectIndex = newIndex;
+      this.selectedIndex = newIndex;
     },
   },
 });

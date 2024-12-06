@@ -1,19 +1,24 @@
 import type { ValidationMode } from '@jsonforms/core';
-import { reactive, ref, watch } from 'vue';
+import { reactive, ref, watch, type Ref, type UnwrapRef } from 'vue';
+
+export const appstoreLayouts = ['', 'demo-and-data'] as const;
+export type AppstoreLayouts = (typeof appstoreLayouts)[number];
 
 const appstore = reactive({
   exampleName: useHistoryHash(''),
   rtl: false,
-  formOnly: false,
+  layout: useLocalStorage('vuetify-example-layout', ''),
+  formOnly: useHistoryHashQuery('form-only', false as boolean),
+  activeTab: useHistoryHashQuery('active-tab', 0 as number),
   dark: useLocalStorage('vuetify-example-dark', false),
   theme: useLocalStorage('vuetify-example-theme', 'light'),
-  drawer: true,
+  drawer: useHistoryHashQuery('drawer', true as boolean),
   settings: false,
   variant: useLocalStorage('vuetify-example-variant', ''),
   iconset: useLocalStorage('vuetify-example-iconset', 'mdi'),
   blueprint: useLocalStorage('vuetify-example-blueprint', 'md1'),
   jsonforms: {
-    readonly: false,
+    readonly: useHistoryHashQuery('read-only', false as boolean),
     validationMode: 'ValidateAndShow' as ValidationMode,
     config: {
       restrict: true,
@@ -26,7 +31,6 @@ const appstore = reactive({
       hideAvatar: false,
       hideArraySummaryValidation: false,
       enableFilterErrorsBeforeTouch: false,
-      vuetify: {},
     },
     locale: useLocalStorage('vuetify-example-locale', 'en'),
   },
@@ -36,12 +40,13 @@ export const useAppStore = () => {
   return appstore;
 };
 
-export function useHistoryHash(initialValue: string) {
+function useHistoryHash(initialValue: string) {
   const data = ref(initialValue);
 
   // Function to update data based on URL hash
   const updateDataFromHash = () => {
-    const hash = window.location.hash.slice(1);
+    const hashAndQuery = window.location.hash.slice(1); // Remove the leading '#'
+    const [hash, _] = hashAndQuery.split('?'); // Split hash and query string
     if (hash) {
       try {
         data.value = decodeURIComponent(hash);
@@ -51,17 +56,83 @@ export function useHistoryHash(initialValue: string) {
     }
   };
 
-  // Update data from URL hash on component mount
+  // Initial update from URL hash
   updateDataFromHash();
 
-  watch(
-    data,
-    (newValue) => {
-      const encodedData = encodeURIComponent(newValue);
-      window.history.replaceState(null, '', `#${encodedData}`);
-    },
-    { deep: true },
-  );
+  watch(data, (newValue) => {
+    const encodedData = encodeURIComponent(newValue);
+
+    const currentHash = window.location.hash.slice(1);
+    const [, currentQueryString] = currentHash.split('?'); // Extract the query part after ?
+
+    window.history.replaceState(
+      null,
+      '',
+      `#${encodedData}${currentQueryString ? '?' + currentQueryString : ''}`, // Keep the query parameters intact
+    );
+  });
+
+  return data;
+}
+
+function useHistoryHashQuery<T extends string | boolean | number>(
+  queryParam: string,
+  initialValue: T,
+) {
+  const data: Ref<UnwrapRef<T>> = ref<T>(initialValue);
+
+  // Function to update data based on URL hash
+  const updateDataFromHash = () => {
+    const hashAndQuery = window.location.hash.slice(1); // Remove the leading '#'
+    const [_, query] = hashAndQuery.split('?'); // Split hash and query string
+
+    const searchParams = new URLSearchParams(query);
+    if (searchParams) {
+      try {
+        const value = searchParams.has(queryParam)
+          ? searchParams.get(queryParam)
+          : `${initialValue}`;
+
+        // Convert the value based on the type of initialValue
+        if (typeof initialValue === 'boolean') {
+          // Handle boolean conversion
+          data.value = (value === 'true') as UnwrapRef<T>;
+        } else if (typeof initialValue === 'number') {
+          data.value = (value ? parseFloat(value) : 0) as UnwrapRef<T>;
+        } else if (typeof initialValue === 'string') {
+          // Handle string conversion
+          data.value = value as UnwrapRef<T>;
+        }
+      } catch (error) {
+        console.error('Error parsing hash:', error);
+      }
+    }
+  };
+
+  // Initial update from URL hash
+  updateDataFromHash();
+
+  watch(data, (newValue) => {
+    const encodedData = encodeURIComponent(newValue);
+
+    const hashAndQuery = window.location.hash.slice(1); // Remove the leading '#'
+    const [hash, query] = hashAndQuery.split('?'); // Split hash and query string
+
+    const searchParams = new URLSearchParams(query);
+
+    if (newValue === initialValue) {
+      // it is the default value so no need to preserve the query paramter
+      searchParams.delete(queryParam);
+    } else {
+      searchParams.set(queryParam, encodedData);
+    }
+
+    window.history.replaceState(
+      null,
+      '',
+      `#${hash}${searchParams.size > 0 ? '?' + searchParams : ''}`, // Keep the query parameters intact
+    );
+  });
 
   return data;
 }

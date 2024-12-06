@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useAppStore } from '../store';
+import { appstoreLayouts, useAppStore, type AppstoreLayouts } from '../store';
 
 const appStore = useAppStore();
 
@@ -53,6 +53,16 @@ const iconsets = [
   { text: 'Material Design', value: 'mdi' },
   { text: 'Font Awesome', value: 'fa' },
 ];
+
+const layoutMapping: Record<AppstoreLayouts, string> = {
+  '': 'Default',
+  'demo-and-data': 'Demo and Data',
+};
+
+const layouts = appstoreLayouts.map((value: AppstoreLayouts) => ({
+  text: layoutMapping[value] ?? value,
+  value: value,
+}));
 </script>
 
 <template>
@@ -165,6 +175,25 @@ const iconsets = [
             dense
             v-model="appStore.jsonforms.locale"
             :items="locales"
+            item-title="text"
+            item-value="value"
+          ></v-select>
+        </v-col>
+      </v-row>
+    </v-container>
+
+    <v-divider />
+
+    <v-container>
+      <v-row><v-col>Demo Layout</v-col></v-row>
+      <v-row>
+        <v-col>
+          <v-select
+            outlined
+            persistent-hint
+            dense
+            v-model="appStore.layout"
+            :items="layouts"
             item-title="text"
             item-value="value"
           ></v-select>
