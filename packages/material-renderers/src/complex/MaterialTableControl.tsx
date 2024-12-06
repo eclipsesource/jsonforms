@@ -47,7 +47,7 @@ import {
 import {
   ArrayLayoutProps,
   ControlElement,
-  errorsAt,
+  errorAt,
   formatErrorMessage,
   JsonSchema,
   Paths,
@@ -177,11 +177,10 @@ const ctxToNonEmptyCellProps = (
     (ownProps.schema.type === 'object' ? '.' + ownProps.propName : '');
   const errors = formatErrorMessage(
     union(
-      errorsAt(
+      errorAt(
         path,
-        ownProps.schema,
-        (p) => p === path
-      )(ctx.core.errors).map((error: ErrorObject) => error.message)
+        ownProps.schema
+      )(ctx.core).map((error: ErrorObject) => error.message)
     )
   );
   return {

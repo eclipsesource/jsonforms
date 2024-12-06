@@ -33,7 +33,7 @@ module.exports = function (config) {
     },
     reporters: ['progress', 'kjhtml', 'dots'],
 
-    browsers: [ config.singleRun ? 'ChromeHeadlessNoSandbox' : 'Chrome' ],
+    browsers: [ 'ChromeHeadlessNoSandbox' ],
     customLaunchers: {
       ChromeHeadlessNoSandbox: {
         base: 'ChromeHeadless',

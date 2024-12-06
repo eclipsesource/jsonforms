@@ -54,6 +54,7 @@ import {
   mapDispatchToControlProps,
   mapDispatchToMultiEnumProps,
   mapStateToAnyOfProps,
+  mapStateToArrayControlProps,
   mapStateToArrayLayoutProps,
   mapStateToControlProps,
   mapStateToEnumControlProps,
@@ -654,6 +655,134 @@ test('createDefaultValue', (t) => {
     bool: true,
     array: ['a', 'b', 'c'],
   });
+
+  const schemaOneOf: JsonSchema = {
+    oneOf: [
+      {
+        type: 'string',
+        default: 'oneOfString',
+      },
+      {
+        type: 'number',
+        default: 42,
+      },
+    ],
+  };
+  const rootSchemaOneOf: JsonSchema = {
+    definitions: {},
+  };
+  const defaultValueOneOf = createDefaultValue(schemaOneOf, rootSchemaOneOf);
+  t.is(defaultValueOneOf, 'oneOfString');
+
+  const schemaAnyOf: JsonSchema = {
+    anyOf: [
+      {
+        type: 'number',
+      },
+      {
+        type: 'string',
+        default: 'anyOfString',
+      },
+    ],
+  };
+  const rootSchemaAnyOf: JsonSchema = {
+    definitions: {},
+  };
+  const defaultValueAnyOf = createDefaultValue(schemaAnyOf, rootSchemaAnyOf);
+  t.is(defaultValueAnyOf, 0);
+
+  console.log('testcase allof');
+  const schemaAllOf: JsonSchema = {
+    allOf: [
+      {
+        properties: {
+          foo: {
+            type: 'string',
+            default: 'foo',
+          },
+        },
+      },
+      {
+        properties: {
+          bar: {
+            type: 'number',
+            default: 42,
+          },
+        },
+      },
+    ],
+  };
+  const rootSchemaAllOf: JsonSchema = {
+    definitions: {},
+  };
+  const defaultValueAllOf = createDefaultValue(schemaAllOf, rootSchemaAllOf);
+  t.deepEqual(defaultValueAllOf, { foo: 'foo', bar: 42 });
+
+  const schemaOneOfEmpty: JsonSchema = {
+    oneOf: [
+      {
+        type: 'string',
+      },
+      {
+        type: 'number',
+      },
+    ],
+  };
+  const rootSchemaOneOfEmpty: JsonSchema = {
+    definitions: {},
+  };
+  const defaultValueOneOfEmpty = createDefaultValue(
+    schemaOneOfEmpty,
+    rootSchemaOneOfEmpty
+  );
+  t.deepEqual(defaultValueOneOfEmpty, '');
+
+  const schemaAnyOfEmpty: JsonSchema = {
+    anyOf: [
+      {
+        type: 'string',
+      },
+      {
+        type: 'number',
+      },
+    ],
+  };
+  const rootSchemaAnyOfEmpty: JsonSchema = {
+    definitions: {},
+  };
+  const defaultValueAnyOfEmpty = createDefaultValue(
+    schemaAnyOfEmpty,
+    rootSchemaAnyOfEmpty
+  );
+  t.deepEqual(defaultValueAnyOfEmpty, '');
+
+  const schemaAllOfEmpty: JsonSchema = {
+    allOf: [
+      {
+        properties: {
+          foo: {
+            type: 'string',
+          },
+        },
+      },
+      {
+        properties: {
+          bar: {
+            type: 'number',
+          },
+        },
+      },
+    ],
+  };
+  const rootSchemaAllOfEmpty: JsonSchema = {
+    definitions: {},
+  };
+  const defaultValueAllOfEmpty = createDefaultValue(
+    schemaAllOfEmpty,
+    rootSchemaAllOfEmpty
+  );
+  console.log('defaultValueAllOfEmpty', defaultValueAllOfEmpty);
+  t.deepEqual(defaultValueAllOfEmpty, {});
 });
 
 test(`mapStateToJsonFormsRendererProps should use registered UI schema given ownProps schema`, (t) => {
@@ -810,6 +939,84 @@ test('mapStateToLayoutProps - visible via state with path from ownProps ', (t) =
   t.true(props.visible);
 });
 
+test('mapStateToArrayControlProps - should include minItems in array control props', (t) => {
+  const schema: JsonSchema = {
+    type: 'array',
+    minItems: 42,
+    items: {
+      type: 'object',
+      properties: {
+        message: {
+          type: 'string',
+          default: 'foo',
+        },
+      },
+    },
+  };
+
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#',
+  };
+
+  const state = {
+    jsonforms: {
+      core: {
+        schema,
+        data: {},
+        uischema,
+        errors: [] as ErrorObject[],
+      },
+    },
+  };
+
+  const ownProps = {
+    uischema,
+  };
+
+  const props = mapStateToArrayControlProps(state, ownProps);
+  t.is(props.arraySchema.minItems, 42);
+});
+
+test('mapStateToArrayControlProps - should include maxItems in array control props', (t) => {
+  const schema: JsonSchema = {
+    type: 'array',
+    maxItems: 42,
+    items: {
+      type: 'object',
+      properties: {
+        message: {
+          type: 'string',
+          default: 'foo',
+        },
+      },
+    },
+  };
+
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#',
+  };
+
+  const state = {
+    jsonforms: {
+      core: {
+        schema,
+        data: {},
+        uischema,
+        errors: [] as ErrorObject[],
+      },
+    },
+  };
+
+  const ownProps = {
+    uischema,
+  };
+
+  const props = mapStateToArrayControlProps(state, ownProps);
+  t.is(props.arraySchema.maxItems, 42);
+});
+
 test('mapStateToArrayLayoutProps - should include minItems in array layout props', (t) => {
   const schema: JsonSchema = {
     type: 'array',
@@ -846,7 +1053,46 @@ test('mapStateToArrayLayoutProps - should include minItems in array layout props
   };
 
   const props = mapStateToArrayLayoutProps(state, ownProps);
-  t.is(props.minItems, 42);
+  t.is(props.arraySchema.minItems, 42);
+});
+
+test('mapStateToArrayLayoutProps - should include maxItems in array layout props', (t) => {
+  const schema: JsonSchema = {
+    type: 'array',
+    maxItems: 42,
+    items: {
+      type: 'object',
+      properties: {
+        message: {
+          type: 'string',
+          default: 'foo',
+        },
+      },
+    },
+  };
+
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#',
+  };
+
+  const state = {
+    jsonforms: {
+      core: {
+        schema,
+        data: {},
+        uischema,
+        errors: [] as ErrorObject[],
+      },
+    },
+  };
+
+  const ownProps = {
+    uischema,
+  };
+
+  const props = mapStateToArrayLayoutProps(state, ownProps);
+  t.is(props.arraySchema.maxItems, 42);
 });
 
 test('mapStateToLayoutProps should return renderers prop via ownProps', (t) => {

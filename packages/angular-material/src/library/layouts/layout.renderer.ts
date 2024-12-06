@@ -44,6 +44,7 @@ import {
 
 @Component({
   template: '',
+  standalone: false,
 })
 export class LayoutRenderer<T extends Layout>
   extends JsonFormsBaseRenderer<T>
@@ -79,7 +80,7 @@ export class LayoutRenderer<T extends Layout>
   }
 }
 
-@Pipe({ name: 'layoutChildrenRenderProps' })
+@Pipe({ name: 'layoutChildrenRenderProps', standalone: false })
 export class LayoutChildrenRenderPropsPipe implements PipeTransform {
   transform(
     uischema: Layout,

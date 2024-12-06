@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/react",
-  "version": "3.4.1",
+  "version": "3.5.0-beta.0",
   "description": "React module of JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -86,7 +86,7 @@
     "lodash": "^4.17.21"
   },
   "peerDependencies": {
-    "@jsonforms/core": "3.4.1",
+    "@jsonforms/core": "3.5.0-beta.0",
     "react": "^16.12.0 || ^17.0.0 || ^18.0.0"
   },
   "optionalPeerDependencies": {
@@ -127,6 +127,6 @@
     "ts-jest": "^27.1.4",
     "tslib": "^2.5.0",
     "typedoc": "~0.25.3",
-    "typescript": "~5.2.2"
+    "typescript": "~5.5.0"
   }
 }
