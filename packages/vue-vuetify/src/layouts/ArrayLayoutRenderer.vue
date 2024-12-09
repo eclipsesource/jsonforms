@@ -193,7 +193,7 @@
         </v-row>
       </v-container>
       <v-container v-if="dataLength === 0" :class="styles.arrayList.noData">
-        No data
+        {{ control.translations.noDataMessage }}
       </v-container>
     </v-card-text>
     <v-card-actions v-if="$slots.actions" class="pb-8">

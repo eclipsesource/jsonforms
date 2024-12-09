@@ -53,7 +53,7 @@ exports[`ArrayLayoutRenderer.vue > should render component and match snapshot 1`
             <div data-v-5f91636e="" class="v-expansion-panels v-theme--light v-expansion-panels--variant-default" accordion=""></div>
           </div>
         </div>
-        <div data-v-5f91636e="" class="v-container v-locale--is-ltr array-list-no-data"> No data </div>
+        <div data-v-5f91636e="" class="v-container v-locale--is-ltr array-list-no-data">No data</div>
       </div>
       <!--v-if-->
       <!---->

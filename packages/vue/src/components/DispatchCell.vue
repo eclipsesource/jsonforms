@@ -1,5 +1,10 @@
 <template>
-  <component :is="determinedCell" v-bind="cell"></component>
+  <component :is="determinedCell" v-bind="cell">
+    <!-- Forward all slots dynamically -->
+    <template v-for="(_, slotName) in $slots" :key="slotName" #[slotName]>
+      <slot :name="slotName"></slot>
+    </template>
+  </component>
 </template>
 
 <script lang="ts">

@@ -52,8 +52,9 @@ export default defineComponent({
   },
   props: {
     data: {
-      required: true,
+      required: false,
       type: [String, Number, Boolean, Array, Object] as PropType<any>,
+      default: undefined,
     },
     schema: {
       required: false,

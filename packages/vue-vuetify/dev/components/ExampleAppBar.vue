@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useAppStore } from '../store';
 import JsonFormsLogo from '../assets/JsonFormsLogo.vue';
+import { useAppStore } from '../store';
 import ThemeChanger from './ThemeChanger.vue';
 
 const appStore = useAppStore();

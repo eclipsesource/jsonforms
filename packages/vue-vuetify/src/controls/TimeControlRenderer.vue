@@ -100,6 +100,7 @@ import {
 import { VTimePicker } from 'vuetify/labs/VTimePicker';
 
 import { useLocale } from 'vuetify';
+import type { IconValue } from '../icons';
 import {
   convertDayjsToMaskaFormat,
   expandLocaleFormat,
@@ -196,7 +197,7 @@ const controlRenderer = defineComponent({
     };
   },
   computed: {
-    pickerIcon(): string {
+    pickerIcon(): IconValue {
       return typeof this.appliedOptions.pickerIcon == 'string'
         ? this.appliedOptions.pickerIcon
         : this.icons.current.value.clock;
