@@ -48,7 +48,8 @@ import { JsonFormsBaseRenderer } from './base.renderer';
 import { JsonFormsControl } from './control';
 import { JsonFormsAngularService } from './jsonforms.service';
 
-import { get, isEqual } from 'lodash';
+import isEqual from 'lodash/isEqual';
+import get from 'lodash/get';
 
 const areEqual = (
   prevProps: StatePropsOfJsonFormsRenderer,

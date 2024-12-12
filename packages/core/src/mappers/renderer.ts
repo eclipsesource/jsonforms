@@ -85,7 +85,7 @@ import {
 } from '../store';
 import { isInherentlyEnabled } from './util';
 import { CombinatorKeyword } from './combinators';
-import { isEqual } from 'lodash';
+import isEqual from 'lodash/isEqual';
 
 const move = (array: any[], index: number, delta: number) => {
   const newIndex: number = index + delta;

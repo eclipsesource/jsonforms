@@ -44,7 +44,7 @@ import {
 } from '../actions';
 import { JsonFormsCore, Reducer, ValidationMode } from '../store';
 import Ajv, { ErrorObject } from 'ajv';
-import { isFunction } from 'lodash';
+import isFunction from 'lodash/isFunction';
 import { createAjv, validate } from '../util';
 
 export const initState: JsonFormsCore = {
