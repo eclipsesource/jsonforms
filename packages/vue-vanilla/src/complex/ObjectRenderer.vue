@@ -31,7 +31,7 @@ import {
   useJsonFormsControlWithDetail,
 } from '../../config/jsonforms';
 import { useVanillaControl } from '../util';
-import { isEmpty } from 'lodash';
+import isEmpty from 'lodash/isEmpty';
 
 const controlRenderer = defineComponent({
   name: 'ObjectRenderer',

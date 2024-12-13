@@ -40,7 +40,7 @@ import {
   setReadonly,
   UISchemaElement,
 } from '@jsonforms/core';
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 
 @Component({
   selector: 'ObjectRenderer',
