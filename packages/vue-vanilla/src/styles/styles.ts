@@ -23,6 +23,9 @@ export interface Styles {
     description?: string;
     error?: string;
     input?: string;
+    radioGroup?: string;
+    radioGroupItem?: string;
+    radioGroupItemLabel?: string;
     textarea?: string;
     select?: string;
     option?: string;
