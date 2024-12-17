@@ -1,7 +1,18 @@
 <template>
-  <v-card v-if="control.visible" :class="styles.arrayList.root">
-    <v-card-title>
-      <v-toolbar flat :class="styles.arrayList.toolbar">
+  <v-card
+    v-if="control.visible"
+    :class="styles.arrayList.root"
+    v-bind="vuetifyProps('v-card')"
+  >
+    <v-card-title
+      :class="styles.arrayList.title"
+      v-bind="vuetifyProps('v-card-title')"
+    >
+      <v-toolbar
+        flat
+        :class="styles.arrayList.toolbar"
+        v-bind="vuetifyProps('v-toolbar')"
+      >
         <v-toolbar-title :class="styles.arrayList.label">{{
           computedLabel
         }}</v-toolbar-title>
@@ -45,7 +56,7 @@
         </slot>
       </v-toolbar>
     </v-card-title>
-    <v-card-text>
+    <v-card-text v-bind="vuetifyProps('v-card-text')">
       <v-container
         justify-space-around
         align-content-center
@@ -196,7 +207,11 @@
         {{ control.translations.noDataMessage }}
       </v-container>
     </v-card-text>
-    <v-card-actions v-if="$slots.actions" class="pb-8">
+    <v-card-actions
+      v-if="$slots.actions"
+      class="pb-8"
+      v-bind="vuetifyProps('v-card-actions')"
+    >
       <slot
         name="actions"
         :addClass="styles.arrayList.addButton"

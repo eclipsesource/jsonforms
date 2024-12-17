@@ -73,14 +73,7 @@
 </template>
 
 <script lang="ts">
-import {
-  and,
-  categorizationHasCategory,
-  isCategorization,
-  rankWith,
-  type JsonFormsRendererRegistryEntry,
-  type Layout,
-} from '@jsonforms/core';
+import { type Layout } from '@jsonforms/core';
 import {
   DispatchRenderer,
   rendererProps,
