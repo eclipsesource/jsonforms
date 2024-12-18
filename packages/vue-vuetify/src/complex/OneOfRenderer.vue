@@ -4,6 +4,7 @@
       :schema="control.schema"
       combinatorKeyword="oneOf"
       :path="path"
+      :rootSchema="control.rootSchema"
     />
 
     <v-select

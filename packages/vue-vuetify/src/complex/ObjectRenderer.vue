@@ -20,11 +20,8 @@
 import {
   Generate,
   findUISchema,
-  isObjectControl,
-  rankWith,
   type ControlElement,
   type GroupLayout,
-  type JsonFormsRendererRegistryEntry,
   type UISchemaElement,
 } from '@jsonforms/core';
 import {
@@ -76,7 +73,12 @@ const controlRenderer = defineComponent({
     },
     detailUiSchema(): UISchemaElement {
       const uiSchemaGenerator = () => {
-        const uiSchema = Generate.uiSchema(this.control.schema, 'Group');
+        const uiSchema = Generate.uiSchema(
+          this.control.schema,
+          'Group',
+          undefined,
+          this.control.rootSchema,
+        );
         if (isEmpty(this.control.path)) {
           uiSchema.type = 'VerticalLayout';
         } else {

@@ -16,6 +16,7 @@
           :schema="control.schema"
           combinatorKeyword="allOf"
           :path="path"
+          :rootSchema="control.rootSchema"
         />
         <dispatch-renderer
           v-for="(allOfRenderInfo, allOfIndex) in allOfRenderInfos"
