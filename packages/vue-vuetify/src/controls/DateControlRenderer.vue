@@ -20,10 +20,9 @@
       v-bind="vuetifyProps('v-text-field')"
       v-model="inputModel"
       :clearable="control.enabled"
-      @click:clear="clear"
       @focus="handleFocus"
       @blur="handleBlur"
-      v-maska:[options]
+      v-maska:[options]="maska"
     >
       <template v-slot:prepend-inner>
         <v-menu
@@ -50,19 +49,17 @@
                 v-if="showMenu"
                 :model-value="showActions ? proxyModel.value : pickerValue"
                 @update:model-value="
-                  (val: unknown) => {
-                    if (showActions) {
-                      proxyModel.value = val as Date;
-                    } else {
-                      pickerValue = val as Date;
-                      showMenu = false;
-                    }
-                  }
+                  (val) => updateDatePickerValue(val, proxyModel)
                 "
                 v-bind="vuetifyProps('v-date-picker')"
                 :title="computedLabel"
                 :min="minDate"
                 :max="maxDate"
+                v-model:view-mode="viewMode"
+                @update:month="
+                  (month) => updateDatePickerMonth(month, proxyModel)
+                "
+                @update:year="(year) => updateDatePickerYear(year, proxyModel)"
               >
                 <template v-slot:actions v-if="showActions">
                   <component :is="actions"></component>
@@ -78,14 +75,15 @@
 
 <script lang="ts">
 import { type ControlElement, type JsonSchema } from '@jsonforms/core';
-import { computed, defineComponent, ref, unref } from 'vue';
+import type { Ref } from 'vue';
+import { computed, defineComponent, reactive, ref, unref, watch } from 'vue';
 
 import {
   rendererProps,
   useJsonFormsControl,
   type RendererProps,
 } from '@jsonforms/vue';
-import { vMaska, type MaskOptions, type MaskaDetail } from 'maska';
+import { vMaska, type MaskOptions } from 'maska';
 import { useLocale } from 'vuetify';
 import {
   VBtn,
@@ -98,6 +96,7 @@ import {
 } from 'vuetify/components';
 import {
   convertDayjsToMaskaFormat,
+  determineClearValue,
   expandLocaleFormat,
   parseDateTime,
   useTranslator,
@@ -107,6 +106,8 @@ import { default as ControlWrapper } from './ControlWrapper.vue';
 import { DisabledIconFocus } from './directives';
 
 const JSON_SCHEMA_DATE_FORMATS = ['YYYY-MM-DD'];
+
+type ViewModeType = 'year' | 'months' | 'month';
 
 // https://ajv.js.org/packages/ajv-formats.html#keywords-to-compare-values-formatmaximum-formatminimum-and-formatexclusivemaximum-formatexclusiveminimum
 type AjvMinMaxFormat = {
@@ -133,11 +134,12 @@ const controlRenderer = defineComponent({
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
+    const clearValue = determineClearValue(props, '');
     const t = useTranslator();
 
     const showMenu = ref(false);
 
-    const adaptValue = (value: any) => value || undefined;
+    const adaptValue = (value: any) => (value === null ? clearValue : value);
     const control = useVuetifyControl(useJsonFormsControl(props), adaptValue);
 
     const dateFormat = computed<string>(
@@ -149,33 +151,110 @@ const controlRenderer = defineComponent({
     );
 
     const useMask = control.appliedOptions.value.mask !== false;
-    const maskCompleted = ref(false);
-
-    const state = computed(() => convertDayjsToMaskaFormat(dateFormat.value));
     const locale = useLocale();
 
+    const maska = reactive({
+      masked: '',
+      unmasked: '',
+      completed: false,
+    });
     const options = useMask
       ? computed<MaskOptions>(() => ({
           mask: state.value.mask,
           tokens: state.value.tokens,
           tokensReplace: true,
-          onMaska: (detail: MaskaDetail) =>
-            (maskCompleted.value = detail.completed),
 
           //invoke the locale.current as side effect so that the computed will rerun if the locale changes since the mask could be dependent on the locale
           _locale: unref(locale.current),
         }))
       : null;
 
+    const state = computed(() => convertDayjsToMaskaFormat(dateFormat.value));
+
+    const viewMode = ref<ViewModeType>('month');
+
+    const views = computed<('day' | 'month' | 'year')[] | undefined>(() =>
+      Array.isArray(control.appliedOptions.value.views)
+        ? control.appliedOptions.value.views.filter(
+            (view: string) =>
+              view === 'day' || view === 'month' || view === 'year',
+          )
+        : undefined,
+    );
+
+    if (views.value !== undefined) {
+      const allowedViewModes = computed<ViewModeType[]>(() => {
+        // Define the priority order
+        const viewPriorityOrder: Record<ViewModeType, number> = {
+          month: 1,
+          months: 2,
+          year: 3,
+        };
+
+        if (views.value === undefined) {
+          return [];
+        }
+        return views.value
+          .map((view) => {
+            if (view === 'day') {
+              return 'month';
+            }
+            if (view === 'month') {
+              return 'months';
+            }
+            if (view === 'year') {
+              return 'year';
+            }
+
+            return null; // null value will be filtered out
+          })
+          .filter((value): value is ViewModeType => value !== null)
+          .sort((a, b) => viewPriorityOrder[a] - viewPriorityOrder[b]);
+      });
+
+      if (allowedViewModes.value.length > 0) {
+        viewMode.value = allowedViewModes.value[0];
+      }
+
+      watch(viewMode, (newViewMode) => {
+        if (
+          allowedViewModes.value.length > 0 &&
+          !allowedViewModes.value.includes(newViewMode)
+        ) {
+          switch (newViewMode) {
+            case 'month':
+              viewMode.value = allowedViewModes.value.includes('months')
+                ? 'months'
+                : 'year';
+              break;
+            case 'months':
+              viewMode.value = allowedViewModes.value.includes('year')
+                ? 'year'
+                : 'month';
+              break;
+            case 'year':
+              viewMode.value = allowedViewModes.value.includes('months')
+                ? 'months'
+                : 'month';
+              break;
+            default:
+              break;
+          }
+        }
+      });
+    }
+
     return {
       ...control,
+      views,
+      viewMode,
+      maska,
       showMenu,
       t,
       adaptValue,
       dateFormat,
       options,
       useMask,
-      maskCompleted,
     };
   },
   computed: {
@@ -240,22 +319,29 @@ const controlRenderer = defineComponent({
       return undefined;
     },
     inputModel: {
-      get(): string | undefined {
+      get(): string | null {
         const value = this.control.data;
         const date = parseDateTime(value, this.formats);
         return date ? date.format(this.dateFormat) : value;
       },
-      set(val: string | undefined): void {
+      set(val: string | null): void {
         let value = val;
 
-        if (
-          this.useMask &&
-          !this.maskCompleted &&
-          value !== null &&
-          value !== undefined
-        ) {
+        if (this.useMask && !this.maska.completed && value) {
           // the value is set not not yet completed so do not set that until the full mask is completed
           // otherwise if the control.data is bound to another renderer with different dateTimeFormat then those will collide
+          return;
+        }
+
+        if (value == null) {
+          // clear
+          this.maska.masked = '';
+          this.maska.unmasked = '';
+          this.maska.completed = false;
+        }
+
+        if (this.useMask && value === '' && this.maska.unmasked === '') {
+          // once cleared the maska will set the value to ''
           return;
         }
 
@@ -279,7 +365,6 @@ const controlRenderer = defineComponent({
       },
       set(val: Date): void {
         this.onPickerChange(val);
-        this.showMenu = false;
       },
     },
     cancelLabel(): string {
@@ -304,14 +389,64 @@ const controlRenderer = defineComponent({
   methods: {
     onPickerChange(value: Date): void {
       const date = parseDateTime(value, undefined);
-      let newdata: string | number | undefined = date
+      let newdata: string | null = date
         ? date.format(this.dateSaveFormat)
-        : undefined;
+        : null;
 
       this.onChange(newdata);
     },
-    clear(): void {
-      this.inputModel = undefined;
+    updateDatePickerValue(
+      val: unknown,
+      proxyModel: Ref<Date | undefined>,
+    ): void {
+      if (this.showActions) {
+        proxyModel.value = val as Date;
+      } else {
+        this.pickerValue = val as Date;
+        this.showMenu = false;
+      }
+    },
+    updateDatePickerYear(
+      year: number,
+      proxyModel: Ref<Date | undefined>,
+    ): void {
+      if (this.showActions) {
+        const date = proxyModel.value ?? new Date();
+        date.setFullYear(year);
+        proxyModel.value = date;
+      } else {
+        const date = this.pickerValue ?? new Date();
+        date.setFullYear(year);
+        this.pickerValue = date;
+
+        if (
+          this.views &&
+          this.views.length === 1 &&
+          this.views.includes('year')
+        ) {
+          // close the menu since only year can be selected
+          this.showMenu = false;
+        }
+      }
+    },
+    updateDatePickerMonth(
+      month: number,
+      proxyModel: Ref<Date | undefined>,
+    ): void {
+      if (this.showActions) {
+        const date = proxyModel.value ?? new Date();
+        date.setMonth(month);
+        proxyModel.value = date;
+      } else {
+        const date = this.pickerValue ?? new Date();
+        date.setMonth(month);
+        this.pickerValue = date;
+
+        if (this.views && !this.views.includes('day')) {
+          // close the menu since day can't be selected
+          this.showMenu = false;
+        }
+      }
     },
   },
 });
