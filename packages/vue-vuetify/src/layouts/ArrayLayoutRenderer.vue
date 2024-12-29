@@ -62,8 +62,10 @@
               :key="`${control.path}-${control.data.length}-${index}`"
               :class="styles.arrayList.item"
             >
-              <v-expansion-panel-title :class="styles.arrayList.itemHeader">
-                <v-container py-0 :class="styles.arrayList.itemContainer">
+              <v-expansion-panel-title
+                :class="`${styles.arrayList.itemHeader} py-0`"
+              >
+                <v-container :class="`${styles.arrayList.itemContainer} py-0`">
                   <v-row
                     :style="`display: grid; grid-template-columns: ${
                       !hideAvatar ? 'min-content' : ''
@@ -161,9 +163,9 @@
                             :disabled="
                               !control.enabled ||
                               (appliedOptions.restrict &&
-                                arraySchema !== undefined &&
-                                arraySchema.minItems !== undefined &&
-                                dataLength <= arraySchema.minItems)
+                                control.arraySchema !== undefined &&
+                                control.arraySchema.minItems !== undefined &&
+                                dataLength <= control.arraySchema.minItems)
                             "
                             @click.stop="suggestToDelete = index"
                           >
@@ -250,13 +252,11 @@
 
 <script lang="ts">
 import {
-  Resolve,
   composePaths,
   createDefaultValue,
   findUISchema,
   getControlPath,
   type ControlElement,
-  type JsonSchema,
   type UISchemaElement,
 } from '@jsonforms/core';
 import {
@@ -351,9 +351,9 @@ const controlRenderer = defineComponent({
       return (
         !this.control.enabled ||
         (this.appliedOptions.restrict &&
-          this.arraySchema !== undefined &&
-          this.arraySchema.maxItems !== undefined &&
-          this.dataLength >= this.arraySchema.maxItems)
+          this.control.arraySchema !== undefined &&
+          this.control.arraySchema.maxItems !== undefined &&
+          this.dataLength >= this.control.arraySchema.maxItems)
       );
     },
     dataLength(): number {
@@ -367,13 +367,6 @@ const controlRenderer = defineComponent({
         this.control.path,
         undefined,
         this.control.uischema,
-        this.control.rootSchema,
-      );
-    },
-    arraySchema(): JsonSchema | undefined {
-      return Resolve.schema(
-        this.control.rootSchema,
-        this.control.uischema.scope,
         this.control.rootSchema,
       );
     },
