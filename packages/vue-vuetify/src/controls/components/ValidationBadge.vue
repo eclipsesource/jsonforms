@@ -20,7 +20,7 @@
       <p>Validation Errors</p>
       <p
         v-for="(message, index) in tooltipMessages"
-        :key="`${index}`"
+        :key="`${tooltipMessages.length}-${index}`"
         class="mb-0"
       >
         {{ message }}

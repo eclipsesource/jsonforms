@@ -7,7 +7,7 @@
   >
     <v-row
       v-for="(element, index) in (layout.uischema as Layout).elements"
-      :key="`${layout.path}-${index}`"
+      :key="`${layout.path}-${(layout.uischema as Layout).elements.length}-${index}`"
       v-bind="vuetifyProps(`v-row[${index}]`)"
     >
       <v-col

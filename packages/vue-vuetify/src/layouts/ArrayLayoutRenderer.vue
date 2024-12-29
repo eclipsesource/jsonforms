@@ -59,7 +59,7 @@
           >
             <v-expansion-panel
               v-for="(_element, index) in control.data"
-              :key="`${control.path}-${index}`"
+              :key="`${control.path}-${control.data.length}-${index}`"
               :class="styles.arrayList.item"
             >
               <v-expansion-panel-title :class="styles.arrayList.itemHeader">

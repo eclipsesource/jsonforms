@@ -46,8 +46,8 @@
             <thead v-if="control.schema.type === 'object'">
               <tr>
                 <th
-                  v-for="(prop, index) in getValidColumnProps(control.schema)"
-                  :key="`${control.path}-header-${index}`"
+                  v-for="(prop, index) in validColumnProps"
+                  :key="`${control.path}-header-${validColumnProps.length}-${index}`"
                   scope="col"
                 >
                   {{ title(prop) }}
@@ -66,14 +66,17 @@
             <tbody>
               <tr
                 v-for="(element, index) in control.data"
-                :key="`${control.path}-${index}`"
+                :key="`${control.path}-${control.data.length}-${index}`"
                 :class="styles.arrayList.item"
               >
                 <td
-                  v-for="propName in getValidColumnProps(control.schema)"
+                  v-for="propName in validColumnProps"
                   :key="
                     composePaths(
-                      composePaths(control.path, `${index}`),
+                      composePaths(
+                        control.path,
+                        `${validColumnProps.length}-${index}`,
+                      ),
                       propName,
                     )
                   "
@@ -249,6 +252,18 @@ const controlRenderer = defineComponent({
     dataLength(): number {
       return this.control.data ? this.control.data.length : 0;
     },
+    validColumnProps() {
+      if (
+        this.control.schema.type === 'object' &&
+        typeof this.control.schema.properties === 'object'
+      ) {
+        return Object.keys(this.control.schema.properties).filter(
+          (prop) => this.control.schema.properties![prop].type !== 'array',
+        );
+      }
+      // primitives
+      return [''];
+    },
   },
   methods: {
     composePaths,
@@ -270,18 +285,6 @@ const controlRenderer = defineComponent({
     removeItemsClick(event: Event, toDelete: number[]): void {
       event.stopPropagation();
       this.removeItems?.(this.control.path, toDelete)();
-    },
-    getValidColumnProps(scopedSchema: JsonSchema) {
-      if (
-        scopedSchema.type === 'object' &&
-        typeof scopedSchema.properties === 'object'
-      ) {
-        return Object.keys(scopedSchema.properties).filter(
-          (prop) => scopedSchema.properties![prop].type !== 'array',
-        );
-      }
-      // primitives
-      return [''];
     },
     title(prop: string) {
       return this.control.schema.properties?.[prop]?.title ?? startCase(prop);
