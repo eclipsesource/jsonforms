@@ -12,13 +12,16 @@ import {
   getCombinatorTranslations,
   getFirstPrimitiveProp,
   isDescriptionHidden,
+  isScoped,
   type ControlElement,
   type DispatchPropsOfControl,
   type DispatchPropsOfMultiEnumControl,
   type JsonFormsSubStates,
   type JsonSchema,
+  type Scopable,
   type UISchemaElement,
 } from '@jsonforms/core';
+import type { RendererProps } from '@jsonforms/vue';
 import type Ajv from 'ajv';
 import type { ErrorObject } from 'ajv';
 import cloneDeep from 'lodash/cloneDeep';
@@ -480,4 +483,33 @@ export const useIcons = () => {
   return {
     current: iconSet,
   };
+};
+
+export const determineClearValue = (
+  props: RendererProps<ControlElement & Scopable>,
+  defaultValue: any,
+) => {
+  const { uischema } = props;
+
+  if (
+    !isScoped(uischema) ||
+    props.schema?.type !== 'object' ||
+    typeof props?.schema?.properties !== 'object'
+  ) {
+    return defaultValue;
+  }
+
+  // check if we are wrapped in an object and
+  // the path to the property is defined in the object properties
+  // then return undefined to clear the property from the object
+
+  // remove any leading #, /, or #/
+  const schemaPath = uischema.scope.replace(/^(#\/|#|\/)/, '');
+  // replace / with .
+  const property = schemaPath.replace(/\//g, '.');
+
+  const definedPropertySchema = get(props.schema, property);
+  return typeof definedPropertySchema === 'object'
+    ? undefined // clear the property from the object
+    : defaultValue;
 };

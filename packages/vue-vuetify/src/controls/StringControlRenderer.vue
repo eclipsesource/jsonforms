@@ -78,7 +78,7 @@ import isArray from 'lodash/isArray';
 import isString from 'lodash/isString';
 import { defineComponent } from 'vue';
 import { VCombobox, VTextField } from 'vuetify/components';
-import { useVuetifyControl } from '../util';
+import { useVuetifyControl, determineClearValue } from '../util';
 import { default as ControlWrapper } from './ControlWrapper.vue';
 import { DisabledIconFocus } from './directives';
 
@@ -96,9 +96,10 @@ const controlRenderer = defineComponent({
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
+    const clearValue = determineClearValue(props, '');
     return useVuetifyControl(
       useJsonFormsControl(props),
-      (value) => value || undefined,
+      (value) => (value === null ? clearValue : value),
       300,
     );
   },

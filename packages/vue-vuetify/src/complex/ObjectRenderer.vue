@@ -10,7 +10,7 @@
       :cells="control.cells"
     />
     <additional-properties
-      v-if="hasAdditionalProperties && showAdditionalProperties"
+      v-if="hasAdditionalProperties || showAdditionalProperties"
       :input="input"
     ></additional-properties>
   </div>
@@ -20,11 +20,8 @@
 import {
   Generate,
   findUISchema,
-  isObjectControl,
-  rankWith,
   type ControlElement,
   type GroupLayout,
-  type JsonFormsRendererRegistryEntry,
   type UISchemaElement,
 } from '@jsonforms/core';
 import {
@@ -51,6 +48,7 @@ const controlRenderer = defineComponent({
   },
   setup(props: RendererProps<ControlElement>) {
     const control = useVuetifyControl(useJsonFormsControlWithDetail(props));
+
     const nested = useNested('object');
     return {
       ...control,
@@ -62,17 +60,14 @@ const controlRenderer = defineComponent({
     hasAdditionalProperties(): boolean {
       return (
         !isEmpty(this.control.schema.patternProperties) ||
-        isObject(this.control.schema.additionalProperties)
-        // do not support - additionalProperties === true - since then the type should be any and we won't know what kind of renderer we should use for new properties
+        isObject(this.control.schema.additionalProperties) ||
+        this.control.schema.additionalProperties === true
       );
     },
     showAdditionalProperties(): boolean {
       const showAdditionalProperties =
         this.control.uischema.options?.showAdditionalProperties;
-      return (
-        showAdditionalProperties === undefined ||
-        showAdditionalProperties === true
-      );
+      return showAdditionalProperties === true;
     },
     detailUiSchema(): UISchemaElement {
       const uiSchemaGenerator = () => {
