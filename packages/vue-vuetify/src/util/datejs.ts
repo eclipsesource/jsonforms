@@ -45,6 +45,35 @@ export const parseDateTime = (
   return dayjsData;
 };
 
+// defintions from - https://day.js.org/docs/en/parse/string-format#list-of-all-available-parsing-tokens
+const dayjsTokens = [
+  'YYYY', // Four-digit year - example: 2001
+  'YY', //Two-digit year - example: 01
+  'M', // Month, beginning at 1 - example: 1-12
+  'MM', // Month, 2-digits - example: 01-12
+  'MMM', // The abbreviated month name - example: Jan-Dec
+  'MMMM', // The full month name - example: January-December
+  'D', // Day of month - example: 1-31
+  'DD', // Day of month, 2-digits - example: 01-31
+  'H', // Hours - example: 0-23
+  'HH', // Hours, 2-digits - example: 00-23
+  'h', // Hours, 12-hour clock - example: 1-12
+  'hh', // Hours, 12-hour clock, 2-digits - example: 01-12
+  'm', // Minutes - example: 0-59
+  'mm', // Minutes, 2-digits - example: 00-59
+  's', // Seconds - example: 0-59
+  'ss', // Seconds, 2-digits - example: 00-59
+  'S', // Hundreds of milliseconds, 1-digit - example: 0-9
+  'SS', // Tens of milliseconds, 2-digits - example: 00-99
+  'SSS', // Milliseconds, 3-digits - example: 000-999
+  'Z', // Offset from UTC - example: -05:00
+  'ZZ', // Compact offset from UTC, 2-digits - example: -0500
+  'A', // Post or ante meridiem, upper-case - example: AM PM
+  'a', // Post or ante meridiem, lower-case - example: am pm,
+  'X', // Unix timestamp - example 1410715640.579,
+  'x', // Unix ms timestamp - example 1410715640579
+].sort((a, b) => b.length - a.length);
+
 export const convertDayjsToMaskaFormat = (
   dayjsFormat: string,
 ): { mask: MaskType; tokens: MaskTokens } => {
@@ -110,35 +139,6 @@ export const convertDayjsToMaskaFormat = (
     }
   }
 
-  // defintions from - https://day.js.org/docs/en/parse/string-format#list-of-all-available-parsing-tokens
-  const dayjsTokens = [
-    'YYYY', // Four-digit year - example: 2001
-    'YY', //Two-digit year - example: 01
-    'M', // Month, beginning at 1 - example: 1-12
-    'MM', // Month, 2-digits - example: 01-12
-    'MMM', // The abbreviated month name - example: Jan-Dec
-    'MMMM', // The full month name - example: January-December
-    'D', // Day of month - example: 1-31
-    'DD', // Day of month, 2-digits - example: 01-31
-    'H', // Hours - example: 0-23
-    'HH', // Hours, 2-digits - example: 00-23
-    'h', // Hours, 12-hour clock - example: 1-12
-    'hh', // Hours, 12-hour clock, 2-digits - example: 01-12
-    'm', // Minutes - example: 0-59
-    'mm', // Minutes, 2-digits - example: 00-59
-    's', // Seconds - example: 0-59
-    'ss', // Seconds, 2-digits - example: 00-59
-    'S', // Hundreds of milliseconds, 1-digit - example: 0-9
-    'SS', // Tens of milliseconds, 2-digits - example: 00-99
-    'SSS', // Milliseconds, 3-digits - example: 000-999
-    'Z', // Offset from UTC - example: -05:00
-    'ZZ', // Compact offset from UTC, 2-digits - example: -0500
-    'A', // Post or ante meridiem, upper-case - example: AM PM
-    'a', // Post or ante meridiem, lower-case - example: am pm,
-    'X', // Unix timestamp - example 1410715640.579,
-    'x', // Unix ms timestamp - example 1410715640579
-  ].sort((a, b) => b.length - a.length);
-
   const parts = dayjsFormat
     .split(new RegExp(`(${dayjsTokens.join('|')})`))
     .filter(Boolean);
@@ -148,7 +148,7 @@ export const convertDayjsToMaskaFormat = (
     .join('');
   const tokens = new Tokens(reservedChars);
 
-  // need to prebuild all keys to tokens are are going to be used in tokenFunction
+  // need to prebuild all keys to tokens that are going to be used in tokenFunction
   tokens.registerToken({ pattern: /[0-9]/ });
   tokens.registerToken({ pattern: /1/ });
   tokens.registerToken({ pattern: /[0-2]/ });
@@ -434,5 +434,22 @@ export const convertDayjsToMaskaFormat = (
     return mask;
   };
 
-  return { mask: tokenFunction, tokens: tokens.getTokens() };
+  const cache: { value: string | undefined; mask: string | undefined } = {
+    value: undefined,
+    mask: undefined,
+  };
+
+  // memorize the last value to token since maska can call this function multiple times with the same value
+  const memorizedTokenFunction = (value: string): string => {
+    if (cache.value === value && cache.mask !== undefined) {
+      return cache.mask;
+    }
+    const mask = tokenFunction(value);
+    cache.value = value;
+    cache.mask = mask;
+
+    return mask;
+  };
+
+  return { mask: memorizedTokenFunction, tokens: tokens.getTokens() };
 };
