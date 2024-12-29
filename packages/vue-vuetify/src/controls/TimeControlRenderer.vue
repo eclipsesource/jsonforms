@@ -20,10 +20,9 @@
       v-bind="vuetifyProps('v-text-field')"
       v-model="inputModel"
       :clearable="control.enabled"
-      @click:clear="clear"
       @focus="handleFocus"
       @blur="handleBlur"
-      v-maska:[options]
+      v-maska:[options]="maska"
     >
       <template v-slot:prepend-inner>
         <v-menu
@@ -87,7 +86,7 @@ import {
   type RendererProps,
 } from '@jsonforms/vue';
 import { vMaska, type MaskOptions, type MaskaDetail } from 'maska';
-import { computed, defineComponent, ref, unref } from 'vue';
+import { computed, reactive, defineComponent, ref, unref } from 'vue';
 import {
   VBtn,
   VConfirmEdit,
@@ -103,6 +102,7 @@ import { useLocale } from 'vuetify';
 import type { IconValue } from '../icons';
 import {
   convertDayjsToMaskaFormat,
+  determineClearValue,
   expandLocaleFormat,
   parseDateTime,
   useIcons,
@@ -145,11 +145,12 @@ const controlRenderer = defineComponent({
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
+    const clearValue = determineClearValue(props, '');
     const t = useTranslator();
 
     const showMenu = ref(false);
 
-    const adaptValue = (value: any) => value || undefined;
+    const adaptValue = (value: any) => (value === null ? clearValue : value);
     const control = useVuetifyControl(useJsonFormsControl(props), adaptValue);
 
     const icons = useIcons();
@@ -165,7 +166,11 @@ const controlRenderer = defineComponent({
     );
 
     const useMask = control.appliedOptions.value.mask !== false;
-    const maskCompleted = ref(false);
+    const maska = reactive({
+      masked: '',
+      unmasked: '',
+      completed: false,
+    });
 
     const state = computed(() => convertDayjsToMaskaFormat(timeFormat.value));
     const locale = useLocale();
@@ -175,8 +180,6 @@ const controlRenderer = defineComponent({
           mask: state.value.mask,
           tokens: state.value.tokens,
           tokensReplace: true,
-          onMaska: (detail: MaskaDetail) =>
-            (maskCompleted.value = detail.completed),
 
           //invoke the locale.current as side effect so that the computed will rerun if the locale changes since the mask could be dependent on the locale
           _locale: unref(locale.current),
@@ -193,7 +196,7 @@ const controlRenderer = defineComponent({
       timeFormat,
       options,
       useMask,
-      maskCompleted,
+      maska,
     };
   },
   computed: {
@@ -284,22 +287,29 @@ const controlRenderer = defineComponent({
       return undefined;
     },
     inputModel: {
-      get(): string | undefined {
+      get(): string | null {
         const value = this.control.data;
         const time = parseDateTime(value, this.formats);
         return time ? time.format(this.timeFormat) : value;
       },
-      set(val: string | undefined): void {
+      set(val: string | null): void {
         let value = val;
 
-        if (
-          this.useMask &&
-          !this.maskCompleted &&
-          value !== null &&
-          value !== undefined
-        ) {
+        if (this.useMask && !this.maska.completed && value) {
           // the value is set not not yet completed so do not set that until the full mask is completed
           // otherwise if the control.data is bound to another renderer with different dateTimeFormat then those will collide
+          return;
+        }
+
+        if (value == null) {
+          // clear
+          this.maska.masked = '';
+          this.maska.unmasked = '';
+          this.maska.completed = false;
+        }
+
+        if (this.useMask && value === '' && this.maska.unmasked === '') {
+          // once cleared the maska will set the value to ''
           return;
         }
 
@@ -319,12 +329,9 @@ const controlRenderer = defineComponent({
         const value = this.control.data;
 
         const time = parseDateTime(value, this.formats);
+        const format = this.useSeconds ? 'HH:mm:ss' : 'HH:mm';
         // show only valid values
-        return time
-          ? this.useSeconds
-            ? time.format('HH:mm:ss')
-            : time.format('HH:mm')
-          : undefined;
+        return time ? time.format(format) : undefined;
       },
       set(val: string) {
         this.onPickerChange(val);
@@ -361,9 +368,6 @@ const controlRenderer = defineComponent({
     onPickerChange(value: string): void {
       const time = parseDateTime(value, this.useSeconds ? 'HH:mm:ss' : 'HH:mm');
       this.onChange(time ? time.format(this.timeSaveFormat) : value);
-    },
-    clear(): void {
-      this.inputModel = undefined;
     },
   },
 });
