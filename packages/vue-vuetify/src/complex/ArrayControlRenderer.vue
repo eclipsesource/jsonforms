@@ -23,9 +23,9 @@
               :disabled="
                 !control.enabled ||
                 (appliedOptions.restrict &&
-                  arraySchema !== undefined &&
-                  arraySchema.maxItems !== undefined &&
-                  dataLength >= arraySchema.maxItems)
+                  control.arraySchema !== undefined &&
+                  control.arraySchema.maxItems !== undefined &&
+                  dataLength >= control.arraySchema.maxItems)
               "
               @click="addButtonClick"
             >
@@ -153,9 +153,9 @@
                         :disabled="
                           !control.enabled ||
                           (appliedOptions.restrict &&
-                            arraySchema !== undefined &&
-                            arraySchema.minItems !== undefined &&
-                            dataLength <= arraySchema.minItems)
+                            control.arraySchema !== undefined &&
+                            control.arraySchema.minItems !== undefined &&
+                            dataLength <= control.arraySchema.minItems)
                         "
                         @click="removeItemsClick($event, [index])"
                       >
@@ -181,11 +181,9 @@
 
 <script lang="ts">
 import {
-  Resolve,
   composePaths,
   createDefaultValue,
   type ControlElement,
-  type JsonSchema,
 } from '@jsonforms/core';
 import {
   DispatchRenderer,
@@ -235,20 +233,14 @@ const controlRenderer = defineComponent({
   },
   setup(props: RendererProps<ControlElement>) {
     const icons = useIcons();
+    const input = useJsonFormsArrayControl(props);
 
     return {
-      ...useVuetifyArrayControl(useJsonFormsArrayControl(props)),
+      ...useVuetifyArrayControl(input),
       icons,
     };
   },
   computed: {
-    arraySchema(): JsonSchema | undefined {
-      return Resolve.schema(
-        this.control.rootSchema,
-        this.control.uischema.scope,
-        this.control.rootSchema,
-      );
-    },
     dataLength(): number {
       return this.control.data ? this.control.data.length : 0;
     },

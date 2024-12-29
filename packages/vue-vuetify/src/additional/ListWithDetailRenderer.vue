@@ -29,9 +29,9 @@
                 :disabled="
                   !control.enabled ||
                   (appliedOptions.restrict &&
-                    arraySchema !== undefined &&
-                    arraySchema.maxItems !== undefined &&
-                    dataLength >= arraySchema.maxItems)
+                    control.arraySchema !== undefined &&
+                    control.arraySchema.maxItems !== undefined &&
+                    dataLength >= control.arraySchema.maxItems)
                 "
               >
                 <v-icon>{{ icons.current.value.itemAdd }}</v-icon>
@@ -150,9 +150,9 @@
                         :disabled="
                           !control.enabled ||
                           (appliedOptions.restrict &&
-                            arraySchema !== undefined &&
-                            arraySchema.minItems !== undefined &&
-                            dataLength <= arraySchema.minItems)
+                            control.arraySchema !== undefined &&
+                            control.arraySchema.minItems !== undefined &&
+                            dataLength <= control.arraySchema.minItems)
                         "
                       >
                         <v-icon class="notranslate">{{
@@ -190,12 +190,10 @@
 
 <script lang="ts">
 import {
-  Resolve,
   composePaths,
   createDefaultValue,
   findUISchema,
   type ControlElement,
-  type JsonSchema,
   type UISchemaElement,
 } from '@jsonforms/core';
 import {
@@ -271,13 +269,6 @@ const controlRenderer = defineComponent({
         this.control.path,
         undefined,
         this.control.uischema,
-      );
-    },
-    arraySchema(): JsonSchema | undefined {
-      return Resolve.schema(
-        this.control.rootSchema,
-        this.control.uischema.scope,
-        this.control.rootSchema,
       );
     },
   },
