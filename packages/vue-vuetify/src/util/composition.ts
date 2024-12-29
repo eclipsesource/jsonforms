@@ -491,11 +491,7 @@ export const determineClearValue = (
 ) => {
   const { uischema } = props;
 
-  if (
-    !isScoped(uischema) ||
-    props.schema?.type !== 'object' ||
-    typeof props?.schema?.properties !== 'object'
-  ) {
+  if (!isScoped(uischema) || props.schema?.type !== 'object') {
     return defaultValue;
   }
 
