@@ -1,5 +1,4 @@
 import {
-  hasType,
   isControl,
   rankWith,
   resolveSchema,
@@ -10,8 +9,8 @@ import {
   type UISchemaElement,
 } from '@jsonforms/core';
 
-import mixedRenderer from './MixedRenderer.vue';
 import isEmpty from 'lodash/isEmpty';
+import mixedRenderer from './MixedRenderer.vue';
 
 export const isMixedSchema = (
   uischema: UISchemaElement & Scopable,
