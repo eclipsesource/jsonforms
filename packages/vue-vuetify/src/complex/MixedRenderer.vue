@@ -1,42 +1,86 @@
 <template>
-  <div
-    :class="[
-      'prefixed-input',
-      { 'vertical-layout': valueType === 'object' || valueType === 'array' },
-    ]"
-    v-if="control.visible"
-  >
-    <v-select
-      v-if="mixedRenderInfos && mixedRenderInfos.length > 1"
-      :class="['prefix']"
-      v-disabled-icon-focus
-      :id="control.id + '-input-selector'"
-      :disabled="!control.enabled"
-      :label="computedLabel"
-      :required="control.required"
-      :error-messages="control.errors"
-      :items="mixedRenderInfos"
-      :clearable="control.enabled"
-      @update:model-value="handleSelectChange"
-      :item-title="(item: SchemaRenderInfo) => t(item.label, item.label)"
-      item-value="index"
-      v-model="selectedIndex"
-      v-bind="vuetifyProps('v-select')"
-      @focus="handleFocus"
-      @blur="handleBlur"
-    >
-    </v-select>
-    <dispatch-renderer
-      :class="['input']"
-      v-if="schema && !(nullable && control.data === null)"
-      :schema="schema"
-      :uischema="uischema"
-      :path="path"
-      :renderers="control.renderers"
-      :cells="control.cells"
-      :enabled="control.enabled"
-    >
-    </dispatch-renderer>
+  <div :class="['prefixed-input']" v-if="control.visible">
+    <template v-if="valueType === 'array' || valueType === 'object'">
+      <v-expansion-panels accordion flat v-model="currentlyExpanded">
+        <v-expansion-panel>
+          <v-expansion-panel-title class="py-0 px-0">
+            <v-container class="py-0">
+              <v-row>
+                <v-col align-self="center" class="pl-0"
+                  ><v-select
+                    v-if="mixedRenderInfos && mixedRenderInfos.length > 1"
+                    v-disabled-icon-focus
+                    :id="control.id + '-input-selector'"
+                    :disabled="!control.enabled"
+                    :label="computedLabel"
+                    :required="control.required"
+                    :error-messages="control.errors"
+                    :items="mixedRenderInfos"
+                    :clearable="control.enabled"
+                    @update:model-value="handleSelectChange"
+                    :item-title="
+                      (item: SchemaRenderInfo) => t(item.label, item.label)
+                    "
+                    item-value="index"
+                    v-model="selectedIndex"
+                    v-bind="vuetifyProps('v-select')"
+                    @click.stop
+                    @focus="handleFocus"
+                    @blur="handleBlur"
+                  >
+                  </v-select
+                ></v-col>
+              </v-row>
+            </v-container>
+          </v-expansion-panel-title>
+          <v-expansion-panel-text>
+            <dispatch-renderer
+              :class="['input']"
+              v-if="schema && !(nullable && control.data === null)"
+              :schema="schema"
+              :uischema="uischema"
+              :path="path"
+              :renderers="control.renderers"
+              :cells="control.cells"
+              :enabled="control.enabled"
+            >
+            </dispatch-renderer>
+          </v-expansion-panel-text>
+        </v-expansion-panel>
+      </v-expansion-panels>
+    </template>
+    <template v-else>
+      <v-select
+        v-if="mixedRenderInfos && mixedRenderInfos.length > 1"
+        v-disabled-icon-focus
+        :id="control.id + '-input-selector'"
+        :disabled="!control.enabled"
+        :label="computedLabel"
+        :required="control.required"
+        :error-messages="control.errors"
+        :items="mixedRenderInfos"
+        :clearable="control.enabled"
+        @update:model-value="handleSelectChange"
+        :item-title="(item: SchemaRenderInfo) => t(item.label, item.label)"
+        item-value="index"
+        v-model="selectedIndex"
+        v-bind="vuetifyProps('v-select')"
+        @focus="handleFocus"
+        @blur="handleBlur"
+      >
+      </v-select>
+      <dispatch-renderer
+        :class="['input']"
+        v-if="schema && !(nullable && control.data === null)"
+        :schema="schema"
+        :uischema="uischema"
+        :path="path"
+        :renderers="control.renderers"
+        :cells="control.cells"
+        :enabled="control.enabled"
+      >
+      </dispatch-renderer>
+    </template>
   </div>
 </template>
 
@@ -56,11 +100,20 @@ import {
   useJsonFormsControl,
   type RendererProps,
 } from '@jsonforms/vue';
-import { computed, defineComponent, ref, watch } from 'vue';
-import { VSelect, VBtn } from 'vuetify/components';
+import { computed, defineComponent, provide, ref, watch } from 'vue';
+import {
+  VCol,
+  VContainer,
+  VExpansionPanel,
+  VExpansionPanelText,
+  VExpansionPanelTitle,
+  VRow,
+  VSelect,
+} from 'vuetify/components';
 import { DisabledIconFocus } from '../controls';
 import {
   useCombinatorTranslations,
+  UseDefaultValueKey,
   useIcons,
   useJsonForms,
   useTranslator,
@@ -179,7 +232,7 @@ const createMixedRenderInfos = (
           : false;
     } else if (schema.type === 'array') {
       schema.items = schema.items ?? {};
-      if (!(schema.items as any)) {
+      if (!(schema.items as any).type) {
         (schema.items as any).type = [
           'array',
           'boolean',
@@ -204,7 +257,10 @@ const createMixedRenderInfos = (
           ...control,
           options: { ...control.options, detail: detailsForSchema },
         }
-      : control;
+      : {
+          ...control,
+          scope: control.scope,
+        };
 
     return {
       schema,
@@ -244,8 +300,13 @@ const controlRenderer = defineComponent({
   name: 'mixed-renderer',
   components: {
     DispatchRenderer,
-    VBtn,
     VSelect,
+    VExpansionPanel,
+    VExpansionPanelTitle,
+    VExpansionPanelText,
+    VContainer,
+    VRow,
+    VCol,
   },
   directives: {
     DisabledIconFocus,
@@ -334,6 +395,10 @@ const controlRenderer = defineComponent({
         : undefined,
     );
 
+    const currentlyExpanded = ref<number | null>(null);
+    // use the default value since all properties are dynamic so preserve the property key
+    provide(UseDefaultValueKey, true);
+
     return {
       ...useCombinatorTranslations(useVuetifyControl(input)),
       nullable,
@@ -345,6 +410,7 @@ const controlRenderer = defineComponent({
       uischema,
       path,
       icons,
+      currentlyExpanded,
     };
   },
   methods: {
@@ -367,6 +433,8 @@ const controlRenderer = defineComponent({
         ? this.mixedRenderInfos[newIndex]?.schema?.type
         : null;
       this.valueType = type as string | null; // we know that this should be either a string or null
+
+      this.currentlyExpanded = 0;
     },
   },
 });
@@ -379,16 +447,12 @@ export default controlRenderer;
   align-items: center;
 }
 
-.vertical-layout {
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.prefix {
-}
-
 .input {
   flex-grow: 1;
   width: 100%;
+}
+
+:deep(.v-expansion-panel-text__wrapper) {
+  padding: 0px;
 }
 </style>

@@ -124,6 +124,7 @@ import {
   computed,
   defineComponent,
   markRaw,
+  provide,
   ref,
   unref,
   type PropType,
@@ -146,6 +147,7 @@ import {
   useJsonForms,
   useTranslator,
 } from '../../util';
+import { UseDefaultValueKey } from '@/util/inject';
 
 type Input = ReturnType<typeof useJsonFormsControlWithDetail>;
 interface AdditionalPropertyType {
@@ -406,6 +408,9 @@ export default defineComponent({
     const validationMode = computed(() =>
       newPropertyName.value ? parentValidationMode : 'ValidateAndHide',
     );
+
+    // use the default value since all properties are dynamic so preserve the property key
+    provide(UseDefaultValueKey, true);
 
     return {
       validationMode: validationMode,

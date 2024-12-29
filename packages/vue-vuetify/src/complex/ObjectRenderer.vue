@@ -33,9 +33,10 @@ import {
 import cloneDeep from 'lodash/cloneDeep';
 import isEmpty from 'lodash/isEmpty';
 import isObject from 'lodash/isObject';
-import { defineComponent } from 'vue';
+import { defineComponent, provide } from 'vue';
 import { useNested, useVuetifyControl } from '../util';
 import { AdditionalProperties } from './components';
+import { UseDefaultValueKey } from '@/util/inject';
 
 const controlRenderer = defineComponent({
   name: 'object-renderer',
@@ -50,6 +51,11 @@ const controlRenderer = defineComponent({
     const control = useVuetifyControl(useJsonFormsControlWithDetail(props));
 
     const nested = useNested('object');
+
+    // do not use the default value but the undefind so that
+    // the property is cleared when property clear action is executed
+    provide(UseDefaultValueKey, false);
+
     return {
       ...control,
       input: control,

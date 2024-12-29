@@ -39,6 +39,7 @@ import {
 } from 'vue';
 import type { IconOptions } from 'vuetify';
 import { useStyles } from '../styles';
+import { UseDefaultValueKey } from './inject';
 
 export const IconSymbol: InjectionKey<Required<IconOptions>> =
   Symbol.for('vuetify:icons');
@@ -489,23 +490,13 @@ export const determineClearValue = (
   props: RendererProps<ControlElement & Scopable>,
   defaultValue: any,
 ) => {
-  const { uischema } = props;
+  const jsonforms = useJsonForms();
 
-  if (!isScoped(uischema) || props.schema?.type !== 'object') {
-    return defaultValue;
-  }
+  const useDefaultValue = inject<boolean>(
+    UseDefaultValueKey,
+    jsonforms.core?.schema.type !== 'object',
+  );
 
-  // check if we are wrapped in an object and
-  // the path to the property is defined in the object properties
-  // then return undefined to clear the property from the object
-
-  // remove any leading #, /, or #/
-  const schemaPath = uischema.scope.replace(/^(#\/|#|\/)/, '');
-  // replace / with .
-  const property = schemaPath.replace(/\//g, '.');
-
-  const definedPropertySchema = get(props.schema, property);
-  return typeof definedPropertySchema === 'object'
-    ? undefined // clear the property from the object
-    : defaultValue;
+  // undefined will clear the property from the object
+  return useDefaultValue ? defaultValue : undefined;
 };
