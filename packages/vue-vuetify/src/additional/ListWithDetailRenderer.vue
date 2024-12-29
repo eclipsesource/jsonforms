@@ -191,15 +191,10 @@
 <script lang="ts">
 import {
   Resolve,
-  and,
   composePaths,
   createDefaultValue,
   findUISchema,
-  isObjectArray,
-  rankWith,
-  uiTypeIs,
   type ControlElement,
-  type JsonFormsRendererRegistryEntry,
   type JsonSchema,
   type UISchemaElement,
 } from '@jsonforms/core';
