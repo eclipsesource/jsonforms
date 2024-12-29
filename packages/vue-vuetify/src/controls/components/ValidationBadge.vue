@@ -17,7 +17,7 @@
         </v-badge>
       </template>
 
-      <p>Validation Errors</p>
+      <p>{{ t('Validation Errors', 'Validation Errors') }}</p>
       <p
         v-for="(message, index) in tooltipMessages"
         :key="`${tooltipMessages.length}-${index}`"
@@ -40,6 +40,7 @@ import {
   createLabelDescriptionFrom,
   type JsonSchema,
 } from '@jsonforms/core';
+import { useTranslator } from '@/util';
 
 export default defineComponent({
   name: 'validation-badge',
@@ -115,6 +116,11 @@ export default defineComponent({
 
       return error.map((v) => v.labels.join(',') + ': ' + v.message);
     },
+  },
+  setup() {
+    const t = useTranslator();
+
+    return { t };
   },
 });
 </script>
