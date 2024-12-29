@@ -411,7 +411,7 @@ const controlRenderer = defineComponent({
       proxyModel: Ref<Date | undefined>,
     ): void {
       if (this.showActions) {
-        const date = proxyModel.value ?? new Date();
+        const date = new Date(proxyModel.value ?? new Date());
         date.setFullYear(year);
         proxyModel.value = date;
       } else {
@@ -434,7 +434,7 @@ const controlRenderer = defineComponent({
       proxyModel: Ref<Date | undefined>,
     ): void {
       if (this.showActions) {
-        const date = proxyModel.value ?? new Date();
+        const date = new Date(proxyModel.value ?? new Date());
         date.setMonth(month);
         proxyModel.value = date;
       } else {
