@@ -4,9 +4,14 @@
       :schema="control.schema"
       combinatorKeyword="oneOf"
       :path="path"
+      :rootSchema="control.rootSchema"
     />
 
-    <v-tabs v-model="selectIndex" @update:model-value="handleTabChange">
+    <v-tabs
+      v-model="selectIndex"
+      @update:model-value="handleTabChange"
+      :disabled="!control.enabled"
+    >
       <v-tab
         v-for="(oneOfRenderInfo, oneOfIndex) in oneOfRenderInfos"
         :key="`${control.path}-${oneOfRenderInfos.length}-${oneOfIndex}`"

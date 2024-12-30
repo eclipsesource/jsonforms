@@ -21,7 +21,7 @@ exports[`ArrayControlRenderer.vue > should render component and match snapshot 1
       </div>
       <!---->
       <!---->
-      <div data-v-4896f876="" class="v-card-title">
+      <div data-v-4896f876="" class="v-card-title array-list-title">
         <header data-v-4896f876="" class="v-toolbar v-toolbar--flat v-toolbar--density-default v-theme--light v-locale--is-ltr array-list-toolbar">
           <!---->
           <div class="v-toolbar__content" style="height: 64px;">

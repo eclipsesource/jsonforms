@@ -1,7 +1,19 @@
 <template>
-  <v-card v-if="control.visible" :class="styles.arrayList.root" elevation="0">
-    <v-card-title>
-      <v-toolbar flat :class="styles.arrayList.toolbar">
+  <v-card
+    v-if="control.visible"
+    :class="styles.arrayList.root"
+    elevation="0"
+    v-bind="vuetifyProps('v-card')"
+  >
+    <v-card-title
+      :class="styles.arrayList.title"
+      v-bind="vuetifyProps('v-card-title')"
+    >
+      <v-toolbar
+        flat
+        :class="styles.arrayList.toolbar"
+        v-bind="vuetifyProps('v-toolbar')"
+      >
         <v-toolbar-title :class="styles.arrayList.label">{{
           computedLabel
         }}</v-toolbar-title>
@@ -36,7 +48,7 @@
         </v-tooltip>
       </v-toolbar>
     </v-card-title>
-    <v-card-text>
+    <v-card-text v-bind="vuetifyProps('v-card-text')">
       <v-container justify-space-around align-content-center>
         <v-row justify="center">
           <v-table

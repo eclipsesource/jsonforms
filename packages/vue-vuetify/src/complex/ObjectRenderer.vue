@@ -80,7 +80,12 @@ const controlRenderer = defineComponent({
     },
     detailUiSchema(): UISchemaElement {
       const uiSchemaGenerator = () => {
-        const uiSchema = Generate.uiSchema(this.control.schema, 'Group');
+        const uiSchema = Generate.uiSchema(
+          this.control.schema,
+          'Group',
+          undefined,
+          this.control.rootSchema,
+        );
         if (isEmpty(this.control.path) || this.isDynamic) {
           uiSchema.type = 'VerticalLayout';
         } else {

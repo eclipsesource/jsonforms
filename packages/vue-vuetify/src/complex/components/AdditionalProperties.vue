@@ -255,7 +255,12 @@ export default defineComponent({
       }
 
       if (propSchema.type === 'array') {
-        propUiSchema = Generate.uiSchema(propSchema, 'Group');
+        propUiSchema = Generate.uiSchema(
+          propSchema,
+          'Group',
+          undefined,
+          control.value.rootSchema,
+        );
         (propUiSchema as GroupLayout).label =
           propSchema.title ?? startCase(propName);
       } else {

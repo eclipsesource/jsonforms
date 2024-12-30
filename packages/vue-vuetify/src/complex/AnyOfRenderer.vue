@@ -4,6 +4,7 @@
       :schema="control.schema"
       combinatorKeyword="anyOf"
       :path="path"
+      :rootSchema="control.rootSchema"
     />
 
     <v-tabs v-model="selectedIndex">
