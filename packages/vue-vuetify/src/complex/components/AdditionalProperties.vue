@@ -1,6 +1,6 @@
 <template>
   <v-card v-if="control.visible" v-bind="vuetifyProps('v-card')" flat>
-    <v-container>
+    <v-container class="py-0">
       <v-row no-gutters>
         <v-col v-if="mdAndUp && additionalPropertiesTitle">
           {{ additionalPropertiesTitle }}</v-col
@@ -47,7 +47,7 @@
         </v-tooltip>
       </v-row>
     </v-container>
-    <v-container v-bind="vuetifyProps('v-container')">
+    <v-container v-bind="vuetifyProps('v-container')" class="py-0">
       <v-row
         no-gutters
         v-for="element in additionalPropertyItems"
