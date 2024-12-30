@@ -30,6 +30,9 @@
                   >
                   </v-select
                 ></v-col>
+                <v-col cols="3" align-self="center" class="text-truncate">{{
+                  computedLabel
+                }}</v-col>
               </v-row>
             </v-container>
           </v-expansion-panel-title>
