@@ -123,12 +123,20 @@ const resolveSchemaWithSegments = (
   pathSegments: string[],
   rootSchema: JsonSchema
 ): JsonSchema => {
+  if (
+    typeof schema === 'boolean' &&
+    (!pathSegments || pathSegments.length === 0)
+  ) {
+    // add the case where the schema can be true value for example: items: true or additionalProperties: false
+    return schema;
+  }
+
   if (isEmpty(schema)) {
     return undefined;
   }
 
   // use typeof because schema can by of any type - check singleSegmentResolveSchema below
-  if (typeof schema.$ref === 'string') {
+  if (typeof schema?.$ref === 'string') {
     schema = resolveSchema(rootSchema, schema.$ref, rootSchema);
   }
 

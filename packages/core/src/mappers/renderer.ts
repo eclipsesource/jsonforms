@@ -186,7 +186,7 @@ export const doCreateDefaultValue = (
   rootSchema: JsonSchema
 ) => {
   const resolvedSchema =
-    typeof schema.$ref === 'string'
+    typeof schema?.$ref === 'string'
       ? Resolve.schema(rootSchema, schema.$ref, rootSchema)
       : schema;
   if (resolvedSchema.default !== undefined) {
@@ -872,7 +872,21 @@ export const mapStateToArrayControlProps = (
   const { path, schema, uischema, label, ...props } =
     mapStateToControlWithDetailProps(state, ownProps);
 
-  const resolvedSchema = Resolve.schema(schema, 'items', props.rootSchema);
+  let resolvedSchema = Resolve.schema(schema, 'items', props.rootSchema);
+  if ((resolvedSchema as any) === true) {
+    // help the testers to determine the mixed control
+    resolvedSchema = {
+      type: [
+        'array',
+        'boolean',
+        'integer',
+        'null',
+        'number',
+        'object',
+        'string',
+      ],
+    };
+  }
   const childErrors = getSubErrorsAt(path, resolvedSchema)(state);
 
   return {
