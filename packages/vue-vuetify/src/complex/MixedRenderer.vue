@@ -1,5 +1,5 @@
 <template>
-  <div :class="['prefixed-input']" v-if="control.visible">
+  <div class="prefixed-input" v-if="control.visible">
     <template v-if="valueType === 'array' || valueType === 'object'">
       <v-expansion-panels accordion flat v-model="currentlyExpanded">
         <v-expansion-panel>
@@ -35,7 +35,7 @@
           </v-expansion-panel-title>
           <v-expansion-panel-text>
             <dispatch-renderer
-              :class="['input']"
+              class="input"
               v-if="schema && !(nullable && control.data === null)"
               :schema="schema"
               :uischema="uischema"
@@ -51,6 +51,7 @@
     </template>
     <template v-else>
       <v-select
+        class="select"
         v-if="mixedRenderInfos && mixedRenderInfos.length > 1"
         v-disabled-icon-focus
         :id="control.id + '-input-selector'"
@@ -65,12 +66,13 @@
         item-value="index"
         v-model="selectedIndex"
         v-bind="vuetifyProps('v-select')"
+        @click.stop
         @focus="handleFocus"
         @blur="handleBlur"
       >
       </v-select>
       <dispatch-renderer
-        :class="['input']"
+        class="input"
         v-if="schema && !(nullable && control.data === null)"
         :schema="schema"
         :uischema="uischema"
@@ -445,6 +447,10 @@ export default controlRenderer;
 .prefixed-input {
   display: flex;
   align-items: center;
+}
+
+.select {
+  flex-shrink: 0;
 }
 
 .input {
