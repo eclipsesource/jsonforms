@@ -592,11 +592,12 @@ export const mapStateToControlProps = (
   const required =
     controlElement.scope !== undefined &&
     isRequired(ownProps.schema, controlElement.scope, rootSchema);
-  const resolvedSchema = Resolve.schema(
-    ownProps.schema || rootSchema,
-    controlElement.scope,
-    rootSchema
-  );
+  const resolvedSchema =
+    Resolve.schema(
+      ownProps.schema || rootSchema,
+      controlElement.scope,
+      rootSchema
+    ) ?? ownProps.schema; // if resolve fails then rely that the ownProps.schema if exist
   const errors = getErrorAt(path, resolvedSchema)(state);
 
   const description =
