@@ -83,6 +83,7 @@ export * from './example';
 
 import * as ifThenElse from './examples/if_then_else';
 import * as jsonschema from './examples/jsonschema';
+import * as jsoneditor from './examples/json-editor';
 
 export {
   issue_1948,
@@ -125,6 +126,7 @@ export {
   oneOfRecursive,
   huge,
   ifThenElse,
+  jsoneditor,
   jsonschema,
   onChange,
   enumExample,
