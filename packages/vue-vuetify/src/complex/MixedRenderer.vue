@@ -115,7 +115,7 @@ import {
 import { DisabledIconFocus } from '../controls';
 import {
   useCombinatorTranslations,
-  UseDefaultValueKey,
+  IsDynamicPropertyContext,
   useIcons,
   useJsonForms,
   useTranslator,
@@ -399,7 +399,7 @@ const controlRenderer = defineComponent({
 
     const currentlyExpanded = ref<number | null>(null);
     // use the default value since all properties are dynamic so preserve the property key
-    provide(UseDefaultValueKey, true);
+    provide(IsDynamicPropertyContext, true);
 
     return {
       ...useCombinatorTranslations(useVuetifyControl(input)),

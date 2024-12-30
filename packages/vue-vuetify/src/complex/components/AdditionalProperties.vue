@@ -147,7 +147,7 @@ import {
   useJsonForms,
   useTranslator,
 } from '../../util';
-import { UseDefaultValueKey } from '@/util/inject';
+import { IsDynamicPropertyContext } from '@/util/inject';
 
 type Input = ReturnType<typeof useJsonFormsControlWithDetail>;
 interface AdditionalPropertyType {
@@ -410,7 +410,7 @@ export default defineComponent({
     );
 
     // use the default value since all properties are dynamic so preserve the property key
-    provide(UseDefaultValueKey, true);
+    provide(IsDynamicPropertyContext, true);
 
     return {
       validationMode: validationMode,

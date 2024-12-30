@@ -39,7 +39,7 @@ import {
 } from 'vue';
 import type { IconOptions } from 'vuetify';
 import { useStyles } from '../styles';
-import { UseDefaultValueKey } from './inject';
+import { IsDynamicPropertyContext } from './inject';
 
 export const IconSymbol: InjectionKey<Required<IconOptions>> =
   Symbol.for('vuetify:icons');
@@ -493,7 +493,7 @@ export const determineClearValue = (
   const jsonforms = useJsonForms();
 
   const useDefaultValue = inject<boolean>(
-    UseDefaultValueKey,
+    IsDynamicPropertyContext,
     jsonforms.core?.schema.type !== 'object',
   );
 
