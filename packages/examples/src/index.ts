@@ -82,6 +82,7 @@ export * from './register';
 export * from './example';
 
 import * as ifThenElse from './examples/if_then_else';
+import * as jsonschema from './examples/jsonschema';
 
 export {
   issue_1948,
@@ -124,6 +125,7 @@ export {
   oneOfRecursive,
   huge,
   ifThenElse,
+  jsonschema,
   onChange,
   enumExample,
   radioGroupExample,
