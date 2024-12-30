@@ -94,6 +94,7 @@ import {
   type ControlElement,
   type JsonFormsUISchemaRegistryEntry,
   type JsonSchema,
+  type JsonSchema7,
   type UISchemaElement,
 } from '@jsonforms/core';
 import {
@@ -234,8 +235,23 @@ const createMixedRenderInfos = (
           : false;
     } else if (schema.type === 'array') {
       schema.items = schema.items ?? {};
-      if (!(schema.items as any).type) {
-        (schema.items as any).type = [
+      if (schema.items === true) {
+        schema.items = {
+          type: [
+            'array',
+            'boolean',
+            'integer',
+            'null',
+            'number',
+            'object',
+            'string',
+          ],
+        };
+      } else if (
+        typeof (schema.items as JsonSchema7).type !== 'string' &&
+        !Array.isArray((schema.items as JsonSchema7).type)
+      ) {
+        (schema.items as JsonSchema7).type = [
           'array',
           'boolean',
           'integer',
