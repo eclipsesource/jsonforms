@@ -89,7 +89,7 @@ export interface JsonSchema7 {
   // Array Validation
   /////////////////////////////////////////////////
   additionalItems?: boolean | JsonSchema7;
-  items?: boolean | JsonSchema7 | JsonSchema7[];
+  items?: JsonSchema7 | JsonSchema7[];
   maxItems?: number;
   minItems?: number;
   uniqueItems?: boolean;
