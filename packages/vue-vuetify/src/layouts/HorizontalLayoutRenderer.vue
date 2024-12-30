@@ -1,6 +1,6 @@
 <template>
   <v-container
-    v-if="layout.visible"
+    v-if="layout.visible && (layout.uischema as Layout).elements.length > 0"
     :class="`${styles.horizontalLayout.root}`"
     v-bind="vuetifyProps('v-container')"
   >
