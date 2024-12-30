@@ -238,7 +238,7 @@ const createMixedRenderInfos = (
           : false;
     } else if (schema.type === 'array') {
       schema.items = schema.items ?? {};
-      if (schema.items === true) {
+      if ((schema.items as any) === true) {
         schema.items = {
           type: [
             'array',
