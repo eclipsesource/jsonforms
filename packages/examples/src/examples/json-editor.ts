@@ -27,7 +27,9 @@ import { registerExamples } from '../register';
 export const schema = {
   type: ['array', 'boolean', 'integer', 'null', 'number', 'object', 'string'],
   additionalProperties: true,
-  items: true,
+  items: {
+    type: ['array', 'boolean', 'integer', 'null', 'number', 'object', 'string'],
+  },
 };
 
 export const uischema = {
