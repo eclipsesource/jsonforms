@@ -17,6 +17,7 @@
 </template>
 
 <script lang="ts">
+import { IsDynamicPropertyContext } from '@/util/inject';
 import {
   Generate,
   findUISchema,
@@ -33,10 +34,9 @@ import {
 import cloneDeep from 'lodash/cloneDeep';
 import isEmpty from 'lodash/isEmpty';
 import isObject from 'lodash/isObject';
-import { defineComponent, inject, provide } from 'vue';
+import { defineComponent, provide } from 'vue';
 import { useNested, useVuetifyControl } from '../util';
 import { AdditionalProperties } from './components';
-import { IsDynamicPropertyContext } from '@/util/inject';
 
 const controlRenderer = defineComponent({
   name: 'object-renderer',
@@ -52,8 +52,6 @@ const controlRenderer = defineComponent({
 
     const nested = useNested('object');
 
-    const isDynamic = inject<boolean>(IsDynamicPropertyContext, false);
-
     // do not use the default value but the undefind so that
     // the property is cleared when property clear action is executed
     provide(IsDynamicPropertyContext, false);
@@ -62,7 +60,6 @@ const controlRenderer = defineComponent({
       ...control,
       input: control,
       nested,
-      isDynamic,
     };
   },
   computed: {
@@ -86,7 +83,7 @@ const controlRenderer = defineComponent({
           undefined,
           this.control.rootSchema,
         );
-        if (isEmpty(this.control.path) || this.isDynamic) {
+        if (isEmpty(this.control.path)) {
           uiSchema.type = 'VerticalLayout';
         } else {
           (uiSchema as GroupLayout).label = this.control.label;

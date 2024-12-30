@@ -114,8 +114,8 @@ import {
 } from 'vuetify/components';
 import { DisabledIconFocus } from '../controls';
 import {
-  useCombinatorTranslations,
   IsDynamicPropertyContext,
+  useCombinatorTranslations,
   useIcons,
   useJsonForms,
   useTranslator,
@@ -264,17 +264,25 @@ const createMixedRenderInfos = (
           scope: control.scope,
         };
 
+    const uischema = findUISchema(
+      uischemas,
+      schema,
+      control.scope,
+      path,
+      () => createControlElement(control.scope ?? '#'),
+      schemaControl,
+      rootSchema,
+    );
+
+    if (uischema.type === 'Control' && schema.type === 'object') {
+      // override to specify exact type since the isObjectControl will check for empty scope
+      // which in this case the scope is not empty
+      uischema.type = 'Object';
+    }
+
     return {
       schema,
-      uischema: findUISchema(
-        uischemas,
-        schema,
-        control.scope,
-        path,
-        () => createControlElement(control.scope),
-        schemaControl,
-        rootSchema,
-      ),
+      uischema,
       label: `${schema.type}`,
     };
   });
