@@ -12,7 +12,6 @@ import {
   getCombinatorTranslations,
   getFirstPrimitiveProp,
   isDescriptionHidden,
-  isScoped,
   type ControlElement,
   type DispatchPropsOfControl,
   type DispatchPropsOfMultiEnumControl,
