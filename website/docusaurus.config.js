@@ -42,27 +42,27 @@ module.exports = {
           position: 'left',
         },
         {
-          to: 'docs',
+          to: 'docs/',
           label: 'Docs',
           position: 'left',
         },
         {
-          to: 'faq',
+          to: 'faq/',
           label: 'FAQ',
           position: 'left',
         },
         {
-          to: 'community',
+          to: 'community/',
           label: 'Community',
           position: 'left'
         },
         {
-          to: 'news',
+          to: 'news/',
           label: 'News',
           position: 'left',
         },
         {
-          to: 'support',
+          to: 'support/',
           label: 'Professional Support',
           position: 'right',
         },
