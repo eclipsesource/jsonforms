@@ -34,3 +34,8 @@
       X-Frame-Options = "SAMEORIGIN"
       X-Content-Type-Options = "nosniff"
       Permissions-Policy = "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
+
+[[headers]]
+   for = "/api/*"
+   [headers.values]
+      Content-Security-Policy = "script-src 'self' 'unsafe-inline'; script-src-elem 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' data:;"
