@@ -31,6 +31,7 @@ export const schema = {
     address: {
       type: 'object',
       properties: {
+        type: { const: 'address', default: 'address' },
         street_address: { type: 'string' },
         city: { type: 'string' },
         state: { type: 'string' },
@@ -41,6 +42,7 @@ export const schema = {
     user: {
       type: 'object',
       properties: {
+        type: { const: 'user', default: 'user' },
         name: { type: 'string' },
         mail: { type: 'string' },
       },
@@ -80,6 +82,7 @@ export const uischema = {
 const data = {
   name: 'test',
   addressOrUser: {
+    type: 'user',
     name: 'User',
     mail: 'mail@example.com',
   },
