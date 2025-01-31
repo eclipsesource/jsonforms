@@ -81,6 +81,7 @@ import {
   arrayDefaultTranslations,
   getArrayTranslations,
   ArrayTranslations,
+  AllOfRendererProps,
 } from '@jsonforms/core';
 import debounce from 'lodash/debounce';
 import React, {
@@ -561,12 +562,12 @@ const withContextToAnyOfProps = (
   };
 
 const withContextToAllOfProps = (
-  Component: ComponentType<CombinatorRendererProps>
+  Component: ComponentType<AllOfRendererProps>
 ): ComponentType<OwnPropsOfControl> =>
   function WithContextToAllOfProps({
     ctx,
     props,
-  }: JsonFormsStateContext & CombinatorRendererProps) {
+  }: JsonFormsStateContext & AllOfRendererProps) {
     const allOfProps = ctxToAllOfProps(ctx, props);
     const dispatchProps = ctxDispatchToControlProps(ctx.dispatch);
     return <Component {...props} {...allOfProps} {...dispatchProps} />;
@@ -764,7 +765,7 @@ export const withJsonFormsAnyOfProps = (
   );
 
 export const withJsonFormsAllOfProps = (
-  Component: ComponentType<CombinatorRendererProps>,
+  Component: ComponentType<AllOfRendererProps>,
   memoize = true
 ): ComponentType<OwnPropsOfControl> =>
   withJsonFormsContext(
