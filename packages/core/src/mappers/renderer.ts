@@ -1123,6 +1123,11 @@ export interface StatePropsOfCombinator extends StatePropsOfControl {
   data: any;
 }
 
+export type StatePropsOfAllOfRenderer = Omit<
+  StatePropsOfCombinator,
+  'indexOfFittingSchema'
+>;
+
 export const mapStateToCombinatorRendererProps = (
   state: JsonFormsState,
   ownProps: OwnPropsOfControl,
@@ -1155,6 +1160,12 @@ export const mapStateToCombinatorRendererProps = (
 export interface CombinatorRendererProps
   extends StatePropsOfCombinator,
     DispatchPropsOfControl {}
+
+export type AllOfRendererProps = Omit<
+  CombinatorRendererProps,
+  'indexOfFittingSchema'
+>;
+
 /**
  * Map state to all of renderer props.
  * @param state the store's state
@@ -1164,8 +1175,20 @@ export interface CombinatorRendererProps
 export const mapStateToAllOfProps = (
   state: JsonFormsState,
   ownProps: OwnPropsOfControl
-): StatePropsOfCombinator =>
-  mapStateToCombinatorRendererProps(state, ownProps, 'allOf');
+): StatePropsOfAllOfRenderer => {
+  const { data, schema, rootSchema, i18nKeyPrefix, label, ...props } =
+    mapStateToControlProps(state, ownProps);
+
+  return {
+    data,
+    schema,
+    rootSchema,
+    ...props,
+    i18nKeyPrefix,
+    label,
+    uischemas: getUISchemas(state),
+  };
+};
 
 export const mapStateToAnyOfProps = (
   state: JsonFormsState,
