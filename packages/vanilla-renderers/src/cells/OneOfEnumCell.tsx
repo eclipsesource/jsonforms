@@ -56,6 +56,11 @@ export const OneOfEnumCell = (
     () => t('enum.none', i18nDefaults['enum.none'], { schema, uischema, path }),
     [t, schema, uischema, path]
   );
+  const noneOption = (
+    <option value={''} key={'jsonforms.enum.none'}>
+      {noneOptionLabel}
+    </option>
+  );
   return (
     <select
       className={className}
@@ -70,11 +75,7 @@ export const OneOfEnumCell = (
         )
       }
     >
-      {(uischema.options.hideEmptyOption ? [] : [
-        <option value={''} key={'jsonforms.enum.none'}>
-          {noneOptionLabel}
-        </option>,
-      ]).concat(
+      {(uischema.options?.hideEmptyOption ? [] : [noneOption]).concat(
         options.map((optionValue) => (
           <option
             value={optionValue.value}
@@ -90,7 +91,10 @@ export const OneOfEnumCell = (
  * Default tester for enum controls.
  * @type {RankedTester}
  */
-export const oneOfEnumCellTester: RankedTester = rankWith(2, isOneOfEnumControl);
+export const oneOfEnumCellTester: RankedTester = rankWith(
+  2,
+  isOneOfEnumControl
+);
 
 export default withJsonFormsOneOfEnumCellProps(
   withTranslateProps(withVanillaEnumCellProps(OneOfEnumCell))
