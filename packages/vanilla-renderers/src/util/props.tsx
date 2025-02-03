@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 
-import Ajv from 'ajv';
+import type Ajv from 'ajv';
 import React, { ComponentType, useMemo } from 'react';
 import isEmpty from 'lodash/isEmpty';
 import type {
