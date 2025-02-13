@@ -134,7 +134,7 @@ const controlRenderer = defineComponent({
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    const clearValue = determineClearValue(props, '');
+    const clearValue = determineClearValue('');
     const t = useTranslator();
 
     const showMenu = ref(false);
