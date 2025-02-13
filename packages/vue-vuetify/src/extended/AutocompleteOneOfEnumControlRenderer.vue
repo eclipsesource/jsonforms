@@ -81,7 +81,7 @@ const controlRenderer = defineComponent({
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    const clearValue = determineClearValue(props, '');
+    const clearValue = determineClearValue('');
     return useVuetifyControl(
       useJsonFormsOneOfEnumControl(props),
       (value) => (value === null ? clearValue : value),

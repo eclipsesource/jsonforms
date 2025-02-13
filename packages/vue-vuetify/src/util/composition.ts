@@ -485,10 +485,7 @@ export const useIcons = () => {
   };
 };
 
-export const determineClearValue = (
-  props: RendererProps<ControlElement & Scopable>,
-  defaultValue: any,
-) => {
+export const determineClearValue = (defaultValue: any) => {
   const jsonforms = useJsonForms();
 
   const useDefaultValue = inject<boolean>(
