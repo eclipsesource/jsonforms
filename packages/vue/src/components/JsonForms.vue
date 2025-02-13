@@ -29,7 +29,8 @@ import {
 import { JsonFormsChangeEvent, MaybeReadonly } from '../types';
 import DispatchRenderer from './DispatchRenderer.vue';
 
-import Ajv, { ErrorObject } from 'ajv';
+import type Ajv from 'ajv';
+import type { ErrorObject } from 'ajv';
 
 // TODO fix @typescript-eslint/ban-types
 // eslint-disable-next-line @typescript-eslint/ban-types
