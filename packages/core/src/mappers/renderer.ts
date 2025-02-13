@@ -186,7 +186,7 @@ export const doCreateDefaultValue = (
   rootSchema: JsonSchema
 ) => {
   const resolvedSchema =
-    typeof schema?.$ref === 'string'
+    typeof schema.$ref === 'string'
       ? Resolve.schema(rootSchema, schema.$ref, rootSchema)
       : schema;
   if (resolvedSchema.default !== undefined) {
