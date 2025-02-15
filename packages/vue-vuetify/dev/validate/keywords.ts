@@ -1,4 +1,4 @@
-import Ajv from 'ajv';
+import type Ajv from 'ajv';
 import keywords from 'ajv-keywords';
 import dynamicDefaults from 'ajv-keywords/dist/definitions/dynamicDefaults';
 import tranform from './transform';

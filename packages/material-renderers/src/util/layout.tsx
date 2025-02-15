@@ -24,7 +24,7 @@
 */
 import isEmpty from 'lodash/isEmpty';
 import React, { ComponentType } from 'react';
-import Ajv from 'ajv';
+import type Ajv from 'ajv';
 import type { UISchemaElement } from '@jsonforms/core';
 import {
   getAjv,

@@ -26,7 +26,8 @@
 import type { Store } from './type';
 import { RankedTester, UISchemaTester } from '../testers';
 import { JsonSchema, UISchemaElement } from '../models';
-import Ajv, { ErrorObject, ValidateFunction } from 'ajv';
+import type Ajv from 'ajv';
+import type { ErrorObject, ValidateFunction } from 'ajv';
 import { JsonFormsI18nState } from './i18nTypes';
 
 /**

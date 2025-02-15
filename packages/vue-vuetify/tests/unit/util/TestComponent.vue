@@ -29,7 +29,8 @@ import {
   type JsonFormsChangeEvent,
   type MaybeReadonly,
 } from '@jsonforms/vue';
-import Ajv, { type ErrorObject } from 'ajv';
+import type Ajv from 'ajv';
+import type { ErrorObject } from 'ajv';
 import { defineComponent, reactive, type PropType } from 'vue';
 import { VApp } from 'vuetify/components';
 

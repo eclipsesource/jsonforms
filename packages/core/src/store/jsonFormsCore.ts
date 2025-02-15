@@ -1,4 +1,5 @@
-import Ajv, { ErrorObject } from 'ajv';
+import type Ajv from 'ajv';
+import type { ErrorObject } from 'ajv';
 import { JsonSchema, UISchemaElement } from '../models';
 import get from 'lodash/get';
 import { errorsAt } from '../util';

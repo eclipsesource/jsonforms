@@ -44,7 +44,8 @@ import {
   ValidationMode,
   defaultMiddleware,
 } from '@jsonforms/core';
-import Ajv, { ErrorObject } from 'ajv';
+import type Ajv from 'ajv';
+import type { ErrorObject } from 'ajv';
 import { JsonFormsAngularService, USE_STATE_VALUE } from './jsonforms.service';
 import { Subscription } from 'rxjs';
 
