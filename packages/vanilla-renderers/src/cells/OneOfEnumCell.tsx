@@ -75,7 +75,7 @@ export const OneOfEnumCell = (
         )
       }
     >
-      {(uischema.options?.hideEmptyOption ? [] : [noneOption]).concat(
+      {(uischema.options?.hideEmptyOption === true ? [] : [noneOption]).concat(
         options.map((optionValue) => (
           <option
             value={optionValue.value}
@@ -88,7 +88,7 @@ export const OneOfEnumCell = (
   );
 };
 /**
- * Default tester for enum controls.
+ * Default tester for oneOf enum controls.
  * @type {RankedTester}
  */
 export const oneOfEnumCellTester: RankedTester = rankWith(
