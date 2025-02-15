@@ -171,6 +171,30 @@ describe('OneOfEnum cell', () => {
     expect(select.options.item(1).value).toBe('b');
   });
 
+  test('render with empty option due to wrong hideEmptyOption value', () => {
+    const core = initCore(fixture.schema, fixture.uischema, fixture.data);
+    wrapper = mount(
+      <JsonFormsStateProvider initState={{ core }}>
+        <OneOfEnumCell
+          schema={fixture.schema}
+          uischema={{
+            ...fixture.uischema,
+            options: { hideEmptyOption: 'true' },
+          }}
+          path='foo'
+        />
+      </JsonFormsStateProvider>
+    );
+
+    const select = wrapper.find('select').getDOMNode() as HTMLSelectElement;
+    expect(select.tagName).toBe('SELECT');
+    expect(select.value).toBe('a');
+    expect(select.options).toHaveLength(3);
+    expect(select.options.item(0).value).toBe('');
+    expect(select.options.item(1).value).toBe('a');
+    expect(select.options.item(2).value).toBe('b');
+  });
+
   test('has classes set', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
     wrapper = mount(
