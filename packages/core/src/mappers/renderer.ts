@@ -1038,9 +1038,12 @@ export const mapStateToLayoutProps = (
   state: JsonFormsState,
   ownProps: OwnPropsOfLayout
 ): LayoutProps => {
-  const rootData = getData(state);
+  const originalData = getData(state);
+  // Create a new object to avoid modifying the original data
+  const rootData = { ...originalData };
   const ajv = getAjv(state);
-  ajv?.compile(getSchema(state))(rootData);
+  const schema = getSchema(state);
+  ajv?.compile(schema)(rootData);
   const { uischema } = ownProps;
   const visible: boolean =
     ownProps.visible === undefined || hasShowRule(uischema)
