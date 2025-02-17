@@ -1039,10 +1039,12 @@ export const mapStateToLayoutProps = (
   ownProps: OwnPropsOfLayout
 ): LayoutProps => {
   const rootData = getData(state);
+  const ajv = getAjv(state);
+  ajv?.compile(getSchema(state))(rootData);
   const { uischema } = ownProps;
   const visible: boolean =
     ownProps.visible === undefined || hasShowRule(uischema)
-      ? isVisible(ownProps.uischema, rootData, ownProps.path, getAjv(state))
+      ? isVisible(ownProps.uischema, rootData, ownProps.path, ajv)
       : ownProps.visible;
 
   const data = Resolve.data(rootData, ownProps.path);

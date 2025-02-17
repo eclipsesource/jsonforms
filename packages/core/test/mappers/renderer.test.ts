@@ -85,6 +85,17 @@ const mockDispatch = (
   return [getCore, dispatch];
 };
 
+const showRule = {
+  effect: RuleEffect.SHOW,
+  condition: {
+    type: 'SCHEMA',
+    scope: '#/properties/firstName',
+    schema: {
+      const: 'Homer',
+    },
+  },
+};
+
 const hideRule = {
   effect: RuleEffect.HIDE,
   condition: {
@@ -1201,6 +1212,68 @@ test('mapStateToLayoutProps - hidden via state with path from ownProps ', (t) =>
         data: {
           foo: { firstName: 'Homer' },
         },
+        uischema,
+        errors: [] as ErrorObject[],
+      },
+    },
+  };
+  const props = mapStateToLayoutProps(state, ownProps);
+  t.false(props.visible);
+});
+
+test('mapStateToLayoutProps - show via state from default values from schema ', (t) => {
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [coreUISchema],
+    rule: showRule,
+  };
+  const ownProps = {
+    uischema,
+  };
+  const state = {
+    jsonforms: {
+      core: {
+        ajv: createAjv({
+          useDefaults: true,
+        }),
+        schema: {
+          type: 'object',
+          properties: {
+            firstName: { type: 'string', default: 'Homer' },
+            lastName: { type: 'string' },
+          },
+        },
+        data: { lastName: 'Simpson' },
+        uischema,
+        errors: [] as ErrorObject[],
+      },
+    },
+  };
+  const props = mapStateToLayoutProps(state, ownProps);
+  t.true(props.visible);
+});
+
+test('mapStateToLayoutProps - do not show via state when the data field is missing ', (t) => {
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [coreUISchema],
+    rule: showRule,
+  };
+  const ownProps = {
+    uischema,
+  };
+  const state = {
+    jsonforms: {
+      core: {
+        ajv: createAjv(),
+        schema: {
+          type: 'object',
+          properties: {
+            firstName: { type: 'string', default: 'Homer' },
+            lastName: { type: 'string' },
+          },
+        },
+        data: { lastName: 'Simpson' },
         uischema,
         errors: [] as ErrorObject[],
       },
