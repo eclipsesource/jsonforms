@@ -10,17 +10,17 @@
 #
 
 MODE="undefined"
-HEADER_FILE="LICENSE"
+HEADER_FILE="LICENSE-MIT"
 SRC_PATH="/dev/null"
-INDENT=2 # two spaces 
+INDENT=2 # two spaces
 REPLACEMENT="undefined"
 
 declare -a EXT_LIST=(ts:c tsx:c)
 
 function print_usage {
   show_status usage "$0 [all|git-dirty] [-h|--header=/path/to/header] [-p|--path=/path/to/src] [-u|--update=\"toreplace/replacement\"]"
-  show_status usage "Example: $0 all --header=./LICENSE --path=/lib # Will add header from LICENSE file and it to all supported file types in /lib directory"
-  show_status usage "Example: $0 all --header=./LICENSE --path=/lib --update=\"2018 /2018-2019 \" # replace \"2018 \" with \"2018-2019 \" in existing headers"
+  show_status usage "Example: $0 all --header=./LICENSE-MIT --path=/lib # Will add header from LICENSE-MIT file and it to all supported file types in /lib directory"
+  show_status usage "Example: $0 all --header=./LICENSE-MIT --path=/lib --update=\"2018 /2018-2019 \" # replace \"2018 \" with \"2018-2019 \" in existing headers"
 }
 
 function show_status {

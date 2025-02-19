@@ -128,4 +128,4 @@ For more information on how JSON Forms can be configured, please see the [README
 
 ## License
 
-The JSONForms project is licensed under the MIT License. See the [LICENSE file](https://github.com/eclipsesource/jsonforms/blob/master/LICENSE) for more information.
+The JSONForms project is licensed under the MIT License. See the [LICENSE file](https://github.com/eclipsesource/jsonforms/blob/master/LICENSE-MIT) for more information.
