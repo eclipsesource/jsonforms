@@ -2,8 +2,9 @@
   "name": "jsonforms-monorepo",
   "engines": {
     "node": "^18.19.0",
-    "pnpm": ">=7.13.4"
+    "pnpm": ">=9.15.4"
   },
+  "packageManager": "pnpm@9.15.6+sha256.5bf88eca1e818b973b9359a16e57405177c7a9b8177b9125d587577311786e64",
   "scripts": {
     "lerna": "lerna",
     "preparePublish": "git clean -dfx && pnpm i --frozen-lockfile && pnpm run clean && pnpm run build && pnpm run doc && pnpm run test",
