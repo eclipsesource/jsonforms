@@ -15,5 +15,5 @@ ENV CHROME_BIN=/usr/bin/chromium
 # RUN su node -c "source /usr/local/share/nvm/nvm.sh && nvm install ${EXTRA_NODE_VERSION}"
 
 # Install and configure pnpm
-RUN su node -c "npm install -g pnpm@9"
+RUN su node -c "npm install -g pnpm@10"
 RUN su node -c "pnpm config set store-dir /home/node/.pnpm-store"
