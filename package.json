@@ -2,7 +2,7 @@
   "name": "jsonforms-monorepo",
   "engines": {
     "node": "^18.19.0",
-    "pnpm": ">=9.15.4"
+    "pnpm": "^10.4.1"
   },
   "packageManager": "pnpm@10.4.1+sha256.4b702887986995933d4300836b04d6d02a43bc72b52e4f7e93a4ca608b959197",
   "scripts": {
