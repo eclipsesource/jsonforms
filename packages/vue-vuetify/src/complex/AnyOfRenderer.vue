@@ -10,7 +10,7 @@
     <v-tabs v-model="selectedIndex">
       <v-tab
         v-for="(anyOfRenderInfo, anyOfIndex) in anyOfRenderInfos"
-        :key="`${control.path}-${anyOfIndex}`"
+        :key="`${control.path}-${anyOfRenderInfos.length}-${anyOfIndex}`"
       >
         {{ anyOfRenderInfo.label }}
       </v-tab>
@@ -19,7 +19,7 @@
     <v-window v-model="selectedIndex">
       <v-window-item
         v-for="(anyOfRenderInfo, anyOfIndex) in anyOfRenderInfos"
-        :key="`${control.path}-${anyOfIndex}`"
+        :key="`${control.path}-${anyOfRenderInfos.length}-${anyOfIndex}`"
       >
         <dispatch-renderer
           v-if="selectedIndex === anyOfIndex"

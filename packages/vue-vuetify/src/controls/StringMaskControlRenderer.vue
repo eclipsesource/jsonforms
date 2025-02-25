@@ -50,7 +50,7 @@ import {
 import isEmpty from 'lodash/isEmpty';
 import { defineComponent, computed } from 'vue';
 import { VTextField } from 'vuetify/components';
-import { useVuetifyControl } from '../util';
+import { determineClearValue, useVuetifyControl } from '../util';
 import { default as ControlWrapper } from './ControlWrapper.vue';
 import { DisabledIconFocus } from './directives';
 import { type MaskTokens, vMaska, Mask } from 'maska';
@@ -76,7 +76,8 @@ const controlRenderer = defineComponent({
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    const adaptValue = (value: any) => value || undefined;
+    const clearValue = determineClearValue('');
+    const adaptValue = (value: any) => (value === null ? clearValue : value);
     const control = useVuetifyControl(useJsonFormsControl(props), adaptValue);
 
     const toTokens = (tokenParams: Record<string, any>): MaskTokens => {
