@@ -44,7 +44,7 @@ Independently of the assigned milestone, contributions are always accepted and a
 ### First time setup
 
 - Install [node.js](https://nodejs.org/) (only Node v18.19+ < 19 is currently supported)
-- Install pnpm: <https://pnpm.io/installation> (use pnpm 8.6.2+)
+- Install pnpm: <https://pnpm.io/installation> (use pnpm 10.4.1+) or use [corepack](https://nodejs.org/docs/latest-v18.x/api/corepack.html) to enable the recommended version
 - Clone this repository
 - Install dependencies: `pnpm i --frozen-lockfile`
 
