@@ -10,14 +10,12 @@ Thus, custom renderers using either method might have behavior changes.
 This rework is part of an ongoing effort to remove mandatory usage of AJV from JSON Forms.
 
 Before this change, AJV was used to validate the current data against all schemas of the combinator.
-This was replaced by using a heuristic which tries to match the schema via an identification property
-against a `const` entry in the schema.
+This was replaced by a heuristic which tries to match the schema via an identification property against a `const` entry in the schema.
 
 The identification property is determined as follows in descending order of priority:
 
 1. The schema contains a new custom property `x-jsf-type-property` next to the combinator to define the identification property.
-2. The data has any of these properties: `type`, `kind`, `id`. They are considered in the listed order.
-3. The data has any string or number property. The first encountered one is used.
+2. At least one of the combinator schemas has this property with a const declaration: `type`, `kind`. They are considered in the listed order.
 
 If no combinator schema can be matched, fallback to the first one as before this update.
 
@@ -72,7 +70,9 @@ const dataWithUser = {
 
 #### Example 2: Use a default identification property
 
-In this example we use the `kind` property as the identification property. Like in the custom property case, subschemas are matched via a `const` definition in the identification property's schema. However, we do not need to explicitly specify `kind` being used.
+In this example we use the `kind` property as the identification property.
+Like in the custom property case, subschemas are matched via a `const` definition in the identification property's schema.
+However, we do not need to explicitly specify `kind` being used.
 The `default` keyword can be used to tell JSON Forms to automatically initialize the property.
 
 ```ts

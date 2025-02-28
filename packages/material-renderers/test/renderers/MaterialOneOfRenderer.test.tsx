@@ -154,7 +154,7 @@ describe('Material oneOf renderer', () => {
     expect(secondTab.html()).toContain('Mui-selected');
   });
 
-  it('should render and select second tab due to string prop with matching const value', () => {
+  it('should render and select second tab due to type prop with matching const value', () => {
     const schema = {
       type: 'object',
       properties: {
@@ -164,7 +164,7 @@ describe('Material oneOf renderer', () => {
               title: 'String',
               type: 'object',
               properties: {
-                foo: { type: 'string', const: 'foo' },
+                type: { const: 'foo' },
               },
               additionalProperties: false,
             },
@@ -172,7 +172,7 @@ describe('Material oneOf renderer', () => {
               title: 'Number',
               type: 'object',
               properties: {
-                bar: { type: 'string', const: 'bar' },
+                type: { const: 'bar' },
               },
               additionalProperties: false,
             },
@@ -186,7 +186,7 @@ describe('Material oneOf renderer', () => {
       scope: '#/properties/value',
     };
     const data = {
-      value: { bar: 'bar' },
+      value: { type: 'bar' },
     };
     wrapper = mount(
       <JsonForms
