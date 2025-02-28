@@ -114,7 +114,7 @@ describe('Material oneOf renderer', () => {
     expect(firstTab.html()).toContain('Mui-selected');
   });
 
-  it('should render and select second tab due to datatype', () => {
+  it('should render and select first tab for primitive combinator data', () => {
     const schema = {
       type: 'object',
       properties: {
@@ -150,11 +150,11 @@ describe('Material oneOf renderer', () => {
     );
     expect(wrapper.find(MaterialOneOfRenderer).length).toBeTruthy();
 
-    const secondTab = wrapper.find(Tab).at(1);
+    const secondTab = wrapper.find(Tab).at(0);
     expect(secondTab.html()).toContain('Mui-selected');
   });
 
-  it('should render and select second tab due to schema with additionalProperties', () => {
+  it('should render and select second tab due to string prop with matching const value', () => {
     const schema = {
       type: 'object',
       properties: {
@@ -164,7 +164,7 @@ describe('Material oneOf renderer', () => {
               title: 'String',
               type: 'object',
               properties: {
-                foo: { type: 'string' },
+                foo: { type: 'string', const: 'foo' },
               },
               additionalProperties: false,
             },
@@ -172,7 +172,7 @@ describe('Material oneOf renderer', () => {
               title: 'Number',
               type: 'object',
               properties: {
-                bar: { type: 'string' },
+                bar: { type: 'string', const: 'bar' },
               },
               additionalProperties: false,
             },
@@ -202,7 +202,7 @@ describe('Material oneOf renderer', () => {
     expect(secondTab.html()).toContain('Mui-selected');
   });
 
-  it('should render and select second tab due to schema with required', () => {
+  it('should render and select second tab due const custom property', () => {
     const schema = {
       type: 'object',
       properties: {
@@ -213,6 +213,7 @@ describe('Material oneOf renderer', () => {
               type: 'object',
               properties: {
                 foo: { type: 'string' },
+                myprop: { const: 'foo' },
               },
               required: ['foo'],
             },
@@ -221,10 +222,12 @@ describe('Material oneOf renderer', () => {
               type: 'object',
               properties: {
                 bar: { type: 'string' },
+                myprop: { const: 'bar' },
               },
               required: ['bar'],
             },
           ],
+          'x-jsf-type-property': 'myprop',
         },
       },
     };
@@ -234,7 +237,7 @@ describe('Material oneOf renderer', () => {
       scope: '#/properties/value',
     };
     const data = {
-      value: { bar: 'bar' },
+      value: { bar: 'bar', myprop: 'bar' },
     };
     wrapper = mount(
       <JsonForms

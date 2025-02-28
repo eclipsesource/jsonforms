@@ -1,6 +1,9 @@
 import test from 'ava';
-import { ControlElement } from '../../src/models';
-import { createCombinatorRenderInfos } from '../../src/mappers';
+import { ControlElement, JsonSchema } from '../../src/models';
+import {
+  createCombinatorRenderInfos,
+  getCombinatorIndexOfFittingSchema,
+} from '../../src/mappers';
 
 const rootSchema = {
   type: 'object',
@@ -110,4 +113,231 @@ test('createCombinatorRenderInfos - uses keyword + index when no labels provided
   );
   t.deepEqual(duaRenderInfo.label, 'anyOf-0');
   t.deepEqual(lipaRenderInfo.label, 'anyOf-1');
+});
+
+const schemaWithCustomIdProperty = {
+  properties: {
+    customId: { const: '123' },
+  },
+};
+
+const schemaWithId = {
+  properties: {
+    id: { const: '123' },
+  },
+};
+
+const schemaWithType = {
+  properties: {
+    type: { const: 'typeValue' },
+  },
+};
+
+const schemaWithTypeWithoutConst = {
+  properties: {
+    type: { type: 'string' },
+  },
+};
+
+const schemaWithKind = {
+  properties: {
+    kind: { const: 'kindValue' },
+  },
+};
+
+const schemaWithFirstString = {
+  properties: {
+    obj: { type: 'object' },
+    name: { const: 'John' },
+  },
+};
+
+const indexRootSchema = {
+  definitions: {
+    schemaWithCustomIdProperty,
+    schemaWithId,
+    schemaWithType,
+    schemaWithKind,
+    schemaWithFirstString,
+  },
+};
+
+test('getCombinatorIndexOfFittingSchema - schema with x-jsf-type-property', (t) => {
+  const data = { customId: '123' };
+  const keyword = 'oneOf';
+  const schema = {
+    oneOf: [schemaWithId, schemaWithCustomIdProperty],
+    'x-jsf-type-property': 'customId',
+  };
+
+  const result = getCombinatorIndexOfFittingSchema(
+    data,
+    keyword,
+    schema,
+    indexRootSchema
+  );
+  t.is(result, 1);
+});
+
+test('getCombinatorIndexOfFittingSchema - data with id property', (t) => {
+  const data = { id: '123' };
+  const keyword = 'oneOf';
+  const schema = { oneOf: [schemaWithId, schemaWithKind] };
+
+  const result = getCombinatorIndexOfFittingSchema(
+    data,
+    keyword,
+    schema,
+    indexRootSchema
+  );
+  // Id property is not one of the default identification properties
+  t.is(result, -1);
+});
+
+test('getCombinatorIndexOfFittingSchema - data with type property', (t) => {
+  const data = { type: 'typeValue' };
+  const keyword = 'oneOf';
+  const schema = { oneOf: [schemaWithId, schemaWithType] };
+
+  const result = getCombinatorIndexOfFittingSchema(
+    data,
+    keyword,
+    schema,
+    indexRootSchema
+  );
+  t.is(result, 1);
+});
+
+test('getCombinatorIndexOfFittingSchema - data with unfitting type property value', (t) => {
+  const data = { type: 'wrongTypeValue' };
+  const keyword = 'oneOf';
+  const schema = { oneOf: [schemaWithId, schemaWithType] };
+
+  const result = getCombinatorIndexOfFittingSchema(
+    data,
+    keyword,
+    schema,
+    indexRootSchema
+  );
+  t.is(result, -1);
+});
+
+test('getCombinatorIndexOfFittingSchema - schema with type property without const', (t) => {
+  const data = { type: 'sometype' };
+  const keyword = 'oneOf';
+  const schema = { oneOf: [schemaWithTypeWithoutConst] };
+
+  const result = getCombinatorIndexOfFittingSchema(
+    data,
+    keyword,
+    schema,
+    indexRootSchema
+  );
+  t.is(result, -1);
+});
+
+test('getCombinatorIndexOfFittingSchema - schema with refs and data with type property', (t) => {
+  const data = { type: 'typeValue' };
+  const keyword = 'oneOf';
+  const schema = {
+    oneOf: [
+      { $ref: '#/definitions/schemaWithId' },
+      { $ref: '#/definitions/schemaWithType' },
+    ],
+  };
+
+  const result = getCombinatorIndexOfFittingSchema(
+    data,
+    keyword,
+    schema,
+    indexRootSchema
+  );
+  t.is(result, 1);
+});
+
+test('getCombinatorIndexOfFittingSchema - data with kind property', (t) => {
+  const data = { kind: 'kindValue' };
+  const keyword = 'oneOf';
+  const schema = { oneOf: [schemaWithKind] };
+
+  const result = getCombinatorIndexOfFittingSchema(
+    data,
+    keyword,
+    schema,
+    indexRootSchema
+  );
+  t.is(result, 0);
+});
+
+test('getCombinatorIndexOfFittingSchema - data with unfitting kind property value', (t) => {
+  const data = { kind: 'wrongKindValue' };
+  const keyword = 'oneOf';
+  const schema = { oneOf: [schemaWithKind] };
+
+  const result = getCombinatorIndexOfFittingSchema(
+    data,
+    keyword,
+    schema,
+    indexRootSchema
+  );
+  t.is(result, -1);
+});
+
+test('getCombinatorIndexOfFittingSchema - no matching schema', (t) => {
+  const data = { name: 'Doe' };
+  const keyword = 'oneOf';
+  const schema = { oneOf: [schemaWithFirstString] };
+
+  const result = getCombinatorIndexOfFittingSchema(
+    data,
+    keyword,
+    schema,
+    indexRootSchema
+  );
+  t.is(result, -1);
+});
+
+test('getCombinatorIndexOfFittingSchema - non-object data', (t) => {
+  const keyword = 'oneOf';
+  const schema = { oneOf: [schemaWithId, schemaWithType] };
+
+  t.is(
+    getCombinatorIndexOfFittingSchema(42, keyword, schema, indexRootSchema),
+    -1
+  );
+  t.is(
+    getCombinatorIndexOfFittingSchema(
+      'string',
+      keyword,
+      schema,
+      indexRootSchema
+    ),
+    -1
+  );
+  t.is(
+    getCombinatorIndexOfFittingSchema(
+      undefined,
+      keyword,
+      schema,
+      indexRootSchema
+    ),
+    -1
+  );
+});
+
+test('getCombinatorIndexOfFittingSchema - combinator schemas are absent', (t) => {
+  const data = { someProp: 'value' };
+  const schema = {};
+  const rootSchema = {};
+  t.is(
+    getCombinatorIndexOfFittingSchema(data, 'oneOf', schema, rootSchema),
+    -1
+  );
+
+  // Empty oneOf array
+  const emptySchema = { oneOf: [] } as JsonSchema;
+  t.is(
+    getCombinatorIndexOfFittingSchema(data, 'oneOf', emptySchema, rootSchema),
+    -1
+  );
 });
