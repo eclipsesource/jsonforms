@@ -40,7 +40,7 @@ export type CombinatorKeyword = 'anyOf' | 'oneOf' | 'allOf';
 export const COMBINATOR_TYPE_PROPERTY = 'x-jsf-type-property';
 
 /** Default properties that are used to identify combinator schemas. */
-export const COMBINATOR_IDENTIFICATION_PROPERTIES = ['type', 'kind', 'id'];
+export const COMBINATOR_IDENTIFICATION_PROPERTIES = ['type', 'kind'];
 
 export const createCombinatorRenderInfos = (
   combinatorSubSchemas: JsonSchema[],
@@ -75,58 +75,14 @@ export const createCombinatorRenderInfos = (
   });
 
 /**
- * Returns the identification property of the given data object.
- * The following heuristics are applied:
- * If the schema defines a `x-jsf-type-property`, it is used as the identification property.
- * Otherwise, the first of the following data properties is used:
- * - `type`
- * - `kind`
- * - `id`
- *
- * If none of the above properties are present, the first string or number property of the data object is used.
- */
-export const getCombinatorIdentificationProp = (
-  data: any,
-  schema: JsonSchema
-): string | undefined => {
-  if (typeof data !== 'object' || data === null) {
-    return undefined;
-  }
-
-  // Determine the identification property
-  let idProperty: string | undefined;
-  if (
-    COMBINATOR_TYPE_PROPERTY in schema &&
-    typeof schema[COMBINATOR_TYPE_PROPERTY] === 'string'
-  ) {
-    idProperty = schema[COMBINATOR_TYPE_PROPERTY];
-  } else {
-    // Use the first default identification property that is present in the data object
-    for (const prop of COMBINATOR_IDENTIFICATION_PROPERTIES) {
-      if (Object.prototype.hasOwnProperty.call(data, prop)) {
-        idProperty = prop;
-        break;
-      }
-    }
-  }
-
-  // If no identification property was found, use the first string or number property
-  // of the data object
-  if (idProperty === undefined) {
-    for (const key of Object.keys(data)) {
-      if (typeof data[key] === 'string' || typeof data[key] === 'number') {
-        idProperty = key;
-        break;
-      }
-    }
-  }
-
-  return idProperty;
-};
-
-/**
  * Returns the index of the schema in the given combinator keyword that matches the identification property of the given data object.
  * The heuristic only works for data objects with a corresponding schema. If the data is a primitive value or an array, the heuristic does not work.
+ *
+ * The following heuristics are applied:
+ * If the schema defines a `x-jsf-type-property`, it is used as the identification property.
+ * Otherwise, the first of the following properties is used if it exists in at least one combinator schema and has a `const` entry:
+ * - `type`
+ * - `kind`
  *
  * If the index cannot be determined, `-1` is returned.
  *
@@ -138,12 +94,12 @@ export const getCombinatorIndexOfFittingSchema = (
   schema: JsonSchema,
   rootSchema: JsonSchema
 ): number => {
-  let indexOfFittingSchema = -1;
-  const idProperty = getCombinatorIdentificationProp(data, schema);
-  if (idProperty === undefined) {
-    return indexOfFittingSchema;
+  if (typeof data !== 'object' || data === null) {
+    return -1;
   }
 
+  // Resolve all schemas in the combinator.
+  const resolvedCombinatorSchemas = [];
   for (let i = 0; i < schema[keyword]?.length; i++) {
     let resolvedSchema = schema[keyword][i];
     if (resolvedSchema.$ref) {
@@ -153,6 +109,36 @@ export const getCombinatorIndexOfFittingSchema = (
         rootSchema
       );
     }
+    resolvedCombinatorSchemas.push(resolvedSchema);
+  }
+
+  // Determine the identification property
+  let idProperty: string | undefined;
+  if (
+    COMBINATOR_TYPE_PROPERTY in schema &&
+    typeof schema[COMBINATOR_TYPE_PROPERTY] === 'string'
+  ) {
+    idProperty = schema[COMBINATOR_TYPE_PROPERTY];
+  } else {
+    // Use the first default identification property that has a const entry in at least one of the schemas
+    for (const potentialIdProp of COMBINATOR_IDENTIFICATION_PROPERTIES) {
+      for (const resolvedSchema of resolvedCombinatorSchemas) {
+        if (resolvedSchema.properties?.[potentialIdProp]?.const !== undefined) {
+          idProperty = potentialIdProp;
+          break;
+        }
+      }
+    }
+  }
+
+  let indexOfFittingSchema = -1;
+  if (idProperty === undefined) {
+    return indexOfFittingSchema;
+  }
+
+  // Check if the data matches the identification property of one of the resolved schemas
+  for (let i = 0; i < resolvedCombinatorSchemas.length; i++) {
+    const resolvedSchema = resolvedCombinatorSchemas[i];
 
     // Match the identification property against a constant value in resolvedSchema
     const maybeConstIdValue = resolvedSchema.properties?.[idProperty]?.const;
@@ -162,9 +148,6 @@ export const getCombinatorIndexOfFittingSchema = (
       data[idProperty] === maybeConstIdValue
     ) {
       indexOfFittingSchema = i;
-      console.debug(
-        `Data matches the resolved schema for property ${idProperty}`
-      );
       break;
     }
   }
