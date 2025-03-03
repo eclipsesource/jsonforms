@@ -3,6 +3,7 @@ import { mountJsonForms } from '../util';
 
 const schema = {
   title: 'My Object',
+  'x-jsf-type-property': 'variant',
   oneOf: [
     {
       title: 'Variant A',
