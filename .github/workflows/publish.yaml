@@ -1,43 +1,43 @@
-name: "Publish"
+name: 'Publish'
 
 on:
   workflow_dispatch:
     inputs:
       next_version:
-        type: "string"
-        description: "version (e.g. 3.4.0-alpha.0)"
+        type: 'string'
+        description: 'version (e.g. 3.4.0-alpha.0)'
         required: true
       skip_publish:
-        type: "boolean"
-        description: "mark in case only the version update shall be executed, skipping the release to npm"
+        type: 'boolean'
+        description: 'mark in case only the version update shall be executed, skipping the release to npm'
         required: true
       skip_push:
-        type: "boolean"
-        description: "mark in case the version update shall not be pushed back to the repository"
+        type: 'boolean'
+        description: 'mark in case the version update shall not be pushed back to the repository'
         required: true
       stable_release:
-        type: "boolean"
-        description: "mark in case this is a full stable release (flag is ignored in case publish is skipped)"
+        type: 'boolean'
+        description: 'mark in case this is a full stable release (flag is ignored in case publish is skipped)'
         required: true
 
 jobs:
   publish:
     permissions:
-      contents: "write"
-      id-token: "write"
-    runs-on: "ubuntu-latest"
+      contents: 'write'
+      id-token: 'write'
+    runs-on: 'ubuntu-latest'
     steps:
-      - uses: "actions/checkout@v4"
+      - uses: 'actions/checkout@v4'
         with:
-          token: "${{ secrets.JSONFORMS_PUBLISH_PAT }}"
+          token: '${{ secrets.JSONFORMS_PUBLISH_PAT }}'
 
-      - name: "Configure Git Credentials"
+      - name: 'Configure Git Credentials'
         run: |
           git config user.name "jsonforms-publish[bot]"
           git config user.email "jsonforms-publish@eclipsesource.com"
 
-      - name: "Setup node"
-        uses: "actions/setup-node@v3"
+      - name: 'Setup node'
+        uses: 'actions/setup-node@v4'
         with:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'
@@ -48,19 +48,19 @@ jobs:
         with:
           run_install: false
 
-      - name: "Install Packages"
-        run: "pnpm i --frozen-lockfile"
+      - name: 'Install Packages'
+        run: 'pnpm i --frozen-lockfile'
 
-      - name: "Build"
-        run: "pnpm run build"
+      - name: 'Build'
+        run: 'pnpm run build'
 
-      - name: "Test"
-        run: "pnpm run test"
+      - name: 'Test'
+        run: 'pnpm run test'
 
-      - name: "Versioning"
-        run: "pnpm exec lerna version ${{ github.event.inputs.next_version }} --no-push --force-publish --yes"
+      - name: 'Versioning'
+        run: 'pnpm exec lerna version ${{ github.event.inputs.next_version }} --no-push --force-publish --yes'
 
-      - name: "Adjust PeerDependencies"
+      - name: 'Adjust PeerDependencies'
         run: |
           cd packages/angular && pnpm pkg set peerDependencies.@jsonforms/core="${{ github.event.inputs.next_version }}"
           cd ../angular-material && pnpm pkg set peerDependencies.@jsonforms/core="${{ github.event.inputs.next_version }}" && pnpm pkg set peerDependencies.@jsonforms/angular="${{ github.event.inputs.next_version }}"
@@ -72,20 +72,20 @@ jobs:
           cd ../vue-vanilla && pnpm pkg set peerDependencies.@jsonforms/core="${{ github.event.inputs.next_version }}" && pnpm pkg set peerDependencies.@jsonforms/vue="${{ github.event.inputs.next_version }}"
           cd ../vue-vuetify && pnpm pkg set peerDependencies.@jsonforms/core="${{ github.event.inputs.next_version }}" && pnpm pkg set peerDependencies.@jsonforms/vue="${{ github.event.inputs.next_version }}"
 
-      - name: "Tag and Commit"
+      - name: 'Tag and Commit'
         run: |
           git add -A && git commit --amend --no-edit
           git tag v${{ github.event.inputs.next_version }} -f
 
-      - name: "push"
-        if: "github.event.inputs.skip_push == 'false'"
+      - name: 'push'
+        if: github.event.inputs.skip_push == 'false'
         run: |
           git push
           git push origin v${{ github.event.inputs.next_version }}
 
-      - name: "Publish to npm"
-        if: "github.event.inputs.skip_publish == 'false'"
+      - name: 'Publish to npm'
+        if: github.event.inputs.skip_publish == 'false'
         run: "pnpm publish --recursive ${{  github.event.inputs.stable_release == 'true' && ' ' || '--tag next' }}"
         env:
-          NODE_AUTH_TOKEN: "${{ secrets.NPM_TOKEN }}"
-          NPM_CONFIG_PROVENANCE: "true"
+          NODE_AUTH_TOKEN: '${{ secrets.NPM_TOKEN }}'
+          NPM_CONFIG_PROVENANCE: 'true'
