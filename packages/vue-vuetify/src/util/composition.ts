@@ -17,8 +17,10 @@ import {
   type DispatchPropsOfMultiEnumControl,
   type JsonFormsSubStates,
   type JsonSchema,
+  type Scopable,
   type UISchemaElement,
 } from '@jsonforms/core';
+import type { RendererProps } from '@jsonforms/vue';
 import type Ajv from 'ajv';
 import type { ErrorObject } from 'ajv';
 import cloneDeep from 'lodash/cloneDeep';
@@ -36,6 +38,7 @@ import {
 } from 'vue';
 import type { IconOptions } from 'vuetify';
 import { useStyles } from '../styles';
+import { IsDynamicPropertyContext } from './inject';
 
 export const IconSymbol: InjectionKey<Required<IconOptions>> =
   Symbol.for('vuetify:icons');
@@ -480,4 +483,16 @@ export const useIcons = () => {
   return {
     current: iconSet,
   };
+};
+
+export const determineClearValue = (defaultValue: any) => {
+  const jsonforms = useJsonForms();
+
+  const useDefaultValue = inject<boolean>(
+    IsDynamicPropertyContext,
+    jsonforms.core?.schema.type !== 'object',
+  );
+
+  // undefined will clear the property from the object
+  return useDefaultValue ? defaultValue : undefined;
 };
