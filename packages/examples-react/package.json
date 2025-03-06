@@ -1,6 +1,7 @@
 {
   "name": "@jsonforms/examples-react",
   "version": "3.5.1",
+  "license": "MIT",
   "private": true,
   "dependencies": {
     "@jsonforms/core": "workspace:*",

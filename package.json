@@ -1,5 +1,6 @@
 {
   "name": "jsonforms-monorepo",
+  "license": "MIT",
   "engines": {
     "node": "^22",
     "pnpm": "^10.4.1"

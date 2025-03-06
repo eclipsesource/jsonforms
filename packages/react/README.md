@@ -114,7 +114,7 @@ export default App;
 
 ## License
 
-The JSON Forms project is licensed under the MIT License. See the [LICENSE file](https://github.com/eclipsesource/jsonforms/blob/master/LICENSE) for more information.
+The JSON Forms project is licensed under the MIT License. See the [LICENSE file](https://github.com/eclipsesource/jsonforms/blob/master/LICENSE-MIT) for more information.
 
 ## Roadmap
 
