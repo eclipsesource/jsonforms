@@ -84,7 +84,10 @@ import {
   getUiSchema,
 } from '../store';
 import { isInherentlyEnabled } from './util';
-import { CombinatorKeyword } from './combinators';
+import {
+  CombinatorKeyword,
+  getCombinatorIndexOfFittingSchema,
+} from './combinators';
 import isEqual from 'lodash/isEqual';
 
 const move = (array: any[], index: number, delta: number) => {
@@ -1120,6 +1123,11 @@ export interface StatePropsOfCombinator extends StatePropsOfControl {
   data: any;
 }
 
+export type StatePropsOfAllOfRenderer = Omit<
+  StatePropsOfCombinator,
+  'indexOfFittingSchema'
+>;
+
 export const mapStateToCombinatorRendererProps = (
   state: JsonFormsState,
   ownProps: OwnPropsOfControl,
@@ -1128,43 +1136,12 @@ export const mapStateToCombinatorRendererProps = (
   const { data, schema, rootSchema, i18nKeyPrefix, label, ...props } =
     mapStateToControlProps(state, ownProps);
 
-  const ajv = state.jsonforms.core.ajv;
-  const structuralKeywords = [
-    'required',
-    'additionalProperties',
-    'type',
-    'enum',
-    'const',
-  ];
-  const dataIsValid = (errors: ErrorObject[]): boolean => {
-    return (
-      !errors ||
-      errors.length === 0 ||
-      !errors.find((e) => structuralKeywords.indexOf(e.keyword) !== -1)
-    );
-  };
-  let indexOfFittingSchema: number;
-  // TODO instead of compiling the combinator subschemas we can compile the original schema
-  // without the combinator alternatives and then revalidate and check the errors for the
-  // element
-  for (let i = 0; i < schema[keyword]?.length; i++) {
-    try {
-      let _schema = schema[keyword][i];
-      if (_schema.$ref) {
-        _schema = Resolve.schema(rootSchema, _schema.$ref, rootSchema);
-      }
-      const valFn = ajv.compile(_schema);
-      valFn(data);
-      if (dataIsValid(valFn.errors)) {
-        indexOfFittingSchema = i;
-        break;
-      }
-    } catch (error) {
-      console.debug(
-        "Combinator subschema is not self contained, can't hand it over to AJV"
-      );
-    }
-  }
+  const indexOfFittingSchema = getCombinatorIndexOfFittingSchema(
+    data,
+    keyword,
+    schema,
+    rootSchema
+  );
 
   return {
     data,
@@ -1173,7 +1150,9 @@ export const mapStateToCombinatorRendererProps = (
     ...props,
     i18nKeyPrefix,
     label,
-    indexOfFittingSchema,
+    // Fall back to the first schema if none fits
+    indexOfFittingSchema:
+      indexOfFittingSchema !== -1 ? indexOfFittingSchema : 0,
     uischemas: getUISchemas(state),
   };
 };
@@ -1181,6 +1160,12 @@ export const mapStateToCombinatorRendererProps = (
 export interface CombinatorRendererProps
   extends StatePropsOfCombinator,
     DispatchPropsOfControl {}
+
+export type AllOfRendererProps = Omit<
+  CombinatorRendererProps,
+  'indexOfFittingSchema'
+>;
+
 /**
  * Map state to all of renderer props.
  * @param state the store's state
@@ -1190,8 +1175,20 @@ export interface CombinatorRendererProps
 export const mapStateToAllOfProps = (
   state: JsonFormsState,
   ownProps: OwnPropsOfControl
-): StatePropsOfCombinator =>
-  mapStateToCombinatorRendererProps(state, ownProps, 'allOf');
+): StatePropsOfAllOfRenderer => {
+  const { data, schema, rootSchema, i18nKeyPrefix, label, ...props } =
+    mapStateToControlProps(state, ownProps);
+
+  return {
+    data,
+    schema,
+    rootSchema,
+    ...props,
+    i18nKeyPrefix,
+    label,
+    uischemas: getUISchemas(state),
+  };
+};
 
 export const mapStateToAnyOfProps = (
   state: JsonFormsState,
