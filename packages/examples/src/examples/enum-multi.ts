@@ -58,7 +58,21 @@ export const uischema = {
     },
     {
       type: 'Control',
+      scope: '#/properties/oneOfMultiEnum',
+      options: {
+        autocomplete: false,
+      },
+    },
+    {
+      type: 'Control',
       scope: '#/properties/multiEnum',
+    },
+    {
+      type: 'Control',
+      scope: '#/properties/multiEnum',
+      options: {
+        autocomplete: false,
+      },
     },
   ],
 };
