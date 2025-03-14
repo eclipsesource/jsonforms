@@ -309,7 +309,7 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
         ? {
             ...state,
             data: updatedData,
-            schema: action.schema,
+            schema: dynamicSchema,
             uischema: action.uischema,
             ajv: thisAjv,
             errors: isEqual(errors, state.errors) ? state.errors : errors,

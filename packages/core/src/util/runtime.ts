@@ -89,12 +89,6 @@ const evaluateCondition = (
       return false;
     }
     const result = ajv.validate(condition.schema, value) as boolean;
-    console.debug('Schema condition validation:', {
-      scope,
-      value,
-      schema: condition.schema,
-      result,
-    });
     return result;
   } else {
     // unknown condition
@@ -218,7 +212,7 @@ export const evalValue = (
   path: string = undefined,
   ajv: Ajv
 ): { shouldUpdate: boolean; newValue: any } => {
-  if (!uischema.rule || !uischema.rule.options?.value) {
+  if (!uischema.rule) {
     return { shouldUpdate: false, newValue: undefined };
   }
 
@@ -228,6 +222,11 @@ export const evalValue = (
     RuleEffect.CLEAR_VALUE,
   ]);
   if (!valueEffect) {
+    return { shouldUpdate: false, newValue: undefined };
+  }
+
+  // For FILL_VALUE, we need options.value to be defined
+  if (valueEffect === RuleEffect.FILL_VALUE && !uischema.rule.options?.value) {
     return { shouldUpdate: false, newValue: undefined };
   }
 
