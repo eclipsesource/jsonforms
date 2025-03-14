@@ -54,6 +54,8 @@ import {
   isRequired,
   hasValueRule,
   evalValue,
+  hasShowRule,
+  isVisible,
 } from '../util';
 import { JsonSchema } from '../models/jsonSchema';
 import { UISchemaElement, SchemaBasedCondition } from '../models';
@@ -191,6 +193,28 @@ const createDynamicSchema = (
           updatedData = setFp(key, newValue, updatedData);
         }
       }
+
+      // Handle visibility rules - clear values for hidden fields
+      if (hasShowRule(control) && data !== undefined) {
+        const condition = control.rule?.condition as SchemaBasedCondition;
+        const isSchemaCondition = condition && 'schema' in condition;
+        const path =
+          isSchemaCondition && condition.scope === '#' ? undefined : key;
+
+        // Check if the field is hidden
+        const isFieldVisible = isVisible(control, data, path, ajv);
+
+        // If field is hidden and has a value, clear it
+        if (!isFieldVisible && data[key] !== undefined) {
+          // Only create a copy if we haven't already
+          if (!dataChanged) {
+            updatedData = { ...data };
+            dataChanged = true;
+          }
+          // Clear the value (set to undefined)
+          updatedData = setFp(key, undefined, updatedData);
+        }
+      }
     }
   });
 
@@ -245,7 +269,7 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
       return {
         ...state,
         data: updatedData,
-        schema: action.schema,
+        schema: dynamicSchema,
         uischema: action.uischema,
         additionalErrors,
         errors: e,
@@ -358,10 +382,21 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
       } else if (action.path === '') {
         // empty path is ok
         const result = action.updater(cloneDeep(state.data));
-        const errors = validate(state.validator, result);
+
+        // Create dynamic schema with UI-based required fields and clear hidden fields
+        const { schema: dynamicSchema, updatedData } = createDynamicSchema(
+          state.schema,
+          state.uischema,
+          result,
+          state.ajv
+        );
+
+        const errors = validate(state.validator, updatedData);
+
         return {
           ...state,
-          data: result,
+          data: updatedData,
+          schema: dynamicSchema,
           errors,
         };
       } else {
@@ -380,10 +415,21 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
             state.data === undefined ? {} : state.data
           );
         }
-        const errors = validate(state.validator, newState);
+
+        // Create dynamic schema with UI-based required fields and clear hidden fields
+        const { schema: dynamicSchema, updatedData } = createDynamicSchema(
+          state.schema,
+          state.uischema,
+          newState,
+          state.ajv
+        );
+
+        const errors = validate(state.validator, updatedData);
+
         return {
           ...state,
-          data: newState,
+          data: updatedData,
+          schema: dynamicSchema,
           errors,
         };
       }
