@@ -46,7 +46,17 @@ import { JsonFormsCore, Reducer, ValidationMode } from '../store';
 import type Ajv from 'ajv';
 import type { ErrorObject } from 'ajv';
 import isFunction from 'lodash/isFunction';
-import { createAjv, validate } from '../util';
+import {
+  createAjv,
+  validate,
+  findControlForProperty,
+  hasRequiredRule,
+  isRequired,
+  hasValueRule,
+  evalValue,
+} from '../util';
+import { JsonSchema } from '../models/jsonSchema';
+import { UISchemaElement, SchemaBasedCondition } from '../models';
 
 export const initState: JsonFormsCore = {
   data: {},
@@ -120,6 +130,94 @@ const hasAjvOption = (option: any): option is InitActionOptions => {
   return false;
 };
 
+const createDynamicSchema = (
+  schema: JsonSchema,
+  uischema: UISchemaElement,
+  data: any,
+  ajv: Ajv
+): { schema: JsonSchema; updatedData: any } => {
+  if (!schema.properties) {
+    return { schema, updatedData: data };
+  }
+
+  // Start with existing required fields or empty array
+  const requiredFields = Array.isArray(schema.required)
+    ? [...schema.required]
+    : [];
+
+  // Track if anything actually changes
+  let requiredChanged = false;
+  let dataChanged = false;
+
+  // Start with references to original objects
+  let updatedData = data;
+
+  // Check each property for dynamic required rules and value rules
+  Object.entries(schema.properties).forEach(([key]) => {
+    const control = findControlForProperty(uischema, key);
+    if (control) {
+      if (hasRequiredRule(control)) {
+        // For schema-based conditions with scope: "#", we need to pass undefined as path
+        const condition = control.rule?.condition as SchemaBasedCondition;
+        const isSchemaCondition = condition && 'schema' in condition;
+        const path =
+          isSchemaCondition && condition.scope === '#' ? undefined : key;
+        const isFieldRequired = isRequired(control, data, path, ajv);
+        const fieldIndex = requiredFields.indexOf(key);
+
+        if (isFieldRequired && fieldIndex === -1) {
+          // Add to required if not already there
+          requiredFields.push(key);
+          requiredChanged = true;
+        } else if (!isFieldRequired && fieldIndex !== -1) {
+          // Remove from required if no longer required
+          requiredFields.splice(fieldIndex, 1);
+          requiredChanged = true;
+        }
+      }
+
+      if (hasValueRule(control) && data !== undefined) {
+        const condition = control.rule?.condition as SchemaBasedCondition;
+        const isSchemaCondition = condition && 'schema' in condition;
+        const path =
+          isSchemaCondition && condition.scope === '#' ? undefined : key;
+        const { shouldUpdate, newValue } = evalValue(control, data, path, ajv);
+        if (shouldUpdate) {
+          // Only create a copy if we haven't already
+          if (!dataChanged) {
+            updatedData = { ...data };
+            dataChanged = true;
+          }
+          updatedData = setFp(key, newValue, updatedData);
+        }
+      }
+    }
+  });
+
+  // Check if required fields actually changed
+  const newRequired = requiredFields.length > 0 ? requiredFields : undefined;
+  const requiredEqual = isEqual(schema.required, newRequired);
+
+  // If nothing changed, return original references
+  if ((!requiredChanged || requiredEqual) && !dataChanged) {
+    return { schema, updatedData: data };
+  }
+
+  // If only data changed, keep schema reference
+  if (!requiredChanged || requiredEqual) {
+    return { schema, updatedData };
+  }
+
+  // If only required changed, create minimal schema update
+  return {
+    schema: {
+      ...schema,
+      required: newRequired,
+    },
+    updatedData,
+  };
+};
+
 export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
   state = initState,
   action
@@ -127,18 +225,26 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
   switch (action.type) {
     case INIT: {
       const thisAjv = getOrCreateAjv(state, action);
-
       const validationMode = getValidationMode(state, action);
+
+      // Create dynamic schema with UI-based required fields
+      const { schema: dynamicSchema, updatedData } = createDynamicSchema(
+        action.schema,
+        action.uischema,
+        action.data,
+        thisAjv
+      );
+
       const v =
         validationMode === 'NoValidation'
           ? undefined
-          : thisAjv.compile(action.schema);
-      const e = validate(v, action.data);
+          : thisAjv.compile(dynamicSchema);
+      const e = validate(v, updatedData);
       const additionalErrors = getAdditionalErrors(state, action);
 
       return {
         ...state,
-        data: action.data,
+        data: updatedData,
         schema: action.schema,
         uischema: action.uischema,
         additionalErrors,
@@ -153,35 +259,56 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
       const validationMode = getValidationMode(state, action);
       let validator = state.validator;
       let errors = state.errors;
+
+      // Create dynamic schema with UI-based required fields
+      const { schema: dynamicSchema, updatedData } = createDynamicSchema(
+        action.schema,
+        action.uischema,
+        action.data,
+        thisAjv
+      );
+
       if (
         state.schema !== action.schema ||
         state.validationMode !== validationMode ||
         state.ajv !== thisAjv
       ) {
-        // revalidate only if necessary
         validator =
           validationMode === 'NoValidation'
             ? undefined
-            : thisAjv.compile(action.schema);
-        errors = validate(validator, action.data);
+            : thisAjv.compile(dynamicSchema);
+        errors = validate(validator, updatedData);
       } else if (state.data !== action.data) {
-        errors = validate(validator, action.data);
+        // Recompile with new dynamic schema since required status might have changed
+        validator = thisAjv.compile(dynamicSchema);
+        errors = validate(validator, updatedData);
       }
       const additionalErrors = getAdditionalErrors(state, action);
 
+      // First check reference equality for performance
+      const dataChanged = updatedData !== state.data;
+      const schemaChanged = dynamicSchema !== state.schema;
+      const uiSchemaChanged = action.uischema !== state.uischema;
+      const errorsChanged = errors !== state.errors;
+      const additionalErrorsChanged =
+        additionalErrors !== state.additionalErrors;
+
+      // Only do deep equality checks if reference equality fails
       const stateChanged =
-        state.data !== action.data ||
-        state.schema !== action.schema ||
-        state.uischema !== action.uischema ||
-        state.ajv !== thisAjv ||
-        state.errors !== errors ||
-        state.validator !== validator ||
-        state.validationMode !== validationMode ||
-        state.additionalErrors !== additionalErrors;
+        (dataChanged && !isEqual(updatedData, state.data)) ||
+        (schemaChanged && !isEqual(dynamicSchema, state.schema)) ||
+        (uiSchemaChanged && !isEqual(action.uischema, state.uischema)) ||
+        thisAjv !== state.ajv ||
+        (errorsChanged && !isEqual(errors, state.errors)) ||
+        validator !== state.validator ||
+        validationMode !== state.validationMode ||
+        (additionalErrorsChanged &&
+          !isEqual(additionalErrors, state.additionalErrors));
+
       return stateChanged
         ? {
             ...state,
-            data: action.data,
+            data: updatedData,
             schema: action.schema,
             uischema: action.uischema,
             ajv: thisAjv,

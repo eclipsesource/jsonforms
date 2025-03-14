@@ -22,9 +22,9 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import Ajv from 'ajv';
+import Ajv, { ValidateFunction, ErrorObject } from 'ajv';
 import addFormats from 'ajv-formats';
-import type { ErrorObject, Options, ValidateFunction } from 'ajv';
+import type { Options } from 'ajv';
 
 export const createAjv = (options?: Options) => {
   const ajv = new Ajv({

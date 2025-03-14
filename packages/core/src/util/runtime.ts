@@ -33,6 +33,9 @@ import {
   SchemaBasedCondition,
   Scopable,
   UISchemaElement,
+  ControlElement,
+  Layout,
+  Rule,
 } from '../models';
 import { resolveData } from './resolvers';
 import type Ajv from 'ajv';
@@ -52,6 +55,10 @@ const isSchemaCondition = (
 ): condition is SchemaBasedCondition => has(condition, 'schema');
 
 const getConditionScope = (condition: Scopable, path: string): string => {
+  // If scope is "#", we want the entire data object
+  if (condition.scope === '#') {
+    return '';
+  }
   return composeWithUi(condition, path);
 };
 
@@ -75,11 +82,20 @@ const evaluateCondition = (
     const value = resolveData(data, getConditionScope(condition, path));
     return value === condition.expectedValue;
   } else if (isSchemaCondition(condition)) {
-    const value = resolveData(data, getConditionScope(condition, path));
+    const scope = getConditionScope(condition, path);
+    const value = scope ? resolveData(data, scope) : data;
     if (condition.failWhenUndefined && value === undefined) {
+      console.debug('Schema condition failed: value is undefined');
       return false;
     }
-    return ajv.validate(condition.schema, value) as boolean;
+    const result = ajv.validate(condition.schema, value) as boolean;
+    console.debug('Schema condition validation:', {
+      scope,
+      value,
+      schema: condition.schema,
+      result,
+    });
+    return result;
   } else {
     // unknown condition
     return true;
@@ -96,23 +112,69 @@ const isRuleFulfilled = (
   return evaluateCondition(data, condition, path, ajv);
 };
 
+// Effect compatibility groups - effects in the same group are mutually exclusive
+const EFFECT_GROUPS = {
+  VISIBILITY: [RuleEffect.SHOW, RuleEffect.HIDE],
+  ENABLEMENT: [RuleEffect.ENABLE, RuleEffect.DISABLE],
+  REQUIREMENT: [RuleEffect.REQUIRED],
+  VALUE: [RuleEffect.FILL_VALUE, RuleEffect.CLEAR_VALUE],
+};
+
+// Check if two effects are compatible (not in the same group)
+const areEffectsCompatible = (
+  effect1: RuleEffect,
+  effect2: RuleEffect
+): boolean => {
+  return !Object.values(EFFECT_GROUPS).some(
+    (group) => group.includes(effect1) && group.includes(effect2)
+  );
+};
+
+// Validate that all effects in a rule set are compatible
+export const validateEffects = (effects: RuleEffect[]): boolean => {
+  for (let i = 0; i < effects.length; i++) {
+    for (let j = i + 1; j < effects.length; j++) {
+      if (!areEffectsCompatible(effects[i], effects[j])) {
+        console.warn(
+          `Incompatible effects found: ${effects[i]} and ${effects[j]}`
+        );
+        return false;
+      }
+    }
+  }
+  return true;
+};
+
+// Helper to get array of effects
+const getEffects = (rule: Rule): RuleEffect[] => {
+  return Array.isArray(rule.effect) ? rule.effect : [rule.effect];
+};
+
+// Helper to find specific effect type
+const findEffect = (
+  effects: RuleEffect[],
+  targetEffects: RuleEffect[]
+): RuleEffect | undefined => {
+  return effects.find((effect) => targetEffects.includes(effect));
+};
+
 export const evalVisibility = (
   uischema: UISchemaElement,
   data: any,
   path: string = undefined,
   ajv: Ajv
 ): boolean => {
-  const fulfilled = isRuleFulfilled(uischema, data, path, ajv);
+  if (!uischema.rule) return true;
 
-  switch (uischema.rule.effect) {
-    case RuleEffect.HIDE:
-      return !fulfilled;
-    case RuleEffect.SHOW:
-      return fulfilled;
-    // visible by default
-    default:
-      return true;
-  }
+  const effects = getEffects(uischema.rule);
+  const visibilityEffect = findEffect(effects, [
+    RuleEffect.SHOW,
+    RuleEffect.HIDE,
+  ]);
+  if (!visibilityEffect) return true;
+
+  const fulfilled = isRuleFulfilled(uischema, data, path, ajv);
+  return visibilityEffect === RuleEffect.SHOW ? fulfilled : !fulfilled;
 };
 
 export const evalEnablement = (
@@ -121,39 +183,98 @@ export const evalEnablement = (
   path: string = undefined,
   ajv: Ajv
 ): boolean => {
+  if (!uischema.rule) return true;
+
+  const effects = getEffects(uischema.rule);
+  const enablementEffect = findEffect(effects, [
+    RuleEffect.ENABLE,
+    RuleEffect.DISABLE,
+  ]);
+  if (!enablementEffect) return true;
+
+  const fulfilled = isRuleFulfilled(uischema, data, path, ajv);
+  return enablementEffect === RuleEffect.ENABLE ? fulfilled : !fulfilled;
+};
+
+export const evalRequired = (
+  uischema: UISchemaElement,
+  data: any,
+  path: string = undefined,
+  ajv: Ajv
+): boolean => {
+  if (!uischema.rule) return false;
+
+  const effects = getEffects(uischema.rule);
+  const requiredEffect = findEffect(effects, [RuleEffect.REQUIRED]);
+  if (!requiredEffect) return false;
+
+  // If the rule exists and has REQUIRED effect, return true only if condition is fulfilled
+  return isRuleFulfilled(uischema, data, path, ajv);
+};
+
+export const evalValue = (
+  uischema: UISchemaElement,
+  data: any,
+  path: string = undefined,
+  ajv: Ajv
+): { shouldUpdate: boolean; newValue: any } => {
+  if (!uischema.rule || !uischema.rule.options?.value) {
+    return { shouldUpdate: false, newValue: undefined };
+  }
+
+  const effects = getEffects(uischema.rule);
+  const valueEffect = findEffect(effects, [
+    RuleEffect.FILL_VALUE,
+    RuleEffect.CLEAR_VALUE,
+  ]);
+  if (!valueEffect) {
+    return { shouldUpdate: false, newValue: undefined };
+  }
+
   const fulfilled = isRuleFulfilled(uischema, data, path, ajv);
 
-  switch (uischema.rule.effect) {
-    case RuleEffect.DISABLE:
-      return !fulfilled;
-    case RuleEffect.ENABLE:
-      return fulfilled;
-    // enabled by default
-    default:
-      return true;
+  if (valueEffect === RuleEffect.FILL_VALUE) {
+    return {
+      shouldUpdate: fulfilled,
+      newValue: fulfilled ? uischema.rule.options.value : undefined,
+    };
+  } else {
+    return {
+      shouldUpdate: fulfilled,
+      newValue: fulfilled ? undefined : data,
+    };
   }
 };
 
+// Update the has*Rule functions to work with arrays of effects
 export const hasShowRule = (uischema: UISchemaElement): boolean => {
-  if (
-    uischema.rule &&
-    (uischema.rule.effect === RuleEffect.SHOW ||
-      uischema.rule.effect === RuleEffect.HIDE)
-  ) {
-    return true;
-  }
-  return false;
+  if (!uischema.rule) return false;
+  const effects = getEffects(uischema.rule);
+  return effects.some((effect) =>
+    [RuleEffect.SHOW, RuleEffect.HIDE].includes(effect)
+  );
 };
 
 export const hasEnableRule = (uischema: UISchemaElement): boolean => {
-  if (
-    uischema.rule &&
-    (uischema.rule.effect === RuleEffect.ENABLE ||
-      uischema.rule.effect === RuleEffect.DISABLE)
-  ) {
-    return true;
-  }
-  return false;
+  if (!uischema.rule) return false;
+  const effects = getEffects(uischema.rule);
+  return effects.some((effect) =>
+    [RuleEffect.ENABLE, RuleEffect.DISABLE].includes(effect)
+  );
+};
+
+export const hasRequiredRule = (uischema: UISchemaElement): boolean => {
+  if (!uischema.rule) return false;
+  const effects = getEffects(uischema.rule);
+  return effects.some((effect) => effect === RuleEffect.REQUIRED);
+};
+
+export const hasValueRule = (uischema: UISchemaElement): boolean => {
+  if (!uischema.rule) return false;
+  const effects = getEffects(uischema.rule);
+  return effects.some((effect) =>
+    [RuleEffect.FILL_VALUE, RuleEffect.CLEAR_VALUE].includes(effect)
+  );
 };
 
 export const isVisible = (
@@ -180,4 +301,40 @@ export const isEnabled = (
   }
 
   return true;
+};
+
+export const findControlForProperty = (
+  uischema: UISchemaElement,
+  propertyPath: string
+): ControlElement | undefined => {
+  if (uischema.type === 'Control') {
+    const control = uischema as ControlElement;
+    if (control.scope?.endsWith(propertyPath)) {
+      return control;
+    }
+  }
+
+  if ('elements' in uischema) {
+    const layout = uischema as Layout;
+    for (const element of layout.elements) {
+      const found = findControlForProperty(element, propertyPath);
+      if (found) {
+        return found;
+      }
+    }
+  }
+
+  return undefined;
+};
+
+export const isRequired = (
+  uischema: UISchemaElement,
+  data: any,
+  path: string = undefined,
+  ajv: Ajv
+): boolean => {
+  if (uischema.rule) {
+    return evalRequired(uischema, data, path, ajv);
+  }
+  return false;
 };
