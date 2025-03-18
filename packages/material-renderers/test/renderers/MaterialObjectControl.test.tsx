@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { ControlElement, NOT_APPLICABLE } from '@jsonforms/core';
+import { ControlElement, NOT_APPLICABLE } from '@mosaic-avantos/jsonforms-core';
 import * as React from 'react';
 import { materialRenderers } from '../../src';
 import MaterialObjectRenderer, {
@@ -30,7 +30,7 @@ import MaterialObjectRenderer, {
 } from '../../src/complex/MaterialObjectRenderer';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-import { JsonFormsStateProvider } from '@jsonforms/react';
+import { JsonFormsStateProvider } from '@mosaic-avantos/jsonforms-react';
 import { initCore } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });

@@ -23,8 +23,8 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
-import { ControlElement, NOT_APPLICABLE } from '@jsonforms/core';
-import { JsonFormsStateProvider } from '@jsonforms/react';
+import { ControlElement, NOT_APPLICABLE } from '@mosaic-avantos/jsonforms-core';
+import { JsonFormsStateProvider } from '@mosaic-avantos/jsonforms-react';
 import MaterialDateCell, {
   materialDateCellTester,
 } from '../../src/cells/MaterialDateCell';

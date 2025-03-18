@@ -28,7 +28,7 @@ import { MaterialTextControl } from '../../src/controls/MaterialTextControl';
 import { MaterialInputControl } from '../../src/controls/MaterialInputControl';
 import { MuiInputText } from '../../src/mui-controls/MuiInputText';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-import { ControlElement, ControlProps } from '@jsonforms/core';
+import { ControlElement, ControlProps } from '@mosaic-avantos/jsonforms-core';
 import { InputAdornment, OutlinedInput } from '@mui/material';
 
 Enzyme.configure({ adapter: new Adapter() });

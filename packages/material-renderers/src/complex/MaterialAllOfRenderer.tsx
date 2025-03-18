@@ -32,8 +32,11 @@ import {
   RankedTester,
   rankWith,
   StatePropsOfCombinator,
-} from '@jsonforms/core';
-import { JsonFormsDispatch, withJsonFormsAllOfProps } from '@jsonforms/react';
+} from '@mosaic-avantos/jsonforms-core';
+import {
+  JsonFormsDispatch,
+  withJsonFormsAllOfProps,
+} from '@mosaic-avantos/jsonforms-react';
 
 export const MaterialAllOfRenderer = ({
   schema,

@@ -28,12 +28,12 @@ import {
   isEnumControl,
   RankedTester,
   rankWith,
-} from '@jsonforms/core';
+} from '@mosaic-avantos/jsonforms-core';
 import {
   TranslateProps,
   withJsonFormsEnumCellProps,
   withTranslateProps,
-} from '@jsonforms/react';
+} from '@mosaic-avantos/jsonforms-react';
 import { i18nDefaults, withVanillaEnumCellProps } from '../util';
 import type { VanillaRendererProps } from '../index';
 

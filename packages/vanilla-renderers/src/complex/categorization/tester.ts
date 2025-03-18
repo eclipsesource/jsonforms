@@ -30,7 +30,7 @@ import {
   RankedTester,
   rankWith,
   uiTypeIs,
-} from '@jsonforms/core';
+} from '@mosaic-avantos/jsonforms-core';
 
 export const isCategorization = (
   category: Category | Categorization

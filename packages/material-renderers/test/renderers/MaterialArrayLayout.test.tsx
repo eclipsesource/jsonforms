@@ -28,7 +28,7 @@ import {
   i18nJsonSchema,
   JsonSchema7,
   Translator,
-} from '@jsonforms/core';
+} from '@mosaic-avantos/jsonforms-core';
 import * as React from 'react';
 
 import { ArrayLayoutToolbar, materialRenderers } from '../../src';
@@ -38,7 +38,10 @@ import {
 } from '../../src/layouts';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-import { JsonForms, JsonFormsStateProvider } from '@jsonforms/react';
+import {
+  JsonForms,
+  JsonFormsStateProvider,
+} from '@mosaic-avantos/jsonforms-react';
 import { Accordion } from '@mui/material';
 import { createTesterContext, testTranslator, initCore } from './util';
 import { checkTooltip, checkTooltipTranslation } from './tooltipChecker';

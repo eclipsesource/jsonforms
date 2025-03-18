@@ -23,8 +23,13 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { LabelProps, RankedTester, rankWith, uiTypeIs } from '@jsonforms/core';
-import { withJsonFormsLabelProps } from '@jsonforms/react';
+import {
+  LabelProps,
+  RankedTester,
+  rankWith,
+  uiTypeIs,
+} from '@mosaic-avantos/jsonforms-core';
+import { withJsonFormsLabelProps } from '@mosaic-avantos/jsonforms-react';
 import { Typography } from '@mui/material';
 
 /**

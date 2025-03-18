@@ -13,7 +13,7 @@ import {
   JsonFormsDispatch,
   JsonFormsStateContext,
   withJsonFormsContext,
-} from '@jsonforms/react';
+} from '@mosaic-avantos/jsonforms-react';
 import {
   composePaths,
   ControlElement,
@@ -30,7 +30,7 @@ import {
   ArrayTranslations,
   computeChildLabel,
   UpdateArrayContext,
-} from '@jsonforms/core';
+} from '@mosaic-avantos/jsonforms-core';
 import {
   Accordion,
   AccordionSummary,

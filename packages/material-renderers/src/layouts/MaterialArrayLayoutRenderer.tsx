@@ -30,13 +30,13 @@ import {
   isObjectArrayWithNesting,
   RankedTester,
   rankWith,
-} from '@jsonforms/core';
+} from '@mosaic-avantos/jsonforms-core';
 import { MaterialArrayLayout } from './MaterialArrayLayout';
 import {
   withArrayTranslationProps,
   withJsonFormsArrayLayoutProps,
   withTranslateProps,
-} from '@jsonforms/react';
+} from '@mosaic-avantos/jsonforms-react';
 
 export const MaterialArrayLayoutRenderer = ({
   visible,

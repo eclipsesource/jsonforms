@@ -10,7 +10,7 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import React from 'react';
 import ValidationIcon from '../complex/ValidationIcon';
-import { ArrayTranslations } from '@jsonforms/core';
+import { ArrayTranslations } from '@mosaic-avantos/jsonforms-core';
 export interface ArrayLayoutToolbarProps {
   label: string;
   description: string;

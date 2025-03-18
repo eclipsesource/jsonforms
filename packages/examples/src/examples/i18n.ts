@@ -30,7 +30,7 @@ import {
   AnyAction,
   Dispatch,
   Translator,
-} from '@jsonforms/core';
+} from '@mosaic-avantos/jsonforms-core';
 import get from 'lodash/get';
 import localize from 'ajv-i18n/localize';
 

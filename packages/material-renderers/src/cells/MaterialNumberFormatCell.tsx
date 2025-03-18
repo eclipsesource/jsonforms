@@ -30,8 +30,8 @@ import {
   RankedTester,
   rankWith,
   WithClassname,
-} from '@jsonforms/core';
-import { withJsonFormsCellProps } from '@jsonforms/react';
+} from '@mosaic-avantos/jsonforms-core';
+import { withJsonFormsCellProps } from '@mosaic-avantos/jsonforms-react';
 import { MuiInputNumberFormat } from '../mui-controls/MuiInputNumberFormat';
 
 export const MaterialNumberFormatCell = (

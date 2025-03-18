@@ -28,7 +28,7 @@ import {
   createDefaultValue,
   JsonSchema,
   ArrayTranslations,
-} from '@jsonforms/core';
+} from '@mosaic-avantos/jsonforms-core';
 import {
   IconButton,
   TableRow,

@@ -23,14 +23,14 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
-import { ControlElement, NOT_APPLICABLE } from '@jsonforms/core';
+import { ControlElement, NOT_APPLICABLE } from '@mosaic-avantos/jsonforms-core';
 import MaterialOneOfRadioGroupControl, {
   materialOneOfRadioGroupControlTester,
 } from '../../src/controls/MaterialOneOfRadioGroupControl';
 import { materialRenderers } from '../../src';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-import { JsonFormsStateProvider } from '@jsonforms/react';
+import { JsonFormsStateProvider } from '@mosaic-avantos/jsonforms-react';
 import { initCore } from './util';
 Enzyme.configure({ adapter: new Adapter() });
 

@@ -42,13 +42,13 @@ import {
   getControlPath,
   encode,
   ArrayTranslations,
-} from '@jsonforms/core';
+} from '@mosaic-avantos/jsonforms-core';
 import {
   DispatchCell,
   withArrayTranslationProps,
   withJsonFormsArrayControlProps,
   withTranslateProps,
-} from '@jsonforms/react';
+} from '@mosaic-avantos/jsonforms-react';
 import { withVanillaControlProps } from '../util';
 import type { VanillaRendererProps } from '../index';
 

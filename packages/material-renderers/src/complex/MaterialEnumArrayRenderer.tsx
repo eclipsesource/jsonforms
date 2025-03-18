@@ -14,9 +14,9 @@ import {
   schemaSubPathMatches,
   showAsRequired,
   uiTypeIs,
-} from '@jsonforms/core';
+} from '@mosaic-avantos/jsonforms-core';
 
-import { withJsonFormsMultiEnumProps } from '@jsonforms/react';
+import { withJsonFormsMultiEnumProps } from '@mosaic-avantos/jsonforms-react';
 import { MuiCheckbox } from '../mui-controls';
 import {
   FormControl,

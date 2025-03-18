@@ -29,7 +29,7 @@ import {
   showAsRequired,
   isDescriptionHidden,
   OwnPropsOfEnum,
-} from '@jsonforms/core';
+} from '@mosaic-avantos/jsonforms-core';
 import {
   FormControl,
   FormControlLabel,

@@ -29,8 +29,11 @@ import {
   ControlElement,
   JsonSchema,
   Layout,
-} from '@jsonforms/core';
-import { JsonForms, JsonFormsStateProvider } from '@jsonforms/react';
+} from '@mosaic-avantos/jsonforms-core';
+import {
+  JsonForms,
+  JsonFormsStateProvider,
+} from '@mosaic-avantos/jsonforms-react';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import CategorizationRenderer, {

@@ -27,7 +27,7 @@ import {
   ControlElement,
   NOT_APPLICABLE,
   UISchemaElement,
-} from '@jsonforms/core';
+} from '@mosaic-avantos/jsonforms-core';
 import BooleanToggleControl, {
   materialBooleanToggleControlTester,
 } from '../../src/controls/MaterialBooleanToggleControl';
@@ -36,7 +36,7 @@ import { materialRenderers } from '../../src';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-import { JsonFormsStateProvider } from '@jsonforms/react';
+import { JsonFormsStateProvider } from '@mosaic-avantos/jsonforms-react';
 import { initCore, TestEmitter } from './util';
 import { Switch } from '@mui/material';
 

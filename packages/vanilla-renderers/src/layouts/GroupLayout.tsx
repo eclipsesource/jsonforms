@@ -30,8 +30,8 @@ import {
   RankedTester,
   rankWith,
   uiTypeIs,
-} from '@jsonforms/core';
-import { withJsonFormsLayoutProps } from '@jsonforms/react';
+} from '@mosaic-avantos/jsonforms-core';
+import { withJsonFormsLayoutProps } from '@mosaic-avantos/jsonforms-react';
 import { renderChildren } from './util';
 import type { VanillaRendererProps } from '../index';
 import { withVanillaControlProps } from '../util';

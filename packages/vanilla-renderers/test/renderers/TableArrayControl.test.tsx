@@ -24,10 +24,13 @@
 */
 import * as React from 'react';
 import * as _ from 'lodash';
-import { ControlElement, HorizontalLayout } from '@jsonforms/core';
+import {
+  ControlElement,
+  HorizontalLayout,
+} from '@mosaic-avantos/jsonforms-core';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
-import { JsonFormsStateProvider } from '@jsonforms/react';
+import { JsonFormsStateProvider } from '@mosaic-avantos/jsonforms-react';
 import TableArrayControl, {
   tableArrayControlTester,
 } from '../../src/complex/TableArrayControl';

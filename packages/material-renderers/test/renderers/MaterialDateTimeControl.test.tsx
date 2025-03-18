@@ -27,7 +27,7 @@ import {
   ControlElement,
   defaultDateTimeFormat,
   NOT_APPLICABLE,
-} from '@jsonforms/core';
+} from '@mosaic-avantos/jsonforms-core';
 import MaterialDateTimeControl, {
   materialDateTimeControlTester,
 } from '../../src/controls/MaterialDateTimeControl';
@@ -36,7 +36,7 @@ import { materialRenderers } from '../../src';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-import { JsonFormsStateProvider } from '@jsonforms/react';
+import { JsonFormsStateProvider } from '@mosaic-avantos/jsonforms-react';
 import { initCore, TestEmitter } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });

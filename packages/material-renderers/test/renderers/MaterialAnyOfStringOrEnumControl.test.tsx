@@ -26,13 +26,13 @@ import React from 'react';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-import { ControlElement, JsonSchema } from '@jsonforms/core';
+import { ControlElement, JsonSchema } from '@mosaic-avantos/jsonforms-core';
 import {
   MaterialAnyOfStringOrEnumControl,
   materialAnyOfStringOrEnumControlTester,
   materialRenderers,
 } from '../../src';
-import { JsonForms } from '@jsonforms/react';
+import { JsonForms } from '@mosaic-avantos/jsonforms-react';
 
 Enzyme.configure({ adapter: new Adapter() });
 

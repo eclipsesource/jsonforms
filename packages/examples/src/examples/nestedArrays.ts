@@ -28,7 +28,7 @@ import {
   JsonFormsUISchemaRegistryEntry,
   JsonSchema,
   NOT_APPLICABLE,
-} from '@jsonforms/core';
+} from '@mosaic-avantos/jsonforms-core';
 import { StateProps } from '..';
 
 const schema = {

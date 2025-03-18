@@ -30,8 +30,11 @@ import {
   TesterContext,
   Translator,
   UISchemaElement,
-} from '@jsonforms/core';
-import { JsonFormsReactProps, useJsonForms } from '@jsonforms/react';
+} from '@mosaic-avantos/jsonforms-core';
+import {
+  JsonFormsReactProps,
+  useJsonForms,
+} from '@mosaic-avantos/jsonforms-react';
 import React from 'react';
 
 export const initCore = (

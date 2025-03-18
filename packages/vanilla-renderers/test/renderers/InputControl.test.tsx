@@ -23,8 +23,15 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
-import { ControlElement, HorizontalLayout, JsonSchema } from '@jsonforms/core';
-import { JsonFormsDispatch, JsonFormsStateProvider } from '@jsonforms/react';
+import {
+  ControlElement,
+  HorizontalLayout,
+  JsonSchema,
+} from '@mosaic-avantos/jsonforms-core';
+import {
+  JsonFormsDispatch,
+  JsonFormsStateProvider,
+} from '@mosaic-avantos/jsonforms-react';
 import { vanillaRenderers } from '../../src';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';

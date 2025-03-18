@@ -27,13 +27,13 @@ import Dialog from '@mui/material/Dialog';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-import { ControlElement } from '@jsonforms/core';
+import { ControlElement } from '@mosaic-avantos/jsonforms-core';
 import { MaterialOneOfRenderer, materialRenderers } from '../../src';
 import {
   JsonForms,
   JsonFormsDispatch,
   JsonFormsStateProvider,
-} from '@jsonforms/react';
+} from '@mosaic-avantos/jsonforms-react';
 import { Tab } from '@mui/material';
 import { initCore, TestEmitter } from './util';
 

@@ -25,7 +25,7 @@
 import maxBy from 'lodash/maxBy';
 import React, { useMemo } from 'react';
 import { UnknownRenderer } from './UnknownRenderer';
-import type { DispatchCellProps } from '@jsonforms/core';
+import type { DispatchCellProps } from '@mosaic-avantos/jsonforms-core';
 import { withJsonFormsDispatchCellProps } from './JsonFormsContext';
 
 /**

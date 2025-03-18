@@ -22,8 +22,8 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import type { StatePropsOfMasterItem } from '@jsonforms/core';
-import { withJsonFormsMasterListItemProps } from '@jsonforms/react';
+import type { StatePropsOfMasterItem } from '@mosaic-avantos/jsonforms-core';
+import { withJsonFormsMasterListItemProps } from '@mosaic-avantos/jsonforms-react';
 import {
   Avatar,
   IconButton,

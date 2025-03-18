@@ -31,8 +31,8 @@ import {
   OwnPropsOfEnum,
   RankedTester,
   rankWith,
-} from '@jsonforms/core';
-import { withJsonFormsEnumProps } from '@jsonforms/react';
+} from '@mosaic-avantos/jsonforms-core';
+import { withJsonFormsEnumProps } from '@mosaic-avantos/jsonforms-react';
 import { MaterialRadioGroup } from './MaterialRadioGroup';
 export const MaterialRadioGroupControl = (
   props: ControlProps & OwnPropsOfEnum

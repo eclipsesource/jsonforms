@@ -24,8 +24,11 @@
 */
 import isEmpty from 'lodash/isEmpty';
 import React from 'react';
-import { JsonSchema, Layout } from '@jsonforms/core';
-import { JsonFormsDispatch, useJsonForms } from '@jsonforms/react';
+import { JsonSchema, Layout } from '@mosaic-avantos/jsonforms-core';
+import {
+  JsonFormsDispatch,
+  useJsonForms,
+} from '@mosaic-avantos/jsonforms-react';
 export interface RenderChildrenProps {
   layout: Layout;
   schema: JsonSchema;

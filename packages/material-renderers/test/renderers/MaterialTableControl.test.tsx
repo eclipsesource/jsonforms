@@ -22,13 +22,13 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { JsonSchema7 } from '@jsonforms/core';
+import { JsonSchema7 } from '@mosaic-avantos/jsonforms-core';
 import * as React from 'react';
 
 import { materialCells, materialRenderers } from '../../src';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-import { JsonForms } from '@jsonforms/react';
+import { JsonForms } from '@mosaic-avantos/jsonforms-react';
 import { FormHelperText } from '@mui/material';
 
 Enzyme.configure({ adapter: new Adapter() });

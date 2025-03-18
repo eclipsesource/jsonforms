@@ -23,7 +23,10 @@
   THE SOFTWARE.
 */
 import { registerExamples } from '../register';
-import { ArrayTranslationEnum, Translator } from '@jsonforms/core';
+import {
+  ArrayTranslationEnum,
+  Translator,
+} from '@mosaic-avantos/jsonforms-core';
 import get from 'lodash/get';
 
 export const schema = {

@@ -28,10 +28,10 @@ import {
   isIntegerControl,
   RankedTester,
   rankWith,
-} from '@jsonforms/core';
+} from '@mosaic-avantos/jsonforms-core';
 import { MuiInputInteger } from '../mui-controls/MuiInputInteger';
 import { MaterialInputControl } from './MaterialInputControl';
-import { withJsonFormsControlProps } from '@jsonforms/react';
+import { withJsonFormsControlProps } from '@mosaic-avantos/jsonforms-react';
 
 export const MaterialIntegerControl = (props: ControlProps) => (
   <MaterialInputControl {...props} input={MuiInputInteger} />

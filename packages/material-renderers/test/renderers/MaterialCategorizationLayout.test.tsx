@@ -32,8 +32,8 @@ import {
   layoutDefaultProps,
   RuleEffect,
   SchemaBasedCondition,
-} from '@jsonforms/core';
-import { JsonFormsStateProvider } from '@jsonforms/react';
+} from '@mosaic-avantos/jsonforms-core';
+import { JsonFormsStateProvider } from '@mosaic-avantos/jsonforms-react';
 import Enzyme, { mount } from 'enzyme';
 
 import MaterialCategorizationLayoutRenderer, {

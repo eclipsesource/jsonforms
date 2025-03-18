@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { RendererProps } from '@jsonforms/core';
+import { RendererProps } from '@mosaic-avantos/jsonforms-core';
 import { VanillaRendererProps, WithChildren } from '../index';
 
 export const JsonFormsLayout = ({

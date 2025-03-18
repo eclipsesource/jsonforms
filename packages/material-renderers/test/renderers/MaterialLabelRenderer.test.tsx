@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
-import { LabelElement, NOT_APPLICABLE } from '@jsonforms/core';
+import { LabelElement, NOT_APPLICABLE } from '@mosaic-avantos/jsonforms-core';
 import '../../src/cells';
 import MaterialLabelRenderer, {
   materialLabelRendererTester,
@@ -31,7 +31,10 @@ import MaterialLabelRenderer, {
 import { materialRenderers } from '../../src';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-import { JsonForms, JsonFormsStateProvider } from '@jsonforms/react';
+import {
+  JsonForms,
+  JsonFormsStateProvider,
+} from '@mosaic-avantos/jsonforms-react';
 import { initCore } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });

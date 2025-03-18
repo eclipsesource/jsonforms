@@ -25,8 +25,8 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
 import App from './App';
-import { RankedTester } from '@jsonforms/core';
-import { getExamples } from '@jsonforms/examples';
+import { RankedTester } from '@mosaic-avantos/jsonforms-core';
+import { getExamples } from '@mosaic-avantos/jsonforms-examples';
 
 export const renderExample = (
   renderers: { tester: RankedTester; renderer: any }[],

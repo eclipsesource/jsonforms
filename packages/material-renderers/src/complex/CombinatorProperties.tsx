@@ -28,8 +28,8 @@ import {
   JsonSchema,
   UISchemaElement,
   isLayout,
-} from '@jsonforms/core';
-import { JsonFormsDispatch } from '@jsonforms/react';
+} from '@mosaic-avantos/jsonforms-core';
+import { JsonFormsDispatch } from '@mosaic-avantos/jsonforms-react';
 import omit from 'lodash/omit';
 
 interface CombinatorPropertiesProps {

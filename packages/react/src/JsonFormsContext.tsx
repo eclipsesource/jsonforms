@@ -81,7 +81,7 @@ import {
   arrayDefaultTranslations,
   getArrayTranslations,
   ArrayTranslations,
-} from '@jsonforms/core';
+} from '@mosaic-avantos/jsonforms-core';
 import debounce from 'lodash/debounce';
 import React, {
   ComponentType,

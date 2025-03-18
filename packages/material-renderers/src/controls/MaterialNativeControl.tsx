@@ -32,9 +32,9 @@ import {
   or,
   RankedTester,
   rankWith,
-} from '@jsonforms/core';
+} from '@mosaic-avantos/jsonforms-core';
 import { TextField } from '@mui/material';
-import { withJsonFormsControlProps } from '@jsonforms/react';
+import { withJsonFormsControlProps } from '@mosaic-avantos/jsonforms-react';
 import merge from 'lodash/merge';
 import { useDebouncedChange, useFocus } from '../util';
 

@@ -36,7 +36,7 @@ import type {
   Middleware,
   RendererProps,
   UISchemaElement,
-} from '@jsonforms/core';
+} from '@mosaic-avantos/jsonforms-core';
 import {
   createAjv,
   jsonFormsReducerConfig,
@@ -47,7 +47,7 @@ import {
   schemaMatches,
   uiTypeIs,
   unregisterRenderer,
-} from '@jsonforms/core';
+} from '@mosaic-avantos/jsonforms-core';
 import { isEqual } from 'lodash';
 import Enzyme, { mount, shallow } from 'enzyme';
 import type { StatelessRenderer } from '../../src/Renderer';

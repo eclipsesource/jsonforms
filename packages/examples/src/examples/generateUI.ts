@@ -24,7 +24,7 @@
 */
 import { registerExamples } from '../register';
 import { data as personData, personCoreSchema } from './person';
-import { UISchemaElement } from '@jsonforms/core';
+import { UISchemaElement } from '@mosaic-avantos/jsonforms-core';
 
 export const schema = personCoreSchema;
 export const uischema: UISchemaElement = undefined;

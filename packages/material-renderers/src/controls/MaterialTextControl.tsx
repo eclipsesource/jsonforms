@@ -28,8 +28,8 @@ import {
   isStringControl,
   RankedTester,
   rankWith,
-} from '@jsonforms/core';
-import { withJsonFormsControlProps } from '@jsonforms/react';
+} from '@mosaic-avantos/jsonforms-core';
+import { withJsonFormsControlProps } from '@mosaic-avantos/jsonforms-react';
 import { MuiInputText } from '../mui-controls/MuiInputText';
 import { MaterialInputControl } from './MaterialInputControl';
 

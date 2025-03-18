@@ -32,7 +32,7 @@ import {
   JsonFormsSubStates,
   rendererReducer,
   uischemaRegistryReducer,
-} from '@jsonforms/core';
+} from '@mosaic-avantos/jsonforms-core';
 import { connect } from 'react-redux';
 import { combineReducers, Reducer } from 'redux';
 import React from 'react';

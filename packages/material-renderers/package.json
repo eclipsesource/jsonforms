@@ -1,6 +1,6 @@
 {
-  "name": "@jsonforms/material-renderers",
-  "version": "3.5.2-alpha.0",
+  "name": "@mosaic-avantos/jsonforms-material-renderers",
+  "version": "3.5.1",
   "description": "Material Renderer Set for JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -86,8 +86,8 @@
   "peerDependencies": {
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
-    "@jsonforms/core": "3.5.2-alpha.0",
-    "@jsonforms/react": "3.5.2-alpha.0",
+    "@mosaic-avantos/jsonforms-core": "3.5.2",
+    "@mosaic-avantos/jsonforms-react": "3.5.2",
     "@mui/icons-material": "^5.11.16 || ^6.0.0",
     "@mui/material": "^5.13.0 || ^6.0.0",
     "@mui/x-date-pickers": "^6.0.0 || ^7.0.0",
@@ -96,8 +96,8 @@
   "devDependencies": {
     "@emotion/react": "^11.5.0",
     "@emotion/styled": "^11.3.0",
-    "@jsonforms/core": "workspace:*",
-    "@jsonforms/react": "workspace:*",
+    "@mosaic-avantos/jsonforms-core": "workspace:*",
+    "@mosaic-avantos/jsonforms-react": "workspace:*",
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "~5.13.0",
     "@mui/x-date-pickers": "^7.7.1",
