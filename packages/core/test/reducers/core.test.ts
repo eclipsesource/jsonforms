@@ -1870,3 +1870,299 @@ test('core reducer helpers - getControlPath - decodes JSON Pointer escape sequen
   const controlPath = getControlPath(errorObject);
   t.is(controlPath, '~group./name');
 });
+
+test('core reducer - FILL_VALUE rule updates the data state when the condition is met', (t) => {
+  const schema = {
+    type: 'object',
+    properties: {
+      name: { type: 'string' },
+      type: { type: 'string', enum: ['person', 'organization'] },
+      contactName: { type: 'string' },
+    },
+  };
+
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [
+      {
+        type: 'Control',
+        scope: '#/properties/name',
+      },
+      {
+        type: 'Control',
+        scope: '#/properties/type',
+      },
+      {
+        type: 'Control',
+        scope: '#/properties/contactName',
+        rule: {
+          effect: 'FILL_VALUE',
+          condition: {
+            scope: '#',
+            schema: {
+              type: 'object',
+              properties: {
+                type: {
+                  const: 'organization',
+                },
+              },
+              required: ['type'],
+            },
+          },
+          options: {
+            value: 'Contact Person',
+          },
+        },
+      },
+    ],
+  };
+
+  // Initial data with type not matching condition
+  const initialData = {
+    name: 'John Doe',
+    type: 'person',
+    contactName: '',
+  };
+
+  // Create initial state
+  const initialState = coreReducer(
+    undefined,
+    init(initialData, schema, uischema)
+  );
+
+  // Verify initial state is unchanged (condition not met)
+  t.is(
+    initialState.data.contactName,
+    '',
+    'Contact name should be empty initially'
+  );
+
+  // Update only the type field to trigger the FILL_VALUE effect
+  const updatedState = coreReducer(
+    initialState,
+    updateCore(
+      {
+        ...initialState.data,
+        type: 'organization',
+      },
+      initialState.schema,
+      initialState.uischema
+    )
+  );
+
+  // Expected data after update
+  const expectedData = {
+    ...initialState.data,
+    type: 'organization',
+    contactName: 'Contact Person',
+  };
+
+  // Verify the entire state was updated correctly
+  t.deepEqual(
+    updatedState.data,
+    expectedData,
+    'Data should be updated with contactName filled when type is organization'
+  );
+});
+
+test('core reducer - CLEAR_VALUE rule clears the data state when the condition is met', (t) => {
+  const schema = {
+    type: 'object',
+    properties: {
+      name: { type: 'string' },
+      type: { type: 'string', enum: ['person', 'organization'] },
+      personalInfo: { type: 'string' },
+    },
+  };
+
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [
+      {
+        type: 'Control',
+        scope: '#/properties/name',
+      },
+      {
+        type: 'Control',
+        scope: '#/properties/type',
+      },
+      {
+        type: 'Control',
+        scope: '#/properties/personalInfo',
+        rule: {
+          effect: 'CLEAR_VALUE',
+          condition: {
+            scope: '#',
+            schema: {
+              type: 'object',
+              properties: {
+                type: {
+                  const: 'organization',
+                },
+              },
+              required: ['type'],
+            },
+          },
+        },
+      },
+    ],
+  };
+
+  // Initial data with personal info and type not triggering the condition
+  const initialData = {
+    name: 'John Doe',
+    type: 'person',
+    personalInfo: 'Some personal details',
+  };
+
+  // Create initial state
+  const initialState = coreReducer(
+    undefined,
+    init(initialData, schema, uischema)
+  );
+
+  // Verify initial state has personal info
+  t.is(
+    initialState.data.personalInfo,
+    'Some personal details',
+    'Personal info should be present initially'
+  );
+
+  // Update only the type field to trigger the CLEAR_VALUE effect
+  const updatedState = coreReducer(
+    initialState,
+    updateCore(
+      {
+        ...initialState.data,
+        type: 'organization',
+      },
+      initialState.schema,
+      initialState.uischema
+    )
+  );
+
+  // Expected data after update
+  const expectedData = {
+    ...initialState.data,
+    type: 'organization',
+    personalInfo: undefined,
+  };
+
+  // Verify the entire state was updated correctly
+  t.deepEqual(
+    updatedState.data,
+    expectedData,
+    'Personal info should be cleared when type is organization'
+  );
+});
+
+test('core reducer - REQUIRED rule updates schema required fields when the condition is met', (t) => {
+  // Create a schema with a property that will be conditionally required
+  const schema = {
+    type: 'object',
+    properties: {
+      name: { type: 'string' },
+      type: { type: 'string', enum: ['person', 'organization'] },
+      taxId: { type: 'string' },
+    },
+    required: ['name', 'type'], // initially only name and type are required
+  };
+
+  // Create a UI schema with a REQUIRED rule on the taxId field
+  // The rule will make taxId required when type is 'organization'
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [
+      {
+        type: 'Control',
+        scope: '#/properties/name',
+      },
+      {
+        type: 'Control',
+        scope: '#/properties/type',
+      },
+      {
+        type: 'Control',
+        // Important: Use 'taxId' as the scope instead of '#/properties/taxId'
+        // This matches what findControlForProperty expects
+        scope: 'taxId',
+        rule: {
+          effect: 'REQUIRED',
+          condition: {
+            scope: '#',
+            schema: {
+              type: 'object',
+              properties: {
+                type: {
+                  const: 'organization',
+                },
+              },
+              required: ['type'],
+            },
+          },
+        },
+      },
+    ],
+  };
+
+  // Initial data with type not triggering the condition
+  const initialData = {
+    name: 'John Doe',
+    type: 'person',
+    taxId: '',
+  };
+
+  // Create initial state
+  const initialState = coreReducer(
+    undefined,
+    init(initialData, schema, uischema)
+  );
+
+  // Verify initial state doesn't have taxId in required fields
+  t.false(
+    initialState.schema.required.includes('taxId'),
+    'taxId should not be required initially'
+  );
+
+  // Update only the type field to trigger the REQUIRED effect
+  const updatedState = coreReducer(
+    initialState,
+    updateCore(
+      {
+        ...initialState.data,
+        type: 'organization',
+      },
+      initialState.schema,
+      initialState.uischema
+    )
+  );
+
+  // Debug output
+  t.log('Initial schema required:', initialState.schema.required);
+  t.log('Updated schema required:', updatedState.schema.required);
+
+  // Verify the schema was updated with taxId as required
+  t.true(
+    updatedState.schema.required.includes('taxId'),
+    'taxId should be required when type is organization'
+  );
+
+  // Change back to person type
+  const revertedState = coreReducer(
+    updatedState,
+    updateCore(
+      {
+        ...updatedState.data,
+        type: 'person',
+      },
+      updatedState.schema,
+      updatedState.uischema
+    )
+  );
+
+  // Verify taxId is no longer required
+  t.false(
+    revertedState.schema.required.includes('taxId'),
+    'taxId should not be required when type is person'
+  );
+});
