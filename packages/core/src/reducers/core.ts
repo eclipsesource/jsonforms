@@ -154,24 +154,33 @@ const createDynamicSchema = (
   // Start with references to original objects
   let updatedData = data;
 
+  const getConditionPath = (
+    control: any,
+    key: string
+  ): { condition: SchemaBasedCondition; path: string | undefined } => {
+    const condition = control.rule?.condition as SchemaBasedCondition;
+    const isSchemaCondition = condition && 'schema' in condition;
+    // For schema-based conditions with scope: "#", we need to pass undefined as path
+    // This is because the condition is evaluated against the root of the data
+    // and we want to ensure that the field is required if the condition is met
+    const path = isSchemaCondition && condition.scope === '#' ? undefined : key;
+    return { condition, path };
+  };
+
   // Check each property for dynamic required rules and value rules
-  Object.entries(schema.properties).forEach(([key]) => {
+  Object.keys(schema.properties).forEach((key) => {
     const control = findControlForProperty(uischema, key);
     if (control) {
+      const { path } = getConditionPath(control, key);
       if (hasRequiredRule(control)) {
-        // For schema-based conditions with scope: "#", we need to pass undefined as path
-        const condition = control.rule?.condition as SchemaBasedCondition;
-        const isSchemaCondition = condition && 'schema' in condition;
-        const path =
-          isSchemaCondition && condition.scope === '#' ? undefined : key;
         const isFieldRequired = isRequired(control, data, path, ajv);
         const fieldIndex = requiredFields.indexOf(key);
 
-        if (isFieldRequired && fieldIndex === -1) {
+        if (isFieldRequired && !requiredFields.includes(key)) {
           // Add to required if not already there
           requiredFields.push(key);
           requiredChanged = true;
-        } else if (!isFieldRequired && fieldIndex !== -1) {
+        } else if (!isFieldRequired && requiredFields.includes(key)) {
           // Remove from required if no longer required
           requiredFields.splice(fieldIndex, 1);
           requiredChanged = true;
@@ -179,10 +188,6 @@ const createDynamicSchema = (
       }
 
       if (hasValueRule(control) && data !== undefined) {
-        const condition = control.rule?.condition as SchemaBasedCondition;
-        const isSchemaCondition = condition && 'schema' in condition;
-        const path =
-          isSchemaCondition && condition.scope === '#' ? undefined : key;
         const { shouldUpdate, newValue } = evalValue(control, data, path, ajv);
         if (shouldUpdate) {
           // Only create a copy if we haven't already
@@ -196,11 +201,6 @@ const createDynamicSchema = (
 
       // Handle visibility rules - clear values for hidden fields
       if (hasShowRule(control) && data !== undefined) {
-        const condition = control.rule?.condition as SchemaBasedCondition;
-        const isSchemaCondition = condition && 'schema' in condition;
-        const path =
-          isSchemaCondition && condition.scope === '#' ? undefined : key;
-
         // Check if the field is hidden
         const isFieldVisible = isVisible(control, data, path, ajv);
 

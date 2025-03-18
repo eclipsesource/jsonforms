@@ -85,7 +85,6 @@ const evaluateCondition = (
     const scope = getConditionScope(condition, path);
     const value = scope ? resolveData(data, scope) : data;
     if (condition.failWhenUndefined && value === undefined) {
-      console.debug('Schema condition failed: value is undefined');
       return false;
     }
     const result = ajv.validate(condition.schema, value) as boolean;
