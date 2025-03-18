@@ -43,7 +43,7 @@ import {
   removeId,
   UISchemaElement,
   ValidationMode,
-} from '@jsonforms/core';
+} from '@mosaic-avantos/jsonforms-core';
 import {
   JsonFormsStateProvider,
   withJsonFormsRendererProps,

@@ -29,7 +29,7 @@ import {
   JsonFormsCore,
   AnyAction,
   Dispatch,
-} from '@jsonforms/core';
+} from '@mosaic-avantos/jsonforms-core';
 
 const touchedProperties: any = {
   name: false,

@@ -23,8 +23,8 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
-import { LabelElement, UISchemaElement } from '@jsonforms/core';
-import { JsonFormsStateProvider } from '@jsonforms/react';
+import { LabelElement, UISchemaElement } from '@mosaic-avantos/jsonforms-core';
+import { JsonFormsStateProvider } from '@mosaic-avantos/jsonforms-react';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import LabelRenderer, {

@@ -23,8 +23,8 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import type { Category, JsonSchema } from '@jsonforms/core';
-import { JsonFormsDispatch } from '@jsonforms/react';
+import type { Category, JsonSchema } from '@mosaic-avantos/jsonforms-core';
+import { JsonFormsDispatch } from '@mosaic-avantos/jsonforms-react';
 
 export interface CategoryProps {
   category: Category;

@@ -35,9 +35,13 @@ import type {
   RendererProps,
   StatePropsOfCell,
   StatePropsOfControl,
-} from '@jsonforms/core';
-import { convertToValidClassName, getAjv, getConfig } from '@jsonforms/core';
-import { useJsonForms } from '@jsonforms/react';
+} from '@mosaic-avantos/jsonforms-core';
+import {
+  convertToValidClassName,
+  getAjv,
+  getConfig,
+} from '@mosaic-avantos/jsonforms-core';
+import { useJsonForms } from '@mosaic-avantos/jsonforms-react';
 import { getStyle, getStyleAsClassName } from '../reducers';
 import { findStyle, findStyleAsClassName } from '../reducers/styling';
 import { useStyles } from '../styles';

@@ -24,13 +24,16 @@
 */
 
 import React, { useEffect, useMemo, useState } from 'react';
-import { JsonForms, JsonFormsInitStateProps } from '@jsonforms/react';
-import { ExampleDescription } from '@jsonforms/examples';
+import {
+  JsonForms,
+  JsonFormsInitStateProps,
+} from '@mosaic-avantos/jsonforms-react';
+import { ExampleDescription } from '@mosaic-avantos/jsonforms-examples';
 import {
   JsonFormsCellRendererRegistryEntry,
   JsonFormsRendererRegistryEntry,
   ValidationMode,
-} from '@jsonforms/core';
+} from '@mosaic-avantos/jsonforms-core';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import Highlight from 'react-highlight';
 import 'highlight.js/styles/default.css';

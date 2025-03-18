@@ -28,7 +28,7 @@ import {
   DispatchCell,
   JsonFormsStateContext,
   useJsonForms,
-} from '@jsonforms/react';
+} from '@mosaic-avantos/jsonforms-react';
 import startCase from 'lodash/startCase';
 import range from 'lodash/range';
 import React, { Fragment, useMemo } from 'react';
@@ -56,7 +56,7 @@ import {
   JsonFormsCellRendererRegistryEntry,
   encode,
   ArrayTranslations,
-} from '@jsonforms/core';
+} from '@mosaic-avantos/jsonforms-core';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowDownward from '@mui/icons-material/ArrowDownward';
 import ArrowUpward from '@mui/icons-material/ArrowUpward';

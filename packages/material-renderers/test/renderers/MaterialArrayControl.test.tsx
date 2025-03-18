@@ -27,14 +27,17 @@ import {
   ControlElement,
   DispatchCellProps,
   JsonSchema,
-} from '@jsonforms/core';
+} from '@mosaic-avantos/jsonforms-core';
 import * as React from 'react';
 
 import MaterialArrayControlRenderer from '../../src/complex/MaterialArrayControlRenderer';
 import { materialCells, materialRenderers } from '../../src';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-import { JsonFormsStateProvider, StatelessRenderer } from '@jsonforms/react';
+import {
+  JsonFormsStateProvider,
+  StatelessRenderer,
+} from '@mosaic-avantos/jsonforms-react';
 import { initCore, TestEmitter } from './util';
 import { checkTooltip, checkTooltipTranslation } from './tooltipChecker';
 

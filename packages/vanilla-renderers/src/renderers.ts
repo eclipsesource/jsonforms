@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 
-import { RankedTester } from '@jsonforms/core';
+import { RankedTester } from '@mosaic-avantos/jsonforms-core';
 
 import {
   BooleanCell,

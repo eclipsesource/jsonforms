@@ -23,12 +23,16 @@
   THE SOFTWARE.
 */
 import React, { useState } from 'react';
-import type { Categorization, Category, LayoutProps } from '@jsonforms/core';
+import type {
+  Categorization,
+  Category,
+  LayoutProps,
+} from '@mosaic-avantos/jsonforms-core';
 import {
   TranslateProps,
   withJsonFormsLayoutProps,
   withTranslateProps,
-} from '@jsonforms/react';
+} from '@mosaic-avantos/jsonforms-react';
 import { CategorizationList } from './CategorizationList';
 import { SingleCategory } from './SingleCategory';
 import { withAjvProps, withVanillaControlProps } from '../../util';

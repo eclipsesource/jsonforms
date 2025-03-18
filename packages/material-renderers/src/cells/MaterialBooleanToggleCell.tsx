@@ -31,8 +31,8 @@ import {
   RankedTester,
   rankWith,
   WithClassname,
-} from '@jsonforms/core';
-import { withJsonFormsCellProps } from '@jsonforms/react';
+} from '@mosaic-avantos/jsonforms-core';
+import { withJsonFormsCellProps } from '@mosaic-avantos/jsonforms-react';
 import { MuiToggle } from '../mui-controls/MuiToggle';
 
 export const MaterialBooleanToggleCell = (props: CellProps & WithClassname) => {

@@ -29,8 +29,8 @@ import {
   rankWith,
   RendererProps,
   uiTypeIs,
-} from '@jsonforms/core';
-import { withJsonFormsLayoutProps } from '@jsonforms/react';
+} from '@mosaic-avantos/jsonforms-core';
+import { withJsonFormsLayoutProps } from '@mosaic-avantos/jsonforms-react';
 import { withVanillaControlProps } from '../util';
 import { JsonFormsLayout } from './JsonFormsLayout';
 import { renderChildren } from './util';

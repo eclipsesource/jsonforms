@@ -29,8 +29,8 @@ import {
   RankedTester,
   rankWith,
   WithClassname,
-} from '@jsonforms/core';
-import { withJsonFormsCellProps } from '@jsonforms/react';
+} from '@mosaic-avantos/jsonforms-core';
+import { withJsonFormsCellProps } from '@mosaic-avantos/jsonforms-react';
 import { MuiInputText } from '../mui-controls/MuiInputText';
 
 export const MaterialTextCell = (props: CellProps & WithClassname) => (

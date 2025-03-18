@@ -34,7 +34,7 @@ import {
   OwnPropsOfEnum,
   rankWith,
   StatePropsOfControlWithDetail,
-} from '@jsonforms/core';
+} from '@mosaic-avantos/jsonforms-core';
 
 import { JsonForms } from '../src/JsonForms';
 import {

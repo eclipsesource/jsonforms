@@ -26,7 +26,7 @@ import {
   isObjectArrayWithNesting,
   RankedTester,
   rankWith,
-} from '@jsonforms/core';
+} from '@mosaic-avantos/jsonforms-core';
 import ArrayControlRenderer, { ArrayControl } from './ArrayControlRenderer';
 export { ArrayControlRenderer, ArrayControl };
 

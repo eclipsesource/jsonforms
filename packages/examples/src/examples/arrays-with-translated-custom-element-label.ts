@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import { registerExamples } from '../register';
-import { JsonSchema7, Translator } from '@jsonforms/core';
+import { JsonSchema7, Translator } from '@mosaic-avantos/jsonforms-core';
 
 export const data = {
   article: {

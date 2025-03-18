@@ -36,9 +36,12 @@ import {
   OwnPropsOfControl,
   RankedTester,
   rankWith,
-} from '@jsonforms/core';
+} from '@mosaic-avantos/jsonforms-core';
 import { Tab, Tabs } from '@mui/material';
-import { JsonFormsDispatch, withJsonFormsOneOfProps } from '@jsonforms/react';
+import {
+  JsonFormsDispatch,
+  withJsonFormsOneOfProps,
+} from '@mosaic-avantos/jsonforms-react';
 import CombinatorProperties from './CombinatorProperties';
 
 export interface OwnOneOfProps extends OwnPropsOfControl {

@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { Translator } from '@jsonforms/core';
+import { Translator } from '@mosaic-avantos/jsonforms-core';
 import get from 'lodash/get';
 import { registerExamples } from '../register';
 

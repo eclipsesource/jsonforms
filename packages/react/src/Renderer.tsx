@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import type { RendererProps } from '@jsonforms/core';
+import type { RendererProps } from '@mosaic-avantos/jsonforms-core';
 
 /**
  * Convenience wrapper around React's Component for constraining props.

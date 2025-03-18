@@ -23,14 +23,17 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
-import { HorizontalLayout, UISchemaElement } from '@jsonforms/core';
+import {
+  HorizontalLayout,
+  UISchemaElement,
+} from '@mosaic-avantos/jsonforms-core';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import HorizontalLayoutRenderer, {
   horizontalLayoutTester,
 } from '../../src/layouts/HorizontalLayout';
 import { initCore } from '../util';
-import { JsonFormsStateProvider } from '@jsonforms/react';
+import { JsonFormsStateProvider } from '@mosaic-avantos/jsonforms-react';
 
 Enzyme.configure({ adapter: new Adapter() });
 

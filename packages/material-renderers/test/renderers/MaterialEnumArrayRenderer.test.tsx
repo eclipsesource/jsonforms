@@ -1,5 +1,5 @@
-import { ControlElement, NOT_APPLICABLE } from '@jsonforms/core';
-import { JsonForms } from '@jsonforms/react';
+import { ControlElement, NOT_APPLICABLE } from '@mosaic-avantos/jsonforms-core';
+import { JsonForms } from '@mosaic-avantos/jsonforms-react';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import React from 'react';

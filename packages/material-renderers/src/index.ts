@@ -25,7 +25,7 @@
 import {
   JsonFormsCellRendererRegistryEntry,
   JsonFormsRendererRegistryEntry,
-} from '@jsonforms/core';
+} from '@mosaic-avantos/jsonforms-core';
 import {
   materialAllOfControlTester,
   MaterialAllOfRenderer,

@@ -33,12 +33,12 @@ import {
   NOT_APPLICABLE,
   RankedTester,
   rankWith,
-} from '@jsonforms/core';
+} from '@mosaic-avantos/jsonforms-core';
 import {
   Control,
   DispatchCell,
   withJsonFormsControlProps,
-} from '@jsonforms/react';
+} from '@mosaic-avantos/jsonforms-react';
 import { withVanillaControlProps } from '../util';
 import type { VanillaRendererProps } from '../index';
 import merge from 'lodash/merge';

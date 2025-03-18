@@ -31,8 +31,8 @@ import {
   rankWith,
   ControlProps,
   isDescriptionHidden,
-} from '@jsonforms/core';
-import { withJsonFormsControlProps } from '@jsonforms/react';
+} from '@mosaic-avantos/jsonforms-core';
+import { withJsonFormsControlProps } from '@mosaic-avantos/jsonforms-react';
 import { FormControlLabel, FormHelperText, Tooltip } from '@mui/material';
 import { MuiCheckbox } from '../mui-controls/MuiCheckbox';
 

@@ -25,15 +25,18 @@
 import isEmpty from 'lodash/isEmpty';
 import React, { ComponentType } from 'react';
 import type Ajv from 'ajv';
-import type { UISchemaElement } from '@jsonforms/core';
+import type { UISchemaElement } from '@mosaic-avantos/jsonforms-core';
 import {
   getAjv,
   JsonFormsCellRendererRegistryEntry,
   JsonFormsRendererRegistryEntry,
   JsonSchema,
   OwnPropsOfRenderer,
-} from '@jsonforms/core';
-import { JsonFormsDispatch, useJsonForms } from '@jsonforms/react';
+} from '@mosaic-avantos/jsonforms-core';
+import {
+  JsonFormsDispatch,
+  useJsonForms,
+} from '@mosaic-avantos/jsonforms-react';
 import { Grid } from '@mui/material';
 
 export const renderLayoutElements = (

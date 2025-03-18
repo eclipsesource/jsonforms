@@ -32,12 +32,12 @@ import {
   rankWith,
   uiTypeIs,
   withIncreasedRank,
-} from '@jsonforms/core';
+} from '@mosaic-avantos/jsonforms-core';
 import {
   MaterialLabelableLayoutRendererProps,
   MaterialLayoutRenderer,
 } from '../util/layout';
-import { withJsonFormsLayoutProps } from '@jsonforms/react';
+import { withJsonFormsLayoutProps } from '@mosaic-avantos/jsonforms-react';
 
 export const groupTester: RankedTester = rankWith(1, uiTypeIs('Group'));
 const style: { [x: string]: any } = { marginBottom: '10px' };

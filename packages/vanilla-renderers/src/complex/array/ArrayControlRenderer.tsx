@@ -32,13 +32,13 @@ import {
   Helpers,
   ControlElement,
   ArrayTranslations,
-} from '@jsonforms/core';
+} from '@mosaic-avantos/jsonforms-core';
 import {
   JsonFormsDispatch,
   withArrayTranslationProps,
   withJsonFormsArrayControlProps,
   withTranslateProps,
-} from '@jsonforms/react';
+} from '@mosaic-avantos/jsonforms-react';
 import type { VanillaRendererProps } from '../../index';
 import { withVanillaControlProps } from '../../util';
 

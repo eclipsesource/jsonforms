@@ -36,12 +36,12 @@ import {
   Tester,
   UISchemaElement,
   uiTypeIs,
-} from '@jsonforms/core';
+} from '@mosaic-avantos/jsonforms-core';
 import {
   TranslateProps,
   withJsonFormsLayoutProps,
   withTranslateProps,
-} from '@jsonforms/react';
+} from '@mosaic-avantos/jsonforms-react';
 import {
   AjvProps,
   MaterialLayoutRenderer,

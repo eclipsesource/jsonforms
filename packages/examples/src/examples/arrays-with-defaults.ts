@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { convertDateToString } from '@jsonforms/core';
+import { convertDateToString } from '@mosaic-avantos/jsonforms-core';
 import { registerExamples } from '../register';
 
 export const schema = {

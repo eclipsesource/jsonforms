@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
-import { ControlElement } from '@jsonforms/core';
+import { ControlElement } from '@mosaic-avantos/jsonforms-core';
 import MaterialOneOfEnumCell, {
   materialOneOfEnumCellTester,
 } from '../../src/cells/MaterialOneOfEnumCell';
@@ -31,7 +31,7 @@ import { materialRenderers } from '../../src';
 
 import Enzyme, { mount } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-import { JsonFormsStateProvider } from '@jsonforms/react';
+import { JsonFormsStateProvider } from '@mosaic-avantos/jsonforms-react';
 import { initCore } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });

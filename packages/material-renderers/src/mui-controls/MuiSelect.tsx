@@ -23,11 +23,11 @@
   THE SOFTWARE.
 */
 import React, { useMemo } from 'react';
-import { EnumCellProps, WithClassname } from '@jsonforms/core';
+import { EnumCellProps, WithClassname } from '@mosaic-avantos/jsonforms-core';
 
 import { MenuItem, Select } from '@mui/material';
 import merge from 'lodash/merge';
-import { TranslateProps } from '@jsonforms/react';
+import { TranslateProps } from '@mosaic-avantos/jsonforms-react';
 import { i18nDefaults, WithInputProps, WithSelectProps } from '../util';
 
 export const MuiSelect = React.memo(function MuiSelect(

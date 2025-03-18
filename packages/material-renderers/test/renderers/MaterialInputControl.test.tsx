@@ -35,12 +35,12 @@ import {
   JsonSchema,
   RankedTester,
   rankWith,
-} from '@jsonforms/core';
+} from '@mosaic-avantos/jsonforms-core';
 import {
   Control,
   JsonFormsStateProvider,
   withJsonFormsControlProps,
-} from '@jsonforms/react';
+} from '@mosaic-avantos/jsonforms-react';
 import { MaterialInputControl } from '../../src/controls/MaterialInputControl';
 import MaterialHorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
 import { MuiInputText } from '../../src/mui-controls';

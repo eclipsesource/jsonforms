@@ -34,13 +34,13 @@ import {
   RankedTester,
   rankWith,
   uiTypeIs,
-} from '@jsonforms/core';
+} from '@mosaic-avantos/jsonforms-core';
 import {
   JsonFormsDispatch,
   withArrayTranslationProps,
   withJsonFormsArrayLayoutProps,
   withTranslateProps,
-} from '@jsonforms/react';
+} from '@mosaic-avantos/jsonforms-react';
 import { Grid, List, Typography } from '@mui/material';
 import map from 'lodash/map';
 import range from 'lodash/range';

@@ -29,7 +29,7 @@ import {
   deriveLabelForUISchemaElement,
   Translator,
   isVisible,
-} from '@jsonforms/core';
+} from '@mosaic-avantos/jsonforms-core';
 import { isCategorization } from './tester';
 import { AjvProps } from '../../util';
 

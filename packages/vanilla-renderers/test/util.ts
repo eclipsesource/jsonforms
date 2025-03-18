@@ -23,8 +23,15 @@
   THE SOFTWARE.
 */
 
-import { createAjv, JsonSchema, UISchemaElement } from '@jsonforms/core';
-import { JsonFormsReactProps, useJsonForms } from '@jsonforms/react';
+import {
+  createAjv,
+  JsonSchema,
+  UISchemaElement,
+} from '@mosaic-avantos/jsonforms-core';
+import {
+  JsonFormsReactProps,
+  useJsonForms,
+} from '@mosaic-avantos/jsonforms-react';
 import React from 'react';
 
 export const initCore = (

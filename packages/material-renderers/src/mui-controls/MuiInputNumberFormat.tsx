@@ -23,7 +23,11 @@
   THE SOFTWARE.
 */
 import React, { useCallback } from 'react';
-import { CellProps, Formatted, WithClassname } from '@jsonforms/core';
+import {
+  CellProps,
+  Formatted,
+  WithClassname,
+} from '@mosaic-avantos/jsonforms-core';
 import merge from 'lodash/merge';
 import { useDebouncedChange, useInputComponent, WithInputProps } from '../util';
 

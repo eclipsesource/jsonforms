@@ -29,12 +29,12 @@ import {
   OwnPropsOfEnum,
   RankedTester,
   rankWith,
-} from '@jsonforms/core';
+} from '@mosaic-avantos/jsonforms-core';
 import {
   TranslateProps,
   withJsonFormsEnumProps,
   withTranslateProps,
-} from '@jsonforms/react';
+} from '@mosaic-avantos/jsonforms-react';
 import { MuiSelect } from '../mui-controls/MuiSelect';
 import merge from 'lodash/merge';
 import { MaterialInputControl } from './MaterialInputControl';

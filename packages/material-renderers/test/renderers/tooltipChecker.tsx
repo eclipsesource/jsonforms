@@ -4,8 +4,8 @@ import {
   ArrayTranslationEnum,
   JsonSchema,
   UISchemaElement,
-} from '@jsonforms/core';
-import { JsonForms } from '@jsonforms/react';
+} from '@mosaic-avantos/jsonforms-core';
+import { JsonForms } from '@mosaic-avantos/jsonforms-react';
 import { materialRenderers } from '../../src';
 import { Tooltip } from '@mui/material';
 import * as React from 'react';

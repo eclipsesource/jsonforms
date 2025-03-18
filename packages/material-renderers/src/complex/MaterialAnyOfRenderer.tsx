@@ -32,8 +32,11 @@ import {
   JsonSchema,
   RankedTester,
   rankWith,
-} from '@jsonforms/core';
-import { JsonFormsDispatch, withJsonFormsAnyOfProps } from '@jsonforms/react';
+} from '@mosaic-avantos/jsonforms-core';
+import {
+  JsonFormsDispatch,
+  withJsonFormsAnyOfProps,
+} from '@mosaic-avantos/jsonforms-react';
 import { Tab, Tabs } from '@mui/material';
 import CombinatorProperties from './CombinatorProperties';
 import isEmpty from 'lodash/isEmpty';

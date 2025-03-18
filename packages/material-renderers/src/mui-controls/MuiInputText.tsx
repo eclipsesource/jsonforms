@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import React, { useState } from 'react';
-import { CellProps, WithClassname } from '@jsonforms/core';
+import { CellProps, WithClassname } from '@mosaic-avantos/jsonforms-core';
 import {
   IconButton,
   InputAdornment,

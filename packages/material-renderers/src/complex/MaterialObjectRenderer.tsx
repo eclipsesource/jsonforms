@@ -30,8 +30,11 @@ import {
   RankedTester,
   rankWith,
   StatePropsOfControlWithDetail,
-} from '@jsonforms/core';
-import { JsonFormsDispatch, withJsonFormsDetailProps } from '@jsonforms/react';
+} from '@mosaic-avantos/jsonforms-core';
+import {
+  JsonFormsDispatch,
+  withJsonFormsDetailProps,
+} from '@mosaic-avantos/jsonforms-react';
 import React, { useMemo } from 'react';
 
 export const MaterialObjectRenderer = ({

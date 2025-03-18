@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import { registerExamples } from '../register';
-import { UISchemaElement } from '@jsonforms/core';
+import { UISchemaElement } from '@mosaic-avantos/jsonforms-core';
 
 export const schema = {
   type: 'object',

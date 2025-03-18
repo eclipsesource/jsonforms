@@ -28,8 +28,8 @@ import {
   isBooleanControl,
   RankedTester,
   rankWith,
-} from '@jsonforms/core';
-import { withJsonFormsCellProps } from '@jsonforms/react';
+} from '@mosaic-avantos/jsonforms-core';
+import { withJsonFormsCellProps } from '@mosaic-avantos/jsonforms-react';
 import type { StatelessComponent } from 'react';
 import type { VanillaRendererProps } from '../index';
 import { withVanillaBooleanCellProps } from '../util/index';

@@ -23,7 +23,10 @@
   THE SOFTWARE.
 */
 import { RendererComponent } from './Renderer';
-import type { ControlProps, ControlState } from '@jsonforms/core';
+import type {
+  ControlProps,
+  ControlState,
+} from '@mosaic-avantos/jsonforms-core';
 
 /**
  * A controlled component convenience wrapper that additionally manages a focused state.

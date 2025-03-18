@@ -31,12 +31,12 @@ import {
   isPrimitiveArrayControl,
   or,
   rankWith,
-} from '@jsonforms/core';
+} from '@mosaic-avantos/jsonforms-core';
 import {
   withArrayTranslationProps,
   withJsonFormsArrayLayoutProps,
   withTranslateProps,
-} from '@jsonforms/react';
+} from '@mosaic-avantos/jsonforms-react';
 import { MaterialTableControl } from './MaterialTableControl';
 import { DeleteDialog } from './DeleteDialog';
 
