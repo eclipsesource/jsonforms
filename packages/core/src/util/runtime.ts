@@ -306,6 +306,10 @@ export const findControlForProperty = (
   uischema: UISchemaElement,
   propertyPath: string
 ): ControlElement | undefined => {
+  if (!uischema) {
+    return undefined;
+  }
+
   if (uischema.type === 'Control') {
     const control = uischema as ControlElement;
     if (control.scope?.endsWith(propertyPath)) {
@@ -313,12 +317,16 @@ export const findControlForProperty = (
     }
   }
 
+  // Check if 'elements' exists in uischema first
   if ('elements' in uischema) {
     const layout = uischema as Layout;
-    for (const element of layout.elements) {
-      const found = findControlForProperty(element, propertyPath);
-      if (found) {
-        return found;
+    // Now safely check the elements array
+    if (Array.isArray(layout.elements) && layout.elements.length > 0) {
+      for (const element of layout.elements) {
+        const found = findControlForProperty(element, propertyPath);
+        if (found) {
+          return found;
+        }
       }
     }
   }
