@@ -9,7 +9,7 @@ on:
         required: true
       skip_publish:
         type: 'boolean'
-        description: 'mark in case only the version update shall be executed, skipping the release to npm'
+        description: 'mark in case only the version update shall be executed, skipping the release to github packages'
         required: true
       skip_push:
         type: 'boolean'
@@ -30,12 +30,12 @@ jobs:
     steps:
       - uses: 'actions/checkout@v4'
         with:
-          token: '${{ secrets.JSONFORMS_PUBLISH_PAT }}'
+          token: '${{ secrets.GITHUB_TOKEN }}'
 
       - name: 'Configure Git Credentials'
         run: |
-          git config user.name "jsonforms-publish[bot]"
-          git config user.email "jsonforms-publish@eclipsesource.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: 'Setup node'
         uses: 'actions/setup-node@v4'
