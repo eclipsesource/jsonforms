@@ -1,25 +1,18 @@
 name: CI
 
 on:
-  push:
-    paths-ignore:
-      - '**.md'
   pull_request:
     paths-ignore:
       - '**.md'
 
 jobs:
   ci:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     timeout-minutes: 30
-    strategy:
-      fail-fast: false
-      matrix:
-        os:
-          - ubuntu-latest
-          - macos-latest
-          - windows-latest
-    name: Run on ${{ matrix.os }}
+    permissions:
+      contents: read
+      packages: read
+    name: CI
     steps:
       - uses: actions/checkout@v4
 
@@ -27,6 +20,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@mosaic-avantos'
 
       - uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda # v4.1.0
         name: Install pnpm
@@ -40,19 +35,13 @@ jobs:
           pnpm run build
           pnpm run doc
           pnpm run bundle
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Lint
-        if: matrix.os == 'ubuntu-latest'
         run: pnpm run lint
 
-      - name: Test
-        if: matrix.os == 'windows-latest' || matrix.os == 'macos-latest'
-        run: |
-          set NODE_OPTIONS=--max_old_space_size=4096
-          pnpm run test
-
       - name: Test & Coverage
-        if: matrix.os == 'ubuntu-latest'
         run: |
           export NODE_OPTIONS=--max_old_space_size=4096
           pnpm run test-cov
@@ -60,7 +49,7 @@ jobs:
           pnpm run merge-report && cat coverage/lcov.info
 
       - name: Upload Coveralls Report
-        if: success() && matrix.os == 'ubuntu-latest'
+        if: success()
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}

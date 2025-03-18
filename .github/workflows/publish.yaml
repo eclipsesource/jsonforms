@@ -25,6 +25,7 @@ jobs:
     permissions:
       contents: 'write'
       id-token: 'write'
+      packages: 'write'
     runs-on: 'ubuntu-latest'
     steps:
       - uses: 'actions/checkout@v4'
@@ -40,7 +41,8 @@ jobs:
         uses: 'actions/setup-node@v4'
         with:
           node-version: '22'
-          registry-url: 'https://registry.npmjs.org'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@mosaic-avantos'
 
       - uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda # v4.1.0
         name: Install pnpm
@@ -83,9 +85,9 @@ jobs:
           git push
           git push origin v${{ github.event.inputs.next_version }}
 
-      - name: 'Publish to npm'
+      - name: 'Publish to GitHub Packages'
         if: github.event.inputs.skip_publish == 'false'
-        run: "pnpm publish --recursive ${{  github.event.inputs.stable_release == 'true' && ' ' || '--tag next' }}"
+        run: "pnpm publish --recursive --registry=https://npm.pkg.github.com ${{  github.event.inputs.stable_release == 'true' && ' ' || '--tag next' }}"
         env:
-          NODE_AUTH_TOKEN: '${{ secrets.NPM_TOKEN }}'
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_CONFIG_PROVENANCE: 'true'

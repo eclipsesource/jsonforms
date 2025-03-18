@@ -78,15 +78,25 @@ export interface Internationalizable {
  */
 export interface Rule {
   /**
-   * The effect of the rule
+   * The effect of the rule. Can be a single effect or an array of compatible effects.
    */
-  effect: RuleEffect;
+  effect: RuleEffect | RuleEffect[];
 
   /**
    * The condition of the rule that must evaluate to true in order
-   * to trigger the effect.
+   * to trigger the effect(s).
    */
   condition: Condition;
+
+  /**
+   * Additional options for the rule effects
+   */
+  options?: {
+    /**
+     * The value to use for FILL_VALUE effect
+     */
+    value?: any;
+  };
 }
 
 /**
@@ -109,6 +119,18 @@ export enum RuleEffect {
    * Effect that disables the associated element.
    */
   DISABLE = 'DISABLE',
+  /**
+   * Effect that makes the associated element required.
+   */
+  REQUIRED = 'REQUIRED',
+  /**
+   * Effect that fills a value into the associated element.
+   */
+  FILL_VALUE = 'FILL_VALUE',
+  /**
+   * Effect that clears the value of the associated element.
+   */
+  CLEAR_VALUE = 'CLEAR_VALUE',
 }
 
 /**

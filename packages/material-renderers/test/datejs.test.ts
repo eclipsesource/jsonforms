@@ -27,25 +27,25 @@ import { formatDate } from '../src/util/datejs';
 
 describe('Date Util tester', () => {
   test('format default', () => {
-    const date = dayjs('2024-01-01');
+    const date = dayjs().year(2024).month(0).date(1);
     const actual = formatDate(date, 'YYYY-MM-DD');
     expect(actual).toBe('2024-01-01');
   });
 
   test('format year < 1000', () => {
-    const date = dayjs('999-01-01');
+    const date = dayjs().year(999).month(0).date(1);
     const actual = formatDate(date, 'YYYY-MM-DD');
     expect(actual).toBe('0999-01-01');
   });
 
   test('format 100 < year < 1000', () => {
-    const date = dayjs(new Date('0099-01-01'));
+    const date = dayjs().year(99).month(0).date(1);
     const actual = formatDate(date, 'YYYY-MM-DD');
     expect(actual).toBe('0099-01-01');
   });
 
   test('format 10 < year < 100', () => {
-    const date = dayjs(new Date('0019-01-01'));
+    const date = dayjs().year(19).month(0).date(1);
     const actual = formatDate(date, 'YYYY-MM-DD');
     expect(actual).toBe('0019-01-01');
   });
