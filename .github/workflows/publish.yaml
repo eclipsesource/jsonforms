@@ -95,7 +95,7 @@ jobs:
 
       - name: 'Publish to GitHub Packages'
         if: github.event.inputs.skip_publish == 'false'
-        run: "pnpm publish --recursive --registry=https://npm.pkg.github.com ${{  github.event.inputs.stable_release == 'true' && ' ' || '--tag next' }}"
+        run: "pnpm publish --recursive --registry=https://npm.pkg.github.com --access public ${{  github.event.inputs.stable_release == 'true' && ' ' || '--tag next' }}"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_CONFIG_PROVENANCE: 'true'
