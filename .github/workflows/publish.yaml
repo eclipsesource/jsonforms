@@ -62,28 +62,36 @@ jobs:
       - name: 'Versioning'
         run: 'pnpm exec lerna version ${{ github.event.inputs.next_version }} --no-push --force-publish --yes'
 
-      - name: 'Adjust PeerDependencies'
+      - name: 'Adjust Dependencies'
         run: |
-          cd packages/angular && pnpm pkg set peerDependencies.@jsonforms/core="${{ github.event.inputs.next_version }}"
-          cd ../angular-material && pnpm pkg set peerDependencies.@jsonforms/core="${{ github.event.inputs.next_version }}" && pnpm pkg set peerDependencies.@jsonforms/angular="${{ github.event.inputs.next_version }}"
-          cd ../examples && pnpm pkg set peerDependencies.@jsonforms/core="${{ github.event.inputs.next_version }}"
-          cd ../material-renderers && pnpm pkg set peerDependencies.@jsonforms/core="${{ github.event.inputs.next_version }}" && pnpm pkg set peerDependencies.@jsonforms/react="${{ github.event.inputs.next_version }}"
-          cd ../react && pnpm pkg set peerDependencies.@jsonforms/core="${{ github.event.inputs.next_version }}"
-          cd ../vanilla-renderers && pnpm pkg set peerDependencies.@jsonforms/core="${{ github.event.inputs.next_version }}" && pnpm pkg set peerDependencies.@jsonforms/react="${{ github.event.inputs.next_version }}"
-          cd ../vue && pnpm pkg set peerDependencies.@jsonforms/core="${{ github.event.inputs.next_version }}"
-          cd ../vue-vanilla && pnpm pkg set peerDependencies.@jsonforms/core="${{ github.event.inputs.next_version }}" && pnpm pkg set peerDependencies.@jsonforms/vue="${{ github.event.inputs.next_version }}"
-          cd ../vue-vuetify && pnpm pkg set peerDependencies.@jsonforms/core="${{ github.event.inputs.next_version }}" && pnpm pkg set peerDependencies.@jsonforms/vue="${{ github.event.inputs.next_version }}"
+          # Update react dependencies
+          cd packages/react
+          pnpm pkg set peerDependencies.@mosaic-avantos/jsonforms-core="${{ github.event.inputs.next_version }}"
+
+          # Update material-renderers dependencies
+          cd ../material-renderers
+          pnpm pkg set peerDependencies.@mosaic-avantos/jsonforms-core="${{ github.event.inputs.next_version }}"
+          pnpm pkg set peerDependencies.@mosaic-avantos/jsonforms-react="${{ github.event.inputs.next_version }}"
+
+          # Update vanilla-renderers dependencies
+          cd ../vanilla-renderers
+          pnpm pkg set peerDependencies.@mosaic-avantos/jsonforms-core="${{ github.event.inputs.next_version }}"
+          pnpm pkg set peerDependencies.@mosaic-avantos/jsonforms-react="${{ github.event.inputs.next_version }}"
+
+          # Update examples dependencies
+          cd ../examples
+          pnpm pkg set peerDependencies.@mosaic-avantos/jsonforms-core="${{ github.event.inputs.next_version }}"
+          pnpm pkg set peerDependencies.@mosaic-avantos/jsonforms-react="${{ github.event.inputs.next_version }}"
+
+          # Update examples-react dependencies
+          cd ../examples-react
+          pnpm pkg set peerDependencies.@mosaic-avantos/jsonforms-core="${{ github.event.inputs.next_version }}"
+          pnpm pkg set peerDependencies.@mosaic-avantos/jsonforms-react="${{ github.event.inputs.next_version }}"
 
       - name: 'Tag and Commit'
         run: |
           git add -A && git commit --amend --no-edit
           git tag v${{ github.event.inputs.next_version }} -f
-
-      - name: 'push'
-        if: github.event.inputs.skip_push == 'false'
-        run: |
-          git push
-          git push origin v${{ github.event.inputs.next_version }}
 
       - name: 'Publish to GitHub Packages'
         if: github.event.inputs.skip_publish == 'false'
@@ -91,3 +99,9 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_CONFIG_PROVENANCE: 'true'
+
+      - name: 'Push Changes'
+        if: success() && github.event.inputs.skip_push == 'false'
+        run: |
+          git push
+          git push origin v${{ github.event.inputs.next_version }}
