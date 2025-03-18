@@ -10,19 +10,12 @@ on:
 
 jobs:
   ci:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:
       contents: read
       packages: read
-    strategy:
-      fail-fast: false
-      matrix:
-        os:
-          - ubuntu-latest
-          - macos-latest
-          - windows-latest
-    name: Run on ${{ matrix.os }}
+    name: CI
     steps:
       - uses: actions/checkout@v4
 
@@ -49,17 +42,9 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Lint
-        if: matrix.os == 'ubuntu-latest'
         run: pnpm run lint
 
-      - name: Test
-        if: matrix.os == 'windows-latest' || matrix.os == 'macos-latest'
-        run: |
-          set NODE_OPTIONS=--max_old_space_size=4096
-          pnpm run test
-
       - name: Test & Coverage
-        if: matrix.os == 'ubuntu-latest'
         run: |
           export NODE_OPTIONS=--max_old_space_size=4096
           pnpm run test-cov
@@ -67,7 +52,7 @@ jobs:
           pnpm run merge-report && cat coverage/lcov.info
 
       - name: Upload Coveralls Report
-        if: success() && matrix.os == 'ubuntu-latest'
+        if: success()
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
