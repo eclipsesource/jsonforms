@@ -73,6 +73,7 @@ export const MuiInputNumberFormat = React.memo(function MuiInputNumberFormat(
     <InputComponent
       type='text'
       value={inputValue}
+      placeholder={appliedUiSchemaOptions?.placeholder}
       onChange={onChange}
       className={className}
       id={id}

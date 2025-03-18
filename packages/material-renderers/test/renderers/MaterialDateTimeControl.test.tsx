@@ -439,3 +439,28 @@ describe('Material date time control', () => {
     expect(onChangeData.data.foo).toBe('2005/12/10 11:22 am');
   });
 });
+
+it('should render with a placeholder', () => {
+  const control: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/foo',
+    options: {
+      placeholder: 'Select a date and time',
+    },
+  };
+  const core = initCore(schema, control, data);
+  const wrapper = mount(
+    <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <MaterialDateTimeControl schema={schema} uischema={control} />
+    </JsonFormsStateProvider>
+  );
+
+  // Log the rendered component tree for debugging
+  console.log(wrapper.debug());
+
+  // Find the input element
+  const inputElement = wrapper.find('input').first();
+
+  // Check the placeholder attribute
+  expect(inputElement.props().placeholder).toBe('Select a date and time');
+});

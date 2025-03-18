@@ -58,6 +58,26 @@ export const MuiSelect = React.memo(function MuiSelect(
     [t, schema, uischema, path]
   );
 
+  const renderValue = (selected: string) => {
+    if (selected && selected !== '') {
+      return selected;
+    }
+
+    // Show placeholder if:
+    // 1. A placeholder is defined in the UI schema options.
+    // 2. The current active element is this select input.
+    if (
+      appliedUiSchemaOptions.placeholder &&
+      document.activeElement?.id === id
+    ) {
+      return (
+        <em style={{ color: 'gray' }}>{appliedUiSchemaOptions.placeholder}</em>
+      );
+    }
+
+    return '';
+  };
+
   return (
     <Select
       className={className}
@@ -67,8 +87,10 @@ export const MuiSelect = React.memo(function MuiSelect(
       autoFocus={appliedUiSchemaOptions.focus}
       value={data !== undefined ? data : ''}
       onChange={(ev) => handleChange(path, ev.target.value || undefined)}
-      fullWidth={true}
+      fullWidth
       multiple={multiple || false}
+      displayEmpty={!!appliedUiSchemaOptions.placeholder}
+      renderValue={renderValue}
     >
       {[
         <MenuItem value={''} key='jsonforms.enum.none'>

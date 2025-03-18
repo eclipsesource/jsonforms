@@ -56,6 +56,7 @@ export const MaterialDateCell = (
     <InputComponent
       type='date'
       value={data || ''}
+      placeholder={appliedUiSchemaOptions?.placeholder}
       onChange={(ev: React.ChangeEvent<HTMLInputElement>) =>
         handleChange(path, ev.target.value)
       }

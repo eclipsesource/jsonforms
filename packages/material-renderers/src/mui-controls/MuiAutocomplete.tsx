@@ -108,6 +108,7 @@ export const MuiAutocomplete = (
         id={id}
         disabled={!enabled}
         value={findOption}
+        placeholder={appliedUiSchemaOptions?.placeholder}
         onChange={(_event: any, newValue: EnumOption | null) => {
           handleChange(path, newValue?.value);
         }}
@@ -125,6 +126,7 @@ export const MuiAutocomplete = (
           return (
             <TextField
               label={label}
+              placeholder={appliedUiSchemaOptions?.placeholder}
               type='text'
               inputProps={params.inputProps}
               inputRef={params.InputProps.ref}

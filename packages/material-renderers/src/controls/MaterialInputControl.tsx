@@ -83,6 +83,14 @@ export const MaterialInputControl = (props: ControlProps & WithInput) => {
     >
       <InputLabel
         htmlFor={id + '-input'}
+        sx={{
+          backgroundColor: 'background.paper',
+          px: 0.5,
+          // Ensure the label is above the outline
+          '&.MuiInputLabel-shrink': {
+            zIndex: 1,
+          },
+        }}
         error={!isValid}
         required={showAsRequired(
           required,

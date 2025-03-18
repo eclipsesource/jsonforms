@@ -54,6 +54,7 @@ export const MuiInputTime = React.memo(function MuiInputTime(
     <InputComponent
       type='time'
       value={inputValue}
+      placeholder={appliedUiSchemaOptions?.placeholder}
       onChange={onChange}
       className={className}
       id={id}
