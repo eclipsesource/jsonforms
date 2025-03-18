@@ -1,6 +1,6 @@
 {
   "name": "@mosaic-avantos/jsonforms-react",
-  "version": "3.5.1",
+  "version": "3.5.2-alpha.1",
   "description": "React module of JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -86,7 +86,7 @@
     "lodash": "^4.17.21"
   },
   "peerDependencies": {
-    "@mosaic-avantos/jsonforms-core": "3.5.2",
+    "@mosaic-avantos/jsonforms-core": "3.5.2-alpha.1",
     "react": "^16.12.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
   },
   "optionalPeerDependencies": {

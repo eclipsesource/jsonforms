@@ -1,11 +1,11 @@
 {
   "name": "@mosaic-avantos/jsonforms-examples-react",
-  "version": "3.5.2-alpha.0",
+  "version": "3.5.2-alpha.1",
   "private": true,
   "dependencies": {
-    "@mosaic-avantos/jsonforms-core": "workspace:*",
+    "@mosaic-avantos/jsonforms-core": "3.5.2-alpha.1",
     "@mosaic-avantos/jsonforms-examples": "workspace:*",
-    "@mosaic-avantos/jsonforms-react": "workspace:*",
+    "@mosaic-avantos/jsonforms-react": "3.5.2-alpha.1",
     "@mui/material": "~5.13.0",
     "@types/react-highlight": "^0.12.5",
     "@types/react-tabs": "^2.3.3",
@@ -35,5 +35,9 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "test": "echo 'Nothing to do'"
+  },
+  "peerDependencies": {
+    "@mosaic-avantos/jsonforms-core": "3.5.2-alpha.1",
+    "@mosaic-avantos/jsonforms-react": "3.5.2-alpha.1"
   }
 }
