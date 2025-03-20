@@ -107,5 +107,16 @@ jobs:
       - name: 'Push Changes'
         if: success() && github.event.inputs.skip_push == 'false'
         run: |
-          git push
+          BRANCH="release-${{ github.event.inputs.next_version }}"
+          git checkout -b $BRANCH
+          git push origin $BRANCH
           git push origin v${{ github.event.inputs.next_version }}
+
+      - name: 'Create Pull Request'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: 'release-${{ github.event.inputs.next_version }}'
+          title: 'Release ${{ github.event.inputs.next_version }}'
+          body: 'This PR contains the version bump to `${{ github.event.inputs.next_version }}`.'
+          base: 'master'
