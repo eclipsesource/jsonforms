@@ -107,6 +107,7 @@ export const MuiInputText = React.memo(function MuiInputText(
       label={label}
       type={appliedUiSchemaOptions.format === 'password' ? 'password' : 'text'}
       value={inputText}
+      placeholder={appliedUiSchemaOptions?.placeholder}
       onChange={onChange}
       className={className}
       id={id}

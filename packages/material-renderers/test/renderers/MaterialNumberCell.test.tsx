@@ -415,3 +415,22 @@ describe('Material number cells', () => {
     expect(input.props().disabled).toBeFalsy();
   });
 });
+
+it('should render with a placeholder', () => {
+  const control: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/foo',
+    options: {
+      placeholder: 'Enter a number',
+    },
+  };
+  const core = initCore(schema, control, data);
+  const wrapper = mount(
+    <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <NumberCell schema={schema} uischema={control} path='foo' />
+    </JsonFormsStateProvider>
+  );
+
+  const input = wrapper.find('input').first();
+  expect(input.props().placeholder).toBe('Enter a number');
+});

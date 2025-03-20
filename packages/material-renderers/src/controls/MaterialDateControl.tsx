@@ -127,6 +127,7 @@ export const MaterialDateControl = (props: ControlProps) => {
               wrapperVariant === 'desktop' ? [] : ['clear', 'cancel', 'accept'],
           }),
           textField: {
+            placeholder: appliedUiSchemaOptions?.placeholder,
             id: id + '-input',
             required: required && !appliedUiSchemaOptions.hideRequiredAsterisk,
             autoFocus: appliedUiSchemaOptions.focus,

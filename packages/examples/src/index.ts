@@ -76,6 +76,7 @@ import * as multiEnumWithLabelAndDesc from './examples/enum-multi-with-label-and
 import * as additionalProperties from './examples/additional-properties';
 import * as login from './examples/login';
 import * as string from './examples/string';
+import * as placeholder from './examples/placeholders';
 export * from './register';
 export * from './example';
 
@@ -137,4 +138,5 @@ export {
   issue_1884,
   arrayWithDefaults,
   string,
+  placeholder,
 };

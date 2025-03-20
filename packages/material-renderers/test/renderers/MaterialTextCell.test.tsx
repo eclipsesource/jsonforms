@@ -599,3 +599,22 @@ describe('Material text cell', () => {
     expect(input.props().disabled).toBe(true);
   });
 });
+
+it('should render with a placeholder', () => {
+  const control: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/name',
+    options: {
+      placeholder: 'Enter your name',
+    },
+  };
+  const core = initCore(schema, control, data);
+  const wrapper = mount(
+    <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
+      <TextCell schema={schema} uischema={control} path='name' />
+    </JsonFormsStateProvider>
+  );
+
+  const input = wrapper.find('input').first();
+  expect(input.props().placeholder).toBe('Enter your name');
+});

@@ -61,6 +61,7 @@ export const MuiInputNumber = React.memo(function MuiInputNumber(
       type='number'
       label={label}
       value={inputValue}
+      placeholder={appliedUiSchemaOptions?.placeholder}
       onChange={onChange}
       className={className}
       id={id}

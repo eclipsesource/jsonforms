@@ -63,6 +63,7 @@ export const MuiInputInteger = React.memo(function MuiInputInteger(
       label={label}
       type='number'
       value={inputValue}
+      placeholder={appliedUiSchemaOptions?.placeholder}
       onChange={onChange}
       className={className}
       id={id}
