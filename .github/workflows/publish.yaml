@@ -63,6 +63,8 @@ jobs:
 
       - name: 'Versioning'
         run: 'pnpm exec lerna version ${{ github.event.inputs.next_version }} --no-push --force-publish --yes'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 'Adjust Dependencies'
         run: |
