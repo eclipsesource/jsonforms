@@ -52,6 +52,8 @@ jobs:
 
       - name: 'Install Packages'
         run: 'pnpm i --frozen-lockfile'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 'Build'
         run: 'pnpm run build'
