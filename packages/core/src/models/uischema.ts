@@ -96,6 +96,10 @@ export interface Rule {
      * The value to use for FILL_VALUE effect
      */
     value?: any;
+    /**
+     * Whether to preserve the field's value when it becomes hidden
+     */
+    preserveValueOnHide?: boolean;
   };
 }
 
