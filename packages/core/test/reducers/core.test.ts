@@ -2167,7 +2167,7 @@ test('core reducer - REQUIRED rule updates schema required fields when the condi
   );
 });
 
-test('core reducer - SHOW rule with preserveValueOnHide preserves field values when hidden', (t) => {
+test('SHOW rule with preserveValueOnHide should preserve field values when hidden', (t) => {
   // Create a schema with minimal fields to test functionality
   const schema = {
     type: 'object',
@@ -2178,7 +2178,7 @@ test('core reducer - SHOW rule with preserveValueOnHide preserves field values w
     },
   };
 
-  // Create a UI schema with SHOW rules and different preserveValueOnHide settings
+  // Create a UI schema with SHOW rules and preserveValueOnHide setting
   const uischema = {
     type: 'VerticalLayout',
     elements: [
@@ -2211,6 +2211,69 @@ test('core reducer - SHOW rule with preserveValueOnHide preserves field values w
       {
         type: 'Control',
         scope: '#/properties/companyName',
+      },
+    ],
+  };
+
+  // Initial data with type 'person' and firstName filled out
+  const initialData = {
+    type: 'person',
+    firstName: 'John',
+  };
+
+  // Create initial state
+  const initialState = coreReducer(
+    undefined,
+    init(initialData, schema, uischema)
+  );
+
+  // Switch type to 'organization' which should hide firstName but preserve its value
+  const updatedState = coreReducer(
+    initialState,
+    updateCore(
+      {
+        ...initialData,
+        type: 'organization',
+      },
+      initialState.schema,
+      initialState.uischema
+    )
+  );
+
+  // Verify firstName is preserved even when hidden
+  t.is(
+    updatedState.data.firstName,
+    initialData.firstName,
+    'firstName should be preserved when hidden'
+  );
+});
+
+test('SHOW rule without preserveValueOnHide should clear field values when hidden', (t) => {
+  // Create a schema with minimal fields to test functionality
+  const schema = {
+    type: 'object',
+    properties: {
+      type: { type: 'string', enum: ['person', 'organization'] },
+      firstName: { type: 'string' },
+      companyName: { type: 'string' },
+    },
+  };
+
+  // Create a UI schema with SHOW rules without preserveValueOnHide
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [
+      {
+        type: 'Control',
+        scope: '#/properties/type',
+      },
+      {
+        type: 'Control',
+        scope: '#/properties/firstName',
+      },
+      {
+        type: 'Control',
+        scope: '#/properties/companyName',
         rule: {
           effect: 'SHOW',
           condition: {
@@ -2231,10 +2294,9 @@ test('core reducer - SHOW rule with preserveValueOnHide preserves field values w
     ],
   };
 
-  // Initial data with type 'person' and all fields filled out
+  // Initial data with type 'organization' and companyName filled out
   const initialData = {
-    type: 'person',
-    firstName: 'John',
+    type: 'organization',
     companyName: 'Acme Corp',
   };
 
@@ -2244,59 +2306,28 @@ test('core reducer - SHOW rule with preserveValueOnHide preserves field values w
     init(initialData, schema, uischema)
   );
 
-  // Switch type to 'organization' which should:
-  // 1. Hide firstName but preserve its value (preserveValueOnHide: true)
-  // 2. Show companyName
+  // Switch type to 'person' which should hide companyName and clear its value
   const updatedState = coreReducer(
     initialState,
     updateCore(
       {
         ...initialData,
-        type: 'organization',
+        type: 'person',
       },
       initialState.schema,
       initialState.uischema
     )
   );
 
-  // Verify firstName is preserved even when hidden
-  t.is(
-    updatedState.data.firstName,
-    initialData.firstName,
-    'firstName should be preserved when hidden'
-  );
-
-  // Switch back to 'person' which should:
-  // 1. Show firstName (with preserved value)
-  // 2. Hide companyName and clear its value (no preserveValueOnHide)
-  const revertedState = coreReducer(
-    updatedState,
-    updateCore(
-      {
-        ...updatedState.data,
-        type: 'person',
-      },
-      updatedState.schema,
-      updatedState.uischema
-    )
-  );
-
-  // Verify firstName is still preserved
-  t.is(
-    revertedState.data.firstName,
-    initialData.firstName,
-    'firstName should still have its original value'
-  );
-
   // Verify companyName was cleared when hidden
   t.is(
-    revertedState.data.companyName,
+    updatedState.data.companyName,
     undefined,
     'companyName should be cleared when hidden'
   );
 });
 
-test('core reducer - HIDE rule with preserveValueOnHide preserves field values when hidden', (t) => {
+test('HIDE rule with preserveValueOnHide should preserve field values when hidden', (t) => {
   // Create a schema with minimal fields to test functionality
   const schema = {
     type: 'object',
@@ -2307,7 +2338,7 @@ test('core reducer - HIDE rule with preserveValueOnHide preserves field values w
     },
   };
 
-  // Create a UI schema with HIDE rules and different preserveValueOnHide settings
+  // Create a UI schema with HIDE rules and preserveValueOnHide setting
   const uischema = {
     type: 'VerticalLayout',
     elements: [
@@ -2340,6 +2371,69 @@ test('core reducer - HIDE rule with preserveValueOnHide preserves field values w
       {
         type: 'Control',
         scope: '#/properties/address',
+      },
+    ],
+  };
+
+  // Initial data with type 'simple' and name filled out
+  const initialData = {
+    type: 'simple',
+    name: 'John Smith',
+  };
+
+  // Create initial state
+  const initialState = coreReducer(
+    undefined,
+    init(initialData, schema, uischema)
+  );
+
+  // Switch type to 'detailed' which should hide name but preserve its value
+  const updatedState = coreReducer(
+    initialState,
+    updateCore(
+      {
+        ...initialData,
+        type: 'detailed',
+      },
+      initialState.schema,
+      initialState.uischema
+    )
+  );
+
+  // Verify name is preserved even when hidden
+  t.is(
+    updatedState.data.name,
+    initialData.name,
+    'name should be preserved when hidden by HIDE rule'
+  );
+});
+
+test('HIDE rule without preserveValueOnHide should clear field values when hidden', (t) => {
+  // Create a schema with minimal fields to test functionality
+  const schema = {
+    type: 'object',
+    properties: {
+      type: { type: 'string', enum: ['simple', 'detailed'] },
+      name: { type: 'string' },
+      address: { type: 'string' },
+    },
+  };
+
+  // Create a UI schema with HIDE rules without preserveValueOnHide
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [
+      {
+        type: 'Control',
+        scope: '#/properties/type',
+      },
+      {
+        type: 'Control',
+        scope: '#/properties/name',
+      },
+      {
+        type: 'Control',
+        scope: '#/properties/address',
         rule: {
           effect: 'HIDE',
           condition: {
@@ -2360,10 +2454,9 @@ test('core reducer - HIDE rule with preserveValueOnHide preserves field values w
     ],
   };
 
-  // Initial data with type 'simple' and all fields filled out
+  // Initial data with type 'detailed' and address filled out
   const initialData = {
-    type: 'simple',
-    name: 'John Smith',
+    type: 'detailed',
     address: '123 Main St',
   };
 
@@ -2373,53 +2466,22 @@ test('core reducer - HIDE rule with preserveValueOnHide preserves field values w
     init(initialData, schema, uischema)
   );
 
-  // Switch type to 'detailed' which should:
-  // 1. Hide name but preserve its value (preserveValueOnHide: true)
-  // 2. Show address
+  // Switch type to 'simple' which should hide address and clear its value
   const updatedState = coreReducer(
     initialState,
     updateCore(
       {
         ...initialData,
-        type: 'detailed',
+        type: 'simple',
       },
       initialState.schema,
       initialState.uischema
     )
   );
 
-  // Verify name is preserved even when hidden
-  t.is(
-    updatedState.data.name,
-    initialData.name,
-    'name should be preserved when hidden by HIDE rule'
-  );
-
-  // Switch back to 'simple' which should:
-  // 1. Show name (with preserved value)
-  // 2. Hide address and clear its value (no preserveValueOnHide)
-  const revertedState = coreReducer(
-    updatedState,
-    updateCore(
-      {
-        ...updatedState.data,
-        type: 'simple',
-      },
-      updatedState.schema,
-      updatedState.uischema
-    )
-  );
-
-  // Verify name is still preserved
-  t.is(
-    revertedState.data.name,
-    initialData.name,
-    'name should still have its original value after being shown again'
-  );
-
   // Verify address was cleared when hidden
   t.is(
-    revertedState.data.address,
+    updatedState.data.address,
     undefined,
     'address should be cleared when hidden by HIDE rule'
   );
