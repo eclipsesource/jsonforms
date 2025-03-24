@@ -204,8 +204,12 @@ const createDynamicSchema = (
         // Check if the field is hidden
         const isFieldVisible = isVisible(control, data, path, ajv);
 
-        // If field is hidden and has a value, clear it
-        if (!isFieldVisible && data[key] !== undefined) {
+        // If field is hidden and has a value, and preserveValueOnHide is not true, clear it
+        if (
+          !isFieldVisible &&
+          data[key] !== undefined &&
+          !control.rule?.options?.preserveValueOnHide
+        ) {
           // Only create a copy if we haven't already
           if (!dataChanged) {
             updatedData = { ...data };

@@ -2166,3 +2166,297 @@ test('core reducer - REQUIRED rule updates schema required fields when the condi
     'taxId should not be required when type is person'
   );
 });
+
+test('core reducer - SHOW rule with preserveValueOnHide preserves field values when hidden', (t) => {
+  // Create a schema with fields that will be conditionally shown/hidden
+  const schema = {
+    type: 'object',
+    properties: {
+      type: { type: 'string', enum: ['person', 'organization'] },
+      personalInfo: {
+        type: 'object',
+        properties: {
+          firstName: { type: 'string' },
+          lastName: { type: 'string' },
+        },
+      },
+      organizationInfo: {
+        type: 'object',
+        properties: {
+          companyName: { type: 'string' },
+          registrationNumber: { type: 'string' },
+        },
+      },
+    },
+  };
+
+  // Create a UI schema with SHOW rules and different preserveValueOnHide settings
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [
+      {
+        type: 'Control',
+        scope: 'type',
+      },
+      {
+        type: 'Control',
+        scope: 'personalInfo',
+        rule: {
+          effect: 'SHOW',
+          condition: {
+            scope: '#',
+            schema: {
+              type: 'object',
+              properties: {
+                type: {
+                  const: 'person',
+                },
+              },
+              required: ['type'],
+            },
+          },
+          options: {
+            preserveValueOnHide: true,
+          },
+        },
+      },
+      {
+        type: 'Control',
+        scope: 'organizationInfo',
+        rule: {
+          effect: 'SHOW',
+          condition: {
+            scope: '#',
+            schema: {
+              type: 'object',
+              properties: {
+                type: {
+                  const: 'organization',
+                },
+              },
+              required: ['type'],
+            },
+          },
+          // No preserveValueOnHide option - should clear when hidden
+        },
+      },
+    ],
+  };
+
+  // Initial data with type 'person' and both sets of info filled out
+  const initialData = {
+    type: 'person',
+    personalInfo: {
+      firstName: 'John',
+      lastName: 'Doe',
+    },
+    organizationInfo: {
+      companyName: 'Acme Corp',
+      registrationNumber: '12345',
+    },
+  };
+
+  // Create initial state
+  const initialState = coreReducer(
+    undefined,
+    init(initialData, schema, uischema)
+  );
+
+  // Switch type to 'organization' which should:
+  // 1. Hide personalInfo but preserve its value (preserveValueOnHide: true)
+  // 2. Show organizationInfo
+  const updatedState = coreReducer(
+    initialState,
+    updateCore(
+      {
+        ...initialData,
+        type: 'organization',
+      },
+      initialState.schema,
+      initialState.uischema
+    )
+  );
+
+  // Verify personalInfo is preserved even when hidden
+  t.deepEqual(
+    updatedState.data.personalInfo,
+    initialData.personalInfo,
+    'personalInfo should be preserved when hidden'
+  );
+
+  // Switch back to 'person' which should:
+  // 1. Show personalInfo (with preserved values)
+  // 2. Hide organizationInfo and clear its value (no preserveValueOnHide)
+  const revertedState = coreReducer(
+    updatedState,
+    updateCore(
+      {
+        ...updatedState.data,
+        type: 'person',
+      },
+      updatedState.schema,
+      updatedState.uischema
+    )
+  );
+
+  // Verify personalInfo is still preserved
+  t.deepEqual(
+    revertedState.data.personalInfo,
+    initialData.personalInfo,
+    'personalInfo should still have its original values'
+  );
+
+  // Verify organizationInfo was cleared when hidden
+  t.is(
+    revertedState.data.organizationInfo,
+    undefined,
+    'organizationInfo should be cleared when hidden'
+  );
+});
+
+test('core reducer - HIDE rule with preserveValueOnHide preserves field values when hidden', (t) => {
+  // Create a schema with fields that will be conditionally hidden
+  const schema = {
+    type: 'object',
+    properties: {
+      type: { type: 'string', enum: ['simple', 'detailed'] },
+      basicInfo: {
+        type: 'object',
+        properties: {
+          name: { type: 'string' },
+          email: { type: 'string' },
+        },
+      },
+      detailedInfo: {
+        type: 'object',
+        properties: {
+          address: { type: 'string' },
+          phone: { type: 'string' },
+        },
+      },
+    },
+  };
+
+  // Create a UI schema with HIDE rules and different preserveValueOnHide settings
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [
+      {
+        type: 'Control',
+        scope: 'type',
+      },
+      {
+        type: 'Control',
+        scope: 'basicInfo',
+        rule: {
+          effect: 'HIDE',
+          condition: {
+            scope: '#',
+            schema: {
+              type: 'object',
+              properties: {
+                type: {
+                  const: 'detailed',
+                },
+              },
+              required: ['type'],
+            },
+          },
+          options: {
+            preserveValueOnHide: true,
+          },
+        },
+      },
+      {
+        type: 'Control',
+        scope: 'detailedInfo',
+        rule: {
+          effect: 'HIDE',
+          condition: {
+            scope: '#',
+            schema: {
+              type: 'object',
+              properties: {
+                type: {
+                  const: 'simple',
+                },
+              },
+              required: ['type'],
+            },
+          },
+          // No preserveValueOnHide option - should clear when hidden
+        },
+      },
+    ],
+  };
+
+  // Initial data with type 'simple' and both sets of info filled out
+  const initialData = {
+    type: 'simple',
+    basicInfo: {
+      name: 'John Smith',
+      email: 'john@example.com',
+    },
+    detailedInfo: {
+      address: '123 Main St',
+      phone: '555-0123',
+    },
+  };
+
+  // Create initial state
+  const initialState = coreReducer(
+    undefined,
+    init(initialData, schema, uischema)
+  );
+
+  // Switch type to 'detailed' which should:
+  // 1. Hide basicInfo but preserve its value (preserveValueOnHide: true)
+  // 2. Show detailedInfo
+  const updatedState = coreReducer(
+    initialState,
+    updateCore(
+      {
+        ...initialData,
+        type: 'detailed',
+      },
+      initialState.schema,
+      initialState.uischema
+    )
+  );
+
+  // Verify basicInfo is preserved even when hidden
+  t.deepEqual(
+    updatedState.data.basicInfo,
+    initialData.basicInfo,
+    'basicInfo should be preserved when hidden by HIDE rule'
+  );
+
+  // Switch back to 'simple' which should:
+  // 1. Show basicInfo (with preserved values)
+  // 2. Hide detailedInfo and clear its value (no preserveValueOnHide)
+  const revertedState = coreReducer(
+    updatedState,
+    updateCore(
+      {
+        ...updatedState.data,
+        type: 'simple',
+      },
+      updatedState.schema,
+      updatedState.uischema
+    )
+  );
+
+  // Verify basicInfo is still preserved
+  t.deepEqual(
+    revertedState.data.basicInfo,
+    initialData.basicInfo,
+    'basicInfo should still have its original values after being shown again'
+  );
+
+  // Verify detailedInfo was cleared when hidden
+  t.is(
+    revertedState.data.detailedInfo,
+    undefined,
+    'detailedInfo should be cleared when hidden by HIDE rule'
+  );
+});
