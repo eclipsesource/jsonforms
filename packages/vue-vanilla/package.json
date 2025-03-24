@@ -60,7 +60,7 @@
     "@types/chai": "^4.2.11",
     "@types/jest": "^27.4.1",
     "@types/mocha": "^5.2.4",
-    "@types/node": "^18.19.4",
+    "@types/node": "^22.13.8",
     "@typescript-eslint/eslint-plugin": "^5.54.1",
     "@typescript-eslint/parser": "^5.54.1",
     "@vue/cli-plugin-babel": "~5.0.8",
