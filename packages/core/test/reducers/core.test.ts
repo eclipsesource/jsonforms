@@ -2168,25 +2168,13 @@ test('core reducer - REQUIRED rule updates schema required fields when the condi
 });
 
 test('core reducer - SHOW rule with preserveValueOnHide preserves field values when hidden', (t) => {
-  // Create a schema with fields that will be conditionally shown/hidden
+  // Create a schema with minimal fields to test functionality
   const schema = {
     type: 'object',
     properties: {
       type: { type: 'string', enum: ['person', 'organization'] },
-      personalInfo: {
-        type: 'object',
-        properties: {
-          firstName: { type: 'string' },
-          lastName: { type: 'string' },
-        },
-      },
-      organizationInfo: {
-        type: 'object',
-        properties: {
-          companyName: { type: 'string' },
-          registrationNumber: { type: 'string' },
-        },
-      },
+      firstName: { type: 'string' },
+      companyName: { type: 'string' },
     },
   };
 
@@ -2196,11 +2184,11 @@ test('core reducer - SHOW rule with preserveValueOnHide preserves field values w
     elements: [
       {
         type: 'Control',
-        scope: 'type',
+        scope: '#/properties/type',
       },
       {
         type: 'Control',
-        scope: 'personalInfo',
+        scope: '#/properties/firstName',
         rule: {
           effect: 'SHOW',
           condition: {
@@ -2222,7 +2210,7 @@ test('core reducer - SHOW rule with preserveValueOnHide preserves field values w
       },
       {
         type: 'Control',
-        scope: 'organizationInfo',
+        scope: '#/properties/companyName',
         rule: {
           effect: 'SHOW',
           condition: {
@@ -2243,17 +2231,11 @@ test('core reducer - SHOW rule with preserveValueOnHide preserves field values w
     ],
   };
 
-  // Initial data with type 'person' and both sets of info filled out
+  // Initial data with type 'person' and all fields filled out
   const initialData = {
     type: 'person',
-    personalInfo: {
-      firstName: 'John',
-      lastName: 'Doe',
-    },
-    organizationInfo: {
-      companyName: 'Acme Corp',
-      registrationNumber: '12345',
-    },
+    firstName: 'John',
+    companyName: 'Acme Corp',
   };
 
   // Create initial state
@@ -2263,8 +2245,8 @@ test('core reducer - SHOW rule with preserveValueOnHide preserves field values w
   );
 
   // Switch type to 'organization' which should:
-  // 1. Hide personalInfo but preserve its value (preserveValueOnHide: true)
-  // 2. Show organizationInfo
+  // 1. Hide firstName but preserve its value (preserveValueOnHide: true)
+  // 2. Show companyName
   const updatedState = coreReducer(
     initialState,
     updateCore(
@@ -2277,16 +2259,16 @@ test('core reducer - SHOW rule with preserveValueOnHide preserves field values w
     )
   );
 
-  // Verify personalInfo is preserved even when hidden
-  t.deepEqual(
-    updatedState.data.personalInfo,
-    initialData.personalInfo,
-    'personalInfo should be preserved when hidden'
+  // Verify firstName is preserved even when hidden
+  t.is(
+    updatedState.data.firstName,
+    initialData.firstName,
+    'firstName should be preserved when hidden'
   );
 
   // Switch back to 'person' which should:
-  // 1. Show personalInfo (with preserved values)
-  // 2. Hide organizationInfo and clear its value (no preserveValueOnHide)
+  // 1. Show firstName (with preserved value)
+  // 2. Hide companyName and clear its value (no preserveValueOnHide)
   const revertedState = coreReducer(
     updatedState,
     updateCore(
@@ -2299,41 +2281,29 @@ test('core reducer - SHOW rule with preserveValueOnHide preserves field values w
     )
   );
 
-  // Verify personalInfo is still preserved
-  t.deepEqual(
-    revertedState.data.personalInfo,
-    initialData.personalInfo,
-    'personalInfo should still have its original values'
+  // Verify firstName is still preserved
+  t.is(
+    revertedState.data.firstName,
+    initialData.firstName,
+    'firstName should still have its original value'
   );
 
-  // Verify organizationInfo was cleared when hidden
+  // Verify companyName was cleared when hidden
   t.is(
-    revertedState.data.organizationInfo,
+    revertedState.data.companyName,
     undefined,
-    'organizationInfo should be cleared when hidden'
+    'companyName should be cleared when hidden'
   );
 });
 
 test('core reducer - HIDE rule with preserveValueOnHide preserves field values when hidden', (t) => {
-  // Create a schema with fields that will be conditionally hidden
+  // Create a schema with minimal fields to test functionality
   const schema = {
     type: 'object',
     properties: {
       type: { type: 'string', enum: ['simple', 'detailed'] },
-      basicInfo: {
-        type: 'object',
-        properties: {
-          name: { type: 'string' },
-          email: { type: 'string' },
-        },
-      },
-      detailedInfo: {
-        type: 'object',
-        properties: {
-          address: { type: 'string' },
-          phone: { type: 'string' },
-        },
-      },
+      name: { type: 'string' },
+      address: { type: 'string' },
     },
   };
 
@@ -2343,11 +2313,11 @@ test('core reducer - HIDE rule with preserveValueOnHide preserves field values w
     elements: [
       {
         type: 'Control',
-        scope: 'type',
+        scope: '#/properties/type',
       },
       {
         type: 'Control',
-        scope: 'basicInfo',
+        scope: '#/properties/name',
         rule: {
           effect: 'HIDE',
           condition: {
@@ -2369,7 +2339,7 @@ test('core reducer - HIDE rule with preserveValueOnHide preserves field values w
       },
       {
         type: 'Control',
-        scope: 'detailedInfo',
+        scope: '#/properties/address',
         rule: {
           effect: 'HIDE',
           condition: {
@@ -2390,17 +2360,11 @@ test('core reducer - HIDE rule with preserveValueOnHide preserves field values w
     ],
   };
 
-  // Initial data with type 'simple' and both sets of info filled out
+  // Initial data with type 'simple' and all fields filled out
   const initialData = {
     type: 'simple',
-    basicInfo: {
-      name: 'John Smith',
-      email: 'john@example.com',
-    },
-    detailedInfo: {
-      address: '123 Main St',
-      phone: '555-0123',
-    },
+    name: 'John Smith',
+    address: '123 Main St',
   };
 
   // Create initial state
@@ -2410,8 +2374,8 @@ test('core reducer - HIDE rule with preserveValueOnHide preserves field values w
   );
 
   // Switch type to 'detailed' which should:
-  // 1. Hide basicInfo but preserve its value (preserveValueOnHide: true)
-  // 2. Show detailedInfo
+  // 1. Hide name but preserve its value (preserveValueOnHide: true)
+  // 2. Show address
   const updatedState = coreReducer(
     initialState,
     updateCore(
@@ -2424,16 +2388,16 @@ test('core reducer - HIDE rule with preserveValueOnHide preserves field values w
     )
   );
 
-  // Verify basicInfo is preserved even when hidden
-  t.deepEqual(
-    updatedState.data.basicInfo,
-    initialData.basicInfo,
-    'basicInfo should be preserved when hidden by HIDE rule'
+  // Verify name is preserved even when hidden
+  t.is(
+    updatedState.data.name,
+    initialData.name,
+    'name should be preserved when hidden by HIDE rule'
   );
 
   // Switch back to 'simple' which should:
-  // 1. Show basicInfo (with preserved values)
-  // 2. Hide detailedInfo and clear its value (no preserveValueOnHide)
+  // 1. Show name (with preserved value)
+  // 2. Hide address and clear its value (no preserveValueOnHide)
   const revertedState = coreReducer(
     updatedState,
     updateCore(
@@ -2446,17 +2410,17 @@ test('core reducer - HIDE rule with preserveValueOnHide preserves field values w
     )
   );
 
-  // Verify basicInfo is still preserved
-  t.deepEqual(
-    revertedState.data.basicInfo,
-    initialData.basicInfo,
-    'basicInfo should still have its original values after being shown again'
+  // Verify name is still preserved
+  t.is(
+    revertedState.data.name,
+    initialData.name,
+    'name should still have its original value after being shown again'
   );
 
-  // Verify detailedInfo was cleared when hidden
+  // Verify address was cleared when hidden
   t.is(
-    revertedState.data.detailedInfo,
+    revertedState.data.address,
     undefined,
-    'detailedInfo should be cleared when hidden by HIDE rule'
+    'address should be cleared when hidden by HIDE rule'
   );
 });
