@@ -1,13 +1,13 @@
 <template>
   <v-container
-    v-if="layout.visible"
+    v-if="layout.visible && (layout.uischema as Layout).elements.length > 0"
     fill-height
     :class="`${styles.verticalLayout.root}`"
     v-bind="vuetifyProps('v-container')"
   >
     <v-row
       v-for="(element, index) in (layout.uischema as Layout).elements"
-      :key="`${layout.path}-${index}`"
+      :key="`${layout.path}-${(layout.uischema as Layout).elements.length}-${index}`"
       v-bind="vuetifyProps(`v-row[${index}]`)"
     >
       <v-col
