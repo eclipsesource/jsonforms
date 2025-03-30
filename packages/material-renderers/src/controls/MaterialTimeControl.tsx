@@ -143,6 +143,7 @@ export const MaterialTimeControl = (props: ControlProps) => {
             fullWidth: !appliedUiSchemaOptions.trim,
             inputProps: {
               type: 'text',
+              readonly: true,
             },
             InputLabelProps: data ? { shrink: true } : undefined,
             onFocus: onFocus,
