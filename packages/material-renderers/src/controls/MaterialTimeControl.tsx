@@ -22,6 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import dayjs from 'dayjs';
 import React, { useCallback, useMemo, useState } from 'react';
 import merge from 'lodash/merge';
 import {
@@ -105,6 +106,9 @@ export const MaterialTimeControl = (props: ControlProps) => {
   );
   const value = getData(data, saveFormat);
 
+  const minTime = dayjs(appliedUiSchemaOptions?.minValue, 'HH:mm');
+  const maxTime = dayjs(appliedUiSchemaOptions?.maxValue, 'HH:mm');
+
   if (!visible) {
     return null;
   }
@@ -117,6 +121,8 @@ export const MaterialTimeControl = (props: ControlProps) => {
         key={key}
         label={label}
         value={value}
+        maxTime={maxTime}
+        minTime={minTime}
         onAccept={onChange}
         format={format}
         ampm={!!appliedUiSchemaOptions.ampm}

@@ -75,14 +75,26 @@ export const uischema = {
         {
           type: 'Control',
           scope: '#/properties/schemaBased/properties/date',
+          options: {
+            maxValue: '2025-03-26',
+            minValue: '2025-03-19',
+          },
         },
         {
           type: 'Control',
           scope: '#/properties/schemaBased/properties/time',
+          options: {
+            maxValue: '18:50',
+            minValue: '10:10',
+          },
         },
         {
           type: 'Control',
           scope: '#/properties/schemaBased/properties/datetime',
+          options: {
+            maxValue: '2025-03-26 10:30',
+            minValue: '2025-03-19 18:30',
+          },
         },
       ],
     },
@@ -101,6 +113,8 @@ export const uischema = {
             views: ['year', 'month'],
             dateFormat: 'YYYY.MM',
             dateSaveFormat: 'YYYY-MM',
+            maxValue: '2025-03-31',
+            minValue: '2025-03-19',
           },
         },
         {
@@ -109,6 +123,10 @@ export const uischema = {
           options: {
             format: 'time',
             ampm: true,
+            options: {
+              maxValue: '18:50',
+              minValue: '10:10',
+            },
           },
         },
         {
@@ -119,6 +137,10 @@ export const uischema = {
             dateTimeFormat: 'DD-MM-YY hh:mm:a',
             dateTimeSaveFormat: 'YYYY/MM/DD h:mm a',
             ampm: true,
+            options: {
+              maxValue: '2025-03-26 22:15',
+              minValue: '2025-03-19 10:10',
+            },
           },
         },
       ],

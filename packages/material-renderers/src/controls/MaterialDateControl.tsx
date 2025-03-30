@@ -42,6 +42,7 @@ import {
   getData,
   useFocus,
 } from '../util';
+import dayjs from 'dayjs';
 
 export const MaterialDateControl = (props: ControlProps) => {
   const [focused, onFocus, onBlur] = useFocus();
@@ -108,6 +109,10 @@ export const MaterialDateControl = (props: ControlProps) => {
     return null;
   }
 
+  const maxDate = dayjs(appliedUiSchemaOptions?.maxValue, 'YYYY-MM-DD');
+
+  const minDate = dayjs(appliedUiSchemaOptions?.minValue, 'YYYY-MM-DD');
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DatePicker
@@ -118,6 +123,8 @@ export const MaterialDateControl = (props: ControlProps) => {
         label={label}
         value={value}
         onAccept={onChange}
+        maxDate={maxDate}
+        minDate={minDate}
         format={format}
         views={views}
         disabled={!enabled}
@@ -135,6 +142,7 @@ export const MaterialDateControl = (props: ControlProps) => {
             fullWidth: !appliedUiSchemaOptions.trim,
             inputProps: {
               type: 'text',
+              readonly: true,
             },
             InputLabelProps: data ? { shrink: true } : undefined,
             onFocus: onFocus,

@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import React, { useCallback, useMemo, useState } from 'react';
+import dayjs from 'dayjs';
 import merge from 'lodash/merge';
 import {
   ControlProps,
@@ -114,6 +115,17 @@ export const MaterialDateTimeControl = (props: ControlProps) => {
   if (!visible) {
     return null;
   }
+
+  const maxDateTime = dayjs(
+    appliedUiSchemaOptions?.maxValue,
+    'YYYY-MM-DD HH:mm'
+  );
+
+  const minDateTime = dayjs(
+    appliedUiSchemaOptions?.minValue,
+    'YYYY-MM-DD HH:mm'
+  );
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DateTimePicker
@@ -123,6 +135,8 @@ export const MaterialDateTimeControl = (props: ControlProps) => {
         key={key}
         label={label}
         value={value}
+        maxDateTime={maxDateTime}
+        minDateTime={minDateTime}
         onAccept={onChange}
         format={format}
         ampm={!!appliedUiSchemaOptions.ampm}
