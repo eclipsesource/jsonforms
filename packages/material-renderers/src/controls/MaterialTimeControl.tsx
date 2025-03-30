@@ -44,6 +44,8 @@ import {
   useFocus,
 } from '../util';
 
+const DEFAULT_TIME_FORMAT = 'HH:mm';
+
 export const MaterialTimeControl = (props: ControlProps) => {
   const [focused, onFocus, onBlur] = useFocus();
   const {
@@ -73,7 +75,7 @@ export const MaterialTimeControl = (props: ControlProps) => {
     appliedUiSchemaOptions.showUnfocusedDescription
   );
 
-  const format = appliedUiSchemaOptions.timeFormat ?? 'HH:mm';
+  const format = appliedUiSchemaOptions.timeFormat ?? DEFAULT_TIME_FORMAT;
   const saveFormat = appliedUiSchemaOptions.timeSaveFormat ?? defaultTimeFormat;
 
   const views = appliedUiSchemaOptions.views ?? ['hours', 'minutes'];
@@ -106,8 +108,8 @@ export const MaterialTimeControl = (props: ControlProps) => {
   );
   const value = getData(data, saveFormat);
 
-  const minTime = dayjs(appliedUiSchemaOptions?.minValue, 'HH:mm');
-  const maxTime = dayjs(appliedUiSchemaOptions?.maxValue, 'HH:mm');
+  const minTime = dayjs(appliedUiSchemaOptions?.minValue, DEFAULT_TIME_FORMAT);
+  const maxTime = dayjs(appliedUiSchemaOptions?.maxValue, DEFAULT_TIME_FORMAT);
 
   if (!visible) {
     return null;

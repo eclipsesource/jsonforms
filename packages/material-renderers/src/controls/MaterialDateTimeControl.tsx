@@ -44,6 +44,8 @@ import {
   useFocus,
 } from '../util';
 
+const DEFAULT_DATE_TIME_FORMAT = 'YYYY-MM-DD HH:mm';
+
 export const MaterialDateTimeControl = (props: ControlProps) => {
   const [focused, onFocus, onBlur] = useFocus();
   const {
@@ -70,7 +72,8 @@ export const MaterialDateTimeControl = (props: ControlProps) => {
     appliedUiSchemaOptions.showUnfocusedDescription
   );
 
-  const format = appliedUiSchemaOptions.dateTimeFormat ?? 'YYYY-MM-DD HH:mm';
+  const format =
+    appliedUiSchemaOptions.dateTimeFormat ?? DEFAULT_DATE_TIME_FORMAT;
   const saveFormat =
     appliedUiSchemaOptions.dateTimeSaveFormat ?? defaultDateTimeFormat;
 
@@ -118,12 +121,12 @@ export const MaterialDateTimeControl = (props: ControlProps) => {
 
   const maxDateTime = dayjs(
     appliedUiSchemaOptions?.maxValue,
-    'YYYY-MM-DD HH:mm'
+    DEFAULT_DATE_TIME_FORMAT
   );
 
   const minDateTime = dayjs(
     appliedUiSchemaOptions?.minValue,
-    'YYYY-MM-DD HH:mm'
+    DEFAULT_DATE_TIME_FORMAT
   );
 
   return (
