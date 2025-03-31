@@ -42,6 +42,9 @@ import {
   getData,
   useFocus,
 } from '../util';
+import dayjs from 'dayjs';
+
+const DEFAULT_DATE_FORMAT = 'YYYY-MM-DD';
 
 export const MaterialDateControl = (props: ControlProps) => {
   const [focused, onFocus, onBlur] = useFocus();
@@ -71,7 +74,7 @@ export const MaterialDateControl = (props: ControlProps) => {
   const [key, setKey] = useState<number>(0);
   const [open, setOpen] = useState<boolean>(false);
 
-  const format = appliedUiSchemaOptions.dateFormat ?? 'YYYY-MM-DD';
+  const format = appliedUiSchemaOptions.dateFormat ?? DEFAULT_DATE_FORMAT;
   const saveFormat = appliedUiSchemaOptions.dateSaveFormat ?? defaultDateFormat;
 
   const views = appliedUiSchemaOptions.views ?? ['year', 'day'];
@@ -108,6 +111,10 @@ export const MaterialDateControl = (props: ControlProps) => {
     return null;
   }
 
+  const maxDate = dayjs(appliedUiSchemaOptions?.maxValue, DEFAULT_DATE_FORMAT);
+
+  const minDate = dayjs(appliedUiSchemaOptions?.minValue, DEFAULT_DATE_FORMAT);
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DatePicker
@@ -118,6 +125,8 @@ export const MaterialDateControl = (props: ControlProps) => {
         label={label}
         value={value}
         onAccept={onChange}
+        maxDate={maxDate}
+        minDate={minDate}
         format={format}
         views={views}
         disabled={!enabled}
@@ -135,6 +144,7 @@ export const MaterialDateControl = (props: ControlProps) => {
             fullWidth: !appliedUiSchemaOptions.trim,
             inputProps: {
               type: 'text',
+              readonly: true,
             },
             InputLabelProps: data ? { shrink: true } : undefined,
             onFocus: onFocus,

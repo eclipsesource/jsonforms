@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import React, { useCallback, useMemo, useState } from 'react';
+import dayjs from 'dayjs';
 import merge from 'lodash/merge';
 import {
   ControlProps,
@@ -42,6 +43,8 @@ import {
   getData,
   useFocus,
 } from '../util';
+
+const DEFAULT_DATE_TIME_FORMAT = 'YYYY-MM-DD HH:mm';
 
 export const MaterialDateTimeControl = (props: ControlProps) => {
   const [focused, onFocus, onBlur] = useFocus();
@@ -69,7 +72,8 @@ export const MaterialDateTimeControl = (props: ControlProps) => {
     appliedUiSchemaOptions.showUnfocusedDescription
   );
 
-  const format = appliedUiSchemaOptions.dateTimeFormat ?? 'YYYY-MM-DD HH:mm';
+  const format =
+    appliedUiSchemaOptions.dateTimeFormat ?? DEFAULT_DATE_TIME_FORMAT;
   const saveFormat =
     appliedUiSchemaOptions.dateTimeSaveFormat ?? defaultDateTimeFormat;
 
@@ -114,6 +118,17 @@ export const MaterialDateTimeControl = (props: ControlProps) => {
   if (!visible) {
     return null;
   }
+
+  const maxDateTime = dayjs(
+    appliedUiSchemaOptions?.maxValue,
+    DEFAULT_DATE_TIME_FORMAT
+  );
+
+  const minDateTime = dayjs(
+    appliedUiSchemaOptions?.minValue,
+    DEFAULT_DATE_TIME_FORMAT
+  );
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DateTimePicker
@@ -123,6 +138,8 @@ export const MaterialDateTimeControl = (props: ControlProps) => {
         key={key}
         label={label}
         value={value}
+        maxDateTime={maxDateTime}
+        minDateTime={minDateTime}
         onAccept={onChange}
         format={format}
         ampm={!!appliedUiSchemaOptions.ampm}
@@ -142,6 +159,7 @@ export const MaterialDateTimeControl = (props: ControlProps) => {
             fullWidth: !appliedUiSchemaOptions.trim,
             inputProps: {
               type: 'text',
+              readonly: true,
             },
             InputLabelProps: data ? { shrink: true } : undefined,
             onFocus: onFocus,

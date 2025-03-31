@@ -423,29 +423,28 @@ describe('Material date control', () => {
     input.simulate('blur', input);
     expect(onChangeData.data.foo).toBe('04---1961');
   });
-});
 
-it('should render with a placeholder', () => {
-  const control: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/foo',
-    options: {
-      placeholder: 'Select a date',
-    },
-  };
-  const core = initCore(schema, control, data);
-  const wrapper = mount(
-    <JsonFormsStateProvider initState={{ renderers: materialRenderers, core }}>
-      <MaterialDateControl schema={schema} uischema={control} />
-    </JsonFormsStateProvider>
-  );
+  it('should render with a placeholder', () => {
+    const control: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/foo',
+      options: {
+        placeholder: 'Select a date',
+      },
+    };
+    const core = initCore(schema, control, data);
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, core }}
+      >
+        <MaterialDateControl schema={schema} uischema={control} />
+      </JsonFormsStateProvider>
+    );
 
-  // Log the rendered component tree for debugging
-  console.log(wrapper.debug());
+    // Find the input element
+    const inputElement = wrapper.find('input').first();
 
-  // Find the input element
-  const inputElement = wrapper.find('input').first();
-
-  // Check the placeholder attribute
-  expect(inputElement.props().placeholder).toBe('Select a date');
+    // Check the placeholder attribute
+    expect(inputElement.props().placeholder).toBe('Select a date');
+  });
 });

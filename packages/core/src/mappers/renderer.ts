@@ -668,7 +668,7 @@ export const mapDispatchToControlProps = (
   dispatch: Dispatch<AnyAction>
 ): DispatchPropsOfControl => ({
   handleChange(path, value) {
-    dispatch(update(path, () => value));
+    dispatch && dispatch(update(path, () => value));
   },
 });
 

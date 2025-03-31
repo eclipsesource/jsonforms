@@ -22,6 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import dayjs from 'dayjs';
 import React, { useCallback, useMemo, useState } from 'react';
 import merge from 'lodash/merge';
 import {
@@ -42,6 +43,8 @@ import {
   getData,
   useFocus,
 } from '../util';
+
+const DEFAULT_TIME_FORMAT = 'HH:mm';
 
 export const MaterialTimeControl = (props: ControlProps) => {
   const [focused, onFocus, onBlur] = useFocus();
@@ -72,7 +75,7 @@ export const MaterialTimeControl = (props: ControlProps) => {
     appliedUiSchemaOptions.showUnfocusedDescription
   );
 
-  const format = appliedUiSchemaOptions.timeFormat ?? 'HH:mm';
+  const format = appliedUiSchemaOptions.timeFormat ?? DEFAULT_TIME_FORMAT;
   const saveFormat = appliedUiSchemaOptions.timeSaveFormat ?? defaultTimeFormat;
 
   const views = appliedUiSchemaOptions.views ?? ['hours', 'minutes'];
@@ -105,6 +108,9 @@ export const MaterialTimeControl = (props: ControlProps) => {
   );
   const value = getData(data, saveFormat);
 
+  const minTime = dayjs(appliedUiSchemaOptions?.minValue, DEFAULT_TIME_FORMAT);
+  const maxTime = dayjs(appliedUiSchemaOptions?.maxValue, DEFAULT_TIME_FORMAT);
+
   if (!visible) {
     return null;
   }
@@ -117,6 +123,8 @@ export const MaterialTimeControl = (props: ControlProps) => {
         key={key}
         label={label}
         value={value}
+        maxTime={maxTime}
+        minTime={minTime}
         onAccept={onChange}
         format={format}
         ampm={!!appliedUiSchemaOptions.ampm}
@@ -135,6 +143,7 @@ export const MaterialTimeControl = (props: ControlProps) => {
             fullWidth: !appliedUiSchemaOptions.trim,
             inputProps: {
               type: 'text',
+              readonly: true,
             },
             InputLabelProps: data ? { shrink: true } : undefined,
             onFocus: onFocus,
