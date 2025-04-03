@@ -24,15 +24,19 @@
 */
 import React from 'react';
 import {
+  isVisible,
   LayoutProps,
   RankedTester,
   rankWith,
   uiTypeIs,
   VerticalLayout,
 } from '@mosaic-avantos/jsonforms-core';
+
 import {
+  AjvProps,
   MaterialLayoutRenderer,
   MaterialLayoutRendererProps,
+  withAjvProps,
 } from '../util/layout';
 import { withJsonFormsLayoutProps } from '@mosaic-avantos/jsonforms-react';
 
@@ -45,6 +49,12 @@ export const materialVerticalLayoutTester: RankedTester = rankWith(
   uiTypeIs('VerticalLayout')
 );
 
+export interface MaterialVerticalLayoutRendererProps
+  extends LayoutProps,
+    AjvProps {
+  data?: any;
+}
+
 export const MaterialVerticalLayoutRenderer = ({
   uischema,
   schema,
@@ -53,10 +63,16 @@ export const MaterialVerticalLayoutRenderer = ({
   visible,
   renderers,
   cells,
-}: LayoutProps) => {
+  ajv,
+  data,
+}: MaterialVerticalLayoutRendererProps) => {
   const verticalLayout = uischema as VerticalLayout;
+
+  const visibleElements = verticalLayout.elements?.filter((element) =>
+    isVisible(element, data, path, ajv)
+  );
   const childProps: MaterialLayoutRendererProps = {
-    elements: verticalLayout.elements,
+    elements: visibleElements,
     schema,
     path,
     enabled,
@@ -73,4 +89,6 @@ export const MaterialVerticalLayoutRenderer = ({
   );
 };
 
-export default withJsonFormsLayoutProps(MaterialVerticalLayoutRenderer);
+export default withAjvProps(
+  withJsonFormsLayoutProps(MaterialVerticalLayoutRenderer)
+);
