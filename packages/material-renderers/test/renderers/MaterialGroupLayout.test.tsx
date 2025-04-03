@@ -27,8 +27,11 @@ import Enzyme, { mount } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import MaterialGroupLayout from '../../src/layouts/MaterialGroupLayout';
 import { MaterialLayoutRenderer } from '../../src/util/layout';
+import { createAjv } from '@mosaic-avantos/jsonforms-core/src/util';
 
 Enzyme.configure({ adapter: new Adapter() });
+
+const ajv = createAjv();
 
 const schema = {
   type: 'object',
@@ -73,6 +76,7 @@ describe('Material group layout', () => {
         enabled
         visible
         path=''
+        ajv={ajv}
       />
     );
     expect(wrapper.find(MaterialLayoutRenderer).props().direction).toBe(
@@ -89,6 +93,7 @@ describe('Material group layout', () => {
         enabled
         visible
         path=''
+        ajv={ajv}
       />
     );
     expect(wrapper.find(MaterialLayoutRenderer).props().direction).toBe('row');

@@ -45,6 +45,9 @@ import { MaterialInputControl } from '../../src/controls/MaterialInputControl';
 import MaterialHorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
 import { MuiInputText } from '../../src/mui-controls';
 import { initCore } from './util';
+import { createAjv } from '@mosaic-avantos/jsonforms-core/src/util';
+
+const ajv = createAjv();
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -276,6 +279,7 @@ describe('Material input control', () => {
           enabled
           visible
           path=''
+          ajv={ajv}
         />
       </JsonFormsStateProvider>
     );
