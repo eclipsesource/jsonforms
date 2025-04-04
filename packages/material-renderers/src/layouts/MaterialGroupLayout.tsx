@@ -27,6 +27,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader } from '@mui/material';
 import {
   GroupLayout,
+  isVisible,
   LayoutProps,
   RankedTester,
   rankWith,
@@ -34,13 +35,21 @@ import {
   withIncreasedRank,
 } from '@mosaic-avantos/jsonforms-core';
 import {
+  AjvProps,
   MaterialLabelableLayoutRendererProps,
   MaterialLayoutRenderer,
+  withAjvProps,
 } from '../util/layout';
 import { withJsonFormsLayoutProps } from '@mosaic-avantos/jsonforms-react';
 
 export const groupTester: RankedTester = rankWith(1, uiTypeIs('Group'));
 const style: { [x: string]: any } = { marginBottom: '10px' };
+
+export interface MaterializedGroupLayoutRendererProps
+  extends LayoutProps,
+    AjvProps {
+  data?: any;
+}
 
 const GroupComponent = React.memo(function GroupComponent({
   visible,
@@ -80,12 +89,18 @@ export const MaterializedGroupLayoutRenderer = ({
   cells,
   direction,
   label,
-}: LayoutProps) => {
+  ajv,
+  data,
+}: MaterializedGroupLayoutRendererProps) => {
   const groupLayout = uischema as GroupLayout;
+
+  const visibleElements = groupLayout.elements?.filter((element) =>
+    isVisible(element, data, path, ajv)
+  );
 
   return (
     <GroupComponent
-      elements={groupLayout.elements}
+      elements={visibleElements}
       schema={schema}
       path={path}
       direction={direction}
@@ -99,7 +114,9 @@ export const MaterializedGroupLayoutRenderer = ({
   );
 };
 
-export default withJsonFormsLayoutProps(MaterializedGroupLayoutRenderer);
+export default withAjvProps(
+  withJsonFormsLayoutProps(MaterializedGroupLayoutRenderer)
+);
 
 export const materialGroupTester: RankedTester = withIncreasedRank(
   1,

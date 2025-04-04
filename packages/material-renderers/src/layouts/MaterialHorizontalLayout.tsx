@@ -25,6 +25,7 @@
 import React from 'react';
 import {
   HorizontalLayout,
+  isVisible,
   LayoutProps,
   RankedTester,
   rankWith,
@@ -32,8 +33,10 @@ import {
 } from '@mosaic-avantos/jsonforms-core';
 import { withJsonFormsLayoutProps } from '@mosaic-avantos/jsonforms-react';
 import {
+  AjvProps,
   MaterialLayoutRenderer,
   MaterialLayoutRendererProps,
+  withAjvProps,
 } from '../util/layout';
 
 /**
@@ -45,6 +48,12 @@ export const materialHorizontalLayoutTester: RankedTester = rankWith(
   uiTypeIs('HorizontalLayout')
 );
 
+export interface MaterialHorizontalLayoutRendererProps
+  extends LayoutProps,
+    AjvProps {
+  data?: any;
+}
+
 export const MaterialHorizontalLayoutRenderer = ({
   uischema,
   renderers,
@@ -53,10 +62,17 @@ export const MaterialHorizontalLayoutRenderer = ({
   path,
   enabled,
   visible,
-}: LayoutProps) => {
+  ajv,
+  data,
+}: MaterialHorizontalLayoutRendererProps) => {
   const layout = uischema as HorizontalLayout;
+
+  const visibleElements = layout.elements?.filter((element) =>
+    isVisible(element, data, path, ajv)
+  );
+
   const childProps: MaterialLayoutRendererProps = {
-    elements: layout.elements,
+    elements: visibleElements,
     schema,
     path,
     enabled,
@@ -73,4 +89,6 @@ export const MaterialHorizontalLayoutRenderer = ({
   );
 };
 
-export default withJsonFormsLayoutProps(MaterialHorizontalLayoutRenderer);
+export default withAjvProps(
+  withJsonFormsLayoutProps(MaterialHorizontalLayoutRenderer)
+);
