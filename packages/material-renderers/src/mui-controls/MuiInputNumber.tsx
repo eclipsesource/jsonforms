@@ -39,6 +39,7 @@ export const MuiInputNumber = React.memo(function MuiInputNumber(
     id,
     enabled,
     uischema,
+    isValid,
     path,
     handleChange,
     config,
@@ -68,6 +69,7 @@ export const MuiInputNumber = React.memo(function MuiInputNumber(
       autoFocus={appliedUiSchemaOptions.focus}
       inputProps={inputProps}
       fullWidth={true}
+      error={!isValid}
     />
   );
 });

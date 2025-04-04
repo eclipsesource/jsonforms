@@ -44,6 +44,7 @@ export const MuiSelect = React.memo(function MuiSelect(
     enabled,
     schema,
     uischema,
+    isValid,
     path,
     handleChange,
     options,
@@ -69,6 +70,7 @@ export const MuiSelect = React.memo(function MuiSelect(
       onChange={(ev) => handleChange(path, ev.target.value || undefined)}
       fullWidth={true}
       multiple={multiple || false}
+      error={!isValid}
     >
       {[
         <MenuItem value={''} key='jsonforms.enum.none'>
