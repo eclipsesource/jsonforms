@@ -114,7 +114,7 @@ export enum RuleEffect {
 /**
  * Represents a condition to be evaluated.
  */
-export interface Condition {
+export interface BaseCondition {
   /**
    * The type of condition.
    */
@@ -124,7 +124,7 @@ export interface Condition {
 /**
  * A leaf condition.
  */
-export interface LeafCondition extends Condition, Scoped {
+export interface LeafCondition extends BaseCondition, Scoped {
   type: 'LEAF';
 
   /**
@@ -133,7 +133,7 @@ export interface LeafCondition extends Condition, Scoped {
   expectedValue: any;
 }
 
-export interface SchemaBasedCondition extends Condition, Scoped {
+export interface SchemaBasedCondition extends BaseCondition, Scoped {
   schema: JsonSchema;
 
   /**
@@ -153,7 +153,7 @@ export interface SchemaBasedCondition extends Condition, Scoped {
 /**
  * A composable condition.
  */
-export interface ComposableCondition extends Condition {
+export interface ComposableCondition extends BaseCondition {
   conditions: Condition[];
 }
 
@@ -170,6 +170,13 @@ export interface OrCondition extends ComposableCondition {
 export interface AndCondition extends ComposableCondition {
   type: 'AND';
 }
+
+export type Condition =
+  | BaseCondition
+  | LeafCondition
+  | OrCondition
+  | AndCondition
+  | SchemaBasedCondition;
 
 /**
  * Common base interface for any UI schema element.
