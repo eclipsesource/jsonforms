@@ -36,6 +36,7 @@ export const MuiInputTime = React.memo(function MuiInputTime(
     id,
     enabled,
     uischema,
+    isValid,
     path,
     handleChange,
     config,
@@ -61,6 +62,7 @@ export const MuiInputTime = React.memo(function MuiInputTime(
       disabled={!enabled}
       autoFocus={appliedUiSchemaOptions.focus}
       fullWidth={true}
+      error={!isValid}
     />
   );
 });

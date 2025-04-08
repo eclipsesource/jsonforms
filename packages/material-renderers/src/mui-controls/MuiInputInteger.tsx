@@ -40,6 +40,7 @@ export const MuiInputInteger = React.memo(function MuiInputInteger(
     id,
     enabled,
     uischema,
+    isValid,
     path,
     handleChange,
     config,
@@ -70,6 +71,7 @@ export const MuiInputInteger = React.memo(function MuiInputInteger(
       autoFocus={appliedUiSchemaOptions.focus}
       inputProps={inputProps}
       fullWidth={true}
+      error={!isValid}
     />
   );
 });
