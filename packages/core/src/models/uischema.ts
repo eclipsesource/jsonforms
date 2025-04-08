@@ -171,6 +171,9 @@ export interface AndCondition extends ComposableCondition {
   type: 'AND';
 }
 
+/**
+ * A union of all available conditions.
+ */
 export type Condition =
   | BaseCondition
   | LeafCondition
@@ -292,6 +295,11 @@ export interface Categorization
   elements: (Category | Categorization)[];
 }
 
+/**
+ * A union of all available UI schema elements.
+ * This includes all layout elements, control elements, label elements,
+ * group elements, category elements and categorization elements.
+ */
 export type UISchemaElement =
   | BaseUISchemaElement
   | ControlElement
