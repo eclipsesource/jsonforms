@@ -127,6 +127,6 @@
     "ts-jest": "^27.1.4",
     "tslib": "^2.5.0",
     "typedoc": "~0.25.3",
-    "typescript": "~5.5.0"
+    "typescript": "~5.8.3"
   }
 }

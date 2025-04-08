@@ -96,6 +96,6 @@
     "ts-node": "^10.4.0",
     "tslib": "^2.5.0",
     "typedoc": "~0.25.3",
-    "typescript": "~5.5.0"
+    "typescript": "~5.8.3"
   }
 }
