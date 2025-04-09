@@ -22,6 +22,10 @@ module.exports = {
     '@angular-eslint/component-class-suffix': 'off',
     '@angular-eslint/directive-class-suffix': 'off',
     '@angular-eslint/no-conflicting-lifecycle': 'warn',
+    // Angular ESLint 19+ reports non-standalone components as errors
+    // However, we want keep using non-standalone components in the library
+    // as changing this is a major breaking change for adopters
+    '@angular-eslint/prefer-standalone': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     // Base rule must be disabled to avoid incorrect errors
     'no-unused-vars': 'off',
@@ -35,19 +39,19 @@ module.exports = {
     ],
     // workaround for
     // https://github.com/import-js/eslint-plugin-import/issues/1810:
-    "import/no-unresolved": [
-      "error",
+    'import/no-unresolved': [
+      'error',
       {
         ignore: [
-          "@angular/cdk/.*",
-          "@angular/core/.*",
-          "@angular/material/.*",
-          "@angular/platform-browser/.*",
-          "@angular/platform-browser-dynamic/.*",
-          "core-js/es7/.*",
-          "zone.js/.*",
-        ] 
-      }
+          '@angular/cdk/.*',
+          '@angular/core/.*',
+          '@angular/material/.*',
+          '@angular/platform-browser/.*',
+          '@angular/platform-browser-dynamic/.*',
+          'core-js/es7/.*',
+          'zone.js/.*',
+        ],
+      },
     ],
   },
 };
