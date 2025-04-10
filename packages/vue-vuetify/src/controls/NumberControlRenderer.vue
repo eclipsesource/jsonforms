@@ -36,7 +36,7 @@ import {
   type RendererProps,
 } from '@jsonforms/vue';
 import { defineComponent } from 'vue';
-import { VNumberInput } from 'vuetify/labs/VNumberInput';
+import { VNumberInput } from 'vuetify/components/VNumberInput';
 
 import { useVuetifyControl } from '../util';
 import { default as ControlWrapper } from './ControlWrapper.vue';
