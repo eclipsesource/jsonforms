@@ -592,11 +592,12 @@ export const mapStateToControlProps = (
   const required =
     controlElement.scope !== undefined &&
     isRequired(ownProps.schema, controlElement.scope, rootSchema);
-  const resolvedSchema = Resolve.schema(
-    ownProps.schema || rootSchema,
-    controlElement.scope,
-    rootSchema
-  );
+  const resolvedSchema =
+    Resolve.schema(
+      ownProps.schema || rootSchema,
+      controlElement.scope,
+      rootSchema
+    ) ?? ownProps.schema; // if resolve fails then rely that the ownProps.schema if exist
   const errors = getErrorAt(path, resolvedSchema)(state);
 
   const description =
@@ -871,7 +872,21 @@ export const mapStateToArrayControlProps = (
   const { path, schema, uischema, label, ...props } =
     mapStateToControlWithDetailProps(state, ownProps);
 
-  const resolvedSchema = Resolve.schema(schema, 'items', props.rootSchema);
+  let resolvedSchema = Resolve.schema(schema, 'items', props.rootSchema);
+  if ((resolvedSchema as any) === true) {
+    // help the testers to determine the mixed control
+    resolvedSchema = {
+      type: [
+        'array',
+        'boolean',
+        'integer',
+        'null',
+        'number',
+        'object',
+        'string',
+      ],
+    };
+  }
   const childErrors = getSubErrorsAt(path, resolvedSchema)(state);
 
   return {

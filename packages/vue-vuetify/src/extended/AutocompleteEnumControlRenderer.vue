@@ -65,7 +65,7 @@ import { defineComponent } from 'vue';
 import { VAutocomplete, VSelect } from 'vuetify/components';
 import { default as ControlWrapper } from '../controls/ControlWrapper.vue';
 import { DisabledIconFocus } from '../controls/directives';
-import { useVuetifyControl } from '../util';
+import { determineClearValue, useVuetifyControl } from '../util';
 
 const controlRenderer = defineComponent({
   name: 'autocomplete-enum-control-renderer',
@@ -81,9 +81,10 @@ const controlRenderer = defineComponent({
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
+    const clearValue = determineClearValue('');
     return useVuetifyControl(
       useJsonFormsEnumControl(props),
-      (value) => (value !== null ? value : undefined),
+      (value) => (value === null ? clearValue : value),
       300,
     );
   },
