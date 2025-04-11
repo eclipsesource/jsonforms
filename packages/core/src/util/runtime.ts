@@ -33,6 +33,7 @@ import {
   SchemaBasedCondition,
   Scopable,
   UISchemaElement,
+  ValidateFunctionCondition,
 } from '../models';
 import { resolveData } from './resolvers';
 import type Ajv from 'ajv';
@@ -50,6 +51,12 @@ const isLeafCondition = (condition: Condition): condition is LeafCondition =>
 const isSchemaCondition = (
   condition: Condition
 ): condition is SchemaBasedCondition => has(condition, 'schema');
+
+const isValidateFunctionCondition = (
+  condition: Condition
+): condition is ValidateFunctionCondition =>
+  has(condition, 'validate') &&
+  typeof (condition as ValidateFunctionCondition).validate === 'function';
 
 const getConditionScope = (condition: Scopable, path: string): string => {
   return composeWithUi(condition, path);
@@ -80,6 +87,9 @@ const evaluateCondition = (
       return false;
     }
     return ajv.validate(condition.schema, value) as boolean;
+  } else if (isValidateFunctionCondition(condition)) {
+    const value = resolveData(data, getConditionScope(condition, path));
+    return condition.validate(value);
   } else {
     // unknown condition
     return true;

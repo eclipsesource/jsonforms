@@ -44,6 +44,10 @@ export const schema = {
       type: 'string',
       enum: ['All', 'Some', 'Only potatoes'],
     },
+    vitaminDeficiency: {
+      type: 'string',
+      enum: ['None', 'Vitamin A', 'Vitamin B', 'Vitamin C'],
+    },
   },
 };
 
@@ -97,6 +101,20 @@ export const uischema = {
               scope: '#/properties/vegetables',
               schema: {
                 const: false,
+              },
+            },
+          },
+        },
+        {
+          type: 'Control',
+          label: 'Vitamin deficiency?',
+          scope: '#/properties/vitaminDeficiency',
+          rule: {
+            effect: 'SHOW',
+            condition: {
+              scope: '#',
+              validate: (data: any) => {
+                return !data.dead && data.kindOfVegetables !== 'All';
               },
             },
           },

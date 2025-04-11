@@ -150,6 +150,16 @@ export interface SchemaBasedCondition extends BaseCondition, Scoped {
   failWhenUndefined?: boolean;
 }
 
+/** A condition using a validation function to determine its fulfillment. */
+export interface ValidateFunctionCondition extends BaseCondition, Scoped {
+  /**
+   * Validates whether the condition is fulfilled.
+   *
+   * @param data The data as resolved via the scope.
+   * @returns `true` if the condition is fulfilled */
+  validate: (data: unknown) => boolean;
+}
+
 /**
  * A composable condition.
  */
@@ -179,7 +189,8 @@ export type Condition =
   | LeafCondition
   | OrCondition
   | AndCondition
-  | SchemaBasedCondition;
+  | SchemaBasedCondition
+  | ValidateFunctionCondition;
 
 /**
  * Common base interface for any UI schema element.
