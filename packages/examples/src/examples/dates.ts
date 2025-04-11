@@ -103,6 +103,33 @@ export const uischema = {
       elements: [
         {
           type: 'Control',
+          scope: '#/properties/schemaBased/properties/date',
+          options: {
+            maxValue: 'Today',
+          },
+        },
+        {
+          type: 'Control',
+          scope: '#/properties/schemaBased/properties/time',
+          options: {
+            maxValue: '18:50',
+            minValue: '10:10',
+          },
+        },
+        {
+          type: 'Control',
+          scope: '#/properties/schemaBased/properties/datetime',
+          options: {
+            minValue: 'Today',
+          },
+        },
+      ],
+    },
+    {
+      type: 'HorizontalLayout',
+      elements: [
+        {
+          type: 'Control',
           scope: '#/properties/uiSchemaBased/properties/date',
           label: 'Year Month Picker',
           options: {

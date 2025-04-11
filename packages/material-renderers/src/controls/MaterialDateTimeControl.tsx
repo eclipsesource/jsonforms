@@ -45,6 +45,7 @@ import {
 } from '../util';
 
 const DEFAULT_DATE_TIME_FORMAT = 'YYYY-MM-DD HH:mm';
+const RELATIVE_DATE_TODAY = 'Today';
 
 export const MaterialDateTimeControl = (props: ControlProps) => {
   const [focused, onFocus, onBlur] = useFocus();
@@ -119,16 +120,25 @@ export const MaterialDateTimeControl = (props: ControlProps) => {
     return null;
   }
 
-  const maxDateTime = dayjs(
-    appliedUiSchemaOptions?.maxValue,
-    DEFAULT_DATE_TIME_FORMAT
+  const now = dayjs();
+
+  const parseDateTimeBound = (
+    value: string | undefined
+  ): dayjs.Dayjs | undefined => {
+    if (!value) return undefined;
+    if (value === RELATIVE_DATE_TODAY) return now;
+    return dayjs(value, DEFAULT_DATE_TIME_FORMAT);
+  };
+
+  const maxDateTime = useMemo(
+    () => parseDateTimeBound(appliedUiSchemaOptions?.maxValue),
+    [appliedUiSchemaOptions?.maxValue]
   );
 
-  const minDateTime = dayjs(
-    appliedUiSchemaOptions?.minValue,
-    DEFAULT_DATE_TIME_FORMAT
+  const minDateTime = useMemo(
+    () => parseDateTimeBound(appliedUiSchemaOptions?.minValue),
+    [appliedUiSchemaOptions?.minValue]
   );
-
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DateTimePicker
