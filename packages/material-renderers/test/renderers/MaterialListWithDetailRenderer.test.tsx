@@ -403,7 +403,9 @@ describe('Material list with detail renderer', () => {
     expect(wrapper.find(ListItemButton).find(Typography).at(0).text()).toBe(
       'El Barto was here'
     );
-    expect(wrapper.find(ListItemButton).find(Typography).at(1).text()).toBe('Yolo');
+    expect(wrapper.find(ListItemButton).find(Typography).at(1).text()).toBe(
+      'Yolo'
+    );
   });
 
   it('should render first simple enum property as translated child label', () => {
