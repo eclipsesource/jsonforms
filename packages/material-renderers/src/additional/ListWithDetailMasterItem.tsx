@@ -27,7 +27,7 @@ import { withJsonFormsMasterListItemProps } from '@jsonforms/react';
 import {
   Avatar,
   IconButton,
-  ListItem,
+  ListItemButton,
   ListItemAvatar,
   ListItemSecondaryAction,
   ListItemText,
@@ -48,7 +48,7 @@ export const ListWithDetailMasterItem = ({
   disableRemove,
 }: StatePropsOfMasterItem) => {
   return (
-    <ListItem button selected={selected} onClick={handleSelect(index)}>
+    <ListItemButton selected={selected} onClick={handleSelect(index)}>
       <ListItemAvatar>
         <Avatar aria-label='Index'>{index + 1}</Avatar>
       </ListItemAvatar>
@@ -70,7 +70,7 @@ export const ListWithDetailMasterItem = ({
           </Tooltip>
         </ListItemSecondaryAction>
       )}
-    </ListItem>
+    </ListItemButton>
   );
 };
 
