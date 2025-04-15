@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CellProps, WithClassname } from '@jsonforms/core';
 import {
   IconButton,
@@ -38,6 +38,7 @@ import {
   WithInputProps,
   useDebouncedChange,
   useInputComponent,
+  useFocus,
 } from '../util';
 
 interface MuiTextInputProps {
@@ -51,6 +52,7 @@ const eventToValue = (ev: any) =>
 export const MuiInputText = React.memo(function MuiInputText(
   props: CellProps & WithClassname & MuiTextInputProps & WithInputProps
 ) {
+  const [focused, onFocus, onBlur] = useFocus();
   const [showAdornment, setShowAdornment] = useState(false);
   const {
     data,
@@ -83,13 +85,18 @@ export const MuiInputText = React.memo(function MuiInputText(
     inputProps.size = maxLength;
   }
 
-  const [inputText, onChange, onClear] = useDebouncedChange(
+  const [inputText, onChange, onClear, cancelDebounce] = useDebouncedChange(
     handleChange,
     '',
     data,
     path,
-    eventToValue
+    eventToValue,
   );
+  useEffect(() => {
+    if (!focused) {
+      cancelDebounce();
+    }
+  }, [focused, cancelDebounce]);
   const onPointerEnter = () => setShowAdornment(true);
   const onPointerLeave = () => setShowAdornment(false);
 
@@ -109,6 +116,8 @@ export const MuiInputText = React.memo(function MuiInputText(
       value={inputText}
       onChange={onChange}
       className={className}
+      onBlur={onBlur}
+      onFocus={onFocus}
       id={id}
       disabled={!enabled}
       autoFocus={appliedUiSchemaOptions.focus}
