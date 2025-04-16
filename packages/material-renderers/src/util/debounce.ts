@@ -44,7 +44,7 @@ export const useDebouncedChange = ({
   defaultValue = '',
   flushOnBlur = false,
   focused = false,
-  timeout = 500,
+  timeout = 300,
 }: DebouncedChangeParams): [any, React.ChangeEventHandler, () => void] => {
   const [input, setInput] = useState(data ?? defaultValue);
   useEffect(() => {
