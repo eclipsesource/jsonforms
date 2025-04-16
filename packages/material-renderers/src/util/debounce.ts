@@ -25,17 +25,27 @@
 import debounce from 'lodash/debounce';
 import { useState, useCallback, useEffect } from 'react';
 
-const eventToValue = (ev: any) => ev.target.value;
-export const useDebouncedChange = (
-  handleChange: (path: string, value: any) => void,
-  defaultValue: any,
-  data: any,
-  path: string,
-  eventToValueFunction: (ev: any) => any = eventToValue,
-  focused = false,
+const defaultEventToValue = (ev: any) => ev.target.value;
+interface DebouncedChangeParams {
+  handleChange: (path: string, value: any) => void;
+  data: any;
+  path: string;
+  eventToValue?: (ev: any) => any;
+  defaultValue?: any;
+  flushOnBlur?: boolean;
+  focused?: boolean;
+  timeout?: number;
+}
+export const useDebouncedChange = ({
+  handleChange,
+  data,
+  path,
+  eventToValue = defaultEventToValue,
+  defaultValue = '',
   flushOnBlur = false,
-  timeout = 300
-): [any, React.ChangeEventHandler, () => void] => {
+  focused = false,
+  timeout = 500,
+}: DebouncedChangeParams): [any, React.ChangeEventHandler, () => void] => {
   const [input, setInput] = useState(data ?? defaultValue);
   useEffect(() => {
     setInput(data ?? defaultValue);
@@ -51,11 +61,11 @@ export const useDebouncedChange = (
   }, [focused, flushOnBlur, debouncedUpdate]);
   const onChange = useCallback(
     (ev: any) => {
-      const newValue = eventToValueFunction(ev);
+      const newValue = eventToValue(ev);
       setInput(newValue ?? defaultValue);
       debouncedUpdate(newValue);
     },
-    [debouncedUpdate, eventToValueFunction]
+    [debouncedUpdate, eventToValue]
   );
   const onClear = useCallback(() => {
     setInput(defaultValue);
