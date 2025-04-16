@@ -32,8 +32,10 @@ export const useDebouncedChange = (
   data: any,
   path: string,
   eventToValueFunction: (ev: any) => any = eventToValue,
+  focused = false,
+  flushOnBlur = false,
   timeout = 300
-): [any, React.ChangeEventHandler, () => void, () => void] => {
+): [any, React.ChangeEventHandler, () => void] => {
   const [input, setInput] = useState(data ?? defaultValue);
   useEffect(() => {
     setInput(data ?? defaultValue);
@@ -42,6 +44,11 @@ export const useDebouncedChange = (
     debounce((newValue: string) => handleChange(path, newValue), timeout),
     [handleChange, path, timeout]
   );
+  useEffect(() => {
+    if (!focused && flushOnBlur) {
+      debouncedUpdate.flush();
+    }
+  }, [focused, flushOnBlur, debouncedUpdate]);
   const onChange = useCallback(
     (ev: any) => {
       const newValue = eventToValueFunction(ev);
@@ -54,8 +61,5 @@ export const useDebouncedChange = (
     setInput(defaultValue);
     handleChange(path, undefined);
   }, [defaultValue, handleChange, path]);
-  const immediateUpdate = useCallback(() => {
-    debouncedUpdate.flush();
-  }, [debouncedUpdate]);
-  return [input, onChange, onClear, immediateUpdate];
+  return [input, onChange, onClear];
 };

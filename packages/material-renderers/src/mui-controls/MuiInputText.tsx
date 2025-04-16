@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { CellProps, WithClassname } from '@jsonforms/core';
 import {
   IconButton,
@@ -85,18 +85,15 @@ export const MuiInputText = React.memo(function MuiInputText(
     inputProps.size = maxLength;
   }
 
-  const [inputText, onChange, onClear, cancelDebounce] = useDebouncedChange(
+  const [inputText, onChange, onClear] = useDebouncedChange(
     handleChange,
     '',
     data,
     path,
     eventToValue,
+    focused,
+    true
   );
-  useEffect(() => {
-    if (!focused) {
-      cancelDebounce();
-    }
-  }, [focused, cancelDebounce]);
   const onPointerEnter = () => setShowAdornment(true);
   const onPointerLeave = () => setShowAdornment(false);
 
