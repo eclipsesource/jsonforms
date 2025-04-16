@@ -40,7 +40,7 @@ export const useDebouncedChange = ({
   handleChange,
   data,
   path,
-  eventToValue = defaultEventToValue,
+  eventToValue = undefined,
   defaultValue = '',
   flushOnBlur = false,
   focused = false,
@@ -61,7 +61,9 @@ export const useDebouncedChange = ({
   }, [focused, flushOnBlur, debouncedUpdate]);
   const onChange = useCallback(
     (ev: any) => {
-      const newValue = eventToValue(ev);
+      const newValue = eventToValue
+        ? eventToValue(ev)
+        : defaultEventToValue(ev);
       setInput(newValue ?? defaultValue);
       debouncedUpdate(newValue);
     },
