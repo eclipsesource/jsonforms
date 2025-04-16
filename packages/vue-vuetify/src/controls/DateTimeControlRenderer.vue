@@ -20,10 +20,9 @@
       v-bind="vuetifyProps('v-text-field')"
       v-model="inputModel"
       :clearable="control.enabled"
-      @click:clear="clear"
       @focus="handleFocus"
       @blur="handleBlur"
-      v-maska:[options]
+      v-maska:[options]="maska"
     >
       <template v-slot:prepend-inner>
         <v-menu
@@ -181,7 +180,7 @@ import {
   useJsonFormsControl,
   type RendererProps,
 } from '@jsonforms/vue';
-import { computed, defineComponent, ref, unref } from 'vue';
+import { computed, reactive, defineComponent, ref, unref } from 'vue';
 import {
   VBtn,
   VCard,
@@ -208,6 +207,7 @@ import { useDisplay, useLocale } from 'vuetify';
 import type { IconValue } from '../icons';
 import {
   convertDayjsToMaskaFormat,
+  determineClearValue,
   expandLocaleFormat,
   parseDateTime,
   useIcons,
@@ -260,10 +260,11 @@ const controlRenderer = defineComponent({
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
+    const clearValue = determineClearValue('');
     const t = useTranslator();
     const showMenu = ref(false);
     const activeTab = ref<'date' | 'time'>('date');
-    const adaptValue = (value: any) => value || undefined;
+    const adaptValue = (value: any) => (value === null ? clearValue : value);
 
     const control = useVuetifyControl(useJsonFormsControl(props), adaptValue);
     const { mobile } = useDisplay();
@@ -277,7 +278,11 @@ const controlRenderer = defineComponent({
     );
 
     const useMask = control.appliedOptions.value.mask !== false;
-    const maskCompleted = ref(false);
+    const maska = reactive({
+      masked: '',
+      unmasked: '',
+      completed: false,
+    });
 
     const state = computed(() =>
       convertDayjsToMaskaFormat(dateTimeFormat.value),
@@ -289,8 +294,6 @@ const controlRenderer = defineComponent({
           mask: state.value.mask,
           tokens: state.value.tokens,
           tokensReplace: true,
-          onMaska: (detail: MaskaDetail) =>
-            (maskCompleted.value = detail.completed),
 
           //invoke the locale.current as side effect so that the computed will rerun if the locale changes since the mask could be dependent on the locale
           _locale: unref(locale.current),
@@ -308,7 +311,7 @@ const controlRenderer = defineComponent({
       dateTimeFormat,
       options,
       useMask,
-      maskCompleted,
+      maska,
     };
   },
   watch: {
@@ -483,22 +486,29 @@ const controlRenderer = defineComponent({
       return undefined;
     },
     inputModel: {
-      get(): string | undefined {
+      get(): string | null {
         const value = this.control.data;
         const date = parseDateTime(value, this.formats);
         return date ? date.format(this.dateTimeFormat) : value;
       },
-      set(val: string | undefined): void {
+      set(val: string | null): void {
         let value = val;
 
-        if (
-          this.useMask &&
-          !this.maskCompleted &&
-          value !== null &&
-          value !== undefined
-        ) {
+        if (this.useMask && !this.maska.completed && value) {
           // the value is set not not yet completed so do not set that until the full mask is completed
           // otherwise if the control.data is bound to another renderer with different dateTimeFormat then those will collide
+          return;
+        }
+
+        if (value == null) {
+          // clear
+          this.maska.masked = '';
+          this.maska.unmasked = '';
+          this.maska.completed = false;
+        }
+
+        if (this.useMask && value === '' && this.maska.unmasked === '') {
+          // once cleared the maska will set the value to ''
           return;
         }
 
@@ -521,11 +531,8 @@ const controlRenderer = defineComponent({
 
         const date = dateTime ? dateTime.toDate() : undefined;
 
-        const time = dateTime
-          ? this.useSeconds
-            ? dateTime.format('HH:mm:ss')
-            : dateTime.format('HH:mm')
-          : undefined;
+        const format = this.useSeconds ? 'HH:mm:ss' : 'HH:mm';
+        const time = dateTime ? dateTime.format(format) : undefined;
 
         return { date, time };
       },
@@ -579,9 +586,6 @@ const controlRenderer = defineComponent({
         );
         this.onChange(dateTime!.format(this.dateTimeSaveFormat));
       }
-    },
-    clear(): void {
-      this.inputModel = undefined;
     },
   },
 });
