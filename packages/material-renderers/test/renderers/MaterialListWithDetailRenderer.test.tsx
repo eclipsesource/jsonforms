@@ -38,7 +38,7 @@ import MaterialListWithDetailRenderer, {
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { JsonFormsStateProvider } from '@jsonforms/react';
-import { ListItem, Typography } from '@mui/material';
+import { ListItemButton, Typography } from '@mui/material';
 import { initCore, testTranslator } from './util';
 import { checkTooltip, checkTooltipTranslation } from './tooltipChecker';
 
@@ -179,8 +179,8 @@ describe('Material list with detail renderer', () => {
       </JsonFormsStateProvider>
     );
 
-    const lis = wrapper.find('li');
-    expect(lis).toHaveLength(2);
+    const listItemButtons = wrapper.find('div[role="button"]');
+    expect(listItemButtons).toHaveLength(2);
   });
   it('should render empty entries', () => {
     const core = initCore(schema, uischema, []);
@@ -364,8 +364,8 @@ describe('Material list with detail renderer', () => {
 
     wrapper.update();
 
-    const lis = wrapper.find('li');
-    expect(lis).toHaveLength(3);
+    const listItemButtons = wrapper.find('div[role="button"]');
+    expect(listItemButtons).toHaveLength(3);
   });
 
   it('remove data from the array', () => {
@@ -378,14 +378,14 @@ describe('Material list with detail renderer', () => {
       </JsonFormsStateProvider>
     );
 
-    expect(wrapper.find(ListItem)).toHaveLength(2);
+    expect(wrapper.find(ListItemButton)).toHaveLength(2);
 
     const removeButton = wrapper.find('button').at(1);
     removeButton.simulate('click');
     wrapper.update();
 
-    const lis = wrapper.find(ListItem);
-    expect(lis).toHaveLength(1);
+    const listItemButtons = wrapper.find(ListItemButton);
+    expect(listItemButtons).toHaveLength(1);
   });
 
   it('should render first simple property', () => {
@@ -398,12 +398,14 @@ describe('Material list with detail renderer', () => {
       </JsonFormsStateProvider>
     );
 
-    expect(wrapper.find(ListItem)).toHaveLength(2);
+    expect(wrapper.find(ListItemButton)).toHaveLength(2);
 
-    expect(wrapper.find(ListItem).find(Typography).at(0).text()).toBe(
+    expect(wrapper.find(ListItemButton).find(Typography).at(0).text()).toBe(
       'El Barto was here'
     );
-    expect(wrapper.find(ListItem).find(Typography).at(1).text()).toBe('Yolo');
+    expect(wrapper.find(ListItemButton).find(Typography).at(1).text()).toBe(
+      'Yolo'
+    );
   });
 
   it('should render first simple enum property as translated child label', () => {
@@ -419,15 +421,15 @@ describe('Material list with detail renderer', () => {
       </JsonFormsStateProvider>
     );
 
-    expect(wrapper.find(ListItem)).toHaveLength(3);
+    expect(wrapper.find(ListItemButton)).toHaveLength(3);
 
-    expect(wrapper.find(ListItem).find(Typography).at(0).text()).toBe(
+    expect(wrapper.find(ListItemButton).find(Typography).at(0).text()).toBe(
       'MSG_TYPE_1'
     );
-    expect(wrapper.find(ListItem).find(Typography).at(1).text()).toBe(
+    expect(wrapper.find(ListItemButton).find(Typography).at(1).text()).toBe(
       'MSG_TYPE_2'
     );
-    expect(wrapper.find(ListItem).find(Typography).at(2).text()).toBe('');
+    expect(wrapper.find(ListItemButton).find(Typography).at(2).text()).toBe('');
   });
 
   it('should have no data message when no translator set', () => {

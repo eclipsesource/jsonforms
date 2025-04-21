@@ -1,5 +1,15 @@
 # Migration guide
 
+## Migrating to JSON Forms 3.6
+
+### UI schema type changes
+
+The `UISchemaElement` type was renamed to `BaseUISchemaElement` and a new `UISchemaElement` type was introduced, which is a union of all available UI schema types.
+
+The `Condition` type was renamed to `BaseCondition` and a new `Condition` type was introduced, which is a union of all available condition types.
+
+Both unions include their respective base type for backwards compatibility, but if you run into errors, replace `UISchemaElement` with `BaseUISchemaElement`/`Condition` with `BaseCondition` in your code to restore the old behaviour.
+
 ## Migrating to JSON Forms 3.5
 
 ### Angular support now targets Angular 18 and Angular 19
