@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/examples",
-  "version": "3.5.1",
+  "version": "3.6.0-alpha.0",
   "description": "JSON Forms Example Data",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -47,11 +47,11 @@
     "lodash": "^4.17.21"
   },
   "peerDependencies": {
-    "@jsonforms/core": "3.5.1"
+    "@jsonforms/core": "3.6.0-alpha.0"
   },
   "devDependencies": {
     "@jsonforms/core": "workspace:*",
-    "@types/node": "^18.19.4",
+    "@types/node": "^22.13.8",
     "@typescript-eslint/eslint-plugin": "^5.54.1",
     "@typescript-eslint/parser": "^5.54.1",
     "eslint": "^8.56.0",

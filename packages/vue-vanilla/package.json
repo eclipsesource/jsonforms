@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/vue-vanilla",
-  "version": "3.5.1",
+  "version": "3.6.0-alpha.0",
   "description": "Vue 3 Vanilla renderers for JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -60,7 +60,7 @@
     "@types/chai": "^4.2.11",
     "@types/jest": "^27.4.1",
     "@types/mocha": "^5.2.4",
-    "@types/node": "^18.19.4",
+    "@types/node": "^22.13.8",
     "@typescript-eslint/eslint-plugin": "^5.54.1",
     "@typescript-eslint/parser": "^5.54.1",
     "@vue/cli-plugin-babel": "~5.0.8",
@@ -93,8 +93,8 @@
     "vue-jest": "^5.0.0-0"
   },
   "peerDependencies": {
-    "@jsonforms/core": "3.5.1",
-    "@jsonforms/vue": "3.5.1",
+    "@jsonforms/core": "3.6.0-alpha.0",
+    "@jsonforms/vue": "3.6.0-alpha.0",
     "vue": "^3.2.26"
   }
 }
