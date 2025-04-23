@@ -36,6 +36,12 @@ export interface CombinatorSubSchemaRenderInfo {
 
 export type CombinatorKeyword = 'anyOf' | 'oneOf' | 'allOf';
 
+/** Custom schema keyword to define the property identifying different combinator schemas. */
+export const COMBINATOR_TYPE_PROPERTY = 'x-jsf-type-property';
+
+/** Default properties that are used to identify combinator schemas. */
+export const COMBINATOR_IDENTIFICATION_PROPERTIES = ['type', 'kind'];
+
 export const createCombinatorRenderInfos = (
   combinatorSubSchemas: JsonSchema[],
   rootSchema: JsonSchema,
@@ -67,3 +73,84 @@ export const createCombinatorRenderInfos = (
         `${keyword}-${subSchemaIndex}`,
     };
   });
+
+/**
+ * Returns the index of the schema in the given combinator keyword that matches the identification property of the given data object.
+ * The heuristic only works for data objects with a corresponding schema. If the data is a primitive value or an array, the heuristic does not work.
+ *
+ * The following heuristics are applied:
+ * If the schema defines a `x-jsf-type-property`, it is used as the identification property.
+ * Otherwise, the first of the following properties is used if it exists in at least one combinator schema and has a `const` entry:
+ * - `type`
+ * - `kind`
+ *
+ * If the index cannot be determined, `-1` is returned.
+ *
+ * @returns the index of the fitting schema or `-1` if no fitting schema was found
+ */
+export const getCombinatorIndexOfFittingSchema = (
+  data: any,
+  keyword: CombinatorKeyword,
+  schema: JsonSchema,
+  rootSchema: JsonSchema
+): number => {
+  if (typeof data !== 'object' || data === null) {
+    return -1;
+  }
+
+  // Resolve all schemas in the combinator.
+  const resolvedCombinatorSchemas = [];
+  for (let i = 0; i < schema[keyword]?.length; i++) {
+    let resolvedSchema = schema[keyword][i];
+    if (resolvedSchema.$ref) {
+      resolvedSchema = Resolve.schema(
+        rootSchema,
+        resolvedSchema.$ref,
+        rootSchema
+      );
+    }
+    resolvedCombinatorSchemas.push(resolvedSchema);
+  }
+
+  // Determine the identification property
+  let idProperty: string | undefined;
+  if (
+    COMBINATOR_TYPE_PROPERTY in schema &&
+    typeof schema[COMBINATOR_TYPE_PROPERTY] === 'string'
+  ) {
+    idProperty = schema[COMBINATOR_TYPE_PROPERTY];
+  } else {
+    // Use the first default identification property that has a const entry in at least one of the schemas
+    for (const potentialIdProp of COMBINATOR_IDENTIFICATION_PROPERTIES) {
+      for (const resolvedSchema of resolvedCombinatorSchemas) {
+        if (resolvedSchema.properties?.[potentialIdProp]?.const !== undefined) {
+          idProperty = potentialIdProp;
+          break;
+        }
+      }
+    }
+  }
+
+  let indexOfFittingSchema = -1;
+  if (idProperty === undefined) {
+    return indexOfFittingSchema;
+  }
+
+  // Check if the data matches the identification property of one of the resolved schemas
+  for (let i = 0; i < resolvedCombinatorSchemas.length; i++) {
+    const resolvedSchema = resolvedCombinatorSchemas[i];
+
+    // Match the identification property against a constant value in resolvedSchema
+    const maybeConstIdValue = resolvedSchema.properties?.[idProperty]?.const;
+
+    if (
+      maybeConstIdValue !== undefined &&
+      data[idProperty] === maybeConstIdValue
+    ) {
+      indexOfFittingSchema = i;
+      break;
+    }
+  }
+
+  return indexOfFittingSchema;
+};
