@@ -10,6 +10,10 @@ The `Condition` type was renamed to `BaseCondition` and a new `Condition` type w
 
 Both unions include their respective base type for backwards compatibility, but if you run into errors, replace `UISchemaElement` with `BaseUISchemaElement`/`Condition` with `BaseCondition` in your code to restore the old behaviour.
 
+### Vuetify renderers now target vuetify `^3.8.0`
+
+The supported Vuetify version was raised from `^3.6.6` to `^3.8.0` due to the promotion of `VNumberInput` from labs to core.
+
 ## Migrating to JSON Forms 3.5
 
 ### Angular support now targets Angular 18 and Angular 19
