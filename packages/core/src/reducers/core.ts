@@ -222,7 +222,67 @@ const createDynamicSchema = (
     }
   });
 
-  // Check if required fields actually changed
+  // Handle array item field rules
+  Object.entries(schema.properties).forEach(([arrayKey, propertySchema]) => {
+    if (
+      propertySchema.type === 'array' &&
+      propertySchema.items &&
+      (propertySchema.items as JsonSchema).type === 'object'
+    ) {
+      const arrayUiControl = findControlForProperty(uischema, arrayKey);
+      console.log('arrayUiControl', arrayUiControl);
+      const itemUiElements = arrayUiControl?.options?.detail?.elements ?? [];
+      console.log('arrayUiControl', itemUiElements);
+      // const arrayData = data?.[arrayKey] ?? [];
+
+      const updatedItemRequired = Array.isArray(
+        (propertySchema.items as JsonSchema).required
+      )
+        ? [...(propertySchema.items as JsonSchema).required]
+        : [];
+
+      itemUiElements.forEach((columnControl: any) => {
+        console.log('columnControl', columnControl);
+        const columnKey = columnControl.scope?.split('/').pop();
+        if (!columnKey) return;
+
+        console.log(data);
+        const isColRequired = isRequired(
+          columnControl,
+          data,
+          `${arrayKey}.0`,
+          ajv
+        );
+
+        if (hasRequiredRule(columnControl)) {
+          if (isColRequired && !updatedItemRequired.includes(columnKey)) {
+            updatedItemRequired.push(columnKey);
+            requiredChanged = true;
+          } else if (
+            !isColRequired &&
+            updatedItemRequired.includes(columnKey)
+          ) {
+            const index = updatedItemRequired.indexOf(columnKey);
+            updatedItemRequired.splice(index, 1);
+            requiredChanged = true;
+          }
+        }
+      });
+
+      if (updatedItemRequired.length > 0) {
+        const updatedItemsSchema = {
+          ...(propertySchema.items as JsonSchema),
+          required: updatedItemRequired,
+        };
+        schema.properties[arrayKey] = {
+          ...propertySchema,
+          items: updatedItemsSchema,
+        };
+        requiredChanged = true;
+      }
+    }
+  });
+
   const newRequired = requiredFields.length > 0 ? requiredFields : undefined;
   const requiredEqual = isEqual(schema.required, newRequired);
 

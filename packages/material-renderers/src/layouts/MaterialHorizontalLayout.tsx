@@ -25,7 +25,6 @@
 import React from 'react';
 import {
   HorizontalLayout,
-  isVisible,
   LayoutProps,
   RankedTester,
   rankWith,
@@ -62,17 +61,11 @@ export const MaterialHorizontalLayoutRenderer = ({
   path,
   enabled,
   visible,
-  ajv,
-  data,
 }: MaterialHorizontalLayoutRendererProps) => {
   const layout = uischema as HorizontalLayout;
 
-  const visibleElements = layout.elements?.filter((element) =>
-    isVisible(element, data, path, ajv)
-  );
-
   const childProps: MaterialLayoutRendererProps = {
-    elements: visibleElements,
+    elements: layout.elements,
     schema,
     path,
     enabled,
