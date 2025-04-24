@@ -64,18 +64,19 @@ const getConditionScope = (condition: Scopable, path: string): string => {
 
 const evaluateCondition = (
   data: any,
+  uischema: UISchemaElement,
   condition: Condition,
   path: string,
   ajv: Ajv
 ): boolean => {
   if (isAndCondition(condition)) {
     return condition.conditions.reduce(
-      (acc, cur) => acc && evaluateCondition(data, cur, path, ajv),
+      (acc, cur) => acc && evaluateCondition(data, uischema, cur, path, ajv),
       true
     );
   } else if (isOrCondition(condition)) {
     return condition.conditions.reduce(
-      (acc, cur) => acc || evaluateCondition(data, cur, path, ajv),
+      (acc, cur) => acc || evaluateCondition(data, uischema, cur, path, ajv),
       false
     );
   } else if (isLeafCondition(condition)) {
@@ -89,7 +90,13 @@ const evaluateCondition = (
     return ajv.validate(condition.schema, value) as boolean;
   } else if (isValidateFunctionCondition(condition)) {
     const value = resolveData(data, getConditionScope(condition, path));
-    return condition.validate(value);
+    const context = {
+      data: value,
+      fullData: data,
+      path,
+      uischemaElement: uischema,
+    };
+    return condition.validate(context);
   } else {
     // unknown condition
     return true;
@@ -103,7 +110,7 @@ const isRuleFulfilled = (
   ajv: Ajv
 ): boolean => {
   const condition = uischema.rule.condition;
-  return evaluateCondition(data, condition, path, ajv);
+  return evaluateCondition(data, uischema, condition, path, ajv);
 };
 
 export const evalVisibility = (

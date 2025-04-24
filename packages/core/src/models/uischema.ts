@@ -157,7 +157,18 @@ export interface ValidateFunctionCondition extends BaseCondition, Scoped {
    *
    * @param data The data as resolved via the scope.
    * @returns `true` if the condition is fulfilled */
-  validate: (data: unknown) => boolean;
+  validate: (context: ValidateFunctionContext) => boolean;
+}
+
+export interface ValidateFunctionContext {
+  /** The resolved data scoped to the `ValidateFunctionCondition`'s scope. */
+  data: unknown;
+  /** The full data of the form. */
+  fullData: unknown;
+  /** Optional instance path. Necessary when the actual data path can not be inferred via the scope alone as it is the case with nested controls. */
+  path: string | undefined;
+  /** The `UISchemaElement` containing the rule that uses the ValidateFunctionCondition, e.g. a `ControlElement` */
+  uischemaElement: UISchemaElement;
 }
 
 /**
