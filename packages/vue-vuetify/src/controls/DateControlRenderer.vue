@@ -1,6 +1,8 @@
 <template>
-  <control-wrapper
+  <component
+    :is="resolvedWrapper"
     v-bind="controlWrapper"
+    :control="control"
     :styles="styles"
     :isFocused="isFocused"
     :appliedOptions="appliedOptions"
@@ -73,12 +75,12 @@
         </v-menu>
       </template>
     </v-text-field>
-  </control-wrapper>
+  </component>
 </template>
 
 <script lang="ts">
 import { type ControlElement, type JsonSchema } from '@jsonforms/core';
-import { computed, defineComponent, ref, unref } from 'vue';
+import { computed, defineComponent, inject, ref, unref } from 'vue';
 
 import {
   rendererProps,
@@ -140,6 +142,7 @@ const controlRenderer = defineComponent({
     const adaptValue = (value: any) => value || undefined;
     const control = useVuetifyControl(useJsonFormsControl(props), adaptValue);
 
+    const resolvedWrapper = inject('controlWrapperOverride', ControlWrapper);
     const dateFormat = computed<string>(
       () =>
         typeof control.appliedOptions.value.dateFormat == 'string'
@@ -176,6 +179,7 @@ const controlRenderer = defineComponent({
       options,
       useMask,
       maskCompleted,
+      resolvedWrapper,
     };
   },
   computed: {
