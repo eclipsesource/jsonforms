@@ -222,6 +222,7 @@ const createDynamicSchema = (
     }
   });
 
+  // Check if required fields actually changed
   const newRequired = requiredFields.length > 0 ? requiredFields : undefined;
   const requiredEqual = isEqual(schema.required, newRequired);
 
