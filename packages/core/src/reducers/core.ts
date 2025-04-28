@@ -50,8 +50,6 @@ import {
   createAjv,
   validate,
   findControlForProperty,
-  hasRequiredRule,
-  isRequired,
   hasValueRule,
   evalValue,
   hasShowRule,
@@ -142,13 +140,6 @@ const createDynamicSchema = (
     return { schema, updatedData: data };
   }
 
-  // Start with existing required fields or empty array
-  const requiredFields = Array.isArray(schema.required)
-    ? [...schema.required]
-    : [];
-
-  // Track if anything actually changes
-  let requiredChanged = false;
   let dataChanged = false;
 
   // Start with references to original objects
@@ -172,21 +163,6 @@ const createDynamicSchema = (
     const control = findControlForProperty(uischema, key);
     if (control) {
       const { path } = getConditionPath(control, key);
-      if (hasRequiredRule(control)) {
-        const isFieldRequired = isRequired(control, data, path, ajv);
-        const fieldIndex = requiredFields.indexOf(key);
-
-        if (isFieldRequired && !requiredFields.includes(key)) {
-          // Add to required if not already there
-          requiredFields.push(key);
-          requiredChanged = true;
-        } else if (!isFieldRequired && requiredFields.includes(key)) {
-          // Remove from required if no longer required
-          requiredFields.splice(fieldIndex, 1);
-          requiredChanged = true;
-        }
-      }
-
       if (hasValueRule(control) && data !== undefined) {
         const { shouldUpdate, newValue } = evalValue(control, data, path, ajv);
         if (shouldUpdate) {
@@ -222,26 +198,8 @@ const createDynamicSchema = (
     }
   });
 
-  // Check if required fields actually changed
-  const newRequired = requiredFields.length > 0 ? requiredFields : undefined;
-  const requiredEqual = isEqual(schema.required, newRequired);
-
-  // If nothing changed, return original references
-  if ((!requiredChanged || requiredEqual) && !dataChanged) {
-    return { schema, updatedData: data };
-  }
-
-  // If only data changed, keep schema reference
-  if (!requiredChanged || requiredEqual) {
-    return { schema, updatedData };
-  }
-
-  // If only required changed, create minimal schema update
   return {
-    schema: {
-      ...schema,
-      required: newRequired,
-    },
+    schema,
     updatedData,
   };
 };

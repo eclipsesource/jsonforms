@@ -189,22 +189,6 @@ export const evalEnablement = (
   return enablementEffect === RuleEffect.ENABLE ? fulfilled : !fulfilled;
 };
 
-export const evalRequired = (
-  uischema: UISchemaElement,
-  data: any,
-  path: string = undefined,
-  ajv: Ajv
-): boolean => {
-  if (!uischema.rule) return false;
-
-  const effects = getEffects(uischema.rule);
-  const requiredEffect = findEffect(effects, [RuleEffect.REQUIRED]);
-  if (!requiredEffect) return false;
-
-  // If the rule exists and has REQUIRED effect, return true only if condition is fulfilled
-  return isRuleFulfilled(uischema, data, path, ajv);
-};
-
 export const evalValue = (
   uischema: UISchemaElement,
   data: any,
@@ -259,12 +243,6 @@ export const hasEnableRule = (uischema: UISchemaElement): boolean => {
   return effects.some((effect) =>
     [RuleEffect.ENABLE, RuleEffect.DISABLE].includes(effect)
   );
-};
-
-export const hasRequiredRule = (uischema: UISchemaElement): boolean => {
-  if (!uischema.rule) return false;
-  const effects = getEffects(uischema.rule);
-  return effects.some((effect) => effect === RuleEffect.REQUIRED);
 };
 
 export const hasValueRule = (uischema: UISchemaElement): boolean => {
@@ -331,16 +309,4 @@ export const findControlForProperty = (
   }
 
   return undefined;
-};
-
-export const isRequired = (
-  uischema: UISchemaElement,
-  data: any,
-  path: string = undefined,
-  ajv: Ajv
-): boolean => {
-  if (uischema.rule) {
-    return evalRequired(uischema, data, path, ajv);
-  }
-  return false;
 };
