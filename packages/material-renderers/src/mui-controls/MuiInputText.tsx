@@ -45,8 +45,10 @@ interface MuiTextInputProps {
   inputComponent?: InputProps['inputComponent'];
 }
 
-const eventToValue = (ev: any) =>
-  ev.target.value === '' ? undefined : ev.target.value;
+const eventToValue = (ev: any) => {
+  const value = ev.target.value;
+  return value.trim() === '' ? undefined : value;
+};
 
 export const MuiInputText = React.memo(function MuiInputText(
   props: CellProps & WithClassname & MuiTextInputProps & WithInputProps
