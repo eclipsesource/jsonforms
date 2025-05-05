@@ -17,6 +17,17 @@ export const isMixedSchema = (
   schema: JsonSchema,
   context: TesterContext,
 ) => {
+  if (schema && typeof schema === 'boolean') {
+    // support a case like
+    // "examples": {
+    //   "type": "array",
+    //   "items": true
+    // }
+    // that is used in the jsonschema meta model where the items: true means any type which in effect means array of all allowed types.
+    // in the above scenario the schema will be the value true from the items
+    return true;
+  }
+
   if (!schema || typeof schema !== 'object') {
     return false;
   }
