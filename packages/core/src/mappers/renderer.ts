@@ -49,13 +49,8 @@ import {
   getI18nKey,
   getI18nKeyPrefix,
   getI18nKeyPrefixBySchema,
-  getArrayTranslations,
-  CombinatorTranslations,
-  getCombinatorTranslations,
-  combinatorDefaultTranslations,
   getTranslator,
   getErrorTranslator,
-  arrayDefaultTranslations,
   ArrayTranslations,
 } from '../i18n';
 import cloneDeep from 'lodash/cloneDeep';
@@ -450,6 +445,7 @@ const isRequired = (
     nextHigherSchemaPath,
     rootSchema
   );
+
   return isRequiredInSchema(nextHigherSchema, lastSegment);
 };
 
@@ -538,7 +534,25 @@ export const createDefaultValue = (
   schema: JsonSchema,
   rootSchema: JsonSchema
 ) => {
-  const resolvedSchema = Resolve.schema(schema, schema.$ref, rootSchema);
+  const defaultValue = doCreateDefaultValue(schema, rootSchema);
+
+  // preserve the backward compatibility where it is returning an empty object if we can't determine the default value
+  return defaultValue === undefined ? {} : defaultValue;
+};
+
+/**
+ * Create a default value based on the given schema.
+ * @param schema the schema for which to create a default value.
+ * @returns the default value to use, undefined if none was found
+ */
+export const doCreateDefaultValue = (
+  schema: JsonSchema,
+  rootSchema: JsonSchema
+) => {
+  const resolvedSchema =
+    typeof schema.$ref === 'string'
+      ? Resolve.schema(rootSchema, schema.$ref, rootSchema)
+      : schema;
   if (resolvedSchema.default !== undefined) {
     return extractDefaults(resolvedSchema, rootSchema);
   }
@@ -551,22 +565,56 @@ export const createDefaultValue = (
       return convertDateToString(new Date(), resolvedSchema.format);
     }
     return '';
-  } else if (
-    hasType(resolvedSchema, 'integer') ||
-    hasType(resolvedSchema, 'number')
-  ) {
-    return 0;
-  } else if (hasType(resolvedSchema, 'boolean')) {
-    return false;
-  } else if (hasType(resolvedSchema, 'array')) {
-    return [];
-  } else if (hasType(resolvedSchema, 'object')) {
-    return extractDefaults(resolvedSchema, rootSchema);
-  } else if (hasType(resolvedSchema, 'null')) {
-    return null;
-  } else {
-    return {};
   }
+  if (hasType(resolvedSchema, 'integer') || hasType(resolvedSchema, 'number')) {
+    return 0;
+  }
+  if (hasType(resolvedSchema, 'boolean')) {
+    return false;
+  }
+  if (hasType(resolvedSchema, 'array')) {
+    return [];
+  }
+  if (hasType(resolvedSchema, 'object')) {
+    return extractDefaults(resolvedSchema, rootSchema);
+  }
+  if (hasType(resolvedSchema, 'null')) {
+    return null;
+  }
+
+  const combinators: CombinatorKeyword[] = ['oneOf', 'anyOf', 'allOf'];
+  for (const combinator of combinators) {
+    if (schema[combinator] && Array.isArray(schema[combinator])) {
+      const combinatorDefault = createDefaultValueForCombinatorSchema(
+        schema[combinator],
+        rootSchema
+      );
+      if (combinatorDefault !== undefined) {
+        return combinatorDefault;
+      }
+    }
+  }
+
+  // no default value found
+  return undefined;
+};
+
+const createDefaultValueForCombinatorSchema = (
+  combinatorSchemas: JsonSchema[],
+  rootSchema: JsonSchema
+): any => {
+  if (combinatorSchemas.length > 0) {
+    for (const combinatorSchema of combinatorSchemas) {
+      const result = doCreateDefaultValue(combinatorSchema, rootSchema);
+      if (result !== undefined) {
+        // return the first one with type information
+        return result;
+      }
+    }
+  }
+
+  // no default value found
+  return undefined;
 };
 
 /**
@@ -582,9 +630,25 @@ export const extractDefaults = (schema: JsonSchema, rootSchema: JsonSchema) => {
       const resolvedProperty = property.$ref
         ? Resolve.schema(rootSchema, property.$ref, rootSchema)
         : property;
-      if (resolvedProperty.default !== undefined) {
+      if (resolvedProperty && resolvedProperty.default !== undefined) {
         result[key] = cloneDeep(resolvedProperty.default);
       }
+    }
+    // there could be more properties in allOf schemas
+    if (schema.allOf && Array.isArray(schema.allOf)) {
+      schema.allOf.forEach((allOfSchema) => {
+        if (allOfSchema && allOfSchema.properties) {
+          for (const key in allOfSchema.properties) {
+            const property = allOfSchema.properties[key];
+            const resolvedProperty = property.$ref
+              ? Resolve.schema(rootSchema, property.$ref, rootSchema)
+              : property;
+            if (resolvedProperty && resolvedProperty.default !== undefined) {
+              result[key] = cloneDeep(resolvedProperty.default);
+            }
+          }
+        }
+      });
     }
     return result;
   }
@@ -1163,7 +1227,6 @@ export interface ControlWithDetailProps
 export interface StatePropsOfArrayControl
   extends StatePropsOfControlWithDetail {
   arraySchema: JsonSchema;
-  translations: ArrayTranslations;
   childErrors?: ErrorObject[];
 }
 
@@ -1178,12 +1241,11 @@ export const mapStateToArrayControlProps = (
   state: JsonFormsState,
   ownProps: OwnPropsOfControl
 ): StatePropsOfArrayControl => {
-  const { path, schema, uischema, i18nKeyPrefix, label, ...props } =
+  const { path, schema, uischema, label, ...props } =
     mapStateToControlWithDetailProps(state, ownProps);
 
   const resolvedSchema = Resolve.schema(schema, 'items', props.rootSchema);
   const childErrors = getSubErrorsAt(path, resolvedSchema)(state);
-  const t = getTranslator()(state);
 
   return {
     ...props,
@@ -1195,12 +1257,6 @@ export const mapStateToArrayControlProps = (
     childErrors,
     renderers: ownProps.renderers || getRenderers(state),
     cells: ownProps.cells || getCells(state),
-    translations: getArrayTranslations(
-      t,
-      arrayDefaultTranslations,
-      i18nKeyPrefix,
-      label
-    ),
   };
 };
 
@@ -1435,7 +1491,6 @@ export interface StatePropsOfCombinator extends StatePropsOfControl {
   indexOfFittingSchema: number;
   uischemas: JsonFormsUISchemaRegistryEntry[];
   data: any;
-  translations: CombinatorTranslations;
 }
 
 export const mapStateToCombinatorRendererProps = (
@@ -1447,13 +1502,6 @@ export const mapStateToCombinatorRendererProps = (
     mapStateToControlProps(state, ownProps);
 
   const ajv = state.jsonforms.core.ajv;
-  const t = getTranslator()(state);
-  const translations = getCombinatorTranslations(
-    t,
-    combinatorDefaultTranslations,
-    i18nKeyPrefix,
-    label
-  );
   const structuralKeywords = [
     'required',
     'additionalProperties',
@@ -1500,7 +1548,6 @@ export const mapStateToCombinatorRendererProps = (
     label,
     indexOfFittingSchema,
     uischemas: getUISchemas(state),
-    translations,
   };
 };
 
@@ -1536,7 +1583,9 @@ export const mapStateToOneOfProps = (
 export interface StatePropsOfArrayLayout extends StatePropsOfControlWithDetail {
   data: number;
   arraySchema: JsonSchema;
-  translations: ArrayTranslations;
+  /**
+   * @deprecated Use `arraySchema.minItems` instead.
+   */
   minItems?: number;
   disableRemove?: boolean;
   disableAdd?: boolean;
@@ -1552,7 +1601,7 @@ export const mapStateToArrayLayoutProps = (
   state: JsonFormsState,
   ownProps: OwnPropsOfControl
 ): StatePropsOfArrayLayout => {
-  const { path, schema, uischema, errors, i18nKeyPrefix, label, ...props } =
+  const { path, schema, uischema, errors, label, ...props } =
     mapStateToControlWithDetailProps(state, ownProps);
 
   const resolvedSchema = Resolve.schema(schema, 'items', props.rootSchema);
@@ -1581,12 +1630,6 @@ export const mapStateToArrayLayoutProps = (
     data: props.data ? props.data.length : 0,
     errors: allErrors,
     minItems: schema.minItems,
-    translations: getArrayTranslations(
-      t,
-      arrayDefaultTranslations,
-      i18nKeyPrefix,
-      label
-    ),
   };
 };
 
