@@ -315,6 +315,21 @@ export default defineComponent({
           ...(control.value.schema as any).propertyNames,
           ...result,
         };
+      } else if (
+        (control.value.schema as any).additionalProperties === false &&
+        typeof (control.value.schema as any).patternProperties === 'object'
+      ) {
+        // check if additionalProperties explicitly set to false then the only valid property names will be derived from patternProperties
+
+        const patterns = Object.keys(
+          (control.value.schema as any).patternProperties,
+        );
+        if (patterns.length > 0) {
+          result = {
+            pattern: patterns.join('|'),
+            ...result,
+          };
+        }
       }
       return result;
     });
