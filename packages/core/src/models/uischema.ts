@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
+
   Copyright (c) 2017-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -114,7 +114,7 @@ export enum RuleEffect {
 /**
  * Represents a condition to be evaluated.
  */
-export interface Condition {
+export interface BaseCondition {
   /**
    * The type of condition.
    */
@@ -124,7 +124,7 @@ export interface Condition {
 /**
  * A leaf condition.
  */
-export interface LeafCondition extends Condition, Scoped {
+export interface LeafCondition extends BaseCondition, Scoped {
   type: 'LEAF';
 
   /**
@@ -133,7 +133,7 @@ export interface LeafCondition extends Condition, Scoped {
   expectedValue: any;
 }
 
-export interface SchemaBasedCondition extends Condition, Scoped {
+export interface SchemaBasedCondition extends BaseCondition, Scoped {
   schema: JsonSchema;
 
   /**
@@ -153,7 +153,7 @@ export interface SchemaBasedCondition extends Condition, Scoped {
 /**
  * A composable condition.
  */
-export interface ComposableCondition extends Condition {
+export interface ComposableCondition extends BaseCondition {
   conditions: Condition[];
 }
 
@@ -172,9 +172,19 @@ export interface AndCondition extends ComposableCondition {
 }
 
 /**
+ * A union of all available conditions.
+ */
+export type Condition =
+  | BaseCondition
+  | LeafCondition
+  | OrCondition
+  | AndCondition
+  | SchemaBasedCondition;
+
+/**
  * Common base interface for any UI schema element.
  */
-export interface UISchemaElement {
+export interface BaseUISchemaElement {
   /**
    * The type of this UI schema element.
    */
@@ -195,7 +205,7 @@ export interface UISchemaElement {
  * Represents a layout element which can order its children
  * in a specific way.
  */
-export interface Layout extends UISchemaElement {
+export interface Layout extends BaseUISchemaElement {
   /**
    * The child elements of this layout.
    */
@@ -241,7 +251,7 @@ export interface LabelDescription {
 /**
  * A label element.
  */
-export interface LabelElement extends UISchemaElement, Internationalizable {
+export interface LabelElement extends BaseUISchemaElement, Internationalizable {
   type: 'Label';
   /**
    * The text of label.
@@ -254,7 +264,7 @@ export interface LabelElement extends UISchemaElement, Internationalizable {
  * to which part of the schema the control should be bound.
  */
 export interface ControlElement
-  extends UISchemaElement,
+  extends BaseUISchemaElement,
     Scoped,
     Labelable<string | boolean | LabelDescription>,
     Internationalizable {
@@ -274,7 +284,7 @@ export interface Category extends Layout, Labeled, Internationalizable {
  * the categorization element can be used to represent recursive structures like trees.
  */
 export interface Categorization
-  extends UISchemaElement,
+  extends BaseUISchemaElement,
     Labeled,
     Internationalizable {
   type: 'Categorization';
@@ -284,3 +294,19 @@ export interface Categorization
    */
   elements: (Category | Categorization)[];
 }
+
+/**
+ * A union of all available UI schema elements.
+ * This includes all layout elements, control elements, label elements,
+ * group elements, category elements and categorization elements.
+ */
+export type UISchemaElement =
+  | BaseUISchemaElement
+  | ControlElement
+  | Layout
+  | LabelElement
+  | GroupLayout
+  | Category
+  | Categorization
+  | VerticalLayout
+  | HorizontalLayout;
