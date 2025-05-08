@@ -17,10 +17,8 @@ import {
   type DispatchPropsOfMultiEnumControl,
   type JsonFormsSubStates,
   type JsonSchema,
-  type Scopable,
   type UISchemaElement,
 } from '@jsonforms/core';
-import type { RendererProps } from '@jsonforms/vue';
 import type Ajv from 'ajv';
 import type { ErrorObject } from 'ajv';
 import cloneDeep from 'lodash/cloneDeep';

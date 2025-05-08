@@ -10,7 +10,7 @@
       :cells="control.cells"
     />
     <additional-properties
-      v-if="hasAdditionalProperties || showAdditionalProperties"
+      v-if="showAdditionalProperties"
       :input="input"
     ></additional-properties>
   </div>
@@ -71,9 +71,11 @@ const controlRenderer = defineComponent({
       );
     },
     showAdditionalProperties(): boolean {
-      const showAdditionalProperties =
-        this.control.uischema.options?.showAdditionalProperties;
-      return showAdditionalProperties === true;
+      return (
+        this.hasAdditionalProperties ||
+        (this.appliedOptions.allowAdditionalPropertiesIfMissing === true &&
+          this.control.schema.additionalProperties === undefined)
+      );
     },
     detailUiSchema(): UISchemaElement {
       const uiSchemaGenerator = () => {

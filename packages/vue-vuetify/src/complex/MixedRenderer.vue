@@ -8,7 +8,7 @@
               <v-row>
                 <v-col align-self="center" class="pl-0"
                   ><v-select
-                    v-if="mixedRenderInfos && mixedRenderInfos.length > 1"
+                    v-if="mixedRenderInfos"
                     v-disabled-icon-focus
                     :id="control.id + '-input-selector'"
                     :disabled="!control.enabled"
@@ -55,7 +55,7 @@
     <template v-else>
       <v-select
         class="select"
-        v-if="mixedRenderInfos && mixedRenderInfos.length > 1"
+        v-if="mixedRenderInfos"
         v-disabled-icon-focus
         :id="control.id + '-input-selector'"
         :disabled="!control.enabled"
@@ -125,9 +125,14 @@ import {
   useTranslator,
   useVuetifyControl,
 } from '../util';
+import cloneDeep from 'lodash/cloneDeep';
+import set from 'lodash/set';
+import get from 'lodash/get';
+import isEqual from 'lodash/isEqual';
 
 interface SchemaRenderInfo {
   schema: JsonSchema;
+  resolvedSchema: JsonSchema;
   uischema: UISchemaElement;
   label: string;
 }
@@ -204,21 +209,22 @@ function getSchemaTypesAsArray(schema: JsonSchema): string[] {
 }
 
 const createMixedRenderInfos = (
+  parentSchema: JsonSchema,
   schema: JsonSchema,
   rootSchema: JsonSchema,
   control: ControlElement,
   path: string,
   uischemas: JsonFormsUISchemaRegistryEntry[],
 ): SchemaRenderInfo[] => {
-  let schemas: JsonSchema[] = [];
+  let resolvedSchemas: JsonSchema[] = [];
 
   if (typeof schema.type === 'string') {
-    schemas.push(schema);
+    resolvedSchemas.push(schema);
   } else {
     const types = getSchemaTypesAsArray(schema);
 
     types.forEach((type) => {
-      schemas.push({
+      resolvedSchemas.push({
         ...schema,
         type,
         default:
@@ -230,16 +236,11 @@ const createMixedRenderInfos = (
     });
   }
 
-  return schemas.map((schema) => {
-    if (schema.type === 'object') {
-      schema.additionalProperties =
-        schema.additionalProperties !== false
-          ? (schema.additionalProperties ?? true)
-          : false;
-    } else if (schema.type === 'array') {
-      schema.items = schema.items ?? {};
-      if ((schema.items as any) === true) {
-        schema.items = {
+  return resolvedSchemas.map((resolvedSchema) => {
+    if (resolvedSchema.type === 'array') {
+      resolvedSchema.items = resolvedSchema.items ?? {};
+      if ((resolvedSchema.items as any) === true) {
+        resolvedSchema.items = {
           type: [
             'array',
             'boolean',
@@ -251,10 +252,10 @@ const createMixedRenderInfos = (
           ],
         };
       } else if (
-        typeof (schema.items as JsonSchema7).type !== 'string' &&
-        !Array.isArray((schema.items as JsonSchema7).type)
+        typeof (resolvedSchema.items as JsonSchema7).type !== 'string' &&
+        !Array.isArray((resolvedSchema.items as JsonSchema7).type)
       ) {
-        (schema.items as JsonSchema7).type = [
+        (resolvedSchema.items as JsonSchema7).type = [
           'array',
           'boolean',
           'integer',
@@ -267,10 +268,10 @@ const createMixedRenderInfos = (
     }
 
     // help determining the correct renders by removing keywords not appropriate for the type
-    cleanSchema(schema);
+    cleanSchema(resolvedSchema);
 
     const detailsForSchema = control.options
-      ? control.options[schema.type + '-detail']
+      ? control.options[resolvedSchema.type + '-detail']
       : undefined;
 
     const schemaControl = detailsForSchema
@@ -278,14 +279,33 @@ const createMixedRenderInfos = (
           ...control,
           options: { ...control.options, detail: detailsForSchema },
         }
-      : {
-          ...control,
-          scope: control.scope,
-        };
+      : control;
+
+    const _resolvedSchema = resolvedSchema;
+
+    if (
+      control.scope &&
+      (resolvedSchema.type === 'object' || resolvedSchema.type === 'array')
+    ) {
+      const segments = control.scope.split('/');
+      const startFromRoot = segments[0] === '#' || segments[0] === '';
+      const startIndex = startFromRoot ? 1 : 0;
+
+      if (segments.length > startIndex) {
+        // for object schema the object renderer expects to get the parent schema
+        const schemaPath = segments.slice(startIndex).join('.');
+        if (schemaPath && isEqual(get(parentSchema, schemaPath), schema)) {
+          // double check that the schema that we are going to replace is the schema that is with the mixed type
+          const newSchema = cloneDeep(parentSchema);
+          set(newSchema, schemaPath, resolvedSchema);
+          resolvedSchema = newSchema;
+        }
+      }
+    }
 
     const uischema = findUISchema(
       uischemas,
-      schema,
+      resolvedSchema,
       control.scope,
       path,
       () => createControlElement(control.scope ?? '#'),
@@ -293,16 +313,11 @@ const createMixedRenderInfos = (
       rootSchema,
     );
 
-    if (uischema.type === 'Control' && schema.type === 'object') {
-      // override to specify exact type since the isObjectControl will check for empty scope
-      // which in this case the scope is not empty
-      uischema.type = 'Object';
-    }
-
     return {
-      schema,
+      schema: resolvedSchema,
+      resolvedSchema: _resolvedSchema,
       uischema,
-      label: `${schema.type}`,
+      label: `${_resolvedSchema.type}`,
     };
   });
 };
@@ -345,6 +360,7 @@ const controlRenderer = defineComponent({
   },
   setup(props: RendererProps<ControlElement>) {
     const path = props.path;
+    const parentSchema = props.schema;
     const input = useJsonFormsControl(props);
 
     const control = input.control.value;
@@ -375,6 +391,7 @@ const controlRenderer = defineComponent({
     >(() => {
       const result = createMixedRenderInfos(
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        parentSchema,
         control.schema,
         control.rootSchema,
         control.uischema,
@@ -388,21 +405,21 @@ const controlRenderer = defineComponent({
     });
 
     const nullable = computed(() =>
-      mixedRenderInfos.value.some((info) => info.schema.type === 'null'),
+      mixedRenderInfos.value.some(
+        (info) => info.resolvedSchema.type === 'null',
+      ),
     );
 
     const matchingSchema = computed(() => {
       let result = mixedRenderInfos.value.find(
-        (entry) => entry.schema.type === valueType.value,
+        (entry) => entry.resolvedSchema.type === valueType.value,
       );
       if (!result) {
         result = mixedRenderInfos.value.find(
           (entry) =>
-            entry.schema.type === 'number' && valueType.value === 'integer',
+            entry.resolvedSchema.type === 'number' &&
+            valueType.value === 'integer',
         );
-      }
-      if (!result && mixedRenderInfos.value.length === 1) {
-        result = mixedRenderInfos.value[0];
       }
       return result;
     });
@@ -418,6 +435,12 @@ const controlRenderer = defineComponent({
         ? mixedRenderInfos.value[selectedIndex.value].schema
         : undefined,
     );
+    const resolvedSchema = computed(() =>
+      selectedIndex.value !== null && selectedIndex.value !== undefined
+        ? mixedRenderInfos.value[selectedIndex.value].resolvedSchema
+        : undefined,
+    );
+
     const uischema = computed(() =>
       selectedIndex.value !== null && selectedIndex.value !== undefined
         ? mixedRenderInfos.value[selectedIndex.value].uischema
@@ -436,6 +459,7 @@ const controlRenderer = defineComponent({
       t,
       valueType,
       schema,
+      resolvedSchema,
       uischema,
       path,
       icons,
@@ -450,7 +474,7 @@ const controlRenderer = defineComponent({
       const newData =
         newIndex != null
           ? createDefaultValue(
-              this.mixedRenderInfos[newIndex].schema,
+              this.mixedRenderInfos[newIndex].resolvedSchema,
               this.control.rootSchema,
             )
           : undefined;
@@ -459,7 +483,7 @@ const controlRenderer = defineComponent({
       this.selectedIndex = newIndex;
 
       const type = newIndex
-        ? this.mixedRenderInfos[newIndex]?.schema?.type
+        ? this.mixedRenderInfos[newIndex]?.resolvedSchema?.type
         : null;
       this.valueType = type as string | null; // we know that this should be either a string or null
 

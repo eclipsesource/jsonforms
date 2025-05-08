@@ -99,7 +99,6 @@ import {
   composePaths,
   createControlElement,
   createDefaultValue,
-  encode,
   getI18nKeyPrefix,
   type GroupLayout,
   type JsonSchema,
@@ -264,7 +263,7 @@ export default defineComponent({
         (propUiSchema as GroupLayout).label =
           propSchema.title ?? startCase(propName);
       } else {
-        propUiSchema = createControlElement('#/' + encode(propName));
+        propUiSchema = createControlElement('#');
       }
 
       propSchema = {

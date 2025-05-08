@@ -294,7 +294,7 @@ const controlRenderer = defineComponent({
       return this.control.schema.properties?.[prop]?.title ?? startCase(prop);
     },
     resolveUiSchema(propName: string) {
-      return this.control.schema.properties
+      return this.control.schema.properties && propName
         ? this.controlWithoutLabel(`#/properties/${propName}`)
         : this.controlWithoutLabel('#');
     },
