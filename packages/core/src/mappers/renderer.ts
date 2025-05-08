@@ -271,7 +271,7 @@ const extractRequired = (
       currentSchema = get(currentSchema, 'properties');
     }
     currentSchema = get(currentSchema, prevSegments[segmentIndex]);
-    ++segmentIndex;
+    segmentIndex++;
   }
 
   if (segmentIndex < prevSegments.length) {
