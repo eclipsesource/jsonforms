@@ -81,11 +81,13 @@ export * from './register';
 export * from './example';
 
 import * as ifThenElse from './examples/if_then_else';
+import * as allOfIf from './examples/if-allOf';
 
 export {
   issue_1948,
   defaultExample,
   allOf,
+  allOfIf,
   anyOf,
   oneOf,
   oneOfArray,

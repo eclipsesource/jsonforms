@@ -45,4 +45,10 @@ export const configDefault = {
    * [text] if asterisks in labels for required fields should be hidden
    */
   hideRequiredAsterisk: false,
+
+  /**
+   * [text] if dynamic checks for conditional application of properties
+   * should be performed (e.g. check for conditional required)
+   */
+  allowDynamicCheck: true,
 };

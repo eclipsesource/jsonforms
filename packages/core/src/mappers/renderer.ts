@@ -27,6 +27,8 @@ import get from 'lodash/get';
 import {
   ControlElement,
   JsonSchema,
+  JsonSchema4,
+  JsonSchema7,
   LabelElement,
   UISchemaElement,
 } from '../models';
@@ -52,6 +54,10 @@ import {
   ArrayTranslations,
 } from '../i18n';
 import cloneDeep from 'lodash/cloneDeep';
+import isEqual from 'lodash/isEqual';
+import has from 'lodash/has';
+import any from 'lodash/fp/any';
+import all from 'lodash/fp/all';
 import {
   composePaths,
   composeWithUi,
@@ -85,7 +91,6 @@ import {
 } from '../store';
 import { isInherentlyEnabled } from './util';
 import { CombinatorKeyword } from './combinators';
-import isEqual from 'lodash/isEqual';
 
 const move = (array: any[], index: number, delta: number) => {
   const newIndex: number = index + delta;
@@ -102,6 +107,324 @@ export const moveUp = (array: any[], toMove: number) => {
 
 export const moveDown = (array: any[], toMove: number) => {
   move(array, toMove, 1);
+};
+
+const dataPathToJsonPointer = (dataPath: string): string => {
+  const parts = dataPath.split('.');
+  let jsonPointer = '#';
+
+  parts.forEach((part) => {
+    if (part.match(/^\d+$/)) {
+      jsonPointer += '/items';
+    } else {
+      jsonPointer += `/properties/${part}`;
+    }
+  });
+
+  return jsonPointer;
+};
+
+const checkDataCondition = (
+  propertyCondition: unknown,
+  property: string,
+  data: Record<string, unknown>
+) => {
+  if (has(propertyCondition, 'const')) {
+    return (
+      has(data, property) &&
+      isEqual(data[property], get(propertyCondition, 'const'))
+    );
+  } else if (has(propertyCondition, 'enum')) {
+    return (
+      has(data, property) &&
+      (get(propertyCondition, 'enum') as unknown[]).find((value) =>
+        isEqual(value, data[property])
+      ) !== undefined
+    );
+  } else if (has(propertyCondition, 'pattern')) {
+    const pattern = new RegExp(get(propertyCondition, 'pattern'));
+
+    return (
+      has(data, property) &&
+      typeof data[property] === 'string' &&
+      pattern.test(data[property] as string)
+    );
+  }
+
+  return false;
+};
+
+const checkPropertyCondition = (
+  propertiesCondition: Record<string, unknown>,
+  property: string,
+  data: Record<string, unknown>
+): boolean => {
+  if (has(propertiesCondition[property], 'not')) {
+    return !checkDataCondition(
+      get(propertiesCondition[property], 'not'),
+      property,
+      data
+    );
+  }
+
+  if (has(propertiesCondition[property], 'properties') && has(data, property)) {
+    const nextPropertyConditions = get(
+      propertiesCondition[property],
+      'properties'
+    );
+
+    return all(
+      (prop) =>
+        checkPropertyCondition(
+          nextPropertyConditions,
+          prop,
+          data[property] as Record<string, unknown>
+        ),
+      Object.keys(nextPropertyConditions)
+    );
+  }
+
+  return checkDataCondition(propertiesCondition[property], property, data);
+};
+
+const evaluateCondition = (
+  schema: JsonSchema,
+  data: Record<string, unknown>
+): boolean => {
+  if (has(schema, 'allOf')) {
+    return all(
+      (subschema: JsonSchema) => evaluateCondition(subschema, data),
+      get(schema, 'allOf')
+    );
+  }
+
+  if (has(schema, 'anyOf')) {
+    return any(
+      (subschema: JsonSchema) => evaluateCondition(subschema, data),
+      get(schema, 'anyOf')
+    );
+  }
+
+  if (has(schema, 'oneOf')) {
+    const subschemas = get(schema, 'oneOf');
+
+    let satisfied = false;
+
+    for (let i = 0; i < subschemas.length; i++) {
+      const current = evaluateCondition(subschemas[i], data);
+      if (current && satisfied) {
+        return false;
+      }
+
+      if (current && !satisfied) {
+        satisfied = true;
+      }
+    }
+
+    return satisfied;
+  }
+
+  let requiredProperties: string[] = [];
+  if (has(schema, 'required')) {
+    requiredProperties = get(schema, 'required');
+  }
+
+  const requiredCondition = all(
+    (property) => has(data, property),
+    requiredProperties
+  );
+
+  if (has(schema, 'properties')) {
+    const propertiesCondition = get(schema, 'properties') as Record<
+      string,
+      unknown
+    >;
+
+    const valueCondition = all(
+      (property) => checkPropertyCondition(propertiesCondition, property, data),
+      Object.keys(propertiesCondition)
+    );
+
+    return requiredCondition && valueCondition;
+  }
+
+  return requiredCondition;
+};
+
+/**
+ * Go through parent's properties until the segment is found at the exact level it is defined and check if it is required
+ */
+const extractRequired = (
+  schema: JsonSchema,
+  segment: string,
+  prevSegments: string[]
+) => {
+  let segmentIndex = 0;
+  let currentSchema = schema;
+  while (
+    segmentIndex < prevSegments.length &&
+    (has(currentSchema, prevSegments[segmentIndex]) ||
+      (has(currentSchema, 'properties') &&
+        has(get(currentSchema, 'properties'), prevSegments[segmentIndex])))
+  ) {
+    if (has(currentSchema, 'properties')) {
+      currentSchema = get(currentSchema, 'properties');
+    }
+    currentSchema = get(currentSchema, prevSegments[segmentIndex]);
+    segmentIndex++;
+  }
+
+  if (segmentIndex < prevSegments.length) {
+    return false;
+  }
+
+  return (
+    has(currentSchema, 'required') &&
+    (get(currentSchema, 'required') as string[]).includes(segment)
+  );
+};
+
+/**
+ * Check if property's required attribute is set based on if-then-else condition
+ */
+const checkRequiredInIf = (
+  schema: JsonSchema,
+  segment: string,
+  prevSegments: string[],
+  data: Record<string, unknown>
+): boolean => {
+  const propertiesConditionSchema = get(schema, 'if');
+
+  const condition = evaluateCondition(propertiesConditionSchema, data);
+
+  const ifInThen = has(get(schema, 'then'), 'if');
+  const ifInElse = has(get(schema, 'else'), 'if');
+  const allOfInThen = has(get(schema, 'then'), 'allOf');
+  const allOfInElse = has(get(schema, 'else'), 'allOf');
+
+  return (
+    (has(schema, 'then') &&
+      condition &&
+      extractRequired(get(schema, 'then'), segment, prevSegments)) ||
+    (has(schema, 'else') &&
+      !condition &&
+      extractRequired(get(schema, 'else'), segment, prevSegments)) ||
+    (ifInThen &&
+      condition &&
+      checkRequiredInIf(get(schema, 'then'), segment, prevSegments, data)) ||
+    (ifInElse &&
+      !condition &&
+      checkRequiredInIf(get(schema, 'else'), segment, prevSegments, data)) ||
+    (allOfInThen &&
+      condition &&
+      conditionallyRequired(
+        get(schema, 'then'),
+        segment,
+        prevSegments,
+        data
+      )) ||
+    (allOfInElse &&
+      !condition &&
+      conditionallyRequired(get(schema, 'else'), segment, prevSegments, data))
+  );
+};
+
+/**
+ * Check if property becomes required based on some if-then-else condition
+ * that is part of allOf combinator
+ */
+const conditionallyRequired = (
+  schema: JsonSchema,
+  segment: string,
+  prevSegments: string[],
+  data: any
+) => {
+  const nestedAllOfSchema = get(schema, 'allOf');
+
+  return any((subschema: JsonSchema4 | JsonSchema7): boolean => {
+    return (
+      (has(subschema, 'if') &&
+        checkRequiredInIf(subschema, segment, prevSegments, data)) ||
+      conditionallyRequired(subschema, segment, prevSegments, data)
+    );
+  }, nestedAllOfSchema);
+};
+
+const getNextHigherSchemaPath = (schemaPath: string): string => {
+  const pathSegments = schemaPath.split('/');
+  const lastSegment = pathSegments[pathSegments.length - 1];
+
+  // We'd normally jump two segments back, but if we're in an `items` key, we want to check its parent
+  // Example path: '#/properties/anotherObject/properties/myArray/items/properties/propertyName'
+  const nextHigherSegmentIndexDifference = lastSegment === 'items' ? 1 : 2;
+  const nextHigherSchemaSegments = pathSegments.slice(
+    0,
+    pathSegments.length - nextHigherSegmentIndexDifference
+  );
+
+  return nextHigherSchemaSegments.join('/');
+};
+
+const getNextHigherDataPath = (dataPath: string): string => {
+  const dataPathSegments = dataPath.split('.');
+  return dataPathSegments.slice(0, dataPathSegments.length - 1).join('.');
+};
+
+/**
+ * Check if property is being required in the parent schema
+ */
+const isRequiredInParent = (
+  schema: JsonSchema,
+  schemaPath: string,
+  segment: string,
+  prevSegments: string[],
+  data: Record<string, unknown>,
+  dataPath: string
+): boolean => {
+  const pathSegments = schemaPath.split('/');
+  const lastSegment = pathSegments[pathSegments.length - 1];
+  const nextHigherSchemaPath = getNextHigherSchemaPath(schemaPath);
+
+  if (!nextHigherSchemaPath) {
+    return false;
+  }
+
+  const nextHigherSchema = Resolve.schema(schema, nextHigherSchemaPath, schema);
+
+  const nextHigherDataPath = getNextHigherDataPath(dataPath);
+  const currentData = Resolve.data(data, nextHigherDataPath);
+
+  return (
+    conditionallyRequired(
+      nextHigherSchema,
+      segment,
+      [lastSegment, ...prevSegments],
+      currentData
+    ) ||
+    (has(nextHigherSchema, 'if') &&
+      checkRequiredInIf(
+        nextHigherSchema,
+        segment,
+        [lastSegment, ...prevSegments],
+        currentData
+      )) ||
+    isRequiredInParent(
+      schema,
+      nextHigherSchemaPath,
+      segment,
+      [lastSegment, ...prevSegments],
+      data,
+      nextHigherDataPath
+    )
+  );
+};
+
+const isRequiredInSchema = (schema: JsonSchema, segment: string): boolean => {
+  return (
+    schema !== undefined &&
+    schema.required !== undefined &&
+    schema.required.indexOf(segment) !== -1
+  );
 };
 
 const isRequired = (
@@ -123,11 +446,52 @@ const isRequired = (
     rootSchema
   );
 
-  return (
-    nextHigherSchema !== undefined &&
-    nextHigherSchema.required !== undefined &&
-    nextHigherSchema.required.indexOf(lastSegment) !== -1
+  return isRequiredInSchema(nextHigherSchema, lastSegment);
+};
+
+const isConditionallyRequired = (
+  rootSchema: JsonSchema,
+  schemaPath: string,
+  data: any,
+  dataPath: string
+): boolean => {
+  const pathSegments = schemaPath.split('/');
+  const lastSegment = pathSegments[pathSegments.length - 1];
+
+  const nextHigherSchemaPath = getNextHigherSchemaPath(schemaPath);
+  const nextHigherSchema = Resolve.schema(
+    rootSchema,
+    nextHigherSchemaPath,
+    rootSchema
   );
+
+  // We need the `dataPath` to be able to resolve data in arrays,
+  // for example `myObject.myArray.0.myProperty` has no
+  // equivalent for the index in the schema syntax
+  const nextHigherDataPath = getNextHigherDataPath(dataPath);
+  const currentData = Resolve.data(data, nextHigherDataPath);
+
+  const requiredInIf =
+    has(nextHigherSchema, 'if') &&
+    checkRequiredInIf(nextHigherSchema, lastSegment, [], currentData);
+
+  const requiredConditionally = conditionallyRequired(
+    nextHigherSchema,
+    lastSegment,
+    [],
+    currentData
+  );
+
+  const requiredConditionallyInParent = isRequiredInParent(
+    rootSchema,
+    nextHigherSchemaPath,
+    lastSegment,
+    [],
+    data,
+    nextHigherDataPath
+  );
+
+  return requiredInIf || requiredConditionally || requiredConditionallyInParent;
 };
 
 /**
@@ -589,9 +953,19 @@ export const mapStateToControlProps = (
   const controlElement = uischema as ControlElement;
   const id = ownProps.id;
   const rootSchema = getSchema(state);
+  const config = getConfig(state);
   const required =
     controlElement.scope !== undefined &&
-    isRequired(ownProps.schema, controlElement.scope, rootSchema);
+    !!(
+      isRequired(ownProps.schema, controlElement.scope, rootSchema) ||
+      (config?.allowDynamicCheck &&
+        isConditionallyRequired(
+          rootSchema,
+          dataPathToJsonPointer(path),
+          rootData,
+          path
+        ))
+    );
   const resolvedSchema = Resolve.schema(
     ownProps.schema || rootSchema,
     controlElement.scope,
@@ -604,7 +978,6 @@ export const mapStateToControlProps = (
   const data = Resolve.data(rootData, path);
   const labelDesc = createLabelDescriptionFrom(uischema, resolvedSchema);
   const label = labelDesc.show ? labelDesc.text : '';
-  const config = getConfig(state);
   const enabled: boolean = isInherentlyEnabled(
     state,
     ownProps,
