@@ -31,11 +31,13 @@ import {
   inject,
   provide,
   ref,
+  type Component,
   type ComputedRef,
   type InjectionKey,
 } from 'vue';
 import type { IconOptions } from 'vuetify';
 import { useStyles } from '../styles';
+import { ControlWrapper } from '@/controls';
 
 export const IconSymbol: InjectionKey<Required<IconOptions>> =
   Symbol.for('vuetify:icons');
@@ -480,4 +482,8 @@ export const useIcons = () => {
   return {
     current: iconSet,
   };
+};
+
+export const useControlWrapper = () => {
+  return inject('vuetify:control-wrapper', ControlWrapper);
 };
