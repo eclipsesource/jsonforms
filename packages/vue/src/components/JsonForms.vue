@@ -182,6 +182,7 @@ export default defineComponent({
       return {
         data: this.jsonforms.core.data,
         errors: this.jsonforms.core.errors,
+        additionalErrors: this.jsonforms.core.additionalErrors,
       };
     },
   },
