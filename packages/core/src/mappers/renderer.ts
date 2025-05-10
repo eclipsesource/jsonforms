@@ -150,6 +150,13 @@ const checkDataCondition = (
       pattern.test(data[property] as string)
     );
   }
+  // Check if the property condition is a schema object and evaluate it again
+  if (typeof propertyCondition === 'object' && propertyCondition !== null) {
+    return evaluateCondition(
+      propertyCondition as JsonSchema,
+      data[property] as Record<string, unknown>
+    );
+  }
 
   return false;
 };
@@ -207,21 +214,23 @@ const evaluateCondition = (
 
   if (has(schema, 'oneOf')) {
     const subschemas = get(schema, 'oneOf');
-
     let satisfied = false;
 
-    for (let i = 0; i < subschemas.length; i++) {
-      const current = evaluateCondition(subschemas[i], data);
-      if (current && satisfied) {
-        return false;
-      }
-
-      if (current && !satisfied) {
+    for (const subschema of subschemas) {
+      if (evaluateCondition(subschema, data)) {
+        if (satisfied) return false;
         satisfied = true;
       }
     }
 
     return satisfied;
+  }
+  // Case for enum like condition that have "contains" schema(multi-select, checkbox)
+  if (has(schema, 'contains')) {
+    if (Array.isArray(data) && 'contains' in schema) {
+      return (data as unknown[]).includes(schema.contains?.const);
+    }
+    return false;
   }
 
   let requiredProperties: string[] = [];
