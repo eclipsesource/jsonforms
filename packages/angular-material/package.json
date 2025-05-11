@@ -39,7 +39,7 @@
   "scripts": {
     "build": "ng build",
     "build:examples-app": "pnpm run build && ng build --project=example",
-    "dev": "pnpm run build:examples-app && npx http-server ./example/dist/ -c-1 -o",
+    "dev": "ng serve --project=example",
     "clean": "rimraf lib coverage example/dist .nyc_output 2> /dev/null",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
@@ -134,7 +134,7 @@
     "ts-loader": "^9.5.1",
     "tslib": "^2.5.0",
     "typedoc": "~0.25.3",
-    "typescript": "~5.5.0",
+    "typescript": "~5.4.2",
     "webpack": "^5.78.0",
     "yargs": "^17.7.2",
     "zone.js": "~0.14.10"
