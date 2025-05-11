@@ -24,7 +24,6 @@
 */
 import maxBy from 'lodash/maxBy';
 import {
-  ComponentFactory,
   ComponentFactoryResolver,
   Directive,
   Input,
@@ -127,32 +126,11 @@ export class JsonFormsOutlet
       renderer !== undefined &&
       renderer.tester(uischema, schema, testerContext) !== -1
     ) {
-      if (renderer.renderer instanceof Promise) {
-        renderer.renderer.then((resolvedRenderer) => {
-          bestComponent = resolvedRenderer;
-          const componentFactory =
-            this.componentFactoryResolver.resolveComponentFactory(
-              bestComponent
-            );
-          this.renderComponent(componentFactory, uischema, schema, props);
-        });
-        return;
-      } else {
-        bestComponent = renderer.renderer;
-      }
+      bestComponent = renderer.renderer;
     }
 
     const componentFactory =
       this.componentFactoryResolver.resolveComponentFactory(bestComponent);
-    this.renderComponent(componentFactory, uischema, schema, props);
-  }
-
-  private renderComponent(
-    componentFactory: ComponentFactory<any>,
-    uischema: UISchemaElement,
-    schema: JsonSchema,
-    props: JsonFormsProps
-  ) {
     this.viewContainerRef.clear();
     const currentComponentRef =
       this.viewContainerRef.createComponent(componentFactory);
