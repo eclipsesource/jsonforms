@@ -26,7 +26,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
-import { JsonFormsAngularBuilderModule } from '../../src/library/module';
+import { JsonFormsAngularBuilderModule } from '../../src/library/formbuilder.module';
 
 @NgModule({
   declarations: [AppComponent],

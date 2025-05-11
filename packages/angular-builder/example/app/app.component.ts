@@ -25,7 +25,7 @@
 import { Component } from '@angular/core';
 import { ExampleDescription, getExamples } from '@jsonforms/examples';
 import { JsonFormsI18nState } from '@jsonforms/core';
-import { angularMaterialRenderers } from '../../lib';
+import { angularMaterialRenderers } from '@jsonforms/angular-material';
 
 const defaultI18n: JsonFormsI18nState = {
   locale: 'en-US',

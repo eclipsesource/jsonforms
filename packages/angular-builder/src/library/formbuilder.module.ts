@@ -24,7 +24,7 @@
 */
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { JsonFormsModule } from '@jsonforms/angular';
+// import { JsonFormsModule } from '@jsonforms/angular';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -37,7 +37,7 @@ import { FormbuilderPreviewComponent } from './components/formbuilder-preview/fo
 @NgModule({
   imports: [
     CommonModule,
-    JsonFormsModule,
+    // JsonFormsModule,
     MatIconModule,
     MatTabsModule,
     MatTooltipModule,

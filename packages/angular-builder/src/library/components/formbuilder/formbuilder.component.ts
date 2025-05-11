@@ -28,8 +28,15 @@ export class JsonformsBuilderComponent {
    */
   @Input() formData: any;
 
+  private _renderers: any = [];
+
   /**
    * Components that will be used to render the form.
    */
-  @Input() renderers: any;
+  @Input() set renderers(renderers: any) {
+    this._renderers = renderers;
+  }
+  get renderers() {
+    return this._renderers;
+  }
 }

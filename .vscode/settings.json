@@ -25,5 +25,6 @@
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": "explicit"
     }
-  }
+  },
+  "angular.enable-strict-mode-prompt": false
 }
