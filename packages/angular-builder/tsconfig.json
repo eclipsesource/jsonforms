@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.base",
+  "compilerOptions": {
+    "declaration": true,
+    "declarationMap": true,
+    "inlineSources": true,
+    "sourceMap": true,
+  },
+  "exclude": ["node_modules"],
+  "files": ["src/index.ts"],
+  "angularCompilerOptions": {
+    "compilationMode": "partial",
+    "strictMetadataEmit": true,
+    "generateCodeForLibraries": false,
+    "skipTemplateCodegen": true
+  }
+}

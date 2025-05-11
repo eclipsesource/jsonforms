@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig",
+  "compilerOptions": {
+    "outDir": "./example/dist"
+  },
+  "files": ["./example/main.ts"],
+  "angularCompilerOptions": {
+    "compilationMode": "full",
+    "strictMetadataEmit": true,
+    "generateCodeForLibraries": false,
+    "skipTemplateCodegen": true
+  }
+}
