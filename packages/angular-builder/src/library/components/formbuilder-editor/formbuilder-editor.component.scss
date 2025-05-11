@@ -1,0 +1,19 @@
+:host{
+  display: flex;
+    /* base fill */
+
+  ::ng-deep .editor-grid{
+    background-color: #fff;
+
+    /* dot pattern */
+    background-image: radial-gradient(circle at 0 0, #ccc 1px, transparent 1px);
+    background-size: .5rem .5rem;
+
+    .mat-mdc-tab-body-content{
+      display: flex;
+      flex-grow: 1;
+    }
+
+  }
+
+}

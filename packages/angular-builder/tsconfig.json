@@ -1,0 +1,29 @@
+{
+  "extends": "../../tsconfig.base",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "declaration": true,
+    "declarationMap": true,
+    "inlineSources": true,
+    "sourceMap": true,
+    "paths": {
+       "@jsonforms/core":[
+          "../../core/src/index"
+        ],
+        "@jsonforms/angular":[
+          "../../angular/src/index"
+        ],
+        "@jsonforms/angular-material":[
+          "../../angular-material/src/index"
+        ],
+      }
+  },
+  "exclude": ["node_modules"],
+  "files": ["src/index.ts"],
+  "angularCompilerOptions": {
+    "compilationMode": "partial",
+    "strictMetadataEmit": true,
+    "generateCodeForLibraries": false,
+    "skipTemplateCodegen": true
+  }
+}

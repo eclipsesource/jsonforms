@@ -1,0 +1,17 @@
+:host{
+  max-width: 200px;
+  .toolbox-container {
+    padding: .5rem;
+  }
+  [class*='tool-'] {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    border-radius: 4px;
+    &:hover {
+      background-color: #f0f0f0;
+    }
+  }
+
+
+}

@@ -1,0 +1,10 @@
+:host{
+  display: flex;
+  flex-grow: 1;
+  .tree-item{
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 8px;
+    flex-grow: 1;
+  }
+}
