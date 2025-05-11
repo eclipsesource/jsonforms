@@ -39,10 +39,7 @@
           }
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-           "buildTarget": "example:build"
-          }
+          "builder": "@angular-devkit/build-angular:dev-server"
         }
       }
     },
