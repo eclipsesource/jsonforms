@@ -150,6 +150,27 @@ export interface SchemaBasedCondition extends BaseCondition, Scoped {
   failWhenUndefined?: boolean;
 }
 
+/** A condition using a validation function to determine its fulfillment. */
+export interface ValidateFunctionCondition extends BaseCondition, Scoped {
+  /**
+   * Validates whether the condition is fulfilled.
+   *
+   * @param data The data as resolved via the scope.
+   * @returns `true` if the condition is fulfilled */
+  validate: (context: ValidateFunctionContext) => boolean;
+}
+
+export interface ValidateFunctionContext {
+  /** The resolved data scoped to the `ValidateFunctionCondition`'s scope. */
+  data: unknown;
+  /** The full data of the form. */
+  fullData: unknown;
+  /** Optional instance path. Necessary when the actual data path can not be inferred via the scope alone as it is the case with nested controls. */
+  path: string | undefined;
+  /** The `UISchemaElement` containing the rule that uses the ValidateFunctionCondition, e.g. a `ControlElement` */
+  uischemaElement: UISchemaElement;
+}
+
 /**
  * A composable condition.
  */
@@ -179,7 +200,8 @@ export type Condition =
   | LeafCondition
   | OrCondition
   | AndCondition
-  | SchemaBasedCondition;
+  | SchemaBasedCondition
+  | ValidateFunctionCondition;
 
 /**
  * Common base interface for any UI schema element.
