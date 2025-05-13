@@ -29,7 +29,7 @@ import {
   UISchemaElement,
   UISchemaTester,
 } from '@jsonforms/core';
-import { angularMaterialRenderers } from '../../lib';
+import { angularMaterialRenderers } from '../../src/library';
 
 const uiSchema = {
   type: 'HorizontalLayout',
