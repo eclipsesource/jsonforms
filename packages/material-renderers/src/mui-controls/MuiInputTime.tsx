@@ -44,12 +44,11 @@ export const MuiInputTime = React.memo(function MuiInputTime(
   } = props;
   const InputComponent = useInputComponent();
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
-  const [inputValue, onChange] = useDebouncedChange(
+  const [inputValue, onChange] = useDebouncedChange({
     handleChange,
-    '',
     data,
-    path
-  );
+    path,
+  });
 
   return (
     <InputComponent

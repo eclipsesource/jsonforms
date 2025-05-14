@@ -38,6 +38,7 @@ import {
   WithInputProps,
   useDebouncedChange,
   useInputComponent,
+  useFocus,
 } from '../util';
 
 interface MuiTextInputProps {
@@ -51,6 +52,7 @@ const eventToValue = (ev: any) =>
 export const MuiInputText = React.memo(function MuiInputText(
   props: CellProps & WithClassname & MuiTextInputProps & WithInputProps
 ) {
+  const [focused, onFocus, onBlur] = useFocus();
   const [showAdornment, setShowAdornment] = useState(false);
   const {
     data,
@@ -83,13 +85,14 @@ export const MuiInputText = React.memo(function MuiInputText(
     inputProps.size = maxLength;
   }
 
-  const [inputText, onChange, onClear] = useDebouncedChange(
+  const [inputText, onChange, onClear] = useDebouncedChange({
     handleChange,
-    '',
     data,
     path,
-    eventToValue
-  );
+    eventToValue,
+    flushOnBlur: true,
+    focused,
+  });
   const onPointerEnter = () => setShowAdornment(true);
   const onPointerLeave = () => setShowAdornment(false);
 
@@ -109,6 +112,8 @@ export const MuiInputText = React.memo(function MuiInputText(
       value={inputText}
       onChange={onChange}
       className={className}
+      onBlur={onBlur}
+      onFocus={onFocus}
       id={id}
       disabled={!enabled}
       autoFocus={appliedUiSchemaOptions.focus}
