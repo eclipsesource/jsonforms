@@ -10,13 +10,14 @@
       :cells="control.cells"
     />
     <additional-properties
-      v-if="hasAdditionalProperties && showAdditionalProperties"
+      v-if="showAdditionalProperties"
       :input="input"
     ></additional-properties>
   </div>
 </template>
 
 <script lang="ts">
+import { IsDynamicPropertyContext } from '@/util/inject';
 import {
   Generate,
   findUISchema,
@@ -33,7 +34,7 @@ import {
 import cloneDeep from 'lodash/cloneDeep';
 import isEmpty from 'lodash/isEmpty';
 import isObject from 'lodash/isObject';
-import { defineComponent } from 'vue';
+import { defineComponent, provide } from 'vue';
 import { useNested, useVuetifyControl } from '../util';
 import { AdditionalProperties } from './components';
 
@@ -48,7 +49,13 @@ const controlRenderer = defineComponent({
   },
   setup(props: RendererProps<ControlElement>) {
     const control = useVuetifyControl(useJsonFormsControlWithDetail(props));
+
     const nested = useNested('object');
+
+    // do not use the default value but the undefind so that
+    // the property is cleared when property clear action is executed
+    provide(IsDynamicPropertyContext, false);
+
     return {
       ...control,
       input: control,
@@ -59,16 +66,15 @@ const controlRenderer = defineComponent({
     hasAdditionalProperties(): boolean {
       return (
         !isEmpty(this.control.schema.patternProperties) ||
-        isObject(this.control.schema.additionalProperties)
-        // do not support - additionalProperties === true - since then the type should be any and we won't know what kind of renderer we should use for new properties
+        isObject(this.control.schema.additionalProperties) ||
+        this.control.schema.additionalProperties === true
       );
     },
     showAdditionalProperties(): boolean {
-      const showAdditionalProperties =
-        this.control.uischema.options?.showAdditionalProperties;
       return (
-        showAdditionalProperties === undefined ||
-        showAdditionalProperties === true
+        this.hasAdditionalProperties ||
+        (this.appliedOptions.allowAdditionalPropertiesIfMissing === true &&
+          this.control.schema.additionalProperties === undefined)
       );
     },
     detailUiSchema(): UISchemaElement {

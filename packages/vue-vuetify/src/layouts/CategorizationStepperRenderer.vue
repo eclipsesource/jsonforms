@@ -12,7 +12,7 @@
         :title="visibleCategoryLabels[index]"
         v-for="(element, index) in visibleCategories"
         :value="index + 1"
-        :key="`${layout.path}-${index}`"
+        :key="`${layout.path}-${visibleCategories.length}-${index}`"
       >
         <v-card elevation="0">
           <dispatch-renderer
@@ -36,14 +36,14 @@
         <v-stepper-header>
           <template
             v-for="(_, index) in visibleCategories"
-            :key="`${layout.path}-${index}`"
+            :key="`${layout.path}-${visibleCategories.length}-${index}`"
           >
             <v-stepper-item :value="index + 1" editable>
               {{ visibleCategoryLabels[index] }}
             </v-stepper-item>
             <v-divider
               v-if="index !== visibleCategories.length - 1"
-              :key="index"
+              :key="`${layout.path}-divider-${visibleCategories.length}-${index}`"
             ></v-divider>
           </template>
         </v-stepper-header>
@@ -52,7 +52,7 @@
           <v-stepper-window-item
             v-for="(element, index) in visibleCategories"
             :value="index + 1"
-            :key="`${layout.path}-${index}`"
+            :key="`${layout.path}-${visibleCategories.length}-${index}`"
           >
             <v-card elevation="0">
               <dispatch-renderer
