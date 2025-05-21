@@ -40,6 +40,8 @@ import {
   useInputComponent,
 } from '../util';
 
+import LaunchIcon from '@mui/icons-material/Launch';
+
 interface MuiTextInputProps {
   muiInputProps?: InputProps['inputProps'];
   inputComponent?: InputProps['inputComponent'];
@@ -85,6 +87,9 @@ export const MuiInputText = React.memo(function MuiInputText(
     inputProps.size = maxLength;
   }
 
+  const isUrl = (text: string | undefined) =>
+    typeof text === 'string' && /^(https?:\/\/[^\s]+)$/i.test(text);
+
   const [inputText, onChange, onClear] = useDebouncedChange(
     handleChange,
     '',
@@ -97,7 +102,7 @@ export const MuiInputText = React.memo(function MuiInputText(
 
   const theme: JsonFormsTheme = useTheme();
 
-  const closeStyle = {
+  const iconStyles = {
     background:
       theme.jsonforms?.input?.delete?.background ||
       theme.palette.background.default,
@@ -133,12 +138,24 @@ export const MuiInputText = React.memo(function MuiInputText(
             right: 0,
           }}
         >
+          {isUrl(inputText) && (
+            <IconButton
+              aria-label='Open link in new tab'
+              onClick={(e) => {
+                e.stopPropagation();
+                window.open(inputText, '_blank', 'noopener,noreferrer');
+              }}
+              size='small'
+            >
+              <LaunchIcon style={iconStyles} />
+            </IconButton>
+          )}
           <IconButton
             aria-label='Clear input field'
             onClick={onClear}
-            size='large'
+            size='small'
           >
-            <Close style={closeStyle} />
+            <Close style={iconStyles} />
           </IconButton>
         </InputAdornment>
       }
