@@ -53,7 +53,10 @@ const eventToValue = (ev: any) => {
 };
 
 export const MuiInputText = React.memo(function MuiInputText(
-  props: CellProps & WithClassname & MuiTextInputProps & WithInputProps
+  props: CellProps &
+    WithClassname &
+    MuiTextInputProps &
+    WithInputProps & { focused?: boolean }
 ) {
   const [showAdornment, setShowAdornment] = useState(false);
   const {
@@ -69,6 +72,7 @@ export const MuiInputText = React.memo(function MuiInputText(
     schema,
     muiInputProps,
     label,
+    focused,
     inputComponent,
   } = props;
   const InputComponent = useInputComponent();
@@ -131,11 +135,9 @@ export const MuiInputText = React.memo(function MuiInputText(
           position='end'
           style={{
             display:
-              !showAdornment || !enabled || data === undefined
-                ? 'none'
-                : 'flex',
-            position: 'absolute',
-            right: 0,
+              (showAdornment || focused) && enabled && data !== undefined
+                ? 'flex'
+                : 'none',
           }}
         >
           {isUrl(inputText) && (
