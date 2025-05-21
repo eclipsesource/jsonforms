@@ -22,6 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import { ValidateFunctionContext } from '@jsonforms/core';
 import { registerExamples } from '../register';
 
 export const schema = {
@@ -113,8 +114,11 @@ export const uischema = {
             effect: 'SHOW',
             condition: {
               scope: '#',
-              validate: (data: any) => {
-                return !data.dead && data.kindOfVegetables !== 'All';
+              validate: (context: ValidateFunctionContext) => {
+                return (
+                  !(context.data as any).dead &&
+                  (context.data as any).kindOfVegetables !== 'All'
+                );
               },
             },
           },
