@@ -22,6 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import { ValidateFunctionContext } from '@jsonforms/core';
 import { registerExamples } from '../register';
 
 export const schema = {
@@ -43,6 +44,10 @@ export const schema = {
     kindOfVegetables: {
       type: 'string',
       enum: ['All', 'Some', 'Only potatoes'],
+    },
+    vitaminDeficiency: {
+      type: 'string',
+      enum: ['None', 'Vitamin A', 'Vitamin B', 'Vitamin C'],
     },
   },
 };
@@ -97,6 +102,23 @@ export const uischema = {
               scope: '#/properties/vegetables',
               schema: {
                 const: false,
+              },
+            },
+          },
+        },
+        {
+          type: 'Control',
+          label: 'Vitamin deficiency?',
+          scope: '#/properties/vitaminDeficiency',
+          rule: {
+            effect: 'SHOW',
+            condition: {
+              scope: '#',
+              validate: (context: ValidateFunctionContext) => {
+                return (
+                  !(context.data as any).dead &&
+                  (context.data as any).kindOfVegetables !== 'All'
+                );
               },
             },
           },
