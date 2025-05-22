@@ -104,6 +104,7 @@ export const MaterialInputControl = (props: ControlProps & WithInput) => {
         id={id + '-input'}
         isValid={isValid}
         visible={visible}
+        focused={focused}
       />
       <FormHelperText error={!isValid && !showDescription}>
         {firstFormHelperText}

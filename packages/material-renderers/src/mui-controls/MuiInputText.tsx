@@ -40,6 +40,8 @@ import {
   useInputComponent,
 } from '../util';
 
+import LaunchIcon from '@mui/icons-material/Launch';
+
 interface MuiTextInputProps {
   muiInputProps?: InputProps['inputProps'];
   inputComponent?: InputProps['inputComponent'];
@@ -51,7 +53,10 @@ const eventToValue = (ev: any) => {
 };
 
 export const MuiInputText = React.memo(function MuiInputText(
-  props: CellProps & WithClassname & MuiTextInputProps & WithInputProps
+  props: CellProps &
+    WithClassname &
+    MuiTextInputProps &
+    WithInputProps & { focused?: boolean }
 ) {
   const [showAdornment, setShowAdornment] = useState(false);
   const {
@@ -67,6 +72,7 @@ export const MuiInputText = React.memo(function MuiInputText(
     schema,
     muiInputProps,
     label,
+    focused,
     inputComponent,
   } = props;
   const InputComponent = useInputComponent();
@@ -85,6 +91,9 @@ export const MuiInputText = React.memo(function MuiInputText(
     inputProps.size = maxLength;
   }
 
+  const isUrl = (text: string | undefined) =>
+    typeof text === 'string' && /^(https?:\/\/[^\s]+)$/i.test(text);
+
   const [inputText, onChange, onClear] = useDebouncedChange(
     handleChange,
     '',
@@ -97,7 +106,7 @@ export const MuiInputText = React.memo(function MuiInputText(
 
   const theme: JsonFormsTheme = useTheme();
 
-  const closeStyle = {
+  const iconStyles = {
     background:
       theme.jsonforms?.input?.delete?.background ||
       theme.palette.background.default,
@@ -126,19 +135,29 @@ export const MuiInputText = React.memo(function MuiInputText(
           position='end'
           style={{
             display:
-              !showAdornment || !enabled || data === undefined
-                ? 'none'
-                : 'flex',
-            position: 'absolute',
-            right: 0,
+              (showAdornment || focused) && enabled && data !== undefined
+                ? 'flex'
+                : 'none',
           }}
         >
+          {isUrl(inputText) && (
+            <IconButton
+              aria-label='Open link in new tab'
+              onClick={(e) => {
+                e.stopPropagation();
+                window.open(inputText, '_blank', 'noopener,noreferrer');
+              }}
+              size='small'
+            >
+              <LaunchIcon style={iconStyles} />
+            </IconButton>
+          )}
           <IconButton
             aria-label='Clear input field'
             onClick={onClear}
-            size='large'
+            size='small'
           >
-            <Close style={closeStyle} />
+            <Close style={iconStyles} />
           </IconButton>
         </InputAdornment>
       }
