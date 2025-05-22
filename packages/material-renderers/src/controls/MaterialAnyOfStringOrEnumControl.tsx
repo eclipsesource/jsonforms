@@ -89,13 +89,16 @@ const MuiAutocompleteInputText = (
     propMemo.list = props.id + 'datalist';
     return propMemo;
   }, [appliedUiSchemaOptions, props.id]);
-  const [inputText, onChange] = useDebouncedChange({
+  const [inputText, onChange] = useDebouncedChange(
     handleChange,
+    '',
     data,
     path,
-    focused,
-    flushOnBlur: true,
-  });
+    undefined,
+    undefined,
+    true,
+    focused
+  );
 
   const dataList = (
     <datalist id={props.id + 'datalist'}>

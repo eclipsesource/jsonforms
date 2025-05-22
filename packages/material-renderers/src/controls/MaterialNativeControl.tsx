@@ -56,11 +56,16 @@ export const MaterialNativeControl = (props: ControlProps) => {
   } = props;
   const isValid = errors.length === 0;
   const appliedUiSchemaOptions = merge({}, config, props.uischema.options);
-  const [inputValue, onChange] = useDebouncedChange({
+  const [inputValue, onChange] = useDebouncedChange(
     handleChange,
+    '',
     data,
     path,
-  });
+    undefined,
+    undefined,
+    true,
+    focused
+  );
   const fieldType = appliedUiSchemaOptions.format ?? schema.format;
   const showDescription = !isDescriptionHidden(
     visible,

@@ -57,14 +57,16 @@ export const MuiInputInteger = React.memo(function MuiInputInteger(
 
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
 
-  const [inputValue, onChange] = useDebouncedChange({
+  const [inputValue, onChange] = useDebouncedChange(
     handleChange,
+    '',
     data,
     path,
     eventToValue,
-    focused,
-    flushOnBlur: true,
-  });
+    undefined,
+    true,
+    focused
+  );
 
   return (
     <InputComponent

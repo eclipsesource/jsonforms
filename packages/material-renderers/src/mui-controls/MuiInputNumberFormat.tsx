@@ -63,14 +63,16 @@ export const MuiInputNumberFormat = React.memo(function MuiInputNumberFormat(
     (ev: any) => props.fromFormatted(ev.currentTarget.value),
     [props.fromFormatted]
   );
-  const [inputValue, onChange] = useDebouncedChange({
+  const [inputValue, onChange] = useDebouncedChange(
     handleChange,
-    data: formattedNumber,
+    '',
+    formattedNumber,
     path,
-    eventToValue: validStringNumber,
-    focused,
-    flushOnBlur: true,
-  });
+    validStringNumber,
+    undefined,
+    true,
+    focused
+  );
 
   return (
     <InputComponent

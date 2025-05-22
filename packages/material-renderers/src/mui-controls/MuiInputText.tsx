@@ -85,14 +85,16 @@ export const MuiInputText = React.memo(function MuiInputText(
     inputProps.size = maxLength;
   }
 
-  const [inputText, onChange, onClear] = useDebouncedChange({
+  const [inputText, onChange, onClear] = useDebouncedChange(
     handleChange,
+    '',
     data,
     path,
     eventToValue,
-    flushOnBlur: true,
-    focused,
-  });
+    undefined,
+    true,
+    focused
+  );
   const onPointerEnter = () => setShowAdornment(true);
   const onPointerLeave = () => setShowAdornment(false);
 
