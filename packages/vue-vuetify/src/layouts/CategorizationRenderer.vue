@@ -15,7 +15,7 @@
         >
           <v-tab
             v-for="(_, index) in visibleCategories"
-            :key="`${layout.path}-${index}`"
+            :key="`${layout.path}-${visibleCategories.length}-${index}`"
           >
             {{ visibleCategoryLabels[index] }}
           </v-tab>
@@ -29,7 +29,7 @@
         >
           <v-window-item
             v-for="(element, index) in visibleCategories"
-            :key="`${layout.path}-${index}`"
+            :key="`${layout.path}-${visibleCategories.length}-${index}`"
           >
             <dispatch-renderer
               :schema="layout.schema"
@@ -47,7 +47,7 @@
       <v-tabs v-model="activeCategory" v-bind="vuetifyProps('v-tabs')">
         <v-tab
           v-for="(_, index) in visibleCategories"
-          :key="`${layout.path}-${index}`"
+          :key="`${layout.path}-${visibleCategories.length}-${index}`"
         >
           {{ visibleCategoryLabels[index] }}
         </v-tab>
@@ -56,7 +56,7 @@
       <v-window v-model="activeCategory" v-bind="vuetifyProps('v-window')">
         <v-window-item
           v-for="(element, index) in visibleCategories"
-          :key="`${layout.path}-${index}`"
+          :key="`${layout.path}-${visibleCategories.length}-${index}`"
         >
           <dispatch-renderer
             :schema="layout.schema"

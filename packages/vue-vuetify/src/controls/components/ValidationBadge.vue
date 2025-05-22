@@ -17,10 +17,14 @@
         </v-badge>
       </template>
 
-      <p>Validation Errors</p>
+      <p>
+        {{
+          t ? t('Validation Errors', 'Validation Errors') : 'Validation Errors'
+        }}
+      </p>
       <p
         v-for="(message, index) in tooltipMessages"
-        :key="`${index}`"
+        :key="`${tooltipMessages.length}-${index}`"
         class="mb-0"
       >
         {{ message }}
@@ -31,15 +35,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, type PropType } from 'vue';
+import { defineComponent, inject, type PropType } from 'vue';
 import { VBadge, VTooltip } from 'vuetify/components';
 import type { ErrorObject } from 'ajv';
 import findIndex from 'lodash/findIndex';
 import {
   createControlElement,
   createLabelDescriptionFrom,
+  type JsonFormsSubStates,
   type JsonSchema,
 } from '@jsonforms/core';
+import { useTranslator } from '@/util';
 
 export default defineComponent({
   name: 'validation-badge',
@@ -115,6 +121,16 @@ export default defineComponent({
 
       return error.map((v) => v.labels.join(',') + ': ' + v.message);
     },
+  },
+  setup() {
+    // allow using the ValidationBadge outside the jsonforms like in the ExampleView in the demo app
+    const jsonforms = inject<JsonFormsSubStates | undefined>(
+      'jsonforms',
+      undefined,
+    );
+
+    const t = jsonforms !== undefined ? useTranslator() : null;
+    return { t };
   },
 });
 </script>

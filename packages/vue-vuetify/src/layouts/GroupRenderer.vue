@@ -16,7 +16,7 @@
     <v-card-text
       v-bind="vuetifyProps(`v-card-text[${index}]`)"
       v-for="(element, index) in (layout.uischema as Layout).elements"
-      :key="`${layout.path}-${index}`"
+      :key="`${layout.path}-${(layout.uischema as Layout).elements.length}-${index}`"
       :class="styles.group.item"
     >
       <dispatch-renderer

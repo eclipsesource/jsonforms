@@ -1,110 +1,108 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col cols="12">
-        <v-card v-if="control.visible" v-bind="vuetifyProps('v-card')" flat>
-          <v-container>
-            <v-row>
-              <v-col v-if="mdAndUp && additionalPropertiesTitle">
-                {{ additionalPropertiesTitle }}</v-col
-              >
-              <v-col>
-                <json-forms
-                  :data="newPropertyName"
-                  :uischema="
-                    {
-                      type: 'Control',
-                      scope: '#/',
-                    } as UISchemaElement
-                  "
-                  :schema="propertyNameSchema"
-                  :additionalErrors="additionalErrors"
-                  :renderers="control.renderers"
-                  :cells="control.cells"
-                  :config="control.config"
-                  :readonly="!control.enabled"
-                  :validation-mode="validationMode"
-                  :i18n="i18n"
-                  :ajv="ajv"
-                  :middleware="middleware"
-                  @change="propertyNameChange"
-                ></json-forms
-              ></v-col>
-              <v-tooltip bottom>
-                <template v-slot:activator="{ props }">
-                  <v-btn
-                    icon
-                    variant="text"
-                    elevation="0"
-                    small
-                    :aria-label="translations.addAriaLabel"
-                    v-bind="props"
-                    :disabled="addPropertyDisabled"
-                    @click="addProperty"
-                  >
-                    <v-icon>{{ icons.current.value.itemAdd }}</v-icon>
-                  </v-btn>
-                </template>
-                {{ translations.addTooltip }}
-              </v-tooltip>
-            </v-row>
-          </v-container>
-          <v-container v-bind="vuetifyProps('v-container')">
-            <v-row
-              v-for="element in additionalPropertyItems"
-              :key="`${element.propertyName}`"
+  <v-card v-if="control.visible" v-bind="vuetifyProps('v-card')" flat>
+    <v-container class="py-0">
+      <v-row no-gutters>
+        <v-col v-if="mdAndUp && additionalPropertiesTitle">
+          {{ additionalPropertiesTitle }}</v-col
+        >
+        <v-col>
+          <json-forms
+            :data="newPropertyName"
+            :uischema="
+              {
+                type: 'Control',
+                scope: '#',
+                label: propertyNameLabel,
+              } as UISchemaElement
+            "
+            :schema="propertyNameSchema"
+            :additionalErrors="additionalErrors"
+            :renderers="control.renderers"
+            :cells="control.cells"
+            :config="control.config"
+            :readonly="!control.enabled"
+            :validation-mode="validationMode"
+            :i18n="i18n"
+            :ajv="ajv"
+            :middleware="middleware"
+            @change="propertyNameChange"
+          ></json-forms
+        ></v-col>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ props }">
+            <v-btn
+              icon
+              variant="text"
+              elevation="0"
+              small
+              :aria-label="translations.addAriaLabel"
+              v-bind="props"
+              :disabled="addPropertyDisabled"
+              @click="addProperty"
             >
-              <v-col class="flex-shrink-0 flex-grow-1">
-                <dispatch-renderer
-                  v-if="element.schema && element.uischema"
-                  :schema="element.schema"
-                  :uischema="element.uischema"
-                  :path="element.path"
-                  :enabled="control.enabled"
-                  :renderers="control.renderers"
-                  :cells="control.cells"
-              /></v-col>
-              <v-col v-if="control.enabled" class="flex-shrink-1 flex-grow-0">
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ props }">
-                    <v-btn
-                      v-bind="props"
-                      icon
-                      variant="text"
-                      elevation="0"
-                      small
-                      :aria-label="translations.removeAriaLabel"
-                      :disabled="removePropertyDisabled"
-                      @click="removeProperty(element.propertyName)"
-                    >
-                      <v-icon class="notranslate">{{
-                        icons.current.value.itemDelete
-                      }}</v-icon>
-                    </v-btn>
-                  </template>
-                  {{ translations.removeTooltip }}
-                </v-tooltip></v-col
+              <v-icon>{{ icons.current.value.itemAdd }}</v-icon>
+            </v-btn>
+          </template>
+          {{ translations.addTooltip }}
+        </v-tooltip>
+      </v-row>
+    </v-container>
+    <v-container v-bind="vuetifyProps('v-container')" class="py-0">
+      <v-row
+        no-gutters
+        v-for="element in additionalPropertyItems"
+        :key="`${element.propertyName}`"
+      >
+        <v-col class="flex-shrink-0 flex-grow-1">
+          <dispatch-renderer
+            v-if="element.schema && element.uischema"
+            :schema="element.schema"
+            :uischema="element.uischema"
+            :path="element.path"
+            :enabled="control.enabled"
+            :renderers="control.renderers"
+            :cells="control.cells"
+        /></v-col>
+        <v-col v-if="control.enabled" class="flex-shrink-1 flex-grow-0">
+          <v-tooltip bottom>
+            <template v-slot:activator="{ props }">
+              <v-btn
+                v-bind="props"
+                icon
+                variant="text"
+                elevation="0"
+                small
+                :aria-label="translations.removeAriaLabel"
+                :disabled="removePropertyDisabled"
+                @click="removeProperty(element.propertyName)"
               >
-            </v-row>
-          </v-container>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
+                <v-icon class="notranslate">{{
+                  icons.current.value.itemDelete
+                }}</v-icon>
+              </v-btn>
+            </template>
+            {{ translations.removeTooltip }}
+          </v-tooltip></v-col
+        >
+      </v-row>
+    </v-container>
+  </v-card>
 </template>
 
 <script lang="ts">
+import { AdditionalPropertiesTranslationEnum } from '@/i18n';
 import { additionalPropertiesDefaultTranslations } from '@/i18n/additionalPropertiesTranslations';
 import { getAdditionalPropertiesTranslations } from '@/i18n/i18nUtil';
 import {
   Generate,
+  Resolve,
   composePaths,
   createControlElement,
   createDefaultValue,
-  encode,
   getI18nKeyPrefix,
   type GroupLayout,
   type JsonSchema,
+  type JsonSchema4,
   type JsonSchema7,
   type UISchemaElement,
 } from '@jsonforms/core';
@@ -116,13 +114,16 @@ import {
 } from '@jsonforms/vue';
 import type { ErrorObject } from 'ajv';
 import get from 'lodash/get';
-import isPlainObject from 'lodash/isPlainObject';
-import startCase from 'lodash/startCase';
 import isEqual from 'lodash/isEqual';
+import isPlainObject from 'lodash/isPlainObject';
+import omit from 'lodash/omit';
+import startCase from 'lodash/startCase';
+
 import {
   computed,
   defineComponent,
   markRaw,
+  provide,
   ref,
   unref,
   type PropType,
@@ -145,7 +146,7 @@ import {
   useJsonForms,
   useTranslator,
 } from '../../util';
-import { AdditionalPropertiesTranslationEnum } from '@/i18n';
+import { IsDynamicPropertyContext } from '@/util/inject';
 
 type Input = ReturnType<typeof useJsonFormsControlWithDetail>;
 interface AdditionalPropertyType {
@@ -185,7 +186,7 @@ export default defineComponent({
     );
 
     const additionalKeys = computed(() =>
-      Object.keys(control.value.data).filter(
+      Object.keys(control.value.data || {}).filter(
         (k) => !reservedPropertyNames.value.includes(k),
       ),
     );
@@ -193,53 +194,77 @@ export default defineComponent({
     const toAdditionalPropertyType = (
       propName: string,
       propValue: any,
+      parentSchema: JsonSchema,
+      rootSchema: JsonSchema,
     ): AdditionalPropertyType => {
       let propSchema: JsonSchema | undefined = undefined;
       let propUiSchema: UISchemaElement | undefined = undefined;
 
-      if (control.value.schema.patternProperties) {
-        const matchedPattern = Object.keys(
-          control.value.schema.patternProperties,
-        ).find((pattern) => new RegExp(pattern).test(propName));
+      if (parentSchema.patternProperties) {
+        const matchedPattern = Object.keys(parentSchema.patternProperties).find(
+          (pattern) => new RegExp(pattern).test(propName),
+        );
         if (matchedPattern) {
-          propSchema = control.value.schema.patternProperties[matchedPattern];
+          propSchema = parentSchema.patternProperties[matchedPattern];
         }
       }
 
       if (
-        !propSchema &&
-        typeof control.value.schema.additionalProperties === 'object'
+        (!propSchema &&
+          typeof parentSchema.additionalProperties === 'object') ||
+        parentSchema.additionalProperties === true
       ) {
-        propSchema = control.value.schema.additionalProperties;
+        propSchema =
+          parentSchema.additionalProperties === true
+            ? { additionalProperties: true }
+            : parentSchema.additionalProperties;
       }
 
-      if (!propSchema && propValue !== undefined) {
-        // can't find the propertySchema so use the schema based on the value
-        // this covers case where the data in invalid according to the schema
-        propSchema = Generate.jsonSchema(
-          { prop: propValue },
-          {
-            additionalProperties: false,
-            required: () => false,
-          },
-        ).properties?.prop;
+      if (typeof propSchema?.$ref === 'string') {
+        propSchema = Resolve.schema(propSchema, propSchema.$ref, rootSchema);
       }
 
-      if (propSchema) {
-        if (propSchema.type === 'object' || propSchema.type === 'array') {
-          propUiSchema = Generate.uiSchema(
-            propSchema,
-            'Group',
-            undefined,
-            control.value.rootSchema,
-          );
-          (propUiSchema as GroupLayout).label =
-            propSchema.title ?? startCase(propName);
-        } else {
-          propUiSchema = createControlElement(
-            control.value.path + '/' + encode(propName),
-          );
-        }
+      propSchema = propSchema ?? {};
+
+      if (propSchema.type === undefined) {
+        propSchema = {
+          ...propSchema,
+          type: [
+            'array',
+            'boolean',
+            'integer',
+            'null',
+            'number',
+            'object',
+            'string',
+          ],
+        };
+      }
+
+      if (propSchema.type === 'array') {
+        propUiSchema = Generate.uiSchema(
+          propSchema,
+          'Group',
+          undefined,
+          control.value.rootSchema,
+        );
+        (propUiSchema as GroupLayout).label =
+          propSchema.title ?? startCase(propName);
+      } else {
+        propUiSchema = createControlElement('#');
+      }
+
+      propSchema = {
+        ...propSchema,
+        title: propName,
+      };
+      if (propSchema.type === 'object') {
+        propSchema.additionalProperties =
+          propSchema.additionalProperties !== false
+            ? (propSchema.additionalProperties ?? true)
+            : false;
+      } else if (propSchema.type === 'array') {
+        propSchema.items = propSchema.items ?? {};
       }
 
       return {
@@ -253,7 +278,12 @@ export default defineComponent({
     const appliedOptions = useControlAppliedOptions(props.input);
     const additionalPropertyItems = ref<AdditionalPropertyType[]>(
       additionalKeys.value.map((propName) =>
-        toAdditionalPropertyType(propName, control.value.data[propName]),
+        toAdditionalPropertyType(
+          propName,
+          control.value.data[propName],
+          control.value.schema,
+          control.value.rootSchema,
+        ),
       ),
     );
 
@@ -273,6 +303,21 @@ export default defineComponent({
           ...(control.value.schema as any).propertyNames,
           ...result,
         };
+      } else if (
+        (control.value.schema as any).additionalProperties === false &&
+        typeof (control.value.schema as any).patternProperties === 'object'
+      ) {
+        // check if additionalProperties explicitly set to false then the only valid property names will be derived from patternProperties
+
+        const patterns = Object.keys(
+          (control.value.schema as any).patternProperties,
+        );
+        if (patterns.length > 0) {
+          result = {
+            pattern: patterns.join('|'),
+            ...result,
+          };
+        }
       }
       return result;
     });
@@ -354,6 +399,9 @@ export default defineComponent({
       newPropertyName,
     );
 
+    const propertyNameLabel =
+      translations[AdditionalPropertiesTranslationEnum.propertyNameLabel];
+
     const { mdAndUp } = useDisplay();
 
     const {
@@ -368,6 +416,9 @@ export default defineComponent({
       newPropertyName.value ? parentValidationMode : 'ValidateAndHide',
     );
 
+    // use the default value since all properties are dynamic so preserve the property key
+    provide(IsDynamicPropertyContext, true);
+
     return {
       validationMode: validationMode,
       i18n: i18n ? markRaw(i18n) : i18n,
@@ -380,8 +431,11 @@ export default defineComponent({
       styles,
       appliedOptions,
       additionalPropertyItems,
+      reservedPropertyNames,
       toAdditionalPropertyType,
+      additionalKeys,
       newPropertyName,
+      propertyNameLabel,
       propertyNameChange,
       newPropertyErrors,
       additionalErrors,
@@ -437,34 +491,34 @@ export default defineComponent({
   },
   watch: {
     'control.data': {
-      handler(newData) {
-        // revert back any undefined values back to the default value when the key is part of the addtional properties since we want to preserved the key
-        // for example when we have a string additonal property then when we clear the text component the componet by default sets the value to undefined to remove the property from the object - for additional properties we do not want that behaviour
-        if (typeof newData === 'object' && newData) {
-          const keys = Object.keys(newData);
-          let hasChanges = false;
-          const updatedData = { ...newData };
+      handler(newData, oldData) {
+        function isEqualIgnoringKeys(
+          obj1: Record<string, any>,
+          obj2: Record<string, any>,
+          keysToIgnore: string[],
+        ) {
+          // Omit the specified keys from both objects
+          const filteredObj1 = omit(obj1, keysToIgnore);
+          const filteredObj2 = omit(obj2, keysToIgnore);
 
-          this.additionalPropertyItems.forEach((ap) => {
-            if (
-              ap.schema &&
-              (!keys.includes(ap.propertyName) ||
-                updatedData[ap.propertyName] === undefined ||
-                (updatedData[ap.propertyName] === null &&
-                  ap.schema.type !== 'null')) // createDefaultValue will return null only when the ap.schema.type is 'null'
-            ) {
-              const newValue = createDefaultValue(
-                ap.schema,
-                this.control.rootSchema,
-              );
-              hasChanges = updatedData[ap.propertyName] !== newValue;
+          // Perform a deep comparison
+          // return isEqual(filteredObj1, filteredObj2);
 
-              updatedData[ap.propertyName] = newValue;
-            }
-          });
-          if (hasChanges) {
-            this.input.handleChange(this.control.path, updatedData);
-          }
+          // compare with property order as well
+          return JSON.stringify(filteredObj1) === JSON.stringify(filteredObj2);
+        }
+
+        if (
+          !isEqualIgnoringKeys(newData, oldData, this.reservedPropertyNames)
+        ) {
+          this.additionalPropertyItems = this.additionalKeys.map((propName) =>
+            this.toAdditionalPropertyType(
+              propName,
+              newData[propName],
+              this.control.schema,
+              this.control.rootSchema,
+            ),
+          );
         }
       },
       deep: true,
@@ -477,6 +531,8 @@ export default defineComponent({
         const additionalProperty = this.toAdditionalPropertyType(
           this.newPropertyName,
           undefined,
+          this.control.schema,
+          this.control.rootSchema,
         );
         if (additionalProperty) {
           this.additionalPropertyItems = [
@@ -495,6 +551,7 @@ export default defineComponent({
             additionalProperty.schema,
             this.control.rootSchema,
           );
+
           // we need always to preserve the key even when the value is "empty"
           this.input.handleChange(this.control.path, updatedData);
         }
