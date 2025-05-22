@@ -224,18 +224,6 @@ export default defineComponent({
         propSchema = Resolve.schema(propSchema, propSchema.$ref, rootSchema);
       }
 
-      if (!propSchema && propValue !== undefined) {
-        // can't find the propertySchema so use the schema based on the value
-        // this covers case where the data in invalid according to the schema
-        propSchema = Generate.jsonSchema(
-          { prop: propValue },
-          {
-            additionalProperties: true,
-            required: (_props: { [property: string]: JsonSchema4 }) => false,
-          },
-        ).properties?.prop;
-      }
-
       propSchema = propSchema ?? {};
 
       if (propSchema.type === undefined) {
