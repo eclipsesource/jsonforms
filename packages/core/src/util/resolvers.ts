@@ -125,7 +125,6 @@ const resolveSchemaWithSegments = (
 ): JsonSchema => {
   // use typeof because schema can by of any type - check singleSegmentResolveSchema below
   if (typeof schema?.$ref === 'string') {
-    // additional ? required
     schema = resolveSchema(rootSchema, schema.$ref, rootSchema);
   }
 
