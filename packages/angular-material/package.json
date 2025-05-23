@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/angular-material",
-  "version": "3.6.0-alpha.0",
+  "version": "3.6.0-alpha.1",
   "description": "Material Renderer Set for Angular module of JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -39,7 +39,7 @@
   "scripts": {
     "build": "ng build",
     "build:examples-app": "pnpm run build && ng build --project=example",
-    "dev": "pnpm run build:examples-app && npx http-server ./example/dist/ -c-1 -o",
+    "dev": "ng serve --project=example",
     "clean": "rimraf lib coverage example/dist .nyc_output 2> /dev/null",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
@@ -60,16 +60,16 @@
     ]
   },
   "peerDependencies": {
-    "@angular/animations": "^18.0.0 || ^19.0.0",
-    "@angular/cdk": "^18.0.0 || ^19.0.0",
-    "@angular/common": "^18.0.0 || ^19.0.0",
-    "@angular/core": "^18.0.0 || ^19.0.0",
-    "@angular/forms": "^18.0.0 || ^19.0.0",
-    "@angular/material": "^18.0.0 || ^19.0.0",
-    "@angular/platform-browser": "^18.0.0 || ^19.0.0",
-    "@angular/router": "^18.0.0 || ^19.0.0",
-    "@jsonforms/angular": "3.6.0-alpha.0",
-    "@jsonforms/core": "3.6.0-alpha.0",
+    "@angular/animations": "^18.0.0 || ^19.0.0 || ^20.0.0-rc.0",
+    "@angular/cdk": "^18.0.0 || ^19.0.0 || ^20.0.0-rc.0",
+    "@angular/common": "^18.0.0 || ^19.0.0 || ^20.0.0-rc.0",
+    "@angular/core": "^18.0.0 || ^19.0.0 || ^20.0.0-rc.0",
+    "@angular/forms": "^18.0.0 || ^19.0.0 || ^20.0.0-rc.0",
+    "@angular/material": "^18.0.0 || ^19.0.0 || ^20.0.0-rc.0",
+    "@angular/platform-browser": "^18.0.0 || ^19.0.0 || ^20.0.0-rc.0",
+    "@angular/router": "^18.0.0 || ^19.0.0 || ^20.0.0-rc.0",
+    "@jsonforms/angular": "3.6.0-alpha.1",
+    "@jsonforms/core": "3.6.0-alpha.1",
     "dayjs": "^1.11.10",
     "rxjs": "^6.6.0 || ^7.4.0"
   },
