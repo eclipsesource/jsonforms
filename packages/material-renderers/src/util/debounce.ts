@@ -55,7 +55,7 @@ export const useDebouncedChange = (
       setInput(newValue ?? defaultValue);
       debouncedUpdate(newValue);
     },
-    [debouncedUpdate, eventToValue]
+    [debouncedUpdate, eventToValueFunction]
   );
   const onClear = useCallback(() => {
     setInput(defaultValue);
