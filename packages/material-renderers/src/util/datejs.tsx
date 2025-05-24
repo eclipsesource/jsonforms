@@ -31,7 +31,10 @@ export const createOnBlurHandler =
   (e: React.FocusEvent<HTMLTextAreaElement | HTMLInputElement, Element>) => {
     const date = dayjs(e.target.value, format);
     const formatedDate = formatDate(date, saveFormat);
-    if (formatedDate.toString() === 'Invalid Date') {
+    if (
+      formatedDate.toString() === 'Invalid Date' &&
+      e.target.value !== format
+    ) {
       handleChange(path, undefined);
       rerenderChild();
     } else {
