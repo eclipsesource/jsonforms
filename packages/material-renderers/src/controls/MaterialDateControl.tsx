@@ -161,7 +161,7 @@ export const MaterialDateControl = (props: ControlProps) => {
             fullWidth: !appliedUiSchemaOptions.trim,
             inputProps: {
               type: 'text',
-              readonly: true,
+              readOnly: true,
             },
             InputLabelProps: data ? { shrink: true } : undefined,
             onFocus: onFocus,
