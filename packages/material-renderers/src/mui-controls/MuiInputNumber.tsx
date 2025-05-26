@@ -25,7 +25,12 @@
 import React from 'react';
 import { CellProps, WithClassname } from '@jsonforms/core';
 import merge from 'lodash/merge';
-import { useDebouncedChange, useInputComponent, WithInputProps } from '../util';
+import {
+  useDebouncedChange,
+  useInputComponent,
+  WithInputProps,
+  useFocus,
+} from '../util';
 
 const toNumber = (value: string) =>
   value === '' ? undefined : parseFloat(value);
@@ -33,6 +38,7 @@ const eventToValue = (ev: any) => toNumber(ev.target.value);
 export const MuiInputNumber = React.memo(function MuiInputNumber(
   props: CellProps & WithClassname & WithInputProps
 ) {
+  const [focused, onFocus, onBlur] = useFocus();
   const {
     data,
     className,
@@ -54,7 +60,10 @@ export const MuiInputNumber = React.memo(function MuiInputNumber(
     '',
     data,
     path,
-    eventToValue
+    eventToValue,
+    undefined,
+    true,
+    focused
   );
 
   return (
@@ -63,6 +72,8 @@ export const MuiInputNumber = React.memo(function MuiInputNumber(
       label={label}
       value={inputValue}
       onChange={onChange}
+      onFocus={onFocus}
+      onBlur={onBlur}
       className={className}
       id={id}
       disabled={!enabled}
