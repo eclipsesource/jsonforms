@@ -33,6 +33,8 @@ import {
   OrCondition,
   RuleEffect,
   SchemaBasedCondition,
+  ValidateFunctionCondition,
+  ValidateFunctionContext,
 } from '../../src';
 import { evalEnablement, evalVisibility } from '../../src/util/runtime';
 
@@ -489,6 +491,119 @@ test('evalEnablement disable valid case', (t) => {
     ruleValue: 'bar',
   };
   t.is(evalEnablement(uischema, data, undefined, createAjv()), false);
+});
+
+// Add test case for ValidateFunctionCondition with evalEnablement (valid enable case)
+test('evalEnablement enable valid case based on ValidateFunctionCondition', (t) => {
+  const condition: ValidateFunctionCondition = {
+    scope: '#/properties/ruleValue',
+    validate: (context: ValidateFunctionContext) => context.data === 'bar',
+  };
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/value',
+    rule: {
+      effect: RuleEffect.ENABLE,
+      condition: condition,
+    },
+  };
+  const data = {
+    value: 'foo',
+    ruleValue: 'bar',
+  };
+  t.is(evalEnablement(uischema, data, undefined, createAjv()), true);
+});
+
+// Add test case for ValidateFunctionCondition with evalEnablement (invalid enable case)
+test('evalEnablement enable invalid case based on ValidateFunctionCondition', (t) => {
+  const condition: ValidateFunctionCondition = {
+    scope: '#/properties/ruleValue',
+    validate: (context: ValidateFunctionContext) => context.data === 'bar',
+  };
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/value',
+    rule: {
+      effect: RuleEffect.ENABLE,
+      condition: condition,
+    },
+  };
+  const data = {
+    value: 'foo',
+    ruleValue: 'foobar',
+  };
+  t.is(evalEnablement(uischema, data, undefined, createAjv()), false);
+});
+
+// Add test case for ValidateFunctionCondition with evalEnablement (valid disable case)
+test('evalEnablement disable valid case based on ValidateFunctionCondition', (t) => {
+  const condition: ValidateFunctionCondition = {
+    scope: '#/properties/ruleValue',
+    validate: (context: ValidateFunctionContext) => context.data === 'bar',
+  };
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/value',
+    rule: {
+      effect: RuleEffect.DISABLE,
+      condition: condition,
+    },
+  };
+  const data = {
+    value: 'foo',
+    ruleValue: 'bar',
+  };
+  t.is(evalEnablement(uischema, data, undefined, createAjv()), false);
+});
+
+// Add test case for ValidateFunctionCondition with evalEnablement (invalid disable case)
+test('evalEnablement disable invalid case based on ValidateFunctionCondition', (t) => {
+  const condition: ValidateFunctionCondition = {
+    scope: '#/properties/ruleValue',
+    validate: (context: ValidateFunctionContext) => context.data === 'bar',
+  };
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/value',
+    rule: {
+      effect: RuleEffect.DISABLE,
+      condition: condition,
+    },
+  };
+  const data = {
+    value: 'foo',
+    ruleValue: 'foobar',
+  };
+  t.is(evalEnablement(uischema, data, undefined, createAjv()), true);
+});
+
+// Test context properties for ValidateFunctionCondition
+test('ValidateFunctionCondition correctly passes context parameters', (t) => {
+  const condition: ValidateFunctionCondition = {
+    scope: '#/properties/ruleValue',
+    validate: (context: ValidateFunctionContext) => {
+      // Verify all context properties are passed correctly
+      return (
+        context.data === 'bar' &&
+        (context.fullData as any).value === 'foo' &&
+        context.path === undefined &&
+        (context.uischemaElement as any).scope === '#/properties/value'
+      );
+    },
+  };
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/value',
+    rule: {
+      effect: RuleEffect.ENABLE,
+      condition: condition,
+    },
+  };
+  const data = {
+    value: 'foo',
+    ruleValue: 'bar',
+  };
+  t.is(evalEnablement(uischema, data, undefined, createAjv()), true);
 });
 
 test('evalEnablement disable invalid case', (t) => {

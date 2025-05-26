@@ -33,6 +33,7 @@ import {
   SchemaBasedCondition,
   Scopable,
   UISchemaElement,
+  ValidateFunctionCondition,
 } from '../models';
 import { resolveData } from './resolvers';
 import type Ajv from 'ajv';
@@ -51,24 +52,31 @@ const isSchemaCondition = (
   condition: Condition
 ): condition is SchemaBasedCondition => has(condition, 'schema');
 
+const isValidateFunctionCondition = (
+  condition: Condition
+): condition is ValidateFunctionCondition =>
+  has(condition, 'validate') &&
+  typeof (condition as ValidateFunctionCondition).validate === 'function';
+
 const getConditionScope = (condition: Scopable, path: string): string => {
   return composeWithUi(condition, path);
 };
 
 const evaluateCondition = (
   data: any,
+  uischema: UISchemaElement,
   condition: Condition,
   path: string,
   ajv: Ajv
 ): boolean => {
   if (isAndCondition(condition)) {
     return condition.conditions.reduce(
-      (acc, cur) => acc && evaluateCondition(data, cur, path, ajv),
+      (acc, cur) => acc && evaluateCondition(data, uischema, cur, path, ajv),
       true
     );
   } else if (isOrCondition(condition)) {
     return condition.conditions.reduce(
-      (acc, cur) => acc || evaluateCondition(data, cur, path, ajv),
+      (acc, cur) => acc || evaluateCondition(data, uischema, cur, path, ajv),
       false
     );
   } else if (isLeafCondition(condition)) {
@@ -80,6 +88,15 @@ const evaluateCondition = (
       return false;
     }
     return ajv.validate(condition.schema, value) as boolean;
+  } else if (isValidateFunctionCondition(condition)) {
+    const value = resolveData(data, getConditionScope(condition, path));
+    const context = {
+      data: value,
+      fullData: data,
+      path,
+      uischemaElement: uischema,
+    };
+    return condition.validate(context);
   } else {
     // unknown condition
     return true;
@@ -93,7 +110,7 @@ const isRuleFulfilled = (
   ajv: Ajv
 ): boolean => {
   const condition = uischema.rule.condition;
-  return evaluateCondition(data, condition, path, ajv);
+  return evaluateCondition(data, uischema, condition, path, ajv);
 };
 
 export const evalVisibility = (
