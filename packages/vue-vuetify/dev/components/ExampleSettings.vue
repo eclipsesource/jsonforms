@@ -391,6 +391,23 @@ const layouts = appstoreLayouts.map((value: AppstoreLayouts) => ({
           </v-tooltip>
         </v-col>
       </v-row>
+      <v-row>
+        <v-col>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ props }">
+              <v-switch
+                v-model="
+                  appStore.jsonforms.config.allowAdditionalPropertiesIfMissing
+                "
+                label="Allow Additional Properties By Default"
+                v-bind="props"
+              ></v-switch>
+            </template>
+            Allow adding additional properties when the schema does not specify
+            explicitly the addtionalProperties
+          </v-tooltip>
+        </v-col>
+      </v-row>
     </v-container>
 
     <v-divider />

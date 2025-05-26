@@ -20,7 +20,7 @@
         />
         <dispatch-renderer
           v-for="(allOfRenderInfo, allOfIndex) in allOfRenderInfos"
-          :key="`${control.path}-${allOfIndex}`"
+          :key="`${control.path}-${allOfRenderInfos.length}-${allOfIndex}`"
           :schema="allOfRenderInfo.schema"
           :uischema="allOfRenderInfo.uischema"
           :path="control.path"

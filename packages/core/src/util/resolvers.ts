@@ -123,17 +123,17 @@ const resolveSchemaWithSegments = (
   pathSegments: string[],
   rootSchema: JsonSchema
 ): JsonSchema => {
-  if (isEmpty(schema)) {
-    return undefined;
-  }
-
   // use typeof because schema can by of any type - check singleSegmentResolveSchema below
-  if (typeof schema.$ref === 'string') {
+  if (typeof schema?.$ref === 'string') {
     schema = resolveSchema(rootSchema, schema.$ref, rootSchema);
   }
 
   if (!pathSegments || pathSegments.length === 0) {
     return schema;
+  }
+
+  if (isEmpty(schema)) {
+    return undefined;
   }
 
   const [segment, ...remainingSegments] = pathSegments;

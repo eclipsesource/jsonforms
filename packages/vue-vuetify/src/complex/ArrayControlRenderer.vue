@@ -35,9 +35,9 @@
               :disabled="
                 !control.enabled ||
                 (appliedOptions.restrict &&
-                  arraySchema !== undefined &&
-                  arraySchema.maxItems !== undefined &&
-                  dataLength >= arraySchema.maxItems)
+                  control.arraySchema !== undefined &&
+                  control.arraySchema.maxItems !== undefined &&
+                  dataLength >= control.arraySchema.maxItems)
               "
               @click="addButtonClick"
             >
@@ -58,8 +58,8 @@
             <thead v-if="control.schema.type === 'object'">
               <tr>
                 <th
-                  v-for="(prop, index) in getValidColumnProps(control.schema)"
-                  :key="`${control.path}-header-${index}`"
+                  v-for="(prop, index) in validColumnProps"
+                  :key="`${control.path}-header-${validColumnProps.length}-${index}`"
                   scope="col"
                 >
                   {{ title(prop) }}
@@ -78,14 +78,17 @@
             <tbody>
               <tr
                 v-for="(element, index) in control.data"
-                :key="`${control.path}-${index}`"
+                :key="`${control.path}-${control.data.length}-${index}`"
                 :class="styles.arrayList.item"
               >
                 <td
-                  v-for="propName in getValidColumnProps(control.schema)"
+                  v-for="propName in validColumnProps"
                   :key="
                     composePaths(
-                      composePaths(control.path, `${index}`),
+                      composePaths(
+                        control.path,
+                        `${validColumnProps.length}-${index}`,
+                      ),
                       propName,
                     )
                   "
@@ -162,9 +165,9 @@
                         :disabled="
                           !control.enabled ||
                           (appliedOptions.restrict &&
-                            arraySchema !== undefined &&
-                            arraySchema.minItems !== undefined &&
-                            dataLength <= arraySchema.minItems)
+                            control.arraySchema !== undefined &&
+                            control.arraySchema.minItems !== undefined &&
+                            dataLength <= control.arraySchema.minItems)
                         "
                         @click="removeItemsClick($event, [index])"
                       >
@@ -190,11 +193,9 @@
 
 <script lang="ts">
 import {
-  Resolve,
   composePaths,
   createDefaultValue,
   type ControlElement,
-  type JsonSchema,
 } from '@jsonforms/core';
 import {
   DispatchRenderer,
@@ -244,22 +245,28 @@ const controlRenderer = defineComponent({
   },
   setup(props: RendererProps<ControlElement>) {
     const icons = useIcons();
+    const input = useJsonFormsArrayControl(props);
 
     return {
-      ...useVuetifyArrayControl(useJsonFormsArrayControl(props)),
+      ...useVuetifyArrayControl(input),
       icons,
     };
   },
   computed: {
-    arraySchema(): JsonSchema | undefined {
-      return Resolve.schema(
-        this.control.rootSchema,
-        this.control.uischema.scope,
-        this.control.rootSchema,
-      );
-    },
     dataLength(): number {
       return this.control.data ? this.control.data.length : 0;
+    },
+    validColumnProps() {
+      if (
+        this.control.schema.type === 'object' &&
+        typeof this.control.schema.properties === 'object'
+      ) {
+        return Object.keys(this.control.schema.properties).filter(
+          (prop) => this.control.schema.properties![prop].type !== 'array',
+        );
+      }
+      // primitives
+      return [''];
     },
   },
   methods: {
@@ -283,23 +290,11 @@ const controlRenderer = defineComponent({
       event.stopPropagation();
       this.removeItems?.(this.control.path, toDelete)();
     },
-    getValidColumnProps(scopedSchema: JsonSchema) {
-      if (
-        scopedSchema.type === 'object' &&
-        typeof scopedSchema.properties === 'object'
-      ) {
-        return Object.keys(scopedSchema.properties).filter(
-          (prop) => scopedSchema.properties![prop].type !== 'array',
-        );
-      }
-      // primitives
-      return [''];
-    },
     title(prop: string) {
       return this.control.schema.properties?.[prop]?.title ?? startCase(prop);
     },
     resolveUiSchema(propName: string) {
-      return this.control.schema.properties
+      return this.control.schema.properties && propName
         ? this.controlWithoutLabel(`#/properties/${propName}`)
         : this.controlWithoutLabel('#');
     },

@@ -5,6 +5,7 @@ export { default as EnumArrayRenderer } from './EnumArrayRenderer.vue';
 export { default as ObjectRenderer } from './ObjectRenderer.vue';
 export { default as OneOfRenderer } from './OneOfRenderer.vue';
 export { default as OneOfTabRenderer } from './OneOfTabRenderer.vue';
+export { default as MixedRenderer } from './MixedRenderer.vue';
 
 import { entry as allOfRendererEntry } from './AllOfRenderer.entry';
 import { entry as anyOfRendererEntry } from './AnyOfRenderer.entry';
@@ -13,6 +14,7 @@ import { entry as enumArrayRendererEntry } from './EnumArrayRenderer.entry';
 import { entry as objectRendererEntry } from './ObjectRenderer.entry';
 import { entry as oneOfRendererEntry } from './OneOfRenderer.entry';
 import { entry as oneOfTabRendererEntry } from './OneOfTabRenderer.entry';
+import { entry as mixedRendererEntry } from './MixedRenderer.entry';
 
 export const complexRenderers = [
   allOfRendererEntry,
@@ -22,6 +24,7 @@ export const complexRenderers = [
   objectRendererEntry,
   oneOfRendererEntry,
   oneOfTabRendererEntry,
+  mixedRendererEntry,
 ];
 
 export {
@@ -32,4 +35,5 @@ export {
   objectRendererEntry,
   oneOfRendererEntry,
   oneOfTabRendererEntry,
+  mixedRendererEntry,
 };

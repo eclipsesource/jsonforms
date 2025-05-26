@@ -38,7 +38,7 @@ import {
 import { defineComponent } from 'vue';
 import { VNumberInput } from 'vuetify/labs/VNumberInput';
 
-import { useVuetifyControl } from '../util';
+import { determineClearValue, useVuetifyControl } from '../util';
 import { default as ControlWrapper } from './ControlWrapper.vue';
 import { DisabledIconFocus } from './directives';
 
@@ -55,7 +55,8 @@ const controlRenderer = defineComponent({
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    const adaptValue = (value: any) => (value == null ? undefined : value);
+    const clearValue = determineClearValue(0);
+    const adaptValue = (value: any) => (value === null ? clearValue : value);
     const input = useVuetifyControl(useJsonFormsControl(props), adaptValue);
 
     return { ...input, adaptValue };

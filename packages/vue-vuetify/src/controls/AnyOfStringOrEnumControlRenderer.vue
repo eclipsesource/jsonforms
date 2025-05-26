@@ -45,7 +45,7 @@ import {
 } from '@jsonforms/vue';
 import { defineComponent } from 'vue';
 import { VCombobox } from 'vuetify/components';
-import { useVuetifyControl } from '../util';
+import { determineClearValue, useVuetifyControl } from '../util';
 import { default as ControlWrapper } from './ControlWrapper.vue';
 import { DisabledIconFocus } from './directives';
 
@@ -62,9 +62,9 @@ const controlRenderer = defineComponent({
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    return useVuetifyControl(
-      useJsonFormsControl(props),
-      (value) => value || undefined,
+    const clearValue = determineClearValue('');
+    return useVuetifyControl(useJsonFormsControl(props), (value) =>
+      value === null ? clearValue : value,
     );
   },
   computed: {
