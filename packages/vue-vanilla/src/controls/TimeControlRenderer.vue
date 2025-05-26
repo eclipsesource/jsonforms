@@ -8,7 +8,7 @@
     <input
       :id="control.id + '-input'"
       type="time"
-      step="2"
+      :step="appliedOptions.step > 0 ? appliedOptions.step : undefined"
       :class="styles.control.input"
       :value="control.data"
       :disabled="!control.enabled"
