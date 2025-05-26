@@ -31,7 +31,15 @@ export const createOnBlurHandler =
   (e: React.FocusEvent<HTMLTextAreaElement | HTMLInputElement, Element>) => {
     const date = dayjs(e.target.value, format);
     const formatedDate = formatDate(date, saveFormat);
-    if (formatedDate.toString() === 'Invalid Date') {
+    // Check if the input value is a date/time format string. Initially, a date format is sent when the user clicks the empty field.
+    if (
+      /^((?:[DMY]{2,4}(?:[-/:\s.]+[DMY]{2,4}){0,2}|\b[DMY]+\b)\s*)?([HhmsAa]+[-/:\s.]+[HhmsAa]+[-/:\s.]*[HhmsAa]*)?$/i.test(
+        e.target.value
+      )
+    ) {
+      handleChange(path, undefined);
+      // don't rerender so user can click the date picker.
+    } else if (formatedDate.toString() === 'Invalid Date') {
       handleChange(path, undefined);
       rerenderChild();
     } else {
