@@ -114,6 +114,30 @@ export const resolveSchema = (
   schemaPath: string,
   rootSchema: JsonSchema
 ): JsonSchema => {
+  // Special case: If the schema is the root schema and has a $ref at the top level
+  // Directly resolve the reference in the root schema first
+  if (schema === rootSchema && typeof schema?.$ref === 'string') {
+    const refSegments = schema.$ref.split('/').map(decode);
+
+    // Create a temporary copy of rootSchema without $ref to prevent recursion
+    // This is crucial for handling self-references in the root schema
+    const tempRootSchema = { ...rootSchema };
+    delete tempRootSchema.$ref;
+
+    // Resolve the reference within the temporary schema without the $ref
+    // This allows us to resolve references like #/definitions/abc properly
+    const resolvedRootSchema = resolveSchemaWithSegments(
+      tempRootSchema,
+      refSegments,
+      tempRootSchema
+    );
+
+    // If successfully resolved, use that as our starting schema
+    if (resolvedRootSchema) {
+      schema = resolvedRootSchema;
+    }
+  }
+
   const segments = schemaPath?.split('/').map(decode);
   return resolveSchemaWithSegments(schema, segments, rootSchema);
 };

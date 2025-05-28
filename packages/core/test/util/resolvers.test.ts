@@ -22,8 +22,8 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { resolveData, resolveSchema } from '../../src/util/resolvers';
 import test from 'ava';
+import { resolveData, resolveSchema } from '../../src/util/resolvers';
 
 test('resolveSchema - resolves schema with any ', (t) => {
   const schema = {
@@ -230,4 +230,217 @@ test('resolveData - resolves data with % characters', (t) => {
     'foo%': '123',
   };
   t.deepEqual(resolveData(data, 'foo%'), '123');
+});
+
+test('resolveSchema - root schema with top-level $ref', (t) => {
+  const schema = {
+    $ref: '#/definitions/person',
+    definitions: {
+      person: {
+        type: 'object',
+        properties: {
+          name: { type: 'string' },
+          age: { type: 'number' },
+        },
+      },
+    },
+  };
+
+  const resolved = resolveSchema(schema, '', schema);
+  t.is(resolved.type, 'object');
+  t.truthy(resolved.properties);
+  t.truthy(resolved.properties?.name);
+  t.truthy(resolved.properties?.age);
+});
+
+test('resolveSchema - self-references in root schema', (t) => {
+  const schema = {
+    $ref: '#',
+    type: 'object',
+    properties: {
+      name: { type: 'string' },
+      child: { $ref: '#' },
+    },
+  };
+
+  const resolved = resolveSchema(schema, '', schema);
+  t.is(resolved.type, 'object');
+  t.truthy(resolved.properties);
+  t.truthy(resolved.properties?.name);
+  t.truthy(resolved.properties?.child);
+});
+
+test('resolveSchema - nested paths after resolving root schema $ref', (t) => {
+  const schema = {
+    $ref: '#/definitions/parent',
+    definitions: {
+      parent: {
+        type: 'object',
+        properties: {
+          child: { $ref: '#/definitions/child' },
+        },
+      },
+      child: {
+        type: 'object',
+        properties: {
+          name: { type: 'string' },
+        },
+      },
+    },
+  };
+
+  // First resolve the root schema
+  const resolved = resolveSchema(schema, '', schema);
+  t.is(resolved.type, 'object');
+
+  // Then resolve the path to the child properties
+  const childSchema = resolveSchema(schema, '/properties/child', schema);
+  t.is(childSchema.type, 'object');
+  t.truthy(childSchema.properties);
+  t.is(childSchema.properties?.name.type, 'string');
+});
+
+test('resolveSchema should resolve a root schema with top-level $ref', (t) => {
+  const schema = {
+    $ref: '#/definitions/person',
+    definitions: {
+      person: {
+        type: 'object',
+        properties: {
+          name: { type: 'string' },
+          age: { type: 'number' },
+        },
+      },
+    },
+  };
+
+  const resolved = resolveSchema(schema, '', schema);
+  t.is(resolved.type, 'object');
+  t.deepEqual(resolved.properties?.name, { type: 'string' });
+  t.deepEqual(resolved.properties?.age, { type: 'number' });
+});
+
+test('resolveSchema should handle self-references in root schema', (t) => {
+  const schema = {
+    $ref: '#',
+    type: 'object',
+    properties: {
+      name: { type: 'string' },
+      child: { $ref: '#' },
+    },
+  };
+
+  const resolved = resolveSchema(schema, '', schema);
+  t.is(resolved.type, 'object');
+  t.deepEqual(resolved.properties?.name, { type: 'string' });
+  t.is(resolved.properties?.child.$ref, '#');
+});
+
+test('resolveSchema should resolve nested paths after resolving root schema $ref', (t) => {
+  const schema = {
+    $ref: '#/definitions/parent',
+    definitions: {
+      parent: {
+        type: 'object',
+        properties: {
+          child: { $ref: '#/definitions/child' },
+        },
+      },
+      child: {
+        type: 'object',
+        properties: {
+          name: { type: 'string' },
+        },
+      },
+    },
+  };
+
+  const childSchema = resolveSchema(schema, '/properties/child', schema);
+  t.is(childSchema.type, 'object');
+  t.deepEqual(childSchema.properties?.name, { type: 'string' });
+});
+
+describe('resolveSchema - root schema with $ref', () => {
+  test('should resolve root schema with top-level $ref', () => {
+    const rootSchema = {
+      $ref: '#/definitions/person',
+      definitions: {
+        person: {
+          type: 'object',
+          properties: {
+            name: { type: 'string' },
+            age: { type: 'number' },
+          },
+        },
+      },
+    };
+
+    const resolved = resolveSchema(rootSchema, '', rootSchema);
+    expect(resolved).toBeDefined();
+    expect(resolved.type).toBe('object');
+    expect(resolved.properties).toBeDefined();
+    if (resolved.properties) {
+      expect(resolved.properties.name).toBeDefined();
+      expect(resolved.properties.age).toBeDefined();
+    }
+  });
+
+  test('should handle self-references in root schema', () => {
+    const rootSchema = {
+      $ref: '#',
+      type: 'object',
+      properties: {
+        name: { type: 'string' },
+        child: { $ref: '#' },
+      },
+    };
+
+    const resolved = resolveSchema(rootSchema, '', rootSchema);
+    expect(resolved).toBeDefined();
+    expect(resolved.type).toBe('object');
+    expect(resolved.properties).toBeDefined();
+    if (resolved.properties) {
+      expect(resolved.properties.name).toBeDefined();
+      expect(resolved.properties.child).toBeDefined();
+    }
+  });
+
+  test('should correctly resolve nested paths after resolving root schema $ref', () => {
+    const rootSchema = {
+      $ref: '#/definitions/parent',
+      definitions: {
+        parent: {
+          type: 'object',
+          properties: {
+            child: { $ref: '#/definitions/child' },
+          },
+        },
+        child: {
+          type: 'object',
+          properties: {
+            name: { type: 'string' },
+          },
+        },
+      },
+    };
+
+    // First resolve the root schema
+    const resolved = resolveSchema(rootSchema, '', rootSchema);
+    expect(resolved).toBeDefined();
+    expect(resolved.type).toBe('object');
+
+    // Then resolve the path to the child properties
+    const childSchema = resolveSchema(
+      rootSchema,
+      '/properties/child',
+      rootSchema
+    );
+    expect(childSchema).toBeDefined();
+    expect(childSchema.type).toBe('object');
+    expect(childSchema.properties).toBeDefined();
+    if (childSchema.properties) {
+      expect(childSchema.properties.name).toBeDefined();
+      expect(childSchema.properties.name.type).toBe('string');
+    }
+  });
 });
