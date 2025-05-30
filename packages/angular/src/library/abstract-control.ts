@@ -126,10 +126,7 @@ export abstract class JsonFormsAbstractControl<
           this.hidden = !visible;
           this.scopedSchema = schema;
           this.rootSchema = rootSchema;
-          this.description =
-            this.scopedSchema !== undefined
-              ? this.scopedSchema.description
-              : '';
+          this.description = props.description ?? '';
           this.id = props.id;
           this.form.setValue(data);
           this.propsPath = path;
