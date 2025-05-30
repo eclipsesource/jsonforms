@@ -13,6 +13,7 @@
       :disabled="!control.enabled"
       :autofocus="appliedOptions.focus"
       :placeholder="appliedOptions.placeholder"
+      :step="typeof appliedOptions.step === 'number' ? appliedOptions.step : 0"
       @change="onChange"
       @focus="isFocused = true"
       @blur="isFocused = false"
@@ -45,10 +46,14 @@ const controlRenderer = defineComponent({
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    return useVanillaControl(
-      useJsonFormsControl(props),
-      (target) => target.value || undefined
-    );
+    return useVanillaControl(useJsonFormsControl(props), (target) => {
+      const value = target.value || undefined;
+      // Append '00' seconds if the value is in HH:MM format
+      if (value && /^\d{2}:\d{2}$/.test(value)) {
+        return `${value}:00`;
+      }
+      return value;
+    });
   },
 });
 
