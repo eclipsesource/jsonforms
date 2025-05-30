@@ -213,4 +213,122 @@ describe('Number control custom', () => {
 
     expect(numberNativeElement.value).toBe('1000000');
   });
+
+  it('should have description property set correctly', () => {
+    const schema = {
+      type: 'object',
+      properties: {
+        foo: {
+          type: 'number',
+          description: 'This is a number field',
+        },
+      },
+    };
+    const uischema = Object.assign({}, defaultUischema);
+    component.uischema = uischema;
+    const state: JsonFormsCore = {
+      data: defaultData,
+      schema: schema,
+      uischema: uischema,
+    };
+    getJsonFormsService(component).init({
+      core: state,
+      i18n: {
+        locale: 'en',
+      },
+    });
+    getJsonFormsService(component).updateCore(
+      Actions.init(state.data, state.schema)
+    );
+    component.ngOnInit();
+    fixture.detectChanges();
+
+    // Verify the description property is set correctly on the component
+    expect(component.description).toBe('This is a number field');
+  });
+
+  it('should show description when showUnfocusedDescription is true', () => {
+    const schema = {
+      type: 'object',
+      properties: {
+        foo: {
+          type: 'number',
+          description: 'This is a number field',
+        },
+      },
+    };
+    const uischema = Object.assign({}, defaultUischema);
+    uischema.options = {
+      showUnfocusedDescription: true,
+    };
+    component.uischema = uischema;
+    const state: JsonFormsCore = {
+      data: defaultData,
+      schema: schema,
+      uischema: uischema,
+    };
+    getJsonFormsService(component).init({
+      core: state,
+      i18n: {
+        locale: 'en',
+      },
+    });
+    getJsonFormsService(component).updateCore(
+      Actions.init(state.data, state.schema)
+    );
+    component.ngOnInit();
+    fixture.detectChanges();
+
+    // Description should be visible even without focus
+    const matHint = fixture.nativeElement.querySelector('mat-hint');
+    expect(matHint).toBeTruthy();
+    expect(matHint.textContent.trim()).toBe('This is a number field');
+  });
+
+  it('should render translated description correctly', () => {
+    const schema = {
+      type: 'object',
+      properties: {
+        foo: {
+          type: 'number',
+          description: 'description.number',
+        },
+      },
+    };
+    const uischema = Object.assign({}, defaultUischema);
+    uischema.options = {
+      showUnfocusedDescription: true,
+    };
+    component.uischema = uischema;
+    const state: JsonFormsCore = {
+      data: defaultData,
+      schema: schema,
+      uischema: uischema,
+    };
+    getJsonFormsService(component).init({
+      core: state,
+      i18n: {
+        locale: 'en',
+        translate: (key: string, defaultMessage: string | undefined) => {
+          const translations: { [key: string]: string } = {
+            'foo.description': 'Translated number description',
+          };
+          return translations[key] ?? defaultMessage;
+        },
+      },
+    });
+    getJsonFormsService(component).updateCore(
+      Actions.init(state.data, state.schema)
+    );
+    component.ngOnInit();
+    fixture.detectChanges();
+
+    // Verify the description is translated and rendered correctly
+    expect(component.description).toBe('Translated number description');
+
+    // Check that the translated description is displayed in the DOM
+    const matHint = fixture.nativeElement.querySelector('mat-hint');
+    expect(matHint).toBeTruthy();
+    expect(matHint.textContent.trim()).toBe('Translated number description');
+  });
 });
