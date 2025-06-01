@@ -30,6 +30,10 @@ import {
   ArrayTranslations,
   computeChildLabel,
   UpdateArrayContext,
+  subErrorsAt,
+  fetchErrorTranslator,
+  fetchTranslator,
+  getCombinedErrorMessage,
 } from '@jsonforms/core';
 import {
   Accordion,
@@ -39,13 +43,16 @@ import {
   Grid,
   IconButton,
   Tooltip,
+  SxProps,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ArrowUpward from '@mui/icons-material/ArrowUpward';
 import ArrowDownward from '@mui/icons-material/ArrowDownward';
 import DeleteIcon from '@mui/icons-material/Delete';
+import ValidationIcon from '../complex/ValidationIcon';
 
 const iconStyle: any = { float: 'right' };
+const avatarSx: SxProps = { display: 'inline-flex', marginRight: '.25rem' };
 
 interface OwnPropsOfExpandPanel {
   enabled: boolean;
@@ -70,6 +77,7 @@ interface OwnPropsOfExpandPanel {
 interface StatePropsOfExpandPanel extends OwnPropsOfExpandPanel {
   childLabel: string;
   childPath: string;
+  childErrors: string;
   enableMoveUp: boolean;
   enableMoveDown: boolean;
 }
@@ -100,6 +108,7 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
     enabled,
     childLabel,
     childPath,
+    childErrors,
     index,
     expanded,
     moveDown,
@@ -146,11 +155,19 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
       onChange={handleExpansion(childPath)}
     >
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Grid container alignItems={'center'}>
+        <Grid container alignItems='center'>
           <Grid item xs={7} md={9}>
-            <Grid container alignItems={'center'}>
+            <Grid container alignItems='center'>
               <Grid item xs={2} md={1}>
-                <Avatar aria-label='Index'>{index + 1}</Avatar>
+                <Avatar aria-label='Index' sx={avatarSx}>
+                  {index + 1}
+                </Avatar>
+                {childErrors.length !== 0 && (
+                  <ValidationIcon
+                    id='tooltip-validation'
+                    errorMessages={childErrors}
+                  />
+                )}
               </Grid>
               <Grid item xs={10} md={11}>
                 <span id={labelHtmlId}>{childLabel}</span>
@@ -379,12 +396,26 @@ export const withContextToExpandPanelProps = (
       uischema,
     ]);
 
+    const childErrors = useMemo(
+      () =>
+        getCombinedErrorMessage(
+          subErrorsAt(childPath, schema)(ctx.core),
+          fetchErrorTranslator(ctx.i18n),
+          fetchTranslator(ctx.i18n),
+          undefined,
+          undefined,
+          undefined
+        ),
+      [ctx.core.errors, ctx.core.validationMode, ctx.i18n, schema, childPath]
+    );
+
     return (
       <Component
         {...props}
         {...dispatchProps}
         childLabel={childLabel}
         childPath={childPath}
+        childErrors={childErrors}
         uischemas={uischemas}
       />
     );
