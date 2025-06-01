@@ -791,10 +791,20 @@ export const mapStateToMasterListItemProps = (
     state.jsonforms.i18n.translate,
     uischema
   );
+  const subErrors = getSubErrorsAt(childPath, schema)(state);
+  const childErrors = getCombinedErrorMessage(
+    subErrors,
+    getErrorTranslator()(state),
+    getTranslator()(state),
+    undefined,
+    undefined,
+    undefined
+  );
 
   return {
     ...ownProps,
     childLabel,
+    childErrors,
   };
 };
 
@@ -823,6 +833,7 @@ export interface OwnPropsOfMasterListItem {
 
 export interface StatePropsOfMasterItem extends OwnPropsOfMasterListItem {
   childLabel: string;
+  childErrors: string;
 }
 
 /**
