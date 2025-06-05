@@ -95,16 +95,6 @@ const evaluateCondition = (
   }
 };
 
-const isRuleFulfilled = (
-  uischema: UISchemaElement,
-  data: any,
-  path: string,
-  ajv: Ajv
-): boolean => {
-  const condition = uischema.rule.condition;
-  return evaluateCondition(data, condition, path, ajv);
-};
-
 // Effect compatibility groups - effects in the same group are mutually exclusive
 const EFFECT_GROUPS = {
   VISIBILITY: [RuleEffect.SHOW, RuleEffect.HIDE],
@@ -138,6 +128,11 @@ export const validateEffects = (effects: RuleEffect[]): boolean => {
   return true;
 };
 
+const normalizeRules = (rule: Rule | Rule[] | undefined): Rule[] => {
+  if (!rule) return [];
+  return Array.isArray(rule) ? rule : [rule];
+};
+
 // Helper to get array of effects
 const getEffects = (rule: Rule): RuleEffect[] => {
   return Array.isArray(rule.effect) ? rule.effect : [rule.effect];
@@ -157,17 +152,26 @@ export const evalVisibility = (
   path: string = undefined,
   ajv: Ajv
 ): boolean => {
-  if (!uischema.rule) return true;
+  const rules = normalizeRules(uischema.rule);
+  let visibility = true;
 
-  const effects = getEffects(uischema.rule);
-  const visibilityEffect = findEffect(effects, [
-    RuleEffect.SHOW,
-    RuleEffect.HIDE,
-  ]);
-  if (!visibilityEffect) return true;
+  for (const rule of rules) {
+    const effects = getEffects(rule);
+    const visibilityEffect = findEffect(effects, [
+      RuleEffect.SHOW,
+      RuleEffect.HIDE,
+    ]);
+    if (!visibilityEffect) continue;
 
-  const fulfilled = isRuleFulfilled(uischema, data, path, ajv);
-  return visibilityEffect === RuleEffect.SHOW ? fulfilled : !fulfilled;
+    const fulfilled = evaluateCondition(data, rule.condition, path, ajv);
+    if (visibilityEffect === RuleEffect.SHOW) {
+      visibility = fulfilled;
+    } else if (visibilityEffect === RuleEffect.HIDE) {
+      visibility = !fulfilled;
+    }
+  }
+
+  return visibility;
 };
 
 export const evalEnablement = (
@@ -176,17 +180,26 @@ export const evalEnablement = (
   path: string = undefined,
   ajv: Ajv
 ): boolean => {
-  if (!uischema.rule) return true;
+  const rules = normalizeRules(uischema.rule);
+  let enabled = true;
 
-  const effects = getEffects(uischema.rule);
-  const enablementEffect = findEffect(effects, [
-    RuleEffect.ENABLE,
-    RuleEffect.DISABLE,
-  ]);
-  if (!enablementEffect) return true;
+  for (const rule of rules) {
+    const effects = getEffects(rule);
+    const enableEffect = findEffect(effects, [
+      RuleEffect.ENABLE,
+      RuleEffect.DISABLE,
+    ]);
+    if (!enableEffect) continue;
 
-  const fulfilled = isRuleFulfilled(uischema, data, path, ajv);
-  return enablementEffect === RuleEffect.ENABLE ? fulfilled : !fulfilled;
+    const fulfilled = evaluateCondition(data, rule.condition, path, ajv);
+    if (enableEffect === RuleEffect.ENABLE) {
+      enabled = fulfilled;
+    } else if (enableEffect === RuleEffect.DISABLE) {
+      enabled = !fulfilled;
+    }
+  }
+
+  return enabled;
 };
 
 export const evalValue = (
@@ -195,61 +208,66 @@ export const evalValue = (
   path: string = undefined,
   ajv: Ajv
 ): { shouldUpdate: boolean; newValue: any } => {
-  if (!uischema.rule) {
-    return { shouldUpdate: false, newValue: undefined };
+  const rules = normalizeRules(uischema.rule);
+
+  for (const rule of rules) {
+    const effects = getEffects(rule);
+    const valueEffect = findEffect(effects, [
+      RuleEffect.FILL_VALUE,
+      RuleEffect.CLEAR_VALUE,
+    ]);
+    if (!valueEffect) {
+      continue;
+    }
+
+    const fulfilled = evaluateCondition(data, rule.condition, path, ajv);
+
+    if (!fulfilled) {
+      continue;
+    }
+
+    if (valueEffect === RuleEffect.FILL_VALUE) {
+      // If FILL_VALUE is matched, we must have a value
+      const newValue = rule.options?.value;
+      return {
+        shouldUpdate: newValue !== undefined,
+        newValue: newValue,
+      };
+    }
+
+    if (valueEffect === RuleEffect.CLEAR_VALUE) {
+      return {
+        shouldUpdate: true,
+        newValue: undefined,
+      };
+    }
   }
 
-  const effects = getEffects(uischema.rule);
-  const valueEffect = findEffect(effects, [
-    RuleEffect.FILL_VALUE,
-    RuleEffect.CLEAR_VALUE,
-  ]);
-  if (!valueEffect) {
-    return { shouldUpdate: false, newValue: undefined };
-  }
-
-  // For FILL_VALUE, we need options.value to be defined
-  if (valueEffect === RuleEffect.FILL_VALUE && !uischema.rule.options?.value) {
-    return { shouldUpdate: false, newValue: undefined };
-  }
-
-  const fulfilled = isRuleFulfilled(uischema, data, path, ajv);
-
-  if (valueEffect === RuleEffect.FILL_VALUE) {
-    return {
-      shouldUpdate: fulfilled,
-      newValue: fulfilled ? uischema.rule.options.value : undefined,
-    };
-  } else {
-    return {
-      shouldUpdate: fulfilled,
-      newValue: fulfilled ? undefined : data,
-    };
-  }
+  return { shouldUpdate: false, newValue: undefined };
 };
 
 // Update the has*Rule functions to work with arrays of effects
 export const hasShowRule = (uischema: UISchemaElement): boolean => {
-  if (!uischema.rule) return false;
-  const effects = getEffects(uischema.rule);
-  return effects.some((effect) =>
-    [RuleEffect.SHOW, RuleEffect.HIDE].includes(effect)
+  return normalizeRules(uischema.rule).some((rule) =>
+    getEffects(rule).some((effect) =>
+      [RuleEffect.SHOW, RuleEffect.HIDE].includes(effect)
+    )
   );
 };
 
 export const hasEnableRule = (uischema: UISchemaElement): boolean => {
-  if (!uischema.rule) return false;
-  const effects = getEffects(uischema.rule);
-  return effects.some((effect) =>
-    [RuleEffect.ENABLE, RuleEffect.DISABLE].includes(effect)
+  return normalizeRules(uischema.rule).some((rule) =>
+    getEffects(rule).some((effect) =>
+      [RuleEffect.ENABLE, RuleEffect.DISABLE].includes(effect)
+    )
   );
 };
 
 export const hasValueRule = (uischema: UISchemaElement): boolean => {
-  if (!uischema.rule) return false;
-  const effects = getEffects(uischema.rule);
-  return effects.some((effect) =>
-    [RuleEffect.FILL_VALUE, RuleEffect.CLEAR_VALUE].includes(effect)
+  return normalizeRules(uischema.rule).some((rule) =>
+    getEffects(rule).some((effect) =>
+      [RuleEffect.FILL_VALUE, RuleEffect.CLEAR_VALUE].includes(effect)
+    )
   );
 };
 
