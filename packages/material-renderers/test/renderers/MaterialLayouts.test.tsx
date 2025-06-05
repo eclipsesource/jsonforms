@@ -26,7 +26,6 @@ import React from 'react';
 import Enzyme, { mount } from 'enzyme';
 import { materialRenderers } from '../../src';
 import {
-  ControlElement,
   Layout,
   RuleEffect,
   UISchemaElement,
@@ -354,6 +353,73 @@ describe('Layout Tests', () => {
     });
   });
 });
+describe('SHOW and ENABLE rule combo', () => {
+  it('should apply both SHOW and ENABLE effects correctly', () => {
+    const schema = {
+      type: 'object',
+      properties: {
+        shouldShow: { type: 'boolean' },
+        shouldEnable: { type: 'boolean' },
+        field: { type: 'string' },
+      },
+    };
+
+    const uischema = {
+      type: 'Control',
+      scope: '#/properties/field',
+      rule: [
+        {
+          effect: RuleEffect.SHOW,
+          condition: {
+            scope: '#/properties/shouldShow',
+            schema: { const: true },
+          },
+        },
+        {
+          effect: RuleEffect.ENABLE,
+          condition: {
+            scope: '#/properties/shouldEnable',
+            schema: { const: true },
+          },
+        },
+      ] as any,
+    };
+
+    const mountWithData = (data: any) =>
+      mount(
+        <JsonForms
+          data={data}
+          schema={schema}
+          uischema={uischema}
+          renderers={materialRenderers}
+        />
+      );
+
+    // Case 1: Both true → visible + enabled
+    let wrapper = mountWithData({ shouldShow: true, shouldEnable: true });
+    let input = wrapper.find('input[type="text"]').first();
+    expect(input.exists()).toBe(true);
+    expect(input.props().disabled).toBeFalsy();
+    wrapper.unmount();
+
+    // Case 2: SHOW true, ENABLE false → visible but disabled
+    wrapper = mountWithData({ shouldShow: true, shouldEnable: false });
+    input = wrapper.find('input[type="text"]').first();
+    expect(input.exists()).toBe(true);
+    expect(input.props().disabled).toBe(true);
+    wrapper.unmount();
+
+    // Case 3: SHOW false, ENABLE true → hidden completely
+    wrapper = mountWithData({ shouldShow: false, shouldEnable: true });
+    expect(wrapper.find('input[type="text"]').exists()).toBe(false);
+    wrapper.unmount();
+
+    // Case 4: both false → hidden
+    wrapper = mountWithData({ shouldShow: false, shouldEnable: false });
+    expect(wrapper.find('input[type="text"]').exists()).toBe(false);
+    wrapper.unmount();
+  });
+});
 
 describe('Special Layout Tests', () => {
   describe('Categorization Tests', () => {
@@ -466,18 +532,20 @@ describe('Special Layout Tests', () => {
       },
     };
 
-    const uischema: ControlElement = {
+    const uischema = {
       type: 'Control',
       scope: '#',
-      rule: {
-        effect: RuleEffect.ENABLE,
-        condition: {
-          scope: '#/properties/check',
-          schema: {
-            const: true,
+      rule: [
+        {
+          effect: RuleEffect.ENABLE,
+          condition: {
+            scope: '#/properties/check',
+            schema: {
+              const: true,
+            },
           },
-        } as any,
-      },
+        },
+      ] as any,
     };
 
     it('enabling object control should enable child controls', () => {
