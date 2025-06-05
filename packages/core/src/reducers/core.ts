@@ -56,7 +56,7 @@ import {
   isVisible,
 } from '../util';
 import { JsonSchema } from '../models/jsonSchema';
-import { UISchemaElement, SchemaBasedCondition } from '../models';
+import { UISchemaElement, SchemaBasedCondition, Rule } from '../models';
 
 export const initState: JsonFormsCore = {
   data: {},
@@ -184,7 +184,7 @@ const createDynamicSchema = (
         if (
           !isFieldVisible &&
           data[key] !== undefined &&
-          !control.rule?.options?.preserveValueOnHide
+          !(control.rule as Rule)?.options?.preserveValueOnHide
         ) {
           // Only create a copy if we haven't already
           if (!dataChanged) {

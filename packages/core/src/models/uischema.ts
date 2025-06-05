@@ -209,7 +209,7 @@ export interface UISchemaElement {
   /**
    * An optional rule.
    */
-  rule?: Rule;
+  rule?: Rule[] | Rule;
 
   /**
    * Any additional options.
