@@ -159,6 +159,14 @@ const createDynamicSchema = (
   };
 
   // Check each property for dynamic required rules and value rules
+
+  const hasPreserveValueOnHide = (control: any): boolean => {
+    const rules = Array.isArray(control.rule)
+      ? control.rule
+      : [control.rule].filter(Boolean);
+    return rules.some((r: Rule) => r.options?.preserveValueOnHide === true);
+  };
+
   Object.keys(schema.properties).forEach((key) => {
     const control = findControlForProperty(uischema, key);
     if (control) {
@@ -175,18 +183,16 @@ const createDynamicSchema = (
         }
       }
 
-      // Handle visibility rules - clear values for hidden fields
+      // Visibility rule: if field is hidden and preserveValueOnHide is not true, clear it
       if (hasShowRule(control) && data !== undefined) {
         // Check if the field is hidden
         const isFieldVisible = isVisible(control, data, path, ajv);
-
-        // If field is hidden and has a value, and preserveValueOnHide is not true, clear it
-        if (
+        const shouldClearHiddenValue =
           !isFieldVisible &&
           data[key] !== undefined &&
-          !(control.rule as Rule)?.options?.preserveValueOnHide
-        ) {
-          // Only create a copy if we haven't already
+          !hasPreserveValueOnHide(control);
+        // Only create a copy if we haven't already
+        if (shouldClearHiddenValue) {
           if (!dataChanged) {
             updatedData = { ...data };
             dataChanged = true;
