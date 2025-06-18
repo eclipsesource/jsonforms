@@ -422,7 +422,7 @@ describe('Input control', () => {
       </JsonFormsStateProvider>
     );
     const label = wrapper.find('label');
-    expect(label.text()).toBe('Date Cell*');
+    expect(label.text()).toBe('Date Cell *');
   });
 
   test('not required', () => {
