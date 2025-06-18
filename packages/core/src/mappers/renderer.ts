@@ -517,7 +517,7 @@ export const computeLabel = (
   required: boolean,
   hideRequiredAsterisk: boolean
 ): string => {
-  return `${label ?? ''}${required && !hideRequiredAsterisk ? '*' : ''}`;
+  return `${label ?? ''}${required && !hideRequiredAsterisk ? ' *' : ''}`;
 };
 
 /**
