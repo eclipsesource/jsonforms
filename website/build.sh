@@ -9,7 +9,8 @@ JS_FILE="./static/current-version.js"
 function next() {
     printf "\n" >> "$JS_FILE"
 
-    NEXTVERSIONCANDIDATE=$(curl --silent "https://api.github.com/repos/eclipsesource/jsonforms/tags" | grep '"name":' | head -1 | sed -E 's/.*"([^"]+)".*/\1/')
+    # Get next version from tags and remove the tag "vv3.5.0-beta.2" as it is incorrectly sorted first due to the "vv" prefix.
+    NEXTVERSIONCANDIDATE=$(curl --silent "https://api.github.com/repos/eclipsesource/jsonforms/tags" | grep '"name":' | grep -v '"vv3.5.0-beta.2"' | head -1 | sed -E 's/.*"([^"]+)".*/\1/')
     if [[ ${NEXTVERSIONCANDIDATE:0:1} == "v" ]] && [[ $NEXTVERSIONCANDIDATE != $CURRENTVERSION ]]; then
         NEXTVERSION="${NEXTVERSIONCANDIDATE:1}"
     fi
