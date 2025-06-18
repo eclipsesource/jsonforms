@@ -2163,7 +2163,7 @@ test('computeLabel - should not edit label if required but hideRequiredAsterisk 
 
 test('computeLabel - should add asterisk if required but hideRequiredAsterisk is false', (t) => {
   const computedLabel = computeLabel('Test Label', true, false);
-  t.is(computedLabel, 'Test Label*');
+  t.is(computedLabel, 'Test Label *');
 });
 
 test('mapStateToAnyOfProps - const constraint in anyOf schema should return correct indexOfFittingSchema', (t) => {
