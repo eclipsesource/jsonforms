@@ -37,19 +37,19 @@ export const ArrayLayoutToolbar = React.memo(function ArrayLayoutToolbar({
     <Toolbar disableGutters={true}>
       <Stack>
         <Grid container alignItems='center' justifyContent='space-between'>
-          <Grid item>
+          <Grid>
             <Grid
               container
               justifyContent={'flex-start'}
               alignItems={'center'}
               spacing={2}
             >
-              <Grid item>
+              <Grid>
                 <Typography variant={'h6'}>{label}</Typography>
               </Grid>
-              <Grid item>
+              <Grid>
                 {errors.length !== 0 && (
-                  <Grid item>
+                  <Grid>
                     <ValidationIcon
                       id='tooltip-validation'
                       errorMessages={errors}
@@ -60,9 +60,9 @@ export const ArrayLayoutToolbar = React.memo(function ArrayLayoutToolbar({
             </Grid>
           </Grid>
           {enabled && !disableAdd && (
-            <Grid item>
+            <Grid>
               <Grid container>
-                <Grid item>
+                <Grid>
                   <Tooltip
                     id='tooltip-add'
                     title={translations.addTooltip}

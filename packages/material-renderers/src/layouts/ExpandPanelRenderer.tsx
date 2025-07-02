@@ -147,19 +147,35 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
     >
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Grid container alignItems={'center'}>
-          <Grid item xs={7} md={9}>
+          <Grid
+            size={{
+              xs: 7,
+              md: 9
+            }}>
             <Grid container alignItems={'center'}>
-              <Grid item xs={2} md={1}>
+              <Grid
+                size={{
+                  xs: 2,
+                  md: 1
+                }}>
                 <Avatar aria-label='Index'>{index + 1}</Avatar>
               </Grid>
-              <Grid item xs={10} md={11}>
+              <Grid
+                size={{
+                  xs: 10,
+                  md: 11
+                }}>
                 <span id={labelHtmlId}>{childLabel}</span>
               </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={5} md={3}>
+          <Grid
+            size={{
+              xs: 5,
+              md: 3
+            }}>
             <Grid container justifyContent='flex-end'>
-              <Grid item>
+              <Grid>
                 <Grid
                   container
                   direction='row'
@@ -168,7 +184,7 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
                 >
                   {showSortButtons && enabled ? (
                     <Fragment>
-                      <Grid item>
+                      <Grid>
                         <Tooltip
                           id='tooltip-up'
                           title={translations.up}
@@ -186,7 +202,7 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
                           </IconButton>
                         </Tooltip>
                       </Grid>
-                      <Grid item>
+                      <Grid>
                         <Tooltip
                           id='tooltip-down'
                           title={translations.down}
@@ -209,7 +225,7 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
                     ''
                   )}
                   {enabled && !disableRemove && (
-                    <Grid item>
+                    <Grid>
                       <Tooltip
                         id='tooltip-remove'
                         title={translations.removeTooltip}

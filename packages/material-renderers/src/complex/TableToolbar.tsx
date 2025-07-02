@@ -85,12 +85,12 @@ const TableToolbar = React.memo(function TableToolbar({
             alignItems={'center'}
             spacing={2}
           >
-            <Grid item>
+            <Grid>
               <Typography variant={'h6'}>{label}</Typography>
             </Grid>
-            <Grid item>
+            <Grid>
               {errors.length !== 0 && (
-                <Grid item>
+                <Grid>
                   <ValidationIcon
                     id='tooltip-validation'
                     errorMessages={errors}

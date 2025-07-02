@@ -317,7 +317,7 @@ const NonEmptyRowComponent = ({
           >
             {showSortButtons ? (
               <Fragment>
-                <Grid item>
+                <Grid>
                   <Tooltip
                     id='tooltip-up'
                     title={translations.up}
@@ -334,7 +334,7 @@ const NonEmptyRowComponent = ({
                     </IconButton>
                   </Tooltip>
                 </Grid>
-                <Grid item>
+                <Grid>
                   <Tooltip
                     id='tooltip-down'
                     title={translations.down}
@@ -354,7 +354,7 @@ const NonEmptyRowComponent = ({
               </Fragment>
             ) : null}
             {!disableRemove ? (
-              <Grid item>
+              <Grid>
                 <Tooltip
                   id='tooltip-remove'
                   title={translations.removeTooltip}

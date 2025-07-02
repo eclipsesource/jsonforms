@@ -45,7 +45,7 @@ export const renderLayoutElements = (
   cells?: JsonFormsCellRendererRegistryEntry[]
 ) => {
   return elements.map((child, index) => (
-    <Grid item key={`${path}-${index}`} xs>
+    <Grid key={`${path}-${index}`} size="grow">
       <JsonFormsDispatch
         uischema={child}
         schema={schema}
@@ -106,12 +106,12 @@ export interface AjvProps {
 export const withAjvProps = <P extends {}>(
   Component: ComponentType<AjvProps & P>
 ) =>
-  function WithAjvProps(props: P) {
+  (function WithAjvProps(props: P) {
     const ctx = useJsonForms();
     const ajv = getAjv({ jsonforms: { ...ctx } });
 
     return <Component {...props} ajv={ajv} />;
-  };
+  });
 
 export interface MaterialLabelableLayoutRendererProps
   extends MaterialLayoutRendererProps {
