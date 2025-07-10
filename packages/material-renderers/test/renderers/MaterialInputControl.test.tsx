@@ -22,10 +22,6 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import Enzyme, { mount, ReactWrapper } from 'enzyme';
-import { materialRenderers } from '../../src';
-import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-import * as React from 'react';
 import {
   ControlElement,
   ControlProps,
@@ -41,11 +37,17 @@ import {
   JsonFormsStateProvider,
   withJsonFormsControlProps,
 } from '@mosaic-avantos/jsonforms-react';
+import Enzyme, { mount, ReactWrapper } from 'enzyme';
+import * as React from 'react';
+
+import { createAjv } from '@mosaic-avantos/jsonforms-core/src/util';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+
 import { MaterialInputControl } from '../../src/controls/MaterialInputControl';
 import MaterialHorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
 import { MuiInputText } from '../../src/mui-controls';
+import { materialRenderers } from '../../src';
 import { initCore } from './util';
-import { createAjv } from '@mosaic-avantos/jsonforms-core/src/util';
 
 const ajv = createAjv();
 
@@ -286,8 +288,8 @@ describe('Material input control', () => {
     const validation = wrapper.find('p');
     expect(validation).toHaveLength(6);
     expect(validation.at(0).text()).toBe('');
-    expect(validation.at(2).text()).toBe('is a required property');
-    expect(validation.at(4).text()).toBe('is a required property');
+    expect(validation.at(2).text().toLocaleLowerCase()).toBe('required field');
+    expect(validation.at(4).text().toLocaleLowerCase()).toBe('required field');
   });
 
   it('should display a marker for a required prop', () => {

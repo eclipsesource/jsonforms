@@ -1,6 +1,3 @@
-import type { ErrorObject } from 'ajv';
-import { Labelable, UISchemaElement } from '../models';
-import type { i18nJsonSchema, ErrorTranslator, Translator } from '../store';
 import {
   ArrayDefaultTranslation,
   ArrayTranslations,
@@ -14,6 +11,10 @@ import {
   getControlPath,
   isInternationalized,
 } from '../util';
+import type { ErrorObject } from 'ajv';
+
+import { Labelable, UISchemaElement } from '../models';
+import type { i18nJsonSchema, ErrorTranslator, Translator } from '../store';
 
 export const getI18nKeyPrefixBySchema = (
   schema: i18nJsonSchema | undefined,
@@ -102,7 +103,7 @@ export const defaultErrorTranslator: ErrorTranslator = (error, t, uischema) => {
     error.keyword === 'required' &&
     error.message?.startsWith('must have required property')
   ) {
-    return t('is a required property', 'is a required property', { error });
+    return t('required field', 'Required Field', { error });
   }
 
   return error.message;

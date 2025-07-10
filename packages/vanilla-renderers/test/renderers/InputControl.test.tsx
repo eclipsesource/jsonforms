@@ -22,7 +22,6 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
 import {
   ControlElement,
   HorizontalLayout,
@@ -32,9 +31,13 @@ import {
   JsonFormsDispatch,
   JsonFormsStateProvider,
 } from '@mosaic-avantos/jsonforms-react';
-import { vanillaRenderers } from '../../src';
-import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
+import * as React from 'react';
+
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+
+import { vanillaRenderers } from '../../src';
+
 import HorizontalLayoutRenderer, {
   horizontalLayoutTester,
 } from '../../src/layouts/HorizontalLayout';
@@ -395,8 +398,8 @@ describe('Input control', () => {
     );
     const validation = wrapper.find('.validation');
     expect(validation.at(0).text()).toBe('');
-    expect(validation.at(1).text()).toBe('is a required property');
-    expect(validation.at(2).text()).toBe('is a required property');
+    expect(validation.at(1).text().toLocaleLowerCase()).toBe('required field');
+    expect(validation.at(2).text().toLocaleLowerCase()).toBe('required field');
   });
   test('required cell is marked', () => {
     const schema: JsonSchema = {
