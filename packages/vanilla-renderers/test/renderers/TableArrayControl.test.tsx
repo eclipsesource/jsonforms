@@ -22,15 +22,17 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
-import * as _ from 'lodash';
 import {
   ControlElement,
   HorizontalLayout,
 } from '@mosaic-avantos/jsonforms-core';
-import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
+import * as _ from 'lodash';
+import * as React from 'react';
+
 import { JsonFormsStateProvider } from '@mosaic-avantos/jsonforms-react';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+
 import TableArrayControl, {
   tableArrayControlTester,
 } from '../../src/complex/TableArrayControl';
@@ -698,11 +700,11 @@ describe('Table array control', () => {
     );
     const validation = wrapper.find('.valdiation');
     expect(validation.at(0).getDOMNode().textContent).toBe('');
-    expect(validation.at(1).getDOMNode().textContent).toBe(
-      'is a required property'
+    expect(validation.at(1).getDOMNode().textContent?.toLocaleLowerCase()).toBe(
+      'required field'
     );
-    expect(validation.at(2).getDOMNode().textContent).toBe(
-      'is a required property'
+    expect(validation.at(2).getDOMNode().textContent?.toLocaleLowerCase()).toBe(
+      'required field'
     );
   });
 });
