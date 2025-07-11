@@ -49,7 +49,7 @@
                 v-if="showMenu"
                 :model-value="showActions ? proxyModel.value : pickerValue"
                 @update:model-value="
-                  (val) => updateDatePickerValue(val, proxyModel)
+                  (val: any) => updateDatePickerValue(val, proxyModel)
                 "
                 v-bind="vuetifyProps('v-date-picker')"
                 :title="computedLabel"
@@ -57,9 +57,11 @@
                 :max="maxDate"
                 v-model:view-mode="viewMode"
                 @update:month="
-                  (month) => updateDatePickerMonth(month, proxyModel)
+                  (month: number) => updateDatePickerMonth(month, proxyModel)
                 "
-                @update:year="(year) => updateDatePickerYear(year, proxyModel)"
+                @update:year="
+                  (year: number) => updateDatePickerYear(year, proxyModel)
+                "
               >
                 <template v-slot:actions v-if="showActions">
                   <component :is="actions"></component>
