@@ -18,6 +18,7 @@ export default mergeConfig(
           inline: ['vuetify'],
         },
       },
+      setupFiles: ['./tests/setup.ts'],
     },
   }),
 );

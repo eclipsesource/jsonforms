@@ -197,10 +197,10 @@ import {
   VTab,
   VTabs,
   VTextField,
+  VTimePicker,
   VWindow,
   VWindowItem,
 } from 'vuetify/components';
-import { VTimePicker } from 'vuetify/labs/VTimePicker';
 
 import { vMaska, type MaskOptions, type MaskaDetail } from 'maska';
 import { useDisplay, useLocale } from 'vuetify';

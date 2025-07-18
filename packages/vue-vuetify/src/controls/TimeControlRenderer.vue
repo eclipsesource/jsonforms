@@ -95,8 +95,8 @@ import {
   VMenu,
   VSpacer,
   VTextField,
+  VTimePicker,
 } from 'vuetify/components';
-import { VTimePicker } from 'vuetify/labs/VTimePicker';
 
 import { useLocale } from 'vuetify';
 import type { IconValue } from '../icons';

@@ -10,15 +10,15 @@ exports[`BooleanControlRenderer.vue > should render component and match snapshot
           <div class="v-selection-control v-selection-control--dirty v-selection-control--density-default v-checkbox-btn">
             <div class="v-selection-control__wrapper">
               <!---->
-              <div class="v-selection-control__input"><i class="mdi-checkbox-marked mdi v-icon notranslate v-theme--light v-icon--size-default" aria-hidden="true"></i><input id="#6-input" aria-disabled="false" aria-label="My Boolean" type="checkbox" aria-describedby="#6-input-messages" placeholder="boolean placeholder" value="true"></div>
+              <div class="v-selection-control__input"><i class="mdi-checkbox-marked mdi v-icon notranslate v-theme--light v-icon--size-default" aria-hidden="true"></i><input checked="" id="#6-input" aria-disabled="false" aria-label="My Boolean" type="checkbox" aria-describedby="#6-input-messages" placeholder="boolean placeholder" value="true"></div>
             </div><label class="v-label v-label--clickable" for="#6-input">
               <!---->My Boolean
             </label>
           </div>
         </div>
         <!---->
-        <div class="v-input__details">
-          <transition-group-stub name="slide-y-transition" tag="div" appear="false" persisted="false" css="true" class="v-messages" role="alert" aria-live="polite" id="#6-input-messages">
+        <div id="#6-input-messages" class="v-input__details" role="alert" aria-live="polite">
+          <transition-group-stub name="slide-y-transition" tag="div" appear="false" persisted="false" css="true" class="v-messages">
             <!---->
           </transition-group-stub>
           <!---->
