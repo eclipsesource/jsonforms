@@ -38,7 +38,7 @@ export const isMixedSchema = (
   if (schema.type === 'object') {
     const schemaPath = uischema.scope;
     if (schemaPath && !isEmpty(schemaPath)) {
-      let currentDataSchema = schema;
+      let currentDataSchema: JsonSchema | undefined = schema;
       currentDataSchema = resolveSchema(
         schema,
         schemaPath,

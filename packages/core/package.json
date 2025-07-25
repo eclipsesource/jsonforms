@@ -54,8 +54,7 @@
       "ts"
     ],
     "require": [
-      "./test-config/ts-node.config.js",
-      "source-map-support/register.js"
+      "./test-config/ts-node.config.js"
     ]
   },
   "nyc": {
