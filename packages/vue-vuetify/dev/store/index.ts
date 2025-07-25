@@ -80,7 +80,7 @@ function useHistoryHashQuery<T extends string | boolean | number>(
   queryParam: string,
   initialValue: T,
 ) {
-  const data: Ref<UnwrapRef<T>> = ref<T>(initialValue);
+  const data = ref<T>(initialValue);
 
   // Function to update data based on URL hash
   const updateDataFromHash = () => {

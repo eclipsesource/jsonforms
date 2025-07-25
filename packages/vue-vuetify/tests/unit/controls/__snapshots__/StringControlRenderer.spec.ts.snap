@@ -29,7 +29,7 @@ exports[`StringControlRenderer.vue > should render component and match snapshot 
               </label><label class="v-label v-field-label" for="#6-input">
                 <!---->My String
               </label>
-              <!----><input placeholder="string placeholder" size="1" type="text" id="#6-input" aria-describedby="#6-input-messages" class="v-field__input">
+              <!----><input placeholder="string placeholder" size="1" type="text" id="#6-input" aria-describedby="#6-input-messages" class="v-field__input" value="a">
               <!---->
             </div>
             <transition-stub name="expand-x-transition" appear="false" persisted="false" css="true">
@@ -46,8 +46,8 @@ exports[`StringControlRenderer.vue > should render component and match snapshot 
           </div>
         </div>
         <!---->
-        <div class="v-input__details">
-          <transition-group-stub name="slide-y-transition" tag="div" appear="false" persisted="false" css="true" class="v-messages" role="alert" aria-live="polite" id="#6-input-messages">
+        <div id="#6-input-messages" class="v-input__details" role="alert" aria-live="polite">
+          <transition-group-stub name="slide-y-transition" tag="div" appear="false" persisted="false" css="true" class="v-messages">
             <!---->
           </transition-group-stub>
           <!---->
@@ -65,7 +65,7 @@ exports[`StringControlRenderer.vue with suggestion > should render component and
       <div class="v-input v-input--horizontal v-input--center-affix v-input--density-default v-theme--light v-locale--is-ltr v-text-field v-combobox v-combobox--single input">
         <!---->
         <div class="v-input__control">
-          <div class="v-field v-field--active v-field--appended v-field--center-affix v-field--dirty v-field--variant-filled v-theme--light v-locale--is-ltr" role="combobox" aria-haspopup="menu" aria-expanded="false" aria-owns="v-menu-2">
+          <div class="v-field v-field--active v-field--appended v-field--center-affix v-field--dirty v-field--variant-filled v-theme--light v-locale--is-ltr" role="combobox" aria-haspopup="menu" aria-expanded="false" aria-controls="v-menu-v-2">
             <div class="v-field__overlay"></div>
             <div class="v-field__loader">
               <div class="v-progress-linear v-theme--light v-locale--is-ltr" style="top: 0px; height: 0px; --v-progress-linear-height: 2px;" role="progressbar" aria-hidden="true" aria-valuemin="0" aria-valuemax="100">
@@ -91,7 +91,7 @@ exports[`StringControlRenderer.vue with suggestion > should render component and
               <div class="v-field__input" data-no-activator="">
                 <!---->
                 <!---->
-                <div class="v-combobox__selection"><span class="v-combobox__selection-text"><!----></span></div><input size="1" type="text" id="#11-input" aria-describedby="#11-input-messages">
+                <div class="v-combobox__selection"><span class="v-combobox__selection-text"><!----></span></div><input size="1" type="text" id="#11-input" aria-describedby="#11-input-messages" value="">
               </div>
               <!---->
             </div>
@@ -109,8 +109,8 @@ exports[`StringControlRenderer.vue with suggestion > should render component and
           </div>
         </div>
         <!---->
-        <div class="v-input__details">
-          <transition-group-stub name="slide-y-transition" tag="div" appear="false" persisted="false" css="true" class="v-messages" role="alert" aria-live="polite" id="#11-input-messages">
+        <div id="#11-input-messages" class="v-input__details" role="alert" aria-live="polite">
+          <transition-group-stub name="slide-y-transition" tag="div" appear="false" persisted="false" css="true" class="v-messages">
             <!---->
           </transition-group-stub>
           <!---->
@@ -124,11 +124,11 @@ exports[`StringControlRenderer.vue with suggestion > should render component and
 exports[`StringControlRenderer.vue with suggestion > should render component and match snapshot when clicked 1`] = `
 "<div class="v-application v-theme--light v-layout v-layout--full-height v-locale--is-ltr">
   <div class="v-application__wrap">
-    <div class="control" id="#12" errors="" label="Select Continent" required="false" isfocused="true" appliedoptions="[object Object]">
+    <div class="control" id="#12" errors="" label="Select Continent" required="false" isfocused="false" appliedoptions="[object Object]">
       <div class="v-input v-input--horizontal v-input--center-affix v-input--density-default v-theme--light v-locale--is-ltr v-text-field v-combobox v-combobox--single input">
         <!---->
         <div class="v-input__control">
-          <div class="v-field v-field--active v-field--appended v-field--center-affix v-field--dirty v-field--variant-filled v-theme--light v-field--focused v-locale--is-ltr" role="combobox" aria-haspopup="menu" aria-expanded="false" aria-owns="v-menu-2">
+          <div class="v-field v-field--active v-field--appended v-field--center-affix v-field--dirty v-field--variant-filled v-theme--light v-locale--is-ltr" role="combobox" aria-haspopup="menu" aria-expanded="false" aria-controls="v-menu-v-2">
             <div class="v-field__overlay"></div>
             <div class="v-field__loader">
               <div class="v-progress-linear v-theme--light v-locale--is-ltr" style="top: 0px; height: 0px; --v-progress-linear-height: 2px;" role="progressbar" aria-hidden="true" aria-valuemin="0" aria-valuemax="100">
@@ -154,7 +154,7 @@ exports[`StringControlRenderer.vue with suggestion > should render component and
               <div class="v-field__input" data-no-activator="">
                 <!---->
                 <!---->
-                <div class="v-combobox__selection"><span class="v-combobox__selection-text"><!----></span></div><input size="1" type="text" id="#12-input" aria-describedby="#12-input-messages">
+                <div class="v-combobox__selection"><span class="v-combobox__selection-text"><!----></span></div><input size="1" type="text" id="#12-input" aria-describedby="#12-input-messages" value="">
               </div>
               <!---->
             </div>
@@ -172,8 +172,8 @@ exports[`StringControlRenderer.vue with suggestion > should render component and
           </div>
         </div>
         <!---->
-        <div class="v-input__details">
-          <transition-group-stub name="slide-y-transition" tag="div" appear="false" persisted="false" css="true" class="v-messages" role="alert" aria-live="polite" id="#12-input-messages">
+        <div id="#12-input-messages" class="v-input__details" role="alert" aria-live="polite">
+          <transition-group-stub name="slide-y-transition" tag="div" appear="false" persisted="false" css="true" class="v-messages">
             <!---->
           </transition-group-stub>
           <!---->
