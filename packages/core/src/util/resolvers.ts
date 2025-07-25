@@ -131,10 +131,10 @@ export const resolveSchema = (
   return result;
 };
 
-const doResolveSchema = <T extends ResolveContext>(
+const doResolveSchema = (
   schema: JsonSchema,
   schemaPath: string,
-  ctx: T
+  ctx: ResolveContext
 ): JsonSchema | undefined => {
   let resolvedSchema: JsonSchema | undefined = undefined;
   // If the schema has a $ref, we resolve it first before continuing.
@@ -152,10 +152,10 @@ const doResolveSchema = <T extends ResolveContext>(
   return resolvedSchema;
 };
 
-const resolvePath = <T extends ResolveContext = ResolveContext>(
+const resolvePath = (
   schema: JsonSchema,
   schemaPath: string | undefined,
-  ctx: T
+  ctx: ResolveContext
 ): JsonSchema => {
   let visitedPaths: Set<string> | undefined = ctx.resolutionMap.get(schema);
   if (!visitedPaths) {
@@ -180,10 +180,10 @@ const resolvePath = <T extends ResolveContext = ResolveContext>(
   return resolvedSchema;
 };
 
-const resolvePathSegmentsWithCombinatorFallback = <T extends ResolveContext>(
+const resolvePathSegmentsWithCombinatorFallback = (
   schema: JsonSchema,
   pathSegments: string[],
-  ctx: T
+  ctx: ResolveContext
 ): JsonSchema | undefined => {
   if (!pathSegments || pathSegments.length === 0) {
     return schema;
@@ -226,10 +226,10 @@ const resolvePathSegmentsWithCombinatorFallback = <T extends ResolveContext>(
   return undefined;
 };
 
-const resolvePathSegments = <T extends ResolveContext>(
+const resolvePathSegments = (
   schema: JsonSchema,
   pathSegments: string[],
-  ctx: T
+  ctx: ResolveContext
 ): JsonSchema | undefined => {
   if (!pathSegments || pathSegments.length === 0) {
     return schema;
