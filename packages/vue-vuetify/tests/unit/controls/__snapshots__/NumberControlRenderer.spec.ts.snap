@@ -29,7 +29,7 @@ exports[`NumberControlRenderer.vue > should render component and match snapshot 
               </label><label class="v-label v-field-label" for="#6-input">
                 <!---->My Number
               </label>
-              <!----><input placeholder="number placeholder" size="1" type="text" id="#6-input" aria-describedby="#6-input-messages" inputmode="decimal" class="v-field__input" value="1">
+              <!----><input placeholder="number placeholder" size="1" type="text" id="#6-input" aria-describedby="#6-input-messages" inputmode="decimal" class="v-field__input" value="1.0">
               <!---->
             </div>
             <transition-stub name="expand-x-transition" appear="false" persisted="false" css="true">
