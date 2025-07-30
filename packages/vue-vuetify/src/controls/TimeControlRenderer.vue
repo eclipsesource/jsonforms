@@ -54,6 +54,19 @@
                       proxyModel.value = val;
                     } else {
                       pickerValue = val;
+                    }
+                  }
+                "
+                @update:minute="
+                  () => {
+                    if (!showActions && !useSeconds) {
+                      showMenu = false;
+                    }
+                  }
+                "
+                @update:second="
+                  () => {
+                    if (!showActions && useSeconds) {
                       showMenu = false;
                     }
                   }
