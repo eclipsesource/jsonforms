@@ -25,6 +25,7 @@ import {
   JsonFormsI18nState,
   defaultMiddleware,
   Middleware,
+  JsonFormsSubStates,
 } from '@jsonforms/core';
 import { JsonFormsChangeEvent, MaybeReadonly } from '../types';
 import DispatchRenderer from './DispatchRenderer.vue';
@@ -47,7 +48,8 @@ export default defineComponent({
   },
   provide() {
     return {
-      jsonforms: this.jsonforms,
+      // Explicitly type provide to avoid TS7056
+      jsonforms: this.jsonforms as JsonFormsSubStates,
       dispatch: this.dispatch,
     };
   },

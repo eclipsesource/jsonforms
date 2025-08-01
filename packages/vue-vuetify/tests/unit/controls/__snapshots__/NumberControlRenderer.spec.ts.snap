@@ -29,7 +29,7 @@ exports[`NumberControlRenderer.vue > should render component and match snapshot 
               </label><label class="v-label v-field-label" for="#6-input">
                 <!---->My Number
               </label>
-              <!----><input placeholder="number placeholder" size="1" type="text" id="#6-input" aria-describedby="#6-input-messages" inputmode="decimal" class="v-field__input">
+              <!----><input placeholder="number placeholder" size="1" type="text" id="#6-input" aria-describedby="#6-input-messages" inputmode="decimal" class="v-field__input" value="1.0">
               <!---->
             </div>
             <transition-stub name="expand-x-transition" appear="false" persisted="false" css="true">
@@ -38,12 +38,12 @@ exports[`NumberControlRenderer.vue > should render component and match snapshot 
             <div class="v-field__append-inner">
               <!---->
               <hr class="v-divider v-divider--vertical v-theme--light" aria-orientation="vertical" role="separator">
-              <div class="v-number-input__control"><button type="button" class="v-btn v-btn--flat v-btn--icon v-theme--light v-btn--density-default v-btn--size-small v-btn--variant-elevated" style="height: 100%;" tabindex="-1" name="decrement-btn"><span class="v-btn__overlay"></span><span class="v-btn__underlay"></span>
+              <div class="v-number-input__control"><button type="button" class="v-btn v-btn--flat v-btn--icon v-theme--light v-btn--density-default v-btn--size-small v-btn--variant-elevated" style="height: 100%;" tabindex="-1" aria-hidden="true" data-testid="decrement"><span class="v-btn__overlay"></span><span class="v-btn__underlay"></span>
                   <!----><span class="v-btn__content" data-no-activator=""><i class="mdi-chevron-down mdi v-icon notranslate v-theme--light v-icon--size-default" aria-hidden="true"></i></span>
                   <!---->
                   <!---->
                 </button>
-                <hr class="v-divider v-divider--vertical v-theme--light" aria-orientation="vertical" role="separator"><button type="button" class="v-btn v-btn--flat v-btn--icon v-theme--light v-btn--density-default v-btn--size-small v-btn--variant-elevated" style="height: 100%;" tabindex="-1" name="increment-btn"><span class="v-btn__overlay"></span><span class="v-btn__underlay"></span>
+                <hr class="v-divider v-divider--vertical v-theme--light" aria-orientation="vertical" role="separator"><button type="button" class="v-btn v-btn--flat v-btn--icon v-theme--light v-btn--density-default v-btn--size-small v-btn--variant-elevated" style="height: 100%;" tabindex="-1" aria-hidden="true" data-testid="increment"><span class="v-btn__overlay"></span><span class="v-btn__underlay"></span>
                   <!----><span class="v-btn__content" data-no-activator=""><i class="mdi-chevron-up mdi v-icon notranslate v-theme--light v-icon--size-default" aria-hidden="true"></i></span>
                   <!---->
                   <!---->
@@ -58,8 +58,8 @@ exports[`NumberControlRenderer.vue > should render component and match snapshot 
           </div>
         </div>
         <!---->
-        <div class="v-input__details">
-          <transition-group-stub name="slide-y-transition" tag="div" appear="false" persisted="false" css="true" class="v-messages" role="alert" aria-live="polite" id="#6-input-messages">
+        <div id="#6-input-messages" class="v-input__details" role="alert" aria-live="polite">
+          <transition-group-stub name="slide-y-transition" tag="div" appear="false" persisted="false" css="true" class="v-messages">
             <!---->
           </transition-group-stub>
           <!---->

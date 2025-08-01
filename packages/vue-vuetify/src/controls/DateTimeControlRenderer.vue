@@ -88,6 +88,19 @@
                             proxyModel.value.time = val;
                           } else {
                             pickerValue.time = val;
+                          }
+                        }
+                      "
+                      @update:minute="
+                        () => {
+                          if (!showActions && !useSeconds) {
+                            showMenu = false;
+                          }
+                        }
+                      "
+                      @update:second="
+                        () => {
+                          if (!showActions && useSeconds) {
                             showMenu = false;
                           }
                         }
@@ -145,7 +158,19 @@
                               date: pickerValue.date,
                               time: val,
                             };
-
+                          }
+                        }
+                      "
+                      @update:minute="
+                        () => {
+                          if (!showActions && !useSeconds) {
+                            showMenu = false;
+                          }
+                        }
+                      "
+                      @update:second="
+                        () => {
+                          if (!showActions && useSeconds) {
                             showMenu = false;
                           }
                         }
@@ -197,10 +222,10 @@ import {
   VTab,
   VTabs,
   VTextField,
+  VTimePicker,
   VWindow,
   VWindowItem,
 } from 'vuetify/components';
-import { VTimePicker } from 'vuetify/labs/VTimePicker';
 
 import { vMaska, type MaskOptions, type MaskaDetail } from 'maska';
 import { useDisplay, useLocale } from 'vuetify';
@@ -541,10 +566,6 @@ const controlRenderer = defineComponent({
 
         if (this.useTabLayout && val.date) {
           this.activeTab = 'time';
-        }
-
-        if (val.date && val.time && !this.showActions) {
-          this.showMenu = false;
         }
       },
     },

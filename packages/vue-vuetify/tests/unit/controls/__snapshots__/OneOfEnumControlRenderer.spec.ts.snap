@@ -7,7 +7,7 @@ exports[`OneOfEnumControlRenderer.vue > should render component and match snapsh
       <div class="v-input v-input--horizontal v-input--center-affix v-input--density-default v-theme--light v-locale--is-ltr v-input--dirty v-text-field v-select v-select--single v-select--selected input">
         <!---->
         <div class="v-input__control">
-          <div class="v-field v-field--active v-field--appended v-field--center-affix v-field--dirty v-field--variant-filled v-theme--light v-locale--is-ltr" role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-owns="v-menu-2">
+          <div class="v-field v-field--active v-field--appended v-field--center-affix v-field--dirty v-field--variant-filled v-theme--light v-locale--is-ltr" role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-controls="v-menu-v-2">
             <div class="v-field__overlay"></div>
             <div class="v-field__loader">
               <div class="v-progress-linear v-theme--light v-locale--is-ltr" style="top: 0px; height: 0px; --v-progress-linear-height: 2px;" role="progressbar" aria-hidden="true" aria-valuemin="0" aria-valuemax="100">
@@ -33,7 +33,7 @@ exports[`OneOfEnumControlRenderer.vue > should render component and match snapsh
               <div class="v-field__input" data-no-activator="">
                 <!---->
                 <!---->
-                <div class="v-select__selection"><span class="v-select__selection-text">Foo<!----></span></div><input size="1" type="text" id="#4-input" aria-describedby="#4-input-messages" inputmode="none" aria-label="Open" title="Open">
+                <div class="v-select__selection"><span class="v-select__selection-text">Foo<!----></span></div><input size="1" type="text" id="#4-input" aria-describedby="#4-input-messages" inputmode="none" aria-label="Open" title="Open" value="a">
               </div>
               <!---->
             </div>
@@ -51,8 +51,8 @@ exports[`OneOfEnumControlRenderer.vue > should render component and match snapsh
           </div>
         </div>
         <!---->
-        <div class="v-input__details">
-          <transition-group-stub name="slide-y-transition" tag="div" appear="false" persisted="false" css="true" class="v-messages" role="alert" aria-live="polite" id="#4-input-messages">
+        <div id="#4-input-messages" class="v-input__details" role="alert" aria-live="polite">
+          <transition-group-stub name="slide-y-transition" tag="div" appear="false" persisted="false" css="true" class="v-messages">
             <!---->
           </transition-group-stub>
           <!---->
@@ -66,11 +66,11 @@ exports[`OneOfEnumControlRenderer.vue > should render component and match snapsh
 exports[`OneOfEnumControlRenderer.vue > should render component and match snapshot when clicked 1`] = `
 "<div class="v-application v-theme--light v-layout v-layout--full-height v-locale--is-ltr">
   <div class="v-application__wrap">
-    <div class="control" id="#5" errors="" label="My OneOf Enum" required="false" isfocused="true" appliedoptions="[object Object]">
+    <div class="control" id="#5" errors="" label="My OneOf Enum" required="false" isfocused="false" appliedoptions="[object Object]">
       <div class="v-input v-input--horizontal v-input--center-affix v-input--density-default v-theme--light v-locale--is-ltr v-input--dirty v-text-field v-select v-select--single v-select--selected input">
         <!---->
         <div class="v-input__control">
-          <div class="v-field v-field--active v-field--appended v-field--center-affix v-field--dirty v-field--variant-filled v-theme--light v-field--focused v-locale--is-ltr" role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-owns="v-menu-2">
+          <div class="v-field v-field--active v-field--appended v-field--center-affix v-field--dirty v-field--variant-filled v-theme--light v-locale--is-ltr" role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-controls="v-menu-v-2">
             <div class="v-field__overlay"></div>
             <div class="v-field__loader">
               <div class="v-progress-linear v-theme--light v-locale--is-ltr" style="top: 0px; height: 0px; --v-progress-linear-height: 2px;" role="progressbar" aria-hidden="true" aria-valuemin="0" aria-valuemax="100">
@@ -96,7 +96,7 @@ exports[`OneOfEnumControlRenderer.vue > should render component and match snapsh
               <div class="v-field__input" data-no-activator="">
                 <!---->
                 <!---->
-                <div class="v-select__selection"><span class="v-select__selection-text">Foo<!----></span></div><input size="1" type="text" id="#5-input" aria-describedby="#5-input-messages" inputmode="none" aria-label="Open" title="Open">
+                <div class="v-select__selection"><span class="v-select__selection-text">Foo<!----></span></div><input size="1" type="text" id="#5-input" aria-describedby="#5-input-messages" inputmode="none" aria-label="Open" title="Open" value="a">
               </div>
               <!---->
             </div>
@@ -114,8 +114,8 @@ exports[`OneOfEnumControlRenderer.vue > should render component and match snapsh
           </div>
         </div>
         <!---->
-        <div class="v-input__details">
-          <transition-group-stub name="slide-y-transition" tag="div" appear="false" persisted="false" css="true" class="v-messages" role="alert" aria-live="polite" id="#5-input-messages">
+        <div id="#5-input-messages" class="v-input__details" role="alert" aria-live="polite">
+          <transition-group-stub name="slide-y-transition" tag="div" appear="false" persisted="false" css="true" class="v-messages">
             <!---->
           </transition-group-stub>
           <!---->

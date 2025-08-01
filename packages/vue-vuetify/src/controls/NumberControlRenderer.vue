@@ -8,6 +8,7 @@
     <v-number-input
       v-disabled-icon-focus
       :step="step"
+      :precision="precision"
       :id="control.id + '-input'"
       :class="styles.control.input"
       :disabled="!control.enabled"
@@ -36,7 +37,7 @@ import {
   type RendererProps,
 } from '@jsonforms/vue';
 import { defineComponent } from 'vue';
-import { VNumberInput } from 'vuetify/labs/VNumberInput';
+import { VNumberInput } from 'vuetify/components';
 
 import { determineClearValue, useVuetifyControl } from '../util';
 import { default as ControlWrapper } from './ControlWrapper.vue';
@@ -65,6 +66,17 @@ const controlRenderer = defineComponent({
     step(): number {
       const options: any = this.appliedOptions;
       return options.step ?? 0.1;
+    },
+    precision(): number | undefined {
+      if (!this.step || Number.isInteger(this.step)) return undefined;
+      // Handle scientific notation and float imprecision
+      const stepStr = this.step.toString();
+      if (stepStr.indexOf('e-') > -1) {
+        // Handle cases like 1e-3
+        return parseInt(stepStr.split('e-')[1], 10);
+      }
+      const fraction = stepStr.split('.')[1];
+      return fraction ? fraction.length : undefined;
     },
   },
 });
