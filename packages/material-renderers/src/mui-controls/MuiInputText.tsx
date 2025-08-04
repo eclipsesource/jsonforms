@@ -135,7 +135,7 @@ export const MuiInputText = React.memo(function MuiInputText(
           position='end'
           style={{
             display:
-              (showAdornment || focused) && enabled && data !== undefined
+              (showAdornment || focused) && data !== undefined
                 ? 'flex'
                 : 'none',
           }}
@@ -143,7 +143,7 @@ export const MuiInputText = React.memo(function MuiInputText(
           {isUrl(inputText) && (
             <IconButton
               aria-label='Open link in new tab'
-              onClick={(e) => {
+              onClick={(e: React.MouseEvent) => {
                 e.stopPropagation();
                 window.open(inputText, '_blank', 'noopener,noreferrer');
               }}
@@ -152,16 +152,19 @@ export const MuiInputText = React.memo(function MuiInputText(
               <LaunchIcon style={iconStyles} />
             </IconButton>
           )}
-          <IconButton
-            aria-label='Clear input field'
-            onClick={onClear}
-            size='small'
-          >
-            <Close style={iconStyles} />
-          </IconButton>
+          {enabled && (
+            <IconButton
+              aria-label='Clear input field'
+              onClick={onClear}
+              size='small'
+            >
+              <Close style={iconStyles} />
+            </IconButton>
+          )}
         </InputAdornment>
       }
       inputComponent={inputComponent}
     />
   );
 });
+
