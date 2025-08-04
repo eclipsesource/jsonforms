@@ -167,4 +167,3 @@ export const MuiInputText = React.memo(function MuiInputText(
     />
   );
 });
-
