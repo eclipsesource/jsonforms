@@ -143,7 +143,7 @@ export const MuiInputText = React.memo(function MuiInputText(
           {isUrl(inputText) && (
             <IconButton
               aria-label='Open link in new tab'
-              onClick={(e: React.MouseEvent) => {
+              onClick={(e) => {
                 e.stopPropagation();
                 window.open(inputText, '_blank', 'noopener,noreferrer');
               }}
