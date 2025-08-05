@@ -40,10 +40,12 @@ import {
   IconButton,
   Tooltip,
 } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ArrowUpward from '@mui/icons-material/ArrowUpward';
-import ArrowDownward from '@mui/icons-material/ArrowDownward';
-import DeleteIcon from '@mui/icons-material/Delete';
+import {
+  ArrowUpward,
+  ArrowDownward,
+  Delete,
+  ExpandMore,
+} from '@mui/icons-material';
 
 const iconStyle: any = { float: 'right' };
 
@@ -145,21 +147,21 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
       expanded={expanded}
       onChange={handleExpansion(childPath)}
     >
-      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Grid container alignItems={'center'}>
-          <Grid item xs={7} md={9}>
+      <AccordionSummary expandIcon={<ExpandMore />}>
+        <Grid container sx={{ width: '100%' }} alignItems={'center'}>
+          <Grid size={{ xs: 7, md: 9 }}>
             <Grid container alignItems={'center'}>
-              <Grid item xs={2} md={1}>
+              <Grid size={{ xs: 2, md: 1 }}>
                 <Avatar aria-label='Index'>{index + 1}</Avatar>
               </Grid>
-              <Grid item xs={10} md={11}>
+              <Grid size={{ xs: 10, md: 11 }}>
                 <span id={labelHtmlId}>{childLabel}</span>
               </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={5} md={3}>
+          <Grid size={{ xs: 5, md: 3 }}>
             <Grid container justifyContent='flex-end'>
-              <Grid item>
+              <Grid>
                 <Grid
                   container
                   direction='row'
@@ -168,7 +170,7 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
                 >
                   {showSortButtons && enabled ? (
                     <Fragment>
-                      <Grid item>
+                      <Grid>
                         <Tooltip
                           id='tooltip-up'
                           title={translations.up}
@@ -186,7 +188,7 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
                           </IconButton>
                         </Tooltip>
                       </Grid>
-                      <Grid item>
+                      <Grid>
                         <Tooltip
                           id='tooltip-down'
                           title={translations.down}
@@ -209,7 +211,7 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
                     ''
                   )}
                   {enabled && !disableRemove && (
-                    <Grid item>
+                    <Grid>
                       <Tooltip
                         id='tooltip-remove'
                         title={translations.removeTooltip}
@@ -221,7 +223,7 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
                           aria-label={translations.removeAriaLabel}
                           size='large'
                         >
-                          <DeleteIcon />
+                          <Delete />
                         </IconButton>
                       </Tooltip>
                     </Grid>

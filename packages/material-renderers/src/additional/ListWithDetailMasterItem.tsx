@@ -33,7 +33,7 @@ import {
   ListItemText,
   Tooltip,
 } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { Delete } from '@mui/icons-material';
 import React from 'react';
 
 export const ListWithDetailMasterItem = ({
@@ -65,7 +65,7 @@ export const ListWithDetailMasterItem = ({
               onClick={removeItem(path, index)}
               size='large'
             >
-              <DeleteIcon />
+              <Delete />
             </IconButton>
           </Tooltip>
         </ListItemSecondaryAction>

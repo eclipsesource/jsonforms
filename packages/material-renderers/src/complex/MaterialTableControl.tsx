@@ -57,9 +57,7 @@ import {
   encode,
   ArrayTranslations,
 } from '@jsonforms/core';
-import DeleteIcon from '@mui/icons-material/Delete';
-import ArrowDownward from '@mui/icons-material/ArrowDownward';
-import ArrowUpward from '@mui/icons-material/ArrowUpward';
+import { Delete, ArrowDownward, ArrowUpward } from '@mui/icons-material';
 
 import { WithDeleteDialogSupport } from './DeleteDialog';
 import NoBorderTableCell from './NoBorderTableCell';
@@ -317,7 +315,7 @@ const NonEmptyRowComponent = ({
           >
             {showSortButtons ? (
               <Fragment>
-                <Grid item>
+                <Grid>
                   <Tooltip
                     id='tooltip-up'
                     title={translations.up}
@@ -334,7 +332,7 @@ const NonEmptyRowComponent = ({
                     </IconButton>
                   </Tooltip>
                 </Grid>
-                <Grid item>
+                <Grid>
                   <Tooltip
                     id='tooltip-down'
                     title={translations.down}
@@ -354,7 +352,7 @@ const NonEmptyRowComponent = ({
               </Fragment>
             ) : null}
             {!disableRemove ? (
-              <Grid item>
+              <Grid>
                 <Tooltip
                   id='tooltip-remove'
                   title={translations.removeTooltip}
@@ -365,7 +363,7 @@ const NonEmptyRowComponent = ({
                     onClick={() => openDeleteDialog(childPath, rowIndex)}
                     size='large'
                   >
-                    <DeleteIcon />
+                    <Delete />
                   </IconButton>
                 </Tooltip>
               </Grid>

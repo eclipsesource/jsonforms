@@ -45,7 +45,7 @@ export const renderLayoutElements = (
   cells?: JsonFormsCellRendererRegistryEntry[]
 ) => {
   return elements.map((child, index) => (
-    <Grid item key={`${path}-${index}`} xs>
+    <Grid key={`${path}-${index}`} size='grow'>
       <JsonFormsDispatch
         uischema={child}
         schema={schema}
