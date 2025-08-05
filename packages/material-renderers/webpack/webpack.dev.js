@@ -6,4 +6,10 @@ module.exports = merge(baseConfig, {
   plugins: [
     new copyWebpackPlugin([{ from: '../examples-react/src/logo.svg' }]),
   ],
+  resolve: {
+    extensions: ['.ts', '.js', '.tsx'],
+    alias: {
+      'react/jsx-runtime': 'react/jsx-runtime.js',
+    },
+  },
 });

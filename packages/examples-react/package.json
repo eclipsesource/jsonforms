@@ -6,7 +6,7 @@
     "@jsonforms/core": "workspace:*",
     "@jsonforms/examples": "workspace:*",
     "@jsonforms/react": "workspace:*",
-    "@mui/material": "~5.13.0",
+    "@mui/material": "^7.3.0",
     "@types/react-highlight": "^0.12.5",
     "@types/react-tabs": "^2.3.3",
     "highlight.js": "^11.3.1",
