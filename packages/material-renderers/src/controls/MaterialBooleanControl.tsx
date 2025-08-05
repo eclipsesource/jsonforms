@@ -31,7 +31,6 @@ import {
   rankWith,
   ControlProps,
   isDescriptionHidden,
-  computeLabel,
 } from '@mosaic-avantos/jsonforms-core';
 import { withJsonFormsControlProps } from '@mosaic-avantos/jsonforms-react';
 import { FormControlLabel, FormHelperText, Tooltip } from '@mui/material';
@@ -109,11 +108,10 @@ export const MaterialBooleanControl = ({
     <>
       <Tooltip id={tooltipId} title={showTooltip ? description : ''}>
         <FormControlLabel
-          label={computeLabel(
-            label,
-            required,
-            appliedUiSchemaOptions.hideRequiredAsterisk
-          )}
+          label={label}
+          required={
+            appliedUiSchemaOptions.hideRequiredAsterisk ? false : required
+          }
           id={id}
           control={
             <MuiCheckbox
