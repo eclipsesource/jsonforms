@@ -38,7 +38,7 @@ import {
   FormHelperText,
   Stack,
 } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import { Add } from '@mui/icons-material';
 import ValidationIcon from './ValidationIcon';
 import NoBorderTableCell from './NoBorderTableCell';
 
@@ -85,12 +85,12 @@ const TableToolbar = React.memo(function TableToolbar({
             alignItems={'center'}
             spacing={2}
           >
-            <Grid item>
+            <Grid>
               <Typography variant={'h6'}>{label}</Typography>
             </Grid>
-            <Grid item>
+            <Grid>
               {errors.length !== 0 && (
-                <Grid item>
+                <Grid>
                   <ValidationIcon
                     id='tooltip-validation'
                     errorMessages={errors}
@@ -114,7 +114,7 @@ const TableToolbar = React.memo(function TableToolbar({
               onClick={addItem(path, createDefaultValue(schema, rootSchema))}
               size='large'
             >
-              <AddIcon />
+              <Add />
             </IconButton>
           </Tooltip>
         </NoBorderTableCell>
