@@ -91,7 +91,6 @@ const onChange = (event: JsonFormsChangeEvent): void => {
       monaco.Uri.parse(toDataUri(props.example.name)),
       event.data !== undefined ? JSON.stringify(event.data, null, 2) : '',
     );
-    state.data = event.data;
   }
   errors.value = event.errors;
 };

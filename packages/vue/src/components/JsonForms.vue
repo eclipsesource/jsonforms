@@ -251,6 +251,9 @@ export default defineComponent({
       );
     },
     eventToEmit(newEvent) {
+      // update the data so if we change the additionalErrors this won't reset the form data
+      this.dataToUse = newEvent.data;
+
       this.$emit('change', newEvent);
     },
     i18n: {
