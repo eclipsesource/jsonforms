@@ -23,7 +23,14 @@
   THE SOFTWARE.
 */
 import { ComponentFixture, waitForAsync } from '@angular/core/testing';
-import { UISchemaElement } from '@jsonforms/core';
+import { MatIcon } from '@angular/material/icon';
+import { MatBadge } from '@angular/material/badge';
+import { MatTooltip } from '@angular/material/tooltip';
+import {
+  MatCard,
+  MatCardContent,
+  MatCardActions,
+} from '@angular/material/card';
 import { beforeEachLayoutTest, setupMockStore } from './common';
 import {
   ArrayLayoutRenderer,
@@ -47,93 +54,71 @@ const TEST_SCHEMA = {
           test2: {
             type: 'string',
             title: 'Test 2',
-            $dataciteRequired: false,
           },
         },
+        required: ['test1', 'test2'],
       },
     },
   },
   required: ['test'],
 };
 
+const TEST_UISCHEMA = {
+  type: 'Control',
+  scope: '#/properties/test',
+  options: {
+    detail: {
+      type: 'HorizontalLayout',
+      elements: [
+        {
+          type: 'Control',
+          scope: '#/properties/test1',
+        },
+        {
+          type: 'Control',
+          scope: '#/properties/test2',
+        },
+      ],
+    },
+  },
+};
+
 describe('Array layout tester', () => {
   it('should succeed', () => {
-    expect(ArrayLayoutRendererTester(undefined, undefined)).toBe(1);
+    expect(
+      ArrayLayoutRendererTester(TEST_UISCHEMA, TEST_SCHEMA, {
+        config: {},
+        rootSchema: {},
+      })
+    ).toBe(4);
   });
 });
-describe.only('Array layout', () => {
+describe('Array layout', () => {
   let fixture: ComponentFixture<any>;
 
   beforeEach(waitForAsync(() => {
     fixture = beforeEachLayoutTest(ArrayLayoutRenderer, {
       declarations: [LayoutChildrenRenderPropsPipe],
+      imports: [
+        MatIcon,
+        MatBadge,
+        MatTooltip,
+        MatCard,
+        MatCardContent,
+        MatCardActions,
+      ],
     });
   }));
 
-  it('render with undefined elements', () => {
-    const uischema: UISchemaElement = {
-      type: 'Control',
-      scope: '#/properties/test',
-    };
+  it('render with no data the error count should be 1', () => {
     setupMockStore(fixture, {
       data: {},
       schema: TEST_SCHEMA,
-      uischema,
-    });
-    fixture.componentInstance.ngOnInit();
-    fixture.detectChanges();
-    expect(fixture.nativeElement.children[0].children.length).toBe(0);
-  });
-
-  it('render with null elements', () => {
-    const uischema = {
-      type: 'Control',
-      elements: null,
-    };
-    setupMockStore(fixture, {
-      data: {},
-      schema: TEST_SCHEMA,
-      uischema,
-    });
-    fixture.componentInstance.ngOnInit();
-    fixture.detectChanges();
-    expect(fixture.nativeElement.children[0].children.length).toBe(0);
-  });
-
-  it('render with children', () => {
-    const uischema = {
-      type: 'VerticalLayout',
-      elements: [
-        {
-          type: 'Control',
-          scope: '#/properties/test',
-          options: {
-            detail: {
-              type: 'HorizontalLayout',
-              elements: [
-                {
-                  type: 'Control',
-                  scope: '#/properties/test1',
-                },
-                {
-                  type: 'Control',
-                  scope: '#/properties/test2',
-                },
-              ],
-            },
-          },
-        },
-      ],
-    };
-    setupMockStore(fixture, {
-      data: {},
-      schema: TEST_SCHEMA,
-      uischema,
+      uischema: TEST_UISCHEMA,
     });
     fixture.componentInstance.ngOnInit();
     fixture.detectChanges();
     expect(fixture.nativeElement.children[0].children.length).toBe(2);
-    expect(fixture.nativeElement.children[0].hidden).toBe(false);
 
     fixture.whenRenderingDone().then(() => {
       fixture.detectChanges();
@@ -142,7 +127,52 @@ describe.only('Array layout', () => {
       const matBadgeElement =
         arrayLayoutElement.querySelector('.mat-badge-content')!;
 
+      const noDataElement = arrayLayoutElement.children[0].children[1];
+
       expect(matBadgeElement.textContent).toBe('1');
+      expect(noDataElement.textContent).toBe('No data');
+    });
+  });
+
+  it('render with data that contains empty required fields should show proper error count', () => {
+    setupMockStore(fixture, {
+      data: { test: [{}] },
+      schema: TEST_SCHEMA,
+      uischema: TEST_UISCHEMA,
+    });
+    fixture.componentInstance.ngOnInit();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.children[0].children.length).toBe(2);
+
+    fixture.whenRenderingDone().then(() => {
+      fixture.detectChanges();
+
+      const arrayLayoutElement: HTMLElement = fixture.nativeElement;
+      const matBadgeElement =
+        arrayLayoutElement.querySelector('.mat-badge-content')!;
+
+      expect(matBadgeElement.textContent).toBe('2');
+    });
+  });
+
+  it('render with more data that contains empty required fields should show proper error count', () => {
+    setupMockStore(fixture, {
+      data: { test: [{}, {}] },
+      schema: TEST_SCHEMA,
+      uischema: TEST_UISCHEMA,
+    });
+    fixture.componentInstance.ngOnInit();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.children[0].children.length).toBe(3);
+
+    fixture.whenRenderingDone().then(() => {
+      fixture.detectChanges();
+
+      const arrayLayoutElement: HTMLElement = fixture.nativeElement;
+      const matBadgeElement =
+        arrayLayoutElement.querySelector('.mat-badge-content')!;
+
+      expect(matBadgeElement.textContent).toBe('4');
     });
   });
 });
