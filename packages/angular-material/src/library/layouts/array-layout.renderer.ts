@@ -60,7 +60,7 @@ import {
         <mat-icon
           *ngIf="this.error?.length"
           color="warn"
-          matBadge="{{ this.error.split('').length }}"
+          matBadge="{{ this.error.split('\\n').length }}"
           matBadgeColor="warn"
           matTooltip="{{ this.error }}"
           matTooltipClass="error-message-tooltip"
