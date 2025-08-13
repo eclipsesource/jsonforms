@@ -73,7 +73,8 @@ export const MaterialListWithDetailRenderer = ({
 }: ArrayLayoutProps & { translations: ArrayTranslations }) => {
   const [selectedIndex, setSelectedIndex] = useState(undefined);
   const handleRemoveItem = useCallback(
-    (p: string, value: any) => () => {
+    (p: string, value: any) => (e?: React.MouseEvent) => {
+      e?.stopPropagation();
       removeItems(p, [value])();
       if (selectedIndex === value) {
         setSelectedIndex(undefined);
@@ -81,7 +82,7 @@ export const MaterialListWithDetailRenderer = ({
         setSelectedIndex(selectedIndex - 1);
       }
     },
-    [removeItems, setSelectedIndex]
+    [removeItems, setSelectedIndex, selectedIndex]
   );
   const handleListItemClick = useCallback(
     (index: number) => () => setSelectedIndex(index),

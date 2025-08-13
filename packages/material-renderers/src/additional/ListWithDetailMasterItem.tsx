@@ -32,13 +32,18 @@ import {
   ListItemSecondaryAction,
   ListItemText,
   Tooltip,
+  SxProps,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import React from 'react';
+import ValidationIcon from '../complex/ValidationIcon';
+
+const avatarSx: SxProps = { display: 'inline-flex', marginRight: '.25rem' };
 
 export const ListWithDetailMasterItem = ({
   index,
   childLabel,
+  childErrors,
   selected,
   enabled,
   handleSelect,
@@ -50,7 +55,10 @@ export const ListWithDetailMasterItem = ({
   return (
     <ListItemButton selected={selected} onClick={handleSelect(index)}>
       <ListItemAvatar>
-        <Avatar aria-label='Index'>{index + 1}</Avatar>
+        <Avatar aria-label='Index' sx={avatarSx}>
+          {index + 1}
+        </Avatar>
+        <ValidationIcon id='tooltip-validation' errorMessages={childErrors} />
       </ListItemAvatar>
       <ListItemText primary={childLabel} />
       {enabled && !disableRemove && (
