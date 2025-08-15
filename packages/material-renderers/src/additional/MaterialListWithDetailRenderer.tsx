@@ -135,7 +135,7 @@ export const MaterialListWithDetailRenderer = ({
         disableAdd={doDisableAdd}
       />
       <Grid container direction='row' spacing={2}>
-        <Grid item xs={3}>
+        <Grid size={3}>
           <List>
             {data > 0 ? (
               map(range(data), (index) => (
@@ -159,7 +159,7 @@ export const MaterialListWithDetailRenderer = ({
             )}
           </List>
         </Grid>
-        <Grid item xs>
+        <Grid size='grow'>
           {selectedIndex !== undefined ? (
             <JsonFormsDispatch
               renderers={renderers}
