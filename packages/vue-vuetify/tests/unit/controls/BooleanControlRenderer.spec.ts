@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { clearAllIds } from '@jsonforms/core';
+import { seedIds } from '@jsonforms/core';
 import BooleanControlRenderer from '../../../src/controls/BooleanControlRenderer.vue';
 import { entry as booleanControlRendererEntry } from '../../../src/controls/BooleanControlRenderer.entry';
 import { mountJsonForms } from '../util';
@@ -23,7 +23,7 @@ describe('BooleanControlRenderer.vue', () => {
 
   beforeEach(() => {
     // clear all ids to guarantee that the snapshots will always be generated with the same ids
-    clearAllIds();
+    seedIds();
     wrapper = mountJsonForms(data, schema, renderers, uischema);
   });
 

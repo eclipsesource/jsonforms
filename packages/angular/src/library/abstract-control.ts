@@ -29,7 +29,6 @@ import {
   JsonFormsState,
   JsonSchema,
   OwnPropsOfControl,
-  removeId,
   StatePropsOfControl,
 } from '@jsonforms/core';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
@@ -147,7 +146,6 @@ export abstract class JsonFormsAbstractControl<
 
   ngOnDestroy() {
     super.ngOnDestroy();
-    removeId(this.id);
   }
 
   isEnabled(): boolean {
