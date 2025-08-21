@@ -289,7 +289,7 @@ const controlRenderer = defineComponent({
     const t = useTranslator();
     const showMenu = ref(false);
     const activeTab = ref<'date' | 'time'>('date');
-    const adaptValue = (value: any) => (value === null ? clearValue : value);
+    const adaptValue = (value: any) => value || clearValue;
 
     const control = useVuetifyControl(useJsonFormsControl(props), adaptValue);
     const { mobile } = useDisplay();
