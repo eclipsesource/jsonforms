@@ -1,29 +1,47 @@
 <template>
-  <div v-if="visible" :class="styles.control.root" :id="id">
-    <slot></slot>
-  </div>
+  <component :is="WrapperComponent" v-bind="props">
+    <slot />
+  </component>
 </template>
 
 <script lang="ts">
-import { defineComponent, type PropType } from 'vue';
-import type { Styles } from '../styles';
+import type { Styles } from '@/styles';
+import type {
+  AppliedOptions,
+  ControlWrapperProps,
+  ControlWrapperType,
+} from '@/util';
+import { ControlWrapperSymbol } from '@/util';
+import { defineComponent, inject, type PropType } from 'vue';
+import DefaultControlWrapper from './components/DefaultControlWrapper.vue';
 
 export default defineComponent({
-  name: 'control-wrapper',
+  name: 'ControlWrapper',
   props: {
-    id: {
-      required: true as const,
-      type: String,
-    },
-    visible: {
-      required: false as const,
-      type: Boolean,
-      default: true,
-    },
-    styles: {
+    id: { type: String, required: true },
+    description: { type: String, required: true },
+    errors: { type: String, required: true },
+    label: { type: String, required: true },
+    visible: { type: Boolean, required: true },
+    required: { type: Boolean, required: true },
+    isFocused: { type: Boolean, required: true },
+    styles: { type: Object as PropType<Styles>, required: true },
+    appliedOptions: {
+      type: Object as PropType<AppliedOptions>,
       required: true,
-      type: Object as PropType<Styles>,
     },
+  },
+  setup(props: ControlWrapperProps) {
+    // Inject a custom wrapper if provided
+    const WrapperComponent = inject<ControlWrapperType>(
+      ControlWrapperSymbol,
+      DefaultControlWrapper,
+    ) as ControlWrapperType;
+
+    return {
+      WrapperComponent,
+      props,
+    };
   },
 });
 </script>

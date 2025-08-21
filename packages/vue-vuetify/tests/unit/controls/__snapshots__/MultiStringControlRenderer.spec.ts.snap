@@ -3,7 +3,7 @@
 exports[`MultiStringControlRenderer.vue > should render component and match snapshot 1`] = `
 "<div class="v-application v-theme--light v-layout v-layout--full-height v-locale--is-ltr">
   <div class="v-application__wrap">
-    <div class="control" id="#6" errors="" label="My Multi String" required="false" isfocused="false" appliedoptions="[object Object]">
+    <div class="control" id="#6">
       <div class="v-input v-input--horizontal v-input--density-default v-theme--light v-locale--is-ltr v-input--dirty v-textarea v-text-field input">
         <!---->
         <div class="v-input__control">
