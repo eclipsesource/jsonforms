@@ -114,7 +114,8 @@ const reloadMonacoSchema = () => {
 const saveMonacoSchema = () => {
   saveMonacoModel(
     schemaModel,
-    (modelValue) => (state.schema = JSON.parse(modelValue)),
+    (modelValue) =>
+      (state.schema = modelValue ? JSON.parse(modelValue) : undefined),
     'New schema applied',
   );
 
@@ -277,6 +278,10 @@ const handleAction = (action: Action) => {
   if (action) {
     const newState = action.apply(state);
     if (newState) {
+      if (newState.renderers) {
+        newState.renderers = markRaw(newState.renderers);
+      }
+
       Object.assign(state, newState);
     }
   }
