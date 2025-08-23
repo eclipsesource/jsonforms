@@ -582,9 +582,11 @@ export const mapStateToControlProps = (
   const { uischema } = ownProps;
   const rootData = getData(state);
   const path = composeWithUi(uischema, ownProps.path);
+  const config = getConfig(state);
+
   const visible: boolean =
     ownProps.visible === undefined || hasShowRule(uischema)
-      ? isVisible(uischema, rootData, ownProps.path, getAjv(state))
+      ? isVisible(uischema, rootData, ownProps.path, getAjv(state), config)
       : ownProps.visible;
   const controlElement = uischema as ControlElement;
   const id = ownProps.id;
@@ -604,7 +606,6 @@ export const mapStateToControlProps = (
   const data = Resolve.data(rootData, path);
   const labelDesc = createLabelDescriptionFrom(uischema, resolvedSchema);
   const label = labelDesc.show ? labelDesc.text : '';
-  const config = getConfig(state);
   const enabled: boolean = isInherentlyEnabled(
     state,
     ownProps,
@@ -1042,7 +1043,13 @@ export const mapStateToLayoutProps = (
   const { uischema } = ownProps;
   const visible: boolean =
     ownProps.visible === undefined || hasShowRule(uischema)
-      ? isVisible(ownProps.uischema, rootData, ownProps.path, getAjv(state))
+      ? isVisible(
+          ownProps.uischema,
+          rootData,
+          ownProps.path,
+          getAjv(state),
+          getConfig(state)
+        )
       : ownProps.visible;
 
   const data = Resolve.data(rootData, ownProps.path);
@@ -1280,7 +1287,13 @@ export const mapStateToLabelProps = (
 
   const visible: boolean =
     props.visible === undefined || hasShowRule(uischema)
-      ? isVisible(props.uischema, getData(state), props.path, getAjv(state))
+      ? isVisible(
+          props.uischema,
+          getData(state),
+          props.path,
+          getAjv(state),
+          getConfig(state)
+        )
       : props.visible;
 
   const text = uischema.text;

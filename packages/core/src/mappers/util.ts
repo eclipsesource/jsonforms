@@ -19,7 +19,7 @@ export const isInherentlyEnabled = (
     return false;
   }
   if (uischema && hasEnableRule(uischema)) {
-    return isEnabled(uischema, rootData, ownProps?.path, getAjv(state));
+    return isEnabled(uischema, rootData, ownProps?.path, getAjv(state), config);
   }
   if (typeof uischema?.options?.readonly === 'boolean') {
     return !uischema.options.readonly;

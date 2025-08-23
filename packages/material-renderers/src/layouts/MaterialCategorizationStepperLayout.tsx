@@ -107,9 +107,9 @@ export const MaterialCategorizationStepperLayoutRenderer = (
   const categories = useMemo(
     () =>
       categorization.elements.filter((category: Category) =>
-        isVisible(category, data, undefined, ajv)
+        isVisible(category, data, undefined, ajv, config)
       ),
-    [categorization, data, ajv]
+    [categorization, data, ajv, config]
   );
   const childProps: MaterialLayoutRendererProps = {
     elements: categories[activeCategory].elements,

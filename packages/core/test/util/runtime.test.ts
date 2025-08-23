@@ -56,7 +56,7 @@ test('evalVisibility show valid case', (t) => {
     value: 'foo',
     ruleValue: 'bar',
   };
-  t.is(evalVisibility(uischema, data, undefined, createAjv()), true);
+  t.is(evalVisibility(uischema, data, undefined, createAjv(), undefined), true);
 });
 
 test('evalVisibility show valid case based on AndCondition', (t) => {
@@ -87,7 +87,7 @@ test('evalVisibility show valid case based on AndCondition', (t) => {
     ruleValue1: 'bar',
     ruleValue2: 'foo',
   };
-  t.is(evalVisibility(uischema, data, undefined, createAjv()), true);
+  t.is(evalVisibility(uischema, data, undefined, createAjv(), undefined), true);
 });
 
 test('evalVisibility show invalid case based on AndCondition', (t) => {
@@ -118,7 +118,10 @@ test('evalVisibility show invalid case based on AndCondition', (t) => {
     ruleValue1: 'bar',
     ruleValue2: 'foo',
   };
-  t.is(evalVisibility(uischema, data, undefined, createAjv()), false);
+  t.is(
+    evalVisibility(uischema, data, undefined, createAjv(), undefined),
+    false
+  );
 });
 
 test('evalVisibility show valid case based on OrCondition', (t) => {
@@ -149,7 +152,7 @@ test('evalVisibility show valid case based on OrCondition', (t) => {
     ruleValue1: 'bar1',
     ruleValue2: 'foo',
   };
-  t.is(evalVisibility(uischema, data, undefined, createAjv()), true);
+  t.is(evalVisibility(uischema, data, undefined, createAjv(), undefined), true);
 });
 
 test('evalVisibility show invalid case based on OrCondition', (t) => {
@@ -180,7 +183,10 @@ test('evalVisibility show invalid case based on OrCondition', (t) => {
     ruleValue1: 'bar',
     ruleValue2: 'foo',
   };
-  t.is(evalVisibility(uischema, data, undefined, createAjv()), false);
+  t.is(
+    evalVisibility(uischema, data, undefined, createAjv(), undefined),
+    false
+  );
 });
 
 test('evalVisibility show valid case based on schema condition', (t) => {
@@ -202,7 +208,7 @@ test('evalVisibility show valid case based on schema condition', (t) => {
     value: 'foo',
     ruleValue: 'bar',
   };
-  t.is(evalVisibility(uischema, data, undefined, createAjv()), true);
+  t.is(evalVisibility(uischema, data, undefined, createAjv(), undefined), true);
 });
 
 test('evalVisibility show valid case based on schema condition and enum', (t) => {
@@ -224,13 +230,14 @@ test('evalVisibility show valid case based on schema condition and enum', (t) =>
     value: 'foo',
     ruleValue: 'bar',
   };
-  t.is(evalVisibility(uischema, data, undefined, createAjv()), true);
+  t.is(evalVisibility(uischema, data, undefined, createAjv(), undefined), true);
   t.is(
     evalVisibility(
       uischema,
       { ...data, ruleValue: 'baz' },
       undefined,
-      createAjv()
+      createAjv(),
+      undefined
     ),
     true
   );
@@ -239,7 +246,8 @@ test('evalVisibility show valid case based on schema condition and enum', (t) =>
       uischema,
       { ...data, ruleValue: 'foo' },
       undefined,
-      createAjv()
+      createAjv(),
+      undefined
     ),
     false
   );
@@ -263,7 +271,10 @@ test('evalVisibility show invalid case', (t) => {
     value: 'foo',
     ruleValue: 'foobar',
   };
-  t.deepEqual(evalVisibility(uischema, data, undefined, createAjv()), false);
+  t.deepEqual(
+    evalVisibility(uischema, data, undefined, createAjv(), undefined),
+    false
+  );
 });
 test('evalVisibility hide valid case', (t) => {
   const leafCondition: LeafCondition = {
@@ -283,7 +294,10 @@ test('evalVisibility hide valid case', (t) => {
     value: 'foo',
     ruleValue: 'bar',
   };
-  t.is(evalVisibility(uischema, data, undefined, createAjv()), false);
+  t.is(
+    evalVisibility(uischema, data, undefined, createAjv(), undefined),
+    false
+  );
 });
 
 test('evalVisibility hide invalid case', (t) => {
@@ -304,7 +318,7 @@ test('evalVisibility hide invalid case', (t) => {
     value: 'foo',
     ruleValue: 'foobar',
   };
-  t.is(evalVisibility(uischema, data, undefined, createAjv()), true);
+  t.is(evalVisibility(uischema, data, undefined, createAjv(), undefined), true);
 });
 
 test('evalEnablement enable valid case', (t) => {
@@ -325,7 +339,7 @@ test('evalEnablement enable valid case', (t) => {
     value: 'foo',
     ruleValue: 'bar',
   };
-  t.is(evalEnablement(uischema, data, undefined, createAjv()), true);
+  t.is(evalEnablement(uischema, data, undefined, createAjv(), undefined), true);
 });
 
 test('evalEnablement show valid case based on AndCondition', (t) => {
@@ -356,7 +370,7 @@ test('evalEnablement show valid case based on AndCondition', (t) => {
     ruleValue1: 'bar',
     ruleValue2: 'foo',
   };
-  t.is(evalEnablement(uischema, data, undefined, createAjv()), true);
+  t.is(evalEnablement(uischema, data, undefined, createAjv(), undefined), true);
 });
 
 test('evalEnablement show invalid case based on AndCondition', (t) => {
@@ -387,7 +401,10 @@ test('evalEnablement show invalid case based on AndCondition', (t) => {
     ruleValue1: 'bar',
     ruleValue2: 'foo',
   };
-  t.is(evalEnablement(uischema, data, undefined, createAjv()), false);
+  t.is(
+    evalEnablement(uischema, data, undefined, createAjv(), undefined),
+    false
+  );
 });
 
 test('evalEnablement show valid case based on OrCondition', (t) => {
@@ -418,7 +435,7 @@ test('evalEnablement show valid case based on OrCondition', (t) => {
     ruleValue1: 'bar1',
     ruleValue2: 'foo',
   };
-  t.is(evalEnablement(uischema, data, undefined, createAjv()), true);
+  t.is(evalEnablement(uischema, data, undefined, createAjv(), undefined), true);
 });
 
 test('evalEnablement show invalid case based on OrCondition', (t) => {
@@ -449,7 +466,10 @@ test('evalEnablement show invalid case based on OrCondition', (t) => {
     ruleValue1: 'bar',
     ruleValue2: 'foo',
   };
-  t.is(evalEnablement(uischema, data, undefined, createAjv()), false);
+  t.is(
+    evalEnablement(uischema, data, undefined, createAjv(), undefined),
+    false
+  );
 });
 
 test('evalEnablement enable invalid case', (t) => {
@@ -470,7 +490,10 @@ test('evalEnablement enable invalid case', (t) => {
     value: 'foo',
     ruleValue: 'foobar',
   };
-  t.is(evalEnablement(uischema, data, undefined, createAjv()), false);
+  t.is(
+    evalEnablement(uischema, data, undefined, createAjv(), undefined),
+    false
+  );
 });
 test('evalEnablement disable valid case', (t) => {
   const leafCondition: LeafCondition = {
@@ -490,7 +513,10 @@ test('evalEnablement disable valid case', (t) => {
     value: 'foo',
     ruleValue: 'bar',
   };
-  t.is(evalEnablement(uischema, data, undefined, createAjv()), false);
+  t.is(
+    evalEnablement(uischema, data, undefined, createAjv(), undefined),
+    false
+  );
 });
 
 // Add test case for ValidateFunctionCondition with evalEnablement (valid enable case)
@@ -511,7 +537,7 @@ test('evalEnablement enable valid case based on ValidateFunctionCondition', (t) 
     value: 'foo',
     ruleValue: 'bar',
   };
-  t.is(evalEnablement(uischema, data, undefined, createAjv()), true);
+  t.is(evalEnablement(uischema, data, undefined, createAjv(), undefined), true);
 });
 
 // Add test case for ValidateFunctionCondition with evalEnablement (invalid enable case)
@@ -532,7 +558,10 @@ test('evalEnablement enable invalid case based on ValidateFunctionCondition', (t
     value: 'foo',
     ruleValue: 'foobar',
   };
-  t.is(evalEnablement(uischema, data, undefined, createAjv()), false);
+  t.is(
+    evalEnablement(uischema, data, undefined, createAjv(), undefined),
+    false
+  );
 });
 
 // Add test case for ValidateFunctionCondition with evalEnablement (valid disable case)
@@ -553,7 +582,10 @@ test('evalEnablement disable valid case based on ValidateFunctionCondition', (t)
     value: 'foo',
     ruleValue: 'bar',
   };
-  t.is(evalEnablement(uischema, data, undefined, createAjv()), false);
+  t.is(
+    evalEnablement(uischema, data, undefined, createAjv(), undefined),
+    false
+  );
 });
 
 // Add test case for ValidateFunctionCondition with evalEnablement (invalid disable case)
@@ -574,7 +606,7 @@ test('evalEnablement disable invalid case based on ValidateFunctionCondition', (
     value: 'foo',
     ruleValue: 'foobar',
   };
-  t.is(evalEnablement(uischema, data, undefined, createAjv()), true);
+  t.is(evalEnablement(uischema, data, undefined, createAjv(), undefined), true);
 });
 
 // Test context properties for ValidateFunctionCondition
@@ -587,7 +619,8 @@ test('ValidateFunctionCondition correctly passes context parameters', (t) => {
         context.data === 'bar' &&
         (context.fullData as any).value === 'foo' &&
         context.path === undefined &&
-        (context.uischemaElement as any).scope === '#/properties/value'
+        (context.uischemaElement as any).scope === '#/properties/value' &&
+        typeof context.config.externalValidator === 'function'
       );
     },
   };
@@ -603,7 +636,12 @@ test('ValidateFunctionCondition correctly passes context parameters', (t) => {
     value: 'foo',
     ruleValue: 'bar',
   };
-  t.is(evalEnablement(uischema, data, undefined, createAjv()), true);
+  const config = {
+    externalValidator: (_context: ValidateFunctionContext): boolean => {
+      return true;
+    },
+  };
+  t.is(evalEnablement(uischema, data, undefined, createAjv(), config), true);
 });
 
 test('evalEnablement disable invalid case', (t) => {
@@ -624,7 +662,7 @@ test('evalEnablement disable invalid case', (t) => {
     value: 'foo',
     ruleValue: 'foobar',
   };
-  t.is(evalEnablement(uischema, data, undefined, createAjv()), true);
+  t.is(evalEnablement(uischema, data, undefined, createAjv(), undefined), true);
 });
 
 test('evalEnablement disable invalid case based on schema condition', (t) => {
@@ -646,13 +684,17 @@ test('evalEnablement disable invalid case based on schema condition', (t) => {
     value: 'foo',
     ruleValue: 'bar',
   };
-  t.is(evalEnablement(uischema, data, undefined, createAjv()), false);
+  t.is(
+    evalEnablement(uischema, data, undefined, createAjv(), undefined),
+    false
+  );
   t.is(
     evalEnablement(
       uischema,
       { ...data, ruleValue: 'baz' },
       undefined,
-      createAjv()
+      createAjv(),
+      undefined
     ),
     false
   );
@@ -661,7 +703,8 @@ test('evalEnablement disable invalid case based on schema condition', (t) => {
       uischema,
       { ...data, ruleValue: 'foo' },
       undefined,
-      createAjv()
+      createAjv(),
+      undefined
     ),
     true
   );
@@ -711,12 +754,24 @@ test('evalEnablement fail on failWhenUndefined', (t) => {
     value: 'foo',
   };
   t.is(
-    evalEnablement(failConditionTrueUischema, data, undefined, createAjv()),
+    evalEnablement(
+      failConditionTrueUischema,
+      data,
+      undefined,
+      createAjv(),
+      undefined
+    ),
     true
   );
   t.is(
-    evalEnablement(failConditionFalseUischema, data, undefined, createAjv()),
-    evalEnablement(uischema, data, undefined, createAjv())
+    evalEnablement(
+      failConditionFalseUischema,
+      data,
+      undefined,
+      createAjv(),
+      undefined
+    ),
+    evalEnablement(uischema, data, undefined, createAjv(), undefined)
   );
 });
 
