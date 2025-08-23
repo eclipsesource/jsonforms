@@ -33,12 +33,6 @@ import DispatchRenderer from './DispatchRenderer.vue';
 import type Ajv from 'ajv';
 import type { ErrorObject } from 'ajv';
 
-// TODO fix @typescript-eslint/ban-types
-// eslint-disable-next-line @typescript-eslint/ban-types
-const isObject = (elem: any): elem is Object => {
-  return elem && typeof elem === 'object';
-};
-
 const EMPTY: ErrorObject[] = reactive([]);
 
 export default defineComponent({
@@ -124,9 +118,8 @@ export default defineComponent({
   emits: ['change'],
   data() {
     const dataToUse = this.data;
-    const generatorData = isObject(dataToUse) ? dataToUse : {};
     const schemaToUse: JsonSchema =
-      this.schema ?? Generate.jsonSchema(generatorData);
+      this.schema ?? Generate.jsonSchema(dataToUse);
     const uischemaToUse =
       this.uischema ??
       Generate.uiSchema(schemaToUse, undefined, undefined, schemaToUse);
@@ -189,8 +182,7 @@ export default defineComponent({
   },
   watch: {
     schema(newSchema) {
-      const generatorData = isObject(this.data) ? this.data : {};
-      this.schemaToUse = newSchema ?? Generate.jsonSchema(generatorData);
+      this.schemaToUse = newSchema ?? Generate.jsonSchema(this.data);
       if (!this.uischema) {
         this.uischemaToUse = Generate.uiSchema(
           this.schemaToUse,
@@ -214,8 +206,7 @@ export default defineComponent({
       this.dataToUse = newData;
 
       if (!this.schema) {
-        const generatorData = isObject(newData) ? newData : {};
-        this.schemaToUse = Generate.jsonSchema(generatorData);
+        this.schemaToUse = Generate.jsonSchema(newData);
         if (!this.uischema) {
           this.uischemaToUse = Generate.uiSchema(
             this.schemaToUse,
