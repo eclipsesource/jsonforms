@@ -212,6 +212,19 @@ export default defineComponent({
     },
     data(newData) {
       this.dataToUse = newData;
+
+      if (!this.schema) {
+        const generatorData = isObject(newData) ? newData : {};
+        this.schemaToUse = Generate.jsonSchema(generatorData);
+        if (!this.uischema) {
+          this.uischemaToUse = Generate.uiSchema(
+            this.schemaToUse,
+            undefined,
+            undefined,
+            this.schemaToUse
+          );
+        }
+      }
     },
     renderers(newRenderers) {
       this.jsonforms.renderers = newRenderers;
