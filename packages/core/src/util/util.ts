@@ -163,10 +163,20 @@ export const Paths = {
 
 // Runtime --
 export const Runtime = {
-  isEnabled(uischema: UISchemaElement, data: any, ajv: Ajv): boolean {
-    return isEnabled(uischema, data, undefined, ajv);
+  isEnabled(
+    uischema: UISchemaElement,
+    data: any,
+    ajv: Ajv,
+    config: any
+  ): boolean {
+    return isEnabled(uischema, data, undefined, ajv, config);
   },
-  isVisible(uischema: UISchemaElement, data: any, ajv: Ajv): boolean {
-    return isVisible(uischema, data, undefined, ajv);
+  isVisible(
+    uischema: UISchemaElement,
+    data: any,
+    ajv: Ajv,
+    config: any
+  ): boolean {
+    return isVisible(uischema, data, undefined, ajv, config);
   },
 };

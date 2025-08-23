@@ -25,6 +25,7 @@
 import {
   ControlElement,
   getAjv,
+  getConfig,
   getData,
   isVisible,
   JsonFormsState,
@@ -44,7 +45,13 @@ export const mapStateToVisible = (
   const visible =
     ownProps.visible !== undefined
       ? ownProps.visible
-      : isVisible(ownProps.uischema, getData(state), undefined, getAjv(state));
+      : isVisible(
+          ownProps.uischema,
+          getData(state),
+          undefined,
+          getAjv(state),
+          getConfig(state)
+        );
 
   return {
     visible,

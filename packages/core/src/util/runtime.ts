@@ -67,16 +67,19 @@ const evaluateCondition = (
   uischema: UISchemaElement,
   condition: Condition,
   path: string,
-  ajv: Ajv
+  ajv: Ajv,
+  config: any
 ): boolean => {
   if (isAndCondition(condition)) {
     return condition.conditions.reduce(
-      (acc, cur) => acc && evaluateCondition(data, uischema, cur, path, ajv),
+      (acc, cur) =>
+        acc && evaluateCondition(data, uischema, cur, path, ajv, config),
       true
     );
   } else if (isOrCondition(condition)) {
     return condition.conditions.reduce(
-      (acc, cur) => acc || evaluateCondition(data, uischema, cur, path, ajv),
+      (acc, cur) =>
+        acc || evaluateCondition(data, uischema, cur, path, ajv, config),
       false
     );
   } else if (isLeafCondition(condition)) {
@@ -95,6 +98,7 @@ const evaluateCondition = (
       fullData: data,
       path,
       uischemaElement: uischema,
+      config,
     };
     return condition.validate(context);
   } else {
@@ -107,19 +111,21 @@ const isRuleFulfilled = (
   uischema: UISchemaElement,
   data: any,
   path: string,
-  ajv: Ajv
+  ajv: Ajv,
+  config: any
 ): boolean => {
   const condition = uischema.rule.condition;
-  return evaluateCondition(data, uischema, condition, path, ajv);
+  return evaluateCondition(data, uischema, condition, path, ajv, config);
 };
 
 export const evalVisibility = (
   uischema: UISchemaElement,
   data: any,
   path: string = undefined,
-  ajv: Ajv
+  ajv: Ajv,
+  config: any
 ): boolean => {
-  const fulfilled = isRuleFulfilled(uischema, data, path, ajv);
+  const fulfilled = isRuleFulfilled(uischema, data, path, ajv, config);
 
   switch (uischema.rule.effect) {
     case RuleEffect.HIDE:
@@ -136,9 +142,10 @@ export const evalEnablement = (
   uischema: UISchemaElement,
   data: any,
   path: string = undefined,
-  ajv: Ajv
+  ajv: Ajv,
+  config: any
 ): boolean => {
-  const fulfilled = isRuleFulfilled(uischema, data, path, ajv);
+  const fulfilled = isRuleFulfilled(uischema, data, path, ajv, config);
 
   switch (uischema.rule.effect) {
     case RuleEffect.DISABLE:
@@ -177,10 +184,11 @@ export const isVisible = (
   uischema: UISchemaElement,
   data: any,
   path: string = undefined,
-  ajv: Ajv
+  ajv: Ajv,
+  config: any
 ): boolean => {
   if (uischema.rule) {
-    return evalVisibility(uischema, data, path, ajv);
+    return evalVisibility(uischema, data, path, ajv, config);
   }
 
   return true;
@@ -190,10 +198,11 @@ export const isEnabled = (
   uischema: UISchemaElement,
   data: any,
   path: string = undefined,
-  ajv: Ajv
+  ajv: Ajv,
+  config: any
 ): boolean => {
   if (uischema.rule) {
-    return evalEnablement(uischema, data, path, ajv);
+    return evalEnablement(uischema, data, path, ajv, config);
   }
 
   return true;
