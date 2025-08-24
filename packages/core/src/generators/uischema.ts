@@ -138,7 +138,7 @@ const generateUISchema = (
 
   const types = deriveTypes(jsonSchema);
   if (types.length === 0) {
-    return null;
+    return createLayout('VerticalLayout');
   }
 
   if (types.length > 1) {
