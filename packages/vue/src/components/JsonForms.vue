@@ -26,6 +26,7 @@ import {
   defaultMiddleware,
   Middleware,
   JsonFormsSubStates,
+  Layout,
 } from '@jsonforms/core';
 import { JsonFormsChangeEvent, MaybeReadonly } from '../types';
 import DispatchRenderer from './DispatchRenderer.vue';
@@ -34,6 +35,14 @@ import type Ajv from 'ajv';
 import type { ErrorObject } from 'ajv';
 
 const EMPTY: ErrorObject[] = reactive([]);
+
+const createDefaultLayout = (): Layout => ({
+  type: 'VerticalLayout',
+  elements: [],
+});
+const generateUISchema = (schema: JsonSchema) =>
+  Generate.uiSchema(schema, undefined, undefined, schema) ??
+  createDefaultLayout();
 
 export default defineComponent({
   name: 'JsonForms',
@@ -120,9 +129,7 @@ export default defineComponent({
     const dataToUse = this.data;
     const schemaToUse: JsonSchema =
       this.schema ?? Generate.jsonSchema(dataToUse);
-    const uischemaToUse =
-      this.uischema ??
-      Generate.uiSchema(schemaToUse, undefined, undefined, schemaToUse);
+    const uischemaToUse = this.uischema ?? generateUISchema(schemaToUse);
     const initCore = (): JsonFormsCore => {
       const initialCore = {
         data: dataToUse,
@@ -184,23 +191,11 @@ export default defineComponent({
     schema(newSchema) {
       this.schemaToUse = newSchema ?? Generate.jsonSchema(this.data);
       if (!this.uischema) {
-        this.uischemaToUse = Generate.uiSchema(
-          this.schemaToUse,
-          undefined,
-          undefined,
-          this.schemaToUse
-        );
+        this.uischemaToUse = generateUISchema(this.schemaToUse);
       }
     },
     uischema(newUischema) {
-      this.uischemaToUse =
-        newUischema ??
-        Generate.uiSchema(
-          this.schemaToUse,
-          undefined,
-          undefined,
-          this.schemaToUse
-        );
+      this.uischemaToUse = newUischema ?? generateUISchema(this.schemaToUse);
     },
     data(newData) {
       this.dataToUse = newData;
@@ -208,12 +203,7 @@ export default defineComponent({
       if (!this.schema) {
         this.schemaToUse = Generate.jsonSchema(newData);
         if (!this.uischema) {
-          this.uischemaToUse = Generate.uiSchema(
-            this.schemaToUse,
-            undefined,
-            undefined,
-            this.schemaToUse
-          );
+          this.uischemaToUse = generateUISchema(this.schemaToUse);
         }
       }
     },
