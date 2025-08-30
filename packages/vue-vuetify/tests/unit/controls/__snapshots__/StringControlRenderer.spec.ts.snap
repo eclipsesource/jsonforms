@@ -3,7 +3,7 @@
 exports[`StringControlRenderer.vue > should render component and match snapshot 1`] = `
 "<div class="v-application v-theme--light v-layout v-layout--full-height v-locale--is-ltr">
   <div class="v-application__wrap">
-    <div class="control" id="#6" errors="" label="My String" required="false" isfocused="false" appliedoptions="[object Object]">
+    <div class="control" id="#6">
       <div class="v-input v-input--horizontal v-input--center-affix v-input--density-default v-theme--light v-locale--is-ltr v-input--dirty v-text-field input">
         <!---->
         <div class="v-input__control">
@@ -61,7 +61,7 @@ exports[`StringControlRenderer.vue > should render component and match snapshot 
 exports[`StringControlRenderer.vue with suggestion > should render component and match snapshot 1`] = `
 "<div class="v-application v-theme--light v-layout v-layout--full-height v-locale--is-ltr">
   <div class="v-application__wrap">
-    <div class="control" id="#11" errors="" label="Select Continent" required="false" isfocused="false" appliedoptions="[object Object]">
+    <div class="control" id="#11">
       <div class="v-input v-input--horizontal v-input--center-affix v-input--density-default v-theme--light v-locale--is-ltr v-text-field v-combobox v-combobox--single input">
         <!---->
         <div class="v-input__control">
@@ -124,7 +124,7 @@ exports[`StringControlRenderer.vue with suggestion > should render component and
 exports[`StringControlRenderer.vue with suggestion > should render component and match snapshot when clicked 1`] = `
 "<div class="v-application v-theme--light v-layout v-layout--full-height v-locale--is-ltr">
   <div class="v-application__wrap">
-    <div class="control" id="#12" errors="" label="Select Continent" required="false" isfocused="false" appliedoptions="[object Object]">
+    <div class="control" id="#12">
       <div class="v-input v-input--horizontal v-input--center-affix v-input--density-default v-theme--light v-locale--is-ltr v-text-field v-combobox v-combobox--single input">
         <!---->
         <div class="v-input__control">
