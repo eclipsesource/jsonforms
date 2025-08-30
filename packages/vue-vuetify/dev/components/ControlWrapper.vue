@@ -1,11 +1,16 @@
 <template>
   <div
+    class="control-wrapper"
     v-if="appStore.overrideControlTemplate && visible"
-    :class="['control-wrapper', { 'focused-wrapper': isFocused }]"
+    :class="[styles?.control.root, { 'focused-wrapper': isFocused }]"
     :id="id"
   >
-    <slot></slot>
+    <label :for="id">{{ label }} {{ required ? '(required)' : '' }}</label>
+    <template v-for="vnode in processedSlot">
+      <component :is="vnode" />
+    </template>
   </div>
+
   <default-control-wrapper v-else v-bind="props">
     <slot></slot>
   </default-control-wrapper>
@@ -14,11 +19,35 @@
 <script setup lang="ts">
 import DefaultControlWrapper from '@/controls/components/DefaultControlWrapper.vue';
 import type { ControlWrapperProps } from '@/util';
+import { cloneVNode, computed, defineProps, useSlots } from 'vue';
 import { useAppStore } from '../store';
-import { defineProps } from 'vue';
 const appStore = useAppStore();
 
 const props = defineProps<ControlWrapperProps>();
+const slots = useSlots();
+
+/**
+ * Recursively clones a VNode and removes 'label' prop from Vuetify input components.
+ */
+function stripLabel(vnode: any) {
+  if (!vnode) return vnode;
+
+  const hasLabel = vnode.props && 'label' in vnode.props;
+  if (hasLabel) {
+    vnode = cloneVNode(vnode, { label: undefined });
+  }
+
+  if (vnode.children && Array.isArray(vnode.children)) {
+    vnode.children = vnode.children.map(stripLabel);
+  }
+
+  return vnode;
+}
+
+const processedSlot = computed(() => {
+  if (!slots.default) return [];
+  return slots.default().map(stripLabel);
+});
 </script>
 
 <style scoped>
@@ -35,28 +64,5 @@ const props = defineProps<ControlWrapperProps>();
 .focused-wrapper {
   background-color: rgba(25, 118, 210, 0.05); /* soft glow */
   box-shadow: 0 0 8px rgba(25, 118, 210, 0.3);
-}
-
-/* Override icon in the corner */
-.override-icon {
-  position: absolute;
-  top: 4px;
-  right: 4px;
-  transition:
-    transform 0.2s ease,
-    color 0.2s ease;
-}
-
-/* Slight icon animation on focus */
-.focused-wrapper .override-icon {
-  transform: scale(1.3);
-  color: #1976d2;
-}
-
-/* Error styling */
-.error-alert {
-  margin-top: 4px;
-  padding: 4px 8px;
-  font-size: 0.85rem;
 }
 </style>
