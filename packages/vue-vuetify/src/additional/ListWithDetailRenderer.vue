@@ -203,7 +203,7 @@ import {
   type RendererProps,
 } from '@jsonforms/vue';
 import type { ErrorObject } from 'ajv';
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 import {
   VAvatar,
   VBtn,
@@ -248,11 +248,28 @@ const controlRenderer = defineComponent({
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    const selectedIndex = ref<number | undefined>(undefined);
+    const input = useVuetifyArrayControl(useJsonFormsArrayControl(props));
+
+    const _selectedIndex = ref<number | undefined>(undefined);
+    const selectedIndex = computed<number | undefined>({
+      get: () => {
+        const len = input.control.value?.data?.length ?? 0;
+
+        // If no index or out of bounds → undefined
+        if (_selectedIndex.value === undefined || _selectedIndex.value >= len) {
+          return undefined;
+        }
+
+        return _selectedIndex.value;
+      },
+      set: (val) => {
+        _selectedIndex.value = val;
+      },
+    });
     const icons = useIcons();
 
     return {
-      ...useVuetifyArrayControl(useJsonFormsArrayControl(props)),
+      ...input,
       selectedIndex,
       icons,
     };
@@ -292,9 +309,6 @@ const controlRenderer = defineComponent({
     removeItemsClick(event: Event, toDelete: number[]): void {
       event.stopPropagation();
       this.removeItems?.(this.control.path, toDelete)();
-      if (this.selectedIndex && this.selectedIndex >= this.dataLength) {
-        this.selectedIndex = undefined;
-      }
     },
     childErrors(index: number): ErrorObject[] {
       return this.control.childErrors.filter((e) =>
