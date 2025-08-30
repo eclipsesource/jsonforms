@@ -292,6 +292,9 @@ const controlRenderer = defineComponent({
     removeItemsClick(event: Event, toDelete: number[]): void {
       event.stopPropagation();
       this.removeItems?.(this.control.path, toDelete)();
+      if (this.selectedIndex && this.selectedIndex >= this.dataLength) {
+        this.selectedIndex = undefined;
+      }
     },
     childErrors(index: number): ErrorObject[] {
       return this.control.childErrors.filter((e) =>

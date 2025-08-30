@@ -18,7 +18,7 @@
       :persistent-hint="persistentHint()"
       :required="control.required"
       :error-messages="control.errors"
-      :model-value="control.data"
+      :model-value="value"
       :clearable="control.enabled"
       v-bind="vuetifyProps('v-text-field')"
       @update:model-value="onChange"
@@ -64,6 +64,16 @@ const controlRenderer = defineComponent({
     step(): number {
       const options: any = this.appliedOptions;
       return options.step ?? 1;
+    },
+    value(): number | null | undefined {
+      if (
+        typeof this.control.data === 'number' ||
+        this.control.data == null ||
+        this.control.data === undefined
+      ) {
+        return this.control.data;
+      }
+      return Number(this.control.data);
     },
   },
 });
