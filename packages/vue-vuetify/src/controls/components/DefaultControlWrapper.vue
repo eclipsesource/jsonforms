@@ -1,5 +1,5 @@
 <template>
-  <div v-if="visible" :class="styles.control.root" :id="id">
+  <div v-if="visible" :class="styles?.control.root" :id="id">
     <slot></slot>
   </div>
 </template>
@@ -12,17 +12,16 @@ import { defineComponent, type DefineComponent, type PropType } from 'vue';
 export default defineComponent({
   name: 'default-control-wrapper',
   props: {
-    id: { type: String, required: true },
-    description: { type: String, required: true },
-    errors: { type: String, required: true },
-    label: { type: String, required: true },
-    visible: { type: Boolean, required: true },
-    required: { type: Boolean, required: true },
-    isFocused: { type: Boolean, required: true },
-    styles: { type: Object as PropType<Styles>, required: true },
+    id: { type: String },
+    description: { type: String },
+    errors: { type: String },
+    label: { type: String },
+    visible: { type: Boolean },
+    required: { type: Boolean },
+    isFocused: { type: Boolean },
+    styles: { type: Object as PropType<Styles> },
     appliedOptions: {
       type: Object as PropType<AppliedOptions>,
-      required: true,
     },
   },
 }) as DefineComponent<ControlWrapperProps>;

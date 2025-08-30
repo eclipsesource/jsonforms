@@ -8,15 +8,15 @@ export const IsDynamicPropertyContext: InjectionKey<boolean> = Symbol.for(
 
 export type AppliedOptions = ReturnType<typeof useControlAppliedOptions>;
 export interface ControlWrapperProps {
-  id: string;
-  description: string;
-  errors: string;
-  label: string;
-  visible: boolean;
-  required: boolean;
-  isFocused: boolean;
-  styles: Styles;
-  appliedOptions: AppliedOptions;
+  id?: string;
+  description?: string;
+  errors?: string;
+  label?: string;
+  visible?: boolean;
+  required?: boolean;
+  isFocused?: boolean;
+  styles?: Styles;
+  appliedOptions?: AppliedOptions;
 }
 
 export type ControlWrapperType = DefineComponent<ControlWrapperProps>;
