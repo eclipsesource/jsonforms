@@ -45,14 +45,20 @@ import cloneDeep from 'lodash/cloneDeep';
 @Component({
   selector: 'ObjectRenderer',
   template: `
-    <mat-card class="object-layout" appearance="outlined">
+    <mat-card
+      *ngIf="!this.containsGroup; else elseTemplate"
+      class="object-layout" appearance="outlined">
+      <ng-container *ngTemplateOutlet="elseTemplate"></ng-container>
+    </mat-card>
+
+    <ng-template #elseTemplate>
       <jsonforms-outlet
         [uischema]="detailUiSchema"
         [schema]="scopedSchema"
         [path]="propsPath"
       >
       </jsonforms-outlet>
-    </mat-card>
+    </ng-template>
   `,
   styles: [
     `
@@ -66,6 +72,7 @@ import cloneDeep from 'lodash/cloneDeep';
 })
 export class ObjectControlRenderer extends JsonFormsControlWithDetail {
   detailUiSchema: UISchemaElement;
+  containsGroup: boolean = false;
   constructor(jsonformsService: JsonFormsAngularService) {
     super(jsonformsService);
   }
@@ -95,6 +102,7 @@ export class ObjectControlRenderer extends JsonFormsControlWithDetail {
       this.detailUiSchema.type = 'VerticalLayout';
     } else {
       (this.detailUiSchema as GroupLayout).label = startCase(props.path);
+      this.containsGroup = true;
     }
     if (!this.isEnabled()) {
       setReadonly(this.detailUiSchema);
