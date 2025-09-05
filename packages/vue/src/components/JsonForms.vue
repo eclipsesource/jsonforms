@@ -126,7 +126,7 @@ export default defineComponent({
   },
   emits: ['change'],
   data() {
-    const dataToUse = this.data;
+    const dataToUse = this.data === undefined ? {} : this.data;
     const schemaToUse: JsonSchema =
       this.schema ?? Generate.jsonSchema(dataToUse);
     const uischemaToUse = this.uischema ?? generateUISchema(schemaToUse);
@@ -189,7 +189,7 @@ export default defineComponent({
   },
   watch: {
     schema(newSchema) {
-      this.schemaToUse = newSchema ?? Generate.jsonSchema(this.data);
+      this.schemaToUse = newSchema ?? Generate.jsonSchema(this.dataToUse);
       if (!this.uischema) {
         this.uischemaToUse = generateUISchema(this.schemaToUse);
       }
@@ -198,10 +198,10 @@ export default defineComponent({
       this.uischemaToUse = newUischema ?? generateUISchema(this.schemaToUse);
     },
     data(newData) {
-      this.dataToUse = newData;
+      this.dataToUse = newData === undefined ? {} : newData;
 
       if (!this.schema) {
-        this.schemaToUse = Generate.jsonSchema(newData);
+        this.schemaToUse = Generate.jsonSchema(this.dataToUse);
         if (!this.uischema) {
           this.uischemaToUse = generateUISchema(this.schemaToUse);
         }
