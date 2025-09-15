@@ -144,7 +144,8 @@ export const Resolve: {
   schema(
     schema: JsonSchema,
     schemaPath: string,
-    rootSchema: JsonSchema
+    rootSchema: JsonSchema,
+    currentData?: any
   ): JsonSchema;
   data(data: any, path: string): any;
 } = {

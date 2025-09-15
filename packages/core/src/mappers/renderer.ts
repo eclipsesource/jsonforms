@@ -978,7 +978,8 @@ export const mapStateToControlProps = (
   const resolvedSchema = Resolve.schema(
     ownProps.schema || rootSchema,
     controlElement.scope,
-    rootSchema
+    rootSchema,
+    rootData
   );
   const errors = getErrorAt(path, resolvedSchema)(state);
 
@@ -1127,7 +1128,12 @@ export const mapStateToMultiEnumControlProps = (
   let items = props.schema.items as JsonSchema;
   items =
     items && items.$ref
-      ? resolveSchema(props.rootSchema, items.$ref, props.rootSchema)
+      ? resolveSchema(
+          props.rootSchema,
+          items.$ref,
+          props.rootSchema,
+          props.data
+        )
       : items;
   const options: EnumOption[] =
     ownProps.options ||
