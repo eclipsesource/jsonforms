@@ -516,7 +516,7 @@ export const useJsonFormsCategorization = (props: LayoutProps) => {
   const { layout, ...other } = useJsonFormsLayout(props);
 
   const categories = (layout.value.uischema as Categorization).elements.map(
-    (category: UISchemaElement) => {
+    (category: Layout) => {
       const categoryProps: LayoutProps = {
         ...props,
         uischema: category,
