@@ -1,8 +1,9 @@
 <template>
   <div>
     Nuxt module for JSON Forms!
-    <JsonForms :schema="schema" :uischema="uischema" :data="data" />
-    END
+    <JsonForms :schema="schema" :uischema="uischema" v-model="data" />
+    <div>Final data:</div>
+    {{ data }}
   </div>
 </template>
 
@@ -31,7 +32,7 @@ const uischema = {
   ],
 };
 
-const data = {
+const data = ref({
   name: 'My Task',
-};
+});
 </script>
