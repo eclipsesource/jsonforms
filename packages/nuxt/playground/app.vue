@@ -1,7 +1,11 @@
 <template>
   <div>
     Nuxt module for JSON Forms!
-    <JsonForms :schema="schema" :uischema="uischema" v-model="data" />
+    <JsonForms
+      v-model="data"
+      :schema="schema"
+      :uischema="uischema"
+    />
     <div>Final data:</div>
     {{ data }}
   </div>
@@ -13,10 +17,10 @@ const schema = {
     name: {
       type: 'string',
       minLength: 1,
-      description: "The task's name",
+      description: 'The task\'s name',
     },
   },
-};
+}
 const uischema = {
   type: 'HorizontalLayout',
   elements: [
@@ -30,9 +34,9 @@ const uischema = {
       ],
     },
   ],
-};
+}
 
 const data = ref({
   name: 'My Task',
-});
+})
 </script>
