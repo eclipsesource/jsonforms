@@ -777,9 +777,6 @@ importers:
         specifier: ^4.1.2
         version: 4.1.2(magicast@0.3.5)
     devDependencies:
-      '@jsonforms/vue-vanilla':
-        specifier: workspace:*
-        version: link:../vue-vanilla
       '@nuxt/devtools':
         specifier: ^2.6.3
         version: 2.6.3(vite@5.4.19(@types/node@24.5.2)(less@4.2.0)(stylus@0.57.0)(terser@5.31.6))(vue@3.5.21(typescript@5.9.2))
@@ -26101,7 +26098,7 @@ snapshots:
       '@one-ini/wasm': 0.1.1
       commander: 10.0.1
       minimatch: 9.0.1
-      semver: 7.6.3
+      semver: 7.7.2
 
   ee-first@1.1.1: {}
 
@@ -28009,7 +28006,7 @@ snapshots:
   http-proxy-agent@7.0.2:
     dependencies:
       agent-base: 7.1.1
-      debug: 4.3.7
+      debug: 4.4.3
     transitivePeerDependencies:
       - supports-color
 
@@ -29249,7 +29246,7 @@ snapshots:
     dependencies:
       config-chain: 1.1.13
       editorconfig: 1.0.4
-      glob: 10.3.16
+      glob: 10.4.5
       js-cookie: 3.0.5
       nopt: 7.2.1
 
@@ -29419,7 +29416,7 @@ snapshots:
       whatwg-encoding: 3.1.1
       whatwg-mimetype: 4.0.0
       whatwg-url: 14.0.0
-      ws: 8.18.0
+      ws: 8.18.3
       xml-name-validator: 5.0.0
     transitivePeerDependencies:
       - bufferutil
@@ -29732,7 +29729,7 @@ snapshots:
     dependencies:
       copy-anything: 2.0.6
       parse-node-version: 1.0.1
-      tslib: 2.6.2
+      tslib: 2.6.3
     optionalDependencies:
       errno: 0.1.8
       graceful-fs: 4.2.11
@@ -30595,7 +30592,7 @@ snapshots:
   needle@3.3.1:
     dependencies:
       iconv-lite: 0.6.3
-      sax: 1.3.0
+      sax: 1.4.1
     optional: true
 
   negotiator@0.6.3: {}
@@ -34257,11 +34254,11 @@ snapshots:
   stylus@0.57.0:
     dependencies:
       css: 3.0.0
-      debug: 4.3.7
+      debug: 4.4.3
       glob: 7.2.3
       safer-buffer: 2.1.2
       sax: 1.2.4
-      source-map: 0.7.4
+      source-map: 0.7.6
     transitivePeerDependencies:
       - supports-color
 
