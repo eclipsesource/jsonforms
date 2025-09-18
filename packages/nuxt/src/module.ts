@@ -1,6 +1,5 @@
 import {
   defineNuxtModule,
-  addPlugin,
   createResolver,
   addComponent,
   addImports,
@@ -31,9 +30,6 @@ export default defineNuxtModule<ModuleOptions>({
         from: options.renderers.from,
       })
     }
-
-    // Do not add the extension since the `.ts` will be transpiled to `.mjs` after `npm run prepack`
-    addPlugin(resolver.resolve('./runtime/plugin'))
 
     addComponent({
       name: 'VueJsonForms',
