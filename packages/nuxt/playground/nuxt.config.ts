@@ -1,5 +1,5 @@
 export default defineNuxtConfig({
   modules: ['../src/module'],
-  myModule: {},
+  jsonforms: {},
   devtools: { enabled: true },
-})
+});

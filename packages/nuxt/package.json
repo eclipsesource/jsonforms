@@ -1,8 +1,10 @@
 {
-  "name": "my-module",
+  "name": "@jsonforms/nuxt",
   "version": "1.0.0",
-  "description": "My new Nuxt module",
-  "repository": "your-org/my-module",
+  "description": "Nuxt module for JSON Forms Vue 3",
+  "repository": "https://github.com/eclipsesource/jsonforms",
+  "bugs": "https://github.com/eclipsesource/jsonforms/issues",
+  "homepage": "http://jsonforms.io/",
   "license": "MIT",
   "type": "module",
   "exports": {
@@ -24,7 +26,7 @@
   ],
   "scripts": {
     "prepack": "nuxt-module-build build",
-    "dev": "npm run dev:prepare && nuxi dev playground",
+    "dev": "pnpm run dev:prepare && nuxi dev playground",
     "dev:build": "nuxi build playground",
     "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxi prepare playground",
     "release": "npm run lint && npm run test && npm run prepack && changelogen --release && npm publish && git push --follow-tags",
