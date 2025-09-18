@@ -23,6 +23,7 @@ export default defineNuxtModule<ModuleOptions>({
 
     addComponent({
       name: 'JsonForms',
+      export: 'JsonForms',
       filePath: '@jsonforms/vue',
     });
   },
