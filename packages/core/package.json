@@ -83,6 +83,7 @@
     "jsdom": "^22.0.0",
     "jsdom-global": "^3.0.2",
     "nyc": "^15.1.0",
+    "parse-path": "^7.1.0",
     "prettier": "^2.8.4",
     "redux": "^4.0.4",
     "redux-mock-store": "1.5.3",
