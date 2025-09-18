@@ -742,7 +742,7 @@ importers:
         version: 0.2.4
       ts-jest:
         specifier: ^27.1.4
-        version: 27.1.5(@babel/core@7.28.4)(@types/jest@27.5.2)(babel-jest@27.5.1(@babel/core@7.28.4))(jest@27.5.1(node-notifier@8.0.2)(ts-node@10.9.2(@types/node@24.5.2)(typescript@5.5.4)))(typescript@5.5.4)
+        version: 27.1.5(@babel/core@7.25.2)(@types/jest@27.5.2)(babel-jest@27.5.1(@babel/core@7.25.2))(jest@27.5.1(node-notifier@8.0.2)(ts-node@10.9.2(@types/node@24.5.2)(typescript@5.5.4)))(typescript@5.5.4)
       ts-loader:
         specifier: ^9.5.1
         version: 9.5.1(typescript@5.5.4)(webpack@5.91.0)
@@ -777,6 +777,9 @@ importers:
         specifier: ^4.1.2
         version: 4.1.2(magicast@0.3.5)
     devDependencies:
+      '@jsonforms/vue-vanilla':
+        specifier: workspace:*
+        version: link:../vue-vanilla
       '@nuxt/devtools':
         specifier: ^2.6.3
         version: 2.6.3(vite@5.4.19(@types/node@24.5.2)(less@4.2.0)(stylus@0.57.0)(terser@5.31.6))(vue@3.5.21(typescript@5.9.2))
@@ -915,7 +918,7 @@ importers:
         version: 5.12.0(rollup@2.79.1)
       ts-jest:
         specifier: ^27.1.4
-        version: 27.1.5(@babel/core@7.25.2)(@types/jest@27.5.2)(babel-jest@27.5.1(@babel/core@7.25.2))(jest@27.5.1(node-notifier@8.0.2)(ts-node@10.9.2(@types/node@24.5.2)(typescript@5.5.4)))(typescript@5.5.4)
+        version: 27.1.5(@babel/core@7.28.4)(@types/jest@27.5.2)(babel-jest@27.5.1(@babel/core@7.28.4))(jest@27.5.1(node-notifier@8.0.2)(ts-node@10.9.2(@types/node@24.5.2)(typescript@5.5.4)))(typescript@5.5.4)
       tslib:
         specifier: ^2.5.0
         version: 2.6.2
@@ -1221,7 +1224,7 @@ importers:
         version: 5.0.8(@vue/cli-service@5.0.8(@vue/compiler-sfc@3.5.21)(ejs@3.1.10)(encoding@0.1.13)(handlebars@4.7.8)(lodash@4.17.21)(prettier@2.8.8)(vue-template-compiler@2.7.16)(vue@3.5.17(typescript@5.5.4))(webpack-sources@3.2.3))(encoding@0.1.13)(eslint@8.57.0)(typescript@5.5.4)(vue-template-compiler@2.7.16)(vue@3.5.17(typescript@5.5.4))
       '@vue/cli-plugin-unit-mocha':
         specifier: ~5.0.8
-        version: 5.0.8(@vue/cli-service@5.0.8(@vue/compiler-sfc@3.5.21)(ejs@3.1.10)(encoding@0.1.13)(handlebars@4.7.8)(lodash@4.17.21)(prettier@2.8.8)(vue-template-compiler@2.7.16)(vue@3.5.17(typescript@5.5.4))(webpack-sources@3.2.3))(encoding@0.1.13)(webpack@5.94.0)
+        version: 5.0.8(@vue/cli-service@5.0.8(@vue/compiler-sfc@3.5.21)(ejs@3.1.10)(encoding@0.1.13)(handlebars@4.7.8)(lodash@4.17.21)(prettier@2.8.8)(vue-template-compiler@2.7.16)(vue@3.5.17(typescript@5.5.4))(webpack-sources@3.2.3))(encoding@0.1.13)(webpack@5.91.0)
       '@vue/cli-service':
         specifier: ~5.0.8
         version: 5.0.8(@vue/compiler-sfc@3.5.21)(ejs@3.1.10)(encoding@0.1.13)(handlebars@4.7.8)(lodash@4.17.21)(prettier@2.8.8)(vue-template-compiler@2.7.16)(vue@3.5.17(typescript@5.5.4))(webpack-sources@3.2.3)
@@ -22897,14 +22900,14 @@ snapshots:
       - uglify-js
       - webpack-cli
 
-  '@vue/cli-plugin-unit-mocha@5.0.8(@vue/cli-service@5.0.8(@vue/compiler-sfc@3.5.21)(ejs@3.1.10)(encoding@0.1.13)(handlebars@4.7.8)(lodash@4.17.21)(prettier@2.8.8)(vue-template-compiler@2.7.16)(vue@3.5.17(typescript@5.5.4))(webpack-sources@3.2.3))(encoding@0.1.13)(webpack@5.94.0)':
+  '@vue/cli-plugin-unit-mocha@5.0.8(@vue/cli-service@5.0.8(@vue/compiler-sfc@3.5.21)(ejs@3.1.10)(encoding@0.1.13)(handlebars@4.7.8)(lodash@4.17.21)(prettier@2.8.8)(vue-template-compiler@2.7.16)(vue@3.5.17(typescript@5.5.4))(webpack-sources@3.2.3))(encoding@0.1.13)(webpack@5.91.0)':
     dependencies:
       '@vue/cli-service': 5.0.8(@vue/compiler-sfc@3.5.21)(ejs@3.1.10)(encoding@0.1.13)(handlebars@4.7.8)(lodash@4.17.21)(prettier@2.8.8)(vue-template-compiler@2.7.16)(vue@3.5.17(typescript@5.5.4))(webpack-sources@3.2.3)
       '@vue/cli-shared-utils': 5.0.8(encoding@0.1.13)
       jsdom: 18.1.1
       jsdom-global: 3.0.2(jsdom@18.1.1)
       mocha: 8.4.0
-      mochapack: 2.1.4(mocha@8.4.0)(webpack@5.94.0)
+      mochapack: 2.1.4(mocha@8.4.0)(webpack@5.91.0)
     transitivePeerDependencies:
       - bufferutil
       - canvas
@@ -24064,7 +24067,7 @@ snapshots:
 
   axios@1.7.2:
     dependencies:
-      follow-redirects: 1.15.6(debug@4.3.7)
+      follow-redirects: 1.15.6(debug@4.3.4)
       form-data: 4.0.0
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
@@ -28048,7 +28051,7 @@ snapshots:
   http-proxy@1.18.1:
     dependencies:
       eventemitter3: 4.0.7
-      follow-redirects: 1.15.6(debug@4.3.7)
+      follow-redirects: 1.15.6(debug@4.3.4)
       requires-port: 1.0.0
     transitivePeerDependencies:
       - debug
@@ -30468,7 +30471,7 @@ snapshots:
       yargs-parser: 20.2.4
       yargs-unparser: 2.0.0
 
-  mochapack@2.1.4(mocha@8.4.0)(webpack@5.94.0):
+  mochapack@2.1.4(mocha@8.4.0)(webpack@5.91.0):
     dependencies:
       '@babel/runtime-corejs2': 7.24.5
       chalk: 2.4.2
@@ -30487,7 +30490,7 @@ snapshots:
       progress: 2.0.3
       source-map-support: 0.5.21
       toposort: 2.0.2
-      webpack: 5.94.0
+      webpack: 5.91.0(webpack-cli@5.1.4)
       yargs: 14.0.0
 
   mocked-exports@0.1.1: {}
