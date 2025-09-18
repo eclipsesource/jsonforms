@@ -28,7 +28,6 @@ const finalRenderers = computed(() => {
 })
 
 const onChange = (event: JsonFormsChangeEvent) => {
-  console.log('form change', event)
   data.value = event.data
 }
 </script>
