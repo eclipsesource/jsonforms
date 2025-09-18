@@ -10,6 +10,8 @@
 import type { JsonFormsRendererRegistryEntry } from '@jsonforms/core'
 import type { MaybeReadonly, JsonFormsChangeEvent } from '@jsonforms/vue'
 import type { PropType } from 'vue'
+import { computed } from 'vue'
+import { defaultRenderers } from '#imports'
 
 const props = defineProps<{
   renderers?: PropType<MaybeReadonly<JsonFormsRendererRegistryEntry[]>>
