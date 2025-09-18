@@ -36,7 +36,9 @@
     "test:types": "vue-tsc --noEmit && cd playground && vue-tsc --noEmit"
   },
   "dependencies": {
-    "@nuxt/kit": "^4.1.2"
+    "@nuxt/kit": "^4.1.2",
+    "@jsonforms/core": "workspace:*",
+    "@jsonforms/vue": "workspace:*"
   },
   "devDependencies": {
     "@nuxt/devtools": "^2.6.3",
