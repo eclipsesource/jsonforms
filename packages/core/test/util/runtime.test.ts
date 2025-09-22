@@ -620,7 +620,7 @@ test('ValidateFunctionCondition correctly passes context parameters', (t) => {
         (context.fullData as any).value === 'foo' &&
         context.path === undefined &&
         (context.uischemaElement as any).scope === '#/properties/value' &&
-        typeof context.config.externalValidator === 'function'
+        typeof (context.config as any).externalValidator === 'function'
       );
     },
   };
@@ -780,8 +780,8 @@ test('isInherentlyEnabled disabled globally', (t) => {
     isInherentlyEnabled(
       { jsonforms: { readonly: true } },
       null,
-      null,
-      null,
+      null as any,
+      undefined,
       null,
       null
     )
@@ -790,21 +790,37 @@ test('isInherentlyEnabled disabled globally', (t) => {
 
 test('isInherentlyEnabled disabled by ownProps', (t) => {
   t.false(
-    isInherentlyEnabled(null, { enabled: false }, null, null, null, null)
+    isInherentlyEnabled(
+      null as any,
+      { enabled: false },
+      null as any,
+      undefined,
+      null,
+      null
+    )
   );
 });
 
 test('isInherentlyEnabled enabled by ownProps', (t) => {
-  t.true(isInherentlyEnabled(null, { enabled: true }, null, null, null, null));
+  t.true(
+    isInherentlyEnabled(
+      null as any,
+      { enabled: true },
+      null as any,
+      undefined,
+      null,
+      null
+    )
+  );
 });
 
 test('isInherentlyEnabled disabled by uischema', (t) => {
   t.false(
     isInherentlyEnabled(
-      null,
+      null as any,
       null,
       { options: { readonly: true } } as unknown as ControlElement,
-      null,
+      undefined,
       null,
       null
     )
@@ -814,10 +830,10 @@ test('isInherentlyEnabled disabled by uischema', (t) => {
 test('isInherentlyEnabled disabled by uischema over ownProps', (t) => {
   t.false(
     isInherentlyEnabled(
-      null,
+      null as any,
       { enabled: true },
       { options: { readonly: true } } as unknown as ControlElement,
-      null,
+      undefined,
       null,
       null
     )
@@ -827,7 +843,7 @@ test('isInherentlyEnabled disabled by uischema over ownProps', (t) => {
 test('isInherentlyEnabled enabled by uischema over schema', (t) => {
   t.true(
     isInherentlyEnabled(
-      null,
+      null as any,
       null,
       { options: { readonly: false } } as unknown as ControlElement,
       { readOnly: true },
@@ -840,9 +856,9 @@ test('isInherentlyEnabled enabled by uischema over schema', (t) => {
 test('isInherentlyEnabled disabled by ownProps over schema enablement', (t) => {
   t.false(
     isInherentlyEnabled(
-      null,
+      null as any,
       { enabled: false },
-      null,
+      null as any,
       { readOnly: false },
       null,
       null
@@ -853,7 +869,7 @@ test('isInherentlyEnabled disabled by ownProps over schema enablement', (t) => {
 test('isInherentlyEnabled disabled by uischema over schema', (t) => {
   t.false(
     isInherentlyEnabled(
-      null,
+      null as any,
       null,
       { options: { readonly: true } } as unknown as ControlElement,
       { readOnly: false },
@@ -865,16 +881,23 @@ test('isInherentlyEnabled disabled by uischema over schema', (t) => {
 
 test('isInherentlyEnabled disabled by schema', (t) => {
   t.false(
-    isInherentlyEnabled(null, null, null, { readOnly: true }, null, null)
+    isInherentlyEnabled(
+      null as any,
+      null,
+      null as any,
+      { readOnly: true },
+      null,
+      null
+    )
   );
 });
 
 test('isInherentlyEnabled disabled by schema over ownProps', (t) => {
   t.false(
     isInherentlyEnabled(
-      null,
+      null as any,
       { enabled: true },
-      null,
+      null as any,
       { readOnly: true },
       null,
       null
@@ -905,7 +928,7 @@ test('isInherentlyEnabled disabled by rule', (t) => {
       { jsonforms: { core: { ajv: createAjv() } as JsonFormsCore } },
       null,
       uischema,
-      null,
+      undefined,
       data,
       null
     )
@@ -940,7 +963,7 @@ test('isInherentlyEnabled disabled by global over rule ', (t) => {
       },
       null,
       uischema,
-      null,
+      undefined,
       data,
       null
     )
@@ -949,25 +972,34 @@ test('isInherentlyEnabled disabled by global over rule ', (t) => {
 
 test('isInherentlyEnabled disabled by config', (t) => {
   t.false(
-    isInherentlyEnabled(null, null, null, null, null, { readonly: true })
+    isInherentlyEnabled(null as any, null, null as any, undefined, null, {
+      readonly: true,
+    })
   );
 });
 
 test('isInherentlyEnabled enabled by config over ownProps', (t) => {
   t.true(
-    isInherentlyEnabled(null, { enabled: false }, null, null, null, {
-      readonly: false,
-    })
+    isInherentlyEnabled(
+      null as any,
+      { enabled: false },
+      null as any,
+      undefined,
+      null,
+      {
+        readonly: false,
+      }
+    )
   );
 });
 
 test('isInherentlyEnabled enabled by uischema over config', (t) => {
   t.true(
     isInherentlyEnabled(
-      null,
+      null as any,
       null,
       { options: { readonly: false } } as unknown as ControlElement,
-      null,
+      undefined,
       null,
       { readonly: true }
     )
@@ -977,24 +1009,24 @@ test('isInherentlyEnabled enabled by uischema over config', (t) => {
 test('isInherentlyEnabled prefer readonly over readOnly', (t) => {
   t.true(
     isInherentlyEnabled(
-      null,
+      null as any,
       null,
       {
         options: { readonly: false, readOnly: true },
       } as unknown as ControlElement,
-      null,
+      undefined,
       null,
       null
     )
   );
   t.false(
     isInherentlyEnabled(
-      null,
+      null as any,
       null,
       {
         options: { readonly: true, readOnly: false },
       } as unknown as ControlElement,
-      null,
+      undefined,
       null,
       null
     )
@@ -1002,5 +1034,7 @@ test('isInherentlyEnabled prefer readonly over readOnly', (t) => {
 });
 
 test('isInherentlyEnabled enabled', (t) => {
-  t.true(isInherentlyEnabled(null, null, null, null, null, null));
+  t.true(
+    isInherentlyEnabled(null as any, null, null as any, undefined, null, null)
+  );
 });
