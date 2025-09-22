@@ -68,7 +68,7 @@ const evaluateCondition = (
   condition: Condition,
   path: string,
   ajv: Ajv,
-  config: any
+  config: unknown
 ): boolean => {
   if (isAndCondition(condition)) {
     return condition.conditions.reduce(
@@ -112,7 +112,7 @@ const isRuleFulfilled = (
   data: any,
   path: string,
   ajv: Ajv,
-  config: any
+  config: unknown
 ): boolean => {
   const condition = uischema.rule.condition;
   return evaluateCondition(data, uischema, condition, path, ajv, config);
@@ -123,7 +123,7 @@ export const evalVisibility = (
   data: any,
   path: string = undefined,
   ajv: Ajv,
-  config: any
+  config: unknown
 ): boolean => {
   const fulfilled = isRuleFulfilled(uischema, data, path, ajv, config);
 
@@ -143,7 +143,7 @@ export const evalEnablement = (
   data: any,
   path: string = undefined,
   ajv: Ajv,
-  config: any
+  config: unknown
 ): boolean => {
   const fulfilled = isRuleFulfilled(uischema, data, path, ajv, config);
 
@@ -185,7 +185,7 @@ export const isVisible = (
   data: any,
   path: string = undefined,
   ajv: Ajv,
-  config: any
+  config: unknown
 ): boolean => {
   if (uischema.rule) {
     return evalVisibility(uischema, data, path, ajv, config);
@@ -199,7 +199,7 @@ export const isEnabled = (
   data: any,
   path: string = undefined,
   ajv: Ajv,
-  config: any
+  config: unknown
 ): boolean => {
   if (uischema.rule) {
     return evalEnablement(uischema, data, path, ajv, config);

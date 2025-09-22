@@ -47,7 +47,7 @@ export interface CategorizationProps {
   subcategoriesClassName: string;
   groupClassName: string;
   t: Translator;
-  config: any;
+  config: unknown;
 }
 
 export const CategorizationList = ({

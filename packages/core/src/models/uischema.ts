@@ -170,7 +170,7 @@ export interface ValidateFunctionContext {
   /** The `UISchemaElement` containing the rule that uses the ValidateFunctionCondition, e.g. a `ControlElement` */
   uischemaElement: UISchemaElement;
   /** The form config */
-  config: any;
+  config: unknown;
 }
 
 /**

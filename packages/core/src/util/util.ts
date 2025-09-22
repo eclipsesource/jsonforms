@@ -167,7 +167,7 @@ export const Runtime = {
     uischema: UISchemaElement,
     data: any,
     ajv: Ajv,
-    config: any
+    config: unknown
   ): boolean {
     return isEnabled(uischema, data, undefined, ajv, config);
   },
@@ -175,7 +175,7 @@ export const Runtime = {
     uischema: UISchemaElement,
     data: any,
     ajv: Ajv,
-    config: any
+    config: unknown
   ): boolean {
     return isVisible(uischema, data, undefined, ajv, config);
   },
