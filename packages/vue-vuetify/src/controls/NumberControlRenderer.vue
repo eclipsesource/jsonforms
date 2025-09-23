@@ -19,7 +19,7 @@
       :persistent-hint="persistentHint()"
       :required="control.required"
       :error-messages="control.errors"
-      :model-value="control.data"
+      :model-value="value"
       :clearable="control.enabled"
       v-bind="vuetifyProps('v-number-input')"
       @update:model-value="onChange"
@@ -77,6 +77,16 @@ const controlRenderer = defineComponent({
       }
       const fraction = stepStr.split('.')[1];
       return fraction ? fraction.length : undefined;
+    },
+    value(): number | null | undefined {
+      if (
+        typeof this.control.data === 'number' ||
+        this.control.data === null ||
+        this.control.data === undefined
+      ) {
+        return this.control.data;
+      }
+      return Number(this.control.data);
     },
   },
 });
