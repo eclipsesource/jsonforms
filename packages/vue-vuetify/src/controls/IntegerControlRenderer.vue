@@ -68,7 +68,7 @@ const controlRenderer = defineComponent({
     value(): number | null | undefined {
       if (
         typeof this.control.data === 'number' ||
-        this.control.data == null ||
+        this.control.data === null ||
         this.control.data === undefined
       ) {
         return this.control.data;
