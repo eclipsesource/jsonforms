@@ -112,13 +112,13 @@ export const mapStateToCellProps = (
 ): StatePropsOfCell => {
   const { id, schema, path, uischema, renderers, cells } = ownProps;
   const rootData = getData(state);
+  const config = getConfig(state);
   const visible =
     ownProps.visible !== undefined
       ? ownProps.visible
-      : isVisible(uischema, rootData, undefined, getAjv(state));
+      : isVisible(uischema, rootData, undefined, getAjv(state), config);
 
   const rootSchema = getSchema(state);
-  const config = getConfig(state);
 
   /* When determining the enabled state of cells we take a shortcut: At the
    * moment it's only possible to configure enablement and disablement at the
