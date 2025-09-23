@@ -30,6 +30,7 @@ import {
   defaultJsonFormsI18nState,
   deriveLabelForUISchemaElement,
   getAjv,
+  getConfig,
   isVisible,
   JsonFormsState,
   Labelable,
@@ -87,7 +88,13 @@ export class CategorizationTabLayoutRenderer
           this.hidden = !props.visible;
           this.visibleCategories = this.uischema.elements.filter(
             (category: Category | Categorization) =>
-              isVisible(category, props.data, undefined, getAjv(state))
+              isVisible(
+                category,
+                props.data,
+                undefined,
+                getAjv(state),
+                getConfig(state)
+              )
           );
           this.categoryLabels = this.visibleCategories.map((element) =>
             deriveLabelForUISchemaElement(
