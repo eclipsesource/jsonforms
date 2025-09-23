@@ -16,7 +16,7 @@ import { defineComponent, inject, type PropType } from 'vue';
 import DefaultControlWrapper from './components/DefaultControlWrapper.vue';
 
 export default defineComponent({
-  name: 'ControlWrapper',
+  name: 'control-wrapper',
   props: {
     id: { type: String },
     description: { type: String },
