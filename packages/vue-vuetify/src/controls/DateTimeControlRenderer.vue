@@ -227,7 +227,7 @@ import {
   VWindowItem,
 } from 'vuetify/components';
 
-import { vMaska, type MaskOptions, type MaskaDetail } from 'maska';
+import { vMaska, type MaskOptions } from 'maska';
 import { useDisplay, useLocale } from 'vuetify';
 import type { IconValue } from '../icons';
 import {
