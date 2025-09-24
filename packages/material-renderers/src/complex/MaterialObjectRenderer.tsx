@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import isEmpty from 'lodash/isEmpty';
+import isObject from 'lodash/isObject';
 import {
   findUISchema,
   Generate,
@@ -33,6 +34,7 @@ import {
 } from '@jsonforms/core';
 import { JsonFormsDispatch, withJsonFormsDetailProps } from '@jsonforms/react';
 import React, { useMemo } from 'react';
+import { MaterialAdditionalPropertiesRenderer } from '../additional';
 
 export const MaterialObjectRenderer = ({
   renderers,
@@ -45,6 +47,9 @@ export const MaterialObjectRenderer = ({
   enabled,
   uischema,
   rootSchema,
+  data,
+  handleChange,
+  config,
 }: StatePropsOfControlWithDetail) => {
   const detailUiSchema = useMemo(
     () =>
@@ -66,20 +71,56 @@ export const MaterialObjectRenderer = ({
     [uischemas, schema, uischema.scope, path, label, uischema, rootSchema]
   );
 
+  const hasAdditionalProperties = useMemo(
+    () =>
+      !isEmpty(schema.patternProperties) ||
+      isObject(schema.additionalProperties) ||
+      schema.additionalProperties === true,
+    [schema.patternProperties, schema.additionalProperties]
+  );
+
+  const showAdditionalProperties = useMemo(() => {
+    // Check config option to allow additional properties even if not defined in schema
+    const allowAdditionalPropertiesIfMissing = config?.allowAdditionalPropertiesIfMissing;
+    return (
+      hasAdditionalProperties ||
+      (allowAdditionalPropertiesIfMissing === true &&
+        schema.additionalProperties === undefined)
+    );
+  }, [hasAdditionalProperties, config, schema.additionalProperties]);
+
   if (!visible) {
     return null;
   }
 
   return (
-    <JsonFormsDispatch
-      visible={visible}
-      enabled={enabled}
-      schema={schema}
-      uischema={detailUiSchema}
-      path={path}
-      renderers={renderers}
-      cells={cells}
-    />
+    <div>
+      <JsonFormsDispatch
+        visible={visible}
+        enabled={enabled}
+        schema={schema}
+        uischema={detailUiSchema}
+        path={path}
+        renderers={renderers}
+        cells={cells}
+      />
+      {showAdditionalProperties && (
+        <MaterialAdditionalPropertiesRenderer
+          schema={schema}
+          rootSchema={rootSchema}
+          path={path}
+          data={data}
+          handleChange={handleChange}
+          enabled={enabled}
+          visible={visible}
+          renderers={renderers}
+          cells={cells}
+          config={config}
+          label={label}
+          uischema={uischema}
+        />
+      )}
+    </div>
   );
 };
 

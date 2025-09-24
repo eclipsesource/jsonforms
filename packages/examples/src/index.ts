@@ -74,6 +74,7 @@ import * as conditionalSchemaComposition from './examples/conditional-schema-com
 import * as additionalErrors from './examples/additional-errors';
 import * as multiEnumWithLabelAndDesc from './examples/enum-multi-with-label-and-desc';
 import * as additionalProperties from './examples/additional-properties';
+import * as additionalPropertiesMaterial from './examples/additional-properties-material';
 import * as login from './examples/login';
 import * as mixed from './examples/mixed';
 import * as mixedObject from './examples/mixed-object';
@@ -139,6 +140,7 @@ export {
   conditionalSchemaComposition,
   additionalErrors,
   additionalProperties,
+  additionalPropertiesMaterial,
   login,
   mixed,
   mixedObject,
