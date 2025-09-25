@@ -26,7 +26,10 @@ import { MaterialLabelRenderer } from './MaterialLabelRenderer';
 
 import { MaterialListWithDetailRenderer } from './MaterialListWithDetailRenderer';
 
+import MaterialAdditionalPropertiesRenderer from './MaterialAdditionalPropertiesRenderer';
+
 export const UnwrappedAdditional = {
   MaterialLabelRenderer,
   MaterialListWithDetailRenderer,
+  MaterialAdditionalPropertiesRenderer,
 };

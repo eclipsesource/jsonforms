@@ -30,11 +30,14 @@ import MaterialListWithDetailRenderer, {
   materialListWithDetailTester,
 } from './MaterialListWithDetailRenderer';
 
+import MaterialAdditionalPropertiesRenderer from './MaterialAdditionalPropertiesRenderer';
+
 export {
   MaterialLabelRenderer,
   materialLabelRendererTester,
   MaterialListWithDetailRenderer,
   materialListWithDetailTester,
+  MaterialAdditionalPropertiesRenderer,
 };
 
 export * from './ListWithDetailMasterItem';
