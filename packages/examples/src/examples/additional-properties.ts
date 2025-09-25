@@ -104,7 +104,6 @@ export const schema = {
     },
     '^arrayOfValuesByKey$': {
       type: 'object',
-      title: 'Dynamic Array of Values by Key',
       additionalProperties: {
         type: 'array',
         items: {
