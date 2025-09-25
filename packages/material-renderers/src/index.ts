@@ -45,7 +45,6 @@ import {
   materialLabelRendererTester,
   MaterialListWithDetailRenderer,
   materialListWithDetailTester,
-  MaterialAdditionalPropertiesRenderer,
 } from './additional';
 import {
   MaterialAnyOfStringOrEnumControl,

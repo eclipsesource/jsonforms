@@ -22,7 +22,19 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React, { useCallback, useMemo, useState } from 'react';
+import {
+  composePaths,
+  createControlElement,
+  createDefaultValue,
+  Generate,
+  JsonSchema,
+  JsonSchema7,
+  Resolve,
+  UISchemaElement,
+} from '@jsonforms/core';
+import { JsonFormsDispatch } from '@jsonforms/react';
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
 import {
   Box,
   Card,
@@ -33,24 +45,8 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
-import {
-  ControlProps,
-  Generate,
-  Resolve,
-  composePaths,
-  createControlElement,
-  createDefaultValue,
-  isPlainLabel,
-  JsonSchema,
-  JsonSchema7,
-  UISchemaElement,
-} from '@jsonforms/core';
-import { JsonFormsDispatch } from '@jsonforms/react';
-import isEmpty from 'lodash/isEmpty';
-import isObject from 'lodash/isObject';
 import startCase from 'lodash/startCase';
+import React, { useCallback, useMemo, useState } from 'react';
 
 interface AdditionalPropertyType {
   propertyName: string;
@@ -72,6 +68,7 @@ export interface MaterialAdditionalPropertiesRendererProps {
   config?: any;
   label?: string;
   uischema: UISchemaElement;
+  containerTitle?: string;
 }
 
 export const MaterialAdditionalPropertiesRenderer = ({
@@ -84,8 +81,7 @@ export const MaterialAdditionalPropertiesRenderer = ({
   visible,
   renderers,
   cells,
-  config,
-  label,
+  containerTitle,
 }: MaterialAdditionalPropertiesRendererProps) => {
   const [newPropertyName, setNewPropertyName] = useState<string>('');
   const [newPropertyErrors, setNewPropertyErrors] = useState<string[]>([]);
@@ -106,7 +102,6 @@ export const MaterialAdditionalPropertiesRenderer = ({
   const toAdditionalPropertyType = useCallback(
     (
       propName: string,
-      propValue: any,
       parentSchema: JsonSchema,
       rootSchemaRef: JsonSchema
     ): AdditionalPropertyType => {
@@ -166,14 +161,26 @@ export const MaterialAdditionalPropertiesRenderer = ({
           undefined,
           rootSchemaRef
         );
-        if (!isPlainLabel(propUiSchema)) {
-          (propUiSchema as any).label = propSchema.title ?? startCase(propName);
+        if (propUiSchema.type !== 'Label') {
+          const titleToUse = propSchema.title ?? startCase(propName);
+          (propUiSchema as any).label = titleToUse;
+        }
+      } else if (propSchema.type === 'object') {
+        propUiSchema = Generate.uiSchema(
+          propSchema,
+          'Group',
+          undefined,
+          rootSchemaRef
+        );
+        if (propUiSchema.type !== 'Label') {
+          const titleToUse = propSchema.title ?? startCase(propName);
+          (propUiSchema as any).label = titleToUse;
         }
       } else {
         propUiSchema = createControlElement('#');
       }
 
-      // Set up schema with title
+      // Set up schema with title (always use property name for objects with additional properties)
       propSchema = {
         ...propSchema,
         title: propName,
@@ -186,52 +193,35 @@ export const MaterialAdditionalPropertiesRenderer = ({
             : false;
       } else if (propSchema.type === 'array') {
         propSchema.items = propSchema.items ?? {};
-      }
-
-      return {
+        // For arrays, ensure items schema doesn't have a generic title
+        if (typeof propSchema.items === 'object' && !Array.isArray(propSchema.items) && (propSchema.items as any).title) {
+          propSchema.items = {
+            ...propSchema.items,
+            title: undefined
+          };
+        }
+      } const result = {
         propertyName: propName,
         path: composePaths(path, propName),
         schema: propSchema,
         uischema: propUiSchema,
       };
+
+      return result;
     },
     [path]
   );
 
   const additionalPropertyItems = useMemo(
-    () =>
-      additionalKeys.map((propName) =>
-        toAdditionalPropertyType(propName, data?.[propName], schema, rootSchema)
-      ),
-    [additionalKeys, data, schema, rootSchema, toAdditionalPropertyType]
+    () => {
+      const items = additionalKeys.map((propName) =>
+        toAdditionalPropertyType(propName, schema, rootSchema)
+      );
+      console.log('additionalPropertyItems:', { path, additionalKeys, items });
+      return items;
+    },
+    [additionalKeys, data, schema, rootSchema, toAdditionalPropertyType, path]
   );
-
-  const propertyNameSchema = useMemo<JsonSchema7>(() => {
-    let result: JsonSchema7 = {
-      type: 'string',
-    };
-
-    // Handle propertyNames constraint
-    if (typeof (schema as any).propertyNames === 'object') {
-      result = {
-        ...(schema as any).propertyNames,
-        ...result,
-      };
-    } else if (
-      (schema as any).additionalProperties === false &&
-      typeof (schema as any).patternProperties === 'object'
-    ) {
-      // If additionalProperties is false, derive valid property names from patternProperties
-      const patterns = Object.keys((schema as any).patternProperties);
-      if (patterns.length > 0) {
-        result = {
-          pattern: patterns.join('|'),
-          ...result,
-        };
-      }
-    }
-    return result;
-  }, [schema]);
 
   const validatePropertyName = useCallback(
     (propertyName: string): string[] => {
@@ -277,7 +267,6 @@ export const MaterialAdditionalPropertiesRenderer = ({
 
     const additionalProperty = toAdditionalPropertyType(
       newPropertyName,
-      undefined,
       schema,
       rootSchema
     );
@@ -348,9 +337,32 @@ export const MaterialAdditionalPropertiesRenderer = ({
   }, [enabled, schema.minProperties, data]);
 
   const additionalPropertiesTitle = useMemo(() => {
+    // Use containerTitle prop if provided
+    if (containerTitle) {
+      return containerTitle;
+    }
+
+    // Check if the current property (from path) matches a pattern property
+    // Extract the property name from the path (e.g., "/arrayOfValuesByKey" -> "arrayOfValuesByKey")
+    const pathSegments = path.split('/').filter(Boolean);
+    const currentPropertyName = pathSegments[pathSegments.length - 1];
+
+    if (currentPropertyName && schema.patternProperties) {
+      const matchedPattern = Object.keys(schema.patternProperties).find(
+        (pattern) => new RegExp(pattern).test(currentPropertyName)
+      );
+      if (matchedPattern) {
+        const patternSchema = schema.patternProperties[matchedPattern];
+        if (patternSchema && typeof patternSchema === 'object' && patternSchema.title) {
+          return patternSchema.title;
+        }
+      }
+    }
+
+    // Fall back to schema.additionalProperties.title
     const title = (schema.additionalProperties as JsonSchema7)?.title;
     return title || undefined;
-  }, [schema.additionalProperties]);
+  }, [containerTitle, schema.patternProperties, schema.additionalProperties, path]);
 
   if (!visible) {
     return null;
@@ -368,7 +380,7 @@ export const MaterialAdditionalPropertiesRenderer = ({
         {/* Add new property section */}
         <Box sx={{ mb: 2 }}>
           <Grid container spacing={2} alignItems="center">
-            <Grid item xs>
+            <Grid size={{ xs: 'grow' }}>
               <TextField
                 fullWidth
                 label="Property Name"
@@ -380,7 +392,7 @@ export const MaterialAdditionalPropertiesRenderer = ({
                 size="small"
               />
             </Grid>
-            <Grid item>
+            <Grid>
               <Tooltip title="Add Property">
                 <span>
                   <IconButton
@@ -400,20 +412,39 @@ export const MaterialAdditionalPropertiesRenderer = ({
         {additionalPropertyItems.map((item) => (
           <Box key={item.propertyName} sx={{ mb: 2 }}>
             <Grid container spacing={2} alignItems="center">
-              <Grid item xs>
+              <Grid size={{ xs: 'grow' }}>
                 {item.schema && item.uischema && (
-                  <JsonFormsDispatch
-                    schema={item.schema}
-                    uischema={item.uischema}
-                    path={item.path}
-                    enabled={enabled}
-                    renderers={renderers}
-                    cells={cells}
-                  />
+                  <>
+                    {/* For objects with additionalProperties, render directly with MaterialAdditionalPropertiesRenderer */}
+                    {item.schema.type === 'object' && item.schema.additionalProperties ? (
+                      <MaterialAdditionalPropertiesRenderer
+                        schema={item.schema}
+                        rootSchema={rootSchema}
+                        path={item.path}
+                        data={data ? data[item.propertyName] : undefined}
+                        handleChange={handleChange}
+                        enabled={enabled}
+                        visible={visible}
+                        renderers={renderers}
+                        cells={cells}
+                        uischema={item.uischema}
+                        containerTitle={item.propertyName}
+                      />
+                    ) : (
+                      <JsonFormsDispatch
+                        schema={item.schema}
+                        uischema={item.uischema}
+                        path={item.path}
+                        enabled={enabled}
+                        renderers={renderers}
+                        cells={cells}
+                      />
+                    )}
+                  </>
                 )}
               </Grid>
               {enabled && (
-                <Grid item>
+                <Grid>
                   <Tooltip title="Remove Property">
                     <span>
                       <IconButton

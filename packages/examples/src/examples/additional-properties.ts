@@ -31,6 +31,17 @@ export const schema = {
     propertiesString: {
       type: 'string',
     },
+    propertiesArrayOfValuesByKey: {
+      type: 'object',
+      title: 'Array of Values by Key',
+      additionalProperties: {
+        type: 'array',
+        items: {
+          type: 'string',
+        },
+        title: 'Item',
+      },
+    },
   },
   propertyNames: {
     minLength: 2,
@@ -91,6 +102,17 @@ export const schema = {
         type: 'boolean',
       },
     },
+    '^arrayOfValuesByKey$': {
+      type: 'object',
+      title: 'Dynamic Array of Values by Key',
+      additionalProperties: {
+        type: 'array',
+        items: {
+          type: 'string',
+        },
+        title: 'Item',
+      },
+    },
   },
   additionalProperties: {
     type: 'string',
@@ -106,6 +128,10 @@ export const uischema = {
 
 const data = {
   propertiesString: 'data',
+  propertiesArrayOfValuesByKey: {
+    keyOne: ['value1', 'value2'],
+    keyTwo: ['value3'],
+  },
   string: 'string value',
   number: 10.2,
   integer: 11,
@@ -118,6 +144,10 @@ const data = {
   integerArray: [33],
   objectArray: [{ prop1: 'prop1 val' }, {}],
   booleanArray: [false, true],
+  arrayOfValuesByKey: {
+    keyOne: ['value1', 'value2'],
+    keyTwo: ['value3'],
+  },
 };
 
 registerExamples([
