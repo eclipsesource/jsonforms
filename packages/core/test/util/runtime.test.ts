@@ -56,7 +56,7 @@ test('evalVisibility show valid case', (t) => {
     value: 'foo',
     ruleValue: 'bar',
   };
-  t.is(evalVisibility(uischema, data, undefined, createAjv()), true);
+  t.is(evalVisibility(uischema, data, undefined, createAjv(), undefined), true);
 });
 
 test('evalVisibility show valid case based on AndCondition', (t) => {
@@ -87,7 +87,7 @@ test('evalVisibility show valid case based on AndCondition', (t) => {
     ruleValue1: 'bar',
     ruleValue2: 'foo',
   };
-  t.is(evalVisibility(uischema, data, undefined, createAjv()), true);
+  t.is(evalVisibility(uischema, data, undefined, createAjv(), undefined), true);
 });
 
 test('evalVisibility show invalid case based on AndCondition', (t) => {
@@ -118,7 +118,10 @@ test('evalVisibility show invalid case based on AndCondition', (t) => {
     ruleValue1: 'bar',
     ruleValue2: 'foo',
   };
-  t.is(evalVisibility(uischema, data, undefined, createAjv()), false);
+  t.is(
+    evalVisibility(uischema, data, undefined, createAjv(), undefined),
+    false
+  );
 });
 
 test('evalVisibility show valid case based on OrCondition', (t) => {
@@ -149,7 +152,7 @@ test('evalVisibility show valid case based on OrCondition', (t) => {
     ruleValue1: 'bar1',
     ruleValue2: 'foo',
   };
-  t.is(evalVisibility(uischema, data, undefined, createAjv()), true);
+  t.is(evalVisibility(uischema, data, undefined, createAjv(), undefined), true);
 });
 
 test('evalVisibility show invalid case based on OrCondition', (t) => {
@@ -180,7 +183,10 @@ test('evalVisibility show invalid case based on OrCondition', (t) => {
     ruleValue1: 'bar',
     ruleValue2: 'foo',
   };
-  t.is(evalVisibility(uischema, data, undefined, createAjv()), false);
+  t.is(
+    evalVisibility(uischema, data, undefined, createAjv(), undefined),
+    false
+  );
 });
 
 test('evalVisibility show valid case based on schema condition', (t) => {
@@ -202,7 +208,7 @@ test('evalVisibility show valid case based on schema condition', (t) => {
     value: 'foo',
     ruleValue: 'bar',
   };
-  t.is(evalVisibility(uischema, data, undefined, createAjv()), true);
+  t.is(evalVisibility(uischema, data, undefined, createAjv(), undefined), true);
 });
 
 test('evalVisibility show valid case based on schema condition and enum', (t) => {
@@ -224,13 +230,14 @@ test('evalVisibility show valid case based on schema condition and enum', (t) =>
     value: 'foo',
     ruleValue: 'bar',
   };
-  t.is(evalVisibility(uischema, data, undefined, createAjv()), true);
+  t.is(evalVisibility(uischema, data, undefined, createAjv(), undefined), true);
   t.is(
     evalVisibility(
       uischema,
       { ...data, ruleValue: 'baz' },
       undefined,
-      createAjv()
+      createAjv(),
+      undefined
     ),
     true
   );
@@ -239,7 +246,8 @@ test('evalVisibility show valid case based on schema condition and enum', (t) =>
       uischema,
       { ...data, ruleValue: 'foo' },
       undefined,
-      createAjv()
+      createAjv(),
+      undefined
     ),
     false
   );
@@ -263,7 +271,10 @@ test('evalVisibility show invalid case', (t) => {
     value: 'foo',
     ruleValue: 'foobar',
   };
-  t.deepEqual(evalVisibility(uischema, data, undefined, createAjv()), false);
+  t.deepEqual(
+    evalVisibility(uischema, data, undefined, createAjv(), undefined),
+    false
+  );
 });
 test('evalVisibility hide valid case', (t) => {
   const leafCondition: LeafCondition = {
@@ -283,7 +294,10 @@ test('evalVisibility hide valid case', (t) => {
     value: 'foo',
     ruleValue: 'bar',
   };
-  t.is(evalVisibility(uischema, data, undefined, createAjv()), false);
+  t.is(
+    evalVisibility(uischema, data, undefined, createAjv(), undefined),
+    false
+  );
 });
 
 test('evalVisibility hide invalid case', (t) => {
@@ -304,7 +318,7 @@ test('evalVisibility hide invalid case', (t) => {
     value: 'foo',
     ruleValue: 'foobar',
   };
-  t.is(evalVisibility(uischema, data, undefined, createAjv()), true);
+  t.is(evalVisibility(uischema, data, undefined, createAjv(), undefined), true);
 });
 
 test('evalEnablement enable valid case', (t) => {
@@ -325,7 +339,7 @@ test('evalEnablement enable valid case', (t) => {
     value: 'foo',
     ruleValue: 'bar',
   };
-  t.is(evalEnablement(uischema, data, undefined, createAjv()), true);
+  t.is(evalEnablement(uischema, data, undefined, createAjv(), undefined), true);
 });
 
 test('evalEnablement show valid case based on AndCondition', (t) => {
@@ -356,7 +370,7 @@ test('evalEnablement show valid case based on AndCondition', (t) => {
     ruleValue1: 'bar',
     ruleValue2: 'foo',
   };
-  t.is(evalEnablement(uischema, data, undefined, createAjv()), true);
+  t.is(evalEnablement(uischema, data, undefined, createAjv(), undefined), true);
 });
 
 test('evalEnablement show invalid case based on AndCondition', (t) => {
@@ -387,7 +401,10 @@ test('evalEnablement show invalid case based on AndCondition', (t) => {
     ruleValue1: 'bar',
     ruleValue2: 'foo',
   };
-  t.is(evalEnablement(uischema, data, undefined, createAjv()), false);
+  t.is(
+    evalEnablement(uischema, data, undefined, createAjv(), undefined),
+    false
+  );
 });
 
 test('evalEnablement show valid case based on OrCondition', (t) => {
@@ -418,7 +435,7 @@ test('evalEnablement show valid case based on OrCondition', (t) => {
     ruleValue1: 'bar1',
     ruleValue2: 'foo',
   };
-  t.is(evalEnablement(uischema, data, undefined, createAjv()), true);
+  t.is(evalEnablement(uischema, data, undefined, createAjv(), undefined), true);
 });
 
 test('evalEnablement show invalid case based on OrCondition', (t) => {
@@ -449,7 +466,10 @@ test('evalEnablement show invalid case based on OrCondition', (t) => {
     ruleValue1: 'bar',
     ruleValue2: 'foo',
   };
-  t.is(evalEnablement(uischema, data, undefined, createAjv()), false);
+  t.is(
+    evalEnablement(uischema, data, undefined, createAjv(), undefined),
+    false
+  );
 });
 
 test('evalEnablement enable invalid case', (t) => {
@@ -470,7 +490,10 @@ test('evalEnablement enable invalid case', (t) => {
     value: 'foo',
     ruleValue: 'foobar',
   };
-  t.is(evalEnablement(uischema, data, undefined, createAjv()), false);
+  t.is(
+    evalEnablement(uischema, data, undefined, createAjv(), undefined),
+    false
+  );
 });
 test('evalEnablement disable valid case', (t) => {
   const leafCondition: LeafCondition = {
@@ -490,7 +513,10 @@ test('evalEnablement disable valid case', (t) => {
     value: 'foo',
     ruleValue: 'bar',
   };
-  t.is(evalEnablement(uischema, data, undefined, createAjv()), false);
+  t.is(
+    evalEnablement(uischema, data, undefined, createAjv(), undefined),
+    false
+  );
 });
 
 // Add test case for ValidateFunctionCondition with evalEnablement (valid enable case)
@@ -511,7 +537,7 @@ test('evalEnablement enable valid case based on ValidateFunctionCondition', (t) 
     value: 'foo',
     ruleValue: 'bar',
   };
-  t.is(evalEnablement(uischema, data, undefined, createAjv()), true);
+  t.is(evalEnablement(uischema, data, undefined, createAjv(), undefined), true);
 });
 
 // Add test case for ValidateFunctionCondition with evalEnablement (invalid enable case)
@@ -532,7 +558,10 @@ test('evalEnablement enable invalid case based on ValidateFunctionCondition', (t
     value: 'foo',
     ruleValue: 'foobar',
   };
-  t.is(evalEnablement(uischema, data, undefined, createAjv()), false);
+  t.is(
+    evalEnablement(uischema, data, undefined, createAjv(), undefined),
+    false
+  );
 });
 
 // Add test case for ValidateFunctionCondition with evalEnablement (valid disable case)
@@ -553,7 +582,10 @@ test('evalEnablement disable valid case based on ValidateFunctionCondition', (t)
     value: 'foo',
     ruleValue: 'bar',
   };
-  t.is(evalEnablement(uischema, data, undefined, createAjv()), false);
+  t.is(
+    evalEnablement(uischema, data, undefined, createAjv(), undefined),
+    false
+  );
 });
 
 // Add test case for ValidateFunctionCondition with evalEnablement (invalid disable case)
@@ -574,7 +606,7 @@ test('evalEnablement disable invalid case based on ValidateFunctionCondition', (
     value: 'foo',
     ruleValue: 'foobar',
   };
-  t.is(evalEnablement(uischema, data, undefined, createAjv()), true);
+  t.is(evalEnablement(uischema, data, undefined, createAjv(), undefined), true);
 });
 
 // Test context properties for ValidateFunctionCondition
@@ -587,7 +619,8 @@ test('ValidateFunctionCondition correctly passes context parameters', (t) => {
         context.data === 'bar' &&
         (context.fullData as any).value === 'foo' &&
         context.path === undefined &&
-        (context.uischemaElement as any).scope === '#/properties/value'
+        (context.uischemaElement as any).scope === '#/properties/value' &&
+        typeof (context.config as any).externalValidator === 'function'
       );
     },
   };
@@ -603,7 +636,12 @@ test('ValidateFunctionCondition correctly passes context parameters', (t) => {
     value: 'foo',
     ruleValue: 'bar',
   };
-  t.is(evalEnablement(uischema, data, undefined, createAjv()), true);
+  const config = {
+    externalValidator: (_context: ValidateFunctionContext): boolean => {
+      return true;
+    },
+  };
+  t.is(evalEnablement(uischema, data, undefined, createAjv(), config), true);
 });
 
 test('evalEnablement disable invalid case', (t) => {
@@ -624,7 +662,7 @@ test('evalEnablement disable invalid case', (t) => {
     value: 'foo',
     ruleValue: 'foobar',
   };
-  t.is(evalEnablement(uischema, data, undefined, createAjv()), true);
+  t.is(evalEnablement(uischema, data, undefined, createAjv(), undefined), true);
 });
 
 test('evalEnablement disable invalid case based on schema condition', (t) => {
@@ -646,13 +684,17 @@ test('evalEnablement disable invalid case based on schema condition', (t) => {
     value: 'foo',
     ruleValue: 'bar',
   };
-  t.is(evalEnablement(uischema, data, undefined, createAjv()), false);
+  t.is(
+    evalEnablement(uischema, data, undefined, createAjv(), undefined),
+    false
+  );
   t.is(
     evalEnablement(
       uischema,
       { ...data, ruleValue: 'baz' },
       undefined,
-      createAjv()
+      createAjv(),
+      undefined
     ),
     false
   );
@@ -661,7 +703,8 @@ test('evalEnablement disable invalid case based on schema condition', (t) => {
       uischema,
       { ...data, ruleValue: 'foo' },
       undefined,
-      createAjv()
+      createAjv(),
+      undefined
     ),
     true
   );
@@ -711,12 +754,24 @@ test('evalEnablement fail on failWhenUndefined', (t) => {
     value: 'foo',
   };
   t.is(
-    evalEnablement(failConditionTrueUischema, data, undefined, createAjv()),
+    evalEnablement(
+      failConditionTrueUischema,
+      data,
+      undefined,
+      createAjv(),
+      undefined
+    ),
     true
   );
   t.is(
-    evalEnablement(failConditionFalseUischema, data, undefined, createAjv()),
-    evalEnablement(uischema, data, undefined, createAjv())
+    evalEnablement(
+      failConditionFalseUischema,
+      data,
+      undefined,
+      createAjv(),
+      undefined
+    ),
+    evalEnablement(uischema, data, undefined, createAjv(), undefined)
   );
 });
 
@@ -725,8 +780,8 @@ test('isInherentlyEnabled disabled globally', (t) => {
     isInherentlyEnabled(
       { jsonforms: { readonly: true } },
       null,
-      null,
-      null,
+      null as any,
+      undefined,
       null,
       null
     )
@@ -735,21 +790,37 @@ test('isInherentlyEnabled disabled globally', (t) => {
 
 test('isInherentlyEnabled disabled by ownProps', (t) => {
   t.false(
-    isInherentlyEnabled(null, { enabled: false }, null, null, null, null)
+    isInherentlyEnabled(
+      null as any,
+      { enabled: false },
+      null as any,
+      undefined,
+      null,
+      null
+    )
   );
 });
 
 test('isInherentlyEnabled enabled by ownProps', (t) => {
-  t.true(isInherentlyEnabled(null, { enabled: true }, null, null, null, null));
+  t.true(
+    isInherentlyEnabled(
+      null as any,
+      { enabled: true },
+      null as any,
+      undefined,
+      null,
+      null
+    )
+  );
 });
 
 test('isInherentlyEnabled disabled by uischema', (t) => {
   t.false(
     isInherentlyEnabled(
-      null,
+      null as any,
       null,
       { options: { readonly: true } } as unknown as ControlElement,
-      null,
+      undefined,
       null,
       null
     )
@@ -759,10 +830,10 @@ test('isInherentlyEnabled disabled by uischema', (t) => {
 test('isInherentlyEnabled disabled by uischema over ownProps', (t) => {
   t.false(
     isInherentlyEnabled(
-      null,
+      null as any,
       { enabled: true },
       { options: { readonly: true } } as unknown as ControlElement,
-      null,
+      undefined,
       null,
       null
     )
@@ -772,7 +843,7 @@ test('isInherentlyEnabled disabled by uischema over ownProps', (t) => {
 test('isInherentlyEnabled enabled by uischema over schema', (t) => {
   t.true(
     isInherentlyEnabled(
-      null,
+      null as any,
       null,
       { options: { readonly: false } } as unknown as ControlElement,
       { readOnly: true },
@@ -785,9 +856,9 @@ test('isInherentlyEnabled enabled by uischema over schema', (t) => {
 test('isInherentlyEnabled disabled by ownProps over schema enablement', (t) => {
   t.false(
     isInherentlyEnabled(
-      null,
+      null as any,
       { enabled: false },
-      null,
+      null as any,
       { readOnly: false },
       null,
       null
@@ -798,7 +869,7 @@ test('isInherentlyEnabled disabled by ownProps over schema enablement', (t) => {
 test('isInherentlyEnabled disabled by uischema over schema', (t) => {
   t.false(
     isInherentlyEnabled(
-      null,
+      null as any,
       null,
       { options: { readonly: true } } as unknown as ControlElement,
       { readOnly: false },
@@ -810,16 +881,23 @@ test('isInherentlyEnabled disabled by uischema over schema', (t) => {
 
 test('isInherentlyEnabled disabled by schema', (t) => {
   t.false(
-    isInherentlyEnabled(null, null, null, { readOnly: true }, null, null)
+    isInherentlyEnabled(
+      null as any,
+      null,
+      null as any,
+      { readOnly: true },
+      null,
+      null
+    )
   );
 });
 
 test('isInherentlyEnabled disabled by schema over ownProps', (t) => {
   t.false(
     isInherentlyEnabled(
-      null,
+      null as any,
       { enabled: true },
-      null,
+      null as any,
       { readOnly: true },
       null,
       null
@@ -850,7 +928,7 @@ test('isInherentlyEnabled disabled by rule', (t) => {
       { jsonforms: { core: { ajv: createAjv() } as JsonFormsCore } },
       null,
       uischema,
-      null,
+      undefined,
       data,
       null
     )
@@ -885,7 +963,7 @@ test('isInherentlyEnabled disabled by global over rule ', (t) => {
       },
       null,
       uischema,
-      null,
+      undefined,
       data,
       null
     )
@@ -894,25 +972,34 @@ test('isInherentlyEnabled disabled by global over rule ', (t) => {
 
 test('isInherentlyEnabled disabled by config', (t) => {
   t.false(
-    isInherentlyEnabled(null, null, null, null, null, { readonly: true })
+    isInherentlyEnabled(null as any, null, null as any, undefined, null, {
+      readonly: true,
+    })
   );
 });
 
 test('isInherentlyEnabled enabled by config over ownProps', (t) => {
   t.true(
-    isInherentlyEnabled(null, { enabled: false }, null, null, null, {
-      readonly: false,
-    })
+    isInherentlyEnabled(
+      null as any,
+      { enabled: false },
+      null as any,
+      undefined,
+      null,
+      {
+        readonly: false,
+      }
+    )
   );
 });
 
 test('isInherentlyEnabled enabled by uischema over config', (t) => {
   t.true(
     isInherentlyEnabled(
-      null,
+      null as any,
       null,
       { options: { readonly: false } } as unknown as ControlElement,
-      null,
+      undefined,
       null,
       { readonly: true }
     )
@@ -922,24 +1009,24 @@ test('isInherentlyEnabled enabled by uischema over config', (t) => {
 test('isInherentlyEnabled prefer readonly over readOnly', (t) => {
   t.true(
     isInherentlyEnabled(
-      null,
+      null as any,
       null,
       {
         options: { readonly: false, readOnly: true },
       } as unknown as ControlElement,
-      null,
+      undefined,
       null,
       null
     )
   );
   t.false(
     isInherentlyEnabled(
-      null,
+      null as any,
       null,
       {
         options: { readonly: true, readOnly: false },
       } as unknown as ControlElement,
-      null,
+      undefined,
       null,
       null
     )
@@ -947,5 +1034,7 @@ test('isInherentlyEnabled prefer readonly over readOnly', (t) => {
 });
 
 test('isInherentlyEnabled enabled', (t) => {
-  t.true(isInherentlyEnabled(null, null, null, null, null, null));
+  t.true(
+    isInherentlyEnabled(null as any, null, null as any, undefined, null, null)
+  );
 });
