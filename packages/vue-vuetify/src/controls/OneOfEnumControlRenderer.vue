@@ -22,6 +22,7 @@
       :items="control.options"
       item-title="label"
       item-value="value"
+      :return-object="true"
       v-bind="vuetifyProps('v-select')"
       @update:model-value="onChange"
       @focus="handleFocus"
@@ -39,7 +40,7 @@ import {
 } from '@jsonforms/vue';
 import { defineComponent } from 'vue';
 import { VSelect } from 'vuetify/components';
-import { useVuetifyControl } from '../util';
+import { determineClearValue, useVuetifyControl } from '../util';
 import { default as ControlWrapper } from './ControlWrapper.vue';
 import { DisabledIconFocus } from './directives';
 
@@ -56,8 +57,10 @@ const controlRenderer = defineComponent({
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    return useVuetifyControl(useJsonFormsOneOfEnumControl(props), (value) =>
-      value !== null ? value : undefined,
+    const clearValue = determineClearValue('');
+
+    return useVuetifyControl(useJsonFormsOneOfEnumControl(props), (item) =>
+      item === null ? clearValue : item.value,
     );
   },
 });
