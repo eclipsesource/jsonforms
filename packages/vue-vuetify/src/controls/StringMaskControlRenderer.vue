@@ -187,20 +187,4 @@ const controlRenderer = defineComponent({
 });
 
 export default controlRenderer;
-
-const hasOption =
-  (optionName: string): Tester =>
-  (uischema: UISchemaElement): boolean => {
-    if (isEmpty(uischema)) {
-      return false;
-    }
-
-    const options = uischema.options;
-    return (
-      (options &&
-        !isEmpty(options) &&
-        typeof options[optionName] === 'string') ||
-      false
-    );
-  };
 </script>
