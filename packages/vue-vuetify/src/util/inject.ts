@@ -19,7 +19,12 @@ export interface ControlWrapperProps {
   appliedOptions?: AppliedOptions;
 }
 
-export type ControlWrapperType = DefineComponent<ControlWrapperProps>;
+export type ControlWrapperType = DefineComponent<
+  ControlWrapperProps,
+  any,
+  any,
+  any
+>;
 
 export const ControlWrapperSymbol: InjectionKey<ControlWrapperType> =
   Symbol.for('jsonforms-vue-vuetify:ControlWrapper');
