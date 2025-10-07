@@ -299,7 +299,7 @@ const controlRenderer = defineComponent({
       typeof control.appliedOptions.value.dateTimeFormat == 'string'
         ? (expandLocaleFormat(control.appliedOptions.value.dateTimeFormat) ??
           control.appliedOptions.value.dateTimeFormat)
-        : (expandLocaleFormat('L LT') ?? 'YYYY-MM-DD H:mm'),
+        : (expandLocaleFormat('L LT') ?? 'YYYY-MM-DD HH:mm'),
     );
 
     const useMask = control.appliedOptions.value.mask !== false;
