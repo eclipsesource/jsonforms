@@ -27,7 +27,6 @@ import {
   ComponentFactoryResolver,
   Directive,
   Input,
-  OnDestroy,
   OnInit,
   Type,
   ViewContainerRef,
@@ -46,11 +45,11 @@ import {
 } from '@jsonforms/core';
 import { UnknownRenderer } from './unknown.component';
 import { JsonFormsBaseRenderer } from './base.renderer';
-import type { Subscription } from 'rxjs';
 import { JsonFormsControl } from './control';
 import { JsonFormsAngularService } from './jsonforms.service';
 
-import { get, isEqual } from 'lodash';
+import isEqual from 'lodash/isEqual';
+import get from 'lodash/get';
 
 const areEqual = (
   prevProps: StatePropsOfJsonFormsRenderer,
@@ -68,12 +67,12 @@ const areEqual = (
 
 @Directive({
   selector: 'jsonforms-outlet',
+  standalone: false,
 })
 export class JsonFormsOutlet
   extends JsonFormsBaseRenderer<UISchemaElement>
-  implements OnInit, OnDestroy
+  implements OnInit
 {
-  private subscription: Subscription;
   private previousProps: StatePropsOfJsonFormsRenderer;
 
   constructor(
@@ -93,9 +92,11 @@ export class JsonFormsOutlet
   }
 
   ngOnInit(): void {
-    this.subscription = this.jsonformsService.$state.subscribe({
-      next: (state: JsonFormsState) => this.update(state),
-    });
+    this.addSubscription(
+      this.jsonformsService.$state.subscribe({
+        next: (state: JsonFormsState) => this.update(state),
+      })
+    );
   }
 
   update(state: JsonFormsState) {
@@ -149,12 +150,6 @@ export class JsonFormsOutlet
           (instance as JsonFormsControl).id = id;
         }
       }
-    }
-  }
-
-  ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
     }
   }
 }

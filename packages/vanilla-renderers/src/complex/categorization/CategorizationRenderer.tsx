@@ -54,6 +54,7 @@ export const CategorizationRenderer = ({
   getStyleAsClassName,
   onChange,
   ajv,
+  config,
 }: LayoutProps &
   VanillaRendererProps &
   TranslateProps &
@@ -97,6 +98,7 @@ export const CategorizationRenderer = ({
           selectedCategory={elements[safeCategory] as Category}
           data={data}
           ajv={ajv}
+          config={config}
           depth={0}
           onSelect={onCategorySelected}
           subcategoriesClassName={subcategoriesClassName}

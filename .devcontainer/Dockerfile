@@ -1,7 +1,7 @@
 # See here for image contents: https://github.com/microsoft/vscode-dev-containers/tree/v0.191.1/containers/javascript-node/.devcontainer/base.Dockerfile
 
-# [Choice] Node.js version: 18
-ARG VARIANT="18"
+# [Choice] Node.js version: 22
+ARG VARIANT="22"
 FROM mcr.microsoft.com/vscode/devcontainers/javascript-node:1-${VARIANT}
 
 # Install chromium and point the CHROME_BIN environment variable to it
@@ -15,5 +15,5 @@ ENV CHROME_BIN=/usr/bin/chromium
 # RUN su node -c "source /usr/local/share/nvm/nvm.sh && nvm install ${EXTRA_NODE_VERSION}"
 
 # Install and configure pnpm
-RUN su node -c "npm install -g pnpm@8"
+RUN su node -c "npm install -g pnpm@10"
 RUN su node -c "pnpm config set store-dir /home/node/.pnpm-store"

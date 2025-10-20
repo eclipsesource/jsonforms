@@ -96,6 +96,7 @@ export const MaterialCategorizationLayoutRenderer = (
     enabled,
     selected,
     onChange,
+    config,
     ajv,
     t,
   } = props;
@@ -106,9 +107,9 @@ export const MaterialCategorizationLayoutRenderer = (
   const categories = useMemo(
     () =>
       categorization.elements.filter((category: Category) =>
-        isVisible(category, data, undefined, ajv)
+        isVisible(category, data, undefined, ajv, config)
       ),
-    [categorization, data, ajv]
+    [categorization, data, ajv, config]
   );
 
   if (categorization !== previousCategorization) {

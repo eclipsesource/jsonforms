@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import isEmpty from 'lodash/isEmpty';
 
 import { TabSwitchConfirmDialog } from './TabSwitchConfirmDialog';
@@ -69,13 +69,17 @@ export const MaterialOneOfRenderer = ({
   const cancel = useCallback(() => {
     setConfirmDialogOpen(false);
   }, [setConfirmDialogOpen]);
-  const oneOfRenderInfos = createCombinatorRenderInfos(
-    (schema as JsonSchema).oneOf,
-    rootSchema,
-    'oneOf',
-    uischema,
-    path,
-    uischemas
+  const oneOfRenderInfos = useMemo(
+    () =>
+      createCombinatorRenderInfos(
+        (schema as JsonSchema).oneOf,
+        rootSchema,
+        'oneOf',
+        uischema,
+        path,
+        uischemas
+      ),
+    [schema, rootSchema, uischema, path, uischemas]
   );
 
   const openNewTab = (newIndex: number) => {

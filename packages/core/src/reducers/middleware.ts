@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import { CoreActions } from '../actions';
-import { JsonFormsCore } from './core';
+import { JsonFormsCore } from '../store';
 
 export interface Middleware {
   (

@@ -23,7 +23,6 @@
   THE SOFTWARE.
 */
 import {
-  OnDestroy,
   OnInit,
   ChangeDetectorRef,
   Component,
@@ -42,18 +41,17 @@ import {
   UISchemaElement,
   JsonSchema,
 } from '@jsonforms/core';
-import type { Subscription } from 'rxjs';
 
 @Component({
   template: '',
+  standalone: false,
 })
 export class LayoutRenderer<T extends Layout>
   extends JsonFormsBaseRenderer<T>
-  implements OnInit, OnDestroy
+  implements OnInit
 {
   hidden: boolean;
   label: string | undefined;
-  private subscription: Subscription;
 
   constructor(
     private jsonFormsService: JsonFormsAngularService,
@@ -63,20 +61,16 @@ export class LayoutRenderer<T extends Layout>
   }
 
   ngOnInit() {
-    this.subscription = this.jsonFormsService.$state.subscribe({
-      next: (state: JsonFormsState) => {
-        const props = mapStateToLayoutProps(state, this.getOwnProps());
-        this.label = props.label;
-        this.hidden = !props.visible;
-        this.changeDetectionRef.markForCheck();
-      },
-    });
-  }
-
-  ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this.addSubscription(
+      this.jsonFormsService.$state.subscribe({
+        next: (state: JsonFormsState) => {
+          const props = mapStateToLayoutProps(state, this.getOwnProps());
+          this.label = props.label;
+          this.hidden = !props.visible;
+          this.changeDetectionRef.markForCheck();
+        },
+      })
+    );
   }
 
   trackElement(_index: number, renderProp: OwnPropsOfRenderer): string {
@@ -86,7 +80,7 @@ export class LayoutRenderer<T extends Layout>
   }
 }
 
-@Pipe({ name: 'layoutChildrenRenderProps' })
+@Pipe({ name: 'layoutChildrenRenderProps', standalone: false })
 export class LayoutChildrenRenderPropsPipe implements PipeTransform {
   transform(
     uischema: Layout,

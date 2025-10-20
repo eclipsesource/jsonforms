@@ -24,22 +24,18 @@
 */
 
 import type { ControlElement, UISchemaElement } from '../models';
-import { coreReducer, errorAt, subErrorsAt } from './core';
 import { defaultDataReducer } from './default-data';
 import { rendererReducer } from './renderers';
-import type { JsonFormsState } from '../store';
-import type { JsonFormsUISchemaRegistryEntry } from './uischemas';
 import { findMatchingUISchema, uischemaRegistryReducer } from './uischemas';
-import { fetchErrorTranslator, fetchLocale, i18nReducer } from './i18n';
+import { i18nReducer } from './i18n';
 
 import { Generate } from '../generators';
 import type { JsonSchema } from '../models/jsonSchema';
 
 import { cellReducer } from './cells';
 import { configReducer } from './config';
-import get from 'lodash/get';
-import { fetchTranslator } from '.';
-import type { ErrorTranslator, Translator } from '../i18n';
+import { coreReducer } from './core';
+import { JsonFormsUISchemaRegistryEntry } from '../store';
 
 export const jsonFormsReducerConfig = {
   core: coreReducer,
@@ -100,27 +96,3 @@ export const findUISchema = (
   }
   return uiSchema;
 };
-
-export const getErrorAt =
-  (instancePath: string, schema: JsonSchema) => (state: JsonFormsState) => {
-    return errorAt(instancePath, schema)(state.jsonforms.core);
-  };
-
-export const getSubErrorsAt =
-  (instancePath: string, schema: JsonSchema) => (state: JsonFormsState) =>
-    subErrorsAt(instancePath, schema)(state.jsonforms.core);
-
-export const getConfig = (state: JsonFormsState) => state.jsonforms.config;
-
-export const getLocale = (state: JsonFormsState) =>
-  fetchLocale(get(state, 'jsonforms.i18n'));
-
-export const getTranslator =
-  () =>
-  (state: JsonFormsState): Translator =>
-    fetchTranslator(get(state, 'jsonforms.i18n'));
-
-export const getErrorTranslator =
-  () =>
-  (state: JsonFormsState): ErrorTranslator =>
-    fetchErrorTranslator(get(state, 'jsonforms.i18n'));

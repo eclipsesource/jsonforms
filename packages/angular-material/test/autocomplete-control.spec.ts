@@ -48,7 +48,6 @@ import { ControlElement, JsonSchema, Actions } from '@jsonforms/core';
 import { AutocompleteControlRenderer } from '../src';
 import { JsonFormsAngularService } from '@jsonforms/angular';
 import { ErrorObject } from 'ajv';
-import { initTestEnvironment } from './test';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MatAutocompleteHarness } from '@angular/material/autocomplete/testing';
@@ -82,8 +81,6 @@ const errorTest: ErrorTestExpectation = {
   numberOfElements: 1,
   indexOfElement: 0,
 };
-
-initTestEnvironment();
 
 describe('Autocomplete control Base Tests', () => {
   let fixture: ComponentFixture<AutocompleteControlRenderer>;

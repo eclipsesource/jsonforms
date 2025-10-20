@@ -38,7 +38,12 @@ import { Control, withJsonFormsControlProps } from '@jsonforms/react';
 import { InputBaseComponentProps } from '@mui/material';
 import merge from 'lodash/merge';
 import React, { useMemo } from 'react';
-import { useDebouncedChange, useInputComponent, WithInputProps } from '../util';
+import {
+  useDebouncedChange,
+  useInputComponent,
+  WithInputProps,
+  useFocus,
+} from '../util';
 import { MaterialInputControl } from './MaterialInputControl';
 
 const findEnumSchema = (schemas: JsonSchema[]) =>
@@ -51,6 +56,7 @@ const findTextSchema = (schemas: JsonSchema[]) =>
 const MuiAutocompleteInputText = (
   props: EnumCellProps & WithClassname & WithInputProps
 ) => {
+  const [focused, onFocus, onBlur] = useFocus();
   const {
     data,
     config,
@@ -87,7 +93,11 @@ const MuiAutocompleteInputText = (
     handleChange,
     '',
     data,
-    path
+    path,
+    undefined,
+    undefined,
+    true,
+    focused
   );
 
   const dataList = (
@@ -102,6 +112,8 @@ const MuiAutocompleteInputText = (
       type='text'
       value={inputText}
       onChange={onChange}
+      onFocus={onFocus}
+      onBlur={onBlur}
       className={className}
       id={id}
       label={label}

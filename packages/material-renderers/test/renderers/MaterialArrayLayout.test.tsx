@@ -22,7 +22,6 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import './MatchMediaMock';
 import {
   ArrayTranslationEnum,
   ControlElement,
@@ -539,16 +538,14 @@ describe('Material array layout', () => {
       wrapper
         .find('Memo(ExpandPanelRendererComponent)')
         .at(0)
-        .find('button')
-        .find({ 'aria-label': 'Move item up' }).length
+        .find('button[aria-label="Move item up"]').length
     ).toBe(1);
     // down button
     expect(
       wrapper
         .find('Memo(ExpandPanelRendererComponent)')
         .at(0)
-        .find('button')
-        .find({ 'aria-label': 'Move item down' }).length
+        .find('button[aria-label="Move item down"]').length
     ).toBe(1);
   });
   it('should render sort buttons if showSortButtons is true in config', () => {
@@ -570,7 +567,7 @@ describe('Material array layout', () => {
         .find('Memo(ExpandPanelRendererComponent)')
         .at(0)
         .find('button')
-        .find({ 'aria-label': 'Move item up' }).length
+        .find('button[aria-label="Move item up"]').length
     ).toBe(1);
     // down button
     expect(
@@ -578,7 +575,7 @@ describe('Material array layout', () => {
         .find('Memo(ExpandPanelRendererComponent)')
         .at(0)
         .find('button')
-        .find({ 'aria-label': 'Move item down' }).length
+        .find('button[aria-label="Move item down"]').length
     ).toBe(1);
   });
   it('should move item up if up button is presses', (done) => {
@@ -604,8 +601,7 @@ describe('Material array layout', () => {
     const upButton = wrapper
       .find('Memo(ExpandPanelRendererComponent)')
       .at(1)
-      .find('button')
-      .find({ 'aria-label': 'Move item up' });
+      .find('button[aria-label="Move item up"]');
     upButton.simulate('click');
     // events are debounced for some time, so let's wait
     setTimeout(() => {
@@ -645,8 +641,7 @@ describe('Material array layout', () => {
     const upButton = wrapper
       .find('Memo(ExpandPanelRendererComponent)')
       .at(0)
-      .find('button')
-      .find({ 'aria-label': 'Move item down' });
+      .find('button[aria-label="Move item down"]');
     upButton.simulate('click');
     // events are debounced for some time, so let's wait
     setTimeout(() => {
@@ -680,8 +675,7 @@ describe('Material array layout', () => {
     const upButton = wrapper
       .find('Memo(ExpandPanelRendererComponent)')
       .at(0)
-      .find('button')
-      .find({ 'aria-label': 'Move item up' });
+      .find('button[aria-label="Move item up"]');
     expect(upButton.is('[disabled]')).toBe(true);
   });
   it('should have down button disabled for last element', () => {
@@ -700,9 +694,94 @@ describe('Material array layout', () => {
     const downButton = wrapper
       .find('Memo(ExpandPanelRendererComponent)')
       .at(1)
-      .find('button')
-      .find({ 'aria-label': 'Move item down' });
+      .find('button[aria-label="Move item down"]');
     expect(downButton.is('[disabled]')).toBe(true);
+  });
+
+  it('add and delete buttons should exist if enabled', () => {
+    wrapper = mount(
+      <JsonForms
+        data={data}
+        schema={schema}
+        uischema={uischema}
+        renderers={materialRenderers}
+      />
+    );
+
+    const deleteButton = wrapper.find({ 'aria-label': 'Delete button' });
+    expect(deleteButton.exists()).toBeTruthy();
+    const addButton = wrapper.find({ 'aria-label': 'Add button' });
+    expect(addButton.exists()).toBeTruthy();
+  });
+
+  it('add and delete buttons should be removed if disabled', () => {
+    const readOnlySchema = { ...schema };
+    readOnlySchema.readOnly = true;
+    wrapper = mount(
+      <JsonForms
+        data={data}
+        schema={readOnlySchema}
+        uischema={uischema}
+        renderers={materialRenderers}
+      />
+    );
+
+    const deleteButton = wrapper.find({ 'aria-label': 'Delete button' });
+    expect(deleteButton.exists()).toBeFalsy();
+    const addButton = wrapper.find({ 'aria-label': 'Add button' });
+    expect(addButton.exists()).toBeFalsy();
+  });
+
+  it('add button should be removed if indicated via ui schema', () => {
+    const disableUischema = { ...uischema };
+    disableUischema.options = { ...uischema.options, disableAdd: true };
+    wrapper = mount(
+      <JsonForms
+        data={data}
+        schema={schema}
+        uischema={disableUischema}
+        renderers={materialRenderers}
+      />
+    );
+
+    const button = wrapper.find({ 'aria-label': 'Add button' });
+    expect(button.exists()).toBeFalsy();
+  });
+
+  it('delete button should be removed if indicated via ui schema', () => {
+    const disableUischema = { ...uischema };
+    disableUischema.options = { ...uischema.options, disableRemove: true };
+    wrapper = mount(
+      <JsonForms
+        data={data}
+        schema={schema}
+        uischema={disableUischema}
+        renderers={materialRenderers}
+      />
+    );
+
+    const button = wrapper.find({ 'aria-label': 'Delete button' });
+    expect(button.exists()).toBeFalsy();
+  });
+
+  it('add and delete buttons should be removed if indicated via config', () => {
+    wrapper = mount(
+      <JsonForms
+        data={data}
+        schema={schema}
+        uischema={uischema}
+        renderers={materialRenderers}
+        config={{
+          disableAdd: true,
+          disableRemove: true,
+        }}
+      />
+    );
+
+    const deleteButton = wrapper.find({ 'aria-label': 'Delete button' });
+    expect(deleteButton.exists()).toBeFalsy();
+    const addButton = wrapper.find({ 'aria-label': 'Add button' });
+    expect(addButton.exists()).toBeFalsy();
   });
 
   const getChildLabel = (wrapper: ReactWrapper, index: number) =>

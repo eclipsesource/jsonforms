@@ -29,7 +29,7 @@ describe('TimeControlRenderer.vue', () => {
     const wrapper = mountJsonForms('00:20', schema, uischema);
     const input = wrapper.find('input');
     await input.setValue('01:51');
-    expect(wrapper.vm.data).to.equal('01:51');
+    expect(wrapper.vm.data).to.equal('01:51:00');
   });
 
   it('should have a placeholder', async () => {
@@ -37,5 +37,19 @@ describe('TimeControlRenderer.vue', () => {
     const input = wrapper.find('input');
     const placeholder = input.attributes('placeholder');
     expect(placeholder).to.equal('time placeholder');
+  });
+
+  it('appends seconds when time value has HH:MM format', async () => {
+    const wrapper = mountJsonForms('00:20:00', schema, uischema);
+    const input = wrapper.find('input');
+    await input.setValue('01:30');
+    expect(wrapper.vm.data).to.equal('01:30:00');
+  });
+
+  it('preserves seconds when time value already has HH:MM:SS format', async () => {
+    const wrapper = mountJsonForms('00:20:00', schema, uischema);
+    const input = wrapper.find('input');
+    await input.setValue('01:30:45');
+    expect(wrapper.vm.data).to.equal('01:30:45');
   });
 });

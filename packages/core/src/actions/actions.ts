@@ -25,12 +25,11 @@
 
 import type AJV from 'ajv';
 import type { ErrorObject } from 'ajv';
-import type { JsonSchema, UISchemaElement } from '../models';
+import { JsonSchema, UISchemaElement } from '../models';
 import { generateDefaultUISchema, generateJsonSchema } from '../generators';
 
-import type { RankedTester } from '../testers';
-import type { UISchemaTester, ValidationMode } from '../reducers';
-import type { ErrorTranslator, Translator } from '../i18n';
+import { RankedTester, UISchemaTester } from '../testers';
+import { ErrorTranslator, Translator, ValidationMode } from '../store';
 
 export const INIT = 'jsonforms/INIT' as const;
 export const UPDATE_CORE = 'jsonforms/UPDATE_CORE' as const;

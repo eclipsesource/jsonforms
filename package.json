@@ -1,9 +1,10 @@
 {
   "name": "jsonforms-monorepo",
   "engines": {
-    "node": "^18.19.0",
-    "pnpm": ">=7.13.4"
+    "node": "^22",
+    "pnpm": "^10.4.1"
   },
+  "packageManager": "pnpm@10.14.0+sha512.ad27a79641b49c3e481a16a805baa71817a04bbe06a38d17e60e2eaee83f6a146c6a688125f5792e48dd5ba30e7da52a5cda4c3992b9ccf333f9ce223af84748",
   "scripts": {
     "lerna": "lerna",
     "preparePublish": "git clean -dfx && pnpm i --frozen-lockfile && pnpm run clean && pnpm run build && pnpm run doc && pnpm run test",
@@ -20,7 +21,8 @@
     "build:examples-app": "lerna run build:examples-app && node packages/examples-app/prepare-examples-app.js"
   },
   "devDependencies": {
-    "@angular/core": "^17.0.0",
+    "@angular/core": "^18.0.0",
+    "@angular/cli": "^18.0.0",
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.16.5",
     "@babel/plugin-proposal-optional-chaining": "^7.16.5",
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
@@ -44,7 +46,7 @@
     "ts-loader": "^9.5.1",
     "ts-node": "^10.4.0",
     "tslib": "^2.5.0",
-    "typescript": "~5.2.2",
+    "typescript": "~5.5.0",
     "webpack": "^5.78.0",
     "webpack-merge": "^5.10.0"
   }

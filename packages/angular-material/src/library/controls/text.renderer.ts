@@ -58,6 +58,7 @@ import { isStringControl, RankedTester, rankWith } from '@jsonforms/core';
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class TextControlRenderer extends JsonFormsControl {
   focused = false;

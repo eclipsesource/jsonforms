@@ -22,7 +22,6 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import './MatchMediaMock';
 import {
   ArrayTranslationEnum,
   ControlElement,
@@ -682,6 +681,108 @@ describe('Material array control', () => {
     // first row is header in table
     const input = wrapper.find('tr').at(1).find('input').first();
     expect(input.props().disabled).toBe(true);
+  });
+
+  it('add and delete buttons should exist if enabled', () => {
+    const core = initCore(fixture2.schema, fixture2.uischema, fixture2.data);
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, cells: materialCells, core }}
+      >
+        <MaterialArrayControlRenderer
+          schema={fixture2.schema}
+          uischema={fixture2.uischema}
+          enabled={true}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    const deleteButton = wrapper.find({ 'aria-label': 'Delete button' });
+    expect(deleteButton.exists()).toBeTruthy();
+    const addButton = wrapper.find({ 'aria-label': 'Add to Test button' });
+    expect(addButton.exists()).toBeTruthy();
+  });
+
+  it('add and delete buttons should be removed if disabled', () => {
+    const core = initCore(fixture2.schema, fixture2.uischema, fixture2.data);
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, cells: materialCells, core }}
+      >
+        <MaterialArrayControlRenderer
+          schema={fixture2.schema}
+          uischema={fixture2.uischema}
+          enabled={false}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    const deleteButton = wrapper.find({ 'aria-label': 'Delete button' });
+    expect(deleteButton.exists()).toBeFalsy();
+    const addButton = wrapper.find({ 'aria-label': 'Add to Test button' });
+    expect(addButton.exists()).toBeFalsy();
+  });
+
+  it('add button should be removed if indicated via ui schema', () => {
+    const core = initCore(fixture2.schema, fixture2.uischema, fixture2.data);
+    const uischema = { ...fixture2.uischema };
+    uischema.options = { ...uischema.options, disableAdd: true };
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, cells: materialCells, core }}
+      >
+        <MaterialArrayControlRenderer
+          schema={fixture2.schema}
+          uischema={uischema}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    const button = wrapper.find({ 'aria-label': 'Add to Test button' });
+    expect(button.exists()).toBeFalsy();
+  });
+
+  it('delete button should be removed if indicated via ui schema', () => {
+    const core = initCore(fixture2.schema, fixture2.uischema, fixture2.data);
+    const uischema = { ...fixture2.uischema };
+    uischema.options = { ...uischema.options, disableRemove: true };
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{ renderers: materialRenderers, cells: materialCells, core }}
+      >
+        <MaterialArrayControlRenderer
+          schema={fixture2.schema}
+          uischema={uischema}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    const button = wrapper.find({ 'aria-label': 'Delete button' });
+    expect(button.exists()).toBeFalsy();
+  });
+
+  it('add and delete buttons should be removed if indicated via config', () => {
+    const core = initCore(fixture2.schema, fixture2.uischema, fixture2.data);
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{
+          renderers: materialRenderers,
+          cells: materialCells,
+          core,
+          config: { disableAdd: true, disableRemove: true },
+        }}
+      >
+        <MaterialArrayControlRenderer
+          schema={fixture2.schema}
+          uischema={fixture2.uischema}
+        />
+      </JsonFormsStateProvider>
+    );
+
+    const deleteButton = wrapper.find({ 'aria-label': 'Delete button' });
+    expect(deleteButton.exists()).toBeFalsy();
+    const addButton = wrapper.find({ 'aria-label': 'Add to Test button' });
+    expect(addButton.exists()).toBeFalsy();
   });
 
   it('should have down button disabled for last element', () => {

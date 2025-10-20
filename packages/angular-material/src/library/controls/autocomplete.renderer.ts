@@ -110,6 +110,7 @@ import { map, startWith } from 'rxjs/operators';
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class AutocompleteControlRenderer
   extends JsonFormsControl

@@ -62,6 +62,9 @@ export const uischema = {
         {
           type: 'Control',
           scope: '#/properties/height',
+          options: {
+            step: 1e-2,
+          },
         },
         {
           type: 'Control',

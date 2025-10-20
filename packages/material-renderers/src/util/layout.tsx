@@ -24,7 +24,7 @@
 */
 import isEmpty from 'lodash/isEmpty';
 import React, { ComponentType } from 'react';
-import Ajv from 'ajv';
+import type Ajv from 'ajv';
 import type { UISchemaElement } from '@jsonforms/core';
 import {
   getAjv,
@@ -45,7 +45,7 @@ export const renderLayoutElements = (
   cells?: JsonFormsCellRendererRegistryEntry[]
 ) => {
   return elements.map((child, index) => (
-    <Grid item key={`${path}-${index}`} xs>
+    <Grid key={`${path}-${index}`} size='grow'>
       <JsonFormsDispatch
         uischema={child}
         schema={schema}

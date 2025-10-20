@@ -46,6 +46,10 @@ export interface WithInputProps {
   label?: string;
 }
 
+export interface WithSelectProps {
+  multiple?: boolean;
+}
+
 const variantToInput = {
   standard: Input,
   filled: FilledInput,

@@ -28,6 +28,7 @@ import {
   EventEmitter,
   Input,
   OnChanges,
+  OnDestroy,
   OnInit,
   Output,
   SimpleChanges,
@@ -43,8 +44,10 @@ import {
   ValidationMode,
   defaultMiddleware,
 } from '@jsonforms/core';
-import Ajv, { ErrorObject } from 'ajv';
+import type Ajv from 'ajv';
+import type { ErrorObject } from 'ajv';
 import { JsonFormsAngularService, USE_STATE_VALUE } from './jsonforms.service';
+import { Subscription } from 'rxjs';
 
 // TODO Can this be rewritten to not use DoCheck and OnChanges?
 /* eslint-disable @angular-eslint/no-conflicting-lifecycle */
@@ -52,8 +55,9 @@ import { JsonFormsAngularService, USE_STATE_VALUE } from './jsonforms.service';
   selector: 'jsonforms',
   template: '<jsonforms-outlet></jsonforms-outlet>',
   providers: [JsonFormsAngularService],
+  standalone: false,
 })
-export class JsonForms implements DoCheck, OnChanges, OnInit {
+export class JsonForms implements DoCheck, OnChanges, OnInit, OnDestroy {
   @Input() uischema: UISchemaElement;
   @Input() schema: JsonSchema;
   @Input() data: any;
@@ -71,6 +75,7 @@ export class JsonForms implements DoCheck, OnChanges, OnInit {
 
   private previousData: any;
   private previousErrors: ErrorObject[];
+  subscription: Subscription;
 
   private initialized = false;
   oldI18N: JsonFormsI18nState;
@@ -96,7 +101,7 @@ export class JsonForms implements DoCheck, OnChanges, OnInit {
       },
       this.middleware
     );
-    this.jsonformsService.$state.subscribe((state) => {
+    this.subscription = this.jsonformsService.$state.subscribe((state) => {
       const data = state?.jsonforms?.core?.data;
       const errors = state?.jsonforms?.core?.errors;
       if (this.previousData !== data) {
@@ -198,5 +203,9 @@ export class JsonForms implements DoCheck, OnChanges, OnInit {
         Actions.setConfig(newConfig.currentValue)
       );
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }

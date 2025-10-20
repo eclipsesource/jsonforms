@@ -27,18 +27,18 @@ import * as _ from 'lodash';
 import * as Redux from 'redux';
 import configureStore from 'redux-mock-store';
 import {
-  findMatchingUISchema,
-  uischemaRegistryReducer,
-  UISchemaTester,
-} from '../../src/reducers/uischemas';
-import {
   registerUISchema,
   RemoveUISchemaAction,
   unregisterUISchema,
 } from '../../src/actions';
-import { findUISchema, getSchema } from '../../src/reducers';
 import { Generate } from '../../src/generators';
-import { JsonFormsState } from '../../src';
+import {
+  findMatchingUISchema,
+  findUISchema,
+  uischemaRegistryReducer,
+} from '../../src/reducers';
+import { UISchemaTester } from '../../src/testers';
+import { JsonFormsState, getSchema } from '../../src/store';
 
 test('init state empty', (t) => {
   const dummyAction: RemoveUISchemaAction = {

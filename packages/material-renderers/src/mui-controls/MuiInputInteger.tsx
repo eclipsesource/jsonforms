@@ -25,7 +25,12 @@
 import React from 'react';
 import { CellProps, WithClassname } from '@jsonforms/core';
 import merge from 'lodash/merge';
-import { useDebouncedChange, useInputComponent, WithInputProps } from '../util';
+import {
+  useDebouncedChange,
+  useInputComponent,
+  WithInputProps,
+  useFocus,
+} from '../util';
 
 const toNumber = (value: string) =>
   value === '' ? undefined : parseInt(value, 10);
@@ -34,12 +39,14 @@ const eventToValue = (ev: any) => toNumber(ev.target.value);
 export const MuiInputInteger = React.memo(function MuiInputInteger(
   props: CellProps & WithClassname & WithInputProps
 ) {
+  const [focused, onFocus, onBlur] = useFocus();
   const {
     data,
     className,
     id,
     enabled,
     uischema,
+    isValid,
     path,
     handleChange,
     config,
@@ -55,7 +62,10 @@ export const MuiInputInteger = React.memo(function MuiInputInteger(
     '',
     data,
     path,
-    eventToValue
+    eventToValue,
+    undefined,
+    true,
+    focused
   );
 
   return (
@@ -63,6 +73,8 @@ export const MuiInputInteger = React.memo(function MuiInputInteger(
       label={label}
       type='number'
       value={inputValue}
+      onFocus={onFocus}
+      onBlur={onBlur}
       onChange={onChange}
       className={className}
       id={id}
@@ -70,6 +82,7 @@ export const MuiInputInteger = React.memo(function MuiInputInteger(
       autoFocus={appliedUiSchemaOptions.focus}
       inputProps={inputProps}
       fullWidth={true}
+      error={!isValid}
     />
   );
 });

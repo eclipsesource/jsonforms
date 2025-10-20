@@ -25,11 +25,17 @@
 import React, { useCallback } from 'react';
 import { CellProps, Formatted, WithClassname } from '@jsonforms/core';
 import merge from 'lodash/merge';
-import { useDebouncedChange, useInputComponent, WithInputProps } from '../util';
+import {
+  useDebouncedChange,
+  useInputComponent,
+  WithInputProps,
+  useFocus,
+} from '../util';
 
 export const MuiInputNumberFormat = React.memo(function MuiInputNumberFormat(
   props: CellProps & WithClassname & Formatted<number> & WithInputProps
 ) {
+  const [focused, onFocus, onBlur] = useFocus();
   const {
     className,
     id,
@@ -62,7 +68,10 @@ export const MuiInputNumberFormat = React.memo(function MuiInputNumberFormat(
     '',
     formattedNumber,
     path,
-    validStringNumber
+    validStringNumber,
+    undefined,
+    true,
+    focused
   );
 
   return (
@@ -70,6 +79,8 @@ export const MuiInputNumberFormat = React.memo(function MuiInputNumberFormat(
       type='text'
       value={inputValue}
       onChange={onChange}
+      onFocus={onFocus}
+      onBlur={onBlur}
       className={className}
       id={id}
       label={label}

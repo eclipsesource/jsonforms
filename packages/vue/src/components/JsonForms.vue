@@ -25,11 +25,13 @@ import {
   JsonFormsI18nState,
   defaultMiddleware,
   Middleware,
+  JsonFormsSubStates,
 } from '@jsonforms/core';
 import { JsonFormsChangeEvent, MaybeReadonly } from '../types';
 import DispatchRenderer from './DispatchRenderer.vue';
 
-import Ajv, { ErrorObject } from 'ajv';
+import type Ajv from 'ajv';
+import type { ErrorObject } from 'ajv';
 
 // TODO fix @typescript-eslint/ban-types
 // eslint-disable-next-line @typescript-eslint/ban-types
@@ -46,14 +48,16 @@ export default defineComponent({
   },
   provide() {
     return {
-      jsonforms: this.jsonforms,
+      // Explicitly type provide to avoid TS7056
+      jsonforms: this.jsonforms as JsonFormsSubStates,
       dispatch: this.dispatch,
     };
   },
   props: {
     data: {
-      required: true,
+      required: false,
       type: [String, Number, Boolean, Array, Object] as PropType<any>,
+      default: undefined,
     },
     schema: {
       required: false,

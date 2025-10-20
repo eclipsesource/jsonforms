@@ -29,7 +29,7 @@ import {
   UISchemaElement,
   UISchemaTester,
 } from '@jsonforms/core';
-import { angularMaterialRenderers } from '../../lib';
+import { angularMaterialRenderers } from '../../src/library';
 
 const uiSchema = {
   type: 'HorizontalLayout',
@@ -87,6 +87,7 @@ const itemTester: UISchemaTester = (_schema, schemaPath, _path) => {
       [readonly]="readonly"
     ></jsonforms>
   `,
+  standalone: false,
 })
 export class AppComponent {
   readonly renderers = angularMaterialRenderers;

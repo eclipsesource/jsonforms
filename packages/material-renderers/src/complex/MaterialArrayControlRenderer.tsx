@@ -25,21 +25,28 @@
 import React, { useCallback, useState } from 'react';
 import {
   ArrayLayoutProps,
+  ArrayTranslations,
   RankedTester,
   isObjectArrayControl,
   isPrimitiveArrayControl,
   or,
   rankWith,
 } from '@jsonforms/core';
-import { withJsonFormsArrayLayoutProps } from '@jsonforms/react';
+import {
+  withArrayTranslationProps,
+  withJsonFormsArrayLayoutProps,
+  withTranslateProps,
+} from '@jsonforms/react';
 import { MaterialTableControl } from './MaterialTableControl';
 import { DeleteDialog } from './DeleteDialog';
 
-export const MaterialArrayControlRenderer = (props: ArrayLayoutProps) => {
+export const MaterialArrayControlRenderer = (
+  props: ArrayLayoutProps & { translations: ArrayTranslations }
+) => {
   const [open, setOpen] = useState(false);
   const [path, setPath] = useState(undefined);
   const [rowData, setRowData] = useState(undefined);
-  const { removeItems, visible } = props;
+  const { removeItems, visible, translations } = props;
 
   const openDeleteDialog = useCallback(
     (p: string, rowIndex: number) => {
@@ -63,16 +70,20 @@ export const MaterialArrayControlRenderer = (props: ArrayLayoutProps) => {
 
   return (
     <>
-      <MaterialTableControl {...props} openDeleteDialog={openDeleteDialog} />
+      <MaterialTableControl
+        {...props}
+        openDeleteDialog={openDeleteDialog}
+        translations={translations}
+      />
       <DeleteDialog
         open={open}
         onCancel={deleteCancel}
         onConfirm={deleteConfirm}
         onClose={deleteClose}
-        acceptText={props.translations.deleteDialogAccept}
-        declineText={props.translations.deleteDialogDecline}
-        title={props.translations.deleteDialogTitle}
-        message={props.translations.deleteDialogMessage}
+        acceptText={translations.deleteDialogAccept}
+        declineText={translations.deleteDialogDecline}
+        title={translations.deleteDialogTitle}
+        message={translations.deleteDialogMessage}
       />
     </>
   );
@@ -83,4 +94,6 @@ export const materialArrayControlTester: RankedTester = rankWith(
   or(isObjectArrayControl, isPrimitiveArrayControl)
 );
 
-export default withJsonFormsArrayLayoutProps(MaterialArrayControlRenderer);
+export default withJsonFormsArrayLayoutProps(
+  withTranslateProps(withArrayTranslationProps(MaterialArrayControlRenderer))
+);

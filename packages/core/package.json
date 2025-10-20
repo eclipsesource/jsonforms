@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/core",
-  "version": "3.3.0",
+  "version": "3.7.0-alpha.1",
   "description": "Core module of JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -54,8 +54,7 @@
       "ts"
     ],
     "require": [
-      "./test-config/ts-node.config.js",
-      "source-map-support/register.js"
+      "./test-config/ts-node.config.js"
     ]
   },
   "nyc": {
@@ -96,6 +95,6 @@
     "ts-node": "^10.4.0",
     "tslib": "^2.5.0",
     "typedoc": "~0.25.3",
-    "typescript": "~5.2.2"
+    "typescript": "~5.5.0"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/examples",
-  "version": "3.3.0",
+  "version": "3.7.0-alpha.1",
   "description": "JSON Forms Example Data",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -43,15 +43,15 @@
     "doc": "typedoc --name 'JSON Forms Examples' --excludeExternals --out docs src"
   },
   "dependencies": {
-    "ajv-i18n": "^3.5.0",
+    "ajv-i18n": "^4.2.0",
     "lodash": "^4.17.21"
   },
   "peerDependencies": {
-    "@jsonforms/core": "3.3.0"
+    "@jsonforms/core": "3.7.0-alpha.1"
   },
   "devDependencies": {
     "@jsonforms/core": "workspace:*",
-    "@types/node": "^18.19.4",
+    "@types/node": "^22.13.8",
     "@typescript-eslint/eslint-plugin": "^5.54.1",
     "@typescript-eslint/parser": "^5.54.1",
     "eslint": "^8.56.0",
@@ -66,6 +66,6 @@
     "rollup-plugin-visualizer": "^5.4.1",
     "tslib": "^2.5.0",
     "typedoc": "~0.25.3",
-    "typescript": "~5.2.2"
+    "typescript": "~5.5.0"
   }
 }

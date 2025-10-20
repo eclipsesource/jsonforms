@@ -78,6 +78,9 @@ import {
   CoreActions,
   Middleware,
   defaultMiddleware,
+  arrayDefaultTranslations,
+  getArrayTranslations,
+  ArrayTranslations,
 } from '@jsonforms/core';
 import debounce from 'lodash/debounce';
 import React, {
@@ -888,4 +891,21 @@ export const withTranslateProps = <P extends {}>(
     const t = ctx.i18n?.translate ?? defaultJsonFormsI18nState.translate;
 
     return <Component {...props} locale={locale} t={t} />;
+  };
+
+export const withArrayTranslationProps = <P extends ArrayLayoutProps>(
+  Component: ComponentType<P & { translations: ArrayTranslations }>
+) =>
+  function withArrayTranslatationProps(props: P & TranslateProps) {
+    const translations = useMemo(
+      () =>
+        getArrayTranslations(
+          props.t,
+          arrayDefaultTranslations,
+          props.i18nKeyPrefix,
+          props.label
+        ),
+      [props.t, props.i18nKeyPrefix, props.label]
+    );
+    return <Component {...props} translations={translations} />;
   };

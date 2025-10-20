@@ -28,18 +28,8 @@ import remove from 'lodash/remove';
 import { ADD_UI_SCHEMA, REMOVE_UI_SCHEMA, UISchemaActions } from '../actions';
 import { NOT_APPLICABLE } from '../testers';
 import type { JsonSchema, UISchemaElement } from '../models';
-import type { Reducer } from '../util';
-
-export type UISchemaTester = (
-  schema: JsonSchema,
-  schemaPath: string,
-  path: string
-) => number;
-
-export interface JsonFormsUISchemaRegistryEntry {
-  tester: UISchemaTester;
-  uischema: UISchemaElement;
-}
+import type { Reducer } from '../store/type';
+import { JsonFormsUISchemaRegistryEntry } from '../store';
 
 export const uischemaRegistryReducer: Reducer<
   JsonFormsUISchemaRegistryEntry[],

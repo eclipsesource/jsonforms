@@ -22,7 +22,6 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import './MatchMediaMock';
 import * as React from 'react';
 import { ControlElement } from '@jsonforms/core';
 import MaterialEnumCell, {

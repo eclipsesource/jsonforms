@@ -33,9 +33,6 @@ import {
   GroupLayoutRenderer,
   groupLayoutTester,
 } from '../src/library/layouts/group-layout.renderer';
-import { initTestEnvironment } from './test';
-
-initTestEnvironment();
 
 describe('Group layout tester', () => {
   it('should succeed', () => {

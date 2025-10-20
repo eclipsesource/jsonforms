@@ -65,6 +65,7 @@ import { isBooleanControl, RankedTester, rankWith } from '@jsonforms/core';
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class BooleanControlRenderer extends JsonFormsControl {
   constructor(

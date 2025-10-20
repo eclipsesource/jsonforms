@@ -148,6 +148,7 @@ import {
     '.sort-column { min-width: 12vw;}',
     '.table-container {max-width: 100%; overflow: auto;}',
   ],
+  standalone: false,
 })
 export class TableRenderer extends JsonFormsArrayControl implements OnInit {
   detailUiSchema: UISchemaElement;
@@ -158,7 +159,7 @@ export class TableRenderer extends JsonFormsArrayControl implements OnInit {
   moveItemUp: (path: string, index: number) => () => void;
   moveItemDown: (path: string, index: number) => () => void;
   removeItems: (path: string, toDelete: number[]) => () => void;
-  translations: ArrayTranslations;
+  translations: ArrayTranslations = {};
 
   constructor(jsonformsService: JsonFormsAngularService) {
     super(jsonformsService);
@@ -166,7 +167,9 @@ export class TableRenderer extends JsonFormsArrayControl implements OnInit {
   trackElement(index: number, _element: any) {
     return index ? index : null;
   }
-  mapAdditionalProps(props: ArrayControlProps) {
+  mapAdditionalProps(
+    props: ArrayControlProps & { translations: ArrayTranslations }
+  ) {
     this.items = this.generateCells(props.schema, props.path);
     this.displayedColumns = this.items.map((item) => item.property);
     if (this.isEnabled()) {
@@ -270,7 +273,7 @@ export const controlWithoutLabel = (scope: string): ControlElement => ({
   label: false,
 });
 
-@Pipe({ name: 'getProps' })
+@Pipe({ name: 'getProps', standalone: false })
 export class GetProps implements PipeTransform {
   transform(index: number, props: OwnPropsOfRenderer) {
     const rowPath = Paths.compose(props.path, `${index}`);

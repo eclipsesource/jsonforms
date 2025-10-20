@@ -55,6 +55,7 @@ import {
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class ToggleControlRenderer extends JsonFormsControl {
   constructor(

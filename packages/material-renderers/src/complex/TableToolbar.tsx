@@ -38,7 +38,7 @@ import {
   FormHelperText,
   Stack,
 } from '@mui/material';
-import { Add as AddIcon } from '@mui/icons-material';
+import { Add } from '@mui/icons-material';
 import ValidationIcon from './ValidationIcon';
 import NoBorderTableCell from './NoBorderTableCell';
 
@@ -54,6 +54,7 @@ export interface MaterialTableToolbarProps {
   enabled: boolean;
   translations: ArrayTranslations;
   addItem(path: string, value: any): () => void;
+  disableAdd?: boolean;
 }
 
 const fixedCellSmall = {
@@ -72,6 +73,7 @@ const TableToolbar = React.memo(function TableToolbar({
   enabled,
   translations,
   rootSchema,
+  disableAdd,
 }: MaterialTableToolbarProps) {
   return (
     <TableRow>
@@ -83,12 +85,12 @@ const TableToolbar = React.memo(function TableToolbar({
             alignItems={'center'}
             spacing={2}
           >
-            <Grid item>
+            <Grid>
               <Typography variant={'h6'}>{label}</Typography>
             </Grid>
-            <Grid item>
+            <Grid>
               {errors.length !== 0 && (
-                <Grid item>
+                <Grid>
                   <ValidationIcon
                     id='tooltip-validation'
                     errorMessages={errors}
@@ -100,7 +102,7 @@ const TableToolbar = React.memo(function TableToolbar({
           {description && <FormHelperText>{description}</FormHelperText>}
         </Stack>
       </NoBorderTableCell>
-      {enabled ? (
+      {enabled && !disableAdd ? (
         <NoBorderTableCell align='right' style={fixedCellSmall}>
           <Tooltip
             id='tooltip-add'
@@ -112,7 +114,7 @@ const TableToolbar = React.memo(function TableToolbar({
               onClick={addItem(path, createDefaultValue(schema, rootSchema))}
               size='large'
             >
-              <AddIcon />
+              <Add />
             </IconButton>
           </Tooltip>
         </NoBorderTableCell>

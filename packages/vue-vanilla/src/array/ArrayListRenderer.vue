@@ -41,7 +41,7 @@
       </array-list-element>
     </div>
     <div v-if="noData" :class="styles.arrayList.noData">
-      {{ control.translations.noDataMessage }}
+      {{ translations.noDataMessage }}
     </div>
   </fieldset>
 </template>
@@ -56,8 +56,12 @@ import {
   schemaTypeIs,
   Resolve,
   JsonSchema,
+  JsonFormsSubStates,
+  arrayDefaultTranslations,
+  getArrayTranslations,
+  defaultJsonFormsI18nState,
 } from '@jsonforms/core';
-import { defineComponent } from 'vue';
+import { defineComponent, inject } from 'vue';
 import {
   DispatchRenderer,
   rendererProps,
@@ -104,6 +108,15 @@ const controlRenderer = defineComponent({
         this.arraySchema.minItems !== undefined &&
         this.control.data !== undefined &&
         this.control.data.length <= this.arraySchema.minItems
+      );
+    },
+    translations(): any {
+      const jsonforms = inject<JsonFormsSubStates>('jsonforms');
+      return getArrayTranslations(
+        jsonforms?.i18n?.translate ?? defaultJsonFormsI18nState.translate,
+        arrayDefaultTranslations,
+        this.control.i18nKeyPrefix,
+        this.control.label
       );
     },
   },

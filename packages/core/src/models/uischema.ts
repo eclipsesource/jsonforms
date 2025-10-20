@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
+
   Copyright (c) 2017-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -114,7 +114,7 @@ export enum RuleEffect {
 /**
  * Represents a condition to be evaluated.
  */
-export interface Condition {
+export interface BaseCondition {
   /**
    * The type of condition.
    */
@@ -124,7 +124,7 @@ export interface Condition {
 /**
  * A leaf condition.
  */
-export interface LeafCondition extends Condition, Scoped {
+export interface LeafCondition extends BaseCondition, Scoped {
   type: 'LEAF';
 
   /**
@@ -133,7 +133,7 @@ export interface LeafCondition extends Condition, Scoped {
   expectedValue: any;
 }
 
-export interface SchemaBasedCondition extends Condition, Scoped {
+export interface SchemaBasedCondition extends BaseCondition, Scoped {
   schema: JsonSchema;
 
   /**
@@ -150,10 +150,33 @@ export interface SchemaBasedCondition extends Condition, Scoped {
   failWhenUndefined?: boolean;
 }
 
+/** A condition using a validation function to determine its fulfillment. */
+export interface ValidateFunctionCondition extends BaseCondition, Scoped {
+  /**
+   * Validates whether the condition is fulfilled.
+   *
+   * @param data The data as resolved via the scope.
+   * @returns `true` if the condition is fulfilled */
+  validate: (context: ValidateFunctionContext) => boolean;
+}
+
+export interface ValidateFunctionContext {
+  /** The resolved data scoped to the `ValidateFunctionCondition`'s scope. */
+  data: unknown;
+  /** The full data of the form. */
+  fullData: unknown;
+  /** Optional instance path. Necessary when the actual data path can not be inferred via the scope alone as it is the case with nested controls. */
+  path: string | undefined;
+  /** The `UISchemaElement` containing the rule that uses the ValidateFunctionCondition, e.g. a `ControlElement` */
+  uischemaElement: UISchemaElement;
+  /** The form config */
+  config: unknown;
+}
+
 /**
  * A composable condition.
  */
-export interface ComposableCondition extends Condition {
+export interface ComposableCondition extends BaseCondition {
   conditions: Condition[];
 }
 
@@ -172,9 +195,20 @@ export interface AndCondition extends ComposableCondition {
 }
 
 /**
+ * A union of all available conditions.
+ */
+export type Condition =
+  | BaseCondition
+  | LeafCondition
+  | OrCondition
+  | AndCondition
+  | SchemaBasedCondition
+  | ValidateFunctionCondition;
+
+/**
  * Common base interface for any UI schema element.
  */
-export interface UISchemaElement {
+export interface BaseUISchemaElement {
   /**
    * The type of this UI schema element.
    */
@@ -195,7 +229,7 @@ export interface UISchemaElement {
  * Represents a layout element which can order its children
  * in a specific way.
  */
-export interface Layout extends UISchemaElement {
+export interface Layout extends BaseUISchemaElement {
   /**
    * The child elements of this layout.
    */
@@ -241,7 +275,7 @@ export interface LabelDescription {
 /**
  * A label element.
  */
-export interface LabelElement extends UISchemaElement, Internationalizable {
+export interface LabelElement extends BaseUISchemaElement, Internationalizable {
   type: 'Label';
   /**
    * The text of label.
@@ -254,7 +288,7 @@ export interface LabelElement extends UISchemaElement, Internationalizable {
  * to which part of the schema the control should be bound.
  */
 export interface ControlElement
-  extends UISchemaElement,
+  extends BaseUISchemaElement,
     Scoped,
     Labelable<string | boolean | LabelDescription>,
     Internationalizable {
@@ -274,7 +308,7 @@ export interface Category extends Layout, Labeled, Internationalizable {
  * the categorization element can be used to represent recursive structures like trees.
  */
 export interface Categorization
-  extends UISchemaElement,
+  extends BaseUISchemaElement,
     Labeled,
     Internationalizable {
   type: 'Categorization';
@@ -285,31 +319,18 @@ export interface Categorization
   elements: (Category | Categorization)[];
 }
 
-export const isInternationalized = (
-  element: unknown
-): element is Required<Internationalizable> =>
-  typeof element === 'object' &&
-  element !== null &&
-  typeof (element as Internationalizable).i18n === 'string';
-
-export const isGroup = (layout: Layout): layout is GroupLayout =>
-  layout.type === 'Group';
-
-export const isLayout = (uischema: UISchemaElement): uischema is Layout =>
-  (uischema as Layout).elements !== undefined;
-
-export const isScopable = (obj: unknown): obj is Scopable =>
-  !!obj && typeof obj === 'object';
-
-export const isScoped = (obj: unknown): obj is Scoped =>
-  isScopable(obj) && typeof obj.scope === 'string';
-
-export const isLabelable = (obj: unknown): obj is Labelable =>
-  !!obj && typeof obj === 'object';
-
-export const isLabeled = <T = never>(obj: unknown): obj is Labeled<T> =>
-  isLabelable(obj) && ['string', 'boolean'].includes(typeof obj.label);
-
-export const isControlElement = (
-  uiSchema: UISchemaElement
-): uiSchema is ControlElement => uiSchema.type === 'Control';
+/**
+ * A union of all available UI schema elements.
+ * This includes all layout elements, control elements, label elements,
+ * group elements, category elements and categorization elements.
+ */
+export type UISchemaElement =
+  | BaseUISchemaElement
+  | ControlElement
+  | Layout
+  | LabelElement
+  | GroupLayout
+  | Category
+  | Categorization
+  | VerticalLayout
+  | HorizontalLayout;

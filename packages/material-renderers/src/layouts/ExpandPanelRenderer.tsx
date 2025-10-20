@@ -29,6 +29,7 @@ import {
   removeId,
   ArrayTranslations,
   computeChildLabel,
+  UpdateArrayContext,
 } from '@jsonforms/core';
 import {
   Accordion,
@@ -40,10 +41,10 @@ import {
   Tooltip,
 } from '@mui/material';
 import {
-  ExpandMore as ExpandMoreIcon,
-  Delete as DeleteIcon,
   ArrowUpward,
   ArrowDownward,
+  Delete,
+  ExpandMore,
 } from '@mui/icons-material';
 
 const iconStyle: any = { float: 'right' };
@@ -65,6 +66,7 @@ interface OwnPropsOfExpandPanel {
   childLabelProp?: string;
   handleExpansion(panel: string): (event: any, expanded: boolean) => void;
   translations: ArrayTranslations;
+  disableRemove?: boolean;
 }
 
 interface StatePropsOfExpandPanel extends OwnPropsOfExpandPanel {
@@ -117,6 +119,7 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
     cells,
     config,
     translations,
+    disableRemove,
   } = props;
 
   const foundUISchema = useMemo(
@@ -144,21 +147,21 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
       expanded={expanded}
       onChange={handleExpansion(childPath)}
     >
-      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Grid container alignItems={'center'}>
-          <Grid item xs={7} md={9}>
+      <AccordionSummary expandIcon={<ExpandMore />}>
+        <Grid container sx={{ width: '100%' }} alignItems={'center'}>
+          <Grid size={{ xs: 7, md: 9 }}>
             <Grid container alignItems={'center'}>
-              <Grid item xs={2} md={1}>
+              <Grid size={{ xs: 2, md: 1 }}>
                 <Avatar aria-label='Index'>{index + 1}</Avatar>
               </Grid>
-              <Grid item xs={10} md={11}>
+              <Grid size={{ xs: 10, md: 11 }}>
                 <span id={labelHtmlId}>{childLabel}</span>
               </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={5} md={3}>
+          <Grid size={{ xs: 5, md: 3 }}>
             <Grid container justifyContent='flex-end'>
-              <Grid item>
+              <Grid>
                 <Grid
                   container
                   direction='row'
@@ -167,7 +170,7 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
                 >
                   {showSortButtons && enabled ? (
                     <Fragment>
-                      <Grid item>
+                      <Grid>
                         <Tooltip
                           id='tooltip-up'
                           title={translations.up}
@@ -185,7 +188,7 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
                           </IconButton>
                         </Tooltip>
                       </Grid>
-                      <Grid item>
+                      <Grid>
                         <Tooltip
                           id='tooltip-down'
                           title={translations.down}
@@ -207,8 +210,8 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
                   ) : (
                     ''
                   )}
-                  {enabled && (
-                    <Grid item>
+                  {enabled && !disableRemove && (
+                    <Grid>
                       <Tooltip
                         id='tooltip-remove'
                         title={translations.removeTooltip}
@@ -220,7 +223,7 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
                           aria-label={translations.removeAriaLabel}
                           size='large'
                         >
-                          <DeleteIcon />
+                          <Delete />
                         </IconButton>
                       </Tooltip>
                     </Grid>
@@ -262,13 +265,17 @@ export const ctxDispatchToExpandPanelProps: (
       (event: any): void => {
         event.stopPropagation();
         dispatch(
-          update(path, (array) => {
-            toDelete
-              .sort()
-              .reverse()
-              .forEach((s) => array.splice(s, 1));
-            return array;
-          })
+          update(
+            path,
+            (array) => {
+              toDelete
+                .sort()
+                .reverse()
+                .forEach((s) => array.splice(s, 1));
+              return array;
+            },
+            { type: 'REMOVE', indices: toDelete } as UpdateArrayContext
+          )
         );
       },
     [dispatch]
@@ -278,10 +285,17 @@ export const ctxDispatchToExpandPanelProps: (
       (event: any): void => {
         event.stopPropagation();
         dispatch(
-          update(path, (array) => {
-            moveUp(array, toMove);
-            return array;
-          })
+          update(
+            path,
+            (array) => {
+              moveUp(array, toMove);
+              return array;
+            },
+            {
+              type: 'MOVE',
+              moves: [{ from: toMove, to: toMove - 1 }],
+            } as UpdateArrayContext
+          )
         );
       },
     [dispatch]
@@ -291,10 +305,17 @@ export const ctxDispatchToExpandPanelProps: (
       (event: any): void => {
         event.stopPropagation();
         dispatch(
-          update(path, (array) => {
-            moveDown(array, toMove);
-            return array;
-          })
+          update(
+            path,
+            (array) => {
+              moveDown(array, toMove);
+              return array;
+            },
+            {
+              type: 'MOVE',
+              moves: [{ from: toMove, to: toMove + 1 }],
+            } as UpdateArrayContext
+          )
         );
       },
     [dispatch]

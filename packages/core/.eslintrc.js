@@ -38,5 +38,11 @@ module.exports = {
         ignore: ['^ava$'],
       },
     ],
+    'import/no-cycle': [
+      'error',
+      {
+        ignoreExternal: true,
+      },
+    ],
   },
 };

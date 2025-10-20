@@ -27,11 +27,11 @@ import isEmpty from 'lodash/isEmpty';
 import isArray from 'lodash/isArray';
 import includes from 'lodash/includes';
 import find from 'lodash/find';
-import type { JsonSchema, Scoped, UISchemaElement } from '..';
 import { resolveData, resolveSchema } from './resolvers';
 import { composePaths, toDataPathSegments } from './path';
 import { isEnabled, isVisible } from './runtime';
 import type Ajv from 'ajv';
+import type { JsonSchema, Scoped, UISchemaElement } from '../models';
 
 /**
  * Returns the string representation of the given date. The format of the output string can be specified:
@@ -85,14 +85,6 @@ export const convertDateToString = (
  */
 export const convertToValidClassName = (s: string): string =>
   s.replace('#', 'root').replace(new RegExp('/', 'g'), '_');
-
-export const formatErrorMessage = (errors: string[]) => {
-  if (errors === undefined || errors === null) {
-    return '';
-  }
-
-  return errors.join('\n');
-};
 
 export const hasType = (jsonSchema: JsonSchema, expected: string): boolean => {
   return includes(deriveTypes(jsonSchema), expected);
@@ -171,10 +163,20 @@ export const Paths = {
 
 // Runtime --
 export const Runtime = {
-  isEnabled(uischema: UISchemaElement, data: any, ajv: Ajv): boolean {
-    return isEnabled(uischema, data, undefined, ajv);
+  isEnabled(
+    uischema: UISchemaElement,
+    data: any,
+    ajv: Ajv,
+    config: unknown
+  ): boolean {
+    return isEnabled(uischema, data, undefined, ajv, config);
   },
-  isVisible(uischema: UISchemaElement, data: any, ajv: Ajv): boolean {
-    return isVisible(uischema, data, undefined, ajv);
+  isVisible(
+    uischema: UISchemaElement,
+    data: any,
+    ajv: Ajv,
+    config: unknown
+  ): boolean {
+    return isVisible(uischema, data, undefined, ajv, config);
   },
 };

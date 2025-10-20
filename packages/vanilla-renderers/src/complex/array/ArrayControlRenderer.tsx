@@ -31,10 +31,13 @@ import {
   findUISchema,
   Helpers,
   ControlElement,
+  ArrayTranslations,
 } from '@jsonforms/core';
 import {
   JsonFormsDispatch,
+  withArrayTranslationProps,
   withJsonFormsArrayControlProps,
+  withTranslateProps,
 } from '@jsonforms/react';
 import type { VanillaRendererProps } from '../../index';
 import { withVanillaControlProps } from '../../util';
@@ -58,7 +61,9 @@ export const ArrayControl = ({
   renderers,
   rootSchema,
   translations,
-}: ArrayControlProps & VanillaRendererProps) => {
+  enabled,
+}: ArrayControlProps &
+  VanillaRendererProps & { translations: ArrayTranslations }) => {
   const controlElement = uischema as ControlElement;
   const childUiSchema = useMemo(
     () =>
@@ -98,6 +103,7 @@ export const ArrayControl = ({
         <button
           type='button'
           className={buttonClassAdd}
+          disabled={!enabled}
           onClick={addItem(path, createDefaultValue(schema, rootSchema))}
         >
           Add to {label}
@@ -121,6 +127,7 @@ export const ArrayControl = ({
                   <button
                     type='button'
                     className={buttonClassUp}
+                    disabled={!enabled}
                     aria-label={translations.upAriaLabel}
                     onClick={() => {
                       moveUp(path, index)();
@@ -131,6 +138,7 @@ export const ArrayControl = ({
                   <button
                     type='button'
                     className={buttonClassDown}
+                    disabled={!enabled}
                     aria-label={translations.downAriaLabel}
                     onClick={() => {
                       moveDown(path, index)();
@@ -141,6 +149,7 @@ export const ArrayControl = ({
                   <button
                     type='button'
                     className={buttonClassDelete}
+                    disabled={!enabled}
                     aria-label={translations.removeAriaLabel}
                     onClick={() => {
                       if (
@@ -184,7 +193,9 @@ export const ArrayControlRenderer = ({
   enabled,
   errors,
   translations,
-}: ArrayControlProps & VanillaRendererProps) => {
+  arraySchema,
+}: ArrayControlProps &
+  VanillaRendererProps & { translations: ArrayTranslations }) => {
   const controlElement = uischema as ControlElement;
   const labelDescription = Helpers.createLabelDescriptionFrom(
     controlElement,
@@ -211,6 +222,7 @@ export const ArrayControlRenderer = ({
       label={label}
       path={path}
       schema={schema}
+      arraySchema={arraySchema}
       errors={errors}
       addItem={addItem}
       removeItems={removeItems}
@@ -230,5 +242,7 @@ export const ArrayControlRenderer = ({
 };
 
 export default withVanillaControlProps(
-  withJsonFormsArrayControlProps(ArrayControlRenderer)
+  withJsonFormsArrayControlProps(
+    withTranslateProps(withArrayTranslationProps(ArrayControlRenderer))
+  )
 );

@@ -1,0 +1,67 @@
+/*
+  The MIT License
+  
+  Copyright (c) 2017-2019 EclipseSource Munich
+  https://github.com/eclipsesource/jsonforms
+  
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+  
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+  
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+  THE SOFTWARE.
+*/
+
+import get from 'lodash/get';
+import {
+  ErrorTranslator,
+  JsonFormsI18nState,
+  Translator,
+  JsonFormsState,
+} from '../store';
+import { defaultErrorTranslator, defaultTranslator } from './i18nUtil';
+
+export const fetchLocale = (state?: JsonFormsI18nState) => {
+  if (state === undefined) {
+    return undefined;
+  }
+  return state.locale;
+};
+
+export const fetchTranslator = (state?: JsonFormsI18nState) => {
+  if (state === undefined) {
+    return defaultTranslator;
+  }
+  return state.translate;
+};
+
+export const fetchErrorTranslator = (state?: JsonFormsI18nState) => {
+  if (state === undefined) {
+    return defaultErrorTranslator;
+  }
+  return state.translateError;
+};
+
+export const getLocale = (state: JsonFormsState) =>
+  fetchLocale(get(state, 'jsonforms.i18n'));
+
+export const getTranslator =
+  () =>
+  (state: JsonFormsState): Translator =>
+    fetchTranslator(get(state, 'jsonforms.i18n'));
+
+export const getErrorTranslator =
+  () =>
+  (state: JsonFormsState): ErrorTranslator =>
+    fetchErrorTranslator(get(state, 'jsonforms.i18n'));

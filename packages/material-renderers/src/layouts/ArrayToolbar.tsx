@@ -7,7 +7,7 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import { Add } from '@mui/icons-material';
 import React from 'react';
 import ValidationIcon from '../complex/ValidationIcon';
 import { ArrayTranslations } from '@jsonforms/core';
@@ -20,6 +20,7 @@ export interface ArrayLayoutToolbarProps {
   addItem(path: string, data: any): () => void;
   createDefault(): any;
   translations: ArrayTranslations;
+  disableAdd?: boolean;
 }
 export const ArrayLayoutToolbar = React.memo(function ArrayLayoutToolbar({
   label,
@@ -30,24 +31,25 @@ export const ArrayLayoutToolbar = React.memo(function ArrayLayoutToolbar({
   enabled,
   createDefault,
   translations,
+  disableAdd,
 }: ArrayLayoutToolbarProps) {
   return (
     <Toolbar disableGutters={true}>
-      <Stack>
+      <Stack width='100%'>
         <Grid container alignItems='center' justifyContent='space-between'>
-          <Grid item>
+          <Grid>
             <Grid
               container
               justifyContent={'flex-start'}
               alignItems={'center'}
               spacing={2}
             >
-              <Grid item>
+              <Grid>
                 <Typography variant={'h6'}>{label}</Typography>
               </Grid>
-              <Grid item>
+              <Grid>
                 {errors.length !== 0 && (
-                  <Grid item>
+                  <Grid>
                     <ValidationIcon
                       id='tooltip-validation'
                       errorMessages={errors}
@@ -57,10 +59,10 @@ export const ArrayLayoutToolbar = React.memo(function ArrayLayoutToolbar({
               </Grid>
             </Grid>
           </Grid>
-          {enabled && (
-            <Grid item>
+          {enabled && !disableAdd && (
+            <Grid>
               <Grid container>
-                <Grid item>
+                <Grid>
                   <Tooltip
                     id='tooltip-add'
                     title={translations.addTooltip}
@@ -71,7 +73,7 @@ export const ArrayLayoutToolbar = React.memo(function ArrayLayoutToolbar({
                       onClick={addItem(path, createDefault())}
                       size='large'
                     >
-                      <AddIcon />
+                      <Add />
                     </IconButton>
                   </Tooltip>
                 </Grid>

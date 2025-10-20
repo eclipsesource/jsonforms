@@ -105,6 +105,7 @@ import { MatDatepicker } from '@angular/material/datepicker';
       useClass: MyFormat,
     },
   ],
+  standalone: false,
 })
 export class DateControlRenderer extends JsonFormsControl {
   focused = false;

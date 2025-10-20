@@ -40,9 +40,6 @@ import { JsonFormsDetailComponent } from '../src/library/other/master-detail/det
 import { getJsonFormsService, setupMockStore } from './common';
 import { Actions } from '@jsonforms/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { initTestEnvironment } from './test';
-
-initTestEnvironment();
 
 describe('Master detail', () => {
   let fixture: ComponentFixture<MasterListComponent>;

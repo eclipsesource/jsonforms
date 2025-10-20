@@ -26,29 +26,39 @@ import React, { useCallback } from 'react';
 
 import {
   ArrayLayoutProps,
+  ArrayTranslations,
   isObjectArrayWithNesting,
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
 import { MaterialArrayLayout } from './MaterialArrayLayout';
-import { withJsonFormsArrayLayoutProps } from '@jsonforms/react';
+import {
+  withArrayTranslationProps,
+  withJsonFormsArrayLayoutProps,
+  withTranslateProps,
+} from '@jsonforms/react';
 
 export const MaterialArrayLayoutRenderer = ({
   visible,
   addItem,
+  translations,
   ...props
-}: ArrayLayoutProps) => {
+}: ArrayLayoutProps & { translations: ArrayTranslations }) => {
   const addItemCb = useCallback(
     (p: string, value: any) => addItem(p, value),
     [addItem]
   );
-
   if (!visible) {
     return null;
   }
 
   return (
-    <MaterialArrayLayout visible={visible} addItem={addItemCb} {...props} />
+    <MaterialArrayLayout
+      translations={translations}
+      visible={visible}
+      addItem={addItemCb}
+      {...props}
+    />
   );
 };
 
@@ -56,4 +66,6 @@ export const materialArrayLayoutTester: RankedTester = rankWith(
   4,
   isObjectArrayWithNesting
 );
-export default withJsonFormsArrayLayoutProps(MaterialArrayLayoutRenderer);
+export default withJsonFormsArrayLayoutProps(
+  withTranslateProps(withArrayTranslationProps(MaterialArrayLayoutRenderer))
+);

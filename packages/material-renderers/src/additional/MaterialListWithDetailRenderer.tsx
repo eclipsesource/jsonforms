@@ -25,6 +25,7 @@
 import {
   and,
   ArrayLayoutProps,
+  ArrayTranslations,
   composePaths,
   computeLabel,
   createDefaultValue,
@@ -36,7 +37,9 @@ import {
 } from '@jsonforms/core';
 import {
   JsonFormsDispatch,
+  withArrayTranslationProps,
   withJsonFormsArrayLayoutProps,
+  withTranslateProps,
 } from '@jsonforms/react';
 import { Grid, List, Typography } from '@mui/material';
 import map from 'lodash/map';
@@ -63,9 +66,11 @@ export const MaterialListWithDetailRenderer = ({
   cells,
   config,
   rootSchema,
-  translations,
   description,
-}: ArrayLayoutProps) => {
+  disableAdd,
+  disableRemove,
+  translations,
+}: ArrayLayoutProps & { translations: ArrayTranslations }) => {
   const [selectedIndex, setSelectedIndex] = useState(undefined);
   const handleRemoveItem = useCallback(
     (p: string, value: any) => () => {
@@ -99,7 +104,10 @@ export const MaterialListWithDetailRenderer = ({
       ),
     [uischemas, schema, uischema.scope, path, uischema, rootSchema]
   );
+
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
+  const doDisableAdd = disableAdd || appliedUiSchemaOptions.disableAdd;
+  const doDisableRemove = disableRemove || appliedUiSchemaOptions.disableRemove;
 
   React.useEffect(() => {
     setSelectedIndex(undefined);
@@ -124,9 +132,10 @@ export const MaterialListWithDetailRenderer = ({
         enabled={enabled}
         addItem={addItem}
         createDefault={handleCreateDefaultValue}
+        disableAdd={doDisableAdd}
       />
       <Grid container direction='row' spacing={2}>
-        <Grid item xs={3}>
+        <Grid size={3}>
           <List>
             {data > 0 ? (
               map(range(data), (index) => (
@@ -142,6 +151,7 @@ export const MaterialListWithDetailRenderer = ({
                   uischema={foundUISchema}
                   childLabelProp={appliedUiSchemaOptions.elementLabelProp}
                   translations={translations}
+                  disableRemove={doDisableRemove}
                 />
               ))
             ) : (
@@ -149,7 +159,7 @@ export const MaterialListWithDetailRenderer = ({
             )}
           </List>
         </Grid>
-        <Grid item xs>
+        <Grid size='grow'>
           {selectedIndex !== undefined ? (
             <JsonFormsDispatch
               renderers={renderers}
@@ -173,4 +183,6 @@ export const materialListWithDetailTester: RankedTester = rankWith(
   and(uiTypeIs('ListWithDetail'), isObjectArray)
 );
 
-export default withJsonFormsArrayLayoutProps(MaterialListWithDetailRenderer);
+export default withJsonFormsArrayLayoutProps(
+  withTranslateProps(withArrayTranslationProps(MaterialListWithDetailRenderer))
+);

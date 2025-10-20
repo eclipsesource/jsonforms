@@ -64,6 +64,7 @@ import { JsonFormsAngularService } from '@jsonforms/angular';
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class GroupLayoutRenderer extends LayoutRenderer<GroupLayout> {
   constructor(

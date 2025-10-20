@@ -36,11 +36,14 @@ import {
 } from '@jsonforms/angular';
 import {
   ArrayControlProps,
+  arrayDefaultTranslations,
   ArrayTranslations,
   ControlElement,
   createDefaultValue,
   decode,
+  defaultJsonFormsI18nState,
   findUISchema,
+  getArrayTranslations,
   getFirstPrimitiveProp,
   JsonFormsState,
   mapDispatchToArrayControlProps,
@@ -156,6 +159,7 @@ export const removeSchemaKeywords = (path: string) => {
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class MasterListComponent
   extends JsonFormsArrayControl
@@ -194,7 +198,9 @@ export class MasterListComponent
     this.removeItems = removeItems;
   }
 
-  mapAdditionalProps(props: ArrayControlProps) {
+  mapAdditionalProps(
+    props: ArrayControlProps & { translations: ArrayTranslations }
+  ) {
     const { data, path, schema, uischema } = props;
     const controlElement = uischema as ControlElement;
     this.propsPath = props.path;
@@ -282,9 +288,19 @@ export class MasterListComponent
     this.removeItems(this.propsPath, [item])();
   }
 
-  protected mapToProps(state: JsonFormsState): StatePropsOfArrayControl {
+  protected mapToProps(
+    state: JsonFormsState
+  ): StatePropsOfArrayControl & { translations: ArrayTranslations } {
     const props = mapStateToArrayControlProps(state, this.getOwnProps());
-    return { ...props };
+    const t =
+      state.jsonforms.i18n?.translate ?? defaultJsonFormsI18nState.translate;
+    const translations = getArrayTranslations(
+      t,
+      arrayDefaultTranslations,
+      props.i18nKeyPrefix,
+      props.label
+    );
+    return { ...props, translations };
   }
 }
 

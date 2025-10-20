@@ -45,23 +45,23 @@
 
     <dialog ref="dialog" :class="styles.dialog.root">
       <h1 :class="styles.dialog.title">
-        {{ control.translations.clearDialogTitle }}
+        {{ translations.clearDialogTitle }}
       </h1>
 
       <p :class="styles.dialog.body">
-        {{ control.translations.clearDialogMessage }}
+        {{ translations.clearDialogMessage }}
       </p>
 
       <div :class="styles.dialog.actions">
         <button :onclick="onCancel" :class="styles.dialog.buttonSecondary">
-          {{ control.translations.clearDialogDecline }}
+          {{ translations.clearDialogDecline }}
         </button>
         <button
           ref="confirm"
           :onclick="onConfirm"
           :class="styles.dialog.buttonPrimary"
         >
-          {{ control.translations.clearDialogAccept }}
+          {{ translations.clearDialogAccept }}
         </button>
       </div>
     </dialog>
@@ -70,12 +70,16 @@
 
 <script lang="ts">
 import {
+  combinatorDefaultTranslations,
   CombinatorSubSchemaRenderInfo,
   ControlElement,
   createCombinatorRenderInfos,
   createDefaultValue,
+  defaultJsonFormsI18nState,
+  getCombinatorTranslations,
   isOneOfControl,
   JsonFormsRendererRegistryEntry,
+  JsonFormsSubStates,
   rankWith,
 } from '@jsonforms/core';
 import {
@@ -85,7 +89,7 @@ import {
   useJsonFormsOneOfControl,
 } from '@jsonforms/vue';
 import isEmpty from 'lodash/isEmpty';
-import { defineComponent, nextTick, ref } from 'vue';
+import { defineComponent, inject, nextTick, ref } from 'vue';
 import { useVanillaControl } from '../util';
 import { ControlWrapper } from '../controls';
 import CombinatorProperties from './components/CombinatorProperties.vue';
@@ -137,6 +141,16 @@ const controlRenderer = defineComponent({
       return result
         .filter((info) => info.uischema)
         .map((info, index) => ({ ...info, index: index }));
+    },
+
+    translations(): any {
+      const jsonforms = inject<JsonFormsSubStates>('jsonforms');
+      return getCombinatorTranslations(
+        jsonforms?.i18n?.translate ?? defaultJsonFormsI18nState.translate,
+        combinatorDefaultTranslations,
+        this.control.i18nKeyPrefix,
+        this.control.label
+      );
     },
   },
   methods: {

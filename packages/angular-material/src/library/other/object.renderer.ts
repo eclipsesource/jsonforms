@@ -40,7 +40,7 @@ import {
   setReadonly,
   UISchemaElement,
 } from '@jsonforms/core';
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 
 @Component({
   selector: 'ObjectRenderer',
@@ -62,6 +62,7 @@ import { cloneDeep } from 'lodash';
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class ObjectControlRenderer extends JsonFormsControlWithDetail {
   detailUiSchema: UISchemaElement;

@@ -31,6 +31,7 @@ body {
   justify-content: center;
   align-items: center;
   margin-top: 20px;
+  gap: 20px;
 }
 .tools .example-selector h4 {
   margin: 0 10px 0 0;

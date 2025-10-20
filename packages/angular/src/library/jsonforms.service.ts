@@ -50,7 +50,7 @@ import {
 import { BehaviorSubject, Observable } from 'rxjs';
 import type { JsonFormsBaseRenderer } from './base.renderer';
 
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import type Ajv from 'ajv';
 import type { ErrorObject } from 'ajv';
 

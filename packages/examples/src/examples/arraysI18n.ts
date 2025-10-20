@@ -24,7 +24,7 @@
 */
 import { registerExamples } from '../register';
 import { ArrayTranslationEnum, Translator } from '@jsonforms/core';
-import { get } from 'lodash';
+import get from 'lodash/get';
 
 export const schema = {
   type: 'object',

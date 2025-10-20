@@ -59,7 +59,7 @@ export const MuiCheckbox = React.memo(function MuiCheckbox(
       className={className}
       id={id}
       disabled={!enabled}
-      inputProps={inputPropsMerged}
+      slotProps={{ input: inputPropsMerged }}
     />
   );
 });

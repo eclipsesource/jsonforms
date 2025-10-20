@@ -58,7 +58,7 @@ export const MuiToggle = React.memo(function MuiToggle(
       className={className}
       id={id}
       disabled={!enabled}
-      inputProps={inputPropsMerged}
+      slotProps={{ input: inputPropsMerged }}
     />
   );
 });

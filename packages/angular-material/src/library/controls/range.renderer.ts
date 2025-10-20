@@ -69,6 +69,7 @@ import { isRangeControl, RankedTester, rankWith } from '@jsonforms/core';
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class RangeControlRenderer extends JsonFormsControl {
   min: number;

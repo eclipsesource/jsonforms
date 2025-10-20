@@ -73,10 +73,17 @@ import * as listWithDetailPrimitives from './examples/list-with-detail-primitive
 import * as conditionalSchemaComposition from './examples/conditional-schema-compositions';
 import * as additionalErrors from './examples/additional-errors';
 import * as multiEnumWithLabelAndDesc from './examples/enum-multi-with-label-and-desc';
+import * as additionalProperties from './examples/additional-properties';
+import * as login from './examples/login';
+import * as mixed from './examples/mixed';
+import * as mixedObject from './examples/mixed-object';
+import * as string from './examples/string';
 export * from './register';
 export * from './example';
 
 import * as ifThenElse from './examples/if_then_else';
+import * as jsonschema from './examples/jsonschema';
+import * as jsoneditor from './examples/json-editor';
 
 export {
   issue_1948,
@@ -119,6 +126,8 @@ export {
   oneOfRecursive,
   huge,
   ifThenElse,
+  jsoneditor,
+  jsonschema,
   onChange,
   enumExample,
   radioGroupExample,
@@ -129,6 +138,11 @@ export {
   listWithDetailPrimitives,
   conditionalSchemaComposition,
   additionalErrors,
+  additionalProperties,
+  login,
+  mixed,
+  mixedObject,
   issue_1884,
   arrayWithDefaults,
+  string,
 };
