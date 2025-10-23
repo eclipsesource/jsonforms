@@ -36,17 +36,18 @@ jobs:
           git config user.name "jsonforms-publish[bot]"
           git config user.email "jsonforms-publish@eclipsesource.com"
 
-      - name: 'Setup node'
-        uses: 'actions/setup-node@v4'
-        with:
-          node-version: '22'
-          registry-url: 'https://registry.npmjs.org'
-
       - uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda # v4.1.0
         name: Install pnpm
         id: pnpm-install
         with:
           run_install: false
+
+      - name: 'Setup node'
+        uses: 'actions/setup-node@v4'
+        with:
+          node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
+          scope: '@jsonforms' # ensure OIDC token is tied to the scope
 
       - name: 'Install Packages'
         run: 'pnpm i --frozen-lockfile'
