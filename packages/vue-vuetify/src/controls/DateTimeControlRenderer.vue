@@ -227,7 +227,7 @@ import {
   VWindowItem,
 } from 'vuetify/components';
 
-import { vMaska, type MaskOptions, type MaskaDetail } from 'maska';
+import { vMaska, type MaskOptions } from 'maska';
 import { useDisplay, useLocale } from 'vuetify';
 import type { IconValue } from '../icons';
 import {
@@ -289,7 +289,7 @@ const controlRenderer = defineComponent({
     const t = useTranslator();
     const showMenu = ref(false);
     const activeTab = ref<'date' | 'time'>('date');
-    const adaptValue = (value: any) => (value === null ? clearValue : value);
+    const adaptValue = (value: any) => value || clearValue;
 
     const control = useVuetifyControl(useJsonFormsControl(props), adaptValue);
     const { mobile } = useDisplay();
@@ -299,7 +299,7 @@ const controlRenderer = defineComponent({
       typeof control.appliedOptions.value.dateTimeFormat == 'string'
         ? (expandLocaleFormat(control.appliedOptions.value.dateTimeFormat) ??
           control.appliedOptions.value.dateTimeFormat)
-        : (expandLocaleFormat('L LT') ?? 'YYYY-MM-DD H:mm'),
+        : (expandLocaleFormat('L LT') ?? 'YYYY-MM-DD HH:mm'),
     );
 
     const useMask = control.appliedOptions.value.mask !== false;
