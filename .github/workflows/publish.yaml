@@ -24,7 +24,7 @@ jobs:
   publish:
     permissions:
       contents: 'write'
-      id-token: 'write'
+      id-token: 'write' # Required for npm OIDC
     runs-on: 'ubuntu-latest'
     steps:
       - uses: 'actions/checkout@v4'
@@ -36,17 +36,21 @@ jobs:
           git config user.name "jsonforms-publish[bot]"
           git config user.email "jsonforms-publish@eclipsesource.com"
 
+      - uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda # v4.1.0
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          run_install: false
+
       - name: 'Setup node'
         uses: 'actions/setup-node@v4'
         with:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'
 
-      - uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda # v4.1.0
-        name: Install pnpm
-        id: pnpm-install
-        with:
-          run_install: false
+      # Ensure npm 11.5.1 or later for trusted publishing
+      - name: Update npm
+        run: npm install -g npm@latest
 
       - name: 'Install Packages'
         run: 'pnpm i --frozen-lockfile'
@@ -87,5 +91,4 @@ jobs:
         if: github.event.inputs.skip_publish == 'false'
         run: "pnpm publish --recursive ${{  github.event.inputs.stable_release == 'true' && ' ' || '--tag next' }}"
         env:
-          NODE_AUTH_TOKEN: '${{ secrets.NPM_TOKEN }}'
           NPM_CONFIG_PROVENANCE: 'true'
