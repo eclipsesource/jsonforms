@@ -2,10 +2,17 @@
   "name": "@jsonforms/material-renderers",
   "version": "3.7.0-alpha.1",
   "description": "Material Renderer Set for JSON Forms",
-  "repository": "https://github.com/eclipsesource/jsonforms",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eclipsesource/jsonforms.git",
+    "directory": "packages/material-renderers"
+  },
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
   "homepage": "http://jsonforms.io/",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "directories": {
     "example": "example",
     "src": "src",

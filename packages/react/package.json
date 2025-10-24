@@ -2,7 +2,11 @@
   "name": "@jsonforms/react",
   "version": "3.7.0-alpha.1",
   "description": "React module of JSON Forms",
-  "repository": "https://github.com/eclipsesource/jsonforms",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eclipsesource/jsonforms.git",
+    "directory": "packages/react"
+  },
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
   "homepage": "http://jsonforms.io/",
   "license": "MIT",

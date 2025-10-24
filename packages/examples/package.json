@@ -2,7 +2,11 @@
   "name": "@jsonforms/examples",
   "version": "3.7.0-alpha.1",
   "description": "JSON Forms Example Data",
-  "repository": "https://github.com/eclipsesource/jsonforms",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eclipsesource/jsonforms.git",
+    "directory": "packages/examples"
+  },
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
   "homepage": "http://jsonforms.io/",
   "license": "MIT",

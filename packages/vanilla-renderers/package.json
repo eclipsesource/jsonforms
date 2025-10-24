@@ -2,10 +2,17 @@
   "name": "@jsonforms/vanilla-renderers",
   "version": "3.7.0-alpha.1",
   "description": "Default Renderer Set for JSON Forms",
-  "repository": "https://github.com/eclipsesource/jsonforms",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eclipsesource/jsonforms.git",
+    "directory": "packages/vanilla-renderers"
+  },
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
   "homepage": "http://jsonforms.io/",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "lib/jsonforms-react-vanilla.cjs.js",
   "module": "lib/jsonforms-react-vanilla.esm.js",
   "typings": "lib/index.d.ts",
