@@ -223,6 +223,10 @@ module.exports = {
             from: '/docs/custom-renderers',
           },
           {
+            to: '/docs/tutorial/dynamic-enum',
+            from: '/docs/dynamic-enum',
+          },
+          {
             to: '/docs/tutorial/multiple-forms',
             from: '/docs/multiple-forms',
           },

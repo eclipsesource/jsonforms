@@ -22,7 +22,7 @@ module.exports = {
       type: 'category',
       label: 'Tutorials',
       collapsed: false,
-      items: ['tutorial/create-app', 'tutorial/custom-layouts', 'tutorial/custom-renderers', 'tutorial/multiple-forms'],
+      items: ['tutorial/create-app', 'tutorial/custom-layouts', 'tutorial/custom-renderers', 'tutorial/dynamic-enum', 'tutorial/multiple-forms'],
     },
     'api',
     {
