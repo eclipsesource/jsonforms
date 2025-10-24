@@ -126,6 +126,34 @@ If note done yet, please [install Vuetify for Vue](https://vuetifyjs.com/en/gett
 
 For more information on how JSON Forms can be configured, please see the [README of `@jsonforms/vue`](https://github.com/eclipsesource/jsonforms/blob/master/packages/vue/README.md).
 
+## Override the ControlWrapper component
+
+All control renderers wrap their components with a **`ControlWrapper`** component, which by default uses **`DefaultControlWrapper`** to render the wrapper element around each control.
+
+If you want to:
+
+- Replace the **`DefaultControlWrapper`** with your own implementation, or
+- Provide custom renderers that render their child controls differently,
+
+you can use Vue’s **`provide` / `inject` mechanism** to supply your own wrapper under the **`ControlWrapperSymbol`**.
+
+For example, the demo application includes a custom wrapper that can be enabled from the **Example App Settings**. It is registered like this:
+
+```ts
+import { provide, type DefineComponent } from 'vue';
+import {
+  ControlWrapperSymbol,
+  type ControlWrapperProps,
+} from '@jsonforms/vue-vuetify';
+
+import ControlWrapper from './components/ControlWrapper.vue';
+
+provide(
+  ControlWrapperSymbol,
+  ControlWrapper as DefineComponent<ControlWrapperProps>,
+);
+```
+
 ## License
 
 The JSONForms project is licensed under the MIT License. See the [LICENSE file](https://github.com/eclipsesource/jsonforms/blob/master/LICENSE) for more information.

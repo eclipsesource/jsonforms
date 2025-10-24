@@ -37,24 +37,19 @@
 </template>
 
 <script lang="ts">
-import {
-  type ControlElement,
-  type Tester,
-  type UISchemaElement,
-} from '@jsonforms/core';
+import { type ControlElement } from '@jsonforms/core';
 import {
   rendererProps,
   type RendererProps,
   useJsonFormsControl,
 } from '@jsonforms/vue';
-import isEmpty from 'lodash/isEmpty';
-import { defineComponent, computed } from 'vue';
+import cloneDeep from 'lodash/cloneDeep';
+import { Mask, type MaskTokens, vMaska } from 'maska';
+import { computed, defineComponent } from 'vue';
 import { VTextField } from 'vuetify/components';
 import { determineClearValue, useVuetifyControl } from '../util';
 import { default as ControlWrapper } from './ControlWrapper.vue';
 import { DisabledIconFocus } from './directives';
-import { type MaskTokens, vMaska, Mask } from 'maska';
-import cloneDeep from 'lodash/cloneDeep';
 
 const defaultTokens: MaskTokens = {
   '#': { pattern: /[0-9]/ },
@@ -187,20 +182,4 @@ const controlRenderer = defineComponent({
 });
 
 export default controlRenderer;
-
-const hasOption =
-  (optionName: string): Tester =>
-  (uischema: UISchemaElement): boolean => {
-    if (isEmpty(uischema)) {
-      return false;
-    }
-
-    const options = uischema.options;
-    return (
-      (options &&
-        !isEmpty(options) &&
-        typeof options[optionName] === 'string') ||
-      false
-    );
-  };
 </script>
