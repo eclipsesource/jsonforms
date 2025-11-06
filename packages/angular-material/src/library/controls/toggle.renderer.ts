@@ -35,6 +35,9 @@ import {
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
+import { CommonModule } from '@angular/common';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: 'ToggleControlRenderer',
@@ -55,7 +58,7 @@ import {
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+  imports: [CommonModule, MatSlideToggleModule, MatFormFieldModule],
 })
 export class ToggleControlRenderer extends JsonFormsControl {
   constructor(

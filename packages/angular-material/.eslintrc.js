@@ -22,8 +22,6 @@ module.exports = {
     '@angular-eslint/component-class-suffix': 'off',
     '@angular-eslint/directive-class-suffix': 'off',
     '@angular-eslint/no-conflicting-lifecycle': 'warn',
-    // Starting with Angular 19, non-standalone components produce a lint error. Reduce to warning until we migrate.
-    '@angular-eslint/prefer-standalone': 'warn',
     '@typescript-eslint/no-explicit-any': 'off',
     // Base rule must be disabled to avoid incorrect errors
     'no-unused-vars': 'off',

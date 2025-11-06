@@ -41,6 +41,11 @@ import {
 } from '@jsonforms/core';
 import type { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 /**
  * To use this component you will need to add your own tester:
@@ -110,7 +115,13 @@ import { map, startWith } from 'rxjs/operators';
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatAutocompleteModule,
+  ],
 })
 export class AutocompleteControlRenderer
   extends JsonFormsControl

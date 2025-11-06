@@ -67,7 +67,6 @@ const areEqual = (
 
 @Directive({
   selector: 'jsonforms-outlet',
-  standalone: false,
 })
 export class JsonFormsOutlet
   extends JsonFormsBaseRenderer<UISchemaElement>

@@ -43,7 +43,10 @@ import { Component, OnInit } from '@angular/core';
 import {
   JsonFormsAngularService,
   JsonFormsBaseRenderer,
+  JsonFormsModule,
 } from '@jsonforms/angular';
+import { CommonModule } from '@angular/common';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @Component({
   selector: 'jsonforms-categorization-layout',
@@ -66,7 +69,7 @@ import {
       </mat-tab>
     </mat-tab-group>
   `,
-  standalone: false,
+  imports: [CommonModule, JsonFormsModule, MatTabsModule],
 })
 export class CategorizationTabLayoutRenderer
   extends JsonFormsBaseRenderer<Categorization>

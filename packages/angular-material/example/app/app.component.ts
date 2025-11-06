@@ -23,6 +23,8 @@
   THE SOFTWARE.
 */
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { JsonFormsModule } from '@jsonforms/angular';
 import { ExampleDescription, getExamples } from '@jsonforms/examples';
 import {
   JsonFormsI18nState,
@@ -87,7 +89,7 @@ const itemTester: UISchemaTester = (_schema, schemaPath, _path) => {
       [readonly]="readonly"
     ></jsonforms>
   `,
-  standalone: false,
+  imports: [CommonModule, JsonFormsModule],
 })
 export class AppComponent {
   readonly renderers = angularMaterialRenderers;

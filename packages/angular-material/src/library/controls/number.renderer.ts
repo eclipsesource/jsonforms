@@ -33,6 +33,10 @@ import {
   StatePropsOfControl,
 } from '@jsonforms/core';
 import merge from 'lodash/merge';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'NumberControlRenderer',
@@ -69,7 +73,12 @@ import merge from 'lodash/merge';
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+  ],
 })
 export class NumberControlRenderer extends JsonFormsControl {
   private readonly MAXIMUM_FRACTIONAL_DIGITS = 20;

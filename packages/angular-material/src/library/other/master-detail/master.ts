@@ -30,6 +30,11 @@ import {
   Component,
   OnInit,
 } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import {
   JsonFormsAngularService,
   JsonFormsArrayControl,
@@ -54,6 +59,7 @@ import {
   StatePropsOfArrayControl,
   uiTypeIs,
 } from '@jsonforms/core';
+import { JsonFormsDetailComponent } from './detail';
 
 const keywords = ['#', 'properties', 'items'];
 
@@ -159,7 +165,14 @@ export const removeSchemaKeywords = (path: string) => {
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+  imports: [
+    CommonModule,
+    MatSidenavModule,
+    MatListModule,
+    MatButtonModule,
+    MatIconModule,
+    JsonFormsDetailComponent,
+  ],
 })
 export class MasterListComponent
   extends JsonFormsArrayControl

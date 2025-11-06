@@ -29,11 +29,11 @@ import { AppComponent } from './app.component';
 import { JsonFormsAngularMaterialModule } from '../../src/library';
 
 @NgModule({
-  declarations: [AppComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     JsonFormsAngularMaterialModule,
+    AppComponent,
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

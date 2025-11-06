@@ -45,7 +45,6 @@ import { JsonFormsAngularService } from './jsonforms.service';
 import merge from 'lodash/merge';
 @Component({
   template: '',
-  standalone: false,
 })
 export abstract class JsonFormsAbstractControl<
     Props extends StatePropsOfControl

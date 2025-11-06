@@ -140,8 +140,10 @@ describe('Table', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [TableRenderer, TextControlRenderer, GetProps],
       imports: [
+        TableRenderer,
+        TextControlRenderer,
+        GetProps,
         CommonModule,
         JsonFormsModule,
         MatCardModule,

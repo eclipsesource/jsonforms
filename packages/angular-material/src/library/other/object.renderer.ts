@@ -28,7 +28,9 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import {
   JsonFormsAngularService,
   JsonFormsControlWithDetail,
+  JsonFormsModule,
 } from '@jsonforms/angular';
+import { MatCardModule } from '@angular/material/card';
 import {
   ControlWithDetailProps,
   findUISchema,
@@ -62,7 +64,7 @@ import cloneDeep from 'lodash/cloneDeep';
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+  imports: [JsonFormsModule, MatCardModule],
 })
 export class ObjectControlRenderer extends JsonFormsControlWithDetail {
   detailUiSchema: UISchemaElement;
