@@ -1,8 +1,12 @@
 {
   "name": "@jsonforms/vue-vuetify",
-  "version": "3.7.0-alpha.1",
+  "version": "3.7.0-alpha.2",
   "description": "Vue Vuetify renderers for JSON Forms",
-  "repository": "https://github.com/eclipsesource/jsonforms",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eclipsesource/jsonforms.git",
+    "directory": "packages/vue-vuetify"
+  },
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
   "homepage": "http://jsonforms.io/",
   "license": "MIT",
@@ -58,8 +62,8 @@
     "type-check": "vue-tsc --build --force"
   },
   "peerDependencies": {
-    "@jsonforms/core": "3.7.0-alpha.1",
-    "@jsonforms/vue": "3.7.0-alpha.1",
+    "@jsonforms/core": "3.7.0-alpha.2",
+    "@jsonforms/vue": "3.7.0-alpha.2",
     "ajv": "^8.6.1",
     "dayjs": "^1.10.6",
     "lodash": "^4.17.21",
