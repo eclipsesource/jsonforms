@@ -1,11 +1,18 @@
 {
   "name": "@jsonforms/material-renderers",
-  "version": "3.7.0-alpha.1",
+  "version": "3.7.0-alpha.2",
   "description": "Material Renderer Set for JSON Forms",
-  "repository": "https://github.com/eclipsesource/jsonforms",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eclipsesource/jsonforms.git",
+    "directory": "packages/material-renderers"
+  },
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
   "homepage": "http://jsonforms.io/",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "directories": {
     "example": "example",
     "src": "src",
@@ -86,11 +93,11 @@
   "peerDependencies": {
     "@emotion/react": "^11.5.0",
     "@emotion/styled": "^11.3.0",
-    "@jsonforms/core": "3.7.0-alpha.1",
-    "@jsonforms/react": "3.7.0-alpha.1",
+    "@jsonforms/core": "3.7.0-alpha.2",
+    "@jsonforms/react": "3.7.0-alpha.2",
     "@mui/icons-material": "^7.0.0",
     "@mui/material": "^7.0.0",
-    "@mui/x-date-pickers": "^7.28.0",
+    "@mui/x-date-pickers": "^8.0.0",
     "react": "^16.12.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
   },
   "devDependencies": {
@@ -100,7 +107,7 @@
     "@jsonforms/react": "workspace:*",
     "@mui/icons-material": "^7.3.0",
     "@mui/material": "^7.3.0",
-    "@mui/x-date-pickers": "^7.29.4",
+    "@mui/x-date-pickers": "^8.11.3",
     "@rollup/plugin-commonjs": "^23.0.3",
     "@rollup/plugin-json": "^5.0.2",
     "@rollup/plugin-node-resolve": "^15.0.1",
