@@ -41,10 +41,12 @@ import {
   createOnChangeHandler,
   getData,
   useFocus,
+  useInputVariant,
 } from '../util';
 
 export const MaterialDateControl = (props: ControlProps) => {
   const [focused, onFocus, onBlur] = useFocus();
+  const inputVariant = useInputVariant();
   const {
     description,
     id,
@@ -75,6 +77,7 @@ export const MaterialDateControl = (props: ControlProps) => {
   const saveFormat = appliedUiSchemaOptions.dateSaveFormat ?? defaultDateFormat;
 
   const views = appliedUiSchemaOptions.views ?? ['year', 'day'];
+  const closeOnSelect = appliedUiSchemaOptions.closeOnSelect ?? true;
 
   const firstFormHelperText = showDescription
     ? description
@@ -100,7 +103,7 @@ export const MaterialDateControl = (props: ControlProps) => {
         updateChild,
         onBlur
       ),
-    [path, handleChange, format, saveFormat, updateChild]
+    [path, handleChange, format, saveFormat, updateChild, onBlur]
   );
   const value = getData(data, saveFormat);
 
@@ -121,23 +124,25 @@ export const MaterialDateControl = (props: ControlProps) => {
         format={format}
         views={views}
         disabled={!enabled}
+        closeOnSelect={closeOnSelect}
         slotProps={{
-          actionBar: ({ wrapperVariant }) => ({
+          actionBar: ({ pickerVariant }) => ({
             actions:
-              wrapperVariant === 'desktop' ? [] : ['clear', 'cancel', 'accept'],
+              pickerVariant === 'desktop' ? [] : ['clear', 'cancel', 'accept'],
           }),
           textField: {
             id: id + '-input',
             required: required && !appliedUiSchemaOptions.hideRequiredAsterisk,
-            autoFocus: appliedUiSchemaOptions.focus,
             error: !isValid,
             fullWidth: !appliedUiSchemaOptions.trim,
+            variant: inputVariant,
             inputProps: {
+              autoFocus: appliedUiSchemaOptions.focus,
               type: 'text',
+              onFocus: onFocus,
+              onBlur: onBlurHandler,
             },
             InputLabelProps: data ? { shrink: true } : undefined,
-            onFocus: onFocus,
-            onBlur: onBlurHandler,
           },
         }}
       />
