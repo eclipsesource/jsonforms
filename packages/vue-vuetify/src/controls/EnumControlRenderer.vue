@@ -22,7 +22,6 @@
       :items="control.options"
       item-title="label"
       item-value="value"
-      :return-object="true"
       v-bind="vuetifyProps('v-select')"
       @update:model-value="onChange"
       @focus="handleFocus"
@@ -58,8 +57,8 @@ const controlRenderer = defineComponent({
   },
   setup(props: RendererProps<ControlElement>) {
     const clearValue = determineClearValue('');
-    return useVuetifyControl(useJsonFormsEnumControl(props), (item) =>
-      item === null ? clearValue : item.value,
+    return useVuetifyControl(useJsonFormsEnumControl(props), (value) =>
+      value === null ? clearValue : value,
     );
   },
 });
