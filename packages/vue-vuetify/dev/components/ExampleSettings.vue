@@ -259,6 +259,24 @@ const layouts = appstoreLayouts.map((value: AppstoreLayouts) => ({
     </v-container>
 
     <v-divider />
+    <v-container>
+      <v-row>
+        <v-col>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ props }">
+              <v-switch
+                v-model="appStore.overrideControlTemplate"
+                label="Use custom ControlWrapper"
+                v-bind="props"
+              ></v-switch>
+            </template>
+            This shows how ControlWrapper can be overriden, uses Example app
+            custom ControlWrapper. Visible when control is on focus.
+          </v-tooltip>
+        </v-col>
+      </v-row>
+    </v-container>
+    <v-divider />
 
     <v-container>
       <v-row><v-col>Options</v-col></v-row>

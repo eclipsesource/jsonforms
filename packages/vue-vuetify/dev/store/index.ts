@@ -17,6 +17,7 @@ const appstore = reactive({
   variant: useLocalStorage('vuetify-example-variant', ''),
   iconset: useLocalStorage('vuetify-example-iconset', 'mdi'),
   blueprint: useLocalStorage('vuetify-example-blueprint', 'md1'),
+  overrideControlTemplate: false,
   jsonforms: {
     readonly: useHistoryHashQuery('read-only', false as boolean),
     validationMode: 'ValidateAndShow' as ValidationMode,
