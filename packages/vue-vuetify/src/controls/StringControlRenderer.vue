@@ -99,7 +99,7 @@ const controlRenderer = defineComponent({
     const clearValue = determineClearValue('');
     return useVuetifyControl(
       useJsonFormsControl(props),
-      (value) => (value === null ? clearValue : value),
+      (value) => value || clearValue,
       300,
     );
   },

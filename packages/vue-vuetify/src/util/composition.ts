@@ -484,12 +484,7 @@ export const useIcons = () => {
 };
 
 export const determineClearValue = (defaultValue: any) => {
-  const jsonforms = useJsonForms();
-
-  const useDefaultValue = inject<boolean>(
-    IsDynamicPropertyContext,
-    jsonforms.core?.schema.type !== 'object',
-  );
+  const useDefaultValue = inject<boolean>(IsDynamicPropertyContext, false);
 
   // undefined will clear the property from the object
   return useDefaultValue ? defaultValue : undefined;
