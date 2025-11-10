@@ -77,7 +77,7 @@ const controlRenderer = defineComponent({
   },
   setup(props: RendererProps<ControlElement>) {
     const clearValue = determineClearValue('');
-    const adaptValue = (value: any) => (value === null ? clearValue : value);
+    const adaptValue = (value: any) => value || clearValue;
     const control = useVuetifyControl(useJsonFormsControl(props), adaptValue);
 
     const toTokens = (tokenParams: Record<string, any>): MaskTokens => {
