@@ -163,7 +163,7 @@ const controlRenderer = defineComponent({
 
     const showMenu = ref(false);
 
-    const adaptValue = (value: any) => (value === null ? clearValue : value);
+    const adaptValue = (value: any) => value || clearValue;
     const control = useVuetifyControl(useJsonFormsControl(props), adaptValue);
 
     const icons = useIcons();
