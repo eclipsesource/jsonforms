@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/angular",
-  "version": "3.7.0-alpha.2",
+  "version": "3.7.0-alpha.3",
   "description": "Angular module of JSON Forms",
   "repository": {
     "type": "git",
@@ -73,7 +73,7 @@
   "peerDependencies": {
     "@angular/core": "^19.0.0 || ^20.0.0 || ^21.0.0-rc.0",
     "@angular/forms": "^19.0.0 || ^20.0.0 || ^21.0.0-rc.0",
-    "@jsonforms/core": "3.7.0-alpha.2",
+    "@jsonforms/core": "3.7.0-alpha.3",
     "rxjs": "^6.6.0 || ^7.4.0"
   },
   "devDependencies": {

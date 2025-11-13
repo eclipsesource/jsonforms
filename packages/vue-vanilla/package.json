@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/vue-vanilla",
-  "version": "3.7.0-alpha.2",
+  "version": "3.7.0-alpha.3",
   "description": "Vue 3 Vanilla renderers for JSON Forms",
   "repository": {
     "type": "git",
@@ -97,8 +97,8 @@
     "vue-jest": "^5.0.0-0"
   },
   "peerDependencies": {
-    "@jsonforms/core": "3.7.0-alpha.2",
-    "@jsonforms/vue": "3.7.0-alpha.2",
+    "@jsonforms/core": "3.7.0-alpha.3",
+    "@jsonforms/vue": "3.7.0-alpha.3",
     "vue": "^3.5.0"
   }
 }
