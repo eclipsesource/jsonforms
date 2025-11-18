@@ -31,7 +31,7 @@
     "babel-loader": "^8.0.6",
     "core-js": "^3.9.1",
     "coveralls": "^3.0.9",
-    "cross-env": "^7.0.2",
+    "cross-env": "^10.1.0",
     "css-loader": "^3.2.0",
     "istanbul-lib-coverage": "^3.2.0",
     "lcov-result-merger": "^3.1.0",
