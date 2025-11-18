@@ -97,7 +97,7 @@
     "eslint": "^8.57.0",
     "eslint-plugin-vue": "^9.23.0",
     "eslint-plugin-vue-scoped-css": "^2.8.0",
-    "jsdom": "^24.0.0",
+    "jsdom": "^27.2.0",
     "json-refs": "3.0.15",
     "lodash": "^4.17.21",
     "maska": "^2.1.11",
