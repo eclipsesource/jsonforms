@@ -4,7 +4,7 @@
     "node": "^22",
     "pnpm": "^10.4.1"
   },
-  "packageManager": "pnpm@10.14.0+sha512.ad27a79641b49c3e481a16a805baa71817a04bbe06a38d17e60e2eaee83f6a146c6a688125f5792e48dd5ba30e7da52a5cda4c3992b9ccf333f9ce223af84748",
+  "packageManager": "pnpm@10.22.0+sha512.bf049efe995b28f527fd2b41ae0474ce29186f7edcb3bf545087bd61fbbebb2bf75362d1307fda09c2d288e1e499787ac12d4fcb617a974718a6051f2eee741c",
   "scripts": {
     "lerna": "lerna",
     "preparePublish": "git clean -dfx && pnpm i --frozen-lockfile && pnpm run clean && pnpm run build && pnpm run doc && pnpm run test",
