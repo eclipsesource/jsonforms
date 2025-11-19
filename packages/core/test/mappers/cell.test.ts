@@ -280,7 +280,7 @@ test('mapStateToCellProps - translated error', (t) => {
   };
   const state = createState(coreUISchema);
   if (state.jsonforms.core === undefined) {
-    fail('Failed to create jsonforms core state');
+    t.fail('Failed to create jsonforms core state');
   }
   const schema = state.jsonforms.core?.schema as JsonSchema;
   const data = state.jsonforms.core?.data as any;
