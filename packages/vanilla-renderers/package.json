@@ -67,6 +67,7 @@
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-replace": "^5.0.1",
     "@types/enzyme": "^3.10.3",
+    "@types/jest": "^29.5.14",
     "@types/react": "^17.0.24",
     "@typescript-eslint/eslint-plugin": "^5.54.1",
     "@typescript-eslint/parser": "^5.54.1",

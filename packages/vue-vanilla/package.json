@@ -62,7 +62,7 @@
     "@jsonforms/core": "workspace:*",
     "@jsonforms/vue": "workspace:*",
     "@types/chai": "^4.2.11",
-    "@types/jest": "^27.4.1",
+    "@types/jest": "^29.5.14",
     "@types/mocha": "^5.2.4",
     "@types/node": "^22.13.8",
     "@typescript-eslint/eslint-plugin": "^5.54.1",
