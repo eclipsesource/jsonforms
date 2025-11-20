@@ -1,0 +1,46 @@
+## JSON Forms Project information
+
+JSON Forms is a declarative framework for efficiently building form-based web UIs.
+These UIs are targeted at entering, modifying and viewing data and are usually embedded within an application.
+
+Any UI is defined by using two schemata:
+ - The JSON schema defines the underlying data to be shown in the UI (objects, properties, and their types)
+ - The UI schema defines how this data is rendered as a form, e.g. the order of controls, their visibility, and the layout.
+   If no UI schema is given, it will be auto generated
+
+We put great emphasis on the customizability and extensibility of JSON Forms.
+
+### Architecture overview
+
+The JSON Forms mono repository consists of these packages:
+ - `@jsonforms/core` in `packages/core`: Provides utilities for managing and rendering JSON Schema based forms.
+   The core package is independent of any UI technology.
+ - `@jsonforms/react` in `packages/react`, `@jsonforms/angular` in `packages/angular`, `@jsonforms/vue` in `packages/vue`.
+   These use the core package to provide specialized bindings for React, Angular and Vue, leveraging each respective's state management and rendering systems.
+ - For React we maintain two renderer sets: The `@jsonforms/material-renderers` in `packages/material-renderers`, which are based on the popular Material-UI framework and `@jsonforms/vanilla-renderers` in `packages/vanilla-renderers` which provides pure HTML5 renderers.
+   For Angular we provide an Angular Material based renderer set (`@jsonforms/angular-material` in `packages/angular-material`). For Vue we provide a HTML5 based renderer set `@jsonforms/vue-vanilla` in `packages/vue-vanilla` and a Vuetify based one `@jsonforms/vue-vuetify` in `packages/vue-vuetify`.
+
+### Core principles
+
+JSON Forms uses a reducer-style approach for its state management.
+The form-wide state is manipulated via the reducers in packages/core/src/reducers.
+
+Renderers are registered in a registry, consisting of tester,renderer pairs.
+For each UI Schema element to be rendered, all testers are asked for their priority.
+The highest priority wins and the respective renderer gets full control over rendering.
+The renderer may dispatch back to JSON Forms to render children elements.
+
+Dispatchers only receive a minimal amount of properties, e.g. which part of the JSON Schema they are refering to and which UI Schema element is to be rendered.
+Mappers in packages/core/src/mappers are then used to determine the actual props for the renderers to work with, combining the handed over dispatch props and the form-wide state.
+
+The binding packages `@jsonforms/react`, `@jsonforms/angular` and `@jsonforms/vue` bind these functionalities to mechanisms of their respective framework.
+The renderers then use the bound functionalities and usually do not interact with `@jsonforms/core` directly.
+
+### Coding Guidelines
+
+When creating new functions we prefer the arrow style approach
+
+### Development Guidelines
+
+The framework is popular, therefore we never break adopters if we don't have to.
+Consider this for all changes.
