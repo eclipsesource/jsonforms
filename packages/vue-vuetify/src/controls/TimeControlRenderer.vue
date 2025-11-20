@@ -25,6 +25,9 @@
       @blur="handleBlur"
       v-maska:[options]
     >
+      <template v-slot:prepend v-if="$slots.prepend">
+        <slot name="prepend" />
+      </template>
       <template v-slot:prepend-inner>
         <v-menu
           v-model="showMenu"
