@@ -26,7 +26,7 @@
           ? control.schema.maxLength
           : undefined
       "
-      :clearable="control.enabled"
+      :clearable="appliedOptions.clearable !== undefined ? appliedOptions.clearable : control.enabled"
       :model-value="control.data"
       :items="suggestions"
       hide-no-data
@@ -34,7 +34,14 @@
       @update:model-value="onChange"
       @focus="handleFocus"
       @blur="handleBlur"
-    />
+    >
+      <template v-slot:prepend v-if="$slots.prepend">
+        <slot name="prepend" />
+      </template>
+      <template v-slot:append v-if="$slots.append">
+        <slot name="append" />
+      </template>
+    </v-combobox>
     <v-text-field
       v-else
       v-disabled-icon-focus
@@ -57,12 +64,19 @@
           ? control.schema.maxLength
           : undefined
       "
-      :clearable="control.enabled"
+      :clearable="appliedOptions.clearable !== undefined ? appliedOptions.clearable : control.enabled"
       v-bind="vuetifyProps('v-text-field')"
       @update:model-value="onChange"
       @focus="handleFocus"
       @blur="handleBlur"
-    />
+    >
+      <template v-slot:prepend v-if="$slots.prepend">
+        <slot name="prepend" />
+      </template>
+      <template v-slot:append v-if="$slots.append">
+        <slot name="append" />
+      </template>
+    </v-text-field>
   </control-wrapper>
 </template>
 
