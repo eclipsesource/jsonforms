@@ -25,7 +25,7 @@
           ? control.schema.maxLength
           : undefined
       "
-      :clearable="appliedOptions.clearable !== undefined ? appliedOptions.clearable : control.enabled"
+      :clearable="clearable"
       @click:clear="clear"
       v-bind="vuetifyProps('v-text-field')"
       @focus="handleFocus"

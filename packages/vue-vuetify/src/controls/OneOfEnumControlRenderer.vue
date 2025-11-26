@@ -17,7 +17,7 @@
       :persistent-hint="persistentHint()"
       :required="control.required"
       :error-messages="control.errors"
-      :clearable="appliedOptions.clearable !== undefined ? appliedOptions.clearable : control.enabled"
+      :clearable="clearable"
       :model-value="control.data"
       :items="control.options"
       item-title="label"

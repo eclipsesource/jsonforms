@@ -26,7 +26,7 @@
           ? control.schema.maxLength
           : undefined
       "
-      :clearable="appliedOptions.clearable !== undefined ? appliedOptions.clearable : control.enabled"
+      :clearable="clearable"
       multi-line
       v-bind="vuetifyProps('v-textarea')"
       @update:model-value="onChange"

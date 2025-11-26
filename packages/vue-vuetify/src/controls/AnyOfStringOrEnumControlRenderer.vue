@@ -27,7 +27,7 @@
           : undefined
       "
       :items="items"
-      :clearable="appliedOptions.clearable !== undefined ? appliedOptions.clearable : control.enabled"
+      :clearable="clearable"
       v-bind="vuetifyProps('v-combobox')"
       @update:model-value="onChange"
       @focus="handleFocus"

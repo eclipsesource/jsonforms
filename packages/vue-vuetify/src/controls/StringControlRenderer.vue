@@ -26,7 +26,7 @@
           ? control.schema.maxLength
           : undefined
       "
-      :clearable="appliedOptions.clearable !== undefined ? appliedOptions.clearable : control.enabled"
+      :clearable="clearable"
       :model-value="control.data"
       :items="suggestions"
       hide-no-data
@@ -64,7 +64,7 @@
           ? control.schema.maxLength
           : undefined
       "
-      :clearable="appliedOptions.clearable !== undefined ? appliedOptions.clearable : control.enabled"
+      :clearable="clearable"
       v-bind="vuetifyProps('v-text-field')"
       @update:model-value="onChange"
       @focus="handleFocus"

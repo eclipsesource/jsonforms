@@ -19,7 +19,7 @@
       :required="control.required"
       :error-messages="control.errors"
       :model-value="value"
-      :clearable="appliedOptions.clearable !== undefined ? appliedOptions.clearable : control.enabled"
+      :clearable="clearable"
       v-bind="vuetifyProps('v-text-field')"
       @update:model-value="onChange"
       @focus="handleFocus"

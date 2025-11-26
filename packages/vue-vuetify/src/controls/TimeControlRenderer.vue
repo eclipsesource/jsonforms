@@ -19,7 +19,7 @@
       :error-messages="control.errors"
       v-bind="vuetifyProps('v-text-field')"
       v-model="inputModel"
-      :clearable="appliedOptions.clearable !== undefined ? appliedOptions.clearable : control.enabled"
+      :clearable="clearable"
       @focus="handleFocus"
       @blur="handleBlur"
       v-maska:[options]="maska"
