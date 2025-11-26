@@ -78,6 +78,7 @@ import * as login from './examples/login';
 import * as mixed from './examples/mixed';
 import * as mixedObject from './examples/mixed-object';
 import * as string from './examples/string';
+import * as prependAppendSlots from './examples/prepend-append-slots';
 export * from './register';
 export * from './example';
 
@@ -145,4 +146,5 @@ export {
   issue_1884,
   arrayWithDefaults,
   string,
+  prependAppendSlots,
 };
