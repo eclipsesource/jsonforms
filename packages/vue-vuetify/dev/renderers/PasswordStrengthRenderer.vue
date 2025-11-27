@@ -8,7 +8,6 @@
           <v-icon
             v-bind="tooltipProps"
             :color="strengthColor"
-            size="small"
             class="mr-1"
             aria-hidden="true"
             tabindex="-1"
@@ -82,5 +81,4 @@ const strengthTooltip = computed(() => {
   ];
   return `${labels[strength.value]}: ${tips[strength.value]}`;
 });
-
 </script>

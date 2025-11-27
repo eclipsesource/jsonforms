@@ -133,11 +133,12 @@ For more information on how JSON Forms can be configured, please see the [README
 All control renderers now support `prepend` and `append` slots, allowing you to add custom content before or after input fields without creating entirely custom renderers.
 
 **Example:**
+
 ```vue
 <template>
   <string-control-renderer v-bind="$props">
     <template #prepend>
-      <v-icon size="small">mdi-help-circle</v-icon>
+      <v-icon>mdi-help-circle</v-icon>
     </template>
   </string-control-renderer>
 </template>
