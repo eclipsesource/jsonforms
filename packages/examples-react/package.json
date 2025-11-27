@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/examples-react",
-  "version": "3.7.0-beta.0",
+  "version": "3.7.0",
   "private": true,
   "dependencies": {
     "@jsonforms/core": "workspace:*",

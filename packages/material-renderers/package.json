@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/material-renderers",
-  "version": "3.7.0-beta.0",
+  "version": "3.7.0",
   "description": "Material Renderer Set for JSON Forms",
   "repository": {
     "type": "git",
@@ -93,8 +93,8 @@
   "peerDependencies": {
     "@emotion/react": "^11.5.0",
     "@emotion/styled": "^11.3.0",
-    "@jsonforms/core": "3.7.0-beta.0",
-    "@jsonforms/react": "3.7.0-beta.0",
+    "@jsonforms/core": "3.7.0",
+    "@jsonforms/react": "3.7.0",
     "@mui/icons-material": "^7.0.0",
     "@mui/material": "^7.0.0",
     "@mui/x-date-pickers": "^8.0.0",
