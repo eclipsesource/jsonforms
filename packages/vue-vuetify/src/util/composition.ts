@@ -140,6 +140,7 @@ export const useVuetifyControl = <
     errors: string;
     id: string;
     visible: boolean;
+    enabled: boolean;
   },
   I extends {
     control: ComputedRef<T>;
@@ -215,6 +216,12 @@ export const useVuetifyControl = <
 
   const rawErrors = computed(() => input.control.value.errors);
 
+  const clearable = computed(() => {
+    return appliedOptions.value.clearable !== undefined
+      ? appliedOptions.value.clearable
+      : input.control.value.enabled;
+  });
+
   return {
     ...input,
     control: overwrittenControl,
@@ -226,6 +233,7 @@ export const useVuetifyControl = <
     vuetifyProps,
     persistentHint,
     computedLabel,
+    clearable,
     touched,
     handleBlur,
     handleFocus,

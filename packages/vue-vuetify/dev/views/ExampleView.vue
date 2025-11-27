@@ -31,6 +31,7 @@ import { createAjv } from '../validate';
 
 import { Pane, Splitpanes } from 'splitpanes';
 import 'splitpanes/dist/splitpanes.css';
+import { getCustomRenderersForExample } from '../renderers';
 
 const { extendedVuetifyRenderers } = await import('../../src');
 
@@ -54,8 +55,6 @@ const snackbar = ref(false);
 const snackbarText = ref('');
 const snackbarTimeout = ref(3000);
 
-const renderers = markRaw(extendedVuetifyRenderers);
-
 const schemaModel = shallowRef<monaco.editor.ITextModel | undefined>(undefined);
 const uischemaModel = shallowRef<monaco.editor.ITextModel | undefined>(
   undefined,
@@ -64,6 +63,10 @@ const dataModel = shallowRef<monaco.editor.ITextModel | undefined>(undefined);
 
 const initialState = (exampleProp: ExampleDescription) => {
   const example = cloneDeep(exampleProp);
+
+  // Get custom renderers for this example (if any)
+  const customRenderers = getCustomRenderersForExample(example.name);
+  const renderers = markRaw([...customRenderers, ...extendedVuetifyRenderers]);
 
   return {
     data: example.data,

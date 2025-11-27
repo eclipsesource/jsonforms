@@ -19,12 +19,19 @@
       :required="control.required"
       :error-messages="control.errors"
       :model-value="value"
-      :clearable="control.enabled"
+      :clearable="clearable"
       v-bind="vuetifyProps('v-text-field')"
       @update:model-value="onChange"
       @focus="handleFocus"
       @blur="handleBlur"
-    ></v-number-input>
+    >
+      <template v-slot:prepend v-if="$slots.prepend">
+        <slot name="prepend" />
+      </template>
+      <template v-slot:append v-if="$slots.append">
+        <slot name="append" />
+      </template>
+    </v-number-input>
   </control-wrapper>
 </template>
 

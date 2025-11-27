@@ -25,14 +25,21 @@
           ? control.schema.maxLength
           : undefined
       "
-      :clearable="control.enabled"
+      :clearable="clearable"
       @click:clear="clear"
       v-bind="vuetifyProps('v-text-field')"
       @focus="handleFocus"
       @blur="handleBlur"
       v-model="maskModel"
       v-maska:[options]
-    />
+    >
+      <template v-slot:prepend v-if="$slots.prepend">
+        <slot name="prepend" />
+      </template>
+      <template v-slot:append v-if="$slots.append">
+        <slot name="append" />
+      </template>
+    </v-text-field>
   </control-wrapper>
 </template>
 

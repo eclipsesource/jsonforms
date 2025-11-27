@@ -36,7 +36,12 @@
       @update:model-value="onChange"
       @focus="handleFocus"
       @blur="handleBlur"
-    />
+    >
+      <template v-slot:prepend v-if="$slots.prepend">
+        <slot name="prepend" />
+      </template>
+      <!-- No append slot - uses built-in append-icon for password visibility toggle -->
+    </v-text-field>
   </control-wrapper>
 </template>
 

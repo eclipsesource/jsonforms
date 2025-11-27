@@ -126,6 +126,26 @@ If note done yet, please [install Vuetify for Vue](https://vuetifyjs.com/en/gett
 
 For more information on how JSON Forms can be configured, please see the [README of `@jsonforms/vue`](https://github.com/eclipsesource/jsonforms/blob/master/packages/vue/README.md).
 
+## Customization
+
+### Prepend and Append Slots
+
+All control renderers now support `prepend` and `append` slots, allowing you to add custom content before or after input fields without creating entirely custom renderers.
+
+**Example:**
+
+```vue
+<template>
+  <string-control-renderer v-bind="$props">
+    <template #prepend>
+      <v-icon>mdi-help-circle</v-icon>
+    </template>
+  </string-control-renderer>
+</template>
+```
+
+See the "Prepend/Append Slots (Basic)" example in the dev app.
+
 ## Override the ControlWrapper component
 
 All control renderers wrap their components with a **`ControlWrapper`** component, which by default uses **`DefaultControlWrapper`** to render the wrapper element around each control.
