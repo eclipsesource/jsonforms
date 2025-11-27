@@ -35,7 +35,7 @@ const { control } = useJsonFormsControl(props);
 // Determine temperature category (Celsius)
 const category = computed(() => {
   const temp = control.value.data || 0;
-  if (temp <= 4) return 'freezing';
+  if (temp <= 5) return 'freezing';
   if (temp < 15) return 'cold';
   if (temp < 25) return 'comfortable';
   if (temp < 35) return 'hot';
