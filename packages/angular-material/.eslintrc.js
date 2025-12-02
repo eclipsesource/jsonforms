@@ -35,19 +35,19 @@ module.exports = {
     ],
     // workaround for
     // https://github.com/import-js/eslint-plugin-import/issues/1810:
-    "import/no-unresolved": [
-      "error",
+    'import/no-unresolved': [
+      'error',
       {
         ignore: [
-          "@angular/cdk/.*",
-          "@angular/core/.*",
-          "@angular/material/.*",
-          "@angular/platform-browser/.*",
-          "@angular/platform-browser-dynamic/.*",
-          "core-js/es7/.*",
-          "zone.js/.*",
-        ] 
-      }
+          '@angular/cdk/.*',
+          '@angular/core/.*',
+          '@angular/material/.*',
+          '@angular/platform-browser/.*',
+          '@angular/platform-browser-dynamic/.*',
+          'core-js/es7/.*',
+          'zone.js/.*',
+        ],
+      },
     ],
   },
 };

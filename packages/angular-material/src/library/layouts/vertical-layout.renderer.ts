@@ -33,8 +33,12 @@ import {
   uiTypeIs,
   VerticalLayout,
 } from '@jsonforms/core';
-import { LayoutRenderer } from './layout.renderer';
-import { JsonFormsAngularService } from '@jsonforms/angular';
+import {
+  LayoutRenderer,
+  LayoutChildrenRenderPropsPipe,
+} from './layout.renderer';
+import { JsonFormsAngularService, JsonFormsModule } from '@jsonforms/angular';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'VerticalLayoutRenderer',
@@ -63,7 +67,7 @@ import { JsonFormsAngularService } from '@jsonforms/angular';
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+  imports: [CommonModule, JsonFormsModule, LayoutChildrenRenderPropsPipe],
 })
 export class VerticalLayoutRenderer extends LayoutRenderer<VerticalLayout> {
   constructor(

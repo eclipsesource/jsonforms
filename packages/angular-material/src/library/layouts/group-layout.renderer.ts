@@ -28,8 +28,13 @@ import {
   Component,
 } from '@angular/core';
 import { GroupLayout, RankedTester, rankWith, uiTypeIs } from '@jsonforms/core';
-import { LayoutRenderer } from './layout.renderer';
-import { JsonFormsAngularService } from '@jsonforms/angular';
+import {
+  LayoutRenderer,
+  LayoutChildrenRenderPropsPipe,
+} from './layout.renderer';
+import { JsonFormsAngularService, JsonFormsModule } from '@jsonforms/angular';
+import { CommonModule } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'GroupLayoutRenderer',
@@ -64,7 +69,12 @@ import { JsonFormsAngularService } from '@jsonforms/angular';
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+  imports: [
+    CommonModule,
+    JsonFormsModule,
+    LayoutChildrenRenderPropsPipe,
+    MatCardModule,
+  ],
 })
 export class GroupLayoutRenderer extends LayoutRenderer<GroupLayout> {
   constructor(

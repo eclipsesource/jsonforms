@@ -1,5 +1,5 @@
 {
-  "version": "3.7.0-alpha.2",
+  "version": "3.7.0",
   "npmClient": "pnpm",
-  "useWorkspaces": true
+  "$schema": "node_modules/lerna/schemas/lerna-schema.json"
 }

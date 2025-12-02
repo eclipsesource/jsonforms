@@ -24,6 +24,9 @@
       @focus="handleFocus"
       @blur="handleBlur"
     >
+      <template v-slot:prepend v-if="$slots.prepend">
+        <slot name="prepend" />
+      </template>
       <v-radio
         v-for="o in control.options"
         v-bind="vuetifyProps(`v-radio[${o.value}]`)"
@@ -31,6 +34,9 @@
         :label="o.label"
         :value="o.value"
       ></v-radio>
+      <template v-slot:append v-if="$slots.append">
+        <slot name="append" />
+      </template>
     </v-radio-group>
   </control-wrapper>
 </template>

@@ -40,7 +40,14 @@ import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MyFormat } from '../util/date-format';
 import { DayJsDateAdapter } from '../util/dayjs-date-adapter';
-import { MatDatepicker } from '@angular/material/datepicker';
+import {
+  MatDatepicker,
+  MatDatepickerModule,
+} from '@angular/material/datepicker';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'DateControlRenderer',
@@ -105,7 +112,13 @@ import { MatDatepicker } from '@angular/material/datepicker';
       useClass: MyFormat,
     },
   ],
-  standalone: false,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+  ],
 })
 export class DateControlRenderer extends JsonFormsControl {
   focused = false;

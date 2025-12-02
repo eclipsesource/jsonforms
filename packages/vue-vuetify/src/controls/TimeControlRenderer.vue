@@ -19,11 +19,14 @@
       :error-messages="control.errors"
       v-bind="vuetifyProps('v-text-field')"
       v-model="inputModel"
-      :clearable="control.enabled"
+      :clearable="clearable"
       @focus="handleFocus"
       @blur="handleBlur"
       v-maska:[options]="maska"
     >
+      <template v-slot:prepend v-if="$slots.prepend">
+        <slot name="prepend" />
+      </template>
       <template v-slot:prepend-inner>
         <v-menu
           v-model="showMenu"
@@ -86,6 +89,9 @@
             </template>
           </v-confirm-edit>
         </v-menu>
+      </template>
+      <template v-slot:append v-if="$slots.append">
+        <slot name="append" />
       </template>
     </v-text-field>
   </control-wrapper>

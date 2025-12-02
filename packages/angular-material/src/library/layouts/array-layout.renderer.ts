@@ -23,9 +23,16 @@
   THE SOFTWARE.
 */
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import {
   JsonFormsAngularService,
   JsonFormsAbstractControl,
+  JsonFormsModule,
 } from '@jsonforms/angular';
 import {
   arrayDefaultTranslations,
@@ -161,7 +168,15 @@ import {
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+  imports: [
+    CommonModule,
+    JsonFormsModule,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    MatBadgeModule,
+    MatTooltipModule,
+  ],
 })
 export class ArrayLayoutRenderer
   extends JsonFormsAbstractControl<StatePropsOfArrayLayout>
