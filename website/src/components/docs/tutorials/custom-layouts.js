@@ -6,8 +6,8 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Hidden,
   Typography,
+  Box,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Demo } from '../../common/Demo';
@@ -25,7 +25,7 @@ const GroupRenderer = (props) => {
     renderers: renderers,
   };
   return (
-    <Hidden xsUp={!visible}>
+    <Box sx={{ display: visible ? 'block' : 'none' }}>
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography>{uischema.label}</Typography>
@@ -34,7 +34,7 @@ const GroupRenderer = (props) => {
           <MaterialLayoutRenderer {...layoutProps} />
         </AccordionDetails>
       </Accordion>
-    </Hidden>
+    </Box>
   );
 };
 

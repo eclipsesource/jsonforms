@@ -1,9 +1,9 @@
 import React from 'react';
-import TableCell from '@mui/material/TableCell/TableCell';
-import TableHead from '@mui/material/TableHead/TableHead';
-import Table from '@mui/material/Table/Table';
-import TableBody from '@mui/material/TableBody/TableBody';
-import TableRow from '@mui/material/TableRow/TableRow';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableRow from '@mui/material/TableRow';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 
