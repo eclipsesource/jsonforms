@@ -31,6 +31,7 @@ export const schema = {
     address: {
       type: 'object',
       properties: {
+        kind: { const: 'address', default: 'address' },
         street_address: { type: 'string' },
         city: { type: 'string' },
         state: { type: 'string' },
@@ -40,6 +41,7 @@ export const schema = {
     user: {
       type: 'object',
       properties: {
+        kind: { const: 'user', default: 'user' },
         name: { type: 'string' },
         mail: { type: 'string' },
       },
@@ -77,11 +79,13 @@ const data = {
   name: 'test',
   addressOrUsers: [
     {
+      kind: 'address',
       street_address: '1600 Pennsylvania Avenue NW',
       city: 'Washington',
       state: 'DC',
     },
     {
+      kind: 'user',
       name: 'User',
       mail: 'user@user.user',
     },
