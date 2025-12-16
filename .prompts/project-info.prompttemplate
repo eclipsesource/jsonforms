@@ -6,7 +6,7 @@ These UIs are targeted at entering, modifying and viewing data and are usually e
 Any UI is defined by using two schemata:
  - The JSON schema defines the underlying data to be shown in the UI (objects, properties, and their types)
  - The UI schema defines how this data is rendered as a form, e.g. the order of controls, their visibility, and the layout.
-   If no UI schema is given, it will be auto generated
+   If no UI schema is given, JSON Forms generates one based on the given JSON schema.
 
 We put great emphasis on the customizability and extensibility of JSON Forms.
 
@@ -23,9 +23,9 @@ The JSON Forms mono repository consists of these packages:
 ### Core principles
 
 JSON Forms uses a reducer-style approach for its state management.
-The form-wide state is manipulated via the reducers in packages/core/src/reducers.
+The form-wide state is manipulated via the reducers in `packages/core/src/reducers`.
 
-Renderers are registered in a registry, consisting of tester,renderer pairs.
+Renderers are registered in a registry, consisting of tester, renderer pairs.
 For each UI Schema element to be rendered, all testers are asked for their priority.
 The highest priority wins and the respective renderer gets full control over rendering.
 The renderer may dispatch back to JSON Forms to render children elements.
