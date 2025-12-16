@@ -1,0 +1,7 @@
+---
+isCommand: true
+commandName: lint
+commandDescription: Run linting checks on the JSON Forms project
+---
+Run the "Lint" task to check the code for linting errors in the JSON Forms project. ~{runTask}
+~{runTask}

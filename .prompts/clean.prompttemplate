@@ -1,0 +1,7 @@
+---
+isCommand: true
+commandName: clean
+commandDescription: Clean the JSON Forms project build artifacts
+---
+Run the "Clean" task to remove build artifacts and clean the JSON Forms project.
+~{runTask}
