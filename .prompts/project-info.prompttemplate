@@ -20,6 +20,15 @@ The JSON Forms mono repository consists of these packages:
  - For React we maintain two renderer sets: The `@jsonforms/material-renderers` in `packages/material-renderers`, which are based on the popular Material-UI framework and `@jsonforms/vanilla-renderers` in `packages/vanilla-renderers` which provides pure HTML5 renderers.
    For Angular we provide an Angular Material based renderer set (`@jsonforms/angular-material` in `packages/angular-material`). For Vue we provide a HTML5 based renderer set `@jsonforms/vue-vanilla` in `packages/vue-vanilla` and a Vuetify based one `@jsonforms/vue-vuetify` in `packages/vue-vuetify`.
 
+### Mono-repo Setup
+
+- Package Manager: pnpm with lerna for orchestration
+- Dependency Management: Each package declares all its dependencies explicitly (no hoisting assumptions). We aim to use the same dependency versions across packages (e.g. for Typescript or Jest)
+- Testing: Independent test setup per package. Tests are implemented in separate folder `test` or `tests` within a package.
+- Build: Each package has its own build configuration. Rollup is the default tool except if there are other typical tools for the respective technology (e.g. Angular)
+- Linting and Formatting: Each package has its own `.eslintrc.js` and `.prettierrc.js` config
+- Typescript: Packages extend common base config `tsconfig.base.js`
+
 ### Core principles
 
 JSON Forms uses a reducer-style approach for its state management.
