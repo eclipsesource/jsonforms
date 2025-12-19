@@ -10,6 +10,116 @@ Use JSON Forms 3.6 if you need to stay on Angular 18.
 
 ## Migrating to JSON Forms 3.6
 
+### Combinator (anyOf & oneOf) index selection now uses a heuristic instead of AJV
+
+In this update, we have eliminated the direct usage of AJV to determine the selected subschema for combinator renderers.
+To achieve this, the algorithm in `getCombinatorIndexOfFittingSchema` and with this `mapStateToCombinatorRendererProps` was changed.
+Thus, custom renderers using either method might have behavior changes.
+This rework is part of an ongoing effort to remove mandatory usage of AJV from JSON Forms.
+
+Before this change, AJV was used to validate the current data against all schemas of the combinator.
+This was replaced by a heuristic which tries to match the schema via an identification property against a `const` entry in the schema.
+
+The identification property is determined as follows in descending order of priority:
+
+1. The schema contains a new custom property `x-jsf-type-property` next to the combinator to define the identification property.
+2. At least one of the combinator schemas has this property with a const declaration: `type`, `kind`. They are considered in the listed order.
+
+If no combinator schema can be matched, fallback to the first one as before this update.
+
+Note that this approach can not determine a subschema for non-object subschemas (e.g. ones only defining a primitive property).
+Furthermore, subschemas can no longer automatically be selected based on validation results like
+produced by different required properties between subschemas.
+
+#### Example 1: Custom identification property
+
+Use custom property `x-jsf-type-property` to define which property's content identifies the subschema to select.
+In this case, `mytype` is defined as the property to use. The two subschemas in the `anyOf` each define a `const` value for this property.
+Meaning a data object with property `mytype: 'user'` results in the second subschema being selected.
+The `default` keyword can be used to tell JSON Forms to automatically initialize the property.
+
+```ts
+const schema = {
+  $schema: 'http://json-schema.org/draft-07/schema#',
+  type: 'object',
+  properties: {
+    addressOrUser: {
+      'x-jsf-type-property': 'mytype',
+      anyOf: [
+        {
+          type: 'object',
+          properties: {
+            mytype: { const: 'address', default: 'address' },
+            street_address: { type: 'string' },
+            city: { type: 'string' },
+            state: { type: 'string' },
+          },
+        },
+        {
+          type: 'object',
+          properties: {
+            mytype: { const: 'user', default: 'user' },
+            name: { type: 'string' },
+          },
+        },
+      ],
+    },
+  },
+};
+
+// Data that results in the second subschema being selected
+const dataWithUser = {
+  addressOrUser: {
+    mytype: 'user',
+    name: 'Peter',
+  },
+};
+```
+
+#### Example 2: Use a default identification property
+
+In this example we use the `kind` property as the identification property.
+Like in the custom property case, subschemas are matched via a `const` definition in the identification property's schema.
+However, we do not need to explicitly specify `kind` being used.
+The `default` keyword can be used to tell JSON Forms to automatically initialize the property.
+
+```ts
+const schema = {
+  $schema: 'http://json-schema.org/draft-07/schema#',
+  type: 'object',
+  properties: {
+    addressOrUser: {
+      anyOf: [
+        {
+          type: 'object',
+          properties: {
+            kind: { const: 'address', default: 'address' },
+            street_address: { type: 'string' },
+            city: { type: 'string' },
+            state: { type: 'string' },
+          },
+        },
+        {
+          type: 'object',
+          properties: {
+            kind: { const: 'user', default: 'user' },
+            name: { type: 'string' },
+          },
+        },
+      ],
+    },
+  },
+};
+
+// Data that results in the second subschema being selected
+const dataWithUser = {
+  addressOrUser: {
+    kind: 'user',
+    name: 'Peter',
+  },
+};
+```
+
 ### UI schema type changes
 
 The `UISchemaElement` type was renamed to `BaseUISchemaElement` and a new `UISchemaElement` type was introduced, which is a union of all available UI schema types.
