@@ -9,15 +9,15 @@
       :hide-actions="!appliedOptions.showNavButtons"
     >
       <v-stepper-vertical-item
-        :title="visibleCategoryLabels[index]"
-        v-for="(element, index) in visibleCategories"
-        :value="index + 1"
-        :key="`${layout.path}-${visibleCategories.length}-${index}`"
+        v-for="entry in visibleCategoriesWithIndex"
+        :title="entry.category.value.label"
+        :value="entry.originalIndex + 1"
+        :key="`${layout.path}-${entry.originalIndex}`"
       >
         <v-card elevation="0">
           <dispatch-renderer
             :schema="layout.schema"
-            :uischema="element.value.uischema"
+            :uischema="entry.category.value.uischema"
             :path="layout.path"
             :enabled="layout.enabled"
             :renderers="layout.renderers"
@@ -35,29 +35,34 @@
       <template v-slot:default="{ prev, next }">
         <v-stepper-header>
           <template
-            v-for="(_, index) in visibleCategories"
-            :key="`${layout.path}-${visibleCategories.length}-${index}`"
+            v-for="entry in visibleCategoriesWithIndex"
+            :key="`${layout.path}-${entry.originalIndex}`"
           >
-            <v-stepper-item :value="index + 1" editable>
-              {{ visibleCategoryLabels[index] }}
+            <v-stepper-item :value="entry.originalIndex + 1" editable>
+              {{ visibleCategoryLabels[entry.originalIndex] }}
             </v-stepper-item>
             <v-divider
-              v-if="index !== visibleCategories.length - 1"
-              :key="`${layout.path}-divider-${visibleCategories.length}-${index}`"
+              v-if="
+                entry.originalIndex !==
+                visibleCategoriesWithIndex[
+                  visibleCategoriesWithIndex.length - 1
+                ].originalIndex
+              "
+              :key="`${layout.path}-divider-${entry.originalIndex}`"
             ></v-divider>
           </template>
         </v-stepper-header>
 
         <v-stepper-window>
           <v-stepper-window-item
-            v-for="(element, index) in visibleCategories"
-            :value="index + 1"
-            :key="`${layout.path}-${visibleCategories.length}-${index}`"
+            v-for="entry in visibleCategoriesWithIndex"
+            :value="entry.originalIndex + 1"
+            :key="`${layout.path}-${entry.originalIndex}`"
           >
             <v-card elevation="0">
               <dispatch-renderer
                 :schema="layout.schema"
-                :uischema="element.value.uischema"
+                :uischema="entry.category.value.uischema"
                 :path="layout.path"
                 :enabled="layout.enabled"
                 :renderers="layout.renderers"
@@ -129,12 +134,17 @@ const layoutRenderer = defineComponent({
     };
   },
   computed: {
-    visibleCategories() {
-      return this.categories.filter((category) => category.value.visible);
+    visibleCategoriesWithIndex() {
+      return this.categories
+        .map((category, originalIndex) => ({
+          category,
+          originalIndex,
+        }))
+        .filter((e) => e.category.value.visible);
     },
     visibleCategoryLabels(): string[] {
-      return this.visibleCategories.map((element) => {
-        return element.value.label;
+      return this.visibleCategoriesWithIndex.map((element) => {
+        return element.category.value.label;
       });
     },
   },
