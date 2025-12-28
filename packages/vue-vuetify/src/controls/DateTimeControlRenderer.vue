@@ -67,9 +67,9 @@
                       @update:model-value="
                         (val: unknown) => {
                           if (showActions) {
-                            proxyModel.value.date = val as Date;
+                            proxyModel.value.date = val as Date | null;
                           } else {
-                            pickerValue.date = val as Date;
+                            pickerValue.date = val as Date | null;
                           }
                         }
                       "
@@ -86,7 +86,7 @@
                         showActions ? proxyModel.value.time : pickerValue.time
                       "
                       @update:model-value="
-                        (val: string) => {
+                        (val: string | null) => {
                           if (showActions) {
                             proxyModel.value.time = val;
                           } else {
@@ -128,10 +128,10 @@
                       @update:model-value="
                         (val: unknown) => {
                           if (showActions) {
-                            proxyModel.value.date = val as Date;
+                            proxyModel.value.date = val as Date | null;
                           } else {
                             pickerValue = {
-                              date: val as Date,
+                              date: val as Date | null,
                               time: pickerValue.time,
                             };
                           }
@@ -153,7 +153,7 @@
                         showActions ? proxyModel.value.time : pickerValue.time
                       "
                       @update:model-value="
-                        (val: string) => {
+                        (val: string | null) => {
                           if (showActions) {
                             proxyModel.value.time = val;
                           } else {
@@ -211,7 +211,7 @@ import {
   useJsonFormsControl,
   type RendererProps,
 } from '@jsonforms/vue';
-import { computed, reactive, defineComponent, ref, unref } from 'vue';
+import { computed, defineComponent, reactive, ref, unref } from 'vue';
 import {
   VBtn,
   VCard,
@@ -308,7 +308,7 @@ const controlRenderer = defineComponent({
         : (expandLocaleFormat('L LT') ?? 'YYYY-MM-DD HH:mm'),
     );
 
-    const useMask = control.appliedOptions.value.mask !== false;
+    const useMask = computed(() => control.appliedOptions.value.mask !== false);
     const maska = reactive({
       masked: '',
       unmasked: '',
@@ -320,7 +320,7 @@ const controlRenderer = defineComponent({
     );
     const locale = useLocale();
 
-    const options = useMask
+    const options = useMask.value
       ? computed<MaskOptions>(() => ({
           mask: state.value.mask,
           tokens: state.value.tokens,
@@ -555,19 +555,19 @@ const controlRenderer = defineComponent({
       },
     },
     pickerValue: {
-      get(): { date: Date | undefined; time: string | undefined } {
+      get(): { date: Date | null; time: string | null } {
         const value = this.control.data;
 
         const dateTime = parseDateTime(value, this.formats);
 
-        const date = dateTime ? dateTime.toDate() : undefined;
+        const date = dateTime ? dateTime.toDate() : null;
 
         const format = this.useSeconds ? 'HH:mm:ss' : 'HH:mm';
-        const time = dateTime ? dateTime.format(format) : undefined;
+        const time = dateTime ? dateTime.format(format) : null;
 
         return { date, time };
       },
-      set(val: { date: Date | undefined; time: string | undefined }) {
+      set(val: { date: Date | null; time: string | null }) {
         this.onPickerChange(val.date, val.time);
 
         if (this.useTabLayout && val.date) {
@@ -595,7 +595,7 @@ const controlRenderer = defineComponent({
     },
   },
   methods: {
-    onPickerChange(dateValue?: Date, timeValue?: string): void {
+    onPickerChange(dateValue: Date | null, timeValue: string | null): void {
       const date = parseDateTime(dateValue, undefined);
       const time = parseDateTime(
         timeValue ?? (this.useSeconds ? '00:00:00' : '00:00'),
