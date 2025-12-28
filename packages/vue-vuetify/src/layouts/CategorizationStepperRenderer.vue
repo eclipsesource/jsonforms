@@ -39,7 +39,7 @@
             :key="`${layout.path}-${entry.originalIndex}`"
           >
             <v-stepper-item :value="entry.originalIndex + 1" editable>
-              {{ visibleCategoryLabels[entry.originalIndex] }}
+              {{ entry.category.value.label }}
             </v-stepper-item>
             <v-divider
               v-if="
@@ -141,11 +141,6 @@ const layoutRenderer = defineComponent({
           originalIndex,
         }))
         .filter((e) => e.category.value.visible);
-    },
-    visibleCategoryLabels(): string[] {
-      return this.visibleCategoriesWithIndex.map((element) => {
-        return element.category.value.label;
-      });
     },
   },
 });
