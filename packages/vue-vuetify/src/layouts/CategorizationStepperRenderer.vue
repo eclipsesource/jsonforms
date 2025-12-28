@@ -35,19 +35,14 @@
       <template v-slot:default="{ prev, next }">
         <v-stepper-header>
           <template
-            v-for="entry in visibleCategoriesWithIndex"
+            v-for="(entry, index) in visibleCategoriesWithIndex"
             :key="`${layout.path}-${entry.originalIndex}`"
           >
             <v-stepper-item :value="entry.originalIndex + 1" editable>
               {{ entry.category.value.label }}
             </v-stepper-item>
             <v-divider
-              v-if="
-                entry.originalIndex !==
-                visibleCategoriesWithIndex[
-                  visibleCategoriesWithIndex.length - 1
-                ].originalIndex
-              "
+              v-if="index < visibleCategoriesWithIndex.length - 1"
               :key="`${layout.path}-divider-${entry.originalIndex}`"
             ></v-divider>
           </template>
