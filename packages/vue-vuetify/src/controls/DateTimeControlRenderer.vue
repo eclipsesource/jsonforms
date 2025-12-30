@@ -209,6 +209,7 @@ import { type ControlElement, type JsonSchema } from '@jsonforms/core';
 import {
   rendererProps,
   useJsonFormsControl,
+  useTranslator,
   type RendererProps,
 } from '@jsonforms/vue';
 import { computed, defineComponent, reactive, ref, unref } from 'vue';
@@ -242,7 +243,6 @@ import {
   expandLocaleFormat,
   parseDateTime,
   useIcons,
-  useTranslator,
   useVuetifyControl,
 } from '../util';
 import { default as ControlWrapper } from './ControlWrapper.vue';

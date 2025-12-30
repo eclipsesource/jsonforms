@@ -35,17 +35,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, type PropType } from 'vue';
-import { VBadge, VTooltip } from 'vuetify/components';
-import type { ErrorObject } from 'ajv';
-import findIndex from 'lodash/findIndex';
 import {
   createControlElement,
   createLabelDescriptionFrom,
-  type JsonFormsSubStates,
   type JsonSchema,
 } from '@jsonforms/core';
-import { useTranslator } from '@/util';
+import { useTranslator } from '@jsonforms/vue';
+import type { ErrorObject } from 'ajv';
+import findIndex from 'lodash/findIndex';
+import { defineComponent, type PropType } from 'vue';
+import { VBadge, VTooltip } from 'vuetify/components';
 
 export default defineComponent({
   name: 'validation-badge',
@@ -124,12 +123,7 @@ export default defineComponent({
   },
   setup() {
     // allow using the ValidationBadge outside the jsonforms like in the ExampleView in the demo app
-    const jsonforms = inject<JsonFormsSubStates | undefined>(
-      'jsonforms',
-      undefined,
-    );
-
-    const t = jsonforms !== undefined ? useTranslator() : null;
+    const t = useTranslator(true);
     return { t };
   },
 });

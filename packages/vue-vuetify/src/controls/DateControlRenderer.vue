@@ -88,6 +88,7 @@ import { computed, defineComponent, reactive, ref, unref, watch } from 'vue';
 import {
   rendererProps,
   useJsonFormsControl,
+  useTranslator,
   type RendererProps,
 } from '@jsonforms/vue';
 import { vMaska, type MaskOptions } from 'maska';
@@ -106,7 +107,6 @@ import {
   determineClearValue,
   expandLocaleFormat,
   parseDateTime,
-  useTranslator,
   useVuetifyControl,
 } from '../util';
 import { default as ControlWrapper } from './ControlWrapper.vue';

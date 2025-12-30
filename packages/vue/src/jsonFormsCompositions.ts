@@ -38,7 +38,9 @@ import {
   Categorization,
   isControl,
   Scopable,
+  Translator,
 } from '@jsonforms/core';
+import Ajv from 'ajv';
 import {
   PropType,
   computed,
@@ -177,14 +179,8 @@ export function useControl<
   stateMap: (state: JsonFormsState, props: P) => R,
   dispatchMap?: (dispatch: Dispatch<CoreActions>) => D
 ) {
-  const jsonforms = inject<JsonFormsSubStates>('jsonforms');
-  const dispatch = inject<Dispatch<CoreActions>>('dispatch');
-
-  if (!jsonforms || !dispatch) {
-    throw new Error(
-      "'jsonforms' or 'dispatch' couldn't be injected. Are you within JSON Forms?"
-    );
-  }
+  const jsonforms = useJsonForms();
+  const dispatch = useDispatch();
 
   const id = ref<string | undefined>(undefined);
   const control = computed(() => ({
@@ -404,14 +400,7 @@ export const useJsonFormsMasterListItem = (props: OwnPropsOfMasterListItem) => {
  * Access bindings via the provided reactive 'renderer' object.
  */
 export const useJsonFormsRenderer = (props: RendererProps) => {
-  const jsonforms = inject<JsonFormsSubStates>('jsonforms');
-  const dispatch = inject<Dispatch<CoreActions>>('dispatch');
-
-  if (!jsonforms || !dispatch) {
-    throw new Error(
-      "'jsonforms' or 'dispatch' couldn't be injected. Are you within JSON Forms?"
-    );
-  }
+  const jsonforms = useJsonForms();
 
   const rawProps = computed(
     () =>
@@ -528,3 +517,83 @@ export const useJsonFormsCategorization = (props: LayoutProps) => {
 
   return { layout, categories, ...other };
 };
+
+/**
+ * Provides access to the JsonForms sub state.
+ *
+ * @returns The JsonForms sub state.
+ */
+export function useJsonForms(): JsonFormsSubStates;
+export function useJsonForms(optional: true): JsonFormsSubStates | undefined;
+export function useJsonForms(optional?: true) {
+  const jsonforms = inject<JsonFormsSubStates>('jsonforms');
+
+  if (!jsonforms && !optional) {
+    throw new Error(
+      "'jsonforms couldn't be injected. Are you within JSON Forms?"
+    );
+  }
+
+  return jsonforms;
+}
+
+/**
+ * Provides access to the JsonForms dispatch function.
+ *
+ * @returns The JsonForms dispatch function.
+ */
+export function useDispatch(): Dispatch<CoreActions>;
+export function useDispatch(optional: true): Dispatch<CoreActions> | undefined;
+export function useDispatch(optional?: true) {
+  const dispatch = inject<Dispatch<CoreActions>>('dispatch');
+
+  if (!dispatch && !optional) {
+    throw new Error(
+      "'dispatch couldn't be injected. Are you within JSON Forms?"
+    );
+  }
+
+  return dispatch;
+}
+
+/**
+ * Provides access to the JsonForms translator function.
+ * @returns The JsonForms translator function.
+ */
+export function useTranslator(): ComputedRef<Translator>;
+export function useTranslator(
+  optional: true
+): ComputedRef<Translator> | undefined;
+export function useTranslator(optional?: true) {
+  const jsonforms = optional ? useJsonForms(true) : useJsonForms();
+
+  if (!optional && (!jsonforms?.i18n || !jsonforms.i18n.translate)) {
+    throw new Error(
+      "'jsonforms i18n couldn't be injected. Are you within JSON Forms?"
+    );
+  }
+
+  const translate = computed(() => {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return jsonforms!.i18n!.translate!;
+  });
+
+  return translate;
+}
+
+/**
+ * Extracts Ajv from JSON Forms
+ */
+export function useAjv(): Ajv;
+export function useAjv(optional: true): Ajv | undefined;
+export function useAjv(optional?: true) {
+  const jsonforms = optional ? useJsonForms(true) : useJsonForms();
+
+  if (!optional && (!jsonforms?.core || !jsonforms.core.ajv)) {
+    throw new Error(
+      "'jsonforms ajv couldn't be injected. Are you within JSON Forms?"
+    );
+  }
+
+  return jsonforms?.core?.ajv as Ajv;
+}

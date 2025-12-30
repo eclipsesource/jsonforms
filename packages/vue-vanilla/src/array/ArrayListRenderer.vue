@@ -48,25 +48,25 @@
 
 <script lang="ts">
 import {
-  composePaths,
-  createDefaultValue,
-  JsonFormsRendererRegistryEntry,
-  rankWith,
-  ControlElement,
-  schemaTypeIs,
-  Resolve,
-  JsonSchema,
-  JsonFormsSubStates,
   arrayDefaultTranslations,
-  getArrayTranslations,
+  composePaths,
+  ControlElement,
+  createDefaultValue,
   defaultJsonFormsI18nState,
+  getArrayTranslations,
+  JsonFormsRendererRegistryEntry,
+  JsonSchema,
+  rankWith,
+  Resolve,
+  schemaTypeIs,
 } from '@jsonforms/core';
-import { defineComponent, inject } from 'vue';
+import { defineComponent } from 'vue';
 import {
   DispatchRenderer,
   rendererProps,
-  useJsonFormsArrayControl,
   RendererProps,
+  useJsonForms,
+  useJsonFormsArrayControl,
 } from '../../config/jsonforms';
 import { useVanillaArrayControl } from '../util';
 import ArrayListElement from './ArrayListElement.vue';
@@ -111,7 +111,7 @@ const controlRenderer = defineComponent({
       );
     },
     translations(): any {
-      const jsonforms = inject<JsonFormsSubStates>('jsonforms');
+      const jsonforms = useJsonForms();
       return getArrayTranslations(
         jsonforms?.i18n?.translate ?? defaultJsonFormsI18nState.translate,
         arrayDefaultTranslations,

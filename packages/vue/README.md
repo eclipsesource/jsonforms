@@ -266,11 +266,11 @@ Should any of the provided bindings not completely match an intended use case, t
 When constructing a new binding you might want to access the injected raw `jsonforms` object and `dispatch` method, e.g.
 
 ```ts
-import { inject } from 'vue';
+import { useJsonForms, useDispatch } from '@jsonforms/vue';
 
 const useCustomBinding = (props) => {
-  const jsonforms = inject<JsonFormsSubStates>('jsonforms');
-  const dispatch = inject<Dispatch<CoreActions>>('dispatch');
+  const jsonforms = useJsonForms();
+  const dispatch = useDispatch();
 
   return {
     // use props, jsonforms and dispatch to construct own binding
