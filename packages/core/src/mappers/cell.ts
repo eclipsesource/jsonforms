@@ -53,7 +53,7 @@ import {
   JsonFormsCellRendererRegistryEntry,
   JsonFormsState,
 } from '../store';
-import { isInherentlyEnabled } from './util';
+import { isInherentlyEnabled, isInherentlyReadonly } from './util';
 
 export interface OwnPropsOfCell extends OwnPropsOfControl {
   data?: any;
@@ -126,10 +126,14 @@ export const mapStateToCellProps = (
    * table renderer, determines whether a cell is enabled and should hand
    * over the prop themselves. If that prop was given, we prefer it over
    * anything else to save evaluation effort (except for the global readonly
-   * flag). For example it would be quite expensive to evaluate the same ui schema
+   * flag when separateReadonlyFromDisabled is disabled).
+   * For example it would be quite expensive to evaluate the same ui schema
    * rule again and again for each cell of a table. */
   let enabled;
-  if (state.jsonforms.readonly === true) {
+  if (
+    !config?.separateReadonlyFromDisabled &&
+    state.jsonforms.readonly === true
+  ) {
     enabled = false;
   } else if (typeof ownProps.enabled === 'boolean') {
     enabled = ownProps.enabled;
@@ -144,6 +148,22 @@ export const mapStateToCellProps = (
     );
   }
 
+  /* Similar to enabled, we take a shortcut for readonly state. The parent
+   * renderer can pass the readonly prop directly if it has already computed it,
+   * saving re-evaluation for each cell. */
+  let readonly;
+  if (typeof ownProps.readonly === 'boolean') {
+    readonly = ownProps.readonly;
+  } else {
+    readonly = isInherentlyReadonly(
+      state,
+      ownProps,
+      uischema,
+      schema || rootSchema,
+      rootData,
+      config
+    );
+  }
   const t = getTranslator()(state);
   const te = getErrorTranslator()(state);
   const errors = getCombinedErrorMessage(
@@ -160,6 +180,7 @@ export const mapStateToCellProps = (
     data: Resolve.data(rootData, path),
     visible,
     enabled,
+    readonly,
     id,
     path,
     errors,

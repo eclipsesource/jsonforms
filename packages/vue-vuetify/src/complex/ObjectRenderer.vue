@@ -3,6 +3,7 @@
     <dispatch-renderer
       :visible="control.visible"
       :enabled="control.enabled"
+      :readonly="control.readonly"
       :schema="control.schema"
       :uischema="detailUiSchema"
       :path="control.path"

@@ -12,11 +12,12 @@
                     v-disabled-icon-focus
                     :id="control.id + '-input-selector'"
                     :disabled="!control.enabled"
+                    :readonly="control.readonly"
                     :label="computedLabel"
                     :required="control.required"
                     :error-messages="control.errors"
                     :items="mixedRenderInfos"
-                    :clearable="control.enabled"
+                    :clearable="control.enabled && !control.readonly"
                     @update:model-value="handleSelectChange"
                     :item-title="
                       (item: SchemaRenderInfo) => t(item.label, item.label)
@@ -46,6 +47,7 @@
               :renderers="control.renderers"
               :cells="control.cells"
               :enabled="control.enabled"
+              :readonly="control.readonly"
             >
             </dispatch-renderer>
           </v-expansion-panel-text>
@@ -59,11 +61,12 @@
         v-disabled-icon-focus
         :id="control.id + '-input-selector'"
         :disabled="!control.enabled"
+        :readonly="control.readonly"
         :label="computedLabel"
         :required="control.required"
         :error-messages="control.errors"
         :items="mixedRenderInfos"
-        :clearable="control.enabled"
+        :clearable="control.enabled && !control.readonly"
         @update:model-value="handleSelectChange"
         :item-title="(item: SchemaRenderInfo) => t(item.label, item.label)"
         item-value="index"
@@ -83,6 +86,7 @@
         :renderers="control.renderers"
         :cells="control.cells"
         :enabled="control.enabled"
+        :readonly="control.readonly"
       >
       </dispatch-renderer>
     </template>
