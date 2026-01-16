@@ -448,7 +448,7 @@ export interface StatePropsOfRenderer {
   /**
    * Whether the rendered element should be readonly.
    */
-  readonly: boolean;
+  readonly?: boolean;
 
   /**
    * Whether the rendered element should be visible.
