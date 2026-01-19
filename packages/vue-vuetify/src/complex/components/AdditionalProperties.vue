@@ -1,92 +1,107 @@
 <template>
-  <v-card v-if="control.visible" v-bind="vuetifyProps('v-card')" flat>
-    <v-container class="py-0">
-      <v-row no-gutters>
-        <v-col v-if="mdAndUp && additionalPropertiesTitle">
-          {{ additionalPropertiesTitle }}</v-col
-        >
-        <v-col>
-          <json-forms
-            :data="newPropertyName"
-            :uischema="
-              {
-                type: 'Control',
-                scope: '#',
-                label: propertyNameLabel,
-              } as UISchemaElement
-            "
-            :schema="propertyNameSchema"
-            :additionalErrors="additionalErrors"
-            :renderers="control.renderers"
-            :cells="control.cells"
-            :config="control.config"
-            :readonly="!control.enabled"
-            :validation-mode="validationMode"
-            :i18n="i18n"
-            :ajv="ajv"
-            :middleware="middleware"
-            @change="propertyNameChange"
-          ></json-forms
-        ></v-col>
-        <v-tooltip bottom>
-          <template v-slot:activator="{ props }">
-            <v-btn
-              icon
-              variant="text"
-              elevation="0"
-              small
-              :aria-label="translations.addAriaLabel"
-              v-bind="props"
-              :disabled="addPropertyDisabled"
-              @click="addProperty"
+  <v-expansion-panels
+    v-if="control.visible"
+    v-bind="vuetifyProps('v-expansion-panels')"
+    v-model="openedPanels"
+    flat
+  >
+    <v-expansion-panel>
+      <v-expansion-panel-title class="pa-0">
+        <v-container class="pa-0 ma-0" fluid @click.stop>
+          <v-row no-gutters>
+            <v-col v-if="mdAndUp && additionalPropertiesTitle">
+              {{ additionalPropertiesTitle }}</v-col
             >
-              <v-icon>{{ icons.current.value.itemAdd }}</v-icon>
-            </v-btn>
-          </template>
-          {{ translations.addTooltip }}
-        </v-tooltip>
-      </v-row>
-    </v-container>
-    <v-container v-bind="vuetifyProps('v-container')" class="py-0">
-      <v-row
-        no-gutters
-        v-for="element in additionalPropertyItems"
-        :key="`${element.propertyName}`"
-      >
-        <v-col class="flex-shrink-0 flex-grow-1">
-          <dispatch-renderer
-            v-if="element.schema && element.uischema"
-            :schema="element.schema"
-            :uischema="element.uischema"
-            :path="element.path"
-            :enabled="control.enabled"
-            :renderers="control.renderers"
-            :cells="control.cells"
-        /></v-col>
-        <v-col v-if="control.enabled" class="flex-shrink-1 flex-grow-0">
-          <v-tooltip bottom>
-            <template v-slot:activator="{ props }">
-              <v-btn
-                v-bind="props"
-                icon
-                variant="text"
-                elevation="0"
-                small
-                :aria-label="translations.removeAriaLabel"
-                :disabled="removePropertyDisabled"
-                @click="removeProperty(element.propertyName)"
-              >
-                <v-icon class="notranslate">{{
-                  icons.current.value.itemDelete
-                }}</v-icon>
-              </v-btn>
-            </template>
-            {{ translations.removeTooltip }}
-          </v-tooltip></v-col
+            <v-col>
+              <json-forms
+                :data="newPropertyName"
+                :uischema="
+                  {
+                    type: 'Control',
+                    scope: '#',
+                    label: propertyNameLabel,
+                  } as UISchemaElement
+                "
+                :schema="propertyNameSchema"
+                :additionalErrors="additionalErrors"
+                :renderers="control.renderers"
+                :cells="control.cells"
+                :config="control.config"
+                :readonly="!control.enabled"
+                :validation-mode="validationMode"
+                :i18n="i18n"
+                :ajv="ajv"
+                :middleware="middleware"
+                @change="propertyNameChange"
+              ></json-forms
+            ></v-col>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ props }">
+                <v-btn
+                  icon
+                  variant="text"
+                  elevation="0"
+                  small
+                  :aria-label="translations.addAriaLabel"
+                  v-bind="props"
+                  :disabled="addPropertyDisabled"
+                  @click="addProperty"
+                >
+                  <v-icon>{{ icons.current.value.itemAdd }}</v-icon>
+                </v-btn>
+              </template>
+              {{ translations.addTooltip }}
+            </v-tooltip>
+          </v-row>
+        </v-container>
+      </v-expansion-panel-title>
+      <v-expansion-panel-text class="additional-properties-panel">
+        <v-container
+          v-bind="vuetifyProps('v-container')"
+          class="pa-0 ma-0"
+          fluid
         >
-      </v-row>
-    </v-container>
-  </v-card>
+          <v-row
+            no-gutters
+            v-for="element in additionalPropertyItems"
+            :key="`${element.propertyName}`"
+          >
+            <v-col class="flex-shrink-0 flex-grow-1">
+              <dispatch-renderer
+                v-if="element.schema && element.uischema"
+                :schema="element.schema"
+                :uischema="element.uischema"
+                :path="element.path"
+                :enabled="control.enabled"
+                :renderers="control.renderers"
+                :cells="control.cells"
+            /></v-col>
+            <v-col v-if="control.enabled" class="flex-shrink-1 flex-grow-0">
+              <v-tooltip bottom>
+                <template v-slot:activator="{ props }">
+                  <v-btn
+                    v-bind="props"
+                    icon
+                    variant="text"
+                    elevation="0"
+                    small
+                    :aria-label="translations.removeAriaLabel"
+                    :disabled="removePropertyDisabled"
+                    @click="removeProperty(element.propertyName)"
+                  >
+                    <v-icon class="notranslate">{{
+                      icons.current.value.itemDelete
+                    }}</v-icon>
+                  </v-btn>
+                </template>
+                {{ translations.removeTooltip }}
+              </v-tooltip></v-col
+            >
+          </v-row>
+        </v-container>
+      </v-expansion-panel-text>
+    </v-expansion-panel>
+  </v-expansion-panels>
 </template>
 
 <script lang="ts">
@@ -102,7 +117,6 @@ import {
   getI18nKeyPrefix,
   type GroupLayout,
   type JsonSchema,
-  type JsonSchema4,
   type JsonSchema7,
   type UISchemaElement,
 } from '@jsonforms/core';
@@ -119,6 +133,7 @@ import isPlainObject from 'lodash/isPlainObject';
 import omit from 'lodash/omit';
 import startCase from 'lodash/startCase';
 
+import { IsDynamicPropertyContext } from '@/util/inject';
 import {
   computed,
   defineComponent,
@@ -131,9 +146,12 @@ import {
 import { useDisplay } from 'vuetify';
 import {
   VBtn,
-  VCard,
   VCol,
   VContainer,
+  VExpansionPanel,
+  VExpansionPanelText,
+  VExpansionPanelTitle,
+  VExpansionPanels,
   VIcon,
   VRow,
   VTooltip,
@@ -146,7 +164,6 @@ import {
   useJsonForms,
   useTranslator,
 } from '../../util';
-import { IsDynamicPropertyContext } from '@/util/inject';
 
 type Input = ReturnType<typeof useJsonFormsControlWithDetail>;
 interface AdditionalPropertyType {
@@ -160,7 +177,10 @@ export default defineComponent({
   name: 'additional-properties',
   components: {
     DispatchRenderer,
-    VCard,
+    VExpansionPanels,
+    VExpansionPanel,
+    VExpansionPanelTitle,
+    VExpansionPanelText,
     VTooltip,
     VIcon,
     VBtn,
@@ -419,7 +439,10 @@ export default defineComponent({
     // use the default value since all properties are dynamic so preserve the property key
     provide(IsDynamicPropertyContext, true);
 
+    const openedPanels = ref<number | number[]>(0);
+
     return {
+      openedPanels,
       validationMode: validationMode,
       i18n: i18n ? markRaw(i18n) : i18n,
       middleware: middleware ? markRaw(middleware) : middleware,
@@ -571,3 +594,12 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped>
+:deep(
+    .v-expansion-panel-text.additional-properties-panel
+      > .v-expansion-panel-text__wrapper
+  ) {
+  padding: 0;
+}
+</style>
