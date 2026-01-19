@@ -21,6 +21,7 @@
       :error-messages="control.errors"
       :model-value="value"
       :clearable="clearable"
+      density="comfortable"
       v-bind="vuetifyProps('v-number-input')"
       @update:model-value="onChange"
       @focus="handleFocus"
