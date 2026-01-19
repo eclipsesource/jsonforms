@@ -2,17 +2,20 @@
   <v-container
     v-if="layout.visible && (layout.uischema as Layout).elements.length > 0"
     fill-height
-    :class="`${styles.verticalLayout.root}`"
+    fluid
+    :class="`pa-0 ${styles.verticalLayout.root}`"
     v-bind="vuetifyProps('v-container')"
   >
     <v-row
       v-for="(element, index) in (layout.uischema as Layout).elements"
       :key="`${layout.path}-${(layout.uischema as Layout).elements.length}-${index}`"
+      no-gutters
+      class="ga-4"
       v-bind="vuetifyProps(`v-row[${index}]`)"
     >
       <v-col
         cols="12"
-        :class="styles.verticalLayout.item"
+        :class="`pa-0 ${styles.verticalLayout.item}`"
         v-bind="vuetifyProps('v-col')"
       >
         <dispatch-renderer
