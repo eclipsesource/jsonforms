@@ -11,7 +11,10 @@
         :key="`${layout.path}-${visibleElementsWithIndex.length}-${index}`"
         :class="styles.horizontalLayout.item"
         :cols="cols[index]"
-        v-bind="vuetifyProps(`v-col[${index}]`)"
+        v-bind="{
+          ...vuetifyProps(`v-col`),
+          ...vuetifyProps(`v-col[${index}]`),
+        }"
       >
         <dispatch-renderer
           :schema="layout.schema"

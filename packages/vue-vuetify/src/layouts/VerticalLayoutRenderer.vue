@@ -9,7 +9,7 @@
     <v-row
       v-for="(element, index) in (layout.uischema as Layout).elements"
       :key="`${layout.path}-${(layout.uischema as Layout).elements.length}-${index}`"
-      v-bind="vuetifyProps(`v-row[${index}]`)"
+      v-bind="{ ...vuetifyProps(`v-row`), ...vuetifyProps(`v-row[${index}]`) }"
     >
       <v-col
         cols="12"
