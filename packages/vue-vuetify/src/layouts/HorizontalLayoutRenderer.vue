@@ -5,11 +5,11 @@
     fluid
     v-bind="vuetifyProps('v-container')"
   >
-    <v-row no-gutters class="ga-4" v-bind="vuetifyProps('v-row')">
+    <v-row v-bind="vuetifyProps('v-row')">
       <v-col
         v-for="(element, index) in (layout.uischema as Layout).elements"
         :key="`${layout.path}-${(layout.uischema as Layout).elements.length}-${index}`"
-        :class="`pa-0 ${styles.horizontalLayout.item}`"
+        :class="styles.horizontalLayout.item"
         :cols="cols[index]"
         v-bind="vuetifyProps(`v-col[${index}]`)"
       >

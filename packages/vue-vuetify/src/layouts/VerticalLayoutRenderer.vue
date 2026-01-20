@@ -10,12 +10,11 @@
       v-for="(element, index) in (layout.uischema as Layout).elements"
       :key="`${layout.path}-${(layout.uischema as Layout).elements.length}-${index}`"
       no-gutters
-      class="ga-4"
       v-bind="vuetifyProps(`v-row[${index}]`)"
     >
       <v-col
         cols="12"
-        :class="`pa-0 ${styles.verticalLayout.item}`"
+        :class="styles.verticalLayout.item"
         v-bind="vuetifyProps('v-col')"
       >
         <dispatch-renderer

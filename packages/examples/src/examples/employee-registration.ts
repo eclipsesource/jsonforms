@@ -83,6 +83,16 @@ export const schema = {
           title: 'Include ID Details',
           default: true,
         },
+        showSsn: {
+          type: 'boolean',
+          title: 'Include SSN',
+          default: true,
+        },
+        showDriversLicense: {
+          type: 'boolean',
+          title: "Include Driver's License",
+          default: true,
+        },
         ssn: {
           type: 'string',
           title: 'Social Security Number',
@@ -308,8 +318,21 @@ export const uischema = {
               ],
             },
             {
-              type: 'Control',
-              scope: '#/properties/person/properties/showIdDetails',
+              type: 'HorizontalLayout',
+              elements: [
+                {
+                  type: 'Control',
+                  scope: '#/properties/person/properties/showIdDetails',
+                },
+                {
+                  type: 'Control',
+                  scope: '#/properties/person/properties/showSsn',
+                },
+                {
+                  type: 'Control',
+                  scope: '#/properties/person/properties/showDriversLicense',
+                },
+              ],
             },
             {
               type: 'HorizontalLayout',
@@ -324,10 +347,25 @@ export const uischema = {
                 {
                   type: 'Control',
                   scope: '#/properties/person/properties/ssn',
+                  rule: {
+                    effect: 'SHOW',
+                    condition: {
+                      scope: '#/properties/person/properties/showSsn',
+                      schema: { const: true },
+                    },
+                  },
                 },
                 {
                   type: 'Control',
                   scope: '#/properties/person/properties/driversLicense',
+                  rule: {
+                    effect: 'SHOW',
+                    condition: {
+                      scope:
+                        '#/properties/person/properties/showDriversLicense',
+                      schema: { const: true },
+                    },
+                  },
                 },
               ],
             },
@@ -625,6 +663,8 @@ export const data = {
   showBenefits: true,
   person: {
     showIdDetails: true,
+    showSsn: true,
+    showDriversLicense: true,
   },
   employment: {
     showManagerInfo: true,
