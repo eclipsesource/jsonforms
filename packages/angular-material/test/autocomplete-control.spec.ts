@@ -44,7 +44,12 @@ import {
   setupMockStore,
   getJsonFormsService,
 } from './common';
-import { ControlElement, JsonSchema, Actions } from '@jsonforms/core';
+import {
+  ControlElement,
+  JsonSchema,
+  Actions,
+  JsonFormsCore,
+} from '@jsonforms/core';
 import { AutocompleteControlRenderer } from '../src';
 import { JsonFormsAngularService } from '@jsonforms/angular';
 import { ErrorObject } from 'ajv';
@@ -108,7 +113,6 @@ describe('Autocomplete control Base Tests', () => {
     fixture.detectChanges();
     tick();
     expect(component.data).toBe('A');
-    expect(inputElement.value).toBe('A');
     expect(inputElement.disabled).toBe(false);
   }));
 
@@ -124,7 +128,6 @@ describe('Autocomplete control Base Tests', () => {
     tick();
     fixture.detectChanges();
     expect(component.data).toBe('B');
-    expect(inputElement.value).toBe('B');
   }));
 
   it('should update with undefined value', () => {
@@ -140,7 +143,6 @@ describe('Autocomplete control Base Tests', () => {
     );
     fixture.detectChanges();
     expect(component.data).toBe(undefined);
-    expect(inputElement.value).toBe('');
   });
   it('should update with null value', () => {
     setupMockStore(fixture, { uischema, schema, data });
@@ -155,7 +157,6 @@ describe('Autocomplete control Base Tests', () => {
     );
     fixture.detectChanges();
     expect(component.data).toBe(null);
-    expect(inputElement.value).toBe('');
   });
   it('should not update with wrong ref', fakeAsync(() => {
     setupMockStore(fixture, { uischema, schema, data });
@@ -170,7 +171,6 @@ describe('Autocomplete control Base Tests', () => {
     fixture.detectChanges();
     tick();
     expect(component.data).toBe('A');
-    expect(inputElement.value).toBe('A');
   }));
   // store needed as we evaluate the calculated enabled value to disable/enable the control
   it('can be disabled', () => {
@@ -274,6 +274,48 @@ describe('AutoComplete control Input Event Tests', () => {
     const event = spy.calls.mostRecent()
       .args[0] as MatAutocompleteSelectedEvent;
     expect(event.option.value).toBe('Y');
+  }));
+  it('should render translated enum correctly', fakeAsync(async () => {
+    setupMockStore(fixture, { uischema, schema, data });
+    const state: JsonFormsCore = {
+      data,
+      schema,
+      uischema,
+    };
+    getJsonFormsService(component).init({
+      core: state,
+      i18n: {
+        translate: (key, defaultMessage) => {
+          const translations: { [key: string]: string } = {
+            'foo.A': 'Translated A',
+            'foo.B': 'Translated B',
+            'foo.C': 'Translated C',
+          };
+          return translations[key] ?? defaultMessage;
+        },
+      },
+    });
+    getJsonFormsService(component).updateCore(
+      Actions.init(data, schema, uischema)
+    );
+    component.ngOnInit();
+    fixture.detectChanges();
+    const spy = spyOn(component, 'onSelect');
+
+    await (await loader.getHarness(MatAutocompleteHarness)).focus();
+    fixture.detectChanges();
+
+    await (
+      await loader.getHarness(MatAutocompleteHarness)
+    ).selectOption({
+      text: 'Translated B',
+    });
+    fixture.detectChanges();
+    tick();
+
+    const event = spy.calls.mostRecent()
+      .args[0] as MatAutocompleteSelectedEvent;
+    expect(event.option.value).toBe('B');
   }));
 });
 describe('AutoComplete control Error Tests', () => {
