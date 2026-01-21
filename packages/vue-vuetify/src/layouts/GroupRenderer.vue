@@ -15,10 +15,13 @@
       >
 
       <v-expansion-panel-text
-        v-bind="vuetifyProps(`v-expansion-panel-text[${index}]`)"
-        v-for="(element, index) in (layout.uischema as Layout).elements"
-        :key="`${layout.path}-${(layout.uischema as Layout).elements.length}-${index}`"
+        v-for="{ element, index } in visibleElementsWithIndex"
+        :key="`${layout.path}-${visibleElementsWithIndex.length}-${index}`"
         :class="styles.group.item"
+        v-bind="{
+          ...vuetifyProps(`v-expansion-panel-text`),
+          ...vuetifyProps(`v-expansion-panel-text[${index}]`),
+        }"
       >
         <dispatch-renderer
           :schema="layout.schema"
@@ -34,7 +37,15 @@
 </template>
 
 <script lang="ts">
-import { type Layout } from '@jsonforms/core';
+import {
+  getAjv,
+  getConfig,
+  getData,
+  hasShowRule,
+  isVisible,
+  type Layout,
+  type UISchemaElement,
+} from '@jsonforms/core';
 import {
   DispatchRenderer,
   rendererProps,
@@ -48,7 +59,7 @@ import {
   VExpansionPanelTitle,
   VExpansionPanels,
 } from 'vuetify/components';
-import { useVuetifyLayout } from '../util';
+import { useJsonForms, useVuetifyLayout } from '../util';
 
 const layoutRenderer = defineComponent({
   name: 'group-renderer',
@@ -64,8 +75,13 @@ const layoutRenderer = defineComponent({
   },
   setup(props: RendererProps<Layout>) {
     const openedPanels = ref<number | number[]>(0);
+    const jsonforms = useJsonForms();
 
-    return { ...useVuetifyLayout(useJsonFormsLayout(props)), openedPanels };
+    return {
+      ...useVuetifyLayout(useJsonFormsLayout(props)),
+      openedPanels,
+      jsonforms,
+    };
   },
   computed: {
     bare(): boolean {
@@ -83,6 +99,28 @@ const layoutRenderer = defineComponent({
         classes.push(`${this.styles.group.alignLeft}`);
       }
       return classes.join(' ');
+    },
+    visibleElementsWithIndex(): { element: UISchemaElement; index: number }[] {
+      return this.layout.uischema.elements
+        .map((element, index) => ({ element, index }))
+        .filter(({ element }) => this.isVisible(element, this.layout.path));
+    },
+  },
+  methods: {
+    isVisible(uischema: UISchemaElement, path: string): boolean {
+      if (hasShowRule(uischema)) {
+        const state = { jsonforms: this.jsonforms };
+        const rootData = getData(state);
+
+        return isVisible(
+          uischema,
+          rootData,
+          path,
+          getAjv(state),
+          getConfig(state),
+        );
+      }
+      return true;
     },
   },
 });
