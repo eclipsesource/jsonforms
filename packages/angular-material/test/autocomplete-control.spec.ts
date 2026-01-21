@@ -44,7 +44,13 @@ import {
   setupMockStore,
   getJsonFormsService,
 } from './common';
-import { ControlElement, JsonSchema, Actions } from '@jsonforms/core';
+import {
+  ControlElement,
+  JsonSchema,
+  Actions,
+  JsonFormsCore,
+  EnumOption,
+} from '@jsonforms/core';
 import { AutocompleteControlRenderer } from '../src';
 import { JsonFormsAngularService } from '@jsonforms/angular';
 import { ErrorObject } from 'ajv';
@@ -252,7 +258,10 @@ describe('AutoComplete control Input Event Tests', () => {
     const event = spy.calls.mostRecent()
       .args[0] as MatAutocompleteSelectedEvent;
 
-    expect(event.option.value).toBe('B');
+    expect(event.option.value).toEqual({
+      label: 'B',
+      value: 'B',
+    } satisfies EnumOption);
     expect(inputElement.value).toBe('B');
   }));
   it('options should prefer own props', fakeAsync(async () => {
@@ -277,8 +286,57 @@ describe('AutoComplete control Input Event Tests', () => {
 
     const event = spy.calls.mostRecent()
       .args[0] as MatAutocompleteSelectedEvent;
-    expect(event.option.value).toBe('Y');
+    expect(event.option.value).toEqual({
+      label: 'Y',
+      value: 'Y',
+    } satisfies EnumOption);
     expect(inputElement.value).toBe('Y');
+  }));
+  it('should render translated enum correctly', fakeAsync(async () => {
+    setupMockStore(fixture, { uischema, schema, data });
+    const state: JsonFormsCore = {
+      data,
+      schema,
+      uischema,
+    };
+    getJsonFormsService(component).init({
+      core: state,
+      i18n: {
+        translate: (key, defaultMessage) => {
+          const translations: { [key: string]: string } = {
+            'foo.A': 'Translated A',
+            'foo.B': 'Translated B',
+            'foo.C': 'Translated C',
+          };
+          return translations[key] ?? defaultMessage;
+        },
+      },
+    });
+    getJsonFormsService(component).updateCore(
+      Actions.init(data, schema, uischema)
+    );
+    component.ngOnInit();
+    fixture.detectChanges();
+    const spy = spyOn(component, 'onSelect');
+
+    await (await loader.getHarness(MatAutocompleteHarness)).focus();
+    fixture.detectChanges();
+
+    await (
+      await loader.getHarness(MatAutocompleteHarness)
+    ).selectOption({
+      text: 'Translated B',
+    });
+    fixture.detectChanges();
+    tick();
+
+    const event = spy.calls.mostRecent()
+      .args[0] as MatAutocompleteSelectedEvent;
+    expect(event.option.value).toEqual({
+      label: 'Translated B',
+      value: 'B',
+    } satisfies EnumOption);
+    expect(inputElement.value).toBe('Translated B');
   }));
 });
 describe('AutoComplete control Error Tests', () => {

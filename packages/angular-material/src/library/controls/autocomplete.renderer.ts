@@ -34,10 +34,15 @@ import {
   Actions,
   composeWithUi,
   ControlElement,
+  EnumOption,
   isEnumControl,
+  JsonFormsState,
+  mapStateToEnumControlProps,
   OwnPropsOfControl,
+  OwnPropsOfEnum,
   RankedTester,
   rankWith,
+  StatePropsOfControl,
 } from '@jsonforms/core';
 import type { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
@@ -67,13 +72,13 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
         autoActiveFirstOption
         #auto="matAutocomplete"
         (optionSelected)="onSelect($event)"
+        [displayWith]="displayFn"
       >
-        <mat-option
-          *ngFor="let option of filteredOptions | async"
-          [value]="option"
-        >
-          {{ option }}
+        @for (option of filteredOptions | async; track option.value) {
+        <mat-option [value]="option">
+          {{ option.label }}
         </mat-option>
+        }
       </mat-autocomplete>
       <mat-hint *ngIf="shouldShowUnfocusedDescription() || focused">{{
         description
@@ -105,15 +110,39 @@ export class AutocompleteControlRenderer
   extends JsonFormsControl
   implements OnInit
 {
-  @Input() options: string[];
-  filteredOptions: Observable<string[]>;
+  @Input() options?: EnumOption[] | string[];
+  valuesToTranslatedOptions?: Map<string, EnumOption>;
+  filteredOptions: Observable<EnumOption[]>;
   shouldFilter: boolean;
   focused = false;
 
   constructor(jsonformsService: JsonFormsAngularService) {
     super(jsonformsService);
   }
+
+  protected override mapToProps(
+    state: JsonFormsState
+  ): StatePropsOfControl & OwnPropsOfEnum {
+    return mapStateToEnumControlProps(state, this.getOwnProps());
+  }
+
   getEventValue = (event: any) => event.target.value;
+
+  override onChange(ev: any) {
+    const eventValue = this.getEventValue(ev);
+    const option = Array.from(this.valuesToTranslatedOptions?.values() ?? []).find(
+      (option) => option.label === eventValue
+    );
+    if (!option) {
+      super.onChange(ev);
+      return;
+    }
+
+    this.jsonFormsService.updateCore(
+      Actions.update(this.propsPath, () => option.value)
+    );
+    this.triggerValidation();
+  }
 
   ngOnInit() {
     super.ngOnInit();
@@ -121,6 +150,12 @@ export class AutocompleteControlRenderer
     this.filteredOptions = this.form.valueChanges.pipe(
       startWith(''),
       map((val) => this.filter(val))
+    );
+  }
+
+  override mapAdditionalProps(_props: StatePropsOfControl & OwnPropsOfEnum) {
+    this.valuesToTranslatedOptions = new Map(
+      (_props.options ?? []).map((option) => [option.value, option])
     );
   }
 
@@ -136,30 +171,67 @@ export class AutocompleteControlRenderer
   onSelect(ev: MatAutocompleteSelectedEvent) {
     const path = composeWithUi(this.uischema as ControlElement, this.path);
     this.shouldFilter = false;
-    this.jsonFormsService.updateCore(
-      Actions.update(path, () => ev.option.value)
-    );
+    const option: EnumOption = ev.option.value;
+    this.jsonFormsService.updateCore(Actions.update(path, () => option.value));
     this.triggerValidation();
   }
 
-  filter(val: string): string[] {
-    return (this.options || this.scopedSchema.enum || []).filter(
-      (option) =>
-        !this.shouldFilter ||
-        !val ||
-        option.toLowerCase().indexOf(val.toLowerCase()) === 0
+  // use arrow function to bind "this" reference
+  displayFn = (option?: string | EnumOption): string => {
+    if (!option) {
+      return '';
+    }
+
+    if (typeof option === 'string') {
+      if (!this.valuesToTranslatedOptions) {
+        return option; // show raw value until translations are ready
+      }
+
+      // if no option matches, it is a manual input
+      return this.valuesToTranslatedOptions.get(option)?.label ?? option;
+    }
+
+    return option?.label ?? '';
+  };
+
+  filter(val: string | EnumOption | undefined): EnumOption[] {
+    const options = Array.from(this.valuesToTranslatedOptions?.values() || []);
+
+    if (!val || !this.shouldFilter) {
+      return options;
+    }
+
+    const label = typeof val === 'string' ? val : val.label;
+    return options.filter((option) =>
+      option.label.toLowerCase().startsWith(label.toLowerCase())
     );
   }
-  protected getOwnProps(): OwnPropsOfAutoComplete {
+  protected getOwnProps(): OwnPropsOfControl & OwnPropsOfEnum {
     return {
       ...super.getOwnProps(),
-      options: this.options,
+      options: this.stringOptionsToEnumOptions(this.options),
     };
+  }
+
+  /**
+   * For {@link options} input backwards compatibility
+   */
+  protected stringOptionsToEnumOptions(
+    options: typeof this.options
+  ): EnumOption[] | undefined {
+    if (!options) {
+      return undefined;
+    }
+
+    return options.every((item) => typeof item === 'string')
+      ? options.map((str) => {
+          return {
+            label: str,
+            value: str,
+          } satisfies EnumOption;
+        })
+      : options;
   }
 }
 
 export const enumControlTester: RankedTester = rankWith(2, isEnumControl);
-
-interface OwnPropsOfAutoComplete extends OwnPropsOfControl {
-  options: string[];
-}
