@@ -51,7 +51,7 @@ import {
   JsonFormsCore,
   EnumOption,
 } from '@jsonforms/core';
-import { AutocompleteControlRenderer } from '../src';
+import { EnumControlRenderer } from '../src';
 import { JsonFormsAngularService } from '@jsonforms/angular';
 import { ErrorObject } from 'ajv';
 import { HarnessLoader } from '@angular/cdk/testing';
@@ -81,16 +81,16 @@ const imports = [
   ReactiveFormsModule,
 ];
 const providers = [JsonFormsAngularService];
-const componentUT: any = AutocompleteControlRenderer;
+const componentUT: any = EnumControlRenderer;
 const errorTest: ErrorTestExpectation = {
   errorInstance: MatError,
   numberOfElements: 1,
   indexOfElement: 0,
 };
 
-describe('Autocomplete control Base Tests', () => {
-  let fixture: ComponentFixture<AutocompleteControlRenderer>;
-  let component: AutocompleteControlRenderer;
+describe('Enum control Base Tests', () => {
+  let fixture: ComponentFixture<EnumControlRenderer>;
+  let component: EnumControlRenderer;
   let inputElement: HTMLInputElement;
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -215,9 +215,9 @@ describe('Autocomplete control Base Tests', () => {
     expect(inputElement.id).toBe('myId');
   });
 });
-describe('AutoComplete control Input Event Tests', () => {
-  let fixture: ComponentFixture<AutocompleteControlRenderer>;
-  let component: AutocompleteControlRenderer;
+describe('Enum control Input Event Tests', () => {
+  let fixture: ComponentFixture<EnumControlRenderer>;
+  let component: EnumControlRenderer;
   let loader: HarnessLoader;
   let inputElement: HTMLInputElement;
   beforeEach(waitForAsync(() => {
@@ -339,9 +339,9 @@ describe('AutoComplete control Input Event Tests', () => {
     expect(inputElement.value).toBe('Translated B');
   }));
 });
-describe('AutoComplete control Error Tests', () => {
-  let fixture: ComponentFixture<AutocompleteControlRenderer>;
-  let component: AutocompleteControlRenderer;
+describe('Enum control Error Tests', () => {
+  let fixture: ComponentFixture<EnumControlRenderer>;
+  let component: EnumControlRenderer;
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [componentUT, ...imports],
@@ -383,9 +383,9 @@ describe('AutoComplete control Error Tests', () => {
   });
 });
 
-describe('AutoComplete control updateFilter function', () => {
-  let fixture: ComponentFixture<AutocompleteControlRenderer>;
-  let component: AutocompleteControlRenderer;
+describe('Enum control updateFilter function', () => {
+  let fixture: ComponentFixture<EnumControlRenderer>;
+  let component: EnumControlRenderer;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({

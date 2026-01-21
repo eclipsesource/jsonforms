@@ -54,9 +54,9 @@ import {
   ToggleControlRendererTester,
 } from './controls/toggle.renderer';
 import {
-  AutocompleteControlRenderer,
+  EnumControlRenderer,
   enumControlTester,
-} from './controls/autocomplete.renderer';
+} from './controls/enum.renderer';
 import {
   ObjectControlRenderer,
   ObjectControlRendererTester,
@@ -106,7 +106,7 @@ export const angularMaterialRenderers: {
   { tester: RangeControlRendererTester, renderer: RangeControlRenderer },
   { tester: DateControlRendererTester, renderer: DateControlRenderer },
   { tester: ToggleControlRendererTester, renderer: ToggleControlRenderer },
-  { tester: enumControlTester, renderer: AutocompleteControlRenderer },
+  { tester: enumControlTester, renderer: EnumControlRenderer },
   { tester: ObjectControlRendererTester, renderer: ObjectControlRenderer },
   // layouts
   { tester: verticalLayoutTester, renderer: VerticalLayoutRenderer },
