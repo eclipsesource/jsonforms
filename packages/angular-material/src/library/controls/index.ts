@@ -30,3 +30,4 @@ export * from './range.renderer';
 export * from './date.renderer';
 export * from './toggle.renderer';
 export * from './enum.renderer';
+export * from './one-of-enum.renderer';

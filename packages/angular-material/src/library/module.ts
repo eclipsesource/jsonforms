@@ -49,6 +49,7 @@ import { BooleanControlRenderer } from './controls/boolean.renderer';
 import { DateControlRenderer } from './controls/date.renderer';
 import { EnumControlRenderer } from './controls/enum.renderer';
 import { NumberControlRenderer } from './controls/number.renderer';
+import { OneOfEnumControlRenderer } from './controls/one-of-enum.renderer';
 import { RangeControlRenderer } from './controls/range.renderer';
 import { TextAreaRenderer } from './controls/textarea.renderer';
 import { TextControlRenderer } from './controls/text.renderer';
@@ -105,6 +106,7 @@ import { LayoutChildrenRenderPropsPipe } from './layouts';
     JsonFormsDetailComponent,
     ObjectControlRenderer,
     EnumControlRenderer,
+    OneOfEnumControlRenderer,
     TableRenderer,
     ArrayLayoutRenderer,
     LayoutChildrenRenderPropsPipe,
@@ -145,6 +147,7 @@ import { LayoutChildrenRenderPropsPipe } from './layouts';
     JsonFormsDetailComponent,
     ObjectControlRenderer,
     EnumControlRenderer,
+    OneOfEnumControlRenderer,
     TableRenderer,
     ArrayLayoutRenderer,
     LayoutChildrenRenderPropsPipe,
