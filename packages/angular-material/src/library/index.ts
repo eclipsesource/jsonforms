@@ -56,6 +56,8 @@ import {
 import {
   EnumControlRenderer,
   enumControlTester,
+  OneOfEnumControlRenderer,
+  oneOfEnumControlTester,
 } from './controls/enum.renderer';
 import {
   ObjectControlRenderer,
@@ -107,6 +109,7 @@ export const angularMaterialRenderers: {
   { tester: DateControlRendererTester, renderer: DateControlRenderer },
   { tester: ToggleControlRendererTester, renderer: ToggleControlRenderer },
   { tester: enumControlTester, renderer: EnumControlRenderer },
+  { tester: oneOfEnumControlTester, renderer: OneOfEnumControlRenderer },
   { tester: ObjectControlRendererTester, renderer: ObjectControlRenderer },
   // layouts
   { tester: verticalLayoutTester, renderer: VerticalLayoutRenderer },

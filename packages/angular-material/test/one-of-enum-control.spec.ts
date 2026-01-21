@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
+
   Copyright (c) 2017-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -41,36 +41,51 @@ import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
   ErrorTestExpectation,
-  setupMockStore,
   getJsonFormsService,
+  setupMockStore,
 } from './common';
 import {
-  ControlElement,
-  JsonSchema,
   Actions,
-  JsonFormsCore,
+  ControlElement,
   EnumOption,
+  JsonFormsCore,
+  JsonSchema,
 } from '@jsonforms/core';
-import { EnumControlRenderer } from '../src';
+import { OneOfEnumControlRenderer } from '../src';
 import { JsonFormsAngularService } from '@jsonforms/angular';
 import { ErrorObject } from 'ajv';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MatAutocompleteHarness } from '@angular/material/autocomplete/testing';
 
-const data = { foo: 'A' };
+const data = {
+  oneOfEnum: 'foo',
+};
 const schema: JsonSchema = {
   type: 'object',
   properties: {
-    foo: {
+    oneOfEnum: {
       type: 'string',
-      enum: ['A', 'B', 'C'],
+      oneOf: [
+        {
+          const: 'foo',
+          title: 'Foo',
+        },
+        {
+          const: 'bar',
+          title: 'Bar',
+        },
+        {
+          const: 'foobar',
+          title: 'FooBar',
+        },
+      ],
     },
   },
 };
 const uischema: ControlElement = {
   type: 'Control',
-  scope: '#/properties/foo',
+  scope: '#/properties/oneOfEnum',
 };
 
 const imports = [
@@ -81,23 +96,25 @@ const imports = [
   ReactiveFormsModule,
 ];
 const providers = [JsonFormsAngularService];
-const componentUT: any = EnumControlRenderer;
+const componentUT: any = OneOfEnumControlRenderer;
 const errorTest: ErrorTestExpectation = {
   errorInstance: MatError,
   numberOfElements: 1,
   indexOfElement: 0,
 };
 
-describe('Enum control Base Tests', () => {
-  let fixture: ComponentFixture<EnumControlRenderer>;
-  let component: EnumControlRenderer;
+describe('OneOfEnum control Base Tests', () => {
+  let fixture: ComponentFixture<OneOfEnumControlRenderer>;
+  let component: OneOfEnumControlRenderer;
   let inputElement: HTMLInputElement;
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [componentUT, ...imports],
       providers: providers,
     }).compileComponents();
   }));
+
   beforeEach(() => {
     fixture = TestBed.createComponent(componentUT);
     component = fixture.componentInstance;
@@ -113,8 +130,8 @@ describe('Enum control Base Tests', () => {
     component.ngOnInit();
     fixture.detectChanges();
     tick();
-    expect(component.data).toBe('A');
-    expect(inputElement.value).toBe('A');
+    expect(component.data).toEqual('foo');
+    expect(inputElement.value).toBe('Foo');
     expect(inputElement.disabled).toBe(false);
   }));
 
@@ -126,11 +143,13 @@ describe('Enum control Base Tests', () => {
     component.ngOnInit();
     fixture.detectChanges();
     tick();
-    getJsonFormsService(component).updateCore(Actions.update('foo', () => 'B'));
+    getJsonFormsService(component).updateCore(
+      Actions.update('oneOfEnum', () => 'bar')
+    );
     tick();
     fixture.detectChanges();
-    expect(component.data).toBe('B');
-    expect(inputElement.value).toBe('B');
+    expect(component.data).toEqual('bar');
+    expect(inputElement.value).toBe('Bar');
   }));
 
   it('should update with undefined value', () => {
@@ -142,12 +161,13 @@ describe('Enum control Base Tests', () => {
     fixture.detectChanges();
 
     getJsonFormsService(component).updateCore(
-      Actions.update('foo', () => undefined)
+      Actions.update('oneOfEnum', () => undefined)
     );
     fixture.detectChanges();
     expect(component.data).toBe(undefined);
     expect(inputElement.value).toBe('');
   });
+
   it('should update with null value', () => {
     setupMockStore(fixture, { uischema, schema, data });
     getJsonFormsService(component).updateCore(
@@ -157,12 +177,13 @@ describe('Enum control Base Tests', () => {
     component.ngOnInit();
 
     getJsonFormsService(component).updateCore(
-      Actions.update('foo', () => null)
+      Actions.update('oneOfEnum', () => null)
     );
     fixture.detectChanges();
     expect(component.data).toBe(null);
     expect(inputElement.value).toBe('');
   });
+
   it('should not update with wrong ref', fakeAsync(() => {
     setupMockStore(fixture, { uischema, schema, data });
     getJsonFormsService(component).updateCore(
@@ -171,13 +192,18 @@ describe('Enum control Base Tests', () => {
     component.ngOnInit();
     fixture.detectChanges();
     tick();
-    getJsonFormsService(component).updateCore(Actions.update('foo', () => 'A'));
-    getJsonFormsService(component).updateCore(Actions.update('bar', () => 'B'));
+    getJsonFormsService(component).updateCore(
+      Actions.update('oneOfEnum', () => 'foo')
+    );
+    getJsonFormsService(component).updateCore(
+      Actions.update('plainEnum', () => 'bar')
+    );
     fixture.detectChanges();
     tick();
-    expect(component.data).toBe('A');
-    expect(inputElement.value).toBe('A');
+    expect(component.data).toEqual('foo');
+    expect(inputElement.value).toBe('Foo');
   }));
+
   // store needed as we evaluate the calculated enabled value to disable/enable the control
   it('can be disabled', () => {
     setupMockStore(fixture, { uischema, schema, data });
@@ -189,6 +215,7 @@ describe('Enum control Base Tests', () => {
     fixture.detectChanges();
     expect(inputElement.disabled).toBe(true);
   });
+
   it('can be hidden', () => {
     setupMockStore(fixture, { uischema, schema, data });
     getJsonFormsService(component).updateCore(
@@ -215,17 +242,20 @@ describe('Enum control Base Tests', () => {
     expect(inputElement.id).toBe('myId');
   });
 });
-describe('Enum control Input Event Tests', () => {
-  let fixture: ComponentFixture<EnumControlRenderer>;
-  let component: EnumControlRenderer;
+
+describe('OneOfEnum control Input Event Tests', () => {
+  let fixture: ComponentFixture<OneOfEnumControlRenderer>;
+  let component: OneOfEnumControlRenderer;
   let loader: HarnessLoader;
   let inputElement: HTMLInputElement;
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [componentUT, ...imports],
       providers: [...providers],
     }).compileComponents();
   }));
+
   beforeEach(waitForAsync(() => {
     fixture = TestBed.createComponent(componentUT);
     component = fixture.componentInstance;
@@ -250,7 +280,7 @@ describe('Enum control Input Event Tests', () => {
 
     await (
       await loader.getHarness(MatAutocompleteHarness)
-    ).selectOption({ text: 'B' });
+    ).selectOption({ text: 'Bar' });
     tick();
     fixture.detectChanges();
 
@@ -259,17 +289,31 @@ describe('Enum control Input Event Tests', () => {
       .args[0] as MatAutocompleteSelectedEvent;
 
     expect(event.option.value).toEqual({
-      label: 'B',
-      value: 'B',
+      label: 'Bar',
+      value: 'bar',
     } satisfies EnumOption);
-    expect(inputElement.value).toBe('B');
+    expect(inputElement.value).toBe('Bar');
   }));
+
   it('options should prefer own props', fakeAsync(async () => {
     setupMockStore(fixture, { uischema, schema, data });
     getJsonFormsService(component).updateCore(
       Actions.init(data, schema, uischema)
     );
-    component.stringOptions = ['X', 'Y', 'Z'];
+    component.options = [
+      {
+        label: 'X',
+        value: 'x',
+      },
+      {
+        label: 'Y',
+        value: 'y',
+      },
+      {
+        label: 'Z',
+        value: 'z',
+      },
+    ];
 
     component.ngOnInit();
     fixture.detectChanges();
@@ -288,10 +332,11 @@ describe('Enum control Input Event Tests', () => {
       .args[0] as MatAutocompleteSelectedEvent;
     expect(event.option.value).toEqual({
       label: 'Y',
-      value: 'Y',
+      value: 'y',
     } satisfies EnumOption);
     expect(inputElement.value).toBe('Y');
   }));
+
   it('should render translated enum correctly', fakeAsync(async () => {
     setupMockStore(fixture, { uischema, schema, data });
     const state: JsonFormsCore = {
@@ -304,9 +349,9 @@ describe('Enum control Input Event Tests', () => {
       i18n: {
         translate: (key, defaultMessage) => {
           const translations: { [key: string]: string } = {
-            'foo.A': 'Translated A',
-            'foo.B': 'Translated B',
-            'foo.C': 'Translated C',
+            'oneOfEnum.Foo': 'Translated Foo',
+            'oneOfEnum.Bar': 'Translated Bar',
+            'oneOfEnum.FooBar': 'Translated FooBar',
           };
           return translations[key] ?? defaultMessage;
         },
@@ -325,7 +370,7 @@ describe('Enum control Input Event Tests', () => {
     await (
       await loader.getHarness(MatAutocompleteHarness)
     ).selectOption({
-      text: 'Translated B',
+      text: 'Translated Bar',
     });
     fixture.detectChanges();
     tick();
@@ -333,29 +378,33 @@ describe('Enum control Input Event Tests', () => {
     const event = spy.calls.mostRecent()
       .args[0] as MatAutocompleteSelectedEvent;
     expect(event.option.value).toEqual({
-      label: 'Translated B',
-      value: 'B',
+      label: 'Translated Bar',
+      value: 'bar',
     } satisfies EnumOption);
-    expect(inputElement.value).toBe('Translated B');
+    expect(inputElement.value).toBe('Translated Bar');
   }));
 });
-describe('Enum control Error Tests', () => {
-  let fixture: ComponentFixture<EnumControlRenderer>;
-  let component: EnumControlRenderer;
+
+describe('OneOfEnum control Error Tests', () => {
+  let fixture: ComponentFixture<OneOfEnumControlRenderer>;
+  let component: OneOfEnumControlRenderer;
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [componentUT, ...imports],
       providers: providers,
     }).compileComponents();
   }));
+
   beforeEach(() => {
     fixture = TestBed.createComponent(componentUT);
     component = fixture.componentInstance;
   });
+
   it('should display errors', () => {
     const errors: ErrorObject[] = [
       {
-        instancePath: '/foo',
+        instancePath: '/oneOfEnum',
         message: 'Hi, this is me, test error!',
         params: {},
         keyword: '',
@@ -383,9 +432,9 @@ describe('Enum control Error Tests', () => {
   });
 });
 
-describe('Enum control updateFilter function', () => {
-  let fixture: ComponentFixture<EnumControlRenderer>;
-  let component: EnumControlRenderer;
+describe('OneOfEnum control updateFilter function', () => {
+  let fixture: ComponentFixture<OneOfEnumControlRenderer>;
+  let component: OneOfEnumControlRenderer;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -401,7 +450,20 @@ describe('Enum control updateFilter function', () => {
 
   it('should not filter options on ENTER key press', () => {
     component.shouldFilter = false;
-    component.stringOptions = ['X', 'Y', 'Z'];
+    component.options = [
+      {
+        label: 'X',
+        value: 'x',
+      },
+      {
+        label: 'Y',
+        value: 'y',
+      },
+      {
+        label: 'Z',
+        value: 'z',
+      },
+    ];
     setupMockStore(fixture, { uischema, schema, data });
     getJsonFormsService(component).updateCore(
       Actions.init(data, schema, uischema)
@@ -415,7 +477,20 @@ describe('Enum control updateFilter function', () => {
 
   it('should filter options when a key other than ENTER is pressed', () => {
     component.shouldFilter = false;
-    component.stringOptions = ['X', 'Y', 'Z'];
+    component.options = [
+      {
+        label: 'X',
+        value: 'x',
+      },
+      {
+        label: 'Y',
+        value: 'y',
+      },
+      {
+        label: 'Z',
+        value: 'z',
+      },
+    ];
     setupMockStore(fixture, { uischema, schema, data });
     getJsonFormsService(component).updateCore(
       Actions.init(data, schema, uischema)

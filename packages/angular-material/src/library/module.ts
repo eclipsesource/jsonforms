@@ -47,7 +47,10 @@ import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { JsonFormsModule } from '@jsonforms/angular';
 import { BooleanControlRenderer } from './controls/boolean.renderer';
 import { DateControlRenderer } from './controls/date.renderer';
-import { EnumControlRenderer } from './controls/enum.renderer';
+import {
+  EnumControlRenderer,
+  OneOfEnumControlRenderer,
+} from './controls/enum.renderer';
 import { NumberControlRenderer } from './controls/number.renderer';
 import { RangeControlRenderer } from './controls/range.renderer';
 import { TextAreaRenderer } from './controls/textarea.renderer';
@@ -105,6 +108,7 @@ import { LayoutChildrenRenderPropsPipe } from './layouts';
     JsonFormsDetailComponent,
     ObjectControlRenderer,
     EnumControlRenderer,
+    OneOfEnumControlRenderer,
     TableRenderer,
     ArrayLayoutRenderer,
     LayoutChildrenRenderPropsPipe,
@@ -145,6 +149,7 @@ import { LayoutChildrenRenderPropsPipe } from './layouts';
     JsonFormsDetailComponent,
     ObjectControlRenderer,
     EnumControlRenderer,
+    OneOfEnumControlRenderer,
     TableRenderer,
     ArrayLayoutRenderer,
     LayoutChildrenRenderPropsPipe,
