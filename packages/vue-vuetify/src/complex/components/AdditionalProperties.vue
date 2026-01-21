@@ -56,13 +56,8 @@
         </v-container>
       </v-expansion-panel-title>
       <v-expansion-panel-text class="additional-properties-panel">
-        <v-container
-          v-bind="vuetifyProps('v-container')"
-          class="pa-0 ma-0"
-          fluid
-        >
+        <v-container v-bind="vuetifyProps('v-container')" class="pa-0" fluid>
           <v-row
-            no-gutters
             v-for="element in additionalPropertyItems"
             :key="`${element.propertyName}`"
           >
@@ -213,7 +208,6 @@ export default defineComponent({
 
     const toAdditionalPropertyType = (
       propName: string,
-      propValue: any,
       parentSchema: JsonSchema,
       rootSchema: JsonSchema,
     ): AdditionalPropertyType => {
@@ -300,7 +294,6 @@ export default defineComponent({
       additionalKeys.value.map((propName) =>
         toAdditionalPropertyType(
           propName,
-          control.value.data[propName],
           control.value.schema,
           control.value.rootSchema,
         ),
@@ -537,7 +530,6 @@ export default defineComponent({
           this.additionalPropertyItems = this.additionalKeys.map((propName) =>
             this.toAdditionalPropertyType(
               propName,
-              newData[propName],
               this.control.schema,
               this.control.rootSchema,
             ),
@@ -553,7 +545,6 @@ export default defineComponent({
       if (this.newPropertyName) {
         const additionalProperty = this.toAdditionalPropertyType(
           this.newPropertyName,
-          undefined,
           this.control.schema,
           this.control.rootSchema,
         );
