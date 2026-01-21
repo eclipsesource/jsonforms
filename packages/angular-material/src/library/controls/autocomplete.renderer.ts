@@ -34,10 +34,15 @@ import {
   Actions,
   composeWithUi,
   ControlElement,
+  EnumOption,
   isEnumControl,
+  JsonFormsState,
+  mapStateToEnumControlProps,
   OwnPropsOfControl,
+  OwnPropsOfEnum,
   RankedTester,
   rankWith,
+  StatePropsOfControl,
 } from '@jsonforms/core';
 import type { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
@@ -67,12 +72,13 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
         autoActiveFirstOption
         #auto="matAutocomplete"
         (optionSelected)="onSelect($event)"
+        [displayWith]="displayFn"
       >
         <mat-option
           *ngFor="let option of filteredOptions | async"
           [value]="option"
         >
-          {{ option }}
+          {{ option.label }}
         </mat-option>
       </mat-autocomplete>
       <mat-hint *ngIf="shouldShowUnfocusedDescription() || focused">{{
@@ -105,14 +111,22 @@ export class AutocompleteControlRenderer
   extends JsonFormsControl
   implements OnInit
 {
-  @Input() options: string[];
-  filteredOptions: Observable<string[]>;
+  @Input() options?: EnumOption[] | string[];
+  translatedOptions?: EnumOption[];
+  filteredOptions: Observable<EnumOption[]>;
   shouldFilter: boolean;
   focused = false;
 
   constructor(jsonformsService: JsonFormsAngularService) {
     super(jsonformsService);
   }
+
+  protected mapToProps(
+    state: JsonFormsState
+  ): StatePropsOfControl & OwnPropsOfEnum {
+    return mapStateToEnumControlProps(state, this.getOwnProps());
+  }
+
   getEventValue = (event: any) => event.target.value;
 
   ngOnInit() {
@@ -122,6 +136,10 @@ export class AutocompleteControlRenderer
       startWith(''),
       map((val) => this.filter(val))
     );
+  }
+
+  mapAdditionalProps(_props: StatePropsOfControl & OwnPropsOfEnum) {
+    this.translatedOptions = _props.options;
   }
 
   updateFilter(event: any) {
@@ -136,30 +154,49 @@ export class AutocompleteControlRenderer
   onSelect(ev: MatAutocompleteSelectedEvent) {
     const path = composeWithUi(this.uischema as ControlElement, this.path);
     this.shouldFilter = false;
-    this.jsonFormsService.updateCore(
-      Actions.update(path, () => ev.option.value)
-    );
+    const option: EnumOption = ev.option.value;
+    this.jsonFormsService.updateCore(Actions.update(path, () => option.value));
     this.triggerValidation();
   }
 
-  filter(val: string): string[] {
-    return (this.options || this.scopedSchema.enum || []).filter(
+  displayFn(option?: EnumOption): string {
+    return option?.label ?? '';
+  }
+
+  filter(val: string): EnumOption[] {
+    return (this.translatedOptions || []).filter(
       (option) =>
         !this.shouldFilter ||
         !val ||
-        option.toLowerCase().indexOf(val.toLowerCase()) === 0
+        option.label.toLowerCase().indexOf(val.toLowerCase()) === 0
     );
   }
-  protected getOwnProps(): OwnPropsOfAutoComplete {
+  protected getOwnProps(): OwnPropsOfControl & OwnPropsOfEnum {
     return {
       ...super.getOwnProps(),
-      options: this.options,
+      options: this.stringOptionsToEnumOptions(this.options),
     };
+  }
+
+  /**
+   * For {@link options} input backwards compatibility
+   */
+  protected stringOptionsToEnumOptions(
+    options: typeof this.options
+  ): EnumOption[] | undefined {
+    if (!options) {
+      return undefined;
+    }
+
+    return options.every((item) => typeof item === 'string')
+      ? options.map((str) => {
+          return {
+            label: str,
+            value: str,
+          } satisfies EnumOption;
+        })
+      : options;
   }
 }
 
 export const enumControlTester: RankedTester = rankWith(2, isEnumControl);
-
-interface OwnPropsOfAutoComplete extends OwnPropsOfControl {
-  options: string[];
-}

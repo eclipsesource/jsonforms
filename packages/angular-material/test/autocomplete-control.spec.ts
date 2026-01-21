@@ -44,7 +44,13 @@ import {
   setupMockStore,
   getJsonFormsService,
 } from './common';
-import { ControlElement, JsonSchema, Actions } from '@jsonforms/core';
+import {
+  ControlElement,
+  JsonSchema,
+  Actions,
+  JsonFormsCore,
+  EnumOption,
+} from '@jsonforms/core';
 import { AutocompleteControlRenderer } from '../src';
 import { JsonFormsAngularService } from '@jsonforms/angular';
 import { ErrorObject } from 'ajv';
@@ -52,7 +58,12 @@ import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MatAutocompleteHarness } from '@angular/material/autocomplete/testing';
 
-const data = { foo: 'A' };
+const data = {
+  foo: {
+    label: 'A',
+    value: 'a',
+  },
+};
 const schema: JsonSchema = {
   type: 'object',
   properties: {
@@ -107,7 +118,10 @@ describe('Autocomplete control Base Tests', () => {
     component.ngOnInit();
     fixture.detectChanges();
     tick();
-    expect(component.data).toBe('A');
+    expect(component.data).toEqual({
+      label: 'A',
+      value: 'a',
+    });
     expect(inputElement.value).toBe('A');
     expect(inputElement.disabled).toBe(false);
   }));
@@ -120,10 +134,20 @@ describe('Autocomplete control Base Tests', () => {
     component.ngOnInit();
     fixture.detectChanges();
     tick();
-    getJsonFormsService(component).updateCore(Actions.update('foo', () => 'B'));
+    getJsonFormsService(component).updateCore(
+      Actions.update('foo', () => {
+        return {
+          label: 'B',
+          value: 'b',
+        } satisfies EnumOption;
+      })
+    );
     tick();
     fixture.detectChanges();
-    expect(component.data).toBe('B');
+    expect(component.data).toEqual({
+      label: 'B',
+      value: 'b',
+    } satisfies EnumOption);
     expect(inputElement.value).toBe('B');
   }));
 
@@ -165,11 +189,28 @@ describe('Autocomplete control Base Tests', () => {
     component.ngOnInit();
     fixture.detectChanges();
     tick();
-    getJsonFormsService(component).updateCore(Actions.update('foo', () => 'A'));
-    getJsonFormsService(component).updateCore(Actions.update('bar', () => 'B'));
+    getJsonFormsService(component).updateCore(
+      Actions.update('foo', () => {
+        return {
+          label: 'A',
+          value: 'a',
+        } satisfies EnumOption;
+      })
+    );
+    getJsonFormsService(component).updateCore(
+      Actions.update('bar', () => {
+        return {
+          label: 'B',
+          value: 'b',
+        } satisfies EnumOption;
+      })
+    );
     fixture.detectChanges();
     tick();
-    expect(component.data).toBe('A');
+    expect(component.data).toEqual({
+      label: 'A',
+      value: 'a',
+    } satisfies EnumOption);
     expect(inputElement.value).toBe('A');
   }));
   // store needed as we evaluate the calculated enabled value to disable/enable the control
@@ -252,7 +293,10 @@ describe('AutoComplete control Input Event Tests', () => {
     const event = spy.calls.mostRecent()
       .args[0] as MatAutocompleteSelectedEvent;
 
-    expect(event.option.value).toBe('B');
+    expect(event.option.value).toEqual({
+      label: 'B',
+      value: 'B',
+    } satisfies EnumOption);
     expect(inputElement.value).toBe('B');
   }));
   it('options should prefer own props', fakeAsync(async () => {
@@ -277,8 +321,57 @@ describe('AutoComplete control Input Event Tests', () => {
 
     const event = spy.calls.mostRecent()
       .args[0] as MatAutocompleteSelectedEvent;
-    expect(event.option.value).toBe('Y');
+    expect(event.option.value).toEqual({
+      label: 'Y',
+      value: 'Y',
+    } satisfies EnumOption);
     expect(inputElement.value).toBe('Y');
+  }));
+  it('should render translated enum correctly', fakeAsync(async () => {
+    setupMockStore(fixture, { uischema, schema, data });
+    const state: JsonFormsCore = {
+      data,
+      schema,
+      uischema,
+    };
+    getJsonFormsService(component).init({
+      core: state,
+      i18n: {
+        translate: (key, defaultMessage) => {
+          const translations: { [key: string]: string } = {
+            'foo.A': 'Translated A',
+            'foo.B': 'Translated B',
+            'foo.C': 'Translated C',
+          };
+          return translations[key] ?? defaultMessage;
+        },
+      },
+    });
+    getJsonFormsService(component).updateCore(
+      Actions.init(data, schema, uischema)
+    );
+    component.ngOnInit();
+    fixture.detectChanges();
+    const spy = spyOn(component, 'onSelect');
+
+    await (await loader.getHarness(MatAutocompleteHarness)).focus();
+    fixture.detectChanges();
+
+    await (
+      await loader.getHarness(MatAutocompleteHarness)
+    ).selectOption({
+      text: 'Translated B',
+    });
+    fixture.detectChanges();
+    tick();
+
+    const event = spy.calls.mostRecent()
+      .args[0] as MatAutocompleteSelectedEvent;
+    expect(event.option.value).toEqual({
+      label: 'Translated B',
+      value: 'B',
+    } satisfies EnumOption);
+    expect(inputElement.value).toBe('Translated B');
   }));
 });
 describe('AutoComplete control Error Tests', () => {
