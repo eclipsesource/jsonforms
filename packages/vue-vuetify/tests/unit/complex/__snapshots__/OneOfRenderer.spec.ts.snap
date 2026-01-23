@@ -57,7 +57,7 @@ exports[`OneOfRenderer.vue > should render component and match snapshot 1`] = `
           <!---->
         </div>
       </div>
-      <div renderers="[object Object]" cells="" schema="[object Object]" uischema="[object Object]" path="" enabled="true" config="[object Object]">No applicable renderer found.</div>
+      <div style="color: red;" renderers="[object Object]" cells="" schema="[object Object]" uischema="[object Object]" path="" enabled="true" config="[object Object]">No applicable renderer found.</div>
       <!---->
       <!---->
     </div>
