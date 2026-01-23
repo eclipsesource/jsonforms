@@ -47,28 +47,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
-/**
- * To use this component you will need to add your own tester:
- * <pre><code>
- * ...
- * export const AutocompleteControlRendererTester: RankedTester = rankWith(2, isEnumControl);
- * ...
- * </code></pre>
- * Add the tester and renderer to JSONForms registry:
- * <pre><code>
- * ...
- * { tester: AutocompleteControlRendererTester, renderer: AutocompleteControlRenderer },
- * ...
- * </code></pre>
- * Furthermore you need to update your module.
- * <pre><code>
- * ...
- * imports: [JsonFormsAngularMaterialModule, MatAutocompleteModule],
- * declarations: [AutocompleteControlRenderer]
- * ...
- * </code></pre>
- *
- */
 @Component({
   selector: 'AutocompleteControlRenderer',
   template: `
