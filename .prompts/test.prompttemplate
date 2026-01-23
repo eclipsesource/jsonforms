@@ -1,7 +1,0 @@
----
-isCommand: true
-commandName: test
-commandDescription: Run tests for the JSON Forms project
----
-Run the "Test" task to execute the test suite for the JSON Forms project.
-~{runTask}

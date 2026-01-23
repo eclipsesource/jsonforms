@@ -1,7 +1,0 @@
----
-isCommand: true
-commandName: lint-fix
-commandDescription: Run linting and auto-fix issues in the JSON Forms project
----
-Run the "Lint Fix" task to automatically fix linting issues in the JSON Forms project.
-~{runTask}

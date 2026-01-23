@@ -1,7 +1,0 @@
----
-isCommand: true
-commandName: build
-commandDescription: Build the JSON Forms project
----
-Run the "Build" task to compile the entire JSON Forms project.
-~{runTask}

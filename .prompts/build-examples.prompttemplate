@@ -1,7 +1,0 @@
----
-isCommand: true
-commandName: build-examples
-commandDescription: Build the JSON Forms examples application
----
-Run the "Build Examples App" task to build the examples application for JSON Forms.
-~{runTask}
