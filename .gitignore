@@ -11,7 +11,6 @@ stats.html
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json
-!.vscode/tasks.json
 
 .coveralls.yml
 packages/examples-react/build
