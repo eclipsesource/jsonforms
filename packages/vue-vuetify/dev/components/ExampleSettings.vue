@@ -262,7 +262,7 @@ const layouts = appstoreLayouts.map((value: AppstoreLayouts) => ({
     <v-container>
       <v-row>
         <v-col>
-          <v-tooltip bottom>
+          <v-tooltip location="bottom">
             <template v-slot:activator="{ props }">
               <v-switch
                 v-model="appStore.overrideControlTemplate"
@@ -282,7 +282,7 @@ const layouts = appstoreLayouts.map((value: AppstoreLayouts) => ({
       <v-row><v-col>Options</v-col></v-row>
       <v-row>
         <v-col>
-          <v-tooltip bottom>
+          <v-tooltip location="bottom">
             <template v-slot:activator="{ props }">
               <v-switch
                 v-model="appStore.jsonforms.config.hideRequiredAsterisk"
@@ -296,7 +296,7 @@ const layouts = appstoreLayouts.map((value: AppstoreLayouts) => ({
       </v-row>
       <v-row>
         <v-col>
-          <v-tooltip bottom>
+          <v-tooltip location="bottom">
             <template v-slot:activator="{ props }">
               <v-switch
                 v-model="appStore.jsonforms.config.showUnfocusedDescription"
@@ -310,7 +310,7 @@ const layouts = appstoreLayouts.map((value: AppstoreLayouts) => ({
       </v-row>
       <v-row>
         <v-col>
-          <v-tooltip bottom>
+          <v-tooltip location="bottom">
             <template v-slot:activator="{ props }">
               <v-switch
                 v-model="appStore.jsonforms.config.restrict"
@@ -325,7 +325,7 @@ const layouts = appstoreLayouts.map((value: AppstoreLayouts) => ({
       </v-row>
       <v-row>
         <v-col>
-          <v-tooltip bottom>
+          <v-tooltip location="bottom">
             <template v-slot:activator="{ props }">
               <v-switch
                 v-model="appStore.jsonforms.readonly"
@@ -339,7 +339,7 @@ const layouts = appstoreLayouts.map((value: AppstoreLayouts) => ({
       </v-row>
       <v-row>
         <v-col>
-          <v-tooltip bottom>
+          <v-tooltip location="bottom">
             <template v-slot:activator="{ props }">
               <v-switch
                 v-model="appStore.jsonforms.config.collapseNewItems"
@@ -353,7 +353,7 @@ const layouts = appstoreLayouts.map((value: AppstoreLayouts) => ({
       </v-row>
       <v-row>
         <v-col>
-          <v-tooltip bottom>
+          <v-tooltip location="bottom">
             <template v-slot:activator="{ props }">
               <v-switch
                 v-model="appStore.jsonforms.config.hideArraySummaryValidation"
@@ -367,7 +367,7 @@ const layouts = appstoreLayouts.map((value: AppstoreLayouts) => ({
       </v-row>
       <v-row>
         <v-col>
-          <v-tooltip bottom>
+          <v-tooltip location="bottom">
             <template v-slot:activator="{ props }">
               <v-switch
                 v-model="appStore.jsonforms.config.initCollapsed"
@@ -381,7 +381,7 @@ const layouts = appstoreLayouts.map((value: AppstoreLayouts) => ({
       </v-row>
       <v-row>
         <v-col>
-          <v-tooltip bottom>
+          <v-tooltip location="bottom">
             <template v-slot:activator="{ props }">
               <v-switch
                 v-model="appStore.jsonforms.config.hideAvatar"
@@ -395,7 +395,7 @@ const layouts = appstoreLayouts.map((value: AppstoreLayouts) => ({
       </v-row>
       <v-row>
         <v-col>
-          <v-tooltip bottom>
+          <v-tooltip location="bottom">
             <template v-slot:activator="{ props }">
               <v-switch
                 v-model="
@@ -411,7 +411,29 @@ const layouts = appstoreLayouts.map((value: AppstoreLayouts) => ({
       </v-row>
       <v-row>
         <v-col>
-          <v-tooltip bottom>
+          <v-tooltip location="bottom">
+            <template v-slot:activator="{ props }">
+              <v-combobox
+                v-model="
+                  appStore.jsonforms.config.filterErrorKeywordsBeforeTouch
+                "
+                label="Filter Error Keywords Before Touch"
+                placeholder="e.g., required, minLength, pattern"
+                chips
+                closable-chips
+                multiple
+                clearable
+                v-bind="props"
+              ></v-combobox>
+            </template>
+            Hide specific AJV error keywords until the control is touched.
+            Requires "Enable Filter Errors Before Touch".
+          </v-tooltip>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <v-tooltip location="bottom">
             <template v-slot:activator="{ props }">
               <v-switch
                 v-model="

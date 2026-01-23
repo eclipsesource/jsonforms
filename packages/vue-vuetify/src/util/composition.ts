@@ -10,6 +10,7 @@ import {
   defaultJsonFormsI18nState,
   getArrayTranslations,
   getCombinatorTranslations,
+  getControlPath,
   getFirstPrimitiveProp,
   isDescriptionHidden,
   type ControlElement,
@@ -176,10 +177,38 @@ export const useVuetifyControl = <
     isFocused.value = false;
   };
 
+  const jsonforms = useJsonForms();
   const filteredErrors = computed(() => {
-    return touched.value || !appliedOptions.value.enableFilterErrorsBeforeTouch
-      ? input.control.value.errors
-      : '';
+    // Always show errors if touched, no errors exist, or filtering is not enabled
+    if (
+      touched.value ||
+      !input.control.value.errors ||
+      !appliedOptions.value.enableFilterErrorsBeforeTouch
+    ) {
+      return input.control.value.errors;
+    }
+
+    const filterKeywords = appliedOptions.value.filterErrorKeywordsBeforeTouch;
+
+    // Filtering is enabled - check if specific keywords are configured
+    if (Array.isArray(filterKeywords) && filterKeywords.length > 0) {
+      // Granular filtering: only hide specific error keywords
+      const errorsAtControl =
+        jsonforms.core?.errors?.filter(
+          (error) => input.control.value.path === getControlPath(error),
+        ) ?? [];
+
+      const allErrorsFiltered =
+        errorsAtControl.length > 0 &&
+        errorsAtControl.every(
+          (error) => error.keyword && filterKeywords.includes(error.keyword),
+        );
+
+      return allErrorsFiltered ? '' : input.control.value.errors;
+    }
+
+    // default, all errors are filtered
+    return '';
   });
 
   const persistentHint = (): boolean => {
