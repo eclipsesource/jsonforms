@@ -5,6 +5,12 @@
     "pnpm": "^10.4.1"
   },
   "packageManager": "pnpm@10.22.0+sha512.bf049efe995b28f527fd2b41ae0474ce29186f7edcb3bf545087bd61fbbebb2bf75362d1307fda09c2d288e1e499787ac12d4fcb617a974718a6051f2eee741c",
+  "pnpm": {
+    "overrides": {
+      "@types/react": "^17.0.80",
+      "@types/react-dom": "^17.0.25"
+    }
+  },
   "scripts": {
     "lerna": "lerna",
     "preparePublish": "git clean -dfx && pnpm i --frozen-lockfile && pnpm run clean && pnpm run build && pnpm run doc && pnpm run test",
