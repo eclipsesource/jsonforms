@@ -8,7 +8,8 @@
   "pnpm": {
     "overrides": {
       "@types/react": "^17.0.80",
-      "@types/react-dom": "^17.0.25"
+      "@types/react-dom": "^17.0.25",
+      "baseline-browser-mapping": "^2.9.18"
     }
   },
   "scripts": {
