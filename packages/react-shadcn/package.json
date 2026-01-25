@@ -18,6 +18,7 @@
   "typings": "lib/index.d.ts",
   "scripts": {
     "build": "rollup -c rollup.config.js",
+    "build:examples-app": "cd example && pnpm run build-example && mv dist/index.example.html dist/index.html",
     "dev": "cd example && pnpm run dev",
     "clean": "rimraf lib coverage dist .nyc_output example/dist 2> /dev/null",
     "lint": "eslint .",

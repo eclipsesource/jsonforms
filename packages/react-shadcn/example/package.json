@@ -6,10 +6,15 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "build-only": "vite build",
+    "build-example": "vite build --config vite.example.config.ts",
+    "type-check": "tsc --noEmit",
     "preview": "vite preview"
   },
   "dependencies": {
     "@jsonforms/core": "workspace:*",
+    "@jsonforms/examples": "workspace:*",
+    "@jsonforms/examples-react": "workspace:*",
     "@jsonforms/react": "workspace:*",
     "@jsonforms/react-shadcn": "workspace:*",
     "react": "^17.0.2",

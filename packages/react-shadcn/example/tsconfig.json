@@ -17,7 +17,9 @@
     /* Path Aliases */
     "baseUrl": ".",
     "paths": {
-      "@/*": ["../src/*"]
+      "@/*": ["../src/*"],
+      "@jsonforms/examples-react": ["../../examples-react/src"],
+      "@jsonforms/examples": ["../../examples/src"]
     },
 
     /* Linting */

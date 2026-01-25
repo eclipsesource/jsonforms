@@ -999,6 +999,12 @@ importers:
       '@jsonforms/core':
         specifier: workspace:*
         version: link:../../core
+      '@jsonforms/examples':
+        specifier: workspace:*
+        version: link:../../examples
+      '@jsonforms/examples-react':
+        specifier: workspace:*
+        version: link:../../examples-react
       '@jsonforms/react':
         specifier: workspace:*
         version: link:../../react
@@ -25855,7 +25861,7 @@ snapshots:
 
   foreground-child@2.0.0:
     dependencies:
-      cross-spawn: 7.0.3
+      cross-spawn: 7.0.6
       signal-exit: 3.0.7
 
   foreground-child@3.3.1:
@@ -27080,7 +27086,7 @@ snapshots:
   istanbul-lib-processinfo@2.0.3:
     dependencies:
       archy: 1.0.0
-      cross-spawn: 7.0.3
+      cross-spawn: 7.0.6
       istanbul-lib-coverage: 3.2.2
       p-map: 3.0.0
       rimraf: 3.0.2
@@ -29204,9 +29210,9 @@ snapshots:
   npm-run-all2@6.2.2:
     dependencies:
       ansi-styles: 6.2.1
-      cross-spawn: 7.0.3
+      cross-spawn: 7.0.6
       memorystream: 0.3.1
-      minimatch: 9.0.4
+      minimatch: 9.0.5
       pidtree: 0.6.0
       read-package-json-fast: 3.0.2
       shell-quote: 1.8.1

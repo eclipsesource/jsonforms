@@ -13,4 +13,22 @@ export default defineConfig({
       '@': path.resolve(__dirname, '../src'),
     },
   },
+  build: {
+    outDir: 'dist',
+    emptyOutDir: true,
+    cssCodeSplit: false,
+    rollupOptions: {
+      input: path.resolve(__dirname, 'index.example.html'),
+      output: {
+        format: 'iife',
+        entryFileNames: 'bundle.js',
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name?.endsWith('.css')) {
+            return 'bundle.css';
+          }
+          return '[name].[ext]';
+        },
+      },
+    },
+  },
 });
