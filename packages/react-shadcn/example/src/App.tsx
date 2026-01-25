@@ -4,46 +4,130 @@ import { shadcnRenderers, shadcnCells, Button } from '@jsonforms/react-shadcn';
 
 const schema = {
   type: 'object',
+  required: ['name', 'age'],
   properties: {
-    firstName: {
+    name: {
       type: 'string',
-      minLength: 3,
-      description: 'Please enter your first name',
-    },
-    lastName: {
-      type: 'string',
-      minLength: 3,
-      description: 'Please enter your last name',
+      minLength: 2,
+      description: 'Your full name',
     },
     email: {
       type: 'string',
       format: 'email',
+      description: 'We will never share your email',
+    },
+    age: {
+      type: 'number',
+      minimum: 0,
+      maximum: 150,
+      description: 'Your age in years',
+    },
+    newsletter: {
+      type: 'boolean',
+      description: 'Subscribe to our newsletter',
+    },
+    country: {
+      type: 'string',
+      enum: ['USA', 'UK', 'Canada', 'Australia', 'Germany', 'France'],
+      description: 'Select your country',
+    },
+    bio: {
+      type: 'string',
+      description: 'Tell us about yourself',
+    },
+    address: {
+      type: 'object',
+      properties: {
+        street: {
+          type: 'string',
+          description: 'Street address',
+        },
+        city: {
+          type: 'string',
+          description: 'City',
+        },
+        zipCode: {
+          type: 'string',
+          description: 'Postal code',
+        },
+      },
     },
   },
-  required: ['firstName', 'lastName'],
 };
 
 const uischema = {
   type: 'VerticalLayout',
   elements: [
     {
-      type: 'Control',
-      scope: '#/properties/firstName',
+      type: 'HorizontalLayout',
+      elements: [
+        {
+          type: 'Control',
+          scope: '#/properties/name',
+        },
+        {
+          type: 'Control',
+          scope: '#/properties/email',
+        },
+      ],
+    },
+    {
+      type: 'HorizontalLayout',
+      elements: [
+        {
+          type: 'Control',
+          scope: '#/properties/age',
+        },
+        {
+          type: 'Control',
+          scope: '#/properties/country',
+        },
+      ],
     },
     {
       type: 'Control',
-      scope: '#/properties/lastName',
+      scope: '#/properties/newsletter',
     },
     {
       type: 'Control',
-      scope: '#/properties/email',
+      scope: '#/properties/bio',
+      options: {
+        multi: true,
+        rows: 5,
+        placeholder: 'Tell us about yourself...',
+      },
+    },
+    {
+      type: 'Group',
+      label: 'Address Information',
+      elements: [
+        {
+          type: 'Control',
+          scope: '#/properties/address/properties/street',
+        },
+        {
+          type: 'HorizontalLayout',
+          elements: [
+            {
+              type: 'Control',
+              scope: '#/properties/address/properties/city',
+            },
+            {
+              type: 'Control',
+              scope: '#/properties/address/properties/zipCode',
+            },
+          ],
+        },
+      ],
     },
   ],
 };
 
 const initialData = {
-  firstName: 'John',
-  lastName: 'Doe',
+  name: 'John Doe',
+  age: 30,
+  newsletter: true,
+  country: 'USA',
 };
 
 type Theme = 'light' | 'dark' | 'system';

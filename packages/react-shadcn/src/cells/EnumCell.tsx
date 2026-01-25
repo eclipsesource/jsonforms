@@ -1,0 +1,98 @@
+/*
+  The MIT License
+
+  Copyright (c) 2017-2019 EclipseSource Munich
+  https://github.com/eclipsesource/jsonforms
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+  THE SOFTWARE.
+*/
+
+import React, { useMemo } from 'react';
+import {
+  EnumCellProps,
+  isEnumControl,
+  RankedTester,
+  rankWith,
+} from '@jsonforms/core';
+import {
+  TranslateProps,
+  withJsonFormsEnumCellProps,
+  withTranslateProps,
+} from '@jsonforms/react';
+import {
+  NativeSelect,
+  NativeSelectOption,
+} from '../shadcn/components/ui/native-select';
+import { cn } from '../shadcn/lib/utils';
+import { withShadcnCellProps } from '../util/props';
+import type { ShadcnRendererProps } from '../util/props';
+import { i18nDefaults } from '../util';
+
+export const EnumCell = (
+  props: EnumCellProps & ShadcnRendererProps & TranslateProps
+) => {
+  const {
+    data,
+    id,
+    enabled,
+    schema,
+    uischema,
+    path,
+    handleChange,
+    options,
+    t,
+    styleOverrides,
+  } = props;
+
+  const noneOptionLabel = useMemo(
+    () => t('enum.none', i18nDefaults['enum.none'], { schema, uischema, path }),
+    [t, schema, uischema, path]
+  );
+
+  return (
+    <NativeSelect
+      id={id}
+      value={data || ''}
+      onChange={(e) =>
+        handleChange(
+          path,
+          e.target.selectedIndex === 0 ? undefined : e.target.value
+        )
+      }
+      disabled={!enabled}
+      className={cn('w-full', styleOverrides?.inputClasses)}
+    >
+      <NativeSelectOption value="">{noneOptionLabel}</NativeSelectOption>
+      {options.map((option) => (
+        <NativeSelectOption key={option.value} value={option.value}>
+          {option.label}
+        </NativeSelectOption>
+      ))}
+    </NativeSelect>
+  );
+};
+
+/**
+ * Default tester for enum cells.
+ */
+export const enumCellTester: RankedTester = rankWith(2, isEnumControl);
+
+export default withJsonFormsEnumCellProps(
+  withTranslateProps(withShadcnCellProps(EnumCell))
+);
