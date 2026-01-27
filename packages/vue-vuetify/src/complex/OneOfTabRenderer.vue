@@ -10,7 +10,7 @@
     <v-tabs
       v-model="selectIndex"
       @update:model-value="handleTabChange"
-      :disabled="!control.enabled"
+      :disabled="!control.enabled || control.readonly"
     >
       <v-tab
         v-for="(oneOfRenderInfo, oneOfIndex) in oneOfRenderInfos"
@@ -33,6 +33,7 @@
           :renderers="control.renderers"
           :cells="control.cells"
           :enabled="control.enabled"
+          :readonly="control.readonly"
         />
       </v-window-item>
     </v-window>
