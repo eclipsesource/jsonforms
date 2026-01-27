@@ -25,11 +25,7 @@
 
 import React from 'react';
 import { withJsonFormsControlProps } from '@jsonforms/react';
-import {
-  ControlProps,
-  isNumberControl,
-  rankWith,
-} from '@jsonforms/core';
+import { ControlProps, isNumberControl, rankWith } from '@jsonforms/core';
 import { Input } from '../shadcn/components/ui/input';
 import {
   Field,
@@ -71,9 +67,7 @@ export const ShadcnNumberControl = (props: ControlProps) => {
   const showDescription = description && !hasErrors;
 
   // Convert JSON Forms error string to FieldError format
-  const errorArray = hasErrors
-    ? [{ message: errors }]
-    : undefined;
+  const errorArray = hasErrors ? [{ message: errors }] : undefined;
 
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
 
@@ -83,7 +77,7 @@ export const ShadcnNumberControl = (props: ControlProps) => {
   return (
     <Field
       data-invalid={hasErrors}
-      orientation="vertical"
+      orientation='vertical'
       className={cn(styleOverrides?.wrapperClasses)}
     >
       <FieldContent>
@@ -91,7 +85,8 @@ export const ShadcnNumberControl = (props: ControlProps) => {
           <FieldLabel
             htmlFor={id}
             className={cn(
-              required && 'after:content-["*"] after:ml-0.5 after:text-destructive',
+              required &&
+                'after:content-["*"] after:ml-0.5 after:text-destructive',
               styleOverrides?.labelClasses
             )}
           >
@@ -100,7 +95,7 @@ export const ShadcnNumberControl = (props: ControlProps) => {
         )}
         <Input
           id={id}
-          type="number"
+          type='number'
           step={step}
           min={schema.minimum}
           max={schema.maximum}
@@ -113,9 +108,7 @@ export const ShadcnNumberControl = (props: ControlProps) => {
           )}
         />
         {showDescription && (
-          <FieldDescription
-            className={cn(styleOverrides?.descriptionClasses)}
-          >
+          <FieldDescription className={cn(styleOverrides?.descriptionClasses)}>
             {description}
           </FieldDescription>
         )}

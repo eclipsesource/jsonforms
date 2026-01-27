@@ -78,7 +78,7 @@ export const EnumCell = (
       disabled={!enabled}
       className={cn('w-full', styleOverrides?.inputClasses)}
     >
-      <NativeSelectOption value="">{noneOptionLabel}</NativeSelectOption>
+      <NativeSelectOption value=''>{noneOptionLabel}</NativeSelectOption>
       {options.map((option) => (
         <NativeSelectOption key={option.value} value={option.value}>
           {option.label}

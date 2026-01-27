@@ -49,9 +49,7 @@ import RadioGroupControl, {
 import OneOfRadioGroupControl, {
   oneOfRadioGroupControlTester,
 } from './controls/OneOfRadioGroupControl';
-import InputControl, {
-  inputControlTester,
-} from './controls/InputControl';
+import InputControl, { inputControlTester } from './controls/InputControl';
 import TextCell, { textCellTester } from './cells/TextCell';
 import NumberCell, { numberCellTester } from './cells/NumberCell';
 import BooleanCell, { booleanCellTester } from './cells/BooleanCell';
@@ -63,16 +61,26 @@ import TimeCell, { timeCellTester } from './cells/TimeCell';
 import IntegerCell, { integerCellTester } from './cells/IntegerCell';
 import OneOfEnumCell, { oneOfEnumCellTester } from './cells/OneOfEnumCell';
 import SliderCell, { sliderCellTester } from './cells/SliderCell';
-import NumberFormatCell, { numberFormatCellTester } from './cells/NumberFormatCell';
+import NumberFormatCell, {
+  numberFormatCellTester,
+} from './cells/NumberFormatCell';
 import VerticalLayout, { verticalLayoutTester } from './layouts/VerticalLayout';
-import HorizontalLayout, { horizontalLayoutTester } from './layouts/HorizontalLayout';
+import HorizontalLayout, {
+  horizontalLayoutTester,
+} from './layouts/HorizontalLayout';
 import GroupLayout, { groupLayoutTester } from './layouts/GroupLayout';
 import LabelRenderer, { labelRendererTester } from './complex/LabelRenderer';
 import ArrayControlRenderer, { arrayControlTester } from './complex/array';
-import TableArrayControl, { tableArrayControlTester } from './complex/TableArrayControl';
-import CategorizationRenderer, { categorizationTester } from './complex/categorization';
+import TableArrayControl, {
+  tableArrayControlTester,
+} from './complex/TableArrayControl';
+import CategorizationRenderer, {
+  categorizationTester,
+} from './complex/categorization';
 import ObjectRenderer, { objectRendererTester } from './complex/ObjectRenderer';
-import ListWithDetailRenderer, { listWithDetailTester } from './complex/ListWithDetailRenderer';
+import ListWithDetailRenderer, {
+  listWithDetailTester,
+} from './complex/ListWithDetailRenderer';
 import AllOfRenderer, { allOfControlTester } from './complex/AllOfRenderer';
 import AnyOfRenderer, { anyOfControlTester } from './complex/AnyOfRenderer';
 import OneOfRenderer, { oneOfControlTester } from './complex/OneOfRenderer';

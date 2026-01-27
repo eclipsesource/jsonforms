@@ -47,7 +47,9 @@ export const LabelRenderer = (props: LabelProps) => {
   }
 
   return (
-    <Label className={cn('text-base font-medium', styleOverrides?.labelClasses)}>
+    <Label
+      className={cn('text-base font-medium', styleOverrides?.labelClasses)}
+    >
       {text}
     </Label>
   );

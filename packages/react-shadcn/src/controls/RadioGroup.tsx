@@ -76,14 +76,15 @@ export const RadioGroup = (props: ControlProps & OwnPropsOfEnum) => {
   return (
     <Field
       data-invalid={hasErrors}
-      orientation="vertical"
+      orientation='vertical'
       className={cn(styleOverrides?.wrapperClasses)}
     >
       <FieldContent>
         {label && (
           <FieldLabel
             className={cn(
-              required && 'after:content-["*"] after:ml-0.5 after:text-destructive',
+              required &&
+                'after:content-["*"] after:ml-0.5 after:text-destructive',
               styleOverrides?.labelClasses
             )}
           >
@@ -100,7 +101,7 @@ export const RadioGroup = (props: ControlProps & OwnPropsOfEnum) => {
           )}
         >
           {options.map((option) => (
-            <div key={option.value} className="flex items-center space-x-2">
+            <div key={option.value} className='flex items-center space-x-2'>
               <RadioGroupItem
                 value={String(option.value)}
                 id={`${id}-${option.value}`}
@@ -108,7 +109,7 @@ export const RadioGroup = (props: ControlProps & OwnPropsOfEnum) => {
               />
               <Label
                 htmlFor={`${id}-${option.value}`}
-                className="font-normal cursor-pointer"
+                className='font-normal cursor-pointer'
               >
                 {option.label}
               </Label>

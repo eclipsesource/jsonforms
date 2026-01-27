@@ -9,4 +9,7 @@ export { default as TimeCell, timeCellTester } from './TimeCell';
 export { default as IntegerCell, integerCellTester } from './IntegerCell';
 export { default as OneOfEnumCell, oneOfEnumCellTester } from './OneOfEnumCell';
 export { default as SliderCell, sliderCellTester } from './SliderCell';
-export { default as NumberFormatCell, numberFormatCellTester } from './NumberFormatCell';
+export {
+  default as NumberFormatCell,
+  numberFormatCellTester,
+} from './NumberFormatCell';

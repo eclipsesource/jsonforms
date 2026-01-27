@@ -80,9 +80,7 @@ export const ShadcnEnumControl = (
   const showDescription = description && !hasErrors;
 
   // Convert JSON Forms error string to FieldError format
-  const errorArray = hasErrors
-    ? [{ message: errors }]
-    : undefined;
+  const errorArray = hasErrors ? [{ message: errors }] : undefined;
 
   const noneOptionLabel = useMemo(
     () => t('enum.none', i18nDefaults['enum.none'], { schema, uischema, path }),
@@ -92,7 +90,7 @@ export const ShadcnEnumControl = (
   return (
     <Field
       data-invalid={hasErrors}
-      orientation="vertical"
+      orientation='vertical'
       className={cn(styleOverrides?.wrapperClasses)}
     >
       <FieldContent>
@@ -100,7 +98,8 @@ export const ShadcnEnumControl = (
           <FieldLabel
             htmlFor={id}
             className={cn(
-              required && 'after:content-["*"] after:ml-0.5 after:text-destructive',
+              required &&
+                'after:content-["*"] after:ml-0.5 after:text-destructive',
               styleOverrides?.labelClasses
             )}
           >
@@ -110,15 +109,17 @@ export const ShadcnEnumControl = (
         <NativeSelect
           id={id}
           value={data !== undefined ? String(data) : ''}
-          onChange={(e) => handleChange(path, e.target.value === '' ? undefined : e.target.value)}
+          onChange={(e) =>
+            handleChange(
+              path,
+              e.target.value === '' ? undefined : e.target.value
+            )
+          }
           disabled={!enabled}
           aria-invalid={hasErrors}
-          className={cn(
-            'w-full',
-            styleOverrides?.inputClasses
-          )}
+          className={cn('w-full', styleOverrides?.inputClasses)}
         >
-          <NativeSelectOption value="">{noneOptionLabel}</NativeSelectOption>
+          <NativeSelectOption value=''>{noneOptionLabel}</NativeSelectOption>
           {options.map((option) => (
             <NativeSelectOption key={option.value} value={String(option.value)}>
               {option.label}
@@ -126,9 +127,7 @@ export const ShadcnEnumControl = (
           ))}
         </NativeSelect>
         {showDescription && (
-          <FieldDescription
-            className={cn(styleOverrides?.descriptionClasses)}
-          >
+          <FieldDescription className={cn(styleOverrides?.descriptionClasses)}>
             {description}
           </FieldDescription>
         )}
@@ -149,6 +148,4 @@ export const ShadcnEnumControl = (
  */
 export const shadcnEnumControlTester = rankWith(2, isEnumControl);
 
-export default withJsonFormsEnumProps(
-  withTranslateProps(ShadcnEnumControl)
-);
+export default withJsonFormsEnumProps(withTranslateProps(ShadcnEnumControl));

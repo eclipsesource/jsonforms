@@ -52,7 +52,7 @@ export const NumberFormatCell = (
 
   return (
     <Input
-      type="text"
+      type='text'
       value={formattedNumber}
       onChange={onChange}
       className={cn(styleOverrides?.inputClasses)}

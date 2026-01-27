@@ -36,7 +36,6 @@ export * from './shadcn/components/ui';
 export * from './styles';
 
 // Utilities
-export { cn } from './shadcn/lib/utils';
 export * from './util';
 
 /**

@@ -53,7 +53,7 @@ export const DateCell = (props: CellProps & ShadcnRendererProps) => {
 
   return (
     <Input
-      type="date"
+      type='date'
       value={data || ''}
       onChange={(ev) =>
         handleChange(path, ev.target.value === '' ? undefined : ev.target.value)

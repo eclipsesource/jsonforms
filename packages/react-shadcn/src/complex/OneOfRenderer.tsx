@@ -96,7 +96,7 @@ export const OneOfRenderer = ({
   }
 
   return (
-    <div className="space-y-4">
+    <div className='space-y-4'>
       <Tabs value={String(selectedIndex)} onValueChange={handleTabChange}>
         <TabsList>
           {oneOfRenderInfos.map((oneOfRenderInfo, index) => (

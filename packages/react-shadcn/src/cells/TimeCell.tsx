@@ -68,7 +68,7 @@ export const TimeCell = (props: CellProps & ShadcnRendererProps) => {
 
   return (
     <Input
-      type="time"
+      type='time'
       value={data || ''}
       onChange={(ev) =>
         handleChange(path, appendSecondsIfNecessary(ev.target.value))

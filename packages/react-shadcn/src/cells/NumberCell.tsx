@@ -39,19 +39,12 @@ import type { ShadcnRendererProps } from '../util/props';
 const toNumber = (value: string) => (value === '' ? undefined : Number(value));
 
 export const NumberCell = (props: CellProps & ShadcnRendererProps) => {
-  const {
-    data,
-    id,
-    enabled,
-    path,
-    handleChange,
-    styleOverrides,
-  } = props;
+  const { data, id, enabled, path, handleChange, styleOverrides } = props;
 
   return (
     <Input
-      type="number"
-      step="0.1"
+      type='number'
+      step='0.1'
       value={data ?? ''}
       onChange={(e) => handleChange(path, toNumber(e.target.value))}
       className={cn(styleOverrides?.inputClasses)}

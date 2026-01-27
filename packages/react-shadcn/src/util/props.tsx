@@ -35,7 +35,7 @@ export interface ShadcnRendererProps {
  * HOC that provides shadcn style overrides to a control component.
  * The component will receive a `styleOverrides` prop containing any
  * custom Tailwind classes from the ShadcnStyleContext.
- * 
+ *
  * This HOC accepts any component type and adds ShadcnRendererProps to it,
  * allowing it to wrap both raw components and the result of withJsonFormsControlProps.
  */
@@ -46,7 +46,9 @@ export const withShadcnControlProps = (
     const styleOverrides = useShadcnStyles();
     return <Component {...props} styleOverrides={styleOverrides} />;
   }
-  WithShadcnControlProps.displayName = `withShadcnControlProps(${Component.displayName || Component.name || 'Component'})`;
+  WithShadcnControlProps.displayName = `withShadcnControlProps(${
+    Component.displayName || Component.name || 'Component'
+  })`;
   return WithShadcnControlProps;
 };
 

@@ -92,9 +92,6 @@ export const ObjectRenderer = ({
  * Tester for object controls.
  * Matches controls that point to object types.
  */
-export const objectRendererTester: RankedTester = rankWith(
-  2,
-  isObjectControl
-);
+export const objectRendererTester: RankedTester = rankWith(2, isObjectControl);
 
 export default withJsonFormsDetailProps(ObjectRenderer);

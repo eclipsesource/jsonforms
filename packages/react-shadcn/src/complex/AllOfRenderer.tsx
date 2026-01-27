@@ -76,7 +76,7 @@ export const AllOfRenderer = ({
   );
 
   return (
-    <div className="space-y-4">
+    <div className='space-y-4'>
       {allOfRenderInfos.map((allOfRenderInfo, allOfIndex) => (
         <JsonFormsDispatch
           key={allOfIndex}
@@ -91,9 +91,6 @@ export const AllOfRenderer = ({
   );
 };
 
-export const allOfControlTester: RankedTester = rankWith(
-  3,
-  isAllOfControl
-);
+export const allOfControlTester: RankedTester = rankWith(3, isAllOfControl);
 
 export default withJsonFormsAllOfProps(AllOfRenderer);

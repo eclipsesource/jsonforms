@@ -33,12 +33,18 @@ import {
   GroupLayout as GroupLayoutType,
 } from '@jsonforms/core';
 import { withJsonFormsLayoutProps, JsonFormsDispatch } from '@jsonforms/react';
-import { Card, CardHeader, CardTitle, CardContent } from '../shadcn/components/ui/card';
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+} from '../shadcn/components/ui/card';
 import { cn } from '../shadcn/lib/utils';
 import { useShadcnStyles } from '../styles/styleContext';
 
 export const GroupLayout = (props: LayoutProps) => {
-  const { uischema, schema, path, enabled, visible, renderers, cells, label } = props;
+  const { uischema, schema, path, enabled, visible, renderers, cells, label } =
+    props;
   const styleOverrides = useShadcnStyles();
 
   if (!visible) {
@@ -54,7 +60,7 @@ export const GroupLayout = (props: LayoutProps) => {
           <CardTitle>{label}</CardTitle>
         </CardHeader>
       )}
-      <CardContent className="flex flex-col space-y-4">
+      <CardContent className='flex flex-col space-y-4'>
         {group.elements.map((child: UISchemaElement, index: number) => (
           <JsonFormsDispatch
             key={`${path}-${index}`}
@@ -71,9 +77,6 @@ export const GroupLayout = (props: LayoutProps) => {
   );
 };
 
-export const groupLayoutTester: RankedTester = rankWith(
-  1,
-  uiTypeIs('Group')
-);
+export const groupLayoutTester: RankedTester = rankWith(1, uiTypeIs('Group'));
 
 export default withJsonFormsLayoutProps(GroupLayout);

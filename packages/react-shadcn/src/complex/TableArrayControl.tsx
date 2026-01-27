@@ -71,11 +71,9 @@ export const tableArrayControlTester: RankedTester = rankWith(
   or(isObjectArrayControl, isPrimitiveArrayControl)
 );
 
-interface TableArrayControlState {}
-
 class TableArrayControlComponent extends React.Component<
   ArrayControlProps & { translations: ArrayTranslations },
-  TableArrayControlState
+  Record<string, never>
 > {
   confirmDelete = (path: string, index: number) => {
     const p = path.substring(0, path.lastIndexOf('.'));
@@ -110,31 +108,31 @@ class TableArrayControlComponent extends React.Component<
     }
 
     return (
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <Label className="text-base font-medium">{label}</Label>
+      <div className='space-y-4'>
+        <div className='flex items-center justify-between'>
+          <Label className='text-base font-medium'>{label}</Label>
           <Button
-            type="button"
-            variant="outline"
-            size="sm"
+            type='button'
+            variant='outline'
+            size='sm'
             disabled={!enabled}
             onClick={addItem(path, createDefaultValue(schema, rootSchema))}
           >
-            <Plus className="h-4 w-4 mr-2" />
+            <Plus className='h-4 w-4 mr-2' />
             {translations.addTooltip}
           </Button>
         </div>
-        {!isValid && (
-          <div className="text-sm text-destructive">{errors}</div>
-        )}
-        <div className="rounded-md border">
+        {!isValid && <div className='text-sm text-destructive'>{errors}</div>}
+        <div className='rounded-md border'>
           <Table>
             <TableHeader>
               <TableRow>
                 {schema.properties ? (
                   fpflow(
                     fpkeys,
-                    fpfilter((prop) => schema.properties[prop].type !== 'array'),
+                    fpfilter(
+                      (prop) => schema.properties[prop].type !== 'array'
+                    ),
                     fpmap((prop) => (
                       <TableHead key={prop}>
                         {schema.properties[prop].title ?? fpstartCase(prop)}
@@ -145,13 +143,16 @@ class TableArrayControlComponent extends React.Component<
                   <TableHead>Items</TableHead>
                 )}
                 <TableHead>Valid</TableHead>
-                <TableHead className="w-[80px]"></TableHead>
+                <TableHead className='w-[80px]'></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {!data || !Array.isArray(data) || data.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={100} className="text-center text-muted-foreground">
+                  <TableCell
+                    colSpan={100}
+                    className='text-center text-muted-foreground'
+                  >
                     {translations.noDataMessage}
                   </TableCell>
                 </TableRow>
@@ -192,7 +193,9 @@ class TableArrayControlComponent extends React.Component<
                           })
                         )(schema.properties)
                       ) : (
-                        <TableCell key={Paths.compose(childPath, index.toString())}>
+                        <TableCell
+                          key={Paths.compose(childPath, index.toString())}
+                        >
                           <DispatchCell
                             schema={schema}
                             uischema={createControlElement()}
@@ -202,21 +205,23 @@ class TableArrayControlComponent extends React.Component<
                       )}
                       <TableCell>
                         {errorsPerEntry && errorsPerEntry.length > 0 ? (
-                          <span className="text-sm text-destructive">
+                          <span className='text-sm text-destructive'>
                             {join(
                               errorsPerEntry.map((e) => e.message),
                               ' and '
                             )}
                           </span>
                         ) : (
-                          <span className="text-sm text-muted-foreground">OK</span>
+                          <span className='text-sm text-muted-foreground'>
+                            OK
+                          </span>
                         )}
                       </TableCell>
                       <TableCell>
                         <Button
-                          type="button"
-                          variant="ghost"
-                          size="icon"
+                          type='button'
+                          variant='ghost'
+                          size='icon'
                           disabled={!enabled}
                           aria-label={translations.removeAriaLabel}
                           onClick={() => {
@@ -227,7 +232,7 @@ class TableArrayControlComponent extends React.Component<
                             }
                           }}
                         >
-                          <Trash2 className="h-4 w-4" />
+                          <Trash2 className='h-4 w-4' />
                         </Button>
                       </TableCell>
                     </TableRow>

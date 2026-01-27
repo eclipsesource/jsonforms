@@ -49,25 +49,25 @@ export const ListWithDetailMasterItem = ({
       )}
       onClick={handleSelect(index)}
     >
-      <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground text-sm font-medium shrink-0">
+      <div className='flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground text-sm font-medium shrink-0'>
         {index + 1}
       </div>
-      <div className="flex-1 min-w-0">
-        <p className="text-sm truncate">{childLabel || `Item ${index + 1}`}</p>
+      <div className='flex-1 min-w-0'>
+        <p className='text-sm truncate'>{childLabel || `Item ${index + 1}`}</p>
       </div>
       {enabled && !disableRemove && (
         <Button
-          variant="ghost"
-          size="sm"
+          variant='ghost'
+          size='sm'
           onClick={(e) => {
             e.stopPropagation();
             removeItem(path, index)();
           }}
           title={translations.removeTooltip}
           aria-label={translations.removeAriaLabel}
-          className="shrink-0 h-8 w-8 p-0"
+          className='shrink-0 h-8 w-8 p-0'
         >
-          <Trash2 className="h-4 w-4" />
+          <Trash2 className='h-4 w-4' />
         </Button>
       )}
     </div>

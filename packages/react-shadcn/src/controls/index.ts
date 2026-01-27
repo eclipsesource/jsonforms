@@ -26,7 +26,4 @@ export {
   default as OneOfRadioGroupControl,
   oneOfRadioGroupControlTester,
 } from './OneOfRadioGroupControl';
-export {
-  default as InputControl,
-  inputControlTester,
-} from './InputControl';
+export { default as InputControl, inputControlTester } from './InputControl';

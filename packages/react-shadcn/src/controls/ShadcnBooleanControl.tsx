@@ -25,11 +25,7 @@
 
 import React from 'react';
 import { withJsonFormsControlProps } from '@jsonforms/react';
-import {
-  ControlProps,
-  isBooleanControl,
-  rankWith,
-} from '@jsonforms/core';
+import { ControlProps, isBooleanControl, rankWith } from '@jsonforms/core';
 import { Checkbox } from '../shadcn/components/ui/checkbox';
 import { Label } from '../shadcn/components/ui/label';
 import {
@@ -64,18 +60,16 @@ export const ShadcnBooleanControl = (props: ControlProps) => {
   const showDescription = description && !hasErrors;
 
   // Convert JSON Forms error string to FieldError format
-  const errorArray = hasErrors
-    ? [{ message: errors }]
-    : undefined;
+  const errorArray = hasErrors ? [{ message: errors }] : undefined;
 
   return (
     <Field
       data-invalid={hasErrors}
-      orientation="horizontal"
+      orientation='horizontal'
       className={cn(styleOverrides?.wrapperClasses)}
     >
       <FieldContent>
-        <div className="flex items-center space-x-2">
+        <div className='flex items-center space-x-2'>
           <Checkbox
             id={id}
             checked={!!data}
@@ -99,9 +93,7 @@ export const ShadcnBooleanControl = (props: ControlProps) => {
           )}
         </div>
         {showDescription && (
-          <FieldDescription
-            className={cn(styleOverrides?.descriptionClasses)}
-          >
+          <FieldDescription className={cn(styleOverrides?.descriptionClasses)}>
             {description}
           </FieldDescription>
         )}

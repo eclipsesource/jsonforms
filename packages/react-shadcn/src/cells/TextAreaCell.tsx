@@ -37,14 +37,7 @@ import { withShadcnCellProps } from '../util/props';
 import type { ShadcnRendererProps } from '../util/props';
 
 export const TextAreaCell = (props: CellProps & ShadcnRendererProps) => {
-  const {
-    data,
-    id,
-    enabled,
-    path,
-    handleChange,
-    styleOverrides,
-  } = props;
+  const { data, id, enabled, path, handleChange, styleOverrides } = props;
 
   return (
     <Textarea

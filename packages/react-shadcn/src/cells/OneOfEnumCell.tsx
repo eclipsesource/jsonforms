@@ -74,14 +74,16 @@ export const OneOfEnumCell = (
       onChange={(e) =>
         handleChange(
           path,
-          e.target.selectedIndex === 0 && !hideEmptyOption ? undefined : e.target.value
+          e.target.selectedIndex === 0 && !hideEmptyOption
+            ? undefined
+            : e.target.value
         )
       }
       disabled={!enabled}
       className={cn('w-full', styleOverrides?.inputClasses)}
     >
       {!hideEmptyOption && (
-        <NativeSelectOption value="">{noneOptionLabel}</NativeSelectOption>
+        <NativeSelectOption value=''>{noneOptionLabel}</NativeSelectOption>
       )}
       {options.map((option) => (
         <NativeSelectOption key={option.value} value={option.value}>

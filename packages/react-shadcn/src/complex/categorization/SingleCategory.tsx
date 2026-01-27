@@ -34,7 +34,7 @@ export interface CategoryProps {
 }
 
 export const SingleCategory = ({ category, schema, path }: CategoryProps) => (
-  <div className="space-y-4">
+  <div className='space-y-4'>
     {(category.elements || []).map((child, index) => (
       <JsonFormsDispatch
         key={`${path}-${index}`}

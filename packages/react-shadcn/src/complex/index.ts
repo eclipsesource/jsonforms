@@ -1,11 +1,5 @@
-export {
-  default as LabelRenderer,
-  labelRendererTester,
-} from './LabelRenderer';
-export {
-  default as ArrayControlRenderer,
-  arrayControlTester,
-} from './array';
+export { default as LabelRenderer, labelRendererTester } from './LabelRenderer';
+export { default as ArrayControlRenderer, arrayControlTester } from './array';
 export {
   default as TableArrayControl,
   tableArrayControlTester,

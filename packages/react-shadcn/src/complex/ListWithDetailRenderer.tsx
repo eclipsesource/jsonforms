@@ -122,7 +122,7 @@ export const ListWithDetailRenderer = ({
   }
 
   return (
-    <div className="space-y-4">
+    <div className='space-y-4'>
       <ArrayLayoutToolbar
         translations={translations}
         label={computeLabel(
@@ -138,9 +138,9 @@ export const ListWithDetailRenderer = ({
         createDefault={handleCreateDefaultValue}
         disableAdd={doDisableAdd}
       />
-      <div className="grid grid-cols-12 gap-4">
-        <div className="col-span-3">
-          <div className="border rounded-lg overflow-hidden">
+      <div className='grid grid-cols-12 gap-4'>
+        <div className='col-span-3'>
+          <div className='border rounded-lg overflow-hidden'>
             {data > 0 ? (
               map(range(data), (index) => (
                 <ListWithDetailMasterItem
@@ -159,13 +159,13 @@ export const ListWithDetailRenderer = ({
                 />
               ))
             ) : (
-              <p className="p-4 text-muted-foreground text-sm">
+              <p className='p-4 text-muted-foreground text-sm'>
                 {translations.noDataMessage}
               </p>
             )}
           </div>
         </div>
-        <div className="col-span-9">
+        <div className='col-span-9'>
           {selectedIndex !== undefined ? (
             <JsonFormsDispatch
               renderers={renderers}
@@ -176,7 +176,7 @@ export const ListWithDetailRenderer = ({
               path={composePaths(path, `${selectedIndex}`)}
             />
           ) : (
-            <p className="text-lg text-muted-foreground">
+            <p className='text-lg text-muted-foreground'>
               {translations.noSelection}
             </p>
           )}

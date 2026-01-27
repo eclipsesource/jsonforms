@@ -24,10 +24,16 @@
 */
 
 import React from 'react';
-import { VerticalLayout as VerticalLayoutSchema, ControlElement } from '@jsonforms/core';
+import {
+  VerticalLayout as VerticalLayoutSchema,
+  ControlElement,
+} from '@jsonforms/core';
 import { JsonFormsStateProvider } from '@jsonforms/react';
 import { mount, ReactWrapper } from 'enzyme';
-import { VerticalLayout, verticalLayoutTester } from '../../src/layouts/VerticalLayout';
+import {
+  VerticalLayout,
+  verticalLayoutTester,
+} from '../../src/layouts/VerticalLayout';
 import { initCore } from '../util';
 
 const fixture = {
@@ -51,7 +57,9 @@ describe('VerticalLayout tester', () => {
   });
 
   it('should fail with wrong uischema type', () => {
-    expect(verticalLayoutTester({ type: 'Foo' }, undefined, undefined)).toBe(-1);
+    expect(verticalLayoutTester({ type: 'Foo' }, undefined, undefined)).toBe(
+      -1
+    );
   });
 
   it('should succeed with VerticalLayout uischema', () => {

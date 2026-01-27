@@ -43,7 +43,9 @@ export const SliderCell = (props: CellProps & ShadcnRendererProps) => {
   const currentValue = data ?? schema.default ?? schema.minimum ?? 0;
 
   return (
-    <div className={cn('flex items-center gap-3', styleOverrides?.inputClasses)}>
+    <div
+      className={cn('flex items-center gap-3', styleOverrides?.inputClasses)}
+    >
       <Slider
         id={id}
         value={[currentValue]}
@@ -51,9 +53,9 @@ export const SliderCell = (props: CellProps & ShadcnRendererProps) => {
         min={schema.minimum}
         max={schema.maximum}
         disabled={!enabled}
-        className="flex-1"
+        className='flex-1'
       />
-      <span className="text-sm font-medium min-w-[3ch] text-right">
+      <span className='text-sm font-medium min-w-[3ch] text-right'>
         {currentValue}
       </span>
     </div>

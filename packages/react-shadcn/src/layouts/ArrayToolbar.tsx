@@ -52,29 +52,29 @@ export const ArrayLayoutToolbar = React.memo(function ArrayLayoutToolbar({
   disableAdd,
 }: ArrayLayoutToolbarProps) {
   return (
-    <div className="space-y-2">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <h3 className="text-lg font-semibold">{label}</h3>
+    <div className='space-y-2'>
+      <div className='flex items-center justify-between'>
+        <div className='flex items-center gap-3'>
+          <h3 className='text-lg font-semibold'>{label}</h3>
           {errors && errors.length !== 0 && (
-            <span className="text-sm text-destructive">{errors}</span>
+            <span className='text-sm text-destructive'>{errors}</span>
           )}
         </div>
         {enabled && !disableAdd && (
           <Button
-            variant="outline"
-            size="sm"
+            variant='outline'
+            size='sm'
             onClick={addItem(path, createDefault())}
             title={translations.addTooltip}
             aria-label={translations.addTooltip}
           >
-            <Plus className="h-4 w-4 mr-2" />
+            <Plus className='h-4 w-4 mr-2' />
             {translations.addTooltip}
           </Button>
         )}
       </div>
       {description && (
-        <p className="text-sm text-muted-foreground">{description}</p>
+        <p className='text-sm text-muted-foreground'>{description}</p>
       )}
     </div>
   );

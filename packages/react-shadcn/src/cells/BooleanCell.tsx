@@ -36,13 +36,7 @@ import { withShadcnCellProps } from '../util/props';
 import type { ShadcnRendererProps } from '../util/props';
 
 export const BooleanCell = (props: CellProps & ShadcnRendererProps) => {
-  const {
-    data,
-    id,
-    enabled,
-    path,
-    handleChange,
-  } = props;
+  const { data, id, enabled, path, handleChange } = props;
 
   return (
     <Checkbox

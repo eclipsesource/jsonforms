@@ -48,10 +48,7 @@ export const VerticalLayout = (props: LayoutProps) => {
 
   return (
     <div
-      className={cn(
-        'flex flex-col space-y-4',
-        styleOverrides?.wrapperClasses
-      )}
+      className={cn('flex flex-col space-y-4', styleOverrides?.wrapperClasses)}
     >
       {layout.elements.map((child: UISchemaElement, index: number) => (
         <JsonFormsDispatch

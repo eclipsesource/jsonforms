@@ -56,8 +56,8 @@ export const IntegerCell = (props: CellProps & ShadcnRendererProps) => {
 
   return (
     <Input
-      type="number"
-      step="1"
+      type='number'
+      step='1'
       value={data ?? ''}
       onChange={(ev) => handleChange(path, toNumber(ev.target.value))}
       className={cn(styleOverrides?.inputClasses)}

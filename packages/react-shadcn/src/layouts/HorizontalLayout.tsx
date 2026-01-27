@@ -48,10 +48,7 @@ export const HorizontalLayout = (props: LayoutProps) => {
 
   return (
     <div
-      className={cn(
-        'flex flex-row space-x-4',
-        styleOverrides?.wrapperClasses
-      )}
+      className={cn('flex flex-row space-x-4', styleOverrides?.wrapperClasses)}
     >
       {layout.elements.map((child: UISchemaElement, index: number) => (
         <JsonFormsDispatch

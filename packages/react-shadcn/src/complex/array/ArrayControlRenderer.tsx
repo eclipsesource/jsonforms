@@ -43,12 +43,7 @@ import { Card, CardContent, CardHeader } from '../../shadcn/components/ui/card';
 import { Label } from '../../shadcn/components/ui/label';
 import { cn } from '../../shadcn/lib/utils';
 import { useShadcnStyles } from '../../styles/styleContext';
-import {
-  ChevronUp,
-  ChevronDown,
-  Trash2,
-  Plus,
-} from 'lucide-react';
+import { ChevronUp, ChevronDown, Trash2, Plus } from 'lucide-react';
 
 export const ArrayControl = (
   props: ArrayControlProps & { translations: ArrayTranslations }
@@ -96,54 +91,52 @@ export const ArrayControl = (
 
   return (
     <div className={cn('space-y-4', styleOverrides?.wrapperClasses)}>
-      <div className="flex items-center justify-between">
-        <Label className="text-base font-medium">{label}</Label>
+      <div className='flex items-center justify-between'>
+        <Label className='text-base font-medium'>{label}</Label>
         <Button
-          type="button"
-          variant="outline"
-          size="sm"
+          type='button'
+          variant='outline'
+          size='sm'
           disabled={!enabled}
           onClick={addItem(path, createDefaultValue(schema, rootSchema))}
         >
-          <Plus className="h-4 w-4 mr-2" />
+          <Plus className='h-4 w-4 mr-2' />
           {translations.addTooltip}
         </Button>
       </div>
-      {!isValid && (
-        <div className="text-sm text-destructive">{errors}</div>
-      )}
-      <div className="space-y-3">
+      {!isValid && <div className='text-sm text-destructive'>{errors}</div>}
+      <div className='space-y-3'>
         {data && data.length > 0 ? (
           range(0, data.length).map((index) => {
             const childPath = composePaths(path, `${index}`);
             return (
               <Card key={index}>
-                <CardHeader className="pb-3">
-                  <div className="flex items-center justify-end gap-2">
+                <CardHeader className='pb-3'>
+                  <div className='flex items-center justify-end gap-2'>
                     <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
+                      type='button'
+                      variant='ghost'
+                      size='icon'
                       disabled={!enabled || index === 0}
                       aria-label={translations.upAriaLabel}
                       onClick={() => moveUp(path, index)()}
                     >
-                      <ChevronUp className="h-4 w-4" />
+                      <ChevronUp className='h-4 w-4' />
                     </Button>
                     <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
+                      type='button'
+                      variant='ghost'
+                      size='icon'
                       disabled={!enabled || index === data.length - 1}
                       aria-label={translations.downAriaLabel}
                       onClick={() => moveDown(path, index)()}
                     >
-                      <ChevronDown className="h-4 w-4" />
+                      <ChevronDown className='h-4 w-4' />
                     </Button>
                     <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
+                      type='button'
+                      variant='ghost'
+                      size='icon'
                       disabled={!enabled}
                       aria-label={translations.removeAriaLabel}
                       onClick={() => {
@@ -156,7 +149,7 @@ export const ArrayControl = (
                         }
                       }}
                     >
-                      <Trash2 className="h-4 w-4" />
+                      <Trash2 className='h-4 w-4' />
                     </Button>
                   </div>
                 </CardHeader>
@@ -173,7 +166,9 @@ export const ArrayControl = (
             );
           })
         ) : (
-          <p className="text-sm text-muted-foreground">{translations.noDataMessage}</p>
+          <p className='text-sm text-muted-foreground'>
+            {translations.noDataMessage}
+          </p>
         )}
       </div>
     </div>

@@ -8,7 +8,10 @@ export default defineConfig({
   resolve: {
     alias: {
       '@jsonforms/react-shadcn': path.resolve(__dirname, '../src'),
-      '@jsonforms/examples-react': path.resolve(__dirname, '../../examples-react/src'),
+      '@jsonforms/examples-react': path.resolve(
+        __dirname,
+        '../../examples-react/src'
+      ),
       '@jsonforms/examples': path.resolve(__dirname, '../../examples/src'),
       '@': path.resolve(__dirname, '../src'),
     },

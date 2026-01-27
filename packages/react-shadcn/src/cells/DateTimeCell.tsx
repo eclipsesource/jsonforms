@@ -57,7 +57,7 @@ export const DateTimeCell = (props: CellProps & ShadcnRendererProps) => {
 
   return (
     <Input
-      type="datetime-local"
+      type='datetime-local'
       value={(data || '').substr(0, 16)}
       onChange={(ev) => handleChange(path, toISOString(ev.target.value))}
       className={cn(styleOverrides?.inputClasses)}

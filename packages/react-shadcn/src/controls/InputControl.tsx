@@ -30,10 +30,7 @@ import {
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
-import {
-  DispatchCell,
-  withJsonFormsControlProps,
-} from '@jsonforms/react';
+import { DispatchCell, withJsonFormsControlProps } from '@jsonforms/react';
 import {
   Field,
   FieldLabel,
@@ -77,7 +74,7 @@ export const InputControl = (props: ControlProps) => {
   return (
     <Field
       data-invalid={hasErrors}
-      orientation="vertical"
+      orientation='vertical'
       className={cn(styleOverrides?.wrapperClasses)}
     >
       <FieldContent>
@@ -85,7 +82,8 @@ export const InputControl = (props: ControlProps) => {
           <FieldLabel
             htmlFor={id + '-input'}
             className={cn(
-              required && 'after:content-["*"] after:ml-0.5 after:text-destructive',
+              required &&
+                'after:content-["*"] after:ml-0.5 after:text-destructive',
               styleOverrides?.labelClasses
             )}
           >

@@ -66,11 +66,9 @@ export const ShadcnTextControl = (props: ControlProps) => {
 
   const hasErrors = errors && errors.length > 0;
   const showDescription = description && !hasErrors;
-  
+
   // Convert JSON Forms error string to FieldError format
-  const errorArray = hasErrors
-    ? [{ message: errors }]
-    : undefined;
+  const errorArray = hasErrors ? [{ message: errors }] : undefined;
 
   // Determine input type based on schema format
   const inputType = schema.format === 'email' ? 'email' : 'text';
@@ -78,7 +76,7 @@ export const ShadcnTextControl = (props: ControlProps) => {
   return (
     <Field
       data-invalid={hasErrors}
-      orientation="vertical"
+      orientation='vertical'
       className={cn(styleOverrides?.wrapperClasses)}
     >
       <FieldContent>
@@ -86,7 +84,8 @@ export const ShadcnTextControl = (props: ControlProps) => {
           <FieldLabel
             htmlFor={id}
             className={cn(
-              required && 'after:content-["*"] after:ml-0.5 after:text-destructive',
+              required &&
+                'after:content-["*"] after:ml-0.5 after:text-destructive',
               styleOverrides?.labelClasses
             )}
           >
@@ -105,9 +104,7 @@ export const ShadcnTextControl = (props: ControlProps) => {
           )}
         />
         {showDescription && (
-          <FieldDescription
-            className={cn(styleOverrides?.descriptionClasses)}
-          >
+          <FieldDescription className={cn(styleOverrides?.descriptionClasses)}>
             {description}
           </FieldDescription>
         )}
@@ -130,7 +127,10 @@ export const shadcnTextControlTester = rankWith(
   1,
   and(
     isStringControl,
-    schemaMatches((schema) => !schema.format || schema.format === 'text' || schema.format === 'email')
+    schemaMatches(
+      (schema) =>
+        !schema.format || schema.format === 'text' || schema.format === 'email'
+    )
   )
 );
 
