@@ -43,30 +43,69 @@ import ShadcnEnumControl, {
 import ShadcnTextAreaControl, {
   shadcnTextAreaControlTester,
 } from './controls/ShadcnTextAreaControl';
+import RadioGroupControl, {
+  radioGroupControlTester,
+} from './controls/RadioGroupControl';
+import OneOfRadioGroupControl, {
+  oneOfRadioGroupControlTester,
+} from './controls/OneOfRadioGroupControl';
+import InputControl, {
+  inputControlTester,
+} from './controls/InputControl';
 import TextCell, { textCellTester } from './cells/TextCell';
 import NumberCell, { numberCellTester } from './cells/NumberCell';
 import BooleanCell, { booleanCellTester } from './cells/BooleanCell';
 import EnumCell, { enumCellTester } from './cells/EnumCell';
 import TextAreaCell, { textAreaCellTester } from './cells/TextAreaCell';
+import DateCell, { dateCellTester } from './cells/DateCell';
+import DateTimeCell, { dateTimeCellTester } from './cells/DateTimeCell';
+import TimeCell, { timeCellTester } from './cells/TimeCell';
+import IntegerCell, { integerCellTester } from './cells/IntegerCell';
+import OneOfEnumCell, { oneOfEnumCellTester } from './cells/OneOfEnumCell';
+import SliderCell, { sliderCellTester } from './cells/SliderCell';
+import NumberFormatCell, { numberFormatCellTester } from './cells/NumberFormatCell';
 import VerticalLayout, { verticalLayoutTester } from './layouts/VerticalLayout';
 import HorizontalLayout, { horizontalLayoutTester } from './layouts/HorizontalLayout';
 import GroupLayout, { groupLayoutTester } from './layouts/GroupLayout';
+import LabelRenderer, { labelRendererTester } from './complex/LabelRenderer';
+import ArrayControlRenderer, { arrayControlTester } from './complex/array';
+import TableArrayControl, { tableArrayControlTester } from './complex/TableArrayControl';
+import CategorizationRenderer, { categorizationTester } from './complex/categorization';
+import ObjectRenderer, { objectRendererTester } from './complex/ObjectRenderer';
+// import ListWithDetailRenderer, { listWithDetailTester } from './complex/ListWithDetailRenderer'; // TEMPORARILY DISABLED
 
 export const shadcnRenderers: JsonFormsRendererRegistryEntry[] = [
   { tester: shadcnBooleanControlTester, renderer: ShadcnBooleanControl },
+  { tester: radioGroupControlTester, renderer: RadioGroupControl },
+  { tester: oneOfRadioGroupControlTester, renderer: OneOfRadioGroupControl },
   { tester: shadcnEnumControlTester, renderer: ShadcnEnumControl },
   { tester: shadcnTextAreaControlTester, renderer: ShadcnTextAreaControl },
   { tester: shadcnNumberControlTester, renderer: ShadcnNumberControl },
   { tester: shadcnTextControlTester, renderer: ShadcnTextControl },
+  { tester: objectRendererTester, renderer: ObjectRenderer },
+  // { tester: listWithDetailTester, renderer: ListWithDetailRenderer }, // TEMPORARILY DISABLED
+  { tester: arrayControlTester, renderer: ArrayControlRenderer },
+  { tester: tableArrayControlTester, renderer: TableArrayControl },
   { tester: verticalLayoutTester, renderer: VerticalLayout },
   { tester: horizontalLayoutTester, renderer: HorizontalLayout },
   { tester: groupLayoutTester, renderer: GroupLayout },
+  { tester: categorizationTester, renderer: CategorizationRenderer },
+  { tester: labelRendererTester, renderer: LabelRenderer },
+  // Fallback InputControl should be last (rank 1)
+  { tester: inputControlTester, renderer: InputControl },
 ];
 
 export const shadcnCells: JsonFormsCellRendererRegistryEntry[] = [
   { tester: booleanCellTester, cell: BooleanCell },
   { tester: enumCellTester, cell: EnumCell },
   { tester: textAreaCellTester, cell: TextAreaCell },
+  { tester: numberFormatCellTester, cell: NumberFormatCell },
   { tester: numberCellTester, cell: NumberCell },
   { tester: textCellTester, cell: TextCell },
+  { tester: dateCellTester, cell: DateCell },
+  { tester: dateTimeCellTester, cell: DateTimeCell },
+  { tester: timeCellTester, cell: TimeCell },
+  { tester: integerCellTester, cell: IntegerCell },
+  { tester: oneOfEnumCellTester, cell: OneOfEnumCell },
+  { tester: sliderCellTester, cell: SliderCell },
 ];

@@ -3,6 +3,7 @@
 @source "../../src";
 
 @custom-variant dark (&:is(.dark *));
+@custom-variant data-active (&[data-state="active"]);
 
 :root {
     --background: oklch(1 0 0);
