@@ -355,7 +355,7 @@ const handleAction = (action: Action) => {
                         <v-toolbar flat>
                           <v-toolbar-title>Data</v-toolbar-title>
                           <v-spacer></v-spacer>
-                          <v-tooltip bottom>
+                          <v-tooltip location="bottom">
                             <template v-slot:activator="{ props }">
                               <v-btn
                                 icon
@@ -367,7 +367,7 @@ const handleAction = (action: Action) => {
                             </template>
                             {{ `Reload Example Data` }}
                           </v-tooltip>
-                          <v-tooltip bottom>
+                          <v-tooltip location="bottom">
                             <template v-slot:activator="{ props }">
                               <v-btn
                                 icon
@@ -402,7 +402,7 @@ const handleAction = (action: Action) => {
                 <v-toolbar flat>
                   <v-toolbar-title>Schema</v-toolbar-title>
                   <v-spacer></v-spacer>
-                  <v-tooltip bottom>
+                  <v-tooltip location="bottom">
                     <template v-slot:activator="{ props }">
                       <v-btn icon @click="reloadMonacoSchema" v-bind="props">
                         <v-icon>$reload</v-icon>
@@ -410,7 +410,7 @@ const handleAction = (action: Action) => {
                     </template>
                     {{ `Reload Example Schema` }}
                   </v-tooltip>
-                  <v-tooltip bottom>
+                  <v-tooltip location="bottom">
                     <template v-slot:activator="{ props }">
                       <v-btn icon @click="saveMonacoSchema" v-bind="props">
                         <v-icon>$save</v-icon>
@@ -435,7 +435,7 @@ const handleAction = (action: Action) => {
                 <v-toolbar flat>
                   <v-toolbar-title>UI Schema</v-toolbar-title>
                   <v-spacer></v-spacer>
-                  <v-tooltip bottom>
+                  <v-tooltip location="bottom">
                     <template v-slot:activator="{ props }">
                       <v-btn icon @click="reloadMonacoUiSchema" v-bind="props">
                         <v-icon>$reload</v-icon>
@@ -443,7 +443,7 @@ const handleAction = (action: Action) => {
                     </template>
                     {{ `Reload Example UI Schema` }}
                   </v-tooltip>
-                  <v-tooltip bottom>
+                  <v-tooltip location="bottom">
                     <template v-slot:activator="{ props }">
                       <v-btn icon @click="saveMonacoUiSchema" v-bind="props">
                         <v-icon>$save</v-icon>
@@ -468,7 +468,7 @@ const handleAction = (action: Action) => {
                 <v-toolbar flat>
                   <v-toolbar-title>Data</v-toolbar-title>
                   <v-spacer></v-spacer>
-                  <v-tooltip bottom>
+                  <v-tooltip location="bottom">
                     <template v-slot:activator="{ props }">
                       <v-btn icon @click="reloadMonacoData" v-bind="props">
                         <v-icon>$reload</v-icon>
@@ -476,7 +476,7 @@ const handleAction = (action: Action) => {
                     </template>
                     {{ `Reload Example Data` }}
                   </v-tooltip>
-                  <v-tooltip bottom>
+                  <v-tooltip location="bottom">
                     <template v-slot:activator="{ props }">
                       <v-btn icon @click="saveMonacoData" v-bind="props">
                         <v-icon>$save</v-icon>
