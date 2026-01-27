@@ -32,7 +32,7 @@ pnpm lerna run test --scope=@jsonforms/core
 
 - `@jsonforms/core` - Core utilities (UI-framework independent)
 - `@jsonforms/react`, `@jsonforms/angular`, `@jsonforms/vue` - Framework bindings
-- `@jsonforms/material-renderers`, `@jsonforms/vanilla-renderers` - React renderer sets
+- `@jsonforms/material-renderers`, `@jsonforms/vanilla-renderers`, `@jsonforms/react-shadcn` - React renderer sets
 - `@jsonforms/angular-material` - Angular renderer set
 - `@jsonforms/vue-vanilla`, `@jsonforms/vue-vuetify` - Vue renderer sets
 

@@ -1,0 +1,32 @@
+{
+  "name": "@jsonforms/react-shadcn-example",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "build-only": "vite build",
+    "build-example": "vite build --config vite.example.config.ts",
+    "type-check": "tsc --noEmit",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@jsonforms/core": "workspace:*",
+    "@jsonforms/examples": "workspace:*",
+    "@jsonforms/examples-react": "workspace:*",
+    "@jsonforms/react": "workspace:*",
+    "@jsonforms/react-shadcn": "workspace:*",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.18",
+    "@types/react": "^17.0.80",
+    "@types/react-dom": "^17.0.25",
+    "@vitejs/plugin-react": "^4.2.1",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.2.2",
+    "vite": "^5.0.8"
+  }
+}
