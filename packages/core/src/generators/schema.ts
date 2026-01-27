@@ -177,5 +177,5 @@ export const generateJsonSchema = (
 
   const gen = new Gen(findOption);
 
-  return gen.schemaObject(instance);
+  return gen.property(instance);
 };
