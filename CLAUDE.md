@@ -2,6 +2,8 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+> **Note:** For additional project information, architecture, and core principles, see `.prompts/project-info.prompttemplate`.
+
 ## Project Overview
 
 JSON Forms is a declarative framework for automatically generating web forms from JSON Schema. It provides a framework-agnostic core with bindings for React, Angular, and Vue, plus multiple renderer sets (Material-UI, Angular Material, Vuetify, and vanilla HTML/CSS).
@@ -20,6 +22,7 @@ Website: https://jsonforms.io
 - `pnpm run build` - Build all packages in the monorepo
 - `pnpm run clean` - Delete all dist folders
 - `cd packages/<package-name> && pnpm run build` - Build a specific package
+- `pnpm lerna run build --scope=@jsonforms/<package-name>` - Build a specific package (preferred for iterative development)
 
 ### Testing
 - `pnpm run test` - Run tests for all packages
@@ -28,10 +31,12 @@ Website: https://jsonforms.io
 - `cd packages/react && pnpm run test` - Run React tests (uses Jest)
 - `cd packages/angular && pnpm run test` - Run Angular tests (uses AVA)
 - `cd packages/vue && pnpm run test` - Run Vue tests (uses Jest)
+- `pnpm lerna run test --scope=@jsonforms/<package-name>` - Test a specific package
 
 ### Linting
 - `pnpm run lint` - Lint all packages
 - `pnpm run lint:fix` - Auto-fix linting issues in all packages
+- `pnpm lerna run lint --scope=@jsonforms/<package-name>` - Lint a specific package
 
 ### Development Servers
 Each renderer package has example apps you can run:
@@ -71,6 +76,10 @@ This is a Lerna-managed pnpm workspace monorepo with three types of packages:
 
 4. **Support Packages**
    - `@jsonforms/examples` - Shared example data, schemas, and UI schemas for testing
+
+### Build Order Dependencies
+
+`core` → `react`/`angular`/`vue` → renderer packages
 
 ### Key Concepts
 
