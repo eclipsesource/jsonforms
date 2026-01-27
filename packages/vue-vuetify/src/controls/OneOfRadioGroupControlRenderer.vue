@@ -18,6 +18,7 @@
       :persistent-hint="persistentHint()"
       :required="control.required"
       :error-messages="control.errors"
+      :inline="inline"
       v-bind="vuetifyProps('v-radio-group')"
       :model-value="control.data"
       @update:model-value="onChange"
@@ -66,6 +67,16 @@ const controlRenderer = defineComponent({
   },
   setup(props: RendererProps<ControlElement>) {
     return useVuetifyControl(useJsonFormsOneOfEnumControl(props));
+  },
+  computed: {
+    inline(): boolean {
+      let inline = this.vuetifyProps('v-radio-group')?.inline;
+      if (typeof inline === 'boolean') {
+        return inline;
+      }
+
+      return this.appliedOptions?.['orientation'] !== 'vertical';
+    },
   },
 });
 
