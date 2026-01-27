@@ -24,15 +24,8 @@
 */
 
 import React, { useState, useMemo } from 'react';
-import type {
-  Categorization,
-  Category,
-  LayoutProps,
-} from '@jsonforms/core';
-import {
-  deriveLabelForUISchemaElement,
-  isVisible,
-} from '@jsonforms/core';
+import type { Categorization, Category, LayoutProps } from '@jsonforms/core';
+import { deriveLabelForUISchemaElement, isVisible } from '@jsonforms/core';
 import {
   TranslateProps,
   withJsonFormsLayoutProps,
@@ -40,12 +33,7 @@ import {
   useJsonForms,
 } from '@jsonforms/react';
 import { SingleCategory } from './SingleCategory';
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '../../shadcn/components/ui/tabs';
+import { Tabs, TabsList, TabsTrigger } from '../../shadcn/components/ui/tabs';
 import { cn } from '../../shadcn/lib/utils';
 import { useShadcnStyles } from '../../styles/styleContext';
 
@@ -71,14 +59,8 @@ export const CategorizationRenderer = ({
   const ajv = ctx.core?.ajv;
 
   const [previousCategorization, setPreviousCategorization] =
-    useState<Categorization>(categorization);
+    useState<Categorization>(uischema as Categorization);
   const [activeCategory, setActiveCategory] = useState<number>(selected ?? 0);
-
-  // Reset to first tab if categorization changes
-  if (categorization !== previousCategorization) {
-    setActiveCategory(0);
-    setPreviousCategorization(categorization);
-  }
 
   // Filter visible categories
   const visibleCategories = useMemo(() => {
@@ -86,6 +68,11 @@ export const CategorizationRenderer = ({
       isVisible(category, data, undefined, ajv, config)
     );
   }, [categorization.elements, data, ajv, config]);
+
+  if (categorization !== previousCategorization) {
+    setActiveCategory(0);
+    setPreviousCategorization(categorization);
+  }
 
   // Get category labels
   const categoryLabels = useMemo(
@@ -113,25 +100,28 @@ export const CategorizationRenderer = ({
   }
 
   return (
-    <Tabs
-      value={String(safeCategory)}
-      onValueChange={handleCategoryChange}
-      className={cn(styleOverrides?.wrapperClasses)}
-    >
-      <TabsList>
-        {categoryLabels.map((label, index) => (
-          <TabsTrigger key={index} value={String(index)}>
-            {label}
-          </TabsTrigger>
-        ))}
-      </TabsList>
-      {visibleCategories.map((category, index) => (
-        <TabsContent key={index} value={String(index)}>
-          <SingleCategory category={category} schema={schema} path={path} />
-        </TabsContent>
-      ))}
-    </Tabs>
+    <div className={cn(styleOverrides?.wrapperClasses)}>
+      <Tabs value={String(safeCategory)} onValueChange={handleCategoryChange}>
+        <TabsList>
+          {categoryLabels.map((label, index) => (
+            <TabsTrigger key={index} value={String(index)}>
+              {label}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      </Tabs>
+      <div className='mt-4'>
+        <SingleCategory
+          key={safeCategory}
+          category={visibleCategories[safeCategory]}
+          schema={schema}
+          path={path}
+        />
+      </div>
+    </div>
   );
 };
 
-export default withTranslateProps(withJsonFormsLayoutProps(CategorizationRenderer));
+export default withTranslateProps(
+  withJsonFormsLayoutProps(CategorizationRenderer)
+);

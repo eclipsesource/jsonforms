@@ -71,33 +71,28 @@ export const ListWithDetailRenderer = ({
   disableRemove,
   translations,
 }: ArrayLayoutProps & { translations: ArrayTranslations }) => {
-  const [selectedIndex, setSelectedIndex] = useState<number | undefined>(
-    undefined
-  );
+  const [selectedIndex, setSelectedIndex] = useState(undefined);
 
   const handleRemoveItem = useCallback(
     (p: string, value: any) => () => {
       removeItems(p, [value])();
-      setSelectedIndex((currentIndex) => {
-        if (currentIndex === value) {
-          return undefined;
-        } else if (currentIndex !== undefined && currentIndex > value) {
-          return currentIndex - 1;
-        }
-        return currentIndex;
-      });
+      if (selectedIndex === value) {
+        setSelectedIndex(undefined);
+      } else if (selectedIndex > value) {
+        setSelectedIndex(selectedIndex - 1);
+      }
     },
-    [removeItems]
+    [removeItems, setSelectedIndex]
   );
 
   const handleListItemClick = useCallback(
     (index: number) => () => setSelectedIndex(index),
-    []
+    [setSelectedIndex]
   );
 
   const handleCreateDefaultValue = useCallback(
     () => createDefaultValue(schema, rootSchema),
-    [schema, rootSchema]
+    [createDefaultValue]
   );
 
   const foundUISchema = useMemo(
@@ -114,10 +109,7 @@ export const ListWithDetailRenderer = ({
     [uischemas, schema, uischema.scope, path, uischema, rootSchema]
   );
 
-  const appliedUiSchemaOptions = useMemo(
-    () => merge({}, config, uischema.options),
-    [config, uischema.options]
-  );
+  const appliedUiSchemaOptions = merge({}, config, uischema.options);
   const doDisableAdd = disableAdd || appliedUiSchemaOptions.disableAdd;
   const doDisableRemove = disableRemove || appliedUiSchemaOptions.disableRemove;
 
@@ -174,7 +166,7 @@ export const ListWithDetailRenderer = ({
           </div>
         </div>
         <div className="col-span-9">
-          {selectedIndex !== undefined && foundUISchema ? (
+          {selectedIndex !== undefined ? (
             <JsonFormsDispatch
               renderers={renderers}
               cells={cells}
@@ -183,10 +175,6 @@ export const ListWithDetailRenderer = ({
               uischema={foundUISchema}
               path={composePaths(path, `${selectedIndex}`)}
             />
-          ) : selectedIndex !== undefined ? (
-            <p className="text-lg text-muted-foreground">
-              No UI schema found for detail view
-            </p>
           ) : (
             <p className="text-lg text-muted-foreground">
               {translations.noSelection}

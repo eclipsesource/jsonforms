@@ -72,7 +72,10 @@ import ArrayControlRenderer, { arrayControlTester } from './complex/array';
 import TableArrayControl, { tableArrayControlTester } from './complex/TableArrayControl';
 import CategorizationRenderer, { categorizationTester } from './complex/categorization';
 import ObjectRenderer, { objectRendererTester } from './complex/ObjectRenderer';
-// import ListWithDetailRenderer, { listWithDetailTester } from './complex/ListWithDetailRenderer'; // TEMPORARILY DISABLED
+import ListWithDetailRenderer, { listWithDetailTester } from './complex/ListWithDetailRenderer';
+import AllOfRenderer, { allOfControlTester } from './complex/AllOfRenderer';
+import AnyOfRenderer, { anyOfControlTester } from './complex/AnyOfRenderer';
+import OneOfRenderer, { oneOfControlTester } from './complex/OneOfRenderer';
 
 export const shadcnRenderers: JsonFormsRendererRegistryEntry[] = [
   { tester: shadcnBooleanControlTester, renderer: ShadcnBooleanControl },
@@ -82,10 +85,16 @@ export const shadcnRenderers: JsonFormsRendererRegistryEntry[] = [
   { tester: shadcnTextAreaControlTester, renderer: ShadcnTextAreaControl },
   { tester: shadcnNumberControlTester, renderer: ShadcnNumberControl },
   { tester: shadcnTextControlTester, renderer: ShadcnTextControl },
+  // Combinators (rank 3)
+  { tester: allOfControlTester, renderer: AllOfRenderer },
+  { tester: anyOfControlTester, renderer: AnyOfRenderer },
+  { tester: oneOfControlTester, renderer: OneOfRenderer },
+  // Complex renderers
   { tester: objectRendererTester, renderer: ObjectRenderer },
-  // { tester: listWithDetailTester, renderer: ListWithDetailRenderer }, // TEMPORARILY DISABLED
+  { tester: listWithDetailTester, renderer: ListWithDetailRenderer },
   { tester: arrayControlTester, renderer: ArrayControlRenderer },
   { tester: tableArrayControlTester, renderer: TableArrayControl },
+  // Layouts
   { tester: verticalLayoutTester, renderer: VerticalLayout },
   { tester: horizontalLayoutTester, renderer: HorizontalLayout },
   { tester: groupLayoutTester, renderer: GroupLayout },
