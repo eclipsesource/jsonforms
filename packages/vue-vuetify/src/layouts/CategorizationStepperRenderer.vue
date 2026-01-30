@@ -5,6 +5,7 @@
       non-linear
       v-model="activeCategory"
       editable
+      flat
       v-bind="vuetifyProps('v-stepper-vertical')"
       :hide-actions="!appliedOptions.showNavButtons"
     >
@@ -14,21 +15,20 @@
         :value="index + 1"
         :key="`${layout.path}-${visibleCategories.length}-${index}`"
       >
-        <v-card elevation="0">
-          <dispatch-renderer
-            :schema="layout.schema"
-            :uischema="element.value.uischema"
-            :path="layout.path"
-            :enabled="layout.enabled"
-            :renderers="layout.renderers"
-            :cells="layout.cells"
-          />
-        </v-card>
+        <dispatch-renderer
+          :schema="layout.schema"
+          :uischema="element.value.uischema"
+          :path="layout.path"
+          :enabled="layout.enabled"
+          :renderers="layout.renderers"
+          :cells="layout.cells"
+        />
       </v-stepper-vertical-item>
     </v-stepper-vertical>
     <v-stepper
       v-else
       non-linear
+      flat
       v-model="activeCategory"
       v-bind="vuetifyProps('v-stepper')"
     >
@@ -48,22 +48,20 @@
           </template>
         </v-stepper-header>
 
-        <v-stepper-window>
+        <v-stepper-window class="ma-0">
           <v-stepper-window-item
             v-for="(element, index) in visibleCategories"
             :value="index + 1"
             :key="`${layout.path}-${visibleCategories.length}-${index}`"
           >
-            <v-card elevation="0">
-              <dispatch-renderer
-                :schema="layout.schema"
-                :uischema="element.value.uischema"
-                :path="layout.path"
-                :enabled="layout.enabled"
-                :renderers="layout.renderers"
-                :cells="layout.cells"
-              />
-            </v-card>
+            <dispatch-renderer
+              :schema="layout.schema"
+              :uischema="element.value.uischema"
+              :path="layout.path"
+              :enabled="layout.enabled"
+              :renderers="layout.renderers"
+              :cells="layout.cells"
+            />
           </v-stepper-window-item>
         </v-stepper-window>
 
@@ -87,7 +85,6 @@ import {
 } from '@jsonforms/vue';
 import { defineComponent, ref } from 'vue';
 import {
-  VCard,
   VDivider,
   VStepper,
   VStepperActions,
@@ -115,7 +112,6 @@ const layoutRenderer = defineComponent({
     VStepperWindowItem,
     VStepperWindow,
     VStepperActions,
-    VCard,
   },
   props: {
     ...rendererProps<Layout>(),

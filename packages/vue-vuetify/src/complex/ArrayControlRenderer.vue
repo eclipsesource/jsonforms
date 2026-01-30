@@ -1,194 +1,210 @@
 <template>
-  <v-card
+  <v-expansion-panels
     v-if="control.visible"
     :class="styles.arrayList.root"
-    elevation="0"
-    v-bind="vuetifyProps('v-card')"
+    flat
+    v-model="openedPanels"
+    v-bind="vuetifyProps('v-expansion-panels')"
   >
-    <v-card-title
-      :class="styles.arrayList.title"
-      v-bind="vuetifyProps('v-card-title')"
-    >
-      <v-toolbar
-        flat
-        :class="styles.arrayList.toolbar"
-        v-bind="vuetifyProps('v-toolbar')"
+    <v-expansion-panel hide-actions>
+      <v-expansion-panel-title
+        :class="`pa-0 ${styles.arrayList.title}`"
+        v-bind="vuetifyProps('v-expansion-panel-title')"
       >
-        <v-toolbar-title :class="styles.arrayList.label">{{
-          computedLabel
-        }}</v-toolbar-title>
-        <v-spacer></v-spacer>
-        <validation-icon
-          v-if="control.childErrors.length > 0"
-          :errors="control.childErrors"
-        />
-        <v-tooltip bottom>
-          <template v-slot:activator="{ props }">
-            <v-btn
-              icon
-              variant="text"
-              elevation="0"
-              small
-              :aria-label="control.translations.addAriaLabel"
-              v-bind="props"
-              :class="styles.arrayList.addButton"
-              :disabled="
-                !control.enabled ||
-                (appliedOptions.restrict &&
-                  control.arraySchema !== undefined &&
-                  control.arraySchema.maxItems !== undefined &&
-                  dataLength >= control.arraySchema.maxItems)
-              "
-              @click="addButtonClick"
-            >
-              <v-icon>{{ icons.current.value.itemAdd }}</v-icon>
+        <v-toolbar
+          flat
+          :class="styles.arrayList.toolbar"
+          v-bind="vuetifyProps('v-toolbar')"
+        >
+          <v-toolbar-title :class="styles.arrayList.label">{{
+            computedLabel
+          }}</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <div class="d-flex ga-1 align-center">
+            <validation-icon
+              @click.stop
+              v-if="control.childErrors.length > 0"
+              :errors="control.childErrors"
+            />
+            <v-tooltip bottom>
+              <template v-slot:activator="{ props }">
+                <v-btn
+                  icon
+                  variant="text"
+                  elevation="0"
+                  small
+                  :aria-label="control.translations.addAriaLabel"
+                  v-bind="props"
+                  :class="styles.arrayList.addButton"
+                  :disabled="
+                    !control.enabled ||
+                    (appliedOptions.restrict &&
+                      control.arraySchema !== undefined &&
+                      control.arraySchema.maxItems !== undefined &&
+                      dataLength >= control.arraySchema.maxItems)
+                  "
+                  @click.stop="addButtonClick"
+                >
+                  <v-icon>{{ icons.current.value.itemAdd }}</v-icon>
+                </v-btn>
+              </template>
+              {{ control.translations.addTooltip }}
+            </v-tooltip>
+            <v-btn icon variant="text" small @click.stop="togglePanel">
+              <v-icon>
+                {{ isSelected ? collapseIcon : expandIcon }}
+              </v-icon>
             </v-btn>
-          </template>
-          {{ control.translations.addTooltip }}
-        </v-tooltip>
-      </v-toolbar>
-    </v-card-title>
-    <v-card-text v-bind="vuetifyProps('v-card-text')">
-      <v-container justify-space-around align-content-center>
-        <v-row justify="center">
-          <v-table
-            class="array-container flex"
-            v-bind="vuetifyProps('v-table')"
-          >
-            <thead v-if="control.schema.type === 'object'">
-              <tr>
-                <th
-                  v-for="(prop, index) in validColumnProps"
-                  :key="`${control.path}-header-${validColumnProps.length}-${index}`"
-                  scope="col"
+          </div>
+        </v-toolbar>
+      </v-expansion-panel-title>
+      <v-expansion-panel-text
+        class="array-data-panel"
+        v-bind="vuetifyProps('v-expansion-panel-text')"
+      >
+        <v-container justify-space-around align-content-center fluid>
+          <v-row justify="center">
+            <v-table
+              class="array-container flex"
+              v-bind="vuetifyProps('v-table')"
+            >
+              <thead v-if="control.schema.type === 'object'">
+                <tr>
+                  <th
+                    v-for="(prop, index) in validColumnProps"
+                    :key="`${control.path}-header-${validColumnProps.length}-${index}`"
+                    scope="col"
+                  >
+                    {{ title(prop) }}
+                  </th>
+                  <th
+                    v-if="control.enabled"
+                    :class="
+                      appliedOptions.showSortButtons
+                        ? 'fixed-cell'
+                        : 'fixed-cell-small'
+                    "
+                    scope="col"
+                  ></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="(element, index) in control.data"
+                  :key="`${control.path}-${control.data.length}-${index}`"
+                  :class="styles.arrayList.item"
                 >
-                  {{ title(prop) }}
-                </th>
-                <th
-                  v-if="control.enabled"
-                  :class="
-                    appliedOptions.showSortButtons
-                      ? 'fixed-cell'
-                      : 'fixed-cell-small'
-                  "
-                  scope="col"
-                ></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="(element, index) in control.data"
-                :key="`${control.path}-${control.data.length}-${index}`"
-                :class="styles.arrayList.item"
-              >
-                <td
-                  v-for="propName in validColumnProps"
-                  :key="
-                    composePaths(
+                  <td
+                    v-for="propName in validColumnProps"
+                    :key="
                       composePaths(
-                        control.path,
-                        `${validColumnProps.length}-${index}`,
-                      ),
-                      propName,
-                    )
-                  "
-                >
-                  <dispatch-renderer
-                    :schema="control.schema"
-                    :uischema="resolveUiSchema(propName)"
-                    :path="composePaths(control.path, `${index}`)"
-                    :enabled="control.enabled"
-                    :renderers="control.renderers"
-                    :cells="control.cells"
-                  />
-                </td>
-                <td
-                  v-if="control.enabled"
-                  :class="
-                    appliedOptions.showSortButtons
-                      ? 'fixed-cell'
-                      : 'fixed-cell-small'
-                  "
-                >
-                  <v-tooltip bottom>
-                    <template v-slot:activator="{ props }">
-                      <v-btn
-                        v-bind="props"
-                        v-if="appliedOptions.showSortButtons"
-                        icon
-                        variant="text"
-                        elevation="0"
-                        small
-                        :aria-label="control.translations.upAriaLabel"
-                        :disabled="index <= 0 || !control.enabled"
-                        :class="styles.arrayList.itemMoveUp"
-                        @click="moveUpClick($event, index)"
-                      >
-                        <v-icon class="notranslate">{{
-                          icons.current.value.itemMoveUp
-                        }}</v-icon>
-                      </v-btn>
-                    </template>
-                    {{ control.translations.up }}
-                  </v-tooltip>
-                  <v-tooltip bottom>
-                    <template v-slot:activator="{ props }">
-                      <v-btn
-                        v-bind="props"
-                        v-if="appliedOptions.showSortButtons"
-                        icon
-                        variant="text"
-                        elevation="0"
-                        small
-                        :aria-label="control.translations.downAriaLabel"
-                        :disabled="index >= dataLength - 1 || !control.enabled"
-                        :class="styles.arrayList.itemMoveDown"
-                        @click="moveDownClick($event, index)"
-                      >
-                        <v-icon class="notranslate">{{
-                          icons.current.value.itemMoveDown
-                        }}</v-icon>
-                      </v-btn>
-                    </template>
-                    {{ control.translations.down }}
-                  </v-tooltip>
-                  <v-tooltip bottom>
-                    <template v-slot:activator="{ props }">
-                      <v-btn
-                        v-bind="props"
-                        icon
-                        variant="text"
-                        elevation="0"
-                        small
-                        :aria-label="control.translations.removeAriaLabel"
-                        :class="styles.arrayList.itemDelete"
-                        :disabled="
-                          !control.enabled ||
-                          (appliedOptions.restrict &&
-                            control.arraySchema !== undefined &&
-                            control.arraySchema.minItems !== undefined &&
-                            dataLength <= control.arraySchema.minItems)
-                        "
-                        @click="removeItemsClick($event, [index])"
-                      >
-                        <v-icon class="notranslate">{{
-                          icons.current.value.itemDelete
-                        }}</v-icon>
-                      </v-btn>
-                    </template>
-                    {{ control.translations.removeTooltip }}
-                  </v-tooltip>
-                </td>
-              </tr>
-            </tbody>
-          </v-table>
-        </v-row>
-      </v-container>
-      <v-container v-if="dataLength === 0" :class="styles.arrayList.noData">
-        {{ control.translations.noDataMessage }}
-      </v-container>
-    </v-card-text>
-  </v-card>
+                        composePaths(
+                          control.path,
+                          `${validColumnProps.length}-${index}`,
+                        ),
+                        propName,
+                      )
+                    "
+                  >
+                    <dispatch-renderer
+                      :schema="control.schema"
+                      :uischema="resolveUiSchema(propName)"
+                      :path="composePaths(control.path, `${index}`)"
+                      :enabled="control.enabled"
+                      :renderers="control.renderers"
+                      :cells="control.cells"
+                    />
+                  </td>
+                  <td
+                    v-if="control.enabled"
+                    :class="
+                      appliedOptions.showSortButtons
+                        ? 'fixed-cell'
+                        : 'fixed-cell-small'
+                    "
+                  >
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ props }">
+                        <v-btn
+                          v-bind="props"
+                          v-if="appliedOptions.showSortButtons"
+                          icon
+                          variant="text"
+                          elevation="0"
+                          small
+                          :aria-label="control.translations.upAriaLabel"
+                          :disabled="index <= 0 || !control.enabled"
+                          :class="styles.arrayList.itemMoveUp"
+                          @click="moveUpClick($event, index)"
+                        >
+                          <v-icon class="notranslate">{{
+                            icons.current.value.itemMoveUp
+                          }}</v-icon>
+                        </v-btn>
+                      </template>
+                      {{ control.translations.up }}
+                    </v-tooltip>
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ props }">
+                        <v-btn
+                          v-bind="props"
+                          v-if="appliedOptions.showSortButtons"
+                          icon
+                          variant="text"
+                          elevation="0"
+                          small
+                          :aria-label="control.translations.downAriaLabel"
+                          :disabled="
+                            index >= dataLength - 1 || !control.enabled
+                          "
+                          :class="styles.arrayList.itemMoveDown"
+                          @click="moveDownClick($event, index)"
+                        >
+                          <v-icon class="notranslate">{{
+                            icons.current.value.itemMoveDown
+                          }}</v-icon>
+                        </v-btn>
+                      </template>
+                      {{ control.translations.down }}
+                    </v-tooltip>
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ props }">
+                        <v-btn
+                          v-bind="props"
+                          icon
+                          variant="text"
+                          elevation="0"
+                          small
+                          :aria-label="control.translations.removeAriaLabel"
+                          :class="styles.arrayList.itemDelete"
+                          :disabled="
+                            !control.enabled ||
+                            (appliedOptions.restrict &&
+                              control.arraySchema !== undefined &&
+                              control.arraySchema.minItems !== undefined &&
+                              dataLength <= control.arraySchema.minItems)
+                          "
+                          @click="removeItemsClick($event, [index])"
+                        >
+                          <v-icon class="notranslate">{{
+                            icons.current.value.itemDelete
+                          }}</v-icon>
+                        </v-btn>
+                      </template>
+                      {{ control.translations.removeTooltip }}
+                    </v-tooltip>
+                  </td>
+                </tr>
+              </tbody>
+            </v-table>
+          </v-row>
+        </v-container>
+        <v-container v-if="dataLength === 0" :class="styles.arrayList.noData">
+          {{ control.translations.noDataMessage }}
+        </v-container>
+      </v-expansion-panel-text>
+    </v-expansion-panel>
+  </v-expansion-panels>
 </template>
 
 <script lang="ts">
@@ -204,12 +220,13 @@ import {
   type RendererProps,
 } from '@jsonforms/vue';
 import startCase from 'lodash/startCase';
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import {
   VBtn,
-  VCard,
-  VCardText,
-  VCardTitle,
+  VExpansionPanel,
+  VExpansionPanelText,
+  VExpansionPanelTitle,
+  VExpansionPanels,
   VContainer,
   VIcon,
   VRow,
@@ -221,14 +238,16 @@ import {
 } from 'vuetify/components';
 import { ValidationIcon } from '../controls/components/index';
 import { useIcons, useVuetifyArrayControl } from '../util';
+import type { IconValue } from '@/icons';
 
 const controlRenderer = defineComponent({
   name: 'array-control-renderer',
   components: {
     DispatchRenderer,
-    VCard,
-    VCardTitle,
-    VCardText,
+    VExpansionPanel,
+    VExpansionPanelText,
+    VExpansionPanelTitle,
+    VExpansionPanels,
     VRow,
     VToolbar,
     VToolbarTitle,
@@ -246,10 +265,12 @@ const controlRenderer = defineComponent({
   setup(props: RendererProps<ControlElement>) {
     const icons = useIcons();
     const input = useJsonFormsArrayControl(props);
+    const openedPanels = ref<number | number[] | null>(0);
 
     return {
       ...useVuetifyArrayControl(input),
       icons,
+      openedPanels,
     };
   },
   computed: {
@@ -268,10 +289,28 @@ const controlRenderer = defineComponent({
       // primitives
       return [''];
     },
+    isSelected(): boolean {
+      return Array.isArray(this.openedPanels)
+        ? this.openedPanels.includes(0)
+        : this.openedPanels === 0;
+    },
+    expandIcon(): IconValue {
+      return (
+        this.vuetifyProps('v-expansion-panel-title').expandIcon ?? '$expand'
+      );
+    },
+    collapseIcon(): IconValue {
+      return (
+        this.vuetifyProps('v-expansion-panel-title').collapseIcon ?? '$collapse'
+      );
+    },
   },
   methods: {
     composePaths,
     createDefaultValue,
+    togglePanel() {
+      this.openedPanels = this.isSelected ? null : 0;
+    },
     addButtonClick() {
       this.addItem(
         this.control.path,
@@ -308,6 +347,12 @@ export default controlRenderer;
 </script>
 
 <style scoped>
+:deep(
+    .v-expansion-panel-text.array-data-panel > .v-expansion-panel-text__wrapper
+  ) {
+  padding: 0;
+}
+
 .fixed-cell {
   width: 150px;
   padding-left: 0 !important;

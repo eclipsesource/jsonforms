@@ -96,42 +96,46 @@ const properties = computed<JsonFormsProps>(() => ({
 </script>
 
 <template>
-  <div>
-    <json-forms
-      v-if="resolvedSchema.resolved && resolvedSchema.error === undefined"
-      v-bind="properties"
-      @change="onChange"
-    ></json-forms>
-    <v-container v-else>
-      <v-row
-        v-if="!resolvedSchema.resolved"
-        class="fill-height"
-        align-content="center"
-        justify="center"
+  <v-container fluid>
+    <v-row no-gutters>
+      <v-col
+        v-if="resolvedSchema.resolved && resolvedSchema.error === undefined"
       >
-        <v-col class="text-subtitle-1 text-center" cols="12">
-          Resolving Schema Refs
-        </v-col>
-        <v-col cols="6">
-          <v-progress-linear
-            indeterminate
-            rounded
-            height="6"
-          ></v-progress-linear>
-        </v-col>
-      </v-row>
-      <v-row
-        v-else-if="resolvedSchema.error !== undefined"
-        class="fill-height"
-        align-content="center"
-        justify="center"
-      >
-        <v-col class="text-subtitle-1 text-center" cols="12">
-          <v-alert color="red" dark>
-            {{ resolvedSchema.error }}
-          </v-alert>
-        </v-col>
-      </v-row>
-    </v-container>
-  </div>
+        <json-forms v-bind="properties" @change="onChange"></json-forms>
+      </v-col>
+      <v-col v-else>
+        <v-container>
+          <v-row
+            v-if="!resolvedSchema.resolved"
+            class="fill-height"
+            align-content="center"
+            justify="center"
+          >
+            <v-col class="text-subtitle-1 text-center" cols="12">
+              Resolving Schema Refs
+            </v-col>
+            <v-col cols="6">
+              <v-progress-linear
+                indeterminate
+                rounded
+                height="6"
+              ></v-progress-linear>
+            </v-col>
+          </v-row>
+          <v-row
+            v-else-if="resolvedSchema.error !== undefined"
+            class="fill-height"
+            align-content="center"
+            justify="center"
+          >
+            <v-col class="text-subtitle-1 text-center" cols="12">
+              <v-alert color="red" dark>
+                {{ resolvedSchema.error }}
+              </v-alert>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>

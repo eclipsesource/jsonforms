@@ -54,7 +54,7 @@ import {
 } from '@jsonforms/vue';
 import { defineComponent, ref } from 'vue';
 import { VTextField } from 'vuetify/components';
-import { useIcons, useVuetifyControl } from '../util';
+import { determineClearValue, useIcons, useVuetifyControl } from '../util';
 import { default as ControlWrapper } from './ControlWrapper.vue';
 
 const controlRenderer = defineComponent({
@@ -67,13 +67,14 @@ const controlRenderer = defineComponent({
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
+    const clearValue = determineClearValue('');
     const showPassword = ref(false);
     const icons = useIcons();
 
     return {
       ...useVuetifyControl(
         useJsonFormsControl(props),
-        (value) => value || undefined,
+        (value) => value || clearValue,
         300,
       ),
       showPassword,
