@@ -12,6 +12,7 @@
       :id="control.id + '-input'"
       :class="styles.control.input"
       :disabled="!control.enabled"
+      :readonly="control.readonly"
       :autofocus="appliedOptions.focus"
       :placeholder="appliedOptions.placeholder"
       :label="computedLabel"
@@ -19,7 +20,7 @@
       :persistent-hint="persistentHint()"
       :required="control.required"
       :error-messages="control.errors"
-      :clearable="control.enabled"
+      :clearable="control.enabled && !control.readonly"
       :items="oneOfRenderInfos"
       @update:model-value="handleSelectChange"
       :item-title="
@@ -39,6 +40,7 @@
       :renderers="control.renderers"
       :cells="control.cells"
       :enabled="control.enabled"
+      :readonly="control.readonly"
     />
 
     <v-dialog v-model="dialog" persistent max-width="600" @keydown.esc="cancel">

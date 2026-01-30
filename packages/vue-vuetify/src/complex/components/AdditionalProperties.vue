@@ -20,7 +20,7 @@
             :renderers="control.renderers"
             :cells="control.cells"
             :config="control.config"
-            :readonly="!control.enabled"
+            :readonly="!control.enabled || control.readonly"
             :validation-mode="validationMode"
             :i18n="i18n"
             :ajv="ajv"
@@ -60,6 +60,7 @@
             :uischema="element.uischema"
             :path="element.path"
             :enabled="control.enabled"
+            :readonly="control.readonly"
             :renderers="control.renderers"
             :cells="control.cells"
         /></v-col>
@@ -449,6 +450,7 @@ export default defineComponent({
       return (
         // add is disabled because the overall control is disabled
         !this.control.enabled ||
+        this.control.readonly ||
         // add is disabled because of contraints
         (this.appliedOptions.restrict && this.maxPropertiesReached) ||
         // add is disabled because there are errors for the new property name or it is not specified
@@ -470,6 +472,7 @@ export default defineComponent({
       return (
         // add is disabled because the overall control is disabled
         !this.control.enabled ||
+        this.control.readonly ||
         // add is disabled because of contraints
         (this.appliedOptions.restrict && this.minPropertiesReached)
       );
