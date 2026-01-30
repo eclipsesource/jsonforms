@@ -90,7 +90,7 @@
     "@typescript-eslint/parser": "^5.54.1",
     "ava": "^6.1.2",
     "copy-webpack-plugin": "^5.0.5",
-    "eslint": "^8.56.0",
+    "eslint": "^9.26.0",
     "eslint-config-prettier": "^8.7.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier": "^4.2.1",
