@@ -10,6 +10,7 @@
       :id="control.id + '-input'"
       :class="styles.control.input"
       :disabled="!control.enabled"
+      :readonly="control.readonly"
       :autofocus="appliedOptions.focus"
       :placeholder="appliedOptions.placeholder ?? timeFormat"
       :label="computedLabel"
@@ -35,7 +36,7 @@
           :min-width="ampm && useSeconds ? '340px' : '290px'"
           v-bind="vuetifyProps('v-menu')"
           activator="parent"
-          :disabled="!control.enabled"
+          :disabled="!control.enabled || control.readonly"
         >
           <template v-slot:activator="{ props }">
             <v-icon v-bind="props" tabindex="-1">{{ pickerIcon }}</v-icon>
