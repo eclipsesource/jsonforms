@@ -349,11 +349,11 @@ export const oneOfToEnumOptionMapper = (
   if (t) {
     // prefer schema keys as they can be more specialized
     if (e.i18n) {
-      label = t(e.i18n, label);
+      label = t(e.i18n, label, { schema: e });
     } else if (fallbackI18nKey) {
-      label = t(`${fallbackI18nKey}.${label}`, label);
+      label = t(`${fallbackI18nKey}.${label}`, label, { schema: e });
     } else {
-      label = t(label, label);
+      label = t(label, label, { schema: e });
     }
   }
   return {
