@@ -14,10 +14,10 @@
           direction="vertical"
         >
           <v-tab
-            v-for="(_, index) in visibleCategories"
-            :key="`${layout.path}-${visibleCategories.length}-${index}`"
+            v-for="entry in visibleCategoriesWithIndex"
+            :key="`${layout.path}-${entry.originalIndex}`"
           >
-            {{ visibleCategoryLabels[index] }}
+            {{ entry.category.value.label }}
           </v-tab>
         </v-tabs>
       </v-col>
@@ -28,12 +28,12 @@
           v-bind="vuetifyProps('v-window')"
         >
           <v-window-item
-            v-for="(element, index) in visibleCategories"
-            :key="`${layout.path}-${visibleCategories.length}-${index}`"
+            v-for="entry in visibleCategoriesWithIndex"
+            :key="`${layout.path}-${entry.originalIndex}`"
           >
             <dispatch-renderer
               :schema="layout.schema"
-              :uischema="element.value.uischema"
+              :uischema="entry.category.value.uischema"
               :path="layout.path"
               :enabled="layout.enabled"
               :renderers="layout.renderers"
@@ -46,21 +46,21 @@
     <v-row v-else v-bind="vuetifyProps('v-row')">
       <v-tabs v-model="activeCategory" v-bind="vuetifyProps('v-tabs')">
         <v-tab
-          v-for="(_, index) in visibleCategories"
-          :key="`${layout.path}-${visibleCategories.length}-${index}`"
+          v-for="entry in visibleCategoriesWithIndex"
+          :key="`${layout.path}-${entry.originalIndex}`"
         >
-          {{ visibleCategoryLabels[index] }}
+          {{ entry.category.value.label }}
         </v-tab>
       </v-tabs>
 
       <v-window v-model="activeCategory" v-bind="vuetifyProps('v-window')">
         <v-window-item
-          v-for="(element, index) in visibleCategories"
-          :key="`${layout.path}-${visibleCategories.length}-${index}`"
+          v-for="entry in visibleCategoriesWithIndex"
+          :key="`${layout.path}-${entry.originalIndex}`"
         >
           <dispatch-renderer
             :schema="layout.schema"
-            :uischema="element.value.uischema"
+            :uischema="entry.category.value.uischema"
             :path="layout.path"
             :enabled="layout.enabled"
             :renderers="layout.renderers"
@@ -115,13 +115,13 @@ const layoutRenderer = defineComponent({
     };
   },
   computed: {
-    visibleCategories() {
-      return this.categories.filter((category) => category.value.visible);
-    },
-    visibleCategoryLabels(): string[] {
-      return this.visibleCategories.map((element) => {
-        return element.value.label;
-      });
+    visibleCategoriesWithIndex() {
+      return this.categories
+        .map((category, originalIndex) => ({
+          category,
+          originalIndex,
+        }))
+        .filter((e) => e.category.value.visible);
     },
   },
 });
