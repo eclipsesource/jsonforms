@@ -1,5 +1,5 @@
 <template>
-  <v-container v-if="layout.visible" :class="styles.categorization.root">
+  <v-container v-if="layout.visible" :class="styles.categorization.root" fluid>
     <v-row
       v-if="appliedOptions.vertical == true"
       v-bind="vuetifyProps('v-row')"

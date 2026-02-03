@@ -1,5 +1,5 @@
 <template>
-  <div v-if="control.visible">
+  <div v-if="control.visible" class="d-flex flex-column ga-4">
     <dispatch-renderer
       :visible="control.visible"
       :enabled="control.enabled"

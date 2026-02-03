@@ -1,5 +1,5 @@
 <template>
-  <div>No applicable renderer found.</div>
+  <div :style="{ color: 'red' }">No applicable renderer found.</div>
 </template>
 
 <script lang="ts">
