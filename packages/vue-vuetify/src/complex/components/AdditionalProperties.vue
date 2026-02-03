@@ -28,7 +28,7 @@
             @change="propertyNameChange"
           ></json-forms
         ></v-col>
-        <v-tooltip bottom>
+        <v-tooltip location="bottom">
           <template v-slot:activator="{ props }">
             <v-btn
               icon
@@ -64,7 +64,7 @@
             :cells="control.cells"
         /></v-col>
         <v-col v-if="control.enabled" class="flex-shrink-1 flex-grow-0">
-          <v-tooltip bottom>
+          <v-tooltip location="bottom">
             <template v-slot:activator="{ props }">
               <v-btn
                 v-bind="props"
