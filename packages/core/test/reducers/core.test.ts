@@ -3411,3 +3411,155 @@ test('core reducer - POPULATE chained destinations work on updateCore (ordering 
   t.is(updatedState.data.dest1, 'b');
   t.is(updatedState.data.dest2, 'b');
 });
+
+test('core reducer - POPULATE chained destinations do not update on update path', (t) => {
+  const schema = {
+    type: 'object',
+    properties: {
+      source: { type: 'string' },
+      dest1: { type: 'string' },
+      dest2: { type: 'string' },
+    },
+  };
+
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [
+      { type: 'Control', scope: '#/properties/source' },
+      {
+        type: 'Control',
+        scope: '#/properties/dest1',
+        rule: {
+          effect: 'POPULATE',
+          condition: { scope: '#', schema: { type: 'object' } },
+          options: {
+            populate: { from: '#/properties/source', overwrite: true },
+          },
+        },
+      },
+      {
+        type: 'Control',
+        scope: '#/properties/dest2',
+        rule: {
+          effect: 'POPULATE',
+          condition: { scope: '#', schema: { type: 'object' } },
+          options: {
+            populate: { from: '#/properties/dest1', overwrite: true },
+          },
+        },
+      },
+    ],
+  };
+
+  const initialState = coreReducer(
+    undefined,
+    init({ source: 'a', dest1: '', dest2: '' }, schema, uischema)
+  );
+
+  const updatedState = coreReducer(
+    initialState,
+    update('source', () => 'b')
+  );
+
+  t.is(updatedState.data.dest1, 'b');
+  t.is(updatedState.data.dest2, '');
+});
+
+test('core reducer - POPULATE applies when condition toggles true (update path)', (t) => {
+  const schema = {
+    type: 'object',
+    properties: {
+      source: { type: 'string' },
+      dest: { type: 'string' },
+      flag: { type: 'boolean' },
+    },
+  };
+
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [
+      { type: 'Control', scope: '#/properties/source' },
+      { type: 'Control', scope: '#/properties/flag' },
+      {
+        type: 'Control',
+        scope: '#/properties/dest',
+        rule: {
+          effect: 'POPULATE',
+          condition: {
+            type: 'LEAF',
+            scope: '#/properties/flag',
+            expectedValue: true,
+          },
+          options: {
+            populate: { from: '#/properties/source', overwrite: true },
+          },
+        },
+      },
+    ],
+  };
+
+  const initialState = coreReducer(
+    undefined,
+    init({ source: 'a', dest: '', flag: false }, schema, uischema)
+  );
+
+  const updatedState = coreReducer(
+    initialState,
+    update('flag', () => true)
+  );
+
+  t.is(updatedState.data.dest, 'a');
+});
+
+test('core reducer - POPULATE condition scopes resolve relative to control path', (t) => {
+  const schema = {
+    type: 'object',
+    properties: {
+      address: {
+        type: 'object',
+        properties: {
+          country: { type: 'string' },
+          source: { type: 'string' },
+          state: { type: 'string' },
+        },
+      },
+    },
+  };
+
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [
+      { type: 'Control', scope: '#/properties/address/properties/country' },
+      { type: 'Control', scope: '#/properties/address/properties/source' },
+      {
+        type: 'Control',
+        scope: '#/properties/address/properties/state',
+        rule: {
+          effect: 'POPULATE',
+          condition: {
+            type: 'LEAF',
+            scope: '#/properties/country',
+            expectedValue: 'US',
+          },
+          options: {
+            populate: {
+              from: '#/properties/address/properties/source',
+              overwrite: true,
+            },
+          },
+        },
+      },
+    ],
+  };
+
+  const state = coreReducer(
+    undefined,
+    init(
+      { address: { country: 'US', source: 'NY', state: '' } },
+      schema,
+      uischema
+    )
+  );
+
+  t.is(state.data.address.state, 'NY');
+});

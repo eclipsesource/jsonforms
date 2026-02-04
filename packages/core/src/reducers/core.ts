@@ -356,13 +356,26 @@ const applyPopulateRules = (
         continue;
       }
 
-      if (!pathAffects(changedPath, fromPath)) {
+      const prevSource = get(prevData, fromPath);
+      const nextSource = get(updatedData, fromPath);
+      const sourceChanged = !isEqual(prevSource, nextSource);
+
+      const conditionNow = evaluateCondition(
+        updatedData,
+        rule.condition,
+        destPath,
+        ajv
+      );
+      const conditionPrev = prevData
+        ? evaluateCondition(prevData, rule.condition, destPath, ajv)
+        : false;
+      const conditionBecameTrue = !conditionPrev && conditionNow;
+
+      if (!pathAffects(changedPath, fromPath) && !conditionBecameTrue) {
         continue;
       }
 
-      const prevSource = get(prevData, fromPath);
-      const nextSource = get(updatedData, fromPath);
-      if (isEqual(prevSource, nextSource)) {
+      if (!sourceChanged && !conditionBecameTrue) {
         continue;
       }
 
@@ -373,6 +386,9 @@ const applyPopulateRules = (
       // If source becomes empty and overwrite is enabled, clear destination
       if (isEmptySourceValue(nextSource)) {
         if (!overwrite) {
+          continue;
+        }
+        if (!sourceChanged) {
           continue;
         }
         if (currentDest === undefined) {
@@ -386,13 +402,7 @@ const applyPopulateRules = (
         continue;
       }
 
-      const conditionFulfilled = evaluateCondition(
-        updatedData,
-        rule.condition,
-        undefined,
-        ajv
-      );
-      if (!conditionFulfilled) {
+      if (!conditionNow) {
         continue;
       }
 
