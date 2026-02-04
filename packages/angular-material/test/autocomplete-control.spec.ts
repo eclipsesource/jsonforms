@@ -213,6 +213,7 @@ describe('AutoComplete control Input Event Tests', () => {
   let fixture: ComponentFixture<AutocompleteControlRenderer>;
   let component: AutocompleteControlRenderer;
   let loader: HarnessLoader;
+  let inputElement: HTMLInputElement;
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [componentUT, ...imports],
@@ -223,6 +224,8 @@ describe('AutoComplete control Input Event Tests', () => {
     fixture = TestBed.createComponent(componentUT);
     component = fixture.componentInstance;
     loader = TestbedHarnessEnvironment.loader(fixture);
+
+    inputElement = fixture.debugElement.query(By.css('input')).nativeElement;
   }));
 
   it('should update via input event', fakeAsync(async () => {
@@ -250,6 +253,7 @@ describe('AutoComplete control Input Event Tests', () => {
       .args[0] as MatAutocompleteSelectedEvent;
 
     expect(event.option.value).toBe('B');
+    expect(inputElement.value).toBe('B');
   }));
   it('options should prefer own props', fakeAsync(async () => {
     setupMockStore(fixture, { uischema, schema, data });
@@ -274,6 +278,7 @@ describe('AutoComplete control Input Event Tests', () => {
     const event = spy.calls.mostRecent()
       .args[0] as MatAutocompleteSelectedEvent;
     expect(event.option.value).toBe('Y');
+    expect(inputElement.value).toBe('Y');
   }));
 });
 describe('AutoComplete control Error Tests', () => {
