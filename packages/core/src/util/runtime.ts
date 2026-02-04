@@ -62,7 +62,7 @@ const getConditionScope = (condition: Scopable, path: string): string => {
   return composeWithUi(condition, path);
 };
 
-const evaluateCondition = (
+export const evaluateCondition = (
   data: any,
   condition: Condition,
   path: string,
@@ -100,7 +100,7 @@ const EFFECT_GROUPS = {
   VISIBILITY: [RuleEffect.SHOW, RuleEffect.HIDE],
   ENABLEMENT: [RuleEffect.ENABLE, RuleEffect.DISABLE],
   REQUIREMENT: [RuleEffect.REQUIRED],
-  VALUE: [RuleEffect.FILL_VALUE, RuleEffect.CLEAR_VALUE],
+  VALUE: [RuleEffect.FILL_VALUE, RuleEffect.CLEAR_VALUE, RuleEffect.POPULATE],
 };
 
 // Check if two effects are compatible (not in the same group)
@@ -268,6 +268,12 @@ export const hasValueRule = (uischema: UISchemaElement): boolean => {
     getEffects(rule).some((effect) =>
       [RuleEffect.FILL_VALUE, RuleEffect.CLEAR_VALUE].includes(effect)
     )
+  );
+};
+
+export const hasPopulateRule = (uischema: UISchemaElement): boolean => {
+  return normalizeRules(uischema.rule).some((rule) =>
+    getEffects(rule).some((effect) => effect === RuleEffect.POPULATE)
   );
 };
 
