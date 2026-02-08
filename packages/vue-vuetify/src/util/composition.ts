@@ -217,7 +217,7 @@ export const useVuetifyControl = <
 
   const clearable = computed(() => {
     return appliedOptions.value.clearable !== undefined
-      ? appliedOptions.value.clearable
+      ? appliedOptions.value.clearable && input.control.value.enabled
       : input.control.value.enabled;
   });
 
