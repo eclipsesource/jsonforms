@@ -604,14 +604,13 @@ const controlRenderer = defineComponent({
       if (date && !time) {
         this.onChange(date!.format(this.dateTimeSaveFormat));
       } else if (date && time) {
-        const dateTimeString = `${date.format('YYYY-MM-DD')}T${time.format(
-          'HH:mm:ss.SSSZ',
-        )}`;
-        const dateTime = parseDateTime(
-          dateTimeString,
-          'YYYY-MM-DDTHH:mm:ss.SSSZ',
-        );
-        this.onChange(dateTime!.format(this.dateTimeSaveFormat));
+        const combined = date
+          .hour(time.hour())
+          .minute(time.minute())
+          .second(time.second())
+          .millisecond(time.millisecond());
+
+        this.onChange(combined.format(this.dateTimeSaveFormat));
       }
     },
   },
