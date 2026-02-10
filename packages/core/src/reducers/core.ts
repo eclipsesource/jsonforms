@@ -342,22 +342,28 @@ const getDetailBasePaths = (
   changedPath: string,
   data: any
 ): string[] => {
-  const value = get(data, arrayPath);
+  const normalizedArrayPath = normalizePathForCompare(arrayPath);
+  const normalizedChanged = normalizePathForCompare(changedPath);
+  const value = get(data, normalizedArrayPath);
   if (!isArray(value)) {
-    return [arrayPath];
+    return [];
   }
 
-  if (changedPath === arrayPath) {
-    return value.map((_: any, idx: number) => `${arrayPath}[${idx}]`);
+  if (normalizedChanged === normalizedArrayPath) {
+    return value.map((_: any, idx: number) => `${normalizedArrayPath}.${idx}`);
   }
 
-  const idx = extractIndexFromPath(changedPath, arrayPath);
+  const idx = extractIndexFromPath(normalizedChanged, normalizedArrayPath);
   if (idx !== null) {
-    return [`${arrayPath}[${idx}]`];
+    return [`${normalizedArrayPath}.${idx}`];
   }
 
-  if (changedPath === '' || changedPath === undefined || changedPath === null) {
-    return value.map((_: any, idx: number) => `${arrayPath}[${idx}]`);
+  if (
+    normalizedChanged === '' ||
+    normalizedChanged === undefined ||
+    normalizedChanged === null
+  ) {
+    return value.map((_: any, idx: number) => `${normalizedArrayPath}.${idx}`);
   }
 
   if (
@@ -366,7 +372,7 @@ const getDetailBasePaths = (
       normalizePathForCompare(arrayPath)
     )
   ) {
-    return value.map((_: any, idx: number) => `${arrayPath}[${idx}]`);
+    return value.map((_: any, idx: number) => `${normalizedArrayPath}.${idx}`);
   }
 
   return [];

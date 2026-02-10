@@ -3632,7 +3632,7 @@ test('core reducer - POPULATE traverses options.detail for array elements', (t) 
 
   const updatedState = coreReducer(
     initialState,
-    update('addresses[0].flag', () => true)
+    update('addresses.0.flag', () => true)
   );
 
   t.is(updatedState.data.addresses[0].dest, 'a');
