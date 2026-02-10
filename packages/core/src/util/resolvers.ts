@@ -50,18 +50,7 @@ export const resolveData = (instance: any, dataPath: string): any => {
   if (isEmpty(dataPath)) {
     return instance;
   }
-  const dataPathSegments = dataPath.split('.');
-
-  return dataPathSegments.reduce((curInstance, decodedSegment) => {
-    if (
-      !curInstance ||
-      !Object.prototype.hasOwnProperty.call(curInstance, decodedSegment)
-    ) {
-      return undefined;
-    }
-
-    return curInstance[decodedSegment];
-  }, instance);
+  return get(instance, dataPath);
 };
 
 /**

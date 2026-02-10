@@ -56,8 +56,9 @@ import {
   hasShowRule,
   isVisible,
   evaluateCondition,
-  iterateSchema,
   isControlElement,
+  isLayout,
+  composePaths,
   toDataPath,
 } from '../util';
 import { JsonSchema } from '../models/jsonSchema';
@@ -307,6 +308,70 @@ const computePopulateValue = (
   return { shouldSet: true, newValue: base };
 };
 
+const getParentPath = (path: string): string => {
+  if (!path) {
+    return '';
+  }
+  const lastDot = path.lastIndexOf('.');
+  return lastDot === -1 ? '' : path.slice(0, lastDot);
+};
+
+const normalizePathForCompare = (path: string): string =>
+  path ? path.replace(/\[(\d+)\]/g, '.$1') : path;
+
+const extractIndexFromPath = (
+  changedPath: string,
+  arrayPath: string
+): number | null => {
+  if (!changedPath || !arrayPath) {
+    return null;
+  }
+  const normalizedChanged = normalizePathForCompare(changedPath);
+  const normalizedArray = normalizePathForCompare(arrayPath);
+  if (!normalizedChanged.startsWith(`${normalizedArray}.`)) {
+    return null;
+  }
+  const rest = normalizedChanged.slice(normalizedArray.length + 1);
+  const idxStr = rest.split('.')[0];
+  const idx = Number(idxStr);
+  return Number.isInteger(idx) ? idx : null;
+};
+
+const getDetailBasePaths = (
+  arrayPath: string,
+  changedPath: string,
+  data: any
+): string[] => {
+  const value = get(data, arrayPath);
+  if (!isArray(value)) {
+    return [arrayPath];
+  }
+
+  if (changedPath === arrayPath) {
+    return value.map((_: any, idx: number) => `${arrayPath}[${idx}]`);
+  }
+
+  const idx = extractIndexFromPath(changedPath, arrayPath);
+  if (idx !== null) {
+    return [`${arrayPath}[${idx}]`];
+  }
+
+  if (changedPath === '' || changedPath === undefined || changedPath === null) {
+    return value.map((_: any, idx: number) => `${arrayPath}[${idx}]`);
+  }
+
+  if (
+    pathAffects(
+      normalizePathForCompare(changedPath),
+      normalizePathForCompare(arrayPath)
+    )
+  ) {
+    return value.map((_: any, idx: number) => `${arrayPath}[${idx}]`);
+  }
+
+  return [];
+};
+
 const applyPopulateRules = (
   prevData: any,
   nextData: any,
@@ -321,11 +386,7 @@ const applyPopulateRules = (
   let updatedData = nextData;
   let dataChanged = false;
 
-  iterateSchema(uischema, (el) => {
-    if (!isControlElement(el)) {
-      return;
-    }
-    const control: any = el;
+  const applyToControl = (control: any, basePath: string) => {
     const rules: Rule[] = Array.isArray(control.rule)
       ? control.rule
       : control.rule
@@ -336,10 +397,21 @@ const applyPopulateRules = (
       return;
     }
 
-    const destPath = control.scope ? toDataPath(control.scope) : '';
+    const localDestPath = control.scope ? toDataPath(control.scope) : '';
+    const destPath =
+      localDestPath && basePath
+        ? composePaths(basePath, localDestPath)
+        : basePath || localDestPath;
     if (!destPath) {
       return;
     }
+    const conditionBasePath = (() => {
+      const parentPath = getParentPath(localDestPath);
+      if (!parentPath) {
+        return basePath;
+      }
+      return basePath ? composePaths(basePath, parentPath) : parentPath;
+    })();
 
     for (const rule of rules) {
       const effects = Array.isArray(rule.effect) ? rule.effect : [rule.effect];
@@ -351,7 +423,11 @@ const applyPopulateRules = (
         continue;
       }
 
-      const fromPath = toDataPath(pop.from);
+      const localFromPath = toDataPath(pop.from);
+      const fromPath =
+        localFromPath && basePath
+          ? composePaths(basePath, localFromPath)
+          : basePath || localFromPath;
       if (!fromPath) {
         continue;
       }
@@ -363,15 +439,21 @@ const applyPopulateRules = (
       const conditionNow = evaluateCondition(
         updatedData,
         rule.condition,
-        destPath,
+        conditionBasePath,
         ajv
       );
       const conditionPrev = prevData
-        ? evaluateCondition(prevData, rule.condition, destPath, ajv)
+        ? evaluateCondition(prevData, rule.condition, conditionBasePath, ajv)
         : false;
       const conditionBecameTrue = !conditionPrev && conditionNow;
 
-      if (!pathAffects(changedPath, fromPath) && !conditionBecameTrue) {
+      if (
+        !pathAffects(
+          normalizePathForCompare(changedPath),
+          normalizePathForCompare(fromPath)
+        ) &&
+        !conditionBecameTrue
+      ) {
         continue;
       }
 
@@ -438,7 +520,44 @@ const applyPopulateRules = (
         updatedData = setFp(destPath, newValue, updatedData);
       }
     }
-  });
+  };
+
+  const traverse = (element: UISchemaElement, basePath: string) => {
+    if (isLayout(element)) {
+      if (Array.isArray(element.elements)) {
+        element.elements.forEach((child) => traverse(child, basePath));
+      }
+      return;
+    }
+    if (!isControlElement(element)) {
+      return;
+    }
+
+    const control: any = element;
+    applyToControl(control, basePath);
+
+    const detail = control.options?.detail;
+    if (detail) {
+      const controlPath = control.scope ? toDataPath(control.scope) : '';
+      const arrayPath =
+        controlPath && basePath
+          ? composePaths(basePath, controlPath)
+          : basePath || controlPath;
+
+      if (!arrayPath) {
+        return;
+      }
+
+      const detailPaths = getDetailBasePaths(
+        arrayPath,
+        changedPath,
+        updatedData
+      );
+      detailPaths.forEach((detailPath) => traverse(detail, detailPath));
+    }
+  };
+
+  traverse(uischema, '');
 
   return updatedData;
 };

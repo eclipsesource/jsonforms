@@ -3453,7 +3453,7 @@ test('core reducer - POPULATE chained destinations do not update on update path'
 
   const initialState = coreReducer(
     undefined,
-    init({ source: 'a', dest1: '', dest2: '' }, schema, uischema)
+    init({ source: '', dest1: '', dest2: '' }, schema, uischema)
   );
 
   const updatedState = coreReducer(
@@ -3562,4 +3562,152 @@ test('core reducer - POPULATE condition scopes resolve relative to control path'
   );
 
   t.is(state.data.address.state, 'NY');
+});
+
+test('core reducer - POPULATE traverses options.detail for array elements', (t) => {
+  const schema = {
+    type: 'object',
+    properties: {
+      addresses: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            source: { type: 'string' },
+            dest: { type: 'string' },
+            flag: { type: 'boolean' },
+          },
+        },
+      },
+    },
+  };
+
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [
+      {
+        type: 'Control',
+        scope: '#/properties/addresses',
+        options: {
+          detail: {
+            type: 'VerticalLayout',
+            elements: [
+              { type: 'Control', scope: '#/properties/source' },
+              { type: 'Control', scope: '#/properties/flag' },
+              {
+                type: 'Control',
+                scope: '#/properties/dest',
+                rule: {
+                  effect: 'POPULATE',
+                  condition: {
+                    type: 'LEAF',
+                    scope: '#/properties/flag',
+                    expectedValue: true,
+                  },
+                  options: {
+                    populate: {
+                      from: '#/properties/source',
+                      overwrite: true,
+                    },
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+    ],
+  };
+
+  const initialState = coreReducer(
+    undefined,
+    init(
+      {
+        addresses: [{ source: 'a', dest: '', flag: false }],
+      },
+      schema,
+      uischema
+    )
+  );
+
+  const updatedState = coreReducer(
+    initialState,
+    update('addresses[0].flag', () => true)
+  );
+
+  t.is(updatedState.data.addresses[0].dest, 'a');
+});
+
+test('core reducer - POPULATE updates row on source change with dot index path', (t) => {
+  const schema = {
+    type: 'object',
+    properties: {
+      addresses: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            source: { type: 'string' },
+            dest: { type: 'string' },
+            flag: { type: 'boolean' },
+          },
+        },
+      },
+    },
+  };
+
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [
+      {
+        type: 'Control',
+        scope: '#/properties/addresses',
+        options: {
+          detail: {
+            type: 'VerticalLayout',
+            elements: [
+              { type: 'Control', scope: '#/properties/source' },
+              { type: 'Control', scope: '#/properties/flag' },
+              {
+                type: 'Control',
+                scope: '#/properties/dest',
+                rule: {
+                  effect: 'POPULATE',
+                  condition: {
+                    type: 'LEAF',
+                    scope: '#/properties/flag',
+                    expectedValue: true,
+                  },
+                  options: {
+                    populate: {
+                      from: '#/properties/source',
+                      overwrite: true,
+                    },
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+    ],
+  };
+
+  const initialState = coreReducer(
+    undefined,
+    init(
+      {
+        addresses: [{ source: '', dest: '', flag: true }],
+      },
+      schema,
+      uischema
+    )
+  );
+
+  const updatedState = coreReducer(
+    initialState,
+    update('addresses.0.source', () => 'test')
+  );
+
+  t.is(updatedState.data.addresses[0].dest, 'test');
 });
