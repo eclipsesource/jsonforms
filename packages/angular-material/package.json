@@ -114,7 +114,7 @@
     "babel-loader": "^8.0.6",
     "copy-webpack-plugin": "^11.0.0",
     "dayjs": "^1.11.10",
-    "eslint": "^8.56.0",
+    "eslint": "^9.26.0",
     "eslint-config-prettier": "^8.7.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier": "^4.2.1",
