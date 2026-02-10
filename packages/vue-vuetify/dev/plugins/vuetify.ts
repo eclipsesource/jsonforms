@@ -131,6 +131,22 @@ function toBlueprint(value: string): Blueprint {
   return md1;
 }
 
+const baseDefaults = {
+  VField: { hideDetails: 'auto' },
+  VTextField: { hideDetails: 'auto' },
+  VCombobox: { hideDetails: 'auto' },
+  VSelect: { hideDetails: 'auto' },
+  VAutocomplete: { hideDetails: 'auto' },
+  VTextarea: { hideDetails: 'auto' },
+  VNumberInput: { density: 'comfortable', hideDetails: 'auto' },
+  VDateInput: { hideDetails: 'auto' },
+  VCheckbox: {
+    density: 'comfortable',
+    hideDetails: 'auto',
+    color: 'primary',
+  },
+};
+
 function createVuetifyInstance(
   dark: boolean,
   blueprint: string,
@@ -139,36 +155,13 @@ function createVuetifyInstance(
   locale: string,
 ) {
   const defaults = variant
-    ? {
-        VField: {
-          variant: variant,
-        },
-        VTextField: {
-          variant: variant,
-        },
-        VCombobox: {
-          variant: variant,
-        },
-        VSelect: {
-          variant: variant,
-        },
-        VAutocomplete: {
-          variant: variant,
-        },
-        VTextarea: {
-          variant: variant,
-        },
-        VNumberInput: {
-          variant: variant,
-        },
-        VDateInput: {
-          variant: variant,
-        },
-        VCheckbox: { color: 'primary' },
-      }
-    : {
-        VCheckbox: { color: 'primary' },
-      };
+    ? Object.fromEntries(
+        Object.entries(baseDefaults).map(([key, props]) => [
+          key,
+          { ...props, variant },
+        ]),
+      )
+    : baseDefaults;
 
   dayjs.locale(locale);
 

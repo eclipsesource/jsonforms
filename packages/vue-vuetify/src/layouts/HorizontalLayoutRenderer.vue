@@ -1,16 +1,20 @@
 <template>
   <v-container
     v-if="layout.visible && (layout.uischema as Layout).elements.length > 0"
-    :class="`${styles.horizontalLayout.root}`"
+    :class="`pa-0 ${styles.horizontalLayout.root}`"
+    fluid
     v-bind="vuetifyProps('v-container')"
   >
     <v-row v-bind="vuetifyProps('v-row')">
       <v-col
-        v-for="(element, index) in (layout.uischema as Layout).elements"
-        :key="`${layout.path}-${(layout.uischema as Layout).elements.length}-${index}`"
+        v-for="{ element, index } in visibleElementsWithIndex"
+        :key="`${layout.path}-${visibleElementsWithIndex.length}-${index}`"
         :class="styles.horizontalLayout.item"
         :cols="cols[index]"
-        v-bind="vuetifyProps(`v-col[${index}]`)"
+        v-bind="{
+          ...vuetifyProps(`v-col`),
+          ...vuetifyProps(`v-col[${index}]`),
+        }"
       >
         <dispatch-renderer
           :schema="layout.schema"
@@ -26,7 +30,15 @@
 </template>
 
 <script lang="ts">
-import { type Layout } from '@jsonforms/core';
+import {
+  getAjv,
+  getConfig,
+  getData,
+  hasShowRule,
+  isVisible,
+  type Layout,
+  type UISchemaElement,
+} from '@jsonforms/core';
 import {
   DispatchRenderer,
   rendererProps,
@@ -36,7 +48,7 @@ import {
 import { defineComponent } from 'vue';
 import { useDisplay } from 'vuetify';
 import { VCol, VContainer, VRow } from 'vuetify/components';
-import { useVuetifyLayout } from '../util';
+import { useJsonForms, useVuetifyLayout } from '../util';
 
 const layoutRenderer = defineComponent({
   name: 'horizontal-layout-renderer',
@@ -51,6 +63,8 @@ const layoutRenderer = defineComponent({
   },
   setup(props: RendererProps<Layout>) {
     const { xs, sm, md, lg, xl } = useDisplay();
+    const jsonforms = useJsonForms();
+
     return {
       ...useVuetifyLayout(useJsonFormsLayout(props)),
       xs,
@@ -58,6 +72,7 @@ const layoutRenderer = defineComponent({
       md,
       lg,
       xl,
+      jsonforms,
     };
   },
   computed: {
@@ -103,6 +118,29 @@ const layoutRenderer = defineComponent({
         const uiSchemaCols = this.vuetifyProps(`v-col[${index}]`)?.cols;
         return uiSchemaCols !== undefined ? uiSchemaCols : false;
       });
+    },
+
+    visibleElementsWithIndex(): { element: UISchemaElement; index: number }[] {
+      return this.layout.uischema.elements
+        .map((element, index) => ({ element, index }))
+        .filter(({ element }) => this.isVisible(element, this.layout.path));
+    },
+  },
+  methods: {
+    isVisible(uischema: UISchemaElement, path: string): boolean {
+      if (hasShowRule(uischema)) {
+        const state = { jsonforms: this.jsonforms };
+        const rootData = getData(state);
+
+        return isVisible(
+          uischema,
+          rootData,
+          path,
+          getAjv(state),
+          getConfig(state),
+        );
+      }
+      return true;
     },
   },
 });

@@ -20,7 +20,7 @@
       :error-messages="control.errors"
       :model-value="value"
       :clearable="clearable"
-      v-bind="vuetifyProps('v-text-field')"
+      v-bind="vuetifyProps('v-number-input')"
       @update:model-value="onChange"
       @focus="handleFocus"
       @blur="handleBlur"
