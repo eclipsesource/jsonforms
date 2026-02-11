@@ -94,7 +94,7 @@
     "core-js": "^3.9.1",
     "cross-env": "^10.1.0",
     "dayjs": "^1.10.6",
-    "eslint": "^8.57.0",
+    "eslint": "^9.26.0",
     "eslint-plugin-vue": "^9.23.0",
     "eslint-plugin-vue-scoped-css": "^2.8.0",
     "jsdom": "^27.2.0",
