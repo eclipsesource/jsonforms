@@ -83,7 +83,7 @@ import {
   getUISchemas,
   getUiSchema,
 } from '../store';
-import { isInherentlyEnabled } from './util';
+import { isInherentlyEnabled, isInherentlyReadonly } from './util';
 import { CombinatorKeyword } from './combinators';
 import isEqual from 'lodash/isEqual';
 
@@ -376,6 +376,10 @@ export interface OwnPropsOfRenderer {
    */
   enabled?: boolean;
   /**
+   * Whether the rendered element should be readonly.
+   */
+  readonly?: boolean;
+  /**
    * Whether the rendered element should be visible.
    */
   visible?: boolean;
@@ -440,6 +444,12 @@ export interface StatePropsOfRenderer {
    * Whether the rendered element should be enabled.
    */
   enabled: boolean;
+
+  /**
+   * Whether the rendered element should be readonly.
+   */
+  readonly?: boolean;
+
   /**
    * Whether the rendered element should be visible.
    */
@@ -614,6 +624,14 @@ export const mapStateToControlProps = (
     rootData,
     config
   );
+  const readonly: boolean = isInherentlyReadonly(
+    state,
+    ownProps,
+    uischema,
+    resolvedSchema || rootSchema,
+    rootData,
+    config
+  );
 
   const schema = resolvedSchema ?? rootSchema;
   const t = getTranslator()(state);
@@ -646,6 +664,7 @@ export const mapStateToControlProps = (
     label: i18nLabel,
     visible,
     enabled,
+    readonly,
     id,
     path,
     required,
@@ -1062,6 +1081,14 @@ export const mapStateToLayoutProps = (
     rootData,
     config
   );
+  const readonly: boolean = isInherentlyReadonly(
+    state,
+    ownProps,
+    uischema,
+    undefined, // layouts have no associated schema
+    rootData,
+    config
+  );
 
   // some layouts have labels which might need to be translated
   const t = getTranslator()(state);
@@ -1075,6 +1102,7 @@ export const mapStateToLayoutProps = (
     cells: ownProps.cells || getCells(state),
     visible,
     enabled,
+    readonly,
     path: ownProps.path,
     data,
     uischema: ownProps.uischema,

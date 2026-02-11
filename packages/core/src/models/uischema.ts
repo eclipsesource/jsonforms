@@ -109,6 +109,15 @@ export enum RuleEffect {
    * Effect that disables the associated element.
    */
   DISABLE = 'DISABLE',
+  /**
+   * Effect that makes the associated element read-only
+   * (interaction allowed, value cannot be changed).
+   */
+  READONLY = 'READONLY',
+  /**
+   * Effect that makes the associated element writable.
+   */
+  WRITABLE = 'WRITABLE',
 }
 
 /**

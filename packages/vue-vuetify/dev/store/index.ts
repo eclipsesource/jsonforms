@@ -26,6 +26,7 @@ const appstore = reactive({
       trim: false,
       showUnfocusedDescription: false,
       hideRequiredAsterisk: true,
+      separateReadonlyFromDisabled: true,
       collapseNewItems: false,
       breakHorizontal: false,
       initCollapsed: false,

@@ -28,6 +28,7 @@
                 @click="addButtonClick"
                 :disabled="
                   !control.enabled ||
+                  control.readonly ||
                   (appliedOptions.restrict &&
                     control.arraySchema !== undefined &&
                     control.arraySchema.maxItems !== undefined &&
@@ -103,7 +104,9 @@
                         small
                         class="ma-0"
                         :aria-label="control.translations.upAriaLabel"
-                        :disabled="index <= 0 || !control.enabled"
+                        :disabled="
+                          index <= 0 || !control.enabled || control.readonly
+                        "
                         :class="styles.listWithDetail.itemMoveUp"
                         @click="moveUpClick($event, index)"
                       >
@@ -124,7 +127,11 @@
                         small
                         class="ma-0"
                         :aria-label="control.translations.downAriaLabel"
-                        :disabled="index >= dataLength - 1 || !control.enabled"
+                        :disabled="
+                          index >= dataLength - 1 ||
+                          !control.enabled ||
+                          control.readonly
+                        "
                         :class="styles.listWithDetail.itemMoveDown"
                         @click="moveDownClick($event, index)"
                       >
@@ -149,6 +156,7 @@
                         @click="removeItemsClick($event, [index])"
                         :disabled="
                           !control.enabled ||
+                          control.readonly ||
                           (appliedOptions.restrict &&
                             control.arraySchema !== undefined &&
                             control.arraySchema.minItems !== undefined &&
@@ -180,6 +188,7 @@
           :uischema="foundUISchema"
           :path="composePaths(control.path, `${selectedIndex}`)"
           :enabled="control.enabled"
+          :readonly="control.readonly"
           :renderers="control.renderers"
           :cells="control.cells"
         />
