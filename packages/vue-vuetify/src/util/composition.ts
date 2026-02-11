@@ -10,8 +10,11 @@ import {
   defaultJsonFormsI18nState,
   getArrayTranslations,
   getCombinatorTranslations,
+  getCombinedErrorMessage,
   getControlPath,
+  getErrorTranslator,
   getFirstPrimitiveProp,
+  getTranslator,
   isDescriptionHidden,
   type ControlElement,
   type DispatchPropsOfControl,
@@ -132,6 +135,7 @@ export const useVuetifyLabel = <
  */
 export const useVuetifyControl = <
   T extends {
+    schema: JsonSchema;
     uischema: ControlElement;
     path: string;
     config: any;
@@ -198,13 +202,26 @@ export const useVuetifyControl = <
           (error) => input.control.value.path === getControlPath(error),
         ) ?? [];
 
-      const allErrorsFiltered =
-        errorsAtControl.length > 0 &&
-        errorsAtControl.every(
-          (error) => error.keyword && filterKeywords.includes(error.keyword),
-        );
+      // Filter out errors that match the filterKeywords, keep the rest
+      const errorsToShow = errorsAtControl.filter(
+        (error) => !error.keyword || !filterKeywords.includes(error.keyword),
+      );
+      // If no errors were filtered out (all errors remain), return original errors string
+      if (errorsToShow.length === errorsAtControl.length) {
+        return input.control.value.errors;
+      }
 
-      return allErrorsFiltered ? '' : input.control.value.errors;
+      const t = getTranslator()({ jsonforms });
+      const te = getErrorTranslator()({ jsonforms });
+
+      return getCombinedErrorMessage(
+        errorsToShow,
+        te,
+        t,
+        input.control.value.schema,
+        input.control.value.uischema,
+        input.control.value.path,
+      );
     }
 
     // default, all errors are filtered
@@ -410,13 +427,31 @@ export const useVuetifyArrayControl = <
     return `${labelValue}`;
   };
   const filteredChildErrors = computed(() => {
+    if (
+      !input.control.value.childErrors ||
+      input.control.value.childErrors.length === 0 ||
+      !appliedOptions.value.enableFilterErrorsBeforeTouch
+    ) {
+      return input.control.value.childErrors;
+    }
+
     // supress childErrors unless touch filtering is disabled
     // otherwise all child errors will show, irrespective of their control touch state
-    const filtered: ErrorObject[] = appliedOptions.value
-      ?.enableFilterErrorsBeforeTouch
-      ? []
-      : input.control.value.childErrors;
-    return filtered;
+
+    const filterKeywords = appliedOptions.value.filterErrorKeywordsBeforeTouch;
+
+    // Filtering is enabled - check if specific keywords are configured
+    if (Array.isArray(filterKeywords) && filterKeywords.length > 0) {
+      // Granular filtering: only hide specific error keywords
+      const errorsToShow = input.control.value.childErrors.filter(
+        (error) => !error.keyword || !filterKeywords.includes(error.keyword),
+      );
+
+      return errorsToShow;
+    }
+
+    // default, all child errors are filtered
+    return [];
   });
 
   const jsonforms = inject<JsonFormsSubStates>('jsonforms');
