@@ -97,10 +97,55 @@ export interface Rule {
      */
     value?: any;
     /**
+     * Options for POPULATE effect
+     */
+    populate?: PopulateOptions;
+    /**
      * Whether to preserve the field's value when it becomes hidden
      */
     preserveValueOnHide?: boolean;
   };
+}
+
+export interface PopulateSelectWhereSchema {
+  /**
+   * JSON Schema to match an array element. The first element validating against this schema
+   * will be selected.
+   *
+   * This enables advanced matching like `allOf`/`anyOf`/`oneOf` and regex via `pattern`.
+   * Note: Remember to use `required` to enforce presence of properties you depend on.
+   */
+  schema: JsonSchema;
+}
+
+export type PopulateSelectWhere = PopulateSelectWhereSchema;
+
+export interface PopulateSelectOptions {
+  /**
+   * Selection predicate for arrays. The first matching element will be used.
+   */
+  where: PopulateSelectWhere;
+}
+
+export interface PopulateOptions {
+  /**
+   * JSON Pointer to the source schema property (e.g. "#/properties/addresses").
+   * The value will be resolved from form data using the corresponding data path.
+   */
+  from: string;
+  /**
+   * Optional dotted path to extract from the resolved source value (or selected array element),
+   * e.g. "state" or "address.state".
+   */
+  valuePath?: string;
+  /**
+   * If the source resolves to an array, optionally select a single element before extracting.
+   */
+  select?: PopulateSelectOptions;
+  /**
+   * Whether to overwrite destination when the source changes. Default: true.
+   */
+  overwrite?: boolean;
 }
 
 /**
@@ -135,6 +180,10 @@ export enum RuleEffect {
    * Effect that clears the value of the associated element.
    */
   CLEAR_VALUE = 'CLEAR_VALUE',
+  /**
+   * Effect that populates the value of the associated element from another field.
+   */
+  POPULATE = 'POPULATE',
 }
 
 /**

@@ -2626,3 +2626,1088 @@ test('Default values should be cleared in schema when preserveValueOnHide is fal
     'shortText default should be cleared from schema when preserveValueOnHide is false'
   );
 });
+
+test('core reducer - POPULATE rule populates destination from scalar source when the source changes', (t) => {
+  const schema = {
+    type: 'object',
+    properties: {
+      source: { type: 'string' },
+      dest: { type: 'string' },
+    },
+  };
+
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [
+      { type: 'Control', scope: '#/properties/source' },
+      {
+        type: 'Control',
+        scope: '#/properties/dest',
+        rule: {
+          effect: 'POPULATE',
+          condition: {
+            scope: '#',
+            schema: {
+              type: 'object',
+              required: ['source'],
+            },
+          },
+          options: {
+            populate: {
+              from: '#/properties/source',
+              overwrite: true,
+            },
+          },
+        },
+      },
+    ],
+  };
+
+  const initialState = coreReducer(
+    undefined,
+    init({ source: 'a', dest: '' }, schema, uischema)
+  );
+
+  // change source -> should populate dest
+  const updatedState = coreReducer(
+    initialState,
+    updateCore({ ...initialState.data, source: 'b' }, schema, uischema)
+  );
+
+  t.is(updatedState.data.dest, 'b');
+});
+
+test('core reducer - POPULATE rule no-ops when extracted value is missing', (t) => {
+  const schema = {
+    type: 'object',
+    properties: {
+      address: { type: 'object' },
+      dest: { type: 'string' },
+    },
+  };
+
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [
+      { type: 'Control', scope: '#/properties/dest' },
+      {
+        type: 'Control',
+        scope: '#/properties/dest',
+        rule: {
+          effect: 'POPULATE',
+          condition: {
+            scope: '#',
+            schema: {
+              type: 'object',
+              required: ['address'],
+            },
+          },
+          options: {
+            populate: {
+              from: '#/properties/address',
+              valuePath: 'state',
+              overwrite: true,
+            },
+          },
+        },
+      },
+    ],
+  };
+
+  const initialState = coreReducer(
+    undefined,
+    init({ address: {}, dest: 'keep' }, schema, uischema)
+  );
+
+  // update address (still missing state) -> should keep dest unchanged
+  const updatedState = coreReducer(
+    initialState,
+    updateCore(
+      { ...initialState.data, address: { type: 'mailing' } },
+      schema,
+      uischema
+    )
+  );
+
+  t.is(updatedState.data.dest, 'keep');
+});
+
+test('core reducer - POPULATE rule selects from array via schema and extracts valuePath', (t) => {
+  const schema = {
+    type: 'object',
+    properties: {
+      addresses: { type: 'array' },
+      mailingState: { type: 'string' },
+    },
+  };
+
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [
+      { type: 'Control', scope: '#/properties/addresses' },
+      {
+        type: 'Control',
+        scope: '#/properties/mailingState',
+        rule: {
+          effect: 'POPULATE',
+          condition: {
+            scope: '#',
+            schema: {
+              type: 'object',
+              required: ['addresses'],
+            },
+          },
+          options: {
+            populate: {
+              from: '#/properties/addresses',
+              select: {
+                where: {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      type: { const: 'mailing' },
+                    },
+                    required: ['type'],
+                  },
+                },
+              },
+              valuePath: 'state',
+              overwrite: true,
+            },
+          },
+        },
+      },
+    ],
+  };
+
+  const initialState = coreReducer(
+    undefined,
+    init(
+      {
+        addresses: [{ type: 'home', state: 'CA' }],
+        mailingState: '',
+      },
+      schema,
+      uischema
+    )
+  );
+
+  const updatedState = coreReducer(
+    initialState,
+    updateCore(
+      {
+        ...initialState.data,
+        addresses: [
+          { type: 'home', state: 'CA' },
+          { type: 'mailing', state: 'NY' },
+        ],
+      },
+      schema,
+      uischema
+    )
+  );
+
+  t.is(updatedState.data.mailingState, 'NY');
+});
+
+test('core reducer - POPULATE rule selects from array via schema (supports pattern/regex)', (t) => {
+  const schema = {
+    type: 'object',
+    properties: {
+      addresses: { type: 'array' },
+      selectedState: { type: 'string' },
+    },
+  };
+
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [
+      { type: 'Control', scope: '#/properties/addresses' },
+      {
+        type: 'Control',
+        scope: '#/properties/selectedState',
+        rule: {
+          effect: 'POPULATE',
+          condition: {
+            scope: '#',
+            schema: { type: 'object', required: ['addresses'] },
+          },
+          options: {
+            populate: {
+              from: '#/properties/addresses',
+              select: {
+                where: {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      type: { const: 'mailing' },
+                      state: { type: 'string', pattern: '^N(J|Y)$' },
+                    },
+                    required: ['type', 'state'],
+                  },
+                },
+              },
+              valuePath: 'state',
+              overwrite: true,
+            },
+          },
+        },
+      },
+    ],
+  };
+
+  const initialState = coreReducer(
+    undefined,
+    init(
+      {
+        addresses: [
+          { type: 'mailing', state: 'CA' },
+          { type: 'home', state: 'NJ' },
+        ],
+        selectedState: '',
+      },
+      schema,
+      uischema
+    )
+  );
+
+  const updatedState = coreReducer(
+    initialState,
+    updateCore(
+      {
+        ...initialState.data,
+        addresses: [
+          { type: 'mailing', state: 'CA' },
+          { type: 'mailing', state: 'NJ' },
+          { type: 'mailing', state: 'NY' },
+        ],
+      },
+      schema,
+      uischema
+    )
+  );
+
+  // first match should win => NJ (matches pattern), not NY
+  t.is(updatedState.data.selectedState, 'NJ');
+});
+
+test('core reducer - POPULATE rule with overwrite=false does not override existing value', (t) => {
+  const schema = {
+    type: 'object',
+    properties: {
+      source: { type: 'string' },
+      dest: { type: 'string' },
+    },
+  };
+
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [
+      { type: 'Control', scope: '#/properties/source' },
+      {
+        type: 'Control',
+        scope: '#/properties/dest',
+        rule: {
+          effect: 'POPULATE',
+          condition: {
+            type: 'LEAF',
+            scope: '#/properties/source',
+            expectedValue: 'b',
+          },
+          options: {
+            populate: {
+              from: '#/properties/source',
+              overwrite: false,
+            },
+          },
+        },
+      },
+    ],
+  };
+
+  const initialState = coreReducer(
+    undefined,
+    init({ source: 'a', dest: 'user' }, schema, uischema)
+  );
+
+  const updatedState = coreReducer(
+    initialState,
+    updateCore({ ...initialState.data, source: 'b' }, schema, uischema)
+  );
+
+  t.is(updatedState.data.dest, 'user');
+});
+
+test('core reducer - POPULATE rule clears destination when source becomes empty (implied by overwrite=true)', (t) => {
+  const schema = {
+    type: 'object',
+    properties: {
+      source: { type: 'string' },
+      dest: { type: 'string' },
+    },
+  };
+
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [
+      { type: 'Control', scope: '#/properties/source' },
+      {
+        type: 'Control',
+        scope: '#/properties/dest',
+        rule: {
+          effect: 'POPULATE',
+          condition: {
+            scope: '#',
+            schema: { type: 'object' },
+          },
+          options: {
+            populate: {
+              from: '#/properties/source',
+              overwrite: true,
+            },
+          },
+        },
+      },
+    ],
+  };
+
+  const initialState = coreReducer(
+    undefined,
+    init({ source: 'a', dest: 'a' }, schema, uischema)
+  );
+
+  const updatedState = coreReducer(
+    initialState,
+    updateCore({ ...initialState.data, source: '' }, schema, uischema)
+  );
+
+  t.is(updatedState.data.dest, undefined);
+});
+
+test('core reducer - POPULATE clears even when condition would not be fulfilled for empty source (implied by overwrite=true)', (t) => {
+  const schema = {
+    type: 'object',
+    properties: {
+      source: { type: 'string' },
+      dest: { type: 'string' },
+    },
+  };
+
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [
+      { type: 'Control', scope: '#/properties/source' },
+      {
+        type: 'Control',
+        scope: '#/properties/dest',
+        rule: {
+          effect: 'POPULATE',
+          condition: {
+            scope: '#',
+            schema: {
+              type: 'object',
+              required: ['source'],
+            },
+          },
+          options: {
+            populate: {
+              from: '#/properties/source',
+              overwrite: true,
+            },
+          },
+        },
+      },
+    ],
+  };
+
+  const initialState = coreReducer(
+    undefined,
+    init({ source: 'a', dest: 'a' }, schema, uischema)
+  );
+
+  // When source becomes empty, the condition (required: ['source']) would fail.
+  // Even though the condition would fail, we still expect the destination to be cleared (overwrite implied).
+  const updatedState = coreReducer(
+    initialState,
+    updateCore({ ...initialState.data, source: '' }, schema, uischema)
+  );
+
+  t.is(updatedState.data.dest, undefined);
+});
+
+test('core reducer - POPULATE with overwrite=false does not clear destination when source becomes empty', (t) => {
+  const schema = {
+    type: 'object',
+    properties: {
+      source: { type: 'string' },
+      dest: { type: 'string' },
+    },
+  };
+
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [
+      { type: 'Control', scope: '#/properties/source' },
+      {
+        type: 'Control',
+        scope: '#/properties/dest',
+        rule: {
+          effect: 'POPULATE',
+          condition: {
+            scope: '#',
+            schema: { type: 'object' },
+          },
+          options: {
+            populate: {
+              from: '#/properties/source',
+              overwrite: false,
+            },
+          },
+        },
+      },
+    ],
+  };
+
+  const initialState = coreReducer(
+    undefined,
+    init({ source: 'a', dest: 'keep' }, schema, uischema)
+  );
+
+  const updatedState = coreReducer(
+    initialState,
+    updateCore({ ...initialState.data, source: '' }, schema, uischema)
+  );
+
+  t.is(updatedState.data.dest, 'keep');
+});
+
+test('core reducer - POPULATE supports nested destination scope (foo.bar)', (t) => {
+  const schema = {
+    type: 'object',
+    properties: {
+      source: { type: 'string' },
+      foo: {
+        type: 'object',
+        properties: {
+          bar: { type: 'string' },
+        },
+      },
+    },
+  };
+
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [
+      { type: 'Control', scope: '#/properties/source' },
+      {
+        type: 'Control',
+        scope: '#/properties/foo/properties/bar',
+        rule: {
+          effect: 'POPULATE',
+          condition: {
+            scope: '#',
+            schema: { type: 'object' },
+          },
+          options: {
+            populate: {
+              from: '#/properties/source',
+              overwrite: true,
+            },
+          },
+        },
+      },
+    ],
+  };
+
+  const initialState = coreReducer(
+    undefined,
+    init({ source: 'a', foo: { bar: '' } }, schema, uischema)
+  );
+
+  const updatedState = coreReducer(
+    initialState,
+    updateCore({ ...initialState.data, source: 'b' }, schema, uischema)
+  );
+  t.is(updatedState.data.foo.bar, 'b');
+
+  const clearedState = coreReducer(
+    updatedState,
+    updateCore({ ...updatedState.data, source: '' }, schema, uischema)
+  );
+  t.is(clearedState.data.foo.bar, undefined);
+});
+
+test('core reducer - POPULATE schema selector supports anyOf', (t) => {
+  const schema = {
+    type: 'object',
+    properties: {
+      addresses: { type: 'array' },
+      selectedState: { type: 'string' },
+    },
+  };
+
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [
+      { type: 'Control', scope: '#/properties/addresses' },
+      {
+        type: 'Control',
+        scope: '#/properties/selectedState',
+        rule: {
+          effect: 'POPULATE',
+          condition: {
+            scope: '#',
+            schema: { type: 'object', required: ['addresses'] },
+          },
+          options: {
+            populate: {
+              from: '#/properties/addresses',
+              select: {
+                where: {
+                  schema: {
+                    anyOf: [
+                      {
+                        type: 'object',
+                        properties: {
+                          type: { const: 'mailing' },
+                          state: { const: 'NJ' },
+                        },
+                        required: ['type', 'state'],
+                      },
+                      {
+                        type: 'object',
+                        properties: {
+                          type: { const: 'home' },
+                          state: { const: 'CA' },
+                        },
+                        required: ['type', 'state'],
+                      },
+                    ],
+                  },
+                },
+              },
+              valuePath: 'state',
+              overwrite: true,
+            },
+          },
+        },
+      },
+    ],
+  };
+
+  const initialState = coreReducer(
+    undefined,
+    init(
+      {
+        addresses: [
+          { type: 'mailing', state: 'CA' },
+          { type: 'home', state: 'CA' },
+        ],
+        selectedState: '',
+      },
+      schema,
+      uischema
+    )
+  );
+
+  // Should select the first element matching anyOf: home+CA, thus state "CA"
+  const updatedState = coreReducer(
+    initialState,
+    updateCore(
+      {
+        ...initialState.data,
+        addresses: [
+          { type: 'home', state: 'CA' },
+          { type: 'mailing', state: 'NJ' },
+        ],
+      },
+      schema,
+      uischema
+    )
+  );
+
+  t.is(updatedState.data.selectedState, 'CA');
+});
+
+test('core reducer - POPULATE no-ops when selector schema is invalid', (t) => {
+  const schema = {
+    type: 'object',
+    properties: {
+      addresses: { type: 'array' },
+      selectedState: { type: 'string' },
+    },
+  };
+
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [
+      { type: 'Control', scope: '#/properties/addresses' },
+      {
+        type: 'Control',
+        scope: '#/properties/selectedState',
+        rule: {
+          effect: 'POPULATE',
+          condition: {
+            scope: '#',
+            schema: { type: 'object', required: ['addresses'] },
+          },
+          options: {
+            populate: {
+              from: '#/properties/addresses',
+              select: {
+                where: {
+                  // invalid regex pattern -> AJV throws during validate/compile
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      state: { type: 'string', pattern: '[' },
+                    },
+                    required: ['state'],
+                  },
+                },
+              },
+              valuePath: 'state',
+              overwrite: true,
+            },
+          },
+        },
+      },
+    ],
+  };
+
+  const initialState = coreReducer(
+    undefined,
+    init(
+      {
+        addresses: [{ type: 'mailing', state: 'NJ' }],
+        selectedState: 'keep',
+      },
+      schema,
+      uischema
+    )
+  );
+
+  const updatedState = coreReducer(
+    initialState,
+    updateCore(
+      {
+        ...initialState.data,
+        addresses: [{ type: 'mailing', state: 'NY' }],
+      },
+      schema,
+      uischema
+    )
+  );
+
+  // Invalid selector schema => no match => no update
+  t.is(updatedState.data.selectedState, 'keep');
+});
+
+test('core reducer - POPULATE applies to multiple destinations from the same source', (t) => {
+  const schema = {
+    type: 'object',
+    properties: {
+      source: { type: 'string' },
+      dest1: { type: 'string' },
+      dest2: { type: 'string' },
+    },
+  };
+
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [
+      { type: 'Control', scope: '#/properties/source' },
+      {
+        type: 'Control',
+        scope: '#/properties/dest1',
+        rule: {
+          effect: 'POPULATE',
+          condition: { scope: '#', schema: { type: 'object' } },
+          options: {
+            populate: { from: '#/properties/source', overwrite: true },
+          },
+        },
+      },
+      {
+        type: 'Control',
+        scope: '#/properties/dest2',
+        rule: {
+          effect: 'POPULATE',
+          condition: { scope: '#', schema: { type: 'object' } },
+          options: {
+            populate: { from: '#/properties/source', overwrite: true },
+          },
+        },
+      },
+    ],
+  };
+
+  const initialState = coreReducer(
+    undefined,
+    init({ source: 'a', dest1: '', dest2: '' }, schema, uischema)
+  );
+
+  const updatedState = coreReducer(
+    initialState,
+    updateCore({ ...initialState.data, source: 'b' }, schema, uischema)
+  );
+
+  t.is(updatedState.data.dest1, 'b');
+  t.is(updatedState.data.dest2, 'b');
+});
+
+test('core reducer - POPULATE chained destinations work on updateCore (ordering within one pass)', (t) => {
+  const schema = {
+    type: 'object',
+    properties: {
+      source: { type: 'string' },
+      dest1: { type: 'string' },
+      dest2: { type: 'string' },
+    },
+  };
+
+  // dest1 populated from source; dest2 populated from dest1
+  // This works with updateCore because applyPopulateRules is invoked with changedPath '' (treat as full update),
+  // allowing all populate rules to be considered within the same pass.
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [
+      { type: 'Control', scope: '#/properties/source' },
+      {
+        type: 'Control',
+        scope: '#/properties/dest1',
+        rule: {
+          effect: 'POPULATE',
+          condition: { scope: '#', schema: { type: 'object' } },
+          options: {
+            populate: { from: '#/properties/source', overwrite: true },
+          },
+        },
+      },
+      {
+        type: 'Control',
+        scope: '#/properties/dest2',
+        rule: {
+          effect: 'POPULATE',
+          condition: { scope: '#', schema: { type: 'object' } },
+          options: {
+            populate: { from: '#/properties/dest1', overwrite: true },
+          },
+        },
+      },
+    ],
+  };
+
+  const initialState = coreReducer(
+    undefined,
+    init({ source: 'a', dest1: '', dest2: '' }, schema, uischema)
+  );
+
+  const updatedState = coreReducer(
+    initialState,
+    updateCore({ ...initialState.data, source: 'b' }, schema, uischema)
+  );
+
+  t.is(updatedState.data.dest1, 'b');
+  t.is(updatedState.data.dest2, 'b');
+});
+
+test('core reducer - POPULATE chained destinations do not update on update path', (t) => {
+  const schema = {
+    type: 'object',
+    properties: {
+      source: { type: 'string' },
+      dest1: { type: 'string' },
+      dest2: { type: 'string' },
+    },
+  };
+
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [
+      { type: 'Control', scope: '#/properties/source' },
+      {
+        type: 'Control',
+        scope: '#/properties/dest1',
+        rule: {
+          effect: 'POPULATE',
+          condition: { scope: '#', schema: { type: 'object' } },
+          options: {
+            populate: { from: '#/properties/source', overwrite: true },
+          },
+        },
+      },
+      {
+        type: 'Control',
+        scope: '#/properties/dest2',
+        rule: {
+          effect: 'POPULATE',
+          condition: { scope: '#', schema: { type: 'object' } },
+          options: {
+            populate: { from: '#/properties/dest1', overwrite: true },
+          },
+        },
+      },
+    ],
+  };
+
+  const initialState = coreReducer(
+    undefined,
+    init({ source: '', dest1: '', dest2: '' }, schema, uischema)
+  );
+
+  const updatedState = coreReducer(
+    initialState,
+    update('source', () => 'b')
+  );
+
+  t.is(updatedState.data.dest1, 'b');
+  t.is(updatedState.data.dest2, '');
+});
+
+test('core reducer - POPULATE applies when condition toggles true (update path)', (t) => {
+  const schema = {
+    type: 'object',
+    properties: {
+      source: { type: 'string' },
+      dest: { type: 'string' },
+      flag: { type: 'boolean' },
+    },
+  };
+
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [
+      { type: 'Control', scope: '#/properties/source' },
+      { type: 'Control', scope: '#/properties/flag' },
+      {
+        type: 'Control',
+        scope: '#/properties/dest',
+        rule: {
+          effect: 'POPULATE',
+          condition: {
+            type: 'LEAF',
+            scope: '#/properties/flag',
+            expectedValue: true,
+          },
+          options: {
+            populate: { from: '#/properties/source', overwrite: true },
+          },
+        },
+      },
+    ],
+  };
+
+  const initialState = coreReducer(
+    undefined,
+    init({ source: 'a', dest: '', flag: false }, schema, uischema)
+  );
+
+  const updatedState = coreReducer(
+    initialState,
+    update('flag', () => true)
+  );
+
+  t.is(updatedState.data.dest, 'a');
+});
+
+test('core reducer - POPULATE condition scopes resolve relative to control path', (t) => {
+  const schema = {
+    type: 'object',
+    properties: {
+      address: {
+        type: 'object',
+        properties: {
+          country: { type: 'string' },
+          source: { type: 'string' },
+          state: { type: 'string' },
+        },
+      },
+    },
+  };
+
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [
+      { type: 'Control', scope: '#/properties/address/properties/country' },
+      { type: 'Control', scope: '#/properties/address/properties/source' },
+      {
+        type: 'Control',
+        scope: '#/properties/address/properties/state',
+        rule: {
+          effect: 'POPULATE',
+          condition: {
+            type: 'LEAF',
+            scope: '#/properties/country',
+            expectedValue: 'US',
+          },
+          options: {
+            populate: {
+              from: '#/properties/address/properties/source',
+              overwrite: true,
+            },
+          },
+        },
+      },
+    ],
+  };
+
+  const state = coreReducer(
+    undefined,
+    init(
+      { address: { country: 'US', source: 'NY', state: '' } },
+      schema,
+      uischema
+    )
+  );
+
+  t.is(state.data.address.state, 'NY');
+});
+
+test('core reducer - POPULATE traverses options.detail for array elements', (t) => {
+  const schema = {
+    type: 'object',
+    properties: {
+      addresses: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            source: { type: 'string' },
+            dest: { type: 'string' },
+            flag: { type: 'boolean' },
+          },
+        },
+      },
+    },
+  };
+
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [
+      {
+        type: 'Control',
+        scope: '#/properties/addresses',
+        options: {
+          detail: {
+            type: 'VerticalLayout',
+            elements: [
+              { type: 'Control', scope: '#/properties/source' },
+              { type: 'Control', scope: '#/properties/flag' },
+              {
+                type: 'Control',
+                scope: '#/properties/dest',
+                rule: {
+                  effect: 'POPULATE',
+                  condition: {
+                    type: 'LEAF',
+                    scope: '#/properties/flag',
+                    expectedValue: true,
+                  },
+                  options: {
+                    populate: {
+                      from: '#/properties/source',
+                      overwrite: true,
+                    },
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+    ],
+  };
+
+  const initialState = coreReducer(
+    undefined,
+    init(
+      {
+        addresses: [{ source: 'a', dest: '', flag: false }],
+      },
+      schema,
+      uischema
+    )
+  );
+
+  const updatedState = coreReducer(
+    initialState,
+    update('addresses.0.flag', () => true)
+  );
+
+  t.is(updatedState.data.addresses[0].dest, 'a');
+});
+
+test('core reducer - POPULATE updates row on source change with dot index path', (t) => {
+  const schema = {
+    type: 'object',
+    properties: {
+      addresses: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            source: { type: 'string' },
+            dest: { type: 'string' },
+            flag: { type: 'boolean' },
+          },
+        },
+      },
+    },
+  };
+
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [
+      {
+        type: 'Control',
+        scope: '#/properties/addresses',
+        options: {
+          detail: {
+            type: 'VerticalLayout',
+            elements: [
+              { type: 'Control', scope: '#/properties/source' },
+              { type: 'Control', scope: '#/properties/flag' },
+              {
+                type: 'Control',
+                scope: '#/properties/dest',
+                rule: {
+                  effect: 'POPULATE',
+                  condition: {
+                    type: 'LEAF',
+                    scope: '#/properties/flag',
+                    expectedValue: true,
+                  },
+                  options: {
+                    populate: {
+                      from: '#/properties/source',
+                      overwrite: true,
+                    },
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+    ],
+  };
+
+  const initialState = coreReducer(
+    undefined,
+    init(
+      {
+        addresses: [{ source: '', dest: '', flag: true }],
+      },
+      schema,
+      uischema
+    )
+  );
+
+  const updatedState = coreReducer(
+    initialState,
+    update('addresses.0.source', () => 'test')
+  );
+
+  t.is(updatedState.data.addresses[0].dest, 'test');
+});

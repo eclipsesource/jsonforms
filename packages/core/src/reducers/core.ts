@@ -28,6 +28,7 @@ import setFp from 'lodash/fp/set';
 import unsetFp from 'lodash/fp/unset';
 import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
+import isArray from 'lodash/isArray';
 import {
   CoreActions,
   INIT,
@@ -54,9 +55,20 @@ import {
   evalValue,
   hasShowRule,
   isVisible,
+  evaluateCondition,
+  isControlElement,
+  isLayout,
+  composePaths,
+  toDataPath,
 } from '../util';
 import { JsonSchema } from '../models/jsonSchema';
-import { UISchemaElement, SchemaBasedCondition, Rule } from '../models';
+import {
+  UISchemaElement,
+  SchemaBasedCondition,
+  Rule,
+  RuleEffect,
+  PopulateOptions,
+} from '../models';
 
 export const initState: JsonFormsCore = {
   data: {},
@@ -229,6 +241,333 @@ const createDynamicSchema = (
   };
 };
 
+const isEmptySourceValue = (value: any): boolean =>
+  value === undefined || value === null || value === '';
+
+const pathAffects = (changedPath: string, targetPath: string): boolean => {
+  if (changedPath === '' || targetPath === '') {
+    return true;
+  }
+  if (!changedPath || !targetPath) {
+    return false;
+  }
+  const boundaryOk = (full: string, prefix: string) => {
+    if (full.length === prefix.length) return true;
+    const next = full.charAt(prefix.length);
+    return next === '.' || next === '[';
+  };
+  return (
+    (changedPath.startsWith(targetPath) &&
+      boundaryOk(changedPath, targetPath)) ||
+    (targetPath.startsWith(changedPath) && boundaryOk(targetPath, changedPath))
+  );
+};
+
+const computePopulateValue = (
+  sourceValue: any,
+  options: PopulateOptions,
+  ajv: Ajv
+): { shouldSet: boolean; newValue: any } => {
+  if (isEmptySourceValue(sourceValue)) {
+    return { shouldSet: false, newValue: undefined };
+  }
+
+  let base: any = sourceValue;
+
+  if (options.select) {
+    if (!isArray(base)) {
+      return { shouldSet: false, newValue: undefined };
+    }
+    const where = options.select.where;
+    if (!where) {
+      return { shouldSet: false, newValue: undefined };
+    }
+
+    const match = (base as any[]).find((el) => {
+      try {
+        return ajv.validate(where.schema, el) as boolean;
+      } catch (e) {
+        // Invalid schema or validation error -> no match
+        return false;
+      }
+    });
+    if (match === undefined) {
+      return { shouldSet: false, newValue: undefined };
+    }
+    base = match;
+  }
+
+  if (options.valuePath && options.valuePath.length > 0) {
+    const extracted = get(base, options.valuePath);
+    if (extracted === undefined) {
+      return { shouldSet: false, newValue: undefined };
+    }
+    return { shouldSet: true, newValue: extracted };
+  }
+
+  return { shouldSet: true, newValue: base };
+};
+
+const getParentPath = (path: string): string => {
+  if (!path) {
+    return '';
+  }
+  const lastDot = path.lastIndexOf('.');
+  return lastDot === -1 ? '' : path.slice(0, lastDot);
+};
+
+const normalizePathForCompare = (path: string): string =>
+  path ? path.replace(/\[(\d+)\]/g, '.$1') : path;
+
+const extractIndexFromPath = (
+  changedPath: string,
+  arrayPath: string
+): number | null => {
+  if (!changedPath || !arrayPath) {
+    return null;
+  }
+  const normalizedChanged = normalizePathForCompare(changedPath);
+  const normalizedArray = normalizePathForCompare(arrayPath);
+  if (!normalizedChanged.startsWith(`${normalizedArray}.`)) {
+    return null;
+  }
+  const rest = normalizedChanged.slice(normalizedArray.length + 1);
+  const idxStr = rest.split('.')[0];
+  const idx = Number(idxStr);
+  return Number.isInteger(idx) ? idx : null;
+};
+
+const getDetailBasePaths = (
+  arrayPath: string,
+  changedPath: string,
+  data: any
+): string[] => {
+  const normalizedArrayPath = normalizePathForCompare(arrayPath);
+  const normalizedChanged = normalizePathForCompare(changedPath);
+  const value = get(data, normalizedArrayPath);
+  if (!isArray(value)) {
+    return [];
+  }
+
+  if (normalizedChanged === normalizedArrayPath) {
+    return value.map((_: any, idx: number) => `${normalizedArrayPath}.${idx}`);
+  }
+
+  const idx = extractIndexFromPath(normalizedChanged, normalizedArrayPath);
+  if (idx !== null) {
+    return [`${normalizedArrayPath}.${idx}`];
+  }
+
+  if (
+    normalizedChanged === '' ||
+    normalizedChanged === undefined ||
+    normalizedChanged === null
+  ) {
+    return value.map((_: any, idx: number) => `${normalizedArrayPath}.${idx}`);
+  }
+
+  if (
+    pathAffects(
+      normalizePathForCompare(changedPath),
+      normalizePathForCompare(arrayPath)
+    )
+  ) {
+    return value.map((_: any, idx: number) => `${normalizedArrayPath}.${idx}`);
+  }
+
+  return [];
+};
+
+const applyPopulateRules = (
+  prevData: any,
+  nextData: any,
+  uischema: UISchemaElement,
+  changedPath: string,
+  ajv: Ajv
+): any => {
+  if (!uischema || changedPath === undefined || changedPath === null) {
+    return nextData;
+  }
+
+  let updatedData = nextData;
+  let dataChanged = false;
+
+  const applyToControl = (control: any, basePath: string) => {
+    const rules: Rule[] = Array.isArray(control.rule)
+      ? control.rule
+      : control.rule
+      ? [control.rule]
+      : [];
+
+    if (rules.length === 0) {
+      return;
+    }
+
+    const localDestPath = control.scope ? toDataPath(control.scope) : '';
+    const destPath =
+      localDestPath && basePath
+        ? composePaths(basePath, localDestPath)
+        : basePath || localDestPath;
+    if (!destPath) {
+      return;
+    }
+    const conditionBasePath = (() => {
+      const parentPath = getParentPath(localDestPath);
+      if (!parentPath) {
+        return basePath;
+      }
+      return basePath ? composePaths(basePath, parentPath) : parentPath;
+    })();
+
+    for (const rule of rules) {
+      const effects = Array.isArray(rule.effect) ? rule.effect : [rule.effect];
+      if (!effects.includes(RuleEffect.POPULATE)) {
+        continue;
+      }
+      const pop: PopulateOptions | undefined = rule.options?.populate;
+      if (!pop?.from) {
+        continue;
+      }
+
+      const localFromPath = toDataPath(pop.from);
+      const fromPath =
+        localFromPath && basePath
+          ? composePaths(basePath, localFromPath)
+          : basePath || localFromPath;
+      if (!fromPath) {
+        continue;
+      }
+
+      const prevSource = get(prevData, fromPath);
+      const nextSource = get(updatedData, fromPath);
+      const sourceChanged = !isEqual(prevSource, nextSource);
+
+      const conditionNow = evaluateCondition(
+        updatedData,
+        rule.condition,
+        conditionBasePath,
+        ajv
+      );
+      const conditionPrev = prevData
+        ? evaluateCondition(prevData, rule.condition, conditionBasePath, ajv)
+        : false;
+      const conditionBecameTrue = !conditionPrev && conditionNow;
+
+      if (
+        !pathAffects(
+          normalizePathForCompare(changedPath),
+          normalizePathForCompare(fromPath)
+        ) &&
+        !conditionBecameTrue
+      ) {
+        continue;
+      }
+
+      if (!sourceChanged && !conditionBecameTrue) {
+        continue;
+      }
+
+      const currentDest = get(updatedData, destPath);
+
+      const overwrite = pop.overwrite !== undefined ? pop.overwrite : true;
+
+      // If source becomes empty and overwrite is enabled, clear destination
+      if (isEmptySourceValue(nextSource)) {
+        if (!overwrite) {
+          continue;
+        }
+        if (!sourceChanged) {
+          continue;
+        }
+        if (currentDest === undefined) {
+          continue;
+        }
+        if (!dataChanged) {
+          updatedData = cloneDeep(updatedData);
+          dataChanged = true;
+        }
+        updatedData = unsetFp(destPath, updatedData);
+        continue;
+      }
+
+      if (!conditionNow) {
+        continue;
+      }
+
+      const { shouldSet, newValue } = computePopulateValue(
+        nextSource,
+        {
+          overwrite: true,
+          ...pop,
+        },
+        ajv
+      );
+      if (!shouldSet) {
+        continue;
+      }
+
+      const destIsEmpty = isEmptySourceValue(currentDest);
+      if (!overwrite && !destIsEmpty) {
+        continue;
+      }
+
+      if (isEqual(currentDest, newValue)) {
+        continue;
+      }
+
+      if (!dataChanged) {
+        updatedData = cloneDeep(updatedData);
+        dataChanged = true;
+      }
+
+      if (newValue === undefined) {
+        updatedData = unsetFp(destPath, updatedData);
+      } else {
+        updatedData = setFp(destPath, newValue, updatedData);
+      }
+    }
+  };
+
+  const traverse = (element: UISchemaElement, basePath: string) => {
+    if (isLayout(element)) {
+      if (Array.isArray(element.elements)) {
+        element.elements.forEach((child) => traverse(child, basePath));
+      }
+      return;
+    }
+    if (!isControlElement(element)) {
+      return;
+    }
+
+    const control: any = element;
+    applyToControl(control, basePath);
+
+    const detail = control.options?.detail;
+    if (detail) {
+      const controlPath = control.scope ? toDataPath(control.scope) : '';
+      const arrayPath =
+        controlPath && basePath
+          ? composePaths(basePath, controlPath)
+          : basePath || controlPath;
+
+      if (!arrayPath) {
+        return;
+      }
+
+      const detailPaths = getDetailBasePaths(
+        arrayPath,
+        changedPath,
+        updatedData
+      );
+      detailPaths.forEach((detailPath) => traverse(detail, detailPath));
+    }
+  };
+
+  traverse(uischema, '');
+
+  return updatedData;
+};
+
 export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
   state = initState,
   action
@@ -238,11 +577,19 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
       const thisAjv = getOrCreateAjv(state, action);
       const validationMode = getValidationMode(state, action);
 
+      const populatedData = applyPopulateRules(
+        undefined,
+        action.data,
+        action.uischema,
+        '',
+        thisAjv
+      );
+
       // Create dynamic schema with UI-based required fields
       const { schema: dynamicSchema, updatedData } = createDynamicSchema(
         action.schema,
         action.uischema,
-        action.data,
+        populatedData,
         thisAjv
       );
 
@@ -271,11 +618,19 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
       let validator = state.validator;
       let errors = state.errors;
 
+      const populatedData = applyPopulateRules(
+        state.data,
+        action.data,
+        action.uischema,
+        '',
+        thisAjv
+      );
+
       // Create dynamic schema with UI-based required fields
       const { schema: dynamicSchema, updatedData } = createDynamicSchema(
         action.schema,
         action.uischema,
-        action.data,
+        populatedData,
         thisAjv
       );
 
@@ -369,12 +724,19 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
       } else if (action.path === '') {
         // empty path is ok
         const result = action.updater(cloneDeep(state.data));
+        const populated = applyPopulateRules(
+          state.data,
+          result,
+          state.uischema,
+          '',
+          state.ajv
+        );
 
         // Create dynamic schema with UI-based required fields and clear hidden fields
         const { schema: dynamicSchema, updatedData } = createDynamicSchema(
           state.schema,
           state.uischema,
-          result,
+          populated,
           state.ajv
         );
 
@@ -402,12 +764,19 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
             state.data === undefined ? {} : state.data
           );
         }
+        const populated = applyPopulateRules(
+          state.data,
+          newState,
+          state.uischema,
+          action.path,
+          state.ajv
+        );
 
         // Create dynamic schema with UI-based required fields and clear hidden fields
         const { schema: dynamicSchema, updatedData } = createDynamicSchema(
           state.schema,
           state.uischema,
-          newState,
+          populated,
           state.ajv
         );
 
