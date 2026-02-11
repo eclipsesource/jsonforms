@@ -452,24 +452,42 @@ const applyPopulateRules = (
         ? evaluateCondition(prevData, rule.condition, conditionBasePath, ajv)
         : false;
       const conditionBecameTrue = !conditionPrev && conditionNow;
+      const conditionBecameFalse = conditionPrev && !conditionNow;
 
       if (
         !pathAffects(
           normalizePathForCompare(changedPath),
           normalizePathForCompare(fromPath)
         ) &&
-        !conditionBecameTrue
+        !conditionBecameTrue &&
+        !conditionBecameFalse
       ) {
         continue;
       }
 
-      if (!sourceChanged && !conditionBecameTrue) {
+      if (!sourceChanged && !conditionBecameTrue && !conditionBecameFalse) {
         continue;
       }
 
       const currentDest = get(updatedData, destPath);
 
       const overwrite = pop.overwrite !== undefined ? pop.overwrite : true;
+
+      // If condition became false and overwrite is enabled, clear destination
+      if (conditionBecameFalse) {
+        if (!overwrite) {
+          continue;
+        }
+        if (currentDest === undefined) {
+          continue;
+        }
+        if (!dataChanged) {
+          updatedData = cloneDeep(updatedData);
+          dataChanged = true;
+        }
+        updatedData = unsetFp(destPath, updatedData);
+        continue;
+      }
 
       // If source becomes empty and overwrite is enabled, clear destination
       if (isEmptySourceValue(nextSource)) {
