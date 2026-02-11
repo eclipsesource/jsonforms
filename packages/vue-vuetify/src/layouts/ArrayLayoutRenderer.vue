@@ -35,7 +35,7 @@
           :styles="styles"
           :icons="icons"
         >
-          <v-tooltip bottom>
+          <v-tooltip location="bottom">
             <template v-slot:activator="{ props }">
               <v-btn
                 icon
@@ -109,7 +109,7 @@
                       align-self="center"
                       v-if="appliedOptions.showSortButtons"
                     >
-                      <v-tooltip bottom>
+                      <v-tooltip location="bottom">
                         <template v-slot:activator="{ props }">
                           <v-btn
                             v-bind="props"
@@ -135,7 +135,7 @@
                       align-self="center"
                       v-if="appliedOptions.showSortButtons"
                     >
-                      <v-tooltip bottom>
+                      <v-tooltip location="bottom">
                         <template v-slot:activator="{ props }">
                           <v-btn
                             v-bind="props"
@@ -160,7 +160,7 @@
                       </v-tooltip>
                     </v-col>
                     <v-col align-self="center">
-                      <v-tooltip bottom>
+                      <v-tooltip location="bottom">
                         <template v-slot:activator="{ props }">
                           <v-btn
                             v-bind="props"
