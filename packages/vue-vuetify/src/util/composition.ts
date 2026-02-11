@@ -192,12 +192,6 @@ export const useVuetifyControl = <
 
   const computedLabel = useComputedLabel(input, appliedOptions);
 
-  const controlWrapper = computed(() => {
-    const { id, description, errors, label, visible, required } =
-      input.control.value;
-    return { id, description, errors, label, visible, required };
-  });
-
   const styles = useStyles(input.control.value.uischema);
 
   const vuetifyProps = (path: string) => {
@@ -211,6 +205,12 @@ export const useVuetifyControl = <
       ...input.control.value,
       errors: filteredErrors.value,
     };
+  });
+
+  const controlWrapper = computed(() => {
+    const { id, description, errors, label, visible, required } =
+      overwrittenControl.value;
+    return { id, description, errors, label, visible, required };
   });
 
   const rawErrors = computed(() => input.control.value.errors);
