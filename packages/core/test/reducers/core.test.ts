@@ -3035,6 +3035,104 @@ test('core reducer - POPULATE clears even when condition would not be fulfilled 
   t.is(updatedState.data.dest, undefined);
 });
 
+test('core reducer - POPULATE rule clears destination when condition becomes false and overwrite is true', (t) => {
+  const schema = {
+    type: 'object',
+    properties: {
+      active: { type: 'boolean' },
+      source: { type: 'string' },
+      dest: { type: 'string' },
+    },
+  };
+
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [
+      { type: 'Control', scope: '#/properties/active' },
+      { type: 'Control', scope: '#/properties/source' },
+      {
+        type: 'Control',
+        scope: '#/properties/dest',
+        rule: {
+          effect: 'POPULATE',
+          condition: {
+            type: 'LEAF',
+            scope: '#/properties/active',
+            expectedValue: true,
+          },
+          options: {
+            populate: {
+              from: '#/properties/source',
+              overwrite: true,
+            },
+          },
+        },
+      },
+    ],
+  };
+
+  const initialState = coreReducer(
+    undefined,
+    init({ active: true, source: 'x', dest: 'x' }, schema, uischema)
+  );
+
+  const updatedState = coreReducer(
+    initialState,
+    updateCore({ ...initialState.data, active: false }, schema, uischema)
+  );
+
+  t.is(updatedState.data.dest, undefined);
+});
+
+test('core reducer - POPULATE rule does not clear destination when condition becomes false and overwrite is false', (t) => {
+  const schema = {
+    type: 'object',
+    properties: {
+      active: { type: 'boolean' },
+      source: { type: 'string' },
+      dest: { type: 'string' },
+    },
+  };
+
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [
+      { type: 'Control', scope: '#/properties/active' },
+      { type: 'Control', scope: '#/properties/source' },
+      {
+        type: 'Control',
+        scope: '#/properties/dest',
+        rule: {
+          effect: 'POPULATE',
+          condition: {
+            type: 'LEAF',
+            scope: '#/properties/active',
+            expectedValue: true,
+          },
+          options: {
+            populate: {
+              from: '#/properties/source',
+              overwrite: false,
+            },
+          },
+        },
+      },
+    ],
+  };
+
+  const initialState = coreReducer(
+    undefined,
+    init({ active: true, source: 'x', dest: 'x' }, schema, uischema)
+  );
+
+  const updatedState = coreReducer(
+    initialState,
+    updateCore({ ...initialState.data, active: false }, schema, uischema)
+  );
+
+  t.is(updatedState.data.dest, 'x');
+});
+
 test('core reducer - POPULATE with overwrite=false does not clear destination when source becomes empty', (t) => {
   const schema = {
     type: 'object',
