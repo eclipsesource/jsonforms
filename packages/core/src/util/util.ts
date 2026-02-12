@@ -24,7 +24,6 @@
 */
 
 import isEmpty from 'lodash/isEmpty';
-import isArray from 'lodash/isArray';
 import includes from 'lodash/includes';
 import find from 'lodash/find';
 import { resolveData, resolveSchema } from './resolvers';
@@ -100,7 +99,7 @@ export const deriveTypes = (jsonSchema: JsonSchema): string[] => {
   if (!isEmpty(jsonSchema.type) && typeof jsonSchema.type === 'string') {
     return [jsonSchema.type];
   }
-  if (isArray(jsonSchema.type)) {
+  if (Array.isArray(jsonSchema.type)) {
     return jsonSchema.type;
   }
   if (

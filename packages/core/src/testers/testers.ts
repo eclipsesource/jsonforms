@@ -27,7 +27,6 @@ import isEmpty from 'lodash/isEmpty';
 import get from 'lodash/get';
 import endsWith from 'lodash/endsWith';
 import last from 'lodash/last';
-import isArray from 'lodash/isArray';
 import reduce from 'lodash/reduce';
 import toPairs from 'lodash/toPairs';
 import includes from 'lodash/includes';
@@ -483,7 +482,7 @@ const traverse = (
   pred: (obj: JsonSchema) => boolean,
   rootSchema: JsonSchema
 ): boolean => {
-  if (isArray(any)) {
+  if (Array.isArray(any)) {
     return reduce(
       any,
       (acc, el) => acc || traverse(el, pred, rootSchema),
