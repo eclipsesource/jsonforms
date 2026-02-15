@@ -24,7 +24,7 @@ const appStore = useAppStore();
       <v-container fill-height fluid justify-end
         ><v-row dense>
           <v-col>
-            <v-tooltip bottom>
+            <v-tooltip location="bottom">
               <template v-slot:activator="{ props }">
                 <v-btn
                   icon
@@ -42,7 +42,7 @@ const appStore = useAppStore();
           </v-col>
           <v-col><theme-changer /> </v-col>
           <v-col>
-            <v-tooltip bottom>
+            <v-tooltip location="bottom">
               <template v-slot:activator="{ props }">
                 <v-btn
                   large

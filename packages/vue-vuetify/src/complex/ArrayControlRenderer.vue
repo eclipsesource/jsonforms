@@ -22,7 +22,7 @@
           v-if="control.childErrors.length > 0"
           :errors="control.childErrors"
         />
-        <v-tooltip bottom>
+        <v-tooltip location="bottom">
           <template v-slot:activator="{ props }">
             <v-btn
               icon
@@ -112,7 +112,7 @@
                       : 'fixed-cell-small'
                   "
                 >
-                  <v-tooltip bottom>
+                  <v-tooltip location="bottom">
                     <template v-slot:activator="{ props }">
                       <v-btn
                         v-bind="props"
@@ -135,7 +135,7 @@
                     </template>
                     {{ control.translations.up }}
                   </v-tooltip>
-                  <v-tooltip bottom>
+                  <v-tooltip location="bottom">
                     <template v-slot:activator="{ props }">
                       <v-btn
                         v-bind="props"
@@ -160,7 +160,7 @@
                     </template>
                     {{ control.translations.down }}
                   </v-tooltip>
-                  <v-tooltip bottom>
+                  <v-tooltip location="bottom">
                     <template v-slot:activator="{ props }">
                       <v-btn
                         v-bind="props"
