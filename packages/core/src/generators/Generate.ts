@@ -23,14 +23,17 @@
   THE SOFTWARE.
 */
 
-import { ControlElement, JsonSchema, UISchemaElement } from '../models';
+import {
+  ControlElement,
+  JsonSchema,
+  JsonSchema4,
+  UISchemaElement,
+} from '../models';
 import { generateJsonSchema } from './schema';
 import { createControlElement, generateDefaultUISchema } from './uischema';
 
 export const Generate: {
-  // TODO fix @typescript-eslint/ban-types
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  jsonSchema(instance: Object, options?: any): JsonSchema;
+  jsonSchema(instance: object, options?: any): JsonSchema4;
   uiSchema(
     jsonSchema: JsonSchema,
     layoutType?: string,

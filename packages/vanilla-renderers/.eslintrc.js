@@ -38,5 +38,6 @@ module.exports = {
         ignore: ['^ava$'],
       },
     ],
+    'react/prop-types': 'off',
   },
 };

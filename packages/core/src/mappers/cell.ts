@@ -186,7 +186,7 @@ export const mapStateToDispatchCellProps = (
   };
 };
 
-export interface DispatchCellProps extends DispatchCellStateProps {}
+export type DispatchCellProps = DispatchCellStateProps;
 
 /**
  * Default mapStateToCellProps for enum cell. Options is used for populating dropdown list

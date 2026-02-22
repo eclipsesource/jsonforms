@@ -506,8 +506,9 @@ describe('Material text cell', () => {
       .getDOMNode() as HTMLInputElement;
     expect(input.maxLength).toBe(DEFAULT_MAX_LENGTH);
 
-    expect(input.parentElement.classList.contains('MuiInputBase-fullWidth'))
-      .toBeTruthy;
+    expect(
+      input.parentElement.classList.contains('MuiInputBase-fullWidth')
+    ).toBeTruthy();
     expect(input.size).toBe(DEFAULT_SIZE);
   });
 
@@ -531,8 +532,9 @@ describe('Material text cell', () => {
       .first()
       .getDOMNode() as HTMLInputElement;
     expect(input.maxLength).toBe(DEFAULT_MAX_LENGTH);
-    expect(input.parentElement.classList.contains('MuiInputBase-fullWidth'))
-      .toBeTruthy;
+    expect(
+      input.parentElement.classList.contains('MuiInputBase-fullWidth')
+    ).toBeTruthy();
     expect(input.size).toBe(DEFAULT_SIZE);
   });
 
@@ -556,8 +558,9 @@ describe('Material text cell', () => {
       .first()
       .getDOMNode() as HTMLInputElement;
     expect(input.maxLength).toBe(DEFAULT_MAX_LENGTH);
-    expect(input.parentElement.classList.contains('MuiInputBase-fullWidth'))
-      .toBeTruthy;
+    expect(
+      input.parentElement.classList.contains('MuiInputBase-fullWidth')
+    ).toBeTruthy();
     expect(input.size).toBe(DEFAULT_SIZE);
   });
 
@@ -575,8 +578,9 @@ describe('Material text cell', () => {
       .first()
       .getDOMNode() as HTMLInputElement;
     expect(input.maxLength).toBe(DEFAULT_MAX_LENGTH);
-    expect(input.parentElement.classList.contains('MuiInputBase-fullWidth'))
-      .toBeTruthy;
+    expect(
+      input.parentElement.classList.contains('MuiInputBase-fullWidth')
+    ).toBeTruthy();
     expect(input.size).toBe(DEFAULT_SIZE);
   });
 

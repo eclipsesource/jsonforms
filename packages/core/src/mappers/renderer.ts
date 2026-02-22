@@ -866,7 +866,7 @@ export interface StatePropsOfScopedRenderer extends StatePropsOfRenderer {
 /**
  * Props of a {@link Renderer}.
  */
-export interface RendererProps extends StatePropsOfRenderer {}
+export type RendererProps = StatePropsOfRenderer;
 
 /**
  * State-based props of a Control
@@ -925,7 +925,7 @@ export interface StatePropsOfLayout extends StatePropsOfRenderer {
   label?: string;
 }
 
-export interface LayoutProps extends StatePropsOfLayout {}
+export type LayoutProps = StatePropsOfLayout;
 
 /**
  * The state of a control.
@@ -1051,7 +1051,7 @@ export const mapDispatchToControlProps = (
   dispatch: Dispatch<AnyAction>
 ): DispatchPropsOfControl => ({
   handleChange(path, value) {
-    dispatch && dispatch(update(path, () => value));
+    dispatch(update(path, () => value));
   },
 });
 
@@ -1468,7 +1468,7 @@ export const mapStateToLayoutProps = (
 
 export type RefResolver = (schema: JsonSchema) => Promise<JsonSchema>;
 
-export interface OwnPropsOfJsonFormsRenderer extends OwnPropsOfRenderer {}
+export type OwnPropsOfJsonFormsRenderer = OwnPropsOfRenderer;
 
 export interface StatePropsOfJsonFormsRenderer
   extends OwnPropsOfJsonFormsRenderer {
@@ -1476,7 +1476,7 @@ export interface StatePropsOfJsonFormsRenderer
   config: any;
 }
 
-export interface JsonFormsProps extends StatePropsOfJsonFormsRenderer {}
+export type JsonFormsProps = StatePropsOfJsonFormsRenderer;
 
 export const mapStateToJsonFormsRendererProps = (
   state: JsonFormsState,
@@ -1547,7 +1547,7 @@ export const mapStateToCombinatorRendererProps = (
         indexOfFittingSchema = i;
         break;
       }
-    } catch (error) {
+    } catch (_error) {
       console.debug(
         "Combinator subschema is not self contained, can't hand it over to AJV"
       );
@@ -1658,7 +1658,7 @@ export interface ArrayLayoutProps
 export interface StatePropsOfLabel extends StatePropsOfRenderer {
   text?: string;
 }
-export interface LabelProps extends StatePropsOfLabel {}
+export type LabelProps = StatePropsOfLabel;
 
 export const mapStateToLabelProps = (
   state: JsonFormsState,

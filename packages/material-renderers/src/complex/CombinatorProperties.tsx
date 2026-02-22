@@ -41,9 +41,7 @@ interface CombinatorPropertiesProps {
 
 export class CombinatorProperties extends React.Component<
   CombinatorPropertiesProps,
-  // TODO fix @typescript-eslint/ban-types
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  {}
+  object
 > {
   render() {
     const { schema, combinatorKeyword, path, rootSchema } = this.props;

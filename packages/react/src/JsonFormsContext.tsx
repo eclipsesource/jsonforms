@@ -880,9 +880,7 @@ export interface TranslateProps {
   locale: string;
 }
 
-// TODO fix @typescript-eslint/ban-types
-// eslint-disable-next-line @typescript-eslint/ban-types
-export const withTranslateProps = <P extends {}>(
+export const withTranslateProps = <P extends object>(
   Component: ComponentType<TranslateProps & P>
 ) =>
   function WithTranslateProps(props: P) {

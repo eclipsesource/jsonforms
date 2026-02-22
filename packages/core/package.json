@@ -73,8 +73,8 @@
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
     "@types/redux-mock-store": "^1.0.1",
-    "@typescript-eslint/eslint-plugin": "^5.54.1",
-    "@typescript-eslint/parser": "^5.54.1",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
     "ava": "^6.1.2",
     "document-register-element": "^1.14.3",
     "eslint": "^8.56.0",

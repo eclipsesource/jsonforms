@@ -19,6 +19,7 @@ module.exports = {
     'plugin:prettier/recommended',
   ],
   rules: {
+    'react/prop-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     // Base rule must be disabled to avoid incorrect errors
     'no-unused-vars': 'off',

@@ -33,7 +33,7 @@ import { JsonFormsI18nState } from './i18nTypes';
 /**
  * JSONForms store.
  */
-export interface JsonFormsStore extends Store<JsonFormsState> {}
+export type JsonFormsStore = Store<JsonFormsState>;
 
 /**
  * The state shape of JSONForms.

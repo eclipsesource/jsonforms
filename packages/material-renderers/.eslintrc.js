@@ -31,6 +31,7 @@ module.exports = {
         caughtErrorsIgnorePattern: '^_',
       },
     ],
+    'react/prop-types': 'off',
   },
   settings: {
     react: {

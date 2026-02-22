@@ -286,7 +286,7 @@ const computePopulateValue = (
     const match = (base as any[]).find((el) => {
       try {
         return ajv.validate(where.schema, el) as boolean;
-      } catch (e) {
+      } catch (_error) {
         // Invalid schema or validation error -> no match
         return false;
       }
