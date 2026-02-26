@@ -130,9 +130,9 @@ export class AutocompleteControlRenderer
 
   override onChange(ev: any) {
     const eventValue = this.getEventValue(ev);
-    const option = Array.from(this.valuesToTranslatedOptions?.values() ?? []).find(
-      (option) => option.label === eventValue
-    );
+    const option = Array.from(
+      this.valuesToTranslatedOptions?.values() ?? []
+    ).find((option) => option.label === eventValue);
     if (!option) {
       super.onChange(ev);
       return;
