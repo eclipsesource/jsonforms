@@ -31,6 +31,7 @@ export const schema = {
     address: {
       type: 'object',
       properties: {
+        mytype: { const: 'address', default: 'address' },
         street_address: { type: 'string' },
         city: { type: 'string' },
         state: { type: 'string' },
@@ -40,6 +41,7 @@ export const schema = {
     user: {
       type: 'object',
       properties: {
+        mytype: { const: 'user', default: 'user' },
         name: { type: 'string' },
         mail: { type: 'string' },
       },
@@ -63,6 +65,7 @@ export const schema = {
         { $ref: '#/definitions/address' },
         { $ref: '#/definitions/user' },
       ],
+      'x-jsf-type-property': 'mytype',
     },
     addressesOrUsers: {
       anyOf: [
@@ -104,9 +107,9 @@ export const uischema = {
 
 const data = {
   addressOrUser: {
-    street_address: '1600 Pennsylvania Avenue NW',
-    city: 'Washington',
-    state: 'DC',
+    mytype: 'user',
+    name: 'Peter',
+    email: 'peter@example.org',
   },
 };
 
