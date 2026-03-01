@@ -1264,6 +1264,33 @@ test('isInherentlyReadonly readonly by uischema option', (t) => {
   );
 });
 
+test('isInherentlyReadonly prefer readonly over readOnly', (t) => {
+  t.false(
+    isInherentlyReadonly(
+      null as any,
+      null,
+      {
+        options: { readonly: false, readOnly: true },
+      } as unknown as ControlElement,
+      undefined,
+      null,
+      null
+    )
+  );
+  t.true(
+    isInherentlyReadonly(
+      null as any,
+      null,
+      {
+        options: { readonly: true, readOnly: false },
+      } as unknown as ControlElement,
+      undefined,
+      null,
+      null
+    )
+  );
+});
+
 test('isInherentlyReadonly readonly by schema', (t) => {
   t.true(
     isInherentlyReadonly(
