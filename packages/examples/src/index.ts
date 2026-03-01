@@ -67,6 +67,7 @@ import * as onChange from './examples/onChange';
 import * as enumExample from './examples/enum';
 import * as radioGroupExample from './examples/radioGroup';
 import * as multiEnum from './examples/enum-multi';
+import * as enumI18n from './examples/enumI18n';
 import * as enumInArray from './examples/enumInArray';
 import * as readonly from './examples/readonly';
 import * as listWithDetailPrimitives from './examples/list-with-detail-primitives';
@@ -134,6 +135,7 @@ export {
   radioGroupExample,
   multiEnum,
   multiEnumWithLabelAndDesc,
+  enumI18n,
   enumInArray,
   readonly,
   listWithDetailPrimitives,
