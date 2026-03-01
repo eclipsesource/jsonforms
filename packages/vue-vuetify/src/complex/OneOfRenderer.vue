@@ -20,7 +20,7 @@
       :persistent-hint="persistentHint()"
       :required="control.required"
       :error-messages="control.errors"
-      :clearable="control.enabled && !control.readonly"
+      :clearable="clearable"
       :items="oneOfRenderInfos"
       @update:model-value="handleSelectChange"
       :item-title="
@@ -104,6 +104,7 @@ import {
 } from 'vuetify/components';
 import { DisabledIconFocus } from '../controls/directives';
 import {
+  isControlEditable,
   useCombinatorTranslations,
   useTranslator,
   useVuetifyControl,

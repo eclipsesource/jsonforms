@@ -95,6 +95,11 @@ export const useComputedLabel = <
   });
 };
 
+export const isControlEditable = (control: {
+  enabled: boolean;
+  readonly: boolean;
+}) => control.enabled && !control.readonly;
+
 /**
  * Adds styles, appliedOptions and vuetifyProps
  */
@@ -266,7 +271,7 @@ export const useVuetifyControl = <
   const clearable = computed(() => {
     return appliedOptions.value.clearable !== undefined
       ? appliedOptions.value.clearable
-      : input.control.value.enabled && !input.control.value.readonly;
+      : isControlEditable(input.control.value);
   });
 
   return {

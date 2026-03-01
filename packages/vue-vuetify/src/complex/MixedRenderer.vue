@@ -17,7 +17,7 @@
                     :required="control.required"
                     :error-messages="control.errors"
                     :items="mixedRenderInfos"
-                    :clearable="control.enabled && !control.readonly"
+                    :clearable="isControlEditable(control)"
                     @update:model-value="handleSelectChange"
                     :item-title="
                       (item: SchemaRenderInfo) => t(item.label, item.label)
@@ -66,7 +66,7 @@
         :required="control.required"
         :error-messages="control.errors"
         :items="mixedRenderInfos"
-        :clearable="control.enabled && !control.readonly"
+        :clearable="isControlEditable(control)"
         @update:model-value="handleSelectChange"
         :item-title="(item: SchemaRenderInfo) => t(item.label, item.label)"
         item-value="index"
@@ -124,6 +124,7 @@ import {
 import { DisabledIconFocus } from '../controls';
 import {
   IsDynamicPropertyContext,
+  isControlEditable,
   useCombinatorTranslations,
   useIcons,
   useJsonForms,
@@ -459,6 +460,7 @@ const controlRenderer = defineComponent({
 
     return {
       ...useCombinatorTranslations(useVuetifyControl(input)),
+      isControlEditable,
       nullable,
       mixedRenderInfos,
       selectedIndex,

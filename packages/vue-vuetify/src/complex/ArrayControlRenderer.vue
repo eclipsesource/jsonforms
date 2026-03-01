@@ -66,7 +66,7 @@
                   {{ title(prop) }}
                 </th>
                 <th
-                  v-if="control.enabled && !control.readonly"
+                  v-if="isControlEditable(control)"
                   :class="
                     appliedOptions.showSortButtons
                       ? 'fixed-cell'
@@ -105,7 +105,7 @@
                   />
                 </td>
                 <td
-                  v-if="control.enabled && !control.readonly"
+                  v-if="isControlEditable(control)"
                   :class="
                     appliedOptions.showSortButtons
                       ? 'fixed-cell'
@@ -122,9 +122,7 @@
                         elevation="0"
                         small
                         :aria-label="control.translations.upAriaLabel"
-                        :disabled="
-                          index <= 0 || !control.enabled || control.readonly
-                        "
+                        :disabled="index <= 0 || !isControlEditable(control)"
                         :class="styles.arrayList.itemMoveUp"
                         @click="moveUpClick($event, index)"
                       >
@@ -229,7 +227,7 @@ import {
   VTooltip,
 } from 'vuetify/components';
 import { ValidationIcon } from '../controls/components/index';
-import { useIcons, useVuetifyArrayControl } from '../util';
+import { isControlEditable, useIcons, useVuetifyArrayControl } from '../util';
 
 const controlRenderer = defineComponent({
   name: 'array-control-renderer',
@@ -258,6 +256,7 @@ const controlRenderer = defineComponent({
 
     return {
       ...useVuetifyArrayControl(input),
+      isControlEditable,
       icons,
     };
   },

@@ -36,7 +36,7 @@
           min-width="290px"
           v-bind="vuetifyProps('v-menu')"
           activator="parent"
-          :disabled="!control.enabled || control.readonly"
+          :disabled="!isControlEditable(control)"
         >
           <template v-slot:activator="{ props }">
             <v-icon v-bind="props" tabindex="-1">{{ pickerIcon }}</v-icon>
@@ -107,6 +107,7 @@ import {
   convertDayjsToMaskaFormat,
   determineClearValue,
   expandLocaleFormat,
+  isControlEditable,
   parseDateTime,
   useTranslator,
   useVuetifyControl,
@@ -262,6 +263,7 @@ const controlRenderer = defineComponent({
       t,
       adaptValue,
       dateFormat,
+      isControlEditable,
       options,
       useMask,
     };

@@ -120,7 +120,7 @@
                             class="v-expansion-panel-title__icon"
                             :aria-label="control.translations.upAriaLabel"
                             :disabled="
-                              index <= 0 || !control.enabled || control.readonly
+                              index <= 0 || !isControlEditable(control)
                             "
                             :class="styles.arrayList.itemMoveUp"
                             @click="moveUpClick($event, index)"
@@ -311,7 +311,12 @@ import {
   VTooltip,
 } from 'vuetify/components';
 import { ValidationBadge, ValidationIcon } from '../controls/components/index';
-import { useIcons, useNested, useVuetifyArrayControl } from '../util';
+import {
+  isControlEditable,
+  useIcons,
+  useNested,
+  useVuetifyArrayControl,
+} from '../util';
 
 const controlRenderer = defineComponent({
   name: 'array-layout-renderer',
@@ -364,14 +369,14 @@ const controlRenderer = defineComponent({
       currentlyExpanded,
       expansionPanelsProps,
       suggestToDelete,
+      isControlEditable,
       icons,
     };
   },
   computed: {
     addDisabled(): boolean {
       return (
-        !this.control.enabled ||
-        this.control.readonly ||
+        !this.isControlEditable(this.control) ||
         (this.appliedOptions.restrict &&
           this.control.arraySchema !== undefined &&
           this.control.arraySchema.maxItems !== undefined &&

@@ -104,9 +104,7 @@
                         small
                         class="ma-0"
                         :aria-label="control.translations.upAriaLabel"
-                        :disabled="
-                          index <= 0 || !control.enabled || control.readonly
-                        "
+                        :disabled="index <= 0 || !isControlEditable(control)"
                         :class="styles.listWithDetail.itemMoveUp"
                         @click="moveUpClick($event, index)"
                       >
@@ -230,7 +228,7 @@ import {
   VVirtualScroll,
 } from 'vuetify/components';
 import { ValidationBadge, ValidationIcon } from '../controls/components/index';
-import { useIcons, useVuetifyArrayControl } from '../util';
+import { isControlEditable, useIcons, useVuetifyArrayControl } from '../util';
 
 const controlRenderer = defineComponent({
   name: 'list-with-detail-renderer',
@@ -279,6 +277,7 @@ const controlRenderer = defineComponent({
 
     return {
       ...input,
+      isControlEditable,
       selectedIndex,
       icons,
     };
@@ -295,6 +294,7 @@ const controlRenderer = defineComponent({
         this.control.path,
         undefined,
         this.control.uischema,
+        this.control.rootSchema,
       );
     },
   },
