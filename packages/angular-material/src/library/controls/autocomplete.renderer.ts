@@ -110,7 +110,7 @@ export class AutocompleteControlRenderer
   extends JsonFormsControl
   implements OnInit
 {
-  @Input() options?: EnumOption[] | string[];
+  @Input() options?: string[];
   valuesToTranslatedOptions?: Map<string, EnumOption>;
   filteredOptions: Observable<EnumOption[]>;
   shouldFilter: boolean;
@@ -209,28 +209,13 @@ export class AutocompleteControlRenderer
   protected getOwnProps(): OwnPropsOfControl & OwnPropsOfEnum {
     return {
       ...super.getOwnProps(),
-      options: this.stringOptionsToEnumOptions(this.options),
+      options: this.options?.map((str) => {
+        return {
+          label: str,
+          value: str,
+        } satisfies EnumOption;
+      }),
     };
-  }
-
-  /**
-   * For {@link options} input backwards compatibility
-   */
-  protected stringOptionsToEnumOptions(
-    options: typeof this.options
-  ): EnumOption[] | undefined {
-    if (!options) {
-      return undefined;
-    }
-
-    return options.every((item) => typeof item === 'string')
-      ? options.map((str) => {
-          return {
-            label: str,
-            value: str,
-          } satisfies EnumOption;
-        })
-      : options;
   }
 }
 
