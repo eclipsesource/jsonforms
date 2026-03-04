@@ -25,7 +25,7 @@
     "@babel/plugin-proposal-optional-chaining": "^7.16.5",
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
     "@types/lodash": "^4.14.149",
-    "ajv": "^8.6.1",
+    "ajv": "^8.18.0",
     "ajv-formats": "^2.1.0",
     "babel-loader": "^8.0.6",
     "core-js": "^3.9.1",
