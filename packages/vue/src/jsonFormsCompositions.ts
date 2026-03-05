@@ -525,6 +525,7 @@ export const useJsonFormsCategorization = (props: LayoutProps) => {
  */
 export function useJsonForms(): JsonFormsSubStates;
 export function useJsonForms(optional: true): JsonFormsSubStates | undefined;
+export function useJsonForms(optional?: true): JsonFormsSubStates | undefined;
 export function useJsonForms(optional?: true) {
   const jsonforms = inject<JsonFormsSubStates>('jsonforms');
 
@@ -544,6 +545,7 @@ export function useJsonForms(optional?: true) {
  */
 export function useDispatch(): Dispatch<CoreActions>;
 export function useDispatch(optional: true): Dispatch<CoreActions> | undefined;
+export function useDispatch(optional?: true): Dispatch<CoreActions> | undefined;
 export function useDispatch(optional?: true) {
   const dispatch = inject<Dispatch<CoreActions>>('dispatch');
 
@@ -565,7 +567,7 @@ export function useTranslator(
   optional: true
 ): ComputedRef<Translator> | undefined;
 export function useTranslator(optional?: true) {
-  const jsonforms = optional ? useJsonForms(true) : useJsonForms();
+  const jsonforms = useJsonForms(optional);
 
   if (!optional && (!jsonforms?.i18n || !jsonforms.i18n.translate)) {
     throw new Error(
@@ -587,7 +589,7 @@ export function useTranslator(optional?: true) {
 export function useAjv(): Ajv;
 export function useAjv(optional: true): Ajv | undefined;
 export function useAjv(optional?: true) {
-  const jsonforms = optional ? useJsonForms(true) : useJsonForms();
+  const jsonforms = useJsonForms(optional);
 
   if (!optional && (!jsonforms?.core || !jsonforms.core.ajv)) {
     throw new Error(
