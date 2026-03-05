@@ -64,7 +64,7 @@
   "peerDependencies": {
     "@jsonforms/core": "3.7.0",
     "@jsonforms/vue": "3.7.0",
-    "ajv": "^8.6.1",
+    "ajv": "^8.18.0",
     "dayjs": "^1.10.6",
     "lodash": "^4.17.21",
     "maska": "^2.1.11",
@@ -89,7 +89,7 @@
     "@vue/eslint-config-typescript": "^13.0.0",
     "@vue/test-utils": "^2.4.5",
     "@vue/tsconfig": "^0.5.1",
-    "ajv": "^8.6.1",
+    "ajv": "^8.18.0",
     "ajv-keywords": "^5.1.0",
     "core-js": "^3.9.1",
     "cross-env": "^10.1.0",
