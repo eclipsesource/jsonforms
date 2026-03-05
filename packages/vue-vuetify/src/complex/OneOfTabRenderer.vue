@@ -10,7 +10,7 @@
     <v-tabs
       v-model="selectIndex"
       @update:model-value="handleTabChange"
-      :disabled="!control.enabled"
+      :disabled="!isControlEditable(control)"
     >
       <v-tab
         v-for="(oneOfRenderInfo, oneOfIndex) in oneOfRenderInfos"
@@ -33,6 +33,7 @@
           :renderers="control.renderers"
           :cells="control.cells"
           :enabled="control.enabled"
+          :readonly="control.readonly"
         />
       </v-window-item>
     </v-window>
@@ -90,7 +91,11 @@ import {
   VWindow,
   VWindowItem,
 } from 'vuetify/components';
-import { useCombinatorTranslations, useVuetifyControl } from '../util';
+import {
+  isControlEditable,
+  useCombinatorTranslations,
+  useVuetifyControl,
+} from '../util';
 import { CombinatorProperties } from './components';
 
 const controlRenderer = defineComponent({
@@ -124,6 +129,7 @@ const controlRenderer = defineComponent({
 
     return {
       ...useCombinatorTranslations(useVuetifyControl(input)),
+      isControlEditable,
       selectedIndex,
       selectIndex,
       dialog,

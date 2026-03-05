@@ -27,7 +27,10 @@ import {
   AndCondition,
   ControlElement,
   createAjv,
+  hasReadonlyRule,
   isInherentlyEnabled,
+  isInherentlyReadonly,
+  isReadonly,
   JsonFormsCore,
   LeafCondition,
   OrCondition,
@@ -36,7 +39,11 @@ import {
   ValidateFunctionCondition,
   ValidateFunctionContext,
 } from '../../src';
-import { evalEnablement, evalVisibility } from '../../src/util/runtime';
+import {
+  evalEnablement,
+  evalReadonly,
+  evalVisibility,
+} from '../../src/util/runtime';
 
 test('evalVisibility show valid case', (t) => {
   const leafCondition: LeafCondition = {
@@ -775,6 +782,150 @@ test('evalEnablement fail on failWhenUndefined', (t) => {
   );
 });
 
+test('evalReadonly readonly valid case', (t) => {
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/value',
+    rule: {
+      effect: RuleEffect.READONLY,
+      condition: {
+        type: 'LEAF',
+        scope: '#/properties/ruleValue',
+        expectedValue: 'bar',
+      },
+    },
+  };
+
+  t.true(
+    evalReadonly(
+      uischema,
+      { value: 'foo', ruleValue: 'bar' },
+      undefined,
+      createAjv(),
+      undefined
+    )
+  );
+});
+
+test('evalReadonly writable valid and invalid cases', (t) => {
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/value',
+    rule: {
+      effect: RuleEffect.WRITABLE,
+      condition: {
+        type: 'LEAF',
+        scope: '#/properties/ruleValue',
+        expectedValue: 'bar',
+      },
+    },
+  };
+
+  t.false(
+    evalReadonly(
+      uischema,
+      { value: 'foo', ruleValue: 'bar' },
+      undefined,
+      createAjv(),
+      undefined
+    )
+  );
+  t.true(
+    evalReadonly(
+      uischema,
+      { value: 'foo', ruleValue: 'baz' },
+      undefined,
+      createAjv(),
+      undefined
+    )
+  );
+});
+
+test('hasReadonlyRule detects readonly and writable rules', (t) => {
+  t.true(
+    hasReadonlyRule({
+      type: 'Control',
+      scope: '#/properties/value',
+      rule: {
+        effect: RuleEffect.READONLY,
+        condition: {
+          type: 'LEAF',
+          scope: '#/properties/ruleValue',
+          expectedValue: 'bar',
+        },
+      },
+    })
+  );
+  t.true(
+    hasReadonlyRule({
+      type: 'Control',
+      scope: '#/properties/value',
+      rule: {
+        effect: RuleEffect.WRITABLE,
+        condition: {
+          type: 'LEAF',
+          scope: '#/properties/ruleValue',
+          expectedValue: 'bar',
+        },
+      },
+    })
+  );
+  t.false(
+    hasReadonlyRule({
+      type: 'Control',
+      scope: '#/properties/value',
+      rule: {
+        effect: RuleEffect.ENABLE,
+        condition: {
+          type: 'LEAF',
+          scope: '#/properties/ruleValue',
+          expectedValue: 'bar',
+        },
+      },
+    })
+  );
+});
+
+test('isReadonly defaults to false without rule', (t) => {
+  t.false(
+    isReadonly(
+      {
+        type: 'Control',
+        scope: '#/properties/value',
+      },
+      {},
+      undefined,
+      createAjv(),
+      undefined
+    )
+  );
+});
+
+test('isReadonly evaluates readonly rules', (t) => {
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/value',
+    rule: {
+      effect: RuleEffect.READONLY,
+      condition: {
+        type: 'LEAF',
+        scope: '#/properties/ruleValue',
+        expectedValue: 'bar',
+      },
+    },
+  };
+
+  t.true(
+    isReadonly(
+      uischema,
+      { value: 'foo', ruleValue: 'bar' },
+      undefined,
+      createAjv(),
+      undefined
+    )
+  );
+});
+
 test('isInherentlyEnabled disabled globally', (t) => {
   t.false(
     isInherentlyEnabled(
@@ -784,6 +935,19 @@ test('isInherentlyEnabled disabled globally', (t) => {
       undefined,
       null,
       null
+    )
+  );
+});
+
+test('isInherentlyEnabled ignores global readonly when separated', (t) => {
+  t.true(
+    isInherentlyEnabled(
+      { jsonforms: { readonly: true } },
+      null,
+      null as any,
+      undefined,
+      null,
+      { separateReadonlyFromDisabled: true }
     )
   );
 });
@@ -823,6 +987,19 @@ test('isInherentlyEnabled disabled by uischema', (t) => {
       undefined,
       null,
       null
+    )
+  );
+});
+
+test('isInherentlyEnabled ignores readonly uischema when separated', (t) => {
+  t.true(
+    isInherentlyEnabled(
+      null as any,
+      null,
+      { options: { readonly: true } } as unknown as ControlElement,
+      undefined,
+      null,
+      { separateReadonlyFromDisabled: true }
     )
   );
 });
@@ -888,6 +1065,19 @@ test('isInherentlyEnabled disabled by schema', (t) => {
       { readOnly: true },
       null,
       null
+    )
+  );
+});
+
+test('isInherentlyEnabled ignores readonly schema when separated', (t) => {
+  t.true(
+    isInherentlyEnabled(
+      null as any,
+      null,
+      null as any,
+      { readOnly: true },
+      null,
+      { separateReadonlyFromDisabled: true }
     )
   );
 });
@@ -978,6 +1168,15 @@ test('isInherentlyEnabled disabled by config', (t) => {
   );
 });
 
+test('isInherentlyEnabled ignores readonly config when separated', (t) => {
+  t.true(
+    isInherentlyEnabled(null as any, null, null as any, undefined, null, {
+      readonly: true,
+      separateReadonlyFromDisabled: true,
+    })
+  );
+});
+
 test('isInherentlyEnabled enabled by config over ownProps', (t) => {
   t.true(
     isInherentlyEnabled(
@@ -1036,5 +1235,137 @@ test('isInherentlyEnabled prefer readonly over readOnly', (t) => {
 test('isInherentlyEnabled enabled', (t) => {
   t.true(
     isInherentlyEnabled(null as any, null, null as any, undefined, null, null)
+  );
+});
+
+test('isInherentlyReadonly readonly globally', (t) => {
+  t.true(
+    isInherentlyReadonly(
+      { jsonforms: { readonly: true } },
+      null,
+      null as any,
+      undefined,
+      null,
+      null
+    )
+  );
+});
+
+test('isInherentlyReadonly readonly by uischema option', (t) => {
+  t.true(
+    isInherentlyReadonly(
+      null as any,
+      { readonly: false },
+      { options: { readonly: true } } as unknown as ControlElement,
+      undefined,
+      null,
+      null
+    )
+  );
+});
+
+test('isInherentlyReadonly prefer readonly over readOnly', (t) => {
+  t.false(
+    isInherentlyReadonly(
+      null as any,
+      null,
+      {
+        options: { readonly: false, readOnly: true },
+      } as unknown as ControlElement,
+      undefined,
+      null,
+      null
+    )
+  );
+  t.true(
+    isInherentlyReadonly(
+      null as any,
+      null,
+      {
+        options: { readonly: true, readOnly: false },
+      } as unknown as ControlElement,
+      undefined,
+      null,
+      null
+    )
+  );
+});
+
+test('isInherentlyReadonly readonly by schema', (t) => {
+  t.true(
+    isInherentlyReadonly(
+      null as any,
+      null,
+      null as any,
+      { readOnly: true },
+      null,
+      null
+    )
+  );
+});
+
+test('isInherentlyReadonly readonly by ownProps', (t) => {
+  t.true(
+    isInherentlyReadonly(
+      null as any,
+      { readonly: true },
+      null as any,
+      undefined,
+      null,
+      null
+    )
+  );
+});
+
+test('isInherentlyReadonly evaluates readonly and writable rules', (t) => {
+  const readonlyRule: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/value',
+    rule: {
+      effect: RuleEffect.READONLY,
+      condition: {
+        type: 'LEAF',
+        scope: '#/properties/ruleValue',
+        expectedValue: 'bar',
+      },
+    },
+  };
+  const writableRule: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/value',
+    rule: {
+      effect: RuleEffect.WRITABLE,
+      condition: {
+        type: 'LEAF',
+        scope: '#/properties/ruleValue',
+        expectedValue: 'bar',
+      },
+    },
+  };
+  const state = {
+    jsonforms: {
+      core: { ajv: createAjv() } as JsonFormsCore,
+    },
+  };
+  const data = {
+    value: 'foo',
+    ruleValue: 'bar',
+  };
+
+  t.true(
+    isInherentlyReadonly(state, null, readonlyRule, undefined, data, null)
+  );
+  t.false(
+    isInherentlyReadonly(state, null, writableRule, undefined, data, null)
+  );
+  t.true(
+    isInherentlyReadonly(
+      state,
+      null,
+      writableRule,
+      undefined,
+      { ...data, ruleValue: 'baz' },
+      null
+    )
   );
 });
