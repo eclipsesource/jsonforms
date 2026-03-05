@@ -27,8 +27,7 @@
                 :class="styles.listWithDetail.addButton"
                 @click="addButtonClick"
                 :disabled="
-                  !control.enabled ||
-                  control.readonly ||
+                  !isControlEditable(control) ||
                   (appliedOptions.restrict &&
                     control.arraySchema !== undefined &&
                     control.arraySchema.maxItems !== undefined &&
@@ -127,8 +126,7 @@
                         :aria-label="control.translations.downAriaLabel"
                         :disabled="
                           index >= dataLength - 1 ||
-                          !control.enabled ||
-                          control.readonly
+                          !isControlEditable(control)
                         "
                         :class="styles.listWithDetail.itemMoveDown"
                         @click="moveDownClick($event, index)"
@@ -153,8 +151,7 @@
                         :class="styles.listWithDetail.itemDelete"
                         @click="removeItemsClick($event, [index])"
                         :disabled="
-                          !control.enabled ||
-                          control.readonly ||
+                          !isControlEditable(control) ||
                           (appliedOptions.restrict &&
                             control.arraySchema !== undefined &&
                             control.arraySchema.minItems !== undefined &&

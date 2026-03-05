@@ -104,7 +104,6 @@ import {
 } from 'vuetify/components';
 import { DisabledIconFocus } from '../controls/directives';
 import {
-  isControlEditable,
   useCombinatorTranslations,
   useTranslator,
   useVuetifyControl,

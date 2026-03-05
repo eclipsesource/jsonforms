@@ -33,8 +33,7 @@
               v-bind="props"
               :class="styles.arrayList.addButton"
               :disabled="
-                !control.enabled ||
-                control.readonly ||
+                !isControlEditable(control) ||
                 (appliedOptions.restrict &&
                   control.arraySchema !== undefined &&
                   control.arraySchema.maxItems !== undefined &&
@@ -145,8 +144,7 @@
                         :aria-label="control.translations.downAriaLabel"
                         :disabled="
                           index >= dataLength - 1 ||
-                          !control.enabled ||
-                          control.readonly
+                          !isControlEditable(control)
                         "
                         :class="styles.arrayList.itemMoveDown"
                         @click="moveDownClick($event, index)"
@@ -169,8 +167,7 @@
                         :aria-label="control.translations.removeAriaLabel"
                         :class="styles.arrayList.itemDelete"
                         :disabled="
-                          !control.enabled ||
-                          control.readonly ||
+                          !isControlEditable(control) ||
                           (appliedOptions.restrict &&
                             control.arraySchema !== undefined &&
                             control.arraySchema.minItems !== undefined &&
