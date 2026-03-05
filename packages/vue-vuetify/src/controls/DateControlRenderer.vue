@@ -168,16 +168,18 @@ const controlRenderer = defineComponent({
     const state = computed(() => convertDayjsToMaskaFormat(dateFormat.value));
     const locale = useLocale();
 
-    const options = useMask.value
-      ? computed<MaskOptions>(() => ({
-          mask: state.value.mask,
-          tokens: state.value.tokens,
-          tokensReplace: true,
+    const options = computed<MaskOptions | null>(() =>
+      useMask.value
+        ? {
+            mask: state.value.mask,
+            tokens: state.value.tokens,
+            tokensReplace: true,
 
-          //invoke the locale.current as side effect so that the computed will rerun if the locale changes since the mask could be dependent on the locale
-          _locale: unref(locale.current),
-        }))
-      : null;
+            // invoke locale.current so the mask recomputes when locale changes
+            _locale: unref(locale.current),
+          }
+        : null,
+    );
 
     const viewMode = ref<ViewModeType>('month');
 
