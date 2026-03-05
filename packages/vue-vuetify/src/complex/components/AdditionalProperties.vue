@@ -109,7 +109,9 @@ import {
 import {
   DispatchRenderer,
   JsonForms,
+  useJsonForms,
   useJsonFormsControlWithDetail,
+  useTranslator,
   type JsonFormsChangeEvent,
 } from '@jsonforms/vue';
 import type { ErrorObject } from 'ajv';
@@ -140,12 +142,7 @@ import {
 } from 'vuetify/components';
 import { DisabledIconFocus } from '../../controls/directives';
 import { useStyles } from '../../styles';
-import {
-  useControlAppliedOptions,
-  useIcons,
-  useJsonForms,
-  useTranslator,
-} from '../../util';
+import { useControlAppliedOptions, useIcons } from '../../util';
 import { IsDynamicPropertyContext } from '@/util/inject';
 
 type Input = ReturnType<typeof useJsonFormsControlWithDetail>;
