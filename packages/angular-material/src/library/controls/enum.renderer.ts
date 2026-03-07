@@ -53,7 +53,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @Component({
-  selector: 'AutocompleteControlRenderer',
+  selector: 'EnumControlRenderer, AutocompleteControlRenderer',
   template: `
     <mat-form-field [ngStyle]="{ display: hidden ? 'none' : '' }">
       <mat-label>{{ label }}</mat-label>
@@ -106,10 +106,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatAutocompleteModule,
   ],
 })
-export class AutocompleteControlRenderer
-  extends JsonFormsControl
-  implements OnInit
-{
+export class EnumControlRenderer extends JsonFormsControl implements OnInit {
   @Input() options?: EnumOption[] | string[];
   valuesToTranslatedOptions?: Map<string, EnumOption>;
   filteredOptions: Observable<EnumOption[]>;
@@ -233,5 +230,10 @@ export class AutocompleteControlRenderer
       : options;
   }
 }
+
+/**
+ * For {@link AutocompleteControlRenderer} class name backwards compatibility
+ */
+export { EnumControlRenderer as AutocompleteControlRenderer };
 
 export const enumControlTester: RankedTester = rankWith(2, isEnumControl);

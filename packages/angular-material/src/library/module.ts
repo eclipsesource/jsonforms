@@ -45,10 +45,11 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { JsonFormsModule } from '@jsonforms/angular';
-import { AutocompleteControlRenderer } from './controls/autocomplete.renderer';
 import { BooleanControlRenderer } from './controls/boolean.renderer';
 import { DateControlRenderer } from './controls/date.renderer';
+import { EnumControlRenderer } from './controls/enum.renderer';
 import { NumberControlRenderer } from './controls/number.renderer';
+import { OneOfEnumControlRenderer } from './controls/one-of-enum.renderer';
 import { RangeControlRenderer } from './controls/range.renderer';
 import { TextAreaRenderer } from './controls/textarea.renderer';
 import { TextControlRenderer } from './controls/text.renderer';
@@ -104,7 +105,8 @@ import { LayoutChildrenRenderPropsPipe } from './layouts';
     MasterListComponent,
     JsonFormsDetailComponent,
     ObjectControlRenderer,
-    AutocompleteControlRenderer,
+    EnumControlRenderer,
+    OneOfEnumControlRenderer,
     TableRenderer,
     ArrayLayoutRenderer,
     LayoutChildrenRenderPropsPipe,
@@ -144,7 +146,8 @@ import { LayoutChildrenRenderPropsPipe } from './layouts';
     MasterListComponent,
     JsonFormsDetailComponent,
     ObjectControlRenderer,
-    AutocompleteControlRenderer,
+    EnumControlRenderer,
+    OneOfEnumControlRenderer,
     TableRenderer,
     ArrayLayoutRenderer,
     LayoutChildrenRenderPropsPipe,
