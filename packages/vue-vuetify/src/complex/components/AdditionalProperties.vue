@@ -20,7 +20,7 @@
             :renderers="control.renderers"
             :cells="control.cells"
             :config="control.config"
-            :readonly="!control.enabled"
+            :readonly="!isControlEditable(control)"
             :validation-mode="validationMode"
             :i18n="i18n"
             :ajv="ajv"
@@ -60,6 +60,7 @@
             :uischema="element.uischema"
             :path="element.path"
             :enabled="control.enabled"
+            :readonly="control.readonly"
             :renderers="control.renderers"
             :cells="control.cells"
         /></v-col>
@@ -142,6 +143,7 @@ import { DisabledIconFocus } from '../../controls/directives';
 import { useStyles } from '../../styles';
 import {
   useControlAppliedOptions,
+  isControlEditable,
   useIcons,
   useJsonForms,
   useTranslator,
@@ -440,6 +442,7 @@ export default defineComponent({
       newPropertyErrors,
       additionalErrors,
       icons,
+      isControlEditable,
       propertyNameSchema,
       translations,
     };
@@ -448,7 +451,7 @@ export default defineComponent({
     addPropertyDisabled(): boolean {
       return (
         // add is disabled because the overall control is disabled
-        !this.control.enabled ||
+        !this.isControlEditable(this.control) ||
         // add is disabled because of contraints
         (this.appliedOptions.restrict && this.maxPropertiesReached) ||
         // add is disabled because there are errors for the new property name or it is not specified
@@ -469,7 +472,7 @@ export default defineComponent({
     removePropertyDisabled(): boolean {
       return (
         // add is disabled because the overall control is disabled
-        !this.control.enabled ||
+        !this.isControlEditable(this.control) ||
         // add is disabled because of contraints
         (this.appliedOptions.restrict && this.minPropertiesReached)
       );

@@ -328,6 +328,22 @@ const layouts = appstoreLayouts.map((value: AppstoreLayouts) => ({
           <v-tooltip location="bottom">
             <template v-slot:activator="{ props }">
               <v-switch
+                v-model="appStore.jsonforms.config.separateReadonlyFromDisabled"
+                label="ReadonlyAware"
+                v-bind="props"
+              ></v-switch>
+            </template>
+            When false, readonly is treated as disabled for backward
+            compatibility. When true, readonly and enabled are handled
+            separately
+          </v-tooltip>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ props }">
+              <v-switch
                 v-model="appStore.jsonforms.readonly"
                 label="Read-Only"
                 v-bind="props"

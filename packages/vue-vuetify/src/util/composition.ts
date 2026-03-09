@@ -95,6 +95,11 @@ export const useComputedLabel = <
   });
 };
 
+export const isControlEditable = (control: {
+  enabled: boolean;
+  readonly: boolean;
+}) => control.enabled && !control.readonly;
+
 /**
  * Adds styles, appliedOptions and vuetifyProps
  */
@@ -146,6 +151,7 @@ export const useVuetifyControl = <
     id: string;
     visible: boolean;
     enabled: boolean;
+    readonly: boolean;
   },
   I extends {
     control: ComputedRef<T>;
@@ -265,7 +271,7 @@ export const useVuetifyControl = <
   const clearable = computed(() => {
     return appliedOptions.value.clearable !== undefined
       ? appliedOptions.value.clearable
-      : input.control.value.enabled;
+      : isControlEditable(input.control.value);
   });
 
   return {
