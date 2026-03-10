@@ -33,7 +33,7 @@
               v-bind="props"
               :class="styles.arrayList.addButton"
               :disabled="
-                !control.enabled ||
+                !isControlEditable(control) ||
                 (appliedOptions.restrict &&
                   control.arraySchema !== undefined &&
                   control.arraySchema.maxItems !== undefined &&
@@ -65,7 +65,7 @@
                   {{ title(prop) }}
                 </th>
                 <th
-                  v-if="control.enabled"
+                  v-if="isControlEditable(control)"
                   :class="
                     appliedOptions.showSortButtons
                       ? 'fixed-cell'
@@ -98,12 +98,13 @@
                     :uischema="resolveUiSchema(propName)"
                     :path="composePaths(control.path, `${index}`)"
                     :enabled="control.enabled"
+                    :readonly="control.readonly"
                     :renderers="control.renderers"
                     :cells="control.cells"
                   />
                 </td>
                 <td
-                  v-if="control.enabled"
+                  v-if="isControlEditable(control)"
                   :class="
                     appliedOptions.showSortButtons
                       ? 'fixed-cell'
@@ -120,7 +121,7 @@
                         elevation="0"
                         small
                         :aria-label="control.translations.upAriaLabel"
-                        :disabled="index <= 0 || !control.enabled"
+                        :disabled="index <= 0 || !isControlEditable(control)"
                         :class="styles.arrayList.itemMoveUp"
                         @click="moveUpClick($event, index)"
                       >
@@ -141,7 +142,10 @@
                         elevation="0"
                         small
                         :aria-label="control.translations.downAriaLabel"
-                        :disabled="index >= dataLength - 1 || !control.enabled"
+                        :disabled="
+                          index >= dataLength - 1 ||
+                          !isControlEditable(control)
+                        "
                         :class="styles.arrayList.itemMoveDown"
                         @click="moveDownClick($event, index)"
                       >
@@ -163,7 +167,7 @@
                         :aria-label="control.translations.removeAriaLabel"
                         :class="styles.arrayList.itemDelete"
                         :disabled="
-                          !control.enabled ||
+                          !isControlEditable(control) ||
                           (appliedOptions.restrict &&
                             control.arraySchema !== undefined &&
                             control.arraySchema.minItems !== undefined &&
@@ -220,7 +224,7 @@ import {
   VTooltip,
 } from 'vuetify/components';
 import { ValidationIcon } from '../controls/components/index';
-import { useIcons, useVuetifyArrayControl } from '../util';
+import { isControlEditable, useIcons, useVuetifyArrayControl } from '../util';
 
 const controlRenderer = defineComponent({
   name: 'array-control-renderer',
@@ -249,6 +253,7 @@ const controlRenderer = defineComponent({
 
     return {
       ...useVuetifyArrayControl(input),
+      isControlEditable,
       icons,
     };
   },

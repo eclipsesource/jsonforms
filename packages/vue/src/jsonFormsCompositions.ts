@@ -79,6 +79,11 @@ export const rendererProps = <U = UISchemaElement>() => ({
     type: Boolean,
     default: undefined,
   },
+  readonly: {
+    required: false as const,
+    type: Boolean,
+    default: undefined,
+  },
   renderers: {
     required: false,
     type: Array as PropType<JsonFormsRendererRegistryEntry[]>,
@@ -134,6 +139,7 @@ export interface RendererProps<U = UISchemaElement> {
   uischema: U;
   path: string;
   enabled?: boolean;
+  readonly?: boolean;
   renderers?: JsonFormsRendererRegistryEntry[];
   cells?: JsonFormsCellRendererRegistryEntry[];
   config?: any;

@@ -45,4 +45,11 @@ export const configDefault = {
    * [text] if asterisks in labels for required fields should be hidden
    */
   hideRequiredAsterisk: false,
+
+  /**
+   * When false (default), readonly is treated as disabled for backward compatibility.
+   * When true, readonly and enabled are handled separately and exposed to renderers,
+   * allowing UI libraries to distinguish between disabled and readonly states.
+   */
+  separateReadonlyFromDisabled: false,
 };

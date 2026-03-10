@@ -20,7 +20,7 @@
             :renderers="control.renderers"
             :cells="control.cells"
             :config="control.config"
-            :readonly="!control.enabled"
+            :readonly="!isControlEditable(control)"
             :validation-mode="validationMode"
             :i18n="i18n"
             :ajv="ajv"
@@ -60,6 +60,7 @@
             :uischema="element.uischema"
             :path="element.path"
             :enabled="control.enabled"
+            :readonly="control.readonly"
             :renderers="control.renderers"
             :cells="control.cells"
         /></v-col>
@@ -102,7 +103,6 @@ import {
   getI18nKeyPrefix,
   type GroupLayout,
   type JsonSchema,
-  type JsonSchema4,
   type JsonSchema7,
   type UISchemaElement,
 } from '@jsonforms/core';
@@ -121,6 +121,7 @@ import isPlainObject from 'lodash/isPlainObject';
 import omit from 'lodash/omit';
 import startCase from 'lodash/startCase';
 
+import { IsDynamicPropertyContext } from '@/util/inject';
 import {
   computed,
   defineComponent,
@@ -142,8 +143,11 @@ import {
 } from 'vuetify/components';
 import { DisabledIconFocus } from '../../controls/directives';
 import { useStyles } from '../../styles';
-import { useControlAppliedOptions, useIcons } from '../../util';
-import { IsDynamicPropertyContext } from '@/util/inject';
+import {
+  isControlEditable,
+  useControlAppliedOptions,
+  useIcons,
+} from '../../util';
 
 type Input = ReturnType<typeof useJsonFormsControlWithDetail>;
 interface AdditionalPropertyType {
@@ -218,7 +222,7 @@ export default defineComponent({
       }
 
       if (typeof propSchema?.$ref === 'string') {
-        propSchema = Resolve.schema(propSchema, propSchema.$ref, rootSchema);
+        propSchema = Resolve.schema(rootSchema, propSchema.$ref, rootSchema);
       }
 
       propSchema = propSchema ?? {};
@@ -437,6 +441,7 @@ export default defineComponent({
       newPropertyErrors,
       additionalErrors,
       icons,
+      isControlEditable,
       propertyNameSchema,
       translations,
     };
@@ -445,7 +450,7 @@ export default defineComponent({
     addPropertyDisabled(): boolean {
       return (
         // add is disabled because the overall control is disabled
-        !this.control.enabled ||
+        !this.isControlEditable(this.control) ||
         // add is disabled because of contraints
         (this.appliedOptions.restrict && this.maxPropertiesReached) ||
         // add is disabled because there are errors for the new property name or it is not specified
@@ -466,7 +471,7 @@ export default defineComponent({
     removePropertyDisabled(): boolean {
       return (
         // add is disabled because the overall control is disabled
-        !this.control.enabled ||
+        !this.isControlEditable(this.control) ||
         // add is disabled because of contraints
         (this.appliedOptions.restrict && this.minPropertiesReached)
       );

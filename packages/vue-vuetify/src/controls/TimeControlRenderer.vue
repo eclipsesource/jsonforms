@@ -10,6 +10,7 @@
       :id="control.id + '-input'"
       :class="styles.control.input"
       :disabled="!control.enabled"
+      :readonly="control.readonly"
       :autofocus="appliedOptions.focus"
       :placeholder="appliedOptions.placeholder ?? timeFormat"
       :label="computedLabel"
@@ -34,7 +35,8 @@
           transition="scale-transition"
           :min-width="ampm && useSeconds ? '340px' : '290px'"
           v-bind="vuetifyProps('v-menu')"
-          :disabled="!control.enabled"
+          activator="parent"
+          :disabled="!isControlEditable(control)"
         >
           <template v-slot:activator="{ props }">
             <v-icon v-bind="props" tabindex="-1">{{ pickerIcon }}</v-icon>
@@ -123,6 +125,7 @@ import {
   convertDayjsToMaskaFormat,
   determineClearValue,
   expandLocaleFormat,
+  isControlEditable,
   parseDateTime,
   useIcons,
   useVuetifyControl,
@@ -215,6 +218,7 @@ const controlRenderer = defineComponent({
       icons,
       ampm,
       timeFormat,
+      isControlEditable,
       options,
       useMask,
       maska,

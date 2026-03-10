@@ -36,6 +36,7 @@
               :uischema="entry.category.value.uischema"
               :path="layout.path"
               :enabled="layout.enabled"
+              :readonly="layout.readonly"
               :renderers="layout.renderers"
               :cells="layout.cells"
             />
@@ -63,6 +64,7 @@
             :uischema="entry.category.value.uischema"
             :path="layout.path"
             :enabled="layout.enabled"
+            :readonly="layout.readonly"
             :renderers="layout.renderers"
             :cells="layout.cells"
           />
