@@ -90,7 +90,6 @@ import {
   type RendererProps,
   useJsonFormsOneOfControl,
 } from '@jsonforms/vue';
-import isEmpty from 'lodash/isEmpty';
 import { defineComponent, ref } from 'vue';
 import {
   VBtn,
@@ -138,7 +137,7 @@ const controlRenderer = defineComponent({
       control.indexOfFittingSchema != null &&
         control.indexOfFittingSchema != undefined // use the fitting schema if found
         ? control.indexOfFittingSchema
-        : !isEmpty(input.control.value.data)
+        : input.control.value.data !== undefined
           ? 0 // uses the first schema and report errors if not empty
           : null,
     );
@@ -176,7 +175,7 @@ const controlRenderer = defineComponent({
     handleSelectChange(selectIndex: number | null): void {
       this.newSelectedIndex = selectIndex;
 
-      if (isEmpty(this.control.data)) {
+      if (this.control.data === undefined) {
         this.openNewTab(this.newSelectedIndex);
       } else {
         this.dialog = true;
