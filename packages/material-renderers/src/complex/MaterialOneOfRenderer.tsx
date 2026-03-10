@@ -23,7 +23,6 @@
   THE SOFTWARE.
 */
 import React, { useCallback, useMemo, useState } from 'react';
-import isEmpty from 'lodash/isEmpty';
 
 import { TabSwitchConfirmDialog } from './TabSwitchConfirmDialog';
 
@@ -98,7 +97,7 @@ export const MaterialOneOfRenderer = ({
   const handleTabChange = useCallback(
     (_event: any, newOneOfIndex: number) => {
       setNewSelectedIndex(newOneOfIndex);
-      if (isEmpty(data)) {
+      if (data === undefined) {
         openNewTab(newOneOfIndex);
       } else {
         setConfirmDialogOpen(true);
