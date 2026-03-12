@@ -101,7 +101,7 @@ export const removeSchemaKeywords = (path: string) => {
               mat-icon-button
               class="button item-button hide"
               (click)="onDeleteClick(i)"
-              [ngClass]="{ show: highlightedIdx == i }"
+              [ngClass]="{ show: highlightedIdx === i }"
               *ngIf="isEnabled()"
             >
               <mat-icon mat-list-icon>delete</mat-icon>
