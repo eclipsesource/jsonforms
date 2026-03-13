@@ -1870,3 +1870,432 @@ test('core reducer helpers - getControlPath - decodes JSON Pointer escape sequen
   const controlPath = getControlPath(errorObject);
   t.is(controlPath, '~group./name');
 });
+
+test('errorAt filters required with nested same-named properties', (t) => {
+  const ajv = createAjv();
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      name: {
+        type: 'object',
+        properties: {
+          name: {
+            type: 'string',
+          },
+        },
+        required: ['name'],
+      },
+    },
+  };
+  const data = { name: {} };
+  const v = ajv.compile(schema);
+  const errors = validate(v, data);
+
+  const state: JsonFormsCore = {
+    data,
+    schema,
+    uischema: undefined,
+    errors,
+  };
+  const filtered = errorAt(
+    'name.name',
+    (schema.properties.name as JsonSchema).properties.name
+  )(state);
+  t.is(filtered.length, 1);
+  t.is(filtered[0].keyword, 'required');
+  t.is(filtered[0].params.missingProperty, 'name');
+});
+
+test('errorAt filters triple-nested same-named properties', (t) => {
+  const ajv = createAjv();
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'object',
+        properties: {
+          foo: {
+            type: 'object',
+            properties: {
+              foo: {
+                type: 'string',
+              },
+            },
+            required: ['foo'],
+          },
+        },
+      },
+    },
+  };
+  const data = { foo: { foo: {} } };
+  const v = ajv.compile(schema);
+  const errors = validate(v, data);
+
+  const state: JsonFormsCore = {
+    data,
+    schema,
+    uischema: undefined,
+    errors,
+  };
+  const filtered = errorAt(
+    'foo.foo.foo',
+    ((schema.properties.foo as JsonSchema).properties.foo as JsonSchema)
+      .properties.foo
+  )(state);
+  t.is(filtered.length, 1);
+  t.is(filtered[0].keyword, 'required');
+  t.is(filtered[0].params.missingProperty, 'foo');
+});
+
+test('errorAt filters parent-child with different names', (t) => {
+  const ajv = createAjv();
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      parent: {
+        type: 'object',
+        properties: {
+          child: {
+            type: 'string',
+          },
+        },
+        required: ['child'],
+      },
+    },
+  };
+  const data = { parent: {} };
+  const v = ajv.compile(schema);
+  const errors = validate(v, data);
+
+  const state: JsonFormsCore = {
+    data,
+    schema,
+    uischema: undefined,
+    errors,
+  };
+  const filtered = errorAt(
+    'parent.child',
+    (schema.properties.parent as JsonSchema).properties.child
+  )(state);
+  t.is(filtered.length, 1);
+  t.is(filtered[0].keyword, 'required');
+  t.is(filtered[0].params.missingProperty, 'child');
+});
+
+test('errorAt filters substring property names edge case', (t) => {
+  const ajv = createAjv();
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      username: {
+        type: 'object',
+        properties: {
+          name: {
+            type: 'string',
+          },
+        },
+        required: ['name'],
+      },
+    },
+  };
+  const data = { username: {} };
+  const v = ajv.compile(schema);
+  const errors = validate(v, data);
+
+  const state: JsonFormsCore = {
+    data,
+    schema,
+    uischema: undefined,
+    errors,
+  };
+  const filtered = errorAt(
+    'username.name',
+    (schema.properties.username as JsonSchema).properties.name
+  )(state);
+  t.is(filtered.length, 1);
+  t.is(filtered[0].keyword, 'required');
+  t.is(filtered[0].params.missingProperty, 'name');
+});
+
+test('errorAt filters root-level required errors', (t) => {
+  const ajv = createAjv();
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      name: {
+        type: 'string',
+      },
+      age: {
+        type: 'number',
+      },
+    },
+    required: ['name', 'age'],
+  };
+  const data = {};
+  const v = ajv.compile(schema);
+  const errors = validate(v, data);
+
+  const state: JsonFormsCore = {
+    data,
+    schema,
+    uischema: undefined,
+    errors,
+  };
+  const filteredName = errorAt('name', schema.properties.name)(state);
+  t.is(filteredName.length, 1);
+  t.is(filteredName[0].keyword, 'required');
+  t.is(filteredName[0].params.missingProperty, 'name');
+
+  const filteredAge = errorAt('age', schema.properties.age)(state);
+  t.is(filteredAge.length, 1);
+  t.is(filteredAge[0].keyword, 'required');
+  t.is(filteredAge[0].params.missingProperty, 'age');
+});
+
+test('errorAt filters array of objects with nested same-named properties', (t) => {
+  const ajv = createAjv();
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      items: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            item: {
+              type: 'object',
+              properties: {
+                item: {
+                  type: 'string',
+                },
+              },
+              required: ['item'],
+            },
+          },
+        },
+      },
+    },
+  };
+  const data = { items: [{ item: {} }] };
+  const v = ajv.compile(schema);
+  const errors = validate(v, data);
+
+  const state: JsonFormsCore = {
+    data,
+    schema,
+    uischema: undefined,
+    errors,
+  };
+  const filtered = errorAt(
+    'items.0.item.item',
+    ((schema.properties.items as JsonSchema).items as JsonSchema).properties
+      .item.properties.item
+  )(state);
+  t.is(filtered.length, 1);
+  t.is(filtered[0].keyword, 'required');
+  t.is(filtered[0].params.missingProperty, 'item');
+});
+
+test('errorAt does not match wrong paths', (t) => {
+  const ajv = createAjv();
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      name: {
+        type: 'object',
+        properties: {
+          name: {
+            type: 'string',
+          },
+        },
+        required: ['name'],
+      },
+    },
+  };
+  const data = { name: {} };
+  const v = ajv.compile(schema);
+  const errors = validate(v, data);
+
+  const state: JsonFormsCore = {
+    data,
+    schema,
+    uischema: undefined,
+    errors,
+  };
+  const filteredWrongPath = errorAt('name', schema.properties.name)(state);
+  t.is(filteredWrongPath.length, 0);
+});
+
+test('errorAt filters multiple required errors with mixed naming', (t) => {
+  const ajv = createAjv();
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      user: {
+        type: 'object',
+        properties: {
+          user: {
+            type: 'string',
+          },
+          name: {
+            type: 'string',
+          },
+        },
+        required: ['user', 'name'],
+      },
+    },
+  };
+  const data = { user: {} };
+  const v = ajv.compile(schema);
+  const errors = validate(v, data);
+
+  const state: JsonFormsCore = {
+    data,
+    schema,
+    uischema: undefined,
+    errors,
+  };
+  const filteredUser = errorAt(
+    'user.user',
+    (schema.properties.user as JsonSchema).properties.user
+  )(state);
+  t.is(filteredUser.length, 1);
+  t.is(filteredUser[0].keyword, 'required');
+  t.is(filteredUser[0].params.missingProperty, 'user');
+
+  const filteredName = errorAt(
+    'user.name',
+    (schema.properties.user as JsonSchema).properties.name
+  )(state);
+  t.is(filteredName.length, 1);
+  t.is(filteredName[0].keyword, 'required');
+  t.is(filteredName[0].params.missingProperty, 'name');
+});
+
+// ============================================================================
+// Additional getControlPath Edge Case Tests
+// ============================================================================
+
+// Dummy path to ensure ErrorObject is valid
+const DUMMY_SCHEMA_PATH = '';
+
+test('getControlPath - root-level required property', (t) => {
+  const errorObject = {
+    instancePath: '',
+    keyword: 'required',
+    params: { missingProperty: 'foo' },
+    schemaPath: DUMMY_SCHEMA_PATH,
+  } as ErrorObject;
+  const controlPath = getControlPath(errorObject);
+  t.is(controlPath, 'foo');
+});
+
+test('getControlPath - nested required property', (t) => {
+  const errorObject = {
+    instancePath: '/parent',
+    keyword: 'required',
+    params: { missingProperty: 'child' },
+    schemaPath: DUMMY_SCHEMA_PATH,
+  } as ErrorObject;
+  const controlPath = getControlPath(errorObject);
+  t.is(controlPath, 'parent.child');
+});
+
+test('getControlPath - prevents duplicate property when path already ends with property', (t) => {
+  const errorObject = {
+    instancePath: '/parent/child',
+    keyword: 'required',
+    params: { missingProperty: 'child' },
+    schemaPath: DUMMY_SCHEMA_PATH,
+  } as ErrorObject;
+  const controlPath = getControlPath(errorObject);
+  t.is(controlPath, 'parent.child.child');
+});
+
+test('getControlPath - same-named nested properties (name -> name.name)', (t) => {
+  const errorObject = {
+    instancePath: '/name',
+    keyword: 'required',
+    params: { missingProperty: 'name' },
+    schemaPath: DUMMY_SCHEMA_PATH,
+  } as ErrorObject;
+  const controlPath = getControlPath(errorObject);
+  t.is(controlPath, 'name.name');
+});
+
+test('getControlPath - deeply nested same-named properties (foo.foo -> foo.foo.foo)', (t) => {
+  const errorObject = {
+    instancePath: '/foo/foo',
+    keyword: 'required',
+    params: { missingProperty: 'foo' },
+    schemaPath: DUMMY_SCHEMA_PATH,
+  } as ErrorObject;
+  const controlPath = getControlPath(errorObject);
+  t.is(controlPath, 'foo.foo.foo');
+});
+
+test('getControlPath - additionalProperties keyword handling', (t) => {
+  const errorObject = {
+    instancePath: '/parent',
+    keyword: 'additionalProperties',
+    params: { additionalProperty: 'extra' },
+    schemaPath: DUMMY_SCHEMA_PATH,
+  } as ErrorObject;
+  const controlPath = getControlPath(errorObject);
+  t.is(controlPath, 'parent.extra');
+});
+
+test('getControlPath - dependencies keyword handling', (t) => {
+  const errorObject = {
+    instancePath: '/parent',
+    keyword: 'dependencies',
+    params: { missingProperty: 'dependent' },
+    schemaPath: DUMMY_SCHEMA_PATH,
+  } as ErrorObject;
+  const controlPath = getControlPath(errorObject);
+  t.is(controlPath, 'parent.dependent');
+});
+
+test('getControlPath - property names as substrings (username.name not confused)', (t) => {
+  const errorObject = {
+    instancePath: '/username',
+    keyword: 'required',
+    params: { missingProperty: 'name' },
+    schemaPath: DUMMY_SCHEMA_PATH,
+  } as ErrorObject;
+  const controlPath = getControlPath(errorObject);
+  t.is(controlPath, 'username.name');
+});
+
+test('getControlPath - array indices in paths', (t) => {
+  const errorObject = {
+    instancePath: '/items/0',
+    keyword: 'required',
+    params: { missingProperty: 'id' },
+    schemaPath: DUMMY_SCHEMA_PATH,
+  } as ErrorObject;
+  const controlPath = getControlPath(errorObject);
+  t.is(controlPath, 'items.0.id');
+});
+
+test('getControlPath - non-required keywords do not append property', (t) => {
+  const errorObject = {
+    instancePath: '/foo',
+    keyword: 'type',
+    params: { type: 'string' },
+    schemaPath: DUMMY_SCHEMA_PATH,
+  } as ErrorObject;
+  const controlPath = getControlPath(errorObject);
+  t.is(controlPath, 'foo');
+});
+
+test('getControlPath - enum keyword does not append property', (t) => {
+  const errorObject = {
+    instancePath: '/status',
+    keyword: 'enum',
+    params: { allowedValues: ['active', 'inactive'] },
+    schemaPath: DUMMY_SCHEMA_PATH,
+  } as ErrorObject;
+  const controlPath = getControlPath(errorObject);
+  t.is(controlPath, 'status');
+});

@@ -30,6 +30,15 @@ import { isOneOfEnumSchema } from './schema';
 import filter from 'lodash/filter';
 import isEqual from 'lodash/isEqual';
 
+/**
+ * Checks for an additionally specified property that the error relates to.
+ * This may be added to an error's instancePath to show it add the violating property's control.
+ * For example, for required property errors, the instancePath points to the object containing the required property.
+ * The missing property's name is specified in the error's params.missingProperty field and returned by this function.
+ *
+ * @param error The ErrorObject to check for an additionally specified property that the error relates to
+ * @returns The invalid property name if present, otherwise undefined
+ */
 const getInvalidProperty = (error: ErrorObject): string | undefined => {
   switch (error.keyword) {
     case 'required':
@@ -51,12 +60,12 @@ export const getControlPath = (error: ErrorObject) => {
   controlPath = controlPath.replace(/\//g, '.');
 
   const invalidProperty = getInvalidProperty(error);
-  if (invalidProperty !== undefined && !controlPath.endsWith(invalidProperty)) {
+  if (invalidProperty !== undefined) {
     controlPath = `${controlPath}.${invalidProperty}`;
   }
 
   // remove '.' chars at the beginning of paths
-  controlPath = controlPath.replace(/^./, '');
+  controlPath = controlPath.replace(/^\./, '');
 
   // decode JSON Pointer escape sequences
   controlPath = decode(controlPath);
