@@ -25,7 +25,7 @@ export default defineComponent({
     determinedRenderer(): any {
       const testerContext = {
         rootSchema: this.rootSchema,
-        config: this.config,
+        config: this.renderer.config,
       };
       const renderer = maxBy(this.renderer.renderers, (r) =>
         r.tester(this.renderer.uischema, this.renderer.schema, testerContext)

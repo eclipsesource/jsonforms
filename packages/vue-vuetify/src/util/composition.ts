@@ -19,11 +19,10 @@ import {
   type ControlElement,
   type DispatchPropsOfControl,
   type DispatchPropsOfMultiEnumControl,
-  type JsonFormsSubStates,
   type JsonSchema,
   type UISchemaElement,
 } from '@jsonforms/core';
-import type Ajv from 'ajv';
+import { useJsonForms } from '@jsonforms/vue';
 import type { ErrorObject } from 'ajv';
 import cloneDeep from 'lodash/cloneDeep';
 import debounce from 'lodash/debounce';
@@ -245,12 +244,6 @@ export const useVuetifyControl = <
 
   const computedLabel = useComputedLabel(input, appliedOptions);
 
-  const controlWrapper = computed(() => {
-    const { id, description, errors, label, visible, required } =
-      input.control.value;
-    return { id, description, errors, label, visible, required };
-  });
-
   const styles = useStyles(input.control.value.uischema);
 
   const vuetifyProps = (path: string) => {
@@ -266,11 +259,17 @@ export const useVuetifyControl = <
     };
   });
 
+  const controlWrapper = computed(() => {
+    const { id, description, errors, label, visible, required } =
+      overwrittenControl.value;
+    return { id, description, errors, label, visible, required };
+  });
+
   const rawErrors = computed(() => input.control.value.errors);
 
   const clearable = computed(() => {
     return appliedOptions.value.clearable !== undefined
-      ? appliedOptions.value.clearable
+      ? appliedOptions.value.clearable && input.control.value.enabled
       : isControlEditable(input.control.value);
   });
 
@@ -304,7 +303,7 @@ export const useCombinatorTranslations = <
 >(
   input: I,
 ) => {
-  const jsonforms = inject<JsonFormsSubStates>('jsonforms');
+  const jsonforms = useJsonForms();
   const translations = getCombinatorTranslations(
     jsonforms?.i18n?.translate ?? defaultJsonFormsI18nState.translate,
     combinatorDefaultTranslations,
@@ -323,35 +322,6 @@ export const useCombinatorTranslations = <
     ...input,
     control: overwrittenControl,
   };
-};
-
-export const useJsonForms = () => {
-  const jsonforms = inject<JsonFormsSubStates>('jsonforms');
-
-  if (!jsonforms) {
-    throw new Error(
-      "'jsonforms couldn't be injected. Are you within JSON Forms?",
-    );
-  }
-
-  return jsonforms;
-};
-
-export const useTranslator = () => {
-  const jsonforms = useJsonForms();
-
-  if (!jsonforms.i18n || !jsonforms.i18n.translate) {
-    throw new Error(
-      "'jsonforms i18n couldn't be injected. Are you within JSON Forms?",
-    );
-  }
-
-  const translate = computed(() => {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return jsonforms.i18n!.translate!;
-  });
-
-  return translate;
 };
 
 /**
@@ -460,7 +430,7 @@ export const useVuetifyArrayControl = <
     return [];
   });
 
-  const jsonforms = inject<JsonFormsSubStates>('jsonforms');
+  const jsonforms = useJsonForms();
   const translations = getArrayTranslations(
     jsonforms?.i18n?.translate ?? defaultJsonFormsI18nState.translate,
     arrayDefaultTranslations,
@@ -513,16 +483,6 @@ export const useVuetifyBasicControl = <
     appliedOptions,
     vuetifyProps,
   };
-};
-
-/**
- * Extracts Ajv from JSON Forms
- */
-export const useAjv = () => {
-  const jsonforms = useJsonForms();
-
-  // should always exist
-  return jsonforms.core?.ajv as Ajv;
 };
 
 export interface NestedInfo {

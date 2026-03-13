@@ -29,7 +29,7 @@ export default defineComponent({
     determinedCell(): any {
       const testerContext = {
         rootSchema: this.cell.rootSchema,
-        config: this.config,
+        config: this.cell.config,
       };
       const cell = maxBy(this.cell.cells, (r) =>
         r.tester(this.cell.uischema, this.cell.schema, testerContext)
