@@ -185,6 +185,9 @@ export const useVuetifyControl = <
   const handleBlur = () => {
     touched.value = true;
     isFocused.value = false;
+    if (changeEmitter && changeEmitter.flush) {
+      changeEmitter.flush();
+    }
   };
 
   const jsonforms = useJsonForms();
