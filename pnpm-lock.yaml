@@ -171,9 +171,6 @@ importers:
 
   packages/angular-material:
     dependencies:
-      hammerjs:
-        specifier: 2.0.8
-        version: 2.0.8
       lodash:
         specifier: ^4.17.21
         version: 4.17.23
@@ -9034,10 +9031,6 @@ packages:
     resolution: {integrity: sha512-ax7ZYomf6jqPTQ4+XCpUGyXKHk5WweS+e05MBO4/y3WJ5RkmPXNKvX+bx1behVILVwr6JSQvZAku021CHPXG3Q==}
     engines: {node: '>=10'}
 
-  hammerjs@2.0.8:
-    resolution: {integrity: sha512-tSQXBXS/MWQOn/RKckawJ61vvsDpCom87JgxiYdGwHdOa0ht0vzUWDlfioofFCRU0L+6NGDt6XzbgoJvZkMeRQ==}
-    engines: {node: '>=0.8.0'}
-
   handle-thing@2.0.1:
     resolution: {integrity: sha512-9Qn4yBxelxoh2Ow62nP+Ka/kMnOXRi8BXnRaUwezLNhqelnN49xKz4F/dPP8OYLxLxq6JDtZb2i9XznUQbNPTg==}
 
@@ -14784,7 +14777,7 @@ snapshots:
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@angular-devkit/architect': 0.1902.17(chokidar@4.0.1)
-      '@angular-devkit/build-webpack': 0.1902.17(chokidar@4.0.1)(webpack-dev-server@5.2.2(webpack@5.98.0(esbuild@0.25.4)))(webpack@5.98.0(esbuild@0.25.4))
+      '@angular-devkit/build-webpack': 0.1902.17(chokidar@4.0.1)(webpack-dev-server@5.2.2(webpack@5.91.0))(webpack@5.98.0(esbuild@0.25.4))
       '@angular-devkit/core': 19.2.17(chokidar@4.0.1)
       '@angular/build': 19.2.17(@angular/compiler-cli@19.2.19(@angular/compiler@19.2.19)(typescript@5.5.4))(@angular/compiler@19.2.19)(@types/node@22.13.8)(chokidar@4.0.1)(jiti@1.21.0)(karma@6.4.3)(less@4.2.2)(ng-packagr@19.2.2(@angular/compiler-cli@19.2.19(@angular/compiler@19.2.19)(typescript@5.5.4))(tslib@2.6.2)(typescript@5.5.4))(postcss@8.5.2)(stylus@0.57.0)(terser@5.39.0)(typescript@5.5.4)(yaml@2.8.1)
       '@angular/compiler-cli': 19.2.19(@angular/compiler@19.2.19)(typescript@5.5.4)
@@ -14869,7 +14862,7 @@ snapshots:
       - webpack-cli
       - yaml
 
-  '@angular-devkit/build-webpack@0.1902.17(chokidar@4.0.1)(webpack-dev-server@5.2.2(webpack@5.98.0(esbuild@0.25.4)))(webpack@5.98.0(esbuild@0.25.4))':
+  '@angular-devkit/build-webpack@0.1902.17(chokidar@4.0.1)(webpack-dev-server@5.2.2(webpack@5.91.0))(webpack@5.98.0(esbuild@0.25.4))':
     dependencies:
       '@angular-devkit/architect': 0.1902.17(chokidar@4.0.1)
       rxjs: 7.8.1
@@ -23970,8 +23963,6 @@ snapshots:
   gzip-size@6.0.0:
     dependencies:
       duplexer: 0.1.2
-
-  hammerjs@2.0.8: {}
 
   handle-thing@2.0.1: {}
 
