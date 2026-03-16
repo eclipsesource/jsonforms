@@ -78,7 +78,6 @@
     "rxjs": "^6.6.0 || ^7.4.0"
   },
   "dependencies": {
-    "hammerjs": "2.0.8",
     "lodash": "^4.17.21"
   },
   "devDependencies": {
