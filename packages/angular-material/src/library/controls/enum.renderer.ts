@@ -54,10 +54,53 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
+const template = `
+  <mat-form-field [ngStyle]="{ display: hidden ? 'none' : '' }">
+    <mat-label>{{ label }}</mat-label>
+    <input
+      matInput
+      type="text"
+      (change)="onChange($event)"
+      [id]="id"
+      [formControl]="form"
+      [matAutocomplete]="auto"
+      (keydown)="updateFilter($event)"
+      (focus)="focused = true"
+      (focusout)="focused = false"
+    />
+    <mat-autocomplete
+      autoActiveFirstOption
+      #auto="matAutocomplete"
+      (optionSelected)="onSelect($event)"
+      [displayWith]="displayFn"
+    >
+      @for (option of filteredOptions | async; track option.value) {
+      <mat-option [value]="option">
+        {{ option.label }}
+      </mat-option>
+      }
+    </mat-autocomplete>
+    <mat-hint *ngIf="shouldShowUnfocusedDescription() || focused">{{
+      description
+    }}</mat-hint>
+    <mat-error>{{ error }}</mat-error>
+  </mat-form-field>
+`;
+
+const style = `
+  :host {
+    display: flex;
+    flex-direction: row;
+  }
+  mat-form-field {
+    flex: 1 1 auto;
+  }
+`;
+
 @Component({
   selector: 'OneOfEnumControlRenderer',
-  templateUrl: './enum.renderer.html',
-  styleUrls: ['./enum.renderer.scss'],
+  template,
+  styles: [style],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
@@ -182,8 +225,8 @@ export const oneOfEnumControlTester: RankedTester = rankWith(
 
 @Component({
   selector: 'EnumControlRenderer, AutocompleteControlRenderer',
-  templateUrl: './enum.renderer.html',
-  styleUrls: ['./enum.renderer.scss'],
+  template,
+  styles: [style],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
