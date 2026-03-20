@@ -65,10 +65,17 @@ export const addI18nKeyToPrefix = (
   return `${i18nKeyPrefix}.${key}`;
 };
 
-export const defaultTranslator: Translator = (
-  _id: string,
-  defaultMessage: string | undefined
-) => defaultMessage;
+export const createTranslator = (
+  fn: (
+    id: string,
+    defaultMessage: string | undefined,
+    values?: any
+  ) => string | undefined
+): Translator => fn as Translator;
+
+export const defaultTranslator: Translator = createTranslator(
+  (_id, defaultMessage) => defaultMessage
+);
 
 export const defaultErrorTranslator: ErrorTranslator = (error, t, uischema) => {
   // check whether there is a special keyword message
