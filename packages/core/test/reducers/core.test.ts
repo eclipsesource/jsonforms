@@ -2201,7 +2201,7 @@ test('getControlPath - nested required property', (t) => {
   t.is(controlPath, 'parent.child');
 });
 
-test('getControlPath - prevents duplicate property when path already ends with property', (t) => {
+test('getControlPath - same-named nested properties in different parent', (t) => {
   const errorObject = {
     instancePath: '/parent/child',
     keyword: 'required',

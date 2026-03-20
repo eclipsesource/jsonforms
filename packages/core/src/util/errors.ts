@@ -32,7 +32,7 @@ import isEqual from 'lodash/isEqual';
 
 /**
  * Checks for an additionally specified property that the error relates to.
- * This may be added to an error's instancePath to show it add the violating property's control.
+ * This may be added to an error's instancePath to show it at the violating property's control.
  * For example, for required property errors, the instancePath points to the object containing the required property.
  * The missing property's name is specified in the error's params.missingProperty field and returned by this function.
  *
