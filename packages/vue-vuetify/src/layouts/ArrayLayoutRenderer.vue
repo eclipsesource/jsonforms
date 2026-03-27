@@ -119,7 +119,9 @@
                             small
                             class="v-expansion-panel-title__icon"
                             :aria-label="control.translations.upAriaLabel"
-                            :disabled="index <= 0 || !control.enabled"
+                            :disabled="
+                              index <= 0 || !isControlEditable(control)
+                            "
                             :class="styles.arrayList.itemMoveUp"
                             @click="moveUpClick($event, index)"
                           >
@@ -146,7 +148,8 @@
                             class="v-expansion-panel-title__icon"
                             :aria-label="control.translations.downAriaLabel"
                             :disabled="
-                              index >= dataLength - 1 || !control.enabled
+                              index >= dataLength - 1 ||
+                              !isControlEditable(control)
                             "
                             :class="styles.arrayList.itemMoveDown"
                             @click="moveDownClick($event, index)"
@@ -172,7 +175,7 @@
                             :aria-label="control.translations.removeAriaLabel"
                             :class="styles.arrayList.itemDelete"
                             :disabled="
-                              !control.enabled ||
+                              !isControlEditable(control) ||
                               (appliedOptions.restrict &&
                                 control.arraySchema !== undefined &&
                                 control.arraySchema.minItems !== undefined &&
@@ -197,6 +200,7 @@
                   :uischema="foundUISchema"
                   :path="composePaths(control.path, `${index}`)"
                   :enabled="control.enabled"
+                  :readonly="control.readonly"
                   :renderers="control.renderers"
                   :cells="control.cells"
                 />
@@ -305,7 +309,12 @@ import {
   VTooltip,
 } from 'vuetify/components';
 import { ValidationBadge, ValidationIcon } from '../controls/components/index';
-import { useIcons, useNested, useVuetifyArrayControl } from '../util';
+import {
+  isControlEditable,
+  useIcons,
+  useNested,
+  useVuetifyArrayControl,
+} from '../util';
 
 const controlRenderer = defineComponent({
   name: 'array-layout-renderer',
@@ -358,13 +367,14 @@ const controlRenderer = defineComponent({
       currentlyExpanded,
       expansionPanelsProps,
       suggestToDelete,
+      isControlEditable,
       icons,
     };
   },
   computed: {
     addDisabled(): boolean {
       return (
-        !this.control.enabled ||
+        !this.isControlEditable(this.control) ||
         (this.appliedOptions.restrict &&
           this.control.arraySchema !== undefined &&
           this.control.arraySchema.maxItems !== undefined &&

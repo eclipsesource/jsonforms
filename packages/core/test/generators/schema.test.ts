@@ -113,7 +113,7 @@ test('default schema generation array types', (t) => {
 test.failing('default schema generation tuple array types', (t) => {
   const instance: any = { tupleArray: [3.14, 'PI'] };
   const schema = generateJsonSchema(instance);
-  // FIXME: This assumption is the correct one, but we crteate a oneOf in this case
+  // FIXME: This assumption is the correct one, but we create a oneOf in this case
   t.deepEqual(schema, {
     type: 'object',
     properties: {

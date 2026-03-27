@@ -11,6 +11,7 @@
       :id="control.id + '-input'"
       :class="styles.control.input"
       :disabled="!control.enabled"
+      :readonly="control.readonly"
       :autofocus="appliedOptions.focus"
       :placeholder="appliedOptions.placeholder"
       :label="computedLabel"
@@ -48,6 +49,7 @@
       :id="control.id + '-input'"
       :class="styles.control.input"
       :disabled="!control.enabled"
+      :readonly="control.readonly"
       :autofocus="appliedOptions.focus"
       :placeholder="appliedOptions.placeholder"
       :label="computedLabel"
@@ -88,7 +90,6 @@ import {
   type RendererProps,
 } from '@jsonforms/vue';
 import every from 'lodash/every';
-import isArray from 'lodash/isArray';
 import isString from 'lodash/isString';
 import { defineComponent } from 'vue';
 import { VCombobox, VTextField } from 'vuetify/components';
@@ -123,7 +124,7 @@ const controlRenderer = defineComponent({
 
       if (
         suggestions === undefined ||
-        !isArray(suggestions) ||
+        !Array.isArray(suggestions) ||
         !every(suggestions, isString)
       ) {
         // check for incorrect data

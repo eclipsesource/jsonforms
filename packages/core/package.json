@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/core",
-  "version": "3.7.0",
+  "version": "3.8.0-alpha.0",
   "description": "Core module of JSON Forms",
   "repository": {
     "type": "git",
@@ -69,7 +69,7 @@
   },
   "dependencies": {
     "@types/json-schema": "^7.0.3",
-    "ajv": "^8.6.1",
+    "ajv": "^8.18.0",
     "ajv-formats": "^2.1.0",
     "lodash": "^4.17.21"
   },

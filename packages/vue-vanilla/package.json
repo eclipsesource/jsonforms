@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/vue-vanilla",
-  "version": "3.7.0",
+  "version": "3.8.0-alpha.0",
   "description": "Vue 3 Vanilla renderers for JSON Forms",
   "repository": {
     "type": "git",
@@ -43,7 +43,7 @@
     "vanilla.css"
   ],
   "scripts": {
-    "serve": "vue-cli-service serve dev/serve.ts",
+    "dev": "vue-cli-service serve dev/serve.ts",
     "build": "cross-env NODE_ENV=production rollup --config rollup.config.js",
     "build:examples-app": "rollup -c rollup.example.config.js",
     "clean": "rimraf lib example/dist",
@@ -97,8 +97,8 @@
     "vue": "^3.5.17"
   },
   "peerDependencies": {
-    "@jsonforms/core": "3.7.0",
-    "@jsonforms/vue": "3.7.0",
+    "@jsonforms/core": "3.8.0-alpha.0",
+    "@jsonforms/vue": "3.8.0-alpha.0",
     "vue": "^3.5.0"
   }
 }
