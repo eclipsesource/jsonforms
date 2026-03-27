@@ -67,7 +67,7 @@ In this case, you can try to clean the repository with `git clean -dfx`. Beware 
 - Run React Vanilla examples: `cd packages/vanilla-renderers && pnpm run dev`
 - Run React Material examples: `cd packages/material-renderers && pnpm run dev`
 - Run Angular Material examples: `cd packages/angular-material && pnpm run dev`
-- Run Vue Vanilla dev setup: `cd packages/vue-vanilla && pnpm run serve`
+- Run Vue Vanilla dev setup: `cd packages/vue-vanilla && pnpm run dev`
 - Run Vue Vuetify dev setup: `cd packages/vue-vuetify && pnpm run dev`
 
 ### Dependency & Release management
