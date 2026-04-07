@@ -1,7 +1,7 @@
 # See here for image contents: https://github.com/microsoft/vscode-dev-containers/tree/v0.191.1/containers/javascript-node/.devcontainer/base.Dockerfile
 
-# [Choice] Node.js version: 22
-ARG VARIANT="22"
+# [Choice] Node.js version: 24
+ARG VARIANT="24"
 FROM mcr.microsoft.com/vscode/devcontainers/javascript-node:1-${VARIANT}
 
 # Install chromium and point the CHROME_BIN environment variable to it
