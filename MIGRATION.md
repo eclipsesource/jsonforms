@@ -40,6 +40,12 @@ return this.t(label, label) as string;
 
 This does not affect the Composition API where `Translator` is accessed directly from a `ComputedRef`.
 
+### Angular material removes hammerjs
+
+The angular material package no longer depends or imports the `hammerjs` package.
+`hammerjs` is a deprecated package for touch gesture support that was last updated 10 years ago.
+Thus, it is not expected to be in use. However, if you notice sudden failures in reaction to touch gestures, check if you are still using this.
+
 ## Migrating to JSON Forms 3.7
 
 ### Angular support now targets Angular 19 to 21
