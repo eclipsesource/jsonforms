@@ -28,6 +28,7 @@ import {
   JsonFormsCore,
   JsonSchema,
   TesterContext,
+  createTranslator,
   Translator,
   UISchemaElement,
 } from '@jsonforms/core';
@@ -58,4 +59,6 @@ export const createTesterContext = (
   return { rootSchema, config };
 };
 
-export const testTranslator: Translator = (key: string) => 'translator.' + key;
+export const testTranslator: Translator = createTranslator(
+  (key) => 'translator.' + key
+);

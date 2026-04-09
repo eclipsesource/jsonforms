@@ -2,6 +2,44 @@
 
 ## Migrating to JSON Forms 3.8
 
+### `Translator` type changed from overloaded signatures to a generic conditional type
+
+The `Translator` type was changed to improve compatibility with TypeScript's `strictFunctionTypes` and `strictNullChecks` compiler options (see [#2528](https://github.com/eclipsesource/jsonforms/issues/2528)).
+
+If you were previously assigning a function directly to the `Translator` type, this may no longer compile:
+
+```ts
+// No longer compiles
+const t: Translator = (id, defaultMessage) => defaultMessage ?? id;
+```
+
+Use the new `createTranslator` helper instead:
+
+```ts
+import { createTranslator } from '@jsonforms/core';
+
+const t = createTranslator((id, defaultMessage) => defaultMessage ?? id);
+```
+
+This also replaces the `as Translator` workaround that was previously needed under strict TypeScript settings.
+
+#### Vue: `Translator` return type in Options API
+
+If you have custom Vue renderers that access a `Translator` via `this` (Options API), the return type may no longer narrow to `string` even when a `defaultMessage` is provided.
+This is because Vue's ref unwrapping loses the generic parameter of the new conditional type.
+
+To fix this, use `as string` when you know a default message is always provided:
+
+```ts
+// Before (may now return string | undefined)
+return this.t(label, label);
+
+// After
+return this.t(label, label) as string;
+```
+
+This does not affect the Composition API where `Translator` is accessed directly from a `ComputedRef`.
+
 ### Angular material removes hammerjs
 
 The angular material package no longer depends or imports the `hammerjs` package.

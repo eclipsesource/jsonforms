@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { clearAllIds, type Translator } from '@jsonforms/core';
+import { clearAllIds, createTranslator } from '@jsonforms/core';
 import OneOfControlRenderer from '../../../src/complex/OneOfRenderer.vue';
 import { entry as oneOfControlRendererEntry } from '../../../src/complex/OneOfRenderer.entry';
 import { mountJsonForms } from '../util';
@@ -40,12 +40,12 @@ describe('OneOfRenderer.vue', () => {
     // clear all ids to guarantee that the snapshots will always be generated with the same ids
     clearAllIds();
     wrapper = mountJsonForms(data, schema, renderers, uischema, undefined, {
-      translate: ((id, defaultMessage) => {
+      translate: createTranslator((id, defaultMessage) => {
         if (id.endsWith('clearDialogAccept')) {
           return 'Do the clear!';
         }
         return defaultMessage;
-      }) as Translator,
+      }),
     });
   });
 

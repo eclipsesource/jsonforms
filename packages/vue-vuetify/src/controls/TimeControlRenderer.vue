@@ -365,7 +365,7 @@ const controlRenderer = defineComponent({
           ? this.appliedOptions.clearLabel
           : 'Clear';
 
-      return this.t(label, label);
+      return this.t(label, label) as string;
     },
     cancelLabel(): string {
       const label =
@@ -373,14 +373,14 @@ const controlRenderer = defineComponent({
           ? this.appliedOptions.cancelLabel
           : 'Cancel';
 
-      return this.t(label, label);
+      return this.t(label, label) as string;
     },
     okLabel(): string {
       const label =
         typeof this.appliedOptions.okLabel == 'string'
           ? this.appliedOptions.okLabel
           : 'OK';
-      return this.t(label, label);
+      return this.t(label, label) as string;
     },
     showActions(): boolean {
       return this.appliedOptions.showActions === true;
