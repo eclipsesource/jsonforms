@@ -27,7 +27,7 @@ jobs:
       id-token: 'write' # Required for npm OIDC
     runs-on: 'ubuntu-latest'
     steps:
-      - uses: 'actions/checkout@v4'
+      - uses: 'actions/checkout@v6'
         with:
           token: '${{ secrets.JSONFORMS_PUBLISH_PAT }}'
 
@@ -36,21 +36,17 @@ jobs:
           git config user.name "jsonforms-publish[bot]"
           git config user.email "jsonforms-publish@eclipsesource.com"
 
-      - uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda # v4.1.0
+      - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5.0.0
         name: Install pnpm
         id: pnpm-install
         with:
           run_install: false
 
       - name: 'Setup node'
-        uses: 'actions/setup-node@v4'
+        uses: 'actions/setup-node@v6'
         with:
-          node-version: '22'
+          node-version: '24'
           registry-url: 'https://registry.npmjs.org'
-
-      # Ensure npm 11.5.1 or later for trusted publishing
-      - name: Update npm
-        run: npm install -g npm@latest
 
       - name: 'Install Packages'
         run: 'pnpm i --frozen-lockfile'
