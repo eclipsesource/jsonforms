@@ -36,8 +36,10 @@ import {
   ControlElement,
   EnumOption,
   isEnumControl,
+  isOneOfEnumControl,
   JsonFormsState,
   mapStateToEnumControlProps,
+  mapStateToOneOfEnumControlProps,
   OwnPropsOfControl,
   OwnPropsOfEnum,
   RankedTester,
@@ -52,51 +54,53 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
+const template = `
+  <mat-form-field [ngStyle]="{ display: hidden ? 'none' : '' }">
+    <mat-label>{{ label }}</mat-label>
+    <input
+      matInput
+      type="text"
+      (change)="onChange($event)"
+      [id]="id"
+      [formControl]="form"
+      [matAutocomplete]="auto"
+      (keydown)="updateFilter($event)"
+      (focus)="focused = true"
+      (focusout)="focused = false"
+    />
+    <mat-autocomplete
+      autoActiveFirstOption
+      #auto="matAutocomplete"
+      (optionSelected)="onSelect($event)"
+      [displayWith]="displayFn"
+    >
+      @for (option of filteredOptions | async; track option.value) {
+      <mat-option [value]="option">
+        {{ option.label }}
+      </mat-option>
+      }
+    </mat-autocomplete>
+    <mat-hint *ngIf="shouldShowUnfocusedDescription() || focused">{{
+      description
+    }}</mat-hint>
+    <mat-error>{{ error }}</mat-error>
+  </mat-form-field>
+`;
+
+const style = `
+  :host {
+    display: flex;
+    flex-direction: row;
+  }
+  mat-form-field {
+    flex: 1 1 auto;
+  }
+`;
+
 @Component({
-  selector: 'AutocompleteControlRenderer',
-  template: `
-    <mat-form-field [ngStyle]="{ display: hidden ? 'none' : '' }">
-      <mat-label>{{ label }}</mat-label>
-      <input
-        matInput
-        type="text"
-        (change)="onChange($event)"
-        [id]="id"
-        [formControl]="form"
-        [matAutocomplete]="auto"
-        (keydown)="updateFilter($event)"
-        (focus)="focused = true"
-        (focusout)="focused = false"
-      />
-      <mat-autocomplete
-        autoActiveFirstOption
-        #auto="matAutocomplete"
-        (optionSelected)="onSelect($event)"
-        [displayWith]="displayFn"
-      >
-        @for (option of filteredOptions | async; track option.value) {
-        <mat-option [value]="option">
-          {{ option.label }}
-        </mat-option>
-        }
-      </mat-autocomplete>
-      <mat-hint *ngIf="shouldShowUnfocusedDescription() || focused">{{
-        description
-      }}</mat-hint>
-      <mat-error>{{ error }}</mat-error>
-    </mat-form-field>
-  `,
-  styles: [
-    `
-      :host {
-        display: flex;
-        flex-direction: row;
-      }
-      mat-form-field {
-        flex: 1 1 auto;
-      }
-    `,
-  ],
+  selector: 'OneOfEnumControlRenderer',
+  template,
+  styles: [style],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
@@ -106,11 +110,11 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatAutocompleteModule,
   ],
 })
-export class AutocompleteControlRenderer
+export class OneOfEnumControlRenderer
   extends JsonFormsControl
   implements OnInit
 {
-  @Input() options?: EnumOption[] | string[];
+  @Input() options?: EnumOption[];
   valuesToTranslatedOptions?: Map<string, EnumOption>;
   filteredOptions: Observable<EnumOption[]>;
   shouldFilter: boolean;
@@ -123,7 +127,7 @@ export class AutocompleteControlRenderer
   protected override mapToProps(
     state: JsonFormsState
   ): StatePropsOfControl & OwnPropsOfEnum {
-    return mapStateToEnumControlProps(state, this.getOwnProps());
+    return mapStateToOneOfEnumControlProps(state, this.getOwnProps());
   }
 
   getEventValue = (event: any) => event.target.value;
@@ -209,29 +213,51 @@ export class AutocompleteControlRenderer
   protected getOwnProps(): OwnPropsOfControl & OwnPropsOfEnum {
     return {
       ...super.getOwnProps(),
-      options: this.stringOptionsToEnumOptions(this.options),
+      options: this.options,
     };
   }
+}
 
-  /**
-   * For {@link options} input backwards compatibility
-   */
-  protected stringOptionsToEnumOptions(
-    options: typeof this.options
-  ): EnumOption[] | undefined {
-    if (!options) {
-      return undefined;
-    }
+export const oneOfEnumControlTester: RankedTester = rankWith(
+  5,
+  isOneOfEnumControl
+);
 
-    return options.every((item) => typeof item === 'string')
-      ? options.map((str) => {
-          return {
-            label: str,
-            value: str,
-          } satisfies EnumOption;
-        })
-      : options;
+@Component({
+  selector: 'EnumControlRenderer, AutocompleteControlRenderer',
+  template,
+  styles: [style],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatAutocompleteModule,
+  ],
+})
+export class EnumControlRenderer extends OneOfEnumControlRenderer {
+  // eslint-disable-next-line @angular-eslint/no-input-rename
+  @Input('options')
+  set stringOptions(strOptions: string[]) {
+    this.options = strOptions.map((str) => {
+      return {
+        label: str,
+        value: str,
+      };
+    });
+  }
+
+  protected override mapToProps(
+    state: JsonFormsState
+  ): StatePropsOfControl & OwnPropsOfEnum {
+    return mapStateToEnumControlProps(state, this.getOwnProps());
   }
 }
+
+/**
+ * For {@link AutocompleteControlRenderer} class name backwards compatibility
+ */
+export { EnumControlRenderer as AutocompleteControlRenderer };
 
 export const enumControlTester: RankedTester = rankWith(2, isEnumControl);
