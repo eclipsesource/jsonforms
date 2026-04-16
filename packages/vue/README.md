@@ -289,6 +289,27 @@ const myComponent = defineComponent({
 The injected `jsonforms` object is not meant to be modified directly.
 Instead it should be modified via the provided `dispatch` and by changing the props of the `json-forms` component.
 
+### Testing with Jest / Vitest
+
+When testing custom renderers with Jest or Vitest using CJS transforms, `vue` must be imported **before** `@jsonforms/vue` in your renderer files.
+This is due to the CJS bundle eagerly evaluating Vue component definitions at `require()` time, which can cause issues when Jest's module resolution processes imports sequentially.
+
+```ts
+// Correct - import vue before @jsonforms/vue
+import { defineComponent } from 'vue';
+import { rendererProps, useJsonFormsControl } from '@jsonforms/vue';
+```
+
+```ts
+// May cause errors in tests:
+//   "Property 'controlWrapper' was accessed during render but is not defined on instance"
+import { rendererProps, useJsonFormsControl } from '@jsonforms/vue';
+import { defineComponent } from 'vue';
+```
+
+This only affects test environments using CJS module transforms.
+Browser builds using Webpack, Vite, or other ESM-aware bundlers are not affected.
+
 ## License
 
 The JSON Forms project is licensed under the MIT License. See the [LICENSE file](https://github.com/eclipsesource/jsonforms/blob/master/LICENSE) for more information.
