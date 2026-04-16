@@ -34,6 +34,13 @@
   "main": "lib/jsonforms-vue.cjs.js",
   "module": "lib/jsonforms-vue.esm.js",
   "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./lib/jsonforms-vue.esm.js",
+      "require": "./lib/jsonforms-vue.cjs.js",
+      "types": "./lib/index.d.ts"
+    }
+  },
   "files": [
     "lib/*",
     "src/*"
