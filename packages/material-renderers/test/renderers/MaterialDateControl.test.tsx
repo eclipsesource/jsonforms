@@ -33,6 +33,9 @@ import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { JsonFormsStateProvider } from '@jsonforms/react';
 import { initCore, TestEmitter } from './util';
+import { DatePicker } from '@mui/x-date-pickers';
+import dayjs from 'dayjs';
+import { act } from 'react-dom/test-utils';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -149,8 +152,9 @@ describe('Material date control', () => {
         <MaterialDateControl schema={schema} uischema={control} />
       </JsonFormsStateProvider>
     );
-    const input = wrapper.find('input').first();
-    expect(input.props().autoFocus).toBe(true);
+    const picker = wrapper.find(DatePicker);
+    const textFieldProps = picker.props().slotProps.textField as any;
+    expect(textFieldProps.autoFocus).toBe(true);
   });
 
   it('should not autofocus via option', () => {
@@ -222,9 +226,12 @@ describe('Material date control', () => {
         <MaterialDateControl schema={schema} uischema={uischema} />
       </JsonFormsStateProvider>
     );
-    const input = wrapper.find('input').first();
-    (input.getDOMNode() as HTMLInputElement).value = '1961-04-12';
-    input.simulate('blur', input);
+    const picker = wrapper.find(DatePicker);
+    const onAccept = picker.props().onAccept as any;
+    act(() => {
+      onAccept(dayjs('1961-04-12'));
+    });
+    wrapper.update();
     expect(onChangeData.data.foo).toBe('1961-04-12');
   });
 
@@ -416,11 +423,14 @@ describe('Material date control', () => {
       </JsonFormsStateProvider>
     );
 
-    const input = wrapper.find('input').first();
-    expect(input.props().value).toBe('1980/06');
+    const picker = wrapper.find(DatePicker);
+    expect(picker.props().format).toBe('YYYY/MM');
 
-    (input.getDOMNode() as HTMLInputElement).value = '1961/04';
-    input.simulate('blur', input);
+    const onAccept = picker.props().onAccept as any;
+    act(() => {
+      onAccept(dayjs('1961-04-01'));
+    });
+    wrapper.update();
     expect(onChangeData.data.foo).toBe('04---1961');
   });
 });

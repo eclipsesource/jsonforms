@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import merge from 'lodash/merge';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   ControlProps,
   defaultDateFormat,
@@ -37,7 +37,6 @@ import { FormHelperText } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import {
-  createOnBlurHandler,
   createOnChangeHandler,
   getData,
   useFocus,
@@ -70,7 +69,6 @@ export const MaterialDateControl = (props: ControlProps) => {
     appliedUiSchemaOptions.showUnfocusedDescription
   );
 
-  const [key, setKey] = useState<number>(0);
   const [open, setOpen] = useState<boolean>(false);
 
   const format = appliedUiSchemaOptions.dateFormat ?? 'YYYY-MM-DD';
@@ -86,25 +84,11 @@ export const MaterialDateControl = (props: ControlProps) => {
     : null;
   const secondFormHelperText = showDescription && !isValid ? errors : null;
 
-  const updateChild = useCallback(() => setKey((key) => key + 1), []);
-
   const onChange = useMemo(
     () => createOnChangeHandler(path, handleChange, saveFormat),
     [path, handleChange, saveFormat]
   );
 
-  const onBlurHandler = useMemo(
-    () =>
-      createOnBlurHandler(
-        path,
-        handleChange,
-        format,
-        saveFormat,
-        updateChild,
-        onBlur
-      ),
-    [path, handleChange, format, saveFormat, updateChild, onBlur]
-  );
   const value = getData(data, saveFormat);
 
   if (!visible) {
@@ -117,10 +101,10 @@ export const MaterialDateControl = (props: ControlProps) => {
         open={open}
         onOpen={() => setOpen(true)}
         onClose={() => setOpen(false)}
-        key={key}
         label={label}
         value={value}
         onAccept={onChange}
+        onChange={onChange}
         format={format}
         views={views}
         disabled={!enabled}
@@ -136,13 +120,13 @@ export const MaterialDateControl = (props: ControlProps) => {
             error: !isValid,
             fullWidth: !appliedUiSchemaOptions.trim,
             variant: inputVariant,
-            inputProps: {
-              autoFocus: appliedUiSchemaOptions.focus,
-              type: 'text',
-              onFocus: onFocus,
-              onBlur: onBlurHandler,
+            autoFocus: appliedUiSchemaOptions.focus,
+            onFocus: onFocus,
+            onBlur: onBlur,
+            slotProps: {
+              htmlInput: { type: 'text' },
+              inputLabel: data ? { shrink: true } : undefined,
             },
-            InputLabelProps: data ? { shrink: true } : undefined,
           },
         }}
       />

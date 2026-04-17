@@ -33,6 +33,9 @@ import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { JsonFormsStateProvider } from '@jsonforms/react';
 import { initCore, TestEmitter } from './util';
+import { TimePicker } from '@mui/x-date-pickers';
+import dayjs from 'dayjs';
+import { act } from 'react-dom/test-utils';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -149,8 +152,9 @@ describe('Material time control', () => {
         <MaterialTimeControl schema={schema} uischema={control} />
       </JsonFormsStateProvider>
     );
-    const input = wrapper.find('input').first();
-    expect(input.props().autoFocus).toBe(true);
+    const picker = wrapper.find(TimePicker);
+    const textFieldProps = picker.props().slotProps.textField as any;
+    expect(textFieldProps.autoFocus).toBe(true);
   });
 
   it('should not autofocus via option', () => {
@@ -222,9 +226,12 @@ describe('Material time control', () => {
         <MaterialTimeControl schema={schema} uischema={uischema} />
       </JsonFormsStateProvider>
     );
-    const input = wrapper.find('input').first();
-    (input.getDOMNode() as HTMLInputElement).value = '08:40';
-    input.simulate('blur', input);
+    const picker = wrapper.find(TimePicker);
+    const onAccept = picker.props().onAccept as any;
+    act(() => {
+      onAccept(dayjs('2000-01-01 08:40:00'));
+    });
+    wrapper.update();
     expect(onChangeData.data.foo).toBe('08:40:00');
   });
 
@@ -416,11 +423,14 @@ describe('Material time control', () => {
       </JsonFormsStateProvider>
     );
 
-    const input = wrapper.find('input').first();
-    expect(input.props().value).toBe('02-13');
+    const picker = wrapper.find(TimePicker);
+    expect(picker.props().format).toBe('mm-HH');
 
-    (input.getDOMNode() as HTMLInputElement).value = '12-01';
-    input.simulate('blur', input);
+    const onAccept = picker.props().onAccept as any;
+    act(() => {
+      onAccept(dayjs('2000-01-01 01:12:00'));
+    });
+    wrapper.update();
     expect(onChangeData.data.foo).toBe('1//12 am');
   });
 });

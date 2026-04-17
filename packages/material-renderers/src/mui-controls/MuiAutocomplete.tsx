@@ -126,8 +126,6 @@ export const MuiAutocomplete = (
             <TextField
               label={label}
               type='text'
-              inputProps={params.inputProps}
-              inputRef={params.InputProps.ref}
               autoFocus={appliedUiSchemaOptions.focus}
               disabled={!enabled}
               {...params}
@@ -137,10 +135,15 @@ export const MuiAutocomplete = (
               }
               error={!isValid}
               fullWidth={!appliedUiSchemaOptions.trim}
-              InputLabelProps={data ? { shrink: true } : undefined}
               onFocus={onFocus}
               onBlur={onBlur}
               focused={focused}
+              slotProps={{
+                ...params.slotProps,
+                inputLabel: data
+                  ? { ...params.slotProps?.inputLabel, shrink: true }
+                  : params.slotProps?.inputLabel,
+              }}
             />
           );
         }}

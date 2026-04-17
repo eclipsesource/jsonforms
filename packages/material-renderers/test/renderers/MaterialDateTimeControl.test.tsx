@@ -38,6 +38,8 @@ import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { JsonFormsStateProvider } from '@jsonforms/react';
 import { initCore, TestEmitter } from './util';
+import { DateTimePicker } from '@mui/x-date-pickers';
+import { act } from 'react-dom/test-utils';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -156,8 +158,9 @@ describe('Material date time control', () => {
         <MaterialDateTimeControl schema={schema} uischema={control} />
       </JsonFormsStateProvider>
     );
-    const input = wrapper.find('input').first();
-    expect(input.props().autoFocus).toBeTruthy();
+    const picker = wrapper.find(DateTimePicker);
+    const textFieldProps = picker.props().slotProps.textField as any;
+    expect(textFieldProps.autoFocus).toBeTruthy();
   });
 
   it('should not autofocus via option', () => {
@@ -229,9 +232,12 @@ describe('Material date time control', () => {
         <MaterialDateTimeControl schema={schema} uischema={uischema} />
       </JsonFormsStateProvider>
     );
-    const input = wrapper.find('input').first();
-    (input.getDOMNode() as HTMLInputElement).value = '1961-12-12 20:15';
-    input.simulate('blur', input);
+    const picker = wrapper.find(DateTimePicker);
+    const onAccept = picker.props().onAccept as any;
+    act(() => {
+      onAccept(dayjs('1961-12-12 20:15'));
+    });
+    wrapper.update();
     expect(onChangeData.data.foo).toBe(
       dayjs('1961-12-12 20:15').format(defaultDateTimeFormat)
     );
@@ -431,11 +437,14 @@ describe('Material date time control', () => {
       </JsonFormsStateProvider>
     );
 
-    const input = wrapper.find('input').first();
-    expect(input.props().value).toBe('23-04-80 01:37:pm');
+    const picker = wrapper.find(DateTimePicker);
+    expect(picker.props().format).toBe('DD-MM-YY hh:mm:a');
 
-    (input.getDOMNode() as HTMLInputElement).value = '10-12-05 11:22:am';
-    input.simulate('blur', input);
+    const onAccept = picker.props().onAccept as any;
+    act(() => {
+      onAccept(dayjs('2005-12-10 11:22'));
+    });
+    wrapper.update();
     expect(onChangeData.data.foo).toBe('2005/12/10 11:22 am');
   });
 });

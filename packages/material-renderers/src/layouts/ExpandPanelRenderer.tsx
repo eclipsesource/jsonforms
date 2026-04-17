@@ -148,9 +148,9 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
       onChange={handleExpansion(childPath)}
     >
       <AccordionSummary expandIcon={<ExpandMore />}>
-        <Grid container sx={{ width: '100%' }} alignItems={'center'}>
+        <Grid container sx={{ width: '100%', alignItems: 'center' }}>
           <Grid size={{ xs: 7, md: 9 }}>
-            <Grid container alignItems={'center'}>
+            <Grid container sx={{ alignItems: 'center' }}>
               <Grid size={{ xs: 2, md: 1 }}>
                 <Avatar aria-label='Index'>{index + 1}</Avatar>
               </Grid>
@@ -160,13 +160,12 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
             </Grid>
           </Grid>
           <Grid size={{ xs: 5, md: 3 }}>
-            <Grid container justifyContent='flex-end'>
+            <Grid container sx={{ justifyContent: 'flex-end' }}>
               <Grid>
                 <Grid
                   container
                   direction='row'
-                  justifyContent='center'
-                  alignItems='center'
+                  sx={{ justifyContent: 'center', alignItems: 'center' }}
                 >
                   {showSortButtons && enabled ? (
                     <Fragment>

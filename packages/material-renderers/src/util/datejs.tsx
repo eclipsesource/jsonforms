@@ -19,6 +19,11 @@ export const createOnChangeHandler =
     }
   };
 
+/**
+ * @deprecated Since MUI X v9, the accessible field DOM structure is the default
+ * and blur events on the field container no longer contain input values.
+ * Use the picker's onChange/onAccept callbacks instead.
+ */
 export const createOnBlurHandler =
   (
     path: string,

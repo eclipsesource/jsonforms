@@ -35,13 +35,15 @@ export const ArrayLayoutToolbar = React.memo(function ArrayLayoutToolbar({
 }: ArrayLayoutToolbarProps) {
   return (
     <Toolbar disableGutters={true}>
-      <Stack width='100%'>
-        <Grid container alignItems='center' justifyContent='space-between'>
+      <Stack sx={{ width: '100%' }}>
+        <Grid
+          container
+          sx={{ alignItems: 'center', justifyContent: 'space-between' }}
+        >
           <Grid>
             <Grid
               container
-              justifyContent={'flex-start'}
-              alignItems={'center'}
+              sx={{ justifyContent: 'flex-start', alignItems: 'center' }}
               spacing={2}
             >
               <Grid>

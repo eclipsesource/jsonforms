@@ -81,8 +81,7 @@ const TableToolbar = React.memo(function TableToolbar({
         <Stack>
           <Grid
             container
-            justifyContent={'flex-start'}
-            alignItems={'center'}
+            sx={{ justifyContent: 'flex-start', alignItems: 'center' }}
             spacing={2}
           >
             <Grid>
