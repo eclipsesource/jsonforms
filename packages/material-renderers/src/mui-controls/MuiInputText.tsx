@@ -32,7 +32,7 @@ import {
   useTheme,
 } from '@mui/material';
 import merge from 'lodash/merge';
-import { Close } from '@mui/icons-material';
+import Close from '@mui/icons-material/Close';
 import {
   JsonFormsTheme,
   WithInputProps,

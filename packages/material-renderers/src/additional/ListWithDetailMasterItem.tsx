@@ -33,7 +33,7 @@ import {
   ListItemText,
   Tooltip,
 } from '@mui/material';
-import { Delete } from '@mui/icons-material';
+import Delete from '@mui/icons-material/Delete';
 import React from 'react';
 
 export const ListWithDetailMasterItem = ({

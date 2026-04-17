@@ -12,6 +12,8 @@ const baseConfig = {
     'react',
     /^lodash\/.*/,
     /^dayjs\/.*/,
+    /^@mui\/icons-material\/.*/,
+    /^@mui\/x-date-pickers\/.*/,
   ],
 };
 
