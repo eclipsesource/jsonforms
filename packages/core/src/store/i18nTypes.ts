@@ -1,11 +1,11 @@
 import type { ErrorObject } from 'ajv';
 import type { JsonSchema, UISchemaElement } from '../models';
 
-export type Translator = {
-  (id: string, defaultMessage: string, values?: any): string;
-  (id: string, defaultMessage: undefined, values?: any): string | undefined;
-  (id: string, defaultMessage?: string, values?: any): string | undefined;
-};
+export type Translator = <D extends string | undefined = undefined>(
+  id: string,
+  defaultMessage?: D,
+  values?: any
+) => D extends string ? string : string | undefined;
 
 export type ErrorTranslator = (
   error: ErrorObject,

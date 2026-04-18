@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { Translator } from '@jsonforms/core';
+import { createTranslator, Translator } from '@jsonforms/core';
 import get from 'lodash/get';
 import { registerExamples } from '../register';
 
@@ -292,9 +292,9 @@ export const translations = {
     label: 'Address',
   },
 };
-export const translate: Translator = (key: string, defaultMessage: string) => {
+export const translate: Translator = createTranslator((key, defaultMessage) => {
   return get(translations, key) ?? defaultMessage;
-};
+});
 
 registerExamples([
   {
