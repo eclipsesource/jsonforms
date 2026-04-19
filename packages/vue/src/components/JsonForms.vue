@@ -8,6 +8,7 @@
 
 <script lang="ts">
 import { PropType, reactive, defineComponent } from 'vue';
+import isEqual from 'lodash/isEqual';
 import {
   coreReducer,
   Actions,
@@ -201,14 +202,18 @@ export default defineComponent({
       this.uischemaToUse = newUischema ?? generateUISchema(this.schemaToUse);
     },
     data(newData) {
+      const isSameAsCurrentData = newData === this.dataToUse;
       this.dataToUse = newData;
 
-      if (!this.schema) {
-        this.schemaToUse = Generate.jsonSchema(
+      if (!this.schema && !isSameAsCurrentData) {
+        const nextSchema = Generate.jsonSchema(
           getSchemaGeneratorInput(this.dataToUse)
         );
-        if (!this.uischema) {
-          this.uischemaToUse = generateUISchema(this.schemaToUse);
+        if (!isEqual(nextSchema, this.schemaToUse)) {
+          this.schemaToUse = nextSchema;
+          if (!this.uischema) {
+            this.uischemaToUse = generateUISchema(this.schemaToUse);
+          }
         }
       }
     },

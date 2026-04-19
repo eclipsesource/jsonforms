@@ -112,4 +112,70 @@ describe('JsonForms.vue', () => {
 
     expect((wrapper.vm as any).jsonforms.core.data).toEqual({ number: 6 });
   });
+
+  it('does not regenerate schema and uischema when the parent passes back the current form data', async () => {
+    const data = { number: 5.5 };
+    const renderers: JsonFormsUISchemaRegistryEntry[] = [];
+    const wrapper = shallowMount(
+      JsonForms,
+      bindings({
+        props: { data, renderers },
+      })
+    );
+
+    const initialSchema = (wrapper.vm as any).schemaToUse;
+    const initialUiSchema = (wrapper.vm as any).uischemaToUse;
+
+    (wrapper.vm as any).dispatch(Actions.update('number', () => 6));
+    await nextTick();
+
+    await wrapper.setProps({
+      data: (wrapper.vm as any).jsonforms.core.data,
+    });
+
+    expect((wrapper.vm as any).schemaToUse).toBe(initialSchema);
+    expect((wrapper.vm as any).uischemaToUse).toBe(initialUiSchema);
+  });
+
+  it('regenerates schema and uischema for external data changes', async () => {
+    const data = { number: 5.5 };
+    const nextData = { number: 5.5, text: 'hello' };
+    const renderers: JsonFormsUISchemaRegistryEntry[] = [];
+    const wrapper = shallowMount(
+      JsonForms,
+      bindings({
+        props: { data, renderers },
+      })
+    );
+
+    const initialSchema = (wrapper.vm as any).schemaToUse;
+    const initialUiSchema = (wrapper.vm as any).uischemaToUse;
+
+    await wrapper.setProps({ data: nextData });
+
+    expect((wrapper.vm as any).schemaToUse).not.toBe(initialSchema);
+    expect((wrapper.vm as any).uischemaToUse).not.toBe(initialUiSchema);
+    expect((wrapper.vm as any).jsonforms.core.schema).toEqual(
+      Generate.jsonSchema(nextData)
+    );
+  });
+
+  it('does not regenerate schema and uischema when external data keeps the same schema', async () => {
+    const data = 'hello';
+    const renderers: JsonFormsUISchemaRegistryEntry[] = [];
+    const wrapper = shallowMount(
+      JsonForms,
+      bindings({
+        props: { data, renderers },
+      })
+    );
+
+    const initialSchema = (wrapper.vm as any).schemaToUse;
+    const initialUiSchema = (wrapper.vm as any).uischemaToUse;
+
+    await wrapper.setProps({ data: 'world' });
+
+    expect((wrapper.vm as any).schemaToUse).toBe(initialSchema);
+    expect((wrapper.vm as any).uischemaToUse).toBe(initialUiSchema);
+  });
 });
