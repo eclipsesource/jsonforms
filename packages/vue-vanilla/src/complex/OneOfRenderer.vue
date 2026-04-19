@@ -88,10 +88,9 @@ import {
   useJsonForms,
   useJsonFormsOneOfControl,
 } from '@jsonforms/vue';
-import { defineComponent, inject, nextTick, ref } from 'vue';
+import { defineComponent, nextTick, ref } from 'vue';
 import { useVanillaControl } from '../util';
 import { ControlWrapper } from '../controls';
-import { useVanillaControl } from '../util';
 import CombinatorProperties from './components/CombinatorProperties.vue';
 
 const controlRenderer = defineComponent({
