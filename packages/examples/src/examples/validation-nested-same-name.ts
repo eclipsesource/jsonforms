@@ -1,7 +1,7 @@
 /*
   The MIT License
 
-  Copyright (c) 2017-2019 EclipseSource Munich
+  Copyright (c) 2026 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,43 +22,48 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import { UISchemaElement } from '@jsonforms/core';
+import { registerExamples } from '../register';
 
-import {
-  createAjv,
-  JsonFormsCore,
-  JsonSchema,
-  TesterContext,
-  createTranslator,
-  Translator,
-  UISchemaElement,
-} from '@jsonforms/core';
-import { JsonFormsReactProps, useJsonForms } from '@jsonforms/react';
-import React from 'react';
-
-export const initCore = (
-  schema: JsonSchema,
-  uischema: UISchemaElement,
-  data?: any
-): JsonFormsCore => {
-  return { schema, uischema, data, ajv: createAjv() };
+export const schema = {
+  type: 'object',
+  properties: {
+    name: {
+      type: 'object',
+      properties: {
+        name: {
+          type: 'object',
+          properties: {
+            name: {
+              type: 'string',
+            },
+          },
+          required: ['name'],
+        },
+      },
+      required: ['name'],
+    },
+  },
 };
 
-export const TestEmitter: React.FC<JsonFormsReactProps> = ({ onChange }) => {
-  const ctx = useJsonForms();
-  const { data, errors } = ctx.core;
-  React.useEffect(() => {
-    onChange({ data, errors });
-  }, [data, errors]);
-  return null;
+export const uischema: UISchemaElement = {
+  type: 'Control',
+  scope: '#/properties/name/properties/name/properties/name',
+  label: 'Name',
 };
 
-export const createTesterContext = (
-  rootSchema: JsonSchema,
-  config?: any
-): TesterContext => {
-  return { rootSchema, config };
+export const data = {
+  name: {
+    name: {},
+  },
 };
 
-export const testTranslator: Translator = createTranslator(
-  (key) => 'translator.' + key
-);
+registerExamples([
+  {
+    name: 'validation-nested-same-name',
+    label: 'Validation - 3x nested properties with same name',
+    data,
+    schema,
+    uischema,
+  },
+]);

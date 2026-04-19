@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import { registerExamples } from '../register';
-import { Translator } from '@jsonforms/core';
+import { createTranslator, Translator } from '@jsonforms/core';
 import get from 'lodash/get';
 
 export const schema = {
@@ -116,12 +116,9 @@ export const translations: Record<string, string> = {
   'status.rejected': 'Declined',
 };
 
-export const translate: Translator = (
-  key: string,
-  defaultMessage: string | undefined
-) => {
+export const translate: Translator = createTranslator((key, defaultMessage) => {
   return get(translations, key) ?? defaultMessage;
-};
+});
 
 registerExamples([
   {

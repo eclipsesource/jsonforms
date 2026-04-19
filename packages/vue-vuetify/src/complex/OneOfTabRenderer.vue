@@ -76,7 +76,6 @@ import {
   type RendererProps,
   useJsonFormsOneOfControl,
 } from '@jsonforms/vue';
-import isEmpty from 'lodash/isEmpty';
 import { defineComponent, ref } from 'vue';
 import {
   VBtn,
@@ -156,7 +155,7 @@ const controlRenderer = defineComponent({
       // revert back to the orginal value until the dialog is done
       this.selectIndex = this.selectedIndex;
 
-      if (isEmpty(this.control.data)) {
+      if (this.control.data === undefined) {
         this.openNewTab(this.newSelectedIndex);
       } else {
         this.dialog = true;

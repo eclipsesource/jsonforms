@@ -80,6 +80,7 @@ import * as mixed from './examples/mixed';
 import * as mixedObject from './examples/mixed-object';
 import * as string from './examples/string';
 import * as prependAppendSlots from './examples/prepend-append-slots';
+import * as validationNestedSameName from './examples/validation-nested-same-name';
 export * from './register';
 export * from './example';
 
@@ -149,4 +150,5 @@ export {
   arrayWithDefaults,
   string,
   prependAppendSlots,
+  validationNestedSameName,
 };
