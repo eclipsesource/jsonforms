@@ -89,6 +89,7 @@ import {
   rendererProps,
   type RendererProps,
   useJsonFormsOneOfControl,
+  useTranslator,
 } from '@jsonforms/vue';
 import { defineComponent, ref } from 'vue';
 import {
@@ -102,11 +103,7 @@ import {
   VSpacer,
 } from 'vuetify/components';
 import { DisabledIconFocus } from '../controls/directives';
-import {
-  useCombinatorTranslations,
-  useTranslator,
-  useVuetifyControl,
-} from '../util';
+import { useCombinatorTranslations, useVuetifyControl } from '../util';
 import { CombinatorProperties } from './components';
 
 const controlRenderer = defineComponent({
