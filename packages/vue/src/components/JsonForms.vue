@@ -8,6 +8,7 @@
 
 <script lang="ts">
 import { PropType, reactive, defineComponent } from 'vue';
+import isEqual from 'lodash/isEqual';
 import {
   coreReducer,
   Actions,
@@ -26,6 +27,7 @@ import {
   defaultMiddleware,
   Middleware,
   JsonFormsSubStates,
+  Layout,
 } from '@jsonforms/core';
 import { JsonFormsChangeEvent, MaybeReadonly } from '../types';
 import DispatchRenderer from './DispatchRenderer.vue';
@@ -33,13 +35,17 @@ import DispatchRenderer from './DispatchRenderer.vue';
 import type Ajv from 'ajv';
 import type { ErrorObject } from 'ajv';
 
-// TODO fix @typescript-eslint/ban-types
-// eslint-disable-next-line @typescript-eslint/ban-types
-const isObject = (elem: any): elem is Object => {
-  return elem && typeof elem === 'object';
-};
-
 const EMPTY: ErrorObject[] = reactive([]);
+
+const createDefaultLayout = (): Layout => ({
+  type: 'VerticalLayout',
+  elements: [],
+});
+const getSchemaGeneratorInput = (data: any) =>
+  data === undefined ? {} : data;
+const generateUISchema = (schema: JsonSchema) =>
+  Generate.uiSchema(schema, undefined, undefined, schema) ??
+  createDefaultLayout();
 
 export default defineComponent({
   name: 'JsonForms',
@@ -124,12 +130,9 @@ export default defineComponent({
   emits: ['change'],
   data() {
     const dataToUse = this.data;
-    const generatorData = isObject(dataToUse) ? dataToUse : {};
     const schemaToUse: JsonSchema =
-      this.schema ?? Generate.jsonSchema(generatorData);
-    const uischemaToUse =
-      this.uischema ??
-      Generate.uiSchema(schemaToUse, undefined, undefined, schemaToUse);
+      this.schema ?? Generate.jsonSchema(getSchemaGeneratorInput(dataToUse));
+    const uischemaToUse = this.uischema ?? generateUISchema(schemaToUse);
     const initCore = (): JsonFormsCore => {
       const initialCore = {
         data: dataToUse,
@@ -189,29 +192,30 @@ export default defineComponent({
   },
   watch: {
     schema(newSchema) {
-      const generatorData = isObject(this.data) ? this.data : {};
-      this.schemaToUse = newSchema ?? Generate.jsonSchema(generatorData);
+      this.schemaToUse =
+        newSchema ?? Generate.jsonSchema(getSchemaGeneratorInput(this.dataToUse));
       if (!this.uischema) {
-        this.uischemaToUse = Generate.uiSchema(
-          this.schemaToUse,
-          undefined,
-          undefined,
-          this.schemaToUse
-        );
+        this.uischemaToUse = generateUISchema(this.schemaToUse);
       }
     },
     uischema(newUischema) {
-      this.uischemaToUse =
-        newUischema ??
-        Generate.uiSchema(
-          this.schemaToUse,
-          undefined,
-          undefined,
-          this.schemaToUse
-        );
+      this.uischemaToUse = newUischema ?? generateUISchema(this.schemaToUse);
     },
     data(newData) {
+      const isSameAsCurrentData = newData === this.dataToUse;
       this.dataToUse = newData;
+
+      if (!this.schema && !isSameAsCurrentData) {
+        const nextSchema = Generate.jsonSchema(
+          getSchemaGeneratorInput(this.dataToUse)
+        );
+        if (!isEqual(nextSchema, this.schemaToUse)) {
+          this.schemaToUse = nextSchema;
+          if (!this.uischema) {
+            this.uischemaToUse = generateUISchema(this.schemaToUse);
+          }
+        }
+      }
     },
     renderers(newRenderers) {
       this.jsonforms.renderers = newRenderers;
@@ -251,6 +255,9 @@ export default defineComponent({
       );
     },
     eventToEmit(newEvent) {
+      // update the data so if we change the additionalErrors this won't reset the form data
+      this.dataToUse = newEvent.data;
+
       this.$emit('change', newEvent);
     },
     i18n: {
