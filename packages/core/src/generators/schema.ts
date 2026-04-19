@@ -52,9 +52,7 @@ class Gen {
     private findOption: (props: Properties) => (optionName: string) => any
   ) {}
 
-  // TODO fix @typescript-eslint/ban-types
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  schemaObject = (data: Object): JsonSchema4 => {
+  schemaObject = (data: Record<string, any>): JsonSchema4 => {
     const props: Properties = this.properties(data);
     const schema: JsonSchema4 = {
       type: 'object',
@@ -140,14 +138,12 @@ class Gen {
 
 /**
  * Generate a JSON schema based on the given data and any additional options.
- * @param {Object} instance the data to create a JSON schema for
+ * @param {unknown} instance the data to create a JSON schema for
  * @param {any} options any additional options that may alter the generated JSON schema
  * @returns {JsonSchema} the generated schema
  */
 export const generateJsonSchema = (
-  // TODO fix @typescript-eslint/ban-types
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  instance: Object,
+  instance: unknown,
   options: any = {}
 ): JsonSchema4 => {
   const findOption =

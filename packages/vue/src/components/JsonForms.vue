@@ -40,6 +40,8 @@ const createDefaultLayout = (): Layout => ({
   type: 'VerticalLayout',
   elements: [],
 });
+const getSchemaGeneratorInput = (data: any) =>
+  data === undefined ? {} : data;
 const generateUISchema = (schema: JsonSchema) =>
   Generate.uiSchema(schema, undefined, undefined, schema) ??
   createDefaultLayout();
@@ -126,9 +128,9 @@ export default defineComponent({
   },
   emits: ['change'],
   data() {
-    const dataToUse = this.data === undefined ? {} : this.data;
+    const dataToUse = this.data;
     const schemaToUse: JsonSchema =
-      this.schema ?? Generate.jsonSchema(dataToUse);
+      this.schema ?? Generate.jsonSchema(getSchemaGeneratorInput(dataToUse));
     const uischemaToUse = this.uischema ?? generateUISchema(schemaToUse);
     const initCore = (): JsonFormsCore => {
       const initialCore = {
@@ -189,7 +191,8 @@ export default defineComponent({
   },
   watch: {
     schema(newSchema) {
-      this.schemaToUse = newSchema ?? Generate.jsonSchema(this.dataToUse);
+      this.schemaToUse =
+        newSchema ?? Generate.jsonSchema(getSchemaGeneratorInput(this.dataToUse));
       if (!this.uischema) {
         this.uischemaToUse = generateUISchema(this.schemaToUse);
       }
@@ -198,10 +201,12 @@ export default defineComponent({
       this.uischemaToUse = newUischema ?? generateUISchema(this.schemaToUse);
     },
     data(newData) {
-      this.dataToUse = newData === undefined ? {} : newData;
+      this.dataToUse = newData;
 
       if (!this.schema) {
-        this.schemaToUse = Generate.jsonSchema(this.dataToUse);
+        this.schemaToUse = Generate.jsonSchema(
+          getSchemaGeneratorInput(this.dataToUse)
+        );
         if (!this.uischema) {
           this.uischemaToUse = generateUISchema(this.schemaToUse);
         }
