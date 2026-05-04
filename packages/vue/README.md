@@ -291,8 +291,7 @@ Instead it should be modified via the provided `dispatch` and by changing the pr
 
 ### Testing with Jest / Vitest
 
-When testing custom renderers with Jest or Vitest using CJS transforms, `vue` must be imported **before** `@jsonforms/vue` in your renderer files.
-This is due to the CJS bundle eagerly evaluating Vue component definitions at `require()` time, which can cause issues when Jest's module resolution processes imports sequentially.
+When testing custom renderers in a CJS-transformed test environment (Jest, or Vitest configured with CJS transforms), `vue` must be imported **before** `@jsonforms/vue` in your renderer files:
 
 ```ts
 // Correct - import vue before @jsonforms/vue
@@ -301,14 +300,15 @@ import { rendererProps, useJsonFormsControl } from '@jsonforms/vue';
 ```
 
 ```ts
-// May cause errors in tests:
-//   "Property 'controlWrapper' was accessed during render but is not defined on instance"
+// May produce errors such as:
+//   "Property '<name>' was accessed during render but is not defined on instance"
 import { rendererProps, useJsonFormsControl } from '@jsonforms/vue';
 import { defineComponent } from 'vue';
 ```
 
-This only affects test environments using CJS module transforms.
-Browser builds using Webpack, Vite, or other ESM-aware bundlers are not affected.
+The reason is that several components shipped by `@jsonforms/vue` (e.g. `JsonForms`, `DispatchRenderer`) call `defineComponent` at module load. When the package is consumed via `require()` and the test runner's CJS transform doesn't hoist imports, `vue` must already be evaluated at that point. Thus, importing `vue` first in renderer and test files is the safest default.
+
+Browser/dev builds using Webpack, Vite, or other ESM-aware bundlers are not affected.
 
 ## License
 

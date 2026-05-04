@@ -174,6 +174,10 @@ provide(
 );
 ```
 
+## Testing in CJS-transformed environments
+
+When writing tests for custom renderers in a Jest/Vitest CJS-transformed environment, `vue` should be imported first in your custom renderers. See [Testing with Jest / Vitest](../vue/README.md#testing-with-jest--vitest) in the `@jsonforms/vue` README.
+
 ## License
 
 The JSONForms project is licensed under the MIT License. See the [LICENSE file](https://github.com/eclipsesource/jsonforms/blob/master/LICENSE) for more information.
