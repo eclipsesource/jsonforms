@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/examples",
-  "version": "3.8.0-alpha.0",
+  "version": "3.8.0-alpha.1",
   "description": "JSON Forms Example Data",
   "repository": {
     "type": "git",
@@ -51,7 +51,7 @@
     "lodash": "^4.17.21"
   },
   "peerDependencies": {
-    "@jsonforms/core": "3.8.0-alpha.0"
+    "@jsonforms/core": "3.8.0-alpha.1"
   },
   "devDependencies": {
     "@jsonforms/core": "workspace:*",
