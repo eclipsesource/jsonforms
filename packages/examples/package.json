@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/examples",
-  "version": "3.8.0-alpha.0",
+  "version": "3.8.0-alpha.1",
   "description": "JSON Forms Example Data",
   "repository": {
     "type": "git",
@@ -51,11 +51,11 @@
     "lodash": "^4.17.21"
   },
   "peerDependencies": {
-    "@jsonforms/core": "3.8.0-alpha.0"
+    "@jsonforms/core": "3.8.0-alpha.1"
   },
   "devDependencies": {
     "@jsonforms/core": "workspace:*",
-    "@types/node": "^22.13.8",
+    "@types/node": "^24.12.2",
     "@typescript-eslint/eslint-plugin": "^5.54.1",
     "@typescript-eslint/parser": "^5.54.1",
     "eslint": "^8.56.0",
