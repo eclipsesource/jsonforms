@@ -23,23 +23,21 @@ exports[`DateTimeControlRenderer.vue > should render component and match snapsho
                 <!---->
               </div>
             </div>
-            <div class="v-field__prepend-inner">
-              <!----><i data-v-bc5e61db="" class="mdi-calendar-clock mdi v-icon notranslate v-theme--light v-icon--size-default v-icon--clickable" role="button" aria-hidden="false" tabindex="-1" aria-haspopup="menu" aria-expanded="false" aria-controls="v-menu-v-2"></i>
+            <div class="v-field__prepend-inner"><i data-v-bc5e61db="" class="mdi-calendar-clock mdi v-icon notranslate v-theme--light v-icon--size-default v-icon--clickable" role="button" aria-hidden="false" tabindex="-1" aria-haspopup="menu" aria-expanded="false" aria-controls="v-menu-v-3" aria-owns="v-menu-v-3"></i>
               <!---->
             </div>
-            <div class="v-field__field" data-no-activator=""><label class="v-label v-field-label v-field-label--floating" aria-hidden="true" for="#6-input">
+            <div class="v-field__field" data-no-activator=""><label class="v-label v-field-label v-field-label--floating" aria-hidden="false" for="#6-input">
                 <!---->My Date Time
-              </label><label class="v-label v-field-label" for="#6-input">
+              </label><label class="v-label v-field-label" id="#6-input-label" aria-hidden="true">
                 <!---->My Date Time
               </label>
-              <!----><input placeholder="date-time placeholder" size="1" type="text" id="#6-input" aria-describedby="#6-input-messages" class="v-field__input" value="2021-03-09T21:54" data-maska-value="2021-03-09T21:54">
+              <!----><input placeholder="date-time placeholder" size="1" type="text" aria-labelledby="#6-input-label" id="#6-input" aria-describedby="#6-input-messages" class="v-field__input" value="2021-03-09T21:54" data-maska-value="2021-03-09T21:54">
               <!---->
             </div>
             <transition-stub name="expand-x-transition" appear="false" persisted="false" css="true">
               <div class="v-field__clearable"><i class="mdi-close-circle mdi v-icon notranslate v-theme--light v-icon--size-default v-icon--clickable" role="button" aria-hidden="false" tabindex="-1" aria-label="Clear My Date Time"></i></div>
             </transition-stub>
             <div class="v-field__append-inner">
-              <!---->
               <!---->
             </div>
             <div class="v-field__outline">
@@ -84,23 +82,21 @@ exports[`DateTimeControlRenderer.vue > should render component and match snapsho
                 <!---->
               </div>
             </div>
-            <div class="v-field__prepend-inner">
-              <!----><i data-v-bc5e61db="" class="mdi-calendar-clock mdi v-icon notranslate v-theme--light v-icon--size-default v-icon--clickable" role="button" aria-hidden="false" tabindex="-1" aria-haspopup="menu" aria-expanded="false" aria-controls="v-menu-v-2"></i>
+            <div class="v-field__prepend-inner"><i data-v-bc5e61db="" class="mdi-calendar-clock mdi v-icon notranslate v-theme--light v-icon--size-default v-icon--clickable" role="button" aria-hidden="false" tabindex="-1" aria-haspopup="menu" aria-expanded="false" aria-controls="v-menu-v-3" aria-owns="v-menu-v-3"></i>
               <!---->
             </div>
-            <div class="v-field__field" data-no-activator=""><label class="v-label v-field-label v-field-label--floating" aria-hidden="true" for="#7-input">
+            <div class="v-field__field" data-no-activator=""><label class="v-label v-field-label v-field-label--floating" aria-hidden="false" for="#7-input">
                 <!---->My Date Time
-              </label><label class="v-label v-field-label" for="#7-input">
+              </label><label class="v-label v-field-label" id="#7-input-label" aria-hidden="true">
                 <!---->My Date Time
               </label>
-              <!----><input placeholder="date-time placeholder" size="1" type="text" id="#7-input" aria-describedby="#7-input-messages" class="v-field__input" value="2021-03-09T21:54" data-maska-value="2021-03-09T21:54">
+              <!----><input placeholder="date-time placeholder" size="1" type="text" aria-labelledby="#7-input-label" id="#7-input" aria-describedby="#7-input-messages" class="v-field__input" value="2021-03-09T21:54" data-maska-value="2021-03-09T21:54">
               <!---->
             </div>
             <transition-stub name="expand-x-transition" appear="false" persisted="false" css="true">
               <div class="v-field__clearable"><i class="mdi-close-circle mdi v-icon notranslate v-theme--light v-icon--size-default v-icon--clickable" role="button" aria-hidden="false" tabindex="-1" aria-label="Clear My Date Time"></i></div>
             </transition-stub>
             <div class="v-field__append-inner">
-              <!---->
               <!---->
             </div>
             <div class="v-field__outline">

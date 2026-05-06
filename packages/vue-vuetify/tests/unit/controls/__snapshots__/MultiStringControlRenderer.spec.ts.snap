@@ -4,7 +4,7 @@ exports[`MultiStringControlRenderer.vue > should render component and match snap
 "<div class="v-application v-theme--light v-layout v-layout--full-height v-locale--is-ltr">
   <div class="v-application__wrap">
     <div class="control" id="#6">
-      <div class="v-input v-input--horizontal v-input--density-default v-theme--light v-locale--is-ltr v-input--dirty v-textarea v-text-field input">
+      <div class="v-input v-input--horizontal v-input--density-default v-theme--light v-locale--is-ltr v-input--dirty v-textarea v-text-field input" style="--v-textarea-scroll-bar-width: 0px;">
         <!---->
         <div class="v-input__control">
           <div class="v-field v-field--active v-field--appended v-field--dirty v-field--variant-filled v-theme--light v-locale--is-ltr">
@@ -24,12 +24,12 @@ exports[`MultiStringControlRenderer.vue > should render component and match snap
               </div>
             </div>
             <!---->
-            <div class="v-field__field" data-no-activator=""><label class="v-label v-field-label v-field-label--floating" aria-hidden="true" for="#6-input">
+            <div class="v-field__field" data-no-activator=""><label class="v-label v-field-label v-field-label--floating" aria-hidden="false" for="#6-input">
                 <!---->My Multi String
-              </label><label class="v-label v-field-label" for="#6-input">
+              </label><label class="v-label v-field-label" id="#6-input-label" aria-hidden="true">
                 <!---->My Multi String
               </label>
-              <!----><textarea class="v-field__input" placeholder="multi placeholder" rows="5" id="#6-input" aria-describedby="#6-input-messages" multi-line="" value="a"></textarea>
+              <!----><textarea class="v-field__input" placeholder="multi placeholder" rows="5" aria-labelledby="#6-input-label" id="#6-input" aria-describedby="#6-input-messages" multi-line="" value="a"></textarea>
               <!---->
               <!---->
             </div>
@@ -37,7 +37,6 @@ exports[`MultiStringControlRenderer.vue > should render component and match snap
               <div class="v-field__clearable"><i class="mdi-close-circle mdi v-icon notranslate v-theme--light v-icon--size-default v-icon--clickable" role="button" aria-hidden="false" tabindex="-1" aria-label="Clear My Multi String"></i></div>
             </transition-stub>
             <div class="v-field__append-inner">
-              <!---->
               <!---->
             </div>
             <div class="v-field__outline">
