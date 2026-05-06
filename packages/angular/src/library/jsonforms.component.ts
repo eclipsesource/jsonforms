@@ -24,7 +24,6 @@
 */
 import maxBy from 'lodash/maxBy';
 import {
-  ComponentFactoryResolver,
   Directive,
   Input,
   OnInit,
@@ -76,7 +75,6 @@ export class JsonFormsOutlet
 
   constructor(
     private viewContainerRef: ViewContainerRef,
-    private componentFactoryResolver: ComponentFactoryResolver,
     private jsonformsService: JsonFormsAngularService
   ) {
     super();
@@ -128,11 +126,9 @@ export class JsonFormsOutlet
       bestComponent = renderer.renderer;
     }
 
-    const componentFactory =
-      this.componentFactoryResolver.resolveComponentFactory(bestComponent);
     this.viewContainerRef.clear();
     const currentComponentRef =
-      this.viewContainerRef.createComponent(componentFactory);
+      this.viewContainerRef.createComponent(bestComponent);
 
     if (currentComponentRef.instance instanceof JsonFormsBaseRenderer) {
       const instance =
