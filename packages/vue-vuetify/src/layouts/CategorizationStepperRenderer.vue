@@ -9,11 +9,12 @@
       :hide-actions="!appliedOptions.showNavButtons"
     >
       <v-stepper-vertical-item
-        v-for="entry in visibleCategoriesWithIndex"
+        v-for="(entry, index) in visibleCategoriesWithIndex"
         :title="entry.category.value.label"
         :value="entry.originalIndex + 1"
         :key="`${layout.path}-${entry.originalIndex}`"
       >
+        <template #icon>{{ index + 1 }}</template>
         <v-card elevation="0">
           <dispatch-renderer
             :schema="layout.schema"
@@ -40,6 +41,7 @@
             :key="`${layout.path}-${entry.originalIndex}`"
           >
             <v-stepper-item :value="entry.originalIndex + 1" editable>
+              <template #icon>{{ index + 1 }}</template>
               {{ entry.category.value.label }}
             </v-stepper-item>
             <v-divider
@@ -87,7 +89,7 @@ import {
   useJsonFormsCategorization,
   type RendererProps,
 } from '@jsonforms/vue';
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref, watch } from 'vue';
 import {
   VCard,
   VDivider,
@@ -124,21 +126,36 @@ const layoutRenderer = defineComponent({
   },
   setup(props: RendererProps<Layout>) {
     const activeCategory = ref(1);
-
-    return {
-      ...useVuetifyLayout(useJsonFormsCategorization(props)),
-      activeCategory,
-    };
-  },
-  computed: {
-    visibleCategoriesWithIndex() {
-      return this.categories
+    const vuetifyLayout = useVuetifyLayout(useJsonFormsCategorization(props));
+    const visibleCategoriesWithIndex = computed(() =>
+      vuetifyLayout.categories
         .map((category, originalIndex) => ({
           category,
           originalIndex,
         }))
-        .filter((e) => e.category.value.visible);
-    },
+        .filter((e) => e.category.value.visible)
+    );
+
+    watch(
+      visibleCategoriesWithIndex,
+      (visibleCategories) => {
+        if (
+          visibleCategories.length > 0 &&
+          !visibleCategories.some(
+            (entry) => entry.originalIndex + 1 === activeCategory.value
+          )
+        ) {
+          activeCategory.value = visibleCategories[0].originalIndex + 1;
+        }
+      },
+      { immediate: true }
+    );
+
+    return {
+      ...vuetifyLayout,
+      visibleCategoriesWithIndex,
+      activeCategory,
+    };
   },
 });
 

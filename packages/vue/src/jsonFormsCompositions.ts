@@ -40,7 +40,7 @@ import {
   Scopable,
   Translator,
 } from '@jsonforms/core';
-import Ajv from 'ajv';
+import type Ajv from 'ajv';
 import {
   PropType,
   computed,
