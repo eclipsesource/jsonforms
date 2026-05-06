@@ -9,15 +9,16 @@
       :hide-actions="!appliedOptions.showNavButtons"
     >
       <v-stepper-vertical-item
-        :title="visibleCategoryLabels[index]"
-        v-for="(element, index) in visibleCategories"
-        :value="index + 1"
-        :key="`${layout.path}-${visibleCategories.length}-${index}`"
+        v-for="(entry, index) in visibleCategoriesWithIndex"
+        :title="entry.category.value.label"
+        :value="entry.originalIndex + 1"
+        :key="`${layout.path}-${entry.originalIndex}`"
       >
+        <template #icon>{{ index + 1 }}</template>
         <v-card elevation="0">
           <dispatch-renderer
             :schema="layout.schema"
-            :uischema="element.value.uischema"
+            :uischema="entry.category.value.uischema"
             :path="layout.path"
             :enabled="layout.enabled"
             :readonly="layout.readonly"
@@ -36,29 +37,30 @@
       <template v-slot:default="{ prev, next }">
         <v-stepper-header>
           <template
-            v-for="(_, index) in visibleCategories"
-            :key="`${layout.path}-${visibleCategories.length}-${index}`"
+            v-for="(entry, index) in visibleCategoriesWithIndex"
+            :key="`${layout.path}-${entry.originalIndex}`"
           >
-            <v-stepper-item :value="index + 1" editable>
-              {{ visibleCategoryLabels[index] }}
+            <v-stepper-item :value="entry.originalIndex + 1" editable>
+              <template #icon>{{ index + 1 }}</template>
+              {{ entry.category.value.label }}
             </v-stepper-item>
             <v-divider
-              v-if="index !== visibleCategories.length - 1"
-              :key="`${layout.path}-divider-${visibleCategories.length}-${index}`"
+              v-if="index < visibleCategoriesWithIndex.length - 1"
+              :key="`${layout.path}-divider-${entry.originalIndex}`"
             ></v-divider>
           </template>
         </v-stepper-header>
 
         <v-stepper-window>
           <v-stepper-window-item
-            v-for="(element, index) in visibleCategories"
-            :value="index + 1"
-            :key="`${layout.path}-${visibleCategories.length}-${index}`"
+            v-for="entry in visibleCategoriesWithIndex"
+            :value="entry.originalIndex + 1"
+            :key="`${layout.path}-${entry.originalIndex}`"
           >
             <v-card elevation="0">
               <dispatch-renderer
                 :schema="layout.schema"
-                :uischema="element.value.uischema"
+                :uischema="entry.category.value.uischema"
                 :path="layout.path"
                 :enabled="layout.enabled"
                 :readonly="layout.readonly"
@@ -87,7 +89,7 @@ import {
   useJsonFormsCategorization,
   type RendererProps,
 } from '@jsonforms/vue';
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref, watch } from 'vue';
 import {
   VCard,
   VDivider,
@@ -124,21 +126,36 @@ const layoutRenderer = defineComponent({
   },
   setup(props: RendererProps<Layout>) {
     const activeCategory = ref(1);
+    const vuetifyLayout = useVuetifyLayout(useJsonFormsCategorization(props));
+    const visibleCategoriesWithIndex = computed(() =>
+      vuetifyLayout.categories
+        .map((category, originalIndex) => ({
+          category,
+          originalIndex,
+        }))
+        .filter((e) => e.category.value.visible)
+    );
+
+    watch(
+      visibleCategoriesWithIndex,
+      (visibleCategories) => {
+        if (
+          visibleCategories.length > 0 &&
+          !visibleCategories.some(
+            (entry) => entry.originalIndex + 1 === activeCategory.value
+          )
+        ) {
+          activeCategory.value = visibleCategories[0].originalIndex + 1;
+        }
+      },
+      { immediate: true }
+    );
 
     return {
-      ...useVuetifyLayout(useJsonFormsCategorization(props)),
+      ...vuetifyLayout,
+      visibleCategoriesWithIndex,
       activeCategory,
     };
-  },
-  computed: {
-    visibleCategories() {
-      return this.categories.filter((category) => category.value.visible);
-    },
-    visibleCategoryLabels(): string[] {
-      return this.visibleCategories.map((element) => {
-        return element.value.label;
-      });
-    },
   },
 });
 

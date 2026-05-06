@@ -107,7 +107,9 @@ import {
 import {
   DispatchRenderer,
   rendererProps,
+  useJsonForms,
   useJsonFormsControl,
+  useTranslator,
   type RendererProps,
 } from '@jsonforms/vue';
 import { computed, defineComponent, provide, ref, watch } from 'vue';
@@ -127,8 +129,6 @@ import {
   isControlEditable,
   useCombinatorTranslations,
   useIcons,
-  useJsonForms,
-  useTranslator,
   useVuetifyControl,
 } from '../util';
 import cloneDeep from 'lodash/cloneDeep';

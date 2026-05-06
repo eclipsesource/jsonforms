@@ -103,14 +103,15 @@ import {
   getI18nKeyPrefix,
   type GroupLayout,
   type JsonSchema,
-  type JsonSchema4,
   type JsonSchema7,
   type UISchemaElement,
 } from '@jsonforms/core';
 import {
   DispatchRenderer,
   JsonForms,
+  useJsonForms,
   useJsonFormsControlWithDetail,
+  useTranslator,
   type JsonFormsChangeEvent,
 } from '@jsonforms/vue';
 import type { ErrorObject } from 'ajv';
@@ -120,6 +121,7 @@ import isPlainObject from 'lodash/isPlainObject';
 import omit from 'lodash/omit';
 import startCase from 'lodash/startCase';
 
+import { IsDynamicPropertyContext } from '@/util/inject';
 import {
   computed,
   defineComponent,
@@ -142,13 +144,10 @@ import {
 import { DisabledIconFocus } from '../../controls/directives';
 import { useStyles } from '../../styles';
 import {
-  useControlAppliedOptions,
   isControlEditable,
+  useControlAppliedOptions,
   useIcons,
-  useJsonForms,
-  useTranslator,
 } from '../../util';
-import { IsDynamicPropertyContext } from '@/util/inject';
 
 type Input = ReturnType<typeof useJsonFormsControlWithDetail>;
 interface AdditionalPropertyType {
@@ -223,7 +222,7 @@ export default defineComponent({
       }
 
       if (typeof propSchema?.$ref === 'string') {
-        propSchema = Resolve.schema(propSchema, propSchema.$ref, rootSchema);
+        propSchema = Resolve.schema(rootSchema, propSchema.$ref, rootSchema);
       }
 
       propSchema = propSchema ?? {};
