@@ -7,28 +7,28 @@
 </template>
 
 <script lang="ts">
-import { PropType, reactive, defineComponent } from 'vue';
-import isEqual from 'lodash/isEqual';
 import {
-  coreReducer,
   Actions,
-  Generate,
   configReducer,
+  CoreActions,
+  coreReducer,
+  defaultMiddleware,
+  Generate,
+  i18nReducer,
+  JsonFormsCellRendererRegistryEntry,
+  JsonFormsCore,
+  JsonFormsI18nState,
+  JsonFormsRendererRegistryEntry,
+  JsonFormsSubStates,
+  JsonFormsUISchemaRegistryEntry,
   JsonSchema,
+  Layout,
+  Middleware,
   UISchemaElement,
   ValidationMode,
-  JsonFormsCore,
-  JsonFormsUISchemaRegistryEntry,
-  JsonFormsRendererRegistryEntry,
-  JsonFormsCellRendererRegistryEntry,
-  CoreActions,
-  i18nReducer,
-  JsonFormsI18nState,
-  defaultMiddleware,
-  Middleware,
-  JsonFormsSubStates,
-  Layout,
 } from '@jsonforms/core';
+import isEqual from 'lodash/isEqual';
+import { defineComponent, PropType, reactive } from 'vue';
 import { JsonFormsChangeEvent, MaybeReadonly } from '../types';
 import DispatchRenderer from './DispatchRenderer.vue';
 
@@ -41,8 +41,7 @@ const createDefaultLayout = (): Layout => ({
   type: 'VerticalLayout',
   elements: [],
 });
-const getSchemaGeneratorInput = (data: any) =>
-  data === undefined ? {} : data;
+const getSchemaGeneratorInput = (data: any) => (data === undefined ? {} : data);
 const generateUISchema = (schema: JsonSchema) =>
   Generate.uiSchema(schema, undefined, undefined, schema) ??
   createDefaultLayout();
@@ -193,7 +192,8 @@ export default defineComponent({
   watch: {
     schema(newSchema) {
       this.schemaToUse =
-        newSchema ?? Generate.jsonSchema(getSchemaGeneratorInput(this.dataToUse));
+        newSchema ??
+        Generate.jsonSchema(getSchemaGeneratorInput(this.dataToUse));
       if (!this.uischema) {
         this.uischemaToUse = generateUISchema(this.schemaToUse);
       }
