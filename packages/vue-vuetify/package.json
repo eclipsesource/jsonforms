@@ -59,7 +59,7 @@
     "doc": "typedoc --tsconfig tsconfig.typedoc.json --name 'JSON Forms Vue Vuetify Renderers' --out docs --entryPoints 'src/**/*.ts' 'lib/index.d.ts'",
     "test": "vitest --watch=false",
     "build-only": "cross-env NODE_OPTIONS=\"--max-old-space-size=4096\" vite build",
-    "type-check": "vue-tsc --build --force"
+    "type-check": "vue-tsc -p tsconfig.lib.json"
   },
   "peerDependencies": {
     "@jsonforms/core": "3.8.0-alpha.1",
@@ -109,7 +109,7 @@
     "rollup-plugin-postcss": "^4.0.2",
     "splitpanes": "^3.1.5",
     "typedoc": "~0.25.3",
-    "typescript": "~5.5.0",
+    "typescript": "~5.8.3",
     "vite": "^5.4.21",
     "vite-plugin-dts": "^3.9.1",
     "vite-plugin-node-polyfills": "^0.21.0",
@@ -118,7 +118,7 @@
     "vitest": "^1.4.0",
     "vue": "^3.5.17",
     "vue-eslint-parser": "^9.4.2",
-    "vue-tsc": "^2.0.11",
+    "vue-tsc": "^2.2.0",
     "vuetify": "^3.9.0"
   }
 }
