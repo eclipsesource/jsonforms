@@ -22,11 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import {
   RankedTester,
   rankWith,
@@ -37,7 +33,7 @@ import {
   LayoutRenderer,
   LayoutChildrenRenderPropsPipe,
 } from './layout.renderer';
-import { JsonFormsAngularService, JsonFormsModule } from '@jsonforms/angular';
+import { JsonFormsModule } from '@jsonforms/angular';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -69,14 +65,7 @@ import { CommonModule } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, JsonFormsModule, LayoutChildrenRenderPropsPipe],
 })
-export class VerticalLayoutRenderer extends LayoutRenderer<VerticalLayout> {
-  constructor(
-    jsonFormsService: JsonFormsAngularService,
-    changeDetectionRef: ChangeDetectorRef
-  ) {
-    super(jsonFormsService, changeDetectionRef);
-  }
-}
+export class VerticalLayoutRenderer extends LayoutRenderer<VerticalLayout> {}
 export const verticalLayoutTester: RankedTester = rankWith(
   1,
   uiTypeIs('VerticalLayout')

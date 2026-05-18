@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
+import { JsonFormsControl } from '@jsonforms/angular';
 import {
   isIntegerControl,
   isNumberControl,
@@ -91,10 +91,6 @@ export class NumberControlRenderer extends JsonFormsControl {
   numberFormat: Intl.NumberFormat;
   decimalSeparator: string;
   focused = false;
-
-  constructor(jsonformsService: JsonFormsAngularService) {
-    super(jsonformsService);
-  }
 
   onChange(ev: any) {
     const data = this.oldValue

@@ -26,6 +26,7 @@ import {
   Component,
   DoCheck,
   EventEmitter,
+  inject,
   Input,
   OnChanges,
   OnDestroy,
@@ -81,7 +82,7 @@ export class JsonForms implements DoCheck, OnChanges, OnInit, OnDestroy {
   private initialized = false;
   oldI18N: JsonFormsI18nState;
 
-  constructor(private jsonformsService: JsonFormsAngularService) {}
+  private jsonformsService = inject(JsonFormsAngularService);
 
   ngOnInit(): void {
     this.jsonformsService.init(

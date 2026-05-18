@@ -25,7 +25,7 @@
 import {
   Component,
   ChangeDetectionStrategy,
-  Inject,
+  inject,
   ViewEncapsulation,
 } from '@angular/core';
 import {
@@ -36,7 +36,7 @@ import {
   rankWith,
   StatePropsOfControl,
 } from '@jsonforms/core';
-import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
+import { JsonFormsControl } from '@jsonforms/angular';
 import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MyFormat } from '../util/date-format';
 import { DayJsDateAdapter } from '../util/dayjs-date-adapter';
@@ -126,13 +126,8 @@ export class DateControlRenderer extends JsonFormsControl {
   startView = '';
   panelClass = '';
 
-  constructor(
-    jsonformsService: JsonFormsAngularService,
-    @Inject(MAT_DATE_FORMATS) private dateFormat: MyFormat,
-    @Inject(DateAdapter) private dateAdapter: DayJsDateAdapter
-  ) {
-    super(jsonformsService);
-  }
+  private dateFormat = inject<MyFormat>(MAT_DATE_FORMATS);
+  private dateAdapter = inject(DateAdapter) as DayJsDateAdapter;
 
   getEventValue = (event: any) => {
     const value = event.value ? event.value : event;
