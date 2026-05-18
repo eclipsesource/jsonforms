@@ -1,2 +1,6 @@
 packages:
   - 'packages/*'
+# The minimum age of dependency versions to be installed in minutes. 4320 minutes is 72h.
+# This is to avoid supply chain attacks where a new version of a dependency is published with malicious code.
+minimumReleaseAge: 4320
+minimumReleaseAgeIgnoreMissingTime: false
