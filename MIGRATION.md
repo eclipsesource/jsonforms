@@ -40,6 +40,12 @@ return this.t(label, label) as string;
 
 This does not affect the Composition API where `Translator` is accessed directly from a `ComputedRef`.
 
+### Angular support now targets Angular 20 to 22
+
+When using JSON Forms 3.8, your Angular application now needs to target Angular 20, 21 or 22.
+
+Use JSON Forms 3.7 if you need to stay on Angular 19.
+
 ### Angular material removes hammerjs
 
 The angular material package no longer depends or imports the `hammerjs` package.
