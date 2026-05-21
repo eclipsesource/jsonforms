@@ -29,11 +29,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import {
-  JsonFormsAngularService,
-  JsonFormsAbstractControl,
-  JsonFormsModule,
-} from '@jsonforms/angular';
+import { JsonFormsAbstractControl, JsonFormsModule } from '@jsonforms/angular';
 import {
   arrayDefaultTranslations,
   ArrayLayoutProps,
@@ -192,9 +188,6 @@ export class ArrayLayoutRenderer
     tester: UISchemaTester;
     uischema: UISchemaElement;
   }[];
-  constructor(jsonFormsService: JsonFormsAngularService) {
-    super(jsonFormsService);
-  }
   mapToProps(
     state: JsonFormsState
   ): StatePropsOfArrayLayout & { translations: ArrayTranslations } {

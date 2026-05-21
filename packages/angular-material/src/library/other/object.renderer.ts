@@ -26,7 +26,6 @@ import isEmpty from 'lodash/isEmpty';
 import startCase from 'lodash/startCase';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import {
-  JsonFormsAngularService,
   JsonFormsControlWithDetail,
   JsonFormsModule,
 } from '@jsonforms/angular';
@@ -68,9 +67,6 @@ import cloneDeep from 'lodash/cloneDeep';
 })
 export class ObjectControlRenderer extends JsonFormsControlWithDetail {
   detailUiSchema: UISchemaElement;
-  constructor(jsonformsService: JsonFormsAngularService) {
-    super(jsonformsService);
-  }
   mapAdditionalProps(props: ControlWithDetailProps) {
     this.detailUiSchema = findUISchema(
       props.uischemas,

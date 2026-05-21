@@ -29,11 +29,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import {
-  JsonFormsAngularService,
-  JsonFormsArrayControl,
-  JsonFormsModule,
-} from '@jsonforms/angular';
+import { JsonFormsArrayControl, JsonFormsModule } from '@jsonforms/angular';
 import {
   ArrayControlProps,
   ArrayTranslations,
@@ -199,9 +195,6 @@ export class TableRenderer extends JsonFormsArrayControl implements OnInit {
   removeItems: (path: string, toDelete: number[]) => () => void;
   translations: ArrayTranslations = {};
 
-  constructor(jsonformsService: JsonFormsAngularService) {
-    super(jsonformsService);
-  }
   trackElement(index: number, _element: any) {
     return index ? index : null;
   }

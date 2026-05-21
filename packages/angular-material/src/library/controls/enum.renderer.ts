@@ -29,7 +29,7 @@ import {
   OnInit,
 } from '@angular/core';
 import type { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
+import { JsonFormsControl } from '@jsonforms/angular';
 import {
   Actions,
   composeWithUi,
@@ -119,10 +119,6 @@ export class OneOfEnumControlRenderer
   filteredOptions: Observable<EnumOption[]>;
   shouldFilter: boolean;
   focused = false;
-
-  constructor(jsonformsService: JsonFormsAngularService) {
-    super(jsonformsService);
-  }
 
   protected override mapToProps(
     state: JsonFormsState
