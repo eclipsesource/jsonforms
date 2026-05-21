@@ -93,7 +93,7 @@
     "symlink-dir": "^5.0.0",
     "tslib": "^2.5.0",
     "typedoc": "~0.25.3",
-    "typescript": "~5.5.0",
+    "typescript": "~5.8.3",
     "vue": "^3.5.17"
   },
   "peerDependencies": {

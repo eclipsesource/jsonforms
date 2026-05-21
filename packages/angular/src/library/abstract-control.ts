@@ -32,7 +32,7 @@ import {
   removeId,
   StatePropsOfControl,
 } from '@jsonforms/core';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormControl,
@@ -67,7 +67,9 @@ export abstract class JsonFormsAbstractControl<
   hidden: boolean;
   propsPath: string;
 
-  constructor(protected jsonFormsService: JsonFormsAngularService) {
+  protected jsonFormsService = inject(JsonFormsAngularService);
+
+  constructor() {
     super();
     this.form = new FormControl(
       {

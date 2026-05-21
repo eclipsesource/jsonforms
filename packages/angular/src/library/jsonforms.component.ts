@@ -25,6 +25,7 @@
 import maxBy from 'lodash/maxBy';
 import {
   Directive,
+  inject,
   Input,
   OnInit,
   Type,
@@ -73,12 +74,8 @@ export class JsonFormsOutlet
 {
   private previousProps: StatePropsOfJsonFormsRenderer;
 
-  constructor(
-    private viewContainerRef: ViewContainerRef,
-    private jsonformsService: JsonFormsAngularService
-  ) {
-    super();
-  }
+  private viewContainerRef = inject(ViewContainerRef);
+  private jsonformsService = inject(JsonFormsAngularService);
 
   @Input()
   set renderProps(renderProps: OwnPropsOfRenderer) {

@@ -40,6 +40,45 @@ return this.t(label, label) as string;
 
 This does not affect the Composition API where `Translator` is accessed directly from a `ComputedRef`.
 
+### Angular support now targets Angular 20 to 22
+
+When using JSON Forms 3.8, your Angular application now needs to target Angular 20, 21 or 22.
+
+Use JSON Forms 3.7 if you need to stay on Angular 19.
+
+### Angular renderers use `inject()` instead of constructor injection
+
+All Angular base classes (`JsonFormsAbstractControl`, `LayoutRenderer`, `JsonFormsOutlet`, `JsonForms`) now use Angular's `inject()` function instead of constructor parameter injection.
+
+The `JsonFormsAngularService` is now provided as a `protected` field on `JsonFormsAbstractControl`, so custom control renderers can use `this.jsonFormsService` directly without injecting it themselves.
+
+**Before:**
+
+```ts
+@Component({ ... })
+export class MyCustomRenderer extends JsonFormsControl {
+  constructor(
+    private myService: MyService,
+    jsonFormsService: JsonFormsAngularService
+  ) {
+    super(jsonFormsService);
+  }
+}
+```
+
+**After:**
+
+```ts
+@Component({ ... })
+export class MyCustomRenderer extends JsonFormsControl {
+  private myService = inject(MyService);
+}
+```
+
+If your custom renderer extends `LayoutRenderer`, the same applies.
+Remove the constructor parameters for `JsonFormsAngularService` and `ChangeDetectorRef`, as both are now injected by the base class.
+The `ChangeDetectorRef` is available as a `protected` field `this.changeDetectionRef` on `LayoutRenderer`.
+
 ### Angular material removes hammerjs
 
 The angular material package no longer depends or imports the `hammerjs` package.
