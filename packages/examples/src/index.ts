@@ -76,6 +76,7 @@ import * as additionalErrors from './examples/additional-errors';
 import * as multiEnumWithLabelAndDesc from './examples/enum-multi-with-label-and-desc';
 import * as additionalProperties from './examples/additional-properties';
 import * as login from './examples/login';
+import * as showErrorsImmediately from './examples/show-errors-immediately';
 import * as mixed from './examples/mixed';
 import * as mixedObject from './examples/mixed-object';
 import * as string from './examples/string';
@@ -144,6 +145,7 @@ export {
   additionalErrors,
   additionalProperties,
   login,
+  showErrorsImmediately,
   mixed,
   mixedObject,
   issue_1884,
