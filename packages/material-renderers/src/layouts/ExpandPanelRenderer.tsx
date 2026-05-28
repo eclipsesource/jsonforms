@@ -25,8 +25,7 @@ import {
   update,
   JsonFormsCellRendererRegistryEntry,
   JsonFormsUISchemaRegistryEntry,
-  createId,
-  removeId,
+  Id,
   ArrayTranslations,
   computeChildLabel,
   UpdateArrayContext,
@@ -90,11 +89,11 @@ export interface ExpandPanelProps
     DispatchPropsOfExpandPanel {}
 
 const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
-  const [labelHtmlId] = useState<string>(createId('expand-panel'));
+  const [labelHtmlId] = useState<string>(Id.createId('expand-panel'));
 
   useEffect(() => {
     return () => {
-      removeId(labelHtmlId);
+      Id.removeId(labelHtmlId);
     };
   }, [labelHtmlId]);
 

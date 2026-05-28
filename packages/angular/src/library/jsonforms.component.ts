@@ -32,7 +32,7 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import {
-  createId,
+  Id,
   isControl,
   getConfig,
   JsonFormsProps,
@@ -137,7 +137,7 @@ export class JsonFormsOutlet
         const controlInstance = instance as JsonFormsControl;
         if (controlInstance.id === undefined) {
           const id = isControl(props.uischema)
-            ? createId(props.uischema.scope)
+            ? Id.createId(props.uischema.scope)
             : undefined;
           (instance as JsonFormsControl).id = id;
         }

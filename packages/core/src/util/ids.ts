@@ -50,3 +50,34 @@ export const createId = (proposedId: string) => {
 export const removeId = (id: string) => usedIds.delete(id);
 
 export const clearAllIds = () => usedIds.clear();
+
+/**
+ * Mutable registry of the ID generation functions used internally by JSON Forms.
+ *
+ * Adopters can override one or more of these methods to provide a custom HTML
+ * ID strategy (e.g. for performance reasons or to integrate with an existing
+ * scheme). Reassigning the methods only affects callers that go through this
+ * object; the standalone `createId`, `removeId` and `clearAllIds` exports
+ * always invoke the default implementations.
+ *
+ * @example
+ * ```ts
+ * import { Id } from '@jsonforms/core';
+ *
+ * let next = 0;
+ * Id.createId = () => `jf-${next++}`;
+ * Id.removeId = () => true;
+ * Id.clearAllIds = () => {
+ *   next = 0;
+ * };
+ * ```
+ */
+export const Id: {
+  createId: (proposedId: string) => string;
+  removeId: (id: string) => boolean;
+  clearAllIds: () => void;
+} = {
+  createId,
+  removeId,
+  clearAllIds,
+};
