@@ -57,6 +57,7 @@ import {
   composeWithUi,
   convertDateToString,
   createLabelDescriptionFrom,
+  encode,
   findUiControl,
   getFirstPrimitiveProp,
   getPropPath,
@@ -127,6 +128,38 @@ const isRequired = (
     nextHigherSchema !== undefined &&
     nextHigherSchema.required !== undefined &&
     nextHigherSchema.required.indexOf(lastSegment) !== -1
+  );
+};
+
+/**
+ * Determines whether the data at the given instance path is required, based on
+ * the root schema. Walks the data path against the root schema while skipping
+ * combinator branches (oneOf/anyOf/allOf), so a required parent makes its
+ * inner combinator sub-schemas required as well.
+ */
+const isRequiredAtPath = (rootSchema: JsonSchema, path: string): boolean => {
+  if (!path) {
+    return false;
+  }
+  const segments = path.split('.');
+  const lastSegment = segments[segments.length - 1];
+  if (/^\d+$/.test(lastSegment)) {
+    return false;
+  }
+  let parentSchemaPath = '#';
+  for (let i = 0; i < segments.length - 1; i++) {
+    const segment = segments[i];
+    if (/^\d+$/.test(segment)) {
+      // We don't try to resolve through array indices to keep the lookup simple.
+      return false;
+    }
+    parentSchemaPath += '/properties/' + encode(segment);
+  }
+  const parentSchema = Resolve.schema(rootSchema, parentSchemaPath, rootSchema);
+  return (
+    parentSchema !== undefined &&
+    parentSchema.required !== undefined &&
+    parentSchema.required.indexOf(lastSegment) !== -1
   );
 };
 
@@ -603,7 +636,8 @@ export const mapStateToControlProps = (
   const rootSchema = getSchema(state);
   const required =
     controlElement.scope !== undefined &&
-    isRequired(ownProps.schema, controlElement.scope, rootSchema);
+    (isRequired(ownProps.schema, controlElement.scope, rootSchema) ||
+      isRequiredAtPath(rootSchema, path));
   const resolvedSchema = Resolve.schema(
     ownProps.schema || rootSchema,
     controlElement.scope,

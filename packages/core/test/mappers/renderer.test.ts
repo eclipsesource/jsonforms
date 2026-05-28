@@ -2149,6 +2149,51 @@ test('mapStateToControlProps - required is calculated correctly from encoded JSO
   t.true(props.required === true);
 });
 
+test('mapStateToControlProps - required propagates from required oneOf parent to dispatched primitive sub-schema (issue #2222)', (t) => {
+  // The OneOf renderer dispatches the string sub-schema with a generated
+  // uischema whose scope is `#`. The inner control should still be marked
+  // as required because the oneOf parent is required.
+  const rootSchema = {
+    type: 'object',
+    properties: {
+      mecanique: {
+        oneOf: [
+          { type: 'string' },
+          {
+            type: 'object',
+            properties: { cardinale: { type: 'string' } },
+            required: ['cardinale'],
+          },
+        ],
+      },
+    },
+    required: ['mecanique'],
+  };
+  const subSchema = (rootSchema.properties.mecanique as any).oneOf[0];
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#',
+  };
+  const ownProps = {
+    visible: true,
+    uischema,
+    path: 'mecanique',
+    schema: subSchema,
+  };
+  const state = {
+    jsonforms: {
+      core: {
+        schema: rootSchema,
+        data: {},
+        uischema,
+        errors: [] as ErrorObject[],
+      },
+    },
+  };
+  const props = mapStateToControlProps(state, ownProps);
+  t.true(props.required === true);
+});
+
 test('mapStateToEnumControlProps - i18n - should not crash without i18n', (t) => {
   const ownProps = {
     uischema: coreUISchema,
