@@ -206,6 +206,105 @@ test(`nested object not expanded`, (t) => {
   t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
 
+test('generate ui schema for nullable object property (issue #2411)', (t) => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      name: {
+        type: 'string',
+      },
+      geometry: {
+        type: ['null', 'object'],
+        properties: {
+          shape: {
+            type: 'string',
+          },
+        },
+      },
+    },
+  };
+  const nameControl: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/name',
+  };
+  const geometryControl: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/geometry',
+  };
+  const uischema: Layout = {
+    type: 'VerticalLayout',
+    elements: [nameControl, geometryControl],
+  };
+  t.deepEqual(generateDefaultUISchema(schema), uischema);
+});
+
+test('generate ui schema for nullable object at root', (t) => {
+  const schema: JsonSchema = {
+    type: ['null', 'object'],
+    properties: {
+      shape: {
+        type: 'string',
+      },
+      size: {
+        type: 'number',
+      },
+    },
+  };
+  const shapeControl: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/shape',
+  };
+  const sizeControl: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/size',
+  };
+  const uischema: Layout = {
+    type: 'VerticalLayout',
+    elements: [shapeControl, sizeControl],
+  };
+  t.deepEqual(generateDefaultUISchema(schema), uischema);
+});
+
+test('generate ui schema for nullable primitive property', (t) => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      maybeName: {
+        type: ['null', 'string'],
+      },
+    },
+  };
+  const control: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/maybeName',
+  };
+  const uischema: Layout = {
+    type: 'VerticalLayout',
+    elements: [control],
+  };
+  t.deepEqual(generateDefaultUISchema(schema), uischema);
+});
+
+test('generate ui schema falls back to single Control for multi non-null types', (t) => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      mixed: {
+        type: ['string', 'integer'],
+      },
+    },
+  };
+  const control: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/mixed',
+  };
+  const uischema: Layout = {
+    type: 'VerticalLayout',
+    elements: [control],
+  };
+  t.deepEqual(generateDefaultUISchema(schema), uischema);
+});
+
 test(`don't ignore non-json-schema id attributes`, (t) => {
   const schema = {
     type: 'object',
