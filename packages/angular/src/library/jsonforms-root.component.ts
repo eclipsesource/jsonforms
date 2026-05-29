@@ -50,11 +50,7 @@ import type { ErrorObject } from 'ajv';
 import merge from 'lodash/merge';
 import { Subscription } from 'rxjs';
 import { JsonFormsOutlet } from './jsonforms.component';
-import {
-  angularConfigDefault,
-  JSONFORMS_CONFIG,
-  JsonFormsAngularConfig,
-} from './jsonforms.config';
+import { JSONFORMS_CONFIG, JsonFormsAngularConfig } from './jsonforms.config';
 import { JsonFormsAngularService, USE_STATE_VALUE } from './jsonforms.service';
 
 // TODO Can this be rewritten to not use DoCheck and OnChanges?
@@ -105,12 +101,7 @@ export class JsonForms implements DoCheck, OnChanges, OnInit, OnDestroy {
         uischemas: this.uischemas,
         i18n: this.i18n,
         renderers: this.renderers,
-        config: merge(
-          {},
-          angularConfigDefault,
-          this.providedConfig,
-          this.config
-        ),
+        config: merge({}, this.providedConfig, this.config),
         readonly: this.readonly,
       },
       this.middleware
@@ -215,12 +206,7 @@ export class JsonForms implements DoCheck, OnChanges, OnInit, OnDestroy {
     if (newConfig && !newConfig.isFirstChange()) {
       this.jsonformsService.updateConfig(
         Actions.setConfig(
-          merge(
-            {},
-            angularConfigDefault,
-            this.providedConfig,
-            newConfig.currentValue
-          )
+          merge({}, this.providedConfig, newConfig.currentValue)
         )
       );
     }

@@ -26,16 +26,11 @@ import { InjectionToken, Provider } from '@angular/core';
 
 export interface JsonFormsAngularConfig {
   /**
-   * When true, validation error indicators are shown immediately without
-   * requiring the user to focus or interact with the field first
+   * When true, markAsTouched() is skipped, so errors only appear after the user actually interacts with the field.
    */
   showErrorsOnTouch?: boolean;
   [key: string]: unknown;
 }
-
-export const angularConfigDefault: JsonFormsAngularConfig = {
-  showErrorsOnTouch: false,
-};
 
 /**
  * Injection token for providing a global JSONForms config via Angular's DI system.

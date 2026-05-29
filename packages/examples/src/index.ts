@@ -77,7 +77,6 @@ import * as readonly from './examples/readonly';
 import * as rule from './examples/rule';
 import * as ruleInheritance from './examples/ruleInheritance';
 import * as scope from './examples/scope';
-import * as showErrorsOnTouch from './examples/show-errors-on-touch';
 import * as string from './examples/string';
 import * as stringArray from './examples/stringArray';
 import * as text from './examples/text';
@@ -146,7 +145,6 @@ export {
   rule,
   ruleInheritance,
   scope,
-  showErrorsOnTouch,
   stepper,
   steppershownav,
   string,

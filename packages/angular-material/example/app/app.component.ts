@@ -79,7 +79,7 @@ const itemTester: UISchemaTester = (_schema, schemaPath, _path) => {
       <button (click)="toggleReadonly()">
         {{ readonly ? 'Unset' : 'Set' }} Readonly
       </button>
-      <button (click)="toggleShowErrorsImmediately()">
+      <button (click)="toggleShowErrorsOnTouch()">
         showErrorsOnTouch: {{ config.showErrorsOnTouch }}
       </button>
     </div>
@@ -128,7 +128,7 @@ export class AppComponent {
     this.readonly = !this.readonly;
   }
 
-  toggleShowErrorsImmediately() {
+  toggleShowErrorsOnTouch() {
     this.config = {
       ...this.config,
       showErrorsOnTouch: !this.config.showErrorsOnTouch,
