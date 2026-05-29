@@ -28,10 +28,7 @@ export * from './base.renderer';
 export * from './control';
 export * from './jsonforms-root.component';
 export * from './jsonforms.component';
-export {
-  JsonFormsAngularConfig,
-  provideJsonFormsConfig,
-} from './jsonforms.config';
+export * from './jsonforms.config';
 export * from './jsonforms.module';
 export * from './jsonforms.service';
 export * from './unknown.component';
