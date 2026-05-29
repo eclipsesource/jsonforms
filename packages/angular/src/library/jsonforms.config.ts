@@ -26,15 +26,15 @@ import { InjectionToken, Provider } from '@angular/core';
 
 export interface JsonFormsAngularConfig {
   /**
-   * When true (default), validation error indicators are shown immediately without
+   * When true, validation error indicators are shown immediately without
    * requiring the user to focus or interact with the field first
    */
-  showErrorsImmediately?: boolean;
+  showErrorsOnTouch?: boolean;
   [key: string]: unknown;
 }
 
 export const angularConfigDefault: JsonFormsAngularConfig = {
-  showErrorsImmediately: true,
+  showErrorsOnTouch: false,
 };
 
 /**
@@ -52,7 +52,7 @@ export const JSONFORMS_CONFIG = new InjectionToken<JsonFormsAngularConfig>(
  * @example
  * // Standalone bootstrap (app.config.ts)
  * export const appConfig: ApplicationConfig = {
- *   providers: [provideJsonFormsConfig({ showErrorsImmediately: false })],
+ *   providers: [provideJsonFormsConfig({ showErrorsOnTouch: false })],
  * };
  */
 export function provideJsonFormsConfig(

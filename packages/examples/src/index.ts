@@ -22,135 +22,135 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import * as issue_1884 from './examples/1884';
+import * as issue_1948 from './examples/1948';
+import * as additionalErrors from './examples/additional-errors';
+import * as additionalProperties from './examples/additional-properties';
 import * as allOf from './examples/allOf';
 import * as anyOf from './examples/anyOf';
-import * as oneOf from './examples/oneOf';
-import * as oneOfArray from './examples/oneOfArray';
 import * as anyOfOneOfAllOfResolve from './examples/anyOf-oneOf-allOf-resolve';
 import * as array from './examples/arrays';
-import * as arrayI18n from './examples/arraysI18n';
-import * as nestedArray from './examples/nestedArrays';
-import * as nestedCategorization from './examples/nestedCategorization';
+import * as arrayWithCustomChildLabel from './examples/arrays-with-custom-element-label';
+import * as arrayWithDefaults from './examples/arrays-with-defaults';
 import * as arrayWithDetail from './examples/arrays-with-detail';
 import * as arrayWithDetailAndRule from './examples/arrays-with-detail-and-rule';
-import * as arrayWithCustomChildLabel from './examples/arrays-with-custom-element-label';
 import * as arrayWithSorting from './examples/arrays-with-sorting';
 import * as arrayWithTranslatedCustomChildLabel from './examples/arrays-with-translated-custom-element-label';
-import * as arrayWithDefaults from './examples/arrays-with-defaults';
-import * as stringArray from './examples/stringArray';
+import * as arrayI18n from './examples/arraysI18n';
 import * as categorization from './examples/categorization';
 import * as stepper from './examples/categorization-stepper';
 import * as steppershownav from './examples/categorization-stepper-nav-buttons';
+import * as conditionalSchemaComposition from './examples/conditional-schema-compositions';
+import * as config from './examples/config';
 import * as controlOptions from './examples/control-options';
 import * as dates from './examples/dates';
-import * as generateDynamic from './examples/generate-dynamic';
-import * as generateSchema from './examples/generate';
-import * as generateUISchema from './examples/generateUI';
-import * as layout from './examples/layout';
-import * as person from './examples/person';
-import * as issue_1884 from './examples/1884';
-import * as rule from './examples/rule';
-import * as ruleInheritance from './examples/ruleInheritance';
-import * as config from './examples/config';
-import * as text from './examples/text';
-import * as numbers from './examples/numbers';
-import * as scope from './examples/scope';
-import * as listWithDetail from './examples/list-with-detail';
-import * as listWithDetailRegistered from './examples/list-with-detail-registered';
-import * as object from './examples/object';
-import * as i18n from './examples/i18n';
-import * as issue_1948 from './examples/1948';
-import * as oneOfRecursive from './examples/oneOf-recursive';
-import * as huge from './examples/huge';
 import * as defaultExample from './examples/default';
-import * as onChange from './examples/onChange';
 import * as enumExample from './examples/enum';
-import * as radioGroupExample from './examples/radioGroup';
 import * as multiEnum from './examples/enum-multi';
+import * as multiEnumWithLabelAndDesc from './examples/enum-multi-with-label-and-desc';
 import * as enumI18n from './examples/enumI18n';
 import * as enumInArray from './examples/enumInArray';
-import * as readonly from './examples/readonly';
+import * as generateSchema from './examples/generate';
+import * as generateDynamic from './examples/generate-dynamic';
+import * as generateUISchema from './examples/generateUI';
+import * as huge from './examples/huge';
+import * as i18n from './examples/i18n';
+import * as layout from './examples/layout';
+import * as listWithDetail from './examples/list-with-detail';
 import * as listWithDetailPrimitives from './examples/list-with-detail-primitives';
-import * as conditionalSchemaComposition from './examples/conditional-schema-compositions';
-import * as additionalErrors from './examples/additional-errors';
-import * as multiEnumWithLabelAndDesc from './examples/enum-multi-with-label-and-desc';
-import * as additionalProperties from './examples/additional-properties';
+import * as listWithDetailRegistered from './examples/list-with-detail-registered';
 import * as login from './examples/login';
-import * as showErrorsImmediately from './examples/show-errors-immediately';
 import * as mixed from './examples/mixed';
 import * as mixedObject from './examples/mixed-object';
-import * as string from './examples/string';
+import * as nestedArray from './examples/nestedArrays';
+import * as nestedCategorization from './examples/nestedCategorization';
+import * as numbers from './examples/numbers';
+import * as object from './examples/object';
+import * as onChange from './examples/onChange';
+import * as oneOf from './examples/oneOf';
+import * as oneOfRecursive from './examples/oneOf-recursive';
+import * as oneOfArray from './examples/oneOfArray';
+import * as person from './examples/person';
 import * as prependAppendSlots from './examples/prepend-append-slots';
+import * as radioGroupExample from './examples/radioGroup';
+import * as readonly from './examples/readonly';
+import * as rule from './examples/rule';
+import * as ruleInheritance from './examples/ruleInheritance';
+import * as scope from './examples/scope';
+import * as showErrorsOnTouch from './examples/show-errors-on-touch';
+import * as string from './examples/string';
+import * as stringArray from './examples/stringArray';
+import * as text from './examples/text';
 import * as validationNestedSameName from './examples/validation-nested-same-name';
-export * from './register';
 export * from './example';
+export * from './register';
 
 import * as ifThenElse from './examples/if_then_else';
-import * as jsonschema from './examples/jsonschema';
 import * as jsoneditor from './examples/json-editor';
+import * as jsonschema from './examples/jsonschema';
 
 export {
-  issue_1948,
-  defaultExample,
+  additionalErrors,
+  additionalProperties,
   allOf,
   anyOf,
-  oneOf,
-  oneOfArray,
   anyOfOneOfAllOfResolve,
-  stringArray,
   array,
   arrayI18n,
-  nestedArray,
-  nestedCategorization,
+  arrayWithCustomChildLabel,
+  arrayWithDefaults,
   arrayWithDetail,
   arrayWithDetailAndRule,
-  arrayWithCustomChildLabel,
   arrayWithSorting,
   arrayWithTranslatedCustomChildLabel,
   categorization,
-  stepper,
-  steppershownav,
-  controlOptions,
-  generateSchema,
-  generateUISchema,
-  layout,
-  person,
-  rule,
-  ruleInheritance,
-  dates,
-  generateDynamic,
+  conditionalSchemaComposition,
   config,
-  text,
-  numbers,
-  scope,
-  listWithDetail,
-  listWithDetailRegistered,
-  object,
-  i18n,
-  oneOfRecursive,
-  huge,
-  ifThenElse,
-  jsoneditor,
-  jsonschema,
-  onChange,
+  controlOptions,
+  dates,
+  defaultExample,
   enumExample,
-  radioGroupExample,
-  multiEnum,
-  multiEnumWithLabelAndDesc,
   enumI18n,
   enumInArray,
-  readonly,
+  generateDynamic,
+  generateSchema,
+  generateUISchema,
+  huge,
+  i18n,
+  ifThenElse,
+  issue_1884,
+  issue_1948,
+  jsoneditor,
+  jsonschema,
+  layout,
+  listWithDetail,
   listWithDetailPrimitives,
-  conditionalSchemaComposition,
-  additionalErrors,
-  additionalProperties,
+  listWithDetailRegistered,
   login,
-  showErrorsImmediately,
   mixed,
   mixedObject,
-  issue_1884,
-  arrayWithDefaults,
-  string,
+  multiEnum,
+  multiEnumWithLabelAndDesc,
+  nestedArray,
+  nestedCategorization,
+  numbers,
+  object,
+  onChange,
+  oneOf,
+  oneOfArray,
+  oneOfRecursive,
+  person,
   prependAppendSlots,
+  radioGroupExample,
+  readonly,
+  rule,
+  ruleInheritance,
+  scope,
+  showErrorsOnTouch,
+  stepper,
+  steppershownav,
+  string,
+  stringArray,
+  text,
   validationNestedSameName,
 };

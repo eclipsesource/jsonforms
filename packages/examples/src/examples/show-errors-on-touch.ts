@@ -116,8 +116,8 @@ export const data = {};
 
 registerExamples([
   {
-    name: 'show-errors-immediately',
-    label: 'Show Errors Immediately',
+    name: 'show-errors-on-touch',
+    label: 'Show Errors On Touch',
     data,
     schema,
     uischema,

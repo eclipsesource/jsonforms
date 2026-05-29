@@ -80,7 +80,7 @@ const itemTester: UISchemaTester = (_schema, schemaPath, _path) => {
         {{ readonly ? 'Unset' : 'Set' }} Readonly
       </button>
       <button (click)="toggleShowErrorsImmediately()">
-        showErrorsImmediately: {{ config.showErrorsImmediately }}
+        showErrorsOnTouch: {{ config.showErrorsOnTouch }}
       </button>
     </div>
     <jsonforms
@@ -101,7 +101,7 @@ export class AppComponent {
   selectedExample: ExampleDescription | undefined;
   i18n: JsonFormsI18nState;
   readonly = false;
-  config = { showErrorsImmediately: false };
+  config = { showErrorsOnTouch: false };
   data: any;
   uischemas: { tester: UISchemaTester; uischema: UISchemaElement }[] = [
     { tester: itemTester, uischema: uiSchema },
@@ -131,7 +131,7 @@ export class AppComponent {
   toggleShowErrorsImmediately() {
     this.config = {
       ...this.config,
-      showErrorsImmediately: !this.config.showErrorsImmediately,
+      showErrorsOnTouch: !this.config.showErrorsOnTouch,
     };
   }
 }

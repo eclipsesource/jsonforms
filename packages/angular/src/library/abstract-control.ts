@@ -179,7 +179,8 @@ export abstract class JsonFormsAbstractControl<
     // related to ionic-team/ionic#11640
     const config = this.jsonFormsService.getConfig();
     const appliedUiSchemaOptions = merge({}, config, this.uischema?.options);
-    if (appliedUiSchemaOptions.showErrorsImmediately) {
+
+    if (!appliedUiSchemaOptions.showErrorsOnTouch) {
       this.form.markAsTouched();
     }
     this.form.updateValueAndValidity();
