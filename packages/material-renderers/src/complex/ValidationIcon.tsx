@@ -25,7 +25,8 @@
 import React from 'react';
 
 import { ErrorOutline } from '@mui/icons-material';
-import { Badge, Tooltip, styled } from '@mui/material';
+import { Badge, Tooltip } from '@mui/material';
+import { styled } from '@mui/material/styles';
 
 const StyledBadge = styled(Badge)(({ theme }: any) => ({
   color: theme.palette.error.main,
