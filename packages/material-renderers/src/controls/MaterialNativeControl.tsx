@@ -93,7 +93,9 @@ export const MaterialNativeControl = (props: ControlProps) => {
       onFocus={onFocus}
       onBlur={onBlur}
       helperText={!isValid ? errors : showDescription ? description : null}
-      InputLabelProps={{ shrink: true }}
+      slotProps={{
+        inputLabel: { shrink: true },
+      }}
       value={inputValue}
       onChange={onChange}
     />

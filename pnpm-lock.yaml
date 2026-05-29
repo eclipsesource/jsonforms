@@ -12393,9 +12393,6 @@ packages:
   react-is@18.3.1:
     resolution: {integrity: sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==}
 
-  react-is@19.1.1:
-    resolution: {integrity: sha512-tr41fA15Vn8p4X9ntI+yCyeGSf1TlYaY5vlTZfQmeLBrFo3psOPX6HhTDnFNL9uj3EhP0KAQ80cugCl4b4BERA==}
-
   react-is@19.2.6:
     resolution: {integrity: sha512-XjBR15BhXuylgWGuslhDKqlSayuqvqBX91BP8pauG8kd1zY8kotkNWbXksTCNRarse4kuGbe2kIY05ARtwNIvw==}
 
@@ -15117,7 +15114,7 @@ snapshots:
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@angular-devkit/architect': 0.2003.26(chokidar@4.0.1)
-      '@angular-devkit/build-webpack': 0.2003.26(chokidar@4.0.1)(webpack-dev-server@5.2.2(webpack@5.105.0(esbuild@0.28.0)))(webpack@5.105.0(esbuild@0.28.0))
+      '@angular-devkit/build-webpack': 0.2003.26(chokidar@4.0.1)(webpack-dev-server@5.2.2(webpack@5.91.0))(webpack@5.105.0(esbuild@0.28.0))
       '@angular-devkit/core': 20.3.26(chokidar@4.0.1)
       '@angular/build': 20.3.26(@angular/compiler-cli@20.3.24(@angular/compiler@20.3.24)(typescript@5.8.3))(@angular/compiler@20.3.24)(@angular/core@20.3.24(@angular/compiler@20.3.24)(rxjs@6.6.7)(zone.js@0.15.1))(@angular/platform-browser@20.3.24(@angular/animations@20.3.24(@angular/core@20.3.24(@angular/compiler@20.3.24)(rxjs@6.6.7)(zone.js@0.15.1)))(@angular/common@20.3.24(@angular/core@20.3.24(@angular/compiler@20.3.24)(rxjs@6.6.7)(zone.js@0.15.1))(rxjs@6.6.7))(@angular/core@20.3.24(@angular/compiler@20.3.24)(rxjs@6.6.7)(zone.js@0.15.1)))(@types/node@24.12.2)(chokidar@4.0.1)(jiti@1.21.0)(karma@6.4.3)(less@4.4.0)(ng-packagr@20.3.2(@angular/compiler-cli@20.3.24(@angular/compiler@20.3.24)(typescript@5.8.3))(tslib@2.6.2)(typescript@5.8.3))(postcss@8.5.12)(stylus@0.57.0)(terser@5.43.1)(tslib@2.8.1)(typescript@5.8.3)(yaml@2.8.1)
       '@angular/compiler-cli': 20.3.24(@angular/compiler@20.3.24)(typescript@5.8.3)
@@ -15203,7 +15200,7 @@ snapshots:
       - webpack-cli
       - yaml
 
-  '@angular-devkit/build-webpack@0.2003.26(chokidar@4.0.1)(webpack-dev-server@5.2.2(webpack@5.105.0(esbuild@0.28.0)))(webpack@5.105.0(esbuild@0.28.0))':
+  '@angular-devkit/build-webpack@0.2003.26(chokidar@4.0.1)(webpack-dev-server@5.2.2(webpack@5.91.0))(webpack@5.105.0(esbuild@0.28.0))':
     dependencies:
       '@angular-devkit/architect': 0.2003.26(chokidar@4.0.1)
       rxjs: 7.8.2
@@ -18444,7 +18441,7 @@ snapshots:
 
   '@mui/material@7.3.0(@emotion/react@11.11.4(@types/react@17.0.80)(react@17.0.2))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@17.0.80)(react@17.0.2))(@types/react@17.0.80)(react@17.0.2))(@types/react@17.0.80)(react-dom@17.0.2(react@17.0.2))(react@17.0.2)':
     dependencies:
-      '@babel/runtime': 7.28.4
+      '@babel/runtime': 7.29.7
       '@mui/core-downloads-tracker': 7.3.0
       '@mui/system': 7.3.0(@emotion/react@11.11.4(@types/react@17.0.80)(react@17.0.2))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@17.0.80)(react@17.0.2))(@types/react@17.0.80)(react@17.0.2))(@types/react@17.0.80)(react@17.0.2)
       '@mui/types': 7.4.6(@types/react@17.0.80)
@@ -18452,11 +18449,11 @@ snapshots:
       '@popperjs/core': 2.11.8
       '@types/react-transition-group': 4.4.12(@types/react@17.0.80)
       clsx: 2.1.1
-      csstype: 3.1.3
+      csstype: 3.2.3
       prop-types: 15.8.1
       react: 17.0.2
       react-dom: 17.0.2(react@17.0.2)
-      react-is: 19.1.1
+      react-is: 19.2.6
       react-transition-group: 4.4.5(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
     optionalDependencies:
       '@emotion/react': 11.11.4(@types/react@17.0.80)(react@17.0.2)
@@ -18508,7 +18505,7 @@ snapshots:
       '@emotion/cache': 11.14.0
       '@emotion/serialize': 1.3.3
       '@emotion/sheet': 1.4.0
-      csstype: 3.1.3
+      csstype: 3.2.3
       prop-types: 15.8.1
       react: 17.0.2
     optionalDependencies:
@@ -18536,7 +18533,7 @@ snapshots:
       '@mui/types': 7.4.6(@types/react@17.0.80)
       '@mui/utils': 7.3.2(@types/react@17.0.80)(react@17.0.2)
       clsx: 2.1.1
-      csstype: 3.1.3
+      csstype: 3.2.3
       prop-types: 15.8.1
       react: 17.0.2
     optionalDependencies:
@@ -20480,7 +20477,7 @@ snapshots:
       '@vue/reactivity': 3.5.17
       '@vue/runtime-core': 3.5.17
       '@vue/shared': 3.5.17
-      csstype: 3.1.3
+      csstype: 3.2.3
 
   '@vue/server-renderer@3.5.17(vue@3.5.17(typescript@5.8.3))':
     dependencies:
@@ -28739,8 +28736,6 @@ snapshots:
 
   react-is@18.3.1: {}
 
-  react-is@19.1.1: {}
-
   react-is@19.2.6: {}
 
   react-redux@7.2.9(react-dom@17.0.2(react@17.0.2))(react@17.0.2):
@@ -31066,7 +31061,7 @@ snapshots:
   vue@2.7.16:
     dependencies:
       '@vue/compiler-sfc': 2.7.16
-      csstype: 3.1.3
+      csstype: 3.2.3
 
   vue@3.5.17(typescript@5.8.3):
     dependencies:
