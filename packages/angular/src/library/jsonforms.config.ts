@@ -22,13 +22,36 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-export * from './abstract-control';
-export * from './array-control';
-export * from './base.renderer';
-export * from './control';
-export * from './jsonforms-root.component';
-export * from './jsonforms.component';
-export * from './jsonforms.config';
-export * from './jsonforms.module';
-export * from './jsonforms.service';
-export * from './unknown.component';
+import { InjectionToken, Provider } from '@angular/core';
+
+export interface JsonFormsAngularConfig {
+  /**
+   * When true, validation errors only appear after the user has interacted with the field.
+   */
+  showErrorsOnTouch?: boolean;
+  [key: string]: unknown;
+}
+
+/**
+ * Injection token for providing a global JSONForms config via Angular's DI system.
+ * Config provided via this token acts as the base; the `config` @Input on the
+ * `<jsonforms>` component takes precedence when both are supplied.
+ */
+export const JSONFORMS_CONFIG = new InjectionToken<JsonFormsAngularConfig>(
+  'JsonFormsConfig'
+);
+
+/**
+ * Returns an Angular provider that sets the global JSONForms config.
+ *
+ * @example
+ * // Standalone bootstrap (app.config.ts)
+ * export const appConfig: ApplicationConfig = {
+ *   providers: [provideJsonFormsConfig({ showErrorsOnTouch: false })],
+ * };
+ */
+export function provideJsonFormsConfig(
+  config: JsonFormsAngularConfig
+): Provider {
+  return { provide: JSONFORMS_CONFIG, useValue: config };
+}

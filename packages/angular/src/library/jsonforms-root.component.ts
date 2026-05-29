@@ -36,6 +36,7 @@ import {
 } from '@angular/core';
 import {
   Actions,
+  defaultMiddleware,
   JsonFormsI18nState,
   JsonFormsRendererRegistryEntry,
   JsonSchema,
@@ -43,13 +44,14 @@ import {
   UISchemaElement,
   UISchemaTester,
   ValidationMode,
-  defaultMiddleware,
 } from '@jsonforms/core';
 import type Ajv from 'ajv';
 import type { ErrorObject } from 'ajv';
-import { JsonFormsAngularService, USE_STATE_VALUE } from './jsonforms.service';
+import merge from 'lodash/merge';
 import { Subscription } from 'rxjs';
 import { JsonFormsOutlet } from './jsonforms.component';
+import { JSONFORMS_CONFIG, JsonFormsAngularConfig } from './jsonforms.config';
+import { JsonFormsAngularService, USE_STATE_VALUE } from './jsonforms.service';
 
 // TODO Can this be rewritten to not use DoCheck and OnChanges?
 /* eslint-disable @angular-eslint/no-conflicting-lifecycle */
@@ -69,7 +71,7 @@ export class JsonForms implements DoCheck, OnChanges, OnInit, OnDestroy {
   @Input() readonly: boolean;
   @Input() validationMode: ValidationMode;
   @Input() ajv: Ajv;
-  @Input() config: any;
+  @Input() config: JsonFormsAngularConfig;
   @Input() i18n: JsonFormsI18nState;
   @Input() additionalErrors: ErrorObject[];
   @Input() middleware: Middleware = defaultMiddleware;
@@ -83,6 +85,7 @@ export class JsonForms implements DoCheck, OnChanges, OnInit, OnDestroy {
   oldI18N: JsonFormsI18nState;
 
   private jsonformsService = inject(JsonFormsAngularService);
+  private providedConfig = inject(JSONFORMS_CONFIG, { optional: true });
 
   ngOnInit(): void {
     this.jsonformsService.init(
@@ -98,7 +101,7 @@ export class JsonForms implements DoCheck, OnChanges, OnInit, OnDestroy {
         uischemas: this.uischemas,
         i18n: this.i18n,
         renderers: this.renderers,
-        config: this.config,
+        config: merge({}, this.providedConfig, this.config),
         readonly: this.readonly,
       },
       this.middleware
@@ -202,7 +205,9 @@ export class JsonForms implements DoCheck, OnChanges, OnInit, OnDestroy {
 
     if (newConfig && !newConfig.isFirstChange()) {
       this.jsonformsService.updateConfig(
-        Actions.setConfig(newConfig.currentValue)
+        Actions.setConfig(
+          merge({}, this.providedConfig, newConfig.currentValue)
+        )
       );
     }
   }

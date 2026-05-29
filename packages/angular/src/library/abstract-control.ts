@@ -22,6 +22,13 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  AbstractControl,
+  FormControl,
+  ValidationErrors,
+  ValidatorFn,
+} from '@angular/forms';
 import {
   Actions,
   computeLabel,
@@ -32,17 +39,11 @@ import {
   removeId,
   StatePropsOfControl,
 } from '@jsonforms/core';
-import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
-import {
-  AbstractControl,
-  FormControl,
-  ValidationErrors,
-  ValidatorFn,
-} from '@angular/forms';
-
 import { JsonFormsBaseRenderer } from './base.renderer';
 import { JsonFormsAngularService } from './jsonforms.service';
+
 import merge from 'lodash/merge';
+
 @Component({
   template: '',
 })
@@ -176,7 +177,12 @@ export abstract class JsonFormsAbstractControl<
   protected triggerValidation() {
     // these cause the correct update of the error underline, seems to be
     // related to ionic-team/ionic#11640
-    this.form.markAsTouched();
+    const config = this.jsonFormsService.getConfig();
+    const appliedUiSchemaOptions = merge({}, config, this.uischema?.options);
+
+    if (!appliedUiSchemaOptions.showErrorsOnTouch) {
+      this.form.markAsTouched();
+    }
     this.form.updateValueAndValidity();
   }
 }
