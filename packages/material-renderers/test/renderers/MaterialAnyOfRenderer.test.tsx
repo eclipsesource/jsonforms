@@ -23,8 +23,8 @@
   THE SOFTWARE.
 */
 import React from 'react';
-
-import Enzyme, { mount, ReactWrapper } from 'enzyme';
+import { act } from 'react-dom/test-utils';
+import Enzyme, { ReactWrapper } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { ControlElement } from '@jsonforms/core';
 import {
@@ -33,11 +33,9 @@ import {
   materialRenderers,
 } from '../../src';
 import { JsonForms, JsonFormsStateProvider } from '@jsonforms/react';
-import { initCore, TestEmitter } from './util';
+import { initCore, mountWithAct, TestEmitter } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });
-
-const waitForAsync = () => new Promise((resolve) => setTimeout(resolve, 0));
 
 const clickAddButton = (wrapper: ReactWrapper, times: number) => {
   const buttons = wrapper.find('button');
@@ -57,9 +55,23 @@ const selectanyOfTab = (wrapper: ReactWrapper, at: number) => {
 describe('Material anyOf renderer', () => {
   let wrapper: ReactWrapper;
 
-  afterEach(() => wrapper.unmount());
+  beforeEach(() => {
+    jest.useFakeTimers();
+  });
 
-  it('should add an item at correct path', (done) => {
+  afterEach(() => {
+    // flush any pending debounce / async updates
+    jest.runOnlyPendingTimers();
+
+    // cleanup React tree FIRST
+    if (wrapper) {
+      wrapper.unmount();
+    }
+
+    jest.useRealTimers();
+  });
+
+  it('should add an item at correct path', () => {
     const schema = {
       type: 'object',
       properties: {
@@ -85,7 +97,7 @@ describe('Material anyOf renderer', () => {
     const onChangeData: any = {
       data: undefined,
     };
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonForms
         data={undefined}
         schema={schema}
@@ -96,19 +108,23 @@ describe('Material anyOf renderer', () => {
         }}
       />
     );
+
     expect(wrapper.find(MaterialAnyOfRenderer).length).toBeTruthy();
-    const input = wrapper.find('input').first();
-    input.simulate('change', { target: { value: 'test' } });
+
+    act(() => {
+      const input = wrapper.find('input').first();
+      input.simulate('change', { target: { value: 'test' } });
+
+      jest.runAllTimers();
+    });
+
     wrapper.update();
-    setTimeout(() => {
-      expect(onChangeData.data).toEqual({
-        value: 'test',
-      });
-      done();
-    }, 1000);
+    expect(onChangeData.data).toEqual({
+      value: 'test',
+    });
   });
 
-  it('should add a "mything"', async () => {
+  it('should add a "mything"', () => {
     const schema = {
       type: 'object',
       properties: {
@@ -155,17 +171,13 @@ describe('Material anyOf renderer', () => {
       scope: '#/properties/myThingsAndOrYourThings',
     };
     const core = initCore(schema, uischema);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
         <MaterialAnyOfRenderer schema={schema} uischema={uischema} />
       </JsonFormsStateProvider>
     );
-
-    await waitForAsync();
-
-    wrapper.update();
 
     selectanyOfTab(wrapper, 1);
     const nrOfRowsBeforeAdd = wrapper.find('tr');
@@ -178,7 +190,7 @@ describe('Material anyOf renderer', () => {
     expect(nrOfRowsAfterAdd.length).toBe(4);
   });
 
-  it('should switch to "yourThing" edit, then switch back, then edit', async () => {
+  it('should switch to "yourThing" edit, then switch back, then edit', () => {
     const schema = {
       type: 'object',
       properties: {
@@ -228,9 +240,14 @@ describe('Material anyOf renderer', () => {
       data: undefined,
     };
     const core = initCore(schema, uischema);
-    wrapper = mount(
+
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
-        initState={{ renderers: materialRenderers, cells: materialCells, core }}
+        initState={{
+          renderers: materialRenderers,
+          cells: materialCells,
+          core,
+        }}
       >
         <TestEmitter
           onChange={({ data }) => {
@@ -240,10 +257,6 @@ describe('Material anyOf renderer', () => {
         <MaterialAnyOfRenderer schema={schema} uischema={uischema} />
       </JsonFormsStateProvider>
     );
-
-    await waitForAsync();
-
-    wrapper.update();
 
     selectanyOfTab(wrapper, 1);
     clickAddButton(wrapper, 1);
@@ -255,20 +268,15 @@ describe('Material anyOf renderer', () => {
     selectanyOfTab(wrapper, 0);
 
     const input = wrapper.find('input').first();
-    input.simulate('change', { target: { value: 'test' } });
+    act(() => {
+      input.simulate('change', { target: { value: 'test' } });
+      jest.runAllTimers();
+    });
     wrapper.update();
 
-    let done: (value: undefined) => void;
-    const donePromise = new Promise<undefined>((resolve) => {
-      done = resolve;
+    expect(onChangeData.data).toEqual({
+      myThingsAndOrYourThings: [{ age: 5, name: 'test' }],
     });
-    setTimeout(() => {
-      expect(onChangeData.data).toEqual({
-        myThingsAndOrYourThings: [{ age: 5, name: 'test' }],
-      });
-      done(undefined);
-    }, 1000);
-    return donePromise;
   });
 
   it('should be hideable', () => {
@@ -295,7 +303,8 @@ describe('Material anyOf renderer', () => {
       scope: '#/properties/value',
     };
     const core = initCore(schema, uischema);
-    wrapper = mount(
+
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >

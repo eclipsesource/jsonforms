@@ -62,7 +62,12 @@
       "js"
     ],
     "transform": {
-      "^.+\\.(ts|tsx)$": "ts-jest"
+      "^.+\\.(ts|tsx)$": [
+        "ts-jest",
+        {
+          "tsconfig": "tsconfig.test.json"
+        }
+      ]
     },
     "testEnvironment": "jsdom",
     "testMatch": [
@@ -72,12 +77,7 @@
     "testPathIgnorePatterns": [
       "/node_modules/",
       "/dist/"
-    ],
-    "globals": {
-      "ts-jest": {
-        "tsconfig": "tsconfig.test.json"
-      }
-    }
+    ]
   },
   "nyc": {
     "reporter": [
@@ -87,7 +87,7 @@
   },
   "dependencies": {
     "@date-io/dayjs": "^3.0.0",
-    "dayjs": "^1.10.7",
+    "dayjs": "1.10.7",
     "lodash": "^4.17.21"
   },
   "peerDependencies": {
@@ -95,9 +95,9 @@
     "@emotion/styled": "^11.3.0 || ^12.0.0",
     "@jsonforms/core": "3.8.0-alpha.2",
     "@jsonforms/react": "3.8.0-alpha.2",
-    "@mui/icons-material": "^7.0.0 || ^8.0.0 || ^9.0.0",
-    "@mui/material": "^7.0.0 || ^8.0.0 || ^9.0.0",
-    "@mui/x-date-pickers": "^8.0.0 || ^9.0.0",
+    "@mui/icons-material": "^9.0.0",
+    "@mui/material": "^9.0.0",
+    "@mui/x-date-pickers": "^9.0.0",
     "react": "^16.12.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
   },
   "devDependencies": {

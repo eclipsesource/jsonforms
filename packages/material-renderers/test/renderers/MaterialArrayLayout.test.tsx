@@ -30,20 +30,27 @@ import {
   Translator,
 } from '@jsonforms/core';
 import * as React from 'react';
+import { act } from 'react-dom/test-utils';
 
 import { ArrayLayoutToolbar, materialRenderers } from '../../src';
 import {
   MaterialArrayLayout,
   materialArrayLayoutTester,
 } from '../../src/layouts';
-import Enzyme, { mount, ReactWrapper } from 'enzyme';
+import Enzyme, { ReactWrapper } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { JsonForms, JsonFormsStateProvider } from '@jsonforms/react';
 import { Accordion } from '@mui/material';
-import { createTesterContext, testTranslator, initCore } from './util';
+import {
+  createTesterContext,
+  testTranslator,
+  initCore,
+  mountWithAct,
+} from './util';
 import { checkTooltip, checkTooltipTranslation } from './tooltipChecker';
 import { cloneDeep } from 'lodash';
 
+jest.useFakeTimers();
 Enzyme.configure({ adapter: new Adapter() });
 
 const data = [
@@ -397,7 +404,7 @@ describe('Material array layout', () => {
 
   it('should render two by two children', () => {
     const core = initCore(schema, uischema, data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -412,7 +419,7 @@ describe('Material array layout', () => {
 
   it('should generate uischema when options.detail=GENERATE', () => {
     const core = initCore(schema, uischema, data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -430,7 +437,7 @@ describe('Material array layout', () => {
 
   it('should use inline options.detail uischema', () => {
     const core = initCore(schema, uischema, data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -448,7 +455,7 @@ describe('Material array layout', () => {
 
   it('should be hideable', () => {
     const core = initCore(schema, uischema, data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -467,7 +474,7 @@ describe('Material array layout', () => {
 
   it('should have renderers prop via ownProps', () => {
     const core = initCore(schema, uischema, data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -488,7 +495,7 @@ describe('Material array layout', () => {
       ...uischema,
       label: 'My awesome label',
     };
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonForms
         data={data}
         schema={nestedSchema}
@@ -522,7 +529,7 @@ describe('Material array layout', () => {
   });
 
   it('should render sort buttons if showSortButtons is true', () => {
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonForms
         data={data}
         schema={nestedSchema}
@@ -538,18 +545,19 @@ describe('Material array layout', () => {
       wrapper
         .find('Memo(ExpandPanelRendererComponent)')
         .at(0)
-        .find('button[aria-label="Move item up"]').length
+        .find('div[aria-label="Move item up"]').length
     ).toBe(1);
     // down button
     expect(
       wrapper
         .find('Memo(ExpandPanelRendererComponent)')
         .at(0)
-        .find('button[aria-label="Move item down"]').length
+        .find('div[aria-label="Move item down"]').length
     ).toBe(1);
   });
+
   it('should render sort buttons if showSortButtons is true in config', () => {
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonForms
         data={data}
         schema={nestedSchema}
@@ -566,23 +574,22 @@ describe('Material array layout', () => {
       wrapper
         .find('Memo(ExpandPanelRendererComponent)')
         .at(0)
-        .find('button')
-        .find('button[aria-label="Move item up"]').length
+        .find('div[aria-label="Move item up"]').length
     ).toBe(1);
     // down button
     expect(
       wrapper
         .find('Memo(ExpandPanelRendererComponent)')
         .at(0)
-        .find('button')
-        .find('button[aria-label="Move item down"]').length
+        .find('div[aria-label="Move item down"]').length
     ).toBe(1);
   });
-  it('should move item up if up button is presses', (done) => {
+
+  it('should move item up if up button is presses', () => {
     const onChangeData: any = {
       data: undefined,
     };
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonForms
         data={data}
         schema={nestedSchema}
@@ -594,6 +601,9 @@ describe('Material array layout', () => {
         }}
       />
     );
+
+    jest.runAllTimers();
+    wrapper.update();
 
     expect(wrapper.find(MaterialArrayLayout).length).toBeTruthy();
 
@@ -601,29 +611,32 @@ describe('Material array layout', () => {
     const upButton = wrapper
       .find('Memo(ExpandPanelRendererComponent)')
       .at(1)
-      .find('button[aria-label="Move item up"]');
-    upButton.simulate('click');
+      .find('div[aria-label="Move item up"]');
+
+    act(() => {
+      upButton.simulate('click');
+      jest.runAllTimers();
+      wrapper.update();
+    });
     // events are debounced for some time, so let's wait
-    setTimeout(() => {
-      expect(onChangeData.data).toEqual([
-        {
-          message: 'Yolo',
-          message2: 'Yolo 2',
-        },
-        {
-          message: 'El Barto was here',
-          message2: 'El Barto was here 2',
-          done: true,
-        },
-      ]);
-      done();
-    }, 50);
+    expect(onChangeData.data).toEqual([
+      {
+        message: 'Yolo',
+        message2: 'Yolo 2',
+      },
+      {
+        message: 'El Barto was here',
+        message2: 'El Barto was here 2',
+        done: true,
+      },
+    ]);
   });
-  it('should move item down if down button is pressed', (done) => {
+
+  it('should move item down if down button is pressed', () => {
     const onChangeData: any = {
       data: undefined,
     };
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonForms
         data={data}
         schema={nestedSchema}
@@ -641,26 +654,30 @@ describe('Material array layout', () => {
     const upButton = wrapper
       .find('Memo(ExpandPanelRendererComponent)')
       .at(0)
-      .find('button[aria-label="Move item down"]');
-    upButton.simulate('click');
-    // events are debounced for some time, so let's wait
-    setTimeout(() => {
-      expect(onChangeData.data).toEqual([
-        {
-          message: 'Yolo',
-          message2: 'Yolo 2',
-        },
-        {
-          message: 'El Barto was here',
-          message2: 'El Barto was here 2',
-          done: true,
-        },
-      ]);
-      done();
-    }, 50);
+      .find('div[aria-label="Move item down"]');
+
+    act(() => {
+      upButton.simulate('click');
+      // events are debounced for some time, so let's wait
+      jest.runAllTimers();
+      wrapper.update();
+    });
+
+    expect(onChangeData.data).toEqual([
+      {
+        message: 'Yolo',
+        message2: 'Yolo 2',
+      },
+      {
+        message: 'El Barto was here',
+        message2: 'El Barto was here 2',
+        done: true,
+      },
+    ]);
   });
+
   it('should have up button disabled for first element', () => {
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonForms
         data={data}
         schema={nestedSchema}
@@ -675,11 +692,12 @@ describe('Material array layout', () => {
     const upButton = wrapper
       .find('Memo(ExpandPanelRendererComponent)')
       .at(0)
-      .find('button[aria-label="Move item up"]');
-    expect(upButton.is('[disabled]')).toBe(true);
+      .find('div[aria-label="Move item up"]');
+    expect(upButton.hasClass('Mui-disabled')).toBe(true);
   });
+
   it('should have down button disabled for last element', () => {
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonForms
         data={data}
         schema={nestedSchema}
@@ -693,13 +711,14 @@ describe('Material array layout', () => {
     // getting up button of second item in expension panel;
     const downButton = wrapper
       .find('Memo(ExpandPanelRendererComponent)')
-      .at(1)
-      .find('button[aria-label="Move item down"]');
-    expect(downButton.is('[disabled]')).toBe(true);
+      .last()
+      .find('div[aria-label="Move item down"]');
+
+    expect(downButton.hasClass('Mui-disabled')).toBe(true);
   });
 
   it('add and delete buttons should exist if enabled', () => {
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonForms
         data={data}
         schema={schema}
@@ -717,7 +736,7 @@ describe('Material array layout', () => {
   it('add and delete buttons should be removed if disabled', () => {
     const readOnlySchema = { ...schema };
     readOnlySchema.readOnly = true;
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonForms
         data={data}
         schema={readOnlySchema}
@@ -735,7 +754,7 @@ describe('Material array layout', () => {
   it('add button should be removed if indicated via ui schema', () => {
     const disableUischema = { ...uischema };
     disableUischema.options = { ...uischema.options, disableAdd: true };
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonForms
         data={data}
         schema={schema}
@@ -751,7 +770,7 @@ describe('Material array layout', () => {
   it('delete button should be removed if indicated via ui schema', () => {
     const disableUischema = { ...uischema };
     disableUischema.options = { ...uischema.options, disableRemove: true };
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonForms
         data={data}
         schema={schema}
@@ -765,7 +784,7 @@ describe('Material array layout', () => {
   });
 
   it('add and delete buttons should be removed if indicated via config', () => {
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonForms
         data={data}
         schema={schema}
@@ -803,7 +822,7 @@ describe('Material array layout', () => {
   });
 
   it('should render configured child label property as child label', () => {
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonForms
         data={data}
         schema={nestedSchema}
@@ -824,7 +843,7 @@ describe('Material array layout', () => {
       description: 'This is an array description',
     };
 
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonForms
         data={data}
         schema={descriptionSchema}
@@ -847,7 +866,7 @@ describe('Material array layout', () => {
     // make sure there is no description
     delete descriptionSchema.description;
 
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonForms
         data={data}
         schema={descriptionSchema}
@@ -863,7 +882,7 @@ describe('Material array layout', () => {
   it('should have a translation for no data', () => {
     const translate = () => 'Translated';
     const core = initCore(schema, uischema, emptyData);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core, i18n: { translate } }}
       >
@@ -890,6 +909,7 @@ describe('Material array layout', () => {
       data
     );
   });
+
   it('should have a translatable tooltip for add button', () => {
     wrapper = checkTooltipTranslation(
       nestedSchema,
@@ -916,6 +936,7 @@ describe('Material array layout', () => {
       data
     );
   });
+
   it('should have a translatable tooltip for delete button', () => {
     wrapper = checkTooltipTranslation(
       nestedSchema,
@@ -942,6 +963,7 @@ describe('Material array layout', () => {
       data
     );
   });
+
   it('should have a translatable tooltip for up button', () => {
     wrapper = checkTooltipTranslation(
       nestedSchema,
@@ -968,6 +990,7 @@ describe('Material array layout', () => {
       data
     );
   });
+
   it('should have a translatable tooltip for down button', () => {
     wrapper = checkTooltipTranslation(
       nestedSchema,
@@ -1240,7 +1263,7 @@ function arrayLayoutWrapper(
 ) {
   const core = initCore(schema, uiSchema, data);
 
-  wrapper = mount(
+  wrapper = mountWithAct(
     <JsonFormsStateProvider
       initState={{
         renderers: materialRenderers,

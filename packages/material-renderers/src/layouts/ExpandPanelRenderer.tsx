@@ -189,6 +189,7 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
                           open={enableMoveUp ? undefined : false}
                         >
                           <IconButton
+                            component='div'
                             onClick={moveUp(path, index)}
                             style={iconStyle}
                             disabled={!enableMoveUp}
@@ -207,6 +208,7 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
                           open={enableMoveDown ? undefined : false}
                         >
                           <IconButton
+                            component='div'
                             onClick={moveDown(path, index)}
                             style={iconStyle}
                             disabled={!enableMoveDown}
@@ -229,6 +231,7 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
                         placement='bottom'
                       >
                         <IconButton
+                          component='div'
                           onClick={removeItems(path, [index])}
                           style={iconStyle}
                           aria-label={translations.removeAriaLabel}

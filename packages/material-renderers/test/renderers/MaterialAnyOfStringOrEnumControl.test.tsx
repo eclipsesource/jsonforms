@@ -24,7 +24,7 @@
 */
 import React from 'react';
 
-import Enzyme, { mount, ReactWrapper } from 'enzyme';
+import Enzyme, { ReactWrapper } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { ControlElement, JsonSchema } from '@jsonforms/core';
 import {
@@ -33,6 +33,7 @@ import {
   materialRenderers,
 } from '../../src';
 import { JsonForms } from '@jsonforms/react';
+import { mountWithAct } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -117,7 +118,7 @@ describe('Material any of string or enum control', () => {
   });
 
   it('render', () => {
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonForms
         data={'foo'}
         schema={schema}

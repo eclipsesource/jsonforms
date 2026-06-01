@@ -23,13 +23,15 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import Enzyme, { mount, ReactWrapper } from 'enzyme';
+import Enzyme, { ReactWrapper } from 'enzyme';
 import { MaterialTextControl } from '../../src/controls/MaterialTextControl';
 import { MaterialInputControl } from '../../src/controls/MaterialInputControl';
 import { MuiInputText } from '../../src/mui-controls/MuiInputText';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { ControlElement, ControlProps } from '@jsonforms/core';
 import { InputAdornment, OutlinedInput } from '@mui/material';
+import { mountWithAct } from './util';
+import { act } from 'react-dom/test-utils';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -76,7 +78,7 @@ describe('Material text control', () => {
 
   it('render', () => {
     const props = defaultControlProps();
-    wrapper = mount(createMaterialTextControl(props));
+    wrapper = mountWithAct(createMaterialTextControl(props));
     expect(wrapper.find(MaterialInputControl).props()).toEqual({
       ...props,
       input: MuiInputText,
@@ -90,15 +92,18 @@ describe('Material text control', () => {
       ...defaultControlProps(),
       muiInputProps: { spellCheck: false },
     };
-    wrapper = mount(createMaterialTextControl(props));
+    wrapper = mountWithAct(createMaterialTextControl(props));
     expect(wrapper.find('input').props().spellCheck).toEqual(false);
   });
 
   it('shows clear button when data exists', () => {
     const props = defaultControlProps();
-    wrapper = mount(createMaterialTextControl(props));
+    wrapper = mountWithAct(createMaterialTextControl(props));
     // call onPointerEnter prop manually as the tests seem to ignore 'pointerenter' events, 'mouseover' events work however.
-    wrapper.find(OutlinedInput).props().onPointerEnter?.call(this);
+
+    act(() => {
+      wrapper.find(OutlinedInput).props().onPointerEnter?.call(this);
+    });
     wrapper.update();
     expect(wrapper.find(InputAdornment).props().style).not.toHaveProperty(
       'display',
@@ -109,10 +114,12 @@ describe('Material text control', () => {
   it('hides clear button when data is undefined', () => {
     const props = defaultControlProps();
     delete props.data;
-    wrapper = mount(createMaterialTextControl(props));
+    wrapper = mountWithAct(createMaterialTextControl(props));
     // call onPointerEnter prop manually as the tests seem to ignore 'pointerenter' events, 'mouseover' events work however.
-    wrapper.find(OutlinedInput).props().onPointerEnter?.call(this);
-    wrapper.update();
+    act(() => {
+      wrapper.find(OutlinedInput).props().onPointerEnter?.call(this);
+      wrapper.update();
+    });
     expect(wrapper.find(InputAdornment).props().style).toHaveProperty(
       'display',
       'none'

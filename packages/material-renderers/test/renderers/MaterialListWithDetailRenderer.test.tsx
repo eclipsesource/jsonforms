@@ -478,8 +478,6 @@ describe('Material list with detail renderer', () => {
       </JsonFormsStateProvider>
     );
 
-    console.log(wrapper.debug());
-
     const deleteButton = wrapper.find({ 'aria-label': 'Delete button' });
     expect(deleteButton.exists()).toBeTruthy();
     const addButton = wrapper.find({ 'aria-label': 'Add' });

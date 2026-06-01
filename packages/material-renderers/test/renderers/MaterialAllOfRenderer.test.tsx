@@ -24,12 +24,12 @@
 */
 import React from 'react';
 
-import Enzyme, { mount, ReactWrapper } from 'enzyme';
+import Enzyme, { ReactWrapper } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { ControlElement } from '@jsonforms/core';
 import { MaterialAllOfRenderer, materialRenderers } from '../../src';
 import { JsonForms, JsonFormsStateProvider } from '@jsonforms/react';
-import { initCore } from './util';
+import { initCore, mountWithAct } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -61,7 +61,8 @@ describe('Material allOf renderer', () => {
       label: 'Value',
       scope: '#/properties/value',
     };
-    wrapper = mount(
+
+    wrapper = mountWithAct(
       <JsonForms
         data={undefined}
         schema={schema}
@@ -98,7 +99,7 @@ describe('Material allOf renderer', () => {
       scope: '#/properties/value',
     };
     const core = initCore(schema, uischema);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
