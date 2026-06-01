@@ -115,7 +115,7 @@
     "vite-plugin-node-polyfills": "^0.21.0",
     "vite-plugin-static-copy": "^2.3.2",
     "vite-plugin-vuetify": "^2.1.1",
-    "vitest": "^1.4.0",
+    "vitest": "^4.1.0",
     "vue": "^3.5.17",
     "vue-eslint-parser": "^9.4.2",
     "vue-tsc": "^2.2.0",
