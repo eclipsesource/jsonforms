@@ -33,10 +33,10 @@ import {
   Actions,
   computeLabel,
   ControlElement,
+  Id,
   JsonFormsState,
   JsonSchema,
   OwnPropsOfControl,
-  removeId,
   StatePropsOfControl,
 } from '@jsonforms/core';
 import { JsonFormsBaseRenderer } from './base.renderer';
@@ -149,7 +149,7 @@ export abstract class JsonFormsAbstractControl<
 
   ngOnDestroy() {
     super.ngOnDestroy();
-    removeId(this.id);
+    Id.removeId(this.id);
   }
 
   isEnabled(): boolean {
