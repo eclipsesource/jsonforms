@@ -16,6 +16,7 @@
           <v-tab
             v-for="entry in visibleCategoriesWithIndex"
             :key="`${layout.path}-${entry.originalIndex}`"
+            :value="entry.originalIndex"
           >
             {{ entry.category.value.label }}
           </v-tab>
@@ -30,6 +31,7 @@
           <v-window-item
             v-for="entry in visibleCategoriesWithIndex"
             :key="`${layout.path}-${entry.originalIndex}`"
+            :value="entry.originalIndex"
           >
             <dispatch-renderer
               :schema="layout.schema"
@@ -49,6 +51,7 @@
         <v-tab
           v-for="entry in visibleCategoriesWithIndex"
           :key="`${layout.path}-${entry.originalIndex}`"
+          :value="entry.originalIndex"
         >
           {{ entry.category.value.label }}
         </v-tab>
@@ -58,6 +61,7 @@
         <v-window-item
           v-for="entry in visibleCategoriesWithIndex"
           :key="`${layout.path}-${entry.originalIndex}`"
+          :value="entry.originalIndex"
         >
           <dispatch-renderer
             :schema="layout.schema"
@@ -82,7 +86,7 @@ import {
   useJsonFormsCategorization,
   type RendererProps,
 } from '@jsonforms/vue';
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref, watch } from 'vue';
 import {
   VCol,
   VContainer,
@@ -111,20 +115,36 @@ const layoutRenderer = defineComponent({
   },
   setup(props: RendererProps<Layout>) {
     const activeCategory = ref(0);
-    return {
-      ...useVuetifyLayout(useJsonFormsCategorization(props)),
-      activeCategory,
-    };
-  },
-  computed: {
-    visibleCategoriesWithIndex() {
-      return this.categories
+    const vuetifyLayout = useVuetifyLayout(useJsonFormsCategorization(props));
+    const visibleCategoriesWithIndex = computed(() =>
+      vuetifyLayout.categories
         .map((category, originalIndex) => ({
           category,
           originalIndex,
         }))
-        .filter((e) => e.category.value.visible);
-    },
+        .filter((e) => e.category.value.visible)
+    );
+
+    watch(
+      visibleCategoriesWithIndex,
+      (visibleCategories) => {
+        if (
+          visibleCategories.length > 0 &&
+          !visibleCategories.some(
+            (entry) => entry.originalIndex === activeCategory.value
+          )
+        ) {
+          activeCategory.value = visibleCategories[0].originalIndex;
+        }
+      },
+      { immediate: true }
+    );
+
+    return {
+      ...vuetifyLayout,
+      visibleCategoriesWithIndex,
+      activeCategory,
+    };
   },
 });
 

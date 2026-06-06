@@ -403,7 +403,7 @@ const controlRenderer = defineComponent({
         let date = parseDateTime(schema.formatExclusiveMinimum, this.formats);
         if (date) {
           // the format is exclusive
-          date = date.add(1, this.useSeconds ? 'second' : 'minutes');
+          date = date.add(1, this.useSeconds ? 'second' : 'minute');
         }
         return date ? date.format('YYYY-MM-DD') : schema.formatExclusiveMinimum;
       }
@@ -424,7 +424,7 @@ const controlRenderer = defineComponent({
         let date = parseDateTime(schema.formatExclusiveMaximum, this.formats);
         if (date) {
           // the format is exclusive
-          date = date.subtract(1, this.useSeconds ? 'second' : 'minutes');
+          date = date.subtract(1, this.useSeconds ? 'second' : 'minute');
         }
         return date ? date.format('YYYY-MM-DD') : schema.formatExclusiveMaximum;
       }

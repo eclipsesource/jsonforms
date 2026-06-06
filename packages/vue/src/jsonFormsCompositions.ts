@@ -536,7 +536,7 @@ export function useJsonForms(optional?: true) {
 
   if (!jsonforms && !optional) {
     throw new Error(
-      "'jsonforms couldn't be injected. Are you within JSON Forms?"
+      "'jsonforms' couldn't be injected. Are you within JSON Forms?"
     );
   }
 
@@ -555,7 +555,7 @@ export function useDispatch(optional?: true) {
 
   if (!dispatch && !optional) {
     throw new Error(
-      "'dispatch couldn't be injected. Are you within JSON Forms?"
+      "'dispatch' couldn't be injected. Are you within JSON Forms?"
     );
   }
 
@@ -573,15 +573,25 @@ export function useTranslator(
 export function useTranslator(optional?: true) {
   const jsonforms = optional === true ? useJsonForms(true) : useJsonForms();
 
-  if (!optional && (!jsonforms?.i18n || !jsonforms.i18n.translate)) {
+  if (!jsonforms?.i18n?.translate) {
+    if (optional) {
+      return undefined;
+    }
+
     throw new Error(
-      "'jsonforms i18n couldn't be injected. Are you within JSON Forms?"
+      "'jsonforms i18n' couldn't be injected. Are you within JSON Forms?"
     );
   }
 
-  const translate = computed(() => {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return jsonforms!.i18n!.translate!;
+  const translate = computed<Translator>(() => {
+    const translator = jsonforms.i18n?.translate;
+    if (!translator) {
+      throw new Error(
+        "'jsonforms i18n' couldn't be injected. Are you within JSON Forms?"
+      );
+    }
+
+    return translator;
   });
 
   return translate;
@@ -597,7 +607,7 @@ export function useAjv(optional?: true) {
 
   if (!optional && (!jsonforms?.core || !jsonforms.core.ajv)) {
     throw new Error(
-      "'jsonforms ajv couldn't be injected. Are you within JSON Forms?"
+      "'jsonforms ajv' couldn't be injected. Are you within JSON Forms?"
     );
   }
 
