@@ -39,7 +39,7 @@ import {
   rankWith,
   uiTypeIs,
 } from '@jsonforms/core';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   JsonFormsAngularService,
   JsonFormsBaseRenderer,
@@ -79,9 +79,7 @@ export class CategorizationTabLayoutRenderer
   visibleCategories: (Category | Categorization)[];
   categoryLabels: string[];
 
-  constructor(private jsonFormsService: JsonFormsAngularService) {
-    super();
-  }
+  private jsonFormsService = inject(JsonFormsAngularService);
 
   ngOnInit() {
     this.addSubscription(

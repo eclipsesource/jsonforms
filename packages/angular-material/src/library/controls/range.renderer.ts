@@ -24,10 +24,11 @@
 */
 import {
   ChangeDetectionStrategy,
-  Component,
   ChangeDetectorRef,
+  Component,
+  inject,
 } from '@angular/core';
-import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
+import { JsonFormsControl } from '@jsonforms/angular';
 import { isRangeControl, RankedTester, rankWith } from '@jsonforms/core';
 import { CommonModule } from '@angular/common';
 import { MatSliderModule } from '@angular/material/slider';
@@ -80,12 +81,7 @@ export class RangeControlRenderer extends JsonFormsControl {
   multipleOf: number;
   focused = false;
 
-  constructor(
-    jsonformsService: JsonFormsAngularService,
-    private changeDetectorRef: ChangeDetectorRef
-  ) {
-    super(jsonformsService);
-  }
+  private changeDetectorRef = inject(ChangeDetectorRef);
   getEventValue = (event: number) => Number(event);
   mapAdditionalProps() {
     if (this.scopedSchema) {

@@ -479,6 +479,8 @@ export const useVuetifyArrayControl = <
     };
   });
 
+  const rawChildErrors = computed(() => input.control.value.childErrors);
+
   return {
     ...input,
     control: overwrittenControl,
@@ -487,7 +489,7 @@ export const useVuetifyArrayControl = <
     childLabelForIndex,
     computedLabel,
     vuetifyProps,
-    rawChildErrors: input.control.value.childErrors,
+    rawChildErrors,
   };
 };
 

@@ -3,7 +3,6 @@ import React, {
   ComponentType,
   Dispatch,
   Fragment,
-  ReducerAction,
   useMemo,
   useState,
   useEffect,
@@ -17,6 +16,7 @@ import {
 import {
   composePaths,
   ControlElement,
+  CoreActions,
   findUISchema,
   JsonFormsRendererRegistryEntry,
   JsonSchema,
@@ -25,8 +25,7 @@ import {
   update,
   JsonFormsCellRendererRegistryEntry,
   JsonFormsUISchemaRegistryEntry,
-  createId,
-  removeId,
+  Id,
   ArrayTranslations,
   computeChildLabel,
   UpdateArrayContext,
@@ -90,11 +89,11 @@ export interface ExpandPanelProps
     DispatchPropsOfExpandPanel {}
 
 const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
-  const [labelHtmlId] = useState<string>(createId('expand-panel'));
+  const [labelHtmlId] = useState<string>(Id.createId('expand-panel'));
 
   useEffect(() => {
     return () => {
-      removeId(labelHtmlId);
+      Id.removeId(labelHtmlId);
     };
   }, [labelHtmlId]);
 
@@ -258,7 +257,7 @@ export const ExpandPanelRenderer = React.memo(ExpandPanelRendererComponent);
  * @returns {DispatchPropsOfArrayControl} dispatch props of an expand panel control
  */
 export const ctxDispatchToExpandPanelProps: (
-  dispatch: Dispatch<ReducerAction<any>>
+  dispatch: Dispatch<CoreActions>
 ) => DispatchPropsOfExpandPanel = (dispatch) => ({
   removeItems: useCallback(
     (path: string, toDelete: number[]) =>

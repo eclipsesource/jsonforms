@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
+import { JsonFormsControl } from '@jsonforms/angular';
 import { isStringControl, RankedTester, rankWith } from '@jsonforms/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -71,9 +71,6 @@ import { MatInputModule } from '@angular/material/input';
 })
 export class TextControlRenderer extends JsonFormsControl {
   focused = false;
-  constructor(jsonformsService: JsonFormsAngularService) {
-    super(jsonformsService);
-  }
   getEventValue = (event: any) => event.target.value || undefined;
   getType = (): string => {
     if (this.uischema.options && this.uischema.options.format) {

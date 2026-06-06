@@ -25,13 +25,14 @@
 import maxBy from 'lodash/maxBy';
 import {
   Directive,
+  inject,
   Input,
   OnInit,
   Type,
   ViewContainerRef,
 } from '@angular/core';
 import {
-  createId,
+  Id,
   isControl,
   getConfig,
   JsonFormsProps,
@@ -73,12 +74,8 @@ export class JsonFormsOutlet
 {
   private previousProps: StatePropsOfJsonFormsRenderer;
 
-  constructor(
-    private viewContainerRef: ViewContainerRef,
-    private jsonformsService: JsonFormsAngularService
-  ) {
-    super();
-  }
+  private viewContainerRef = inject(ViewContainerRef);
+  private jsonformsService = inject(JsonFormsAngularService);
 
   @Input()
   set renderProps(renderProps: OwnPropsOfRenderer) {
@@ -140,7 +137,7 @@ export class JsonFormsOutlet
         const controlInstance = instance as JsonFormsControl;
         if (controlInstance.id === undefined) {
           const id = isControl(props.uischema)
-            ? createId(props.uischema.scope)
+            ? Id.createId(props.uischema.scope)
             : undefined;
           (instance as JsonFormsControl).id = id;
         }

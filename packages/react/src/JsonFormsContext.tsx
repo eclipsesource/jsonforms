@@ -86,7 +86,6 @@ import debounce from 'lodash/debounce';
 import React, {
   ComponentType,
   Dispatch,
-  ReducerAction,
   useCallback,
   useContext,
   useEffect,
@@ -107,7 +106,7 @@ const initialCoreState: JsonFormsCore = {
 };
 
 export interface JsonFormsStateContext extends JsonFormsSubStates {
-  dispatch?: Dispatch<ReducerAction<typeof coreReducer>>;
+  dispatch?: Dispatch<CoreActions>;
 }
 
 export const JsonFormsContext = React.createContext<JsonFormsStateContext>({
@@ -276,7 +275,7 @@ export const useJsonForms = (): JsonFormsStateContext =>
 
 export interface JsonFormsReduxContextProps extends JsonFormsSubStates {
   children: any;
-  dispatch: Dispatch<ReducerAction<any>>;
+  dispatch: Dispatch<CoreActions>;
 }
 
 export const ctxToArrayLayoutProps = (
@@ -373,7 +372,7 @@ export const ctxToAllOfProps = (
 };
 
 export const ctxDispatchToControlProps = (
-  dispatch: Dispatch<ReducerAction<any>>
+  dispatch: Dispatch<CoreActions>
 ): DispatchPropsOfControl =>
   useMemo(() => mapDispatchToControlProps(dispatch as any), [dispatch]);
 
@@ -409,7 +408,7 @@ export const ctxToJsonFormsRendererProps = (
 ) => mapStateToJsonFormsRendererProps({ jsonforms: { ...ctx } }, ownProps);
 
 export const ctxDispatchToArrayControlProps = (
-  dispatch: Dispatch<ReducerAction<any>>
+  dispatch: Dispatch<CoreActions>
 ) => ({
   ...ctxDispatchToControlProps(dispatch),
   ...useMemo(() => mapDispatchToArrayControlProps(dispatch as any), [dispatch]),
@@ -473,7 +472,7 @@ export const ctxToDispatchCellProps = (
 };
 
 export const ctxDispatchToMultiEnumProps = (
-  dispatch: Dispatch<ReducerAction<any>>
+  dispatch: Dispatch<CoreActions>
 ) => ({
   ...ctxDispatchToControlProps(dispatch),
   ...useMemo(() => mapDispatchToMultiEnumProps(dispatch as any), [dispatch]),
