@@ -28,6 +28,7 @@ import {
   Component,
   PipeTransform,
   Pipe,
+  inject,
 } from '@angular/core';
 import {
   JsonFormsAngularService,
@@ -52,12 +53,8 @@ export class LayoutRenderer<T extends Layout>
   hidden: boolean;
   label: string | undefined;
 
-  constructor(
-    private jsonFormsService: JsonFormsAngularService,
-    protected changeDetectionRef: ChangeDetectorRef
-  ) {
-    super();
-  }
+  private jsonFormsService = inject(JsonFormsAngularService);
+  protected changeDetectionRef = inject(ChangeDetectorRef);
 
   ngOnInit() {
     this.addSubscription(

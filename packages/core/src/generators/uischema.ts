@@ -141,13 +141,21 @@ const generateUISchema = (
     return null;
   }
 
-  if (types.length > 1) {
+  // If the schema declares multiple types alongside 'null' (e.g. ['null', 'object']),
+  // treat it as a nullable instance of the non-null type for UI generation purposes.
+  // Without this, a nested nullable object would only produce a single Control,
+  // which can lead to infinite recursion when an object renderer regenerates the
+  // UI schema for that nested schema (see issue #2411).
+  const nonNullTypes = types.filter((t) => t !== 'null');
+  const effectiveTypes = nonNullTypes.length > 0 ? nonNullTypes : types;
+
+  if (effectiveTypes.length > 1) {
     const controlObject: ControlElement = createControlElement(currentRef);
     schemaElements.push(controlObject);
     return controlObject;
   }
 
-  if (currentRef === '#' && types[0] === 'object') {
+  if (currentRef === '#' && effectiveTypes[0] === 'object') {
     const layout: Layout = createLayout(layoutType);
     schemaElements.push(layout);
 
@@ -178,7 +186,7 @@ const generateUISchema = (
     return layout;
   }
 
-  switch (types[0]) {
+  switch (effectiveTypes[0]) {
     case 'object': // object items will be handled by the object control itself
     /* falls through */
     case 'array': // array items will be handled by the array control itself

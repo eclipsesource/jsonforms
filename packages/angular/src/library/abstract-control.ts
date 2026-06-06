@@ -22,27 +22,28 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import {
-  Actions,
-  computeLabel,
-  ControlElement,
-  JsonFormsState,
-  JsonSchema,
-  OwnPropsOfControl,
-  removeId,
-  StatePropsOfControl,
-} from '@jsonforms/core';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormControl,
   ValidationErrors,
   ValidatorFn,
 } from '@angular/forms';
-
+import {
+  Actions,
+  computeLabel,
+  ControlElement,
+  Id,
+  JsonFormsState,
+  JsonSchema,
+  OwnPropsOfControl,
+  StatePropsOfControl,
+} from '@jsonforms/core';
 import { JsonFormsBaseRenderer } from './base.renderer';
 import { JsonFormsAngularService } from './jsonforms.service';
+
 import merge from 'lodash/merge';
+
 @Component({
   template: '',
 })
@@ -67,7 +68,9 @@ export abstract class JsonFormsAbstractControl<
   hidden: boolean;
   propsPath: string;
 
-  constructor(protected jsonFormsService: JsonFormsAngularService) {
+  protected jsonFormsService = inject(JsonFormsAngularService);
+
+  constructor() {
     super();
     this.form = new FormControl(
       {
@@ -146,7 +149,7 @@ export abstract class JsonFormsAbstractControl<
 
   ngOnDestroy() {
     super.ngOnDestroy();
-    removeId(this.id);
+    Id.removeId(this.id);
   }
 
   isEnabled(): boolean {
@@ -174,7 +177,12 @@ export abstract class JsonFormsAbstractControl<
   protected triggerValidation() {
     // these cause the correct update of the error underline, seems to be
     // related to ionic-team/ionic#11640
-    this.form.markAsTouched();
+    const config = this.jsonFormsService.getConfig();
+    const appliedUiSchemaOptions = merge({}, config, this.uischema?.options);
+
+    if (!appliedUiSchemaOptions.showErrorsOnTouch) {
+      this.form.markAsTouched();
+    }
     this.form.updateValueAndValidity();
   }
 }

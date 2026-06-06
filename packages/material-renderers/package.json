@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/material-renderers",
-  "version": "3.8.0-alpha.1",
+  "version": "3.8.0-alpha.2",
   "description": "Material Renderer Set for JSON Forms",
   "repository": {
     "type": "git",
@@ -93,8 +93,8 @@
   "peerDependencies": {
     "@emotion/react": "^11.5.0",
     "@emotion/styled": "^11.3.0",
-    "@jsonforms/core": "3.8.0-alpha.1",
-    "@jsonforms/react": "3.8.0-alpha.1",
+    "@jsonforms/core": "3.8.0-alpha.2",
+    "@jsonforms/react": "3.8.0-alpha.2",
     "@mui/icons-material": "^7.0.0",
     "@mui/material": "^7.0.0",
     "@mui/x-date-pickers": "^8.0.0",
@@ -145,7 +145,7 @@
     "ts-loader": "^9.5.1",
     "tslib": "^2.5.0",
     "typedoc": "~0.25.3",
-    "typescript": "~5.5.0",
+    "typescript": "~5.8.3",
     "webpack": "^5.78.0",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.15.1"

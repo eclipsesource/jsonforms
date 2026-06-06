@@ -23,30 +23,91 @@
   THE SOFTWARE.
 */
 
-const usedIds: Set<string> = new Set<string>();
+interface PrefixState {
+  used: Set<number>;
+  next: number;
+}
+
+const idSlots = new Map<string, { prefix: string; index: number }>();
+const prefixStates = new Map<string, PrefixState>();
 
 const makeId = (idBase: string, iteration: number) =>
   iteration <= 1 ? idBase : idBase + iteration.toString();
-
-const isUniqueId = (idBase: string, iteration: number) => {
-  const newID = makeId(idBase, iteration);
-  return !usedIds.has(newID);
-};
 
 export const createId = (proposedId: string) => {
   if (proposedId === undefined) {
     // failsafe to avoid endless loops in error cases
     proposedId = 'undefined';
   }
-  let tries = 0;
-  while (!isUniqueId(proposedId, tries)) {
+  let state = prefixStates.get(proposedId);
+  if (state === undefined) {
+    state = { used: new Set<number>(), next: 0 };
+    prefixStates.set(proposedId, state);
+  }
+  // Start from the smallest index that hasn't been allocated for this prefix.
+  // Holes left by removeId reset `next`, so released ids are reused.
+  let tries = state.next;
+  while (state.used.has(tries) || idSlots.has(makeId(proposedId, tries))) {
     tries++;
   }
-  const newID = makeId(proposedId, tries);
-  usedIds.add(newID);
-  return newID;
+  const newId = makeId(proposedId, tries);
+  state.used.add(tries);
+  state.next = tries + 1;
+  idSlots.set(newId, { prefix: proposedId, index: tries });
+  return newId;
 };
 
-export const removeId = (id: string) => usedIds.delete(id);
+export const removeId = (id: string) => {
+  const slot = idSlots.get(id);
+  if (slot === undefined) {
+    return false;
+  }
+  idSlots.delete(id);
+  const state = prefixStates.get(slot.prefix);
+  if (state !== undefined) {
+    state.used.delete(slot.index);
+    if (slot.index < state.next) {
+      state.next = slot.index;
+    }
+    if (state.used.size === 0) {
+      prefixStates.delete(slot.prefix);
+    }
+  }
+  return true;
+};
 
-export const clearAllIds = () => usedIds.clear();
+export const clearAllIds = () => {
+  idSlots.clear();
+  prefixStates.clear();
+};
+
+/**
+ * Mutable registry of the ID generation functions used internally by JSON Forms.
+ *
+ * Adopters can override one or more of these methods to provide a custom HTML
+ * ID strategy (e.g. for performance reasons or to integrate with an existing
+ * scheme). Reassigning the methods only affects callers that go through this
+ * object; the standalone `createId`, `removeId` and `clearAllIds` exports
+ * always invoke the default implementations.
+ *
+ * @example
+ * ```ts
+ * import { Id } from '@jsonforms/core';
+ *
+ * let next = 0;
+ * Id.createId = () => `jf-${next++}`;
+ * Id.removeId = () => true;
+ * Id.clearAllIds = () => {
+ *   next = 0;
+ * };
+ * ```
+ */
+export const Id: {
+  createId: (proposedId: string) => string;
+  removeId: (id: string) => boolean;
+  clearAllIds: () => void;
+} = {
+  createId,
+  removeId,
+  clearAllIds,
+};
