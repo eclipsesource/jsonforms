@@ -1,7 +1,7 @@
 {
-  "name": "@jsonforms/examples",
+  "name": "@jsonforms/zod",
   "version": "4.0.0-alpha.0",
-  "description": "Shared example forms for the JSON Forms demo applications",
+  "description": "Zod SchemaSource and FormValidator for JSON Forms",
   "license": "MIT",
   "type": "module",
   "homepage": "https://jsonforms.io",
@@ -9,27 +9,19 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/eclipsesource/jsonforms.git",
-    "directory": "packages/examples"
+    "directory": "packages/zod"
   },
   "keywords": [
     "form",
     "forms",
     "json",
-    "json-schema",
-    "examples"
+    "zod",
+    "validation"
   ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
-    },
-    "./json-schema": {
-      "types": "./dist/json-schema.d.ts",
-      "default": "./dist/json-schema.js"
-    },
-    "./zod": {
-      "types": "./dist/zod.d.ts",
-      "default": "./dist/zod.js"
     },
     "./package.json": "./package.json"
   },
@@ -49,8 +41,6 @@
   },
   "devDependencies": {
     "@jsonforms/core": "workspace:*",
-    "@jsonforms/validator-ajv": "workspace:*",
-    "@jsonforms/zod": "workspace:*",
     "tsdown": "^0.22.2",
     "typescript": "^6.0.3",
     "vitest": "^4.1.8",

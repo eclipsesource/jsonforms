@@ -1,9 +1,12 @@
 import { describe, expect, test } from 'vitest';
+import { z } from 'zod';
+import type { Example } from '@jsonforms/examples';
 import {
   ajvValidatorFor,
   asAsyncValidator,
   createValidator,
   handwrittenValidator,
+  validationChoicesFor,
 } from '../src';
 
 const schema = {
@@ -23,6 +26,23 @@ const schema2020 = {
     billingAddress: { type: 'string' },
   },
   dependentRequired: { cardNumber: ['billingAddress'] },
+};
+
+const jsonExample: Example = {
+  format: 'json-schema',
+  id: 'test-json',
+  title: 'Test',
+  schema,
+  data: {},
+};
+
+const zodExample: Example = {
+  format: 'zod',
+  id: 'test-zod',
+  title: 'Test',
+  schema: z.object({ name: z.string().min(2) }),
+  schemaText: 'z.object({ name: z.string().min(2) })',
+  data: {},
 };
 
 describe('ajvValidatorFor', () => {
@@ -78,17 +98,31 @@ describe('asAsyncValidator', () => {
   });
 });
 
+describe('validationChoicesFor', () => {
+  test('JSON Schema examples offer AJV, handwritten and none', () => {
+    expect(
+      validationChoicesFor(jsonExample).map((choice) => choice.id),
+    ).toEqual(['ajv', 'handwritten', 'none']);
+  });
+
+  test('zod examples offer zod and none', () => {
+    expect(validationChoicesFor(zodExample).map((choice) => choice.id)).toEqual(
+      ['zod', 'none'],
+    );
+  });
+});
+
 describe('createValidator', () => {
   test("the 'none' choice never reports issues", () => {
-    expect(createValidator({ choice: 'none' }, schema).validate({})).toEqual(
-      [],
-    );
+    expect(
+      createValidator({ choice: 'none' }, jsonExample).validate({}),
+    ).toEqual([]);
   });
 
   test('ajv with async mode delivers a promise', async () => {
     const validator = createValidator(
       { choice: 'ajv', ajvAsync: true },
-      schema,
+      jsonExample,
     );
     await expect(validator.validate({})).resolves.toMatchObject([
       { path: '/name' },
@@ -98,8 +132,19 @@ describe('createValidator', () => {
   test('an explicit ajv version is honored', () => {
     const validator = createValidator(
       { choice: 'ajv', ajvVersion: '2019-09' },
-      schema,
+      jsonExample,
     );
     expect(validator.validate({ name: 'Ada' })).toEqual([]);
+  });
+
+  test('zod examples validate with their own schema', () => {
+    const validator = createValidator({ choice: 'zod' }, zodExample);
+    expect(validator.validate({ name: 'Ada' })).toEqual([]);
+    expect(validator.validate({})).toMatchObject([{ path: '/name' }]);
+  });
+
+  test('format mismatches are rejected', () => {
+    expect(() => createValidator({ choice: 'ajv' }, zodExample)).toThrow();
+    expect(() => createValidator({ choice: 'zod' }, jsonExample)).toThrow();
   });
 });

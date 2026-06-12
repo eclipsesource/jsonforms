@@ -8,16 +8,10 @@ import type {
 } from '../src';
 import { createEngineHost, createRemoteFormEngine } from '../src';
 
+// The host resolves examples by id, like a real server owning its schemas.
+// '#/0/0' is the 'First Name' control of the shared 'person' example.
 const inputs: DemoEngineInputs = {
-  schema: {
-    type: 'object',
-    required: ['name'],
-    properties: {
-      name: { type: 'string', title: 'Name', minLength: 2 },
-      age: { type: 'integer', title: 'Age' },
-    },
-  },
-  data: { name: 'Ada' },
+  exampleId: 'person',
   validation: { choice: 'handwritten' },
 };
 
@@ -54,44 +48,56 @@ const connect = (
 describe('remote engine over a serialized transport', () => {
   test('delivers the initial model', async () => {
     const engine = await connect(inputs).ready;
-    const name = engine.getNode('#/0') as ControlNode;
-    expect(name.label).toBe('Name');
-    expect(name.value).toBe('Ada');
-    expect(engine.getData()).toEqual({ name: 'Ada' });
+    const firstName = engine.getNode('#/0/0') as ControlNode;
+    expect(firstName.label).toBe('First Name');
+    expect(firstName.value).toBe('Ada');
   });
 
   test('round-trips commands and applies deltas with identity preservation', async () => {
     const engine = await connect(inputs).ready;
-    const ageBefore = engine.getNode('#/1');
-    engine.dispatch(setValue('/name', 'Grace'));
-    expect((engine.getNode('#/0') as ControlNode).value).toBe('Grace');
-    expect(engine.getData()).toEqual({ name: 'Grace' });
-    expect(engine.getNode('#/1')).toBe(ageBefore);
+    const lastNameBefore = engine.getNode('#/0/1');
+    engine.dispatch(setValue('/firstName', 'Grace'));
+    expect((engine.getNode('#/0/0') as ControlNode).value).toBe('Grace');
+    expect(engine.getNode('#/0/1')).toBe(lastNameBefore);
   });
 
   test('notifies node subscribers on remote updates', async () => {
     const engine = await connect(inputs).ready;
     let notified = 0;
-    engine.subscribeNode('#/0', () => {
+    engine.subscribeNode('#/0/0', () => {
       notified += 1;
     });
-    engine.dispatch(setValue('/name', 'Grace'));
+    engine.dispatch(setValue('/firstName', 'Grace'));
     expect(notified).toBe(1);
   });
 
   test('remote validation issues arrive on the nodes', async () => {
     const engine = await connect(inputs).ready;
-    engine.dispatch(setValue('/name', undefined));
-    expect((engine.getNode('#/0') as ControlNode).issues).toMatchObject([
+    engine.dispatch(setValue('/firstName', undefined));
+    expect((engine.getNode('#/0/0') as ControlNode).issues).toMatchObject([
       { key: 'required' },
     ]);
   });
 
+  test('zod examples work through the protocol', async () => {
+    const engine = await connect({
+      exampleId: 'zod-cross-field',
+      validation: { choice: 'zod' },
+    }).ready;
+    // The initial trip data violates the cross-field refinement.
+    const endDate = engine.getNode('#/1/1') as ControlNode;
+    expect(endDate.path).toBe('/endDate');
+    expect(endDate.issues).toMatchObject([
+      { message: 'must not be before the start date' },
+    ]);
+    engine.dispatch(setValue('/endDate', '2026-07-12'));
+    expect((engine.getNode('#/1/1') as ControlNode).issues).toEqual([]);
+  });
+
   test('rejected changes leave the model untouched', async () => {
     const engine = await connect(inputs, { rejectChangesPercent: 100 }).ready;
-    engine.dispatch(setValue('/name', 'Grace'));
-    expect((engine.getNode('#/0') as ControlNode).value).toBe('Ada');
-    expect(engine.getData()).toEqual({ name: 'Ada' });
+    engine.dispatch(setValue('/firstName', 'Grace'));
+    expect((engine.getNode('#/0/0') as ControlNode).value).toBe('Ada');
   });
 
   test('responses are delayed when configured', async () => {

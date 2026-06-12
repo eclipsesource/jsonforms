@@ -20,22 +20,23 @@ bindings subscribe per node.
 
 ## Packages
 
-| Package                                    | Status      | Description                                                                         |
-| ------------------------------------------ | ----------- | ----------------------------------------------------------------------------------- |
-| `@jsonforms/core`                          | **MVP**     | Framework-agnostic presentation model, builder, engine, testers. Zero dependencies. |
-| `@jsonforms/validator-ajv`                 | **MVP**     | `FormValidator` implementation backed by AJV.                                       |
-| `@jsonforms/react`                         | **MVP**     | React 19 binding: `<JsonForms>`, `useNode`, `useControlDispatch`, `NodeDispatch`.   |
-| `@jsonforms/react-material`                | **MVP**     | Material UI (v9) renderer set.                                                      |
-| `@jsonforms/react-vanilla`                 | **MVP**     | Plain-HTML renderer set (successor of `vanilla-renderers`).                         |
-| `@jsonforms/examples`                      | **MVP**     | Shared example forms, grouped by schema format (`json-schema/` now, others later).  |
-| `@jsonforms/demo-react-material` (`apps/`) | **MVP**     | Vite demo app for the Material renderer set.                                        |
-| `@jsonforms/demo-react-vanilla` (`apps/`)  | **MVP**     | Vite demo app for the plain-HTML renderer set.                                      |
-| `@jsonforms/demo-all` (`apps/`)            | **MVP**     | Combined static app: landing page + all demo apps under one roof.                   |
-| `@jsonforms/angular`                       | placeholder | Angular binding.                                                                    |
-| `@jsonforms/angular-material`              | placeholder | Angular Material renderer set.                                                      |
-| `@jsonforms/vue`                           | placeholder | Vue binding.                                                                        |
-| `@jsonforms/vue-vanilla`                   | placeholder | Plain-HTML Vue renderer set.                                                        |
-| `@jsonforms/vue-vuetify`                   | placeholder | Vuetify renderer set.                                                               |
+| Package                                    | Status      | Description                                                                                       |
+| ------------------------------------------ | ----------- | ------------------------------------------------------------------------------------------------- |
+| `@jsonforms/core`                          | **MVP**     | Framework-agnostic presentation model, builder, engine, testers. Zero dependencies.               |
+| `@jsonforms/validator-ajv`                 | **MVP**     | `FormValidator` implementation backed by AJV.                                                     |
+| `@jsonforms/zod`                           | **MVP**     | Zod `SchemaSource` + `FormValidator` — forms without JSON Schema or AJV.                          |
+| `@jsonforms/react`                         | **MVP**     | React 19 binding: `<JsonForms>`, `useNode`, `useControlDispatch`, `NodeDispatch`.                 |
+| `@jsonforms/react-material`                | **MVP**     | Material UI (v9) renderer set.                                                                    |
+| `@jsonforms/react-vanilla`                 | **MVP**     | Plain-HTML renderer set (successor of `vanilla-renderers`).                                       |
+| `@jsonforms/examples`                      | **MVP**     | Shared example forms, grouped by schema format (JSON Schema, zod) with subpath exports per group. |
+| `@jsonforms/demo-react-material` (`apps/`) | **MVP**     | Vite demo app for the Material renderer set.                                                      |
+| `@jsonforms/demo-react-vanilla` (`apps/`)  | **MVP**     | Vite demo app for the plain-HTML renderer set.                                                    |
+| `@jsonforms/demo-all` (`apps/`)            | **MVP**     | Combined static app: landing page + all demo apps under one roof.                                 |
+| `@jsonforms/angular`                       | placeholder | Angular binding.                                                                                  |
+| `@jsonforms/angular-material`              | placeholder | Angular Material renderer set.                                                                    |
+| `@jsonforms/vue`                           | placeholder | Vue binding.                                                                                      |
+| `@jsonforms/vue-vanilla`                   | placeholder | Plain-HTML Vue renderer set.                                                                      |
+| `@jsonforms/vue-vuetify`                   | placeholder | Vuetify renderer set.                                                                             |
 
 The former `material-renderers` package continues as `react-material`, `vanilla-renderers` as
 `react-vanilla`; the former `examples*` packages continue as `packages/examples` (shared
@@ -44,7 +45,8 @@ under `apps/`.
 
 ## MVP scope
 
-- JSON Schema as the first `SchemaSource` (objects with primitive properties, no `$ref`).
+- Two `SchemaSource`s — JSON Schema (objects with primitive properties, no `$ref`) and zod
+  (`@jsonforms/zod`) — proving the schema-format abstraction.
 - `VerticalLayout` / `HorizontalLayout`, string / number / integer / boolean controls.
 - AJV-based validation via `@jsonforms/validator-ajv` (optional — core has no validator
   dependency). Issues show immediately by default; `config: { showIssuesOnTouch: true }`

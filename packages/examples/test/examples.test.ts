@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import type { FormValidator } from '@jsonforms/core';
+import type { FormValidator, SchemaSource } from '@jsonforms/core';
 import {
   createFormEngine,
   isControlNode,
@@ -7,14 +7,24 @@ import {
 } from '@jsonforms/core';
 import { ajvValidator as draft07Validator } from '@jsonforms/validator-ajv/draft-07';
 import { ajvValidator as draft2020Validator } from '@jsonforms/validator-ajv/draft-2020';
-import type { JsonSchemaExample } from '../src';
+import { zodSchemaSource, zodValidator } from '@jsonforms/zod';
+import type { Example } from '../src';
 import { allExamples } from '../src';
 
-const validatorFor = (example: JsonSchemaExample): FormValidator =>
-  typeof example.schema.$schema === 'string' &&
-  example.schema.$schema.includes('2020-12')
+const sourceFor = (example: Example): SchemaSource =>
+  example.format === 'zod'
+    ? zodSchemaSource(example.schema)
+    : jsonSchemaSource(example.schema);
+
+const validatorFor = (example: Example): FormValidator => {
+  if (example.format === 'zod') {
+    return zodValidator(example.schema);
+  }
+  return typeof example.schema.$schema === 'string' &&
+    example.schema.$schema.includes('2020-12')
     ? draft2020Validator(example.schema)
     : draft07Validator(example.schema);
+};
 
 describe('examples', () => {
   test('example ids are unique', () => {
@@ -25,7 +35,7 @@ describe('examples', () => {
   for (const example of allExamples) {
     test(`'${example.id}' builds a presentation model without configuration issues`, () => {
       const engine = createFormEngine({
-        schemaSource: jsonSchemaSource(example.schema),
+        schemaSource: sourceFor(example),
         uischema: example.uischema,
         data: example.data,
         validator: validatorFor(example),

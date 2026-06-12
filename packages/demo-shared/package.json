@@ -20,7 +20,10 @@
   },
   "dependencies": {
     "@jsonforms/core": "workspace:*",
-    "@jsonforms/validator-ajv": "workspace:*"
+    "@jsonforms/examples": "workspace:*",
+    "@jsonforms/validator-ajv": "workspace:*",
+    "@jsonforms/zod": "workspace:*",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "tsdown": "^0.22.2",

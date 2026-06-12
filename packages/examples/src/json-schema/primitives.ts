@@ -1,6 +1,7 @@
 import type { JsonSchemaExample } from '../types';
 
 export const primitives: JsonSchemaExample = {
+  format: 'json-schema',
   id: 'primitives',
   title: 'Primitives',
   description:

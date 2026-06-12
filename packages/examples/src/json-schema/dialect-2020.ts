@@ -5,6 +5,7 @@ import type { JsonSchemaExample } from '../types';
  * AJV builds for older dialects fail to compile it.
  */
 export const dialect2020: JsonSchemaExample = {
+  format: 'json-schema',
   id: 'dialect-2020',
   title: 'JSON Schema 2020-12',
   description:

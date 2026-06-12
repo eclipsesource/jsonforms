@@ -21,6 +21,9 @@ HOC prop chains, AJV-in-state) or compatibility shims.
   `FormConfig` (the `config` option/prop) holds form-wide options such as
   `showIssuesOnTouch` — keep it separate from per-node `uiOptions`, which always reflect
   exactly the UI schema element.
+- `@jsonforms/zod`: zod-backed `SchemaSource` (`zodSchemaSource`) and `FormValidator`
+  (`zodValidator`) — the second schema format, proving the abstraction. Zod scopes are
+  plain data pointers (`/name`); scope semantics always belong to the `SchemaSource`.
 - `@jsonforms/validator-ajv`: AJV-backed `FormValidator`s. Core must never depend on AJV.
   Bundle hygiene is a hard rule here: the base entry takes a caller-supplied AJV instance
   and imports AJV types only (plus `compiledAjvValidator` for precompiled/no-eval setups);
@@ -33,10 +36,13 @@ HOC prop chains, AJV-in-state) or compatibility shims.
 - `@jsonforms/react-material`: Material UI v9 renderers — thin views over nodes only.
 - `@jsonforms/react-vanilla`: plain-HTML renderers (`jf-` class names, no styling) — same
   thin-view rules.
-- `@jsonforms/examples`: shared example definitions (schema + uischema + data), grouped by
-  schema format (`src/json-schema/` now; other formats become sibling groups). All demo apps
-  render these examples. Examples are **pure data** — orthogonal topics (validation, SSR, …)
-  must not leak into them; a schema's dialect is data via its standard `$schema` field.
+- `@jsonforms/examples`: shared example definitions, grouped by schema format with subpath
+  exports per group (`./json-schema`, `./zod`). All demo apps render these examples.
+  JSON Schema examples are **pure data** (dialect via the standard `$schema` field); zod
+  examples carry their schema as code plus a `schemaText` display snippet — zod is not
+  serializable. Orthogonal topics (validation, SSR, …) must not leak into examples. The
+  worker engine host resolves examples by id (like a real server owning its schemas), so
+  the wire protocol stays serializable for every format.
 - `@jsonforms/demo-shared` (private): the demo apps' selectable axes, orthogonal to the
   examples. Validation axis (`ValidationSettings`): AJV (version sub-option: draft-07
   default, 2019-09, 2020-12 — no automatic dialect detection; a dialect/build mismatch

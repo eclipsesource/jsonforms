@@ -48,6 +48,20 @@ const sourceAliases = [
     replacement: workspaceSource('../../packages/examples/src/index.ts'),
   },
   {
+    find: /^@jsonforms\/zod$/,
+    replacement: workspaceSource('../../packages/zod/src/index.ts'),
+  },
+  {
+    find: /^@jsonforms\/examples\/json-schema$/,
+    replacement: workspaceSource(
+      '../../packages/examples/src/json-schema/index.ts',
+    ),
+  },
+  {
+    find: /^@jsonforms\/examples\/zod$/,
+    replacement: workspaceSource('../../packages/examples/src/zod/index.ts'),
+  },
+  {
     find: /^@jsonforms\/demo-shared$/,
     replacement: workspaceSource('../../packages/demo-shared/src/index.ts'),
   },

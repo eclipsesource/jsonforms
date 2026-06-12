@@ -1,6 +1,7 @@
 import type { JsonSchemaExample } from '../types';
 
 export const validation: JsonSchemaExample = {
+  format: 'json-schema',
   id: 'validation',
   title: 'Validation',
   description:

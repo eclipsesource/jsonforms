@@ -34,7 +34,8 @@ import {
   ajvVersionChoices,
   createValidator,
   engineChoices,
-  validationChoices,
+  schemaSourceFor,
+  validationChoicesFor,
 } from '@jsonforms/demo-shared';
 import { RemoteEngineForm } from './RemoteEngineForm';
 
@@ -46,7 +47,15 @@ if (firstExample === undefined) {
 export const App = () => {
   const [exampleId, setExampleId] = useState(firstExample.id);
   const example = findExample(exampleId) ?? firstExample;
-  const [validation, setValidation] = useState<ValidationChoice>('ajv');
+  const [validationChoice, setValidationChoice] =
+    useState<ValidationChoice>('ajv');
+  // Validators must understand the example's schema format, so the available
+  // options (and thereby the effective choice) depend on the example.
+  const validationOptions = validationChoicesFor(example);
+  const validation =
+    validationOptions.find((choice) => choice.id === validationChoice)?.id ??
+    validationOptions[0]?.id ??
+    'none';
   const [ajvVersion, setAjvVersion] = useState<AjvVersion>('default');
   const [ajvAsync, setAjvAsync] = useState(false);
   const [engineChoice, setEngineChoice] = useState<EngineChoice>('local');
@@ -67,12 +76,13 @@ export const App = () => {
   }>(() => {
     try {
       return {
-        validator: createValidator(validationSettings, example.schema),
+        validator: createValidator(validationSettings, example),
       };
     } catch (error) {
       return { error: error instanceof Error ? error.message : String(error) };
     }
   }, [validationSettings, example]);
+  const schemaSource = useMemo(() => schemaSourceFor(example), [example]);
   const config = useMemo(() => ({ showIssuesOnTouch }), [showIssuesOnTouch]);
   const simulation = useMemo(
     () => ({ responseDelayMs, rejectChangesPercent }),
@@ -91,7 +101,12 @@ export const App = () => {
   ].join(':');
   const panels = [
     { label: 'Data', content: JSON.stringify(data, null, 2) },
-    { label: 'JSON Schema', content: JSON.stringify(example.schema, null, 2) },
+    example.format === 'zod'
+      ? { label: 'Zod Schema', content: example.schemaText }
+      : {
+          label: 'JSON Schema',
+          content: JSON.stringify(example.schema, null, 2),
+        },
     {
       label: 'UI Schema',
       content: example.uischema
@@ -139,10 +154,12 @@ export const App = () => {
                     label="Validator"
                     value={validation}
                     onChange={(event) =>
-                      setValidation(event.target.value as ValidationChoice)
+                      setValidationChoice(
+                        event.target.value as ValidationChoice,
+                      )
                     }
                   >
-                    {validationChoices.map((choice) => (
+                    {validationOptions.map((choice) => (
                       <MenuItem key={choice.id} value={choice.id}>
                         {choice.label}
                       </MenuItem>
@@ -295,9 +312,7 @@ export const App = () => {
                     <RemoteEngineForm
                       key={formKey}
                       inputs={{
-                        schema: example.schema,
-                        uischema: example.uischema,
-                        data: example.data,
+                        exampleId: example.id,
                         validation: validationSettings,
                         config,
                       }}
@@ -316,7 +331,7 @@ export const App = () => {
                   ) : (
                     <JsonForms
                       key={formKey}
-                      schema={example.schema}
+                      schemaSource={schemaSource}
                       uischema={example.uischema}
                       data={example.data}
                       validator={validatorResult.validator}

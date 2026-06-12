@@ -1,23 +1,36 @@
 import type { JsonSchema, UISchemaElement } from '@jsonforms/core';
+import type { ZodType } from 'zod';
 
-/** An example form defined by a JSON Schema. Examples are pure data. */
-export interface JsonSchemaExample {
+export interface ExampleBase {
   id: string;
   title: string;
   description?: string;
-  schema: JsonSchema;
   /** Omitted to demonstrate UI schema generation. */
   uischema?: UISchemaElement;
   data: unknown;
 }
 
+/** An example form defined by a JSON Schema — pure, serializable data. */
+export interface JsonSchemaExample extends ExampleBase {
+  format: 'json-schema';
+  schema: JsonSchema;
+}
+
 /**
- * A group of examples sharing a schema format. Currently only JSON Schema;
- * other schema formats (zod, plain definitions, …) become sibling groups once
- * their `SchemaSource` implementations exist.
+ * An example form defined by a zod schema. Zod schemas are code, not data —
+ * `schemaText` carries a displayable source snippet for the demo apps.
  */
+export interface ZodExample extends ExampleBase {
+  format: 'zod';
+  schema: ZodType;
+  schemaText: string;
+}
+
+export type Example = JsonSchemaExample | ZodExample;
+
+/** A group of examples sharing a schema format. */
 export interface ExampleGroup {
   id: string;
   title: string;
-  examples: readonly JsonSchemaExample[];
+  examples: readonly Example[];
 }

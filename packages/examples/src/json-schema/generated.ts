@@ -1,6 +1,7 @@
 import type { JsonSchemaExample } from '../types';
 
 export const generated: JsonSchemaExample = {
+  format: 'json-schema',
   id: 'generated-uischema',
   title: 'Generated UI Schema',
   description:

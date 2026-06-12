@@ -1,6 +1,7 @@
 import type { JsonSchemaExample } from '../types';
 
 export const layouts: JsonSchemaExample = {
+  format: 'json-schema',
   id: 'layouts',
   title: 'Nested Layouts',
   description: 'Horizontal and vertical layouts nested into each other.',
