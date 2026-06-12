@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>JSON Forms 4.x — Presentation Model Architecture</title>
+<style>
+  :root {
+    --fg: #1f2328;
+    --fg-muted: #59636e;
+    --border: #d1d9e0;
+    --bg-subtle: #f6f8fa;
+    --accent: #0969da;
+    --warn-bg: #fff8c5;
+    --warn-border: #d4a72c;
+    --ok-bg: #dafbe1;
+    --ok-border: #1a7f37;
+    --code-bg: #f6f8fa;
+    --max-width: 1000px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    color: var(--fg);
+    font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+  }
+  main { max-width: var(--max-width); margin: 0 auto; padding: 2rem 1.5rem 6rem; }
+  h1 { font-size: 2rem; border-bottom: 1px solid var(--border); padding-bottom: .4rem; }
+  h2 { font-size: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: .3rem; margin-top: 3rem; }
+  h3 { font-size: 1.2rem; margin-top: 2rem; }
+  h4 { font-size: 1.02rem; margin-top: 1.5rem; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  p, li { max-width: 75ch; }
+  .meta { color: var(--fg-muted); font-size: .9rem; margin-top: -0.6rem; }
+  .badge {
+    display: inline-block; font-size: .75rem; font-weight: 600;
+    padding: .1rem .55rem; border-radius: 999px; border: 1px solid var(--border);
+    background: var(--bg-subtle); color: var(--fg-muted); vertical-align: middle;
+  }
+  .badge.proposal { background: var(--warn-bg); border-color: var(--warn-border); color: #6f5500; }
+  pre.mermaid {
+    background: #fff; border: 1px solid var(--border); border-radius: 8px;
+    padding: 1rem; overflow-x: auto; display: flex; justify-content: center;
+  }
+  figure { margin: 1.5rem 0; }
+  figcaption { text-align: center; color: var(--fg-muted); font-size: .85rem; margin-top: .4rem; }
+  pre.code {
+    background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px;
+    padding: 1rem; overflow-x: auto; font-size: .85rem; line-height: 1.5;
+  }
+  code {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    font-size: .875em; background: var(--code-bg);
+    padding: .15em .35em; border-radius: 4px;
+  }
+  pre.code code { background: none; padding: 0; font-size: 1em; }
+  table { border-collapse: collapse; margin: 1rem 0; width: 100%; }
+  th, td { border: 1px solid var(--border); padding: .45rem .7rem; text-align: left; vertical-align: top; }
+  th { background: var(--bg-subtle); }
+  .callout {
+    border-left: 4px solid var(--accent); background: var(--bg-subtle);
+    padding: .7rem 1rem; border-radius: 0 8px 8px 0; margin: 1.2rem 0;
+  }
+  .callout.warn { border-left-color: var(--warn-border); background: var(--warn-bg); }
+  .callout.ok { border-left-color: var(--ok-border); background: var(--ok-bg); }
+  .callout :first-child { margin-top: 0; }
+  .callout :last-child { margin-bottom: 0; }
+  nav.toc {
+    background: var(--bg-subtle); border: 1px solid var(--border); border-radius: 8px;
+    padding: 1rem 1.5rem; margin: 1.5rem 0;
+  }
+  nav.toc ol { margin: .3rem 0; padding-left: 1.4rem; }
+  nav.toc li { margin: .15rem 0; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 800px) { .cols { grid-template-columns: 1fr; } }
+  .col h4 { margin-top: 0; }
+  .col { border: 1px solid var(--border); border-radius: 8px; padding: 1rem; }
+  .col.before { background: #fff5f5; }
+  .col.after { background: #f0fff4; }
+</style>
+</head>
+<body>
+<main>
+
+<h1>JSON Forms 4.x — Presentation Model Architecture</h1>
+<p class="meta">
+  <span class="badge proposal">Draft Proposal</span>
+  &nbsp;Targets <a href="https://github.com/eclipsesource/jsonforms/issues/2571">eclipsesource/jsonforms#2571</a>
+  &nbsp;·&nbsp; Branch <code>feat/presentation-model</code> &nbsp;·&nbsp; June 2026
+</p>
+
+<div class="callout">
+<p><strong>TL;DR</strong> — JSON Forms 4.x replaces the per-renderer <code>mapStateTo*Props</code>
+mapper layer with a centralized, framework-agnostic <strong>Presentation Model</strong> (PM):
+a serializable collection of nodes, built by a pluggable pipeline in
+<code>@jsonforms/core</code>, where every node carries <em>everything a renderer needs</em> —
+final label, translated errors, value, visibility, enablement, options.
+Renderers become thin views. The pipeline abstracts over the schema format (JSON Schema first,
+zod / arbitrary definitions later) and over validation (AJV first, anything later), and the
+model can be built on a server with no form engine running in the browser at all.</p>
+</div>
+
+<div class="callout ok">
+<p><strong>Status update (June 2026)</strong> — implementation has started as a <em>clean cut</em>:
+the repository was reset and rebuilt around the new architecture (pnpm + Turborepo + tsdown,
+ESM-only, React 19, MUI v9). Decisions taken since this document was first written:</p>
+<ul>
+  <li><strong>No escape hatches.</strong> The originally proposed <code>NodeSource</code>
+    raw-schema bag on nodes was dropped — nodes expose abstracted facets only.</li>
+  <li><strong>Package renames:</strong> <code>material-renderers</code> →
+    <code>react-material</code>, <code>vanilla-renderers</code> → <code>react-vanilla</code>;
+    the example packages are replaced by <code>apps/demo</code>.</li>
+  <li><strong>New package <code>@jsonforms/validator-ajv</code>:</strong> core has zero
+    dependencies; AJV ships as a separate <code>FormValidator</code> implementation.</li>
+  <li><strong>Issue display is a builder policy</strong> (<code>IssueDisplayPolicy</code>,
+    default: show once touched) — renderers display <code>node.issues</code> unconditionally
+    instead of combining interaction state themselves.</li>
+  <li><strong>Boolean node flags are optional and default-false</strong>
+    (<code>hidden</code>, <code>disabled</code>, <code>required</code>, <code>readonly</code>,
+    <code>touched</code>) — builders only set what applies; serialized models stay lean.</li>
+  <li><strong>Commands carry optional <code>sourceNodeId</code> provenance;</strong> React
+    renderers dispatch through the node-scoped <code>useControlDispatch</code> and never see
+    paths or ids.</li>
+</ul>
+</div>
+
+<nav class="toc">
+<strong>Contents</strong>
+<ol>
+  <li><a href="#goals">Goals &amp; non-goals</a></li>
+  <li><a href="#current">Current architecture &amp; pain points</a></li>
+  <li><a href="#target">Target architecture overview</a></li>
+  <li><a href="#model">The Presentation Model</a></li>
+  <li><a href="#pipeline">The builder pipeline &amp; pluggable services</a></li>
+  <li><a href="#engine">The FormEngine runtime: commands, updates, deltas</a></li>
+  <li><a href="#incremental">Incremental updates &amp; identity preservation</a></li>
+  <li><a href="#deployment">Deployment modes incl. server-side building</a></li>
+  <li><a href="#react">React binding</a></li>
+  <li><a href="#material">Impact on material renderers</a></li>
+  <li><a href="#extensibility">Extensibility &amp; customization model</a></li>
+  <li><a href="#mergeability">Repository strategy: staying mergeable with master</a></li>
+  <li><a href="#roadmap">Iteration roadmap</a></li>
+  <li><a href="#questions">Open questions &amp; risks</a></li>
+</ol>
+</nav>
+
+<!-- ============================================================ -->
+<h2 id="goals">1. Goals &amp; non-goals</h2>
+
+<h3>Goals</h3>
+<ul>
+  <li><strong>Single source of truth for presentation logic.</strong> Labels, descriptions,
+    visibility, enablement, required-ness, error messages, enum options, i18n — computed once,
+    centrally, in <code>@jsonforms/core</code>. Renderers only render.</li>
+  <li><strong>Schema-format independence.</strong> JSON Schema is the first
+    <em>SchemaSource</em>, not a hard-wired assumption. Other dialects, zod, or fully
+    arbitrary definitions can be plugged in without touching renderers.</li>
+  <li><strong>Validation independence.</strong> AJV is the first <em>Validator</em>, not part
+    of the core state. Environments that cannot run AJV (CSP without
+    <code>unsafe-eval</code>, restricted runtimes, bundle-size constraints) can use
+    precompiled validators, custom lightweight validators, or server-side validation.</li>
+  <li><strong>Location independence.</strong> The model is plain serializable data and the
+    builder has no DOM/browser dependency — it can run on a server. A browser client can
+    consume a server-built model with no form engine shipped to the client at all.</li>
+  <li><strong>Performance by design.</strong> Updates preserve object identity for unchanged
+    nodes and (in a later phase) recompute only affected nodes, instead of re-running all
+    mappers for all renderers on every change.</li>
+  <li><strong>Cross-cutting customization.</strong> Change label computation (or any other
+    derived aspect) <em>once</em> via the pipeline, instead of overriding every renderer.</li>
+</ul>
+
+<h3>Non-goals (for the MVP)</h3>
+<ul>
+  <li>No backward-compatible mapper/tester shims in the first iteration. The 3.x stack stays
+    untouched and fully functional next to the new code; a compat layer is a later, separate
+    decision (see <a href="#roadmap">roadmap</a>).</li>
+  <li>No second schema source implementation in the MVP — but every interface is designed and
+    reviewed against the question <em>“would this work for zod / a plain definition / a server
+    DTO?”</em>.</li>
+  <li>No Angular/Vue bindings in the MVP; React proves the binding model first. The PM itself
+    is framework-agnostic, so the other bindings follow the same pattern later.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="current">2. Current architecture &amp; pain points</h2>
+
+<p>Today, core keeps a minimal central state and every renderer derives its own props on every
+render through the mapper layer:</p>
+
+<figure>
+<pre class="mermaid">
+flowchart LR
+  IN["data / schema / uischema"] --> ST["JsonFormsCore state<br/>data, schema, uischema,<br/>errors, <b>ajv, validator</b>"]
+  ST --> MAP["mapStateToControlProps,<br/>mapStateToLayoutProps, ...<br/><i>~1,400 LOC, re-run per renderer<br/>on every render</i>"]
+  MAP --> HOC["React HOCs<br/>withJsonFormsControlProps + memo"]
+  HOC --> REN["Renderers<br/>(still contain logic: option merging,<br/>description policy, ...)"]
+  REN -- "handleChange(path, value)" --> ACT["Actions → coreReducer<br/>(AJV revalidates everything)"]
+  ACT --> ST
+</pre>
+<figcaption>Figure 1 — Current 3.x flow: derived state is recomputed inside every renderer's HOC chain.</figcaption>
+</figure>
+
+<p>Concrete observations from the codebase that motivate the redesign:</p>
+<table>
+  <tr><th>Pain point</th><th>Where it lives today</th></tr>
+  <tr>
+    <td>Presentation logic leaks into the “UI” layer: label derivation, required handling,
+      error extraction, i18n key resolution, option computation, visibility rules.</td>
+    <td><code>core/src/mappers/renderer.ts</code> (~1,418 LOC) + per-renderer logic such as
+      <code>merge({}, config, uischema.options)</code> in
+      <code>MaterialInputControl</code>.</td>
+  </tr>
+  <tr>
+    <td>Customization is coarse-grained — changing how labels are computed means overriding
+      every renderer.</td>
+    <td>No central hook; the mappers are plain functions baked into HOCs.</td>
+  </tr>
+  <tr>
+    <td>AJV is structurally embedded: <code>ajv</code> and <code>validator</code> are fields of
+      <code>JsonFormsCore</code>; AJV's <code>ErrorObject</code> is the public error type
+      everywhere.</td>
+    <td><code>core/src/reducers/core.ts</code>, <code>core/src/store/type.ts</code>,
+      <code>core/src/util/errors.ts</code>.</td>
+  </tr>
+  <tr>
+    <td>Every change re-runs all mappers and all testers; testers resolve schemas at match
+      time. Memoization is bolted on per-HOC and is fragile (e.g. i18n function identity
+      invalidates option memos).</td>
+    <td><code>react/src/JsonFormsContext.tsx</code>, <code>react/src/JsonForms.tsx</code>
+      (<code>TestAndRender</code>).</td>
+  </tr>
+  <tr>
+    <td>Schema resolution (<code>$ref</code>, combinators) happens repeatedly at render time
+      instead of once at build time.</td>
+    <td><code>core/src/util/resolvers.ts</code> called from mappers and testers.</td>
+  </tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="target">3. Target architecture overview</h2>
+
+<p>The new architecture introduces three core concepts in <code>@jsonforms/core</code>:</p>
+<ol>
+  <li>The <strong>Presentation Model</strong> — a versioned, serializable collection of
+    <em>presentation nodes</em> mirroring the rendered form (<a href="#model">§4</a>).</li>
+  <li>The <strong>builder pipeline</strong> — pure build logic composed from pluggable
+    services: <em>SchemaSource</em>, <em>Validator</em>, <em>ConditionEvaluator</em>,
+    <em>i18n</em>, and user-supplied <em>NodeProcessors</em> (<a href="#pipeline">§5</a>).</li>
+  <li>The <strong>FormEngine</strong> — the stateful runtime that owns data + model, accepts
+    <em>commands</em>, and emits <em>model deltas</em> (<a href="#engine">§6</a>).</li>
+</ol>
+
+<figure>
+<pre class="mermaid">
+flowchart TB
+  subgraph RS["@jsonforms/material-renderers — thin views"]
+    direction LR
+    MTC["MaterialTextControl"]
+    MVL["MaterialVerticalLayout"]
+    MAR["Array / Variant renderers"]
+  end
+  subgraph RB["@jsonforms/react — binding"]
+    direction LR
+    JFC["JsonForms component<br/>(owns or receives a FormEngine)"]
+    ND["NodeDispatch<br/>+ useNode(id) fine-grained subscription"]
+    JFC --> ND
+  end
+  subgraph CORE["@jsonforms/core — presentation (framework-agnostic, runs in browser or on server)"]
+    FE["FormEngine<br/>data + model owner,<br/>command processor"]
+    PM["PresentationModel<br/>serializable nodes,<br/>stable ids, versioned"]
+    BP["Builder pipeline"]
+    FE --- PM
+    FE --> BP
+    BP --> SS["SchemaSource<br/><i>JSON Schema impl first;<br/>zod / arbitrary later</i>"]
+    BP --> VAL["Validator<br/><i>AJV impl first;<br/>precompiled / custom / remote later</i>"]
+    BP --> CE["ConditionEvaluator<br/>(uischema rules)"]
+    BP --> I18N["i18n<br/>(baked into nodes)"]
+    BP --> NP["NodeProcessors<br/>(adopter customization)"]
+  end
+  RS -->|"render node, dispatch commands"| RB
+  RB -->|"subscribe + dispatch"| CORE
+</pre>
+<figcaption>Figure 2 — Target layering. Everything inside CORE is plain TypeScript with no framework or DOM dependency.</figcaption>
+</figure>
+
+<p><strong>Hard design rules</strong> for everything inside the presentation layer:</p>
+<div class="callout ok">
+<ol>
+  <li><strong>Nodes are plain serializable JSON.</strong> No functions, no class instances, no
+    live references into a schema object graph. This is what makes server-side building, dev
+    tooling, snapshot testing, and AI-agent inspection possible.</li>
+  <li><strong>Nodes are complete.</strong> A renderer must never need to reach back into
+    schema, data, or i18n state. If a renderer needs it, it goes on the node (or the node is
+    extended via a NodeProcessor).</li>
+  <li><strong>Strings are final.</strong> Labels, descriptions, error messages are translated
+    during the build. Locale switches trigger a rebuild (rare, acceptable).</li>
+  <li><strong>Ids are stable, identity is preserved.</strong> Unchanged nodes keep the same
+    object reference across updates so view-layer memoization works for free.</li>
+  <li><strong>The pipeline is pure.</strong> Same inputs → same model. All statefulness lives
+    in the FormEngine.</li>
+</ol>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="model">4. The Presentation Model</h2>
+
+<h3>4.1 Shape</h3>
+<p>The model is a <em>normalized</em> map of nodes plus a root reference. Containers reference
+children by id. Normalization (vs. a nested tree) makes partial updates, diffing, and the
+wire-format for server-built models trivial:</p>
+
+<pre class="code"><code>type NodeId = string;
+/** JSON Pointer into the form data, e.g. "/address/street", "/items/2/name" */
+type DataPath = string;
+
+interface PresentationModel {
+  version: number;              // monotonically increasing per update
+  rootId: NodeId;
+  nodes: Record&lt;NodeId, PresentationNode&gt;;
+}</code></pre>
+
+<div class="callout">
+<p><strong>Deliberate break:</strong> the new layer uses <em>JSON Pointer</em> for data paths
+instead of 3.x lodash dot-paths. JSON Pointer is standard, unambiguous for keys containing
+dots, and serializes cleanly across the wire.</p>
+</div>
+
+<h3>4.2 Node taxonomy</h3>
+
+<figure>
+<pre class="mermaid">
+classDiagram
+  class PresentationNode {
+    &lt;&lt;abstract&gt;&gt;
+    +id : NodeId
+    +kind : string
+    +parent? : NodeId
+    +hidden? : boolean
+    +disabled? : boolean
+    +uiOptions : object
+    +annotations? : object
+  }
+  class ControlNode {
+    +kind = control
+    +path : DataPath
+    +value : unknown
+    +valueType : ValueType
+    +label : string
+    +description? : string
+    +required? : boolean
+    +readonly? : boolean
+    +touched? : boolean
+    +issues : FormIssue[]
+    +options? : EnumOption[]
+    +constraints : ControlConstraints
+  }
+  class LayoutNode {
+    +kind = layout
+    +layout : vertical / horizontal / group / ...
+    +label? : string
+    +children : NodeId[]
+  }
+  class ArrayControlNode {
+    +kind = array-control
+    +path : DataPath
+    +label : string
+    +issues : FormIssue[]
+    +items : ArrayItem[]
+    +capabilities : add / remove / reorder
+  }
+  class VariantControlNode {
+    +kind = variant-control
+    +variant : oneOf / anyOf / allOf
+    +variants : VariantInfo[]
+    +selectedIndex : number
+    +child? : NodeId
+  }
+  class CategorizationNode {
+    +kind = categorization
+    +categories : CategoryInfo[]
+    +children : NodeId[]
+  }
+  class LabelNode {
+    +kind = label
+    +text : string
+  }
+  PresentationNode <|-- ControlNode
+  PresentationNode <|-- LayoutNode
+  PresentationNode <|-- ArrayControlNode
+  PresentationNode <|-- VariantControlNode
+  PresentationNode <|-- CategorizationNode
+  PresentationNode <|-- LabelNode
+</pre>
+<figcaption>Figure 3 — Node taxonomy. The set is open: custom builders/processors may introduce new kinds; testers simply match on them.</figcaption>
+</figure>
+
+<h3>4.3 Key types</h3>
+
+<pre class="code"><code>/** Abstracted value classification — what a renderer needs to pick a widget.
+ *  Derived from JSON Schema today, from any other source tomorrow. */
+type ValueType =
+  | 'string' | 'number' | 'integer' | 'boolean'
+  | 'date' | 'time' | 'date-time'
+  | 'object' | 'array' | 'unknown';
+
+/** Widget-relevant constraints, abstracted away from any schema dialect. */
+interface ControlConstraints {
+  maxLength?: number;  minLength?: number;
+  minimum?: number;    maximum?: number;   multipleOf?: number;
+  pattern?: string;
+  format?: string;          // escape hatch for source-specific formats
+  multiline?: boolean;
+}
+
+interface EnumOption {
+  value: unknown;
+  label: string;            // final, translated
+}
+
+/** Validation result attached to nodes — replaces AJV's ErrorObject as public API. */
+interface FormIssue {
+  severity: 'error' | 'warning' | 'info';
+  message: string;          // final, translated, ready to display
+  key?: string;             // stable key (validation keyword / i18n key)
+  source?: unknown;         // raw validator payload (e.g. AJV ErrorObject), still JSON
+}
+
+interface ArrayItem {
+  key: string;              // stable per data element, survives reorder → perfect React key
+  child: NodeId;            // root node of the item's sub-form
+  label?: string;           // computed child label (master/detail, tables)
+}</code></pre>
+
+<h3>4.4 Design decisions on the node level</h3>
+<ul>
+  <li><strong>The model mirrors the expected visual representation.</strong> Array nodes have
+    one item entry per element <em>in the data</em>; recursive schemas terminate naturally
+    because the data terminates — the “endless layout” problem of schema-first generation
+    disappears. Lazy materialization of collapsed subtrees (tabs, accordions) is a planned
+    optimization (<a href="#questions">§14</a>).</li>
+  <li><strong><code>uiOptions</code> is pre-merged.</strong> The
+    <code>merge(config, uischema.options)</code> dance every renderer does today happens once
+    in the builder.</li>
+  <li><strong>Stable array item keys.</strong> The engine assigns a persistent key per array
+    element and keeps it across moves — fixing the long-standing index-as-React-key issue and
+    making reorder animations possible.</li>
+  <li><strong>Interaction state lives on the node too.</strong> <code>touched</code> is set by
+    a <code>touch</code> command (blur), so “show errors only after interaction” becomes a
+    build-pipeline policy instead of per-renderer-set logic (cf. the recent Angular
+    <code>showErrorsOnTouch</code> feature on master).</li>
+  <li><strong><code>annotations</code> is the open extension bag</strong> for NodeProcessors to
+    attach adopter-specific derived data without forking node types.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="pipeline">5. The builder pipeline &amp; pluggable services</h2>
+
+<p>The builder walks the UI structure (explicit uischema, or one generated by the
+SchemaSource), consults the services at every step, and emits nodes. It is a pure function of
+its inputs:</p>
+
+<figure>
+<pre class="mermaid">
+flowchart LR
+  IN["BuildInput<br/>data, uischema?,<br/>context (locale, config, readonly)"] --> WALK["Walk UI structure<br/>(generate via SchemaSource<br/>if no uischema)"]
+  WALK --> DESC["SchemaSource.describe(scope)<br/>→ facets: valueType, title,<br/>options, constraints, variants"]
+  DESC --> RULES["ConditionEvaluator<br/>→ visible / enabled per rules"]
+  RULES --> VALD["Validator.validate(data)<br/>→ issues, distributed to<br/>nodes by DataPath"]
+  VALD --> I18N["i18n<br/>translate labels, descriptions,<br/>options, issue messages"]
+  I18N --> PROC["NodeProcessors<br/>adopter chain, per node"]
+  PROC --> OUT["PresentationModel<br/>(normalized, serializable)"]
+</pre>
+<figcaption>Figure 4 — Builder pipeline. Each stage is replaceable; the defaults form the “JSON Schema + AJV” preset.</figcaption>
+</figure>
+
+<h3>5.1 SchemaSource — abstracting the schema format</h3>
+
+<p>The single interface between the builder and “whatever describes the data”. The builder
+never touches JSON Schema directly; it only sees <em>facets</em>:</p>
+
+<pre class="code"><code>interface SchemaSource {
+  /** Interpret a uischema scope (or structural path) into abstract facets. */
+  describe(scope: string): SchemaFacets | undefined;
+  /** Default value for a location — used by add-item, variant selection, init. */
+  createDefault(scope: string): unknown;
+  /** Generate a default UI structure when no uischema is provided. */
+  generateUISchema(): UISchemaElement;
+}
+
+interface SchemaFacets {
+  valueType: ValueType;
+  title?: string;
+  description?: string;
+  constraints?: ControlConstraints;
+  enumOptions?: EnumOption[];          // pre-i18n labels
+  required?: string[];                 // for objects: required property names
+  variants?: VariantInfo[];            // oneOf / anyOf alternatives
+  itemFacets?: SchemaFacets;           // for arrays
+  readOnly?: boolean;
+  deprecated?: boolean;
+  defaultValue?: unknown;
+}
+
+/** First implementation, ~wrapping today's util/resolvers.ts logic: */
+const source = jsonSchemaSource(schema /* JsonSchema draft-04/-07/2020-12 */);</code></pre>
+
+<p>This is where today's <code>$ref</code> resolution, combinator handling, and
+draft-dialect quirks are encapsulated — resolved <em>once per build</em>, not per render.
+A future <code>zodSource(zodSchema)</code> or <code>plainSource(definition)</code> implements
+the same three methods and the whole stack — builder, testers, renderers — works unchanged.</p>
+
+<h3>5.2 Validator — abstracting validation</h3>
+
+<pre class="code"><code>interface FormValidator {
+  validate(data: unknown): ValidationIssue[] | Promise&lt;ValidationIssue[]&gt;;
+}
+
+interface ValidationIssue {
+  path: DataPath;             // which node(s) the issue belongs to
+  severity: 'error' | 'warning' | 'info';
+  key?: string;               // e.g. 'required', 'maxLength' — i18n lookup key
+  message: string;            // default (untranslated) message
+  source?: unknown;           // raw validator object for power users
+}
+
+/** Implementations planned / enabled by this interface: */
+ajvValidator(schema, ajv?)        // default; wraps today's createAjv + validate
+standaloneValidator(compiledFn)   // AJV standalone precompiled — CSP-safe, no eval
+noValidation()                    // replaces ValidationMode 'NoValidation'
+remoteValidator(transport)        // server round-trip validation
+composeValidators(...validators)  // schema validation + custom business rules</code></pre>
+
+<ul>
+  <li><strong>Async is first-class.</strong> <code>validate</code> may return a promise. The
+    engine applies the data change and emits the model immediately; issues arrive as a second
+    delta when validation resolves. Sync validators (AJV) behave exactly like today.</li>
+  <li><strong><code>additionalErrors</code> generalizes</strong> to
+    <code>engine.setExternalIssues(issues)</code> — external issues are merged into the same
+    distribution step.</li>
+  <li><strong>Validation display policy</strong> (today's
+    <code>ValidateAndShow/ValidateAndHide</code> + touched-based display) becomes a pipeline
+    policy deciding which issues land on which nodes.</li>
+</ul>
+
+<h3>5.3 ConditionEvaluator, i18n, NodeProcessors</h3>
+
+<pre class="code"><code>/** uischema rules (SHOW/HIDE/ENABLE/DISABLE) — today evaluated via AJV conditions.
+ *  Pluggable so rules work without AJV and custom condition languages are possible. */
+interface ConditionEvaluator {
+  evaluate(rule: Rule, data: unknown, context: BuildContext): boolean;
+}
+
+/** i18n — same Translator concept as 3.x, but applied once at build time. */
+interface BuildI18n {
+  locale?: string;
+  t: Translator;
+  translateIssue?: (issue: ValidationIssue, t: Translator, node: PresentationNode) =&gt; string;
+}
+
+/** The cross-cutting customization hook: every node flows through this chain. */
+type NodeProcessor = (node: PresentationNode, ctx: BuildContext) =&gt; PresentationNode;
+
+// Example: organisation-wide label policy, replacing N renderer overrides:
+const upperCaseRequired: NodeProcessor = (node) =&gt;
+  node.kind === 'control' &amp;&amp; node.required
+    ? { ...node, label: node.label.toUpperCase() }
+    : node;</code></pre>
+
+<!-- ============================================================ -->
+<h2 id="engine">6. The FormEngine runtime: commands, updates, deltas</h2>
+
+<p>The FormEngine is the only stateful object. It owns the data and the current model,
+processes <strong>commands</strong>, and notifies subscribers with <strong>deltas</strong>.
+It replaces actions + coreReducer + middleware of 3.x.</p>
+
+<pre class="code"><code>interface FormEngine {
+  getModel(): PresentationModel;
+  getNode(id: NodeId): PresentationNode | undefined;
+  getData(): unknown;
+  dispatch(command: FormCommand): void;
+  setExternalIssues(issues: ValidationIssue[]): void;
+  subscribe(listener: (delta: ModelDelta) =&gt; void): Unsubscribe;       // engine-level
+  subscribeNode(id: NodeId, listener: () =&gt; void): Unsubscribe;        // node-level
+}
+
+type FormCommand =
+  | { type: 'set-value';      path: DataPath; value: unknown }
+  | { type: 'add-item';       path: DataPath; value?: unknown; index?: number }
+  | { type: 'remove-items';   path: DataPath; indices: number[] }
+  | { type: 'move-item';      path: DataPath; from: number; to: number }
+  | { type: 'select-variant'; nodeId: NodeId; variantIndex: number }
+  | { type: 'touch';          nodeId: NodeId }
+  | { type: 'update-input';   data?: unknown; uischema?: UISchemaElement }
+  | { type: 'update-context'; locale?: string; readonly?: boolean; config?: object };
+
+/** Every command may carry a `sourceNodeId` — the node on whose behalf it was
+ *  dispatched (provenance for interceptors, auditing, remote backends). */
+
+/** What subscribers receive — also the wire format for server-driven forms. */
+interface ModelDelta {
+  version: number;
+  upserted: PresentationNode[];   // new or changed nodes
+  removed: NodeId[];
+  rootChanged?: boolean;
+  data?: unknown;                 // optional data echo for onChange consumers
+}
+
+const engine = createFormEngine({
+  // JSON Schema convenience preset:
+  schema, uischema, data,
+  // …which is sugar for the fully explicit form:
+  schemaSource: jsonSchemaSource(schema),
+  validator: ajvValidator(schema),
+  conditions: ajvConditionEvaluator(),
+  i18n, config, processors: [],
+});</code></pre>
+
+<div class="callout">
+<p><strong>Commands replace <code>handleChange</code> + action creators.</strong> They are
+plain JSON — serializable by design, so the same command stream works against a local engine,
+a web worker, or a server (<a href="#deployment">§8</a>). Today's middleware concept maps to a
+command interceptor: <code>(command, next) =&gt; void</code>.</p>
+</div>
+
+<h3>6.1 Update lifecycle</h3>
+
+<figure>
+<pre class="mermaid">
+sequenceDiagram
+  actor U as User
+  participant V as MaterialTextControl (view)
+  participant E as FormEngine
+  participant VAL as Validator (AJV)
+  participant B as Builder pipeline
+  participant O as Other subscribed views
+  U->>V: types "Jo"
+  V->>E: dispatch set-value "/name" = "Jo"
+  E->>E: apply command to data (immutable update)
+  E->>VAL: validate(data)
+  VAL-->>E: issues[]
+  E->>B: update model (previous model + changes)
+  B-->>E: new model — unchanged nodes keep object identity
+  E-->>V: notify node "/name" subscribers (version n+1)
+  E-->>O: notify only other nodes whose content changed
+  Note over O: views of unchanged nodes are not re-rendered at all
+</pre>
+<figcaption>Figure 5 — A single edit. Node-level subscriptions plus identity preservation replace the 3.x “re-run every mapper, rely on memo” model.</figcaption>
+</figure>
+
+<!-- ============================================================ -->
+<h2 id="incremental">7. Incremental updates &amp; identity preservation</h2>
+
+<p>Issue #2571 calls out that real performance gains need partial updates, not full
+re-generation. We stage this:</p>
+
+<h3>Phase 1 (MVP): full rebuild with structural sharing</h3>
+<ul>
+  <li>On every command the builder re-walks the structure, but for each node it compares the
+    node's <em>inputs</em> (value slice identity, issues for its path, rule outcome, label
+    inputs) against the previous build and <strong>reuses the previous node object</strong>
+    when nothing changed.</li>
+  <li>Cost is O(form size) per change — same asymptotics as 3.x's mapper re-runs, but the work
+    per node is cheaper (no schema resolution: facets are cached per scope) and, crucially,
+    <strong>view re-renders drop to O(changed nodes)</strong>.</li>
+  <li>This is simple, correct, and already a measurable win. It also defines the contract
+    (identity preservation, deltas) that Phase 2 must honor.</li>
+</ul>
+
+<h3>Phase 2: dependency-tracked partial updates</h3>
+<ul>
+  <li>During the build, each node records its dependencies: its data path prefix, rule
+    condition paths, and label/i18n inputs. The engine maintains an inverted index
+    <code>DataPath → NodeId[]</code>.</li>
+  <li>A <code>set-value</code> then recomputes: the nodes covering the changed path, the nodes
+    whose rule conditions reference it, and the nodes whose <em>issue set</em> changed (diffing
+    the validator output between runs).</li>
+  <li>Structural commands (<code>add-item</code>, <code>select-variant</code>) rebuild only the
+    affected subtree.</li>
+</ul>
+
+<div class="callout warn">
+<p><strong>Risk watch:</strong> whole-form validators (AJV) always produce a full issue list,
+so issue <em>diffing</em>, not issue computation, is the partial-update boundary for
+validation. Cross-field rules are the other global dependency. The dependency index handles
+both, but this is the part of the design with the most hidden complexity — hence Phase 2, with
+Phase 1's full-rebuild as the always-correct fallback path.</p>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="deployment">8. Deployment modes incl. server-side building</h2>
+
+<p>Because the model is serializable JSON, commands are serializable JSON, and deltas are
+serializable JSON, the engine can sit on either side of a network boundary. The renderer/
+binding layer is identical in all three modes — it only ever sees a
+<code>FormEngine</code>-shaped object:</p>
+
+<figure>
+<pre class="mermaid">
+flowchart TB
+  subgraph M1["Mode A — Client-only (default, like today)"]
+    direction LR
+    A1["Browser: FormEngine<br/>+ SchemaSource + AJV"] --> A2["Browser: React binding<br/>+ renderers"]
+  end
+  subgraph M2["Mode B — Server-built, client-updated"]
+    direction LR
+    B1["Server: build initial<br/>PresentationModel"] -- "serialized model<br/>(+ schema inputs)" --> B2["Browser: hydrate local<br/>FormEngine, updates run locally"]
+    B2 --> B3["React binding + renderers"]
+  end
+  subgraph M3["Mode C — Server-authoritative (no form engine in the browser)"]
+    direction LR
+    C1["Server: FormEngine<br/>+ any validator (even non-JS)"] -- "ModelDelta stream" --> C2["Browser: RemoteFormEngine<br/>(thin proxy, optimistic value echo)"]
+    C2 -- "FormCommand stream" --> C1
+    C2 --> C3["React binding + renderers<br/>(unchanged)"]
+  end
+</pre>
+<figcaption>Figure 6 — Deployment modes. Mode C ships neither AJV nor schema interpretation to the client.</figcaption>
+</figure>
+
+<table>
+  <tr><th>Mode</th><th>What ships to the browser</th><th>Typical use</th></tr>
+  <tr><td><strong>A — Client-only</strong></td>
+      <td>Engine + JSON Schema source + AJV</td>
+      <td>Default; drop-in successor of today's setup.</td></tr>
+  <tr><td><strong>B — Server-built, client-updated</strong></td>
+      <td>Engine, hydrated from a server-built model</td>
+      <td>SSR/fast first paint; heavy schema preprocessing offloaded.</td></tr>
+  <tr><td><strong>C — Server-authoritative</strong></td>
+      <td>Only the thin <code>RemoteFormEngine</code> proxy + renderers</td>
+      <td>CSP-restricted environments, secret schemas/business rules, non-JS validation
+      backends, minimal bundles.</td></tr>
+</table>
+
+<p>For Mode C, the <code>RemoteFormEngine</code> implements the same <code>FormEngine</code>
+interface over a pluggable transport (HTTP, WebSocket). It echoes <code>set-value</code> into
+the local node optimistically so typing stays latency-free, and reconciles when the
+authoritative delta arrives. Transport, batching, and conflict policy are deliberately out of
+core scope — core defines the <em>protocol types</em> (<code>FormCommand</code>,
+<code>ModelDelta</code>) only.</p>
+
+<!-- ============================================================ -->
+<h2 id="react">9. React binding</h2>
+
+<p>The binding shrinks dramatically: no HOC chains, no context-wide cascades, no mapper calls.
+Three primitives:</p>
+
+<pre class="code"><code>// 1. Provider — owns a local engine (convenience) or receives any FormEngine.
+&lt;JsonForms
+  schema={schema} uischema={uischema} data={data}    // convenience: local engine
+  renderers={materialRenderers}
+  onChange={({ data, issues }) =&gt; ...}
+/&gt;
+// or:
+&lt;JsonForms engine={remoteEngine} renderers={materialRenderers} /&gt;
+
+// 2. useNode — node-granular subscription via useSyncExternalStore.
+const useNode = (id: NodeId): PresentationNode =&gt; {
+  const { engine } = useFormContext();
+  return useSyncExternalStore(
+    (cb) =&gt; engine.subscribeNode(id, cb),
+    () =&gt; engine.getNode(id),
+    () =&gt; engine.getNode(id)        // SSR snapshot — Mode B works out of the box
+  );
+};
+
+// 3. NodeDispatch — renderer selection, replacing JsonFormsDispatch.
+const NodeDispatch = ({ id }: { id: NodeId }) =&gt; {
+  const node = useNode(id);
+  const { renderers } = useFormContext();
+  const match = useMemo(
+    () =&gt; maxBy(renderers, (r) =&gt; r.tester(node)),     // testers see the NODE only
+    [renderers, node]
+  );
+  if (!node?.visible) return null;
+  if (!match || match.tester(node) === NOT_APPLICABLE) return &lt;UnknownNode node={node} /&gt;;
+  return &lt;match.renderer id={id} /&gt;;
+};</code></pre>
+
+<p><strong>Testers run against presentation nodes</strong>, not (uischema, schema) pairs.
+They become trivial, fast (no schema resolution at match time), and schema-format independent:</p>
+
+<pre class="code"><code>type NodeTester = (node: PresentationNode) =&gt; number;   // NOT_APPLICABLE = -1
+
+const isStringControl = (n: PresentationNode) =&gt;
+  n.kind === 'control' &amp;&amp; n.valueType === 'string' &amp;&amp; !n.options;
+
+const materialTextControlTester = rankWith(1, isStringControl);</code></pre>
+
+<p>Because testers only need the node, renderer selection can even happen against a
+serialized, server-built model — and the existing combinators
+(<code>rankWith</code>, <code>and</code>, <code>or</code>) carry over with a changed
+signature.</p>
+
+<figure>
+<pre class="mermaid">
+flowchart LR
+  E["FormEngine"] -- "subscribeNode(id)" --> UN["useNode(id)"]
+  UN --> ND["NodeDispatch"]
+  ND -- "tester(node) → rank" --> REG["Renderer registry"]
+  REG --> R["Matched renderer<br/>props: { id } — reads node, dispatches commands"]
+  R -- "NodeDispatch(childId) for children" --> ND
+  R -- "dispatch(command)" --> E
+</pre>
+<figcaption>Figure 7 — React render loop. Containers recurse by rendering NodeDispatch per child id.</figcaption>
+</figure>
+
+<!-- ============================================================ -->
+<h2 id="material">10. Impact on material renderers</h2>
+
+<p>Renderers keep their local UI state (focus, dialogs, debounced input) and their MUI markup —
+they lose all derivation logic. Before/after for the text control:</p>
+
+<div class="cols">
+<div class="col before">
+<h4>3.x — logic mixed into the view path</h4>
+<pre class="code"><code>// HOC computes ~20 props via
+// mapStateToControlProps on every render
+export default withJsonFormsControlProps(
+  MaterialTextControl
+);
+
+// MaterialInputControl re-derives:
+//  - merge({}, config, uischema.options)
+//  - isDescriptionHidden(...)
+//  - showAsRequired(...)
+//  - error string formatting
+// MuiInputText reads schema.maxLength,
+// uischema options, config again…</code></pre>
+</div>
+<div class="col after">
+<h4>4.x — thin view over a ControlNode</h4>
+<pre class="code"><code>const MaterialTextControl = ({ id }) =&gt; {
+  const node = useControlNode(id);
+  const dispatch = useFormDispatch();
+  const [text, onText] = useDebounced(
+    node.value, (v) =&gt;
+      dispatch(setValue(node.path, v)));
+
+  return (
+    &lt;TextField
+      label={node.label}
+      value={text ?? ''}
+      required={node.required}
+      disabled={!node.enabled}
+      error={node.issues.length &gt; 0}
+      helperText={node.issues[0]?.message
+        ?? node.description}
+      inputProps={{ maxLength:
+        node.constraints.maxLength }}
+      onChange={(e) =&gt; onText(e.target.value)}
+      onBlur={() =&gt; dispatch(touch(id))}
+    /&gt;
+  );
+};</code></pre>
+</div>
+</div>
+
+<p>Consequences across the renderer set:</p>
+<ul>
+  <li><strong>Layouts</strong> map <code>node.children</code> to
+    <code>&lt;NodeDispatch id={childId} /&gt;</code> — no more re-passing schema/path down the
+    tree.</li>
+  <li><strong>Array renderers</strong> read <code>node.items</code> (with stable
+    <code>item.key</code> as React key and precomputed <code>item.label</code>) and dispatch
+    <code>add-item</code>/<code>remove-items</code>/<code>move-item</code>. Today's
+    <code>childErrors</code> plumbing disappears — each item's nodes carry their own
+    issues.</li>
+  <li><strong>oneOf/anyOf renderers</strong> read <code>node.variants</code> +
+    <code>node.selectedIndex</code> and dispatch <code>select-variant</code>; default-value
+    creation and tab-switch data handling move into the engine where they belong.</li>
+  <li><strong>The cells registry can likely merge into the renderers registry</strong>: a table
+    cell is just a compact renderer for a <code>ControlNode</code> in an array context (open
+    question in <a href="#questions">§14</a>).</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="extensibility">11. Extensibility &amp; customization model</h2>
+
+<table>
+  <tr><th>You want to…</th><th>3.x mechanism</th><th>4.x mechanism</th></tr>
+  <tr>
+    <td>Custom renderer for one control type</td>
+    <td>Tester + renderer registration</td>
+    <td>Same concept — <code>NodeTester</code> + renderer registration</td>
+  </tr>
+  <tr>
+    <td>Change label/description/required display logic globally</td>
+    <td>Override every renderer (or fork mappers)</td>
+    <td>One <code>NodeProcessor</code></td>
+  </tr>
+  <tr>
+    <td>Custom error messages / severity / placement</td>
+    <td><code>translateError</code> + per-renderer logic</td>
+    <td><code>translateIssue</code> + issue-distribution policy + NodeProcessor</td>
+  </tr>
+  <tr>
+    <td>Different validation engine / no eval / server validation</td>
+    <td>Not possible (AJV baked into core state)</td>
+    <td>Provide a <code>FormValidator</code></td>
+  </tr>
+  <tr>
+    <td>Different schema language (zod, custom DTOs)</td>
+    <td>Not possible</td>
+    <td>Provide a <code>SchemaSource</code></td>
+  </tr>
+  <tr>
+    <td>Intercept changes (today's middleware)</td>
+    <td>Core middleware <code>(state, action, reducer)</code></td>
+    <td>Command interceptor <code>(command, next)</code></td>
+  </tr>
+  <tr>
+    <td>Per-control detail uischemas (registry)</td>
+    <td><code>uischemas</code> registry + testers</td>
+    <td>Same registry concept, consulted by the builder when expanding subtrees</td>
+  </tr>
+  <tr>
+    <td>Inspect form state (debugging, AI agents)</td>
+    <td>Scattered: state + per-renderer derivation</td>
+    <td><code>JSON.stringify(engine.getModel())</code> — the PM <em>is</em> the concise,
+      complete form state</td>
+  </tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="mergeability">12. Repository strategy: staying mergeable with master</h2>
+
+<p>The iteration will run for months while master keeps moving. The strategy is
+<strong>strictly additive code in new directories</strong> — the 3.x stack is not modified
+until the very end:</p>
+
+<pre class="code"><code>packages/core/src/presentation/        ← all new core code (model, pipeline, engine,
+                                          json-schema source, ajv validator, testers)
+packages/core/test/presentation/       ← new tests
+packages/react/src/presentation/       ← new binding (provider, useNode, NodeDispatch)
+packages/material-renderers/src/next/  ← ported renderers, old ones untouched
+packages/examples/src/presentation/    ← side-by-side example entries
+docs/presentation-model/               ← this document, ADRs, protocol specs</code></pre>
+
+<ul>
+  <li><strong>Touch existing files only for exports</strong> (one <code>export *</code> line in
+    each <code>index.ts</code>, or — preferred — a dedicated subpath export
+    <code>@jsonforms/core/presentation</code> so 3.x consumers see zero surface change and
+    tree-shaking is trivial).</li>
+  <li><strong>Merge master into <code>feat/presentation-model</code> regularly</strong>
+    (e.g. weekly). With disjoint directories, conflicts are limited to lockfile/exports noise.</li>
+  <li><strong>Reuse, don't fork, the stable 3.x internals</strong> where they fit:
+    <code>util/resolvers.ts</code> (inside <code>jsonSchemaSource</code>),
+    <code>generators/uischema.ts</code>, <code>models/uischema.ts</code> types,
+    <code>util/validator.ts</code> (inside <code>ajvValidator</code>). Master-side fixes to
+    these flow into the new stack via normal merges for free.</li>
+  <li><strong>Old stack removal is the last commit series</strong> of the 4.0 release, after
+    the renderer sets are ported — not a precondition for any earlier milestone.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="roadmap">13. Iteration roadmap</h2>
+
+<figure>
+<pre class="mermaid">
+flowchart LR
+  M1["M1 — Core MVP<br/>node model · JSON Schema source ·<br/>AJV validator · builder · engine ·<br/>commands · full-rebuild w/ identity"] -->
+  M2["M2 — React proof<br/>provider · useNode · NodeDispatch ·<br/>port 4-5 material renderers ·<br/>side-by-side example app"] -->
+  M3["M3 — Completeness<br/>arrays · oneOf/anyOf/allOf ·<br/>rules · categorization · i18n switch ·<br/>detail-uischema registry"] -->
+  M4["M4 — Performance<br/>dependency-tracked partial updates ·<br/>benchmarks vs 3.x (huge form)"] -->
+  M5["M5 — Pluggability proof<br/>2nd SchemaSource (zod or plain) ·<br/>non-AJV validator ·<br/>RemoteFormEngine prototype"] -->
+  M6["M6 — 4.0 release<br/>port renderer sets · migration guide ·<br/>compat-layer decision ·<br/>remove old stack"]
+</pre>
+<figcaption>Figure 8 — Milestones. M1–M2 validate the concept end-to-end; M5 validates the abstractions that justify the break.</figcaption>
+</figure>
+
+<table>
+  <tr><th>Milestone</th><th>Exit criterion</th></tr>
+  <tr><td><strong>M1</strong> Core MVP</td>
+    <td><code>createFormEngine({schema, uischema, data})</code> builds a correct model for the
+    primitive-control examples; commands update data + model with preserved identities;
+    snapshot + unit tests green.</td></tr>
+  <tr><td><strong>M2</strong> React proof</td>
+    <td>An example form renders pixel-identical with old and new stack side by side; React
+    DevTools confirms only changed nodes re-render on input.</td></tr>
+  <tr><td><strong>M3</strong> Completeness</td>
+    <td>The shared <code>packages/examples</code> suite renders correctly on the new stack.</td></tr>
+  <tr><td><strong>M4</strong> Performance</td>
+    <td>Benchmark: keystroke latency and re-render counts on a large form beat 3.x measurably;
+    numbers documented here.</td></tr>
+  <tr><td><strong>M5</strong> Pluggability proof</td>
+    <td>One non-JSON-Schema source and one non-AJV validator pass the M3 example subset;
+    Mode C demo works over a mock transport.</td></tr>
+  <tr><td><strong>M6</strong> 4.0</td>
+    <td>Renderer sets ported, MIGRATION.md updated, old stack removed or wrapped.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="questions">14. Open questions &amp; risks</h2>
+
+<table>
+  <tr><th>#</th><th>Question / risk</th><th>Current lean</th></tr>
+  <tr><td>1</td>
+    <td><strong>Node id stability for moved array items.</strong> Path-based ids are readable
+      but change on reorder; key-based ids are stable but opaque.</td>
+    <td>Path-based <code>NodeId</code>s + stable <code>ArrayItem.key</code> for view identity;
+      engine remaps ids on <code>move-item</code>.</td></tr>
+  <tr><td>2</td>
+    <td><strong>How much raw source on nodes?</strong> A raw-schema escape hatch would bloat
+      serialized models (Modes B/C) and tempt renderers back into schema-coupling.</td>
+    <td><strong>Resolved (June 2026): none.</strong> Nodes expose abstracted facets only;
+      anything a renderer legitimately needs is added to the node model or via a
+      NodeProcessor.</td></tr>
+  <tr><td>3</td>
+    <td><strong>Lazy subtree materialization.</strong> Huge categorized forms shouldn't pay
+      full build cost for invisible tabs.</td>
+    <td>Defer to M4: <code>materialize(nodeId)</code> command + <code>materialized:
+      boolean</code> on container nodes.</td></tr>
+  <tr><td>4</td>
+    <td><strong>Does uischema stay first-class?</strong> The PM abstracts the data schema —
+      should the UI structure description also become pluggable?</td>
+    <td>Keep today's uischema as the canonical UI structure input for 4.0; it is already
+      schema-format-neutral except for <code>scope</code> semantics, which the SchemaSource
+      interprets.</td></tr>
+  <tr><td>5</td>
+    <td><strong>Cells vs. renderers.</strong> Can the cell registry merge into the renderer
+      registry now that nodes carry everything?</td>
+    <td>Likely yes — table contexts set an annotation (<code>annotations.compact</code>) that
+      testers can rank on. Decide during M3 (table port).</td></tr>
+  <tr><td>6</td>
+    <td><strong>Async validation UX.</strong> Two-phase deltas (data echo, then issues) may
+      flicker error states.</td>
+    <td>Issue-retention policy in the engine: keep previous issues marked
+      <code>stale</code> until the new result lands.</td></tr>
+  <tr><td>7</td>
+    <td><strong>Partial-update correctness</strong> (cross-field rules, whole-form
+      validators).</td>
+    <td>Phase-1 full rebuild stays as the always-correct path; Phase 2 must prove equivalence
+      property-based against it.</td></tr>
+  <tr><td>8</td>
+    <td><strong>Compat layer worth it?</strong> Re-implementing
+      <code>mapStateToControlProps</code> on top of the PM is feasible (the node is a superset)
+      but drags 3.x semantics into 4.x.</td>
+    <td>Decide at M6 with real migration feedback; not on the critical path.</td></tr>
+  <tr><td>9</td>
+    <td><strong>Mode C interaction latency</strong> for typing-heavy forms.</td>
+    <td>Optimistic local echo for <code>set-value</code> is mandatory in
+      <code>RemoteFormEngine</code>; everything else tolerates round-trips.</td></tr>
+</table>
+
+<hr style="margin-top:3rem; border:none; border-top:1px solid var(--border);" />
+<p class="meta">Sources: code analysis of <code>packages/core</code>, <code>packages/react</code>,
+<code>packages/material-renderers</code> on <code>master</code> (June 2026), and
+<a href="https://github.com/eclipsesource/jsonforms/issues/2571">issue #2571</a>.
+Diagrams render via Mermaid (CDN); open this file in any browser.</p>
+
+</main>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({ startOnLoad: true, theme: 'neutral', flowchart: { curve: 'basis' } });
+</script>
+</body>
+</html>

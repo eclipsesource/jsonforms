@@ -1,91 +1,65 @@
-# General project information
+# JSON Forms 4.x (presentation-model rewrite)
 
-For information on project setup, architecture, and core principles refer to @.prompts/project-info.prompttemplate
+This repository is the ground-up rewrite of JSON Forms around the presentation-model
+architecture ([issue #2571](https://github.com/eclipsesource/jsonforms/issues/2571)).
+The complete architecture design is in `docs/presentation-model/architecture.html`.
+It is a clean cut from 3.x: never reintroduce 3.x concepts (mappers, reducers/actions,
+HOC prop chains, AJV-in-state) or compatibility shims.
 
-## Build Commands
+## Architecture summary
 
-### Full Repository
+- `@jsonforms/core` (`packages/core`): framework-agnostic and dependency-free.
+  A `FormEngine` (`createFormEngine`) owns data + the **presentation model** (serializable
+  nodes carrying label, value, issues, constraints, …), processes serializable **commands**
+  (`set-value`, `touch`) and notifies subscribers with node-granular deltas. The model is
+  produced by a pure builder over pluggable services: `SchemaSource` (JSON Schema impl:
+  `jsonSchemaSource`), `FormValidator`, `IssueDisplayPolicy` (which issues land on nodes;
+  default: show once touched), `NodeProcessor`s. Testers rank renderers against **nodes**,
+  never against schemas. Boolean node flags (`hidden`, `disabled`, `required`, `readonly`,
+  `touched`) are optional and default-false. Commands may carry `sourceNodeId` provenance.
+- `@jsonforms/validator-ajv`: AJV-backed `FormValidator`. Core must never depend on AJV.
+- `@jsonforms/react`: React 19 binding — `<JsonForms>`, `useNode`/`useControlNode` (via
+  `useSyncExternalStore`, node-granular subscriptions), `NodeDispatch`, and
+  `useControlDispatch` (node-scoped commands with provenance; `useFormDispatch` is the
+  low-level fallback).
+- `@jsonforms/react-material`: Material UI v9 renderers — thin views over nodes only.
+- `apps/demo`: Vite demo app.
+- Other packages (`angular*`, `vue*`, `react-vanilla`) are placeholders for later phases.
 
-```bash
-pnpm install                  # Install dependencies
-pnpm run build                # Build all packages
-pnpm run lint                 # Lint all packages
-pnpm run lint:fix             # Lint and auto-fix
-pnpm run test                 # Test all packages
-pnpm run clean                # Clean build artifacts
-```
+## Hard design rules
 
-### Single Package (Preferred for Iterative Development)
+1. Presentation nodes are plain serializable JSON — no functions, no live schema references,
+   no escape hatches to raw schemas.
+2. Nodes are complete: if a renderer needs information, it goes on the node (or via a
+   `NodeProcessor`) — renderers never reach into schema/data/engine internals.
+3. Unchanged nodes keep object identity across rebuilds (this is what makes re-renders cheap);
+   preserve this invariant in any builder change.
+4. The builder is pure; all statefulness lives in the `FormEngine`.
+5. Data paths are JSON Pointers (RFC 6901), not lodash dot paths.
 
-```bash
-# Build
-pnpm lerna run build --scope=@jsonforms/core
+## Workspace & commands
 
-# Lint
-pnpm lerna run lint --scope=@jsonforms/core
-
-# Test
-pnpm lerna run test --scope=@jsonforms/core
-```
-
-### Package Names
-
-- `@jsonforms/core` - Core utilities (UI-framework independent)
-- `@jsonforms/react`, `@jsonforms/angular`, `@jsonforms/vue` - Framework bindings
-- `@jsonforms/material-renderers`, `@jsonforms/vanilla-renderers` - React renderer sets
-- `@jsonforms/angular-material` - Angular renderer set
-- `@jsonforms/vue-vanilla`, `@jsonforms/vue-vuetify` - Vue renderer sets
-
-### Build Order Dependencies
-
-`core` → `react`/`angular`/`vue` → renderer packages.
-Lerna automatically respects the build order dependencies.
-
-## Running Example Applications for UI Testing
-
-Each renderer set has its own example application with a dev server. Before starting any dev server, you **must** first install dependencies and build all packages:
+pnpm 11 workspaces + Turborepo; Node >= 22.12. All packages are ESM-only, TypeScript strict.
 
 ```bash
-pnpm install                  # Install dependencies (run from repo root)
-pnpm run build                # Build all packages (required before dev servers work)
+pnpm install
+pnpm build        # turbo run build (topological, cached)
+pnpm dev          # watch libs (tsdown --watch) + demo dev server (vite)
+pnpm test         # vitest (turbo run test)
+pnpm typecheck    # tsc --noEmit per package
+pnpm lint         # eslint flat config at repo root
+pnpm format       # prettier
 ```
 
-All renderer sets share the same set of examples from `packages/examples/`.
+Single package: `pnpm --filter @jsonforms/core test`, `turbo run build --filter @jsonforms/react...`
 
-### Individual Dev Servers
+## Conventions
 
-Start dev servers from the **repo root** using `cd` into the package directory.
-Each renderer set example application can be started by executing `pnpm run dev`.
-
-### Combined Examples App (All Renderer Sets)
-
-The combined examples app aggregates all 5 renderer sets into a single static app at `packages/examples-app/dist/`.
-It has an index page with links to each renderer set's sub-app.
-
-**Full build (first time or after `clean`):**
-
-```bash
-pnpm install                          # Install dependencies
-pnpm run build                        # Build all packages (required first)
-pnpm run build:examples-app           # Build all example bundles + aggregate into dist
-```
-
-**Rebuild after code changes to a specific renderer set:**
-
-```bash
-# 1. Rebuild the changed package (and any dependencies that changed)
-pnpm lerna run build --scope=@jsonforms/material-renderers
-
-# 2. Rebuild only that renderer set's example bundle
-pnpm lerna run build:examples-app --scope=@jsonforms/material-renderers
-
-# 3. Re-aggregate into the combined app
-node packages/examples-app/prepare-examples-app.js
-```
-
-**Serving the combined app:**
-
-```bash
-# No built-in serve script exists - use any static file server:
-python3 -m http.server 9090 --directory packages/examples-app/dist
-```
+- Libraries build with `tsdown` (ESM + d.ts + sourcemaps into `dist/`); the demo uses Vite.
+- Tests live in `test/` per package, written with Vitest; React tests use jsdom +
+  Testing Library.
+- Prefer arrow functions; type-only imports must use `import type`
+  (`verbatimModuleSyntax` is on).
+- Releases via changesets (`pnpm changeset`); all packages versioned in lockstep.
+- Lint/format configs live only at the repo root (single flat ESLint config, single
+  Prettier config) — do not add per-package configs.

@@ -1,0 +1,7 @@
+{
+  "name": "@jsonforms/react-vanilla",
+  "version": "4.0.0-alpha.0",
+  "private": true,
+  "description": "Placeholder: Plain-HTML React renderer set (successor of vanilla-renderers) — will be rebuilt on the presentation-model architecture",
+  "license": "MIT"
+}

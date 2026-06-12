@@ -1,0 +1,63 @@
+{
+  "name": "@jsonforms/react-material",
+  "version": "4.0.0-alpha.0",
+  "description": "Material UI renderer set for JSON Forms (React)",
+  "license": "MIT",
+  "type": "module",
+  "homepage": "https://jsonforms.io",
+  "bugs": "https://github.com/eclipsesource/jsonforms/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eclipsesource/jsonforms.git",
+    "directory": "packages/react-material"
+  },
+  "keywords": [
+    "form",
+    "forms",
+    "json",
+    "json-schema",
+    "react",
+    "material-ui",
+    "mui"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "@jsonforms/core": "workspace:^",
+    "@jsonforms/react": "workspace:^",
+    "@mui/material": "^9.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@jsonforms/core": "workspace:*",
+    "@jsonforms/react": "workspace:*",
+    "@mui/material": "^9.1.1",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "tsdown": "^0.22.2",
+    "typescript": "^6.0.3"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

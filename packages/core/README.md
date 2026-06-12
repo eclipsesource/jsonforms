@@ -1,44 +1,16 @@
-# JSON Forms - More Forms. Less Code
+# @jsonforms/core
 
-_Complex forms in the blink of an eye_
+Framework-agnostic core of JSON Forms 4.x. Builds and maintains a **presentation model** —
+a serializable collection of nodes mirroring the rendered form, where every node carries
+everything a renderer needs (label, value, validation issues, constraints, …).
 
-JSON Forms eliminates the tedious task of writing fully-featured forms by hand by leveraging the capabilities of JSON, JSON Schema and Javascript.
+- `createFormEngine` — stateful runtime: owns data + model, processes serializable commands
+  (`set-value`, `touch`), notifies subscribers with node-granular deltas.
+- `SchemaSource` — abstracts the schema format; `jsonSchemaSource` is the JSON Schema
+  implementation.
+- `FormValidator` — abstracts validation; see `@jsonforms/validator-ajv` for the AJV
+  implementation. Core itself has **zero dependencies**.
+- `NodeProcessor` — cross-cutting customization hook applied to every node during builds.
+- Node testers (`rankWith`, `isStringControl`, …) — rank renderers against presentation nodes.
 
-## Core Package
-
-This is the JSON Forms core package. It provides the basic functionality needed to render forms.
-
-In order to use JSON Forms Core you need to decide which UI framework you would like to use.
-
-JSON Forms currently supports [React](https://github.com/eclipsesource/jsonforms/blob/master/packages/react), [Angular](https://github.com/eclipsesource/jsonforms/blob/master/packages/angular) and [Vue](https://github.com/eclipsesource/jsonforms/blob/master/packages/vue).
-
-The following seeds are available:
-
-- [React Seed](https://github.com/eclipsesource/jsonforms-react-seed)
-- [Angular Seed](https://github.com/eclipsesource/jsonforms-angular-seed)
-- [Vue Seed](https://github.com/eclipsesource/jsonforms-vue-seed)
-
-See the official [documentation](https://jsonforms.io/) for more information.
-
-Check <https://www.npmjs.com/search?q=%40jsonforms> for all published JSON Forms packages.
-
-## License
-
-The JSON Forms project is licensed under the MIT License. See the [LICENSE file](https://github.com/eclipsesource/jsonforms/blob/master/LICENSE) for more information.
-
-## Roadmap
-
-Our current roadmap is available [here](https://github.com/eclipsesource/jsonforms/blob/master/ROADMAP.md).
-
-## Feedback, Help and Support
-
-JSON Forms is developed by [EclipseSource](https://eclipsesource.com).
-
-If you encounter any problems feel free to [open an issue](https://github.com/eclipsesource/jsonforms/issues/new/choose) on the repo.
-For questions and discussions please use the [JSON Forms board](https://jsonforms.discourse.group).
-You can also reach us via [email](mailto:jsonforms@eclipsesource.com?subject=JSON%20Forms).
-In addition, EclipseSource also offers [professional support](https://jsonforms.io/support) for JSON Forms.
-
-## Migration
-
-See our [migration guide](https://github.com/eclipsesource/jsonforms/blob/master/MIGRATION.md) when updating JSON Forms.
+See `docs/presentation-model/architecture.html` in the repository root for the full design.

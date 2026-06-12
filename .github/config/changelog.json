@@ -1,6 +1,0 @@
-{
-  "sort": "DESC",
-  "pr_template": "- [${{LABELS}}] ${{TITLE}} (#${{NUMBER}})",
-  "template": "${{UNCATEGORIZED}}",
-  "ignore_labels": ["dependencies"]
-}
