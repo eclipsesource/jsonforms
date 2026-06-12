@@ -20,7 +20,7 @@ import Tabs from '@mui/material/Tabs';
 import TextField from '@mui/material/TextField';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import type { FormValidator } from '@jsonforms/core';
+import type { FormValidator, PresentationModel } from '@jsonforms/core';
 import { JsonForms } from '@jsonforms/react';
 import { materialRenderers } from '@jsonforms/react-material';
 import { allExamples, exampleGroups, findExample } from '@jsonforms/examples';
@@ -54,6 +54,7 @@ export const App = () => {
   const [rejectChangesPercent, setRejectChangesPercent] = useState(0);
   const [showIssuesOnTouch, setShowIssuesOnTouch] = useState(false);
   const [data, setData] = useState<unknown>(example.data);
+  const [model, setModel] = useState<PresentationModel | undefined>(undefined);
   const [tab, setTab] = useState(0);
 
   const validationSettings = useMemo<ValidationSettings>(
@@ -96,6 +97,10 @@ export const App = () => {
       content: example.uischema
         ? JSON.stringify(example.uischema, null, 2)
         : '// no UI schema — generated from the JSON Schema',
+    },
+    {
+      label: 'Presentation Model',
+      content: JSON.stringify(model, null, 2),
     },
   ];
 
@@ -298,7 +303,10 @@ export const App = () => {
                       }}
                       simulation={simulation}
                       renderers={materialRenderers}
-                      onChange={(event) => setData(event.data)}
+                      onChange={(event) => {
+                        setData(event.data);
+                        setModel(event.model);
+                      }}
                       fallback={
                         <Typography variant="body2">
                           Starting server engine…
@@ -314,7 +322,10 @@ export const App = () => {
                       validator={validatorResult.validator}
                       config={config}
                       renderers={materialRenderers}
-                      onChange={(event) => setData(event.data)}
+                      onChange={(event) => {
+                        setData(event.data);
+                        setModel(event.model);
+                      }}
                     />
                   )}
                 </CardContent>
@@ -323,6 +334,8 @@ export const App = () => {
                 <Tabs
                   value={tab}
                   onChange={(_event, value: number) => setTab(value)}
+                  variant="scrollable"
+                  scrollButtons="auto"
                 >
                   {panels.map((panel) => (
                     <Tab key={panel.label} label={panel.label} />
