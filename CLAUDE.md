@@ -23,8 +23,17 @@ HOC prop chains, AJV-in-state) or compatibility shims.
   `useControlDispatch` (node-scoped commands with provenance; `useFormDispatch` is the
   low-level fallback).
 - `@jsonforms/react-material`: Material UI v9 renderers — thin views over nodes only.
-- `apps/demo`: Vite demo app.
-- Other packages (`angular*`, `vue*`, `react-vanilla`) are placeholders for later phases.
+- `@jsonforms/react-vanilla`: plain-HTML renderers (`jf-` class names, no styling) — same
+  thin-view rules.
+- `@jsonforms/examples`: shared example definitions (schema + uischema + data), grouped by
+  schema format (`src/json-schema/` now; other formats become sibling groups). All demo apps
+  render these examples.
+- `apps/demo-react-material` (port 5173), `apps/demo-react-vanilla` (port 5174): per-renderer-
+  set Vite demo apps with an example selector. `apps/demo-all` aggregates all demo apps:
+  its `build.js` builds each sub-app with `--base=/<id>/` into `dist/<id>/` behind a landing
+  page, and its `dev.js` mounts each sub-app as Vite dev-server middleware on one port
+  (5170) — new renderer sets are added in `build.js`, `dev.js`, and `index.html`.
+- Other packages (`angular*`, `vue*`) are placeholders for later phases.
 
 ## Hard design rules
 
@@ -44,7 +53,8 @@ pnpm 11 workspaces + Turborepo; Node >= 22.12. All packages are ESM-only, TypeSc
 ```bash
 pnpm install
 pnpm build        # turbo run build (topological, cached)
-pnpm dev          # watch libs (tsdown --watch) + demo dev server (vite)
+pnpm dev          # combined demo app (demo-all) on :5170; libs aliased to src — no watchers
+pnpm dev:react-material / pnpm dev:react-vanilla   # a single demo app (:5173 / :5174)
 pnpm test         # vitest (turbo run test)
 pnpm typecheck    # tsc --noEmit per package
 pnpm lint         # eslint flat config at repo root
@@ -55,7 +65,10 @@ Single package: `pnpm --filter @jsonforms/core test`, `turbo run build --filter 
 
 ## Conventions
 
-- Libraries build with `tsdown` (ESM + d.ts + sourcemaps into `dist/`); the demo uses Vite.
+- Libraries build with `tsdown` (ESM + d.ts + sourcemaps into `dist/`) and have no watch
+  scripts: the demo apps alias `@jsonforms/*` to the package `src/` entry points during dev
+  (see their `vite.config.ts`), so library edits hot-reload instantly. Builds and tests
+  resolve `dist/` like external consumers.
 - Tests live in `test/` per package, written with Vitest; React tests use jsdom +
   Testing Library.
 - Prefer arrow functions; type-only imports must use `import type`

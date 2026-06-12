@@ -1,7 +1,56 @@
 {
   "name": "@jsonforms/react-vanilla",
   "version": "4.0.0-alpha.0",
-  "private": true,
-  "description": "Placeholder: Plain-HTML React renderer set (successor of vanilla-renderers) — will be rebuilt on the presentation-model architecture",
-  "license": "MIT"
+  "description": "Plain-HTML renderer set for JSON Forms (React)",
+  "license": "MIT",
+  "type": "module",
+  "homepage": "https://jsonforms.io",
+  "bugs": "https://github.com/eclipsesource/jsonforms/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eclipsesource/jsonforms.git",
+    "directory": "packages/react-vanilla"
+  },
+  "keywords": [
+    "form",
+    "forms",
+    "json",
+    "json-schema",
+    "react",
+    "html"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsdown",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "@jsonforms/core": "workspace:^",
+    "@jsonforms/react": "workspace:^",
+    "react": "^19.0.0"
+  },
+  "devDependencies": {
+    "@jsonforms/core": "workspace:*",
+    "@jsonforms/react": "workspace:*",
+    "@types/react": "^19.2.17",
+    "react": "^19.2.7",
+    "tsdown": "^0.22.2",
+    "typescript": "^6.0.3"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
 }

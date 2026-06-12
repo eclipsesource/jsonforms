@@ -1,0 +1,34 @@
+{
+  "name": "@jsonforms/demo-react-vanilla",
+  "version": "4.0.0-alpha.0",
+  "private": true,
+  "description": "Plain-HTML demo application for the JSON Forms 4.x presentation-model MVP",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@jsonforms/core": "workspace:*",
+    "@jsonforms/examples": "workspace:*",
+    "@jsonforms/react": "workspace:*",
+    "@jsonforms/react-vanilla": "workspace:*",
+    "@jsonforms/validator-ajv": "workspace:*",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.2",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.2",
+    "typescript": "^6.0.3",
+    "vite": "^8.0.16"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}

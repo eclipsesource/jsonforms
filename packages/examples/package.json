@@ -1,7 +1,7 @@
 {
-  "name": "@jsonforms/react-material",
+  "name": "@jsonforms/examples",
   "version": "4.0.0-alpha.0",
-  "description": "Material UI renderer set for JSON Forms (React)",
+  "description": "Shared example forms for the JSON Forms demo applications",
   "license": "MIT",
   "type": "module",
   "homepage": "https://jsonforms.io",
@@ -9,16 +9,14 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/eclipsesource/jsonforms.git",
-    "directory": "packages/react-material"
+    "directory": "packages/examples"
   },
   "keywords": [
     "form",
     "forms",
     "json",
     "json-schema",
-    "react",
-    "material-ui",
-    "mui"
+    "examples"
   ],
   "exports": {
     ".": {
@@ -33,25 +31,19 @@
   "sideEffects": false,
   "scripts": {
     "build": "tsdown",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
-    "@jsonforms/core": "workspace:^",
-    "@jsonforms/react": "workspace:^",
-    "@mui/material": "^9.0.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "@jsonforms/core": "workspace:^"
   },
   "devDependencies": {
     "@jsonforms/core": "workspace:*",
-    "@jsonforms/react": "workspace:*",
-    "@mui/material": "^9.1.1",
-    "@types/react": "^19.2.17",
-    "@types/react-dom": "^19.2.3",
-    "react": "^19.2.7",
-    "react-dom": "^19.2.7",
+    "@jsonforms/validator-ajv": "workspace:*",
     "tsdown": "^0.22.2",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.8"
   },
   "engines": {
     "node": ">=22.12.0"

@@ -1,0 +1,24 @@
+{
+  "name": "@jsonforms/demo-all",
+  "version": "4.0.0-alpha.0",
+  "private": true,
+  "description": "Combined static app aggregating all renderer-set demo applications",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "node build.js",
+    "dev": "node dev.js",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@jsonforms/demo-react-material": "workspace:*",
+    "@jsonforms/demo-react-vanilla": "workspace:*",
+    "@types/node": "^24.13.2",
+    "typescript": "^6.0.3",
+    "vite": "^8.0.16"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}

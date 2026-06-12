@@ -1,0 +1,165 @@
+/* App chrome */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #f6f8fa;
+  color: #1f2328;
+  font:
+    15px/1.5 system-ui,
+    sans-serif;
+}
+
+.app-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.75rem 1.5rem;
+  background: #1f2937;
+  color: #fff;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.app-subtitle {
+  opacity: 0.75;
+  font-size: 0.85rem;
+}
+
+.app-example-select {
+  margin-left: auto;
+  font-size: 0.85rem;
+}
+
+.app-example-select select {
+  margin-left: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  font: inherit;
+}
+
+.app-main {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 1.5rem;
+  align-items: start;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+@media (max-width: 800px) {
+  .app-main {
+    grid-template-columns: 1fr;
+  }
+}
+
+.app-panel {
+  background: #fff;
+  border: 1px solid #d1d9e0;
+  border-radius: 8px;
+  padding: 1.25rem;
+}
+
+.app-panel h2 {
+  margin: 0 0 0.25rem;
+  font-size: 1.1rem;
+}
+
+.app-description {
+  margin: 0 0 1.25rem;
+  color: #59636e;
+  font-size: 0.85rem;
+}
+
+.app-tabs {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 0.75rem;
+  border-bottom: 1px solid #d1d9e0;
+}
+
+.app-tab {
+  border: none;
+  background: none;
+  padding: 0.4rem 0.8rem;
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+
+.app-tab--active {
+  border-bottom-color: #1565c0;
+  color: #1565c0;
+  font-weight: 600;
+}
+
+.app-json {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  overflow: auto;
+}
+
+/* Styling for the @jsonforms/react-vanilla class names */
+
+.jf-control {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.jf-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.jf-label--checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 400;
+}
+
+.jf-required {
+  color: #c62828;
+}
+
+.jf-input {
+  padding: 0.45rem 0.6rem;
+  border: 1px solid #d1d9e0;
+  border-radius: 6px;
+  font: inherit;
+  width: 100%;
+}
+
+.jf-input:focus {
+  outline: 2px solid #1565c0;
+  outline-offset: -1px;
+}
+
+.jf-input:disabled {
+  background: #f6f8fa;
+  color: #59636e;
+}
+
+.jf-control--invalid .jf-input {
+  border-color: #c62828;
+}
+
+.jf-description,
+.jf-issues {
+  margin: 0;
+  font-size: 0.75rem;
+  color: #59636e;
+}
+
+.jf-issues {
+  color: #c62828;
+}

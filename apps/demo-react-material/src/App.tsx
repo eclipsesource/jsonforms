@@ -1,0 +1,128 @@
+import { useMemo, useState } from 'react';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Container from '@mui/material/Container';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import ListSubheader from '@mui/material/ListSubheader';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import Stack from '@mui/material/Stack';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import { JsonForms } from '@jsonforms/react';
+import { materialRenderers } from '@jsonforms/react-material';
+import { ajvValidator } from '@jsonforms/validator-ajv';
+import { allExamples, exampleGroups, findExample } from '@jsonforms/examples';
+
+const firstExample = allExamples[0];
+if (firstExample === undefined) {
+  throw new Error('No examples available.');
+}
+
+export const App = () => {
+  const [exampleId, setExampleId] = useState(firstExample.id);
+  const example = findExample(exampleId) ?? firstExample;
+  const [data, setData] = useState<unknown>(example.data);
+  const [tab, setTab] = useState(0);
+  const validator = useMemo(() => ajvValidator(example.schema), [example]);
+
+  const panels = [
+    { label: 'Data', content: JSON.stringify(data, null, 2) },
+    { label: 'JSON Schema', content: JSON.stringify(example.schema, null, 2) },
+    {
+      label: 'UI Schema',
+      content: example.uischema
+        ? JSON.stringify(example.uischema, null, 2)
+        : '// no UI schema — generated from the JSON Schema',
+    },
+  ];
+
+  return (
+    <>
+      <AppBar position="static" elevation={0}>
+        <Toolbar>
+          <Typography variant="h6">JSON Forms 4</Typography>
+          <Typography variant="body2" sx={{ ml: 2, opacity: 0.75 }}>
+            React Material renderer set
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Stack spacing={3}>
+          <FormControl size="small" sx={{ maxWidth: 360 }}>
+            <InputLabel id="example-select-label">Example</InputLabel>
+            <Select
+              labelId="example-select-label"
+              label="Example"
+              value={exampleId}
+              onChange={(event) => setExampleId(event.target.value)}
+            >
+              {exampleGroups.flatMap((group) => [
+                <ListSubheader key={group.id}>{group.title}</ListSubheader>,
+                ...group.examples.map((item) => (
+                  <MenuItem key={item.id} value={item.id}>
+                    {item.title}
+                  </MenuItem>
+                )),
+              ])}
+            </Select>
+          </FormControl>
+          <Stack
+            direction={{ xs: 'column', md: 'row' }}
+            spacing={3}
+            sx={{ alignItems: 'flex-start' }}
+          >
+            <Card variant="outlined" sx={{ flex: 3, width: '100%' }}>
+              <CardContent>
+                <Typography variant="h6" gutterBottom>
+                  {example.title}
+                </Typography>
+                {example.description !== undefined && (
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{ mb: 2 }}
+                  >
+                    {example.description}
+                  </Typography>
+                )}
+                <JsonForms
+                  key={example.id}
+                  schema={example.schema}
+                  uischema={example.uischema}
+                  data={example.data}
+                  validator={validator}
+                  renderers={materialRenderers}
+                  onChange={(event) => setData(event.data)}
+                />
+              </CardContent>
+            </Card>
+            <Card variant="outlined" sx={{ flex: 2, width: '100%' }}>
+              <Tabs
+                value={tab}
+                onChange={(_event, value: number) => setTab(value)}
+              >
+                {panels.map((panel) => (
+                  <Tab key={panel.label} label={panel.label} />
+                ))}
+              </Tabs>
+              <CardContent>
+                <Box
+                  component="pre"
+                  sx={{ m: 0, fontSize: 13, lineHeight: 1.5, overflow: 'auto' }}
+                >
+                  {panels[tab]?.content}
+                </Box>
+              </CardContent>
+            </Card>
+          </Stack>
+        </Stack>
+      </Container>
+    </>
+  );
+};

@@ -11,7 +11,9 @@
   },
   "scripts": {
     "build": "turbo run build",
-    "dev": "turbo run dev",
+    "dev": "turbo run dev --filter=@jsonforms/demo-all",
+    "dev:react-material": "turbo run dev --filter=@jsonforms/demo-react-material",
+    "dev:react-vanilla": "turbo run dev --filter=@jsonforms/demo-react-vanilla",
     "test": "turbo run test",
     "typecheck": "turbo run typecheck",
     "lint": "eslint .",

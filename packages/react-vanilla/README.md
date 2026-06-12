@@ -1,8 +1,29 @@
 # @jsonforms/react-vanilla
 
-> **Placeholder.** JSON Forms 4.x is a ground-up rewrite around the presentation-model
-> architecture ([#2571](https://github.com/eclipsesource/jsonforms/issues/2571)).
->
-> Plain-HTML React renderer set (successor of vanilla-renderers) will be re-implemented on top of `@jsonforms/core` once the React MVP
-> has stabilized. See `docs/presentation-model/architecture.html` for the architecture
-> design and roadmap.
+Plain-HTML renderer set for JSON Forms 4.x (React) — the successor of the 3.x
+`@jsonforms/vanilla-renderers` package.
+
+Renderers emit semantic HTML with `jf-` prefixed class names and ship **no styling**
+(except the flex direction of layouts). Style them from your application:
+
+```css
+.jf-control { … }
+.jf-label { … }
+.jf-input { … }
+.jf-control--invalid .jf-input { border-color: red; }
+.jf-issues { color: red; }
+```
+
+MVP scope: vertical/horizontal layouts, string, number/integer, and boolean controls.
+
+```tsx
+import { JsonForms } from '@jsonforms/react';
+import { vanillaRenderers } from '@jsonforms/react-vanilla';
+
+<JsonForms
+  schema={schema}
+  uischema={uischema}
+  data={data}
+  renderers={vanillaRenderers}
+/>;
+```

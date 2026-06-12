@@ -1,8 +1,8 @@
 {
-  "name": "@jsonforms/demo",
+  "name": "@jsonforms/demo-react-material",
   "version": "4.0.0-alpha.0",
   "private": true,
-  "description": "Demo application for the JSON Forms 4.x presentation-model MVP",
+  "description": "Material UI demo application for the JSON Forms 4.x presentation-model MVP",
   "license": "MIT",
   "type": "module",
   "scripts": {
@@ -15,6 +15,7 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@jsonforms/core": "workspace:*",
+    "@jsonforms/examples": "workspace:*",
     "@jsonforms/react": "workspace:*",
     "@jsonforms/react-material": "workspace:*",
     "@jsonforms/validator-ajv": "workspace:*",
@@ -23,6 +24,7 @@
     "react-dom": "^19.2.7"
   },
   "devDependencies": {
+    "@types/node": "^24.13.2",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.2",
