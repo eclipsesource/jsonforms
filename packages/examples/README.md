@@ -14,5 +14,10 @@ Examples are grouped by **schema format**:
 import { exampleGroups, allExamples, findExample } from '@jsonforms/examples';
 ```
 
-Each example is plain data (`JsonSchemaExample`); the package has no runtime dependencies.
+Examples are **pure data** (`JsonSchemaExample`): schema, optional UI schema, and data.
+Orthogonal topics — which validator runs, server-side building, etc. — deliberately do not
+leak into them; the demo apps offer those as separate selectors (see
+`@jsonforms/demo-validators`). A schema's dialect is part of the data via its standard
+`$schema` declaration.
+
 A test guards that every example builds a presentation model without configuration issues.

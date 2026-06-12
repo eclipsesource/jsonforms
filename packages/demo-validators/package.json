@@ -1,0 +1,33 @@
+{
+  "name": "@jsonforms/demo-validators",
+  "version": "4.0.0-alpha.0",
+  "private": true,
+  "description": "Selectable validators for the JSON Forms demo applications — an axis orthogonal to the example data",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsdown",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@jsonforms/core": "workspace:*",
+    "@jsonforms/validator-ajv": "workspace:*"
+  },
+  "devDependencies": {
+    "tsdown": "^0.22.2",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.8"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}

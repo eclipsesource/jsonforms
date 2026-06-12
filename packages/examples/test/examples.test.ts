@@ -1,11 +1,20 @@
 import { describe, expect, test } from 'vitest';
+import type { FormValidator } from '@jsonforms/core';
 import {
   createFormEngine,
   isControlNode,
   jsonSchemaSource,
 } from '@jsonforms/core';
-import { ajvValidator } from '@jsonforms/validator-ajv';
+import { ajvValidator as draft07Validator } from '@jsonforms/validator-ajv/draft-07';
+import { ajvValidator as draft2020Validator } from '@jsonforms/validator-ajv/draft-2020';
+import type { JsonSchemaExample } from '../src';
 import { allExamples } from '../src';
+
+const validatorFor = (example: JsonSchemaExample): FormValidator =>
+  typeof example.schema.$schema === 'string' &&
+  example.schema.$schema.includes('2020-12')
+    ? draft2020Validator(example.schema)
+    : draft07Validator(example.schema);
 
 describe('examples', () => {
   test('example ids are unique', () => {
@@ -19,7 +28,7 @@ describe('examples', () => {
         schemaSource: jsonSchemaSource(example.schema),
         uischema: example.uischema,
         data: example.data,
-        validator: ajvValidator(example.schema),
+        validator: validatorFor(example),
       });
       const nodes = Object.values(engine.getModel().nodes);
       expect(nodes.length).toBeGreaterThan(1);

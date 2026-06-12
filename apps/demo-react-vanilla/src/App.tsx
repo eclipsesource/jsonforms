@@ -1,8 +1,13 @@
 import { useMemo, useState } from 'react';
 import { JsonForms } from '@jsonforms/react';
 import { vanillaRenderers } from '@jsonforms/react-vanilla';
-import { ajvValidator } from '@jsonforms/validator-ajv';
 import { allExamples, exampleGroups, findExample } from '@jsonforms/examples';
+import type { ValidationChoice } from '@jsonforms/demo-validators';
+import {
+  createValidator,
+  describeValidator,
+  validationChoices,
+} from '@jsonforms/demo-validators';
 
 const firstExample = allExamples[0];
 if (firstExample === undefined) {
@@ -12,9 +17,13 @@ if (firstExample === undefined) {
 export const App = () => {
   const [exampleId, setExampleId] = useState(firstExample.id);
   const example = findExample(exampleId) ?? firstExample;
+  const [validation, setValidation] = useState<ValidationChoice>('ajv');
   const [data, setData] = useState<unknown>(example.data);
   const [tab, setTab] = useState(0);
-  const validator = useMemo(() => ajvValidator(example.schema), [example]);
+  const validator = useMemo(
+    () => createValidator(validation, example.schema),
+    [validation, example],
+  );
 
   const panels = [
     { label: 'Data', content: JSON.stringify(data, null, 2) },
@@ -49,6 +58,21 @@ export const App = () => {
             ))}
           </select>
         </label>
+        <label className="app-select">
+          Validation{' '}
+          <select
+            value={validation}
+            onChange={(event) =>
+              setValidation(event.target.value as ValidationChoice)
+            }
+          >
+            {validationChoices.map((choice) => (
+              <option key={choice.id} value={choice.id}>
+                {choice.label}
+              </option>
+            ))}
+          </select>
+        </label>
       </header>
       <main className="app-main">
         <section className="app-panel app-panel--form">
@@ -56,8 +80,11 @@ export const App = () => {
           {example.description !== undefined && (
             <p className="app-description">{example.description}</p>
           )}
+          <p className="app-validator">
+            Validation: {describeValidator(validation, example.schema)}
+          </p>
           <JsonForms
-            key={example.id}
+            key={`${example.id}:${validation}`}
             schema={example.schema}
             uischema={example.uischema}
             data={example.data}

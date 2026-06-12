@@ -1,6 +1,6 @@
 import type { JsonSchema, UISchemaElement } from '@jsonforms/core';
 
-/** An example form defined by a JSON Schema. */
+/** An example form defined by a JSON Schema. Examples are pure data. */
 export interface JsonSchemaExample {
   id: string;
   title: string;

@@ -15,10 +15,10 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@jsonforms/core": "workspace:*",
+    "@jsonforms/demo-validators": "workspace:*",
     "@jsonforms/examples": "workspace:*",
     "@jsonforms/react": "workspace:*",
     "@jsonforms/react-material": "workspace:*",
-    "@jsonforms/validator-ajv": "workspace:*",
     "@mui/material": "^9.1.1",
     "react": "^19.2.7",
     "react-dom": "^19.2.7"

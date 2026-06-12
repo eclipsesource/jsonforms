@@ -1,58 +1,34 @@
-import Ajv, { type ErrorObject, type Options } from 'ajv';
-import addFormats from 'ajv-formats';
-import type { FormValidator, ValidationIssue } from '@jsonforms/core';
-import { escapePointerSegment } from '@jsonforms/core';
+import type Ajv from 'ajv/dist/core';
+import type { ValidateFunction } from 'ajv/dist/core';
+import type { FormValidator } from '@jsonforms/core';
+import { ajvErrorsToIssues } from './issues';
 
-/** Creates an AJV instance configured for form validation. */
-export const createAjv = (options?: Options): Ajv => {
-  const ajv = new Ajv({
-    allErrors: true,
-    strict: false,
-    ...options,
-  });
-  addFormats(ajv);
-  return ajv;
-};
-
-export interface AjvValidatorOptions {
-  /** Custom AJV instance; a default one is created when omitted. */
-  ajv?: Ajv;
-}
+export * from './issues';
+export * from './options';
 
 /**
- * Creates a {@link FormValidator} that validates against `schema` using AJV.
- * AJV errors are mapped to {@link ValidationIssue}s addressed by JSON Pointer;
- * `required` errors are mapped onto the missing property itself.
+ * Creates a {@link FormValidator} validating against `schema` with the given
+ * AJV instance — any AJV build (draft-07, 2019-09, 2020-12, …) and any custom
+ * configuration.
+ *
+ * This entry point imports AJV **types only**: nothing of AJV ends up in your
+ * bundle beyond the instance you pass in. For batteries-included setups, use
+ * the per-draft subpath entries (`@jsonforms/validator-ajv/draft-07`,
+ * `…/draft-2019`, `…/draft-2020`) — each bundles exactly one AJV build.
  */
-export const ajvValidator = (
-  schema: object,
-  options: AjvValidatorOptions = {},
-): FormValidator => {
-  const ajv = options.ajv ?? createAjv();
-  const validateFn = ajv.compile(schema);
-  return {
-    validate: (data) => {
-      validateFn(data);
-      return (validateFn.errors ?? []).map(toIssue);
-    },
-  };
-};
+export const ajvValidator = (schema: object, ajv: Ajv): FormValidator =>
+  compiledAjvValidator(ajv.compile(schema));
 
-const toIssue = (error: ErrorObject): ValidationIssue => ({
-  path: issuePath(error),
-  severity: 'error',
-  key: error.keyword,
-  message: issueMessage(error),
+/**
+ * Wraps an already compiled AJV validate function as a {@link FormValidator} —
+ * e.g. one precompiled with AJV's standalone code generation for CSP
+ * environments without `unsafe-eval`. Involves no runtime AJV import at all.
+ */
+export const compiledAjvValidator = (
+  validateFn: ValidateFunction,
+): FormValidator => ({
+  validate: (data) => {
+    validateFn(data);
+    return ajvErrorsToIssues(validateFn.errors ?? []);
+  },
 });
-
-const issuePath = (error: ErrorObject): string =>
-  error.keyword === 'required'
-    ? `${error.instancePath}/${escapePointerSegment(
-        (error.params as { missingProperty: string }).missingProperty,
-      )}`
-    : error.instancePath;
-
-const issueMessage = (error: ErrorObject): string =>
-  error.keyword === 'required'
-    ? 'is required'
-    : (error.message ?? 'is invalid');

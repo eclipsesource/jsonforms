@@ -17,7 +17,11 @@ HOC prop chains, AJV-in-state) or compatibility shims.
   default: show once touched), `NodeProcessor`s. Testers rank renderers against **nodes**,
   never against schemas. Boolean node flags (`hidden`, `disabled`, `required`, `readonly`,
   `touched`) are optional and default-false. Commands may carry `sourceNodeId` provenance.
-- `@jsonforms/validator-ajv`: AJV-backed `FormValidator`. Core must never depend on AJV.
+- `@jsonforms/validator-ajv`: AJV-backed `FormValidator`s. Core must never depend on AJV.
+  Bundle hygiene is a hard rule here: the base entry takes a caller-supplied AJV instance
+  and imports AJV types only (plus `compiledAjvValidator` for precompiled/no-eval setups);
+  per-draft presets live in subpath exports (`/draft-07`, `/draft-2019`, `/draft-2020`) so
+  consumers bundle exactly one AJV build. Never add a runtime AJV import to the base entry.
 - `@jsonforms/react`: React 19 binding — `<JsonForms>`, `useNode`/`useControlNode` (via
   `useSyncExternalStore`, node-granular subscriptions), `NodeDispatch`, and
   `useControlDispatch` (node-scoped commands with provenance; `useFormDispatch` is the
@@ -27,7 +31,11 @@ HOC prop chains, AJV-in-state) or compatibility shims.
   thin-view rules.
 - `@jsonforms/examples`: shared example definitions (schema + uischema + data), grouped by
   schema format (`src/json-schema/` now; other formats become sibling groups). All demo apps
-  render these examples.
+  render these examples. Examples are **pure data** — orthogonal topics (validation, SSR, …)
+  must not leak into them; a schema's dialect is data via its standard `$schema` field.
+- `@jsonforms/demo-validators` (private): the demo apps' selectable validation axis,
+  orthogonal to the examples — AJV (build picked from the schema's `$schema` dialect),
+  async-wrapped AJV (simulated server), a handwritten dependency-free validator, none.
 - `apps/demo-react-material` (port 5173), `apps/demo-react-vanilla` (port 5174): per-renderer-
   set Vite demo apps with an example selector. `apps/demo-all` aggregates all demo apps:
   its `build.js` builds each sub-app with `--base=/<id>/` into `dist/<id>/` behind a landing

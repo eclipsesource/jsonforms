@@ -112,7 +112,11 @@ ESM-only, React 19, MUI v9). Decisions taken since this document was first writt
     <code>react-material</code>, <code>vanilla-renderers</code> → <code>react-vanilla</code>;
     the example packages are replaced by <code>apps/demo</code>.</li>
   <li><strong>New package <code>@jsonforms/validator-ajv</code>:</strong> core has zero
-    dependencies; AJV ships as a separate <code>FormValidator</code> implementation.</li>
+    dependencies; AJV ships as a separate <code>FormValidator</code> implementation. Its base
+    entry takes a caller-supplied AJV instance (types-only import; includes a
+    precompiled-validator wrapper for no-eval environments), while per-draft presets live in
+    subpath exports (<code>/draft-07</code>, <code>/draft-2019</code>, <code>/draft-2020</code>)
+    so consumers bundle exactly one AJV build.</li>
   <li><strong>Issue display is a builder policy</strong> (<code>IssueDisplayPolicy</code>,
     default: show once touched) — renderers display <code>node.issues</code> unconditionally
     instead of combining interaction state themselves.</li>

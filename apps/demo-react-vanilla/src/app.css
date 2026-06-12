@@ -34,10 +34,15 @@ body {
 
 .app-example-select {
   margin-left: auto;
+}
+
+.app-example-select,
+.app-select {
   font-size: 0.85rem;
 }
 
-.app-example-select select {
+.app-example-select select,
+.app-select select {
   margin-left: 0.5rem;
   padding: 0.25rem 0.5rem;
   font: inherit;
@@ -72,9 +77,15 @@ body {
 }
 
 .app-description {
-  margin: 0 0 1.25rem;
+  margin: 0 0 0.25rem;
   color: #59636e;
   font-size: 0.85rem;
+}
+
+.app-validator {
+  margin: 0 0 1.25rem;
+  color: #1565c0;
+  font-size: 0.75rem;
 }
 
 .app-tabs {

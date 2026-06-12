@@ -1,12 +1,7 @@
 import { defineConfig } from 'tsdown';
 
 export default defineConfig({
-  entry: [
-    'src/index.ts',
-    'src/draft-07.ts',
-    'src/draft-2019.ts',
-    'src/draft-2020.ts',
-  ],
+  entry: ['src/index.ts'],
   format: 'esm',
   platform: 'neutral',
   dts: true,

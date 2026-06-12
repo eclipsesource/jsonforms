@@ -26,8 +26,24 @@ const sourceAliases = [
     replacement: workspaceSource('../../packages/validator-ajv/src/index.ts'),
   },
   {
+    find: /^@jsonforms\/validator-ajv\/draft-07$/,
+    replacement: workspaceSource(
+      '../../packages/validator-ajv/src/draft-07.ts',
+    ),
+  },
+  {
+    find: /^@jsonforms\/validator-ajv\/draft-2020$/,
+    replacement: workspaceSource(
+      '../../packages/validator-ajv/src/draft-2020.ts',
+    ),
+  },
+  {
     find: /^@jsonforms\/examples$/,
     replacement: workspaceSource('../../packages/examples/src/index.ts'),
+  },
+  {
+    find: /^@jsonforms\/demo-validators$/,
+    replacement: workspaceSource('../../packages/demo-validators/src/index.ts'),
   },
 ];
 

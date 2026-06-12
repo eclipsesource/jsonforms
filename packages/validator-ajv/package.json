@@ -24,6 +24,18 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
+    "./draft-07": {
+      "types": "./dist/draft-07.d.ts",
+      "default": "./dist/draft-07.js"
+    },
+    "./draft-2019": {
+      "types": "./dist/draft-2019.d.ts",
+      "default": "./dist/draft-2019.js"
+    },
+    "./draft-2020": {
+      "types": "./dist/draft-2020.d.ts",
+      "default": "./dist/draft-2020.js"
+    },
     "./package.json": "./package.json"
   },
   "files": [
