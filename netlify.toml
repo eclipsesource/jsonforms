@@ -1,0 +1,14 @@
+# Netlify configuration for the JSON Forms 4 demo (jsonforms-4-demo.netlify.app).
+# Builds all packages and the combined demo app (landing page + every
+# renderer-set demo) via Turborepo; the aggregated output of
+# @jsonforms/demo-all is published.
+#
+# The pnpm version is taken from the "packageManager" field in package.json
+# (corepack).
+
+[build]
+  command = "pnpm build"
+  publish = "apps/demo-all/dist"
+
+[build.environment]
+  NODE_VERSION = "22"

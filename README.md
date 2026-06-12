@@ -86,7 +86,8 @@ exactly like an external consumer.
 ### Combined demo app
 
 Aggregates every renderer-set demo into one app with a landing page for selecting the
-renderer set (Vue, Angular, … join later as further sub-apps). `pnpm dev` serves it in dev
+renderer set (Vue, Angular, … join later as further sub-apps). It is deployed at
+<https://jsonforms-4-demo.netlify.app> (see `netlify.toml`). `pnpm dev` serves it in dev
 mode — every demo app mounted as Vite middleware on a single port, with HMR. The static
 production build:
 
