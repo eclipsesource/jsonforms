@@ -17,12 +17,15 @@ import Typography from '@mui/material/Typography';
 import { JsonForms } from '@jsonforms/react';
 import { materialRenderers } from '@jsonforms/react-material';
 import { allExamples, exampleGroups, findExample } from '@jsonforms/examples';
-import type { ValidationChoice } from '@jsonforms/demo-validators';
+import type { EngineChoice, ValidationChoice } from '@jsonforms/demo-shared';
 import {
   createValidator,
+  describeEngine,
   describeValidator,
+  engineChoices,
   validationChoices,
-} from '@jsonforms/demo-validators';
+} from '@jsonforms/demo-shared';
+import { RemoteEngineForm } from './RemoteEngineForm';
 
 const firstExample = allExamples[0];
 if (firstExample === undefined) {
@@ -33,6 +36,7 @@ export const App = () => {
   const [exampleId, setExampleId] = useState(firstExample.id);
   const example = findExample(exampleId) ?? firstExample;
   const [validation, setValidation] = useState<ValidationChoice>('ajv');
+  const [engineChoice, setEngineChoice] = useState<EngineChoice>('local');
   const [data, setData] = useState<unknown>(example.data);
   const [tab, setTab] = useState(0);
   const validator = useMemo(
@@ -40,6 +44,7 @@ export const App = () => {
     [validation, example],
   );
 
+  const formKey = `${example.id}:${validation}:${engineChoice}`;
   const panels = [
     { label: 'Data', content: JSON.stringify(data, null, 2) },
     { label: 'JSON Schema', content: JSON.stringify(example.schema, null, 2) },
@@ -64,7 +69,7 @@ export const App = () => {
       <Container maxWidth="lg" sx={{ py: 4 }}>
         <Stack spacing={3}>
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-            <FormControl size="small" sx={{ minWidth: 280 }}>
+            <FormControl size="small" sx={{ minWidth: 240 }}>
               <InputLabel id="example-select-label">Example</InputLabel>
               <Select
                 labelId="example-select-label"
@@ -82,7 +87,7 @@ export const App = () => {
                 ])}
               </Select>
             </FormControl>
-            <FormControl size="small" sx={{ minWidth: 280 }}>
+            <FormControl size="small" sx={{ minWidth: 240 }}>
               <InputLabel id="validation-select-label">Validation</InputLabel>
               <Select
                 labelId="validation-select-label"
@@ -93,6 +98,23 @@ export const App = () => {
                 }
               >
                 {validationChoices.map((choice) => (
+                  <MenuItem key={choice.id} value={choice.id}>
+                    {choice.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <FormControl size="small" sx={{ minWidth: 240 }}>
+              <InputLabel id="engine-select-label">Engine</InputLabel>
+              <Select
+                labelId="engine-select-label"
+                label="Engine"
+                value={engineChoice}
+                onChange={(event) =>
+                  setEngineChoice(event.target.value as EngineChoice)
+                }
+              >
+                {engineChoices.map((choice) => (
                   <MenuItem key={choice.id} value={choice.id}>
                     {choice.label}
                   </MenuItem>
@@ -122,19 +144,45 @@ export const App = () => {
                 <Typography
                   variant="caption"
                   color="primary"
-                  sx={{ display: 'block', mb: 2 }}
+                  sx={{ display: 'block' }}
                 >
                   Validation: {describeValidator(validation, example.schema)}
                 </Typography>
-                <JsonForms
-                  key={`${example.id}:${validation}`}
-                  schema={example.schema}
-                  uischema={example.uischema}
-                  data={example.data}
-                  validator={validator}
-                  renderers={materialRenderers}
-                  onChange={(event) => setData(event.data)}
-                />
+                <Typography
+                  variant="caption"
+                  color="primary"
+                  sx={{ display: 'block', mb: 2 }}
+                >
+                  Engine: {describeEngine(engineChoice)}
+                </Typography>
+                {engineChoice === 'worker' ? (
+                  <RemoteEngineForm
+                    key={formKey}
+                    inputs={{
+                      schema: example.schema,
+                      uischema: example.uischema,
+                      data: example.data,
+                      validation,
+                    }}
+                    renderers={materialRenderers}
+                    onChange={(event) => setData(event.data)}
+                    fallback={
+                      <Typography variant="body2">
+                        Starting server engine…
+                      </Typography>
+                    }
+                  />
+                ) : (
+                  <JsonForms
+                    key={formKey}
+                    schema={example.schema}
+                    uischema={example.uischema}
+                    data={example.data}
+                    validator={validator}
+                    renderers={materialRenderers}
+                    onChange={(event) => setData(event.data)}
+                  />
+                )}
               </CardContent>
             </Card>
             <Card variant="outlined" sx={{ flex: 2, width: '100%' }}>

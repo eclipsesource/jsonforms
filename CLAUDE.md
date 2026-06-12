@@ -33,9 +33,13 @@ HOC prop chains, AJV-in-state) or compatibility shims.
   schema format (`src/json-schema/` now; other formats become sibling groups). All demo apps
   render these examples. Examples are **pure data** — orthogonal topics (validation, SSR, …)
   must not leak into them; a schema's dialect is data via its standard `$schema` field.
-- `@jsonforms/demo-validators` (private): the demo apps' selectable validation axis,
-  orthogonal to the examples — AJV (build picked from the schema's `$schema` dialect),
+- `@jsonforms/demo-shared` (private): the demo apps' selectable axes, orthogonal to the
+  examples. Validation axis: AJV (build picked from the schema's `$schema` dialect),
   async-wrapped AJV (simulated server), a handwritten dependency-free validator, none.
+  Engine axis: local, or a real engine hosted in a Web Worker (`createEngineHost`) behind a
+  thin `FormEngine` facade (`createRemoteFormEngine`) exchanging serialized commands/deltas
+  (applied via core's `applyDelta`) — the Mode C server-side story with a worker as the
+  server stand-in. New orthogonal demo axes (SSR variants, locales, …) belong here.
 - `apps/demo-react-material` (port 5173), `apps/demo-react-vanilla` (port 5174): per-renderer-
   set Vite demo apps with an example selector. `apps/demo-all` aggregates all demo apps:
   its `build.js` builds each sub-app with `--base=/<id>/` into `dist/<id>/` behind a landing

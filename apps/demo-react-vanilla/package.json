@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@jsonforms/core": "workspace:*",
-    "@jsonforms/demo-validators": "workspace:*",
+    "@jsonforms/demo-shared": "workspace:*",
     "@jsonforms/examples": "workspace:*",
     "@jsonforms/react": "workspace:*",
     "@jsonforms/react-vanilla": "workspace:*",

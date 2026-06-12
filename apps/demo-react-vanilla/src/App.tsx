@@ -2,12 +2,15 @@ import { useMemo, useState } from 'react';
 import { JsonForms } from '@jsonforms/react';
 import { vanillaRenderers } from '@jsonforms/react-vanilla';
 import { allExamples, exampleGroups, findExample } from '@jsonforms/examples';
-import type { ValidationChoice } from '@jsonforms/demo-validators';
+import type { EngineChoice, ValidationChoice } from '@jsonforms/demo-shared';
 import {
   createValidator,
+  describeEngine,
   describeValidator,
+  engineChoices,
   validationChoices,
-} from '@jsonforms/demo-validators';
+} from '@jsonforms/demo-shared';
+import { RemoteEngineForm } from './RemoteEngineForm';
 
 const firstExample = allExamples[0];
 if (firstExample === undefined) {
@@ -18,6 +21,7 @@ export const App = () => {
   const [exampleId, setExampleId] = useState(firstExample.id);
   const example = findExample(exampleId) ?? firstExample;
   const [validation, setValidation] = useState<ValidationChoice>('ajv');
+  const [engineChoice, setEngineChoice] = useState<EngineChoice>('local');
   const [data, setData] = useState<unknown>(example.data);
   const [tab, setTab] = useState(0);
   const validator = useMemo(
@@ -25,6 +29,7 @@ export const App = () => {
     [validation, example],
   );
 
+  const formKey = `${example.id}:${validation}:${engineChoice}`;
   const panels = [
     { label: 'Data', content: JSON.stringify(data, null, 2) },
     { label: 'JSON Schema', content: JSON.stringify(example.schema, null, 2) },
@@ -73,6 +78,21 @@ export const App = () => {
             ))}
           </select>
         </label>
+        <label className="app-select">
+          Engine{' '}
+          <select
+            value={engineChoice}
+            onChange={(event) =>
+              setEngineChoice(event.target.value as EngineChoice)
+            }
+          >
+            {engineChoices.map((choice) => (
+              <option key={choice.id} value={choice.id}>
+                {choice.label}
+              </option>
+            ))}
+          </select>
+        </label>
       </header>
       <main className="app-main">
         <section className="app-panel app-panel--form">
@@ -82,16 +102,33 @@ export const App = () => {
           )}
           <p className="app-validator">
             Validation: {describeValidator(validation, example.schema)}
+            <br />
+            Engine: {describeEngine(engineChoice)}
           </p>
-          <JsonForms
-            key={`${example.id}:${validation}`}
-            schema={example.schema}
-            uischema={example.uischema}
-            data={example.data}
-            validator={validator}
-            renderers={vanillaRenderers}
-            onChange={(event) => setData(event.data)}
-          />
+          {engineChoice === 'worker' ? (
+            <RemoteEngineForm
+              key={formKey}
+              inputs={{
+                schema: example.schema,
+                uischema: example.uischema,
+                data: example.data,
+                validation,
+              }}
+              renderers={vanillaRenderers}
+              onChange={(event) => setData(event.data)}
+              fallback={<p>Starting server engine…</p>}
+            />
+          ) : (
+            <JsonForms
+              key={formKey}
+              schema={example.schema}
+              uischema={example.uischema}
+              data={example.data}
+              validator={validator}
+              renderers={vanillaRenderers}
+              onChange={(event) => setData(event.data)}
+            />
+          )}
         </section>
         <section className="app-panel app-panel--inspector">
           <div className="app-tabs" role="tablist">

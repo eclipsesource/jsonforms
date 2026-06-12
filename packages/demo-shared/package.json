@@ -1,8 +1,8 @@
 {
-  "name": "@jsonforms/demo-validators",
+  "name": "@jsonforms/demo-shared",
   "version": "4.0.0-alpha.0",
   "private": true,
-  "description": "Selectable validators for the JSON Forms demo applications — an axis orthogonal to the example data",
+  "description": "Shared demo-app modules: selectable validators and engine hosting — axes orthogonal to the example data",
   "license": "MIT",
   "type": "module",
   "exports": {

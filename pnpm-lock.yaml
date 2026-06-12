@@ -62,9 +62,9 @@ importers:
       '@jsonforms/core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@jsonforms/demo-validators':
+      '@jsonforms/demo-shared':
         specifier: workspace:*
-        version: link:../../packages/demo-validators
+        version: link:../../packages/demo-shared
       '@jsonforms/examples':
         specifier: workspace:*
         version: link:../../packages/examples
@@ -108,9 +108,9 @@ importers:
       '@jsonforms/core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@jsonforms/demo-validators':
+      '@jsonforms/demo-shared':
         specifier: workspace:*
-        version: link:../../packages/demo-validators
+        version: link:../../packages/demo-shared
       '@jsonforms/examples':
         specifier: workspace:*
         version: link:../../packages/examples
@@ -162,7 +162,7 @@ importers:
         specifier: ^4.1.8
         version: 4.1.8(@types/node@24.13.2)(jsdom@29.1.1)(vite@8.0.16(@types/node@24.13.2))
 
-  packages/demo-validators:
+  packages/demo-shared:
     dependencies:
       '@jsonforms/core':
         specifier: workspace:*

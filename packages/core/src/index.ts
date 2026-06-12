@@ -7,6 +7,7 @@ export * from './engine/commands';
 export * from './engine/build';
 export * from './engine/issue-display';
 export * from './engine/engine';
+export * from './engine/delta';
 export * from './testers';
 export * from './util/pointer';
 export * from './util/strings';

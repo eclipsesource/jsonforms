@@ -4,10 +4,6 @@ import { ajvForSchema, declaredDialect } from './ajv';
 import { handwrittenValidator } from './handwritten';
 import { withSimulatedLatency } from './async';
 
-export * from './ajv';
-export * from './handwritten';
-export * from './async';
-
 /**
  * The validation choices offered by the demo apps — an axis orthogonal to the
  * example data, demonstrating the pluggable `FormValidator` seam.

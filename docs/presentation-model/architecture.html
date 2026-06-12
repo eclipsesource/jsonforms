@@ -126,6 +126,10 @@ ESM-only, React 19, MUI v9). Decisions taken since this document was first writt
   <li><strong>Commands carry optional <code>sourceNodeId</code> provenance;</strong> React
     renderers dispatch through the node-scoped <code>useControlDispatch</code> and never see
     paths or ids.</li>
+  <li><strong>Mode C prototyped in the demos:</strong> the demo apps can host the engine in a
+    Web Worker behind the serialized command/delta protocol (core gained
+    <code>applyDelta</code>, the client half) — a network server merely swaps the transport,
+    so the demo stays statically hostable.</li>
 </ul>
 </div>
 

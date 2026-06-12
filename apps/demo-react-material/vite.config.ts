@@ -42,8 +42,8 @@ const sourceAliases = [
     replacement: workspaceSource('../../packages/examples/src/index.ts'),
   },
   {
-    find: /^@jsonforms\/demo-validators$/,
-    replacement: workspaceSource('../../packages/demo-validators/src/index.ts'),
+    find: /^@jsonforms\/demo-shared$/,
+    replacement: workspaceSource('../../packages/demo-shared/src/index.ts'),
   },
 ];
 

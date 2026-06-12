@@ -15,7 +15,7 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@jsonforms/core": "workspace:*",
-    "@jsonforms/demo-validators": "workspace:*",
+    "@jsonforms/demo-shared": "workspace:*",
     "@jsonforms/examples": "workspace:*",
     "@jsonforms/react": "workspace:*",
     "@jsonforms/react-material": "workspace:*",

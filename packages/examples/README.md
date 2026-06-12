@@ -17,7 +17,7 @@ import { exampleGroups, allExamples, findExample } from '@jsonforms/examples';
 Examples are **pure data** (`JsonSchemaExample`): schema, optional UI schema, and data.
 Orthogonal topics — which validator runs, server-side building, etc. — deliberately do not
 leak into them; the demo apps offer those as separate selectors (see
-`@jsonforms/demo-validators`). A schema's dialect is part of the data via its standard
+`@jsonforms/demo-shared`). A schema's dialect is part of the data via its standard
 `$schema` declaration.
 
 A test guards that every example builds a presentation model without configuration issues.
