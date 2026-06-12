@@ -53,7 +53,7 @@
                 v-if="showMenu"
                 :model-value="showActions ? proxyModel.value : pickerValue"
                 @update:model-value="
-                  (val: string) => {
+                  (val: string | null) => {
                     if (showActions) {
                       proxyModel.value = val;
                     } else {
@@ -81,7 +81,7 @@
                 :max="maxTime"
                 :use-seconds="useSeconds"
                 :format="ampm ? 'ampm' : '24hr'"
-                :ampm-in-title="ampm ? true : false"
+                :ampm-in-title="ampm"
               >
                 <template v-slot:actions v-if="showActions">
                   <component :is="actions"></component>
@@ -103,10 +103,11 @@ import { type ControlElement, type JsonSchema } from '@jsonforms/core';
 import {
   rendererProps,
   useJsonFormsControl,
+  useTranslator,
   type RendererProps,
 } from '@jsonforms/vue';
-import { vMaska, type MaskOptions, type MaskaDetail } from 'maska';
-import { computed, reactive, defineComponent, ref, unref } from 'vue';
+import { vMaska, type MaskOptions } from 'maska';
+import { computed, defineComponent, reactive, ref, unref } from 'vue';
 import {
   VBtn,
   VConfirmEdit,
@@ -127,7 +128,6 @@ import {
   isControlEditable,
   parseDateTime,
   useIcons,
-  useTranslator,
   useVuetifyControl,
 } from '../util';
 import { default as ControlWrapper } from './ControlWrapper.vue';
@@ -186,7 +186,8 @@ const controlRenderer = defineComponent({
           : (expandLocaleFormat('LT') ?? 'H:mm'), // by default try to use localized default if unavailable then H:mm,
     );
 
-    const useMask = control.appliedOptions.value.mask !== false;
+    const useMask = computed(() => control.appliedOptions.value.mask !== false);
+
     const maska = reactive({
       masked: '',
       unmasked: '',
@@ -196,16 +197,18 @@ const controlRenderer = defineComponent({
     const state = computed(() => convertDayjsToMaskaFormat(timeFormat.value));
     const locale = useLocale();
 
-    const options = useMask
-      ? computed<MaskOptions>(() => ({
-          mask: state.value.mask,
-          tokens: state.value.tokens,
-          tokensReplace: true,
+    const options = computed<MaskOptions | null>(() =>
+      useMask.value
+        ? {
+            mask: state.value.mask,
+            tokens: state.value.tokens,
+            tokensReplace: true,
 
-          //invoke the locale.current as side effect so that the computed will rerun if the locale changes since the mask could be dependent on the locale
-          _locale: unref(locale.current),
-        }))
-      : null;
+            // invoke locale.current so the mask recomputes when locale changes
+            _locale: unref(locale.current),
+          }
+        : null,
+    );
 
     return {
       ...control,
@@ -347,15 +350,15 @@ const controlRenderer = defineComponent({
       },
     },
     pickerValue: {
-      get(): string | undefined {
+      get(): string | null {
         const value = this.control.data;
 
         const time = parseDateTime(value, this.formats);
         const format = this.useSeconds ? 'HH:mm:ss' : 'HH:mm';
         // show only valid values
-        return time ? time.format(format) : undefined;
+        return time ? time.format(format) : null;
       },
-      set(val: string) {
+      set(val: string | null) {
         this.onPickerChange(val);
       },
     },
@@ -387,7 +390,7 @@ const controlRenderer = defineComponent({
     },
   },
   methods: {
-    onPickerChange(value: string): void {
+    onPickerChange(value: string | null): void {
       const time = parseDateTime(value, this.useSeconds ? 'HH:mm:ss' : 'HH:mm');
       this.onChange(time ? time.format(this.timeSaveFormat) : value);
     },

@@ -14,10 +14,11 @@
           direction="vertical"
         >
           <v-tab
-            v-for="(_, index) in visibleCategories"
-            :key="`${layout.path}-${visibleCategories.length}-${index}`"
+            v-for="entry in visibleCategoriesWithIndex"
+            :key="`${layout.path}-${entry.originalIndex}`"
+            :value="entry.originalIndex"
           >
-            {{ visibleCategoryLabels[index] }}
+            {{ entry.category.value.label }}
           </v-tab>
         </v-tabs>
       </v-col>
@@ -28,12 +29,13 @@
           v-bind="vuetifyProps('v-window')"
         >
           <v-window-item
-            v-for="(element, index) in visibleCategories"
-            :key="`${layout.path}-${visibleCategories.length}-${index}`"
+            v-for="entry in visibleCategoriesWithIndex"
+            :key="`${layout.path}-${entry.originalIndex}`"
+            :value="entry.originalIndex"
           >
             <dispatch-renderer
               :schema="layout.schema"
-              :uischema="element.value.uischema"
+              :uischema="entry.category.value.uischema"
               :path="layout.path"
               :enabled="layout.enabled"
               :readonly="layout.readonly"
@@ -47,21 +49,23 @@
     <v-row v-else v-bind="vuetifyProps('v-row')">
       <v-tabs v-model="activeCategory" v-bind="vuetifyProps('v-tabs')">
         <v-tab
-          v-for="(_, index) in visibleCategories"
-          :key="`${layout.path}-${visibleCategories.length}-${index}`"
+          v-for="entry in visibleCategoriesWithIndex"
+          :key="`${layout.path}-${entry.originalIndex}`"
+          :value="entry.originalIndex"
         >
-          {{ visibleCategoryLabels[index] }}
+          {{ entry.category.value.label }}
         </v-tab>
       </v-tabs>
 
       <v-window v-model="activeCategory" v-bind="vuetifyProps('v-window')">
         <v-window-item
-          v-for="(element, index) in visibleCategories"
-          :key="`${layout.path}-${visibleCategories.length}-${index}`"
+          v-for="entry in visibleCategoriesWithIndex"
+          :key="`${layout.path}-${entry.originalIndex}`"
+          :value="entry.originalIndex"
         >
           <dispatch-renderer
             :schema="layout.schema"
-            :uischema="element.value.uischema"
+            :uischema="entry.category.value.uischema"
             :path="layout.path"
             :enabled="layout.enabled"
             :readonly="layout.readonly"
@@ -82,7 +86,7 @@ import {
   useJsonFormsCategorization,
   type RendererProps,
 } from '@jsonforms/vue';
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref, watch } from 'vue';
 import {
   VCol,
   VContainer,
@@ -111,20 +115,36 @@ const layoutRenderer = defineComponent({
   },
   setup(props: RendererProps<Layout>) {
     const activeCategory = ref(0);
+    const vuetifyLayout = useVuetifyLayout(useJsonFormsCategorization(props));
+    const visibleCategoriesWithIndex = computed(() =>
+      vuetifyLayout.categories
+        .map((category, originalIndex) => ({
+          category,
+          originalIndex,
+        }))
+        .filter((e) => e.category.value.visible)
+    );
+
+    watch(
+      visibleCategoriesWithIndex,
+      (visibleCategories) => {
+        if (
+          visibleCategories.length > 0 &&
+          !visibleCategories.some(
+            (entry) => entry.originalIndex === activeCategory.value
+          )
+        ) {
+          activeCategory.value = visibleCategories[0].originalIndex;
+        }
+      },
+      { immediate: true }
+    );
+
     return {
-      ...useVuetifyLayout(useJsonFormsCategorization(props)),
+      ...vuetifyLayout,
+      visibleCategoriesWithIndex,
       activeCategory,
     };
-  },
-  computed: {
-    visibleCategories() {
-      return this.categories.filter((category) => category.value.visible);
-    },
-    visibleCategoryLabels(): string[] {
-      return this.visibleCategories.map((element) => {
-        return element.value.label;
-      });
-    },
   },
 });
 
