@@ -10,13 +10,28 @@ import type { DemoEngineInputs } from './demo-engine';
 import { createDemoEngine } from './demo-engine';
 
 /**
+ * Behavior of the simulated server hosting the engine — lets the demos
+ * explore how the UI copes with slow or unreliable backends.
+ */
+export interface ServerSimulationOptions {
+  /** Delay every server response by this many milliseconds. Default: `0`. */
+  responseDelayMs?: number;
+  /** Reject this percentage (0–100) of value changes. Default: `0`. */
+  rejectChangesPercent?: number;
+}
+
+/**
  * The serialized engine protocol used by the demos' "server simulation": the
  * engine runs in a Web Worker (a stand-in for a server) and the UI thread only
  * ever exchanges plain JSON — commands in, model + deltas out. A real network
  * server merely swaps the transport.
  */
 export type ClientMessage =
-  | { type: 'init'; inputs: DemoEngineInputs }
+  | {
+      type: 'init';
+      inputs: DemoEngineInputs;
+      simulation?: ServerSimulationOptions;
+    }
   | { type: 'command'; command: FormCommand };
 
 export type ServerMessage =
@@ -31,19 +46,41 @@ export const createEngineHost = (
   post: (message: ServerMessage) => void,
 ): ((message: ClientMessage) => void) => {
   let engine: FormEngine | undefined;
+  let simulation: ServerSimulationOptions | undefined;
+
+  const respond = (message: ServerMessage): void => {
+    const delay = simulation?.responseDelayMs ?? 0;
+    if (delay > 0) {
+      setTimeout(() => post(message), delay);
+    } else {
+      post(message);
+    }
+  };
+
   return (message) => {
     switch (message.type) {
       case 'init': {
+        simulation = message.simulation;
         engine = createDemoEngine(message.inputs);
-        post({
+        respond({
           type: 'model',
           model: engine.getModel(),
           data: engine.getData(),
         });
-        engine.subscribe((delta) => post({ type: 'delta', delta }));
+        engine.subscribe((delta) => respond({ type: 'delta', delta }));
         break;
       }
       case 'command': {
+        const rejectPercent = simulation?.rejectChangesPercent ?? 0;
+        if (
+          message.command.type === 'set-value' &&
+          rejectPercent > 0 &&
+          Math.random() * 100 < rejectPercent
+        ) {
+          // Change rejected by the simulated server — no delta is sent, so
+          // the client model (and thereby the UI) keeps the previous value.
+          break;
+        }
         engine?.dispatch(message.command);
         break;
       }
@@ -67,6 +104,7 @@ export interface RemoteEngineConnection {
 export const createRemoteFormEngine = (
   post: (message: ClientMessage) => void,
   inputs: DemoEngineInputs,
+  simulation?: ServerSimulationOptions,
 ): RemoteEngineConnection => {
   let model: PresentationModel | undefined;
   let data: unknown;
@@ -133,7 +171,7 @@ export const createRemoteFormEngine = (
     }
   };
 
-  post({ type: 'init', inputs });
+  post({ type: 'init', inputs, simulation });
   return { ready, receive };
 };
 

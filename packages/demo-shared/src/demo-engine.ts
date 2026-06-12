@@ -5,7 +5,7 @@ import type {
   UISchemaElement,
 } from '@jsonforms/core';
 import { createFormEngine, jsonSchemaSource } from '@jsonforms/core';
-import type { ValidationChoice } from './validators';
+import type { ValidationSettings } from './validators';
 import { createValidator } from './validators';
 
 /**
@@ -17,7 +17,7 @@ export interface DemoEngineInputs {
   schema: JsonSchema;
   uischema?: UISchemaElement;
   data: unknown;
-  validation: ValidationChoice;
+  validation: ValidationSettings;
   config?: Readonly<FormConfig>;
 }
 

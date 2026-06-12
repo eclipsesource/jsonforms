@@ -1,7 +1,11 @@
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 import type { ControlNode } from '@jsonforms/core';
 import { setValue } from '@jsonforms/core';
-import type { DemoEngineInputs, ServerMessage } from '../src';
+import type {
+  DemoEngineInputs,
+  ServerMessage,
+  ServerSimulationOptions,
+} from '../src';
 import { createEngineHost, createRemoteFormEngine } from '../src';
 
 const inputs: DemoEngineInputs = {
@@ -14,7 +18,7 @@ const inputs: DemoEngineInputs = {
     },
   },
   data: { name: 'Ada' },
-  validation: 'handwritten',
+  validation: { choice: 'handwritten' },
 };
 
 /**
@@ -22,7 +26,10 @@ const inputs: DemoEngineInputs = {
  * proving the whole protocol is plain serializable data, exactly like a
  * worker or network transport.
  */
-const connect = (connectInputs: DemoEngineInputs) => {
+const connect = (
+  connectInputs: DemoEngineInputs,
+  simulation?: ServerSimulationOptions,
+) => {
   const pending: ServerMessage[] = [];
   const sink: { receive?: (message: ServerMessage) => void } = {};
   const wire = <T>(message: T): T => JSON.parse(JSON.stringify(message)) as T;
@@ -37,6 +44,7 @@ const connect = (connectInputs: DemoEngineInputs) => {
   const connection = createRemoteFormEngine(
     (message) => handle(wire(message)),
     connectInputs,
+    simulation,
   );
   sink.receive = connection.receive;
   pending.forEach(connection.receive);
@@ -74,9 +82,28 @@ describe('remote engine over a serialized transport', () => {
   test('remote validation issues arrive on the nodes', async () => {
     const engine = await connect(inputs).ready;
     engine.dispatch(setValue('/name', undefined));
-    engine.dispatch({ type: 'touch', nodeId: '#/0' });
     expect((engine.getNode('#/0') as ControlNode).issues).toMatchObject([
       { key: 'required' },
     ]);
+  });
+
+  test('rejected changes leave the model untouched', async () => {
+    const engine = await connect(inputs, { rejectChangesPercent: 100 }).ready;
+    engine.dispatch(setValue('/name', 'Grace'));
+    expect((engine.getNode('#/0') as ControlNode).value).toBe('Ada');
+    expect(engine.getData()).toEqual({ name: 'Ada' });
+  });
+
+  test('responses are delayed when configured', async () => {
+    const connection = connect(inputs, { responseDelayMs: 20 });
+    let ready = false;
+    void connection.ready.then(() => {
+      ready = true;
+    });
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(ready).toBe(false);
+    await vi.waitFor(async () => {
+      expect(ready).toBe(true);
+    });
   });
 });

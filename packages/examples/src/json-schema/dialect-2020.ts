@@ -1,15 +1,14 @@
 import type { JsonSchemaExample } from '../types';
 
 /**
- * Declares the 2020-12 dialect via `$schema` and uses `dependentRequired`,
- * which draft-07 validators do not know — the demo apps' AJV validator picks
- * the matching AJV build from the declared dialect.
+ * Declares the 2020-12 dialect via `$schema` and uses `dependentRequired` —
+ * AJV builds for older dialects fail to compile it.
  */
 export const dialect2020: JsonSchemaExample = {
   id: 'dialect-2020',
   title: 'JSON Schema 2020-12',
   description:
-    'This schema declares the 2020-12 dialect and uses dependentRequired: entering a card number makes the billing address required. The AJV validator picks the 2020-12 build based on the declared $schema.',
+    "This schema declares the 2020-12 dialect and uses dependentRequired: entering a card number makes the billing address required. With the default draft-07 AJV build it fails to compile — select AJV version '2020-12' in the settings.",
   schema: {
     $schema: 'https://json-schema.org/draft/2020-12/schema',
     type: 'object',

@@ -6,7 +6,11 @@ import type {
   RendererRegistryEntry,
 } from '@jsonforms/react';
 import { JsonForms } from '@jsonforms/react';
-import type { DemoEngineInputs, ServerMessage } from '@jsonforms/demo-shared';
+import type {
+  DemoEngineInputs,
+  ServerMessage,
+  ServerSimulationOptions,
+} from '@jsonforms/demo-shared';
 import { createRemoteFormEngine } from '@jsonforms/demo-shared';
 
 export interface RemoteEngineFormProps {
@@ -15,6 +19,8 @@ export interface RemoteEngineFormProps {
    * is read once on mount. Remount the component (via `key`) to reconfigure.
    */
   inputs: DemoEngineInputs;
+  /** Initial server-simulation behavior; read once on mount like `inputs`. */
+  simulation?: ServerSimulationOptions;
   renderers: readonly RendererRegistryEntry[];
   onChange?: (event: JsonFormsChangeEvent) => void;
   /** Shown until the worker delivered the initial model. */
@@ -29,11 +35,13 @@ export interface RemoteEngineFormProps {
  */
 export const RemoteEngineForm = ({
   inputs,
+  simulation,
   renderers,
   onChange,
   fallback,
 }: RemoteEngineFormProps) => {
   const [initialInputs] = useState(inputs);
+  const [initialSimulation] = useState(simulation);
   const [engine, setEngine] = useState<FormEngine | undefined>(undefined);
 
   useEffect(() => {
@@ -43,6 +51,7 @@ export const RemoteEngineForm = ({
     const connection = createRemoteFormEngine(
       (message) => worker.postMessage(message),
       initialInputs,
+      initialSimulation,
     );
     worker.onmessage = (event: MessageEvent) =>
       connection.receive(event.data as ServerMessage);
@@ -56,7 +65,7 @@ export const RemoteEngineForm = ({
       cancelled = true;
       worker.terminate();
     };
-  }, [initialInputs]);
+  }, [initialInputs, initialSimulation]);
 
   if (engine === undefined) {
     return fallback;

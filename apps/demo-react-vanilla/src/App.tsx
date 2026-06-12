@@ -1,9 +1,16 @@
 import { useMemo, useState } from 'react';
+import type { FormValidator } from '@jsonforms/core';
 import { JsonForms } from '@jsonforms/react';
 import { vanillaRenderers } from '@jsonforms/react-vanilla';
 import { allExamples, exampleGroups, findExample } from '@jsonforms/examples';
-import type { EngineChoice, ValidationChoice } from '@jsonforms/demo-shared';
+import type {
+  AjvVersion,
+  EngineChoice,
+  ValidationChoice,
+  ValidationSettings,
+} from '@jsonforms/demo-shared';
 import {
+  ajvVersionChoices,
   createValidator,
   engineChoices,
   validationChoices,
@@ -19,17 +26,47 @@ export const App = () => {
   const [exampleId, setExampleId] = useState(firstExample.id);
   const example = findExample(exampleId) ?? firstExample;
   const [validation, setValidation] = useState<ValidationChoice>('ajv');
+  const [ajvVersion, setAjvVersion] = useState<AjvVersion>('default');
+  const [ajvAsync, setAjvAsync] = useState(false);
   const [engineChoice, setEngineChoice] = useState<EngineChoice>('local');
+  const [responseDelayMs, setResponseDelayMs] = useState(0);
+  const [rejectChangesPercent, setRejectChangesPercent] = useState(0);
   const [showIssuesOnTouch, setShowIssuesOnTouch] = useState(false);
   const [data, setData] = useState<unknown>(example.data);
   const [tab, setTab] = useState(0);
-  const validator = useMemo(
-    () => createValidator(validation, example.schema),
-    [validation, example],
-  );
-  const config = useMemo(() => ({ showIssuesOnTouch }), [showIssuesOnTouch]);
 
-  const formKey = `${example.id}:${validation}:${engineChoice}:${showIssuesOnTouch}`;
+  const validationSettings = useMemo<ValidationSettings>(
+    () => ({ choice: validation, ajvVersion, ajvAsync }),
+    [validation, ajvVersion, ajvAsync],
+  );
+  const validatorResult = useMemo<{
+    validator?: FormValidator;
+    error?: string;
+  }>(() => {
+    try {
+      return {
+        validator: createValidator(validationSettings, example.schema),
+      };
+    } catch (error) {
+      return { error: error instanceof Error ? error.message : String(error) };
+    }
+  }, [validationSettings, example]);
+  const config = useMemo(() => ({ showIssuesOnTouch }), [showIssuesOnTouch]);
+  const simulation = useMemo(
+    () => ({ responseDelayMs, rejectChangesPercent }),
+    [responseDelayMs, rejectChangesPercent],
+  );
+
+  const formKey = [
+    example.id,
+    validation,
+    ajvVersion,
+    ajvAsync,
+    engineChoice,
+    responseDelayMs,
+    rejectChangesPercent,
+    showIssuesOnTouch,
+  ].join(':');
   const panels = [
     { label: 'Data', content: JSON.stringify(data, null, 2) },
     { label: 'JSON Schema', content: JSON.stringify(example.schema, null, 2) },
@@ -67,8 +104,9 @@ export const App = () => {
       <main className="app-main">
         <aside className="app-panel app-sidebar">
           <h2>Settings</h2>
+          <h3 className="app-group-heading">Validation</h3>
           <label className="app-field">
-            Validation
+            Validator
             <select
               value={validation}
               onChange={(event) =>
@@ -82,8 +120,36 @@ export const App = () => {
               ))}
             </select>
           </label>
+          {validation === 'ajv' && (
+            <>
+              <label className="app-field">
+                AJV version
+                <select
+                  value={ajvVersion}
+                  onChange={(event) =>
+                    setAjvVersion(event.target.value as AjvVersion)
+                  }
+                >
+                  {ajvVersionChoices.map((choice) => (
+                    <option key={choice.id} value={choice.id}>
+                      {choice.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label className="app-checkbox">
+                <input
+                  type="checkbox"
+                  checked={ajvAsync}
+                  onChange={(event) => setAjvAsync(event.target.checked)}
+                />
+                Async
+              </label>
+            </>
+          )}
+          <h3 className="app-group-heading">Engine</h3>
           <label className="app-field">
-            Engine
+            Location
             <select
               value={engineChoice}
               onChange={(event) =>
@@ -97,7 +163,43 @@ export const App = () => {
               ))}
             </select>
           </label>
-          <h3 className="app-config-heading">Config</h3>
+          {engineChoice === 'worker' && (
+            <>
+              <label className="app-field">
+                Artificial delay (ms)
+                <input
+                  type="number"
+                  min={0}
+                  step={50}
+                  value={responseDelayMs}
+                  onChange={(event) =>
+                    setResponseDelayMs(
+                      Math.max(0, Number(event.target.value) || 0),
+                    )
+                  }
+                />
+              </label>
+              <label className="app-field">
+                Reject changes (%)
+                <input
+                  type="number"
+                  min={0}
+                  max={100}
+                  step={10}
+                  value={rejectChangesPercent}
+                  onChange={(event) =>
+                    setRejectChangesPercent(
+                      Math.min(
+                        100,
+                        Math.max(0, Number(event.target.value) || 0),
+                      ),
+                    )
+                  }
+                />
+              </label>
+            </>
+          )}
+          <h3 className="app-group-heading">Config</h3>
           <label className="app-checkbox">
             <input
               type="checkbox"
@@ -112,16 +214,21 @@ export const App = () => {
           {example.description !== undefined && (
             <p className="app-description">{example.description}</p>
           )}
-          {engineChoice === 'worker' ? (
+          {validatorResult.error !== undefined ? (
+            <p className="app-error">
+              Creating the validator failed: {validatorResult.error}
+            </p>
+          ) : engineChoice === 'worker' ? (
             <RemoteEngineForm
               key={formKey}
               inputs={{
                 schema: example.schema,
                 uischema: example.uischema,
                 data: example.data,
-                validation,
+                validation: validationSettings,
                 config,
               }}
+              simulation={simulation}
               renderers={vanillaRenderers}
               onChange={(event) => setData(event.data)}
               fallback={<p>Starting server engine…</p>}
@@ -132,7 +239,7 @@ export const App = () => {
               schema={example.schema}
               uischema={example.uischema}
               data={example.data}
-              validator={validator}
+              validator={validatorResult.validator}
               config={config}
               renderers={vanillaRenderers}
               onChange={(event) => setData(event.data)}

@@ -1,19 +1,42 @@
 import type { FormValidator, JsonSchema } from '@jsonforms/core';
 import { ajvValidator as draft07Validator } from '@jsonforms/validator-ajv/draft-07';
+import { ajvValidator as draft2019Validator } from '@jsonforms/validator-ajv/draft-2019';
 import { ajvValidator as draft2020Validator } from '@jsonforms/validator-ajv/draft-2020';
 
-/** The JSON Schema dialect a schema declares via `$schema`; draft-07 by default. */
-export const declaredDialect = (schema: JsonSchema): 'draft-07' | '2020-12' =>
-  typeof schema.$schema === 'string' && schema.$schema.includes('2020-12')
-    ? '2020-12'
-    : 'draft-07';
+/**
+ * Selectable AJV builds. `'default'` is AJV's default build (draft-07) —
+ * schemas declaring another dialect via `$schema` fail to compile with it,
+ * exactly as they would in an application using the wrong build.
+ */
+export type AjvVersion = 'default' | '2019-09' | '2020-12';
+
+export interface AjvVersionInfo {
+  id: AjvVersion;
+  label: string;
+}
+
+export const ajvVersionChoices: readonly AjvVersionInfo[] = [
+  { id: 'default', label: 'draft-07 (default)' },
+  { id: '2019-09', label: '2019-09' },
+  { id: '2020-12', label: '2020-12' },
+];
 
 /**
- * AJV validation with the build matching the schema's declared dialect.
- * Thanks to the per-draft subpath entries of `@jsonforms/validator-ajv`,
- * exactly the builds imported here end up in the demo bundles.
+ * AJV validation with the selected build. Thanks to the per-draft subpath
+ * entries of `@jsonforms/validator-ajv`, exactly the builds imported here end
+ * up in the demo bundles. Throws if the schema cannot be compiled by the
+ * selected build (e.g. a 2020-12 schema with the draft-07 build).
  */
-export const ajvForSchema = (schema: JsonSchema): FormValidator =>
-  declaredDialect(schema) === '2020-12'
-    ? draft2020Validator(schema)
-    : draft07Validator(schema);
+export const ajvValidatorFor = (
+  schema: JsonSchema,
+  version: AjvVersion,
+): FormValidator => {
+  switch (version) {
+    case '2019-09':
+      return draft2019Validator(schema);
+    case '2020-12':
+      return draft2020Validator(schema);
+    case 'default':
+      return draft07Validator(schema);
+  }
+};
