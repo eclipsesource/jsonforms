@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>JSON Forms 4 — Examples</title>
+    <title>JSON Forms 4 Demo</title>
     <style>
       * {
         box-sizing: border-box;
@@ -19,25 +19,52 @@
       header {
         background: #1f2937;
         color: #fff;
-        padding: 2.5rem 1.5rem;
+        padding: 3rem 1.5rem 2.5rem;
         text-align: center;
       }
       header h1 {
-        margin: 0 0 0.25rem;
-        font-size: 1.6rem;
+        margin: 0 0 0.5rem;
+        font-size: 2rem;
       }
       header p {
-        margin: 0;
-        opacity: 0.75;
-        font-size: 0.95rem;
+        margin: 0 auto;
+        max-width: 46rem;
+        opacity: 0.8;
+        font-size: 1rem;
       }
       main {
-        max-width: 900px;
+        max-width: 980px;
         margin: 0 auto;
-        padding: 2.5rem 1.5rem;
+        padding: 2.5rem 1.5rem 3rem;
+      }
+      h2 {
+        margin: 0 0 1rem;
+        font-size: 1.2rem;
+      }
+      .features {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 1.5rem 2.5rem;
+      }
+      .feature {
+        border-left: 3px solid #1565c0;
+        padding-left: 1rem;
+      }
+      .feature h3 {
+        margin: 0 0 0.25rem;
+        font-size: 0.95rem;
+        color: #1f2328;
+      }
+      .feature p {
+        margin: 0;
+        font-size: 0.85rem;
+        color: #59636e;
+      }
+      .apps {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
         gap: 1.25rem;
+        margin-bottom: 3rem;
       }
       a.card {
         display: block;
@@ -55,7 +82,7 @@
         border-color: #1565c0;
         box-shadow: 0 2px 10px rgba(21, 101, 192, 0.15);
       }
-      .card h2 {
+      .card h3 {
         margin: 0 0 0.35rem;
         font-size: 1.05rem;
         color: #1565c0;
@@ -69,33 +96,93 @@
         opacity: 0.55;
         pointer-events: none;
       }
-      .card.soon h2 {
+      .card.soon h3 {
         color: #59636e;
+      }
+      footer {
+        text-align: center;
+        padding: 0 1.5rem 2.5rem;
+        font-size: 0.85rem;
+        color: #59636e;
+      }
+      footer a {
+        color: #1565c0;
       }
     </style>
   </head>
   <body>
     <header>
-      <h1>JSON Forms 4 — Examples</h1>
-      <p>Pick a renderer set. All apps render the same shared examples.</p>
+      <h1>JSON Forms 4 Demo</h1>
+      <p>
+        A ground-up refactoring of JSON Forms around a
+        <strong>presentation model</strong>: the core computes everything a form
+        needs — labels, values, validation issues, constraints — into one
+        serializable model. This decouples rendering from the core, and the core
+        from its schema input.
+      </p>
     </header>
     <main>
-      <a class="card" href="./react-material/">
-        <h2>React Material</h2>
-        <p>Material UI v9 renderer set (@jsonforms/react-material)</p>
-      </a>
-      <a class="card" href="./react-vanilla/">
-        <h2>React Vanilla</h2>
-        <p>Plain-HTML renderer set (@jsonforms/react-vanilla)</p>
-      </a>
-      <a class="card soon" href="#" aria-disabled="true">
-        <h2>Vue</h2>
-        <p>Coming with a later milestone</p>
-      </a>
-      <a class="card soon" href="#" aria-disabled="true">
-        <h2>Angular</h2>
-        <p>Coming with a later milestone</p>
-      </a>
+      <h2>Pick a renderer set</h2>
+      <div class="apps">
+        <a class="card" href="./react-material/">
+          <h3>React Material</h3>
+          <p>Material UI v9 renderer set (@jsonforms/react-material)</p>
+        </a>
+        <a class="card" href="./react-vanilla/">
+          <h3>React Vanilla</h3>
+          <p>Plain-HTML renderer set (@jsonforms/react-vanilla)</p>
+        </a>
+        <a class="card soon" href="#" aria-disabled="true">
+          <h3>Vue</h3>
+          <p>Coming with a later milestone</p>
+        </a>
+        <a class="card soon" href="#" aria-disabled="true">
+          <h3>Angular</h3>
+          <p>Coming with a later milestone</p>
+        </a>
+      </div>
+
+      <h2>What this demo showcases</h2>
+      <div class="features">
+        <div class="feature">
+          <h3>Presentation model</h3>
+          <p>
+            Renderers are thin views over precomputed nodes — no schema logic in
+            the UI layer, and only changed nodes re-render. Inspect the live
+            model in every demo.
+          </p>
+        </div>
+        <div class="feature">
+          <h3>Pluggable schema sources</h3>
+          <p>
+            The same forms, layouts and renderers driven by JSON Schema or by
+            zod — the schema format is an exchangeable input to the core.
+          </p>
+        </div>
+        <div class="feature">
+          <h3>Pluggable validation</h3>
+          <p>
+            AJV with selectable builds (draft-07, 2019-09, 2020-12), arbitrary
+            handwritten validators without any framework, or zod itself —
+            synchronous or asynchronous.
+          </p>
+        </div>
+        <div class="feature">
+          <h3>Server-side forms</h3>
+          <p>
+            The form engine can run outside the browser's UI thread: a Web
+            Worker stands in for a server, exchanging serialized commands and
+            model deltas — including simulated latency and rejected changes.
+          </p>
+        </div>
+      </div>
     </main>
+    <footer>
+      All apps render the same shared examples, so renderer sets can be compared
+      side by side. Tracking issue:
+      <a href="https://github.com/eclipsesource/jsonforms/issues/2571"
+        >eclipsesource/jsonforms#2571</a
+      >
+    </footer>
   </body>
 </html>

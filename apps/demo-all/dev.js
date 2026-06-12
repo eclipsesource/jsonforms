@@ -36,8 +36,6 @@ const servers = await Promise.all(
   }),
 );
 
-const landingPage = readFileSync(join(root, 'index.html'));
-
 const httpServer = createHttpServer((request, response) => {
   const url = request.url ?? '/';
   for (const { id, vite } of servers) {
@@ -56,7 +54,8 @@ const httpServer = createHttpServer((request, response) => {
   }
   if (url === '/' || url === '/index.html') {
     response.writeHead(200, { 'content-type': 'text/html' });
-    response.end(landingPage);
+    // Read per request so landing-page edits show up on refresh.
+    response.end(readFileSync(join(root, 'index.html')));
     return;
   }
   response.statusCode = 404;
