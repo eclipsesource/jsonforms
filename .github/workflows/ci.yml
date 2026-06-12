@@ -10,7 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+      # standalone: pnpm 11 requires Node >= 22.13, but this step runs before
+      # setup-node (its pnpm cache needs pnpm on the PATH) and would otherwise
+      # install pnpm with the runner's older default Node.
       - uses: pnpm/action-setup@v4
+        with:
+          standalone: true
       - uses: actions/setup-node@v5
         with:
           node-version: 24
