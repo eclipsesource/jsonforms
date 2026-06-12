@@ -1,4 +1,9 @@
-import type { FormEngine, JsonSchema, UISchemaElement } from '@jsonforms/core';
+import type {
+  FormConfig,
+  FormEngine,
+  JsonSchema,
+  UISchemaElement,
+} from '@jsonforms/core';
 import { createFormEngine, jsonSchemaSource } from '@jsonforms/core';
 import type { ValidationChoice } from './validators';
 import { createValidator } from './validators';
@@ -13,6 +18,7 @@ export interface DemoEngineInputs {
   uischema?: UISchemaElement;
   data: unknown;
   validation: ValidationChoice;
+  config?: Readonly<FormConfig>;
 }
 
 export const createDemoEngine = (inputs: DemoEngineInputs): FormEngine =>
@@ -21,4 +27,5 @@ export const createDemoEngine = (inputs: DemoEngineInputs): FormEngine =>
     uischema: inputs.uischema,
     data: inputs.data,
     validator: createValidator(inputs.validation, inputs.schema),
+    config: inputs.config,
   });

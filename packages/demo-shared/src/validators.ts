@@ -1,6 +1,6 @@
 import type { FormValidator, JsonSchema } from '@jsonforms/core';
 import { noValidation } from '@jsonforms/core';
-import { ajvForSchema, declaredDialect } from './ajv';
+import { ajvForSchema } from './ajv';
 import { handwrittenValidator } from './handwritten';
 import { withSimulatedLatency } from './async';
 
@@ -35,22 +35,5 @@ export const createValidator = (
       return handwrittenValidator(schema);
     case 'none':
       return noValidation;
-  }
-};
-
-/** Human-readable description of the active validation, shown in the demos. */
-export const describeValidator = (
-  choice: ValidationChoice,
-  schema: JsonSchema,
-): string => {
-  switch (choice) {
-    case 'ajv':
-      return `AJV, ${declaredDialect(schema)} build`;
-    case 'ajv-async':
-      return `AJV, ${declaredDialect(schema)} build — async with simulated 400 ms latency`;
-    case 'handwritten':
-      return 'handwritten validator — no validation framework involved';
-    case 'none':
-      return 'none';
   }
 };

@@ -4,7 +4,7 @@ export const validation: JsonSchemaExample = {
   id: 'validation',
   title: 'Validation',
   description:
-    'Required fields, length, range, format, and pattern constraints. The initial data is invalid — touch a field (focus and blur it) to reveal its issues.',
+    "Required fields, length, range, format, and pattern constraints. The initial data is invalid, so issues show right away — enable 'Show issues only after touch' in the settings to defer them.",
   schema: {
     type: 'object',
     title: 'Validation',

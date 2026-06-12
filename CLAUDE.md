@@ -14,9 +14,13 @@ HOC prop chains, AJV-in-state) or compatibility shims.
   (`set-value`, `touch`) and notifies subscribers with node-granular deltas. The model is
   produced by a pure builder over pluggable services: `SchemaSource` (JSON Schema impl:
   `jsonSchemaSource`), `FormValidator`, `IssueDisplayPolicy` (which issues land on nodes;
-  default: show once touched), `NodeProcessor`s. Testers rank renderers against **nodes**,
-  never against schemas. Boolean node flags (`hidden`, `disabled`, `required`, `readonly`,
-  `touched`) are optional and default-false. Commands may carry `sourceNodeId` provenance.
+  default: show immediately — `config: { showIssuesOnTouch: true }` defers them until
+  touch), `NodeProcessor`s. Testers rank renderers against **nodes**, never against
+  schemas. Boolean node flags (`hidden`, `disabled`, `required`, `readonly`, `touched`)
+  are optional and default-false. Commands may carry `sourceNodeId` provenance.
+  `FormConfig` (the `config` option/prop) holds form-wide options such as
+  `showIssuesOnTouch` — keep it separate from per-node `uiOptions`, which always reflect
+  exactly the UI schema element.
 - `@jsonforms/validator-ajv`: AJV-backed `FormValidator`s. Core must never depend on AJV.
   Bundle hygiene is a hard rule here: the base entry takes a caller-supplied AJV instance
   and imports AJV types only (plus `compiledAjvValidator` for precompiled/no-eval setups);

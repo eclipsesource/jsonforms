@@ -47,7 +47,8 @@ under `apps/`.
 - JSON Schema as the first `SchemaSource` (objects with primitive properties, no `$ref`).
 - `VerticalLayout` / `HorizontalLayout`, string / number / integer / boolean controls.
 - AJV-based validation via `@jsonforms/validator-ajv` (optional — core has no validator
-  dependency), with a configurable issue-display policy (default: show once touched).
+  dependency). Issues show immediately by default; `config: { showIssuesOnTouch: true }`
+  defers them until a field was touched.
 - Identity-preserving full rebuild on every command: unchanged nodes keep their object
   identity, so only views of changed nodes re-render.
 

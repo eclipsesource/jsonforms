@@ -211,10 +211,22 @@ describe('validation', () => {
     },
   };
 
-  test('gates issues behind interaction by default', () => {
+  test('shows issues immediately by default', () => {
     const engine = createEngine({
       data: { name: 'A' },
       validator: lengthValidator,
+    });
+    expect((engine.getNode('#/0/0') as ControlNode).issues).toEqual([
+      { severity: 'error', key: 'minLength', message: 'Too short.' },
+    ]);
+    expect((engine.getNode('#/0/1') as ControlNode).issues).toEqual([]);
+  });
+
+  test('config.showIssuesOnTouch gates issues behind interaction', () => {
+    const engine = createEngine({
+      data: { name: 'A' },
+      validator: lengthValidator,
+      config: { showIssuesOnTouch: true },
     });
     expect((engine.getNode('#/0/0') as ControlNode).issues).toEqual([]);
     engine.dispatch(touch('#/0/0'));
@@ -223,24 +235,20 @@ describe('validation', () => {
     ]);
   });
 
-  test('alwaysShowIssues distributes issues without interaction', () => {
+  test('an explicit issueDisplay policy overrides the config', () => {
     const engine = createEngine({
       data: { name: 'A' },
       validator: lengthValidator,
+      config: { showIssuesOnTouch: true },
       issueDisplay: alwaysShowIssues,
     });
-    const name = engine.getNode('#/0/0') as ControlNode;
-    expect(name.issues).toEqual([
-      { severity: 'error', key: 'minLength', message: 'Too short.' },
-    ]);
-    expect((engine.getNode('#/0/1') as ControlNode).issues).toEqual([]);
+    expect((engine.getNode('#/0/0') as ControlNode).issues).toHaveLength(1);
   });
 
   test('clears issues once the data is fixed', () => {
     const engine = createEngine({
       data: { name: 'A' },
       validator: lengthValidator,
-      issueDisplay: alwaysShowIssues,
     });
     engine.dispatch(setValue('/name', 'Ada'));
     expect((engine.getNode('#/0/0') as ControlNode).issues).toEqual([]);
@@ -253,7 +261,6 @@ describe('validation', () => {
     const engine = createEngine({
       data: { name: 'A' },
       validator: asyncValidator,
-      issueDisplay: alwaysShowIssues,
     });
     expect((engine.getNode('#/0/0') as ControlNode).issues).toEqual([]);
     await vi.waitFor(() => {

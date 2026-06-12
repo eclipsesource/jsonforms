@@ -117,9 +117,13 @@ ESM-only, React 19, MUI v9). Decisions taken since this document was first writt
     precompiled-validator wrapper for no-eval environments), while per-draft presets live in
     subpath exports (<code>/draft-07</code>, <code>/draft-2019</code>, <code>/draft-2020</code>)
     so consumers bundle exactly one AJV build.</li>
-  <li><strong>Issue display is a builder policy</strong> (<code>IssueDisplayPolicy</code>,
-    default: show once touched) — renderers display <code>node.issues</code> unconditionally
-    instead of combining interaction state themselves.</li>
+  <li><strong>Issue display is a builder policy</strong> (<code>IssueDisplayPolicy</code>;
+    issues show immediately by default, <code>config.showIssuesOnTouch</code> defers them
+    until touch) — renderers display <code>node.issues</code> unconditionally instead of
+    combining interaction state themselves.</li>
+  <li><strong>Form-wide options live in a first-class <code>FormConfig</code></strong> on
+    the engine (e.g. <code>showIssuesOnTouch</code>), separate from per-node
+    <code>uiOptions</code>, which always reflect exactly the UI schema element.</li>
   <li><strong>Boolean node flags are optional and default-false</strong>
     (<code>hidden</code>, <code>disabled</code>, <code>required</code>, <code>readonly</code>,
     <code>touched</code>) — builders only set what applies; serialized models stay lean.</li>
@@ -447,9 +451,9 @@ interface ArrayItem {
     because the data terminates — the “endless layout” problem of schema-first generation
     disappears. Lazy materialization of collapsed subtrees (tabs, accordions) is a planned
     optimization (<a href="#questions">§14</a>).</li>
-  <li><strong><code>uiOptions</code> is pre-merged.</strong> The
-    <code>merge(config, uischema.options)</code> dance every renderer does today happens once
-    in the builder.</li>
+  <li><strong><code>uiOptions</code> reflect exactly the UI schema element.</strong>
+    Form-wide options live in a separate, first-class <code>FormConfig</code> on the
+    engine.</li>
   <li><strong>Stable array item keys.</strong> The engine assigns a persistent key per array
     element and keeps it across moves — fixing the long-standing index-as-React-key issue and
     making reorder animations possible.</li>

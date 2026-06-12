@@ -149,9 +149,3 @@ export const engineChoices: readonly EngineChoiceInfo[] = [
   { id: 'local', label: 'Local (browser)' },
   { id: 'worker', label: 'Web Worker (server simulation)' },
 ];
-
-/** Human-readable description of the active engine location. */
-export const describeEngine = (choice: EngineChoice): string =>
-  choice === 'local'
-    ? 'local — model built and validated in the browser'
-    : 'web worker (server simulation) — model built and validated off the UI thread; the UI exchanges serialized commands and deltas';

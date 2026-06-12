@@ -5,8 +5,6 @@ import { allExamples, exampleGroups, findExample } from '@jsonforms/examples';
 import type { EngineChoice, ValidationChoice } from '@jsonforms/demo-shared';
 import {
   createValidator,
-  describeEngine,
-  describeValidator,
   engineChoices,
   validationChoices,
 } from '@jsonforms/demo-shared';
@@ -22,14 +20,16 @@ export const App = () => {
   const example = findExample(exampleId) ?? firstExample;
   const [validation, setValidation] = useState<ValidationChoice>('ajv');
   const [engineChoice, setEngineChoice] = useState<EngineChoice>('local');
+  const [showIssuesOnTouch, setShowIssuesOnTouch] = useState(false);
   const [data, setData] = useState<unknown>(example.data);
   const [tab, setTab] = useState(0);
   const validator = useMemo(
     () => createValidator(validation, example.schema),
     [validation, example],
   );
+  const config = useMemo(() => ({ showIssuesOnTouch }), [showIssuesOnTouch]);
 
-  const formKey = `${example.id}:${validation}:${engineChoice}`;
+  const formKey = `${example.id}:${validation}:${engineChoice}:${showIssuesOnTouch}`;
   const panels = [
     { label: 'Data', content: JSON.stringify(data, null, 2) },
     { label: 'JSON Schema', content: JSON.stringify(example.schema, null, 2) },
@@ -63,48 +63,55 @@ export const App = () => {
             ))}
           </select>
         </label>
-        <label className="app-select">
-          Validation{' '}
-          <select
-            value={validation}
-            onChange={(event) =>
-              setValidation(event.target.value as ValidationChoice)
-            }
-          >
-            {validationChoices.map((choice) => (
-              <option key={choice.id} value={choice.id}>
-                {choice.label}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label className="app-select">
-          Engine{' '}
-          <select
-            value={engineChoice}
-            onChange={(event) =>
-              setEngineChoice(event.target.value as EngineChoice)
-            }
-          >
-            {engineChoices.map((choice) => (
-              <option key={choice.id} value={choice.id}>
-                {choice.label}
-              </option>
-            ))}
-          </select>
-        </label>
       </header>
       <main className="app-main">
+        <aside className="app-panel app-sidebar">
+          <h2>Settings</h2>
+          <label className="app-field">
+            Validation
+            <select
+              value={validation}
+              onChange={(event) =>
+                setValidation(event.target.value as ValidationChoice)
+              }
+            >
+              {validationChoices.map((choice) => (
+                <option key={choice.id} value={choice.id}>
+                  {choice.label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="app-field">
+            Engine
+            <select
+              value={engineChoice}
+              onChange={(event) =>
+                setEngineChoice(event.target.value as EngineChoice)
+              }
+            >
+              {engineChoices.map((choice) => (
+                <option key={choice.id} value={choice.id}>
+                  {choice.label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <h3 className="app-config-heading">Config</h3>
+          <label className="app-checkbox">
+            <input
+              type="checkbox"
+              checked={showIssuesOnTouch}
+              onChange={(event) => setShowIssuesOnTouch(event.target.checked)}
+            />
+            Show issues only after touch
+          </label>
+        </aside>
         <section className="app-panel app-panel--form">
           <h2>{example.title}</h2>
           {example.description !== undefined && (
             <p className="app-description">{example.description}</p>
           )}
-          <p className="app-validator">
-            Validation: {describeValidator(validation, example.schema)}
-            <br />
-            Engine: {describeEngine(engineChoice)}
-          </p>
           {engineChoice === 'worker' ? (
             <RemoteEngineForm
               key={formKey}
@@ -113,6 +120,7 @@ export const App = () => {
                 uischema: example.uischema,
                 data: example.data,
                 validation,
+                config,
               }}
               renderers={vanillaRenderers}
               onChange={(event) => setData(event.data)}
@@ -125,6 +133,7 @@ export const App = () => {
               uischema={example.uischema}
               data={example.data}
               validator={validator}
+              config={config}
               renderers={vanillaRenderers}
               onChange={(event) => setData(event.data)}
             />

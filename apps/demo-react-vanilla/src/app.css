@@ -35,15 +35,10 @@ body {
 
 .app-example-select {
   margin-left: auto;
-}
-
-.app-example-select,
-.app-select {
   font-size: 0.85rem;
 }
 
-.app-example-select select,
-.app-select select {
+.app-example-select select {
   margin-left: 0.5rem;
   padding: 0.25rem 0.5rem;
   font: inherit;
@@ -51,15 +46,15 @@ body {
 
 .app-main {
   display: grid;
-  grid-template-columns: 3fr 2fr;
+  grid-template-columns: 240px 3fr 2fr;
   gap: 1.5rem;
   align-items: start;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 1.5rem;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 1000px) {
   .app-main {
     grid-template-columns: 1fr;
   }
@@ -77,17 +72,50 @@ body {
   font-size: 1.1rem;
 }
 
+/* Settings sidebar */
+
+.app-sidebar h2 {
+  margin-bottom: 1rem;
+}
+
+.app-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.app-field select {
+  padding: 0.35rem 0.5rem;
+  font: inherit;
+  font-weight: 400;
+}
+
+.app-config-heading {
+  margin: 1.25rem 0 0.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid #d1d9e0;
+  font-size: 0.9rem;
+}
+
+.app-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+}
+
+/* Form panel */
+
 .app-description {
-  margin: 0 0 0.25rem;
+  margin: 0 0 1.25rem;
   color: #59636e;
   font-size: 0.85rem;
 }
 
-.app-validator {
-  margin: 0 0 1.25rem;
-  color: #1565c0;
-  font-size: 0.75rem;
-}
+/* Inspector panel */
 
 .app-tabs {
   display: flex;
