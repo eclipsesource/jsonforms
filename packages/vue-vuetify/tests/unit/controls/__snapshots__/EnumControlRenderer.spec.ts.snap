@@ -7,7 +7,7 @@ exports[`EnumControlRenderer.vue > should render component and match snapshot 1`
       <div class="v-input v-input--horizontal v-input--center-affix v-input--density-default v-theme--light v-locale--is-ltr v-input--dirty v-text-field v-select v-select--single v-select--selected input">
         <!---->
         <div class="v-input__control">
-          <div class="v-field v-field--active v-field--appended v-field--center-affix v-field--dirty v-field--variant-filled v-theme--light v-locale--is-ltr" role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-controls="v-menu-v-2">
+          <div class="v-field v-field--active v-field--appended v-field--center-affix v-field--dirty v-field--variant-filled v-theme--light v-locale--is-ltr" role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-controls="menu-v-1" aria-owns="menu-v-1">
             <div class="v-field__overlay"></div>
             <div class="v-field__loader">
               <div class="v-progress-linear v-theme--light v-locale--is-ltr" style="top: 0px; height: 0px; --v-progress-linear-height: 2px;" role="progressbar" aria-hidden="true" aria-valuemin="0" aria-valuemax="100">
@@ -24,16 +24,19 @@ exports[`EnumControlRenderer.vue > should render component and match snapshot 1`
               </div>
             </div>
             <!---->
-            <div class="v-field__field" data-no-activator=""><label class="v-label v-field-label v-field-label--floating" aria-hidden="true" for="#4-input">
+            <div class="v-field__field" data-no-activator=""><label class="v-label v-field-label v-field-label--floating" aria-hidden="false" for="#4-input">
                 <!---->My Enum
-              </label><label class="v-label v-field-label" for="#4-input">
+              </label><label class="v-label v-field-label" id="#4-input-label" aria-hidden="true">
                 <!---->My Enum
               </label>
               <!---->
-              <div class="v-field__input" data-no-activator="">
+              <div class="v-field__input" data-no-activator=""><select hidden="">
+                  <option selected="" value="a"></option>
+                  <option value="b"></option>
+                </select>
                 <!---->
                 <!---->
-                <div class="v-select__selection"><span class="v-select__selection-text">a<!----></span></div><input size="1" type="text" id="#4-input" aria-describedby="#4-input-messages" inputmode="none" aria-label="Open" title="Open" value="a">
+                <div class="v-select__selection"><span class="v-select__selection-text">a<!----></span></div><input size="1" role="combobox" type="text" aria-labelledby="#4-input-label" id="#4-input" aria-describedby="#4-input-messages" inputmode="none" aria-expanded="false" aria-controls="menu-v-1" value="a">
               </div>
               <!---->
             </div>
@@ -70,7 +73,7 @@ exports[`EnumControlRenderer.vue > should render component and match snapshot wh
       <div class="v-input v-input--horizontal v-input--center-affix v-input--density-default v-theme--light v-locale--is-ltr v-input--dirty v-text-field v-select v-select--single v-select--selected input">
         <!---->
         <div class="v-input__control">
-          <div class="v-field v-field--active v-field--appended v-field--center-affix v-field--dirty v-field--variant-filled v-theme--light v-locale--is-ltr" role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-controls="v-menu-v-2">
+          <div class="v-field v-field--active v-field--appended v-field--center-affix v-field--dirty v-field--variant-filled v-theme--light v-locale--is-ltr" role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-controls="menu-v-1" aria-owns="menu-v-1">
             <div class="v-field__overlay"></div>
             <div class="v-field__loader">
               <div class="v-progress-linear v-theme--light v-locale--is-ltr" style="top: 0px; height: 0px; --v-progress-linear-height: 2px;" role="progressbar" aria-hidden="true" aria-valuemin="0" aria-valuemax="100">
@@ -87,16 +90,19 @@ exports[`EnumControlRenderer.vue > should render component and match snapshot wh
               </div>
             </div>
             <!---->
-            <div class="v-field__field" data-no-activator=""><label class="v-label v-field-label v-field-label--floating" aria-hidden="true" for="#5-input">
+            <div class="v-field__field" data-no-activator=""><label class="v-label v-field-label v-field-label--floating" aria-hidden="false" for="#5-input">
                 <!---->My Enum
-              </label><label class="v-label v-field-label" for="#5-input">
+              </label><label class="v-label v-field-label" id="#5-input-label" aria-hidden="true">
                 <!---->My Enum
               </label>
               <!---->
-              <div class="v-field__input" data-no-activator="">
+              <div class="v-field__input" data-no-activator=""><select hidden="">
+                  <option selected="" value="a"></option>
+                  <option value="b"></option>
+                </select>
                 <!---->
                 <!---->
-                <div class="v-select__selection"><span class="v-select__selection-text">a<!----></span></div><input size="1" type="text" id="#5-input" aria-describedby="#5-input-messages" inputmode="none" aria-label="Open" title="Open" value="a">
+                <div class="v-select__selection"><span class="v-select__selection-text">a<!----></span></div><input size="1" role="combobox" type="text" aria-labelledby="#5-input-label" id="#5-input" aria-describedby="#5-input-messages" inputmode="none" aria-expanded="false" aria-controls="menu-v-1" value="a">
               </div>
               <!---->
             </div>
