@@ -81,9 +81,11 @@ const TableToolbar = React.memo(function TableToolbar({
         <Stack>
           <Grid
             container
-            justifyContent={'flex-start'}
-            alignItems={'center'}
-            spacing={2}
+            sx={{
+              alignItems: 'center',
+              justifyContent: 'flex-start',
+              spacing: 2,
+            }}
           >
             <Grid>
               <Typography variant={'h6'}>{label}</Typography>

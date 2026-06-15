@@ -29,15 +29,17 @@ import {
   JsonSchema,
 } from '@jsonforms/core';
 import * as React from 'react';
+import { act } from 'react-dom/test-utils';
 
 import MaterialArrayControlRenderer from '../../src/complex/MaterialArrayControlRenderer';
 import { materialCells, materialRenderers } from '../../src';
-import Enzyme, { mount, ReactWrapper } from 'enzyme';
+import Enzyme, { ReactWrapper } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { JsonFormsStateProvider } from '@jsonforms/react';
-import { initCore, TestEmitter } from './util';
+import { initCore, mountWithAct, TestEmitter } from './util';
 import { checkTooltip, checkTooltipTranslation } from './tooltipChecker';
 
+jest.useFakeTimers();
 Enzyme.configure({ adapter: new Adapter() });
 
 const fixture: {
@@ -106,7 +108,7 @@ describe('Material array control', () => {
 
   it('should render', () => {
     const core = initCore(fixture.schema, fixture.uischema, fixture.data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -124,7 +126,7 @@ describe('Material array control', () => {
 
   it('should render empty', () => {
     const core = initCore(fixture.schema, fixture.uischema);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -161,7 +163,7 @@ describe('Material array control', () => {
     };
     const core = initCore(schema, uischema, data);
 
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -206,7 +208,7 @@ describe('Material array control', () => {
     };
     const core = initCore(schema, uischema, data);
 
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -241,7 +243,7 @@ describe('Material array control', () => {
       scope: '#/properties/test',
     };
     const core = initCore(schema, uischema, data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -275,7 +277,7 @@ describe('Material array control', () => {
       scope: '#/properties/test',
     };
     const core = initCore(schema, uischema, data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -295,7 +297,7 @@ describe('Material array control', () => {
     };
 
     const core = initCore(descriptionSchema, fixture.uischema, fixture.data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -319,7 +321,7 @@ describe('Material array control', () => {
     delete descriptionSchema.description;
 
     const core = initCore(descriptionSchema, fixture.uischema, fixture.data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -337,7 +339,7 @@ describe('Material array control', () => {
     const onChangeData: any = {
       data: undefined,
     };
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, cells: materialCells, core }}
       >
@@ -362,16 +364,24 @@ describe('Material array control', () => {
     // delete row
     // two dialog buttons (no + yes)
     const nrOfRowsBeforeDelete = wrapper.find('tr').length;
+    expect(nrOfRowsBeforeDelete).toBe(4);
 
-    const deleteButton = buttons.at(2);
-    deleteButton.simulate('click');
+    act(() => {
+      const deleteButton = buttons.at(2);
+      deleteButton.simulate('click');
+    });
+    wrapper.update();
 
-    const confirmButton = buttons.at(6);
-    confirmButton.simulate('click');
+    act(() => {
+      // Re-collect buttons after the dialog opens
+      const buttonsAfterDelete = wrapper.find('button');
+      const confirmButton = buttonsAfterDelete.at(6);
+      confirmButton.simulate('click');
+    });
+
+    wrapper.update();
 
     const nrOfRowsAfterDelete = wrapper.find('tr').length;
-
-    expect(nrOfRowsBeforeDelete).toBe(4);
     expect(nrOfRowsAfterDelete).toBe(3);
     expect(onChangeData.data.length).toBe(1);
   });
@@ -396,7 +406,7 @@ describe('Material array control', () => {
       },
     ];
 
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -420,7 +430,7 @@ describe('Material array control', () => {
       cell: CellRenderer1,
     };
 
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -467,7 +477,7 @@ describe('Material array control', () => {
       data: undefined,
     };
 
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -524,7 +534,7 @@ describe('Material array control', () => {
       scope: '#/properties/things',
     };
     const core = initCore(schema, uischema, {});
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -542,10 +552,11 @@ describe('Material array control', () => {
     const nrOfRows = wrapper.find('tr').length;
     expect(nrOfRows).toBe(0);
   });
+
   it('should render sort buttons if showSortButtons is true', () => {
     const data = { test: ['foo'] };
     const core = initCore(fixture2.schema, fixture2.uischema, data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -564,12 +575,13 @@ describe('Material array control', () => {
       wrapper.find('button').find({ 'aria-label': 'Move item down' }).length
     ).toBe(1);
   });
+
   it('should be able to move item down if down button is clicked', () => {
     const core = initCore(fixture2.schema, fixture2.uischema, fixture2.data);
     const onChangeData: any = {
       data: undefined,
     };
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -595,12 +607,13 @@ describe('Material array control', () => {
       test: ['baz', 'foo', 'bar'],
     });
   });
+
   it('should be able to move item up if up button is clicked', () => {
     const core = initCore(fixture2.schema, fixture2.uischema, fixture2.data);
     const onChangeData: any = {
       data: undefined,
     };
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -626,9 +639,10 @@ describe('Material array control', () => {
       test: ['foo', 'bar', 'baz'],
     });
   });
+
   it('should have up button disabled for first element', () => {
     const core = initCore(fixture2.schema, fixture2.uischema, fixture2.data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -649,7 +663,7 @@ describe('Material array control', () => {
 
   it('should have fields enabled', () => {
     const core = initCore(fixture2.schema, fixture2.uischema, fixture2.data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, cells: materialCells, core }}
       >
@@ -667,7 +681,7 @@ describe('Material array control', () => {
 
   it('should have fields disabled', () => {
     const core = initCore(fixture2.schema, fixture2.uischema, fixture2.data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, cells: materialCells, core }}
       >
@@ -685,7 +699,7 @@ describe('Material array control', () => {
 
   it('add and delete buttons should exist if enabled', () => {
     const core = initCore(fixture2.schema, fixture2.uischema, fixture2.data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, cells: materialCells, core }}
       >
@@ -705,7 +719,7 @@ describe('Material array control', () => {
 
   it('add and delete buttons should be removed if disabled', () => {
     const core = initCore(fixture2.schema, fixture2.uischema, fixture2.data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, cells: materialCells, core }}
       >
@@ -727,7 +741,7 @@ describe('Material array control', () => {
     const core = initCore(fixture2.schema, fixture2.uischema, fixture2.data);
     const uischema = { ...fixture2.uischema };
     uischema.options = { ...uischema.options, disableAdd: true };
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, cells: materialCells, core }}
       >
@@ -746,7 +760,7 @@ describe('Material array control', () => {
     const core = initCore(fixture2.schema, fixture2.uischema, fixture2.data);
     const uischema = { ...fixture2.uischema };
     uischema.options = { ...uischema.options, disableRemove: true };
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, cells: materialCells, core }}
       >
@@ -763,7 +777,7 @@ describe('Material array control', () => {
 
   it('add and delete buttons should be removed if indicated via config', () => {
     const core = initCore(fixture2.schema, fixture2.uischema, fixture2.data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{
           renderers: materialRenderers,
@@ -787,7 +801,7 @@ describe('Material array control', () => {
 
   it('should have down button disabled for last element', () => {
     const core = initCore(fixture2.schema, fixture2.uischema, fixture2.data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -820,6 +834,7 @@ describe('Material array control', () => {
       fixture.data
     );
   });
+
   it('should have a translatable tooltip for add button', () => {
     wrapper = checkTooltipTranslation(
       fixture.schema,
@@ -846,6 +861,7 @@ describe('Material array control', () => {
       fixture2.data
     );
   });
+
   it('should have a translatable tooltip for delete button', () => {
     wrapper = checkTooltipTranslation(
       fixture2.schema,
@@ -872,6 +888,7 @@ describe('Material array control', () => {
       fixture2.data
     );
   });
+
   it('should have a translatable tooltip for up button', () => {
     wrapper = checkTooltipTranslation(
       fixture2.schema,
@@ -898,6 +915,7 @@ describe('Material array control', () => {
       fixture2.data
     );
   });
+
   it('should have a translatable tooltip for down button', () => {
     wrapper = checkTooltipTranslation(
       fixture2.schema,

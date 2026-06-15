@@ -27,9 +27,8 @@ import { withJsonFormsMasterListItemProps } from '@jsonforms/react';
 import {
   Avatar,
   IconButton,
-  ListItemButton,
   ListItemAvatar,
-  ListItemSecondaryAction,
+  ListItemButton,
   ListItemText,
   Tooltip,
 } from '@mui/material';
@@ -54,21 +53,20 @@ export const ListWithDetailMasterItem = ({
       </ListItemAvatar>
       <ListItemText primary={childLabel} />
       {enabled && !disableRemove && (
-        <ListItemSecondaryAction>
+        <IconButton
+          aria-label={translations.removeAriaLabel}
+          onClick={removeItem(path, index)}
+          size='large'
+          sx={{ marginLeft: 'auto' }}
+        >
           <Tooltip
             id='tooltip-remove'
             title={translations.removeTooltip}
             placement='bottom'
           >
-            <IconButton
-              aria-label={translations.removeAriaLabel}
-              onClick={removeItem(path, index)}
-              size='large'
-            >
-              <Delete />
-            </IconButton>
+            <Delete />
           </Tooltip>
-        </ListItemSecondaryAction>
+        </IconButton>
       )}
     </ListItemButton>
   );

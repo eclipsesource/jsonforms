@@ -1,3 +1,5 @@
+import { act } from 'react-dom/test-utils';
+
 /*
   The MIT License
 
@@ -29,11 +31,12 @@ import TimeCell, {
 } from '../../src/cells/MaterialTimeCell';
 import { materialRenderers } from '../../src';
 
-import Enzyme, { mount, ReactWrapper } from 'enzyme';
+import Enzyme, { ReactWrapper } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { JsonFormsStateProvider } from '@jsonforms/react';
-import { initCore, TestEmitter } from './util';
+import { initCore, mountWithAct, TestEmitter } from './util';
 
+jest.useFakeTimers();
 Enzyme.configure({ adapter: new Adapter() });
 
 const data = { foo: '13:37' };
@@ -131,13 +134,15 @@ describe('Material time cell', () => {
       },
     };
     const core = initCore(schema, control, data);
-    wrapper = mount(
-      <JsonFormsStateProvider
-        initState={{ renderers: materialRenderers, core }}
-      >
-        <TimeCell schema={schema} uischema={control} />
-      </JsonFormsStateProvider>
-    );
+    act(() => {
+      wrapper = mountWithAct(
+        <JsonFormsStateProvider
+          initState={{ renderers: materialRenderers, core }}
+        >
+          <TimeCell schema={schema} uischema={control} />
+        </JsonFormsStateProvider>
+      );
+    });
     const input = wrapper.find('input').first();
     expect(input.props().autoFocus).toBeTruthy();
   });
@@ -151,13 +156,15 @@ describe('Material time cell', () => {
       },
     };
     const core = initCore(schema, control, data);
-    wrapper = mount(
-      <JsonFormsStateProvider
-        initState={{ renderers: materialRenderers, core }}
-      >
-        <TimeCell schema={schema} uischema={control} />
-      </JsonFormsStateProvider>
-    );
+    act(() => {
+      wrapper = mountWithAct(
+        <JsonFormsStateProvider
+          initState={{ renderers: materialRenderers, core }}
+        >
+          <TimeCell schema={schema} uischema={control} />
+        </JsonFormsStateProvider>
+      );
+    });
     const input = wrapper.find('input').first();
     expect(input.props().autoFocus).toBeFalsy();
   });
@@ -168,38 +175,43 @@ describe('Material time cell', () => {
       scope: '#/properties/foo',
     };
     const core = initCore(schema, control, data);
-    wrapper = mount(
-      <JsonFormsStateProvider
-        initState={{ renderers: materialRenderers, core }}
-      >
-        <TimeCell schema={schema} uischema={control} path='foo' />
-      </JsonFormsStateProvider>
-    );
+    act(() => {
+      wrapper = mountWithAct(
+        <JsonFormsStateProvider
+          initState={{ renderers: materialRenderers, core }}
+        >
+          <TimeCell schema={schema} uischema={control} path='foo' />
+        </JsonFormsStateProvider>
+      );
+    });
     const input = wrapper.find('input').first();
     expect(input.props().autoFocus).toBeFalsy();
   });
 
   it('should render', () => {
     const core = initCore(schema, uischema, data);
-    wrapper = mount(
-      <JsonFormsStateProvider
-        initState={{ renderers: materialRenderers, core }}
-      >
-        <TimeCell schema={schema} uischema={uischema} path='foo' />
-      </JsonFormsStateProvider>
-    );
+    act(() => {
+      wrapper = mountWithAct(
+        <JsonFormsStateProvider
+          initState={{ renderers: materialRenderers, core }}
+        >
+          <TimeCell schema={schema} uischema={uischema} path='foo' />
+        </JsonFormsStateProvider>
+      );
+    });
 
     const input = wrapper.find('input').first();
     expect(input.props().type).toBe('time');
     expect(input.props().value).toBe('13:37');
   });
 
-  it('should update via event', (done) => {
+  it('should update via event', () => {
     const core = initCore(schema, uischema, data);
     const onChangeData: any = {
       data: undefined,
     };
-    wrapper = mount(
+
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -211,17 +223,19 @@ describe('Material time cell', () => {
         <TimeCell schema={schema} uischema={uischema} path='foo' />
       </JsonFormsStateProvider>
     );
-    const input = wrapper.find('input').first();
-    input.simulate('change', { target: { value: '20:15' } });
-    setTimeout(() => {
-      expect(onChangeData.data.foo).toBe('20:15');
-      done();
-    }, 1000);
+
+    act(() => {
+      const input = wrapper.find('input').first();
+      input.simulate('change', { target: { value: '20:15' } });
+      jest.runAllTimers();
+    });
+
+    expect(onChangeData.data.foo).toBe('20:15');
   });
 
-  it('should update via action', (done) => {
+  it('should update via action', () => {
     const core = initCore(schema, uischema, data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -229,18 +243,20 @@ describe('Material time cell', () => {
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, foo: '20:15' };
-    wrapper.setProps({ initState: { renderers: materialRenderers, core } });
+    act(() => {
+      wrapper.setProps({ initState: { renderers: materialRenderers, core } });
+    });
+
     wrapper.update();
-    setTimeout(() => {
-      const input = wrapper.find('input').first();
-      expect(input.props().value).toBe('20:15');
-      done();
-    }, 1000);
+
+    const input = wrapper.find('input').first();
+    expect(input.props().value).toBe('20:15');
   });
 
-  it('should update with null value', (done) => {
+  it('should update with null value', () => {
     const core = initCore(schema, uischema, data);
-    wrapper = mount(
+
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -248,18 +264,20 @@ describe('Material time cell', () => {
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, foo: null };
-    wrapper.setProps({ initState: { renderers: materialRenderers, core } });
+    act(() => {
+      wrapper.setProps({ initState: { renderers: materialRenderers, core } });
+    });
+
     wrapper.update();
-    setTimeout(() => {
-      const input = wrapper.find('input').first();
-      expect(input.props().value).toBe('');
-      done();
-    }, 1000);
+
+    const input = wrapper.find('input').first();
+    expect(input.props().value).toBe('');
   });
 
-  it('update with undefined value', (done) => {
+  it('update with undefined value', () => {
     const core = initCore(schema, uischema, data);
-    wrapper = mount(
+
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -267,18 +285,18 @@ describe('Material time cell', () => {
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, foo: undefined };
-    wrapper.setProps({ initState: { renderers: materialRenderers, core } });
+    act(() => {
+      wrapper.setProps({ initState: { renderers: materialRenderers, core } });
+    });
     wrapper.update();
-    setTimeout(() => {
-      const input = wrapper.find('input').first();
-      expect(input.props().value).toBe('');
-      done();
-    }, 1000);
+
+    const input = wrapper.find('input').first();
+    expect(input.props().value).toBe('');
   });
 
-  it('should update with wrong ref', (done) => {
+  it('should update with wrong ref', () => {
     const core = initCore(schema, uischema, data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -286,18 +304,18 @@ describe('Material time cell', () => {
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, bar: 'Bar' };
-    wrapper.setProps({ initState: { renderers: materialRenderers, core } });
+    act(() => {
+      wrapper.setProps({ initState: { renderers: materialRenderers, core } });
+    });
+
     wrapper.update();
-    setTimeout(() => {
-      const input = wrapper.find('input').first();
-      expect(input.props().value).toBe('13:37');
-      done();
-    }, 1000);
+    const input = wrapper.find('input').first();
+    expect(input.props().value).toBe('13:37');
   });
 
-  it('should update with null ref', (done) => {
+  it('should update with null ref', () => {
     const core = initCore(schema, uischema, data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -305,18 +323,18 @@ describe('Material time cell', () => {
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, null: '20:15' };
-    wrapper.setProps({ initState: { renderers: materialRenderers, core } });
+    act(() => {
+      wrapper.setProps({ initState: { renderers: materialRenderers, core } });
+    });
     wrapper.update();
-    setTimeout(() => {
-      const input = wrapper.find('input').first();
-      expect(input.props().value).toBe('13:37');
-      done();
-    }, 1000);
+    const input = wrapper.find('input').first();
+    expect(input.props().value).toBe('13:37');
   });
 
-  it('should update with undefined ref', (done) => {
+  it('should update with undefined ref', () => {
     const core = initCore(schema, uischema, data);
-    wrapper = mount(
+
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -324,18 +342,19 @@ describe('Material time cell', () => {
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, undefined: '20:15' };
-    wrapper.setProps({ initState: { renderers: materialRenderers, core } });
+    act(() => {
+      wrapper.setProps({ initState: { renderers: materialRenderers, core } });
+    });
     wrapper.update();
-    setTimeout(() => {
-      const input = wrapper.find('input').first();
-      expect(input.props().value).toBe('13:37');
-      done();
-    }, 1000);
+
+    const input = wrapper.find('input').first();
+    expect(input.props().value).toBe('13:37');
   });
 
   it('can be disabled', () => {
     const core = initCore(schema, uischema, data);
-    wrapper = mount(
+
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -353,7 +372,7 @@ describe('Material time cell', () => {
 
   it('should be enabled by default', () => {
     const core = initCore(schema, uischema, data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >

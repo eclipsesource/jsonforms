@@ -29,11 +29,13 @@ import TextCell, {
 } from '../../src/cells/MaterialTextCell';
 import { materialRenderers } from '../../src';
 
-import Enzyme, { mount, ReactWrapper } from 'enzyme';
+import Enzyme, { ReactWrapper } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { JsonFormsStateProvider } from '@jsonforms/react';
-import { initCore, TestEmitter } from './util';
+import { initCore, mountWithAct, TestEmitter } from './util';
+import { act } from 'react-dom/test-utils';
 
+jest.useFakeTimers();
 Enzyme.configure({ adapter: new Adapter() });
 
 const DEFAULT_MAX_LENGTH = 524288;
@@ -149,7 +151,7 @@ describe('Material text cell', () => {
       options: { focus: true },
     };
     const core = initCore(minLengthSchema, control, data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -167,7 +169,7 @@ describe('Material text cell', () => {
       options: { focus: false },
     };
     const core = initCore(schema, control, data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -184,7 +186,7 @@ describe('Material text cell', () => {
       scope: '#/properties/name',
     };
     const core = initCore(minLengthSchema, control, data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -203,7 +205,7 @@ describe('Material text cell', () => {
       },
     };
     const core = initCore(minLengthSchema, uischema, { name: 'Foo' });
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -215,12 +217,12 @@ describe('Material text cell', () => {
     expect(input.props().value).toBe('Foo');
   });
 
-  it('should update via input event', (done) => {
+  it('should update via input event', () => {
     const core = initCore(minLengthSchema, uischema, data);
     const onChangeData: any = {
       data: undefined,
     };
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -234,16 +236,17 @@ describe('Material text cell', () => {
     );
 
     const input = wrapper.find('input').first();
-    input.simulate('change', { target: { value: 'Bar' } });
-    setTimeout(() => {
-      expect(onChangeData.data.name).toBe('Bar');
-      done();
-    }, 1000);
+    act(() => {
+      input.simulate('change', { target: { value: 'Bar' } });
+      jest.runAllTimers();
+    });
+
+    expect(onChangeData.data.name).toBe('Bar');
   });
 
-  it('should update via action', (done) => {
+  it('should update via action', () => {
     const core = initCore(minLengthSchema, uischema, data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -251,18 +254,18 @@ describe('Material text cell', () => {
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, name: 'Bar' };
-    wrapper.setProps({ initState: { renderers: materialRenderers, core } });
+    act(() => {
+      wrapper.setProps({ initState: { renderers: materialRenderers, core } });
+    });
     wrapper.update();
-    setTimeout(() => {
-      const input = wrapper.find('input').first();
-      expect(input.props().value).toBe('Bar');
-      done();
-    }, 1000);
+
+    const input = wrapper.find('input').first();
+    expect(input.props().value).toBe('Bar');
   });
 
-  it('should update with undefined value', (done) => {
+  it('should update with undefined value', () => {
     const core = initCore(minLengthSchema, uischema, data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -270,18 +273,18 @@ describe('Material text cell', () => {
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, name: undefined };
-    wrapper.setProps({ initState: { renderers: materialRenderers, core } });
+    act(() => {
+      wrapper.setProps({ initState: { renderers: materialRenderers, core } });
+    });
     wrapper.update();
-    setTimeout(() => {
-      const input = wrapper.find('input').first();
-      expect(input.props().value).toBe('');
-      done();
-    }, 1000);
+
+    const input = wrapper.find('input').first();
+    expect(input.props().value).toBe('');
   });
 
-  it('should update with null value', (done) => {
+  it('should update with null value', () => {
     const core = initCore(minLengthSchema, uischema, data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -289,18 +292,18 @@ describe('Material text cell', () => {
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, name: null };
-    wrapper.setProps({ initState: { renderers: materialRenderers, core } });
+    act(() => {
+      wrapper.setProps({ initState: { renderers: materialRenderers, core } });
+    });
     wrapper.update();
-    setTimeout(() => {
-      const input = wrapper.find('input').first();
-      expect(input.props().value).toBe('');
-      done();
-    }, 1000);
+
+    const input = wrapper.find('input').first();
+    expect(input.props().value).toBe('');
   });
 
-  it('should not update if wrong ref', (done) => {
+  it('should not update if wrong ref', () => {
     const core = initCore(minLengthSchema, uischema, data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -308,18 +311,18 @@ describe('Material text cell', () => {
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, firstname: 'Bar' };
-    wrapper.setProps({ initState: { renderers: materialRenderers, core } });
+    act(() => {
+      wrapper.setProps({ initState: { renderers: materialRenderers, core } });
+    });
     wrapper.update();
-    setTimeout(() => {
-      const input = wrapper.find('input').first();
-      expect(input.props().value).toBe('Foo');
-      done();
-    }, 1000);
+
+    const input = wrapper.find('input').first();
+    expect(input.props().value).toBe('Foo');
   });
 
-  it('should not update if null ref', (done) => {
+  it('should not update if null ref', () => {
     const core = initCore(minLengthSchema, uischema, data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -327,18 +330,18 @@ describe('Material text cell', () => {
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, null: 'Bar' };
-    wrapper.setProps({ initState: { renderers: materialRenderers, core } });
+    act(() => {
+      wrapper.setProps({ initState: { renderers: materialRenderers, core } });
+    });
     wrapper.update();
-    setTimeout(() => {
-      const input = wrapper.find('input').first();
-      expect(input.props().value).toBe('Foo');
-      done();
-    }, 1000);
+
+    const input = wrapper.find('input').first();
+    expect(input.props().value).toBe('Foo');
   });
 
-  it('should not update if undefined ref', (done) => {
+  it('should not update if undefined ref', () => {
     const core = initCore(minLengthSchema, uischema, data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -346,18 +349,18 @@ describe('Material text cell', () => {
       </JsonFormsStateProvider>
     );
     core.data = { ...core.data, undefined: 'Bar' };
-    wrapper.setProps({ initState: { renderers: materialRenderers, core } });
+    act(() => {
+      wrapper.setProps({ initState: { renderers: materialRenderers, core } });
+    });
     wrapper.update();
-    setTimeout(() => {
-      const input = wrapper.find('input').first();
-      expect(input.props().value).toBe('Foo');
-      done();
-    }, 1000);
+
+    const input = wrapper.find('input').first();
+    expect(input.props().value).toBe('Foo');
   });
 
   it('can be disabled', () => {
     const core = initCore(minLengthSchema, uischema, data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -375,7 +378,7 @@ describe('Material text cell', () => {
 
   it('should be enabled by default', () => {
     const core = initCore(minLengthSchema, uischema, data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -396,7 +399,7 @@ describe('Material text cell', () => {
       },
     };
     const core = initCore(maxLengthSchema, control, data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -416,7 +419,7 @@ describe('Material text cell', () => {
       options: { trim: true },
     };
     const core = initCore(maxLengthSchema, control, data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -441,7 +444,7 @@ describe('Material text cell', () => {
       options: { restrict: true },
     };
     const core = initCore(maxLengthSchema, control, data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -461,7 +464,7 @@ describe('Material text cell', () => {
 
   it('should not use maxLength by default', () => {
     const core = initCore(maxLengthSchema, uischema, data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -489,7 +492,7 @@ describe('Material text cell', () => {
       },
     };
     const core = initCore(schema, control, data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -514,7 +517,7 @@ describe('Material text cell', () => {
       options: { trim: true },
     };
     const core = initCore(schema, control, data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -539,7 +542,7 @@ describe('Material text cell', () => {
       options: { restrict: true },
     };
     const core = initCore(schema, control, data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -559,7 +562,7 @@ describe('Material text cell', () => {
 
   it('should have default values for attributes', () => {
     const core = initCore(schema, uischema, data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -578,7 +581,7 @@ describe('Material text cell', () => {
 
   it('should be disabled', () => {
     const core = initCore(minLengthSchema, uischema, data);
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >

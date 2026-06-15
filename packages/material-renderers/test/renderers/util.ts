@@ -33,7 +33,9 @@ import {
   UISchemaElement,
 } from '@jsonforms/core';
 import { JsonFormsReactProps, useJsonForms } from '@jsonforms/react';
+import { mount, ReactWrapper } from 'enzyme';
 import React from 'react';
+import { act } from 'react-dom/test-utils';
 
 export const initCore = (
   schema: JsonSchema,
@@ -62,3 +64,11 @@ export const createTesterContext = (
 export const testTranslator: Translator = createTranslator(
   (key) => 'translator.' + key
 );
+
+export const mountWithAct = (component: React.ReactElement) => {
+  let c: ReactWrapper;
+  act(() => {
+    c = mount(component);
+  });
+  return c;
+};

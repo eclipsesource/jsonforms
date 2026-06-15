@@ -33,9 +33,8 @@ import {
   SelectChangeEvent,
   Stack,
   TextFieldProps,
-  ThemeProvider,
-  createTheme,
 } from '@mui/material';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { renderExample } from '../../examples-react/src/index';
 import { materialRenderers, materialCells } from '../src';
 

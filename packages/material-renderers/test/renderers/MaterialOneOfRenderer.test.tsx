@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
+
   Copyright (c) 2017-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,7 +25,7 @@
 import React from 'react';
 import Dialog from '@mui/material/Dialog';
 
-import Enzyme, { mount, ReactWrapper } from 'enzyme';
+import Enzyme, { ReactWrapper } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { ControlElement } from '@jsonforms/core';
 import { MaterialOneOfRenderer, materialRenderers } from '../../src';
@@ -35,11 +35,11 @@ import {
   JsonFormsStateProvider,
 } from '@jsonforms/react';
 import { Tab } from '@mui/material';
-import { initCore, TestEmitter } from './util';
+import { initCore, mountWithAct, TestEmitter } from './util';
+import { act } from 'react-dom/test-utils';
 
+jest.useFakeTimers();
 Enzyme.configure({ adapter: new Adapter() });
-
-const waitForAsync = () => new Promise((resolve) => setTimeout(resolve, 0));
 
 const clickAddButton = (wrapper: ReactWrapper, times: number) => {
   // click add button
@@ -102,7 +102,7 @@ describe('Material oneOf renderer', () => {
       scope: '#/properties/value',
     };
     const core = initCore(schema, uischema, { data: undefined });
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -140,7 +140,7 @@ describe('Material oneOf renderer', () => {
     const data = {
       value: 5,
     };
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonForms
         data={data}
         schema={schema}
@@ -188,7 +188,7 @@ describe('Material oneOf renderer', () => {
     const data = {
       value: { bar: 'bar' },
     };
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonForms
         data={data}
         schema={schema}
@@ -236,7 +236,7 @@ describe('Material oneOf renderer', () => {
     const data = {
       value: { bar: 'bar' },
     };
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonForms
         data={data}
         schema={schema}
@@ -250,7 +250,7 @@ describe('Material oneOf renderer', () => {
     expect(secondTab.html()).toContain('Mui-selected');
   });
 
-  it('should add an item at correct path', (done) => {
+  it('should add an item at correct path', () => {
     const schema = {
       type: 'object',
       properties: {
@@ -276,7 +276,7 @@ describe('Material oneOf renderer', () => {
     const onChangeData: any = {
       data: undefined,
     };
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonForms
         data={undefined}
         schema={schema}
@@ -290,17 +290,19 @@ describe('Material oneOf renderer', () => {
     expect(wrapper.find(MaterialOneOfRenderer).length).toBeTruthy();
 
     const input = wrapper.find('input').first();
-    input.simulate('change', { target: { value: 'test' } });
+    act(() => {
+      input.simulate('change', { target: { value: 'test' } });
+      jest.runAllTimers();
+    });
+
     wrapper.update();
-    setTimeout(() => {
-      expect(onChangeData.data).toEqual({
-        value: 'test',
-      });
-      done();
-    }, 1000);
+
+    expect(onChangeData.data).toEqual({
+      value: 'test',
+    });
   });
 
-  it('should add an item within an array', async () => {
+  it('should add an item within an array', () => {
     const schema = {
       type: 'object',
       properties: {
@@ -336,7 +338,7 @@ describe('Material oneOf renderer', () => {
 
     const core = initCore(schema, uischema, { data: {} });
 
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -344,8 +346,7 @@ describe('Material oneOf renderer', () => {
       </JsonFormsStateProvider>
     );
 
-    await waitForAsync();
-
+    jest.runAllTimers();
     wrapper.update();
 
     selectOneOfTab(wrapper, 1, false);
@@ -359,7 +360,7 @@ describe('Material oneOf renderer', () => {
     expect(nrOfRowsAfterAdd.length).toBe(3);
   });
 
-  it('should add an object within an array', async () => {
+  it('should add an object within an array', () => {
     const schema = {
       type: 'object',
       properties: {
@@ -404,7 +405,7 @@ describe('Material oneOf renderer', () => {
       data: undefined,
     };
 
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -417,8 +418,7 @@ describe('Material oneOf renderer', () => {
       </JsonFormsStateProvider>
     );
 
-    await waitForAsync();
-
+    jest.runAllTimers();
     wrapper.update();
 
     selectOneOfTab(wrapper, 1, false);
@@ -435,7 +435,7 @@ describe('Material oneOf renderer', () => {
     });
   });
 
-  it('should switch to array based oneOf subschema, then switch back, then edit', async () => {
+  it('should switch to array based oneOf subschema, then switch back, then edit', () => {
     const schema = {
       type: 'object',
       properties: {
@@ -480,7 +480,7 @@ describe('Material oneOf renderer', () => {
       data: undefined,
     };
 
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >
@@ -493,8 +493,7 @@ describe('Material oneOf renderer', () => {
       </JsonFormsStateProvider>
     );
 
-    await waitForAsync();
-
+    jest.runAllTimers();
     wrapper.update();
 
     selectOneOfTab(wrapper, 1, false);
@@ -502,23 +501,19 @@ describe('Material oneOf renderer', () => {
     selectOneOfTab(wrapper, 0, true);
 
     const input = wrapper.find('input').first();
-    input.simulate('change', { target: { value: 'test' } });
+    act(() => {
+      input.simulate('change', { target: { value: 'test' } });
+      jest.runAllTimers();
+    });
+
     wrapper.update();
 
-    let done: (value: undefined) => void;
-    const donePromise = new Promise<undefined>((resolve) => {
-      done = resolve;
+    expect(onChangeData.data).toEqual({
+      thingOrThings: { thing: 'test' },
     });
-    setTimeout(() => {
-      expect(onChangeData.data).toEqual({
-        thingOrThings: { thing: 'test' },
-      });
-      done(undefined);
-    }, 1000);
-    return donePromise;
   });
 
-  it('should show confirm dialog when data is not an empty object', async () => {
+  it('should show confirm dialog when data is not an empty object', () => {
     const schema = {
       type: 'object',
       properties: {
@@ -546,7 +541,7 @@ describe('Material oneOf renderer', () => {
     const data = {
       value: 'Foo Bar',
     };
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonForms
         data={data}
         schema={schema}
@@ -554,10 +549,9 @@ describe('Material oneOf renderer', () => {
         renderers={materialRenderers}
       />
     );
-    expect(wrapper.find(MaterialOneOfRenderer).length).toBeTruthy();
-
-    await waitForAsync();
     wrapper.update();
+
+    expect(wrapper.find(MaterialOneOfRenderer).length).toBeTruthy();
     selectOneOfTab(wrapper, 1, true);
   });
 
@@ -585,7 +579,7 @@ describe('Material oneOf renderer', () => {
       scope: '#/properties/value',
     };
     const core = initCore(schema, uischema, { data: undefined });
-    wrapper = mount(
+    wrapper = mountWithAct(
       <JsonFormsStateProvider
         initState={{ renderers: materialRenderers, core }}
       >

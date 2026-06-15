@@ -58,24 +58,22 @@ export const isSingleLevelCategorization: Tester = and(
       categorization.elements &&
       categorization.elements.reduce(
         (acc, e) => acc && e.type === 'Category',
-        true
+        true,
       )
     );
-  }
+  },
 );
 
 export const materialCategorizationTester: RankedTester = rankWith(
   1,
-  isSingleLevelCategorization
+  isSingleLevelCategorization,
 );
 export interface CategorizationState {
   activeCategory: number;
 }
 
 export interface MaterialCategorizationLayoutRendererProps
-  extends StatePropsOfLayout,
-    AjvProps,
-    TranslateProps {
+  extends StatePropsOfLayout, AjvProps, TranslateProps {
   selected?: number;
   ownState?: boolean;
   data?: any;
@@ -83,7 +81,7 @@ export interface MaterialCategorizationLayoutRendererProps
 }
 
 export const MaterialCategorizationLayoutRenderer = (
-  props: MaterialCategorizationLayoutRendererProps
+  props: MaterialCategorizationLayoutRendererProps,
 ) => {
   const {
     data,
@@ -107,9 +105,9 @@ export const MaterialCategorizationLayoutRenderer = (
   const categories = useMemo(
     () =>
       categorization.elements.filter((category: Category) =>
-        isVisible(category, data, undefined, ajv, config)
+        isVisible(category, data, undefined, ajv, config),
       ),
-    [categorization, data, ajv, config]
+    [categorization, data, ajv, config],
   );
 
   if (categorization !== previousCategorization) {
@@ -151,7 +149,6 @@ export const MaterialCategorizationLayoutRenderer = (
         <Tabs
           value={safeCategory}
           onChange={onTabChange}
-          textColor='inherit'
           indicatorColor='secondary'
           variant='scrollable'
         >
@@ -169,6 +166,6 @@ export const MaterialCategorizationLayoutRenderer = (
 
 export default withAjvProps(
   withTranslateProps(
-    withJsonFormsLayoutProps(MaterialCategorizationLayoutRenderer)
-  )
+    withJsonFormsLayoutProps(MaterialCategorizationLayoutRenderer),
+  ),
 );

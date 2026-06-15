@@ -78,8 +78,7 @@ const MaterialLayoutRendererComponent = ({
     return (
       <Grid
         container
-        direction={direction}
-        spacing={direction === 'row' ? 2 : 0}
+        sx={{ direction: direction, spacing: direction === 'row' ? 2 : 0 }}
       >
         {renderLayoutElements(
           elements,
