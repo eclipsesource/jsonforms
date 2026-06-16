@@ -1022,6 +1022,7 @@ export const MaterialMixedRenderer = ({
   const [treeWidth, setTreeWidth] = useState(320);
   const [treeExpanded, setTreeExpanded] = useState(true);
   const [draggingSplitter, setDraggingSplitter] = useState(false);
+  const splitContainerRef = useRef<HTMLDivElement | null>(null);
   const latestTreeData = useRef(data);
   const treeControlCache = useRef(new Map<string, TreeNodeControl>());
   const inputVariant = useInputVariant();
@@ -1143,24 +1144,46 @@ export const MaterialMixedRenderer = ({
     );
   }, [treeNodes, path, activeNodeId]);
 
+  const updateTreeWidthFromPointer = useCallback((clientX: number) => {
+    const splitContainer = splitContainerRef.current;
+    if (!splitContainer) {
+      return;
+    }
+
+    const { left, width } = splitContainer.getBoundingClientRect();
+    const minTreeWidth = 220;
+    const minDetailWidth = 320;
+    const maxTreeWidth = Math.min(
+      640,
+      Math.max(minTreeWidth, width - minDetailWidth)
+    );
+
+    setTreeWidth(
+      Math.min(maxTreeWidth, Math.max(minTreeWidth, clientX - left))
+    );
+  }, []);
+
   useEffect(() => {
     if (!draggingSplitter) {
       return undefined;
     }
 
-    const onMouseMove = (event: MouseEvent) => {
-      setTreeWidth(Math.min(640, Math.max(220, event.clientX - 32)));
+    const onPointerMove = (event: PointerEvent) => {
+      event.preventDefault();
+      updateTreeWidthFromPointer(event.clientX);
     };
-    const onMouseUp = () => setDraggingSplitter(false);
+    const onPointerEnd = () => setDraggingSplitter(false);
 
-    window.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('mouseup', onMouseUp);
+    window.addEventListener('pointermove', onPointerMove);
+    window.addEventListener('pointerup', onPointerEnd);
+    window.addEventListener('pointercancel', onPointerEnd);
 
     return () => {
-      window.removeEventListener('mousemove', onMouseMove);
-      window.removeEventListener('mouseup', onMouseUp);
+      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('pointerup', onPointerEnd);
+      window.removeEventListener('pointercancel', onPointerEnd);
     };
-  }, [draggingSplitter]);
+  }, [draggingSplitter, updateTreeWidthFromPointer]);
 
   const getPathAncestorNodeIds = useCallback(
     (targetPath: string): string[] => {
@@ -1589,7 +1612,10 @@ export const MaterialMixedRenderer = ({
             </Box>
           </AccordionSummary>
           <AccordionDetails sx={{ p: 0 }}>
-            <Box sx={{ display: 'flex', minHeight: 320 }}>
+            <Box
+              ref={splitContainerRef}
+              sx={{ display: 'flex', minHeight: 320 }}
+            >
               <Box
                 sx={{
                   borderRight: '1px solid',
@@ -1641,10 +1667,17 @@ export const MaterialMixedRenderer = ({
               <Divider
                 flexItem
                 orientation='vertical'
-                onMouseDown={() => setDraggingSplitter(true)}
+                onPointerDown={(event) => {
+                  event.preventDefault();
+                  event.currentTarget.setPointerCapture?.(event.pointerId);
+                  setDraggingSplitter(true);
+                  updateTreeWidthFromPointer(event.clientX);
+                }}
                 sx={{
                   bgcolor: draggingSplitter ? 'primary.main' : 'divider',
                   cursor: 'col-resize',
+                  touchAction: 'none',
+                  userSelect: 'none',
                   width: 6,
                 }}
               />
