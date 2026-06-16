@@ -26,6 +26,7 @@ import { MaterialAllOfRenderer } from './MaterialAllOfRenderer';
 import { MaterialAnyOfRenderer } from './MaterialAnyOfRenderer';
 import { MaterialArrayControlRenderer } from './MaterialArrayControlRenderer';
 import { MaterialEnumArrayRenderer } from './MaterialEnumArrayRenderer';
+import { MaterialMixedRenderer } from './MaterialMixedRenderer';
 import { MaterialObjectRenderer } from './MaterialObjectRenderer';
 import { MaterialOneOfRenderer } from './MaterialOneOfRenderer';
 
@@ -34,6 +35,7 @@ export const UnwrappedComplex = {
   MaterialAnyOfRenderer,
   MaterialArrayControlRenderer,
   MaterialEnumArrayRenderer,
+  MaterialMixedRenderer,
   MaterialObjectRenderer,
   MaterialOneOfRenderer,
 };

@@ -1,11 +1,25 @@
 <template>
-  <v-card v-if="control.visible" v-bind="vuetifyProps('v-card')" flat>
+  <v-card
+    v-if="control.visible"
+    class="additional-properties-card"
+    v-bind="vuetifyProps('v-card')"
+    flat
+  >
     <v-container class="py-0">
-      <v-row no-gutters>
-        <v-col v-if="mdAndUp && additionalPropertiesTitle">
-          {{ additionalPropertiesTitle }}</v-col
+      <div
+        class="additional-properties-add"
+        :class="{
+          'additional-properties-add--with-title':
+            mdAndUp && additionalPropertiesTitle,
+        }"
+      >
+        <div
+          v-if="mdAndUp && additionalPropertiesTitle"
+          class="additional-properties-title"
         >
-        <v-col>
+          {{ additionalPropertiesTitle }}
+        </div>
+        <div class="additional-properties-add-field">
           <json-forms
             :data="newPropertyName"
             :uischema="
@@ -26,8 +40,8 @@
             :ajv="ajv"
             :middleware="middleware"
             @change="propertyNameChange"
-          ></json-forms
-        ></v-col>
+          ></json-forms>
+        </div>
         <v-tooltip location="bottom">
           <template v-slot:activator="{ props }">
             <v-btn
@@ -45,15 +59,18 @@
           </template>
           {{ translations.addTooltip }}
         </v-tooltip>
-      </v-row>
+      </div>
     </v-container>
-    <v-container v-bind="vuetifyProps('v-container')" class="py-0">
-      <v-row
-        no-gutters
+    <v-container
+      v-bind="vuetifyProps('v-container')"
+      class="additional-properties-items py-0"
+    >
+      <div
+        :class="additionalPropertyRowClasses(element)"
         v-for="element in additionalPropertyItems"
         :key="`${element.propertyName}`"
       >
-        <v-col class="flex-shrink-0 flex-grow-1">
+        <div class="additional-property-content">
           <dispatch-renderer
             v-if="element.schema && element.uischema"
             :schema="element.schema"
@@ -63,18 +80,74 @@
             :readonly="control.readonly"
             :renderers="control.renderers"
             :cells="control.cells"
-        /></v-col>
-        <v-col v-if="control.enabled" class="flex-shrink-1 flex-grow-0">
+          />
+        </div>
+        <div v-if="control.enabled" class="additional-property-actions">
+          <v-menu
+            :model-value="renamingPropertyName === element.propertyName"
+            :close-on-content-click="false"
+            location="top end"
+            @update:model-value="
+              (open) =>
+                open ? startRename(element.propertyName) : cancelRename()
+            "
+          >
+            <template v-slot:activator="{ props }">
+              <v-btn
+                v-bind="props"
+                class="additional-property-action-button"
+                icon
+                variant="text"
+                elevation="0"
+                :aria-label="'Rename property ' + element.propertyName"
+                :title="'Rename property ' + element.propertyName"
+              >
+                <v-icon class="notranslate">{{
+                  icons.current.value.itemEdit
+                }}</v-icon>
+              </v-btn>
+            </template>
+            <v-card class="additional-property-rename-menu" elevation="8">
+              <v-text-field
+                v-model="renameValue"
+                density="compact"
+                hide-details="auto"
+                autofocus
+                :label="propertyNameLabel"
+                :error-messages="renameError ? [renameError] : []"
+                v-bind="vuetifyProps('v-text-field')"
+                @update:model-value="updateRenameError(element.propertyName)"
+                @keydown.enter="renameProperty(element.propertyName)"
+                @keydown.esc="cancelRename"
+              />
+              <div class="additional-property-rename-actions">
+                <v-btn
+                  variant="text"
+                  size="small"
+                  :disabled="renamePropertyDisabled(element.propertyName)"
+                  @click="renameProperty(element.propertyName)"
+                >
+                  Rename
+                </v-btn>
+                <v-btn variant="text" size="small" @click="cancelRename">
+                  Cancel
+                </v-btn>
+              </div>
+            </v-card>
+          </v-menu>
           <v-tooltip location="bottom">
             <template v-slot:activator="{ props }">
               <v-btn
                 v-bind="props"
+                class="additional-property-action-button"
                 icon
                 variant="text"
                 elevation="0"
-                small
                 :aria-label="translations.removeAriaLabel"
-                :disabled="removePropertyDisabled"
+                :disabled="
+                  removePropertyDisabled ||
+                  renamingPropertyName === element.propertyName
+                "
                 @click="removeProperty(element.propertyName)"
               >
                 <v-icon class="notranslate">{{
@@ -83,9 +156,9 @@
               </v-btn>
             </template>
             {{ translations.removeTooltip }}
-          </v-tooltip></v-col
-        >
-      </v-row>
+          </v-tooltip>
+        </div>
+      </div>
     </v-container>
   </v-card>
 </template>
@@ -118,7 +191,6 @@ import type { ErrorObject } from 'ajv';
 import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
 import isPlainObject from 'lodash/isPlainObject';
-import omit from 'lodash/omit';
 import startCase from 'lodash/startCase';
 
 import { IsDynamicPropertyContext } from '@/util/inject';
@@ -135,10 +207,10 @@ import { useDisplay } from 'vuetify';
 import {
   VBtn,
   VCard,
-  VCol,
   VContainer,
   VIcon,
-  VRow,
+  VMenu,
+  VTextField,
   VTooltip,
 } from 'vuetify/components';
 import { DisabledIconFocus } from '../../controls/directives';
@@ -165,9 +237,9 @@ export default defineComponent({
     VTooltip,
     VIcon,
     VBtn,
+    VMenu,
     VContainer,
-    VRow,
-    VCol,
+    VTextField,
     JsonForms,
   },
   directives: {
@@ -292,6 +364,9 @@ export default defineComponent({
     const newPropertyName = ref<string | null>('');
     const newPropertyErrors = ref<ErrorObject[] | undefined>(undefined);
     const additionalErrors = ref<ErrorObject[]>([]);
+    const renamingPropertyName = ref<string | null>(null);
+    const renameValue = ref('');
+    const renameError = ref<string | null>(null);
 
     const propertyNameSchema = computed<JsonSchema7>(() => {
       let result: JsonSchema7 = {
@@ -440,6 +515,9 @@ export default defineComponent({
       propertyNameChange,
       newPropertyErrors,
       additionalErrors,
+      renamingPropertyName,
+      renameValue,
+      renameError,
       icons,
       isControlEditable,
       propertyNameSchema,
@@ -494,25 +572,12 @@ export default defineComponent({
   watch: {
     'control.data': {
       handler(newData, oldData) {
-        function isEqualIgnoringKeys(
-          obj1: Record<string, any>,
-          obj2: Record<string, any>,
-          keysToIgnore: string[],
-        ) {
-          // Omit the specified keys from both objects
-          const filteredObj1 = omit(obj1, keysToIgnore);
-          const filteredObj2 = omit(obj2, keysToIgnore);
+        const additionalKeys = (data: Record<string, any> | undefined) =>
+          Object.keys(data || {}).filter(
+            (k) => !this.reservedPropertyNames.includes(k),
+          );
 
-          // Perform a deep comparison
-          // return isEqual(filteredObj1, filteredObj2);
-
-          // compare with property order as well
-          return JSON.stringify(filteredObj1) === JSON.stringify(filteredObj2);
-        }
-
-        if (
-          !isEqualIgnoringKeys(newData, oldData, this.reservedPropertyNames)
-        ) {
+        if (!isEqual(additionalKeys(newData), additionalKeys(oldData))) {
           this.additionalPropertyItems = this.additionalKeys.map((propName) =>
             this.toAdditionalPropertyType(
               propName,
@@ -528,6 +593,116 @@ export default defineComponent({
   },
   methods: {
     composePaths,
+    additionalPropertyRowClasses(element: AdditionalPropertyType): string[] {
+      const schemaType = element.schema?.type;
+      const classes = ['additional-property-row'];
+
+      if (Array.isArray(schemaType)) {
+        classes.push('additional-property-row--mixed');
+      } else if (schemaType === 'object') {
+        classes.push('additional-property-row--object');
+      } else if (schemaType === 'array') {
+        classes.push('additional-property-row--array');
+      } else {
+        classes.push('additional-property-row--primitive');
+      }
+
+      return classes;
+    },
+    validatePropertyName(
+      propertyName: string,
+      currentPropertyName?: string,
+    ): string | null {
+      if (!propertyName) {
+        return null;
+      }
+
+      if (
+        typeof this.control.data === 'object' &&
+        this.control.data &&
+        Object.prototype.hasOwnProperty.call(this.control.data, propertyName)
+      ) {
+        if (propertyName === currentPropertyName) {
+          return null;
+        }
+        return (
+          unref(
+            this.translations[
+              AdditionalPropertiesTranslationEnum.propertyAlreadyDefined
+            ],
+          ) ?? `Property '${propertyName}' already defined`
+        );
+      }
+
+      if (
+        propertyName.includes('[') ||
+        propertyName.includes(']') ||
+        propertyName.includes('.')
+      ) {
+        return (
+          unref(
+            this.translations[
+              AdditionalPropertiesTranslationEnum.propertyNameInvalid
+            ],
+          ) ?? `Property name '${propertyName}' is invalid`
+        );
+      }
+
+      const pattern = this.propertyNameSchema.pattern;
+      if (pattern && !new RegExp(pattern).test(propertyName)) {
+        return `Property name must match pattern: ${pattern}`;
+      }
+
+      return null;
+    },
+    startRename(propName: string): void {
+      this.renamingPropertyName = propName;
+      this.renameValue = propName;
+      this.renameError = null;
+    },
+    cancelRename(): void {
+      this.renamingPropertyName = null;
+      this.renameValue = '';
+      this.renameError = null;
+    },
+    renamePropertyDisabled(propName: string): boolean {
+      const trimmed = this.renameValue.trim();
+      return (
+        !this.isControlEditable(this.control) ||
+        !trimmed ||
+        trimmed === propName ||
+        Boolean(this.validatePropertyName(trimmed, propName))
+      );
+    },
+    updateRenameError(propName: string): void {
+      this.renameError = this.validatePropertyName(
+        this.renameValue.trim(),
+        propName,
+      );
+    },
+    renameProperty(propName: string): void {
+      const trimmed = this.renameValue.trim();
+      this.renameError = this.validatePropertyName(trimmed, propName);
+      if (
+        this.renameError ||
+        !trimmed ||
+        trimmed === propName ||
+        typeof this.control.data !== 'object' ||
+        this.control.data === null ||
+        Array.isArray(this.control.data)
+      ) {
+        return;
+      }
+
+      const updatedData = Object.fromEntries(
+        Object.entries(this.control.data).map(([key, value]) => [
+          key === propName ? trimmed : key,
+          value,
+        ]),
+      );
+      this.input.handleChange(this.control.path, updatedData);
+      this.cancelRename();
+    },
     addProperty() {
       if (this.newPropertyName) {
         const additionalProperty = this.toAdditionalPropertyType(
@@ -573,3 +748,82 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped>
+.additional-properties-card {
+  margin-top: 8px;
+}
+
+.additional-properties-items {
+  width: 100%;
+}
+
+.additional-properties-add {
+  align-items: flex-start;
+  display: grid;
+  gap: 8px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  width: 100%;
+}
+
+.additional-properties-add--with-title {
+  grid-template-columns: minmax(180px, max-content) minmax(0, 1fr) auto;
+}
+
+.additional-properties-title {
+  padding-top: 10px;
+}
+
+.additional-properties-add-field {
+  min-width: 0;
+}
+
+.additional-property-row {
+  align-items: flex-start;
+  display: grid;
+  gap: 8px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  min-width: 0;
+  width: 100%;
+}
+
+.additional-property-content {
+  min-width: 0;
+  width: 100%;
+}
+
+.additional-property-actions {
+  align-items: center;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0;
+  opacity: 0.72;
+  transition: opacity 120ms ease;
+}
+
+.additional-property-row:hover .additional-property-actions {
+  opacity: 1;
+}
+
+.additional-property-action-button {
+  height: 24px;
+  width: 24px;
+}
+
+.additional-property-action-button :deep(.v-icon) {
+  font-size: 16px;
+}
+
+.additional-property-rename-menu {
+  min-width: 280px;
+  padding: 12px;
+}
+
+.additional-property-rename-actions {
+  align-items: flex-start;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+</style>

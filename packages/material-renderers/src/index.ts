@@ -33,6 +33,8 @@ import {
   MaterialAnyOfRenderer,
   MaterialArrayControlRenderer,
   materialArrayControlTester,
+  MaterialMixedRenderer,
+  materialMixedControlTester,
   materialObjectControlTester,
   MaterialObjectRenderer,
   materialOneOfControlTester,
@@ -126,6 +128,7 @@ export * from './util';
 
 export const materialRenderers: JsonFormsRendererRegistryEntry[] = [
   // controls
+  { tester: materialMixedControlTester, renderer: MaterialMixedRenderer },
   {
     tester: materialArrayControlTester,
     renderer: MaterialArrayControlRenderer,

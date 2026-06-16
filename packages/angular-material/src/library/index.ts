@@ -62,6 +62,7 @@ import {
   ObjectControlRenderer,
   ObjectControlRendererTester,
 } from './other/object.renderer';
+import { MixedRenderer, MixedRendererTester } from './other/mixed.renderer';
 import {
   VerticalLayoutRenderer,
   verticalLayoutTester,
@@ -109,6 +110,7 @@ export const angularMaterialRenderers: {
   { tester: ToggleControlRendererTester, renderer: ToggleControlRenderer },
   { tester: enumControlTester, renderer: EnumControlRenderer },
   { tester: oneOfEnumControlTester, renderer: OneOfEnumControlRenderer },
+  { tester: MixedRendererTester, renderer: MixedRenderer },
   { tester: ObjectControlRendererTester, renderer: ObjectControlRenderer },
   // layouts
   { tester: verticalLayoutTester, renderer: VerticalLayoutRenderer },

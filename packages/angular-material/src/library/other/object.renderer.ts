@@ -30,6 +30,7 @@ import {
   JsonFormsModule,
 } from '@jsonforms/angular';
 import { MatCardModule } from '@angular/material/card';
+import { AdditionalPropertiesRenderer } from './additional-properties.renderer';
 import {
   ControlWithDetailProps,
   findUISchema,
@@ -47,12 +48,25 @@ import cloneDeep from 'lodash/cloneDeep';
   selector: 'ObjectRenderer',
   template: `
     <mat-card class="object-layout" appearance="outlined">
+      <mat-card-title *ngIf="objectLabel" class="object-layout-title">
+        {{ objectLabel }}
+      </mat-card-title>
       <jsonforms-outlet
         [uischema]="detailUiSchema"
         [schema]="scopedSchema"
         [path]="propsPath"
       >
       </jsonforms-outlet>
+      <AdditionalPropertiesRenderer
+        [config]="additionalPropertiesConfig"
+        [data]="data"
+        [enabled]="isEnabled()"
+        [label]="label"
+        [path]="propsPath"
+        [rootSchema]="rootSchema"
+        [schema]="scopedSchema"
+        [uischema]="uischema"
+      ></AdditionalPropertiesRenderer>
     </mat-card>
   `,
   styles: [
@@ -60,14 +74,23 @@ import cloneDeep from 'lodash/cloneDeep';
       .object-layout {
         padding: 16px;
       }
+      .object-layout-title {
+        margin-bottom: 16px;
+      }
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [JsonFormsModule, MatCardModule],
+  imports: [JsonFormsModule, MatCardModule, AdditionalPropertiesRenderer],
 })
 export class ObjectControlRenderer extends JsonFormsControlWithDetail {
   detailUiSchema: UISchemaElement;
+  additionalPropertiesConfig: any;
+  objectLabel: string | undefined;
   mapAdditionalProps(props: ControlWithDetailProps) {
+    this.additionalPropertiesConfig = {
+      ...props.config,
+      ...props.uischema.options,
+    };
     this.detailUiSchema = findUISchema(
       props.uischemas,
       props.schema,
@@ -81,7 +104,7 @@ export class ObjectControlRenderer extends JsonFormsControlWithDetail {
         delete newSchema.allOf;
         return Generate.uiSchema(
           newSchema,
-          'Group',
+          'VerticalLayout',
           undefined,
           this.rootSchema
         );
@@ -91,8 +114,16 @@ export class ObjectControlRenderer extends JsonFormsControlWithDetail {
     );
     if (isEmpty(props.path)) {
       this.detailUiSchema.type = 'VerticalLayout';
+      this.objectLabel = undefined;
     } else {
-      (this.detailUiSchema as GroupLayout).label = startCase(props.path);
+      this.objectLabel =
+        (this.detailUiSchema as GroupLayout).label ?? startCase(props.path);
+      if (this.detailUiSchema.type === 'Group') {
+        this.detailUiSchema = {
+          ...this.detailUiSchema,
+          type: 'VerticalLayout',
+        } as UISchemaElement;
+      }
     }
     if (!this.isEnabled()) {
       setReadonly(this.detailUiSchema);
