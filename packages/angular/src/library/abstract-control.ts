@@ -33,6 +33,7 @@ import {
   Actions,
   computeLabel,
   ControlElement,
+  createDefaultValue,
   Id,
   JsonFormsState,
   JsonSchema,
@@ -56,6 +57,7 @@ export abstract class JsonFormsAbstractControl<
   @Input() id: string;
   @Input() disabled: boolean;
   @Input() visible: boolean;
+  @Input() preserveUndefinedAsDefault = false;
 
   form: FormControl;
   data: any;
@@ -87,8 +89,14 @@ export abstract class JsonFormsAbstractControl<
   getEventValue = (event: any) => event.value;
 
   onChange(ev: any) {
+    const eventValue = this.getEventValue(ev);
+    const value =
+      this.preserveUndefinedAsDefault && eventValue === undefined
+        ? createDefaultValue(this.scopedSchema, this.rootSchema)
+        : eventValue;
+
     this.jsonFormsService.updateCore(
-      Actions.update(this.propsPath, () => this.getEventValue(ev))
+      Actions.update(this.propsPath, () => value)
     );
     this.triggerValidation();
   }

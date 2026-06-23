@@ -24,5 +24,7 @@
 */
 export * from './label.renderer';
 export * from './master-detail';
+export * from './additional-properties.renderer';
+export * from './mixed.renderer';
 export * from './object.renderer';
 export * from './table.renderer';

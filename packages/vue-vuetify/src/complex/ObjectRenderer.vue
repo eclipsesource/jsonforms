@@ -1,5 +1,5 @@
 <template>
-  <div v-if="control.visible">
+  <div v-if="control.visible && isRootObject">
     <dispatch-renderer
       :visible="control.visible"
       :enabled="control.enabled"
@@ -15,6 +15,29 @@
       :input="input"
     ></additional-properties>
   </div>
+  <v-card
+    v-else-if="control.visible"
+    :class="objectCardClasses"
+    :outlined="nested.level > 0"
+  >
+    <v-card-title v-if="objectLabel">{{ objectLabel }}</v-card-title>
+    <v-card-text>
+      <dispatch-renderer
+        :visible="control.visible"
+        :enabled="control.enabled"
+        :readonly="control.readonly"
+        :schema="control.schema"
+        :uischema="detailUiSchema"
+        :path="control.path"
+        :renderers="control.renderers"
+        :cells="control.cells"
+      />
+      <additional-properties
+        v-if="showAdditionalProperties"
+        :input="input"
+      ></additional-properties>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script lang="ts">
@@ -24,6 +47,7 @@ import {
   findUISchema,
   type ControlElement,
   type GroupLayout,
+  type Layout,
   type UISchemaElement,
 } from '@jsonforms/core';
 import {
@@ -36,6 +60,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import isEmpty from 'lodash/isEmpty';
 import isObject from 'lodash/isObject';
 import { defineComponent, provide } from 'vue';
+import { VCard, VCardText, VCardTitle } from 'vuetify/components';
 import { useNested, useVuetifyControl } from '../util';
 import { AdditionalProperties } from './components';
 
@@ -44,6 +69,9 @@ const controlRenderer = defineComponent({
   components: {
     DispatchRenderer,
     AdditionalProperties,
+    VCard,
+    VCardText,
+    VCardTitle,
   },
   props: {
     ...rendererProps<ControlElement>(),
@@ -64,6 +92,19 @@ const controlRenderer = defineComponent({
     };
   },
   computed: {
+    isRootObject(): boolean {
+      return isEmpty(this.control.path);
+    },
+    objectLabel(): string | undefined {
+      return this.isRootObject ? undefined : this.control.label;
+    },
+    objectCardClasses(): string {
+      const classes = ['my-1', 'pa-0'];
+      if (this.nested.level > 0) {
+        classes.push('group-bare');
+      }
+      return classes.join(' ');
+    },
     hasAdditionalProperties(): boolean {
       return (
         !isEmpty(this.control.schema.patternProperties) ||
@@ -80,18 +121,12 @@ const controlRenderer = defineComponent({
     },
     detailUiSchema(): UISchemaElement {
       const uiSchemaGenerator = () => {
-        const uiSchema = Generate.uiSchema(
+        return Generate.uiSchema(
           this.control.schema,
-          'Group',
+          'VerticalLayout',
           undefined,
-          this.control.rootSchema,
+          this.control.rootSchema
         );
-        if (isEmpty(this.control.path)) {
-          uiSchema.type = 'VerticalLayout';
-        } else {
-          (uiSchema as GroupLayout).label = this.control.label;
-        }
-        return uiSchema;
       };
 
       let result = findUISchema(
@@ -101,11 +136,18 @@ const controlRenderer = defineComponent({
         this.control.path,
         uiSchemaGenerator,
         this.control.uischema,
-        this.control.rootSchema,
+        this.control.rootSchema
       );
 
       if (this.nested.level > 0) {
         result = cloneDeep(result);
+        if (result.type === 'Group') {
+          result = {
+            ...result,
+            type: 'VerticalLayout',
+            elements: (result as GroupLayout).elements,
+          } as Layout;
+        }
         result.options = {
           ...result.options,
           bare: true,
