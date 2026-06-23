@@ -24,6 +24,7 @@
 */
 import isEmpty from 'lodash/isEmpty';
 import startCase from 'lodash/startCase';
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import {
   JsonFormsControlWithDetail,
@@ -80,7 +81,12 @@ import cloneDeep from 'lodash/cloneDeep';
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [JsonFormsModule, MatCardModule, AdditionalPropertiesRenderer],
+  imports: [
+    CommonModule,
+    JsonFormsModule,
+    MatCardModule,
+    AdditionalPropertiesRenderer,
+  ],
 })
 export class ObjectControlRenderer extends JsonFormsControlWithDetail {
   detailUiSchema: UISchemaElement;
