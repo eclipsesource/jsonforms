@@ -26,6 +26,37 @@ import test from 'ava';
 
 import { generateJsonSchema } from '../../src/generators/schema';
 
+test('default schema generation root primitive types', (t) => {
+  t.deepEqual(generateJsonSchema('hello'), {
+    type: 'string',
+  });
+  t.deepEqual(generateJsonSchema(42), {
+    type: 'integer',
+  });
+  t.deepEqual(generateJsonSchema(3.14), {
+    type: 'number',
+  });
+  t.deepEqual(generateJsonSchema(true), {
+    type: 'boolean',
+  });
+  t.deepEqual(generateJsonSchema(null), {
+    type: 'null',
+  });
+});
+
+test('default schema generation root array types', (t) => {
+  t.deepEqual(generateJsonSchema([]), {
+    type: 'array',
+    items: {},
+  });
+  t.deepEqual(generateJsonSchema([1, 2]), {
+    type: 'array',
+    items: {
+      type: 'integer',
+    },
+  });
+});
+
 test('default schema generation basic types', (t) => {
   const instance: any = {
     boolean: false,
