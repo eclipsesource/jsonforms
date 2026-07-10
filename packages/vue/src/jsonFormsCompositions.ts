@@ -531,7 +531,10 @@ export const useJsonFormsCategorization = (props: LayoutProps) => {
 export function useJsonForms(): JsonFormsSubStates;
 export function useJsonForms(optional: true): JsonFormsSubStates | undefined;
 export function useJsonForms(optional?: true) {
-  const jsonforms = inject<JsonFormsSubStates>('jsonforms');
+  const jsonforms = inject<JsonFormsSubStates | undefined>(
+    'jsonforms',
+    undefined
+  );
 
   if (!jsonforms && !optional) {
     throw new Error(
@@ -550,7 +553,10 @@ export function useJsonForms(optional?: true) {
 export function useDispatch(): Dispatch<CoreActions>;
 export function useDispatch(optional: true): Dispatch<CoreActions> | undefined;
 export function useDispatch(optional?: true) {
-  const dispatch = inject<Dispatch<CoreActions>>('dispatch');
+  const dispatch = inject<Dispatch<CoreActions> | undefined>(
+    'dispatch',
+    undefined
+  );
 
   if (!dispatch && !optional) {
     throw new Error(
