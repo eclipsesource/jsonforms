@@ -24,28 +24,55 @@
 */
 import isEmpty from 'lodash/isEmpty';
 import {
+  ControlProps,
   findUISchema,
   Generate,
+  GroupLayout,
   isObjectControl,
   RankedTester,
   rankWith,
-  StatePropsOfControlWithDetail,
+  UISchemaElement,
 } from '@jsonforms/core';
-import { JsonFormsDispatch, withJsonFormsDetailProps } from '@jsonforms/react';
+import {
+  JsonFormsDispatch,
+  useJsonForms,
+  withJsonFormsControlProps,
+} from '@jsonforms/react';
 import React, { useMemo } from 'react';
+import { MaterialAdditionalProperties } from './MaterialAdditionalProperties';
+import { Card, CardContent, CardHeader } from '@mui/material';
+
+const objectCardStyle: { [x: string]: any } = { marginBottom: '10px' };
+
+const withoutGroupFrame = (uischema: UISchemaElement): UISchemaElement => {
+  if (uischema.type !== 'Group') {
+    return uischema;
+  }
+
+  const { label: _label, ...layout } = uischema as GroupLayout;
+  return {
+    ...layout,
+    type: 'VerticalLayout',
+  };
+};
 
 export const MaterialObjectRenderer = ({
-  renderers,
   cells,
-  uischemas,
-  schema,
+  config,
+  data,
+  enabled,
+  handleChange,
   label,
   path,
-  visible,
-  enabled,
+  readonly,
+  renderers,
+  schema,
   uischema,
   rootSchema,
-}: StatePropsOfControlWithDetail) => {
+  visible,
+}: ControlProps) => {
+  const jsonforms = useJsonForms();
+  const uischemas = jsonforms.uischemas ?? [];
   const detailUiSchema = useMemo(
     () =>
       findUISchema(
@@ -54,32 +81,64 @@ export const MaterialObjectRenderer = ({
         uischema.scope,
         path,
         () =>
-          isEmpty(path)
-            ? Generate.uiSchema(schema, 'VerticalLayout', undefined, rootSchema)
-            : {
-                ...Generate.uiSchema(schema, 'Group', undefined, rootSchema),
-                label,
-              },
+          Generate.uiSchema(schema, 'VerticalLayout', undefined, rootSchema),
         uischema,
         rootSchema
       ),
-    [uischemas, schema, uischema.scope, path, label, uischema, rootSchema]
+    [uischemas, schema, uischema.scope, path, uischema, rootSchema]
   );
+  const dispatchUiSchema = useMemo(
+    () => (isEmpty(path) ? detailUiSchema : withoutGroupFrame(detailUiSchema)),
+    [detailUiSchema, path]
+  );
+  const objectLabel =
+    detailUiSchema.type === 'Group'
+      ? (detailUiSchema as GroupLayout).label ?? label
+      : label;
 
   if (!visible) {
     return null;
   }
 
+  const content = (
+    <>
+      <JsonFormsDispatch
+        visible={visible}
+        enabled={enabled}
+        schema={schema}
+        uischema={dispatchUiSchema}
+        path={path}
+        renderers={renderers}
+        cells={cells}
+        readonly={readonly}
+      />
+      <MaterialAdditionalProperties
+        cells={cells}
+        config={config}
+        data={data}
+        enabled={enabled}
+        handleChange={handleChange}
+        label={label}
+        path={path}
+        readonly={readonly}
+        renderers={renderers}
+        rootSchema={rootSchema}
+        schema={schema}
+        uischema={uischema}
+        uischemas={uischemas}
+      />
+    </>
+  );
+
+  if (isEmpty(path)) {
+    return content;
+  }
+
   return (
-    <JsonFormsDispatch
-      visible={visible}
-      enabled={enabled}
-      schema={schema}
-      uischema={detailUiSchema}
-      path={path}
-      renderers={renderers}
-      cells={cells}
-    />
+    <Card style={objectCardStyle} variant='outlined'>
+      {!isEmpty(objectLabel) && <CardHeader title={objectLabel} />}
+      <CardContent>{content}</CardContent>
+    </Card>
   );
 };
 
@@ -88,4 +147,4 @@ export const materialObjectControlTester: RankedTester = rankWith(
   isObjectControl
 );
 
-export default withJsonFormsDetailProps(MaterialObjectRenderer);
+export default withJsonFormsControlProps(MaterialObjectRenderer);
