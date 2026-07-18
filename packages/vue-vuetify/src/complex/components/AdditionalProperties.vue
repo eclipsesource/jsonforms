@@ -109,6 +109,7 @@ import {
 import {
   DispatchRenderer,
   JsonForms,
+  useAjv,
   useJsonForms,
   useJsonFormsControlWithDetail,
   useTranslator,
@@ -410,8 +411,8 @@ export default defineComponent({
       validationMode: parentValidationMode,
       i18n,
       middleware,
-      ajv,
     } = useJsonForms();
+    const ajv = useAjv();
 
     // if the new property name is not specified then hide any errors
     const validationMode = computed(() =>
