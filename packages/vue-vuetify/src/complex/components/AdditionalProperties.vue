@@ -301,8 +301,17 @@ export default defineComponent({
       // TODO: create issue against jsonforms to add propertyNames into the JsonSchema interface
       // propertyNames exist in draft-6 but not defined in the JsonSchema
       if (typeof (control.value.schema as any).propertyNames === 'object') {
+        let propertyNames = (control.value.schema as any).propertyNames;
+        if (typeof propertyNames.$ref === 'string') {
+          propertyNames =
+            Resolve.schema(
+              control.value.rootSchema,
+              propertyNames.$ref,
+              control.value.rootSchema,
+            ) ?? propertyNames;
+        }
         result = {
-          ...(control.value.schema as any).propertyNames,
+          ...propertyNames,
           ...result,
         };
       } else if (
