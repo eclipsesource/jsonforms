@@ -78,7 +78,6 @@ const controlRenderer = defineComponent({
     precision(): number | null {
       const options: any = this.appliedOptions;
 
-      // If precision is explicitly configured in the UI Schema options, respect it
       if (options.precision !== undefined && options.precision !== null) {
         return Number(options.precision);
       }
