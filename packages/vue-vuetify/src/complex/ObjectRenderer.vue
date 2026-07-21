@@ -35,7 +35,7 @@ import {
 import cloneDeep from 'lodash/cloneDeep';
 import isEmpty from 'lodash/isEmpty';
 import isObject from 'lodash/isObject';
-import { defineComponent, provide } from 'vue';
+import { defineComponent, provide, type DefineComponent } from 'vue';
 import { useNested, useVuetifyControl } from '../util';
 import { AdditionalProperties } from './components';
 
@@ -117,7 +117,7 @@ const controlRenderer = defineComponent({
       return result;
     },
   },
-});
+}) as DefineComponent<any, any, any>;
 
 export default controlRenderer;
 </script>
