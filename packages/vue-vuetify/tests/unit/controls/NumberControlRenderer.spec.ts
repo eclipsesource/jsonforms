@@ -4,6 +4,7 @@ import NumberControlRenderer from '../../../src/controls/NumberControlRenderer.v
 import { entry as numberControlRendererEntry } from '../../../src/controls/NumberControlRenderer.entry';
 import { wait } from '../../../tests';
 import { mountJsonForms } from '../util';
+import { VNumberInput } from 'vuetify/components';
 
 describe('NumberControlRenderer.vue', () => {
   const renderers = [numberControlRendererEntry];
@@ -57,8 +58,6 @@ describe('NumberControlRenderer.vue', () => {
     expect(wrapper.html()).toMatchSnapshot();
   });
 });
-
-import { VNumberInput } from 'vuetify/components';
 
 describe('NumberControlRenderer precision logic', () => {
   const renderers = [numberControlRendererEntry];
