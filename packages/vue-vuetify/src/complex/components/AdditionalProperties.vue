@@ -130,6 +130,7 @@ import {
   ref,
   unref,
   type PropType,
+  type DefineComponent
 } from 'vue';
 import { useDisplay } from 'vuetify';
 import {
@@ -150,7 +151,7 @@ import {
 } from '../../util';
 
 type Input = ReturnType<typeof useJsonFormsControlWithDetail>;
-interface AdditionalPropertyType {
+export interface AdditionalPropertyType {
   propertyName: string;
   path: string;
   schema: JsonSchema | undefined;
@@ -513,7 +514,7 @@ export default defineComponent({
         if (
           !isEqualIgnoringKeys(newData, oldData, this.reservedPropertyNames)
         ) {
-          this.additionalPropertyItems = this.additionalKeys.map((propName) =>
+          this.additionalPropertyItems = this.additionalKeys.map((propName: string) =>
             this.toAdditionalPropertyType(
               propName,
               newData[propName],
@@ -562,7 +563,7 @@ export default defineComponent({
     },
     removeProperty(propName: string): void {
       this.additionalPropertyItems = this.additionalPropertyItems.filter(
-        (d) => d.propertyName !== propName,
+        (d: AdditionalPropertyType) => d.propertyName !== propName,
       );
       if (typeof this.control.data === 'object') {
         const updatedData = { ...this.control.data };
@@ -571,5 +572,5 @@ export default defineComponent({
       }
     },
   },
-});
+}) as DefineComponent<any, any, any>;
 </script>
