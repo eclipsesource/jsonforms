@@ -24,8 +24,8 @@
 */
 
 import cloneDeep from 'lodash/cloneDeep';
-import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
+import { resolveData } from '../util/resolvers';
 import { setDataAt, unsetDataAt } from '../util/setData';
 import {
   CoreActions,
@@ -237,7 +237,7 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
           errors,
         };
       } else {
-        const oldData: any = get(state.data, action.path);
+        const oldData: any = resolveData(state.data, action.path);
         const newData = action.updater(cloneDeep(oldData));
         let newState: any;
         if (newData !== undefined) {

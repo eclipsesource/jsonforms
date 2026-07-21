@@ -860,6 +860,41 @@ test('core reducer - update - unset works for numeric and bracket-containing key
   });
 });
 
+test('core reducer - update - updater receives the current value for special property names', (t) => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      'test[0]': { type: 'string' },
+      'group-key': {
+        type: 'object',
+        properties: {
+          '15': { type: 'string' },
+        },
+      },
+    },
+  };
+
+  const before: JsonFormsCore = {
+    data: { 'test[0]': 'a', 'group-key': { '15': 'x' } },
+    schema,
+    uischema: { type: 'Label' },
+    errors: [],
+    validator: new Ajv().compile(schema),
+  };
+
+  const afterBracket = coreReducer(
+    before,
+    update('test[0]', (old) => old + '!')
+  );
+  t.is((afterBracket.data as any)['test[0]'], 'a!');
+
+  const afterNumeric = coreReducer(
+    afterBracket,
+    update('group-key.15', (old) => old + '!')
+  );
+  t.is((afterNumeric.data as any)['group-key']['15'], 'x!');
+});
+
 test('core reducer - updateErrors - should update errors with empty list', (t) => {
   const before: JsonFormsCore = {
     data: {},

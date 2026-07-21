@@ -26,9 +26,16 @@
 import type { JsonSchema } from '../models';
 import { encode } from './path';
 import { resolveSchema } from './resolvers';
-import { hasType } from './util';
+import { deriveTypes, hasType } from './util';
 
 const splitPath = (path: string): string[] => path.split('.');
+
+/**
+ * Whether the segment addresses an array element, i.e. is a canonical
+ * non-negative integer without leading zeros.
+ */
+const isIndexSegment = (segment: string): boolean =>
+  /^(?:0|[1-9]\d*)$/.test(segment);
 
 /**
  * Walks one step in the schema along the given data path segment, so we can
@@ -51,21 +58,64 @@ const stepSchema = (
   return resolveSchema(schema, pointer, rootSchema);
 };
 
-const cloneContainer = (data: any): any => {
-  if (Array.isArray(data)) {
-    return [...data];
-  }
-  return { ...(data ?? {}) };
-};
-
 const assign = (container: any, segment: string, value: any): any => {
-  if (Array.isArray(container)) {
-    const index = Number(segment);
-    container[Number.isInteger(index) ? index : (segment as any)] = value;
+  if (segment === '__proto__') {
+    // A plain assignment would overwrite the container's prototype instead
+    // of creating an own property.
+    Object.defineProperty(container, segment, {
+      value,
+      writable: true,
+      enumerable: true,
+      configurable: true,
+    });
   } else {
     container[segment] = value;
   }
   return container;
+};
+
+const cloneContainer = (data: any): any => {
+  if (Array.isArray(data)) {
+    return [...data];
+  }
+  if (typeof data === 'object' && data !== null) {
+    // Not a spread because downleveled object spreads assign instead of
+    // defining properties, which mishandles own "__proto__" properties.
+    const clone: { [key: string]: any } = {};
+    for (const key of Object.keys(data)) {
+      assign(clone, key, data[key]);
+    }
+    return clone;
+  }
+  return {};
+};
+
+/**
+ * Looks up the own property `segment` of `data`, ignoring inherited
+ * properties like `__proto__`, mirroring the semantics of `resolveData`.
+ */
+const ownPropertyValue = (data: any, segment: string): any =>
+  data != null && Object.prototype.hasOwnProperty.call(data, segment)
+    ? data[segment]
+    : undefined;
+
+/**
+ * Determines the container to create for a missing child. The schema takes
+ * precedence; without any schema type information the next path segment
+ * decides, mirroring the behavior of lodash's `set`.
+ */
+const createInitialContainer = (
+  childSchema: JsonSchema | undefined,
+  nextSegment: string
+): any => {
+  const types = childSchema ? deriveTypes(childSchema) : [];
+  if (types.includes('array')) {
+    return [];
+  }
+  if (types.length > 0) {
+    return {};
+  }
+  return isIndexSegment(nextSegment) ? [] : {};
 };
 
 /**
@@ -74,7 +124,10 @@ const assign = (container: any, segment: string, value: any): any => {
  * Numeric path segments and segments containing bracket notation are treated
  * as plain object property names. The optional `rootSchema` is consulted when
  * a new intermediate container has to be created, so that arrays are still
- * created where the schema declares an array type.
+ * created where the schema declares an array type. Without schema type
+ * information, a canonical numeric follow-up segment creates an array.
+ *
+ * An empty `path` addresses the root, i.e. `value` itself is returned.
  */
 export const setDataAt = (
   data: any,
@@ -82,11 +135,10 @@ export const setDataAt = (
   value: any,
   rootSchema?: JsonSchema
 ): any => {
-  const segments = splitPath(path);
-  if (segments.length === 0) {
+  if (path === '') {
     return value;
   }
-  return doSet(data, segments, 0, value, rootSchema, rootSchema);
+  return doSet(data, splitPath(path), 0, value, rootSchema, rootSchema);
 };
 
 const doSet = (
@@ -98,39 +150,26 @@ const doSet = (
   rootSchema: JsonSchema | undefined
 ): any => {
   const segment = segments[index];
-  const childSchema = stepSchema(currentSchema, segment, rootSchema);
   const container = cloneContainer(data);
 
   if (index === segments.length - 1) {
     return assign(container, segment, value);
   }
 
-  const existingChild = data?.[segment];
-  let nextValue;
-  if (
-    existingChild !== undefined &&
-    existingChild !== null &&
-    typeof existingChild === 'object'
-  ) {
-    nextValue = doSet(
-      existingChild,
-      segments,
-      index + 1,
-      value,
-      childSchema,
-      rootSchema
-    );
-  } else {
-    const initial = hasType(childSchema, 'array') ? [] : {};
-    nextValue = doSet(
-      initial,
-      segments,
-      index + 1,
-      value,
-      childSchema,
-      rootSchema
-    );
-  }
+  const childSchema = stepSchema(currentSchema, segment, rootSchema);
+  const existingChild = ownPropertyValue(data, segment);
+  const child =
+    existingChild !== null && typeof existingChild === 'object'
+      ? existingChild
+      : createInitialContainer(childSchema, segments[index + 1]);
+  const nextValue = doSet(
+    child,
+    segments,
+    index + 1,
+    value,
+    childSchema,
+    rootSchema
+  );
   return assign(container, segment, nextValue);
 };
 
@@ -139,49 +178,47 @@ const doSet = (
  *
  * Numeric path segments and bracket notation in segments are treated as
  * plain object property names, mirroring the semantics of {@link setDataAt}.
+ * Unsetting an array element leaves a hole, i.e. the array is not compacted.
+ * If there is nothing to unset at `path`, `data` is returned unchanged.
  */
 export const unsetDataAt = (data: any, path: string): any => {
-  const segments = splitPath(path);
-  if (segments.length === 0) {
+  if (path === '') {
     return data;
   }
-  return doUnset(data, segments, 0);
+  return doUnset(data, splitPath(path), 0);
 };
 
 const doUnset = (data: any, segments: string[], index: number): any => {
-  if (data === undefined || data === null) {
+  if (data === null || typeof data !== 'object') {
     return data;
   }
   const segment = segments[index];
   if (index === segments.length - 1) {
-    if (Array.isArray(data)) {
-      const container = [...data];
-      const numericIndex = Number(segment);
-      if (Number.isInteger(numericIndex)) {
-        delete container[numericIndex];
-      }
-      return container;
-    }
     if (!Object.prototype.hasOwnProperty.call(data, segment)) {
       return data;
     }
-    const container: { [key: string]: any } = { ...data };
+    if (Array.isArray(data)) {
+      // Non-index own properties of arrays (e.g. `length`) are not form data
+      // and deleting them could throw in strict mode.
+      if (!isIndexSegment(segment)) {
+        return data;
+      }
+      const container = [...data];
+      delete container[Number(segment)];
+      return container;
+    }
+    const container = cloneContainer(data);
     delete container[segment];
     return container;
   }
 
-  const existingChild = data[segment];
-  if (
-    existingChild === undefined ||
-    existingChild === null ||
-    typeof existingChild !== 'object'
-  ) {
+  const existingChild = ownPropertyValue(data, segment);
+  if (existingChild === null || typeof existingChild !== 'object') {
     return data;
   }
   const nextValue = doUnset(existingChild, segments, index + 1);
   if (nextValue === existingChild) {
     return data;
   }
-  const container = cloneContainer(data);
-  return assign(container, segment, nextValue);
+  return assign(cloneContainer(data), segment, nextValue);
 };
