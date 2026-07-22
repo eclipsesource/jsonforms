@@ -595,6 +595,306 @@ test('core reducer - update - setting a state slice as undefined should remove t
   t.deepEqual(Object.keys(after.data), ['fizz']);
 });
 
+test('core reducer - update - numeric property key on nested object should not be treated as array index (#2397)', (t) => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      'group-key': {
+        type: 'object',
+        properties: {
+          '15': {
+            type: 'string',
+          },
+        },
+      },
+    },
+  };
+
+  const before: JsonFormsCore = {
+    data: {},
+    schema,
+    uischema: {
+      type: 'Label',
+    },
+    errors: [],
+    validator: new Ajv().compile(schema),
+  };
+
+  const after = coreReducer(
+    before,
+    update('group-key.15', () => 'something')
+  );
+
+  t.false(Array.isArray((after.data as any)['group-key']));
+  t.deepEqual(after.data, { 'group-key': { '15': 'something' } });
+});
+
+test('core reducer - update - property name containing brackets should be treated as a single key (#2102)', (t) => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      'test[0]': { type: 'string' },
+      'object[0]': {
+        type: 'object',
+        properties: {
+          test: { type: 'string' },
+        },
+      },
+    },
+  };
+
+  const before: JsonFormsCore = {
+    data: {},
+    schema,
+    uischema: {
+      type: 'Label',
+    },
+    errors: [],
+    validator: new Ajv().compile(schema),
+  };
+
+  const afterFirst = coreReducer(
+    before,
+    update('test[0]', () => 'TEST')
+  );
+  t.deepEqual(afterFirst.data, { 'test[0]': 'TEST' });
+
+  const afterSecond = coreReducer(
+    afterFirst,
+    update('object[0].test', () => 'NESTED')
+  );
+  t.deepEqual(afterSecond.data, {
+    'test[0]': 'TEST',
+    'object[0]': { test: 'NESTED' },
+  });
+});
+
+test('core reducer - update - array elements addressed by numeric segment continue to work', (t) => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      items: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            name: { type: 'string' },
+          },
+        },
+      },
+    },
+  };
+
+  const before: JsonFormsCore = {
+    data: { items: [{ name: 'a' }, { name: 'b' }] },
+    schema,
+    uischema: {
+      type: 'Label',
+    },
+    errors: [],
+    validator: new Ajv().compile(schema),
+  };
+
+  const after = coreReducer(
+    before,
+    update('items.1.name', () => 'updated')
+  );
+
+  t.true(Array.isArray((after.data as any).items));
+  t.is((after.data as any).items.length, 2);
+  t.deepEqual(after.data, { items: [{ name: 'a' }, { name: 'updated' }] });
+});
+
+test('core reducer - update - rebuilds containers along the path while keeping sibling references untouched', (t) => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      parent: {
+        type: 'object',
+        properties: {
+          target: { type: 'string' },
+          siblingObject: {
+            type: 'object',
+            properties: { value: { type: 'string' } },
+          },
+        },
+      },
+      untouchedObject: {
+        type: 'object',
+        properties: { value: { type: 'string' } },
+      },
+    },
+  };
+
+  const siblingObject = { value: 'untouched-nested' };
+  const untouchedObject = { value: 'untouched-root' };
+
+  const before: JsonFormsCore = {
+    data: {
+      parent: { target: 'old', siblingObject },
+      untouchedObject,
+    },
+    schema,
+    uischema: { type: 'Label' },
+    errors: [],
+    validator: new Ajv().compile(schema),
+  };
+
+  const after = coreReducer(
+    before,
+    update('parent.target', () => 'new')
+  );
+
+  // Containers on the path are fresh references
+  t.not(after.data, before.data);
+  t.not((after.data as any).parent, (before.data as any).parent);
+  // Siblings on those containers keep their original references
+  t.is((after.data as any).parent.siblingObject, siblingObject);
+  t.is((after.data as any).untouchedObject, untouchedObject);
+  t.is((after.data as any).parent.target, 'new');
+});
+
+test('core reducer - update - creates an array when the schema declares one even if the segment is non-numeric in the parent', (t) => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      list: {
+        type: 'array',
+        items: { type: 'string' },
+      },
+    },
+  };
+
+  const before: JsonFormsCore = {
+    data: {},
+    schema,
+    uischema: {
+      type: 'Label',
+    },
+    errors: [],
+    validator: new Ajv().compile(schema),
+  };
+
+  const after = coreReducer(
+    before,
+    update('list.0', () => 'first')
+  );
+
+  t.true(Array.isArray((after.data as any).list));
+  t.deepEqual(after.data, { list: ['first'] });
+});
+
+test('core reducer - update - creates a schema-declared array of objects when the path traverses a missing array', (t) => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      users: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: { name: { type: 'string' } },
+        },
+      },
+    },
+  };
+
+  const before: JsonFormsCore = {
+    data: {},
+    schema,
+    uischema: { type: 'Label' },
+    errors: [],
+    validator: new Ajv().compile(schema),
+  };
+
+  const after = coreReducer(
+    before,
+    update('users.0.name', () => 'Alice')
+  );
+
+  t.true(Array.isArray((after.data as any).users));
+  t.is((after.data as any).users.length, 1);
+  t.deepEqual(after.data, { users: [{ name: 'Alice' }] });
+});
+
+test('core reducer - update - unset works for numeric and bracket-containing keys', (t) => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      'group-key': {
+        type: 'object',
+        properties: {
+          '15': { type: 'string' },
+          'non-numeric-key': { type: 'string' },
+        },
+      },
+      'test[0]': { type: 'string' },
+    },
+  };
+
+  const before: JsonFormsCore = {
+    data: {
+      'group-key': { '15': 'fifteen', 'non-numeric-key': 'kept' },
+      'test[0]': 'TEST',
+    },
+    schema,
+    uischema: { type: 'Label' },
+    errors: [],
+    validator: new Ajv().compile(schema),
+  };
+
+  const afterNumeric = coreReducer(
+    before,
+    update('group-key.15', () => undefined)
+  );
+  t.deepEqual(afterNumeric.data, {
+    'group-key': { 'non-numeric-key': 'kept' },
+    'test[0]': 'TEST',
+  });
+
+  const afterBracket = coreReducer(
+    afterNumeric,
+    update('test[0]', () => undefined)
+  );
+  t.deepEqual(afterBracket.data, {
+    'group-key': { 'non-numeric-key': 'kept' },
+  });
+});
+
+test('core reducer - update - updater receives the current value for special property names', (t) => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      'test[0]': { type: 'string' },
+      'group-key': {
+        type: 'object',
+        properties: {
+          '15': { type: 'string' },
+        },
+      },
+    },
+  };
+
+  const before: JsonFormsCore = {
+    data: { 'test[0]': 'a', 'group-key': { '15': 'x' } },
+    schema,
+    uischema: { type: 'Label' },
+    errors: [],
+    validator: new Ajv().compile(schema),
+  };
+
+  const afterBracket = coreReducer(
+    before,
+    update('test[0]', (old) => old + '!')
+  );
+  t.is((afterBracket.data as any)['test[0]'], 'a!');
+
+  const afterNumeric = coreReducer(
+    afterBracket,
+    update('group-key.15', (old) => old + '!')
+  );
+  t.is((afterNumeric.data as any)['group-key']['15'], 'x!');
+});
+
 test('core reducer - updateErrors - should update errors with empty list', (t) => {
   const before: JsonFormsCore = {
     data: {},
