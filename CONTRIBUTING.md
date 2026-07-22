@@ -38,6 +38,13 @@ Contributions to the main repository should adhere to the following:
 
 The better the quality of the contribution, the faster it can be merged.
 
+### Use of AI Tools
+
+Contributors can use whatever tools they would like to craft their contributions, but there must be a human in the loop.
+Contributors must read and review all LLM-generated code or text before they ask other project members to review it.
+The contributor is always the author and is fully accountable for their contributions.
+Contributors should be sufficiently confident that the contribution is high enough quality that asking for a review is a good use of scarce maintainer time, and they should be able to answer questions about their work themselves during review.
+
 ### Contributing Features
 
 If you have an idea for a feature, we recommend first opening an issue or starting a discussion on the [Community Board](https://jsonforms.discourse.group) to assess whether it aligns with the goals and scope of JSON Forms.
