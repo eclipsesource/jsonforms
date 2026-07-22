@@ -14,6 +14,19 @@ npm ci
 npm start
 ```
 This starts the local development server at `http://localhost:3000` with hot-reloading.
+It uses the published `@jsonforms/*` versions from `package.json`.
+
+### Develop Against Local JSON Forms
+This website lives inside the JSON Forms monorepo. To render the site against
+the local (unreleased) state of JSON Forms, build the packages once at the repo
+root (`pnpm build`), then run:
+```bash
+npm run start:local   # or: npm run build:local
+```
+`JSONFORMS_LOCAL=true` makes the build alias `@jsonforms/*` to the monorepo's
+local `packages/*` (see `src/custom-webpack/index.js`). Re-run `pnpm build` at
+the root after changing a package. Refresh the bundled API docs with
+`./copy-docs.sh`.
 
 ### Build for Production
 ```bash

@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 WEBSITE_REPO=$( dirname "${BASH_SOURCE[0]}" )
-JSONFORMS_REPO=$1
+# The website lives inside the JSON Forms monorepo, so default the source repo
+# to the parent directory. An explicit path can still be passed as $1.
+JSONFORMS_REPO=${1:-"$WEBSITE_REPO/.."}
 declare -a PACKAGES=(core react material-renderers vanilla-renderers angular angular-material vue vue-vanilla vue-vuetify)
 
-if [[ -z $JSONFORMS_REPO || ! -d $JSONFORMS_REPO ]]; then
-  echo "Error: please specify JSONForms source repo location."
+if [[ ! -d $JSONFORMS_REPO ]]; then
+  echo "Error: JSONForms source repo not found at '$JSONFORMS_REPO'."
   echo "Example: $0 /path/to/jsonforms"
   exit 1
 fi
