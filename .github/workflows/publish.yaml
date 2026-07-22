@@ -92,11 +92,3 @@ jobs:
         run: "pnpm publish --recursive ${{  github.event.inputs.stable_release == 'true' && ' ' || '--tag next' }}"
         env:
           NPM_CONFIG_PROVENANCE: 'true'
-
-      # Publish the documentation website, but only for stable releases. This
-      # POSTs to a Netlify build hook; automatic Netlify deploys are disabled,
-      # so the website is never published on regular pushes ("no rolling
-      # website"). The build renders against the latest stable release.
-      - name: 'Trigger website deploy'
-        if: github.event.inputs.skip_publish == 'false' && github.event.inputs.stable_release == 'true'
-        run: curl -fsS -X POST -d '{}' "${{ secrets.NETLIFY_WEBSITE_BUILD_HOOK }}"
