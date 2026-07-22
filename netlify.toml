@@ -1,5 +1,19 @@
+# Netlify configuration for the JSON Forms documentation website, which lives
+# in website/.
+#
+# The site is published only against the latest stable release, not on every
+# push ("no rolling website"):
+#   - Automatic production deploys are disabled in the Netlify UI.
+#   - A Netlify build hook, fired from .github/workflows/publish.yaml on a
+#     stable release, triggers the production build. `build:current` renders
+#     against the latest stable @jsonforms/* release.
+#   - The `ignore` command below skips deploy-preview builds for changes that
+#     don't touch website/ (paths are relative to the base directory).
 [build]
+  base = "website"
+  command = "npm run build:current"
   publish = "build"
+  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- ."
 
 [[redirects]]
  from = "/public/api/core/*"

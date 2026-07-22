@@ -8,9 +8,11 @@
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
+    "start:local": "JSONFORMS_LOCAL=true docusaurus start",
     "build:docusaurus": "docusaurus build",
     "build:next": "./build.sh next && npm run build:docusaurus",
     "build:current": "./build.sh && npm run build:docusaurus",
+    "build:local": "JSONFORMS_LOCAL=true npm run build:next",
     "build": "npm run build:next",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
