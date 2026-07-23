@@ -1,0 +1,188 @@
+---
+id: middleware
+title: Middleware
+description: middleware
+---
+
+import {
+  DependentFieldExample,
+  ControlledStyle,
+} from '../../src/components/docs/middleware';
+
+# JSON Forms Middleware
+
+JSON Forms offers the option to employ middleware, allowing you to integrate deeply with JSON Forms and directly modify JSON Forms state.
+This enables various use cases, for example to use JSON Forms in a controlled style and implementing custom data updates and validation methods.
+
+:::caution ATTENTION
+
+Middlewares allow for very powerful customization of internal JSON Forms behavior.
+Proceed with caution as it's easy to break core functionality if used inappropriately.
+
+:::
+
+In this chapter, we'll introduce the JSON Forms reducer pattern and its key actions.
+Through two examples, we'll demonstrate how middleware enables controlled and customized form interactions.
+
+## JSON Forms Reducer Pattern and Actions
+
+JSON Forms adheres to the reducer pattern for maintaining a consistent application state. The reducer pattern comprises:
+
+**State:** Representing the current application state, encompassing all necessary data.
+
+**Action:**
+Representing a user action or a triggered event, described by objects. Actions are the way to communicate with the reducer to request a state change.
+
+**Reducer:**
+A function that accepts the current state and an action as arguments, generating a new state based on the action. It is responsible for managing different action types and updating the state accordingly.
+
+**Dispatcher:**
+Serving as a mechanism for managing the flow of actions. In the case of JSON Forms, when an action is created, it is dispatched to the dispatcher, which then distributes the action to the reducer for processing.
+
+JSON Forms' most important actions are: `INIT`, `UPDATE_CORE` and `UPDATE_DATA`.
+
+`INIT` is triggered on initiation, setting up the initial state and validating the form.
+`UPDATE_DATA` is triggered whenever data within JSON Forms is changed.
+`UPDATE_CORE` is triggered, whenever props handed over to JSON Forms are changed.
+
+## JSON Forms Middleware
+
+When a middleware is handed over to JSON Forms, it will be called during dispatching instead of the regular reducer.
+The middleware can apply arbitrary changes and therefore has full power over the JSON Forms state.
+The middleware's arguments are the current JSON Forms state, the dispatched action and the default reducer of JSON Forms.
+
+```js
+interface Middleware {
+  (
+    state: JsonFormsCore,
+    action: CoreActions,
+    defaultReducer: (state: JsonFormsCore, action: CoreActions) => JsonFormsCore
+  ): JsonFormsCore;
+}
+```
+
+The default reducer can be used to apply the default behavior of JSON Forms for the action in question.
+The following middleware has the same effect as not using any middleware:
+
+```js
+const middleware = (
+  state: JsonFormsCore,
+  action: CoreActions,
+  defaultReducer: (state: JsonFormsCore, action: CoreActions) => JsonFormsCore
+) => {
+  return defaultReducer(state, action);
+};
+```
+
+In the following, we will explore two examples demonstrating how middlewares can be utilized to provide custom implementations for JSON Forms actions.
+
+### Dependent Fields
+
+In this scenario one field depends on another.
+For instance, consider a carwash service that offers various services and calculates a price based on the selected options.
+We can utilize middleware to compute and set the price. When an `UPDATE_DATA` action is triggered, we initially invoke the default reducer to update the data and identify any errors.
+Subsequently, we adjust the price fields based on the selected services and update the state with the newly calculated data.
+We additionally override the `INIT` and `UPDATE_CORE` actions, in case the data prop passed to JSON Forms doesn't have the correct price set yet.
+
+```js
+import { INIT, UPDATE_DATA } from  '@jsonforms/core'
+
+...
+const middleware = useCallback((state, action, defaultReducer) => {
+  const newState = defaultReducer(state, action);
+  switch (action.type) {
+    case INIT:
+    case UPDATE_CORE:
+    case UPDATE_DATA: {
+      if (newState.data.services.length * 15 !== newState.data.price) {
+        newState.data.price = newState.data.services.length * 15;
+      }
+      return newState;
+    }
+    default:
+      return newState;
+  }
+});
+
+...
+
+<JsonForms
+  data={data}
+  schema={schema}
+  renderers={materialRenderers}
+  middleware={middleware}
+/>
+```
+
+<DependentFieldExample />
+
+### Using JSON Forms in controlled style
+
+In this example, we'll look at a form that lets you choose your activity for the weekend and validates that activity based on the current weather.
+Using middleware, we'll implement this example in JSON Forms with a controlled approach, meaning data and errors are stored in the parent components state.
+
+When an `INIT` or `UPDATE_DATA` action is triggered, we update the data in the parent's state and invoke our custom validation function, but return the original state in the middleware.
+This way JSON Forms doesn't update its internal state. Instead, the data and errors from the parent component are passed as properties to JSON Forms.
+In combination with the `NoValidation` mode, JSON Forms is entirely controlled by its parent component.
+
+```js
+import { INIT, UPDATE_DATA } from '@jsonforms/core';
+
+export const ControlledStyle = () => {
+  const [errors, setErrors] = useState([]);
+  const [data, setData] = useState({ activity: 'Snowboarding' });
+
+  const validateActivity = useCallback((data) => {
+    switch (data.activity) {
+      case 'Snowboarding':
+        setErrors([
+          {
+            instancePath: '/activity',
+            message: 'No Snow',
+            schemaPath: '#/properties/activity',
+          },
+        ]);
+        break;
+      case 'Soccer':
+        setErrors([
+          {
+            instancePath: '/activity',
+            message: 'Too Cold',
+            schemaPath: '#/properties/activity',
+          },
+        ]);
+        break;
+      default:
+        setErrors([]);
+    }
+  }, []);
+
+  const middleware = useCallback(
+    (state, action, defaultReducer) => {
+      const newState = defaultReducer(state, action);
+      switch (action.type) {
+        case INIT:
+        case UPDATE_DATA: {
+          setData(newState.data);
+          validateActivity(newState.data);
+          return state;
+        }
+        default:
+          return newState;
+      }
+    },[]
+  );
+
+  return (
+    <JsonForms
+      data={data}
+      schema={schema}
+      renderers={materialRenderers}
+      middleware={middleware}
+      additionalErrors={errors}
+      validationMode='NoValidation'
+    />
+  );
+};
+
+<ControlledStyle />
