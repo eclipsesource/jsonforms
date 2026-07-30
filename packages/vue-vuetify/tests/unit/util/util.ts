@@ -4,6 +4,7 @@ import type {
   JsonSchema,
   UISchemaElement,
 } from '@jsonforms/core';
+import type Ajv from 'ajv';
 import { mount } from '@vue/test-utils';
 import TestComponent from './TestComponent.vue';
 import { createVuetify } from 'vuetify';
@@ -25,6 +26,7 @@ export const mountJsonForms = (
   uischema?: UISchemaElement,
   config?: any,
   i18n?: JsonFormsI18nState,
+  ajv?: Ajv,
 ) => {
   return mount(TestComponent, {
     global: {
@@ -37,6 +39,7 @@ export const mountJsonForms = (
       config,
       renderers: markRaw(renderers),
       i18n,
+      ajv,
     },
     attachTo: document.body,
   });
