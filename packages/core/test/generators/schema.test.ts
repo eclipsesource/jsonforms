@@ -27,6 +27,7 @@ import test from 'ava';
 import { generateJsonSchema } from '../../src/generators/schema';
 
 test('default schema generation root primitive types', (t) => {
+  t.deepEqual(generateJsonSchema(undefined), {});
   t.deepEqual(generateJsonSchema('hello'), {
     type: 'string',
   });

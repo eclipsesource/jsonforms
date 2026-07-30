@@ -22,7 +22,6 @@ import {
   JsonFormsSubStates,
   JsonFormsUISchemaRegistryEntry,
   JsonSchema,
-  Layout,
   Middleware,
   UISchemaElement,
   ValidationMode,
@@ -37,14 +36,9 @@ import type { ErrorObject } from 'ajv';
 
 const EMPTY: ErrorObject[] = reactive([]);
 
-const createDefaultLayout = (): Layout => ({
-  type: 'VerticalLayout',
-  elements: [],
-});
 const getSchemaGeneratorInput = (data: any) => (data === undefined ? {} : data);
 const generateUISchema = (schema: JsonSchema) =>
-  Generate.uiSchema(schema, undefined, undefined, schema) ??
-  createDefaultLayout();
+  Generate.uiSchema(schema, undefined, undefined, schema);
 
 export default defineComponent({
   name: 'JsonForms',
@@ -126,7 +120,7 @@ export default defineComponent({
       default: defaultMiddleware,
     },
   },
-  emits: ['change'],
+  emits: ['change', 'update:data'],
   data() {
     const dataToUse = this.data;
     const schemaToUse: JsonSchema =
@@ -202,7 +196,7 @@ export default defineComponent({
       this.uischemaToUse = newUischema ?? generateUISchema(this.schemaToUse);
     },
     data(newData) {
-      const isSameAsCurrentData = newData === this.dataToUse;
+      const isSameAsCurrentData = newData === this.jsonforms.core.data;
       this.dataToUse = newData;
 
       if (!this.schema && !isSameAsCurrentData) {
@@ -255,9 +249,7 @@ export default defineComponent({
       );
     },
     eventToEmit(newEvent) {
-      // update the data so if we change the additionalErrors this won't reset the form data
-      this.dataToUse = newEvent.data;
-
+      this.$emit('update:data', newEvent.data);
       this.$emit('change', newEvent);
     },
     i18n: {

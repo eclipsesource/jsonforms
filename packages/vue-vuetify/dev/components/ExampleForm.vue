@@ -50,10 +50,14 @@ const resolvedSchema = shallowReactive<ResolvedSchema>({
   error: undefined,
 });
 
-const emits = defineEmits(['jsfchange']);
+const emits = defineEmits(['jsfchange', 'update:data']);
 
 const onChange = (event: JsonFormsChangeEvent): void => {
   emits('jsfchange', event);
+};
+
+const onUpdateData = (data: any): void => {
+  emits('update:data', data);
 };
 
 watch(
@@ -101,6 +105,7 @@ const properties = computed<JsonFormsProps>(() => ({
       v-if="resolvedSchema.resolved && resolvedSchema.error === undefined"
       v-bind="properties"
       @change="onChange"
+      @update:data="onUpdateData"
     ></json-forms>
     <v-container v-else>
       <v-row

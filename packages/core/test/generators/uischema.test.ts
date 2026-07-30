@@ -496,19 +496,28 @@ test('generate unnamed array control w/o type', (t) => {
 
 test('generate for empty schema', (t) => {
   const schema: JsonSchema = {};
-  const uischema: Layout = null;
+  const uischema: Layout = {
+    type: 'VerticalLayout',
+    elements: [],
+  };
   t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
 
 test('generate for null schema', (t) => {
   const schema: JsonSchema = null;
-  const uischema: Layout = null;
+  const uischema: Layout = {
+    type: 'VerticalLayout',
+    elements: [],
+  };
   t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
 
 test('generate for undefined schema', (t) => {
   const schema: JsonSchema = undefined;
-  const uischema: Layout = null;
+  const uischema: Layout = {
+    type: 'VerticalLayout',
+    elements: [],
+  };
   t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
 

@@ -86,7 +86,7 @@ describe('JsonForms.vue', () => {
     expect(latestChangeEvent?.data).toBeUndefined();
   });
 
-  it('preserves edited data when additionalErrors change', async () => {
+  it('emits update:data when the form data changes', async () => {
     const data = { number: 5.5 };
     const renderers: JsonFormsUISchemaRegistryEntry[] = [];
     const wrapper = shallowMount(
@@ -98,6 +98,54 @@ describe('JsonForms.vue', () => {
 
     (wrapper.vm as any).dispatch(Actions.update('number', () => 6));
     await nextTick();
+
+    const updateEvents = wrapper.emitted('update:data');
+    expect(updateEvents?.[updateEvents.length - 1]?.[0]).toEqual({ number: 6 });
+  });
+
+  it('keeps the data prop authoritative when additionalErrors change', async () => {
+    const data = { number: 5.5 };
+    const renderers: JsonFormsUISchemaRegistryEntry[] = [];
+    const wrapper = shallowMount(
+      JsonForms,
+      bindings({
+        props: { data, renderers },
+      })
+    );
+
+    (wrapper.vm as any).dispatch(Actions.update('number', () => 6));
+    await nextTick();
+
+    await wrapper.setProps({
+      additionalErrors: [
+        {
+          instancePath: '/number',
+          schemaPath: '#/properties/number/minimum',
+          keyword: 'minimum',
+          params: { comparison: '>=', limit: 7 },
+        },
+      ],
+    });
+
+    expect((wrapper.vm as any).jsonforms.core.data).toEqual(data);
+  });
+
+  it('preserves edited data when v-model:data is used and additionalErrors change', async () => {
+    const data = { number: 5.5 };
+    const renderers: JsonFormsUISchemaRegistryEntry[] = [];
+    const wrapper = shallowMount(
+      JsonForms,
+      bindings({
+        props: { data, renderers },
+      })
+    );
+
+    (wrapper.vm as any).dispatch(Actions.update('number', () => 6));
+    await nextTick();
+
+    const updateEvents = wrapper.emitted('update:data');
+    const updatedData = updateEvents?.[updateEvents.length - 1]?.[0];
+    await wrapper.setProps({ data: updatedData });
 
     await wrapper.setProps({
       additionalErrors: [
