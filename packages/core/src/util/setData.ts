@@ -95,7 +95,9 @@ const cloneContainer = (data: any): any => {
  * properties like `__proto__`, mirroring the semantics of `resolveData`.
  */
 const ownPropertyValue = (data: any, segment: string): any =>
-  data !== null && data !== undefined && Object.prototype.hasOwnProperty.call(data, segment)
+  data !== null &&
+  data !== undefined &&
+  Object.prototype.hasOwnProperty.call(data, segment)
     ? data[segment]
     : undefined;
 
