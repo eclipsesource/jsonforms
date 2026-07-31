@@ -1,5 +1,17 @@
 # Migration guide
 
+## Migration to JSON Forms 3.9
+
+### Data update paths treat all segments literally
+
+Data updates (e.g. dispatched `update` actions) previously wrote to the form data via lodash's `set`/`unset`, which interpret bracket notation and array indices in paths.
+This corrupted data for property names that look like lodash path syntax, for example numeric property names like `"15"` were turned into array indices and names containing brackets like `"prop[0]"` were split up (see [#2397](https://github.com/eclipsesource/jsonforms/issues/2397) and [#2102](https://github.com/eclipsesource/jsonforms/issues/2102)).
+
+Updates now use the new `setDataAt`/`unsetDataAt` utilities of `@jsonforms/core`, which split paths on `.` and treat every segment as a literal property name, matching how JSON Forms resolves values for display.
+When a missing intermediate container is created, the JSON Schema decides whether it becomes an array or an object; without schema type information, a numeric follow-up segment creates an array, as before.
+
+If you dispatch update actions yourself, make sure to use dot-separated paths (e.g. `update('list.0.name', ...)`) instead of lodash bracket syntax (e.g. `update('list[0].name', ...)`), which is no longer interpreted.
+
 ## Migrating to JSON Forms 3.8
 
 ### `Translator` type changed from overloaded signatures to a generic conditional type
@@ -39,16 +51,6 @@ return this.t(label, label) as string;
 ```
 
 This does not affect the Composition API where `Translator` is accessed directly from a `ComputedRef`.
-
-### Data update paths treat all segments literally
-
-Data updates (e.g. dispatched `update` actions) previously wrote to the form data via lodash's `set`/`unset`, which interpret bracket notation and array indices in paths.
-This corrupted data for property names that look like lodash path syntax, for example numeric property names like `"15"` were turned into array indices and names containing brackets like `"prop[0]"` were split up (see [#2397](https://github.com/eclipsesource/jsonforms/issues/2397) and [#2102](https://github.com/eclipsesource/jsonforms/issues/2102)).
-
-Updates now use the new `setDataAt`/`unsetDataAt` utilities of `@jsonforms/core`, which split paths on `.` and treat every segment as a literal property name, matching how JSON Forms resolves values for display.
-When a missing intermediate container is created, the JSON Schema decides whether it becomes an array or an object; without schema type information, a numeric follow-up segment creates an array, as before.
-
-If you dispatch update actions yourself, make sure to use dot-separated paths (e.g. `update('list.0.name', ...)`) instead of lodash bracket syntax (e.g. `update('list[0].name', ...)`), which is no longer interpreted.
 
 ### Angular support now targets Angular 20 to 22
 
