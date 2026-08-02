@@ -62,6 +62,7 @@ import isObject from 'lodash/isObject';
 import { defineComponent, provide, type DefineComponent } from 'vue';
 import { useNested, useVuetifyControl } from '../util';
 import { AdditionalProperties } from './components';
+import { VCard, VCardText, VCardTitle } from 'vuetify/components';
 
 const controlRenderer = defineComponent({
   name: 'object-renderer',

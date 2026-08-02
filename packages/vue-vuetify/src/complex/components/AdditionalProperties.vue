@@ -88,7 +88,7 @@
             :close-on-content-click="false"
             location="top end"
             @update:model-value="
-              (open) =>
+              (open: boolean) =>
                 open ? startRename(element.propertyName) : cancelRename()
             "
           >
@@ -589,13 +589,14 @@ export default defineComponent({
           );
 
         if (!isEqual(additionalKeys(newData), additionalKeys(oldData))) {
-          this.additionalPropertyItems = this.additionalKeys.map((propName) =>
-            this.toAdditionalPropertyType(
-              propName,
-              newData[propName],
-              this.control.schema,
-              this.control.rootSchema,
-            ),
+          this.additionalPropertyItems = this.additionalKeys.map(
+            (propName: string) =>
+              this.toAdditionalPropertyType(
+                propName,
+                newData[propName],
+                this.control.schema,
+                this.control.rootSchema,
+              ),
           );
         }
       },
