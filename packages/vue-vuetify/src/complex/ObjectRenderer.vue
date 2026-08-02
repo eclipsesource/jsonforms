@@ -59,8 +59,7 @@ import {
 import cloneDeep from 'lodash/cloneDeep';
 import isEmpty from 'lodash/isEmpty';
 import isObject from 'lodash/isObject';
-import { defineComponent, provide } from 'vue';
-import { VCard, VCardText, VCardTitle } from 'vuetify/components';
+import { defineComponent, provide, type DefineComponent } from 'vue';
 import { useNested, useVuetifyControl } from '../util';
 import { AdditionalProperties } from './components';
 
@@ -125,7 +124,7 @@ const controlRenderer = defineComponent({
           this.control.schema,
           'VerticalLayout',
           undefined,
-          this.control.rootSchema
+          this.control.rootSchema,
         );
       };
 
@@ -136,7 +135,7 @@ const controlRenderer = defineComponent({
         this.control.path,
         uiSchemaGenerator,
         this.control.uischema,
-        this.control.rootSchema
+        this.control.rootSchema,
       );
 
       if (this.nested.level > 0) {
@@ -159,7 +158,7 @@ const controlRenderer = defineComponent({
       return result;
     },
   },
-});
+}) as DefineComponent<any, any, any>;
 
 export default controlRenderer;
 </script>

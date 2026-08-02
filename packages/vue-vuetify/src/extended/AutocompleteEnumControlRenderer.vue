@@ -63,7 +63,7 @@ import {
   useJsonFormsEnumControl,
   type RendererProps,
 } from '@jsonforms/vue';
-import { defineComponent } from 'vue';
+import { defineComponent, type DefineComponent } from 'vue';
 import { VAutocomplete, VSelect } from 'vuetify/components';
 import { default as ControlWrapper } from '../controls/ControlWrapper.vue';
 import { DisabledIconFocus } from '../controls/directives';
@@ -90,7 +90,7 @@ const controlRenderer = defineComponent({
       300,
     );
   },
-});
+}) as DefineComponent<any, any, any>;
 
 export default controlRenderer;
 </script>

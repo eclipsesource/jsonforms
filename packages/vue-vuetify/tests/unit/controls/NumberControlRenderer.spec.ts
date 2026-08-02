@@ -4,6 +4,7 @@ import NumberControlRenderer from '../../../src/controls/NumberControlRenderer.v
 import { entry as numberControlRendererEntry } from '../../../src/controls/NumberControlRenderer.entry';
 import { wait } from '../../../tests';
 import { mountJsonForms } from '../util';
+import { VNumberInput } from 'vuetify/components';
 
 describe('NumberControlRenderer.vue', () => {
   const renderers = [numberControlRendererEntry];
@@ -55,5 +56,35 @@ describe('NumberControlRenderer.vue', () => {
 
   it('should render component and match snapshot', () => {
     expect(wrapper.html()).toMatchSnapshot();
+  });
+});
+
+describe('NumberControlRenderer precision logic', () => {
+  const renderers = [numberControlRendererEntry];
+  const schema = { type: 'number' };
+
+  beforeEach(() => {
+    clearAllIds();
+  });
+
+  it('allows unlimited precision by default (passes null to v-number-input)', () => {
+    const uischema = { type: 'Control', scope: '#' };
+    const wrapper = mountJsonForms(1.23456, schema, renderers, uischema);
+
+    const numberInput = wrapper.findComponent(VNumberInput);
+    // Vuetify requires null to remove precision limits
+    expect(numberInput.props('precision')).toBeNull();
+  });
+
+  it('respects explicitly configured precision via UI schema options', () => {
+    const uischema = {
+      type: 'Control',
+      scope: '#',
+      options: { precision: 3 }
+    };
+    const wrapper = mountJsonForms(1.23456, schema, renderers, uischema);
+
+    const numberInput = wrapper.findComponent(VNumberInput);
+    expect(numberInput.props('precision')).toBe(3);
   });
 });

@@ -75,16 +75,15 @@ const controlRenderer = defineComponent({
       const options: any = this.appliedOptions;
       return options.step ?? 0.1;
     },
-    precision(): number | undefined {
-      if (!this.step || Number.isInteger(this.step)) return undefined;
-      // Handle scientific notation and float imprecision
-      const stepStr = this.step.toString();
-      if (stepStr.indexOf('e-') > -1) {
-        // Handle cases like 1e-3
-        return parseInt(stepStr.split('e-')[1], 10);
+    precision(): number | null {
+      const options: any = this.appliedOptions;
+
+      if (options.precision !== undefined && options.precision !== null) {
+        return Number(options.precision);
       }
-      const fraction = stepStr.split('.')[1];
-      return fraction ? fraction.length : undefined;
+
+      // Return null (not undefined) to allow Vuetify to accept any precision by default
+      return null;
     },
     value(): number | null | undefined {
       if (

@@ -182,6 +182,7 @@ import {
 import {
   DispatchRenderer,
   JsonForms,
+  useAjv,
   useJsonForms,
   useJsonFormsControlWithDetail,
   useTranslator,
@@ -202,6 +203,7 @@ import {
   ref,
   unref,
   type PropType,
+  type DefineComponent,
 } from 'vue';
 import { useDisplay } from 'vuetify';
 import {
@@ -222,7 +224,7 @@ import {
 } from '../../util';
 
 type Input = ReturnType<typeof useJsonFormsControlWithDetail>;
-interface AdditionalPropertyType {
+export interface AdditionalPropertyType {
   propertyName: string;
   path: string;
   schema: JsonSchema | undefined;
@@ -375,8 +377,17 @@ export default defineComponent({
       // TODO: create issue against jsonforms to add propertyNames into the JsonSchema interface
       // propertyNames exist in draft-6 but not defined in the JsonSchema
       if (typeof (control.value.schema as any).propertyNames === 'object') {
+        let propertyNames = (control.value.schema as any).propertyNames;
+        if (typeof propertyNames.$ref === 'string') {
+          propertyNames =
+            Resolve.schema(
+              control.value.rootSchema,
+              propertyNames.$ref,
+              control.value.rootSchema,
+            ) ?? propertyNames;
+        }
         result = {
-          ...(control.value.schema as any).propertyNames,
+          ...propertyNames,
           ...result,
         };
       } else if (
@@ -484,8 +495,8 @@ export default defineComponent({
       validationMode: parentValidationMode,
       i18n,
       middleware,
-      ajv,
     } = useJsonForms();
+    const ajv = useAjv();
 
     // if the new property name is not specified then hide any errors
     const validationMode = computed(() =>
@@ -737,7 +748,7 @@ export default defineComponent({
     },
     removeProperty(propName: string): void {
       this.additionalPropertyItems = this.additionalPropertyItems.filter(
-        (d) => d.propertyName !== propName,
+        (d: AdditionalPropertyType) => d.propertyName !== propName,
       );
       if (typeof this.control.data === 'object') {
         const updatedData = { ...this.control.data };
@@ -746,7 +757,7 @@ export default defineComponent({
       }
     },
   },
-});
+}) as DefineComponent<any, any, any>;
 </script>
 
 <style scoped>

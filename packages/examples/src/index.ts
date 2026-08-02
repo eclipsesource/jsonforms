@@ -77,6 +77,7 @@ import * as readonly from './examples/readonly';
 import * as rule from './examples/rule';
 import * as ruleInheritance from './examples/ruleInheritance';
 import * as scope from './examples/scope';
+import * as specialPropertyNames from './examples/special-property-names';
 import * as string from './examples/string';
 import * as stringArray from './examples/stringArray';
 import * as text from './examples/text';
@@ -145,6 +146,7 @@ export {
   rule,
   ruleInheritance,
   scope,
+  specialPropertyNames,
   stepper,
   steppershownav,
   string,
