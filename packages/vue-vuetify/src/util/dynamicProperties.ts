@@ -1,10 +1,11 @@
 import { Resolve, type JsonSchema, type JsonSchema7 } from '@jsonforms/core';
 import type Ajv from 'ajv';
+import type { ErrorObject } from 'ajv';
 
 export type DynamicPropertyNameValidationError =
   | { reason: 'alreadyDefined' }
   | { reason: 'invalid' }
-  | { reason: 'schema'; message?: string };
+  | { reason: 'schema'; errors: ErrorObject[] };
 
 export interface DynamicPropertyNameValidationOptions {
   propertyName: string;
@@ -139,11 +140,7 @@ export const validateDynamicPropertyName = ({
     ajv &&
     !ajv.validate(propertyNameSchema, propertyName)
   ) {
-    const message = ajv.errors
-      ?.map((error) => error.message)
-      .filter((entry): entry is string => Boolean(entry))
-      .join(', ');
-    return { reason: 'schema', message: message || undefined };
+    return { reason: 'schema', errors: [...(ajv.errors ?? [])] };
   }
 
   return null;
@@ -151,7 +148,11 @@ export const validateDynamicPropertyName = ({
 
 export const getDynamicPropertyNameErrorMessage = (
   error: DynamicPropertyNameValidationError | null,
-  messages: { alreadyDefined: string; invalid: string },
+  messages: {
+    alreadyDefined: string;
+    invalid: string;
+    schema?: (error: ErrorObject) => string;
+  },
 ): string | null => {
   if (!error) {
     return null;
@@ -162,5 +163,12 @@ export const getDynamicPropertyNameErrorMessage = (
   if (error.reason === 'invalid') {
     return messages.invalid;
   }
-  return error.message ?? messages.invalid;
+  const translatedErrors = error.errors
+    .map((schemaError) =>
+      messages.schema
+        ? messages.schema(schemaError)
+        : (schemaError.message ?? ''),
+    )
+    .filter(Boolean);
+  return translatedErrors.join(', ') || messages.invalid;
 };

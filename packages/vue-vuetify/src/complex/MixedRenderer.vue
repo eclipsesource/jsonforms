@@ -48,7 +48,7 @@
                       density="compact"
                       hide-details
                       clearable
-                      label="Search"
+                      :label="mixedTranslations.searchLabel"
                       :prepend-inner-icon="icons.current.value.search"
                       v-bind="vuetifyProps('v-text-field')"
                     />
@@ -113,14 +113,19 @@
                                 "
                                 variant="text"
                                 size="x-small"
+                                :aria-label="
+                                  showPrimitivesInTree
+                                    ? mixedTranslations.hidePrimitives
+                                    : mixedTranslations.showPrimitives
+                                "
                                 @click.stop="toggleShowPrimitives"
                               />
                             </template>
                             <span>
                               {{
                                 showPrimitivesInTree
-                                  ? 'Hide primitives'
-                                  : 'Show primitives'
+                                  ? mixedTranslations.hidePrimitives
+                                  : mixedTranslations.showPrimitives
                               }}
                             </span>
                           </v-tooltip>
@@ -131,12 +136,17 @@
                                   v-bind="props"
                                   class="mixed-tree-action mixed-hover-action"
                                   :icon="icons.current.value.itemEdit"
+                                  :aria-label="
+                                    mixedTranslations.renameAriaLabel(
+                                      item.label,
+                                    )
+                                  "
                                   variant="text"
                                   size="x-small"
                                   @click.stop="startRename(item)"
                                 />
                               </template>
-                              <span>Rename</span>
+                              <span>{{ mixedTranslations.renameTooltip }}</span>
                             </v-tooltip>
                             <v-tooltip v-if="item.canDelete" location="top">
                               <template #activator="{ props }">
@@ -144,13 +154,18 @@
                                   v-bind="props"
                                   class="mixed-tree-action mixed-hover-action"
                                   :icon="icons.current.value.itemDelete"
+                                  :aria-label="
+                                    mixedTranslations.deleteAriaLabel(
+                                      item.label,
+                                    )
+                                  "
                                   variant="text"
                                   size="x-small"
                                   color="error"
                                   @click.stop="deleteNode(item)"
                                 />
                               </template>
-                              <span>Delete</span>
+                              <span>{{ mixedTranslations.deleteTooltip }}</span>
                             </v-tooltip>
                           </template>
                         </div>
@@ -209,13 +224,14 @@
               v-bind="props"
               class="mixed-navigate-button"
               :icon="icons.current.value.visibilityOn"
+              :aria-label="mixedTranslations.viewAriaLabel(computedLabel)"
               variant="text"
               color="primary"
               :disabled="!navigationContext"
               @click="selectCurrentPath"
             />
           </template>
-          <span>View {{ computedLabel }}</span>
+          <span>{{ mixedTranslations.viewTooltip(computedLabel) }}</span>
         </v-tooltip>
       </div>
     </template>
@@ -262,7 +278,10 @@
 <script lang="ts">
 import { AdditionalPropertiesTranslationEnum } from '@/i18n';
 import { additionalPropertiesDefaultTranslations } from '@/i18n/additionalPropertiesTranslations';
-import { getAdditionalPropertiesTranslations } from '@/i18n/i18nUtil';
+import {
+  getAdditionalPropertyTranslation,
+  getMixedRendererTranslations,
+} from '@/i18n/i18nUtil';
 import {
   Resolve,
   createControlElement,
@@ -285,6 +304,7 @@ import {
   useTranslator,
   type RendererProps,
 } from '@jsonforms/vue';
+import type { ErrorObject } from 'ajv';
 import cloneDeep from 'lodash/cloneDeep';
 import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
@@ -295,7 +315,6 @@ import {
   inject,
   provide,
   ref,
-  unref,
   watch,
   type DefineComponent,
   type InjectionKey,
@@ -661,16 +680,17 @@ function prepareChildSchema(
   key: string,
   index: number | null,
   rootSchema: JsonSchema,
+  itemLabel?: string,
 ): JsonSchema {
   let childSchema: JsonSchema | undefined;
 
   if (index !== null) {
     childSchema = getArrayItemSchema(currentSchema, index, rootSchema);
     childSchema = childSchema
-      ? { ...childSchema, title: `Item ${index}` }
+      ? { ...childSchema, title: itemLabel }
       : {
           type: [...JSON_TYPES],
-          title: `Item ${index}`,
+          title: itemLabel,
         };
   } else {
     childSchema = findPropertySchema(currentSchema, key, rootSchema);
@@ -767,6 +787,7 @@ function buildTreeFromData(
   enabled: boolean,
   readonly: boolean,
   showPrimitives: boolean,
+  itemLabel: (index: number) => string,
 ): MixedTreeNode[] {
   const dataType = getJsonDataType(data);
   if (dataType !== 'object' && dataType !== 'array') {
@@ -880,16 +901,17 @@ function buildTreeFromData(
       value.forEach((childValue: any, index: number) => {
         const childType = getJsonDataType(childValue);
         const childPath = composePropertyPath(currentPath, `${index}`);
+        const childLabel = itemLabel(index);
         const childSchema = prepareChildSchema(
           childType ?? 'object',
           currentSchema,
           '',
           index,
           rootSchema,
+          childLabel,
         );
         const resolvedChildType =
           childType ?? getSchemaDefaultType(childSchema);
-        const childLabel = `Item ${index}`;
         if (resolvedChildType === 'object' || resolvedChildType === 'array') {
           traverse(
             childValue ?? (resolvedChildType === 'array' ? [] : {}),
@@ -999,13 +1021,37 @@ const controlRenderer = defineComponent({
       input.control.value.uischema,
       input.control.value.path + '.additionalProperties',
     );
-    const renameTranslations = getAdditionalPropertiesTranslations(
-      t.value,
-      additionalPropertiesDefaultTranslations,
-      i18nAdditionalPropertiesPrefix,
-      input.control.value.label,
-      renameValue,
+    const translateAdditionalProperty = (
+      key: AdditionalPropertiesTranslationEnum,
+      propertyName: string,
+    ) =>
+      getAdditionalPropertyTranslation(
+        t.value,
+        additionalPropertiesDefaultTranslations,
+        i18nAdditionalPropertiesPrefix,
+        key,
+        propertyName,
+      );
+    const i18nMixedRendererPrefix = getI18nKeyPrefix(
+      input.control.value.schema,
+      input.control.value.uischema,
+      input.control.value.path + '.mixedRenderer',
     );
+    const mixedTranslations = getMixedRendererTranslations(
+      t.value,
+      i18nMixedRendererPrefix,
+    );
+    const translatePropertyNameSchemaError = (error: ErrorObject) =>
+      jsonforms.i18n?.translateError?.(
+        error,
+        t.value,
+        input.control.value.uischema,
+      ) ??
+      error.message ??
+      translateAdditionalProperty(
+        AdditionalPropertiesTranslationEnum.propertyNameInvalid,
+        renameValue.value,
+      );
 
     const mixedRenderInfos = computed<
       (SchemaRenderInfo & {
@@ -1091,6 +1137,7 @@ const controlRenderer = defineComponent({
             input.control.value.enabled,
             input.control.value.readonly,
             showPrimitivesInTree.value,
+            mixedTranslations.itemLabel,
           )
         : [],
     );
@@ -1292,18 +1339,15 @@ const controlRenderer = defineComponent({
         ajv,
       });
       renameError.value = getDynamicPropertyNameErrorMessage(validationError, {
-        alreadyDefined:
-          unref(
-            renameTranslations[
-              AdditionalPropertiesTranslationEnum.propertyAlreadyDefined
-            ],
-          ) ?? `Property '${trimmed}' already defined`,
-        invalid:
-          unref(
-            renameTranslations[
-              AdditionalPropertiesTranslationEnum.propertyNameInvalid
-            ],
-          ) ?? `Property name '${trimmed}' is invalid`,
+        alreadyDefined: translateAdditionalProperty(
+          AdditionalPropertiesTranslationEnum.propertyAlreadyDefined,
+          trimmed,
+        ),
+        invalid: translateAdditionalProperty(
+          AdditionalPropertiesTranslationEnum.propertyNameInvalid,
+          trimmed,
+        ),
+        schema: translatePropertyNameSchemaError,
       });
       if (renameError.value) {
         return;
@@ -1432,6 +1476,7 @@ const controlRenderer = defineComponent({
       renamingNodeId,
       renameValue,
       renameError,
+      mixedTranslations,
       navigationContext,
       toggleShowPrimitives,
       startRename,

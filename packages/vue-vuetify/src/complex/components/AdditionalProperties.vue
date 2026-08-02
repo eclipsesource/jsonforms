@@ -99,8 +99,8 @@
                 icon
                 variant="text"
                 elevation="0"
-                :aria-label="'Rename property ' + element.propertyName"
-                :title="'Rename property ' + element.propertyName"
+                :aria-label="renamePropertyAriaLabel(element.propertyName)"
+                :title="renamePropertyAriaLabel(element.propertyName)"
               >
                 <v-icon class="notranslate">{{
                   icons.current.value.itemEdit
@@ -127,10 +127,10 @@
                   :disabled="renamePropertyDisabled(element.propertyName)"
                   @click="renameProperty(element.propertyName)"
                 >
-                  Rename
+                  {{ translations.renameConfirm }}
                 </v-btn>
                 <v-btn variant="text" size="small" @click="cancelRename">
-                  Cancel
+                  {{ translations.cancel }}
                 </v-btn>
               </div>
             </v-card>
@@ -166,7 +166,10 @@
 <script lang="ts">
 import { AdditionalPropertiesTranslationEnum } from '@/i18n';
 import { additionalPropertiesDefaultTranslations } from '@/i18n/additionalPropertiesTranslations';
-import { getAdditionalPropertiesTranslations } from '@/i18n/i18nUtil';
+import {
+  getAdditionalPropertiesTranslations,
+  getAdditionalPropertyTranslation,
+} from '@/i18n/i18nUtil';
 import {
   Generate,
   createControlElement,
@@ -199,7 +202,6 @@ import {
   markRaw,
   provide,
   ref,
-  unref,
   type PropType,
   type DefineComponent,
 } from 'vue';
@@ -361,18 +363,14 @@ export default defineComponent({
         data: control.value.data,
       });
       const message = getDynamicPropertyNameErrorMessage(validationError, {
-        alreadyDefined:
-          unref(
-            translations[
-              AdditionalPropertiesTranslationEnum.propertyAlreadyDefined
-            ],
-          ) ?? `Property '${newPropertyName.value}' already defined`,
-        invalid:
-          unref(
-            translations[
-              AdditionalPropertiesTranslationEnum.propertyNameInvalid
-            ],
-          ) ?? `Property name '${newPropertyName.value}' is invalid`,
+        alreadyDefined: translatePropertyName(
+          AdditionalPropertiesTranslationEnum.propertyAlreadyDefined,
+          newPropertyName.value,
+        ),
+        invalid: translatePropertyName(
+          AdditionalPropertiesTranslationEnum.propertyNameInvalid,
+          newPropertyName.value,
+        ),
       });
       const newAdditionalErrors: ErrorObject[] = message
         ? [
@@ -416,25 +414,46 @@ export default defineComponent({
       control.value.label,
       newPropertyName,
     );
-    const renameTranslations = getAdditionalPropertiesTranslations(
-      t.value,
-      additionalPropertiesDefaultTranslations,
-      i18nAdditionalPropertiesPrefix,
-      control.value.label,
-      renameValue,
-    );
+    const translatePropertyName = (
+      key: AdditionalPropertiesTranslationEnum,
+      propertyName: string,
+    ) =>
+      getAdditionalPropertyTranslation(
+        t.value,
+        additionalPropertiesDefaultTranslations,
+        i18nAdditionalPropertiesPrefix,
+        key,
+        propertyName,
+      );
+    const renamePropertyAriaLabel = (propertyName: string) =>
+      translatePropertyName(
+        AdditionalPropertiesTranslationEnum.renameAriaLabel,
+        propertyName,
+      );
 
     const propertyNameLabel =
       translations[AdditionalPropertiesTranslationEnum.propertyNameLabel];
 
     const { mdAndUp } = useDisplay();
 
+    const jsonforms = useJsonForms();
     const {
       validationMode: parentValidationMode,
       i18n,
       middleware,
-    } = useJsonForms();
+    } = jsonforms;
     const ajv = useAjv();
+    const translatePropertyNameSchemaError = (error: ErrorObject) =>
+      jsonforms.i18n?.translateError?.(
+        error,
+        t.value,
+        control.value.uischema,
+      ) ??
+      error.message ??
+      translatePropertyName(
+        AdditionalPropertiesTranslationEnum.propertyNameInvalid,
+        renameValue.value,
+      );
 
     // if the new property name is not specified then hide any errors
     const validationMode = computed(() =>
@@ -471,7 +490,9 @@ export default defineComponent({
       isControlEditable,
       propertyNameSchema,
       translations,
-      renameTranslations,
+      translatePropertyName,
+      renamePropertyAriaLabel,
+      translatePropertyNameSchemaError,
     };
   },
   computed: {
@@ -572,18 +593,15 @@ export default defineComponent({
           ajv: this.ajv,
         }),
         {
-          alreadyDefined:
-            unref(
-              this.renameTranslations[
-                AdditionalPropertiesTranslationEnum.propertyAlreadyDefined
-              ],
-            ) ?? `Property '${propertyName}' already defined`,
-          invalid:
-            unref(
-              this.renameTranslations[
-                AdditionalPropertiesTranslationEnum.propertyNameInvalid
-              ],
-            ) ?? `Property name '${propertyName}' is invalid`,
+          alreadyDefined: this.translatePropertyName(
+            AdditionalPropertiesTranslationEnum.propertyAlreadyDefined,
+            propertyName,
+          ),
+          invalid: this.translatePropertyName(
+            AdditionalPropertiesTranslationEnum.propertyNameInvalid,
+            propertyName,
+          ),
+          schema: this.translatePropertyNameSchemaError,
         },
       );
     },

@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import {
   composePropertyPath,
   findPropertySchema,
+  getDynamicPropertyNameErrorMessage,
   getPropertyNameSchema,
   haveAdditionalPropertyNamesChanged,
   validateDynamicPropertyName,
@@ -147,6 +148,23 @@ describe('dynamic property utilities', () => {
           ajv,
         }),
       ).toBeNull();
+    });
+
+    it('allows JSON Schema errors to be translated by the caller', () => {
+      const validationError = validateDynamicPropertyName({
+        propertyName: 'invalid',
+        data: {},
+        propertyNameSchema: { type: 'string', pattern: '^[A-Z]' },
+        ajv,
+      });
+
+      expect(
+        getDynamicPropertyNameErrorMessage(validationError, {
+          alreadyDefined: 'Already defined',
+          invalid: 'Invalid',
+          schema: (error) => `Translated ${error.keyword} error`,
+        }),
+      ).toBe('Translated pattern error');
     });
   });
 
