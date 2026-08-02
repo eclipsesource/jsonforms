@@ -25,6 +25,7 @@
 import MaterialAllOfRenderer, {
   materialAllOfControlTester,
 } from './MaterialAllOfRenderer';
+import { MaterialAdditionalProperties } from './MaterialAdditionalProperties';
 import MaterialAnyOfRenderer, {
   materialAnyOfControlTester,
 } from './MaterialAnyOfRenderer';
@@ -34,6 +35,9 @@ import MaterialArrayControlRenderer, {
 import MaterialEnumArrayRenderer, {
   materialEnumArrayRendererTester,
 } from './MaterialEnumArrayRenderer';
+import MaterialMixedRenderer, {
+  materialMixedControlTester,
+} from './MaterialMixedRenderer';
 import MaterialObjectRenderer, {
   materialObjectControlTester,
 } from './MaterialObjectRenderer';
@@ -42,6 +46,7 @@ import MaterialOneOfRenderer, {
 } from './MaterialOneOfRenderer';
 
 export {
+  MaterialAdditionalProperties,
   materialAllOfControlTester,
   MaterialAllOfRenderer,
   materialAnyOfControlTester,
@@ -50,6 +55,8 @@ export {
   MaterialArrayControlRenderer,
   materialEnumArrayRendererTester,
   MaterialEnumArrayRenderer,
+  materialMixedControlTester,
+  MaterialMixedRenderer,
   materialObjectControlTester,
   MaterialObjectRenderer,
   materialOneOfControlTester,

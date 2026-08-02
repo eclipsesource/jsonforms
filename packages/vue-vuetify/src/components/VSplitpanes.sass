@@ -1,0 +1,218 @@
+@use 'sass:math'
+@use 'vuetify/tools'
+
+$splitter-thickness: 1px
+$splitter-hover-thickness: 4px
+$splitter-hit-area: 8px
+$splitter-transition: background-color 0.15s ease, width 0.15s ease, height 0.15s ease
+$pane-transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1)
+
+@mixin splitter-base
+  box-sizing: border-box
+  flex-shrink: 0
+  background-color: transparent
+  transition: none
+  position: relative
+
+@mixin splitter-line($width: $splitter-thickness, $height: 100%, $top: 0, $left: 0)
+  content: ''
+  position: absolute
+  top: $top
+  left: $left
+  width: $width
+  height: $height
+  background-color: rgba(var(--v-border-color), var(--v-border-opacity))
+  transition: $splitter-transition
+  z-index: 1
+
+@mixin splitter-hover-state($is-horizontal: false)
+  @if $is-horizontal
+    height: $splitter-hover-thickness
+    width: 100%
+    top: -1.5px
+    left: 0
+  @else
+    width: $splitter-hover-thickness
+    height: 100%
+    left: -1.5px
+    top: 0
+  background-color: rgb(var(--v-theme-primary))
+
+@mixin hit-area($is-horizontal: false)
+  content: ''
+  position: absolute
+  z-index: 0
+  background-color: transparent
+
+  @if $is-horizontal
+    top: -(math.div($splitter-hit-area, 2))
+    bottom: -(math.div($splitter-hit-area, 2))
+    left: 0
+    right: 0
+    cursor: row-resize
+  @else
+    left: -(math.div($splitter-hit-area, 2))
+    right: -(math.div($splitter-hit-area, 2))
+    top: 0
+    bottom: 0
+    cursor: col-resize
+
+@mixin pane-transition($property)
+  transition: none
+
+  .splitpanes:not(.splitpanes--dragging) &
+    transition: #{$property} $pane-transition
+
+@include tools.layer('components')
+  .splitpanes
+    display: flex
+    width: 100%
+    height: 100%
+
+    &--vertical
+      flex-direction: row
+
+    &--horizontal
+      flex-direction: column
+
+    &--dragging
+      -webkit-user-select: none
+      user-select: none
+      pointer-events: auto
+      transform: translateZ(0)
+      will-change: transform
+
+      *, *:before, *:after
+        transition: none !important
+
+      .splitpanes__splitter
+        pointer-events: auto
+
+    &[dir='rtl']
+      &.splitpanes--vertical
+        flex-direction: row-reverse
+
+        > .splitpanes__splitter
+          border-left: none
+          border-right: $splitter-thickness solid rgba(var(--v-border-color), var(--v-border-opacity))
+
+  .splitpanes__pane
+    width: 100%
+    height: 100%
+    overflow: hidden
+    transform: translateZ(0)
+    backface-visibility: hidden
+
+    .splitpanes--vertical &
+      @include pane-transition(width)
+
+    .splitpanes--horizontal &
+      @include pane-transition(height)
+
+  .splitpanes__splitter
+    .splitpanes--vertical > &
+      min-width: $splitter-thickness
+      cursor: col-resize
+
+    .splitpanes--horizontal > &
+      min-height: $splitter-thickness
+      cursor: row-resize
+
+    &:first-child
+      cursor: auto
+
+    &:focus-visible
+      outline: 2px solid rgb(var(--v-theme-primary))
+      outline-offset: -2px
+
+  .splitpanes.v-splitpanes
+    color: rgba(var(--v-theme-on-surface), var(--v-high-emphasis-opacity))
+
+    .splitpanes__pane
+      background-color: rgb(var(--v-theme-surface))
+
+    .splitpanes__splitter
+      @include splitter-base
+      transform: translateZ(0)
+      will-change: auto
+
+      &:before
+        @include splitter-line
+
+      &:hover:before
+        @include splitter-hover-state
+
+      .splitpanes--dragging &:before
+        @include splitter-hover-state
+        transition: none !important
+
+      .splitpanes &
+        z-index: 1
+
+    &.splitpanes--vertical > .splitpanes__splitter:after
+      @include hit-area
+
+    &.splitpanes--horizontal > .splitpanes__splitter
+      &:before
+        @include splitter-line(100%, $splitter-thickness)
+
+      &:hover:before
+        @include splitter-hover-state(true)
+
+      .splitpanes--dragging &:before
+        @include splitter-hover-state(true)
+        transition: none !important
+
+      &:after
+        @include hit-area(true)
+
+  .splitpanes.v-splitpanes.splitpanes--dragging
+    .splitpanes__pane
+      transition: none
+
+    .splitpanes__splitter:hover:before,
+    .splitpanes__splitter:focus:before,
+    .splitpanes__splitter:active:before
+      @include splitter-hover-state
+      transition: none
+
+    .splitpanes__pane .splitpanes__splitter:before
+      background-color: rgba(var(--v-border-color), var(--v-border-opacity))
+      width: $splitter-thickness
+      height: 100%
+      top: 0
+      left: 0
+      transition: none
+
+    .splitpanes__pane .splitpanes__splitter:hover:before,
+    .splitpanes__pane .splitpanes__splitter:focus:before,
+    .splitpanes__pane .splitpanes__splitter:active:before
+      @include splitter-hover-state
+      transition: none
+
+    &.splitpanes--horizontal .splitpanes__splitter:before,
+    .splitpanes__pane .splitpanes--horizontal .splitpanes__splitter:before
+      background-color: rgba(var(--v-border-color), var(--v-border-opacity))
+      width: 100%
+      height: $splitter-thickness
+      top: 0
+      left: 0
+      transition: none
+
+    &.splitpanes--horizontal .splitpanes__splitter:hover:before,
+    &.splitpanes--horizontal .splitpanes__splitter:focus:before,
+    &.splitpanes--horizontal .splitpanes__splitter:active:before,
+    .splitpanes__pane .splitpanes--horizontal .splitpanes__splitter:hover:before,
+    .splitpanes__pane .splitpanes--horizontal .splitpanes__splitter:focus:before,
+    .splitpanes__pane .splitpanes--horizontal .splitpanes__splitter:active:before
+      @include splitter-hover-state(true)
+      transition: none
+
+  @media (prefers-contrast: high)
+    .splitpanes.v-splitpanes .splitpanes__splitter
+      opacity: 1 !important
+      background-color: rgba(var(--v-border-color), 0.87) !important
+
+  @media (prefers-reduced-motion: reduce)
+    .splitpanes__pane
+      transition: none

@@ -129,10 +129,11 @@ describe('Object Control', () => {
     fixture.detectChanges();
     component.ngOnInit();
     fixture.whenStable().then(() => {
-      // one for the object renderer and one for the group
-      expect(fixture.nativeElement.querySelectorAll('mat-card').length).toBe(2);
+      expect(fixture.nativeElement.querySelectorAll('mat-card').length).toBe(1);
       expect(
-        fixture.nativeElement.querySelectorAll('mat-card-title')[0].textContent
+        fixture.nativeElement
+          .querySelectorAll('mat-card-title')[0]
+          .textContent.trim()
       ).toBe('Foo');
     });
   }));

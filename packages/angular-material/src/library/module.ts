@@ -43,6 +43,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTreeModule } from '@angular/material/tree';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { JsonFormsModule } from '@jsonforms/angular';
 import { BooleanControlRenderer } from './controls/boolean.renderer';
@@ -57,6 +58,8 @@ import { TextAreaRenderer } from './controls/textarea.renderer';
 import { TextControlRenderer } from './controls/text.renderer';
 import { ToggleControlRenderer } from './controls/toggle.renderer';
 import { LabelRenderer } from './other/label.renderer';
+import { AdditionalPropertiesRenderer } from './other/additional-properties.renderer';
+import { MixedRenderer } from './other/mixed.renderer';
 import { JsonFormsDetailComponent } from './other/master-detail/detail';
 import { MasterListComponent } from './other/master-detail/master';
 import { ObjectControlRenderer } from './other/object.renderer';
@@ -92,6 +95,7 @@ import { LayoutChildrenRenderPropsPipe } from './layouts';
     MatToolbarModule,
     MatTooltipModule,
     MatBadgeModule,
+    MatTreeModule,
     BooleanControlRenderer,
     TextAreaRenderer,
     TextControlRenderer,
@@ -106,6 +110,8 @@ import { LayoutChildrenRenderPropsPipe } from './layouts';
     LabelRenderer,
     MasterListComponent,
     JsonFormsDetailComponent,
+    AdditionalPropertiesRenderer,
+    MixedRenderer,
     ObjectControlRenderer,
     EnumControlRenderer,
     OneOfEnumControlRenderer,
@@ -147,6 +153,8 @@ import { LayoutChildrenRenderPropsPipe } from './layouts';
     LabelRenderer,
     MasterListComponent,
     JsonFormsDetailComponent,
+    AdditionalPropertiesRenderer,
+    MixedRenderer,
     ObjectControlRenderer,
     EnumControlRenderer,
     OneOfEnumControlRenderer,

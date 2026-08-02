@@ -1,6 +1,7 @@
 export * from './additional';
 export * from './array';
 export * from './complex';
+export * from './components';
 export * from './controls';
 export * from './extended';
 export * from './i18n';

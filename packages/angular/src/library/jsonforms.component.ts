@@ -27,7 +27,9 @@ import {
   Directive,
   inject,
   Input,
+  OnChanges,
   OnInit,
+  SimpleChanges,
   Type,
   ViewContainerRef,
 } from '@angular/core';
@@ -70,12 +72,14 @@ const areEqual = (
 })
 export class JsonFormsOutlet
   extends JsonFormsBaseRenderer<UISchemaElement>
-  implements OnInit
+  implements OnInit, OnChanges
 {
   private previousProps: StatePropsOfJsonFormsRenderer;
 
   private viewContainerRef = inject(ViewContainerRef);
   private jsonformsService = inject(JsonFormsAngularService);
+
+  @Input() preserveUndefinedAsDefault = false;
 
   @Input()
   set renderProps(renderProps: OwnPropsOfRenderer) {
@@ -83,6 +87,21 @@ export class JsonFormsOutlet
     this.schema = renderProps.schema;
     this.uischema = renderProps.uischema;
     this.update(this.jsonformsService.getState());
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.renderProps) {
+      return;
+    }
+
+    if (
+      changes.schema ||
+      changes.uischema ||
+      changes.path ||
+      changes.preserveUndefinedAsDefault
+    ) {
+      this.update(this.jsonformsService.getState());
+    }
   }
 
   ngOnInit(): void {
@@ -135,6 +154,8 @@ export class JsonFormsOutlet
       instance.path = this.path;
       if (instance instanceof JsonFormsControl) {
         const controlInstance = instance as JsonFormsControl;
+        controlInstance.preserveUndefinedAsDefault =
+          this.preserveUndefinedAsDefault;
         if (controlInstance.id === undefined) {
           const id = isControl(props.uischema)
             ? Id.createId(props.uischema.scope)
