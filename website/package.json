@@ -1,0 +1,54 @@
+{
+  "name": "jsonforms-website",
+  "version": "2.0.0",
+  "description": "Complex forms in the blink of an eye",
+  "repository": "https://github.com/eclipsesource/jsonforms2-website",
+  "bugs": "https://github.com/eclipsesource/jsonforms2-website/issues",
+  "license": "MIT",
+  "scripts": {
+    "docusaurus": "docusaurus",
+    "start": "docusaurus start",
+    "build:docusaurus": "docusaurus build",
+    "build:next": "./build.sh next && npm run build:docusaurus",
+    "build:current": "./build.sh && npm run build:docusaurus",
+    "build": "npm run build:next",
+    "swizzle": "docusaurus swizzle",
+    "deploy": "docusaurus deploy",
+    "serve": "docusaurus serve",
+    "clear": "docusaurus clear"
+  },
+  "dependencies": {
+    "@docusaurus/core": "3.10.1",
+    "@docusaurus/plugin-client-redirects": "3.10.1",
+    "@docusaurus/preset-classic": "3.10.1",
+    "@easyops-cn/docusaurus-search-local": "^0.47.0",
+    "@emotion/react": "^11.11.3",
+    "@emotion/styled": "^11.11.0",
+    "@jsonforms/core": "^3.8.0",
+    "@jsonforms/examples": "^3.8.0",
+    "@jsonforms/material-renderers": "^3.8.0",
+    "@jsonforms/react": "^3.8.0",
+    "@mdx-js/react": "^3.0.0",
+    "@mui/icons-material": "^7.3.5",
+    "@mui/lab": "^7.0.1-beta.19",
+    "@mui/material": "^7.3.5",
+    "@mui/system": "^7.3.5",
+    "@mui/x-date-pickers": "^8.19.0",
+    "clsx": "^2.1.0",
+    "prism-react-renderer": "^2.3.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.5%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

@@ -1,0 +1,41 @@
+[build]
+  publish = "build"
+
+[[redirects]]
+ from = "/public/api/core/*"
+ to = "/api/core/"
+
+[[redirects]]
+ from = "/public/api/react/*"
+ to = "/api/react/"
+
+[[redirects]]
+ from = "/public/api/material/*"
+ to = "/api/material/"
+
+[[redirects]]
+ from = "/public/api/vanilla/*"
+ to = "/api/vanilla/"
+
+[[redirects]]
+ from = "/public/api/angular/*"
+ to = "/api/angular/"
+
+[[redirects]]
+ from = "/public/api/vue/*"
+ to = "/api/vue/"
+
+[[headers]]
+   for = "/*"
+   [headers.values]
+      Access-Control-Allow-Origin = "*"
+      Referrer-Policy = "strict-origin-when-cross-origin"
+      Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-eval' 'sha256-O8zYuOjyuzUZDv3fub7DKfAs5TEd1dG+fz+hCSCFmQA=' 'sha256-nlA5Eh6znySQnjHmn8Yf6Vfz2I3XgXggeuOKoXBiBC0=' 'sha256-pBkmluod9Ko4GzDfbWgKM/wxzujFXUdGVOePkwOQT+c=' 'sha256-bI2b8zL8P3uzmgy+aB+Lh2ZEf8GRlptjS0Gs3QKMRSM=' static.cloudflareinsights.com cloudflareinsights.com/cdn-cgi/rum; connect-src 'self' cloudflareinsights.com/cdn-cgi/rum; style-src 'self' 'unsafe-inline'; img-src 'self' data:; object-src 'none'; frame-ancestors 'self';"
+      X-Frame-Options = "SAMEORIGIN"
+      X-Content-Type-Options = "nosniff"
+      Permissions-Policy = "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
+
+[[headers]]
+   for = "/api/*"
+   [headers.values]
+      Content-Security-Policy = "script-src 'self' 'unsafe-inline'; script-src-elem 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' data:;"
