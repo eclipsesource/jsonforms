@@ -24,10 +24,9 @@
 */
 
 import cloneDeep from 'lodash/cloneDeep';
-import setFp from 'lodash/fp/set';
-import unsetFp from 'lodash/fp/unset';
-import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
+import { resolveData } from '../util/resolvers';
+import { setDataAt, unsetDataAt } from '../util/setData';
 import {
   CoreActions,
   INIT,
@@ -238,19 +237,20 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
           errors,
         };
       } else {
-        const oldData: any = get(state.data, action.path);
+        const oldData: any = resolveData(state.data, action.path);
         const newData = action.updater(cloneDeep(oldData));
         let newState: any;
         if (newData !== undefined) {
-          newState = setFp(
+          newState = setDataAt(
+            state.data === undefined ? {} : state.data,
             action.path,
             newData,
-            state.data === undefined ? {} : state.data
+            state.schema
           );
         } else {
-          newState = unsetFp(
-            action.path,
-            state.data === undefined ? {} : state.data
+          newState = unsetDataAt(
+            state.data === undefined ? {} : state.data,
+            action.path
           );
         }
         const errors = validate(state.validator, newState);
