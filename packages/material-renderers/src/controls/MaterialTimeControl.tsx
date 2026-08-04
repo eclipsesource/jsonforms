@@ -138,13 +138,15 @@ export const MaterialTimeControl = (props: ControlProps) => {
             error: !isValid,
             fullWidth: !appliedUiSchemaOptions.trim,
             variant: inputVariant,
-            inputProps: {
-              autoFocus: appliedUiSchemaOptions.focus,
-              type: 'text',
-              onBlur: onBlurHandler,
-              onFocus: onFocus,
+            slotProps: {
+              htmlInput: {
+                autoFocus: appliedUiSchemaOptions.focus,
+                type: 'text',
+                onBlur: onBlurHandler,
+                onFocus: onFocus,
+              },
+              inputLabel: data ? { shrink: true } : undefined,
             },
-            InputLabelProps: data ? { shrink: true } : undefined,
           },
         }}
       />

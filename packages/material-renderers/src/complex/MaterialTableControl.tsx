@@ -310,8 +310,7 @@ const NonEmptyRowComponent = ({
           <Grid
             container
             direction='row'
-            justifyContent='flex-end'
-            alignItems='center'
+            sx={{ justifyContent: 'flex-end', alignItems: 'center' }}
           >
             {showSortButtons ? (
               <Fragment>
