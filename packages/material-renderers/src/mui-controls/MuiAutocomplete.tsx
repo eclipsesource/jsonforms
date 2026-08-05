@@ -33,7 +33,6 @@ import {
 
 import {
   Autocomplete,
-  AutocompleteRenderInputParams,
   AutocompleteRenderOptionState,
   FilterOptionsState,
   FormHelperText,
@@ -41,16 +40,6 @@ import {
 } from '@mui/material';
 import merge from 'lodash/merge';
 import { useFocus } from '../util/focus';
-
-// Material UI 7.x delivers the input wiring of renderInput params as legacy
-// top-level props (InputProps/inputProps/InputLabelProps), while v9 nests it
-// under slotProps. Both majors are supported as peers, so both shapes must be
-// normalized to slotProps before rendering the TextField.
-type LegacyRenderInputParams = {
-  InputProps?: Record<string, unknown>;
-  inputProps?: Record<string, unknown>;
-  InputLabelProps?: Record<string, unknown>;
-};
 
 export interface WithOptionLabel {
   getOptionLabel?(option: EnumOption): string;
@@ -132,48 +121,29 @@ export const MuiAutocomplete = (
         options={options}
         getOptionLabel={getOptionLabel || ((option) => option?.label)}
         freeSolo={false}
-        renderInput={(rawParams) => {
-          const {
-            InputProps: legacyInputProps,
-            inputProps: legacyHtmlInputProps,
-            InputLabelProps: legacyInputLabelProps,
-            ...params
-          } = rawParams as AutocompleteRenderInputParams &
-            LegacyRenderInputParams;
-          const paramsSlotProps:
-            | AutocompleteRenderInputParams['slotProps']
-            | undefined = params.slotProps;
-          return (
-            <TextField
-              label={label}
-              type='text'
-              autoFocus={appliedUiSchemaOptions.focus}
-              disabled={!enabled}
-              {...params}
-              id={id}
-              required={
-                required && !appliedUiSchemaOptions.hideRequiredAsterisk
-              }
-              error={!isValid}
-              fullWidth={!appliedUiSchemaOptions.trim}
-              slotProps={{
-                input: { ...legacyInputProps, ...paramsSlotProps?.input },
-                htmlInput: {
-                  ...legacyHtmlInputProps,
-                  ...paramsSlotProps?.htmlInput,
-                },
-                inputLabel: {
-                  ...legacyInputLabelProps,
-                  ...paramsSlotProps?.inputLabel,
-                  ...(data ? { shrink: true } : undefined),
-                },
-              }}
-              onFocus={onFocus}
-              onBlur={onBlur}
-              focused={focused}
-            />
-          );
-        }}
+        renderInput={(params) => (
+          <TextField
+            label={label}
+            type='text'
+            autoFocus={appliedUiSchemaOptions.focus}
+            disabled={!enabled}
+            {...params}
+            id={id}
+            required={required && !appliedUiSchemaOptions.hideRequiredAsterisk}
+            error={!isValid}
+            fullWidth={!appliedUiSchemaOptions.trim}
+            slotProps={{
+              ...params.slotProps,
+              inputLabel: {
+                ...params.slotProps.inputLabel,
+                ...(data ? { shrink: true } : undefined),
+              },
+            }}
+            onFocus={onFocus}
+            onBlur={onBlur}
+            focused={focused}
+          />
+        )}
         renderOption={renderOption}
         filterOptions={filterOptions}
       />
