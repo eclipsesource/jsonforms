@@ -134,7 +134,7 @@ export const MaterialListWithDetailRenderer = ({
         createDefault={handleCreateDefaultValue}
         disableAdd={doDisableAdd}
       />
-      <Grid container direction='row' spacing={2}>
+      <Grid container spacing={2}>
         <Grid size={3}>
           <List>
             {data > 0 ? (

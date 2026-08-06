@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import isEmpty from 'lodash/isEmpty';
-import React, { ComponentType } from 'react';
+import React, { ComponentType, Fragment } from 'react';
 import type Ajv from 'ajv';
 import type { UISchemaElement } from '@jsonforms/core';
 import {
@@ -34,7 +34,7 @@ import {
   OwnPropsOfRenderer,
 } from '@jsonforms/core';
 import { JsonFormsDispatch, useJsonForms } from '@jsonforms/react';
-import { Grid } from '@mui/material';
+import { Grid, Stack } from '@mui/material';
 
 export const renderLayoutElements = (
   elements: UISchemaElement[],
@@ -42,10 +42,11 @@ export const renderLayoutElements = (
   path: string,
   enabled: boolean,
   renderers?: JsonFormsRendererRegistryEntry[],
-  cells?: JsonFormsCellRendererRegistryEntry[]
+  cells?: JsonFormsCellRendererRegistryEntry[],
+  direction: 'row' | 'column' = 'row'
 ) => {
-  return elements.map((child, index) => (
-    <Grid key={`${path}-${index}`} size='grow'>
+  return elements.map((child, index) => {
+    const dispatch = (
       <JsonFormsDispatch
         uischema={child}
         schema={schema}
@@ -54,8 +55,16 @@ export const renderLayoutElements = (
         renderers={renderers}
         cells={cells}
       />
-    </Grid>
-  ));
+    );
+
+    return direction === 'row' ? (
+      <Grid key={`${path}-${index}`} size='grow'>
+        {dispatch}
+      </Grid>
+    ) : (
+      <Fragment key={`${path}-${index}`}>{dispatch}</Fragment>
+    );
+  });
 };
 
 export interface MaterialLayoutRendererProps extends OwnPropsOfRenderer {
@@ -74,24 +83,25 @@ const MaterialLayoutRendererComponent = ({
 }: MaterialLayoutRendererProps) => {
   if (isEmpty(elements) || !visible) {
     return null;
-  } else {
-    return (
-      <Grid
-        container
-        direction={direction}
-        spacing={direction === 'row' ? 2 : 0}
-      >
-        {renderLayoutElements(
-          elements,
-          schema,
-          path,
-          enabled,
-          renderers,
-          cells
-        )}
-      </Grid>
-    );
   }
+
+  const children = renderLayoutElements(
+    elements,
+    schema,
+    path,
+    enabled,
+    renderers,
+    cells,
+    direction
+  );
+
+  return direction === 'row' ? (
+    <Grid container spacing={2}>
+      {children}
+    </Grid>
+  ) : (
+    <Stack>{children}</Stack>
+  );
 };
 export const MaterialLayoutRenderer = React.memo(
   MaterialLayoutRendererComponent

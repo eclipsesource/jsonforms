@@ -121,29 +121,29 @@ export const MuiAutocomplete = (
         options={options}
         getOptionLabel={getOptionLabel || ((option) => option?.label)}
         freeSolo={false}
-        renderInput={(params) => {
-          return (
-            <TextField
-              label={label}
-              type='text'
-              inputProps={params.inputProps}
-              inputRef={params.InputProps.ref}
-              autoFocus={appliedUiSchemaOptions.focus}
-              disabled={!enabled}
-              {...params}
-              id={id}
-              required={
-                required && !appliedUiSchemaOptions.hideRequiredAsterisk
-              }
-              error={!isValid}
-              fullWidth={!appliedUiSchemaOptions.trim}
-              InputLabelProps={data ? { shrink: true } : undefined}
-              onFocus={onFocus}
-              onBlur={onBlur}
-              focused={focused}
-            />
-          );
-        }}
+        renderInput={(params) => (
+          <TextField
+            label={label}
+            type='text'
+            autoFocus={appliedUiSchemaOptions.focus}
+            disabled={!enabled}
+            {...params}
+            id={id}
+            required={required && !appliedUiSchemaOptions.hideRequiredAsterisk}
+            error={!isValid}
+            fullWidth={!appliedUiSchemaOptions.trim}
+            slotProps={{
+              ...params.slotProps,
+              inputLabel: {
+                ...params.slotProps.inputLabel,
+                ...(data ? { shrink: true } : undefined),
+              },
+            }}
+            onFocus={onFocus}
+            onBlur={onBlur}
+            focused={focused}
+          />
+        )}
         renderOption={renderOption}
         filterOptions={filterOptions}
       />
