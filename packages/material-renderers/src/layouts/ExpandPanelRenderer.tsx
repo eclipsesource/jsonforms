@@ -163,7 +163,6 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
               <Grid>
                 <Grid
                   container
-                  direction='row'
                   sx={{ justifyContent: 'center', alignItems: 'center' }}
                 >
                   {showSortButtons && enabled ? (
