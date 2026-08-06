@@ -1,0 +1,117 @@
+---
+id: readonly
+title: ReadOnly
+---
+
+import { ReadOnlyConfig, ReadOnlyUiSchema, ReadOnlySchema, ReadOnlyRule } from '../../src/components/docs/readonly'
+
+JSON Forms allows to enable and disable any input, either programmatically, via JSON Schema or the UI schema.
+
+## Form Wide
+
+The whole form can be disabled by specifying the `readonly` flag on the `JsonForms` component itself.
+This will disable *all* elements of this form.
+
+```js
+<JsonForms
+  renderers={materialRenderers}
+  cells={materialCells}
+  data={data}
+  schema={schema}
+  uischema={uischema}
+  readonly
+/>
+```
+
+This flag is also supported by the Angular and Vue bindings.
+
+<ReadOnlyConfig />
+
+## Schema based
+
+### UI Schema option
+
+The option `readonly: true` can be set on any element in the UI schema:
+
+```js
+{
+  type: "VerticalLayout",
+  elements: [
+    {
+      type: "Control",
+      scope: "#/properties/firstName",
+      options: {
+        readonly: true
+      }
+    }
+  ]
+}
+```
+
+<ReadOnlyUiSchema />
+
+### JSON Schema
+
+To disable an input via JSON Schema, specify `readOnly: true`:
+
+```js
+{
+  properties: {
+    firstName: {
+      type: "string",
+      readOnly: true
+    },
+  }
+}
+```
+
+Note: JSON Forms will ignore `readonly` within JSON Schemas [as only `readOnly` is part of the specification](https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.9.4).
+
+<ReadOnlySchema />
+
+### Rule
+
+Any UI schema element can be enabled or disabled dynamically via our [rule support](/docs/uischema/rules).
+
+```js
+{
+  type: "VerticalLayout",
+  elements: [
+    {
+      type: "Control",
+      scope: "#/properties/firstName",
+      rule: {
+        effect: "DISABLE",
+        condition: {
+          scope: "#",
+          schema: {} //always true
+        }
+      }
+    },
+    // OR
+    {
+      type: "Control",
+      scope: "#/properties/firstName",
+      rule: {
+        effect: "ENABLE",
+        condition: {
+          scope: "#",
+          schema: { not: {} } //always false
+        }
+      }
+    }
+  ]
+}
+```
+
+<ReadOnlyRule />
+
+## Evaluation order
+
+JSON Forms determines the `enabled` status for each UI schema element based on the following order
+
+1. When the form wide `readonly` is specified, all inputs will be disabled.
+2. If an `ENABLE` or `DISABLE` rule exists, the UI schema element will be rendered accordingly.
+3. If the UI schema `readonly` option is set, the UI schema element will be rendered accordingly.
+4. If the JSON Schema `readOnly: true` attribute is specified, the UI schema element will be disabled.
+5. If none of the above apply, the UI schema element will be enabled or disabled based on its parent.
