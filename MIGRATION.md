@@ -23,6 +23,8 @@ Use JSON Forms 3.8 if you need to stay on Material UI v7.
 
 As part of this upgrade, layouts that arrange their children vertically (e.g. `VerticalLayout`, `Group`, `Categorization`) now render a MUI `Stack` instead of a `Grid` container with `direction="column"`, and their children are no longer wrapped in `Grid` items.
 If you apply custom styling that relies on the previous `Grid`-based DOM structure of these layouts, verify that it still works as expected.
+Furthermore, if you use exported method `renderLayoutElements`, it no longer wraps children in `Grid` items for direction `column`.
+This should not affect you except if you explicitly use this method in custom renderers.
 
 ## Migrating to JSON Forms 3.8
 
