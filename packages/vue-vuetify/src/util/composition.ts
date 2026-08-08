@@ -507,7 +507,7 @@ export const useNested = (element: false | 'array' | 'object'): NestedInfo => {
 };
 
 export const useIcons = () => {
-  const iconSet = computed<IconAliases>(() => {
+  const iconSet = computed<Required<IconAliases>>(() => {
     const icons = inject(IconSymbol);
     if (!icons) throw new Error('Missing Vuetify Icons provide!');
 

@@ -1,11 +1,25 @@
 <template>
-  <v-card v-if="control.visible" v-bind="vuetifyProps('v-card')" flat>
+  <v-card
+    v-if="control.visible"
+    class="additional-properties-card"
+    v-bind="vuetifyProps('v-card')"
+    flat
+  >
     <v-container class="py-0">
-      <v-row no-gutters>
-        <v-col v-if="mdAndUp && additionalPropertiesTitle">
-          {{ additionalPropertiesTitle }}</v-col
+      <div
+        class="additional-properties-add"
+        :class="{
+          'additional-properties-add--with-title':
+            mdAndUp && additionalPropertiesTitle,
+        }"
+      >
+        <div
+          v-if="mdAndUp && additionalPropertiesTitle"
+          class="additional-properties-title"
         >
-        <v-col>
+          {{ additionalPropertiesTitle }}
+        </div>
+        <div class="additional-properties-add-field">
           <json-forms
             :data="newPropertyName"
             :uischema="
@@ -26,8 +40,8 @@
             :ajv="ajv"
             :middleware="middleware"
             @change="propertyNameChange"
-          ></json-forms
-        ></v-col>
+          ></json-forms>
+        </div>
         <v-tooltip location="bottom">
           <template v-slot:activator="{ props }">
             <v-btn
@@ -45,15 +59,18 @@
           </template>
           {{ translations.addTooltip }}
         </v-tooltip>
-      </v-row>
+      </div>
     </v-container>
-    <v-container v-bind="vuetifyProps('v-container')" class="py-0">
-      <v-row
-        no-gutters
+    <v-container
+      v-bind="vuetifyProps('v-container')"
+      class="additional-properties-items py-0"
+    >
+      <div
+        :class="additionalPropertyRowClasses(element)"
         v-for="element in additionalPropertyItems"
         :key="`${element.propertyName}`"
       >
-        <v-col class="flex-shrink-0 flex-grow-1">
+        <div class="additional-property-content">
           <dispatch-renderer
             v-if="element.schema && element.uischema"
             :schema="element.schema"
@@ -63,18 +80,74 @@
             :readonly="control.readonly"
             :renderers="control.renderers"
             :cells="control.cells"
-        /></v-col>
-        <v-col v-if="control.enabled" class="flex-shrink-1 flex-grow-0">
+          />
+        </div>
+        <div v-if="control.enabled" class="additional-property-actions">
+          <v-menu
+            :model-value="renamingPropertyName === element.propertyName"
+            :close-on-content-click="false"
+            location="top end"
+            @update:model-value="
+              (open: boolean) =>
+                open ? startRename(element.propertyName) : cancelRename()
+            "
+          >
+            <template v-slot:activator="{ props }">
+              <v-btn
+                v-bind="props"
+                class="additional-property-action-button"
+                icon
+                variant="text"
+                elevation="0"
+                :aria-label="renamePropertyAriaLabel(element.propertyName)"
+                :title="renamePropertyAriaLabel(element.propertyName)"
+              >
+                <v-icon class="notranslate">{{
+                  icons.current.value.itemEdit
+                }}</v-icon>
+              </v-btn>
+            </template>
+            <v-card class="additional-property-rename-menu" elevation="8">
+              <v-text-field
+                v-model="renameValue"
+                density="compact"
+                hide-details="auto"
+                autofocus
+                :label="propertyNameLabel"
+                :error-messages="renameError ? [renameError] : []"
+                v-bind="vuetifyProps('v-text-field')"
+                @update:model-value="updateRenameError(element.propertyName)"
+                @keydown.enter="renameProperty(element.propertyName)"
+                @keydown.esc="cancelRename"
+              />
+              <div class="additional-property-rename-actions">
+                <v-btn
+                  variant="text"
+                  size="small"
+                  :disabled="renamePropertyDisabled(element.propertyName)"
+                  @click="renameProperty(element.propertyName)"
+                >
+                  {{ translations.renameConfirm }}
+                </v-btn>
+                <v-btn variant="text" size="small" @click="cancelRename">
+                  {{ translations.cancel }}
+                </v-btn>
+              </div>
+            </v-card>
+          </v-menu>
           <v-tooltip location="bottom">
             <template v-slot:activator="{ props }">
               <v-btn
                 v-bind="props"
+                class="additional-property-action-button"
                 icon
                 variant="text"
                 elevation="0"
-                small
                 :aria-label="translations.removeAriaLabel"
-                :disabled="removePropertyDisabled"
+                :disabled="
+                  removePropertyDisabled ||
+                  renamingPropertyName === element.propertyName
+                "
                 @click="removeProperty(element.propertyName)"
               >
                 <v-icon class="notranslate">{{
@@ -83,9 +156,9 @@
               </v-btn>
             </template>
             {{ translations.removeTooltip }}
-          </v-tooltip></v-col
-        >
-      </v-row>
+          </v-tooltip>
+        </div>
+      </div>
     </v-container>
   </v-card>
 </template>
@@ -93,11 +166,12 @@
 <script lang="ts">
 import { AdditionalPropertiesTranslationEnum } from '@/i18n';
 import { additionalPropertiesDefaultTranslations } from '@/i18n/additionalPropertiesTranslations';
-import { getAdditionalPropertiesTranslations } from '@/i18n/i18nUtil';
+import {
+  getAdditionalPropertiesTranslations,
+  getAdditionalPropertyTranslation,
+} from '@/i18n/i18nUtil';
 import {
   Generate,
-  Resolve,
-  composePaths,
   createControlElement,
   createDefaultValue,
   getI18nKeyPrefix,
@@ -119,7 +193,6 @@ import type { ErrorObject } from 'ajv';
 import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
 import isPlainObject from 'lodash/isPlainObject';
-import omit from 'lodash/omit';
 import startCase from 'lodash/startCase';
 
 import { IsDynamicPropertyContext } from '@/util/inject';
@@ -129,22 +202,29 @@ import {
   markRaw,
   provide,
   ref,
-  unref,
   type PropType,
-  type DefineComponent
+  type DefineComponent,
 } from 'vue';
 import { useDisplay } from 'vuetify';
 import {
   VBtn,
   VCard,
-  VCol,
   VContainer,
   VIcon,
-  VRow,
+  VMenu,
+  VTextField,
   VTooltip,
 } from 'vuetify/components';
 import { DisabledIconFocus } from '../../controls/directives';
 import { useStyles } from '../../styles';
+import {
+  composePropertyPath,
+  findPropertySchema,
+  getDynamicPropertyNameErrorMessage,
+  getPropertyNameSchema,
+  haveAdditionalPropertyNamesChanged,
+  validateDynamicPropertyName,
+} from '../../util/dynamicProperties';
 import {
   isControlEditable,
   useControlAppliedOptions,
@@ -167,9 +247,9 @@ export default defineComponent({
     VTooltip,
     VIcon,
     VBtn,
+    VMenu,
     VContainer,
-    VRow,
-    VCol,
+    VTextField,
     JsonForms,
   },
   directives: {
@@ -196,36 +276,11 @@ export default defineComponent({
 
     const toAdditionalPropertyType = (
       propName: string,
-      propValue: any,
       parentSchema: JsonSchema,
       rootSchema: JsonSchema,
     ): AdditionalPropertyType => {
-      let propSchema: JsonSchema | undefined = undefined;
+      let propSchema = findPropertySchema(parentSchema, propName, rootSchema);
       let propUiSchema: UISchemaElement | undefined = undefined;
-
-      if (parentSchema.patternProperties) {
-        const matchedPattern = Object.keys(parentSchema.patternProperties).find(
-          (pattern) => new RegExp(pattern).test(propName),
-        );
-        if (matchedPattern) {
-          propSchema = parentSchema.patternProperties[matchedPattern];
-        }
-      }
-
-      if (
-        (!propSchema &&
-          typeof parentSchema.additionalProperties === 'object') ||
-        parentSchema.additionalProperties === true
-      ) {
-        propSchema =
-          parentSchema.additionalProperties === true
-            ? { additionalProperties: true }
-            : parentSchema.additionalProperties;
-      }
-
-      if (typeof propSchema?.$ref === 'string') {
-        propSchema = Resolve.schema(rootSchema, propSchema.$ref, rootSchema);
-      }
 
       propSchema = propSchema ?? {};
 
@@ -272,7 +327,7 @@ export default defineComponent({
 
       return {
         propertyName: propName,
-        path: composePaths(control.value.path, propName),
+        path: composePropertyPath(control.value.path, propName),
         schema: propSchema,
         uischema: propUiSchema,
       };
@@ -283,7 +338,6 @@ export default defineComponent({
       additionalKeys.value.map((propName) =>
         toAdditionalPropertyType(
           propName,
-          control.value.data[propName],
           control.value.schema,
           control.value.rootSchema,
         ),
@@ -294,92 +348,42 @@ export default defineComponent({
     const newPropertyName = ref<string | null>('');
     const newPropertyErrors = ref<ErrorObject[] | undefined>(undefined);
     const additionalErrors = ref<ErrorObject[]>([]);
+    const renamingPropertyName = ref<string | null>(null);
+    const renameValue = ref('');
+    const renameError = ref<string | null>(null);
 
-    const propertyNameSchema = computed<JsonSchema7>(() => {
-      let result: JsonSchema7 = {
-        type: 'string',
-      };
-      // TODO: create issue against jsonforms to add propertyNames into the JsonSchema interface
-      // propertyNames exist in draft-6 but not defined in the JsonSchema
-      if (typeof (control.value.schema as any).propertyNames === 'object') {
-        let propertyNames = (control.value.schema as any).propertyNames;
-        if (typeof propertyNames.$ref === 'string') {
-          propertyNames =
-            Resolve.schema(
-              control.value.rootSchema,
-              propertyNames.$ref,
-              control.value.rootSchema,
-            ) ?? propertyNames;
-        }
-        result = {
-          ...propertyNames,
-          ...result,
-        };
-      } else if (
-        (control.value.schema as any).additionalProperties === false &&
-        typeof (control.value.schema as any).patternProperties === 'object'
-      ) {
-        // check if additionalProperties explicitly set to false then the only valid property names will be derived from patternProperties
-
-        const patterns = Object.keys(
-          (control.value.schema as any).patternProperties,
-        );
-        if (patterns.length > 0) {
-          result = {
-            pattern: patterns.join('|'),
-            ...result,
-          };
-        }
-      }
-      return result;
-    });
+    const propertyNameSchema = computed<JsonSchema7>(() =>
+      getPropertyNameSchema(control.value.schema, control.value.rootSchema),
+    );
 
     const propertyNameChange = (event: JsonFormsChangeEvent) => {
       newPropertyName.value = typeof event.data === 'string' ? event.data : '';
-      let newAdditionalErrors: ErrorObject[] = [];
-
-      if (
-        typeof control.value.data === 'object' &&
-        control.value.data &&
-        Object.keys(control.value.data).find((e) => e === newPropertyName.value)
-      ) {
-        newAdditionalErrors = [
-          {
-            data: newPropertyName.value,
-            instancePath: '',
-            keyword: '',
-            message: unref(
-              translations[
-                AdditionalPropertiesTranslationEnum.propertyAlreadyDefined
-              ],
-            )!,
-            params: { propertyName: newPropertyName.value },
-            schemaPath: '',
-          },
-        ];
-      }
-
-      // JSONForms has special means for "[]." chars - those are part of the path composition so for not we can't support those without special handling
-      if (
-        newPropertyName.value.includes('[') ||
-        newPropertyName.value.includes(']') ||
-        newPropertyName.value.includes('.')
-      ) {
-        newAdditionalErrors = [
-          {
-            data: newPropertyName.value,
-            instancePath: '',
-            keyword: '',
-            message: unref(
-              translations[
-                AdditionalPropertiesTranslationEnum.propertyNameInvalid
-              ],
-            )!,
-            params: { propertyName: newPropertyName.value },
-            schemaPath: '',
-          },
-        ];
-      }
+      const validationError = validateDynamicPropertyName({
+        propertyName: newPropertyName.value,
+        data: control.value.data,
+      });
+      const message = getDynamicPropertyNameErrorMessage(validationError, {
+        alreadyDefined: translatePropertyName(
+          AdditionalPropertiesTranslationEnum.propertyAlreadyDefined,
+          newPropertyName.value,
+        ),
+        invalid: translatePropertyName(
+          AdditionalPropertiesTranslationEnum.propertyNameInvalid,
+          newPropertyName.value,
+        ),
+      });
+      const newAdditionalErrors: ErrorObject[] = message
+        ? [
+            {
+              data: newPropertyName.value,
+              instancePath: '',
+              keyword: '',
+              message,
+              params: { propertyName: newPropertyName.value },
+              schemaPath: '',
+            },
+          ]
+        : [];
 
       if (!isEqual(additionalErrors.value, newAdditionalErrors)) {
         // only change the additional errors if different to prevent recursive calls
@@ -410,18 +414,46 @@ export default defineComponent({
       control.value.label,
       newPropertyName,
     );
+    const translatePropertyName = (
+      key: AdditionalPropertiesTranslationEnum,
+      propertyName: string,
+    ) =>
+      getAdditionalPropertyTranslation(
+        t.value,
+        additionalPropertiesDefaultTranslations,
+        i18nAdditionalPropertiesPrefix,
+        key,
+        propertyName,
+      );
+    const renamePropertyAriaLabel = (propertyName: string) =>
+      translatePropertyName(
+        AdditionalPropertiesTranslationEnum.renameAriaLabel,
+        propertyName,
+      );
 
     const propertyNameLabel =
       translations[AdditionalPropertiesTranslationEnum.propertyNameLabel];
 
     const { mdAndUp } = useDisplay();
 
+    const jsonforms = useJsonForms();
     const {
       validationMode: parentValidationMode,
       i18n,
       middleware,
-    } = useJsonForms();
+    } = jsonforms;
     const ajv = useAjv();
+    const translatePropertyNameSchemaError = (error: ErrorObject) =>
+      jsonforms.i18n?.translateError?.(
+        error,
+        t.value,
+        control.value.uischema,
+      ) ??
+      error.message ??
+      translatePropertyName(
+        AdditionalPropertiesTranslationEnum.propertyNameInvalid,
+        renameValue.value,
+      );
 
     // if the new property name is not specified then hide any errors
     const validationMode = computed(() =>
@@ -451,10 +483,16 @@ export default defineComponent({
       propertyNameChange,
       newPropertyErrors,
       additionalErrors,
+      renamingPropertyName,
+      renameValue,
+      renameError,
       icons,
       isControlEditable,
       propertyNameSchema,
       translations,
+      translatePropertyName,
+      renamePropertyAriaLabel,
+      translatePropertyNameSchemaError,
     };
   },
   computed: {
@@ -505,32 +543,20 @@ export default defineComponent({
   watch: {
     'control.data': {
       handler(newData, oldData) {
-        function isEqualIgnoringKeys(
-          obj1: Record<string, any>,
-          obj2: Record<string, any>,
-          keysToIgnore: string[],
-        ) {
-          // Omit the specified keys from both objects
-          const filteredObj1 = omit(obj1, keysToIgnore);
-          const filteredObj2 = omit(obj2, keysToIgnore);
-
-          // Perform a deep comparison
-          // return isEqual(filteredObj1, filteredObj2);
-
-          // compare with property order as well
-          return JSON.stringify(filteredObj1) === JSON.stringify(filteredObj2);
-        }
-
         if (
-          !isEqualIgnoringKeys(newData, oldData, this.reservedPropertyNames)
+          haveAdditionalPropertyNamesChanged(
+            newData,
+            oldData,
+            this.reservedPropertyNames,
+          )
         ) {
-          this.additionalPropertyItems = this.additionalKeys.map((propName: string) =>
-            this.toAdditionalPropertyType(
-              propName,
-              newData[propName],
-              this.control.schema,
-              this.control.rootSchema,
-            ),
+          this.additionalPropertyItems = this.additionalKeys.map(
+            (propName: string) =>
+              this.toAdditionalPropertyType(
+                propName,
+                this.control.schema,
+                this.control.rootSchema,
+              ),
           );
         }
       },
@@ -538,12 +564,99 @@ export default defineComponent({
     },
   },
   methods: {
-    composePaths,
+    additionalPropertyRowClasses(element: AdditionalPropertyType): string[] {
+      const schemaType = element.schema?.type;
+      const classes = ['additional-property-row'];
+
+      if (Array.isArray(schemaType)) {
+        classes.push('additional-property-row--mixed');
+      } else if (schemaType === 'object') {
+        classes.push('additional-property-row--object');
+      } else if (schemaType === 'array') {
+        classes.push('additional-property-row--array');
+      } else {
+        classes.push('additional-property-row--primitive');
+      }
+
+      return classes;
+    },
+    validatePropertyName(
+      propertyName: string,
+      currentPropertyName?: string,
+    ): string | null {
+      return getDynamicPropertyNameErrorMessage(
+        validateDynamicPropertyName({
+          propertyName,
+          currentPropertyName,
+          data: this.control.data,
+          propertyNameSchema: this.propertyNameSchema,
+          ajv: this.ajv,
+        }),
+        {
+          alreadyDefined: this.translatePropertyName(
+            AdditionalPropertiesTranslationEnum.propertyAlreadyDefined,
+            propertyName,
+          ),
+          invalid: this.translatePropertyName(
+            AdditionalPropertiesTranslationEnum.propertyNameInvalid,
+            propertyName,
+          ),
+          schema: this.translatePropertyNameSchemaError,
+        },
+      );
+    },
+    startRename(propName: string): void {
+      this.renamingPropertyName = propName;
+      this.renameValue = propName;
+      this.renameError = null;
+    },
+    cancelRename(): void {
+      this.renamingPropertyName = null;
+      this.renameValue = '';
+      this.renameError = null;
+    },
+    renamePropertyDisabled(propName: string): boolean {
+      const trimmed = this.renameValue.trim();
+      return (
+        !this.isControlEditable(this.control) ||
+        !trimmed ||
+        trimmed === propName ||
+        Boolean(this.validatePropertyName(trimmed, propName))
+      );
+    },
+    updateRenameError(propName: string): void {
+      this.renameError = this.validatePropertyName(
+        this.renameValue.trim(),
+        propName,
+      );
+    },
+    renameProperty(propName: string): void {
+      const trimmed = this.renameValue.trim();
+      this.renameError = this.validatePropertyName(trimmed, propName);
+      if (
+        this.renameError ||
+        !trimmed ||
+        trimmed === propName ||
+        typeof this.control.data !== 'object' ||
+        this.control.data === null ||
+        Array.isArray(this.control.data)
+      ) {
+        return;
+      }
+
+      const updatedData = Object.fromEntries(
+        Object.entries(this.control.data).map(([key, value]) => [
+          key === propName ? trimmed : key,
+          value,
+        ]),
+      );
+      this.input.handleChange(this.control.path, updatedData);
+      this.cancelRename();
+    },
     addProperty() {
       if (this.newPropertyName) {
         const additionalProperty = this.toAdditionalPropertyType(
           this.newPropertyName,
-          undefined,
           this.control.schema,
           this.control.rootSchema,
         );
@@ -584,3 +697,82 @@ export default defineComponent({
   },
 }) as DefineComponent<any, any, any>;
 </script>
+
+<style scoped>
+.additional-properties-card {
+  margin-top: 8px;
+}
+
+.additional-properties-items {
+  width: 100%;
+}
+
+.additional-properties-add {
+  align-items: flex-start;
+  display: grid;
+  gap: 8px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  width: 100%;
+}
+
+.additional-properties-add--with-title {
+  grid-template-columns: minmax(180px, max-content) minmax(0, 1fr) auto;
+}
+
+.additional-properties-title {
+  padding-top: 10px;
+}
+
+.additional-properties-add-field {
+  min-width: 0;
+}
+
+.additional-property-row {
+  align-items: flex-start;
+  display: grid;
+  gap: 8px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  min-width: 0;
+  width: 100%;
+}
+
+.additional-property-content {
+  min-width: 0;
+  width: 100%;
+}
+
+.additional-property-actions {
+  align-items: center;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0;
+  opacity: 0.72;
+  transition: opacity 120ms ease;
+}
+
+.additional-property-row:hover .additional-property-actions {
+  opacity: 1;
+}
+
+.additional-property-action-button {
+  height: 24px;
+  width: 24px;
+}
+
+.additional-property-action-button :deep(.v-icon) {
+  font-size: 16px;
+}
+
+.additional-property-rename-menu {
+  min-width: 280px;
+  padding: 12px;
+}
+
+.additional-property-rename-actions {
+  align-items: flex-start;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+</style>
