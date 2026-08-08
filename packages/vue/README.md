@@ -37,12 +37,13 @@ Optional props:
 Events:
 
 - `change: {data: any; errors: AJVError[]}` - Whenever data and/or errors change this event is emitted.
+- `update:data: any` - Emits the current data alongside `change`, enabling `v-model:data`.
 
 Example:
 
 ```html
 <json-forms
-  :data="data"
+  v-model:data="data"
   :renderers="renderers"
   :schema="schema"
   :uischema="uischema"
@@ -82,7 +83,7 @@ export default defineComponent({
   },
   methods: {
     onChange(event: JsonFormsChangeEvent) {
-      this.data = event.data;
+      console.log(event);
     },
   },
 });
