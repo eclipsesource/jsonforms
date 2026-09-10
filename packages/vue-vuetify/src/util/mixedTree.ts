@@ -12,10 +12,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
 import set from 'lodash/set';
-import {
-  composePropertyPath,
-  findPropertySchema,
-} from './dynamicProperties';
+import { composePropertyPath, findPropertySchema } from './dynamicProperties';
 
 export type JsonDataType =
   | 'array'
@@ -403,6 +400,7 @@ export const buildTreeFromData = (
   readonly: boolean,
   showPrimitives: boolean,
   itemLabel: (index: number) => string,
+  restrict = false,
 ): MixedTreeNode[] => {
   const dataType = getJsonDataType(data);
   if (dataType !== 'object' && dataType !== 'array') {
@@ -410,6 +408,21 @@ export const buildTreeFromData = (
   }
 
   const nodes: MixedTreeNode[] = [];
+  const canDeleteChild = (
+    parent: any,
+    parentSchema: JsonSchema,
+    key: string,
+  ): boolean => {
+    if (!enabled || readonly) return false;
+    if (!restrict) return true;
+    if (Array.isArray(parent)) {
+      return parent.length > (parentSchema.minItems ?? 0);
+    }
+    return (
+      !parentSchema.required?.includes(key) &&
+      Object.keys(parent).length > (parentSchema.minProperties ?? 0)
+    );
+  };
 
   const traverse = (
     value: any,
@@ -445,11 +458,14 @@ export const buildTreeFromData = (
         const childValue = value[key];
         const childPath = composePropertyPath(currentPath, key);
         const rawChildType = getJsonDataType(childValue);
-        const initialChildSchema =
-          findPropertySchema(currentSchema, key, rootSchema) ?? {
-            type: [...JSON_TYPES],
-            title: key,
-          };
+        const initialChildSchema = findPropertySchema(
+          currentSchema,
+          key,
+          rootSchema,
+        ) ?? {
+          type: [...JSON_TYPES],
+          title: key,
+        };
         const childType =
           rawChildType ?? getSchemaDefaultType(initialChildSchema);
         const childSchema = prepareChildSchema(
@@ -459,6 +475,7 @@ export const buildTreeFromData = (
           null,
           rootSchema,
         );
+        const childCanDelete = canDeleteChild(value, currentSchema, key);
         const childCanRename = isDynamicProperty(currentSchema, key);
 
         if (childType === 'object' || childType === 'array') {
@@ -469,7 +486,7 @@ export const buildTreeFromData = (
             childSchema,
             node.children!,
             childCanRename,
-            true,
+            childCanDelete,
           );
         } else if (showPrimitives) {
           node.children!.push({
@@ -478,7 +495,7 @@ export const buildTreeFromData = (
             jsonType: childType,
             label: key,
             canRename: childCanRename,
-            canDelete: true,
+            canDelete: childCanDelete,
             control: createTreeNodeControl(
               childSchema,
               childPath,
@@ -508,6 +525,7 @@ export const buildTreeFromData = (
       children.push(node);
 
       value.forEach((childValue: any, index: number) => {
+        const childCanDelete = canDeleteChild(value, currentSchema, `${index}`);
         const childType = getJsonDataType(childValue);
         const childPath = composePropertyPath(currentPath, `${index}`);
         const childLabel = itemLabel(index);
@@ -530,7 +548,7 @@ export const buildTreeFromData = (
             childSchema,
             node.children!,
             false,
-            true,
+            childCanDelete,
           );
         } else if (showPrimitives) {
           node.children!.push({
@@ -539,7 +557,7 @@ export const buildTreeFromData = (
             jsonType: resolvedChildType,
             label: childLabel,
             canRename: false,
-            canDelete: true,
+            canDelete: childCanDelete,
             control: createTreeNodeControl(
               childSchema,
               childPath,

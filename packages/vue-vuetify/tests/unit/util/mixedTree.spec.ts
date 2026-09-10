@@ -14,6 +14,107 @@ import {
 describe('mixed tree utilities', () => {
   const itemLabel = (index: number) => `Item ${index + 1}`;
 
+  describe('deletion permissions', () => {
+    const schema: JsonSchema = {
+      type: 'object',
+      required: ['requiredChild'],
+      properties: {
+        requiredChild: { type: 'object' },
+        list: { $ref: '#/$defs/list' },
+      },
+      $defs: {
+        list: { type: 'array', minItems: 1, items: { type: 'object' } },
+      },
+    };
+    const data = { requiredChild: {}, list: [{}], optional: true };
+
+    it.each([true, false])(
+      'applies schema restrictions only when restrict is %s',
+      (restrict) => {
+        const nodes = flattenTree(
+          buildTreeFromData(
+            data,
+            schema,
+            schema,
+            '',
+            '',
+            true,
+            false,
+            true,
+            itemLabel,
+            restrict,
+          ),
+        );
+        expect(nodes.find((node) => node.control.path === '')?.canDelete).toBe(
+          false,
+        );
+        expect(
+          nodes.find((node) => node.control.path === 'requiredChild')
+            ?.canDelete,
+        ).toBe(!restrict);
+        expect(
+          nodes.find((node) => node.control.path === 'list.0')?.canDelete,
+        ).toBe(!restrict);
+        expect(
+          nodes.find((node) => node.control.path === 'optional')?.canDelete,
+        ).toBe(true);
+      },
+    );
+
+    it.each([
+      [false, false],
+      [true, true],
+    ])(
+      'prevents deletion with enabled=%s and readonly=%s',
+      (enabled, readonly) => {
+        const nodes = flattenTree(
+          buildTreeFromData(
+            data,
+            schema,
+            schema,
+            '',
+            '',
+            enabled,
+            readonly,
+            true,
+            itemLabel,
+          ),
+        );
+        expect(nodes.every((node) => !node.canDelete)).toBe(true);
+      },
+    );
+
+    it('protects minProperties and permits deletion above minItems', () => {
+      const root: JsonSchema = {
+        type: 'object',
+        minProperties: 1,
+        properties: {
+          list: { type: 'array', minItems: 1, items: { type: 'number' } },
+        },
+      };
+      const nodes = flattenTree(
+        buildTreeFromData(
+          { list: [1, 2] },
+          root,
+          root,
+          '',
+          '',
+          true,
+          false,
+          true,
+          itemLabel,
+          true,
+        ),
+      );
+      expect(
+        nodes.find((node) => node.control.path === 'list')?.canDelete,
+      ).toBe(false);
+      expect(
+        nodes.find((node) => node.control.path === 'list.0')?.canDelete,
+      ).toBe(true);
+    });
+  });
+
   describe('JSON type handling', () => {
     it('distinguishes JSON-compatible values, including integers', () => {
       expect(getJsonDataType('value')).toBe('string');
@@ -40,9 +141,7 @@ describe('mixed tree utilities', () => {
     it('allows integers to use a number schema', () => {
       expect(schemaSupportsInputType('number', 'integer')).toBe(true);
       expect(schemaSupportsInputType('integer', 'number')).toBe(false);
-      expect(schemaSupportsInputType(['number', 'null'], 'number')).toBe(
-        false,
-      );
+      expect(schemaSupportsInputType(['number', 'null'], 'number')).toBe(false);
     });
   });
 
@@ -81,7 +180,15 @@ describe('mixed tree utilities', () => {
     expect(infos[0].schema.minItems).toBeUndefined();
     expect(infos[1].resolvedSchema.default).toBeUndefined();
     expect(infos[1].resolvedSchema.items).toEqual({
-      type: ['array', 'boolean', 'integer', 'null', 'number', 'object', 'string'],
+      type: [
+        'array',
+        'boolean',
+        'integer',
+        'null',
+        'number',
+        'object',
+        'string',
+      ],
     });
     expect(infos[1].schema).toMatchObject({ type: 'array', minItems: 1 });
     expect(infos[1].schema.minLength).toBeUndefined();

@@ -271,6 +271,35 @@
         />
       </div>
     </template>
+    <v-dialog
+      :aria-label="t('mixedRenderer.confirmDeleteTitle', 'Delete item?')"
+      :model-value="pendingDeleteNode !== null"
+      max-width="480"
+      @update:model-value="pendingDeleteNode = null"
+    >
+      <v-card :title="t('mixedRenderer.confirmDeleteTitle', 'Delete item?')">
+        <v-card-text>
+          {{
+            t(
+              'mixedRenderer.confirmDeleteMessage',
+              'This will delete the selected item and all its nested content.',
+            )
+          }}
+        </v-card-text>
+        <v-card-actions>
+          <v-btn @click="pendingDeleteNode = null">{{
+            t('mixedRenderer.cancelDelete', 'Cancel')
+          }}</v-btn>
+          <v-btn
+            class="mixed-confirm-delete"
+            color="error"
+            @click="confirmDelete"
+          >
+            {{ mixedTranslations.deleteTooltip }}
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -310,6 +339,10 @@ import {
 } from 'vue';
 import {
   VBtn,
+  VDialog,
+  VCard,
+  VCardText,
+  VCardActions,
   VCol,
   VContainer,
   VExpansionPanel,
@@ -368,6 +401,10 @@ const controlRenderer = defineComponent({
   components: {
     DispatchRenderer,
     VBtn,
+    VDialog,
+    VCard,
+    VCardText,
+    VCardActions,
     VCol,
     VContainer,
     VExpansionPanel,
@@ -406,6 +443,7 @@ const controlRenderer = defineComponent({
     const treeSearch = ref('');
     const currentlyExpanded = ref<string | null>('mixed-details');
     const showPrimitivesInTree = ref(false);
+    const pendingDeleteNode = ref<MixedTreeNode | null>(null);
     const renamingNodeId = ref<string | null>(null);
     const renameValue = ref('');
     const renameError = ref<string | null>(null);
@@ -531,6 +569,7 @@ const controlRenderer = defineComponent({
             input.control.value.readonly,
             showPrimitivesInTree.value,
             mixedTranslations.itemLabel,
+            !!vuetifyControl.appliedOptions.value.restrict,
           )
         : [],
     );
@@ -571,6 +610,7 @@ const controlRenderer = defineComponent({
       () => input.control.value.data,
       (newValue, oldValue) => {
         if (newValue !== oldValue) {
+          pendingDeleteNode.value = null;
           const oldValueType = valueType.value;
           valueType.value = getJsonDataType(newValue);
 
@@ -764,8 +804,11 @@ const controlRenderer = defineComponent({
       cancelRename();
     };
 
-    const deleteNode = (node: MixedTreeNode) => {
-      if (!node.canDelete) {
+    const commitDelete = (node: MixedTreeNode) => {
+      // Recheck current eligibility: restrictions or readonly may have changed
+      // while the confirmation dialog was open.
+      const currentNode = findNodeById(treeNodes.value, node.nodeId);
+      if (!currentNode?.canDelete || !isControlEditable(input.control.value)) {
         return;
       }
 
@@ -799,6 +842,32 @@ const controlRenderer = defineComponent({
       ) {
         selectPath(parentPath);
       }
+    };
+
+    const deleteNode = (node: MixedTreeNode) => {
+      const currentNode = findNodeById(treeNodes.value, node.nodeId);
+      if (!currentNode?.canDelete || !isControlEditable(input.control.value))
+        return;
+      const relativePath = getRelativePath(currentNode.control.path);
+      const value =
+        relativePath === null
+          ? input.control.value.data
+          : resolveData(input.control.value.data, relativePath);
+      if (
+        value !== null &&
+        typeof value === 'object' &&
+        Object.keys(value).length > 0
+      ) {
+        pendingDeleteNode.value = currentNode;
+      } else {
+        commitDelete(currentNode);
+      }
+    };
+
+    const confirmDelete = () => {
+      const node = pendingDeleteNode.value;
+      pendingDeleteNode.value = null;
+      if (node) commitDelete(node);
     };
 
     const handleSelectChange = (newIndex: number | null | undefined): void => {
@@ -882,6 +951,8 @@ const controlRenderer = defineComponent({
       updateRenameError,
       commitRename,
       deleteNode,
+      pendingDeleteNode,
+      confirmDelete,
       handleSelectChange,
       selectCurrentPath,
       getTypeIcon,
