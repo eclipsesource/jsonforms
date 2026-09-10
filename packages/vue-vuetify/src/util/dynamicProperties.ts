@@ -104,31 +104,36 @@ export const getPropertyNameSchema = (
   schema: JsonSchema,
   rootSchema: JsonSchema,
 ): JsonSchema7 => {
-  const result: JsonSchema7 = { type: 'string' };
-  const propertyNames = (schema as JsonSchema & { propertyNames?: JsonSchema })
-    .propertyNames;
+  const constraints: JsonSchema7[] = [];
+  const propertyNames = (
+    schema as JsonSchema & { propertyNames?: JsonSchema7 | boolean }
+  ).propertyNames;
 
-  if (propertyNames && typeof propertyNames === 'object') {
+  if (propertyNames === false) {
+    // Express a false schema without requiring boolean-schema type support.
+    constraints.push({ not: {} });
+  } else if (propertyNames && typeof propertyNames === 'object') {
     const resolved =
       typeof propertyNames.$ref === 'string'
         ? (Resolve.schema(rootSchema, propertyNames.$ref, rootSchema) ??
           propertyNames)
         : propertyNames;
-    return { ...resolved, ...result } as JsonSchema7;
+    constraints.push(resolved as JsonSchema7);
   }
 
-  if (
-    schema.additionalProperties === false &&
-    schema.patternProperties &&
-    typeof schema.patternProperties === 'object'
-  ) {
-    const patterns = Object.keys(schema.patternProperties);
-    if (patterns.length > 0) {
-      return { pattern: patterns.join('|'), ...result };
-    }
+  if (schema.additionalProperties === false) {
+    const patterns = Object.keys(schema.patternProperties ?? {});
+    constraints.push(
+      patterns.length > 0
+        ? { anyOf: patterns.map((pattern) => ({ pattern })) }
+        : { not: {} },
+    );
   }
 
-  return result;
+  return {
+    type: 'string',
+    ...(constraints.length > 0 ? { allOf: constraints } : {}),
+  };
 };
 
 export const validateDynamicPropertyName = ({

@@ -77,7 +77,7 @@ describe('dynamic property utilities', () => {
 
       expect(getPropertyNameSchema(schema, rootSchema)).toEqual({
         type: 'string',
-        pattern: '^[A-Z][A-Za-z0-9]*$',
+        allOf: [{ type: 'string', pattern: '^[A-Z][A-Za-z0-9]*$' }],
       });
     });
 
@@ -93,7 +93,10 @@ describe('dynamic property utilities', () => {
           },
           rootSchema,
         ),
-      ).toEqual({ type: 'string', pattern: '^allowed' });
+      ).toEqual({
+        type: 'string',
+        allOf: [{ anyOf: [{ pattern: '^allowed' }] }],
+      });
 
       expect(
         getPropertyNameSchema(
@@ -105,6 +108,112 @@ describe('dynamic property utilities', () => {
           rootSchema,
         ),
       ).toEqual({ type: 'string' });
+    });
+  });
+
+  describe('property name schema validation', () => {
+    it.each([
+      ['inline', { minLength: 5 }],
+      ['referenced', { $ref: '#/$defs/name' }],
+    ])(
+      'combines %s propertyNames with allowed patterns',
+      (_, propertyNames) => {
+        const schema = {
+          type: 'object',
+          propertyNames,
+          additionalProperties: false,
+          patternProperties: {
+            '^foo_': { type: 'string' },
+            '^bar_': { type: 'number' },
+          },
+        } as JsonSchema;
+        const propertyNameSchema = getPropertyNameSchema(schema, {
+          $defs: { name: { minLength: 5 } },
+        });
+        const ajv = createAjv();
+
+        for (const propertyName of ['foo_title', 'bar_count']) {
+          expect(
+            validateDynamicPropertyName({
+              propertyName,
+              data: {},
+              propertyNameSchema,
+              ajv,
+            }),
+          ).toBeNull();
+        }
+        // Each name satisfies one constraint but violates the other.
+        for (const propertyName of ['wrong_name', 'foo_']) {
+          expect(
+            validateDynamicPropertyName({
+              propertyName,
+              data: {},
+              propertyNameSchema,
+              ajv,
+            }),
+          ).toMatchObject({ reason: 'schema' });
+        }
+      },
+    );
+
+    it.each([
+      ['propertyNames false', { propertyNames: false }],
+      ['closed object without patterns', { additionalProperties: false }],
+      [
+        'closed object with empty patterns',
+        {
+          additionalProperties: false,
+          patternProperties: {},
+        },
+      ],
+      [
+        'incompatible propertyNames type',
+        { propertyNames: { type: 'number' } },
+      ],
+    ])('rejects dynamic names for %s', (_, schema) => {
+      const propertyNameSchema = getPropertyNameSchema(
+        schema as unknown as JsonSchema,
+        rootSchema,
+      );
+      expect(
+        validateDynamicPropertyName({
+          propertyName: 'anything',
+          data: {},
+          propertyNameSchema,
+          ajv: createAjv(),
+        }),
+      ).toMatchObject({ reason: 'schema' });
+    });
+
+    it('keeps capture groups and backreferences local to each pattern', () => {
+      const propertyNameSchema = getPropertyNameSchema(
+        {
+          additionalProperties: false,
+          patternProperties: {
+            '^(a)\\1$': { type: 'string' },
+            '^(b)\\1$': { type: 'string' },
+          },
+        },
+        rootSchema,
+      );
+      const ajv = createAjv();
+      for (const name of ['aa', 'bb']) {
+        expect(ajv.validate(propertyNameSchema, name)).toBe(true);
+      }
+      for (const name of ['a', 'b', 'ab']) {
+        expect(ajv.validate(propertyNameSchema, name)).toBe(false);
+      }
+    });
+
+    it('allows unrestricted names when propertyNames is true', () => {
+      const propertyNameSchema = getPropertyNameSchema(
+        {
+          propertyNames: true,
+          additionalProperties: true,
+        } as unknown as JsonSchema,
+        rootSchema,
+      );
+      expect(createAjv().validate(propertyNameSchema, 'anything')).toBe(true);
     });
   });
 
