@@ -14,7 +14,7 @@ The renderers are in a preview state.
 Install JSON Forms Core, Vue 3 and Vue 3 Vuetify Renderers.
 
 ```bash
-npm i --save @jsonforms/core @jsonforms/vue @jsonforms/vue-vuetify
+npm i --save @jsonforms/core @jsonforms/vue @jsonforms/vue-vuetify splitpanes
 ```
 
 Also add the packages to the transpile dependencies in the `vite.config.js` file:

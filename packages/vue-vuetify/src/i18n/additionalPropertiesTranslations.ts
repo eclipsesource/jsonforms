@@ -10,6 +10,10 @@ export enum AdditionalPropertiesTranslationEnum {
   addAriaLabel = 'addAriaLabel',
   removeTooltip = 'removeTooltip',
   removeAriaLabel = 'removeAriaLabel',
+  renameTooltip = 'renameTooltip',
+  renameAriaLabel = 'renameAriaLabel',
+  renameConfirm = 'renameConfirm',
+  cancel = 'cancel',
   propertyNameLabel = 'propertyNameLabel',
   propertyNameInvalid = 'propertyNameInvalid',
   propertyAlreadyDefined = 'propertyAlreadyDefined',
@@ -38,6 +42,23 @@ export const additionalPropertiesDefaultTranslations: AdditionalPropertiesDefaul
     {
       key: AdditionalPropertiesTranslationEnum.removeAriaLabel,
       default: () => 'Delete button',
+    },
+    {
+      key: AdditionalPropertiesTranslationEnum.renameTooltip,
+      default: () => 'Rename',
+    },
+    {
+      key: AdditionalPropertiesTranslationEnum.renameAriaLabel,
+      default: (input) =>
+        input ? `Rename property '${input}' button` : 'Rename property button',
+    },
+    {
+      key: AdditionalPropertiesTranslationEnum.renameConfirm,
+      default: () => 'Rename',
+    },
+    {
+      key: AdditionalPropertiesTranslationEnum.cancel,
+      default: () => 'Cancel',
     },
     {
       key: AdditionalPropertiesTranslationEnum.propertyNameLabel,
