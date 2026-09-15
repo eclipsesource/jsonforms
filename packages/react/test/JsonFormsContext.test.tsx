@@ -25,6 +25,7 @@
 
 import React from 'react';
 import Enzyme, { mount } from 'enzyme';
+import { act } from 'react-dom/test-utils';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import {
   CellProps,
@@ -167,7 +168,9 @@ test('withJsonFormsMultiEnumProps - should update options when an externally sup
     const [options, setOptions] = React.useState<OwnPropsOfEnum['options']>([
       { value: 'red', label: 'Red' },
     ]);
-    setExternalOptions = setOptions;
+    React.useEffect(() => {
+      setExternalOptions = setOptions;
+    }, []);
     return <MockMultiEnumControl {...ownProps} options={options} />;
   };
 
@@ -176,7 +179,14 @@ test('withJsonFormsMultiEnumProps - should update options when an externally sup
     properties: {
       colors: {
         type: 'array',
-        items: { type: 'string' },
+        items: {
+          type: 'string',
+          oneOf: [
+            { const: 'red', title: 'Schema Red' },
+            { const: 'green', title: 'Schema Green' },
+            { const: 'blue', title: 'Schema Blue' },
+          ],
+        },
       },
     },
   };
@@ -206,10 +216,12 @@ test('withJsonFormsMultiEnumProps - should update options when an externally sup
     { value: 'red', label: 'Red' },
   ]);
 
-  setExternalOptions([
-    { value: 'red', label: 'Red' },
-    { value: 'green', label: 'Green' },
-  ]);
+  act(() => {
+    setExternalOptions([
+      { value: 'red', label: 'Red' },
+      { value: 'green', label: 'Green' },
+    ]);
+  });
   wrapper.update();
 
   expect(wrapper.find(MockMultiEnumControlUnwrapped).props().options).toEqual([
