@@ -31,13 +31,12 @@ import {
   WithClassname,
 } from '@jsonforms/core';
 
-import {
-  Autocomplete,
+import Autocomplete, {
   AutocompleteRenderOptionState,
-  FilterOptionsState,
-  FormHelperText,
-  TextField,
-} from '@mui/material';
+} from '@mui/material/Autocomplete';
+import { FilterOptionsState } from '@mui/material/useAutocomplete';
+import FormHelperText from '@mui/material/FormHelperText';
+import TextField from '@mui/material/TextField';
 import merge from 'lodash/merge';
 import { useFocus } from '../util/focus';
 

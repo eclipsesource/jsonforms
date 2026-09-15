@@ -33,7 +33,9 @@ import {
   isDescriptionHidden,
 } from '@jsonforms/core';
 import { withJsonFormsControlProps } from '@jsonforms/react';
-import { FormControlLabel, FormHelperText, Tooltip } from '@mui/material';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormHelperText from '@mui/material/FormHelperText';
+import Tooltip from '@mui/material/Tooltip';
 import { MuiCheckbox } from '../mui-controls/MuiCheckbox';
 
 export const MaterialBooleanControl = ({

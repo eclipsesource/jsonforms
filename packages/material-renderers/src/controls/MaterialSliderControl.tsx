@@ -33,13 +33,11 @@ import {
 } from '@jsonforms/core';
 import { withJsonFormsControlProps } from '@jsonforms/react';
 
-import {
-  FormControl,
-  FormHelperText,
-  FormLabel,
-  Slider,
-  Typography,
-} from '@mui/material';
+import FormControl from '@mui/material/FormControl';
+import FormHelperText from '@mui/material/FormHelperText';
+import FormLabel from '@mui/material/FormLabel';
+import Slider from '@mui/material/Slider';
+import Typography from '@mui/material/Typography';
 import merge from 'lodash/merge';
 import { useFocus } from '../util';
 

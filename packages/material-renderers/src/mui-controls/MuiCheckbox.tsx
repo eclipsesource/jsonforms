@@ -24,7 +24,8 @@
 */
 import React from 'react';
 import { CellProps, WithClassname } from '@jsonforms/core';
-import { Checkbox, InputProps } from '@mui/material';
+import Checkbox from '@mui/material/Checkbox';
+import { InputProps } from '@mui/material/Input';
 import merge from 'lodash/merge';
 
 interface MuiCheckboxInputProps {
