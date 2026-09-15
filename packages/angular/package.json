@@ -68,7 +68,7 @@
     ]
   },
   "dependencies": {
-    "lodash": "^4.17.21"
+    "lodash": "^4.18.1"
   },
   "peerDependencies": {
     "@angular/core": "^20.0.0 || ^21.0.0 || ^22.0.0",
@@ -81,10 +81,10 @@
     "@angular-eslint/eslint-plugin-template": "^20.7.0",
     "@angular-eslint/schematics": "^20.7.0",
     "@angular-eslint/template-parser": "^20.7.0",
-    "@angular/compiler": "^20.3.24",
-    "@angular/compiler-cli": "^20.3.24",
-    "@angular/core": "^20.3.24",
-    "@angular/forms": "^20.3.24",
+    "@angular/compiler": "^20.3.29",
+    "@angular/compiler-cli": "^20.3.29",
+    "@angular/core": "^20.3.29",
+    "@angular/forms": "^20.3.29",
     "@jsonforms/core": "workspace:*",
     "@typescript-eslint/eslint-plugin": "^5.54.1",
     "@typescript-eslint/parser": "^5.54.1",
@@ -98,7 +98,7 @@
     "nyc": "^15.1.0",
     "prettier": "^2.8.4",
     "rimraf": "^6.1.0",
-    "rxjs": "^6.6.0",
+    "rxjs": "^6.6.7",
     "source-map-support": "^0.5.21",
     "tslib": "^2.3.0",
     "typedoc": "~0.25.3",
