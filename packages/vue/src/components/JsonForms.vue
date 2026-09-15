@@ -7,39 +7,37 @@
 </template>
 
 <script lang="ts">
-import { PropType, reactive, defineComponent } from 'vue';
 import {
-  coreReducer,
   Actions,
-  Generate,
   configReducer,
+  CoreActions,
+  coreReducer,
+  defaultMiddleware,
+  Generate,
+  i18nReducer,
+  JsonFormsCellRendererRegistryEntry,
+  JsonFormsCore,
+  JsonFormsI18nState,
+  JsonFormsRendererRegistryEntry,
+  JsonFormsSubStates,
+  JsonFormsUISchemaRegistryEntry,
   JsonSchema,
+  Middleware,
   UISchemaElement,
   ValidationMode,
-  JsonFormsCore,
-  JsonFormsUISchemaRegistryEntry,
-  JsonFormsRendererRegistryEntry,
-  JsonFormsCellRendererRegistryEntry,
-  CoreActions,
-  i18nReducer,
-  JsonFormsI18nState,
-  defaultMiddleware,
-  Middleware,
-  JsonFormsSubStates,
 } from '@jsonforms/core';
+import isEqual from 'lodash/isEqual';
+import { defineComponent, PropType, reactive } from 'vue';
 import { JsonFormsChangeEvent, MaybeReadonly } from '../types';
 import DispatchRenderer from './DispatchRenderer.vue';
 
 import type Ajv from 'ajv';
 import type { ErrorObject } from 'ajv';
 
-// TODO fix @typescript-eslint/ban-types
-// eslint-disable-next-line @typescript-eslint/ban-types
-const isObject = (elem: any): elem is Object => {
-  return elem && typeof elem === 'object';
-};
-
 const EMPTY: ErrorObject[] = reactive([]);
+
+const generateUISchema = (schema: JsonSchema) =>
+  Generate.uiSchema(schema, undefined, undefined, schema);
 
 export default defineComponent({
   name: 'JsonForms',
@@ -121,15 +119,12 @@ export default defineComponent({
       default: defaultMiddleware,
     },
   },
-  emits: ['change'],
+  emits: ['change', 'update:data'],
   data() {
     const dataToUse = this.data;
-    const generatorData = isObject(dataToUse) ? dataToUse : {};
     const schemaToUse: JsonSchema =
-      this.schema ?? Generate.jsonSchema(generatorData);
-    const uischemaToUse =
-      this.uischema ??
-      Generate.uiSchema(schemaToUse, undefined, undefined, schemaToUse);
+      this.schema ?? Generate.jsonSchema(dataToUse);
+    const uischemaToUse = this.uischema ?? generateUISchema(schemaToUse);
     const initCore = (): JsonFormsCore => {
       const initialCore = {
         data: dataToUse,
@@ -189,29 +184,27 @@ export default defineComponent({
   },
   watch: {
     schema(newSchema) {
-      const generatorData = isObject(this.data) ? this.data : {};
-      this.schemaToUse = newSchema ?? Generate.jsonSchema(generatorData);
+      this.schemaToUse = newSchema ?? Generate.jsonSchema(this.dataToUse);
       if (!this.uischema) {
-        this.uischemaToUse = Generate.uiSchema(
-          this.schemaToUse,
-          undefined,
-          undefined,
-          this.schemaToUse
-        );
+        this.uischemaToUse = generateUISchema(this.schemaToUse);
       }
     },
     uischema(newUischema) {
-      this.uischemaToUse =
-        newUischema ??
-        Generate.uiSchema(
-          this.schemaToUse,
-          undefined,
-          undefined,
-          this.schemaToUse
-        );
+      this.uischemaToUse = newUischema ?? generateUISchema(this.schemaToUse);
     },
     data(newData) {
+      const isSameAsCurrentData = newData === this.jsonforms.core.data;
       this.dataToUse = newData;
+
+      if (this.schema === undefined && !isSameAsCurrentData) {
+        const nextSchema = Generate.jsonSchema(this.dataToUse);
+        if (!isEqual(nextSchema, this.schemaToUse)) {
+          this.schemaToUse = nextSchema;
+          if (!this.uischema) {
+            this.uischemaToUse = generateUISchema(this.schemaToUse);
+          }
+        }
+      }
     },
     renderers(newRenderers) {
       this.jsonforms.renderers = newRenderers;
@@ -251,6 +244,7 @@ export default defineComponent({
       );
     },
     eventToEmit(newEvent) {
+      this.$emit('update:data', newEvent.data);
       this.$emit('change', newEvent);
     },
     i18n: {
@@ -268,7 +262,8 @@ export default defineComponent({
     },
   },
   mounted() {
-    // emit an inital change so clients can react to error validation and default data insertion
+    // emit an initial change so clients can react to error validation and default data insertion
+    this.$emit('update:data', this.jsonforms.core.data);
     this.$emit('change', {
       data: this.jsonforms.core.data,
       errors: this.jsonforms.core.errors,

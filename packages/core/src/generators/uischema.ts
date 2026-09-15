@@ -225,4 +225,4 @@ export const generateDefaultUISchema = (
   wrapInLayoutIfNecessary(
     generateUISchema(jsonSchema, [], prefix, '', layoutType, rootSchema),
     layoutType
-  );
+  ) ?? createLayout(layoutType);
