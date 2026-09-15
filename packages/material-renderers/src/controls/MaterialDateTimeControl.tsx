@@ -34,7 +34,8 @@ import {
 } from '@jsonforms/core';
 import { withJsonFormsControlProps } from '@jsonforms/react';
 import FormHelperText from '@mui/material/FormHelperText';
-import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import {
   createOnBlurHandler,
