@@ -33,7 +33,7 @@ import {
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
-import { TextField } from '@mui/material';
+import TextField from '@mui/material/TextField';
 import { withJsonFormsControlProps } from '@jsonforms/react';
 import merge from 'lodash/merge';
 import { useDebouncedChange, useFocus } from '../util';

@@ -1,13 +1,11 @@
-import {
-  FormHelperText,
-  Grid,
-  IconButton,
-  Stack,
-  Toolbar,
-  Tooltip,
-  Typography,
-} from '@mui/material';
-import { Add } from '@mui/icons-material';
+import FormHelperText from '@mui/material/FormHelperText';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import Stack from '@mui/material/Stack';
+import Toolbar from '@mui/material/Toolbar';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
+import Add from '@mui/icons-material/Add';
 import React from 'react';
 import ValidationIcon from '../complex/ValidationIcon';
 import { ArrayTranslations } from '@jsonforms/core';

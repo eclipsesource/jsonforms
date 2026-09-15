@@ -34,7 +34,8 @@ import {
   rankWith,
 } from '@jsonforms/core';
 import { JsonFormsDispatch, withJsonFormsAnyOfProps } from '@jsonforms/react';
-import { Tab, Tabs } from '@mui/material';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
 import CombinatorProperties from './CombinatorProperties';
 import isEmpty from 'lodash/isEmpty';
 import { TabSwitchConfirmDialog } from './TabSwitchConfirmDialog';

@@ -35,7 +35,7 @@ import {
   WithClassname,
 } from '@jsonforms/core';
 import { Control, withJsonFormsControlProps } from '@jsonforms/react';
-import { InputBaseComponentProps } from '@mui/material';
+import { InputBaseComponentProps } from '@mui/material/InputBase';
 import merge from 'lodash/merge';
 import React, { useMemo } from 'react';
 import {

@@ -22,15 +22,12 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import {
-  Theme,
-  FilledInput,
-  Input,
-  OutlinedInput,
-  TextFieldProps,
-  useThemeProps,
-  InputBaseProps,
-} from '@mui/material';
+import { Theme, useThemeProps } from '@mui/material/styles';
+import FilledInput from '@mui/material/FilledInput';
+import Input from '@mui/material/Input';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import { TextFieldProps } from '@mui/material/TextField';
+import { InputBaseProps } from '@mui/material/InputBase';
 
 export interface JsonFormsTheme extends Theme {
   jsonforms?: {

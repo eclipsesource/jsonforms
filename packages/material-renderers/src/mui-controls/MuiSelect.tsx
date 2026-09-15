@@ -25,7 +25,8 @@
 import React, { useMemo } from 'react';
 import { EnumCellProps, WithClassname } from '@jsonforms/core';
 
-import { MenuItem, Select } from '@mui/material';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
 import merge from 'lodash/merge';
 import { TranslateProps } from '@jsonforms/react';
 import { i18nDefaults, WithInputProps, WithSelectProps } from '../util';
