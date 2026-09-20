@@ -154,6 +154,24 @@ describe('ArrayListRenderer.vue', () => {
     expect(labelText).to.equal('1');
   });
 
+  it('uses elementLabelProp for the item label', () => {
+    const wrapper = mountJsonForms(
+      [{ name: 'name1', rate: 5 }],
+      schemaWithNameAndRate,
+      {
+        ...uischema,
+        options: {
+          ...uischema.options,
+          elementLabelProp: 'rate',
+          childLabelProp: 'name',
+        },
+      }
+    );
+    const label = wrapper.find('.array-list-item-label');
+
+    expect(label.text()).to.equal('5');
+  });
+
   it('compute default label with NaN', async () => {
     const wrapper = mountJsonForms(
       [{ count: Number(undefined), name: 'name1' }],

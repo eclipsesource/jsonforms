@@ -387,6 +387,7 @@ export const useVuetifyArrayControl = <
       return '';
     }
     const childLabelProp =
+      input.control.value.uischema.options?.elementLabelProp ??
       input.control.value.uischema.options?.childLabelProp ??
       getFirstPrimitiveProp(input.control.value.schema);
     if (!childLabelProp) {
