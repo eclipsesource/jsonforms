@@ -1,7 +1,7 @@
 import { Resolve, type JsonSchema } from '@jsonforms/core';
 /** Tree-only segment encoding. These IDs must never be dispatched as core paths. */
 export const encodeMixedSegment = (key: string): string =>
-  key === '' || /[.\u0000]/.test(key)
+  key === '' || key.includes('.') || key.includes('\0')
     ? '\0' +
       key
         .split('')
@@ -65,7 +65,8 @@ export function mixedHasUnsafeDeclaredScopes(
   for (const [key, child] of Object.entries(schema.properties ?? {})) {
     if (
       key === '' ||
-      /[.\u0000]/.test(key) ||
+      key.includes('.') ||
+      key.includes('\0') ||
       mixedHasUnsafeDeclaredScopes(child, root, seen)
     )
       return true;
