@@ -15,6 +15,9 @@ import { mountJsonForms } from '../util';
 type EditorVM = {
   control: { path: string };
   treeNodes: MixedTreeNode[];
+  deleteNode: (node: MixedTreeNode) => void;
+  confirmDelete: () => void;
+  selectedNode: MixedTreeNode;
   treeSearch: string;
   activatedTreeNodes: string[];
   mixedRenderInfos: { index: number; resolvedSchema: JsonSchema }[];
@@ -670,4 +673,88 @@ it('keeps the detail panel after a selected object becomes a hidden primitive', 
     wrapper.find('.mixed-detail-pane').find('.mixed-primitive').exists(),
   ).toBe(true);
   expect(wrapper.vm.event.data).toEqual({ child: '' });
+});
+
+describe('MixedRenderer selection after deletion', () => {
+  it.each([
+    {
+      data: ['Alice', 'Bob', 'Carol'],
+      selected: '2',
+      deleted: '0',
+      expected: '1',
+      value: 'Carol',
+    },
+    {
+      data: ['Alice', 'Bob', 'Carol'],
+      selected: '1',
+      deleted: '0',
+      expected: '0',
+      value: 'Bob',
+    },
+    {
+      data: { people: [{ name: 'Alice' }, { name: 'Bob' }, { name: 'Carol' }] },
+      selected: 'people.2.name',
+      deleted: 'people.0',
+      expected: 'people.1.name',
+      value: 'Carol',
+    },
+    {
+      data: ['Alice', 'Bob', 'Carol'],
+      selected: '0',
+      deleted: '2',
+      expected: '0',
+      value: 'Alice',
+    },
+    {
+      data: { item: 1, itemCode: 'keep' },
+      selected: 'itemCode',
+      deleted: 'item',
+      expected: 'itemCode',
+      value: 'keep',
+    },
+    // Index 10 is a sibling of index 1, and shifts to 9 rather than selecting the parent.
+    {
+      data: Array.from({ length: 11 }, (_, i) => `Item ${i}`),
+      selected: '10',
+      deleted: '1',
+      expected: '9',
+      value: 'Item 10',
+    },
+    {
+      data: { parent: { child: 1, keep: 2 } },
+      selected: 'parent.child',
+      deleted: 'parent.child',
+      expected: 'parent',
+      value: { keep: 2 },
+    },
+    {
+      data: { parent: { child: { name: 'Alice' }, keep: 2 } },
+      selected: 'parent.child.name',
+      deleted: 'parent.child',
+      expected: 'parent',
+      value: { keep: 2 },
+    },
+  ])(
+    'keeps the correct target when deleting $deleted with $selected selected',
+    async ({ data, selected, deleted, expected, value }) => {
+      const wrapper = mountEditor(data, { type: ['object', 'array', 'null'] });
+      const vm = vmOf(wrapper, 'mixed-renderer');
+      vm.toggleShowPrimitives();
+      await nextTick();
+      vm.activatedTreeNodes = [`$path:${selected}`];
+      await nextTick();
+      const node = flattenTree(vm.treeNodes).find(
+        (node) => node.control.path === deleted,
+      )!;
+      vm.deleteNode(node);
+      vm.confirmDelete();
+      await nextTick();
+      expect(vm.activatedTreeNodes).toEqual([`$path:${expected}`]);
+      expect(vm.selectedNode.control.path).toBe(expected);
+      const selectedValue = expected
+        .split('.')
+        .reduce((data, key) => data[key], wrapper.vm.event.data);
+      expect(selectedValue).toEqual(value);
+    },
+  );
 });

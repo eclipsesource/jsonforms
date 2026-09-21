@@ -932,6 +932,8 @@ const controlRenderer = defineComponent({
         parentPath.length ? parentPath.length + 1 : 0,
       );
 
+      const selectedPath = selectedNode.value?.control.path;
+
       if (Array.isArray(parentData)) {
         const index = Number(key);
         if (!Number.isInteger(index)) {
@@ -940,6 +942,21 @@ const controlRenderer = defineComponent({
         const updatedData = [...parentData];
         updatedData.splice(index, 1);
         vuetifyControl.handleChange(parentPath, updatedData);
+        // A splice changes the paths of later siblings and their descendants.
+        // Preserve the selected value by shifting only this array's index segment.
+        const prefix = parentPath ? `${parentPath}.` : '';
+        if (selectedPath !== undefined && selectedPath.startsWith(prefix)) {
+          const segments = selectedPath.slice(prefix.length).split('.');
+          const selectedArrayIndex = Number(segments[0]);
+          if (
+            Number.isInteger(selectedArrayIndex) &&
+            selectedArrayIndex > index
+          ) {
+            segments[0] = `${selectedArrayIndex - 1}`;
+            selectPath(`${prefix}${segments.join('.')}`);
+            return;
+          }
+        }
       } else if (typeof parentData === 'object' && parentData !== null) {
         const updatedData = { ...parentData };
         delete updatedData[key];
