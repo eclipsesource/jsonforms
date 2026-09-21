@@ -9,6 +9,8 @@ export type DynamicPropertyNameValidationError =
 
 export interface DynamicPropertyNameValidationOptions {
   propertyName: string;
+  /** Enable only when the caller updates literal keys at the parent path. */
+  allowDots?: boolean;
   currentPropertyName?: string;
   data: unknown;
   /** Names owned by the object schema, even when absent from data. */
@@ -171,6 +173,7 @@ export const validateDynamicPropertyName = ({
   currentPropertyName,
   data,
   reservedPropertyNames = [],
+  allowDots = false,
   propertyNameSchema,
   ajv,
 }: DynamicPropertyNameValidationOptions): DynamicPropertyNameValidationError | null => {
@@ -193,7 +196,7 @@ export const validateDynamicPropertyName = ({
 
   // JSON Forms data paths use dots as segment separators. Brackets are
   // treated literally by core and therefore are valid in property names.
-  if (propertyName.includes('.')) {
+  if (!allowDots && propertyName.includes('.')) {
     return { reason: 'invalid' };
   }
 

@@ -343,3 +343,33 @@ describe('mixed tree utilities', () => {
     expect(findNodeById([], toTreeNodeId('missing'))).toBeUndefined();
   });
 });
+
+it('combines readOnly constraints from all matching property patterns', () => {
+  const schema: JsonSchema = {
+    type: 'object',
+    patternProperties: {
+      '^locked': { type: 'object', readOnly: false },
+      locked$: { allOf: [{ readOnly: true }] },
+    },
+  };
+  const nodes = flattenTree(
+    buildTreeFromData(
+      { locked: { child: 1 }, editable: 2 },
+      schema,
+      schema,
+      '',
+      '',
+      true,
+      false,
+      true,
+      String,
+    ),
+  );
+  const locked = nodes.filter((node) => node.control.path.startsWith('locked'));
+  expect(
+    locked.every(
+      (node) => node.control.readonly && !node.canRename && !node.canDelete,
+    ),
+  ).toBe(true);
+  expect(nodes.find((node) => node.label === 'editable')?.canDelete).toBe(true);
+});

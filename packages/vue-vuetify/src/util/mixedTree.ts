@@ -56,6 +56,8 @@ export interface MixedTreeNode {
   control: TreeNodeControl;
   /** Original allowed types for the selected node editor; control.schema is the tree view. */
   editorSchema: JsonSchema;
+  /** Literal display for keys that core cannot address with a data path. */
+  uneditableValue?: string;
   children?: MixedTreeNode[];
 }
 
@@ -100,6 +102,7 @@ const combineTreeSchemas = (
   if (parts.length === 1) return parts[0];
   const result: JsonSchema7 = { ...parts[0] };
   for (const part of parts.slice(1)) {
+    if (part.readOnly) result.readOnly = true;
     result.required = [
       ...new Set([...(result.required ?? []), ...(part.required ?? [])]),
     ];
@@ -491,8 +494,9 @@ export const buildTreeFromData = (
     parent: any,
     parentSchema: JsonSchema,
     key: string,
+    nodeReadonly: boolean,
   ): boolean => {
-    if (!enabled || readonly) return false;
+    if (!enabled || nodeReadonly) return false;
     if (!restrict) return true;
     if (Array.isArray(parent)) {
       return parent.length > (parentSchema.minItems ?? 0);
@@ -511,9 +515,13 @@ export const buildTreeFromData = (
     children: MixedTreeNode[],
     canRename = false,
     canDelete = false,
+    inheritedReadonly = readonly,
   ): void => {
     const type = getJsonDataType(value);
     currentSchema = combineTreeSchemas([currentSchema], rootSchema);
+    const nodeReadonly = inheritedReadonly || Boolean(currentSchema.readOnly);
+    canRename = canRename && !nodeReadonly;
+    canDelete = canDelete && !nodeReadonly;
 
     if (type === 'object') {
       const objectSchema = prepareObjectSchema(currentSchema);
@@ -531,7 +539,7 @@ export const buildTreeFromData = (
           objectSchema,
           currentPath,
           enabled,
-          readonly,
+          nodeReadonly,
         ),
         children: [],
       };
@@ -539,6 +547,23 @@ export const buildTreeFromData = (
 
       Object.keys(value).forEach((key) => {
         const childValue = value[key];
+        // Dots (and empty keys) cannot be represented by core's data paths.
+        // Keep a distinct, view-only node instead of aliasing another property.
+        if (key.includes('.') || key === '') {
+          node.children!.push({
+            nodeId: `$literal:${JSON.stringify([currentPath, key])}`,
+            title: key,
+            label: key,
+            jsonType: getJsonDataType(childValue) ?? 'null',
+            canRename: false,
+            canDelete: false,
+            editorSchema: {},
+            control: createTreeNodeControl({}, currentPath, false, true),
+            uneditableValue:
+              JSON.stringify(childValue, null, 2) ?? String(childValue),
+          });
+          return;
+        }
         const childPath = composePropertyPath(currentPath, key);
         const rawChildType = getJsonDataType(childValue);
         const initialChildSchema = findTreePropertySchema(
@@ -558,13 +583,21 @@ export const buildTreeFromData = (
           null,
           rootSchema,
         );
-        const childCanDelete = canDeleteChild(value, currentSchema, key);
+        const childReadonly =
+          nodeReadonly ||
+          Boolean(combineTreeSchemas([childSchema], rootSchema).readOnly);
+        const childCanDelete = canDeleteChild(
+          value,
+          currentSchema,
+          key,
+          childReadonly,
+        );
         const childCanRename = canRenameDynamicProperty({
           schema: currentSchema,
           data: value,
           propertyName: key,
           enabled,
-          readonly,
+          readonly: childReadonly,
           restrict,
         });
 
@@ -577,6 +610,7 @@ export const buildTreeFromData = (
             node.children!,
             childCanRename,
             childCanDelete,
+            nodeReadonly,
           );
         } else if (showPrimitives) {
           node.children!.push({
@@ -591,7 +625,7 @@ export const buildTreeFromData = (
               childSchema,
               childPath,
               enabled,
-              readonly,
+              childReadonly,
             ),
           });
         }
@@ -612,14 +646,13 @@ export const buildTreeFromData = (
           arraySchema,
           currentPath,
           enabled,
-          readonly,
+          nodeReadonly,
         ),
         children: [],
       };
       children.push(node);
 
       value.forEach((childValue: any, index: number) => {
-        const childCanDelete = canDeleteChild(value, currentSchema, `${index}`);
         const childType = getJsonDataType(childValue);
         const childPath = composePropertyPath(currentPath, `${index}`);
         const childLabel = itemLabel(index);
@@ -630,6 +663,15 @@ export const buildTreeFromData = (
           index,
           rootSchema,
           childLabel,
+        );
+        const childReadonly =
+          nodeReadonly ||
+          Boolean(combineTreeSchemas([childSchema], rootSchema).readOnly);
+        const childCanDelete = canDeleteChild(
+          value,
+          currentSchema,
+          `${index}`,
+          childReadonly,
         );
         const resolvedChildType =
           childType ?? getSchemaDefaultType(childSchema);
@@ -643,6 +685,7 @@ export const buildTreeFromData = (
             node.children!,
             false,
             childCanDelete,
+            nodeReadonly,
           );
         } else if (showPrimitives) {
           node.children!.push({
@@ -657,7 +700,7 @@ export const buildTreeFromData = (
               childSchema,
               childPath,
               enabled,
-              readonly,
+              childReadonly,
             ),
           });
         }

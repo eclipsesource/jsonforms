@@ -758,3 +758,201 @@ describe('MixedRenderer selection after deletion', () => {
     },
   );
 });
+
+describe('MixedRenderer safe tree mutations', () => {
+  it('does not delete a nested property through a literal dotted key', async () => {
+    const data = { 'a.b': 1, a: { b: 2 } };
+    const wrapper = mountEditor(data, { type: ['object', 'null'] });
+    const vm = vmOf(wrapper, 'mixed-renderer');
+    vm.toggleShowPrimitives();
+    await nextTick();
+    const nodes = flattenTree(vm.treeNodes);
+    const literal = nodes.find((node) => node.label === 'a.b')!;
+    vm.deleteNode(literal);
+    await nextTick();
+    expect(wrapper.vm.event.data).toEqual(data);
+    expect(new Set(nodes.map((node) => node.nodeId)).size).toBe(nodes.length);
+    expect(literal.canRename).toBe(false);
+    vm.activatedTreeNodes = [literal.nodeId];
+    await nextTick();
+    expect(wrapper.find('.mixed-detail-pane pre').text()).toBe('1');
+  });
+
+  it.each(['object', 'array'] as const)(
+    'inherits readOnly through a referenced %s schema',
+    async (type) => {
+      const data = { locked: type === 'object' ? { child: 1 } : [1] };
+      const wrapper = mountEditor(data, {
+        type: ['object', 'null'],
+        properties: { locked: { $ref: '#/definitions/locked' } },
+        definitions: { locked: { type, readOnly: true } },
+      });
+      const vm = vmOf(wrapper, 'mixed-renderer');
+      vm.toggleShowPrimitives();
+      await nextTick();
+      const nodes = flattenTree(vm.treeNodes).filter((node) =>
+        node.control.path.startsWith('locked'),
+      );
+      for (const node of nodes) {
+        vm.deleteNode(node);
+        vm.confirmDelete();
+      }
+      await nextTick();
+      expect(wrapper.vm.event.data).toEqual(data);
+      expect(
+        nodes.every(
+          (node) => !node.canDelete && !node.canRename && node.control.readonly,
+        ),
+      ).toBe(true);
+    },
+  );
+
+  it('preserves literal brackets when deleting a nested property', async () => {
+    const wrapper = mountEditor(
+      { 'a[0]': { child: 1 }, a: [{ child: 2 }] },
+      { type: ['object', 'null'] },
+    );
+    const vm = vmOf(wrapper, 'mixed-renderer');
+    vm.toggleShowPrimitives();
+    await nextTick();
+    vm.deleteNode(
+      flattenTree(vm.treeNodes).find(
+        (node) => node.control.path === 'a[0].child',
+      )!,
+    );
+    await nextTick();
+    expect(wrapper.vm.event.data).toEqual({ 'a[0]': {}, a: [{ child: 2 }] });
+  });
+});
+
+it.each(['a.b', ''])(
+  'edits the literal property %j while allowing rename and delete',
+  async (key) => {
+    const data = { [key]: 'literal value', a: { b: 'nested value' } };
+    const wrapper = mountEditor(data, {
+      type: 'object',
+      additionalProperties: true,
+    });
+    await nextTick();
+    const row = wrapper.find('.additional-property-row');
+    const input = row
+      .findAll('input')
+      .find(
+        (input) =>
+          (input.element as HTMLInputElement).value === 'literal value',
+      )!;
+    expect(input.exists()).toBe(true);
+    expect((input.element as HTMLInputElement).value).toBe('literal value');
+    expect(
+      (input.element as HTMLInputElement).readOnly ||
+        (input.element as HTMLInputElement).disabled,
+    ).toBe(false);
+    await input.setValue('edited');
+    // String controls debounce writes for 300 ms.
+    await vi.waitFor(() =>
+      expect(wrapper.vm.event.data).toEqual({
+        [key]: 'edited',
+        a: { b: 'nested value' },
+      }),
+    );
+    const vm = vmOf(wrapper, 'additional-properties');
+    vm.startRename(key);
+    vm.renameValue = 'renamed';
+    vm.renameProperty(key);
+    await nextTick();
+    expect(wrapper.vm.event.data).toEqual({
+      renamed: 'edited',
+      a: { b: 'nested value' },
+    });
+    vm.removeProperty('renamed');
+    await nextTick();
+    expect(wrapper.vm.event.data).toEqual({ a: { b: 'nested value' } });
+  },
+);
+
+it('adds and renames dotted properties without creating nested paths', async () => {
+  const wrapper = mountEditor(
+    {},
+    {
+      type: 'object',
+      additionalProperties: { type: 'string', default: 'new' },
+    },
+  );
+  const vm = vmOf(wrapper, 'additional-properties');
+  vm.newPropertyName = 'a.b';
+  vm.addProperty();
+  await nextTick();
+  expect(wrapper.vm.event.data).toEqual({ 'a.b': 'new' });
+  vm.startRename('a.b');
+  vm.renameValue = 'c.d';
+  vm.renameProperty('a.b');
+  await nextTick();
+  expect(wrapper.vm.event.data).toEqual({ 'c.d': 'new' });
+});
+
+it('preserves nested schema references and validation for a dotted property', async () => {
+  const schema: JsonSchema = {
+    type: 'object',
+    additionalProperties: { $ref: '#/definitions/value' },
+    definitions: {
+      value: {
+        type: 'object',
+        properties: { count: { $ref: '#/definitions/count' } },
+      },
+      count: { type: 'integer', minimum: 5 },
+    },
+  };
+  const wrapper = mountEditor({ 'a.b': { count: 6 } }, schema);
+  await nextTick();
+  const input = wrapper.find('.additional-property-content input');
+  expect((input.element as HTMLInputElement).value).toBe('6');
+  await input.setValue('2');
+  await flushPromises();
+  expect(wrapper.vm.event.data).toEqual({ 'a.b': { count: 2 } });
+  expect(
+    wrapper.vm.event.errors?.some((error) => error.keyword === 'minimum'),
+  ).toBe(true);
+});
+
+it.each([
+  { type: 'string', before: 'old', after: 'new' },
+  { type: 'integer', before: 1, after: 2 },
+  { type: 'number', before: 1.5, after: 2.5 },
+  { type: 'boolean', before: true, after: false },
+  { type: 'null', before: null, after: null },
+  { type: 'array', before: [1], after: [1, 2] },
+  { type: 'object', before: { child: 1 }, after: { child: 2 } },
+] as const)(
+  'keeps the $type schema and literal key when forwarding an isolated form update',
+  async ({ type, before, after }) => {
+    const wrapper = mountEditor(
+      { 'a.b': before },
+      { type: 'object', additionalProperties: { type } },
+    );
+    await nextTick();
+    const form = wrapper
+      .find('.additional-property-content')
+      .findComponent({ name: 'JsonForms' });
+    expect(form.props('schema').type).toBe(type);
+    // Exercise the bridge independently of each renderer's input widgets.
+    form.vm.$emit('change', { data: after, errors: [] });
+    await nextTick();
+    expect(wrapper.vm.event.data).toEqual({ 'a.b': after });
+  },
+);
+
+it('ignores literal-value changes when the parent is read-only', async () => {
+  const wrapper = mountEditor(
+    { 'a.b': 'keep' },
+    { type: 'object', additionalProperties: { type: 'string' } },
+    { readonly: true },
+  );
+  await nextTick();
+  const form = wrapper
+    .find('.additional-property-content')
+    .findComponent({ name: 'JsonForms' });
+  expect(form.props('readonly')).toBe(true);
+  form.vm.$emit('change', { data: 'discard', errors: [] });
+  await nextTick();
+  expect(wrapper.vm.event.data).toEqual({ 'a.b': 'keep' });
+});

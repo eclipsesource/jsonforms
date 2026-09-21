@@ -4,6 +4,7 @@ export interface MixedRendererDefaultTranslation {
 }
 
 export enum MixedRendererTranslationEnum {
+  unsupportedPropertyName = 'unsupportedPropertyName',
   searchLabel = 'searchLabel',
   showPrimitives = 'showPrimitives',
   hidePrimitives = 'hidePrimitives',
@@ -18,6 +19,10 @@ export enum MixedRendererTranslationEnum {
 
 export const mixedRendererDefaultTranslations: MixedRendererDefaultTranslation[] =
   [
+    {
+      key: MixedRendererTranslationEnum.unsupportedPropertyName,
+      default: () => 'This property name does not support editing.',
+    },
     {
       key: MixedRendererTranslationEnum.searchLabel,
       default: () => 'Search',

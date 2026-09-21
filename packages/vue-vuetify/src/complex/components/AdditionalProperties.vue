@@ -71,8 +71,30 @@
         :key="`${element.propertyName}`"
       >
         <div class="additional-property-content">
+          <json-forms
+            v-if="
+              element.propertyName.includes('.') || element.propertyName === ''
+            "
+            :data="control.data[element.propertyName]"
+            :schema="literalValueSchema(element.schema)"
+            :uischema="
+              {
+                type: 'Control',
+                scope: '#',
+                label: element.propertyName,
+              } as UISchemaElement
+            "
+            :renderers="control.renderers"
+            :cells="control.cells"
+            :config="control.config"
+            :readonly="!isControlEditable(control)"
+            :i18n="i18n"
+            :ajv="ajv"
+            :validation-mode="parentValidationMode"
+            @change="literalValueChange(element.propertyName, $event)"
+          />
           <dispatch-renderer
-            v-if="element.schema && element.uischema"
+            v-else-if="element.schema && element.uischema"
             :schema="element.schema"
             :uischema="element.uischema"
             :path="element.path"
@@ -196,6 +218,7 @@ import isEqual from 'lodash/isEqual';
 import isPlainObject from 'lodash/isPlainObject';
 import startCase from 'lodash/startCase';
 
+import { literalPropertySchema } from '../../util/literalPropertySchema';
 import { IsDynamicPropertyContext } from '@/util/inject';
 import {
   computed,
@@ -369,6 +392,7 @@ export default defineComponent({
     const propertyNameChange = (event: JsonFormsChangeEvent) => {
       newPropertyName.value = typeof event.data === 'string' ? event.data : '';
       const validationError = validateDynamicPropertyName({
+        allowDots: true,
         propertyName: newPropertyName.value,
         reservedPropertyNames: reservedPropertyNames.value,
         data: control.value.data,
@@ -474,7 +498,12 @@ export default defineComponent({
     // use the default value since all properties are dynamic so preserve the property key
     provide(IsDynamicPropertyContext, true);
 
+    const literalValueSchema = (schema: JsonSchema) =>
+      literalPropertySchema(schema, control.value.rootSchema);
+
     return {
+      literalValueSchema,
+      parentValidationMode,
       validationMode: validationMode,
       i18n: i18n ? markRaw(i18n) : i18n,
       middleware: middleware ? markRaw(middleware) : middleware,
@@ -555,12 +584,33 @@ export default defineComponent({
     },
   },
   methods: {
+    literalValueChange(
+      propertyName: string,
+      event: JsonFormsChangeEvent,
+    ): void {
+      const data = this.control.data;
+      if (
+        !this.isControlEditable(this.control) ||
+        !data ||
+        typeof data !== 'object' ||
+        Array.isArray(data) ||
+        !Object.prototype.hasOwnProperty.call(data, propertyName) ||
+        isEqual(data[propertyName], event.data)
+      )
+        return;
+      // Write at the parent path; the literal key must never be parsed as a path.
+      this.input.handleChange(this.control.path, {
+        ...data,
+        [propertyName]: event.data,
+      });
+    },
     validatePropertyName(
       propertyName: string,
       currentPropertyName?: string,
     ): string | null {
       return getDynamicPropertyNameErrorMessage(
         validateDynamicPropertyName({
+          allowDots: true,
           propertyName,
           currentPropertyName,
           reservedPropertyNames: this.reservedPropertyNames,

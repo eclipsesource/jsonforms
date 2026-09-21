@@ -176,8 +176,17 @@
 
                 <v-pane min-size="35" size="75">
                   <div class="mixed-detail-pane">
+                    <template
+                      v-if="selectedNode?.uneditableValue !== undefined"
+                    >
+                      <p>{{ mixedTranslations.unsupportedPropertyName }}</p>
+                      <pre>{{ selectedNode.uneditableValue }}</pre>
+                    </template>
                     <dispatch-renderer
-                      v-if="selectedNode"
+                      v-if="
+                        selectedNode &&
+                        selectedNode.uneditableValue === undefined
+                      "
                       :key="selectedNode.nodeId"
                       :schema="selectedNodeEditor.schema"
                       :uischema="selectedNodeEditor.uischema"

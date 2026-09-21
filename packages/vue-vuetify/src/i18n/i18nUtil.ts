@@ -59,6 +59,7 @@ export const getAdditionalPropertiesTranslations = (
 };
 
 export interface MixedRendererTranslations {
+  unsupportedPropertyName: string;
   searchLabel: string;
   showPrimitives: string;
   hidePrimitives: string;
@@ -87,6 +88,9 @@ export const getMixedRendererTranslations = (
   };
 
   return {
+    unsupportedPropertyName: translate(
+      MixedRendererTranslationEnum.unsupportedPropertyName,
+    ),
     searchLabel: translate(MixedRendererTranslationEnum.searchLabel),
     showPrimitives: translate(MixedRendererTranslationEnum.showPrimitives),
     hidePrimitives: translate(MixedRendererTranslationEnum.hidePrimitives),
