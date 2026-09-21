@@ -770,12 +770,9 @@ describe('MixedRenderer safe tree mutations', () => {
     const literal = nodes.find((node) => node.label === 'a.b')!;
     vm.deleteNode(literal);
     await nextTick();
-    expect(wrapper.vm.event.data).toEqual(data);
+    expect(wrapper.vm.event.data).toEqual({ a: { b: 2 } });
     expect(new Set(nodes.map((node) => node.nodeId)).size).toBe(nodes.length);
-    expect(literal.canRename).toBe(false);
-    vm.activatedTreeNodes = [literal.nodeId];
-    await nextTick();
-    expect(wrapper.find('.mixed-detail-pane pre').text()).toBe('1');
+    expect(literal.canRename).toBe(true);
   });
 
   it.each(['object', 'array'] as const)(
@@ -955,4 +952,310 @@ it('ignores literal-value changes when the parent is read-only', async () => {
   form.vm.$emit('change', { data: 'discard', errors: [] });
   await nextTick();
   expect(wrapper.vm.event.data).toEqual({ 'a.b': 'keep' });
+});
+
+it('adds an empty property name and prevents overwriting it', async () => {
+  const wrapper = mountEditor(
+    {},
+    {
+      type: 'object',
+      additionalProperties: { type: 'string', default: 'new' },
+    },
+    { allowEmptyPropertyNames: true },
+  );
+  const vm = vmOf(wrapper, 'additional-properties');
+  await nextTick();
+  vm.newPropertyName = '';
+  vm.addProperty();
+  await nextTick();
+  expect(wrapper.vm.event.data).toEqual({ '': 'new' });
+  await wrapper.setProps({ data: { '': 'keep' } });
+  vm.addProperty();
+  await nextTick();
+  expect(wrapper.vm.event.data).toEqual({ '': 'keep' });
+});
+
+it('renames to an empty property name', async () => {
+  const wrapper = mountEditor(
+    { original: 1 },
+    { type: 'object', additionalProperties: { type: 'number' } },
+    { allowEmptyPropertyNames: true },
+  );
+  const vm = vmOf(wrapper, 'additional-properties');
+  vm.startRename('original');
+  vm.renameValue = '';
+  vm.renameProperty('original');
+  await nextTick();
+  expect(wrapper.vm.event.data).toEqual({ '': 1 });
+});
+
+it('applies propertyNames constraints to the empty string', async () => {
+  const wrapper = mountEditor(
+    { original: 1 },
+    {
+      type: 'object',
+      propertyNames: { minLength: 1 },
+      additionalProperties: { type: 'number' },
+    },
+  );
+  const vm = vmOf(wrapper, 'additional-properties');
+  vm.newPropertyName = '';
+  vm.addProperty();
+  vm.startRename('original');
+  vm.renameValue = '';
+  vm.renameProperty('original');
+  await nextTick();
+  expect(wrapper.vm.event.data).toEqual({ original: 1 });
+});
+
+describe('mixed literal-key selected editors', () => {
+  it.each(['a.b', ''])(
+    'edits nested literal key %j without changing siblings',
+    async (key) => {
+      const wrapper = mountEditor(
+        { holder: { [key]: 'Original' }, sibling: 'Untouched' },
+        { type: ['object', 'null'] },
+      );
+      const vm = vmOf(wrapper, 'mixed-renderer');
+      vm.toggleShowPrimitives();
+      await nextTick();
+      const node = flattenTree(vm.treeNodes).find(
+        (n) =>
+          n.control.path !== 'holder' &&
+          (key === '' ? n.label === '""' : n.label === key),
+      )!;
+      expect(node).toBeTruthy();
+      vm.activatedTreeNodes = [node.nodeId];
+      await nextTick();
+      const form = wrapper
+        .find('.mixed-detail-pane')
+        .findComponent({ name: 'JsonForms' });
+      expect(form.exists()).toBe(true);
+      const field = wrapper
+        .find('.mixed-detail-pane')
+        .findAll('input')
+        .find((i) => (i.element as HTMLInputElement).value === 'Original')!;
+      expect(field).toBeTruthy();
+      await field.setValue('Updated');
+      await vi.waitFor(() =>
+        expect(wrapper.vm.event.data).toEqual({
+          holder: { [key]: 'Updated' },
+          sibling: 'Untouched',
+        }),
+      );
+    },
+  );
+});
+
+it.each(['', 'new.name', '  spaced  '])(
+  'renames a mixed dotted key to exact name %j and keeps selection',
+  async (name) => {
+    const wrapper = mountEditor(
+      { 'a.b': 'Original', a: { b: 'Nested' } },
+      { type: ['object', 'null'] },
+      { allowEmptyPropertyNames: true },
+    );
+    const vm = vmOf(wrapper, 'mixed-renderer');
+    vm.toggleShowPrimitives();
+    await nextTick();
+    const node = flattenTree(vm.treeNodes).find((n) => n.label === 'a.b')!;
+    vm.activatedTreeNodes = [node.nodeId];
+    await nextTick();
+    vm.startRename(node);
+    vm.renameValue = name;
+    vm.commitRename(node);
+    await nextTick();
+    expect(wrapper.vm.event.data).toEqual({
+      [name]: 'Original',
+      a: { b: 'Nested' },
+    });
+    expect(vm.selectedNode.label).toBe(name === '' ? '""' : name);
+    const field = wrapper
+      .find('.mixed-detail-pane')
+      .findAll('input')
+      .find((i) => (i.element as HTMLInputElement).value === 'Original')!;
+    await field.setValue('Updated');
+    await vi.waitFor(() =>
+      expect(wrapper.vm.event.data).toEqual({
+        [name]: 'Updated',
+        a: { b: 'Nested' },
+      }),
+    );
+  },
+);
+it('edits the innermost empty key without inheriting parent name constraints', async () => {
+  const wrapper = mountEditor(
+    { '': { asd: { '': 'Original' } } },
+    {
+      type: 'object',
+      additionalProperties: {
+        type: 'object',
+        propertyNames: { minLength: 1 },
+        additionalProperties: true,
+      },
+    },
+  );
+  const vm = vmOf(wrapper, 'mixed-renderer');
+  vm.toggleShowPrimitives();
+  await nextTick();
+  const node = flattenTree(vm.treeNodes).find((n) => n.label === '""')!;
+  vm.activatedTreeNodes = [node.nodeId];
+  await nextTick();
+  const field = wrapper
+    .find('.mixed-detail-pane')
+    .findAll('input')
+    .find((i) => (i.element as HTMLInputElement).value === 'Original')!;
+  await field.setValue('Updated');
+  await vi.waitFor(() =>
+    expect(wrapper.vm.event.data).toEqual({ '': { asd: { '': 'Updated' } } }),
+  );
+  expect(wrapper.vm.event.errors).toEqual([]);
+});
+it('changes the type of a literal-key selected value without changing its key', async () => {
+  const wrapper = mountEditor({ 'a.b': {} }, { type: ['object', 'null'] });
+  const vm = vmOf(wrapper, 'mixed-renderer');
+  const node = flattenTree(vm.treeNodes).find((n) => n.label === 'a.b')!;
+  vm.activatedTreeNodes = [node.nodeId];
+  await nextTick();
+  const detail = wrapper
+    .find('.mixed-detail-pane')
+    .findComponent({ name: 'mixed-renderer' }).vm as unknown as EditorVM;
+  detail.handleSelectChange(
+    detail.mixedRenderInfos.find((i) => i.resolvedSchema.type === 'string')!
+      .index,
+  );
+  await nextTick();
+  expect(wrapper.vm.event.data).toEqual({ 'a.b': '' });
+});
+it('rechecks readonly ancestors for literal-key updates and mutations', async () => {
+  const data = { 'a.b': { leaf: 'Original' } };
+  const wrapper = mountEditor(data, {
+    type: ['object', 'null'],
+    properties: { 'a.b': { type: 'object', readOnly: true } },
+  });
+  const vm = vmOf(wrapper, 'mixed-renderer');
+  vm.toggleShowPrimitives();
+  await nextTick();
+  const node = flattenTree(vm.treeNodes).find((n) => n.label === 'leaf')!;
+  expect(node.canDelete).toBe(false);
+  expect(node.canRename).toBe(false);
+  vm.activatedTreeNodes = [node.nodeId];
+  await nextTick();
+  const form = wrapper
+    .find('.mixed-detail-pane')
+    .findComponent({ name: 'JsonForms' });
+  expect(form.props('readonly')).toBe(true);
+  form.vm.$emit('change', { data: 'Forbidden', errors: [] });
+  vm.deleteNode(node);
+  vm.confirmDelete();
+  await nextTick();
+  expect(wrapper.vm.event.data).toEqual(data);
+});
+it('honors minProperties on a literal parent when restrict is enabled', async () => {
+  const data = { 'a.b': { leaf: 'Original' } };
+  const wrapper = mountEditor(
+    data,
+    {
+      type: ['object', 'null'],
+      additionalProperties: { type: 'object', minProperties: 1 },
+    },
+    { restrict: true },
+  );
+  const vm = vmOf(wrapper, 'mixed-renderer');
+  vm.toggleShowPrimitives();
+  await nextTick();
+  const node = flattenTree(vm.treeNodes).find((n) => n.label === 'leaf')!;
+  expect(node.canDelete).toBe(false);
+  vm.deleteNode(node);
+  await nextTick();
+  expect(wrapper.vm.event.data).toEqual(data);
+});
+
+it.each([
+  { config: {}, options: {}, allowed: false },
+  { config: { allowEmptyPropertyNames: true }, options: {}, allowed: true },
+  {
+    config: { allowEmptyPropertyNames: true },
+    options: { allowEmptyPropertyNames: false },
+    allowed: false,
+  },
+  { config: {}, options: { allowEmptyPropertyNames: true }, allowed: true },
+])(
+  'applies the empty-name policy with $config and $options',
+  async ({ config, options, allowed }) => {
+    const wrapper = mountEditor(
+      { old: 1 },
+      { type: 'object', additionalProperties: { type: 'number' } },
+      config,
+      { type: 'Control', scope: '#', options },
+    );
+    const vm = vmOf(wrapper, 'additional-properties');
+    vm.newPropertyName = '';
+    vm.addProperty();
+    await nextTick();
+    expect(
+      Object.prototype.hasOwnProperty.call(wrapper.vm.event.data, ''),
+    ).toBe(allowed);
+    vm.startRename('old');
+    vm.renameValue = '   ';
+    vm.renameProperty('old');
+    await nextTick();
+    expect(
+      Object.prototype.hasOwnProperty.call(wrapper.vm.event.data, '   '),
+    ).toBe(allowed);
+  },
+);
+
+it.each([
+  { config: {}, options: {}, allowed: false },
+  { config: { allowEmptyPropertyNames: true }, options: {}, allowed: true },
+  {
+    config: { allowEmptyPropertyNames: true },
+    options: { allowEmptyPropertyNames: false },
+    allowed: false,
+  },
+  { config: {}, options: { allowEmptyPropertyNames: true }, allowed: true },
+])(
+  'applies the empty-name policy to mixed-tree rename with $config and $options',
+  async ({ config, options, allowed }) => {
+    const wrapper = mountEditor(
+      { old: 1 },
+      { type: ['object', 'null'] },
+      config,
+      { type: 'Control', scope: '#', options },
+    );
+    const vm = vmOf(wrapper, 'mixed-renderer');
+    vm.toggleShowPrimitives();
+    await nextTick();
+    const node = flattenTree(vm.treeNodes).find(
+      (node) => node.label === 'old',
+    )!;
+    vm.startRename(node);
+    vm.renameValue = '';
+    vm.commitRename(node);
+    await nextTick();
+    expect(wrapper.vm.event.data).toEqual(allowed ? { '': 1 } : { old: 1 });
+  },
+);
+
+it('keeps an untouched or reset property-name field free of errors while guarding Add', async () => {
+  const wrapper = mountEditor(
+    { existing: 'keep' },
+    { type: 'object', additionalProperties: { type: 'string' } },
+  );
+  await flushPromises();
+  const field = wrapper.find('.additional-properties-add-field');
+  const add = wrapper.find('.additional-properties-add button');
+  expect(field.text()).not.toContain('Property name is invalid');
+  expect(add.attributes('disabled')).toBeDefined();
+  const input = field.find('input');
+  await input.setValue('existing');
+  await vi.waitFor(() => expect(field.find('.v-messages').text()).not.toBe(''));
+  await input.setValue('new');
+  await vi.waitFor(() => expect(add.attributes('disabled')).toBeUndefined());
+  await add.trigger('click');
+  await flushPromises();
+  expect(wrapper.vm.event.data).toEqual({ existing: 'keep', new: '' });
+  expect(field.text()).not.toContain('Property name is invalid');
+  expect(add.attributes('disabled')).toBeDefined();
 });

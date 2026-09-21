@@ -176,17 +176,38 @@
 
                 <v-pane min-size="35" size="75">
                   <div class="mixed-detail-pane">
-                    <template
-                      v-if="selectedNode?.uneditableValue !== undefined"
-                    >
-                      <p>{{ mixedTranslations.unsupportedPropertyName }}</p>
-                      <pre>{{ selectedNode.uneditableValue }}</pre>
-                    </template>
-                    <dispatch-renderer
+                    <mixed-literal-detail
                       v-if="
-                        selectedNode &&
-                        selectedNode.uneditableValue === undefined
+                        selectedNode && selectedNode.control.path.includes('\0')
                       "
+                      :key="selectedNode.nodeId"
+                      :node-path="selectedNode.control.path"
+                      :data="readNodeValue(selectedNode.control.path)"
+                      :schema="selectedNodeEditor.schema"
+                      :root-schema="control.rootSchema"
+                      :uischema="{
+                        ...selectedNodeEditor.uischema,
+                        scope: '#',
+                        options: {
+                          ...selectedNodeEditor.uischema.options,
+                          clearable: false,
+                        },
+                      }"
+                      :renderers="control.renderers"
+                      :cells="control.cells"
+                      :config="control.config"
+                      :uischemas="jsonforms.uischemas"
+                      :i18n="jsonforms.i18n"
+                      :ajv="ajv"
+                      :validation-mode="jsonforms.core?.validationMode"
+                      :readonly="
+                        !selectedNode.control.enabled ||
+                        selectedNode.control.readonly
+                      "
+                      @change="literalNodeChange(selectedNode, $event)"
+                    />
+                    <dispatch-renderer
+                      v-else-if="selectedNode"
                       :key="selectedNode.nodeId"
                       :schema="selectedNodeEditor.schema"
                       :uischema="selectedNodeEditor.uischema"
@@ -318,6 +339,14 @@
 </template>
 
 <script lang="ts">
+import MixedLiteralDetail from './components/MixedLiteralDetail.vue';
+import {
+  encodeMixedSegment,
+  decodeMixedSegment,
+  mixedValueAt,
+  replaceMixedValue,
+} from '../util/mixedLiteral';
+import isEqual from 'lodash/isEqual';
 import { AdditionalPropertiesTranslationEnum } from '@/i18n';
 import { additionalPropertiesDefaultTranslations } from '@/i18n/additionalPropertiesTranslations';
 import {
@@ -420,6 +449,7 @@ const controlRenderer = defineComponent({
   name: 'mixed-renderer',
   components: {
     DispatchRenderer,
+    MixedLiteralDetail,
     VBtn,
     VDialog,
     VCard,
@@ -552,7 +582,10 @@ const controlRenderer = defineComponent({
       return Array.isArray(resolveData(jsonforms.core?.data, parentPath));
     });
     const canClearType = computed(
-      () => isControlEditable(input.control.value) && !isArrayItem.value,
+      () =>
+        isControlEditable(input.control.value) &&
+        !isArrayItem.value &&
+        vuetifyControl.appliedOptions.value.clearable !== false,
     );
 
     const isNestedComplexType = computed(
@@ -802,6 +835,38 @@ const controlRenderer = defineComponent({
 
     // Tree construction already resolves properties, patterns, references and
     // tuple items. Reuse that schema rather than walking the path a second time.
+    const readNodeValue = (path: string) => {
+      const relative = getRelativePath(path);
+      return mixedValueAt(
+        input.control.value.data,
+        relative === null ? [] : relative.split('.').map(decodeMixedSegment),
+      );
+    };
+    const writeNodeValue = (path: string, value: unknown) => {
+      if (
+        !isControlEditable(input.control.value) ||
+        isEqual(readNodeValue(path), value)
+      )
+        return;
+      const relative = getRelativePath(path);
+      vuetifyControl.handleChange(
+        input.control.value.path,
+        replaceMixedValue(
+          input.control.value.data,
+          relative === null ? [] : relative.split('.').map(decodeMixedSegment),
+          value,
+        ),
+      );
+    };
+    const literalNodeChange = (
+      node: MixedTreeNode,
+      event: { data: unknown },
+    ) => {
+      const current = findNodeById(allTreeNodes.value, node.nodeId);
+      if (!current?.control.enabled || current.control.readonly) return;
+      writeNodeValue(current.control.path, event.data);
+    };
+
     const getParentSchema = (parentPath: string): JsonSchema | undefined =>
       findNodeById(allTreeNodes.value, toTreeNodeId(parentPath))?.control
         .schema;
@@ -817,7 +882,9 @@ const controlRenderer = defineComponent({
       renameTarget = input.control.value.data;
       renameTargetPath = input.control.value.path;
       renamingNodeId.value = node.nodeId;
-      renameValue.value = node.label;
+      renameValue.value = decodeMixedSegment(
+        node.control.path.split('.').slice(-1)[0] ?? '',
+      );
       renameError.value = null;
     };
 
@@ -828,20 +895,28 @@ const controlRenderer = defineComponent({
     };
 
     const validateRename = (node: MixedTreeNode): string | null => {
-      const propertyName = renameValue.value.trim();
+      const propertyName = renameValue.value;
       const parentPath = getParentPath(node.control.path);
       const parentRelativePath = getRelativePath(parentPath);
       const parentData =
         parentRelativePath === null
           ? input.control.value.data
-          : resolveData(input.control.value.data, parentRelativePath);
+          : mixedValueAt(
+              input.control.value.data,
+              parentRelativePath.split('.').map(decodeMixedSegment),
+            );
       const parentSchema = getParentSchema(parentPath);
       const resolvedParentSchema = parentSchema
         ? resolveSchema(parentSchema, input.control.value.rootSchema)
         : {};
       const validationError = validateDynamicPropertyName({
+        allowEmptyPropertyNames:
+          vuetifyControl.appliedOptions.value.allowEmptyPropertyNames === true,
         propertyName,
-        currentPropertyName: node.label,
+        currentPropertyName: decodeMixedSegment(
+          node.control.path.split('.').slice(-1)[0] ?? '',
+        ),
+        allowDots: true,
         reservedPropertyNames: Object.keys(
           resolvedParentSchema.properties ?? {},
         ),
@@ -883,8 +958,11 @@ const controlRenderer = defineComponent({
         return;
       }
 
-      const trimmed = renameValue.value.trim();
-      if (!trimmed || trimmed === node.label) {
+      const trimmed = renameValue.value;
+      if (
+        trimmed ===
+        decodeMixedSegment(node.control.path.split('.').slice(-1)[0] ?? '')
+      ) {
         cancelRename();
         return;
       }
@@ -894,7 +972,10 @@ const controlRenderer = defineComponent({
       const parentData =
         parentRelativePath === null
           ? input.control.value.data
-          : resolveData(input.control.value.data, parentRelativePath);
+          : mixedValueAt(
+              input.control.value.data,
+              parentRelativePath.split('.').map(decodeMixedSegment),
+            );
 
       if (
         typeof parentData !== 'object' ||
@@ -912,13 +993,19 @@ const controlRenderer = defineComponent({
 
       const updatedData = Object.fromEntries(
         Object.entries(parentData).map(([key, value]) => [
-          key === node.label ? trimmed : key,
+          key ===
+          decodeMixedSegment(node.control.path.split('.').slice(-1)[0] ?? '')
+            ? trimmed
+            : key,
           value,
         ]),
       );
-      vuetifyControl.handleChange(parentPath, updatedData);
+      writeNodeValue(parentPath, updatedData);
 
-      const newPath = composePropertyPath(parentPath, trimmed);
+      const newPath = composePropertyPath(
+        parentPath,
+        encodeMixedSegment(trimmed),
+      );
       selectPath(newPath);
       cancelRename();
     };
@@ -936,9 +1023,12 @@ const controlRenderer = defineComponent({
       const parentData =
         parentRelativePath === null
           ? input.control.value.data
-          : resolveData(input.control.value.data, parentRelativePath);
-      const key = node.control.path.slice(
-        parentPath.length ? parentPath.length + 1 : 0,
+          : mixedValueAt(
+              input.control.value.data,
+              parentRelativePath.split('.').map(decodeMixedSegment),
+            );
+      const key = decodeMixedSegment(
+        node.control.path.slice(parentPath.length ? parentPath.length + 1 : 0),
       );
 
       const selectedPath = selectedNode.value?.control.path;
@@ -950,7 +1040,7 @@ const controlRenderer = defineComponent({
         }
         const updatedData = [...parentData];
         updatedData.splice(index, 1);
-        vuetifyControl.handleChange(parentPath, updatedData);
+        writeNodeValue(parentPath, updatedData);
         // A splice changes the paths of later siblings and their descendants.
         // Preserve the selected value by shifting only this array's index segment.
         const prefix = parentPath ? `${parentPath}.` : '';
@@ -969,7 +1059,7 @@ const controlRenderer = defineComponent({
       } else if (typeof parentData === 'object' && parentData !== null) {
         const updatedData = { ...parentData };
         delete updatedData[key];
-        vuetifyControl.handleChange(parentPath, updatedData);
+        writeNodeValue(parentPath, updatedData);
       }
 
       if (
@@ -988,7 +1078,10 @@ const controlRenderer = defineComponent({
       const value =
         relativePath === null
           ? input.control.value.data
-          : resolveData(input.control.value.data, relativePath);
+          : mixedValueAt(
+              input.control.value.data,
+              relativePath.split('.').map(decodeMixedSegment),
+            );
       if (
         value !== null &&
         typeof value === 'object' &&
@@ -1080,6 +1173,10 @@ const controlRenderer = defineComponent({
       treeNodes,
       selectedNode,
       selectedNodeEditor,
+      readNodeValue,
+      literalNodeChange,
+      jsonforms,
+      ajv,
       isSelectedComplexType,
       canClearType,
       activatedTreeNodes,

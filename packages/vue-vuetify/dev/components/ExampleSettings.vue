@@ -464,6 +464,22 @@ const layouts = appstoreLayouts.map((value: AppstoreLayouts) => ({
           </v-tooltip>
         </v-col>
       </v-row>
+      <v-row>
+        <v-col>
+          <v-tooltip location="bottom">
+            <template v-slot:activator="{ props }">
+              <v-switch
+                v-model="appStore.jsonforms.config.allowEmptyPropertyNames"
+                label="Allow Empty Property Names"
+                v-bind="props"
+              ></v-switch>
+            </template>
+            Allow adding or renaming properties to empty or whitespace-only
+            names. Schema constraints still apply; UI-schema options override
+            this setting.
+          </v-tooltip>
+        </v-col>
+      </v-row>
     </v-container>
 
     <v-divider />

@@ -392,6 +392,8 @@ export default defineComponent({
     const propertyNameChange = (event: JsonFormsChangeEvent) => {
       newPropertyName.value = typeof event.data === 'string' ? event.data : '';
       const validationError = validateDynamicPropertyName({
+        allowEmptyPropertyNames:
+          appliedOptions.value.allowEmptyPropertyNames === true,
         allowDots: true,
         propertyName: newPropertyName.value,
         reservedPropertyNames: reservedPropertyNames.value,
@@ -407,18 +409,21 @@ export default defineComponent({
           newPropertyName.value,
         ),
       });
-      const newAdditionalErrors: ErrorObject[] = message
-        ? [
-            {
-              data: newPropertyName.value,
-              instancePath: '',
-              keyword: '',
-              message,
-              params: { propertyName: newPropertyName.value },
-              schemaPath: '',
-            },
-          ]
-        : [];
+      // Additional errors remain visible even in ValidateAndHide mode. Keep
+      // the initial/reset empty draft quiet; Add validates the name separately.
+      const newAdditionalErrors: ErrorObject[] =
+        message && newPropertyName.value !== ''
+          ? [
+              {
+                data: newPropertyName.value,
+                instancePath: '',
+                keyword: '',
+                message,
+                params: { propertyName: newPropertyName.value },
+                schemaPath: '',
+              },
+            ]
+          : [];
 
       if (!isEqual(additionalErrors.value, newAdditionalErrors)) {
         // only change the additional errors if different to prevent recursive calls
@@ -545,10 +550,11 @@ export default defineComponent({
         !this.isControlEditable(this.control) ||
         // add is disabled because of contraints
         (this.appliedOptions.restrict && this.maxPropertiesReached) ||
-        // add is disabled because there are errors for the new property name or it is not specified
+        // Empty strings are valid names; validate them like any other key.
         (this.newPropertyErrors && this.newPropertyErrors.length > 0) ||
         (this.additionalErrors && this.additionalErrors.length > 0) ||
-        !this.newPropertyName
+        this.newPropertyName === null ||
+        Boolean(this.validatePropertyName(this.newPropertyName))
       );
     },
     maxPropertiesReached(): boolean {
@@ -610,6 +616,8 @@ export default defineComponent({
     ): string | null {
       return getDynamicPropertyNameErrorMessage(
         validateDynamicPropertyName({
+          allowEmptyPropertyNames:
+            this.appliedOptions.allowEmptyPropertyNames === true,
           allowDots: true,
           propertyName,
           currentPropertyName,
@@ -654,19 +662,15 @@ export default defineComponent({
       this.renameError = null;
     },
     renamePropertyDisabled(propName: string): boolean {
-      const trimmed = this.renameValue.trim();
+      const name = this.renameValue;
       return (
         !this.canRenameProperty(propName) ||
-        !trimmed ||
-        trimmed === propName ||
-        Boolean(this.validatePropertyName(trimmed, propName))
+        name === propName ||
+        Boolean(this.validatePropertyName(name, propName))
       );
     },
     updateRenameError(propName: string): void {
-      this.renameError = this.validatePropertyName(
-        this.renameValue.trim(),
-        propName,
-      );
+      this.renameError = this.validatePropertyName(this.renameValue, propName);
     },
     renameProperty(propName: string): void {
       if (
@@ -677,12 +681,11 @@ export default defineComponent({
         this.cancelRename();
         return;
       }
-      const trimmed = this.renameValue.trim();
-      this.renameError = this.validatePropertyName(trimmed, propName);
+      const name = this.renameValue;
+      this.renameError = this.validatePropertyName(name, propName);
       if (
         this.renameError ||
-        !trimmed ||
-        trimmed === propName ||
+        name === propName ||
         typeof this.control.data !== 'object' ||
         this.control.data === null ||
         Array.isArray(this.control.data)
@@ -692,7 +695,7 @@ export default defineComponent({
 
       const updatedData = Object.fromEntries(
         Object.entries(this.control.data).map(([key, value]) => [
-          key === propName ? trimmed : key,
+          key === propName ? name : key,
           value,
         ]),
       );
@@ -703,7 +706,7 @@ export default defineComponent({
       if (
         !this.isControlEditable(this.control) ||
         (this.appliedOptions.restrict && this.maxPropertiesReached) ||
-        !this.newPropertyName ||
+        this.newPropertyName === null ||
         this.validatePropertyName(this.newPropertyName)
       )
         return;

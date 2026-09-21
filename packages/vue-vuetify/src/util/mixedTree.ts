@@ -1,4 +1,8 @@
 import {
+  encodeMixedSegment,
+  mixedHasUnsafeDeclaredScopes,
+} from './mixedLiteral';
+import {
   Resolve,
   createControlElement,
   findUISchema,
@@ -56,8 +60,6 @@ export interface MixedTreeNode {
   control: TreeNodeControl;
   /** Original allowed types for the selected node editor; control.schema is the tree view. */
   editorSchema: JsonSchema;
-  /** Literal display for keys that core cannot address with a data path. */
-  uneditableValue?: string;
   children?: MixedTreeNode[];
 }
 
@@ -539,7 +541,8 @@ export const buildTreeFromData = (
           objectSchema,
           currentPath,
           enabled,
-          nodeReadonly,
+          nodeReadonly ||
+            mixedHasUnsafeDeclaredScopes(currentSchema, rootSchema),
         ),
         children: [],
       };
@@ -547,24 +550,10 @@ export const buildTreeFromData = (
 
       Object.keys(value).forEach((key) => {
         const childValue = value[key];
-        // Dots (and empty keys) cannot be represented by core's data paths.
-        // Keep a distinct, view-only node instead of aliasing another property.
-        if (key.includes('.') || key === '') {
-          node.children!.push({
-            nodeId: `$literal:${JSON.stringify([currentPath, key])}`,
-            title: key,
-            label: key,
-            jsonType: getJsonDataType(childValue) ?? 'null',
-            canRename: false,
-            canDelete: false,
-            editorSchema: {},
-            control: createTreeNodeControl({}, currentPath, false, true),
-            uneditableValue:
-              JSON.stringify(childValue, null, 2) ?? String(childValue),
-          });
-          return;
-        }
-        const childPath = composePropertyPath(currentPath, key);
+        const childPath = composePropertyPath(
+          currentPath,
+          encodeMixedSegment(key),
+        );
         const rawChildType = getJsonDataType(childValue);
         const initialChildSchema = findTreePropertySchema(
           currentSchema,
@@ -605,7 +594,7 @@ export const buildTreeFromData = (
           traverse(
             childValue ?? (childType === 'array' ? [] : {}),
             childPath,
-            key,
+            key === '' ? '""' : key,
             childSchema,
             node.children!,
             childCanRename,
@@ -615,9 +604,9 @@ export const buildTreeFromData = (
         } else if (showPrimitives) {
           node.children!.push({
             nodeId: toTreeNodeId(childPath),
-            title: key,
+            title: key === '' ? '""' : key,
             jsonType: childType,
-            label: key,
+            label: key === '' ? '""' : key,
             editorSchema: childSchema,
             canRename: childCanRename,
             canDelete: childCanDelete,
@@ -646,7 +635,8 @@ export const buildTreeFromData = (
           arraySchema,
           currentPath,
           enabled,
-          nodeReadonly,
+          nodeReadonly ||
+            mixedHasUnsafeDeclaredScopes(currentSchema, rootSchema),
         ),
         children: [],
       };

@@ -11,6 +11,7 @@ export interface DynamicPropertyNameValidationOptions {
   propertyName: string;
   /** Enable only when the caller updates literal keys at the parent path. */
   allowDots?: boolean;
+  allowEmptyPropertyNames?: boolean;
   currentPropertyName?: string;
   data: unknown;
   /** Names owned by the object schema, even when absent from data. */
@@ -174,15 +175,16 @@ export const validateDynamicPropertyName = ({
   data,
   reservedPropertyNames = [],
   allowDots = false,
+  allowEmptyPropertyNames = false,
   propertyNameSchema,
   ajv,
 }: DynamicPropertyNameValidationOptions): DynamicPropertyNameValidationError | null => {
-  if (reservedPropertyNames.includes(propertyName)) {
-    return { reason: 'alreadyDefined' };
+  if (!allowEmptyPropertyNames && propertyName.trim().length === 0) {
+    return { reason: 'invalid' };
   }
 
-  if (!propertyName) {
-    return null;
+  if (reservedPropertyNames.includes(propertyName)) {
+    return { reason: 'alreadyDefined' };
   }
 
   if (

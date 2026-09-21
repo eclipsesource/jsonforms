@@ -35,6 +35,7 @@ const appstore = reactive({
       enableFilterErrorsBeforeTouch: false,
       filterErrorKeywordsBeforeTouch: ['required'],
       allowAdditionalPropertiesIfMissing: false,
+      allowEmptyPropertyNames: false,
     },
     locale: useLocalStorage('vuetify-example-locale', 'en'),
   },

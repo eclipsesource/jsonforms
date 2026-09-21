@@ -382,3 +382,33 @@ describe('dynamic property utilities', () => {
     });
   });
 });
+
+it.each(['', '   '])(
+  'requires an explicit opt-in for blank name %j',
+  (propertyName) => {
+    expect(validateDynamicPropertyName({ propertyName, data: {} })).toEqual({
+      reason: 'invalid',
+    });
+    expect(
+      validateDynamicPropertyName({
+        propertyName,
+        data: {},
+        allowEmptyPropertyNames: true,
+      }),
+    ).toBeNull();
+  },
+);
+
+it('still validates schema constraints and collisions when empty names are enabled', () => {
+  const options = { propertyName: '', allowEmptyPropertyNames: true, data: {} };
+  expect(
+    validateDynamicPropertyName({
+      ...options,
+      propertyNameSchema: { type: 'string', minLength: 1 },
+      ajv: createAjv(),
+    })?.reason,
+  ).toBe('schema');
+  expect(
+    validateDynamicPropertyName({ ...options, data: { '': 1 } })?.reason,
+  ).toBe('alreadyDefined');
+});
