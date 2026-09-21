@@ -12,7 +12,12 @@ import cloneDeep from 'lodash/cloneDeep';
 import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
 import set from 'lodash/set';
-import { composePropertyPath, findPropertySchema } from './dynamicProperties';
+import {
+  canRenameDynamicProperty,
+  composePropertyPath,
+  findPropertySchema,
+  getPropertyNameSchema,
+} from './dynamicProperties';
 
 export type JsonDataType =
   | 'array'
@@ -49,6 +54,8 @@ export interface MixedTreeNode {
   canRename: boolean;
   canDelete: boolean;
   control: TreeNodeControl;
+  /** Original allowed types for the selected node editor; control.schema is the tree view. */
+  editorSchema: JsonSchema;
   children?: MixedTreeNode[];
 }
 
@@ -72,6 +79,87 @@ export const resolveSchema = (
     return Resolve.schema(rootSchema, schema.$ref, rootSchema) ?? schema;
   }
   return schema;
+};
+
+/** Project conjunctive structural constraints for tree actions. Core validates
+ * the original schema; introducing allOf here would change renderer selection.
+ * A later matching pattern must never relax an earlier bound. */
+const combineTreeSchemas = (
+  schemas: JsonSchema[],
+  rootSchema: JsonSchema,
+): JsonSchema7 => {
+  const parts = schemas.flatMap((schema) => {
+    const resolved = resolveSchema(schema, rootSchema) as JsonSchema7;
+    return [
+      resolved,
+      ...(resolved.allOf ?? []).map((part) =>
+        combineTreeSchemas([part], rootSchema),
+      ),
+    ];
+  });
+  if (parts.length === 1) return parts[0];
+  const result: JsonSchema7 = { ...parts[0] };
+  for (const part of parts.slice(1)) {
+    result.required = [
+      ...new Set([...(result.required ?? []), ...(part.required ?? [])]),
+    ];
+    for (const key of ['minProperties', 'minItems'] as const) {
+      if (part[key] !== undefined)
+        result[key] = Math.max(result[key] ?? 0, part[key]!);
+    }
+    for (const key of ['maxProperties', 'maxItems'] as const) {
+      if (part[key] !== undefined)
+        result[key] = Math.min(result[key] ?? Infinity, part[key]!);
+    }
+    for (const key of ['properties', 'patternProperties'] as const) {
+      if (!part[key]) continue;
+      const entries: Record<string, JsonSchema7> = { ...result[key] };
+      for (const [name, schema] of Object.entries(part[key]!)) {
+        entries[name] = Object.prototype.hasOwnProperty.call(entries, name)
+          ? combineTreeSchemas([entries[name], schema], rootSchema)
+          : schema;
+      }
+      result[key] = entries;
+    }
+    if (part.additionalProperties === false)
+      result.additionalProperties = false;
+    else if (result.additionalProperties === undefined)
+      result.additionalProperties = part.additionalProperties;
+    if (result.type === undefined) result.type = part.type;
+    if (part.items !== undefined && result.items === undefined)
+      result.items = part.items;
+  }
+  if (
+    parts.some(
+      (part) =>
+        part.propertyNames !== undefined || part.additionalProperties === false,
+    )
+  ) {
+    // Admission and propertyNames constraints are conjunctive too; resolve each
+    // name schema before embedding it so local $refs keep their root context.
+    result.propertyNames = {
+      allOf: parts.map((part) => getPropertyNameSchema(part, rootSchema)),
+    };
+  }
+  return result;
+};
+
+const findTreePropertySchema = (
+  parent: JsonSchema,
+  key: string,
+  root: JsonSchema,
+): JsonSchema | undefined => {
+  const schemas: JsonSchema[] = [];
+  const declared = parent.properties?.[key];
+  if (declared) schemas.push(declared);
+  for (const [pattern, schema] of Object.entries(
+    parent.patternProperties ?? {},
+  )) {
+    if (new RegExp(pattern).test(key)) schemas.push(schema);
+  }
+  return schemas.length
+    ? combineTreeSchemas(schemas, root)
+    : findPropertySchema(parent, key, root);
 };
 
 export const cleanSchema = (schema: JsonSchema): JsonSchema => {
@@ -331,7 +419,7 @@ const prepareChildSchema = (
       ? { ...childSchema, title: itemLabel }
       : { type: [...JSON_TYPES], title: itemLabel };
   } else {
-    childSchema = findPropertySchema(currentSchema, key, rootSchema);
+    childSchema = findTreePropertySchema(currentSchema, key, rootSchema);
     childSchema = childSchema
       ? { ...childSchema, title: key }
       : { type: [...JSON_TYPES], title: key };
@@ -345,12 +433,6 @@ const prepareChildSchema = (
     childSchema.type = [...JSON_TYPES];
   }
 
-  if (childType === 'object') {
-    return prepareObjectSchema(childSchema);
-  }
-  if (childType === 'array') {
-    return prepareArraySchema(childSchema, rootSchema);
-  }
   return childSchema;
 };
 
@@ -386,9 +468,6 @@ const withoutEmptyChildren = (node: MixedTreeNode): MixedTreeNode => {
 
 const getDisplayTitle = (label: string, type: JsonDataType): string =>
   label || (type === 'array' ? '[]' : '{}');
-
-const isDynamicProperty = (parentSchema: JsonSchema, key: string): boolean =>
-  !parentSchema.properties?.[key];
 
 export const buildTreeFromData = (
   data: any,
@@ -434,6 +513,7 @@ export const buildTreeFromData = (
     canDelete = false,
   ): void => {
     const type = getJsonDataType(value);
+    currentSchema = combineTreeSchemas([currentSchema], rootSchema);
 
     if (type === 'object') {
       const objectSchema = prepareObjectSchema(currentSchema);
@@ -444,6 +524,9 @@ export const buildTreeFromData = (
         label: currentLabel,
         canRename,
         canDelete,
+        editorSchema: currentSchema.type
+          ? currentSchema
+          : { ...currentSchema, type: [...JSON_TYPES] },
         control: createTreeNodeControl(
           objectSchema,
           currentPath,
@@ -458,7 +541,7 @@ export const buildTreeFromData = (
         const childValue = value[key];
         const childPath = composePropertyPath(currentPath, key);
         const rawChildType = getJsonDataType(childValue);
-        const initialChildSchema = findPropertySchema(
+        const initialChildSchema = findTreePropertySchema(
           currentSchema,
           key,
           rootSchema,
@@ -476,7 +559,14 @@ export const buildTreeFromData = (
           rootSchema,
         );
         const childCanDelete = canDeleteChild(value, currentSchema, key);
-        const childCanRename = isDynamicProperty(currentSchema, key);
+        const childCanRename = canRenameDynamicProperty({
+          schema: currentSchema,
+          data: value,
+          propertyName: key,
+          enabled,
+          readonly,
+          restrict,
+        });
 
         if (childType === 'object' || childType === 'array') {
           traverse(
@@ -494,6 +584,7 @@ export const buildTreeFromData = (
             title: key,
             jsonType: childType,
             label: key,
+            editorSchema: childSchema,
             canRename: childCanRename,
             canDelete: childCanDelete,
             control: createTreeNodeControl(
@@ -514,6 +605,9 @@ export const buildTreeFromData = (
         label: currentLabel,
         canRename,
         canDelete,
+        editorSchema: currentSchema.type
+          ? currentSchema
+          : { ...currentSchema, type: [...JSON_TYPES] },
         control: createTreeNodeControl(
           arraySchema,
           currentPath,
@@ -556,6 +650,7 @@ export const buildTreeFromData = (
             title: childLabel,
             jsonType: resolvedChildType,
             label: childLabel,
+            editorSchema: childSchema,
             canRename: false,
             canDelete: childCanDelete,
             control: createTreeNodeControl(

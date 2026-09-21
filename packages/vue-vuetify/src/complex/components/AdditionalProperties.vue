@@ -99,6 +99,7 @@
                 icon
                 variant="text"
                 elevation="0"
+                :disabled="!canRenameProperty(element.propertyName)"
                 :aria-label="renamePropertyAriaLabel(element.propertyName)"
                 :title="renamePropertyAriaLabel(element.propertyName)"
               >
@@ -145,7 +146,7 @@
                 elevation="0"
                 :aria-label="translations.removeAriaLabel"
                 :disabled="
-                  removePropertyDisabled ||
+                  !canRemoveProperty(element.propertyName) ||
                   renamingPropertyName === element.propertyName
                 "
                 @click="removeProperty(element.propertyName)"
@@ -218,11 +219,11 @@ import {
 import { DisabledIconFocus } from '../../controls/directives';
 import { useStyles } from '../../styles';
 import {
+  canRenameDynamicProperty,
   composePropertyPath,
   findPropertySchema,
   getDynamicPropertyNameErrorMessage,
   getPropertyNameSchema,
-  haveAdditionalPropertyNamesChanged,
   validateDynamicPropertyName,
 } from '../../util/dynamicProperties';
 import {
@@ -235,7 +236,7 @@ type Input = ReturnType<typeof useJsonFormsControlWithDetail>;
 export interface AdditionalPropertyType {
   propertyName: string;
   path: string;
-  schema: JsonSchema | undefined;
+  schema: JsonSchema;
   uischema: UISchemaElement | undefined;
 }
 
@@ -334,7 +335,7 @@ export default defineComponent({
     };
 
     const appliedOptions = useControlAppliedOptions(props.input);
-    const additionalPropertyItems = ref<AdditionalPropertyType[]>(
+    const additionalPropertyItems = computed<AdditionalPropertyType[]>(() =>
       additionalKeys.value.map((propName) =>
         toAdditionalPropertyType(
           propName,
@@ -350,6 +351,15 @@ export default defineComponent({
     const additionalErrors = ref<ErrorObject[]>([]);
     const renamingPropertyName = ref<string | null>(null);
     const renameValue = ref('');
+    let renameTarget: unknown;
+    let renameTargetPath: string | undefined;
+    const captureRenameTarget = () => {
+      renameTarget = control.value.data;
+      renameTargetPath = control.value.path;
+    };
+    const isRenameTargetCurrent = () =>
+      renameTarget === control.value.data &&
+      renameTargetPath === control.value.path;
     const renameError = ref<string | null>(null);
 
     const propertyNameSchema = computed<JsonSchema7>(() =>
@@ -360,6 +370,7 @@ export default defineComponent({
       newPropertyName.value = typeof event.data === 'string' ? event.data : '';
       const validationError = validateDynamicPropertyName({
         propertyName: newPropertyName.value,
+        reservedPropertyNames: reservedPropertyNames.value,
         data: control.value.data,
       });
       const message = getDynamicPropertyNameErrorMessage(validationError, {
@@ -485,9 +496,12 @@ export default defineComponent({
       additionalErrors,
       renamingPropertyName,
       renameValue,
+      captureRenameTarget,
+      isRenameTargetCurrent,
       renameError,
       icons,
       isControlEditable,
+      canRenameDynamicProperty,
       propertyNameSchema,
       translations,
       translatePropertyName,
@@ -517,14 +531,6 @@ export default defineComponent({
           this.control.schema.maxProperties
       );
     },
-    removePropertyDisabled(): boolean {
-      return (
-        // add is disabled because the overall control is disabled
-        !this.isControlEditable(this.control) ||
-        // add is disabled because of contraints
-        (this.appliedOptions.restrict && this.minPropertiesReached)
-      );
-    },
     minPropertiesReached(): boolean {
       return (
         this.control.schema.minProperties !== undefined && // we have minProperties constraint
@@ -541,26 +547,11 @@ export default defineComponent({
     },
   },
   watch: {
-    'control.data': {
-      handler(newData, oldData) {
-        if (
-          haveAdditionalPropertyNamesChanged(
-            newData,
-            oldData,
-            this.reservedPropertyNames,
-          )
-        ) {
-          this.additionalPropertyItems = this.additionalKeys.map(
-            (propName: string) =>
-              this.toAdditionalPropertyType(
-                propName,
-                this.control.schema,
-                this.control.rootSchema,
-              ),
-          );
-        }
-      },
-      deep: true,
+    'control.data'() {
+      this.cancelRename();
+    },
+    'control.path'() {
+      this.cancelRename();
     },
   },
   methods: {
@@ -572,6 +563,7 @@ export default defineComponent({
         validateDynamicPropertyName({
           propertyName,
           currentPropertyName,
+          reservedPropertyNames: this.reservedPropertyNames,
           data: this.control.data,
           propertyNameSchema: this.propertyNameSchema,
           ajv: this.ajv,
@@ -589,7 +581,19 @@ export default defineComponent({
         },
       );
     },
+    canRenameProperty(propName: string): boolean {
+      return this.canRenameDynamicProperty({
+        schema: this.control.schema,
+        data: this.control.data,
+        propertyName: propName,
+        enabled: this.control.enabled,
+        readonly: this.control.readonly,
+        restrict: this.appliedOptions.restrict,
+      });
+    },
     startRename(propName: string): void {
+      if (!this.canRenameProperty(propName)) return;
+      this.captureRenameTarget();
       this.renamingPropertyName = propName;
       this.renameValue = propName;
       this.renameError = null;
@@ -602,7 +606,7 @@ export default defineComponent({
     renamePropertyDisabled(propName: string): boolean {
       const trimmed = this.renameValue.trim();
       return (
-        !this.isControlEditable(this.control) ||
+        !this.canRenameProperty(propName) ||
         !trimmed ||
         trimmed === propName ||
         Boolean(this.validatePropertyName(trimmed, propName))
@@ -615,6 +619,14 @@ export default defineComponent({
       );
     },
     renameProperty(propName: string): void {
+      if (
+        this.renamingPropertyName !== propName ||
+        !this.isRenameTargetCurrent() ||
+        !this.canRenameProperty(propName)
+      ) {
+        this.cancelRename();
+        return;
+      }
       const trimmed = this.renameValue.trim();
       this.renameError = this.validatePropertyName(trimmed, propName);
       if (
@@ -638,45 +650,40 @@ export default defineComponent({
       this.cancelRename();
     },
     addProperty() {
-      if (this.newPropertyName) {
-        const additionalProperty = this.toAdditionalPropertyType(
-          this.newPropertyName,
-          this.control.schema,
-          this.control.rootSchema,
-        );
-        if (additionalProperty) {
-          this.additionalPropertyItems = [
-            ...this.additionalPropertyItems,
-            additionalProperty,
-          ];
-        }
-
-        if (
-          typeof this.control.data === 'object' &&
-          additionalProperty.schema
-        ) {
-          const updatedData = { ...this.control.data };
-
-          updatedData[this.newPropertyName] = createDefaultValue(
-            additionalProperty.schema,
-            this.control.rootSchema,
-          );
-
-          // we need always to preserve the key even when the value is "empty"
-          this.input.handleChange(this.control.path, updatedData);
-        }
-      }
+      if (
+        !this.isControlEditable(this.control) ||
+        (this.appliedOptions.restrict && this.maxPropertiesReached) ||
+        !this.newPropertyName ||
+        this.validatePropertyName(this.newPropertyName)
+      )
+        return;
+      const data = this.control.data;
+      if (data != null && (typeof data !== 'object' || Array.isArray(data)))
+        return;
+      const additionalProperty = this.toAdditionalPropertyType(
+        this.newPropertyName,
+        this.control.schema,
+        this.control.rootSchema,
+      );
+      const updatedData = { ...data };
+      updatedData[this.newPropertyName] = createDefaultValue(
+        additionalProperty.schema,
+        this.control.rootSchema,
+      );
+      this.input.handleChange(this.control.path, updatedData);
       this.newPropertyName = '';
     },
-    removeProperty(propName: string): void {
-      this.additionalPropertyItems = this.additionalPropertyItems.filter(
-        (d: AdditionalPropertyType) => d.propertyName !== propName,
+    canRemoveProperty(propName: string): boolean {
+      return (
+        this.canRenameProperty(propName) &&
+        !(this.appliedOptions.restrict && this.minPropertiesReached)
       );
-      if (typeof this.control.data === 'object') {
-        const updatedData = { ...this.control.data };
-        delete updatedData[propName];
-        this.input.handleChange(this.control.path, updatedData);
-      }
+    },
+    removeProperty(propName: string): void {
+      if (!this.canRemoveProperty(propName)) return;
+      const updatedData = { ...this.control.data };
+      delete updatedData[propName];
+      this.input.handleChange(this.control.path, updatedData);
     },
   },
 }) as DefineComponent<any, any, any>;

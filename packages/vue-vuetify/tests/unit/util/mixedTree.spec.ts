@@ -1,4 +1,5 @@
-import type { ControlElement, JsonSchema } from '@jsonforms/core';
+import type { ControlElement } from '@jsonforms/core';
+import type { JsonSchema7 as JsonSchema } from '@jsonforms/core';
 import { describe, expect, it } from 'vitest';
 import {
   buildTreeFromData,
@@ -20,9 +21,9 @@ describe('mixed tree utilities', () => {
       required: ['requiredChild'],
       properties: {
         requiredChild: { type: 'object' },
-        list: { $ref: '#/$defs/list' },
+        list: { $ref: '#/definitions/list' },
       },
-      $defs: {
+      definitions: {
         list: { type: 'array', minItems: 1, items: { type: 'object' } },
       },
     };
@@ -151,7 +152,8 @@ describe('mixed tree utilities', () => {
       default: 'default value',
       minLength: 2,
       minItems: 1,
-      items: true,
+      // Boolean items are valid JSON Schema but absent from core's items type.
+      items: true as unknown as JsonSchema,
     };
     const originalSchema = structuredClone(schema);
     const control: ControlElement = {
@@ -287,10 +289,10 @@ describe('mixed tree utilities', () => {
     const rootSchema: JsonSchema = {
       type: 'array',
       items: [
-        { $ref: '#/$defs/count' },
+        { $ref: '#/definitions/count' },
         { type: 'object', additionalProperties: false },
       ],
-      $defs: {
+      definitions: {
         count: { type: 'number', minimum: 0 },
       },
     };

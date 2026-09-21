@@ -59,7 +59,7 @@
     "doc": "typedoc --tsconfig tsconfig.typedoc.json --name 'JSON Forms Vue Vuetify Renderers' --out docs --entryPoints 'src/**/*.ts' 'lib/index.d.ts'",
     "test": "vitest --watch=false",
     "build-only": "cross-env NODE_OPTIONS=\"--max-old-space-size=4096\" vite build",
-    "type-check": "vue-tsc -p tsconfig.lib.json"
+    "type-check": "vue-tsc -p tsconfig.lib.json && vue-tsc --noEmit -p tsconfig.vitest.json"
   },
   "peerDependencies": {
     "@jsonforms/core": "3.9.0-alpha.1",

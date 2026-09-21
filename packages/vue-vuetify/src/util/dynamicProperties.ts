@@ -11,6 +11,8 @@ export interface DynamicPropertyNameValidationOptions {
   propertyName: string;
   currentPropertyName?: string;
   data: unknown;
+  /** Names owned by the object schema, even when absent from data. */
+  reservedPropertyNames?: readonly string[];
   propertyNameSchema?: JsonSchema7;
   ajv?: Ajv;
 }
@@ -100,6 +102,34 @@ export const findPropertySchema = (
     : undefined;
 };
 
+/** Rename preserves property count, so only name ownership and editability matter. */
+export const canRenameDynamicProperty = ({
+  schema,
+  data,
+  propertyName,
+  enabled,
+  readonly,
+  restrict,
+}: {
+  schema: JsonSchema;
+  data: unknown;
+  propertyName: string;
+  enabled: boolean;
+  readonly: boolean;
+  restrict?: boolean;
+}): boolean =>
+  enabled &&
+  !readonly &&
+  typeof data === 'object' &&
+  data !== null &&
+  !Array.isArray(data) &&
+  Object.prototype.hasOwnProperty.call(data, propertyName) &&
+  !Object.prototype.hasOwnProperty.call(
+    schema.properties ?? {},
+    propertyName,
+  ) &&
+  !(restrict && schema.required?.includes(propertyName));
+
 export const getPropertyNameSchema = (
   schema: JsonSchema,
   rootSchema: JsonSchema,
@@ -140,9 +170,14 @@ export const validateDynamicPropertyName = ({
   propertyName,
   currentPropertyName,
   data,
+  reservedPropertyNames = [],
   propertyNameSchema,
   ajv,
 }: DynamicPropertyNameValidationOptions): DynamicPropertyNameValidationError | null => {
+  if (reservedPropertyNames.includes(propertyName)) {
+    return { reason: 'alreadyDefined' };
+  }
+
   if (!propertyName) {
     return null;
   }

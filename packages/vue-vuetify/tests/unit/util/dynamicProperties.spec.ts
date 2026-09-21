@@ -1,6 +1,8 @@
-import { createAjv, type JsonSchema } from '@jsonforms/core';
+import { createAjv } from '@jsonforms/core';
+import type { JsonSchema7 as JsonSchema } from '@jsonforms/core';
 import { describe, expect, it } from 'vitest';
 import {
+  canRenameDynamicProperty,
   composePropertyPath,
   findPropertySchema,
   getDynamicPropertyNameErrorMessage,
@@ -13,7 +15,7 @@ import {
 describe('dynamic property utilities', () => {
   const rootSchema: JsonSchema = {
     type: 'object',
-    $defs: {
+    definitions: {
       propertyName: {
         type: 'string',
         pattern: '^[A-Z][A-Za-z0-9]*$',
@@ -23,6 +25,38 @@ describe('dynamic property utilities', () => {
       },
     },
   };
+
+  describe('rename eligibility', () => {
+    it.each([
+      ['editable dynamic', {}, true],
+      ['readonly', { readonly: true }, false],
+      ['disabled', { enabled: false }, false],
+      [
+        'required and restricted',
+        { schema: { required: ['key'] }, restrict: true },
+        false,
+      ],
+      ['required and unrestricted', { schema: { required: ['key'] } }, true],
+      [
+        'declared false schema',
+        { schema: { properties: { key: false } } },
+        false,
+      ],
+      ['missing property', { data: {} }, false],
+      ['array index', { data: [1], propertyName: '0' }, false],
+    ])('%s', (_, overrides, expected) => {
+      expect(
+        canRenameDynamicProperty({
+          schema: {},
+          data: { key: 1 },
+          propertyName: 'key',
+          enabled: true,
+          readonly: false,
+          ...overrides,
+        } as Parameters<typeof canRenameDynamicProperty>[0]),
+      ).toBe(expected);
+    });
+  });
 
   describe('getPathAncestorPaths', () => {
     it('derives ancestors from an absolute nested control path', () => {
@@ -43,7 +77,7 @@ describe('dynamic property utilities', () => {
       const schema: JsonSchema = {
         type: 'object',
         patternProperties: {
-          '^count': { $ref: '#/$defs/patternValue' },
+          '^count': { $ref: '#/definitions/patternValue' },
         },
         additionalProperties: true,
       };
@@ -72,7 +106,7 @@ describe('dynamic property utilities', () => {
     it('resolves a propertyNames $ref against the root schema', () => {
       const schema = {
         type: 'object',
-        propertyNames: { $ref: '#/$defs/propertyName' },
+        propertyNames: { $ref: '#/definitions/propertyName' },
       } as JsonSchema;
 
       expect(getPropertyNameSchema(schema, rootSchema)).toEqual({
@@ -114,7 +148,7 @@ describe('dynamic property utilities', () => {
   describe('property name schema validation', () => {
     it.each([
       ['inline', { minLength: 5 }],
-      ['referenced', { $ref: '#/$defs/name' }],
+      ['referenced', { $ref: '#/definitions/name' }],
     ])(
       'combines %s propertyNames with allowed patterns',
       (_, propertyNames) => {
@@ -127,9 +161,13 @@ describe('dynamic property utilities', () => {
             '^bar_': { type: 'number' },
           },
         } as JsonSchema;
-        const propertyNameSchema = getPropertyNameSchema(schema, {
-          $defs: { name: { minLength: 5 } },
-        });
+        const referencedRoot: JsonSchema = {
+          definitions: { name: { minLength: 5 } },
+        };
+        const propertyNameSchema = getPropertyNameSchema(
+          schema,
+          referencedRoot,
+        );
         const ajv = createAjv();
 
         for (const propertyName of ['foo_title', 'bar_count']) {
@@ -218,6 +256,29 @@ describe('dynamic property utilities', () => {
   });
 
   describe('validateDynamicPropertyName', () => {
+    it.each([undefined, {}, { other: 1 }])(
+      'reserves declared names independently of data: %j',
+      (data) => {
+        expect(
+          validateDynamicPropertyName({
+            propertyName: 'fixed',
+            reservedPropertyNames: ['fixed'],
+            data,
+          }),
+        ).toEqual({ reason: 'alreadyDefined' });
+      },
+    );
+
+    it('does not reserve inherited Object prototype names', () => {
+      expect(
+        validateDynamicPropertyName({
+          propertyName: 'toString',
+          reservedPropertyNames: Object.keys({ fixed: false }),
+          data: {},
+        }),
+      ).toBeNull();
+    });
+
     const ajv = createAjv();
 
     it('rejects another existing property but allows the current name', () => {
@@ -251,7 +312,7 @@ describe('dynamic property utilities', () => {
       const propertyNameSchema = getPropertyNameSchema(
         {
           type: 'object',
-          propertyNames: { $ref: '#/$defs/propertyName' },
+          propertyNames: { $ref: '#/definitions/propertyName' },
         } as JsonSchema,
         rootSchema,
       );

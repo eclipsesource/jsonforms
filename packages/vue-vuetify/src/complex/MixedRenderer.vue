@@ -17,12 +17,12 @@
                     :required="control.required"
                     :error-messages="control.errors"
                     :items="mixedRenderInfos"
-                    :clearable="isControlEditable(control)"
+                    :clearable="canClearType"
                     :item-title="
                       (item: SchemaRenderInfo) => t(item.label, item.label)
                     "
                     item-value="index"
-                    v-model="selectedIndex"
+                    :model-value="selectedIndex"
                     v-bind="vuetifyProps('v-select')"
                     @update:model-value="handleSelectChange"
                     @click.stop
@@ -178,8 +178,9 @@
                   <div class="mixed-detail-pane">
                     <dispatch-renderer
                       v-if="selectedNode"
-                      :schema="selectedNode.control.schema"
-                      :uischema="selectedNode.control.uischema"
+                      :key="selectedNode.nodeId"
+                      :schema="selectedNodeEditor.schema"
+                      :uischema="selectedNodeEditor.uischema"
                       :path="selectedNode.control.path"
                       :renderers="control.renderers"
                       :cells="control.cells"
@@ -208,10 +209,10 @@
           :required="control.required"
           :error-messages="control.errors"
           :items="mixedRenderInfos"
-          :clearable="isControlEditable(control)"
+          :clearable="canClearType"
           :item-title="(item: SchemaRenderInfo) => t(item.label, item.label)"
           item-value="index"
-          v-model="selectedIndex"
+          :model-value="selectedIndex"
           v-bind="vuetifyProps('v-select')"
           @update:model-value="handleSelectChange"
           @click.stop
@@ -236,7 +237,11 @@
     </template>
 
     <template v-else>
-      <div class="mixed-primitive">
+      <div
+        :class="
+          isSelectedComplexType ? 'mixed-selected-complex' : 'mixed-primitive'
+        "
+      >
         <v-select
           class="select"
           v-if="mixedRenderInfos"
@@ -248,10 +253,10 @@
           :required="control.required"
           :error-messages="control.errors"
           :items="mixedRenderInfos"
-          :clearable="isControlEditable(control)"
+          :clearable="canClearType"
           :item-title="(item: SchemaRenderInfo) => t(item.label, item.label)"
           item-value="index"
-          v-model="selectedIndex"
+          :model-value="selectedIndex"
           v-bind="vuetifyProps('v-select')"
           @update:model-value="handleSelectChange"
           @click.stop
@@ -312,6 +317,11 @@ import {
 } from '@/i18n/i18nUtil';
 import {
   createDefaultValue,
+  findUISchema,
+  isControl,
+  toDataPath,
+  type UISchemaElement,
+  type Layout,
   getI18nKeyPrefix,
   resolveData,
   type ControlElement,
@@ -336,6 +346,7 @@ import {
   watch,
   type DefineComponent,
   type InjectionKey,
+  type ComputedRef,
 } from 'vue';
 import {
   VBtn,
@@ -361,7 +372,6 @@ import { DisabledIconFocus } from '../controls';
 import type { IconValue } from '../icons';
 import {
   composePropertyPath,
-  findPropertySchema,
   getDynamicPropertyNameErrorMessage,
   getPathAncestorPaths,
   getPropertyNameSchema,
@@ -390,6 +400,7 @@ import {
 
 interface NavigationContext {
   selectPath: (path: string) => void;
+  selectedPath: ComputedRef<string | undefined>;
 }
 
 const NavigationContextSymbol: InjectionKey<NavigationContext> = Symbol.for(
@@ -427,8 +438,7 @@ const controlRenderer = defineComponent({
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    const path = props.path;
-    const parentSchema = props.schema;
+    const path = computed(() => props.path);
     const input = useJsonFormsControl(props);
     const vuetifyControl = useCombinatorTranslations(useVuetifyControl(input));
     const valueType = ref(getJsonDataType(input.control.value.data));
@@ -446,6 +456,8 @@ const controlRenderer = defineComponent({
     const pendingDeleteNode = ref<MixedTreeNode | null>(null);
     const renamingNodeId = ref<string | null>(null);
     const renameValue = ref('');
+    let renameTarget: unknown;
+    let renameTargetPath: string | undefined;
     const renameError = ref<string | null>(null);
     const i18nAdditionalPropertiesPrefix = getI18nKeyPrefix(
       input.control.value.schema,
@@ -491,7 +503,7 @@ const controlRenderer = defineComponent({
     >(() => {
       const control = input.control.value;
       const result = createMixedRenderInfos(
-        parentSchema,
+        props.schema,
         control.schema,
         control.rootSchema,
         control.uischema,
@@ -515,9 +527,29 @@ const controlRenderer = defineComponent({
         isRoot && (valueType.value === 'object' || valueType.value === 'array'),
     );
 
+    const isSelectedComplexType = computed(
+      () =>
+        !isRoot &&
+        navigationContext?.selectedPath.value === input.control.value.path &&
+        (valueType.value === 'object' || valueType.value === 'array'),
+    );
+
+    const isArrayItem = computed(() => {
+      const currentPath = input.control.value.path;
+      if (!currentPath) return false;
+      const parentPath = currentPath.includes('.')
+        ? currentPath.slice(0, currentPath.lastIndexOf('.'))
+        : '';
+      return Array.isArray(resolveData(jsonforms.core?.data, parentPath));
+    });
+    const canClearType = computed(
+      () => isControlEditable(input.control.value) && !isArrayItem.value,
+    );
+
     const isNestedComplexType = computed(
       () =>
         !isRoot &&
+        !isSelectedComplexType.value &&
         (valueType.value === 'object' || valueType.value === 'array'),
     );
 
@@ -557,7 +589,7 @@ const controlRenderer = defineComponent({
         : undefined,
     );
 
-    const treeNodes = computed(() =>
+    const allTreeNodes = computed(() =>
       showTreeView.value
         ? buildTreeFromData(
             input.control.value.data,
@@ -567,22 +599,104 @@ const controlRenderer = defineComponent({
             vuetifyControl.computedLabel.value,
             input.control.value.enabled,
             input.control.value.readonly,
-            showPrimitivesInTree.value,
+            true,
             mixedTranslations.itemLabel,
             !!vuetifyControl.appliedOptions.value.restrict,
           )
         : [],
     );
 
+    // Presentation filters must not determine whether the selected data exists.
+    // Keep the full tree for editing/selection, and hide leaves only in the view.
+    const treeNodes = computed(() => {
+      if (showPrimitivesInTree.value) return allTreeNodes.value;
+      const complexNodes = (nodes: MixedTreeNode[]): MixedTreeNode[] =>
+        nodes
+          .filter(
+            (node) => node.jsonType === 'object' || node.jsonType === 'array',
+          )
+          .map((node) => {
+            const children = complexNodes(node.children ?? []);
+            const rest = { ...node };
+            delete rest.children;
+            return children.length ? { ...rest, children } : rest;
+          });
+      return complexNodes(allTreeNodes.value);
+    });
+
     const selectedNode = computed(() =>
-      findNodeById(treeNodes.value, activeNodeId.value),
+      findNodeById(allTreeNodes.value, activeNodeId.value),
     );
+
+    const findDetailControl = (
+      ui: UISchemaElement,
+      relativePath: string,
+    ): ControlElement | undefined => {
+      if (isControl(ui) && toDataPath(ui.scope) === relativePath) return ui;
+      for (const element of (ui as Layout).elements ?? []) {
+        const found = findDetailControl(element, relativePath);
+        if (found) return found;
+      }
+      return undefined;
+    };
+
+    const nodeUISchema = (node: MixedTreeNode): ControlElement => {
+      if (node.control.path === input.control.value.path) {
+        return { ...input.control.value.uischema, scope: '#' };
+      }
+      // Resolve authored controls even when their ancestor forms have never
+      // been visited. Navigation must not replace their detail/options with a
+      // generated Control merely because the tree was used to reach them.
+      const ancestors = getPathAncestorPaths(
+        input.control.value.path,
+        node.control.path,
+      ).reverse();
+      for (const ancestorPath of ancestors) {
+        const ancestor = findNodeById(
+          allTreeNodes.value,
+          toTreeNodeId(ancestorPath),
+        );
+        if (!ancestor) continue;
+        const control = nodeUISchema(ancestor);
+        const detail =
+          control.options?.[`${ancestor.jsonType}-detail`] ??
+          control.options?.detail;
+        const ui = findUISchema(
+          jsonforms.uischemas ?? [],
+          ancestor.control.schema,
+          control.scope,
+          ancestorPath,
+          'VerticalLayout',
+          { ...control, options: { ...control.options, detail } },
+          input.control.value.rootSchema,
+        );
+        const relativePath = node.control.path.slice(
+          ancestorPath ? ancestorPath.length + 1 : 0,
+        );
+        const authored = findDetailControl(ui, relativePath);
+        if (authored) return { ...authored, scope: '#' };
+      }
+      return node.control.uischema;
+    };
+
+    const selectedNodeEditor = computed(() => {
+      const node = selectedNode.value!;
+      if (node.control.path === input.control.value.path) {
+        const detail = uischema.value ?? input.control.value.uischema;
+        return {
+          schema: node.control.schema,
+          uischema:
+            detail.type === 'Control' ? { ...detail, scope: '#' } : detail,
+        };
+      }
+      return { schema: node.editorSchema, uischema: nodeUISchema(node) };
+    });
 
     const activatedTreeNodes = computed<string[]>({
       get: () => [activeNodeId.value],
       set: (value) => {
         const nodeId = value[0];
-        if (nodeId && findNodeById(treeNodes.value, nodeId)) {
+        if (nodeId && findNodeById(allTreeNodes.value, nodeId)) {
           activeNodeId.value = nodeId;
         }
       },
@@ -603,7 +717,10 @@ const controlRenderer = defineComponent({
     };
 
     if (isRoot) {
-      provide(NavigationContextSymbol, { selectPath });
+      provide(NavigationContextSymbol, {
+        selectPath,
+        selectedPath: computed(() => selectedNode.value?.control.path),
+      });
     }
 
     watch(
@@ -611,6 +728,7 @@ const controlRenderer = defineComponent({
       (newValue, oldValue) => {
         if (newValue !== oldValue) {
           pendingDeleteNode.value = null;
+          cancelRename();
           const oldValueType = valueType.value;
           valueType.value = getJsonDataType(newValue);
 
@@ -636,7 +754,7 @@ const controlRenderer = defineComponent({
     );
 
     watch(
-      treeNodes,
+      allTreeNodes,
       (nodes) => {
         const allNodeIds = flattenTree(nodes).map((node) => node.nodeId);
         const allNodeIdSet = new Set(allNodeIds);
@@ -649,6 +767,11 @@ const controlRenderer = defineComponent({
         ).filter((id) => allNodeIdSet.has(id));
       },
       { immediate: true },
+    );
+
+    watch(
+      () => input.control.value.path,
+      () => cancelRename(),
     );
 
     const getRelativePath = (nodePath: string): string | null => {
@@ -668,46 +791,22 @@ const controlRenderer = defineComponent({
         : input.control.value.path;
     };
 
-    const getParentSchema = (parentPath: string): JsonSchema | undefined => {
-      const parentRelativePath = getRelativePath(parentPath);
-      if (parentRelativePath === null) {
-        return resolvedSchema.value ?? input.control.value.schema;
-      }
-
-      const segments = parentRelativePath.split('.');
-      let currentSchema: JsonSchema =
-        resolvedSchema.value ?? input.control.value.schema;
-
-      for (const segment of segments) {
-        currentSchema = resolveSchema(
-          currentSchema,
-          input.control.value.rootSchema,
-        );
-        if (currentSchema.type === 'array') {
-          currentSchema = (currentSchema.items as JsonSchema) ?? {};
-        } else {
-          currentSchema =
-            currentSchema.properties?.[segment] ??
-            findPropertySchema(
-              currentSchema,
-              segment,
-              input.control.value.rootSchema,
-            ) ??
-            {};
-        }
-      }
-
-      return currentSchema;
-    };
+    // Tree construction already resolves properties, patterns, references and
+    // tuple items. Reuse that schema rather than walking the path a second time.
+    const getParentSchema = (parentPath: string): JsonSchema | undefined =>
+      findNodeById(allTreeNodes.value, toTreeNodeId(parentPath))?.control
+        .schema;
 
     const toggleShowPrimitives = () => {
       showPrimitivesInTree.value = !showPrimitivesInTree.value;
     };
 
     const startRename = (node: MixedTreeNode) => {
-      if (!node.canRename) {
+      if (!findNodeById(allTreeNodes.value, node.nodeId)?.canRename) {
         return;
       }
+      renameTarget = input.control.value.data;
+      renameTargetPath = input.control.value.path;
       renamingNodeId.value = node.nodeId;
       renameValue.value = node.label;
       renameError.value = null;
@@ -734,6 +833,9 @@ const controlRenderer = defineComponent({
       const validationError = validateDynamicPropertyName({
         propertyName,
         currentPropertyName: node.label,
+        reservedPropertyNames: Object.keys(
+          resolvedParentSchema.properties ?? {},
+        ),
         data: parentData,
         propertyNameSchema: getPropertyNameSchema(
           resolvedParentSchema,
@@ -760,7 +862,15 @@ const controlRenderer = defineComponent({
     };
 
     const commitRename = (node: MixedTreeNode) => {
-      if (renamingNodeId.value !== node.nodeId) {
+      if (
+        renamingNodeId.value !== node.nodeId ||
+        renameTarget !== input.control.value.data ||
+        renameTargetPath !== input.control.value.path
+      ) {
+        return;
+      }
+      if (!findNodeById(allTreeNodes.value, node.nodeId)?.canRename) {
+        cancelRename();
         return;
       }
 
@@ -807,7 +917,7 @@ const controlRenderer = defineComponent({
     const commitDelete = (node: MixedTreeNode) => {
       // Recheck current eligibility: restrictions or readonly may have changed
       // while the confirmation dialog was open.
-      const currentNode = findNodeById(treeNodes.value, node.nodeId);
+      const currentNode = findNodeById(allTreeNodes.value, node.nodeId);
       if (!currentNode?.canDelete || !isControlEditable(input.control.value)) {
         return;
       }
@@ -845,7 +955,7 @@ const controlRenderer = defineComponent({
     };
 
     const deleteNode = (node: MixedTreeNode) => {
-      const currentNode = findNodeById(treeNodes.value, node.nodeId);
+      const currentNode = findNodeById(allTreeNodes.value, node.nodeId);
       if (!currentNode?.canDelete || !isControlEditable(input.control.value))
         return;
       const relativePath = getRelativePath(currentNode.control.path);
@@ -871,6 +981,13 @@ const controlRenderer = defineComponent({
     };
 
     const handleSelectChange = (newIndex: number | null | undefined): void => {
+      if (
+        !isControlEditable(input.control.value) ||
+        (newIndex == null && !canClearType.value) ||
+        newIndex === selectedIndex.value
+      )
+        return;
+      if (newIndex != null && !mixedRenderInfos.value[newIndex]) return;
       const newData =
         newIndex != null
           ? createDefaultValue(
@@ -936,6 +1053,9 @@ const controlRenderer = defineComponent({
       isNestedComplexType,
       treeNodes,
       selectedNode,
+      selectedNodeEditor,
+      isSelectedComplexType,
+      canClearType,
       activatedTreeNodes,
       activeNodeId,
       openedNodes,
@@ -965,6 +1085,16 @@ export default controlRenderer;
 
 <style scoped>
 .mixed-renderer {
+  width: 100%;
+}
+
+.mixed-selected-complex {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.mixed-selected-complex > * {
   width: 100%;
 }
 
