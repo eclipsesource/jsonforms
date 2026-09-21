@@ -1259,3 +1259,50 @@ it('keeps an untouched or reset property-name field free of errors while guardin
   expect(field.text()).not.toContain('Property name is invalid');
   expect(add.attributes('disabled')).toBeDefined();
 });
+
+it.each([true, false, { type: 'string' }])(
+  'combines all dynamic property patterns with fallback %j',
+  async (additionalProperties) => {
+    for (const reverse of [false, true]) {
+      const entries: [string, JsonSchema][] = [
+        ['^price_', { type: 'number', minimum: 0 }],
+        ['_total$', { maximum: 1000 }],
+      ];
+      const wrapper = mountEditor(
+        { price_total: 500 },
+        {
+          type: 'object',
+          patternProperties: Object.fromEntries(
+            reverse ? entries.reverse() : entries,
+          ),
+          additionalProperties,
+        },
+        { restrict: true },
+      );
+      await nextTick();
+      const property = vmOf(wrapper, 'additional-properties')
+        .additionalPropertyItems[0];
+      expect(property.schema).toMatchObject({
+        type: 'number',
+        minimum: 0,
+        maximum: 1000,
+      });
+      const input = wrapper
+        .findAll('input')
+        .find((field) => field.element.value === '500');
+      expect(input).toBeDefined();
+      await input!.setValue('1001');
+      await vi.waitFor(() =>
+        expect(wrapper.vm.event.data).toEqual({ price_total: 1001 }),
+      );
+      expect(wrapper.vm.event.errors).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            keyword: 'maximum',
+            instancePath: '/price_total',
+          }),
+        ]),
+      );
+    }
+  },
+);

@@ -1,3 +1,4 @@
+import { additionalPropertySchema } from './additionalPropertySchema';
 import { Resolve, type JsonSchema, type JsonSchema7 } from '@jsonforms/core';
 import type Ajv from 'ajv';
 import type { ErrorObject } from 'ajv';
@@ -81,28 +82,7 @@ export const findPropertySchema = (
       : declaredSchema;
   }
 
-  const pattern = Object.keys(parentSchema.patternProperties ?? {}).find(
-    (candidate) => new RegExp(candidate).test(propertyName),
-  );
-  if (pattern) {
-    const patternSchema = parentSchema.patternProperties?.[pattern];
-    return typeof patternSchema?.$ref === 'string'
-      ? (Resolve.schema(rootSchema, patternSchema.$ref, rootSchema) ??
-          patternSchema)
-      : patternSchema;
-  }
-
-  const additionalProperties = parentSchema.additionalProperties;
-  if (typeof additionalProperties === 'object') {
-    return typeof additionalProperties.$ref === 'string'
-      ? (Resolve.schema(rootSchema, additionalProperties.$ref, rootSchema) ??
-          additionalProperties)
-      : additionalProperties;
-  }
-
-  return additionalProperties === true
-    ? { additionalProperties: true }
-    : undefined;
+  return additionalPropertySchema(propertyName, parentSchema, rootSchema);
 };
 
 /** Rename preserves property count, so only name ownership and editability matter. */

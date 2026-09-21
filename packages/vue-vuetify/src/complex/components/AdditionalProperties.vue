@@ -308,7 +308,12 @@ export default defineComponent({
 
       propSchema = propSchema ?? {};
 
-      if (propSchema.type === undefined) {
+      if (
+        propSchema.type === undefined &&
+        !propSchema.allOf &&
+        !propSchema.anyOf &&
+        !propSchema.oneOf
+      ) {
         propSchema = {
           ...propSchema,
           type: [
