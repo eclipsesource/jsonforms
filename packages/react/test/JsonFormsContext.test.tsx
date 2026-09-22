@@ -25,10 +25,12 @@
 
 import React from 'react';
 import Enzyme, { mount } from 'enzyme';
+import { act } from 'react-dom/test-utils';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import {
   CellProps,
   ControlProps,
+  DispatchPropsOfMultiEnumControl,
   JsonSchema,
   NOT_APPLICABLE,
   OwnPropsOfEnum,
@@ -41,6 +43,7 @@ import {
   withJsonFormsDetailProps,
   withJsonFormsEnumCellProps,
   withJsonFormsEnumProps,
+  withJsonFormsMultiEnumProps,
 } from '../src/JsonFormsContext';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -145,6 +148,85 @@ test('withJsonFormsEnumProps - enum: should supply control and enum props', () =
     { value: 'amber', label: 'amber' },
     { value: 'green', label: 'green' },
     { value: null, label: 'null' },
+  ]);
+});
+
+test('withJsonFormsMultiEnumProps - should update options when an externally supplied options own prop changes after mount', () => {
+  let setExternalOptions: (options: OwnPropsOfEnum['options']) => void;
+
+  const MockMultiEnumControlUnwrapped = (
+    _: ControlProps & OwnPropsOfEnum & DispatchPropsOfMultiEnumControl
+  ) => {
+    return <></>;
+  };
+
+  const MockMultiEnumControl = withJsonFormsMultiEnumProps(
+    MockMultiEnumControlUnwrapped
+  );
+
+  const ExternalOptionsProvider = (ownProps: any) => {
+    const [options, setOptions] = React.useState<OwnPropsOfEnum['options']>([
+      { value: 'red', label: 'Red' },
+    ]);
+    React.useEffect(() => {
+      setExternalOptions = setOptions;
+    }, []);
+    return <MockMultiEnumControl {...ownProps} options={options} />;
+  };
+
+  const schema = {
+    type: 'object',
+    properties: {
+      colors: {
+        type: 'array',
+        items: {
+          type: 'string',
+          oneOf: [
+            { const: 'red', title: 'Schema Red' },
+            { const: 'green', title: 'Schema Green' },
+            { const: 'blue', title: 'Schema Blue' },
+          ],
+        },
+      },
+    },
+  };
+
+  const renderers = [
+    {
+      tester: rankWith(1, () => true),
+      renderer: ExternalOptionsProvider,
+    },
+  ];
+
+  const uischema = {
+    type: 'Control',
+    scope: '#/properties/colors',
+  };
+
+  const wrapper = mount(
+    <JsonForms
+      data={{}}
+      schema={schema}
+      uischema={uischema}
+      renderers={renderers}
+    />
+  );
+
+  expect(wrapper.find(MockMultiEnumControlUnwrapped).props().options).toEqual([
+    { value: 'red', label: 'Red' },
+  ]);
+
+  act(() => {
+    setExternalOptions([
+      { value: 'red', label: 'Red' },
+      { value: 'green', label: 'Green' },
+    ]);
+  });
+  wrapper.update();
+
+  expect(wrapper.find(MockMultiEnumControlUnwrapped).props().options).toEqual([
+    { value: 'red', label: 'Red' },
+    { value: 'green', label: 'Green' },
   ]);
 });
 

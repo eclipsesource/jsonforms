@@ -338,7 +338,7 @@ export const ctxToOneOfEnumControlProps = (
 
 export const ctxToMultiEnumControlProps = (
   ctx: JsonFormsStateContext,
-  props: OwnPropsOfControl
+  props: OwnPropsOfControl & OwnPropsOfEnum
 ) => {
   const enumProps = mapStateToMultiEnumControlProps(
     { jsonforms: { ...ctx } },
@@ -350,7 +350,7 @@ export const ctxToMultiEnumControlProps = (
    */
   const options = useMemo(
     () => enumProps.options,
-    [enumProps.schema, ctx.i18n?.translate]
+    [props.options, enumProps.schema, ctx.i18n?.translate]
   );
   return { ...enumProps, options };
 };
