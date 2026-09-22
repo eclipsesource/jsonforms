@@ -68,10 +68,10 @@
     ]
   },
   "dependencies": {
-    "@types/json-schema": "^7.0.3",
+    "@types/json-schema": "^7.0.15",
     "ajv": "^8.18.0",
-    "ajv-formats": "^2.1.0",
-    "lodash": "^4.17.21"
+    "ajv-formats": "^2.1.1",
+    "lodash": "^4.18.1"
   },
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
