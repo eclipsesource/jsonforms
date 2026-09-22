@@ -535,18 +535,30 @@ const controlRenderer = defineComponent({
         renameValue.value,
       );
 
+    // The control binding produces a new object for any form-state update.
+    // Project stable inputs so unrelated edits do not rebuild schemas or trees.
+    const treeData = computed(() => input.control.value.data);
+    const controlSchema = computed(() => input.control.value.schema);
+    const rootSchema = computed(() => input.control.value.rootSchema);
+    const controlUISchema = computed(() => input.control.value.uischema);
+    const controlPath = computed(() => input.control.value.path);
+    const treeEnabled = computed(() => input.control.value.enabled);
+    const treeReadonly = computed(() => input.control.value.readonly);
+    const treeRestrict = computed(
+      () => !!vuetifyControl.appliedOptions.value.restrict,
+    );
+
     const mixedRenderInfos = computed<
       (SchemaRenderInfo & {
         index: number;
       })[]
     >(() => {
-      const control = input.control.value;
       const result = createMixedRenderInfos(
         props.schema,
-        control.schema,
-        control.rootSchema,
-        control.uischema,
-        control.path,
+        controlSchema.value,
+        rootSchema.value,
+        controlUISchema.value,
+        controlPath.value,
         jsonforms.uischemas || [],
       );
 
@@ -634,16 +646,16 @@ const controlRenderer = defineComponent({
     const allTreeNodes = computed(() =>
       showTreeView.value
         ? buildTreeFromData(
-            input.control.value.data,
-            resolvedSchema.value ?? input.control.value.schema,
-            input.control.value.rootSchema,
-            input.control.value.path,
+            treeData.value,
+            resolvedSchema.value ?? controlSchema.value,
+            rootSchema.value,
+            controlPath.value,
             vuetifyControl.computedLabel.value,
-            input.control.value.enabled,
-            input.control.value.readonly,
+            treeEnabled.value,
+            treeReadonly.value,
             true,
             mixedTranslations.itemLabel,
-            !!vuetifyControl.appliedOptions.value.restrict,
+            treeRestrict.value,
           )
         : [],
     );
