@@ -52,6 +52,8 @@ import {
   UISchemaTester,
   unsetReadonly,
 } from '@jsonforms/core';
+import cloneDeep from 'lodash/cloneDeep';
+import { depsChanged } from '../util/deps';
 
 @Component({
   selector: 'app-array-layout-renderer',
@@ -84,7 +86,7 @@ import {
       <p *ngIf="noData">{{ translations.noDataMessage }}</p>
       <div
         *ngFor="
-          let item of [].constructor(data);
+          let item of itemProps;
           let idx = index;
           trackBy: trackByFn;
           last as last;
@@ -93,7 +95,7 @@ import {
       >
         <mat-card class="array-item" appearance="outlined">
           <mat-card-content>
-            <jsonforms-outlet [renderProps]="getProps(idx)"></jsonforms-outlet>
+            <jsonforms-outlet [renderProps]="item"></jsonforms-outlet>
           </mat-card-content>
           <mat-card-actions *ngIf="isEnabled()">
             <button
@@ -184,10 +186,31 @@ export class ArrayLayoutRenderer
   moveItemUp: (path: string, index: number) => () => void;
   moveItemDown: (path: string, index: number) => () => void;
   removeItems: (path: string, toDelete: number[]) => () => void;
+  /**
+   * The registered UI schemas. Kept up to date for subclasses; the renderer
+   * itself resolves the item UI schema from the mapped props.
+   */
   uischemas: {
     tester: UISchemaTester;
     uischema: UISchemaElement;
   }[];
+  /**
+   * The UI schema to render for each of the array's items.
+   *
+   * This is always a defensive copy: `findUISchema` can hand back the inline
+   * `options.detail` UI schema or a UI schema from the registry, i.e. objects
+   * owned by the user, and we set the `readonly` option on it.
+   */
+  detailUiSchema: UISchemaElement;
+  /**
+   * The props to render each of the array's items with.
+   *
+   * Also determines how many items are rendered, so that the rendered items and
+   * their props can't get out of sync.
+   */
+  itemProps: OwnPropsOfRenderer[] = [];
+  private detailUiSchemaDeps: unknown[] | undefined;
+  private itemPropsDeps: unknown[] | undefined;
   mapToProps(
     state: JsonFormsState
   ): StatePropsOfArrayLayout & { translations: ArrayTranslations } {
@@ -234,27 +257,73 @@ export class ArrayLayoutRenderer
     this.noData = !props.data || props.data === 0;
     this.uischemas = props.uischemas;
     this.translations = props.translations;
+    this.detailUiSchema = this.resolveDetailUiSchema(props);
+    this.updateItemProps(props, this.detailUiSchema);
   }
-  getProps(index: number): OwnPropsOfRenderer {
-    const uischema = findUISchema(
-      this.uischemas,
-      this.scopedSchema,
-      this.uischema.scope,
-      this.propsPath,
-      undefined,
-      this.uischema,
-      this.rootSchema
+  private resolveDetailUiSchema(props: ArrayLayoutProps): UISchemaElement {
+    const deps = [
+      props.uischema,
+      props.uischemas,
+      props.schema,
+      props.rootSchema,
+      props.path,
+      this.isEnabled(),
+    ];
+    if (!depsChanged(this.detailUiSchemaDeps, deps)) {
+      return this.detailUiSchema;
+    }
+    this.detailUiSchemaDeps = deps;
+
+    // `findUISchema` can hand back the inline `options.detail` UI schema or a
+    // UI schema from the registry, i.e. objects owned by the user. We set the
+    // `readonly` option on the result, so we have to work on a copy.
+    const detailUiSchema = cloneDeep(
+      findUISchema(
+        props.uischemas,
+        props.schema,
+        props.uischema.scope,
+        props.path,
+        undefined,
+        props.uischema,
+        props.rootSchema
+      )
     );
     if (this.isEnabled()) {
-      unsetReadonly(uischema);
+      unsetReadonly(detailUiSchema);
     } else {
-      setReadonly(uischema);
+      setReadonly(detailUiSchema);
     }
-    return {
-      schema: this.scopedSchema,
-      path: Paths.compose(this.propsPath, `${index}`),
-      uischema,
-    };
+    return detailUiSchema;
+  }
+  /**
+   * Precalculates the props of every item.
+   *
+   * These must not be created in the template: `jsonforms-outlet` re-evaluates
+   * its inputs whenever the bound object changes, and doing so deep clones the
+   * whole form state, which would then happen once per item per change
+   * detection cycle.
+   */
+  private updateItemProps(
+    props: ArrayLayoutProps,
+    detailUiSchema: UISchemaElement
+  ): void {
+    // `props.data` is the item count, but it is only derived from `length`, so
+    // it is `undefined` for data that isn't an array. Treat that as no items.
+    const itemCount = props.data > 0 ? props.data : 0;
+    const deps = [detailUiSchema, props.schema, props.path, itemCount];
+    if (!depsChanged(this.itemPropsDeps, deps)) {
+      return;
+    }
+    this.itemPropsDeps = deps;
+
+    this.itemProps = Array.from({ length: itemCount }, (_unused, index) => ({
+      schema: props.schema,
+      path: Paths.compose(props.path, `${index}`),
+      uischema: detailUiSchema,
+    }));
+  }
+  getProps(index: number): OwnPropsOfRenderer {
+    return this.itemProps[index];
   }
   trackByFn(index: number) {
     return index;
