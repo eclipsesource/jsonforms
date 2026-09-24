@@ -36,6 +36,7 @@ import { JsonFormsDetailComponent } from '../src/library/other/master-detail/det
 import { getJsonFormsService, setupMockStore } from './common';
 import { Actions } from '@jsonforms/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import cloneDeep from 'lodash/cloneDeep';
 
 describe('Master detail', () => {
   let fixture: ComponentFixture<MasterListComponent>;
@@ -400,4 +401,24 @@ describe('Master detail', () => {
       expect(fixture.nativeElement.children[0].style.display).toBe('none');
     });
   }));
+
+  it('does not modify the given ui schema', () => {
+    const ownUischema = cloneDeep(uischema);
+    const pristine = cloneDeep(uischema);
+
+    setupMockStore(fixture, { uischema: ownUischema, schema, data });
+    getJsonFormsService(component).updateCore(Actions.init(data, schema));
+    component.ngOnInit();
+    getJsonFormsService(component).setReadonly(true);
+    fixture.detectChanges();
+
+    expect(ownUischema).toEqual(pristine);
+    expect(component.detailUISchema).not.toBe(ownUischema.options.detail);
+    expect(component.detailUISchema.elements[0].options.readonly).toBe(true);
+
+    // the detail is rebuilt from the original, so re-enabling actually restores it
+    getJsonFormsService(component).setReadonly(false);
+    fixture.detectChanges();
+    expect(component.detailUISchema.elements[0].options?.readonly).toBeFalsy();
+  });
 });
