@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import { CommonModule } from '@angular/common';
+import { ChangeDetectorRef } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -30,7 +31,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { JsonFormsAngularService, JsonFormsModule } from '@jsonforms/angular';
+import { By } from '@angular/platform-browser';
 import { ControlElement } from '@jsonforms/core';
+import cloneDeep from 'lodash/cloneDeep';
 import {
   GroupLayoutRenderer,
   groupLayoutTester,
@@ -214,4 +217,83 @@ describe('Object Control', () => {
       expect(fixture.nativeElement.querySelector('input').disabled).toBeFalsy();
     });
   }));
+
+  it('does not modify the given ui schema', () => {
+    const uischema = {
+      type: 'Control',
+      scope: '#/properties/foo',
+      options: {
+        detail: {
+          type: 'Group',
+          elements: [{ type: 'Control', scope: '#/properties/foo_1' }],
+        },
+      },
+    };
+    const pristine = cloneDeep(uischema);
+
+    component.uischema = uischema;
+    component.schema = schema2;
+    component.disabled = true;
+    getJsonFormsService(component).init({
+      core: {
+        data: {},
+        schema: schema2,
+        uischema: undefined,
+      },
+    });
+    getJsonFormsService(component).registerRenderers(renderers);
+    component.ngOnInit();
+    fixture.detectChanges();
+
+    expect(uischema).toEqual(pristine);
+    expect(component.detailUiSchema).not.toBe(uischema.options.detail);
+    expect(component.detailUiSchema.elements[0].options.readonly).toBe(true);
+  });
+
+  it('propagates a changed enabled state to the rendered detail', () => {
+    const uischema = {
+      type: 'Control',
+      scope: '#/properties/foo',
+      options: {
+        detail: {
+          type: 'Group',
+          elements: [{ type: 'Control', scope: '#/properties/foo_1' }],
+        },
+      },
+    };
+
+    component.uischema = uischema;
+    component.schema = schema2;
+    getJsonFormsService(component).init({
+      core: {
+        data: {},
+        schema: schema2,
+        uischema: undefined,
+      },
+    });
+    getJsonFormsService(component).registerRenderers(renderers);
+    component.ngOnInit();
+    fixture.detectChanges();
+
+    const detailControl = () =>
+      fixture.debugElement.query(By.directive(TextControlRenderer))
+        .componentInstance;
+
+    expect(detailControl().uischema.options?.readonly).toBeFalsy();
+
+    // the component is OnPush and nothing below it reports the change, so in a
+    // real form it has to schedule the check itself. As the fixture root it is
+    // checked unconditionally, hence the explicit expectation below.
+    const changeDetectorRef = component.changeDetectorRef as ChangeDetectorRef;
+    spyOn(changeDetectorRef, 'markForCheck').and.callThrough();
+
+    getJsonFormsService(component).setReadonly(true);
+    expect(changeDetectorRef.markForCheck).toHaveBeenCalled();
+    fixture.detectChanges();
+    expect(detailControl().uischema.options.readonly).toBe(true);
+
+    getJsonFormsService(component).setReadonly(false);
+    fixture.detectChanges();
+    expect(detailControl().uischema.options?.readonly).toBeFalsy();
+  });
 });
