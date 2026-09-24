@@ -357,4 +357,36 @@ describe('Array layout ui schema handling', () => {
     expect(detail.elements[0].options.readonly).toBe(true);
     expect(uischema).toEqual(pristine);
   });
+
+  it('keeps a readonly option set on a detail control when enabled', () => {
+    const uischema = {
+      type: 'Control',
+      scope: '#/properties/test',
+      options: {
+        detail: {
+          type: 'HorizontalLayout',
+          elements: [
+            {
+              type: 'Control',
+              scope: '#/properties/test1',
+              options: { readonly: true },
+            },
+            { type: 'Control', scope: '#/properties/test2' },
+          ],
+        },
+      },
+    };
+
+    setupMockStore(fixture, {
+      data: { test: [{}] },
+      schema: TEST_SCHEMA,
+      uischema,
+    });
+    fixture.componentInstance.ngOnInit();
+    fixture.detectChanges();
+
+    const detail = fixture.componentInstance.getProps(0).uischema as Layout;
+    expect(detail.elements[0].options.readonly).toBe(true);
+    expect(detail.elements[1].options?.readonly).toBeUndefined();
+  });
 });

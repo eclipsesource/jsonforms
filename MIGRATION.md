@@ -2,6 +2,21 @@
 
 ## Migration to JSON Forms 3.9
 
+### Angular Material detail renderers no longer modify the given UI schema
+
+The Angular Material array layout, object control and list-with-detail renderers determine the UI schema for their contents via `findUISchema`, which returns the inline `options.detail` UI schema or a UI schema from the `uischemas` registry as-is, i.e. the very object the application passed in.
+These renderers then modified that result in place, i.e. they modified the application's UI schema (see [#2343](https://github.com/eclipsesource/jsonforms/issues/2343)).
+All three set the `readonly` option on it; the object control additionally overwrote the detail's `type` and `label`.
+They now work on a copy instead.
+
+Consequences:
+
+- Nothing is written into your UI schema anymore. If you relied on reading the `readonly` option, the `type` or the `label` back out of your own object, you need to track that state yourself.
+- The array layout no longer forces the `readonly` option to `false` on the controls of an enabled array's detail. That option takes precedence over both the global config and the JSON schema, so the write suppressed all of them. For controls inside an array's `options.detail`, the following now take effect where they previously did not, in this order of precedence: a `readonly`/`readOnly` option you set yourself, a `readonly`/`readOnly` entry in the global config, and a `readOnly: true` in the corresponding JSON schema. If a field inside an array detail unexpectedly became readonly, one of these is now being honored.
+- The detail UI schema is only recalculated when one of its inputs changes. Modifying your UI schema in place, without replacing the object, is not picked up - as everywhere else in JSON Forms, provide a new UI schema object instead.
+- The array layout renders one item per array entry. Previously, data that was neither an array nor empty - for example an object at a path the schema declares as an array - rendered a single item at a path that does not exist, next to the "No data" message. Such data now renders no items at all. It is still reported as a validation error as before.
+- `ArrayLayoutRenderer` now precalculates the props of its items in `mapAdditionalProps` and exposes them as `itemProps`, which also drives how many items are rendered. `getProps(index)` reads from that array and returns `undefined` for an out of range index instead of synthesizing props. If you subclass the renderer and override `mapAdditionalProps`, call `super.mapAdditionalProps(props)`, otherwise no items are rendered.
+
 ### Data update paths treat all segments literally
 
 Data updates (e.g. dispatched `update` actions) previously wrote to the form data via lodash's `set`/`unset`, which interpret bracket notation and array indices in paths.

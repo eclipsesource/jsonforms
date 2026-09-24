@@ -50,7 +50,6 @@ import {
   StatePropsOfArrayLayout,
   UISchemaElement,
   UISchemaTester,
-  unsetReadonly,
 } from '@jsonforms/core';
 import cloneDeep from 'lodash/cloneDeep';
 import { depsChanged } from '../util/deps';
@@ -288,9 +287,7 @@ export class ArrayLayoutRenderer
         props.rootSchema
       )
     );
-    if (this.isEnabled()) {
-      unsetReadonly(detailUiSchema);
-    } else {
+    if (!this.isEnabled()) {
       setReadonly(detailUiSchema);
     }
     return detailUiSchema;
