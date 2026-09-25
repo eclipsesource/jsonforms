@@ -1,6 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { clearAllIds, createAjv } from '@jsonforms/core';
-import { markRaw } from 'vue';
 import { extendedVuetifyRenderers } from '../../../src';
 import { mountJsonForms } from '../util/util';
 
@@ -27,7 +26,7 @@ describe('AdditionalProperties nested AJV', () => {
 
   it('mounts a map whose key pattern is only valid without the `u` flag', () => {
     // A parent form configured with `unicodeRegExp: false`
-    const ajv = markRaw(createAjv({ unicodeRegExp: false }));
+    const ajv = createAjv({ unicodeRegExp: false });
     expect(() =>
       mountJsonForms(
         { secretFiles: {} },
