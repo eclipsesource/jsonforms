@@ -24,16 +24,14 @@
 */
 import type { StatePropsOfMasterItem } from '@jsonforms/core';
 import { withJsonFormsMasterListItemProps } from '@jsonforms/react';
-import {
-  Avatar,
-  IconButton,
-  ListItemButton,
-  ListItemAvatar,
-  ListItemSecondaryAction,
-  ListItemText,
-  Tooltip,
-} from '@mui/material';
-import { Delete } from '@mui/icons-material';
+import Avatar from '@mui/material/Avatar';
+import IconButton from '@mui/material/IconButton';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import ListItemText from '@mui/material/ListItemText';
+import Tooltip from '@mui/material/Tooltip';
+import Delete from '@mui/icons-material/Delete';
 import React from 'react';
 
 export const ListWithDetailMasterItem = ({

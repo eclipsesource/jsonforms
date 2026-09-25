@@ -37,4 +37,35 @@ module.exports = {
       version: 'detect',
     },
   },
+  overrides: [
+    {
+      // Scoped to src/ - example/ and test/ aren't part of the published
+      // bundle, so their import shape doesn't affect consumers' bundle size.
+      files: ['src/**/*.ts', 'src/**/*.tsx'],
+      rules: {
+        'no-restricted-imports': [
+          'error',
+          {
+            paths: [
+              {
+                name: '@mui/material',
+                message:
+                  "Import from the specific component path instead (e.g. '@mui/material/Button') - importing from the package root pulls in the whole barrel. See https://mui.com/material-ui/guides/minimizing-bundle-size/",
+              },
+              {
+                name: '@mui/icons-material',
+                message:
+                  "Import from the specific icon path instead (e.g. '@mui/icons-material/Add') - importing from the package root pulls in the whole barrel. See https://mui.com/material-ui/guides/minimizing-bundle-size/",
+              },
+              {
+                name: '@mui/x-date-pickers',
+                message:
+                  "Import from the specific component path instead (e.g. '@mui/x-date-pickers/DatePicker') - importing from the package root pulls in the whole barrel. See https://mui.com/material-ui/guides/minimizing-bundle-size/",
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
 };

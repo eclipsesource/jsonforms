@@ -24,7 +24,8 @@
 */
 import React from 'react';
 import { CellProps, WithClassname } from '@jsonforms/core';
-import { Switch, InputProps } from '@mui/material';
+import Switch from '@mui/material/Switch';
+import { InputProps } from '@mui/material/Input';
 import merge from 'lodash/merge';
 
 interface MuiToggleInputProps {

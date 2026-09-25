@@ -36,7 +36,8 @@ import {
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
-import { Tab, Tabs } from '@mui/material';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
 import { JsonFormsDispatch, withJsonFormsOneOfProps } from '@jsonforms/react';
 import CombinatorProperties from './CombinatorProperties';
 

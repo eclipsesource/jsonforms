@@ -24,15 +24,13 @@
 */
 import React, { useState } from 'react';
 import { CellProps, WithClassname } from '@jsonforms/core';
-import {
-  IconButton,
-  InputAdornment,
-  InputBaseComponentProps,
-  InputProps,
-  useTheme,
-} from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import { InputBaseComponentProps } from '@mui/material/InputBase';
+import { InputProps } from '@mui/material/Input';
+import { useTheme } from '@mui/material/styles';
 import merge from 'lodash/merge';
-import { Close } from '@mui/icons-material';
+import Close from '@mui/icons-material/Close';
 import {
   JsonFormsTheme,
   WithInputProps,
