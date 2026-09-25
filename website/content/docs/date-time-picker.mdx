@@ -1,0 +1,107 @@
+---
+id: date-time-picker
+title: Date and Time Picker
+description: Configure Date and Time Picker
+---
+
+import { OneOfLabel, PropertyLabel, SchemaLabel, UiSchemaLabel } from '../../src/components/docs/labels'
+
+import {
+  TimeSchema,
+  TimeUiSchema,
+  TimeUiOptionSchema,
+  DateSchema,
+  DateUiSchema,
+  DateUiSchemaOptions,
+  DateTimeSchema,
+  DateTimeUiSchema,
+  DateTimeUiOptionSchema,
+  TimeOptionTable,
+  DateOptionTable,
+  DateTimeOptionTable,
+  LocalizationExample
+} from '../../src/components/docs/date-time-picker';
+
+JSON Forms supports JSON Schema's "date", "time" and "date-time" formats. Additional options to customize the "date", "time" and "date-time" pickers are offered for the React Material renderer set.
+
+## Time Picker
+The time picker will be used when `format: "time"` is specified for a string property in the JSON Schema. Alternatively `format: "time"` can also be specified via the UI Schema options.
+
+### Schema Based
+A control will be rendered as a time picker when the format of the corresponding string property is set to "time" in the JSON Schema.
+<TimeSchema />
+
+### UI Schema Based
+A string control will also be rendered as a time picker by setting the property "format" to "time" in the UI Schema options.
+<TimeUiSchema />
+
+### Options
+The React Material renderer set offers additional UI Schema options to customize the appearance of the time picker text input as well as the picker itself. Please also refer to the localization section of this page to get information on how to customize the locales.
+<TimeOptionTable />
+
+The following example showcases some of the options.
+The text input is configured to only show the full hours while both hours and minutes are saved into the data.
+The picker presents itself in `am/pm` format.
+<TimeUiOptionSchema/>
+
+
+## Date Picker
+The date picker will be used when `format: "date"` is specified for a string property in the JSON Schema. Alternatively `format: "date"` can also be specified via the UI Schema options.
+
+### Schema Based
+A control will be rendered as a date picker when the format of the corresponding string property is set to "date" in the JSON Schema.
+<DateSchema />
+
+### UI Schema Based
+A string control will also be rendered as a date picker by setting the property "format" to "date" in the UI Schema options.
+<DateUiSchema />
+
+### Options
+The React Material renderer set offers additional UI Schema options to customize the appearance of the date picker text input as well as the picker itself. Please also refer to the localization section of this page to get information on how to customize the locales.
+<DateOptionTable/>
+The following example showcases some of the options. Only Year and month are selected as views, this means the user is only able to pick a year and a month, but not the day. We are also only saving the year and month to the data as we configured it in the dateFormat options.
+<DateUiSchemaOptions/>
+
+## Date-Time Picker
+The date-time picker will be used when `format: "date-time"` is specified for a string property in the JSON Schema. Alternatively `format: "date-time"` can also be specified via the UI Schema options.
+
+### Schema Based
+A control will be rendered as a date-time picker when the format of the corresponding string property is set to "date-time" in the JSON Schema.
+<DateTimeSchema />
+
+### UI Schema Based
+A string control will also be rendered as a date-time picker by setting the property "format" to "date-time" in the UI Schema options.
+<DateTimeUiSchema />
+
+### Options
+The React Material renderer set offers additional UI Schema options to customize the appearance of the date-time picker text input as well as the picker itself. Please also refer to the localization section of this page to get information on how to customize the locales.
+<DateTimeOptionTable/>
+The following example showcases some of the options.
+The text input is configured to only show the day, month and year, while hours and minutes are also saved into the data.
+The time picker presents itself in `am/pm` format.
+<DateTimeUiOptionSchema />
+
+## Localization
+
+The Material Renderer set let’s you customize the picker´s modal by selecting a locale. For this JSON Forms is using the dayjs library. You need to import dayjs and set the global “locale” variable. In the example below we import dayjs, the locals for English and German and set the global “locale” variable to English. You can do this anywhere in your application.
+```js
+import dayjs from 'dayjs';
+import 'dayjs/locale/de';
+import 'dayjs/locale/en';
+
+dayjs.locale("en");
+```
+JSON Forms will now use the global variable for the picker´s modal. You can use JSON Forms in your preferred way. For example, like in the code snippet below. 
+```js
+<JsonForms
+  schema={schema}
+  uischema={uischema}
+  data={data}
+  renderers={materialRenderers}
+  cells={materialCells}
+  validationMode={currentValidationMode}
+/>
+```
+You can see the result in the example below. It is also possible to switch between different locales like we did in our example.
+
+<LocalizationExample/>

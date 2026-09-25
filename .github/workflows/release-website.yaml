@@ -1,0 +1,149 @@
+name: 'Release Website'
+
+# Pin the documentation website to a stable JSON Forms release and (re)deploy
+# it. This is intentionally separate from publish.yaml: a website failure must
+# never taint or block an already-published npm release, and the site also
+# needs to be redeployable on its own (docs, news, community changes) without
+# cutting a library release.
+#
+# Run manually after a stable release, passing the released version. It bumps
+# the website's @jsonforms/* dependencies to that exact version, verifies the
+# site still builds, pushes the bump to master, and triggers the Netlify build
+# hook so production is published against the latest stable release.
+#
+# The optional regenerate_docs flag rebuilds the typedoc API docs from the
+# current state of master (no tag checkout) and commits the refreshed
+# website/static/api along with the bump. Use it while master still matches
+# the released code, i.e. right after a stable release.
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        type: 'string'
+        description: 'stable JSON Forms version to pin the website to (e.g. 3.9.0)'
+        required: true
+      skip_bump:
+        type: 'boolean'
+        description: 'mark to skip the dependency bump and only rebuild/redeploy the current website state'
+        required: false
+        default: false
+      skip_deploy:
+        type: 'boolean'
+        description: 'mark to only bump and push, skipping the Netlify deploy trigger'
+        required: false
+        default: false
+      regenerate_docs:
+        type: 'boolean'
+        description: 'mark to regenerate the API docs from the current repository state and commit them'
+        required: false
+        default: false
+
+jobs:
+  release-website:
+    permissions:
+      contents: 'write'
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: 'actions/checkout@v4'
+        with:
+          ref: 'master'
+          token: '${{ secrets.JSONFORMS_PUBLISH_PAT }}'
+
+      - name: 'Configure Git Credentials'
+        run: |
+          git config user.name "jsonforms-publish[bot]"
+          git config user.email "jsonforms-publish@eclipsesource.com"
+
+      - name: 'Setup node'
+        uses: 'actions/setup-node@v4'
+        with:
+          node-version-file: 'website/.nvmrc'
+          registry-url: 'https://registry.npmjs.org'
+
+      - uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda # v4.1.0
+        if: github.event.inputs.regenerate_docs == 'true'
+        name: 'Install pnpm'
+        with:
+          run_install: false
+
+      # Regenerate the API docs from the current repository state. The
+      # packages are built first because typedoc resolves cross-package types
+      # from the built lib/ output (same order as ci.yaml).
+      - name: 'Regenerate API docs'
+        if: github.event.inputs.regenerate_docs == 'true'
+        run: |
+          pnpm i --frozen-lockfile
+          pnpm run build
+          pnpm run doc
+          ./website/copy-docs.sh
+
+      # Ensure the released version is actually on npmjs before pinning to it.
+      - name: 'Wait for npm propagation'
+        if: github.event.inputs.skip_bump == 'false'
+        run: |
+          for i in $(seq 1 30); do
+            if [ "$(npm view @jsonforms/core@${VERSION} version 2> /dev/null)" = "${VERSION}" ]; then
+              exit 0
+            fi
+            echo "@jsonforms/core@${VERSION} not yet available on npmjs, retrying..."
+            sleep 20
+          done
+          echo "@jsonforms/core@${VERSION} did not appear on npmjs in time"
+          exit 1
+        env:
+          VERSION: ${{ github.event.inputs.version }}
+
+      - name: 'Bump @jsonforms/* to the released version'
+        if: github.event.inputs.skip_bump == 'false'
+        working-directory: 'website'
+        run: |
+          npm install --save-exact \
+            @jsonforms/core@${VERSION} \
+            @jsonforms/react@${VERSION} \
+            @jsonforms/material-renderers@${VERSION} \
+            @jsonforms/examples@${VERSION}
+        env:
+          VERSION: ${{ github.event.inputs.version }}
+
+      # Install (in case the bump was skipped) and verify the site builds before
+      # pushing or deploying, so we never publish a broken bump.
+      - name: 'Install'
+        if: github.event.inputs.skip_bump == 'true'
+        working-directory: 'website'
+        run: npm ci
+
+      - name: 'Verify build'
+        working-directory: 'website'
+        run: npm run build:current
+
+      - name: 'Commit and push'
+        if: github.event.inputs.skip_bump == 'false' || github.event.inputs.regenerate_docs == 'true'
+        run: |
+          if [ "${SKIP_BUMP}" = "false" ]; then
+            git add website/package.json website/package-lock.json
+          fi
+          if [ "${REGENERATE_DOCS}" = "true" ]; then
+            git add website/static/api
+          fi
+          if git diff --cached --quiet; then
+            echo "Website already up to date, nothing to commit."
+          elif [ "${SKIP_BUMP}" = "false" ] && [ "${REGENERATE_DOCS}" = "true" ]; then
+            git commit -m "docs: pin website to JSON Forms ${VERSION} and regenerate API docs"
+            git push origin HEAD:master
+          elif [ "${SKIP_BUMP}" = "false" ]; then
+            git commit -m "docs: pin website to JSON Forms ${VERSION}"
+            git push origin HEAD:master
+          else
+            git commit -m "docs: regenerate website API docs"
+            git push origin HEAD:master
+          fi
+        env:
+          VERSION: ${{ github.event.inputs.version }}
+          SKIP_BUMP: ${{ github.event.inputs.skip_bump }}
+          REGENERATE_DOCS: ${{ github.event.inputs.regenerate_docs }}
+
+      # Trigger the production build on Netlify. Automatic Netlify deploys are
+      # disabled, so this hook is what publishes the site.
+      - name: 'Trigger website deploy'
+        if: github.event.inputs.skip_deploy == 'false'
+        run: curl -fsS -X POST -d '{}' "${{ secrets.NETLIFY_WEBSITE_BUILD_HOOK }}"
