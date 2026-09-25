@@ -22,6 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import { ChangeDetectorRef } from '@angular/core';
 import { ComponentFixture, waitForAsync } from '@angular/core/testing';
 import { MatIcon } from '@angular/material/icon';
 import { MatBadge } from '@angular/material/badge';
@@ -31,7 +32,13 @@ import {
   MatCardContent,
   MatCardActions,
 } from '@angular/material/card';
-import { beforeEachLayoutTest, setupMockStore } from './common';
+import { Actions, Layout } from '@jsonforms/core';
+import cloneDeep from 'lodash/cloneDeep';
+import {
+  beforeEachLayoutTest,
+  getJsonFormsService,
+  setupMockStore,
+} from './common';
 import {
   ArrayLayoutRenderer,
   ArrayLayoutRendererTester,
@@ -93,21 +100,23 @@ describe('Array layout tester', () => {
     ).toBe(4);
   });
 });
+const TEST_BED_CONFIG = {
+  declarations: [LayoutChildrenRenderPropsPipe],
+  imports: [
+    MatIcon,
+    MatBadge,
+    MatTooltip,
+    MatCard,
+    MatCardContent,
+    MatCardActions,
+  ],
+};
+
 describe('Array layout', () => {
   let fixture: ComponentFixture<any>;
 
   beforeEach(waitForAsync(() => {
-    fixture = beforeEachLayoutTest(ArrayLayoutRenderer, {
-      declarations: [LayoutChildrenRenderPropsPipe],
-      imports: [
-        MatIcon,
-        MatBadge,
-        MatTooltip,
-        MatCard,
-        MatCardContent,
-        MatCardActions,
-      ],
-    });
+    fixture = beforeEachLayoutTest(ArrayLayoutRenderer, TEST_BED_CONFIG);
   }));
 
   it('render with no data the error count should be 1', () => {
@@ -174,5 +183,236 @@ describe('Array layout', () => {
 
       expect(matBadgeElement?.textContent).toBe('4');
     });
+  });
+});
+
+describe('Array layout ui schema handling', () => {
+  let fixture: ComponentFixture<ArrayLayoutRenderer>;
+
+  beforeEach(waitForAsync(() => {
+    fixture = beforeEachLayoutTest(ArrayLayoutRenderer, TEST_BED_CONFIG);
+  }));
+
+  // https://github.com/eclipsesource/jsonforms/issues/2343
+  it('does not modify the given ui schema when rendering items', () => {
+    const uischema = cloneDeep(TEST_UISCHEMA);
+    const pristine = cloneDeep(TEST_UISCHEMA);
+
+    setupMockStore(fixture, {
+      data: { test: [{}] },
+      schema: TEST_SCHEMA,
+      uischema,
+    });
+    fixture.componentInstance.ngOnInit();
+    fixture.detectChanges();
+
+    expect(uischema).toEqual(pristine);
+  });
+
+  it('does not hand out the inline options.detail instance', () => {
+    const uischema = cloneDeep(TEST_UISCHEMA);
+
+    setupMockStore(fixture, {
+      data: { test: [{}] },
+      schema: TEST_SCHEMA,
+      uischema,
+    });
+    fixture.componentInstance.ngOnInit();
+    fixture.detectChanges();
+
+    const detail = fixture.componentInstance.getProps(0).uischema;
+    expect(detail).not.toBe(uischema.options.detail);
+    expect(detail.type).toBe('HorizontalLayout');
+  });
+
+  it('returns a stable copy of the detail ui schema across state emissions', () => {
+    const uischema = cloneDeep(TEST_UISCHEMA);
+
+    setupMockStore(fixture, {
+      data: { test: [{}] },
+      schema: TEST_SCHEMA,
+      uischema,
+    });
+    fixture.componentInstance.ngOnInit();
+    fixture.detectChanges();
+
+    const detail = fixture.componentInstance.getProps(0).uischema;
+    expect(detail).not.toBe(uischema.options.detail);
+
+    getJsonFormsService(fixture.componentInstance).updateCore(
+      Actions.update('test', () => [{}, {}])
+    );
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.getProps(0).uischema).toBe(detail);
+    expect(fixture.componentInstance.getProps(1).uischema).toBe(detail);
+  });
+
+  it('schedules a check so that state changes reach the template', () => {
+    const uischema = cloneDeep(TEST_UISCHEMA);
+
+    setupMockStore(fixture, {
+      data: { test: [{}] },
+      schema: TEST_SCHEMA,
+      uischema,
+    });
+    fixture.componentInstance.ngOnInit();
+    fixture.detectChanges();
+
+    // the renderer is OnPush, so without this nothing repaints for a change
+    // that did not originate from an event in its own view. As the fixture root
+    // it is checked unconditionally, hence the explicit expectation.
+    const changeDetectorRef = (fixture.componentInstance as any)
+      .changeDetectorRef as ChangeDetectorRef;
+    spyOn(changeDetectorRef, 'markForCheck').and.callThrough();
+
+    getJsonFormsService(fixture.componentInstance).updateCore(
+      Actions.update('test', () => [{}, {}])
+    );
+
+    expect(changeDetectorRef.markForCheck).toHaveBeenCalled();
+  });
+
+  it('renders no items for data that is not an array', () => {
+    const uischema = cloneDeep(TEST_UISCHEMA);
+
+    setupMockStore(fixture, {
+      // schema violating data, which JSON Forms reports rather than rejects
+      data: { test: {} },
+      schema: TEST_SCHEMA,
+      uischema,
+    });
+    fixture.componentInstance.ngOnInit();
+
+    // must not render an item whose props were never calculated
+    expect(() => fixture.detectChanges()).not.toThrow();
+    expect(fixture.componentInstance.itemProps).toEqual([]);
+    expect(fixture.nativeElement.querySelectorAll('.array-item').length).toBe(
+      0
+    );
+  });
+
+  it('reuses the item props instead of recreating them per change detection cycle', () => {
+    const uischema = cloneDeep(TEST_UISCHEMA);
+
+    setupMockStore(fixture, {
+      data: { test: [{}] },
+      schema: TEST_SCHEMA,
+      uischema,
+    });
+    fixture.componentInstance.ngOnInit();
+    fixture.detectChanges();
+
+    const itemProps = fixture.componentInstance.getProps(0);
+    expect(fixture.componentInstance.getProps(0)).toBe(itemProps);
+
+    // an emission that leaves the array's structure alone must not invalidate
+    // them either, otherwise the outlet re-reads - and deep clones - the state
+    getJsonFormsService(fixture.componentInstance).updateCore(
+      Actions.update('test.0.test1', () => 'a value')
+    );
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.getProps(0)).toBe(itemProps);
+  });
+
+  it('clears the readonly option again when the array is re-enabled', () => {
+    const uischema = cloneDeep(TEST_UISCHEMA);
+
+    setupMockStore(fixture, {
+      data: { test: [{}] },
+      schema: TEST_SCHEMA,
+      uischema,
+    });
+    fixture.componentInstance.ngOnInit();
+    getJsonFormsService(fixture.componentInstance).setReadonly(true);
+    fixture.detectChanges();
+
+    let detail = fixture.componentInstance.getProps(0).uischema as Layout;
+    expect(detail.elements[0].options.readonly).toBe(true);
+
+    // the detail is rebuilt from the original, so this is not sticky
+    getJsonFormsService(fixture.componentInstance).setReadonly(false);
+    fixture.detectChanges();
+
+    detail = fixture.componentInstance.getProps(0).uischema as Layout;
+    expect(detail.elements[0].options?.readonly).toBeFalsy();
+  });
+
+  it('does not modify a ui schema coming from the registry', () => {
+    const registered = {
+      type: 'HorizontalLayout',
+      elements: [{ type: 'Control', scope: '#/properties/test1' }],
+    };
+    const pristine = cloneDeep(registered);
+    // no options.detail, so the registry is consulted
+    const uischema = { type: 'Control', scope: '#/properties/test' };
+
+    fixture.componentInstance.disabled = true;
+    setupMockStore(fixture, {
+      data: { test: [{}] },
+      schema: TEST_SCHEMA,
+      uischema,
+    });
+    getJsonFormsService(fixture.componentInstance).setUiSchemas([
+      { tester: () => 2, uischema: registered },
+    ]);
+    fixture.componentInstance.ngOnInit();
+    fixture.detectChanges();
+
+    const detail = fixture.componentInstance.getProps(0).uischema as Layout;
+    expect(registered).toEqual(pristine);
+    expect(detail).not.toBe(registered);
+    expect(detail.elements[0].options.readonly).toBe(true);
+  });
+
+  it('marks the detail ui schema readonly when disabled without touching the original', () => {
+    const uischema = cloneDeep(TEST_UISCHEMA);
+    const pristine = cloneDeep(TEST_UISCHEMA);
+
+    fixture.componentInstance.disabled = true;
+    setupMockStore(fixture, {
+      data: { test: [{}] },
+      schema: TEST_SCHEMA,
+      uischema,
+    });
+    fixture.componentInstance.ngOnInit();
+    fixture.detectChanges();
+
+    const detail = fixture.componentInstance.getProps(0).uischema as Layout;
+    expect(detail.elements[0].options.readonly).toBe(true);
+    expect(uischema).toEqual(pristine);
+  });
+
+  it('keeps a readonly option set on a detail control when enabled', () => {
+    const uischema = {
+      type: 'Control',
+      scope: '#/properties/test',
+      options: {
+        detail: {
+          type: 'HorizontalLayout',
+          elements: [
+            {
+              type: 'Control',
+              scope: '#/properties/test1',
+              options: { readonly: true },
+            },
+            { type: 'Control', scope: '#/properties/test2' },
+          ],
+        },
+      },
+    };
+
+    setupMockStore(fixture, {
+      data: { test: [{}] },
+      schema: TEST_SCHEMA,
+      uischema,
+    });
+    fixture.componentInstance.ngOnInit();
+    fixture.detectChanges();
+
+    const detail = fixture.componentInstance.getProps(0).uischema as Layout;
+    expect(detail.elements[0].options.readonly).toBe(true);
+    expect(detail.elements[1].options?.readonly).toBeUndefined();
   });
 });

@@ -24,7 +24,13 @@
 */
 import isEmpty from 'lodash/isEmpty';
 import startCase from 'lodash/startCase';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  inject,
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
 import {
   JsonFormsControlWithDetail,
   JsonFormsModule,
@@ -36,23 +42,23 @@ import {
   Generate,
   GroupLayout,
   isObjectControl,
+  OwnPropsOfRenderer,
   RankedTester,
   rankWith,
   setReadonly,
   UISchemaElement,
 } from '@jsonforms/core';
 import cloneDeep from 'lodash/cloneDeep';
+import { depsChanged } from '../util/deps';
 
 @Component({
   selector: 'ObjectRenderer',
   template: `
     <mat-card class="object-layout" appearance="outlined">
       <jsonforms-outlet
-        [uischema]="detailUiSchema"
-        [schema]="scopedSchema"
-        [path]="propsPath"
-      >
-      </jsonforms-outlet>
+        *ngIf="renderProps"
+        [renderProps]="renderProps"
+      ></jsonforms-outlet>
     </mat-card>
   `,
   styles: [
@@ -63,40 +69,83 @@ import cloneDeep from 'lodash/cloneDeep';
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [JsonFormsModule, MatCardModule],
+  imports: [CommonModule, JsonFormsModule, MatCardModule],
 })
 export class ObjectControlRenderer extends JsonFormsControlWithDetail {
+  /**
+   * The UI schema to render for the object's detail.
+   *
+   * This is always a defensive copy: `findUISchema` can hand back the inline
+   * `options.detail` UI schema or a UI schema from the registry, i.e. objects
+   * owned by the user, and we modify the result below.
+   */
   detailUiSchema: UISchemaElement;
+  /**
+   * The props to render the detail with.
+   *
+   * Bound as a whole instead of as separate `uischema`, `schema` and `path`
+   * inputs: `jsonforms-outlet` only re-dispatches when its `renderProps` setter
+   * is called, so with separate inputs a new detail UI schema would only be
+   * picked up on the next emitted state.
+   */
+  renderProps: OwnPropsOfRenderer;
+  private detailUiSchemaDeps: unknown[] | undefined;
+  private changeDetectorRef = inject(ChangeDetectorRef);
   mapAdditionalProps(props: ControlWithDetailProps) {
-    this.detailUiSchema = findUISchema(
+    const deps = [
+      props.uischema,
       props.uischemas,
       props.schema,
-      props.uischema.scope,
+      props.rootSchema,
       props.path,
-      () => {
-        const newSchema = cloneDeep(props.schema);
-        // delete unsupported operators
-        delete newSchema.oneOf;
-        delete newSchema.anyOf;
-        delete newSchema.allOf;
-        return Generate.uiSchema(
-          newSchema,
-          'Group',
-          undefined,
-          this.rootSchema
-        );
-      },
-      props.uischema,
-      props.rootSchema
+      this.isEnabled(),
+    ];
+    if (!depsChanged(this.detailUiSchemaDeps, deps)) {
+      return;
+    }
+    this.detailUiSchemaDeps = deps;
+
+    const detailUiSchema = cloneDeep(
+      findUISchema(
+        props.uischemas,
+        props.schema,
+        props.uischema.scope,
+        props.path,
+        () => {
+          const newSchema = cloneDeep(props.schema);
+          // delete unsupported operators
+          delete newSchema.oneOf;
+          delete newSchema.anyOf;
+          delete newSchema.allOf;
+          return Generate.uiSchema(
+            newSchema,
+            'Group',
+            undefined,
+            this.rootSchema
+          );
+        },
+        props.uischema,
+        props.rootSchema
+      )
     );
     if (isEmpty(props.path)) {
-      this.detailUiSchema.type = 'VerticalLayout';
+      detailUiSchema.type = 'VerticalLayout';
     } else {
-      (this.detailUiSchema as GroupLayout).label = startCase(props.path);
+      (detailUiSchema as GroupLayout).label = startCase(props.path);
     }
     if (!this.isEnabled()) {
-      setReadonly(this.detailUiSchema);
+      setReadonly(detailUiSchema);
     }
+    this.detailUiSchema = detailUiSchema;
+    this.renderProps = {
+      uischema: detailUiSchema,
+      schema: props.schema,
+      path: props.path,
+    };
+    // the component is OnPush and nothing below it reports the change, so
+    // without this the new detail is not rendered until the view happens to be
+    // checked for an unrelated reason
+    this.changeDetectorRef.markForCheck();
   }
 }
 export const ObjectControlRendererTester: RankedTester = rankWith(
