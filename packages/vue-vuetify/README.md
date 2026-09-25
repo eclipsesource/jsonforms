@@ -14,7 +14,7 @@ The renderers are in a preview state.
 Install JSON Forms Core, Vue 3 and Vue 3 Vuetify Renderers.
 
 ```bash
-npm i --save @jsonforms/core @jsonforms/vue @jsonforms/vue-vuetify
+npm i --save @jsonforms/core @jsonforms/vue @jsonforms/vue-vuetify splitpanes
 ```
 
 Also add the packages to the transpile dependencies in the `vite.config.js` file:
@@ -127,6 +127,44 @@ If note done yet, please [install Vuetify for Vue](https://vuetifyjs.com/en/gett
 For more information on how JSON Forms can be configured, please see the [README of `@jsonforms/vue`](https://github.com/eclipsesource/jsonforms/blob/master/packages/vue/README.md).
 
 ## Customization
+
+### Empty property names
+
+`allowEmptyPropertyNames` controls whether Additional Properties can add or rename
+properties to empty or whitespace-only names, and whether the Mixed renderer can
+rename tree properties to those names. It defaults to `false`: names for which
+`name.trim().length === 0` are rejected.
+
+Enable it globally through the JSON Forms `config` prop:
+
+```js
+const config = { allowEmptyPropertyNames: true };
+```
+
+Or set it for an object control through `uischema.options`:
+
+```json
+{
+  "type": "Control",
+  "scope": "#/properties/settings",
+  "options": {
+    "allowEmptyPropertyNames": true
+  }
+}
+```
+
+The UI-schema option takes precedence over global config, including an explicit
+`false` overriding global `true`.
+
+Accepted names are preserved exactly; trimming is only used to check whether a
+name is blank. Schema constraints such as `propertyNames.minLength` and duplicate
+name checks still apply when the option is enabled. Having a `propertyNames`
+schema does not automatically enable empty names.
+
+Existing empty or whitespace-only keys remain visible and editable, and can be
+deleted or renamed to a permitted name, subject to the usual permissions and
+schema restrictions. This option controls property **names**, not how empty
+property **values** are stored or cleared.
 
 ### Prepend and Append Slots
 
