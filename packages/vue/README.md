@@ -18,7 +18,7 @@ Use the `json-forms` component for each form you want to render.
 
 Mandatory props:
 
-- `data: any` - the data to show
+- `data: any` - the controlled data to show. Use `v-model:data` to keep the parent state synchronized with form edits. When binding with `:data` instead, update the bound value from `update:data` or `change`; otherwise later prop updates can restore stale data.
 - `renderers: JsonFormsRendererRegistryEntry[]` - the Vue renderer set to use
 
 Optional props:
@@ -37,12 +37,13 @@ Optional props:
 Events:
 
 - `change: {data: any; errors: AJVError[]}` - Whenever data and/or errors change this event is emitted.
+- `update:data: any` - Emits the current data alongside `change`, enabling `v-model:data`.
 
 Example:
 
 ```html
 <json-forms
-  :data="data"
+  v-model:data="data"
   :renderers="renderers"
   :schema="schema"
   :uischema="uischema"
@@ -62,6 +63,7 @@ export default defineComponent({
       data: {
         number: 5,
       },
+      validationErrors: [] as JsonFormsChangeEvent['errors'],
       schema: {
         properties: {
           number: {
@@ -82,7 +84,7 @@ export default defineComponent({
   },
   methods: {
     onChange(event: JsonFormsChangeEvent) {
-      this.data = event.data;
+      this.validationErrors = event.errors;
     },
   },
 });
