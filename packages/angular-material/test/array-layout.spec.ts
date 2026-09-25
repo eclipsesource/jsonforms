@@ -22,6 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import { ChangeDetectorRef } from '@angular/core';
 import { ComponentFixture, waitForAsync } from '@angular/core/testing';
 import { MatIcon } from '@angular/material/icon';
 import { MatBadge } from '@angular/material/badge';
@@ -245,6 +246,31 @@ describe('Array layout ui schema handling', () => {
 
     expect(fixture.componentInstance.getProps(0).uischema).toBe(detail);
     expect(fixture.componentInstance.getProps(1).uischema).toBe(detail);
+  });
+
+  it('schedules a check so that state changes reach the template', () => {
+    const uischema = cloneDeep(TEST_UISCHEMA);
+
+    setupMockStore(fixture, {
+      data: { test: [{}] },
+      schema: TEST_SCHEMA,
+      uischema,
+    });
+    fixture.componentInstance.ngOnInit();
+    fixture.detectChanges();
+
+    // the renderer is OnPush, so without this nothing repaints for a change
+    // that did not originate from an event in its own view. As the fixture root
+    // it is checked unconditionally, hence the explicit expectation.
+    const changeDetectorRef = (fixture.componentInstance as any)
+      .changeDetectorRef as ChangeDetectorRef;
+    spyOn(changeDetectorRef, 'markForCheck').and.callThrough();
+
+    getJsonFormsService(fixture.componentInstance).updateCore(
+      Actions.update('test', () => [{}, {}])
+    );
+
+    expect(changeDetectorRef.markForCheck).toHaveBeenCalled();
   });
 
   it('renders no items for data that is not an array', () => {

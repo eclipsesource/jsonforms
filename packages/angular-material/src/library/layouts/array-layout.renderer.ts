@@ -22,7 +22,13 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  inject,
+  OnInit,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -210,6 +216,7 @@ export class ArrayLayoutRenderer
   itemProps: OwnPropsOfRenderer[] = [];
   private detailUiSchemaDeps: unknown[] | undefined;
   private itemPropsDeps: unknown[] | undefined;
+  private changeDetectorRef = inject(ChangeDetectorRef);
   mapToProps(
     state: JsonFormsState
   ): StatePropsOfArrayLayout & { translations: ArrayTranslations } {
@@ -258,6 +265,12 @@ export class ArrayLayoutRenderer
     this.translations = props.translations;
     this.detailUiSchema = this.resolveDetailUiSchema(props);
     this.updateItemProps(props, this.detailUiSchema);
+    // The component is OnPush, so it is only checked when an event inside its
+    // own view marks it dirty. A state change with no such event - the form
+    // being set readonly, data being set programmatically, an item being added
+    // from elsewhere - has to schedule the check itself, otherwise none of the
+    // above reaches the template.
+    this.changeDetectorRef.markForCheck();
   }
   private resolveDetailUiSchema(props: ArrayLayoutProps): UISchemaElement {
     const deps = [
