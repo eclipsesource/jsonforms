@@ -24,12 +24,6 @@
 */
 /**
  * Compares two dependency arrays by reference, like React's `useMemo` deps.
- *
- * Renderers use this to only recalculate expensive, derived state when one of
- * its inputs actually changed instead of on every emitted state. As with
- * `useMemo`, a given call site is expected to always pass the same dependencies
- * in the same order; the length is compared as well so that a call site which
- * does not can't report "unchanged" for a shortened dependency list.
  */
 export const depsChanged = (
   previous: unknown[] | undefined,

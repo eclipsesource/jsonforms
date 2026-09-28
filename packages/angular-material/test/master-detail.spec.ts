@@ -413,12 +413,12 @@ describe('Master detail', () => {
     fixture.detectChanges();
 
     expect(ownUischema).toEqual(pristine);
-    expect(component.detailUISchema).not.toBe(ownUischema.options.detail);
-    expect(component.detailUISchema.elements[0].options.readonly).toBe(true);
+    expect(component.detailUiSchema).not.toBe(ownUischema.options.detail);
+    expect(component.detailUiSchema.elements[0].options.readonly).toBe(true);
 
     // the detail is rebuilt from the original, so re-enabling actually restores it
     getJsonFormsService(component).setReadonly(false);
     fixture.detectChanges();
-    expect(component.detailUISchema.elements[0].options?.readonly).toBeFalsy();
+    expect(component.detailUiSchema.elements[0].options?.readonly).toBeFalsy();
   });
 });

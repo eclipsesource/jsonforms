@@ -42,7 +42,6 @@ import {
   ArrayTranslations,
   createDefaultValue,
   defaultJsonFormsI18nState,
-  findUISchema,
   getArrayTranslations,
   isObjectArrayWithNesting,
   JsonFormsState,
@@ -52,13 +51,12 @@ import {
   Paths,
   RankedTester,
   rankWith,
-  setReadonly,
   StatePropsOfArrayLayout,
   UISchemaElement,
   UISchemaTester,
 } from '@jsonforms/core';
-import cloneDeep from 'lodash/cloneDeep';
 import { depsChanged } from '../util/deps';
+import { createDetailUiSchemaResolver } from '../util/detail-uischema';
 
 @Component({
   selector: 'app-array-layout-renderer',
@@ -191,30 +189,14 @@ export class ArrayLayoutRenderer
   moveItemUp: (path: string, index: number) => () => void;
   moveItemDown: (path: string, index: number) => () => void;
   removeItems: (path: string, toDelete: number[]) => () => void;
-  /**
-   * The registered UI schemas. Kept up to date for subclasses; the renderer
-   * itself resolves the item UI schema from the mapped props.
-   */
   uischemas: {
     tester: UISchemaTester;
     uischema: UISchemaElement;
   }[];
-  /**
-   * The UI schema to render for each of the array's items.
-   *
-   * This is always a defensive copy: `findUISchema` can hand back the inline
-   * `options.detail` UI schema or a UI schema from the registry, i.e. objects
-   * owned by the user, and we set the `readonly` option on it.
-   */
   detailUiSchema: UISchemaElement;
-  /**
-   * The props to render each of the array's items with.
-   *
-   * Also determines how many items are rendered, so that the rendered items and
-   * their props can't get out of sync.
-   */
+  /** Also determines how many items are rendered. */
   itemProps: OwnPropsOfRenderer[] = [];
-  private detailUiSchemaDeps: unknown[] | undefined;
+  private resolveDetailUiSchema = createDetailUiSchemaResolver();
   private itemPropsDeps: unknown[] | undefined;
   private changeDetectorRef = inject(ChangeDetectorRef);
   mapToProps(
@@ -263,55 +245,18 @@ export class ArrayLayoutRenderer
     this.noData = !props.data || props.data === 0;
     this.uischemas = props.uischemas;
     this.translations = props.translations;
-    this.detailUiSchema = this.resolveDetailUiSchema(props);
+    this.detailUiSchema = this.resolveDetailUiSchema(
+      props,
+      this.isEnabled(),
+      props.uischema.scope
+    );
     this.updateItemProps(props, this.detailUiSchema);
-    // The component is OnPush, so it is only checked when an event inside its
-    // own view marks it dirty. A state change with no such event - the form
-    // being set readonly, data being set programmatically, an item being added
-    // from elsewhere - has to schedule the check itself, otherwise none of the
-    // above reaches the template.
+    // OnPush: changes without an event in this view must schedule the check
     this.changeDetectorRef.markForCheck();
   }
-  private resolveDetailUiSchema(props: ArrayLayoutProps): UISchemaElement {
-    const deps = [
-      props.uischema,
-      props.uischemas,
-      props.schema,
-      props.rootSchema,
-      props.path,
-      this.isEnabled(),
-    ];
-    if (!depsChanged(this.detailUiSchemaDeps, deps)) {
-      return this.detailUiSchema;
-    }
-    this.detailUiSchemaDeps = deps;
-
-    // `findUISchema` can hand back the inline `options.detail` UI schema or a
-    // UI schema from the registry, i.e. objects owned by the user. We set the
-    // `readonly` option on the result, so we have to work on a copy.
-    const detailUiSchema = cloneDeep(
-      findUISchema(
-        props.uischemas,
-        props.schema,
-        props.uischema.scope,
-        props.path,
-        undefined,
-        props.uischema,
-        props.rootSchema
-      )
-    );
-    if (!this.isEnabled()) {
-      setReadonly(detailUiSchema);
-    }
-    return detailUiSchema;
-  }
   /**
-   * Precalculates the props of every item.
-   *
-   * These must not be created in the template: `jsonforms-outlet` re-evaluates
-   * its inputs whenever the bound object changes, and doing so deep clones the
-   * whole form state, which would then happen once per item per change
-   * detection cycle.
+   * Not created in the template: each new object makes the outlet deep clone
+   * the whole form state.
    */
   private updateItemProps(
     props: ArrayLayoutProps,

@@ -45,7 +45,6 @@ import {
   createDefaultValue,
   decode,
   defaultJsonFormsI18nState,
-  findUISchema,
   getArrayTranslations,
   getFirstPrimitiveProp,
   JsonFormsState,
@@ -53,14 +52,12 @@ import {
   mapStateToArrayControlProps,
   RankedTester,
   rankWith,
-  setReadonly,
   StatePropsOfArrayControl,
   uiTypeIs,
   UISchemaElement,
 } from '@jsonforms/core';
-import cloneDeep from 'lodash/cloneDeep';
 import { JsonFormsDetailComponent } from './detail';
-import { depsChanged } from '../../util/deps';
+import { createDetailUiSchemaResolver } from '../../util/detail-uischema';
 
 const keywords = ['#', 'properties', 'items'];
 
@@ -186,15 +183,8 @@ export class MasterListComponent
   removeItems: (path: string, toDelete: number[]) => () => void;
   highlightedIdx: number;
   translations: ArrayTranslations;
-  /**
-   * The UI schema to render for the selected item.
-   *
-   * This is always a defensive copy: `findUISchema` can hand back the inline
-   * `options.detail` UI schema or a UI schema from the registry, i.e. objects
-   * owned by the user, and we set the `readonly` option on it.
-   */
-  detailUISchema: UISchemaElement;
-  private detailUISchemaDeps: unknown[] | undefined;
+  detailUiSchema: UISchemaElement;
+  private resolveDetailUiSchema = createDetailUiSchemaResolver();
 
   private changeDetectorRef = inject(ChangeDetectorRef);
 
@@ -222,7 +212,12 @@ export class MasterListComponent
     const { data, path, schema, uischema } = props;
     const controlElement = uischema as ControlElement;
     this.propsPath = props.path;
-    this.updateDetailUiSchema(props, controlElement);
+    this.detailUiSchema = this.resolveDetailUiSchema(
+      props,
+      this.isEnabled(),
+      `${controlElement.scope}/items`,
+      'VerticalLayout'
+    );
 
     this.translations = props.translations;
 
@@ -238,7 +233,7 @@ export class MasterListComponent
         data: d,
         path: `${path}.${index}`,
         schema,
-        uischema: this.detailUISchema,
+        uischema: this.detailUiSchema,
       };
       return masterItem;
     });
@@ -276,40 +271,6 @@ export class MasterListComponent
       this.selectedItemIdx = 0;
     }
     this.changeDetectorRef.markForCheck();
-  }
-
-  private updateDetailUiSchema(
-    props: ArrayControlProps,
-    controlElement: ControlElement
-  ): void {
-    const deps = [
-      props.uischema,
-      props.uischemas,
-      props.schema,
-      props.rootSchema,
-      props.path,
-      this.isEnabled(),
-    ];
-    if (!depsChanged(this.detailUISchemaDeps, deps)) {
-      return;
-    }
-    this.detailUISchemaDeps = deps;
-
-    const detailUISchema = cloneDeep(
-      findUISchema(
-        props.uischemas,
-        props.schema,
-        `${controlElement.scope}/items`,
-        props.path,
-        'VerticalLayout',
-        controlElement,
-        props.rootSchema
-      )
-    );
-    if (!this.isEnabled()) {
-      setReadonly(detailUISchema);
-    }
-    this.detailUISchema = detailUISchema;
   }
 
   onSelect(item: any, idx: number): void {

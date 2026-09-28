@@ -38,18 +38,16 @@ import {
 import { MatCardModule } from '@angular/material/card';
 import {
   ControlWithDetailProps,
-  findUISchema,
   Generate,
   GroupLayout,
   isObjectControl,
   OwnPropsOfRenderer,
   RankedTester,
   rankWith,
-  setReadonly,
   UISchemaElement,
 } from '@jsonforms/core';
 import cloneDeep from 'lodash/cloneDeep';
-import { depsChanged } from '../util/deps';
+import { createDetailUiSchemaResolver } from '../util/detail-uischema';
 
 @Component({
   selector: 'ObjectRenderer',
@@ -72,69 +70,37 @@ import { depsChanged } from '../util/deps';
   imports: [CommonModule, JsonFormsModule, MatCardModule],
 })
 export class ObjectControlRenderer extends JsonFormsControlWithDetail {
-  /**
-   * The UI schema to render for the object's detail.
-   *
-   * This is always a defensive copy: `findUISchema` can hand back the inline
-   * `options.detail` UI schema or a UI schema from the registry, i.e. objects
-   * owned by the user, and we modify the result below.
-   */
   detailUiSchema: UISchemaElement;
-  /**
-   * The props to render the detail with.
-   *
-   * Bound as a whole instead of as separate `uischema`, `schema` and `path`
-   * inputs: `jsonforms-outlet` only re-dispatches when its `renderProps` setter
-   * is called, so with separate inputs a new detail UI schema would only be
-   * picked up on the next emitted state.
-   */
+  /** Bound as a whole, as the outlet only re-dispatches when this is set. */
   renderProps: OwnPropsOfRenderer;
-  private detailUiSchemaDeps: unknown[] | undefined;
+  private resolveDetailUiSchema = createDetailUiSchemaResolver();
   private changeDetectorRef = inject(ChangeDetectorRef);
   mapAdditionalProps(props: ControlWithDetailProps) {
-    const deps = [
-      props.uischema,
-      props.uischemas,
-      props.schema,
-      props.rootSchema,
-      props.path,
+    const detailUiSchema = this.resolveDetailUiSchema(
+      props,
       this.isEnabled(),
-    ];
-    if (!depsChanged(this.detailUiSchemaDeps, deps)) {
+      props.uischema.scope,
+      () => {
+        const newSchema = cloneDeep(props.schema);
+        // delete unsupported operators
+        delete newSchema.oneOf;
+        delete newSchema.anyOf;
+        delete newSchema.allOf;
+        return Generate.uiSchema(
+          newSchema,
+          'Group',
+          undefined,
+          this.rootSchema
+        );
+      }
+    );
+    if (detailUiSchema === this.detailUiSchema) {
       return;
     }
-    this.detailUiSchemaDeps = deps;
-
-    const detailUiSchema = cloneDeep(
-      findUISchema(
-        props.uischemas,
-        props.schema,
-        props.uischema.scope,
-        props.path,
-        () => {
-          const newSchema = cloneDeep(props.schema);
-          // delete unsupported operators
-          delete newSchema.oneOf;
-          delete newSchema.anyOf;
-          delete newSchema.allOf;
-          return Generate.uiSchema(
-            newSchema,
-            'Group',
-            undefined,
-            this.rootSchema
-          );
-        },
-        props.uischema,
-        props.rootSchema
-      )
-    );
     if (isEmpty(props.path)) {
       detailUiSchema.type = 'VerticalLayout';
     } else {
       (detailUiSchema as GroupLayout).label = startCase(props.path);
-    }
-    if (!this.isEnabled()) {
-      setReadonly(detailUiSchema);
     }
     this.detailUiSchema = detailUiSchema;
     this.renderProps = {
@@ -142,9 +108,7 @@ export class ObjectControlRenderer extends JsonFormsControlWithDetail {
       schema: props.schema,
       path: props.path,
     };
-    // the component is OnPush and nothing below it reports the change, so
-    // without this the new detail is not rendered until the view happens to be
-    // checked for an unrelated reason
+    // OnPush: nothing below reports the new detail, so schedule the check
     this.changeDetectorRef.markForCheck();
   }
 }
