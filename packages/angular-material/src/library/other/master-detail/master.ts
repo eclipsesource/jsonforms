@@ -45,7 +45,6 @@ import {
   createDefaultValue,
   decode,
   defaultJsonFormsI18nState,
-  findUISchema,
   getArrayTranslations,
   getFirstPrimitiveProp,
   JsonFormsState,
@@ -53,11 +52,12 @@ import {
   mapStateToArrayControlProps,
   RankedTester,
   rankWith,
-  setReadonly,
   StatePropsOfArrayControl,
   uiTypeIs,
+  UISchemaElement,
 } from '@jsonforms/core';
 import { JsonFormsDetailComponent } from './detail';
+import { createDetailUiSchemaResolver } from '../../util/detail-uischema';
 
 const keywords = ['#', 'properties', 'items'];
 
@@ -183,6 +183,8 @@ export class MasterListComponent
   removeItems: (path: string, toDelete: number[]) => () => void;
   highlightedIdx: number;
   translations: ArrayTranslations;
+  detailUiSchema: UISchemaElement;
+  private resolveDetailUiSchema = createDetailUiSchemaResolver();
 
   private changeDetectorRef = inject(ChangeDetectorRef);
 
@@ -210,19 +212,12 @@ export class MasterListComponent
     const { data, path, schema, uischema } = props;
     const controlElement = uischema as ControlElement;
     this.propsPath = props.path;
-    const detailUISchema = findUISchema(
-      props.uischemas,
-      schema,
+    this.detailUiSchema = this.resolveDetailUiSchema(
+      props,
+      this.isEnabled(),
       `${controlElement.scope}/items`,
-      props.path,
-      'VerticalLayout',
-      controlElement,
-      props.rootSchema
+      'VerticalLayout'
     );
-
-    if (!this.isEnabled()) {
-      setReadonly(detailUISchema);
-    }
 
     this.translations = props.translations;
 
@@ -238,7 +233,7 @@ export class MasterListComponent
         data: d,
         path: `${path}.${index}`,
         schema,
-        uischema: detailUISchema,
+        uischema: this.detailUiSchema,
       };
       return masterItem;
     });

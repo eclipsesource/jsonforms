@@ -22,7 +22,13 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  inject,
+  OnInit,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -36,7 +42,6 @@ import {
   ArrayTranslations,
   createDefaultValue,
   defaultJsonFormsI18nState,
-  findUISchema,
   getArrayTranslations,
   isObjectArrayWithNesting,
   JsonFormsState,
@@ -46,12 +51,12 @@ import {
   Paths,
   RankedTester,
   rankWith,
-  setReadonly,
   StatePropsOfArrayLayout,
   UISchemaElement,
   UISchemaTester,
-  unsetReadonly,
 } from '@jsonforms/core';
+import { depsChanged } from '../util/deps';
+import { createDetailUiSchemaResolver } from '../util/detail-uischema';
 
 @Component({
   selector: 'app-array-layout-renderer',
@@ -84,7 +89,7 @@ import {
       <p *ngIf="noData">{{ translations.noDataMessage }}</p>
       <div
         *ngFor="
-          let item of [].constructor(data);
+          let item of itemProps;
           let idx = index;
           trackBy: trackByFn;
           last as last;
@@ -93,7 +98,7 @@ import {
       >
         <mat-card class="array-item" appearance="outlined">
           <mat-card-content>
-            <jsonforms-outlet [renderProps]="getProps(idx)"></jsonforms-outlet>
+            <jsonforms-outlet [renderProps]="item"></jsonforms-outlet>
           </mat-card-content>
           <mat-card-actions *ngIf="isEnabled()">
             <button
@@ -188,6 +193,12 @@ export class ArrayLayoutRenderer
     tester: UISchemaTester;
     uischema: UISchemaElement;
   }[];
+  detailUiSchema: UISchemaElement;
+  /** Also determines how many items are rendered. */
+  itemProps: OwnPropsOfRenderer[] = [];
+  private resolveDetailUiSchema = createDetailUiSchemaResolver();
+  private itemPropsDeps: unknown[] | undefined;
+  private changeDetectorRef = inject(ChangeDetectorRef);
   mapToProps(
     state: JsonFormsState
   ): StatePropsOfArrayLayout & { translations: ArrayTranslations } {
@@ -234,27 +245,40 @@ export class ArrayLayoutRenderer
     this.noData = !props.data || props.data === 0;
     this.uischemas = props.uischemas;
     this.translations = props.translations;
+    this.detailUiSchema = this.resolveDetailUiSchema(
+      props,
+      this.isEnabled(),
+      props.uischema.scope
+    );
+    this.updateItemProps(props, this.detailUiSchema);
+    // OnPush: changes without an event in this view must schedule the check
+    this.changeDetectorRef.markForCheck();
+  }
+  /**
+   * Not created in the template: each new object makes the outlet deep clone
+   * the whole form state.
+   */
+  private updateItemProps(
+    props: ArrayLayoutProps,
+    detailUiSchema: UISchemaElement
+  ): void {
+    // `props.data` is the item count, but it is only derived from `length`, so
+    // it is `undefined` for data that isn't an array. Treat that as no items.
+    const itemCount = props.data > 0 ? props.data : 0;
+    const deps = [detailUiSchema, props.schema, props.path, itemCount];
+    if (!depsChanged(this.itemPropsDeps, deps)) {
+      return;
+    }
+    this.itemPropsDeps = deps;
+
+    this.itemProps = Array.from({ length: itemCount }, (_unused, index) => ({
+      schema: props.schema,
+      path: Paths.compose(props.path, `${index}`),
+      uischema: detailUiSchema,
+    }));
   }
   getProps(index: number): OwnPropsOfRenderer {
-    const uischema = findUISchema(
-      this.uischemas,
-      this.scopedSchema,
-      this.uischema.scope,
-      this.propsPath,
-      undefined,
-      this.uischema,
-      this.rootSchema
-    );
-    if (this.isEnabled()) {
-      unsetReadonly(uischema);
-    } else {
-      setReadonly(uischema);
-    }
-    return {
-      schema: this.scopedSchema,
-      path: Paths.compose(this.propsPath, `${index}`),
-      uischema,
-    };
+    return this.itemProps[index];
   }
   trackByFn(index: number) {
     return index;
