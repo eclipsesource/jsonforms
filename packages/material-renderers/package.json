@@ -41,6 +41,7 @@
   ],
   "main": "lib/jsonforms-react-material.cjs.js",
   "module": "lib/jsonforms-react-material.esm.js",
+  "sideEffects": false,
   "typings": "lib/index.d.ts",
   "scripts": {
     "build": "rollup -c rollup.config.js",
