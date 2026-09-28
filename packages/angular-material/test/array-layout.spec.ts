@@ -70,7 +70,8 @@ const TEST_SCHEMA = {
   required: ['test'],
 };
 
-const TEST_UISCHEMA = {
+// a factory, so that tests can't observe each other's modifications
+const createTestUiSchema = () => ({
   type: 'Control',
   scope: '#/properties/test',
   options: {
@@ -88,12 +89,12 @@ const TEST_UISCHEMA = {
       ],
     },
   },
-};
+});
 
 describe('Array layout tester', () => {
   it('should succeed', () => {
     expect(
-      ArrayLayoutRendererTester(TEST_UISCHEMA, TEST_SCHEMA, {
+      ArrayLayoutRendererTester(createTestUiSchema(), TEST_SCHEMA, {
         config: {},
         rootSchema: {},
       })
@@ -123,7 +124,7 @@ describe('Array layout', () => {
     setupMockStore(fixture, {
       data: {},
       schema: TEST_SCHEMA,
-      uischema: TEST_UISCHEMA,
+      uischema: createTestUiSchema(),
     });
     fixture.componentInstance.ngOnInit();
     fixture.detectChanges();
@@ -147,7 +148,7 @@ describe('Array layout', () => {
     setupMockStore(fixture, {
       data: { test: [{}] },
       schema: TEST_SCHEMA,
-      uischema: TEST_UISCHEMA,
+      uischema: createTestUiSchema(),
     });
     fixture.componentInstance.ngOnInit();
     fixture.detectChanges();
@@ -168,7 +169,7 @@ describe('Array layout', () => {
     setupMockStore(fixture, {
       data: { test: [{}, {}] },
       schema: TEST_SCHEMA,
-      uischema: TEST_UISCHEMA,
+      uischema: createTestUiSchema(),
     });
     fixture.componentInstance.ngOnInit();
     fixture.detectChanges();
@@ -195,8 +196,8 @@ describe('Array layout ui schema handling', () => {
 
   // https://github.com/eclipsesource/jsonforms/issues/2343
   it('does not modify the given ui schema when rendering items', () => {
-    const uischema = cloneDeep(TEST_UISCHEMA);
-    const pristine = cloneDeep(TEST_UISCHEMA);
+    const uischema = createTestUiSchema();
+    const pristine = createTestUiSchema();
 
     setupMockStore(fixture, {
       data: { test: [{}] },
@@ -210,7 +211,7 @@ describe('Array layout ui schema handling', () => {
   });
 
   it('does not hand out the inline options.detail instance', () => {
-    const uischema = cloneDeep(TEST_UISCHEMA);
+    const uischema = createTestUiSchema();
 
     setupMockStore(fixture, {
       data: { test: [{}] },
@@ -226,7 +227,7 @@ describe('Array layout ui schema handling', () => {
   });
 
   it('returns a stable copy of the detail ui schema across state emissions', () => {
-    const uischema = cloneDeep(TEST_UISCHEMA);
+    const uischema = createTestUiSchema();
 
     setupMockStore(fixture, {
       data: { test: [{}] },
@@ -249,7 +250,7 @@ describe('Array layout ui schema handling', () => {
   });
 
   it('schedules a check so that state changes reach the template', () => {
-    const uischema = cloneDeep(TEST_UISCHEMA);
+    const uischema = createTestUiSchema();
 
     setupMockStore(fixture, {
       data: { test: [{}] },
@@ -274,7 +275,7 @@ describe('Array layout ui schema handling', () => {
   });
 
   it('renders no items for data that is not an array', () => {
-    const uischema = cloneDeep(TEST_UISCHEMA);
+    const uischema = createTestUiSchema();
 
     setupMockStore(fixture, {
       // schema violating data, which JSON Forms reports rather than rejects
@@ -293,7 +294,7 @@ describe('Array layout ui schema handling', () => {
   });
 
   it('reuses the item props instead of recreating them per change detection cycle', () => {
-    const uischema = cloneDeep(TEST_UISCHEMA);
+    const uischema = createTestUiSchema();
 
     setupMockStore(fixture, {
       data: { test: [{}] },
@@ -317,7 +318,7 @@ describe('Array layout ui schema handling', () => {
   });
 
   it('clears the readonly option again when the array is re-enabled', () => {
-    const uischema = cloneDeep(TEST_UISCHEMA);
+    const uischema = createTestUiSchema();
 
     setupMockStore(fixture, {
       data: { test: [{}] },
@@ -367,8 +368,8 @@ describe('Array layout ui schema handling', () => {
   });
 
   it('marks the detail ui schema readonly when disabled without touching the original', () => {
-    const uischema = cloneDeep(TEST_UISCHEMA);
-    const pristine = cloneDeep(TEST_UISCHEMA);
+    const uischema = createTestUiSchema();
+    const pristine = createTestUiSchema();
 
     fixture.componentInstance.disabled = true;
     setupMockStore(fixture, {
