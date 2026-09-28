@@ -229,12 +229,6 @@ importers:
       '@angular/router':
         specifier: ^20.3.31
         version: 20.3.31(@angular/common@20.3.31(@angular/core@20.3.31(@angular/compiler@20.3.31)(rxjs@6.6.7)(zone.js@0.15.1))(rxjs@6.6.7))(@angular/core@20.3.31(@angular/compiler@20.3.31)(rxjs@6.6.7)(zone.js@0.15.1))(@angular/platform-browser@20.3.31(@angular/animations@20.3.31(@angular/core@20.3.31(@angular/compiler@20.3.31)(rxjs@6.6.7)(zone.js@0.15.1)))(@angular/common@20.3.31(@angular/core@20.3.31(@angular/compiler@20.3.31)(rxjs@6.6.7)(zone.js@0.15.1))(rxjs@6.6.7))(@angular/core@20.3.31(@angular/compiler@20.3.31)(rxjs@6.6.7)(zone.js@0.15.1)))(rxjs@6.6.7)
-      '@babel/plugin-proposal-nullish-coalescing-operator':
-        specifier: ^7.18.6
-        version: 7.18.6(@babel/core@7.29.7(supports-color@8.1.1))
-      '@babel/plugin-proposal-optional-chaining':
-        specifier: ^7.21.0
-        version: 7.21.0(@babel/core@7.29.7(supports-color@8.1.1))(supports-color@8.1.1)
       '@jsonforms/angular':
         specifier: workspace:*
         version: link:../angular
@@ -262,9 +256,6 @@ importers:
       '@typescript-eslint/parser':
         specifier: ^5.54.1
         version: 5.62.0(eslint@8.57.0(supports-color@8.1.1))(supports-color@8.1.1)(typescript@5.8.3)
-      babel-loader:
-        specifier: ^8.0.6
-        version: 8.3.0(@babel/core@7.29.7(supports-color@8.1.1))(webpack@5.91.0)
       copy-webpack-plugin:
         specifier: ^11.0.0
         version: 11.0.0(webpack@5.91.0)
@@ -600,10 +591,10 @@ importers:
     dependencies:
       '@date-io/dayjs':
         specifier: ^3.0.0
-        version: 3.0.0(dayjs@1.10.7)
+        version: 3.0.0(dayjs@1.11.11)
       dayjs:
-        specifier: 1.10.7
-        version: 1.10.7
+        specifier: ^1.11.11
+        version: 1.11.11
       lodash:
         specifier: ^4.18.1
         version: 4.18.1
@@ -628,7 +619,7 @@ importers:
         version: 9.2.0(@emotion/react@11.11.4(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@types/react@17.0.80)(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@mui/x-date-pickers':
         specifier: ^9.10.1
-        version: 9.10.1(@emotion/react@11.11.4(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@mui/material@9.2.0(@emotion/react@11.11.4(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@types/react@17.0.80)(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(@mui/system@9.2.0(@emotion/react@11.11.4(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@types/react@17.0.80)(react@17.0.2))(@types/react@17.0.80)(dayjs@1.10.7)(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+        version: 9.10.1(@emotion/react@11.11.4(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@mui/material@9.2.0(@emotion/react@11.11.4(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@types/react@17.0.80)(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(@mui/system@9.2.0(@emotion/react@11.11.4(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@types/react@17.0.80)(react@17.0.2))(@types/react@17.0.80)(dayjs@1.11.11)(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@rollup/plugin-commonjs':
         specifier: ^23.0.3
         version: 23.0.7(rollup@2.80.0)
@@ -7170,9 +7161,6 @@ packages:
 
   dateformat@3.0.3:
     resolution: {integrity: sha512-jyCETtSl3VMZMWeRo7iY1FL19ges1t55hMo5yaam4Jrsm5EPL89UQkoQRyiI+Yf4k8r2ZpdngkV8hr1lIdjb3Q==}
-
-  dayjs@1.10.7:
-    resolution: {integrity: sha512-P6twpd70BcPK34K26uJ1KT3wlhpuOAPoMwJzpsIWUxHZ7wpmbdZL/hQqBDfz7hGurYSa5PhzdhDHtt319hL3ig==}
 
   dayjs@1.11.11:
     resolution: {integrity: sha512-okzr3f11N6WuqYtZSvm+F776mB41wRZMhKP+hc34YdW+KmtYYK9iqvHSwo2k9FEH3fhGXvOPV6yz2IcSrfRUDg==}
@@ -16258,11 +16246,11 @@ snapshots:
 
   '@date-io/core@3.0.0': {}
 
-  '@date-io/dayjs@3.0.0(dayjs@1.10.7)':
+  '@date-io/dayjs@3.0.0(dayjs@1.11.11)':
     dependencies:
       '@date-io/core': 3.0.0
     optionalDependencies:
-      dayjs: 1.10.7
+      dayjs: 1.11.11
 
   '@discoveryjs/json-ext@0.5.7': {}
 
@@ -17459,7 +17447,7 @@ snapshots:
     optionalDependencies:
       '@types/react': 17.0.80
 
-  '@mui/x-date-pickers@9.10.1(@emotion/react@11.11.4(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@mui/material@9.2.0(@emotion/react@11.11.4(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@types/react@17.0.80)(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(@mui/system@9.2.0(@emotion/react@11.11.4(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@types/react@17.0.80)(react@17.0.2))(@types/react@17.0.80)(dayjs@1.10.7)(react-dom@17.0.2(react@17.0.2))(react@17.0.2)':
+  '@mui/x-date-pickers@9.10.1(@emotion/react@11.11.4(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@mui/material@9.2.0(@emotion/react@11.11.4(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@types/react@17.0.80)(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(@mui/system@9.2.0(@emotion/react@11.11.4(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@types/react@17.0.80)(react@17.0.2))(@types/react@17.0.80)(dayjs@1.11.11)(react-dom@17.0.2(react@17.0.2))(react@17.0.2)':
     dependencies:
       '@babel/runtime': 7.29.7
       '@mui/material': 9.2.0(@emotion/react@11.11.4(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@types/react@17.0.80)(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
@@ -17475,7 +17463,7 @@ snapshots:
     optionalDependencies:
       '@emotion/react': 11.11.4(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1)
       '@emotion/styled': 11.11.5(@emotion/react@11.11.4(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1))(@types/react@17.0.80)(react@17.0.2)(supports-color@8.1.1)
-      dayjs: 1.10.7
+      dayjs: 1.11.11
     transitivePeerDependencies:
       - '@types/react'
 
@@ -21793,8 +21781,6 @@ snapshots:
       time-zone: 1.0.0
 
   dateformat@3.0.3: {}
-
-  dayjs@1.10.7: {}
 
   dayjs@1.11.11: {}
 
