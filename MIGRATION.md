@@ -4,19 +4,14 @@
 
 ### Angular Material detail renderers no longer modify the given UI schema
 
-The Angular Material array layout, object control and list-with-detail renderers determine the UI schema for their contents via `findUISchema`, which returns the inline `options.detail` UI schema or a UI schema from the `uischemas` registry as-is, i.e. the very object the application passed in.
-These renderers then modified that result in place, i.e. they modified the application's UI schema (see [#2343](https://github.com/eclipsesource/jsonforms/issues/2343)).
-All three set the `readonly` option on it; the object control additionally overwrote the detail's `type` and `label`.
+The Angular Material array layout, object control and list-with-detail renderers modified the detail UI schema given via `options.detail` or the `uischemas` registry in place (see [#2343](https://github.com/eclipsesource/jsonforms/issues/2343)).
 They now work on a copy instead.
 
-Consequences:
-
-- Nothing is written into your UI schema anymore. If you relied on reading the `readonly` option, the `type` or the `label` back out of your own object, you need to track that state yourself.
-- The array layout no longer forces the `readonly` option to `false` on the controls of an enabled array's detail. That option takes precedence over both the global config and the JSON schema, so the write suppressed all of them. For controls inside an array's `options.detail`, the following now take effect where they previously did not, in this order of precedence: a `readonly`/`readOnly` option you set yourself, a `readonly`/`readOnly` entry in the global config, and a `readOnly: true` in the corresponding JSON schema. If a field inside an array detail unexpectedly became readonly, one of these is now being honored.
-- The object control no longer overrides the `type` and `label` of a detail UI schema given via `options.detail` or the `uischemas` registry, matching the React and Vue renderers. Only a generated detail is still labeled after the property, or rendered as a `VerticalLayout` at the root. If you relied on the previous label, set `label` in your detail UI schema.
-- The detail UI schema is only recalculated when one of its inputs changes. Modifying your UI schema in place, without replacing the object, is not picked up - as everywhere else in JSON Forms, provide a new UI schema object instead.
-- The array layout renders one item per array entry. Previously, data that was neither an array nor empty - for example an object at a path the schema declares as an array - rendered a single item at a path that does not exist, next to the "No data" message. Such data now renders no items at all. It is still reported as a validation error as before.
-- `ArrayLayoutRenderer` now precalculates the props of its items in `mapAdditionalProps` and exposes them as `itemProps`, which also drives how many items are rendered. `getProps(index)` reads from that array and returns `undefined` for an out of range index instead of synthesizing props. If you subclass the renderer and override `mapAdditionalProps`, call `super.mapAdditionalProps(props)`, otherwise no items are rendered.
+- Nothing is written into your UI schema anymore, e.g. the `readonly` option. If you read such state back out of your own object, track it yourself.
+- The array layout no longer forces the `readonly` option to `false` on the controls of its detail. A `readonly`/`readOnly` option, a `readonly`/`readOnly` config entry and a `readOnly: true` in the JSON schema now take effect for controls inside an array's `options.detail`, so such a field may now be readonly where it previously was not.
+- The object control no longer overrides the `type` and `label` of a detail UI schema given via `options.detail` or the `uischemas` registry. If you relied on the previous label, set `label` in your detail UI schema.
+- In-place modifications of your UI schema are not picked up anymore. Provide a new UI schema object instead.
+- If you subclass `ArrayLayoutRenderer` and override `mapAdditionalProps`, call `super.mapAdditionalProps(props)`. The item props are precalculated there and exposed as `itemProps`; `getProps(index)` returns `undefined` for an out of range index.
 
 ### Data update paths treat all segments literally
 
