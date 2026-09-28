@@ -86,21 +86,22 @@ export class ObjectControlRenderer extends JsonFormsControlWithDetail {
         delete newSchema.oneOf;
         delete newSchema.anyOf;
         delete newSchema.allOf;
-        return Generate.uiSchema(
+        const generated = Generate.uiSchema(
           newSchema,
           'Group',
           undefined,
-          this.rootSchema
+          props.rootSchema
         );
+        if (isEmpty(props.path)) {
+          generated.type = 'VerticalLayout';
+        } else {
+          (generated as GroupLayout).label = startCase(props.path);
+        }
+        return generated;
       }
     );
     if (detailUiSchema === this.detailUiSchema) {
       return;
-    }
-    if (isEmpty(props.path)) {
-      detailUiSchema.type = 'VerticalLayout';
-    } else {
-      (detailUiSchema as GroupLayout).label = startCase(props.path);
     }
     this.detailUiSchema = detailUiSchema;
     this.renderProps = {

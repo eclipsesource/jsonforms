@@ -250,6 +250,82 @@ describe('Object Control', () => {
     expect(component.detailUiSchema.elements[0].options.readonly).toBe(true);
   });
 
+  it('keeps the label of a given detail ui schema', () => {
+    const uischema = {
+      type: 'Control',
+      scope: '#/properties/foo',
+      options: {
+        detail: {
+          type: 'Group',
+          label: 'Custom',
+          elements: [{ type: 'Control', scope: '#/properties/foo_1' }],
+        },
+      },
+    };
+
+    component.uischema = uischema;
+    component.schema = schema2;
+    getJsonFormsService(component).init({
+      core: {
+        data: {},
+        schema: schema2,
+        uischema: undefined,
+      },
+    });
+    getJsonFormsService(component).registerRenderers(renderers);
+    component.ngOnInit();
+    fixture.detectChanges();
+
+    expect(component.detailUiSchema.label).toBe('Custom');
+  });
+
+  it('keeps the type of a given detail ui schema at the root', () => {
+    const uischema = {
+      type: 'Control',
+      scope: '#',
+      options: {
+        detail: {
+          type: 'Group',
+          label: 'Custom',
+          elements: [{ type: 'Control', scope: '#/properties/foo' }],
+        },
+      },
+    };
+
+    component.uischema = uischema;
+    component.schema = schema1;
+    getJsonFormsService(component).init({
+      core: {
+        data: {},
+        schema: schema1,
+        uischema: undefined,
+      },
+    });
+    getJsonFormsService(component).registerRenderers(renderers);
+    component.ngOnInit();
+    fixture.detectChanges();
+
+    expect(component.detailUiSchema.type).toBe('Group');
+    expect(component.detailUiSchema.label).toBe('Custom');
+  });
+
+  it('renders a generated detail at the root as a vertical layout', () => {
+    component.uischema = uischema1;
+    component.schema = schema1;
+    getJsonFormsService(component).init({
+      core: {
+        data: {},
+        schema: schema1,
+        uischema: undefined,
+      },
+    });
+    getJsonFormsService(component).registerRenderers(renderers);
+    component.ngOnInit();
+    fixture.detectChanges();
+
+    expect(component.detailUiSchema.type).toBe('VerticalLayout');
+  });
+
   it('propagates a changed enabled state to the rendered detail', () => {
     const uischema = {
       type: 'Control',
