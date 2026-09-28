@@ -87,7 +87,7 @@
   },
   "dependencies": {
     "@date-io/dayjs": "^3.0.0",
-    "dayjs": "1.10.7",
+    "dayjs": "^1.11.11",
     "lodash": "^4.18.1"
   },
   "peerDependencies": {
