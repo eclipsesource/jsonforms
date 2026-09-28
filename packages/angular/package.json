@@ -38,6 +38,7 @@
     "customization"
   ],
   "module": "./lib/fesm2022/jsonforms-angular.mjs",
+  "sideEffects": false,
   "typings": "./lib/index.d.ts",
   "scripts": {
     "build": "node ./build-package.js",

@@ -15,6 +15,7 @@
   },
   "main": "lib/jsonforms-react-vanilla.cjs.js",
   "module": "lib/jsonforms-react-vanilla.esm.js",
+  "sideEffects": false,
   "typings": "lib/index.d.ts",
   "scripts": {
     "build": "rollup -c rollup.config.js",

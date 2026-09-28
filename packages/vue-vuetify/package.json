@@ -32,6 +32,7 @@
   ],
   "main": "lib/jsonforms-vue-vuetify.cjs.js",
   "module": "lib/jsonforms-vue-vuetify.esm.js",
+  "sideEffects": ["*.css"],
   "jsdelivr": "lib/jsonforms-vue-vuetify.umd.js",
   "unpkg": "lib/jsonforms-vue-vuetify.umd.js",
   "styles": "lib/jsonforms-vue-vuetify.css",

@@ -36,6 +36,7 @@
   ],
   "main": "lib/jsonforms-vue-vanilla.cjs.js",
   "module": "lib/jsonforms-vue-vanilla.esm.js",
+  "sideEffects": ["*.css"],
   "types": "lib/src/index.d.ts",
   "files": [
     "lib/*",

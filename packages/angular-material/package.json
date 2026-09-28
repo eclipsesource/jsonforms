@@ -39,6 +39,7 @@
     "customization"
   ],
   "module": "./lib/fesm2022/jsonforms-angular-material.mjs",
+  "sideEffects": false,
   "typings": "./lib/index.d.ts",
   "scripts": {
     "build": "ng build",

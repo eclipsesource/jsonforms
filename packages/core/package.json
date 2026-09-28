@@ -39,6 +39,7 @@
   ],
   "main": "lib/jsonforms-core.cjs.js",
   "module": "lib/jsonforms-core.esm.js",
+  "sideEffects": false,
   "typings": "./lib/index.d.ts",
   "scripts": {
     "build": "rollup -c rollup.config.js",
