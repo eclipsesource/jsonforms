@@ -104,6 +104,51 @@ describe('JsonForms.vue', () => {
     expect(updateEvents?.[updateEvents.length - 1]?.[0]).toEqual({ number: 6 });
   });
 
+  it('does not emit update:data on mount when data is unchanged', () => {
+    const data = { number: 5.5 };
+    const wrapper = shallowMount(
+      JsonForms,
+      bindings({ props: { data, renderers: [] } })
+    );
+
+    expect(wrapper.emitted('update:data')).toBeUndefined();
+    expect(wrapper.emitted('change')).toHaveLength(1);
+  });
+
+  it('only emits change when validation-related props change without changing data', async () => {
+    const data = { number: 5.5 };
+    const wrapper = shallowMount(
+      JsonForms,
+      bindings({ props: { data, renderers: [] } })
+    );
+
+    await wrapper.setProps({
+      additionalErrors: [
+        {
+          instancePath: '/number',
+          schemaPath: '#/properties/number/minimum',
+          keyword: 'minimum',
+          params: { comparison: '>=', limit: 7 },
+        },
+      ],
+    });
+    expect(wrapper.emitted('change')).toHaveLength(2);
+    expect(wrapper.emitted('update:data')).toBeUndefined();
+
+    await wrapper.setProps({
+      schema: {
+        type: 'object',
+        properties: { number: { type: 'number', minimum: 7 } },
+      },
+    });
+    expect(wrapper.emitted('change')).toHaveLength(3);
+    expect(wrapper.emitted('update:data')).toBeUndefined();
+
+    await wrapper.setProps({ validationMode: 'NoValidation' });
+    expect(wrapper.emitted('change')).toHaveLength(4);
+    expect(wrapper.emitted('update:data')).toBeUndefined();
+  });
+
   it('emits middleware-transformed data on mount', () => {
     const middleware: Middleware = (state, action, defaultReducer) => ({
       ...defaultReducer(state, action),
@@ -202,28 +247,31 @@ describe('JsonForms.vue', () => {
     expect((wrapper.vm as any).uischemaToUse).toBe(initialUiSchema);
   });
 
-  it('regenerates schema and uischema for external data changes', async () => {
-    const data = { number: 5.5 };
-    const nextData = { number: 5.5, text: 'hello' };
-    const renderers: JsonFormsUISchemaRegistryEntry[] = [];
-    const wrapper = shallowMount(
-      JsonForms,
-      bindings({
-        props: { data, renderers },
-      })
-    );
+  it.each([undefined, null])(
+    'regenerates schema and uischema for external data changes with schema %s',
+    async (schema) => {
+      const data = { number: 5.5 };
+      const nextData = { number: 5.5, text: 'hello' };
+      const renderers: JsonFormsUISchemaRegistryEntry[] = [];
+      const wrapper = shallowMount(
+        JsonForms,
+        bindings({
+          props: { data, schema, renderers },
+        })
+      );
 
-    const initialSchema = (wrapper.vm as any).schemaToUse;
-    const initialUiSchema = (wrapper.vm as any).uischemaToUse;
+      const initialSchema = (wrapper.vm as any).schemaToUse;
+      const initialUiSchema = (wrapper.vm as any).uischemaToUse;
 
-    await wrapper.setProps({ data: nextData });
+      await wrapper.setProps({ data: nextData });
 
-    expect((wrapper.vm as any).schemaToUse).not.toBe(initialSchema);
-    expect((wrapper.vm as any).uischemaToUse).not.toBe(initialUiSchema);
-    expect((wrapper.vm as any).jsonforms.core.schema).toEqual(
-      Generate.jsonSchema(nextData)
-    );
-  });
+      expect((wrapper.vm as any).schemaToUse).not.toBe(initialSchema);
+      expect((wrapper.vm as any).uischemaToUse).not.toBe(initialUiSchema);
+      expect((wrapper.vm as any).jsonforms.core.schema).toEqual(
+        Generate.jsonSchema(nextData)
+      );
+    }
+  );
 
   it('does not replace a false schema when data changes', async () => {
     const renderers: JsonFormsUISchemaRegistryEntry[] = [];

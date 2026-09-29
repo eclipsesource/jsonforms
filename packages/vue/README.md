@@ -37,7 +37,7 @@ Optional props:
 Events:
 
 - `change: {data: any; errors: AJVError[]}` - Whenever data and/or errors change this event is emitted.
-- `update:data: any` - Emits the current data alongside `change`, enabling `v-model:data`.
+- `update:data: any` - Emits when the data changes, including on mount if initialization replaces the supplied data, enabling `v-model:data`.
 
 Example:
 

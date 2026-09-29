@@ -27,7 +27,7 @@ import {
   ValidationMode,
 } from '@jsonforms/core';
 import isEqual from 'lodash/isEqual';
-import { defineComponent, PropType, reactive } from 'vue';
+import { defineComponent, PropType, reactive, toRaw } from 'vue';
 import { JsonFormsChangeEvent, MaybeReadonly } from '../types';
 import DispatchRenderer from './DispatchRenderer.vue';
 
@@ -196,7 +196,10 @@ export default defineComponent({
       const isSameAsCurrentData = newData === this.jsonforms.core.data;
       this.dataToUse = newData;
 
-      if (this.schema === undefined && !isSameAsCurrentData) {
+      if (
+        (this.schema === undefined || this.schema === null) &&
+        !isSameAsCurrentData
+      ) {
         const nextSchema = Generate.jsonSchema(this.dataToUse);
         if (!isEqual(nextSchema, this.schemaToUse)) {
           this.schemaToUse = nextSchema;
@@ -243,8 +246,10 @@ export default defineComponent({
         coreReducer
       );
     },
-    eventToEmit(newEvent) {
-      this.$emit('update:data', newEvent.data);
+    eventToEmit(newEvent, oldEvent) {
+      if (newEvent.data !== oldEvent.data) {
+        this.$emit('update:data', newEvent.data);
+      }
       this.$emit('change', newEvent);
     },
     i18n: {
@@ -263,7 +268,9 @@ export default defineComponent({
   },
   mounted() {
     // emit an initial change so clients can react to error validation and default data insertion
-    this.$emit('update:data', this.jsonforms.core.data);
+    if (toRaw(this.jsonforms.core.data) !== toRaw(this.data)) {
+      this.$emit('update:data', this.jsonforms.core.data);
+    }
     this.$emit('change', {
       data: this.jsonforms.core.data,
       errors: this.jsonforms.core.errors,
