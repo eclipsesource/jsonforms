@@ -29,7 +29,9 @@ import {
   isDescriptionHidden,
 } from '@jsonforms/core';
 
-import { InputLabel, FormControl, FormHelperText } from '@mui/material';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import FormHelperText from '@mui/material/FormHelperText';
 import merge from 'lodash/merge';
 import { useFocus, useInputVariant } from '../util';
 

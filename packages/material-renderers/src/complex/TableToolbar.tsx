@@ -29,16 +29,14 @@ import {
   JsonSchema,
   ArrayTranslations,
 } from '@jsonforms/core';
-import {
-  IconButton,
-  TableRow,
-  Tooltip,
-  Grid,
-  Typography,
-  FormHelperText,
-  Stack,
-} from '@mui/material';
-import { Add } from '@mui/icons-material';
+import IconButton from '@mui/material/IconButton';
+import TableRow from '@mui/material/TableRow';
+import Tooltip from '@mui/material/Tooltip';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import FormHelperText from '@mui/material/FormHelperText';
+import Stack from '@mui/material/Stack';
+import Add from '@mui/icons-material/Add';
 import ValidationIcon from './ValidationIcon';
 import NoBorderTableCell from './NoBorderTableCell';
 
