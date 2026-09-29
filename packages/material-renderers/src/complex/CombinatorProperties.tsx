@@ -58,10 +58,8 @@ export class CombinatorProperties extends React.Component<
       undefined,
       rootSchema
     );
-    let isLayoutWithElements = false;
-    if (foundUISchema !== null && isLayout(foundUISchema)) {
-      isLayoutWithElements = foundUISchema.elements.length > 0;
-    }
+    const isLayoutWithElements =
+      isLayout(foundUISchema) && foundUISchema.elements.length > 0;
 
     if (isLayoutWithElements) {
       return (

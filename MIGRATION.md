@@ -2,6 +2,18 @@
 
 ## Migration to JSON Forms 3.9
 
+### JSON Schema generation supports non-object root values
+
+`generateJsonSchema` now generates a schema matching the root value's actual type. In particular, arrays produce an array schema with an `items` schema, primitives produce their corresponding primitive schema, and `undefined` produces an empty schema.
+
+Previously all root values were handled as objects. For example, `generateJsonSchema([1, 2])` produced an object schema with properties named `"0"` and `"1"`; it now produces an array schema with an integer `items` schema. If you depend on the previous object-shaped output, adapt the generated schema before consuming it.
+
+### Default UI schema generation always returns a layout
+
+`generateDefaultUISchema` previously returned `null` when no UI schema elements could be generated. It now returns an empty layout of the requested type instead.
+
+If you call `generateDefaultUISchema` directly, remove any `null` handling and check the returned layout's `elements` when you need to know whether controls were generated.
+
 ### Data update paths treat all segments literally
 
 Data updates (e.g. dispatched `update` actions) previously wrote to the form data via lodash's `set`/`unset`, which interpret bracket notation and array indices in paths.

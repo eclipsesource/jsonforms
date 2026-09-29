@@ -59,10 +59,8 @@ export default defineComponent({
     const isLayout = (uischema: UISchemaElement): uischema is Layout =>
       Object.prototype.hasOwnProperty.call(uischema, 'elements');
 
-    let isLayoutWithElements = false;
-    if (foundUISchema !== null && isLayout(foundUISchema)) {
-      isLayoutWithElements = foundUISchema.elements.length > 0;
-    }
+    const isLayoutWithElements =
+      isLayout(foundUISchema) && foundUISchema.elements.length > 0;
 
     return {
       otherProps,
