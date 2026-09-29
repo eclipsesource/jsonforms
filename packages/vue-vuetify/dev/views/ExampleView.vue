@@ -29,8 +29,7 @@ import examples from '../examples';
 import { useAppStore } from '../store';
 import { createAjv } from '../validate';
 
-import { Pane, Splitpanes } from 'splitpanes';
-import 'splitpanes/dist/splitpanes.css';
+import { VPane, VSplitpanes } from '../../src/components';
 import { getCustomRenderersForExample } from '../renderers';
 
 const { extendedVuetifyRenderers } = await import('../../src');
@@ -332,12 +331,11 @@ const handleAction = (action: Action) => {
               </v-card-title>
               <v-divider class="mx-4"></v-divider>
               <div class="json-forms">
-                <splitpanes
-                  :class="['default-theme', 'splitpanes-vuetify']"
-                  :rtl="appStore.rtl"
+                <v-splitpanes
+                  class="splitpanes-vuetify"
                   v-if="appStore.layout === 'demo-and-data'"
                 >
-                  <pane min-size="20">
+                  <v-pane min-size="20">
                     <v-card>
                       <v-card-title>
                         <v-toolbar flat>
@@ -348,8 +346,8 @@ const handleAction = (action: Action) => {
                       <v-divider class="mx-4"></v-divider>
                       <example-form :state="state" @jsfchange="onChange" />
                     </v-card>
-                  </pane>
-                  <pane>
+                  </v-pane>
+                  <v-pane>
                     <v-card>
                       <v-card-title>
                         <v-toolbar flat>
@@ -389,8 +387,8 @@ const handleAction = (action: Action) => {
                         :editorBeforeMount="registerValidations"
                       ></monaco-editor>
                     </v-card>
-                  </pane>
-                </splitpanes>
+                  </v-pane>
+                </v-splitpanes>
 
                 <example-form :state="state" @jsfchange="onChange" v-else />
               </div>
@@ -509,28 +507,3 @@ const handleAction = (action: Action) => {
     </div>
   </div>
 </template>
-<style lang="scss" scoped>
-:deep(.default-theme) {
-  &.splitpanes--vertical > .splitpanes__splitter,
-  .splitpanes--vertical > .splitpanes__splitter {
-    border-left: 1px solid rgb(var(--v-theme-on-surface-variant));
-  }
-
-  &.splitpanes--horizontal > .splitpanes__splitter,
-  .splitpanes--horizontal > .splitpanes__splitter {
-    border-top: 1px solid rgb(var(--v-theme-on-surface-variant));
-  }
-
-  .splitpanes__splitter {
-    background-color: rgb(var(--v-theme-surface));
-    &:before,
-    &:after {
-      background-color: rgb(var(--v-theme-on-surface-variant));
-    }
-    &:hover:before,
-    &:hover:after {
-      background-color: rgb(var(--v-theme-on-surface-variant));
-    }
-  }
-}
-</style>
