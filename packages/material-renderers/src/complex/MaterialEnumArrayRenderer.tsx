@@ -18,13 +18,11 @@ import {
 
 import { withJsonFormsMultiEnumProps } from '@jsonforms/react';
 import { MuiCheckbox } from '../mui-controls';
-import {
-  FormControl,
-  FormControlLabel,
-  FormGroup,
-  FormHelperText,
-  FormLabel,
-} from '@mui/material';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormGroup from '@mui/material/FormGroup';
+import FormHelperText from '@mui/material/FormHelperText';
+import FormLabel from '@mui/material/FormLabel';
 import isEmpty from 'lodash/isEmpty';
 import React from 'react';
 import merge from 'lodash/merge';

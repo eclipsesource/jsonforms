@@ -30,21 +30,17 @@ import {
   computeChildLabel,
   UpdateArrayContext,
 } from '@jsonforms/core';
-import {
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Avatar,
-  Grid,
-  IconButton,
-  Tooltip,
-} from '@mui/material';
-import {
-  ArrowUpward,
-  ArrowDownward,
-  Delete,
-  ExpandMore,
-} from '@mui/icons-material';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import Avatar from '@mui/material/Avatar';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import ArrowUpward from '@mui/icons-material/ArrowUpward';
+import ArrowDownward from '@mui/icons-material/ArrowDownward';
+import Delete from '@mui/icons-material/Delete';
+import ExpandMore from '@mui/icons-material/ExpandMore';
 
 const iconStyle: any = { float: 'right' };
 
