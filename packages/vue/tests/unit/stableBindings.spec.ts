@@ -8,7 +8,8 @@ import {
   rankWith,
 } from '@jsonforms/core';
 import { mount } from '@vue/test-utils';
-import { defineComponent, h, nextTick } from 'vue';
+import cloneDeep from 'lodash/cloneDeep';
+import { defineComponent, h, markRaw, nextTick } from 'vue';
 import {
   DispatchRenderer,
   JsonForms,
@@ -28,34 +29,46 @@ const TestControl = defineComponent({
     return () => {
       const path = control.value.path;
       renders[path] = (renders[path] ?? 0) + 1;
-      return h('span', String(control.value.data));
+      const min = control.value.uischema.options?.min;
+      return h(
+        'span',
+        min instanceof Date ? min.toISOString() : String(control.value.data)
+      );
     };
   },
 });
 
-const TestLayout = defineComponent({
-  props: rendererProps<Layout>(),
-  setup(props) {
-    const { layout } = useJsonFormsLayout(props);
-    return () =>
-      h(
-        'div',
-        (layout.value.uischema as Layout).elements.map((element) =>
-          h(DispatchRenderer, {
-            schema: layout.value.schema,
-            uischema: element,
-            path: layout.value.path,
-            enabled: layout.value.enabled,
-          })
-        )
-      );
-  },
-});
+// A layout that dispatches its elements. With `clone`, it gives a new clone of
+// each element to the dispatch on each render, as wrapper renderers often do.
+const createTestLayout = (clone: boolean) =>
+  defineComponent({
+    props: rendererProps<Layout>(),
+    setup(props) {
+      const { layout } = useJsonFormsLayout(props);
+      return () =>
+        h(
+          'div',
+          (layout.value.uischema as Layout).elements.map((element) =>
+            h(DispatchRenderer, {
+              schema: layout.value.schema,
+              uischema: clone ? cloneDeep(element) : element,
+              path: layout.value.path,
+              enabled: layout.value.enabled,
+            })
+          )
+        );
+    },
+  });
 
-const renderers: JsonFormsRendererRegistryEntry[] = [
-  { tester: rankWith(1, isControl), renderer: TestControl },
-  { tester: rankWith(1, isLayout), renderer: TestLayout },
+const createRenderers = (clone: boolean): JsonFormsRendererRegistryEntry[] => [
+  { tester: rankWith(1, isControl), renderer: markRaw(TestControl) },
+  {
+    tester: rankWith(1, isLayout),
+    renderer: markRaw(createTestLayout(clone)),
+  },
 ];
+
+const renderers = createRenderers(false);
 
 const schema = {
   type: 'object',
@@ -118,5 +131,32 @@ describe('stable bindings', () => {
     expect(wrapper.text()).toContain('changed');
     expect(renders.first).toBe(1);
     expect(renders.second).toBe(2);
+  });
+
+  it('re-renders a control when a date in its UI schema changes', async () => {
+    const uischemaWithDate = (min: Date) => ({
+      type: 'VerticalLayout',
+      elements: [
+        { type: 'Control', scope: '#/properties/first', options: { min } },
+        { type: 'Control', scope: '#/properties/second' },
+      ],
+    });
+    const wrapper = mount(JsonForms, {
+      props: {
+        data: { first: 'a', second: 'b' },
+        schema,
+        uischema: uischemaWithDate(new Date(Date.UTC(1970, 0, 1))),
+        renderers,
+      },
+    });
+    await nextTick();
+    expect(wrapper.text()).toContain('1970-01-01');
+
+    await wrapper.setProps({
+      uischema: uischemaWithDate(new Date(Date.UTC(2030, 0, 1))),
+    });
+    await nextTick();
+
+    expect(wrapper.text()).toContain('2030-01-01');
   });
 });
