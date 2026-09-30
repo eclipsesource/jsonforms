@@ -149,9 +149,26 @@ export interface ControlProps extends RendererProps {
 }
 
 /**
- * Compares two values structurally, to at most `depth` levels of objects and
- * arrays. At the depth limit, two different objects are not equal. The result
- * is conservative: `true` only when the values are deep-equal.
+ * Returns `true` for arrays and plain objects. Other objects (for example
+ * `Date`, `RegExp`, `Map` or `Set`) keep their contents out of their own keys,
+ * thus a compare of their keys is not sufficient.
+ */
+const isPlainObjectOrArray = (value: unknown): value is object => {
+  if (typeof value !== 'object' || value === null) {
+    return false;
+  }
+  if (Array.isArray(value)) {
+    return true;
+  }
+  const prototype = Object.getPrototypeOf(value);
+  return prototype === Object.prototype || prototype === null;
+};
+
+/**
+ * Compares two values structurally, to at most `depth` levels of plain objects
+ * and arrays. Other objects are compared by identity. At the depth limit, two
+ * different objects are not equal. The result is conservative: `true` only
+ * when the values are deep-equal.
  */
 const isEqualToDepth = (a: unknown, b: unknown, depth: number): boolean => {
   if (a === b) {
@@ -159,10 +176,8 @@ const isEqualToDepth = (a: unknown, b: unknown, depth: number): boolean => {
   }
   if (
     depth <= 0 ||
-    a === null ||
-    b === null ||
-    typeof a !== 'object' ||
-    typeof b !== 'object' ||
+    !isPlainObjectOrArray(a) ||
+    !isPlainObjectOrArray(b) ||
     Array.isArray(a) !== Array.isArray(b)
   ) {
     return false;
