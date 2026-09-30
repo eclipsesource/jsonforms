@@ -148,6 +148,110 @@ export interface ControlProps extends RendererProps {
   uischema: ControlElement;
 }
 
+/**
+ * Returns `true` for arrays and plain objects. Other objects (for example
+ * `Date`, `RegExp`, `Map` or `Set`) keep their contents out of their own keys,
+ * thus a compare of their keys is not sufficient.
+ */
+const isPlainObjectOrArray = (value: unknown): value is object => {
+  if (typeof value !== 'object' || value === null) {
+    return false;
+  }
+  if (Array.isArray(value)) {
+    return true;
+  }
+  const prototype = Object.getPrototypeOf(value);
+  return prototype === Object.prototype || prototype === null;
+};
+
+/**
+ * Compares two values structurally, to at most `depth` levels of plain objects
+ * and arrays. Other objects are compared by identity. At the depth limit, two
+ * different objects are not equal. The result is conservative: `true` only
+ * when the values are deep-equal.
+ */
+const isEqualToDepth = (a: unknown, b: unknown, depth: number): boolean => {
+  if (a === b) {
+    return true;
+  }
+  if (
+    depth <= 0 ||
+    !isPlainObjectOrArray(a) ||
+    !isPlainObjectOrArray(b) ||
+    Array.isArray(a) !== Array.isArray(b)
+  ) {
+    return false;
+  }
+  const keysA = Object.keys(a);
+  const keysB = Object.keys(b);
+  return (
+    keysA.length === keysB.length &&
+    keysA.every(
+      (key) =>
+        Object.prototype.hasOwnProperty.call(b, key) &&
+        isEqualToDepth(
+          (a as Record<string, unknown>)[key],
+          (b as Record<string, unknown>)[key],
+          depth - 1
+        )
+    )
+  );
+};
+
+/**
+ * The compare depth for each key of a bindings object:
+ * - `data`, `schema` and `rootSchema` are compared by identity. The core
+ *   replaces the data immutably, thus changed data always has a new identity.
+ *   The schemas can be large, and a structural compare would be expensive.
+ * - `uischema` is compared structurally, because renderers often give a new
+ *   clone of a UI schema element to a nested dispatch on each render.
+ * - All other keys are compared structurally to a small depth.
+ */
+const compareDepth = (key: string): number => {
+  if (key === 'data' || key === 'schema' || key === 'rootSchema') {
+    return 0;
+  }
+  return key === 'uischema' ? 8 : 3;
+};
+
+/**
+ * Returns `previous` when `next` has the same keys, and each value is equal to
+ * the value in `previous`. Otherwise returns `next`.
+ */
+const reuseIfEqual = <T extends object>(
+  previous: T | undefined,
+  next: T
+): T => {
+  if (previous === undefined) {
+    return next;
+  }
+  const previousKeys = Object.keys(previous);
+  const nextKeys = Object.keys(next);
+  const equal =
+    previousKeys.length === nextKeys.length &&
+    nextKeys.every(
+      (key) =>
+        Object.prototype.hasOwnProperty.call(previous, key) &&
+        isEqualToDepth(
+          (previous as Record<string, unknown>)[key],
+          (next as Record<string, unknown>)[key],
+          compareDepth(key)
+        )
+    );
+  return equal ? previous : next;
+};
+
+/**
+ * A `computed` for a bindings object. Each change of the JSON Forms state
+ * recomputes the bindings of all renderers, and the getter returns a new
+ * object each time. Vue compares a computed value by identity, thus without
+ * this wrapper each change re-renders all renderers in the form. When the new
+ * bindings are equal to the previous bindings, this computed keeps the
+ * previous object, and Vue does not trigger the dependents.
+ */
+const stableComputed = <T extends object>(getter: () => T): ComputedRef<T> =>
+  computed((previous?: T) => reuseIfEqual(previous, getter()));
+
 export type Required<T> = T extends object
   ? { [P in keyof T]-?: NonNullable<T[P]> }
   : T;
@@ -188,7 +292,7 @@ export function useControl<
   const dispatch = useDispatch();
 
   const id = ref<string | undefined>(undefined);
-  const control = computed(() => ({
+  const control = stableComputed(() => ({
     ...props,
     ...stateMap({ jsonforms }, props),
     id: id.value,
@@ -416,7 +520,7 @@ export const useJsonFormsRenderer = (props: RendererProps) => {
   );
 
   const rootSchema = computed(() => rawProps.value.rootSchema);
-  const renderer = computed(() => {
+  const renderer = stableComputed(() => {
     const { rootSchema: _rootSchema, ...rest } = rawProps.value;
     return rest;
   });
