@@ -133,6 +133,26 @@ describe('stable bindings', () => {
     expect(renders.second).toBe(2);
   });
 
+  it('does not re-render a control when its layout dispatches a cloned UI schema element', async () => {
+    const wrapper = mount(JsonForms, {
+      props: {
+        data: { first: 'a', second: 'b' },
+        schema,
+        uischema,
+        renderers: createRenderers(true),
+      },
+    });
+    await nextTick();
+    expect(renders).toEqual({ first: 1, second: 1 });
+
+    changeHandlers.first('first', 'changed');
+    await nextTick();
+
+    expect(wrapper.text()).toContain('changed');
+    expect(renders.first).toBe(2);
+    expect(renders.second).toBe(1);
+  });
+
   it('re-renders a control when a date in its UI schema changes', async () => {
     const uischemaWithDate = (min: Date) => ({
       type: 'VerticalLayout',
