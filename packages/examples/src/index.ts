@@ -154,3 +154,4 @@ export {
   text,
   validationNestedSameName,
 };
+import './examples/multi-select';
