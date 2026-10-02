@@ -48,6 +48,7 @@ import * as defaultExample from './examples/default';
 import * as enumExample from './examples/enum';
 import * as multiEnum from './examples/enum-multi';
 import * as multiEnumWithLabelAndDesc from './examples/enum-multi-with-label-and-desc';
+import * as multiSelect from './examples/multi-select';
 import * as enumI18n from './examples/enumI18n';
 import * as enumInArray from './examples/enumInArray';
 import * as generateSchema from './examples/generate';
@@ -131,6 +132,7 @@ export {
   mixedObject,
   multiEnum,
   multiEnumWithLabelAndDesc,
+  multiSelect,
   nestedArray,
   nestedCategorization,
   numbers,
@@ -154,4 +156,3 @@ export {
   text,
   validationNestedSameName,
 };
-import './examples/multi-select';
