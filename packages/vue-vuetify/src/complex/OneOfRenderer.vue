@@ -45,7 +45,7 @@
 
     <v-dialog v-model="dialog" persistent max-width="600" @keydown.esc="cancel">
       <v-card>
-        <v-card-title class="text-h5">
+        <v-card-title class="text-headline-medium">
           {{ control.translations.clearDialogTitle }}
         </v-card-title>
 

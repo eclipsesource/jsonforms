@@ -103,7 +103,7 @@ import {
 import {
   VStepperVertical,
   VStepperVerticalItem,
-} from 'vuetify/labs/VStepperVertical';
+} from 'vuetify/components';
 import { useVuetifyLayout } from '../util';
 
 const layoutRenderer = defineComponent({
