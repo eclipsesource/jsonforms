@@ -12,6 +12,20 @@ When a missing intermediate container is created, the JSON Schema decides whethe
 
 If you dispatch update actions yourself, make sure to use dot-separated paths (e.g. `update('list.0.name', ...)`) instead of lodash bracket syntax (e.g. `update('list[0].name', ...)`), which is no longer interpreted.
 
+### React Material renderers now require Material UI v9
+
+The React Material renderers (`@jsonforms/material-renderers`) were upgraded from Material UI v7 to v9.
+When using JSON Forms 3.9, your application now needs to provide `@mui/material` and `@mui/icons-material` in version 9, as well as `@mui/x-date-pickers` in version 9 (previously version 8).
+
+To upgrade your application, follow the official [Material UI upgrade guide](https://mui.com/material-ui/migration/upgrade-to-v9/) and the [MUI X Date Pickers migration guide](https://mui.com/x/migration/migration-pickers-v8/).
+
+Use JSON Forms 3.8 if you need to stay on Material UI v7.
+
+As part of this upgrade, layouts that arrange their children vertically (e.g. `VerticalLayout`, `Group`, `Categorization`) now render a MUI `Stack` instead of a `Grid` container with `direction="column"`, and their children are no longer wrapped in `Grid` items.
+If you apply custom styling that relies on the previous `Grid`-based DOM structure of these layouts, verify that it still works as expected.
+Furthermore, if you use exported method `renderLayoutElements`, it no longer wraps children in `Grid` items for direction `column`.
+This should not affect you except if you explicitly use this method in custom renderers.
+
 ## Migrating to JSON Forms 3.8
 
 ### `Translator` type changed from overloaded signatures to a generic conditional type

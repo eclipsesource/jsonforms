@@ -33,8 +33,9 @@ import {
   rankWith,
 } from '@jsonforms/core';
 import { withJsonFormsControlProps } from '@jsonforms/react';
-import { FormHelperText } from '@mui/material';
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import FormHelperText from '@mui/material/FormHelperText';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import {
   createOnBlurHandler,
@@ -136,13 +137,15 @@ export const MaterialDateControl = (props: ControlProps) => {
             error: !isValid,
             fullWidth: !appliedUiSchemaOptions.trim,
             variant: inputVariant,
-            inputProps: {
-              autoFocus: appliedUiSchemaOptions.focus,
-              type: 'text',
-              onFocus: onFocus,
-              onBlur: onBlurHandler,
+            slotProps: {
+              htmlInput: {
+                autoFocus: appliedUiSchemaOptions.focus,
+                type: 'text',
+                onFocus: onFocus,
+                onBlur: onBlurHandler,
+              },
+              inputLabel: data ? { shrink: true } : undefined,
             },
-            InputLabelProps: data ? { shrink: true } : undefined,
           },
         }}
       />

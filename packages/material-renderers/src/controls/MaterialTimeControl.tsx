@@ -33,8 +33,9 @@ import {
   defaultTimeFormat,
 } from '@jsonforms/core';
 import { withJsonFormsControlProps } from '@jsonforms/react';
-import { FormHelperText } from '@mui/material';
-import { TimePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import FormHelperText from '@mui/material/FormHelperText';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import {
   createOnBlurHandler,
@@ -138,13 +139,15 @@ export const MaterialTimeControl = (props: ControlProps) => {
             error: !isValid,
             fullWidth: !appliedUiSchemaOptions.trim,
             variant: inputVariant,
-            inputProps: {
-              autoFocus: appliedUiSchemaOptions.focus,
-              type: 'text',
-              onBlur: onBlurHandler,
-              onFocus: onFocus,
+            slotProps: {
+              htmlInput: {
+                autoFocus: appliedUiSchemaOptions.focus,
+                type: 'text',
+                onBlur: onBlurHandler,
+                onFocus: onFocus,
+              },
+              inputLabel: data ? { shrink: true } : undefined,
             },
-            InputLabelProps: data ? { shrink: true } : undefined,
           },
         }}
       />

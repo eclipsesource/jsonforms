@@ -13,6 +13,56 @@ const makeError = (instancePath: string): ErrorObject => ({
 });
 
 describe('useVuetifyArrayControl', () => {
+  it('uses elementLabelProp before the legacy childLabelProp', () => {
+    let captured: ReturnType<typeof useVuetifyArrayControl> | undefined;
+
+    const Child = defineComponent({
+      setup() {
+        const control = computed(() => ({
+          label: '',
+          required: false,
+          config: {},
+          uischema: {
+            type: 'Control',
+            scope: '#',
+            options: {
+              elementLabelProp: 'message2',
+              childLabelProp: 'message1',
+            },
+          },
+          schema: {
+            type: 'object',
+            properties: {
+              message1: { type: 'string' },
+              message2: { type: 'string' },
+            },
+          },
+          data: [{ message1: 'Message one', message2: 'Message two' }],
+          childErrors: [],
+          i18nKeyPrefix: '',
+        }));
+        captured = useVuetifyArrayControl({ control });
+        return () => h('div');
+      },
+    });
+
+    const Host = defineComponent({
+      setup() {
+        provide('jsonforms', {
+          core: { data: {}, schema: {}, uischema: { type: 'Control' } },
+          i18n: {
+            translate: (_id: string, defaultMessage?: string) => defaultMessage,
+          },
+        });
+        return () => h(Child);
+      },
+    });
+
+    mount(Host);
+
+    expect(captured!.childLabelForIndex(0)).toBe('Message two');
+  });
+
   it('exposes a reactive rawChildErrors that reflects child error changes', async () => {
     const childErrors = ref<ErrorObject[]>([]);
 

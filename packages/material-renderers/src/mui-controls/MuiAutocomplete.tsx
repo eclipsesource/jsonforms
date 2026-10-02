@@ -31,13 +31,12 @@ import {
   WithClassname,
 } from '@jsonforms/core';
 
-import {
-  Autocomplete,
+import Autocomplete, {
   AutocompleteRenderOptionState,
-  FilterOptionsState,
-  FormHelperText,
-  TextField,
-} from '@mui/material';
+} from '@mui/material/Autocomplete';
+import { FilterOptionsState } from '@mui/material/useAutocomplete';
+import FormHelperText from '@mui/material/FormHelperText';
+import TextField from '@mui/material/TextField';
 import merge from 'lodash/merge';
 import { useFocus } from '../util/focus';
 
@@ -121,29 +120,29 @@ export const MuiAutocomplete = (
         options={options}
         getOptionLabel={getOptionLabel || ((option) => option?.label)}
         freeSolo={false}
-        renderInput={(params) => {
-          return (
-            <TextField
-              label={label}
-              type='text'
-              inputProps={params.inputProps}
-              inputRef={params.InputProps.ref}
-              autoFocus={appliedUiSchemaOptions.focus}
-              disabled={!enabled}
-              {...params}
-              id={id}
-              required={
-                required && !appliedUiSchemaOptions.hideRequiredAsterisk
-              }
-              error={!isValid}
-              fullWidth={!appliedUiSchemaOptions.trim}
-              InputLabelProps={data ? { shrink: true } : undefined}
-              onFocus={onFocus}
-              onBlur={onBlur}
-              focused={focused}
-            />
-          );
-        }}
+        renderInput={(params) => (
+          <TextField
+            label={label}
+            type='text'
+            autoFocus={appliedUiSchemaOptions.focus}
+            disabled={!enabled}
+            {...params}
+            id={id}
+            required={required && !appliedUiSchemaOptions.hideRequiredAsterisk}
+            error={!isValid}
+            fullWidth={!appliedUiSchemaOptions.trim}
+            slotProps={{
+              ...params.slotProps,
+              inputLabel: {
+                ...params.slotProps.inputLabel,
+                ...(data ? { shrink: true } : undefined),
+              },
+            }}
+            onFocus={onFocus}
+            onBlur={onBlur}
+            focused={focused}
+          />
+        )}
         renderOption={renderOption}
         filterOptions={filterOptions}
       />

@@ -24,8 +24,10 @@
 */
 import React from 'react';
 
-import { ErrorOutline } from '@mui/icons-material';
-import { Badge, Tooltip, styled } from '@mui/material';
+import ErrorOutlineOutlined from '@mui/icons-material/ErrorOutlineOutlined';
+import Badge from '@mui/material/Badge';
+import Tooltip from '@mui/material/Tooltip';
+import { styled } from '@mui/material/styles';
 
 const StyledBadge = styled(Badge)(({ theme }: any) => ({
   color: theme.palette.error.main,
@@ -40,7 +42,7 @@ const ValidationIcon: React.FC<ValidationProps> = ({ errorMessages, id }) => {
   return (
     <Tooltip id={id} title={errorMessages}>
       <StyledBadge badgeContent={errorMessages.split('\n').length}>
-        <ErrorOutline color='inherit' />
+        <ErrorOutlineOutlined color='inherit' />
       </StyledBadge>
     </Tooltip>
   );
