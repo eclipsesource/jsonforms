@@ -105,11 +105,9 @@ const properties = computed<JsonFormsProps>(() => ({
     <v-container v-else>
       <v-row
         v-if="!resolvedSchema.resolved"
-        class="fill-height"
-        align-content="center"
-        justify="center"
+        class="fill-height align-content-center justify-center"
       >
-        <v-col class="text-subtitle-1 text-center" cols="12">
+        <v-col class="text-body-large text-center" cols="12">
           Resolving Schema Refs
         </v-col>
         <v-col cols="6">
@@ -122,11 +120,9 @@ const properties = computed<JsonFormsProps>(() => ({
       </v-row>
       <v-row
         v-else-if="resolvedSchema.error !== undefined"
-        class="fill-height"
-        align-content="center"
-        justify="center"
+        class="fill-height align-content-center justify-center"
       >
-        <v-col class="text-subtitle-1 text-center" cols="12">
+        <v-col class="text-body-large text-center" cols="12">
           <v-alert color="red" dark>
             {{ resolvedSchema.error }}
           </v-alert>

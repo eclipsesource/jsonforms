@@ -6,12 +6,13 @@ exports[`ArrayLayoutRenderer.vue > should render component and match snapshot 1`
     <div data-v-5f91636e="" class="v-card v-theme--light v-card--density-default v-card--variant-elevated array-list">
       <!---->
       <div class="v-card__loader">
-        <div class="v-progress-linear v-theme--light v-locale--is-ltr" style="top: 0px; height: 0px; --v-progress-linear-height: 2px;" role="progressbar" aria-hidden="true" aria-valuemin="0" aria-valuemax="100">
+        <div class="v-progress-linear v-theme--light v-locale--is-ltr" style="top: 0px; height: 0px; --v-progress-linear-height: 2px; --v-progress-reveal-duration: 900ms; --v-progress-chunk-gap: 4px;" role="progressbar" aria-hidden="true" aria-valuemin="0" aria-valuemax="100">
           <!---->
           <div class="v-progress-linear__background"></div>
           <div class="v-progress-linear__buffer" style="width: 0%;"></div>
           <transition-stub name="fade-transition" appear="false" persisted="false" css="true">
             <div class="v-progress-linear__indeterminate">
+              <!---->
               <div class="v-progress-linear__indeterminate long"></div>
               <div class="v-progress-linear__indeterminate short"></div>
             </div>
@@ -49,7 +50,7 @@ exports[`ArrayLayoutRenderer.vue > should render component and match snapshot 1`
       </div>
       <div data-v-5f91636e="" class="v-card-text">
         <div data-v-5f91636e="" class="v-container v-locale--is-ltr" justify-space-around="" align-content-center="">
-          <div data-v-5f91636e="" class="v-row justify-center">
+          <div data-v-5f91636e="" class="v-row v-row--density-default justify-center">
             <div data-v-5f91636e="" class="v-expansion-panels v-theme--light v-expansion-panels--variant-default" accordion=""></div>
           </div>
         </div>
