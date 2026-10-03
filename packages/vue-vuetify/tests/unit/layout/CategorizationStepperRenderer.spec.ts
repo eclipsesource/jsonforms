@@ -4,6 +4,7 @@ import { nextTick } from 'vue';
 import CategorizationStepperRenderer from '../../../src/layouts/CategorizationStepperRenderer.vue';
 import { layoutRenderers } from '../../../src/layouts';
 import { mountJsonForms } from '../util';
+import { VStepperItem } from 'vuetify/components';
 
 describe('CategorizationStepperRenderer.vue', () => {
   const schema = {
