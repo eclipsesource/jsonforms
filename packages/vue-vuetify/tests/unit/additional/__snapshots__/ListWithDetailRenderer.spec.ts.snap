@@ -4,7 +4,7 @@ exports[`ListWithDetailRenderer.vue > should render component and match snapshot
 "<div class="v-application v-theme--light v-layout v-layout--full-height v-locale--is-ltr">
   <div class="v-application__wrap">
     <div data-v-7e93fcc2="" class="v-container v-locale--is-ltr list-with-detail" fill-height="">
-      <div data-v-7e93fcc2="" class="v-row">
+      <div data-v-7e93fcc2="" class="v-row v-row--density-default">
         <div data-v-7e93fcc2="" class="v-col pa-0">
           <header data-v-7e93fcc2="" class="v-toolbar v-toolbar--collapse-start v-toolbar--flat v-toolbar--density-default v-theme--light v-locale--is-ltr list-with-detail-toolbar">
             <!---->
@@ -32,7 +32,7 @@ exports[`ListWithDetailRenderer.vue > should render component and match snapshot
           </header>
         </div>
       </div>
-      <div data-v-7e93fcc2="" class="v-row list-with-detail-no-data">
+      <div data-v-7e93fcc2="" class="v-row v-row--density-default list-with-detail-no-data">
         <div data-v-7e93fcc2="" class="v-col">No data</div>
       </div>
     </div>
