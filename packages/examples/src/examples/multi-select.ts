@@ -1,6 +1,6 @@
 import { registerExamples } from '../register';
 
-const schema = {
+export const schema = {
   type: 'object',
   properties: {
     fruits: {
@@ -15,7 +15,7 @@ const schema = {
   },
 };
 
-const uischema = {
+export const uischema = {
   type: 'VerticalLayout',
   elements: [
     {
@@ -28,7 +28,7 @@ const uischema = {
   ],
 };
 
-const data = {
+export const data = {
   fruits: ['Banana', 'Cherry'],
 };
 
@@ -41,4 +41,3 @@ registerExamples([
     uischema,
   },
 ]);
-
