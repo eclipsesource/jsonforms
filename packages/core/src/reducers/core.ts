@@ -200,6 +200,7 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
       const errors = validate(validator, state.data);
       return {
         ...state,
+        ajv: currentAjv,
         validator,
         errors,
       };
