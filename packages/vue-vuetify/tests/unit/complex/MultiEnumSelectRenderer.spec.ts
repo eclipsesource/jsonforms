@@ -57,7 +57,7 @@ describe('MultiEnumSelectRenderer.vue', () => {
       await select.vm.$emit('update:modelValue', []);
 
       const component = wrapper.getComponent(MultiEnumSelectRenderer);
-      expect(component.vm.control.data).toEqual([]);
+      expect(component.vm.control.data).toBeUndefined();
     });
 
     it('emits change when cleared', async () => {

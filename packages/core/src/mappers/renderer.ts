@@ -992,6 +992,7 @@ export const mapDispatchToArrayControlProps = (
 export interface DispatchPropsOfMultiEnumControl {
   addItem: (path: string, value: any) => void;
   removeItem?: (path: string, toDelete: any) => void;
+  handleChange?: (path: string, value: any) => void;
 }
 
 export const mapDispatchToMultiEnumProps = (
@@ -1016,6 +1017,9 @@ export const mapDispatchToMultiEnumProps = (
         return data;
       })
     );
+  },
+  handleChange: (path: string, value: any) => {
+    dispatch(update(path, () => value));
   },
 });
 
