@@ -26,6 +26,7 @@ import test from 'ava';
 import type { ErrorObject } from 'ajv';
 import { JsonSchema } from '../../src/models';
 import {
+  isSchemaMatch,
   isStructuralMatch,
   structuralKeywords,
 } from '../../src/util/structural';
@@ -328,4 +329,125 @@ test('isStructuralMatch - undefined property values do not count as present', (t
   };
   t.false(isStructuralMatch(schema, { a: undefined }));
   t.true(isStructuralMatch(schema, { a: 'x', b: undefined }));
+});
+
+/** Full AJV validity, the reference for isSchemaMatch. */
+const ajvValid = (schema: JsonSchema, data: unknown): boolean =>
+  createAjv().validate(schema, data) as boolean;
+
+const valueCases: Array<{ name: string; schema: JsonSchema; data: unknown }> = [
+  { name: 'minimum ok', schema: { minimum: 3 }, data: 3 },
+  { name: 'minimum fail', schema: { minimum: 3 }, data: 2.5 },
+  { name: 'maximum ok', schema: { maximum: 3 }, data: 3 },
+  { name: 'maximum fail', schema: { maximum: 3 }, data: 4 },
+  { name: 'exclusiveMinimum ok', schema: { exclusiveMinimum: 3 }, data: 3.1 },
+  { name: 'exclusiveMinimum fail', schema: { exclusiveMinimum: 3 }, data: 3 },
+  { name: 'exclusiveMaximum ok', schema: { exclusiveMaximum: 3 }, data: 2 },
+  { name: 'exclusiveMaximum fail', schema: { exclusiveMaximum: 3 }, data: 3 },
+  { name: 'multipleOf ok', schema: { multipleOf: 0.5 }, data: 2.5 },
+  { name: 'multipleOf fail', schema: { multipleOf: 2 }, data: 3 },
+  {
+    name: 'numeric keywords ignore strings',
+    schema: { minimum: 3 },
+    data: 'a',
+  },
+  { name: 'minLength ok', schema: { minLength: 2 }, data: 'ab' },
+  { name: 'minLength fail', schema: { minLength: 2 }, data: 'a' },
+  {
+    name: 'minLength counts code points',
+    schema: { minLength: 2 },
+    data: '😀',
+  },
+  { name: 'maxLength ok', schema: { maxLength: 2 }, data: 'ab' },
+  { name: 'maxLength fail', schema: { maxLength: 2 }, data: 'abc' },
+  { name: 'pattern ok', schema: { pattern: '^a.c$' }, data: 'abc' },
+  { name: 'pattern fail', schema: { pattern: '^a.c$' }, data: 'abd' },
+  { name: 'pattern is unanchored', schema: { pattern: 'b' }, data: 'abc' },
+  { name: 'minItems fail', schema: { minItems: 2 }, data: [1] },
+  { name: 'maxItems fail', schema: { maxItems: 1 }, data: [1, 2] },
+  {
+    name: 'uniqueItems ok',
+    schema: { uniqueItems: true },
+    data: [1, 2, { a: 1 }],
+  },
+  {
+    name: 'uniqueItems fail',
+    schema: { uniqueItems: true },
+    data: [{ a: 1 }, { a: 1 }],
+  },
+  { name: 'minProperties fail', schema: { minProperties: 2 }, data: { a: 1 } },
+  {
+    name: 'maxProperties fail',
+    schema: { maxProperties: 1 },
+    data: { a: 1, b: 2 },
+  },
+  { name: 'not ok', schema: { not: { type: 'string' } }, data: 1 },
+  { name: 'not fail', schema: { not: { type: 'string' } }, data: 'a' },
+  { name: 'not with const fail', schema: { not: { const: 'x' } }, data: 'x' },
+  {
+    name: 'nested value constraint in properties',
+    schema: {
+      type: 'object',
+      properties: { age: { type: 'integer', minimum: 18 } },
+    },
+    data: { age: 17 },
+  },
+  {
+    name: 'value constraint inside anyOf',
+    schema: {
+      anyOf: [
+        { type: 'string', minLength: 5 },
+        { type: 'number', minimum: 10 },
+      ],
+    },
+    data: 12,
+  },
+  {
+    name: 'value constraint inside anyOf fail',
+    schema: {
+      anyOf: [
+        { type: 'string', minLength: 5 },
+        { type: 'number', minimum: 10 },
+      ],
+    },
+    data: 3,
+  },
+  {
+    name: 'rule-like condition: range',
+    schema: { type: 'number', minimum: 1, maximum: 10 },
+    data: 5,
+  },
+];
+
+for (const c of valueCases) {
+  test(`isSchemaMatch agrees with AJV: ${c.name}`, (t) => {
+    t.is(isSchemaMatch(c.schema, c.data), ajvValid(c.schema, c.data));
+  });
+}
+
+test('isSchemaMatch - draft-04 boolean exclusiveMinimum/exclusiveMaximum', (t) => {
+  const min = { minimum: 3, exclusiveMinimum: true } as unknown as JsonSchema;
+  t.false(isSchemaMatch(min, 3));
+  t.true(isSchemaMatch(min, 3.1));
+  const max = { maximum: 3, exclusiveMaximum: true } as unknown as JsonSchema;
+  t.false(isSchemaMatch(max, 3));
+  t.true(isSchemaMatch(max, 2.9));
+});
+
+test('isSchemaMatch - invalid pattern is ignored, format is not evaluated', (t) => {
+  t.true(isSchemaMatch({ pattern: '(' }, 'anything'));
+  t.true(isSchemaMatch({ type: 'string', format: 'email' }, 'not an email'));
+});
+
+test('isStructuralMatch - still ignores value constraints', (t) => {
+  t.true(isStructuralMatch({ minimum: 3 }, 1));
+  t.true(isStructuralMatch({ pattern: '^a' }, 'b'));
+  t.true(isStructuralMatch({ not: { type: 'string' } }, 'a'));
+  t.true(isStructuralMatch({ minLength: 10 }, 'short'));
+});
+
+test('isSchemaMatch - also enforces every structural keyword', (t) => {
+  t.false(isSchemaMatch({ type: 'string' }, 1));
+  t.false(isSchemaMatch({ required: ['a'] }, {}));
+  t.true(isSchemaMatch({ enum: ['a'] }, 'a'));
 });

@@ -74,6 +74,14 @@ const matchesType = (type: string, data: unknown): boolean => {
   }
 };
 
+const isMultipleOf = (data: number, divisor: number): boolean =>
+  Number.isInteger(data / divisor);
+
+/** String length in code points, as AJV counts it. */
+const codePointLength = (value: string): number =>
+  // surrogate pairs count once; avoids string iteration for ES5 targets
+  value.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, '_').length;
+
 const compilePattern = (pattern: string): RegExp | undefined => {
   try {
     return new RegExp(pattern, 'u');
@@ -105,14 +113,40 @@ export const isStructuralMatch = (
   rootSchema?: JsonSchema
 ): boolean => {
   const root = rootSchema ?? (typeof schema === 'object' ? schema : {});
-  return match(schema, data, root, []);
+  return match(schema, data, root, [], false);
+};
+
+/**
+ * The Structural Matcher extended with the value constraints rule conditions
+ * commonly use: `minimum`, `maximum`, `exclusiveMinimum`,
+ * `exclusiveMaximum`, `multipleOf`, `minLength`, `maxLength`, `pattern`,
+ * `minItems`, `maxItems`, `uniqueItems`, `minProperties`, `maxProperties`
+ * and `not`. Like {@link isStructuralMatch} it needs no validator instance
+ * and generates no code. `format` and `$data` references are not evaluated.
+ *
+ * Core uses it to evaluate schema based rule conditions when no validator is
+ * configured or the configured Form Validator has no `matches`.
+ *
+ * @param schema the schema to match against
+ * @param data the data to check
+ * @param rootSchema the root schema used to resolve `$ref`s; defaults to `schema`
+ * @returns `true` when no evaluated keyword rejects the data
+ */
+export const isSchemaMatch = (
+  schema: JsonSchema | boolean | undefined,
+  data: unknown,
+  rootSchema?: JsonSchema
+): boolean => {
+  const root = rootSchema ?? (typeof schema === 'object' ? schema : {});
+  return match(schema, data, root, [], true);
 };
 
 const match = (
   schema: JsonSchema | boolean | undefined,
   data: unknown,
   rootSchema: JsonSchema,
-  visited: Visited
+  visited: Visited,
+  extended: boolean
 ): boolean => {
   if (schema === undefined || schema === null) {
     return true;
@@ -135,21 +169,22 @@ const match = (
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { $ref, ...siblings } = schema;
     return (
-      match(resolved, data, rootSchema, nextVisited) &&
-      matchKeywords(siblings, data, rootSchema, nextVisited)
+      match(resolved, data, rootSchema, nextVisited, extended) &&
+      matchKeywords(siblings, data, rootSchema, nextVisited, extended)
     );
   }
-  return matchKeywords(schema, data, rootSchema, nextVisited);
+  return matchKeywords(schema, data, rootSchema, nextVisited, extended);
 };
 
 const matchKeywords = (
   schema: SchemaLike,
   data: unknown,
   rootSchema: JsonSchema,
-  visited: Visited
+  visited: Visited,
+  extended: boolean
 ): boolean => {
   const sub = (s: JsonSchema | boolean | undefined, d: unknown): boolean =>
-    match(s, d, rootSchema, visited);
+    match(s, d, rootSchema, visited, extended);
 
   if (schema.nullable === true && data === null) {
     return true;
@@ -167,6 +202,9 @@ const matchKeywords = (
     return false;
   }
   if ('const' in schema && !isEqual(schema.const, data)) {
+    return false;
+  }
+  if (extended && !matchesValueConstraints(schema, data, sub)) {
     return false;
   }
   if (Array.isArray(schema.allOf) && !schema.allOf.every((s) => sub(s, data))) {
@@ -243,6 +281,105 @@ const matchKeywords = (
     ) {
       return false;
     }
+  }
+  return true;
+};
+
+/**
+ * The value constraints evaluated by {@link isSchemaMatch} on top of the
+ * structural keywords. Mirrors AJV's semantics for each keyword.
+ */
+const matchesValueConstraints = (
+  schema: SchemaLike,
+  data: unknown,
+  sub: (s: JsonSchema | boolean | undefined, d: unknown) => boolean
+): boolean => {
+  if (typeof data === 'number') {
+    if (typeof schema.minimum === 'number') {
+      if (schema.exclusiveMinimum === true) {
+        if (data <= schema.minimum) {
+          return false;
+        }
+      } else if (data < schema.minimum) {
+        return false;
+      }
+    }
+    if (typeof schema.maximum === 'number') {
+      if (schema.exclusiveMaximum === true) {
+        if (data >= schema.maximum) {
+          return false;
+        }
+      } else if (data > schema.maximum) {
+        return false;
+      }
+    }
+    if (
+      typeof schema.exclusiveMinimum === 'number' &&
+      data <= schema.exclusiveMinimum
+    ) {
+      return false;
+    }
+    if (
+      typeof schema.exclusiveMaximum === 'number' &&
+      data >= schema.exclusiveMaximum
+    ) {
+      return false;
+    }
+    if (
+      typeof schema.multipleOf === 'number' &&
+      !isMultipleOf(data, schema.multipleOf)
+    ) {
+      return false;
+    }
+  }
+  if (typeof data === 'string') {
+    const length = codePointLength(data);
+    if (typeof schema.minLength === 'number' && length < schema.minLength) {
+      return false;
+    }
+    if (typeof schema.maxLength === 'number' && length > schema.maxLength) {
+      return false;
+    }
+    if (typeof schema.pattern === 'string') {
+      const regex = compilePattern(schema.pattern);
+      if (regex !== undefined && !regex.test(data)) {
+        return false;
+      }
+    }
+  }
+  if (Array.isArray(data)) {
+    if (typeof schema.minItems === 'number' && data.length < schema.minItems) {
+      return false;
+    }
+    if (typeof schema.maxItems === 'number' && data.length > schema.maxItems) {
+      return false;
+    }
+    if (
+      schema.uniqueItems === true &&
+      data.some((item, i) =>
+        data.slice(0, i).some((prev) => isEqual(prev, item))
+      )
+    ) {
+      return false;
+    }
+  }
+  if (isPlainObject(data)) {
+    const count = Object.values(data).filter((v) => v !== undefined).length;
+    if (
+      typeof schema.minProperties === 'number' &&
+      count < schema.minProperties
+    ) {
+      return false;
+    }
+    if (
+      typeof schema.maxProperties === 'number' &&
+      count > schema.maxProperties
+    ) {
+      return false;
+    }
+  }
+  if (schema.not !== undefined && sub(schema.not, data)) {
+    return false;
   }
   return true;
 };
