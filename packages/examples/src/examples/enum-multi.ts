@@ -46,6 +46,15 @@ export const schema = {
         enum: ['foo', 'bar', 'foobar'],
       },
     },
+    multiSelect: {
+      type: 'array',
+      title: 'Select Fruits',
+      uniqueItems: true,
+      items: {
+        type: 'string',
+        enum: ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry'],
+      },
+    },
   },
 };
 
@@ -60,10 +69,21 @@ export const uischema = {
       type: 'Control',
       scope: '#/properties/multiEnum',
     },
+    {
+      type: 'Control',
+      scope: '#/properties/multiSelect',
+      options: {
+        format: 'multiselect',
+      },
+    },
   ],
 };
 
-export const data = { oneOfMultiEnum: ['foo'], multiEnum: ['bar'] };
+export const data = {
+  oneOfMultiEnum: ['foo'],
+  multiEnum: ['bar'],
+  multiSelect: ['Banana', 'Cherry'],
+};
 
 registerExamples([
   {

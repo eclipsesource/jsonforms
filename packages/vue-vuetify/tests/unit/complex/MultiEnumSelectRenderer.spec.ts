@@ -65,8 +65,6 @@ describe('MultiEnumSelectRenderer.vue', () => {
       await select.vm.$emit('update:modelValue', null);
 
       const component = wrapper.getComponent(MultiEnumSelectRenderer);
-      // Because `determineClearValue([])` is used by jsonforms natively
-      // clearing sets the value to undefined to remove it from the data object cleanly
       expect(component.vm.control.data).toEqual(undefined);
     });
 
