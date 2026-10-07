@@ -76,6 +76,7 @@ import * as prependAppendSlots from './examples/prepend-append-slots';
 import * as radioGroupExample from './examples/radioGroup';
 import * as readonly from './examples/readonly';
 import * as rule from './examples/rule';
+import * as standardSchema from './examples/standard-schema';
 import * as ruleInheritance from './examples/ruleInheritance';
 import * as scope from './examples/scope';
 import * as specialPropertyNames from './examples/special-property-names';
@@ -146,6 +147,7 @@ export {
   radioGroupExample,
   readonly,
   rule,
+  standardSchema,
   ruleInheritance,
   scope,
   specialPropertyNames,
