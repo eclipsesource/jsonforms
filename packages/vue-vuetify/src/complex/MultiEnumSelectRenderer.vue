@@ -73,9 +73,10 @@ const controlRenderer = defineComponent({
     return {
       ...vuetifyControl,
       onChange: (value: any[] | null) => {
-        const sanitizedValue = value === null || value.length === 0 ? undefined : value;
+        const sanitizedValue =
+          value === null || value.length === 0 ? undefined : value;
         control.handleChange?.(control.control.value.path, sanitizedValue);
-      }
+      },
     };
   },
 });

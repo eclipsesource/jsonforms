@@ -16,6 +16,6 @@ export const entry: JsonFormsRendererRegistryEntry = {
       uiTypeIs('Control'),
       optionIs('format', 'multiselect'),
       isMultiEnumControl
-    ),
+    )
   ),
 };
