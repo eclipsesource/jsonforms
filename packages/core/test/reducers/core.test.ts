@@ -27,6 +27,7 @@ import Ajv, { ErrorObject } from 'ajv';
 import { coreReducer } from '../../src/reducers';
 import {
   init,
+  setAjv,
   setSchema,
   setValidationMode,
   update,
@@ -2145,6 +2146,76 @@ test('core reducer - setSchema - schema with id', (t) => {
 
   const after: JsonFormsCore = coreReducer(before, setSchema(updatedSchema));
   t.is(after.schema.properties.animal.minLength, 5);
+});
+
+test('core reducer - setAjv - stores the new ajv instance in state', (t) => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      foo: { type: 'string' },
+    },
+  };
+  const before: JsonFormsCore = coreReducer(
+    undefined,
+    init({ foo: 'bar' }, schema, undefined, undefined)
+  );
+  const newAjv = createAjv();
+  t.not(before.ajv, newAjv);
+
+  const after: JsonFormsCore = coreReducer(before, setAjv(newAjv));
+  t.is(after.ajv, newAjv);
+  t.not(after.validator, before.validator);
+});
+
+test('core reducer - setAjv - later setSchema compiles with the new ajv instance', (t) => {
+  // Two violated constraints: the default ajv (allErrors: true) reports both,
+  // an ajv with allErrors: false reports only the first one.
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      foo: { type: 'string', minLength: 5, pattern: '^a' },
+    },
+  };
+  const before: JsonFormsCore = coreReducer(
+    undefined,
+    init({ foo: 'b' }, schema, undefined, undefined)
+  );
+  t.is(before.errors.length, 2);
+
+  const firstErrorOnlyAjv = createAjv({ allErrors: false });
+  const afterSetAjv: JsonFormsCore = coreReducer(
+    before,
+    setAjv(firstErrorOnlyAjv)
+  );
+  t.is(afterSetAjv.errors.length, 1);
+
+  const updatedSchema = cloneDeep(schema);
+  updatedSchema.properties.foo.minLength = 6;
+  const afterSetSchema: JsonFormsCore = coreReducer(
+    afterSetAjv,
+    setSchema(updatedSchema)
+  );
+  t.is(afterSetSchema.errors.length, 1);
+});
+
+test('core reducer - setAjv - re-enabling validation compiles with the new ajv instance', (t) => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      foo: { type: 'string', minLength: 5, pattern: '^a' },
+    },
+  };
+  const before: JsonFormsCore = coreReducer(
+    undefined,
+    init({ foo: 'b' }, schema, undefined, undefined)
+  );
+  const firstErrorOnlyAjv = createAjv({ allErrors: false });
+  const afterSetAjv = coreReducer(before, setAjv(firstErrorOnlyAjv));
+  const hidden = coreReducer(afterSetAjv, setValidationMode('NoValidation'));
+  t.is(hidden.errors.length, 0);
+
+  const shown = coreReducer(hidden, setValidationMode('ValidateAndShow'));
+  t.is(shown.errors.length, 1);
 });
 
 test('core reducer helpers - getControlPath - converts JSON Pointer notation to dot notation', (t) => {
