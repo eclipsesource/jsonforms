@@ -27,10 +27,7 @@ module.exports = {
           {
             loader: 'babel-loader',
             options: {
-              plugins: [
-                '@babel/plugin-proposal-optional-chaining',
-                '@babel/plugin-proposal-nullish-coalescing-operator',
-              ],
+              presets: ['@babel/preset-env'],
             },
           },
           { loader: 'ts-loader' },
@@ -41,10 +38,7 @@ module.exports = {
         test: /\.jsx?$/, // all js and jsx files will be processed by
         loader: 'babel-loader', // babel-loader
         options: {
-          plugins: [
-            '@babel/plugin-proposal-optional-chaining',
-            '@babel/plugin-proposal-nullish-coalescing-operator',
-          ],
+          presets: ['@babel/preset-env'],
         },
         exclude: /node_modules/, // ignore node_modules
       },
