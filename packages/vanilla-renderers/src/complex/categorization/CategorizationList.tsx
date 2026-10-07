@@ -60,13 +60,14 @@ export const CategorizationList = ({
   groupClassName,
   t,
   ajv,
+  ruleValidator,
   config,
 }: CategorizationProps & AjvProps) => {
   const filteredElements = useMemo(() => {
     return elements.filter((category: Category | Categorization) =>
-      isVisible(category, data, undefined, ajv, config)
+      isVisible(category, data, undefined, ruleValidator ?? ajv, config)
     );
-  }, [elements, data, ajv, config]);
+  }, [elements, data, ajv, ruleValidator, config]);
 
   const categoryLabels = useMemo(
     () => filteredElements.map((cat) => deriveLabelForUISchemaElement(cat, t)),
@@ -85,6 +86,7 @@ export const CategorizationList = ({
                 elements={category.elements}
                 data={data}
                 ajv={ajv}
+                ruleValidator={ruleValidator}
                 config={config}
                 depth={depth + 1}
                 onSelect={onSelect}

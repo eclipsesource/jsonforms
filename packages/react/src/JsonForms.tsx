@@ -42,6 +42,7 @@ import {
   OwnPropsOfJsonFormsRenderer,
   UISchemaElement,
   ValidationMode,
+  ValidatorOption,
 } from '@jsonforms/core';
 import {
   JsonFormsStateProvider,
@@ -190,6 +191,11 @@ export interface JsonFormsInitStateProps {
   renderers: JsonFormsRendererRegistryEntry[];
   cells?: JsonFormsCellRendererRegistryEntry[];
   ajv?: Ajv;
+  /**
+   * A custom Form Validator: a factory producing one per schema, or a
+   * validator already bound to the schema. Takes precedence over `ajv`.
+   */
+  validator?: ValidatorOption;
   config?: any;
   uischemas?: JsonFormsUISchemaRegistryEntry[];
   readonly?: boolean;
@@ -203,6 +209,7 @@ export const JsonForms = (
 ) => {
   const {
     ajv,
+    validator,
     data,
     schema,
     uischema,
@@ -234,6 +241,7 @@ export const JsonForms = (
       initState={{
         core: {
           ajv,
+          validatorOption: validator,
           data,
           schema: schemaToUse,
           uischema: uischemaToUse,
