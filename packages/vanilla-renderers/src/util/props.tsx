@@ -35,8 +35,14 @@ import type {
   RendererProps,
   StatePropsOfCell,
   StatePropsOfControl,
+  RuleValidator,
 } from '@jsonforms/core';
-import { convertToValidClassName, getAjv, getConfig } from '@jsonforms/core';
+import {
+  convertToValidClassName,
+  getAjv,
+  getConfig,
+  getRuleValidator,
+} from '@jsonforms/core';
 import { useJsonForms } from '@jsonforms/react';
 import { getStyle, getStyleAsClassName } from '../reducers';
 import { findStyle, findStyleAsClassName } from '../reducers/styling';
@@ -48,6 +54,11 @@ export interface WithClassname {
 
 export interface AjvProps {
   ajv: Ajv;
+  /**
+   * What rule conditions are evaluated with: the configured Form Validator
+   * when a custom one is set, otherwise the Ajv instance.
+   */
+  ruleValidator?: RuleValidator;
 }
 
 export interface WithChildren {
@@ -278,9 +289,11 @@ export const withAjvProps = <P extends object>(
 ) =>
   function WithAjvProps(props: P) {
     const ctx = useJsonForms();
-    const ajv = getAjv({ jsonforms: { ...ctx } });
+    const state = { jsonforms: { ...ctx } };
+    const ajv = getAjv(state);
+    const ruleValidator = getRuleValidator(state);
 
-    return <Component {...props} ajv={ajv} />;
+    return <Component {...props} ajv={ajv} ruleValidator={ruleValidator} />;
   };
 
 export const withVanillaCellProps =
