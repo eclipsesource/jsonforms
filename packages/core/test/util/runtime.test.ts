@@ -1445,6 +1445,67 @@ test('rules - a Form Validator without matches falls back to the Structural Matc
   );
 });
 
+test('rules - no validator at all also evaluates value constraints', (t) => {
+  const uischema = ruleUischema({
+    scope: '#/properties/ruleValue',
+    schema: { type: 'number', minimum: 18 },
+  });
+  t.true(
+    evalVisibility(uischema, { ruleValue: 18 }, undefined, undefined, undefined)
+  );
+  t.false(
+    evalVisibility(uischema, { ruleValue: 17 }, undefined, undefined, undefined)
+  );
+  const pattern = ruleUischema({
+    scope: '#/properties/ruleValue',
+    schema: { pattern: '^DE' },
+  });
+  t.true(
+    evalVisibility(
+      pattern,
+      { ruleValue: 'DE123' },
+      undefined,
+      undefined,
+      undefined
+    )
+  );
+  t.false(
+    evalVisibility(
+      pattern,
+      { ruleValue: 'FR123' },
+      undefined,
+      undefined,
+      undefined
+    )
+  );
+});
+
+test('rules - a Form Validator without matches gets value constraints evaluated too', (t) => {
+  const validator: FormValidator = { validate: () => [] };
+  const uischema = ruleUischema({
+    scope: '#/properties/ruleValue',
+    schema: { not: { const: 'hidden' } },
+  });
+  t.true(
+    evalVisibility(
+      uischema,
+      { ruleValue: 'shown' },
+      undefined,
+      validator,
+      undefined
+    )
+  );
+  t.false(
+    evalVisibility(
+      uischema,
+      { ruleValue: 'hidden' },
+      undefined,
+      validator,
+      undefined
+    )
+  );
+});
+
 test('rules - no validator at all uses the Structural Matcher', (t) => {
   const uischema = ruleUischema({
     scope: '#/properties/ruleValue',

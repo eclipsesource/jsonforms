@@ -46,14 +46,15 @@ import {
   isFormValidator,
   isFormValidatorFactory,
 } from './formValidator';
-import { isStructuralMatch } from './structural';
+import { isSchemaMatch } from './structural';
 
 /**
  * What rule conditions are evaluated with:
  * - an AJV instance (the historical argument): `ajv.validate(schema, data)`;
- * - a Form Validator: its `matches`, or the Structural Matcher when it has none;
+ * - a Form Validator: its `matches`, or core's own schema matcher
+ *   ({@link isSchemaMatch}) when it has none;
  * - a Form Validator Factory: one Form Validator per condition schema, cached;
- * - `undefined`: the Structural Matcher alone.
+ * - `undefined`: core's own schema matcher alone.
  */
 export type RuleValidator =
   | Ajv
@@ -110,9 +111,9 @@ export const matchesConditionSchema = (
   if (isFormValidator(validator)) {
     return validator.matches
       ? validator.matches(schema, data)
-      : isStructuralMatch(schema, data);
+      : isSchemaMatch(schema, data);
   }
-  return isStructuralMatch(schema, data);
+  return isSchemaMatch(schema, data);
 };
 
 const isOrCondition = (condition: Condition): condition is OrCondition =>
