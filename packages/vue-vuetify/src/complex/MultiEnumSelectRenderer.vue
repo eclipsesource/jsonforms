@@ -20,7 +20,7 @@
       :error-messages="control.errors"
       :clearable="clearable"
       :model-value="control.data"
-      :items="selectOptions"
+      :items="control.options"
       item-title="label"
       item-value="value"
       multiple
@@ -45,12 +45,12 @@
 import { type ControlElement } from '@jsonforms/core';
 import {
   rendererProps,
-  useJsonFormsControl,
+  useJsonFormsMultiEnumControl,
   type RendererProps,
 } from '@jsonforms/vue';
 import { defineComponent } from 'vue';
 import { VSelect } from 'vuetify/components';
-import { determineClearValue, useVuetifyControl } from '../util';
+import { useVuetifyControl } from '../util';
 import { default as ControlWrapper } from '../controls/ControlWrapper.vue';
 import { DisabledIconFocus } from '../controls/directives';
 
@@ -67,29 +67,18 @@ const controlRenderer = defineComponent({
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    const clearValue = determineClearValue([]);
-    return useVuetifyControl(useJsonFormsControl(props), (value) =>
-      value === null ? clearValue : value || [],
-    );
+    const control = useJsonFormsMultiEnumControl(props);
+    const vuetifyControl = useVuetifyControl(control);
+
+    return {
+      ...vuetifyControl,
+      onChange: (value: any[] | null) => {
+        const sanitizedValue =
+          value === null || value.length === 0 ? undefined : value;
+        control.handleChange?.(control.control.value.path, sanitizedValue);
+      },
+    };
   },
-  computed: {
-    selectOptions() {
-      const itemsSchema = this.control.schema.items as any;
-      if (itemsSchema.oneOf) {
-        return itemsSchema.oneOf.map((item: any) => ({
-          label: item.title || item.const,
-          value: item.const,
-        }));
-      }
-      if (itemsSchema.enum) {
-        return itemsSchema.enum.map((val: any) => ({
-          label: val,
-          value: val,
-        }));
-      }
-      return [];
-    }
-  }
 });
 
 export default controlRenderer;
