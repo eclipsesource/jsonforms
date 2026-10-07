@@ -41,7 +41,9 @@ import {
   withJsonFormsArrayLayoutProps,
   withTranslateProps,
 } from '@jsonforms/react';
-import { Grid, List, Typography } from '@mui/material';
+import Grid from '@mui/material/Grid';
+import List from '@mui/material/List';
+import Typography from '@mui/material/Typography';
 import map from 'lodash/map';
 import range from 'lodash/range';
 import React, { useCallback, useMemo, useState } from 'react';
@@ -134,7 +136,7 @@ export const MaterialListWithDetailRenderer = ({
         createDefault={handleCreateDefaultValue}
         disableAdd={doDisableAdd}
       />
-      <Grid container direction='row' spacing={2}>
+      <Grid container spacing={2}>
         <Grid size={3}>
           <List>
             {data > 0 ? (

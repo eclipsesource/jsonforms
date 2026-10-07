@@ -24,10 +24,11 @@
 */
 import {
   ChangeDetectionStrategy,
-  Component,
   ChangeDetectorRef,
+  Component,
+  inject,
 } from '@angular/core';
-import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
+import { JsonFormsControl } from '@jsonforms/angular';
 import {
   and,
   isBooleanControl,
@@ -35,6 +36,9 @@ import {
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
+import { CommonModule } from '@angular/common';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: 'ToggleControlRenderer',
@@ -55,15 +59,10 @@ import {
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+  imports: [CommonModule, MatSlideToggleModule, MatFormFieldModule],
 })
 export class ToggleControlRenderer extends JsonFormsControl {
-  constructor(
-    jsonformsService: JsonFormsAngularService,
-    private changeDetectorRef: ChangeDetectorRef
-  ) {
-    super(jsonformsService);
-  }
+  private changeDetectorRef = inject(ChangeDetectorRef);
   isChecked = () => this.data || false;
   getEventValue = (event: any) => event.checked;
   mapAdditionalProps() {

@@ -22,19 +22,19 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import {
   HorizontalLayout,
   RankedTester,
   rankWith,
   uiTypeIs,
 } from '@jsonforms/core';
-import { LayoutRenderer } from './layout.renderer';
-import { JsonFormsAngularService } from '@jsonforms/angular';
+import {
+  LayoutRenderer,
+  LayoutChildrenRenderPropsPipe,
+} from './layout.renderer';
+import { JsonFormsModule } from '@jsonforms/angular';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'HorizontalLayoutRenderer',
@@ -68,16 +68,9 @@ import { JsonFormsAngularService } from '@jsonforms/angular';
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+  imports: [CommonModule, JsonFormsModule, LayoutChildrenRenderPropsPipe],
 })
-export class HorizontalLayoutRenderer extends LayoutRenderer<HorizontalLayout> {
-  constructor(
-    jsonFormsService: JsonFormsAngularService,
-    changeDetectionRef: ChangeDetectorRef
-  ) {
-    super(jsonFormsService, changeDetectionRef);
-  }
-}
+export class HorizontalLayoutRenderer extends LayoutRenderer<HorizontalLayout> {}
 export const horizontalLayoutTester: RankedTester = rankWith(
   1,
   uiTypeIs('HorizontalLayout')

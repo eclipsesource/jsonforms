@@ -22,13 +22,15 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { ExampleDescription, getExamples } from '@jsonforms/examples';
+import { JsonFormsModule } from '@jsonforms/angular';
 import {
   JsonFormsI18nState,
   UISchemaElement,
   UISchemaTester,
 } from '@jsonforms/core';
+import { ExampleDescription, getExamples } from '@jsonforms/examples';
 import { angularMaterialRenderers } from '../../src/library';
 
 const uiSchema = {
@@ -77,6 +79,9 @@ const itemTester: UISchemaTester = (_schema, schemaPath, _path) => {
       <button (click)="toggleReadonly()">
         {{ readonly ? 'Unset' : 'Set' }} Readonly
       </button>
+      <button (click)="toggleShowErrorsOnTouch()">
+        showErrorsOnTouch: {{ config.showErrorsOnTouch }}
+      </button>
     </div>
     <jsonforms
       [(data)]="selectedExample.data"
@@ -85,9 +90,10 @@ const itemTester: UISchemaTester = (_schema, schemaPath, _path) => {
       [renderers]="renderers"
       [i18n]="i18n"
       [readonly]="readonly"
+      [config]="config"
     ></jsonforms>
   `,
-  standalone: false,
+  imports: [CommonModule, JsonFormsModule],
 })
 export class AppComponent {
   readonly renderers = angularMaterialRenderers;
@@ -95,6 +101,7 @@ export class AppComponent {
   selectedExample: ExampleDescription | undefined;
   i18n: JsonFormsI18nState;
   readonly = false;
+  config = { showErrorsOnTouch: false };
   data: any;
   uischemas: { tester: UISchemaTester; uischema: UISchemaElement }[] = [
     { tester: itemTester, uischema: uiSchema },
@@ -109,6 +116,7 @@ export class AppComponent {
     this.selectedExample = this.examples.find(
       (e) => e.name === ev.target.value
     );
+
     this.i18n = this.selectedExample?.i18n ?? defaultI18n;
   }
 
@@ -118,5 +126,12 @@ export class AppComponent {
 
   toggleReadonly() {
     this.readonly = !this.readonly;
+  }
+
+  toggleShowErrorsOnTouch() {
+    this.config = {
+      ...this.config,
+      showErrorsOnTouch: !this.config.showErrorsOnTouch,
+    };
   }
 }

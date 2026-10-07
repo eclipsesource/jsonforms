@@ -1,10 +1,10 @@
 {
   "name": "jsonforms-monorepo",
   "engines": {
-    "node": "^22",
-    "pnpm": "^10.4.1"
+    "node": "^24",
+    "pnpm": "^11"
   },
-  "packageManager": "pnpm@10.14.0+sha512.ad27a79641b49c3e481a16a805baa71817a04bbe06a38d17e60e2eaee83f6a146c6a688125f5792e48dd5ba30e7da52a5cda4c3992b9ccf333f9ce223af84748",
+  "packageManager": "pnpm@11.27.1+sha512.a81d4c21b9b09a4b0aebf90ef5e527d4262bdda322d26082978cb549023ac6d9cafc98b19fffaa5c71db438a65f70224edb78d7311187861ff96480d1cdca23c",
   "scripts": {
     "lerna": "lerna",
     "preparePublish": "git clean -dfx && pnpm i --frozen-lockfile && pnpm run clean && pnpm run build && pnpm run doc && pnpm run test",
@@ -21,23 +21,20 @@
     "build:examples-app": "lerna run build:examples-app && node packages/examples-app/prepare-examples-app.js"
   },
   "devDependencies": {
-    "@angular/core": "^18.0.0",
-    "@angular/cli": "^18.0.0",
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.16.5",
     "@babel/plugin-proposal-optional-chaining": "^7.16.5",
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
-    "@types/jest": "^27.4.1",
     "@types/lodash": "^4.14.149",
-    "ajv": "^8.6.1",
+    "ajv": "^8.18.0",
     "ajv-formats": "^2.1.0",
     "babel-loader": "^8.0.6",
     "core-js": "^3.9.1",
     "coveralls": "^3.0.9",
-    "cross-env": "^7.0.2",
+    "cross-env": "^10.1.0",
     "css-loader": "^3.2.0",
     "istanbul-lib-coverage": "^3.2.0",
     "lcov-result-merger": "^3.1.0",
-    "lerna": "^6.6.2",
+    "lerna": "^9.0.1",
     "nan": "^2.14.2",
     "nyc": "^15.1.0",
     "prettier": "^2.8.4",
@@ -46,7 +43,7 @@
     "ts-loader": "^9.5.1",
     "ts-node": "^10.4.0",
     "tslib": "^2.5.0",
-    "typescript": "~5.5.0",
+    "typescript": "~5.8.3",
     "webpack": "^5.78.0",
     "webpack-merge": "^5.10.0"
   }

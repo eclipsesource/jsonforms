@@ -12,6 +12,7 @@
       :id="control.id + '-input'"
       :class="styles.control.input"
       :disabled="!control.enabled"
+      :readonly="control.readonly"
       :autofocus="appliedOptions.focus"
       :placeholder="appliedOptions.placeholder"
       :label="computedLabel"
@@ -19,7 +20,7 @@
       :persistent-hint="persistentHint()"
       :required="control.required"
       :error-messages="control.errors"
-      :clearable="control.enabled"
+      :clearable="clearable"
       :items="oneOfRenderInfos"
       @update:model-value="handleSelectChange"
       :item-title="
@@ -39,6 +40,7 @@
       :renderers="control.renderers"
       :cells="control.cells"
       :enabled="control.enabled"
+      :readonly="control.readonly"
     />
 
     <v-dialog v-model="dialog" persistent max-width="600" @keydown.esc="cancel">
@@ -87,8 +89,8 @@ import {
   rendererProps,
   type RendererProps,
   useJsonFormsOneOfControl,
+  useTranslator,
 } from '@jsonforms/vue';
-import isEmpty from 'lodash/isEmpty';
 import { defineComponent, ref } from 'vue';
 import {
   VBtn,
@@ -101,11 +103,7 @@ import {
   VSpacer,
 } from 'vuetify/components';
 import { DisabledIconFocus } from '../controls/directives';
-import {
-  useCombinatorTranslations,
-  useTranslator,
-  useVuetifyControl,
-} from '../util';
+import { useCombinatorTranslations, useVuetifyControl } from '../util';
 import { CombinatorProperties } from './components';
 
 const controlRenderer = defineComponent({
@@ -136,7 +134,7 @@ const controlRenderer = defineComponent({
       control.indexOfFittingSchema != null &&
         control.indexOfFittingSchema != undefined // use the fitting schema if found
         ? control.indexOfFittingSchema
-        : !isEmpty(input.control.value.data)
+        : input.control.value.data !== undefined
           ? 0 // uses the first schema and report errors if not empty
           : null,
     );
@@ -174,7 +172,7 @@ const controlRenderer = defineComponent({
     handleSelectChange(selectIndex: number | null): void {
       this.newSelectedIndex = selectIndex;
 
-      if (isEmpty(this.control.data)) {
+      if (this.control.data === undefined) {
         this.openNewTab(this.newSelectedIndex);
       } else {
         this.dialog = true;

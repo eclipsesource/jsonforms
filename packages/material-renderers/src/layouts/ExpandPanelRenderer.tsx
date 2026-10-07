@@ -3,7 +3,6 @@ import React, {
   ComponentType,
   Dispatch,
   Fragment,
-  ReducerAction,
   useMemo,
   useState,
   useEffect,
@@ -17,6 +16,7 @@ import {
 import {
   composePaths,
   ControlElement,
+  CoreActions,
   findUISchema,
   JsonFormsRendererRegistryEntry,
   JsonSchema,
@@ -25,27 +25,22 @@ import {
   update,
   JsonFormsCellRendererRegistryEntry,
   JsonFormsUISchemaRegistryEntry,
-  createId,
-  removeId,
+  Id,
   ArrayTranslations,
   computeChildLabel,
   UpdateArrayContext,
 } from '@jsonforms/core';
-import {
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Avatar,
-  Grid,
-  IconButton,
-  Tooltip,
-} from '@mui/material';
-import {
-  ArrowUpward,
-  ArrowDownward,
-  Delete,
-  ExpandMore,
-} from '@mui/icons-material';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import Avatar from '@mui/material/Avatar';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import ArrowUpward from '@mui/icons-material/ArrowUpward';
+import ArrowDownward from '@mui/icons-material/ArrowDownward';
+import Delete from '@mui/icons-material/Delete';
+import ExpandMore from '@mui/icons-material/ExpandMore';
 
 const iconStyle: any = { float: 'right' };
 
@@ -90,11 +85,11 @@ export interface ExpandPanelProps
     DispatchPropsOfExpandPanel {}
 
 const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
-  const [labelHtmlId] = useState<string>(createId('expand-panel'));
+  const [labelHtmlId] = useState<string>(Id.createId('expand-panel'));
 
   useEffect(() => {
     return () => {
-      removeId(labelHtmlId);
+      Id.removeId(labelHtmlId);
     };
   }, [labelHtmlId]);
 
@@ -148,9 +143,9 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
       onChange={handleExpansion(childPath)}
     >
       <AccordionSummary expandIcon={<ExpandMore />}>
-        <Grid container sx={{ width: '100%' }} alignItems={'center'}>
+        <Grid container sx={{ width: '100%', alignItems: 'center' }}>
           <Grid size={{ xs: 7, md: 9 }}>
-            <Grid container alignItems={'center'}>
+            <Grid container sx={{ alignItems: 'center' }}>
               <Grid size={{ xs: 2, md: 1 }}>
                 <Avatar aria-label='Index'>{index + 1}</Avatar>
               </Grid>
@@ -160,13 +155,11 @@ const ExpandPanelRendererComponent = (props: ExpandPanelProps) => {
             </Grid>
           </Grid>
           <Grid size={{ xs: 5, md: 3 }}>
-            <Grid container justifyContent='flex-end'>
+            <Grid container sx={{ justifyContent: 'flex-end' }}>
               <Grid>
                 <Grid
                   container
-                  direction='row'
-                  justifyContent='center'
-                  alignItems='center'
+                  sx={{ justifyContent: 'center', alignItems: 'center' }}
                 >
                   {showSortButtons && enabled ? (
                     <Fragment>
@@ -258,7 +251,7 @@ export const ExpandPanelRenderer = React.memo(ExpandPanelRendererComponent);
  * @returns {DispatchPropsOfArrayControl} dispatch props of an expand panel control
  */
 export const ctxDispatchToExpandPanelProps: (
-  dispatch: Dispatch<ReducerAction<any>>
+  dispatch: Dispatch<CoreActions>
 ) => DispatchPropsOfExpandPanel = (dispatch) => ({
   removeItems: useCallback(
     (path: string, toDelete: number[]) =>

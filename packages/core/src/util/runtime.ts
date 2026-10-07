@@ -158,6 +158,26 @@ export const evalEnablement = (
   }
 };
 
+export const evalReadonly = (
+  uischema: UISchemaElement,
+  data: any,
+  path: string = undefined,
+  ajv: Ajv,
+  config: unknown
+): boolean => {
+  const fulfilled = isRuleFulfilled(uischema, data, path, ajv, config);
+
+  switch (uischema.rule.effect) {
+    case RuleEffect.WRITABLE:
+      return !fulfilled;
+    case RuleEffect.READONLY:
+      return fulfilled;
+    // writable by default
+    default:
+      return false;
+  }
+};
+
 export const hasShowRule = (uischema: UISchemaElement): boolean => {
   if (
     uischema.rule &&
@@ -174,6 +194,17 @@ export const hasEnableRule = (uischema: UISchemaElement): boolean => {
     uischema.rule &&
     (uischema.rule.effect === RuleEffect.ENABLE ||
       uischema.rule.effect === RuleEffect.DISABLE)
+  ) {
+    return true;
+  }
+  return false;
+};
+
+export const hasReadonlyRule = (uischema: UISchemaElement): boolean => {
+  if (
+    uischema.rule &&
+    (uischema.rule.effect === RuleEffect.READONLY ||
+      uischema.rule.effect === RuleEffect.WRITABLE)
   ) {
     return true;
   }
@@ -206,4 +237,18 @@ export const isEnabled = (
   }
 
   return true;
+};
+
+export const isReadonly = (
+  uischema: UISchemaElement,
+  data: any,
+  path: string = undefined,
+  ajv: Ajv,
+  config: unknown
+): boolean => {
+  if (uischema.rule) {
+    return evalReadonly(uischema, data, path, ajv, config);
+  }
+
+  return false;
 };

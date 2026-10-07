@@ -12,11 +12,12 @@
                     v-disabled-icon-focus
                     :id="control.id + '-input-selector'"
                     :disabled="!control.enabled"
+                    :readonly="control.readonly"
                     :label="computedLabel"
                     :required="control.required"
                     :error-messages="control.errors"
                     :items="mixedRenderInfos"
-                    :clearable="control.enabled"
+                    :clearable="isControlEditable(control)"
                     @update:model-value="handleSelectChange"
                     :item-title="
                       (item: SchemaRenderInfo) => t(item.label, item.label)
@@ -46,6 +47,7 @@
               :renderers="control.renderers"
               :cells="control.cells"
               :enabled="control.enabled"
+              :readonly="control.readonly"
             >
             </dispatch-renderer>
           </v-expansion-panel-text>
@@ -59,11 +61,12 @@
         v-disabled-icon-focus
         :id="control.id + '-input-selector'"
         :disabled="!control.enabled"
+        :readonly="control.readonly"
         :label="computedLabel"
         :required="control.required"
         :error-messages="control.errors"
         :items="mixedRenderInfos"
-        :clearable="control.enabled"
+        :clearable="isControlEditable(control)"
         @update:model-value="handleSelectChange"
         :item-title="(item: SchemaRenderInfo) => t(item.label, item.label)"
         item-value="index"
@@ -83,6 +86,7 @@
         :renderers="control.renderers"
         :cells="control.cells"
         :enabled="control.enabled"
+        :readonly="control.readonly"
       >
       </dispatch-renderer>
     </template>
@@ -103,7 +107,9 @@ import {
 import {
   DispatchRenderer,
   rendererProps,
+  useJsonForms,
   useJsonFormsControl,
+  useTranslator,
   type RendererProps,
 } from '@jsonforms/vue';
 import { computed, defineComponent, provide, ref, watch } from 'vue';
@@ -120,10 +126,9 @@ import {
 import { DisabledIconFocus } from '../controls';
 import {
   IsDynamicPropertyContext,
+  isControlEditable,
   useCombinatorTranslations,
   useIcons,
-  useJsonForms,
-  useTranslator,
   useVuetifyControl,
 } from '../util';
 import cloneDeep from 'lodash/cloneDeep';
@@ -455,6 +460,7 @@ const controlRenderer = defineComponent({
 
     return {
       ...useCombinatorTranslations(useVuetifyControl(input)),
+      isControlEditable,
       nullable,
       mixedRenderInfos,
       selectedIndex,

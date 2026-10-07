@@ -31,6 +31,7 @@ import { createAjv } from '../validate';
 
 import { Pane, Splitpanes } from 'splitpanes';
 import 'splitpanes/dist/splitpanes.css';
+import { getCustomRenderersForExample } from '../renderers';
 
 const { extendedVuetifyRenderers } = await import('../../src');
 
@@ -54,8 +55,6 @@ const snackbar = ref(false);
 const snackbarText = ref('');
 const snackbarTimeout = ref(3000);
 
-const renderers = markRaw(extendedVuetifyRenderers);
-
 const schemaModel = shallowRef<monaco.editor.ITextModel | undefined>(undefined);
 const uischemaModel = shallowRef<monaco.editor.ITextModel | undefined>(
   undefined,
@@ -64,6 +63,10 @@ const dataModel = shallowRef<monaco.editor.ITextModel | undefined>(undefined);
 
 const initialState = (exampleProp: ExampleDescription) => {
   const example = cloneDeep(exampleProp);
+
+  // Get custom renderers for this example (if any)
+  const customRenderers = getCustomRenderersForExample(example.name);
+  const renderers = markRaw([...customRenderers, ...extendedVuetifyRenderers]);
 
   return {
     data: example.data,
@@ -114,7 +117,8 @@ const reloadMonacoSchema = () => {
 const saveMonacoSchema = () => {
   saveMonacoModel(
     schemaModel,
-    (modelValue) => (state.schema = JSON.parse(modelValue)),
+    (modelValue) =>
+      (state.schema = modelValue ? JSON.parse(modelValue) : undefined),
     'New schema applied',
   );
 
@@ -277,6 +281,10 @@ const handleAction = (action: Action) => {
   if (action) {
     const newState = action.apply(state);
     if (newState) {
+      if (newState.renderers) {
+        newState.renderers = markRaw(newState.renderers);
+      }
+
       Object.assign(state, newState);
     }
   }
@@ -347,7 +355,7 @@ const handleAction = (action: Action) => {
                         <v-toolbar flat>
                           <v-toolbar-title>Data</v-toolbar-title>
                           <v-spacer></v-spacer>
-                          <v-tooltip bottom>
+                          <v-tooltip location="bottom">
                             <template v-slot:activator="{ props }">
                               <v-btn
                                 icon
@@ -359,7 +367,7 @@ const handleAction = (action: Action) => {
                             </template>
                             {{ `Reload Example Data` }}
                           </v-tooltip>
-                          <v-tooltip bottom>
+                          <v-tooltip location="bottom">
                             <template v-slot:activator="{ props }">
                               <v-btn
                                 icon
@@ -394,7 +402,7 @@ const handleAction = (action: Action) => {
                 <v-toolbar flat>
                   <v-toolbar-title>Schema</v-toolbar-title>
                   <v-spacer></v-spacer>
-                  <v-tooltip bottom>
+                  <v-tooltip location="bottom">
                     <template v-slot:activator="{ props }">
                       <v-btn icon @click="reloadMonacoSchema" v-bind="props">
                         <v-icon>$reload</v-icon>
@@ -402,7 +410,7 @@ const handleAction = (action: Action) => {
                     </template>
                     {{ `Reload Example Schema` }}
                   </v-tooltip>
-                  <v-tooltip bottom>
+                  <v-tooltip location="bottom">
                     <template v-slot:activator="{ props }">
                       <v-btn icon @click="saveMonacoSchema" v-bind="props">
                         <v-icon>$save</v-icon>
@@ -427,7 +435,7 @@ const handleAction = (action: Action) => {
                 <v-toolbar flat>
                   <v-toolbar-title>UI Schema</v-toolbar-title>
                   <v-spacer></v-spacer>
-                  <v-tooltip bottom>
+                  <v-tooltip location="bottom">
                     <template v-slot:activator="{ props }">
                       <v-btn icon @click="reloadMonacoUiSchema" v-bind="props">
                         <v-icon>$reload</v-icon>
@@ -435,7 +443,7 @@ const handleAction = (action: Action) => {
                     </template>
                     {{ `Reload Example UI Schema` }}
                   </v-tooltip>
-                  <v-tooltip bottom>
+                  <v-tooltip location="bottom">
                     <template v-slot:activator="{ props }">
                       <v-btn icon @click="saveMonacoUiSchema" v-bind="props">
                         <v-icon>$save</v-icon>
@@ -460,7 +468,7 @@ const handleAction = (action: Action) => {
                 <v-toolbar flat>
                   <v-toolbar-title>Data</v-toolbar-title>
                   <v-spacer></v-spacer>
-                  <v-tooltip bottom>
+                  <v-tooltip location="bottom">
                     <template v-slot:activator="{ props }">
                       <v-btn icon @click="reloadMonacoData" v-bind="props">
                         <v-icon>$reload</v-icon>
@@ -468,7 +476,7 @@ const handleAction = (action: Action) => {
                     </template>
                     {{ `Reload Example Data` }}
                   </v-tooltip>
-                  <v-tooltip bottom>
+                  <v-tooltip location="bottom">
                     <template v-slot:activator="{ props }">
                       <v-btn icon @click="saveMonacoData" v-bind="props">
                         <v-icon>$save</v-icon>

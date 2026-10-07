@@ -24,10 +24,12 @@
 */
 import startCase from 'lodash/startCase';
 import { Component, OnInit, Pipe, PipeTransform } from '@angular/core';
-import {
-  JsonFormsAngularService,
-  JsonFormsArrayControl,
-} from '@jsonforms/angular';
+import { CommonModule } from '@angular/common';
+import { MatTableModule } from '@angular/material/table';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { JsonFormsArrayControl, JsonFormsModule } from '@jsonforms/angular';
 import {
   ArrayControlProps,
   ArrayTranslations,
@@ -47,6 +49,30 @@ import {
   setReadonly,
   UISchemaElement,
 } from '@jsonforms/core';
+
+interface ColumnDescription {
+  property: string;
+  header: string;
+  props: OwnPropsOfRenderer;
+}
+
+export const controlWithoutLabel = (scope: string): ControlElement => ({
+  type: 'Control',
+  scope: scope,
+  label: false,
+});
+
+@Pipe({ name: 'getProps' })
+export class GetProps implements PipeTransform {
+  transform(index: number, props: OwnPropsOfRenderer) {
+    const rowPath = Paths.compose(props.path, `${index}`);
+    return {
+      schema: props.schema,
+      uischema: props.uischema,
+      path: rowPath,
+    };
+  }
+}
 
 @Component({
   selector: 'TableRenderer',
@@ -148,7 +174,15 @@ import {
     '.sort-column { min-width: 12vw;}',
     '.table-container {max-width: 100%; overflow: auto;}',
   ],
-  standalone: false,
+  imports: [
+    CommonModule,
+    JsonFormsModule,
+    MatTableModule,
+    MatButtonModule,
+    MatIconModule,
+    MatTooltipModule,
+    GetProps,
+  ],
 })
 export class TableRenderer extends JsonFormsArrayControl implements OnInit {
   detailUiSchema: UISchemaElement;
@@ -161,9 +195,6 @@ export class TableRenderer extends JsonFormsArrayControl implements OnInit {
   removeItems: (path: string, toDelete: number[]) => () => void;
   translations: ArrayTranslations = {};
 
-  constructor(jsonformsService: JsonFormsAngularService) {
-    super(jsonformsService);
-  }
   trackElement(index: number, _element: any) {
     return index ? index : null;
   }
@@ -260,27 +291,3 @@ export const TableRendererTester: RankedTester = rankWith(
   3,
   or(isObjectArrayControl, isPrimitiveArrayControl)
 );
-
-interface ColumnDescription {
-  property: string;
-  header: string;
-  props: OwnPropsOfRenderer;
-}
-
-export const controlWithoutLabel = (scope: string): ControlElement => ({
-  type: 'Control',
-  scope: scope,
-  label: false,
-});
-
-@Pipe({ name: 'getProps', standalone: false })
-export class GetProps implements PipeTransform {
-  transform(index: number, props: OwnPropsOfRenderer) {
-    const rowPath = Paths.compose(props.path, `${index}`);
-    return {
-      schema: props.schema,
-      uischema: props.uischema,
-      path: rowPath,
-    };
-  }
-}

@@ -23,7 +23,6 @@
   THE SOFTWARE.
 */
 import React, { useCallback, useMemo, useState } from 'react';
-import isEmpty from 'lodash/isEmpty';
 
 import { TabSwitchConfirmDialog } from './TabSwitchConfirmDialog';
 
@@ -37,7 +36,8 @@ import {
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
-import { Tab, Tabs } from '@mui/material';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
 import { JsonFormsDispatch, withJsonFormsOneOfProps } from '@jsonforms/react';
 import CombinatorProperties from './CombinatorProperties';
 
@@ -98,7 +98,7 @@ export const MaterialOneOfRenderer = ({
   const handleTabChange = useCallback(
     (_event: any, newOneOfIndex: number) => {
       setNewSelectedIndex(newOneOfIndex);
-      if (isEmpty(data)) {
+      if (data === undefined) {
         openNewTab(newOneOfIndex);
       } else {
         setConfirmDialogOpen(true);

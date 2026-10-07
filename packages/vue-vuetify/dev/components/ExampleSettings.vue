@@ -259,12 +259,30 @@ const layouts = appstoreLayouts.map((value: AppstoreLayouts) => ({
     </v-container>
 
     <v-divider />
+    <v-container>
+      <v-row>
+        <v-col>
+          <v-tooltip location="bottom">
+            <template v-slot:activator="{ props }">
+              <v-switch
+                v-model="appStore.overrideControlTemplate"
+                label="Use custom ControlWrapper"
+                v-bind="props"
+              ></v-switch>
+            </template>
+            This shows how ControlWrapper can be overriden, uses Example app
+            custom ControlWrapper. Visible when control is on focus.
+          </v-tooltip>
+        </v-col>
+      </v-row>
+    </v-container>
+    <v-divider />
 
     <v-container>
       <v-row><v-col>Options</v-col></v-row>
       <v-row>
         <v-col>
-          <v-tooltip bottom>
+          <v-tooltip location="bottom">
             <template v-slot:activator="{ props }">
               <v-switch
                 v-model="appStore.jsonforms.config.hideRequiredAsterisk"
@@ -278,7 +296,7 @@ const layouts = appstoreLayouts.map((value: AppstoreLayouts) => ({
       </v-row>
       <v-row>
         <v-col>
-          <v-tooltip bottom>
+          <v-tooltip location="bottom">
             <template v-slot:activator="{ props }">
               <v-switch
                 v-model="appStore.jsonforms.config.showUnfocusedDescription"
@@ -292,7 +310,7 @@ const layouts = appstoreLayouts.map((value: AppstoreLayouts) => ({
       </v-row>
       <v-row>
         <v-col>
-          <v-tooltip bottom>
+          <v-tooltip location="bottom">
             <template v-slot:activator="{ props }">
               <v-switch
                 v-model="appStore.jsonforms.config.restrict"
@@ -302,6 +320,22 @@ const layouts = appstoreLayouts.map((value: AppstoreLayouts) => ({
             </template>
             Whether to restrict the number of characters to maxLength, if
             specified in the JSON schema
+          </v-tooltip>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <v-tooltip location="bottom">
+            <template v-slot:activator="{ props }">
+              <v-switch
+                v-model="appStore.jsonforms.config.separateReadonlyFromDisabled"
+                label="ReadonlyAware"
+                v-bind="props"
+              ></v-switch>
+            </template>
+            When false, readonly is treated as disabled for backward
+            compatibility. When true, readonly and enabled are handled
+            separately
           </v-tooltip>
         </v-col>
       </v-row>
@@ -321,7 +355,7 @@ const layouts = appstoreLayouts.map((value: AppstoreLayouts) => ({
       </v-row>
       <v-row>
         <v-col>
-          <v-tooltip bottom>
+          <v-tooltip location="bottom">
             <template v-slot:activator="{ props }">
               <v-switch
                 v-model="appStore.jsonforms.config.collapseNewItems"
@@ -335,7 +369,7 @@ const layouts = appstoreLayouts.map((value: AppstoreLayouts) => ({
       </v-row>
       <v-row>
         <v-col>
-          <v-tooltip bottom>
+          <v-tooltip location="bottom">
             <template v-slot:activator="{ props }">
               <v-switch
                 v-model="appStore.jsonforms.config.hideArraySummaryValidation"
@@ -349,7 +383,7 @@ const layouts = appstoreLayouts.map((value: AppstoreLayouts) => ({
       </v-row>
       <v-row>
         <v-col>
-          <v-tooltip bottom>
+          <v-tooltip location="bottom">
             <template v-slot:activator="{ props }">
               <v-switch
                 v-model="appStore.jsonforms.config.initCollapsed"
@@ -363,7 +397,7 @@ const layouts = appstoreLayouts.map((value: AppstoreLayouts) => ({
       </v-row>
       <v-row>
         <v-col>
-          <v-tooltip bottom>
+          <v-tooltip location="bottom">
             <template v-slot:activator="{ props }">
               <v-switch
                 v-model="appStore.jsonforms.config.hideAvatar"
@@ -377,7 +411,7 @@ const layouts = appstoreLayouts.map((value: AppstoreLayouts) => ({
       </v-row>
       <v-row>
         <v-col>
-          <v-tooltip bottom>
+          <v-tooltip location="bottom">
             <template v-slot:activator="{ props }">
               <v-switch
                 v-model="
@@ -393,7 +427,29 @@ const layouts = appstoreLayouts.map((value: AppstoreLayouts) => ({
       </v-row>
       <v-row>
         <v-col>
-          <v-tooltip bottom>
+          <v-tooltip location="bottom">
+            <template v-slot:activator="{ props }">
+              <v-combobox
+                v-model="
+                  appStore.jsonforms.config.filterErrorKeywordsBeforeTouch
+                "
+                label="Filter Error Keywords Before Touch"
+                placeholder="e.g., required, minLength, pattern"
+                chips
+                closable-chips
+                multiple
+                clearable
+                v-bind="props"
+              ></v-combobox>
+            </template>
+            Hide specific AJV error keywords until the control is touched.
+            Requires "Enable Filter Errors Before Touch".
+          </v-tooltip>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <v-tooltip location="bottom">
             <template v-slot:activator="{ props }">
               <v-switch
                 v-model="

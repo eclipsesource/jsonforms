@@ -50,7 +50,6 @@ import {
 } from '@jsonforms/core';
 import { isEqual } from 'lodash';
 import Enzyme, { mount, shallow } from 'enzyme';
-import type { StatelessRenderer } from '../../src/Renderer';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import {
   JsonForms,
@@ -114,13 +113,13 @@ export const initJsonFormsStore = ({
   return createStore(reducer, initState);
 };
 
-const CustomRenderer1: StatelessRenderer<RendererProps> = () => <h1>test</h1>;
-const CustomRenderer2: StatelessRenderer<RendererProps> = () => <h2>test</h2>;
-const CustomRenderer3: StatelessRenderer<RendererProps> = () => <h3>test</h3>;
-const CellRenderer1: StatelessRenderer<DispatchCellProps> = () => (
+const CustomRenderer1: React.FC<RendererProps> = () => <h1>test</h1>;
+const CustomRenderer2: React.FC<RendererProps> = () => <h2>test</h2>;
+const CustomRenderer3: React.FC<RendererProps> = () => <h3>test</h3>;
+const CellRenderer1: React.FC<DispatchCellProps> = () => (
   <h1 className='cell test 1'>test</h1>
 );
-const CellRenderer2: StatelessRenderer<DispatchCellProps> = () => (
+const CellRenderer2: React.FC<DispatchCellProps> = () => (
   <h2 className='cell test 2'>test</h2>
 );
 
@@ -256,7 +255,7 @@ test('ids should be unique within the same form', () => {
   });
 
   const ids: string[] = [];
-  const MyCustomRenderer: StatelessRenderer<any> = (props: any) => {
+  const MyCustomRenderer: React.FC<any> = (props: any) => {
     ids.push(props.id);
     return <div>Custom</div>;
   };
@@ -432,9 +431,7 @@ test('JsonForms renderer should pick most applicable cell renderer via ownProps'
   });
   store.dispatch(registerCell(() => 50, CellRenderer1));
 
-  const ArrayRenderer: StatelessRenderer<RendererProps> = (
-    props: RendererProps
-  ) => {
+  const ArrayRenderer: React.FC<RendererProps> = (props: RendererProps) => {
     return (
       <DispatchCell
         schema={props.schema}
@@ -555,9 +552,7 @@ test('JsonForms renderer should pick schema from ownProps', () => {
 });
 
 test('JsonForms renderer should pick enabled prop from ownProps', () => {
-  const CustomRenderer4: StatelessRenderer<RendererProps> = (
-    props: RendererProps
-  ) => {
+  const CustomRenderer4: React.FC<RendererProps> = (props: RendererProps) => {
     return <h3>{`${props.enabled}`}</h3>;
   };
 
@@ -1010,7 +1005,7 @@ test('JsonForms should update if data prop is updated', () => {
 });
 
 test('JsonForms should use additionalErrors if provided', () => {
-  const CustomRendererWithError: StatelessRenderer<ControlProps> = ({
+  const CustomRendererWithError: React.FC<ControlProps> = ({
     errors,
   }: ControlProps) => {
     return <h5>{errors}</h5>;
@@ -1048,7 +1043,7 @@ test('JsonForms should use additionalErrors if provided', () => {
 });
 
 test('JsonForms should use react to additionalErrors update', () => {
-  const CustomRendererWithError: StatelessRenderer<ControlProps> = ({
+  const CustomRendererWithError: React.FC<ControlProps> = ({
     errors,
   }: ControlProps) => {
     return <h5>{errors}</h5>;

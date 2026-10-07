@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
+import { JsonFormsControl } from '@jsonforms/angular';
 import {
   isIntegerControl,
   isNumberControl,
@@ -33,6 +33,10 @@ import {
   StatePropsOfControl,
 } from '@jsonforms/core';
 import merge from 'lodash/merge';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'NumberControlRenderer',
@@ -69,7 +73,12 @@ import merge from 'lodash/merge';
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+  ],
 })
 export class NumberControlRenderer extends JsonFormsControl {
   private readonly MAXIMUM_FRACTIONAL_DIGITS = 20;
@@ -82,10 +91,6 @@ export class NumberControlRenderer extends JsonFormsControl {
   numberFormat: Intl.NumberFormat;
   decimalSeparator: string;
   focused = false;
-
-  constructor(jsonformsService: JsonFormsAngularService) {
-    super(jsonformsService);
-  }
 
   onChange(ev: any) {
     const data = this.oldValue

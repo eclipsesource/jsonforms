@@ -93,14 +93,12 @@ describe('Object Control', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
+      imports: [
         ObjectControlRenderer,
         TextControlRenderer,
         VerticalLayoutRenderer,
         GroupLayoutRenderer,
         LayoutChildrenRenderPropsPipe,
-      ],
-      imports: [
         CommonModule,
         JsonFormsModule,
         MatCardModule,

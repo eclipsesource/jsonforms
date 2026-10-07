@@ -39,11 +39,14 @@ import {
   rankWith,
   uiTypeIs,
 } from '@jsonforms/core';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   JsonFormsAngularService,
   JsonFormsBaseRenderer,
+  JsonFormsModule,
 } from '@jsonforms/angular';
+import { CommonModule } from '@angular/common';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @Component({
   selector: 'jsonforms-categorization-layout',
@@ -66,7 +69,7 @@ import {
       </mat-tab>
     </mat-tab-group>
   `,
-  standalone: false,
+  imports: [CommonModule, JsonFormsModule, MatTabsModule],
 })
 export class CategorizationTabLayoutRenderer
   extends JsonFormsBaseRenderer<Categorization>
@@ -76,9 +79,7 @@ export class CategorizationTabLayoutRenderer
   visibleCategories: (Category | Categorization)[];
   categoryLabels: string[];
 
-  constructor(private jsonFormsService: JsonFormsAngularService) {
-    super();
-  }
+  private jsonFormsService = inject(JsonFormsAngularService);
 
   ngOnInit() {
     this.addSubscription(

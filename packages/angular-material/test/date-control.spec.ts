@@ -94,8 +94,7 @@ describe('Date control Base Tests', () => {
   let inputElement: HTMLInputElement;
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [componentUT],
-      imports: imports,
+      imports: [componentUT, ...imports],
       providers: providers,
     }).compileComponents();
   }));
@@ -233,8 +232,7 @@ describe('Date control Input Event Tests', () => {
   let inputElement: HTMLInputElement;
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [componentUT],
-      imports: imports,
+      imports: [componentUT, ...imports],
       providers: providers,
     }).compileComponents();
   }));
@@ -278,8 +276,7 @@ describe('Date control Error Tests', () => {
   let component: DateControlRenderer;
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [componentUT],
-      imports: imports,
+      imports: [componentUT, ...imports],
       providers: providers,
     }).compileComponents();
   }));

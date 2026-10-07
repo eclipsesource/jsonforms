@@ -111,6 +111,7 @@ export const useVanillaArrayControl = <I extends { control: any }>(
 
   const childLabelForIndex = (index: number) => {
     const childLabelProp =
+      input.control.value.uischema.options?.elementLabelProp ??
       input.control.value.uischema.options?.childLabelProp ??
       getFirstPrimitiveProp(input.control.value.schema);
     if (!childLabelProp) {

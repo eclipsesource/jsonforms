@@ -29,6 +29,7 @@
           :renderers="control.renderers"
           :cells="control.cells"
           :enabled="control.enabled"
+          :readonly="control.readonly"
         />
       </v-window-item>
     </v-window>

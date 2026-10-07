@@ -11,6 +11,7 @@
       :id="control.id + '-input'"
       :class="styles.control.input"
       :disabled="!control.enabled"
+      :readonly="control.readonly"
       :autofocus="appliedOptions.focus"
       :placeholder="appliedOptions.placeholder"
       :label="computedLabel"
@@ -26,7 +27,7 @@
           ? control.schema.maxLength
           : undefined
       "
-      :clearable="control.enabled"
+      :clearable="clearable"
       :model-value="control.data"
       :items="suggestions"
       hide-no-data
@@ -34,13 +35,21 @@
       @update:model-value="onChange"
       @focus="handleFocus"
       @blur="handleBlur"
-    />
+    >
+      <template v-slot:prepend v-if="$slots.prepend">
+        <slot name="prepend" />
+      </template>
+      <template v-slot:append v-if="$slots.append">
+        <slot name="append" />
+      </template>
+    </v-combobox>
     <v-text-field
       v-else
       v-disabled-icon-focus
       :id="control.id + '-input'"
       :class="styles.control.input"
       :disabled="!control.enabled"
+      :readonly="control.readonly"
       :autofocus="appliedOptions.focus"
       :placeholder="appliedOptions.placeholder"
       :label="computedLabel"
@@ -57,12 +66,19 @@
           ? control.schema.maxLength
           : undefined
       "
-      :clearable="control.enabled"
+      :clearable="clearable"
       v-bind="vuetifyProps('v-text-field')"
       @update:model-value="onChange"
       @focus="handleFocus"
       @blur="handleBlur"
-    />
+    >
+      <template v-slot:prepend v-if="$slots.prepend">
+        <slot name="prepend" />
+      </template>
+      <template v-slot:append v-if="$slots.append">
+        <slot name="append" />
+      </template>
+    </v-text-field>
   </control-wrapper>
 </template>
 
@@ -74,7 +90,6 @@ import {
   type RendererProps,
 } from '@jsonforms/vue';
 import every from 'lodash/every';
-import isArray from 'lodash/isArray';
 import isString from 'lodash/isString';
 import { defineComponent } from 'vue';
 import { VCombobox, VTextField } from 'vuetify/components';
@@ -99,7 +114,7 @@ const controlRenderer = defineComponent({
     const clearValue = determineClearValue('');
     return useVuetifyControl(
       useJsonFormsControl(props),
-      (value) => (value === null ? clearValue : value),
+      (value) => value || clearValue,
       300,
     );
   },
@@ -109,7 +124,7 @@ const controlRenderer = defineComponent({
 
       if (
         suggestions === undefined ||
-        !isArray(suggestions) ||
+        !Array.isArray(suggestions) ||
         !every(suggestions, isString)
       ) {
         // check for incorrect data

@@ -43,8 +43,8 @@ Independently of the assigned milestone, contributions are always accepted and a
 
 ### First time setup
 
-- Install [node.js](https://nodejs.org/) (only Node v22+ < 23 is currently supported)
-- Install pnpm: <https://pnpm.io/installation> (use pnpm 10.4.1+) or use [corepack](https://nodejs.org/docs/latest-v18.x/api/corepack.html) to enable the recommended version
+- Install [node.js](https://nodejs.org/) (only Node v24+ < 25 is currently supported)
+- Install pnpm: <https://pnpm.io/installation> (use pnpm 11+) or use [corepack](https://github.com/nodejs/corepack) to enable the recommended version
 - Clone this repository
 - Install dependencies: `pnpm i --frozen-lockfile`
 
@@ -67,7 +67,7 @@ In this case, you can try to clean the repository with `git clean -dfx`. Beware 
 - Run React Vanilla examples: `cd packages/vanilla-renderers && pnpm run dev`
 - Run React Material examples: `cd packages/material-renderers && pnpm run dev`
 - Run Angular Material examples: `cd packages/angular-material && pnpm run dev`
-- Run Vue Vanilla dev setup: `cd packages/vue-vanilla && pnpm run serve`
+- Run Vue Vanilla dev setup: `cd packages/vue-vanilla && pnpm run dev`
 - Run Vue Vuetify dev setup: `cd packages/vue-vuetify && pnpm run dev`
 
 ### Dependency & Release management

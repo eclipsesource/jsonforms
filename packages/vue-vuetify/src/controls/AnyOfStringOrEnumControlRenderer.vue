@@ -10,6 +10,7 @@
       :id="control.id + '-input'"
       :class="styles.control.input"
       :disabled="!control.enabled"
+      :readonly="control.readonly"
       :autofocus="appliedOptions.focus"
       :placeholder="appliedOptions.placeholder"
       :label="computedLabel"
@@ -27,12 +28,19 @@
           : undefined
       "
       :items="items"
-      :clearable="control.enabled"
+      :clearable="clearable"
       v-bind="vuetifyProps('v-combobox')"
       @update:model-value="onChange"
       @focus="handleFocus"
       @blur="handleBlur"
-    />
+    >
+      <template v-slot:prepend v-if="$slots.prepend">
+        <slot name="prepend" />
+      </template>
+      <template v-slot:append v-if="$slots.append">
+        <slot name="append" />
+      </template>
+    </v-combobox>
   </control-wrapper>
 </template>
 
@@ -63,8 +71,9 @@ const controlRenderer = defineComponent({
   },
   setup(props: RendererProps<ControlElement>) {
     const clearValue = determineClearValue('');
-    return useVuetifyControl(useJsonFormsControl(props), (value) =>
-      value === null ? clearValue : value,
+    return useVuetifyControl(
+      useJsonFormsControl(props),
+      (value) => value || clearValue,
     );
   },
   computed: {

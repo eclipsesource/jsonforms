@@ -23,7 +23,7 @@ const setTheme = (theme: string) => {
     offset-y
   >
     <template v-slot:activator="{ props: propsMenu }">
-      <v-tooltip bottom>
+      <v-tooltip location="bottom">
         <template v-slot:activator="{ props: propsTooltip }">
           <v-btn large icon dark>
             <v-icon

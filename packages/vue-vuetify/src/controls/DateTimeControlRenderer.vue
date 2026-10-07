@@ -10,6 +10,7 @@
       :id="control.id + '-input'"
       :class="styles.control.input"
       :disabled="!control.enabled"
+      :readonly="control.readonly"
       :autofocus="appliedOptions.focus"
       :placeholder="appliedOptions.placeholder ?? dateTimeFormat"
       :label="computedLabel"
@@ -19,11 +20,14 @@
       :error-messages="control.errors"
       v-bind="vuetifyProps('v-text-field')"
       v-model="inputModel"
-      :clearable="control.enabled"
+      :clearable="clearable"
       @focus="handleFocus"
       @blur="handleBlur"
       v-maska:[options]="maska"
     >
+      <template v-slot:prepend v-if="$slots.prepend">
+        <slot name="prepend" />
+      </template>
       <template v-slot:prepend-inner>
         <v-menu
           v-model="showMenu"
@@ -31,7 +35,7 @@
           transition="scale-transition"
           :min-width="useTabLayout ? '290px' : '580px'"
           v-bind="vuetifyProps('v-menu')"
-          :disabled="!control.enabled"
+          :disabled="!isControlEditable(control)"
         >
           <template v-slot:activator="{ props }">
             <v-icon v-bind="props" tabindex="-1">{{ pickerIcon }}</v-icon>
@@ -64,9 +68,9 @@
                       @update:model-value="
                         (val: unknown) => {
                           if (showActions) {
-                            proxyModel.value.date = val as Date;
+                            proxyModel.value.date = val as Date | null;
                           } else {
-                            pickerValue.date = val as Date;
+                            pickerValue.date = val as Date | null;
                           }
                         }
                       "
@@ -83,7 +87,7 @@
                         showActions ? proxyModel.value.time : pickerValue.time
                       "
                       @update:model-value="
-                        (val: string) => {
+                        (val: string | null) => {
                           if (showActions) {
                             proxyModel.value.time = val;
                           } else {
@@ -125,10 +129,10 @@
                       @update:model-value="
                         (val: unknown) => {
                           if (showActions) {
-                            proxyModel.value.date = val as Date;
+                            proxyModel.value.date = val as Date | null;
                           } else {
                             pickerValue = {
-                              date: val as Date,
+                              date: val as Date | null,
                               time: pickerValue.time,
                             };
                           }
@@ -150,7 +154,7 @@
                         showActions ? proxyModel.value.time : pickerValue.time
                       "
                       @update:model-value="
-                        (val: string) => {
+                        (val: string | null) => {
                           if (showActions) {
                             proxyModel.value.time = val;
                           } else {
@@ -194,6 +198,9 @@
           </v-confirm-edit>
         </v-menu>
       </template>
+      <template v-slot:append v-if="$slots.append">
+        <slot name="append" />
+      </template>
     </v-text-field>
   </control-wrapper>
 </template>
@@ -203,9 +210,10 @@ import { type ControlElement, type JsonSchema } from '@jsonforms/core';
 import {
   rendererProps,
   useJsonFormsControl,
+  useTranslator,
   type RendererProps,
 } from '@jsonforms/vue';
-import { computed, reactive, defineComponent, ref, unref } from 'vue';
+import { computed, defineComponent, reactive, ref, unref } from 'vue';
 import {
   VBtn,
   VCard,
@@ -227,16 +235,16 @@ import {
   VWindowItem,
 } from 'vuetify/components';
 
-import { vMaska, type MaskOptions, type MaskaDetail } from 'maska';
+import { vMaska, type MaskOptions } from 'maska';
 import { useDisplay, useLocale } from 'vuetify';
 import type { IconValue } from '../icons';
 import {
   convertDayjsToMaskaFormat,
   determineClearValue,
   expandLocaleFormat,
+  isControlEditable,
   parseDateTime,
   useIcons,
-  useTranslator,
   useVuetifyControl,
 } from '../util';
 import { default as ControlWrapper } from './ControlWrapper.vue';
@@ -289,7 +297,7 @@ const controlRenderer = defineComponent({
     const t = useTranslator();
     const showMenu = ref(false);
     const activeTab = ref<'date' | 'time'>('date');
-    const adaptValue = (value: any) => (value === null ? clearValue : value);
+    const adaptValue = (value: any) => value || clearValue;
 
     const control = useVuetifyControl(useJsonFormsControl(props), adaptValue);
     const { mobile } = useDisplay();
@@ -299,10 +307,10 @@ const controlRenderer = defineComponent({
       typeof control.appliedOptions.value.dateTimeFormat == 'string'
         ? (expandLocaleFormat(control.appliedOptions.value.dateTimeFormat) ??
           control.appliedOptions.value.dateTimeFormat)
-        : (expandLocaleFormat('L LT') ?? 'YYYY-MM-DD H:mm'),
+        : (expandLocaleFormat('L LT') ?? 'YYYY-MM-DD HH:mm'),
     );
 
-    const useMask = control.appliedOptions.value.mask !== false;
+    const useMask = computed(() => control.appliedOptions.value.mask !== false);
     const maska = reactive({
       masked: '',
       unmasked: '',
@@ -314,16 +322,18 @@ const controlRenderer = defineComponent({
     );
     const locale = useLocale();
 
-    const options = useMask
-      ? computed<MaskOptions>(() => ({
-          mask: state.value.mask,
-          tokens: state.value.tokens,
-          tokensReplace: true,
+    const options = computed<MaskOptions | null>(() =>
+      useMask.value
+        ? {
+            mask: state.value.mask,
+            tokens: state.value.tokens,
+            tokensReplace: true,
 
-          //invoke the locale.current as side effect so that the computed will rerun if the locale changes since the mask could be dependent on the locale
-          _locale: unref(locale.current),
-        }))
-      : null;
+            // invoke locale.current so the mask recomputes when locale changes
+            _locale: unref(locale.current),
+          }
+        : null,
+    );
 
     return {
       ...control,
@@ -334,6 +344,7 @@ const controlRenderer = defineComponent({
       mobile,
       icons,
       dateTimeFormat,
+      isControlEditable,
       options,
       useMask,
       maska,
@@ -392,7 +403,7 @@ const controlRenderer = defineComponent({
         let date = parseDateTime(schema.formatExclusiveMinimum, this.formats);
         if (date) {
           // the format is exclusive
-          date = date.add(1, 'second');
+          date = date.add(1, this.useSeconds ? 'second' : 'minute');
         }
         return date ? date.format('YYYY-MM-DD') : schema.formatExclusiveMinimum;
       }
@@ -413,7 +424,7 @@ const controlRenderer = defineComponent({
         let date = parseDateTime(schema.formatExclusiveMaximum, this.formats);
         if (date) {
           // the format is exclusive
-          date = date.subtract(1, 'second');
+          date = date.subtract(1, this.useSeconds ? 'second' : 'minute');
         }
         return date ? date.format('YYYY-MM-DD') : schema.formatExclusiveMaximum;
       }
@@ -549,19 +560,19 @@ const controlRenderer = defineComponent({
       },
     },
     pickerValue: {
-      get(): { date: Date | undefined; time: string | undefined } {
+      get(): { date: Date | null; time: string | null } {
         const value = this.control.data;
 
         const dateTime = parseDateTime(value, this.formats);
 
-        const date = dateTime ? dateTime.toDate() : undefined;
+        const date = dateTime ? dateTime.toDate() : null;
 
         const format = this.useSeconds ? 'HH:mm:ss' : 'HH:mm';
-        const time = dateTime ? dateTime.format(format) : undefined;
+        const time = dateTime ? dateTime.format(format) : null;
 
         return { date, time };
       },
-      set(val: { date: Date | undefined; time: string | undefined }) {
+      set(val: { date: Date | null; time: string | null }) {
         this.onPickerChange(val.date, val.time);
 
         if (this.useTabLayout && val.date) {
@@ -575,21 +586,21 @@ const controlRenderer = defineComponent({
           ? this.appliedOptions.cancelLabel
           : 'Cancel';
 
-      return this.t(label, label);
+      return this.t(label, label) as string;
     },
     okLabel(): string {
       const label =
         typeof this.appliedOptions.okLabel == 'string'
           ? this.appliedOptions.okLabel
           : 'OK';
-      return this.t(label, label);
+      return this.t(label, label) as string;
     },
     showActions(): boolean {
       return this.appliedOptions.showActions === true;
     },
   },
   methods: {
-    onPickerChange(dateValue?: Date, timeValue?: string): void {
+    onPickerChange(dateValue: Date | null, timeValue: string | null): void {
       const date = parseDateTime(dateValue, undefined);
       const time = parseDateTime(
         timeValue ?? (this.useSeconds ? '00:00:00' : '00:00'),
@@ -598,14 +609,13 @@ const controlRenderer = defineComponent({
       if (date && !time) {
         this.onChange(date!.format(this.dateTimeSaveFormat));
       } else if (date && time) {
-        const dateTimeString = `${date.format('YYYY-MM-DD')}T${time.format(
-          'HH:mm:ss.SSSZ',
-        )}`;
-        const dateTime = parseDateTime(
-          dateTimeString,
-          'YYYY-MM-DDTHH:mm:ss.SSSZ',
-        );
-        this.onChange(dateTime!.format(this.dateTimeSaveFormat));
+        const combined = date
+          .hour(time.hour())
+          .minute(time.minute())
+          .second(time.second())
+          .millisecond(time.millisecond());
+
+        this.onChange(combined.format(this.dateTimeSaveFormat));
       }
     },
   },

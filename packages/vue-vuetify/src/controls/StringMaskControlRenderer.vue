@@ -10,6 +10,7 @@
       :id="control.id + '-input'"
       :class="styles.control.input"
       :disabled="!control.enabled"
+      :readonly="control.readonly"
       :autofocus="appliedOptions.focus"
       :placeholder="appliedOptions.placeholder ?? appliedOptions.mask"
       :label="computedLabel"
@@ -25,36 +26,38 @@
           ? control.schema.maxLength
           : undefined
       "
-      :clearable="control.enabled"
+      :clearable="clearable"
       @click:clear="clear"
       v-bind="vuetifyProps('v-text-field')"
       @focus="handleFocus"
       @blur="handleBlur"
       v-model="maskModel"
       v-maska:[options]
-    />
+    >
+      <template v-slot:prepend v-if="$slots.prepend">
+        <slot name="prepend" />
+      </template>
+      <template v-slot:append v-if="$slots.append">
+        <slot name="append" />
+      </template>
+    </v-text-field>
   </control-wrapper>
 </template>
 
 <script lang="ts">
-import {
-  type ControlElement,
-  type Tester,
-  type UISchemaElement,
-} from '@jsonforms/core';
+import { type ControlElement } from '@jsonforms/core';
 import {
   rendererProps,
   type RendererProps,
   useJsonFormsControl,
 } from '@jsonforms/vue';
-import isEmpty from 'lodash/isEmpty';
-import { defineComponent, computed } from 'vue';
+import cloneDeep from 'lodash/cloneDeep';
+import { Mask, type MaskTokens, vMaska } from 'maska';
+import { computed, defineComponent } from 'vue';
 import { VTextField } from 'vuetify/components';
 import { determineClearValue, useVuetifyControl } from '../util';
 import { default as ControlWrapper } from './ControlWrapper.vue';
 import { DisabledIconFocus } from './directives';
-import { type MaskTokens, vMaska, Mask } from 'maska';
-import cloneDeep from 'lodash/cloneDeep';
 
 const defaultTokens: MaskTokens = {
   '#': { pattern: /[0-9]/ },
@@ -77,7 +80,7 @@ const controlRenderer = defineComponent({
   },
   setup(props: RendererProps<ControlElement>) {
     const clearValue = determineClearValue('');
-    const adaptValue = (value: any) => (value === null ? clearValue : value);
+    const adaptValue = (value: any) => value || clearValue;
     const control = useVuetifyControl(useJsonFormsControl(props), adaptValue);
 
     const toTokens = (tokenParams: Record<string, any>): MaskTokens => {
@@ -187,20 +190,4 @@ const controlRenderer = defineComponent({
 });
 
 export default controlRenderer;
-
-const hasOption =
-  (optionName: string): Tester =>
-  (uischema: UISchemaElement): boolean => {
-    if (isEmpty(uischema)) {
-      return false;
-    }
-
-    const options = uischema.options;
-    return (
-      (options &&
-        !isEmpty(options) &&
-        typeof options[optionName] === 'string') ||
-      false
-    );
-  };
 </script>

@@ -10,6 +10,7 @@
       :id="control.id + '-input'"
       :class="styles.control.input"
       :disabled="!control.enabled"
+      :readonly="control.readonly"
       :autofocus="appliedOptions.focus"
       :placeholder="appliedOptions.placeholder"
       :label="computedLabel"
@@ -26,13 +27,20 @@
           ? control.schema.maxLength
           : undefined
       "
-      :clearable="control.enabled"
+      :clearable="clearable"
       multi-line
       v-bind="vuetifyProps('v-textarea')"
       @update:model-value="onChange"
       @focus="handleFocus"
       @blur="handleBlur"
-    />
+    >
+      <template v-slot:prepend v-if="$slots.prepend">
+        <slot name="prepend" />
+      </template>
+      <template v-slot:append v-if="$slots.append">
+        <slot name="append" />
+      </template>
+    </v-textarea>
   </control-wrapper>
 </template>
 
@@ -65,7 +73,7 @@ const controlRenderer = defineComponent({
     const clearValue = determineClearValue('');
     return useVuetifyControl(
       useJsonFormsControl(props),
-      (value) => (value === null ? clearValue : value),
+      (value) => value || clearValue,
       300,
     );
   },

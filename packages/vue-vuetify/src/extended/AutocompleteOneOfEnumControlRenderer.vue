@@ -11,6 +11,7 @@
       :id="control.id + '-input'"
       :class="styles.control.input"
       :disabled="!control.enabled"
+      :readonly="control.readonly"
       :autofocus="appliedOptions.focus"
       :placeholder="appliedOptions.placeholder"
       :label="computedLabel"
@@ -18,7 +19,7 @@
       :persistent-hint="persistentHint()"
       :required="control.required"
       :error-messages="control.errors"
-      :clearable="control.enabled"
+      :clearable="clearable"
       :model-value="control.data"
       :items="control.options"
       item-title="label"
@@ -34,6 +35,7 @@
       :id="control.id + '-input'"
       :class="styles.control.input"
       :disabled="!control.enabled"
+      :readonly="control.readonly"
       :autofocus="appliedOptions.focus"
       :placeholder="appliedOptions.placeholder"
       :label="computedLabel"
@@ -41,7 +43,7 @@
       :persistent-hint="persistentHint()"
       :required="control.required"
       :error-messages="control.errors"
-      :clearable="control.enabled"
+      :clearable="clearable"
       :model-value="control.data"
       :items="control.options"
       item-title="label"
@@ -61,7 +63,7 @@ import {
   useJsonFormsOneOfEnumControl,
   type RendererProps,
 } from '@jsonforms/vue';
-import { defineComponent } from 'vue';
+import { defineComponent, type DefineComponent } from 'vue';
 import { VAutocomplete, VSelect } from 'vuetify/components';
 import { default as ControlWrapper } from '../controls/ControlWrapper.vue';
 import { DisabledIconFocus } from '../controls/directives';
@@ -88,7 +90,7 @@ const controlRenderer = defineComponent({
       300,
     );
   },
-});
+}) as DefineComponent<any, any, any>;
 
 export default controlRenderer;
 </script>

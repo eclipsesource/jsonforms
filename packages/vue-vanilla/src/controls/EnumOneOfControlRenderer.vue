@@ -52,8 +52,11 @@ const controlRenderer = defineComponent({
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    return useVanillaControl(useJsonFormsOneOfEnumControl(props), (target) =>
-      target.selectedIndex === 0 ? undefined : target.value
+    const input = useJsonFormsOneOfEnumControl(props);
+    return useVanillaControl(input, (target) =>
+      target.selectedIndex === 0
+        ? undefined
+        : input.control.value.options[target.selectedIndex - 1].value
     );
   },
 });

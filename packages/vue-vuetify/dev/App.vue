@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, provide, type DefineComponent } from 'vue';
+import ControlWrapper from './components/ControlWrapper.vue';
 import ExampleAppBar from './components/ExampleAppBar.vue';
 import ExampleDrawer from './components/ExampleDrawer.vue';
 import ExampleSettings from './components/ExampleSettings.vue';
@@ -7,6 +8,7 @@ import ExampleSettings from './components/ExampleSettings.vue';
 import ExampleView from './views/ExampleView.vue';
 import HomeView from './views/HomeView.vue';
 
+import { ControlWrapperSymbol, type ControlWrapperProps } from '@/util';
 import examples from './examples';
 import { getCustomThemes } from './plugins/vuetify';
 import { useAppStore } from './store';
@@ -27,6 +29,12 @@ const theme = computed(() => {
 
   return appStore.dark ? 'dark' : 'light';
 });
+
+// override the default ControlWrapper
+provide(
+  ControlWrapperSymbol,
+  ControlWrapper as DefineComponent<ControlWrapperProps>,
+);
 </script>
 
 <template>

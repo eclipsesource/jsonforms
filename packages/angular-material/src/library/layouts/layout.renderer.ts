@@ -28,6 +28,7 @@ import {
   Component,
   PipeTransform,
   Pipe,
+  inject,
 } from '@angular/core';
 import {
   JsonFormsAngularService,
@@ -44,7 +45,6 @@ import {
 
 @Component({
   template: '',
-  standalone: false,
 })
 export class LayoutRenderer<T extends Layout>
   extends JsonFormsBaseRenderer<T>
@@ -53,12 +53,8 @@ export class LayoutRenderer<T extends Layout>
   hidden: boolean;
   label: string | undefined;
 
-  constructor(
-    private jsonFormsService: JsonFormsAngularService,
-    protected changeDetectionRef: ChangeDetectorRef
-  ) {
-    super();
-  }
+  private jsonFormsService = inject(JsonFormsAngularService);
+  protected changeDetectionRef = inject(ChangeDetectorRef);
 
   ngOnInit() {
     this.addSubscription(
@@ -80,7 +76,7 @@ export class LayoutRenderer<T extends Layout>
   }
 }
 
-@Pipe({ name: 'layoutChildrenRenderProps', standalone: false })
+@Pipe({ name: 'layoutChildrenRenderProps' })
 export class LayoutChildrenRenderPropsPipe implements PipeTransform {
   transform(
     uischema: Layout,

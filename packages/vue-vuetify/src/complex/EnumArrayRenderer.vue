@@ -4,6 +4,7 @@
     :id="control.id + '-input'"
     :class="styles.control.input"
     :disabled="!control.enabled"
+    :readonly="control.readonly"
     :autofocus="appliedOptions.focus"
     :placeholder="appliedOptions.placeholder"
     :hint="control.description"
@@ -34,6 +35,7 @@
           :error-messages="control.errors"
           hide-details
           :disabled="!control.enabled"
+          :readonly="control.readonly"
           :indeterminate="control.data === undefined"
           v-bind="vuetifyProps(`v-checkbox[${o.value}]`)"
           @update:model-value="() => toggle(o.value)"

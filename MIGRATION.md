@@ -1,5 +1,124 @@
 # Migration guide
 
+## Migration to JSON Forms 3.9
+
+### Data update paths treat all segments literally
+
+Data updates (e.g. dispatched `update` actions) previously wrote to the form data via lodash's `set`/`unset`, which interpret bracket notation and array indices in paths.
+This corrupted data for property names that look like lodash path syntax, for example numeric property names like `"15"` were turned into array indices and names containing brackets like `"prop[0]"` were split up (see [#2397](https://github.com/eclipsesource/jsonforms/issues/2397) and [#2102](https://github.com/eclipsesource/jsonforms/issues/2102)).
+
+Updates now use the new `setDataAt`/`unsetDataAt` utilities of `@jsonforms/core`, which split paths on `.` and treat every segment as a literal property name, matching how JSON Forms resolves values for display.
+When a missing intermediate container is created, the JSON Schema decides whether it becomes an array or an object; without schema type information, a numeric follow-up segment creates an array, as before.
+
+If you dispatch update actions yourself, make sure to use dot-separated paths (e.g. `update('list.0.name', ...)`) instead of lodash bracket syntax (e.g. `update('list[0].name', ...)`), which is no longer interpreted.
+
+### React Material renderers now require Material UI v9
+
+The React Material renderers (`@jsonforms/material-renderers`) were upgraded from Material UI v7 to v9.
+When using JSON Forms 3.9, your application now needs to provide `@mui/material` and `@mui/icons-material` in version 9, as well as `@mui/x-date-pickers` in version 9 (previously version 8).
+
+To upgrade your application, follow the official [Material UI upgrade guide](https://mui.com/material-ui/migration/upgrade-to-v9/) and the [MUI X Date Pickers migration guide](https://mui.com/x/migration/migration-pickers-v8/).
+
+Use JSON Forms 3.8 if you need to stay on Material UI v7.
+
+As part of this upgrade, layouts that arrange their children vertically (e.g. `VerticalLayout`, `Group`, `Categorization`) now render a MUI `Stack` instead of a `Grid` container with `direction="column"`, and their children are no longer wrapped in `Grid` items.
+If you apply custom styling that relies on the previous `Grid`-based DOM structure of these layouts, verify that it still works as expected.
+Furthermore, if you use exported method `renderLayoutElements`, it no longer wraps children in `Grid` items for direction `column`.
+This should not affect you except if you explicitly use this method in custom renderers.
+
+## Migrating to JSON Forms 3.8
+
+### `Translator` type changed from overloaded signatures to a generic conditional type
+
+The `Translator` type was changed to improve compatibility with TypeScript's `strictFunctionTypes` and `strictNullChecks` compiler options (see [#2528](https://github.com/eclipsesource/jsonforms/issues/2528)).
+
+If you were previously assigning a function directly to the `Translator` type, this may no longer compile:
+
+```ts
+// No longer compiles
+const t: Translator = (id, defaultMessage) => defaultMessage ?? id;
+```
+
+Use the new `createTranslator` helper instead:
+
+```ts
+import { createTranslator } from '@jsonforms/core';
+
+const t = createTranslator((id, defaultMessage) => defaultMessage ?? id);
+```
+
+This also replaces the `as Translator` workaround that was previously needed under strict TypeScript settings.
+
+#### Vue: `Translator` return type in Options API
+
+If you have custom Vue renderers that access a `Translator` via `this` (Options API), the return type may no longer narrow to `string` even when a `defaultMessage` is provided.
+This is because Vue's ref unwrapping loses the generic parameter of the new conditional type.
+
+To fix this, use `as string` when you know a default message is always provided:
+
+```ts
+// Before (may now return string | undefined)
+return this.t(label, label);
+
+// After
+return this.t(label, label) as string;
+```
+
+This does not affect the Composition API where `Translator` is accessed directly from a `ComputedRef`.
+
+### Angular support now targets Angular 20 to 22
+
+When using JSON Forms 3.8, your Angular application now needs to target Angular 20, 21 or 22.
+
+Use JSON Forms 3.7 if you need to stay on Angular 19.
+
+### Angular renderers use `inject()` instead of constructor injection
+
+All Angular base classes (`JsonFormsAbstractControl`, `LayoutRenderer`, `JsonFormsOutlet`, `JsonForms`) now use Angular's `inject()` function instead of constructor parameter injection.
+
+The `JsonFormsAngularService` is now provided as a `protected` field on `JsonFormsAbstractControl`, so custom control renderers can use `this.jsonFormsService` directly without injecting it themselves.
+
+**Before:**
+
+```ts
+@Component({ ... })
+export class MyCustomRenderer extends JsonFormsControl {
+  constructor(
+    private myService: MyService,
+    jsonFormsService: JsonFormsAngularService
+  ) {
+    super(jsonFormsService);
+  }
+}
+```
+
+**After:**
+
+```ts
+@Component({ ... })
+export class MyCustomRenderer extends JsonFormsControl {
+  private myService = inject(MyService);
+}
+```
+
+If your custom renderer extends `LayoutRenderer`, the same applies.
+Remove the constructor parameters for `JsonFormsAngularService` and `ChangeDetectorRef`, as both are now injected by the base class.
+The `ChangeDetectorRef` is available as a `protected` field `this.changeDetectionRef` on `LayoutRenderer`.
+
+### Angular material removes hammerjs
+
+The angular material package no longer depends or imports the `hammerjs` package.
+`hammerjs` is a deprecated package for touch gesture support that was last updated 10 years ago.
+Thus, it is not expected to be in use. However, if you notice sudden failures in reaction to touch gestures, check if you are still using this.
+
+## Migrating to JSON Forms 3.7
+
+### Angular support now targets Angular 19 to 21
+
+When using JSON Forms 3.7, your Angular application now needs to target Angular 19, 20 or 21.
+
+Use JSON Forms 3.6 if you need to stay on Angular 18.
+
 ## Migrating to JSON Forms 3.6
 
 ### UI schema type changes

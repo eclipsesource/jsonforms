@@ -33,18 +33,21 @@ import {
   rankWith,
 } from '@jsonforms/core';
 import { withJsonFormsControlProps } from '@jsonforms/react';
-import { FormHelperText } from '@mui/material';
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import FormHelperText from '@mui/material/FormHelperText';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import {
   createOnBlurHandler,
   createOnChangeHandler,
   getData,
   useFocus,
+  useInputVariant,
 } from '../util';
 
 export const MaterialDateControl = (props: ControlProps) => {
   const [focused, onFocus, onBlur] = useFocus();
+  const inputVariant = useInputVariant();
   const {
     description,
     id,
@@ -75,6 +78,7 @@ export const MaterialDateControl = (props: ControlProps) => {
   const saveFormat = appliedUiSchemaOptions.dateSaveFormat ?? defaultDateFormat;
 
   const views = appliedUiSchemaOptions.views ?? ['year', 'day'];
+  const closeOnSelect = appliedUiSchemaOptions.closeOnSelect ?? true;
 
   const firstFormHelperText = showDescription
     ? description
@@ -100,7 +104,7 @@ export const MaterialDateControl = (props: ControlProps) => {
         updateChild,
         onBlur
       ),
-    [path, handleChange, format, saveFormat, updateChild]
+    [path, handleChange, format, saveFormat, updateChild, onBlur]
   );
   const value = getData(data, saveFormat);
 
@@ -121,23 +125,27 @@ export const MaterialDateControl = (props: ControlProps) => {
         format={format}
         views={views}
         disabled={!enabled}
+        closeOnSelect={closeOnSelect}
         slotProps={{
-          actionBar: ({ wrapperVariant }) => ({
+          actionBar: ({ pickerVariant }) => ({
             actions:
-              wrapperVariant === 'desktop' ? [] : ['clear', 'cancel', 'accept'],
+              pickerVariant === 'desktop' ? [] : ['clear', 'cancel', 'accept'],
           }),
           textField: {
             id: id + '-input',
             required: required && !appliedUiSchemaOptions.hideRequiredAsterisk,
-            autoFocus: appliedUiSchemaOptions.focus,
             error: !isValid,
             fullWidth: !appliedUiSchemaOptions.trim,
-            inputProps: {
-              type: 'text',
+            variant: inputVariant,
+            slotProps: {
+              htmlInput: {
+                autoFocus: appliedUiSchemaOptions.focus,
+                type: 'text',
+                onFocus: onFocus,
+                onBlur: onBlurHandler,
+              },
+              inputLabel: data ? { shrink: true } : undefined,
             },
-            InputLabelProps: data ? { shrink: true } : undefined,
-            onFocus: onFocus,
-            onBlur: onBlurHandler,
           },
         }}
       />

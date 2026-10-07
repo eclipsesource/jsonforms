@@ -29,4 +29,4 @@ export * from './number.renderer';
 export * from './range.renderer';
 export * from './date.renderer';
 export * from './toggle.renderer';
-export * from './autocomplete.renderer';
+export * from './enum.renderer';

@@ -266,11 +266,11 @@ Should any of the provided bindings not completely match an intended use case, t
 When constructing a new binding you might want to access the injected raw `jsonforms` object and `dispatch` method, e.g.
 
 ```ts
-import { inject } from 'vue';
+import { useJsonForms, useDispatch } from '@jsonforms/vue';
 
 const useCustomBinding = (props) => {
-  const jsonforms = inject<JsonFormsSubStates>('jsonforms');
-  const dispatch = inject<Dispatch<CoreActions>>('dispatch');
+  const jsonforms = useJsonForms();
+  const dispatch = useDispatch();
 
   return {
     // use props, jsonforms and dispatch to construct own binding
@@ -288,6 +288,27 @@ const myComponent = defineComponent({
 
 The injected `jsonforms` object is not meant to be modified directly.
 Instead it should be modified via the provided `dispatch` and by changing the props of the `json-forms` component.
+
+### Testing with Jest / Vitest
+
+When testing custom renderers in a CJS-transformed test environment (Jest, or Vitest configured with CJS transforms), `vue` must be imported **before** `@jsonforms/vue` in your renderer files:
+
+```ts
+// Correct - import vue before @jsonforms/vue
+import { defineComponent } from 'vue';
+import { rendererProps, useJsonFormsControl } from '@jsonforms/vue';
+```
+
+```ts
+// May produce errors such as:
+//   "Property '<name>' was accessed during render but is not defined on instance"
+import { rendererProps, useJsonFormsControl } from '@jsonforms/vue';
+import { defineComponent } from 'vue';
+```
+
+The reason is that several components shipped by `@jsonforms/vue` (e.g. `JsonForms`, `DispatchRenderer`) call `defineComponent` at module load. When the package is consumed via `require()` and the test runner's CJS transform doesn't hoist imports, `vue` must already be evaluated at that point. Thus, importing `vue` first in renderer and test files is the safest default.
+
+Browser/dev builds using Webpack, Vite, or other ESM-aware bundlers are not affected.
 
 ## License
 

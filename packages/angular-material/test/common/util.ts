@@ -48,8 +48,7 @@ export const baseSetup = <C extends JsonFormsControl>(
 ) => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [testConfig.componentUT],
-      imports: testConfig.imports,
+      imports: [testConfig.componentUT].concat(testConfig.imports),
       providers: [JsonFormsAngularService].concat(testConfig.providers),
     }).compileComponents();
   }));

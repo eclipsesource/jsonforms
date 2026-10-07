@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import { registerExamples } from '../register';
-import { JsonSchema7, Translator } from '@jsonforms/core';
+import { createTranslator, JsonSchema7, Translator } from '@jsonforms/core';
 
 export const data = {
   article: {
@@ -265,9 +265,9 @@ export const uischema = {
   ],
 };
 
-export const translate: Translator = (key: string) => {
+export const translate: Translator = createTranslator((key) => {
   return 'translator.' + key;
-};
+});
 
 registerExamples([
   {

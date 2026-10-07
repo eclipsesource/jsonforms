@@ -10,16 +10,19 @@ import {
   defaultJsonFormsI18nState,
   getArrayTranslations,
   getCombinatorTranslations,
+  getCombinedErrorMessage,
+  getControlPath,
+  getErrorTranslator,
   getFirstPrimitiveProp,
+  getTranslator,
   isDescriptionHidden,
   type ControlElement,
   type DispatchPropsOfControl,
   type DispatchPropsOfMultiEnumControl,
-  type JsonFormsSubStates,
   type JsonSchema,
   type UISchemaElement,
 } from '@jsonforms/core';
-import type Ajv from 'ajv';
+import { useJsonForms } from '@jsonforms/vue';
 import type { ErrorObject } from 'ajv';
 import cloneDeep from 'lodash/cloneDeep';
 import debounce from 'lodash/debounce';
@@ -91,6 +94,11 @@ export const useComputedLabel = <
   });
 };
 
+export const isControlEditable = (control: {
+  enabled: boolean;
+  readonly: boolean;
+}) => control.enabled && !control.readonly;
+
 /**
  * Adds styles, appliedOptions and vuetifyProps
  */
@@ -131,6 +139,7 @@ export const useVuetifyLabel = <
  */
 export const useVuetifyControl = <
   T extends {
+    schema: JsonSchema;
     uischema: ControlElement;
     path: string;
     config: any;
@@ -140,6 +149,8 @@ export const useVuetifyControl = <
     errors: string;
     id: string;
     visible: boolean;
+    enabled: boolean;
+    readonly: boolean;
   },
   I extends {
     control: ComputedRef<T>;
@@ -173,12 +184,56 @@ export const useVuetifyControl = <
   const handleBlur = () => {
     touched.value = true;
     isFocused.value = false;
+    if (changeEmitter && (changeEmitter as any).flush) {
+      (changeEmitter as any).flush();
+    }
   };
 
+  const jsonforms = useJsonForms();
   const filteredErrors = computed(() => {
-    return touched.value || !appliedOptions.value.enableFilterErrorsBeforeTouch
-      ? input.control.value.errors
-      : '';
+    // Always show errors if touched, no errors exist, or filtering is not enabled
+    if (
+      touched.value ||
+      !input.control.value.errors ||
+      !appliedOptions.value.enableFilterErrorsBeforeTouch
+    ) {
+      return input.control.value.errors;
+    }
+
+    const filterKeywords = appliedOptions.value.filterErrorKeywordsBeforeTouch;
+
+    // Filtering is enabled - check if specific keywords are configured
+    if (Array.isArray(filterKeywords) && filterKeywords.length > 0) {
+      // Granular filtering: only hide specific error keywords
+      const errorsAtControl =
+        jsonforms.core?.errors?.filter(
+          (error) => input.control.value.path === getControlPath(error),
+        ) ?? [];
+
+      // Filter out errors that match the filterKeywords, keep the rest
+      const errorsToShow = errorsAtControl.filter(
+        (error) => !error.keyword || !filterKeywords.includes(error.keyword),
+      );
+      // If no errors were filtered out (all errors remain), return original errors string
+      if (errorsToShow.length === errorsAtControl.length) {
+        return input.control.value.errors;
+      }
+
+      const t = getTranslator()({ jsonforms });
+      const te = getErrorTranslator()({ jsonforms });
+
+      return getCombinedErrorMessage(
+        errorsToShow,
+        te,
+        t,
+        input.control.value.schema,
+        input.control.value.uischema,
+        input.control.value.path,
+      );
+    }
+
+    // default, all errors are filtered
+    return '';
   });
 
   const persistentHint = (): boolean => {
@@ -191,12 +246,6 @@ export const useVuetifyControl = <
   };
 
   const computedLabel = useComputedLabel(input, appliedOptions);
-
-  const controlWrapper = computed(() => {
-    const { id, description, errors, label, visible, required } =
-      input.control.value;
-    return { id, description, errors, label, visible, required };
-  });
 
   const styles = useStyles(input.control.value.uischema);
 
@@ -213,7 +262,19 @@ export const useVuetifyControl = <
     };
   });
 
+  const controlWrapper = computed(() => {
+    const { id, description, errors, label, visible, required } =
+      overwrittenControl.value;
+    return { id, description, errors, label, visible, required };
+  });
+
   const rawErrors = computed(() => input.control.value.errors);
+
+  const clearable = computed(() => {
+    return appliedOptions.value.clearable !== undefined
+      ? appliedOptions.value.clearable && input.control.value.enabled
+      : isControlEditable(input.control.value);
+  });
 
   return {
     ...input,
@@ -226,6 +287,7 @@ export const useVuetifyControl = <
     vuetifyProps,
     persistentHint,
     computedLabel,
+    clearable,
     touched,
     handleBlur,
     handleFocus,
@@ -244,7 +306,7 @@ export const useCombinatorTranslations = <
 >(
   input: I,
 ) => {
-  const jsonforms = inject<JsonFormsSubStates>('jsonforms');
+  const jsonforms = useJsonForms();
   const translations = getCombinatorTranslations(
     jsonforms?.i18n?.translate ?? defaultJsonFormsI18nState.translate,
     combinatorDefaultTranslations,
@@ -263,35 +325,6 @@ export const useCombinatorTranslations = <
     ...input,
     control: overwrittenControl,
   };
-};
-
-export const useJsonForms = () => {
-  const jsonforms = inject<JsonFormsSubStates>('jsonforms');
-
-  if (!jsonforms) {
-    throw new Error(
-      "'jsonforms couldn't be injected. Are you within JSON Forms?",
-    );
-  }
-
-  return jsonforms;
-};
-
-export const useTranslator = () => {
-  const jsonforms = useJsonForms();
-
-  if (!jsonforms.i18n || !jsonforms.i18n.translate) {
-    throw new Error(
-      "'jsonforms i18n couldn't be injected. Are you within JSON Forms?",
-    );
-  }
-
-  const translate = computed(() => {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return jsonforms.i18n!.translate!;
-  });
-
-  return translate;
 };
 
 /**
@@ -354,6 +387,7 @@ export const useVuetifyArrayControl = <
       return '';
     }
     const childLabelProp =
+      input.control.value.uischema.options?.elementLabelProp ??
       input.control.value.uischema.options?.childLabelProp ??
       getFirstPrimitiveProp(input.control.value.schema);
     if (!childLabelProp) {
@@ -373,16 +407,34 @@ export const useVuetifyArrayControl = <
     return `${labelValue}`;
   };
   const filteredChildErrors = computed(() => {
+    if (
+      !input.control.value.childErrors ||
+      input.control.value.childErrors.length === 0 ||
+      !appliedOptions.value.enableFilterErrorsBeforeTouch
+    ) {
+      return input.control.value.childErrors;
+    }
+
     // supress childErrors unless touch filtering is disabled
     // otherwise all child errors will show, irrespective of their control touch state
-    const filtered: ErrorObject[] = appliedOptions.value
-      ?.enableFilterErrorsBeforeTouch
-      ? []
-      : input.control.value.childErrors;
-    return filtered;
+
+    const filterKeywords = appliedOptions.value.filterErrorKeywordsBeforeTouch;
+
+    // Filtering is enabled - check if specific keywords are configured
+    if (Array.isArray(filterKeywords) && filterKeywords.length > 0) {
+      // Granular filtering: only hide specific error keywords
+      const errorsToShow = input.control.value.childErrors.filter(
+        (error) => !error.keyword || !filterKeywords.includes(error.keyword),
+      );
+
+      return errorsToShow;
+    }
+
+    // default, all child errors are filtered
+    return [];
   });
 
-  const jsonforms = inject<JsonFormsSubStates>('jsonforms');
+  const jsonforms = useJsonForms();
   const translations = getArrayTranslations(
     jsonforms?.i18n?.translate ?? defaultJsonFormsI18nState.translate,
     arrayDefaultTranslations,
@@ -398,6 +450,8 @@ export const useVuetifyArrayControl = <
     };
   });
 
+  const rawChildErrors = computed(() => input.control.value.childErrors);
+
   return {
     ...input,
     control: overwrittenControl,
@@ -406,7 +460,7 @@ export const useVuetifyArrayControl = <
     childLabelForIndex,
     computedLabel,
     vuetifyProps,
-    rawChildErrors: input.control.value.childErrors,
+    rawChildErrors,
   };
 };
 
@@ -435,16 +489,6 @@ export const useVuetifyBasicControl = <
     appliedOptions,
     vuetifyProps,
   };
-};
-
-/**
- * Extracts Ajv from JSON Forms
- */
-export const useAjv = () => {
-  const jsonforms = useJsonForms();
-
-  // should always exist
-  return jsonforms.core?.ajv as Ajv;
 };
 
 export interface NestedInfo {
@@ -484,12 +528,7 @@ export const useIcons = () => {
 };
 
 export const determineClearValue = (defaultValue: any) => {
-  const jsonforms = useJsonForms();
-
-  const useDefaultValue = inject<boolean>(
-    IsDynamicPropertyContext,
-    jsonforms.core?.schema.type !== 'object',
-  );
+  const useDefaultValue = inject<boolean>(IsDynamicPropertyContext, false);
 
   // undefined will clear the property from the object
   return useDefaultValue ? defaultValue : undefined;

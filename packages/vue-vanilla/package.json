@@ -1,8 +1,12 @@
 {
   "name": "@jsonforms/vue-vanilla",
-  "version": "3.7.0-alpha.1",
+  "version": "3.9.0-alpha.1",
   "description": "Vue 3 Vanilla renderers for JSON Forms",
-  "repository": "https://github.com/eclipsesource/jsonforms",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eclipsesource/jsonforms.git",
+    "directory": "packages/vue-vanilla"
+  },
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
   "homepage": "http://jsonforms.io/",
   "license": "MIT",
@@ -39,7 +43,7 @@
     "vanilla.css"
   ],
   "scripts": {
-    "serve": "vue-cli-service serve dev/serve.ts",
+    "dev": "vue-cli-service serve dev/serve.ts",
     "build": "cross-env NODE_ENV=production rollup --config rollup.config.js",
     "build:examples-app": "rollup -c rollup.example.config.js",
     "clean": "rimraf lib example/dist",
@@ -58,9 +62,9 @@
     "@jsonforms/core": "workspace:*",
     "@jsonforms/vue": "workspace:*",
     "@types/chai": "^4.2.11",
-    "@types/jest": "^27.4.1",
+    "@types/jest": "^29.5.14",
     "@types/mocha": "^5.2.4",
-    "@types/node": "^22.13.8",
+    "@types/node": "^24.12.2",
     "@typescript-eslint/eslint-plugin": "^5.54.1",
     "@typescript-eslint/parser": "^5.54.1",
     "@vue/cli-plugin-babel": "~5.0.8",
@@ -69,8 +73,9 @@
     "@vue/cli-service": "~5.0.8",
     "@vue/eslint-config-typescript": "^11.0.2",
     "@vue/test-utils": "^2.4.5",
+    "@vue/vue3-jest": "^29.2.6",
     "chai": "^4.1.2",
-    "cross-env": "^7.0.2",
+    "cross-env": "^10.1.0",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^8.7.0",
     "eslint-plugin-import": "^2.27.5",
@@ -78,7 +83,7 @@
     "eslint-plugin-vue": "^9.9.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.8.4",
-    "rimraf": "^3.0.2",
+    "rimraf": "^6.1.0",
     "rollup": "^2.78.0",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-cleanup": "^3.2.1",
@@ -88,13 +93,12 @@
     "symlink-dir": "^5.0.0",
     "tslib": "^2.5.0",
     "typedoc": "~0.25.3",
-    "typescript": "~5.5.0",
-    "vue": "^3.5.17",
-    "vue-jest": "^5.0.0-0"
+    "typescript": "~5.8.3",
+    "vue": "^3.5.17"
   },
   "peerDependencies": {
-    "@jsonforms/core": "3.7.0-alpha.1",
-    "@jsonforms/vue": "3.7.0-alpha.1",
+    "@jsonforms/core": "3.9.0-alpha.1",
+    "@jsonforms/vue": "3.9.0-alpha.1",
     "vue": "^3.5.0"
   }
 }

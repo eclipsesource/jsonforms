@@ -36,6 +36,19 @@ export const schema = {
     nullableString: {
       type: ['string', 'null'],
     },
+    nullableObject: {
+      type: ['object', 'null'],
+      description:
+        'A nullable object whose properties should still be rendered.',
+      properties: {
+        shape: {
+          type: 'string',
+        },
+        size: {
+          type: 'number',
+        },
+      },
+    },
     mixed: {
       type: [
         'array',
@@ -64,6 +77,10 @@ export const uischema = {
     },
     {
       type: 'Control',
+      scope: '#/properties/nullableObject',
+    },
+    {
+      type: 'Control',
       scope: '#/properties/mixed',
     },
   ],
@@ -72,6 +89,10 @@ export const uischema = {
 const data = {
   mixedSimple: 'String',
   nullableString: null as any,
+  nullableObject: {
+    shape: 'circle',
+    size: 5,
+  },
 };
 
 registerExamples([

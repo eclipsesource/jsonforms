@@ -10,6 +10,7 @@
       :id="control.id + '-input'"
       :class="styles.control.input"
       :disabled="!control.enabled"
+      :readonly="control.readonly"
       :autofocus="appliedOptions.focus"
       :placeholder="appliedOptions.placeholder ?? dateFormat"
       :label="computedLabel"
@@ -19,11 +20,14 @@
       :error-messages="control.errors"
       v-bind="vuetifyProps('v-text-field')"
       v-model="inputModel"
-      :clearable="control.enabled"
+      :clearable="clearable"
       @focus="handleFocus"
       @blur="handleBlur"
       v-maska:[options]="maska"
     >
+      <template v-slot:prepend v-if="$slots.prepend">
+        <slot name="prepend" />
+      </template>
       <template v-slot:prepend-inner>
         <v-menu
           v-model="showMenu"
@@ -32,7 +36,7 @@
           min-width="290px"
           v-bind="vuetifyProps('v-menu')"
           activator="parent"
-          :disabled="!control.enabled"
+          :disabled="!isControlEditable(control)"
         >
           <template v-slot:activator="{ props }">
             <v-icon v-bind="props" tabindex="-1">{{ pickerIcon }}</v-icon>
@@ -49,7 +53,7 @@
                 v-if="showMenu"
                 :model-value="showActions ? proxyModel.value : pickerValue"
                 @update:model-value="
-                  (val: any) => updateDatePickerValue(val, proxyModel)
+                  (val: unknown) => updateDatePickerValue(val, proxyModel)
                 "
                 v-bind="vuetifyProps('v-date-picker')"
                 :title="computedLabel"
@@ -71,6 +75,9 @@
           </v-confirm-edit>
         </v-menu>
       </template>
+      <template v-slot:append v-if="$slots.append">
+        <slot name="append" />
+      </template>
     </v-text-field>
   </control-wrapper>
 </template>
@@ -83,6 +90,7 @@ import { computed, defineComponent, reactive, ref, unref, watch } from 'vue';
 import {
   rendererProps,
   useJsonFormsControl,
+  useTranslator,
   type RendererProps,
 } from '@jsonforms/vue';
 import { vMaska, type MaskOptions } from 'maska';
@@ -100,8 +108,8 @@ import {
   convertDayjsToMaskaFormat,
   determineClearValue,
   expandLocaleFormat,
+  isControlEditable,
   parseDateTime,
-  useTranslator,
   useVuetifyControl,
 } from '../util';
 import { default as ControlWrapper } from './ControlWrapper.vue';
@@ -141,7 +149,7 @@ const controlRenderer = defineComponent({
 
     const showMenu = ref(false);
 
-    const adaptValue = (value: any) => (value === null ? clearValue : value);
+    const adaptValue = (value: any) => value || clearValue;
     const control = useVuetifyControl(useJsonFormsControl(props), adaptValue);
 
     const dateFormat = computed<string>(
@@ -152,26 +160,29 @@ const controlRenderer = defineComponent({
           : (expandLocaleFormat('L') ?? 'YYYY-MM-DD'), // by default try to use localized default if unavailable then YYYY-MM-DD
     );
 
-    const useMask = control.appliedOptions.value.mask !== false;
-    const locale = useLocale();
+    const useMask = computed(() => control.appliedOptions.value.mask !== false);
 
     const maska = reactive({
       masked: '',
       unmasked: '',
       completed: false,
     });
-    const options = useMask
-      ? computed<MaskOptions>(() => ({
-          mask: state.value.mask,
-          tokens: state.value.tokens,
-          tokensReplace: true,
-
-          //invoke the locale.current as side effect so that the computed will rerun if the locale changes since the mask could be dependent on the locale
-          _locale: unref(locale.current),
-        }))
-      : null;
 
     const state = computed(() => convertDayjsToMaskaFormat(dateFormat.value));
+    const locale = useLocale();
+
+    const options = computed<MaskOptions | null>(() =>
+      useMask.value
+        ? {
+            mask: state.value.mask,
+            tokens: state.value.tokens,
+            tokensReplace: true,
+
+            // invoke locale.current so the mask recomputes when locale changes
+            _locale: unref(locale.current),
+          }
+        : null,
+    );
 
     const viewMode = ref<ViewModeType>('month');
 
@@ -255,6 +266,7 @@ const controlRenderer = defineComponent({
       t,
       adaptValue,
       dateFormat,
+      isControlEditable,
       options,
       useMask,
     };
@@ -359,13 +371,13 @@ const controlRenderer = defineComponent({
       },
     },
     pickerValue: {
-      get(): Date | undefined {
+      get(): Date | null {
         const value = this.control.data;
         const date = parseDateTime(value, this.formats);
         // show only valid values
-        return date ? date.toDate() : undefined;
+        return date ? date.toDate() : null;
       },
-      set(val: Date): void {
+      set(val: Date | null): void {
         this.onPickerChange(val);
       },
     },
@@ -375,21 +387,21 @@ const controlRenderer = defineComponent({
           ? this.appliedOptions.cancelLabel
           : 'Cancel';
 
-      return this.t(label, label);
+      return this.t(label, label) as string;
     },
     okLabel(): string {
       const label =
         typeof this.appliedOptions.okLabel == 'string'
           ? this.appliedOptions.okLabel
           : 'OK';
-      return this.t(label, label);
+      return this.t(label, label) as string;
     },
     showActions(): boolean {
       return this.appliedOptions.showActions === true;
     },
   },
   methods: {
-    onPickerChange(value: Date): void {
+    onPickerChange(value: Date | null): void {
       const date = parseDateTime(value, undefined);
       let newdata: string | null = date
         ? date.format(this.dateSaveFormat)
@@ -397,21 +409,15 @@ const controlRenderer = defineComponent({
 
       this.onChange(newdata);
     },
-    updateDatePickerValue(
-      val: unknown,
-      proxyModel: Ref<Date | undefined>,
-    ): void {
+    updateDatePickerValue(val: unknown, proxyModel: Ref<Date | null>): void {
       if (this.showActions) {
-        proxyModel.value = val as Date;
+        proxyModel.value = val as Date | null;
       } else {
-        this.pickerValue = val as Date;
+        this.pickerValue = val as Date | null;
         this.showMenu = false;
       }
     },
-    updateDatePickerYear(
-      year: number,
-      proxyModel: Ref<Date | undefined>,
-    ): void {
+    updateDatePickerYear(year: number, proxyModel: Ref<Date | null>): void {
       if (this.showActions) {
         const date = new Date(proxyModel.value ?? new Date());
         date.setFullYear(year);
@@ -431,10 +437,7 @@ const controlRenderer = defineComponent({
         }
       }
     },
-    updateDatePickerMonth(
-      month: number,
-      proxyModel: Ref<Date | undefined>,
-    ): void {
+    updateDatePickerMonth(month: number, proxyModel: Ref<Date | null>): void {
       if (this.showActions) {
         const date = new Date(proxyModel.value ?? new Date());
         date.setMonth(month);

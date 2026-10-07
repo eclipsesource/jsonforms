@@ -10,7 +10,7 @@
     <v-tabs
       v-model="selectIndex"
       @update:model-value="handleTabChange"
-      :disabled="!control.enabled"
+      :disabled="!isControlEditable(control)"
     >
       <v-tab
         v-for="(oneOfRenderInfo, oneOfIndex) in oneOfRenderInfos"
@@ -33,6 +33,7 @@
           :renderers="control.renderers"
           :cells="control.cells"
           :enabled="control.enabled"
+          :readonly="control.readonly"
         />
       </v-window-item>
     </v-window>
@@ -75,7 +76,6 @@ import {
   type RendererProps,
   useJsonFormsOneOfControl,
 } from '@jsonforms/vue';
-import isEmpty from 'lodash/isEmpty';
 import { defineComponent, ref } from 'vue';
 import {
   VBtn,
@@ -90,7 +90,11 @@ import {
   VWindow,
   VWindowItem,
 } from 'vuetify/components';
-import { useCombinatorTranslations, useVuetifyControl } from '../util';
+import {
+  isControlEditable,
+  useCombinatorTranslations,
+  useVuetifyControl,
+} from '../util';
 import { CombinatorProperties } from './components';
 
 const controlRenderer = defineComponent({
@@ -124,6 +128,7 @@ const controlRenderer = defineComponent({
 
     return {
       ...useCombinatorTranslations(useVuetifyControl(input)),
+      isControlEditable,
       selectedIndex,
       selectIndex,
       dialog,
@@ -150,7 +155,7 @@ const controlRenderer = defineComponent({
       // revert back to the orginal value until the dialog is done
       this.selectIndex = this.selectedIndex;
 
-      if (isEmpty(this.control.data)) {
+      if (this.control.data === undefined) {
         this.openNewTab(this.newSelectedIndex);
       } else {
         this.dialog = true;

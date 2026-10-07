@@ -23,8 +23,12 @@
   THE SOFTWARE.
 */
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
+import { JsonFormsControl } from '@jsonforms/angular';
 import { isMultiLineControl, RankedTester, rankWith } from '@jsonforms/core';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'TextAreaRenderer',
@@ -57,13 +61,15 @@ import { isMultiLineControl, RankedTester, rankWith } from '@jsonforms/core';
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+  ],
 })
 export class TextAreaRenderer extends JsonFormsControl {
   focused = false;
-  constructor(jsonformsService: JsonFormsAngularService) {
-    super(jsonformsService);
-  }
   getEventValue = (event: any) => event.target.value || undefined;
 }
 export const TextAreaRendererTester: RankedTester = rankWith(

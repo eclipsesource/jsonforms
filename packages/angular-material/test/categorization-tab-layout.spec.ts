@@ -71,8 +71,9 @@ describe('Categorization tab layout', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [CategorizationTabLayoutRenderer, TextControlRenderer],
       imports: [
+        CategorizationTabLayoutRenderer,
+        TextControlRenderer,
         CommonModule,
         MatTabsModule,
         NoopAnimationsModule,

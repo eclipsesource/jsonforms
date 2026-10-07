@@ -26,10 +26,14 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  inject,
   ViewRef,
 } from '@angular/core';
-import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
+import { JsonFormsControl } from '@jsonforms/angular';
 import { isBooleanControl, RankedTester, rankWith } from '@jsonforms/core';
+import { CommonModule } from '@angular/common';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: 'BooleanControlRenderer',
@@ -65,15 +69,10 @@ import { isBooleanControl, RankedTester, rankWith } from '@jsonforms/core';
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+  imports: [CommonModule, MatCheckboxModule, MatFormFieldModule],
 })
 export class BooleanControlRenderer extends JsonFormsControl {
-  constructor(
-    jsonformsService: JsonFormsAngularService,
-    private changeDetectionRef: ChangeDetectorRef
-  ) {
-    super(jsonformsService);
-  }
+  private changeDetectionRef = inject(ChangeDetectorRef);
   isChecked = () => this.data || false;
   getEventValue = (event: any) => event.checked;
 

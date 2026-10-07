@@ -12,6 +12,7 @@
       :id="control.id + '-input'"
       :class="styles.control.input"
       :disabled="!control.enabled"
+      :readonly="control.readonly"
       :autofocus="appliedOptions.focus"
       :placeholder="appliedOptions.placeholder"
       :label="computedLabel"
@@ -19,13 +20,20 @@
       :persistent-hint="persistentHint()"
       :required="control.required"
       :error-messages="control.errors"
-      :model-value="control.data"
-      :clearable="control.enabled"
+      :model-value="value"
+      :clearable="clearable"
       v-bind="vuetifyProps('v-number-input')"
       @update:model-value="onChange"
       @focus="handleFocus"
       @blur="handleBlur"
-    ></v-number-input>
+    >
+      <template v-slot:prepend v-if="$slots.prepend">
+        <slot name="prepend" />
+      </template>
+      <template v-slot:append v-if="$slots.append">
+        <slot name="append" />
+      </template>
+    </v-number-input>
   </control-wrapper>
 </template>
 
@@ -67,16 +75,25 @@ const controlRenderer = defineComponent({
       const options: any = this.appliedOptions;
       return options.step ?? 0.1;
     },
-    precision(): number | undefined {
-      if (!this.step || Number.isInteger(this.step)) return undefined;
-      // Handle scientific notation and float imprecision
-      const stepStr = this.step.toString();
-      if (stepStr.indexOf('e-') > -1) {
-        // Handle cases like 1e-3
-        return parseInt(stepStr.split('e-')[1], 10);
+    precision(): number | null {
+      const options: any = this.appliedOptions;
+
+      if (options.precision !== undefined && options.precision !== null) {
+        return Number(options.precision);
       }
-      const fraction = stepStr.split('.')[1];
-      return fraction ? fraction.length : undefined;
+
+      // Return null (not undefined) to allow Vuetify to accept any precision by default
+      return null;
+    },
+    value(): number | null | undefined {
+      if (
+        typeof this.control.data === 'number' ||
+        this.control.data === null ||
+        this.control.data === undefined
+      ) {
+        return this.control.data;
+      }
+      return Number(this.control.data);
     },
   },
 });

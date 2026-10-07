@@ -20,7 +20,7 @@
             :renderers="control.renderers"
             :cells="control.cells"
             :config="control.config"
-            :readonly="!control.enabled"
+            :readonly="!isControlEditable(control)"
             :validation-mode="validationMode"
             :i18n="i18n"
             :ajv="ajv"
@@ -28,7 +28,7 @@
             @change="propertyNameChange"
           ></json-forms
         ></v-col>
-        <v-tooltip bottom>
+        <v-tooltip location="bottom">
           <template v-slot:activator="{ props }">
             <v-btn
               icon
@@ -60,11 +60,12 @@
             :uischema="element.uischema"
             :path="element.path"
             :enabled="control.enabled"
+            :readonly="control.readonly"
             :renderers="control.renderers"
             :cells="control.cells"
         /></v-col>
         <v-col v-if="control.enabled" class="flex-shrink-1 flex-grow-0">
-          <v-tooltip bottom>
+          <v-tooltip location="bottom">
             <template v-slot:activator="{ props }">
               <v-btn
                 v-bind="props"
@@ -102,14 +103,16 @@ import {
   getI18nKeyPrefix,
   type GroupLayout,
   type JsonSchema,
-  type JsonSchema4,
   type JsonSchema7,
   type UISchemaElement,
 } from '@jsonforms/core';
 import {
   DispatchRenderer,
   JsonForms,
+  useAjv,
+  useJsonForms,
   useJsonFormsControlWithDetail,
+  useTranslator,
   type JsonFormsChangeEvent,
 } from '@jsonforms/vue';
 import type { ErrorObject } from 'ajv';
@@ -119,6 +122,7 @@ import isPlainObject from 'lodash/isPlainObject';
 import omit from 'lodash/omit';
 import startCase from 'lodash/startCase';
 
+import { IsDynamicPropertyContext } from '@/util/inject';
 import {
   computed,
   defineComponent,
@@ -127,6 +131,7 @@ import {
   ref,
   unref,
   type PropType,
+  type DefineComponent
 } from 'vue';
 import { useDisplay } from 'vuetify';
 import {
@@ -141,15 +146,13 @@ import {
 import { DisabledIconFocus } from '../../controls/directives';
 import { useStyles } from '../../styles';
 import {
+  isControlEditable,
   useControlAppliedOptions,
   useIcons,
-  useJsonForms,
-  useTranslator,
 } from '../../util';
-import { IsDynamicPropertyContext } from '@/util/inject';
 
 type Input = ReturnType<typeof useJsonFormsControlWithDetail>;
-interface AdditionalPropertyType {
+export interface AdditionalPropertyType {
   propertyName: string;
   path: string;
   schema: JsonSchema | undefined;
@@ -221,7 +224,7 @@ export default defineComponent({
       }
 
       if (typeof propSchema?.$ref === 'string') {
-        propSchema = Resolve.schema(propSchema, propSchema.$ref, rootSchema);
+        propSchema = Resolve.schema(rootSchema, propSchema.$ref, rootSchema);
       }
 
       propSchema = propSchema ?? {};
@@ -299,8 +302,17 @@ export default defineComponent({
       // TODO: create issue against jsonforms to add propertyNames into the JsonSchema interface
       // propertyNames exist in draft-6 but not defined in the JsonSchema
       if (typeof (control.value.schema as any).propertyNames === 'object') {
+        let propertyNames = (control.value.schema as any).propertyNames;
+        if (typeof propertyNames.$ref === 'string') {
+          propertyNames =
+            Resolve.schema(
+              control.value.rootSchema,
+              propertyNames.$ref,
+              control.value.rootSchema,
+            ) ?? propertyNames;
+        }
         result = {
-          ...(control.value.schema as any).propertyNames,
+          ...propertyNames,
           ...result,
         };
       } else if (
@@ -408,8 +420,8 @@ export default defineComponent({
       validationMode: parentValidationMode,
       i18n,
       middleware,
-      ajv,
     } = useJsonForms();
+    const ajv = useAjv();
 
     // if the new property name is not specified then hide any errors
     const validationMode = computed(() =>
@@ -440,6 +452,7 @@ export default defineComponent({
       newPropertyErrors,
       additionalErrors,
       icons,
+      isControlEditable,
       propertyNameSchema,
       translations,
     };
@@ -448,7 +461,7 @@ export default defineComponent({
     addPropertyDisabled(): boolean {
       return (
         // add is disabled because the overall control is disabled
-        !this.control.enabled ||
+        !this.isControlEditable(this.control) ||
         // add is disabled because of contraints
         (this.appliedOptions.restrict && this.maxPropertiesReached) ||
         // add is disabled because there are errors for the new property name or it is not specified
@@ -469,7 +482,7 @@ export default defineComponent({
     removePropertyDisabled(): boolean {
       return (
         // add is disabled because the overall control is disabled
-        !this.control.enabled ||
+        !this.isControlEditable(this.control) ||
         // add is disabled because of contraints
         (this.appliedOptions.restrict && this.minPropertiesReached)
       );
@@ -511,7 +524,7 @@ export default defineComponent({
         if (
           !isEqualIgnoringKeys(newData, oldData, this.reservedPropertyNames)
         ) {
-          this.additionalPropertyItems = this.additionalKeys.map((propName) =>
+          this.additionalPropertyItems = this.additionalKeys.map((propName: string) =>
             this.toAdditionalPropertyType(
               propName,
               newData[propName],
@@ -560,7 +573,7 @@ export default defineComponent({
     },
     removeProperty(propName: string): void {
       this.additionalPropertyItems = this.additionalPropertyItems.filter(
-        (d) => d.propertyName !== propName,
+        (d: AdditionalPropertyType) => d.propertyName !== propName,
       );
       if (typeof this.control.data === 'object') {
         const updatedData = { ...this.control.data };
@@ -569,5 +582,5 @@ export default defineComponent({
       }
     },
   },
-});
+}) as DefineComponent<any, any, any>;
 </script>

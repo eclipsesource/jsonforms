@@ -28,8 +28,8 @@ import type Ajv from 'ajv';
 import type { ErrorObject } from 'ajv';
 import { UnknownRenderer } from './UnknownRenderer';
 import {
-  createId,
   Generate,
+  Id,
   isControl,
   JsonFormsCellRendererRegistryEntry,
   JsonFormsCore,
@@ -40,7 +40,6 @@ import {
   JsonSchema,
   Middleware,
   OwnPropsOfJsonFormsRenderer,
-  removeId,
   UISchemaElement,
   ValidationMode,
 } from '@jsonforms/core';
@@ -66,23 +65,23 @@ export class JsonFormsDispatchRenderer extends React.Component<
     super(props);
     this.state = {
       id: isControl(props.uischema)
-        ? createId(props.uischema.scope)
+        ? Id.createId(props.uischema.scope)
         : undefined,
     };
   }
 
   componentWillUnmount() {
     if (isControl(this.props.uischema)) {
-      removeId(this.state.id);
+      Id.removeId(this.state.id);
     }
   }
 
   componentDidUpdate(prevProps: JsonFormsProps) {
     if (prevProps.schema !== this.props.schema) {
-      removeId(this.state.id);
+      Id.removeId(this.state.id);
       this.setState({
         id: isControl(this.props.uischema)
-          ? createId(this.props.uischema.scope)
+          ? Id.createId(this.props.uischema.scope)
           : undefined,
       });
     }

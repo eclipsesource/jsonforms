@@ -125,11 +125,11 @@ describe('Array layout', () => {
 
       const arrayLayoutElement: HTMLElement = fixture.nativeElement;
       const matBadgeElement =
-        arrayLayoutElement.querySelector('.mat-badge-content')!;
+        arrayLayoutElement.querySelector('.mat-badge-content');
 
       const noDataElement = arrayLayoutElement.children[0].children[1];
 
-      expect(matBadgeElement.textContent).toBe('1');
+      expect(matBadgeElement?.textContent).toBe('1');
       expect(noDataElement.textContent).toBe('No data');
     });
   });
@@ -149,9 +149,9 @@ describe('Array layout', () => {
 
       const arrayLayoutElement: HTMLElement = fixture.nativeElement;
       const matBadgeElement =
-        arrayLayoutElement.querySelector('.mat-badge-content')!;
+        arrayLayoutElement.querySelector('.mat-badge-content');
 
-      expect(matBadgeElement.textContent).toBe('2');
+      expect(matBadgeElement?.textContent).toBe('2');
     });
   });
 
@@ -170,9 +170,9 @@ describe('Array layout', () => {
 
       const arrayLayoutElement: HTMLElement = fixture.nativeElement;
       const matBadgeElement =
-        arrayLayoutElement.querySelector('.mat-badge-content')!;
+        arrayLayoutElement.querySelector('.mat-badge-content');
 
-      expect(matBadgeElement.textContent).toBe('4');
+      expect(matBadgeElement?.textContent).toBe('4');
     });
   });
 });

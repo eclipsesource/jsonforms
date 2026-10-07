@@ -58,7 +58,7 @@ describe('Label Renderer Base Tests', () => {
   let labelElement: HTMLLabelElement;
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [componentUT],
+      imports: [componentUT],
       providers: providers,
     }).compileComponents();
   }));

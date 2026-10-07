@@ -34,7 +34,7 @@ import MaterialArrayControlRenderer from '../../src/complex/MaterialArrayControl
 import { materialCells, materialRenderers } from '../../src';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-import { JsonFormsStateProvider, StatelessRenderer } from '@jsonforms/react';
+import { JsonFormsStateProvider } from '@jsonforms/react';
 import { initCore, TestEmitter } from './util';
 import { checkTooltip, checkTooltipTranslation } from './tooltipChecker';
 
@@ -376,10 +376,10 @@ describe('Material array control', () => {
     expect(onChangeData.data.length).toBe(1);
   });
 
-  const CellRenderer1: StatelessRenderer<DispatchCellProps> = () => (
+  const CellRenderer1: React.FC<DispatchCellProps> = () => (
     <div className='cell test 1' />
   );
-  const CellRenderer2: StatelessRenderer<DispatchCellProps> = () => (
+  const CellRenderer2: React.FC<DispatchCellProps> = () => (
     <div className='cell test 2' />
   );
 

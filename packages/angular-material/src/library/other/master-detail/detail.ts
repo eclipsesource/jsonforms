@@ -23,6 +23,8 @@
   THE SOFTWARE.
 */
 import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { JsonFormsModule } from '@jsonforms/angular';
 
 @Component({
   selector: 'jsonforms-detail',
@@ -31,7 +33,7 @@ import { Component, Input } from '@angular/core';
       <jsonforms-outlet [renderProps]="_item"></jsonforms-outlet>
     </div>
   `,
-  standalone: false,
+  imports: [CommonModule, JsonFormsModule],
 })
 export class JsonFormsDetailComponent {
   _item: any;

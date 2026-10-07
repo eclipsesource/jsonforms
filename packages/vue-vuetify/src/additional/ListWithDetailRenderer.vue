@@ -15,7 +15,7 @@
             v-if="control.childErrors.length > 0"
             :errors="control.childErrors"
           />
-          <v-tooltip bottom>
+          <v-tooltip location="bottom">
             <template v-slot:activator="{ props }">
               <v-btn
                 icon
@@ -27,7 +27,7 @@
                 :class="styles.listWithDetail.addButton"
                 @click="addButtonClick"
                 :disabled="
-                  !control.enabled ||
+                  !isControlEditable(control) ||
                   (appliedOptions.restrict &&
                     control.arraySchema !== undefined &&
                     control.arraySchema.maxItems !== undefined &&
@@ -80,7 +80,7 @@
                   </validation-badge>
                 </template>
                 <v-list-item-title>
-                  <v-tooltip bottom>
+                  <v-tooltip location="bottom">
                     <template v-slot:activator="{ props }">
                       <span
                         v-bind="props"
@@ -103,7 +103,7 @@
                         small
                         class="ma-0"
                         :aria-label="control.translations.upAriaLabel"
-                        :disabled="index <= 0 || !control.enabled"
+                        :disabled="index <= 0 || !isControlEditable(control)"
                         :class="styles.listWithDetail.itemMoveUp"
                         @click="moveUpClick($event, index)"
                       >
@@ -124,7 +124,10 @@
                         small
                         class="ma-0"
                         :aria-label="control.translations.downAriaLabel"
-                        :disabled="index >= dataLength - 1 || !control.enabled"
+                        :disabled="
+                          index >= dataLength - 1 ||
+                          !isControlEditable(control)
+                        "
                         :class="styles.listWithDetail.itemMoveDown"
                         @click="moveDownClick($event, index)"
                       >
@@ -135,7 +138,7 @@
                     </template>
                     {{ control.translations.down }}
                   </v-tooltip>
-                  <v-tooltip bottom>
+                  <v-tooltip location="bottom">
                     <template v-slot:activator="{ props }">
                       <v-btn
                         v-bind="props"
@@ -148,7 +151,7 @@
                         :class="styles.listWithDetail.itemDelete"
                         @click="removeItemsClick($event, [index])"
                         :disabled="
-                          !control.enabled ||
+                          !isControlEditable(control) ||
                           (appliedOptions.restrict &&
                             control.arraySchema !== undefined &&
                             control.arraySchema.minItems !== undefined &&
@@ -180,6 +183,7 @@
           :uischema="foundUISchema"
           :path="composePaths(control.path, `${selectedIndex}`)"
           :enabled="control.enabled"
+          :readonly="control.readonly"
           :renderers="control.renderers"
           :cells="control.cells"
         />
@@ -203,7 +207,7 @@ import {
   type RendererProps,
 } from '@jsonforms/vue';
 import type { ErrorObject } from 'ajv';
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 import {
   VAvatar,
   VBtn,
@@ -221,7 +225,7 @@ import {
   VVirtualScroll,
 } from 'vuetify/components';
 import { ValidationBadge, ValidationIcon } from '../controls/components/index';
-import { useIcons, useVuetifyArrayControl } from '../util';
+import { isControlEditable, useIcons, useVuetifyArrayControl } from '../util';
 
 const controlRenderer = defineComponent({
   name: 'list-with-detail-renderer',
@@ -248,11 +252,29 @@ const controlRenderer = defineComponent({
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    const selectedIndex = ref<number | undefined>(undefined);
+    const input = useVuetifyArrayControl(useJsonFormsArrayControl(props));
+
+    const _selectedIndex = ref<number | undefined>(undefined);
+    const selectedIndex = computed<number | undefined>({
+      get: () => {
+        const len = input.control.value?.data?.length ?? 0;
+
+        // If no index or out of bounds → undefined
+        if (_selectedIndex.value === undefined || _selectedIndex.value >= len) {
+          return undefined;
+        }
+
+        return _selectedIndex.value;
+      },
+      set: (val) => {
+        _selectedIndex.value = val;
+      },
+    });
     const icons = useIcons();
 
     return {
-      ...useVuetifyArrayControl(useJsonFormsArrayControl(props)),
+      ...input,
+      isControlEditable,
       selectedIndex,
       icons,
     };
@@ -269,6 +291,7 @@ const controlRenderer = defineComponent({
         this.control.path,
         undefined,
         this.control.uischema,
+        this.control.rootSchema,
       );
     },
   },

@@ -46,9 +46,10 @@ export class RendererComponent<
  * Stateless Renderer.
  *
  * @template P type of any renderer props
+ * @deprecated Use React.FunctionComponent instead
  */
 export type StatelessRenderer<P extends RendererProps> =
-  React.StatelessComponent<P>;
+  React.FunctionComponent<P>;
 
 /**
  * Represents a Renderer, which might either be a component or a function.
@@ -57,4 +58,4 @@ export type Renderer =
   // TODO fix @typescript-eslint/ban-types
   // eslint-disable-next-line @typescript-eslint/ban-types
   | RendererComponent<RendererProps & any, {}>
-  | StatelessRenderer<RendererProps & any>;
+  | React.FunctionComponent<RendererProps & any>;

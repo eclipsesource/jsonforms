@@ -8,7 +8,7 @@ exports[`OneOfRenderer.vue > should render component and match snapshot 1`] = `
       <div class="v-input v-input--horizontal v-input--center-affix v-input--density-default v-theme--light v-locale--is-ltr v-input--error v-input--dirty v-text-field v-select v-select--single v-select--selected input">
         <!---->
         <div class="v-input__control">
-          <div class="v-field v-field--active v-field--appended v-field--center-affix v-field--dirty v-field--error v-field--no-label v-field--variant-filled v-theme--light v-locale--is-ltr" role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-controls="v-menu-v-2">
+          <div class="v-field v-field--active v-field--appended v-field--center-affix v-field--dirty v-field--error v-field--no-label v-field--variant-filled v-theme--light v-locale--is-ltr" role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-controls="menu-v-1" aria-owns="menu-v-1">
             <div class="v-field__overlay"></div>
             <div class="v-field__loader">
               <div class="v-progress-linear v-theme--light v-locale--is-ltr" style="top: 0px; height: 0px; --v-progress-linear-height: 2px;" role="progressbar" aria-hidden="true" aria-valuemin="0" aria-valuemax="100">
@@ -29,10 +29,13 @@ exports[`OneOfRenderer.vue > should render component and match snapshot 1`] = `
               <!---->
               <!---->
               <!---->
-              <div class="v-field__input" data-no-activator="">
+              <div class="v-field__input" data-no-activator=""><select hidden="">
+                  <option selected="" value="0"></option>
+                  <option value="1"></option>
+                </select>
                 <!---->
                 <!---->
-                <div class="v-select__selection"><span class="v-select__selection-text">oneOf-0<!----></span></div><input size="1" type="text" id="#3-input" aria-describedby="#3-input-messages" inputmode="none" aria-label="Open" title="Open" value="0">
+                <div class="v-select__selection"><span class="v-select__selection-text">oneOf-0<!----></span></div><input size="1" role="combobox" type="text" aria-labelledby="#3-input-label" id="#3-input" aria-describedby="#3-input-messages" inputmode="none" aria-expanded="false" aria-controls="menu-v-1" value="oneOf-0">
               </div>
               <!---->
             </div>

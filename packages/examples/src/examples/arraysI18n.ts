@@ -23,7 +23,11 @@
   THE SOFTWARE.
 */
 import { registerExamples } from '../register';
-import { ArrayTranslationEnum, Translator } from '@jsonforms/core';
+import {
+  ArrayTranslationEnum,
+  createTranslator,
+  Translator,
+} from '@jsonforms/core';
 import get from 'lodash/get';
 
 export const schema = {
@@ -88,9 +92,9 @@ export const translations = {
       'Are you sure you want to delete this comment?',
   },
 };
-export const translate: Translator = (key: string, defaultMessage: string) => {
+export const translate: Translator = createTranslator((key, defaultMessage) => {
   return get(translations, key) ?? defaultMessage;
-};
+});
 
 registerExamples([
   {

@@ -28,6 +28,7 @@ export * from './ids';
 export * from './label';
 export * from './path';
 export * from './resolvers';
+export * from './setData';
 export * from './runtime';
 export * from './schema';
 export * from './uischema';

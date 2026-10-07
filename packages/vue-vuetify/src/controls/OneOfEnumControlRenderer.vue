@@ -10,6 +10,7 @@
       :id="control.id + '-input'"
       :class="styles.control.input"
       :disabled="!control.enabled"
+      :readonly="control.readonly"
       :autofocus="appliedOptions.focus"
       :placeholder="appliedOptions.placeholder"
       :label="computedLabel"
@@ -17,7 +18,7 @@
       :persistent-hint="persistentHint()"
       :required="control.required"
       :error-messages="control.errors"
-      :clearable="control.enabled"
+      :clearable="clearable"
       :model-value="control.data"
       :items="control.options"
       item-title="label"
@@ -26,7 +27,14 @@
       @update:model-value="onChange"
       @focus="handleFocus"
       @blur="handleBlur"
-    />
+    >
+      <template v-slot:prepend v-if="$slots.prepend">
+        <slot name="prepend" />
+      </template>
+      <template v-slot:append v-if="$slots.append">
+        <slot name="append" />
+      </template>
+    </v-select>
   </control-wrapper>
 </template>
 
@@ -39,7 +47,7 @@ import {
 } from '@jsonforms/vue';
 import { defineComponent } from 'vue';
 import { VSelect } from 'vuetify/components';
-import { useVuetifyControl } from '../util';
+import { determineClearValue, useVuetifyControl } from '../util';
 import { default as ControlWrapper } from './ControlWrapper.vue';
 import { DisabledIconFocus } from './directives';
 
@@ -56,8 +64,10 @@ const controlRenderer = defineComponent({
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
+    const clearValue = determineClearValue('');
+
     return useVuetifyControl(useJsonFormsOneOfEnumControl(props), (value) =>
-      value !== null ? value : undefined,
+      value === null ? clearValue : value,
     );
   },
 });

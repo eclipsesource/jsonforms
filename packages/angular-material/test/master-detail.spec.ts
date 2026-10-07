@@ -29,11 +29,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListItem, MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import {
-  JsonFormsAngularService,
-  JsonFormsOutlet,
-  UnknownRenderer,
-} from '@jsonforms/angular';
+import { JsonFormsAngularService, JsonFormsModule } from '@jsonforms/angular';
 import { DebugElement } from '@angular/core';
 import { MasterListComponent } from '../src/library/other/master-detail/master';
 import { JsonFormsDetailComponent } from '../src/library/other/master-detail/detail';
@@ -101,13 +97,10 @@ describe('Master detail', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        JsonFormsOutlet,
-        MasterListComponent,
-        UnknownRenderer,
-        JsonFormsDetailComponent,
-      ],
       imports: [
+        MasterListComponent,
+        JsonFormsDetailComponent,
+        JsonFormsModule,
         MatListModule,
         MatSidenavModule,
         MatIconModule,

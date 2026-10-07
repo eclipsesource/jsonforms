@@ -23,19 +23,14 @@
   THE SOFTWARE.
 */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import {
-  JsonFormsAngularService,
-  JsonFormsOutlet,
-  UnknownRenderer,
-} from '@jsonforms/angular';
+import { JsonFormsAngularService, JsonFormsModule } from '@jsonforms/angular';
 
 export const beforeEachLayoutTest = <LAYOUT>(
   Renderer: any,
   { declarations = [], imports = [], providers = [] }: any = {}
 ): ComponentFixture<LAYOUT> => {
   TestBed.configureTestingModule({
-    declarations: [Renderer, UnknownRenderer, JsonFormsOutlet, ...declarations],
-    imports,
+    imports: [Renderer, JsonFormsModule, ...imports, ...declarations],
     providers: [JsonFormsAngularService, ...providers],
   }).compileComponents();
   return TestBed.createComponent(Renderer);

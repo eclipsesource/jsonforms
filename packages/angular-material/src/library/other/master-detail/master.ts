@@ -28,12 +28,15 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  inject,
   OnInit,
 } from '@angular/core';
-import {
-  JsonFormsAngularService,
-  JsonFormsArrayControl,
-} from '@jsonforms/angular';
+import { CommonModule } from '@angular/common';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { JsonFormsArrayControl } from '@jsonforms/angular';
 import {
   ArrayControlProps,
   arrayDefaultTranslations,
@@ -54,6 +57,7 @@ import {
   StatePropsOfArrayControl,
   uiTypeIs,
 } from '@jsonforms/core';
+import { JsonFormsDetailComponent } from './detail';
 
 const keywords = ['#', 'properties', 'items'];
 
@@ -95,7 +99,7 @@ export const removeSchemaKeywords = (path: string) => {
               mat-icon-button
               class="button item-button hide"
               (click)="onDeleteClick(i)"
-              [ngClass]="{ show: highlightedIdx == i }"
+              [ngClass]="{ show: highlightedIdx === i }"
               *ngIf="isEnabled()"
             >
               <mat-icon mat-list-icon>delete</mat-icon>
@@ -159,7 +163,14 @@ export const removeSchemaKeywords = (path: string) => {
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+  imports: [
+    CommonModule,
+    MatSidenavModule,
+    MatListModule,
+    MatButtonModule,
+    MatIconModule,
+    JsonFormsDetailComponent,
+  ],
 })
 export class MasterListComponent
   extends JsonFormsArrayControl
@@ -173,12 +184,7 @@ export class MasterListComponent
   highlightedIdx: number;
   translations: ArrayTranslations;
 
-  constructor(
-    jsonformsService: JsonFormsAngularService,
-    private changeDetectorRef: ChangeDetectorRef
-  ) {
-    super(jsonformsService);
-  }
+  private changeDetectorRef = inject(ChangeDetectorRef);
 
   onListItemHover(idx: number) {
     this.highlightedIdx = idx;

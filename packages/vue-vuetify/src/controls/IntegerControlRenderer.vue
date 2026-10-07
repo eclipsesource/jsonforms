@@ -11,6 +11,7 @@
       :id="control.id + '-input'"
       :class="styles.control.input"
       :disabled="!control.enabled"
+      :readonly="control.readonly"
       :autofocus="appliedOptions.focus"
       :placeholder="appliedOptions.placeholder"
       :label="computedLabel"
@@ -18,13 +19,20 @@
       :persistent-hint="persistentHint()"
       :required="control.required"
       :error-messages="control.errors"
-      :model-value="control.data"
-      :clearable="control.enabled"
+      :model-value="value"
+      :clearable="clearable"
       v-bind="vuetifyProps('v-text-field')"
       @update:model-value="onChange"
       @focus="handleFocus"
       @blur="handleBlur"
-    ></v-number-input>
+    >
+      <template v-slot:prepend v-if="$slots.prepend">
+        <slot name="prepend" />
+      </template>
+      <template v-slot:append v-if="$slots.append">
+        <slot name="append" />
+      </template>
+    </v-number-input>
   </control-wrapper>
 </template>
 
@@ -64,6 +72,16 @@ const controlRenderer = defineComponent({
     step(): number {
       const options: any = this.appliedOptions;
       return options.step ?? 1;
+    },
+    value(): number | null | undefined {
+      if (
+        typeof this.control.data === 'number' ||
+        this.control.data === null ||
+        this.control.data === undefined
+      ) {
+        return this.control.data;
+      }
+      return Number(this.control.data);
     },
   },
 });

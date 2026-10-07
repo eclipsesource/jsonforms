@@ -10,6 +10,7 @@
       :id="control.id + '-input'"
       :class="styles.control.input"
       :disabled="!control.enabled"
+      :readonly="control.readonly"
       :autofocus="appliedOptions.focus"
       :placeholder="appliedOptions.placeholder ?? timeFormat"
       :label="computedLabel"
@@ -19,11 +20,14 @@
       :error-messages="control.errors"
       v-bind="vuetifyProps('v-text-field')"
       v-model="inputModel"
-      :clearable="control.enabled"
+      :clearable="clearable"
       @focus="handleFocus"
       @blur="handleBlur"
       v-maska:[options]="maska"
     >
+      <template v-slot:prepend v-if="$slots.prepend">
+        <slot name="prepend" />
+      </template>
       <template v-slot:prepend-inner>
         <v-menu
           v-model="showMenu"
@@ -32,7 +36,7 @@
           :min-width="ampm && useSeconds ? '340px' : '290px'"
           v-bind="vuetifyProps('v-menu')"
           activator="parent"
-          :disabled="!control.enabled"
+          :disabled="!isControlEditable(control)"
         >
           <template v-slot:activator="{ props }">
             <v-icon v-bind="props" tabindex="-1">{{ pickerIcon }}</v-icon>
@@ -49,7 +53,7 @@
                 v-if="showMenu"
                 :model-value="showActions ? proxyModel.value : pickerValue"
                 @update:model-value="
-                  (val: string) => {
+                  (val: string | null) => {
                     if (showActions) {
                       proxyModel.value = val;
                     } else {
@@ -77,7 +81,7 @@
                 :max="maxTime"
                 :use-seconds="useSeconds"
                 :format="ampm ? 'ampm' : '24hr'"
-                :ampm-in-title="ampm ? true : false"
+                :ampm-in-title="ampm"
               >
                 <template v-slot:actions v-if="showActions">
                   <component :is="actions"></component>
@@ -86,6 +90,9 @@
             </template>
           </v-confirm-edit>
         </v-menu>
+      </template>
+      <template v-slot:append v-if="$slots.append">
+        <slot name="append" />
       </template>
     </v-text-field>
   </control-wrapper>
@@ -96,10 +103,11 @@ import { type ControlElement, type JsonSchema } from '@jsonforms/core';
 import {
   rendererProps,
   useJsonFormsControl,
+  useTranslator,
   type RendererProps,
 } from '@jsonforms/vue';
-import { vMaska, type MaskOptions, type MaskaDetail } from 'maska';
-import { computed, reactive, defineComponent, ref, unref } from 'vue';
+import { vMaska, type MaskOptions } from 'maska';
+import { computed, defineComponent, reactive, ref, unref } from 'vue';
 import {
   VBtn,
   VConfirmEdit,
@@ -117,9 +125,9 @@ import {
   convertDayjsToMaskaFormat,
   determineClearValue,
   expandLocaleFormat,
+  isControlEditable,
   parseDateTime,
   useIcons,
-  useTranslator,
   useVuetifyControl,
 } from '../util';
 import { default as ControlWrapper } from './ControlWrapper.vue';
@@ -163,7 +171,7 @@ const controlRenderer = defineComponent({
 
     const showMenu = ref(false);
 
-    const adaptValue = (value: any) => (value === null ? clearValue : value);
+    const adaptValue = (value: any) => value || clearValue;
     const control = useVuetifyControl(useJsonFormsControl(props), adaptValue);
 
     const icons = useIcons();
@@ -178,7 +186,8 @@ const controlRenderer = defineComponent({
           : (expandLocaleFormat('LT') ?? 'H:mm'), // by default try to use localized default if unavailable then H:mm,
     );
 
-    const useMask = control.appliedOptions.value.mask !== false;
+    const useMask = computed(() => control.appliedOptions.value.mask !== false);
+
     const maska = reactive({
       masked: '',
       unmasked: '',
@@ -188,16 +197,18 @@ const controlRenderer = defineComponent({
     const state = computed(() => convertDayjsToMaskaFormat(timeFormat.value));
     const locale = useLocale();
 
-    const options = useMask
-      ? computed<MaskOptions>(() => ({
-          mask: state.value.mask,
-          tokens: state.value.tokens,
-          tokensReplace: true,
+    const options = computed<MaskOptions | null>(() =>
+      useMask.value
+        ? {
+            mask: state.value.mask,
+            tokens: state.value.tokens,
+            tokensReplace: true,
 
-          //invoke the locale.current as side effect so that the computed will rerun if the locale changes since the mask could be dependent on the locale
-          _locale: unref(locale.current),
-        }))
-      : null;
+            // invoke locale.current so the mask recomputes when locale changes
+            _locale: unref(locale.current),
+          }
+        : null,
+    );
 
     return {
       ...control,
@@ -207,6 +218,7 @@ const controlRenderer = defineComponent({
       icons,
       ampm,
       timeFormat,
+      isControlEditable,
       options,
       useMask,
       maska,
@@ -338,15 +350,15 @@ const controlRenderer = defineComponent({
       },
     },
     pickerValue: {
-      get(): string | undefined {
+      get(): string | null {
         const value = this.control.data;
 
         const time = parseDateTime(value, this.formats);
         const format = this.useSeconds ? 'HH:mm:ss' : 'HH:mm';
         // show only valid values
-        return time ? time.format(format) : undefined;
+        return time ? time.format(format) : null;
       },
-      set(val: string) {
+      set(val: string | null) {
         this.onPickerChange(val);
       },
     },
@@ -356,7 +368,7 @@ const controlRenderer = defineComponent({
           ? this.appliedOptions.clearLabel
           : 'Clear';
 
-      return this.t(label, label);
+      return this.t(label, label) as string;
     },
     cancelLabel(): string {
       const label =
@@ -364,21 +376,21 @@ const controlRenderer = defineComponent({
           ? this.appliedOptions.cancelLabel
           : 'Cancel';
 
-      return this.t(label, label);
+      return this.t(label, label) as string;
     },
     okLabel(): string {
       const label =
         typeof this.appliedOptions.okLabel == 'string'
           ? this.appliedOptions.okLabel
           : 'OK';
-      return this.t(label, label);
+      return this.t(label, label) as string;
     },
     showActions(): boolean {
       return this.appliedOptions.showActions === true;
     },
   },
   methods: {
-    onPickerChange(value: string): void {
+    onPickerChange(value: string | null): void {
       const time = parseDateTime(value, this.useSeconds ? 'HH:mm:ss' : 'HH:mm');
       this.onChange(time ? time.format(this.timeSaveFormat) : value);
     },

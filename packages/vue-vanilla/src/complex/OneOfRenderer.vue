@@ -79,17 +79,16 @@ import {
   getCombinatorTranslations,
   isOneOfControl,
   JsonFormsRendererRegistryEntry,
-  JsonFormsSubStates,
   rankWith,
 } from '@jsonforms/core';
 import {
   DispatchRenderer,
   rendererProps,
   RendererProps,
+  useJsonForms,
   useJsonFormsOneOfControl,
 } from '@jsonforms/vue';
-import isEmpty from 'lodash/isEmpty';
-import { defineComponent, inject, nextTick, ref } from 'vue';
+import { defineComponent, nextTick, ref } from 'vue';
 import { useVanillaControl } from '../util';
 import { ControlWrapper } from '../controls';
 import CombinatorProperties from './components/CombinatorProperties.vue';
@@ -144,7 +143,7 @@ const controlRenderer = defineComponent({
     },
 
     translations(): any {
-      const jsonforms = inject<JsonFormsSubStates>('jsonforms');
+      const jsonforms = useJsonForms();
       return getCombinatorTranslations(
         jsonforms?.i18n?.translate ?? defaultJsonFormsI18nState.translate,
         combinatorDefaultTranslations,
@@ -158,7 +157,7 @@ const controlRenderer = defineComponent({
       const target = event.target as any;
       this.selectIndex = target.value;
 
-      if (this.control.enabled && !isEmpty(this.control.data)) {
+      if (this.control.enabled && this.control.data !== undefined) {
         this.showDialog();
         nextTick(() => {
           this.newSelectedIndex = this.selectIndex;

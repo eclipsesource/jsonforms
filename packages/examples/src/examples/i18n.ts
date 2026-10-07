@@ -30,6 +30,7 @@ import {
   AnyAction,
   Dispatch,
   Translator,
+  createTranslator,
 } from '@jsonforms/core';
 import get from 'lodash/get';
 import localize from 'ajv-i18n/localize';
@@ -99,9 +100,9 @@ export const translations = {
   },
   additionalInformationLabel: 'Additional Information',
 };
-export const translate: Translator = (key: string, defaultMessage: string) => {
+export const translate: Translator = createTranslator((key, defaultMessage) => {
   return get(translations, key) ?? defaultMessage;
-};
+});
 
 registerExamples([
   {

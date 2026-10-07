@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   JsonFormsAngularService,
   JsonFormsBaseRenderer,
@@ -47,7 +47,6 @@ import {
       }
     `,
   ],
-  standalone: false,
 })
 export class LabelRenderer
   extends JsonFormsBaseRenderer<LabelElement>
@@ -56,9 +55,7 @@ export class LabelRenderer
   label: string;
   visible: boolean;
 
-  constructor(private jsonFormsService: JsonFormsAngularService) {
-    super();
-  }
+  private jsonFormsService = inject(JsonFormsAngularService);
   ngOnInit() {
     this.addSubscription(
       this.jsonFormsService.$state.subscribe({
