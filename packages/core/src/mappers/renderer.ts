@@ -84,6 +84,7 @@ import {
   getUiSchema,
 } from '../store';
 import { isInherentlyEnabled, isInherentlyReadonly } from './util';
+import { isStructuralMatch } from '../util/structural';
 import { CombinatorKeyword } from './combinators';
 import isEqual from 'lodash/isEqual';
 
@@ -1163,41 +1164,14 @@ export const mapStateToCombinatorRendererProps = (
   const { data, schema, rootSchema, i18nKeyPrefix, label, ...props } =
     mapStateToControlProps(state, ownProps);
 
-  const ajv = state.jsonforms.core.ajv;
-  const structuralKeywords = [
-    'required',
-    'additionalProperties',
-    'type',
-    'enum',
-    'const',
-  ];
-  const dataIsValid = (errors: ErrorObject[]): boolean => {
-    return (
-      !errors ||
-      errors.length === 0 ||
-      !errors.find((e) => structuralKeywords.indexOf(e.keyword) !== -1)
-    );
-  };
+  // Pick the first branch whose structural keywords fit the data. This is a
+  // pure structural check (see isStructuralMatch): no validator instance and
+  // no code generation are involved, so it also works under a strict CSP.
   let indexOfFittingSchema: number;
-  // TODO instead of compiling the combinator subschemas we can compile the original schema
-  // without the combinator alternatives and then revalidate and check the errors for the
-  // element
   for (let i = 0; i < schema[keyword]?.length; i++) {
-    try {
-      let _schema = schema[keyword][i];
-      if (_schema.$ref) {
-        _schema = Resolve.schema(rootSchema, _schema.$ref, rootSchema);
-      }
-      const valFn = ajv.compile(_schema);
-      valFn(data);
-      if (dataIsValid(valFn.errors)) {
-        indexOfFittingSchema = i;
-        break;
-      }
-    } catch (error) {
-      console.debug(
-        "Combinator subschema is not self contained, can't hand it over to AJV"
-      );
+    if (isStructuralMatch(schema[keyword][i], data, rootSchema)) {
+      indexOfFittingSchema = i;
+      break;
     }
   }
 
