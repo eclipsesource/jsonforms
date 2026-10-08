@@ -5,15 +5,17 @@ import {
   isOneOfEnumSchema,
   schemaMatches,
   schemaSubPathMatches,
+  uiTypeIs,
   type JsonSchema,
 } from '@jsonforms/core';
 
 export const isMultiEnumControl = and(
+  uiTypeIs('Control'),
   schemaMatches(
     (schema) =>
       hasType(schema, 'array') &&
       !Array.isArray(schema.items) &&
-      schema.uniqueItems === true
+      schema.uniqueItems === true,
   ),
   schemaSubPathMatches('items', (schema) => {
     return (
@@ -22,5 +24,5 @@ export const isMultiEnumControl = and(
         (schema.oneOf as JsonSchema[]).length > 0) ||
       (schema.type === 'string' && isEnumSchema(schema))
     );
-  })
+  }),
 );

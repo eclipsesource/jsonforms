@@ -2,7 +2,6 @@ import {
   and,
   optionIs,
   rankWith,
-  uiTypeIs,
   type JsonFormsRendererRegistryEntry,
 } from '@jsonforms/core';
 import controlRenderer from './MultiEnumSelectRenderer.vue';
@@ -12,10 +11,6 @@ export const entry: JsonFormsRendererRegistryEntry = {
   renderer: controlRenderer,
   tester: rankWith(
     10,
-    and(
-      uiTypeIs('Control'),
-      optionIs('format', 'multiselect'),
-      isMultiEnumControl
-    )
+    and(optionIs('format', 'multiselect'), isMultiEnumControl),
   ),
 };
