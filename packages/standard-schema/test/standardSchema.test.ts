@@ -201,6 +201,7 @@ test('end to end - JSON Forms core stores the issues as errors with parentSchema
   t.is(streetErrors[0].keyword, 'required');
   t.deepEqual(streetErrors[0].params, { missingProperty: 'street' });
 
-  t.is(core.ajv !== undefined, true);
+  // No AJV instance is created while a Form Validator is configured.
+  t.is(core.ajv, undefined);
   t.is(core.validator, undefined);
 });

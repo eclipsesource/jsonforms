@@ -24,7 +24,7 @@
 */
 import test from 'ava';
 import Ajv, { ErrorObject } from 'ajv';
-import { coreReducer } from '../../src/reducers';
+import { coreReducer, getOrCreateAjv } from '../../src/reducers';
 import {
   init,
   setAjv,
@@ -2449,6 +2449,64 @@ test('core reducer - ajv path - formValidator is an AJV-backed validator and sta
   t.truthy(after.validator);
   t.is(after.validatorOption, undefined);
   t.is(after.formValidator.validate({ foo: 1 }).length, 1);
+});
+
+test('core reducer - validator option - no default ajv instance is created', (t) => {
+  const { factory } = fakeValidator();
+  const after = coreReducer(
+    undefined,
+    init({ foo: 'bad' }, fooSchema, undefined, { validator: factory })
+  );
+  t.is(after.ajv, undefined);
+  t.is(after.errors.length, 1);
+  const updated = coreReducer(
+    after,
+    updateCore({ foo: 'ok' }, fooSchema, undefined, { validator: factory })
+  );
+  t.is(updated.ajv, undefined);
+  t.is(updated.errors.length, 0);
+  const newSchema = coreReducer(updated, setSchema(cloneDeep(fooSchema)));
+  t.is(newSchema.ajv, undefined);
+  const toggled = coreReducer(
+    coreReducer(newSchema, setValidationMode('NoValidation')),
+    setValidationMode('ValidateAndShow')
+  );
+  t.is(toggled.ajv, undefined);
+  t.truthy(toggled.formValidator);
+});
+
+test('core reducer - validator option - an explicitly passed ajv is still kept', (t) => {
+  const { factory } = fakeValidator();
+  const ajv = createAjv();
+  const after = coreReducer(
+    undefined,
+    init({}, fooSchema, undefined, { ajv, validator: factory })
+  );
+  t.is(after.ajv, ajv);
+});
+
+test('core reducer - validator option - switching back to ajv creates the default instance', (t) => {
+  const { factory } = fakeValidator();
+  const before = coreReducer(
+    undefined,
+    init({ foo: 1 }, fooSchema, undefined, { validator: factory })
+  );
+  t.is(before.ajv, undefined);
+  const after = coreReducer(
+    before,
+    updateCore({ foo: 1 }, fooSchema, undefined, { validator: undefined })
+  );
+  t.truthy(after.ajv);
+  t.truthy(after.validator);
+  t.is(after.errors.length, 1);
+  t.is(after.errors[0].keyword, 'type');
+});
+
+test('core reducer - no validator option - default ajv is still created', (t) => {
+  const after = coreReducer(undefined, init({}, fooSchema));
+  t.truthy(after.ajv);
+  t.is(getOrCreateAjv(after), after.ajv);
+  t.is(getOrCreateAjv({} as JsonFormsCore, undefined, false), undefined);
 });
 
 test('core reducer - validator option - getValidator selector exposes the bound validator', (t) => {

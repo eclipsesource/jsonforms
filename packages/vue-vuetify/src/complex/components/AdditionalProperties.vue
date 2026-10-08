@@ -421,7 +421,8 @@ export default defineComponent({
       i18n,
       middleware,
     } = useJsonForms();
-    const ajv = useAjv();
+    // Optional: no AJV instance exists while a custom Form Validator is set.
+    const ajv = useAjv(true);
 
     // if the new property name is not specified then hide any errors
     const validationMode = computed(() =>

@@ -106,10 +106,17 @@ export const getAdditionalErrors = (
   return state.additionalErrors;
 };
 
+/**
+ * The AJV instance for an action: the one given in the action's options, the
+ * one already in state, or, when `createDefault` is true, a new default
+ * instance. Core passes `createDefault = false` while a custom Form Validator
+ * is configured, so no AJV instance exists unless the adopter provides one.
+ */
 export const getOrCreateAjv = (
   state: JsonFormsCore,
-  action?: InitAction | UpdateCoreAction
-): Ajv => {
+  action?: InitAction | UpdateCoreAction,
+  createDefault = true
+): Ajv | undefined => {
   if (action) {
     if (hasAjvOption(action.options)) {
       // options object with ajv
@@ -121,7 +128,10 @@ export const getOrCreateAjv = (
       }
     }
   }
-  return state.ajv ? state.ajv : createAjv();
+  if (state.ajv) {
+    return state.ajv;
+  }
+  return createDefault ? createAjv() : undefined;
 };
 
 const hasAjvOption = (option: any): option is InitActionOptions => {
@@ -206,8 +216,12 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
 ) => {
   switch (action.type) {
     case INIT: {
-      const thisAjv = getOrCreateAjv(state, action);
       const validatorOption = getValidatorOption(state, action);
+      const thisAjv = getOrCreateAjv(
+        state,
+        action,
+        validatorOption === undefined
+      );
       const validationMode = getValidationMode(state, action);
       const formValidator = createFormValidator(
         validatorOption,
@@ -233,8 +247,12 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
       };
     }
     case UPDATE_CORE: {
-      const thisAjv = getOrCreateAjv(state, action);
       const validatorOption = getValidatorOption(state, action);
+      const thisAjv = getOrCreateAjv(
+        state,
+        action,
+        validatorOption === undefined
+      );
       const validationMode = getValidationMode(state, action);
       let formValidator = currentFormValidator(state);
       let errors = state.errors;

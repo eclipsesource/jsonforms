@@ -96,6 +96,10 @@ export interface JsonFormsCore {
    * compatibility, prefer `formValidator`.
    */
   validator?: ValidateFunction;
+  /**
+   * The AJV instance. Not created by default while a custom Form Validator
+   * is configured; then only set when one is passed explicitly.
+   */
   ajv?: Ajv;
   validationMode?: ValidationMode;
   /** The Form Validator bound to `schema`. Not consulted while validation is off. */
