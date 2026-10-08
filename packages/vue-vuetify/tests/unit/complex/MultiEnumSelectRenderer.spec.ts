@@ -54,6 +54,14 @@ describe('MultiEnumSelectRenderer.vue', () => {
 
     it('emits change when an item is deselected', async () => {
       const select = wrapper.findComponent({ name: 'VSelect' });
+      await select.vm.$emit('update:modelValue', ['a']);
+
+      const component = wrapper.getComponent(MultiEnumSelectRenderer);
+      expect(component.vm.control.data).toEqual(['a']);
+    });
+
+    it('emits change when cleared via empty array', async () => {
+      const select = wrapper.findComponent({ name: 'VSelect' });
       await select.vm.$emit('update:modelValue', []);
 
       const component = wrapper.getComponent(MultiEnumSelectRenderer);
