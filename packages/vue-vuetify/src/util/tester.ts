@@ -1,7 +1,6 @@
 import {
   and,
   hasType,
-  isEnumSchema,
   isOneOfEnumSchema,
   schemaMatches,
   schemaSubPathMatches,
@@ -22,7 +21,7 @@ export const isMultiEnumControl = and(
       (isOneOfEnumSchema(schema) &&
         schema.oneOf !== undefined &&
         (schema.oneOf as JsonSchema[]).length > 0) ||
-      (schema.type === 'string' && isEnumSchema(schema))
+      (schema.type === 'string' && schema.enum !== undefined)
     );
   }),
 );
