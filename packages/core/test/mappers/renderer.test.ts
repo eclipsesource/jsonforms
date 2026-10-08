@@ -72,11 +72,11 @@ const middlewares: Redux.Middleware[] = [];
 const mockStore = configureStore<JsonFormsState>(middlewares);
 
 const mockDispatch = (
-  initialCore: JsonFormsCore
+  initialCore: JsonFormsCore,
 ): [() => JsonFormsCore, Redux.Dispatch<CoreActions>] => {
   const coreContainer = { core: initialCore };
   const dispatch: Redux.Dispatch<CoreActions> = <T extends CoreActions>(
-    action: T
+    action: T,
   ): T => {
     coreContainer.core = coreReducer(coreContainer.core, action);
     return action;
@@ -420,11 +420,11 @@ test('mapStateToControlProps - no duplicate error messages', (t) => {
   const initCoreState = coreReducer(undefined, init({}, schema, coreUISchema));
   const updateCoreState = coreReducer(
     initCoreState,
-    update('firstName', () => true)
+    update('firstName', () => true),
   );
   const props = mapStateToControlProps(
     { jsonforms: { core: updateCoreState } },
-    { uischema: coreUISchema }
+    { uischema: coreUISchema },
   );
   t.is(props.errors.split('\n').length, 1);
 });
@@ -454,7 +454,7 @@ test('mapStateToControlProps - hide errors in hide validation mode', (t) => {
   };
   const initCoreState = coreReducer(
     undefined,
-    init({ animal: 100 }, schema, uischema)
+    init({ animal: 100 }, schema, uischema),
   );
   t.is(initCoreState.errors.length, 1);
 
@@ -463,19 +463,19 @@ test('mapStateToControlProps - hide errors in hide validation mode', (t) => {
   };
   const props = mapStateToControlProps(
     { jsonforms: { core: initCoreState } },
-    ownProps
+    ownProps,
   );
   t.not(props.errors.length, 0);
 
   const hideErrorsState = coreReducer(
     initCoreState,
-    setValidationMode('ValidateAndHide')
+    setValidationMode('ValidateAndHide'),
   );
   t.is(hideErrorsState.errors.length, 1);
 
   const hideErrorsProps = mapStateToControlProps(
     { jsonforms: { core: hideErrorsState } },
-    ownProps
+    ownProps,
   );
   t.is(hideErrorsProps.errors, '');
 });
@@ -500,9 +500,9 @@ test('createDefaultValue', (t) => {
       {
         type: 'string',
         format: 'date',
-      }
+      },
     ),
-    convertDateToString(new Date(), 'date')
+    convertDateToString(new Date(), 'date'),
   );
   t.regex(
     createDefaultValue(
@@ -513,9 +513,9 @@ test('createDefaultValue', (t) => {
       {
         type: 'string',
         format: 'date-time',
-      }
+      },
     ),
-    /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/
+    /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/,
   );
   t.regex(
     createDefaultValue(
@@ -526,9 +526,9 @@ test('createDefaultValue', (t) => {
       {
         type: 'string',
         format: 'time',
-      }
+      },
     ),
-    /^\d{2}:\d{2}:\d{2}$/
+    /^\d{2}:\d{2}:\d{2}$/,
   );
   t.is(createDefaultValue({ type: 'string' }, { type: 'string' }), '');
   t.is(createDefaultValue({ type: 'number' }, { type: 'number' }), 0);
@@ -539,7 +539,7 @@ test('createDefaultValue', (t) => {
   t.deepEqual(createDefaultValue({ type: 'object' }, { type: 'object' }), {});
   t.deepEqual(
     createDefaultValue({ type: 'something' }, { type: 'something' }),
-    {}
+    {},
   );
 
   // defaults:
@@ -552,53 +552,53 @@ test('createDefaultValue', (t) => {
       {
         type: 'string',
         default: '2023-10-10',
-      }
+      },
     ),
-    '2023-10-10'
+    '2023-10-10',
   );
   t.is(
     createDefaultValue(
       { type: 'string', default: 'excellent' },
-      { type: 'string', default: 'excellent' }
+      { type: 'string', default: 'excellent' },
     ),
-    'excellent'
+    'excellent',
   );
   t.is(
     createDefaultValue(
       { type: 'number', default: 10 },
-      { type: 'number', default: 10 }
+      { type: 'number', default: 10 },
     ),
-    10
+    10,
   );
   t.is(
     createDefaultValue(
       { type: 'boolean', default: true },
-      { type: 'boolean', default: true }
+      { type: 'boolean', default: true },
     ),
-    true
+    true,
   );
   t.is(
     createDefaultValue(
       { type: 'integer', default: 11 },
-      { type: 'integer', default: 11 }
+      { type: 'integer', default: 11 },
     ),
-    11
+    11,
   );
   t.deepEqual(
     createDefaultValue(
       { type: 'array', default: ['a', 'b', 'c'] },
-      { type: 'array', default: ['a', 'b', 'c'] }
+      { type: 'array', default: ['a', 'b', 'c'] },
     ),
-    ['a', 'b', 'c']
+    ['a', 'b', 'c'],
   );
   t.deepEqual(
     createDefaultValue(
       { type: 'object', default: { foo: 'bar' } },
-      { type: 'object', default: { foo: 'bar' } }
+      { type: 'object', default: { foo: 'bar' } },
     ),
     {
       foo: 'bar',
-    }
+    },
   );
   const objectSchema = {
     type: 'object',
@@ -733,7 +733,7 @@ test('createDefaultValue', (t) => {
   };
   const defaultValueOneOfEmpty = createDefaultValue(
     schemaOneOfEmpty,
-    rootSchemaOneOfEmpty
+    rootSchemaOneOfEmpty,
   );
   t.deepEqual(defaultValueOneOfEmpty, '');
 
@@ -752,7 +752,7 @@ test('createDefaultValue', (t) => {
   };
   const defaultValueAnyOfEmpty = createDefaultValue(
     schemaAnyOfEmpty,
-    rootSchemaAnyOfEmpty
+    rootSchemaAnyOfEmpty,
   );
   t.deepEqual(defaultValueAnyOfEmpty, '');
 
@@ -779,7 +779,7 @@ test('createDefaultValue', (t) => {
   };
   const defaultValueAllOfEmpty = createDefaultValue(
     schemaAllOfEmpty,
-    rootSchemaAllOfEmpty
+    rootSchemaAllOfEmpty,
   );
   console.log('defaultValueAllOfEmpty', defaultValueAllOfEmpty);
   t.deepEqual(defaultValueAllOfEmpty, {});
@@ -1551,6 +1551,43 @@ test('mapDispatchToMultiEnumProps - oneOf schema - removeItem', (t) => {
   t.is(getCore().data.colors.length, 0);
 });
 
+test('mapDispatchToMultiEnumProps - handleChange', (t) => {
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/colors',
+  };
+  const schema = {
+    type: 'object',
+    properties: {
+      colors: {
+        type: 'array',
+        items: {
+          type: 'string',
+          enum: ['red', 'green', 'pink'],
+        },
+        uniqueItems: true,
+      },
+    },
+  };
+  const data = { colors: ['green'] };
+  const initCore: JsonFormsCore = {
+    uischema,
+    schema,
+    data,
+    errors: [] as ErrorObject[],
+  };
+  const [getCore, dispatch] = mockDispatch(initCore);
+  dispatch(init(data, schema, uischema, createAjv({ useDefaults: true })));
+  const props = mapDispatchToMultiEnumProps(dispatch);
+
+  if (props.handleChange) {
+    props.handleChange('colors', ['green', 'red']);
+  }
+
+  t.is(getCore().data.colors.length, 2);
+  t.deepEqual(getCore().data.colors, ['green', 'red']);
+});
+
 test('should assign defaults to enum', (t) => {
   const schema: JsonSchema = {
     type: 'object',
@@ -1585,7 +1622,7 @@ test('should assign defaults to enum', (t) => {
   };
   const newCore = coreReducer(
     initState.jsonforms.core,
-    init(data, schema, uischema, createAjv({ useDefaults: true }))
+    init(data, schema, uischema, createAjv({ useDefaults: true })),
   );
   t.is(newCore.data.color, 'green');
 });
@@ -1624,7 +1661,7 @@ test('should assign defaults to empty item within nested object of an array', (t
 
   const newCore = coreReducer(
     initState.jsonforms.core,
-    init(data, schema, uischema, createAjv({ useDefaults: true }))
+    init(data, schema, uischema, createAjv({ useDefaults: true })),
   );
   t.is(newCore.data.length, 1);
   t.deepEqual(newCore.data[0], { message: 'foo' });
@@ -1772,7 +1809,7 @@ test('mapStateToControlProps - i18n - translation via path key', (t) => {
   state.jsonforms.i18n = defaultJsonFormsI18nState;
   state.jsonforms.i18n.translate = (
     key: string,
-    defaultMessage: string | undefined
+    defaultMessage: string | undefined,
   ) => {
     switch (key) {
       case 'firstName.label':
@@ -1795,7 +1832,7 @@ test('mapStateToControlProps - i18n - translation via default message', (t) => {
   state.jsonforms.i18n = defaultJsonFormsI18nState;
   state.jsonforms.i18n.translate = (
     _key: string,
-    defaultMessage: string | undefined
+    defaultMessage: string | undefined,
   ) => {
     switch (defaultMessage) {
       case 'First Name':
@@ -1820,7 +1857,7 @@ test('mapStateToControlProps - i18n - translation via JSON Schema i18n key', (t)
     'my-key';
   state.jsonforms.i18n.translate = (
     key: string,
-    defaultMessage: string | undefined
+    defaultMessage: string | undefined,
   ) => {
     switch (key) {
       case 'my-key.label':
@@ -1846,7 +1883,7 @@ test('mapStateToControlProps - i18n - translation via UI Schema i18n key', (t) =
   ownProps.uischema = { ...ownProps.uischema, i18n: 'my-key' };
   state.jsonforms.i18n.translate = (
     key: string,
-    defaultMessage: string | undefined
+    defaultMessage: string | undefined,
   ) => {
     switch (key) {
       case 'my-key.label':
@@ -1875,8 +1912,8 @@ test('mapStateToControlProps - i18n errors - should not crash without i18n', (t)
       state.jsonforms.core.data,
       state.jsonforms.core.schema,
       state.jsonforms.core.uischema,
-      createAjv()
-    )
+      createAjv(),
+    ),
   );
   state.jsonforms.i18n = undefined;
 
@@ -1896,8 +1933,8 @@ test('mapStateToControlProps - i18n errors - default translation has no effect',
       state.jsonforms.core.data,
       state.jsonforms.core.schema,
       state.jsonforms.core.uischema,
-      createAjv()
-    )
+      createAjv(),
+    ),
   );
   state.jsonforms.i18n = defaultJsonFormsI18nState;
 
@@ -1917,13 +1954,13 @@ test('mapStateToControlProps - i18n errors - translate via error message key', (
       state.jsonforms.core.data,
       state.jsonforms.core.schema,
       state.jsonforms.core.uischema,
-      createAjv()
-    )
+      createAjv(),
+    ),
   );
   state.jsonforms.i18n = defaultJsonFormsI18nState;
   state.jsonforms.i18n.translate = (
     key: string,
-    defaultMessage: string | undefined
+    defaultMessage: string | undefined,
   ) => {
     switch (key) {
       case 'must match pattern "[0-9]+"':
@@ -1951,13 +1988,13 @@ test('mapStateToControlProps - i18n errors - translate via i18 specialized error
       state.jsonforms.core.data,
       state.jsonforms.core.schema,
       state.jsonforms.core.uischema,
-      createAjv()
-    )
+      createAjv(),
+    ),
   );
   state.jsonforms.i18n = defaultJsonFormsI18nState;
   state.jsonforms.i18n.translate = (
     key: string,
-    defaultMessage: string | undefined
+    defaultMessage: string | undefined,
   ) => {
     switch (key) {
       case 'my-key.error.pattern':
@@ -1985,13 +2022,13 @@ test('mapStateToControlProps - i18n errors - translate via i18 general error key
       state.jsonforms.core.data,
       state.jsonforms.core.schema,
       state.jsonforms.core.uischema,
-      createAjv()
-    )
+      createAjv(),
+    ),
   );
   state.jsonforms.i18n = defaultJsonFormsI18nState;
   state.jsonforms.i18n.translate = (
     key: string,
-    defaultMessage: string | undefined
+    defaultMessage: string | undefined,
   ) => {
     switch (key) {
       case 'error.pattern':
@@ -2019,13 +2056,13 @@ test('mapStateToControlProps - i18n errors - specialized keyword wins over gener
       state.jsonforms.core.data,
       state.jsonforms.core.schema,
       state.jsonforms.core.uischema,
-      createAjv()
-    )
+      createAjv(),
+    ),
   );
   state.jsonforms.i18n = defaultJsonFormsI18nState;
   state.jsonforms.i18n.translate = (
     key: string,
-    defaultMessage: string | undefined
+    defaultMessage: string | undefined,
   ) => {
     switch (key) {
       case 'my-key.error.pattern':
@@ -2056,13 +2093,13 @@ test('mapStateToControlProps - i18n errors - multiple errors customization', (t)
       state.jsonforms.core.data,
       state.jsonforms.core.schema,
       state.jsonforms.core.uischema,
-      createAjv()
-    )
+      createAjv(),
+    ),
   );
   state.jsonforms.i18n = defaultJsonFormsI18nState;
   state.jsonforms.i18n.translate = (
     key: string,
-    defaultMessage: string | undefined
+    defaultMessage: string | undefined,
   ) => {
     switch (key) {
       case 'error.maxLength':
@@ -2093,13 +2130,13 @@ test('mapStateToControlProps - i18n errors - custom keyword wins over all other 
       state.jsonforms.core.data,
       state.jsonforms.core.schema,
       state.jsonforms.core.uischema,
-      createAjv()
-    )
+      createAjv(),
+    ),
   );
   state.jsonforms.i18n = defaultJsonFormsI18nState;
   state.jsonforms.i18n.translate = (
     key: string,
-    defaultMessage: string | undefined
+    defaultMessage: string | undefined,
   ) => {
     switch (key) {
       case 'my-key.error.custom':
@@ -2182,7 +2219,7 @@ test('mapStateToEnumControlProps - i18n - path label translation', (t) => {
   state.jsonforms.i18n = defaultJsonFormsI18nState;
   state.jsonforms.i18n.translate = (
     key: string,
-    defaultMessage: string | undefined
+    defaultMessage: string | undefined,
   ) => {
     switch (key) {
       case 'firstName.a':
@@ -2205,7 +2242,7 @@ test('mapStateToEnumControlProps - i18n - defaultMessage translation', (t) => {
   state.jsonforms.i18n = defaultJsonFormsI18nState;
   state.jsonforms.i18n.translate = (
     _key: string,
-    defaultMessage: string | undefined
+    defaultMessage: string | undefined,
   ) => {
     switch (defaultMessage) {
       case 'a':
@@ -2230,7 +2267,7 @@ test('mapStateToEnumControlProps - i18n - i18n key translation', (t) => {
   state.jsonforms.i18n = defaultJsonFormsI18nState;
   state.jsonforms.i18n.translate = (
     key: string,
-    defaultMessage: string | undefined
+    defaultMessage: string | undefined,
   ) => {
     switch (key) {
       case 'my-key.a':
@@ -2286,7 +2323,7 @@ test('mapStateToOneOfEnumControlProps - i18n - path label translation', (t) => {
   state.jsonforms.i18n = defaultJsonFormsI18nState;
   state.jsonforms.i18n.translate = (
     key: string,
-    defaultMessage: string | undefined
+    defaultMessage: string | undefined,
   ) => {
     switch (key) {
       case 'firstName.foo':
@@ -2312,7 +2349,7 @@ test('mapStateToOneOfEnumControlProps - i18n - default message translation', (t)
   state.jsonforms.i18n = defaultJsonFormsI18nState;
   state.jsonforms.i18n.translate = (
     _key: string,
-    defaultMessage: string | undefined
+    defaultMessage: string | undefined,
   ) => {
     switch (defaultMessage) {
       case 'foo':
@@ -2338,7 +2375,7 @@ test('mapStateToOneOfEnumControlProps - i18n - i18n key translation', (t) => {
   state.jsonforms.i18n = defaultJsonFormsI18nState;
   state.jsonforms.i18n.translate = (
     key: string,
-    defaultMessage: string | undefined
+    defaultMessage: string | undefined,
   ) => {
     switch (key) {
       case 'my-foo':
@@ -2396,7 +2433,7 @@ test('mapStateToLabelProps - i18n - default key translation', (t) => {
   state.jsonforms.i18n = defaultJsonFormsI18nState;
   state.jsonforms.i18n.translate = (
     key: string,
-    defaultMessage: string | undefined
+    defaultMessage: string | undefined,
   ) => {
     switch (key) {
       case 'foo':
@@ -2423,7 +2460,7 @@ test('mapStateToLabelProps - i18n - default message translation', (t) => {
   state.jsonforms.i18n = defaultJsonFormsI18nState;
   state.jsonforms.i18n.translate = (
     _key: string,
-    defaultMessage: string | undefined
+    defaultMessage: string | undefined,
   ) => {
     switch (defaultMessage) {
       case 'foo':
@@ -2450,7 +2487,7 @@ test('mapStateToLabelProps - i18n - i18n key translation', (t) => {
   state.jsonforms.i18n = defaultJsonFormsI18nState;
   state.jsonforms.i18n.translate = (
     key: string,
-    defaultMessage: string | undefined
+    defaultMessage: string | undefined,
   ): string | undefined => {
     switch (key) {
       case 'bar.text':

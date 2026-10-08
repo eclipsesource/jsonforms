@@ -54,6 +54,14 @@ describe('MultiEnumSelectRenderer.vue', () => {
 
     it('emits change when an item is deselected', async () => {
       const select = wrapper.findComponent({ name: 'VSelect' });
+      await select.vm.$emit('update:modelValue', ['a']);
+
+      const component = wrapper.getComponent(MultiEnumSelectRenderer);
+      expect(component.vm.control.data).toEqual(['a']);
+    });
+
+    it('emits change when cleared via empty array', async () => {
+      const select = wrapper.findComponent({ name: 'VSelect' });
       await select.vm.$emit('update:modelValue', []);
 
       const component = wrapper.getComponent(MultiEnumSelectRenderer);
@@ -103,6 +111,38 @@ describe('MultiEnumSelectRenderer.vue', () => {
 
     it('check if child MultiEnumSelectRenderer exists', () => {
       expect(wrapper.getComponent(MultiEnumSelectRenderer)).toBeTruthy();
+    });
+
+    it('emits change when an item is selected', async () => {
+      const select = wrapper.findComponent({ name: 'VSelect' });
+      await select.vm.$emit('update:modelValue', ['b', 'c']);
+
+      const component = wrapper.getComponent(MultiEnumSelectRenderer);
+      expect(component.vm.control.data).toEqual(['b', 'c']);
+    });
+
+    it('emits change when an item is deselected', async () => {
+      const select = wrapper.findComponent({ name: 'VSelect' });
+      await select.vm.$emit('update:modelValue', ['a']);
+
+      const component = wrapper.getComponent(MultiEnumSelectRenderer);
+      expect(component.vm.control.data).toEqual(['a']);
+    });
+
+    it('emits change when cleared via empty array', async () => {
+      const select = wrapper.findComponent({ name: 'VSelect' });
+      await select.vm.$emit('update:modelValue', []);
+
+      const component = wrapper.getComponent(MultiEnumSelectRenderer);
+      expect(component.vm.control.data).toBeUndefined();
+    });
+
+    it('emits change when cleared', async () => {
+      const select = wrapper.findComponent({ name: 'VSelect' });
+      await select.vm.$emit('update:modelValue', null);
+
+      const component = wrapper.getComponent(MultiEnumSelectRenderer);
+      expect(component.vm.control.data).toBeUndefined();
     });
 
     it('should render component and match snapshot', () => {
