@@ -23,24 +23,25 @@ let changeHandlers: Record<string, (path: string, value: unknown) => void> = {};
 
 const TestControl = defineComponent({
   props: rendererProps<ControlElement>(),
-  setup(props) {
+  setup(props, { slots }) {
     const { control, handleChange } = useJsonFormsControl(props);
     changeHandlers[control.value.path] = handleChange;
     return () => {
       const path = control.value.path;
       renders[path] = (renders[path] ?? 0) + 1;
       const min = control.value.uischema.options?.min;
-      return h(
-        'span',
-        min instanceof Date ? min.toISOString() : String(control.value.data)
-      );
+      return h('span', [
+        min instanceof Date ? min.toISOString() : String(control.value.data),
+        slots.default?.(),
+      ]);
     };
   },
 });
 
 // A layout that dispatches its elements. With `clone`, it gives a new clone of
 // each element to the dispatch on each render, as wrapper renderers often do.
-const createTestLayout = (clone: boolean) =>
+// With `slot`, it gives a default slot to each dispatch.
+const createTestLayout = (clone: boolean, slot: boolean) =>
   defineComponent({
     props: rendererProps<Layout>(),
     setup(props) {
@@ -49,22 +50,34 @@ const createTestLayout = (clone: boolean) =>
         h(
           'div',
           (layout.value.uischema as Layout).elements.map((element) =>
-            h(DispatchRenderer, {
-              schema: layout.value.schema,
-              uischema: clone ? cloneDeep(element) : element,
-              path: layout.value.path,
-              enabled: layout.value.enabled,
-            })
+            h(
+              DispatchRenderer,
+              {
+                schema: layout.value.schema,
+                uischema: clone ? cloneDeep(element) : element,
+                path: layout.value.path,
+                enabled: layout.value.enabled,
+              },
+              slot
+                ? {
+                    default: () =>
+                      h('em', `slot ${String(layout.value.data.first)}`),
+                  }
+                : undefined
+            )
           )
         );
     },
   });
 
-const createRenderers = (clone: boolean): JsonFormsRendererRegistryEntry[] => [
+const createRenderers = (
+  clone: boolean,
+  slot = false
+): JsonFormsRendererRegistryEntry[] => [
   { tester: rankWith(1, isControl), renderer: markRaw(TestControl) },
   {
     tester: rankWith(1, isLayout),
-    renderer: markRaw(createTestLayout(clone)),
+    renderer: markRaw(createTestLayout(clone, slot)),
   },
 ];
 
@@ -178,5 +191,29 @@ describe('stable bindings', () => {
     await nextTick();
 
     expect(wrapper.text()).toContain('2030-01-01');
+  });
+
+  it('forwards the slots of a dispatch to the dispatched renderer', async () => {
+    const wrapper = mount(JsonForms, {
+      props: {
+        data: { first: 'a', second: 'b' },
+        schema,
+        uischema,
+        renderers: createRenderers(false, true),
+      },
+    });
+    await nextTick();
+    expect(wrapper.findAll('em').map((em) => em.text())).toEqual([
+      'slot a',
+      'slot a',
+    ]);
+
+    changeHandlers.first('first', 'changed');
+    await nextTick();
+
+    expect(wrapper.findAll('em').map((em) => em.text())).toEqual([
+      'slot changed',
+      'slot changed',
+    ]);
   });
 });
