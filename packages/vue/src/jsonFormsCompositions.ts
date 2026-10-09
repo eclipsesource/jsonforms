@@ -38,6 +38,7 @@ import {
   isControl,
   Scopable,
   Translator,
+  FormValidator,
 } from '@jsonforms/core';
 import type Ajv from 'ajv';
 import {
@@ -617,4 +618,22 @@ export function useAjv(optional?: true) {
   }
 
   return jsonforms?.core?.ajv as Ajv;
+}
+
+/**
+ * Extracts the Form Validator bound to the form schema from JSON Forms.
+ * It is `undefined` while validation is off.
+ */
+export function useValidator(): FormValidator;
+export function useValidator(optional: true): FormValidator | undefined;
+export function useValidator(optional?: true) {
+  const jsonforms = optional === true ? useJsonForms(true) : useJsonForms();
+
+  if (!optional && !jsonforms?.core?.formValidator) {
+    throw new Error(
+      "'jsonforms validator' couldn't be injected. Are you within JSON Forms?"
+    );
+  }
+
+  return jsonforms?.core?.formValidator;
 }
