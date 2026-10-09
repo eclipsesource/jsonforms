@@ -25,6 +25,7 @@
 import * as issue_1884 from './examples/1884';
 import * as issue_1948 from './examples/1948';
 import * as additionalErrors from './examples/additional-errors';
+import * as customValidator from './examples/custom-validator';
 import * as additionalProperties from './examples/additional-properties';
 import * as allOf from './examples/allOf';
 import * as anyOf from './examples/anyOf';
@@ -91,6 +92,7 @@ import * as jsonschema from './examples/jsonschema';
 
 export {
   additionalErrors,
+  customValidator,
   additionalProperties,
   allOf,
   anyOf,

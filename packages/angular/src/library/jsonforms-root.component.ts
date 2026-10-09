@@ -44,6 +44,7 @@ import {
   UISchemaElement,
   UISchemaTester,
   ValidationMode,
+  ValidatorOption,
 } from '@jsonforms/core';
 import type Ajv from 'ajv';
 import type { ErrorObject } from 'ajv';
@@ -71,6 +72,7 @@ export class JsonForms implements DoCheck, OnChanges, OnInit, OnDestroy {
   @Input() readonly: boolean;
   @Input() validationMode: ValidationMode;
   @Input() ajv: Ajv;
+  @Input() validator: ValidatorOption;
   @Input() config: JsonFormsAngularConfig;
   @Input() i18n: JsonFormsI18nState;
   @Input() additionalErrors: ErrorObject[];
@@ -95,6 +97,7 @@ export class JsonForms implements DoCheck, OnChanges, OnInit, OnDestroy {
           uischema: this.uischema,
           schema: this.schema,
           ajv: this.ajv,
+          validatorOption: this.validator,
           validationMode: this.validationMode,
           additionalErrors: this.additionalErrors,
         },
@@ -160,6 +163,7 @@ export class JsonForms implements DoCheck, OnChanges, OnInit, OnDestroy {
     const newReadonly = changes.readonly;
     const newValidationMode = changes.validationMode;
     const newAjv = changes.ajv;
+    const newValidator = changes.validator;
     const newConfig = changes.config;
     const newAdditionalErrors = changes.additionalErrors;
 
@@ -169,6 +173,7 @@ export class JsonForms implements DoCheck, OnChanges, OnInit, OnDestroy {
       newUiSchema ||
       newValidationMode ||
       newAjv ||
+      newValidator ||
       newAdditionalErrors
     ) {
       this.jsonformsService.updateCoreState(
@@ -177,7 +182,10 @@ export class JsonForms implements DoCheck, OnChanges, OnInit, OnDestroy {
         newUiSchema ? newUiSchema.currentValue : USE_STATE_VALUE,
         newAjv ? newAjv.currentValue : USE_STATE_VALUE,
         newValidationMode ? newValidationMode.currentValue : USE_STATE_VALUE,
-        newAdditionalErrors ? newAdditionalErrors.currentValue : USE_STATE_VALUE
+        newAdditionalErrors
+          ? newAdditionalErrors.currentValue
+          : USE_STATE_VALUE,
+        newValidator ? newValidator.currentValue : USE_STATE_VALUE
       );
     }
 

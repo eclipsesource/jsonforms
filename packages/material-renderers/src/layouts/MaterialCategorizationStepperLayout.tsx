@@ -92,6 +92,7 @@ export const MaterialCategorizationStepperLayoutRenderer = (
     cells,
     config,
     ajv,
+    ruleValidator,
     t,
   } = props;
   const categorization = uischema as Categorization;
@@ -110,9 +111,9 @@ export const MaterialCategorizationStepperLayoutRenderer = (
   const categories = useMemo(
     () =>
       categorization.elements.filter((category: Category) =>
-        isVisible(category, data, undefined, ajv, config)
+        isVisible(category, data, undefined, ruleValidator ?? ajv, config)
       ),
-    [categorization, data, ajv, config]
+    [categorization, data, ajv, ruleValidator, config]
   );
   const childProps: MaterialLayoutRendererProps = {
     elements: categories[activeCategory].elements,

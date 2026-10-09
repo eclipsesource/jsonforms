@@ -38,6 +38,82 @@ import {
 import { resolveData } from './resolvers';
 import type Ajv from 'ajv';
 import { composeWithUi } from './uischema';
+import isFunction from 'lodash/isFunction';
+import type { JsonSchema } from '../models';
+import {
+  FormValidator,
+  FormValidatorFactory,
+  isFormValidator,
+  isFormValidatorFactory,
+} from './formValidator';
+import { isStructuralMatch } from './structural';
+
+/**
+ * What rule conditions are evaluated with:
+ * - an AJV instance (the historical argument): `ajv.validate(schema, data)`;
+ * - a Form Validator: its `matches`, or the Structural Matcher when it has none;
+ * - a Form Validator Factory: one Form Validator per condition schema, cached;
+ * - `undefined`: the Structural Matcher alone.
+ */
+export type RuleValidator =
+  | Ajv
+  | FormValidator
+  | FormValidatorFactory
+  | undefined;
+
+const isAjvInstance = (candidate: unknown): candidate is Ajv =>
+  typeof candidate === 'object' &&
+  candidate !== null &&
+  isFunction((candidate as Ajv).compile) &&
+  isFunction((candidate as Ajv).validate);
+
+const conditionValidators = new WeakMap<
+  FormValidatorFactory,
+  WeakMap<object, FormValidator>
+>();
+
+const conditionValidatorFor = (
+  factory: FormValidatorFactory,
+  schema: JsonSchema
+): FormValidator => {
+  if (typeof schema !== 'object' || schema === null) {
+    return factory(schema);
+  }
+  let perSchema = conditionValidators.get(factory);
+  if (perSchema === undefined) {
+    perSchema = new WeakMap();
+    conditionValidators.set(factory, perSchema);
+  }
+  let validator = perSchema.get(schema);
+  if (validator === undefined) {
+    validator = factory(schema);
+    perSchema.set(schema, validator);
+  }
+  return validator;
+};
+
+/**
+ * Whether `data` satisfies the rule condition `schema`, evaluated with the
+ * given {@link RuleValidator}.
+ */
+export const matchesConditionSchema = (
+  schema: JsonSchema,
+  data: unknown,
+  validator: RuleValidator
+): boolean => {
+  if (isAjvInstance(validator)) {
+    return validator.validate(schema, data) as boolean;
+  }
+  if (isFormValidatorFactory(validator)) {
+    return conditionValidatorFor(validator, schema).validate(data).length === 0;
+  }
+  if (isFormValidator(validator)) {
+    return validator.matches
+      ? validator.matches(schema, data)
+      : isStructuralMatch(schema, data);
+  }
+  return isStructuralMatch(schema, data);
+};
 
 const isOrCondition = (condition: Condition): condition is OrCondition =>
   condition.type === 'OR';
@@ -67,19 +143,19 @@ const evaluateCondition = (
   uischema: UISchemaElement,
   condition: Condition,
   path: string,
-  ajv: Ajv,
+  validator: RuleValidator,
   config: unknown
 ): boolean => {
   if (isAndCondition(condition)) {
     return condition.conditions.reduce(
       (acc, cur) =>
-        acc && evaluateCondition(data, uischema, cur, path, ajv, config),
+        acc && evaluateCondition(data, uischema, cur, path, validator, config),
       true
     );
   } else if (isOrCondition(condition)) {
     return condition.conditions.reduce(
       (acc, cur) =>
-        acc || evaluateCondition(data, uischema, cur, path, ajv, config),
+        acc || evaluateCondition(data, uischema, cur, path, validator, config),
       false
     );
   } else if (isLeafCondition(condition)) {
@@ -90,7 +166,7 @@ const evaluateCondition = (
     if (condition.failWhenUndefined && value === undefined) {
       return false;
     }
-    return ajv.validate(condition.schema, value) as boolean;
+    return matchesConditionSchema(condition.schema, value, validator);
   } else if (isValidateFunctionCondition(condition)) {
     const value = resolveData(data, getConditionScope(condition, path));
     const context = {
@@ -111,21 +187,21 @@ const isRuleFulfilled = (
   uischema: UISchemaElement,
   data: any,
   path: string,
-  ajv: Ajv,
+  validator: RuleValidator,
   config: unknown
 ): boolean => {
   const condition = uischema.rule.condition;
-  return evaluateCondition(data, uischema, condition, path, ajv, config);
+  return evaluateCondition(data, uischema, condition, path, validator, config);
 };
 
 export const evalVisibility = (
   uischema: UISchemaElement,
   data: any,
   path: string = undefined,
-  ajv: Ajv,
+  validator: RuleValidator,
   config: unknown
 ): boolean => {
-  const fulfilled = isRuleFulfilled(uischema, data, path, ajv, config);
+  const fulfilled = isRuleFulfilled(uischema, data, path, validator, config);
 
   switch (uischema.rule.effect) {
     case RuleEffect.HIDE:
@@ -142,10 +218,10 @@ export const evalEnablement = (
   uischema: UISchemaElement,
   data: any,
   path: string = undefined,
-  ajv: Ajv,
+  validator: RuleValidator,
   config: unknown
 ): boolean => {
-  const fulfilled = isRuleFulfilled(uischema, data, path, ajv, config);
+  const fulfilled = isRuleFulfilled(uischema, data, path, validator, config);
 
   switch (uischema.rule.effect) {
     case RuleEffect.DISABLE:
@@ -162,10 +238,10 @@ export const evalReadonly = (
   uischema: UISchemaElement,
   data: any,
   path: string = undefined,
-  ajv: Ajv,
+  validator: RuleValidator,
   config: unknown
 ): boolean => {
-  const fulfilled = isRuleFulfilled(uischema, data, path, ajv, config);
+  const fulfilled = isRuleFulfilled(uischema, data, path, validator, config);
 
   switch (uischema.rule.effect) {
     case RuleEffect.WRITABLE:
@@ -215,11 +291,11 @@ export const isVisible = (
   uischema: UISchemaElement,
   data: any,
   path: string = undefined,
-  ajv: Ajv,
+  validator: RuleValidator,
   config: unknown
 ): boolean => {
   if (uischema.rule) {
-    return evalVisibility(uischema, data, path, ajv, config);
+    return evalVisibility(uischema, data, path, validator, config);
   }
 
   return true;
@@ -229,11 +305,11 @@ export const isEnabled = (
   uischema: UISchemaElement,
   data: any,
   path: string = undefined,
-  ajv: Ajv,
+  validator: RuleValidator,
   config: unknown
 ): boolean => {
   if (uischema.rule) {
-    return evalEnablement(uischema, data, path, ajv, config);
+    return evalEnablement(uischema, data, path, validator, config);
   }
 
   return true;
@@ -243,11 +319,11 @@ export const isReadonly = (
   uischema: UISchemaElement,
   data: any,
   path: string = undefined,
-  ajv: Ajv,
+  validator: RuleValidator,
   config: unknown
 ): boolean => {
   if (uischema.rule) {
-    return evalReadonly(uischema, data, path, ajv, config);
+    return evalReadonly(uischema, data, path, validator, config);
   }
 
   return false;

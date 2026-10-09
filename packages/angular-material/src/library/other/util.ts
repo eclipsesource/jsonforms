@@ -24,7 +24,7 @@
 */
 import {
   ControlElement,
-  getAjv,
+  getRuleValidator,
   getConfig,
   getData,
   isVisible,
@@ -49,7 +49,7 @@ export const mapStateToVisible = (
           ownProps.uischema,
           getData(state),
           undefined,
-          getAjv(state),
+          getRuleValidator(state),
           getConfig(state)
         );
 
