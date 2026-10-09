@@ -165,54 +165,56 @@ const isPlainObjectOrArray = (value: unknown): value is object => {
 };
 
 /**
- * Compares two values structurally, to at most `depth` levels of plain objects
- * and arrays. Other objects are compared by identity. At the depth limit, two
- * different objects are not equal. The result is conservative: `true` only
+ * Compares two values structurally through plain objects and arrays. Other
+ * objects are compared by identity. The compare does not go into values that
+ * are identical, and it stops at the first difference. Thus it reads only the
+ * parts of `b` that are new, and it has no depth limit to tune. When the values
+ * contain a cycle, they are not equal. The result is conservative: `true` only
  * when the values are deep-equal.
  */
-const isEqualToDepth = (a: unknown, b: unknown, depth: number): boolean => {
+const isDeepEqual = (a: unknown, b: unknown, ancestors?: object[]): boolean => {
   if (a === b) {
     return true;
   }
   if (
-    depth <= 0 ||
     !isPlainObjectOrArray(a) ||
     !isPlainObjectOrArray(b) ||
-    Array.isArray(a) !== Array.isArray(b)
+    Array.isArray(a) !== Array.isArray(b) ||
+    ancestors?.includes(a)
   ) {
     return false;
   }
   const keysA = Object.keys(a);
   const keysB = Object.keys(b);
-  return (
-    keysA.length === keysB.length &&
-    keysA.every(
-      (key) =>
-        Object.prototype.hasOwnProperty.call(b, key) &&
-        isEqualToDepth(
-          (a as Record<string, unknown>)[key],
-          (b as Record<string, unknown>)[key],
-          depth - 1
-        )
-    )
+  if (keysA.length !== keysB.length) {
+    return false;
+  }
+  const path = ancestors ?? [];
+  path.push(a);
+  const equal = keysA.every(
+    (key) =>
+      Object.prototype.hasOwnProperty.call(b, key) &&
+      isDeepEqual(
+        (a as Record<string, unknown>)[key],
+        (b as Record<string, unknown>)[key],
+        path
+      )
   );
+  path.pop();
+  return equal;
 };
 
 /**
- * The compare depth for each key of a bindings object:
- * - `data`, `schema` and `rootSchema` are compared by identity. The core
- *   replaces the data immutably, thus changed data always has a new identity.
- *   The schemas can be large, and a structural compare would be expensive.
- * - `uischema` is compared structurally, because renderers often give a new
- *   clone of a UI schema element to a nested dispatch on each render.
- * - All other keys are compared structurally to a small depth.
+ * The keys of a bindings object that are compared by identity. For these keys
+ * the core gives the same object when the value does not change: it replaces
+ * the data immutably, and it resolves a schema to a part of the root schema.
+ * Thus a structural compare can find an equal value only when the application
+ * gives a copy, and the values can be large. All other keys are compared with
+ * `isDeepEqual`, because the core or a renderer makes a new but equal value on
+ * each change, for example a filtered `childErrors` array or a clone of a UI
+ * schema element.
  */
-const compareDepth = (key: string): number => {
-  if (key === 'data' || key === 'schema' || key === 'rootSchema') {
-    return 0;
-  }
-  return key === 'uischema' ? 8 : 3;
-};
+const identityKeys = new Set(['data', 'schema', 'rootSchema']);
 
 /**
  * Returns `previous` when `next` has the same keys, and each value is equal to
@@ -232,11 +234,13 @@ const reuseIfEqual = <T extends object>(
     nextKeys.every(
       (key) =>
         Object.prototype.hasOwnProperty.call(previous, key) &&
-        isEqualToDepth(
-          (previous as Record<string, unknown>)[key],
-          (next as Record<string, unknown>)[key],
-          compareDepth(key)
-        )
+        (identityKeys.has(key)
+          ? (previous as Record<string, unknown>)[key] ===
+            (next as Record<string, unknown>)[key]
+          : isDeepEqual(
+              (previous as Record<string, unknown>)[key],
+              (next as Record<string, unknown>)[key]
+            ))
     );
   return equal ? previous : next;
 };

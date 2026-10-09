@@ -166,6 +166,60 @@ describe('stable bindings', () => {
     expect(renders.second).toBe(1);
   });
 
+  it('does not re-render a control when a cloned UI schema element has deeply nested options', async () => {
+    let options: Record<string, unknown> = { value: 'deep' };
+    for (let level = 0; level < 20; level++) {
+      options = { nested: options };
+    }
+    const wrapper = mount(JsonForms, {
+      props: {
+        data: { first: 'a', second: 'b' },
+        schema,
+        uischema: {
+          type: 'VerticalLayout',
+          elements: [
+            { type: 'Control', scope: '#/properties/first' },
+            { type: 'Control', scope: '#/properties/second', options },
+          ],
+        },
+        renderers: createRenderers(true),
+      },
+    });
+    await nextTick();
+
+    changeHandlers.first('first', 'changed');
+    await nextTick();
+
+    expect(wrapper.text()).toContain('changed');
+    expect(renders.first).toBe(2);
+    expect(renders.second).toBe(1);
+  });
+
+  it('updates a control when a cloned UI schema element contains a cycle', async () => {
+    const options: Record<string, unknown> = {};
+    options.self = options;
+    const wrapper = mount(JsonForms, {
+      props: {
+        data: { first: 'a', second: 'b' },
+        schema,
+        uischema: {
+          type: 'VerticalLayout',
+          elements: [
+            { type: 'Control', scope: '#/properties/first', options },
+            { type: 'Control', scope: '#/properties/second', options },
+          ],
+        },
+        renderers: createRenderers(true),
+      },
+    });
+    await nextTick();
+
+    changeHandlers.first('first', 'changed');
+    await nextTick();
+
+    expect(wrapper.text()).toContain('changed');
+  });
+
   it('re-renders a control when a date in its UI schema changes', async () => {
     const uischemaWithDate = (min: Date) => ({
       type: 'VerticalLayout',
