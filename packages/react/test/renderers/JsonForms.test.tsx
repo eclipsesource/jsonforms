@@ -1042,6 +1042,43 @@ test('JsonForms should use additionalErrors if provided', () => {
   wrapper.unmount();
 });
 
+test('JsonForms should pass the validator option to core and show its errors', () => {
+  const CustomRendererWithError: React.FC<ControlProps> = ({
+    errors,
+  }: ControlProps) => {
+    return <h5>{errors}</h5>;
+  };
+  const renderers = [
+    {
+      tester: () => 1000,
+      renderer: withJsonFormsControlProps(CustomRendererWithError),
+    },
+  ];
+  const compiled: JsonSchema[] = [];
+  const validator = (schema: JsonSchema) => {
+    compiled.push(schema);
+    return {
+      validate: () => [
+        { path: '/foo', key: 'custom', message: 'Custom validator says no' },
+      ],
+    };
+  };
+  const wrapper = mount(
+    <JsonForms
+      data={fixture.data}
+      uischema={fixture.uischema}
+      schema={fixture.schema}
+      renderers={renderers}
+      validator={validator}
+    />
+  );
+  const initState = wrapper.find(JsonFormsStateProvider).props().initState;
+  expect(initState.core.validatorOption).toBe(validator);
+  expect(compiled).toEqual([fixture.schema]);
+  expect(wrapper.find('h5').text()).toBe('Custom validator says no');
+  wrapper.unmount();
+});
+
 test('JsonForms should use react to additionalErrors update', () => {
   const CustomRendererWithError: React.FC<ControlProps> = ({
     errors,

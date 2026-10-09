@@ -1,0 +1,97 @@
+{
+  "name": "@jsonforms/standard-schema",
+  "version": "3.9.0-alpha.1",
+  "description": "Use any Standard Schema library (Valibot, Zod, ArkType, ...) as the validator of JSON Forms",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eclipsesource/jsonforms.git",
+    "directory": "packages/standard-schema"
+  },
+  "bugs": "https://github.com/eclipsesource/jsonforms/issues",
+  "homepage": "http://jsonforms.io/",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "directories": {
+    "src": "src",
+    "test": "test"
+  },
+  "files": [
+    "lib",
+    "src"
+  ],
+  "keywords": [
+    "form",
+    "forms",
+    "json",
+    "jsonforms",
+    "validation",
+    "standard-schema",
+    "valibot",
+    "zod",
+    "arktype",
+    "jsonschema",
+    "csp"
+  ],
+  "main": "lib/jsonforms-standard-schema.cjs.js",
+  "module": "lib/jsonforms-standard-schema.esm.js",
+  "typings": "./lib/index.d.ts",
+  "scripts": {
+    "build": "rollup -c rollup.config.js",
+    "clean": "rimraf -rf lib coverage dist .nyc_output 2> /dev/null",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "test": "ava",
+    "test-cov": "rimraf -rf .nyc_output && nyc ava",
+    "doc": "typedoc --name 'JSON Forms Standard Schema' --excludeExternals --out docs src",
+    "serve-csp": "node scripts/serve-csp.cjs"
+  },
+  "ava": {
+    "files": [
+      "test/**/*"
+    ],
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "./test-config/ts-node.config.js"
+    ]
+  },
+  "nyc": {
+    "reporter": [
+      "lcov",
+      "text-summary"
+    ]
+  },
+  "dependencies": {
+    "@standard-schema/spec": "^1.1.0"
+  },
+  "peerDependencies": {
+    "@jsonforms/core": "3.9.0-alpha.1"
+  },
+  "devDependencies": {
+    "@istanbuljs/nyc-config-typescript": "^1.0.2",
+    "@jsonforms/core": "workspace:*",
+    "@typescript-eslint/eslint-plugin": "^5.54.1",
+    "@typescript-eslint/parser": "^5.54.1",
+    "@valibot/to-json-schema": "^1.8.0",
+    "ava": "^6.1.2",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^8.7.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-prettier": "^4.2.1",
+    "nyc": "^15.1.0",
+    "prettier": "^2.8.4",
+    "rimraf": "^6.1.0",
+    "rollup": "^2.78.0",
+    "rollup-plugin-cleanup": "^3.2.1",
+    "rollup-plugin-typescript2": "^0.34.1",
+    "rollup-plugin-visualizer": "^5.4.1",
+    "ts-node": "^10.4.0",
+    "tslib": "^2.5.0",
+    "typedoc": "~0.25.3",
+    "typescript": "~5.8.3",
+    "valibot": "^1.5.0"
+  }
+}
