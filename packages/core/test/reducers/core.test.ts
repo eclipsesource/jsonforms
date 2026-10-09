@@ -27,6 +27,7 @@ import Ajv, { ErrorObject } from 'ajv';
 import { coreReducer } from '../../src/reducers';
 import {
   init,
+  setAjv,
   setSchema,
   setValidationMode,
   update,
@@ -37,7 +38,13 @@ import { JsonSchema } from '../../src/models/jsonSchema';
 
 import { cloneDeep } from 'lodash';
 import { createAjv, validate } from '../../src/util/validator';
-import { JsonFormsCore, errorAt, subErrorsAt } from '../../src/store';
+import {
+  JsonFormsCore,
+  errorAt,
+  getValidator,
+  subErrorsAt,
+} from '../../src/store';
+import type { FormValidator } from '../../src/util/formValidator';
 import { getControlPath } from '../../src/util';
 
 test('core reducer should support v7', (t) => {
@@ -2145,6 +2152,243 @@ test('core reducer - setSchema - schema with id', (t) => {
 
   const after: JsonFormsCore = coreReducer(before, setSchema(updatedSchema));
   t.is(after.schema.properties.animal.minLength, 5);
+});
+
+const fakeValidator = (badValue = 'bad') => {
+  const calls = { compile: [] as JsonSchema[], validate: [] as unknown[] };
+  const factory = (schema: JsonSchema) => {
+    calls.compile.push(schema);
+    return {
+      validate: (data: unknown) => {
+        calls.validate.push(data);
+        const value = (data as { foo?: string } | undefined)?.foo;
+        return value === badValue
+          ? [{ path: '/foo', key: 'const', message: 'must be good' }]
+          : [];
+      },
+    };
+  };
+  return { factory, calls };
+};
+
+const fooSchema: JsonSchema = {
+  type: 'object',
+  properties: { foo: { type: 'string' } },
+};
+
+const explodingAjv = {
+  compile: () => {
+    throw new Error('AJV must not compile when a validator is given');
+  },
+} as unknown as Ajv;
+
+test('core reducer - validator option - factory is called with the schema and validates the data', (t) => {
+  const { factory, calls } = fakeValidator();
+  const after = coreReducer(
+    undefined,
+    init({ foo: 'bad' }, fooSchema, undefined, {
+      ajv: explodingAjv,
+      validator: factory,
+    })
+  );
+  t.deepEqual(calls.compile, [fooSchema]);
+  t.deepEqual(calls.validate, [{ foo: 'bad' }]);
+  t.is(after.errors.length, 1);
+  t.is(after.errors[0].instancePath, '/foo');
+  t.is(after.errors[0].keyword, 'const');
+  t.is(after.errors[0].message, 'must be good');
+  t.deepEqual(after.errors[0].parentSchema, fooSchema.properties.foo);
+  t.is(after.validator, undefined);
+  t.truthy(after.formValidator);
+  t.is(after.validatorOption, factory);
+  t.is(after.ajv, explodingAjv);
+});
+
+test('core reducer - validator option - a bound FormValidator object is accepted', (t) => {
+  const bound = {
+    validate: () => [
+      {
+        path: '',
+        key: 'required',
+        message: 'is required',
+        params: { missingProperty: 'foo' },
+      },
+    ],
+  };
+  const after = coreReducer(
+    undefined,
+    init({}, fooSchema, undefined, { validator: bound })
+  );
+  t.is(after.formValidator, bound);
+  t.is(after.errors.length, 1);
+  t.deepEqual(after.errors[0].params, { missingProperty: 'foo' });
+  t.deepEqual(after.errors[0].parentSchema, fooSchema);
+});
+
+test('core reducer - validator option - updateCore recompiles only when the schema changes', (t) => {
+  const { factory, calls } = fakeValidator();
+  const before = coreReducer(
+    undefined,
+    init({ foo: 'ok' }, fooSchema, undefined, { validator: factory })
+  );
+  t.is(calls.compile.length, 1);
+
+  const sameSchema = coreReducer(
+    before,
+    updateCore({ foo: 'bad' }, fooSchema, undefined, { validator: factory })
+  );
+  t.is(calls.compile.length, 1);
+  t.is(calls.validate.length, 2);
+  t.is(sameSchema.errors.length, 1);
+
+  const newSchema = cloneDeep(fooSchema);
+  const after = coreReducer(
+    sameSchema,
+    updateCore({ foo: 'bad' }, newSchema, undefined, { validator: factory })
+  );
+  t.is(calls.compile.length, 2);
+  t.is(calls.compile[1], newSchema);
+  t.is(after.errors.length, 1);
+});
+
+test('core reducer - validator option - options without a validator key keep the current validator', (t) => {
+  const { factory, calls } = fakeValidator();
+  const before = coreReducer(
+    undefined,
+    init({ foo: 'ok' }, fooSchema, undefined, { validator: factory })
+  );
+  const after = coreReducer(
+    before,
+    updateCore({ foo: 'bad' }, fooSchema, undefined, {
+      validationMode: 'ValidateAndShow',
+    })
+  );
+  t.is(after.validatorOption, factory);
+  t.is(calls.validate.length, 2);
+  t.is(after.errors.length, 1);
+});
+
+test('core reducer - validator option - an explicit undefined validator switches back to AJV', (t) => {
+  const { factory } = fakeValidator();
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: { foo: { type: 'string', const: 'bar' } },
+  };
+  const before = coreReducer(
+    undefined,
+    init({ foo: 'baz' }, schema, undefined, { validator: factory })
+  );
+  t.is(before.errors.length, 0);
+  const after = coreReducer(
+    before,
+    updateCore({ foo: 'baz' }, schema, undefined, { validator: undefined })
+  );
+  t.is(after.validatorOption, undefined);
+  t.is(after.errors.length, 1);
+  t.is(after.errors[0].keyword, 'const');
+  t.truthy(after.validator);
+});
+
+test('core reducer - validator option - update revalidates through the validator', (t) => {
+  const { factory, calls } = fakeValidator();
+  const before = coreReducer(
+    undefined,
+    init({ foo: 'ok' }, fooSchema, undefined, { validator: factory })
+  );
+  const after = coreReducer(
+    before,
+    update('foo', () => 'bad')
+  );
+  t.is(calls.compile.length, 1);
+  t.is(calls.validate.length, 2);
+  t.is(after.errors.length, 1);
+});
+
+test('core reducer - validator option - setSchema compiles the new schema through the validator', (t) => {
+  const { factory, calls } = fakeValidator();
+  const before = coreReducer(
+    undefined,
+    init({ foo: 'ok' }, fooSchema, undefined, { validator: factory })
+  );
+  const newSchema = cloneDeep(fooSchema);
+  const after = coreReducer(before, setSchema(newSchema));
+  t.is(calls.compile.length, 2);
+  t.is(calls.compile[1], newSchema);
+  t.is(after.schema, newSchema);
+});
+
+test('core reducer - validator option - NoValidation skips the validator and re-enabling recompiles', (t) => {
+  const { factory, calls } = fakeValidator();
+  const before = coreReducer(
+    undefined,
+    init({ foo: 'bad' }, fooSchema, undefined, { validator: factory })
+  );
+  t.is(before.errors.length, 1);
+  const hidden = coreReducer(before, setValidationMode('NoValidation'));
+  t.is(hidden.errors.length, 0);
+  t.is(hidden.formValidator, undefined);
+  t.is(hidden.validator, undefined);
+  const validateCalls = calls.validate.length;
+  const updated = coreReducer(
+    hidden,
+    update('foo', () => 'still bad')
+  );
+  t.is(calls.validate.length, validateCalls);
+  t.is(updated.errors.length, 0);
+  const shown = coreReducer(updated, setValidationMode('ValidateAndShow'));
+  t.is(calls.compile.length, 2);
+  t.is(shown.errors.length, 0);
+});
+
+test('core reducer - validator option - setAjv does not override a custom validator', (t) => {
+  const { factory, calls } = fakeValidator();
+  const before = coreReducer(
+    undefined,
+    init({ foo: 'bad' }, fooSchema, undefined, { validator: factory })
+  );
+  const after = coreReducer(before, setAjv(explodingAjv));
+  t.is(after.ajv, explodingAjv);
+  t.is(calls.compile.length, 2);
+  t.is(after.errors.length, 1);
+  t.is(after.errors[0].keyword, 'const');
+});
+
+test('core reducer - validator option - issues are normalized to the AJV error shape', (t) => {
+  const bound = {
+    validate: () => [
+      { path: '/foo', message: 'no key' },
+      { path: '/foo', key: 'required', message: 'is required' },
+      { path: '/foo', key: 'x', message: 'warn', severity: 'warning' },
+    ],
+  } as unknown as FormValidator;
+  const after = coreReducer(
+    undefined,
+    init({}, fooSchema, undefined, { validator: bound })
+  );
+  t.is(after.errors.length, 2);
+  t.is(after.errors[0].keyword, 'custom');
+  t.is(after.errors[1].keyword, 'required');
+  t.is(after.errors[1].instancePath, '');
+  t.deepEqual(after.errors[1].params, { missingProperty: 'foo' });
+  t.deepEqual(errorAt('foo', fooSchema)(after).length, 2);
+});
+
+test('core reducer - ajv path - formValidator is an AJV-backed validator and state.validator is kept', (t) => {
+  const after = coreReducer(undefined, init({ foo: 'bar' }, fooSchema));
+  t.truthy(after.formValidator);
+  t.truthy(after.validator);
+  t.is(after.validatorOption, undefined);
+  t.is(after.formValidator.validate({ foo: 1 }).length, 1);
+});
+
+test('core reducer - validator option - getValidator selector exposes the bound validator', (t) => {
+  const { factory } = fakeValidator();
+  const core = coreReducer(
+    undefined,
+    init({ foo: 'ok' }, fooSchema, undefined, { validator: factory })
+  );
+  t.is(getValidator({ jsonforms: { core } } as any), core.formValidator);
+  t.is(getValidator({ jsonforms: {} } as any), undefined);
 });
 
 test('core reducer helpers - getControlPath - converts JSON Pointer notation to dot notation', (t) => {
