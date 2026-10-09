@@ -14,7 +14,7 @@ const appStore = useAppStore();
     />
     <v-toolbar-title>
       <v-container fill-height fluid
-        ><v-row align="center" justify="center" dense>
+        ><v-row class="align-center justify-center" density="compact">
           <JsonFormsLogo width="40" height="40"></JsonFormsLogo>
           <v-col>JSON Forms </v-col>
         </v-row>
@@ -22,7 +22,7 @@ const appStore = useAppStore();
     </v-toolbar-title>
     <v-toolbar-items>
       <v-container fill-height fluid justify-end
-        ><v-row dense>
+        ><v-row density="compact">
           <v-col>
             <v-tooltip location="bottom">
               <template v-slot:activator="{ props }">

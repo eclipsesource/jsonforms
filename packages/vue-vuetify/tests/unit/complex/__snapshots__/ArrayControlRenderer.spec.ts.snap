@@ -6,12 +6,13 @@ exports[`ArrayControlRenderer.vue > should render component and match snapshot 1
     <div data-v-4896f876="" class="v-card v-theme--light v-card--density-default elevation-0 v-card--variant-elevated array-list">
       <!---->
       <div class="v-card__loader">
-        <div class="v-progress-linear v-theme--light v-locale--is-ltr" style="top: 0px; height: 0px; --v-progress-linear-height: 2px;" role="progressbar" aria-hidden="true" aria-valuemin="0" aria-valuemax="100">
+        <div class="v-progress-linear v-theme--light v-locale--is-ltr" style="top: 0px; height: 0px; --v-progress-linear-height: 2px; --v-progress-reveal-duration: 900ms; --v-progress-chunk-gap: 4px;" role="progressbar" aria-hidden="true" aria-valuemin="0" aria-valuemax="100">
           <!---->
           <div class="v-progress-linear__background"></div>
           <div class="v-progress-linear__buffer" style="width: 0%;"></div>
           <transition-stub name="fade-transition" appear="false" persisted="false" css="true">
             <div class="v-progress-linear__indeterminate">
+              <!---->
               <div class="v-progress-linear__indeterminate long"></div>
               <div class="v-progress-linear__indeterminate short"></div>
             </div>
@@ -49,11 +50,12 @@ exports[`ArrayControlRenderer.vue > should render component and match snapshot 1
       </div>
       <div data-v-4896f876="" class="v-card-text">
         <div data-v-4896f876="" class="v-container v-locale--is-ltr" justify-space-around="" align-content-center="">
-          <div data-v-4896f876="" class="v-row justify-center">
-            <div data-v-4896f876="" class="v-table v-theme--light v-table--density-default array-container flex">
+          <div data-v-4896f876="" class="v-row v-row--density-default justify-center">
+            <div data-v-4896f876="" class="v-table v-table--gridlines-horizontal v-theme--light v-table--density-default array-container flex">
               <!---->
               <div class="v-table__wrapper">
                 <table>
+                  <!---->
                   <thead data-v-4896f876="">
                     <tr data-v-4896f876="">
                       <th data-v-4896f876="" scope="col">Name</th>
