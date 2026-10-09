@@ -148,6 +148,114 @@ export interface ControlProps extends RendererProps {
   uischema: ControlElement;
 }
 
+/**
+ * Returns `true` for arrays and plain objects. Other objects (for example
+ * `Date`, `RegExp`, `Map` or `Set`) keep their contents out of their own keys,
+ * thus a compare of their keys is not sufficient.
+ */
+const isPlainObjectOrArray = (value: unknown): value is object => {
+  if (typeof value !== 'object' || value === null) {
+    return false;
+  }
+  if (Array.isArray(value)) {
+    return true;
+  }
+  const prototype = Object.getPrototypeOf(value);
+  return prototype === Object.prototype || prototype === null;
+};
+
+/**
+ * Compares two values structurally through plain objects and arrays. Other
+ * objects are compared by identity. The compare does not go into values that
+ * are identical, and it stops at the first difference. Thus it reads only the
+ * parts of `b` that are new, and it has no depth limit to tune. When the values
+ * contain a cycle, they are not equal. The result is conservative: `true` only
+ * when the values are deep-equal.
+ */
+const isDeepEqual = (a: unknown, b: unknown, ancestors?: object[]): boolean => {
+  if (a === b) {
+    return true;
+  }
+  if (
+    !isPlainObjectOrArray(a) ||
+    !isPlainObjectOrArray(b) ||
+    Array.isArray(a) !== Array.isArray(b) ||
+    ancestors?.includes(a)
+  ) {
+    return false;
+  }
+  const keysA = Object.keys(a);
+  const keysB = Object.keys(b);
+  if (keysA.length !== keysB.length) {
+    return false;
+  }
+  const path = ancestors ?? [];
+  path.push(a);
+  const equal = keysA.every(
+    (key) =>
+      Object.prototype.hasOwnProperty.call(b, key) &&
+      isDeepEqual(
+        (a as Record<string, unknown>)[key],
+        (b as Record<string, unknown>)[key],
+        path
+      )
+  );
+  path.pop();
+  return equal;
+};
+
+/**
+ * The keys of a bindings object that are compared by identity. For these keys
+ * the core gives the same object when the value does not change: it replaces
+ * the data immutably, and it resolves a schema to a part of the root schema.
+ * Thus a structural compare can find an equal value only when the application
+ * gives a copy, and the values can be large. All other keys are compared with
+ * `isDeepEqual`, because the core or a renderer makes a new but equal value on
+ * each change, for example a filtered `childErrors` array or a clone of a UI
+ * schema element.
+ */
+const identityKeys = new Set(['data', 'schema', 'rootSchema']);
+
+/**
+ * Returns `previous` when `next` has the same keys, and each value is equal to
+ * the value in `previous`. Otherwise returns `next`.
+ */
+const reuseIfEqual = <T extends object>(
+  previous: T | undefined,
+  next: T
+): T => {
+  if (previous === undefined) {
+    return next;
+  }
+  const previousKeys = Object.keys(previous);
+  const nextKeys = Object.keys(next);
+  const equal =
+    previousKeys.length === nextKeys.length &&
+    nextKeys.every(
+      (key) =>
+        Object.prototype.hasOwnProperty.call(previous, key) &&
+        (identityKeys.has(key)
+          ? (previous as Record<string, unknown>)[key] ===
+            (next as Record<string, unknown>)[key]
+          : isDeepEqual(
+              (previous as Record<string, unknown>)[key],
+              (next as Record<string, unknown>)[key]
+            ))
+    );
+  return equal ? previous : next;
+};
+
+/**
+ * A `computed` for a bindings object. Each change of the JSON Forms state
+ * recomputes the bindings of all renderers, and the getter returns a new
+ * object each time. Vue compares a computed value by identity, thus without
+ * this wrapper each change re-renders all renderers in the form. When the new
+ * bindings are equal to the previous bindings, this computed keeps the
+ * previous object, and Vue does not trigger the dependents.
+ */
+const stableComputed = <T extends object>(getter: () => T): ComputedRef<T> =>
+  computed((previous?: T) => reuseIfEqual(previous, getter()));
+
 export type Required<T> = T extends object
   ? { [P in keyof T]-?: NonNullable<T[P]> }
   : T;
@@ -188,7 +296,7 @@ export function useControl<
   const dispatch = useDispatch();
 
   const id = ref<string | undefined>(undefined);
-  const control = computed(() => ({
+  const control = stableComputed(() => ({
     ...props,
     ...stateMap({ jsonforms }, props),
     id: id.value,
@@ -416,7 +524,7 @@ export const useJsonFormsRenderer = (props: RendererProps) => {
   );
 
   const rootSchema = computed(() => rawProps.value.rootSchema);
-  const renderer = computed(() => {
+  const renderer = stableComputed(() => {
     const { rootSchema: _rootSchema, ...rest } = rawProps.value;
     return rest;
   });
