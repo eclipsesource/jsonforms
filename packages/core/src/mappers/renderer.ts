@@ -998,7 +998,7 @@ export interface DispatchPropsOfMultiEnumControl {
 export const mapDispatchToMultiEnumProps = (
   dispatch: Dispatch<CoreActions>
 ): DispatchPropsOfMultiEnumControl => ({
-  ...mapDispatchToControlProps(dispatch as any),
+  ...mapDispatchToControlProps(dispatch),
   addItem: (path: string, value: any) => {
     dispatch(
       update(path, (data) => {
