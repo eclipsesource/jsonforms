@@ -1551,6 +1551,43 @@ test('mapDispatchToMultiEnumProps - oneOf schema - removeItem', (t) => {
   t.is(getCore().data.colors.length, 0);
 });
 
+test('mapDispatchToMultiEnumProps - handleChange', (t) => {
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/colors',
+  };
+  const schema = {
+    type: 'object',
+    properties: {
+      colors: {
+        type: 'array',
+        items: {
+          type: 'string',
+          enum: ['red', 'green', 'pink'],
+        },
+        uniqueItems: true,
+      },
+    },
+  };
+  const data = { colors: ['green'] };
+  const initCore: JsonFormsCore = {
+    uischema,
+    schema,
+    data,
+    errors: [] as ErrorObject[],
+  };
+  const [getCore, dispatch] = mockDispatch(initCore);
+  dispatch(init(data, schema, uischema, createAjv({ useDefaults: true })));
+  const props = mapDispatchToMultiEnumProps(dispatch);
+
+  if (props.handleChange) {
+    props.handleChange('colors', ['green', 'red']);
+  }
+
+  t.is(getCore().data.colors.length, 2);
+  t.deepEqual(getCore().data.colors, ['green', 'red']);
+});
+
 test('should assign defaults to enum', (t) => {
   const schema: JsonSchema = {
     type: 'object',

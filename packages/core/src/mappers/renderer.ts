@@ -992,11 +992,13 @@ export const mapDispatchToArrayControlProps = (
 export interface DispatchPropsOfMultiEnumControl {
   addItem: (path: string, value: any) => void;
   removeItem?: (path: string, toDelete: any) => void;
+  handleChange?: (path: string, value: any) => void;
 }
 
 export const mapDispatchToMultiEnumProps = (
   dispatch: Dispatch<CoreActions>
 ): DispatchPropsOfMultiEnumControl => ({
+  ...mapDispatchToControlProps(dispatch),
   addItem: (path: string, value: any) => {
     dispatch(
       update(path, (data) => {
