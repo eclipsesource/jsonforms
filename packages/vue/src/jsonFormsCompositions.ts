@@ -40,6 +40,7 @@ import {
   Translator,
 } from '@jsonforms/core';
 import type Ajv from 'ajv';
+import isEqualWith from 'lodash/isEqualWith';
 import {
   PropType,
   computed,
@@ -149,60 +150,34 @@ export interface ControlProps extends RendererProps {
 }
 
 /**
- * Returns `true` for arrays and plain objects. Other objects (for example
- * `Date`, `RegExp`, `Map` or `Set`) keep their contents out of their own keys,
- * thus a compare of their keys is not sufficient.
+ * Returns `true` for an instance of a class that has no `Symbol.toStringTag`.
+ * `isEqual` compares such an instance by its own keys. Thus it finds two
+ * instances equal when their contents are in private fields. `isEqual` compares
+ * `Date`, `Map`, `Set` and other values with a known tag by their contents, and
+ * it finds values with an unknown tag (for example `Temporal`) equal only when
+ * they are identical.
  */
-const isPlainObjectOrArray = (value: unknown): value is object => {
-  if (typeof value !== 'object' || value === null) {
-    return false;
-  }
-  if (Array.isArray(value)) {
-    return true;
-  }
-  const prototype = Object.getPrototypeOf(value);
-  return prototype === Object.prototype || prototype === null;
-};
-
-/**
- * Compares two values structurally through plain objects and arrays. Other
- * objects are compared by identity. The compare does not go into values that
- * are identical, and it stops at the first difference. Thus it reads only the
- * parts of `b` that are new, and it has no depth limit to tune. When the values
- * contain a cycle, they are not equal. The result is conservative: `true` only
- * when the values are deep-equal.
- */
-const isDeepEqual = (a: unknown, b: unknown, ancestors?: object[]): boolean => {
-  if (a === b) {
-    return true;
-  }
+const isClassInstance = (value: unknown): boolean => {
   if (
-    !isPlainObjectOrArray(a) ||
-    !isPlainObjectOrArray(b) ||
-    Array.isArray(a) !== Array.isArray(b) ||
-    ancestors?.includes(a)
+    typeof value !== 'object' ||
+    value === null ||
+    Object.prototype.toString.call(value) !== '[object Object]'
   ) {
     return false;
   }
-  const keysA = Object.keys(a);
-  const keysB = Object.keys(b);
-  if (keysA.length !== keysB.length) {
-    return false;
-  }
-  const path = ancestors ?? [];
-  path.push(a);
-  const equal = keysA.every(
-    (key) =>
-      Object.prototype.hasOwnProperty.call(b, key) &&
-      isDeepEqual(
-        (a as Record<string, unknown>)[key],
-        (b as Record<string, unknown>)[key],
-        path
-      )
-  );
-  path.pop();
-  return equal;
+  const prototype = Object.getPrototypeOf(value);
+  return prototype !== Object.prototype && prototype !== null;
 };
+
+/**
+ * Compares two values structurally with `isEqual`, but compares class
+ * instances by identity. Thus the result is `true` only when the values are
+ * deep-equal.
+ */
+const isDeepEqual = (a: unknown, b: unknown): boolean =>
+  isEqualWith(a, b, (x: unknown, y: unknown) =>
+    isClassInstance(x) || isClassInstance(y) ? x === y : undefined
+  );
 
 /**
  * The keys of a bindings object that are compared by identity. For these keys

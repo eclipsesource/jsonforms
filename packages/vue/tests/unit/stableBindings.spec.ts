@@ -31,7 +31,9 @@ const TestControl = defineComponent({
       renders[path] = (renders[path] ?? 0) + 1;
       const min = control.value.uischema.options?.min;
       return h('span', [
-        min instanceof Date ? min.toISOString() : String(control.value.data),
+        min instanceof Date
+          ? min.toISOString()
+          : String(min ?? control.value.data),
         slots.default?.(),
       ]);
     };
@@ -218,6 +220,8 @@ describe('stable bindings', () => {
     await nextTick();
 
     expect(wrapper.text()).toContain('changed');
+    expect(renders.first).toBe(2);
+    expect(renders.second).toBe(1);
   });
 
   it('re-renders a control when a date in its UI schema changes', async () => {
@@ -245,6 +249,44 @@ describe('stable bindings', () => {
     await nextTick();
 
     expect(wrapper.text()).toContain('2030-01-01');
+  });
+
+  it('re-renders a control when an object with private fields in its UI schema changes', async () => {
+    // Vue cannot read private fields through a reactive proxy, thus the
+    // application marks the instances raw.
+    class Amount {
+      readonly #value: number;
+      constructor(value: number) {
+        this.#value = value;
+      }
+      toString() {
+        return `amount ${this.#value}`;
+      }
+    }
+    const uischemaWithAmount = (min: Amount) => ({
+      type: 'VerticalLayout',
+      elements: [
+        { type: 'Control', scope: '#/properties/first', options: { min } },
+        { type: 'Control', scope: '#/properties/second' },
+      ],
+    });
+    const wrapper = mount(JsonForms, {
+      props: {
+        data: { first: 'a', second: 'b' },
+        schema,
+        uischema: uischemaWithAmount(markRaw(new Amount(1))),
+        renderers,
+      },
+    });
+    await nextTick();
+    expect(wrapper.text()).toContain('amount 1');
+
+    await wrapper.setProps({
+      uischema: uischemaWithAmount(markRaw(new Amount(2))),
+    });
+    await nextTick();
+
+    expect(wrapper.text()).toContain('amount 2');
   });
 
   it('forwards the slots of a dispatch to the dispatched renderer', async () => {
