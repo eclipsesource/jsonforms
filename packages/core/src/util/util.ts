@@ -29,7 +29,7 @@ import find from 'lodash/find';
 import { resolveData, resolveSchema } from './resolvers';
 import { composePaths, toDataPathSegments } from './path';
 import { isEnabled, isVisible } from './runtime';
-import type Ajv from 'ajv';
+import type { RuleValidator } from './runtime';
 import type { JsonSchema, Scoped, UISchemaElement } from '../models';
 
 /**
@@ -165,17 +165,17 @@ export const Runtime = {
   isEnabled(
     uischema: UISchemaElement,
     data: any,
-    ajv: Ajv,
+    validator: RuleValidator,
     config: unknown
   ): boolean {
-    return isEnabled(uischema, data, undefined, ajv, config);
+    return isEnabled(uischema, data, undefined, validator, config);
   },
   isVisible(
     uischema: UISchemaElement,
     data: any,
-    ajv: Ajv,
+    validator: RuleValidator,
     config: unknown
   ): boolean {
-    return isVisible(uischema, data, undefined, ajv, config);
+    return isVisible(uischema, data, undefined, validator, config);
   },
 };

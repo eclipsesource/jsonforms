@@ -26,6 +26,7 @@ import {
   defaultMiddleware,
   Middleware,
   JsonFormsSubStates,
+  ValidatorOption,
 } from '@jsonforms/core';
 import { JsonFormsChangeEvent, MaybeReadonly } from '../types';
 import DispatchRenderer from './DispatchRenderer.vue';
@@ -105,6 +106,11 @@ export default defineComponent({
       type: Object as PropType<Ajv>,
       default: undefined,
     },
+    validator: {
+      required: false,
+      type: [Function, Object] as PropType<ValidatorOption>,
+      default: undefined,
+    },
     i18n: {
       required: false,
       type: Object as PropType<JsonFormsI18nState>,
@@ -141,6 +147,7 @@ export default defineComponent({
         Actions.init(dataToUse, schemaToUse, uischemaToUse, {
           validationMode: this.validationMode,
           ajv: this.ajv,
+          validator: this.validator,
           additionalErrors: this.additionalErrors,
         }),
         coreReducer
@@ -177,6 +184,7 @@ export default defineComponent({
         this.uischemaToUse,
         this.validationMode,
         this.ajv,
+        this.validator,
         this.additionalErrors,
       ];
     },
@@ -244,6 +252,7 @@ export default defineComponent({
           {
             validationMode: this.validationMode,
             ajv: this.ajv,
+            validator: this.validator,
             additionalErrors: this.additionalErrors,
           }
         ),

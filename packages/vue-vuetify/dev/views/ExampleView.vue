@@ -57,7 +57,7 @@ const snackbarTimeout = ref(3000);
 
 const schemaModel = shallowRef<monaco.editor.ITextModel | undefined>(undefined);
 const uischemaModel = shallowRef<monaco.editor.ITextModel | undefined>(
-  undefined,
+  undefined
 );
 const dataModel = shallowRef<monaco.editor.ITextModel | undefined>(undefined);
 
@@ -79,6 +79,7 @@ const initialState = (exampleProp: ExampleDescription) => {
     uischemas: example.uischemas,
     validationMode: appStore.jsonforms.validationMode,
     ajv: ajv,
+    validator: exampleProp.validator,
     i18n: exampleProp.i18n ?? {
       locale: appStore.jsonforms.locale,
     },
@@ -92,7 +93,7 @@ const onChange = (event: JsonFormsChangeEvent): void => {
   if (props.example.name) {
     dataModel.value = getMonacoModelForUri(
       monaco.Uri.parse(toDataUri(props.example.name)),
-      event.data !== undefined ? JSON.stringify(event.data, null, 2) : '',
+      event.data !== undefined ? JSON.stringify(event.data, null, 2) : ''
     );
     state.data = event.data;
   }
@@ -102,13 +103,13 @@ const onChange = (event: JsonFormsChangeEvent): void => {
 const reloadMonacoSchema = () => {
   const example = find(
     examples,
-    (example) => example.name === appStore.exampleName,
+    (example) => example.name === appStore.exampleName
   );
 
   if (example) {
     schemaModel.value = getMonacoModelForUri(
       monaco.Uri.parse(toSchemaUri(example.name)),
-      example.schema ? JSON.stringify(example.schema, null, 2) : '',
+      example.schema ? JSON.stringify(example.schema, null, 2) : ''
     );
     toast('Original example schema loaded. Apply it to take effect.');
   }
@@ -119,7 +120,7 @@ const saveMonacoSchema = () => {
     schemaModel,
     (modelValue) =>
       (state.schema = modelValue ? JSON.parse(modelValue) : undefined),
-    'New schema applied',
+    'New schema applied'
   );
 
   if (state.schema) {
@@ -127,7 +128,7 @@ const saveMonacoSchema = () => {
       monaco,
       `inmemory://${toSchemaUri(props.example.name)}`,
       toDataUri(props.example.name),
-      cloneDeep(state.schema),
+      cloneDeep(state.schema)
     );
   }
 };
@@ -135,13 +136,13 @@ const saveMonacoSchema = () => {
 const reloadMonacoUiSchema = () => {
   const example = find(
     examples,
-    (example) => example.name === appStore.exampleName,
+    (example) => example.name === appStore.exampleName
   );
 
   if (example) {
     uischemaModel.value = getMonacoModelForUri(
       monaco.Uri.parse(toUiSchemaUri(example.name)),
-      example.uischema ? JSON.stringify(example.uischema, null, 2) : '',
+      example.uischema ? JSON.stringify(example.uischema, null, 2) : ''
     );
     toast('Original example UI schema loaded. Apply it to take effect.');
   }
@@ -152,20 +153,20 @@ const saveMonacoUiSchema = () => {
     uischemaModel,
     (modelValue) =>
       (state.uischema = modelValue ? JSON.parse(modelValue) : undefined),
-    'New UI schema applied',
+    'New UI schema applied'
   );
 };
 
 const reloadMonacoData = () => {
   const example = find(
     examples,
-    (example) => example.name === appStore.exampleName,
+    (example) => example.name === appStore.exampleName
   );
 
   if (example) {
     dataModel.value = getMonacoModelForUri(
       monaco.Uri.parse(toDataUri(example.name)),
-      example.data !== undefined ? JSON.stringify(example.data, null, 2) : '',
+      example.data !== undefined ? JSON.stringify(example.data, null, 2) : ''
     );
     toast('Original example data loaded. Apply it to take effect.');
   }
@@ -177,14 +178,14 @@ const saveMonacoData = () => {
     (modelValue) => {
       state.data = modelValue === '' ? undefined : JSON.parse(modelValue);
     },
-    'New data applied',
+    'New data applied'
   );
 };
 
 const saveMonacoModel = (
   model: ShallowRef<monaco.editor.ITextModel | undefined>,
   apply: (value: string) => void,
-  successToast: string,
+  successToast: string
 ) => {
   if (model.value) {
     const modelValue = model.value.getValue();
@@ -212,7 +213,7 @@ const registerValidations = (editor: MonacoApi) => {
         editor,
         `inmemory://${toSchemaUri(example.name)}`,
         toDataUri(example.name),
-        schema,
+        schema
       );
     }
   }
@@ -221,17 +222,17 @@ const registerValidations = (editor: MonacoApi) => {
 const updateMonacoModels = (example: ExampleDescription) => {
   schemaModel.value = getMonacoModelForUri(
     monaco.Uri.parse(toSchemaUri(example.name)),
-    example.schema ? JSON.stringify(example.schema, null, 2) : '',
+    example.schema ? JSON.stringify(example.schema, null, 2) : ''
   );
 
   uischemaModel.value = getMonacoModelForUri(
     monaco.Uri.parse(toUiSchemaUri(example.name)),
-    example.uischema ? JSON.stringify(example.uischema, null, 2) : '',
+    example.uischema ? JSON.stringify(example.uischema, null, 2) : ''
   );
 
   dataModel.value = getMonacoModelForUri(
     monaco.Uri.parse(toDataUri(example.name)),
-    example.data !== undefined ? JSON.stringify(example.data, null, 2) : '',
+    example.data !== undefined ? JSON.stringify(example.data, null, 2) : ''
   );
 };
 
@@ -262,7 +263,7 @@ watch(
     updateMonacoModels(props.example);
     // reset state when example changes
     Object.assign(state, initialState(value));
-  },
+  }
 );
 
 watch(
@@ -272,7 +273,7 @@ watch(
       // we need to show the wrapper so make sure that the monaco models are updated
       updateMonacoModels(props.example);
     }
-  },
+  }
 );
 
 type Action = NonNullable<ExampleDescription['actions']>[number];

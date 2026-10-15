@@ -87,6 +87,7 @@ const itemTester: UISchemaTester = (_schema, schemaPath, _path) => {
       [(data)]="selectedExample.data"
       [schema]="selectedExample.schema"
       [uischema]="selectedExample.uischema"
+      [validator]="selectedExample.validator"
       [renderers]="renderers"
       [i18n]="i18n"
       [readonly]="readonly"
