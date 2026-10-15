@@ -54,6 +54,7 @@ export const CategorizationRenderer = ({
   getStyleAsClassName,
   onChange,
   ajv,
+  ruleValidator,
   config,
 }: LayoutProps &
   VanillaRendererProps &
@@ -98,6 +99,7 @@ export const CategorizationRenderer = ({
           selectedCategory={elements[safeCategory] as Category}
           data={data}
           ajv={ajv}
+          ruleValidator={ruleValidator}
           config={config}
           depth={0}
           onSelect={onCategorySelected}

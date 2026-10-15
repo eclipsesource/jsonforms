@@ -25,6 +25,7 @@
 import * as issue_1884 from './examples/1884';
 import * as issue_1948 from './examples/1948';
 import * as additionalErrors from './examples/additional-errors';
+import * as customValidator from './examples/custom-validator';
 import * as additionalProperties from './examples/additional-properties';
 import * as allOf from './examples/allOf';
 import * as anyOf from './examples/anyOf';
@@ -75,6 +76,7 @@ import * as prependAppendSlots from './examples/prepend-append-slots';
 import * as radioGroupExample from './examples/radioGroup';
 import * as readonly from './examples/readonly';
 import * as rule from './examples/rule';
+import * as standardSchema from './examples/standard-schema';
 import * as ruleInheritance from './examples/ruleInheritance';
 import * as scope from './examples/scope';
 import * as specialPropertyNames from './examples/special-property-names';
@@ -91,6 +93,7 @@ import * as jsonschema from './examples/jsonschema';
 
 export {
   additionalErrors,
+  customValidator,
   additionalProperties,
   allOf,
   anyOf,
@@ -144,6 +147,7 @@ export {
   radioGroupExample,
   readonly,
   rule,
+  standardSchema,
   ruleInheritance,
   scope,
   specialPropertyNames,

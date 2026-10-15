@@ -43,7 +43,12 @@ import {
   evalEnablement,
   evalReadonly,
   evalVisibility,
+  isVisible,
+  matchesConditionSchema,
 } from '../../src/util/runtime';
+import type { FormValidator } from '../../src/util/formValidator';
+import { getRuleValidator } from '../../src/store';
+import { JsonSchema } from '../../src/models';
 
 test('evalVisibility show valid case', (t) => {
   const leafCondition: LeafCondition = {
@@ -1115,7 +1120,7 @@ test('isInherentlyEnabled disabled by rule', (t) => {
 
   t.false(
     isInherentlyEnabled(
-      { jsonforms: { core: { ajv: createAjv() } as JsonFormsCore } },
+      { jsonforms: { core: { ajv: createAjv() } as unknown as JsonFormsCore } },
       null,
       uischema,
       undefined,
@@ -1148,7 +1153,7 @@ test('isInherentlyEnabled disabled by global over rule ', (t) => {
       {
         jsonforms: {
           readonly: true,
-          core: { ajv: createAjv() } as JsonFormsCore,
+          core: { ajv: createAjv() } as unknown as JsonFormsCore,
         },
       },
       null,
@@ -1344,7 +1349,7 @@ test('isInherentlyReadonly evaluates readonly and writable rules', (t) => {
   };
   const state = {
     jsonforms: {
-      core: { ajv: createAjv() } as JsonFormsCore,
+      core: { ajv: createAjv() } as unknown as JsonFormsCore,
     },
   };
   const data = {
@@ -1366,6 +1371,425 @@ test('isInherentlyReadonly evaluates readonly and writable rules', (t) => {
       undefined,
       { ...data, ruleValue: 'baz' },
       null
+    )
+  );
+});
+
+const ruleUischema = (
+  condition: SchemaBasedCondition | AndCondition | OrCondition
+): ControlElement => ({
+  type: 'Control',
+  scope: '#/properties/value',
+  rule: { effect: RuleEffect.SHOW, condition },
+});
+
+const barCondition: SchemaBasedCondition = {
+  scope: '#/properties/ruleValue',
+  schema: { const: 'bar' },
+};
+
+test('rules - schema condition uses the Form Validator matches when present', (t) => {
+  const calls: Array<[JsonSchema, unknown]> = [];
+  const validator: FormValidator = {
+    validate: () => [],
+    matches: (schema, data) => {
+      calls.push([schema, data]);
+      return data === 'bar';
+    },
+  };
+  const uischema = ruleUischema(barCondition);
+  t.true(
+    evalVisibility(
+      uischema,
+      { ruleValue: 'bar' },
+      undefined,
+      validator,
+      undefined
+    )
+  );
+  t.false(
+    evalVisibility(
+      uischema,
+      { ruleValue: 'baz' },
+      undefined,
+      validator,
+      undefined
+    )
+  );
+  t.deepEqual(calls, [
+    [barCondition.schema, 'bar'],
+    [barCondition.schema, 'baz'],
+  ]);
+});
+
+test('rules - a Form Validator without matches falls back to the Structural Matcher', (t) => {
+  const validator: FormValidator = { validate: () => [] };
+  const uischema = ruleUischema(barCondition);
+  t.true(
+    evalVisibility(
+      uischema,
+      { ruleValue: 'bar' },
+      undefined,
+      validator,
+      undefined
+    )
+  );
+  t.false(
+    evalVisibility(
+      uischema,
+      { ruleValue: 'baz' },
+      undefined,
+      validator,
+      undefined
+    )
+  );
+});
+
+test('rules - no validator at all also evaluates value constraints', (t) => {
+  const uischema = ruleUischema({
+    scope: '#/properties/ruleValue',
+    schema: { type: 'number', minimum: 18 },
+  });
+  t.true(
+    evalVisibility(uischema, { ruleValue: 18 }, undefined, undefined, undefined)
+  );
+  t.false(
+    evalVisibility(uischema, { ruleValue: 17 }, undefined, undefined, undefined)
+  );
+  const pattern = ruleUischema({
+    scope: '#/properties/ruleValue',
+    schema: { pattern: '^DE' },
+  });
+  t.true(
+    evalVisibility(
+      pattern,
+      { ruleValue: 'DE123' },
+      undefined,
+      undefined,
+      undefined
+    )
+  );
+  t.false(
+    evalVisibility(
+      pattern,
+      { ruleValue: 'FR123' },
+      undefined,
+      undefined,
+      undefined
+    )
+  );
+});
+
+test('rules - a Form Validator without matches gets value constraints evaluated too', (t) => {
+  const validator: FormValidator = { validate: () => [] };
+  const uischema = ruleUischema({
+    scope: '#/properties/ruleValue',
+    schema: { not: { const: 'hidden' } },
+  });
+  t.true(
+    evalVisibility(
+      uischema,
+      { ruleValue: 'shown' },
+      undefined,
+      validator,
+      undefined
+    )
+  );
+  t.false(
+    evalVisibility(
+      uischema,
+      { ruleValue: 'hidden' },
+      undefined,
+      validator,
+      undefined
+    )
+  );
+});
+
+test('rules - no validator at all uses the Structural Matcher', (t) => {
+  const uischema = ruleUischema({
+    scope: '#/properties/ruleValue',
+    schema: { type: 'string', enum: ['a', 'b'] },
+  });
+  t.true(
+    evalVisibility(
+      uischema,
+      { ruleValue: 'a' },
+      undefined,
+      undefined,
+      undefined
+    )
+  );
+  t.false(
+    evalVisibility(
+      uischema,
+      { ruleValue: 'c' },
+      undefined,
+      undefined,
+      undefined
+    )
+  );
+  t.false(
+    evalVisibility(uischema, { ruleValue: 1 }, undefined, undefined, undefined)
+  );
+});
+
+test('rules - a Form Validator Factory is called once per condition schema', (t) => {
+  const compiled: JsonSchema[] = [];
+  const factory = (schema: JsonSchema): FormValidator => {
+    compiled.push(schema);
+    return {
+      validate: (data) =>
+        data === (schema as { const: unknown }).const
+          ? []
+          : [{ path: '', key: 'const', message: 'mismatch' }],
+    };
+  };
+  const uischema = ruleUischema(barCondition);
+  t.true(
+    evalVisibility(
+      uischema,
+      { ruleValue: 'bar' },
+      undefined,
+      factory,
+      undefined
+    )
+  );
+  t.false(
+    evalVisibility(
+      uischema,
+      { ruleValue: 'baz' },
+      undefined,
+      factory,
+      undefined
+    )
+  );
+  t.true(
+    evalVisibility(
+      uischema,
+      { ruleValue: 'bar' },
+      undefined,
+      factory,
+      undefined
+    )
+  );
+  t.is(compiled.length, 1);
+  t.is(compiled[0], barCondition.schema);
+
+  const other = ruleUischema({
+    scope: '#/properties/ruleValue',
+    schema: { const: 'other' },
+  });
+  t.true(
+    evalVisibility(other, { ruleValue: 'other' }, undefined, factory, undefined)
+  );
+  t.is(compiled.length, 2);
+});
+
+test('rules - AND and OR compose with a Form Validator', (t) => {
+  const validator: FormValidator = {
+    validate: () => [],
+    matches: (schema, data) => data === (schema as { const: unknown }).const,
+  };
+  const and: AndCondition = {
+    type: 'AND',
+    conditions: [
+      barCondition,
+      { scope: '#/properties/other', schema: { const: 1 } },
+    ],
+  };
+  const or: OrCondition = { type: 'OR', conditions: and.conditions };
+  t.true(
+    evalVisibility(
+      ruleUischema(and),
+      { ruleValue: 'bar', other: 1 },
+      undefined,
+      validator,
+      undefined
+    )
+  );
+  t.false(
+    evalVisibility(
+      ruleUischema(and),
+      { ruleValue: 'bar', other: 2 },
+      undefined,
+      validator,
+      undefined
+    )
+  );
+  t.true(
+    evalVisibility(
+      ruleUischema(or),
+      { ruleValue: 'x', other: 1 },
+      undefined,
+      validator,
+      undefined
+    )
+  );
+  t.false(
+    evalVisibility(
+      ruleUischema(or),
+      { ruleValue: 'x', other: 2 },
+      undefined,
+      validator,
+      undefined
+    )
+  );
+});
+
+test('rules - an AJV instance keeps working as the rule validator', (t) => {
+  const uischema = ruleUischema({
+    scope: '#/properties/ruleValue',
+    schema: { type: 'string', minLength: 3 },
+  });
+  t.true(
+    evalVisibility(
+      uischema,
+      { ruleValue: 'long' },
+      undefined,
+      createAjv(),
+      undefined
+    )
+  );
+  t.false(
+    evalVisibility(
+      uischema,
+      { ruleValue: 'no' },
+      undefined,
+      createAjv(),
+      undefined
+    )
+  );
+});
+
+test('rules - enablement and readonly go through the Form Validator too', (t) => {
+  const validator: FormValidator = {
+    validate: () => [],
+    matches: (_schema, data) => data === 'bar',
+  };
+  const enable: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/value',
+    rule: { effect: RuleEffect.ENABLE, condition: barCondition },
+  };
+  const readonly: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/value',
+    rule: { effect: RuleEffect.READONLY, condition: barCondition },
+  };
+  t.true(
+    evalEnablement(
+      enable,
+      { ruleValue: 'bar' },
+      undefined,
+      validator,
+      undefined
+    )
+  );
+  t.false(
+    evalEnablement(enable, { ruleValue: 'x' }, undefined, validator, undefined)
+  );
+  t.true(
+    evalReadonly(
+      readonly,
+      { ruleValue: 'bar' },
+      undefined,
+      validator,
+      undefined
+    )
+  );
+  t.false(
+    evalReadonly(readonly, { ruleValue: 'x' }, undefined, validator, undefined)
+  );
+});
+
+test('matchesConditionSchema - dispatches on the validator kind', (t) => {
+  const schema: JsonSchema = { const: 'a' };
+  t.true(matchesConditionSchema(schema, 'a', undefined));
+  t.true(matchesConditionSchema(schema, 'a', createAjv()));
+  t.false(matchesConditionSchema(schema, 'b', createAjv()));
+  t.true(matchesConditionSchema(schema, 'a', { validate: () => [] }));
+  t.false(
+    matchesConditionSchema(schema, 'a', {
+      validate: () => [],
+      matches: () => false,
+    })
+  );
+  t.false(
+    matchesConditionSchema(schema, 'a', () => ({
+      validate: () => [{ path: '', message: 'nope' }],
+    }))
+  );
+});
+
+test('getRuleValidator - AJV instance when no custom validator is configured', (t) => {
+  const ajv = createAjv();
+  const state = { jsonforms: { core: { ajv } as unknown as JsonFormsCore } };
+  t.is(getRuleValidator(state as any), ajv);
+  t.is(getRuleValidator({ jsonforms: {} } as any), undefined);
+});
+
+test('getRuleValidator - the bound Form Validator when a custom one is configured', (t) => {
+  const ajv = createAjv();
+  const bound: FormValidator = { validate: () => [] };
+  const factory = () => bound;
+  const state = {
+    jsonforms: {
+      core: {
+        ajv,
+        validatorOption: factory,
+        formValidator: bound,
+      } as unknown as JsonFormsCore,
+    },
+  };
+  t.is(getRuleValidator(state as any), bound);
+  const off = {
+    jsonforms: {
+      core: {
+        ajv,
+        validatorOption: factory,
+        formValidator: undefined,
+      } as unknown as JsonFormsCore,
+    },
+  };
+  t.is(getRuleValidator(off as any), factory);
+});
+
+test('isVisible - integrates with getRuleValidator for a custom validator', (t) => {
+  const bound: FormValidator = {
+    validate: () => [],
+    matches: (_schema, data) => data === 'bar',
+  };
+  const core = {
+    ajv: {
+      validate: () => {
+        throw new Error('AJV must not evaluate rules when a validator is set');
+      },
+      compile: () => {
+        throw new Error('no compile');
+      },
+    },
+    validatorOption: bound,
+    formValidator: bound,
+  } as unknown as JsonFormsCore;
+  const state = { jsonforms: { core } } as any;
+  const uischema = ruleUischema(barCondition);
+  t.true(
+    isVisible(
+      uischema,
+      { ruleValue: 'bar' },
+      undefined,
+      getRuleValidator(state),
+      undefined
+    )
+  );
+  t.false(
+    isVisible(
+      uischema,
+      { ruleValue: 'x' },
+      undefined,
+      getRuleValidator(state),
+      undefined
     )
   );
 });

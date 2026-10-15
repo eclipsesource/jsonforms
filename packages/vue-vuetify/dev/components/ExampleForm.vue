@@ -8,6 +8,7 @@ import type {
   Middleware,
   UISchemaElement,
   ValidationMode,
+  ValidatorOption,
 } from '@jsonforms/core';
 import {
   JsonForms,
@@ -35,6 +36,7 @@ export interface JsonFormsProps {
   uischemas?: MaybeReadonly<JsonFormsUISchemaRegistryEntry[]>;
   validationMode?: ValidationMode;
   ajv?: Ajv;
+  validator?: ValidatorOption;
   i18n?: JsonFormsI18nState;
   additionalErrors?: ErrorObject<string, Record<string, any>, unknown>[];
   middleware?: Middleware;
@@ -60,7 +62,7 @@ watch(
   () => props.state.schema,
   (schema) => {
     resolveSchema(schema);
-  },
+  }
 );
 
 const resolveSchema = (schema?: JsonSchema): void => {
@@ -77,7 +79,7 @@ const resolveSchema = (schema?: JsonSchema): void => {
       function (err: Error) {
         resolvedSchema.resolved = true;
         resolvedSchema.error = err.message;
-      },
+      }
     );
   } else {
     // nothing to resolve

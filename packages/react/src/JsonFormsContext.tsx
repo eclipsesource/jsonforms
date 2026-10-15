@@ -138,8 +138,15 @@ export const JsonFormsStateProvider = ({
   onChange,
   middleware,
 }: any) => {
-  const { data, schema, uischema, ajv, validationMode, additionalErrors } =
-    initState.core;
+  const {
+    data,
+    schema,
+    uischema,
+    ajv,
+    validatorOption,
+    validationMode,
+    additionalErrors,
+  } = initState.core;
 
   const middlewareRef = useRef<Middleware>(middleware ?? defaultMiddleware);
   middlewareRef.current = middleware ?? defaultMiddleware;
@@ -149,6 +156,7 @@ export const JsonFormsStateProvider = ({
       initState.core,
       Actions.init(data, schema, uischema, {
         ajv,
+        validator: validatorOption,
         validationMode,
         additionalErrors,
       }),
@@ -163,13 +171,22 @@ export const JsonFormsStateProvider = ({
           currentCore,
           Actions.updateCore(data, schema, uischema, {
             ajv,
+            validator: validatorOption,
             validationMode,
             additionalErrors,
           }),
           coreReducer
         )
       ),
-    [data, schema, uischema, ajv, validationMode, additionalErrors]
+    [
+      data,
+      schema,
+      uischema,
+      ajv,
+      validatorOption,
+      validationMode,
+      additionalErrors,
+    ]
   );
 
   const [config, configDispatch] = useReducer(configReducer, undefined, () =>
