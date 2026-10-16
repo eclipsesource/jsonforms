@@ -5,7 +5,6 @@ import cloneDeep from 'lodash/cloneDeep';
 import find from 'lodash/find';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import {
-  markRaw,
   onMounted,
   provide,
   ref,
@@ -66,7 +65,7 @@ const initialState = (exampleProp: ExampleDescription) => {
 
   // Get custom renderers for this example (if any)
   const customRenderers = getCustomRenderersForExample(example.name);
-  const renderers = markRaw([...customRenderers, ...extendedVuetifyRenderers]);
+  const renderers = [...customRenderers, ...extendedVuetifyRenderers];
 
   return {
     data: example.data,
@@ -281,10 +280,6 @@ const handleAction = (action: Action) => {
   if (action) {
     const newState = action.apply(state);
     if (newState) {
-      if (newState.renderers) {
-        newState.renderers = markRaw(newState.renderers);
-      }
-
       Object.assign(state, newState);
     }
   }
