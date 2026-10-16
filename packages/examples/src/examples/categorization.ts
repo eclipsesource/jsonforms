@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import { createTranslator, Translator } from '@jsonforms/core';
+import cloneDeep from 'lodash/cloneDeep';
 import get from 'lodash/get';
 import { registerExamples } from '../register';
 
@@ -286,6 +287,63 @@ const uischema_1713 = {
   ],
 };
 
+const schema_2343 = {
+  type: 'object',
+  properties: {
+    parc: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          id: {
+            type: 'string',
+          },
+        },
+      },
+    },
+  },
+};
+const arrayControl_2343 = {
+  type: 'Control',
+  scope: '#/properties/parc',
+  options: {
+    detail: {
+      type: 'VerticalLayout',
+      elements: [
+        {
+          type: 'HorizontalLayout',
+          elements: [
+            {
+              type: 'Control',
+              scope: '#/properties/id',
+            },
+          ],
+        },
+      ],
+    },
+  },
+};
+const uischema_2343 = {
+  type: 'VerticalLayout',
+  elements: [
+    {
+      type: 'Categorization',
+      elements: [
+        {
+          type: 'Category',
+          label: 'A1',
+          elements: [cloneDeep(arrayControl_2343)],
+        },
+        {
+          type: 'Category',
+          label: 'A2',
+          elements: [cloneDeep(arrayControl_2343)],
+        },
+      ],
+    },
+  ],
+};
+
 export const translations = {
   categoryLabelKey: 'Basic',
   address: {
@@ -311,5 +369,12 @@ registerExamples([
     data,
     schema: schema_1713,
     uischema: uischema_1713,
+  },
+  {
+    name: 'categorization_2343',
+    label: 'Categorization - Issue 2343',
+    data: {},
+    schema: schema_2343,
+    uischema: uischema_2343,
   },
 ]);

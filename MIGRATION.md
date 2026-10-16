@@ -2,6 +2,17 @@
 
 ## Migration to JSON Forms 3.9
 
+### Angular Material detail renderers no longer modify the given UI schema
+
+The Angular Material array layout, object control and list-with-detail renderers modified the detail UI schema given via `options.detail` or the `uischemas` registry in place (see [#2343](https://github.com/eclipsesource/jsonforms/issues/2343)).
+They now work on a copy instead.
+
+- Nothing is written into your UI schema anymore, e.g. the `readonly` option. If you read such state back out of your own object, track it yourself.
+- The array layout no longer forces the `readonly` option to `false` on the controls of its detail. A `readonly`/`readOnly` option, a `readonly`/`readOnly` config entry and a `readOnly: true` in the JSON schema now take effect for controls inside an array's `options.detail`, so such a field may now be readonly where it previously was not.
+- The object control no longer overrides the `type` and `label` of a detail UI schema given via `options.detail` or the `uischemas` registry. If you relied on the previous label, set `label` in your detail UI schema.
+- In-place modifications of your UI schema are not picked up anymore. Provide a new UI schema object instead.
+- If you subclass `ArrayLayoutRenderer` and override `mapAdditionalProps`, call `super.mapAdditionalProps(props)`. The item props are precalculated there and exposed as `itemProps`; `getProps(index)` returns `undefined` for an out of range index.
+
 ### Data update paths treat all segments literally
 
 Data updates (e.g. dispatched `update` actions) previously wrote to the form data via lodash's `set`/`unset`, which interpret bracket notation and array indices in paths.
