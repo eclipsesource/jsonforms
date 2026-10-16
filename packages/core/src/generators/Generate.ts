@@ -28,9 +28,7 @@ import { generateJsonSchema } from './schema';
 import { createControlElement, generateDefaultUISchema } from './uischema';
 
 export const Generate: {
-  // TODO fix @typescript-eslint/ban-types
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  jsonSchema(instance: Object, options?: any): JsonSchema;
+  jsonSchema(instance: unknown, options?: any): JsonSchema;
   uiSchema(
     jsonSchema: JsonSchema,
     layoutType?: string,
