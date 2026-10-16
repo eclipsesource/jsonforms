@@ -100,11 +100,13 @@
                       </validation-badge>
                     </v-col>
 
-                    <v-col class="align-self-center"
+                    <v-col
+                      class="align-self-center"
                       :class="`pl-0 text-truncate ${styles.arrayList.itemLabel}`"
                       >{{ childLabelForIndex(index) }}</v-col
                     >
-                    <v-col class="align-self-center"
+                    <v-col
+                      class="align-self-center"
                       v-if="appliedOptions.showSortButtons"
                     >
                       <v-tooltip location="bottom">
@@ -131,7 +133,8 @@
                         {{ control.translations.up }}
                       </v-tooltip>
                     </v-col>
-                    <v-col class="align-self-center"
+                    <v-col
+                      class="align-self-center"
                       v-if="appliedOptions.showSortButtons"
                     >
                       <v-tooltip location="bottom">
