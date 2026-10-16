@@ -4,18 +4,19 @@ exports[`NumberControlRenderer.vue > should render component and match snapshot 
 "<div class="v-application v-theme--light v-layout v-layout--full-height v-locale--is-ltr">
   <div class="v-application__wrap">
     <div class="control" id="#6">
-      <div class="v-input v-input--horizontal v-input--center-affix v-input--density-default v-theme--light v-locale--is-ltr v-input--dirty v-text-field v-number-input v-number-input--default input">
+      <div class="v-input v-input--horizontal v-input--center-affix v-input--indent-details v-input--density-default v-theme--light v-locale--is-ltr v-input--dirty v-text-field v-number-input v-number-input--default input">
         <!---->
         <div class="v-input__control">
           <div class="v-field v-field--active v-field--appended v-field--center-affix v-field--dirty v-field--variant-filled v-theme--light v-locale--is-ltr">
             <div class="v-field__overlay"></div>
             <div class="v-field__loader">
-              <div class="v-progress-linear v-theme--light v-locale--is-ltr" style="top: 0px; height: 0px; --v-progress-linear-height: 2px;" role="progressbar" aria-hidden="true" aria-valuemin="0" aria-valuemax="100">
+              <div class="v-progress-linear v-theme--light v-locale--is-ltr" style="top: 0px; height: 0px; --v-progress-linear-height: 2px; --v-progress-reveal-duration: 900ms; --v-progress-chunk-gap: 4px;" role="progressbar" aria-hidden="true" aria-valuemin="0" aria-valuemax="100">
                 <!---->
                 <div class="v-progress-linear__background"></div>
                 <div class="v-progress-linear__buffer" style="width: 0%;"></div>
                 <transition-stub name="fade-transition" appear="false" persisted="false" css="true">
                   <div class="v-progress-linear__indeterminate">
+                    <!---->
                     <div class="v-progress-linear__indeterminate long"></div>
                     <div class="v-progress-linear__indeterminate short"></div>
                   </div>
@@ -37,13 +38,13 @@ exports[`NumberControlRenderer.vue > should render component and match snapshot 
             </transition-stub>
             <div class="v-field__append-inner">
               <!---->
-              <hr class="v-divider v-divider--vertical v-theme--light" style="border-style: solid;" aria-orientation="vertical" role="separator">
+              <hr class="v-divider v-divider--vertical v-theme--light" style="border-style: solid;" aria-orientation="vertical">
               <div class="v-number-input__control"><button type="button" class="v-btn v-btn--icon v-theme--light v-btn--density-default v-btn--size-small v-btn--variant-text" style="height: 100%;" tabindex="-1" aria-hidden="true" data-testid="decrement"><span class="v-btn__overlay"></span><span class="v-btn__underlay"></span>
                   <!----><span class="v-btn__content" data-no-activator=""><i class="mdi-chevron-down mdi v-icon notranslate v-theme--light v-icon--size-default" aria-hidden="true"></i></span>
                   <!---->
                   <!---->
                 </button>
-                <hr class="v-divider v-divider--vertical v-theme--light" style="border-style: solid;" aria-orientation="vertical" role="separator"><button type="button" class="v-btn v-btn--icon v-theme--light v-btn--density-default v-btn--size-small v-btn--variant-text" style="height: 100%;" tabindex="-1" aria-hidden="true" data-testid="increment"><span class="v-btn__overlay"></span><span class="v-btn__underlay"></span>
+                <hr class="v-divider v-divider--vertical v-theme--light" style="border-style: solid;" aria-orientation="vertical"><button type="button" class="v-btn v-btn--icon v-theme--light v-btn--density-default v-btn--size-small v-btn--variant-text" style="height: 100%;" tabindex="-1" aria-hidden="true" data-testid="increment"><span class="v-btn__overlay"></span><span class="v-btn__underlay"></span>
                   <!----><span class="v-btn__content" data-no-activator=""><i class="mdi-chevron-up mdi v-icon notranslate v-theme--light v-icon--size-default" aria-hidden="true"></i></span>
                   <!---->
                   <!---->

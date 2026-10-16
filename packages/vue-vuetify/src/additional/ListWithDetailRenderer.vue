@@ -172,7 +172,7 @@
         </v-list>
       </v-col>
       <v-col v-if="selectedIndex === undefined" class="flex-grow-1">
-        <span class="text-h6">{{ control.translations.noSelection }}</span>
+        <span class="text-headline-small">{{ control.translations.noSelection }}</span>
       </v-col>
       <v-col
         v-else
