@@ -1,0 +1,88 @@
+---
+id: labels
+title: Labels
+---
+
+import { OneOfLabel, PropertyLabel, SchemaLabel, UiSchemaLabel } from '../../src/components/docs/labels'
+
+Labels are determined by JSON Forms in the following way:
+- If an UI Schema `label` is set, it will be used as the label
+- If there is no UI Schema `label` **but** a JSON Schema `title`, the JSON Schema `title` will be used as the label
+- If there is no UI schema `label` **and** no JSON Schema `title`, the label will be derived from the property name
+
+## UI Schema `label`
+
+Labels can be specified in UI Schemas via the label attribute.
+If both the JSON Schema `title` and the UI Schema `label` are specified, the UI Schema `label` will be used.
+
+```js
+{
+  type: "VerticalLayout",
+  elements: [
+    {
+      type: "Control",
+      scope: "#/properties/name",
+      label: "First Name"
+    }
+  ]
+}
+```
+
+<UiSchemaLabel />
+
+## JSON Schema `title`
+
+When no UI Schema `label` is set, JSON Forms will use the JSON Schema `title` annotation.
+
+```js
+{
+  properties: {
+    name: {
+      type: "string",
+      title: "First Name"
+    }
+  }
+}
+```
+
+<SchemaLabel />
+
+## Derived by property
+
+When no `label` in the UI Schema and no `title` in the JSON Schema is provided, JSON Forms will derive the label directly from the property name.
+For example if the input name is `firstname`, the label will be `Firstname`.
+In order to have a label with multiple separated words, camel case can be used.
+So if the input name is `firstName`, the label will be `First Name`.
+
+<PropertyLabel />
+
+## `oneOf` enum titles
+
+JSON Schema does not provide a way to specify titles for enum values.
+However you can use a `oneOf` construct instead in which each entry specifies a `const` for the enum value and `title` for the enum label.
+JSON Forms will recognize this construct and render it in the same way as usual enums.
+
+```js
+{
+  properties: {
+    gender: {
+      oneOf: [
+        {
+          const: "male",
+          title: "Male"
+        },
+        {
+          const: "female",
+          title: "Female"
+        },
+        {
+          const: "other",
+          title: "Diverse"
+        }
+      ]
+    }
+  }
+}
+```
+
+<OneOfLabel />
