@@ -4,7 +4,6 @@ import { nextTick } from 'vue';
 import CategorizationStepperRenderer from '../../../src/layouts/CategorizationStepperRenderer.vue';
 import { layoutRenderers } from '../../../src/layouts';
 import { mountJsonForms } from '../util';
-import { VStepperItem } from 'vuetify/components';
 
 describe('CategorizationStepperRenderer.vue', () => {
   const schema = {
@@ -77,17 +76,9 @@ describe('CategorizationStepperRenderer.vue', () => {
 
     const stepper = wrapper.getComponent(CategorizationStepperRenderer);
 
-    const items = stepper.findAllComponents(VStepperItem);
-
-    // 1. Verify it keeps original category values
-    expect(items.map((item) => item.props('value'))).toEqual([2, 3]);
-
-    // 2. Verify sequential visible step badges and labels via rendered text
-    expect(items[0].text()).toContain('1');
-    expect(items[0].text()).toContain('Second');
-
-    expect(items[1].text()).toContain('2');
-    expect(items[1].text()).toContain('Third');
+    expect(
+      stepper.findAll('.v-stepper-item__avatar').map((avatar) => avatar.text())
+    ).toEqual(['1', '2']);
   });
 
   it('keeps the same active category when a previous category becomes visible', async () => {

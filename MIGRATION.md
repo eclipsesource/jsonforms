@@ -26,6 +26,19 @@ If you apply custom styling that relies on the previous `Grid`-based DOM structu
 Furthermore, if you use exported method `renderLayoutElements`, it no longer wraps children in `Grid` items for direction `column`.
 This should not affect you except if you explicitly use this method in custom renderers.
 
+### Vue Vuetify renderers now require Vuetify v4
+
+The Vue Vuetify renderers (`@jsonforms/vue-vuetify`) were upgraded from Vuetify 3 to Vuetify 4. When using JSON Forms 3.9, your application now needs to provide `vuetify` in version 4.
+
+To upgrade your application, follow the official [Vuetify upgrade guide](https://vuetifyjs.com/en/getting-started/upgrade-guide/).
+
+Use JSON Forms 3.8 if you need to stay on Vuetify 3.
+
+As part of this upgrade, you may notice several visible changes due to Vuetify 4's updated design specifications:
+* Typography has been updated to Material Design 3 (MD3) specifications.
+* The grid system is now gap-based.
+* The default theme is now `system` instead of `light`.
+
 ## Migrating to JSON Forms 3.8
 
 ### `Translator` type changed from overloaded signatures to a generic conditional type

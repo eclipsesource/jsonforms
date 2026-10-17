@@ -101,8 +101,7 @@
                     </v-col>
 
                     <v-col
-                      class="align-self-center"
-                      :class="`pl-0 text-truncate ${styles.arrayList.itemLabel}`"
+                      :class="`align-self-center pl-0 text-truncate ${styles.arrayList.itemLabel}`"
                       >{{ childLabelForIndex(index) }}</v-col
                     >
                     <v-col
@@ -237,7 +236,7 @@
       @click:outside="suggestToDelete = null"
     >
       <v-card>
-        <v-card-title class="text-headline-medium">
+        <v-card-title class="text-headline-small">
           {{ control.translations.deleteDialogTitle }}
         </v-card-title>
 
