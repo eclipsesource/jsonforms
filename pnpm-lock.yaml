@@ -1306,7 +1306,7 @@ importers:
         specifier: ^8.57.0
         version: 8.57.0(supports-color@8.1.1)
       eslint-plugin-vue:
-        specifier: ^9.26.0
+        specifier: ^9.23.0
         version: 9.26.0(eslint@8.57.0(supports-color@8.1.1))(supports-color@8.1.1)
       eslint-plugin-vue-scoped-css:
         specifier: ^2.8.0
