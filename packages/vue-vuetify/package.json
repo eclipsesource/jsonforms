@@ -95,7 +95,7 @@
     "cross-env": "^10.1.0",
     "dayjs": "^1.11.11",
     "eslint": "^8.57.0",
-    "eslint-plugin-vue": "^9.26.0",
+    "eslint-plugin-vue": "^9.23.0",
     "eslint-plugin-vue-scoped-css": "^2.8.0",
     "jsdom": "^27.2.0",
     "json-refs": "3.0.15",
