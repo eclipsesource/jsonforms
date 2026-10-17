@@ -1,0 +1,139 @@
+---
+id: rules
+title: Rules
+description: Rules allow for dynamic aspects for a form, e.g. by hiding or disabling UI schema elements
+---
+
+import ApiLink from '../../../src/components/common/ApiLink';
+
+<ApiLink link='core/interfaces/rule.html' title='API' />
+
+Rules allow for dynamic aspects for a form, e.g. by hiding or disabling UI schema elements.
+
+A rule may be attached to any UI schema element and can be defined with the `rule` property which looks like:
+
+```js
+"rule": {
+  "effect": "HIDE" | "SHOW" | "ENABLE" | "DISABLE",
+  "condition": {
+    "scope": "<UI Schema scope>",
+    "schema": JSON Schema
+  }
+}
+```
+
+A rule basically works by first evaluating the `condition` property and in case it evaluates to true, executing the associated `effect`.
+
+
+## Rule Effect
+
+The `effect` property determines what should happen to the attached UI schema element once the `condition` is met.
+Current effects include:
+
+- `HIDE`: hide the UI schema element
+- `SHOW`: show the UI schema element
+- `DISABLE`: disable the UI schema element
+- `ENABLE`: enable the UI schema element
+
+## Rule Condition
+
+The rule `condition` object should conform to the <ApiLink link='core/interfaces/schemabasedcondition.html' title='SchemaBasedCondition' /> interface.
+
+It should contain a `scope` and `schema` property, where the `schema` is a standard JSON schema object.
+This means everything that can be specified using JSON schema can be used as a rule condition.
+
+The `schema` is validated against the data specified in the `scope` property.
+If the `scope` data matches the `schema` the rule evaluates to true and the rule effect is applied.
+
+If the `scope` resolves to `undefined`, the JSON schema will successfully validate and the condition will be applied.
+Optionally, `failWhenUndefined: true` can be specified to fail the condition in case the scope resolves to `undefined`.
+
+
+## Examples
+
+Below are some common rule examples.
+
+To match a scope variable to a specific value, "const" can be used:
+
+```js
+"rule": {
+  "effect": "HIDE",
+  "condition": {
+    "scope": "#/properties/counter",
+    "schema": { const: 10 }
+  }
+}
+```
+Here, the control is hidden when the `counter` property is equal to `10`.
+
+Similar, to match multiple values, `enum` can be used:
+
+```js
+"rule": {
+  "effect": "HIDE",
+  "condition": {
+    "scope": "#/properties/name",
+    "schema": { enum: ["foo", "bar"] }
+  }
+}
+```
+The rule evaluates to true if the `scope` property `name` is either "foo" or "bar".
+
+A rule can be negated using "not":
+
+```js
+"rule": {
+  "effect": "SHOW",
+  "condition": {
+    "scope": "#/properties/counter",
+    "schema": { not: { const: 10 } }
+  }
+}
+```
+
+The following rule evaluates to true if the `counter` property is `1 <= counter < 10`:
+
+```js
+"rule": {
+  "effect": "SHOW",
+  "condition": {
+    "scope": "#/properties/counter",
+    "schema": {  minimum: 1, exclusiveMaximum: 10 }
+  }
+}
+```
+
+This rule evaluates to true if the `counter` property exists *and* is larger than 1.
+This is in contrast with the previous rule, which will evaluate to true if the `counter` property is undefined.
+
+```js
+"rule": {
+  "effect": "SHOW",
+  "condition": {
+    "scope": "#/properties/counter",
+    "schema": {  minimum: 1 },
+    "failWhenUndefined": true
+  }
+}
+```
+
+
+A rule can even operate on the full form data object and over multiple properties:
+
+```js
+"rule": {
+  "effect": "SHOW",
+  "condition": {
+    "scope": "#",
+    "schema": {
+      "properties": {
+        "stringArray": { "contains": { "const": "Foo"  }  }
+      },
+      "required": ["stringArray", "otherProperty"]
+    }
+  }
+}
+```
+
+In this example, the condition is true if the properties "stringArray" and "otherProperty" are set in the form data and the "stringArray" property contains an element "Foo".
+Note, that the schema rule in this example looks more like a normal JSON schema as it is commonly used.

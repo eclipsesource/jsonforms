@@ -1,0 +1,41 @@
+name: Check Webpage daily for Console Errors
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  check-webpage:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm install puppeteer
+
+      - name: Open webpage and check for errors
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const puppeteer = require('puppeteer');
+
+            const browser = await puppeteer.launch();
+            const page = await browser.newPage();
+
+            page
+              .on('console', message => core.setFailed(`Webpage has console errors: ${message}`))
+              .on('pageerror', ({ message }) => core.setFailed(`Webpage has console errors: ${message}`));
+
+            await page.goto('https://jsonforms.io');
+
+            await new Promise(r => setTimeout(r, 5000));
+
+            await browser.close();
