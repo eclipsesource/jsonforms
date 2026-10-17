@@ -1378,7 +1378,7 @@ importers:
         specifier: ^2.2.0
         version: 2.2.12(typescript@5.8.3)
       vuetify:
-        specifier: ^4.0.0
+        specifier: ^4.2.6
         version: 4.3.0(typescript@5.8.3)(vite-plugin-vuetify@2.1.1)(vue@3.5.17(typescript@5.8.3))
 
 packages:
