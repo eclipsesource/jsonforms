@@ -27,7 +27,14 @@ import {
   ValidationMode,
 } from '@jsonforms/core';
 import isEqual from 'lodash/isEqual';
-import { defineComponent, PropType, reactive, toRaw } from 'vue';
+import {
+  defineComponent,
+  PropType,
+  reactive,
+  shallowReactive,
+  shallowRef,
+  toRaw,
+} from 'vue';
 import { JsonFormsChangeEvent, MaybeReadonly } from '../types';
 import DispatchRenderer from './DispatchRenderer.vue';
 
@@ -120,6 +127,19 @@ export default defineComponent({
     },
   },
   emits: ['change', 'update:data'],
+  /**
+   * The state of a form is shallow.
+   *
+   * JSON Forms only reads the schema and the UI schema, thus Vue does not need
+   * to make them reactive. A deep proxy made a new proxy for each nested schema
+   * node at the first read of that node. Testers and the scope resolution read
+   * the schema many times for each control, thus these proxies made a large
+   * form slow to mount.
+   *
+   * `shallowRef` and `shallowReactive` keep the objects of the application as
+   * they are. A reducer replaces `core` for each change and never changes it in
+   * place, thus shallow tracking is sufficient.
+   */
   data() {
     const dataToUse = this.data;
     const schemaToUse: JsonSchema =
@@ -135,7 +155,8 @@ export default defineComponent({
         initialCore,
         Actions.init(dataToUse, schemaToUse, uischemaToUse, {
           validationMode: this.validationMode,
-          ajv: this.ajv,
+          // Ajv cannot compile a schema through a proxy of itself.
+          ajv: toRaw(this.ajv),
           additionalErrors: this.additionalErrors,
         }),
         coreReducer
@@ -143,10 +164,10 @@ export default defineComponent({
       return core;
     };
     return {
-      schemaToUse,
-      dataToUse,
-      uischemaToUse,
-      jsonforms: {
+      schemaToUse: shallowRef(schemaToUse),
+      dataToUse: shallowRef(dataToUse),
+      uischemaToUse: shallowRef(uischemaToUse),
+      jsonforms: shallowReactive({
         core: initCore(),
         config: configReducer(undefined, Actions.setConfig(this.config)),
         i18n: i18nReducer(
@@ -161,7 +182,7 @@ export default defineComponent({
         cells: this.cells,
         uischemas: this.uischemas,
         readonly: this.readonly,
-      },
+      }),
     };
   },
   computed: {
@@ -193,7 +214,8 @@ export default defineComponent({
       this.uischemaToUse = newUischema ?? generateUISchema(this.schemaToUse);
     },
     data(newData) {
-      const isSameAsCurrentData = newData === this.jsonforms.core.data;
+      const isSameAsCurrentData =
+        toRaw(newData) === toRaw(this.jsonforms.core.data);
       this.dataToUse = newData;
 
       if (
@@ -239,7 +261,8 @@ export default defineComponent({
           this.uischemaToUse,
           {
             validationMode: this.validationMode,
-            ajv: this.ajv,
+            // Ajv cannot compile a schema through a proxy of itself.
+            ajv: toRaw(this.ajv),
             additionalErrors: this.additionalErrors,
           }
         ),
