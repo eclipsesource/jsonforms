@@ -10,6 +10,7 @@ import TestComponent from './TestComponent.vue';
 import { createVuetify } from 'vuetify';
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
+import { markRaw } from 'vue';
 
 const vuetify = createVuetify({
   components,
@@ -36,7 +37,7 @@ export const mountJsonForms = (
       schema,
       uischema,
       config,
-      renderers,
+      renderers: markRaw(renderers),
       i18n,
       ajv,
     },
