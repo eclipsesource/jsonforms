@@ -102,10 +102,12 @@ export const getAdditionalErrors = (
   return state.additionalErrors;
 };
 
+/** Without `createDefault`, no default Ajv instance is created. */
 export const getOrCreateAjv = (
   state: JsonFormsCore,
-  action?: InitAction | UpdateCoreAction
-): Ajv => {
+  action?: InitAction | UpdateCoreAction,
+  createDefault = true
+): Ajv | undefined => {
   if (action) {
     if (hasAjvOption(action.options)) {
       // options object with ajv
@@ -117,7 +119,10 @@ export const getOrCreateAjv = (
       }
     }
   }
-  return state.ajv ? state.ajv : createAjv();
+  if (state.ajv) {
+    return state.ajv;
+  }
+  return createDefault ? createAjv() : undefined;
 };
 
 const hasAjvOption = (option: any): option is InitActionOptions => {
@@ -146,7 +151,7 @@ export const getValidatorFactory = (
 
 const createValidator = (
   validatorFactory: FormValidatorFactory | undefined,
-  ajv: Ajv,
+  ajv: Ajv | undefined,
   schema: JsonSchema,
   validationMode: ValidationMode
 ): FormValidator | undefined => {
@@ -168,8 +173,12 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
 ) => {
   switch (action.type) {
     case INIT: {
-      const thisAjv = getOrCreateAjv(state, action);
       const validatorFactory = getValidatorFactory(state, action);
+      const thisAjv = getOrCreateAjv(
+        state,
+        action,
+        validatorFactory === undefined
+      );
       const validationMode = getValidationMode(state, action);
       const v = createValidator(
         validatorFactory,
@@ -194,8 +203,12 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
       };
     }
     case UPDATE_CORE: {
-      const thisAjv = getOrCreateAjv(state, action);
       const validatorFactory = getValidatorFactory(state, action);
+      const thisAjv = getOrCreateAjv(
+        state,
+        action,
+        validatorFactory === undefined
+      );
       const validationMode = getValidationMode(state, action);
       let validator = state.validator;
       let errors = state.errors;

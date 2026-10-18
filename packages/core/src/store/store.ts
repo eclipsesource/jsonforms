@@ -95,6 +95,7 @@ export interface JsonFormsCore {
   additionalErrors?: ErrorObject[];
   /** The Form Validator bound to `schema`. */
   validator?: FormValidator;
+  /** Not created by default while a custom Form Validator factory is set. */
   ajv?: Ajv;
   /** The custom Form Validator factory, if one was given. */
   validatorFactory?: FormValidatorFactory;

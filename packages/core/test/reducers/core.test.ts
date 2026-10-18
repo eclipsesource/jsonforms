@@ -24,7 +24,7 @@
 */
 import test from 'ava';
 import Ajv, { ErrorObject } from 'ajv';
-import { coreReducer } from '../../src/reducers';
+import { coreReducer, getOrCreateAjv } from '../../src/reducers';
 import {
   init,
   setAjv,
@@ -2401,6 +2401,47 @@ test('core reducer - without validator option - Ajv is the default Form Validato
   t.truthy(after.validator);
   t.is(after.validatorFactory, undefined);
   t.is(after.validator.validate({ foo: 1 }).length, 1);
+});
+
+test('core reducer - validator option - no default ajv instance is created', (t) => {
+  const { factory } = fakeValidator();
+  const after = coreReducer(
+    undefined,
+    init({ foo: 'bad' }, fooSchema, undefined, { validator: factory })
+  );
+  t.is(after.ajv, undefined);
+  t.is(after.errors.length, 1);
+  const updated = coreReducer(
+    after,
+    updateCore({ foo: 'ok' }, fooSchema, undefined, { validator: factory })
+  );
+  t.is(updated.ajv, undefined);
+  t.is(updated.errors.length, 0);
+  const newSchema = coreReducer(updated, setSchema(cloneDeep(fooSchema)));
+  t.is(newSchema.ajv, undefined);
+  const toggled = coreReducer(
+    coreReducer(newSchema, setValidationMode('NoValidation')),
+    setValidationMode('ValidateAndShow')
+  );
+  t.is(toggled.ajv, undefined);
+  t.truthy(toggled.validator);
+});
+
+test('core reducer - validator option - an explicitly passed ajv is still kept', (t) => {
+  const { factory } = fakeValidator();
+  const ajv = createAjv();
+  const after = coreReducer(
+    undefined,
+    init({}, fooSchema, undefined, { ajv, validator: factory })
+  );
+  t.is(after.ajv, ajv);
+});
+
+test('core reducer - no validator option - default ajv is still created', (t) => {
+  const after = coreReducer(undefined, init({}, fooSchema));
+  t.truthy(after.ajv);
+  t.is(getOrCreateAjv(after), after.ajv);
+  t.is(getOrCreateAjv({} as JsonFormsCore, undefined, false), undefined);
 });
 
 test('core reducer helpers - getControlPath - converts JSON Pointer notation to dot notation', (t) => {
