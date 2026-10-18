@@ -72,7 +72,7 @@ import {
 } from '../util';
 import {
   Translator,
-  getAjv,
+  getRuleValidator,
   getCells,
   getConfig,
   getData,
@@ -597,7 +597,13 @@ export const mapStateToControlProps = (
 
   const visible: boolean =
     ownProps.visible === undefined || hasShowRule(uischema)
-      ? isVisible(uischema, rootData, ownProps.path, getAjv(state), config)
+      ? isVisible(
+          uischema,
+          rootData,
+          ownProps.path,
+          getRuleValidator(state),
+          config
+        )
       : ownProps.visible;
   const controlElement = uischema as ControlElement;
   const id = ownProps.id;
@@ -1069,7 +1075,7 @@ export const mapStateToLayoutProps = (
           ownProps.uischema,
           rootData,
           ownProps.path,
-          getAjv(state),
+          getRuleValidator(state),
           getConfig(state)
         )
       : ownProps.visible;
@@ -1295,7 +1301,7 @@ export const mapStateToLabelProps = (
           props.uischema,
           getData(state),
           props.path,
-          getAjv(state),
+          getRuleValidator(state),
           getConfig(state)
         )
       : props.visible;
