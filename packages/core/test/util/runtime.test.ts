@@ -1429,6 +1429,41 @@ test('rules - schema condition goes through the Form Validator factory', (t) => 
   ]);
 });
 
+test('rules - no validator at all also evaluates value constraints', (t) => {
+  const uischema = ruleUischema({
+    scope: '#/properties/ruleValue',
+    schema: { type: 'number', minimum: 18 },
+  });
+  t.true(
+    evalVisibility(uischema, { ruleValue: 18 }, undefined, undefined, undefined)
+  );
+  t.false(
+    evalVisibility(uischema, { ruleValue: 17 }, undefined, undefined, undefined)
+  );
+  const pattern = ruleUischema({
+    scope: '#/properties/ruleValue',
+    schema: { pattern: '^DE' },
+  });
+  t.true(
+    evalVisibility(
+      pattern,
+      { ruleValue: 'DE123' },
+      undefined,
+      undefined,
+      undefined
+    )
+  );
+  t.false(
+    evalVisibility(
+      pattern,
+      { ruleValue: 'FR123' },
+      undefined,
+      undefined,
+      undefined
+    )
+  );
+});
+
 test('rules - no validator at all uses the Structural Matcher', (t) => {
   const uischema = ruleUischema({
     scope: '#/properties/ruleValue',

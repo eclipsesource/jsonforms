@@ -41,12 +41,12 @@ import { composeWithUi } from './uischema';
 import isFunction from 'lodash/isFunction';
 import type { JsonSchema } from '../models';
 import type { FormValidator, FormValidatorFactory } from './formValidator';
-import { isStructuralMatch } from './structural';
+import { isSchemaMatch } from './structural';
 
 /**
  * What rule conditions are evaluated with: an Ajv instance, a Form Validator
  * factory (one cached Form Validator per condition schema), or `undefined`
- * for core's Structural Matcher ({@link isStructuralMatch}).
+ * for core's own schema matcher ({@link isSchemaMatch}).
  */
 export type RuleValidator = Ajv | FormValidatorFactory | undefined;
 
@@ -87,7 +87,7 @@ export const matchesConditionSchema = (
   if (validator !== undefined) {
     return validator.validate(schema, data) as boolean;
   }
-  return isStructuralMatch(schema, data);
+  return isSchemaMatch(schema, data);
 };
 
 const isOrCondition = (condition: Condition): condition is OrCondition =>
