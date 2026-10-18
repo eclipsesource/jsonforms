@@ -2,6 +2,13 @@
 
 ## Migration to JSON Forms 3.9
 
+### `validator` in the core state is a Form Validator
+
+JSON Forms 3.9 adds a `validator` option to plug in a custom validation library. It takes a factory `(schema) => FormValidator` and takes precedence over `ajv`. Without it, Ajv validates as before.
+
+As a consequence, `JsonFormsCore.validator` now holds a `FormValidator` instead of the compiled Ajv `ValidateFunction`.
+If you read `state.validator` or build the core state by hand, call `validator.validate(data)`, which returns `ValidationIssue`s, or wrap a compiled Ajv function with `compiledAjvValidator(validateFn)`.
+
 ### JSON Schema generation supports non-object root values
 
 `generateJsonSchema` now generates a schema matching the root value's actual type. In particular, arrays produce an array schema with an `items` schema, primitives produce their corresponding primitive schema, and `undefined` produces an empty schema.
