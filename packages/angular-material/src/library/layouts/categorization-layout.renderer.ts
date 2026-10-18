@@ -29,7 +29,7 @@ import {
   Category,
   defaultJsonFormsI18nState,
   deriveLabelForUISchemaElement,
-  getAjv,
+  getRuleValidator,
   getConfig,
   isVisible,
   JsonFormsState,
@@ -93,7 +93,7 @@ export class CategorizationTabLayoutRenderer
                 category,
                 props.data,
                 undefined,
-                getAjv(state),
+                getRuleValidator(state),
                 getConfig(state)
               )
           );

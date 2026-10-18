@@ -32,6 +32,8 @@ import {
   JsonFormsRendererRegistryEntry,
   JsonSchema,
   OwnPropsOfRenderer,
+  getRuleValidator,
+  RuleValidator,
 } from '@jsonforms/core';
 import { JsonFormsDispatch, useJsonForms } from '@jsonforms/react';
 import Grid from '@mui/material/Grid';
@@ -110,6 +112,11 @@ export const MaterialLayoutRenderer = React.memo(
 
 export interface AjvProps {
   ajv: Ajv;
+  /**
+   * What rule conditions are evaluated with: the configured Form Validator
+   * when a custom one is set, otherwise the Ajv instance.
+   */
+  ruleValidator?: RuleValidator;
 }
 
 // TODO fix @typescript-eslint/ban-types
@@ -119,9 +126,11 @@ export const withAjvProps = <P extends {}>(
 ) =>
   function WithAjvProps(props: P) {
     const ctx = useJsonForms();
-    const ajv = getAjv({ jsonforms: { ...ctx } });
+    const state = { jsonforms: { ...ctx } };
+    const ajv = getAjv(state);
+    const ruleValidator = getRuleValidator(state);
 
-    return <Component {...props} ajv={ajv} />;
+    return <Component {...props} ajv={ajv} ruleValidator={ruleValidator} />;
   };
 
 export interface MaterialLabelableLayoutRendererProps

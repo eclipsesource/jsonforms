@@ -13,6 +13,7 @@ import {
   CoreActions,
   coreReducer,
   defaultMiddleware,
+  FormValidatorFactory,
   Generate,
   i18nReducer,
   JsonFormsCellRendererRegistryEntry,
@@ -103,6 +104,11 @@ export default defineComponent({
       type: Object as PropType<Ajv>,
       default: undefined,
     },
+    validator: {
+      required: false,
+      type: Function as PropType<FormValidatorFactory>,
+      default: undefined,
+    },
     i18n: {
       required: false,
       type: Object as PropType<JsonFormsI18nState>,
@@ -136,6 +142,7 @@ export default defineComponent({
         Actions.init(dataToUse, schemaToUse, uischemaToUse, {
           validationMode: this.validationMode,
           ajv: this.ajv,
+          validator: this.validator,
           additionalErrors: this.additionalErrors,
         }),
         coreReducer
@@ -172,6 +179,7 @@ export default defineComponent({
         this.uischemaToUse,
         this.validationMode,
         this.ajv,
+        this.validator,
         this.additionalErrors,
       ];
     },
@@ -240,6 +248,7 @@ export default defineComponent({
           {
             validationMode: this.validationMode,
             ajv: this.ajv,
+            validator: this.validator,
             additionalErrors: this.additionalErrors,
           }
         ),

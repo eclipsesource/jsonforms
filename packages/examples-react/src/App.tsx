@@ -59,6 +59,7 @@ const getProps = (
   const uischemas = example.uischemas;
   const config = example.config;
   const i18n = example.i18n;
+  const validator = example.validator;
   return {
     schema,
     uischema,
@@ -68,6 +69,7 @@ const getProps = (
     cells,
     renderers,
     i18n,
+    validator,
   };
 };
 
