@@ -27,7 +27,11 @@ import type { Store } from './type';
 import { RankedTester, UISchemaTester } from '../testers';
 import { JsonSchema, UISchemaElement } from '../models';
 import type Ajv from 'ajv';
-import type { ErrorObject, ValidateFunction } from 'ajv';
+import type { ErrorObject } from 'ajv';
+import type {
+  FormValidator,
+  FormValidatorFactory,
+} from '../util/formValidator';
 import { JsonFormsI18nState } from './i18nTypes';
 
 /**
@@ -89,8 +93,11 @@ export interface JsonFormsCore {
   uischema: UISchemaElement;
   errors?: ErrorObject[];
   additionalErrors?: ErrorObject[];
-  validator?: ValidateFunction;
+  /** The Form Validator bound to `schema`. */
+  validator?: FormValidator;
   ajv?: Ajv;
+  /** The custom Form Validator factory, if one was given. */
+  validatorFactory?: FormValidatorFactory;
   validationMode?: ValidationMode;
 }
 
