@@ -136,15 +136,16 @@ export default defineComponent({
    * the schema many times for each control, thus these proxies made a large
    * form slow to mount.
    *
-   * `shallowRef` and `shallowReactive` keep the objects of the application as
-   * they are. A reducer replaces `core` for each change and never changes it in
-   * place, thus shallow tracking is sufficient.
+   * `toRaw` unwraps a proxy of the data, the schema and the UI schema, thus the
+   * form always works on the plain objects. `shallowRef` and `shallowReactive`
+   * keep these objects as they are. A reducer replaces `core` for each change
+   * and never changes it in place, thus shallow tracking is sufficient.
    */
   data() {
-    const dataToUse = this.data;
+    const dataToUse = toRaw(this.data);
     const schemaToUse: JsonSchema =
-      this.schema ?? Generate.jsonSchema(dataToUse);
-    const uischemaToUse = this.uischema ?? generateUISchema(schemaToUse);
+      toRaw(this.schema) ?? Generate.jsonSchema(dataToUse);
+    const uischemaToUse = toRaw(this.uischema) ?? generateUISchema(schemaToUse);
     const initCore = (): JsonFormsCore => {
       const initialCore = {
         data: dataToUse,
@@ -205,18 +206,20 @@ export default defineComponent({
   },
   watch: {
     schema(newSchema) {
-      this.schemaToUse = newSchema ?? Generate.jsonSchema(this.dataToUse);
+      this.schemaToUse =
+        toRaw(newSchema) ?? Generate.jsonSchema(this.dataToUse);
       if (!this.uischema) {
         this.uischemaToUse = generateUISchema(this.schemaToUse);
       }
     },
     uischema(newUischema) {
-      this.uischemaToUse = newUischema ?? generateUISchema(this.schemaToUse);
+      this.uischemaToUse =
+        toRaw(newUischema) ?? generateUISchema(this.schemaToUse);
     },
     data(newData) {
       const isSameAsCurrentData =
         toRaw(newData) === toRaw(this.jsonforms.core.data);
-      this.dataToUse = newData;
+      this.dataToUse = toRaw(newData);
 
       if (
         (this.schema === undefined || this.schema === null) &&
