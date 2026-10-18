@@ -136,6 +136,7 @@ export default defineComponent({
           :data="example.data"
           :schema="example.schema"
           :uischema="example.uischema"
+          :validator="example.validator"
           :renderers="renderers"
           :i18n="example.i18n"
           :additional-errors="additionalErrors"
@@ -207,7 +208,6 @@ main article {
   padding: 1rem;
 }
 </style>
-
 
 <style>
 body {

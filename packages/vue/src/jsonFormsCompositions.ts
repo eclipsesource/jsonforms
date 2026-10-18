@@ -38,6 +38,7 @@ import {
   isControl,
   Scopable,
   Translator,
+  FormValidator,
 } from '@jsonforms/core';
 import type Ajv from 'ajv';
 import isEqualWith from 'lodash/isEqualWith';
@@ -700,4 +701,19 @@ export function useAjv(optional?: true) {
   }
 
   return jsonforms?.core?.ajv as Ajv;
+}
+
+/** Extracts the Form Validator from JSON Forms. */
+export function useValidator(): FormValidator;
+export function useValidator(optional: true): FormValidator | undefined;
+export function useValidator(optional?: true) {
+  const jsonforms = optional === true ? useJsonForms(true) : useJsonForms();
+
+  if (!optional && !jsonforms?.core?.validator) {
+    throw new Error(
+      "'jsonforms validator' couldn't be injected. Are you within JSON Forms?"
+    );
+  }
+
+  return jsonforms?.core?.validator;
 }

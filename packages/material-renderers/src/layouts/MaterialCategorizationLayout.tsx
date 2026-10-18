@@ -100,6 +100,7 @@ export const MaterialCategorizationLayoutRenderer = (
     onChange,
     config,
     ajv,
+    ruleValidator,
     t,
   } = props;
   const categorization = uischema as Categorization;
@@ -109,9 +110,9 @@ export const MaterialCategorizationLayoutRenderer = (
   const categories = useMemo(
     () =>
       categorization.elements.filter((category: Category) =>
-        isVisible(category, data, undefined, ajv, config)
+        isVisible(category, data, undefined, ruleValidator ?? ajv, config)
       ),
-    [categorization, data, ajv, config]
+    [categorization, data, ajv, ruleValidator, config]
   );
 
   if (categorization !== previousCategorization) {

@@ -1,5 +1,5 @@
 import { JsonSchema, UISchemaElement } from '../models';
-import { JsonFormsState, getAjv } from '../store';
+import { JsonFormsState, getRuleValidator } from '../store';
 import { hasEnableRule, hasReadonlyRule, isEnabled, isReadonly } from '../util';
 
 /**
@@ -19,7 +19,13 @@ export const isInherentlyEnabled = (
     return false;
   }
   if (uischema && hasEnableRule(uischema)) {
-    return isEnabled(uischema, rootData, ownProps?.path, getAjv(state), config);
+    return isEnabled(
+      uischema,
+      rootData,
+      ownProps?.path,
+      getRuleValidator(state),
+      config
+    );
   }
   if (!config?.separateReadonlyFromDisabled) {
     if (typeof uischema?.options?.readonly === 'boolean') {
@@ -66,7 +72,7 @@ export const isInherentlyReadonly = (
       uischema,
       rootData,
       ownProps?.path,
-      getAjv(state),
+      getRuleValidator(state),
       config
     );
   }
