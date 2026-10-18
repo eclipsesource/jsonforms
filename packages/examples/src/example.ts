@@ -29,6 +29,7 @@ import {
   JsonSchema,
   UISchemaElement,
   JsonFormsI18nState,
+  FormValidatorFactory,
 } from '@jsonforms/core';
 
 export interface ExampleDescription {
@@ -42,6 +43,8 @@ export interface ExampleDescription {
   actions?: { label: string; apply: (props: StateProps) => any }[];
   i18n?: JsonFormsI18nState;
   readonly?: boolean;
+  /** A custom Form Validator for this example; the apps pass it to JSON Forms' `validator` prop. */
+  validator?: FormValidatorFactory;
 }
 
 export interface StateProps {
@@ -53,4 +56,6 @@ export interface StateProps {
   config?: any;
   uischemas?: JsonFormsUISchemaRegistryEntry[];
   readonly?: boolean;
+  /** A custom Form Validator for this example; the apps pass it to JSON Forms' `validator` prop. */
+  validator?: FormValidatorFactory;
 }
